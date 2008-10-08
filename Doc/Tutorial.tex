@@ -1189,7 +1189,7 @@ We hinted that handles are not always from files, and in this section we'll use
 handles to internet connections to download sequences.
 
 Note that just because you \emph{can} download sequence data and parse it into
-a \verb|SeqRecord| object in one go doesn't mean this is always a good idea.
+a \verb|SeqRecord| object in one go doesn't mean this is a good idea.
 In general, you should probably download sequences \emph{once} and save them to
 a file for reuse.
 
@@ -3099,7 +3099,7 @@ ORIGIN
 
 The argument \verb+rettype="genbank"+ lets us download this record in the GenBank format. Alternatively, you could for example use \verb+rettype="fasta"+ to get the Fasta-format; see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq\_help.html}{EFetch Help page} for other options. The available formats depend on which database you are downloading from.
 
-If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see Chapter~\ref{chapter:Bio.SeqIO}), you can directly parse it into a \verb+SeqRecord+:
+If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see Chapter~\ref{chapter:Bio.SeqIO}), you could directly parse it into a \verb+SeqRecord+:
 
 \begin{verbatim}
 >>> from Bio import Entrez, SeqIO
@@ -3112,6 +3112,26 @@ Description: Selenipedium aequinoctiale maturase K (matK) gene, partial cds; chl
 Number of features: 3
 ...
 Seq('ATTTTTTACGAACCTGTGGAAATTTTTGGTTATGACAATAAATCTAGTTTAGTA...GAA', IUPACAmbiguousDNA())\end{verbatim}
+
+Note that a more typical use would be to save the sequence data to a local file, and \emph{then} parse it with \verb|Bio.SeqIO|.  This can save you having to re-download the same file repeatedly while working on your script, and in particular places less load on the NCBI's servers.  For example:
+
+\begin{verbatim}
+import os
+from Bio import Entrez, SeqIO
+filename = "gi_186972394.gbk"
+if not os.path.isfile(filename) :
+    print "Downloading..."
+    net_handle = Entrez.efetch(db="nucleotide",id="186972394",rettype="genbank")
+    out_handle = open(filename, "w")
+    out_handle.write(net_handle.read())
+    out_handle.close()
+    net_handle.close()
+    print "Saved"
+
+print "Parsing..."
+record = SeqIO.read(open(filename), "genbank")
+print record
+\end{verbatim}
 
 To get the output in XML format, which you can parse using the \verb+Bio.Entrez.read()+ function, use \verb+retmode="xml"+:
 
@@ -3456,7 +3476,6 @@ You could use this to quickly set up searches -- but for heavy usage, see Sectio
 The GenBank record format is a very popular method of holding information about sequences, sequence features, and other associated sequence information. The format is a good way to get information from the NCBI databases at \url{http://www.ncbi.nlm.nih.gov/}.
 
 In this example we'll show how to query the NCBI databases,to retrieve the records from the query, and then parse them using \verb+Bio.SeqIO+  - something touched on in Section~\ref{sec:SeqIO_GenBank_Online}.
-
 For simplicity, this example \emph{does not} take advantage of the WebEnv history feature -- see Section~\ref{sec:entrez-webenv} for this.
 
 First, we want to make a query and find out the ids of the records to retrieve. Here we'll do a quick search for one of our favorite organisms, \emph{Opuntia} (prickly-pear cacti). We can do quick search and get back the GIs (GenBank identifiers) for all of the corresponding records. First we check how many records there are:
@@ -3536,11 +3555,11 @@ AF191658, length 896, with 3 features
 Using these automated query retrieval functionality is a big plus over doing things by hand.   Although the module should obey the NCBI's three-second rule, the NCBI have other recommendations like avoiding peak hours.  See Section~\ref{sec:entrez-guidelines}.
 In particular, please note that for simplicity, this example does not use the WebEnv history feature.  You should use this for any non-trivial search and download work, see Section~\ref{sec:entrez-webenv}.
 
-Finally, if plan to repeat your analysis, rather than downloading the files from the NCBI and parsing them immediately, consider just downloading the files \emph{once} and saving them to your hard disk.
+Finally, if plan to repeat your analysis, rather than downloading the files from the NCBI and parsing them immediately (as shown in this example), you should just download the records \emph{once} and save them to your hard disk, and then parse the local file.
 
 \subsection{Finding the lineage of an organism}
 
-Staying with the same organism, let's now find its lineage. First, we search the Taxonomy database for Cypripedioideae (an orchid family). We find exactly one accession number:
+Staying with a plant example, let's now find the lineage of the Cypripedioideae orchid family. First, we search the Taxonomy database for Cypripedioideae, which yields exactly one NCBI taxonomy identifier:
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
@@ -3551,7 +3570,7 @@ Staying with the same organism, let's now find its lineage. First, we search the
 >>> record["IdList"][0]
 '158330'
 \end{verbatim}
-Now, we use \verb+efetch+ to download this entry in the Taxonomy database and to parse it:
+Now, we use \verb+efetch+ to download this entry in the Taxonomy database, and then parse it:
 \begin{verbatim}
 >>> handle = Entrez.efetch(db="Taxonomy", id="158330", retmode="xml")
 >>> records = Entrez.read(handle)
@@ -3570,6 +3589,8 @@ We can get the lineage directly from this record:
  Embryophyta; Tracheophyta; Euphyllophyta; Spermatophyta; Magnoliophyta;
  Liliopsida; Asparagales; Orchidaceae'
 \end{verbatim}
+
+The record data contains much more than just the information shown here - for example look under \texttt{"LineageEx"} instead of \texttt{"Lineage"} and you'll get the NCBI taxon identifiers of the lineage entries too.
 
 \section{Using the history and WebEnv}
 \label{sec:entrez-webenv}
