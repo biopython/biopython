@@ -18,6 +18,24 @@ Martel and Bio.Mindy are now considered to be deprecated, meaning mxTextTools
 is no longer required to use Biopython.  See the DEPRECATED file for details
 of other deprecations.
 
+The behaviour of the Bio.Seq module's translate function has changed so that
+ambiguous codons which could be a stop codon like "TAN" or "NNN" are now
+translated as "X" (consistent with EMBOSS and BioPerl - Biopython previously
+raised an exception), and a bug was fixed so that invalid codons (like "A-T")
+now raise an exception (previously these were translated as stop codons).
+
+BioSQL had a few bugs fixed, and can now optionally fetch the NCBI taxonomy
+on demand when loading sequences (via Bio.Entrez) allowing you to populate
+the taxon/taxon_name tables gradually.  This has been tested in combination
+with the BioSQL load_ncbi_taxonomy.pl script used to populate or update the
+taxon/taxon_name tables.
+
+The "Cookbook" section of the tutorial now has a few graphical examples using
+Biopython to calculate sequence properties, and matplotlib (pylab) to plot
+them.  Additionally the PDB and PopGen sections have been promoted to full
+chapters, and a new chapter has been added on supervised learning methods
+like logistic regression.
+
 ===================================================================
 
 September 8, 2008: Biopython 1.48 released.
