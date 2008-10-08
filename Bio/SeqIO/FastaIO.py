@@ -55,7 +55,9 @@ def FastaIterator(handle, alphabet = single_letter_alphabet, title2ids = None) :
             if not line : break
             if line[0] == ">": break
             #Remove trailing whitespace, and any internal spaces
-            lines.append(line.rstrip().replace(" ",""))
+            #(and any embedded \r which are possible in mangled files
+            #when not opened in universal read lines mode)
+            lines.append(line.rstrip().replace(" ","").replace("\r",""))
             line = handle.readline()
 
         #Return the record and then continue...
