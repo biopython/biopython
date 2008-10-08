@@ -9,6 +9,7 @@ from Bio.Alphabet import IUPAC
 from Bio import Alphabet
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
+from Bio.Data.CodonTable import TranslationError
 
 print
 print "Testing Seq"
@@ -398,6 +399,16 @@ for nucleotide_seq in [misc_stops, Seq.Seq(misc_stops),
     assert "***RR" == str(Seq.translate(nucleotide_seq, table='Bacterial'))
 del misc_stops
 
+assert Seq.translate("TAR")=="*"
+assert Seq.translate("TAN")=="X"
+assert Seq.translate("NNN")=="X"
+for codon in ["TA?", "N-N", "AC_"] :
+    try :
+        print Seq.translate(codon)
+        assert "Translating %s should have failed" % repr(codon)
+    except TranslationError :
+        pass
+
 ambig = set(IUPAC.IUPACAmbiguousDNA.letters)
 for c1 in ambig :
     for c2 in ambig :
@@ -406,10 +417,6 @@ for c1 in ambig :
                           for a in ambiguous_dna_values[c1] \
                           for b in ambiguous_dna_values[c2] \
                           for c in ambiguous_dna_values[c3]])
-            if "*" in values and len(values) > 1 :
-                #Translation is expected to fail.
-                #TODO - Confirm it fails with a try/except
-                continue
             t = Seq.translate(c1+c2+c3)
             if t=="*" :
                 assert values == set("*")

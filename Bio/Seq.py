@@ -10,6 +10,12 @@
 import string, array
 import sys
 
+#TODO - Remove this work around once we drop python 2.3 support
+try:
+   set = set
+except NameError:
+   from sets import Set as set
+
 import Alphabet
 from Alphabet import IUPAC
 from Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
@@ -664,6 +670,49 @@ def back_transcribe(rna):
         dna = rna.replace('U','T').replace('u','t')
         return dna
 
+def _translate_str(sequence, table, stop_symbol="*", pos_stop="X") :
+    """Helper function to translate a nucleotide string (PRIVATE).
+
+    sequence    - a string
+    table       - a CodonTable object (NOT a table name or id number)
+    stop_symbol - a single character string
+    pos_stop    - a single character string for a possible stop codon
+                  (e.g. TAN or NNN)
+
+    Returns a string.
+
+    e.g.
+    _translate_str("AAA") -> "K"
+    _translate_str("TAR",table) -> "*"
+    _translate_str("TAN",table) -> "X"
+    _translate_str("TAN",table,pos_stop="@") -> "@"
+    _translate_str("TA?",table) -> TranslationError
+    """
+    amino_acids = []
+    forward_table = table.forward_table
+    stop_codons = table.stop_codons
+    if table.nucleotide_alphabet.letters is not None :
+        valid_letters = set(table.nucleotide_alphabet.letters)
+    else :
+        #Assume the worst case, ambiguous DNA or RNA:
+        valid_letters = set(IUPAC.ambiguous_dna.letters + \
+                            IUPAC.ambiguous_rna.letters)
+    n = len(sequence)
+    for i in xrange(0,n-n%3,3) :
+        codon = sequence[i:i+3]
+        try :
+            amino_acids.append(forward_table[codon])
+        except (KeyError, CodonTable.TranslationError) :
+            #Todo? Treat "---" as a special case (gapped translation)
+            if codon in table.stop_codons :
+                amino_acids.append(stop_symbol)
+            elif valid_letters.issuperset(codon) :
+                #Possible stop codon (e.g. NNN or TAN)
+                amino_acids.append(pos_stop)
+            else :
+                raise CodonTable.TranslationError(\
+                    "Codon '%s' is invalid" % codon)
+    return "".join(amino_acids)
 
 def translate(sequence, table = "Standard", stop_symbol = "*"):
     """Translate a nucleotide sequence into amino acids.
@@ -674,49 +723,53 @@ def translate(sequence, table = "Standard", stop_symbol = "*"):
     table - Which codon table to use?  This can be either a name
            (string) or an identifier (integer)
 
-    NOTE - Does NOT support ambiguous nucleotide sequences which
-    could code for a stop codon.  This will throw a TranslationError.
+    NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
+    or a stop codon.  These are translated as "X".  Any invalid codon
+    (e.g. "TA?" or "T-A") will throw a TranslationError.
 
     NOTE - Does NOT support gapped sequences.
     
-    It will however translate either DNA or RNA."""
+    It will however translate either DNA or RNA.
+
+    e.g.
+    translate("AAA") -> "K"
+    translate("TAR") -> "*"
+    translate("TAN") -> "X"
+    translate("NNN") -> "X"
+    """
     try:
-        id = int(table)
+        table_id = int(table)
     except:
-        id = None
+        table_id = None
     if isinstance(sequence, Seq) or isinstance(sequence, MutableSeq):
         if isinstance(sequence.alphabet, Alphabet.ProteinAlphabet) :
             raise ValueError, "Proteins cannot be translated!"
         if sequence.alphabet==IUPAC.unambiguous_dna:
-            if id==None:
+            if table_id is None:
                 table = CodonTable.unambiguous_dna_by_name[table]
             else:
-                table = CodonTable.unambiguous_dna_by_id[id]
+                table = CodonTable.unambiguous_dna_by_id[table_id]
         elif sequence.alphabet==IUPAC.ambiguous_dna:
-            if id==None:
+            if table_id is None:
                 table = CodonTable.ambiguous_dna_by_name[table]
             else:
-                table = CodonTable.ambiguous_dna_by_id[id]
+                table = CodonTable.ambiguous_dna_by_id[table_id]
         elif sequence.alphabet==IUPAC.unambiguous_rna:
-            if id==None:
+            if table_id is None:
                 table = CodonTable.unambiguous_rna_by_name[table]
             else:
-                table = CodonTable.unambiguous_rna_by_id[id]
+                table = CodonTable.unambiguous_rna_by_id[table_id]
         elif sequence.alphabet==IUPAC.ambiguous_rna:
-            if id==None:
+            if table_id is None:
                 table = CodonTable.ambiguous_rna_by_name[table]
             else:
-                table = CodonTable.ambiguous_rna_by_id[id]
+                table = CodonTable.ambiguous_rna_by_id[table_id]
         else:
-            if id==None:
+            if table_id is None:
                 table = CodonTable.ambiguous_generic_by_name[table]
             else:
-                table = CodonTable.ambiguous_generic_by_id[id]
-        sequence = sequence.tostring().upper()
-        n = len(sequence)
-        get = table.forward_table.get
-        protein = [get(sequence[i:i+3], stop_symbol) for i in xrange(0,n-n%3,3)]
-        protein = "".join(protein)
+                table = CodonTable.ambiguous_generic_by_id[table_id]
+        protein = _translate_str(sequence.tostring(), table, stop_symbol)
         if stop_symbol in protein :
             alphabet = Alphabet.HasStopCodon(table.protein_alphabet,
                                              stop_symbol = stop_symbol)
@@ -724,16 +777,11 @@ def translate(sequence, table = "Standard", stop_symbol = "*"):
             alphabet = table.protein_alphabet
         return Seq(protein, alphabet)
     else:
-        if id==None:
+        if table_id==None:
             table = CodonTable.ambiguous_generic_by_name[table]
         else:
-            table = CodonTable.ambiguous_generic_by_id[id]
-        get = table.forward_table.get
-        sequence = sequence.upper()
-        n = len(sequence)
-        protein = [get(sequence[i:i+3], stop_symbol) for i in xrange(0,n-n%3,3)]
-        protein = "".join(protein)
-        return protein
+            table = CodonTable.ambiguous_generic_by_id[table_id]
+        return _translate_str(sequence, table, stop_symbol)
 
 
 def reverse_complement(sequence):
@@ -742,7 +790,7 @@ def reverse_complement(sequence):
     If given a string, returns a new string object.
     Given a Seq or a MutableSeq, returns a new Seq object with the same alphabet.
 
-    Supports unambiguous nucleotide sequences
+    Supports unambiguous and ambiguous nucleotide sequences.
     """
     if isinstance(sequence, Seq) :
         #Return a Seq
@@ -761,12 +809,6 @@ if __name__ == "__main__" :
     print "Quick self test"
     from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values#
     from Bio.Alphabet import generic_dna, generic_rna
-
-    #TODO - Remove this work around once we drop python 2.3 support
-    try:
-       set = set
-    except NameError:
-       from sets import Set as set
 
     print ambiguous_dna_complement
     for ambig_char, values in ambiguous_dna_values.iteritems() :
@@ -820,6 +862,9 @@ if __name__ == "__main__" :
     print repr(translate(Seq("GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGTTAG",
                              IUPAC.unambiguous_dna), stop_symbol="@"))
     
+    assert translate("TAR")=="*"
+    assert translate("TAN")=="X"
+    assert translate("NNN")=="X"
     ambig = set(IUPAC.IUPACAmbiguousDNA.letters)
     for c1 in ambig :
         for c2 in ambig :
@@ -828,11 +873,7 @@ if __name__ == "__main__" :
                               for a in ambiguous_dna_values[c1] \
                               for b in ambiguous_dna_values[c2] \
                               for c in ambiguous_dna_values[c3]])
-                try :
-                    t = translate(c1+c2+c3)
-                except CodonTable.TranslationError :
-                    assert "*" in values
-                    continue
+                t = translate(c1+c2+c3)
                 if t=="*" :
                     assert values == set("*")
                 elif t=="X" :
