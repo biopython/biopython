@@ -399,10 +399,22 @@ for nucleotide_seq in [misc_stops, Seq.Seq(misc_stops),
     assert "***RR" == str(Seq.translate(nucleotide_seq, table='Bacterial'))
 del misc_stops
 
+assert Seq.translate("TAT")=="Y"
 assert Seq.translate("TAR")=="*"
 assert Seq.translate("TAN")=="X"
 assert Seq.translate("NNN")=="X"
-for codon in ["TA?", "N-N", "AC_"] :
+
+assert Seq.translate("TAt")=="Y"
+assert Seq.translate("TaR")=="*"
+assert Seq.translate("TaN")=="X"
+assert Seq.translate("nnN")=="X"
+
+assert Seq.translate("tat")=="Y"
+assert Seq.translate("tar")=="*"
+assert Seq.translate("tan")=="X"
+assert Seq.translate("nnn")=="X"
+
+for codon in ["TA?", "N-N", "AC_", "Ac_"] :
     try :
         print Seq.translate(codon)
         assert "Translating %s should have failed" % repr(codon)

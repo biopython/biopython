@@ -688,15 +688,16 @@ def _translate_str(sequence, table, stop_symbol="*", pos_stop="X") :
     _translate_str("TAN",table,pos_stop="@") -> "@"
     _translate_str("TA?",table) -> TranslationError
     """
+    sequence = sequence.upper()
     amino_acids = []
     forward_table = table.forward_table
     stop_codons = table.stop_codons
     if table.nucleotide_alphabet.letters is not None :
-        valid_letters = set(table.nucleotide_alphabet.letters)
+        valid_letters = set(table.nucleotide_alphabet.letters.upper())
     else :
         #Assume the worst case, ambiguous DNA or RNA:
-        valid_letters = set(IUPAC.ambiguous_dna.letters + \
-                            IUPAC.ambiguous_rna.letters)
+        valid_letters = set(IUPAC.ambiguous_dna.letters.upper() + \
+                            IUPAC.ambiguous_rna.letters.upper())
     n = len(sequence)
     for i in xrange(0,n-n%3,3) :
         codon = sequence[i:i+3]
@@ -865,6 +866,9 @@ if __name__ == "__main__" :
     assert translate("TAR")=="*"
     assert translate("TAN")=="X"
     assert translate("NNN")=="X"
+    assert translate("TaR")=="*"
+    assert translate("TaN")=="X"
+    assert translate("NnN")=="X"
     ambig = set(IUPAC.IUPACAmbiguousDNA.letters)
     for c1 in ambig :
         for c2 in ambig :
