@@ -3117,7 +3117,9 @@ Note that a more typical use would be to save the sequence data to a local file,
 
 \begin{verbatim}
 import os
-from Bio import Entrez, SeqIO
+from Bio import SeqIO
+from Bio import Entrez
+Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
 filename = "gi_186972394.gbk"
 if not os.path.isfile(filename) :
     print "Downloading..."
@@ -3187,7 +3189,7 @@ See the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/espell\_help.html}
 \section{Specialized parsers}
 \label{sec:entrez-specialized-parsers}
 
-The \verb+Bio.Entrez.read+ function can parse most (if not all) XML output returned by Entrez. Entrez typically allows you to retrieve records in other formats, which may have some advantages compared to the XML format in terms of readability.
+The \verb|Bio.Entrez.read()| function can parse most (if not all) XML output returned by Entrez. Entrez typically allows you to retrieve records in other formats, which may have some advantages compared to the XML format in terms of readability (or download size).
 
 To request a specific file format from Entrez using \verb|Bio.Entrez.efetch()| requires specifying the \verb|rettype| and/or \verb|retmode| optional arguments.  The different combinations are described for each database type on the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html}{NCBI efetch webpage}.
 
@@ -3214,7 +3216,8 @@ PG  - 296-302
 AB  - Bioinformatics research is often difficult to do with commercial software. The
       Open Source BioPerl, BioPython and Biojava projects provide toolkits with
 ...
-\end{verbatim}We first open the file and then parse it:
+\end{verbatim}
+We first open the file and then parse it:
 \begin{verbatim}
 >>> from Bio import Medline
 >>> input = open("pubmed_result1.txt")
@@ -3327,7 +3330,6 @@ Now we use the \verb+Bio.Entrez.efetch+ function to download the PubMed IDs of t
 
 
 This returns a python list containing all of the PubMed IDs of articles related to orchids:
-
 \begin{verbatim}
 ['18680603', '18665331', '18661158', '18627489', '18627452', '18612381',
 '18594007', '18591784', '18589523', '18579475', '18575811', '18575690',
@@ -3335,7 +3337,6 @@ This returns a python list containing all of the PubMed IDs of articles related 
 \end{verbatim}
 
 Now that we've got them, we obviously want to get the corresponding Medline records and extract the information from them. Here, we'll download the Medline records in the Medline flat-file format, and use the \verb+Bio.Medline+ module to parse them:
-
 \begin{verbatim}
 >>> from Bio import Medline
 >>> handle = Entrez.efetch(db="pubmed", id=idlist, rettype="medline",
@@ -3344,13 +3345,11 @@ Now that we've got them, we obviously want to get the corresponding Medline reco
 \end{verbatim}
 
 Keep in mind that \verb+records+ is an iterator, so you can iterate through the records only once. If you want to save the records, you can convert them to a list:
-
 \begin{verbatim}
 >>> records = list(records)
 \end{verbatim}
 
 Let's now iterate over the records to print out some information about each record:
-
 \begin{verbatim}
 >>> for record in records:
 ...     print "title:", record["TI"]
@@ -3361,7 +3360,6 @@ Let's now iterate over the records to print out some information about each reco
 \end{verbatim}
 
 The output for this looks like:
-
 \begin{verbatim}
 title: Sex pheromone mimicry in the early spider orchid (ophrys sphegodes):
 patterns of hydrocarbons as the key mechanism for pollination by sexual
@@ -3372,7 +3370,6 @@ source: J Comp Physiol [A] 2000 Jun;186(6):567-74
 \end{verbatim}
 
 Especially interesting to note is the list of authors, which is returned as a standard python list. This makes it easy to manipulate and search using standard python tools. For instance, we could loop through a whole bunch of entries searching for a particular author with code like the following:
-
 \begin{verbatim}
 >>> search_author = "Waits T"
 
