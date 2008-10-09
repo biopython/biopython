@@ -26,7 +26,15 @@ class Seq:
 
     Like normal python strings, our basic sequence object is immuatable.
     This prevents you from doing my_seq[5] = "A" for example, but does allow
-    Seq objects to be used as dictionary keys."""
+    Seq objects to be used as dictionary keys.
+
+    The Seq object provides a number of string like methods (such as count,
+    find, split and strip), which are alphabet aware where appropriate.
+
+    The Seq object also provides some biological methods, such as complement
+    and reverse_complement (not applicable to sequences with a
+    protein alphabet).
+    """
     def __init__(self, data, alphabet = Alphabet.generic_alphabet):
         # Enforce string storage
         assert (type(data) == type("") or # must use a string
@@ -305,6 +313,8 @@ class Seq:
 
     def complement(self):
         """Returns the complement sequence. New Seq object.
+
+        Trying to complement a protein sequence raises an exception.
         """
         if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
             raise ValueError, "Proteins do not have complements!"
@@ -324,8 +334,10 @@ class Seq:
 
     def reverse_complement(self):
         """Returns the reverse complement sequence. New Seq object.
+
+        Trying to complement a protein sequence raises an exception.
         """
-        #Use -1 stride to reverse the complement
+        #Use -1 stride/step to reverse the complement
         return self.complement()[::-1]
 
 class MutableSeq:
@@ -450,7 +462,9 @@ class MutableSeq:
         del self.data[index]
     
     def __add__(self, other):
-        """Add another sequence or string to this sequence."""
+        """Add another sequence or string to this sequence.
+
+        Returns a new MutableSeq object."""
         if hasattr(other, "alphabet") :
             #other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
@@ -553,13 +567,15 @@ class MutableSeq:
         raise ValueError, "MutableSeq.index(x): x not in list"
 
     def reverse(self):
-        """Modify the MutableSequence to reverse itself.
+        """Modify the mutable sequence to reverse itself.
 
         No return value."""
         self.data.reverse()
 
     def complement(self):
-        """Modify the MutableSequence to take on its complement.
+        """Modify the mutable sequence to take on its complement.
+
+        Trying to complement a protein sequence raises an exception.
 
         No return value"""
         if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
@@ -578,11 +594,11 @@ class MutableSeq:
         self.data = array.array('c', self.data)
         
     def reverse_complement(self):
-        """Modify the MutableSequence to take on its reverse complement.
+        """Modify the mutable sequence to take on its reverse complement.
+
+        Trying to reverse complement a protein sequence raises an exception.
 
         No return value."""
-        if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
-            raise ValueError, "Proteins do not have complements!"
         self.complement()
         self.data.reverse()
 
@@ -615,7 +631,7 @@ class MutableSeq:
         return "".join(self.data)
 
     def toseq(self):
-        """Returns the full sequence as a new immutable Seq object"""
+        """Returns the full sequence as a new immutable Seq object."""
         return Seq("".join(self.data), self.alphabet)
 
 
@@ -627,7 +643,10 @@ def transcribe(dna):
     """Transcribes a DNA sequence into RNA.
 
     If given a string, returns a new string object.
-    Given a Seq or MutableSeq, returns a new Seq object with the same alphabet.
+
+    Given a Seq or MutableSeq, returns a new Seq object with an RNA alphabet.
+
+    Trying to transcribe a protein or RNA sequence raises an exception.
     """
     if isinstance(dna, Seq) or isinstance(dna, MutableSeq):
         if isinstance(dna.alphabet, Alphabet.ProteinAlphabet) :
@@ -651,7 +670,10 @@ def back_transcribe(rna):
     """Back-transcribes an RNA sequence into DNA.
 
     If given a string, returns a new string object.
-    Given a Seq or MutableSeq, returns a new Seq object with the same alphabet.
+    
+    Given a Seq or MutableSeq, returns a new Seq object with an RNA alphabet.
+
+    Trying to transcribe a protein or DNA sequence raises an exception.
     """
     if isinstance(rna, Seq) or isinstance(rna, MutableSeq):
         if isinstance(rna.alphabet, Alphabet.ProteinAlphabet) :
@@ -719,10 +741,11 @@ def translate(sequence, table = "Standard", stop_symbol = "*"):
     """Translate a nucleotide sequence into amino acids.
 
     If given a string, returns a new string object.
-    Given a Seq or MutableSeq, returns a Seq object.
+    Given a Seq or MutableSeq, returns a Seq object with a protein
+    alphabet.
 
     table - Which codon table to use?  This can be either a name
-           (string) or an identifier (integer)
+            (string) or an NCBI identifier (integer).
 
     NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
     or a stop codon.  These are translated as "X".  Any invalid codon
@@ -735,8 +758,10 @@ def translate(sequence, table = "Standard", stop_symbol = "*"):
     e.g.
     translate("AAA") -> "K"
     translate("TAR") -> "*"
+    translate("UAR") -> "*"
     translate("TAN") -> "X"
     translate("NNN") -> "X"
+    translate("TAG",stop_sybmol="@") -> "@"
     """
     try:
         table_id = int(table)
