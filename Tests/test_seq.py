@@ -315,6 +315,7 @@ print
 
 test_seqs = [s,t,u,
              Seq.Seq("ATGAAACTG"),
+             "ATGAAACTG",
              #TODO - Fix ambiguous translation
              #Seq.Seq("ATGAARCTG"),
              #Seq.Seq("AWGAARCKG"),  # Note no U or T
@@ -325,7 +326,7 @@ test_seqs = [s,t,u,
              #Seq.Seq("".join(ambiguous_rna_values), IUPAC.IUPACAmbiguousDNA()),
              #Seq.Seq("".join(ambiguous_dna_values), IUPAC.IUPACAmbiguousRNA()),
              #Seq.Seq("AWGAARCKG", Alphabet.generic_dna), 
-             Seq.Seq("AUGAAACUG", Alphabet.generic_dna), 
+             Seq.Seq("AUGAAACUG", Alphabet.generic_rna), 
              Seq.Seq("ATGAAACTG", IUPAC.unambiguous_dna), 
              Seq.Seq("ATGAAACTGWN", IUPAC.ambiguous_dna), 
              Seq.Seq("AUGAAACUG", Alphabet.generic_rna), 
@@ -333,41 +334,75 @@ test_seqs = [s,t,u,
              Seq.Seq("AUGAAACUGWN", IUPAC.ambiguous_rna), 
              Seq.Seq("ATGAAACTG", Alphabet.generic_nucleotide), 
              Seq.Seq("AUGAAACTG", Alphabet.generic_nucleotide), #U and T
-             Seq.MutableSeq("ATGAAACTG", Alphabet.generic_rna),
+             Seq.MutableSeq("ATGAAACTG", Alphabet.generic_dna),
+             Seq.MutableSeq("AUGaaaCUG", IUPAC.unambiguous_rna),
              Seq.Seq("ACTGTCGTCT", Alphabet.generic_protein)]
+#Sanity test on the test sequence alphabets (see also enhancement bug 2597)
+for nucleotide_seq in test_seqs :
+    if hasattr(nucleotide_seq, "alphabet") :
+        if "U" in str(nucleotide_seq).upper() :
+            assert not isinstance(nucleotide_seq.alphabet, Alphabet.DNAAlphabet)
+        if "T" in str(nucleotide_seq).upper() :
+            assert not isinstance(nucleotide_seq.alphabet, Alphabet.RNAAlphabet)
+            
 
 print
 print "Transcribe DNA into RNA"
 print "======================="
 for nucleotide_seq in test_seqs:
     try :
+        expected = Seq.transcribe(nucleotide_seq)
         print "%s -> %s" \
-        % (repr(nucleotide_seq) , repr(Seq.transcribe(nucleotide_seq)))
+        % (repr(nucleotide_seq) , repr(expected))
     except ValueError, e :
+        expected = None
         print "%s -> %s" \
         % (repr(nucleotide_seq) , str(e))
+    #Now test the Seq object's method (see enhancement Bug 2381)
+    #if isinstance(nucleotide_seq, Seq.Seq) :
+    #    try :
+    #        assert repr(expected) == repr(nucleotide_seq.transcribe())
+    #    except ValueError :
+    #        assert expected is None
 
 print
 print "Back-transcribe RNA into DNA"
 print "============================"
 for nucleotide_seq in test_seqs:
     try :
+        expected = Seq.back_transcribe(nucleotide_seq)
         print "%s -> %s" \
-        % (repr(nucleotide_seq) , repr(Seq.back_transcribe(nucleotide_seq)))
+        % (repr(nucleotide_seq) , repr(expected))
     except ValueError, e :
+        expected = None
         print "%s -> %s" \
         % (repr(nucleotide_seq) , str(e))
+    #Now test the Seq object's method (see enhancement Bug 2381)
+    #if isinstance(nucleotide_seq, Seq.Seq) :
+    #    try :
+    #        assert repr(expected) == repr(nucleotide_seq.back_transcribe())
+    #    except ValueError :
+    #        assert expected is None
         
 print
 print "Reverse Complement"
 print "=================="
 for nucleotide_seq in test_seqs:
     try :
+        expected = Seq.reverse_complement(nucleotide_seq)
         print "%s\n-> %s" \
-        % (repr(nucleotide_seq) , repr(Seq.reverse_complement(nucleotide_seq)))
+        % (repr(nucleotide_seq) , repr(expected))
     except ValueError, e :
+        expected = None
         print "%s\n-> %s" \
         % (repr(nucleotide_seq) , str(e))
+    #Now test the Seq object's method
+    #(The MutualSeq object acts in place)
+    if isinstance(nucleotide_seq, Seq.Seq) :
+        try :
+            assert repr(expected) == repr(nucleotide_seq.reverse_complement())
+        except ValueError :
+            assert expected is None
         
 print
 print "Translating"
