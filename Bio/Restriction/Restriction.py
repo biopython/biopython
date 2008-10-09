@@ -79,9 +79,13 @@
         """
 
 import re
-
-from sets import Set
 import itertools
+
+#TODO - Remove this work around once we drop python 2.3 support
+try:
+   set = set
+except NameError:
+   from sets import Set as set
 
 from Bio.Seq import Seq, MutableSeq
 from Bio.Alphabet import IUPAC
@@ -1766,13 +1770,13 @@ class Not_available(AbstractCut) :
 ###############################################################################
 
 
-class RestrictionBatch(Set) :
+class RestrictionBatch(set) :
 
     def __init__(self, first=[], suppliers=[]) :
         """RestrictionBatch([sequence]) -> new RestrictionBatch."""
         first = [self.format(x) for x in first]
         first += [eval(x) for n in suppliers for x in suppliers_dict[n][1]]
-        Set.__init__(self, first)
+        set.__init__(self, first)
         self.mapping = dict.fromkeys(self)
         self.already_mapped = DNA('')
             
@@ -1791,7 +1795,7 @@ class RestrictionBatch(Set) :
             other = self.format(other)
         except ValueError : # other is not a restriction enzyme
             return False
-        return Set.__contains__(self, other)
+        return set.__contains__(self, other)
     
     def __div__(self, other) :
         return self.search(other)
@@ -1861,25 +1865,25 @@ class RestrictionBatch(Set) :
     def remove(self, other) :
         """B.remove(other) -> remove other from B if other is a RestrictionType.
 
-        Safe Set.remove method. Verify that other is a RestrictionType or can be
+        Safe set.remove method. Verify that other is a RestrictionType or can be
         evaluated to a RestrictionType.
         raise a ValueError if other can not be evaluated to a RestrictionType.
         raise a KeyError if other is not in B."""
-        return Set.remove(self, self.format(other))
+        return set.remove(self, self.format(other))
 
     def add(self, other) :
         """B.add(other) -> add other to B if other is a RestrictionType.
 
-        Safe Set.add method. Verify that other is a RestrictionType or can be
+        Safe set.add method. Verify that other is a RestrictionType or can be
         evaluated to a RestrictionType.
         raise a ValueError if other can not be evaluated to a RestrictionType.
         """
-        return Set.add(self, self.format(other))
+        return set.add(self, self.format(other))
 
     def add_nocheck(self, other) :
         """B.add_nocheck(other) -> add other to B. don't check type of other.
         """
-        return Set.add(self, other)
+        return set.add(self, other)
         
     def format(self, y) :
         """B.format(y) -> RestrictionType or raise ValueError.
@@ -2010,15 +2014,15 @@ class Analysis(RestrictionBatch, PrintFormat) :
         return 'Analysis(%s,%s,%s)'%\
                (repr(self.rb),repr(self.sequence),self.linear)
 
-    def _sub_set(self, set) :
-        """A._sub_set(set) -> dict.
+    def _sub_set(self, wanted) :
+        """A._sub_set(other_set) -> dict.
 
         Internal use only.
         
-        screen the results through set.
-        Keep only the results for which the enzymes is in set.
+        screen the results through wanted set.
+        Keep only the results for which the enzymes is in wanted set.
         """
-        return dict([(k,v) for k,v in self.mapping.iteritems() if k in set])
+        return dict([(k,v) for k,v in self.mapping.iteritems() if k in wanted])
     
     def _boundaries(self, start, end) :
         """A._boundaries(start, end) -> tuple.
