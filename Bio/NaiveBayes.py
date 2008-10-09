@@ -29,8 +29,8 @@ classify       Classify an observation into a class.
 # add code to help discretize data
 # use objects
 
-from numpy.oldnumeric import *
-from Bio import mathfns, listfns
+from numpy import *
+from Bio import listfns
 
 class NaiveBayes:
     """Holds information for a NaiveBayes classifier.
@@ -69,28 +69,25 @@ def calculate(nb, observation, scale=0):
               % (len(observation), nb.dimensionality)
 
     # Calculate log P(observation|class) for every class.
-    lp_observation_class = []     # list of log P(observation|class)
-    for i in range(len(nb.classes)):
+    n  = len(nb.classes)
+    lp_observation_class = zeros(n)   # array of log P(observation|class)
+    for i in range(n):
         # log P(observation|class) = SUM_i log P(observation_i|class)
         probs = [None] * len(observation)
         for j in range(len(observation)):
             probs[j] = nb.p_conditional[i][j].get(observation[j], 0)
-        lprobs = [mathfns.safe_log(x, -10000) for x in probs]
-        lprob = sum(lprobs)
-        lp_observation_class.append(lprob)
+        lprobs = log(clip(probs, 1.e-300, 1.e+300))
+        lp_observation_class[i] = sum(lprobs)
 
     # Calculate log P(class).
-    lp_prior = map(math.log, nb.p_prior)
+    lp_prior = log(nb.p_prior)
 
     # Calculate log P(observation).
     lp_observation = 0.0          # P(observation)
     if scale:   # Only calculate this if requested.
         # log P(observation) = log SUM_i P(observation|class_i)P(class_i)
-        obs = zeros(len(nb.classes), Float32)
-        for i in range(len(nb.classes)):
-            obs[i] = mathfns.safe_exp(lp_prior[i]+lp_observation_class[i],
-                                      under=1E-300)
-        lp_observation = math.log(sum(obs))
+        obs = exp(clip(lp_prior+lp_observation_class,-700,+700))
+        lp_observation = log(sum(obs))
 
     # Calculate log P(class|observation).
     lp_class_observation = {}      # Dict of class : log P(class|observation)
@@ -153,7 +150,7 @@ def train(training_set, results, priors=None, typecode=None):
         percs = priors
     else:
         percs = listfns.contents(results)
-    nb.p_prior = zeros(len(nb.classes), Float16)
+    nb.p_prior = zeros(len(nb.classes))
     for i in range(len(nb.classes)):
         nb.p_prior[i] = percs[nb.classes[i]]
 
