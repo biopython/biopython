@@ -315,7 +315,7 @@ print
 
 test_seqs = [s,t,u,
              Seq.Seq("ATGAAACTG"),
-             "ATGAAACTG",
+             "ATGAAACtg",
              #TODO - Fix ambiguous translation
              #Seq.Seq("ATGAARCTG"),
              #Seq.Seq("AWGAARCKG"),  # Note no U or T
@@ -352,18 +352,19 @@ print "======================="
 for nucleotide_seq in test_seqs:
     try :
         expected = Seq.transcribe(nucleotide_seq)
+        assert str(nucleotide_seq).replace("t","u").replace("T","U") == str(expected)
         print "%s -> %s" \
         % (repr(nucleotide_seq) , repr(expected))
     except ValueError, e :
         expected = None
         print "%s -> %s" \
         % (repr(nucleotide_seq) , str(e))
-    #Now test the Seq object's method (see enhancement Bug 2381)
-    #if isinstance(nucleotide_seq, Seq.Seq) :
-    #    try :
-    #        assert repr(expected) == repr(nucleotide_seq.transcribe())
-    #    except ValueError :
-    #        assert expected is None
+    #Now test the Seq object's method
+    if isinstance(nucleotide_seq, Seq.Seq) :
+        try :
+            assert repr(expected) == repr(nucleotide_seq.transcribe())
+        except ValueError :
+            assert expected is None
 
 print
 print "Back-transcribe RNA into DNA"
@@ -371,18 +372,19 @@ print "============================"
 for nucleotide_seq in test_seqs:
     try :
         expected = Seq.back_transcribe(nucleotide_seq)
+        assert str(nucleotide_seq).replace("u","t").replace("U","T") == str(expected)
         print "%s -> %s" \
         % (repr(nucleotide_seq) , repr(expected))
     except ValueError, e :
         expected = None
         print "%s -> %s" \
         % (repr(nucleotide_seq) , str(e))
-    #Now test the Seq object's method (see enhancement Bug 2381)
-    #if isinstance(nucleotide_seq, Seq.Seq) :
-    #    try :
-    #        assert repr(expected) == repr(nucleotide_seq.back_transcribe())
-    #    except ValueError :
-    #        assert expected is None
+    #Now test the Seq object's method
+    if isinstance(nucleotide_seq, Seq.Seq) :
+        try :
+            assert repr(expected) == repr(nucleotide_seq.back_transcribe())
+        except ValueError :
+            assert expected is None
         
 print
 print "Reverse Complement"

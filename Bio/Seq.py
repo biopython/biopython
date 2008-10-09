@@ -158,7 +158,7 @@ class Seq:
             raise TypeError, ("incompatable alphabets", str(self.alphabet),
                               str(other_alpha))
         #Return as a string
-        return other_sequence.tostring()
+        return str(other_sequence)
     
     def count(self, sub, start=0, end=sys.maxint):
         """Count method, like that of a python string.
@@ -182,7 +182,7 @@ class Seq:
         """
         #If it has one, check the alphabet:
         sub_str = self._get_seq_str_and_check_alphabet(sub)
-        return self.tostring().count(sub_str, start, end)
+        return str(self).count(sub_str, start, end)
 
     def find(self, sub, start=0, end=sys.maxint):
         """Find method, like that of a python string.
@@ -194,7 +194,7 @@ class Seq:
         """
         #If it has one, check the alphabet:
         sub_str = self._get_seq_str_and_check_alphabet(sub)
-        return self.tostring().find(sub_str, start, end)
+        return str(self).find(sub_str, start, end)
     
     def split(self, sep=None, maxsplit=-1) :
         """Split method, like that of a python string.
@@ -329,7 +329,7 @@ class Seq:
         ttable = self.__maketrans(d)
         #Much faster on really long sequences than the previous loop based one.
         #thx to Michael Palmer, University of Waterloo
-        s = self.data.translate(ttable)
+        s = str(self).translate(ttable)
         return Seq(s, self.alphabet)
 
     def reverse_complement(self):
@@ -339,6 +339,45 @@ class Seq:
         """
         #Use -1 stride/step to reverse the complement
         return self.complement()[::-1]
+
+    def transcribe(self):
+        """Returns the RNA sequence from a DNA sequence. New Seq object.
+
+        Trying to transcribe a protein or RNA sequence raises an exception.
+        """
+        if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
+            raise ValueError, "Proteins cannot be transcribed!"
+        if isinstance(self.alphabet, Alphabet.RNAAlphabet) :
+            raise ValueError, "RNA cannot be transcribed!"
+
+        if self.alphabet==IUPAC.unambiguous_dna:
+            alphabet = IUPAC.unambiguous_rna
+        elif self.alphabet==IUPAC.ambiguous_dna:
+            alphabet = IUPAC.ambiguous_rna
+        else:
+            alphabet = Alphabet.generic_rna
+        return Seq(str(self).replace('T','U').replace('t','u'), alphabet)
+
+    
+    def back_transcribe(self):
+        """Returns the DNA sequence from an RNA sequence. New Seq object.
+
+        Trying to back-transcribe a protein or DNA sequence raises an
+        exception.
+        """
+        if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
+            raise ValueError, "Proteins cannot be back transcribed!"
+        if isinstance(self.alphabet, Alphabet.DNAAlphabet) :
+            raise ValueError, "DNA cannot be back transcribed!"
+
+        if self.alphabet==IUPAC.unambiguous_rna:
+            alphabet = IUPAC.unambiguous_dna
+        elif self.alphabet==IUPAC.ambiguous_rna:
+            alphabet = IUPAC.ambiguous_dna
+        else:
+            alphabet = Alphabet.generic_dna
+        return Seq(str(self).replace("U", "T").replace("u", "t"), alphabet)
+
 
 class MutableSeq:
     """An editable sequence object (with an alphabet).
@@ -648,23 +687,12 @@ def transcribe(dna):
 
     Trying to transcribe a protein or RNA sequence raises an exception.
     """
-    if isinstance(dna, Seq) or isinstance(dna, MutableSeq):
-        if isinstance(dna.alphabet, Alphabet.ProteinAlphabet) :
-            raise ValueError, "Proteins cannot be transcribed!"
-        if isinstance(dna.alphabet, Alphabet.RNAAlphabet) :
-            raise ValueError, "RNA cannot be transcribed!"
-        rna = dna.tostring().replace('T','U').replace('t','u')
-        if dna.alphabet==IUPAC.unambiguous_dna:
-            alphabet = IUPAC.unambiguous_rna
-        elif dna.alphabet==IUPAC.ambiguous_dna:
-            alphabet = IUPAC.ambiguous_rna
-        else:
-            alphabet = Alphabet.generic_rna
-        return Seq(rna, alphabet)
+    if isinstance(dna, Seq) :
+        return dna.transcribe()
+    elif isinstance(dna, MutableSeq):
+        return dna.toseq().transcribe()
     else:
-        rna = dna.replace('T','U').replace('t','u')
-        return rna
-
+        return dna.replace('T','U').replace('t','u')
 
 def back_transcribe(rna):
     """Back-transcribes an RNA sequence into DNA.
@@ -675,22 +703,12 @@ def back_transcribe(rna):
 
     Trying to transcribe a protein or DNA sequence raises an exception.
     """
-    if isinstance(rna, Seq) or isinstance(rna, MutableSeq):
-        if isinstance(rna.alphabet, Alphabet.ProteinAlphabet) :
-            raise ValueError, "Proteins cannot be (back)transcribed!"
-        if isinstance(rna.alphabet, Alphabet.DNAAlphabet) :
-            raise ValueError, "DNA cannot be back transcribed!"
-        dna = rna.tostring().replace('U','T').replace('u','t')
-        if rna.alphabet==IUPAC.unambiguous_rna:
-            alphabet = IUPAC.unambiguous_dna
-        elif rna.alphabet==IUPAC.ambiguous_rna:
-            alphabet = IUPAC.ambiguous_dna
-        else:
-            alphabet = Alphabet.generic_dna
-        return Seq(dna, alphabet)
+    if isinstance(rna, Seq) :
+        return rna.back_transcribe()
+    elif isinstance(rna, MutableSeq):
+        return rna.toseq().back_transcribe()
     else:
-        dna = rna.replace('U','T').replace('u','t')
-        return dna
+        return rna.replace('U','T').replace('u','t')
 
 def _translate_str(sequence, table, stop_symbol="*", pos_stop="X") :
     """Helper function to translate a nucleotide string (PRIVATE).

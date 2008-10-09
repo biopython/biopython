@@ -170,7 +170,7 @@ Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA()) -> Seq('UCAAAAGGAUGCAUCAUG', IU
 Seq('T', IUPACAmbiguousDNA()) -> Seq('U', IUPACAmbiguousRNA())
 Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA()) -> Seq('UCAAAAGGAUGCAUCAUGU', IUPACAmbiguousRNA())
 Seq('ATGAAACTG', Alphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
-'ATGAAACTG' -> 'AUGAAACUG'
+'ATGAAACtg' -> 'AUGAAACug'
 Seq('AUGAAACUG', RNAAlphabet()) -> RNA cannot be transcribed!
 Seq('ATGAAACTG', IUPACUnambiguousDNA()) -> Seq('AUGAAACUG', IUPACUnambiguousRNA())
 Seq('ATGAAACTGWN', IUPACAmbiguousDNA()) -> Seq('AUGAAACUGWN', IUPACAmbiguousRNA())
@@ -189,7 +189,7 @@ Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA()) -> DNA cannot be back transcrib
 Seq('T', IUPACAmbiguousDNA()) -> DNA cannot be back transcribed!
 Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA()) -> DNA cannot be back transcribed!
 Seq('ATGAAACTG', Alphabet()) -> Seq('ATGAAACTG', DNAAlphabet())
-'ATGAAACTG' -> 'ATGAAACTG'
+'ATGAAACtg' -> 'ATGAAACtg'
 Seq('AUGAAACUG', RNAAlphabet()) -> Seq('ATGAAACTG', DNAAlphabet())
 Seq('ATGAAACTG', IUPACUnambiguousDNA()) -> DNA cannot be back transcribed!
 Seq('ATGAAACTGWN', IUPACAmbiguousDNA()) -> DNA cannot be back transcribed!
@@ -212,8 +212,8 @@ Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA())
 -> Seq('ACATGATGCATCCTTTTGA', IUPACAmbiguousDNA())
 Seq('ATGAAACTG', Alphabet())
 -> Seq('CAGTTTCAT', Alphabet())
-'ATGAAACTG'
--> 'CAGTTTCAT'
+'ATGAAACtg'
+-> 'caGTTTCAT'
 Seq('AUGAAACUG', RNAAlphabet())
 -> Seq('CAGUUUCAU', RNAAlphabet())
 Seq('ATGAAACTG', IUPACUnambiguousDNA())
@@ -247,7 +247,7 @@ Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA())
 -> Seq('SKGCIM', ExtendedIUPACProtein())
 Seq('ATGAAACTG', Alphabet())
 -> Seq('MKL', ExtendedIUPACProtein())
-'ATGAAACTG'
+'ATGAAACtg'
 -> 'MKL'
 Seq('AUGAAACUG', RNAAlphabet())
 -> Seq('MKL', ExtendedIUPACProtein())
