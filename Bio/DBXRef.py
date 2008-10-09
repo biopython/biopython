@@ -1,3 +1,25 @@
+# This is a Python module.
+"""This module is DEPRECATED.
+
+DBXref was used in building SeqRecords from Martel descriptions (see
+Bio.builders.SeqRecord.sequence for more details).
+
+Andrew Dalke is no longer maintaining Martel or Bio.Mindy, and these modules
+and associate ones like Bio.DBXRef are now deprecated.  They are no longer
+used in any of the current Biopython parsers, and are likely to be removed
+in a future release.
+"""
+
+import warnings
+warnings.warn("Martel and those parts of Biopython closely linked to it" \
+              +" (such as Bio.DBXRef which is not used elsewhere) are now" \
+              +" deprecated, and will be removed in a future release of"\
+              +" Biopython.  If you want to continue to use this code,"\
+              +" please get in contact with the Biopython developers via"\
+              +" the mailing lists to avoid its permanent removal from"\
+              +" Biopython.", \
+              DeprecationWarning)
+
 class DBXRef:
     def __init__(self, dbname, dbid, reftype = None, negate = 0):
         self.dbname = dbname
