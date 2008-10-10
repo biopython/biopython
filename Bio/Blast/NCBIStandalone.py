@@ -1974,7 +1974,7 @@ def _escape_filename(filename) :
         return '"%s"' % filename
 
 def _invoke_blast(blast_cmd, params) :
-    """Start BLAST and returns undo-handles for stdout and stderr (PRIVATE).
+    """Start BLAST and returns handles for stdout and stderr (PRIVATE).
 
     Tries to deal with spaces in the BLAST executable path.
     """
@@ -1983,11 +1983,20 @@ def _invoke_blast(blast_cmd, params) :
 
     cmd_string = " ".join([_escape_filename(blast_cmd)] + params)
 
-    #subprocess isn't available on python 2.3
-    write_handle, result_handle, error_handle \
-                  = os.popen3(cmd_string)
-    write_handle.close()
-    return File.UndoHandle(result_handle), File.UndoHandle(error_handle)
+    try :
+        import subprocess, sys
+        blast_process = subprocess.Popen(cmd_string,
+                                         stdout=subprocess.PIPE,
+                                         stderr=subprocess.PIPE,
+                                         shell=(sys.platform!="win32"))
+        return blast_process.stdout, blast_process.stderr
+    except ImportError :
+        #subprocess isn't available on python 2.3
+        #Note os.popen3 is deprecated in python 2.6
+        write_handle, result_handle, error_handle \
+                      = os.popen3(cmd_string)
+        write_handle.close()
+        return result_handle, error_handle
 
 def _security_check_parameters(param_dict) :
     """Look for any attempt to insert a command into a parameter.
