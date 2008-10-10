@@ -380,11 +380,11 @@ class InDepthLoadTest(unittest.TestCase):
         assert str(test_feature.location) == "[0:206]"
         assert len(test_feature.qualifiers.keys()) == 3, \
                "Expected three keys, have %s" % repr(test_feature.qualifiers.keys())
-        assert test_feature.qualifiers.has_key("country")
+        assert "country" in test_feature.qualifiers
         assert test_feature.qualifiers["country"] == ["Russia:Bashkortostan"]
-        assert test_feature.qualifiers.has_key("organism")
+        assert "organism" in test_feature.qualifiers
         assert test_feature.qualifiers["organism"] == ["Armoracia rusticana"]
-        assert test_feature.qualifiers.has_key("db_xref")
+        assert "db_xref" in test_feature.qualifiers
         assert test_feature.qualifiers["db_xref"] == ["taxon:3704"], \
                "%s <> ['taxon:3704']" % test_feature.qualifiers["db_xref"]
 
@@ -400,7 +400,7 @@ class InDepthLoadTest(unittest.TestCase):
         assert test_feature.sub_features[1].type == "CDS"
         assert test_feature.sub_features[1].location_operator == "join"
         assert len(test_feature.qualifiers.keys()) == 6
-        assert test_feature.qualifiers.has_key("product")
+        assert "product" in test_feature.qualifiers
         assert test_feature.qualifiers["gene"] == ["csp14"]
         assert test_feature.qualifiers["codon_start"] == ["2"]
         assert test_feature.qualifiers["product"] == ["cold shock protein"]

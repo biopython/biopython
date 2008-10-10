@@ -668,9 +668,9 @@ class Nexus(object):
         pass
 
     def _dimensions(self,options):
-        if options.has_key('ntax'):
+        if 'ntax' in options:
             self.ntax=eval(options['ntax'])
-        if options.has_key('nchar'):
+        if 'nchar' in options:
             self.nchar=eval(options['nchar'])
 
     def _format(self,options):
@@ -678,10 +678,10 @@ class Nexus(object):
         # we first need to test respectcase, then symbols (which depends on respectcase)
         # then datatype (which, if standard, depends on symbols and respectcase in order to generate
         # dicts for ambiguous values and alphabet
-        if options.has_key('respectcase'):
+        if 'respectcase' in options:
             self.respectcase=True
         # adjust symbols to for respectcase
-        if options.has_key('symbols'):
+        if 'symbols' in options:
             self.symbols=options['symbols']
             if (self.symbols.startswith('"') and self.symbols.endswith('"')) or\
             (self.symbold.startswith("'") and self.symbols.endswith("'")):
@@ -689,7 +689,7 @@ class Nexus(object):
             if not self.respectcase:
                 self.symbols=self.symbols.lower()+self.symbols.upper()
                 self.symbols=list(set(self.symbols))
-        if options.has_key('datatype'):
+        if 'datatype' in options:
             self.datatype=options['datatype'].lower()
             if self.datatype=='dna' or self.datatype=='nucleotide':
                 self.alphabet=copy.deepcopy(IUPAC.ambiguous_dna)
@@ -732,25 +732,25 @@ class Nexus(object):
         elif self.datatype=='standard':
             if not self.symbols:
                 self.symbols=['1','0']
-        if options.has_key('missing'):
+        if 'missing' in options:
             self.missing=options['missing'][0]
-        if options.has_key('gap'):
+        if 'gap' in options:
             self.gap=options['gap'][0]
-        if options.has_key('equate'):
+        if 'equate' in options:
             self.equate=options['equate']
-        if options.has_key('matchchar'):
+        if 'matchchar' in options:
             self.matchchar=options['matchchar'][0]
-        if options.has_key('labels'):
+        if 'labels' in options:
             self.labels=options['labels']
-        if options.has_key('transpose'):
+        if 'transpose' in options:
             raise NexusError, 'TRANSPOSE is not supported!'
             self.transpose=True
-        if options.has_key('interleave'):
+        if 'interleave' in options:
             if options['interleave']==None or options['interleave'].lower()=='yes':
                 self.interleave=True
-        if options.has_key('tokens'):
+        if 'tokens' in options:
             self.tokens=True
-        if options.has_key('notokens'):
+        if 'notokens' in options:
             self.tokens=False
 
 
