@@ -386,7 +386,7 @@ class InDepthLoadTest(unittest.TestCase):
         assert test_feature.qualifiers["organism"] == ["Armoracia rusticana"]
         assert "db_xref" in test_feature.qualifiers
         assert test_feature.qualifiers["db_xref"] == ["taxon:3704"], \
-               "%s <> ['taxon:3704']" % test_feature.qualifiers["db_xref"]
+               "%s != ['taxon:3704']" % test_feature.qualifiers["db_xref"]
 
         # test split locations
         test_feature = features[4]

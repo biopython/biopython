@@ -37,11 +37,11 @@ str_light_chain_two = "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGK" \
                 + "YCCSYAGSSTWVFGGGTKLTVL"
 
 #Explicit testing of crc64 collision:
-assert str_light_chain_one <> str_light_chain_two
-assert crc32(str_light_chain_one) <> crc32(str_light_chain_two)
+assert str_light_chain_one != str_light_chain_two
+assert crc32(str_light_chain_one) != crc32(str_light_chain_two)
 assert crc64(str_light_chain_one) == crc64(str_light_chain_two)
-assert gcg(str_light_chain_one) <> gcg(str_light_chain_two)
-assert seguid(str_light_chain_one) <> seguid(str_light_chain_two)
+assert gcg(str_light_chain_one) != gcg(str_light_chain_two)
+assert seguid(str_light_chain_one) != seguid(str_light_chain_two)
 
 ###########################
 # main checksum/LCC tests #

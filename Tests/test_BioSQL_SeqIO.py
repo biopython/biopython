@@ -369,7 +369,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
 
         if "gi" in record.annotations :
             key = record.annotations['gi']
-            if key <> record.id :
+            if key != record.id :
                 print " - Retrieving by GI '%s'," % key,
                 db_rec = db.lookup(primary_id=key)
                 compare_records(record, db_rec)

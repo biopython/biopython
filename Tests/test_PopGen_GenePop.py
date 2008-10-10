@@ -111,7 +111,7 @@ class UtilsTest(unittest.TestCase):
         assert len(rec.populations) == initial_pops - 1
         rec.remove_locus_by_name(first_loci)
         assert len(rec.loci_list) == initial_loci - 1
-        assert rec.loci_list[0] <> first_loci
+        assert rec.loci_list[0] != first_loci
         rec.remove_locus_by_position(0)
         assert len(rec.loci_list) == initial_loci - 2
 

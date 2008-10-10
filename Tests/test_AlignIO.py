@@ -90,7 +90,7 @@ def check_simple_write_read(alignments, indent=" ") :
     for format in test_write_read_align_with_seq_count :
         records_per_alignment = len(alignments[0].get_all_seqs())
         for a in alignments :
-            if records_per_alignment <> len(a.get_all_seqs()) :
+            if records_per_alignment != len(a.get_all_seqs()) :
                 records_per_alignment = None
         #Can we expect this format to work?
         if not records_per_alignment \
@@ -265,14 +265,14 @@ for (t_format, t_per, t_count, t_filename) in test_files :
     summary = AlignInfo.SummaryInfo(alignment)
     dumb_consensus = summary.dumb_consensus()
     gap_consensus = summary.gap_consensus()
-    if t_format <> "nexus" :
+    if t_format != "nexus" :
         #Hack for bug 2535
         pssm = summary.pos_specific_score_matrix()
         rep_dict = summary.replacement_dictionary()
         try :
             info_content = summary.information_content()
         except ValueError, e :
-            if str(e) <> "Error in alphabet: not Nucleotide or Protein, supply expected frequencies" :
+            if str(e) != "Error in alphabet: not Nucleotide or Protein, supply expected frequencies" :
                 raise e
             pass
 

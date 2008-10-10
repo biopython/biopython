@@ -64,7 +64,7 @@ for (t_per, t_count, t_filename) in test_files :
         print
         print alignment
     
-    if t_count <> 1 : continue
+    if t_count != 1 : continue
     print
 
     # Check Bio.AlignIO.read(...)

@@ -64,7 +64,7 @@ for test in all_tests:
                     # number of digits in the exponent to match that on record
                     # as the expected output.
                     f = str(hsp.expect)
-                    if f.find("e-") <> -1 :
+                    if f.find("e-") != -1 :
                         matissa, exponent = str(f).split("e-")
                         print 'e-value %se-%02i' % (matissa, int(exponent))
                     else :

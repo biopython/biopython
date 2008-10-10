@@ -190,13 +190,13 @@ test_records[4][0][2].annotations["weight"] = 2.5
 
 def records_match(record_one, record_two) :
     """This is meant to be a strict comparison for exact agreement"""
-    if record_one.id <> record_two.id :
+    if record_one.id != record_two.id :
         return False
-    if record_one.name <> record_two.name :
+    if record_one.name != record_two.name :
         return False
-    if record_one.description <> record_two.description :
+    if record_one.description != record_two.description :
         return False
-    if record_one.seq.tostring() <> record_two.seq.tostring() :
+    if record_one.seq.tostring() != record_two.seq.tostring() :
         return False
     #Close enough... should I check for features, annotation etc?
     return True
@@ -251,7 +251,7 @@ def check_simple_write_read(records, indent=" ") :
             #This is often expected to happen, for example when we try and
             #write sequences of different lengths to an alignment file.
             print indent+"Failed: %s" % str(e)
-            assert format <> t_format, \
+            assert format != t_format, \
                    "Should be able to re-write in the original format!"
             #Carry on to the next format:
             continue
@@ -371,7 +371,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
         assert isinstance(record.id, basestring)
         assert isinstance(record.name, basestring)
         assert isinstance(record.description, basestring)
-        assert record.id <> ""
+        assert record.id != ""
 
         if "accessions" in record.annotations :
             accs = record.annotations["accessions"]
