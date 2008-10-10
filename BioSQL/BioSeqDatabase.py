@@ -39,18 +39,18 @@ def open_database(driver = "MySQLdb", **kwargs):
     # Different drivers use different keywords...
     kw = kwargs.copy()
     if driver == "MySQLdb":
-        if kw.has_key("database"):
+        if "database" in kw:
             kw["db"] = kw["database"]
             del kw["database"]
-        if kw.has_key("password"):
+        if "password" in kw:
             kw["passwd"] = kw["password"]
             del kw["password"]
     else:
         # DB-API recommendations
-        if kw.has_key("db"):
+        if "db" in kw:
             kw["database"] = kw["db"]
             del kw["db"]
-        if kw.has_key("passwd"):
+        if "passwd" in kw:
             kw["password"] = kw["passwd"]
             del kw["passwd"]
     if driver == "psycopg" and not kw.get("database"):
@@ -60,10 +60,10 @@ def open_database(driver = "MySQLdb", **kwargs):
     except module.InterfaceError:
         # Ok, so let's try building a DSN
         # (older releases of psycopg need this)
-        if kw.has_key("database"):
+        if "database" in kw:
             kw["dbname"] = kw["database"]
             del kw["database"]
-        elif kw.has_key("db"):
+        elif "db" in kw:
             kw["dbname"] = kw["db"]
             del kw["db"]
         
@@ -386,7 +386,7 @@ class BioSeqDatabase:
         if len(kwargs) != 1:
             raise TypeError("single key/value parameter expected")
         k, v = kwargs.items()[0]
-        if not _allowed_lookups.has_key(k):
+        if k not in _allowed_lookups:
             raise TypeError("lookup() expects one of %s, not %r" % \
                             (repr(_allowed_lookups.keys())[1:-1], repr(k)))
         lookup_name = _allowed_lookups[k]
