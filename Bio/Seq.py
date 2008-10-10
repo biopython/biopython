@@ -21,7 +21,7 @@ from Alphabet import IUPAC
 from Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 from Bio.Data import CodonTable
 
-class Seq:
+class Seq(object):
     """A read-only sequence object (essentially a string with an alphabet).
 
     Like normal python strings, our basic sequence object is immuatable.
@@ -378,8 +378,7 @@ class Seq:
             alphabet = Alphabet.generic_dna
         return Seq(str(self).replace("U", "T").replace("u", "t"), alphabet)
 
-
-class MutableSeq:
+class MutableSeq(object):
     """An editable sequence object (with an alphabet).
 
     Unlike normal python strings and our basic sequence object (the Seq class)

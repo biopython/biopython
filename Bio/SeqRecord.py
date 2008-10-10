@@ -6,7 +6,7 @@
 # need to be in sync (this is the BioSQL "Database SeqRecord", see
 # also BioSQL.BioSeq.DBSeq which is the "Database Seq" class)
 
-class SeqRecord:
+class SeqRecord(object):
     """A SeqRecord object holds a sequence and information about it.
 
     Main attributes:
