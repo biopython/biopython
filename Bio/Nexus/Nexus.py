@@ -1435,7 +1435,7 @@ class Nexus(object):
     def export_fasta(self, filename=None, width=70):
         """Writes matrix into a fasta file: (self, filename=None, width=70)."""       
         if not filename:
-            if '.' in filename and self.filename.split('.')[-1].lower() in ['paup','nexus','nex','dat']:
+            if '.' in self.filename and self.filename.split('.')[-1].lower() in ['paup','nexus','nex','dat']:
                 filename='.'.join(self.filename.split('.')[:-1])+'.fas'
             else:
                 filename=self.filename+'.fas'
@@ -1445,14 +1445,15 @@ class Nexus(object):
             for i in range(0, len(self.matrix[taxon].tostring()), width):
                 fh.write(self.matrix[taxon].tostring()[i:i+width] + '\n')    
         fh.close()
+        return filename
 
     def export_phylip(self, filename=None):
-        """Writes matrix into a PHYLIP file: (self, filename=None, width=70).
+        """Writes matrix into a PHYLIP file: (self, filename=None).
 
         Note that this writes a relaxed PHYLIP format file, where the names
         are not truncated, nor checked for invalid characters."""
         if not filename:
-            if '.' in filename and self.filename.split('.')[-1].lower() in ['paup','nexus','nex','dat']:
+            if '.' in self.filename and self.filename.split('.')[-1].lower() in ['paup','nexus','nex','dat']:
                 filename='.'.join(self.filename.split('.')[:-1])+'.phy'
             else:
                 filename=self.filename+'.phy'
@@ -1461,6 +1462,7 @@ class Nexus(object):
         for taxon in self.taxlabels:
             fh.write('%s %s\n' % (safename(taxon),self.matrix[taxon].tostring()))
         fh.close()
+        return filename
     
     def constant(self,matrix=None,delete=[],exclude=[]):
         """Return a list with all constant characters."""
