@@ -9,10 +9,9 @@ Command line options:
 
 -g;--generate -- write the output file for a test instead of comparing it.
                  A test to write the output for must be specified.
---no-gui      -- do not use a GUI to run the tests
+--no-gui      -- Obsolete option (there used to be a GUI for the tests).
 --help        -- show usage info
-<test_name>   -- supply the name of one (or more) tests to be run. Supplying
-                 the name of tests automatically switches to non-gui mode.
+<test_name>   -- supply the name of one (or more) tests to be run.
                  The .py file extension is optional.
 """
 # standard modules
@@ -20,7 +19,6 @@ import sys
 import cStringIO
 import os
 import re
-import string
 import sys
 import getopt
 
@@ -28,7 +26,6 @@ import getopt
 import unittest
 
 import distutils.util
-
 
 def main(argv):
     # insert our paths in sys.path:
@@ -46,16 +43,6 @@ def main(argv):
     if os.access(build_path, os.F_OK):
         sys.path.insert(1, build_path)
     
-    # start off using the GUI
-    use_gui = 1
-    
-    if use_gui:
-        try:
-            import unittestgui
-            import Tkinter as tk
-        except ImportError:
-            use_gui = 0
-
     # get the command line options
     try:
         opts, args = getopt.getopt(argv, 'g',
@@ -70,9 +57,6 @@ def main(argv):
         if o == "--help":
             print __doc__
             return 0
-        if o == "--no-gui":
-            use_gui = 0
-
         if o == "-g" or o == "--generate":
             if len(args) > 1:
                 print "Only one argument (the test name) needed for generate"
@@ -91,25 +75,14 @@ def main(argv):
 
     # deal with the arguments, which should be names of tests to run
     for arg_num in range(len(args)):
-        # string off the .py if it was included
+        # strip off the .py if it was included
         if args[arg_num][-3:] == ".py":
             args[arg_num] = args[arg_num][:-3]
-    # if we have tests to run, run in non-gui mode
-    if len(args) > 0:
-        use_gui = 0
 
     # run the tests
-    if use_gui:
-        root = tk.Tk()
-        root.title("Biopython Tests")
-        runner = unittestgui.TkTestRunner(root,
-                                          "run_tests.testing_suite")
-        root.protocol('WM_DELETE_WINDOW', root.quit)
-        root.mainloop()
-    else:    
-        test_suite = testing_suite(args)
-        runner = unittest.TextTestRunner(verbosity = 2)
-        runner.run(test_suite)
+    test_suite = testing_suite(args)
+    runner = unittest.TextTestRunner(verbosity = 2)
+    runner.run(test_suite)
 
 def testing_suite(tests_to_run = []):
     all_tests = tests_to_run
@@ -253,7 +226,7 @@ def compare_output(test_name, output_handle, expected_handle):
     """
     # first check that we are dealing with the right output
     # the first line of the output file is the test name
-    expected_test = string.strip(expected_handle.readline())
+    expected_test = expected_handle.readline().strip()
 
     assert expected_test == test_name, "\nOutput:   %s\nExpected: %s" % \
            (test_name, expected_test)
@@ -319,5 +292,6 @@ def convert_string_newlines(line):
     return line
         
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
+    #Don't do a sys.exit(...) as it isn't nice if run from IDLE.
+    main(sys.argv[1:])
 
