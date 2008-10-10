@@ -31,7 +31,7 @@ def _namelist(instance):
         for b in c.__bases__:
             classlist.append(b)
         for name in dir(c):
-            if not namedict.has_key(name):
+            if name not in namedict:
                 namelist.append(name)
                 namedict[name] = 1
     return namelist
@@ -73,7 +73,7 @@ class GenericScanner:
 
             groups = m.groups()
             for i in range(len(groups)):
-                if groups[i] and self.index2func.has_key(i):
+                if groups[i] and i in self.index2func:
                     self.index2func[i](groups[i])
             pos = m.end()
 
@@ -114,7 +114,7 @@ class GenericParser:
 
             rule, fn = self.preprocess(rule, func)
 
-            if self.rules.has_key(lhs):
+            if lhs in self.rules:
                 self.rules[lhs].append(rule)
             else:
                 self.rules[lhs] = [ rule ]
@@ -147,7 +147,7 @@ class GenericParser:
         
         for rulelist in self.rules.values():
             for lhs, rhs in rulelist:
-                if not self.first.has_key(lhs):
+                if lhs not in self.first:
                     self.first[lhs] = {}
 
                 if len(rhs) == 0:
@@ -155,7 +155,7 @@ class GenericParser:
                     continue
 
                 sym = rhs[0]
-                if not self.rules.has_key(sym):
+                if sym not in self.rules:
                     self.first[lhs][sym] = 1
                 else:
                     union[(sym, lhs)] = 1
@@ -245,7 +245,7 @@ class GenericParser:
             #
             #  A -> a . B (predictor)
             #
-            if self.rules.has_key(nextSym):
+            if nextSym in self.rules:
                 #
                 #  Work on completer step some more; for rules
                 #  with empty RHS, the "parent state" is the
@@ -253,7 +253,7 @@ class GenericParser:
                 #  so the Earley items the completer step needs
                 #  may not all be present when it runs.
                 #
-                if needsCompletion.has_key(nextSym):
+                if nextSym in needsCompletion:
                     new = (rule, pos+1, parent)
                     olditem_i = needsCompletion[nextSym]
                     if new not in state:
@@ -265,7 +265,7 @@ class GenericParser:
                 #
                 #  Has this been predicted already?
                 #
-                if predicted.has_key(nextSym):
+                if nextSym in predicted:
                     continue
                 predicted[nextSym] = 1
 
@@ -289,15 +289,15 @@ class GenericParser:
                             state.append(new)
                             continue
                         prhs0 = prhs[0]
-                        if not self.rules.has_key(prhs0):
+                        if prhs0 not in self.rules:
                             if prhs0 != ttype:
                                 continue
                             else:
                                 state.append(new)
                                 continue
                         first = self.first[prhs0]
-                        if not first.has_key(None) and \
-                           not first.has_key(ttype):
+                        if None not in first and \
+                           ttype not in first:
                             continue
                         state.append(new)
                     continue
@@ -310,7 +310,7 @@ class GenericParser:
                     #
                     prhs = prule[1]
                     if len(prhs) > 0 and \
-                       not self.rules.has_key(prhs[0]) and \
+                       prhs[0] not in self.rules and \
                        token != prhs[0]:
                         continue
                     state.append((prule, 0, i))
@@ -332,7 +332,7 @@ class GenericParser:
         
         while pos > 0:
             want = ((rule, pos, parent), state)
-            if not tree.has_key(want):
+            if want not in tree:
                 #
                 #  Since pos > 0, it didn't come from closure,
                 #  and if it isn't in tree[], then there must

@@ -94,7 +94,7 @@ class ds:
             tags=['CHROMAT_FILE','PHD_FILE','TIME','CHEM','DYE','TEMPLATE','DIRECTION']
             poss=map(line.find,tags)
             tagpos=dict(zip(poss,tags))
-            if tagpos.has_key(-1):
+            if -1 in tagpos:
                 del tagpos[-1]
             ps=tagpos.keys()
             ps.sort()
@@ -808,7 +808,7 @@ class _RecordConsumer(AbstractConsumer):
         tags=['CHROMAT_FILE','PHD_FILE','TIME','CHEM','DYE','TEMPLATE','DIRECTION']
         poss=map(line.find,tags)
         tagpos=dict(zip(poss,tags))
-        if tagpos.has_key(-1):
+        if -1 in tagpos:
             del tagpos[-1]
         ps=tagpos.keys()
         ps.sort()
