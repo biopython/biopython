@@ -286,7 +286,8 @@ def compare_output(test_name, output_handle, expected_handle):
         # otherwise make sure the two lines are the same
         else:
             assert expected_line == output_line, \
-                  "\nOutput  : "+`output_line` + "\nExpected: "+`expected_line`
+                  "\nOutput  : %s\nExpected: %s" \
+                  % (repr(output_line), repr(expected_line))
 
 def convert_newlines(line):
     """Convert all end of line characters to '\n'
