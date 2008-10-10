@@ -253,7 +253,7 @@ class MultipleAlignCL:
     def __str__(self):
         """Write out the command line as a string."""
 
-        if sys.platform <> "win32" :
+        if sys.platform != "win32" :
             #On Linux with clustalw 1.83, you can do:
             #clustalw input.faa
             #clustalw /full/path/input.faa

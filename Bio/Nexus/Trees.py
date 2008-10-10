@@ -479,7 +479,7 @@ class Tree(Nodes.Chain):
                 self.node(n).data.support/=float(nrep)
 
     def has_support(self,node=None):
-        """Returns True if any of the nodes has data.support <> None."""
+        """Returns True if any of the nodes has data.support != None."""
         for n in self._walk(node):
             if self.node(n).data.support:
                 return True
@@ -499,7 +499,7 @@ class Tree(Nodes.Chain):
             taxon_list=['taxon'+str(i+1) for i in range(ntax)]
         elif not ntax and not taxon_list:
             raise TreeError('Either numer of taxa or list of taxa must be specified.')
-        elif ntax<>len(taxon_list):
+        elif ntax != len(taxon_list):
             raise TreeError('Length of taxon list must correspond to ntax.')
         # initiate self with empty root
         self.__init__()
@@ -616,7 +616,7 @@ class Tree(Nodes.Chain):
         else:
             treeline.append('a_tree')
         treeline.append('=')
-        if self.weight<>1:
+        if self.weight != 1:
             treeline.append('[&W%s]' % str(round(float(self.weight),3)))
         if self.rooted:
             treeline.append('[&R]')

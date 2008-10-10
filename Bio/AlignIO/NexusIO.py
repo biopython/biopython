@@ -44,7 +44,7 @@ def NexusIterator(handle, seq_count=None) :
     #The original names and the modified names are kept in these two lists:
     assert len(n.unaltered_taxlabels) == len(n.taxlabels)
     
-    if seq_count and seq_count <> len(n.unaltered_taxlabels) :
+    if seq_count and seq_count != len(n.unaltered_taxlabels) :
         raise ValueError("Found %i sequences, but seq_count=%i" \
                % (len(n.unaltered_taxlabels), seq_count))
         

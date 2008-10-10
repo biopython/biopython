@@ -185,7 +185,7 @@ class _Scanner:
             read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         line = uhandle.peekline()
-        assert line.strip() <> ""
+        assert line.strip() != ""
         assert not line.startswith("RID:")
         if line.startswith("Query=") :
             #This is an old style query then database...

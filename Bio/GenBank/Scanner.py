@@ -240,9 +240,9 @@ class InsdcScanner :
                         qualifiers.append((key,None))
                     elif value[0]=='"' :
                         #Quoted...
-                        if value[-1]<>'"' or value<>'"' :
+                        if value[-1]!='"' or value!='"' :
                             #No closing quote on the first line...
-                            while value[-1] <> '"' :
+                            while value[-1] != '"' :
                                 value += "\n" + iterator.next()
                         else :
                             #One single line (quoted)
@@ -410,8 +410,8 @@ class InsdcScanner :
             record = self.parse(handle)
             if record is None : break
             assert record.id is not None
-            assert record.name <> "<unknown name>"
-            assert record.description <> "<unknown description>"
+            assert record.name != "<unknown name>"
+            assert record.description != "<unknown description>"
             yield record
 
     def parse_cds_features(self, handle,
@@ -729,7 +729,7 @@ class GenBankScanner(InsdcScanner) :
             if line.find('CONTIG')==0 :
                 #What should we do with this?
                 break
-            if len(line) > 9 and  line[9:10]<>' ' :
+            if len(line) > 9 and  line[9:10]!=' ' :
                 raise ValueError("Sequence line mal-formed, '%s'" % line)
             seq_lines.append(line[10:].replace(" ",""))
             line = self.handle.readline()
@@ -784,12 +784,12 @@ class GenBankScanner(InsdcScanner) :
                    'LOCUS line does not contain - at position 69 in date:\n' + line
 
             name_and_length_str = line[GENBANK_INDENT:29]
-            while name_and_length_str.find('  ')<>-1 :
+            while name_and_length_str.find('  ')!=-1 :
                 name_and_length_str = name_and_length_str.replace('  ',' ')
             name_and_length = name_and_length_str.split(' ')
             assert len(name_and_length)<=2, \
                    'Cannot parse the name and length in the LOCUS line:\n' + line
-            assert len(name_and_length)<>1, \
+            assert len(name_and_length)!=1, \
                    'Name and length collide in the LOCUS line:\n' + line
                    #Should be possible to split them based on position, if
                    #a clear definition of the standard exists THAT AGREES with
@@ -834,8 +834,8 @@ class GenBankScanner(InsdcScanner) :
             assert line[44:47] in ['   ', 'ss-', 'ds-', 'ms-'], \
                    'LOCUS line does not have valid strand type (Single stranded, ...):\n' + line
             assert line[47:54].strip() == "" \
-            or line[47:54].strip().find('DNA') <> -1 \
-            or line[47:54].strip().find('RNA') <> -1, \
+            or line[47:54].strip().find('DNA') != -1 \
+            or line[47:54].strip().find('RNA') != -1, \
                    'LOCUS line does not contain valid sequence type (DNA, RNA, ...):\n' + line
             assert line[54:55] == ' ', \
                    'LOCUS line does not contain space at position 55:\n' + line
@@ -851,12 +851,12 @@ class GenBankScanner(InsdcScanner) :
                    'LOCUS line does not contain - at position 75 in date:\n' + line
 
             name_and_length_str = line[GENBANK_INDENT:40]
-            while name_and_length_str.find('  ')<>-1 :
+            while name_and_length_str.find('  ')!=-1 :
                 name_and_length_str = name_and_length_str.replace('  ',' ')
             name_and_length = name_and_length_str.split(' ')
             assert len(name_and_length)<=2, \
                    'Cannot parse the name and length in the LOCUS line:\n' + line
-            assert len(name_and_length)<>1, \
+            assert len(name_and_length)!=1, \
                    'Name and length collide in the LOCUS line:\n' + line
                    #Should be possible to split them based on position, if
                    #a clear definition of the stand exists THAT AGREES with
@@ -891,7 +891,7 @@ class GenBankScanner(InsdcScanner) :
             #    00:06      LOCUS
             #    06:12      spaces
             #    12:??      Locus name
-            if line[GENBANK_INDENT:].strip() <> "" :
+            if line[GENBANK_INDENT:].strip() != "" :
                 consumer.locus(line[GENBANK_INDENT:].strip())
             else :
                 #Must just have just "LOCUS       ", is this even legitimate?
@@ -950,7 +950,7 @@ class GenBankScanner(InsdcScanner) :
                     #Need to call consumer.version(), and maybe also consumer.gi() as well.
                     #e.g.
                     # VERSION     AC007323.5  GI:6587720
-                    while data.find('  ')<>-1:
+                    while data.find('  ')!=-1:
                         data = data.replace('  ',' ')
                     if data.find(' GI:')==-1 :
                         consumer.version(data)
@@ -987,7 +987,7 @@ class GenBankScanner(InsdcScanner) :
 
                     #We now have all the reference line(s) stored in a string, data,
                     #which we pass to the consumer
-                    while data.find('  ')<>-1:
+                    while data.find('  ')!=-1:
                         data = data.replace('  ',' ')
                     if data.find(' ')==-1 :
                         if self.debug >2 : print 'Reference number \"' + data + '\"'

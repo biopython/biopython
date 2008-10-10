@@ -211,7 +211,7 @@ class FDistController:
         conf_lines = []
         l = f.readline()
         try:
-            while l<>'':
+            while l!='':
                 conf_lines.append(
                     tuple(map(lambda x : float(x), l.rstrip().split(' ')))
                 )

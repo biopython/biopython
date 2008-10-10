@@ -994,7 +994,7 @@ if __name__ == "__main__" :
         assert MutableSeq("A",a) == "A"
         assert MutableSeq("ABC",a) == MutableSeq("A") \
                + MutableSeq("B", Alphabet.generic_protein) + MutableSeq("C",a)
-        assert MutableSeq("A",a) <> MutableSeq("B")
+        assert MutableSeq("A",a) != MutableSeq("B")
         assert MutableSeq("ABC",a) <= MutableSeq("ABD")
         assert MutableSeq("ABC",a) < MutableSeq("ABD")
         assert MutableSeq("ABC",a) < Seq("ABD")
@@ -1009,7 +1009,7 @@ if __name__ == "__main__" :
         assert Seq("A",a) == Seq("A",a)
         assert Seq("A",a) == Seq("A")
         assert Seq("ABC",a) == Seq("A") + Seq("B", Alphabet.generic_protein) + Seq("C",a)
-        assert Seq("A",a) <> Seq("B")
+        assert Seq("A",a) != Seq("B")
         assert Seq("ABC",a) <= Seq("ABD")
         assert Seq("ABC",a) < Seq("ABD")
         try :

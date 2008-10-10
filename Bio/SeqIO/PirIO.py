@@ -125,10 +125,10 @@ def PirIterator(handle) :
             break
 
     while True :
-        if line[0]<>">" :
+        if line[0]!=">" :
             raise ValueError("Records in PIR files should start with '>' character")
         pir_type = line[1:3]
-        if pir_type not in _pir_alphabets or line[3] <> ";" :
+        if pir_type not in _pir_alphabets or line[3] != ";" :
             raise ValueError("Records should start with '>XX;' where XX is a valid sequence type")
         identifier = line[4:].strip()
         description = handle.readline().strip()
@@ -143,7 +143,7 @@ def PirIterator(handle) :
             lines.append(line.rstrip().replace(" ",""))
             line = handle.readline()
         seq = "".join(lines)
-        if seq[-1] <> "*" :
+        if seq[-1] != "*" :
             #Note the * terminator is present on nucleotide sequences too,
             #it is not a stop codon!
             raise ValueError("Sequences in PIR files should include a * terminator!")

@@ -215,10 +215,10 @@ class FastaM10Iterator(AlignmentIterator) :
         #The "sq_offset" values can be specified with the -X command line option.
         #They appear to just shift the origin used in the calculation of the coordinates.
         
-        if len(query_align_seq) <> len(match_align_seq) :
+        if len(query_align_seq) != len(match_align_seq) :
             raise ValueError("Problem parsing the alignment sequence coordinates")
         if "sw_overlap" in alignment_annotation :
-            if int(alignment_annotation["sw_overlap"]) <> len(query_align_seq) :
+            if int(alignment_annotation["sw_overlap"]) != len(query_align_seq) :
                 raise ValueError("Specified sw_overlap = %s does not match expected value %i" \
                                  % (alignment_annotation["sw_overlap"],
                                     len(query_align_seq)))

@@ -50,7 +50,7 @@ def _neighbor_test(nr_points, dim, bucket_size, radius):
     if l1==l2:
         print "Passed."
     else:
-        print "Not passed: %i <> %i." % (l1, l2)
+        print "Not passed: %i != %i." % (l1, l2)
 
 def _test(nr_points, dim, bucket_size, radius):
     """Test neighbor search.
@@ -82,7 +82,7 @@ def _test(nr_points, dim, bucket_size, radius):
     if l1==l2:
         print "Passed."
     else:
-        print "Not passed: %i <> %i." % (l1, l2)
+        print "Not passed: %i != %i." % (l1, l2)
 
 class KDTree:
     """

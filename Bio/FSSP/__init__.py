@@ -59,7 +59,7 @@ class FSSPHeader:
 class PosAlign:
    def __init__(self,inStr):
       inStr = string.strip(inStr)
-      if len(inStr) <> 1 and len(inStr)<> 2:
+      if len(inStr) != 1 and len(inStr)!= 2:
          raise ValueError, 'PosAlign: length not 2 chars' + inStr
       if inStr == '..':
          self.aa = '-'

@@ -52,7 +52,7 @@ class PhylipWriter(SequentialAlignmentWriter) :
             raise ValueError("Must have at least one sequence")
         length_of_seqs = alignment.get_alignment_length()
         for record in records :
-            if length_of_seqs <> len(record.seq) :
+            if length_of_seqs != len(record.seq) :
                 raise ValueError("Sequences must all be the same length")
         if length_of_seqs <= 0 :
             raise ValueError("Non-empty sequences are required")
@@ -130,7 +130,7 @@ class PhylipIterator(AlignmentIterator) :
     def _is_header(self, line) :
         line = line.strip()
         parts = filter(None, line.split())
-        if len(parts)<>2 :
+        if len(parts)!=2 :
             return False # First line should have two integers
         try :
             number_of_seqs = int(parts[0])
@@ -153,7 +153,7 @@ class PhylipIterator(AlignmentIterator) :
         if not line: return
         line = line.strip()
         parts = filter(None, line.split())
-        if len(parts)<>2 :
+        if len(parts)!=2 :
             raise ValueError("First line should have two integers")
         try :
             number_of_seqs = int(parts[0])
@@ -164,7 +164,7 @@ class PhylipIterator(AlignmentIterator) :
         assert self._is_header(line)
 
         if self.records_per_alignment is not None \
-        and self.records_per_alignment <> number_of_seqs :
+        and self.records_per_alignment != number_of_seqs :
             raise ValueError("Found %i records in this alignment, told to expect %i" \
                              % (number_of_seqs, self.records_per_alignment))
 
@@ -203,7 +203,7 @@ class PhylipIterator(AlignmentIterator) :
         alignment = Alignment(self.alphabet)
         for i in range(0,number_of_seqs) :
             seq = "".join(seqs[i])
-            if len(seq)<>length_of_seqs :
+            if len(seq)!=length_of_seqs :
                 raise ValueError("Sequence %i length %i, expected length %i" \
                                   % (i+1, len(seq), length_of_seqs))
             alignment.add_sequence(ids[i], seq)

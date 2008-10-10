@@ -38,7 +38,7 @@ def IgIterator(handle, alphabet = single_letter_alphabet) :
 
     while line :
         #Now iterate over the records
-        if line[0]<>";" :
+        if line[0]!=";" :
             raise ValueError, \
                   "Records should start with ';' and not:\n%s" % repr(line)
 

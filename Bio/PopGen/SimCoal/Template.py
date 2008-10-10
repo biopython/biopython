@@ -154,7 +154,7 @@ def get_demography_template(stream, model, tp_dir = None):
         #External template
         f = open(sep.join([tp_dir, model + '.par']), 'r')
     l = f.readline()
-    while l<>'':
+    while l!='':
         stream.write(l)
         l = f.readline()
     f.close()

@@ -217,7 +217,8 @@ def _consensus_alphabet(alphabets) :
         #New letters...
         if hasattr(alpha, "new_letters") :
             for letter in alpha.new_letters :
-                if letter not in new_letters and letter <> gap and letter <> stop :
+                if letter not in new_letters \
+                and letter != gap and letter != stop :
                     new_letters += letter
 
     alpha = base

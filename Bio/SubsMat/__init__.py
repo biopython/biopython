@@ -194,7 +194,7 @@ class SeqMat(dict):
          self._init_zero()
       else:
 			# Convert full to half if matrix is not already a log-odds matrix
-         if self.mat_type <> LO:
+         if self.mat_type != LO:
             self._full_to_half()
          self._correct_matrix()
       self.sum_letters = {}
@@ -221,7 +221,7 @@ class SeqMat(dict):
          return
       for i in self.ab_list:
          for j in self.ab_list[:self.ab_list.index(i)+1]:
-            if i <> j:
+            if i != j:
                self[j,i] = self[j,i] + self[i,j]
                del self[i,j]
 
@@ -274,7 +274,7 @@ class SeqMat(dict):
       type(non_sym) == type(1)
       full_mat = copy.copy(self)
       for i in self:
-         if i[0] <> i[1]:
+         if i[0] != i[1]:
             full_mat[(i[1],i[0])] = full_mat[i]
       if not alphabet:
          alphabet = self.ab_list
@@ -286,7 +286,7 @@ class SeqMat(dict):
       for i in alphabet:
          outline = i
          for j in alphabet:
-            if alphabet.index(j) > alphabet.index(i) and non_sym <> None:
+            if alphabet.index(j) > alphabet.index(i) and non_sym is not None:
                val = non_sym
             else:
                val = full_mat[i,j]
@@ -395,7 +395,7 @@ def _build_exp_freq_mat(exp_freq_table):
 #
 def _build_subs_mat(obs_freq_mat,exp_freq_mat):
    """ Build the substitution matrix """
-   if obs_freq_mat.ab_list <> exp_freq_mat.ab_list:
+   if obs_freq_mat.ab_list != exp_freq_mat.ab_list:
       raise ValueError, "Alphabet mismatch in passed matrices"
    subs_mat = SeqMat(obs_freq_mat)
    for i in obs_freq_mat.keys():
@@ -502,15 +502,15 @@ def two_mat_relative_entropy(mat_1,mat_2,logbase=2,diag=diagALL):
    for i in key_list_1:
       if i in key_list_2:
          key_list.append(i)
-   if len(key_list_1) <> len(key_list_2):
+   if len(key_list_1) != len(key_list_2):
    
       sys.stderr.write("Warning:first matrix has more entries than the second\n")
-   if key_list_1 <> key_list_2:
+   if key_list_1 != key_list_2:
       sys.stderr.write("Warning: indices not the same between matrices\n")
    for key in key_list:
       if diag == diagNO and key[0] == key[1]:
          continue
-      if diag == diagONLY and key[0] <> key[1]:
+      if diag == diagONLY and key[0] != key[1]:
          continue
       if mat_1[key] > EPSILON and mat_2[key] > EPSILON:
          sum_ent_1 += mat_1[key]
@@ -519,7 +519,7 @@ def two_mat_relative_entropy(mat_1,mat_2,logbase=2,diag=diagALL):
    for key in key_list:
       if diag == diagNO and key[0] == key[1]:
          continue
-      if diag == diagONLY and key[0] <> key[1]:
+      if diag == diagONLY and key[0] != key[1]:
          continue
       if mat_1[key] > EPSILON and mat_2[key] > EPSILON:
          val_1 = mat_1[key] / sum_ent_1

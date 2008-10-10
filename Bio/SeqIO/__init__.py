@@ -259,7 +259,7 @@ def write(sequences, handle, format) :
         raise TypeError("Need a string for the file format (lower case)")
     if not format :
         raise ValueError("Format required (lower case string)")
-    if format <> format.lower() :
+    if format != format.lower() :
         raise ValueError("Format string '%s' should be lower case" % format)
     if isinstance(sequences,SeqRecord):
         raise ValueError("Use a SeqRecord list/iterator, not just a single SeqRecord")
@@ -315,7 +315,7 @@ def parse(handle, format) :
         raise TypeError("Need a string for the file format (lower case)")
     if not format :
         raise ValueError("Format required (lower case string)")
-    if format <> format.lower() :
+    if format != format.lower() :
         raise ValueError("Format string '%s' should be lower case" % format)
 
     #Map the file format to a sequence iterator:    
@@ -452,7 +452,7 @@ def to_alignment(sequences, alphabet=None, strict=True) :
         if strict :
             if alignment_length is None :
                 alignment_length = len(record.seq)
-            elif alignment_length <> len(record.seq) :
+            elif alignment_length != len(record.seq) :
                 raise ValueError("Sequences must all be the same length")
 
             assert isinstance(record.seq.alphabet, Alphabet) \
@@ -485,8 +485,8 @@ def to_alignment(sequences, alphabet=None, strict=True) :
                     raise ValueError("Incompatible sequence alphabet " \
                                      + "%s for %s alignment" \
                                      % (record.seq.alphabet, alphabet))
-                if record.seq.alphabet.gap_char <> alphabet.gap_char :
-                    raise ValueError("Sequence gap characters <> alignment gap char")
+                if record.seq.alphabet.gap_char != alphabet.gap_char :
+                    raise ValueError("Sequence gap characters != alignment gap char")
             #ToDo, additional checks on the specified alignment...
             #Should we look at the alphabet.contains() method?
             

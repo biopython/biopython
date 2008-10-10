@@ -828,7 +828,7 @@ class Nexus(object):
         first_matrix_block=True
     
         #eliminate empty lines and leading/trailing whitespace 
-        lines=[l.strip() for l in options.split('\n') if l.strip()<>'']
+        lines=[l.strip() for l in options.split('\n') if l.strip()!='']
         lineiter=iter(lines)
         while 1:
             try:

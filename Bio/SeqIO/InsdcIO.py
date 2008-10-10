@@ -192,8 +192,8 @@ class GenBankWriter(SequentialSequenceWriter) :
         assert line[44:47] in ['   ', 'ss-', 'ds-', 'ms-'], \
                'LOCUS line does not have valid strand type (Single stranded, ...):\n' + line
         assert line[47:54].strip() == "" \
-        or line[47:54].strip().find('DNA') <> -1 \
-        or line[47:54].strip().find('RNA') <> -1, \
+        or line[47:54].strip().find('DNA') != -1 \
+        or line[47:54].strip().find('RNA') != -1, \
                'LOCUS line does not contain valid sequence type (DNA, RNA, ...):\n' + line
         assert line[54:55] == ' ', \
                'LOCUS line does not contain space at position 55:\n' + line
@@ -260,7 +260,7 @@ class GenBankWriter(SequentialSequenceWriter) :
         self._write_multi_line("DEFINITION", descr)
         
         self._write_single_line("ACCESSION", accession)
-        if gi <> "." :
+        if gi != "." :
             self._write_single_line("VERSION", "%s  GI:%s" % (acc_with_version,gi))
         else :
             self._write_single_line("VERSION", "%s" % (acc_with_version))

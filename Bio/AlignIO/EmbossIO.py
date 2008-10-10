@@ -79,7 +79,7 @@ class EmbossIterator(AlignmentIterator) :
         if not line:
             return None
 
-        while line.rstrip() <> "#=======================================" :
+        while line.rstrip() != "#=======================================" :
             line = handle.readline()
             if not line :
                 return None
@@ -118,7 +118,7 @@ class EmbossIterator(AlignmentIterator) :
             raise SyntaxError("Length of sequences missing!")
 
         if self.records_per_alignment is not None \
-        and self.records_per_alignment <> number_of_seqs :
+        and self.records_per_alignment != number_of_seqs :
             raise ValueError("Found %i records in this alignment, told to expect %i" \
                              % (number_of_seqs, self.records_per_alignment))
 
@@ -187,13 +187,13 @@ class EmbossIterator(AlignmentIterator) :
         assert index == 0
 
         if self.records_per_alignment is not None \
-        and self.records_per_alignment <> len(ids) :
+        and self.records_per_alignment != len(ids) :
             raise ValueError("Found %i records in this alignment, told to expect %i" \
                              % (len(ids), self.records_per_alignment))
 
         alignment = Alignment(self.alphabet)
         for id, seq in zip(ids, seqs) :
-            if len(seq) <> length_of_seqs :
+            if len(seq) != length_of_seqs :
                 raise SyntaxError("Error parsing alignment - sequences of different length?")
             alignment.add_sequence(id, seq)
         return alignment

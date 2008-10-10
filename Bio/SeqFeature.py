@@ -98,7 +98,7 @@ class SeqFeature:
             answer += ", location_operator=%s" % repr(self.location_operator)
         if self.strand :
             answer += ", strand=%s" % repr(self.strand)
-        if self.id and self.id <> "<unknown id>" :
+        if self.id and self.id != "<unknown id>" :
             answer += ", id=%s" % repr(self.id)
         if self.ref :
             answer += ", ref=%s" % repr(self.ref)

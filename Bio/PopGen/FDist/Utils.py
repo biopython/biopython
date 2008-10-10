@@ -32,14 +32,14 @@ def convert_genepop_to_fdist(gp_rec):
         for pop_i in range(len(gp_rec.populations)):
             for indiv in gp_rec.populations[pop_i]:
                 for al in indiv[1][lc_i]:
-                    if al<>None and (not (al in alleles)):
+                    if al is not None and al not in alleles:
                         alleles.append(al)
         #here we go again (necessary...)
         for pop_i in range(len(gp_rec.populations)):
             allele_counts = {}
             for indiv in gp_rec.populations[pop_i]:
                 for al in indiv[1][lc_i]:
-                    if al<>None:
+                    if al is not None:
                         count = allele_counts.get(al, 0)
                         allele_counts[al] = count + 1
             allele_array = [] #We need the same order as in alleles

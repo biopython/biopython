@@ -203,7 +203,7 @@ class _Scanner:
         else:
             consumer.loci_name(sample_loci_line)
         next_line = uhandle.readline().rstrip()
-        while next_line.upper()<>'POP':
+        while next_line.upper()!='POP':
             if next_line == '':
                 raise ValueError('No population data found, file probably not GenePop related')
             consumer.loci_name(next_line)
@@ -211,7 +211,7 @@ class _Scanner:
         consumer.start_pop()
         first_individual = True
         line = uhandle.readline().rstrip()
-        while line<>'':
+        while line!='':
             if line.upper()=='POP':
                 consumer.start_pop()
             else:

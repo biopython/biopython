@@ -57,7 +57,7 @@ class StockholmWriter(SequentialAlignmentWriter) :
 
     def _write_record(self, record):
         """Write a single SeqRecord to the file"""
-        if self._length_of_sequences <> len(record.seq) :
+        if self._length_of_sequences != len(record.seq) :
             raise ValueError("Sequences must all be the same length")
 
         #For the case for stockholm to stockholm, try and use record.name
@@ -74,7 +74,7 @@ class StockholmWriter(SequentialAlignmentWriter) :
         and  "end" in record.annotations :
             suffix = "/%s-%s" % (str(record.annotations["start"]),
                                  str(record.annotations["end"]))
-            if seq_name[-len(suffix):] <> suffix :
+            if seq_name[-len(suffix):] != suffix :
                 seq_name = "%s/%s-%s" % (seq_name,
                                         str(record.annotations["start"]),
                                         str(record.annotations["end"]))
@@ -217,12 +217,12 @@ class StockholmIterator(AlignmentIterator) :
             elif line == "" :
                 #blank line, ignore
                 pass
-            elif line[0] <> "#" :
+            elif line[0] != "#" :
                 #Sequence
                 #Format: "<seqname> <sequence>"
                 assert not passed_end_alignment
                 parts = [x.strip() for x in line.split(" ",1)]
-                if len(parts) <> 2 :
+                if len(parts) != 2 :
                     #This might be someone attempting to store a zero length sequence?
                     raise ValueError("Could not split line into identifier " \
                                       + "and sequence:\n" + line)
@@ -288,7 +288,7 @@ class StockholmIterator(AlignmentIterator) :
         if ids and seqs :
 
             if self.records_per_alignment is not None \
-            and self.records_per_alignment <> len(ids) :
+            and self.records_per_alignment != len(ids) :
                 raise ValueError("Found %i records in this alignment, told to expect %i" \
                                  % (len(ids), self.records_per_alignment))
 
@@ -301,7 +301,7 @@ class StockholmIterator(AlignmentIterator) :
             alignment_length = len(seqs.values()[0])
             for id in ids :
                 seq = seqs[id]
-                if alignment_length <> len(seq) :
+                if alignment_length != len(seq) :
                     raise ValueError("Sequences have different lengths, or repeated identifier")
                 name, start, end = self._identifier_split(id)
                 alignment.add_sequence(id, seq, start=start, end=end)
@@ -326,7 +326,7 @@ class StockholmIterator(AlignmentIterator) :
 
     def _identifier_split(self, identifier) :
         """Returns (name,start,end) string tuple from an identier."""
-        if identifier.find("/")<>-1 :
+        if identifier.find("/")!=-1 :
             start_end = identifier.split("/",1)[1]
             if start_end.count("-")==1 :
                 start, end = map(int, start_end.split("-"))

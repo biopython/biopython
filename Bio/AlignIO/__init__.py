@@ -191,7 +191,7 @@ def write(alignments, handle, format) :
         raise TypeError("Need a string for the file format (lower case)")
     if not format :
         raise ValueError("Format required (lower case string)")
-    if format <> format.lower() :
+    if format != format.lower() :
         raise ValueError("Format string '%s' should be lower case" % format)
     if isinstance(alignments, Alignment) :
         raise TypeError("Need an Alignment list/iterator, not just a single Alignment")
@@ -281,7 +281,7 @@ def parse(handle, format, seq_count=None) :
         raise TypeError("Need a string for the file format (lower case)")
     if not format :
         raise ValueError("Format required (lower case string)")
-    if format <> format.lower() :
+    if format != format.lower() :
         raise ValueError("Format string '%s' should be lower case" % format)
 
     #Map the file format to a sequence iterator:
@@ -350,14 +350,14 @@ if __name__ == "__main__" :
     print
 
     def align_cmp(align1, align2) :
-        if align1.get_alignment_length() <> align2.get_alignment_length() :
+        if align1.get_alignment_length() != align2.get_alignment_length() :
             return False
         recs1 = align1.get_all_seqs()
         recs2 = align2.get_all_seqs()
-        if len(recs1) <> len(recs2) :
+        if len(recs1) != len(recs2) :
             return False
         for r1, r2 in zip(recs1, recs2) :
-            if r1.seq.tostring() <> r2.seq.tostring() :
+            if r1.seq.tostring() != r2.seq.tostring() :
                 return False
         return True
     
