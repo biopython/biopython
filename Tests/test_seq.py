@@ -328,15 +328,26 @@ test_seqs = [s,t,u,
              #Seq.Seq("AWGAARCKG", Alphabet.generic_dna), 
              Seq.Seq("AUGAAACUG", Alphabet.generic_rna), 
              Seq.Seq("ATGAAACTG", IUPAC.unambiguous_dna), 
+             Seq.Seq("ATGAAA-CTG", Alphabet.Gapped(IUPAC.unambiguous_dna)),
              Seq.Seq("ATGAAACTGWN", IUPAC.ambiguous_dna), 
              Seq.Seq("AUGAAACUG", Alphabet.generic_rna), 
-             Seq.Seq("AUGAAACUG", IUPAC.unambiguous_rna), 
-             Seq.Seq("AUGAAACUGWN", IUPAC.ambiguous_rna), 
-             Seq.Seq("ATGAAACTG", Alphabet.generic_nucleotide), 
+             Seq.Seq("AUGAAA==CUG", Alphabet.Gapped(Alphabet.generic_rna,"=")),
+             Seq.Seq("AUGAAACUG", IUPAC.unambiguous_rna),
+             Seq.Seq("AUGAAACUGWN", IUPAC.ambiguous_rna),
+             Seq.Seq("ATGAAACTG", Alphabet.generic_nucleotide),
              Seq.Seq("AUGAAACTG", Alphabet.generic_nucleotide), #U and T
              Seq.MutableSeq("ATGAAACTG", Alphabet.generic_dna),
              Seq.MutableSeq("AUGaaaCUG", IUPAC.unambiguous_rna),
              Seq.Seq("ACTGTCGTCT", Alphabet.generic_protein)]
+protein_seqs = [Seq.Seq("ATCGPK", IUPAC.protein),
+                Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, ".")),
+                Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-")),
+                Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
+                Seq.MutableSeq("ME-K-DRXR*XU", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
+                Seq.Seq("MEDG-KRXR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.extended_protein, "-"), "*")),
+                Seq.Seq("ME-KR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.protein, "-"), "@")),
+                Seq.Seq("MEDG.KRXR@", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "@"), "."))]
+
 #Sanity test on the test sequence alphabets (see also enhancement bug 2597)
 for nucleotide_seq in test_seqs :
     if hasattr(nucleotide_seq, "alphabet") :
@@ -366,6 +377,13 @@ for nucleotide_seq in test_seqs:
         except ValueError :
             assert expected is None
 
+for s in protein_seqs :
+    try :
+        print Seq.transcribe(s)
+        assert False, "Shouldn't work on a protein!"
+    except ValueError :
+        pass
+
 print
 print "Back-transcribe RNA into DNA"
 print "============================"
@@ -385,6 +403,13 @@ for nucleotide_seq in test_seqs:
             assert repr(expected) == repr(nucleotide_seq.back_transcribe())
         except ValueError :
             assert expected is None
+            
+for s in protein_seqs :
+    try :
+        print Seq.back_transcribe(s)
+        assert False, "Shouldn't work on a protein!"
+    except ValueError :
+        pass
         
 print
 print "Reverse Complement"
@@ -403,9 +428,22 @@ for nucleotide_seq in test_seqs:
     if isinstance(nucleotide_seq, Seq.Seq) :
         try :
             assert repr(expected) == repr(nucleotide_seq.reverse_complement())
+            assert repr(expected[::-1]) == repr(nucleotide_seq.complement())
         except ValueError :
             assert expected is None
-        
+
+for s in protein_seqs :
+    try :
+        print s.complement()
+        assert False, "Shouldn't work on a protein!"
+    except ValueError :
+        pass
+    try :
+        print s.reverse_complement()
+        assert False, "Shouldn't work on a protein!"
+    except ValueError :
+        pass
+   
 print
 print "Translating"
 print "==========="
@@ -413,7 +451,7 @@ for nucleotide_seq in test_seqs:
     try :
         print "%s\n-> %s" \
         % (repr(nucleotide_seq) , repr(Seq.translate(nucleotide_seq)))
-    except ValueError, e :
+    except (ValueError, TranslationError), e :
         print "%s\n-> %s" \
         % (repr(nucleotide_seq) , str(e))
 
@@ -435,6 +473,13 @@ for nucleotide_seq in [misc_stops, Seq.Seq(misc_stops),
     assert "***RR" == str(Seq.translate(nucleotide_seq, table=11))
     assert "***RR" == str(Seq.translate(nucleotide_seq, table='Bacterial'))
 del misc_stops
+
+for s in protein_seqs :
+    try :
+        print Seq.translate(s)
+        assert False, "Shouldn't work on a protein!"
+    except ValueError :
+        pass
 
 assert Seq.translate("TAT")=="Y"
 assert Seq.translate("TAR")=="*"

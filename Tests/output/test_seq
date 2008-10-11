@@ -173,8 +173,10 @@ Seq('ATGAAACTG', Alphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
 'ATGAAACtg' -> 'AUGAAACug'
 Seq('AUGAAACUG', RNAAlphabet()) -> RNA cannot be transcribed!
 Seq('ATGAAACTG', IUPACUnambiguousDNA()) -> Seq('AUGAAACUG', IUPACUnambiguousRNA())
+Seq('ATGAAA-CTG', Gapped(IUPACUnambiguousDNA(), '-')) -> Seq('AUGAAA-CUG', RNAAlphabet())
 Seq('ATGAAACTGWN', IUPACAmbiguousDNA()) -> Seq('AUGAAACUGWN', IUPACAmbiguousRNA())
 Seq('AUGAAACUG', RNAAlphabet()) -> RNA cannot be transcribed!
+Seq('AUGAAA==CUG', Gapped(RNAAlphabet(), '=')) -> RNA cannot be transcribed!
 Seq('AUGAAACUG', IUPACUnambiguousRNA()) -> RNA cannot be transcribed!
 Seq('AUGAAACUGWN', IUPACAmbiguousRNA()) -> RNA cannot be transcribed!
 Seq('ATGAAACTG', NucleotideAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
@@ -192,8 +194,10 @@ Seq('ATGAAACTG', Alphabet()) -> Seq('ATGAAACTG', DNAAlphabet())
 'ATGAAACtg' -> 'ATGAAACtg'
 Seq('AUGAAACUG', RNAAlphabet()) -> Seq('ATGAAACTG', DNAAlphabet())
 Seq('ATGAAACTG', IUPACUnambiguousDNA()) -> DNA cannot be back transcribed!
+Seq('ATGAAA-CTG', Gapped(IUPACUnambiguousDNA(), '-')) -> DNA cannot be back transcribed!
 Seq('ATGAAACTGWN', IUPACAmbiguousDNA()) -> DNA cannot be back transcribed!
 Seq('AUGAAACUG', RNAAlphabet()) -> Seq('ATGAAACTG', DNAAlphabet())
+Seq('AUGAAA==CUG', Gapped(RNAAlphabet(), '=')) -> Seq('ATGAAA==CTG', DNAAlphabet())
 Seq('AUGAAACUG', IUPACUnambiguousRNA()) -> Seq('ATGAAACTG', IUPACUnambiguousDNA())
 Seq('AUGAAACUGWN', IUPACAmbiguousRNA()) -> Seq('ATGAAACTGWN', IUPACAmbiguousDNA())
 Seq('ATGAAACTG', NucleotideAlphabet()) -> Seq('ATGAAACTG', DNAAlphabet())
@@ -218,10 +222,14 @@ Seq('AUGAAACUG', RNAAlphabet())
 -> Seq('CAGUUUCAU', RNAAlphabet())
 Seq('ATGAAACTG', IUPACUnambiguousDNA())
 -> Seq('CAGTTTCAT', IUPACUnambiguousDNA())
+Seq('ATGAAA-CTG', Gapped(IUPACUnambiguousDNA(), '-'))
+-> Seq('CAG-TTTCAT', Gapped(IUPACUnambiguousDNA(), '-'))
 Seq('ATGAAACTGWN', IUPACAmbiguousDNA())
 -> Seq('NWCAGTTTCAT', IUPACAmbiguousDNA())
 Seq('AUGAAACUG', RNAAlphabet())
 -> Seq('CAGUUUCAU', RNAAlphabet())
+Seq('AUGAAA==CUG', Gapped(RNAAlphabet(), '='))
+-> Seq('CAG==UUUCAU', Gapped(RNAAlphabet(), '='))
 Seq('AUGAAACUG', IUPACUnambiguousRNA())
 -> Seq('CAGUUUCAU', IUPACUnambiguousRNA())
 Seq('AUGAAACUGWN', IUPACAmbiguousRNA())
@@ -229,7 +237,7 @@ Seq('AUGAAACUGWN', IUPACAmbiguousRNA())
 Seq('ATGAAACTG', NucleotideAlphabet())
 -> Seq('CAGTTTCAT', NucleotideAlphabet())
 Seq('AUGAAACTG', NucleotideAlphabet())
--> Seq('CTGUUUCAU', NucleotideAlphabet())
+-> Mixed RNA/DNA found
 MutableSeq('ATGAAACTG', DNAAlphabet())
 -> Seq('CAGTTTCAT', DNAAlphabet())
 MutableSeq('AUGaaaCUG', IUPACUnambiguousRNA())
@@ -253,10 +261,14 @@ Seq('AUGAAACUG', RNAAlphabet())
 -> Seq('MKL', ExtendedIUPACProtein())
 Seq('ATGAAACTG', IUPACUnambiguousDNA())
 -> Seq('MKL', IUPACProtein())
+Seq('ATGAAA-CTG', Gapped(IUPACUnambiguousDNA(), '-'))
+-> Codon '-CT' is invalid
 Seq('ATGAAACTGWN', IUPACAmbiguousDNA())
 -> Seq('MKL', ExtendedIUPACProtein())
 Seq('AUGAAACUG', RNAAlphabet())
 -> Seq('MKL', ExtendedIUPACProtein())
+Seq('AUGAAA==CUG', Gapped(RNAAlphabet(), '='))
+-> Codon '==C' is invalid
 Seq('AUGAAACUG', IUPACUnambiguousRNA())
 -> Seq('MKL', IUPACProtein())
 Seq('AUGAAACUGWN', IUPACAmbiguousRNA())
@@ -280,12 +292,14 @@ Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA()) -> Seq('AGTTTTCCTACGTAGTACA', IU
 Seq('ATGAAACTG', Alphabet()) -> Seq('TACTTTGAC', Alphabet())
 Seq('AUGAAACUG', RNAAlphabet()) -> Seq('UACUUUGAC', RNAAlphabet())
 Seq('ATGAAACTG', IUPACUnambiguousDNA()) -> Seq('TACTTTGAC', IUPACUnambiguousDNA())
+Seq('ATGAAA-CTG', Gapped(IUPACUnambiguousDNA(), '-')) -> Seq('TACTTT-GAC', Gapped(IUPACUnambiguousDNA(), '-'))
 Seq('ATGAAACTGWN', IUPACAmbiguousDNA()) -> Seq('TACTTTGACWN', IUPACAmbiguousDNA())
 Seq('AUGAAACUG', RNAAlphabet()) -> Seq('UACUUUGAC', RNAAlphabet())
+Seq('AUGAAA==CUG', Gapped(RNAAlphabet(), '=')) -> Seq('UACUUU==GAC', Gapped(RNAAlphabet(), '='))
 Seq('AUGAAACUG', IUPACUnambiguousRNA()) -> Seq('UACUUUGAC', IUPACUnambiguousRNA())
 Seq('AUGAAACUGWN', IUPACAmbiguousRNA()) -> Seq('UACUUUGACWN', IUPACAmbiguousRNA())
 Seq('ATGAAACTG', NucleotideAlphabet()) -> Seq('TACTTTGAC', NucleotideAlphabet())
-Seq('AUGAAACTG', NucleotideAlphabet()) -> Seq('UACUUUGTC', NucleotideAlphabet())
+Seq('AUGAAACTG', NucleotideAlphabet()) -> Mixed RNA/DNA found
 Seq('ACTGTCGTCT', ProteinAlphabet()) -> Proteins do not have complements!
 
 Seq's .reverse_complement() method
@@ -296,10 +310,12 @@ Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA()) -> Seq('ACATGATGCATCCTTTTGA', IU
 Seq('ATGAAACTG', Alphabet()) -> Seq('CAGTTTCAT', Alphabet())
 Seq('AUGAAACUG', RNAAlphabet()) -> Seq('CAGUUUCAU', RNAAlphabet())
 Seq('ATGAAACTG', IUPACUnambiguousDNA()) -> Seq('CAGTTTCAT', IUPACUnambiguousDNA())
+Seq('ATGAAA-CTG', Gapped(IUPACUnambiguousDNA(), '-')) -> Seq('CAG-TTTCAT', Gapped(IUPACUnambiguousDNA(), '-'))
 Seq('ATGAAACTGWN', IUPACAmbiguousDNA()) -> Seq('NWCAGTTTCAT', IUPACAmbiguousDNA())
 Seq('AUGAAACUG', RNAAlphabet()) -> Seq('CAGUUUCAU', RNAAlphabet())
+Seq('AUGAAA==CUG', Gapped(RNAAlphabet(), '=')) -> Seq('CAG==UUUCAU', Gapped(RNAAlphabet(), '='))
 Seq('AUGAAACUG', IUPACUnambiguousRNA()) -> Seq('CAGUUUCAU', IUPACUnambiguousRNA())
 Seq('AUGAAACUGWN', IUPACAmbiguousRNA()) -> Seq('NWCAGUUUCAU', IUPACAmbiguousRNA())
 Seq('ATGAAACTG', NucleotideAlphabet()) -> Seq('CAGTTTCAT', NucleotideAlphabet())
-Seq('AUGAAACTG', NucleotideAlphabet()) -> Seq('CTGUUUCAU', NucleotideAlphabet())
+Seq('AUGAAACTG', NucleotideAlphabet()) -> Mixed RNA/DNA found
 Seq('ACTGTCGTCT', ProteinAlphabet()) -> Proteins do not have complements!

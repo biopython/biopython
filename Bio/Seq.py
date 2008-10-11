@@ -78,7 +78,7 @@ class Seq(object):
             #They should be the same sequence type (or one of them is generic)
             return cmp(str(self), str(other))
         elif isinstance(other, basestring) :
-            return cmp(str(self), str(other))
+            return cmp(str(self), other)
         else :
             raise TypeError
     """
@@ -109,7 +109,7 @@ class Seq(object):
             return self.__class__(str(self) + str(other), a)
         elif isinstance(other, basestring) :
             #other is a plain string - use the current alphabet
-            return self.__class__(str(self) + str(other), self.alphabet)
+            return self.__class__(str(self) + other, self.alphabet)
         else :
             raise TypeError
 
@@ -125,7 +125,7 @@ class Seq(object):
             return self.__class__(str(other) + str(self), a)
         elif isinstance(other, basestring) :
             #other is a plain string - use the current alphabet
-            return self.__class__(str(other) + str(self), self.alphabet)
+            return self.__class__(other + str(self), self.alphabet)
         else :
             raise TypeError
 
@@ -316,12 +316,18 @@ class Seq(object):
 
         Trying to complement a protein sequence raises an exception.
         """
-        if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
+        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
+                      Alphabet.ProteinAlphabet) :
             raise ValueError, "Proteins do not have complements!"
-        if isinstance(self.alphabet, Alphabet.DNAAlphabet) :
+        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
+                      Alphabet.DNAAlphabet) :
             d = ambiguous_dna_complement
-        elif isinstance(self.alphabet, Alphabet.RNAAlphabet) :
+        elif isinstance(Alphabet._get_base_alphabet(self.alphabet),
+                        Alphabet.RNAAlphabet) :
             d = ambiguous_rna_complement
+        elif 'U' in self.data and 'T' in self.data:
+            #TODO - Handle this cleanly?
+            raise ValueError, "Mixed RNA/DNA found"
         elif 'U' in self.data:
             d = ambiguous_rna_complement
         else:
@@ -345,9 +351,11 @@ class Seq(object):
 
         Trying to transcribe a protein or RNA sequence raises an exception.
         """
-        if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
+        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
+                      Alphabet.ProteinAlphabet) :
             raise ValueError, "Proteins cannot be transcribed!"
-        if isinstance(self.alphabet, Alphabet.RNAAlphabet) :
+        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
+                      Alphabet.RNAAlphabet) :
             raise ValueError, "RNA cannot be transcribed!"
 
         if self.alphabet==IUPAC.unambiguous_dna:
@@ -365,9 +373,11 @@ class Seq(object):
         Trying to back-transcribe a protein or DNA sequence raises an
         exception.
         """
-        if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
+        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
+                      Alphabet.ProteinAlphabet) :
             raise ValueError, "Proteins cannot be back transcribed!"
-        if isinstance(self.alphabet, Alphabet.DNAAlphabet) :
+        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
+                      Alphabet.DNAAlphabet) :
             raise ValueError, "DNA cannot be back transcribed!"
 
         if self.alphabet==IUPAC.unambiguous_rna:
@@ -458,7 +468,7 @@ class MutableSeq(object):
             else :
                 return cmp(str(self), str(other))
         elif isinstance(other, basestring) :
-            return cmp(str(self), str(other))
+            return cmp(str(self), other)
         else :
             raise TypeError
 
@@ -616,12 +626,16 @@ class MutableSeq(object):
         Trying to complement a protein sequence raises an exception.
 
         No return value"""
-        if isinstance(self.alphabet, Alphabet.ProteinAlphabet) :
+        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
+                      Alphabet.ProteinAlphabet) :
             raise ValueError, "Proteins do not have complements!"
         if self.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
             d = ambiguous_dna_complement
         elif self.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
             d = ambiguous_rna_complement
+        elif 'U' in self.data and 'T' in self.data :
+            #TODO - Handle this cleanly?
+            raise ValueError, "Mixed RNA/DNA found"
         elif 'U' in self.data:
             d = ambiguous_rna_complement
         else:
@@ -785,7 +799,8 @@ def translate(sequence, table = "Standard", stop_symbol = "*"):
     except:
         table_id = None
     if isinstance(sequence, Seq) or isinstance(sequence, MutableSeq):
-        if isinstance(sequence.alphabet, Alphabet.ProteinAlphabet) :
+        if isinstance(Alphabet._get_base_alphabet(sequence.alphabet),
+                      Alphabet.ProteinAlphabet) :
             raise ValueError, "Proteins cannot be translated!"
         if sequence.alphabet==IUPAC.unambiguous_dna:
             if table_id is None:
@@ -847,174 +862,3 @@ def reverse_complement(sequence):
         #do the reverse complement, and turn this back to a string
         #TODO - Find a more efficient way to do this without code duplication?
         return Seq(sequence).reverse_complement().tostring()
-
-if __name__ == "__main__" :
-    print "Quick self test"
-    from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values#
-    from Bio.Alphabet import generic_dna, generic_rna
-
-    print ambiguous_dna_complement
-    for ambig_char, values in ambiguous_dna_values.iteritems() :
-        compl_values = reverse_complement(values)[::-1]
-        print "%s={%s} --> {%s}=%s" % \
-            (ambig_char, values, compl_values, ambiguous_dna_complement[ambig_char])
-        assert set(compl_values) == set(ambiguous_dna_values[ambiguous_dna_complement[ambig_char]])
-
-    for s in ["".join(ambiguous_dna_values),
-              Seq("".join(ambiguous_dna_values)),
-              Seq("".join(ambiguous_dna_values), generic_dna),
-              "".join(ambiguous_rna_values),
-              Seq("".join(ambiguous_rna_values)),
-              Seq("".join(ambiguous_dna_values), generic_rna)]:
-        print "%s -> %s [RC]" % (repr(s), repr(reverse_complement(s)))
-        print "%s -> %s [RNA]" % (repr(s), repr(transcribe(s)))
-        print "%s -> %s [DNA]" % (repr(s), repr(back_transcribe(s)))
-
-    #Quick check of the count method
-    for letter in "ABCDEFGHIjklmnopqrstuvwyz" :
-        assert 1 == Seq(letter).count(letter)
-        assert 1 == MutableSeq(letter).count(letter)
-    my_str = "AAAATGACGGCGGCGGCT"
-    for my_obj in [my_str, Seq(my_str), MutableSeq(my_str)] :
-        assert 5 == my_obj.count("A")
-        assert 1 == my_obj.count("ATG")
-        assert 3 == my_obj.count("CG")
-        assert 2 == my_obj.count("A", 3, -5)
-    for my_obj in [Seq(my_str), MutableSeq(my_str)] :
-        assert 1 == my_obj.count(Seq("AT"))
-        assert 5 == my_obj.count(Seq("A"))
-        assert 3 == my_obj.count(Seq("CG"))
-        assert 2 == my_obj.count(Seq("A"), 3, -5)
-        assert 1 == my_obj.count(MutableSeq("AT"))
-        assert 5 == my_obj.count(MutableSeq("A"))
-        assert 3 == my_obj.count(MutableSeq("CG"))
-        assert 2 == my_obj.count(MutableSeq("A"), 3, -5)
-        for start in range(-len(my_str), len(my_str)) :
-            for end in range(-len(my_str), len(my_str)) :
-                c = my_str.count("A",start,end)
-                assert c == my_str[start:end].count("A")
-                assert c == my_obj.count("A",start,end)
-                assert c == my_obj[start:end].count("A")
-                #This one is a bit silly:
-                assert my_str[start:end:-1].count("A") == my_obj[start:end:-1].count("A")
-
-    print repr(translate(Seq("GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGT",
-                             IUPAC.unambiguous_dna)))
-    print repr(translate(Seq("GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGTTAG",
-                             IUPAC.unambiguous_dna)))
-    print repr(translate(Seq("GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGTTAG",
-                             IUPAC.unambiguous_dna), stop_symbol="@"))
-    
-    assert translate("TAR")=="*"
-    assert translate("TAN")=="X"
-    assert translate("NNN")=="X"
-    assert translate("TaR")=="*"
-    assert translate("TaN")=="X"
-    assert translate("NnN")=="X"
-    ambig = set(IUPAC.IUPACAmbiguousDNA.letters)
-    for c1 in ambig :
-        for c2 in ambig :
-            for c3 in ambig :
-                values = set([translate(a+b+c, table=1) \
-                              for a in ambiguous_dna_values[c1] \
-                              for b in ambiguous_dna_values[c2] \
-                              for c in ambiguous_dna_values[c3]])
-                t = translate(c1+c2+c3)
-                if t=="*" :
-                    assert values == set("*")
-                elif t=="X" :
-                    assert len(values) > 1, \
-                        "translate('%s') = '%s' not '%s'" \
-                        % (c1+c2+c3, t, ",".join(values))
-                elif t=="Z" :
-                    assert values == set("EQ")
-                elif t=="J" :
-                    assert values == set("IL")
-                elif t=="B" :
-                    assert values == set("DN")
-                else :
-                    assert values == set(t)
-
-    print "Checking addition"
-    p = Seq("PKLPAK", Alphabet.generic_protein)
-    q = Seq("PKL-PAK", Alphabet.Gapped(Alphabet.generic_protein,"-"))
-    r = Seq("PKL-PAK*", Alphabet.Gapped(Alphabet.HasStopCodon(Alphabet.generic_protein,"*"),"-"))
-    s = Seq("PKL-PAK*", Alphabet.HasStopCodon(Alphabet.Gapped(Alphabet.generic_protein,"-"),"*"))
-    t = Seq("PKLPAK*", Alphabet.HasStopCodon(Alphabet.generic_protein,"*"))
-    u = "PAPKXALOA"
-    v = Seq("PKLPAK!", Alphabet.HasStopCodon(Alphabet.generic_protein,"!"))
-    w = Seq("PKL.PAK", Alphabet.Gapped(Alphabet.generic_protein,"."))
-    for a in [p,q,r,s,t,u,v,w] :
-        for b in [p,q,r,s,t,u,v,w] :
-            try :
-                c = a+b
-            except (TypeError,ValueError), e :
-                print "%s and %s -> %s" % (a.alphabet, b.alphabet, str(e))
-        try :
-            c = a+Seq("ACTG", Alphabet.generic_dna)
-            assert isinstance(a,str), "Should have failed"
-        except TypeError, e :
-            pass
-
-    print "Checking split, strip, count and find"
-    for s in [p,q,r,s,t,v,w] :
-        assert [x.tostring() for x in s.split()] == s.tostring().split()
-        assert [x.tostring() for x in s.split("-")] == s.tostring().split("-")
-        assert [x.tostring() for x in s.split(None,1)] == s.tostring().split(None,1)
-        assert [x.tostring() for x in s.split("-",1)] == s.tostring().split("-",1)
-        assert [x.tostring() for x in s.rsplit()] == s.tostring().rsplit()
-        for sep, max_split in [(None,-1),(None,1),("-",1),("L-",1),
-                               ("P",1),(Seq("P"),2),
-                               (Seq("L",Alphabet.generic_protein),2)] :
-            assert [x.tostring() for x in s.split(sep,max_split)] \
-                   == s.tostring().split(str(sep),max_split)
-            
-        assert s.strip().tostring() == s.tostring().strip()
-        assert s.strip("*").tostring() == s.tostring().strip("*")
-        assert s.rstrip("*").tostring() == s.tostring().rstrip("*")
-        assert s.lstrip("PK").tostring() == s.tostring().lstrip("PK")
-        assert s.lstrip(Seq("PK",Alphabet.generic_protein)).tostring() \
-               == s.tostring().lstrip("PK")
-
-        for text in ["-","-P", "P"] :
-            assert s.find(text) == s.tostring().find(text)
-            assert s.find(text,1,-2) == s.tostring().find(text,1,-2)
-            assert s.find(text,2,-2) == s.tostring().find(text,2,-2)
-            assert s.count(text) == s.tostring().count(text)
-            assert s.count(text,1,-2) == s.tostring().count(text,1,-2)
-            assert s.count(text,2,-2) == s.tostring().count(text,2,-2)
-    print
-
-    print "Checking comparisons"
-    for a in [Alphabet.generic_protein, Alphabet.HasStopCodon(Alphabet.Gapped(Alphabet.generic_protein,"-"),"*")] :
-        assert MutableSeq("A",a) == MutableSeq("A",a)
-        assert MutableSeq("A",a) == Seq("A",a)
-        assert MutableSeq("A",a) == Seq("A")
-        assert MutableSeq("A",a) == "A"
-        assert MutableSeq("ABC",a) == MutableSeq("A") \
-               + MutableSeq("B", Alphabet.generic_protein) + MutableSeq("C",a)
-        assert MutableSeq("A",a) != MutableSeq("B")
-        assert MutableSeq("ABC",a) <= MutableSeq("ABD")
-        assert MutableSeq("ABC",a) < MutableSeq("ABD")
-        assert MutableSeq("ABC",a) < Seq("ABD")
-        assert Seq("ABC",a) < MutableSeq("ABD")
-        try :
-            assert MutableSeq("A",a) == MutableSeq("A",Alphabet.generic_dna)
-            assert False
-        except TypeError :
-            pass
-        """
-        #TODO - Support __cmp__ for Seq object
-        assert Seq("A",a) == Seq("A",a)
-        assert Seq("A",a) == Seq("A")
-        assert Seq("ABC",a) == Seq("A") + Seq("B", Alphabet.generic_protein) + Seq("C",a)
-        assert Seq("A",a) != Seq("B")
-        assert Seq("ABC",a) <= Seq("ABD")
-        assert Seq("ABC",a) < Seq("ABD")
-        try :
-            assert Seq("A",a) == Seq("A",Alphabet.generic_dna)
-            assert False
-        except TypeError :
-            pass
-        """
-    print "Done"
