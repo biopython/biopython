@@ -2,7 +2,6 @@
 """
 import os, sys
 import StringIO
-import popen2
 
 from Bio import File
 
@@ -13,39 +12,66 @@ def generic_run(commandline):
     AbstractCommandline, and returns a ApplicationResult object
     to get results from a program, along with handles of the
     standard output and standard error.
+
+    WARNING - This will read in the full program output into memory!
+    This may be in issue when the program write a large amount of
+    data to standard output.
     """
     # print str(commandline)
-    if sys.platform[:3]=='win':
-        # Windows does not have popen2.Popen3
-        r, w, e = popen2.popen3(str(commandline))
-    
+
+    #Try and use subprocess (available in python 2.4+)
+    try :
+        import subprocess, sys
+        child = subprocess.Popen(str(commandline),
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 shell=(sys.platform!="win32"))
+        r = child.stdout
+        e = child.stderr 
+
         r_out = r.read()
         e_out = e.read()
-        w.close()
         r.close()
         e.close()
 
-        # No way to get the error code; setting it to a dummy variable
-        error_code = 0
-
-    else:
-        child = popen2.Popen3(str(commandline), 1)
-        # get information and close the files, so if we call this function
-        # repeatedly we won't end up with too many open files
-
-        # here are the file descriptors
-        r = child.fromchild
-        w = child.tochild
-        e = child.childerr
-    
-        r_out = r.read()
-        e_out = e.read()
-        w.close()
-        r.close()
-        e.close()
-    
         # capture error code
-        error_code = os.WEXITSTATUS(child.wait())
+        error_code = child.wait()
+
+    except ImportError :
+        #For python 2.3 can't use subprocess, using popen2 instead
+        #(deprecated in python 2.6)
+        import popen2
+        if sys.platform[:3]=='win':
+            # Windows does not have popen2.Popen3
+            r, w, e = popen2.popen3(str(commandline))
+        
+            r_out = r.read()
+            e_out = e.read()
+            w.close()
+            r.close()
+            e.close()
+
+            # No way to get the error code; setting it to a dummy variable
+            error_code = 0
+
+        else:
+            child = popen2.Popen3(str(commandline), 1)
+            # get information and close the files, so if we call this function
+            # repeatedly we won't end up with too many open files
+
+            # here are the file descriptors
+            r = child.fromchild
+            w = child.tochild
+            e = child.childerr
+        
+            r_out = r.read()
+            e_out = e.read()
+            w.close()
+            r.close()
+            e.close()
+        
+            # capture error code
+            error_code = os.WEXITSTATUS(child.wait())
 
     return ApplicationResult(commandline, error_code), \
            File.UndoHandle(StringIO.StringIO(r_out)), \
