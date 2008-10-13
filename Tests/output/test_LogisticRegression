@@ -1,0 +1,11 @@
+test_LogisticRegression
+test_calculate_model (test_LogisticRegression.TestLogisticRegression) ... ok
+test_calculate_probability (test_LogisticRegression.TestLogisticRegression) ... ok
+test_classify (test_LogisticRegression.TestLogisticRegression) ... ok
+test_leave_one_out (test_LogisticRegression.TestLogisticRegression) ... ok
+test_model_accuracy (test_LogisticRegression.TestLogisticRegression) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.220s
+
+OK
