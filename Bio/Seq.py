@@ -24,16 +24,16 @@ from Bio.Data import CodonTable
 class Seq(object):
     """A read-only sequence object (essentially a string with an alphabet).
 
-    Like normal python strings, our basic sequence object is immuatable.
+    Like normal python strings, our basic sequence object is immutable.
     This prevents you from doing my_seq[5] = "A" for example, but does allow
     Seq objects to be used as dictionary keys.
 
     The Seq object provides a number of string like methods (such as count,
     find, split and strip), which are alphabet aware where appropriate.
 
-    The Seq object also provides some biological methods, such as complement
-    and reverse_complement (not applicable to sequences with a
-    protein alphabet).
+    The Seq object also provides some biological methods, such as complement,
+    reverse_complement, transcribe, back_transcribe and translate (which are
+    not applicable to sequences with a protein alphabet).
     """
     def __init__(self, data, alphabet = Alphabet.generic_alphabet):
         # Enforce string storage
