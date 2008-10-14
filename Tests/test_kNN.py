@@ -9,7 +9,9 @@
 
 import unittest
 import sys
-from Bio import LogisticRegression
+
+from numpy import *
+from Bio import kNN
 
 
 xs = [[-53, -200.78],
@@ -48,52 +50,64 @@ ys = [1,
       0,
       0]
 
-class TestLogisticRegression(unittest.TestCase):
+class TestKNN(unittest.TestCase):
 
     def test_calculate_model(self):
-        model = LogisticRegression.train(xs, ys)
-        beta = model.beta
-        self.assertAlmostEqual(beta[0],  8.9830, 4)
-        self.assertAlmostEqual(beta[1], -0.0360, 4)
-        self.assertAlmostEqual(beta[2],  0.0218, 4)
+        k = 3
+        model = kNN.train(xs, ys, k)
+        self.assertEqual(model.classes, set([0,1]))
+        n = len(xs)
+        for i in range(n):
+            self.assertAlmostEqual(model.xs[i,0], xs[i][0], 4)
+            self.assertAlmostEqual(model.xs[i,1], xs[i][1], 4)
+            self.assertEqual(model.ys[i], ys[i])
+        self.assertEqual(model.k, k)
 
     def test_classify(self):
-        model = LogisticRegression.train(xs, ys)
-        result = LogisticRegression.classify(model, [6,-173.143442352])
+        k = 3
+        model = kNN.train(xs, ys, k)
+        result = kNN.classify(model, [6,-173.143442352])
         self.assertEqual(result, 1)
-        result = LogisticRegression.classify(model, [309, -271.005880394])
+        result = kNN.classify(model, [309, -271.005880394])
         self.assertEqual(result, 0)
 
     def test_calculate_probability(self):
-        model = LogisticRegression.train(xs, ys)
-        q, p = LogisticRegression.calculate(model, [6,-173.143442352])
-        self.assertAlmostEqual(p,  0.993242, 6)
-        self.assertAlmostEqual(q,  0.006758, 6)
-        q, p = LogisticRegression.calculate(model, [309, -271.005880394])
-        self.assertAlmostEqual(p,  0.000321, 6)
-        self.assertAlmostEqual(q,  0.999679, 6)
+        k = 3
+        model = kNN.train(xs, ys, k)
+        weights = kNN.calculate(model, [6,-173.143442352])
+        self.assertAlmostEqual(weights[0], 0.0, 6)
+        self.assertAlmostEqual(weights[1], 3.0, 6)
+        weights = kNN.calculate(model, [309, -271.005880394])
+        self.assertAlmostEqual(weights[0], 3.0, 6)
+        self.assertAlmostEqual(weights[1], 0.0, 6)
+        weights = kNN.calculate(model, [117, -267.13999999999999])
+        self.assertAlmostEqual(weights[0], 2.0, 6)
+        self.assertAlmostEqual(weights[1], 1.0, 6)
 
     def test_model_accuracy(self):
         correct = 0
-        model = LogisticRegression.train(xs, ys)
-        predictions = [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]
+        k = 3
+        model = kNN.train(xs, ys, k)
+        predictions = [1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]
         for i in range(len(predictions)):
-            prediction = LogisticRegression.classify(model, xs[i])
-            self.assertEqual(prediction, predictions[i])
-            if prediction==ys[i]:
-                correct+=1
-        self.assertEqual(correct, 16)
-
-    def test_leave_one_out(self):
-        correct = 0
-        predictions = [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0]
-        for i in range(len(predictions)):
-            model = LogisticRegression.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:])
-            prediction = LogisticRegression.classify(model, xs[i])
+            prediction = kNN.classify(model, xs[i])
             self.assertEqual(prediction, predictions[i])
             if prediction==ys[i]:
                 correct+=1
         self.assertEqual(correct, 15)
+
+    def test_leave_one_out(self):
+        correct = 0
+        k = 3
+        model = kNN.train(xs, ys, k)
+        predictions = [1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1]
+        for i in range(len(predictions)):
+            model = kNN.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:], k)
+            prediction = kNN.classify(model, xs[i])
+            self.assertEqual(prediction, predictions[i])
+            if prediction==ys[i]:
+                correct+=1
+        self.assertEqual(correct, 13)
 
 def run_tests(argv):
     test_suite = testing_suite()
@@ -105,7 +119,7 @@ def testing_suite():
     """
     unittest_suite = unittest.TestSuite()
     test_loader = unittest.TestLoader()
-    cur_suite = test_loader.loadTestsFromTestCase(TestLogisticRegression)
+    cur_suite = test_loader.loadTestsFromTestCase(TestKNN)
     unittest_suite.addTest(cur_suite)
     return unittest_suite
 

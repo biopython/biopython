@@ -1,0 +1,11 @@
+test_kNN
+test_calculate_model (test_kNN.TestKNN) ... ok
+test_calculate_probability (test_kNN.TestKNN) ... ok
+test_classify (test_kNN.TestKNN) ... ok
+test_leave_one_out (test_kNN.TestKNN) ... ok
+test_model_accuracy (test_kNN.TestKNN) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.019s
+
+OK
