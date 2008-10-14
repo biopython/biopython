@@ -1,9 +1,18 @@
-"""Code to translate DNA or RNA into proteins.
+"""Code to translate DNA or RNA into proteins (semi-obsolete).
 
-You are encouraged to use the translate function in Bio.Seq instead,
-however this does not yet offer the full functionality of Bio.Translate
-at this time."""
-import string
+Instead of Bio.Translate, for translation you are now encouraged to use the
+Seq object's translate method, or the translate function in the Bio.Seq
+module.
+
+However, at the time of writing, Bio.Seq does not yet offer the full
+functionality of Bio.Translate, lacking in particular back-translation and
+translate-to-stop.
+
+The provisional intension is to add back-translation and translate-to-stop
+functionality to Bio.Seq, and then declare Bio.Translate as obsolete.  This
+module would then be deprecated, and later removed in a future release of
+Biopython.
+"""
 from Bio import Alphabet, Seq
 from Bio.Data import CodonTable
 
@@ -37,7 +46,7 @@ class Translator:
             alphabet = Alphabet.HasStopCodon(table.protein_alphabet)
             self._encoded[stop_symbol] = alphabet
 
-        return Seq.Seq(string.join(letters, ""), alphabet)
+        return Seq.Seq("".join(letters), alphabet)
                            
     def translate_to_stop(self, seq):
         # This doesn't have a stop encoding
@@ -58,7 +67,7 @@ class Translator:
         except KeyError:
             # Stop at the first codon failure
             pass
-        return Seq.Seq(string.join(letters, ""), self.table.protein_alphabet)
+        return Seq.Seq("".join(letters), self.table.protein_alphabet)
 
     def back_translate(self, seq):
         # includes the stop codon
@@ -77,7 +86,7 @@ class Translator:
                 append(table[None])
             else:
                 append(table[c])
-        return Seq.Seq(string.join(letters, ""),
+        return Seq.Seq("".join(letters),
                        self.table.nucleotide_alphabet)
 
     def _back_translate_no_stop(self, seq):
@@ -91,7 +100,7 @@ class Translator:
         table = self.table.back_table
         for c in seq.data:
             append(table[c])
-        return Seq.Seq(string.join(letters, ""),
+        return Seq.Seq("".join(letters),
                        self.table.nucleotide_alphabet)
 
 unambiguous_dna_by_name = {}
