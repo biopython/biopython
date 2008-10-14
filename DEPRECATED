@@ -4,9 +4,7 @@ to find documentation about how to update your code to work again.
 
 Numeric support
 ===============
-Following the release of 1.48, Numeric support in Biopython is discontinued.
-Limited support is still available for python modules via back compatible
-imports, but C modules will not work. Please move to NumPy.
+Following the release of 1.48, Numeric support in Biopython is discontinued. Please move to NumPy.
 
 Martel
 ======
@@ -43,8 +41,8 @@ in the following release.  Please use Bio.Entrez instead.
 
 Bio.PubMed
 ==========
-Declared obsolete in Release 1.48, with the intention of an official deprecation
-in the following release.  Please use Bio.Entrez instead.
+Declared obsolete in Release 1.48, deprecated in Release 1.49.
+Please use Bio.Entrez instead.
 
 Bio.EUtils
 ==========
