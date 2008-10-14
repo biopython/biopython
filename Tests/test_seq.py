@@ -380,7 +380,13 @@ for nucleotide_seq in test_seqs:
 for s in protein_seqs :
     try :
         print Seq.transcribe(s)
-        assert False, "Shouldn't work on a protein!"
+        assert False, "Transcription shouldn't work on a protein!"
+    except ValueError :
+        pass
+    if not isinstance(s, Seq.Seq) : continue #Only Seq has this method
+    try :
+        print s.transcribe()
+        assert False, "Transcription shouldn't work on a protein!"
     except ValueError :
         pass
 
@@ -407,7 +413,13 @@ for nucleotide_seq in test_seqs:
 for s in protein_seqs :
     try :
         print Seq.back_transcribe(s)
-        assert False, "Shouldn't work on a protein!"
+        assert False, "Back transcription shouldn't work on a protein!"
+    except ValueError :
+        pass
+    if not isinstance(s, Seq.Seq) : continue #Only Seq has this method
+    try :
+        print s.back_transcribe()
+        assert False, "Back transcription shouldn't work on a protein!"
     except ValueError :
         pass
         
@@ -434,13 +446,19 @@ for nucleotide_seq in test_seqs:
 
 for s in protein_seqs :
     try :
+        print Seq.reverse_complement(s)
+        assert False, "Reverse complement shouldn't work on a protein!"
+    except ValueError :
+        pass
+    #Note that these methods are "in place" for the MutableSeq:
+    try :
         print s.complement()
-        assert False, "Shouldn't work on a protein!"
+        assert False, "Complement shouldn't work on a protein!"
     except ValueError :
         pass
     try :
         print s.reverse_complement()
-        assert False, "Shouldn't work on a protein!"
+        assert False, "Reverse complement shouldn't work on a protein!"
     except ValueError :
         pass
    
@@ -449,11 +467,33 @@ print "Translating"
 print "==========="
 for nucleotide_seq in test_seqs:
     try :
+        expected = Seq.translate(nucleotide_seq)
         print "%s\n-> %s" \
-        % (repr(nucleotide_seq) , repr(Seq.translate(nucleotide_seq)))
+        % (repr(nucleotide_seq) , repr(expected))
     except (ValueError, TranslationError), e :
+        expected = None
         print "%s\n-> %s" \
         % (repr(nucleotide_seq) , str(e))
+    #Now test the Seq object's method
+    if isinstance(nucleotide_seq, Seq.Seq) :
+        try :
+            assert repr(expected) == repr(nucleotide_seq.translate())
+        except (ValueError, TranslationError) :
+            assert expected is None
+
+for s in protein_seqs :
+    try :
+        print Seq.translate(s)
+        assert False, "Translation shouldn't work on a protein!"
+    except ValueError :
+        pass
+    if not isinstance(s, Seq.Seq) : continue #Only Seq has this method
+    try :
+        print s.translate()
+        assert False, "Translation shouldn't work on a protein!"
+    except ValueError :
+        pass
+
 
 misc_stops = "TAATAGTGAAGAAGG"
 for nucleotide_seq in [misc_stops, Seq.Seq(misc_stops),

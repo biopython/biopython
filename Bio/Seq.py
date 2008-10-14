@@ -365,7 +365,6 @@ class Seq(object):
         else:
             alphabet = Alphabet.generic_rna
         return Seq(str(self).replace('T','U').replace('t','u'), alphabet)
-
     
     def back_transcribe(self):
         """Returns the DNA sequence from an RNA sequence. New Seq object.
@@ -387,6 +386,65 @@ class Seq(object):
         else:
             alphabet = Alphabet.generic_dna
         return Seq(str(self).replace("U", "T").replace("u", "t"), alphabet)
+
+    def translate(self, table = "Standard", stop_symbol = "*"):
+        """Turns a nucleotide sequence into a protein sequence. New Seq object.
+
+        Trying to back-transcribe a protein sequence raises an exception.
+        This method will translate DNA or RNA sequences.
+
+        table - Which codon table to use?  This can be either a name
+                (string) or an NCBI identifier (integer).
+        stop_symbol - Single character string, what to use for terminators.
+
+        NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
+        or a stop codon.  These are translated as "X".  Any invalid codon
+        (e.g. "TA?" or "T-A") will throw a TranslationError.
+
+        NOTE - Does NOT support gapped sequences.
+
+        NOTE - This does NOT behave like the python string's translate
+        method.  For that use str(my_seq).translate(...) instead.
+        """
+        try:
+            table_id = int(table)
+        except ValueError:
+            table_id = None
+        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
+                      Alphabet.ProteinAlphabet) :
+            raise ValueError, "Proteins cannot be translated!"
+        if self.alphabet==IUPAC.unambiguous_dna:
+            if table_id is None:
+                codon_table = CodonTable.unambiguous_dna_by_name[table]
+            else:
+                codon_table = CodonTable.unambiguous_dna_by_id[table_id]
+        elif self.alphabet==IUPAC.ambiguous_dna:
+            if table_id is None:
+                codon_table = CodonTable.ambiguous_dna_by_name[table]
+            else:
+                codon_table = CodonTable.ambiguous_dna_by_id[table_id]
+        elif self.alphabet==IUPAC.unambiguous_rna:
+            if table_id is None:
+                codon_table = CodonTable.unambiguous_rna_by_name[table]
+            else:
+                codon_table = CodonTable.unambiguous_rna_by_id[table_id]
+        elif self.alphabet==IUPAC.ambiguous_rna:
+            if table_id is None:
+                codon_table = CodonTable.ambiguous_rna_by_name[table]
+            else:
+                codon_table = CodonTable.ambiguous_rna_by_id[table_id]
+        else:
+            if table_id is None:
+                codon_table = CodonTable.ambiguous_generic_by_name[table]
+            else:
+                codon_table = CodonTable.ambiguous_generic_by_id[table_id]
+        protein = _translate_str(str(self), codon_table, stop_symbol)
+        if stop_symbol in protein :
+            alphabet = Alphabet.HasStopCodon(codon_table.protein_alphabet,
+                                             stop_symbol = stop_symbol)
+        else :
+            alphabet = codon_table.protein_alphabet
+        return Seq(protein, alphabet)
 
 class MutableSeq(object):
     """An editable sequence object (with an alphabet).
@@ -794,53 +852,18 @@ def translate(sequence, table = "Standard", stop_symbol = "*"):
     translate("NNN") -> "X"
     translate("TAG",stop_sybmol="@") -> "@"
     """
-    try:
-        table_id = int(table)
-    except:
-        table_id = None
-    if isinstance(sequence, Seq) or isinstance(sequence, MutableSeq):
-        if isinstance(Alphabet._get_base_alphabet(sequence.alphabet),
-                      Alphabet.ProteinAlphabet) :
-            raise ValueError, "Proteins cannot be translated!"
-        if sequence.alphabet==IUPAC.unambiguous_dna:
-            if table_id is None:
-                table = CodonTable.unambiguous_dna_by_name[table]
-            else:
-                table = CodonTable.unambiguous_dna_by_id[table_id]
-        elif sequence.alphabet==IUPAC.ambiguous_dna:
-            if table_id is None:
-                table = CodonTable.ambiguous_dna_by_name[table]
-            else:
-                table = CodonTable.ambiguous_dna_by_id[table_id]
-        elif sequence.alphabet==IUPAC.unambiguous_rna:
-            if table_id is None:
-                table = CodonTable.unambiguous_rna_by_name[table]
-            else:
-                table = CodonTable.unambiguous_rna_by_id[table_id]
-        elif sequence.alphabet==IUPAC.ambiguous_rna:
-            if table_id is None:
-                table = CodonTable.ambiguous_rna_by_name[table]
-            else:
-                table = CodonTable.ambiguous_rna_by_id[table_id]
-        else:
-            if table_id is None:
-                table = CodonTable.ambiguous_generic_by_name[table]
-            else:
-                table = CodonTable.ambiguous_generic_by_id[table_id]
-        protein = _translate_str(sequence.tostring(), table, stop_symbol)
-        if stop_symbol in protein :
-            alphabet = Alphabet.HasStopCodon(table.protein_alphabet,
-                                             stop_symbol = stop_symbol)
-        else :
-            alphabet = table.protein_alphabet
-        return Seq(protein, alphabet)
+    if isinstance(sequence, Seq) :
+        return sequence.translate(table, stop_symbol)
+    elif isinstance(sequence, MutableSeq):
+        #Return a Seq object
+        return sequence.toseq().translate(table, stop_symbol)
     else:
-        if table_id==None:
-            table = CodonTable.ambiguous_generic_by_name[table]
-        else:
-            table = CodonTable.ambiguous_generic_by_id[table_id]
-        return _translate_str(sequence, table, stop_symbol)
-
+        #Assume its a string, return a string
+        try :
+            codon_table = CodonTable.ambiguous_generic_by_id[int(table)]
+        except ValueError :
+            codon_table = CodonTable.ambiguous_generic_by_name[table]
+        return _translate_str(sequence, codon_table, stop_symbol)
 
 def reverse_complement(sequence):
     """Returns the reverse complement sequence of a nucleotide string.
