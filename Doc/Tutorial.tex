@@ -5634,7 +5634,7 @@ pylab.show()
 If you tried this on the full set of genes from one organism, you'd probably get a much
 smoother plot than this.
 
-\subsection{Nucleotide dot plot}
+\subsection{Nucleotide dot plots}
 A dot plot is a way of visually comparing two nucleotide sequences for similarity to
 each other.  A sliding window is used to compare short sub-sequences to each other,
 often with a mis-match threshold.  Here for simplicity we'll only look for perfect
@@ -5654,7 +5654,7 @@ in the plot below).
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{images/dot_plot.png}
-\caption{Nucleotide dot plot of two orchid sequence lengths (as a matrix).}
+\caption{Nucleotide dot plot of two orchid sequence lengths (using pylab's imshow function).}
 \label{fig:nuc-dot-plot}
 \end{figure}
 \end{latexonly}
@@ -5744,6 +5744,7 @@ for (seq, section_dict) in [(rec_one.seq.tostring().upper(), dict_one),
         except KeyError :
             section_dict[section] = [i]
 #Now find any sub-sequences found in both sequences
+#(Python 2.3 would require slightly different code here)
 matches = set(dict_one).intersection(dict_two)
 print "%i unique matches" % len(matches)
 \end{verbatim}
@@ -5763,8 +5764,8 @@ for section in matches :
 import pylab
 pylab.gray()
 pylab.scatter(x,y)
-pylab.xlim(0, len(seq_one)-window)
-pylab.ylim(0, len(seq_two)-window)
+pylab.xlim(0, len(rec_one)-window)
+pylab.ylim(0, len(rec_two)-window)
 pylab.xlabel("%s (length %i bp)" % (rec_one.id, len(rec_one)))
 pylab.ylabel("%s (length %i bp)" % (rec_two.id, len(rec_two)))
 pylab.title("Dot plot using window size %i\n(allowing no mis-matches)" % window)
