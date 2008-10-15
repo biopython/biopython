@@ -5736,21 +5736,42 @@ step = 1
 dict_one = {}
 dict_two = {}
 for (seq, section_dict) in [(rec_one.seq.tostring().upper(), dict_one),
-                            (rec_two.seq.tostring().upper(), dict_two)] :    for i in range(0, len(seq)-window, step) :        section = seq[i:i+window]        try :            section_dict[section].append(i)        except KeyError :            section_dict[section] = [i]
+                            (rec_two.seq.tostring().upper(), dict_two)] :
+    for i in range(0, len(seq)-window, step) :
+        section = seq[i:i+window]
+        try :
+            section_dict[section].append(i)
+        except KeyError :
+            section_dict[section] = [i]
 #Now find any sub-sequences found in both sequences
-matches = set(dict_one).intersection(dict_two)print "%i unique matches" % len(matches)
+matches = set(dict_one).intersection(dict_two)
+print "%i unique matches" % len(matches)
 \end{verbatim}
 \noindent In order to use the \verb|pylab.scatter()| we need separate lists for the $x$ and $y$ co-ordinates:
 \begin{verbatim}
 #Create lists of x and y co-ordinates for scatter plot
-x = []y = []for section in matches :    for i in dict_one[section] :        for j in dict_two[section] :            x.append(i)            y.append(j)
+x = []
+y = []
+for section in matches :
+    for i in dict_one[section] :
+        for j in dict_two[section] :
+            x.append(i)
+            y.append(j)
 \end{verbatim}
 \noindent We are now reading to draw the revised dot plot as a scatter plot:
 \begin{verbatim}
-import pylabpylab.gray()pylab.scatter(x,y)pylab.xlim(0, len(seq_one)-window)pylab.ylim(0, len(seq_two)-window)pylab.xlabel("%s (length %i bp)" % (rec_one.id, len(rec_one)))pylab.ylabel("%s (length %i bp)" % (rec_two.id, len(rec_two)))pylab.title("Dot plot using window size %i\n(allowing no mis-matches)" % window)
+import pylab
+pylab.gray()
+pylab.scatter(x,y)
+pylab.xlim(0, len(seq_one)-window)
+pylab.ylim(0, len(seq_two)-window)
+pylab.xlabel("%s (length %i bp)" % (rec_one.id, len(rec_one)))
+pylab.ylabel("%s (length %i bp)" % (rec_two.id, len(rec_two)))
+pylab.title("Dot plot using window size %i\n(allowing no mis-matches)" % window)
 pylab.show()
 \end{verbatim}
-%pylab.savefig("dot_plot.png", dpi=75)%pylab.savefig("dot_plot.pdf")
+%pylab.savefig("dot_plot.png", dpi=75)
+%pylab.savefig("dot_plot.pdf")
 %
 % Have a HTML version and a PDF version to display nicely...
 %
