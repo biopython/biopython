@@ -46,6 +46,14 @@ for (col, letter) in enumerate(letters) :
     assert alignment.get_column(col) == letter \
                                       + letter.lower() \
                                       + letter.upper()
+#Check row extractions:
+assert alignment[0].id == "mixed"
+assert alignment[-1].id == "upper"
+#Check sub-alignment extraction by row slicing:
+assert isinstance(alignment[::-1], Alignment)
+assert alignment[::-1][0].id == "upper"
+assert alignment[::-1][2].id == "mixed"
+
 del alignment
 del letters
 

@@ -36,7 +36,7 @@ class Alignment:
         self._records = []
 
     def _str_line(self, record) :
-        """Returns a truncated string representation of a SeqRecord.
+        """Returns a truncated string representation of a SeqRecord (PRIVATE).
 
         This is a PRIVATE function used by the __str__ method.
         """
@@ -57,7 +57,9 @@ class Alignment:
         DNAAlphabet() alignment with 3 rows and 14 columns
         ACGATCAGCTAGCT Alpha
         CCGATCAGCTAGCT Beta
-        ACGATGAGCTAGCT Gamma        
+        ACGATGAGCTAGCT Gamma
+
+        See also the alignment's format method.
         """
         rows = len(self._records)
         lines = ["%s alignment with %i rows and %i columns" \
@@ -129,6 +131,10 @@ class Alignment:
         """Return all of the sequences involved in the alignment.
 
         The return value is a list of SeqRecord objects.
+
+        This method is semi-obsolete, as the Alignment object itself offers
+        much of the functionality of a list of SeqRecord objects (e.g. iteration
+        or slicing to create a sub-alignment).
         """
         return self._records
 
@@ -144,7 +150,7 @@ class Alignment:
         return iter(self._records) 
 
     def get_seq_by_num(self, number):
-        """Retrieve a sequence by row number.
+        """Retrieve a sequence by row number (OBSOLETE).
 
         Returns:
         o A Seq object for the requested sequence.
@@ -245,18 +251,46 @@ class Alignment:
         You can access a row of the alignment as a SeqRecord using an integer
         index (think of the alignment as a list of SeqRecord objects here):
 
-        first_record = my_alignment[0]
-        last_record = my_alignment[-1]
+            first_record = my_alignment[0]
+            last_record = my_alignment[-1]
 
-        Right now, this is the ONLY indexing operation supported.  The
-        use of two indices and splice notation to extract a sub-alignment,
-        row, column or letter is under discussion for a future update."""
+        You can also access use python's slice notation to create a sub-alignment
+        containing only some of the SeqRecord objects:
+
+            sub_alignment = my_alignment[2:20]
+
+        This includes support for a step,
+
+            sub_alignment = my_alignment[start:end:step]
+
+        For example to select every second sequence:
+
+            sub_alignment = my_alignment[::2]
+
+        Or to reverse the row order:
+
+            rev_alignment = my_alignment[::-1]
+
+        Right now, these are the ONLY indexing operations supported.  The use of
+        a second column based index is under discussion for a future update.
+        """
         if isinstance(index, int) :
             #e.g. result = align[x]
             #Return a SeqRecord
             return self._records[index]
+        elif isinstance(index, slice) :
+            #e.g. sub_aling = align[i:j:k]
+            #Return a new Alignment using only the specified records.
+            #TODO - See Bug 2554 for changing the __init__ method
+            #to allow us to do this more cleanly.
+            sub_align = Alignment(self._alphabet)
+            sub_align._records = self._records[index]
+            return sub_align
+        elif len(index)==2 :
+            raise TypeError("Row and Column indexing is not currently supported,"\
+                            +"but may be in future.")
         else :
-            raise TypeError, "Not currently supported, but may be in future."
+            raise TypeError("Invalid index type.")
 
 if __name__ == "__main__" :
     print "Mini self test..."
@@ -294,3 +328,10 @@ if __name__ == "__main__" :
         print "Using .format('%s')," % format
         print "="*60
         print a.format(format)
+
+    print
+    print "Row slicing the alignment:"
+    print a[1:3]
+    print
+    print "Reversing the row order:"
+    print a[::-1]
