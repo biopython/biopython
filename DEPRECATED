@@ -6,6 +6,12 @@ Numeric support
 ===============
 Following the release of 1.48, Numeric support in Biopython is discontinued. Please move to NumPy.
 
+Bio.Seq
+=======
+Direct use of the Seq object (and MutableSeq object) .data property is discouraged.
+As of release 1.49, writing to the Seq object's .data property triggers a warning,
+and this property is likely to be made read only in the next release.
+
 Martel
 ======
 Declared obsolete in Release 1.48, deprecated in Release 1.49.

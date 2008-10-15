@@ -40,8 +40,20 @@ class Seq(object):
         assert (type(data) == type("") or # must use a string
                 type(data) == type(u""))  # but can be a unicode string
 
-        self.data = data                           # Seq API requirement
-        self.alphabet = alphabet                   # Seq API requirement
+        self._data = data
+        self.alphabet = alphabet  # Seq API requirement
+ 
+    # A data property is/was a Seq API requirement
+    def _set_data(self, value) :
+        #TODO - In the next release, actually raise an exception?
+        #The Seq object is like a python string, it should be read only!
+        import warnings
+        warnings.warn("Writing to the Seq object's .data propery is deprecated.",
+                      DeprecationWarning)
+        self._data = value
+    data = property(fget= lambda self : self._data,
+                    fset=_set_data,
+                    doc="Sequence as a string (DEPRECATED)")
 
     def __repr__(self):
         """Returns a (truncated) representation of the sequence for debugging."""
@@ -50,7 +62,7 @@ class Seq(object):
             #is a stop codon at the end of a sequence.
             #Note total length is 54+3+3=60
             return "%s('%s...%s', %s)" % (self.__class__.__name__,
-                                   self.data[:54], self.data[-3:],
+                                   str(self)[:54], str(self)[-3:],
                                    repr(self.alphabet))
         else :
             return "%s(%s, %s)" % (self.__class__.__name__,
@@ -64,7 +76,7 @@ class Seq(object):
         which need to be backwards compatible with old Biopython, you
         should continue to use my_seq.tostring() rather than str(my_seq)
         """
-        return self.data
+        return self._data
 
     """
     TODO - Work out why this breaks test_Restriction.py
@@ -83,7 +95,7 @@ class Seq(object):
             raise TypeError
     """
 
-    def __len__(self): return len(self.data)       # Seq API requirement
+    def __len__(self): return len(self._data)       # Seq API requirement
 
     def __getitem__(self, index) :                 # Seq API requirement
         #Note since Python 2.0, __getslice__ is deprecated
@@ -91,10 +103,10 @@ class Seq(object):
         #See http://docs.python.org/ref/sequence-methods.html
         if isinstance(index, int) :
             #Return a single letter as a string
-            return self.data[index]
+            return self._data[index]
         else :
             #Return the (sub)sequence as another Seq object
-            return Seq(self.data[index], self.alphabet)
+            return Seq(self._data[index], self.alphabet)
 
     def __add__(self, other):
         """Add another sequence or string to this sequence."""
@@ -134,10 +146,10 @@ class Seq(object):
 
         Although not formally deprecated, you are now encouraged to use
         str(my_seq) instead of my_seq.tostring()."""
-        return self.data
+        return self._data
 
     def tomutable(self):   # Needed?  Or use a function?
-        return MutableSeq(self.data, self.alphabet)
+        return MutableSeq(str(self), self.alphabet)
 
     def _get_seq_str_and_check_alphabet(self, other_sequence) :
         """string/Seq/MutableSeq to string, checking alphabet (PRIVATE).
@@ -325,10 +337,10 @@ class Seq(object):
         elif isinstance(Alphabet._get_base_alphabet(self.alphabet),
                         Alphabet.RNAAlphabet) :
             d = ambiguous_rna_complement
-        elif 'U' in self.data and 'T' in self.data:
+        elif 'U' in self._data and 'T' in self._data:
             #TODO - Handle this cleanly?
             raise ValueError, "Mixed RNA/DNA found"
-        elif 'U' in self.data:
+        elif 'U' in self._data:
             d = ambiguous_rna_complement
         else:
             d = ambiguous_dna_complement
