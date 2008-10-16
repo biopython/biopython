@@ -68,8 +68,8 @@
 \begin{document}
 
 \title{Biopython Tutorial and Cookbook}
-\author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- September 2008}
+\author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
+\date{Last Update -- October 2008}
 
 \maketitle
 \tableofcontents
@@ -383,7 +383,7 @@ In Chapter~\ref{chapter:Bio.SeqIO} on Sequence Input/Output (and Section~\ref{se
 
 Sequences are essentially strings of letters like \verb|AGTACACTGGT|, which seems very natural since this is the most common way that sequences are seen in biological file formats.
 
-There are two important differences between the \verb|Seq| object and standard python strings.  First of all the Seq object has a slightly different set of methods to a plain python string (for example, a \verb|reverse_complement()| method used for nucleotide sequences).
+There are two important differences between the \verb|Seq| object and standard python strings.  First of all the Seq object has a slightly different set of methods to a plain python string (for example, \verb|reverse_complement()| and \verb|translate()| methods used for nucleotide sequences).
 Secondly, the \verb|Seq| object has an important attribute, \verb|alphabet|, which is an object describing what the individual characters making up the sequence string ``mean'', and how they should be interpreted.  For example, is \verb|AGTACACTGGT| a DNA sequence, or just a protein sequence that happens to be rich in Alanines, Glycines, Cysteines
 and Threonines?
 
@@ -571,9 +571,12 @@ Seq('GATCGATGCACGT', NucleotideAlphabet())
 \section{Nucleotide sequences and (reverse) complements}
 \label{sec:seq-reverse-complement}
 
-For nucleotide sequences, you can easily obtain the complement or reverse complement of a Seq object:
+For nucleotide sequences, you can easily obtain the complement or reverse complement of a \verb|Seq| object using its built-in methods:
 
 \begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import IUPAC
+>>> my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", IUPAC.unambiguous_dna)
 >>> my_seq
 Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPACUnambiguousDNA())
 >>> my_seq.complement()
@@ -585,8 +588,9 @@ Seq('GCGATTTTCGATCCTATATAGGCCCATCGATC', IUPACUnambiguousDNA())
 In all of these operations, the alphabet property is maintained. This is very useful in case you accidentally end up trying to do something weird like take the (reverse)complement of a protein sequence:
 
 \begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import IUPAC
 >>> protein_seq = Seq("EVRNAK", IUPAC.protein)
->>> dna_seq = Seq("ACGT", IUPAC.unambiguous_dna)
 >>> protein_seq.complement()
 Traceback (most recent call last):
   File "<stdin>", line 1, in ?
@@ -632,12 +636,11 @@ Seq('CTATCGGGCACCCTTTCAGCGGCCCATTACAATGGCCAT', IUPACUnambiguousDNA())
 \end{verbatim}
 \noindent These should match the figure above - remember by convention nucleotide sequences are normally read from the 5' to 3' direction, while in the figure the template strand is shown reversed.
 
-Now let's transcribe the coding strand into the corresponding mRNA:
+Now let's transcribe the coding strand into the corresponding mRNA, using the \verb|Seq| object's built in \verb|transcribe| method:
 \begin{verbatim}
->>> from Bio.Seq import transcribe
 >>> coding_dna
 Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
->>> messenger_rna = transcribe(coding_dna)
+>>> messenger_rna = coding_dna.transcribe()
 >>> messenger_rna
 Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
 \end{verbatim}
@@ -645,42 +648,61 @@ Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
 
 If you do want to do a true biological transcription starting with the template strand, then this becomes a two-step process:
 \begin{verbatim}
->>> transcribe(template_dna.reverse_complement())
+>>> template_dna.reverse_complement().transcribe()
 Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
 \end{verbatim}
 
-The \verb|Bio.Seq| module also includes a back-translation function for going from the mRNA to the coding strand of the DNA.  Again, this is a simple U $\rightarrow$ T substitution and associated change of alphabet:
+The \verb|Seq| object also includes a back-translation method for going from the mRNA to the coding strand of the DNA.  Again, this is a simple U $\rightarrow$ T substitution and associated change of alphabet:
 \begin{verbatim}
->>> from Bio.Seq import Seq, back_transcribe
+>>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
 >>> messenger_rna = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG", IUPAC.unambiguous_rna)
+>>> messenger_rna
+Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
+>>> messenger_rna.back_transcribe()
+Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
+\end{verbatim}
+
+Note that the \verb|Seq| object's \verb|transcribe| and \verb|back_transcribe| methods
+are new in Biopython 1.49.  For older releases you would have to use the \verb|Bio.Seq|
+module's function instead, e.g.:
+\begin{verbatim}
+>>> from Bio.Seq import Seq, transcribe, back_transcribe
+>>> from Bio.Alphabet import IUPAC
+>>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG", IUPAC.unambiguous_dna)
+>>> coding_dna
+Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
+>>> messenger_rna = transcribe(coding_dna)
 >>> messenger_rna
 Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
 >>> back_transcribe(messenger_rna)
 Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
 \end{verbatim}
+\noindent See Section~\ref{sec:seq-module-functions} for more details on these module level functions.
 
 \section{Translation}
 Sticking with the same example discussed in the transcription section above,
-now let's translate this mRNA into the corresponding protein sequence:
+now let's translate this mRNA into the corresponding protein sequence - again taking
+advantage of one of the \verb|Seq| object's biological methods:
+
 \begin{verbatim}
->>> from Bio.Seq import Seq, translate
+>>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
 >>> messenger_rna = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG", IUPAC.unambiguous_rna)
 >>> messenger_rna
 Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
->>> translate(messenger_rna)
+>>> messenger_rna.translate()
 Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
 \end{verbatim}
 
 You can also translate directly from the coding strand DNA sequence:
 \begin{verbatim}
->>> from Bio.Seq import Seq, translate
+>>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
 >>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG", IUPAC.unambiguous_dna)
 >>> coding_dna
 Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
->>> translate(coding_dna)
+>>> coding_dna.translate()
 Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
 \end{verbatim}
 
@@ -691,23 +713,49 @@ By default, the function \verb|Bio.Seq.translate()| will use the \emph{standard}
 
 Suppose we are dealing with a mitochondrial sequence.  We need to tell the translation function to use the relevant genetic code instead:
 \begin{verbatim}
->>> translate(coding_dna, table="Vertebrate Mitochondrial")
+>>> coding_dna.translate(table="Vertebrate Mitochondrial")
 Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
 \end{verbatim}
 
 You can also specify the table using the NCBI table number which is shorter, and often included in the feature annotation of GenBank files:
 \begin{verbatim}
->>> translate(coding_dna, table=2)
+>>> coding_dna.translate(table=2)
 Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
 \end{verbatim}
 
-The \verb|Bio.Seq.translate()| function is intended to be simple and easy to use.  However, is isn't flexible enough to do things like translate up to the first stop codon for example.  For that, see the next section.
+You can even specify the stop symbol if you don't like the default asterisk:
+\begin{verbatim}
+>>> coding_dna.translate(table=2, stop_symbol="@")
+Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '@'))
+\end{verbatim}
+
+Note that the \verb|Seq| object's \verb|translate| method is new in Biopython 1.49.  For older releases you would have to use the \verb|Bio.Seq| module's function instead, e.g.:
+\begin{verbatim}
+>>> from Bio.Seq import Seq, translate
+>>> from Bio.Alphabet import IUPAC
+>>> messenger_rna = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG", IUPAC.unambiguous_rna)
+>>> messenger_rna
+Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
+>>> translate(messenger_rna)
+Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
+\end{verbatim}
+\noindent See Section~\ref{sec:seq-module-functions} for more details on these module level functions.
+
+The \verb|Seq| object's \verb|translate| method (and the \verb|Bio.Seq.translate()|
+function) are intended to be simple and easy to use.  However, they aren't currently
+flexible enough to do things like translate up to the first stop codon for example.
+For that, see the next section.
 
 \section{Transcription and Translation Continued}
 
-In the previous sections we talked about the transcription and translation functions in the \verb|Bio.Seq| module, which are intended to be very simple and easy to use.
+In the previous sections we talked about the \verb|Seq| object transcription and
+translation methods (and the functions in the \verb|Bio.Seq| module), which are
+intended to be very simple and easy to use.
 
-There is also an older \verb|Bio.Translate| module which has a few more advanced options, but is more complicated to use.  Additionally there is also an older \verb|Bio.Transcribe| module, but as this is now obsolete and likely to be deprecated, we will not discuss it here.
+There is also an older \verb|Bio.Translate| module which has a few more advanced
+options, but is more complicated to use.  Additionally there is also an older
+\verb|Bio.Transcribe| module, but as this is now obsolete and likely to be deprecated,
+we will not discuss it here.
 
 To translate our DNA object we have quite a few choices. First, we can use any number
 of translation tables depending on what we know about our DNA sequence.
@@ -871,8 +919,11 @@ Seq('AGCCCGTGGGAAAGTCGCCGGGTAATGTACCG', IUPACUnambiguousDNA())
 You can also get a string from a \verb|MutableSeq| object just like from a \verb|Seq| object (Section~\ref{sec:seq-to-string}).
 
 \section{Working with directly strings}
-
-To close this chapter, for those you who \emph{really} don't want to use the sequence objects, the module level functions in \verb|Bio.Seq| will also accept plain python strings (in addition to \verb|Seq| objects or \verb|MutableSeq| objects):
+\label{sec:seq-module-functions}
+To close this chapter, for those you who \emph{really} don't want to use the sequence
+objects (or who prefer a functional programming style to an object orientated one),
+there are module level functions in \verb|Bio.Seq| will accept plain python strings,
+\verb|Seq| objects or \verb|MutableSeq| objects:
 
 \begin{verbatim}
 >>> from Bio.Seq import reverse_complement, transcribe, back_transcribe, translate
