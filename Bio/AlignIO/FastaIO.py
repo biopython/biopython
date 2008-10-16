@@ -78,12 +78,13 @@ class FastaM10Iterator(AlignmentIterator) :
         if line.startswith("#") :
             #Skip the file header before the alignments.  e.g.
             line = self._skip_file_header(line)
-        if ">>>" in line and not line.startswith(">>>") :
+        while ">>>" in line and not line.startswith(">>>") :
             #Moved onto the next query sequence!
             self._query_descr = ""
             self._query_header_annotation = {}
             #Read in the query header
             line = self._parse_query_header(line)
+            #Now should be some alignments, but if not we move onto the next query
         if not line :
             #End of file
             return None
@@ -386,7 +387,7 @@ class FastaM10Iterator(AlignmentIterator) :
         line = self.handle.readline()
         line = self._parse_tag_section(line, self._query_header_annotation)
         assert not line[0:2] == "; ", line
-        assert line[0:2] == ">>", line
+        assert line[0:2] == ">>" or ">>>" in line, line
         return line
 
 
