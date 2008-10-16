@@ -169,6 +169,9 @@ and HTML formats
   For Biopython 1.49 onwards, you need the newer NumPy instead.
   See also: \url{http://numpy.scipy.org/}
 
+  \item \emph{Why is the} \verb|Seq| \emph{object missing the (back) transcription and translation methods described in this Tutorial?} \\
+  You need Biopython 1.49 or later.  Alternatively, use the \verb|Bio.Seq| module functions described in Section~\ref{sec:seq-module-functions}.
+
   \item \emph{Why doesn't} \verb|Bio.SeqIO| \emph{work? It imports fine but there is no parse function etc.} \\
   You need Biopython 1.43 or later.  Older versions did contain some related code under the \verb|Bio.SeqIO| name which has since been deprecated - and this is why the import ``works''.
 
@@ -665,20 +668,7 @@ Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
 
 Note that the \verb|Seq| object's \verb|transcribe| and \verb|back_transcribe| methods
 are new in Biopython 1.49.  For older releases you would have to use the \verb|Bio.Seq|
-module's function instead, e.g.:
-\begin{verbatim}
->>> from Bio.Seq import Seq, transcribe, back_transcribe
->>> from Bio.Alphabet import IUPAC
->>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG", IUPAC.unambiguous_dna)
->>> coding_dna
-Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
->>> messenger_rna = transcribe(coding_dna)
->>> messenger_rna
-Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
->>> back_transcribe(messenger_rna)
-Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
-\end{verbatim}
-\noindent See Section~\ref{sec:seq-module-functions} for more details on these module level functions.
+module's function instead, see Section~\ref{sec:seq-module-functions}.
 
 \section{Translation}
 Sticking with the same example discussed in the transcription section above,
@@ -729,39 +719,21 @@ You can even specify the stop symbol if you don't like the default asterisk:
 Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '@'))
 \end{verbatim}
 
-Note that the \verb|Seq| object's \verb|translate| method is new in Biopython 1.49.  For older releases you would have to use the \verb|Bio.Seq| module's function instead, e.g.:
-\begin{verbatim}
->>> from Bio.Seq import Seq, translate
->>> from Bio.Alphabet import IUPAC
->>> messenger_rna = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG", IUPAC.unambiguous_rna)
->>> messenger_rna
-Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
->>> translate(messenger_rna)
-Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
-\end{verbatim}
-\noindent See Section~\ref{sec:seq-module-functions} for more details on these module level functions.
+Note that the \verb|Seq| object's \verb|translate| method is new in Biopython 1.49.  For older releases you would have to use the \verb|Bio.Seq| module's function instead, see Section~\ref{sec:seq-module-functions}.  These are intended to be simple and easy to use.  
+However, they aren't currently flexible enough to do things like translate up to the
+first stop codon for example. For that, see the next section.
 
-The \verb|Seq| object's \verb|translate| method (and the \verb|Bio.Seq.translate()|
-function) are intended to be simple and easy to use.  However, they aren't currently
-flexible enough to do things like translate up to the first stop codon for example.
-For that, see the next section.
+\section{Translation Continued}
 
-\section{Transcription and Translation Continued}
-
-In the previous sections we talked about the \verb|Seq| object transcription and
-translation methods (and the functions in the \verb|Bio.Seq| module), which are
-intended to be very simple and easy to use.
-
+In the previous sections we talked about the \verb|Seq| object translation method (and mentioned the equivalent function in the \verb|Bio.Seq| module -- see Section~\ref{sec:seq-module-functions}).
 There is also an older \verb|Bio.Translate| module which has a few more advanced
-options, but is more complicated to use.  Additionally there is also an older
-\verb|Bio.Transcribe| module, but as this is now obsolete and likely to be deprecated,
-we will not discuss it here.
+options, but is more complicated to use.
 
 To translate our DNA object we have quite a few choices. First, we can use any number
 of translation tables depending on what we know about our DNA sequence.
 %The translation tables available in biopython were taken from information at
 %\url{ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}.
-So, you have tons of choices to pick from. As before, let's just focus on two choices:
+As before, let's just focus on two choices:
 the Standard translation table, and the Translation table for Vertebrate Mitochondrial
 DNA. These tables are labeled with id numbers 1 and 2, respectively.
 
@@ -774,7 +746,6 @@ Now that we know what tables we are trying to use, we're all set to perform a ba
 \end{verbatim}
 
 You compare the actual tables visually by printing the translator objects:
-
 \begin{verbatim}
 >>> print standard_translator
 Translator object
@@ -802,6 +773,9 @@ G | GTC V   | GCC A   | GAC D   | GGC G   | C
 G | GTA V   | GCA A   | GAA E   | GGA G   | A
 G | GTG V   | GCG A   | GAG E   | GGG G   | G
 --+---------+---------+---------+---------+--
+\end{verbatim}
+\noindent and:
+\begin{verbatim}
 >>> print mito_translator
 Translator object
 Table 2 Vertebrate Mitochondrial, SGC1
@@ -4110,6 +4084,8 @@ Biopython also allows you to explore the extensive realm of macromolecular struc
 Biopython comes with a PDBParser class that produces a Structure object. The Structure object
 can be used to access the atomic data in the file in a convenient manner.
 
+%Note the \verb|Bio.PDB| module requires Numerical Python (numpy) to be installed.
+
 \section{Structure representation}
 
 A macromolecular structure is represented using a structure, model chain,
@@ -5269,6 +5245,8 @@ like $F_{st}$, or allele counts.
 
 \chapter{Supervised learning methods}
 
+%Note the supervised learning methods described in this chapter all require Numerical Python (numpy) to be installed.
+
 \section{The Logistic Regression Model}
 
 \subsection{Background and Purpose}
@@ -5540,11 +5518,19 @@ Trevor Hastie, Robert Tibshirani, and Jerome Friedman: {\it The Elements of Stat
 
 \section{$k$-Nearest Neighbors}
 
+This section will describe the \verb|Bio.kNN| module.
+
 \section{Na\"ive Bayes}
+
+This section will describe the \verb|Bio.NaiveBayes| module.
 
 \section{Maximum Entropy}
 
+This section will describe the \verb|Bio.MaximumEntropy| module.
+
 \section{Markov Models}
+
+This section will describe the \verb|Bio.MarkovModel| module.
 
 \chapter{Cookbook -- Cool things to do with it}
 \label{chapter:cookbook}
