@@ -228,8 +228,8 @@ class Seq(object):
         """
         #If it has one, check the alphabet:
         sep_str = self._get_seq_str_and_check_alphabet(sep)
-        return [Seq(chunk, self.alphabet) \
-                for chunk in str(self).split(sep_str, maxsplit)]
+        return [Seq(part, self.alphabet) \
+                for part in str(self).split(sep_str, maxsplit)]
 
     def rsplit(self, sep=None, maxsplit=-1) :
         """Right split method, like that of a python string.
@@ -251,8 +251,17 @@ class Seq(object):
         """
         #If it has one, check the alphabet:
         sep_str = self._get_seq_str_and_check_alphabet(sep)
-        return [Seq(chunk, self.alphabet) \
-                for chunk in str(self).rsplit(sep_str, maxsplit)]
+        try :
+            return [Seq(part, self.alphabet) \
+                    for part in str(self).rsplit(sep_str, maxsplit)]
+        except AttributeError :
+            #Python 2.3 doesn't have a string rsplit method, which we can
+            #word around by reversing the sequence, using (left) split,
+            #and then reversing the answer. Not very efficient!
+            words = [Seq(word[::-1], self.alphabet) for word \
+                     in str(self)[::-1].split(sep_str[::-1], maxsplit)]
+            words.reverse()
+            return words
 
     def strip(self, chars=None) :
         """Returns a new Seq object with leading and trailing ends stripped.
@@ -756,7 +765,6 @@ class MutableSeq(object):
         """Returns the full sequence as a new immutable Seq object."""
         return Seq("".join(self.data), self.alphabet)
 
-
 # The transcribe, backward_transcribe, and translate functions are
 # user-friendly versions of the corresponding functions in Bio.Transcribe
 # and Bio.Translate. The functions work both on Seq objects, and on strings.
@@ -792,7 +800,7 @@ def back_transcribe(rna):
         return rna.toseq().back_transcribe()
     else:
         return rna.replace('U','T').replace('u','t')
-
+    
 def _translate_str(sequence, table, stop_symbol="*", pos_stop="X") :
     """Helper function to translate a nucleotide string (PRIVATE).
 
@@ -876,7 +884,7 @@ def translate(sequence, table = "Standard", stop_symbol = "*"):
         except ValueError :
             codon_table = CodonTable.ambiguous_generic_by_name[table]
         return _translate_str(sequence, codon_table, stop_symbol)
-
+      
 def reverse_complement(sequence):
     """Returns the reverse complement sequence of a nucleotide string.
 
