@@ -254,13 +254,21 @@ for a in dna + rna + nuc + protein :
         #Now check splits
         assert [x.tostring() for x in a.split(chars)] \
                == a.tostring().split(str(chars))
-        assert [x.tostring() for x in a.rsplit(chars)] \
-               == a.tostring().rsplit(str(chars))
+        try :
+            assert [x.tostring() for x in a.rsplit(chars)] \
+                   == a.tostring().rsplit(str(chars))
+        except AttributeError :
+            #Python 2.3 string lacks the rsplit method
+            pass
         for max_sep in [0,1,2,999] :
             assert [x.tostring() for x in a.split(chars, max_sep)] \
                    == a.tostring().split(str(chars), max_sep)
-            assert [x.tostring() for x in a.rsplit(chars, max_sep)] \
-                   == a.tostring().rsplit(str(chars), max_sep)
+            try :
+                assert [x.tostring() for x in a.rsplit(chars, max_sep)] \
+                       == a.tostring().rsplit(str(chars), max_sep)
+            except AttributeError :
+                #Python 2.3 string lacks the rsplit method
+                pass
 del a, alpha, chars, str_chars, test_chars
 del dna, rna, nuc, protein
 ###########################################################################
