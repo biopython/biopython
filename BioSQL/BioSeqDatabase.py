@@ -53,7 +53,7 @@ def open_database(driver = "MySQLdb", **kwargs):
         if "passwd" in kw:
             kw["password"] = kw["passwd"]
             del kw["passwd"]
-    if driver == "psycopg" and not kw.get("database"):
+    if driver in ["psycopg", "psycopg2"] and not kw.get("database"):
         kw["database"] = "template1"
     try:
         conn = connect(**kw)
@@ -134,7 +134,7 @@ class DBServer:
         # 1. PostgreSQL can load it all at once and actually needs to
         # due to FUNCTION defines at the end of the SQL which mess up
         # the splitting by semicolons
-        if self.module_name in ["psycopg"]:
+        if self.module_name in ["psycopg", "psycopg2"]:
             self.adaptor.cursor.execute(sql)
         # 2. MySQL needs the database loading split up into single lines of
         # SQL executed one at a time

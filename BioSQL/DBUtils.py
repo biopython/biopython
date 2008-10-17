@@ -68,7 +68,17 @@ class Psycopg_dbutils(Generic_dbutils):
 
     def autocommit(self, conn, y = True):
         conn.autocommit(y)
+
 _dbutils["psycopg"] = Psycopg_dbutils
+ 
+class Psycopg2_dbutils(Psycopg_dbutils):
+    def autocommit(self, conn, y = True):
+        if y:
+            conn.set_isolation_level(0)
+        else:
+            conn.set_isolation_level(1)
+
+_dbutils["psycopg2"] = Psycopg2_dbutils
 
 class Pgdb_dbutils(Generic_dbutils):
     """Add support for pgdb in the PyGreSQL database connectivity package.
