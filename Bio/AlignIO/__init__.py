@@ -132,10 +132,10 @@ http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
 import os
 #from cStringIO import StringIO
 from StringIO import StringIO
-from Bio.Alphabet import generic_alphabet, generic_protein
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align.Generic import Alignment
+from Bio.Alphabet import Alphabet, AlphabetEncoder
 
 import StockholmIO
 import ClustalIO
@@ -213,11 +213,13 @@ def write(alignments, handle, format) :
     return
 
 #This is a generator function!
-def _SeqIO_to_alignment_iterator(handle, format, seq_count=None) :
-    """Private function, uses Bio.SeqIO to create an Alignment iterator.
+def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None) :
+    """Uses Bio.SeqIO to create an Alignment iterator (PRIVATE).
 
     handle   - handle to the file.
     format   - string describing the file format.
+    alphabet - optional Alphabet object, useful when the sequence type cannot
+               be automatically inferred from the file itself (e.g. fasta)
     seq_count- Optional integer, number of sequences expected in
                each alignment.  Recommended for fasta format files.
 
@@ -230,7 +232,7 @@ def _SeqIO_to_alignment_iterator(handle, format, seq_count=None) :
 
     if seq_count :
         #Use the count to split the records into batches.
-        seq_record_iterator = SeqIO.parse(handle, format)
+        seq_record_iterator = SeqIO.parse(handle, format, alphabet)
 
         records = []
         for record in seq_record_iterator :
@@ -243,18 +245,30 @@ def _SeqIO_to_alignment_iterator(handle, format, seq_count=None) :
     else :
         #Must assume that there is a single alignment using all
         #the SeqRecord objects:
-        records = list(SeqIO.parse(handle, format))
+        records = list(SeqIO.parse(handle, format, alphabet))
         if records :
             yield SeqIO.to_alignment(records)
         else :
             #No alignment found!
             pass
+
+def _force_alphabet(alignment_iterator, alphabet) :
+     """Iterate over alignments, over-riding the alphabet (PRIVATE)."""
+     #Assume the alphabet argument has been pre-validated
+     #TODO - Check the given alphabet is compatible?
+     for align in alignment_iterator :
+         for record in align :
+             record.seq.alphabet = alphabet
+         align._alphabet = alphabet
+         yield align
     
-def parse(handle, format, seq_count=None) :
+def parse(handle, format, seq_count=None, alphabet=None) :
     """Turns a sequence file into an iterator returning Alignment objects.
 
     handle   - handle to the file.
     format   - string describing the file format.
+    alphabet - optional Alphabet object, useful when the sequence type cannot
+               be automatically inferred from the file itself (e.g. phylip)
     seq_count- Optional integer, number of sequences expected in
                each alignment.  Recommended for fasta format files.
 
@@ -283,22 +297,35 @@ def parse(handle, format, seq_count=None) :
         raise ValueError("Format required (lower case string)")
     if format != format.lower() :
         raise ValueError("Format string '%s' should be lower case" % format)
+    if alphabet is not None and not (isinstance(alphabet, Alphabet) or \
+                                     isinstance(alphabet, AlphabetEncoder)) :
+        raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:
     if format in _FormatToIterator :
         iterator_generator = _FormatToIterator[format]
-        return iterator_generator(handle, seq_count)
+        if alphabet is None : 
+            return iterator_generator(handle, seq_count)
+        try :
+            #Initially assume the optional alphabet argument is supported
+            return iterator_generator(handle, seq_count, alphabet=alphabet)
+        except TypeError :
+            #It isn't supported.
+            return _force_alphabet(iterator_generator(handle, seq_count), alphabet)
+
     elif format in SeqIO._FormatToIterator :
         #Exploit the existing SeqIO parser to the dirty work!
-        return _SeqIO_to_alignment_iterator(handle, format, seq_count)
+        return _SeqIO_to_alignment_iterator(handle, format, alphabet, seq_count)
     else :
         raise ValueError("Unknown format '%s'" % format)
 
-def read(handle, format, seq_count=None) :
+def read(handle, format, seq_count=None, alphabet=None) :
     """Turns an alignment file into a single Alignment object.
 
     handle   - handle to the file.
     format   - string describing the file format.
+    alphabet - optional Alphabet object, useful when the sequence type cannot
+               be automatically inferred from the file itself (e.g. phylip)
     seq_count- Optional interger, number of sequences expected in
                the alignment to check you got what you expected.
 
@@ -319,7 +346,7 @@ def read(handle, format, seq_count=None) :
     Use the Bio.AlignIO.parse() function if you want to read multiple
     records from the handle.
     """
-    iterator = parse(handle, format, seq_count)
+    iterator = parse(handle, format, seq_count, alphabet)
     try :
         first = iterator.next()
     except StopIteration :
@@ -339,7 +366,7 @@ def read(handle, format, seq_count=None) :
            
 if __name__ == "__main__" :
     #Run some tests...
-    from Bio.Alphabet import generic_nucleotide
+    from Bio.Alphabet import single_letter_alphabet
 
     for format in _FormatToIterator :
         print "parse(handle to empty file)"
@@ -1129,6 +1156,10 @@ ORIGIN
 
         print "Bio.AlignIO.read(handle, format, seq_count)"
         alignment = read(StringIO(data), format, rec_count)
+        assert len(alignment.get_all_seqs()) == rec_count
+        
+        print "Bio.AlignIO.read(handle, format, seq_count, alphabet)"
+        alignment = read(StringIO(data), format, rec_count, single_letter_alphabet)
         assert len(alignment.get_all_seqs()) == rec_count
         
         print "Bio.AlignIO.parse(handle, format)"

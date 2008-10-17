@@ -201,6 +201,7 @@ from StringIO import StringIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align.Generic import Alignment
+from Bio.Alphabet import Alphabet, AlphabetEncoder
 
 import AceIO
 import FastaIO
@@ -281,11 +282,13 @@ def write(sequences, handle, format) :
 
     return
     
-def parse(handle, format) :
+def parse(handle, format, alphabet=None) :
     """Turns a sequence file into an iterator returning SeqRecords.
 
     handle   - handle to the file.
     format   - lower case string describing the file format.
+    alphabet - optional Alphabet object, useful when the sequence type cannot
+               be automatically inferred from the file itself (e.g. fasta)
 
     If you have the file name in a string 'filename', use:
 
@@ -298,13 +301,12 @@ def parse(handle, format) :
     from StringIO import StringIO
     my_iterator = SeqIO.parse(StringIO(data), format)
 
-    Note that file will be parsed with default settings,
-    which may result in a generic alphabet or other non-ideal
-    settings.  For more control, you must use the format specific
-    iterator directly...
+    Note that file will be parsed with default settings, which may result in
+    a generic alphabet or other non-ideal settings.  For more control, you
+    must use the format specific iterator directly...
 
-    Use the Bio.SeqIO.read(handle, format) function when you expect
-    a single record only.
+    Use the Bio.SeqIO.read(handle, format) function when you expect a single
+    record only.
     """
     from Bio import AlignIO
 
@@ -317,32 +319,50 @@ def parse(handle, format) :
         raise ValueError("Format required (lower case string)")
     if format != format.lower() :
         raise ValueError("Format string '%s' should be lower case" % format)
+    if alphabet is not None and not (isinstance(alphabet, Alphabet) or \
+                                     isinstance(alphabet, AlphabetEncoder)) :
+        raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:    
     if format in _FormatToIterator :
         iterator_generator = _FormatToIterator[format]
-        return iterator_generator(handle)
+        if alphabet is None :
+            return iterator_generator(handle)
+        try :
+            return iterator_generator(handle, alphabet=alphabet)
+        except :
+            return _force_alphabet(iterator_generator(handle), alphabet)
     elif format in AlignIO._FormatToIterator :
         #Use Bio.AlignIO to read in the alignments
         #TODO - Once we drop support for Python 2.3, this helper function can be
         #replaced with a generator expression.
-        return _iterate_via_AlignIO(handle, format)
+        return _iterate_via_AlignIO(handle, format, alphabet)
     else :
         raise ValueError("Unknown format '%s'" % format)
 
 #This is a generator function
-def _iterate_via_AlignIO(handle, format) :
-    """Private function to iterate over all records in several alignments."""
+def _iterate_via_AlignIO(handle, format, alphabet) :
+    """Iterate over all records in several alignments (PRIVATE)."""
     from Bio import AlignIO
-    for align in AlignIO.parse(handle, format) :
+    for align in AlignIO.parse(handle, format, alphabet=alphabet) :
         for record in align :
             yield record
 
-def read(handle, format) :
+def _force_alphabet(record_iterator, alphabet) :
+     """Iterate over records, over-riding the alphabet (PRIVATE)."""
+     #Assume the alphabet argument has been pre-validated
+     #TODO - Check the given alphabet is compatible?
+     for record in record_iterator :
+         record.seq.alphabet = alphabet
+         yield record
+
+def read(handle, format, alphabet=None) :
     """Turns a sequence file into a single SeqRecord.
 
     handle   - handle to the file.
     format   - string describing the file format.
+    alphabet - optional Alphabet object, useful when the sequence type cannot
+               be automatically inferred from the file itself (e.g. fasta)
 
     If the handle contains no records, or more than one record,
     an exception is raised.  For example, using a GenBank file
@@ -361,7 +381,7 @@ def read(handle, format) :
     Use the Bio.SeqIO.parse(handle, format) function if you want
     to read multiple records from the handle.
     """
-    iterator = parse(handle, format)
+    iterator = parse(handle, format, alphabet)
     try :
         first = iterator.next()
     except StopIteration :
@@ -437,14 +457,14 @@ def to_alignment(sequences, alphabet=None, strict=True) :
     alignment = AlignIO.read(handle, format)
     """
     #TODO - Move this functionality into the Alignment class instead?
-    from Bio.Alphabet import Alphabet, AlphabetEncoder, generic_alphabet
+    from Bio.Alphabet import generic_alphabet
     from Bio.Alphabet import _consensus_alphabet
     if alphabet is None :
         sequences = list(sequences)
         alphabet = _consensus_alphabet([rec.seq.alphabet for rec in sequences])
 
     if not (isinstance(alphabet, Alphabet) or isinstance(alphabet, AlphabetEncoder)) :
-        raise ValueError("Invalid alignment alphabet")
+        raise ValueError("Invalid alphabet")
 
     alignment_length = None
     alignment = Alignment(alphabet)
@@ -498,7 +518,7 @@ def to_alignment(sequences, alphabet=None, strict=True) :
            
 if __name__ == "__main__" :
     #Run some tests...
-    from Bio.Alphabet import generic_nucleotide
+    from Bio.Alphabet import single_letter_alphabet
 
     #TODO - Remove this work around once we drop python 2.3 support
     try:
@@ -1478,7 +1498,7 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
         count = 1
         record = iterator.next()
         assert record is not None
-        assert str(record.__class__) == "Bio.SeqRecord.SeqRecord"
+        assert isinstance(record, SeqRecord)
         #print record
         for record in iterator :
             assert record.id == as_list[count].id
@@ -1546,6 +1566,9 @@ SQ   SEQUENCE   102 AA;  10576 MW;  CFBAA1231C3A5E92 CRC64;
                 pass
 
         print
+        print "With alphabet..."
+        assert rec_count == \
+               len(list(parse(StringIO(data),format,single_letter_alphabet)))
         
     print "Checking phy <-> aln examples agree using list(parse(...))"
     #Only compare the first 10 characters of the record.id as they
