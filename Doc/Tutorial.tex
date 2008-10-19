@@ -506,21 +506,21 @@ Seq('CGCTAAAAGCTAGGATATATCCGGGTAGCTAG', IUPACUnambiguousDNA())
 \section{Turning Seq objects into strings}
 \label{sec:seq-to-string}
 
-If you really do just need a plain string, for example to print out, write to a file, or insert into a database, then this is very easy to get:
+If you really do just need a plain string, for example to write to a file, or insert into a database, then this is very easy to get:
 \begin{verbatim}
 >>> str(my_seq)
 'GATCGATGGGCCTATATAGGATCGAAAATCGC'
 \end{verbatim}
-\noindent or:
+
+Since calling \verb|str()| on a \verb|Seq| object returns the full sequence as a string,
+you often don't actually have to do this conversion explicitly.
+Python does this automatically with a print statement:
 \begin{verbatim}
->>> my_seq.tostring()
-'GATCGATGGGCCTATATAGGATCGAAAATCGC'
+>>> print my_seq
+GATCGATGGGCCTATATAGGATCGAAAATCGC
 \end{verbatim}
 
-Because calling \verb|str()| on a \verb|Seq| object returns the full sequence as a string,
-you often don't actually have to do this conversion explicitly.
-For example, you can use the \verb|Seq| object directly with a \verb|%s| placeholder when using the python string formatting or interpolation operator (\verb|%|):
-
+You can also use the \verb|Seq| object directly with a \verb|%s| placeholder when using the python string formatting or interpolation operator (\verb|%|):
 \begin{verbatim}
 >>> fasta_format_string = ">Name\n%s\n" % my_seq
 >>> print fasta_format_string
@@ -528,9 +528,16 @@ For example, you can use the \verb|Seq| object directly with a \verb|%s| placeho
 GATCGATGGGCCTATATAGGATCGAAAATCGC
 \end{verbatim}
 
-\noindent This line of code constructs a simple FASTA format record.  Chapter~\ref{chapter:Bio.SeqIO} covers using the \verb|Bio.SeqIO| module for writing FASTA and other format sequence files.  For writing FASTA files \verb|Bio.SeqIO.write()| will automatically include line wrapping for long sequences (required by some external programs to read the data), while Section~\ref{sec:Bio.SeqIO-and-StringIO} describes a neat way to get a FASTA formatted string.
+\noindent This line of code constructs a simple FASTA format record (without worrying about line wrapping).  Reading and writing FASTA format sequence files is covered in Chapter~\ref{chapter:Bio.SeqIO}, in particular Section~\ref{sec:Bio.SeqIO-and-StringIO} describes a neat way to get a FASTA formatted string.
 
-\emph{NOTE:} If you are using Biopython 1.44 or older, you must explicitly call \verb|my_seq.tostring()| as using \verb|str(my_seq)| would give just a truncated representation.
+\emph{NOTE:} If you are using Biopython 1.44 or older, using \verb|str(my_seq)|
+will give just a truncated representation.  Instead use \verb|my_seq.tostring()|
+(which is still available in the current Biopython releases for backwards compatibility):
+
+\begin{verbatim}
+>>> my_seq.tostring()
+'GATCGATGGGCCTATATAGGATCGAAAATCGC'
+\end{verbatim}
 
 \section{Concatenating or adding sequences}
 
@@ -666,7 +673,7 @@ Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
 Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
 \end{verbatim}
 
-Note that the \verb|Seq| object's \verb|transcribe| and \verb|back_transcribe| methods
+\emph{Note:} The \verb|Seq| object's \verb|transcribe| and \verb|back_transcribe| methods
 are new in Biopython 1.49.  For older releases you would have to use the \verb|Bio.Seq|
 module's function instead, see Section~\ref{sec:seq-module-functions}.
 
@@ -698,7 +705,7 @@ Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
 
 You should notice in the above protein sequences that in addition to the end stop character, there is an internal stop as well.  This was a deliberate choice of example, as it gives an excuse to talk about different translation tables (Genetic Codes).  
 
-The translation tables available in Biopython were taken from information at \url{ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}. So, you have tons of choices to pick from. 
+The translation tables available in Biopython were taken from the NCBI information at \url{ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}. So, you have tons of choices to pick from. 
 By default, the function \verb|Bio.Seq.translate()| will use the \emph{standard} genetic code (NCBI table 1).
 
 Suppose we are dealing with a mitochondrial sequence.  We need to tell the translation function to use the relevant genetic code instead:
@@ -719,7 +726,12 @@ You can even specify the stop symbol if you don't like the default asterisk:
 Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '@'))
 \end{verbatim}
 
-Note that the \verb|Seq| object's \verb|translate| method is new in Biopython 1.49.  For older releases you would have to use the \verb|Bio.Seq| module's function instead, see Section~\ref{sec:seq-module-functions}.  These are intended to be simple and easy to use.  
+\emph{Note:} The \verb|Seq| object's \verb|translate| method is new in Biopython 1.49.
+For older releases you would have to use the \verb|Bio.Seq| module's \verb|translate|
+function instead, see Section~\ref{sec:seq-module-functions}.
+
+The \verb|Seq| object's \verb|translate| method (and the \verb|Bio.Seq| module's
+\verb|translate|function) are intended to be simple and easy to use.  
 However, they aren't currently flexible enough to do things like translate up to the
 first stop codon for example. For that, see the next section.
 
@@ -917,7 +929,7 @@ there are module level functions in \verb|Bio.Seq| will accept plain python stri
 \chapter{Sequence Input/Output}
 \label{chapter:Bio.SeqIO}
 
-In this chapter we'll discuss in more detail the \verb|Bio.SeqIO| module, which was briefly introduced in Chapter~\ref{chapter:quick-start}. This is a relatively new interface, added in Biopython 1.43, which aims to provide a simple interface for working with assorted sequence file formats in a uniform way.
+In this chapter we'll discuss in more detail the \verb|Bio.SeqIO| module, which was briefly introduced in Chapter~\ref{chapter:quick-start}. This aims to provide a simple interface for working with assorted sequence file formats in a uniform way.
 
 The ``catch'' is that you have to work with \verb|SeqRecord| objects - which contain a \verb|Seq| object (as described in Chapter~\ref{chapter:Bio.Seq}) plus annotation like an identifier and description.  We'll introduce the basics of \verb|SeqRecord| object in this chapter, but see Section~\ref{sec:advanced-seq} for more details.
 
@@ -1544,7 +1556,7 @@ from Bio import SeqIO
 in_handle = open("ls_orchid.gbk")
 for record in SeqIO.parse(in_handle, "genbank") :
     print record.id
-    print record.seq.reverse_complement().tostring()
+    print record.seq.reverse_complement()
 in_handle.close()
 \end{verbatim}
 
@@ -1647,7 +1659,7 @@ fasta_data = out_handle.read()
 print fasta_data
 \end{verbatim}
 
-This isn't entirely straightforward the first time you see it!  On the bright side, for the special case where you would like a string containing a single record in a particular file format, Biopython 1.48 adds a new \verb|format()| method to the \verb|SeqRecord| class:
+This isn't entirely straightforward the first time you see it!  On the bright side, for the special case where you would like a string containing a single record in a particular file format, Biopython 1.48 added a new \verb|format()| method to the \verb|SeqRecord| class:
 
 \begin{verbatim}
 from Bio.Seq import Seq
@@ -5664,7 +5676,7 @@ This section will describe the \verb|Bio.MarkovModel| module.
 \label{seq:sequence-parsing-plus-pylab}
 
 This section shows some more examples of sequence parsing, using the \verb|Bio.SeqIO|
-module described in Chapter~\ref{chapter:Bio.SeqIO}, plus the python library matplotlib's \verb|pylab| plotting interface (see \href{http://matplotlib.sourceforge.net/tutorial.html}{the matplotlib tutorial}).  Note that to follow these examples you will need matplotlib installed - but without it you can still try the data parsing bits.
+module described in Chapter~\ref{chapter:Bio.SeqIO}, plus the python library matplotlib's \verb|pylab| plotting interface (see \href{http://matplotlib.sourceforge.net/}{the matplotlib website for a tutorial}).  Note that to follow these examples you will need matplotlib installed - but without it you can still try the data parsing bits.
 
 \subsection{Histogram of sequence lengths}
 
@@ -5733,6 +5745,8 @@ shown in Figure~\ref{fig:seq-len-hist}.
 %
 Notice that most of these orchid sequences are about $740$ bp long, and there could be
 two distinct classes of sequence here with a subset of shorter sequences.
+
+\emph{Tip:} Rather than using \verb|pylab.show()| to show the plot in a window, you can also use \verb|pylab.savefig(...)| to save the figure to a file (e.g. as a PNG or PDF).
 
 \subsection{Plot of sequence GC\%}
 
@@ -5842,8 +5856,8 @@ comprehension:
 \begin{verbatim}
 window = 7
 step = 1
-seq_one = rec_one.seq.tostring().upper()
-seq_two = rec_two.seq.tostring().upper()
+seq_one = str(rec_one.seq).upper()
+seq_two = str(rec_two.seq).upper()
 data = [[(seq_one[i:i+window] <> seq_two[j:j+window]) \
         for j in range(0, len(seq_one)-window, step)] \
        for i in range(0, len(seq_two)-window, step)]
@@ -5897,8 +5911,8 @@ window = 7
 step = 1
 dict_one = {}
 dict_two = {}
-for (seq, section_dict) in [(rec_one.seq.tostring().upper(), dict_one),
-                            (rec_two.seq.tostring().upper(), dict_two)] :
+for (seq, section_dict) in [(str(rec_one.seq).upper(), dict_one),
+                            (str(rec_two.seq).upper(), dict_two)] :
     for i in range(0, len(seq)-window, step) :
         section = seq[i:i+window]
         try :
