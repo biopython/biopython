@@ -5248,6 +5248,7 @@ like $F_{st}$, or allele counts.
 %Note the supervised learning methods described in this chapter all require Numerical Python (numpy) to be installed.
 
 \section{The Logistic Regression Model}
+\label{sec:LogisticRegression}
 
 \subsection{Background and Purpose}
 
@@ -5283,6 +5284,7 @@ In the logistic regression model, the probability of belonging to a class depend
 Using a set of gene pairs for which it is known whether they belong to the same operon (class OP) or to different operons (class NOP), we can calculate the weights $\beta_0$, $\beta_1$, $\beta_2$ by maximizing the log-likelihood corresponding to the probability functions (\ref{eq:OP}) and (\ref{eq:NOP}).
 
 \subsection{Training the logistic regression model}
+\label{subsec:LogisticRegressionTraining}
 
 \begin{table}[h]
 \begin{center}
@@ -5506,7 +5508,7 @@ True: 0 Predicted: 1
 True: 0 Predicted: 0
 True: 0 Predicted: 0
 \end{verbatim}
-The leave-one-out analysis shows the the prediction of the logistic regression model is incorrect for only two of the gene pairs, which corresponds to a prediction accuracy of 88\%.
+The leave-one-out analysis shows that the prediction of the logistic regression model is incorrect for only two of the gene pairs, which corresponds to a prediction accuracy of 88\%.
 
 \subsection{Logistic Regression, Linear Discriminant Analysis, and Support Vector Machines}
 
@@ -5518,7 +5520,130 @@ Trevor Hastie, Robert Tibshirani, and Jerome Friedman: {\it The Elements of Stat
 
 \section{$k$-Nearest Neighbors}
 
-This section will describe the \verb|Bio.kNN| module.
+\subsection{Background and purpose}
+
+The $k$-nearest neighbors method is a supervised learning approach that does not need to fit a model to the data. Instead, data points are classified based on the categories of the $k$ nearest neighbors in the training data set.
+
+In Biopython, the $k$-nearest neighbors method is available in \verb+Bio.kNN+. To illustrate the use of the $k$-nearest neighbor method in Biopython, we will use the same operon data set as in section \ref{sec:LogisticRegression}.
+
+\subsection{Initializing a $k$-nearest neighbors model}
+
+Using the data in Table \ref{table:training}, we create and initialize a $k$-nearest neighbors model as follows:
+
+\begin{verbatim}
+>>> from Bio import kNN
+>>> k = 3
+>>> model = kNN.train(xs, ys, k)
+\end{verbatim}
+
+where \verb+xs+ and \verb+ys+ are the same as in Section \ref{subsec:LogisticRegressionTraining}. Here, \verb+k+ is the number of neighbors $k$ that will be considered for the classification. For classification into two classes, choosing an odd number for $k$ lets you avoid tied votes. The function name \verb+train+ is a bit of a misnomer, since no model training is done: this function simply stores \verb+xs+, \verb+ys+, and \verb+k+ in \verb+model+.
+
+\subsection{Using a $k$-nearest neighbors model for classification}
+
+To classify new data using the $k$-nearest neighbors model, we use the \verb+classify+ function. This function takes a data point $(x_1,x_2)$ and finds the $k$-nearest neighbors in the training data set \verb+xs+. The data point $(x_1, x_2)$ is then classified based on which category (\verb+ys+) occurs most among the $k$ neighbors.
+
+For the example of the gene pairs {\it yxcE}, {\it yxcD} and {\it yxiB}, {\it yxiA}, we find:
+\begin{verbatim}
+>>> x = [6, -173.143442352]
+>>> print "yxcE, yxcD:", kNN.classify(model, x)
+yxcE, yxcD: 1
+>>> x = [309, -271.005880394]
+>>> print "yxiB, yxiA:", kNN.classify(model, x)
+yxiB, yxiA: 0
+\end{verbatim}
+In agreement with the logistic regression model, {\it yxcE}, {\it yxcD} are classified as belonging to the same operon (class OP), while {\it yxiB}, {\it yxiA} are predicted to belong to different operons.
+
+The \verb+classify+ function lets us specify both a distance function and a weight function as optional arguments. The distance function affects which $k$ neighbors are chosen as the nearest neighbors, as these are defined as the neighbors with the smallest distance to the query point $(x, y)$. By default, the Euclidean distance is used. Instead, we could for example use the city-block (Manhattan) distance:
+
+\begin{verbatim}
+>>> def cityblock(x1, x2):
+...    assert len(x1)==2
+...    assert len(x2)==2
+...    distance = abs(x1[0]-x2[0]) + abs(x1[1]-x2[1])
+...    return distance
+...
+>>> x = [6, -173.143442352]
+>>> print "yxcE, yxcD:", kNN.classify(model, x, distance_fn = cityblock)
+yxcE, yxcD: 1
+\end{verbatim}
+
+The weight function can be used for weighted voting. For example, we may want to give closer neighbors a higher weight than neighbors that are further away:
+
+\begin{verbatim}
+>>> def weight(x1, x2):
+...    assert len(x1)==2
+...    assert len(x2)==2
+...    return exp(-abs(x1[0]-x2[0]) - abs(x1[1]-x2[1]))
+...
+>>> x = [6, -173.143442352]
+>>> print "yxcE, yxcD:", kNN.classify(model, x, weight_fn = weight)
+yxcE, yxcD: 1
+\end{verbatim}
+By default, all neighbors are given an equal weight.
+
+To find out how confident we can be in these predictions, we can call the \verb+calculate+ function, which will calculate the total weight assigned to the classes OP and NOP. For the default weighting scheme, this reduces to the number of neighbors in each category. For {\it yxcE}, {\it yxcD}, we find
+\begin{verbatim}
+>>> x = [6, -173.143442352]
+>>> weight = kNN.calculate(model, x)
+>>> print "class OP: weight =", weight[0], "class NOP: weight =", weight[1]
+class OP: weight = 0.0 class NOP: weight = 3.0
+\end{verbatim}
+which means that all three neighbors of \verb+x1+, \verb+x2+ are in the NOP class. As another example, for {\it yesK}, {\it yesL} we find
+
+\begin{verbatim}
+>>> x = [117, -267.14]
+>>> weight = kNN.calculate(model, x)
+>>> print "class OP: weight =", weight[0], "class NOP: weight =", weight[1]
+class OP: weight = 2.0 class NOP: weight = 1.0
+\end{verbatim}
+which means that two neighbors are operon pairs and one neighbor is a non-operon pair.
+
+To get some idea of the prediction accuracy of the $k$-nearest neighbors approach, we can apply it to the training data:
+\begin{verbatim}
+>>> for i in range(len(ys)):
+        print "True:", ys[i], "Predicted:", kNN.classify(model, xs[i])
+True: 1 Predicted: 1
+True: 1 Predicted: 0
+True: 1 Predicted: 1
+True: 1 Predicted: 1
+True: 1 Predicted: 1
+True: 1 Predicted: 1
+True: 1 Predicted: 1
+True: 1 Predicted: 1
+True: 1 Predicted: 1
+True: 1 Predicted: 0
+True: 0 Predicted: 0
+True: 0 Predicted: 0
+True: 0 Predicted: 0
+True: 0 Predicted: 0
+True: 0 Predicted: 0
+True: 0 Predicted: 0
+True: 0 Predicted: 0
+\end{verbatim}
+showing that the prediction is correct for all but two of the gene pairs. A more reliable estimate of the prediction accuracy can be found from a leave-one-out analysis, in which the model is recalculated from the training data after removing the gene to be predicted:
+\begin{verbatim}
+>>> for i in range(len(ys)):
+        model = kNN.train(xs[:i]+xs[i+1:], ys[:i]+ys[i+1:])
+        print "True:", ys[i], "Predicted:", kNN.classify(model, xs[i])
+True: 1 Predicted: 1
+True: 1 Predicted: 0
+True: 1 Predicted: 1
+True: 1 Predicted: 1
+True: 1 Predicted: 1
+True: 1 Predicted: 1
+True: 1 Predicted: 1
+True: 1 Predicted: 1
+True: 1 Predicted: 1
+True: 1 Predicted: 0
+True: 0 Predicted: 0
+True: 0 Predicted: 0
+True: 0 Predicted: 1
+True: 0 Predicted: 0
+True: 0 Predicted: 0
+True: 0 Predicted: 0
+True: 0 Predicted: 1
+\end{verbatim}
+The leave-one-out analysis shows that $k$-nearest neighbors model is correct for 13 out of 17 gene pairs, which corresponds to a prediction accuracy of 76\%.
 
 \section{Na\"ive Bayes}
 
