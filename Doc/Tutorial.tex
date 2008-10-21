@@ -5855,12 +5855,11 @@ comprehension:
 
 \begin{verbatim}
 window = 7
-step = 1
 seq_one = str(rec_one.seq).upper()
 seq_two = str(rec_two.seq).upper()
 data = [[(seq_one[i:i+window] <> seq_two[j:j+window]) \
-        for j in range(0, len(seq_one)-window, step)] \
-       for i in range(0, len(seq_two)-window, step)]
+        for j in range(len(seq_one)-window)] \
+       for i in range(len(seq_two)-window)]
 \end{verbatim}
 
 Now we'll use the matplotlib's \verb|pylab.imshow()| function to display this data,
@@ -5908,12 +5907,11 @@ the size of matrix it can display.  As an alternative, we'll use the \verb|pylab
 We start by creating dictionaries mapping the window-sized sub-sequences to locations:
 \begin{verbatim}
 window = 7
-step = 1
 dict_one = {}
 dict_two = {}
 for (seq, section_dict) in [(str(rec_one.seq).upper(), dict_one),
                             (str(rec_two.seq).upper(), dict_two)] :
-    for i in range(0, len(seq)-window, step) :
+    for i in range(len(seq)-window) :
         section = seq[i:i+window]
         try :
             section_dict[section].append(i)
