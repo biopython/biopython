@@ -442,6 +442,14 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>
 \end{verbatim}
 
+\subsection{flex (fast lexical analyzer generator) (optional)}
+
+The mmCIF parser \verb|Bio.PDB.mmCIF.MMCIFlex| relies on C code which
+uses flex (fast lexical analyzer generator).  At the time of writing,
+in order to parse mmCIF files you'll have to install flex, then tweak
+your \verb|setup.py| file to include the \verb|Bio.PDB.mmCIF.MMCIFlex|
+module, before (re)installing Biopython from source.
+
 \section{Installing Biopython}
 
 \subsection{Obtaining Biopython}

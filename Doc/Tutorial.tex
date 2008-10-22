@@ -167,9 +167,10 @@ and HTML formats
   \item \emph{Which ``Numerical Python'' do I need?} \\
   For Biopython 1.48 or earlier, you need the old Numeric module.
   For Biopython 1.49 onwards, you need the newer NumPy instead.
+  Both Numeric and NumPy can be installed on the same machine fine.
   See also: \url{http://numpy.scipy.org/}
 
-  \item \emph{Why is the} \verb|Seq| \emph{object missing the (back) transcription and translation methods described in this Tutorial?} \\
+  \item \emph{Why is the} \verb|Seq| \emph{object missing the (back) transcription \& translation methods described in this Tutorial?} \\
   You need Biopython 1.49 or later.  Alternatively, use the \verb|Bio.Seq| module functions described in Section~\ref{sec:seq-module-functions}.
 
   \item \emph{Why doesn't} \verb|Bio.SeqIO| \emph{work? It imports fine but there is no parse function etc.} \\
@@ -192,6 +193,12 @@ and HTML formats
 
   \item \emph{Why doesn't} \verb|Bio.Entrez.read()| \emph{work? The module imports fine but there is no read function!} \\
   You need Biopython 1.46 or later.
+
+  \item \emph{Why doesn't} \verb|Bio.PDB.MMCIFParser| \emph{work? I see an import error about} \verb|MMCIFlex| \\
+  Since Biopython 1.42, the underlying \verb|Bio.PDB.mmCIF.MMCIFlex| module has
+  not been installed by default.  It requires a third party tool called flex
+  (fast lexical analyzer generator). At the time of writing, you'll have install
+  flex, then tweak your Biopython \verb|setup.py| file and reinstall from source.
 
   \item \emph{I looked in a directory for code, but I couldn't seem to find the code that does something. Where's it hidden?} \\
   One thing to know is that we put code in \verb|__init__.py| files. If you are not used to looking for code in this file this can be confusing. The reason we do this is to make the imports easier for users. For instance, instead of having to do a ``repetitive'' import like \verb|from Bio.GenBank import GenBank|, you can just use \verb|from Bio import GenBank|.
