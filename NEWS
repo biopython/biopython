@@ -11,8 +11,8 @@ The latest news is at the top.
 
 Biopython has transitioned from Numeric to NumPy.  Please move to NumPy.
 
-As part of the Numeric to NumPy migration, Bio.KDTree has been rewritten in C
-instead of C++ which therefore simplifies building Biopython from source.
+As part of the Numeric to NumPy migration, Bio.KDTree has been rewritten in
+C instead of C++ which therefore simplifies building Biopython from source.
 
 Martel and Bio.Mindy are now considered to be deprecated, meaning mxTextTools
 is no longer required to use Biopython.  See the DEPRECATED file for details
@@ -35,13 +35,20 @@ BioSQL had a few bugs fixed, and can now optionally fetch the NCBI taxonomy
 on demand when loading sequences (via Bio.Entrez) allowing you to populate
 the taxon/taxon_name tables gradually.  This has been tested in combination
 with the BioSQL load_ncbi_taxonomy.pl script used to populate or update the
-taxon/taxon_name tables.
+taxon/taxon_name tables.  BioSQL should also now work with the psycopg2
+driver for PostgreSQL as well as the older psycopg driver.
 
-The "Cookbook" section of the tutorial now has a few graphical examples using
-Biopython to calculate sequence properties, and matplotlib (pylab) to plot
-them.  Additionally the PDB and PopGen sections have been promoted to full
+The PDB and PopGen sections of the Tutorial have been promoted to full
 chapters, and a new chapter has been added on supervised learning methods
-like logistic regression.
+like logistic regression.  The "Cookbook" section now has a few graphical
+examples using Biopython to calculate sequence properties, and matplotlib
+(pylab) to plot them.
+
+The input functions in Bio.SeqIO and Bio.AlignIO now accept an optional
+argument to specify the expected sequence alphabet.
+
+The somewhat quirky unit test GUI has been removed, the unit tests are now
+run via the command line by default.
 
 ===================================================================
 
