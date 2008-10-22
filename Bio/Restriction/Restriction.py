@@ -141,7 +141,7 @@ class FormattedSeq(object) :
             self.alphabet = seq.alphabet
             self.klass    = seq.klass   
         else :
-            raise TypeError, 'expected Seq or MutableSeq, got %s' % type(seq)
+            raise TypeError('expected Seq or MutableSeq, got %s' % type(seq))
 
     def __len__(self) :
         return len(self.data) - 1
@@ -328,8 +328,8 @@ class RestrictionType(type) :
         Test compatibility of the overhang of a and b.
         True if a and b have compatible overhang."""
         if not isinstance(other, RestrictionType) :
-            raise TypeError,\
-                  'expected RestrictionType, got %s instead' % type(other)            
+            raise TypeError( \
+                  'expected RestrictionType, got %s instead' % type(other))
         return cls._mod1(other)
         
     def __ge__(cls, other) :
@@ -857,7 +857,8 @@ class Unknown(AbstractCut) :
         
         if linear is False, the sequence is considered to be circular and the
         output will be modified accordingly."""
-        raise NotImplementedError, '%s restriction is unknown.' % self.__name__
+        raise NotImplementedError('%s restriction is unknown.' \
+                                  % self.__name__)
     catalyze = catalyse = classmethod(catalyse)
 
     def is_blunt(self) :
@@ -1561,7 +1562,8 @@ class Ambiguous(AbstractCut) :
             elif f5 > length :
                 re = site + (f5-length)*'N' + '^_N'
             else :
-                raise ValueError, '%s.easyrepr() : error f5=%i'% (self.name,f5)
+                raise ValueError('%s.easyrepr() : error f5=%i' \
+                                 % (self.name,f5))
         else :
             if f3 == 0 :
                 if f5 == 0 : re = 'N_' + site + '^N'
@@ -1665,8 +1667,8 @@ class NotDefined(AbstractCut) :
         #   could raise an Error may be rather than return quietly.
         #
         #return False
-        raise ValueError, "%s.mod2(%s), %s : NotDefined. pas glop pas glop!" \
-              % (str(self), str(other), str(self))         
+        raise ValueError("%s.mod2(%s), %s : NotDefined. pas glop pas glop!" \
+                         % (str(self), str(other), str(self)))
     _mod2 = classmethod(_mod2)
 
     def elucidate(self) :
@@ -1752,7 +1754,7 @@ class Not_available(AbstractCut) :
         """RE.buffers(supplier) -> string.
 
         not implemented yet."""
-        raise TypeError, "Enzyme not commercially available."
+        raise TypeError("Enzyme not commercially available.")
     buffers = classmethod(buffers)
     
     def is_comm(self) :
@@ -1817,7 +1819,8 @@ class RestrictionBatch(set) :
             self.add(e)
             return e
         else :
-            raise ValueError, 'enzyme %s is not in RestrictionBatch'%e.__name__
+            raise ValueError('enzyme %s is not in RestrictionBatch' \
+                             % e.__name__)
 
     def lambdasplit(self, func) :
         """B.lambdasplit(func) -> RestrictionBatch .
@@ -1901,7 +1904,7 @@ class RestrictionBatch(set) :
                 pass
         except (NameError, SyntaxError) :
             pass
-        raise ValueError, '%s is not a RestrictionType'%y.__class__
+        raise ValueError('%s is not a RestrictionType' % y.__class__)
         
 
     def is_restriction(self, y) :
@@ -1984,8 +1987,8 @@ class RestrictionBatch(set) :
                 self.already_mapped = dna, dna.linear
                 self.mapping = dict([(x, x.search(dna)) for x in self])
                 return self.mapping
-        raise TypeError,\
-              "Expected Seq or MutableSeq instance, got %s instead"%type(dna)
+        raise TypeError("Expected Seq or MutableSeq instance, got %s instead"\
+                        %type(dna))
 
 ###############################################################################  
 #                                                                             #
@@ -2031,9 +2034,9 @@ class Analysis(RestrictionBatch, PrintFormat) :
         search to only part of the sequence given to analyse.
         """
         if not isinstance(start, int) :
-            raise TypeError, 'expected int, got %s instead' % type(start)
+            raise TypeError('expected int, got %s instead' % type(start))
         if not isinstance(end, int) :
-            raise TypeError, 'expected int, got %s instead' % type(end)
+            raise TypeError('expected int, got %s instead' % type(end))
         if start < 1 :
             start += len(self.sequence)
         if end < 1 :
@@ -2102,10 +2105,12 @@ class Analysis(RestrictionBatch, PrintFormat) :
             elif k in ('Indent', 'Maxsize') :
                 setattr(self, k, v)
             elif k in ('Cmodulo', 'PrefWidth') :
-                raise AttributeError, \
-                      'To change %s, change NameWidth and/or ConsoleWidth'%name
+                raise AttributeError( \
+                    'To change %s, change NameWidth and/or ConsoleWidth' \
+                    % name)
             else :
-                raise AttributeError, 'Analysis has no attribute %s' % name
+                raise AttributeError( \
+                    'Analysis has no attribute %s' % name)
         return
 
     def full(self, linear=True) :
