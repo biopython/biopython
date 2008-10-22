@@ -1078,18 +1078,21 @@ class _HSPConsumer:
             r"Identities = (\d+)\/(\d+)", line,
             "I could not find the identities in line\n%s" % line)
         self._hsp.identities = _safe_int(x), _safe_int(y)
+        self._hsp.align_length = _safe_int(y)
 
         if line.find('Positives') != -1:
             x, y = _re_search(
                 r"Positives = (\d+)\/(\d+)", line,
                 "I could not find the positives in line\n%s" % line)
             self._hsp.positives = _safe_int(x), _safe_int(y)
+            assert self._hsp.align_length == _safe_int(y)
 
         if line.find('Gaps') != -1:
             x, y = _re_search(
                 r"Gaps = (\d+)\/(\d+)", line,
                 "I could not find the gaps in line\n%s" % line)
             self._hsp.gaps = _safe_int(x), _safe_int(y)
+            assert self._hsp.align_length == _safe_int(y)
 
         
     def strand(self, line):
