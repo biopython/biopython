@@ -265,8 +265,8 @@ class _Scanner:
         # blastpgp 2.0.10 from NCBI 9/19/99 for Solaris sometimes crashes here.
         # If this happens, the handle will yield no more information.
         if not uhandle.peekline():
-            raise ValueError, "Unexpected end of blast report.  " + \
-                  "Looks suspiciously like a PSI-BLAST crash."
+            raise ValueError("Unexpected end of blast report.  " + \
+                  "Looks suspiciously like a PSI-BLAST crash.")
 
         # BLASTN 2.2.3 sometimes spews a bunch of warnings and errors here:
         # Searching[blastall] WARNING:  [000.000]  AT1G08320: SetUpBlastSearch 
@@ -410,7 +410,7 @@ class _Scanner:
                 break
             elif is_blank_line(line):
                 # Check to make sure I haven't missed the Length line
-                raise ValueError, "I missed the Length in an alignment header"
+                raise ValueError("I missed the Length in an alignment header")
             consumer.title(line)
 
         # Older versions of BLAST will have a line with some spaces.
@@ -850,7 +850,7 @@ class _DescriptionConsumer:
 
     def round(self, line):
         if not line.startswith('Results from round'):
-            raise ValueError, "I didn't understand the round line\n%s" % line
+            raise ValueError("I didn't understand the round line\n%s" % line)
         self._roundnum = _safe_int(line[18:].strip())
 
     def end_descriptions(self):
@@ -869,8 +869,8 @@ class _DescriptionConsumer:
         #   - sometimes there's an "N" score of '1'.
         cols = line.split()
         if len(cols) < 3:
-            raise ValueError, \
-                  "Line does not appear to contain description:\n%s" % line
+            raise ValueError( \
+                  "Line does not appear to contain description:\n%s" % line)
         if self.__has_n:
             i = line.rfind(cols[-1])        # find start of N
             i = line.rfind(cols[-2], 0, i)  # find start of p-value
@@ -920,8 +920,7 @@ class _AlignmentConsumer:
             try:
                 name, start, seq, end = line.split()
             except ValueError:
-                raise ValueError, "I do not understand the line\n%s" \
-                      % line
+                raise ValueError("I do not understand the line\n%s" % line)
             self._start_index = line.index(start, len(name))
             self._seq_index = line.index(seq,
                                          self._start_index+len(start))
@@ -1122,7 +1121,7 @@ class _HSPConsumer:
     def query(self, line):
         m = self._query_re.search(line)
         if m is None:
-            raise ValueError, "I could not find the query in line\n%s" % line
+            raise ValueError("I could not find the query in line\n%s" % line)
         
         # line below modified by Yair Benita, Sep 2004.
         # added the end attribute for the query
@@ -1145,8 +1144,8 @@ class _HSPConsumer:
             # Make sure the alignment is the same length as the query
             seq = seq + ' ' * (self._query_len-len(seq))
         elif len(seq) < self._query_len:
-            raise ValueError, "Match is longer than the query in line\n%s" % \
-                  line
+            raise ValueError("Match is longer than the query in line\n%s" \
+                             % line)
         self._hsp.match = self._hsp.match + seq
 
     # To match how we do the query, cache the regular expression.
@@ -1155,7 +1154,7 @@ class _HSPConsumer:
     def sbjct(self, line):
         m = self._sbjct_re.search(line)
         if m is None:
-            raise ValueError, "I could not find the sbjct in line\n%s" % line
+            raise ValueError("I could not find the sbjct in line\n%s" % line)
         colon, start, seq, end = m.groups()
         #mikep 26/9/00
         #On occasion, there is a blast hit with no subject match
@@ -1169,9 +1168,9 @@ class _HSPConsumer:
 
         self._hsp.sbjct_end = _safe_int(end)
         if len(seq) != self._query_len:
-            raise ValueError, \
+            raise ValueError( \
                   "QUERY and SBJCT sequence lengths don't match in line\n%s" \
-                  % line
+                  % line)
 
         del self._query_start_index   # clean up unused variables
         del self._query_len
@@ -1417,8 +1416,7 @@ class _BlastConsumer(AbstractConsumer,
 
     def round(self, line):
         # Make sure nobody's trying to pass me PSI-BLAST data!
-        raise ValueError, \
-              "This consumer doesn't handle PSI-BLAST data"
+        raise ValueError("This consumer doesn't handle PSI-BLAST data")
         
     def start_header(self):
         self.data = Record.Blast()
@@ -1443,7 +1441,7 @@ class _BlastConsumer(AbstractConsumer,
         try:
             self._alignment.hsps.append(self._hsp)
         except AttributeError:
-            raise ValueError, "Found an HSP before an alignment"
+            raise ValueError("Found an HSP before an alignment")
 
     def end_database_report(self):
         _DatabaseReportConsumer.end_database_report(self)
@@ -1499,7 +1497,7 @@ class _PSIBlastConsumer(AbstractConsumer,
         try:
             self._alignment.hsps.append(self._hsp)
         except AttributeError:
-            raise ValueError, "Found an HSP before an alignment"
+            raise ValueError("Found an HSP before an alignment")
 
     def end_database_report(self):
         _DatabaseReportConsumer.end_database_report(self)
@@ -1896,7 +1894,7 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
 def _re_search(regex, line, error_msg):
     m = re.search(regex, line)
     if not m:
-        raise ValueError, error_msg
+        raise ValueError(error_msg)
     return m.groups()
 
 def _get_cols(line, cols_to_get, ncols=None, expected={}):
@@ -1904,14 +1902,14 @@ def _get_cols(line, cols_to_get, ncols=None, expected={}):
 
     # Check to make sure number of columns is correct
     if ncols is not None and len(cols) != ncols:
-        raise ValueError, "I expected %d columns (got %d) in line\n%s" % \
-              (ncols, len(cols), line)
+        raise ValueError("I expected %d columns (got %d) in line\n%s" \
+                         % (ncols, len(cols), line))
 
     # Check to make sure columns contain the correct data
     for k in expected.keys():
         if cols[k] != expected[k]:
-            raise ValueError, "I expected '%s' in column %d in line\n%s" % (
-                expected[k], k, line)
+            raise ValueError("I expected '%s' in column %d in line\n%s" \
+                             % (expected[k], k, line))
 
     # Construct the answer tuple
     results = []
@@ -1982,7 +1980,7 @@ def _invoke_blast(blast_cmd, params) :
     Tries to deal with spaces in the BLAST executable path.
     """
     if not os.path.exists(blast_cmd):
-        raise ValueError, "BLAST executable does not exist at %s" % blast_cmd
+        raise ValueError("BLAST executable does not exist at %s" % blast_cmd)
 
     cmd_string = " ".join([_escape_filename(blast_cmd)] + params)
 
@@ -2021,7 +2019,7 @@ class _BlastErrorConsumer(_BlastConsumer):
         _BlastConsumer.__init__(self)
     def noevent(self, line):
         if line.find("Query must be at least wordsize") != -1:
-            raise ShortQueryBlastError, "Query must be at least wordsize"
+            raise ShortQueryBlastError("Query must be at least wordsize")
         # Now pass the line back up to the superclass.
         method = getattr(_BlastConsumer, 'noevent',
                          _BlastConsumer.__getattr__(self, 'noevent'))

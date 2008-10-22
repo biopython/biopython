@@ -335,26 +335,26 @@ def _open(cgi, params={}):
                    
     if "500 Proxy Error" in data:
         # Sometimes Entrez returns a Proxy Error instead of results
-        raise IOError, "500 Proxy Error (NCBI busy?)"
+        raise IOError("500 Proxy Error (NCBI busy?)")
     elif "502 Proxy Error" in data:
-        raise IOError, "502 Proxy Error (NCBI busy?)"
+        raise IOError("502 Proxy Error (NCBI busy?)")
     elif "WWW Error 500 Diagnostic" in data:
-        raise IOError, "WWW Error 500 Diagnostic (NCBI busy?)"
+        raise IOError("WWW Error 500 Diagnostic (NCBI busy?)")
     elif data.startswith("Error:") :
         #e.g. 'Error: Your session has expired. Please repeat your search.\n'
-        raise IOError, data.strip()
+        raise IOError(data.strip())
     elif data.startswith("The resource is temporarily unavailable") :
         #This can occur with an invalid query_key
         #Perhaps this should be a ValueError?
-        raise IOError, "The resource is temporarily unavailable"
+        raise IOError("The resource is temporarily unavailable")
     elif data.startswith("download dataset is empty") :
         #This can occur when omit the identifier, or the WebEnv and query_key
         #Perhaps this should be a ValueError?
-        raise IOError, "download dataset is empty"
+        raise IOError("download dataset is empty")
     elif data[:5] == "ERROR":
         # XXX Possible bug here, because I don't know whether this really
         # occurs on the first line.  I need to check this!
-        raise IOError, "ERROR, possibly because id not available?"
+        raise IOError("ERROR, possibly because id not available?")
     # Should I check for 404?  timeout?  etc?
     return uhandle
 

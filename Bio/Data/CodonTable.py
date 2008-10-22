@@ -262,7 +262,7 @@ def register_ncbi_table(name, alt_name, id,
 ##         line == 'Genetic-code-table ::= {\n':
 ##        pass
 ##    else:
-##        raise "Unparsed", repr(line)
+##        raise Error("Unparsed: " + repr(line))
 
 register_ncbi_table(name = 'Standard',
                     alt_name = 'SGC0', id = 1,
@@ -561,9 +561,10 @@ def list_possible_proteins(codon, forward_table, ambiguous_nucleotide_values):
                         stops.append(y1+y2+y3)
         if stops:
             if possible.keys():
-                raise TranslationError, ("ambiguous codon codes for both proteins and stop codons", codon)
+                raise TranslationError("ambiguous codon '%s' codes " % codon \
+                                       + "for both proteins and stop codons")
             # This is a true stop codon - tell the caller about it
-            raise KeyError, codon
+            raise KeyError(codon)
         return possible.keys()
 
 def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
@@ -666,9 +667,9 @@ class AmbiguousForwardTable:
             pass
         else:
             if x is TranslationError:
-                raise TranslationError, codon   # no unique translation
+                raise TranslationError(codon)   # no unique translation
             if x is KeyError:
-                raise KeyError, codon  # it's a stop codon
+                raise KeyError(codon)  # it's a stop codon
             return x
         try:
             x = self.forward_table[codon]
@@ -685,10 +686,10 @@ class AmbiguousForwardTable:
                                               self.ambiguous_nucleotide)
         except KeyError:
             self._cache[codon] = KeyError
-            raise KeyError, codon  # stop codon
+            raise KeyError(codon)  # stop codon
         except TranslationError:
             self._cache[codon] = TranslationError
-            raise TranslationError, codon  # does not code
+            raise TranslationError(codon)  # does not code
         assert len(possible) > 0, "unambiguous codons must code"
 
         # Hah!  Only one possible protein, so use it
@@ -712,7 +713,7 @@ class AmbiguousForwardTable:
         # No amino acid encoding for the results
         if len(possible) == 0:
             self._cache[codon] = TranslationError
-            raise TranslationError, codon   # no valid translation
+            raise TranslationError(codon)   # no valid translation
 
         # All of these are valid, so choose one
         # To be unique, sort by smallet ambiguity then alphabetically
