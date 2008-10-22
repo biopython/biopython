@@ -1213,21 +1213,21 @@ class NCBIDictionary:
         self.format = format
 
     def __len__(self):
-        raise NotImplementedError, "GenBank contains lots of entries"
+        raise NotImplementedError("GenBank contains lots of entries")
     def clear(self):
-        raise NotImplementedError, "This is a read-only dictionary"
+        raise NotImplementedError("This is a read-only dictionary")
     def __setitem__(self, key, item):
-        raise NotImplementedError, "This is a read-only dictionary"
+        raise NotImplementedError("This is a read-only dictionary")
     def update(self):
-        raise NotImplementedError, "This is a read-only dictionary"
+        raise NotImplementedError("This is a read-only dictionary")
     def copy(self):
-        raise NotImplementedError, "You don't need to do this..."
+        raise NotImplementedError("You don't need to do this...")
     def keys(self):
-        raise NotImplementedError, "You don't really want to do this..."
+        raise NotImplementedError("You don't really want to do this...")
     def items(self):
-        raise NotImplementedError, "You don't really want to do this..."
+        raise NotImplementedError("You don't really want to do this...")
     def values(self):
-        raise NotImplementedError, "You don't really want to do this..."
+        raise NotImplementedError("You don't really want to do this...")
     
     def has_key(self, id):
         """S.has_key(id) -> bool"""
@@ -1242,7 +1242,6 @@ class NCBIDictionary:
             return self[id]
         except KeyError:
             return failobj
-        raise "How did I get here?"
 
     def __getitem__(self, id):
         """Return the GenBank entry specified by the GenBank ID.

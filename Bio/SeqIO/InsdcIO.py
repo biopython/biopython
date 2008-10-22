@@ -126,17 +126,17 @@ class GenBankWriter(SequentialSequenceWriter) :
         if not locus or locus == "<unknown id>" :
             locus = self._get_annotation_str(record, "accession", just_first=True)
         if len(locus) > 16 :
-            raise ValueError, "Locus identifier %s is too long" % repr(locus)
+            raise ValueError("Locus identifier %s is too long" % repr(locus))
 
         if len(record) > 99999999999 :
             #Currently GenBank only officially support up to 350000, but
             #the length field can take eleven digits
-            raise ValueError, "Sequence too long!"
+            raise ValueError("Sequence too long!")
 
         #Get the base alphabet (underneath any Gapped or StopCodon encoding)
         a = Alphabet._get_base_alphabet(record.seq.alphabet)
         if not isinstance(a, Alphabet.Alphabet) :
-            raise TypeError, "Invalid alphabet"
+            raise TypeError("Invalid alphabet")
         elif isinstance(a, Alphabet.ProteinAlphabet) :
             units = "bp"
         elif isinstance(a, Alphabet.NucleotideAlphabet) :
@@ -144,7 +144,7 @@ class GenBankWriter(SequentialSequenceWriter) :
         else :
             #Must be something like NucleotideAlphabet or
             #just the generic Alphabet (default for fasta files)
-            raise ValueError, "Need a Nucleotide or Protein alphabet"
+            raise ValueError("Need a Nucleotide or Protein alphabet")
 
         #Get the molecule type
         #TODO - record this explicitly in the parser?
@@ -157,7 +157,7 @@ class GenBankWriter(SequentialSequenceWriter) :
         else :
             #Must be something like NucleotideAlphabet or
             #just the generic Alphabet (default for fasta files)
-            raise ValueError, "Need a DNA, RNA or Protein alphabet"
+            raise ValueError("Need a DNA, RNA or Protein alphabet")
         
         try :
             division = record.annotations["data_file_division"]

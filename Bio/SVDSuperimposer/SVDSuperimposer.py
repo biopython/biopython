@@ -62,13 +62,13 @@ class SVDSuperimposer:
         n=reference_coords.shape
         m=coords.shape
         if n!=m or not(n[1]==m[1]==3):
-            raise Exception, "Coordinate number/dimension mismatch."
+            raise Exception("Coordinate number/dimension mismatch.")
         self.n=n[0]
 
     def run(self):
         "Superimpose the coordinate sets."
         if self.coords is None or self.reference_coords is None:
-            raise Exception, "No coordinates set."
+            raise Exception("No coordinates set.")
         coords=self.coords
         reference_coords=self.reference_coords
         # center on centroid
@@ -89,9 +89,9 @@ class SVDSuperimposer:
     def get_transformed(self):
         "Get the transformed coordinate set."
         if self.coords is None or self.reference_coords is None:
-            raise Exception, "No coordinates set."
+            raise Exception("No coordinates set.")
         if self.rot is None:
-            raise Exception, "Nothing superimposed yet."
+            raise Exception("Nothing superimposed yet.")
         if self.transformed_coords is None:
             self.transformed_coords=dot(self.coords, self.rot)+self.tran
         return self.transformed_coords
@@ -99,13 +99,13 @@ class SVDSuperimposer:
     def get_rotran(self):
         "Right multiplying rotation matrix and translation."
         if self.rot is None:
-            raise Exception, "Nothing superimposed yet."
+            raise Exception("Nothing superimposed yet.")
         return self.rot, self.tran
 
     def get_init_rms(self):
         "Root mean square deviation of untransformed coordinates."
         if self.coords is None:
-            raise Exception, "No coordinates set yet."
+            raise Exception("No coordinates set yet.")
         if self.init_rms is None:
             self.init_rms=self._rms(self.coords, self.reference_coords)
         return self.init_rms

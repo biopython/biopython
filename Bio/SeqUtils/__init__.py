@@ -272,7 +272,7 @@ def seq3(seq):
 def translate(seq, frame = 1, genetic_code = 1, translator = None):
    " translation of DNA in one of the six different reading frames "
    if frame not in [1,2,3,-1,-2,-3]:
-      raise ValueError, 'invalid frame'
+      raise ValueError('invalid frame')
 
    if not translator:
       table = makeTableX(CodonTable.ambiguous_dna_by_id[genetic_code])
@@ -408,7 +408,7 @@ def apply_on_multi_fasta(file, function, *args):
    try:
       f = globals()[function]
    except:
-      raise NotImplementedError, "%s not implemented" % function
+      raise NotImplementedError("%s not implemented" % function)
    
    handle = open(file, 'r')
    records = SeqIO.parse(handle, "fasta")
@@ -442,7 +442,7 @@ def quicker_apply_on_multi_fasta(file, function, *args):
    try:
       f = globals()[function]
    except:
-      raise NotImplementedError, "%s not implemented" % function
+      raise NotImplementedError("%s not implemented" % function)
    
    entries = quick_FASTA_reader(file)
    results = []

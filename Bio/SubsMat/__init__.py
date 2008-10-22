@@ -242,7 +242,7 @@ class SeqMat(dict):
             if self[i] > EPSILON:
                ent += obs_freq_mat[i]*log(self[i])/log(2)
       else:
-         raise TypeError,"entropy: substitution or log-odds matrices only"
+         raise TypeError("entropy: substitution or log-odds matrices only")
       self.relative_entropy = ent
    #
    def make_entropy(self):
@@ -396,7 +396,7 @@ def _build_exp_freq_mat(exp_freq_table):
 def _build_subs_mat(obs_freq_mat,exp_freq_mat):
    """ Build the substitution matrix """
    if obs_freq_mat.ab_list != exp_freq_mat.ab_list:
-      raise ValueError, "Alphabet mismatch in passed matrices"
+      raise ValueError("Alphabet mismatch in passed matrices")
    subs_mat = SeqMat(obs_freq_mat)
    for i in obs_freq_mat.keys():
       subs_mat[i] = obs_freq_mat[i]/exp_freq_mat[i]

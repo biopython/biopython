@@ -50,7 +50,7 @@ def read(handle):
         if line.startswith("BEGIN_COMMENT"):
             break
     else:
-        raise ValueError, "Failed to find BEGIN_COMMENT line"
+        raise ValueError("Failed to find BEGIN_COMMENT line")
        
     for line in handle:
         line = line.strip()
@@ -81,13 +81,13 @@ def read(handle):
             first, last, prob = value.split()
             record.comments[keyword] = (int(first), int(last), float(prob))
     else:
-        raise ValueError, "Failed to find END_COMMENT line"
+        raise ValueError("Failed to find END_COMMENT line")
 
     for line in handle:
         if line.startswith('BEGIN_DNA'):
             break
     else:
-        raise ValueError, "Failed to find BEGIN_DNA line"
+        raise ValueError("Failed to find BEGIN_DNA line")
 
     for line in handle:
         if line.startswith('END_DNA'):
@@ -100,7 +100,7 @@ def read(handle):
         if line.startswith("END_SEQUENCE"):
             break
     else:
-        raise ValueError, "Failed to find END_SEQUENCE line"
+        raise ValueError("Failed to find END_SEQUENCE line")
 
     alphabet = IUPAC.IUPACAmbiguousDNA()
     record.seq = Seq.Seq(''.join([n[0] for n in record.sites]), alphabet)

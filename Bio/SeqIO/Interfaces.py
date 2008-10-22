@@ -41,7 +41,7 @@ class SequenceIterator :
         """Return the next record in the file.
 
         This method should be replaced by any derived class to do something useful."""
-        raise NotImplementedError, "This object should be subclassed"
+        raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this, to split the file up    #
         # into your individual records, and convert these   #
@@ -90,7 +90,7 @@ class InterlacedSequenceIterator(SequenceIterator) :
         This method should be replaced by any derived class to do something useful."""
         #We assume that your implementation of __init__ will ensure self._n=0
         self.move_start()
-        raise NotImplementedError, "This object method should be subclassed"
+        raise NotImplementedError("This object method should be subclassed")
         #####################################################
         # You SHOULD subclass this                          #
         #####################################################
@@ -99,7 +99,7 @@ class InterlacedSequenceIterator(SequenceIterator) :
         """Return the number of records.
 
         This method should be replaced by any derived class to do something useful."""
-        raise NotImplementedError, "This object method should be subclassed"
+        raise NotImplementedError("This object method should be subclassed")
         #####################################################
         # You SHOULD subclass this                          #
         #####################################################
@@ -111,7 +111,7 @@ class InterlacedSequenceIterator(SequenceIterator) :
         useful.
 
         It should NOT touch the value of self._n"""
-        raise NotImplementedError, "This object method should be subclassed"
+        raise NotImplementedError("This object method should be subclassed")
         #####################################################
         # You SHOULD subclass this                          #
         #####################################################
@@ -159,7 +159,7 @@ class SequenceWriter:
 
         This method can only be called once."""
         #Note when implementing this, you should close the file at the end.
-        raise NotImplementedError, "This object should be subclassed"
+        raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this                          #
         #####################################################
@@ -214,7 +214,7 @@ class SequentialSequenceWriter(SequenceWriter):
         assert self._header_written, "You must call write_header() first"
         assert not self._footer_written, "You have already called write_footer()"
         self._record_written = True
-        raise NotImplementedError, "This object should be subclassed"
+        raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this                          #
         #####################################################

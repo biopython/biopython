@@ -27,13 +27,13 @@ def read(handle):
         record = parser.parse(handle)
     except ValueError, error:
         if error.message.startswith("Line does not start with 'ID':"): 
-            raise ValueError, "No SwissProt record found"
+            raise ValueError("No SwissProt record found")
         else:
             raise error
     # We should have reached the end of the record by now
     remainder = handle.read()
     if remainder:
-        raise ValueError, "More than one SwissProt record found"
+        raise ValueError("More than one SwissProt record found")
     return record
 
 

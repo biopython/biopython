@@ -39,8 +39,8 @@ def IgIterator(handle, alphabet = single_letter_alphabet) :
     while line :
         #Now iterate over the records
         if line[0]!=";" :
-            raise ValueError, \
-                  "Records should start with ';' and not:\n%s" % repr(line)
+            raise ValueError( \
+                  "Records should start with ';' and not:\n%s" % repr(line))
 
         #Try and agree with SeqRecord convention from the GenBank parser,
         #(and followed in the SwissProt parser) which stores the comments

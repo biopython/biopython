@@ -73,7 +73,7 @@ class FreqTable(dict):
             self.count = {}
             self.update(in_dict)
         else:
-            raise ValueError,"bad dict_type"
+            raise ValueError("bad dict_type")
         if not alphabet:
             self.alphabet = Alphabet.Alphabet()
             self.alphabet.letters = self._alphabet_from_input()

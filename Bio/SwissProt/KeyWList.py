@@ -223,5 +223,5 @@ def extract_keywords(keywlist_handle):
               DeprecationWarning)
     if type(keywlist_handle) is not FileType and \
        type(keywlist_handle) is not InstanceType:
-        raise ValueError, "I expected a file handle or file-like object"
+        raise ValueError("I expected a file handle or file-like object")
     return ListParser().parse(keywlist_handle)

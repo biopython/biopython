@@ -147,7 +147,7 @@ class Iterator:
               DeprecationWarning)
 
         if type(handle) is not FileType and type(handle) is not InstanceType:
-            raise ValueError, "I expected a file handle or file-like object"
+            raise ValueError("I expected a file handle or file-like object")
         self._uhandle = File.UndoHandle(handle)
         self._parser = parser
 
@@ -240,21 +240,21 @@ class ExPASyDictionary:
         self.limiter = RequestLimiter(delay)
 
     def __len__(self):
-        raise NotImplementedError, "SwissProt contains lots of entries"
+        raise NotImplementedError("SwissProt contains lots of entries")
     def clear(self):
-        raise NotImplementedError, "This is a read-only dictionary"
+        raise NotImplementedError("This is a read-only dictionary")
     def __setitem__(self, key, item):
-        raise NotImplementedError, "This is a read-only dictionary"
+        raise NotImplementedError("This is a read-only dictionary")
     def update(self):
-        raise NotImplementedError, "This is a read-only dictionary"
+        raise NotImplementedError("This is a read-only dictionary")
     def copy(self):
-        raise NotImplementedError, "You don't need to do this..."
+        raise NotImplementedError("You don't need to do this...")
     def keys(self):
-        raise NotImplementedError, "You don't really want to do this..."
+        raise NotImplementedError("You don't really want to do this...")
     def items(self):
-        raise NotImplementedError, "You don't really want to do this..."
+        raise NotImplementedError("You don't really want to do this...")
     def values(self):
-        raise NotImplementedError, "You don't really want to do this..."
+        raise NotImplementedError("You don't really want to do this...")
     
     def has_key(self, id):
         """has_key(self, id) -> bool"""
@@ -269,7 +269,6 @@ class ExPASyDictionary:
             return self[id]
         except KeyError:
             return failobj
-        raise "How did I get here?"
 
     def __getitem__(self, id):
         """__getitem__(self, id) -> object
@@ -286,7 +285,7 @@ class ExPASyDictionary:
         try:
             handle = ExPASy.get_sprot_raw(id)
         except IOError:
-            raise KeyError, id
+            raise KeyError(id)
         
         if self.parser is not None:
             return self.parser.parse(handle)
@@ -587,14 +586,14 @@ class _RecordConsumer(AbstractConsumer):
         # pjc:2006-11-02 added 'Reviewed' and 'Unreviewed'
         if self.data.data_class not in ['STANDARD', 'PRELIMINARY', 'IPI',
                                         'Reviewed', 'Unreviewed']: 
-            raise ValueError, "Unrecognized data class %s in line\n%s" % \
-                  (self.data.data_class, line)
+            raise ValueError("Unrecognized data class %s in line\n%s" % \
+                  (self.data.data_class, line))
         # molecule_type should be 'PRT' for PRoTein
         # Note that has been removed in recent releases (set to None)
         if self.data.molecule_type is not None \
         and self.data.molecule_type != 'PRT':
-            raise ValueError, "Unrecognized molecule type %s in line\n%s" % \
-                  (self.data.molecule_type, line)
+            raise ValueError("Unrecognized molecule type %s in line\n%s" % \
+                  (self.data.molecule_type, line))
     
     def accession(self, line):
         cols = line[5:].rstrip(_CHOMP).strip().split(';')
@@ -692,7 +691,7 @@ class _RecordConsumer(AbstractConsumer):
             else:
                 assert False, "Shouldn't reach this line!"
         else:
-            raise ValueError, "I don't understand the date line %s" % line
+            raise ValueError("I don't understand the date line %s" % line)
     
     def description(self, line):
         self.data.description += line[5:]
@@ -1262,7 +1261,7 @@ def index_file(filename, indexname, rec2key=None):
     """
     from Bio.SwissProt import parse
     if not os.path.exists(filename):
-        raise ValueError, "%s does not exist" % filename
+        raise ValueError("%s does not exist" % filename)
     
     index = Index.Index(indexname, truncate=1)
     index[Dictionary._Dictionary__filename_key] = filename
@@ -1281,8 +1280,8 @@ def index_file(filename, indexname, rec2key=None):
             key = record.entry_name
 
         if not key:
-            raise KeyError, "empty sequence key was produced"
+            raise KeyError("empty sequence key was produced")
         elif index.has_key(key):
-            raise KeyError, "duplicate key %s found" % key
+            raise KeyError("duplicate key %s found" % key)
 
         index[key] = start, length

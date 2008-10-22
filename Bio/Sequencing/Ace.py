@@ -273,7 +273,7 @@ def parse(handle):
             if line.strip():
                 break
         if not line.startswith("BQ"):
-            raise ValueError, "Failed to find BQ line"
+            raise ValueError("Failed to find BQ line")
 
         for line in handle:
             if not line.strip():
@@ -291,7 +291,7 @@ def parse(handle):
             try:
                 line = handle.next()
             except StopIteration:
-                raise ValueError, "Unexpected end of AF block"
+                raise ValueError("Unexpected end of AF block")
 
         while True:
             if line.strip():
@@ -299,7 +299,7 @@ def parse(handle):
             try:
                 line = handle.next()
             except StopIteration:
-                raise ValueError, "Unexpected end of file"
+                raise ValueError("Unexpected end of file")
 
         while True:
             if not line.startswith("BS "):
@@ -308,7 +308,7 @@ def parse(handle):
             try:
                 line = handle.next()
             except StopIteration:
-                raise ValueError, "Failed to find end of BS block"
+                raise ValueError("Failed to find end of BS block")
 
         # now read all the read data
         # it starts with a 'RD', and then a mandatory QA
@@ -326,7 +326,7 @@ def parse(handle):
                         break
                     line = handle.next()
             except StopIteration:
-                raise ValueError, "Failed to find RD line"
+                raise ValueError("Failed to find RD line")
 
             record.reads.append(Reads(line))
 
@@ -340,7 +340,7 @@ def parse(handle):
                 if line.strip():
                     break
             if not line.startswith("QA "):
-                raise ValueError, "Failed to find QA line"
+                raise ValueError("Failed to find QA line")
             record.reads[-1].qa = qa(line)
 
             # now one ds can follow
@@ -390,7 +390,7 @@ def parse(handle):
                     try:
                         line = handle.next()
                     except StopIteration:
-                        raise ValueError, "Failed to read WA block"
+                        raise ValueError("Failed to read WA block")
                     record.wa.append(wa(line))
                     for line in handle:
                         line=line.strip()
@@ -403,7 +403,7 @@ def parse(handle):
                     try:
                         line = handle.next()
                     except StopIteration:
-                        raise ValueError, "Failed to read CT block"
+                        raise ValueError("Failed to read CT block")
                     record.ct.append(ct(line))
                     for line in handle:
                         line=line.strip()
@@ -496,11 +496,11 @@ def read(handle):
     try:
         line = handle.next()
     except StopIteration:
-        raise ValueError, "Premature end of file"
+        raise ValueError("Premature end of file")
 
     # check if the file starts correctly
     if not line.startswith('AS'):
-        raise ValueError, "File does not start with 'AS'."
+        raise ValueError("File does not start with 'AS'.")
 
     words = line.split()
     record.ncontigs, record.nreads = map(int, words[1:3])
@@ -606,7 +606,7 @@ class ACEParser(AbstractParser):
         firstline=handle.readline()
         # check if the file starts correctly
         if firstline[:2]!='AS':
-            raise ValueError, "File does not start with 'AS'."
+            raise ValueError("File does not start with 'AS'.")
         self.data.ncontigs=eval(firstline.split()[1])
         self.data.nreads=eval(firstline.split()[2])
         # now read all the records
@@ -818,7 +818,7 @@ class _RecordConsumer(AbstractConsumer):
 
     def ct_start(self,line):
         if not line.strip().endswith('{'):
-            raise ValueError, 'CT tag does not start with CT{'
+            raise ValueError('CT tag does not start with CT{')
         ctdata=ct()
         if self.data.ct is None:
             self.data.ct=[]
@@ -826,7 +826,7 @@ class _RecordConsumer(AbstractConsumer):
     
     def ct_data(self,taglines):
         if len(taglines)<1:
-            raise ValueError, 'Missing header line in CT tag'
+            raise ValueError('Missing header line in CT tag')
         header=taglines[0].split()
         self.data.ct[-1].name=header[0]
         self.data.ct[-1].tag_type=header[1]
@@ -840,7 +840,7 @@ class _RecordConsumer(AbstractConsumer):
 
     def rt_start(self,line):
         if not line.strip().endswith('{'):
-            raise ValueError, 'RT tag does not start with RT{'
+            raise ValueError('RT tag does not start with RT{')
         rtdata=rt()
         # now if we're at the end of the file, this rt could belong to a previous read, not the actual one
         # we store it here were it appears, the user can sort later. 
@@ -850,7 +850,7 @@ class _RecordConsumer(AbstractConsumer):
    
     def rt_data(self,taglines):
         if len(taglines)<1:
-            raise ValueError, 'Missing header line in RT tag'
+            raise ValueError('Missing header line in RT tag')
         header=taglines[0].split()
         self.data.reads[-1].rt[-1].name=header[0]
         self.data.reads[-1].rt[-1].tag_type=header[1]
@@ -861,7 +861,7 @@ class _RecordConsumer(AbstractConsumer):
     
     def wa_start(self,line):
         if not line.strip().endswith('{'):
-            raise ValueError, 'WA tag does not start with WA{'
+            raise ValueError('WA tag does not start with WA{')
         wadata=wa()
         if self.data.wa is None:
             self.data.wa=[]
@@ -869,7 +869,7 @@ class _RecordConsumer(AbstractConsumer):
     
     def wa_data(self,taglines):
         if len(taglines)<1:
-            raise ValueError, 'Missing header line in WA tag'
+            raise ValueError('Missing header line in WA tag')
         header=taglines[0].split()
         self.data.wa[-1].tag_type=header[0]
         self.data.wa[-1].program=header[1]
@@ -878,7 +878,7 @@ class _RecordConsumer(AbstractConsumer):
     
     def wr_start(self,line):
         if not line.strip().endswith('{'):
-            raise ValueError, 'WR tag does not start with WR{'
+            raise ValueError('WR tag does not start with WR{')
         wrdata=wr()
         if self.data.reads[-1].wr is None:
             self.data.reads[-1].wr=[]
@@ -886,7 +886,7 @@ class _RecordConsumer(AbstractConsumer):
     
     def wr_data(self,taglines):
         if len(taglines)<1:
-            raise ValueError, 'Missing header line in WR tag'
+            raise ValueError('Missing header line in WR tag')
         header=taglines[0].split()
         self.data.reads[-1].wr[-1].name=header[0]
         self.data.reads[-1].wr[-1].aligned=header[1]

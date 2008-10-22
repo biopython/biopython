@@ -11,7 +11,7 @@
 # Bio.Wise.psw is for protein Smith-Waterman alignments
 # Bio.Wise.dnal is for Smith-Waterman DNA alignments
 
-__version__ = "$Revision: 1.16 $"
+__version__ = "$Revision: 1.17 $"
 
 import os
 import sys
@@ -97,7 +97,7 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
             print >>sys.stderr, "INFO trying again with the linear model"
             return align(cmdline, pair, 0, force_type, dry_run, quiet, debug)
         else:
-            raise OSError, "%s returned %s" % (" ".join(cmdline), status)
+            raise OSError("%s returned %s" % (" ".join(cmdline), status))
     
     return output_file
 

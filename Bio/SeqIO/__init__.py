@@ -387,13 +387,13 @@ def read(handle, format, alphabet=None) :
     except StopIteration :
         first = None
     if first is None :
-        raise ValueError, "No records found in handle"
+        raise ValueError("No records found in handle")
     try :
         second = iterator.next()
     except StopIteration :
         second = None
     if second is not None :
-        raise ValueError, "More than one record found in handle"
+        raise ValueError("More than one record found in handle")
     return first
 
 def to_dict(sequences, key_function=None) :
