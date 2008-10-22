@@ -83,6 +83,11 @@ Bio.ECell
 Deprecated as of Release 1.47, as it appears to have no users, and the code
 does not seem relevant for ECell 3.  Removed in Release 1.49.
 
+Bio.LocusLink
+=============
+Deprecated as of Release 1.45, removed in Release 1.49.
+The NCBI's LocusLink was superseded by Entrez Gene.
+
 Bio.SGMLExtractor
 =================
 Deprecated as of Release 1.46, removed in Release 1.49.
