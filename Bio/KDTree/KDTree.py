@@ -7,11 +7,8 @@ Algorithms and Applications" (Mark de Berg, Marc van Kreveld, Mark Overmars,
 Otfried Schwarzkopf). Author: Thomas Hamelryck.
 """
 
-try:
-    from numpy import sum, sqrt
-    from numpy.random import random
-except ImportError:
-    raise ImportError, "This module requires Numeric (precursor to NumPy)"
+from numpy import sum, sqrt
+from numpy.random import random
 
 import _CKDTree 
 
@@ -132,11 +129,11 @@ class KDTree:
         array should be NxD dimensional. 
         """
         if min(coords)<=-1e6 or max(coords)>=1e6:
-                raise Exception, "Points should lie between -1e6 and 1e6"
+                raise Exception("Points should lie between -1e6 and 1e6")
         if len(coords.shape)!=2 or coords.shape[1]!=self.dim:
-                raise Exception, "Expected a Nx%i Numeric array" % self.dim
+                raise Exception("Expected a Nx%i Numeric array" % self.dim)
         if coords.typecode()!="f":
-                raise Exception, "Expected a Numeric array of type float" 
+                raise Exception("Expected a Numeric array of type float")
         self.kdt.set_data(coords)
         self.built=1
 
@@ -151,11 +148,12 @@ class KDTree:
         o radius - float>0
         """
         if not self.built:
-                raise Exception, "No point set specified"
+                raise Exception("No point set specified")
         if center.shape!=(self.dim,):
-                raise Exception, "Expected a %i-dimensional Numeric array" % self.dim
+                raise Exception("Expected a %i-dimensional Numeric array" \
+                                % self.dim)
         if center.typecode()!="f":
-                raise Exception, "Expected a Numeric array of type float" 
+                raise Exception("Expected a Numeric array of type float")
         self.kdt.search_center_radius(center, radius)
 
     def get_radii(self):
@@ -194,7 +192,7 @@ class KDTree:
         o radius - float (>0)
         """
         if not self.built:
-                raise Exception, "No point set specified"
+                raise Exception("No point set specified")
         self.neighbors = self.kdt.neighbor_search(radius)
 
     def all_get_indices(self):
