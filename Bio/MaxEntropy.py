@@ -191,7 +191,7 @@ def _iis_solve_delta(N, feature, f_sharp, empirical, prob_yx):
             break
         iters = iters + 1
     else:
-        raise "Newton's method did not converge"
+        raise RuntimeError("Newton's method did not converge")
     return delta
 
 def _train_iis(xs, classes, features, f_sharp, alphas, e_empirical):
@@ -223,9 +223,9 @@ def train(training_set, results, feature_fns, update_fn=None):
     
     """
     if not len(training_set):
-        raise ValueError, "No data in the training set."
+        raise ValueError("No data in the training set.")
     if len(training_set) != len(results):
-        raise ValueError, "training_set and results should be parallel lists."
+        raise ValueError("training_set and results should be parallel lists.")
 
     # Rename variables for convenience.
     xs, ys = training_set, results
@@ -261,6 +261,6 @@ def train(training_set, results, feature_fns, update_fn=None):
         if diff < IIS_CONVERGE:   # converged
             break
     else:
-        raise "IIS did not converge"
+        raise RuntimeError("IIS did not converge")
 
     return me

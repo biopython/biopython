@@ -144,22 +144,22 @@ should return a gap penalty."""),
             # reasonable.
             if name.startswith("global"):
                 if len(name) != 8:
-                    raise AttributeError, "function should be globalXX"
+                    raise AttributeError("function should be globalXX")
             elif name.startswith("local"):
                 if len(name) != 7:
-                    raise AttributeError, "function should be localXX"
+                    raise AttributeError("function should be localXX")
             else:
-                raise AttributeError, name
+                raise AttributeError(name)
             align_type, match_type, penalty_type = \
                         name[:-2], name[-2], name[-1]
             try:
                 match_args, match_doc = self.match2args[match_type]
             except KeyError, x:
-                raise AttributeError, "unknown match type %r" % match_type
+                raise AttributeError("unknown match type %r" % match_type)
             try:
                 penalty_args, penalty_doc = self.penalty2args[penalty_type]
             except KeyError, x:
-                raise AttributeError, "unknown penalty type %r" % penalty_type
+                raise AttributeError("unknown penalty type %r" % penalty_type)
 
             # Now get the names of the parameters to this function.
             param_names = ['sequenceA', 'sequenceB']
@@ -192,8 +192,8 @@ alignment occurs.
             # this function into forms appropriate for _align.
             keywds = keywds.copy()
             if len(args) != len(self.param_names):
-                raise TypeError, "%s takes exactly %d argument (%d given)" % (
-                    self.function_name, len(self.param_names), len(args))
+                raise TypeError("%s takes exactly %d argument (%d given)" \
+                    % (self.function_name, len(self.param_names), len(args)))
             i = 0
             while i < len(self.param_names):
                 if self.param_names[i] in [
@@ -224,8 +224,8 @@ alignment occurs.
                     keywds['gap_B_fn'] = affine_penalty(openB, extendB, pe)
                     i += 4
                 else:
-                    raise ValueError, "unknown parameter %r" % \
-                          self.param_names[i]
+                    raise ValueError("unknown parameter %r" \
+                                     % self.param_names[i])
 
             # Here are the default parameters for _align.  Assign
             # these to keywds, unless already specified.
@@ -749,7 +749,7 @@ class affine_penalty:
     """
     def __init__(self, open, extend, penalize_extend_when_opening=0):
         if open > 0 or extend > 0:
-            raise ValueError, "Gap penalties should be non-positive."
+            raise ValueError("Gap penalties should be non-positive.")
         self.open, self.extend = open, extend
         self.penalize_extend_when_opening = penalize_extend_when_opening
     def __call__(self, index, length):

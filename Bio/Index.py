@@ -45,7 +45,7 @@ class _ShelveIndex(dict):
                 for file in files:
                     if os.path.exists(file):
                         os.unlink(file)
-                raise "open a new shelf"
+                raise Exception("open a new shelf")
             self.data = shelve.open(indexname, flag='r')
         except:
             # No database exists.
@@ -55,10 +55,10 @@ class _ShelveIndex(dict):
             # Check to make sure the database is the correct version.
             version = self.data.get(self.__version_key, None)
             if version is None:
-                raise IOError, "Unrecognized index format"
+                raise IOError("Unrecognized index format")
             elif version != self.__version:
-                raise IOError, "Version %s doesn't match my version %s" % \
-                      (version, self.__version)
+                raise IOError("Version %s doesn't match my version %s" \
+                              % (version, self.__version))
             
     def __del__(self):
         if self.__dict__.has_key('data'):
@@ -91,8 +91,8 @@ class _InMemoryIndex(dict):
             handle = open(indexname)
             version = self._toobj(string.rstrip(handle.readline()))
             if version != self.__version:
-                raise IOError, "Version %s doesn't match my version %s" % \
-                      (version, self.__version)
+                raise IOError("Version %s doesn't match my version %s" \
+                              % (version, self.__version))
             lines = handle.readlines()
             lines = map(string.split, lines)
             for key, value in lines:

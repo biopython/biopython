@@ -56,9 +56,9 @@ class MultiGraph:
     def add_edge(self, source, to, label = None):
         """Adds an edge to this graph."""
         if not self.__adjacency_list.has_key(source):
-            raise ValueError, "Unknown <from> node: " + str(source)
+            raise ValueError("Unknown <from> node: " + str(source))
         if not self.__adjacency_list.has_key(to):
-            raise ValueError, "Unknown <to> node: " + str(to)
+            raise ValueError("Unknown <to> node: " + str(to))
         edge = (to, label)
         self.__adjacency_list[source].add(edge)
         if not self.__label_map.has_key(label):
@@ -68,7 +68,7 @@ class MultiGraph:
     def child_edges(self, parent):
         """Returns a list of (child, label) pairs for parent."""
         if not self.__adjacency_list.has_key(parent):
-            raise ValueError, "Unknown <parent> node: " + str(parent)
+            raise ValueError("Unknown <parent> node: " + str(parent))
         return self.__adjacency_list[parent].list()
 
     def children(self, parent):
@@ -79,7 +79,7 @@ class MultiGraph:
     def edges(self, label):
         """Returns a list of all the edges with this label."""
         if not self.__label_map.has_key(label):
-            raise ValueError, "Unknown label: " + str(label)
+            raise ValueError("Unknown label: " + str(label))
         return self.__label_map[label].list()
 
     def labels(self):
@@ -93,7 +93,7 @@ class MultiGraph:
     def parent_edges(self, child):
         """Returns a list of (parent, label) pairs for child."""
         if not self.__adjacency_list.has_key(child):
-            raise ValueError, "Unknown <child> node: " + str(child)
+            raise ValueError("Unknown <child> node: " + str(child))
         parents = []
         for parent in self.__adjacency_list.keys():
             children = self.__adjacency_list[parent]
@@ -110,7 +110,7 @@ class MultiGraph:
     def remove_node(self, node):
         """Removes node and all edges connected to it."""
         if not self.__adjacency_list.has_key(node):
-            raise ValueError, "Unknown node: " + str(node)
+            raise ValueError("Unknown node: " + str(node))
         # remove node (and all out-edges) from adjacency list
         del self.__adjacency_list[node]
         # remove all in-edges from adjacency list
@@ -131,7 +131,7 @@ class MultiGraph:
     def remove_edge(self, parent, child, label):
         """Removes edge. -- NOT IMPLEMENTED"""
         # hm , this is a multigraph - how should this be implemented?
-        raise NotImplementedError, "remove_edge is not yet implemented"
+        raise NotImplementedError("remove_edge is not yet implemented")
 
 # auxilliary graph functions
 

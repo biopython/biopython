@@ -16,7 +16,7 @@ from numpy import *
 def euclidean(x, y):
     """euclidean(x, y) -> euclidean distance between x and y"""
     if len(x) != len(y):
-        raise ValueError, "vectors must be same length"
+        raise ValueError("vectors must be same length")
     #return sqrt(sum((x-y)**2))
     # Optimization by John Corradi (JCorradi@msn.com)
     d = x-y
@@ -28,7 +28,7 @@ def euclidean_py(x, y):
     # This works faster than the Numeric implementation on shorter
     # vectors.
     if len(x) != len(y):
-        raise ValueError, "vectors must be same length"
+        raise ValueError("vectors must be same length")
     sum = 0
     for i in range(len(x)):
         sum += (x[i]-y[i])**2

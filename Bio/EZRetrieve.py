@@ -48,7 +48,7 @@ def parse_single(handle):
     if i >= 0:
         j = lresults.index("<br>", i)
         errmsg = results[i:j].strip()
-        raise AssertionError, errmsg
+        raise AssertionError(errmsg)
 
     i = lresults.find("<b>>")
     assert i >= 0, "Couldn't find sequence."

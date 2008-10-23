@@ -28,7 +28,7 @@ class PropertyManager:
         try:
             klass = obj.__class__
         except AttributeError:
-            raise KeyError, "built-in instance"
+            raise KeyError("built-in instance")
         
         return self.resolve_class(klass, property)
         
@@ -76,8 +76,8 @@ class PropertyManager:
 
             # this is why the search is depth-first/right-left
             bases[:0] = list(base.__bases__)
-        raise KeyError, "cannot find property %s for class %s" % \
-              (property, klass)
+        raise KeyError("cannot find property %s for class %s" \
+                       % (property, klass))
             
 
 default_manager = PropertyManager()
