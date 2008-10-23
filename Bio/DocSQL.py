@@ -22,7 +22,7 @@ Bio.DocSQL: easy access to DB API databases.
 CreatePeople(message=Success)
 """
 
-__version__ = "$Revision: 1.12 $"
+__version__ = "$Revision: 1.13 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/DocSQL.py,v $
 
 import exceptions
@@ -62,10 +62,9 @@ class QueryRow(list):
         _check_is_public(name)
         try:
             return self[self._names_hash[name]]
-        except KeyError:
-            raise AttributeError, "'%s' object has no attribute '%s'" % (self.__class__.__name__, name)
-        except AttributeError:
-            raise AttributeError, "'%s' object has no attribute '%s'" % (self.__class__.__name__, name)
+        except (KeyError, AttributeError) :
+            raise AttributeError("'%s' object has no attribute '%s'" \
+                                 % (self.__class__.__name__, name))
 
     def __setattr__(self, name, value):
         try:
@@ -126,7 +125,7 @@ class QueryGeneric(Query):
 class IterationCursor(object):
     def __init__(self, query, connection=connection):
         if connection is None:
-            raise TypeError, "database connection is None"
+            raise TypeError("database connection is None")
         self.cursor = connection.cursor()
         self.row_class = query.row_class
         if query.diagnostics:
@@ -188,7 +187,7 @@ class Insert(Create):
             except AttributeError:
                 self.total_count = 0
             
-            raise MySQLdb.IntegrityError, self.error_message
+            raise MySQLdb.IntegrityError(self.error_message)
             
         self.id = self.cursor().insert_id()
         try:
