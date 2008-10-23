@@ -85,8 +85,8 @@ class Seq(object):
             #other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]) :
-                raise TypeError, ("incompatable alphabets", str(self.alphabet),
-                                  str(other.alphabet))
+                raise TypeError("Incompatable alphabets %s and %s" \
+                                % (repr(self.alphabet), repr(other.alphabet)))
             #They should be the same sequence type (or one of them is generic)
             return cmp(str(self), str(other))
         elif isinstance(other, basestring) :
@@ -114,8 +114,8 @@ class Seq(object):
             #other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]) :
-                raise TypeError, ("incompatable alphabets", str(self.alphabet),
-                                  str(other.alphabet))
+                raise TypeError("Incompatable alphabets %s and %s" \
+                                % (repr(self.alphabet), repr(other.alphabet)))
             #They should be the same sequence type (or one of them is generic)
             a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
             return self.__class__(str(self) + str(other), a)
@@ -130,8 +130,8 @@ class Seq(object):
             #other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]) :
-                raise TypeError, ("incompatable alphabets", str(self.alphabet),
-                                  str(other.alphabet))
+                raise TypeError("Incompatable alphabets %s and %s" \
+                                % (repr(self.alphabet), repr(other.alphabet)))
             #They should be the same sequence type (or one of them is generic)
             a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
             return self.__class__(str(other) + str(self), a)
@@ -167,8 +167,8 @@ class Seq(object):
 
         #Other should be a Seq or a MutableSeq
         if not Alphabet._check_type_compatible([self.alphabet, other_alpha]) :
-            raise TypeError, ("incompatable alphabets", str(self.alphabet),
-                              str(other_alpha))
+            raise TypeError("Incompatable alphabets %s and %s" \
+                            % (repr(self.alphabet), repr(other_alpha)))
         #Return as a string
         return str(other_sequence)
     
@@ -339,7 +339,7 @@ class Seq(object):
         """
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.ProteinAlphabet) :
-            raise ValueError, "Proteins do not have complements!"
+            raise ValueError("Proteins do not have complements!")
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.DNAAlphabet) :
             d = ambiguous_dna_complement
@@ -348,7 +348,7 @@ class Seq(object):
             d = ambiguous_rna_complement
         elif 'U' in self._data and 'T' in self._data:
             #TODO - Handle this cleanly?
-            raise ValueError, "Mixed RNA/DNA found"
+            raise ValueError("Mixed RNA/DNA found")
         elif 'U' in self._data:
             d = ambiguous_rna_complement
         else:
@@ -374,10 +374,10 @@ class Seq(object):
         """
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.ProteinAlphabet) :
-            raise ValueError, "Proteins cannot be transcribed!"
+            raise ValueError("Proteins cannot be transcribed!")
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.RNAAlphabet) :
-            raise ValueError, "RNA cannot be transcribed!"
+            raise ValueError("RNA cannot be transcribed!")
 
         if self.alphabet==IUPAC.unambiguous_dna:
             alphabet = IUPAC.unambiguous_rna
@@ -395,10 +395,10 @@ class Seq(object):
         """
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.ProteinAlphabet) :
-            raise ValueError, "Proteins cannot be back transcribed!"
+            raise ValueError("Proteins cannot be back transcribed!")
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.DNAAlphabet) :
-            raise ValueError, "DNA cannot be back transcribed!"
+            raise ValueError("DNA cannot be back transcribed!")
 
         if self.alphabet==IUPAC.unambiguous_rna:
             alphabet = IUPAC.unambiguous_dna
@@ -433,7 +433,7 @@ class Seq(object):
             table_id = None
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.ProteinAlphabet) :
-            raise ValueError, "Proteins cannot be translated!"
+            raise ValueError("Proteins cannot be translated!")
         if self.alphabet==IUPAC.unambiguous_dna:
             if table_id is None:
                 codon_table = CodonTable.unambiguous_dna_by_name[table]
@@ -537,8 +537,8 @@ class MutableSeq(object):
             #other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]) :
-                raise TypeError, ("incompatable alphabets", str(self.alphabet),
-                                  str(other.alphabet))
+                raise TypeError("Incompatable alphabets %s and %s" \
+                                % (repr(self.alphabet), repr(other.alphabet)))
             #They should be the same sequence type (or one of them is generic)
             if isinstance(other, MutableSeq):
                 #See test_GAQueens.py for an historic usage of a non-string
@@ -596,8 +596,8 @@ class MutableSeq(object):
             #other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]) :
-                raise TypeError, ("incompatable alphabets", str(self.alphabet),
-                                  str(other.alphabet))
+                raise TypeError("Incompatable alphabets %s and %s" \
+                                % (repr(self.alphabet), repr(other.alphabet)))
             #They should be the same sequence type (or one of them is generic)
             a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
             if isinstance(other, MutableSeq):
@@ -617,8 +617,8 @@ class MutableSeq(object):
             #other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]) :
-                raise TypeError, ("incompatable alphabets", str(self.alphabet),
-                                  str(other.alphabet))
+                raise TypeError("Incompatable alphabets %s and %s" \
+                                % (repr(self.alphabet), repr(other.alphabet)))
             #They should be the same sequence type (or one of them is generic)
             a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
             if isinstance(other, MutableSeq):
@@ -649,7 +649,7 @@ class MutableSeq(object):
             if self.data[i] == item:
                 del self.data[i]
                 return
-        raise ValueError, "MutableSeq.remove(x): x not in list"
+        raise ValueError("MutableSeq.remove(x): x not in list")
 
     def count(self, sub, start=0, end=sys.maxint):
         """Count method, like that of a python string.
@@ -691,7 +691,7 @@ class MutableSeq(object):
         for i in range(len(self.data)):
             if self.data[i] == item:
                 return i
-        raise ValueError, "MutableSeq.index(x): x not in list"
+        raise ValueError("MutableSeq.index(x): x not in list")
 
     def reverse(self):
         """Modify the mutable sequence to reverse itself.
@@ -707,14 +707,14 @@ class MutableSeq(object):
         No return value"""
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.ProteinAlphabet) :
-            raise ValueError, "Proteins do not have complements!"
+            raise ValueError("Proteins do not have complements!")
         if self.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
             d = ambiguous_dna_complement
         elif self.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
             d = ambiguous_rna_complement
         elif 'U' in self.data and 'T' in self.data :
             #TODO - Handle this cleanly?
-            raise ValueError, "Mixed RNA/DNA found"
+            raise ValueError("Mixed RNA/DNA found")
         elif 'U' in self.data:
             d = ambiguous_rna_complement
         else:

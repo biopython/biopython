@@ -59,21 +59,21 @@ class Dictionary:
         self.parser = parser
 
     def __len__(self):
-        raise NotImplementedError, "PubMed contains lots of entries"
+        raise NotImplementedError("PubMed contains lots of entries")
     def clear(self):
-        raise NotImplementedError, "This is a read-only dictionary"
+        raise NotImplementedError("This is a read-only dictionary")
     def __setitem__(self, key, item):
-        raise NotImplementedError, "This is a read-only dictionary"
+        raise NotImplementedError("This is a read-only dictionary")
     def update(self):
-        raise NotImplementedError, "This is a read-only dictionary"
+        raise NotImplementedError("This is a read-only dictionary")
     def copy(self):
-        raise NotImplementedError, "You don't need to do this..."
+        raise NotImplementedError("You don't need to do this...")
     def keys(self):
-        raise NotImplementedError, "You don't really want to do this..."
+        raise NotImplementedError("You don't really want to do this...")
     def items(self):
-        raise NotImplementedError, "You don't really want to do this..."
+        raise NotImplementedError("You don't really want to do this...")
     def values(self):
-        raise NotImplementedError, "You don't really want to do this..."
+        raise NotImplementedError("You don't really want to do this...")
     
     def has_key(self, id):
         """S.has_key(id) -> bool"""
@@ -88,7 +88,6 @@ class Dictionary:
             return self[id]
         except KeyError:
             return failobj
-        raise "How did I get here?"
 
     def __getitem__(self, id):
         """S.__getitem__(id) -> object
@@ -105,7 +104,7 @@ class Dictionary:
             # raise a KeyError instead of an IOError
             # XXX I really should distinguish between a real IOError and
             # if the id is not in the database.
-            raise KeyError, x
+            raise KeyError(x)
         if self.parser is not None:
             return self.parser.parse(handle)
         return handle.read()
@@ -201,9 +200,9 @@ def find_related(pmid):
             # of only integers.  Should I check to make sure it
             # meets a certain minimum length?
             if self._not_pmid_re.search(data):
-                raise ValueError, \
+                raise ValueError(\
                       "I expected an ID, but '%s' doesn't look like one." % \
-                      repr(data)
+                      repr(data))
             self.ids.append(data)
 
     parser = ResultParser()
@@ -232,7 +231,7 @@ def download_many(ids, callback_fn, broken_fn=None,
     # dangerous because the results may be malformed, and exceptions
     # in the parser may disrupt the whole download process.
     if batchsize > 500 or batchsize < 1:
-        raise ValueError, "batchsize must be between 1 and 500"
+        raise ValueError("batchsize must be between 1 and 500")
     current_batchsize = batchsize
     
     # Loop until all the ids are processed.  We want to process as
