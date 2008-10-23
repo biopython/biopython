@@ -50,7 +50,7 @@ class MarkovModel:
 def _readline_and_check_start(handle, start):
     line = handle.readline()
     if not line.startswith(start):
-        raise ValueError, "I expected %r but got %r" % (start, line)
+        raise ValueError("I expected %r but got %r" % (start, line))
     return line
 
 def load(handle):
@@ -133,17 +133,17 @@ def train_bw(states, alphabet, training_data,
     """
     N, M = len(states), len(alphabet)
     if not training_data:
-        raise ValueError, "No training data given."
+        raise ValueError("No training data given.")
     pseudo_initial, pseudo_emission, pseudo_transition = map(
         _safe_asarray, (pseudo_initial, pseudo_emission, pseudo_transition))
     if pseudo_initial and shape(pseudo_initial) != (N,):
-        raise ValueError, "pseudo_initial not shape len(states)"
+        raise ValueError("pseudo_initial not shape len(states)")
     if pseudo_transition and shape(pseudo_transition) != (N,N):
-        raise ValueError, "pseudo_transition not shape " + \
-              "len(states) X len(states)"
+        raise ValueError("pseudo_transition not shape " + \
+                         "len(states) X len(states)")
     if pseudo_emission and shape(pseudo_emission) != (N,M):
-        raise ValueError, "pseudo_emission not shape " + \
-              "len(states) X len(alphabet)"
+        raise ValueError("pseudo_emission not shape " + \
+                         "len(states) X len(alphabet)")
         
     # Training data is given as a list of members of the alphabet.
     # Replace those with indexes into the alphabet list for easier
@@ -156,7 +156,7 @@ def train_bw(states, alphabet, training_data,
     # Do some sanity checking on the outputs.
     lengths = map(len, training_outputs)
     if min(lengths) == 0:
-        raise ValueError, "I got training data with outputs of length 0"
+        raise ValueError("I got training data with outputs of length 0")
 
     # Do the training with baum welch.
     x = _baum_welch(N, M, training_outputs,
@@ -209,7 +209,8 @@ def _baum_welch(N, M, training_outputs,
             break
         prev_llik = llik
     else:
-        raise "HMM did not converge in %d iterations" % MAX_ITERATIONS
+        raise RuntimeError("HMM did not converge in %d iterations" \
+                           % MAX_ITERATIONS)
 
     # Return everything back in normal space.
     return map(exp, (lp_initial, lp_transition, lp_emission))
@@ -359,13 +360,13 @@ def train_visible(states, alphabet, training_data,
     pseudo_initial, pseudo_emission, pseudo_transition = map(
         _safe_asarray, (pseudo_initial, pseudo_emission, pseudo_transition))
     if pseudo_initial and shape(pseudo_initial) != (N,):
-        raise ValueError, "pseudo_initial not shape len(states)"
+        raise ValueError("pseudo_initial not shape len(states)")
     if pseudo_transition and shape(pseudo_transition) != (N,N):
-        raise ValueError, "pseudo_transition not shape " + \
-              "len(states) X len(states)"
+        raise ValueError("pseudo_transition not shape " + \
+                         "len(states) X len(states)")
     if pseudo_emission and shape(pseudo_emission) != (N,M):
-        raise ValueError, "pseudo_emission not shape " + \
-              "len(states) X len(alphabet)"
+        raise ValueError("pseudo_emission not shape " + \
+                         "len(states) X len(alphabet)")
     
     # Training data is given as a list of members of the alphabet.
     # Replace those with indexes into the alphabet list for easier
@@ -375,7 +376,7 @@ def train_visible(states, alphabet, training_data,
     outputs_indexes = listfns.itemindex(alphabet)
     for toutputs, tstates in training_data:
         if len(tstates) != len(toutputs):
-            raise ValueError, "states and outputs not aligned"
+            raise ValueError("states and outputs not aligned")
         training_states.append([states_indexes[x] for x in tstates])
         training_outputs.append([outputs_indexes[x] for x in toutputs])
 
@@ -501,7 +502,7 @@ def _normalize(matrix):
         for i in range(len(matrix)):
             matrix[i,:] = matrix[i,:] / sum(matrix[i,:])
     else:
-        raise ValueError, "I cannot handle matrixes of that shape"
+        raise ValueError("I cannot handle matrixes of that shape")
     return matrix
     
 def _uniform_norm(shape):
@@ -517,17 +518,17 @@ def _copy_and_check(matrix, desired_shape):
     matrix = array(matrix, MATCODE, copy=1)
     # Check the dimensions.
     if shape(matrix) != desired_shape:
-        raise ValuError, "Incorrect dimension"
+        raise ValuError("Incorrect dimension")
     # Make sure it's normalized.
     if len(shape(matrix)) == 1:
         if fabs(sum(matrix)-1.0) > 0.01:
-            raise ValueError, "matrix not normalized to 1.0"
+            raise ValueError("matrix not normalized to 1.0")
     elif len(shape(matrix)) == 2:
         for i in range(len(matrix)):
             if fabs(sum(matrix[i])-1.0) > 0.01:
-                raise ValueError, "matrix %d not normalized to 1.0" % i
+                raise ValueError("matrix %d not normalized to 1.0" % i)
     else:
-        raise ValueError, "I don't handle matrices > 2 dimensions"
+        raise ValueError("I don't handle matrices > 2 dimensions")
     return matrix
 
 def _safe_copy_and_check(matrix, desired_shape):

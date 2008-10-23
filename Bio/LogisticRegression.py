@@ -40,10 +40,10 @@ def train(xs, ys, update_fn=None, typecode=None):
     
     """
     if len(xs) != len(ys):
-        raise ValueError, "xs and ys should be the same length."
+        raise ValueError("xs and ys should be the same length.")
     classes = set(ys)
     if classes != set([0, 1]):
-        raise ValueError, "Classes should be 0's and 1's"
+        raise ValueError("Classes should be 0's and 1's")
     if typecode is None:
         typecode = 'd'
 
@@ -51,7 +51,7 @@ def train(xs, ys, update_fn=None, typecode=None):
     # observations plus a constant dimension.
     N, ndims = len(xs), len(xs[0]) + 1
     if N==0 or ndims==1:
-        raise ValueError, "No observations or observation of 0 dimension."
+        raise ValueError("No observations or observation of 0 dimension.")
 
     # Make an X array, with a constant first dimension.
     X = ones((N, ndims), typecode)
@@ -101,7 +101,7 @@ def train(xs, ys, update_fn=None, typecode=None):
             delta = delta * stepsize
         beta = beta + delta                 # Update beta.
     else:
-        raise AssertionError, "Didn't converge."
+        raise RuntimeError("Didn't converge.")
 
     lr = LogisticRegression()
     lr.beta = map(float, beta)   # Convert back to regular array.

@@ -65,8 +65,8 @@ def calculate(nb, observation, scale=0):
 
     # Make sure the observation has the right dimensionality.
     if len(observation) != nb.dimensionality:
-        raise ValueError, "observation in %d dimension, but classifier in %d" \
-              % (len(observation), nb.dimensionality)
+        raise ValueError("observation in %d dimension, but classifier in %d" \
+                         % (len(observation), nb.dimensionality))
 
     # Calculate log P(observation|class) for every class.
     n  = len(nb.classes)
@@ -123,9 +123,9 @@ def train(training_set, results, priors=None, typecode=None):
 
     """
     if not len(training_set):
-        raise ValueError, "No data in the training set."
+        raise ValueError("No data in the training set.")
     if len(training_set) != len(results):
-        raise ValueError, "training_set and results should be parallel lists."
+        raise ValueError("training_set and results should be parallel lists.")
 
     # If no typecode is specified, try to pick a reasonable one.  If
     # training_set is a Numeric array, then use that typecode.
@@ -136,7 +136,7 @@ def train(training_set, results, priors=None, typecode=None):
     # dimensionality.
     dimensions = [len(x) for x in training_set]
     if min(dimensions) != max(dimensions):
-        raise ValueError, "observations have different dimensionality"
+        raise ValueError("observations have different dimensionality")
 
     nb = NaiveBayes()
     nb.dimensionality = dimensions[0]
