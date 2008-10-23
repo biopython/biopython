@@ -40,7 +40,7 @@ class Chain:
     def add(self,node,prev=None):
         """Attaches node to another: (self, node, prev)."""
         if prev is not None and prev not in self.chain:
-            raise ChainException('Unknow predecessor: '+str(prev))
+            raise ChainException('Unknown predecessor: '+str(prev))
         else:
             id=self._get_id()
             node.set_id(id)
@@ -127,7 +127,7 @@ class Node:
     def set_id(self,id):
         """Sets the id of a node, if not set yet: (self,id)."""
         if self.id is not None:
-            raise NodeException, 'Node id cannot be changed.'
+            raise NodeException('Node id cannot be changed.')
         self.id=id
 
     def get_id(self):
@@ -156,7 +156,7 @@ class Node:
     def set_succ(self,new_succ):
         """Sets the node's successors: (self,new_succ)."""
         if not isinstance(new_succ,type([])):
-            raise NodeException, 'Node successor must be of list type.'
+            raise NodeException('Node successor must be of list type.')
         self.succ=new_succ
 
     def set_prev(self,id):

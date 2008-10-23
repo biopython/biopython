@@ -78,7 +78,7 @@ class Tree(Nodes.Chain):
         #with " (..." should be recognised as a leaf, "(..."
         tree = tree.strip()
         if tree.count('(')!=tree.count(')'):
-            raise TreeError, 'Parentheses do not match in (sub)tree: '+tree
+            raise TreeError('Parentheses do not match in (sub)tree: '+tree)
         if tree.count('(')==0: # a leaf
             #check if there's a colon, or a special comment, or both  after the taxon name
             nodecomment=tree.find(NODECOMMENT_START)
@@ -164,7 +164,8 @@ class Tree(Nodes.Chain):
             nc_start=text.find(NODECOMMENT_START)
             nc_end=text.find(NODECOMMENT_END)
             if nc_end==-1:
-                raise TreeError, 'Error in tree description: Found %s without matching %s' % (NODECOMMENT_START, NODECOMMENT_END)
+                raise TreeError('Error in tree description: Found %s without matching %s' \
+                                % (NODECOMMENT_START, NODECOMMENT_END))
             nodecomment=text[nc_start:nc_end+1]
             text=text[:nc_start]+text[nc_end+1:]
             values=[float(t) for t in text.split(':') if t.strip()]
@@ -382,7 +383,7 @@ class Tree(Nodes.Chain):
                 print 'Taxon/taxa %s is/are missing in tree %s' % (','.join(missing1) , self.name)
             if missing2:
                 print 'Taxon/taxa %s is/are missing in tree %s' % (','.join(missing2) , tree2.name)
-            raise TreeError, 'Can\'t compare trees with different taxon compositions.'
+            raise TreeError('Can\'t compare trees with different taxon compositions.')
         t1=[(set(self.get_taxa(n)),self.node(n).data.support) for n in self.all_ids() if \
             self.node(n).succ and\
             (self.node(n).data and self.node(n).data.support and self.node(n).data.support>=threshold)]
@@ -663,7 +664,8 @@ class Tree(Nodes.Chain):
             elif b1[3]==0 or b2[3]==0:
                 newbranch.append(b1[3]+b2[3]) # one is 0, take the other
             else:
-                raise TreeError, 'Support mismatch in bifurcating root: %f, %f' % (float(b1[3]),float(b2[3]))
+                raise TreeError('Support mismatch in bifurcating root: %f, %f' \
+                                % (float(b1[3]),float(b2[3])))
             self.unrooted.append(newbranch)
 
     def root_with_outgroup(self,outgroup=None):
@@ -675,7 +677,8 @@ class Tree(Nodes.Chain):
                     branch=self.unrooted.pop(i)
                     break 
             else:
-                raise TreeError, 'Unable to connect nodes for rooting: nodes %d and %d are not connected' % (parent,child)
+                raise TreeError('Unable to connect nodes for rooting: nodes %d and %d are not connected' \
+                                % (parent,child))
             self.link(parent,child)
             self.node(child).data.branchlength=branch[2]
             self.node(child).data.support=branch[3]
@@ -707,7 +710,7 @@ class Tree(Nodes.Chain):
                 root_branch=self.unrooted.pop(i)
                 break
         else:
-            raise TreeError, 'Unrooted and rooted Tree do not match'
+            raise TreeError('Unrooted and rooted Tree do not match')
         if outgroup_node==root_branch[1]:
             ingroup_node=root_branch[0]
         else:
@@ -727,7 +730,8 @@ class Tree(Nodes.Chain):
         # if theres still a lonely node in self.chain, then it's the old root, and we delete it
         oldroot=[i for i in self.all_ids() if self.node(i).prev is None and i!=self.root]
         if len(oldroot)>1:
-            raise TreeError, 'Isolated nodes in tree description: %s' % ','.join(oldroot)
+            raise TreeError('Isolated nodes in tree description: %s' \
+                            % ','.join(oldroot))
         elif len(oldroot)==1:
             self.kill(oldroot[0])
         return self.root
@@ -751,7 +755,7 @@ class Tree(Nodes.Chain):
                 smallest=min([(len(self.get_taxa(n)),n) for n in succnodes]) 
                 outgroup=self.get_taxa(smallest[1])
             except:
-                raise TreeError, "Error determining outgroup."
+                raise TreeError("Error determining outgroup.")
         else: # root with user specified outgroup
             self.root_with_outgroup(outgroup)
 
@@ -788,7 +792,7 @@ def consensus(trees, threshold=0.5,outgroup=None):
         #if c%1==0:
         #    print c
         if alltaxa!=set(t.get_taxa()):
-            raise TreeError, 'Trees for consensus must contain the same taxa'
+            raise TreeError('Trees for consensus must contain the same taxa')
         t.root_with_outgroup(outgroup=outgroup)
         for st_node in t._walk(t.root):
             subclade_taxa=t.get_taxa(st_node)
