@@ -56,15 +56,15 @@ class Residues :
         for l in str.split(",") :
             m = _fragment_re.match(l)
             if m is None:
-                raise ValueError, "I don't understand the format of %s" % l
+                raise ValueError("I don't understand the format of %s" % l)
             chain, start, end, postfix = m.groups()
 
             if postfix != "" :
-                 raise ValueError, "I don't understand the format of %s" % l
+                 raise ValueError("I don't understand the format of %s" % l)
 
             if chain:
                 if chain[-1] != ':':
-                    raise ValueError, "I don't understand the chain in %s" % l
+                    raise ValueError("I don't understand the chain in %s" % l)
                 chain = chain[:-1]   # chop off the ':'
             else :
                 chain ="" 

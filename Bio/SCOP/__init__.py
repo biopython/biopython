@@ -122,7 +122,7 @@ def parse_domain(str) :
     """
 
     m = _domain_re.match(str)
-    if (not m) : raise ValueError, "Domain: "+ str
+    if (not m) : raise ValueError("Domain: "+ str)
 
     dom = Domain()
     dom.sid = m.group(1)
@@ -167,7 +167,7 @@ class Scop:
 
         if dir_path is None and db_handle is None:
             if cla_handle == None or des_handle==None or hie_handle==None:
-                raise RuntimeError,"Need CLA, DES and HIE files to build SCOP" 
+                raise RuntimeError("Need CLA, DES and HIE files to build SCOP")
 
         sunidDict = {}
 
@@ -182,9 +182,9 @@ class Scop:
                 # open SCOP parseable files 
                 if dir_path:
                     if not version :
-                        raise RuntimeError, "Need SCOP version to find parsable files in directory"
+                        raise RuntimeError("Need SCOP version to find parsable files in directory")
                     if cla_handle or des_handle or hie_handle:
-                        raise RuntimeError,"Cannot specify SCOP directory and specific files"
+                        raise RuntimeError("Cannot specify SCOP directory and specific files")
                 
                     cla_handle = _open_scop_file( dir_path, version, 'cla')
                     des_handle = _open_scop_file( dir_path, version, 'des')
@@ -225,13 +225,13 @@ class Scop:
                     if record.parent != '' : # Not root node
     
                         if not sunidDict.has_key(record.parent):
-                            raise ValueError, "Incomplete data?"
+                            raise ValueError("Incomplete data?")
                                        
                         n.parent = sunidDict[record.parent]
                 
                     for c in record.children:
                         if not sunidDict.has_key(c) :
-                            raise ValueError, "Incomplete data?"
+                            raise ValueError("Incomplete data?")
                         n.children.append(sunidDict[c])
 
                         
@@ -701,13 +701,13 @@ class Astral:
         Note that the ind_file argument is deprecated.
         """
         if ind_file :
-            raise RuntimeError, "The ind_file (index file) argument is deprecated"
+            raise RuntimeError("The ind_file (index file) argument is deprecated")
 
         if astral_file==dir_path==db_handle==None:
-            raise RunTimeError,"Need either file handle, or (dir_path + version)\
-            or database handle to construct Astral"
+            raise RuntimeError("Need either file handle, or (dir_path + "\
+                       + "version) or database handle to construct Astral")
         if not scop:
-            raise RuntimeError, "Must provide a Scop instance to construct"
+            raise RuntimeError("Must provide a Scop instance to construct")
 
         self.scop = scop
         self.db_handle = db_handle 
@@ -715,7 +715,7 @@ class Astral:
         
         if not astral_file and not db_handle:
             if dir_path == None or version == None:
-                raise RuntimeError, "must provide dir_path and version"
+                raise RuntimeError("must provide dir_path and version")
 
             self.version = version
             self.path = os.path.join( dir_path, "scopseq-%s" % version)
@@ -741,7 +741,7 @@ class Astral:
                 
             else:
                 if not self.path:
-                    raise RuntimeError, "No scopseq directory specified"
+                    raise RuntimeError("No scopseq directory specified")
                 
                 file_prefix = "astral-scopdom-seqres-sel-gs"
                 filename = "%s-e100m-%s-%s.id" % (file_prefix, astralEv_to_file[id] ,
@@ -759,7 +759,7 @@ class Astral:
                 
             else:
                 if not self.path:
-                    raise RuntimeError, "No scopseq directory specified"
+                    raise RuntimeError("No scopseq directory specified")
                 
                 file_prefix = "astral-scopdom-seqres-sel-gs"
                 filename = "%s-bib-%s-%s.id" % (file_prefix, id, self.version)
@@ -771,7 +771,7 @@ class Astral:
     def getAstralDomainsFromFile(self,filename=None,file_handle=None):
         """Get the scop domains from a file containing a list of sids"""
         if file_handle == filename == none:
-            raise RuntimeError, "You must provide a filename or handle"
+            raise RuntimeError("You must provide a filename or handle")
         if not file_handle:
             file_handle = open(filename)
         doms = []

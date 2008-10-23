@@ -46,7 +46,7 @@ class Record:
         line = line.rstrip()        # no trailing whitespace
         columns = line.split('\t')   # separate the tab-delineated cols
         if len(columns) != 3:
-            raise ValueError, "I don't understand the format of %s" % line
+            raise ValueError("I don't understand the format of %s" % line)
         
         sunid, parent, children = columns
 
@@ -118,7 +118,7 @@ class Iterator:
         warnings.warn("Bio.SCOP.Hie.Iterator is deprecated. Please use Bio.SCOP.Hie.parse() instead.", DeprecationWarning)
         from types import FileType, InstanceType
         if type(handle) is not FileType and type(handle) is not InstanceType:
-            raise TypeError, "I expected a file handle or file-like object"
+            raise TypeError("I expected a file handle or file-like object")
         self._handle = handle
         self._parser = parser
 

@@ -203,7 +203,7 @@ class SeqMap :
         line = line.rstrip()  # no trailing whitespace        
 
         if len(line)<header_len: 
-            raise ValueError, "Incomplete header: "+line
+            raise ValueError("Incomplete header: "+line)
 
         self.pdbid = line[0:4]
         chainid = line[4:5]
@@ -212,7 +212,7 @@ class SeqMap :
 
         #Raf format versions 0.01 and 0.02 are identical for practical purposes
         if(self.version != "0.01" and  self.version !="0.02") :
-            raise ValueError, "Incompatible RAF version: "+self.version 
+            raise ValueError("Incompatible RAF version: "+self.version)
 
         self.pdb_datestamp = line[14:20]
         self.flags = line[21:27]
@@ -220,7 +220,7 @@ class SeqMap :
         for i in range(header_len, len(line), 7) :
             f = line[i : i+7]
             if len(f)!=7:
-                raise ValueError, "Corrupt Field: ("+f+")"
+                raise ValueError("Corrupt Field: ("+f+")")
             r = Res()
             r.chainid = chainid
             r.resid =  f[0:5].strip()
@@ -234,7 +234,7 @@ class SeqMap :
         for i in range(0, len(self.res)) :
             if self.res[i].resid == resid and self.res[i].chainid == chainid :
                 return i
-        raise KeyError, "No such residue "+chainid+resid
+        raise KeyError("No such residue "+chainid+resid)
 
     def __getslice__(self, i, j) :
         s = copy(self)
@@ -253,13 +253,13 @@ class SeqMap :
         may happen when fragments are taken from different chains.
         """
         if not isinstance(other, SeqMap):
-            raise TypeError, "Can only extend a SeqMap with a SeqMap."
+            raise TypeError("Can only extend a SeqMap with a SeqMap.")
         if self.pdbid != other.pdbid :
-            raise TypeError, "Cannot add fragments from different proteins"
+            raise TypeError("Cannot add fragments from different proteins")
         if self.version != other.version :
-            raise TypeError, "Incompatible rafs"
+            raise TypeError("Incompatible rafs")
         if self.pdb_datestamp != other.pdb_datestamp :
-            raise TypeError, "Different pdb dates!"
+            raise TypeError("Different pdb dates!")
         if self.flags != other.flags :
             self.flags = ''
         self.res += other.res
@@ -321,8 +321,8 @@ class SeqMap :
             #    del resSet[k]
             #print resSet
                                      
-            raise RuntimeError, 'I could not find at least one ATOM or ' \
-               +'HETATM record for each and every residue in this sequence map.'
+            raise RuntimeError('I could not find at least one ATOM or HETATM' \
+                   +' record for each and every residue in this sequence map.')
         
         
         
@@ -374,7 +374,7 @@ class Iterator:
 
         from types import FileType, InstanceType
         if type(handle) is not FileType and type(handle) is not InstanceType:
-            raise TypeError, "I expected a file handle or file-like object"
+            raise TypeError("I expected a file handle or file-like object")
         self._handle = handle
         self._parser = parser
 

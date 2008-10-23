@@ -58,7 +58,7 @@ class Record:
         line = line.rstrip()  # no trailing whitespace
         columns = line.split("\t")  # separate the tab-delineated cols
         if len(columns) != 5:
-            raise ValueError, "I don't understand the format of %s" % line
+            raise ValueError("I don't understand the format of %s" % line)
         
         sunid, self.nodetype, self.sccs, self.name, self.description = columns
         if self.name=='-': self.name =''
@@ -106,7 +106,7 @@ class Iterator:
         warnings.warn("Bio.SCOP.Des.Iterator is deprecated. Please use Bio.SCOP.Des.parse() instead.", DeprecationWarning)
         from types import FileType, InstanceType
         if type(handle) is not FileType and type(handle) is not InstanceType:
-            raise TypeError, "I expected a file handle or file-like object"
+            raise TypeError("I expected a file handle or file-like object")
         self._handle = handle
         self._parser = parser
 

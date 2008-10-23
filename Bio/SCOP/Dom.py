@@ -50,7 +50,7 @@ class Record:
         line = line.rstrip()  # no trailing whitespace
         columns = line.split("\t")  # separate the tab-delineated cols
         if len(columns) != 4:
-            raise ValueError, "I don't understand the format of %s" % line
+            raise ValueError("I don't understand the format of %s" % line)
         self.sid, pdbid, res, self.hierarchy = columns
         self.residues = Residues(res)
         self.residues.pdbid =pdbid
@@ -91,7 +91,7 @@ class Iterator:
         """
         from types import FileType, InstanceType
         if type(handle) is not FileType and type(handle) is not InstanceType:
-            raise ValueError, "I expected a file handle or file-like object"
+            raise ValueError("I expected a file handle or file-like object")
         self._handle = handle
         self._parser = parser
 
