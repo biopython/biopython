@@ -46,7 +46,7 @@ class AbstractParser:
 
     """
     def parse(self, handle):
-        raise NotImplementedError, "Please implement in a derived class"
+        raise NotImplementedError("Please implement in a derived class")
 
     def parse_str(self, string):
         return self.parse(File.StringHandle(string))
@@ -91,7 +91,7 @@ class TaggingConsumer(AbstractConsumer):
         # be closed or invalid at a later time.
         if handle is None:
             handle = sys.stdout
-	self._handle = handle
+        self._handle = handle
         self._colwidth = colwidth
         self._maxwidth = maxwidth
 
@@ -126,7 +126,7 @@ class SGMLStrippingConsumer:
     """
     def __init__(self, consumer):
         if type(consumer) is not InstanceType:
-            raise ValueError, "consumer should be an instance"
+            raise ValueError("consumer should be an instance")
         self._consumer = consumer
         self._prev_attr = None
         self._stripper = File.SGMLStripper()
@@ -299,7 +299,7 @@ def read_and_call(uhandle, method, **keywds):
     line = safe_readline(uhandle)
     errmsg = _fails_conditions(*(line,), **keywds)
     if errmsg is not None:
-        raise ValueError, errmsg
+        raise ValueError(errmsg)
     method(line)
 
 def read_and_call_while(uhandle, method, **keywds):
@@ -410,7 +410,7 @@ def safe_readline(handle):
     """
     line = handle.readline()
     if not line:
-        raise ValueError, "Unexpected end of stream."
+        raise ValueError("Unexpected end of stream.")
     return line
 
 def safe_peekline(handle):
@@ -422,5 +422,5 @@ def safe_peekline(handle):
     """
     line = handle.peekline()
     if not line:
-        raise ValueError, "Unexpected end of stream."
+        raise ValueError("Unexpected end of stream.")
     return line
