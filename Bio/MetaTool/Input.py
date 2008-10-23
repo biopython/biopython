@@ -51,7 +51,7 @@ def system_to_metatool(system, metext = [], metint = [], generate_names = 1):
     contained in the input system.
     """
     if not isinstance(system, System):
-        raise TypeError, "Input is not a System object"
+        raise TypeError("Input is not a System object")
     # Build the ENZREV and ENZIRREV strings:
     enzrev    = []
     enzirrev  = []
@@ -88,10 +88,10 @@ def system_to_metatool(system, metext = [], metint = [], generate_names = 1):
             if m in metabolites:
                 metabolites.remove(m)
             else:
-                raise ValueError, "metext contains an unknown metabolite"
+                raise ValueError("metext contains an unknown metabolite")
         for m in metint:
             if not m in metabolites:
-                raise ValueError, "metint contains an unknown metabolite"
+                raise ValueError("metint contains an unknown metabolite")
         metext_str += " ".join([str(m) for m in metext]) + "\n"
         metint_str += " ".join([str(m) for m in metabolites]) + "\n"
     elif metint:
@@ -99,10 +99,10 @@ def system_to_metatool(system, metext = [], metint = [], generate_names = 1):
             if m in metabolites:
                 metabolites.remove(m)
             else:
-                raise ValueError, "metint contains an unknown metabolite"
+                raise ValueError("metint contains an unknown metabolite")
         for m in metext:
             if not m in metabolites:
-                raise ValueError, "metext contains an unknown metabolite"
+                raise ValueError("metext contains an unknown metabolite")
         metint_str += " ".join([str(m) for m in metint]) + "\n"
         metext_str += " ".join([str(m) for m in metabolites]) + "\n"        
     else:

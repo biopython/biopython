@@ -128,7 +128,7 @@ class Reaction:
                     products = products + str(stoch) + " "
                 products = products + str(species)
             else:
-                raise AttributeError, "Invalid 0 coefficient in Reaction.reactants"
+                raise AttributeError("Invalid 0 coefficient in Reaction.reactants")
         if self.reversible:
             return substrates + " <=> " + products
         else:

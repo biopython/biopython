@@ -60,7 +60,7 @@ class PosAlign:
    def __init__(self,inStr):
       inStr = string.strip(inStr)
       if len(inStr) != 1 and len(inStr)!= 2:
-         raise ValueError, 'PosAlign: length not 2 chars' + inStr
+         raise ValueError('PosAlign: length not 2 chars' + inStr)
       if inStr == '..':
          self.aa = '-'
          self.gap = 1
@@ -99,14 +99,14 @@ class FSSPSumRec:
       elif len(in_rec[1]) == 5:
          self.chain1=in_rec[1][4]
       else:
-         raise ValueError, 'Bad PDB ID 1'
+         raise ValueError('Bad PDB ID 1')
       self.pdb2 = in_rec[2][:4]
       if len(in_rec[2]) == 4:
          self.chain2='0'
       elif len(in_rec[2]) == 5:
          self.chain2=in_rec[2][4]
       else:
-         raise ValueError, 'Bad PDB ID 2'
+         raise ValueError('Bad PDB ID 2')
       self.zscore = string.atof(in_rec[3])
       self.rmsd = string.atof(in_rec[4])
       self.lali = string.atof(in_rec[5])
@@ -222,7 +222,7 @@ def read_fssp(fssp_handle):
       curline = fssp_handle.readline()
       
    if not summary_title.match(curline):
-      raise ValueError,'Bad FSSP file: no summary record found'
+      raise ValueError('Bad FSSP file: no summary record found')
    curline = fssp_handle.readline()  #Read the title line, discard
    curline = fssp_handle.readline()  #Read the next line
    # Process the summary records into a list
@@ -241,7 +241,7 @@ def read_fssp(fssp_handle):
             # print "Reached equiv_title"
             break
          else:
-            raise ValueError,'Bad FSSP file: no alignments title record found'
+            raise ValueError('Bad FSSP file: no alignments title record found')
 
       if equiv_title.match(curline):
          break
