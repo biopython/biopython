@@ -60,10 +60,10 @@ def AlignAce(infile, cmd="AlignACE", **keywds):
     """
 
     if not os.path.exists(cmd):
-        raise IOError, "Executable does not exist at %s" % cmd
+        raise IOError("Executable does not exist at %s" % cmd)
 
     if not os.path.exists(infile):
-        raise IOError, "Input file does not exist at %s" % infile
+        raise IOError("Input file does not exist at %s" % infile)
     
     AlignCmd = AlignAceCommandline(cmd)
 

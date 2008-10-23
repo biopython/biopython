@@ -490,7 +490,7 @@ class SummaryInfo:
             else :
                 errstr = "Error in alphabet: not Nucleotide or Protein, "
                 errstr += "supply expected frequencies"
-                raise ValueError, errstr
+                raise ValueError(errstr)
             del base_alpha
         elif not isinstance(e_freq_table, FreqTable.FreqTable) :
             raise ValueError("e_freq_table should be a FreqTable object")

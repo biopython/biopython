@@ -28,13 +28,13 @@ class Motif(object):
         if self.length==None:
             self.length = len
         elif self.length != len:
-            raise ValueError, "You can't change the length of the motif"
+            raise ValueError("You can't change the length of the motif")
 
     def _check_alphabet(self,alphabet):
         if self.alphabet==None:
             self.alphabet=alphabet
         elif self.alphabet != alphabet:
-                raise ValueError, "Wrong Alphabet"
+                raise ValueError("Wrong Alphabet")
         
     def add_instance(self,instance):
         """

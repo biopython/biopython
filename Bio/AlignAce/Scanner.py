@@ -57,7 +57,7 @@ class AlignAceScanner:
             elif "*" in line:
                 consumer.motif_mask(line)
             else:
-                raise ValueError, line
+                raise ValueError(line)
 
 class CompareAceScanner:
     """Scannner for CompareACE output

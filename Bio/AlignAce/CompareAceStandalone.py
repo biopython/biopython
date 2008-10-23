@@ -34,7 +34,7 @@ def CompareAce( cmd="CompareACE", **keywds):
     """
 
     if not os.path.exists(cmd):
-        raise IOError, "Executable does not exist at %s" % cmd
+        raise IOError("Executable does not exist at %s" % cmd)
     
     CompareCmd = CompareAceCommandline(cmd)
 
