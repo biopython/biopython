@@ -69,7 +69,7 @@ class CodonAdaptationIndex:
 	def generate_index(self, FastaFile):
 		# first make sure i am not overwriting an existing index:
 		if self.index != {} or self.codon_count!={}:
-			raise Error("an index has already been set or a codon count has been done. cannot overwrite either.")
+			raise ValueError("an index has already been set or a codon count has been done. cannot overwrite either.")
 		# count codon occurances in the file.
 		self._count_codons(FastaFile)	
 	

@@ -262,7 +262,7 @@ def register_ncbi_table(name, alt_name, id,
 ##         line == 'Genetic-code-table ::= {\n':
 ##        pass
 ##    else:
-##        raise Error("Unparsed: " + repr(line))
+##        raise Exception("Unparsed: " + repr(line))
 
 register_ncbi_table(name = 'Standard',
                     alt_name = 'SGC0', id = 1,
