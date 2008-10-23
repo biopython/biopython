@@ -118,7 +118,7 @@ prosite_alphabet = PrositeAlphabet()
 
 def compile(pattern):
     if not verify_pattern(pattern):
-        raise TypeError, "not a legal prosite pattern"
+        raise TypeError("not a legal prosite pattern")
     return Prosite(pattern = pattern)
 
 class Prosite:
@@ -159,7 +159,7 @@ class Prosite:
         elif name == "pattern":
             self.pattern = str(self)
             return self.pattern
-        raise AttributeError, name
+        raise AttributeError(name)
 
     def tostring(self):
         return str(self)
@@ -353,7 +353,7 @@ $
 # be converted!
 def find_terms(pattern):
     if pattern[-1:] != ".":
-        raise TypeError, "not a prosite pattern - needs a final '.'"
+        raise TypeError("not a prosite pattern - needs a final '.'")
     pattern = pattern[:-1]
     terms = string.split(pattern, "-")
     result = []
@@ -376,7 +376,7 @@ def find_terms(pattern):
 
         match = prosite_term_re.match(term)
         if match is None:
-            raise TypeError, "not a Prosite term (%s)" % repr(term)
+            raise TypeError("not a Prosite term (%s)" % repr(term))
         if match.group(1) is not None:
             # Single letter
             ignore = 0
@@ -388,21 +388,21 @@ def find_terms(pattern):
             if match.group(2):
                 can_begin = 1
                 if i != 0:
-                    raise TypeError, \
-                          "[<] only allowed for first term (%s)" % repr(term)
+                    raise TypeError("[<] only allowed for first term (%s)" \
+                                    % repr(term))
                     
             if match.group(4):
                 can_end = 1
                 if i != len(terms) - 1:
-                    raise TypeError, \
-                          "[>] only allowed for last term (%s)" % repr(term)
+                    raise TypeError("[>] only allowed for last term (%s)" \
+                                    % repr(term))
                       
         elif match.group(5) is not None:
             # Letters inside of "{}"s
             ignore = 1
             letters = match.group(5)
         else:
-            raise TypeError, "not a prosite term (%s)" % repr(term)
+            raise TypeError("not a prosite term (%s)" % repr(term))
 
         if match.group(6) is not None:
             # there is a minimum number

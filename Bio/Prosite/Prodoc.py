@@ -56,7 +56,7 @@ def read(handle):
     # We should have reached the end of the record by now
     remainder = handle.read()
     if remainder:
-        raise ValueError, "More than one Prodoc record found"
+        raise ValueError("More than one Prodoc record found")
     return record
 
 
@@ -112,7 +112,7 @@ class Iterator:
         warnings.warn("Bio.Prosite.Prodoc.Iterator is deprecated; we recommend using the function Bio.Prosite.Prodoc.parse instead. Please contact the Biopython developers at biopython-dev@biopython.org you cannot use Bio.Prosite.Prodoc.parse instead of Bio.Prosite.Prodoc.Iterator.",
               DeprecationWarning)
         if type(handle) is not FileType and type(handle) is not InstanceType:
-            raise ValueError, "I expected a file handle or file-like object"
+            raise ValueError("I expected a file handle or file-like object")
         self._uhandle = File.UndoHandle(handle)
         self._parser = parser
 
@@ -200,21 +200,21 @@ class ExPASyDictionary:
         self.last_query_time = None
 
     def __len__(self):
-        raise NotImplementedError, "Prodoc contains lots of entries"
+        raise NotImplementedError("Prodoc contains lots of entries")
     def clear(self):
-        raise NotImplementedError, "This is a read-only dictionary"
+        raise NotImplementedError("This is a read-only dictionary")
     def __setitem__(self, key, item):
-        raise NotImplementedError, "This is a read-only dictionary"
+        raise NotImplementedError("This is a read-only dictionary")
     def update(self):
-        raise NotImplementedError, "This is a read-only dictionary"
+        raise NotImplementedError("This is a read-only dictionary")
     def copy(self):
-        raise NotImplementedError, "You don't need to do this..."
+        raise NotImplementedError("You don't need to do this...")
     def keys(self):
-        raise NotImplementedError, "You don't really want to do this..."
+        raise NotImplementedError("You don't really want to do this...")
     def items(self):
-        raise NotImplementedError, "You don't really want to do this..."
+        raise NotImplementedError("You don't really want to do this...")
     def values(self):
-        raise NotImplementedError, "You don't really want to do this..."
+        raise NotImplementedError("You don't really want to do this...")
     
     def has_key(self, id):
         """has_key(self, id) -> bool"""
@@ -229,7 +229,6 @@ class ExPASyDictionary:
             return self[id]
         except KeyError:
             return failobj
-        raise "How did I get here?"
 
     def __getitem__(self, id):
         """__getitem__(self, id) -> object
@@ -251,11 +250,11 @@ class ExPASyDictionary:
         try:
             handle = ExPASy.get_prodoc_entry(id)
         except IOError:
-            raise KeyError, id
+            raise KeyError(id)
         try:
             handle = File.StringHandle(_extract_record(handle))
         except ValueError:
-            raise KeyError, id
+            raise KeyError(id)
         
         if self.parser is not None:
             return self.parser.parse(handle)
@@ -370,16 +369,16 @@ class _RecordConsumer(AbstractConsumer):
     def accession(self, line):
         line = line.rstrip()
         if line[0] != '{' or line[-1] != '}':
-            raise ValueError, "I don't understand accession line\n%s" % line
+            raise ValueError("I don't understand accession line\n%s" % line)
         acc = line[1:-1]
         if acc[:4] != 'PDOC':
-            raise ValueError, "Invalid accession in line\n%s" % line
+            raise ValueError("Invalid accession in line\n%s" % line)
         self.data.accession = acc
 
     def prosite_reference(self, line):
         line = line.rstrip()
         if line[0] != '{' or line[-1] != '}':
-            raise ValueError, "I don't understand accession line\n%s" % line
+            raise ValueError("I don't understand accession line\n%s" % line)
         acc, name = line[1:-1].split('; ')
         self.data.prosite_refs.append((acc, name))
     
@@ -399,10 +398,10 @@ class _RecordConsumer(AbstractConsumer):
             self.data.references.append(self._ref)
         elif line[:4] == '    ':
             if not self._ref:
-                raise ValueError, "Unnumbered reference lines\n%s" % line
+                raise ValueError("Unnumbered reference lines\n%s" % line)
             self._ref.citation = self._ref.citation + line[5:]
         else:
-            raise "I don't understand the reference line\n%s" % line
+            raise Exception("I don't understand the reference line\n%s" % line)
 
     def _clean_data(self):
         # get rid of trailing newlines
@@ -422,7 +421,7 @@ def index_file(filename, indexname, rec2key=None):
     """
     import os
     if not os.path.exists(filename):
-        raise ValueError, "%s does not exist" % filename
+        raise ValueError("%s does not exist" % filename)
 
     index = Index.Index(indexname, truncate=1)
     index[Dictionary._Dictionary__filename_key] = filename
@@ -441,9 +440,9 @@ def index_file(filename, indexname, rec2key=None):
             key = record.accession
             
         if not key:
-            raise KeyError, "empty key was produced"
+            raise KeyError("empty key was produced")
         elif index.has_key(key):
-            raise KeyError, "duplicate key %s found" % key
+            raise KeyError("duplicate key %s found" % key)
 
         index[key] = start, length
 
@@ -478,5 +477,5 @@ def _extract_record(handle):
     p.feed(handle.read())
     data = ''.join(p.data).lstrip()
     if not data:
-        raise ValueError, "No data found in web page."
+        raise ValueError("No data found in web page.")
     return data

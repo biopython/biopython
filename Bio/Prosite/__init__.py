@@ -66,13 +66,13 @@ def read(handle):
         record = parser.parse(handle)
     except ValueError, error:
         if error.message=="There doesn't appear to be a record":
-            raise ValueError, "No Prosite record found"
+            raise ValueError("No Prosite record found")
         else:
             raise error
     # We should have reached the end of the record by now
     remainder = handle.read()
     if remainder:
-        raise ValueError, "More than one Prosite record found"
+        raise ValueError("More than one Prosite record found")
     return record
 
 class Record:
@@ -219,7 +219,7 @@ class Iterator:
         warnings.warn("Bio.Prosite.Iterator is deprecated; we recommend using the function Bio.Prosite.parse instead. Please contact the Biopython developers at biopython-dev@biopython.org you cannot use Bio.Prosite.parse instead of Bio.Prosite.Iterator.",
               DeprecationWarning)
         if type(handle) is not FileType and type(handle) is not InstanceType:
-            raise ValueError, "I expected a file handle or file-like object"
+            raise ValueError("I expected a file handle or file-like object")
         self._uhandle = File.UndoHandle(handle)
         self._parser = parser
 
@@ -240,8 +240,7 @@ class Iterator:
                 if line[:2] == '//':
                     break
                 if line[:2] != 'CC':
-                    raise ValueError, \
-                          "Oops, where's the copyright?"
+                    raise ValueError("Oops, where's the copyright?")
         
         lines = []
         while 1:
@@ -319,21 +318,21 @@ class ExPASyDictionary:
         self.limiter = RequestLimiter(delay)
 
     def __len__(self):
-        raise NotImplementedError, "Prosite contains lots of entries"
+        raise NotImplementedError("Prosite contains lots of entries")
     def clear(self):
-        raise NotImplementedError, "This is a read-only dictionary"
+        raise NotImplementedError("This is a read-only dictionary")
     def __setitem__(self, key, item):
-        raise NotImplementedError, "This is a read-only dictionary"
+        raise NotImplementedError("This is a read-only dictionary")
     def update(self):
-        raise NotImplementedError, "This is a read-only dictionary"
+        raise NotImplementedError("This is a read-only dictionary")
     def copy(self):
-        raise NotImplementedError, "You don't need to do this..."
+        raise NotImplementedError("You don't need to do this...")
     def keys(self):
-        raise NotImplementedError, "You don't really want to do this..."
+        raise NotImplementedError("You don't really want to do this...")
     def items(self):
-        raise NotImplementedError, "You don't really want to do this..."
+        raise NotImplementedError("You don't really want to do this...")
     def values(self):
-        raise NotImplementedError, "You don't really want to do this..."
+        raise NotImplementedError("You don't really want to do this...")
     
     def has_key(self, id):
         """has_key(self, id) -> bool"""
@@ -348,7 +347,6 @@ class ExPASyDictionary:
             return self[id]
         except KeyError:
             return failobj
-        raise "How did I get here?"
 
     def __getitem__(self, id):
         """__getitem__(self, id) -> object
@@ -365,11 +363,11 @@ class ExPASyDictionary:
         try:
             handle = ExPASy.get_prosite_entry(id)
         except IOError:
-            raise KeyError, id
+            raise KeyError(id)
         try:
             handle = File.StringHandle(_extract_record(handle))
         except ValueError:
-            raise KeyError, id
+            raise KeyError(id)
         
         if self.parser is not None:
             return self.parser.parse(handle)
@@ -421,7 +419,7 @@ class _Scanner:
             elif line[:2] == 'CC':
                 self._scan_copyrights(uhandle, consumer)
             else:
-                raise ValueError, "There doesn't appear to be a record"
+                raise ValueError("There doesn't appear to be a record")
 
     def _scan_copyrights(self, uhandle, consumer):
         consumer.start_copyrights()
@@ -575,15 +573,15 @@ class _RecordConsumer(AbstractConsumer):
     def identification(self, line):
         cols = line.split()
         if len(cols) != 3:
-            raise ValueError, "I don't understand identification line\n%s" % \
-                  line
+            raise ValueError("I don't understand identification line\n%s" \
+                             % line)
         self.data.name = self._chomp(cols[1])    # don't want ';'
         self.data.type = self._chomp(cols[2])    # don't want '.'
     
     def accession(self, line):
         cols = line.split()
         if len(cols) != 2:
-            raise ValueError, "I don't understand accession line\n%s" % line
+            raise ValueError("I don't understand accession line\n%s" % line)
         self.data.accession = self._chomp(cols[1])
     
     def date(self, line):
@@ -594,7 +592,7 @@ class _RecordConsumer(AbstractConsumer):
         if cols[2] != '(CREATED);' or \
            cols[4] != '(DATA' or cols[5] != 'UPDATE);' or \
            cols[7][:4] != '(INF' or cols[8] != 'UPDATE).':
-            raise ValueError, "I don't understand date line\n%s" % line
+            raise ValueError("I don't understand date line\n%s" % line)
 
         self.data.created = cols[1]
         self.data.data_update = cols[3]
@@ -633,8 +631,8 @@ class _RecordConsumer(AbstractConsumer):
             elif qual in ['/TOTAL', '/POSITIVE', '/UNKNOWN', '/FALSE_POS']:
                 m = re.match(r'(\d+)\((\d+)\)', data)
                 if not m:
-                    raise error, "Broken data %s in comment line\n%s" % \
-                          (repr(data), line)
+                    raise Exception("Broken data %s in comment line\n%s" \
+                                    % (repr(data), line))
                 hits = tuple(map(int, m.groups()))
                 if(qual == "/TOTAL"):
                     self.data.nr_total = hits
@@ -645,8 +643,8 @@ class _RecordConsumer(AbstractConsumer):
                 elif(qual == "/FALSE_POS"):
                     self.data.nr_false_pos = hits
             else:
-                raise ValueError, "Unknown qual %s in comment line\n%s" % \
-                      (repr(qual), line)
+                raise ValueError("Unknown qual %s in comment line\n%s" \
+                                 % (repr(qual), line))
     
     def comment(self, line):
         #Expect CC lines like this:
@@ -687,8 +685,8 @@ class _RecordConsumer(AbstractConsumer):
             elif qual == '/VERSION':
                 self.data.cc_version = data
             else:
-                raise ValueError, "Unknown qual %s in comment line\n%s" % \
-                      (repr(qual), line)
+                raise ValueError("Unknown qual %s in comment line\n%s" \
+                                 % (repr(qual), line))
             
     def database_reference(self, line):
         refs = self._clean(line).split(";")
@@ -707,7 +705,7 @@ class _RecordConsumer(AbstractConsumer):
             elif type == '?':
                 self.data.dr_unknown.append((acc, name))
             else:
-                raise ValueError, "I don't understand type flag %s" % type
+                raise ValueError("I don't understand type flag %s" % type)
     
     def pdb_reference(self, line):
         cols = line.split()
@@ -750,7 +748,7 @@ def scan_sequence_expasy(seq=None, id=None, exclude_frequent=None):
     """
     from Bio import ExPASy
     if (seq and id) or not (seq or id):
-        raise ValueError, "Please specify either a sequence or an id"
+        raise ValueError("Please specify either a sequence or an id")
     handle = ExPASy.scanprosite1(seq, id, exclude_frequent)
     return _extract_pattern_hits(handle)
 
@@ -785,7 +783,7 @@ def _extract_pattern_hits(handle):
                 self._last_found = 'pdoc'
             elif self._last_found == 'pdoc':
                 if data[:2] != 'PS':
-                    raise ValueError, "Expected accession but got:\n%s" % data
+                    raise ValueError("Expected accession but got:\n%s" % data)
                 self._current_hit.accession = data
                 self._last_found = 'accession'
             elif self._last_found == 'accession':
@@ -814,7 +812,7 @@ def _extract_pattern_hits(handle):
     p = parser()
     p.feed(handle.read())
     if p.broken_message:
-        raise ValueError, p.broken_message
+        raise ValueError(p.broken_message)
     return p.hits
 
 
@@ -832,7 +830,7 @@ def index_file(filename, indexname, rec2key=None):
     """
     import os
     if not os.path.exists(filename):
-        raise ValueError, "%s does not exist" % filename
+        raise ValueError("%s does not exist" % filename)
 
     index = Index.Index(indexname, truncate=1)
     index[Dictionary._Dictionary__filename_key] = filename
@@ -851,9 +849,9 @@ def index_file(filename, indexname, rec2key=None):
             key = record.name
             
         if not key:
-            raise KeyError, "empty key was produced"
+            raise KeyError("empty key was produced")
         elif index.has_key(key):
-            raise KeyError, "duplicate key %s found" % key
+            raise KeyError("duplicate key %s found" % key)
 
         index[key] = start, length
 
@@ -887,5 +885,5 @@ def _extract_record(handle):
     p = parser()
     p.feed(handle.read())
     if not p.data:
-        raise ValueError, "No data found in web page."
+        raise ValueError("No data found in web page.")
     return "".join(p.data)
