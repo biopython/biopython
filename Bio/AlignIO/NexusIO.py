@@ -90,7 +90,7 @@ class NexusWriter(AlignmentWriter) :
         except StopIteration :
             second_alignment = None
         if second_alignment is not None :
-            raise ValueError, "We can only write one Alignment to a Nexus file."
+            raise ValueError("We can only write one Alignment to a Nexus file.")
 
         #Good.  Actually write the single alignment,
         self.write_alignment(first_alignment)
@@ -119,7 +119,7 @@ class NexusWriter(AlignmentWriter) :
         a = Alphabet._get_base_alphabet(alphabet)
 
         if not isinstance(a, Alphabet.Alphabet) :
-            raise TypeError, "Invalid alphabet"
+            raise TypeError("Invalid alphabet")
         elif isinstance(a, Alphabet.ProteinAlphabet) :
             return "protein"
         elif isinstance(a, Alphabet.DNAAlphabet) :
@@ -129,7 +129,7 @@ class NexusWriter(AlignmentWriter) :
         else :
             #Must be something like NucleotideAlphabet or
             #just the generic Alphabet (default for fasta files)
-            raise ValueError, "Need a DNA, RNA or Protein alphabet"
+            raise ValueError("Need a DNA, RNA or Protein alphabet")
 
 if __name__ == "__main__" :
     from StringIO import StringIO

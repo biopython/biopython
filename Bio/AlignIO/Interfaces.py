@@ -47,7 +47,7 @@ class AlignmentIterator :
         
         This method should be replaced by any derived class to do something
         useful."""
-        raise NotImplementedError, "This object should be subclassed"
+        raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this, to split the file up    #
         # into your individual alignments and convert these #
@@ -86,7 +86,7 @@ class AlignmentWriter :
         
         This method should be replaced by any derived class to do something
         useful."""
-        raise NotImplementedError, "This object should be subclassed"
+        raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this, to write the alignment  #
         # objecta to the file handle                        #
@@ -139,7 +139,7 @@ class SequentialAlignmentWriter(AlignmentWriter) :
         
         This method should be replaced by any derived class to do something
         useful."""
-        raise NotImplementedError, "This object should be subclassed"
+        raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this, to write the alignment  #
         # objecta to the file handle                        #
