@@ -769,7 +769,7 @@ class DictionaryBuilder(object) :
                 #
                 #   should not happend
                 #
-                raise ValueError, 'Error in #1'
+                raise ValueError('Error in #1')
         elif fst3 < 0 and size < fst5 :
             #
             #   3' overhang. site is included.
@@ -893,7 +893,8 @@ class DictionaryBuilder(object) :
                         line.append(bl[1])
                         line.append(bl[2])
                         i2 += 1
-                    else : raise TypeError  
+                    else :
+                        raise TypeError  
                 oldblock = block
                 i2 += 1
                 try :

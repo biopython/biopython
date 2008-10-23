@@ -83,7 +83,7 @@ class Async:
             return None
 
 class FileRetriever:
-    '''A Abstract Support class to retrieve files.
+    '''An Abstract Support class to retrieve files.
     '''
 
     def __init__(self):
@@ -95,7 +95,7 @@ class FileRetriever:
         return self.file_list
 
     def get_file(self, name):
-        raise NotImplementedError, 'Abstract method'
+        raise NotImplementedError('Abstract method')
 
 class DirectoryRetriever(FileRetriever):
     '''Retrieves a directory content.

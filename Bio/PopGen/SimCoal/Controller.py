@@ -1,7 +1,10 @@
 # Copyright 2007 by Tiago Antao <tiagoantao@gmail.com>.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
 """
-This module allows to control Simcoal2.
+This module allows you to control Simcoal2.
 
 """
 
@@ -31,9 +34,9 @@ class SimCoalController:
         if self.bin_name in dir_contents:
             if not os.access(self.simcoal_dir + os.sep +
                 self.bin_name, os.X_OK):
-                raise IOError, "SimCoal not executable"
+                raise IOError("SimCoal not executable")
         else:
-            raise IOError, "SimCoal not available"
+            raise IOError("SimCoal not available")
 
     def run_simcoal(self, par_file, num_sims, ploydi = '1', par_dir = '.'):
         """Executes SimCoal.

@@ -116,7 +116,7 @@ class _Scanner:
                     pop_dist = map(lambda x: int(x), line_comp)
                     pops_data.append(pop_dist)
             else:
-                raise NotImplementedError, '1/alleles by rows not implemented'
+                raise NotImplementedError('1/alleles by rows not implemented')
             consumer.new_locus(num_alleles, pops_data)
         consumer.end_record()
 

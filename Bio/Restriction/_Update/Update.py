@@ -35,9 +35,9 @@ class RebaseUpdate(FancyURLopener) :
         global Rebase_password
         Rebase_password = e_mail or Rebase_password
         if not Rebase_password :
-            raise FtpPasswordError, 'Rebase'
+            raise FtpPasswordError('Rebase')
         if not Rebase_name :
-            raise FtpNameError, 'Rebase'
+            raise FtpNameError('Rebase')
         FancyURLopener.__init__(self, proxy)
 
     def prompt_user_passwd(self, host, realm) :
@@ -48,7 +48,7 @@ class RebaseUpdate(FancyURLopener) :
         try :
             self.open(name)
         except :
-            raise ConnectionError, 'Rebase'
+            raise ConnectionError('Rebase')
         return
 
     def getfiles(self, *files) :
