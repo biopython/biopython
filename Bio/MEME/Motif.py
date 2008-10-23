@@ -74,7 +74,7 @@ class Motif:
     
     def make_pssm (self):
         if self.alphabet == None:
-            raise ValueError, "Alphabet for motif has not been set"
+            raise ValueError("Alphabet for motif has not been set")
         moieties = ''
         if self.alphabet == IUPAC.unambiguous_dna:
             moieties = 'ACGT'
@@ -169,9 +169,9 @@ class MEMEMotif (Motif):
     def compare_motifs (self, motif):
         if isinstance(motif, MEMEMotif):
             if not self.pssm:
-                raise ValueError, 'This motif does not have a PSSM'
+                raise ValueError('This motif does not have a PSSM')
             if not motif.pssm:
-                raise ValueError, 'The other motif does not have a PSSM'
+                raise ValueError('The other motif does not have a PSSM')
             mylen = len(self.pssm)
             yourlen = len(motif.pssm)
             myr = None

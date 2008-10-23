@@ -87,7 +87,7 @@ class _MEMEScanner:
         try:
             read_and_call_until(uhandle, consumer.noevent, contains = 'MEME version')
         except ValueError:
-            raise ValueError, "Improper input file. File should contain a line starting MEME version."
+            raise ValueError("Improper input file. File should contain a line starting MEME version.")
         read_and_call(uhandle, consumer._version, start = 'MEME version')
         read_and_call_until(uhandle, consumer.noevent, start = 'TRAINING SET')
         read_and_call(uhandle, consumer.noevent, start = 'TRAINING SET')
@@ -500,7 +500,7 @@ class _MASTScanner:
         try:
             read_and_call_until(uhandle, consumer.noevent, contains = "MAST version")
         except ValueError:
-            raise ValueError, "Improper input file. Does not begin with a line with 'MAST version'"
+            raise ValueError("Improper input file. Does not begin with a line with 'MAST version'")
         read_and_call(uhandle, consumer._version, contains = 'MAST version')
         read_and_call_until(uhandle, consumer.noevent, start = 'DATABASE AND MOTIFS')
         read_and_call(uhandle, consumer.noevent, start = 'DATABASE')
