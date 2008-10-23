@@ -9,7 +9,7 @@
 A set of generic bits of code under Bio.GFF (possibly obsolete).
 """
 
-__version__ = "$Revision: 1.5 $"
+__version__ = "$Revision: 1.6 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/GenericTools.py,v $
 
 import exceptions
@@ -79,12 +79,12 @@ class Surrogate(object):
 
     def __getattr__(self, name):
         if name == "_data":
-            raise SurrogateNotInitedError, name
+            raise SurrogateNotInitedError(name)
         else:
             try:
                 return getattr(self._data, name)
             except SurrogateNotInitedError:
-                raise SurrogateNotInitedError, name
+                raise SurrogateNotInitedError(name)
 
 
 def defline_text(defline):

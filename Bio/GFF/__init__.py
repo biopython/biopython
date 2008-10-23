@@ -19,7 +19,7 @@ based on documentation for Lincoln Stein's Perl Bio::DB::GFF
 
 """
 
-__version__ = "$Revision: 1.8 $"
+__version__ = "$Revision: 1.9 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/__init__.py,v $
 
 import exceptions
@@ -182,7 +182,7 @@ class Feature(object):
                  location=None,
                  alphabet=DEFAULT_ALPHABET):
         if not isinstance(seqname, (types.StringType, types.NoneType)):
-            raise exceptions.TypeError, "seqname needs to be string"
+            raise exceptions.TypeError("seqname needs to be string")
         self.frame = frame
         self.alphabet = alphabet
         if location is None:

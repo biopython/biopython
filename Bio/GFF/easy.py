@@ -9,7 +9,7 @@
 Bio.GFF.easy: some functions to ease the use of Biopython
 """
 
-__version__ = "$Revision: 1.10 $"
+__version__ = "$Revision: 1.11 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/easy.py,v $
 
 import copy
@@ -157,7 +157,7 @@ class Location(GenericTools.VerboseList):
         elif self.join:
             return self[index].findseqname(direction)
         else:
-            raise AttributeError, 'no sequence name'
+            raise AttributeError('no sequence name')
 
     def five_prime(self):
         return self.findside(1)
@@ -558,7 +558,7 @@ def record_sequence(record):
     elif isinstance(record, Bio.GenBank.Record.Record):
         return Seq(record.sequence)
     else:
-        raise TypeError, 'not Bio.SeqRecord.SeqRecord or Bio.GenBank.Record.Record'
+        raise TypeError('not Bio.SeqRecord.SeqRecord or Bio.GenBank.Record.Record')
 
 def record_coords(record, start, end, strand=0, upper=0):
     """
