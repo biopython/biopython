@@ -87,7 +87,7 @@ class SeqRecord(object):
         string.
 
         e.g.
-        print my_record.to_format("fasta")
+        print my_record.format("fasta")
 
         This will NOT work on every possible file format supported by
         Bio.SeqIO (e.g. some are for multiple sequences only).
