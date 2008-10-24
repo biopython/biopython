@@ -135,7 +135,7 @@ from StringIO import StringIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align.Generic import Alignment
-from Bio.Alphabet import Alphabet, AlphabetEncoder
+from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 
 import StockholmIO
 import ClustalIO
@@ -227,7 +227,6 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None) 
     the file are combined into a single Alignment.
     """
     from Bio import SeqIO
-
     assert format in SeqIO._FormatToIterator
 
     if seq_count :
@@ -255,9 +254,19 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None) 
 def _force_alphabet(alignment_iterator, alphabet) :
      """Iterate over alignments, over-riding the alphabet (PRIVATE)."""
      #Assume the alphabet argument has been pre-validated
-     #TODO - Check the given alphabet is compatible?
+     given_base_class = _get_base_alphabet(alphabet).__class__
      for align in alignment_iterator :
+         if not isinstance(_get_base_alphabet(align._alphabet),
+                           given_base_class) :
+             raise ValueError("Specified alphabet %s clashes with "\
+                              "that determined from the file, %s" \
+                              % (repr(alphabet), repr(align._alphabet)))
          for record in align :
+             if not isinstance(_get_base_alphabet(record.seq.alphabet),
+                               given_base_class) :
+                 raise ValueError("Specified alphabet %s clashes with "\
+                                  "that determined from the file, %s" \
+                            % (repr(alphabet), repr(record.seq.alphabet)))
              record.seq.alphabet = alphabet
          align._alphabet = alphabet
          yield align
@@ -315,7 +324,9 @@ def parse(handle, format, seq_count=None, alphabet=None) :
 
     elif format in SeqIO._FormatToIterator :
         #Exploit the existing SeqIO parser to the dirty work!
-        return _SeqIO_to_alignment_iterator(handle, format, alphabet, seq_count)
+        return _SeqIO_to_alignment_iterator(handle, format,
+                                            alphabet=alphabet,
+                                            seq_count=seq_count)
     else :
         raise ValueError("Unknown format '%s'" % format)
 

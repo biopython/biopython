@@ -201,7 +201,7 @@ from StringIO import StringIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align.Generic import Alignment
-from Bio.Alphabet import Alphabet, AlphabetEncoder
+from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 
 import AceIO
 import FastaIO
@@ -351,10 +351,16 @@ def _iterate_via_AlignIO(handle, format, alphabet) :
 def _force_alphabet(record_iterator, alphabet) :
      """Iterate over records, over-riding the alphabet (PRIVATE)."""
      #Assume the alphabet argument has been pre-validated
-     #TODO - Check the given alphabet is compatible?
+     given_base_class = _get_base_alphabet(alphabet).__class__
      for record in record_iterator :
-         record.seq.alphabet = alphabet
-         yield record
+         if isinstance(_get_base_alphabet(record.seq.alphabet),
+                       given_base_class) :
+             record.seq.alphabet = alphabet
+             yield record
+         else :
+             raise ValueError("Specified alphabet %s clashes with "\
+                              "that determined from the file, %s" \
+                              % (repr(alphabet), repr(record.seq.alphabet)))
 
 def read(handle, format, alphabet=None) :
     """Turns a sequence file into a single SeqRecord.

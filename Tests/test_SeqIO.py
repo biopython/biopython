@@ -18,7 +18,12 @@ from Bio.Seq import Seq
 from StringIO import StringIO
 from Bio import Alphabet
 
-no_alpha_formats = ["fasta","clustal","phylip","tab","ig"]
+protein_alphas = [Alphabet.generic_protein]
+dna_alphas = [Alphabet.generic_dna]
+rna_alphas = [Alphabet.generic_rna]
+nucleotide_alphas = [Alphabet.generic_nucleotide,
+                     Alphabet.Gapped(Alphabet.generic_nucleotide)]
+no_alpha_formats = ["fasta","clustal","phylip","tab","ig","stockholm","emboss"]
 
 #List of formats including alignment only file formats we can read AND write.
 #The list is initially hard coded to preserve the original order of the unit
@@ -422,23 +427,43 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
         assert isinstance(base_alpha, Alphabet.SingleLetterAlphabet)
         if t_format in no_alpha_formats :
             assert base_alpha == Alphabet.single_letter_alphabet # Too harsh?
-    if t_format in no_alpha_formats :
-        #Make sure the supplied alphabet is used AS IS.
-        for given_alpha in [Alphabet.generic_protein,
-                      Alphabet.generic_dna,
-                      Alphabet.generic_rna,
-                      Alphabet.generic_nucleotide,
-                      Alphabet.Gapped(Alphabet.generic_nucleotide),
-                      ] :
-            given_base = Alphabet._get_base_alphabet(given_alpha)
-            for record in SeqIO.parse(open(t_filename),t_format,given_alpha):
-                base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
-                assert isinstance(base_alpha, given_base.__class__)
-                assert base_alpha == given_base
-            if t_count == 1 :
-                record = SeqIO.read(open(t_filename),t_format,given_alpha)
-                assert isinstance(base_alpha, given_base.__class__)
-                assert base_alpha == given_base
+    if isinstance(base_alpha, Alphabet.ProteinAlphabet) :
+        good = protein_alphas
+        bad = dna_alphas + rna_alphas + nucleotide_alphas
+    elif isinstance(base_alpha, Alphabet.RNAAlphabet) :
+        good = nucleotide_alphas + rna_alphas
+        bad = protein_alphas + dna_alphas
+    elif isinstance(base_alpha, Alphabet.DNAAlphabet) :
+        good = nucleotide_alphas + dna_alphas
+        bad = protein_alphas + rna_alphas
+    elif isinstance(base_alpha, Alphabet.NucleotideAlphabet) :
+        good = nucleotide_alphas
+        bad = protein_alphas
+    else :
+        assert t_format in no_alpha_formats, "Got %s from %s file" \
+               % (repr(base_alpha), t_format)
+        good = protein_alphas + dna_alphas + rna_alphas + nucleotide_alphas
+        bad = []
+    for given_alpha in good :
+        #These should all work...
+        given_base = Alphabet._get_base_alphabet(given_alpha)
+        for record in SeqIO.parse(open(t_filename),t_format,given_alpha):
+            base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
+            assert isinstance(base_alpha, given_base.__class__)
+            assert base_alpha == given_base
+        if t_count == 1 :
+            record = SeqIO.read(open(t_filename),t_format,given_alpha)
+            assert isinstance(base_alpha, given_base.__class__)
+            assert base_alpha == given_base
+    for given_alpha in bad :
+        #These should all fail...
+        try :
+            print SeqIO.parse(open(t_filename),t_format,given_alpha).next()
+            assert False, "Forcing wrong alphabet, %s, should fail (%s)" \
+                   % (repr(given_alpha), t_filename)
+        except ValueError :
+            pass
+    del good, bad, given_alpha, base_alpha
 
     if t_alignment :
         print "Testing reading %s format file %s as an alignment" \
