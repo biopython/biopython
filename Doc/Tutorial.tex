@@ -3040,8 +3040,23 @@ Again, we could use EFetch to obtain more information for each of these journal 
 
 ESearch has many useful options --- see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/esearch\_help.html}{ESearch help page} for more information.
 
-\section{EPost}
-EPost posts a list of UIs for use in subsequent search strategies; see the  \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/epost\_help.html}{EPost help page} for more information. It is available from Biopython through \verb+Bio.Entrez.epost()+.
+\section{EPost: Uploading a list of identifiers}
+EPost uploads a list of UIs for use in subsequent search strategies; see the
+\href{http://www.ncbi.nlm.nih.gov/entrez/query/static/epost\_help.html}{EPost help page} for more information. It is available from Biopython through
+the \verb+Bio.Entrez.epost()+ function.
+
+To give an example of when this is useful, suppose you have a long list IDs
+you want to download using EFetch (maybe sequences, maybe citations --
+anything). When you make a  request with EFetch your list of IDs, the database
+etc are all turned into a long URL sent to the server.  If your list of IDs is
+long, this URL gets long, and long URLs can break (e.g. some proxies don't
+cope well).
+
+Instead, you can break this up into two steps, first uploading the list of IDs
+using EPost (this uses an "HTML post" internally, rather than an "HTML get",
+getting round the long URL problem).  With the history support, you can then
+refer to this long list of IDs, and download the associated data with EFetch
+(see Section~\ref{sec:entrez-webenv}).
 
 \section{ESummary: Retrieving summaries from primary IDs}
 ESummary retrieves document summaries from a list of primary IDs (see the  \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/esummary\_help.html}{ESummary help page} for more information). In Biopython, ESummary is available as \verb+Bio.Entrez.esummary()+. Using the search result above, we can for example find out more about the journal with ID 30367:
@@ -3426,7 +3441,7 @@ Especially interesting to note is the list of authors, which is returned as a st
 
 Hopefully this section gave you an idea of the power and flexibility of the Entrez and Medline interfaces and how they can be used together.
 
-\subsection{Searching, downloading, and parsing Entrez Nucleotide records with Bio.Entrez}
+\subsection{Searching, downloading, and parsing Entrez Nucleotide records}
 \label{subsec:entrez_example_genbank}
 
 Here we'll show a simple example of performing a remote Entrez query. In section~\ref{sec:orchids} of the parsing examples, we talked about using NCBI's Entrez website to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a Python script. In this example, we'll just show how to connect, get the results, and parse them, with the Entrez module doing all of the work.
@@ -3511,7 +3526,7 @@ Cypripedium calceolus
 
 You could use this to quickly set up searches -- but for heavy usage, see Section~\ref{sec:entrez-webenv}.
 
-\subsection{Searching, downloading, and parsing GenBank records using Bio.Entrez and Bio.SeqIO}
+\subsection{Searching, downloading, and parsing GenBank records}
 \label{sec:entrez-search-fetch-genbank}
 
 The GenBank record format is a very popular method of holding information about sequences, sequence features, and other associated sequence information. The format is a good way to get information from the NCBI databases at \url{http://www.ncbi.nlm.nih.gov/}.
