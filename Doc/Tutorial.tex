@@ -3053,10 +3053,35 @@ long, this URL gets long, and long URLs can break (e.g. some proxies don't
 cope well).
 
 Instead, you can break this up into two steps, first uploading the list of IDs
-using EPost (this uses an "HTML post" internally, rather than an "HTML get",
+using EPost (this uses an ``HTML post'' internally, rather than an ``HTML get'',
 getting round the long URL problem).  With the history support, you can then
-refer to this long list of IDs, and download the associated data with EFetch
-(see Section~\ref{sec:entrez-webenv}).
+refer to this long list of IDs, and download the associated data with EFetch.
+
+Let's look at a simple example to see how EPost works -- uploading some PubMed identifiers:
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+>>> id_list = ['18606172', '16403221', '16377612', '14871861', '14630660']
+>>> print Entrez.epost("pubmed", id=",".join(id_list)).read()
+<?xml version="1.0"?>
+<!DOCTYPE ePostResult PUBLIC "-//NLM//DTD ePostResult, 11 May 2002//EN"
+ "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/ePost_020511.dtd">
+<ePostResult>
+	<QueryKey>1</QueryKey>
+	<WebEnv>06QtR6pVc1VZEbFZYgmSORUbB71DSx9I5N6bFCcW46LpYQ1Y...0002SID</WebEnv>
+</ePostResult>
+\end{verbatim}
+\noindent The returned XML includes two important strings, \verb|QueryKey| and \verb|WebEnv| which together define your history session.
+You would extract these values for use with another Entrez call such as EFetch:
+\begin{verbatim}
+from Bio import Entrez
+Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+id_list = ['18606172', '16403221', '16377612', '14871861', '14630660']
+search_results = Entrez.read(Entrez.epost("pubmed", id=",".join(id_list)))
+webenv = search_results["WebEnv"]
+query_key = search_results["QueryKey"] 
+\end{verbatim}
+\noindent Section~\ref{sec:entrez-webenv} shows how to use the history feature.
 
 \section{ESummary: Retrieving summaries from primary IDs}
 ESummary retrieves document summaries from a list of primary IDs (see the  \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/esummary\_help.html}{ESummary help page} for more information). In Biopython, ESummary is available as \verb+Bio.Entrez.esummary()+. Using the search result above, we can for example find out more about the journal with ID 30367:
@@ -3651,15 +3676,30 @@ The record data contains much more than just the information shown here - for ex
 \section{Using the history and WebEnv}
 \label{sec:entrez-webenv}
 
-Often you will want to make a series of linked queries.  Most typically, running a search, perhaps refining the search, and then retrieving detailed search results.  You \emph{can} do this by making a series of separate calls to Entrez.  However, the NCBI prefer you to take advantage of their history support.
+Often you will want to make a series of linked queries.  Most typically,
+running a search, perhaps refining the search, and then retrieving detailed
+search results.  You \emph{can} do this by making a series of separate calls
+to Entrez.  However, the NCBI prefer you to take advantage of their history
+support - for example combining ESearch and EFetch.
+
+Another typical use of the history support would be to combine EPost and
+EFetch.  You use EPost to upload a list of identifiers, which starts a new
+history session.  You then download the records with EFetch by referring
+to the session (instead of the identifiers).
 
 \subsection{Searching for and downloading sequences using the history}
-For example, suppose we want to search and download all the \textit{Opuntia} rpl16 nucleotide sequences, and store them in a FASTA file.  As shown in Section~\ref{sec:entrez-search-fetch-genbank}, we can naively combine \verb|Bio.Entrez.esearch()|
-to get a list of GI numbers, and then call \verb|Bio.Entrez.efetch()| to download them all.
+Suppose we want to search and download all the \textit{Opuntia} rpl16
+nucleotide sequences, and store them in a FASTA file.  As shown in
+Section~\ref{sec:entrez-search-fetch-genbank}, we can naively combine
+\verb|Bio.Entrez.esearch()| to get a list of GI numbers, and then call
+\verb|Bio.Entrez.efetch()| to download them all.
 
-However, the approved approach is to run the search with the history feature.  Then, we can fetch the results by reference to the search results - which the NCBI can anticipate and cache.
+However, the approved approach is to run the search with the history
+feature.  Then, we can fetch the results by reference to the search
+results - which the NCBI can anticipate and cache.
 
-To do this, you call \verb|Bio.Entrez.esearch()| as normal, but with the additional argument of \verb|usehistory="y"|,
+To do this, you call \verb|Bio.Entrez.esearch()| as normal, but with the
+additional argument of \verb|usehistory="y"|,
 
 \begin{verbatim}
 >>> from Bio import Entrez
@@ -3681,7 +3721,7 @@ To do this, you call \verb|Bio.Entrez.esearch()| as normal, but with the additio
 \noindent However, you also get given two additional pieces of information, the {\tt WebEnv} session cookie, and the {\tt QueryKey}:
 
 \begin{verbatim}
->>> session_cookie = search_results["WebEnv"]
+>>> webenv = search_results["WebEnv"]
 >>> query_key = search_results["QueryKey"] 
 \end{verbatim}
 
@@ -3697,7 +3737,7 @@ for start in range(0,count,batch_size) :
     print "Going to download record %i to %i" % (start+1, end)
     fetch_handle = Entrez.efetch(db="nucleotide", rettype="fasta",
                                  retstart=start, retmax=batch_size,
-                                 webenv=session_cookie, query_key=query_key)
+                                 webenv=webenv, query_key=query_key)
     data = fetch_handle.read()
     fetch_handle.close()
     out_handle.write(data)
