@@ -16,7 +16,9 @@ from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
 from StringIO import StringIO
-from Bio.Alphabet import generic_protein, generic_rna, generic_dna
+from Bio import Alphabet
+
+no_alpha_formats = ["fasta","clustal","phylip","tab","ig"]
 
 #List of formats including alignment only file formats we can read AND write.
 #The list is initially hard coded to preserve the original order of the unit
@@ -153,28 +155,28 @@ test_files = [ \
 # list of SeqRecord objects and a description (string)
 test_records = [
     ([], "zero records"),
-    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL",generic_protein), id="Alpha"),
-      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",generic_protein), id="Gamma"),
-      SeqRecord(Seq("DITHGVG",generic_protein), id="delta")],
+    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL",Alphabet.generic_protein), id="Alpha"),
+      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",Alphabet.generic_protein), id="Gamma"),
+      SeqRecord(Seq("DITHGVG",Alphabet.generic_protein), id="delta")],
      "three peptides of different lengths"),
-    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL",generic_protein), id="Alpha"),
-      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",generic_protein), id="Beta"),
-      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",generic_protein), id="Gamma")],
+    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL",Alphabet.generic_protein), id="Alpha"),
+      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",Alphabet.generic_protein), id="Beta"),
+      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",Alphabet.generic_protein), id="Gamma")],
      "three proteins alignment"),
-    ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA",generic_dna), id="X"),
-      SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA",generic_dna), id="Y"),
-      SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT",generic_dna), id="Z")],
+    ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA",Alphabet.generic_dna), id="X"),
+      SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA",Alphabet.generic_dna), id="Y"),
+      SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT",Alphabet.generic_dna), id="Z")],
      "three DNA sequence alignment"),
-    ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA",generic_dna), id="X",
+    ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA",Alphabet.generic_dna), id="X",
                 name="The\nMystery\rSequece:\r\nX"),
-      SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA",generic_dna), id="Y",
+      SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA",Alphabet.generic_dna), id="Y",
                 description="an%sevil\rdescription right\nhere" % os.linesep),
-      SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT",generic_dna), id="Z")],
+      SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT",Alphabet.generic_dna), id="Z")],
      "3 DNA seq alignment with CR/LF in name/descr"),
-    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL",generic_protein), id="Alpha"),
-      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",generic_protein), id="Beta"),
-      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",generic_protein), id="Beta"),
-      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",generic_protein), id="Gamma")],
+    ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL",Alphabet.generic_protein), id="Alpha"),
+      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",Alphabet.generic_protein), id="Beta"),
+      SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",Alphabet.generic_protein), id="Beta"),
+      SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",Alphabet.generic_protein), id="Gamma")],
      "alignment with repeated record"),
     ]
 # Meddle with the annotation too:
@@ -414,6 +416,29 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
             #Expected to fail
             pass
 
+    # Check alphabets
+    for record in records :
+        base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
+        assert isinstance(base_alpha, Alphabet.SingleLetterAlphabet)
+        if t_format in no_alpha_formats :
+            assert base_alpha == Alphabet.single_letter_alphabet # Too harsh?
+    if t_format in no_alpha_formats :
+        #Make sure the supplied alphabet is used AS IS.
+        for given_alpha in [Alphabet.generic_protein,
+                      Alphabet.generic_dna,
+                      Alphabet.generic_rna,
+                      Alphabet.generic_nucleotide,
+                      Alphabet.Gapped(Alphabet.generic_nucleotide),
+                      ] :
+            given_base = Alphabet._get_base_alphabet(given_alpha)
+            for record in SeqIO.parse(open(t_filename),t_format,given_alpha):
+                base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
+                assert isinstance(base_alpha, given_base.__class__)
+                assert base_alpha == given_base
+            if t_count == 1 :
+                record = SeqIO.read(open(t_filename),t_format,given_alpha)
+                assert isinstance(base_alpha, given_base.__class__)
+                assert base_alpha == given_base
 
     if t_alignment :
         print "Testing reading %s format file %s as an alignment" \
