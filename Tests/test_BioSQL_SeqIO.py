@@ -29,7 +29,7 @@ try :
     from setup_BioSQL import DBDRIVER, DBTYPE
     from setup_BioSQL import DBHOST, DBUSER, DBPASSWD, TESTDB
     from setup_BioSQL import DBSCHEMA, SQL_FILE
-except NameError :
+except (NameError, ImportError) :
     message = "Check settings in Tests/setup_BioSQL.py "\
               "if you plan to use BioSQL."
     raise MissingExternalDependencyError(message)
