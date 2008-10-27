@@ -1,0 +1,32 @@
+test_Clustalw_tool
+Calling clustalw on 'Fasta/f002' (with 3 records)
+using output file 'temp_test.aln'
+Got an alignment, 3 sequences of length 637
+
+Calling clustalw on 'GFF/multi.fna' (with 3 records)
+using output file 'temp with space.aln'
+Got an alignment, 3 sequences of length 9
+
+Calling clustalw on 'Registry/seqs.fasta' (with 2 records)
+using output file 'temp_test.aln'
+Got an alignment, 2 sequences of length 291
+
+Calling clustalw on 'Registry/seqs.fasta' (with 2 records)
+using output file 'temp_test.aln'
+requesting output guide tree file 'temp_test.dnd'
+Got an alignment, 2 sequences of length 291
+
+Calling clustalw on 'Registry/seqs.fasta' (with 2 records)
+using output file 'temp_test.aln'
+requesting output guide tree file 'temp with space.dnd'
+Got an alignment, 2 sequences of length 291
+
+Calling clustalw on 'Clustalw/temp horses.fasta' (with 10 records)
+using output file 'temp_test.aln'
+Got an alignment, 10 sequences of length 41
+
+Calling clustalw on 'Clustalw/temp horses.fasta' (with 10 records)
+using output file 'temp with space.aln'
+Got an alignment, 10 sequences of length 41
+
+Done

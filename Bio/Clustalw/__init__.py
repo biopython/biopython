@@ -168,6 +168,22 @@ class ClustalAlignment(Alignment):
         handle.seek(0)
         return handle.read()
             
+def _escape_filename(filename) :
+    """Escape filenames with spaces (PRIVATE).
+
+    NOTE - This code is duplicated in Bio.Blast.NCBIStandalone,
+    scope for refactoring!
+    """
+    if " " not in filename :
+        return filename
+
+    #We'll just quote it - works on Mac etc
+    if filename.startswith('"') and filename.endswith('"') :
+        #Its already quoted
+        return filename
+    else :
+        return '"%s"' % filename
+
 class MultipleAlignCL:
     """Represent a clustalw multiple alignment command line.
 
@@ -291,23 +307,14 @@ class MultipleAlignCL:
         #
         #Thanks to Emanuel Hey for flagging this on the mailing list.
         #
-        #In addtion, both self.command and self.sequence_file
+        #In addition, both self.command and self.sequence_file
         #may contain spaces, so should be quoted. But clustalw
         #is fussy.
-        if self.command.count(" ") > 0 :
-            cline = '"%s"' % self.command
-        else :
-            cline = self.command
+        cline = _escape_filename(self.command)
         if sys.platform == "win32" :
-            if self.sequence_file.count(" ") > 0 :
-                cline += ' /INFILE="%s"' % self.sequence_file
-            else :
-                cline += ' /INFILE=%s' % self.sequence_file
+            cline += ' /INFILE=%s' % _escape_filename(self.sequence_file)
         else :
-            if self.sequence_file.count(" ") > 0 :
-                cline += ' -INFILE="%s"' % self.sequence_file
-            else :
-                cline += ' -INFILE=%s' % self.sequence_file
+            cline += ' -INFILE=%s' % _escape_filename(self.sequence_file)
 
         # general options
         if self.type:
@@ -321,7 +328,7 @@ class MultipleAlignCL:
 
         # output options
         if self.output_file:
-            cline += " -OUTFILE=%s" % self.output_file
+            cline += " -OUTFILE=%s" % _escape_filename(self.output_file)
         if self.output_type:
             cline += " -OUTPUT=%s" % self.output_type
         if self.output_order:
@@ -332,11 +339,11 @@ class MultipleAlignCL:
             cline += " -SEQNOS=%s" % self.add_seqnos
         if self.new_tree:
             # clustal does not work if -align is written -ALIGN
-            cline += " -NEWTREE=%s -align" % self.new_tree
+            cline += " -NEWTREE=%s -align" % _escape_filename(self.new_tree)
 
         # multiple alignment options
         if self.guide_tree:
-            cline += " -USETREE=%s" % self.guide_tree
+            cline += " -USETREE=%s" % _escape_filename(self.guide_tree)
         if self.protein_matrix:
             cline += " -MATRIX=%s" % self.protein_matrix
         if self.dna_matrix:
