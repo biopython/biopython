@@ -13,6 +13,13 @@ train        Train a new classifier.
 calculate    Calculate the probabilities of each class, given an observation.
 classify     Classify an observation into a class.
 """
+
+#TODO - Remove this work around once we drop python 2.3 support
+try:
+    set = set
+except NameError:
+    from sets import Set as set
+
 from numpy import *
 from numpy.linalg import *
 

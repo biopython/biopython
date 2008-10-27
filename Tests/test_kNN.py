@@ -6,9 +6,14 @@
 # See the Biopython Tutorial for an explanation of the biological
 # background of these tests.
 
-
 import unittest
 import sys
+
+#TODO - Remove this work around once we drop python 2.3 support
+try:
+    set = set
+except NameError:
+    from sets import Set as set
 
 from numpy import *
 from Bio import kNN

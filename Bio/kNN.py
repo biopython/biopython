@@ -24,6 +24,13 @@ classify     Classify an observation into a class.
 equal_weight    Every example is given a weight of 1.
 
 """
+
+#TODO - Remove this work around once we drop python 2.3 support
+try:
+    set = set
+except NameError:
+    from sets import Set as set
+
 from numpy import *
 
 class kNN:
