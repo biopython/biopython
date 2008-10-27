@@ -21,6 +21,6 @@ print "Fraction of amino acids in Turn: %.2f" % Turn
 print "Fraction of amino acids in Sheet: %.2f" % Sheet
 print "\nKyte and Doolittle protein scale:"
 for i in X.protein_scale(ProtParamData.kd, 9, 0.4):
-	print "%.3f" %i
+	print "% 0.2f" %i
 print "\nGRAVY:"
-print X.gravy()
+print "%0.4f" % X.gravy()
