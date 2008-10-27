@@ -817,14 +817,22 @@ def qblast(program, database, sequence,
     return StringIO.StringIO(results)
 
 def _parse_qblast_ref_page(handle):
-    """Extract a tuple of RID, RTOE from the 'please wait' page (PRIVATE)."""
+    """Extract a tuple of RID, RTOE from the 'please wait' page (PRIVATE).
+    """
     s = handle.read()
     i = s.find("RID =")
+    if i == 1 :
+        raise ValueError("No RID found in the 'please wait' page.")
     j = s.find("\n", i)
     rid = s[i+len("RID ="):j].strip()
 
     i = s.find("RTOE =")
+    if i == 1 :
+        raise ValueError("No RTOE found in the 'please wait' page.")
     j = s.find("\n", i)
     rtoe = s[i+len("RTOE ="):j].strip()
-    return rid, int(rtoe)
-    
+    try :
+        return rid, int(rtoe)
+    except ValueError :
+        raise ValueError("A non-integer RTOE found in " \
+                         +"the 'please wait' page, %s" % repr(rtoe))
