@@ -838,7 +838,7 @@ def _translate_str(sequence, table, stop_symbol="*", pos_stop="X") :
             #Todo? Treat "---" as a special case (gapped translation)
             if codon in table.stop_codons :
                 amino_acids.append(stop_symbol)
-            elif valid_letters.issuperset(codon) :
+            elif valid_letters.issuperset(set(codon)) :
                 #Possible stop codon (e.g. NNN or TAN)
                 amino_acids.append(pos_stop)
             else :
