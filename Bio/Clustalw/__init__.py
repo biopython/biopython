@@ -253,60 +253,61 @@ class MultipleAlignCL:
     def __str__(self):
         """Write out the command line as a string."""
 
-        if sys.platform != "win32" :
-            #On Linux with clustalw 1.83, you can do:
-            #clustalw input.faa
-            #clustalw /full/path/input.faa
-            #clustalw -INFILE=input.faa
-            #clustalw -INFILE=/full/path/input.faa
-            #
-            #Note these fail (using DOS style slashes):
-            #
-            #clustalw /INFILE=input.faa
-            #clustalw /INFILE=/full/path/input.faa
-            #
-            #To keep things simple, and follow the original
-            #behaviour of Bio.Clustalw use this:
-            cline = self.command + " " + self.sequence_file
+        #On Linux with clustalw 1.83, you can do:
+        #clustalw input.faa
+        #clustalw /full/path/input.faa
+        #clustalw -INFILE=input.faa
+        #clustalw -INFILE=/full/path/input.faa
+        #
+        #Note these fail (using DOS style slashes):
+        #
+        #clustalw /INFILE=input.faa
+        #clustalw /INFILE=/full/path/input.faa
+        #
+        #On Windows XP with clustalw.exe 1.83, these work at
+        #the command prompt:
+        #
+        #clustalw.exe input.faa
+        #clustalw.exe /INFILE=input.faa
+        #clustalw.exe /INFILE="input.faa"
+        #clustalw.exe /INFILE="with space.faa"
+        #clustalw.exe /INFILE=C:\full\path\input.faa
+        #clustalw.exe /INFILE="C:\full path\with spaces.faa"
+        #
+        #Sadly these fail:
+        #clustalw.exe "input.faa"
+        #clustalw.exe "with space.faa"
+        #clustalw.exe C:\full\path\input.faa
+        #clustalw.exe "C:\full path\with spaces.faa"
+        #
+        #These also fail but a minus/dash does seem to
+        #work with other options (!):
+        #clustalw.exe -INFILE=input.faa
+        #clustalw.exe -INFILE=C:\full\path\input.faa
+        #
+        #Also these fail:
+        #clustalw.exe "/INFILE=input.faa"
+        #clustalw.exe "/INFILE=C:\full\path\input.faa"
+        #
+        #Thanks to Emanuel Hey for flagging this on the mailing list.
+        #
+        #In addtion, both self.command and self.sequence_file
+        #may contain spaces, so should be quoted. But clustalw
+        #is fussy.
+        if self.command.count(" ") > 0 :
+            cline = '"%s"' % self.command
         else :
-            #On Windows XP with clustalw.exe 1.83, these work at
-            #the command prompt:
-            #
-            #clustalw.exe input.faa
-            #clustalw.exe /INFILE=input.faa
-            #clustalw.exe /INFILE="input.faa"
-            #clustalw.exe /INFILE="with space.faa"
-            #clustalw.exe /INFILE=C:\full\path\input.faa
-            #clustalw.exe /INFILE="C:\full path\with spaces.faa"
-            #
-            #Sadly these fail:
-            #clustalw.exe "input.faa"
-            #clustalw.exe "with space.faa"
-            #clustalw.exe C:\full\path\input.faa
-            #clustalw.exe "C:\full path\with spaces.faa"
-            #
-            #These also fail but a minus/dash does seem to
-            #work with other options (!):
-            #clustalw.exe -INFILE=input.faa
-            #clustalw.exe -INFILE=C:\full\path\input.faa
-            #
-            #Also these fail:
-            #clustalw.exe "/INFILE=input.faa"
-            #clustalw.exe "/INFILE=C:\full\path\input.faa"
-            #
-            #Thanks to Emanuel Hey for flagging this on the mailing list.
-            #
-            #In addtion, both self.command and self.sequence_file
-            #may contain spaces, so should be quoted. But clustalw
-            #is fussy.
-            if self.command.count(" ") > 0 :
-                cline = '"%s"' % self.command
-            else :
-                cline = self.command
+            cline = self.command
+        if sys.platform == "win32" :
             if self.sequence_file.count(" ") > 0 :
                 cline += ' /INFILE="%s"' % self.sequence_file
             else :
                 cline += ' /INFILE=%s' % self.sequence_file
+        else :
+            if self.sequence_file.count(" ") > 0 :
+                cline += ' -INFILE="%s"' % self.sequence_file
+            else :
+                cline += ' -INFILE=%s' % self.sequence_file
 
         # general options
         if self.type:
