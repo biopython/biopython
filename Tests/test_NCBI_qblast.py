@@ -13,6 +13,8 @@ Goals:
     Make sure we can parse the latest XML format being used by the NCBI.
 """
 import requires_internet
+from Bio import MissingExternalDependencyError 
+from urllib2 import HTTPError
 
 #We want to test these:
 from Bio.Blast import NCBIWWW
@@ -55,11 +57,15 @@ ACATTAGTATCATATGGCTATTTGCTCAATTGCAGATTTCTTTCTTTTGTGAATG""",
 print "Checking Bio.Blast.NCBIWWW.qblast() with various queries"
 for program,database,query,e_value,entrez_filter,expected_hits in tests :
     print "qblast('%s', '%s', %s, ...)" % (program, database, repr(query))
-    handle = NCBIWWW.qblast(program, database, query, \
-                            alignments=10, descriptions=10, \
-                            hitlist_size=10, \
-                            entrez_query=entrez_filter,
-                            expect=e_value)
+    try :
+        handle = NCBIWWW.qblast(program, database, query, \
+                                alignments=10, descriptions=10, \
+                                hitlist_size=10, \
+                                entrez_query=entrez_filter,
+                                expect=e_value)
+    except HTTPError :
+        #e.g. a proxy error
+        raise MissingExternalDependencyError("internet connection failed")
     records = list(NCBIXML.parse(handle))
     assert len(records)==1
     record = records[0]
