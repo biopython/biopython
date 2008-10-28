@@ -4,13 +4,19 @@ to find documentation about how to update your code to work again.
 
 Numeric support
 ===============
-Following the release of 1.48, Numeric support in Biopython is discontinued. Please move to NumPy.
+Following the release of 1.48, Numeric support in Biopython is discontinued.
+Please move to NumPy.
 
 Bio.Seq
 =======
 Direct use of the Seq object (and MutableSeq object) .data property is discouraged.
 As of release 1.49, writing to the Seq object's .data property triggers a warning,
 and this property is likely to be made read only in the next release.
+
+Bio.Transcribe and Bio.Translate
+================================
+Declared obsolete in Release 1.49.
+Please use the methods or functions in Bio.Seq instead.
 
 Martel
 ======
@@ -183,9 +189,7 @@ Bio.RecordFile
 ==============
 Deprecated as of Release 1.30, removed in Release 1.42.
 RecordFile wasn't completely implemented and duplicates the work 
-of most standard parsers. We recommend using a specific iterator 
-(Bio.Fasta.Iterator for example) without a parser to get back
-text records.
+of most standard parsers.
 
 Bio.kMeans and Bio.xkMeans
 ==========================

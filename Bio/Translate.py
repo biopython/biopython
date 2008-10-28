@@ -1,17 +1,16 @@
-"""Code to translate DNA or RNA into proteins (semi-obsolete).
+"""Code to translate DNA or RNA into proteins (OBSOLETE).
 
 Instead of Bio.Translate, for translation you are now encouraged to use the
 Seq object's translate method, or the translate function in the Bio.Seq
-module.
+module.  Translate-to-stop functionality is via an optional argument.
 
-However, at the time of writing, Bio.Seq does not yet offer the full
-functionality of Bio.Translate, lacking in particular back-translation and
-translate-to-stop.
+Bio.Seq does not offer any back-translation function like the one here. It
+was concluded that a since a simple back-translation giving a Seq or python
+string could only capture some of the possible back translations, there were
+no practical uses for such a method/function.
 
-The provisional intension is to add back-translation and translate-to-stop
-functionality to Bio.Seq, and then declare Bio.Translate as obsolete.  This
-module would then be deprecated, and later removed in a future release of
-Biopython.
+This module is now considered to be obsolete, and is likely to be deprecated
+in a future release of Biopython, and later removed.
 """
 from Bio import Alphabet, Seq
 from Bio.Data import CodonTable

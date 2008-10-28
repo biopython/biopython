@@ -1,6 +1,11 @@
 """Code to transcribe DNA into RNA or back (OBSOLETE).
 
-You are now encouraged to use the functions in Bio.Seq instead."""
+You are now encouraged to use the Seq object methods or the functions
+in Bio.Seq instead.
+
+This module is now considered to be obsolete, and is likely to be deprecated
+in a future release of Biopython, and later removed.
+"""
 import string
 
 from Bio import Alphabet, Seq
