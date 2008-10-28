@@ -408,7 +408,7 @@ class Seq(object):
             alphabet = Alphabet.generic_dna
         return Seq(str(self).replace("U", "T").replace("u", "t"), alphabet)
 
-    def translate(self, table = "Standard", stop_symbol = "*"):
+    def translate(self, table="Standard", stop_symbol="*", to_stop=False):
         """Turns a nucleotide sequence into a protein sequence. New Seq object.
 
         Trying to back-transcribe a protein sequence raises an exception.
@@ -417,6 +417,11 @@ class Seq(object):
         table - Which codon table to use?  This can be either a name
                 (string) or an NCBI identifier (integer).
         stop_symbol - Single character string, what to use for terminators.
+        to_stop - Boolean, defaults to False meaning do a full translation
+                  continuing on past any stop codons (translated as the
+                  specified stop_symbol).  If True, translation is terminated
+                  at the first in frame stop codon (and the stop_symbol is
+                  not appended to the returned protein sequence).
 
         NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
         or a stop codon.  These are translated as "X".  Any invalid codon
@@ -464,7 +469,7 @@ class Seq(object):
                 codon_table = CodonTable.ambiguous_generic_by_name[table]
             else:
                 codon_table = CodonTable.ambiguous_generic_by_id[table_id]
-        protein = _translate_str(str(self), codon_table, stop_symbol)
+        protein = _translate_str(str(self), codon_table, stop_symbol, to_stop)
         if stop_symbol in protein :
             alphabet = Alphabet.HasStopCodon(codon_table.protein_alphabet,
                                              stop_symbol = stop_symbol)
@@ -806,12 +811,14 @@ def back_transcribe(rna):
     else:
         return rna.replace('U','T').replace('u','t')
     
-def _translate_str(sequence, table, stop_symbol="*", pos_stop="X") :
+def _translate_str(sequence, table, stop_symbol="*", to_stop=False, pos_stop="X") :
     """Helper function to translate a nucleotide string (PRIVATE).
 
     sequence    - a string
     table       - a CodonTable object (NOT a table name or id number)
-    stop_symbol - a single character string
+    stop_symbol - a single character string, what to use for terminators.
+    to_stop     - boolean, should translation terminate at the first
+                  in frame stop codon?
     pos_stop    - a single character string for a possible stop codon
                   (e.g. TAN or NNN)
 
@@ -842,6 +849,7 @@ def _translate_str(sequence, table, stop_symbol="*", pos_stop="X") :
         except (KeyError, CodonTable.TranslationError) :
             #Todo? Treat "---" as a special case (gapped translation)
             if codon in table.stop_codons :
+                if to_stop : break
                 amino_acids.append(stop_symbol)
             elif valid_letters.issuperset(set(codon)) :
                 #Possible stop codon (e.g. NNN or TAN)
@@ -851,7 +859,7 @@ def _translate_str(sequence, table, stop_symbol="*", pos_stop="X") :
                     "Codon '%s' is invalid" % codon)
     return "".join(amino_acids)
 
-def translate(sequence, table = "Standard", stop_symbol = "*"):
+def translate(sequence, table="Standard", stop_symbol="*", to_stop=False):
     """Translate a nucleotide sequence into amino acids.
 
     If given a string, returns a new string object.
@@ -860,6 +868,12 @@ def translate(sequence, table = "Standard", stop_symbol = "*"):
 
     table - Which codon table to use?  This can be either a name
             (string) or an NCBI identifier (integer).
+    stop_symbol - Single character string, what to use for terminators.
+    to_stop - Boolean, defaults to False meaning do a full translation
+              continuing on past any stop codons (translated as the
+              specified stop_symbol).  If True, translation is terminated
+              at the first in frame stop codon (and the stop_symbol is
+              not appended to the returned protein sequence).
 
     NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
     or a stop codon.  These are translated as "X".  Any invalid codon
@@ -878,17 +892,17 @@ def translate(sequence, table = "Standard", stop_symbol = "*"):
     translate("TAG",stop_sybmol="@") -> "@"
     """
     if isinstance(sequence, Seq) :
-        return sequence.translate(table, stop_symbol)
+        return sequence.translate(table, stop_symbol, to_stop)
     elif isinstance(sequence, MutableSeq):
         #Return a Seq object
-        return sequence.toseq().translate(table, stop_symbol)
+        return sequence.toseq().translate(table, stop_symbol, to_stop)
     else:
         #Assume its a string, return a string
         try :
             codon_table = CodonTable.ambiguous_generic_by_id[int(table)]
         except ValueError :
             codon_table = CodonTable.ambiguous_generic_by_name[table]
-        return _translate_str(sequence, codon_table, stop_symbol)
+        return _translate_str(sequence, codon_table, stop_symbol, to_stop)
       
 def reverse_complement(sequence):
     """Returns the reverse complement sequence of a nucleotide string.

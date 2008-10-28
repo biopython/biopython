@@ -488,6 +488,19 @@ for nucleotide_seq in test_seqs:
             assert repr(expected) == repr(nucleotide_seq.translate())
         except (ValueError, TranslationError) :
             assert expected is None
+    #Now check translate(..., to_stop=True)
+    try :
+        short = Seq.translate(nucleotide_seq, to_stop=True)
+    except (ValueError, TranslationError), e :
+        short = None
+    if expected is not None :
+        assert short is not None
+        assert str(short) == str(expected.split("*")[0])
+    if isinstance(nucleotide_seq, Seq.Seq) :
+        try :
+            assert repr(short) == repr(nucleotide_seq.translate(to_stop=True))
+        except (ValueError, TranslationError) :
+            assert short is None
 
 for s in protein_seqs :
     try :
