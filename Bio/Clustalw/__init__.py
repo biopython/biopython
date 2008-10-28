@@ -87,8 +87,18 @@ def do_alignment(command_line, alphabet=None):
     o A clustal alignment object corresponding to the created alignment.
     If the alignment type was not a clustal object, None is returned.
     """
-    run_clust = os.popen(str(command_line))
-    status = run_clust.close()
+    try :
+        import subprocess
+        child_process = subprocess.Popen(str(command_line),
+                                         stdout=subprocess.PIPE,
+                                         stderr=subprocess.PIPE,
+                                         shell=(sys.platform!="win32")
+                                         )
+        status = child_process.wait()
+    except ImportError :
+        #Fall back for python 2.3
+        run_clust = os.popen(str(command_line))
+        status = run_clust.close()
 
     
     # The exit status is the second byte of the termination status
@@ -296,6 +306,8 @@ class MultipleAlignCL:
         #clustalw.exe C:\full\path\input.faa
         #clustalw.exe "C:\full path\with spaces.faa"
         #
+        #Testing today (using a different binary of clustalw.exe 1.83),
+        #using -INFILE as follows seems to work.  However I had once noted:
         #These also fail but a minus/dash does seem to
         #work with other options (!):
         #clustalw.exe -INFILE=input.faa
@@ -311,10 +323,7 @@ class MultipleAlignCL:
         #may contain spaces, so should be quoted. But clustalw
         #is fussy.
         cline = _escape_filename(self.command)
-        if sys.platform == "win32" :
-            cline += ' /INFILE=%s' % _escape_filename(self.sequence_file)
-        else :
-            cline += ' -INFILE=%s' % _escape_filename(self.sequence_file)
+        cline += ' -INFILE=%s' % _escape_filename(self.sequence_file)
 
         # general options
         if self.type:
