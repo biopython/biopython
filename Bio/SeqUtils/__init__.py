@@ -126,99 +126,98 @@ except ImportError:
 from math import pi, sin, cos, log
 def xGC_skew(seq, window = 1000, zoom = 100,
                          r = 300, px = 100, py = 100):
-   " calculates and plots normal and accumulated GC skew (GRAPHICS !!!) "
+    """Calculates and plots normal and accumulated GC skew (GRAPHICS !!!)."""
+    yscroll = Scrollbar(orient = VERTICAL)
+    xscroll = Scrollbar(orient = HORIZONTAL)
+    canvas = Canvas(yscrollcommand = yscroll.set,
+                    xscrollcommand = xscroll.set, background = 'white')
+    win = canvas.winfo_toplevel()
+    win.geometry('700x700')
    
+    yscroll.config(command = canvas.yview)
+    xscroll.config(command = canvas.xview)
+    yscroll.pack(side = RIGHT, fill = Y)
+    xscroll.pack(side = BOTTOM, fill = X)
+    canvas.pack(fill=BOTH, side = LEFT, expand = 1)
+    canvas.update()
 
-   yscroll = Scrollbar(orient = VERTICAL)
-   xscroll = Scrollbar(orient = HORIZONTAL)
-   canvas = Canvas(yscrollcommand = yscroll.set,
-                   xscrollcommand = xscroll.set, background = 'white')
-   win = canvas.winfo_toplevel()
-   win.geometry('700x700')
+    X0, Y0  = r + px, r + py
+    x1, x2, y1, y2 = X0 - r, X0 + r, Y0 -r, Y0 + r
    
-   yscroll.config(command = canvas.yview)
-   xscroll.config(command = canvas.xview)
-   yscroll.pack(side = RIGHT, fill = Y)
-   xscroll.pack(side = BOTTOM, fill = X)
-   canvas.pack(fill=BOTH, side = LEFT, expand = 1)
-   canvas.update()
+    ty = Y0
+    canvas.create_text(X0, ty, text = '%s...%s (%d nt)' % (seq[:7], seq[-7:], len(seq)))
+    ty +=20
+    canvas.create_text(X0, ty, text = 'GC %3.2f%%' % (GC(seq)))
+    ty +=20
+    canvas.create_text(X0, ty, text = 'GC Skew', fill = 'blue')
+    ty +=20
+    canvas.create_text(X0, ty, text = 'Accumulated GC Skew', fill = 'magenta')
+    ty +=20
+    canvas.create_oval(x1,y1, x2, y2)
 
-   X0, Y0  = r + px, r + py
-   x1, x2, y1, y2 = X0 - r, X0 + r, Y0 -r, Y0 + r
-   
-   ty = Y0
-   canvas.create_text(X0, ty, text = '%s...%s (%d nt)' % (seq[:7], seq[-7:], len(seq)))
-   ty +=20
-   canvas.create_text(X0, ty, text = 'GC %3.2f%%' % (GC(seq)))
-   ty +=20
-   canvas.create_text(X0, ty, text = 'GC Skew', fill = 'blue')
-   ty +=20
-   canvas.create_text(X0, ty, text = 'Accumulated GC Skew', fill = 'magenta')
-   ty +=20
-   canvas.create_oval(x1,y1, x2, y2)
+    acc = 0
+    start = 0
+    for gc in GC_skew(seq, window):
+        r1 = r
+        acc+=gc
+        # GC skew
+        alpha = pi - (2*pi*start)/len(seq)
+        r2 = r1 - gc*zoom
+        x1 = X0 + r1 * sin(alpha)
+        y1 = Y0 + r1 * cos(alpha)
+        x2 = X0 + r2 * sin(alpha)
+        y2 = Y0 + r2 * cos(alpha)
+        canvas.create_line(x1,y1,x2,y2, fill = 'blue')
+        # accumulated GC skew
+        r1 = r - 50
+        r2 = r1 - acc
+        x1 = X0 + r1 * sin(alpha)
+        y1 = Y0 + r1 * cos(alpha)
+        x2 = X0 + r2 * sin(alpha)
+        y2 = Y0 + r2 * cos(alpha)
+        canvas.create_line(x1,y1,x2,y2, fill = 'magenta')
 
-   acc = 0
-   start = 0
-   for gc in GC_skew(seq, window):
-      r1 = r
-      acc+=gc
-      # GC skew
-      alpha = pi - (2*pi*start)/len(seq)
-      r2 = r1 - gc*zoom
-      x1 = X0 + r1 * sin(alpha)
-      y1 = Y0 + r1 * cos(alpha)
-      x2 = X0 + r2 * sin(alpha)
-      y2 = Y0 + r2 * cos(alpha)
-      canvas.create_line(x1,y1,x2,y2, fill = 'blue')
-      # accumulated GC skew
-      r1 = r - 50
-      r2 = r1 - acc
-      x1 = X0 + r1 * sin(alpha)
-      y1 = Y0 + r1 * cos(alpha)
-      x2 = X0 + r2 * sin(alpha)
-      y2 = Y0 + r2 * cos(alpha)
-      canvas.create_line(x1,y1,x2,y2, fill = 'magenta')
+        canvas.update()
+        start += window
 
-      canvas.update()
-      start = start + window
-      
-
-   canvas.configure(scrollregion = canvas.bbox(ALL))
+    canvas.configure(scrollregion = canvas.bbox(ALL))
 
 def molecular_weight(seq):
     """Calculate the molecular weight of a DNA sequence."""
     if type(seq) == type(''): seq = Seq(seq, IUPAC.unambiguous_dna)
     weight_table = IUPACData.unambiguous_dna_weights
-    sum = 0
+    #TODO, use a generator expession once we drop Python 2.3?
+    #e.g. return sum(weight_table[x] for x in seq)
+    total = 0
     for x in seq:
-        sum += weight_table[x]
-    return sum
+        total += weight_table[x]
+    return total
 
 def nt_search(seq, subseq):
-   """ search for a DNA subseq in sequence
-       use ambiguous values (like N = A or T or C or G, R = A or G etc.)
-       searches only on forward strand
-   """
-   pattern = ''
-   for nt in subseq:
-      value = IUPACData.ambiguous_dna_values[nt]
-      if len(value) == 1:
-         pattern += value
-      else:
-         pattern += '[%s]' % value
+    """Search for a DNA subseq in sequence.
 
-   pos = -1
-   result = [pattern]
-   l = len(seq)
-   while 1:
-      pos+=1
-      s = seq[pos:]
-      m = re.search(pattern, s)
-      if not m: break
-      pos += int(m.start(0))
-      result.append(pos)
+    use ambiguous values (like N = A or T or C or G, R = A or G etc.)
+    searches only on forward strand
+    """
+    pattern = ''
+    for nt in subseq:
+        value = IUPACData.ambiguous_dna_values[nt]
+        if len(value) == 1:
+            pattern += value
+        else:
+            pattern += '[%s]' % value
 
-   return result
+    pos = -1
+    result = [pattern]
+    l = len(seq)
+    while True:
+        pos+=1
+        s = seq[pos:]
+        m = re.search(pattern, s)
+        if not m: break
+        pos += int(m.start(0))
+        result.append(pos)
+    return result
 
 # }}}
    
@@ -454,70 +453,70 @@ def quick_FASTA_reader(file):
     return entries
 
 def apply_on_multi_fasta(file, function, *args):
-   """Apply a function on each sequence in a multiple FASTA file (OBSOLETE).
+    """Apply a function on each sequence in a multiple FASTA file (OBSOLETE).
 
-   file - filename of a FASTA format file
-   function - the function you wish to invoke on each record
-   *args - any extra arguments you want passed to the function
+    file - filename of a FASTA format file
+    function - the function you wish to invoke on each record
+    *args - any extra arguments you want passed to the function
    
-   This function will iterate over each record in a FASTA file as SeqRecord
-   objects, calling your function with the record (and supplied args) as
-   arguments.
+    This function will iterate over each record in a FASTA file as SeqRecord
+    objects, calling your function with the record (and supplied args) as
+    arguments.
 
-   This function returns a list.  For those records where your function
-   returns a value, this is taken as a sequence and used to construct a
-   FASTA format string.  If your function never has a return value, this
-   means apply_on_multi_fasta will return an empty list.
-   """
-   try:
-      f = globals()[function]
-   except:
-      raise NotImplementedError("%s not implemented" % function)
+    This function returns a list.  For those records where your function
+    returns a value, this is taken as a sequence and used to construct a
+    FASTA format string.  If your function never has a return value, this
+    means apply_on_multi_fasta will return an empty list.
+    """
+    try:
+        f = globals()[function]
+    except:
+        raise NotImplementedError("%s not implemented" % function)
    
-   handle = open(file, 'r')
-   records = SeqIO.parse(handle, "fasta")
-   results = []
-   for record in records:
-      arguments = [record.sequence]
-      for arg in args: arguments.append(arg)
-      result = f(*arguments)
-      if result:
-         results.append('>%s\n%s' % (record.name, result))
-   handle.close()
-   return results
+    handle = open(file, 'r')
+    records = SeqIO.parse(handle, "fasta")
+    results = []
+    for record in records:
+        arguments = [record.sequence]
+        for arg in args: arguments.append(arg)
+        result = f(*arguments)
+        if result:
+            results.append('>%s\n%s' % (record.name, result))
+    handle.close()
+    return results
          
 def quicker_apply_on_multi_fasta(file, function, *args):
-   """Apply a function on each sequence in a multiple FASTA file (OBSOLETE).
+    """Apply a function on each sequence in a multiple FASTA file (OBSOLETE).
 
-   file - filename of a FASTA format file
-   function - the function you wish to invoke on each record
-   *args - any extra arguments you want passed to the function
+    file - filename of a FASTA format file
+    function - the function you wish to invoke on each record
+    *args - any extra arguments you want passed to the function
    
-   This function will use quick_FASTA_reader to load every record in the
-   FASTA file into memory as a list of tuples.  For each record, it will
-   call your supplied function with the record as a tuple of the name and
-   sequence as strings (plus any supplied args).
+    This function will use quick_FASTA_reader to load every record in the
+    FASTA file into memory as a list of tuples.  For each record, it will
+    call your supplied function with the record as a tuple of the name and
+    sequence as strings (plus any supplied args).
 
-   This function returns a list.  For those records where your function
-   returns a value, this is taken as a sequence and used to construct a
-   FASTA format string.  If your function never has a return value, this
-   means quicker_apply_on_multi_fasta will return an empty list.
-   """
-   try:
-      f = globals()[function]
-   except:
-      raise NotImplementedError("%s not implemented" % function)
+    This function returns a list.  For those records where your function
+    returns a value, this is taken as a sequence and used to construct a
+    FASTA format string.  If your function never has a return value, this
+    means quicker_apply_on_multi_fasta will return an empty list.
+    """
+    try:
+        f = globals()[function]
+    except:
+        raise NotImplementedError("%s not implemented" % function)
    
-   entries = quick_FASTA_reader(file)
-   results = []
-   for name, seq in entries:
-      arguments = [seq]
-      for arg in args: arguments.append(arg)
-      result = f(*arguments)
-      if result:
-         results.append('>%s\n%s' % (name, result))
-   handle.close()
-   return results
+    entries = quick_FASTA_reader(file)
+    results = []
+    for name, seq in entries:
+        arguments = [seq]
+        for arg in args: arguments.append(arg)
+        result = f(*arguments)
+        if result:
+            results.append('>%s\n%s' % (name, result))
+    handle.close()
+    return results
 
 # }}}
 
