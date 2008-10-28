@@ -37,6 +37,7 @@ def GC(seq):
     when counting the G and C content.  The percentage is calculated against
     the full length, e.g.: 
 
+    >>> from Bio.SeqUtils import GC
     >>> GC("ACTGN")
     40.0
     """
@@ -59,6 +60,7 @@ def GC123(seq):
     Returns a tuple of four floats (percentages between 0 and 100) for the
     entire sequence, and the three codon positions.  e.g.
 
+    >>> from Bio.SeqUtils import GC123
     >>> GC123("ACTGTN")
     (40.0, 50.0, 50.0, 0.0)
 
@@ -264,6 +266,7 @@ def seq3(seq):
     character (including possible gap characters), is changed into 'Xaa'.
 
     e.g.
+    >>> from Bio.SeqUtils import seq3
     >>> seq3("MAIVMGRWKGAR*")
     'MetAlaIleValMetGlyArgTrpLysGlyAlaArgTer'
 
@@ -290,7 +293,33 @@ def seq3(seq):
 # {{{ 
 
 def translate(seq, frame = 1, genetic_code = 1, translator = None):
-    "Translation of DNA in one of the six different reading frames (OBSOLETE)."
+    """Translation of DNA in one of the six different reading frames (DEPRECATED).
+
+    Use the Bio.Seq.Translate function, or the Seq object's translate method
+    instead:
+
+    >>> from Bio.Seq import Seq
+    >>> my_seq = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG")
+    >>> my_seq = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUA")
+    >>> for frame in [0,1,2] :
+    ...    print my_seq[frame:].translate()
+    ... 
+    MAIVMGR*KGAR*
+    WPL*WAAERVPDS
+    GHCNGPLKGCPIV
+    >>> for frame in [0,1,2] :
+    ...     print my_seq.reverse_complement()[frame:].translate()
+    ... 
+    YYRAPFQRPITMA
+    TIGHPFSGPLQWP
+    LSGTLSAAHYNGH
+    """
+    import warnings
+    warnings.warn("Bio.SeqUtils.translate() has been deprecated, and we intend" \
+                  +" to remove it in a future release of Biopython.  Please use"\
+                  +" the method or function in Bio.Seq instead, as described in"\
+                  +" the Tutorial.", DeprecationWarning)
+
     if frame not in [1,2,3,-1,-2,-3]:
         raise ValueError('invalid frame')
 
@@ -302,15 +331,23 @@ def translate(seq, frame = 1, genetic_code = 1, translator = None):
     return translator.translate(Seq(seq[frame-1:], IUPAC.ambiguous_dna)).data
 
 def GC_Frame(seq, genetic_code = 1):
-    "Just an alias for six_frame_translations."
+    """Just an alias for six_frame_translations (OBSOLETE).
+
+    Use six_frame_translation directly, as this function may be deprecated
+    in a future release."""
     return six_frame_translations(seq, genetic_code)
 
 def six_frame_translations(seq, genetic_code = 1):
-    """
+    """Formatted string showing the 6 frame translations and GC content.
+
     nice looking 6 frame translation with GC content - code from xbbtools
     similar to DNA Striders six-frame translation
+
+    e.g.
+    >>> from Bio.SeqUtils import six_frame_translations
+    >>> print six_frame_translations("AUGGCCAUUGUAAUGGGCCGCUGA")
     """
-    from Bio.Seq import reverse_complement
+    from Bio.Seq import reverse_complement, translate
     anti = reverse_complement(seq)
     comp = anti[::-1]
     length = len(seq)
@@ -324,6 +361,7 @@ def six_frame_translations(seq, genetic_code = 1):
         short = '%s ... %s' % (seq[:10], seq[-10:])
     else:
         short = seq
+    #TODO? Remove the date as this would spoil any unit test...
     date = time.strftime('%y %b %d, %X', time.localtime(time.time()))
     header = 'GC_Frame: %s, ' % date
     for nt in ['a','t','g','c']:
