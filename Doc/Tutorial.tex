@@ -710,11 +710,9 @@ Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
 Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
 \end{verbatim}
 
-You should notice in the above protein sequences that in addition to the end stop character, there is an internal stop as well.  This was a deliberate choice of example, as it gives an excuse to talk about different translation tables (Genetic Codes).  
+You should notice in the above protein sequences that in addition to the end stop character, there is an internal stop as well.  This was a deliberate choice of example, as it gives an excuse to talk about some optional arguments, including different translation tables (Genetic Codes).
 
-The translation tables available in Biopython were taken from the NCBI information at \url{ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}. So, you have tons of choices to pick from. 
-By default, the function \verb|Bio.Seq.translate()| will use the \emph{standard} genetic code (NCBI table 1).
-
+The translation tables available in Biopython are based on those from the NCBI (see the next section of this tutorial).  By default, translation will use the \emph{standard} genetic code (NCBI table id 1).
 Suppose we are dealing with a mitochondrial sequence.  We need to tell the translation function to use the relevant genetic code instead:
 \begin{verbatim}
 >>> coding_dna.translate(table="Vertebrate Mitochondrial")
@@ -727,7 +725,23 @@ You can also specify the table using the NCBI table number which is shorter, and
 Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
 \end{verbatim}
 
-You can even specify the stop symbol if you don't like the default asterisk:
+Now, you may want to translate the nucleotides up to the first in frame stop codon,
+and then stop (as happens in nature):
+\begin{verbatim}
+>>> coding_dna.translate()
+Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
+>>> coding_dna.translate(to_stop=True)
+Seq('MAIVMGR', IUPACProtein())
+>>> coding_dna.translate(table=2)
+Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
+>>> coding_dna.translate(table=2, to_stop=True)
+Seq('MAIVMGRWKGAR', IUPACProtein())
+\end{verbatim}
+\noindent Notice that when you use the \verb|to_stop| argument, the stop codon itself
+is not translated - and the stop symbol is not included at the end of your protein
+sequence.
+
+Finally, you can even specify the stop symbol if you don't like the default asterisk:
 \begin{verbatim}
 >>> coding_dna.translate(table=2, stop_symbol="@")
 Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '@'))
@@ -737,37 +751,32 @@ Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '@'))
 For older releases you would have to use the \verb|Bio.Seq| module's \verb|translate|
 function instead, see Section~\ref{sec:seq-module-functions}.
 
-The \verb|Seq| object's \verb|translate| method (and the \verb|Bio.Seq| module's
-\verb|translate|function) are intended to be simple and easy to use.  
-However, they aren't currently flexible enough to do things like translate up to the
-first stop codon for example. For that, see the next section.
+\section{Translation Tables}
 
-\section{Translation Continued}
+In the previous sections we talked about the \verb|Seq| object translation method (and mentioned the equivalent function in the \verb|Bio.Seq| module -- see
+Section~\ref{sec:seq-module-functions}).
+Internally these use codon table objects derived from the NCBI information at
+\url{ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}.
 
-In the previous sections we talked about the \verb|Seq| object translation method (and mentioned the equivalent function in the \verb|Bio.Seq| module -- see Section~\ref{sec:seq-module-functions}).
-There is also an older \verb|Bio.Translate| module which has a few more advanced
-options, but is more complicated to use.
-
-To translate our DNA object we have quite a few choices. First, we can use any number
-of translation tables depending on what we know about our DNA sequence.
-%The translation tables available in biopython were taken from information at
-%\url{ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}.
-As before, let's just focus on two choices:
-the Standard translation table, and the Translation table for Vertebrate Mitochondrial
-DNA. These tables are labeled with id numbers 1 and 2, respectively.
-
-Now that we know what tables we are trying to use, we're all set to perform a basic translation. First, we need to create translator objects that use the relevant tables. Since we are still dealing with our unambiguous DNA object, we want to fetch translators that take this into account:
+As before, let's just focus on two choices: the Standard translation table, and the
+translation table for Vertebrate Mitochondrial DNA. 
 
 \begin{verbatim}
->>> from Bio import Translate
->>> standard_translator = Translate.unambiguous_dna_by_id[1]
->>> mito_translator = Translate.unambiguous_dna_by_id[2]
+>>> from Bio.Data import CodonTable
+>>> standard_table = CodonTable.unambiguous_dna_by_name["Standard"]
+>>> mito_table = CodonTable.unambiguous_dna_by_name["Vertebrate Mitochondrial"]
 \end{verbatim}
 
-You compare the actual tables visually by printing the translator objects:
+Alternatively, these tables are labeled with ID numbers 1 and 2, respectively:
 \begin{verbatim}
->>> print standard_translator
-Translator object
+>>> from Bio.Data import CodonTable
+>>> standard_table = CodonTable.unambiguous_dna_by_id[1]
+>>> mito_table = CodonTable.unambiguous_dna_by_id[2]
+\end{verbatim}
+
+You compare the actual tables visually by printing them:
+\begin{verbatim}
+>>> print standard_table
 Table 1 Standard, SGC0
 
   |  T      |  C      |  A      |  G      |
@@ -795,8 +804,7 @@ G | GTG V   | GCG A   | GAG E   | GGG G   | G
 \end{verbatim}
 \noindent and:
 \begin{verbatim}
->>> print mito_translator
-Translator object
+>>> print mito_table
 Table 2 Vertebrate Mitochondrial, SGC1
 
   |  T      |  C      |  A      |  G      |
@@ -823,34 +831,11 @@ G | GTG V(s)| GCG A   | GAG E   | GGG G   | G
 --+---------+---------+---------+---------+--
 \end{verbatim}
 
-Once we've got the relevant translator object, it's time to go ahead and translate a sequence:
-
+You may find these following properties useful -- for example if you are trying
+to do your own gene finding:
 \begin{verbatim}
->>> from Bio.Seq import Seq
->>> from Bio.Alphabet import IUPAC
->>> my_seq = Seq("GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA", IUPAC.unambiguous_dna)
->>> standard_translator.translate(my_seq)
-Seq('AIVMGR*KGAR', IUPACProtein())
->>> mito_translator.translate(my_seq)
-Seq('AIVMGRWKGAR', IUPACProtein())
+>>> mito_table.stop_codons['TAA', 'TAG', 'AGA', 'AGG']>>> mito_table.start_codons['ATT', 'ATC', 'ATA', 'ATG', 'GTG']>>> mito_table.forward_table["ACG"]'T'
 \end{verbatim}
-
-Notice that the default translation will just go ahead and proceed blindly through a stop codon. If you are aware that you are translating some kind of open reading frame and want to just see everything up until the stop codon, this can be easily done with the \verb|translate_to_stop| function:
-
-\begin{verbatim}
->>> standard_translator.translate_to_stop(my_seq)
-Seq('AIVMGR', IUPACProtein())
-\end{verbatim}
-
-It is also possible to reverse translate a protein into a DNA sequence:
-
-\begin{verbatim}
->>> my_protein = Seq("AVMGRWKGGRAAG", IUPAC.protein)
->>> standard_translator.back_translate(my_protein)
-Seq('GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGT', IUPACUnambiguousDNA())
-\end{verbatim}
-
-Note that this only gives you one possible back-translation, and doesn't attempt to show any freedom with ambiguous nucleotides.
 
 \section{MutableSeq objects}
 \label{sec:mutable-seq}
