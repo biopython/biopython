@@ -431,6 +431,11 @@ class Seq(object):
             table_id = int(table)
         except ValueError:
             table_id = None
+        if isinstance(table, str) and len(table)==256 :
+            raise ValueError("The Seq object translate method DOES NOT take " \
+                             + "a 256 character string mapping table like " \
+                             + "the python string object's translate method. " \
+                             + "Use str(my_seq).translate(...) instead.")
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.ProteinAlphabet) :
             raise ValueError("Proteins cannot be translated!")
