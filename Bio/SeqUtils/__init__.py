@@ -24,71 +24,91 @@ from Bio.Data import IUPACData, CodonTable
 # {{{ 
 
 def reverse(seq):
-   """Reverse the sequence. Works on string sequences.
-   """
-   r = map(None, seq)
-   r.reverse()
-   return ''.join(r)
+    """Reverse the sequence. Works on string sequences.
+    """
+    r = map(None, seq)
+    r.reverse()
+    return ''.join(r)
 
 def GC(seq):
-   """ calculates G+C content """
-#      19/8/03: Iddo: added provision for lowercase
-#      19/8/03: Iddo: divide by the sequence's length rather than by the
-#      A+T+G+C number. In that way, make provision for N.
-       
-   d = {}
-   for nt in ['A','T','G','C','a','t','g','c','S','s']:
-      d[nt] = seq.count(nt)
-      gc = d.get('G',0) + d.get('C',0) + d.get('g',0) + d.get('c',0) + \
-           d.get('S',0) + d.get('s',0)
+    """Calculates G+C content, returns the percentage (float between 0 and 100).
 
-   if gc == 0: return 0
-#   return gc*100.0/(d['A'] +d['T'] + gc)
-   return gc*100.0/len(seq)
+    Copes mixed case seuqneces, and with the ambiguous nucleotide S (G or C)
+    when counting the G and C content.  The percentage is calculated against
+    the full length, e.g.: 
+
+    >>> GC("ACTGN")
+    40.0
+    """
+    #      19/8/03: Iddo: added provision for lowercase
+    #      19/8/03: Iddo: divide by the sequence's length rather than by the
+    #      A+T+G+C number. In that way, make provision for N.
+        
+    d = {}
+    for nt in ['A','T','G','C','a','t','g','c','S','s']:
+        d[nt] = seq.count(nt)
+        gc = d.get('G',0) + d.get('C',0) + d.get('g',0) + d.get('c',0) + \
+             d.get('S',0) + d.get('s',0)
+ 
+    if gc == 0: return 0
+    return gc*100.0/len(seq)
     
 def GC123(seq):
-   " calculates total G+C content plus first, second and third position "
+    """Calculates total G+C content plus first, second and third positions.
 
-   d= {}
-   for nt in ['A','T','G','C']:
-      d[nt] = [0,0,0]
+    Returns a tuple of four floats (percentages between 0 and 100) for the
+    entire sequence, and the three codon positions.  e.g.
 
-   for i in range(0,len(seq),3):
-      codon = seq[i:i+3]
-      if len(codon) <3: codon += '  '
-      for pos in range(0,3):
-         for nt in ['A','T','G','C']:
-            if codon[pos] == nt or codon[pos] == nt.lower():
-                d[nt][pos] = d[nt][pos] +1
+    >>> GC123("ACTGTN")
+    (40.0, 50.0, 50.0, 0.0)
 
+    Copes with mixed case sequences, but does NOT deal with ambiguous
+    nucleotides.
+    """
+    d= {}
+    for nt in ['A','T','G','C']:
+       d[nt] = [0,0,0]
 
-   gc = {}
-   gcall = 0
-   nall = 0
-   for i in range(0,3):
-      try:
-         n = d['G'][i] + d['C'][i] +d['T'][i] + d['A'][i]
-         gc[i] = (d['G'][i] + d['C'][i])*100.0/n
-      except:
-         gc[i] = 0
+    for i in range(0,len(seq),3):
+        codon = seq[i:i+3]
+        if len(codon) <3: codon += '  '
+        for pos in range(0,3):
+            for nt in ['A','T','G','C']:
+                if codon[pos] == nt or codon[pos] == nt.lower():
+                    d[nt][pos] += 1
+    gc = {}
+    gcall = 0
+    nall = 0
+    for i in range(0,3):
+        try:
+            n = d['G'][i] + d['C'][i] +d['T'][i] + d['A'][i]
+            gc[i] = (d['G'][i] + d['C'][i])*100.0/n
+        except:
+            gc[i] = 0
 
-      gcall = gcall + d['G'][i] + d['C'][i]
-      nall = nall + n
+        gcall = gcall + d['G'][i] + d['C'][i]
+        nall = nall + n
 
-   gcall = 100.0*gcall/nall
-   return gcall, gc[0], gc[1], gc[2]
+    gcall = 100.0*gcall/nall
+    return gcall, gc[0], gc[1], gc[2]
 
 def GC_skew(seq, window = 100):
-   """ calculates GC skew (G-C)/(G+C) """
-	# 8/19/03: Iddo: added lowercase 
-   values = []
-   for i in range(0, len(seq), window):
-      s = seq[i: i + window]
-      g = s.count('G') + s.count('g')
-      c = s.count('C') + s.count('c')
-      skew = (g-c)/float(g+c)
-      values.append(skew)
-   return values
+    """Calculates GC skew (G-C)/(G+C) for multuple windows along the sequence.
+
+    Returns a list of ratios (floats), controlled by the length of the sequence
+    and the size of the window.
+
+    Does NOT look at any ambiguous nucleotides.
+    """
+    # 8/19/03: Iddo: added lowercase 
+    values = []
+    for i in range(0, len(seq), window):
+        s = seq[i: i + window]
+        g = s.count('G') + s.count('g')
+        c = s.count('C') + s.count('c')
+        skew = (g-c)/float(g+c)
+        values.append(skew)
+    return values
 
 # 8/19/03 Iddo: moved these imports from within the function as
 # ``import * '' is only
@@ -164,12 +184,13 @@ def xGC_skew(seq, window = 1000, zoom = 100,
    canvas.configure(scrollregion = canvas.bbox(ALL))
 
 def molecular_weight(seq):
-   if type(seq) == type(''): seq = Seq(seq, IUPAC.unambiguous_dna)
-   weight_table = IUPACData.unambiguous_dna_weights
-   sum = 0
-   for x in seq:
-      sum += weight_table[x]
-   return sum
+    """Calculate the molecular weight of a DNA sequence."""
+    if type(seq) == type(''): seq = Seq(seq, IUPAC.unambiguous_dna)
+    weight_table = IUPACData.unambiguous_dna_weights
+    sum = 0
+    for x in seq:
+        sum += weight_table[x]
+    return sum
 
 def nt_search(seq, subseq):
    """ search for a DNA subseq in sequence
@@ -208,58 +229,57 @@ def nt_search(seq, subseq):
 # should be moved to ???
 
 class ProteinX(Alphabet.ProteinAlphabet):
-   letters = IUPACData.extended_protein_letters + "X"
+    letters = IUPACData.extended_protein_letters + "X"
 
 proteinX = ProteinX()
 
 class MissingTable:
-  def __init__(self, table):
-    self._table = table
-  def get(self, codon, stop_symbol):
-    try:
-      return self._table.get(codon, stop_symbol)
-    except CodonTable.TranslationError:
-      return 'X'
+    def __init__(self, table):
+        self._table = table
+    def get(self, codon, stop_symbol):
+        try:
+            return self._table.get(codon, stop_symbol)
+        except CodonTable.TranslationError:
+            return 'X'
 
 def makeTableX(table):
-  assert table.protein_alphabet == IUPAC.extended_protein
-  return CodonTable.CodonTable(table.nucleotide_alphabet, proteinX,
-                               MissingTable(table.forward_table),
-                               table.back_table, table.start_codons,
-                               table.stop_codons)
-
+    assert table.protein_alphabet == IUPAC.extended_protein
+    return CodonTable.CodonTable(table.nucleotide_alphabet, proteinX,
+                                 MissingTable(table.forward_table),
+                                 table.back_table, table.start_codons,
+                                 table.stop_codons)
 
 # end of hacks
 
 def seq3(seq):
-   """Turn a one letter code protein sequence into one with three letter codes.
+    """Turn a one letter code protein sequence into one with three letter codes.
 
-   The single input argument 'seq' should be a protein sequence using single
-   letter codes, either as a python string or as a Seq or MutableSeq object.
+    The single input argument 'seq' should be a protein sequence using single
+    letter codes, either as a python string or as a Seq or MutableSeq object.
 
-   This function returns the amino acid sequence as a string using the three
-   letter amino acid codes. Output follows the IUPAC standard (including
-   ambiguous characters B for "Asx", J for "Xle" and X for "Xaa", and also U
-   for "Sel" and O for "Pyl") plus "Ter" for a terminator given as an asterisk.  Any unknown
-   character (including possible gap characters), is changed into 'Xaa'.
+    This function returns the amino acid sequence as a string using the three
+    letter amino acid codes. Output follows the IUPAC standard (including
+    ambiguous characters B for "Asx", J for "Xle" and X for "Xaa", and also U
+    for "Sel" and O for "Pyl") plus "Ter" for a terminator given as an asterisk.  Any unknown
+    character (including possible gap characters), is changed into 'Xaa'.
 
-   e.g.
-   >>> seq3("MAIVMGRWKGAR*")
-   'MetAlaIleValMetGlyArgTrpLysGlyAlaArgTer'
+    e.g.
+    >>> seq3("MAIVMGRWKGAR*")
+    'MetAlaIleValMetGlyArgTrpLysGlyAlaArgTer'
 
-   This function was inspired by BioPerl's seq3.
-   """
-   threecode = {'A':'Ala', 'B':'Asx', 'C':'Cys', 'D':'Asp',
-                'E':'Glu', 'F':'Phe', 'G':'Gly', 'H':'His',
-                'I':'Ile', 'K':'Lys', 'L':'Leu', 'M':'Met',
-                'N':'Asn', 'P':'Pro', 'Q':'Gln', 'R':'Arg',
-                'S':'Ser', 'T':'Thr', 'V':'Val', 'W':'Trp',
-                'Y':'Tyr', 'Z':'Glx', 'X':'Xaa', '*':'Ter',
-                'U':'Sel', 'O':'Pyl', 'J':'Xle',
-                }
-   #We use a default of 'Xaa' for undefined letters
-   #Note this will map '-' to 'Xaa' which may be undesirable!
-   return ''.join([threecode.get(aa,'Xaa') for aa in seq])
+    This function was inspired by BioPerl's seq3.
+    """
+    threecode = {'A':'Ala', 'B':'Asx', 'C':'Cys', 'D':'Asp',
+                 'E':'Glu', 'F':'Phe', 'G':'Gly', 'H':'His',
+                 'I':'Ile', 'K':'Lys', 'L':'Leu', 'M':'Met',
+                 'N':'Asn', 'P':'Pro', 'Q':'Gln', 'R':'Arg',
+                 'S':'Ser', 'T':'Thr', 'V':'Val', 'W':'Trp',
+                 'Y':'Tyr', 'Z':'Glx', 'X':'Xaa', '*':'Ter',
+                 'U':'Sel', 'O':'Pyl', 'J':'Xle',
+                 }
+    #We use a default of 'Xaa' for undefined letters
+    #Note this will map '-' to 'Xaa' which may be undesirable!
+    return ''.join([threecode.get(aa,'Xaa') for aa in seq])
 
 
 # }}}
@@ -270,63 +290,64 @@ def seq3(seq):
 # {{{ 
 
 def translate(seq, frame = 1, genetic_code = 1, translator = None):
-   " translation of DNA in one of the six different reading frames "
-   if frame not in [1,2,3,-1,-2,-3]:
-      raise ValueError('invalid frame')
+    "Translation of DNA in one of the six different reading frames (OBSOLETE)."
+    if frame not in [1,2,3,-1,-2,-3]:
+        raise ValueError('invalid frame')
 
-   if not translator:
-      table = makeTableX(CodonTable.ambiguous_dna_by_id[genetic_code])
-      translator = Translate.Translator(table)
+    if not translator:
+        table = makeTableX(CodonTable.ambiguous_dna_by_id[genetic_code])
+        translator = Translate.Translator(table)
 
-   return translator.translate(Seq(seq[frame-1:], IUPAC.ambiguous_dna)).data
+    #Does this frame calculation do something sensible?  No RC taken!
+    return translator.translate(Seq(seq[frame-1:], IUPAC.ambiguous_dna)).data
 
 def GC_Frame(seq, genetic_code = 1):
-   " just an alias for six_frame_translations "
-   return six_frame_translations(seq, genetic_code)
+    "Just an alias for six_frame_translations."
+    return six_frame_translations(seq, genetic_code)
 
 def six_frame_translations(seq, genetic_code = 1):
-   """
-   nice looking 6 frame translation with GC content - code from xbbtools
-   similar to DNA Striders six-frame translation
-   """
-   from Bio.Seq import reverse_complement
-   anti = reverse_complement(seq)
-   comp = anti[::-1]
-   length = len(seq)
-   frames = {}
-   for i in range(0,3):
-      frames[i+1]  = translate(seq[i:], genetic_code)
-      frames[-(i+1)] = reverse(translate(anti[i:], genetic_code))
+    """
+    nice looking 6 frame translation with GC content - code from xbbtools
+    similar to DNA Striders six-frame translation
+    """
+    from Bio.Seq import reverse_complement
+    anti = reverse_complement(seq)
+    comp = anti[::-1]
+    length = len(seq)
+    frames = {}
+    for i in range(0,3):
+        frames[i+1]  = translate(seq[i:], genetic_code)
+        frames[-(i+1)] = reverse(translate(anti[i:], genetic_code))
 
-   # create header
-   if length > 20:
-      short = '%s ... %s' % (seq[:10], seq[-10:])
-   else:
-      short = seq
-   date = time.strftime('%y %b %d, %X', time.localtime(time.time()))
-   header = 'GC_Frame: %s, ' % date
-   for nt in ['a','t','g','c']:
-      header += '%s:%d ' % (nt, seq.count(nt.upper()))
+    # create header
+    if length > 20:
+        short = '%s ... %s' % (seq[:10], seq[-10:])
+    else:
+        short = seq
+    date = time.strftime('%y %b %d, %X', time.localtime(time.time()))
+    header = 'GC_Frame: %s, ' % date
+    for nt in ['a','t','g','c']:
+        header += '%s:%d ' % (nt, seq.count(nt.upper()))
       
-   header += '\nSequence: %s, %d nt, %0.2f %%GC\n\n\n' % (short.lower(),length, GC(seq))       
-   res = header
+    header += '\nSequence: %s, %d nt, %0.2f %%GC\n\n\n' % (short.lower(),length, GC(seq))       
+    res = header
    
-   for i in range(0,length,60):
-      subseq = seq[i:i+60]
-      csubseq = comp[i:i+60]
-      p = i/3
-      res = res + '%d/%d\n' % (i+1, i/3+1)
-      res = res + '  ' + '  '.join(map(None,frames[3][p:p+20])) + '\n'
-      res = res + ' ' + '  '.join(map(None,frames[2][p:p+20])) + '\n'
-      res = res + '  '.join(map(None,frames[1][p:p+20])) + '\n'
-      # seq
-      res = res + subseq.lower() + '%5d %%\n' % int(GC(subseq))
-      res = res + csubseq.lower() + '\n'
-      # - frames
-      res = res + '  '.join(map(None,frames[-2][p:p+20]))  +' \n'
-      res = res + ' ' + '  '.join(map(None,frames[-1][p:p+20])) + '\n'
-      res = res + '  ' + '  '.join(map(None,frames[-3][p:p+20])) + '\n\n'
-   return res
+    for i in range(0,length,60):
+        subseq = seq[i:i+60]
+        csubseq = comp[i:i+60]
+        p = i/3
+        res = res + '%d/%d\n' % (i+1, i/3+1)
+        res = res + '  ' + '  '.join(map(None,frames[3][p:p+20])) + '\n'
+        res = res + ' ' + '  '.join(map(None,frames[2][p:p+20])) + '\n'
+        res = res + '  '.join(map(None,frames[1][p:p+20])) + '\n'
+        # seq
+        res = res + subseq.lower() + '%5d %%\n' % int(GC(subseq))
+        res = res + csubseq.lower() + '\n'
+        # - frames
+        res = res + '  '.join(map(None,frames[-2][p:p+20]))  +' \n'
+        res = res + ' ' + '  '.join(map(None,frames[-1][p:p+20])) + '\n'
+        res = res + '  ' + '  '.join(map(None,frames[-3][p:p+20])) + '\n\n'
+    return res
 
 # }}}
 
@@ -336,58 +357,63 @@ def six_frame_translations(seq, genetic_code = 1):
 # {{{ 
 
 def fasta_uniqids(file):
-   " checks and changes the name/ID's to be unique identifiers by adding numbers "
-   dict = {}
-   txt = open(file).read()
-   entries = []
-   for entry in txt.split('>')[1:]:
-      name, seq= entry.split('\n',1)
-      name = name.split()[0].split(',')[0]
-      
-      if dict.has_key(name):
-         n = 1
-         while 1:
-            n = n + 1
-            _name = name + str(n)
-            if not dict.has_key(_name):
-               name = _name
-               break
-            
-      dict[name] = seq
+    """Checks and changes the name/ID's to be unique identifiers by adding numbers (OBSOLETE).
 
-   for name, seq in dict.items():
-      print '>%s\n%s' % (name, seq)
+    file - a FASTA format filename to read in.
+
+    No return value, the output is written to screen.
+    """
+    dict = {}
+    txt = open(file).read()
+    entries = []
+    for entry in txt.split('>')[1:]:
+        name, seq= entry.split('\n',1)
+        name = name.split()[0].split(',')[0]
+      
+        if dict.has_key(name):
+            n = 1
+            while 1:
+                n = n + 1
+                _name = name + str(n)
+                if not dict.has_key(_name):
+                    name = _name
+                    break
+            
+        dict[name] = seq
+
+    for name, seq in dict.items():
+        print '>%s\n%s' % (name, seq)
 
 def quick_FASTA_reader(file):
-   """Simple FASTA reader, returning a list of string tuples.
+    """Simple FASTA reader, returning a list of string tuples.
 
-   The single argument 'file' should be the filename of a FASTA format file.
-   This function will open and read in the entire file, constructing a list
-   of all the records, each held as a tuple of strings (the sequence name or
-   title, and its sequence).
+    The single argument 'file' should be the filename of a FASTA format file.
+    This function will open and read in the entire file, constructing a list
+    of all the records, each held as a tuple of strings (the sequence name or
+    title, and its sequence).
 
-   This function was originally intended for use on large files, where its
-   low overhead makes it very fast.  However, because it returns the data as
-   a single in memory list, this can require a lot of RAM on large files.
+    This function was originally intended for use on large files, where its
+    low overhead makes it very fast.  However, because it returns the data as
+    a single in memory list, this can require a lot of RAM on large files.
    
-   You are generally encouraged to use Bio.SeqIO.parse(handle, "fasta") which
-   allows you to iterate over the records one by one (avoiding having all the
-   records in memory at once).  Using Bio.SeqIO also makes it easy to switch
-   between different input file formats.  However, please note that rather
-   than simple strings, Bio.SeqIO uses SeqRecord objects for each record.
-   """
-   #Want to split on "\n>" not just ">" in case there are any extra ">"
-   #in the name/description.  So, in order to make sure we also split on
-   #the first entry, prepend a "\n" to the start of the file.
-   handle = open(file)
-   txt = "\n" + handle.read()
-   handle.close()
-   entries = []
-   for entry in txt.split('\n>')[1:]:
-      name,seq= entry.split('\n',1)
-      seq = seq.replace('\n','').replace(' ','').upper()
-      entries.append((name, seq))
-   return entries
+    You are generally encouraged to use Bio.SeqIO.parse(handle, "fasta") which
+    allows you to iterate over the records one by one (avoiding having all the
+    records in memory at once).  Using Bio.SeqIO also makes it easy to switch
+    between different input file formats.  However, please note that rather
+    than simple strings, Bio.SeqIO uses SeqRecord objects for each record.
+    """
+    #Want to split on "\n>" not just ">" in case there are any extra ">"
+    #in the name/description.  So, in order to make sure we also split on
+    #the first entry, prepend a "\n" to the start of the file.
+    handle = open(file)
+    txt = "\n" + handle.read()
+    handle.close()
+    entries = []
+    for entry in txt.split('\n>')[1:]:
+        name,seq= entry.split('\n',1)
+        seq = seq.replace('\n','').replace(' ','').upper()
+        entries.append((name, seq))
+    return entries
 
 def apply_on_multi_fasta(file, function, *args):
    """Apply a function on each sequence in a multiple FASTA file (OBSOLETE).
