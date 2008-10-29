@@ -4,9 +4,12 @@
 # as part of this package.
 
 """
-This module provides code to work with html files from NDB.
-http://ndbserver.rutgers.edu/NDB/structure-finder/ndb/index.html
+This module provided code to parse HTML files from NDB (DEPRECATED).
 
+This module provides an HTML parser designed for the NDB website
+http://ndbserver.rutgers.edu/ as it was circa 2002.  The site has since
+been redesigned, breaking the parser.  Bio.Ndb is therefore deprecated,
+and will be removed in a future release of Biopython.
 
 Classes:
 Record             Holds NDB sequence data.
@@ -16,6 +19,9 @@ The algorithm is based on a state machine because the record has multiple
 sections and the handling of tags varies depending on the section.  
 Citations have their own state machine.
 """
+import warnings
+warnings.warn("Bio.Ndb has been deprecated as the NDB website it used to"\
+              " parse has been redesigned.", DeprecationWarning)
 
 from types import *
 import string

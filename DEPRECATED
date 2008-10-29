@@ -18,6 +18,10 @@ Bio.Transcribe and Bio.Translate
 Declared obsolete in Release 1.49.
 Please use the methods or functions in Bio.Seq instead.
 
+Bio.Ndb
+=======
+Deprecated in Release 1.49, as the website this parsed has been redesigned.
+
 Martel
 ======
 Declared obsolete in Release 1.48, deprecated in Release 1.49.
