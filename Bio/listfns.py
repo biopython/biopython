@@ -3,7 +3,12 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This provides useful general functions for working with lists.
+"""This provides useful general functions for working with lists (OBSOLETE).
+
+This module and its C code equivalent are considered to be obsolete, and
+are likely to be deprecated in a future release of Biopython, before being
+removed.  Please get in touch via the mailing list if this will affect you.
+Many of these functions can be avoided using the python set object.
 
 Functions:
 asdict        Make the list into a dictionary (for fast testing of membership).

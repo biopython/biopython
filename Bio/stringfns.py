@@ -3,7 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This provides useful general functions for working with strings.
+"""This provides useful general functions for working with strings (OBSOLETE).
+
+This module and its C code equivalent are considered to be obsolete, and
+are likely to be deprecated in a future release of Biopython, before being
+removed.  Please get in touch via the mailing list if this will affect you.
 
 Functions:
 splitany       Split a string using many delimiters.
@@ -69,16 +73,6 @@ def rfind_anychar(string, chars, index=None, negate=0):
         index -= 1
     # If not found, index will already be -1.
     return index
-
-def starts_with(s, start):
-    """starts_with(s, start) -> 1/0
-
-    Return whether s begins with start.
-
-    """
-    import warnings
-    warnings.warn("The starts_with function in Bio.stringfns was deprecated. Please use s.startswith(start) instead of starts_with(s, start)", DeprecationWarning)
-    return s.startswith(start)
 
 # Try and load C implementations of functions.  If I can't,
 # then just ignore and use the pure python implementations.

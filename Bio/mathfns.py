@@ -3,7 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This provides useful general math tools.
+"""This provides useful general math tools (OBSOLETE).
+
+This module and its C code equivalent are considered to be obsolete, and
+are likely to be deprecated in a future release of Biopython, before being
+removed.  Please get in touch via the mailing list if this will affect you.
 
 Functions:
 fcmp       Compare two floating point numbers, up to a specified precision.
