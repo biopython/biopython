@@ -7,8 +7,6 @@
 #    input assignment peaklist. 
 
 import string
-import sys
-sys.path=[sys.path,"/usr/people/robert/development/xpktools/"]
 import xpktools
 
 def predictNOE(peaklist,originNuc,detectedNuc,originResNum,toResNum):
@@ -35,8 +33,8 @@ def predictNOE(peaklist,originNuc,detectedNuc,originResNum,toResNum):
   detectedPPMCol = datamap[detectedNuc+".P"]+1
 
   # Make a list of the data lines involving the detected
-  if (peaklist.residue_dict(detectedNuc).has_key(str(toResNum)) and 
-      peaklist.residue_dict(detectedNuc).has_key(str(originResNum))):
+  if str(toResNum) in peaklist.residue_dict(detectedNuc) \
+  and str(originResNum) in peaklist.residue_dict(detectedNuc):
     detectedList=peaklist.residue_dict(detectedNuc)[str(toResNum)]
     originList=peaklist.residue_dict(detectedNuc)[str(originResNum)]
     returnLine=detectedList[0]
@@ -68,8 +66,8 @@ def _data_map(labelline):
 
 def _col_ave(list,col):
 # Compute average values from a particular column in a string list
-  sum=0; n=0
+  total=0; n=0
   for element in list:
-    sum=sum+string.atof(string.split(element)[col])
-    n=n+1
-  return sum/n
+    total+=string.atof(string.split(element)[col])
+    n+=1
+  return total/n
