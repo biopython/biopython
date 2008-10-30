@@ -101,7 +101,7 @@ class CodonAdaptationIndex:
 			DNAsequence = DNAsequence.upper()
 		for i in range (0,len(DNAsequence),3):
 			codon = DNAsequence[i:i+3]
-			if self.index.has_key(codon):
+			if codon in self.index:
 				if codon!='ATG' and codon!= 'TGG': #these two codons are always one, exclude them.
 					caiValue += math.log(self.index[codon])
 					LengthForCai += 1
@@ -129,7 +129,7 @@ class CodonAdaptationIndex:
 				DNAsequence = cur_record.sequence
 			for i in range(0,len(DNAsequence),3):
 				codon = DNAsequence[i:i+3]
-				if self.codon_count.has_key(codon):
+				if codon in self.codon_count:
 					self.codon_count[codon] += 1
 				else:
 					raise TypeError("illegal codon %s in gene: %s" % (codon, cur_record.title))

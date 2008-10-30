@@ -1281,7 +1281,7 @@ def index_file(filename, indexname, rec2key=None):
 
         if not key:
             raise KeyError("empty sequence key was produced")
-        elif index.has_key(key):
+        elif key in index:
             raise KeyError("duplicate key %s found" % key)
 
         index[key] = start, length

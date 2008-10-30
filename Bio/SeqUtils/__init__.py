@@ -407,12 +407,12 @@ def fasta_uniqids(file):
         name, seq= entry.split('\n',1)
         name = name.split()[0].split(',')[0]
       
-        if dict.has_key(name):
+        if name in dict:
             n = 1
             while 1:
                 n = n + 1
                 _name = name + str(n)
-                if not dict.has_key(_name):
+                if _name not in dict:
                     name = _name
                     break
             

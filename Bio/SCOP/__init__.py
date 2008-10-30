@@ -217,20 +217,20 @@ class Scop:
                 # Glue all of the Nodes together using the HIE file
                 records = Hie.parse(hie_handle)
                 for record in records:
-                    if not sunidDict.has_key(record.sunid) :
+                    if record.sunid not in sunidDict :
                         print record.sunid
                         
                     n = sunidDict[record.sunid]
     
                     if record.parent != '' : # Not root node
     
-                        if not sunidDict.has_key(record.parent):
+                        if record.parent not in sunidDict:
                             raise ValueError("Incomplete data?")
                                        
                         n.parent = sunidDict[record.parent]
                 
                     for c in record.children:
-                        if not sunidDict.has_key(c) :
+                        if c not in sunidDict :
                             raise ValueError("Incomplete data?")
                         n.children.append(sunidDict[c])
 
@@ -264,11 +264,11 @@ class Scop:
 
     def getDomainBySid(self, sid) :
         """Return a domain from its sid"""
-        if self._sidDict.has_key(sid):
+        if sid in self._sidDict:
             return self._sidDict[sid]
         if self.db_handle:
             self.getDomainFromSQL(sid=sid)
-            if self._sidDict.has_key(sid):
+            if sid in self._sidDict:
                 return self._sidDict[sid]
         else:
             return None
@@ -276,11 +276,11 @@ class Scop:
 
     def getNodeBySunid(self, sunid) :
         """Return a node from its sunid"""
-        if self._sunidDict.has_key(sunid):
+        if sunid in self._sunidDict:
             return self._sunidDict[sunid]
         if self.db_handle:
             self.getDomainFromSQL(sunid=sunid)
-            if self._sunidDict.has_key(sunid):
+            if sunid in self._sunidDict:
                 return self._sunidDict[sunid]
         else:
             return None
@@ -415,7 +415,7 @@ class Scop:
             cla,des WHERE cla."+node.type+"=%s AND cla."+type+"=des.sunid", (node.sunid))
             data = cur.fetchall()
             for d in data:
-                if not self._sunidDict.has_key(int(d[0])):
+                if int(d[0]) not in self._sunidDict:
                     n = Node(scop=self)
                     [n.sunid,n.type,n.sccs,n.description] = d
                     n.sunid=int(n.sunid)
@@ -440,7 +440,7 @@ class Scop:
 
             data = cur.fetchall()
             for d in data:
-                if not self._sunidDict.has_key(int(d[0])):
+                if int(d[0]) not in self._sunidDict:
                     n = Domain(scop=self)
                     #[n.sunid, n.sid, n.pdbid, n.residues, n.sccs, n.type,
                     #n.description,n.parent] = data
@@ -584,7 +584,7 @@ class Node :
         """ Return a list of all decendent nodes of the given type. Node type can a
         two letter code or longer description. e.g. 'fa' or 'family'
         """
-        if _nodetype_to_code.has_key(node_type):
+        if node_type in _nodetype_to_code:
             node_type = _nodetype_to_code[node_type]
             
         nodes = [self]
@@ -604,7 +604,7 @@ class Node :
     def getAscendent( self, node_type) :
         """ Return the ancenstor node of the given type, or None.Node type can a
         two letter code or longer description. e.g. 'fa' or 'family'"""
-        if _nodetype_to_code.has_key(node_type):
+        if node_type in _nodetype_to_code:
             node_type = _nodetype_to_code[node_type]
 
         if self.scop:
@@ -735,7 +735,7 @@ class Astral:
         
     def domainsClusteredByEv(self,id):
         """get domains clustered by evalue"""
-        if not self.EvDatasets.has_key(id):
+        if id not in self.EvDatasets:
             if self.db_handle:
                 self.EvDatasets[id] = self.getAstralDomainsFromSQL(astralEv_to_sql[id])
                 
@@ -753,7 +753,7 @@ class Astral:
 
     def domainsClusteredById(self,id):
         """get domains clustered by percent id"""
-        if not self.IdDatasets.has_key(id):
+        if id not in self.IdDatasets:
             if self.db_handle:
                 self.IdDatasets[id] = self.getAstralDomainsFromSQL("id"+str(id))
                 
@@ -816,7 +816,7 @@ class Astral:
 
     def hashedDomainsById(self,id):
         """Get domains clustered by sequence identity in a dict"""
-        if not self.IdDatahash.has_key(id):
+        if id not in self.IdDatahash:
             self.IdDatahash[id] = {}
             for d in self.domainsClusteredById(id):
                 self.IdDatahash[id][d] = 1
@@ -824,7 +824,7 @@ class Astral:
 
     def hashedDomainsByEv(self,id):
         """Get domains clustered by evalue in a dict"""
-        if not self.EvDatahash.has_key(id):
+        if id not in self.EvDatahash:
             self.EvDatahash[id] = {}
             for d in self.domainsClusteredByEv(id):
                 self.EvDatahash[id][d] = 1
@@ -833,11 +833,11 @@ class Astral:
 
     def isDomainInId(self,dom,id):
         """Returns true if the domain is in the astral clusters for percent ID"""
-        return self.hashedDomainsById(id).has_key(dom)
+        return dom in self.hashedDomainsById(id)
 
     def isDomainInEv(self,dom,id):
         """Returns true if the domain is in the ASTRAL clusters for evalues"""
-        return self.hashedDomainsByEv(id).has_key(dom)
+        return dom in self.hashedDomainsByEv(id)
             
 
     def writeToSQL(self, db_handle):

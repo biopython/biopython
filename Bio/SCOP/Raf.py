@@ -307,11 +307,11 @@ class SeqMap :
                 chainid = line[21:22]
                 resid = line[22:27].strip()
                 key = (chainid, resid)
-                if resSet.has_key(key):
+                if key in resSet:
                     res = resSet[key]
                     atom_aa = res.atom
                     resName = line[17:20]
-                    if to_one_letter_code.has_key(resName) :
+                    if resName in to_one_letter_code :
                         if to_one_letter_code[resName] == atom_aa :
                             out_handle.write(line)
                             resFound[key] = res
