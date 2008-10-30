@@ -50,24 +50,24 @@ class MultiGraph:
 
     def add_node(self, node):
         """Adds a node to this graph."""
-        if not self.__adjacency_list.has_key(node):
+        if node not in self.__adjacency_list:
             self.__adjacency_list[node] = HashSet()
 
     def add_edge(self, source, to, label = None):
         """Adds an edge to this graph."""
-        if not self.__adjacency_list.has_key(source):
+        if source not in self.__adjacency_list:
             raise ValueError("Unknown <from> node: " + str(source))
-        if not self.__adjacency_list.has_key(to):
+        if to not in self.__adjacency_list:
             raise ValueError("Unknown <to> node: " + str(to))
         edge = (to, label)
         self.__adjacency_list[source].add(edge)
-        if not self.__label_map.has_key(label):
+        if label not in self.__label_map:
             self.__label_map[label] = HashSet()
         self.__label_map[label].add((source,to))
 
     def child_edges(self, parent):
         """Returns a list of (child, label) pairs for parent."""
-        if not self.__adjacency_list.has_key(parent):
+        if parent not in self.__adjacency_list:
             raise ValueError("Unknown <parent> node: " + str(parent))
         return self.__adjacency_list[parent].list()
 
@@ -78,7 +78,7 @@ class MultiGraph:
 
     def edges(self, label):
         """Returns a list of all the edges with this label."""
-        if not self.__label_map.has_key(label):
+        if label not in self.__label_map:
             raise ValueError("Unknown label: " + str(label))
         return self.__label_map[label].list()
 
@@ -92,7 +92,7 @@ class MultiGraph:
 
     def parent_edges(self, child):
         """Returns a list of (parent, label) pairs for child."""
-        if not self.__adjacency_list.has_key(child):
+        if child not in self.__adjacency_list:
             raise ValueError("Unknown <child> node: " + str(child))
         parents = []
         for parent in self.__adjacency_list.keys():
@@ -109,7 +109,7 @@ class MultiGraph:
 
     def remove_node(self, node):
         """Removes node and all edges connected to it."""
-        if not self.__adjacency_list.has_key(node):
+        if node not in self.__adjacency_list:
             raise ValueError("Unknown node: " + str(node))
         # remove node (and all out-edges) from adjacency list
         del self.__adjacency_list[node]
@@ -155,7 +155,7 @@ def df_search(graph, root = None):
     while len(current) > 0:
         node = current[0]
         current = current[1:]
-        if not seen.has_key(node):
+        if node not in seen:
             search.append(node)
             seen[node] = 1
             current = g.children(node) + current
@@ -181,7 +181,7 @@ def bf_search(graph, root = None):
     while len(current) > 0:
         node = current[0]
         current = current[1:]
-        if not seen.has_key(node):
+        if node not in seen:
             search.append(node)
             seen[node] = 1
             current.extend(g.children(node))

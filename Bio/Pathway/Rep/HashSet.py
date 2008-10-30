@@ -3,6 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+# TODO - Can we replace this with the python built in set object?
 class HashSet:
     """A set abstraction supporting the basic set operations.
 
@@ -17,8 +18,8 @@ class HashSet:
             
     def __contains__(self, element):
         """Returns true iff this set contains element."""
-        return self.__elements.has_key(element)
-
+        return element in self.__elements
+    
     def __eq__(self, set):
         """Returns true iff x == y for all elements in self, set."""
         if not isinstance(set, HashSet):
