@@ -253,7 +253,7 @@ def read_fssp(fssp_handle):
          align_rec = FSSPAlignRec(fff_rec(curline))
          key = align_rec.chain_id+align_rec.res_name+str(align_rec.pdb_res_num)
          align_list = string.split(curline[fssp_rec.align.start_aa_list:])
-         if not align_dict.has_key(key):
+         if key not in align_dict:
             align_dict[key] = align_rec
          align_dict[key].add_align_list(align_list)
          curline = fssp_handle.readline()

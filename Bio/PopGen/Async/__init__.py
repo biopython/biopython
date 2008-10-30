@@ -51,7 +51,7 @@ class Async:
            to the program. It should always be relative.
            Value is a stream.
         '''
-        if self.hooks.has_key(program):
+        if program in self.hooks:
             self.access_ds.acquire()
             self.id += 1
             id = self.id
@@ -74,7 +74,7 @@ class Async:
             output stream.
         '''
         self.access_ds.acquire()
-        if self.done.has_key(id):
+        if id in self.done:
             returnCode, fileObject = done[id]
             del done[id]
             self.access_ds.release()

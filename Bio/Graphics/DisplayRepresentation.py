@@ -89,7 +89,7 @@ class ChromosomeCounts:
 
         Raises a KeyError is the specified segment name is not found.
         """
-        if self._label_info.has_key(segment_name):
+        if segment_name in self._label_info:
             self._label_info[segment_name] = label
         else:
             raise KeyError("Segment name %s not found." % segment_name)
@@ -102,7 +102,7 @@ class ChromosomeCounts:
 
         Raises a KeyError is the specified segment name is not found.
         """
-        if self._label_info.has_key(segment_name):
+        if segment_name in self._label_info:
             self._scale_info[segment_name] = scale
         else:
             raise KeyError("Segment name %s not found." % segment_name)
