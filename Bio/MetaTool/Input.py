@@ -64,7 +64,7 @@ def system_to_metatool(system, metext = [], metint = [], generate_names = 1):
             enz_name += "_".join([str(x[0]) for x in r.catalysts])
         else:
             enz_name += "E"
-        if enz_names.has_key(enz_name):
+        if enz_name in enz_names:
             enz_names[enz_name] += 1
             enz_name += "_" + str(enz_names[enz_name])
         else:

@@ -295,7 +295,7 @@ class PrintFormat(object) :
         enzymemap = {}
         for (enzyme, cut) in ls :
             for c in cut :
-                if enzymemap.has_key(c) :
+                if c in enzymemap :
                     enzymemap[c].append(str(enzyme))
                 else :
                     enzymemap[c] = [str(enzyme)]

@@ -59,20 +59,20 @@ class InterProParser(  sgmllib.SGMLParser ):
         sgmllib.SGMLParser.reset( self )
         self.text = ''
         self.inter_pro_dict = Record()
-        self.inter_pro_dict[ 'Database' ] = ''
-        self.inter_pro_dict[ 'Accession' ] = ''
-        self.inter_pro_dict[ 'Name' ] = ''
-        self.inter_pro_dict[ 'Dates' ] = ''
-        self.inter_pro_dict[ 'Type' ] = ''
-        self.inter_pro_dict[ 'Parent' ] = ''
-        self.inter_pro_dict[ 'Process' ] = ''
-        self.inter_pro_dict[ 'Function' ] = ''
-        self.inter_pro_dict[ 'Component' ] = ''
-        self.inter_pro_dict[ 'Signatures' ] = []
-        self.inter_pro_dict[ 'Abstract' ] = ''
-        self.inter_pro_dict[ 'Examples' ] = []
-        self.inter_pro_dict[ 'References' ] = []
-        self.inter_pro_dict[ 'Database links' ] = []
+        self.inter_pro_dict['Database'] = ''
+        self.inter_pro_dict['Accession'] = ''
+        self.inter_pro_dict['Name'] = ''
+        self.inter_pro_dict['Dates'] = ''
+        self.inter_pro_dict['Type'] = ''
+        self.inter_pro_dict['Parent'] = ''
+        self.inter_pro_dict['Process'] = ''
+        self.inter_pro_dict['Function'] = ''
+        self.inter_pro_dict['Component'] = ''
+        self.inter_pro_dict['Signatures'] = []
+        self.inter_pro_dict['Abstract'] = ''
+        self.inter_pro_dict['Examples'] = []
+        self.inter_pro_dict['References'] = []
+        self.inter_pro_dict['Database links'] = []
         self._state = 'title'
         self._reference_state = ''
         self._key_waiting = ''
@@ -126,11 +126,11 @@ class InterProParser(  sgmllib.SGMLParser ):
     def start_td( self, attrs ):
         dictionary = dict( attrs )
         if self._state == 'chugging_along':
-            if dictionary.has_key( 'class' ):
-                if dictionary[ 'class' ] == 'tag':
+            if 'class' in dictionary:
+                if dictionary['class'] == 'tag':
                     self._state = 'waiting_tag'
                     self._flush_text()
-                elif dictionary[ 'class' ] == 'inf':
+                elif dictionary['class'] == 'inf':
                     self._state = 'waiting_inf'
                     self._flush_text()
 
@@ -140,7 +140,7 @@ class InterProParser(  sgmllib.SGMLParser ):
             self._state = 'chugging_along'
         elif self._state == 'waiting_inf':
             key = self._key_waiting
-            if self.inter_pro_dict.has_key( key ):
+            if key in self.inter_pro_dict:
                 val = self._flush_text()
                 if key == 'Signatures':
                     pass
@@ -171,7 +171,7 @@ class InterProParser(  sgmllib.SGMLParser ):
     def end_ol( self ):
         if self._state == 'references':
             self._references.append( self._current_reference )
-            self.inter_pro_dict[ 'References' ] = self._references
+            self.inter_pro_dict['References'] = self._references
         self._state = 'chugging_along'
 
     def start_li( self, attrs ):
@@ -185,14 +185,14 @@ class InterProParser(  sgmllib.SGMLParser ):
     def end_li( self ):
         if self._state == 'examples':
             text = self._flush_text()
-            self.inter_pro_dict[ 'Examples' ].append( text )
+            self.inter_pro_dict['Examples'].append( text )
 
     def start_a( self, attrs ):
         dictionary = dict( attrs )
         if self._state == 'references':
             if self._reference_state == 'pubmed_id':
-                if dictionary.has_key( 'name' ):
-                    self._current_reference.pubmed_id = dictionary[ 'name' ]
+                if 'name' in dictionary:
+                    self._current_reference.pubmed_id = dictionary['name']
                     self._reference_state = 'authors'
             elif self._reference_state == 'journal':
                 self._current_reference.journal = self._flush_text()
@@ -217,9 +217,9 @@ class InterProParser(  sgmllib.SGMLParser ):
                 self._current_reference.authors = self._flush_text()
                 self._reference_state = 'title'
         elif self._key_waiting == 'Signatures':
-            self.inter_pro_dict[ 'Signatures' ].append( self._flush_text() )
+            self.inter_pro_dict['Signatures'].append( self._flush_text() )
         elif self._key_waiting == 'Database links':
-            self.inter_pro_dict[ 'Database links' ].append( self._flush_text() )
+            self.inter_pro_dict['Database links'].append( self._flush_text() )
 
     def start_i( self, attrs ):
         pass
