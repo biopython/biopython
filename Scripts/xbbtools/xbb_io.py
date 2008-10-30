@@ -4,7 +4,6 @@
 # Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
 # File: xbb_io.py
 
-import string, re, regsub
 import os, sys  # os.system, sys.argv
 sys.path.insert(0, '.')
 sys.path.insert(0, os.path.expanduser('~thomas/cbs/python/biopython'))

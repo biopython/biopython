@@ -4,7 +4,7 @@
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_translations.py
 
-import string, re, regsub
+import string
 import os, sys  # os.system, sys.argv
 import time
 

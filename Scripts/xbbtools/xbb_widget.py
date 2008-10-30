@@ -9,7 +9,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import string, re, regsub
+import string, re
 import os, sys
 import time
 
@@ -398,7 +398,7 @@ class xbb_widget:
         seq = string.upper(seq)
         aa = {'A':0,'C':0,'G':0,'T':0,'N':0}
         for nt in seq:
-            if not aa.has_key(nt): nt = 'N'
+            if nt not in aa: nt = 'N'
             aa[nt] = aa[nt] + 1
 
         GC = (100.0*(aa['G'] + aa['C']))/len(seq)

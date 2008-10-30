@@ -4,7 +4,6 @@
 # Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
 # File: xbb_sequence.py
 
-import string, re, regsub
 import os, sys  # os.system, sys.argv
 sys.path.insert(0, '.')
 from Bio import Sequence

@@ -4,7 +4,6 @@
 # Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
 # File: xbb_blastbg.py
 
-import string, re, regsub
 import posixpath, posix
 import os, sys, commands
 sys.path.insert(0, '.')
