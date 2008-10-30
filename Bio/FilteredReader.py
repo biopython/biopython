@@ -100,7 +100,7 @@ class FilteredReader:
     def read_block( self, len_expected ):
 
         len_filtered = 0
-        len_adjusted = len_expected - len( self._start_line )
+        len_adjusted -= len( self._start_line )
         filtered_text = ''
         while( len_filtered < len_expected ):
 
@@ -123,13 +123,8 @@ class FilteredReader:
         text_read = self._handle.read()
         full_text = self._start_line + text_read
         lines = full_text.splitlines( 1 )
-        filtered_text = filtered_text + self.filter( lines[:] )
+        filtered_text += self.filter( lines[:] )
         return filtered_text[ : ]
-
-
-
-
-
 
     def _get_len_expected( self, args, keywds ):
 
@@ -137,8 +132,8 @@ class FilteredReader:
             len_expected = args[ 0 ]
             if( len_expected < 0 ):
                 len_expected = None
-        elif( keywds.has_key( 'size' ) ):
-            len_expected = keywds[ 'size' ]
+        elif 'size' in keywds:
+            len_expected = keywds['size']
         else:
             len_expected = None
         return len_expected
@@ -149,7 +144,7 @@ class FilteredReader:
         for line in lines:
             for filter in filter_chain:
                 line = filter( *( line, ) )
-            filtered_text = filtered_text + line
+            filtered_text += line
 
         return filtered_text
 
