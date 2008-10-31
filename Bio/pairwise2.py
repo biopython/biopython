@@ -735,7 +735,7 @@ class dictionary_match:
         self.score_dict = score_dict
         self.symmetric = symmetric
     def __call__(self, charA, charB):
-        if self.symmetric and not self.score_dict.has_key((charA, charB)):
+        if self.symmetric and (charA, charB) not in self.score_dict:
             # If the score dictionary is symmetric, then look up the
             # score both ways.
             charB, charA = charA, charB

@@ -264,11 +264,14 @@ class Crystal:
     def keys(self): return self.data.keys()
     def items(self): return self.data.items()
     def values(self): return self.data.values()
-    def has_key(self, key): return self.data.has_key(key)
+
+    #TODO - Define the __in__ method?
+
+    def has_key(self, key): return key in self.data
     def get(self, key, failobj=None):
         return self.data.get(key, failobj)
     def setdefault(self, key, failobj=None):
-        if not self.data.has_key(key):
+        if key not in self.data:
             self.data[key] = failobj
         return self.data[key]
     def popitem(self):
