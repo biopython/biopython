@@ -18,8 +18,6 @@ MarkovModel     Holds the description of a markov model
 
 import numpy
 
-import StringIO # StringIO was in Numeric's namespace, so import this after.
-
 
 def itemindex(values):
     d = {}
@@ -42,6 +40,7 @@ class MarkovModel:
         self.p_transition = p_transition
         self.p_emission = p_emission
     def __str__(self):
+        import StringIO
         handle = StringIO.StringIO()
         save(self, handle)
         handle.seek(0)
