@@ -15,16 +15,15 @@ approach to regression analysis by local fitting", Journal of the American
 Statistical Association, September 1988, volume 83, number 403, pp. 596-610.
 """
 
-from numpy.oldnumeric import *
-from numpy.oldnumeric.linear_algebra import solve_linear_equations
+import numpy
 
 try:
     from Bio.Cluster import median
     # The function median in Bio.Cluster is faster than the function median
     # in Numeric's MLab, as it does not require a full sort.
 except ImportError, x:
-    # Use the median function in numpy's MLab if Bio.Cluster is not available
-    from numpy.oldnumeric.mlab import median
+    # Use the median function in NumPy if Bio.Cluster is not available
+    from numpy import median
 
 def lowess(x, y, f=2./3., iter=3):
   """lowess(x, y, f=2./3., iter=3) -> yest
@@ -39,24 +38,24 @@ The smoothing span is given by f. A larger value for f will result in a
 smoother curve. The number of robustifying iterations is given by iter. The
 function will run faster with a smaller number of iterations."""
   n = len(x)
-  r = int(ceil(f*n))
-  h = [sort(abs(x-x[i]))[r] for i in range(n)]
-  w = clip(abs(([x]-transpose([x]))/h),0.0,1.0)
+  r = int(numpy.ceil(f*n))
+  h = [numpy.sort(abs(x-x[i]))[r] for i in range(n)]
+  w = numpy.clip(abs(([x]-numpy.transpose([x]))/h),0.0,1.0)
   w = 1-w*w*w
   w = w*w*w
-  yest = zeros(n,'d')
-  delta = ones(n,'d')
+  yest = numpy.zeros(n)
+  delta = numpy.ones(n)
   for iteration in range(iter):
     for i in range(n):
       weights = delta * w[:,i]
-      b = array([sum(weights*y), sum(weights*y*x)])
-      A = array([[sum(weights),   sum(weights*x)],
-                 [sum(weights*x), sum(weights*x*x)]])
-      beta = solve_linear_equations(A,b)
+      b = numpy.array([sum(weights*y), sum(weights*y*x)])
+      A = numpy.array([[sum(weights),   sum(weights*x)],
+                       [sum(weights*x), sum(weights*x*x)]])
+      beta = numpy.linalg.solve(A,b)
       yest[i] = beta[0] + beta[1]*x[i]
     residuals = y-yest
-    s = median(abs(residuals))
-    delta = clip(residuals/(6*s),-1,1)
+    s = numpy.median(abs(residuals))
+    delta = numpy.clip(residuals/(6*s),-1,1)
     delta = 1-delta*delta
     delta = delta*delta
   return yest
