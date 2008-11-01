@@ -3,8 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from numpy.oldnumeric import array, Float0, zeros
 import os
+import numpy
 
 from Bio.SVDSuperimposer import SVDSuperimposer
 from Bio.PDB import *
@@ -76,7 +76,7 @@ def _read_fragments(size, length, dir="."):
             fid+=1
             continue
         # Add CA coord to Fragment
-        coord=array(map(float, sl[0:3]))
+        coord=numpy.array(map(float, sl[0:3]))
         # XXX= dummy residue name
         f.add_residue("XXX", coord)
     fp.close()
@@ -101,7 +101,7 @@ class Fragment:
         self.counter=0
         self.resname_list=[]
         # CA coordinate matrix
-        self.coords_ca=zeros((length, 3), "d")
+        self.coords_ca=numpy.zeros((length, 3), "d")
         self.fid=fid
 
     def get_resname_list(self):

@@ -3,7 +3,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.  
 
-from numpy.oldnumeric import Float0
 from copy import copy
 
 from PDBExceptions import PDBConstructionException, PDBException

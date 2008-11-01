@@ -4,7 +4,7 @@
 # as part of this package.           
 
 # Python stuff
-from numpy.oldnumeric import array, sum, sqrt, matrixmultiply
+import numpy
 
 # My stuff
 from Entity import DisorderedEntityWrapper
@@ -78,7 +78,7 @@ class Atom:
         @type other: L{Atom}
         """
         diff=self.coord-other.coord
-        return sqrt(sum(diff*diff))
+        return numpy.sqrt(numpy.dot(diff,diff))
 
     # set methods
 
@@ -227,7 +227,7 @@ class Atom:
         @param tran: the translation vector
         @type tran: size 3 Numeric array
         """
-        self.coord=matrixmultiply(self.coord, rot)+tran
+        self.coord=numpy.dot(self.coord, rot)+tran
         
     def get_vector(self):
         """

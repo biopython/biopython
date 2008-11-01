@@ -3,13 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from numpy.oldnumeric import array, sum, sqrt, arccos, matrixmultiply, \
-     transpose, cos, sin, zeros, trace
-from numpy.oldnumeric.linear_algebra import determinant, eigenvectors
-from numpy.oldnumeric.mlab import eye
-from math import acos
+import numpy
 import sys
-from math import pi
 
 
 __doc__="Vector class, including rotation-related functions."
@@ -20,14 +15,14 @@ def m2rotaxis(m):
     """
     # Angle always between 0 and pi
     # Sense of rotation is defined by axis orientation
-    t=0.5*(trace(m)-1)
+    t=0.5*(numpy.trace(m)-1)
     t=max(-1, t)
     t=min(1, t)
-    angle=acos(t)
+    angle=numpy.arccos(t)
     if angle<1e-15:
         # Angle is 0
         return 0.0, Vector(1,0,0)
-    elif angle<pi:
+    elif angle<numpy.pi:
         # Angle is smaller than pi
         x=m[2,1]-m[1,2]
         y=m[0,2]-m[2,0]
@@ -41,20 +36,20 @@ def m2rotaxis(m):
         m11=m[1,1]
         m22=m[2,2]
         if m00>m11 and m00>m22:
-            x=sqrt(m00-m11-m22+0.5)
+            x=numpy.sqrt(m00-m11-m22+0.5)
             y=m[0,1]/(2*x)
             z=m[0,2]/(2*x)
         elif m11>m00 and m11>m22:
-            y=sqrt(m11-m00-m22+0.5)
+            y=numpy.sqrt(m11-m00-m22+0.5)
             x=m[0,1]/(2*y)
             z=m[1,2]/(2*y)
         else:
-            z=sqrt(m22-m00-m11+0.5)
+            z=numpy.sqrt(m22-m00-m11+0.5)
             x=m[0,2]/(2*z)
             y=m[1,2]/(2*z)
         axis=Vector(x,y,z)
         axis.normalize()
-        return pi, axis
+        return numpy.pi, axis
 
 
 def vector_to_axis(line, point):
@@ -72,7 +67,7 @@ def vector_to_axis(line, point):
     line=line.normalized()
     np=point.norm()
     angle=line.angle(point)
-    return point-line**(np*cos(angle))
+    return point-line**(np*numpy.cos(angle))
 
 
 def rotaxis2m(theta, vector):
@@ -96,11 +91,11 @@ def rotaxis2m(theta, vector):
     """
     vector=vector.copy()
     vector.normalize()
-    c=cos(theta)
-    s=sin(theta)
+    c=numpy.cos(theta)
+    s=numpy.sin(theta)
     t=1-c
     x,y,z=vector.get_array()
-    rot=zeros((3,3), "d")
+    rot=numpy.zeros((3,3))
     # 1st row
     rot[0,0]=t*x*x+c
     rot[0,1]=t*x*y-s*z
@@ -132,13 +127,13 @@ def refmat(p,q):
     p.normalize()
     q.normalize()
     if (p-q).norm()<1e-5:
-        return eye(3)
+        return numpy.identity(3)
     pq=p-q
     pq.normalize()
     b=pq.get_array()
     b.shape=(3, 1)
     i=eye(3)
-    ref=i-2*matrixmultiply(b, transpose(b))
+    ref=i-2*numpy.dot(b, numpy.transpose(b))
     return ref
 
 def rotmat(p,q):
@@ -158,7 +153,7 @@ def rotmat(p,q):
     @return: rotation matrix that rotates p onto q
     @rtype: 3x3 Numeric array
     """
-    rot=matrixmultiply(refmat(q, -p), refmat(p, -p))
+    rot=numpy.dot(refmat(q, -p), refmat(p, -p))
     return rot
 
 def calc_angle(v1, v2, v3):
@@ -209,10 +204,10 @@ class Vector:
             # Array, list, tuple...
             if len(x)!=3:
                 raise "Vector: x is not a list/tuple/array of 3 numbers"
-            self._ar=array(x, 'd')
+            self._ar=numpy.array(x, 'd')
         else:
             # Three numbers
-            self._ar=array((x, y, z), 'd')
+            self._ar=numpy.array((x, y, z), 'd')
 
     def __repr__(self):
         x,y,z=self._ar
@@ -228,7 +223,7 @@ class Vector:
         if isinstance(other, Vector):
             a=self._ar+other._ar
         else:
-            a=self._ar+array(other)
+            a=self._ar+numpy.array(other)
         return Vector(a)
 
     def __sub__(self, other):
@@ -236,7 +231,7 @@ class Vector:
         if isinstance(other, Vector):
             a=self._ar-other._ar
         else:
-            a=self._ar-array(other)
+            a=self._ar-numpy.array(other)
         return Vector(a)
 
     def __mul__(self, other):
@@ -245,7 +240,7 @@ class Vector:
 
     def __div__(self, x):
         "Return Vector(coords/a)"
-        a=self._ar/array(x)
+        a=self._ar/numpy.array(x)
         return Vector(a)
 
     def __pow__(self, other):
@@ -253,12 +248,12 @@ class Vector:
         if isinstance(other, Vector):
             a,b,c=self._ar
             d,e,f=other._ar
-            c1=determinant(array(((b,c), (e,f))))
-            c2=-determinant(array(((a,c), (d,f))))
-            c3=determinant(array(((a,b), (d,e))))
+            c1=numpy.linalg.det(numpy.array(((b,c), (e,f))))
+            c2=-numpy.linalg.det(numpy.array(((a,c), (d,f))))
+            c3=numpy.linalg.det(numpy.array(((a,b), (d,e))))
             return Vector(c1,c2,c3)
         else:
-            a=self._ar*array(other)
+            a=self._ar*numpy.array(other)
             return Vector(a)
 
     def __getitem__(self, i):
@@ -269,7 +264,7 @@ class Vector:
 
     def norm(self):
         "Return vector norm"
-        return sqrt(sum(self._ar*self._ar))
+        return numpy.sqrt(sum(self._ar*self._ar))
 
     def normsq(self):
         "Return square of vector norm"
@@ -293,20 +288,20 @@ class Vector:
         # Take care of roundoff errors
         c=min(c,1)
         c=max(-1,c)
-        return arccos(c)
+        return numpy.arccos(c)
 
     def get_array(self):
         "Return (a copy of) the array of coordinates"
-        return array(self._ar)
+        return numpy.array(self._ar)
 
     def left_multiply(self, matrix):
         "Return Vector=Matrix x Vector"
-        a=matrixmultiply(matrix, self._ar)
+        a=numpy.dot(matrix, self._ar)
         return Vector(a)
 
     def right_multiply(self, matrix):
         "Return Vector=Vector x Matrix"
-        a=matrixmultiply(self._ar, matrix)
+        a=numpy.dot(self._ar, matrix)
         return Vector(a)
 
     def copy(self):
@@ -315,7 +310,6 @@ class Vector:
 
 if __name__=="__main__":
 
-        from math import pi
         from RandomArray import *
         from numpy.oldnumeric import *
 
@@ -340,7 +334,7 @@ if __name__=="__main__":
         print v3
         print v1.left_multiply(ref)
         print v1.left_multiply(rot)
-        print v1.right_multiply(transpose(rot))
+        print v1.right_multiply(numpy.transpose(rot))
 
         # -
         print v1-v2
@@ -369,11 +363,11 @@ if __name__=="__main__":
         # getitem
         print v1[2]
 
-        print array(v1)
+        print numpy.array(v1)
 
         print "ROT"
 
-        angle=random()*pi
+        angle=random()*numpy.pi
         axis=Vector(random(3)-random(3))
         axis.normalize()
 

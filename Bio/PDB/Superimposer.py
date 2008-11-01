@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from numpy.oldnumeric import Float0, zeros
+import numpy
 
 from Bio.SVDSuperimposer import SVDSuperimposer
 from Bio.PDB.PDBExceptions import PDBException
@@ -31,8 +31,8 @@ class Superimposer:
         if not (len(fixed)==len(moving)):
             raise PDBException("Fixed and moving atom lists differ in size")
         l=len(fixed)
-        fixed_coord=zeros((l, 3), 'd')
-        moving_coord=zeros((l, 3), 'd')
+        fixed_coord=numpy.zeros((l, 3))
+        moving_coord=numpy.zeros((l, 3))
         for i in range(0, len(fixed)):
             fixed_coord[i]=fixed[i].get_coord()
             moving_coord[i]=moving[i].get_coord()
@@ -49,8 +49,8 @@ class Superimposer:
         if self.rotran is None:
             raise PDBException("No transformation has been calculated yet")
         rot, tran=self.rotran
-        rot=rot.astype(Float0)
-        tran=tran.astype(Float0)
+        rot=rot.astype('f')
+        tran=tran.astype('f')
         for atom in atom_list:
             atom.transform(rot, tran)
 
@@ -68,8 +68,8 @@ if __name__=="__main__":
     s2=p.get_structure("MOVING", sys.argv[1])
     moving=Selection.unfold_entities(s2, "A")
 
-    rot=identity(3).astype(Float0)
-    tran=array((1.0, 2.0, 3.0), Float0)
+    rot=identity(3).astype('f')
+    tran=array((1.0, 2.0, 3.0), 'f')
 
     for atom in moving:
         atom.transform(rot, tran)

@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from numpy.oldnumeric import array, sum, sqrt
+import numpy
 import tempfile
 import os
 import sys
@@ -60,7 +60,7 @@ def _read_vertex_array(filename):
         vl=map(float, sl[0:3])
         vertex_list.append(vl)
     fp.close()
-    return array(vertex_list)
+    return numpy.array(vertex_list)
 
 def get_surface(pdb_file, PDB_TO_XYZR="pdb_to_xyzr", MSMS="msms"):
     """
@@ -98,7 +98,7 @@ def min_dist(coord, surface):
     """
     d=surface-coord
     d2=sum(d*d, 1)
-    return sqrt(min(d2))
+    return numpy.sqrt(min(d2))
 
 def residue_depth(residue, surface):
     """

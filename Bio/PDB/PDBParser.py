@@ -7,7 +7,7 @@
 import sys
 from string import split
 
-from numpy.oldnumeric import array, Float0
+import numpy
 
 # My stuff
 from StructureBuilder import StructureBuilder
@@ -154,7 +154,7 @@ class PDBParser:
                 x=float(line[30:38]) 
                 y=float(line[38:46]) 
                 z=float(line[46:54])
-                coord=array((x, y, z), Float0)
+                coord=numpy.array((x, y, z), 'f')
                 # occupancy & B factor
                 occupancy=float(line[54:60])
                 bfactor=float(line[60:66])
@@ -186,7 +186,7 @@ class PDBParser:
             elif(record_type=='ANISOU'):
                 anisou=map(float, (line[28:35], line[35:42], line[43:49], line[49:56], line[56:63], line[63:70]))
                 # U's are scaled by 10^4 
-                anisou_array=(array(anisou, Float0)/10000.0).astype(Float0)
+                anisou_array=(numpy.array(anisou, 'f')/10000.0).astype('f')
                 structure_builder.set_anisou(anisou_array)
             elif(record_type=='MODEL '):
                 structure_builder.init_model(current_model_id)
@@ -206,12 +206,12 @@ class PDBParser:
                 # standard deviation of anisotropic B factor
                 siguij=map(float, (line[28:35], line[35:42], line[42:49], line[49:56], line[56:63], line[63:70]))
                 # U sigma's are scaled by 10^4
-                siguij_array=(array(siguij, Float0)/10000.0).astype(Float0)   
+                siguij_array=(numpy.array(siguij, 'f')/10000.0).astype('f')   
                 structure_builder.set_siguij(siguij_array)
             elif(record_type=='SIGATM'):
                 # standard deviation of atomic positions
                 sigatm=map(float, (line[30:38], line[38:45], line[46:54], line[54:60], line[60:66]))
-                sigatm_array=array(sigatm, Float0)
+                sigatm_array=numpy.array(sigatm, 'f')
                 structure_builder.set_sigatm(sigatm_array)
             local_line_counter=local_line_counter+1
         # EOF (does not end in END or CONECT)

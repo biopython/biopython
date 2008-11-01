@@ -6,7 +6,7 @@
 #Python stuff
 from string import atoi, atof, letters
 
-from numpy.oldnumeric import array, Float0
+import numpy
 
 # My stuff
 from MMCIF2Dict import MMCIF2Dict
@@ -91,14 +91,14 @@ class MMCIFParser:
                 icode, int_resseq=self._get_icode(resseq)
                 structure_builder.init_residue(resname, hetatm_flag, int_resseq, 
                     icode)
-            coord=array((x, y, z), Float0)  
+            coord=numpy.array((x, y, z), 'f')  
             structure_builder.init_atom(name, coord, tempfactor, occupancy, altloc,
                 name)   
             if aniso_flag==1:
                 u=(aniso_u11[i], aniso_u12[i], aniso_u13[i],
                     aniso_u22[i], aniso_u23[i], aniso_u33[i])
                 mapped_anisou=map(atof, u)
-                anisou_array=array(mapped_anisou, Float0)
+                anisou_array=numpy.array(mapped_anisou, 'f')
                 structure_builder.set_anisou(anisou_array)
         # Now try to set the cell
         try:
@@ -108,7 +108,7 @@ class MMCIFParser:
             alpha=atof(mmcif_dict["_cell.angle_alpha"])
             beta=atof(mmcif_dict["_cell.angle_beta"])
             gamma=atof(mmcif_dict["_cell.angle_gamma"])
-            cell=array((a, b, c, alpha, beta, gamma), Float0)
+            cell=numpy.array((a, b, c, alpha, beta, gamma), 'f')
             spacegroup=mmcif_dict["_symmetry.space_group_name_H-M"]
             spacegroup=spacegroup[1:-1] # get rid of quotes!!
             if spacegroup==None:

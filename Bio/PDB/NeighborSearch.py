@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from numpy.oldnumeric import array
+import numpy
 
 from Bio.KDTree import *
 from PDBExceptions import PDBException
@@ -35,7 +35,7 @@ class NeighborSearch:
         # get the coordinates
         coord_list=map(lambda a: a.get_coord(), atom_list) 
         # to Nx3 array of type float
-        self.coords=array(coord_list).astype("f")
+        self.coords=numpy.array(coord_list).astype("f")
         assert(bucket_size>1)
         assert(self.coords.shape[1]==3)
         assert(self.coords.typecode()=="f")
