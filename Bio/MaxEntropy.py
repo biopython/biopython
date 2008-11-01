@@ -14,7 +14,7 @@ XXX ref
 """
 import math
 from numpy.oldnumeric import *
-from Bio import listfns
+
 
 # XXX typecodes for Numeric
 # XXX multiprocessor
@@ -96,7 +96,9 @@ def _calc_empirical_expects(xs, ys, classes, features):
     """
     # E[f_i] = SUM_x,y P(x, y) f(x, y)
     #        = 1/N f(x, y)
-    class2index = listfns.itemindex(classes)
+    class2index = {}
+    for index, key in enumerate(classes):
+        class2index[key] = index
     ys_i = [class2index[y] for y in ys]
     
     expect = []
@@ -231,7 +233,7 @@ def train(training_set, results, feature_fns, update_fn=None):
     xs, ys = training_set, results
 
     # Get a list of all the classes that need to be trained.
-    classes = listfns.items(results)
+    classes = list(set(results))
     classes.sort()
 
     # Cache values for all features.
