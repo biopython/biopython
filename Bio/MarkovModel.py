@@ -15,23 +15,23 @@ save            Save a MarkovModel.
 Classes:
 MarkovModel     Holds the description of a markov model
 """
-import math
 
-from numpy.oldnumeric import *
-import numpy.oldnumeric.random_array as RandomArray
+import numpy
 
 import StringIO # StringIO was in Numeric's namespace, so import this after.
 
-from Bio import listfns
 
+def itemindex(values):
+    d = {}
+    entries = enumerate(values[::-1])
+    n = len(values)-1
+    for index, key in entries: d[key] = n-index
+    return d
 
-#RandomArray.seed(0, 0)   # use 0 for debugging
-RandomArray.seed()
+numpy.random.seed()
 
 VERY_SMALL_NUMBER = 1E-300
-LOG0 = log(VERY_SMALL_NUMBER)
-
-MATCODE = Float64
+LOG0 = numpy.log(VERY_SMALL_NUMBER)
 
 class MarkovModel:
     def __init__(self, states, alphabet,
@@ -67,21 +67,21 @@ def load(handle):
     N, M = len(states), len(alphabet)
 
     # Load the initial probabilities.
-    mm.p_initial = zeros(N, MATCODE)
+    mm.p_initial = numpy.zeros(N)
     line = _readline_and_check_start(handle, "INITIAL:")
     for i in range(len(states)):
         line = _readline_and_check_start(handle, "  %s:" % states[i])
         mm.p_initial[i] = float(line.split()[-1])
 
     # Load the transition.
-    mm.p_transition = zeros((N, N), MATCODE)
+    mm.p_transition = numpy.zeros((N, N))
     line = _readline_and_check_start(handle, "TRANSITION:")
     for i in range(len(states)):
         line = _readline_and_check_start(handle, "  %s:" % states[i])
         mm.p_transition[i,:] = map(float, line.split()[1:])
 
     # Load the emission.
-    mm.p_emission = zeros((N, M), MATCODE)
+    mm.p_emission = numpy.zeros((N, M))
     line = _readline_and_check_start(handle, "EMISSION:")
     for i in range(len(states)):
         line = _readline_and_check_start(handle, "  %s:" % states[i])
@@ -134,22 +134,26 @@ def train_bw(states, alphabet, training_data,
     N, M = len(states), len(alphabet)
     if not training_data:
         raise ValueError("No training data given.")
-    pseudo_initial, pseudo_emission, pseudo_transition = map(
-        _safe_asarray, (pseudo_initial, pseudo_emission, pseudo_transition))
-    if pseudo_initial and shape(pseudo_initial) != (N,):
-        raise ValueError("pseudo_initial not shape len(states)")
-    if pseudo_transition and shape(pseudo_transition) != (N,N):
-        raise ValueError("pseudo_transition not shape " + \
-                         "len(states) X len(states)")
-    if pseudo_emission and shape(pseudo_emission) != (N,M):
-        raise ValueError("pseudo_emission not shape " + \
-                         "len(states) X len(alphabet)")
+    if pseudo_initial!=None:
+        pseudo_initial = asarray(pseudo_initial)
+        if pseudo_initial.shape != (N,):
+            raise ValueError("pseudo_initial not shape len(states)")
+    if pseudo_transition!=None:
+        pseudo_transition = asarray(pseudo_transition)
+        if pseudo_transition.shape != (N,N):
+            raise ValueError("pseudo_transition not shape " + \
+                             "len(states) X len(states)")
+    if pseudo_emission!=None:
+        pseudo_emission = asarray(pseudo_emission)
+        if pseudo_emission.shape != (N,M):
+            raise ValueError("pseudo_emission not shape " + \
+                             "len(states) X len(alphabet)")
         
     # Training data is given as a list of members of the alphabet.
     # Replace those with indexes into the alphabet list for easier
     # computation.
     training_outputs = []
-    indexes = listfns.itemindex(alphabet)
+    indexes = itemindex(alphabet)
     for outputs in training_data:
         training_outputs.append([indexes[x] for x in outputs])
 
@@ -173,24 +177,36 @@ def _baum_welch(N, M, training_outputs,
                 pseudo_initial=None, pseudo_transition=None,
                 pseudo_emission=None, update_fn=None):
     # Returns (p_initial, p_transition, p_emission)
-
-    #This code works on numpy (but not on Numeric which lacks the "any" method)
-    p_initial = _safe_copy_and_check(p_initial, (N,))
-    if not p_initial.any():
+    if p_initial==None:
         p_initial = _random_norm(N)
-    p_transition = _safe_copy_and_check(p_transition, (N,N))
-    if not p_transition.any():
+    else:
+        p_initial = _copy_and_check(p_initial, (N,))
+
+    if p_transition==None:
         p_transition = _random_norm((N,N))
-    p_emission = _safe_copy_and_check(p_emission, (N,M))
-    if not p_emission.any():
-         p_emission = _random_norm((N,M))
+    else:
+        p_transition = _copy_and_check(p_transition, (N,N))
+    if p_emission==None:
+        p_emission = _random_norm((N,M))
+    else:
+        p_emission = _copy_and_check(p_emission, (N,M))
     
     # Do all the calculations in log space to avoid underflows.
     lp_initial, lp_transition, lp_emission = map(
-        log, (p_initial, p_transition, p_emission))
-    lpseudo_initial, lpseudo_transition, lpseudo_emission = map(
-        _safe_log, (pseudo_initial, pseudo_transition, pseudo_emission))
-    
+        numpy.log, (p_initial, p_transition, p_emission))
+    if pseudo_initial!=None:
+        lpseudo_initial = numpy.log(pseudo_initial)
+    else:
+        lpseudo_initial = None
+    if pseudo_transition!=None:
+        lpseudo_transition = numpy.log(pseudo_transition)
+    else:
+        lpseudo_transition = None
+    if pseudo_emission!=None:
+        lpseudo_emission = numpy.log(pseudo_emission)
+    else:
+        lpseudo_emission = None
+
     # Iterate through each sequence of output, updating the parameters
     # to the HMM.  Stop when the log likelihoods of the sequences
     # stops varying.
@@ -205,7 +221,7 @@ def _baum_welch(N, M, training_outputs,
             llik += x
         if update_fn is not None:
             update_fn(i, llik)
-        if prev_llik is not None and fabs(prev_llik-llik) < 0.1:
+        if prev_llik is not None and numpy.fabs(prev_llik-llik) < 0.1:
             break
         prev_llik = llik
     else:
@@ -213,7 +229,7 @@ def _baum_welch(N, M, training_outputs,
                            % MAX_ITERATIONS)
 
     # Return everything back in normal space.
-    return map(exp, (lp_initial, lp_transition, lp_emission))
+    return map(numpy.exp, (lp_initial, lp_transition, lp_emission))
     
 def _baum_welch_one(N, M, outputs,
                     lp_initial, lp_transition, lp_emission,
@@ -227,10 +243,10 @@ def _baum_welch_one(N, M, outputs,
 
     # Calculate the probability of traversing each arc for any given
     # transition.
-    lp_arc = zeros((N, N, T), MATCODE)
+    lp_arc = numpy.zeros((N, N, T))
     for t in range(T):
         k = outputs[t]
-        lp_traverse = zeros((N, N), MATCODE) # P going over one arc.
+        lp_traverse = numpy.zeros((N, N)) # P going over one arc.
         for i in range(N):
             for j in range(N):
                 # P(getting to this arc)
@@ -247,19 +263,19 @@ def _baum_welch_one(N, M, outputs,
 
 
     # Sum of all the transitions out of state i at time t.
-    lp_arcout_t = zeros((N, T), MATCODE)
+    lp_arcout_t = numpy.zeros((N, T))
     for t in range(T):
         for i in range(N):
             lp_arcout_t[i][t] = _logsum(lp_arc[i,:,t])
             
     # Sum of all the transitions out of state i.
-    lp_arcout = zeros(N, MATCODE)
+    lp_arcout = numpy.zeros(N)
     for i in range(N):
         lp_arcout[i] = _logsum(lp_arcout_t[i,:])
 
     # UPDATE P_INITIAL.
     lp_initial = lp_arcout_t[:,0]
-    if lpseudo_initial:
+    if lpseudo_initial!=None:
         lp_initial = _logvecadd(lp_initial, lpseudo_initial)
         lp_initial = lp_initial - _logsum(lp_initial)
     
@@ -269,7 +285,7 @@ def _baum_welch_one(N, M, outputs,
     for i in range(N):
         for j in range(N):
             lp_transition[i][j] = _logsum(lp_arc[i,j,:]) - lp_arcout[i]
-        if lpseudo_transition:
+        if lpseudo_transition!=None:
             lp_transition[i] = _logvecadd(lp_transition[i], lpseudo_transition)
             lp_transition[i] = lp_transition[i] - _logsum(lp_transition[i])
             
@@ -277,13 +293,13 @@ def _baum_welch_one(N, M, outputs,
     # transitions out of i when k is observed, divided by the sum of
     # the transitions out of i.
     for i in range(N):
-        ksum = zeros(M, MATCODE)+LOG0    # ksum[k] is the sum of all i with k.
+        ksum = numpy.zeros(M)+LOG0    # ksum[k] is the sum of all i with k.
         for t in range(T):
             k = outputs[t]
             for j in range(N):
                 ksum[k] = _logadd(ksum[k], lp_arc[i,j,t])
         ksum = ksum - _logsum(ksum)      # Normalize
-        if lpseudo_emission:
+        if lpseudo_emission!=None:
             ksum = _logvecadd(ksum, lpseudo_emission[i])
             ksum = ksum - _logsum(ksum)  # Renormalize
         lp_emission[i,:] = ksum
@@ -302,7 +318,7 @@ def _forward(N, T, lp_initial, lp_transition, lp_emission, outputs):
     # Nx(T+1) matrix, where the last column is the total probability
     # of the output.
     
-    matrix = zeros((N, T+1), MATCODE)
+    matrix = numpy.zeros((N, T+1))
     
     # Initialize the first column to be the initial values.
     matrix[:,0] = lp_initial
@@ -321,7 +337,7 @@ def _forward(N, T, lp_initial, lp_transition, lp_emission, outputs):
     return matrix
 
 def _backward(N, T, lp_transition, lp_emission, outputs):
-    matrix = zeros((N, T+1), MATCODE)
+    matrix = numpy.zeros((N, T+1))
     for t in range(T-1, -1, -1):
         k = outputs[t]
         for i in range(N):
@@ -357,23 +373,27 @@ def train_visible(states, alphabet, training_data,
 
     """
     N, M = len(states), len(alphabet)
-    pseudo_initial, pseudo_emission, pseudo_transition = map(
-        _safe_asarray, (pseudo_initial, pseudo_emission, pseudo_transition))
-    if pseudo_initial and shape(pseudo_initial) != (N,):
-        raise ValueError("pseudo_initial not shape len(states)")
-    if pseudo_transition and shape(pseudo_transition) != (N,N):
-        raise ValueError("pseudo_transition not shape " + \
-                         "len(states) X len(states)")
-    if pseudo_emission and shape(pseudo_emission) != (N,M):
-        raise ValueError("pseudo_emission not shape " + \
-                         "len(states) X len(alphabet)")
+    if pseudo_initial!=None:
+        pseudo_initial = asarray(pseudo_initial)
+        if pseudo_initial.shape != (N,):
+            raise ValueError("pseudo_initial not shape len(states)")
+    if pseudo_transition!=None:
+        pseudo_transition = asarray(pseudo_transition)
+        if pseudo_transition.shape != (N,N):
+            raise ValueError("pseudo_transition not shape " + \
+                             "len(states) X len(states)")
+    if pseudo_emission!=None:
+        pseudo_emission = asarray(pseudo_emission)
+        if pseudo_emission.shape != (N,M):
+            raise ValueError("pseudo_emission not shape " + \
+                             "len(states) X len(alphabet)")
     
     # Training data is given as a list of members of the alphabet.
     # Replace those with indexes into the alphabet list for easier
     # computation.
     training_states, training_outputs = [], []
-    states_indexes = listfns.itemindex(states)
-    outputs_indexes = listfns.itemindex(alphabet)
+    states_indexes = itemindex(states)
+    outputs_indexes = itemindex(alphabet)
     for toutputs, tstates in training_data:
         if len(tstates) != len(toutputs):
             raise ValueError("states and outputs not aligned")
@@ -390,7 +410,7 @@ def _mle(N, M, training_outputs, training_states, pseudo_initial,
          pseudo_transition, pseudo_emission):
     # p_initial is the probability that a sequence of states starts
     # off with a particular one.
-    p_initial = zeros(N, MATCODE)
+    p_initial = numpy.zeros(N)
     if pseudo_initial:
         p_initial = p_initial + pseudo_initial
     for states in training_states:
@@ -399,7 +419,7 @@ def _mle(N, M, training_outputs, training_states, pseudo_initial,
     
     # p_transition is the probability that a state leads to the next
     # one.  C(i,j)/C(i) where i and j are states.
-    p_transition = zeros((N,N), MATCODE)
+    p_transition = numpy.zeros((N,N))
     if pseudo_transition:
         p_transition = p_transition + pseudo_transition
     for states in training_states:
@@ -411,10 +431,10 @@ def _mle(N, M, training_outputs, training_states, pseudo_initial,
 
     # p_emission is the probability of an output given a state.
     # C(s,o)|C(s) where o is an output and s is a state.
-    p_emission = zeros((N,M), MATCODE)
+    p_emission = numpy.zeros((N,M))
     if pseudo_emission:
         p_emission = p_emission + pseudo_emission
-    p_emission = ones((N,M), MATCODE)
+    p_emission = numpy.ones((N,M))
     for outputs, states in zip(training_outputs, training_states):
         for o, s in zip(outputs, states):
             p_emission[s, o] += 1
@@ -424,7 +444,7 @@ def _mle(N, M, training_outputs, training_states, pseudo_initial,
     return p_initial, p_transition, p_emission
           
 def _argmaxes(vector, allowance=None):
-    return [argmax(vector)]
+    return [numpy.argmax(vector)]
 
 def find_states(markov_model, output):
     """find_states(markov_model, output) -> list of (states, score)"""
@@ -436,9 +456,9 @@ def find_states(markov_model, output):
     x = mm.p_initial + VERY_SMALL_NUMBER
     y = mm.p_transition + VERY_SMALL_NUMBER
     z = mm.p_emission + VERY_SMALL_NUMBER
-    lp_initial, lp_transition, lp_emission = map(log, (x, y, z))
+    lp_initial, lp_transition, lp_emission = map(numpy.log, (x, y, z))
     # Change output into a list of indexes into the alphabet.
-    indexes = listfns.itemindex(mm.alphabet)
+    indexes = itemindex(mm.alphabet)
     output = [indexes[x] for x in output]
     
     # Run the viterbi algorithm.
@@ -446,7 +466,7 @@ def find_states(markov_model, output):
 
     for i in range(len(results)):
         states, score = results[i]
-        results[i] = [mm.states[x] for x in states], exp(score)
+        results[i] = [mm.states[x] for x in states], numpy.exp(score)
     return results
 
 def _viterbi(N, lp_initial, lp_transition, lp_emission, output):
@@ -460,7 +480,7 @@ def _viterbi(N, lp_initial, lp_transition, lp_emission, output):
         backtrace.append([None] * T)
 
     # Store the best scores.
-    scores = zeros((N, T), MATCODE)
+    scores = numpy.zeros((N, T))
     scores[:,0] = lp_initial + lp_emission[:,output[0]]
     for t in range(1, T):
         k = output[t]
@@ -495,9 +515,9 @@ def _viterbi(N, lp_initial, lp_transition, lp_emission, output):
 
 def _normalize(matrix):
     # Make sure numbers add up to 1.0
-    if len(shape(matrix)) == 1:
+    if len(matrix.shape) == 1:
         matrix = matrix / float(sum(matrix))
-    elif len(shape(matrix)) == 2:
+    elif len(matrix.shape) == 2:
         # Normalize by rows.
         for i in range(len(matrix)):
             matrix[i,:] = matrix[i,:] / sum(matrix[i,:])
@@ -506,45 +526,30 @@ def _normalize(matrix):
     return matrix
     
 def _uniform_norm(shape):
-    matrix = ones(shape, MATCODE)
+    matrix = numpy.ones(shape)
     return _normalize(matrix)
 
 def _random_norm(shape):
-    matrix = asarray(RandomArray.random(shape), MATCODE)
+    matrix = numpy.random.random(shape)
     return _normalize(matrix)
 
 def _copy_and_check(matrix, desired_shape):
     # Copy the matrix.
-    matrix = array(matrix, MATCODE, copy=1)
+    matrix = numpy.array(matrix, copy=1)
     # Check the dimensions.
-    if shape(matrix) != desired_shape:
+    if matrix.shape != desired_shape:
         raise ValuError("Incorrect dimension")
     # Make sure it's normalized.
-    if len(shape(matrix)) == 1:
-        if fabs(sum(matrix)-1.0) > 0.01:
+    if len(matrix.shape) == 1:
+        if numpy.fabs(sum(matrix)-1.0) > 0.01:
             raise ValueError("matrix not normalized to 1.0")
-    elif len(shape(matrix)) == 2:
+    elif len(matrix.shape) == 2:
         for i in range(len(matrix)):
-            if fabs(sum(matrix[i])-1.0) > 0.01:
+            if numpy.fabs(sum(matrix[i])-1.0) > 0.01:
                 raise ValueError("matrix %d not normalized to 1.0" % i)
     else:
         raise ValueError("I don't handle matrices > 2 dimensions")
     return matrix
-
-def _safe_copy_and_check(matrix, desired_shape):
-    if matrix is None:
-        return None
-    return _copy_and_check(matrix, desired_shape)
-
-def _safe_log(n):
-    if n is None:
-        return None
-    return log(n)
-
-def _safe_asarray(a, typecode=None):
-    if a is None:
-        return None
-    return asarray(a, typecode=typecode)
 
 def _logadd(logx, logy):
     if logy - logx > 100:
@@ -552,11 +557,11 @@ def _logadd(logx, logy):
     elif logx - logy > 100:
         return logx
     minxy = min(logx, logy)
-    return minxy + log(exp(logx-minxy) + exp(logy-minxy))
+    return minxy + numpy.log(numpy.exp(logx-minxy) + numpy.exp(logy-minxy))
 
 def _logsum(matrix):
-    if len(shape(matrix)) > 1:
-        vec = reshape(matrix, (product(shape(matrix)),))
+    if len(matrix.shape) > 1:
+        vec = numpy.reshape(matrix, (numpy.product(matrix.shape),))
     else:
         vec = matrix
     sum = LOG0
@@ -566,14 +571,14 @@ def _logsum(matrix):
 
 def _logvecadd(logvec1, logvec2):
     assert len(logvec1) == len(logvec2), "vectors aren't the same length"
-    sumvec = zeros(len(logvec1), MATCODE)
+    sumvec = numpy.zeros(len(logvec1))
     for i in range(len(logvec1)):
         sumvec[i] = _logadd(logvec1[i], logvec2[i])
     return sumvec
 
 def _exp_logsum(numbers):
     sum = _logsum(numbers)
-    return math.exp(sum)
+    return numpy.exp(sum)
 
 try:
     import cMarkovModel
