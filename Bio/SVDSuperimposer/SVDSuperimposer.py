@@ -3,9 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from numpy.oldnumeric import dot, transpose, sum, sqrt
-from numpy.oldnumeric.linear_algebra import singular_value_decomposition, \
-     determinant
+from numpy import dot, transpose, sqrt
+from numpy.linalg import svd, det
 
 class SVDSuperimposer:
     """
@@ -78,10 +77,10 @@ class SVDSuperimposer:
         reference_coords=reference_coords-av2
         # correlation matrix
         a=dot(transpose(coords), reference_coords)
-        u, d, vt=singular_value_decomposition(a)
+        u, d, vt=svd(a)
         self.rot=transpose(dot(transpose(vt), transpose(u)))
         # check if we have found a reflection
-        if determinant(self.rot)<0:
+        if det(self.rot)<0:
             vt[2]=-vt[2]
             self.rot=transpose(dot(transpose(vt), transpose(u)))
         self.tran=av2-dot(av1, self.rot)
