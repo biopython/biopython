@@ -7,10 +7,10 @@ Algorithms and Applications" (Mark de Berg, Marc van Kreveld, Mark Overmars,
 Otfried Schwarzkopf). Author: Thomas Hamelryck.
 """
 
-from numpy import sum, sqrt
+from numpy import sum, sqrt, dtype, array
 from numpy.random import random
 
-import _CKDTree 
+from Bio.KDTree import _CKDTree 
 
 def _dist(p, q):
     diff=p-q
@@ -128,11 +128,11 @@ class KDTree:
         points have dimensionality D and there are N points, the coords 
         array should be NxD dimensional. 
         """
-        if min(coords)<=-1e6 or max(coords)>=1e6:
+        if coords.min()<=-1e6 or coords.max()>=1e6:
                 raise Exception("Points should lie between -1e6 and 1e6")
         if len(coords.shape)!=2 or coords.shape[1]!=self.dim:
                 raise Exception("Expected a Nx%i Numeric array" % self.dim)
-        if coords.typecode()!="f":
+        if coords.dtype!=dtype('float32'):
                 raise Exception("Expected a Numeric array of type float")
         self.kdt.set_data(coords)
         self.built=1
@@ -152,8 +152,8 @@ class KDTree:
         if center.shape!=(self.dim,):
                 raise Exception("Expected a %i-dimensional Numeric array" \
                                 % self.dim)
-        if center.typecode()!="f":
-                raise Exception("Expected a Numeric array of type float")
+        if center.dtype!=dtype('float32'):
+                raise Exception("Expected a Numeric array of type float32")
         self.kdt.search_center_radius(center, radius)
 
     def get_radii(self):
@@ -216,7 +216,7 @@ class KDTree:
 
 if __name__=="__main__":
 
-    from RandomArray import *
+    from numpy.random import random
 
     nr_points=100000
     dim=3
