@@ -29,7 +29,7 @@ classify       Classify an observation into a class.
 # add code to help discretize data
 # use objects
 
-from numpy import *
+import numpy
 from Bio import listfns
 
 class NaiveBayes:
@@ -70,24 +70,24 @@ def calculate(nb, observation, scale=0):
 
     # Calculate log P(observation|class) for every class.
     n  = len(nb.classes)
-    lp_observation_class = zeros(n)   # array of log P(observation|class)
+    lp_observation_class = numpy.zeros(n)   # array of log P(observation|class)
     for i in range(n):
         # log P(observation|class) = SUM_i log P(observation_i|class)
         probs = [None] * len(observation)
         for j in range(len(observation)):
             probs[j] = nb.p_conditional[i][j].get(observation[j], 0)
-        lprobs = log(clip(probs, 1.e-300, 1.e+300))
+        lprobs = numpy.log(numpy.clip(probs, 1.e-300, 1.e+300))
         lp_observation_class[i] = sum(lprobs)
 
     # Calculate log P(class).
-    lp_prior = log(nb.p_prior)
+    lp_prior = numpy.log(nb.p_prior)
 
     # Calculate log P(observation).
     lp_observation = 0.0          # P(observation)
     if scale:   # Only calculate this if requested.
         # log P(observation) = log SUM_i P(observation|class_i)P(class_i)
-        obs = exp(clip(lp_prior+lp_observation_class,-700,+700))
-        lp_observation = log(sum(obs))
+        obs = numpy.exp(numpy.clip(lp_prior+lp_observation_class,-700,+700))
+        lp_observation = numpy.log(sum(obs))
 
     # Calculate log P(class|observation).
     lp_class_observation = {}      # Dict of class : log P(class|observation)
@@ -142,7 +142,7 @@ def train(training_set, results, priors=None, typecode=None):
     nb.dimensionality = dimensions[0]
     
     # Get a list of all the classes.
-    nb.classes = listfns.items(results)
+    nb.classes = list(set(results))
     nb.classes.sort()   # keep it tidy
     
     # Estimate the prior probabilities for the classes.
@@ -150,7 +150,7 @@ def train(training_set, results, priors=None, typecode=None):
         percs = priors
     else:
         percs = listfns.contents(results)
-    nb.p_prior = zeros(len(nb.classes))
+    nb.p_prior = numpy.zeros(len(nb.classes))
     for i in range(len(nb.classes)):
         nb.p_prior[i] = percs[nb.classes[i]]
 
@@ -160,7 +160,9 @@ def train(training_set, results, priors=None, typecode=None):
     # were guaranteed to be a matrix.  However, this may not be the
     # case, because the client may be hacking up a sparse matrix or
     # something.
-    c2i = listfns.itemindex(nb.classes)      # class to index of class
+    c2i = {}      # class to index of class
+    for index, key in enumerate(nb.classes):
+        c2i[key] = index
     observations = [[] for c in nb.classes]  # separate observations by class
     for i in range(len(results)):
         klass, obs = results[i], training_set[i]
@@ -168,7 +170,7 @@ def train(training_set, results, priors=None, typecode=None):
     # Now make the observations Numeric matrics.
     for i in range(len(observations)):
         # XXX typecode must be specified!
-        observations[i] = asarray(observations[i], typecode)
+        observations[i] = numpy.asarray(observations[i], typecode)
 
     # Calculate P(value|class,dim) for every class.
     # This is a good loop to optimize.
@@ -186,3 +188,38 @@ def train(training_set, results, priors=None, typecode=None):
             # Estimate P(value|class,dim)
             nb.p_conditional[i][j] = listfns.contents(values)
     return nb
+
+if __name__ == "__main__" :
+    # Car data from example 'Naive Bayes Classifier example' by Eric Meisner November 22, 2003
+    # http://www.inf.u-szeged.hu/~ormandi/teaching/mi2/02-naiveBayes-example.pdf
+    xcar=[
+        ['Red',    'Sports', 'Domestic'],
+        ['Red',    'Sports', 'Domestic'],
+        ['Red',    'Sports', 'Domestic'],
+        ['Yellow', 'Sports', 'Domestic'],
+        ['Yellow', 'Sports', 'Imported'],
+        ['Yellow', 'SUV',    'Imported'],
+        ['Yellow', 'SUV',    'Imported'],
+        ['Yellow', 'SUV',    'Domestic'],
+        ['Red',    'SUV',    'Imported'],
+        ['Red',    'Sports', 'Imported']
+    ]
+
+    ycar=[
+        'Yes',
+        'No',
+        'Yes',
+        'No',
+        'Yes',
+        'No',
+        'Yes',
+        'No',
+        'No',
+        'Yes'
+    ]
+
+    carmodel = train(xcar, ycar)
+    carresult = classify(carmodel, ['Red', 'Sports', 'Domestic'])
+    print 'Is Yes?', carresult
+    carresult = classify(carmodel, ['Red', 'SUV', 'Domestic'])
+    print 'Is No?', carresult
