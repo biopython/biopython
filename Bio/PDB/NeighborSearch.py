@@ -121,7 +121,7 @@ class NeighborSearch:
 
 if __name__=="__main__":
 
-    from RandomArray import *
+    from numpy.random import random
 
     class Atom:
         def __init__(self):
