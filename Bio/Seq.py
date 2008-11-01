@@ -415,13 +415,15 @@ class Seq(object):
         This method will translate DNA or RNA sequences.
 
         table - Which codon table to use?  This can be either a name
-                (string) or an NCBI identifier (integer).
+                (string) or an NCBI identifier (integer).  This defaults
+                to the "Standard" table.
         stop_symbol - Single character string, what to use for terminators.
+                This defaults to the asterisk, "*".
         to_stop - Boolean, defaults to False meaning do a full translation
-                  continuing on past any stop codons (translated as the
-                  specified stop_symbol).  If True, translation is terminated
-                  at the first in frame stop codon (and the stop_symbol is
-                  not appended to the returned protein sequence).
+                continuing on past any stop codons (translated as the
+                specified stop_symbol).  If True, translation is terminated
+                at the first in frame stop codon (and the stop_symbol is
+                not appended to the returned protein sequence).
 
         NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
         or a stop codon.  These are translated as "X".  Any invalid codon
@@ -866,14 +868,15 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False):
     Given a Seq or MutableSeq, returns a Seq object with a protein
     alphabet.
 
-    table - Which codon table to use?  This can be either a name
-            (string) or an NCBI identifier (integer).
+    table - Which codon table to use?  This can be either a name (string) or
+            an NCBI identifier (integer).  Defaults to the "Standard" table.
     stop_symbol - Single character string, what to use for terminators.
+            This defaults to the asterisk, "*".
     to_stop - Boolean, defaults to False meaning do a full translation
-              continuing on past any stop codons (translated as the
-              specified stop_symbol).  If True, translation is terminated
-              at the first in frame stop codon (and the stop_symbol is
-              not appended to the returned protein sequence).
+            continuing on past any stop codons (translated as the
+            specified stop_symbol).  If True, translation is terminated
+            at the first in frame stop codon (and the stop_symbol is
+            not appended to the returned protein sequence).
 
     NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
     or a stop codon.  These are translated as "X".  Any invalid codon
