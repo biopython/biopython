@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from numpy import dot, transpose, sqrt
+from numpy import dot, transpose, sqrt, array
 from numpy.linalg import svd, det
 
 class SVDSuperimposer:
@@ -119,19 +119,17 @@ class SVDSuperimposer:
 
 if __name__=="__main__":
 
-    from numpy.oldnumeric import *
-
-    # start with two coordinate sets (Nx3 arrays - Float0)
+    # start with two coordinate sets (Nx3 arrays - float)
 
     x=array([[51.65, -1.90, 50.07],
          [50.40, -1.23, 50.65],
          [50.68, -0.04, 51.54],
-         [50.22, -0.02, 52.85]], Float0)
+         [50.22, -0.02, 52.85]], 'f')
 
     y=array([[51.30, -2.99, 46.54],
          [51.09, -1.88, 47.58],
          [52.36, -1.20, 48.03],
-         [52.71, -1.18, 49.38]], Float0)
+         [52.71, -1.18, 49.38]], 'f')
 
     # start!
     sup=SVDSuperimposer()
@@ -160,6 +158,3 @@ if __name__=="__main__":
     print y_on_x2
     print
     print "%.2f" % rms
-    
-
-        
