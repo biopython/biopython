@@ -57,7 +57,6 @@ class Superimposer:
 
 if __name__=="__main__":
     import sys
-    from numpy.oldnumeric import *
 
     from Bio.PDB import *
 
@@ -68,8 +67,8 @@ if __name__=="__main__":
     s2=p.get_structure("MOVING", sys.argv[1])
     moving=Selection.unfold_entities(s2, "A")
 
-    rot=identity(3).astype('f')
-    tran=array((1.0, 2.0, 3.0), 'f')
+    rot=numpy.identity(3).astype('f')
+    tran=numpy.array((1.0, 2.0, 3.0), 'f')
 
     for atom in moving:
         atom.transform(rot, tran)
