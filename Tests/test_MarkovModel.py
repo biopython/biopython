@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 
-import StringIO
-from operator import truth
-
 from Bio import MarkovModel
-from numpy.oldnumeric import ones, zeros, log, asarray
+from numpy import asarray
 
 def print_mm(markov_model):
     print "STATES: %s" % ' '.join(markov_model.states)

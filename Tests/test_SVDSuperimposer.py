@@ -1,4 +1,4 @@
-from numpy.oldnumeric import *
+from numpy import *
 from Bio.SVDSuperimposer import *
 
 # start with two coordinate sets (Nx3 arrays - Float0)
@@ -6,12 +6,12 @@ from Bio.SVDSuperimposer import *
 x=array([[51.65, -1.90, 50.07],
 	 [50.40, -1.23, 50.65],
 	 [50.68, -0.04, 51.54],
-	 [50.22, -0.02, 52.85]], Float0)
+	 [50.22, -0.02, 52.85]], 'f')
 
 y=array([[51.30, -2.99, 46.54],
 	 [51.09, -1.88, 47.58],
 	 [52.36, -1.20, 48.03],
-	 [52.71, -1.18, 49.38]], Float0)
+	 [52.71, -1.18, 49.38]], 'f')
 
 sup=SVDSuperimposer()
 
