@@ -132,7 +132,7 @@ def refmat(p,q):
     pq.normalize()
     b=pq.get_array()
     b.shape=(3, 1)
-    i=eye(3)
+    i=numpy.identity(3)
     ref=i-2*numpy.dot(b, numpy.transpose(b))
     return ref
 
@@ -310,8 +310,7 @@ class Vector:
 
 if __name__=="__main__":
 
-        from RandomArray import *
-        from numpy.oldnumeric import *
+        from numpy.random import random
 
         v1=Vector(0,0,1)
         v2=Vector(0,0,0)
