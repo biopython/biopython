@@ -11,6 +11,10 @@ The latest news is at the top.
 
 Biopython has transitioned from Numeric to NumPy.  Please move to NumPy.
 
+A number of small changes have been made to support Python 2.6 (mostly
+avoiding deprecated functionality).  However, we intend to support
+Python 2.3 for only a couple more releases.
+
 As part of the Numeric to NumPy migration, Bio.KDTree has been rewritten in
 C instead of C++ which therefore simplifies building Biopython from source.
 
@@ -18,12 +22,12 @@ Martel and Bio.Mindy are now considered to be deprecated, meaning mxTextTools
 is no longer required to use Biopython.  See the DEPRECATED file for details
 of other deprecations.
 
-The Seq object now supports more string like methods (gaining find, split,
-rsplit, strip, lstrip and rstrip in addition to previously supported methods
-like count).  Also, biological methods transcribe, back_transcribe and
-translate have been added, joining the pre-existing reverse_complement and
-complement methods.  Together these changes allow a more object orientated
-programming style using the Seq object.
+The Seq object now supports more string like methods (gaining find, rfind,
+split, rsplit, strip, lstrip and rstrip in addition to previously supported
+methods like count).  Also, biological methods transcribe, back_transcribe
+and translate have been added, joining the pre-existing reverse_complement
+and complement methods.  Together these changes allow a more object
+orientated programming style using the Seq object.
 
 The behaviour of the Bio.Seq module's translate function has changed so that
 ambiguous codons which could be a stop codon like "TAN" or "NNN" are now

@@ -80,6 +80,8 @@ class Seq(object):
 
     """
     TODO - Work out why this breaks test_Restriction.py
+    (Comparing Seq objects would be nice to have.  May need to think about
+    hashes and the in operator for when have list/dictionary of Seq objects...)
     def __cmp__(self, other):
         if hasattr(other, "alphabet") :
             #other should be a Seq or a MutableSeq
@@ -175,6 +177,8 @@ class Seq(object):
     def count(self, sub, start=0, end=sys.maxint):
         """Count method, like that of a python string.
 
+        This behaves like the python string method of the same name.
+
         Returns an integer, the number of occurrences of substring
         argument sub in the (sub)sequence given by [start:end].
         Optional arguments start and end are interpreted as in slice
@@ -199,14 +203,38 @@ class Seq(object):
     def find(self, sub, start=0, end=sys.maxint):
         """Find method, like that of a python string.
 
+        This behaves like the python string method of the same name.
+
         Returns an integer, the index of the first occurrence of substring
         argument sub in the (sub)sequence given by [start:end].
+
+        sub - a string or another Seq object to look for
+        start - optional integer, slice start
+        end - optional integer, slice end
 
         Returns -1 if the subsequence is NOT found.
         """
         #If it has one, check the alphabet:
         sub_str = self._get_seq_str_and_check_alphabet(sub)
         return str(self).find(sub_str, start, end)
+
+    def rfind(self, sub, start=0, end=sys.maxint):
+        """Find from right method, like that of a python string.
+
+        This behaves like the python string method of the same name.
+
+        Returns an integer, the index of the last (right most) occurrence of
+        substring argument sub in the (sub)sequence given by [start:end].
+
+        sub - a string or another Seq object to look for
+        start - optional integer, slice start
+        end - optional integer, slice end
+
+        Returns -1 if the subsequence is NOT found.
+        """
+        #If it has one, check the alphabet:
+        sub_str = self._get_seq_str_and_check_alphabet(sub)
+        return str(self).rfind(sub_str, start, end)
     
     def split(self, sep=None, maxsplit=-1) :
         """Split method, like that of a python string.
@@ -413,6 +441,8 @@ class Seq(object):
 
         Trying to back-transcribe a protein sequence raises an exception.
         This method will translate DNA or RNA sequences.
+
+        Trying to translate a protein sequence raises an exception.
 
         table - Which codon table to use?  This can be either a name
                 (string) or an NCBI identifier (integer).  This defaults

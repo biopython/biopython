@@ -249,6 +249,8 @@ for a in dna + rna + nuc + protein :
         assert a.rstrip(chars).tostring() == a.tostring().rstrip(str_chars)
         assert a.find(chars) == a.tostring().find(str_chars)
         assert a.find(chars,2,-2) == a.tostring().find(str_chars,2,-2)
+        assert a.rfind(chars) == a.tostring().rfind(str_chars)
+        assert a.rfind(chars,2,-2) == a.tostring().rfind(str_chars,2,-2)
         assert a.count(chars) == a.tostring().count(str_chars)
         assert a.count(chars,2,-2) == a.tostring().count(str_chars,2,-2)
         #Now check splits
