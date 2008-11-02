@@ -179,17 +179,20 @@ and HTML formats
   \item \emph{Why doesn't} \verb|Bio.SeqIO.read()| \emph{work? The module imports fine but there is no read function!} \\
   You need Biopython 1.45 or later.
 
+  \item \emph{Why isn't} \verb|Bio.AlignIO| \emph{present? The module import fails!} \\
+  You need Biopython 1.46 or later.
+
   \item \emph{What file formats do} \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{read and write?} \\
   See \url{http://biopython.org/wiki/SeqIO} and \url{http://biopython.org/wiki/AlignIO} on the wiki for the latest listing.
   
+  \item \emph{Why don't the } \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{input functions let me provide a sequence alphabet?} \\
+  You need Biopython 1.49 or later.
+
   \item \emph{Why doesn't} \verb|str(...)| \emph{give me the full sequence of a} \verb|Seq| \emph{object?} \\
   You need Biopython 1.45 or later.  Alternatively, rather than \verb|str(my_seq)|, use \verb|my_seq.tostring()| (which will also work on recent versions of Biopython).
   
   \item \emph{Why doesn't} \verb|Bio.Blast| \emph{work with the latest plain text NCBI blast output?} \\
   The NCBI keep tweaking the plain text output from the BLAST tools, and keeping our parser up to date is an ongoing struggle.  We recommend you use the XML output instead, which is designed to be read by a computer program.
-
-  \item \emph{Why isn't} \verb|Bio.AlignIO| \emph{present? The module import fails!} \\
-  You need Biopython 1.46 or later.
 
   \item \emph{Why doesn't} \verb|Bio.Entrez.read()| \emph{work? The module imports fine but there is no read function!} \\
   You need Biopython 1.46 or later.
@@ -934,9 +937,11 @@ The workhorse function \verb|Bio.SeqIO.parse()| is used to read in sequence data
 \item The second argument is a lower case string specifying sequence format -- we don't try and guess the file format for you!  See \url{http://biopython.org/wiki/SeqIO} for a full listing of supported formats.
 \end{enumerate}
 
-\noindent This returns an {\it iterator} which gives \verb|SeqRecord| objects.  Iterators are typically used in a for loop.
+\noindent As of Biopython 1.49 there is an optional argument \verb|alphabet| to specify the alphabet to be used.  This is useful for file formats like FASTA where otherwise \verb|Bio.SeqIO| will default to a generic alphabet.
 
-Sometimes you'll find yourself dealing with files which contain only a single record.  For this situation Biopython 1.45 introduced the function \verb|Bio.SeqIO.read()|.  Again, this takes a handle and format as arguments.  Provided there is one and only one record, this is returned as a \verb|SeqRecord| object.
+The \verb|Bio.SeqIO.parse()| functions returns an {\it iterator} which gives \verb|SeqRecord| objects.  Iterators are typically used in a for loop.
+
+Sometimes you'll find yourself dealing with files which contain only a single record.  For this situation Biopython 1.45 introduced the function \verb|Bio.SeqIO.read()| which takes the same arguments.  Provided there is one and only one record in the file, this is returned as a \verb|SeqRecord| object.  Otherwise an exception is raised.
 
 \subsection{Reading Sequence Files}
 
@@ -1721,6 +1726,8 @@ Both functions expect two mandatory arguments:
 
 \noindent There is also an optional \verb|seq_count| argument which is discussed in Section~\ref{sec:AlignIO-count-argument} below for dealing with ambiguous file formats which may contain more than one alignment.
 
+Biopython 1.49 introduced a further optional \verb|alphabet| argument allowing you to specify the expected alphabet. This can be useful as many alignment file formats do not explicitly label the sequences as RNA, DNA or protein -- which means \verb|Bio.AlignIO| will default to using a generic alphabet.
+
 \subsection{Single Alignments}
 As an example, consider the following annotation rich protein alignment in the PFAM or Stockholm file format:
 
@@ -1798,6 +1805,8 @@ AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA - Q9T0Q9_BPFD/1-49
 FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA - COATB_BPIF1/22-73
 \end{verbatim}
 
+You could also use the alignment object's \verb|format| method to show it in a particular file format  -- see Section~\ref{sec:alignment-format-method} for details.
+
 Did you notice in the raw file above that several of the sequences include database cross-references to the PDB and the associated known secondary structure?  Try this:
 
 \begin{verbatim}
@@ -1832,16 +1841,16 @@ AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA
 >COATB_BPI22/32-83
 DGTSTATSYATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA
 >COATB_BPM13/24-72
-AEGDDP...AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA
+AEGDDP---AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA
 >COATB_BPZJ2/1-49
-AEGDDP...AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFASKA
+AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFASKA
 >Q9T0Q9_BPFD/1-49
-AEGDDP...AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA
+AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA
 >COATB_BPIF1/22-73
 FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA
 \end{verbatim}
 
-\noindent Assuming you download and save this as file ``PF05371\_seed.faa'' then you can load it with almost exactly the same code:
+\noindent Note the website should have an option about showing gaps as periods (dots) or dashes, we've shown dashes above.  Assuming you download and save this as file ``PF05371\_seed.faa'' then you can load it with almost exactly the same code:
 
 \begin{verbatim}
 from Bio import AlignIO
@@ -2232,6 +2241,7 @@ seq6       FAADDATSQA KAAFDSLTAQ ATEMSGYAWA LVVLVVGATV GIKLFKKFVS
 \noindent In general, because of the identifier limitation, working with PHYLIP file formats shouldn't be your first choice.  Using the PFAM/Stockholm format on the other hand allows you to record a lot of additional annotation too.
 
 \subsection{Getting your Alignment objects as formatted strings}
+\label{sec:alignment-format-method}
 The \verb|Bio.AlignIO| interface is based on handles, which means if you want to get your alignment(s) into a string in a particular file format you need to do a little bit more work (see below).  
 However, you will probably prefer to take advantage of the new \verb|format()| method added to the \verb|Alignment| object in Biopython 1.48.  This takes a single mandatory argument, a lower case string which is supported by \verb|Bio.AlignIO| as an output format.  For example:
 
