@@ -55,6 +55,10 @@ class AppTest(unittest.TestCase):
     """Tests simcoal execution via biopython.
     """
     def tearDown(self):
+        if not os.path.isdir('PopGen' + os.sep + 'simple') :
+            #Unit test must have failed to invoke simcaol,
+            #and this it never created the directory.
+            return
         for file in os.listdir('PopGen' + os.sep + 'simple'):
             os.remove(os.sep.join(['PopGen', 'simple', file]))
         os.rmdir('PopGen' + os.sep + 'simple')
