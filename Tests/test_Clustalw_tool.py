@@ -29,10 +29,13 @@ if sys.platform=="win32" :
         prog_files = os.environ["PROGRAMFILES"]
     except KeyError :
         prog_files = r"C:\Program Files"
-        
+
     #Note that EBI's clustalw2 installer, e.g. clustalw-2.0.10-win.msi
     #uses C:\Program Files\ClustalW2\clustalw2.exe so we should check
     #for that.
+    #
+    #Some users doing a manual install have reported using
+    #C:\Program Files\clustalw.exe
     #
     #Older installers might use something like this,
     #C:\Program Files\Clustalw\clustalw.exe
@@ -40,7 +43,7 @@ if sys.platform=="win32" :
     #One particular case is www.tc.cornell.edu currently provide a
     #clustalw1.83 installer which uses the following long location:
     #C:\Program Files\CTCBioApps\clustalw\v1.83\clustalw1.83.exe
-    likely_dirs = ["ClustalW2",
+    likely_dirs = ["ClustalW2", "",
                    "Clustal","Clustalw","Clustalw183","Clustalw1.83",
                    r"CTCBioApps\clustalw\v1.83"]
     likely_exes = ["clustalw2.exe",
