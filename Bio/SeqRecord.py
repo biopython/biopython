@@ -41,6 +41,17 @@ class SeqRecord(object):
         You can create a 'blank' SeqRecord object, and then populated the
         attributes later.  Note that currently the annotations dictionary
         cannot be specified when creating the SeqRecord."""
+        if id is not None and not isinstance(id, basestring) :
+            #Lots of existing code uses id=None... this may be a bad idea.
+            raise ValueError("id argument should be a string")
+        if not isinstance(name, basestring) :
+            raise ValueError("name argument should be a string")
+        if not isinstance(description, basestring) :
+            raise ValueError("description argument should be a string")
+        if dbxrefs is not None and not isinstance(dbxrefs, list) :
+            raise ValueError("dbxrefs argument should be a list (of strings)")
+        if features is not None and not isinstance(features, list) :
+            raise ValueError("features argument should be a list (of SeqFeature objects)")
         self.seq = seq
         self.id = id
         self.name = name
