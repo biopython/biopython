@@ -164,13 +164,6 @@ _FormatToWriter ={#"fasta" is done via Bio.SeqIO
                   "clustal" : ClustalIO.ClustalWriter,
                   }
 
-#This is a generator function
-def _multiple_alignment_record_iterator(alignments) :
-    """Private function to loop over all the records in many alignments."""
-    for alignment in alignments :
-        for record in alignment :
-            yield record
-
 def write(alignments, handle, format) :
     """Write complete set of alignments to a file.
 
@@ -180,7 +173,7 @@ def write(alignments, handle, format) :
 
     You should close the handle after calling this function.
 
-    There is no return value.
+    Returns the number of alignments written (as an integer).
     """
     from Bio import SeqIO
 
@@ -199,18 +192,23 @@ def write(alignments, handle, format) :
     #Map the file format to a writer class
     if format in _FormatToIterator :
         writer_class = _FormatToWriter[format]
-        writer_class(handle).write_file(alignments)
+        count = writer_class(handle).write_file(alignments)
     elif format in SeqIO._FormatToWriter :
         #Exploit the existing SeqIO parser to the dirty work!
-        #TODO - Once we drop support for Python 2.3, this helper function can be
-        #replaced with a generator expression.
-        SeqIO.write(_multiple_alignment_record_iterator(alignments), handle, format)
+        #TODO - Can we make one call to SeqIO.write() and count the alignments?
+        count = 0
+        for alignment in alignments :
+            SeqIO.write(alignment, handle, format)
+            count += 1
     elif format in _FormatToIterator or format in SeqIO._FormatToIterator :
-        raise ValueError("Reading format '%s' is supported, but not writing" % format)
+        raise ValueError("Reading format '%s' is supported, but not writing" \
+                         % format)
     else :
         raise ValueError("Unknown format '%s'" % format)
 
-    return
+    assert isinstance(count, int), "Internal error - the underlying writer " \
+           + " should have returned the alignment count, not %s" % repr(count)
+    return count
 
 #This is a generator function!
 def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None) :

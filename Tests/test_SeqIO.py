@@ -253,7 +253,8 @@ def check_simple_write_read(records, indent=" ") :
         handle = StringIO()
         
         try :
-            SeqIO.write(sequences=records, handle=handle, format=format)
+            c = SeqIO.write(sequences=records, handle=handle, format=format)
+            assert c == len(records)
         except ValueError, e :
             #This is often expected to happen, for example when we try and
             #write sequences of different lengths to an alignment file.
@@ -506,7 +507,8 @@ for (records, descr) in test_records :
         #################
         handle = StringIO()
         try :
-            SeqIO.write(records, handle, format)
+            c = SeqIO.write(records, handle, format)
+            assert c == len(records)
         except ValueError, e:
             #This is expected to happen on many of the examples.
             print " Failed: %s" % str(e)

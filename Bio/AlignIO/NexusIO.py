@@ -94,6 +94,7 @@ class NexusWriter(AlignmentWriter) :
 
         #Good.  Actually write the single alignment,
         self.write_alignment(first_alignment)
+        return 1 #we only support writing one alignment!
 
     def write_alignment(self, alignment) :
         #Creates an empty Nexus object, adds the sequences,

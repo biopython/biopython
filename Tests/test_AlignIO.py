@@ -103,7 +103,8 @@ def check_simple_write_read(alignments, indent=" ") :
         handle = StringIO()
         
         try :
-            AlignIO.write(alignments, handle=handle, format=format)
+            c = AlignIO.write(alignments, handle=handle, format=format)
+            assert c == len(alignments)
         except ValueError, e :
             #This is often expected to happen, for example when we try and
             #write sequences of different lengths to an alignment file.

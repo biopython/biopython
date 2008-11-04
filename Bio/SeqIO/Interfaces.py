@@ -157,6 +157,8 @@ class SequenceWriter:
 
         records - A list or iterator returning SeqRecord objects
 
+        Should return the number of records (as an integer).
+
         This method can only be called once."""
         #Note when implementing this, you should close the file at the end.
         raise NotImplementedError("This object should be subclassed")
@@ -226,21 +228,30 @@ class SequentialSequenceWriter(SequenceWriter):
 
         Once you have called write_header() you can call write_record()
         and/or write_records() as many times as needed.  Then call
-        write_footer() and close()."""
+        write_footer() and close().
+
+        Returns the number of records written.
+        """
         #Default implementation:
         assert self._header_written, "You must call write_header() first"
         assert not self._footer_written, "You have already called write_footer()"
+        count = 0
         for record in records :
             self.write_record(record)
+            count += 1
         #Mark as true, even if there where no records
         self._record_written = True
+        return count
 
     def write_file(self, records) :
         """Use this to write an entire file containing the given records.
 
         records - A list or iterator returning SeqRecord objects
 
-        This method can only be called once."""
+        This method can only be called once.  Returns the number of records
+        written.
+        """
         self.write_header()
-        self.write_records(records)
+        count = self.write_records(records)
         self.write_footer()
+        return count

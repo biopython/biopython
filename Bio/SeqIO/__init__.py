@@ -248,10 +248,9 @@ def write(sequences, handle, format) :
 
     You should close the handle after calling this function.
 
-    There is no return value.
+    Returns the number of records written (as an integer).
     """
     from Bio import AlignIO
-
 
     #Try and give helpful error messages:
     if isinstance(handle, basestring) :
@@ -268,19 +267,25 @@ def write(sequences, handle, format) :
     #Map the file format to a writer class
     if format in _FormatToWriter :
         writer_class = _FormatToWriter[format]
-        writer_class(handle).write_file(sequences)
-        #Don't close the file, as that would prevent things like
-        #creating concatenated phylip files for bootstrapping.
+        count = writer_class(handle).write_file(sequences)
     elif format in AlignIO._FormatToWriter :
         #Try and turn all the records into a single alignment,
         #and write that using Bio.AlignIO
-        AlignIO.write([to_alignment(sequences)], handle, format)
+        alignment = to_alignment(sequences)
+        alignment_count = AlignIO.write([alignment], handle, format)
+        assert alignment_count == 1, "Internal error - the underlying writer " \
+           + " should have returned 1, not %s" % repr(alignment_count)
+        count = len(alignment.get_all_seqs())
+        del alignment_count, alignment
     elif format in _FormatToIterator or format in AlignIO._FormatToIterator :
-        raise ValueError("Reading format '%s' is supported, but not writing" % format)
+        raise ValueError("Reading format '%s' is supported, but not writing" \
+                         % format)
     else :
         raise ValueError("Unknown format '%s'" % format)
 
-    return
+    assert isinstance(count, int), "Internal error - the underlying writer " \
+           + " should have returned the record count, not %s" % repr(count)
+    return count
     
 def parse(handle, format, alphabet=None) :
     """Turns a sequence file into an iterator returning SeqRecords.

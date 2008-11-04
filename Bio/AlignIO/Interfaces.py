@@ -85,7 +85,7 @@ class AlignmentWriter :
         In general, this method can only be called once per file.
         
         This method should be replaced by any derived class to do something
-        useful."""
+        useful.  It should return the number of alignments"""
         raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this, to write the alignment  #
@@ -116,9 +116,12 @@ class SequentialAlignmentWriter(AlignmentWriter) :
 
         In general, this method can only be called once per file."""
         self.write_header()
+        count = 0
         for alignment in alignments :
             self.write_alignment(alignment)
+            count += 1
         self.write_footer()
+        return count
         
     def write_header(self) :
         """Use this to write any header.
