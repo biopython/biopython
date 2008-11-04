@@ -837,7 +837,12 @@ G | GTG V(s)| GCG A   | GAG E   | GGG G   | G
 You may find these following properties useful -- for example if you are trying
 to do your own gene finding:
 \begin{verbatim}
->>> mito_table.stop_codons['TAA', 'TAG', 'AGA', 'AGG']>>> mito_table.start_codons['ATT', 'ATC', 'ATA', 'ATG', 'GTG']>>> mito_table.forward_table["ACG"]'T'
+>>> mito_table.stop_codons
+['TAA', 'TAG', 'AGA', 'AGG']
+>>> mito_table.start_codons
+['ATT', 'ATC', 'ATA', 'ATG', 'GTG']
+>>> mito_table.forward_table["ACG"]
+'T'
 \end{verbatim}
 
 \section{MutableSeq objects}
@@ -1520,6 +1525,9 @@ IAHPGGPAILDQVELKLGLKQEKLKATRKVLSNYGNMSSACVLFILDEMRKASAKEGLGT
 TGEGLEWGVLFGFGPGLTVETVVLHSVAT
 \end{verbatim}
 
+Suppose you wanted to know how many records the \verb|Bio.SeqIO.write()| function wrote to the handle?
+If your records were in a list you could just use \verb|len(my_records)|, however you can't do that when your records come from a generator/iterator.  Therefore as of Biopython 1.49, the \verb|Bio.SeqIO.write()| function returns the number of \verb|SeqRecord| objects written to the file.   
+
 \subsection{Converting between sequence file formats}
 
 In previous example we used a list of \verb|SeqRecord| objects as input to the \verb|Bio.SeqIO.write()| function, but it will also accept a \verb|SeqRecord| iterator like we get from \verb|Bio.SeqIO.parse()| -- this lets us do file conversion very succinctly. For this example we'll read in the GenBank format file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk} and write it out in FASTA format:
@@ -2115,6 +2123,9 @@ Iota       -CTACTACAG GTG
 \end{verbatim}
 
 Its more common to want to load an existing alignment, and save that, perhaps after some simple manipulation like removing certain rows or columns.
+
+Suppose you wanted to know how many alignments the \verb|Bio.AlignIO.write()| function wrote to the handle? If your alignments were in a list like the example above, you could just use \verb|len(my_alignments)|, however you can't do that when your records come from a generator/iterator.  Therefore as of Biopython 1.49, the \verb|Bio.AlignIO.write()| function returns the number of alignments written to the file.   
+
 
 \subsection{Converting between sequence alignment file formats}
 \label{sec:converting-alignments}
@@ -5052,8 +5063,9 @@ stepwise mutation model among others).
 We now discuss how to run SIMCOAL2 from inside Biopython. It is required
 that the binary for SIMCOAL2 is called simcoal2 (or simcoal2.exe on Windows
 based platforms), please note that the typical name when downloading the
-program is in the format simcoal2\_x\_y. As such renaming of the binary
-after download is needed.
+program is in the format simcoal2\_x\_y. As such, when installing SIMCOAL2
+you will need to rename of the downloaded executable so that Biopython can
+find it.
 
 It is possible to run SIMCOAL2 on files that were not generated using the method
 above (e.g., writing a parameter file by hand), but we will show an
