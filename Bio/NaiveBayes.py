@@ -32,6 +32,12 @@ classify       Classify an observation into a class.
 import numpy
 from Bio import listfns
 
+#TODO - Remove this work around once we drop python 2.3 support
+try:
+    set
+except NameError:
+    from sets import Set as set
+
 class NaiveBayes:
     """Holds information for a NaiveBayes classifier.
 
