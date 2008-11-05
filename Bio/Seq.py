@@ -463,6 +463,22 @@ class Seq(object):
 
         NOTE - This does NOT behave like the python string's translate
         method.  For that use str(my_seq).translate(...) instead.
+
+        e.g. Using the standard table,
+        
+        >>> coding_dna = Seq("TTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
+        >>> coding_dna.translate()
+        Seq('LAIVMGR*KGAR*', HasStopCodon(ExtendedIUPACProtein(), '*'))
+        >>> coding_dna.translate(to_stop=True)
+        Seq('LAIVMGR', ExtendedIUPACProtein())
+        
+        Now using NCBI table 2, where TGA is not a stop codon:
+        
+        >>> coding_dna.translate(table=2)
+        Seq('LAIVMGRWKGAR*', HasStopCodon(ExtendedIUPACProtein(), '*'))
+        >>> coding_dna.translate(table=2, to_stop=True)
+        Seq('LAIVMGRWKGAR', ExtendedIUPACProtein())
+
         """
         try:
             table_id = int(table)
@@ -530,7 +546,8 @@ class MutableSeq(object):
     'A'
     >>> my_seq[5:8] = "NNN"
     >>> my_seq
-    MutableSeq('ACTCGNNNTCG', DNAAlphabet())    
+    MutableSeq('ACTCGNNNTCG', DNAAlphabet())
+    
     """
     def __init__(self, data, alphabet = Alphabet.generic_alphabet):
         if type(data) == type(""):
@@ -843,7 +860,8 @@ def back_transcribe(rna):
     else:
         return rna.replace('U','T').replace('u','t')
     
-def _translate_str(sequence, table, stop_symbol="*", to_stop=False, pos_stop="X") :
+def _translate_str(sequence, table, stop_symbol="*",
+                   to_stop=False, pos_stop="X") :
     """Helper function to translate a nucleotide string (PRIVATE).
 
     sequence    - a string
@@ -857,11 +875,20 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False, pos_stop="X"
     Returns a string.
 
     e.g.
-    _translate_str("AAA") -> "K"
-    _translate_str("TAR",table) -> "*"
-    _translate_str("TAN",table) -> "X"
-    _translate_str("TAN",table,pos_stop="@") -> "@"
-    _translate_str("TA?",table) -> TranslationError
+    >>> from Bio.Data import CodonTable
+    >>> table = CodonTable.ambiguous_dna_by_id[1]
+    >>> _translate_str("AAA", table)
+    'K'
+    >>> _translate_str("TAR", table)
+    '*'
+    >>> _translate_str("TAN", table)
+    'X'
+    >>> _translate_str("TAN", table, pos_stop="@")
+    '@'
+    >>> _translate_str("TA?", table)
+    Traceback (most recent call last):
+       ...
+    TranslationError: Codon 'TA?' is invalid
     """
     sequence = sequence.upper()
     amino_acids = []
@@ -873,6 +900,7 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False, pos_stop="X"
         #Assume the worst case, ambiguous DNA or RNA:
         valid_letters = set(IUPAC.ambiguous_dna.letters.upper() + \
                             IUPAC.ambiguous_rna.letters.upper())
+
     n = len(sequence)
     for i in xrange(0,n-n%3,3) :
         codon = sequence[i:i+3]
@@ -908,6 +936,21 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False):
             at the first in frame stop codon (and the stop_symbol is
             not appended to the returned protein sequence).
 
+    A simple string example using the default (standard) genetic code,
+    
+    >>> coding_dna = "TTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG"
+    >>> translate(coding_dna)
+    'LAIVMGR*KGAR*'
+    >>> translate(coding_dna, to_stop=True)
+    'LAIVMGR'
+     
+    Now using NCBI table 2, where TGA is not a stop codon:
+
+    >>> translate(coding_dna, table=2)
+    'LAIVMGRWKGAR*'
+    >>> translate(coding_dna, table=2, to_stop=True)
+    'LAIVMGRWKGAR'
+    
     NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
     or a stop codon.  These are translated as "X".  Any invalid codon
     (e.g. "TA?" or "T-A") will throw a TranslationError.
@@ -915,14 +958,6 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False):
     NOTE - Does NOT support gapped sequences.
     
     It will however translate either DNA or RNA.
-
-    e.g.
-    translate("AAA") -> "K"
-    translate("TAR") -> "*"
-    translate("UAR") -> "*"
-    translate("TAN") -> "X"
-    translate("NNN") -> "X"
-    translate("TAG",stop_sybmol="@") -> "@"
     """
     if isinstance(sequence, Seq) :
         return sequence.translate(table, stop_symbol, to_stop)
