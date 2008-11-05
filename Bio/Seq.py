@@ -455,6 +455,32 @@ class Seq(object):
                 at the first in frame stop codon (and the stop_symbol is
                 not appended to the returned protein sequence).
 
+        e.g. Using the standard table,
+        
+        >>> coding_dna = Seq("GTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
+        >>> coding_dna.translate()
+        Seq('VAIVMGR*KGAR*', HasStopCodon(ExtendedIUPACProtein(), '*'))
+        >>> coding_dna.translate(stop_symbol="@")
+        Seq('VAIVMGR@KGAR@', HasStopCodon(ExtendedIUPACProtein(), '@'))
+        >>> coding_dna.translate(to_stop=True)
+        Seq('VAIVMGR', ExtendedIUPACProtein())
+        
+        Now using NCBI table 2, where TGA is not a stop codon:
+        
+        >>> coding_dna.translate(table=2)
+        Seq('VAIVMGRWKGAR*', HasStopCodon(ExtendedIUPACProtein(), '*'))
+        >>> coding_dna.translate(table=2, to_stop=True)
+        Seq('VAIVMGRWKGAR', ExtendedIUPACProtein())
+
+        If the sequence has no in-frame stop codon, then the to_stop argument
+        has no effect:
+
+        >>> coding_dna2 = Seq("TTGGCCATTGTAATGGGCCGC")
+        >>> coding_dna2.translate()
+        Seq('LAIVMGR', ExtendedIUPACProtein())
+        >>> coding_dna2.translate(to_stop=True)
+        Seq('LAIVMGR', ExtendedIUPACProtein())
+
         NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
         or a stop codon.  These are translated as "X".  Any invalid codon
         (e.g. "TA?" or "T-A") will throw a TranslationError.
@@ -463,32 +489,6 @@ class Seq(object):
 
         NOTE - This does NOT behave like the python string's translate
         method.  For that use str(my_seq).translate(...) instead.
-
-        e.g. Using the standard table,
-        
-        >>> coding_dna = Seq("TTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
-        >>> coding_dna.translate()
-        Seq('LAIVMGR*KGAR*', HasStopCodon(ExtendedIUPACProtein(), '*'))
-        >>> coding_dna.translate(stop_symbol="@")
-        Seq('LAIVMGR@KGAR@', HasStopCodon(ExtendedIUPACProtein(), '@'))
-        >>> coding_dna.translate(to_stop=True)
-        Seq('LAIVMGR', ExtendedIUPACProtein())
-        
-        Now using NCBI table 2, where TGA is not a stop codon:
-        
-        >>> coding_dna.translate(table=2)
-        Seq('LAIVMGRWKGAR*', HasStopCodon(ExtendedIUPACProtein(), '*'))
-        >>> coding_dna.translate(table=2, to_stop=True)
-        Seq('LAIVMGRWKGAR', ExtendedIUPACProtein())
-
-        If the sequence has no in-frame stop codon, then the to_stop argument
-        has no effect:
-
-        >>> coding_dna = Seq("TTGGCCATTGTAATGGGCCGC")
-        >>> coding_dna.translate()
-        Seq('LAIVMGR', ExtendedIUPACProtein())
-        >>> coding_dna.translate(to_stop=True)
-        Seq('LAIVMGR', ExtendedIUPACProtein())
         """
         try:
             table_id = int(table)
@@ -949,29 +949,29 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False):
 
     A simple string example using the default (standard) genetic code,
     
-    >>> coding_dna = "TTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG"
+    >>> coding_dna = "GTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG"
     >>> translate(coding_dna)
-    'LAIVMGR*KGAR*'
+    'VAIVMGR*KGAR*'
     >>> translate(coding_dna, stop_symbol="@")
-    'LAIVMGR@KGAR@'
+    'VAIVMGR@KGAR@'
     >>> translate(coding_dna, to_stop=True)
-    'LAIVMGR'
+    'VAIVMGR'
      
     Now using NCBI table 2, where TGA is not a stop codon:
 
     >>> translate(coding_dna, table=2)
-    'LAIVMGRWKGAR*'
+    'VAIVMGRWKGAR*'
     >>> translate(coding_dna, table=2, to_stop=True)
-    'LAIVMGRWKGAR'
+    'VAIVMGRWKGAR'
 
-    If the sequence has no in-frame stop codon, then the to_stop argument
-    has no effect:
+    Note that if the sequence has no in-frame stop codon, then the to_stop
+    argument has no effect:
 
-    >>> coding_dna = "TTGGCCATTGTAATGGGCCGC"
-    >>> translate(coding_dna)
-    'LAIVMGR'
-    >>> translate(coding_dna, to_stop=True)
-    'LAIVMGR'
+    >>> coding_dna2 = "GTGGCCATTGTAATGGGCCGC"
+    >>> translate(coding_dna2)
+    'VAIVMGR'
+    >>> translate(coding_dna2, to_stop=True)
+    'VAIVMGR'
     
     NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
     or a stop codon.  These are translated as "X".  Any invalid codon
