@@ -469,6 +469,8 @@ class Seq(object):
         >>> coding_dna = Seq("TTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
         >>> coding_dna.translate()
         Seq('LAIVMGR*KGAR*', HasStopCodon(ExtendedIUPACProtein(), '*'))
+        >>> coding_dna.translate(stop_symbol="@")
+        Seq('LAIVMGR@KGAR@', HasStopCodon(ExtendedIUPACProtein(), '@'))
         >>> coding_dna.translate(to_stop=True)
         Seq('LAIVMGR', ExtendedIUPACProtein())
         
@@ -479,6 +481,14 @@ class Seq(object):
         >>> coding_dna.translate(table=2, to_stop=True)
         Seq('LAIVMGRWKGAR', ExtendedIUPACProtein())
 
+        If the sequence has no in-frame stop codon, then the to_stop argument
+        has no effect:
+
+        >>> coding_dna = Seq("TTGGCCATTGTAATGGGCCGC")
+        >>> coding_dna.translate()
+        Seq('LAIVMGR', ExtendedIUPACProtein())
+        >>> coding_dna.translate(to_stop=True)
+        Seq('LAIVMGR', ExtendedIUPACProtein())
         """
         try:
             table_id = int(table)
@@ -868,7 +878,8 @@ def _translate_str(sequence, table, stop_symbol="*",
     table       - a CodonTable object (NOT a table name or id number)
     stop_symbol - a single character string, what to use for terminators.
     to_stop     - boolean, should translation terminate at the first
-                  in frame stop codon?
+                  in frame stop codon?  If there is no in-frame stop codon
+                  then translation continues to the end.
     pos_stop    - a single character string for a possible stop codon
                   (e.g. TAN or NNN)
 
@@ -941,6 +952,8 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False):
     >>> coding_dna = "TTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG"
     >>> translate(coding_dna)
     'LAIVMGR*KGAR*'
+    >>> translate(coding_dna, stop_symbol="@")
+    'LAIVMGR@KGAR@'
     >>> translate(coding_dna, to_stop=True)
     'LAIVMGR'
      
@@ -950,6 +963,15 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False):
     'LAIVMGRWKGAR*'
     >>> translate(coding_dna, table=2, to_stop=True)
     'LAIVMGRWKGAR'
+
+    If the sequence has no in-frame stop codon, then the to_stop argument
+    has no effect:
+
+    >>> coding_dna = "TTGGCCATTGTAATGGGCCGC"
+    >>> translate(coding_dna)
+    'LAIVMGR'
+    >>> translate(coding_dna, to_stop=True)
+    'LAIVMGR'
     
     NOTE - Ambiguous codons like "TAN" or "NNN" could be an amino acid
     or a stop codon.  These are translated as "X".  Any invalid codon
