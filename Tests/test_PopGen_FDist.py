@@ -81,17 +81,21 @@ class AppTest(unittest.TestCase):
     def t_fdist(self):
         """Test fdist execution.
         """
+        #The number of simulations in real life should be at least 10000,
+        #see the fdist2 documentation.
         fst = self.ctrl.run_fdist(npops = 15, nsamples = 10, fst = 0.1,
-                sample_size = 20, mut = 0, num_sims = 10000,
+                sample_size = 20, mut = 0, num_sims = 100,
                 data_dir = self.dirname)
         assert(abs(fst - 0.1) < 0.02) #Stochastic result...
 
     def t_fdist_force_fst(self):
         """Test fdist execution approximating Fst.
         """
+        #The number of simulations in real life should be at least 10000,
+        #see the fdist2 documentation.
         fst = self.ctrl.run_fdist_force_fst(npops = 15, nsamples = 10,
                 fst = 0.1,
-                sample_size = 20, mut = 0, num_sims = 10000,
+                sample_size = 20, mut = 0, num_sims = 100,
                 data_dir = self.dirname)
         assert(abs(fst - 0.09) < 0.05) #Stochastic result...
 
