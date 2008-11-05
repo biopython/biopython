@@ -295,20 +295,38 @@ def parse(handle, format, alphabet=None) :
     alphabet - optional Alphabet object, useful when the sequence type cannot
                be automatically inferred from the file itself (e.g. fasta)
 
-    If you have the file name in a string 'filename', use:
+    Typical usage, opening a file to read in, and looping over the record(s):
 
-    from Bio import SeqIO
-    my_iterator = SeqIO.parse(open(filename,"rU"), format)
+    >>> from Bio import SeqIO
+    >>> filename = "Nucleic/sweetpea.nu"
+    >>> for record in SeqIO.parse(open(filename,"rU"), "fasta") :
+    ...    print "ID", record.id
+    ...    print "Sequence length", len(record)
+    ...    print "Sequence alphabet", record.seq.alphabet
+    ID gi|3176602|gb|U78617.1|LOU78617
+    Sequence length 309
+    Sequence alphabet SingleLetterAlphabet()
 
-    If you have a string 'data' containing the file contents, use:
+    For file formats like FASTA where the alphabet cannot be determined, it
+    may be useful to specify the alphabet explicitly:
+
+    >>> from Bio import SeqIO
+    >>> from Bio.Alphabet import generic_dna
+    >>> filename = "Nucleic/sweetpea.nu"
+    >>> for record in SeqIO.parse(open(filename,"rU"), "fasta", generic_dna) :
+    ...    print "ID", record.id
+    ...    print "Sequence length", len(record)
+    ...    print "Sequence alphabet", record.seq.alphabet
+    ID gi|3176602|gb|U78617.1|LOU78617
+    Sequence length 309
+    Sequence alphabet DNAAlphabet()
+
+    If you have a string 'data' containing the file contents, you must
+    first turn this into a handle in order to parse it:
 
     from Bio import SeqIO
     from StringIO import StringIO
     my_iterator = SeqIO.parse(StringIO(data), format)
-
-    Note that file will be parsed with default settings, which may result in
-    a generic alphabet or other non-ideal settings.  For more control, you
-    must use the format specific iterator directly...
 
     Use the Bio.SeqIO.read(handle, format) function when you expect a single
     record only.
@@ -375,19 +393,35 @@ def read(handle, format, alphabet=None) :
     alphabet - optional Alphabet object, useful when the sequence type cannot
                be automatically inferred from the file itself (e.g. fasta)
 
+    This function is for use parsing sequence files containing
+    exactly one record.  For example, reading a GenBank file:
+
+    >>> from Bio import SeqIO
+    >>> record = SeqIO.read(open("GenBank/arab1.gb", "rU"), "genbank")
+    >>> print "ID", record.id
+    ID AC007323.5
+    >>> print "Sequence length", len(record)
+    Sequence length 86436
+    >>> print "Sequence alphabet", record.seq.alphabet
+    Sequence alphabet IUPACAmbiguousDNA()
+
     If the handle contains no records, or more than one record,
-    an exception is raised.  For example, using a GenBank file
-    containing one record:
+    an exception is raised.  For example:
 
-    from Bio import SeqIO
-    record = SeqIO.read(open("example.gbk"), "genbank")
+    >>> from Bio import SeqIO
+    >>> record = SeqIO.read(open("GenBank/cor6_6.gb", "rU"), "genbank")
+    Traceback (most recent call last):
+        ...
+    ValueError: More than one record found in handle
 
-    If however you want the first record from a file containing,
-    multiple records this function would raise an exception.
-    Instead use:
+    If however you want the first record from a file containing
+    multiple records this function would raise an exception (as
+    shown in the example above).  Instead use:
 
-    from Bio import SeqIO
-    record = SeqIO.parse(open("example.gbk"), "genbank").next()
+    >>> from Bio import SeqIO
+    >>> record = SeqIO.parse(open("GenBank/cor6_6.gb", "rU"), "genbank").next()
+    >>> print "First record's ID", record.id
+    First record's ID X55053.1
 
     Use the Bio.SeqIO.parse(handle, format) function if you want
     to read multiple records from the handle.
@@ -424,16 +458,35 @@ def to_dict(sequences, key_function=None) :
 
     If there are duplicate keys, an error is raised.
 
-    Example usage:
+    Example usage, defaulting to using the record.id as key:
 
-    from Bio import SeqIO
-    filename = "example.fasta"
-    d = SeqIO.to_dict(SeqIO.parse(open(faa_filename, "rU")),
-        key_function = lambda rec : rec.description.split()[0])
-    print len(d)
-    print d.keys()[0:10]
-    key = d.keys()[0]
-    print d[key]
+    >>> from Bio import SeqIO
+    >>> handle = open("GenBank/cor6_6.gb", "rU")
+    >>> format = "genbank"
+    >>> id_dict = SeqIO.to_dict(SeqIO.parse(handle, format))
+    >>> print id_dict.keys()
+    ['L31939.1', 'AJ237582.1', 'X62281.1', 'AF297471.1', 'X55053.1', 'M81224.1']
+    >>> print id_dict["L31939.1"].description
+    Brassica rapa (clone bif72) kin mRNA, complete cds.
+
+    A more complex example, using the key_function argument in order to use
+    a sequence checksum as the dictionary key:
+    
+    >>> from Bio import SeqIO
+    >>> from Bio.SeqUtils.CheckSum import seguid
+    >>> handle = open("GenBank/cor6_6.gb", "rU")
+    >>> format = "genbank"
+    >>> seguid_dict = SeqIO.to_dict(SeqIO.parse(handle, format), \
+                                    key_function = lambda rec : seguid(rec.seq))
+    >>> for key, record in seguid_dict.iteritems() :
+    ...     print key, record.id
+    SabZaA4V2eLE9/2Fm5FnyYy07J4 X55053.1
+    l7gjJFE6W/S1jJn5+1ASrUKW/FA X62281.1
+    /wQvmrl87QWcm9llO4/efg23Vgg AJ237582.1
+    TtWsXo45S3ZclIBy4X/WJc39+CY M81224.1
+    uVEYeAQSV5EDQOnFoeMmVea+Oow AF297471.1
+    BUg6YxXSKWEcFFH0L08JzaLGhQs L31939.1
+
     """    
     if key_function is None :
         key_function = lambda rec : rec.id

@@ -281,8 +281,16 @@ def parse(handle, format, seq_count=None, alphabet=None) :
 
     If you have the file name in a string 'filename', use:
 
-    from Bio import AlignIO
-    my_iterator = AlignIO.parse(open(filename,"rU"), format)
+    >>> from Bio import AlignIO
+    >>> filename = "Emboss/needle.txt"
+    >>> format = "emboss"
+    >>> for alignment in AlignIO.parse(open(filename,"rU"), format) :
+    ...     print "Alignment of length", alignment.get_alignment_length()
+    Alignment of length 124
+    Alignment of length 119
+    Alignment of length 120
+    Alignment of length 118
+    Alignment of length 125
 
     If you have a string 'data' containing the file contents, use:
 
@@ -290,8 +298,7 @@ def parse(handle, format, seq_count=None, alphabet=None) :
     from StringIO import StringIO
     my_iterator = AlignIO.parse(StringIO(data), format)
 
-    Use the Bio.AlignIO.read(handle, format[, seq_count]) function when
-    you expect a single record only.
+    Use the Bio.AlignIO.read() function when you expect a single record only.
     """
     from Bio import SeqIO
 
@@ -342,15 +349,23 @@ def read(handle, format, seq_count=None, alphabet=None) :
     an exception is raised.  For example, using a PFAM/Stockholm file
     containing one alignment:
 
-    from Bio import AlignIO
-    align = AlignIO.read(open("example.sth"), "stockholm")
+    >>> from Bio import AlignIO
+    >>> filename = "Clustalw/protein.aln"
+    >>> format = "clustal"
+    >>> alignment = AlignIO.read(open(filename, "rU"), format)
+    >>> print "Alignment of length", alignment.get_alignment_length()
+    Alignment of length 411
 
     If however you want the first alignment from a file containing
     multiple alignments this function would raise an exception.
     Instead use:
 
-    from Bio import AlignIO
-    align = AlignIO.parse(open("example.sth"), "stockholm").next()
+    >>> from Bio import AlignIO
+    >>> filename = "Emboss/needle.txt"
+    >>> format = "emboss"
+    >>> alignment = AlignIO.parse(open(filename, "rU"), format).next()
+    >>> print "First alignment has length", alignment.get_alignment_length()
+    First alignment has length 124
 
     Use the Bio.AlignIO.parse() function if you want to read multiple
     records from the handle.
