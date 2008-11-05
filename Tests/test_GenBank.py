@@ -18,11 +18,12 @@ gb_file_dir = os.path.join(os.getcwd(), 'GenBank')
 test_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
               'protein_refseq.gb', 'extra_keywords.gb', 'one_of.gb',
               'NT_019265.gb', 'origin_line.gb', 'blank_seq.gb',
-              'dbsource_wrap.gb', 'gbvrl1_start.seq']
+              'dbsource_wrap.gb', 'gbvrl1_start.seq', 'between_location.gb']
 
 # We only test writing on a subset of the examples:
 write_format_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
-                      'extra_keywords.gb', 'one_of.gb', 'origin_line.gb']
+                      'extra_keywords.gb', 'one_of.gb', 'origin_line.gb',
+                      'between_location.gb']
 # don't test writing on protein_refseq, since it is horribly nasty
 # don't test writing on the CONTIG refseq, because the wrapping of
 # locations won't work exactly
@@ -125,13 +126,13 @@ def do_comparison(good_record, test_record):
 
         if not(good_line) and not(test_line):
             break
-
         if not(good_line):
             raise AssertionError("Extra info in Test: `%s`" % test_line)
         if not(test_line):
             raise AssertionError("Extra info in Expected: `%s`" % good_line)
-
-        assert test_line == good_line, \
+        test_normalized = ' '.join([x for x in test_line.split() if x])
+        good_normalized = ' '.join([x for x in good_line.split() if x])
+        assert test_normalized == good_normalized, \
                "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n" % \
                (good_line, test_line)
     

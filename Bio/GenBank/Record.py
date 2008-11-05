@@ -156,6 +156,7 @@ class Record:
         self.nid = ''
         self.pid = ''
         self.version = ''
+        self.project = ''
         self.db_source = ''
         self.gi = ''
         self.keywords = []
@@ -189,6 +190,7 @@ class Record:
         output += self._definition_line()
         output += self._accession_line()
         output += self._version_line()
+        output += self._project_line()
         output += self._nid_line()
         output += self._pid_line()
         output += self._keywords_line()
@@ -276,6 +278,13 @@ class Record:
             output += "%s\n" % self.gi
         else:
             output = ""
+        return output
+
+    def _project_line(self):
+        output = ""
+        if self.project:
+            output = Record.BASE_FORMAT % "PROJECT"
+            output += "%s\n" % "  ".join(self.project)
         return output
 
     def _nid_line(self):

@@ -543,6 +543,8 @@ class DatabaseLoader:
          %s,
          %s,
          %s)"""
+        #print self.dbid, taxon_id, record.name, accession, identifier, \
+        #        division, description, version
         self.adaptor.execute(sql, (self.dbid,
                                    taxon_id,
                                    record.name, 

@@ -356,7 +356,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 #self.data.id = new_acc_nums[0]
                 #Use the FIRST accession as the ID, not the first on this line!
                 self.data.id = self.data.annotations['accessions'][0]
-                
 
     def nid(self, content):
         self.data.annotations['nid'] = content
@@ -376,6 +375,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         else :
             #For backwards compatibility...
             self.data.id = version_id
+
+    def project(self, content):
+        """Handle the information from the PROJECT line as a list of projects.
+        """
+        projects = [p for p in content.split() if p]
+        self.data.annotations['project'] = projects
 
     def version_suffix(self, version):
         """Set the version to overwrite the id.
@@ -793,11 +798,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # case 4 -- we've got 100^101
         elif isinstance(position, LocationParser.Between):
             final_pos = SeqFeature.BetweenPosition(position.low.val,
-                                                 position.high.val)
+                                 position.high.val-position.low.val)
         # case 5 -- we've got (100.101)
         elif isinstance(position, LocationParser.TwoBound):
             final_pos = SeqFeature.WithinPosition(position.low.val,
-                                                position.high.val)
+                                position.high.val-position.low.val)
         # case 6 -- we've got a one-of(100, 110) location
         elif isinstance(position, LocationParser.Function) and \
                         position.name == "one-of":
@@ -1020,6 +1025,9 @@ class _RecordConsumer(_BaseGenBankConsumer):
 
     def keywords(self, content):
         self.data.keywords = self._split_keywords(content)
+
+    def project(self, content):
+        self.data.project = [p for p in content.split() if p]
 
     def segment(self, content):
         self.data.segment = content

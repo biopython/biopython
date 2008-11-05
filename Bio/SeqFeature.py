@@ -235,17 +235,32 @@ class FeatureLocation:
         ask for 'item.nofuzzy_start', 'item.nofuzzy_end'. These should return
         the largest range of the fuzzy position. So something like:
         (10.20)..(30.40) should return 10 for start, and 40 for end.
+
+        The special tricky case where is when we have a single between position
+        argument like 2^3 for the range. We want nofuzzy_start and nofuzzy_end
+        to give a reasonable approximation of what this really means, which
+        is an empty string -- so the same position for both. Doing a special
+        case here sucks, but there is really not a general rule you can apply
+        to this.
         """
         if attr == 'start':
             return self._start
         elif attr == 'end':
             return self._end
         elif attr == 'nofuzzy_start':
-            return min(self._start.position,
-                       self._start.position + self._start.extension)
+            if ((self._start == self._end) and isinstance(self._start,
+                 BetweenPosition)):
+                return self._start.position
+            else:
+                return min(self._start.position,
+                           self._start.position + self._start.extension)
         elif attr == 'nofuzzy_end':
-            return max(self._end.position,
-                       self._end.position + self._end.extension)
+            if ((self._start == self._end) and isinstance(self._start,
+                 BetweenPosition)):
+                return self._end.position
+            else:
+                return max(self._end.position,
+                           self._end.position + self._end.extension)
         else:
             raise AttributeError("Cannot evaluate attribute %s." % attr)
 
@@ -394,7 +409,7 @@ class OneOfPosition(AbstractPosition):
     extension is the range to the highest choice.
     """
     def __init__(self, position_list):
-        """Initialie with a set of posssible positions.
+        """Initialize with a set of posssible positions.
 
         position_list is a list of AbstractPosition derived objects,
         specifying possible locations.
