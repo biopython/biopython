@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import doctest, unittest
+import doctest, unittest, sys
 
 from Bio import Seq, SeqRecord, SeqIO, AlignIO
 test_modules = [Seq, SeqRecord, SeqIO, AlignIO]
@@ -11,11 +11,16 @@ test_modules = [Seq, SeqRecord, SeqIO, AlignIO]
 test_suite = unittest.TestSuite((doctest.DocTestSuite(module) \
                                 for module in test_modules))
 
-#Using sys.stdout prevent this working nicely when run from idle:
-#runner = unittest.TextTestRunner(sys.stdout, verbosity = 0)
+#Use stdout so that run_tests.py can capture the output.
+#Even verbosity=0 outputs something, e.g.
+"""
+----------------------------------------------------------------------
+Ran 15 tests in 0.456s
 
-#Using verbosity = 0 means we won't have to regenerate the unit
-#test output file used by the run_tests.py framework whenever a
-#new module or doctest is added.
-runner = unittest.TextTestRunner(verbosity = 0)
+OK
+"""
+#However, the only bits that change here are the number of tests and the
+#time, and run_tests.py knows to ignore these lines.  This means we don't
+#have to update output/test_docstrings when more doctests are added :)
+runner = unittest.TextTestRunner(sys.stdout, verbosity = 0)
 runner.run(test_suite)

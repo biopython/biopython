@@ -251,7 +251,7 @@ def compare_output(test_name, output_handle, expected_handle):
         expected_line = convert_string_newlines(expected_line)
         output_line = convert_string_newlines(output_line)
 
-        # if the line is a PyUnit time output like:
+        # if the line is a doctest or PyUnit time output like:
         # Ran 2 tests in 0.285s
         # ignore it, so we don't have problems with different running times
         if re.compile("^Ran [0-9]+ tests? in ").match(expected_line):
