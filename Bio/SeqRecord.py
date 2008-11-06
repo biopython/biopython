@@ -87,7 +87,7 @@ class SeqRecord(object):
         self.features = features
 
     def __str__(self) :
-        """A human readable summary of the record and its annotation.
+        """A human readable summary of the record and its annotation (string).
 
         e.g.
         
@@ -121,20 +121,24 @@ class SeqRecord(object):
         return "\n".join(lines)
 
     def __repr__(self) :
-        """A concise summary of the record for debugging.
+        """A concise summary of the record for debugging (string).
 
         e.g.
         
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
-        >>> from Bio.Alphabet import IUPAC
-        >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
-        ...                         IUPAC.protein),
-        ...                    id="YP_025292.1", name="HokC",
-        ...                    description="toxic membrane protein, small")
-        >>> record
-        SeqRecord(seq=Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein()), id='YP_025292.1', name='HokC', description='toxic membrane protein, small', dbxrefs=[])
-
+        >>> from Bio.Alphabet import generic_protein
+        >>> rec = SeqRecord(Seq("MASRGVNKVILVGNLGQDPEVRYMPNGGAVANITLATSESWRDKAT"
+        ...                    +"GEMKEQTEWHRVVLFGKLAEVASEYLRKGSQVYIEGQLRTRKWTDQ"
+        ...                    +"SGQDRYTTEVVVNVGGTMQMLGGRQGGGAPAGGNIGGGQPQGGWGQ"
+        ...                    +"PQQPQGGNQFSGGAQSRPQQSAPAAPSNEPPMDFDDDIPF",
+        ...                    generic_protein),
+        ...                 id="NP_418483.1", name="b4059",
+        ...                 description="ssDNA-binding protein",
+        ...                 dbxrefs=["ASAP:13298", "GI:16131885", "GeneID:948570"])
+        >>> rec
+        SeqRecord(seq=Seq('MASRGVNKVILVGNLGQDPEVRYMPNGGAVANITLATSESWRDKATGEMKEQTE...IPF', ProteinAlphabet()), id='NP_418483.1', name='b4059', description='ssDNA-binding protein', dbxrefs=['ASAP:13298', 'GI:16131885', 'GeneID:948570'])
+        
         """
         return self.__class__.__name__ \
          + "(seq=%s, id=%s, name=%s, description=%s, dbxrefs=%s)" \
@@ -207,32 +211,10 @@ class SeqRecord(object):
         """
         return True
 
-if __name__ == "__main__" :
-    #The following is a very quick example of how to create a SeqRecord object
-    from Bio.Seq import Seq
-    from Bio.Alphabet import generic_protein
-    record = SeqRecord(Seq("MASRGVNKVILVGNLGQDPEVRYMPNGGAVANITLATSESWRDKAT" \
-                          +"GEMKEQTEWHRVVLFGKLAEVASEYLRKGSQVYIEGQLRTRKWTDQ" \
-                          +"SGQDRYTTEVVVNVGGTMQMLGGRQGGGAPAGGNIGGGQPQGGWGQ" \
-                          +"PQQPQGGNQFSGGAQSRPQQSAPAAPSNEPPMDFDDDIPF",
-                           generic_protein),
-                       id="NP_418483.1", name="b4059",
-                       description="ssDNA-binding protein",
-                       dbxrefs=["ASAP:13298", "GI:16131885", "GeneID:948570"])
+def _test():
+    """Run the Bio.SeqRecord module's doctests."""
+    import doctest
+    doctest.testmod()
 
-    #Note that annotations must be added AFTER creating the record
-    record.annotations["note"] = "This annotation was added later"
-
-    print str(record)
-    print
-    print repr(record)
-    assert 178 == len(record)
-    print
-    print "Using .format('fasta'),", repr(record.format("fasta"))
-    print
-    print "Using .format('tab'),", repr(record.format("tab"))
-
-    #One way to create a minimal record.
-    record2 = SeqRecord(Seq(""))
-    assert record2 #True eeven though length is zero
-    assert not len(record2)
+if __name__ == "__main__":
+    _test()
