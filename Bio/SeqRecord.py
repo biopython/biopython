@@ -34,13 +34,32 @@ class SeqRecord(object):
         dbxrefs     - Database cross references, optional (list of strings)
         features    - Any (sub)features, optional (list of SeqFeature objects)
 
+        You will typically use Bio.SeqIO to read in sequences from files as
+        SeqRecord objects.  However, you may want to create your own SeqRecord
+        objects directly:
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> from Bio.Alphabet import IUPAC
+        >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
+        ...                         IUPAC.protein),
+        ...                    id="YP_025292.1", name="HokC",
+        ...                    description="toxic membrane protein, small")
+        >>> print record
+        ID: YP_025292.1
+        Name: HokC
+        Description: toxic membrane protein, small
+        Number of features: 0
+        Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())
+
         Note that while an id is optional, we strongly recommend you supply a
         unique id string for each record.  This is especially important
         if you wish to write your sequences to a file.
 
         You can create a 'blank' SeqRecord object, and then populated the
         attributes later.  Note that currently the annotations dictionary
-        cannot be specified when creating the SeqRecord."""
+        cannot be specified when creating the SeqRecord.
+        """
         if id is not None and not isinstance(id, basestring) :
             #Lots of existing code uses id=None... this may be a bad idea.
             raise ValueError("id argument should be a string")
@@ -68,7 +87,25 @@ class SeqRecord(object):
         self.features = features
 
     def __str__(self) :
-        """A human readable summary of the record and its annotation."""
+        """A human readable summary of the record and its annotation.
+
+        e.g.
+        
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> from Bio.Alphabet import IUPAC
+        >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
+        ...                         IUPAC.protein),
+        ...                    id="YP_025292.1", name="HokC",
+        ...                    description="toxic membrane protein, small")
+        >>> print record
+        ID: YP_025292.1
+        Name: HokC
+        Description: toxic membrane protein, small
+        Number of features: 0
+        Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())
+
+        """
         lines = []
         if self.id : lines.append("ID: %s" % self.id)
         if self.name : lines.append("Name: %s" % self.name)
@@ -84,7 +121,21 @@ class SeqRecord(object):
         return "\n".join(lines)
 
     def __repr__(self) :
-        """A concise summary of the record for debugging."""
+        """A concise summary of the record for debugging.
+
+        e.g.
+        
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> from Bio.Alphabet import IUPAC
+        >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
+        ...                         IUPAC.protein),
+        ...                    id="YP_025292.1", name="HokC",
+        ...                    description="toxic membrane protein, small")
+        >>> record
+        SeqRecord(seq=Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein()), id='YP_025292.1', name='HokC', description='toxic membrane protein, small', dbxrefs=[])
+
+        """
         return self.__class__.__name__ \
          + "(seq=%s, id=%s, name=%s, description=%s, dbxrefs=%s)" \
          % tuple(map(repr, (self.seq, self.id, self.name,
@@ -98,7 +149,18 @@ class SeqRecord(object):
         string.
 
         e.g.
-        print my_record.format("fasta")
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> from Bio.Alphabet import IUPAC
+        >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
+        ...                         IUPAC.protein),
+        ...                    id="YP_025292.1", name="HokC",
+        ...                    description="toxic membrane protein, small")
+        >>> print record.format("fasta")
+        >YP_025292.1 toxic membrane protein, small
+        MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
+        <BLANKLINE>
 
         This will NOT work on every possible file format supported by
         Bio.SeqIO (e.g. some are for multiple sequences only).
@@ -113,7 +175,8 @@ class SeqRecord(object):
         This method supports the python format() function added in
         Python 2.6/3.0.  The format_spec should be a lower case
         string supported by Bio.SeqIO as an output file format.
-        See also the SeqRecord's format() method."""
+        See also the SeqRecord's format() method.
+        """
         if format_spec:
             from StringIO import StringIO
             from Bio import SeqIO
