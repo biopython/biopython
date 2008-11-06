@@ -36,6 +36,27 @@ class Seq(object):
     not applicable to sequences with a protein alphabet).
     """
     def __init__(self, data, alphabet = Alphabet.generic_alphabet):
+        """Create a Seq object.
+
+        Arguments:
+        seq      - Sequence, required (string)
+        alphabet - Optional argument, an Alphabet object from Bio.Alphabet
+        
+        You will typically use Bio.SeqIO to read in sequences from files as
+        SeqRecord objects, whose sequence will be exposed as a Seq object via
+        the seq property.
+
+        However, will often want to create your own Seq objects directly:
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import IUPAC
+        >>> my_seq = Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF", \
+                          IUPAC.protein)
+        >>> my_seq
+        Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())
+        >>> print my_seq
+        MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
+        """
         # Enforce string storage
         assert (type(data) == type("") or # must use a string
                 type(data) == type(u""))  # but can be a unicode string
@@ -66,7 +87,7 @@ class Seq(object):
                                    repr(self.alphabet))
         else :
             return "%s(%s, %s)" % (self.__class__.__name__,
-                                   repr(self.data),
+                                  repr(self.data),
                                    repr(self.alphabet))
     def __str__(self):
         """Returns the full sequence as a python string.
@@ -733,12 +754,17 @@ class MutableSeq(object):
         end - optional integer, slice end
 
         e.g.
-        from Bio.Seq import MutableSeq
-        my_mseq = MutableSeq("AAAATGA")
-        print my_mseq.count("A")
-        print my_mseq.count("ATG")
-        print my_mseq.count(Seq("AT"))
-        print my_mseq.count("AT", 2, -1)
+        >>> from Bio.Seq import Seq, MutableSeq
+        >>> from Bio.Seq import MutableSeq
+        >>> my_mseq = MutableSeq("AAAATGA")
+        >>> print my_mseq.count("A")
+        5
+        >>> print my_mseq.count("ATG")
+        1
+        >>> print my_mseq.count(Seq("AT"))
+        1
+        >>> print my_mseq.count("AT", 2, -1)
+        1
         """
         try :
             #TODO - Should we check the alphabet?
@@ -846,6 +872,10 @@ def transcribe(dna):
     Given a Seq or MutableSeq, returns a new Seq object with an RNA alphabet.
 
     Trying to transcribe a protein or RNA sequence raises an exception.
+
+    e.g.
+    >>> transcribe("ACTGN")
+    'ACUGN'
     """
     if isinstance(dna, Seq) :
         return dna.transcribe()
@@ -862,6 +892,10 @@ def back_transcribe(rna):
     Given a Seq or MutableSeq, returns a new Seq object with an RNA alphabet.
 
     Trying to transcribe a protein or DNA sequence raises an exception.
+
+    e.g.
+    >>> back_transcribe("ACUGN")
+    'ACTGN'
     """
     if isinstance(rna, Seq) :
         return rna.back_transcribe()
@@ -1001,6 +1035,10 @@ def reverse_complement(sequence):
     Given a Seq or a MutableSeq, returns a new Seq object with the same alphabet.
 
     Supports unambiguous and ambiguous nucleotide sequences.
+
+    e.g.
+    >>> reverse_complement("ACTGN")
+    'NCAGT'
     """
     if isinstance(sequence, Seq) :
         #Return a Seq
@@ -1014,3 +1052,11 @@ def reverse_complement(sequence):
         #do the reverse complement, and turn this back to a string
         #TODO - Find a more efficient way to do this without code duplication?
         return Seq(sequence).reverse_complement().tostring()
+
+def _test():
+    """Run the Bio.Seq module's doctests."""
+    import doctest
+    doctest.testmod()
+
+if __name__ == "__main__":
+    _test()
