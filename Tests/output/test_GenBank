@@ -4121,7 +4121,7 @@ qualifiers:
 	Key: replace, Value: ['']
 
 type: variation
-location: [(5932^5933):(5932^5933)]
+location: [5933:5933]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -4129,7 +4129,7 @@ qualifiers:
 	Key: replace, Value: ['a']
 
 type: variation
-location: [(5932^5933):(5932^5933)]
+location: [5933:5933]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -4244,7 +4244,7 @@ qualifiers:
 	Key: translation, Value: ['MADLKKLQVYGPELPRPYADTVKGSRYKNMKELRVQFSGRPIRAFYAFDPIRRAIVLCAGDKSNDKRFYEKLVRIAEDEFTAHLNTLESK']
 
 type: variation
-location: [(8528^8529):(8528^8529)]
+location: [8529:8529]
 ref: None:None
 strand: 1
 qualifiers: 

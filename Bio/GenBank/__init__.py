@@ -754,8 +754,18 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         """
         from Bio import SeqFeature
         from Bio.GenBank import LocationParser
+
+        if isinstance(range_info, LocationParser.Between) \
+        and range_info.low.val+1 == range_info.high.val:
+            #A between location like "67^68" (one based counting) is a
+            #special case (note it has zero length). In python slice
+            #notation this is 67:67, a zero length slice.  See Bug 2622
+            pos = self._get_position(range_info.low)
+            return SeqFeature.FeatureLocation(pos, pos)
+            #NOTE - We can imagine between locations like "2^4", but this
+            #is just "3".  Similarly, "2^5" is just "3..4"
         # check if we just have a single base
-        if not(isinstance(range_info, LocationParser.Range)):
+        elif not(isinstance(range_info, LocationParser.Range)):
             pos = self._get_position(range_info)
             # move the single position back one to be consistent with how
             # python indexes numbers (starting at 0)
@@ -796,7 +806,14 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         elif isinstance(position, LocationParser.HighBound):
             final_pos = SeqFeature.BeforePosition(position.base.val)
         # case 4 -- we've got 100^101
+        # Is the extension is zero in this example?
         elif isinstance(position, LocationParser.Between):
+            #NOTE - We don't *expect* this code to get called!
+            #We only except between locations like 3^4 (consecutive)
+            #which are handled in _get_location.  We don't expect
+            #non consecutive variants like "2^5" as this is just "3..4".
+            #Similarly there is no reason to expect composite locations
+            #like "(3^4)..6" which should just be "4..6".
             final_pos = SeqFeature.BetweenPosition(position.low.val,
                                  position.high.val-position.low.val)
         # case 5 -- we've got (100.101)
@@ -1324,3 +1341,4 @@ def download_many(ids, database = 'nucleotide'):
                                   retmode = "text",
                                   rettype = format)
     return cStringIO.StringIO(result_handle.read())
+
