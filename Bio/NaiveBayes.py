@@ -25,18 +25,21 @@ calculate      Calculate the probabilities of each class, given an observation.
 classify       Classify an observation into a class.
 
 """
-# To Do:
-# add code to help discretize data
-# use objects
 
 import numpy
-from Bio import listfns
 
 #TODO - Remove this work around once we drop python 2.3 support
 try:
     set
 except NameError:
     from sets import Set as set
+
+def _contents(items):
+    term = 1.0/len(items)
+    counts = {}
+    for item in items:
+        counts[item] = counts.get(item,0) + term
+    return counts
 
 class NaiveBayes:
     """Holds information for a NaiveBayes classifier.
@@ -147,15 +150,17 @@ def train(training_set, results, priors=None, typecode=None):
     nb = NaiveBayes()
     nb.dimensionality = dimensions[0]
     
-    # Get a list of all the classes.
-    nb.classes = list(set(results))
-    nb.classes.sort()   # keep it tidy
-    
-    # Estimate the prior probabilities for the classes.
+    # Get a list of all the classes, and
+    # estimate the prior probabilities for the classes.
     if priors is not None:
         percs = priors
+        nb.classes = list(set(results))
     else:
-        percs = listfns.contents(results)
+        class_freq = _contents(results)
+        nb.classes = class_freq.keys()
+        percs = class_freq
+    nb.classes.sort()   # keep it tidy
+
     nb.p_prior = numpy.zeros(len(nb.classes))
     for i in range(len(nb.classes)):
         nb.p_prior[i] = percs[nb.classes[i]]
@@ -192,7 +197,7 @@ def train(training_set, results, priors=None, typecode=None):
             #values = list(values) + range(len(nb.classes))  # XXX add 1
             
             # Estimate P(value|class,dim)
-            nb.p_conditional[i][j] = listfns.contents(values)
+            nb.p_conditional[i][j] = _contents(values)
     return nb
 
 if __name__ == "__main__" :
