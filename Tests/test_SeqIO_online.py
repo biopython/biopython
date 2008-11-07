@@ -7,6 +7,9 @@ Goals:
     Make sure that all retrieval is working as expected.
     May catch some format changes early too.
 """
+import sys
+if sys.modules.has_key('requires_internet'):
+    del sys.modules['requires_internet']
 import requires_internet
 
 #We want to test these:

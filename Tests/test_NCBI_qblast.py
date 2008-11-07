@@ -12,6 +12,9 @@ Goals:
     Make sure that all retrieval is working as expected.
     Make sure we can parse the latest XML format being used by the NCBI.
 """
+import sys
+if sys.modules.has_key('requires_internet'):
+    del sys.modules['requires_internet']
 import requires_internet
 from Bio import MissingExternalDependencyError 
 from urllib2 import HTTPError

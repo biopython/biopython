@@ -5,6 +5,8 @@
 import sys
 
 # local stuff
+if sys.modules.has_key('requires_internet'):
+    del sys.modules['requires_internet']
 import requires_internet
 
 # PyUnit
