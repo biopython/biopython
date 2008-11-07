@@ -406,7 +406,7 @@ class install_data_biopython(install_data):
 
 setup(
     name='biopython',
-    version='1.48',
+    version='1.49b',
     author='The Biopython Consortium',
     author_email='biopython@biopython.org',
     url='http://www.biopython.org/',

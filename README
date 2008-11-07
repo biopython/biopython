@@ -152,7 +152,8 @@ setup.py     -- Installation file.
 
 Bio/         -- The main code base code.
 
-Martel/      -- Code for the Martel parsing system, used in many Biopython parsers.
+Martel/      -- Code for the Martel parsing system, once used in many
+                Biopython parsers but now deprecated.
 
 BioSQL/      -- Code for using Biopython with BioSQL databases.
 

@@ -9,11 +9,14 @@ The latest news is at the top.
 
 ===================================================================
 
+November 7, 2008: Biopython 1.49 beta released.
+
 Biopython has transitioned from Numeric to NumPy.  Please move to NumPy.
 
 A number of small changes have been made to support Python 2.6 (mostly
-avoiding deprecated functionality).  However, we intend to support
-Python 2.3 for only a couple more releases.
+avoiding deprecated functionality), and further small changes have been
+made for better compatibility with Python 3 (this work is still ongoing).
+However, we intend to support Python 2.3 for only a couple more releases.
 
 As part of the Numeric to NumPy migration, Bio.KDTree has been rewritten in
 C instead of C++ which therefore simplifies building Biopython from source.
