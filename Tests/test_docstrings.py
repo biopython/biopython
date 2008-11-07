@@ -3,13 +3,21 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import doctest, unittest, sys
+import sys
+from Bio import MissingExternalDependencyError
+if sys.version_info[:2] < (2, 4):
+    #On python 2.3, doctest uses slightly different formatting
+    #which would be a problem as the expected output won't match.
+    #Also, it can't cope with <BLANKLINE> in a doctest string.
+    raise MissingExternalDependencyError(\
+          "This unit test requires Python 2.4 or later")
+import doctest, unittest
 
 from Bio import Seq, SeqRecord, SeqIO, AlignIO
 test_modules = [Seq, SeqRecord, SeqIO, AlignIO]
 
-test_suite = unittest.TestSuite((doctest.DocTestSuite(module) \
-                                for module in test_modules))
+test_suite = unittest.TestSuite([doctest.DocTestSuite(module) \
+                                 for module in test_modules])
 
 #Use stdout so that run_tests.py can capture the output.
 #Even verbosity=0 outputs something, e.g.
