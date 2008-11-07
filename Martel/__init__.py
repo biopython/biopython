@@ -18,7 +18,7 @@ Andrew Dalke is no longer maintaining Martel or Bio.Mindy, and these modules
 are now deprecated.  They are no longer used in any of the current Biopython
 parsers, and are likely to be removed in a future release of Biopython.
 """
-__version__ = "1.48"
+__version__ = "1.49"
 
 import warnings
 warnings.warn("Martel and those parts of Biopython depending on it" \
