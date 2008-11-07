@@ -25,17 +25,20 @@ python setup.py install
 
 **System Requirements**
 
-o "Python 2.3 or better":http://www.python.org/
+o "Python 2.3, 2.4, 2.5 or 2.6":http://www.python.org/
+  Note that support for Python 2.3 is likely to be dropped in a few
+  releases time.  Given that Python 2.6 is still very new, it would be
+  prudent to opt for Python 2.5 or 2.4 at this time.
 
-o "NumPy":http://numpy.scipy.org/ (optional)
+o "NumPy":http://numpy.scipy.org/ (optional, but strongly recommended)
   This package is only used in the computationally-oriented modules.
   It is required for Bio.Cluster and a few other modules.  If you
   think you might need these modules, then please install NumPy
   first. Also, please install if you are seeing
   error messages such as:
   ImportError: No module named numpy
-  Please note that this is the current NumPy distribution. Older distributions
-  (Numeric and Numarray) are no longer officially supported.
+  Please note that this is the current NumPy distribution. The older
+  Numeric library is no longer supported in Biopython.
 
 o "ReportLab":http://www.reportlab.org/downloads.html (optional)
   This package is used in some code that generates graphical displays
@@ -49,10 +52,9 @@ o "psycopg":http://initd.org/software/psycopg/ (optional) or
 o "MySQLdb":http://sourceforge.net/projects/mysql-python (optional)
   This package is used by BioSQL or Bio.GFF to access a MySQL database.
 
-o "mxTextTools":http://www.egenix.com/files/python/mxTextTools.html (rare)
+o "mxTextTools":http://www.egenix.com/files/python/mxTextTools.html (unlikely)
   You probably won't need mxTextTools.  This was used in some of Biopython's
-  older parsers, and Martel/Mindy, but none of the commonly used parsers in
-  Biopython need mxTextTools anymore.
+  older parsers, and Martel/Mindy, but these have all been deprecated now.
 
 In addition there are a number of useful third party tools you may wish to
 install such as standalone NCBI BLAST or ClustalW.
@@ -80,12 +82,6 @@ everything is running correctly.  To do the tests, go to the
 biopython source code directory and type:
 
 	'python setup.py test'
-
-If you have Tk installed, this will run a nice GUI that displays the
-results of the tests.  Otherwise, you will see results on the command
-line.  You can request no GUI with:
-
-	'python setup.py test --no-gui'
 
 Do not panic if you see messages warning of skipped tests:
     test_DocSQL ... skipping. Install MySQLdb if you want to use Bio.DocSQL.
