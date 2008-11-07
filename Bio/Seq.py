@@ -12,9 +12,9 @@ import sys
 
 #TODO - Remove this work around once we drop python 2.3 support
 try:
-   set = set
+    set = set
 except NameError:
-   from sets import Set as set
+    from sets import Set as set
 
 import Alphabet
 from Alphabet import IUPAC
@@ -172,6 +172,19 @@ class Seq(object):
         return self._data
 
     def tomutable(self):   # Needed?  Or use a function?
+        """Returns the full sequence as a MutableSeq object.
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import IUPAC
+        >>> my_seq = Seq("MKQHKAMIVALIVICITAVVAAL", \
+                          IUPAC.protein)
+        >>> my_seq
+        Seq('MKQHKAMIVALIVICITAVVAAL', IUPACProtein())
+        >>> my_seq.tomutable()
+        MutableSeq('MKQHKAMIVALIVICITAVVAAL', IUPACProtein())
+
+        Note that the alphabet is preserved.
+        """
         return MutableSeq(str(self), self.alphabet)
 
     def _get_seq_str_and_check_alphabet(self, other_sequence) :
@@ -210,12 +223,16 @@ class Seq(object):
         end - optional integer, slice end
 
         e.g.
-        from Bio.Seq import Seq
-        my_seq = Seq("AAAATGA")
-        print my_seq.count("A")
-        print my_seq.count("ATG")
-        print my_seq.count(Seq("AT"))
-        print my_seq.count("AT", 2, -1)
+        >>> from Bio.Seq import Seq
+        >>> my_seq = Seq("AAAATGA")
+        >>> print my_seq.count("A")
+        5
+        >>> print my_seq.count("ATG")
+        1
+        >>> print my_seq.count(Seq("AT"))
+        1
+        >>> print my_seq.count("AT", 2, -1)
+        1
         """
         #If it has one, check the alphabet:
         sub_str = self._get_seq_str_and_check_alphabet(sub)
@@ -578,7 +595,11 @@ class MutableSeq(object):
     >>> my_seq[5:8] = "NNN"
     >>> my_seq
     MutableSeq('ACTCGNNNTCG', DNAAlphabet())
-    
+    >>> len(my_seq)
+    11
+
+    Note that the MutableSeq object does not support as many string-like
+    or biological methods as the Seq object.
     """
     def __init__(self, data, alphabet = Alphabet.generic_alphabet):
         if type(data) == type(""):
@@ -857,7 +878,19 @@ class MutableSeq(object):
         return "".join(self.data)
 
     def toseq(self):
-        """Returns the full sequence as a new immutable Seq object."""
+        """Returns the full sequence as a new immutable Seq object.
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import IUPAC
+        >>> my_mseq = MutableSeq("MKQHKAMIVALIVICITAVVAAL", \
+                                 IUPAC.protein)
+        >>> my_mseq
+        MutableSeq('MKQHKAMIVALIVICITAVVAAL', IUPACProtein())
+        >>> my_mseq.toseq()
+        Seq('MKQHKAMIVALIVICITAVVAAL', IUPACProtein())
+
+        Note that the alphabet is preserved.
+        """
         return Seq("".join(self.data), self.alphabet)
 
 # The transcribe, backward_transcribe, and translate functions are
