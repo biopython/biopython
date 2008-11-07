@@ -684,6 +684,16 @@ Testing reading genbank format file GenBank/dbsource_wrap.gb
  Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
+Testing reading genbank format file GenBank/NC_005816.gb
+ ID = 'NC_005816.1', Name='NC_005816',
+ Seq='TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTG...ACCCCTG', length=9609
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/gbvrl1_start.seq
  ID = 'AB000048.1', Name='AB000048',
  Seq='ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAG...GGATTAA', length=2007

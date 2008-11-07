@@ -18,12 +18,11 @@ gb_file_dir = os.path.join(os.getcwd(), 'GenBank')
 test_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
               'protein_refseq.gb', 'extra_keywords.gb', 'one_of.gb',
               'NT_019265.gb', 'origin_line.gb', 'blank_seq.gb',
-              'dbsource_wrap.gb', 'gbvrl1_start.seq', 'between_location.gb']
+              'dbsource_wrap.gb', 'gbvrl1_start.seq', 'NC_005816.gb']
 
 # We only test writing on a subset of the examples:
 write_format_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
-                      'extra_keywords.gb', 'one_of.gb', 'origin_line.gb',
-                      'between_location.gb']
+                      'extra_keywords.gb', 'one_of.gb', 'origin_line.gb']
 # don't test writing on protein_refseq, since it is horribly nasty
 # don't test writing on the CONTIG refseq, because the wrapping of
 # locations won't work exactly
