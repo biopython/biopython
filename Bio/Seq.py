@@ -432,7 +432,21 @@ class Seq(object):
     def complement(self):
         """Returns the complement sequence. New Seq object.
 
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import IUPAC
+        >>> my_dna = Seq("CCCCCGATAG", IUPAC.unambiguous_dna)
+        >>> my_dna
+        Seq('CCCCCGATAG', IUPACUnambiguousDNA())
+        >>> my_dna.complement()
+        Seq('GGGGGCTATC', IUPACUnambiguousDNA())
+
         Trying to complement a protein sequence raises an exception.
+
+        >>> my_protein = Seq("MAIVMGR", IUPAC.protein)
+        >>> my_protein.complement()
+        Traceback (most recent call last):
+           ...
+        ValueError: Proteins do not have complements!
         """
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.ProteinAlphabet) :
@@ -459,7 +473,21 @@ class Seq(object):
     def reverse_complement(self):
         """Returns the reverse complement sequence. New Seq object.
 
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import IUPAC
+        >>> my_dna = Seq("CCCCCGATAG", IUPAC.unambiguous_dna)
+        >>> my_dna
+        Seq('CCCCCGATAG', IUPACUnambiguousDNA())
+        >>> my_dna.reverse_complement()
+        Seq('CTATCGGGGG', IUPACUnambiguousDNA())
+
         Trying to complement a protein sequence raises an exception.
+
+        >>> my_protein = Seq("MAIVMGR", IUPAC.protein)
+        >>> my_protein.reverse_complement()
+        Traceback (most recent call last):
+           ...
+        ValueError: Proteins do not have complements!
         """
         #Use -1 stride/step to reverse the complement
         return self.complement()[::-1]
@@ -467,7 +495,22 @@ class Seq(object):
     def transcribe(self):
         """Returns the RNA sequence from a DNA sequence. New Seq object.
 
-        Trying to transcribe a protein or RNA sequence raises an exception.
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import IUPAC
+        >>> coding_dna = Seq("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG", \
+                             IUPAC.unambiguous_dna)
+        >>> coding_dna
+        Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
+        >>> coding_dna.transcribe()
+        Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
+
+        Trying to transcribe a protein or RNA sequence raises an exception:
+
+        >>> my_protein = Seq("MAIVMGR", IUPAC.protein)
+        >>> my_protein.transcribe()
+        Traceback (most recent call last):
+           ...
+        ValueError: Proteins cannot be transcribed!
         """
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.ProteinAlphabet) :
@@ -487,8 +530,23 @@ class Seq(object):
     def back_transcribe(self):
         """Returns the DNA sequence from an RNA sequence. New Seq object.
 
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import IUPAC
+        >>> messenger_rna = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG", \
+                                IUPAC.unambiguous_rna)
+        >>> messenger_rna
+        Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
+        >>> messenger_rna.back_transcribe()
+        Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
+
         Trying to back-transcribe a protein or DNA sequence raises an
         exception.
+
+        >>> my_protein = Seq("MAIVMGR", IUPAC.protein)
+        >>> my_protein.back_transcribe()
+        Traceback (most recent call last):
+           ...
+        ValueError: Proteins cannot be back transcribed!
         """
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.ProteinAlphabet) :
