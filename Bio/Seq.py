@@ -251,6 +251,14 @@ class Seq(object):
         end - optional integer, slice end
 
         Returns -1 if the subsequence is NOT found.
+
+        e.g. Locating the first typical start codon, AUG, in an RNA sequence:
+        
+        >>> from Bio.Seq import Seq
+        >>> my_rna = Seq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
+        >>> my_rna.find("AUG")
+        3
+        
         """
         #If it has one, check the alphabet:
         sub_str = self._get_seq_str_and_check_alphabet(sub)
@@ -288,12 +296,27 @@ class Seq(object):
         white space (tabs, spaces, newlines) but this is unlikely to
         apply to biological sequences.
         
-        e.g. print my_seq.split("*")
+        e.g.
+        >>> from Bio.Seq import Seq
+        >>> my_rna = Seq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
+        >>> my_aa = my_rna.translate()
+        >>> my_aa
+        Seq('VMAIVMGR*KGAR*L', HasStopCodon(ExtendedIUPACProtein(), '*'))
+        >>> my_aa.split("*")
+        [Seq('VMAIVMGR', HasStopCodon(ExtendedIUPACProtein(), '*')), Seq('KGAR', HasStopCodon(ExtendedIUPACProtein(), '*')), Seq('L', HasStopCodon(ExtendedIUPACProtein(), '*'))]
+        >>> my_aa.split("*",1)
+        [Seq('VMAIVMGR', HasStopCodon(ExtendedIUPACProtein(), '*')), Seq('KGAR*L', HasStopCodon(ExtendedIUPACProtein(), '*'))]
 
-        See also the rsplit method.
+        See also the rsplit method:
+
+        >>> my_aa.rsplit("*",1)
+        [Seq('VMAIVMGR*KGAR', HasStopCodon(ExtendedIUPACProtein(), '*')), Seq('L', HasStopCodon(ExtendedIUPACProtein(), '*'))]
+
         """
         #If it has one, check the alphabet:
         sep_str = self._get_seq_str_and_check_alphabet(sep)
+        #TODO - If the sep is the defined stop symbol, or gap char,
+        #should we adjust the alphabet?
         return [Seq(part, self.alphabet) \
                 for part in str(self).split(sep_str, maxsplit)]
 
@@ -311,7 +334,7 @@ class Seq(object):
         white space (tabs, spaces, newlines) but this is unlikely to
         apply to biological sequences.
         
-        e.g. print my_seq.split("*")
+        e.g. print my_seq.rsplit("*",1)
 
         See also the split method.
         """
@@ -372,7 +395,15 @@ class Seq(object):
         ommitted or None (default) then as for the python string method,
         this defaults to removing any white space.
         
-        e.g. print my_seq.lstrip("-")
+        e.g. Removing a nucleotide sequence's polyadenylation (poly-A tail):
+
+        >>> from Bio.Alphabet import IUPAC
+        >>> from Bio.Seq import Seq
+        >>> my_seq = Seq("CGGTACGCTTATGTCACGTAGAAAAAA", IUPAC.unambiguous_dna)
+        >>> my_seq
+        Seq('CGGTACGCTTATGTCACGTAGAAAAAA', IUPACUnambiguousDNA())
+        >>> my_seq.rstrip("A")
+        Seq('CGGTACGCTTATGTCACGTAG', IUPACUnambiguousDNA())
 
         See also the strip and lstrip methods.
         """
