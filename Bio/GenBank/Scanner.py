@@ -926,6 +926,7 @@ class GenBankScanner(InsdcScanner) :
             'AUTHORS'    : 'authors',
             'CONSRTM'    : 'consrtm',
             'PROJECT'    : 'project',
+            'DBLINK'     : 'dblink',
             'TITLE'      : 'title',
             'JOURNAL'    : 'journal',
             'MEDLINE'    : 'medline_id',

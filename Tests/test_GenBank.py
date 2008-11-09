@@ -84,6 +84,7 @@ for parser in all_parsers:
                 print "Feaures"
                 for feature in cur_record.features:
                     print feature
+                print "DB cross refs", cur_record.dbxrefs
             elif isinstance(parser, GenBank.RecordParser):
                 print "***Record from %s with the RecordParser" \
                       % filename.split(os.path.sep)[-1]

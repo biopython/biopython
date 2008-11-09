@@ -378,9 +378,18 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
     def project(self, content):
         """Handle the information from the PROJECT line as a list of projects.
+
+        This is stored as dbxrefs in the SeqRecord to be consistent with the
+        projected switch of this line to DBLINK in future GenBank versions.
         """
         projects = [p for p in content.split() if p]
-        self.data.annotations['project'] = projects
+        self.data.dbxrefs.extend(projects)
+
+    def dblink(self, content):
+        """Store DBLINK cross references as dbxrefs in our record object.
+        """
+        dblinks = [l for l in content.split() if l]
+        self.data.dbxrefs.extend(projects)
 
     def version_suffix(self, version):
         """Set the version to overwrite the id.
@@ -1044,7 +1053,10 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self.data.keywords = self._split_keywords(content)
 
     def project(self, content):
-        self.data.project = [p for p in content.split() if p]
+        self.data.projects.extend([p for p in content.split() if p])
+
+    def dblink(self, content):
+        self.data.dblinks.extend([l for l in content.split() if l])
 
     def segment(self, content):
         self.data.segment = content

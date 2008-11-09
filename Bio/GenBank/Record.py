@@ -156,7 +156,8 @@ class Record:
         self.nid = ''
         self.pid = ''
         self.version = ''
-        self.project = ''
+        self.projects = []
+        self.dblinks = []
         self.db_source = ''
         self.gi = ''
         self.keywords = []
@@ -191,6 +192,7 @@ class Record:
         output += self._accession_line()
         output += self._version_line()
         output += self._project_line()
+        output += self._dblink_line()
         output += self._nid_line()
         output += self._pid_line()
         output += self._keywords_line()
@@ -282,9 +284,17 @@ class Record:
 
     def _project_line(self):
         output = ""
-        if self.project:
+        if len(self.projects) > 0:
             output = Record.BASE_FORMAT % "PROJECT"
-            output += "%s\n" % "  ".join(self.project)
+            output += "%s\n" % "  ".join(self.projects)
+        return output
+
+    def _dblink_line(self):
+        output = ""
+        if len(self.dblinks) > 0:
+            output = Record.BASE_FORMAT % "DBLINK"
+            dblink_info = "\n".join(self.dblinks)
+            output += _wrapped_genbank(dblink_info, Record.GB_BASE_INDENT)
         return output
 
     def _nid_line(self):
