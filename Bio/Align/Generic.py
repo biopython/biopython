@@ -6,14 +6,10 @@ classes:
 o Alignment
 """
 
-# standard library
-import string
-
 # biopython
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import Alphabet
-from Bio.Alphabet import IUPAC
 
 class Alignment:
     """Represent a set of alignments.
@@ -44,7 +40,7 @@ class Alignment:
         or isinstance(alphabet, Alphabet.AlphabetEncoder)):
             raise ValueError("Invalid alphabet argument")
         self._alphabet = alphabet
-        # hold everything at a list of seq record objects
+        # hold everything at a list of SeqRecord objects
         self._records = []
 
     def _str_line(self, record) :
