@@ -27,6 +27,19 @@ class Alignment:
         Arguments:
         o alphabet - The alphabet to use for the sequence objects that are
         created. This alphabet must be a gapped type.
+
+        e.g.
+        >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
+        >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
+        >>> align.add_sequence("Gamma", "ACTGCTAGDTAG")
+        >>> print align
+        Gapped(IUPACUnambiguousDNA(), '-') alignment with 3 rows and 12 columns
+        ACTGCTAGCTAG Alpha
+        ACT-CTAGCTAG Beta
+        ACTGCTAGDTAG Gamma
+    
         """
         if not (isinstance(alphabet, Alphabet.Alphabet) \
         or isinstance(alphabet, Alphabet.AlphabetEncoder)):
@@ -54,10 +67,16 @@ class Alignment:
         are shown, with the record identifiers.  This should fit nicely on a
         single screen.  e.g.
 
-        DNAAlphabet() alignment with 3 rows and 14 columns
-        ACGATCAGCTAGCT Alpha
-        CCGATCAGCTAGCT Beta
-        ACGATGAGCTAGCT Gamma
+        >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
+        >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
+        >>> align.add_sequence("Gamma", "ACTGCTAGDTAG")
+        >>> print align
+        Gapped(IUPACUnambiguousDNA(), '-') alignment with 3 rows and 12 columns
+        ACTGCTAGCTAG Alpha
+        ACT-CTAGCTAG Beta
+        ACTGCTAGDTAG Gamma
 
         See also the alignment's format method.
         """
@@ -85,6 +104,8 @@ class Alignment:
         This provides a simple way to visually distinguish alignments of
         the same size.
         """
+        #A doctest for __repr__ would be nice, but __class__ comes out differently
+        #if run via the __main__ trick.
         return "<%s instance (%i records of length %i, %s) at %x>" % \
                (self.__class__, len(self._records),
                 self.get_alignment_length(), repr(self._alphabet), id(self))
@@ -104,6 +125,9 @@ class Alignment:
         print my_alignment.format("clustal")
         print my_alignment.format("fasta")
         """
+        #A doctest would be nice, but the <BLANKLINE> stuff is very ugly!
+        #The "tab" format is possible, but tabs don't seem to work nicely in doctests.
+        
         #See also the __format__ added for Python 2.6 / 3.0, PEP 3101
         #See also the SeqRecord class and its format() method using Bio.SeqIO
         return self.__format__(format)
@@ -142,10 +166,20 @@ class Alignment:
         """Iterate over alignment rows as SeqRecord objects.
 
         e.g.
-
-        for record in align :
-            print record.id
-            print record.seq
+        >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
+        >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
+        >>> align.add_sequence("Gamma", "ACTGCTAGDTAG")
+        >>> for record in align :
+        ...    print record.id
+        ...    print record.seq
+        Alpha
+        ACTGCTAGCTAG
+        Beta
+        ACT-CTAGCTAG
+        Gamma
+        ACTGCTAGDTAG
         """
         return iter(self._records) 
 
@@ -176,6 +210,14 @@ class Alignment:
         All objects in the alignment should (hopefully) have the same
         length. This function will go through and find this length
         by finding the maximum length of sequences in the alignment.
+
+        >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
+        >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
+        >>> align.add_sequence("Gamma", "ACTGCTAGDTAG")
+        >>> align.get_alignment_length()
+        12
         """
         max_length = 0
 
@@ -237,7 +279,19 @@ class Alignment:
         self._records.append(new_record)
         
     def get_column(self,col):
-        """Returns a string containing a given column."""
+        """Returns a string containing a given column.
+
+        e.g.
+        >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
+        >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
+        >>> align.add_sequence("Gamma", "ACTGCTAGDTAG")
+        >>> align.get_column(0)
+        'AAA'
+        >>> align.get_column(3)
+        'G-G'
+        """
         #TODO - Support negative indices?
         col_str = ''
         assert col >= 0 and col <= self.get_alignment_length()
@@ -292,8 +346,14 @@ class Alignment:
         else :
             raise TypeError("Invalid index type.")
 
-if __name__ == "__main__" :
+def _test():
+    """Run the Bio.Seq module's doctests."""
+    import doctest
+    doctest.testmod()
+
+if __name__ == "__main__":
     print "Mini self test..."
+    _test()
 
     raw_data = ["ACGATCAGCTAGCT", "CCGATCAGCTAGCT", "ACGATGAGCTAGCT"]
     a = Alignment(Alphabet.generic_dna)

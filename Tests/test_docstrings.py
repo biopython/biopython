@@ -14,7 +14,9 @@ if sys.version_info[:2] < (2, 4):
 import doctest, unittest
 
 from Bio import Seq, SeqRecord, SeqIO, AlignIO
-test_modules = [Seq, SeqRecord, SeqIO, AlignIO]
+import Bio.Align.Generic
+test_modules = [Seq, SeqRecord, SeqIO, AlignIO,
+                Bio.Align.Generic]
 
 test_suite = unittest.TestSuite([doctest.DocTestSuite(module) \
                                  for module in test_modules])
