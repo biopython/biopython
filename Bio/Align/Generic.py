@@ -39,7 +39,6 @@ class Alignment:
         ACTGCTAGCTAG Alpha
         ACT-CTAGCTAG Beta
         ACTGCTAGDTAG Gamma
-    
         """
         if not (isinstance(alphabet, Alphabet.Alphabet) \
         or isinstance(alphabet, Alphabet.AlphabetEncoder)):
@@ -118,16 +117,33 @@ class Alignment:
         """Returns the alignment as a string in the specified file format.
 
         The format should be a lower case string supported as an output
-        format by Bio.AlignIO, which is used to turn the alignment into a
+        format by Bio.AlignIO (such as "fasta", "clustal", "phylip",
+        "stockholm", etc), which is used to turn the alignment into a
         string.
 
         e.g.
-        print my_alignment.format("clustal")
-        print my_alignment.format("fasta")
+        >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
+        >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
+        >>> align.add_sequence("Gamma", "ACTGCTAGDTAG")
+        >>> print align.format("fasta")
+        >Alpha
+        ACTGCTAGCTAG
+        >Beta
+        ACT-CTAGCTAG
+        >Gamma
+        ACTGCTAGDTAG
+        <BLANKLINE>
+        >>> print align.format("phylip")
+         3 12
+        Alpha      ACTGCTAGCT AG
+        Beta       ACT-CTAGCT AG
+        Gamma      ACTGCTAGDT AG
+        <BLANKLINE>
+
+        For Python 2.6, 3.0 or later see also the built in format() function.
         """
-        #A doctest would be nice, but the <BLANKLINE> stuff is very ugly!
-        #The "tab" format is possible, but tabs don't seem to work nicely in doctests.
-        
         #See also the __format__ added for Python 2.6 / 3.0, PEP 3101
         #See also the SeqRecord class and its format() method using Bio.SeqIO
         return self.__format__(format)
@@ -352,8 +368,9 @@ def _test():
     doctest.testmod()
 
 if __name__ == "__main__":
-    print "Mini self test..."
+    print "Doctests..."
     _test()
+    print "Mini self test..."
 
     raw_data = ["ACGATCAGCTAGCT", "CCGATCAGCTAGCT", "ACGATGAGCTAGCT"]
     a = Alignment(Alphabet.generic_dna)
