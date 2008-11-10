@@ -151,7 +151,7 @@ class Iterator:
         If set to None, then the raw contents of the file will be returned.
         """
         import warnings
-        warnings.warn("Bio.Sequencing.Ace.Iterator is deprecated. Please use Bio.Sequencing.Ace.parse(handle) instead of Bio.Sequencing.Ace.Iterator(handle, RecordParser())", DeprecationWarning)
+        warnings.warn("Bio.Sequencing.Phd.Iterator is deprecated. Please use Bio.Sequencing.Phd.parse(handle) instead of Bio.Sequencing.Phd.Iterator(handle, RecordParser())", DeprecationWarning)
         self._uhandle = File.UndoHandle(handle)
         self._parser = parser
 
@@ -183,7 +183,7 @@ class RecordParser(AbstractParser):
     """Parses PHD file data into a Record object (DEPRECATED)."""
     def __init__(self):
         import warnings
-        warnings.warn("Bio.Sequencing.Ace.RecordParser is deprecated. Please use Bio.Sequencing.Ace.read(handle) instead of Bio.Sequencing.Ace.RecordParser().parse(handle)", DeprecationWarning)
+        warnings.warn("Bio.Sequencing.Phd.RecordParser is deprecated. Please use Bio.Sequencing.Phd.read(handle) instead of Bio.Sequencing.Phd.RecordParser().parse(handle)", DeprecationWarning)
         self._scanner = _Scanner()
         self._consumer = _RecordConsumer()
 
