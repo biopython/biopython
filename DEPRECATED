@@ -68,6 +68,15 @@ Bio.EUtils
 ==========
 Deprecated in favor of Bio.Entrez in Release 1.48.
 
+Bio.Sequencing
+==============
+A revised API was added and the old one deprecated in Biopython 1.48:
+Bio.Sequencing.Ace.RecordParser --> Bio.Sequencing.Ace.read(handle)
+Bio.Sequencing.Ace.Iterator --> Bio.Sequencing.Ace.parse(handle)
+Bio.Sequencing.Phd.RecordParser --> Bio.Sequencing.Phd.read(handle)
+Bio.Sequencing.Phd.Iterator --> Bio.Sequencing.Phd.parse(handle)
+
+
 Bio.Blast.NCBIWWW
 =================
 The HTML BLAST parser was deprecated as of Release 1.48.
