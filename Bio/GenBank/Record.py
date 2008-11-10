@@ -120,8 +120,11 @@ class Record:
     o base_counts - A string with the counts of bases for the sequence.
     o origin - A string specifying info about the origin of the sequence.
     o sequence - A string with the sequence itself.
-    o contig - A string of location information for a CONTIG in a RefSeq
-    file.
+    o contig - A string of location information for a CONTIG in a RefSeq file
+    o project - The genome sequencing project numbers
+                (will be replaced by the dblink cross-references in 2009).
+    o dblinks - The genome sequencing project number(s) and other links.
+                (will replace the project information in 2009).
     """
     # constants for outputting GenBank information
     GB_LINE_LENGTH = 79

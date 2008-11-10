@@ -379,17 +379,45 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def project(self, content):
         """Handle the information from the PROJECT line as a list of projects.
 
+        e.g.
+        PROJECT     GenomeProject:28471
+
+        or:
+        PROJECT     GenomeProject:13543  GenomeProject:99999
+
         This is stored as dbxrefs in the SeqRecord to be consistent with the
         projected switch of this line to DBLINK in future GenBank versions.
+        Note the NCBI plan to replace "GenomeProject:28471" with the shorter
+        "Project:28471" as part of this transition.
         """
-        projects = [p for p in content.split() if p]
-        self.data.dbxrefs.extend(projects)
+        content = content.replace("GenomeProject:", "Project:")
+        self.data.dbxrefs.extend([p for p in content.split() if p])
 
     def dblink(self, content):
         """Store DBLINK cross references as dbxrefs in our record object.
+
+        This line type is expected to replace the PROJECT line in 2009. e.g.
+
+        During transition:
+        
+        PROJECT     GenomeProject:28471
+        DBLINK      Project:28471
+                    Trace Assembly Archive:123456
+
+        Once the project line is dropped:
+
+        DBLINK      Project:28471
+                    Trace Assembly Archive:123456
+
+        Note GenomeProject -> Project.
+
+        We'll have to see some real examples to be sure, but based on the
+        above example we can expect one reference per line.
         """
-        dblinks = [l for l in content.split() if l]
-        self.data.dbxrefs.extend(projects)
+        #During the transition period with both PROJECT and DBLINK lines,
+        #we don't want to add the same cross reference twice.
+        if content.strip() not in self.data.dbxrefs :
+            self.data.dbxrefs.append(content.strip())
 
     def version_suffix(self, version):
         """Set the version to overwrite the id.
@@ -1056,7 +1084,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self.data.projects.extend([p for p in content.split() if p])
 
     def dblink(self, content):
-        self.data.dblinks.extend([l for l in content.split() if l])
+        self.data.dblinks.append(content)
 
     def segment(self, content):
         self.data.segment = content
