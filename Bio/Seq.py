@@ -882,6 +882,9 @@ class MutableSeq(object):
         except AttributeError :
             search = sub
 
+        if not isinstance(search, basestring) :
+            raise TypeError("expected a string, Seq or MutableSeq")
+
         if len(search) == 1 :
             #Try and be efficient and work directly from the array.
             count = 0
@@ -1177,8 +1180,10 @@ def reverse_complement(sequence):
 
 def _test():
     """Run the Bio.Seq module's doctests."""
+    print "Runing doctests..."
     import doctest
     doctest.testmod()
+    print "Done"
 
 if __name__ == "__main__":
     _test()
