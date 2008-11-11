@@ -1,6 +1,6 @@
 import math
 from CodonUsageIndices import SharpEcoliIndex
-from Bio import Fasta
+from Bio import SeqIO # To parse a FASTA file
 
 CodonsDict = {'TTT':0, 'TTC':0, 'TTA':0, 'TTG':0, 'CTT':0, 
 'CTC':0, 'CTA':0, 'CTG':0, 'ATT':0, 'ATC':0, 
@@ -31,7 +31,7 @@ SynonymousCodons = {'CYS': ['TGT', 'TGC'], 'ASP': ['GAT', 'GAC'],
 
 
 class CodonAdaptationIndex:
-	"""
+	"""A codon adaptaion index (CAI) implementation.
 	
 	This class implements the codon adaptaion index (CAI) described by Sharp and
 	Li (Nucleic Acids Res. 1987 Feb 11;15(3):1281-95).
@@ -40,7 +40,7 @@ class CodonAdaptationIndex:
 
 	set_cai_index(Index):
 
-	This mehtod sets-up an index to be used when calculating CAI for a gene.
+	This method sets-up an index to be used when calculating CAI for a gene.
 	Just pass a dictionary similar to the SharpEcoliIndex in CodonUsageIndices
 	module.
 
@@ -110,32 +110,25 @@ class CodonAdaptationIndex:
 		return math.exp(caiValue*(1.0/(LengthForCai-1)))
 			
 	def _count_codons(self, FastaFile):
-		InputFile = open(FastaFile, 'r')
-		# set up the fasta parser
-		parser = Fasta.RecordParser()
-		iterator = Fasta.Iterator(InputFile, parser)
-		cur_record = iterator.next()
+		handle = open(FastaFile, 'r')
 		
 		# make the codon dictionary local
 		self.codon_count = CodonsDict.copy()
-		
-		
+
 		# iterate over sequence and count all the codons in the FastaFile.
-		while cur_record:
+		for cur_record in SeqIO.parse(handle, "fasta") :
 			# make sure the sequence is lower case
-			if cur_record.sequence.islower():
-				DNAsequence = cur_record.sequence.upper()
+			if str(cur_record.seq).islower():
+				DNAsequence = str(cur_record.seq).upper()
 			else:
-				DNAsequence = cur_record.sequence
+				DNAsequence = str(cur_record.seq)
 			for i in range(0,len(DNAsequence),3):
 				codon = DNAsequence[i:i+3]
 				if codon in self.codon_count:
 					self.codon_count[codon] += 1
 				else:
-					raise TypeError("illegal codon %s in gene: %s" % (codon, cur_record.title))
-
-			cur_record = iterator.next()
-		InputFile.close()
+					raise TypeError("illegal codon %s in gene: %s" % (codon, cur_record.id))
+		handle.close()
 	
 	# this just gives the index when the objects is printed.
 	def print_index (self):
