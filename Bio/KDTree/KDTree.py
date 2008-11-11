@@ -1,4 +1,11 @@
+# Copyright 2004 by Thomas Hamelryck. 	 
+# All rights reserved. 	 
+# This code is part of the Biopython distribution and governed by its 	 
+# license.  Please see the LICENSE file that should have been included 	 
+# as part of this package. 	 
 """
+KD tree data structure for searching N-dimensional vectors.
+
 The KD tree data structure can be used for all kinds of searches that
 involve N-dimensional vectors, e.g.  neighbor searches (find all points
 within a radius of a given point) or finding all point pairs in a set
@@ -124,14 +131,14 @@ class KDTree:
     def set_coords(self, coords):
         """Add the coordinates of the points.
 
-        o coords - two dimensional Numeric array of type "f". E.g. if the 
-        points have dimensionality D and there are N points, the coords 
+        o coords - two dimensional NumPy array. E.g. if the points
+        have dimensionality D and there are N points, the coords 
         array should be NxD dimensional. 
         """
         if coords.min()<=-1e6 or coords.max()>=1e6:
                 raise Exception("Points should lie between -1e6 and 1e6")
         if len(coords.shape)!=2 or coords.shape[1]!=self.dim:
-                raise Exception("Expected a Nx%i Numeric array" % self.dim)
+                raise Exception("Expected a Nx%i NumPy array" % self.dim)
         self.kdt.set_data(coords)
         self.built=1
 
@@ -140,15 +147,14 @@ class KDTree:
     def search(self, center, radius):
         """Search all points within radius of center.
 
-        o center - one dimensional Numeric array of type "f". E.g. if the 
-        points have dimensionality D, the center array should be D 
-        dimensional. 
+        o center - one dimensional NumPy array. E.g. if the points have
+        dimensionality D, the center array should be D dimensional. 
         o radius - float>0
         """
         if not self.built:
                 raise Exception("No point set specified")
         if center.shape!=(self.dim,):
-                raise Exception("Expected a %i-dimensional Numeric array" \
+                raise Exception("Expected a %i-dimensional NumPy array" \
                                 % self.dim)
         self.kdt.search_center_radius(center, radius)
 
@@ -167,7 +173,7 @@ class KDTree:
         """Return the list of indices.
 
         Return the list of indices after a neighbor search.
-        The indices refer to the original coords Numeric array. The
+        The indices refer to the original coords NumPy array. The
         coordinates with these indices were within radius of center.
 
         For an index pair, the first index<second index. 
@@ -194,7 +200,7 @@ class KDTree:
     def all_get_indices(self):
         """Return All Fixed Neighbor Search results.
 
-        Return a Nx2 dim Numeric array containing
+        Return a Nx2 dim NumPy array containing
         the indices of the point pairs, where N
         is the number of neighbor pairs.
         """
@@ -219,7 +225,7 @@ if __name__=="__main__":
     bucket_size=10
     query_radius=10
 
-    coords=(200*random((nr_points, dim))).astype("f")
+    coords=(200*random((nr_points, dim)))
 
     kdtree=KDTree(dim, bucket_size)
 
@@ -244,7 +250,7 @@ if __name__=="__main__":
 
     for i in range(0, 10):
         # pick a random center
-        center=random(dim).astype("f")
+        center=random(dim)
         
         # search neighbors
         kdtree.search(center, query_radius)
