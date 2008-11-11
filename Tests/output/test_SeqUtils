@@ -2,6 +2,11 @@ test_SeqUtils
 gi|1348912|gb|G26680|G26680 has GC% of 42.2
 gi|1348917|gb|G26685|G26685 has GC% of 38.0
 gi|1592936|gb|G29385|G29385 has GC% of 41.0
+
+Codon Adaption Index (CAI)
+Example CAI 0.09978 using E. coli (default)
+Example CAI 0.65258 using Yersinia pestis biovar Microtus str. 91001
+
 Example 1, length 110, QSALTQPASV...
  crc32 = -1299987031
  crc64 = CRC-44CAAD88706CC153

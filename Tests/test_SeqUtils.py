@@ -3,24 +3,66 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+import os
+
 from Bio.SeqUtils import GC, quick_FASTA_reader
 from Bio.SeqUtils.CheckSum import crc32, crc64, gcg, seguid
 from Bio.SeqUtils.lcc import lcc_simp, lcc_mult
+from Bio.SeqUtils.CodonUsage import CodonAdaptationIndex
 from Bio.Seq import Seq, MutableSeq
 from Bio.Alphabet import single_letter_alphabet
 from Bio import SeqIO
+
 
 ######################
 # quick_FASTA_reader #
 ######################
 
-tuple_records = quick_FASTA_reader("Fasta/f002")
+dna_fasta_filename = "Fasta/f002"
+
+tuple_records = quick_FASTA_reader(dna_fasta_filename)
 assert len(tuple_records)==3
-seq_records = list(SeqIO.parse(open("Fasta/f002"),"fasta"))
+seq_records = list(SeqIO.parse(open(dna_fasta_filename),"fasta"))
 assert len(seq_records)==3
 for tuple_record, seq_record in zip(tuple_records, seq_records) :
     assert tuple_record == (seq_record.description, seq_record.seq.tostring())
     print "%s has GC%% of %0.1f" % (seq_record.name, GC(seq_record.seq))
+
+##############
+# CodonUsage #
+##############
+
+print
+print "Codon Adaption Index (CAI)"
+CAI = CodonAdaptationIndex()
+# Note - this needs a whole number of codons, and a DNA seq AS A STRING.
+print "Example CAI %0.5f using E. coli (default)" \
+      % CAI.cai_for_gene("ATGCGTATCGATCGCGATACGATTAGGCGGATG")
+
+dna_fasta_filename = "fasta.tmp"
+dna_genbank_filename = "GenBank/NC_005816.gb"
+record = SeqIO.read(open(dna_genbank_filename), "genbank")
+if os.path.isfile(dna_fasta_filename) :
+    os.remove(dna_fasta_filename)
+handle = open(dna_fasta_filename, "w")
+SeqIO.write([record], handle, "fasta")
+handle.close()
+
+
+CAI = CodonAdaptationIndex()
+# Note - this needs a FASTA file which a non-ambiguous DNA seq, and
+# it may even need it to be a whole number of codons (!).
+CAI.generate_index(dna_fasta_filename)
+print "Example CAI %0.5f using %s" \
+      % (CAI.cai_for_gene("ATGCGTATCGATCGCGATACGATTAGGCGGATG"),
+         record.annotations["source"])
+
+os.remove(dna_fasta_filename)
+del record
+del dna_genbank_filename
+del dna_fasta_filename
+
+print
 
 ###################
 # crc64 collision #
@@ -69,3 +111,4 @@ for i, seq_str in enumerate(examples) :
         assert value == checksum(Seq(seq_str, single_letter_alphabet))
         #Finally check it works with a MutableSeq object
         assert value == checksum(MutableSeq(seq_str, single_letter_alphabet))
+
