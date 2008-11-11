@@ -4269,7 +4269,7 @@ qualifiers:
 	Key: note, Value: ['compared to AL109969']
 	Key: replace, Value: ['tt']
 
-DB cross refs ['GenomeProject:10638']
+DB cross refs ['Project:10638']
 ***Record from noref.gb with the RecordParser
 sequence length: 1622
 locus: NM_006141
