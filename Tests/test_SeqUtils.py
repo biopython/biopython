@@ -9,6 +9,7 @@ from Bio.SeqUtils import GC, quick_FASTA_reader
 from Bio.SeqUtils.CheckSum import crc32, crc64, gcg, seguid
 from Bio.SeqUtils.lcc import lcc_simp, lcc_mult
 from Bio.SeqUtils.CodonUsage import CodonAdaptationIndex
+from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq, MutableSeq
 from Bio.Alphabet import single_letter_alphabet
 from Bio import SeqIO
@@ -39,26 +40,44 @@ CAI = CodonAdaptationIndex()
 print "Example CAI %0.5f using E. coli (default)" \
       % CAI.cai_for_gene("ATGCGTATCGATCGCGATACGATTAGGCGGATG")
 
+#We need a FASTA file of CDS sequences to count the codon usage...
 dna_fasta_filename = "fasta.tmp"
 dna_genbank_filename = "GenBank/NC_005816.gb"
 record = SeqIO.read(open(dna_genbank_filename), "genbank")
+records = []
+for feature in record.features :
+    if feature.type == "CDS" \
+    and not feature.sub_features :
+        start = feature.location.start.position
+        end = feature.location.end.position
+        table = int(feature.qualifiers["transl_table"][0])
+        if feature.strand == -1 :
+            seq = record.seq[start:end].reverse_complement()
+        else :
+            seq = record.seq[start:end]
+        #Double check we have the CDS sequence expected
+        #TODO - Use any cds_start option if/when added to deal with the met
+        assert "M" + str(seq[3:].translate(table)) \
+               == feature.qualifiers["translation"][0]+"*"
+        records.append(SeqRecord(seq, id=feature.qualifiers["protein_id"][0],
+                                 description=feature.qualifiers["product"][0]))
+del start, end, table, seq
 if os.path.isfile(dna_fasta_filename) :
     os.remove(dna_fasta_filename)
 handle = open(dna_fasta_filename, "w")
-SeqIO.write([record], handle, "fasta")
+SeqIO.write(records, handle, "fasta")
 handle.close()
 
-
 CAI = CodonAdaptationIndex()
-# Note - this needs a FASTA file which a non-ambiguous DNA seq, and
-# it may even need it to be a whole number of codons (!).
+# Note - this needs a FASTA file which containing non-ambiguous DNA coding
+# sequences - which should each be a whole number of codons.
 CAI.generate_index(dna_fasta_filename)
 print "Example CAI %0.5f using %s" \
       % (CAI.cai_for_gene("ATGCGTATCGATCGCGATACGATTAGGCGGATG"),
          record.annotations["source"])
 
 os.remove(dna_fasta_filename)
-del record
+del record, records
 del dna_genbank_filename
 del dna_fasta_filename
 
