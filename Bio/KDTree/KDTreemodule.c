@@ -232,7 +232,24 @@ PyTree_set_data(PyTree* self, PyObject* args)
     {
         PyErr_SetString(PyExc_ValueError, "Array must be two dimensional.");
         return NULL;
-    }	
+    }
+    if (PyArray_TYPE(array) == NPY_DOUBLE)
+    {
+        Py_INCREF(obj);
+    }
+    else
+    {
+        /* Cast to type double */
+        obj = PyArray_Cast(array, NPY_DOUBLE);
+        if (!obj)
+        {
+            PyErr_SetString(PyExc_ValueError,
+                            "coordinates cannot be cast to needed type.");
+            return NULL;
+        }
+        array = (PyArrayObject*) obj;
+    }
+
     n = (long int) PyArray_DIM(array, 0);
     m = (long int) PyArray_DIM(array, 1);
 
@@ -240,6 +257,7 @@ PyTree_set_data(PyTree* self, PyObject* args)
     coords= malloc(m*n*sizeof(float));
     if (!coords)
     {
+        Py_DECREF(obj);
         PyErr_SetString (PyExc_MemoryError, "Failed to allocate memory for coordinates.");
         return NULL;
     }
@@ -254,9 +272,10 @@ PyTree_set_data(PyTree* self, PyObject* args)
 
         for (j=0; j<m; j++)
         {
-            coords[i*m+j]=*(float *) (p+i*rowstride+j*colstride);
+            coords[i*m+j]=*(double *) (p+i*rowstride+j*colstride);
         }
     }	
+    Py_DECREF(obj);
 
     ok = KDTree_set_data(tree, coords, n);
     if (!ok)
@@ -303,7 +322,23 @@ PyTree_search_center_radius(PyTree* self, PyObject* args)
     {
         PyErr_SetString(PyExc_ValueError, "Array must be one dimensional.");
         return NULL;
-    }	
+    }
+    if (PyArray_TYPE(array) == NPY_DOUBLE)
+    {
+        Py_INCREF(obj);
+    }
+    else
+    {
+        /* Cast to type double */
+        obj = PyArray_Cast(array, NPY_DOUBLE);
+        if (!obj)
+        {
+            PyErr_SetString(PyExc_ValueError,
+                            "coordinates cannot be cast to needed type.");
+            return NULL;
+        }
+        array = (PyArrayObject*) obj;
+    }
 
     n = (long int) PyArray_DIM(array, 0);
 
@@ -311,6 +346,7 @@ PyTree_search_center_radius(PyTree* self, PyObject* args)
     coords= malloc(n*sizeof(float));
     if (!coords)
     {
+        Py_DECREF(obj);
         PyErr_SetString (PyExc_MemoryError, "Failed to allocate memory for coordinates.");
         return NULL;
     }
@@ -319,8 +355,9 @@ PyTree_search_center_radius(PyTree* self, PyObject* args)
     p = PyArray_BYTES(array);
     for (i=0; i<n; i++)
     {
-        coords[i]=*(float *) (p+i*stride);
+        coords[i]=*(double *) (p+i*stride);
     }
+    Py_DECREF(obj);
 
     ok = KDTree_search_center_radius(tree, coords, radius);
 
