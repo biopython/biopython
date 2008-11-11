@@ -2,6 +2,8 @@ test_BioSQL
 Load SeqRecord objects into a BioSQL database. ... ok
 Get a list of all items in the database. ... ok
 Test retrieval of items using various ids. ... ok
+Check can add DBSeq objects together. ... ok
+Check can turn a DBSeq object into a Seq or MutableSeq. ... ok
 Make sure Seqs from BioSQL implement the right interface. ... ok
 Check SeqFeatures of a sequence. ... ok
 Make sure SeqRecords from BioSQL implement the right interface. ... ok
@@ -10,6 +12,6 @@ Make sure all records are correctly loaded. ... ok
 Indepth check that SeqFeatures are transmitted through the db. ... ok
 
 ----------------------------------------------------------------------
-Ran 9 tests in 30.244s
+Ran 11 tests in 19.318s
 
 OK

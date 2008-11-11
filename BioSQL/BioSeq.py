@@ -19,6 +19,11 @@ from Bio import SeqFeature
 
 class DBSeq(Seq):  # This implements the biopython Seq interface
     def __init__(self, primary_id, adaptor, alphabet, start, length):
+        """Create a new DBSeq object referring to a BioSQL entry.
+
+        You wouldn't normally create a DBSeq object yourself, this is done
+        for you when retreiving a DBSeqRecord object from the database.
+        """
         self.primary_id = primary_id
         self.adaptor = adaptor
         self.alphabet = alphabet
@@ -102,8 +107,21 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
                                                  self.start,
                                                  self.start + self._length)
 
-
     data = property(tostring, doc="Sequence as string (DEPRECATED)")
+
+    def toseq(self):
+        """Returns the full sequence as a Seq object."""
+        #Note - the method name copies that of the MutableSeq object
+        return Seq(str(self), self.alphabet)
+
+    def __add__(self, other) :
+        #Let the Seq object deal with the alphabet issues etc
+        return self.toseq() + other
+
+    def __radd__(self, other) :
+        #Let the Seq object deal with the alphabet issues etc
+        return other + self.toseq()
+
 
 def _retrieve_seq(adaptor, primary_id):
     seqs = adaptor.execute_and_fetchall(

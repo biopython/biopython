@@ -10,7 +10,7 @@ import unittest
 
 # local stuff
 from Bio import MissingExternalDependencyError
-from Bio.Seq import Seq
+from Bio.Seq import Seq, MutableSeq
 from Bio.SeqFeature import SeqFeature
 from Bio import Alphabet
 from Bio import GenBank
@@ -232,6 +232,36 @@ class SeqInterfaceTest(unittest.TestCase):
         assert type(string_rep) == type("")
     
         assert len(test_seq) == 880, len(test_seq)
+
+    def t_convert(self):
+        """Check can turn a DBSeq object into a Seq or MutableSeq."""
+        test_seq = self.item.seq
+
+        other = test_seq.toseq()
+        assert str(test_seq) == str(other)
+        assert test_seq.alphabet == other.alphabet
+        assert isinstance(other, Seq)
+
+        other = test_seq.tomutable()
+        assert str(test_seq) == str(other)
+        assert test_seq.alphabet == other.alphabet
+        assert isinstance(other, MutableSeq)
+
+
+    def t_addition(self):
+        """Check can add DBSeq objects together."""
+        test_seq = self.item.seq
+        for other in [Seq("ACGT",test_seq.alphabet),
+                      MutableSeq("ACGT",test_seq.alphabet),
+                      "ACGT",
+                      test_seq] :
+            test = test_seq + other
+            assert str(test) == str(test_seq) + str(other)
+            assert isinstance(test, Seq), test
+
+            test = other + test_seq
+            assert str(test) == str(other) + str(test_seq)
+            
 
     def t_seq_slicing(self):
         """Check that slices of sequences are retrieved properly.
