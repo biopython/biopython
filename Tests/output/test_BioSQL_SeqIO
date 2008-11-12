@@ -168,6 +168,37 @@ Testing loading from genbank format file GenBank/noref.gb
  - Retrieving by version 'NM_006141.1', OK
  - Retrieving by accession 'NM_006141', OK
  - Retrieving by GI '5453633', OK
+Testing loading from genbank format file GenBank/cor6_6.gb
+ - AACAAAACACACATCAAAA...AAA [SabZaA4V2eLE9/2Fm5FnyYy07J4] len 513, X55053.1
+ - Retrieving by name/display_id 'ATCOR66M', OK
+ - Retrieving by version 'X55053.1', OK
+ - Retrieving by accession 'X55053', OK
+ - Retrieving by GI '16229', OK
+ - ATTTGGCCTATAAATATAA...ATA [l7gjJFE6W/S1jJn5+1ASrUKW/FA] len 880, X62281.1
+ - Retrieving by name/display_id 'ATKIN2', OK
+ - Retrieving by version 'X62281.1', OK
+ - Retrieving by accession 'X62281', OK
+ - Retrieving by GI '16353', OK
+ - AAAAAAACACAACAAAACT...TTC [TtWsXo45S3ZclIBy4X/WJc39+CY] len 441, M81224.1
+ - Retrieving by name/display_id 'BNAKINI', OK
+ - Retrieving by version 'M81224.1', OK
+ - Retrieving by accession 'M81224', OK
+ - Retrieving by GI '167145', OK
+ - GGACAAGGCCAAGGATGCT...GGC [/wQvmrl87QWcm9llO4/efg23Vgg] len 206, AJ237582.1
+ - Retrieving by name/display_id 'ARU237582', OK
+ - Retrieving by version 'AJ237582.1', OK
+ - Retrieving by accession 'AJ237582', OK
+ - Retrieving by GI '4538892', OK
+ - AACAAAACTCAATAAATAA...TTT [BUg6YxXSKWEcFFH0L08JzaLGhQs] len 282, L31939.1
+ - Retrieving by name/display_id 'BRRBIF72', OK
+ - Retrieving by version 'L31939.1', OK
+ - Retrieving by accession 'L31939', OK
+ - Retrieving by GI '1209261', OK
+ - ATGGCAGACAACAAGCAGA...TAG [uVEYeAQSV5EDQOnFoeMmVea+Oow] len 497, AF297471.1
+ - Retrieving by name/display_id 'AF297471', OK
+ - Retrieving by version 'AF297471.1', OK
+ - Retrieving by accession 'AF297471', OK
+ - Retrieving by GI '10121868', OK
 Testing loading from genbank format file GenBank/iro.gb
  - CACAGGCCCAGAGCCACTC...AAA [7P6ThjKwpVuH+5V3npBraPFagRM] len 1326, AL109817.1
  - Retrieving by name/display_id 'IRO125195', OK

@@ -177,7 +177,8 @@ def _retrieve_features(adaptor, primary_id):
         qvs = adaptor.execute_and_fetchall(
             "SELECT name, value" \
             " FROM seqfeature_qualifier_value  join term using (term_id)" \
-            " WHERE seqfeature_id = %s", (seqfeature_id,))
+            " WHERE seqfeature_id = %s" \
+            " ORDER BY rank", (seqfeature_id,))
         qualifiers = {}
         for qv_name, qv_value in qvs:
             qualifiers.setdefault(qv_name, []).append(qv_value)
@@ -185,7 +186,8 @@ def _retrieve_features(adaptor, primary_id):
         qvs = adaptor.execute_and_fetchall(
             "SELECT dbxref.dbname, dbxref.accession" \
             " FROM dbxref join seqfeature_dbxref using (dbxref_id)" \
-            " WHERE seqfeature_dbxref.seqfeature_id = %s", (seqfeature_id,))
+            " WHERE seqfeature_dbxref.seqfeature_id = %s" \
+            " ORDER BY rank", (seqfeature_id,))
         for qv_name, qv_value in qvs:
             value = "%s:%s" % (qv_name, qv_value)
             qualifiers.setdefault("db_xref", []).append(value)
@@ -215,6 +217,7 @@ def _retrieve_features(adaptor, primary_id):
             lookup[location_id] = (dbname, v)
         
         feature = SeqFeature.SeqFeature(type = seqfeature_type)
+        feature._seqfeature_id = seqfeature_id #Store the key as a private property
         feature.qualifiers = qualifiers
         if len(locations) == 0:
             pass

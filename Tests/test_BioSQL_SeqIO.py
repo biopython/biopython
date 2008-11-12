@@ -83,8 +83,7 @@ test_files = [ \
     ("swiss",  False, 'Registry/EDD_RAT.dat', 1),
 #Following examples are also used in test_GenBank.py
     ("genbank",False, 'GenBank/noref.gb', 1),
-#TODO - Pin down the "Duplicate entry" IntegrityError from this:
-#    ("genbank",False, 'GenBank/cor6_6.gb', 6),
+    ("genbank",False, 'GenBank/cor6_6.gb', 6),
     ("genbank",False, 'GenBank/iro.gb', 1),
     ("genbank",False, 'GenBank/pri1.gb', 1),
     ("genbank",False, 'GenBank/arab1.gb', 1),
@@ -181,7 +180,8 @@ def compare_features(old_f, new_f) :
                 assert False, "Problem with feature's '%s' qualifier" & key
         else :
             #Should both be lists of strings...
-            assert old_f.qualifiers[key] == new_f.qualifiers[key]
+            assert old_f.qualifiers[key] == new_f.qualifiers[key], \
+                "%s -> %s" % (old_f.qualifiers[key], new_f.qualifiers[key])
 
 def compare_sequences(old, new) :
     """Compare two Seq or DBSeq objects"""
