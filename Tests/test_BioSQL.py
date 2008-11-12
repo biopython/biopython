@@ -87,9 +87,7 @@ def create_database():
         pass
     except (server.module.IntegrityError,
             server.module.ProgrammingError), e: # ditto--perhaps
-        if str(e).find('database "%s" does not exist' % TESTDB) > 0:
-            pass
-        else:
+        if str(e).find('database "%s" does not exist' % TESTDB) == -1 :
             raise
     # create a new database
     sql = r"CREATE DATABASE " + TESTDB
