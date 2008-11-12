@@ -1,5 +1,5 @@
 # Copyright 2000 by Jeffrey Chang, Brad Chapman.  All rights reserved.
-# Copyright 2006, 2007 by Peter Cock.  All rights reserved.
+# Copyright 2006-2008 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -452,7 +452,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self.data.annotations['segment'] = content
 
     def source(self, content):
-        if content[-1] == '.':
+        #Note that some software (e.g. VectorNTI) may produce an empty
+        #source (rather than using a dot/period as might be expected).
+        if content == "" :
+            source_info = ""
+        elif content[-1] == '.':
             source_info = content[:-1]
         else:
             source_info = content
