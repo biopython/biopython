@@ -168,11 +168,8 @@ def compare_features(old_f, new_f) :
         # 
         # BioSQL currently does not store fuzzy locations, but instead stores
         # them as FeatureLocation.nofuzzy_start FeatureLocation.nofuzzy_end.
-        # Hence, the old_sub from SeqIO.parse() will have fuzzy location while
-        # new_sub locations from BioSQL will be fuzzy.
         # The vast majority of cases will be comparisons of ExactPosition
         # class locations, so we'll try that first and catch the exceptions.
-
         try:
             assert str(old_sub.location) == str(new_sub.location), \
                "%s -> %s" % (str(old_sub.location), str(new_sub.location))
