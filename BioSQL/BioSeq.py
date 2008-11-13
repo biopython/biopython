@@ -232,7 +232,7 @@ def _retrieve_features(adaptor, primary_id):
         else:
             min_start = locations[0][1]
             max_end = locations[0][2]
-            sub_feature_list = []       # (start, sub feature) for sorting
+            assert feature.sub_features == []
             for location in locations:
                 location_id, start, end, strand = location
                 dbname, version = lookup.get(location_id, (None, None))
@@ -246,23 +246,13 @@ def _retrieve_features(adaptor, primary_id):
                 subfeature.strand = strand
                 subfeature.ref_db = dbname
                 subfeature.ref = version
-                sub_feature_list.append((start, subfeature))
-            sub_feature_list.sort()
-            feature.sub_features = [sub_feature[1]
-                                    for sub_feature in sub_feature_list]
+                feature.sub_features.append(subfeature)
             feature.location = SeqFeature.FeatureLocation(min_start, max_end)
             feature.strand = feature.sub_features[0].strand
 
-        seq_feature_list.append(
-            (seqfeature_rank, feature.location.start.position, feature) )
+        seq_feature_list.append(feature)
 
-    # Primary sort is on the feature's rank
-    #  .. then on the start position
-    #  .. then arbitrary on the feature's id (SeqFeature has no __cmp__)
-    seq_feature_list.sort()
-
-    # Get just the SeqFeature
-    return [x[2] for x in seq_feature_list]
+    return seq_feature_list
 
 def _retrieve_annotations(adaptor, primary_id, taxon_id):
     annotations = {}

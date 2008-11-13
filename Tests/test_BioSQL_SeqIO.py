@@ -18,6 +18,7 @@ from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from StringIO import StringIO
 from Bio.SeqUtils.CheckSum import seguid
+from Bio.SeqFeature import ExactPosition
 
 from BioSQL import BioSeqDatabase
 from BioSQL import BioSeq
@@ -162,8 +163,37 @@ def compare_features(old_f, new_f) :
     for old_sub, new_sub in zip(old_f.sub_features, new_f.sub_features) :
         assert old_sub.type == new_sub.type
         #TODO: assert old_sub.strand == new_sub.strand
-        #TODO: assert str(old_sub.location) == str(new_sub.location), \
-        #       "%s -> %s" % (str(old_sub.location), str(new_sub.location))
+
+        # Compare sub-feature Locations:
+        # 
+        # BioSQL currently does not store fuzzy locations, but instead stores
+        # them as FeatureLocation.nofuzzy_start FeatureLocation.nofuzzy_end.
+        # Hence, the old_sub from SeqIO.parse() will have fuzzy location while
+        # new_sub locations from BioSQL will be fuzzy.
+        # The vast majority of cases will be comparisons of ExactPosition
+        # class locations, so we'll try that first and catch the exceptions.
+
+        try:
+            assert str(old_sub.location) == str(new_sub.location), \
+               "%s -> %s" % (str(old_sub.location), str(new_sub.location))
+        except AssertionError, e:
+            if isinstance(old_sub.location.start, ExactPosition) and \
+                isinstance(new_sub.location.start, ExactPosition) and \
+                isinstance(old_sub.location.end, ExactPosition) and \
+                isinstance(new_sub.location.end, ExactPosition) :
+                # Its not a problem with fuzzy locations, re-raise 
+                raise e
+            else:
+                #At least one location is fuzzy
+                assert old_sub.location.nofuzzy_start == \
+                       new_sub.location.nofuzzy_start, \
+                       "%s -> %s" % (old_sub.location.nofuzzy_start, \
+                                     new_sub.location.nofuzzy_start)
+                assert old_sub.location.nofuzzy_end == \
+                       new_sub.location.nofuzzy_end, \
+                       "%s -> %s" % (old_sub.location.nofuzzy_end, \
+                                     new_sub.location.nofuzzy_end)
+
     assert len(old_f.qualifiers) == len(new_f.qualifiers)    
     assert set(old_f.qualifiers.keys()) == set(new_f.qualifiers.keys())
     for key in old_f.qualifiers.keys() :
