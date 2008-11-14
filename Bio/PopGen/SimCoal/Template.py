@@ -39,7 +39,7 @@ def process_para(in_string, out_file_prefix, para_list, curr_values):
         f = open(f_name + '.par', 'w')
         #executed_template = template
         executed_template = exec_template(template)
-        clean_template =  executed_template.replace('\r\n','\n').replace('\n\n','\n').replace('\n','\r\n')
+        clean_template =  executed_template.replace('\r\n','\n').replace('\n\n','\n')
         f.write(clean_template)
         f.close()
         return [f_name]

@@ -44,8 +44,13 @@ class TemplateTest(unittest.TestCase):
             [('sample_size', [30]),
              ('pop_size', [100])],
             'PopGen')
-        assert(os.stat('PopGen' + os.sep + 'simple.par').st_size ==
-               os.stat('PopGen' + os.sep + 'simple_100_30.par').st_size)
+        #Confirm the files match (ignoring any switch of line endings
+        #possible if the input file used a different OS convention)
+        old = open('PopGen' + os.sep + 'simple.par', "rU").readlines()
+        new = open('PopGen' + os.sep + 'simple_100_30.par').readlines()
+        assert old==new, "Error - Old:\n%s\n\nNew:\n%s\n" % (old, new)
+        #assert(os.stat('PopGen' + os.sep + 'simple.par').st_size ==
+        #       os.stat('PopGen' + os.sep + 'simple_100_30.par').st_size)
 
     def tearDown(self):
         os.remove('PopGen' + os.sep + 'tmp.par')
