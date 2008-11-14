@@ -1,7 +1,11 @@
-#!/usr/bin/env python
+try :
+    from numpy import asarray
+except ImportError :
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(\
+        "Install NumPy if you want to use Bio.MarkovModel.")
 
 from Bio import MarkovModel
-from numpy import asarray
 
 def print_mm(markov_model):
     print "STATES: %s" % ' '.join(markov_model.states)

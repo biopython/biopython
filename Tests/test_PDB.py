@@ -3,6 +3,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.  
 
+try :
+    import numpy
+except ImportError :
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(\
+        "Install NumPy if you want to use Bio.PDB.")
+
 import sys
 # Redirect stderr so user does not see warnings
 

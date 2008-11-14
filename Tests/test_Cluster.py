@@ -1,9 +1,14 @@
-import numpy
+#TODO - What if numpy was installed after Biopython,
+#meaning Cluster's C code hasn't been compiled?
+try :
+    import numpy
+except ImportError :
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(\
+        "Install NumPy if you want to use Bio.Cluster.")
 
 import unittest
 import sys
-
-
 
 def run_tests(module="Pycluster"):
     if module==[]:

@@ -15,7 +15,14 @@ try:
 except NameError:
     from sets import Set as set
 
-from numpy import *
+#TODO - Don't use "from XXX import *"
+try :
+    from numpy import *
+except ImportError :
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(\
+        "Install NumPy if you want to use Bio.kNN.")
+
 from Bio import kNN
 
 

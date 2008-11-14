@@ -1,4 +1,11 @@
-from numpy import *
+#TODO - Don't use "from XXX import *"
+try :
+    from numpy import *
+except ImportError :
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(\
+        "Install NumPy if you want to use Bio.SVDSuperimposer.")
+
 from Bio.SVDSuperimposer import *
 
 # start with two coordinate sets (Nx3 arrays - Float0)
