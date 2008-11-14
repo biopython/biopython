@@ -46,9 +46,16 @@ class SimCoalController:
         if par_dir == None:
             par_dir = os.sep.join([Config.dataDir, 'SimCoal', 'runs'])
         curr_dir = os.getcwd()
+        #TODO - Make sure we change drive on Windows as well?
         os.chdir(par_dir)
-        os.system(self.simcoal_dir + os.sep + self.bin_name + ' ' +
-          par_file + ' ' + str(num_sims) + ' ' + ploydi + ' >/dev/null 2>&1')
+        cmd = self.simcoal_dir + os.sep + self.bin_name + ' ' + \
+              par_file + ' ' + str(num_sims) + ' ' + ploydi
+        if sys.platform=="win32" :
+            #There is no /dev/nul on Windows
+            cmd += ' > nul 2>nul'
+        else :
+            cmd += ' >/dev/null 2>&1'
+        os.system(cmd)
         os.chdir(curr_dir)
     
 
