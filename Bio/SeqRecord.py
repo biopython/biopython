@@ -20,6 +20,35 @@ class SeqRecord(object):
     features    - Any (sub)features defined (list of SeqFeature objects)
     annotations - Further information about the whole sequence (dictionary)
                   Most entries are lists of strings.
+
+    You will typically use Bio.SeqIO to read in sequences from files as
+    SeqRecord objects.  However, you may want to create your own SeqRecord
+    objects directly (see the __init__ method for further details).
+
+    e.g.
+    >>> from Bio.Seq import Seq
+    >>> from Bio.SeqRecord import SeqRecord
+    >>> from Bio.Alphabet import IUPAC
+    >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
+    ...                         IUPAC.protein),
+    ...                    id="YP_025292.1", name="HokC",
+    ...                    description="toxic membrane protein, small")
+    >>> print record
+    ID: YP_025292.1
+    Name: HokC
+    Description: toxic membrane protein, small
+    Number of features: 0
+    Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())
+
+    If you want to save SeqRecord objects to a sequence file, use Bio.SeqIO
+    for this.  For the special case where you want the SeqRecord turned into
+    a string in a particular file format there is a format method which uses
+    Bio.SeqIO internally:
+
+    >>> print record.format("fasta")
+    >YP_025292.1 toxic membrane protein, small
+    MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
+    <BLANKLINE>
     """
     def __init__(self, seq, id = "<unknown id>", name = "<unknown name>",
                  description = "<unknown description>", dbxrefs = None,
@@ -36,21 +65,7 @@ class SeqRecord(object):
 
         You will typically use Bio.SeqIO to read in sequences from files as
         SeqRecord objects.  However, you may want to create your own SeqRecord
-        objects directly:
-
-        >>> from Bio.Seq import Seq
-        >>> from Bio.SeqRecord import SeqRecord
-        >>> from Bio.Alphabet import IUPAC
-        >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
-        ...                         IUPAC.protein),
-        ...                    id="YP_025292.1", name="HokC",
-        ...                    description="toxic membrane protein, small")
-        >>> print record
-        ID: YP_025292.1
-        Name: HokC
-        Description: toxic membrane protein, small
-        Number of features: 0
-        Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())
+        objects directly.
 
         Note that while an id is optional, we strongly recommend you supply a
         unique id string for each record.  This is especially important
@@ -89,8 +104,10 @@ class SeqRecord(object):
     def __str__(self) :
         """A human readable summary of the record and its annotation (string).
 
-        e.g.
+        The python built in function str works by calling the object's ___str__
+        method.
         
+        e.g.
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.Alphabet import IUPAC
@@ -98,6 +115,16 @@ class SeqRecord(object):
         ...                         IUPAC.protein),
         ...                    id="YP_025292.1", name="HokC",
         ...                    description="toxic membrane protein, small")
+        >>> print str(record)
+        ID: YP_025292.1
+        Name: HokC
+        Description: toxic membrane protein, small
+        Number of features: 0
+        Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())
+
+        In this example you don't actually need to call str explicity, as the
+        print command does this automatically:
+
         >>> print record
         ID: YP_025292.1
         Name: HokC
@@ -105,6 +132,7 @@ class SeqRecord(object):
         Number of features: 0
         Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())
 
+        Note that long sequences are shown truncated.
         """
         lines = []
         if self.id : lines.append("ID: %s" % self.id)
@@ -123,8 +151,10 @@ class SeqRecord(object):
     def __repr__(self) :
         """A concise summary of the record for debugging (string).
 
-        e.g.
+        The python built in function repr works by calling the object's ___repr__
+        method.
         
+        e.g.
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.Alphabet import generic_protein
@@ -136,9 +166,15 @@ class SeqRecord(object):
         ...                 id="NP_418483.1", name="b4059",
         ...                 description="ssDNA-binding protein",
         ...                 dbxrefs=["ASAP:13298", "GI:16131885", "GeneID:948570"])
+        >>> print repr(rec)
+        SeqRecord(seq=Seq('MASRGVNKVILVGNLGQDPEVRYMPNGGAVANITLATSESWRDKATGEMKEQTE...IPF', ProteinAlphabet()), id='NP_418483.1', name='b4059', description='ssDNA-binding protein', dbxrefs=['ASAP:13298', 'GI:16131885', 'GeneID:948570'])
+
+        At the python prompt you can also use this shorthand:
+
         >>> rec
         SeqRecord(seq=Seq('MASRGVNKVILVGNLGQDPEVRYMPNGGAVANITLATSESWRDKATGEMKEQTE...IPF', ProteinAlphabet()), id='NP_418483.1', name='b4059', description='ssDNA-binding protein', dbxrefs=['ASAP:13298', 'GI:16131885', 'GeneID:948570'])
-        
+
+        Note that long sequences are shown truncated.
         """
         return self.__class__.__name__ \
          + "(seq=%s, id=%s, name=%s, description=%s, dbxrefs=%s)" \
@@ -153,7 +189,6 @@ class SeqRecord(object):
         string.
 
         e.g.
-
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.Alphabet import IUPAC
@@ -166,8 +201,14 @@ class SeqRecord(object):
         MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
         <BLANKLINE>
 
-        This will NOT work on every possible file format supported by
-        Bio.SeqIO (e.g. some are for multiple sequences only).
+        The python print command automatically appends a new line, meaning
+        in this example a blank line is shown.  If you look at the string
+        representation you can see there is a trailing new line (shown as
+        slash n) which is important when writing to a file or if
+        concatenating mutliple sequence strings together.
+
+        Note that this method will NOT work on every possible file format
+        supported by Bio.SeqIO (e.g. some are for multiple sequences only).
         """
         #See also the __format__ added for Python 2.6 / 3.0, PEP 3101
         #See also the Bio.Align.Generic.Alignment class and its format()
@@ -213,8 +254,10 @@ class SeqRecord(object):
 
 def _test():
     """Run the Bio.SeqRecord module's doctests."""
+    print "Runing doctests..."
     import doctest
     doctest.testmod()
+    print "Done"
 
 if __name__ == "__main__":
     _test()
