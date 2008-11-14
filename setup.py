@@ -236,7 +236,6 @@ def is_Numpy_installed():
 # standard biopython packages
 PACKAGES = [
     'Bio',
-    'Bio.Ais',
     'Bio.Align',
     'Bio.AlignIO',
     'Bio.AlignAce',

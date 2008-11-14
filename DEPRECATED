@@ -106,6 +106,10 @@ Bio.ECell
 Deprecated as of Release 1.47, as it appears to have no users, and the code
 does not seem relevant for ECell 3.  Removed in Release 1.49.
 
+Bio.Ais
+=======
+Deprecated as of Release 1.45, removed in Release 1.49.
+
 Bio.LocusLink
 =============
 Deprecated as of Release 1.45, removed in Release 1.49.
