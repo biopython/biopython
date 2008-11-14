@@ -15,8 +15,10 @@ import doctest, unittest
 
 from Bio import Seq, SeqRecord, SeqIO, AlignIO
 import Bio.Align.Generic
+import Bio.Statistics.lowess
 test_modules = [Seq, SeqRecord, SeqIO, AlignIO,
-                Bio.Align.Generic]
+                Bio.Align.Generic,
+                Bio.Statistics.lowess]
 
 test_suite = unittest.TestSuite([doctest.DocTestSuite(module) \
                                  for module in test_modules])
