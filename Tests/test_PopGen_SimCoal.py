@@ -19,9 +19,9 @@ from Bio import MissingExternalDependencyError
 found = False
 for path in os.environ['PATH'].split(os.pathsep):
     try:
-        list = os.listdir(path)
-        for file in os.listdir(path):
-            if file.startswith('simcoal2'):
+        for filename in os.listdir(path):
+            if filename.startswith('simcoal2') \
+            or (filename.lower() == "simcoal2.exe") :
                 found = True
                 simcoal_dir = path
     except os.error:
@@ -31,7 +31,7 @@ if not found:
         "Install SIMCOAL2 if you want to use Bio.PopGen.SimCoal.")
 
 def run_tests(argv):
-    test_suite = testing_suite()
+    test_suite = testing_suite()    
     runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
     runner.run(test_suite)
 
@@ -55,21 +55,22 @@ class AppTest(unittest.TestCase):
     """Tests simcoal execution via biopython.
     """
     def tearDown(self):
-        if not os.path.isdir('PopGen' + os.sep + 'simple') :
+        if not os.path.isdir(os.path.join('PopGen', 'simple')) :
             #Unit test must have failed to invoke simcaol,
             #and this it never created the directory.
             return
-        for file in os.listdir('PopGen' + os.sep + 'simple'):
+        for file in os.listdir(os.path.join('PopGen', 'simple')):
             os.remove(os.sep.join(['PopGen', 'simple', file]))
-        os.rmdir('PopGen' + os.sep + 'simple')
+        os.rmdir(os.path.join('PopGen', 'simple'))
 
     def t_simcoal(self):
         """Test simcoal execution.
         """
         ctrl = SimCoalController(simcoal_dir)
         ctrl.run_simcoal('simple.par', 50, par_dir = 'PopGen')
-        assert( len(os.listdir('PopGen' + os.sep + 'simple')) == 52)
-
+        assert os.path.isdir(os.path.join('PopGen', 'simple')), \
+               "Output directory not created!"
+        assert( len(os.listdir(os.path.join('PopGen', 'simple'))) == 52)
 
 if __name__ == "__main__":
     sys.exit(run_tests(sys.argv))
