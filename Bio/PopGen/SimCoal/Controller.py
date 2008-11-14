@@ -24,13 +24,15 @@ class SimCoalController:
         """
         self.simcoal_dir = simcoal_dir
         self.os_name = os.name
+        dir_contents = os.listdir(self.simcoal_dir)
+        #We expect the tool to be installed as simcoal2(.exe)
+        #without any trailing version number.
         if self.os_name=='nt' or sys.platform=='cygwin':
             self.bin_name = 'simcoal2.exe'
-            #this is wrong (the exe name), most probably
+            #Windows is case insenstive
+            dir_contents = [x.lower() for x in dir_contents]
         else:
             self.bin_name = 'simcoal2'
-            #This name is too specific
-        dir_contents = os.listdir(self.simcoal_dir)
         if self.bin_name in dir_contents:
             if not os.access(self.simcoal_dir + os.sep +
                 self.bin_name, os.X_OK):
