@@ -801,8 +801,10 @@ static int KDTree_neighbor_search_pairs(struct KDTree* tree, struct Node *down, 
         /* one or no leaf nodes */
 
         struct Node *up_right, *up_left, *down_left, *down_right;
-        struct Region *up_left_region, *up_right_region, 
-                      *down_left_region, *down_right_region;  
+        struct Region *up_left_region = NULL;
+        struct Region *up_right_region = NULL;
+        struct Region *down_left_region = NULL;
+        struct Region *down_right_region = NULL;  
         
         if (down_is_leaf)
         {
@@ -956,7 +958,8 @@ static int KDTree_search_neighbors_in_bucket(struct KDTree* tree, struct Node *n
 static int KDTree__neighbor_search(struct KDTree* tree, struct Node *node, struct Region *region, int depth)
 {
     struct Node *left, *right;
-    struct Region *left_region, *right_region; 
+    struct Region *left_region = NULL;
+    struct Region *right_region = NULL;
     int localdim;
     int intersect;
     float cut_value;
