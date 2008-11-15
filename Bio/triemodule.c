@@ -40,7 +40,13 @@ trie_dealloc(PyObject* self)
     PyObject_Del(self);
 }
 
+/* Since Python 2.5, the first member of PyMappingMethods
+ * returns Py_ssize_t instead of int.*/
+#if PY_VERSION_HEX < 0x02050000
 static int
+#else
+static Py_ssize_t
+#endif
 trie_length(trieobject *mp)
 {
     return Trie_len(mp->trie);
@@ -386,7 +392,11 @@ trie_nohash(PyObject *self)
 }
 
 static PyMappingMethods trie_as_mapping = {
+#if PY_VERSION_HEX < 0x02050000
     (inquiry)trie_length,        /*mp_length*/
+#else
+    (lenfunc)trie_length,        /*mp_length*/
+#endif
     (binaryfunc)trie_subscript,  /*mp_subscript*/
     (objobjargproc)trie_ass_sub  /*mp_ass_subscript*/
 };
