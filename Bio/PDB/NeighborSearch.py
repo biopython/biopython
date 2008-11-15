@@ -38,7 +38,6 @@ class NeighborSearch:
         self.coords=numpy.array(coord_list).astype("f")
         assert(bucket_size>1)
         assert(self.coords.shape[1]==3)
-        assert(self.coords.typecode()=="f")
         self.kdt=KDTree(3, bucket_size)
         self.kdt.set_coords(self.coords)
     
