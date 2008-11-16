@@ -1,0 +1,7 @@
+test_lowess
+test_Precomputed (test_lowess.test_lowess) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.005s
+
+OK
