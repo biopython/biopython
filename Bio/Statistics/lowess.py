@@ -71,23 +71,29 @@ def lowess(x, y, f=2./3., iter=3):
     yest = numpy.zeros(n)
     delta = numpy.ones(n)
     for iteration in range(iter):
-        for i in range(n):
+        for i in xrange(n):
             weights = delta * w[:,i]
-            b = numpy.array([sum(weights*y), sum(weights*y*x)])
-            A = numpy.array([[sum(weights),   sum(weights*x)],
-                       [sum(weights*x), sum(weights*x*x)]])
-            beta = numpy.linalg.solve(A,b)
-            yest[i] = beta[0] + beta[1]*x[i]
+            weights_mul_x = weights * x
+            b1 = numpy.dot(weights,y)
+            b2 = numpy.dot(weights_mul_x,y)
+            A11 = sum(weights)
+            A12 = sum(weights_mul_x)
+            A21 = A12
+            A22 = numpy.dot(weights_mul_x,x)
+            determinant = A11*A22 - A12*A21
+            beta1 = (A22*b1-A12*b2) / determinant
+            beta2 = (A11*b2-A21*b1) / determinant
+            yest[i] = beta1 + beta2*x[i]
         residuals = y-yest
-        s = numpy.median(abs(residuals))
-        delta = numpy.clip(residuals/(6*s),-1,1)
-        delta = 1-delta*delta
-        delta = delta*delta
+        s = median(abs(residuals))
+        delta[:] = numpy.clip(residuals/(6*s),-1,1)
+        delta[:] = 1-delta*delta
+        delta[:] = delta*delta
     return yest
 
 def _test():
     """Run the Bio.Statistics.lowess module's doctests."""
-    print "Runing doctests..."
+    print "Running doctests..."
     import doctest
     doctest.testmod()
     print "Done"
