@@ -130,9 +130,8 @@ if __name__=="__main__":
             return self.coord
 
     for i in range(0, 20):
-        al=[]
-        for i in range(0, 100):
-            al.append(Atom())
+        #Make a list of 100 atoms
+        al = [Atom() for j in range(100)]
 
         ns=NeighborSearch(al)
 
