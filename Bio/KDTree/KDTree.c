@@ -1046,12 +1046,12 @@ static int KDTree__neighbor_search(struct KDTree* tree, struct Node *node, struc
     return ok;
 }
 
-struct Neighbor*
-KDTree_neighbor_search(struct KDTree* tree, float neighbor_radius)
+int
+KDTree_neighbor_search(struct KDTree* tree, float neighbor_radius,
+                       struct Neighbor** neighbors)
 {
     long int i;
     int ok;
-    struct Neighbor* result;
     Region_dim=tree->dim;
 
     if(tree->_neighbor_list)
@@ -1076,13 +1076,13 @@ KDTree_neighbor_search(struct KDTree* tree, float neighbor_radius)
         struct Region *region;
         /* start with [-INF, INF] */
         region= Region_create(NULL, NULL);
-        if (!region) return NULL;
+        if (!region) return 0;
         ok = KDTree__neighbor_search(tree, tree->_root, region, 0);
         Region_destroy(region);
     }
-    if (!ok) return NULL;
+    if (!ok) return 0;
 
-    result = NULL;
+    *neighbors = NULL;
     for (i = 0; i < tree->_neighbor_count; i++)
     {
         struct Neighbor* neighbor = malloc(sizeof(struct Neighbor));
@@ -1090,24 +1090,24 @@ KDTree_neighbor_search(struct KDTree* tree, float neighbor_radius)
         {
             while(1)
             {
-                neighbor = result;
-                if (!neighbor) return NULL;
-                result = neighbor->next;
+                neighbor = *neighbors;
+                if (!neighbor) return 0;
+                *neighbors = neighbor->next;
                 free(neighbor);
             }
         }
         *neighbor = tree->_neighbor_list[i];
-        neighbor->next = result;
-        result = neighbor;
+        neighbor->next = *neighbors;
+        *neighbors = neighbor;
     }
 
-    return result;
+    return 1;
 }
 
-struct Neighbor*
-KDTree_neighbor_simple_search(struct KDTree* tree, float radius)
+int
+KDTree_neighbor_simple_search(struct KDTree* tree, float radius,
+                              struct Neighbor** neighbors)
 {
-    struct Neighbor* result;
     long int i;
     int ok = 1;
 
@@ -1154,28 +1154,27 @@ KDTree_neighbor_simple_search(struct KDTree* tree, float radius)
         }
     }
 
-    result = NULL;
+    if (!ok) return 0;
 
-    if (ok)
+    *neighbors = NULL;
+
+    for (i = 0; i < tree->_neighbor_count; i++)
     {
-        for (i = 0; i < tree->_neighbor_count; i++)
+        struct Neighbor* neighbor = malloc(sizeof(struct Neighbor));
+        if (!neighbor)
         {
-            struct Neighbor* neighbor = malloc(sizeof(struct Neighbor));
-            if (!neighbor)
+            while(1)
             {
-                while(1)
-                {
-                    neighbor = result;
-                    if (!neighbor) return NULL;
-                    result = neighbor->next;
-                    free(neighbor);
-                }
+                neighbor = *neighbors;
+                if (!neighbor) return 0;
+                *neighbors = neighbor->next;
+                free(neighbor);
             }
-            *neighbor = tree->_neighbor_list[i];
-            neighbor->next = result;
-            result = neighbor;
         }
+        *neighbor = tree->_neighbor_list[i];
+        neighbor->next = *neighbors;
+        *neighbors = neighbor;
     }
 
-    return result;
+    return 1;
 }

@@ -374,6 +374,7 @@ PyTree_search_center_radius(PyTree* self, PyObject* args)
 static PyObject*
 PyTree_neighbor_search(PyTree* self, PyObject* args)
 {
+    int ok;
     double radius;
     struct KDTree* tree = self->tree;
     struct Neighbor* neighbors;
@@ -390,8 +391,8 @@ PyTree_neighbor_search(PyTree* self, PyObject* args)
         return NULL;
     }
 
-    neighbors = KDTree_neighbor_search(tree, radius);
-    if (neighbors==NULL)
+    ok = KDTree_neighbor_search(tree, radius, &neighbors);
+    if (!ok)
     {
         PyErr_SetString(PyExc_MemoryError,
             "calculation failed due to lack of memory");
@@ -435,6 +436,7 @@ PyTree_neighbor_search(PyTree* self, PyObject* args)
 static PyObject*
 PyTree_neighbor_simple_search(PyTree* self, PyObject* args)
 {
+    int ok;
     double radius;
     struct KDTree* tree = self->tree;
     struct Neighbor* neighbors;
@@ -451,8 +453,8 @@ PyTree_neighbor_simple_search(PyTree* self, PyObject* args)
         return NULL;
     }
 
-    neighbors = KDTree_neighbor_simple_search(tree, radius);
-    if (neighbors==NULL)
+    ok = KDTree_neighbor_simple_search(tree, radius, &neighbors);
+    if (!ok)
     {
         PyErr_SetString(PyExc_MemoryError,
             "calculation failed due to lack of memory");
