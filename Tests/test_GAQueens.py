@@ -200,7 +200,7 @@ class QueensRepair:
         """
         duplicates = []
         for item in genome.alphabet.letters:
-            if genome.count(item) > 1:
+            if genome.count(str(item)) > 1:
                 duplicates.append(item)
 
         return duplicates
@@ -213,7 +213,7 @@ class QueensRepair:
         """
         unused = []
         for item in genome.alphabet.letters:
-            if genome.count(item) == 0:
+            if genome.count(str(item)) == 0:
                 unused.append(item)
 
         return unused
@@ -398,14 +398,4 @@ class QueensMutation:
         
 if __name__ == "__main__":
     sys.exit(main(sys.argv))
-
-
-
-
-
-
-
-
-
-
 
