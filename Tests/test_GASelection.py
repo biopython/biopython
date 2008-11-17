@@ -139,18 +139,27 @@ class TournamentSelectionTest(AbstractSelectionTest):
     def t_select_best(self):
         """Ensure selection of the best organism in a population of 2.
         """
+        #Create any two non equal organisms
         org_1 = random_organism()
-        while 1:
+        while True:
             org_2 = random_organism()
-
-            if org_2.fitness < org_1.fitness:
+            if org_2.fitness != org_1.fitness:
                 break
-
+        #Sort them so org_1 is most fit
+        if org_2.fitness > org_1.fitness :
+            org_1, org_2 = org_2, org_1
+        assert org_1.fitness > org_2.fitness
+        
         pop = [org_1, org_2]
-
         new_pop = self.selector.select(pop)
-
         for org in new_pop:
+            assert org == org_1, "Got a worse organism selected."
+
+        #Just to make sure the selector isn't doing something
+        #silly with the order, try this with the input reserved:
+        pop = [org_2, org_1]
+        new_pop = self.selector.select(pop)
+        for org in new_pop :
             assert org == org_1, "Got a worse organism selected."
 
 class RouletteWheelSelectionTest(AbstractSelectionTest):
@@ -174,4 +183,4 @@ class RouletteWheelSelectionTest(AbstractSelectionTest):
             assert org == better_org, "Worse organism unexpectly selected."
         
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+   sys.exit(run_tests(sys.argv))
