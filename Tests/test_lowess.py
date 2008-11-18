@@ -1,5 +1,11 @@
+try :
+    from numpy import array
+except ImportError :
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(\
+        "Install NumPy if you want to use Bio.Statistics.lowess.")
+
 from Bio.Statistics.lowess import lowess
-from numpy import array
 import unittest, sys
 
 class test_lowess(unittest.TestCase):
