@@ -13,12 +13,21 @@ if sys.version_info[:2] < (2, 4):
           "This unit test requires Python 2.4 or later")
 import doctest, unittest
 
+#Silently ignore any doctests for modules requiring numpy!
+try :
+    import numpy
+    numpy_present = True
+except ImportError :
+    numpy_present = False
+
 from Bio import Seq, SeqRecord, SeqIO, AlignIO
 import Bio.Align.Generic
-import Bio.Statistics.lowess
 test_modules = [Seq, SeqRecord, SeqIO, AlignIO,
-                Bio.Align.Generic,
-                Bio.Statistics.lowess]
+                Bio.Align.Generic]
+
+if numpy_present :
+    import Bio.Statistics.lowess
+    test_modules.extend([Bio.Statistics.lowess])
 
 test_suite = unittest.TestSuite([doctest.DocTestSuite(module) \
                                  for module in test_modules])
