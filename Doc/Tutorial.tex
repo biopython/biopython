@@ -944,7 +944,7 @@ The workhorse function \verb|Bio.SeqIO.parse()| is used to read in sequence data
 
 \noindent As of Biopython 1.49 there is an optional argument \verb|alphabet| to specify the alphabet to be used.  This is useful for file formats like FASTA where otherwise \verb|Bio.SeqIO| will default to a generic alphabet.
 
-The \verb|Bio.SeqIO.parse()| functions returns an {\it iterator} which gives \verb|SeqRecord| objects.  Iterators are typically used in a for loop.
+The \verb|Bio.SeqIO.parse()| function returns an {\it iterator} which gives \verb|SeqRecord| objects.  Iterators are typically used in a for loop as shown below.
 
 Sometimes you'll find yourself dealing with files which contain only a single record.  For this situation Biopython 1.45 introduced the function \verb|Bio.SeqIO.read()| which takes the same arguments.  Provided there is one and only one record in the file, this is returned as a \verb|SeqRecord| object.  Otherwise an exception is raised.
 
@@ -958,7 +958,7 @@ handle = open("ls_orchid.fasta")
 for seq_record in SeqIO.parse(handle, "fasta") :
     print seq_record.id
     print repr(seq_record.seq)
-    print len(seq_record.seq)
+    print len(seq_record)
 handle.close()
 \end{verbatim}
 
@@ -970,7 +970,7 @@ handle = open("ls_orchid.gbk")
 for seq_record in SeqIO.parse(handle, "genbank") :
     print seq_record.id
     print seq_record.seq
-    print len(seq_record.seq)
+    print len(seq_record)
 handle.close()
 \end{verbatim}
 
@@ -2433,8 +2433,20 @@ supplied just the sequence itself:
 >>> result_handle = NCBIWWW.qblast("blastn", "nr", record.seq)
 \end{verbatim}
 
+Supplying just the sequence means that BLAST will assign an identifier
+for your sequence automatically.  You might prefer to use the
+\verb|SeqRecord| object's format method to make a fasta string
+(which will include the existing identifier):
+
+\begin{verbatim}
+>>> from Bio.Blast import NCBIWWW
+>>> from Bio import SeqIO
+>>> record = SeqIO.read(open("m_cold.fasta"), format="fasta")
+>>> result_handle = NCBIWWW.qblast("blastn", "nr", record.format("fasta"))
+\end{verbatim}
+
 This approach makes more sense if you have your sequence(s) in a
-non-FASTA file format which you could extract using \verb|Bio.SeqIO|
+non-FASTA file format which you can extract using \verb|Bio.SeqIO|
 (see Chapter~\ref{chapter:Bio.SeqIO}).
 
 Whatever arguments you give the \verb|qblast()| function, you should
@@ -2864,13 +2876,30 @@ As mentioned, with each error generated, the BlastErrorParser will write the off
 
 Hopefully the \verb|BlastErrorParser| will make it much easier to debug and deal with large Blast files.
 
-\section{Dealing with PSIBlast}
+\section{Dealing with PSI-BLAST}
+
+You can run the standalone verion of PSI-BLAST (the command line tool
+\verb|blastpgp|) using the \verb|blastpgp| function in the
+\verb|Bio.Blast.NCBIStandalone| module.
+At the time of writing, the NCBI do not appear to support tools running a
+PSI-BLAST search via the internet.
 
 Note that the \verb|Bio.Blast.NCBIXML| parser can read the XML output from
 current versions of PSI-BLAST, but information like which sequences in each
 iteration is new or reused isn't present in the XML file.
 If you care about this information you may have more joy with the plain text
 output and the \verb|PSIBlastParser| in \verb|Bio.Blast.NCBIStandalone|.
+
+\section{Dealing with RPS-BLAST}
+
+You can run the standalone verion of RPS-BLAST (the command line tool
+\verb|rpsblast|) using the \verb|rpsblast| function in the
+\verb|Bio.Blast.NCBIStandalone| module.
+At the time of writing, the NCBI do not appear to support tools running an
+RPS-BLAST search via the internet.
+
+You can use the \verb|Bio.Blast.NCBIXML| parser to read the XML output from
+current versions of RPS-BLAST.
 
 \chapter{Accessing NCBI's Entrez databases}
 \label{chapter:entrez}
