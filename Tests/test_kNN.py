@@ -11,13 +11,12 @@ import sys
 
 #TODO - Remove this work around once we drop python 2.3 support
 try:
-    set = set
+    set
 except NameError:
     from sets import Set as set
 
-#TODO - Don't use "from XXX import *"
 try :
-    from numpy import *
+    import numpy
 except ImportError :
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(\
