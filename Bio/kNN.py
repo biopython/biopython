@@ -31,7 +31,7 @@ try:
 except NameError:
     from sets import Set as set
 
-from numpy import *
+import numpy
 
 class kNN:
     """Holds information necessary to do nearest neighbors classification.
@@ -67,7 +67,7 @@ def train(xs, ys, k, typecode=None):
     """
     knn = kNN()
     knn.classes = set(ys)
-    knn.xs = asarray(xs, typecode)
+    knn.xs = numpy.asarray(xs, typecode)
     knn.ys = ys
     knn.k = k
     return knn
@@ -84,7 +84,7 @@ def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
     the weight given to the class.
     
     """
-    x = asarray(x)
+    x = numpy.asarray(x)
 
     order = []  # list of (distance, index)
     if distance_fn:
@@ -93,12 +93,12 @@ def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
             order.append((dist, i))
     else:
         # Default: Use a fast implementation of the Euclidean distance
-        temp = zeros(len(x))
+        temp = numpy.zeros(len(x))
         # Predefining temp allows reuse of this array, making this
         # function about twice as fast.
         for i in range(len(knn.xs)):
             temp[:] = x - knn.xs[i]
-            dist = sqrt(dot(temp,temp))
+            dist = numpy.sqrt(numpy.dot(temp,temp))
             order.append((dist, i))
     order.sort()
 
