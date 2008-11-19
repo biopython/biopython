@@ -20,9 +20,10 @@ try:
 except NameError:
     from sets import Set as set
 
-from numpy import *
-from numpy.linalg import *
-
+#from numpy import *
+#from numpy.linalg import *
+import numpy
+import numpy.linalg
 
 class LogisticRegression:
     """Holds information necessary to do logistic regression
@@ -61,13 +62,13 @@ def train(xs, ys, update_fn=None, typecode=None):
         raise ValueError("No observations or observation of 0 dimension.")
 
     # Make an X array, with a constant first dimension.
-    X = ones((N, ndims), typecode)
+    X = numpy.ones((N, ndims), typecode)
     X[:, 1:] = xs
-    Xt = transpose(X)
-    y = asarray(ys, typecode)
+    Xt = numpy.transpose(X)
+    y = numpy.asarray(ys, typecode)
 
     # Initialize the beta parameter to 0.
-    beta = zeros(ndims, typecode)
+    beta = numpy.zeros(ndims, typecode)
 
     MAX_ITERATIONS = 500
     CONVERGE_THRESHOLD = 0.01
@@ -78,11 +79,11 @@ def train(xs, ys, update_fn=None, typecode=None):
     old_beta = old_llik = None
     while iter < MAX_ITERATIONS:
         # Calculate the probabilities.  p = e^(beta X) / (1+e^(beta X))
-        ebetaX = exp(dot(beta, Xt))
+        ebetaX = numpy.exp(numpy.dot(beta, Xt))
         p = ebetaX / (1+ebetaX)
         
         # Find the log likelihood score and see if I've converged.
-        logp = y*log(p) + (1-y)*log(1-p)
+        logp = y*numpy.log(p) + (1-y)*numpy.log(1-p)
         llik = sum(logp)
         if update_fn is not None:
             update_fn(iter, llik)
@@ -92,19 +93,19 @@ def train(xs, ys, update_fn=None, typecode=None):
             stepsize = stepsize / 2.0
             beta = old_beta
         # If I've converged, then stop.
-        if old_llik is not None and fabs(llik-old_llik) <= CONVERGE_THRESHOLD:
+        if old_llik is not None and numpy.fabs(llik-old_llik) <= CONVERGE_THRESHOLD:
             break
         old_llik, old_beta = llik, beta
         iter += 1
 
-        W = identity(N) * p
-        Xtyp = dot(Xt, y-p)         # Calculate the first derivative.
-        XtWX = dot(dot(Xt, W), X)   # Calculate the second derivative.
+        W = numpy.identity(N) * p
+        Xtyp = numpy.dot(Xt, y-p)         # Calculate the first derivative.
+        XtWX = numpy.dot(numpy.dot(Xt, W), X)   # Calculate the second derivative.
         #u, s, vt = singular_value_decomposition(XtWX)
         #print "U", u
         #print "S", s
-        delta = solve(XtWX, Xtyp)
-        if fabs(stepsize-1.0) > 0.001:
+        delta = numpy.linalg.solve(XtWX, Xtyp)
+        if numpy.fabs(stepsize-1.0) > 0.001:
             delta = delta * stepsize
         beta = beta + delta                 # Update beta.
     else:
@@ -123,9 +124,9 @@ def calculate(lr, x):
 
     """
     # Insert a constant term for x.
-    x = asarray([1.0] + x)
+    x = numpy.asarray([1.0] + x)
     # Calculate the probability.  p = e^(beta X) / (1+e^(beta X))
-    ebetaX = exp(dot(lr.beta, x))
+    ebetaX = numpy.exp(numpy.dot(lr.beta, x))
     p = ebetaX / (1+ebetaX)
     return [1-p, p]
 
