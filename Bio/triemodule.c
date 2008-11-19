@@ -2,6 +2,12 @@
 #include <marshal.h>
 #include "trie.h"
 
+#if PY_VERSION_HEX < 0x02050000
+#define Py_ssize_t int
+#endif
+
+
+
 staticforward PyTypeObject Trie_Type;
 
 typedef struct {
@@ -40,13 +46,7 @@ trie_dealloc(PyObject* self)
     PyObject_Del(self);
 }
 
-/* Since Python 2.5, the first member of PyMappingMethods
- * returns Py_ssize_t instead of int.*/
-#if PY_VERSION_HEX < 0x02050000
-static int
-#else
 static Py_ssize_t
-#endif
 trie_length(trieobject *mp)
 {
     return Trie_len(mp->trie);
@@ -392,6 +392,7 @@ trie_nohash(PyObject *self)
 }
 
 static PyMappingMethods trie_as_mapping = {
+/* The first member of PyMappingMethods was redefined in Python 2.5. */
 #if PY_VERSION_HEX < 0x02050000
     (inquiry)trie_length,        /*mp_length*/
 #else
@@ -484,7 +485,7 @@ int _write_value_to_handle(const void *value, void *handle)
     PyObject *py_value = (PyObject *)value,
 	*py_marshalled = NULL;
     char *marshalled;
-    int length;
+    Py_ssize_t length;
     int success = 0;
 
 #ifdef Py_MARSHAL_VERSION  
@@ -499,7 +500,9 @@ int _write_value_to_handle(const void *value, void *handle)
 	goto _write_value_to_handle_cleanup;
     if(!_write_to_handle(&length, sizeof(length), handle))
 	goto _write_value_to_handle_cleanup;
-    if(!_write_to_handle(marshalled, length, handle))
+    if (length != (int)length)
+	goto _write_value_to_handle_cleanup;
+    if(!_write_to_handle(marshalled, (int)length, handle))
 	goto _write_value_to_handle_cleanup;
     success = 1;
 
@@ -587,7 +590,7 @@ _read_from_handle(void *wasread, const int length, void *handle)
 static void *
 _read_value_from_handle(void *handle)
 {
-    int length;
+    Py_ssize_t length;
     char KEY[MAX_KEY_LENGTH];
 
     if(!_read_from_handle((void *)&length, sizeof(length), (void *)handle))
