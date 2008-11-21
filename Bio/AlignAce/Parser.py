@@ -5,14 +5,14 @@
 """
 Classes for pparsing AlignAce and CompareACE files
 """
+#changed string.atof to float, for compatibility with python 2.6 and 3k, BW
 
-#TODO - Can we just use float() instead of string.atof() ?
-import string #for atof
 from Bio.ParserSupport import *
 from Scanner import AlignAceScanner,CompareAceScanner
 from Motif import Motif
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
+
 
 class AlignAceConsumer:
     """
@@ -50,7 +50,7 @@ class AlignAceConsumer:
         self.current_motif.add_instance(seq)
         
     def motif_score(self,line):
-        self.current_motif.score = string.atof(line.split()[-1])
+        self.current_motif.score = float(line.split()[-1])
         
     def motif_mask(self,line):
         self.current_motif.set_mask(line.strip("\n\c"))
@@ -87,7 +87,7 @@ class CompareAceConsumer:
     def __init__(self):
         pass
     def motif_score(self,line):
-        self.data = string.atof(line.split()[-1])
+        self.data = float(line.split()[-1])
     
 class CompareAceParser(AbstractParser):
     """Parses CompareAce output to usable form
