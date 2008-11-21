@@ -292,6 +292,7 @@ def _retrieve_annotations(adaptor, primary_id, taxon_id):
     annotations.update(_retrieve_qualifier_value(adaptor, primary_id))
     annotations.update(_retrieve_reference(adaptor, primary_id))
     annotations.update(_retrieve_taxon(adaptor, primary_id, taxon_id))
+    annotations.update(_retrieve_comment(adaptor, primary_id))
     return annotations
 
 def _retrieve_qualifier_value(adaptor, primary_id):
@@ -334,7 +335,10 @@ def _retrieve_reference(adaptor, primary_id):
         elif dbname == 'MEDLINE':
             reference.medline_id = accession
         references.append(reference)
-    return {'references': references}
+    if references :
+        return {'references': references}
+    else :
+        return {}
 
 def _retrieve_taxon(adaptor, primary_id, taxon_id):
     a = {}
@@ -385,6 +389,18 @@ def _retrieve_taxon(adaptor, primary_id, taxon_id):
     if taxonomy:
         a['taxonomy'] = taxonomy
     return a
+
+def _retrieve_comment(adaptor, primary_id):
+    qvs = adaptor.execute_and_fetchall(
+        "SELECT comment_text FROM comment" \
+        " WHERE bioentry_id=%s" \
+        " ORDER BY rank", (primary_id,))
+    if qvs == []:
+        comments = [comm[0] for comm in qvs]
+        #Don't want to add an empty list...
+        if comments :
+            return {"comment": comments}
+    return  {}
 
 class DBSeqRecord(SeqRecord):
     """BioSQL equivalent of the biopython SeqRecord object.

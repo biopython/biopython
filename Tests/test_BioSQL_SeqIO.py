@@ -336,22 +336,39 @@ def compare_records(old, new) :
         compare_features(old_f, new_f)
 
     #Annotation:
-    #
-    #TODO - See Bug 2396 for why some annotations are never recorded.
-    #However, we are also seeing some "extra" annotations appearing,
-    #such as 'cross_references', 'dates', 'references', 'data_file_division'
-    #
-    #assert len(old.annotations) == len(new.annotations), \
-    #       "Different annotations\nOld extra: %s\nNew extra: %s" % \
-    #       (set(old.annotations.keys()).difference(new.annotations.keys()),
-    #        set(new.annotations.keys()).difference(old.annotations.keys()))
-    #
+    #We are expecting to see some "extra" annotations appearing,
+    #such as 'cross_references', 'dates', 'data_file_division',
+    #'ncbi_taxon' and 'gi'.
+    #TODO - address these, see Bug 2681?
+    new_keys = set(new.annotations).difference(old.annotations)
+    new_keys = new_keys.difference(['cross_references', 'dates', 
+                                    'data_file_division', 'ncbi_taxid', 'gi'])
+    assert not new_keys, "Unexpected new annotation keys: %s" \
+           % ", ".join(new_keys)
+    missing_keys = set(old.annotations).difference(new.annotations)
+    assert not new_keys, "Unexpectedly missing annotation keys: %s" \
+           % ", ".join(missing_keys)
+    
     #In the short term, just compare any shared keys:
     for key in set(old.annotations.keys()).intersection(new.annotations.keys()) :
         if key == "references" :
             assert len(old.annotations[key]) == len(new.annotations[key])
             for old_r, new_r in zip(old.annotations[key], new.annotations[key]) :
                 compare_references(old_r, new_r)
+        elif key == "comment":
+            if isinstance(old.annotations[key], list):
+                old_comment = [comm.replace("\n", " ") for comm in \
+                    old.annotations[key]]
+            else:
+                old_comment = [old.annotations[key].replace("\n", " ")]
+            assert len(old_comment) == len(new.annotations[key]), \
+                "Number of annotation 'comment's changed by load/retrieve\n" \
+                "Was:%s\nNow:%s" \
+                % (len(old_comment), len(new.annotations[key]))
+            for old_com, new_com in zip(old_comment, new.annotations[key]):
+                assert old_com == new_com, \
+                    "Annotation 'comment' changed by load/retrieve\n" \
+                    "Was:%s\nNow:%s" % (old_com, new_com)
         elif key in ["taxonomy", "organism", "source"]:
             #If there is a taxon id recorded, these fields get overwritten
             #by data from the taxon/taxon_name tables.  There is no
