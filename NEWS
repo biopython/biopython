@@ -9,6 +9,8 @@ The latest news is at the top.
 
 ===================================================================
 
+Novemver 21, 2008: Biopython 1.49 released.
+
 See the notes below for the Biopython 1.49 beta release for more details,
 but the highlights are:
 * Biopython has transitioned from Numeric to NumPy
