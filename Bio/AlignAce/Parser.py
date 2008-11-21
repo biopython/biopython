@@ -3,9 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """
-Classes for pparsing AlignAce and CompareACE files
+Classes for parsing AlignAce and CompareACE files
 """
-#changed string.atof to float, for compatibility with python 2.6 and 3k, BW
 
 from Bio.ParserSupport import *
 from Scanner import AlignAceScanner,CompareAceScanner
