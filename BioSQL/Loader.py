@@ -1,5 +1,6 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
-# Revisions 2007-2008 by Peter Cock.
+# Revisions 2007-2008 copyright by Peter Cock.  All rights reserved.
+# Revisions 2008 copyright by Cymon J. Cox.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -741,7 +742,6 @@ class DatabaseLoader:
         ontology_id = self._get_ontology_id('SeqFeature Keys')
         seqfeature_key_id = self._get_term_id(feature_type,
                                               ontology_id = ontology_id)
-        
         # XXX source is always EMBL/GenBank/SwissProt here; it should depend on
         # the record (how?)
         source_cat_id = self._get_ontology_id('SeqFeature Sources')
@@ -770,6 +770,9 @@ class DatabaseLoader:
             start = 3, end = 4, rank = 2
             start = 5, end = 6, rank = 3
         """
+        # TODO - Record an ontology for the locations (using location.term_id)
+        # which for now as in BioPerl we leave defaulting to NULL.
+        
         # two cases, a simple location or a split location
         if not feature.sub_features:    # simple location
             self._insert_seqfeature_location(feature, 1, seqfeature_id)
@@ -781,22 +784,57 @@ class DatabaseLoader:
 
     def _insert_seqfeature_location(self, feature, rank, seqfeature_id):
         """Add a location of a SeqFeature to the seqfeature_location table (PRIVATE).
-        """
-        sql = r"INSERT INTO location (seqfeature_id, " \
-              r"start_pos, end_pos, strand, rank) " \
-              r"VALUES (%s, %s, %s, %s, %s)"
 
+        TODO - Add location_operators to location_qualifier_value.
+        """
         # convert biopython locations to the 1-based location system
         # used in bioSQL
         # XXX This could also handle fuzzies
         start = feature.location.nofuzzy_start + 1
         end = feature.location.nofuzzy_end
+
         # Biopython uses None when we don't know strand information but
         # BioSQL requires something (non null) and sets this as zero
         # So we'll use the strand or 0 if Biopython spits out None
         strand = feature.strand or 0
 
-        self.adaptor.execute(sql, (seqfeature_id, start, end, strand, rank))
+        # TODO - Record an ontology term for the location (location.term_id)
+        # which for now like BioPerl we'll leave as NULL.
+        loc_term_id = None
+
+        if feature.ref:
+            # sub_feature remote locations when they are in the same db as the current
+            # record do not have a value for ref_db, which the SeqFeature object
+            # stores as None. BioSQL schema requires a varchar and is not NULL 
+            dbxref_id = self._get_dbxref_id(feature.ref_db or "", feature.ref)
+        else :
+            dbxref_id = None
+
+        sql = r"INSERT INTO location (seqfeature_id, dbxref_id, term_id," \
+              r"start_pos, end_pos, strand, rank) " \
+              r"VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        self.adaptor.execute(sql, (seqfeature_id, dbxref_id, loc_term_id,
+                                   start, end, strand, rank))
+
+        """
+        # See Bug 2677
+        # TODO - Record the location_operator (e.g. "join" or "order")
+        # using the location_qualifier_value table (which we and BioPerl
+        # have historically left empty).
+        # Note this will need an ontology term for the location qualifer
+        # (location_qualifier_value.term_id) for which oddly the schema
+        # does not allow NULL.
+        if feature.location_operator:
+            #e.g. "join" (common),
+            #or "order" (see Tests/GenBank/protein_refseq2.gb)
+            location_id = self.adaptor.last_id('location')
+            loc_qual_term_id = None # Not allowed in BioSQL v1.0.1
+            sql = r"INSERT INTO location_qualifier_value" \
+                  r"(location_id, term_id, value)" \
+                  r"VALUES (%s, %s, %s)"
+            self.adaptor.execute(sql, (location_id, loc_qual_term_id,
+                                       feature.location_operator))
+        """
 
     def _load_seqfeature_qualifiers(self, qualifiers, seqfeature_id):
         """Insert the (key, value) pair qualifiers relating to a feature (PRIVATE).

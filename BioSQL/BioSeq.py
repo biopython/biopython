@@ -1,5 +1,6 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
-# Revisions 2007-2008 by Peter Cock.
+# Revisions 2007-2008 copyright by Peter Cock.  All rights reserved.
+# Revisions 2008 copyright by Cymon J. Cox.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -199,9 +200,16 @@ def _retrieve_features(adaptor, primary_id):
             " ORDER BY rank", (seqfeature_id,))
         locations = []
         # convert to Python standard form
+        # Convert strand = 0 to strand = None
+        # re: comment in Loader.py:
+        # Biopython uses None when we don't know strand information but
+        # BioSQL requires something (non null) and sets this as zero
+        # So we'll use the strand or 0 if Biopython spits out None
         for location_id, start, end, strand in results:
             if start:
                 start -= 1
+            if strand == 0:
+                strand = None
             locations.append( (location_id, start, end, strand) )
         # Get possible remote reference information
         remote_results = adaptor.execute_and_fetchall(
@@ -214,6 +222,10 @@ def _retrieve_features(adaptor, primary_id):
                 v = "%s.%s" % (accession, version)
             else:
                 v = accession
+            # subfeature remote location db_ref are stored as a empty string when
+            # not present
+            if dbname == "":
+                dbname = None
             lookup[location_id] = (dbname, v)
         
         feature = SeqFeature.SeqFeature(type = seqfeature_type)
@@ -223,36 +235,57 @@ def _retrieve_features(adaptor, primary_id):
             pass
         elif len(locations) == 1:
             location_id, start, end, strand = locations[0]
+            #See Bug 2677, we currently don't record the location_operator
+            #For consistency with older versions Biopython, default to "".
+            feature.location_operator = \
+                _retrieve_location_qualifier_value(adaptor, location_id)
             dbname, version = lookup.get(location_id, (None, None))
-
             feature.location = SeqFeature.FeatureLocation(start, end)
             feature.strand = strand
             feature.ref_db = dbname
             feature.ref = version
         else:
-            min_start = locations[0][1]
-            max_end = locations[0][2]
             assert feature.sub_features == []
             for location in locations:
                 location_id, start, end, strand = location
                 dbname, version = lookup.get(location_id, (None, None))
-                min_start = min(min_start, start)
-                max_end = max(max_end, end)
-
                 subfeature = SeqFeature.SeqFeature()
-                subfeature.type = seqfeature_type 
-                subfeature.location_operator = "join"
+                subfeature.type = seqfeature_type
+                subfeature.location_operator = \
+                    _retrieve_location_qualifier_value(adaptor, location_id)
+                #TODO - See Bug 2677 - we don't yet record location_operator,
+                #so for consistency with older versions of Biopython default
+                #to assuming its a join.
+                if not subfeature.location_operator :
+                    subfeature.location_operator="join"
                 subfeature.location = SeqFeature.FeatureLocation(start, end)
                 subfeature.strand = strand
                 subfeature.ref_db = dbname
                 subfeature.ref = version
                 feature.sub_features.append(subfeature)
-            feature.location = SeqFeature.FeatureLocation(min_start, max_end)
+            # Assuming that the feature loc.op is the same as the sub_feature
+            # loc.op:
+            feature.location_operator = \
+                feature.sub_features[0].location_operator
+            # Locations are in order, but because of remote locations for
+            # sub-features they are not necessarily in numerical order:
+            start = locations[0][1]
+            end = locations[-1][2]
+            feature.location = SeqFeature.FeatureLocation(start, end)
             feature.strand = feature.sub_features[0].strand
 
         seq_feature_list.append(feature)
 
     return seq_feature_list
+
+def _retrieve_location_qualifier_value(adaptor, location_id):
+    value = adaptor.execute_and_fetch_col0(
+        "SELECT value FROM location_qualifier_value" \
+        " WHERE location_id = %s", (location_id,))
+    try:
+        return value[0] 
+    except IndexError:
+        return ""
 
 def _retrieve_annotations(adaptor, primary_id, taxon_id):
     annotations = {}
