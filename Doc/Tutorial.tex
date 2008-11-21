@@ -69,7 +69,7 @@
 
 \title{Biopython Tutorial and Cookbook}
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 7 November 2008 (Biopython 1.49 beta)}
+\date{Last Update -- 21 November 2008 (Biopython 1.49)}
 
 \maketitle
 \tableofcontents
@@ -396,7 +396,8 @@ In Chapter~\ref{chapter:Bio.SeqIO} on Sequence Input/Output (and Section~\ref{se
 
 Sequences are essentially strings of letters like \verb|AGTACACTGGT|, which seems very natural since this is the most common way that sequences are seen in biological file formats.
 
-There are two important differences between the \verb|Seq| object and standard python strings.  First of all the Seq object has a slightly different set of methods to a plain python string (for example, \verb|reverse_complement()| and \verb|translate()| methods used for nucleotide sequences).
+There are two important differences between \verb|Seq| objects and standard python strings.
+First of all, they have different methods.  Although the \verb|Seq| object supports many of the same methods as a plain string, its \verb|translate()| method differs by doing biological translation, and there are also additional biologically relevant methods like \verb|reverse_complement()|.
 Secondly, the \verb|Seq| object has an important attribute, \verb|alphabet|, which is an object describing what the individual characters making up the sequence string ``mean'', and how they should be interpreted.  For example, is \verb|AGTACACTGGT| a DNA sequence, or just a protein sequence that happens to be rich in Alanines, Glycines, Cysteines
 and Threonines?
 
@@ -6031,7 +6032,7 @@ for section in matches :
             x.append(i)
             y.append(j)
 \end{verbatim}
-\noindent We are now reading to draw the revised dot plot as a scatter plot:
+\noindent We are now ready to draw the revised dot plot as a scatter plot:
 \begin{verbatim}
 import pylab
 pylab.gray()
