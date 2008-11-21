@@ -9,6 +9,19 @@ The latest news is at the top.
 
 ===================================================================
 
+See the notes below for the Biopython 1.49 beta release for more details,
+but the highlights are:
+* Biopython has transitioned from Numeric to NumPy
+* Martel and Bio.Mindy are now deprecated
+
+Since the 1.49 beta release:
+* A couple of NumPy issues have been resolved
+* Further small improvements to BioSQL
+* Bio.PopGen.SimCoal should now work on Windows
+* A few more unit tests were added
+
+===================================================================
+
 November 7, 2008: Biopython 1.49 beta released.
 
 Biopython has transitioned from Numeric to NumPy.  Please move to NumPy.
