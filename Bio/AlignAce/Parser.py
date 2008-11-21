@@ -6,6 +6,8 @@
 Classes for pparsing AlignAce and CompareACE files
 """
 
+#TODO - Can we just use float() instead of string.atof() ?
+import string #for atof
 from Bio.ParserSupport import *
 from Scanner import AlignAceScanner,CompareAceScanner
 from Motif import Motif
