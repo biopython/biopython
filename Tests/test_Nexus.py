@@ -27,9 +27,19 @@ def testing_suite():
 class NexusTest1(unittest.TestCase):
     def setUp(self):
         self.handle = open("Nexus/test_Nexus_input.nex")
+        #Remove any output files from a previous test run
+        f1=os.path.join('Nexus','f1.nex')
+        f2=os.path.join('Nexus','f2.nex')
+        if os.path.isfile(f1) : os.remove(f1)
+        if os.path.isfile(f2) : os.remove(f2)
 
     def tearDown(self):
         self.handle.close()
+        #Remove our test output files
+        f1=os.path.join('Nexus','f1.nex')
+        f2=os.path.join('Nexus','f2.nex')
+        if os.path.isfile(f1) : os.remove(f1)
+        if os.path.isfile(f2) : os.remove(f2)
 
     def print_dictnlist(self,name,d):
         """Output a list or a dict alphabetically by keys()"""

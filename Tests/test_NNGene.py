@@ -55,7 +55,15 @@ class PatternIOTest(unittest.TestCase):
     def setUp(self):
         self.alphabet = IUPAC.ambiguous_dna
         self.test_file = os.path.join("NeuralNetwork", "patternio.txt")
+        #Remove any existing copy of the output file,
+        if os.path.isfile(self.test_file) :
+            os.remove(self.test_file)
         self.pattern_io = Pattern.PatternIO(self.alphabet)
+
+    def tearDown(self):
+        #Clean up by removing our output file,
+        if os.path.isfile(self.test_file) :
+            os.remove(self.test_file)
 
     def t_motif(self):
         """Reading and writing motifs to a file
