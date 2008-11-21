@@ -258,6 +258,12 @@ Testing loading from genbank format file GenBank/dbsource_wrap.gb
  - Retrieving by name/display_id 'SCX3_BUTOC', OK
  - Retrieving by accession 'P01485', OK
  - Retrieving by GI '134354', OK
+Testing loading from genbank format file GenBank/NC_005816.gb
+ - TGTAACGAACGGTGCAATA...CTG [BJyiVBblVozP/evddBBrOxC9Rwo] len 9609, NC_005816.1
+ - Retrieving by name/display_id 'NC_005816', OK
+ - Retrieving by version 'NC_005816.1', OK
+ - Retrieving by accession 'NC_005816', OK
+ - Retrieving by GI '45478711', OK
 Testing loading from genbank format file GenBank/gbvrl1_start.seq
  - ATGTCTGGCAACCAGTATA...TAA [iOtYxMtQxgFhtAHI3B7A6aI5ypY] len 2007, AB000048.1
  - Retrieving by name/display_id 'AB000048', OK

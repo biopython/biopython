@@ -97,6 +97,7 @@ test_files = [ \
     ("genbank",False, 'GenBank/origin_line.gb', 1),
     ("genbank",False, 'GenBank/blank_seq.gb', 1),
     ("genbank",False, 'GenBank/dbsource_wrap.gb', 1),
+    ("genbank",False, 'GenBank/NC_005816.gb', 1),
 # The next example is a truncated copy of gbvrl1.seq from
 # ftp://ftp.ncbi.nih.gov/genbank/gbvrl1.seq.gz
 # This includes an NCBI header, and the first three records:
@@ -123,11 +124,14 @@ def checksum_summary(record) :
 
 def compare_references(old_r, new_r) :
     """Compare two Reference objects"""
-    assert old_r.title == new_r.title
-    assert old_r.authors == new_r.authors
-    assert old_r.consrtm == new_r.consrtm
-    assert old_r.journal == new_r.journal
-    assert old_r.medline_id == new_r.medline_id
+    assert old_r.title == new_r.title, \
+           "%s vs %s" % (old_r.title, new_r.title)
+    assert old_r.authors == new_r.authors, \
+           "%s vs %s" % (old_r.authors, new_r.authors)
+    assert old_r.journal == new_r.journal, \
+           "%s vs %s" % (old_r.journal, new_r.journal)
+    assert old_r.medline_id == new_r.medline_id, \
+           "%s vs %s" % (old_r.medline_id, new_r.medline_id)
 
     #TODO assert old_r.pubmed_id == new_r.pubmed_id
     #Looking at BioSQL/BioSeq.py function _retrieve_reference
@@ -138,6 +142,12 @@ def compare_references(old_r, new_r) :
     #TODO - assert old_r.comment == new_r.comment
     #Looking at the tables, I *think* the current schema does not
     #allow us to store a reference comment.  Must confirm this.
+    assert new_r.comment == ""
+
+    #TODO - assert old_r.consrtm == new_r.consrtm
+    #Looking at the tables, I *think* the current schema does not
+    #allow us to store a consortium.
+    assert new_r.consrtm == ""
     
     #TODO - reference location?
     #The parser seems to give a location object (i.e. which
