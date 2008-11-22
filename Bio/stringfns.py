@@ -3,11 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This provides useful general functions for working with strings (OBSOLETE).
+"""This provides useful general functions for working with strings (DEPRECATED).
 
-This module and its C code equivalent are considered to be obsolete, and
-are likely to be deprecated in a future release of Biopython, before being
-removed.  Please get in touch via the mailing list if this will affect you.
+This module and its C code equivalent are considered to be deprecated, and
+are likely to be removed in a future release of Biopython.  Please get in
+touch via the mailing list if this will affect you.
 
 Functions:
 splitany       Split a string using many delimiters.
@@ -16,6 +16,15 @@ rfind_anychar  Find one of a list of characters in a string, from end to start.
 starts_with    Check whether a string starts with another string [DEPRECATED].
 
 """
+import warnings
+warnings.warn("Bio.stringfns and its C code equivalent Bio.cstringfns are" \
+              +" deprecated, and will be removed in a future release of"\
+              +" Biopython.  If you want to continue to use this code,"\
+              +" please get in contact with the Biopython developers via"\
+              +" the mailing lists to avoid its permanent removal from"\
+              +" Biopython.", \
+              DeprecationWarning)
+
 def splitany(s, sep=" \011\012\013\014\015", maxsplit=None, negate=0):
     """splitany(s [,sep [,maxsplit [,negate]]]) -> list of strings
 

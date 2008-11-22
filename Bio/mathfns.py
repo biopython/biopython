@@ -3,11 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This provides useful general math tools (OBSOLETE).
+"""This provides useful general math tools (DEPRECATED).
 
-This module and its C code equivalent are considered to be obsolete, and
-are likely to be deprecated in a future release of Biopython, before being
-removed.  Please get in touch via the mailing list if this will affect you.
+This module and its C code equivalent are considered to be deprecated, and
+are likely to be removed in a future release of Biopython.  Please get in
+touch via the mailing list if this will affect you.
 
 Functions:
 fcmp       Compare two floating point numbers, up to a specified precision.
@@ -16,6 +16,15 @@ safe_log   log, but returns an arbitrarily small number for log(0).
 safe_exp   exp, but returns a large or small number instead of overflows.
 
 """
+import warnings
+warnings.warn("Bio.mathfns and its C code equivalent Bio.cmathfns are" \
+              +" deprecated, and will be removed in a future release of"\
+              +" Biopython.  If you want to continue to use this code,"\
+              +" please get in contact with the Biopython developers via"\
+              +" the mailing lists to avoid its permanent removal from"\
+              +" Biopython.", \
+              DeprecationWarning)
+
 import math
 
 def fcmp(x, y, precision):

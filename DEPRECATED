@@ -5,7 +5,7 @@ to find documentation about how to update your code to work again.
 Numeric support
 ===============
 Following the release of 1.48, Numeric support in Biopython is discontinued.
-Please move to NumPy.
+Please move to NumPy for Biopython 1.49 or later.
 
 Bio.Seq
 =======
@@ -21,6 +21,8 @@ Please use the methods or functions in Bio.Seq instead.
 Bio.mathfns, Bio.stringfns and Bio.listfns (and their C code variants)
 ==========================================
 Declared obsolete in Release 1.49.
+Bio.mathfns and Bio.stringfns were deprecated in Release 1.50
+(the deprecation of Bio.listfns is still pending)
 
 Bio.Ndb
 =======
