@@ -11,8 +11,8 @@ from sys import exit
 import os
 import tarfile
 import tempfile
-from PopGen.SimCoal.Controller import SimCoalController
-from PopGen import Config
+import SimCoalController
+import Config
 
 class SimCoalCache:
     def __init__(self, simcoalDir = None):

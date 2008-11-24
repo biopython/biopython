@@ -13,10 +13,11 @@ from sys import exit
 import os
 import tarfile
 import tempfile
-from PopGen.SimCoal.Controller import SimCoalController
-from PopGen.SimCoal import Cache
-from PopGen import Config
-from PopGen import Async
+
+import SimCoalController
+import Cache
+import Config
+import Async
 
 class SimCoalCache(Cache.SimCoalCache):
     def __init__(self, simcoalDir = None):
