@@ -30,8 +30,6 @@ ApplicationResult object
 """
 
 import os
-import string
-import re
 
 from Bio import File
 from Bio.ParserSupport import *

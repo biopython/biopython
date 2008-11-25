@@ -17,7 +17,6 @@ CompareAce - runs the AlignACE standalone prgram and returns the ApplicationResu
 """
 
 import os
-import string
 import re
 
 from Bio import File
