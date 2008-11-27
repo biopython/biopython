@@ -7,12 +7,11 @@ similar to the "new" module.
 """
 
 import sys, os
-import string
 
 BANGLINE = "#!/usr/bin/env python\n"
 
 def _tuplestr(tup):
-	return string.join(map(str, tup), ", ")
+	return ", ".join(map(str, tup))
 
 # These functions resembled the "new" module interface, but with different
 # names. This is the function interface. There are also generator object
@@ -43,7 +42,7 @@ def genClass(klassname, parents, attribs=None, doc=None, methods=None):
 	if len(s) == 1:
 		s.append("\tpass")
 	s.append("\n")
-	return string.join(s, "\n")
+	return "\n".join(s)
 
 def genFunc(funcname, params, body=None, globals=None, doc=None):
 	s = []
@@ -57,7 +56,7 @@ def genFunc(funcname, params, body=None, globals=None, doc=None):
 	else:
 		s.append(body)
 	s.append("\n")
-	return string.join(s, "\n")
+	return "\n".join(s)
 
 def genMethod(funcname, params, body=None, globals=None, doc=None):
 	s = []
@@ -69,19 +68,19 @@ def genMethod(funcname, params, body=None, globals=None, doc=None):
 	if body is None:
 		s.append("\tpass")
 	elif type(body) is str:
-		s.extend( map(lambda l: "\t%s"%l, string.split(body, "\n")) )
+		s.extend( map(lambda l: "\t%s"%l, body.split("\n")) )
 	elif type(body) is list or type(body) is tuple:
 		s.extend( map(lambda l: "\t%s"%l, body) )
 	else:
 		raise TypeError, "invalid type for body text"
 	s.append("\n")
 	# insert a tab in the front of each line and return lines joined with newlines.
-	return string.join(map(lambda l: "\t%s"%l, s), "\n")
+	return "\n".join(map(lambda l: "\t%s"%l, s))
 
 def genComment(text):
 	lines = text.split("\n")
 	lines = map(lambda l: "# %s" % l, lines)
-	return string.join(lines, "\n")
+	return "\n".join(lines)
 
 def genImport(module, obj=None, indent=0):
 	if type(module) is type(sys): # a module type
