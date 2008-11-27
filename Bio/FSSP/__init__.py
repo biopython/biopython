@@ -8,9 +8,8 @@ structure-structure alignment of proteins.
 
 functions: read_fssp(file_handle): reads an fssp file into the records. Returns a
 tuple of two instances.
-mult_align: returns a Biopyton alignment object
+mult_align: returns a Biopython alignment object
 """
-import string
 import re
 import fssp_rec
 from Bio.Align import Generic
@@ -47,18 +46,18 @@ class FSSPHeader:
       for i in header_records.keys():
          if header_records[i].match(inline):
             if i == 'database' or i == 'seqlength' or i == 'nalign':
-               setattr(self,i,int(string.split(inline)[1]))
+               setattr(self,i,int(inline.split()[1]))
             elif i == 'compnd' or i == 'author':
-               setattr(self,i,string.split(inline)[1:])
+               setattr(self,i,inline.split()[1:])
             elif i == 'source' or i == 'header':
                attr = inline[inline.find(' ')+1:].strip()
                setattr(self,i,attr)
             else:
-               setattr(self,i,string.split(inline)[1])
+               setattr(self,i,inline.split()[1])
 
 class PosAlign:
    def __init__(self,inStr):
-      inStr = string.strip(inStr)
+      inStr = inStr.strip()
       if len(inStr) != 1 and len(inStr)!= 2:
          raise ValueError('PosAlign: length not 2 chars' + inStr)
       if inStr == '..':
@@ -67,10 +66,10 @@ class PosAlign:
       else:
          self.gap = 0
          self.aa = inStr[0]
-         if self.aa == string.lower(self.aa):
+         if self.aa == self.aa.lower():
             self.aa = 'C'
          if len(inStr) == 2:
-            self.ss = string.upper(inStr[1])
+            self.ss = inStr[1].upper()
          else:
             self.ss = '0'
 
@@ -78,7 +77,7 @@ class PosAlign:
       if self.gap:
          outstring = '..'
       else:
-         outstring = self.aa+string.lower(self.ss)
+         outstring = self.aa+self.ss.lower()
       return outstring
 
    __str__  = __repr__
@@ -90,9 +89,9 @@ class FSSPSumRec:
    """ Contains info from an FSSP summary record"""
    def __init__(self,in_str):
       self.raw = in_str
-      in_rec = string.split(string.strip(in_str))
+      in_rec = in_str.strip().split()
       # print in_rec
-      self.nr = string.atoi(in_rec[0][:-1])
+      self.nr = int(in_rec[0][:-1])
       self.pdb1 = in_rec[1][:4]
       if len(in_rec[1]) == 4:
          self.chain1='0'
@@ -107,19 +106,19 @@ class FSSPSumRec:
          self.chain2=in_rec[2][4]
       else:
          raise ValueError('Bad PDB ID 2')
-      self.zscore = string.atof(in_rec[3])
-      self.rmsd = string.atof(in_rec[4])
-      self.lali = string.atof(in_rec[5])
-      self.lseq2 = string.atof(in_rec[6])
-      self.pID = string.atof(in_rec[7])
-      self.revers = string.atoi(in_rec[8])
-      self.permut = string.atoi(in_rec[9])
-      self.nfrag = string.atoi(in_rec[10])
+      self.zscore = float(in_rec[3])
+      self.rmsd = float(in_rec[4])
+      self.lali = float(in_rec[5])
+      self.lseq2 = float(in_rec[6])
+      self.pID = float(in_rec[7])
+      self.revers = int(in_rec[8])
+      self.permut = int(in_rec[9])
+      self.nfrag = int(in_rec[10])
       self.topo = in_rec[11]
       self.doc = ''
       for i in in_rec[12:]:
          self.doc = self.doc + i + ' '
-      self.doc = string.rstrip(self.doc) + '\n'
+      self.doc = self.doc.rstrip() + '\n'
 
    def __repr__(self):
       return self.raw
@@ -128,13 +127,13 @@ class FSSPSumRec:
 class FSSPAlignRec:
    def __init__(self,in_fff_rec):
       # print in_fff_rec
-      self.abs_res_num = string.atoi(in_fff_rec[fssp_rec.align.abs_res_num])
-      self.pdb_res_num = string.strip(in_fff_rec[fssp_rec.align.pdb_res_num])
+      self.abs_res_num = int(in_fff_rec[fssp_rec.align.abs_res_num])
+      self.pdb_res_num = in_fff_rec[fssp_rec.align.pdb_res_num].strip()
       self.chain_id  = in_fff_rec[fssp_rec.align.chain_id]
       if self.chain_id == ' ':
          self.chain_id = '0'
       self.res_name = in_fff_rec[fssp_rec.align.res_name]
-      if self.res_name == string.lower(self.res_name):
+      if self.res_name == self.res_name.lower():
          self.res_name = 'C'
       self.ss1 = in_fff_rec[fssp_rec.align.ss1]
       self.turn3 = in_fff_rec[fssp_rec.align.turn3]
@@ -252,7 +251,7 @@ def read_fssp(fssp_handle):
       while alignments_rec.match(curline):
          align_rec = FSSPAlignRec(fff_rec(curline))
          key = align_rec.chain_id+align_rec.res_name+str(align_rec.pdb_res_num)
-         align_list = string.split(curline[fssp_rec.align.start_aa_list:])
+         align_list = curline[fssp_rec.align.start_aa_list:].strip().split()
          if key not in align_dict:
             align_dict[key] = align_rec
          align_dict[key].add_align_list(align_list)
