@@ -20,8 +20,6 @@ Parameters         Holds information from the parameters.
 """
 # XXX finish printable BLAST output
 
-import string
-
 from Bio.Align import Generic
 
 class Header:
@@ -92,14 +90,9 @@ class Alignment:
         self.length = None
         self.hsps = []
     def __str__(self):
-        lines = []
-        titles = string.split(self.title, '\n')
-        for i in range(len(titles)):
-            if i:
-                lines.append("           ")
-            lines.append("%s\n" % titles[i])
-        lines.append("           Length = %s\n" % self.length)
-        return string.join(lines, '')
+        lines = self.title.split('\n')
+        lines.append("Length = %s\n" % self.length)
+        return '\n           '.join(lines)
 
 class HSP:
     """Stores information about one hsp in an alignment hit.
