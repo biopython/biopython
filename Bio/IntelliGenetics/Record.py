@@ -8,8 +8,6 @@
 This module defines a Record class to hold a sequence from the IntelliGenetics/
 MASE file format in a similar represenation to the original raw file.
 """
-# standard library
-import string
 
 
 from Bio.Seq import Seq

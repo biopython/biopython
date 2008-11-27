@@ -5,7 +5,6 @@
 
 
 import os
-from string import upper
 from Bio.PDB import *
 
 

@@ -11,9 +11,7 @@ is a minimal subset of the PDB format.  Heteo supports a 3 alphameric code.
 The NDB web interface is located at http://ndbserver.rutgers.edu/NDB/index.html
 """
 
-import string, array, copy
-from Bio.Seq import Seq
-from Bio.Seq import MutableSeq
+import copy
 
 class CrystalError(Exception):
     pass

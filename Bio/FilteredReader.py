@@ -23,11 +23,6 @@ input parameter and altered text as the return value.
 
 """
 
-import os
-import string
-import copy
-from File import UndoHandle
-
 
 
 """Used for debugging"""

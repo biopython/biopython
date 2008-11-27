@@ -47,14 +47,13 @@ _open         -- Internally used function.
 """
 
 from types import *
-import os, string
+import os
 
 import Des
 import Cla
 import Hie
 from Residues import *
 from Bio import SeqIO
-from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 
 

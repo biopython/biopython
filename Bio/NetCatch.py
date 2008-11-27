@@ -13,12 +13,9 @@ get_urls_by_index
 get_urls_by_range
 select_output_file
 """
-import sys
 import os
 import urllib
-from tempfile import mktemp
 import sgmllib
-import string
 from Bio import File
 
 

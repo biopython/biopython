@@ -8,13 +8,10 @@
 This is a huge regular regular expression for the IntelliGenetics/MASE format,
 built using the 'regular expressions on steroids' capabilities of Martel.
 """
-# standard library
 #http://immuno.bme.nwu.edu/seqhunt.html
-import string
 
 # Martel
 import Martel
-from Martel import RecordReader
 
 # --- first set up some helper constants and functions
 comment_line = Martel.Group( "comment_line", \
