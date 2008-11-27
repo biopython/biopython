@@ -13,7 +13,6 @@ o parse_file()
 classes:
 FastaAlignment"""
 # standard library
-import string
 import os
 
 # biopython
@@ -77,7 +76,7 @@ class FastaAlignment(Alignment):
             return_string = return_string + str(new_f_record) + os.linesep + os.linesep
 
         # have a extra newline, so strip two off and add one before returning
-        return string.rstrip(return_string) + os.linesep
+        return return_string.rstrip() + os.linesep
 
             
             
