@@ -23,7 +23,7 @@ Iterator      Iterate through a number of compass records
 """
 from Bio import File
 from Bio.ParserSupport import *
-import re,string
+import re
 
 class Record:
     """
@@ -54,12 +54,12 @@ class Record:
 
     def query_coverage(self):
         """Return the length of the query covered in alignment"""
-        s = string.replace(self.query_aln, "=", "")
+        s = self.query_aln.replace("=", "")
         return len(s)
 
     def hit_coverage(self):
         """Return the length of the hit covered in the alignment"""
-        s = string.replace(self.hit_aln, "=", "")
+        s = self.hit_aln.replace("=", "")
         return len(s)
 
 class _Scanner:
@@ -255,6 +255,6 @@ class Iterator:
         if not lines:
             return None
 
-        data = string.join(lines, '')
+        data = ''.join(lines)
         return self._parser.parse(File.StringHandle(data))
 
