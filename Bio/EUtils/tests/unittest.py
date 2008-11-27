@@ -51,7 +51,6 @@ __version__ = "#Revision: 1.46 $"[11:-2]
 import time
 import sys
 import traceback
-import string
 import os
 import types
 
@@ -115,7 +114,7 @@ class TestResult:
 
     def _exc_info_to_string(self, err):
         """Converts a sys.exc_info()-style tuple of values into a string."""
-        return string.join(traceback.format_exception(*err), '')
+        return ''.join(traceback.format_exception(*err))
 
     def __repr__(self):
         return "<%s run=%i errors=%i failures=%i>" % \
@@ -186,7 +185,7 @@ class TestCase:
         the specified test method's docstring.
         """
         doc = self.__testMethodDoc
-        return doc and string.strip(string.split(doc, "\n")[0]) or None
+        return doc and doc.split("\n")[0].strip() or None
 
     def id(self):
         return "%s.%s" % (_strclass(self.__class__), self.__testMethodName)
@@ -424,7 +423,7 @@ class FunctionTestCase(TestCase):
     def shortDescription(self):
         if self.__description is not None: return self.__description
         doc = self.__testFunc.__doc__
-        return doc and string.strip(string.split(doc, "\n")[0]) or None
+        return doc and doc.split("\n")[0].strip() or None
 
 
 
@@ -466,7 +465,7 @@ class TestLoader:
 
         The method optionally resolves the names relative to a given module.
         """
-        parts = string.split(name, '.')
+        parts = name.split('.')
         if module is None:
             if not parts:
                 raise ValueError, "incomplete test name: %s" % name
@@ -474,7 +473,7 @@ class TestLoader:
                 parts_copy = parts[:]
                 while parts_copy:
                     try:
-                        module = __import__(string.join(parts_copy,'.'))
+                        module = __import__('.'.join(parts_copy))
                         break
                     except ImportError:
                         del parts_copy[-1]
@@ -698,7 +697,7 @@ Examples:
                  argv=None, testRunner=None, testLoader=defaultTestLoader):
         if type(module) == type(''):
             self.module = __import__(module)
-            for part in string.split(module,'.')[1:]:
+            for part in module.split('.')[1:]:
                 self.module = getattr(self.module, part)
         else:
             self.module = module
