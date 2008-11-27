@@ -9,12 +9,11 @@
 Bio.GFF.easy: some functions to ease the use of Biopython
 """
 
-__version__ = "$Revision: 1.11 $"
+__version__ = "$Revision: 1.12 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/easy.py,v $
 
 import copy
 import re
-import string
 import sys
 
 import Bio
@@ -36,7 +35,7 @@ class FeatureDict(dict):
 
         for i in feature_list:
             key = key_re.match(i.key).group(1)
-            val = string.replace(i.value,'"','')
+            val = i.value.replace('"','')
             self[key] = val
     def __getitem__(self, key):
         try:
