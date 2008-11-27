@@ -4,7 +4,6 @@ try:
 except NameError:
    from sets import Set as set
 
-import string
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
@@ -141,7 +140,7 @@ class NCBICodonTableRNA(NCBICodonTable):
 
 def register_ncbi_table(name, alt_name, id,
                         table, start_codons, stop_codons):
-    names = string.split(name, "; ")
+    names = name.split("; ")
     
     dna = NCBICodonTableDNA(id, names + [alt_name], table, start_codons,
                             stop_codons)
