@@ -10,7 +10,6 @@ o PSSM
 """
 
 # standard library
-import string
 import math
 import sys
 
@@ -352,9 +351,7 @@ class SummaryInfo:
         # and drop it out
         if isinstance(self.alignment._alphabet, Alphabet.Gapped):
             skip_items.append(self.alignment._alphabet.gap_char)
-            all_letters = string.replace(all_letters,
-                                         self.alignment._alphabet.gap_char,
-                                         '')
+            all_letters = all_letters.replace(self.alignment._alphabet.gap_char,'')
 
         # now create the dictionary
         for first_letter in all_letters:
@@ -397,7 +394,7 @@ class SummaryInfo:
             chars_to_ignore.append(self.alignment._alphabet.gap_char)
         
         for char in chars_to_ignore:
-            all_letters = string.replace(all_letters, char, '')
+            all_letters = all_letters.replace(char, '')
 
         if axis_seq:
             left_seq = axis_seq
@@ -499,7 +496,7 @@ class SummaryInfo:
         # determine all of the letters we have to deal with
         all_letters = self._get_all_letters()
         for char in chars_to_ignore:
-            all_letters = string.replace(all_letters, char, '')
+            all_letters = all_letters.replace(char, '')
 
         info_content = {}
         for residue_num in range(start, end):
