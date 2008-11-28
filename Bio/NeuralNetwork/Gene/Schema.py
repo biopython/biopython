@@ -12,7 +12,6 @@ motifs or signatures.
 """
 # standard modules
 import random
-import string
 import re
 
 # biopython
@@ -708,7 +707,7 @@ class SchemaFactory:
                     break
 
         # convert the schema back to a string
-        new_schema = string.join(new_schema_list, '')
+        new_schema = ''.join(new_schema_list)
 
         # get the motifs that the schema matches
         matched_motifs = []
