@@ -5,7 +5,6 @@
 
 # Python stuff
 import sys
-from string import split
 
 import numpy
 
@@ -125,7 +124,7 @@ class PDBParser:
                     model_open=1
                 fullname=line[12:16]
                 # get rid of whitespace in atom names
-                split_list=split(fullname)
+                split_list=fullname.split()
                 if len(split_list)!=1:
                     # atom name has internal spaces, e.g. " N B ", so
                     # we do not strip spaces
@@ -140,7 +139,7 @@ class PDBParser:
                     serial_number=int(line[6:11])
                 except:
                     serial_number=0
-                resseq=int(split(line[22:26])[0])   # sequence identifier   
+                resseq=int(line[22:26].split()[0])   # sequence identifier   
                 icode=line[26:27]           # insertion code
                 if record_type=='HETATM':       # hetero atom flag
                     if resname=="HOH" or resname=="WAT":
