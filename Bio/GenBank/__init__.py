@@ -229,12 +229,10 @@ class _BaseGenBankConsumer(AbstractConsumer):
         The location parser isn't a fan of whitespace, so we clean it out
         before feeding it into the parser.
         """
-        import string
-        location_line = location_string
-        for ws in string.whitespace:
-            location_line = location_line.replace(ws, '')
-
-        return location_line
+        #Originally this imported string.whitespace and did a replace
+        #via a loop.  It's simpler to just split on whitespace and rejoin
+        #the string - and this avoids importing string too.  See Bug 2684.
+        return ''.join(location_string.split())
 
     def _remove_newlines(self, text):
         """Remove any newlines in the passed text, returning the new string.
