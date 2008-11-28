@@ -348,12 +348,12 @@ EXTENSIONS = [
                'Bio/csupport.c'],
               include_dirs=["Bio"]
               ),
-#   Extension('Bio.PDB.mmCIF.MMCIFlex',
-#              ['Bio/PDB/mmCIF/lex.yy.c',
-#               'Bio/PDB/mmCIF/MMCIFlexmodule.c'],
-#              include_dirs=["Bio"],
-#              libraries=["fl"]
-#              ),
+   #Extension('Bio.PDB.mmCIF.MMCIFlex',
+              #['Bio/PDB/mmCIF/lex.yy.c',
+               #'Bio/PDB/mmCIF/MMCIFlexmodule.c'],
+              #include_dirs=["Bio"],
+              #libraries=["fl"]
+              #),
     Extension('Bio.Nexus.cnexus',
               ['Bio/Nexus/cnexus.c']
               ),

@@ -4,7 +4,7 @@
 # as part of this package.
 
 #Python stuff
-from string import atoi, atof, letters
+from string import letters
 
 import numpy
 
@@ -29,9 +29,9 @@ class MMCIFParser:
         residue_id_list=mmcif_dict["_atom_site.label_comp_id"]
         seq_id_list=mmcif_dict["_atom_site.label_seq_id"]
         chain_id_list=mmcif_dict["_atom_site.label_asym_id"]
-        x_list=map(atof, mmcif_dict["_atom_site.Cartn_x"])
-        y_list=map(atof, mmcif_dict["_atom_site.Cartn_y"])
-        z_list=map(atof, mmcif_dict["_atom_site.Cartn_z"])
+        x_list=map(float, mmcif_dict["_atom_site.Cartn_x"])
+        y_list=map(float, mmcif_dict["_atom_site.Cartn_y"])
+        z_list=map(float, mmcif_dict["_atom_site.Cartn_z"])
         alt_list=mmcif_dict["_atom_site.label_alt_id"]
         b_factor_list=mmcif_dict["_atom_site.B_iso_or_equiv"]
         occupancy_list=mmcif_dict["_atom_site.occupancy"]
@@ -97,17 +97,17 @@ class MMCIFParser:
             if aniso_flag==1:
                 u=(aniso_u11[i], aniso_u12[i], aniso_u13[i],
                     aniso_u22[i], aniso_u23[i], aniso_u33[i])
-                mapped_anisou=map(atof, u)
+                mapped_anisou=map(float, u)
                 anisou_array=numpy.array(mapped_anisou, 'f')
                 structure_builder.set_anisou(anisou_array)
         # Now try to set the cell
         try:
-            a=atof(mmcif_dict["_cell.length_a"])
-            b=atof(mmcif_dict["_cell.length_b"])
-            c=atof(mmcif_dict["_cell.length_c"])
-            alpha=atof(mmcif_dict["_cell.angle_alpha"])
-            beta=atof(mmcif_dict["_cell.angle_beta"])
-            gamma=atof(mmcif_dict["_cell.angle_gamma"])
+            a=float(mmcif_dict["_cell.length_a"])
+            b=float(mmcif_dict["_cell.length_b"])
+            c=float(mmcif_dict["_cell.length_c"])
+            alpha=float(mmcif_dict["_cell.angle_alpha"])
+            beta=float(mmcif_dict["_cell.angle_beta"])
+            gamma=float(mmcif_dict["_cell.angle_gamma"])
             cell=numpy.array((a, b, c, alpha, beta, gamma), 'f')
             spacegroup=mmcif_dict["_symmetry.space_group_name_H-M"]
             spacegroup=spacegroup[1:-1] # get rid of quotes!!
@@ -123,10 +123,10 @@ class MMCIFParser:
         last_resseq_char=resseq[-1]
         if last_resseq_char in letters:
             icode=last_resseq_char
-            int_resseq=atoi(resseq[0:-1])
+            int_resseq=int(resseq[0:-1])
         else:
             icode=" "
-            int_resseq=atoi(resseq)
+            int_resseq=int(resseq)
         return icode, int_resseq    
 
 
