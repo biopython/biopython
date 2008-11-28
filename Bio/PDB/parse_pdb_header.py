@@ -24,7 +24,7 @@
 __doc__="Parse the header of a PDB file."
 
 import sys
-import os,string,re
+import os, re
 import urllib
 import types
 
@@ -34,7 +34,7 @@ def _get_journal(inl):
     journal=""
     for l in inl:
         if re.search("\AJRNL",l):
-            journal+=string.lower(l[19:72])
+            journal+=l[19:72].lower()
     journal=re.sub("\s\s+"," ",journal)
     return journal
 
@@ -52,7 +52,7 @@ def _get_references(inl):
                         references.append(actref)
                     actref=""
             else:
-                actref+=string.lower(l[19:72])
+                actref+=l[19:72].lower()
 
     if actref!="":
         actref=re.sub("\s\s+"," ",actref)
@@ -92,15 +92,14 @@ def _chop_end_misc(line):
 
 def _nice_case(line):
     """Makes A Lowercase String With Capitals."""
-    import string
-    l=string.lower(line)
+    l=line.lower()
     s=""
     i=0
     nextCap=1
     while i<len(l):
         c=l[i]
         if c>='a' and c<='z' and nextCap:
-            c=string.upper(c)
+            c=c.upper()
             nextCap=0
         elif c==' ' or c=='.' or c==',' or c==';' or c==':' or c=='\t' or\
             c=='-' or c=='_':
@@ -159,7 +158,7 @@ def _parse_pdb_header_list(header):
         
         # From here, all the keys from the header are being parsed
         if key=="TITLE":
-            name=string.lower(_chop_end_codes(tail))
+            name=_chop_end_codes(tail).lower()
             if dict.has_key('name'):
                 dict['name'] += " "+name
             else:
@@ -168,10 +167,10 @@ def _parse_pdb_header_list(header):
             rr=re.search("\d\d-\w\w\w-\d\d",tail)
             if rr!=None:
                 dict['deposition_date']=_format_date(_nice_case(rr.group()))
-            head=string.lower(_chop_end_misc(tail))
+            head=_chop_end_misc(tail).lower()
             dict['head']=head
         elif key=="COMPND":            
-            tt=string.lower(re.sub("\;\s*\Z","",_chop_end_codes(tail)))
+            tt=re.sub("\;\s*\Z","",_chop_end_codes(tail)).lower()
             # look for E.C. numbers in COMPND lines
             rec = re.search('\d+\.\d+\.\d+\.\d+',tt)
             if rec:
@@ -191,7 +190,7 @@ def _parse_pdb_header_list(header):
             else:
                 dict['compound'][comp_molid][last_comp_key]+=tok[0]+" "
         elif key=="SOURCE":
-            tt=string.lower(re.sub("\;\s*\Z","",_chop_end_codes(tail)))
+            tt=re.sub("\;\s*\Z","",_chop_end_codes(tail)).lower()
             tok=tt.split(":")
             # print tok
             if len(tok)>=2:
@@ -207,7 +206,7 @@ def _parse_pdb_header_list(header):
             else:
                 dict['source'][comp_molid][last_src_key]+=tok[0]+" "
         elif key=="KEYWDS":
-            kwd=string.lower(_chop_end_codes(tail))
+            kwd=_chop_end_codes(tail).lower()
             if dict.has_key('keywords'):
                 dict['keywords']+=" "+kwd
             else:
@@ -218,7 +217,7 @@ def _parse_pdb_header_list(header):
             expd=re.sub('\s\s\s\s\s\s\s.*\Z','',expd)
             # if re.search('\Anmr',expd,re.IGNORECASE): expd='nmr'
             # if re.search('x-ray diffraction',expd,re.IGNORECASE): expd='x-ray diffraction'
-            dict['structure_method']=string.lower(expd)
+            dict['structure_method']=expd.lower()
         elif key=="CAVEAT":
             # make Annotation entries out of these!!!
             pass
