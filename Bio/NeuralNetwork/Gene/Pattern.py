@@ -6,7 +6,6 @@ signatures and schemas). These are the general classes which should be
 handle any of the different specific patterns.
 """
 # standard library
-import string
 import random
 
 # biopython
@@ -45,7 +44,7 @@ class PatternIO:
             # deal with signatures, concatentate them with the separator
             if (type(pattern) == type([]) or 
                 type(pattern) == type(tuple([]))):
-                string_pattern = string.join(pattern, self.separator)
+                string_pattern = self.separator.join(pattern)
             # deal with the normal cases
             else:
                 string_pattern = pattern
@@ -83,7 +82,7 @@ class PatternIO:
             if not(cur_line):
                 break
 
-            cur_pattern = string.rstrip(cur_line)
+            cur_pattern = cur_line.rstrip()
             # split up signatures
             if cur_pattern.find(self.separator) >= 0:
                 cur_pattern = tuple(cur_pattern.split(self.separator))
@@ -237,9 +236,7 @@ class PatternRepository:
         remove_list = []
         # find all of the really AT rich patterns
         for pattern_info in self._pattern_list:
-            pattern_at = (float(string.count(pattern_info[1], 'A') +
-                              string.count(pattern_info[1], 'T')) /
-                        float(len(pattern_info[1])))
+            pattern_at = float(pattern_info[1].count('A') + pattern_info[1].count('T')) / len(pattern_info[1])
             if pattern_at > at_percentage:
                 remove_list.append(pattern_info)
 
