@@ -16,7 +16,6 @@ _InMemoryIndex  An in-memory Index class.
 """
 import os
 import array
-import string
 import cPickle
 import shelve
 
@@ -89,13 +88,12 @@ class _InMemoryIndex(dict):
         # Load the database if it exists
         if os.path.exists(indexname):
             handle = open(indexname)
-            version = self._toobj(string.rstrip(handle.readline()))
+            version = self._toobj(handle.readline().rstrip())
             if version != self.__version:
                 raise IOError("Version %s doesn't match my version %s" \
                               % (version, self.__version))
-            lines = handle.readlines()
-            lines = map(string.split, lines)
-            for key, value in lines:
+            for line in handle:
+                key, value = line.split()
                 key, value = self._toobj(key), self._toobj(value)
                 self[key] = value
             self.__changed = 0
@@ -133,12 +131,12 @@ class _InMemoryIndex(dict):
         s = cPickle.dumps(obj)
         intlist = array.array('b', s)
         strlist = map(str, intlist)
-        return string.join(strlist, ',')
+        return ','.join(strlist)
 
     def _toobj(self, str):
-        intlist = map(int, string.split(str, ','))
+        intlist = map(int, str.split(','))
         intlist = array.array('b', intlist)
         strlist = map(chr, intlist)
-        return cPickle.loads(string.join(strlist, ''))
+        return cPickle.loads(''.join(strlist))
 
 Index = _InMemoryIndex
