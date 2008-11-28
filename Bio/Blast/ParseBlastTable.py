@@ -3,7 +3,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import string
 """A parser for the NCBI blastpgp version 2.2.5 output format. Currently only supports
 the '-m 9' option, (table w/ annotations).
 Returns a BlastTableRec instance
@@ -14,14 +13,14 @@ class BlastTableEntry:
       bt_fields = in_rec.split()
       self.qid = bt_fields[0].split('|')
       self.sid = bt_fields[1].split('|')
-      self.pid = string.atof(bt_fields[2])
-      self.ali_len = string.atoi(bt_fields[3])
-      self.mis = string.atoi(bt_fields[4])
-      self.gaps = string.atoi(bt_fields[5])
-      self.q_bounds = (string.atoi(bt_fields[6]), string.atoi(bt_fields[7]))
-      self.s_bounds = (string.atoi(bt_fields[8]), string.atoi(bt_fields[9]))
-      self.e_value = string.atof(bt_fields[10])
-      self.bit_score = string.atof(bt_fields[11])
+      self.pid = float(bt_fields[2])
+      self.ali_len = int(bt_fields[3])
+      self.mis = int(bt_fields[4])
+      self.gaps = int(bt_fields[5])
+      self.q_bounds = (int(bt_fields[6]), int(bt_fields[7]))
+      self.s_bounds = (int(bt_fields[8]), int(bt_fields[9]))
+      self.e_value = float(bt_fields[10])
+      self.bit_score = float(bt_fields[11])
       
 class BlastTableRec:
    def __init__(self):
@@ -87,7 +86,7 @@ class BlastTableReader:
       self.table_record.date = date
       return 1
    def _parse_iteration(self, inline):
-      self.table_record.iteration = string.atoi(inline.split()[2])
+      self.table_record.iteration = int(inline.split()[2])
       return 1
    def _parse_query(self, inline):
       self.table_record.query = inline.split()[2:]
