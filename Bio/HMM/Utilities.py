@@ -3,8 +3,6 @@
 This just collects general functions which you might like to use in
 dealing with HMMs.
 """
-# standard modules
-import string
 
 def pretty_print_prediction(emissions, real_state, predicted_state,
                             emission_title = "Emissions",
@@ -28,9 +26,9 @@ def pretty_print_prediction(emissions, real_state, predicted_state,
     seq_length = line_width - title_length
 
     # set up the titles so they'll print right
-    emission_title = string.ljust(emission_title, title_length)
-    real_title = string.ljust(real_title, title_length)
-    predicted_title = string.ljust(predicted_title, title_length)
+    emission_title = emission_title.ljust(title_length)
+    real_title = real_title.ljust(title_length)
+    predicted_title = predicted_title.ljust(title_length)
 
     cur_position = 0
     # while we still have more than seq_length characters to print
