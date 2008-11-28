@@ -6,7 +6,6 @@
 #    peaklist with predicted crosspeaks directly from the
 #    input assignment peaklist. 
 
-import string
 import xpktools
 
 def predictNOE(peaklist,originNuc,detectedNuc,originResNum,toResNum):
@@ -43,7 +42,7 @@ def predictNOE(peaklist,originNuc,detectedNuc,originResNum,toResNum):
 
       aveDetectedPPM	=_col_ave(detectedList,detectedPPMCol)
       aveOriginPPM	=_col_ave(originList,originPPMCol)
-      originAss		=string.splitfields(originList[0])[originAssCol]
+      originAss		=originList[0].split()[originAssCol]
 
     returnLine=xpktools.replace_entry(returnLine,originAssCol+1,originAss)
     returnLine=xpktools.replace_entry(returnLine,originPPMCol+1,aveOriginPPM)
@@ -56,7 +55,7 @@ def _data_map(labelline):
 #   based on a labelline
   i=0		# A counter
   datamap={}	# The data map dictionary
-  labelList=string.splitfields(labelline)	# Get the label line
+  labelList=labelline.split()	# Get the label line
 
   # Get the column number for each label
   for i in range(len(labelList)):
@@ -68,6 +67,6 @@ def _col_ave(list,col):
 # Compute average values from a particular column in a string list
   total=0; n=0
   for element in list:
-    total+=string.atof(string.split(element)[col])
+    total+=float(element.split()[col])
     n+=1
   return total/n
