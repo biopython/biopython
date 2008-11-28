@@ -3,7 +3,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from string import join
 from Bio.Alphabet import IUPAC
 from Bio import File
 from Bio.ParserSupport import *
@@ -186,7 +185,7 @@ class _MEMEConsumer:
     def motif_name (self, line):
         line = line.strip()
         ls = line.split()
-        name = join(ls[0:2], ' ')
+        name = ' '.join(ls[0:2])
         self.current_motif._name(name)
     
     def add_instance (self, line):
