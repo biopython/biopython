@@ -9,7 +9,6 @@
 #        which is listed in the last line of the peaklist header.
 
 
-import string
 
 # * * * * * INITIALIZATIONS * * * * *
 HEADERLEN=6
@@ -27,8 +26,8 @@ class XpkEntry:
     def __init__(self,entry,headline):
        self.fields={}   # Holds all fields from input line in a dictionary
                         # keys are data labels from the .xpk header 
-       datlist  = string.split(entry)
-       headlist = string.split(headline)
+       datlist  = entry.split()
+       headlist = headline.split()
 
        i=0  
        for i in range(len(datlist)-1):
@@ -51,17 +50,17 @@ class Peaklist:
         infile=open(infn,'r')
 
         # Read in the header lines
-        self.firstline=string.split(infile.readline(),"\012")[0]
-        self.axislabels=string.split(infile.readline(),"\012")[0]
-        self.dataset=string.split(infile.readline(),"\012")[0]
-        self.sw=string.split(infile.readline(),"\012")[0]
-        self.sf=string.split(infile.readline(),"\012")[0]
-        self.datalabels=string.split(infile.readline(),"\012")[0]
+        self.firstline=infile.readline().split("\012")[0]
+        self.axislabels=infile.readline().split("\012")[0]
+        self.dataset=infile.readline().split("\012")[0]
+        self.sw=infile.readline().split("\012")[0]
+        self.sf=infile.readline().split("\012")[0]
+        self.datalabels=infile.readline().split("\012")[0]
 
         # Read in the data lines to a list 
         line=infile.readline()
         while line:
-            self.data.append(string.split(line,"\012")[0])
+            self.data.append(line.split("\012")[0])
         line=infile.readline()
 
     def residue_dict(self,index):
@@ -76,9 +75,9 @@ class Peaklist:
         for i in range(len(self.data)):
             line=self.data[i]
             ind=XpkEntry(line,self.datalabels).fields[index+".L"]
-            key=string.split(ind,".")[0]
+            key=ind.split(".")[0]
 
-            res=string.atoi(key)
+            res=int(key)
 
             if (maxres==-1):
                 maxres=res
@@ -140,7 +139,7 @@ def replace_entry(line,fieldn,newentry):
         # This method depends on xpktools._find_start_entry
 
         start=_find_start_entry(line,fieldn)
-        leng=len(string.splitfields(line[start:])[0])
+        leng=len(line[start:].split()[0])
         newline=line[:start]+str(newentry)+line[(start+leng):]
         return newline
 
