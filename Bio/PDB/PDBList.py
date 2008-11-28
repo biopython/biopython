@@ -35,7 +35,7 @@
 
 __doc__="Access the PDB over the internet (for example to download structures)."
 
-import urllib,string,re,os,sys
+import urllib, re, os, sys
 
 class PDBList:
     """
@@ -171,7 +171,7 @@ OBSLTE     26-SEP-03 1DYV      1UN2
         """
         url = urllib.urlopen(self.pdb_server+'/pub/pdb/data/status/obsolete.dat')
         # extract pdb codes
-        obsolete = map(lambda x: string.lower(x[21:25]),
+        obsolete = map(lambda x: x[21:25].lower(),
                        filter(lambda x: x[:6] == 'OBSLTE', url.readlines()))
 
         return obsolete
@@ -194,7 +194,7 @@ OBSLTE     26-SEP-03 1DYV      1UN2
         @rtype: string
         """
         # get the structure
-        code=string.lower(pdb_code)
+        code=pdb_code.lower()
         filename="pdb%s.ent%s"%(code,compression)
         if not obsolete:
             url=(self.pdb_server+
