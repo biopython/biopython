@@ -1,7 +1,6 @@
 """Substitution matrices, log odds matrices, and operations on them.
 """
 import re
-import string
 import sys
 import copy
 import math
@@ -454,10 +453,10 @@ def observed_frequency_to_substitution_matrix(obs_freq_mat):
    return subs_mat
 def read_text_matrix(data_file,mat_type=NOTYPE):
    matrix = {}
-   tmp = string.split(data_file.read(),"\n")
+   tmp = data_file.read().split("\n")
    table=[]
    for i in tmp: 
-      table.append(string.split(i))
+      table.append(i.split())
    # remove records beginning with ``#''
    for rec in table[:]:
       if (rec.count('#') > 0):
@@ -480,7 +479,7 @@ def read_text_matrix(data_file,mat_type=NOTYPE):
       i = 0
       for field in rec[first_col:]:
          col = alphabet[i]
-         matrix[(row,col)] = string.atof(field)
+         matrix[(row,col)] = float(field)
          i += 1
       j += 1
    # delete entries with an asterisk

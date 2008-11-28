@@ -1,4 +1,3 @@
-import string
 from Bio import Alphabet
 COUNT = 1
 FREQ = 2
@@ -79,17 +78,17 @@ class FreqTable(dict):
             self.alphabet.letters = self._alphabet_from_input()
 
 def read_count(f):
-    l = map(string.split,map(string.strip,f.readlines()))
     count = {}
-    for i in l:
-        count[i[0]] = int(i[1])
+    for line in f:
+        key, value = line.strip().split()
+        count[key] = int(value)
     freq_table = FreqTable(count,COUNT)
     return freq_table
 
 def read_freq(f):
     freq_dict = {}
-    l = map(string.split,map(string.strip,f.readlines()))
-    for i in l:
-        freq_dict[i[0]] = float(i[1]) 
+    for line in f:
+        key, value = line.strip().split()
+        freq_dict[key] = float(value) 
     return FreqTable(freq_dict,FREQ)
 

@@ -6,7 +6,6 @@
 
 """Miscellaneous functions for dealing with sequences (obsolete?)."""
 
-import string
 import Seq
 import Alphabet
 
@@ -88,7 +87,7 @@ def ungap(seq):
     for c in seq.data:
         if c != gap:
             letters.append(c)
-    return Seq.Seq(string.join(letters, ""), seq.alphabet.alphabet)
+    return Seq.Seq("".join(letters), seq.alphabet.alphabet)
 
 def verify_alphabet(seq):
     letters = {}
@@ -106,7 +105,7 @@ def count_monomers(seq):
 #    bugfix: string.count(s,c) raises an AttributeError. Iddo Friedberg 16 Mar. 04
 #    s = buffer(seq.data)  # works for strings and array.arrays
     for c in seq.alphabet.letters:
-        dict[c] = string.count(seq.data, c)
+        dict[c] = seq.data.count(c)
     return dict
 
 def percent_monomers(seq):
