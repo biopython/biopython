@@ -58,8 +58,8 @@ which is now obsolete.
 Bio.GenBank
 ===========
 The online functionality (search_for, download_many, and NCBIDictionary) was
-declared obsolete in Release 1.48, with the intention of an official deprecation
-in the following release.  Please use Bio.Entrez instead.
+declared obsolete in Release 1.48, and deprecated in Release 1.50.
+Please use Bio.Entrez instead.
 
 Bio.PubMed
 ==========

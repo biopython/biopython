@@ -25,7 +25,7 @@ Dictionary            Access a GenBank file using a dictionary interface.
 ErrorFeatureParser    Catch errors caused during parsing.
 FeatureParser         Parse GenBank data in SeqRecord and SeqFeature objects.
 RecordParser          Parse GenBank data into a Record object.
-NCBIDictionary        Access GenBank using a dictionary interface (OBSOLETE).
+NCBIDictionary        Access GenBank using a dictionary interface (DEPRECATED).
 
 _BaseGenBankConsumer  A base class for GenBank consumer that implements
                       some helpful functions that are in common between
@@ -41,8 +41,8 @@ LocationParserError   Exception indiciating a problem with the spark based
                       location parser.
 
 Functions:
-search_for            Do a query against GenBank (OBSOLETE).
-download_many         Download many GenBank records (OBSOLETE).
+search_for            Do a query against GenBank (DEPRECATED).
+download_many         Download many GenBank records (DEPRECATED).
 
 """
 import cStringIO
@@ -1247,10 +1247,10 @@ class _RecordConsumer(_BaseGenBankConsumer):
 
 
 class NCBIDictionary:
-    """Access GenBank using a read-only dictionary interface (OBSOLETE).
+    """Access GenBank using a read-only dictionary interface (DEPRECATED).
 
-    This object is considered obsolete and likely to be deprecated
-    in the next release of Biopython.  Please use Bio.Entrez instead.
+    This object is deprecated and will be removed in a future release of
+    Biopython.  Please use Bio.Entrez instead as described in the tutorial.
     """
     VALID_DATABASES = ['nucleotide', 'protein', 'genome']
     VALID_FORMATS = ['genbank', 'fasta']
@@ -1267,6 +1267,12 @@ class NCBIDictionary:
         to change the results into another form.  If unspecified, then
         the raw contents of the file will be returned.
         """
+        import warnings
+        warnings.warn("Bio.GenBank.NCBIDictionary has been deprecated, and will be"\
+                      " removed in a future release of Biopython. Please use"\
+                      " Bio.Entrez instead which is described in the tutorial.",
+                      DeprecationWarning)
+
         self.parser = parser
         if database not in self.__class__.VALID_DATABASES:
             raise ValueError("Invalid database %s, should be one of %s" %
@@ -1324,10 +1330,10 @@ class NCBIDictionary:
 def search_for(search, database='nucleotide',
                reldate=None, mindate=None, maxdate=None,
                start_id = 0, max_ids = 50000000):
-    """Do an online search at the NCBI, returns a list of IDs (OBSOLETE).
+    """Do an online search at the NCBI, returns a list of IDs (DEPRECATED).
 
-    This function is obsolete and likely to be deprecated in the next
-    release of Biopython.  Please use Bio.Entrez instead.
+    This function is deprecated and will be removed in a future release of
+    Biopython.  Please use Bio.Entrez instead as described in the tutorial.
 
     Search GenBank and return a list of the GenBank identifiers (gi's)
     that match the criteria.  search is the search string used to
@@ -1338,6 +1344,12 @@ def search_for(search, database='nucleotide',
     e.g. 2002/12/20.  start_id is the number to begin retrieval on.
     max_ids specifies the maximum number of id's to retrieve.
     """
+    import warnings
+    warnings.warn("Bio.GenBank.search_for has been deprecated, and will be"\
+                  " removed in a future release of Biopython. Please use"\
+                  " Bio.Entrez instead which is described in the tutorial.",
+                  DeprecationWarning)
+
     # mindate and maxdate are NCBI parameters in "YYYY/MM/DD" format
     # (and both should be supplied or neither)
     # relate is an NCBI parameter for "within N days"
@@ -1363,14 +1375,20 @@ def search_for(search, database='nucleotide',
     return Entrez.read(handle)["IdList"]
 
 def download_many(ids, database = 'nucleotide'):
-    """Download multiple NCBI GenBank records, returned as a handle (OBSOLETE).
+    """Download multiple NCBI GenBank records, returned as a handle (DEPRECATED).
 
-    This function is obsolete and likely to be deprecated in the next
-    release of Biopython.  Please use Bio.Entrez instead.
+    This function is deprecated and will be removed in a future release of
+    Biopython.  Please use Bio.Entrez instead as described in the tutorial.
 
     Download many records from GenBank.  ids is a list of gis or
     accessions.
     """
+    import warnings
+    warnings.warn("Bio.GenBank.download_many has been deprecated, and will be"\
+                  " removed in a future release of Biopython. Please use"\
+                  " Bio.Entrez instead which is described in the tutorial.",
+                  DeprecationWarning)
+
     if database in ['nucleotide']:
         format = 'gb'
     elif database in ['protein']:

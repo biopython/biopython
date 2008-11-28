@@ -13,7 +13,7 @@ if sys.modules.has_key('requires_internet'):
 import requires_internet
 
 #We want to test these:
-from Bio import GenBank
+from Bio import Entrez
 from Bio import ExPASy
 
 #In order to check any sequences returned
@@ -22,7 +22,6 @@ from StringIO import StringIO
 from Bio.SeqUtils.CheckSum import seguid
 
 #This lets us set the email address to be sent to NCBI Entrez:
-from Bio import Entrez
 Entrez.email = "biopython-dev@biopython.org"
 
 def checksum_summary(record) :
@@ -50,19 +49,7 @@ del id_list, handle, identifier, records, record
 
 #####################################################################
 
-print "Checking Bio.GenBank.download_many()"
-id_list = ['6273290', '6273289']
-handle = GenBank.download_many(id_list)
-for identifier, record in zip(id_list, SeqIO.parse(handle, "genbank")) :
-    print "- Fetched GI %s as genbank" % identifier
-    print "  Got " + checksum_summary(record)
-    assert record.annotations["gi"] == identifier
-handle.close()
-del id_list, handle, identifier, record
-
-#####################################################################
-
-print "Checking Bio.GenBank.NCBIDictionary()"
+print "Checking Bio.Entrez.efetch()"
 for database, format, entry in [("genome","fasta","X52960"),
                                 ("genome","genbank","X52960"),
                                 ("nucleotide", "fasta", "6273291"),
@@ -70,14 +57,15 @@ for database, format, entry in [("genome","fasta","X52960"),
                                 ("protein", "fasta", "16130152"),
                                 ("protein", "genbank", "16130152")] :
     print "- Fetching %s from %s as %s" % (entry, database, format)
-    ncbi_dict = GenBank.NCBIDictionary(database, format)
-    data = ncbi_dict[entry]
-    assert isinstance(data, str)
-    handle = StringIO(data) #turn into a handle
-    records = list(SeqIO.parse(handle, format))
+    handle = Entrez.efetch(db=database,
+                           id=entry,
+                           rettype=format)
+    record = SeqIO.read(handle, format) # checks there is exactly one record
     handle.close()
-    assert len(records) == 1
-    print "  Got " + checksum_summary(records[0])
-del database, format, entry, handle, data, records
+    print "  Got " + checksum_summary(record)
+    assert (entry in record.name) or (entry in record.id) \
+        or ("gi" in record.annotations and record.annotations["gi"]==entry), \
+           "%s got %s, %s" % (entry, record.name, record.id)
+del database, format, entry, handle, record
 
 #####################################################################
