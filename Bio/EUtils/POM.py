@@ -1075,9 +1075,8 @@ def get_mod_file(sourcefilename):
 	name is the destination for generated python files.
 	"""
 	import DTDs as dtds
-	from string import maketrans
 	modname = os.path.splitext(os.path.split(sourcefilename)[1])[0]
-	return os.path.join(dtds.__path__[0], modname.translate(maketrans("-.", "__"))+".py")
+	return os.path.join(dtds.__path__[0], modname.translate(string.maketrans("-.", "__"))+".py")
 
 
 def _find_element(elname, modules):

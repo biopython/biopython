@@ -307,4 +307,4 @@ def _strip_and_combine(line_list):
     # first strip out extra whitespace
     stripped_line_list = map(string.strip, line_list)
     # now combine everything with spaces
-    return string.join(stripped_line_list, ' ')
+    return ' '.join(stripped_line_list)

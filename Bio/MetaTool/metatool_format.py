@@ -14,8 +14,6 @@ http://www2.bioinf.mdc-berlin.de/metabolic/metatool/
 This helps us have endlines be consistent across platforms.
 
 """
-# standard library
-import string
 
 # Martel
 from Martel import Opt, Alt, Digits, Integer, Group, Str, MaxRepeat

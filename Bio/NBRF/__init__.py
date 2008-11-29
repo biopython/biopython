@@ -14,8 +14,6 @@ warnings.warn("Bio.NBRF is deprecated." \
               + "for you.",
               DeprecationWarning)
 
-# standard library
-import string
 
 # Martel
 import Martel

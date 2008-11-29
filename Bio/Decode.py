@@ -88,7 +88,7 @@ def join_fixspaces(lines):
 
 def tr(s, frm, to):
     table = string.maketrans(frm, to)
-    return string.translate(s, table)
+    return s.translate(table)
 
 def safe_int(s):
     """converts to int if the number is small, long if it's large"""

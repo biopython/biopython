@@ -6,7 +6,6 @@ in Bio.Seq instead.
 This module is now considered to be obsolete, and is likely to be deprecated
 in a future release of Biopython, and later removed.
 """
-import string
 
 from Bio import Alphabet, Seq
 from Bio.Alphabet import IUPAC
@@ -20,12 +19,12 @@ class Transcribe:
         assert dna.alphabet == self.dna_alphabet, \
                "transcribe has the wrong DNA alphabet"
         s = dna.data
-        return Seq.Seq(string.replace(s, "T", "U"), self.rna_alphabet)
+        return Seq.Seq(s.replace("T", "U"), self.rna_alphabet)
     def back_transcribe(self, rna):
         assert rna.alphabet == self.rna_alphabet, \
                "back transcribe has the wrong RNA alphabet"
         s = rna.data
-        return Seq.Seq(string.replace(s, "U", "T"), self.dna_alphabet)
+        return Seq.Seq(s.replace("U", "T"), self.dna_alphabet)
 
 generic_transcriber = Transcribe(Alphabet.generic_dna,
                                  Alphabet.generic_rna)

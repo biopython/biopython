@@ -190,13 +190,13 @@ class _RecordConsumer:
     def reaction( self, reactions ):
         for reaction in reactions:
             items = reaction.split()
-            item = string.join( items[ 1: ] )
+            item = ' '.join( items[ 1: ] )
             self._reactions.append(item)
 
     def enzyme( self, enzymes ):
         for enzyme in enzymes:
             items = enzyme.split()
-            item = string.join( items[ 1: ] )
+            item = ' '.join( items[ 1: ] )
             self._enzymes.append(item)
 
     def sum_is_constant_line( self, lines ):
@@ -371,7 +371,7 @@ def _strip_and_combine(line_list):
     stripped_line_list = map(string.strip, line_list)
 
     # now combine everything with spaces
-    return string.join(stripped_line_list)
+    return ' '.join(stripped_line_list)
 
 
 

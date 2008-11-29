@@ -2,8 +2,6 @@
 """
 
 # standard modules
-import string
-
 import numpy.oldnumeric.matrix as Matrix
 
 # local stuff

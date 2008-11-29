@@ -62,17 +62,17 @@ _prosite_trans = string.maketrans("abcdefghijklmnopqrstuvwxyzX}()<>",
 def prosite_to_re(pattern):
     """convert a valid Prosite pattern into an re string"""
     flg = (pattern[:2] == "[<")
-    s = string.replace(pattern, "{", "[^")
-    s = string.translate(s, _prosite_trans, "-.")
+    s = pattern.replace("{", "[^")
+    s = s.translate(_prosite_trans, "-.")
     # special case "[<" and ">]", if they exist
     if flg:
-        i = string.index(s, "]")
+        i = s.index("]")
         s = "(?:^|[" + s[2:i] + "])" + s[i+1:]
     if s[-2:] == "$]":
-        i = string.rindex(s, "[")
+        i = s.rindex("[")
         s = s[:i] + "(?:" + s[i:-2] + "]|$)"
     elif s[-3:] == "$]$":
-        i = string.rindex(s, "[")
+        i = s.rindex("[")
         s = s[:i] + "(?:" + s[i:-3] + "]|$)$"
     return s
         
@@ -82,19 +82,19 @@ def prosite_to_re(pattern):
 def prosite_to_grouped_re(pattern):
     """convert a valid Prosite pattern into an re with groups for each term"""
     flg = (pattern[:2] == "[<")
-    s = string.replace(pattern, "{", "[^")
+    s = pattern.replace("{", "[^")
     # Don't delete the "-" characters: use them to place the ()s
-    s = string.translate(s, _prosite_trans, ".")
+    s = s.translate(_prosite_trans, ".")
 
     # Get the [< and >] terms correct
     if flg:
-        i = string.index(s, "]")
+        i = s.index("]")
         s = "(?:^|[" + s[2:i] + "])" + s[i+1:]
     if s[-2:] == "$]":
-        i = string.rindex(s, "[")
+        i = s.rindex("[")
         s = s[:i] + "(?:" + s[i:-2] + "]|$)"
     if s[-3:] == "$]$":
-        i = string.rindex(s, "[")
+        i = s.rindex("[")
         s = s[:i] + "(?:" + s[i:-3] + "]|$)$"
 
     # Watch out for unescaped < and > terms
@@ -107,7 +107,7 @@ def prosite_to_grouped_re(pattern):
     else:
         s = s + ")"
 
-    return string.replace(s, "-", ")(")
+    return s.replace("-", ")(")
 
 
 
@@ -139,7 +139,7 @@ class Prosite:
     def __repr__(self):
         return "Prosite(%s)" % repr(str(self))
     def __str__(self):
-        return string.join(map(str, self.data), "-") + "."
+        return '-'.join(map(str, self.data)) + "."
     def __len__(self): return len(self.data)
     def __getitem__(self, i): return self.data[i]
     def __getslice__(self, i, j):
@@ -355,7 +355,7 @@ def find_terms(pattern):
     if pattern[-1:] != ".":
         raise TypeError("not a prosite pattern - needs a final '.'")
     pattern = pattern[:-1]
-    terms = string.split(pattern, "-")
+    terms = pattern.split("-")
     result = []
     i = 0
     for term in terms:
@@ -452,9 +452,9 @@ def verify_pattern(pattern):
     if x is None:
         return 0
     # check there's only one [< at the beginning, or >] at the end
-    if string.find(pattern, "[<", 1) != -1:
+    if pattern.find("[<", 1) != -1:
         return 0
-    if string.find(pattern, ">]", 0, len(pattern)-2) != -1:
+    if pattern.find(">]", 0, len(pattern)-2) != -1:
         return 0
     return 1
 

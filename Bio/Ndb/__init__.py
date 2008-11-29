@@ -24,7 +24,6 @@ warnings.warn("Bio.Ndb has been deprecated as the NDB website it used to"\
               " parse has been redesigned.", DeprecationWarning)
 
 from types import *
-import string
 from Bio import File
 from Bio import Index
 from Bio.Crystal import Hetero
@@ -137,7 +136,7 @@ class NdbParser(  sgmllib.SGMLParser ):
             line = uhandle.readline()
             if( not line ):
                 break
-            line = string.strip( line )
+            line = line.strip()
             if( line[ -7: ] == '</HTML>' ):
                 break
             text = text + ' ' + line
@@ -146,7 +145,7 @@ class NdbParser(  sgmllib.SGMLParser ):
 
 
     def handle_data(self, newtext ):
-        newtext = string.strip( newtext )
+        newtext = newtext.strip()
         self.text = self.text + newtext
 
     def start_h1( self, attrs ):
@@ -284,7 +283,7 @@ class NdbParser(  sgmllib.SGMLParser ):
 
 
     def _flush_text( self ):
-        text = string.strip( self.text )
+        text = self.text.strip()
         self.text = ''
         return text[:]
 
