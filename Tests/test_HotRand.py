@@ -12,29 +12,15 @@ import requires_internet
 # PyUnit
 import unittest
 from Bio.HotRand import HotRandom
-from Bio.HotRand import hex_convert
 
 def run_tests(argv):
-    ALL_TESTS = [HexConversionTest, RandomSequenceTest ]
-
     runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
     test_loader = unittest.TestLoader()
     test_loader.testMethodPrefix = 't_'
-
-    for test in ALL_TESTS:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        runner.run(cur_suite)
+    cur_suite = test_loader.loadTestsFromTestCase(RandomSequenceTest)
+    runner.run(cur_suite)
 
 # --- helper classes and functions
-
-def are_lists_equal( a, b ):
-    if( len( a ) != len( b ) ):
-        return 0
-    for j in range( 0, len( a ) ):
-        if( a[ j ] != b[ j ] ):
-            return 0
-    return 1
-
 
 def are_items_in_range( a, high, low ):
     for j in range( 0, len( a ) ):
@@ -47,20 +33,6 @@ def are_items_in_range( a, high, low ):
     return 1
 
 # --- the actual test classes
-
-class HexConversionTest(unittest.TestCase):
-    """Some examples of conversions from hex strings.
-    """
-
-    def t_convert(self):
-        """Test conversion of hex strings.
-        """
-        nums = [ '0000', 'abcd', '1234', '5555', '4321', 'aaaa', 'ffff', '7', '21' ]
-        actual = []
-        expected = [ 0, 43981, 4660, 21845, 17185, 43690, 65535, 7, 33 ]
-        for num in nums:
-            actual.append( hex_convert( num ) )
-        assert are_lists_equal( actual, expected ), "Did not convert string."
 
 class RandomSequenceTest(unittest.TestCase):
     """Test sequence of random numbers.

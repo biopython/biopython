@@ -6,19 +6,13 @@
 """handles true random numbers supplied from the the web server of fourmilab. Based on atmospheric noise.  The motivation is to support biosimulations that rely on random numbers.
 """
 
-import string
 import urllib
 
 
-def hex_convert( text ):
-    num_val = 0L
-    text = text.lower()
-    for letter in text:
-        hex_digit = string.hexdigits.find( letter )
-        if( hex_digit < 0 ):
-            raise ValueError
-        num_val = ( num_val * 16 ) + hex_digit
-    return num_val
+def hex_convert(text):
+    import warnings
+    warnings.warn("The function Bio.HotRand.hex_convert is deprecated. Instead of Bio.HotRand.hex_convert(text), please use int(text, 16) instead", DeprecationWarning)
+    return int(text, 16)
 
 def byte_concat( text ):
     val = 0
