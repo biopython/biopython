@@ -3269,8 +3269,76 @@ To get the output in XML format, which you can parse using the \verb+Bio.Entrez.
 
 If you want to perform a search with \verb|Bio.Entrez.esearch()|, and then download the records with \verb|Bio.Entrez.efetch()|, you should use the WebEnv history feature -- see Section~\ref{sec:entrez-webenv}.
 
-\section{ELink}
-For help on ELink, see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/elink\_help.html}{ELink help page}. ELink is available from Biopython through \verb+Bio.Entrez.elink()+.
+\section{ELink: Searching for related items in NCBI Entrez}
+
+ELink, available from Biopython as \verb+Bio.Entrez.elink()+, can be used to find related items in the NCBI Entrez databases. For example, let's try to find articles related to the one Harry Mangalam wrote in 2002 about the BioPerl, Biopython, and BioJava projects (Briefings in Bioinformatics, 3(3): 296-302). The PubMed ID of this article is 12230038. Now we use \verb+Bio.Entrez.elink+ to find all related items to this article:
+
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com"
+>>> pmid = "12230038"
+>>> handle = Entrez.elink(dbfrom='pubmed', id=pmid)
+>>> record = Entrez.read(handle)
+\end{verbatim}
+
+The \verb+record+ variable consists of a Python list, one for each database in which we searched. Since we specified only one PubMed ID to search for, \verb+record+ contains only one item. This item is a dictionary containing information about our search term, as well as all the related items that were found:
+
+\begin{verbatim}
+>>> record[0]['DbFrom']
+'pubmed'
+>>> record[0]['IdList']
+['12230038']
+\end{verbatim}
+
+The \verb+"LinkSetDb"+ key contains the search results, stored as a list consisting of one item for each target database. In our search results, we only find hits in the PubMed database:
+
+\begin{verbatim}
+>>> len(record[0]['LinkSetDb'])
+1
+>>> record[0]['LinkSetDb'][0]['DbTo']
+'pubmed'
+\end{verbatim}
+
+The actual search results are stored as under the \verb+"Link"+ key. In total, 134 items were found:
+
+\begin{verbatim}
+>>> len(record[0]['LinkSetDb'][0]['Link'])
+134
+\end{verbatim}
+
+Let's now at the first search result:
+\begin{verbatim}
+>>> record[0]['LinkSetDb'][0]['Link'][0]
+{u'Score': '2147483647', u'Id': '12230038'}
+\end{verbatim}
+
+This is the article we searched for, which doesn't help us much, so let's look at the second search result:
+
+\begin{verbatim}
+>>> record[0]['LinkSetDb'][0]['Link'][1]
+{u'Score': '36245843', u'Id': '17316423'}
+\end{verbatim}
+
+This paper, with PubMed ID 17316423, is most closely related to the paper by Harry Mangalam. If you look up this paper in PubMed, you'll see that this is a paper published in BMC Bioinformatics about the Bioclipse software project.
+
+We can use a loop to print out all PubMed IDs:
+\begin{verbatim}
+>>> for link in record[0]["LinkSetDb"][0]['Link'] :
+...     print link
+...
+{u'Score': '2147483647', u'Id': '12230038'}
+{u'Score': '36245843', u'Id': '17316423'}
+{u'Score': '34527046', u'Id': '18174185'}
+{u'Score': '33170001', u'Id': '11928498'}
+{u'Score': '32284469', u'Id': '17441614'}
+{u'Score': '31719319', u'Id': '17291351'}
+{u'Score': '31123154', u'Id': '15572471'}
+{u'Score': '31002490', u'Id': '16539535'}
+{u'Score': '30946408', u'Id': '17384428'}
+......
+\end{verbatim}
+
+For help on ELink, see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/elink\_help.html}{ELink help page}.
 
 \section{EGQuery: Obtaining counts for search terms}
 EGQuery provides counts for a search term in each of the Entrez databases. This is particularly useful to find out how many items your search terms would find in each database without actually performing lots of separate searches with ESearch (see the example in \ref{subsec:entrez_example_genbank} below).
