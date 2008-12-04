@@ -194,14 +194,10 @@ class test_biopython(Command):
     
     """
     description = "Automatically run the test suite for Biopython."
-
-    user_options = [
-        # provide the option to run tests in no-gui mode
-        ('no-gui', None, "Do not run in GUI mode")
-    ]
+    user_options = []
 
     def initialize_options(self):
-        self.no_gui = None
+        pass
 
     def finalize_options(self):
         pass
@@ -212,11 +208,8 @@ class test_biopython(Command):
         # change to the test dir and run the tests
         os.chdir("Tests")
         sys.path.insert(0, '')
-        import run_tests
-        if self.no_gui:
-            run_tests.main(['--no-gui'])
-        else:
-            run_tests.main([])
+        import run_tests   
+        run_tests.main([])
 
         # change back to the current directory
         os.chdir(this_dir)
@@ -227,7 +220,6 @@ def can_import(module_name):
         return __import__(module_name)
     except ImportError:
         return None
-    raise AssertionError, "how did I get here?"
 
 def is_Numpy_installed():
     return can_import("numpy")
@@ -348,12 +340,13 @@ EXTENSIONS = [
                'Bio/csupport.c'],
               include_dirs=["Bio"]
               ),
-   #Extension('Bio.PDB.mmCIF.MMCIFlex',
-              #['Bio/PDB/mmCIF/lex.yy.c',
-               #'Bio/PDB/mmCIF/MMCIFlexmodule.c'],
-              #include_dirs=["Bio"],
-              #libraries=["fl"]
-              #),
+#Commented out due to the build dependency on flex, see Bug 2619
+#   Extension('Bio.PDB.mmCIF.MMCIFlex',
+#              ['Bio/PDB/mmCIF/lex.yy.c',
+#               'Bio/PDB/mmCIF/MMCIFlexmodule.c'],
+#              include_dirs=["Bio"],
+#              libraries=["fl"]
+#              ),
     Extension('Bio.Nexus.cnexus',
               ['Bio/Nexus/cnexus.c']
               ),
@@ -405,7 +398,7 @@ class install_data_biopython(install_data):
 
 setup(
     name='biopython',
-    version='1.49b',
+    version='1.49',
     author='The Biopython Consortium',
     author_email='biopython@biopython.org',
     url='http://www.biopython.org/',
@@ -421,7 +414,7 @@ setup(
     packages=PACKAGES,
     ext_modules=EXTENSIONS,
     data_files=DATA_FILES,
-    #install_requires = ['numpy>=1.1'],
+    #install_requires = ['numpy>=1.0'],
     #extras_require = {
     #    'PDF' : ['reportlab>=2.0']
     #    }
