@@ -45,7 +45,8 @@ from Bio import Medline
 class Dictionary:
     """Access PubMed using a read-only dictionary interface (DEPRECATED).
 
-    Please use Bio.Entrez instead as described in the Biopython Tutorial.
+    Please use the Bio.Entrez.efetch(...) function instead as described in the
+    Biopython Tutorial.
     """
     def __init__(self, parser=None):
         """Dictionary(parser=None)
@@ -163,10 +164,22 @@ def search_for(search, reldate=None, mindate=None, maxdate=None,
 def find_related(pmid):
     """Find related articles in PubMed, returns an ID list (DEPRECATED).
 
-    Please use Bio.Entrez instead as described in the Biopython Tutorial.
-
     Search PubMed for a list of citations related to pmid.  pmid can
     be a PubMed ID, a MEDLINE UID, or a list of those.
+
+    Please use Bio.Entrez instead as described in the Biopython Tutorial.
+    e.g.
+
+    >>> from Bio import Entrez
+    >>> Entrez.email = "A.N.Other@example.com"
+    >>> pmid = "12230038"
+    >>> handle = Entrez.elink(dbfrom='pubmed', id=pmid)
+    >>> result = Entrez.read(handle)
+    >>> for link in result[0]["LinkSetDb"][0]['Link'] :
+    ...     print link
+
+    (Output ommitted)
+
     """
     class ResultParser(sgmllib.SGMLParser):
         # Parse the ID's out of the HTML-formatted page that PubMed
