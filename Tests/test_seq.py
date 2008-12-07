@@ -149,7 +149,7 @@ protein = [Seq.Seq("ATCGPK", IUPAC.protein),
            Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-")),
            Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
            Seq.MutableSeq("ME-K-DRXR*XU", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
-           Seq.Seq("MEDG-KRXR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.extended_protein, "-"), "*")),
+           Seq.Seq("MEDG-KRXR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.extended_protein, "-"), "@")),
            Seq.Seq("ME-KR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.protein, "-"), "@")),
            Seq.Seq("MEDG.KRXR@", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "@"), ".")),
            "TEDDF"]
@@ -311,8 +311,8 @@ for sequence in [Seq.Seq("".join(ambiguous_rna_values)),
             Seq.Seq("".join(ambiguous_dna_values)),
             Seq.Seq("".join(ambiguous_rna_values), Alphabet.generic_rna),
             Seq.Seq("".join(ambiguous_dna_values), Alphabet.generic_dna),
-            Seq.Seq("".join(ambiguous_rna_values), IUPAC.IUPACAmbiguousRNA()),
-            Seq.Seq("".join(ambiguous_dna_values), IUPAC.IUPACAmbiguousDNA()),
+            Seq.Seq("".join(ambiguous_rna_values).replace("X",""), IUPAC.IUPACAmbiguousRNA()),
+            Seq.Seq("".join(ambiguous_dna_values).replace("X",""), IUPAC.IUPACAmbiguousDNA()),
             Seq.Seq("AWGAARCKG")]:  # Note no U or T
         print "%s -> %s" \
               % (repr(sequence), repr(Seq.reverse_complement(sequence)))
@@ -354,7 +354,7 @@ protein_seqs = [Seq.Seq("ATCGPK", IUPAC.protein),
                 Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-")),
                 Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
                 Seq.MutableSeq("ME-K-DRXR*XU", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
-                Seq.Seq("MEDG-KRXR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.extended_protein, "-"), "*")),
+                Seq.Seq("MEDG-KRXR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.extended_protein, "-"), "@")),
                 Seq.Seq("ME-KR@", Alphabet.HasStopCodon(Alphabet.Gapped(IUPAC.protein, "-"), "@")),
                 Seq.Seq("MEDG.KRXR@", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "@"), "."))]
 

@@ -63,7 +63,7 @@ Gapped(IUPACProtein(), '.') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), 
 -> More than one gap character present
 Gapped(IUPACProtein(), '.') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-')
 -> More than one gap character present
-Gapped(IUPACProtein(), '.') + HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '*')
+Gapped(IUPACProtein(), '.') + HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '@')
 -> More than one gap character present
 Gapped(IUPACProtein(), '.') + HasStopCodon(Gapped(IUPACProtein(), '-'), '@')
 -> More than one gap character present
@@ -73,29 +73,33 @@ Gapped(IUPACProtein(), '-') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), 
 -> More than one gap character present
 Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-') + Gapped(IUPACProtein(), '.')
 -> More than one gap character present
+Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-') + HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '@')
+-> More than one stop symbol present
 Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-') + HasStopCodon(Gapped(IUPACProtein(), '-'), '@')
 -> More than one stop symbol present
 Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.')
 -> More than one gap character present
 Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-') + Gapped(IUPACProtein(), '.')
 -> More than one gap character present
+Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-') + HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '@')
+-> More than one stop symbol present
 Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-') + HasStopCodon(Gapped(IUPACProtein(), '-'), '@')
 -> More than one stop symbol present
 Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.')
 -> More than one gap character present
-HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '*') + Gapped(IUPACProtein(), '.')
+HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '@') + Gapped(IUPACProtein(), '.')
 -> More than one gap character present
-HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '*') + HasStopCodon(Gapped(IUPACProtein(), '-'), '@')
+HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '@') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-')
 -> More than one stop symbol present
-HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '*') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.')
+HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '@') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-')
+-> More than one stop symbol present
+HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '@') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.')
 -> More than one gap character present
 HasStopCodon(Gapped(IUPACProtein(), '-'), '@') + Gapped(IUPACProtein(), '.')
 -> More than one gap character present
 HasStopCodon(Gapped(IUPACProtein(), '-'), '@') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-')
 -> More than one stop symbol present
 HasStopCodon(Gapped(IUPACProtein(), '-'), '@') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-')
--> More than one stop symbol present
-HasStopCodon(Gapped(IUPACProtein(), '-'), '@') + HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '*')
 -> More than one stop symbol present
 HasStopCodon(Gapped(IUPACProtein(), '-'), '@') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.')
 -> More than one gap character present
@@ -105,7 +109,7 @@ Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.') + Gapped(HasStopCodon(Ext
 -> More than one gap character present
 Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.') + Gapped(HasStopCodon(ExtendedIUPACProtein(), '*'), '-')
 -> More than one gap character present
-Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.') + HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '*')
+Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.') + HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '@')
 -> More than one gap character present
 Gapped(HasStopCodon(ExtendedIUPACProtein(), '@'), '.') + HasStopCodon(Gapped(IUPACProtein(), '-'), '@')
 -> More than one gap character present
@@ -159,8 +163,8 @@ Seq('ACBDGHKMNSRUWVYX', Alphabet()) -> Seq('XRBWAYSNKMDCHVGU', Alphabet())
 Seq('ACBDGHKMNSRTWVYX', Alphabet()) -> Seq('XRBWAYSNKMDCHVGT', Alphabet())
 Seq('ACBDGHKMNSRUWVYX', RNAAlphabet()) -> Seq('XRBWAYSNKMDCHVGU', RNAAlphabet())
 Seq('ACBDGHKMNSRTWVYX', DNAAlphabet()) -> Seq('XRBWAYSNKMDCHVGT', DNAAlphabet())
-Seq('ACBDGHKMNSRUWVYX', IUPACAmbiguousRNA()) -> Seq('XRBWAYSNKMDCHVGU', IUPACAmbiguousRNA())
-Seq('ACBDGHKMNSRTWVYX', IUPACAmbiguousDNA()) -> Seq('XRBWAYSNKMDCHVGT', IUPACAmbiguousDNA())
+Seq('ACBDGHKMNSRUWVY', IUPACAmbiguousRNA()) -> Seq('RBWAYSNKMDCHVGU', IUPACAmbiguousRNA())
+Seq('ACBDGHKMNSRTWVY', IUPACAmbiguousDNA()) -> Seq('RBWAYSNKMDCHVGT', IUPACAmbiguousDNA())
 Seq('AWGAARCKG', Alphabet()) -> Seq('CMGYTTCWT', Alphabet())
 
 
