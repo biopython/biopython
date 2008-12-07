@@ -15,9 +15,9 @@ from Bio.Data import IUPACData
 # From the IUPAC definition at:
 #   http://www.chem.qmw.ac.uk/iupac/AminoAcid/A2021.html#AA21
 
-# If you use X for selenocysteines, then you'll need a new alphabet.
+assert IUPACData.extended_protein_letters == IUPACData.extended_protein_letters.upper()
 class ExtendedIUPACProtein(Alphabet.ProteinAlphabet):
-    """Extended IUPAC protein single letter alphabet including X etc.
+    """Extended uppercase IUPAC protein single letter alphabet including X etc.
 
     In addition to the standard 20 single letter protein codes, this includes:
     
@@ -27,13 +27,17 @@ class ExtendedIUPACProtein(Alphabet.ProteinAlphabet):
     J = "Xle";  Leucine (L) or Isoleucine (I), used in mass-spec (NMR)
     U = "Sec";  Selenocysteine
     O = "Pyl";  Pyrrolysine
+
+    This alphabet is not intended to be used with X for Selenocysteine
+    (an ad-hoc standard prior to the IUPAC adoption of U instead).
     """
     letters = IUPACData.extended_protein_letters
 
 extended_protein = ExtendedIUPACProtein()
 
+assert IUPACData.protein_letters == IUPACData.protein_letters.upper()
 class IUPACProtein(ExtendedIUPACProtein):
-    """IUPAC protein single letter alphabet of the 20 standard amino acids."""
+    """Uppercase IUPAC protein single letter alphabet of the 20 standard amino acids."""
     letters = IUPACData.protein_letters
 
 protein = IUPACProtein()
@@ -43,11 +47,13 @@ protein = IUPACProtein()
 # The next two are the IUPAC definitions, from:
 #   http://www.chem.qmw.ac.uk/iubmb/misc/naseq.html
 class IUPACAmbiguousDNA(Alphabet.DNAAlphabet):
+    """Uppercase IUPAC ambiguous DNA."""
     letters = IUPACData.ambiguous_dna_letters
 
 ambiguous_dna = IUPACAmbiguousDNA()
 
 class IUPACUnambiguousDNA(IUPACAmbiguousDNA):
+    """Uppercase IUPAC unambiguous DNA (letters GATC only)."""
     letters = IUPACData.unambiguous_dna_letters
 
 unambiguous_dna = IUPACUnambiguousDNA()
@@ -55,22 +61,29 @@ unambiguous_dna = IUPACUnambiguousDNA()
 
 # Also from the URL, but not part of the standard
 class ExtendedIUPACDNA(Alphabet.DNAAlphabet):
+    """Extended IUPAC DNA alphabet.
+
+    In addition to the standard letter codes GATC, this includes:
+
+    B = 5-bromouridine
+    D = 5,6-dihydrouridine
+    S = thiouridine
+    W = wyosine
+    """
     letters = IUPACData.extended_dna_letters
-    #   B == 5-bromouridine
-    #   D == 5,6-dihydrouridine
-    #   S == thiouridine
-    #   W == wyosine
 
 extended_dna = ExtendedIUPACDNA()
 
 ##################### RNA
 
 class IUPACAmbiguousRNA(Alphabet.RNAAlphabet):
+    """Uppercase IUPAC ambiguous RNA."""
     letters = IUPACData.ambiguous_rna_letters
 
 ambiguous_rna = IUPACAmbiguousRNA()
 
 class IUPACUnambiguousRNA(IUPACAmbiguousRNA):
+    """Uppercase IUPAC unambiguous RNA (letters GAUC only)."""
     letters = IUPACData.unambiguous_rna_letters
 
 unambiguous_rna = IUPACUnambiguousRNA()
