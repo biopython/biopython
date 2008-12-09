@@ -1,0 +1,9 @@
+test_GenomeDiagram
+t_slicing (test_GenomeDiagram.GraphTest) ... ok
+Test color translations. ... ok
+Output circular and linear diagrams of a GenBank sequence to PDF. ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 5.679s
+
+OK
