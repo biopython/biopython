@@ -113,9 +113,9 @@ class EmbossIterator(AlignmentIterator) :
             line = handle.readline()
 
         if number_of_seqs is None :
-            raise SyntaxError("Number of sequences missing!")
+            raise ValueError("Number of sequences missing!")
         if length_of_seqs is None :
-            raise SyntaxError("Length of sequences missing!")
+            raise ValueError("Length of sequences missing!")
 
         if self.records_per_alignment is not None \
         and self.records_per_alignment != number_of_seqs :
@@ -161,7 +161,7 @@ class EmbossIterator(AlignmentIterator) :
                     #Check the end ...
                     assert int(end) == len(seqs[index].replace("-","")), \
                         "Found %i chars so far for %s, file says end %i:\n%s" \
-                            % (len(seqs[index]), id, int(end), seqs[index])
+                            % (len(seqs[index]), id, int(end), repr(seqs[index]))
 
                     index += 1
                     if index >= number_of_seqs :
@@ -194,7 +194,13 @@ class EmbossIterator(AlignmentIterator) :
         alignment = Alignment(self.alphabet)
         for id, seq in zip(ids, seqs) :
             if len(seq) != length_of_seqs :
-                raise SyntaxError("Error parsing alignment - sequences of different length?")
+                #EMBOSS 2.9.0 is known to use spaces instead of minus signs
+                #for leading gaps, and thus fails to parse.  This old version
+                #is still used as of Dec 2008 behind the EBI SOAP webservice:
+                #http://www.ebi.ac.uk/Tools/webservices/wsdl/WSEmboss.wsdl
+                raise ValueError("Error parsing alignment - sequences of "
+                                 "different length? You could be using an "
+                                 "old version of EMBOSS.")
             alignment.add_sequence(id, seq)
         return alignment
     
@@ -557,6 +563,7 @@ asis             311 -----------------    311
 #---------------------------------------
 #---------------------------------------"""
 
+
     from StringIO import StringIO
 
     alignments = list(EmbossIterator(StringIO(pair_example)))
@@ -593,7 +600,6 @@ asis             311 -----------------    311
            == ["ref_rec", "gi|94968718|receiver"]
     assert [r.id for r in alignments[4].get_all_seqs()] \
            == ["ref_rec", "gi|94970041|receiver"]
-
 
 
     alignments = list(EmbossIterator(StringIO(pair_example3)))
