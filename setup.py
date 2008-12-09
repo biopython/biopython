@@ -256,6 +256,7 @@ PACKAGES = [
     'Bio.Geo',
     'Bio.GFF',
     'Bio.Graphics',
+    'Bio.Graphics.GenomeDiagram',
     'Bio.HMM',
     'Bio.IntelliGenetics',
     'Bio.InterPro',

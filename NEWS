@@ -9,6 +9,13 @@ The latest news is at the top.
 
 ===================================================================
 
+GenomeDiagram by Leighton Pritchard has been integrated into Biopython
+as the Bio.Graphics. GenomeDiagram module  If you use this code, please
+cite the publication Pritchard et al. (2006), Bioinformatics 22  616-617.
+Note that like Bio.Graphics, this requires the ReportLab python library.
+
+===================================================================
+
 Novemver 21, 2008: Biopython 1.49 released.
 
 See the notes below for the Biopython 1.49 beta release for more details,
