@@ -265,6 +265,7 @@ PACKAGES = [
     'Bio.KEGG.Map',
     'Bio.Medline',
     'Bio.MEME',
+    'Bio.Motif',
     'Bio.MetaTool',
     'Bio.Mindy',
     'Bio.NBRF',
