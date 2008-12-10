@@ -783,7 +783,7 @@ class LinearDrawer(AbstractDrawer):
                 if feature.label_position in ('start', "5'", 'left'):
                     pos = x0
                 elif feature.label_position in ('middle', 'centre'):
-                    pos = (x1 - x0)/2.
+                    pos = (x1 + x0)/2.
                 else:
                     pos = x1
                 labelgroup.transform = (rotation[0], rotation[1], rotation[2],
@@ -793,7 +793,7 @@ class LinearDrawer(AbstractDrawer):
                 if feature.label_position in ('start', "5'", 'left'):
                     pos = x1
                 elif feature.label_position in ('middle', 'centre'):
-                    pos = (x1 - x0)/2.
+                    pos = (x1 + x0)/2.
                 else:
                     pos = x0
                 labelgroup.transform = (rotation[0], rotation[1], rotation[2],
