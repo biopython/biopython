@@ -231,11 +231,6 @@ class GraphTest(unittest.TestCase):
 
 class DiagramTest(unittest.TestCase):
     """Creating feature sets, graph sets, tracks etc individually for the diagram."""
-    def setUp(self):
-        # This has to be done on Windows otherwise it fails with 
-        # the following stack trace:
-        # TODO Put stack trace
-        pdfmetrics.registerFont(TTFont('Vera', 'Vera.ttf'))
     
     def load_sequence(self, filename):
         """Load a GenBank file as a SeqRecord."""
