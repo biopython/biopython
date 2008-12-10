@@ -255,6 +255,7 @@ class DiagramTest(unittest.TestCase):
         gdfs3 = FeatureSet(name='misc_features')
         gdfs4 = FeatureSet(name='repeat regions')
 
+        cds_count = 0
         for feature in genbank_entry.features:
             if feature.type == 'source':
                 start = str(feature.location._start)  # Feature start
@@ -275,7 +276,11 @@ class DiagramTest(unittest.TestCase):
             gdd.end = end
 
             if feature.type == 'CDS':
-                gdfs1.add_feature(feature) #, name="Some feature or other")
+                cds_count += 1
+                if cds_count % 2 == 0 :
+                    gdfs1.add_feature(feature, color=colors.pink)
+                else :
+                    gdfs1.add_feature(feature, color=colors.red)
 
             if feature.type == 'gene':
                 gdfs2.add_feature(feature)
@@ -295,7 +300,7 @@ class DiagramTest(unittest.TestCase):
         gdfs3.set_all_features('hide', 0)
         gdfs4.set_all_features('hide', 0)
 
-        gdfs1.set_all_features('color', colors.red)
+        #gdfs1.set_all_features('color', colors.red)
         gdfs2.set_all_features('color', colors.blue)
 
         gdt1 = Track('CDS features', greytrack=1,
