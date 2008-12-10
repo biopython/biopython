@@ -431,9 +431,8 @@ class CircularDrawer(AbstractDrawer):
             sinval, cosval = startsin, startcos
             if feature.strand == 1:    # Feature is on top, or covers both strands
                 if startangle < pi: # Turn text round and anchor end to inner radius
-                    #TODO - there's something not quite right here, labels get the wrong angle. PJC
                     sinval, cosval = endsin, endcos
-                    label_angle += pi
+                    label_angle = endangle - 0.5 * pi
                     labelgroup.contents[0].textAnchor = 'end'
                 pos = self.xcentre+top*sinval
                 coslabel = cos(label_angle)
