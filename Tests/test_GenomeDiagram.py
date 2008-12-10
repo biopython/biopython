@@ -155,6 +155,21 @@ def calc_at_skew(sequence):
     else :
         return (a-t)/float(a+t)
 
+def calc_dinucleotide_counts(sequence):
+    """Returns the total count of di-nucleotides repeats (e.g. "AA", "CC").
+
+    This is purely for the same of generating some non-random sequence
+    based score for plotting, with no expected biological meaning.
+
+    NOTE - Only considers same case pairs.
+    NOTE - "AA" scores 1, "AAA" scores 2, "AAAA" scores 3 etc.
+    """
+    total = 0
+    for letter in "ACTGUactgu" :
+        total += sequence.count(letter+letter)
+    return total
+    
+
 ###############################################################################
 # End of utility functions for graph plotting                                 #
 ###############################################################################
@@ -318,21 +333,29 @@ class DiagramTest(unittest.TestCase):
 
 
         gdgs2 = GraphSet('GC and AT Content')
-        graphdata2 = apply_to_window(genbank_entry.seq, step, calc_gc_content, step)
-        gdgs2.new_graph(graphdata2, 'GC content', style='line', 
-                color=colors.lightgreen,
-                altcolor=colors.darkseagreen)
+        gdgs2.new_graph(apply_to_window(genbank_entry.seq, step, calc_gc_content, step),
+                        'GC content', style='line', 
+                        color=colors.lightgreen,
+                        altcolor=colors.darkseagreen)
 
-        graphdata3 = apply_to_window(genbank_entry.seq, step, calc_at_content, step)
-        gdgs2.new_graph(graphdata3, 'AT content', style='line', 
-                color=colors.orange,
-                altcolor=colors.red)    
+        gdgs2.new_graph(apply_to_window(genbank_entry.seq, step, calc_at_content, step),
+                        'AT content', style='line', 
+                        color=colors.orange,
+                        altcolor=colors.red)    
 
         gdt5 = Track(\
                 'GC Content(green line), AT Content(red line)',
                 height=1.94, greytrack=1,
                 scale_largetick_interval=1e4)
         gdt5.add_set(gdgs2)
+
+        gdgs3 = GraphSet('Di-nucleotide count')
+        step = (end-start)/400 #smaller step
+        gdgs3.new_graph(apply_to_window(genbank_entry.seq, step, calc_dinucleotide_counts, step),
+                        'Di-nucleotide count', style='heat', 
+                        color=colors.red, altcolor=colors.orange)
+        gdt6 = Track('Di-nucleotide count', height=0.5, greytrack=False, scale=False)
+        gdt6.add_set(gdgs3)
 
         #Add the tracks (from both features and graphs)
         #Leave some white space in the middle
@@ -341,6 +364,7 @@ class DiagramTest(unittest.TestCase):
         gdd.add_track(gdt1, 5) # CDS features
         gdd.add_track(gdt2, 6) # Gene features
         gdd.add_track(gdt3, 7) # Misc features and repeat feature
+        gdd.add_track(gdt6, 8) # Feature depth
 
         #Finally draw it in both formats,
         gdd.draw(format='circular', orientation='landscape',
