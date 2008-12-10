@@ -38,6 +38,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.SITESin = open("Motif/Arnt.sites")
         self.TFout = "Motif/tf.out"
         self.FAout = "Motif/fa.out"
+        self.PFMout = "Motif/fa.out"
         from Bio.Seq import Seq
         self.m=Motif.Motif()
         self.m.add_instance(Seq("ATATA",self.m.alphabet))
@@ -56,8 +57,8 @@ class MotifTestsBasic(unittest.TestCase):
         """Test to be sure that Motif can parse AlignAce output files.
         """
         parser= Motif.AlignAceParser()
-        motifs=parser.parse(self.ACin)
-        assert len(motifs)==16
+        record=parser.parse(self.ACin)
+        assert len(record.motifs)==16
         
     def t_meme_parsing(self):
         """Test to be sure that Motif can parse MEME output files.
@@ -93,6 +94,14 @@ class MotifTestsBasic(unittest.TestCase):
         output_handle = open(self.TFout, "w")
         output_handle.write(self.m.to_transfac())
         output_handle.close()
+
+    def t_pfm_output(self):
+        """Ensure that we can write proper pfm output files.
+        """
+        output_handle = open(self.PFMout, "w")
+        output_handle.write(self.m.to_transfac())
+        output_handle.close()
+        
         
 
 if __name__ == "__main__":
