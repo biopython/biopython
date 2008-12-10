@@ -924,9 +924,7 @@ class CircularDrawer(AbstractDrawer):
         # earliest opportunity
         if angle>.01:  # Wide arc, represent with multiple boxes
             # Draw multiple boxes, representing an arc
-            n = int(angle/.01)     # Number of boxes to use
-            if n > 10:              # Limit for sanity
-                n = 10
+            n = max(50, int(angle/.01))     # Number of boxes to use
             radiansdelta = angle/n  # Radians subtended by each box
             points = [] # Holds values specifyifile:///usr/share/doc/HTML/index.htmlng start and end points for individual boxes
             a = points.append       # function proxy
