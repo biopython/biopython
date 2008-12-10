@@ -16,13 +16,14 @@ try:
     from reportlab.lib import colors
     from reportlab.pdfbase import pdfmetrics
     from reportlab.pdfbase.ttfonts import TTFont
+    from reportlab.lib.units import cm
 except:
     raise MissingExternalDependencyError(\
             "Install reportlab if you want to use Bio.Graphics.")
 
 # Biopython core
 from Bio import SeqIO
-from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio import SeqUtils
 
 # Bio.Graphics.GenomeDiagram
@@ -229,6 +230,7 @@ class GraphTest(unittest.TestCase):
 
 
 class DiagramTest(unittest.TestCase):
+    """Creating feature sets, graph sets, tracks etc individually for the diagram."""
     def setUp(self):
         # This has to be done on Windows otherwise it fails with 
         # the following stack trace:
@@ -242,9 +244,87 @@ class DiagramTest(unittest.TestCase):
         handle.close()
         return genbank_entry
 
-    def t_diagram_pdf(self):
-        """Output circular and linear diagrams of a GenBank sequence to PDF.
-        """
+    def t_diagram_via_methods_pdf(self) :
+        """Construct and draw PDF using method approach."""
+        
+        genbank_entry = self.load_sequence(os.path.join("GenBank","NC_005816.gb"))
+        gdd = Diagram('Test Diagram')
+
+        #Add a track of features,
+        gdt_features = gdd.new_track(1, greytrack=True,
+                                     name="CDS Features", greytrack_labels=0,
+                                     height=0.5)
+        #We'll just use one feature set for the genes and misc_features,
+        gds_features = gdt_features.new_set()
+        for feature in genbank_entry.features:
+            if feature.type == "gene" :
+                if len(gds_features) % 2 == 0 :
+                    color = "blue"
+                else :
+                    color = "lightblue"
+                gds_features.add_feature(feature, color=color,
+                                            #label_position = "middle",
+                                            #label_position = "end",
+                                            label_position = "start",
+                                            label_size = 11,
+                                            #label_angle = 90,
+                                            label=True)
+
+        #I want to include some strandless features, so for an example
+        #will use EcoRI recognition sites etc.
+        for site, name, color in [("GAATTC","EcoRI","green"),
+                                  ("CCCGGG","SmaI","orange"),
+                                  ("AAGCTT","HindIII","red"),
+                                  ("GGATCC","BamHI","purple")] :
+            index = 0
+            while True :
+                index  = genbank_entry.seq.find(site, start=index)
+                if index == -1 : break
+                feature = SeqFeature(FeatureLocation(index, index+6), strand=None)
+                gds_features.add_feature(feature, color=color,
+                                            #label_position = "middle",
+                                            label_size = 10,
+                                            label_color=color,
+                                            #label_angle = 90,
+                                            name=name,
+                                            label=True)
+                index += len(site)
+            del index
+
+        #Now add a graph track...
+        gdt_at_gc = gdd.new_track(2, greytrack=True,
+                                  name="AT and GC content",
+                                  greytrack_labels=True)
+        gds_at_gc = gdt_at_gc.new_set(type="graph")
+
+        step = len(genbank_entry)/200
+        gds_at_gc.new_graph(apply_to_window(genbank_entry.seq, step, calc_gc_content, step),
+                        'GC content', style='line', 
+                        color=colors.lightgreen,
+                        altcolor=colors.darkseagreen)
+        gds_at_gc.new_graph(apply_to_window(genbank_entry.seq, step, calc_at_content, step),
+                        'AT content', style='line', 
+                        color=colors.orange,
+                        altcolor=colors.red)
+        
+        #Finally draw it in both formats,
+        gdd.draw(format='linear', orientation='landscape',
+             tracklines=0, pagesize='A4', fragments=3)
+        output_filename = os.path.join('Graphics', 'GD_by_meth_linear.pdf')
+        gdd.write(output_filename, 'PDF')
+
+        #Change the order and leave an empty space in the center:
+        gdd.move_track(1,3)
+
+        gdd.draw(format='circular', tracklines=False,
+                 pagesize=(20*cm,20*cm), circular=True)
+        output_filename = os.path.join('Graphics', 'GD_by_meth_circular.pdf')
+        gdd.write(output_filename, 'PDF')
+
+        
+
+    def t_diagram_via_object_pdf(self):
+        """Construct and draw PDF using object approach."""
         genbank_entry = self.load_sequence(os.path.join("GenBank","NC_005816.gb"))
         
         gdd = Diagram('Test Diagram')
@@ -257,24 +337,6 @@ class DiagramTest(unittest.TestCase):
 
         cds_count = 0
         for feature in genbank_entry.features:
-            if feature.type == 'source':
-                start = str(feature.location._start)  # Feature start
-                end = str(feature.location._end)      # Feature end
-
-                # Remove extraneous leading chars
-                while start[0] not in string.digits:  
-                    start = start[1:]
-
-                while end[0] not in string.digits:
-                    end = end[1:]
-
-                start, end = int(start), int(end)
-                if end < start:
-                    start, end = end, start
-    	    
-            gdd.start = start
-            gdd.end = end
-
             if feature.type == 'CDS':
                 cds_count += 1
                 if cds_count % 2 == 0 :
@@ -322,7 +384,7 @@ class DiagramTest(unittest.TestCase):
 
         #Use a fairly large step so we can easily tell the difference
         #between the bar and line graphs.
-        step = (end-start)/200
+        step = len(genbank_entry)/200
         gdgs1 = GraphSet('GC skew')
         
         graphdata1 = apply_to_window(genbank_entry.seq, step, calc_gc_skew, step)
@@ -355,7 +417,7 @@ class DiagramTest(unittest.TestCase):
         gdt5.add_set(gdgs2)
 
         gdgs3 = GraphSet('Di-nucleotide count')
-        step = (end-start)/400 #smaller step
+        step = len(genbank_entry)/400 #smaller step
         gdgs3.new_graph(apply_to_window(genbank_entry.seq, step, calc_dinucleotide_counts, step),
                         'Di-nucleotide count', style='heat', 
                         color=colors.red, altcolor=colors.orange)
@@ -373,15 +435,13 @@ class DiagramTest(unittest.TestCase):
 
         #Finally draw it in both formats,
         gdd.draw(format='circular', orientation='landscape',
-             tracklines=0, pagesize='A0', circular=True,
-             start=start, end=end)
-        output_filename = os.path.join('Graphics', 'DiagramTestCircular.pdf')
+             tracklines=0, pagesize='A0', circular=True)
+        output_filename = os.path.join('Graphics', 'GD_by_obj_circular.pdf')
         gdd.write(output_filename, 'PDF')
         
         gdd.draw(format='linear', orientation='landscape',
-             tracklines=0, pagesize='A0', fragments=3,
-             start=start, end=end)
-        output_filename = os.path.join('Graphics', 'DiagramTestLinear.pdf')
+             tracklines=0, pagesize='A0', fragments=3)
+        output_filename = os.path.join('Graphics', 'GD_by_obj_linear.pdf')
         gdd.write(output_filename, 'PDF')
 
 if __name__ == "__main__":
