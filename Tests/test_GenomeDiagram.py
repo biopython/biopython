@@ -135,9 +135,9 @@ def calc_gc_skew(sequence):
     """
     g = sequence.count('G') + sequence.count('g')
     c = sequence.count('C') + sequence.count('c')
-    if g+c == 0:
-        return 0
-    else:
+    if g+c == 0 :
+        return 0.0 #TODO - return NaN or None here?
+    else :
         return (g-c)/float(g+c)
 
 
@@ -148,11 +148,11 @@ def calc_at_skew(sequence):
 
         Returns the (A-T)/(A+T) AT skew in a passed sequence
     """
-    a = sequence.count('A')
-    t = sequence.count('T')
-    if a+t == 0:
-        return 0
-    else:
+    a = sequence.count('A') + sequence.count('a')
+    t = sequence.count('T') + sequence.count('t')
+    if a+t == 0 :
+        return 0.0 #TODO - return NaN or None here?
+    else :
         return (a-t)/float(a+t)
 
 ###############################################################################
