@@ -31,7 +31,7 @@ from reportlab.lib import colors
 from reportlab.pdfbase import _fontdata
 
 # GenomeDiagram imports
-from AbstractDrawer import *
+from AbstractDrawer import AbstractDrawer, draw_box, intermediate_points
 from FeatureSet import FeatureSet
 from GraphSet import GraphSet
 

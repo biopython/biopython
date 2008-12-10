@@ -30,7 +30,7 @@ from reportlab.graphics.shapes import *
 from reportlab.lib import colors
 
 # GenomeDiagram imports
-from AbstractDrawer import *
+from AbstractDrawer import AbstractDrawer, draw_box, intermediate_points, angle2trig
 from FeatureSet import FeatureSet
 from GraphSet import GraphSet
 
