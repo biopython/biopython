@@ -230,10 +230,11 @@ class DiagramTest(unittest.TestCase):
     def t_diagram_pdf(self):
         """Output circular and linear diagrams of a GenBank sequence to PDF.
         """
-        genbank_entry = self.load_sequence(os.path.join("GenBank","arab1.gb"))
+        genbank_entry = self.load_sequence(os.path.join("GenBank","NC_005816.gb"))
         
         gdd = Diagram('Test Diagram')
 
+        #First add some feature sets:
         gdfs1 = FeatureSet(name='CDS features')
         gdfs2 = FeatureSet(name='gene features')
         gdfs3 = FeatureSet(name='misc_features')
@@ -292,40 +293,56 @@ class DiagramTest(unittest.TestCase):
                    scale_largetick_interval=1e4)
         gdt2.add_set(gdfs2)
                 
-        gdt3 = Track('misc features', greytrack=1,
+        gdt3 = Track('misc features and repeats', greytrack=1,
                    scale_largetick_interval=1e4)
         gdt3.add_set(gdfs3)
-        gdt3.add_set(gdfs4)        
+        gdt3.add_set(gdfs4)
 
-        step = (end-start)/2000
-        gdgs = GraphSet('GC Content')
+        #Now add some graph sets:
+
+        #Use a fairly large step so we can easily tell the difference
+        #between the bar and line graphs.
+        step = (end-start)/200
+        gdgs1 = GraphSet('GC skew')
         
         graphdata1 = apply_to_window(genbank_entry.seq, step, calc_gc_skew, step)
-        gdgs.new_graph(graphdata1, 'GC Skew', style='bar',
+        gdgs1.new_graph(graphdata1, 'GC Skew', style='bar',
                 color=colors.violet,
                 altcolor=colors.purple)
         
         gdt4 = Track(\
-                'GC Skew (bar), GCContent(green line), ATContent(red line)',
+                'GC Skew (bar)',
                 height=1.94, greytrack=1,
                 scale_largetick_interval=1e4)
-        gdt4.add_set(gdgs)
+        gdt4.add_set(gdgs1)
 
+
+        gdgs2 = GraphSet('GC and AT Content')
         graphdata2 = apply_to_window(genbank_entry.seq, step, calc_gc_content, step)
-        gdgs.new_graph(graphdata2, 'GC content', style='line', 
+        gdgs2.new_graph(graphdata2, 'GC content', style='line', 
                 color=colors.lightgreen,
                 altcolor=colors.darkseagreen)
 
         graphdata3 = apply_to_window(genbank_entry.seq, step, calc_at_content, step)
-        gdgs.new_graph(graphdata3, 'AT content', style='line', 
+        gdgs2.new_graph(graphdata3, 'AT content', style='line', 
                 color=colors.orange,
                 altcolor=colors.red)    
-        
-        gdd.add_track(gdt1, 2)
-        gdd.add_track(gdt2, 4)
-        gdd.add_track(gdt4, 5)
-        gdd.add_track(gdt3, 6)
 
+        gdt5 = Track(\
+                'GC Content(green line), AT Content(red line)',
+                height=1.94, greytrack=1,
+                scale_largetick_interval=1e4)
+        gdt5.add_set(gdgs2)
+
+        #Add the tracks (from both features and graphs)
+        #Leave some white space in the middle
+        gdd.add_track(gdt4, 3) # GC skew
+        gdd.add_track(gdt5, 4) # GC and AT content
+        gdd.add_track(gdt1, 5) # CDS features
+        gdd.add_track(gdt2, 6) # Gene features
+        gdd.add_track(gdt3, 7) # Misc features and repeat feature
+
+        #Finally draw it in both formats,
         gdd.draw(format='circular', orientation='landscape',
              tracklines=0, pagesize='A0', circular=True,
              start=start, end=end)
@@ -333,7 +350,7 @@ class DiagramTest(unittest.TestCase):
         gdd.write(output_filename, 'PDF')
         
         gdd.draw(format='linear', orientation='landscape',
-             tracklines=0, pagesize='A0', fragments=20,
+             tracklines=0, pagesize='A0', fragments=3,
              start=start, end=end)
         output_filename = os.path.join('Graphics', 'DiagramTestLinear.pdf')
         gdd.write(output_filename, 'PDF')
