@@ -679,12 +679,10 @@ class CircularDrawer(AbstractDrawer):
             largeinterval = int(track.scale_largetick_interval)
             largeticks = range(self.start, self.end, largeinterval)
             largeticks = [largeinterval*(pos/largeinterval) for pos in largeticks]
-            if largeticks[0] == 0:
+            # There could be NO large ticks,
+            if largeticks and largeticks[0] == 0:
                 largeticks[0] = 1
             for tickpos in largeticks:
-            #for tickpos in xrange(self.start, self.end,
-            #                      int(track.scale_largetick_interval)):
-                
                 tick, label = self.draw_tick(tickpos, ctr, ticklen,
                                              track,
                                              track.scale_largetick_labels)
@@ -696,11 +694,10 @@ class CircularDrawer(AbstractDrawer):
             smallinterval = int(track.scale_smalltick_interval)
             smallticks = range(self.start, self.end, smallinterval)
             smallticks = [smallinterval*(pos/smallinterval) for pos in smallticks]
-            if smallticks[0] == 0:
+            # There could be NO small ticks,
+            if smallticks and smallticks[0] == 0:
                 smallticks[0] = 1
             for tickpos in smallticks:
-            #for tickpos in xrange(self.start, self.end,
-            #                      int(track.scale_smalltick_interval)):
                 tick, label = self.draw_tick(tickpos, ctr, ticklen,
                                              track,
                                              track.scale_smalltick_labels)

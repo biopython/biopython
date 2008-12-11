@@ -427,6 +427,8 @@ class LinearDrawer(AbstractDrawer):
             Returns a drawing element that is the tick on the scale
         """
         fragment, tickx = self.canvas_location(tickpos) # Tick co-ordinates
+        assert fragment >=0, \
+               "Fragment %i, tickpos %i" % (fragment, tickpos)
         tctr = ctr + self.fragment_lines[fragment][0]   # Centreline of the track
         tickx += self.x0                # Tick X co-ord
         ticktop = tctr + ticklen        # Y co-ord of tick top
@@ -493,7 +495,8 @@ class LinearDrawer(AbstractDrawer):
             largeinterval = int(track.scale_largetick_interval)
             largeticks = range(self.start, self.end, largeinterval)
             largeticks = [largeinterval*(pos/largeinterval) for pos in largeticks]
-            if largeticks[0] == 0:
+            #Could be NO large ticks at all,
+            if largeticks and largeticks[0] == 0:
                 largeticks[0] = 1
             for tickpos in largeticks:
                 tick, label = self.draw_tick(tickpos, ctr, ticklen,
@@ -507,7 +510,8 @@ class LinearDrawer(AbstractDrawer):
             smallinterval = track.scale_smalltick_interval
             smallticks = range(int(self.start), int(self.end), int(smallinterval))
             smallticks = [smallinterval*(pos/smallinterval) for pos in smallticks]
-            if smallticks[0] == 0:
+            #Could be NO small ticks at all,
+            if smallticks and smallticks[0] == 0:
                 smallticks[0] = 1
             for tickpos in smallticks:
                 tick, label = self.draw_tick(tickpos, ctr, ticklen,
@@ -1070,7 +1074,8 @@ class LinearDrawer(AbstractDrawer):
         fragment = int(base / self.fragment_bases)
         if fragment < 1:    # First fragment
             base_offset = base
-        else:               # Calculate number of bases from star of fragment
+            fragment = 0
+        else:               # Calculate number of bases from start of fragment
             base_offset = base % self.fragment_bases
         # Calculate number of pixels from start of fragment
         x_offset = 1. * self.pagewidth * base_offset / self.fragment_bases
