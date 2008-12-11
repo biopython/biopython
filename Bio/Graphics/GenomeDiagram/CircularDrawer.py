@@ -900,15 +900,15 @@ class CircularDrawer(AbstractDrawer):
 
             o endangle      Float angle subtended by end of arc at drawing centre
 
-            o color        colors.Color object for arc
+            o color        colors.Color object for arc (overridden by backwards
+                           compatible argument with UK spelling, colour).
 
             Returns a Group object describing an arc corresponding to the passed
             values            
         """
-
+        #Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:
             color = colour
-
 
         if border is None:
             border = color

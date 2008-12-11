@@ -175,11 +175,15 @@ class Track:
                                         rotate the grey track labels
 
             o greytrack_font_color     colors.Color describing the color to draw
-                                        the grey track labels
+                                       the grey track labels (overridden by
+                                       backwards compatible argument with UK
+                                       spelling, colour).
 
             o scale     Boolean, 1 if a scale is to be drawn on the track
 
             o scale_color  colors.Color to draw the elemnts of the scale
+                           (overridden by backwards compatible argument with UK
+                           spelling, colour).
 
             o scale_font    String describing the font to use for the scale labels
 
@@ -207,14 +211,17 @@ class Track:
                                         should be written over large ticks
                                         
             o scale_smalltick_labels    Boolean describing whether position labels
-                                        should be written over small ticks            o name          String to help identify the track
+                                        should be written over small ticks
+
+            o name          String to help identify the track
             
             o height        Relative height to draw the track
 
             o axis_labels       Boolean describing whether the value labels should
                                 be placed on the Y axes
         """
-        if greytrack_font_colour is not None:
+        #Let the UK spelling (colour) override the USA spelling (color)
+        if greytrack_font_color is not None:
             greytrack_font_color = greytrack_font_colour
         if scale_colour is not None:
             scale_color = scale_colour

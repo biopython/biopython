@@ -82,7 +82,8 @@ class GraphSet:
 
 
     def new_graph(self, data, name=None, style='bar', color=colors.lightgreen,
-                  altcolor=colors.darkseagreen, linewidth=1, centre=None, colour=None, altcolour=None):
+                  altcolor=colors.darkseagreen, linewidth=1, centre=None,
+                  colour=None, altcolour=None):
         """ new_graph(self, data, name=None, style='bar', color=colors.lightgreen,
                   altcolor=colors.darkseagreen)
 
@@ -94,11 +95,13 @@ class GraphSet:
                         will be drawn
 
             o color    colors.Color describing the color to draw all or 'high'
-                        (some styles) data
+                       (some styles) data (overridden by backwards compatible
+                       argument with UK spelling, colour).
 
-            o altcolor colors.Color describing the color to draw 'low' (some
-                        styles) data
-
+            o altcolor  colors.Color describing the color to draw 'low' (some
+                        styles) data (overridden by backwards compatible argument
+                        with UK spelling, colour).
+            
             o linewidth     Float describing linewidth for graph
 
             o centre        Float setting the value at which the x-axis
@@ -107,9 +110,9 @@ class GraphSet:
             Add a GraphData object to the diagram (will be stored
             internally
         """
+        #Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:
             color = colour
-
         if altcolour is not None:
             altcolor = altcolour
 

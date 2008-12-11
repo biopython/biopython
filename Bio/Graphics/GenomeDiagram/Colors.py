@@ -64,15 +64,18 @@ class ColorTranslator:
         """ translate(self, color)
 
             o color    Color defined as an int, a tuple of three ints 0->255
-                        or a tuple of three floats 0 -> 1
+                       or a tuple of three floats 0 -> 1 (overridden by
+                       backwards compatible argument with UK spelling, colour).
 
             Returns a colors.Color object, determined semi-intelligently
             depending on the input values
         """
+        #Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:
             color = colour
+        
         if color is None:
-            raise ValueError, "Passed colour must be a valid colour type"
+            raise ValueError, "Passed color (or colour) must be a valid color type"
         if type(color) == type(1):
             color = self.scheme_color(color)
         elif type(color) == type((1., 2., 3.)) and type(color[0]) == type(1.):

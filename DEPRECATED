@@ -2,6 +2,19 @@ This file provides documentation for modules in Biopython that have been moved
 or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
 
+Bio.Graphics.GenomeDiagram and colour/color
+===========================================
+GenomeDiagram originally used colour (UK spelling of color) for argument names.
+For its integration into Biopython 1.50, this will support both colour and color,
+to help people port existing scripts written for the standalone version of
+GenomeDiagram.  However, we do intend to deprecate and then eventually remove
+support for colour in later releases of Biopython.
+
+Bio.AlignAce and Bio.MEME
+=========================
+As of Biopython 1.50, these modules are considered to be obsolete with the
+introduction of Bio.Motif, and will be deprecated in a future release.
+
 Numeric support
 ===============
 Following the release of 1.48, Numeric support in Biopython is discontinued.

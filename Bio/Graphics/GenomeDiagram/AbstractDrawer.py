@@ -83,23 +83,28 @@ def page_sizes(size):
 
 
 def draw_box((x1, y1), (x2, y2), (x3, y3), (x4, y4),
-              colour=colors.lightgreen, border=None, color=None):
+              color=colors.lightgreen, border=None, colour=None):
     """ draw_box(self, (x1, y1), (x2, y2), (x3, y3), (x4, y4),
               color=colors.lightgreen)
 
         o (x1,y1)...(x4,y4)   Co-ordinates for four corners of the box
         
-        o color              The color for the box
+        o color /colour       The color for the box
+                              (colour takes priority over color)
+                              
+        o border              Border color for the box
 
         Returns a closed path object, beginning at (x1,y1) going round
         the four points in order, and filling with the passed color.            
     """
-    if color is None:
+    #Let the UK spelling (colour) override the USA spelling (color)
+    if colour is not None:
         color = colour
+    
     if color == colors.white and border is None:   # Force black border on 
         strokecolor = colors.black                 # white boxes with
     elif border is None:                           # undefined border, else
-        strokecolor = color                        # use fill colour
+        strokecolor = color                        # use fill color
     elif border is not None:
         strokecolor = border
     return Polygon([x1, y1, x2, y2, x3, y3, x4, y4],

@@ -105,11 +105,14 @@ class Feature:
 
             o feature   Bio.SeqFeature object to be wrapped
 
-            o color    color.Color Color to draw the feature (overridden if
-                        'color' found in feature qualifiers
+            o color    color.Color Color to draw the feature (overridden
+                       by backwards compatible argument with UK spelling,
+                       colour).  Either argument is overridden if 'color'
+                       is found in feature qualifiers
 
             o label     Boolean, 1 if the label should be shown
         """
+        #Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:
             color = colour
 
@@ -229,22 +232,23 @@ class Feature:
         """
         return self._feature
 
+    def set_colour(self, colour):
+        """Backwards compatible variant of set_color(self, color) using UK spelling."""
+        color = self._colortranslator.translate(colour)
+        self.color = color
 
-    def set_color(self, color, colour=None):
+    def set_color(self, color):
         """ set_color(self, color)
 
             o color    The color to draw the feature - either a colors.Color
-                        object, an RGB tuple of floats, or an integer
-                        corresponding to colors in colors.txt
-
+                       object, an RGB tuple of floats, or an integer
+                       corresponding to colors in colors.txt
+                           
             Set the color in which the feature will be drawn
         """
-        if colour is not None:
-            color = colour
-
+        #TODO - Make this into the set method for a color property?
         color = self._colortranslator.translate(color)
         self.color = color
-
 
     def __getattr__(self, name):
         """ __getattr__(self, name) -> various

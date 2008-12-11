@@ -100,15 +100,18 @@ class GraphData:
             o style String describing the presentation style ('bar', 'line',
                     'heat')
 
-            o color    colors.Color describing the color to draw all or the
-                    'high' (some styles) values
+            o color   colors.Color describing the color to draw all or the
+                      'high' (some styles) values (overridden by backwards
+                      compatible argument with UK spelling, colour).
 
             o altcolor colors.Color describing the color to draw the 'low'
-                    values (some styles only)
+                       values (some styles only) (overridden by backwards
+                       compatible argument with UK spelling, colour).
         """
+
+        #Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:
             color = colour
-
         if altcolour is not None:
             altcolor = altcolour
 

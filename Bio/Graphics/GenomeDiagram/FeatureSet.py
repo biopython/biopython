@@ -117,6 +117,9 @@ class FeatureSet(object):
         id = self.next_id                                  # get id number
         self.features[id] = Feature(self, id, feature)   # add feature
         for key in kwargs:
+            if key == "colour" :
+                #Deal with "colour" as a special case by also mapping to "color"
+                setattr(self.features[id], "color", kwargs[key])
             setattr(self.features[id], key, kwargs[key])
         self.next_id += 1                                  # increment next id
 
@@ -147,6 +150,12 @@ class FeatureSet(object):
             if hasattr(feature, attr):    
 	        if getattr(feature, attr) != value:
 		    setattr(feature, attr, value) # set it to the passed value
+
+        #For backwards compatibility, we support both colour and color.
+	#As a quick hack, make "colour" set both "colour" and "color".
+	#if attr=="colour" :
+        #    self.set_all_feature("color",value)
+	
 
     def get_features(self, attribute=None, value=None, comparator=None):
         """ get_features(self, attribute=None, value=None, comparator=None) ->
