@@ -231,18 +231,61 @@ class GraphTest(unittest.TestCase):
 
 class DiagramTest(unittest.TestCase):
     """Creating feature sets, graph sets, tracks etc individually for the diagram."""
-    
-    def load_sequence(self, filename):
-        """Load a GenBank file as a SeqRecord."""
-        handle = open(filename, 'r')
-        genbank_entry = SeqIO.read(handle, "genbank")
+    def setUp(self) :
+        """Test setup, just loads a GenBank file as a SeqRecord."""
+        handle = open(os.path.join("GenBank","NC_005816.gb"), 'r')
+        self.record = SeqIO.read(handle, "genbank")
         handle.close()
-        return genbank_entry
+
+    def t_partial_diagram(self) :
+        """construct and draw PDF for just part of a SeqRecord."""
+        genbank_entry = self.record
+        start = 6500
+        end = 8750
+        
+        gdd = Diagram('Test Diagram')
+        #Add a track of features,
+        gdt_features = gdd.new_track(1, greytrack=True,
+                                     name="CDS Features",
+                                     scale_largetick_interval=1000,
+                                     scale_smalltick_interval=100,
+                                     scale_format = "SInt",
+                                     greytrack_labels=False,
+                                     height=0.5)
+        #We'll just use one feature set for these features,
+        gds_features = gdt_features.new_set()
+        for feature in genbank_entry.features:
+            if feature.type <> "CDS" :
+                #We're going to ignore these.
+                continue
+            if feature.location.end.position < start :
+                #Out of frame (too far left)
+                continue
+            if feature.location.start.position > end :
+                #Out of frame (too far right)
+                continue
+            if len(gds_features) % 2 == 0 :
+                color = "orange"
+            else :
+                color = "red"
+            #Checking it can cope with the old UK spelling colour.
+            #Also show the labels perpendicular to the track.
+            gds_features.add_feature(feature, colour=color,
+                                     label_position = "start",
+                                     label_size = 8,
+                                     label_angle = 90,
+                                     label=True)
+
+        #And draw it...
+        gdd.draw(format='linear', orientation='landscape',
+                 tracklines=False, pagesize=(10*cm,6*cm), fragments=1,
+                 start=start, end=end)
+        output_filename = os.path.join('Graphics', 'GD_region_linear.pdf')
+        gdd.write(output_filename, 'PDF')
 
     def t_diagram_via_methods_pdf(self) :
         """Construct and draw PDF using method approach."""
-        
-        genbank_entry = self.load_sequence(os.path.join("GenBank","NC_005816.gb"))
+        genbank_entry = self.record
         gdd = Diagram('Test Diagram')
 
         #Add a track of features,
@@ -320,8 +363,7 @@ class DiagramTest(unittest.TestCase):
 
     def t_diagram_via_object_pdf(self):
         """Construct and draw PDF using object approach."""
-        genbank_entry = self.load_sequence(os.path.join("GenBank","NC_005816.gb"))
-        
+        genbank_entry = self.record
         gdd = Diagram('Test Diagram')
 
         #First add some feature sets:

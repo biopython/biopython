@@ -3,8 +3,9 @@ t_slicing (test_GenomeDiagram.GraphTest) ... ok
 Test color translations. ... ok
 Construct and draw PDF using method approach. ... ok
 Construct and draw PDF using object approach. ... ok
+construct and draw PDF for just part of a SeqRecord. ... ok
 
 ----------------------------------------------------------------------
-Ran 4 tests in 15.136s
+Ran 5 tests in 27.700s
 
 OK
