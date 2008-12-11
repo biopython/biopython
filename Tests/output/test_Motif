@@ -1,1 +1,13 @@
 test_Motif
+Ensure that we can write proper FASTA output files. ... ok
+Ensure that we can write proper TransFac output files. ... ok
+Test to be sure that Motif can parse AlignAce output files. ... ok
+Test to be sure that Motif can parse MEME output files. ... ok
+Ensure that we can write proper pfm output files. ... ok
+Test to be sure that Motif can parse pfm  files. ... ok
+Test to be sure that Motif can parse sites files. ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.040s
+
+OK
