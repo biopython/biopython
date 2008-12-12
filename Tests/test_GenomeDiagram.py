@@ -12,12 +12,13 @@ import unittest
 import string
 
 # Do we have ReportLab?  Raise error if not present.
+from Bio import MissingExternalDependencyError
 try:
     from reportlab.lib import colors
     from reportlab.pdfbase import pdfmetrics
     from reportlab.pdfbase.ttfonts import TTFont
     from reportlab.lib.units import cm
-except:
+except ImportError:
     raise MissingExternalDependencyError(\
             "Install reportlab if you want to use Bio.Graphics.")
 
