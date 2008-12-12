@@ -159,7 +159,7 @@ def calc_at_skew(sequence):
 def calc_dinucleotide_counts(sequence):
     """Returns the total count of di-nucleotides repeats (e.g. "AA", "CC").
 
-    This is purely for the same of generating some non-random sequence
+    This is purely for the sake of generating some non-random sequence
     based score for plotting, with no expected biological meaning.
 
     NOTE - Only considers same case pairs.
@@ -264,6 +264,8 @@ class DiagramTest(unittest.TestCase):
             if feature.location.start.position > end :
                 #Out of frame (too far right)
                 continue
+            #Note that I am using strings for color names, instead
+            #of passing in color objects.  This should also work!
             if len(gds_features) % 2 == 0 :
                 color = "orange"
             else :
@@ -282,6 +284,11 @@ class DiagramTest(unittest.TestCase):
                  start=start, end=end)
         output_filename = os.path.join('Graphics', 'GD_region_linear.pdf')
         gdd.write(output_filename, 'PDF')
+
+        #This will only work if PIL and appropriate fonts are installed:
+        #output_filename = os.path.join('Graphics', 'GD_region_linear.png')
+        #gdd.write(output_filename, 'PNG')
+
 
     def t_diagram_via_methods_pdf(self) :
         """Construct and draw PDF using method approach."""

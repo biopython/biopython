@@ -117,9 +117,14 @@ class FeatureSet(object):
         id = self.next_id                                  # get id number
         self.features[id] = Feature(self, id, feature)   # add feature
         for key in kwargs:
-            if key == "colour" :
-                #Deal with "colour" as a special case by also mapping to "color"
-                setattr(self.features[id], "color", kwargs[key])
+            if key == "colour" or key == "color" :
+                #Deal with "colour" as a special case by also mapping to color.
+                #If Feature.py used a python property we wouldn't need to call
+                #set_color explicitly.  However, this is important to make sure
+                #every color gets mapped to a colors object - for example color
+                #numbers, or strings (may not matter for PDF, but does for PNG).
+                self.features[id].set_color(kwargs[key])
+                continue
             setattr(self.features[id], key, kwargs[key])
         self.next_id += 1                                  # increment next id
 
