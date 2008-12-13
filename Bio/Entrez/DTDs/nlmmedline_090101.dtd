@@ -1,0 +1,74 @@
+<!-- NLMMedline DTD              
+
+     Comments and suggestions are welcome.
+     January 1, 2009 v.3
+
+     **THIS IS THE FORTHCOMING DTD FOR 2009 NOT CURRENTLY IN USE.  
+     SEE http://www.nlm.nih.gov/databases/dtd/nlmmedline_080101.dtd FOR THE 
+     NLMMEDLINE DTD DATED JANUARY 1, 2008 CURRENTLY IN USE.**  
+            
+     This is the DTD which the U.S. National Library of Medicine 
+     has written for External Use.        
+     If you are a data Licensee, the data are found in 
+     MedlineCitationSet.       
+ 
+     NOTE:  The use of "Medline" in a DTD or element name does not mean the record 
+     represents a citation from a Medline-selected journal.  When the NLM DTDs and 
+     XML elements were first created, MEDLINE records were the only data exported. 
+     Now NLM exports citations other than MEDLINE records using these tools. To 
+     minimize unnecessary disruption to users of the data and tools, NLM has
+     retained the original DTD and element names (e.g., NLMMedline DTD, MedlineTA,
+     MedlineJournalInfo)).       
+       
+  * = 0 or more occurrences (optional element, repeatable)
+  ? = 0 or 1 occurrences (optional element, at most 1)
+  + = 1 or more occurrences (required element, repeatable)
+  | = choice, one or the other but not both 
+  no symbol = required element
+-->
+<!-- ================================================================= -->
+<!--   NLMMedline DTD   -->
+<!-- Typical usage:   
+
+  <!DOCTYPE MedlineCitationSet PUBLIC "-//NLM//DTD NLM Medline//EN">
+
+-->
+<!-- ================================================================= -->
+<!--   Revision Notes Section 
+
+The following changes were made in the nlmmedline_090101.dtd:
+  
+       a.  Changed entity reference from "nlmmedlinecitation_080101.dtd"
+           to: "nlmmedlinecitation_090101.dtd"
+
+       b.  CHANGE WITHDRAWN FOR V.2: Delete entity NlmDcmsID.Ref and
+           NlmDcmsID element
+
+       c.  FOR V.3: Added GrantCountry.Ref entity
+        
+     Historic Revision notes for previous versions of NLMMedline DTD 
+     See:
+     http://www.nlm.nih.gov/databases/dtd/history_dtd_nlmmedline.html
+-->
+<!-- ================================================================= -->
+<!--  external DTD entities                        -->
+<!ENTITY % Acronym.Ref "Acronym?">
+<!ENTITY % Agency.Ref "Agency">
+<!ENTITY % ArticleTitle.Ref "ArticleTitle">
+<!ENTITY % DateCreated.Ref "DateCreated">
+<!ENTITY % GrantCountry.Ref "Country?">
+<!ENTITY % GrantID.Ref "GrantID?">
+<!ENTITY % ISSN.Ref "ISSN?">
+<!ENTITY % NlmDcmsID.Ref "NlmDcmsID?">
+<!ENTITY % PMID.Ref "PMID">
+<!ENTITY % PubDate.Ref "PubDate">
+<!ENTITY % PublicationType.Ref  "PublicationTypeList">
+<!-- ================================================================= -->
+<!-- Reference to Where the NLM MedlineCitation DTD is located  -->
+<!ENTITY % MedlineCitation PUBLIC "-//NLM//DTD MedlineCitation, 1st January 2009//EN"
+"nlmmedlinecitation_090101.dtd" >  
+%MedlineCitation;
+<!-- ================================================================= -->
+<!ELEMENT DeleteCitation (PMID+)>
+<!ELEMENT MedlineCitationSet (MedlineCitation*, DeleteCitation?)>
+<!-- ================================================================= -->

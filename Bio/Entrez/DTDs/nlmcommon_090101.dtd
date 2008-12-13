@@ -1,0 +1,220 @@
+<!-- NLMCommon DTD
+
+     Comments and suggestions are welcome.
+     January 1, 2009 v.2
+
+     **THIS IS THE FORTHCOMING DTD FOR 2009 NOT CURRENTLY IN USE.  
+     SEE http://www.nlm.nih.gov/databases/dtd/nlmcommon_080101.dtd FOR THE 
+     NLMCOMMON DTD DATED JANUARY 1, 2008 CURRENTLY IN USE.**  
+             
+     This is the DTD for data elements that are shared 
+     among various applications at the U.S. National Library of Medicine. 
+ 
+    NOTE:  The use of "Medline" in a DTD or element name does not mean the record 
+    represents a citation from a Medline-selected journal.  When the NLM DTDs and 
+    XML elements were first created, MEDLINE records were the only data exported. 
+    Now NLM exports citations other than MEDLINE records using these tools. To 
+    minimize unnecessary disruption to users of the data and tools, NLM has
+    retained the original DTD and element names (e.g., NLMMedline DTD, MedlineTA,
+    MedlineJournalInfo)).       
+
+  * = 0 or more occurrences (optional element, repeatable)
+  ? = 0 or 1 occurrences (optional element, at most 1)
+  + = 1 or more occurrences (required element, repeatable)
+   | = choice, one or the other but not both 
+  no symbol = required element
+-->
+<!--    NLMCommon.dtd
+
+        Document Type Definition for the PubMed Article DTD
+        $Id: nlmcommon_090101.dtd,v 1.1 2008-12-13 18:18:29 peterc Exp $
+-->
+<!-- ====================================================================== -->
+<!--   Revision Notes Section
+    
+    The following changes were made in the nlmcommon_090101.dtd:
+    
+     a. Added ValidYN attribute to Investigator element
+            
+     b. Moved OtherAbstract element from nlmsharedcatcit to nlmcommon dtd
+
+     c. Added OtherAbstract element to NCBIArticle element
+
+     d. Moved entity Type from nlmmedlinecitation to nlmcommon dtd
+ 
+     e. Added Publisher value to entity Type 
+     
+     f. Deleted Consumer value from entity Type 
+
+     g. Added Country element to Grant element
+  
+     h. FOR V.2: Changed Country value to GrantCountry.Ref in Grant element
+ 
+                
+     Historic Revision notes for previous versions of NLMCommon DTD
+     See:
+     http://www.nlm.nih.gov/databases/dtd/history_dtd_nlmcommon.html
+-->
+<!-- ================================================================= -->
+<!--     internal DTD entities             -->   
+<!ENTITY % Abstract "(AbstractText,CopyrightInformation?)">
+<!ENTITY % personal.name "(LastName,(ForeName|(FirstName,MiddleName?))?,
+                           Initials?,Suffix?)">
+<!ENTITY % author.name "(%personal.name; | CollectiveName)">
+<!ENTITY % data.template "#PCDATA">
+<!ENTITY % ImprintType "(Current | Original)">
+<!ENTITY % IndexingStatus "(Ceased-publication |  Continued-by-another-indexed-title | 
+                            Currently-indexed |  Currently-indexed-Title-changed |
+                            Date-range-of-indexed-citations-unspecified | 
+                            Deselected) #IMPLIED">
+<!ENTITY % IndexingTreatment "(Unknown | Full | Selective | ReferencedIn | 
+                               ReferencedInNoDetails) #IMPLIED">
+<!ENTITY % normal.date "(Year,Month,Day,(Hour,(Minute,Second?)?)?)">
+<!ENTITY % pub.date "((Year, ((Month, Day?) | Season)?) | MedlineDate)">
+<!ENTITY % Type "(AAMC | AIDS | KIE | PIP | NASA | Publisher) #REQUIRED">
+<!-- ================================================================= -->
+<!-- ================================================================= -->
+<!-- This is the top level element for NCBIArticle -->
+<!ELEMENT NCBIArticle (PMID, Article, MedlineJournalInfo,InvestigatorList?,OtherAbstract?)>
+<!-- ================================================================= -->
+<!-- This is the top level element for Article -->
+<!ELEMENT Article ((Journal | Book), %ArticleTitle.Ref;,
+                  ((Pagination, ELocationID*) | ELocationID+),
+                   Abstract?, Affiliation?, AuthorList?, Language+, DataBankList?, 
+                    GrantList?, %PublicationType.Ref;, VernacularTitle?,
+                    ArticleDate*)>
+<!-- ================================================================= -->
+<!--  Further Definitions of NLM Tags                                  -->
+<!ELEMENT Abstract (%Abstract;)>
+<!ELEMENT AbstractText (#PCDATA)>
+<!ELEMENT AccessionNumber (#PCDATA)>
+<!ELEMENT AccessionNumberList (AccessionNumber+)>
+<!ELEMENT Acronym (#PCDATA)>
+<!ELEMENT Affiliation (#PCDATA)>
+<!ELEMENT Agency (#PCDATA)>
+<!ELEMENT ArticleDate (%normal.date;)>
+<!ATTLIST ArticleDate
+          DateType CDATA  #FIXED "Electronic">
+<!ELEMENT ArticleTitle (#PCDATA)>
+<!ELEMENT Author ((%author.name;), Affiliation?,DatesAssociatedWithName?,
+                 NameQualifier?,OtherInformation?,TitleAssociatedWithName?)>
+<!ATTLIST Author
+	ValidYN (Y | N) "Y"
+>
+<!ELEMENT AuthorList (Author+)>
+<!ATTLIST AuthorList
+	CompleteYN (Y | N) "Y"
+>
+<!ELEMENT Book (%PubDate.Ref;, Publisher, Title, AuthorList?,
+                CollectionTitle?, Volume?)>
+<!ELEMENT BroadJournalHeading (#PCDATA)>
+<!ELEMENT BroadJournalHeadingList (BroadJournalHeading+)>
+<!ELEMENT Coden (#PCDATA)>
+<!ELEMENT CollectionTitle (#PCDATA)>
+<!ELEMENT CollectiveName (#PCDATA)>
+<!ELEMENT CopyrightInformation (#PCDATA)>
+<!ELEMENT Country (#PCDATA)>
+<!ELEMENT Coverage  (#PCDATA)>
+<!ELEMENT DataBank (DataBankName, AccessionNumberList?)>
+<!ELEMENT DataBankList (DataBank+)>
+<!ATTLIST DataBankList
+	CompleteYN (Y | N) "Y"
+>
+<!ELEMENT DataBankName (#PCDATA)>
+<!ELEMENT DateIssued (#PCDATA)>
+<!ELEMENT DatesAssociatedWithName (#PCDATA)>
+<!ELEMENT DatesOfSerialPublication (#PCDATA)>
+<!ELEMENT Day (#PCDATA)>
+
+<!ELEMENT DescriptorName (#PCDATA)>
+<!ATTLIST DescriptorName
+	MajorTopicYN (Y | N) "N"
+>
+<!ELEMENT Edition (#PCDATA)>
+<!ELEMENT ELocationID (#PCDATA)>
+<!ATTLIST ELocationID
+          EIdType %EIdType;
+          ValidYN  (Y | N) "Y"
+>
+<!ELEMENT EndPage (#PCDATA)>
+<!ELEMENT FirstName (#PCDATA)>
+<!ELEMENT ForeName (#PCDATA)>
+<!ELEMENT Frequency (#PCDATA)>
+<!ATTLIST Frequency 
+          FrequencyType (Current | Former) "Current"
+>
+<!ELEMENT Grant (%GrantID.Ref;, %Acronym.Ref;, %Agency.Ref;, %GrantCountry.Ref;)>
+<!ELEMENT GrantID (#PCDATA)>
+<!ELEMENT GrantList (Grant+)>
+<!ATTLIST GrantList
+	CompleteYN (Y | N) "Y"
+>
+<!ELEMENT Hour (#PCDATA)>
+<!ELEMENT Imprint (#PCDATA)>
+<!ELEMENT Initials (#PCDATA)>
+<!ELEMENT Investigator (%personal.name;, Affiliation?)>
+<!ATTLIST Investigator
+          ValidYN (Y | N) "Y"
+>
+<!ELEMENT InvestigatorList (Investigator+)>
+<!ELEMENT ISOAbbreviation (#PCDATA)>
+<!ELEMENT ISSN (#PCDATA)>
+<!ATTLIST ISSN
+	  IssnType  (Electronic | Print | Undetermined) #REQUIRED
+>
+<!ELEMENT ISSNLinking (#PCDATA)>
+<!ELEMENT Issue (#PCDATA)>
+<!ELEMENT Journal (%ISSN.Ref;, JournalIssue, Coden?, Title?, ISOAbbreviation?)>
+<!ELEMENT JournalIssue (Volume?, Issue?, %PubDate.Ref;)>
+<!ATTLIST JournalIssue
+	CitedMedium (Internet | Print) #REQUIRED
+>
+<!ELEMENT Language (#PCDATA)>
+<!ELEMENT LastName (#PCDATA)>
+<!ELEMENT MedlineDate (#PCDATA)>
+<!ELEMENT MedlineJournalInfo (Country?, MedlineTA, %NlmUniqueID.Ref;, ISSNLinking?)>
+<!ELEMENT MedlinePgn (#PCDATA)>
+<!ELEMENT MedlineTA (#PCDATA)>
+<!ELEMENT MeshHeading (DescriptorName, QualifierName*)>
+<!ELEMENT MeshHeadingList (MeshHeading+)>
+<!ELEMENT MiddleName (#PCDATA)>
+<!ELEMENT Minute (#PCDATA)>
+<!ELEMENT Month (#PCDATA)>
+<!ELEMENT NameQualifier (#PCDATA)>
+<!ELEMENT NlmUniqueID (#PCDATA)>
+<!ELEMENT OtherAbstract (%Abstract;)>
+<!ATTLIST OtherAbstract
+	Type %Type;
+>
+<!ELEMENT OtherInformation (#PCDATA)>
+<!ELEMENT Pagination ((StartPage, EndPage?, MedlinePgn?) | MedlinePgn)>
+<!ELEMENT Place (#PCDATA)>
+<!ATTLIST Place  
+       ImprintType %ImprintType; "Current"
+>
+<!ELEMENT PlaceCode (#PCDATA)>
+<!ELEMENT PMID (#PCDATA)>
+<!ELEMENT ProjectedPublicationDate (#PCDATA)>
+<!ELEMENT PubDate (%pub.date;)>
+<!ELEMENT PublicationEndYear (#PCDATA)>
+<!ELEMENT PublicationFirstYear (#PCDATA)>
+<!ELEMENT PublicationInfo (Country?, PlaceCode?, Imprint*, Place*, 
+                           Publisher*, DateIssued*,  ProjectedPublicationDate?,
+                           PublicationFirstYear?, PublicationEndYear?, Edition?,
+                           DatesOfSerialPublication*, Frequency*)>
+<!ELEMENT PublicationType (#PCDATA)>
+<!ELEMENT PublicationTypeList (PublicationType+)>
+<!ELEMENT Publisher (#PCDATA)>
+<!ELEMENT QualifierName (#PCDATA)>
+<!ATTLIST QualifierName
+	MajorTopicYN (Y | N) "N"
+>
+<!ELEMENT Season (#PCDATA)>
+<!ELEMENT Second (#PCDATA)>
+<!ELEMENT StartPage (#PCDATA)>
+<!ELEMENT Suffix (#PCDATA)>
+<!ELEMENT Title (#PCDATA)>
+<!ELEMENT TitleAssociatedWithName (#PCDATA)>
+<!ELEMENT VernacularTitle (#PCDATA)>
+<!ELEMENT Volume (#PCDATA)>
+<!ELEMENT Year (#PCDATA)>

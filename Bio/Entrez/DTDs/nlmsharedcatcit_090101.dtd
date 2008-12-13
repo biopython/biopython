@@ -1,0 +1,80 @@
+<!-- NLMSharedCatCit DTD
+
+     Comments and suggestions are welcome.
+     January 1, 2009
+
+     **THIS IS THE FORTHCOMING DTD FOR 2009 NOT CURRENTLY IN USE.  
+     SEE http://www.nlm.nih.gov/databases/dtd/nlmsharedcatcit_080101.dtd FOR THE 
+     NLMSHAREDCATCIT DTD DATED JANUARY 1, 2008 CURRENTLY IN USE.**  
+  
+     This is the DTD for data elements that are shared between 
+     NLMCatalogRecord and NLMMedlineCitation DTDs at the 
+     U.S. National Library of Medicine. 
+     
+    NOTE:  The use of "Medline" in a DTD or element name does not mean the record 
+    represents a citation from a Medline-selected journal.  When the NLM DTDs and 
+    XML elements were first created, MEDLINE records were the only data exported. 
+    Now NLM exports citations other than MEDLINE records using these tools. To 
+    minimize unnecessary disruption to users of the data and tools, NLM has
+    retained the original DTD and element names (e.g., NLMMedline DTD, MedlineTA,
+    MedlineJournalInfo)).       
+  
+  * = 0 or more occurrences (optional element, repeatable)
+  ? = 0 or 1 occurrences (optional element, at most 1)
+  + = 1 or more occurrences (required element, repeatable)
+   | = choice, one or the other but not both 
+  no symbol = required element
+-->
+<!-- ================================================================= -->
+<!--   Revision Notes Section 
+
+The following changes were made in the nlmsharedcatcit_090101.dtd:
+     
+     a.  Changed entity reference from "nlmcommon_080101.dtd"
+                      to "nlmcommon_090101.dtd"
+
+     b.  Moved OtherAbstract element from nlmsharedcatcit dtd to
+         nlmcommon dtd
+    
+    Historic Revision notes for previous versions of NLMSharedcatcit DTD
+     See:
+     http://www.nlm.nih.gov/databases/dtd/history_dtd_nlmsharedcatcit.html
+
+-->
+<!-- ====================================================================== -->
+<!-- internal DTD entities -->
+<!ENTITY % NlmUniqueID.Ref "NlmUniqueID?">
+<!-- ====================================================================== -->
+<!-- ====================================================================== -->
+<!-- Reference to Where the NLMCommon DTD is located  -->
+<!ENTITY % NlmCommon PUBLIC "-//NLM//DTD Common, 1st January 2009//EN" 
+"nlmcommon_090101.dtd"> 
+%NlmCommon;
+<!-- ======================================================================= -->
+<!--  Further Definitions of NLM Tags                                        -->
+<!ELEMENT Chemical (RegistryNumber, NameOfSubstance)>
+<!ELEMENT ChemicalList (Chemical+)>
+<!ELEMENT DateCompleted (%normal.date;)>
+<!ELEMENT DateCreated (%normal.date;)>
+<!ELEMENT DateRevised (%normal.date;)>
+<!ELEMENT GeneralNote (#PCDATA)>
+<!ELEMENT Keyword (#PCDATA)>
+<!ATTLIST Keyword
+	MajorTopicYN (Y | N) "N"
+>
+<!ELEMENT KeywordList (Keyword+)>
+<!ATTLIST KeywordList
+	Owner %Owner; "NLM"
+>
+<!ELEMENT NameOfSubstance (#PCDATA)>
+<!ELEMENT OtherID (#PCDATA)>
+<!ATTLIST OtherID
+        Prefix CDATA #IMPLIED
+	Source %Source;       
+>
+<!ELEMENT PersonalNameSubject (%personal.name;, DatesAssociatedWithName?,
+                               NameQualifier?, OtherInformation?,
+                               TitleAssociatedWithName?)>
+<!ELEMENT PersonalNameSubjectList (PersonalNameSubject+)>
+<!ELEMENT RegistryNumber (#PCDATA)>
+<!ELEMENT SpaceFlightMission (#PCDATA)>
