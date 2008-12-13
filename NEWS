@@ -10,9 +10,16 @@ The latest news is at the top.
 ===================================================================
 
 GenomeDiagram by Leighton Pritchard has been integrated into Biopython
-as the Bio.Graphics. GenomeDiagram module  If you use this code, please
-cite the publication Pritchard et al. (2006), Bioinformatics 22  616-617.
+as the Bio.Graphics.GenomeDiagram module  If you use this code, please
+cite the publication Pritchard et al. (2006), Bioinformatics 22 616-617.
 Note that like Bio.Graphics, this requires the ReportLab python library.
+
+A new module Bio.Motif has been added, which is intended to replace
+the existing Bio.AlignAce and Bio.MEME modules.
+
+The set of NCBI DTD files included with Bio.Entrez has been updated
+ready for the revised XML formats the NCBI will be introducing on
+1 Jan 2008.
 
 ===================================================================
 
