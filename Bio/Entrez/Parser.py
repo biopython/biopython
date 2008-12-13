@@ -276,8 +276,19 @@ class DataHandler:
             handle = open(path)
         except IOError:
             import warnings, urllib
-            warnings.warn("DTD file %s not found in Biopython installation; trying to retrieve it from NCBI" % filename)
-            handle = urllib.urlopen(systemId)
+            if systemId.startswith("http") :
+                #Does this ever happen?
+                url = systemId
+            else :
+                #Note - what if systemId is a relative URL?
+                handle = urllib.urlopen("http://www.ncbi.nlm.nih.gov/dtd/"+systemId)
+                #There is also to option of using the following base URL,
+                #http://eutils.ncbi.nlm.nih.gov/entrez/query/DTD/
+                #However, from personal experience, this only hosts a
+                #partial subset of all the DTD files in use by Entrez.
+            warnings.warn("Missing %s, trying access it from %s" \
+                          % (filename, url))
+            handle = urllib.urlopen(url)
         parser = self.parser.ExternalEntityParserCreate(context)
         parser.ElementDeclHandler = self.elementDecl
         parser.ParseFile(handle)
