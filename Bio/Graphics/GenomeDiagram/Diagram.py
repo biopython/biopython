@@ -29,7 +29,12 @@
 # IMPORTS
 
 # ReportLab
-from reportlab.graphics import renderPS, renderPDF, renderSVG, renderPM
+from reportlab.graphics import renderPS, renderPDF, renderSVG
+try:
+    from reportlab.graphics import renderPM
+except ImportError:
+    #This is an optional part of ReportLab, so may not be installed.
+    renderPM=None
 from reportlab.lib import pagesizes
 
 # GenomeDiagram
@@ -51,53 +56,53 @@ class Diagram(object):
 
         Provides:
 
-	Attributes:
+        Attributes:
 
-	o name         String, identifier for the diagram
+        o name         String, identifier for the diagram
 
-	o tracks       List of Track objects comprising the diagram 
+        o tracks       List of Track objects comprising the diagram 
 
-	o format       String, format of the diagram (circular/linear)
+        o format       String, format of the diagram (circular/linear)
 
-	o pagesize     String, the pagesize of output
+        o pagesize     String, the pagesize of output
 
-	o orientation  String, the page orientation (landscape/portrait)
+        o orientation  String, the page orientation (landscape/portrait)
 
-	o x            Float, the proportion of the page to take up with even 
-	                      X margins
+        o x            Float, the proportion of the page to take up with even 
+                              X margins
 
-	o y            Float, the proportion of the page to take up with even 
-	                      Y margins
+        o y            Float, the proportion of the page to take up with even 
+                              Y margins
 
-	o xl           Float, the proportion of the page to take up with the 
-	                      left X margin
+        o xl           Float, the proportion of the page to take up with the 
+                              left X margin
 
-	o xr           Float, the proportion of the page to take up with the 
-	                      right X margin
+        o xr           Float, the proportion of the page to take up with the 
+                              right X margin
 
-	o yt           Float, the proportion of the page to take up with the 
-	                      top Y margin
+        o yt           Float, the proportion of the page to take up with the 
+                              top Y margin
 
-	o yb           Float, the proportion of the page to take up with the 
-	                      bottom Y margin
+        o yb           Float, the proportion of the page to take up with the 
+                              bottom Y margin
 
-	o start        Int, the base/aa position to start the diagram at
+        o start        Int, the base/aa position to start the diagram at
 
-	o end          Int, the base/aa position to end the diagram at
+        o end          Int, the base/aa position to end the diagram at
 
-	o tracklines   Boolean, True if track guidelines are to be drawn
+        o tracklines   Boolean, True if track guidelines are to be drawn
 
-	o fragments    Int, for a linear diagram, the number of equal divisions
-                            into which the sequence is divided
+        o fragments    Int, for a linear diagram, the number of equal divisions
+                                into which the sequence is divided
 
-	o fragment_size Float, the proportion of the space available to each 
-                               fragment that should be used in drawing
+        o fragment_size Float, the proportion of the space available to each 
+                                   fragment that should be used in drawing
 
-	o track_size   Float, the proportion of the space available to each 
-                              track that should be used in drawing
+        o track_size   Float, the proportion of the space available to each 
+                                  track that should be used in drawing
 
-	o circular     Boolean, True if the genome/sequence to be drawn is, in 
-	                        reality, circular.  
+        o circular     Boolean, True if the genome/sequence to be drawn is, in 
+                                reality, circular.  
 
         Methods:
 
@@ -142,15 +147,15 @@ class Diagram(object):
 
     """
     def __init__(self, name=None, format='circular', pagesize='A3', 
-		 orientation='landscape', x=0.05, y=0.05, xl=None, 
-		 xr=None, yt=None, yb=None, start=None, end=None, 
-		 tracklines=False, fragments=10, fragment_size=0.9, 
-		 track_size=0.75, circular=True):
+         orientation='landscape', x=0.05, y=0.05, xl=None, 
+         xr=None, yt=None, yb=None, start=None, end=None, 
+         tracklines=False, fragments=10, fragment_size=0.9, 
+         track_size=0.75, circular=True):
         """ __init__(self, name=None)
 
             o name  String describing the diagram
 
-	    o format    String: 'circular' or 'linear', depending on the sort of
+            o format    String: 'circular' or 'linear', depending on the sort of
                         diagram required
 
             o pagesize  String describing the ISO size of the image, or a tuple
@@ -186,7 +191,7 @@ class Diagram(object):
             o end       Int, the position to stop drawing the diagram at
 
             o tracklines    Boolean flag to show (or not) lines delineating 
-	                    tracks on the diagram
+                        tracks on the diagram
 
             o fragments Int, for linear diagrams, the number of sections into
                         which to break the sequence being drawn
@@ -205,23 +210,23 @@ class Diagram(object):
         """
         self.tracks = {}   # Holds all Track objects, keyed by level
         self.name = name    # Description of the diagram
-	# Diagram page setup attributes
-	self.format = format
-	self.pagesize = pagesize
-	self.orientation = orientation
-	self.x = x
-	self.y = y
-	self.xl = xl
-	self.xr = xr
-	self.yt = yt
-	self.yb = yb
-	self.start = start
-	self.end = end
-	self.tracklines = tracklines
-	self.fragments = fragments
-	self.fragment_size = fragment_size
-	self.track_size = track_size
-	self.circular = circular
+        # Diagram page setup attributes
+        self.format = format
+        self.pagesize = pagesize
+        self.orientation = orientation
+        self.x = x
+        self.y = y
+        self.xl = xl
+        self.xr = xr
+        self.yt = yt
+        self.yb = yb
+        self.start = start
+        self.end = end
+        self.tracklines = tracklines
+        self.fragments = fragments
+        self.fragment_size = fragment_size
+        self.track_size = track_size
+        self.circular = circular
 
     def set_all_tracks(self, attr, value):
         """ set_all_tracks(self, attr, value)
@@ -248,37 +253,92 @@ class Diagram(object):
             fragment_size=None, track_size=None)
 
             Draws the diagram using the passed parameters, if any, to override
-	    previous settings for the diagram object.
+        previous settings for the diagram object.
         """
         # Pass the parameters to the drawer objects that will build the 
-	# diagrams.  At the moment, we detect overrides with an or in the 
-	# Instantiation arguments, but I suspect there's a neater way to do 
-	# this.
+    # diagrams.  At the moment, we detect overrides with an or in the 
+    # Instantiation arguments, but I suspect there's a neater way to do 
+    # this.
         if format == 'linear':
             drawer = LinearDrawer(self, pagesize or self.pagesize, 
-				    orientation or self.orientation, 
-				    x or self.x, y or self.y, xl or self.xl, 
-				    xr or self.xr, yt or self.yt, 
-				    yb or self.yb, start or self.start, 
-				    end or self.end, 
-				    tracklines or self.tracklines,
-                                    fragments or self.fragments, 
-				    fragment_size or self.fragment_size, 
-				    track_size or self.track_size)
+                                  orientation or self.orientation, 
+                                  x or self.x, y or self.y, xl or self.xl, 
+                                  xr or self.xr, yt or self.yt, 
+                                  yb or self.yb, start or self.start, 
+                                  end or self.end, 
+                                  tracklines or self.tracklines,
+                                  fragments or self.fragments, 
+                                  fragment_size or self.fragment_size, 
+                                  track_size or self.track_size)
         else:
             drawer = CircularDrawer(self, pagesize or self.pagesize, 
-				    orientation or self.orientation, 
-				    x or self.x, y or self.y, xl or self.xl, 
-				    xr or self.xr, yt or self.yt, 
-				    yb or self.yb, start or self.start, 
-				    end or self.end, 
-				    tracklines or self.tracklines,
-				    track_size or self.track_size,
-				    circular or self.circular)
+                                    orientation or self.orientation, 
+                                    x or self.x, y or self.y, xl or self.xl, 
+                                    xr or self.xr, yt or self.yt, 
+                                    yb or self.yb, start or self.start, 
+                                    end or self.end, 
+                                    tracklines or self.tracklines,
+                                    track_size or self.track_size,
+                                    circular or self.circular)
         drawer.draw()   # Tell the drawer to complete the drawing
         self.drawing = drawer.drawing  # Get the completed drawing
 
+    def _write(self, output, dpi, filename_if_not_string=None) :
+        """Helper function for output (PRIVATE).
 
+        ouput = upper case format string, e.g. PS, PDF or SVN
+                For bitmaps use JPG, BMP, GIF, PNG, TIFF/TIF, but note
+                that reportlab's renderPM module must be installed.
+
+        dpi = dots per inch, used for bitmap output only.
+        
+        filename_if_not_string = filename, will write to that file
+                                 (and the function has no return value).
+                               = None, will return the file contents as
+                                 a string.
+                               
+        This function exists to reduce code duplication between the write
+        and write_to_string methods.
+        """
+        formatdict = {'PS': renderPS,
+                      'PDF': renderPDF,
+                      'SVG': renderSVG,
+                      'JPG': renderPM,
+                      'BMP': renderPM,
+                      'GIF': renderPM,
+                      'PNG': renderPM,
+                      'TIFF': renderPM,
+                      'TIF': renderPM
+                      }
+        try :
+            drawmethod = formatdict[output]     # select drawing method
+        except KeyError :
+            raise ValueError("Output format should be one of %s" \
+                             % ", ".join(formatdict))
+
+        if drawmethod is None :
+            #i.e. We wanted renderPM but it isn't installed
+            #See the import at the top of the module.
+            from Bio import MissingExternalDependencyError
+            raise MissingExternalDependencyError( \
+                "Please install ReportLab's renderPM module")
+
+        if filename_if_not_string :
+            #To file
+            filename = filename_if_not_string
+            if drawmethod == renderPM:
+                return drawmethod.drawToFile(self.drawing, filename,
+                                             output, dpi=dpi)
+            else:
+                return drawmethod.drawToFile(self.drawing, filename)
+        else :
+            #To string
+            if drawmethod == renderPM:
+                return drawmethod.drawToString(self.drawing,
+                                               output, dpi=dpi)
+            else:
+                return drawmethod.drawToString(self.drawing)
+        
     def write(self, filename='test1.ps', output='PS', dpi=72):
         """ write(self, filename='test1.ps', output='PS', dpi=72)
 
@@ -287,50 +347,25 @@ class Diagram(object):
             o output        String indicating output format, one of PS, PDF,
                             SVG, JPG, BMP, GIF, PNG, TIFF or TIFF
 
-            Write the completed drawing out to a file in a prescribed format
-        """
-        # Distribution dictionary of allowed output formats and drawing methods
-        formatdict = {'PS': renderPS,
-                      'PDF': renderPDF,
-                      'SVG': renderSVG,
-                      'JPG': renderPM,
-                      'BMP': renderPM,
-                      'GIF': renderPM,
-                      'PNG': renderPM,
-                      'TIFF': renderPM,
-                      'TIF': renderPM
-                      }
-        drawmethod = formatdict[output]     # select drawing method
-        if drawmethod == renderPM:          # Write out the diagram
-            drawmethod.drawToFile(self.drawing, filename, output, dpi=dpi)
-        else:
-            drawmethod.drawToFile(self.drawing, filename)
+            o dpi           Resolution (dots per inch) for bitmap formats.
 
-    def write_to_string(self, output='PS'):
+            Write the completed drawing out to a file in a prescribed format
+
+            No return value.
+        """
+        self._write(output, dpi, filename)
+        
+    def write_to_string(self, output='PS', dpi=72):
         """ write(self, output='PS')
 
             o output        String indicating output format, one of PS, PDF,
                             SVG, JPG, BMP, GIF, PNG, TIFF or TIFF
 
+            o dpi           Resolution (dots per inch) for bitmap formats.
+
             Return the completed drawing as a string in a prescribed format
         """
-        # Distribution dictionary of allowed output formats and drawing methods
-        formatdict = {'PS': renderPS,
-                      'PDF': renderPDF,
-                      'SVG': renderSVG,
-                      'JPG': renderPM,
-                      'BMP': renderPM,
-                      'GIF': renderPM,
-                      'PNG': renderPM,
-                      'TIFF': renderPM,
-                      'TIF': renderPM
-                      }
-        drawmethod = formatdict[output]     # select drawing method
-        if drawmethod == renderPM:          # Write out the diagram
-            return drawmethod.drawToString(self.drawing, output)
-        else:
-            return drawmethod.drawToString(self.drawing)
-        
+        return self._write(output, dpi, None)
 
     def add_track(self, track, track_level):
         """ add_track(self, track, track_level)
@@ -488,5 +523,5 @@ class Diagram(object):
         for level in self.get_levels():
             outstr.append("Track %d: %s\n" % (level, self.tracks[level]))
         outstr = '\n'.join(outstr)
-        return outstr    	
+        return outstr       
 

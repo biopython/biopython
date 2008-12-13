@@ -238,6 +238,26 @@ class DiagramTest(unittest.TestCase):
         self.record = SeqIO.read(handle, "genbank")
         handle.close()
 
+    def t_write_arguments(self) :
+        """Check how the write methods respond to output format arguments."""
+        gdd = Diagram('Test Diagram')
+        filename = os.path.join("Graphics","error.txt")
+        for output in ["ps","pdf","xxx",None,123,5.9] :
+            try :
+                gdd.write(filename, output)
+                assert False, \
+                       "Should have rejected %s as an output format" % output
+            except ValueError, e :
+                #Good!
+                pass
+            try :
+                gdd.write_to_string(output)
+                assert False, \
+                       "Should have rejected %s as an output format" % output
+            except ValueError, e :
+                #Good!
+                pass
+
     def t_partial_diagram(self) :
         """construct and draw PDF for just part of a SeqRecord."""
         genbank_entry = self.record
