@@ -1,0 +1,293 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "homologene.asn"
+     ::DATATOOL:: by application DATATOOL version 1.9.0
+     ::DATATOOL:: on 04/10/2008 16:04:22
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "HomoloGene"
+================================================= -->
+
+
+<!-- Elements referenced from other modules:
+          Date FROM NCBI-General,
+          Seq-loc FROM NCBI-Seqloc,
+          Seq-align FROM NCBI-Seqalign -->
+<!-- ============================================ -->
+
+<!--
+ HomoloGeneEntry taxid is the tax id of the group node, which can
+ be the same as the Gene tax id in case of singletons
+-->
+<!ELEMENT HG-EntrySet (
+        HG-EntrySet_entries)>
+
+<!-- homologene entry -->
+<!ELEMENT HG-EntrySet_entries (HG-Entry*)>
+
+
+<!ELEMENT HG-Entry (
+        HG-Entry_hg-id, 
+        HG-Entry_version?, 
+        HG-Entry_title?, 
+        HG-Entry_caption?, 
+        HG-Entry_taxid?, 
+        HG-Entry_genes?, 
+        HG-Entry_cr-date?, 
+        HG-Entry_up-date?, 
+        HG-Entry_distances?, 
+        HG-Entry_commentaries?, 
+        HG-Entry_warnings?, 
+        HG-Entry_node?)>
+
+<!ELEMENT HG-Entry_hg-id (%INTEGER;)>
+
+<!ELEMENT HG-Entry_version (%INTEGER;)>
+
+<!ELEMENT HG-Entry_title (#PCDATA)>
+
+<!ELEMENT HG-Entry_caption (#PCDATA)>
+
+<!ELEMENT HG-Entry_taxid (%INTEGER;)>
+
+<!ELEMENT HG-Entry_genes (HG-Gene*)>
+
+<!ELEMENT HG-Entry_cr-date (Date)>
+
+<!ELEMENT HG-Entry_up-date (Date)>
+
+<!ELEMENT HG-Entry_distances (HG-Stats*)>
+
+<!ELEMENT HG-Entry_commentaries (HG-CommentarySet*)>
+
+<!ELEMENT HG-Entry_warnings (HG-Entry_warnings_E*)>
+
+
+<!ELEMENT HG-Entry_warnings_E (#PCDATA)>
+
+<!ELEMENT HG-Entry_node (HG-Node)>
+
+
+<!ELEMENT HG-Gene (
+        HG-Gene_geneid, 
+        HG-Gene_otherid?, 
+        HG-Gene_symbol?, 
+        HG-Gene_aliases?, 
+        HG-Gene_title, 
+        HG-Gene_taxid, 
+        HG-Gene_prot-gi?, 
+        HG-Gene_prot-acc?, 
+        HG-Gene_prot-len?, 
+        HG-Gene_nuc-gi?, 
+        HG-Gene_nuc-acc?, 
+        HG-Gene_gene-links?, 
+        HG-Gene_prot-links?, 
+        HG-Gene_domains?, 
+        HG-Gene_chr?, 
+        HG-Gene_location?, 
+        HG-Gene_locus-tag?)>
+
+<!ELEMENT HG-Gene_geneid (%INTEGER;)>
+
+<!-- internal use only!!!!! -->
+<!ELEMENT HG-Gene_otherid (%INTEGER;)>
+
+<!ELEMENT HG-Gene_symbol (#PCDATA)>
+
+<!ELEMENT HG-Gene_aliases (HG-Gene_aliases_E*)>
+
+
+<!ELEMENT HG-Gene_aliases_E (#PCDATA)>
+
+<!ELEMENT HG-Gene_title (#PCDATA)>
+
+<!--taxid of gene node -->
+<!ELEMENT HG-Gene_taxid (%INTEGER;)>
+
+<!ELEMENT HG-Gene_prot-gi (%INTEGER;)>
+
+<!ELEMENT HG-Gene_prot-acc (#PCDATA)>
+
+<!ELEMENT HG-Gene_prot-len (%INTEGER;)>
+
+<!ELEMENT HG-Gene_nuc-gi (%INTEGER;)>
+
+<!ELEMENT HG-Gene_nuc-acc (#PCDATA)>
+
+<!ELEMENT HG-Gene_gene-links (HG-Link*)>
+
+<!ELEMENT HG-Gene_prot-links (HG-Link*)>
+
+<!ELEMENT HG-Gene_domains (HG-Domain*)>
+
+<!ELEMENT HG-Gene_chr (#PCDATA)>
+
+<!-- location on the genome -->
+<!ELEMENT HG-Gene_location (Seq-loc)>
+
+<!ELEMENT HG-Gene_locus-tag (#PCDATA)>
+
+
+<!ELEMENT HG-Stats (
+        HG-Stats_gi1, 
+        HG-Stats_gi2, 
+        HG-Stats_nuc-change, 
+        HG-Stats_nuc-change-jc, 
+        HG-Stats_prot-change, 
+        HG-Stats_ka, 
+        HG-Stats_ks, 
+        HG-Stats_knr, 
+        HG-Stats_knc, 
+        HG-Stats_recip-best?)>
+
+<!ELEMENT HG-Stats_gi1 (%INTEGER;)>
+
+<!ELEMENT HG-Stats_gi2 (%INTEGER;)>
+
+<!ELEMENT HG-Stats_nuc-change (%REAL;)>
+
+<!ELEMENT HG-Stats_nuc-change-jc (%REAL;)>
+
+<!ELEMENT HG-Stats_prot-change (%REAL;)>
+
+<!ELEMENT HG-Stats_ka (%REAL;)>
+
+<!ELEMENT HG-Stats_ks (%REAL;)>
+
+<!ELEMENT HG-Stats_knr (%REAL;)>
+
+<!ELEMENT HG-Stats_knc (%REAL;)>
+
+<!ELEMENT HG-Stats_recip-best EMPTY>
+<!ATTLIST HG-Stats_recip-best value ( true | false ) #REQUIRED >
+
+
+
+<!ELEMENT HG-Commentary (
+        HG-Commentary_link, 
+        HG-Commentary_description?, 
+        HG-Commentary_caption?, 
+        HG-Commentary_provider?, 
+        HG-Commentary_other-links?, 
+        HG-Commentary_other-commentaries?, 
+        HG-Commentary_taxid?, 
+        HG-Commentary_geneid?)>
+
+<!ELEMENT HG-Commentary_link (HG-Link)>
+
+<!-- main description -->
+<!ELEMENT HG-Commentary_description (#PCDATA)>
+
+<!-- extra text -->
+<!ELEMENT HG-Commentary_caption (#PCDATA)>
+
+<!ELEMENT HG-Commentary_provider (#PCDATA)>
+
+<!ELEMENT HG-Commentary_other-links (HG-Link*)>
+
+<!ELEMENT HG-Commentary_other-commentaries (HG-Commentary*)>
+
+<!ELEMENT HG-Commentary_taxid (%INTEGER;)>
+
+<!ELEMENT HG-Commentary_geneid (%INTEGER;)>
+
+
+<!ELEMENT HG-CommentarySet (
+        HG-CommentarySet_hg-id?, 
+        HG-CommentarySet_title, 
+        HG-CommentarySet_commentaries)>
+
+<!ELEMENT HG-CommentarySet_hg-id (%INTEGER;)>
+
+<!ELEMENT HG-CommentarySet_title (#PCDATA)>
+
+<!ELEMENT HG-CommentarySet_commentaries (HG-Commentary*)>
+
+
+<!ELEMENT HG-CommentaryContainer (HG-CommentarySet*)>
+
+
+<!ELEMENT HG-Link (
+        HG-Link_hypertext, 
+        HG-Link_url?)>
+
+<!ELEMENT HG-Link_hypertext (#PCDATA)>
+
+<!ELEMENT HG-Link_url (#PCDATA)>
+
+
+<!ELEMENT HG-Domain (
+        HG-Domain_begin, 
+        HG-Domain_end, 
+        HG-Domain_pssm-id?, 
+        HG-Domain_cdd-id?, 
+        HG-Domain_cdd-name?)>
+
+<!ELEMENT HG-Domain_begin (%INTEGER;)>
+
+<!ELEMENT HG-Domain_end (%INTEGER;)>
+
+<!-- entrez uid -->
+<!ELEMENT HG-Domain_pssm-id (%INTEGER;)>
+
+<!ELEMENT HG-Domain_cdd-id (#PCDATA)>
+
+<!ELEMENT HG-Domain_cdd-name (#PCDATA)>
+
+
+<!ELEMENT HG-Node (
+        HG-Node_type, 
+        HG-Node_id, 
+        HG-Node_caption?, 
+        HG-Node_current-node?, 
+        HG-Node_children?, 
+        HG-Node_branch-len?)>
+
+<!ELEMENT HG-Node_type %ENUM;>
+<!ATTLIST HG-Node_type value (
+        family |
+        ortholog |
+        paralog |
+        leaf
+        ) #REQUIRED >
+
+
+<!ELEMENT HG-Node_id (HG-Node-id)>
+
+<!ELEMENT HG-Node_caption (#PCDATA)>
+
+<!ELEMENT HG-Node_current-node EMPTY>
+<!ATTLIST HG-Node_current-node value ( true | false ) "false" >
+
+
+<!ELEMENT HG-Node_children (HG-Node*)>
+
+<!ELEMENT HG-Node_branch-len (%INTEGER;)>
+
+
+<!ELEMENT HG-Node-id (
+        HG-Node-id_id?, 
+        HG-Node-id_id-type)>
+
+<!ELEMENT HG-Node-id_id (%INTEGER;)>
+
+<!ELEMENT HG-Node-id_id-type %ENUM;>
+<!ATTLIST HG-Node-id_id-type value (
+        none |
+        geneid |
+        hid
+        ) #REQUIRED >
+
+
+
+<!ELEMENT HG-Alignment (
+        HG-Alignment_hg-id, 
+        HG-Alignment_alignment)>
+
+<!ELEMENT HG-Alignment_hg-id (%INTEGER;)>
+
+<!ELEMENT HG-Alignment_alignment (Seq-align)>
+
+
+<!ELEMENT HG-AlignmentSet (HG-Alignment*)>
+
