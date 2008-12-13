@@ -281,7 +281,7 @@ class DataHandler:
                 url = systemId
             else :
                 #Note - what if systemId is a relative URL?
-                handle = urllib.urlopen("http://www.ncbi.nlm.nih.gov/dtd/"+systemId)
+                url = "http://www.ncbi.nlm.nih.gov/dtd/"+systemId
                 #There is also to option of using the following base URL,
                 #http://eutils.ncbi.nlm.nih.gov/entrez/query/DTD/
                 #However, from personal experience, this only hosts a
