@@ -15,6 +15,11 @@ XXX ref
 
 import numpy
 
+#TODO - Remove this work around once we drop python 2.3 support
+try:
+    set
+except NameError:
+    from sets import Set as set
 
 # XXX typecodes for Numeric
 # XXX multiprocessor
