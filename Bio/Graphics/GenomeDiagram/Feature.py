@@ -65,8 +65,15 @@ class Feature:
 
         o hide      Boolean for whether the feature will be drawn or not
 
-        o sigil     String denoting the type of sigil to use for the feature
+        o sigil     String denoting the type of sigil to use for the feature.
+                    Currently either "BOX" or "ARROW" are supported.
 
+        o arrowhead_length  Float denoting either a relative or absolute pixel
+                            length of the representative arrow to be drawn
+
+        o arrowshaft_length  Float denoting either a relative or absolute pixel
+                             length of the representative arrow to be drawn
+         
         o name_qualifiers   List of Strings, describes the qualifiers that may
                     contain feature names in the wrapped Bio.SeqFeature object
 
@@ -125,6 +132,8 @@ class Feature:
         self._feature = None            # Bio.SeqFeature object to wrap
         self.hide = 0                   # show by default
         self.sigil = 'BOX'
+        self.arrowhead_length = 0.2
+        self.arrowshaft_height = 0.4
         self.name_qualifiers = ['gene', 'label', 'name', 'locus_tag', 'product']
         self.label = label
         self.label_font = 'Helvetica'

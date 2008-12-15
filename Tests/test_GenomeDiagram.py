@@ -294,6 +294,7 @@ class DiagramTest(unittest.TestCase):
             #Checking it can cope with the old UK spelling colour.
             #Also show the labels perpendicular to the track.
             gds_features.add_feature(feature, colour=color,
+                                     sigil="ARROW",
                                      label_position = "start",
                                      label_size = 8,
                                      label_angle = 90,
@@ -306,7 +307,8 @@ class DiagramTest(unittest.TestCase):
         output_filename = os.path.join('Graphics', 'GD_region_linear.pdf')
         gdd.write(output_filename, 'PDF')
 
-        #This will only work if PIL and appropriate fonts are installed:
+        #This will only work if ReportLab's renderPM, PIL and the
+        #appropriate fonts are installed:
         #output_filename = os.path.join('Graphics', 'GD_region_linear.png')
         #gdd.write(output_filename, 'PNG')
 

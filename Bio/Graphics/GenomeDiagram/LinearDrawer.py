@@ -30,7 +30,8 @@ from reportlab.graphics.shapes import *
 from reportlab.lib import colors
 
 # GenomeDiagram imports
-from AbstractDrawer import AbstractDrawer, draw_box, intermediate_points, angle2trig
+from AbstractDrawer import AbstractDrawer, draw_box, draw_arrow
+from AbstractDrawer import intermediate_points, angle2trig
 from FeatureSet import FeatureSet
 from GraphSet import GraphSet
 
@@ -354,6 +355,7 @@ class LinearDrawer(AbstractDrawer):
         # base
         track_offsets = {}      # The offsets from fragment base for each track
         track_crop = trackunit_height*(1-self.track_size)/2.    # 'step back' in pixels
+        assert track_crop >= 0
         for track in trackunits:
             top = trackunits[track][1]*trackunit_height-track_crop  # top offset
             btm = trackunits[track][0]*trackunit_height+track_crop  # bottom offset
@@ -588,9 +590,8 @@ class LinearDrawer(AbstractDrawer):
             tbtm = btm + self.fragment_lines[fragment][0]
             tctr = ctr + self.fragment_lines[fragment][0]
             ttop = top + self.fragment_lines[fragment][0]  
-            box = draw_box((self.x0, tbtm), (self.xlim, tbtm),  # Grey track bg
-                           (self.xlim, ttop), (self.x0, ttop),  # is just a box
-                           colors.Color(0.98,0.98, 0.98))
+            box = draw_box((self.x0, tbtm), (self.xlim, ttop),  # Grey track bg
+                           colors.Color(0.98,0.98, 0.98))       # is just a box
             greytrack_bgs.append(box)
 
             if track.greytrack_labels:  # If labels are required
@@ -725,7 +726,7 @@ class LinearDrawer(AbstractDrawer):
 
         
 
-    def get_feature_sigil(self, feature, x0, x1, fragment):
+    def get_feature_sigil(self, feature, x0, x1, fragment, **kwargs):
         """ get_feature_sigil(self, feature, x0, x1, fragment) -> (element, element, element)
 
             o feature       Feature object
@@ -760,20 +761,24 @@ class LinearDrawer(AbstractDrawer):
         # Distribution dictionary for various ways of drawing the feature
         # Each method takes the corners of a containing box and a color
         # as argument
-        draw_methods = {'BOX': draw_box
+        draw_methods = {'BOX': draw_box,
+                        'ARROW': draw_arrow,
                         }
         method = draw_methods[feature.sigil]
+        kwargs['head_length'] = feature.arrowhead_length
+        kwargs['shaft_height'] = feature.arrowshaft_height
 
+        strand = feature.strand
         # Get sigil for the feature, location dependent on the feature strand
-        if feature.strand == 0:
-            sigil = method((x0, btm), (x1, btm), (x1, top), (x0, top),
-                           feature.color)
-        if feature.strand == 1:
-            sigil = method((x0, ctr), (x1, ctr), (x1, top), (x0, top),
-                           feature.color)
-        if feature.strand == -1:
-            sigil = method((x1, btm), (x0, btm), (x0, ctr), (x1, ctr),
-                           feature.color)
+        if strand == 0:
+            sigil = method((x0, btm), (x1, top), color=feature.color,
+                           **kwargs)
+        if strand == 1:
+            sigil = method((x0, ctr), (x1, top), color=feature.color,
+                           orientation='right', **kwargs)
+        if strand == -1:
+            sigil = method((x1, btm), (x0, ctr), color=feature.color,
+                           orientation='left', **kwargs)
         if feature.label:   # Feature requires a label
             label = String(0, 0, feature.name,
                            fontName=feature.label_font,
@@ -942,8 +947,7 @@ class LinearDrawer(AbstractDrawer):
                 tbtm = btm + self.fragment_lines[fragment0][0]
                 #print 'equal', pos0, pos1, val
                 #print pos0, pos1, fragment0, fragment1
-                heat_elements.append(draw_box((x0, tbtm), (x1, tbtm),
-                                              (x1, ttop), (x0, ttop),
+                heat_elements.append(draw_box((x0, tbtm), (x1, ttop),
                                               color=heat, border=None))
             else:   # box is split over two or more fragments
                 #if pos0 >= self.fragment_limits[fragment0][0]:
@@ -955,9 +959,7 @@ class LinearDrawer(AbstractDrawer):
                     ttop = top + self.fragment_lines[fragment][0]
                     tbtm = btm + self.fragment_lines[fragment][0]
                     heat_elements.append(draw_box((start, tbtm),
-                                                  (self.xlim, tbtm),
                                                   (self.xlim, ttop),
-                                                  (start, ttop),
                                                   color=heat,
                                                   border=None))
                     fragment += 1
@@ -966,8 +968,7 @@ class LinearDrawer(AbstractDrawer):
                 tbtm = btm + self.fragment_lines[fragment][0]
                 # Add the last part of the bar
                 #print 'x1 after:', x1, '\n'
-                heat_elements.append(draw_box((self.x0, tbtm), (x1, tbtm),
-                                              (x1, ttop), (self.x0, ttop),
+                heat_elements.append(draw_box((self.x0, tbtm), (x1, ttop),
                                               color=heat, border=None))                    
 
         return heat_elements
@@ -1034,8 +1035,7 @@ class LinearDrawer(AbstractDrawer):
                     x1 = self.xlim
                 tctr = ctr + self.fragment_lines[fragment0][0]
                 barval += tctr                
-                bar_elements.append(draw_box((x0, tctr), (x1, tctr),
-                                             (x1, barval), (x0, barval),
+                bar_elements.append(draw_box((x0, tctr), (x1, barval),
                                              color=barcolor))
             else:   # Box is split over two or more fragments                       
                 fragment = fragment0
@@ -1046,17 +1046,14 @@ class LinearDrawer(AbstractDrawer):
                     tctr = ctr + self.fragment_lines[fragment][0]
                     thisbarval = barval + tctr
                     bar_elements.append(draw_box((start, tctr),
-                                                 (self.xlim, tctr),
                                                  (self.xlim, thisbarval),
-                                                 (start, thisbarval),
                                                  color=barcolor))
                     fragment += 1
                     start = self.x0
                 tctr = ctr + self.fragment_lines[fragment1][0]
                 barval += tctr
                 # Add the last part of the bar
-                bar_elements.append(draw_box((self.x0, tctr), (x1, tctr),
-                                             (x1, barval), (self.x0, barval),
+                bar_elements.append(draw_box((self.x0, tctr), (x1, barval),
                                              color=barcolor))
 
         return bar_elements

@@ -8,7 +8,7 @@
 #                L.Pritchard@scri.ac.uk
 ################################################################################
 
-""" AbstractDrawer module
+""" AbstractDrawer module (considered to be a private module, the API may change!)
 
     Provides:
 
@@ -18,7 +18,7 @@
                             a valid ISO size
 
     o draw_box -            Method that returns a closed path object when passed
-                            the proper co-ordinates
+                            the proper co-ordinates.  For HORIZONTAL boxes only.
 
     o angle2trig -          Method that returns a tuple of values that are the
                             vector for rotating a point through a passed angle,
@@ -82,12 +82,13 @@ def page_sizes(size):
         raise ValueError, "%s not in list of page sizes" % size
 
 
-def draw_box((x1, y1), (x2, y2), (x3, y3), (x4, y4),
-              color=colors.lightgreen, border=None, colour=None):
+def draw_box((x1, y1), (x2, y2),
+             color=colors.lightgreen, border=None, colour=None,
+             **kwargs):
     """ draw_box(self, (x1, y1), (x2, y2), (x3, y3), (x4, y4),
               color=colors.lightgreen)
 
-        o (x1,y1)...(x4,y4)   Co-ordinates for four corners of the box
+        o (x1,y1) and (x2,y2) Co-ordinates for opposite corners of the box
         
         o color /colour       The color for the box
                               (colour takes priority over color)
@@ -100,19 +101,119 @@ def draw_box((x1, y1), (x2, y2), (x3, y3), (x4, y4),
     #Let the UK spelling (colour) override the USA spelling (color)
     if colour is not None:
         color = colour
+        del colour
+
+    if not isinstance(color, colors.Color) :
+        raise ValueError("Invalid color %s" % repr(color))
     
     if color == colors.white and border is None:   # Force black border on 
         strokecolor = colors.black                 # white boxes with
     elif border is None:                           # undefined border, else
         strokecolor = color                        # use fill color
     elif border is not None:
+        if not isinstance(border, colors.Color) :
+            raise ValueError("Invalid border color %s" % repr(border))
         strokecolor = border
+
+    x1, y1, x2, y2 = min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2)
+    return Polygon([x1, y1, x2, y1, x2, y2, x1, y2],
+                   strokeColor=strokecolor,
+                   fillColor=color,
+                   strokewidth=0)
+
+def draw_polygon((x1, y1), (x2, y2), (x3, y3), (x4, y4),
+                 color=colors.lightgreen, border=None, colour=None,
+                 **kwargs):
+    """ draw_polygon(self, (x1, y1), (x2, y2), (x3, y3), (x4, y4)
+              colour=colors.lightgreen)
+
+        o (x1,y1)...(x4,y4)   Co-ordinates for four corners of the box
+        
+        o colour              The colour for the box
+
+        Returns a closed path object, beginning at (x1,y1) going round
+        the four points in order, and filling with the passed colour.          
+    """
+    #Let the UK spelling (colour) override the USA spelling (color)
+    if colour is not None :
+        color = colour
+        del colour
+
+    if color == colors.white and border is None:   # Force black border on 
+        strokecolor = colors.black                 # white boxes with
+    elif border is None:                           # undefined border, else
+        strokecolor = colour                       # use fill colour
+    elif border is not None:
+        strokecolor = border
+
     return Polygon([x1, y1, x2, y2, x3, y3, x4, y4],
                    strokeColor=strokecolor,
                    fillColor=color,
                    strokewidth=0)
 
 
+def draw_arrow((x1, y1), (x2, y2), color=colors.lightgreen, border=None,
+               shaft_height=0.4, head_length=0.2, orientation='right',
+               colour=None, **kwargs):
+    """ Returns a closed path object representing an arrow enclosed by the
+        box with corners at {(x1,y1),(x2,y2)}, a shaft height
+        given by shaft_height (relative to box height), a head length that may
+        be absolute or relative to the overall length of the enclosing box, and
+        an orientation that may be 'left' or 'right'.
+    """
+    #Let the UK spelling (colour) override the USA spelling (color)
+    if colour is not None :
+        color = colour
+        del colour
+
+    if color == colors.white and border is None:   # Force black border on 
+        strokecolor = colors.black                 # white boxes with
+    elif border is None:                            # undefined border, else
+        strokecolor = colors.black                 # use fill colour
+    elif border is not None:
+        strokecolor = border
+
+    # Depending on the orientation, we define the bottom left (x1, y1) and
+    # top right (x2, y2) coordinates differently, but still draw the box
+    # using the same relative co-ordinates:
+    xmin, ymin = min(x1, x2), min(y1, y2)
+    xmax, ymax = max(x1, x2), max(y1, y2)
+    if orientation == 'right':
+        x1, x2, y1, y2 = xmin, xmax, ymin, ymax
+    elif orientation == 'left':
+        x1, x2, y1, y2 = xmax, xmin, ymin, ymax
+    # We define boxheight and boxwidth accordingly, and calculate the shaft
+    # height from these.  We also ensure that the maximum head length is
+    # the width of the box enclosure
+    boxheight = y2-y1
+    boxwidth = x2-x1
+    shaftheight = boxheight*shaft_height
+    head_length = min(abs(head_length), abs(boxwidth))
+    #print head_length
+    # If the passed head_length is between 1 and 0, we assume that a relative
+    # head_length is required, else we set the head length to an absolute
+    if 0 < head_length <= 1:
+        headlength = boxwidth * head_length
+    else:
+        if boxwidth < 0:
+            headlength = -head_length
+        else:
+            headlength = head_length
+    shafttop = 0.5*(boxheight+shaftheight)
+    shaftbase = boxheight-shafttop
+    headbase = boxwidth-headlength
+    midheight = 0.5*boxheight
+    return Polygon([x1, y1+shafttop,
+                    x1+headbase, y1+shafttop,
+                    x1+headbase, y2,
+                    x2, y1+midheight,
+                    x1+headbase, y1,
+                    x1+headbase, y1+shaftbase,
+                    x1, y1+shaftbase],
+                   strokeColor=strokecolor,
+                   #strokeWidth=max(1, int(boxheight/40.)),
+                   strokeWidth=1,
+                   fillColor=color)
 
 def angle2trig(theta):
     """ angle2trig(angle)

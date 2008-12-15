@@ -31,7 +31,7 @@ from reportlab.lib import colors
 from reportlab.pdfbase import _fontdata
 
 # GenomeDiagram imports
-from AbstractDrawer import AbstractDrawer, draw_box, intermediate_points
+from AbstractDrawer import AbstractDrawer, draw_polygon, intermediate_points
 from FeatureSet import FeatureSet
 from GraphSet import GraphSet
 
@@ -404,8 +404,10 @@ class CircularDrawer(AbstractDrawer):
         # Distribution dictionary for various ways of drawing the feature
         # Each method takes the inner and outer radii, the start and end angle
         # subtended at the diagram centre, and the color as arguments
-        draw_methods = {'BOX': self.draw_arc}
-
+        draw_methods = {'BOX': self.draw_arc,
+                        'ARROW': self.draw_arc, #need an arc version of draw_arrow
+                        }
+                        
         # Get sigil for the feature, location dependent on the feature strand        
         method = draw_methods[feature.sigil]
         if feature.color == colors.white:
@@ -940,8 +942,8 @@ class CircularDrawer(AbstractDrawer):
                 x2,y2 = (x0+inner_radius*endsin, y0+inner_radius*endcos)
                 x3,y3 = (x0+outer_radius*endsin, y0+outer_radius*endcos)
                 x4,y4 = (x0+outer_radius*startsin, y0+outer_radius*startcos)
-                box = draw_box((x1,y1),(x2,y2),(x3,y3),(x4,y4), color,
-                               border)
+                box = draw_polygon((x1,y1),(x2,y2),(x3,y3),(x4,y4), color,
+                                   border)
                 boxes.add(box)
             #print len(boxes.contents), n
         else:   # Narrow arc, represent with one box
@@ -950,7 +952,7 @@ class CircularDrawer(AbstractDrawer):
             x2,y2 = (x0+inner_radius*endsin, y0+inner_radius*endcos)
             x3,y3 = (x0+outer_radius*endsin, y0+outer_radius*endcos)
             x4,y4 = (x0+outer_radius*startsin, y0+outer_radius*startcos)
-            box = draw_box((x1,y1),(x2,y2),(x3,y3),(x4,y4), color,
-                           border)
+            box = draw_polygon((x1,y1),(x2,y2),(x3,y3),(x4,y4), color,
+                               border)
             boxes.add(box)
         return boxes
