@@ -153,14 +153,19 @@ def draw_polygon((x1, y1), (x2, y2), (x3, y3), (x4, y4),
 
 
 def draw_arrow((x1, y1), (x2, y2), color=colors.lightgreen, border=None,
-               shaft_height=0.4, head_length=0.2, orientation='right',
+               shaft_height_ratio=0.4, head_length_ratio=1.0, orientation='right',
                colour=None, **kwargs):
     """ Returns a closed path object representing an arrow enclosed by the
         box with corners at {(x1,y1),(x2,y2)}, a shaft height
-        given by shaft_height (relative to box height), a head length that may
-        be absolute or relative to the overall length of the enclosing box, and
+        given by shaft_height_ratio (relative to box height), a head length
+        given by head_length_ratio (also relative to box height), and
         an orientation that may be 'left' or 'right'.
     """
+    if shaft_height_ratio < 0 or 1 < shaft_height_ratio :
+        raise ValueError("Arrow shaft height ratio should be in range 0 to 1")
+    if head_length_ratio < 0 :
+        raise ValueError("Arrow head length ratio should be positive")
+
     #Let the UK spelling (colour) override the USA spelling (color)
     if colour is not None :
         color = colour
@@ -182,23 +187,21 @@ def draw_arrow((x1, y1), (x2, y2), color=colors.lightgreen, border=None,
         x1, x2, y1, y2 = xmin, xmax, ymin, ymax
     elif orientation == 'left':
         x1, x2, y1, y2 = xmax, xmin, ymin, ymax
+    else :
+        raise ValueError("Invalid orientation %s, should be 'left' or 'right'" \
+                         % repr(orientation))
+
     # We define boxheight and boxwidth accordingly, and calculate the shaft
     # height from these.  We also ensure that the maximum head length is
     # the width of the box enclosure
     boxheight = y2-y1
     boxwidth = x2-x1
-    shaftheight = boxheight*shaft_height
-    head_length = min(abs(head_length), abs(boxwidth))
-    #print head_length
-    # If the passed head_length is between 1 and 0, we assume that a relative
-    # head_length is required, else we set the head length to an absolute
-    if 0 < head_length <= 1:
-        headlength = boxwidth * head_length
-    else:
-        if boxwidth < 0:
-            headlength = -head_length
-        else:
-            headlength = head_length
+    shaftheight = boxheight*shaft_height_ratio
+    headlength = min(abs(boxheight)*head_length_ratio, abs(boxwidth))
+    if boxwidth < 0 :
+        headlength *= -1 #reverse it
+
+
     shafttop = 0.5*(boxheight+shaftheight)
     shaftbase = boxheight-shafttop
     headbase = boxwidth-headlength

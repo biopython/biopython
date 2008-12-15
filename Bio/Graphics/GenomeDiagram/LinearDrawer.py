@@ -765,8 +765,8 @@ class LinearDrawer(AbstractDrawer):
                         'ARROW': draw_arrow,
                         }
         method = draw_methods[feature.sigil]
-        kwargs['head_length'] = feature.arrowhead_length
-        kwargs['shaft_height'] = feature.arrowshaft_height
+        kwargs['head_length_ratio'] = feature.arrowhead_length
+        kwargs['shaft_height_ratio'] = feature.arrowshaft_height
 
         strand = feature.strand
         # Get sigil for the feature, location dependent on the feature strand
