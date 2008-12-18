@@ -29,6 +29,7 @@
 from reportlab.graphics.shapes import *
 from reportlab.lib import colors
 from reportlab.pdfbase import _fontdata
+from reportlab.graphics.shapes import ArcPath
 
 # GenomeDiagram imports
 from AbstractDrawer import AbstractDrawer, draw_polygon, intermediate_points
@@ -896,14 +897,17 @@ class CircularDrawer(AbstractDrawer):
             o outer_radius  Float distance of outside of arc from drawing centre
 
             o startangle    Float angle subtended by start of arc at drawing centre
+                            (in radians)
 
             o endangle      Float angle subtended by end of arc at drawing centre
+                            (in radians)
 
             o color        colors.Color object for arc (overridden by backwards
                            compatible argument with UK spelling, colour).
 
-            Returns a Group object describing an arc corresponding to the passed
-            values            
+            Returns a closed path object describing an arced box corresponding to
+            the passed values.  For very small angles, a simple four sided
+            polygon is used.
         """
         #Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:
@@ -911,48 +915,43 @@ class CircularDrawer(AbstractDrawer):
 
         if border is None:
             border = color
-        # Calculate trig values for angle and coordinates
-        startcos, startsin = cos(startangle), sin(startangle)
-        endcos, endsin = cos(endangle), sin(endangle)
-        boxes = Group()     # Holds arc elements
-        angle = float(endangle - startangle)    # angle subtended by arc
-        x0,y0 = self.xcentre, self.ycentre      # origin of the circle
 
-        # Make the arc
-        # LP: This code should be modified to use reportlab's arc functionality at the 
-        # earliest opportunity
+        if color is None:
+            color = colour
+        if color == colors.white and border is None:   # Force black border on 
+            strokecolor = colors.black                 # white boxes with
+        elif border is None:                           # undefined border, else
+            strokecolor = color                        # use fill colour
+        elif border is not None:
+            strokecolor = border
+
+        angle = float(endangle - startangle)    # angle subtended by arc
         if angle>.01:  # Wide arc, represent with multiple boxes
-            # Draw multiple boxes, representing an arc
-            n = max(50, int(angle/.01))     # Number of boxes to use
-            radiansdelta = angle/n  # Radians subtended by each box
-            points = [] # Holds values specifyifile:///usr/share/doc/HTML/index.htmlng start and end points for individual boxes
-            a = points.append       # function proxy
-            lastcos, lastsin = startcos, startsin   # Last box angle
-            # Sort out box angles
-            for angle in xrange(n):
-                newangle = startangle + angle * radiansdelta
-                newcos, newsin = cos(newangle), sin(newangle) # Next box angle
-                a((lastcos, lastsin, newcos, newsin))   # Box start and end
-                lastcos, lastsin = newcos, newsin
-            #print lastcos, lastsin, endcos, endsin
-            a((lastcos, lastsin, endcos, endsin))       # Last box
-            # Sort out box co-ordinates and add to group
-            for startcos, startsin, endcos, endsin in points:
-                x1,y1 = (x0+inner_radius*startsin, y0+inner_radius*startcos)          # calculate co-ordinates
-                x2,y2 = (x0+inner_radius*endsin, y0+inner_radius*endcos)
-                x3,y3 = (x0+outer_radius*endsin, y0+outer_radius*endcos)
-                x4,y4 = (x0+outer_radius*startsin, y0+outer_radius*startcos)
-                box = draw_polygon((x1,y1),(x2,y2),(x3,y3),(x4,y4), color,
-                                   border)
-                boxes.add(box)
-            #print len(boxes.contents), n
-        else:   # Narrow arc, represent with one box
-            x0,y0 = self.xcentre, self.ycentre                   # origin of the circle
-            x1,y1 = (x0+inner_radius*startsin, y0+inner_radius*startcos)          # calculate co-ordinates
+            p = ArcPath(strokeColor=strokecolor,
+                        fillColor=color,
+                        strokewidth=0)
+            #Note reportlab counts angles anti-clockwise from the horizontal
+            #(as in mathematics, e.g. complex numbers and polar coordinates)
+            #but we use clockwise from the vertical.  Also reportlab uses
+            #degrees, but we use radians.
+            p.addArc(self.xcentre, self.ycentre, inner_radius,
+                     90 - (endangle * 180 / pi), 90 - (startangle * 180 / pi),
+                     moveTo=True)
+            p.addArc(self.xcentre, self.ycentre, outer_radius,
+                     90 - (endangle * 180 / pi), 90 - (startangle * 180 / pi),
+                     reverse=True)
+            p.closePath()
+            return p
+        else :
+            #Cheat and just use a four sided polygon.
+            # Calculate trig values for angle and coordinates
+            startcos, startsin = cos(startangle), sin(startangle)
+            endcos, endsin = cos(endangle), sin(endangle)
+            boxes = Group()     # Holds arc elements
+            x0,y0 = self.xcentre, self.ycentre      # origin of the circle
+            x1,y1 = (x0+inner_radius*startsin, y0+inner_radius*startcos)
             x2,y2 = (x0+inner_radius*endsin, y0+inner_radius*endcos)
             x3,y3 = (x0+outer_radius*endsin, y0+outer_radius*endcos)
             x4,y4 = (x0+outer_radius*startsin, y0+outer_radius*startcos)
-            box = draw_polygon((x1,y1),(x2,y2),(x3,y3),(x4,y4), color,
-                               border)
-            boxes.add(box)
-        return boxes
+            return draw_polygon((x1,y1),(x2,y2),(x3,y3),(x4,y4), color, border)
+
