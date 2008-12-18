@@ -288,13 +288,13 @@ class DiagramTest(unittest.TestCase):
             #Note that I am using strings for color names, instead
             #of passing in color objects.  This should also work!
             if len(gds_features) % 2 == 0 :
-                color = "orange"
+                color = "white" #for testing the automatic black border!
             else :
                 color = "red"
             #Checking it can cope with the old UK spelling colour.
             #Also show the labels perpendicular to the track.
             gds_features.add_feature(feature, colour=color,
-                                     sigil="ARROW",
+                                     sigil="ARROW", #Currently linear only
                                      label_position = "start",
                                      label_size = 8,
                                      label_angle = 90,
@@ -305,6 +305,13 @@ class DiagramTest(unittest.TestCase):
                  tracklines=False, pagesize=(10*cm,6*cm), fragments=1,
                  start=start, end=end)
         output_filename = os.path.join('Graphics', 'GD_region_linear.pdf')
+        gdd.write(output_filename, 'PDF')
+
+        #Circular with a particular start/end is a bit odd, but should work!
+        gdd.draw(format='circular',
+                 tracklines=False, pagesize=(10*cm,10*cm),
+                 start=start, end=end)
+        output_filename = os.path.join('Graphics', 'GD_region_circular.pdf')
         gdd.write(output_filename, 'PDF')
 
         #This will only work if ReportLab's renderPM, PIL and the
