@@ -368,7 +368,8 @@ class Record:
         """Output for ORGANISM line with taxonomy info.
         """
         output = Record.INTERNAL_FORMAT % "ORGANISM"
-        output += "%s\n" % self.organism
+        # Now that species names can be too long, this line can wrap (Bug 2591)
+        output += _wrapped_genbank(self.organism, Record.GB_BASE_INDENT)
         output += " " * Record.GB_BASE_INDENT
         taxonomy_info = ""
         for tax in self.taxonomy:

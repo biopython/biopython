@@ -999,20 +999,31 @@ class GenBankScanner(InsdcScanner) :
                         consumer.reference_num(data[:data.find(' ')])
                         consumer.reference_bases(data[data.find(' ')+1:])
                 elif line_type == 'ORGANISM' :
-                    #The first line is the organism, but subsequent lines go to the taxonomy consumer
-                    consumer.organism(data)
-                    data = ""
+                    #Typically the first line is the organism, and subsequent lines
+                    #are the taxonomy lineage.  However, given longer and longer
+                    #species names (as more and more strains and sub strains get
+                    #sequenced) the oragnism name can now get wrapped onto multiple
+                    #lines.  The NCBI say we have to recognise the lineage line by
+                    #the presense of semi-colon delimited entries.  In the long term,
+                    #they are considering adding a new keyword (e.g. LINEAGE).
+                    #See Bug 2591 for details.
+                    organism_data = data
+                    lineage_data = ""
                     while True :
                         line = line_iter.next()
                         if line[0:GENBANK_INDENT] == GENBANK_SPACER :
-                            data += ' ' + line[GENBANK_INDENT:]
+                            if lineage_data or ";" in line :
+                                lineage_data += " " + line[GENBANK_INDENT:]
+                            else :
+                                organism_data += " " + line[GENBANK_INDENT:].strip()
                         else :
-                            #We now have all the data for this taxonomy:
-                            if data.strip() == "" :
-                                if self.debug > 1 : print "Taxonomy line(s) missing or blank"
-                            consumer.taxonomy(data.strip())
-                            #End of continuation - return to top of loop!
+                            #End of organism and taxonomy
                             break
+                    consumer.organism(organism_data)
+                    if lineage_data.strip() == "" and self.debug > 1 :
+                        print "Taxonomy line(s) missing or blank"
+                    consumer.taxonomy(lineage_data.strip())
+                    del organism_data, lineage_data
                 elif line_type == 'COMMENT' :
                     if self.debug > 1 : print "Found comment"
                     #This can be multiline, and should call consumer.comment() once
