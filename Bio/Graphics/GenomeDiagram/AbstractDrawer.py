@@ -142,7 +142,7 @@ def draw_polygon((x1, y1), (x2, y2), (x3, y3), (x4, y4),
     if color == colors.white and border is None:   # Force black border on 
         strokecolor = colors.black                 # white boxes with
     elif border is None:                           # undefined border, else
-        strokecolor = colour                       # use fill colour
+        strokecolor = color                        # use fill colour
     elif border is not None:
         strokecolor = border
 
@@ -173,8 +173,8 @@ def draw_arrow((x1, y1), (x2, y2), color=colors.lightgreen, border=None,
 
     if color == colors.white and border is None:   # Force black border on 
         strokecolor = colors.black                 # white boxes with
-    elif border is None:                            # undefined border, else
-        strokecolor = colors.black                 # use fill colour
+    elif border is None:                           # undefined border, else
+        strokecolor = color                        # use fill colour
     elif border is not None:
         strokecolor = border
 
