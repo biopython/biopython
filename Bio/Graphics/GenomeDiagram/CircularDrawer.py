@@ -999,6 +999,10 @@ class CircularDrawer(AbstractDrawer):
             headangle = endangle-headangle_delta
         else :
             headangle = startangle+headangle_delta
+        if startangle <= endangle :
+            headangle = max(min(headangle, endangle), startangle)
+        else :
+            headangle = max(min(headangle, startangle), endangle)
         assert startangle <= headangle <= endangle \
             or endangle <= headangle <= startangle
         
@@ -1011,9 +1015,14 @@ class CircularDrawer(AbstractDrawer):
         if abs(headangle_delta) >= abs(angle) :
             #Cheat and just use a triangle.
             boxes = Group()     # Holds arc elements
-            x1,y1 = (x0+inner_radius*startsin, y0+inner_radius*startcos)
-            x2,y2 = (x0+outer_radius*startsin, y0+outer_radius*startcos)
-            x3,y3 = (x0+middle_radius*endsin, y0+middle_radius*endcos)
+            if orientation=="right" :
+                x1,y1 = (x0+inner_radius*startsin, y0+inner_radius*startcos)
+                x2,y2 = (x0+outer_radius*startsin, y0+outer_radius*startcos)
+                x3,y3 = (x0+middle_radius*endsin, y0+middle_radius*endcos)
+            else :
+                x1,y1 = (x0+inner_radius*endsin, y0+inner_radius*endcos)
+                x2,y2 = (x0+outer_radius*endsin, y0+outer_radius*endcos)
+                x3,y3 = (x0+middle_radius*startsin, y0+middle_radius*startcos)
             return draw_polygon([(x1,y1),(x2,y2),(x3,y3)], color, border)
         elif orientation=="right" :
             p = ArcPath(strokeColor=strokecolor,
