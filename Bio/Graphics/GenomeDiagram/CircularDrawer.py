@@ -36,7 +36,7 @@ from AbstractDrawer import AbstractDrawer, draw_polygon, intermediate_points
 from FeatureSet import FeatureSet
 from GraphSet import GraphSet
 
-from math import ceil, pi, cos, sin
+from math import ceil, pi, cos, sin, asin
 from string import join
 
 class CircularDrawer(AbstractDrawer):
@@ -405,8 +405,8 @@ class CircularDrawer(AbstractDrawer):
         # Distribution dictionary for various ways of drawing the feature
         # Each method takes the inner and outer radii, the start and end angle
         # subtended at the diagram centre, and the color as arguments
-        draw_methods = {'BOX': self.draw_arc,
-                        'ARROW': self.draw_arc, #need an arc version of draw_arrow
+        draw_methods = {'BOX': self._draw_arc,
+                        'ARROW': self._draw_arc_arrow,
                         }
                         
         # Get sigil for the feature, location dependent on the feature strand        
@@ -420,10 +420,10 @@ class CircularDrawer(AbstractDrawer):
                            border)
         if feature.strand == 1:
             sigil = method(ctr, top, startangle, endangle, feature.color,
-                           border)
+                           border, orientation='right')
         if feature.strand == -1:
             sigil = method(btm, ctr, startangle, endangle, feature.color,
-                           border)
+                           border, orientation='left')
         if feature.label:   # Feature needs a label
             label = String(0, 0, feature.name.strip(),
                            fontName=feature.label_font,
@@ -604,7 +604,7 @@ class CircularDrawer(AbstractDrawer):
                 barcolor = graph.negcolor
 
             # Draw bar
-            bar_elements.append(self.draw_arc(ctr, ctr+barval, pos0angle,
+            bar_elements.append(self._draw_arc(ctr, ctr+barval, pos0angle,
                                               pos1angle, barcolor))
         return bar_elements
 
@@ -648,7 +648,7 @@ class CircularDrawer(AbstractDrawer):
                                                     maxval, minval, val)
             
             # Draw heat box
-            heat_elements.append(self.draw_arc(btm, top, pos0angle, pos1angle,
+            heat_elements.append(self._draw_arc(btm, top, pos0angle, pos1angle,
                                                heat, border=heat))
         return heat_elements
 
@@ -887,8 +887,8 @@ class CircularDrawer(AbstractDrawer):
         return (angle, cos(angle), sin(angle))
 
 
-    def draw_arc(self, inner_radius, outer_radius, startangle, endangle,
-                 color, border=None, colour=None):
+    def _draw_arc(self, inner_radius, outer_radius, startangle, endangle,
+                 color, border=None, colour=None, **kwargs):
         """ draw_arc(self, inner_radius, outer_radius, startangle, endangle, color)
                 -> Group
 
@@ -953,5 +953,104 @@ class CircularDrawer(AbstractDrawer):
             x2,y2 = (x0+inner_radius*endsin, y0+inner_radius*endcos)
             x3,y3 = (x0+outer_radius*endsin, y0+outer_radius*endcos)
             x4,y4 = (x0+outer_radius*startsin, y0+outer_radius*startcos)
-            return draw_polygon((x1,y1),(x2,y2),(x3,y3),(x4,y4), color, border)
+            return draw_polygon([(x1,y1),(x2,y2),(x3,y3),(x4,y4)], color, border)
+
+    def _draw_arc_arrow(self, inner_radius, outer_radius, startangle, endangle,
+                  color, border=None,
+                  shaft_height_ratio=0.4, head_length_ratio=1.0, orientation='right',
+                  colour=None, **kwargs):
+        """Draw an arrow along an arc."""
+        #Let the UK spelling (colour) override the USA spelling (color)
+        if colour is not None:
+            color = colour
+
+        if border is None:
+            border = color
+
+        if color is None:
+            color = colour
+        if color == colors.white and border is None:   # Force black border on 
+            strokecolor = colors.black                 # white boxes with
+        elif border is None:                           # undefined border, else
+            strokecolor = color                        # use fill colour
+        elif border is not None:
+            strokecolor = border
+
+        #if orientation == 'right':
+        #    startangle, endangle = min(startangle, endangle), max(startangle, endangle)
+        #elif orientation == 'left':
+        #    startangle, endangle = max(startangle, endangle), min(startangle, endangle)
+        #else :
+        startangle, endangle = min(startangle, endangle), max(startangle, endangle)
+        if orientation <> "left" and orientation <> "right" :
+            raise ValueError("Invalid orientation %s, should be 'left' or 'right'" \
+                             % repr(orientation))
+
+        angle = float(endangle - startangle)    # angle subtended by arc
+        middle_radius = 0.5*(inner_radius+outer_radius)
+        boxheight = outer_radius - inner_radius
+        shaft_height = boxheight*shaft_height_ratio
+        shaft_inner_radius = middle_radius - 0.5*shaft_height
+        shaft_outer_radius = middle_radius + 0.5*shaft_height
+        headangle_delta = min(abs(asin(boxheight/middle_radius)*head_length_ratio), abs(angle))
+        if angle < 0 :
+            headangle_delta *= -1 #reverse it
+        if orientation=="right" :
+            headangle = endangle-headangle_delta
+        else :
+            headangle = startangle+headangle_delta
+        assert startangle <= headangle <= endangle \
+            or endangle <= headangle <= startangle
+        
+
+        # Calculate trig values for angle and coordinates
+        startcos, startsin = cos(startangle), sin(startangle)
+        headcos, headsin = cos(headangle), sin(headangle)
+        endcos, endsin = cos(endangle), sin(endangle)
+        x0,y0 = self.xcentre, self.ycentre      # origin of the circle
+        if abs(headangle_delta) >= abs(angle) :
+            #Cheat and just use a triangle.
+            boxes = Group()     # Holds arc elements
+            x1,y1 = (x0+inner_radius*startsin, y0+inner_radius*startcos)
+            x2,y2 = (x0+outer_radius*startsin, y0+outer_radius*startcos)
+            x3,y3 = (x0+middle_radius*endsin, y0+middle_radius*endcos)
+            return draw_polygon([(x1,y1),(x2,y2),(x3,y3)], color, border)
+        elif orientation=="right" :
+            p = ArcPath(strokeColor=strokecolor,
+                        fillColor=color,
+                        strokewidth=0)
+            #Note reportlab counts angles anti-clockwise from the horizontal
+            #(as in mathematics, e.g. complex numbers and polar coordinates)
+            #but we use clockwise from the vertical.  Also reportlab uses
+            #degrees, but we use radians.
+            p.addArc(self.xcentre, self.ycentre, shaft_inner_radius,
+                     90 - (headangle * 180 / pi), 90 - (startangle * 180 / pi),
+                     moveTo=True)
+            p.addArc(self.xcentre, self.ycentre, shaft_outer_radius,
+                     90 - (headangle * 180 / pi), 90 - (startangle * 180 / pi),
+                     reverse=True)
+            p.lineTo(x0+outer_radius*headsin, y0+outer_radius*headcos)
+            p.lineTo(x0+middle_radius*endsin, y0+middle_radius*endcos)
+            p.lineTo(x0+inner_radius*headsin, y0+inner_radius*headcos)
+            p.closePath()
+            return p
+        else :
+            p = ArcPath(strokeColor=strokecolor,
+                        fillColor=color,
+                        strokewidth=0)
+            #Note reportlab counts angles anti-clockwise from the horizontal
+            #(as in mathematics, e.g. complex numbers and polar coordinates)
+            #but we use clockwise from the vertical.  Also reportlab uses
+            #degrees, but we use radians.
+            p.addArc(self.xcentre, self.ycentre, shaft_inner_radius,
+                     90 - (endangle * 180 / pi), 90 - (headangle * 180 / pi),
+                     moveTo=True, reverse=True)
+            p.addArc(self.xcentre, self.ycentre, shaft_outer_radius,
+                     90 - (endangle * 180 / pi), 90 - (headangle * 180 / pi),
+                     reverse=False)
+            p.lineTo(x0+outer_radius*headsin, y0+outer_radius*headcos)
+            p.lineTo(x0+middle_radius*startsin, y0+middle_radius*startcos)
+            p.lineTo(x0+inner_radius*headsin, y0+inner_radius*headcos)
+            p.closePath()
+            return p
 

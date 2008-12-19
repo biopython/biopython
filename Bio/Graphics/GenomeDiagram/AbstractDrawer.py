@@ -121,13 +121,13 @@ def draw_box((x1, y1), (x2, y2),
                    fillColor=color,
                    strokewidth=0)
 
-def draw_polygon((x1, y1), (x2, y2), (x3, y3), (x4, y4),
+def draw_polygon(list_of_points,
                  color=colors.lightgreen, border=None, colour=None,
                  **kwargs):
     """ draw_polygon(self, (x1, y1), (x2, y2), (x3, y3), (x4, y4)
               colour=colors.lightgreen)
 
-        o (x1,y1)...(x4,y4)   Co-ordinates for four corners of the box
+        o list_of_point = list of (x,y) tuples for the corner coordinates
         
         o colour              The colour for the box
 
@@ -146,7 +146,12 @@ def draw_polygon((x1, y1), (x2, y2), (x3, y3), (x4, y4),
     elif border is not None:
         strokecolor = border
 
-    return Polygon([x1, y1, x2, y2, x3, y3, x4, y4],
+    xy_list = []
+    for (x,y) in list_of_points :
+        xy_list.append(x)
+        xy_list.append(y)
+
+    return Polygon(xy_list,
                    strokeColor=strokecolor,
                    fillColor=color,
                    strokewidth=0)

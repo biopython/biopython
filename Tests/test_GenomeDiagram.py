@@ -294,7 +294,7 @@ class DiagramTest(unittest.TestCase):
             #Checking it can cope with the old UK spelling colour.
             #Also show the labels perpendicular to the track.
             gds_features.add_feature(feature, colour=color,
-                                     sigil="ARROW", #Currently linear only
+                                     sigil="ARROW",
                                      label_position = "start",
                                      label_size = 8,
                                      label_angle = 90,
@@ -343,6 +343,7 @@ class DiagramTest(unittest.TestCase):
                                             label_position = "start",
                                             label_size = 11,
                                             #label_angle = 90,
+                                            sigil="ARROW",
                                             label=True)
 
         #I want to include some strandless features, so for an example
