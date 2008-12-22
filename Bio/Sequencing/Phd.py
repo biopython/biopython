@@ -14,7 +14,7 @@ internally.  This will give SeqRecord objects for each contig sequence.
 """
 
 from Bio import Seq
-from Bio.Alphabet import IUPAC
+from Bio.Alphabet import generic_dna
 
 CKEYWORDS=['CHROMAT_FILE','ABI_THUMBPRINT','PHRED_VERSION','CALL_METHOD',\
         'QUALITY_LEVELS','TIME','TRACE_ARRAY_MIN_INDEX','TRACE_ARRAY_MAX_INDEX',\
@@ -102,8 +102,7 @@ def read(handle):
     else:
         raise ValueError("Failed to find END_SEQUENCE line")
 
-    alphabet = IUPAC.IUPACAmbiguousDNA()
-    record.seq = Seq.Seq(''.join([n[0] for n in record.sites]), alphabet)
+    record.seq = Seq.Seq(''.join([n[0] for n in record.sites]), generic_dna)
     if record.comments['trim'] is not None:
         first, last = record.comments['trim'][:2]
         record.seq_trimmed = record.seq[first:last]
@@ -259,7 +258,7 @@ class _RecordConsumer(AbstractConsumer):
         self.data.file_name = line[15:].rstrip() 
 
     def end_sequence(self):
-        self.data.seq = Seq.Seq(''.join([n[0] for n in self.data.sites]), IUPAC.IUPACAmbiguousDNA())
+        self.data.seq = Seq.Seq(''.join([n[0] for n in self.data.sites]), generic_dna)
         if self.data.comments['trim'] is not None :
             first = self.data.comments['trim'][0]
             last = self.data.comments['trim'][1]
