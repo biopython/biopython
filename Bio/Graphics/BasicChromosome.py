@@ -112,8 +112,9 @@ class Organism(_ChromosomeComponent):
 
         Arguments:
 
-        o output_file -- The name of a file specifying where the pdf
-        document drawn should be saved.
+        o output_file -- The name of a file specifying where the
+        document should be saved, or a handle to be written to.
+        The output format is set when creating the Organism object.
 
         o title -- The output title of the produced document.
         """

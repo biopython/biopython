@@ -283,7 +283,7 @@ class Diagram(object):
         drawer.draw()   # Tell the drawer to complete the drawing
         self.drawing = drawer.drawing  # Get the completed drawing
 
-    def _write(self, output, dpi, filename_if_not_string=None) :
+    def _write(self, output, dpi, file_if_not_string=None) :
         """Helper function for output (PRIVATE).
 
         ouput = upper case format string, e.g. PS, PDF or SVN
@@ -292,10 +292,9 @@ class Diagram(object):
 
         dpi = dots per inch, used for bitmap output only.
         
-        filename_if_not_string = filename, will write to that file
-                                 (and the function has no return value).
-                               = None, will return the file contents as
-                                 a string.
+        file_if_not_string = If a filename or handle, will write to that file
+                             (and the function has no return value).
+                           = None, will return the file contents as a string.
                                
         This function exists to reduce code duplication between the write
         and write_to_string methods.
@@ -323,9 +322,9 @@ class Diagram(object):
             raise MissingExternalDependencyError( \
                 "Please install ReportLab's renderPM module")
 
-        if filename_if_not_string :
+        if file_if_not_string :
             #To file
-            filename = filename_if_not_string
+            filename = file_if_not_string
             if drawmethod == renderPM:
                 return drawmethod.drawToFile(self.drawing, filename,
                                              output, dpi=dpi)
@@ -342,7 +341,8 @@ class Diagram(object):
     def write(self, filename='test1.ps', output='PS', dpi=72):
         """ write(self, filename='test1.ps', output='PS', dpi=72)
 
-            o filename      String indicating the name of the output file
+            o filename      String indicating the name of the output file,
+                            or a handle to write to.
 
             o output        String indicating output format, one of PS, PDF,
                             SVG, JPG, BMP, GIF, PNG, TIFF or TIFF

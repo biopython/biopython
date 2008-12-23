@@ -43,7 +43,8 @@ class DistributionPage:
 
         Arguments:
 
-        o output_file - The name of the file to output the information to.
+        o output_file - The name of the file to output the information to,
+                        or a handle to write to.
 
         o title - A title to display on the graphic.
         """

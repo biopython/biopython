@@ -52,6 +52,13 @@ class ComparativeScatterPlot:
 
     def draw_to_file(self, output_file, title):
         """Write the comparative plot to a file.
+
+        Arguments:
+
+        o output_file - The name of the file to output the information to,
+                        or a handle to write to.
+
+        o title - A title to display on the graphic.
         """
         width, height = self.page_size
         cur_drawing = Drawing(width, height)
