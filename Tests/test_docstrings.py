@@ -21,8 +21,10 @@ except ImportError :
     numpy_present = False
 
 from Bio import Seq, SeqRecord, SeqIO, AlignIO
+import Bio.KEGG.Compound
 import Bio.Align.Generic
 test_modules = [Seq, SeqRecord, SeqIO, AlignIO,
+                Bio.KEGG.Compound,
                 Bio.Align.Generic]
 
 if numpy_present :

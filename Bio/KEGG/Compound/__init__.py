@@ -7,9 +7,11 @@
 """
 This module provides code to work with the KEGG Ligand/Compound database.
 
+Functions:
+parse - Returns an iterator giving Record objects.
 
 Classes:
-Record
+Record - A representation of a KEGG Ligand/Compound.
 """
 
 # other Biopython stuff
@@ -117,6 +119,25 @@ class Record:
 
 
 def parse(handle):
+    """Parse a KEGG Ligan/Compound file, returning Record objects.
+
+    This is an iterator function, typically used in a for loop.  For
+    example, using one of the example KEGG files in the Biopython
+    test suite,
+
+    >>> handle = open("KEGG/compound.sample")
+    >>> for record in parse(handle) :
+    ...     print record.entry, record.name[0]
+    ...
+    C00023 Iron
+    C00017 Protein
+    C00099 beta-Alanine
+    C00294 Inosine
+    C00298 Trypsin
+    C00348 Undecaprenyl phosphate
+    C00349 2-Methyl-3-oxopropanoate
+    C01386 NH2Mec
+    """
     record = Record()
     for line in handle:
         if line[:3]=="///":
@@ -169,3 +190,23 @@ def parse(handle):
                 values.extend(data.split())
                 row = key, values
                 record.dblinks[-1] = row
+
+def _test():
+    """Run the Bio.KEGG.Compound module's doctests.
+    
+    This will try and locate the unit tests directory, and run the doctests
+    from there in order that the relative paths used in the examples work.
+    """
+    import doctest
+    import os
+    if os.path.isdir(os.path.join("..","..","..","Tests")) :
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("..","..","..","Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
+
+if __name__ == "__main__":
+    _test()
