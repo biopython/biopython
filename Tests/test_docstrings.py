@@ -20,11 +20,16 @@ try :
 except ImportError :
     numpy_present = False
 
+#Assuming we keep adding doctests, we'll need to have this module
+#list populated automatically - or otherwise integrated into the
+#Biopython test framework.
 from Bio import Seq, SeqRecord, SeqIO, AlignIO
 import Bio.KEGG.Compound
+import Bio.KEGG.Enzyme
 import Bio.Align.Generic
 test_modules = [Seq, SeqRecord, SeqIO, AlignIO,
                 Bio.KEGG.Compound,
+                Bio.KEGG.Enzyme,
                 Bio.Align.Generic]
 
 if numpy_present :

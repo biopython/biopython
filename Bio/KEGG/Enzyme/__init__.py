@@ -7,6 +7,8 @@
 """
 This module provides code to work with the KEGG Enzyme database.
 
+Functions:
+parse - Returns an iterator giving Record objects.
 
 Classes:
 Record               -- Holds the information from a KEGG Enzyme record.
@@ -178,6 +180,25 @@ class Record:
 
 
 def parse(handle):
+    """Parse a KEGG Enzyme file, returning Record objects.
+
+    This is an iterator function, typically used in a for loop.  For
+    example, using one of the example KEGG files in the Biopython
+    test suite,
+
+    >>> handle = open("KEGG/enzyme.sample")
+    >>> for record in parse(handle) :
+    ...     print record.entry, record.name[0]
+    ...
+    1.1.1.1 Alcohol dehydrogenase
+    1.1.1.62 Estradiol 17beta-dehydrogenase
+    1.1.1.68 Transferred to EC 1.7.99.5
+    1.6.5.3 NADH dehydrogenase (ubiquinone)
+    1.14.13.28 3,9-Dihydroxypterocarpan 6a-monooxygenase
+    2.4.1.68 Glycoprotein 6-alpha-L-fucosyltransferase
+    3.1.1.6 Acetylesterase
+    2.7.2.1 Acetate kinase
+    """
     record = Record()
     for line in handle:
         if line[:3]=="///":
@@ -271,3 +292,23 @@ def parse(handle):
              record.substrate.append(data.strip(";"))
         elif keyword=="SYSNAME     ":
              record.sysname.append(data.strip(";"))
+
+def _test():
+    """Run the Bio.KEGG.Enzyme module's doctests.
+    
+    This will try and locate the unit tests directory, and run the doctests
+    from there in order that the relative paths used in the examples work.
+    """
+    import doctest
+    import os
+    if os.path.isdir(os.path.join("..","..","..","Tests")) :
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("..","..","..","Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
+
+if __name__ == "__main__":
+    _test()
