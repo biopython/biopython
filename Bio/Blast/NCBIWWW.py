@@ -818,19 +818,42 @@ def qblast(program, database, sequence,
 
 def _parse_qblast_ref_page(handle):
     """Extract a tuple of RID, RTOE from the 'please wait' page (PRIVATE).
+
+    The NCBI FAQ pages use TOE for 'Time of Execution', so RTOE is proably
+    'Request Time of Execution' and RID would be 'Request Identifier'.
     """
     s = handle.read()
     i = s.find("RID =")
     if i == -1 :
-        raise ValueError("No RID found in the 'please wait' page.")
-    j = s.find("\n", i)
-    rid = s[i+len("RID ="):j].strip()
+        rid = None
+    else :
+        j = s.find("\n", i)
+        rid = s[i+len("RID ="):j].strip()
 
     i = s.find("RTOE =")
     if i == -1 :
-        raise ValueError("No RTOE found in the 'please wait' page.")
-    j = s.find("\n", i)
-    rtoe = s[i+len("RTOE ="):j].strip()
+        rtoe = None
+    else :
+        j = s.find("\n", i)
+        rtoe = s[i+len("RTOE ="):j].strip()
+
+    if not rid and not rtoe :
+        #Can we reliably extract the error message from the HTML page?
+        #e.g.  "Message ID#24 Error: Failed to read the Blast query:
+        #       Nucleotide FASTA provided for protein sequence"
+        #This occurs inside a <div class="error msInf"> entry so it might
+        #be possible to grab this...
+        raise ValueError("No RID and no RTOE found in the 'please wait' page."
+                         " (there was probably a problem with your request)")
+    elif not rid :
+        #Can this happen?
+        raise ValueError("No RID found in the 'please wait' page."
+                         " (although RTOE = %s)" % repr(rtoe))
+    elif not rtoe :
+        #Can this happen?
+        raise ValueError("No RTOE found in the 'please wait' page."
+                         " (although RID = %s)" % repr(rid))
+
     try :
         return rid, int(rtoe)
     except ValueError :
