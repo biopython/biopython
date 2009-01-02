@@ -821,13 +821,13 @@ def _parse_qblast_ref_page(handle):
     """
     s = handle.read()
     i = s.find("RID =")
-    if i == 1 :
+    if i == -1 :
         raise ValueError("No RID found in the 'please wait' page.")
     j = s.find("\n", i)
     rid = s[i+len("RID ="):j].strip()
 
     i = s.find("RTOE =")
-    if i == 1 :
+    if i == -1 :
         raise ValueError("No RTOE found in the 'please wait' page.")
     j = s.find("\n", i)
     rtoe = s[i+len("RTOE ="):j].strip()
