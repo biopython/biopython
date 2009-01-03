@@ -69,7 +69,7 @@
 
 \title{Biopython Tutorial and Cookbook}
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 21 November 2008 (Biopython 1.49)}
+\date{Last Update -- 3 January 2009 (Biopython 1.49)}
 
 \maketitle
 \tableofcontents
@@ -1721,7 +1721,7 @@ We have two functions for reading in sequence alignments, \verb|Bio.AlignIO.read
 
 Using \verb|Bio.AlignIO.parse()| will return an {\it iterator} which gives \verb|Alignment| objects.  Iterators are typically used in a for loop.  Examples of situations where you will have multiple different alignments include resampled alignments from the PHYLIP tool \verb|seqboot|, or multiple pairwise alignments from the EMBOSS tools \verb|water| or \verb|needle|, or Bill Pearson's FASTA tools.
 
-However, in many situations you will be dealing with files which contain only a single alignment.  In this case, you should use the \verb|Bio.AlignIO.read()| function which return a single \verb|Alignment| object.
+However, in many situations you will be dealing with files which contain only a single alignment.  In this case, you should use the \verb|Bio.AlignIO.read()| function which returns a single \verb|Alignment| object.
 
 Both functions expect two mandatory arguments:
 
@@ -2262,7 +2262,9 @@ print alignment.format("clustal")
 
 As described in Section~\ref{sec:Bio.SeqIO-and-StringIO}, the \verb|SeqRecord| object has a similar method using output formats supported by \verb|Bio.SeqIO|.
 
-Internally the \verb|format()| method is using the \verb|StringIO| string based handle and calling\verb|Bio.AlignIO.write()|.  You can do this in your own code if for example you are using an older version of Biopython:
+Internally the \verb|format()| method is using the \verb|StringIO| string based handle and calling
+\verb|Bio.AlignIO.write()|.  You can do this in your own code if for example you are using an
+older version of Biopython:
 
 \begin{verbatim}
 from Bio import AlignIO
@@ -2272,10 +2274,7 @@ alignments = AlignIO.parse(open("PF05371_seed.sth"), "stockholm")
 
 out_handle = StringIO()
 AlignIO.write(alignments, out_handle, "clustal")
-#Now need to "rewind" the StringIO handle back to the start...
-out_handle.seek(0)
-#...and we can read back what was written to it as a string:
-clustal_data = out_handle.read()
+clustal_data = out_handle.getvalue()
 
 print clustal_data
 \end{verbatim}
@@ -3530,6 +3529,8 @@ Now that we've got them, we obviously want to get the corresponding Medline reco
                            retmode="text")
 >>> records = Medline.parse(handle)
 \end{verbatim}
+
+NOTE - We've just done a separate search and fetch here, the NCBI much prefer you to take advantage of their history support in this situation.  See Section~\ref{sec:entrez-webenv}.
 
 Keep in mind that \verb+records+ is an iterator, so you can iterate through the records only once. If you want to save the records, you can convert them to a list:
 \begin{verbatim}
