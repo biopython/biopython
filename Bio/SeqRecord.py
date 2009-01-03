@@ -1,4 +1,10 @@
-# Stores data about the sequence
+# Copyright 2000-2002 Andrew Dalke.
+# Copyright 2002-2004 Brad Chapman.
+# Copyright 2006-2009 by Peter Cock.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """Represent a Sequence Record, a sequence with annotation."""
 
 # NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL
@@ -227,8 +233,7 @@ class SeqRecord(object):
             from Bio import SeqIO
             handle = StringIO()
             SeqIO.write([self], handle, format_spec)
-            handle.seek(0)
-            return handle.read()
+            return handle.getvalue()
         else :
             #Follow python convention and default to using __str__
             return str(self)    

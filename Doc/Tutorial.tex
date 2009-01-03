@@ -1645,7 +1645,7 @@ SeqIO.write(records, open("rev_comp.fasta", "w"), "fasta")
 
 \subsection{Getting your SeqRecord objects as formatted strings}
 \label{sec:Bio.SeqIO-and-StringIO}
-Suppose that you don't really want to write your records to a file or handle -- instead you want a string containing the records in a particular file format.  The \verb|Bio.SeqIO| interface is based on file handles, but python has a useful built in module which provides a string based handle.
+Suppose that you don't really want to write your records to a file or handle -- instead you want a string containing the records in a particular file format.  The \verb|Bio.SeqIO| interface is based on handles, but python has a useful built in module which provides a string based handle.
 
 For an example of how you might use this, let's load in a bunch of \verb|SeqRecord| objects from our orchids GenBank file, and create a string containing the records in FASTA format:
 
@@ -1653,19 +1653,16 @@ For an example of how you might use this, let's load in a bunch of \verb|SeqReco
 from Bio import SeqIO
 from StringIO import StringIO
 
-records = SeqIO.parse(open("ls_orchid.gbk", "r"), "genbank")
+records = SeqIO.parse(open("ls_orchid.gbk"), "genbank")
 
 out_handle = StringIO()
 SeqIO.write(records, out_handle, "fasta")
-#Now need to "rewind" the StringIO handle back to the start...
-out_handle.seek(0)
-#...and we can read back what was written to it as a string:
-fasta_data = out_handle.read()
+fasta_data = out_handle.getvalue()
 
 print fasta_data
 \end{verbatim}
 
-This isn't entirely straightforward the first time you see it!  On the bright side, for the special case where you would like a string containing a single record in a particular file format, Biopython 1.48 added a new \verb|format()| method to the \verb|SeqRecord| class:
+This isn't entirely straightforward the first time you see it!  On the bright side, for the special case where you would like a string containing a \emph{single} record in a particular file format, Biopython 1.48 added a new \verb|format()| method to the \verb|SeqRecord| class:
 
 \begin{verbatim}
 from Bio.Seq import Seq
@@ -3138,6 +3135,8 @@ ESummary retrieves document summaries from a list of primary IDs (see the  \href
 \label{sec:efetch}
 
 EFetch is what you use when you want to retrieve a full record from Entrez.
+This covers several possible databases, as described on the main \href{http://eutils.ncbi.nlm.nih.gov/entrez/query/static/efetch\_help.html}{EFetch Help page}.
+
 From the \emph{Cypripedioideae} example above, we can download GenBank record 186972394 using \verb+Bio.Entrez.efetch+:
 
 \begin{verbatim}
@@ -3217,7 +3216,7 @@ ORIGIN
 //
 \end{verbatim}
 
-The argument \verb+rettype="genbank"+ lets us download this record in the GenBank format. Alternatively, you could for example use \verb+rettype="fasta"+ to get the Fasta-format; see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq\_help.html}{EFetch Help page} for other options. The available formats depend on which database you are downloading from.
+The argument \verb+rettype="genbank"+ lets us download this record in the GenBank format. Alternatively, you could for example use \verb+rettype="fasta"+ to get the Fasta-format; see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq\_help.html}{EFetch Sequences Help page} for other options. The available formats depend on which database you are downloading from - see the main \href{http://eutils.ncbi.nlm.nih.gov/entrez/query/static/efetch\_help.html}{EFetch Help page}.
 
 If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see Chapter~\ref{chapter:Bio.SeqIO}), you could directly parse it into a \verb+SeqRecord+:
 

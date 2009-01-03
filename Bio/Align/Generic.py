@@ -1,3 +1,10 @@
+# Copyright 2000-2004 Brad Chapman.
+# Copyright 2001 Iddo Friedberg.
+# Copyright 2007-2009 by Peter Cock.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """
 Contains classes to deal with generic sequence alignment stuff not
 specific to a particular program or format.
@@ -157,8 +164,7 @@ class Alignment:
             from Bio import AlignIO
             handle = StringIO()
             AlignIO.write([self], handle, format_spec)
-            handle.seek(0)
-            return handle.read()
+            return handle.getvalue()
         else :
             #Follow python convention and default to using __str__
             return str(self)    
