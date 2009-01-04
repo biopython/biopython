@@ -37,6 +37,12 @@ Declared obsolete in Release 1.49.
 Bio.mathfns and Bio.stringfns were deprecated in Release 1.50
 (the deprecation of Bio.listfns is still pending)
 
+Bio.distance (and Bio.cdistance)
+================================
+Bio.distance was deprecated in Release 1.49, at which point its C code
+implementation Bio.cdistance was removed (this was not intended as a public
+API).
+
 Bio.Ndb
 =======
 Deprecated in Release 1.49, as the website this parsed has been redesigned.
