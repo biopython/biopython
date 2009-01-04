@@ -76,6 +76,7 @@ if not clustalw_exe :
 
 #Create a temp fasta file with a space in the name
 temp_filename_with_spaces = "Clustalw/temp horses.fasta"
+temp_dnd_filename_with_spaces = "Clustalw/temp horses.dnd"
 handle = open(temp_filename_with_spaces, "w")
 SeqIO.write(SeqIO.parse(open("Phylip/hennigian.phy"),"phylip"),handle, "fasta")
 handle.close()
@@ -118,13 +119,20 @@ for input_file, output_file, newtree_file in [
         assert str(record.seq).replace("-","") == \
                str(input_records[record.id].seq)
     os.remove(output_file)
+
+    #Check the DND file was created.
+    #TODO - Try and parse this with Bio.Nexus?
     if newtree_file is not None :
         assert os.path.isfile(newtree_file)
-        #TODO - Try and parse this with Bio.Nexus?
         os.remove(newtree_file)
+    else :
+        assert os.path.isfile(temp_dnd_filename_with_spaces)
+        os.remove(temp_dnd_filename_with_spaces)
     print
 
-#Clean up temp file..
-os.remove(temp_filename_with_spaces)
+#Clean up any stray temp files..
+if os.path.isfile(temp_filename_with_spaces) :   
+    os.remove(temp_filename_with_spaces)
+if os.path.isfile(temp_dnd_filename_with_spaces) :
+    os.remove(temp_dnd_filename_with_spaces)
 print "Done"
-
