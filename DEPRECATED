@@ -2,13 +2,14 @@ This file provides documentation for modules in Biopython that have been moved
 or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
 
-Bio.Graphics.GenomeDiagram and colour/color
-===========================================
-GenomeDiagram originally used colour (UK spelling of color) for argument names.
-For its integration into Biopython 1.50, this will support both colour and color,
-to help people port existing scripts written for the standalone version of
-GenomeDiagram.  However, we do intend to deprecate and then eventually remove
-support for colour in later releases of Biopython.
+Bio.Graphics.GenomeDiagram and colour/color, centre/center
+==========================================================
+GenomeDiagram originally used colour and centre (UK spelling of color and
+center) for argument names.  As part of its integration into Biopython 1.50,
+this will support both colour and color, and both centre and center, to help
+people port existing scripts written for the standalone version of
+GenomeDiagram.  However, we do intend to deprecate and then eventually
+remove support for colour and centre in later releases of Biopython.
 
 Bio.AlignAce and Bio.MEME
 =========================
@@ -20,11 +21,12 @@ Numeric support
 Following the release of 1.48, Numeric support in Biopython is discontinued.
 Please move to NumPy for Biopython 1.49 or later.
 
-Bio.Seq
-=======
-Direct use of the Seq object (and MutableSeq object) .data property is discouraged.
-As of release 1.49, writing to the Seq object's .data property triggers a warning,
-and this property is likely to be made read only in the next release.
+Bio.Seq and the data property
+=============================
+Direct use of the Seq object (and MutableSeq object) .data property is
+discouraged.  As of release 1.49, writing to the Seq object's .data property
+triggers a warning, and this property is likely to be made read only in the
+next release.
 
 Bio.Transcribe and Bio.Translate
 ================================
