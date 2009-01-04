@@ -1,4 +1,5 @@
 # Copyright 2003-2008 by Leighton Pritchard.  All rights reserved.
+# Revisions copyright 2008-2009 by Peter Cock.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -136,9 +137,9 @@ class LinearDrawer(AbstractDrawer):
 
         o pageheight    Float pixel height of drawable area
 
-        o xcentre       Float X co-ord of centre of drawable area
+        o xcenter       Float X co-ord of center of drawable area
 
-        o ycentre       Float Y co-ord of centre of drawable area
+        o ycenter       Float Y co-ord of center of drawable area
 
         o start         Int, base to start drawing from
 
@@ -173,7 +174,7 @@ class LinearDrawer(AbstractDrawer):
                             keyed by fragment number
 
         o track_offsets     Dictionary of number of pixels that each track top,
-                            centre and bottom is offset from the base of a
+                            center and bottom is offset from the base of a
                             fragment, keyed by track
 
     """
@@ -359,7 +360,7 @@ class LinearDrawer(AbstractDrawer):
         for track in trackunits:
             top = trackunits[track][1]*trackunit_height-track_crop  # top offset
             btm = trackunits[track][0]*trackunit_height+track_crop  # bottom offset
-            ctr = btm+(top-btm)/2.                          # centre offset
+            ctr = btm+(top-btm)/2.                          # center offset
             track_offsets[track] = (btm, ctr, top)          
         self.track_offsets = track_offsets
         
@@ -385,7 +386,7 @@ class LinearDrawer(AbstractDrawer):
                 self.drawing.add(Line(self.x0, tracktop, self.xlim, tracktop,
                                       strokeColor=colors.blue))  # top line
                 self.drawing.add(Line(self.x0, trackctr, self.xlim, trackctr,
-                                      strokeColor=colors.green))  # centre line
+                                      strokeColor=colors.green))  # center line
                 self.drawing.add(Line(self.x0, trackbtm, self.xlim, trackbtm,
                                       strokeColor=colors.blue))  # bottom line
         
@@ -418,7 +419,7 @@ class LinearDrawer(AbstractDrawer):
 
             o tickpos   Int, position of the tick on the sequence
 
-            o ctr       Float, Y co-ord of the centre of the track
+            o ctr       Float, Y co-ord of the center of the track
 
             o ticklen   How long to draw the tick
 
@@ -434,7 +435,7 @@ class LinearDrawer(AbstractDrawer):
         fragment, tickx = self.canvas_location(tickpos) # Tick co-ordinates
         assert fragment >=0, \
                "Fragment %i, tickpos %i" % (fragment, tickpos)
-        tctr = ctr + self.fragment_lines[fragment][0]   # Centreline of the track
+        tctr = ctr + self.fragment_lines[fragment][0]   # Center line of the track
         tickx += self.x0                # Tick X co-ord
         ticktop = tctr + ticklen        # Y co-ord of tick top
         tick = Line(tickx, tctr, tickx, ticktop, strokeColor=track.scale_color)
@@ -545,16 +546,16 @@ class LinearDrawer(AbstractDrawer):
                     for graph in set.get_graphs():
                         quartiles = graph.quartiles()
                         minval, maxval = quartiles[0], quartiles[4]
-                        if graph.centre is None:
+                        if graph.center is None:
                             midval = (maxval + minval)/2.
                             graph_label_min.append("%.3f" % minval)
                             graph_label_max.append("%.3f" % maxval)
                         else:
-                            diff = max((graph.centre-minval),
-                                       (maxval-graph.centre))
-                            minval = graph.centre-diff
-                            maxval = graph.centre+diff
-                            midval = graph.centre
+                            diff = max((graph.center-minval),
+                                       (maxval-graph.center))
+                            minval = graph.center-diff
+                            maxval = graph.center+diff
+                            midval = graph.center
                             graph_label_mid.append("%.3f" % midval)
                             graph_label_min.append("%.3f" % minval)
                             graph_label_max.append("%.3f" % maxval)
@@ -802,7 +803,7 @@ class LinearDrawer(AbstractDrawer):
                 rotation = angle2trig(feature.label_angle)
                 if feature.label_position in ('start', "5'", 'left'):
                     pos = x0
-                elif feature.label_position in ('middle', 'centre'):
+                elif feature.label_position in ('middle', 'center', 'centre'):
                     pos = (x1 + x0)/2.
                 else:
                     pos = x1
@@ -812,7 +813,7 @@ class LinearDrawer(AbstractDrawer):
                 rotation = angle2trig(feature.label_angle + 180)                        
                 if feature.label_position in ('start', "5'", 'left'):
                     pos = x1
-                elif feature.label_position in ('middle', 'centre'):
+                elif feature.label_position in ('middle', 'center', 'centre'):
                     pos = (x1 + x0)/2.
                 else:
                     pos = x0
@@ -867,10 +868,10 @@ class LinearDrawer(AbstractDrawer):
 
         # midval is the value at which the x-axis is plotted, and is the
         # central ring in the track
-        if graph.centre is None:
+        if graph.center is None:
             midval = (maxval + minval)/2.    
         else:
-            midval = graph.centre
+            midval = graph.center
         # Whichever is the greatest difference: max-midval or min-midval, is
         # taken to specify the number of pixel units resolved along the
         # y-axis
@@ -995,7 +996,7 @@ class LinearDrawer(AbstractDrawer):
         """
         #print '\tdraw_bar_graph'
         # At each point contained in the graph data, we draw a vertical bar
-        # from the track centre to the height of the datapoint value (positive
+        # from the track center to the height of the datapoint value (positive
         # values go up in one color, negative go down in the alternative
         # color).
         bar_elements = []   # Holds drawable elements for the graph
@@ -1011,10 +1012,10 @@ class LinearDrawer(AbstractDrawer):
         data = graph[self.start:self.end]
         # midval is the value at which the x-axis is plotted, and is the
         # central ring in the track
-        if graph.centre is None:
+        if graph.center is None:
             midval = (maxval + minval)/2.    
         else:
-            midval = graph.centre
+            midval = graph.center
 
         # Convert data into 'binned' blocks, covering half the distance to the
         # next data point on either side, accounting for the ends of fragments

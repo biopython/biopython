@@ -1,4 +1,5 @@
 # Copyright 2003-2008 by Leighton Pritchard.  All rights reserved.
+# Revisions copyright 2008-2009 by Peter Cock.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -87,7 +88,7 @@ class GraphData:
     """
     def __init__(self, id=None, data=None, name=None, style='bar',
                  color=colors.lightgreen, altcolor=colors.darkseagreen,
-                 centre=None, colour=None, altcolour=None):
+                 center=None, colour=None, altcolour=None, centre=None):
         """__init__(self, id=None, data=None, name=None, style='bar',
                  color=colors.lightgreen, altcolor=colors.darkseagreen)
 
@@ -107,6 +108,10 @@ class GraphData:
             o altcolor colors.Color describing the color to draw the 'low'
                        values (some styles only) (overridden by backwards
                        compatible argument with UK spelling, colour).
+
+            o center Value at which x-axis crosses y-axis (overridden by
+                     backwards comparible argument with UK spelling, centre).
+
         """
 
         #Let the UK spelling (colour) override the USA spelling (color)
@@ -114,6 +119,8 @@ class GraphData:
             color = colour
         if altcolour is not None:
             altcolor = altcolour
+        if centre is not None :
+            center = centre
 
         self.id = id            # Unique identifier for the graph
         self.data = {}          # holds values, keyed by sequence position
@@ -126,8 +133,13 @@ class GraphData:
         self.poscolor = color     # Color to draw all, or 'high' values
         self.negcolor = altcolor  # Color to draw 'low' values
         self.linewidth = 2          # linewidth to use in line graphs
-        self.centre = centre        # value at which x-axis crosses y-axis
+        self.center = center        # value at which x-axis crosses y-axis
 
+    def _set_centre(self, value) :
+        self.center = value
+    centre = property(fget = lambda self : self.center,
+                       fset = _set_centre,
+                       doc="Backwards compatible alias for center (OBSOLETE)")
 
     def set_data(self, data):
         """ set_data(self, data)

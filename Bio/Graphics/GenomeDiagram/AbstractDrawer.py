@@ -1,4 +1,5 @@
 # Copyright 2003-2008 by Leighton Pritchard.  All rights reserved.
+# Revisions copyright 2008-2009 by Peter Cock.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -315,9 +316,9 @@ class AbstractDrawer:
 
         o pageheight    Float pixel height of drawable area
 
-        o xcentre       Float X co-ord of centre of drawable area
+        o xcenter       Float X co-ord of center of drawable area
 
-        o ycentre       Float Y co-ord of centre of drawable area
+        o ycenter       Float Y co-ord of center of drawable area
 
         o start         Int, base to start drawing from
 
@@ -378,6 +379,17 @@ class AbstractDrawer:
         self.set_bounds(start, end) # Set limits on what will be drawn
         self.tracklines = tracklines    # Set flags
         
+    def _set_xcentre(self, value) :
+        self.xcenter = value
+    xcentre = property(fget = lambda self : self.xcenter,
+                       fset = _set_xcentre,
+                       doc="Backwards compatible alias for xcenter (OBSOLETE)")
+
+    def _set_ycentre(self, value) :
+        self.ycenter = value
+    ycentre = property(fget = lambda self : self.ycenter,
+                       fset = _set_ycentre,
+                       doc="Backwards compatible alias for ycenter (OBSOLETE)")
 
     def set_page_size(self, pagesize, orientation):
         """ set_page_size(self, pagesize, orientation)
@@ -423,7 +435,7 @@ class AbstractDrawer:
             o yb        Float(0->1), Bottom Y margin as % of page
 
             Set the page margins as proportions of the page 0->1, and also
-            set the page limits x0, y0 and xlim, ylim, and page centre
+            set the page limits x0, y0 and xlim, ylim, and page center
             xorigin, yorigin, as well as overall page width and height
         """
         # Set left, right, top and bottom margins
@@ -432,12 +444,12 @@ class AbstractDrawer:
         ymargin_top = yt or y
         ymargin_btm = yb or y
         
-        # Set page limits, centre and height/width
+        # Set page limits, center and height/width
         self.x0, self.y0 = self.pagesize[0]*xmargin_l, self.pagesize[1]*ymargin_btm
         self.xlim, self.ylim = self.pagesize[0]*(1-xmargin_r), self.pagesize[1]*(1-ymargin_top)
         self.pagewidth = self.xlim-self.x0
         self.pageheight = self.ylim-self.y0
-        self.xcentre, self.ycentre = self.x0+self.pagewidth/2., self.y0+self.pageheight/2.
+        self.xcenter, self.ycenter = self.x0+self.pagewidth/2., self.y0+self.pageheight/2.
 
             
     def set_bounds(self, start, end):
