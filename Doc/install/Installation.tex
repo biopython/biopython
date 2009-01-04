@@ -4,7 +4,8 @@
 % If you just want to read the documentation, you can pick up ready-to-go 
 % copies in both pdf and html format from:
 %
-% http://www.biopython.org/documentation/
+% http://biopython.org/DIST/docs/install/Installation.html
+% http://biopython.org/DIST/docs/install/Installation.pdf
 %
 % If you want to typeset the documentation, you'll need a standard TeX/LaTeX
 % distribution (I use teTeX, which works great for me on unix platforms).
@@ -54,7 +55,7 @@
 \begin{document}
 
 \title{Biopython Installation}
-\author{Brad Chapman}
+\author{Brad Chapman, with other contributors}
 
 \maketitle
 \tableofcontents
@@ -370,16 +371,17 @@ MySQLdb is not necessary.
 
 Additionally, both MySQLdb and psycopg (a PostgreSQL database adaptor)
 can be used for accessing BioSQL databases through Biopython
-(see \ahref{\url{http://biopython.org/wiki/BioSQL}}). Again if
+(see \ahrefurl{\url{http://biopython.org/wiki/BioSQL}}). Again if
 you are not going to use BioSQL, there shouldn't be any need to install
 these modules.
 
 \subsection{mxTextTools (no longer needed)}
 
-Historically this was an important Biopython dependency was used
-extensively in the internals of a number of parsers. However, it is now
-only used in a few deprecated modules.  You can skip installing this
-unless you hit an import error about mxTextTools when actually using Biopython.
+Historically this was an important Biopython dependency, used extensively
+in a number of parsers.  However, we have gradually phased out its use,
+and as of Biopython 1.49, mxTextTools is only used in a few deprecated
+modules.  You can skip installing this unless you hit an import error
+about mxTextTools when actually using Biopython.
 
 mxTextTools is available along with the entire mx-base system (which
 contains a number of other useful utilities as well) and the latest
@@ -387,7 +389,8 @@ version is available for download at:
 \ahrefurl{\url{http://www.egenix.com/products/python/mxBase/mxTextTools/}}.
 
 However, we currently recommend you install mxTextTools 2.0, as some of
-the API changes made in 3.0 version were not compatible with Biopython.  Goto \ahref{\ur{http://www.egenix.com/www2002/python/eGenix-mx-Extensions-v2.x.html/}}
+the API changes made in 3.0 version were not compatible with Biopython.  Goto
+\ahrefurl{\url{http://www.egenix.com/www2002/python/eGenix-mx-Extensions-v2.x.html/}}
 to download this.
 
 \subsubsection{UNIX and Mac OS X systems}
@@ -637,6 +640,22 @@ This should start up a Tk based graphical user interface (or default to the comm
 If you've made it this far, you've gotten Biopython installed and running.
 Congratulations!
 
+\section{Third Party Tools}
+
+Note that Biopython includes support for interfacing with or parsing the output from a number of third party command line tools.  These are not required to install Biopython, but may be of interest.  This includes:
+
+\begin{itemize}
+\item NCBI Standalone BLAST, which can used with the \verb|Bio.Blast| module.
+\item EMBOSS tools, which can be invoked using the \verb|Bio.EMBOSS| module.  The \verb|Bio.AlignIO| module can also parse some alignment formats output by the EMBOSS suite.
+\item ClustalW, which can be invoked using the \verb|Bio.Clustalw| module.
+\item SIMCOAL2 and FDist tools for population genetics can be used via the \verb|Bio.PopGen| module.
+\item Bill Pearson's FASTA tools output can be parsed using the \verb|Bio.AlignIO| module.
+\item Wise2 includes the useful tool dnal.
+\end{itemize}
+
+\noindent
+See also the listing on \ahrefurl{\url{http://biopython.org/wiki/Download}} which should include URLs for these tools, and may also be more up to date.
+
 \section{Notes for installing with non-administrator permissions}
 
 Although I mentioned above that I wouldn't go much into installing in
@@ -645,25 +664,15 @@ Biopython and it's dependencies into your home directory here are a
 few notes and tricks to keep you going:
 
 \begin{itemize}
-  \item The Numeric package will take a little trickery to get it to be
-    able to import. It will install a \verb|Numeric| directory and
-    \verb|Numeric.pth| file into \verb|your_dir/lib/python|. The problem
-    is that the \verb|Numeric.pth| file only works when located in the main
-    python \verb|site-packages| directory. The solution, fortunately, is
-    simple -- you need to make sure \verb|your_dir/lib/python| is in the
-    \verb|PYTHONPATH| and then need to make a \verb|__init__.py| file in
-    the \verb|Numeric| directory (an empty file or a file with just a
-    comment is fine, as long as it exists). Then \verb|import Numeric|
-    should work.
 
   \item Building some C modules, such as \verb|Bio.Cluster| require that 
-    the numpy/Numeric include files (normally installed in
+    the NumPy include files (normally installed in
     \verb|your_dir/include/python/Numeric|) be available. If the
     compiler can't find these directories you'll normally get an error
     like:
 
     \begin{verbatim}
-Bio/Cluster/clustermodule.c:2: Numeric/arrayobject.h: No such file or directory
+Bio/Cluster/clustermodule.c:2: NumpPy/arrayobject.h: No such file or directory
     \end{verbatim}
 
     Followed by a long messy list of syntax errors. To fix this, you'll
@@ -676,7 +685,7 @@ Bio/Cluster/clustermodule.c:2: Numeric/arrayobject.h: No such file or directory
     \end{verbatim}
 
     and adjust it so that it includes the include directory where the
-    numpy/Numeric libraries were installed:
+    NumPy libraries were installed:
     
     \begin{verbatim}
     include_dirs=["Bio/Cluster", "your_dir/include/python"]
