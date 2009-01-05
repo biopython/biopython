@@ -242,7 +242,8 @@ class DiagramTest(unittest.TestCase):
         """Check how the write methods respond to output format arguments."""
         gdd = Diagram('Test Diagram')
         filename = os.path.join("Graphics","error.txt")
-        for output in ["ps","pdf","xxx",None,123,5.9] :
+        #We (now) allow valid formats in any case.
+        for output in ["XXX","xxx",None,123,5.9] :
             try :
                 gdd.write(filename, output)
                 assert False, \
@@ -307,18 +308,17 @@ class DiagramTest(unittest.TestCase):
         output_filename = os.path.join('Graphics', 'GD_region_linear.pdf')
         gdd.write(output_filename, 'PDF')
 
+        #Also check the write_to_string method matches,
+        #(Note the possible confusion over new lines on Windows)
+        assert open(output_filename).read() \
+               == gdd.write_to_string('PDF').replace("\r\n","\n")
+
         #Circular with a particular start/end is a bit odd, but should work!
         gdd.draw(format='circular',
                  tracklines=False, pagesize=(10*cm,10*cm),
                  start=start, end=end)
         output_filename = os.path.join('Graphics', 'GD_region_circular.pdf')
         gdd.write(output_filename, 'PDF')
-
-        #This will only work if ReportLab's renderPM, PIL and the
-        #appropriate fonts are installed:
-        #output_filename = os.path.join('Graphics', 'GD_region_linear.png')
-        #gdd.write(output_filename, 'PNG')
-
 
     def t_diagram_via_methods_pdf(self) :
         """Construct and draw PDF using method approach."""
@@ -396,8 +396,6 @@ class DiagramTest(unittest.TestCase):
                  pagesize=(20*cm,20*cm), circular=True)
         output_filename = os.path.join('Graphics', 'GD_by_meth_circular.pdf')
         gdd.write(output_filename, 'PDF')
-
-        
 
     def t_diagram_via_object_pdf(self):
         """Construct and draw PDF using object approach."""
@@ -513,7 +511,7 @@ class DiagramTest(unittest.TestCase):
              tracklines=0, pagesize='A0', circular=True)
         output_filename = os.path.join('Graphics', 'GD_by_obj_circular.pdf')
         gdd.write(output_filename, 'PDF')
-        
+
         gdd.draw(format='linear', orientation='landscape',
              tracklines=0, pagesize='A0', fragments=3)
         output_filename = os.path.join('Graphics', 'GD_by_obj_linear.pdf')
