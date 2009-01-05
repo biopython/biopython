@@ -282,22 +282,24 @@ class Diagram(object):
                                     circular or self.circular)
         drawer.draw()   # Tell the drawer to complete the drawing
         self.drawing = drawer.drawing  # Get the completed drawing
-
-    def _write(self, output, dpi, file_if_not_string=None) :
-        """Helper function for output (PRIVATE).
-
-        ouput = upper case format string, e.g. PS, PDF or SVN
-                For bitmaps use JPG, BMP, GIF, PNG, TIFF/TIF, but note
-                that reportlab's renderPM module must be installed.
-
-        dpi = dots per inch, used for bitmap output only.
         
-        file_if_not_string = If a filename or handle, will write to that file
-                             (and the function has no return value).
-                           = None, will return the file contents as a string.
-                               
-        This function exists to reduce code duplication between the write
-        and write_to_string methods.
+    def write(self, filename='test1.ps', output='PS', dpi=72):
+        """ write(self, filename='test1.ps', output='PS', dpi=72)
+
+            o filename      String indicating the name of the output file,
+                            or a handle to write to.
+
+            o output        String indicating output format, one of PS, PDF,
+                            SVG, or provided the ReportLab renderPM module is
+                            installed, one of the bitmap formats JPG, BMP,
+                            GIF, PNG, TIFF or TIFF.  The format can be given
+                            in upper or lower case.
+
+            o dpi           Resolution (dots per inch) for bitmap formats.
+
+            Write the completed drawing out to a file in a prescribed format
+
+            No return value.
         """
         formatdict = {'PS': renderPS,
                       'PDF': renderPDF,
@@ -310,8 +312,10 @@ class Diagram(object):
                       'TIF': renderPM
                       }
         try :
-            drawmethod = formatdict[output]     # select drawing method
-        except KeyError :
+            #If output is not a string, then .upper() will trigger
+            #an attribute error...
+            drawmethod = formatdict[output.upper()] # select drawing method
+        except (KeyError,AttributeError) :
             raise ValueError("Output format should be one of %s" \
                              % ", ".join(formatdict))
 
@@ -322,50 +326,32 @@ class Diagram(object):
             raise MissingExternalDependencyError( \
                 "Please install ReportLab's renderPM module")
 
-        if file_if_not_string :
-            #To file
-            filename = file_if_not_string
-            if drawmethod == renderPM:
-                return drawmethod.drawToFile(self.drawing, filename,
-                                             output, dpi=dpi)
-            else:
-                return drawmethod.drawToFile(self.drawing, filename)
-        else :
-            #To string
-            if drawmethod == renderPM:
-                return drawmethod.drawToString(self.drawing,
-                                               output, dpi=dpi)
-            else:
-                return drawmethod.drawToString(self.drawing)
-        
-    def write(self, filename='test1.ps', output='PS', dpi=72):
-        """ write(self, filename='test1.ps', output='PS', dpi=72)
-
-            o filename      String indicating the name of the output file,
-                            or a handle to write to.
-
-            o output        String indicating output format, one of PS, PDF,
-                            SVG, JPG, BMP, GIF, PNG, TIFF or TIFF
-
-            o dpi           Resolution (dots per inch) for bitmap formats.
-
-            Write the completed drawing out to a file in a prescribed format
-
-            No return value.
-        """
-        self._write(output, dpi, filename)
+        #To file
+        if drawmethod == renderPM:
+            return drawmethod.drawToFile(self.drawing, filename,
+                                         output, dpi=dpi)
+        else:
+            return drawmethod.drawToFile(self.drawing, filename)
         
     def write_to_string(self, output='PS', dpi=72):
         """ write(self, output='PS')
 
             o output        String indicating output format, one of PS, PDF,
-                            SVG, JPG, BMP, GIF, PNG, TIFF or TIFF
+                            SVG, JPG, BMP, GIF, PNG, TIFF or TIFF (as
+                            specified for the write method).
 
             o dpi           Resolution (dots per inch) for bitmap formats.
 
             Return the completed drawing as a string in a prescribed format
         """
-        return self._write(output, dpi, None)
+        #The ReportLab drawToString method, which this function used to call,
+        #just uses a cStringIO or StringIO handle with the drawToFile method.
+        #In order to put all our complicated file format specific code in one
+        #place we'll just use a StringIO handle here:
+        from StringIO import StringIO
+        handle = StringIO()
+        self.write(handle, output, dpi)
+        return handle.getvalue()
 
     def add_track(self, track, track_level):
         """ add_track(self, track, track_level)
