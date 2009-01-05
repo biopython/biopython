@@ -36,12 +36,12 @@ class Alignment:
         >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
-        >>> align.add_sequence("Gamma", "ACTGCTAGDTAG")
+        >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
         >>> print align
         Gapped(IUPACUnambiguousDNA(), '-') alignment with 3 rows and 12 columns
         ACTGCTAGCTAG Alpha
         ACT-CTAGCTAG Beta
-        ACTGCTAGDTAG Gamma
+        ACTGCTAGATAG Gamma
         """
         if not (isinstance(alphabet, Alphabet.Alphabet) \
         or isinstance(alphabet, Alphabet.AlphabetEncoder)):
@@ -73,12 +73,12 @@ class Alignment:
         >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
-        >>> align.add_sequence("Gamma", "ACTGCTAGDTAG")
+        >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
         >>> print align
         Gapped(IUPACUnambiguousDNA(), '-') alignment with 3 rows and 12 columns
         ACTGCTAGCTAG Alpha
         ACT-CTAGCTAG Beta
-        ACTGCTAGDTAG Gamma
+        ACTGCTAGATAG Gamma
 
         See also the alignment's format method.
         """
@@ -129,20 +129,20 @@ class Alignment:
         >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
-        >>> align.add_sequence("Gamma", "ACTGCTAGDTAG")
+        >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
         >>> print align.format("fasta")
         >Alpha
         ACTGCTAGCTAG
         >Beta
         ACT-CTAGCTAG
         >Gamma
-        ACTGCTAGDTAG
+        ACTGCTAGATAG
         <BLANKLINE>
         >>> print align.format("phylip")
          3 12
         Alpha      ACTGCTAGCT AG
         Beta       ACT-CTAGCT AG
-        Gamma      ACTGCTAGDT AG
+        Gamma      ACTGCTAGAT AG
         <BLANKLINE>
 
         For Python 2.6, 3.0 or later see also the built in format() function.
@@ -188,7 +188,7 @@ class Alignment:
         >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
-        >>> align.add_sequence("Gamma", "ACTGCTAGDTAG")
+        >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
         >>> for record in align :
         ...    print record.id
         ...    print record.seq
@@ -197,7 +197,7 @@ class Alignment:
         Beta
         ACT-CTAGCTAG
         Gamma
-        ACTGCTAGDTAG
+        ACTGCTAGATAG
         """
         return iter(self._records) 
 
@@ -233,7 +233,7 @@ class Alignment:
         >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
-        >>> align.add_sequence("Gamma", "ACTGCTAGDTAG")
+        >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
         >>> align.get_alignment_length()
         12
         """
@@ -304,7 +304,7 @@ class Alignment:
         >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
         >>> align.add_sequence("Beta",  "ACT-CTAGCTAG")
-        >>> align.add_sequence("Gamma", "ACTGCTAGDTAG")
+        >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
         >>> align.get_column(0)
         'AAA'
         >>> align.get_column(3)
