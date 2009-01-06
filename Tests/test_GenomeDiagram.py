@@ -310,7 +310,7 @@ class DiagramTest(unittest.TestCase):
 
         #Also check the write_to_string method matches,
         #(Note the possible confusion over new lines on Windows)
-        assert open(output_filename).read() \
+        assert open(output_filename).read().replace("\r\n","\n") \
                == gdd.write_to_string('PDF').replace("\r\n","\n")
 
         #Circular with a particular start/end is a bit odd, but should work!
