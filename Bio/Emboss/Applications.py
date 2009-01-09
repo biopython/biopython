@@ -501,3 +501,20 @@ class DiffseqCommandline(Application.AbstractCommandline):
                  "Output report file format")
          ]
 
+class IepCommandline(Application.AbstractCommandline):
+    """Commandline for EMBOSS iep: calculated isoelectric point and charge.
+    """
+    def __init__(self, cmd = "iep"):
+        Application.AbstractCommandline.__init__(self)
+        self.program_name = cmd
+
+        self.parameters = [
+         _Option(["-sequence"], ["input", "file"], None, 1,
+                "Protein sequence(s) filename"),
+         _Option(["-outfile"], ["output", "file"], None, 1,
+                "Output report file name"),
+         _Option(["-amino"], ["input"], None, 0),
+         _Option(["-lysinemodified"], ["input"], None, 0),
+         _Option(["-disulphides"], ["input"], None, 0),
+         _Option(["-notermini"], ["input"], None, 0),
+         ]
