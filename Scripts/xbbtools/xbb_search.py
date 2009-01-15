@@ -12,7 +12,7 @@ from tkColorChooser import askcolor
 from Bio.Data.IUPACData import ambiguous_dna_values
 import re
 
-from Bio.sequtils import antiparallel
+from Bio.Seq import reverse_complement
 
 class DNAsearch:
     def __init__(self):
@@ -132,7 +132,7 @@ class XDNAsearch(Toplevel, DNAsearch):
         
     def do_search(self, other_strand = 0):
         pattern = self.get_pattern()
-        if other_strand: pattern = antiparallel(pattern)
+        if other_strand: pattern = reverse_complement(pattern)
         self.SetPattern(pattern)
         pos = self.Search(self.cur_pos)
         self.cur_pos = pos +1

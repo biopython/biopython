@@ -13,41 +13,36 @@ from Tkinter import *
 
 from Bio import Seq
 from Bio import Alphabet
-from Bio.Alphabet import IUPAC
-from Bio import Translate
-from Bio.Data import IUPACData
-
+from Bio.Seq import reverse_complement, translate
+from Bio.SeqUtils import GC
 
 class xbb_translations:
     def __init__(self):
         ""
 
     def frame1(self, seq, translation_table = 1):
-        dna = Seq.Seq(seq, IUPAC.unambiguous_dna)
-        trans = Translate.unambiguous_dna_by_id[translation_table]
-        protein = trans.translate(dna)
-        return protein
+        return translate(seq, table=translation_table)
 
     def complement(self, seq):
-        return string.join(map(lambda x:IUPACData.ambiguous_dna_complement[x], map(None,seq)),'')
+        #TODO - use Seq methods instead of this hack:?
+        return reverse_complement(seq)[::-1]
 
     def reverse(self, seq):
-        r = map(None, seq)
-        r.reverse()
-        return string.join(r,'')
+        return seq[::-1]
 
     def antiparallel(self, seq):
-        s = self.complement(seq)
-        s = self.reverse(s)
-        return s
+        return reverse_complement(seq)
     
     def frame(self, seq, frame, translation_table = 1):
-        dna = Seq.Seq(seq, IUPAC.unambiguous_dna)
-        trans = Translate.unambiguous_dna_by_id[translation_table]
         if not ((-3 <= frame <= -1) or (1 <= frame <= 3)):
             frame = 1
-        protein = trans.translate(dna)
-        return protein
+        if frame != 1 :
+            raise NotImplementedError
+            #TODO - Support the frame argument
+            #The old code didn't, but I can guess from
+            #the code the expected 1,2,3 for the forward
+            #strands and -1,-2,-3 for the reverse.
+        return translate(seq, table=translation_table)
 
     def header_nice(self, txt, seq):
         length = len(seq)
@@ -81,10 +76,8 @@ class xbb_translations:
         return res
     
     def gc(self, seq):
-        ngc = string.count(seq,'G') + string.count(seq,'C')
-        if ngc == 0: return 0.0
-        gc = (100.0*ngc)/len(seq)
-        return gc
+        """Returns a float between 0 and 100."""
+        return GC(seq)
     
     def gcframe(self, seq, translation_table = 1):
         # always use uppercase nt-sequence !!
