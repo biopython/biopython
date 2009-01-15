@@ -175,8 +175,8 @@ class Alignment:
         The return value is a list of SeqRecord objects.
 
         This method is semi-obsolete, as the Alignment object itself offers
-        much of the functionality of a list of SeqRecord objects (e.g. iteration
-        or slicing to create a sub-alignment).
+        much of the functionality of a list of SeqRecord objects (e.g.
+        iteration or slicing to create a sub-alignment).
         """
         return self._records
 
@@ -222,6 +222,18 @@ class Alignment:
         """
         return self._records[number].seq
 
+    def __len__(self) :
+        """Returns the number of sequences in the alignment.
+
+        Use len(alignment) to get the number of sequences (i.e. the number of
+        rows), and alignment.get_alignment_length() to get the length of the
+        longest sequence (i.e. the number of columns).
+
+        This is easy to remember if you think of the alignment as being like a
+        list of SeqRecord objects.
+        """
+        return len(self._records)
+    
     def get_alignment_length(self):
         """Return the maximum length of the alignment.
 
@@ -236,6 +248,13 @@ class Alignment:
         >>> align.add_sequence("Gamma", "ACTGCTAGATAG")
         >>> align.get_alignment_length()
         12
+
+        If you want to know the number of sequences in the alignment,
+        use len(align) instead:
+
+        >>> len(align)
+        3
+        
         """
         max_length = 0
 
