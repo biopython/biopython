@@ -4,8 +4,7 @@
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_utils.py
 
-import string, re
-import os, sys
+import sys
 sys.path.insert(0, '.')
 from Tkinter import *
 from FileDialog import SaveFileDialog

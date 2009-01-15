@@ -4,8 +4,7 @@
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_blast.py
 
-import string, re
-import os, sys, glob, time
+import os, sys, glob
 from threading import *
 import commands
 from Tkinter import *
@@ -87,8 +86,8 @@ class BlastIt:
             
     def _Run(self):
         alternative_command = self.alternative.get()
-        if len(string.strip(alternative_command)):
-            self.command = string.strip(alternative_command)
+        if len(alternative_command.strip()):
+            self.command = alternative_command.strip()
         else:
             db = self.dbs.get()
             prog = self.blasts.get()

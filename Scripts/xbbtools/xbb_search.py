@@ -4,7 +4,7 @@
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_search.py
 
-import string, re
+import re
 import os, sys, commands
 sys.path.insert(0, '.')
 from Tkinter import *
@@ -21,7 +21,7 @@ class DNAsearch:
         
     def init_alphabet(self):
         self.alphabet = ambiguous_dna_values
-        other = string.join(self.alphabet.keys(),'')
+        other = ''.join(self.alphabet.keys())
         self.alphabet['N'] = self.alphabet['N'] + other
         for key in self.alphabet.keys():
             if key == 'N': continue

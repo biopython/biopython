@@ -9,8 +9,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import string, re
-import os, sys
+import re
+import sys
 import time
 
 from Tkinter import *
@@ -109,19 +109,19 @@ class xbb_widget:
         # how would one implement Tk's -class ?
         tk = self.main_frame.master
         for k,v in self.colorsbg.items():
-            name = '*' + string.upper(k[0]) + k[1:] + '.background'
+            name = '*' + k[0].upper() + k[1:] + '.background'
             tk.option_add(name, v)
 
         for k,v in self.colorsfg.items():
-            name = '*' + string.upper(k[0]) + k[1:] + '.foreground'
+            name = '*' + k[0].upper() + k[1:] + '.foreground'
             tk.option_add(name, v)
             
         for k,v in self.colorsPMWbg.items():
-            name = '*' + string.upper(k[0]) + k[1:] + '.background'
+            name = '*' + k[0].upper() + k[1:] + '.background'
             tk.option_add(name, v)
 
         for k,v in self.colorsPMWfg.items():
-            name = '*' + string.upper(k[0]) + k[1:] + '.foreground'
+            name = '*' + k[0].upper() + k[1:] + '.foreground'
             tk.option_add(name, v)
             
     def create_menu(self, parent):
@@ -313,8 +313,8 @@ class xbb_widget:
         w = self.sequence_id
         w.selection_own()
         try:
-            a = int(string.split(w.index('sel.first'), '.')[1]) +1
-            b = int(string.split(w.index('sel.last'), '.')[1])
+            a = int(w.index('sel.first').split('.')[1]) +1
+            b = int(w.index('sel.last').split('.')[1])
             length = b - a + 1
 
             self.position_ids['from_id'].configure(text = 'Start:%d'% a)
@@ -324,7 +324,7 @@ class xbb_widget:
             self.statistics_ids['length_id'].configure(text = 'Length=%d' % length)
             seq = self.get_self_selection()
             for nt in ['A','C','G','T']:
-                n = string.count(seq,nt)
+                n = seq.count(nt)
                 self.statistics_ids[nt].configure(text = '%s=%d' % (nt,n))
                 
             
@@ -334,7 +334,7 @@ class xbb_widget:
     def position(self, event):
         x = event.x
         y = event.y
-        pos = string.split(self.sequence_id.index('@%d,%d' % (x,y)),'.')
+        pos = self.sequence_id.index('@%d,%d' % (x,y)).split('.')
         pos = int(pos[1]) + 1
         self.position_ids['id'].configure(text = str(pos))
         
@@ -348,20 +348,20 @@ class xbb_widget:
 
     def insert_sequence(self, (name, sequence)):
         self.sequence_id.delete(0.0, END)
-        self.sequence_id.insert(END, string.upper(sequence))
+        self.sequence_id.insert(END, sequence.upper())
         self.fix_sequence()
         self.update_label(name)
 
     def fix_sequence(self):
         seq = self.sequence_id.get(1.0,END)
-        seq = string.upper(seq)
+        seq = seq.upper()
         seq = re.sub('[^A-Z]','',seq)
         self.sequence_id.delete(0.0,END)
         self.sequence_id.insert(END, seq)
         
     def update_label(self, header):
-        name = string.split(header,' ')[0]
-        name = string.split(name,',')[0]
+        name = header.split(' ')[0]
+        name = name.split(',')[0]
         self.position_ids['label'].configure(text = name)
         
     def export(self):
@@ -395,7 +395,7 @@ class xbb_widget:
     def statistics(self):
         seq = self.get_selection_or_sequence()
         if not seq: return
-        seq = string.upper(seq)
+        seq = seq.upper()
         aa = {'A':0,'C':0,'G':0,'T':0,'N':0}
         for nt in seq:
             if nt not in aa: nt = 'N'
@@ -431,7 +431,7 @@ GC=%f
         seq = w.get(start, stop)
         seq = map(None,re.sub('[^A-Z]','',seq))
         seq.reverse()
-        seq = string.join(seq,'')
+        seq = ''.join(seq)
 
         w.delete(start, stop)
         w.insert(start, seq)
