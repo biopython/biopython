@@ -147,14 +147,19 @@ The short version is go to our downloads page (\url{http://biopython.org/wiki/Do
 download and install the listed dependencies, then download and install Biopython.
 For Windows we provide pre-compiled click-and-run installers, while for Unix and other
 operating systems you must install from source as described in the included README file.
-This is usually as simple as the standard command:
+This is usually as simple as the standard commands:
 
 \begin{verbatim}
+python setup.py build
+python setup.py test
 sudo python setup.py install
 \end{verbatim}
 
+\noindent (You can in fact skip the build and test, and go straight to the install --
+but its better to make sure everything seems to be working.)
+
 The longer version of our installation instructions covers
-installation of python, Biopython dependencies and Biopython itself.
+installation of Python, Biopython dependencies and Biopython itself.
 It is available in PDF
 (\url{http://biopython.org/DIST/docs/install/Installation.pdf})
 and HTML formats
