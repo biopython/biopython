@@ -49,13 +49,12 @@ import cStringIO
 
 # other Biopython stuff
 from Bio import SeqFeature
-from Bio.GenBank import LocationParser
 from Bio.ParserSupport import AbstractConsumer
-from utils import FeatureValueCleaner
 from Bio import Entrez
 
-#There used to be a (GenBank only) class _Scanner in
-#this file.  Now use a more generic system which we import:
+# other Bio.GenBank stuff
+import LocationParser
+from utils import FeatureValueCleaner
 from Scanner import GenBankScanner
 
 #Constants used to parse GenBank header lines
@@ -67,7 +66,7 @@ FEATURE_KEY_INDENT = 5
 FEATURE_QUALIFIER_INDENT = 21
 FEATURE_KEY_SPACER = " " * FEATURE_KEY_INDENT
 FEATURE_QUALIFIER_SPACER = " " * FEATURE_QUALIFIER_INDENT
-        
+
 class Iterator:
     """Iterator interface to move over a file of GenBank entries one at a time.
     """
@@ -705,12 +704,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         """
         # for each inner element, create a sub SeqFeature within the
         # current feature, then get the information for this feature
+        cur_feature.location_operator = function.name
         for inner_element in function.args:
             new_sub_feature = SeqFeature.SeqFeature()
             # inherit the type from the parent
             new_sub_feature.type = cur_feature.type 
             # add the join or order info to the location_operator
-            cur_feature.location_operator = function.name
             new_sub_feature.location_operator = function.name
             # inherit references and strand from the parent feature
             new_sub_feature.ref = cur_feature.ref
