@@ -1,11 +1,11 @@
 test_Wise
-test_dnal (test_Wise.TestWiseDryRun) ... ok
-test_psw (test_Wise.TestWiseDryRun) ... ok
-test_align (test_Wise.TestWise) ... ok
+Call dnal, and do a trivial check on its output. ... ok
+Call psw, and do a trivial check on its output. ... ok
+Call dnal with optional arguments, and do a trivial check on the output. ... ok
 Doctest: Bio.Wise._build_align_cmdline ... ok
 Doctest: Bio.Wise.all_pairs ... ok
 
 ----------------------------------------------------------------------
-Ran 5 tests in 0.010s
+Ran 5 tests in 0.070s
 
 OK
