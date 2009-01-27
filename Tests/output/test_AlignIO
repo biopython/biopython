@@ -386,6 +386,17 @@ Testing reading fasta-m10 format file Fasta/output005.m10 with 1 alignments
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
+Testing reading fasta-m10 format file Fasta/output006.m10 with 1 alignments
+ Alignment 0, with 2 sequences of length 131
+  GCAACGCTTCAAGAACTGGAATTAGGAACCGTGACA...CAT query
+  GCAACGCTTCAAGAACTGGAATTAGGAACCGTGACA...CAT gi|116660610|gb|EG558221.1|EG558221
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading ig format file IntelliGenetics/VIF_mase-pro.txt with 1 alignments
  Alignment 0, with 16 sequences of length 298
   MMMMMMMMMMMMMMMM alignment column 0

@@ -51,6 +51,7 @@ test_files = [ \
     ("fasta-m10", 2, 3, 'Fasta/output003.m10'),
     ("fasta-m10", 2, 1, 'Fasta/output004.m10'),
     ("fasta-m10", 2, 1, 'Fasta/output005.m10'),
+    ("fasta-m10", 2, 1, 'Fasta/output006.m10'),
     ("ig", 16, 1, 'IntelliGenetics/VIF_mase-pro.txt'),
     ("pir", 2, 1,  'NBRF/clustalw.pir'),
     ]
@@ -265,7 +266,7 @@ for (t_format, t_per, t_count, t_filename) in test_files :
     #Check AlignInfo.SummaryInfo likes the alignment
     summary = AlignInfo.SummaryInfo(alignment)
     dumb_consensus = summary.dumb_consensus()
-    gap_consensus = summary.gap_consensus()
+    #gap_consensus = summary.gap_consensus()
     if t_format != "nexus" :
         #Hack for bug 2535
         pssm = summary.pos_specific_score_matrix()

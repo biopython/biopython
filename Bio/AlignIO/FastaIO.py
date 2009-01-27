@@ -404,15 +404,21 @@ class FastaM10Iterator(AlignmentIterator) :
         Note that this code seems to work fine even when the "sq_offset"
         entries are prsent as a result of using the -X command line option.
         """
-        if int(annotation['al_start']) > int(annotation['al_stop']) :
-            raise ValueError("Unsupported inverted sequence found (from the -i option?)")
         align_stripped = alignment_seq_with_flanking.strip("-")
         display_start = int(annotation['al_display_start'])
-        start = int(annotation['al_start']) \
-              - display_start
-        end   = int(annotation['al_stop']) \
-              - display_start \
-              + align_stripped.count("-") + 1
+        if int(annotation['al_start']) <= int(annotation['al_stop']) :
+            start = int(annotation['al_start']) \
+                  - display_start
+            end   = int(annotation['al_stop']) \
+                  - display_start \
+                  + align_stripped.count("-") + 1
+        else :
+            #FASTA has flipped this sequence...
+            start = int(annotation['al_start']) \
+                  - display_start
+            end   = display_start \
+                  - int(annotation['al_stop']) \
+                  + align_stripped.count("-") + 1
         return align_stripped[start:end]
 
 

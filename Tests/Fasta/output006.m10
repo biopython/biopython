@@ -1,0 +1,85 @@
+# /Users/pjcock/Downloads/Software/fasta-35.4.4/bin/fasta35 -H -q -E 0.05 -m 10 query.txt orchid_cds.txt
+FASTA searches a protein or DNA sequence data bank
+ version 35.04 Jan. 15, 2009
+Please cite:
+ W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
+
+Query: query.txt
+  1>>>query - 131 nt
+Library: orchid_cds.txt     573 residues in     1 sequences
+
+    573 residues in     1 sequences
+Statistics: (shuffled [500]) MLE statistics: Lambda= 0.1428;  K=0.01152
+Algorithm: FASTA (3.5 Sept 2006) [optimized]
+Parameters: +5/-4 matrix (5:-4) ktup: 6
+ join: 46, opt: 31, open/ext: -12/-4, width:  16
+ Scan time:  0.030
+
+The best scores are:                                      opt bits E(1)
+gi|116660610|gb|EG558221.1|EG558221 CR03001A07 ( 573) [r]  646 139.6 7.2e-38
+
+>>>query, 131 nt vs orchid_cds.txt library
+; pg_name: /Users/pjcock/Downloads/Software/fasta-35.4.4/bin/fasta35
+; pg_ver: 35.04
+; pg_argv: /Users/pjcock/Downloads/Software/fasta-35.4.4/bin/fasta35 -H -q -E 0.05 -m 10 query.txt orchid_cds.txt
+; pg_name_alg: FASTA
+; pg_ver_rel: 3.5 Sept 2006
+; pg_matrix: +5/-4 (5:-4)
+; pg_open-ext: -12 -4
+; pg_ktup: 6
+; pg_optcut: 31
+; pg_cgap: 46
+; mp_extrap: 60000 500
+; mp_stats: (shuffled [500]) MLE statistics: Lambda= 0.1428;  K=0.01152
+; mp_KS: -0.0000 (N=0) at   0
+; mp_Algorithm: FASTA (3.5 Sept 2006) [optimized]
+; mp_Parameters: +5/-4 matrix (5:-4) ktup: 6  join: 46, opt: 31, open/ext: -12/-4, width:  16
+>>gi|116660610|gb|EG558221.1|EG558221 CR03001A07 Root CR03 cDNA library Catharanthus roseus cDNA clone CR03001A07 5', mRNA sequence
+; fa_frame: r
+; fa_initn: 646
+; fa_init1: 646
+; fa_opt: 646
+; fa_z-score: 712.3
+; fa_bits: 139.6
+; fa_expect: 7.2e-38
+; bs_ident: 0.992
+; bs_sim: 0.992
+; bs_overlap: 131
+>query ..
+; sq_len: 131
+; sq_offset: 132
+; sq_type: D
+; al_start: 131
+; al_stop: 1
+; al_display_start: 131
+------------------------------GCAACGCTTCAAGAACTGGA
+ATTAGGAACCGTGACAACGATTAATGAGGAGATTTATGAAGAGGGTTCTT
+CGATTTTAGGCCAATCGGAAGGAATTATGTAGCAAGTCCATCAGAAAATG
+GAAGAAGTCAT
+>gi|116660610|gb|EG558221.1|EG558221 ..
+; sq_len: 573
+; sq_offset: 1
+; sq_type: D
+; al_start: 360
+; al_stop: 490
+; al_display_start: 330
+CAAGGGTTGATTATGTCATATCCAGCCGTTGCAACGCTTCAAGAACTGGA
+ATTAGGAACCGTGACAACGATTAATGAGGAGATTTATGAAGAGGGTTCTT
+CGATTTTAGGCCAATCGGAAGGAATTATGTAGCAAGTCCATCAGAAAATG
+GAAGTAGTCATCATATGATGATGGCAATGACAGTAAGTTTTAATAATAAT
+AATAATGGTGATCATGATGAGAAGATTAAGGATGGATTAA
+; al_cons:
+                              ::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+:::: ::::::
+>>><<<
+
+
+131 residues in 1 query   sequences
+573 residues in 1 library sequences
+ Scomplib [35.04]
+ start: Tue Jan 27 18:10:06 2009 done: Tue Jan 27 18:10:06 2009
+ Total Scan time:  0.030 Total Display time:  0.010
+
+Function used was FASTA [version 35.04 Jan. 15, 2009]
