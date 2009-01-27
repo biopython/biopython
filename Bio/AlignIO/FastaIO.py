@@ -217,7 +217,12 @@ class FastaM10Iterator(AlignmentIterator) :
         #They appear to just shift the origin used in the calculation of the coordinates.
         
         if len(query_align_seq) != len(match_align_seq) :
-            raise ValueError("Problem parsing the alignment sequence coordinates")
+            raise ValueError("Problem parsing the alignment sequence coordinates, " 
+                             "following should be the same length but are not:\n"
+                             "%s - len %i\n%s - len %i" % (query_align_seq,
+                                                           len(query_align_seq),
+                                                           match_align_seq,
+                                                           len(match_align_seq)))
         if "sw_overlap" in alignment_annotation :
             if int(alignment_annotation["sw_overlap"]) != len(query_align_seq) :
                 raise ValueError("Specified sw_overlap = %s does not match expected value %i" \
@@ -414,11 +419,14 @@ class FastaM10Iterator(AlignmentIterator) :
                   + align_stripped.count("-") + 1
         else :
             #FASTA has flipped this sequence...
-            start = int(annotation['al_start']) \
-                  - display_start
+            start = display_start \
+                  - int(annotation['al_start'])
             end   = display_start \
                   - int(annotation['al_stop']) \
                   + align_stripped.count("-") + 1
+        assert 0 <= start and start < end and end <= len(align_stripped), \
+               "Problem with sequence start/stop,\n%s[%i:%i]\n%s" \
+               % (alignment_seq_with_flanking, start, end, annotation)
         return align_stripped[start:end]
 
 
