@@ -21,9 +21,8 @@ try:
 except NameError:
     from sets import Set as set
 
-# XXX typecodes for Numeric
-# XXX multiprocessor
-
+#These are module level defaults, which in theory users might change
+#at run time to adjust the behaviour of the train function:
 MAX_IIS_ITERATIONS = 10000    # Maximum iterations for IIS.
 IIS_CONVERGE = 1E-5           # Convergence criteria for IIS.
 MAX_NEWTON_ITERATIONS = 100   # Maximum iterations on Newton's method.
@@ -202,7 +201,7 @@ def _iis_solve_delta(N, feature, f_sharp, empirical, prob_yx):
     return delta
 
 def _train_iis(xs, classes, features, f_sharp, alphas, e_empirical):
-    # Do one iteration of hill climbing to find better alphas.
+    """Do one iteration of hill climbing to find better alphas (PRIVATE)."""
     # This is a good function to parallelize.
 
     # Pre-calculate P(y|x)
@@ -217,7 +216,7 @@ def _train_iis(xs, classes, features, f_sharp, alphas, e_empirical):
 
 
 def train(training_set, results, feature_fns, update_fn=None):
-    """train(training_set, results, feature_fns[, update_fn]) -> MaxEntropy object
+    """Train a maximum entropy classifier, returns MaxEntropy object.
 
     Train a maximum entropy classifier on a training set.
     training_set is a list of observations.  results is a list of the
@@ -306,7 +305,7 @@ if __name__ == "__main__" :
     #Requires some rules or features
     def udf1(ts, cl):
         if ts[0] =='Red':
-	    return 0
+            return 0
         else:
             return 1
 
@@ -326,5 +325,5 @@ if __name__ == "__main__" :
 
     xe=train(xcar, ycar, user_functions)
     for xv,yv in zip(xcar, ycar):
-	    xc=classify(xe, xv)
-	    print 'Pred:', xv, 'gives', xc, 'y is', yv
+        xc=classify(xe, xv)
+        print 'Pred:', xv, 'gives', xc, 'y is', yv
