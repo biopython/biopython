@@ -2,6 +2,10 @@ This file provides documentation for modules in Biopython that have been moved
 or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
 
+Bio.EZRetrieve
+==============
+Declared obsolete in Release 1.50, will be deprecated in a subsequent release.
+
 Bio.Graphics.GenomeDiagram and colour/color, centre/center
 ==========================================================
 GenomeDiagram originally used colour and centre (UK spelling of color and

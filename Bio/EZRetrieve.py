@@ -1,9 +1,11 @@
-"""This module contains code to access EZRetrieve.
+"""This module contains code to access EZRetrieve (OBSOLETE).
 
 Functions:
 retrieve_single  Retrieve a single sequence from EZRetrieve.
 parse_single     Parse the results from EZRetrieve into FASTA format.
 
+This module is now considered to be obsolete, and is likely to be deprecated
+in a future release of Biopython, and later removed.
 """
 
 def retrieve_single(id, from_, to, retrieve_by=None, organism=None,
