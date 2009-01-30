@@ -1,5 +1,13 @@
 """This module contains code to access EZRetrieve (OBSOLETE).
 
+This is a very simple interface to the EZRetrieve website described in:
+
+Zhang, H., Ramanathan, Y., Soteropoulos, P., Recce, M., and Tolias, P.P. (2002).
+EZ-Retrieve: A web-server for batch retrieval of coordinate-specified human
+DNA sequences and underscoring putative transcription factor-binding sites.
+Nucl. Acids. Res. 2002 30: e121.
+http://dx.doi.org/10.1093/nar/gnf120
+
 Functions:
 retrieve_single  Retrieve a single sequence from EZRetrieve.
 parse_single     Parse the results from EZRetrieve into FASTA format.
