@@ -1,4 +1,4 @@
-# Copyright 2006-2008 by Peter Cock.  All rights reserved.
+# Copyright 2006-2009 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -131,7 +131,21 @@ class FastaWriter(SequentialSequenceWriter):
         assert "\r" not in title
         self.handle.write(">%s\n" % title)
 
-        data = record.seq.tostring()
+        try :
+            #The tostring() method is part of the Seq API, we could instead
+            #use str(record.seq) but that would give a string "None" if the
+            #sequence was None, and unpredicatable output if an unexpected
+            #object was present.
+            data = record.seq.tostring()
+        except AttributeError :
+            if data is None :
+                #We could silently treat this as an empty sequence, Seq(""),
+                #but that would be an implict assumption we should avoid.
+                raise TypeError("SeqRecord (id=%s) has None for its sequence." \
+                                % record.id)
+            else :
+                raise TypeError("SeqRecord (id=%s) has an invalid sequence." \
+                                % record.id)
         assert "\n" not in data
         assert "\r" not in data
 
