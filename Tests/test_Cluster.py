@@ -23,6 +23,8 @@ def run_tests(module="Pycluster"):
 
 class TestCluster(unittest.TestCase):
 
+    module = 'Bio.Cluster'
+
     def test_median_mean(self):
         if TestCluster.module=='Bio.Cluster':
             from Bio.Cluster import mean, median
