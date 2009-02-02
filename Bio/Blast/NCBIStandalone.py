@@ -1984,12 +1984,19 @@ def _invoke_blast(blast_cmd, params) :
 
     cmd_string = " ".join([_escape_filename(blast_cmd)] + params)
 
+    #Try and use subprocess (available in python 2.4+)
     try :
         import subprocess, sys
+        #We don't need to supply any piped input, but we setup the
+        #standard input pipe anyway as a work around for a python
+        #bug if this is called from a Windows GUI program.  For
+        #details, see http://bugs.python.org/issue1124861
         blast_process = subprocess.Popen(cmd_string,
+                                         stdin=subprocess.PIPE,
                                          stdout=subprocess.PIPE,
                                          stderr=subprocess.PIPE,
                                          shell=(sys.platform!="win32"))
+        blast_process.stdin.close()
         return blast_process.stdout, blast_process.stderr
     except ImportError :
         #subprocess isn't available on python 2.3

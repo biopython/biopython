@@ -22,10 +22,16 @@ def generic_run(commandline):
     #Try and use subprocess (available in python 2.4+)
     try :
         import subprocess, sys
+        #We don't need to supply any piped input, but we setup the
+        #standard input pipe anyway as a work around for a python
+        #bug if this is called from a Windows GUI program.  For
+        #details, see http://bugs.python.org/issue1124861
         child = subprocess.Popen(str(commandline),
+                                 stdin=subprocess.PIPE,
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  shell=(sys.platform!="win32"))
+        child.stdin.close()
         r = child.stdout
         e = child.stderr 
 

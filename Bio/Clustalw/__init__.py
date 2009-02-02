@@ -87,13 +87,20 @@ def do_alignment(command_line, alphabet=None):
     o A clustal alignment object corresponding to the created alignment.
     If the alignment type was not a clustal object, None is returned.
     """
+    #Try and use subprocess (available in python 2.4+)
     try :
         import subprocess
+        #We don't need to supply any piped input, but we setup the
+        #standard input pipe anyway as a work around for a python
+        #bug if this is called from a Windows GUI program.  For
+        #details, see http://bugs.python.org/issue1124861
         child_process = subprocess.Popen(str(command_line),
+                                         stdin=subprocess.PIPE,
                                          stdout=subprocess.PIPE,
                                          stderr=subprocess.PIPE,
                                          shell=(sys.platform!="win32")
                                          )
+        child_process.stdin.close()
         status = child_process.wait()
     except ImportError :
         #Fall back for python 2.3
