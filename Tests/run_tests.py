@@ -21,10 +21,7 @@ import os
 import re
 import getopt
 import time
-
-# PyUnit
 import unittest
-
 import distutils.util
 
 def main(argv):
@@ -81,7 +78,7 @@ def main(argv):
             args[arg_num] = args[arg_num][:-3]
 
     # run the tests
-    runner = GlobalTestRunner(args)
+    runner = TestRunner(args)
     runner.run()
 
 
@@ -107,7 +104,7 @@ class ComparisonTestCase(unittest.TestCase):
     def runTest(self):
         # check the expected output to be consistent with what
         # we generated
-        outputdir = os.path.join(GlobalTestRunner.testdir, "output")
+        outputdir = os.path.join(TestRunner.testdir, "output")
         outputfile = os.path.join(outputdir, self.name)
         try:
             expected = open(outputfile, 'r')
@@ -152,7 +149,7 @@ class ComparisonTestCase(unittest.TestCase):
     def generate_output(self):
         """Generate the golden output for the specified test.
         """
-        outputdir = os.path.join(GlobalTestRunner.testdir, "output")
+        outputdir = os.path.join(TestRunner.testdir, "output")
         outputfile = os.path.join(outputdir, self.name)
 
         output_handle = open(outputfile, 'w')
@@ -178,7 +175,7 @@ class ComparisonTestCase(unittest.TestCase):
             sys.stdout = save_stdout
 
 
-class GlobalTestRunner(unittest.TextTestRunner):
+class TestRunner(unittest.TextTestRunner):
 
     if __name__ == '__main__':
         file = sys.argv[0]
@@ -191,7 +188,7 @@ class GlobalTestRunner(unittest.TextTestRunner):
         self.tests = tests
         if not self.tests:
             # Make a list of all applicable test modules.
-            names = os.listdir(GlobalTestRunner.testdir)
+            names = os.listdir(TestRunner.testdir)
             for name in names:
                 if name[:5] == "test_" and name[-3:] == ".py":
 	            self.tests.append(name[:-3])
@@ -246,7 +243,7 @@ class GlobalTestRunner(unittest.TextTestRunner):
         sys.stderr.write(self.stream.getvalue())
         sys.stderr.write('-' * 70 + "\n")
         n = len(self.tests)
-        sys.stderr.write("Ran %d test%s in %.3f\n" %
+        sys.stderr.write("Ran %d test%s in %.3f seconds\n" %
                             (n, n != 1 and "s" or "", timeTaken))
         sys.stderr.write("\n")
         if failures:
