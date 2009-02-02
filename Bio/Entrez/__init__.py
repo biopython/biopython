@@ -324,12 +324,12 @@ def _open(cgi, params={}):
     # Wrap the handle inside an UndoHandle.
     uhandle = File.UndoHandle(handle)
 
-    # Check for errors in the first 5 lines.
+    # Check for errors in the first 7 lines.
     # This is kind of ugly.
     lines = []
-    for i in range(5):
+    for i in range(7):
         lines.append(uhandle.readline())
-    for i in range(4, -1, -1):
+    for i in range(6, -1, -1):
         uhandle.saveline(lines[i])
     data = ''.join(lines)
                    
@@ -340,6 +340,14 @@ def _open(cgi, params={}):
         raise IOError("502 Proxy Error (NCBI busy?)")
     elif "WWW Error 500 Diagnostic" in data:
         raise IOError("WWW Error 500 Diagnostic (NCBI busy?)")
+    elif "<title>Service unavailable!</title>" in data :
+        #Probably later in the file it will say "Error 503"
+        raise IOError("Service unavailable!")
+    elif "<title>Bad Gateway!</title>" in data :
+        #Probably later in the file it will say:
+        #  "The proxy server received an invalid
+        #   response from an upstream server."
+        raise IOError("Bad Gateway!")
     elif data.startswith("Error:") :
         #e.g. 'Error: Your session has expired. Please repeat your search.\n'
         raise IOError(data.strip())
