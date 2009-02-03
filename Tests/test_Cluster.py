@@ -8,17 +8,6 @@ except ImportError :
         "Install NumPy if you want to use Bio.Cluster.")
 
 import unittest
-import sys
-
-def run_tests(module="Pycluster"):
-    if module==[]:
-        module = "Bio.Cluster"
-    if not module in ("Pycluster", "Bio.Cluster"):
-        raise ValueError('Unknown module name: ' + module)
-    TestCluster.module = module
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestCluster)
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(suite)
 
 
 class TestCluster(unittest.TestCase):
@@ -646,5 +635,6 @@ class TestCluster(unittest.TestCase):
         self.assertAlmostEqual(error, 7.680, 3)
 
 if __name__ == "__main__" :
-    print "test_Cluster"
-    run_tests("Bio.Cluster")
+    TestCluster.module = 'Bio.Cluster'
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)
