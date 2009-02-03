@@ -4,14 +4,12 @@
 Also tests Training methods.
 """
 # standard modules
-import sys
+import unittest
 
 # biopython
 from Bio import Alphabet
 from Bio.Seq import Seq
 
-# PyUnit
-import unittest
 
 # stuff we are testing
 from Bio.HMM import MarkovModel
@@ -41,7 +39,7 @@ class MarkovModelBuilderTest(unittest.TestCase):
         self.mm_builder = MarkovModel.MarkovModelBuilder(NumberAlphabet(),
                                                          LetterAlphabet())
 
-    def t_test_initialize(self):
+    def test_test_initialize(self):
         """Making sure MarkovModelBuilder is initialized correctly.
         """
         expected_transition_prob = {}
@@ -64,7 +62,7 @@ class MarkovModelBuilderTest(unittest.TestCase):
                            expected_emission_pseudo)
 
 
-    def t_allow_all_transitions(self):
+    def test_allow_all_transitions(self):
         """Testing allow_all_transtions.
         """
         self.mm_builder.allow_all_transitions()
@@ -89,7 +87,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
 
         self.mm = mm_builder.get_markov_model()
 
-    def t_transitions_from(self):
+    def test_transitions_from(self):
         """Testing the calculation of transitions_from
         """
         state_1 = self.mm.transitions_from("1")
@@ -126,7 +124,7 @@ class ScaledDPAlgorithmsTest(unittest.TestCase):
         # finally set up the DP
         self.dp = DynamicProgramming.ScaledDPAlgorithms(mm, training_seq)
         
-    def t_calculate_s_value(self):
+    def test_calculate_s_value(self):
         """Testing the calculation of s values.
         """
         previous_vars = {('1', 0) : .5,
@@ -141,7 +139,7 @@ class AbstractTrainerTest(unittest.TestCase):
         hmm = MarkovModel.HiddenMarkovModel({}, {}, {}, {})
         self.test_trainer = Trainer.AbstractTrainer(hmm)
     
-    def t_ml_estimator(self):
+    def test_ml_estimator(self):
         """Test the maximum likelihood estimator for simple cases.
         """
         # set up a simple dictionary
@@ -169,7 +167,7 @@ class AbstractTrainerTest(unittest.TestCase):
                                                    test_result[1],
                                                    test_result[0])
 
-    def t_log_likelihood(self):
+    def test_log_likelihood(self):
         """Calculate log likelihood.
         """
         probs = [.25, .13, .12, .17]
@@ -180,20 +178,6 @@ class AbstractTrainerTest(unittest.TestCase):
           "Bad probability calculated: %s" % log_prob
 
 # run the tests
-all_tests = [MarkovModelBuilderTest, HiddenMarkovModelTest,
-             ScaledDPAlgorithmsTest, AbstractTrainerTest]
-
-runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-test_loader = unittest.TestLoader()
-test_loader.testMethodPrefix = 't_'
-
-for cur_test in all_tests:
-    test_suite = test_loader.loadTestsFromTestCase(cur_test)
-    runner.run(test_suite)
-
-        
-        
-
-        
-
-        
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

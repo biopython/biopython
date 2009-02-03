@@ -2,8 +2,7 @@
 """Tests different Genetic Algorithm crossover classes.
 """
 # standard library
-import sys
-import string
+import unittest
 
 # biopython
 from Bio.Seq import MutableSeq
@@ -18,21 +17,6 @@ from Bio.GA.Crossover.TwoPoint     import TwoPointCrossover
 from Bio.GA.Crossover.Point        import SinglePointCrossover
 from Bio.GA.Crossover.Uniform      import UniformCrossover
 
-
-# PyUnit
-import unittest
-
-def run_tests(argv):
-    ALL_TESTS = [SinglePointTest, FourPointTest, InterleaveTest,
-                 TwoPointTest, UniformTest, SafeFitnessTest]
-    
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    
-    for test in ALL_TESTS:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        runner.run(cur_suite)
 
 class TestAlphabet(SingleLetterAlphabet):
     """Simple test alphabet.
@@ -60,7 +44,7 @@ class SinglePointTest(unittest.TestCase):
         
         self.crossover  = SinglePointCrossover(1.0)
 	
-    def t_basic_crossover(self):
+    def test_basic_crossover(self):
         """Test basic point crossover functionality.
         """
         start_genome_1 = self.org_1.genome[:]
@@ -92,7 +76,7 @@ class UniformTest(unittest.TestCase):
 	
         self.crossover = UniformCrossover(1.0, 0.8)
 
-    def t_basic_crossover(self):
+    def test_basic_crossover(self):
         """Test basic uniform crossover functionality.
         """
         start_genome_1 = self.org_1.genome[:]
@@ -109,7 +93,7 @@ class UniformTest(unittest.TestCase):
                "Returned an exact copy of the original organism."
 	return
 
-    def t_ds_prop_uniform_crossover(self):
+    def test_ds_prop_uniform_crossover(self):
 	"""Test properties of differing genome length, uniform crossovers.
 	"""
         new_org_1, new_org_2 = self.crossover.do_crossover(self.org_1,
@@ -119,15 +103,15 @@ class UniformTest(unittest.TestCase):
 	assert len(new_org_1.genome) > len(new_org_2.genome), \
 	       "Strings are of wrong sizes after uniform crossover."
 
-        assert string.count( new_org_2.genome.tostring(), "1" ) ==  \
-	       string.count( new_org_1.genome.tostring(), "3" ),    \
+        assert new_org_2.genome.tostring().count("1") ==  \
+	       new_org_1.genome.tostring().count("3"),    \
 	       "There should be equal distributions of the smaller string"
 
 	assert self.org_1.genome[len(new_org_2.genome):] == \
 	       new_org_1.genome[len(new_org_2.genome):], \
 	       "Uniform should not touch non-overlapping elements of genome"
 	return
-    def t_ss_prop_uniform_crossover(self):
+    def test_ss_prop_uniform_crossover(self):
 	"""Test properties of equal genome length, uniform crossovers.
 	"""
         new_org_1, new_org_2 = self.crossover.do_crossover(self.org_1,
@@ -137,10 +121,10 @@ class UniformTest(unittest.TestCase):
 	assert len(new_org_1.genome) == len(new_org_2.genome), \
 	       "Strings are of different sizes after symmetric crossover."
 
-        assert string.count( new_org_1.genome.tostring(), "1" ) ==  \
-	       string.count( new_org_2.genome.tostring(), "2" ) and \
-	       string.count( new_org_1.genome.tostring(), "2" ) ==  \
- 	       string.count( new_org_2.genome.tostring(), "1" ),    \
+        assert new_org_1.genome.tostring().count("1") ==  \
+	       new_org_2.genome.tostring().count("2") and \
+	       new_org_1.genome.tostring().count("2") ==  \
+ 	       new_org_2.genome.tostring().count("1"),    \
 	       "There should be equal, inverse distributions"
 	return
 
@@ -160,7 +144,7 @@ class InterleaveTest(unittest.TestCase):
         
 	self._crossover  = InterleaveCrossover(1.0)
 
-    def t_basic_crossover(self):
+    def test_basic_crossover(self):
         """Test basic interleave crossover functionality.
         """
         start_genome_1 = self.org_1.genome[:]
@@ -177,7 +161,7 @@ class InterleaveTest(unittest.TestCase):
                "Returned an exact copy of the original organism."
 	return
 	       
-    def t_prop_sym_crossover(self):
+    def test_prop_sym_crossover(self):
 	"""Test properties of interleave point crossover.
 	"""
         new_org_1, new_org_2 = self._crossover.do_crossover(self.org_1,
@@ -186,10 +170,10 @@ class InterleaveTest(unittest.TestCase):
 	assert len(new_org_1.genome) == len(new_org_2.genome), \
 	       "Strings are of different sizes after symmetric crossover."
 
-        assert string.count( new_org_1.genome.tostring(), "1" ) ==  \
-	       string.count( new_org_2.genome.tostring(), "2" ) and \
-	       string.count( new_org_1.genome.tostring(), "2" ) ==  \
- 	       string.count( new_org_2.genome.tostring(), "1" ),    \
+        assert new_org_1.genome.tostring().count("1" ) ==  \
+	       new_org_2.genome.tostring().count("2" ) and \
+	       new_org_1.genome.tostring().count("2" ) ==  \
+ 	       new_org_2.genome.tostring().count("1" ),    \
 	       "There should be equal, inverse distributions"
 	       
 	assert new_org_1.genome.tostring() == "12121" and  \
@@ -198,7 +182,7 @@ class InterleaveTest(unittest.TestCase):
 	       
 	return
 
-    def t_prop_asym_crossover(self):
+    def test_prop_asym_crossover(self):
 	"""Test basic interleave crossover with asymmetric genomes.
 	"""
         start_genome_1 = self.org_1.genome[:]
@@ -233,7 +217,7 @@ class FourPointTest(unittest.TestCase):
 	self.sym_crossover  = GeneralPointCrossover(3,1.0)
 	self.asym_crossover = GeneralPointCrossover(4,1.0)
 	
-    def t_basic_crossover(self):
+    def test_basic_crossover(self):
         """Test basic 4-point crossover functionality.
         """
         start_genome_1 = self.org_1.genome[:]
@@ -250,7 +234,7 @@ class FourPointTest(unittest.TestCase):
                "Returned an exact copy of the original organism."
 	return
 	       
-    def t_prop_sym_crossover(self):
+    def test_prop_sym_crossover(self):
 	"""Test properties of symmetric 4-point crossover.
 	"""
         new_org_1, new_org_2 = self.sym_crossover.do_crossover(self.org_1,
@@ -260,15 +244,15 @@ class FourPointTest(unittest.TestCase):
 	       "Strings are of different sizes after symmetric crossover."
 
 	
-        assert string.count( new_org_1.genome.tostring(), "1" ) ==  \
-	       string.count( new_org_2.genome.tostring(), "2" ) and \
-	       string.count( new_org_1.genome.tostring(), "2" ) ==  \
- 	       string.count( new_org_2.genome.tostring(), "1" ),    \
+        assert new_org_1.genome.tostring().count("1") ==  \
+	       new_org_2.genome.tostring().count("2") and \
+	       new_org_1.genome.tostring().count("2") ==  \
+ 	       new_org_2.genome.tostring().count("1"),    \
 	       "There should be equal, inverse distributions"
 	       
 	return
     
-    def t_basic_asym_crossover(self):
+    def test_basic_asym_crossover(self):
         """Test basic asymmetric 2-point crossover functionality.
         """
         start_genome_1 = self.org_1.genome[:]
@@ -300,7 +284,7 @@ class TwoPointTest(unittest.TestCase):
         
 	self.asym_crossover = TwoPointCrossover(1.0)
 
-    def t_basic_asym_crossover(self):
+    def test_basic_asym_crossover(self):
         """Test basic asymmetric 2-point crossover functionality.
         """
         start_genome_1 = self.org_1.genome[:]
@@ -371,7 +355,7 @@ class SafeFitnessTest(unittest.TestCase):
 
         self.test_crossover = TestCrossover()
 
-    def t_keep_higher(self):
+    def test_keep_higher(self):
         """Make sure we always keep higher fitness when specified.
         """
         crossover = SafeFitnessCrossover(self.test_crossover)
@@ -395,7 +379,7 @@ class SafeFitnessTest(unittest.TestCase):
                 new_org_2.fitness > self.org_2.fitness), \
                 "Did not get new organism when it had higher fitness."
 
-    def t_keep_lower(self):
+    def test_keep_lower(self):
         """Make sure we do normal crossover functionality when specified.
         """
         crossover = SafeFitnessCrossover(self.test_crossover, 1.0)
@@ -420,4 +404,5 @@ class SafeFitnessTest(unittest.TestCase):
                 "Did not get new organism under higher fitness conditions."
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

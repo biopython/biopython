@@ -7,9 +7,7 @@
 
 # Builtins
 import os
-import sys
 import unittest
-import string
 
 # Do we have ReportLab?  Raise error if not present.
 from Bio import MissingExternalDependencyError
@@ -177,31 +175,12 @@ def calc_dinucleotide_counts(sequence):
 ###############################################################################
 
 # Tests
-def run_tests(argv):
-    test_suite = testing_suite()
-
-    runner = unittest.TextTestRunner(sys.stdout, verbosity=2)
-    runner.run(test_suite)
-
-def testing_suite():
-    test_suite = unittest.TestSuite()
-
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    tests = [GraphTest, ColorsTest, TrackTest, DiagramTest]   
-
-    for test in tests:
-        current_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(current_suite)
-
-    return test_suite        
-
 class TrackTest(unittest.TestCase):
     # TODO Bring code from Track.py, unsure about what test does
     pass
 
 class ColorsTest(unittest.TestCase):
-    def t_color_conversions(self):
+    def test_color_conversions(self):
         """Test color translations.
         """
         translator = ColorTranslator()
@@ -221,7 +200,7 @@ class GraphTest(unittest.TestCase):
     def setUp(self):
         self.data = [(1, 10), (5, 15), (20, 40)]
         
-    def t_slicing(self):
+    def test_slicing(self):
         gd = GraphData()
         gd.set_data(self.data)
         gd.add_point((10, 20))
@@ -238,7 +217,7 @@ class DiagramTest(unittest.TestCase):
         self.record = SeqIO.read(handle, "genbank")
         handle.close()
 
-    def t_write_arguments(self) :
+    def test_write_arguments(self) :
         """Check how the write methods respond to output format arguments."""
         gdd = Diagram('Test Diagram')
         filename = os.path.join("Graphics","error.txt")
@@ -259,7 +238,7 @@ class DiagramTest(unittest.TestCase):
                 #Good!
                 pass
 
-    def t_partial_diagram(self) :
+    def test_partial_diagram(self) :
         """construct and draw PDF for just part of a SeqRecord."""
         genbank_entry = self.record
         start = 6500
@@ -320,7 +299,7 @@ class DiagramTest(unittest.TestCase):
         output_filename = os.path.join('Graphics', 'GD_region_circular.pdf')
         gdd.write(output_filename, 'PDF')
 
-    def t_diagram_via_methods_pdf(self) :
+    def test_diagram_via_methods_pdf(self) :
         """Construct and draw PDF using method approach."""
         genbank_entry = self.record
         gdd = Diagram('Test Diagram')
@@ -397,7 +376,7 @@ class DiagramTest(unittest.TestCase):
         output_filename = os.path.join('Graphics', 'GD_by_meth_circular.pdf')
         gdd.write(output_filename, 'PDF')
 
-    def t_diagram_via_object_pdf(self):
+    def test_diagram_via_object_pdf(self):
         """Construct and draw PDF using object approach."""
         genbank_entry = self.record
         gdd = Diagram('Test Diagram')
@@ -518,4 +497,5 @@ class DiagramTest(unittest.TestCase):
         gdd.write(output_filename, 'PDF')
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

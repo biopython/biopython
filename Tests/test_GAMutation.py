@@ -2,7 +2,7 @@
 """Tests for Genetic Algorithm mutation functionality.
 """
 # standard library
-import sys
+import unittest
 
 # biopython
 from Bio.Seq import MutableSeq
@@ -14,19 +14,6 @@ from Bio.GA.Mutation.General import SafeFitnessMutation
 from Bio.GA.Mutation.Simple import ConversionMutation
 from Bio.GA.Mutation.Simple import SinglePositionMutation
 
-# PyUnit
-import unittest
-
-def run_tests(argv):
-    ALL_TESTS = [ConversionTest, SinglePositionTest, SafeFitnessTest]
-    
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    
-    for test in ALL_TESTS:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        runner.run(cur_suite)
 
 class TestAlphabet(SingleLetterAlphabet):
     """Simple test alphabet.
@@ -81,7 +68,7 @@ class ConversionTest(unittest.TestCase, MutationHelper):
         genome = MutableSeq("1111", TestAlphabet())
         self.organism = Organism(genome, test_fitness)
 
-    def t_always_mutate(self):
+    def test_always_mutate(self):
         """Test ability to cause mutations.
         """
         mutator = ConversionMutation(mutation_rate = 1.0)
@@ -96,7 +83,7 @@ class ConversionTest(unittest.TestCase, MutationHelper):
 
         self._always_mutate(mutator, expected_percent)
 
-    def t_never_mutate(self):
+    def test_never_mutate(self):
         """Make sure we do not mutate at unexpected times.
         """
         mutator = ConversionMutation(mutation_rate = 0.0)
@@ -109,7 +96,7 @@ class SinglePositionTest(unittest.TestCase, MutationHelper):
         genome = MutableSeq("1111", TestAlphabet())
         self.organism = Organism(genome, test_fitness)
 
-    def t_always_mutate(self):
+    def test_always_mutate(self):
         """Test ability to cause mutations.
         """
         mutator = SinglePositionMutation(mutation_rate = 1.0)
@@ -121,7 +108,7 @@ class SinglePositionTest(unittest.TestCase, MutationHelper):
 
         self._always_mutate(mutator, expected_percent)
 
-    def t_never_mutate(self):
+    def test_never_mutate(self):
         """Make sure we do not mutate at unexpected times.
         """
         mutator = SinglePositionMutation(mutation_rate = 0.0)
@@ -162,7 +149,7 @@ class SafeFitnessTest(unittest.TestCase):
 
         self.test_mutator = TestMutator()
 
-    def t_keep_higher(self): 
+    def test_keep_higher(self): 
         """Make sure we always keep the higher fitness.
         """
         mutator = SafeFitnessMutation(self.test_mutator)
@@ -182,7 +169,7 @@ class SafeFitnessTest(unittest.TestCase):
         assert (new_org.fitness > self.org.fitness), \
                 "Did not get new organism when it had higher fitness."
 
-    def t_keep_new(self):
+    def test_keep_new(self):
         """Make sure we always keep the new organism when specified.
         """
         mutator = SafeFitnessMutation(self.test_mutator, 1.0)
@@ -203,4 +190,5 @@ class SafeFitnessTest(unittest.TestCase):
                 "Did not get new organism under higher fitness conditions."
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

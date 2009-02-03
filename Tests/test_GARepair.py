@@ -5,8 +5,7 @@ This tests classes which are designed for repairing organisms after
 mutation and crossover.
 """
 # standard library
-import sys
-import string
+import unittest
 
 # biopython
 from Bio.Seq import MutableSeq
@@ -16,19 +15,7 @@ from Bio.NeuralNetwork.Gene.Schema import Schema
 from Bio.GA.Organism import Organism
 from Bio.GA.Repair.Stabilizing import AmbiguousRepair
 
-# PyUnit
-import unittest
 
-def run_tests(argv):
-    ALL_TESTS = [AmbiguousRepairTest]
-    
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    
-    for test in ALL_TESTS:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        runner.run(cur_suite)
 
 class TestAlphabet:
     """Simple test alphabet.
@@ -55,7 +42,7 @@ class AmbiguousRepairTest(unittest.TestCase):
         
         self.ambig_info = Schema(alphabet.alphabet_matches)
 
-    def t_single_repair(self):
+    def test_single_repair(self):
         """Test repair of a single ambiguous position in a genome.
         """
         repairer = AmbiguousRepair(self.ambig_info, 2)
@@ -67,7 +54,7 @@ class AmbiguousRepairTest(unittest.TestCase):
             assert new_genome_seq.data.count("*") == 2, \
                    "Did not repair genome, got %s" % new_genome_seq.data
 
-    def t_multiple_repair(self):
+    def test_multiple_repair(self):
         """Test repair of multiple ambiguous positions in a genome.
         """
         repairer = AmbiguousRepair(self.ambig_info, 0)
@@ -80,5 +67,5 @@ class AmbiguousRepairTest(unittest.TestCase):
                    "Did not repair genome, got %s" % new_genome_seq.data
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
-        
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

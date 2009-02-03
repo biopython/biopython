@@ -5,10 +5,7 @@ This exercises the Motif, Schema and Signature methods of representing
 genes, as well as generic Pattern methods.
 """
 # standard library
-import sys
 import os
-
-# PyUnit
 import unittest
 
 # Biopython
@@ -24,28 +21,6 @@ from Bio.NeuralNetwork.Gene import Pattern
 
 VERBOSE = 0
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-    
-def testing_suite():
-    """Generate the set of tests for this suite.
-    """
-    test_suite = unittest.TestSuite()
-    test_suite.addTest(SchemaMatchingTest())
-
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    tests = [PatternIOTest, PatternRepositoryTest, MotifFinderTest,
-             MotifCoderTest, SchemaTest, SchemaCoderTest, SchemaFinderTest,
-             SchemaFactoryTest, SignatureFinderTest, SignatureCoderTest]
-
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(cur_suite)
-
-    return test_suite
 
 # --- Tests for Pattern
 
@@ -65,7 +40,7 @@ class PatternIOTest(unittest.TestCase):
         if os.path.isfile(self.test_file) :
             os.remove(self.test_file)
 
-    def t_motif(self):
+    def test_motif(self):
         """Reading and writing motifs to a file
         """
         # write to a file
@@ -98,7 +73,7 @@ class PatternIOTest(unittest.TestCase):
                "Failed to get back expected motifs %s from seqs, got %s" \
                % (motifs, read_motifs)
 
-    def t_schema(self):
+    def test_schema(self):
         """Reading and writing schemas to a file.
         """
         schemas = ["GTR", "GAC"]
@@ -132,7 +107,7 @@ class PatternIOTest(unittest.TestCase):
 
         input_handle.close()
 
-    def t_signature(self):
+    def test_signature(self):
         """Reading and writing signatures to a file.
         """
         signatures = [("GAC", "GAC"), ("AAA", "TTT")]
@@ -159,7 +134,7 @@ class PatternRepositoryTest(unittest.TestCase):
 
         self.repository = Pattern.PatternRepository(self.motifs)
 
-    def t_get_all(self):
+    def test_get_all(self):
         """Retrieve all patterns from a repository.
         """
         all_motifs = self.repository.get_all()
@@ -167,7 +142,7 @@ class PatternRepositoryTest(unittest.TestCase):
         assert all_motifs == ["GATC", "GGGG", "GTAG", "AAAA", "ATAT"], \
                "Unexpected motifs returned %s" % all_motifs
 
-    def t_get_random(self):
+    def test_get_random(self):
         """Retrieve random patterns from the repository.
         """
         for num_patterns in range(5):
@@ -180,7 +155,7 @@ class PatternRepositoryTest(unittest.TestCase):
                 assert pattern in self.motifs.keys(), \
                        "Got unexpected pattern %s" % pattern
 
-    def t_get_top_percentage(self):
+    def test_get_top_percentage(self):
         """Retrieve the top percentge of patterns from the repository.
         """
         for num_patterns, percentage in ((1, 0.2), (2, .4), (5, 1.0)):
@@ -193,7 +168,7 @@ class PatternRepositoryTest(unittest.TestCase):
                 assert pattern in self.motifs.keys(), \
                        "Got unexpected pattern %s" % pattern      
 
-    def t_get_top(self):
+    def test_get_top(self):
         """Retrieve a certain number of the top patterns.
         """
         for num_patterns in range(5):
@@ -206,14 +181,14 @@ class PatternRepositoryTest(unittest.TestCase):
                 assert pattern in self.motifs.keys(), \
                        "Got unexpected pattern %s" % pattern       
 
-    def t_get_differing(self):
+    def test_get_differing(self):
         """Retrieve patterns from both sides of the list (top and bottom).
         """
         patterns = self.repository.get_differing(2, 2)
         assert patterns == ["GATC", "GGGG", "AAAA", "ATAT"], \
                "Got unexpected patterns %s" % patterns
 
-    def t_remove_polyA(self):
+    def test_remove_polyA(self):
         """Test the ability to remove A rich patterns from the repository.
         """
         patterns = self.repository.get_all()
@@ -226,7 +201,7 @@ class PatternRepositoryTest(unittest.TestCase):
         assert patterns == ["GATC", "GGGG", "GTAG"], \
                "Unexpected patterns: %s" % patterns
 
-    def t_count(self):
+    def test_count(self):
         """Retrieve counts for particular patterns in the repository.
         """
         num_times = self.repository.count("GGGG")
@@ -269,7 +244,7 @@ class MotifFinderTest(unittest.TestCase):
 
         self.motif_finder = Motif.MotifFinder()
 
-    def t_find(self):
+    def test_find(self):
         """Find all motifs in a set of sequences.
         """
         motif_repository = self.motif_finder.find(self.test_records, 8)
@@ -278,7 +253,7 @@ class MotifFinderTest(unittest.TestCase):
         assert top_motif[0] == 'TTGGAAAG', \
                "Got unexpected motif %s" % top_motif[0]
 
-    def t_find_differences(self):
+    def test_find_differences(self):
         """Find the difference in motif counts between two sets of sequences.
         """
         motif_repository = \
@@ -302,7 +277,7 @@ class MotifCoderTest(unittest.TestCase):
         self.coder = Motif.MotifCoder(motifs)
 
         
-    def t_representation(self):
+    def test_representation(self):
         """Convert a sequence into its motif representation.
         """
         for match_string, expected in self.match_strings:
@@ -335,7 +310,7 @@ class SchemaTest(unittest.TestCase):
                            ("GATRG", ["GATAG"]),
                            ("*A", ["GA", "TA"])]
 
-    def t_find_matches(self):
+    def test_find_matches(self):
         """Find all matches in a sequence.
         """
         for motif, expected in self.match_info:
@@ -344,7 +319,7 @@ class SchemaTest(unittest.TestCase):
             assert found_matches == expected, "Expected %s, got %s" \
                    % (expected, found_matches)
 
-    def t_num_matches(self):
+    def test_num_matches(self):
         """Find how many matches are present in a sequence.
         """
         for motif, expected in self.match_info:
@@ -353,7 +328,7 @@ class SchemaTest(unittest.TestCase):
             assert num_matches == len(expected), \
                    "Expected %s, got %s" % (num_matches, len(expected))
 
-    def t_find_ambiguous(self):
+    def test_find_ambiguous(self):
         """Find the positions of ambiguous items in a sequence.
         """
         ambig_info = (("GATC", []),
@@ -367,7 +342,7 @@ class SchemaTest(unittest.TestCase):
                    "Expected %s, got %s for %s" % (expected, found_positions,
                                                    motif)
         
-    def t_num_ambiguous(self):
+    def test_num_ambiguous(self):
         """Find the number of ambiguous items in a sequence.
         """
         ambig_info = (("GATC", 0),
@@ -380,7 +355,7 @@ class SchemaTest(unittest.TestCase):
             assert found_num == expected, \
                    "Expected %s, got %s for %s" % (expected, found_num, motif)
 
-    def t_motif_cache(self):
+    def test_motif_cache(self):
         """Make sure motif compiled regular expressions are cached properly.
         """
         test_motif = "GATC"
@@ -393,7 +368,7 @@ class SchemaTest(unittest.TestCase):
         # make sure we don't bomb out if we use the same motif twice
         self.motif_coder.find_matches(test_motif, "GATCGATC")
 
-    def t_all_unambiguous(self):
+    def test_all_unambiguous(self):
         """Return all unambiguous characters that can be in a motif.
         """
         found_unambig = self.motif_coder.all_unambiguous()
@@ -436,7 +411,7 @@ class SchemaFinderTest(unittest.TestCase):
         self.finder = Schema.SchemaFinder(num_schemas = self.num_schemas,
                                           schema_finder = schema_ga)
 
-    def t_find(self):
+    def test_find(self):
         """Find schemas from sequence inputs.
         """
         # this test takes too long
@@ -446,7 +421,7 @@ class SchemaFinderTest(unittest.TestCase):
 
             assert len(schemas) >= self.num_schemas, "Got too few schemas."
 
-    def t_find_differences(self):
+    def test_find_differences(self):
         """Find schemas that differentiate between two sets of sequences.
         """
         # this test takes too long
@@ -478,7 +453,7 @@ class SchemaCoderTest(unittest.TestCase):
                                             float(1) / float(4), 0,
                                             1])]
 
-    def t_representation(self):
+    def test_representation(self):
         """Convert a string into a representation of motifs.
         """
         for match_string, expected in self.match_strings:
@@ -532,7 +507,7 @@ class SchemaFactoryTest(unittest.TestCase):
 
         self.schema = Schema.Schema(ambiguity_chars)
 
-    def t_easy_from_motifs(self):
+    def test_easy_from_motifs(self):
         """Generating schema from a simple list of motifs.
         """
         motifs = {"GATCGAA" : 20,
@@ -548,7 +523,7 @@ class SchemaFactoryTest(unittest.TestCase):
             for schema in schema_bank.get_all():
                 print "%s: %s" % (schema, schema_bank.count(schema))
 
-    def t_hard_from_motifs(self):
+    def test_hard_from_motifs(self):
         """Generating schema from a real life set of motifs.
         """
         schema_bank = self._load_schema_repository()
@@ -600,7 +575,7 @@ class SchemaFactoryTest(unittest.TestCase):
 
         return schema_bank
 
-    def t_schema_representation(self):
+    def test_schema_representation(self):
         """Convert sequences into schema representations.
         """
         # get a set of schemas we want to code the sequence in
@@ -652,7 +627,7 @@ class SignatureFinderTest(unittest.TestCase):
 
         self.sig_finder = Signature.SignatureFinder()
 
-    def t_find(self):
+    def test_find(self):
         """Find signatures from sequence inputs.
         """
         repository = self.sig_finder.find(self.test_records, 6, 9)
@@ -676,7 +651,7 @@ class SignatureCoderTest(unittest.TestCase):
                           ("GACAAAAAAAAAGAC", [1.0, 0.0, 0.0]),
                           ("GACAAAAAAAAAAGAC", [0.0, 0.0, 0.0])]
 
-    def t_representation(self):
+    def test_representation(self):
         """Convert a sequence into its signature representation.
         """
         for seq_string, expected in self.test_seqs:
@@ -688,4 +663,5 @@ class SignatureCoderTest(unittest.TestCase):
                    % (predicted, seq_string, expected)
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

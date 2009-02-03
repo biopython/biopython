@@ -5,32 +5,12 @@
 
 
 import os
-import sys
 import unittest
 from Bio.PopGen import GenePop
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    """Generate the suite of tests.
-    """
-    test_suite = unittest.TestSuite()
-
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    tests = [RecordTest, ParserTest, UtilsTest]
-    
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(cur_suite)
-
-    return test_suite
 
 class RecordTest(unittest.TestCase):
-    def t_record_basic(self):
+    def test_record_basic(self):
         """Basic test on Record
         """
 
@@ -60,7 +40,7 @@ class ParserTest(unittest.TestCase):
         for handle in self.handles:
             handle.close()
 
-    def t_record_parser(self):
+    def test_record_parser(self):
         """Basic operation of the Record Parser.
         """
         for index in range(len(self.handles)):
@@ -74,7 +54,7 @@ class ParserTest(unittest.TestCase):
                 assert len(rec.populations[i]) == \
                            self.pops_indivs[index][1][i]
 
-    def t_wrong_file_parser(self):
+    def test_wrong_file_parser(self):
         """Testing the ability to deal with wrongly formatted files
         """
         f = open(os.path.join("PopGen", "fdist1"))
@@ -98,7 +78,7 @@ class UtilsTest(unittest.TestCase):
         for handle in self.handles:
             handle.close()
 
-    def t_utils(self):
+    def test_utils(self):
         """Basic operation of GenePop Utils.
         """
         for index in range(len(self.handles)):
@@ -116,4 +96,5 @@ class UtilsTest(unittest.TestCase):
         assert len(rec.loci_list) == initial_loci - 2
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

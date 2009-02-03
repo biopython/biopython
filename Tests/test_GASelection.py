@@ -2,8 +2,8 @@
 """Tests for Genetic Algorithm classes that provide selection capabilities.
 """
 # standard library
-import sys
 import random
+import unittest
 
 # biopython
 from Bio.Seq import MutableSeq
@@ -15,20 +15,6 @@ from Bio.GA.Selection.Diversity import DiversitySelection
 from Bio.GA.Selection.Tournament import TournamentSelection
 from Bio.GA.Selection.RouletteWheel import RouletteWheelSelection
 
-# PyUnit
-import unittest
-
-def run_tests(argv):
-    ALL_TESTS = [DiversitySelectionTest, TournamentSelectionTest,
-                 RouletteWheelSelectionTest]
-    
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    
-    for test in ALL_TESTS:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        runner.run(cur_suite)
 
 # --- helper classes and functions
 
@@ -86,30 +72,13 @@ def random_organism():
 
 # --- the actual test classes
 
-class AbstractSelectionTest(unittest.TestCase):
-    """Some base tests that all selection classes should pass.
-    """
-    def setUp(self):
-        raise NotImplementError("Need to subclass and define a selector.")
-
-    def t_selection(self):
-        """Test basic selection on a small population.
-        """
-        pop = []
-        for org_num in range(50):
-            pop.append(random_organism())
-
-        new_pop = self.selector.select(pop)
-
-        assert len(new_pop) == len(pop), "Did not maintain population size."
-
-class DiversitySelectionTest(AbstractSelectionTest):
+class DiversitySelectionTest(unittest.TestCase):
     """Test selection trying to maximize diversity.
     """
     def setUp(self):
         self.selector = DiversitySelection(NoSelection(), random_genome)
 
-    def t_get_new_organism(self):
+    def test_get_new_organism(self):
         """Getting a new organism not in the new population.
         """
         org = random_organism()
@@ -119,7 +88,7 @@ class DiversitySelectionTest(AbstractSelectionTest):
         new_org = self.selector._get_new_organism(new_pop, old_pop)
         assert new_org == org, "Got an unexpected organism %s" % new_org
 
-    def t_no_retrive_organism(self):
+    def test_no_retrieve_organism(self):
         """Test not getting an organism already in the new population.
         """
         org = random_organism()
@@ -129,14 +98,23 @@ class DiversitySelectionTest(AbstractSelectionTest):
         new_org = self.selector._get_new_organism(new_pop, old_pop)
         #assert new_org != org, "Got organism already in the new population."
 
-class TournamentSelectionTest(AbstractSelectionTest):
+    def test_selection(self):
+        """Test basic selection on a small population.
+        """
+        pop = [random_organism() for org_num in range(50)]
+
+        new_pop = self.selector.select(pop)
+
+        assert len(new_pop) == len(pop), "Did not maintain population size."
+
+class TournamentSelectionTest(unittest.TestCase):
     """Test selection based on a tournament style scheme.
     """
     def setUp(self):
         self.selector = TournamentSelection(NoMutation(), NoCrossover(),
                                             NoRepair(), 2)
 
-    def t_select_best(self):
+    def test_select_best(self):
         """Ensure selection of the best organism in a population of 2.
         """
         #Create any two non equal organisms
@@ -162,14 +140,23 @@ class TournamentSelectionTest(AbstractSelectionTest):
         for org in new_pop :
             assert org == org_1, "Got a worse organism selected."
 
-class RouletteWheelSelectionTest(AbstractSelectionTest):
+    def test_selection(self):
+        """Test basic selection on a small population.
+        """
+        pop = [random_organism() for org_num in range(50)]
+        new_pop = self.selector.select(pop)
+
+        assert len(new_pop) == len(pop), "Did not maintain population size."
+
+
+class RouletteWheelSelectionTest(unittest.TestCase):
     """Test selection using a roulette wheel selection scheme.
     """
     def setUp(self):
         self.selector = RouletteWheelSelection(NoMutation(), NoCrossover(),
                                                NoRepair())
 
-    def t_select_best(self):
+    def test_select_best(self):
         """Ensure selection of a best organism in a population of 2.
         """
         worst_genome = MutableSeq("0", TestAlphabet())
@@ -181,6 +168,16 @@ class RouletteWheelSelectionTest(AbstractSelectionTest):
         new_pop = self.selector.select([worst_org, better_org])
         for org in new_pop:
             assert org == better_org, "Worse organism unexpectly selected."
+
+    def test_selection(self):
+        """Test basic selection on a small population.
+        """
+        pop = [random_organism() for org_num in range(50)]
+        new_pop = self.selector.select(pop)
+
+        assert len(new_pop) == len(pop), "Did not maintain population size."
+
         
 if __name__ == "__main__":
-   sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

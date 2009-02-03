@@ -1,35 +1,15 @@
 '''Testing code for Bio.Entrez parsers.
 '''
 
-import sys
 import unittest
 
 from Bio import Entrez
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    '''Generate the suite of tests.
-    '''
-    test_suite = unittest.TestSuite()
-
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    tests = [EInfoTest, ESearchTest, EPostTest, ESummaryTest, ELinkTest, EFetchTest, EGQueryTest, ESpellTest]
-    
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(cur_suite)
-
-    return test_suite
 
 class EInfoTest(unittest.TestCase):
     '''Tests for parsing XML output returned by EInfo
     '''
-    def t_list(self):
+    def test_list(self):
         '''Test parsing database list returned by EInfo
         '''
         # To create the XML file, use
@@ -74,7 +54,7 @@ class EInfoTest(unittest.TestCase):
                                   'unigene',
                                   'unists'
                                  ]
-    def t_pubmed(self):
+    def test_pubmed(self):
         '''Test parsing database info returned by EInfo
         '''
         # To create the XML file, use
@@ -109,7 +89,7 @@ class EInfoTest(unittest.TestCase):
 class ESearchTest(unittest.TestCase):
     '''Tests for parsing XML output returned by ESearch
     '''
-    def t_pubmed1(self):
+    def test_pubmed1(self):
         '''Test parsing XML returned by ESearch from PubMed (first test)
         '''
         # To create the XML file, use
@@ -134,7 +114,7 @@ class ESearchTest(unittest.TestCase):
         assert record['TranslationStack'][1]=='GROUP'
         assert record['QueryTranslation']=='biopython[All Fields]'
 
-    def t_pubmed2(self):
+    def test_pubmed2(self):
         '''Test parsing XML returned by ESearch from PubMed (second test)
         '''
         # Search in PubMed for the term cancer for the entrez date from
@@ -288,7 +268,7 @@ class ESearchTest(unittest.TestCase):
         assert record['TranslationStack'][12]=='AND'
         assert record['QueryTranslation']=='(("neoplasms"[TIAB] NOT Medline[SB]) OR "neoplasms"[MeSH Terms] OR cancer[Text Word]) AND 2008/02/16[EDAT] : 2008/04/16[EDAT]'
 
-    def t_pubmed3(self):
+    def test_pubmed3(self):
         '''Test parsing XML returned by ESearch from PubMed (third test)
         '''
         # Search in PubMed for the journal PNAS Volume 97, and retrieve
@@ -323,7 +303,7 @@ class ESearchTest(unittest.TestCase):
         assert record['TranslationStack'][2]=='AND'
         assert record['QueryTranslation']=='"Proc Natl Acad Sci U S A"[Journal] AND 97[vi]'
 
-    def t_journals(self):
+    def test_journals(self):
         '''Test parsing XML returned by ESearch from the Journals database
         '''
         # Search in Journals for the term obstetrics.
@@ -366,7 +346,7 @@ class ESearchTest(unittest.TestCase):
         assert record['TranslationStack'][1].tag=="OP"
         assert record['QueryTranslation']=='obstetrics[All Fields]'
 
-    def t_pmc(self):
+    def test_pmc(self):
         '''Test parsing XML returned by ESearch from PubMed Central
         '''
         # Search in PubMed Central for stem cells in free fulltext articles.
@@ -445,7 +425,7 @@ class ESearchTest(unittest.TestCase):
         assert record['TranslationStack'][15]=='AND'
         assert record['QueryTranslation']=='("stem cells"[MeSH Terms] OR stem cells[Acknowledgments] OR stem cells[Figure/Table Caption] OR stem cells[Section Title] OR stem cells[Body - All Words] OR stem cells[Title] OR stem cells[Abstract]) AND free fulltext[filter]'
 
-    def t_nucleotide(self):
+    def test_nucleotide(self):
         '''Test parsing XML returned by ESearch from the Nucleotide database
         '''
         # Search in Nucleotide for a property of the sequence,
@@ -480,7 +460,7 @@ class ESearchTest(unittest.TestCase):
         assert len(record['TranslationSet'])==0
         assert record['QueryTranslation']==''
 
-    def t_protein(self):
+    def test_protein(self):
         '''Test parsing XML returned by ESearch from the Protein database
         '''
         # Search in Protein for a molecular weight
@@ -504,7 +484,7 @@ class ESearchTest(unittest.TestCase):
         assert record['TranslationStack'][1]=='GROUP'
         assert record['QueryTranslation']=='000200020[molecular weight]'
 
-    def t_notfound(self):
+    def test_notfound(self):
         '''Test parsing XML returned by ESearch when no items were found
         '''
         # To create the XML file, use
@@ -537,7 +517,7 @@ class EPostTest(unittest.TestCase):
     '''
     # Don't know how to get an InvalidIdList in the XML returned by EPost;
     # unable to test if we are parsing it correctly.
-    def t_epost(self):
+    def test_epost(self):
         '''Test parsing XML returned by EPost
         '''
         # To create the XML file, use
@@ -547,7 +527,7 @@ class EPostTest(unittest.TestCase):
         assert record["QueryKey"]== '1'
         assert record["WebEnv"]=='0zYsuLk3zG_lRMkblPBEqnT8nIENUGw4HAy8xXChTnoVm7GEnWY71jv3nz@1FC077F3806DE010_0042SID'
 
-    def t_wrong(self):
+    def test_wrong(self):
         '''Test parsing XML returned by EPost with incorrect arguments
         '''
         # To create the XML file, use
@@ -562,7 +542,7 @@ class EPostTest(unittest.TestCase):
         assert exception_triggered
 
 
-    def t_invalid(self):
+    def test_invalid(self):
         '''Test parsing XML returned by EPost with an invalid id (overflow tag)
         '''
         # To create the XML file, use
@@ -582,7 +562,7 @@ class ESummaryTest(unittest.TestCase):
     # (Integer|Date|String|Structure|List|Flags|Qualifier|Enumerator|Unknown)
     # I don't have an XML file where the type "Flags", "Qualifier",
     # "Enumerator", or "Unknown" is used, so they are not tested here.
-    def t_pubmed(self):
+    def test_pubmed(self):
         '''Test parsing XML returned by ESummary from PubMed
         '''
         # In PubMed display records for PMIDs 11850928 and 11482001 in
@@ -661,7 +641,7 @@ class ESummaryTest(unittest.TestCase):
         assert record[1]["ELocationID"]==""
         assert record[1]["SO"]=="2001 Jun;20(2):89-103"
 
-    def t_journals(self):
+    def test_journals(self):
         '''Test parsing XML returned by ESummary from the Journals database
         '''
         # In Journals display records for journal IDs 27731,439,735,905 
@@ -735,7 +715,7 @@ class ESummaryTest(unittest.TestCase):
         assert record[3]["BroadHeading"][1]=="Obstetrics"
         assert record[3]["ContinuationNotes"]=="Continues: Journal of the Asian Federation of Obstetrics and Gynaecology. Continued by: Journal of obstetrics and gynaecology (Tokyo, Japan). "
 
-    def t_protein(self):
+    def test_protein(self):
         '''Test parsing XML returned by ESummary from the Protein database
         '''
         # In Protein display records for GIs 28800982 and 28628843 in xml retrieval mode
@@ -772,7 +752,7 @@ class ESummaryTest(unittest.TestCase):
         assert record[1]["ReplacedBy"]==""
         assert record[1]["Comment"]=="  "
 
-    def t_nucleotide(self):
+    def test_nucleotide(self):
         '''Test parsing XML returned by ESummary from the Nucleotide database
         '''
         # In Nucleotide display records for GIs 28864546 and 28800981
@@ -811,7 +791,7 @@ class ESummaryTest(unittest.TestCase):
         assert record[1]["ReplacedBy"]==""
         assert record[1]["Comment"]=="  "
 
-    def t_structure(self):
+    def test_structure(self):
         '''Test parsing XML returned by ESummary from the Structure database
         '''
         # In Nucleotide display records for GIs 28864546 and 28800981
@@ -861,7 +841,7 @@ class ESummaryTest(unittest.TestCase):
         assert record[1]["DNAChainCount"]=="0"
         assert record[1]["RNAChainCount"]=="0"
 
-    def t_taxonomy(self):
+    def test_taxonomy(self):
         '''Test parsing XML returned by ESummary from the Taxonomy database
         '''
         # In Taxonomy display records for TAXIDs 9913 and 30521 in
@@ -901,7 +881,7 @@ class ESummaryTest(unittest.TestCase):
         assert record[1]["Species"]==""
         assert record[1]["Subsp"]==""
 
-    def t_unists(self):
+    def test_unists(self):
         '''Test parsing XML returned by ESummary from the UniSTS database
         '''
         # In UniSTS display records for IDs 254085 and 254086 in xml
@@ -930,7 +910,7 @@ class ESummaryTest(unittest.TestCase):
         assert record[1]["EPCR_Summary"]=="Found by e-PCR in sequences from Sus scrofa."
         assert record[1]["LocusId"]==""
 
-    def t_wrong(self):
+    def test_wrong(self):
         '''Test parsing XML returned by ESummary with incorrect arguments
         '''
         # To create the XML file, use
@@ -948,7 +928,7 @@ class ESummaryTest(unittest.TestCase):
 class ELinkTest(unittest.TestCase):
     '''Tests for parsing XML output returned by ELink
     '''
-    def t_pubmed1(self):
+    def test_pubmed1(self):
         '''Test parsing pubmed links returned by ELink (first test)
         '''
         # Retrieve IDs from PubMed for PMID 9298984 to the PubMed database
@@ -1252,7 +1232,7 @@ class ELinkTest(unittest.TestCase):
         assert record[0]["LinkSetDb"][0]["Link"][143]["Id"]=="17248312"
         assert record[0]["LinkSetDb"][0]["Link"][143]["Score"]=="7610436"
 
-    def t_nucleotide(self):
+    def test_nucleotide(self):
         '''Test parsing Nucleotide to Protein links returned by ELink
         '''
         # Retrieve IDs from Nucleotide for GI  48819, 7140345 to Protein
@@ -1265,7 +1245,7 @@ class ELinkTest(unittest.TestCase):
         assert record[0]["DbFrom"]=="nucleotide"
         assert record[0]["IdList"]==["48819", "7140345"]
 
-    def t_pubmed2(self):
+    def test_pubmed2(self):
         '''Test parsing pubmed links returned by ELink (second test)
         '''
         # Retrieve PubMed related articles for PMIDs 11812492 11774222
@@ -1978,7 +1958,7 @@ class ELinkTest(unittest.TestCase):
         assert record[0]["LinkSetDb"][0]["Link"][346]["Id"]=="15181901"
         assert record[0]["LinkSetDb"][0]["Link"][346]["Score"]=="14385628"
 
-    def t_medline(self):
+    def test_medline(self):
         '''Test parsing medline indexed articles returned by ELink
         '''
         # Retrieve MEDLINE indexed only related articles for PMID 12242737
@@ -2416,7 +2396,7 @@ class ELinkTest(unittest.TestCase):
         assert record[0]["LinkSetDb"][0]["Link"][210]["Id"]=="4414214"
         assert record[0]["LinkSetDb"][0]["Link"][210]["Score"]=="10113539"
 
-    def t_pubmed3(self):
+    def test_pubmed3(self):
         '''Test parsing pubmed link returned by ELink (third test)
         '''
         # Create a hyperlink to the first link available for PMID 10611131
@@ -2444,7 +2424,7 @@ class ELinkTest(unittest.TestCase):
         assert record[0]["IdUrlList"][0]["ObjUrl"][0]["Provider"]["IconUrl"]=="http://highwire.stanford.edu/icons/externalservices/pubmed/highwirepress.jpg"
 
 
-    def t_pubmed4(self):
+    def test_pubmed4(self):
         '''Test parsing pubmed links returned by ELink (fourth test)
         '''
         # List all available links in PubMed, except for libraries, for
@@ -2512,7 +2492,7 @@ class ELinkTest(unittest.TestCase):
         assert record[0]["IdUrlList"][1]["ObjUrl"][3]["Provider"]["Url"]=="http://medlineplus.gov/"
         assert record[0]["IdUrlList"][1]["ObjUrl"][3]["Provider"]["IconUrl"]=="http://www.nlm.nih.gov/medlineplus/images/linkout_sm.gif"
 
-    def t_pubmed5(self):
+    def test_pubmed5(self):
         '''Test parsing pubmed links returned by ELink (fifth test)
         '''
         # List Entrez database links for PubMed PMIDs 12169658 and 11748140
@@ -2681,7 +2661,7 @@ class ELinkTest(unittest.TestCase):
         assert record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][13]["Priority"]=="255"
 
 
-    def t_pubmed6(self):
+    def test_pubmed6(self):
         '''Test parsing pubmed links returned by ELink (sixth test)
         '''
         # Check for the existence of a Related Articles link for PMIDs
@@ -2700,7 +2680,7 @@ class ELinkTest(unittest.TestCase):
         assert len(record[0]["IdCheckList"]["Id"][0].attributes)==1
         assert record[0]["IdCheckList"]["Id"][0].attributes["HasNeighbor"]=="Y"
 
-    def t_cancerchromosomes(self):
+    def test_cancerchromosomes(self):
         '''Test parsing cancerchromosomes links returned by ELink
         '''
         # Retrieve neighbors for Cancer Chromosomes ID 2662 to the link
@@ -2720,7 +2700,7 @@ class ELinkTest(unittest.TestCase):
 class EGQueryTest(unittest.TestCase):
     '''Tests for parsing XML output returned by EGQuery
     '''
-    def t_egquery1(self):
+    def test_egquery1(self):
         '''Test parsing XML output returned by EGQuery (first test)
         '''
         # Display counts in XML for stem cells in each Entrez database
@@ -2872,7 +2852,7 @@ class EGQueryTest(unittest.TestCase):
         assert record["eGQueryResult"][34]["Count"]=="0"
         assert record["eGQueryResult"][34]["Status"]=="Term or Database is not found"
 
-    def t_egquery2(self):
+    def test_egquery2(self):
         '''Test parsing XML output returned by EGQuery (second test)
         '''
         # Display counts in XML for brca1 or brca2 for each Entrez database
@@ -3027,7 +3007,7 @@ class EGQueryTest(unittest.TestCase):
 class ESpellTest(unittest.TestCase):
     '''Tests for parsing XML output returned by ESpell
     '''
-    def t_espell(self):
+    def test_espell(self):
         '''Test parsing XML output returned by ESpell
         '''
         # Request suggestions for the PubMed search biopythooon
@@ -3046,7 +3026,7 @@ class ESpellTest(unittest.TestCase):
 class EFetchTest(unittest.TestCase):
     '''Tests for parsing XML output returned by EFetch
     '''
-    def t_pubmed1(self):
+    def test_pubmed1(self):
         '''Test parsing XML returned by EFetch, PubMed database (first test)
         '''
         # In PubMed display PMIDs 12091962 and 9997 in xml retrieval mode
@@ -3250,7 +3230,7 @@ class EFetchTest(unittest.TestCase):
         assert record[1]["PubmedData"]["ArticleIdList"][0].attributes["IdType"]=="pubmed"
 
 
-    def t_pubmed2(self):
+    def test_pubmed2(self):
         '''Test parsing XML returned by EFetch, PubMed database (second test)
         '''
         # In PubMed display PMIDs in xml retrieval mode.
@@ -3464,7 +3444,7 @@ class EFetchTest(unittest.TestCase):
         assert record[1]["PubmedData"]["ArticleIdList"][2]=="S1090-7807(01)92429-2"
         assert record[1]["PubmedData"]["ArticleIdList"][2].attributes["IdType"]=="pii"
 
-    def t_journals(self):
+    def test_journals(self):
         '''Test parsing XML returned by EFetch, Journals database
         '''
         # In Journals display records for journal IDs 22682,21698,1490
@@ -3608,7 +3588,7 @@ class EFetchTest(unittest.TestCase):
         assert record[2]["IlsUpdatedTimestamp"]["Month"]=="04"
         assert record[2]["IlsUpdatedTimestamp"]["Day"]=="04"
 
-    def t_omim(self):
+    def test_omim(self):
         '''Test parsing XML returned by EFetch, OMIM database
         '''
         # In OMIM show the full record for MIM number 601100 as XML
@@ -3786,7 +3766,7 @@ class EFetchTest(unittest.TestCase):
         assert record[0]["Mim-entry_nucleotideLinks"]["Mim-link"]["Mim-link_uids"]=="148747549,55741785,48928055,2352620,460147"
         assert record[0]["Mim-entry_nucleotideLinks"]["Mim-link"]["Mim-link_numRelevant"]=="0"
 
-    def t_taxonomy(self):
+    def test_taxonomy(self):
         '''Test parsing XML returned by EFetch, Taxonomy database
         '''
         # Access the Taxonomy database using efetch.
@@ -3895,7 +3875,7 @@ class EFetchTest(unittest.TestCase):
         assert record[0]["UpdateDate"]=="2007/09/04"
         assert record[0]["PubDate"]=="1993/07/26"
 
-    def t_nucleotide1(self):
+    def test_nucleotide1(self):
         '''Test parsing XML returned by EFetch, Nucleotide database (first test)
         '''
         # Access the nucleotide database using efetch.
@@ -4018,7 +3998,7 @@ class EFetchTest(unittest.TestCase):
         assert record[0]["GBSeq_feature-table"][6]["GBFeature_quals"][0]["GBQualifier_value"]=="beta-2-gpI"
         assert record[0]["GBSeq_sequence"]=="ccagcgctcgtcttgctgttggggtttctctgccacgttgctatcgcaggacgaacctgccccaagccagatgagctaccgttttccacggtggttccactgaaacggacctatgagcccggggagcagatagtcttctcctgccagccgggctacgtgtcccggggagggatccggcggtttacatgcccgctcacaggactctggcccatcaacacgctgaaatgcatgcccagagtatgtccttttgctgggatcttagaaaacggaacggtacgctatacaacgtttgagtatcccaacaccatcagcttttcttgccacacggggttttatctgaaaggagctagttctgcaaaatgcactgaggaagggaagtggagcccagaccttcctgtctgtgcccctataacctgccctccaccacccatacccaagtttgcaagtctcagcgtttacaagccgttggctgggaacaactccttctatggcagcaaggcagtctttaagtgcttgccacaccacgcgatgtttggaaatgacaccgttacctgcacggaacatgggaactggacgcagttgccagaatgcagggaagtaagatgcccattcccatcaagaccagacaatgggtttgtgaaccatcctgcaaatccagtgctctactataaggacaccgccacctttggctgccatgaaacgtattccttggatggaccggaagaagtagaatgcagcaaattcggaaactggtctgcacagccaagctgtaaagcatcttgtaagttatctattaaaagagctactgtgatatatgaaggagagagagtagctatccagaacaaatttaagaatggaatgctgcatggccaaaaggtttctttcttctgcaagcataaggaaaagaagtgcagctacacagaagatgctcagtgcatagacggcaccatcgagattcccaaatgcttcaaggagcacagttctttagctttctggaaaacggatgcatctgacgtaaaaccatgctaagctggttttcacactgaaaattaaatgtcatgcttatatgtgtctgtctgagaatctgatggaaacggaaaaataaagagactgaatttaccgtgtcaagaaaaaaa"
 
-    def t_nucleotide2(self):
+    def test_nucleotide2(self):
         '''Test parsing XML returned by EFetch, Nucleotide database (second test)
         '''
         # Access the nucleotide database using efetch.
@@ -4048,7 +4028,7 @@ class EFetchTest(unittest.TestCase):
         assert record[1]["TSeq_length"]=="342"
         assert record[1]["TSeq_sequence"]=="PALVLLLGFLCHVAIAGRTCPKPDELPFSTVVPLKRTYEPGEQIVFSCQPGYVSRGGIRRFTCPLTGLWPINTLKCMPRVCPFAGILENGTVRYTTFEYPNTISFSCHTGFYLKGASSAKCTEEGKWSPDLPVCAPITCPPPPIPKFASLSVYKPLAGNNSFYGSKAVFKCLPHHAMFGNDTVTCTEHGNWTQLPECREVRCPFPSRPDNGFVNHPANPVLYYKDTATFGCHETYSLDGPEEVECSKFGNWSAQPSCKASCKLSIKRATVIYEGERVAIQNKFKNGMLHGQKVSFFCKHKEKKCSYTEDAQCIDGTIEIPKCFKEHSSLAFWKTDASDVKPC"
 
-    def t_nucleotide2(self):
+    def test_nucleotide2(self):
         '''Test parsing XML returned by EFetch, Protein database
         '''
         # Access the protein database using efetch.
@@ -4144,4 +4124,5 @@ class EFetchTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

@@ -5,30 +5,10 @@
 # as part of this package.
 
 import os
-import sys
 import unittest
 
 from Bio import Motif
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    """Generate the suite of tests.
-    """
-    test_suite = unittest.TestSuite()
-
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    tests = [MotifTestsBasic]
-    
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(cur_suite)
-
-    return test_suite
 
 class MotifTestsBasic(unittest.TestCase):
     def setUp(self):
@@ -53,49 +33,49 @@ class MotifTestsBasic(unittest.TestCase):
         if os.path.exists(self.FAout):
             os.remove(self.FAout)
 
-    def t_alignace_parsing(self):
+    def test_alignace_parsing(self):
         """Test to be sure that Motif can parse AlignAce output files.
         """
         parser= Motif.AlignAceParser()
         record=parser.parse(self.ACin)
         assert len(record.motifs)==16
         
-    def t_meme_parsing(self):
+    def test_meme_parsing(self):
         """Test to be sure that Motif can parse MEME output files.
         """
         parser= Motif.MEMEParser()
         record=parser.parse(self.MEMEin)
         assert len(record.motifs)==1
 
-    def t_pfm_parsing(self):
+    def test_pfm_parsing(self):
         """Test to be sure that Motif can parse pfm  files.
         """
         motif= Motif.Motif()
         motif.from_jaspar_pfm(self.PFMin)
         assert motif.length==12
 
-    def t_sites_parsing(self):
+    def test_sites_parsing(self):
         """Test to be sure that Motif can parse sites files.
         """
         motif= Motif.Motif()
         motif.from_jaspar_sites(self.SITESin)
         assert motif.length==6
 
-    def t_FAoutput(self):
+    def test_FAoutput(self):
         """Ensure that we can write proper FASTA output files.
         """
         output_handle = open(self.FAout, "w")
         output_handle.write(self.m.to_fasta())
         output_handle.close()
 
-    def t_TFoutput(self):
+    def test_TFoutput(self):
         """Ensure that we can write proper TransFac output files.
         """
         output_handle = open(self.TFout, "w")
         output_handle.write(self.m.to_transfac())
         output_handle.close()
 
-    def t_pfm_output(self):
+    def test_pfm_output(self):
         """Ensure that we can write proper pfm output files.
         """
         output_handle = open(self.PFMout, "w")
@@ -103,6 +83,6 @@ class MotifTestsBasic(unittest.TestCase):
         output_handle.close()
         
         
-
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

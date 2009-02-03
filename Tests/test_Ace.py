@@ -15,7 +15,6 @@ def testing_suite():
     test_suite = unittest.TestSuite()
 
     test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
     tests = [AceTestOne, AceTestTwo, AceTestThree]
     
     for test in tests:
@@ -86,7 +85,7 @@ class AceTestOne(unittest.TestCase):
                 for i in r.wr:
                     print i.name, i.aligned, i.program, i.date
 
-    def t_check_ACEParser(self):
+    def test_check_ACEParser(self):
         """Test to check that ACEParser can parse the whole file into one record."""
         record=Ace.read(self.handle)
         x=0
@@ -103,7 +102,7 @@ class AceTestOne(unittest.TestCase):
             self.contig_summary(c,x)
             x+=1
     
-    def t_check_record_parser(self):
+    def test_check_record_parser(self):
         """Test to check that record parser parses each contig into a record."""
         records=Ace.parse(self.handle)
         x=0

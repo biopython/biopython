@@ -3,22 +3,15 @@
 """
 # standard library
 import sys
+import unittest
 
 # local stuff
 if sys.modules.has_key('requires_internet'):
     del sys.modules['requires_internet']
 import requires_internet
 
-# PyUnit
-import unittest
 from Bio.HotRand import HotRandom
 
-def run_tests(argv):
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    cur_suite = test_loader.loadTestsFromTestCase(RandomSequenceTest)
-    runner.run(cur_suite)
 
 # --- helper classes and functions
 
@@ -38,7 +31,7 @@ class RandomSequenceTest(unittest.TestCase):
     """Test sequence of random numbers.
     """
 
-    def t_get_random_range(self):
+    def test_get_random_range(self):
         """Get a sequence of random numbers.
         """
         return
@@ -59,6 +52,6 @@ class RandomSequenceTest(unittest.TestCase):
             rand_seq.append( rand_num )
         assert are_items_in_range( rand_seq, 61, 4 ) , "Got an out of range number"
 
-
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

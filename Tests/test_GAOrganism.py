@@ -2,37 +2,17 @@
 """Tests for an Organism in a Genetic Algorithm population.
 """
 # standard library
-import sys
+import unittest
 
 # Biopython
 from Bio import Alphabet
 from Bio.Seq import MutableSeq
 
-# PyUnit
-import unittest
 
 # local stuff
 from Bio.GA import Organism
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
     
-def testing_suite():
-    """Generate the set of tests.
-    """
-    test_suite = unittest.TestSuite()
-
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    tests = [CreatePopulationTest, OrganismTest]
-
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(cur_suite)
-
-    return test_suite
 
 # -- utility functions
 class TestAlphabet(Alphabet.Alphabet):
@@ -59,7 +39,7 @@ class CreatePopulationTest(unittest.TestCase):
     def setUp(self):
         self.alphabet = TestAlphabet()
 
-    def t_function_population(self):
+    def test_function_population(self):
         """Create a population using a function to generate genomes.
         """
         num_orgs = 10
@@ -77,7 +57,7 @@ class CreatePopulationTest(unittest.TestCase):
             assert org.fitness == exp_fit, \
                    "Expected fitness of %s, got %s" % (org.fitness, exp_fit)
 
-    def t_random_population(self):
+    def test_random_population(self):
         """Create a population randomly from a alphabet.
         """
         num_orgs = 10
@@ -100,7 +80,7 @@ class CreatePopulationTest(unittest.TestCase):
                    "Expected genome size of %s, got %s" % (len(org.genome),
                                                            genome_size)
 
-    def t_random_population_types(self):
+    def test_random_population_types(self):
         """Creating a random population with different types of alphabets.
         """
         class DoubleAlphabet:
@@ -130,7 +110,7 @@ class OrganismTest(unittest.TestCase):
         self.genome = MutableSeq("1234", self.alphabet)
         self.organism = Organism.Organism(self.genome, fitness_calculator)
 
-    def t_organism_basic(self):
+    def test_organism_basic(self):
         """Exercise basic organism functionality.
         """
         same_genome = MutableSeq("1234", self.alphabet)
@@ -145,7 +125,7 @@ class OrganismTest(unittest.TestCase):
         assert self.organism != dif_organism, \
                "Comparison doesn't work for different organism."
 
-    def t_organism_fitness(self):
+    def test_organism_fitness(self):
         """Test the ability to deal with the fitness of the genome.
         """
         assert self.organism.fitness == 1234, \
@@ -158,7 +138,7 @@ class OrganismTest(unittest.TestCase):
         assert self.organism.fitness == 1111, \
                "Unexpected fitness %s" % self.organism.fitness
 
-    def t_organism_copy(self):
+    def test_organism_copy(self):
         """Test copying of organisms.
         """
         new_organism = self.organism.copy()
@@ -168,7 +148,7 @@ class OrganismTest(unittest.TestCase):
         assert new_organism.genome != self.organism.genome, \
                "Did not provide a copy of the organism."
 
-    def t_provide_fitness(self):
+    def test_provide_fitness(self):
         """Test that providing a pre-calculated fitness works.
         """
         def fitness_calc(genome):
@@ -187,4 +167,5 @@ class OrganismTest(unittest.TestCase):
         new_org = Organism.Organism(genome, fitness_calc, 50)
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

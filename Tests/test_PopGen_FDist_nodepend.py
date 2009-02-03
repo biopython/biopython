@@ -3,11 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import commands
 import os
-import shutil
-import sys
-import tempfile
 import unittest
 from Bio.PopGen import GenePop
 from Bio.PopGen import FDist
@@ -16,28 +12,9 @@ from Bio.PopGen.FDist.Utils import convert_genepop_to_fdist
 #Tests fdist related code. Note: this case doesn't require fdist
 #test_PopGen_FDist tests code that requires fdist
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    """Generate the suite of tests.
-    """
-    test_suite = unittest.TestSuite()
-
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    tests = [RecordTest, ParserTest, ConversionTest]
-    
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(cur_suite)
-
-    return test_suite
 
 class RecordTest(unittest.TestCase):
-    def t_record_basic(self):
+    def test_record_basic(self):
         """Basic test on Record
         """
 
@@ -72,7 +49,7 @@ class ParserTest(unittest.TestCase):
         for handle in self.handles:
             handle.close()
 
-    def t_record_parser(self):
+    def test_record_parser(self):
         """Basic operation of the Record Parser.
         """
         parser = FDist.RecordParser()
@@ -98,7 +75,7 @@ class ConversionTest(unittest.TestCase):
         for filename in files:
             self.handles.append(open(os.path.join("PopGen", filename)))
 
-    def t_convert(self):
+    def test_convert(self):
         """Basic conversion test.
         """
         for i in range(len(self.handles)):
@@ -113,4 +90,5 @@ class ConversionTest(unittest.TestCase):
             handle.close()
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

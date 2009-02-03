@@ -12,8 +12,6 @@ import sys
 import string
 import random
 import cStringIO
-
-# PyUnit
 import unittest
 
 from Bio import MissingExternalDependencyError
@@ -159,7 +157,7 @@ class OrganismGraphicTest(unittest.TestCase):
     def setUp(self):
         self.test_file = os.path.join("Graphics", "organism.pdf")
 
-    def t_simple_organism(self):
+    def test_simple_organism(self):
         """Test the basic functionality of drawing an organism.
         """
         pdf_organism = BasicChromosome.Organism()
@@ -171,7 +169,7 @@ class OrganismGraphicTest(unittest.TestCase):
 
         pdf_organism.draw(self.test_file, "Test organism")
 
-    def t_simple_organism_ps(self):
+    def test_simple_organism_ps(self):
         """Output a simple organism to a postscript file.
         """
         ps_organism = BasicChromosome.Organism('eps')
@@ -185,7 +183,7 @@ class OrganismGraphicTest(unittest.TestCase):
 
         ps_organism.draw(ps_file, "Test organism")
      
-    def t_random_organism(self):
+    def test_random_organism(self):
         """Generate an organism with random chromosome info.
         """
         random_file = os.path.join("Graphics", "random_organism.pdf")
@@ -208,7 +206,7 @@ class OrganismGraphicTest(unittest.TestCase):
 
         pdf_organism.draw(random_file, "Randomly generated Organism")
 
-    def t_widget(self):
+    def test_widget(self):
         """Try widget derived functionality.
         """
         test_widget = BasicChromosome.ChromosomeSegment()
@@ -225,7 +223,7 @@ class OrganismGraphicTest(unittest.TestCase):
         properties = new_stdout.getvalue()
         sys.stdout = save_stdout
 
-        assert string.find(properties, expected_string) >= 0, \
+        assert properties.find(expected_string) >= 0, \
                "Unexpected results from dumpProperties: \n %s" % properties
 
         properties = test_widget.getProperties()
@@ -245,7 +243,7 @@ class ChromosomeCountTest(unittest.TestCase):
         self.names = ["Bob", "Dylan", "Doesn't", "Like", "Spam"]
         self.count_display = ChromosomeCounts(self.names)
 
-    def t_add_count(self):
+    def test_add_count(self):
         """Add counts to specific chromosome segments.
         """
         self.count_display.add_count(self.names[1])
@@ -257,7 +255,7 @@ class ChromosomeCountTest(unittest.TestCase):
         except KeyError:
             pass
 
-    def t_add_label(self):
+    def test_add_label(self):
         """Add labels to chromosome segments.
         """
         self.count_display.add_label(self.names[1], "Rules")
@@ -268,7 +266,7 @@ class ChromosomeCountTest(unittest.TestCase):
         except KeyError:
             pass
 
-    def t_set_scale(self):
+    def test_set_scale(self):
         """Set the scale for a chromosome segment.
         """
         self.count_display.set_scale(self.names[1], 1.5)
@@ -279,7 +277,7 @@ class ChromosomeCountTest(unittest.TestCase):
         except KeyError:
             pass
 
-    def t_color_from_count(self):
+    def test_color_from_count(self):
         """Retrieve a color from a count number with the default color scheme.
         """
         test_color = self.count_display._color_from_count(3)
@@ -294,7 +292,7 @@ class ChromosomeCountTest(unittest.TestCase):
         except ValueError:
             pass
 
-    def t_fill_chromosome(self):
+    def test_fill_chromosome(self):
         """Test filling out the information on a chromosome.
         """
         test_chr = BasicChromosome.Chromosome("1")
@@ -304,7 +302,7 @@ class ChromosomeCountTest(unittest.TestCase):
 
         new_chr = self.count_display.fill_chromosome(test_chr)
 
-    def t_get_segment_info(self):
+    def test_get_segment_info(self):
         """Test retrieval of segment information.
         """
         test_count_num = 1
@@ -325,15 +323,6 @@ class ChromosomeCountTest(unittest.TestCase):
         assert seg_info[test_label_num][1] == test_label_value, \
                "Did not set and retrieve label correctly."
 
-# run the tests
-all_tests = [OrganismGraphicTest, ChromosomeCountTest]
-
-runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-test_loader = unittest.TestLoader()
-test_loader.testMethodPrefix = 't_'
-
-for cur_test in all_tests:
-    test_suite = test_loader.loadTestsFromTestCase(cur_test)
-    runner.run(test_suite)
-
-
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

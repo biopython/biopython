@@ -3,11 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import commands
 import os
-import shutil
-import sys
-import tempfile
 import unittest
 from Bio.PopGen import SimCoal
 from Bio.PopGen.SimCoal.Controller import SimCoalController
@@ -30,26 +26,6 @@ if not found:
     raise MissingExternalDependencyError(\
         "Install SIMCOAL2 if you want to use Bio.PopGen.SimCoal.")
 
-def run_tests(argv):
-    test_suite = testing_suite()    
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    """Generate the suite of tests.
-    """
-    print "Running simcoal tests, which might take some time, please wait"
-    test_suite = unittest.TestSuite()
-
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    tests = [AppTest]
-    
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(cur_suite)
-
-    return test_suite
 
 class AppTest(unittest.TestCase):
     """Tests simcoal execution via biopython.
@@ -63,7 +39,7 @@ class AppTest(unittest.TestCase):
             os.remove(os.sep.join(['PopGen', 'simple', file]))
         os.rmdir(os.path.join('PopGen', 'simple'))
 
-    def t_simcoal(self):
+    def test_simcoal(self):
         """Test simcoal execution.
         """
         ctrl = SimCoalController(simcoal_dir)
@@ -73,4 +49,5 @@ class AppTest(unittest.TestCase):
         assert( len(os.listdir(os.path.join('PopGen', 'simple'))) == 52)
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

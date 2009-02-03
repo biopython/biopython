@@ -1,28 +1,8 @@
 import os
-import sys
-import StringIO
 import unittest
 
 from Bio.Nexus import Nexus
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    """Generate the suite of tests."""
-    test_suite = unittest.TestSuite()
-
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    tests = [NexusTest1]
-    
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(cur_suite)
-
-    return test_suite
 
 class NexusTest1(unittest.TestCase):
     def setUp(self):
@@ -71,7 +51,7 @@ class NexusTest1(unittest.TestCase):
         for pk in ps:
                 self.print_dictnlist(pk,n.taxpartitions[pk])
         
-    def t_NexusTest1(self):
+    def test_NexusTest1(self):
         """Test Nexus module"""
         n=Nexus.Nexus(self.handle)
         # check data of main nexus file
@@ -88,7 +68,7 @@ class NexusTest1(unittest.TestCase):
         # check the stepmatrix
         print n.weighted_stepmatrix(name='matrix_test')
 
-    def t_TreeTest1(self):
+    def test_TreeTest1(self):
         """Test Tree module."""
         n=Nexus.Nexus(self.handle)
         t3=n.trees[2]
@@ -104,5 +84,5 @@ class NexusTest1(unittest.TestCase):
         
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
-
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

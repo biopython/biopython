@@ -5,41 +5,18 @@ This exercises various elements of the BackPropagation NeuralNetwork
 libraries.
 """
 # standard library
-import sys
-import os
 import random
-
-# PyUnit
 import unittest
 
 # local stuff
 from Bio.NeuralNetwork.Training import TrainingExample, ExampleManager
 from Bio.NeuralNetwork.StopTraining import ValidationIncreaseStop
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    """Generate the set of tests.
-    """
-    test_suite = unittest.TestSuite()
-
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    tests = [StopTrainingTest, ExampleManagerTest]
-
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(cur_suite)
-
-    return test_suite
 
 class StopTrainingTest(unittest.TestCase):
     """Test functionality for stopping training networks.
     """
-    def t_validation_increase_stop(self):
+    def test_validation_increase_stop(self):
         """Stop training when the ValidationExamples increase.
         """
         stopper = ValidationIncreaseStop(max_iterations = 20,
@@ -74,7 +51,7 @@ class ExampleManagerTest(unittest.TestCase):
             outputs = [random.randrange(1, 7)]
             self.examples.append(TrainingExample(inputs, outputs))
 
-    def t_adding_examples(self):
+    def test_adding_examples(self):
         """Make sure test examples are added properly.
         """
         manager = ExampleManager()
@@ -97,7 +74,7 @@ class ExampleManagerTest(unittest.TestCase):
                    "Deviation in how examples were added, expect %s, got %s" \
                    % (expect, actual)
         
-    def t_partioning_examples(self):
+    def test_partioning_examples(self):
         """Test that we can change how to partition the test examples.
         """
         manager = ExampleManager(0, 0)
@@ -116,4 +93,5 @@ class ExampleManagerTest(unittest.TestCase):
                "Did not partition correctly to validation_examples."
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

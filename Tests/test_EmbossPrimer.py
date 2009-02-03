@@ -22,7 +22,6 @@ def testing_suite():
     test_suite = unittest.TestSuite()
 
     test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
     tests = [Primer3ParseTest, PrimersearchParseTest,
              PrimerSearchInputTest]
     
@@ -42,7 +41,7 @@ class Primer3ParseTest(unittest.TestCase):
            os.path.join("Emboss", "internal_oligo.primer3")
            ]
 
-    def t_simple_parse(self):
+    def test_simple_parse(self):
         """Make sure that we can parse all primer3 files.
         """
         for file in self.test_files:
@@ -50,7 +49,7 @@ class Primer3ParseTest(unittest.TestCase):
             Primer3.read(h)
             h.close()
 
-    def t_indepth_regular_parse(self):
+    def test_indepth_regular_parse(self):
         """Make sure we get the data from normal primer3 files okay.
         """
         regular_file = self.test_files[0]
@@ -76,7 +75,7 @@ class Primer3ParseTest(unittest.TestCase):
         assert primer_info.primers[4].reverse_tm == 59.61
         assert primer_info.primers[4].reverse_gc == 40.91
 
-    def t_in_depth_single_parse(self):
+    def test_in_depth_single_parse(self):
         """Make sure we get info right from a single primer find.
         """
         file = self.test_files[1]
@@ -90,7 +89,7 @@ class Primer3ParseTest(unittest.TestCase):
         assert primer_info.primers[3].forward_seq == "TGTGATTGCTTGAGCTGGAC"
         assert primer_info.primers[3].forward_start == 253
 
-    def t_internal_oligo_single_parse(self):
+    def test_internal_oligo_single_parse(self):
         ''' Make sure we can parse an internal oligo file correctly '''
         # these files are generated when designing hybridization probes.
         file = self.test_files[4]
@@ -111,7 +110,7 @@ class PrimersearchParseTest(unittest.TestCase):
         self.test_files = \
           [os.path.join("Emboss", "bac_find.psearch")]
 
-    def t_simple_parse(self):
+    def test_simple_parse(self):
         """Make sure that we can parse all primersearch files.
         """
         for file in self.test_files:
@@ -119,7 +118,7 @@ class PrimersearchParseTest(unittest.TestCase):
             PrimerSearch.read(h)
             h.close()
 
-    def t_in_depth_normal_parse(self):
+    def test_in_depth_normal_parse(self):
         """Make sure the output from a simple primersearch file is correct.
         """
         file = self.test_files[0]
@@ -147,7 +146,7 @@ class PrimerSearchInputTest(unittest.TestCase):
     def setUp(self):
         pass
 
-    def t_primer_representation(self):
+    def test_primer_representation(self):
         """Make sure we can output primer information correctly.
         """
         p_info = PrimerSearch.InputRecord()

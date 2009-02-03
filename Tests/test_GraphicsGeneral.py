@@ -15,10 +15,7 @@ appreciated.
 """
 # standard library
 import os
-import sys
 import random
-
-# PyUnit
 import unittest
 
 from Bio import MissingExternalDependencyError
@@ -33,16 +30,6 @@ except:
 # the stuff we're testing
 from Bio.Graphics.Comparative import ComparativeScatterPlot
 
-def run_tests(argv):
-    ALL_TESTS = [ComparativeTest]
-    
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    
-    for test in ALL_TESTS:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        runner.run(cur_suite)
 
 class ComparativeTest(unittest.TestCase):
     """Do tests for modules involved with comparing data.
@@ -79,7 +66,7 @@ class ComparativeTest(unittest.TestCase):
             plot_info.append(cur_list)
         return plot_info
                 
-    def t_simple_scatter_plot(self):
+    def test_simple_scatter_plot(self):
         """Test creation of a simple ScatterPlot.
         """
         compare_plot = ComparativeScatterPlot()
@@ -94,4 +81,5 @@ class ComparativeTest(unittest.TestCase):
             pass
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

@@ -3,11 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import commands
 import os
-import shutil
-import sys
-import tempfile
 import unittest
 from Bio.PopGen import SimCoal
 from Bio.PopGen.SimCoal.Template import generate_simcoal_from_template
@@ -15,28 +11,9 @@ from Bio.PopGen.SimCoal.Template import generate_simcoal_from_template
 #Tests simcoal related code. Note: this case doesn't require simcoal
 #test_PopGen_SimCoal tests code that requires simcoal
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    """Generate the suite of tests.
-    """
-    test_suite = unittest.TestSuite()
-
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    tests = [TemplateTest]
-    
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(cur_suite)
-
-    return test_suite
 
 class TemplateTest(unittest.TestCase):
-    def t_template_full(self):
+    def test_template_full(self):
         """Full template creation test
         """
         generate_simcoal_from_template('simple',
@@ -58,4 +35,5 @@ class TemplateTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

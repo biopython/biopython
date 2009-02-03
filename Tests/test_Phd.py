@@ -1,28 +1,7 @@
-import os
-import sys
 import unittest
 
 from Bio.Sequencing import Phd
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    """Generate the suite of tests.
-    """
-    test_suite = unittest.TestSuite()
-
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    tests = [PhdTestOne]
-    
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(cur_suite)
-
-    return test_suite
 
 class PhdTestOne(unittest.TestCase):
     def setUp(self):
@@ -31,7 +10,7 @@ class PhdTestOne(unittest.TestCase):
     def tearDown(self):
         self.handle.close()
 
-    def t_check_record_parser(self):
+    def test_check_record_parser(self):
         """Test to check that record parser parses all records of a contig.
         """
         rs = Phd.parse(self.handle)
@@ -50,4 +29,5 @@ class PhdTestOne(unittest.TestCase):
             print r.seq_trimmed.tostring()[:10],r.seq_trimmed.tostring()[-10:]
         
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

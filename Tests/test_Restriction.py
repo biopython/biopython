@@ -1,33 +1,12 @@
 """Testing code for Restriction enzyme classes of Biopython.
 """
 
-import os
-import sys
 import unittest
 
 from Bio.Restriction import *
 from Bio.Seq import Seq
 from Bio.Alphabet.IUPAC import IUPACAmbiguousDNA
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    """Generate the suite of tests.
-    """
-    test_suite = unittest.TestSuite()
-
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
-    tests = [SimpleEnzyme, EnzymeComparison, RestrictionBatches]
-    
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(cur_suite)
-
-    return test_suite
 
 class SimpleEnzyme(unittest.TestCase):
     """Tests for dealing with basic enzymes using the Restriction package.
@@ -40,7 +19,7 @@ class SimpleEnzyme(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def t_eco_cutting(self):
+    def test_eco_cutting(self):
         """Test basic cutting with EcoRI.
         """
         assert EcoRI.site == 'GAATTC'
@@ -56,7 +35,7 @@ class SimpleEnzyme(unittest.TestCase):
         parts = EcoRI.catalyze(self.ecosite_seq)
         assert len(parts) == 2
 
-    def t_circular_sequences(self):
+    def test_circular_sequences(self):
         """Deal with cutting circular sequences.
         """
         parts = EcoRI.catalyse(self.ecosite_seq, linear = False)
@@ -73,7 +52,7 @@ class EnzymeComparison(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def t_basic_isochizomers(self):
+    def test_basic_isochizomers(self):
         """Test to be sure isochizomer and neoschizomers are as expected.
         """
         assert Acc65I.isoschizomers() == [Asp718I, KpnI]
@@ -81,7 +60,7 @@ class EnzymeComparison(unittest.TestCase):
         assert Asp718I.elucidate() == 'G^GTAC_C'
         assert KpnI.elucidate() == 'G_GTAC^C'
 
-    def t_comparisons(self):
+    def test_comparisons(self):
         """Comparison operators between iso and neoschizomers.
         """
         assert Acc65I == Acc65I
@@ -106,7 +85,7 @@ class RestrictionBatches(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def t_creating_batch(self):
+    def test_creating_batch(self):
         """Creating and modifying a restriction batch.
         """
         batch = RestrictionBatch([EcoRI])
@@ -124,7 +103,7 @@ class RestrictionBatches(unittest.TestCase):
         batch.remove(EcoRV)
         assert len(batch) == 2
 
-    def t_batch_analysis(self):
+    def test_batch_analysis(self):
         """Sequence analysis with a restriction batch.
         """
         seq = Seq("AAAA" + EcoRV.site + "AAAA" + EcoRI.site + "AAAA",
@@ -136,4 +115,5 @@ class RestrictionBatches(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

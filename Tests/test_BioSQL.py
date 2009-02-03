@@ -51,7 +51,6 @@ def testing_suite():
     test_suite = unittest.TestSuite()
 
     test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
     tests = [LoaderTest, ReadTest, SeqInterfaceTest, InDepthLoadTest]
     
     for test in tests:
@@ -149,12 +148,12 @@ class ReadTest(unittest.TestCase):
         self.db.adaptor.conn.close()
         del self.db
 
-    def t_get_db_items(self):
+    def test_get_db_items(self):
         """Get a list of all items in the database.
         """
         items = self.db.values()
 
-    def t_lookup_items(self):
+    def test_lookup_items(self):
         """Test retrieval of items using various ids.
         """
         item = self.db.lookup(accession = "X62281")
@@ -200,7 +199,7 @@ class SeqInterfaceTest(unittest.TestCase):
         del self.db
         del self.item
     
-    def t_seq_record(self):
+    def test_seq_record(self):
         """Make sure SeqRecords from BioSQL implement the right interface.
         """
         test_record = self.item
@@ -216,7 +215,7 @@ class SeqInterfaceTest(unittest.TestCase):
         for feature in test_record.features:
             assert isinstance(feature, SeqFeature)
 
-    def t_seq(self):
+    def test_seq(self):
         """Make sure Seqs from BioSQL implement the right interface.
         """
         test_seq = self.item.seq
@@ -231,7 +230,7 @@ class SeqInterfaceTest(unittest.TestCase):
     
         assert len(test_seq) == 880, len(test_seq)
 
-    def t_convert(self):
+    def test_convert(self):
         """Check can turn a DBSeq object into a Seq or MutableSeq."""
         test_seq = self.item.seq
 
@@ -246,7 +245,7 @@ class SeqInterfaceTest(unittest.TestCase):
         assert isinstance(other, MutableSeq)
 
 
-    def t_addition(self):
+    def test_addition(self):
         """Check can add DBSeq objects together."""
         test_seq = self.item.seq
         for other in [Seq("ACGT",test_seq.alphabet),
@@ -261,7 +260,7 @@ class SeqInterfaceTest(unittest.TestCase):
             assert str(test) == str(other) + str(test_seq)
             
 
-    def t_seq_slicing(self):
+    def test_seq_slicing(self):
         """Check that slices of sequences are retrieved properly.
         """
         test_seq = self.item.seq
@@ -280,7 +279,7 @@ class SeqInterfaceTest(unittest.TestCase):
         assert test_seq[1] == 'T'
         assert test_seq[-10:][5:].tostring() == "TTATA"
 
-    def t_seq_features(self):
+    def test_seq_features(self):
         """Check SeqFeatures of a sequence.
         """
         test_features = self.item.features
@@ -339,7 +338,7 @@ class LoaderTest(unittest.TestCase):
         self.db.adaptor.conn.close()
         del self.db
 
-    def t_load_database(self):
+    def test_load_database(self):
         """Load SeqRecord objects into a BioSQL database.
         """
         self.db.load(self.iterator)
@@ -378,7 +377,7 @@ class InDepthLoadTest(unittest.TestCase):
         self.db.adaptor.conn.close()
         del self.db
 
-    def t_record_loading(self):
+    def test_record_loading(self):
         """Make sure all records are correctly loaded.
         """
         test_record = self.db.lookup(accession = "X55053")
@@ -395,7 +394,7 @@ class InDepthLoadTest(unittest.TestCase):
         assert isinstance(test_record.seq.alphabet, Alphabet.DNAAlphabet)
         assert test_record.seq[:10].tostring() == 'ATTTGGCCTA'
 
-    def t_seq_feature(self):
+    def test_seq_feature(self):
         """Indepth check that SeqFeatures are transmitted through the db.
         """
         test_record = self.db.lookup(accession = "AJ237582")

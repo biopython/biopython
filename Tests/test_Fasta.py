@@ -25,7 +25,6 @@ def testing_suite():
     test_suite = unittest.TestSuite()
 
     test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 't_'
     tests = [RecordTest, ParserTest, IteratorTest]
     
     for test in tests:
@@ -35,7 +34,7 @@ def testing_suite():
     return test_suite
 
 class RecordTest(unittest.TestCase):
-    def t_record_basic(self):
+    def test_record_basic(self):
         """Basic test on Record
         """
         def pbool(b):
@@ -61,7 +60,7 @@ class ParserTest(unittest.TestCase):
         for handle in self.handles:
             handle.close()
 
-    def t_record_parser(self):
+    def test_record_parser(self):
         """Basic operation of the Record Parser.
         """
         parser = Fasta.RecordParser()
@@ -72,7 +71,7 @@ class ParserTest(unittest.TestCase):
             assert len(rec.title) == self.lengths[index][0]
             assert len(rec.sequence) == self.lengths[index][1]
 
-    def t_sequence_parser(self):
+    def test_sequence_parser(self):
         """Basic operation of the Sequence Parser.
         """
         parser = Fasta.SequenceParser()
@@ -85,7 +84,7 @@ class ParserTest(unittest.TestCase):
             assert len(rec.seq) == self.lengths[index][1]
             assert len(rec.description) == self.lengths[index][0]
 
-    def t_sequence_alphabet(self):
+    def test_sequence_alphabet(self):
         """Setting the alphabet for the Sequence Parser.
         """
         parser = Fasta.SequenceParser(alphabet =
@@ -93,7 +92,7 @@ class ParserTest(unittest.TestCase):
         rec = parser.parse(self.handles[0])
         assert rec.seq.alphabet == IUPAC.unambiguous_dna
 
-    def t_sequence_title_convert(self):
+    def test_sequence_title_convert(self):
         """Test title conversion for the Sequence Parser.
         """
         def test_title2ids(title):
@@ -111,7 +110,7 @@ class IteratorTest(unittest.TestCase):
     def tearDown(self):
         self.test_handle.close()
 
-    def t_basic_iterator(self):
+    def test_basic_iterator(self):
         """Ensure the Fasta iterator works returning text.
         """
         i = Fasta.Iterator(self.test_handle)
@@ -128,7 +127,7 @@ class IteratorTest(unittest.TestCase):
         assert i.next() is None
         assert i.next() is None
 
-    def t_new_iterator(self):
+    def test_new_iterator(self):
         """Ensure the Fasta iterator works like a Python 2.2 iterator.
         """
         n = 0
@@ -137,7 +136,7 @@ class IteratorTest(unittest.TestCase):
             n += 1
         assert n == 3
 
-    def t_record_iterator(self):
+    def test_record_iterator(self):
         """Test the iterator with a Record Parser.
         """
         parser = Fasta.RecordParser()
@@ -145,7 +144,7 @@ class IteratorTest(unittest.TestCase):
         for rec in iter(iterator):
             assert isinstance(rec, Fasta.Record)
 
-    def t_sequence_iterator(self):
+    def test_sequence_iterator(self):
         """Test the iterator with a Sequence Parser.
         """
         parser = Fasta.SequenceParser()
@@ -153,7 +152,7 @@ class IteratorTest(unittest.TestCase):
         for rec in iter(iterator):
             assert isinstance(rec, SeqRecord.SeqRecord)
     
-    def t_parsing_comments(self):
+    def test_parsing_comments(self):
         """Parse FASTA files with # style comment lines in them.
         """
         handle = open(os.path.join("Fasta", "f003"))
