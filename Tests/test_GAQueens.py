@@ -9,10 +9,12 @@ We represent queens on the board as a tuple like (1, 2, 3, 4, 5)
 which would be 5 queens diaganol across the board.
 
 Usage:
-python place_queens.py <Number of Queens to place>
+python test_GAQueens.py <Number of Queens to place>
 
 where <Number of Queens to place> is just a number specifying how many
 queens you want to try to calculate this for.
+
+When called as part of the Biopython unit test suite, 5 queens are used.
 """
 # standard library
 import sys
@@ -46,7 +48,7 @@ def main(argv):
 
     if len(arguments) != 1:
         print "Usage:"
-        print "python place_queens.py <Number of Queens to place>\n"
+        print "python test_GAQueens.py <Number of Queens to place>\n"
         print "where <Number of Queens to place> is a number specifying "
         print "how many queens you want to try to calculate this for."
         return 1
