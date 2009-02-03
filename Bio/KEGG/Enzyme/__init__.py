@@ -245,7 +245,7 @@ def parse(handle):
              record.effector.append(data.strip(";"))
         elif keyword=="GENES       ":
             if data[3:5]==': ':
-                key, values = data.split(":")
+                key, values = data.split(":",1)
                 values = [value.split("(")[0] for value in values.split()]
                 row = (key, values)
                 record.genes.append(row)
