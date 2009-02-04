@@ -10,13 +10,6 @@ from Bio.SCOP.Residues import *
 
 import sys
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    return test_suite()
 
 
 class ResiduesTests(unittest.TestCase):
@@ -84,16 +77,8 @@ class ResiduesTests(unittest.TestCase):
         except ValueError, e :
             pass
 
-def test_suite():
-    return unittest.makeSuite(ResiduesTests)
 
             
 if __name__ == '__main__':
-    unittest.main()
-
-
-
-
-
-
-
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

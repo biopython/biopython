@@ -10,8 +10,6 @@ from Bio.NeuralNetwork.BackPropagation.Network import BasicNetwork
 
 VERBOSE = 0
 
-def run_tests(argv):
-    main()
 
 def main():
     """Train a neural network, and then test it to see how it does.
@@ -59,5 +57,4 @@ def stopping_criteria(num_iterations, validation_error, training_error):
 
     return 0
 
-if __name__ == "__main__":
-    main()
+main()

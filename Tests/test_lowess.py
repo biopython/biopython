@@ -6,7 +6,7 @@ except ImportError :
         "Install NumPy if you want to use Bio.Statistics.lowess.")
 
 from Bio.Statistics.lowess import lowess
-import unittest, sys
+import unittest
 
 class test_lowess(unittest.TestCase):
 
@@ -21,14 +21,6 @@ class test_lowess(unittest.TestCase):
         for precomputed, calculated in zip(ys, output):
             self.assertAlmostEqual(precomputed, calculated, 4)
 
-def testing_suite():
-    s = unittest.makeSuite(test_lowess)
-    return unittest.TestSuite([s])
-
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

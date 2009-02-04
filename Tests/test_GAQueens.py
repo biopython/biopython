@@ -18,7 +18,6 @@ When called as part of the Biopython unit test suite, 5 queens are used.
 """
 # standard library
 import sys
-import getopt
 import math
 import random
 import copy
@@ -37,24 +36,9 @@ from Bio.GA.Selection.Tournament import TournamentSelection
 
 VERBOSE = 0
 
-def run_tests(argv):
-    """Run the default test.
-    """
-    arguments = ["test_GAQueens.py", "5"] + argv
-    main(arguments)
 
-def main(argv):
-    options, arguments = getopt.getopt(argv[1:], '')
+def main(num_queens):
 
-    if len(arguments) != 1:
-        print "Usage:"
-        print "python test_GAQueens.py <Number of Queens to place>\n"
-        print "where <Number of Queens to place> is a number specifying "
-        print "how many queens you want to try to calculate this for."
-        return 1
-
-    
-    num_queens = int(arguments[0])    
     print "Calculating for %s queens..." % num_queens
 
     num_orgs = 1000
@@ -397,7 +381,18 @@ class QueensMutation:
                 new_org.genome[gene_index] = new_letter
 
         return new_org
-        
-if __name__ == "__main__":
-    sys.exit(main(sys.argv))
+ 
+num_queens = 5
 
+if __name__ == "__main__":
+    if len(sys.argv) == 2:
+        num_queens = int(sys.argv[1])
+    elif len(sys.argv) > 2:
+        print "Usage:"
+        print "python test_GAQueens.py <Number of Queens to place>\n"
+        print "where <Number of Queens to place> is an optional parameter"
+        print "specifying how many queens you want to try to calculate"
+        print "this for. The default number of queens to place is 5."
+        sys.exit(1)
+
+main(num_queens)

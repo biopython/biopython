@@ -13,14 +13,6 @@ from Bio.SCOP.Residues import Residues
 
 import sys
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    return test_suite()
-
 
 class DesTests(unittest.TestCase):
 
@@ -68,12 +60,7 @@ class DesTests(unittest.TestCase):
         assert record.description == recFields[4]
 
 
-def test_suite():
-    return unittest.makeSuite(DesTests)
 
 if __name__ == '__main__':
-    unittest.main()
-
-
-
-
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

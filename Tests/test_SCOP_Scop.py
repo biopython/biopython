@@ -12,26 +12,6 @@ from Bio.SCOP import *
 
 import sys
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    """Generate the suite of tests.
-    """
-    test_suite = unittest.TestSuite()
-    
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 'test'
-    tests = [ScopTests]
-    
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(cur_suite)
-        
-    return test_suite
-
 
 class ScopTests(unittest.TestCase):
 
@@ -171,13 +151,7 @@ class ScopTests(unittest.TestCase):
         
         
 
-#def test_suite():
-#    return unittest.makeSuite(ScopTests)
 
 if __name__ == '__main__':
-    unittest.main()
-
-
-
-
-
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

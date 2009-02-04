@@ -162,13 +162,7 @@ class ComparisonTestCase(unittest.TestCase):
         try:
             # write the output from the test into a string
             sys.stdout = output_handle
-            cur_test = __import__(self.name)
-
-            # run tests that use run_tests() to signify running
-            try:
-                cur_test.run_tests([])
-            except AttributeError:
-                pass
+            __import__(self.name)
         finally:
             output_handle.close()
             # return standard out to its normal setting
@@ -210,11 +204,6 @@ class TestRunner(unittest.TextTestRunner):
             if suite.countTestCases()==0:
                 # This is a print-and-compare test instead of a unittest-
                 # type test.
-                # Some tests may be runnable by run_tests()
-                try:        
-                    module.run_tests([])
-                except AttributeError:
-                    pass
                 test = ComparisonTestCase(name, output)
                 suite = unittest.TestSuite([test])
             suite.run(result)

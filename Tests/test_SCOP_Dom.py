@@ -16,13 +16,6 @@ from Bio.SCOP.Residues import Residues
 
 import sys
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    return test_suite()
 
 
 class DomTests(unittest.TestCase):
@@ -64,15 +57,7 @@ class DomTests(unittest.TestCase):
         self.assertEquals(rec.hierarchy,'1.001.001.001.001.001')
 
 
-def test_suite():
-    return unittest.makeSuite(DomTests)
 
 if __name__ == '__main__':
-    unittest.main()
-
-
-
-
-
-
-
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

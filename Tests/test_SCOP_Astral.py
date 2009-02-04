@@ -12,24 +12,6 @@ from Bio.SCOP import *
 
 import sys
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    test_suite = unittest.TestSuite()
-    
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 'test'
-    tests = [AstralTests]
-    
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(cur_suite)
-        
-    return test_suite
-
 
 class AstralTests(unittest.TestCase):
 
@@ -84,9 +66,5 @@ class AstralTests(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
-
-
-
-
-
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)
