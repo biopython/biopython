@@ -673,9 +673,22 @@ class CircularDrawer(AbstractDrawer):
         trackheight = (top-ctr)
         
         # X-axis
-        scale_elements.append(Circle(self.xcenter, self.ycenter, ctr,
-                                    strokeColor=track.scale_color,
-                                    fillColor=None))
+        if self.sweep < 1 :
+            #Draw an arc, leaving out the wedge
+            p = ArcPath(strokeColor=track.scale_color, fillColor=None)
+            #Note reportlab counts angles anti-clockwise from the horizontal
+            #(as in mathematics, e.g. complex numbers and polar coordinates)
+            #in degrees.
+            p.addArc(self.xcenter, self.ycenter, ctr,
+                     startangledegrees=90-360*self.sweep,
+                     endangledegrees=90)
+            scale_elements.append(p)
+            del p
+        else :
+            #Draw a full circle
+            scale_elements.append(Circle(self.xcenter, self.ycenter, ctr,
+                                         strokeColor=track.scale_color,
+                                         fillColor=None))
 
         if track.scale_ticks:   # Ticks are required on the scale
             # Draw large ticks 
