@@ -221,7 +221,7 @@ class Track:
                                 be placed on the Y axes
         """
         #Let the UK spelling (colour) override the USA spelling (color)
-        if greytrack_font_color is not None:
+        if greytrack_font_colour is not None:
             greytrack_font_color = greytrack_font_colour
         if scale_colour is not None:
             scale_color = scale_colour
