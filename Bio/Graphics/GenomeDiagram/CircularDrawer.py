@@ -861,9 +861,16 @@ class CircularDrawer(AbstractDrawer):
         btm, ctr, top = self.track_radii[self.current_track_level]
 
         # Make background
-        bg = Circle(self.xcenter, self.ycenter, ctr, 
-                    strokeColor = colors.Color(0.98, 0.98, 0.98),
-                    fillColor=None, strokeWidth=top-btm)
+        if self.sweep < 1 :
+            #Make a partial circle, a large arc box
+            #This method assumes the correct center for us.
+            bg = self._draw_arc(btm, top, 0, 2*pi*self.sweep,
+                                colors.Color(0.98, 0.98, 0.98))
+        else :
+            #Make a full circle (using a VERY thick linewidth)
+            bg = Circle(self.xcenter, self.ycenter, ctr, 
+                        strokeColor = colors.Color(0.98, 0.98, 0.98),
+                        fillColor=None, strokeWidth=top-btm)
         greytrack_bgs.append(bg)
 
         if track.greytrack_labels:  # Labels are required for this track
