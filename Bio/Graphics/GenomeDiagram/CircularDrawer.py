@@ -679,13 +679,21 @@ class CircularDrawer(AbstractDrawer):
 
         if track.scale_ticks:   # Ticks are required on the scale
             # Draw large ticks 
+            #I want the ticks to be consistently positioned relative to
+            #the start of the sequence (position 0), not relative to the
+            #current viewpoint (self.start and self.end)
+
             ticklen = track.scale_largeticks * trackheight
-            largeinterval = int(track.scale_largetick_interval)
-            largeticks = range(self.start, self.end, largeinterval)
-            largeticks = [largeinterval*(pos/largeinterval) for pos in largeticks]
-            # There could be NO large ticks,
-            if largeticks and largeticks[0] == 0:
-                largeticks[0] = 1
+            tickiterval = int(track.scale_largetick_interval)
+            #Note that we could just start the list of ticks using
+            #range(0,self.end,tickinterval) and the filter out the
+            #ones before self.start - but this seems wasteful.
+            #Using tickiterval * (self.start/tickiterval) is a shortcut.
+            largeticks = [pos for pos \
+                          in range(tickiterval * (self.start/tickiterval),
+                                   int(self.end),
+                                   tickiterval) \
+                          if pos >= self.start]
             for tickpos in largeticks:
                 tick, label = self.draw_tick(tickpos, ctr, ticklen,
                                              track,
@@ -695,12 +703,12 @@ class CircularDrawer(AbstractDrawer):
                     scale_labels.append(label)
             # Draw small ticks
             ticklen = track.scale_smallticks * trackheight
-            smallinterval = int(track.scale_smalltick_interval)
-            smallticks = range(self.start, self.end, smallinterval)
-            smallticks = [smallinterval*(pos/smallinterval) for pos in smallticks]
-            # There could be NO small ticks,
-            if smallticks and smallticks[0] == 0:
-                smallticks[0] = 1
+            tickiterval = int(track.scale_smalltick_interval)
+            smallticks = [pos for pos \
+                          in range(tickiterval * (self.start/tickiterval),
+                                   int(self.end),
+                                   tickiterval) \
+                          if pos >= self.start]
             for tickpos in smallticks:
                 tick, label = self.draw_tick(tickpos, ctr, ticklen,
                                              track,
