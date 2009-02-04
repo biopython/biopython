@@ -21,6 +21,7 @@ import os
 import re
 import getopt
 import time
+import traceback
 import unittest
 import distutils.util
 
@@ -217,6 +218,14 @@ class TestRunner(unittest.TextTestRunner):
         except MissingExternalDependencyError, msg:
             sys.stderr.write("skipping. %s\n" % msg)
             return True
+        except Exception:
+            # This happened during the import
+            sys.stderr.write("ERROR\n")
+            result.stream.write(result.separator1+"\n")
+            result.stream.write("ERROR: %s\n" % name)
+            result.stream.write(result.separator2+"\n")
+            result.stream.write(traceback.format_exc())
+            return False
         finally:
             sys.stdout = stdout
 
