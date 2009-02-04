@@ -244,7 +244,10 @@ class DiagramTest(unittest.TestCase):
         start = 6500
         end = 8750
         
-        gdd = Diagram('Test Diagram')
+        gdd = Diagram('Test Diagram',
+                      #For the circular diagram we don't want a closed cirle:
+                      circular=False,
+                      )
         #Add a track of features,
         gdt_features = gdd.new_track(1, greytrack=True,
                                      name="CDS Features",
@@ -292,7 +295,8 @@ class DiagramTest(unittest.TestCase):
         assert open(output_filename).read().replace("\r\n","\n") \
                == gdd.write_to_string('PDF').replace("\r\n","\n")
 
-        #Circular with a particular start/end is a bit odd, but should work!
+        #Circular with a particular start/end is a bit odd, but by setting
+        #circular=False (above) a sweep of 90% is used (a wedge is left out)
         gdd.draw(format='circular',
                  tracklines=False, pagesize=(10*cm,10*cm),
                  start=start, end=end)
@@ -417,10 +421,12 @@ class DiagramTest(unittest.TestCase):
         #gdfs1.set_all_features('color', colors.red)
         gdfs2.set_all_features('color', colors.blue)
 
-        gdt1 = Track('CDS features', greytrack=1,
-            scale_largetick_interval=1e4,
-            scale_smalltick_interval=1e3,
-            scale_format = "SInt")
+        gdt1 = Track('CDS features', greytrack=True,
+                     scale_largetick_interval=1e4,
+                     scale_smalltick_interval=1e3,
+                     greytrack_labels=10,
+                     greytrack_font_color="red",
+                     scale_format = "SInt")
         gdt1.add_set(gdfs1)
 
         gdt2 = Track('gene features', greytrack=1,
