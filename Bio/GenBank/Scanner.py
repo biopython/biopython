@@ -663,14 +663,39 @@ class EmblScanner(InsdcScanner) :
                     assert data.count("-")==1
                     consumer.reference_bases("(bases " + data.replace("-", " to ") + ")")
                 elif line_type == 'RX' :
-                    # TODO - I have seen both DOI and PubMed reference cross references
-                    # The GenBank based consumer and Reference class may need extending here.
-                    pass
+                    # EMBL support three reference types at the moment:
+                    # - PUBMED    PUBMED bibliographic database (NLM)
+                    # - DOI       Digital Object Identifier (International DOI Foundation)
+                    # - AGRICOLA  US National Agriculture Library (NAL) of the US Department
+                    #             of Agriculture (USDA)
+                    #
+                    # Format:
+                    # RX  resource_identifier; identifier.
+                    #
+                    # e.g.
+                    # RX   DOI; 10.1016/0024-3205(83)90010-3.
+                    # RX   PUBMED; 264242.
+                    #
+                    # Currently our reference object only supports PUBMED and MEDLINE
+                    # (as these were in GenBank files?).
+                    key, value = data.split(";",1)
+                    if value.endswith(".") : value = value[:-1]
+                    value = value.strip()
+                    if key == "PUBMED" :
+                        consumer.pubmed_id(value)
+                    #TODO - Handle other reference types (here and in BioSQL bindings)
                 elif line_type == 'CC' :
                     # Have to pass a list of strings for this one (not just a string)
                     consumer.comment([data])
                 elif line_type == 'DR' :
+                    # Database Cross-reference, format:
+                    # DR   database_identifier; primary_identifier; secondary_identifier.
+                    #
+                    # e.g.
+                    # DR   MGI; 98599; Tcrb-V4.
+                    #
                     # TODO - Data reference...
+                    # How should we store the secondary identifier (if present)?  Ignore it?
                     pass
                 elif line_type in consumer_dict :
                     #Its a semi-automatic entry!
@@ -727,7 +752,6 @@ class GenBankScanner(InsdcScanner) :
             if line=='//' :
                 break
             if line.find('CONTIG')==0 :
-                #What should we do with this?
                 break
             if len(line) > 9 and  line[9:10]!=' ' :
                 raise ValueError("Sequence line mal-formed, '%s'" % line)
@@ -1081,13 +1105,14 @@ class GenBankScanner(InsdcScanner) :
                         consumer.origin_name(line)
                 if line.find("CONTIG")==0 :
                     line = line[6:].strip()
-                    contig_location = line + '\n'
+                    contig_location = line
                     while True :
                         line = line_iter.next()
                         if not line :
                             break
                         elif line[:GENBANK_INDENT]==GENBANK_SPACER :
-                            contig_location += line.rstrip()
+                            #Don't need to preseve the whitespace here.
+                            contig_location += line[GENBANK_INDENT:].rstrip()
                         else:
                             raise ValueError('Expected CONTIG continuation line, got:\n' + line)
                     consumer.contig_location(contig_location)
