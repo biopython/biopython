@@ -550,16 +550,28 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         return new_locations
 
     def authors(self, content):
-        self._current_ref.authors = content
+        if self._current_ref.authors :
+            self._current_ref.authors += ' ' + content
+        else :
+            self._current_ref.authors = content
 
     def consrtm(self, content):
-        self._current_ref.consrtm = content
+        if self._current_ref.consrtm :
+            self._current_ref.consrtm += ' ' + content
+        else :
+            self._current_ref.consrtm = content
 
     def title(self, content):
-        self._current_ref.title = content
+        if self._current_ref.title :
+            self._current_ref.title += ' ' + content
+        else :
+            self._current_ref.title = content
 
     def journal(self, content):
-        self._current_ref.journal = content
+        if self._current_ref.journal :
+            self._current_ref.journal += ' ' + content
+        else :
+            self._current_ref.journal = content
 
     def medline_id(self, content):
         self._current_ref.medline_id = content
@@ -568,7 +580,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._current_ref.pubmed_id = content
 
     def remark(self, content):
-        self._current_ref.comment = content
+        """Deal with a reference comment."""
+        if self._current_ref.comment :
+            self._current_ref.comment += ' ' + content
+        else :
+            self._current_ref.comment = content
 
     def comment(self, content):
         try :
@@ -920,16 +936,18 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._cur_qualifier_value.append(qual_value)
 
     def contig_location(self, content):
-        """Deal with a location of CONTIG information.
+        """Deal with CONTIG information.
+
+        Most CONTIG descriptions use a join of other externally referenced
+        sequences.  Currently this code tries to use the location parser,
+        and represent this as a SeqFeature with sub-features.
         """
         # add a last feature if is hasn't been added,
         # so that we don't overwrite it
         self._add_feature()
-
         # make a feature to add the information to
         self._cur_feature = SeqFeature.SeqFeature()
         self._cur_feature.type = "contig"
-        
         # now set the location on the feature using the standard
         # location handler
         self.location(content)
