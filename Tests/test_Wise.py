@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-__version__ = "$Revision: 1.8 $"
+__version__ = "$Revision: 1.9 $"
 
 import cStringIO
 import doctest, unittest
@@ -59,12 +59,6 @@ class TestWise(unittest.TestCase):
             #Bad!
             self.assert_(False, line)
 
-class TestWiseDoctestSuite(unittest.TestSuite):
-
-    def __init__(self):
-        suite = doctest.DocTestSuite(Wise)
-        unittest.TestSuite.__init__(suite)
-
 def run_tests(argv):
     test_suite = testing_suite()
     runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
@@ -90,6 +84,4 @@ def testing_suite():
     return big_suite
 
 if __name__ == "__main__":
-    # sys.exit(run_tests(sys.argv))
-    runner = unittest.TextTestRunner(verbosity = 2)
-    unittest.main(testRunner=runner)
+    sys.exit(run_tests(sys.argv))
