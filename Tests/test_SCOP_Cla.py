@@ -11,7 +11,6 @@ import unittest
 from Bio.SCOP import Cla
 from Bio.SCOP.Residues import Residues
 
-import sys
 
 
 

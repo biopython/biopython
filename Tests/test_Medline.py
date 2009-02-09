@@ -177,11 +177,8 @@ class TestMedline(unittest.TestCase):
         self.assertEqual(record["SO"], "Bioinformatics. 2003 Nov 22;19(17):2308-10.")
         self.assertRaises(StopIteration, records.next)
 
-def run_tests(argv):
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestMedline)
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(suite)
-
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)
+

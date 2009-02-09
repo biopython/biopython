@@ -7,7 +7,6 @@
 # background of these tests.
 
 import unittest
-import sys
 
 #TODO - Remove this work around once we drop python 2.3 support
 try:
@@ -120,19 +119,6 @@ class TestKNN(unittest.TestCase):
                 correct+=1
         self.assertEqual(correct, 13)
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    """Generate the suite of tests.
-    """
-    unittest_suite = unittest.TestSuite()
-    test_loader = unittest.TestLoader()
-    cur_suite = test_loader.loadTestsFromTestCase(TestKNN)
-    unittest_suite.addTest(cur_suite)
-    return unittest_suite
-
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

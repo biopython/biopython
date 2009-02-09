@@ -513,42 +513,8 @@ class HeteroTestCase(unittest.TestCase):
         self.assertNotEquals(gna, Hetero('gnb'))
         self.assertNotEquals(gna, Hetero('na'))
 
-class CrystalTestSuite(unittest.TestSuite):
-
-    def __init__(self):
-        unittest.TestSuite.__init__(self,
-                                    map(ChainTestCase, ("testLen",
-                                                        "testEquals",
-                                                        "testAppend",
-                                                        "testInsert",
-                                                        "testRemove",
-                                                        "testIndex",
-                                                        "testCount",
-                                                        "testGetItem",
-                                                        "testSetItem",
-                                                        "testDelItem",
-                                                        "testGetSlice",
-                                                        "testSetSlice",
-                                                        "testDelSlice",
-                                                        "testContains",
-                                                        "testAdd")) + \
-                                    map(HeteroTestCase, ("testEquals",
-                                                         "testInit",
-                                                         "testLen")) + \
-                                    map(CrystalTestCase,("testLen",
-                                                         "testGetItem",
-                                                         "testSetItem",
-                                                         "testDelItem",
-                                                         "testClear",
-                                                         "testKeys",
-                                                         "testValues",
-                                                         "testItems",
-                                                         "testHasKey")))
-
-
-def run_tests(argv):
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(CrystalTestSuite())
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)
+

@@ -5,7 +5,6 @@ import unittest
 
 from Bio.SCOP import Raf
 
-import sys
 
 
 

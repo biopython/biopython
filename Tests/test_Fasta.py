@@ -14,24 +14,6 @@ from Bio import Seq
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    """Generate the suite of tests.
-    """
-    test_suite = unittest.TestSuite()
-
-    test_loader = unittest.TestLoader()
-    tests = [RecordTest, ParserTest, IteratorTest]
-    
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(cur_suite)
-
-    return test_suite
 
 class RecordTest(unittest.TestCase):
     def test_record_basic(self):
@@ -162,9 +144,7 @@ class IteratorTest(unittest.TestCase):
             num_recs += 1
         assert num_recs == 2
 
-##The dictionaries code has been deprecated
-#class DictionaryTest(unittest.TestCase):
-#   ...
-        
+
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

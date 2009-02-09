@@ -208,22 +208,6 @@ class MultiGraphTestCase(unittest.TestCase):
         self.assertEqual(a, b)#, "incorrect node removal")
 
         
-class RepTestSuite(unittest.TestSuite):
-
-    def __init__(self):
-        unittest.TestSuite.__init__(self,
-                                    map(HashSetTestCase, ("testEquals",
-                                                          "testLen",
-                                                          "testContains",
-                                                          "testList",
-                                                          "testSetOps")) + \
-                                    map(GraphTestCase, ("testEquals",
-                                                        "testNodes",
-                                                        "testEdges")) + \
-                                    map(MultiGraphTestCase, ("testEquals",
-                                                             "testNodes",
-                                                             "testEdges")))
-
 class ReactionTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -250,16 +234,6 @@ class ReactionTestCase(unittest.TestCase):
                           "double reversal not identity")
     
 
-class PathwayTestSuite(unittest.TestSuite):
-    
-    def __init__(self):
-        unittest.TestSuite.__init__(self,
-                                    map(ReactionTestCase, ("testEq", "testRev"))) 
-    
-
-def run_tests(argv):
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(unittest.TestSuite([RepTestSuite(), PathwayTestSuite()]))
-
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

@@ -11,7 +11,6 @@ import unittest
 from Bio.SCOP import Des
 from Bio.SCOP.Residues import Residues
 
-import sys
 
 
 class DesTests(unittest.TestCase):

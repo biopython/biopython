@@ -2,10 +2,7 @@
 """Tests for dealing with storage of biopython objects in a relational db.
 """
 # standard library
-import sys
 import os
-
-# PyUnit
 import unittest
 
 # local stuff
@@ -40,24 +37,6 @@ except Exception, e :
               "if you plan to use BioSQL: %s" % str(e)
     raise MissingExternalDependencyError(message)
   
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    """Generate the suite of tests.
-    """
-    test_suite = unittest.TestSuite()
-
-    test_loader = unittest.TestLoader()
-    tests = [LoaderTest, ReadTest, SeqInterfaceTest, InDepthLoadTest]
-    
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(cur_suite)
-
-    return test_suite
 
 def create_database():
     """Create an empty BioSQL database."""
@@ -450,5 +429,5 @@ class InDepthLoadTest(unittest.TestCase):
         assert test_feature.strand == 1, test_feature.strand
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
-
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

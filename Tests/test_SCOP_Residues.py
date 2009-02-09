@@ -8,7 +8,6 @@
 import unittest
 from Bio.SCOP.Residues import *
 
-import sys
 
 
 

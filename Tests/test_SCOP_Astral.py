@@ -10,7 +10,6 @@ from StringIO import *
 
 from Bio.SCOP import *
 
-import sys
 
 
 class AstralTests(unittest.TestCase):

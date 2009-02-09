@@ -14,7 +14,6 @@ import unittest
 from Bio.SCOP import Dom
 from Bio.SCOP.Residues import Residues
 
-import sys
 
 
 

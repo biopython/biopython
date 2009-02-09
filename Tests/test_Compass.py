@@ -1,30 +1,10 @@
 """Tests for parsing Compass output.
 """
 import os
-import sys
 import unittest
 
 from Bio import Compass
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    """Generate the suite of tests.
-    """
-    test_suite = unittest.TestSuite()
-
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 'test'
-    tests = [CompassTest]
-    
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(cur_suite)
-
-    return test_suite
 
 class CompassTest(unittest.TestCase):
     def setUp(self):
@@ -116,4 +96,5 @@ class CompassTest(unittest.TestCase):
         self.assertEquals("LKERKL", com_record.hit_aln[-6:])
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

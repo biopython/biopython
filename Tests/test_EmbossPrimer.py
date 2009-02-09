@@ -4,32 +4,11 @@
 # standard library
 import sys
 import os
-
-# PyUnit
 import unittest
 
 # local stuff
 from Bio.Emboss import PrimerSearch, Primer3
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
-
-def testing_suite():
-    """Generate the suite of tests.
-    """
-    test_suite = unittest.TestSuite()
-
-    test_loader = unittest.TestLoader()
-    tests = [Primer3ParseTest, PrimersearchParseTest,
-             PrimerSearchInputTest]
-    
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        test_suite.addTest(cur_suite)
-
-    return test_suite
 
 class Primer3ParseTest(unittest.TestCase):
     def setUp(self):
@@ -158,4 +137,5 @@ class PrimerSearchInputTest(unittest.TestCase):
                          "Test2 AATA TTAT\n"
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)
