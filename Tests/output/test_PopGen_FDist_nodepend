@@ -1,9 +1,0 @@
-test_PopGen_FDist_nodepend
-Basic test on Record ... ok
-Basic operation of the Record Parser. ... ok
-Basic conversion test. ... ok
-
-----------------------------------------------------------------------
-Ran 3 tests in 0.001s
-
-OK
