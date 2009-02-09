@@ -1,13 +1,13 @@
 test_PDB
 PDBConstructionException: Atom N defined twice in residue <Residue ARG het=  resseq=2 icode= > at line 19.
 Exception ignored.
-Some atoms or residues will be missing in the data structure.
+Some atoms or residues may be missing in the data structure.
 PDBConstructionException: Blank altlocs in duplicate residue SER (' ', 4, ' ') at line 41.
 Exception ignored.
-Some atoms or residues will be missing in the data structure.
+Some atoms or residues may be missing in the data structure.
 PDBConstructionException: Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 820.
 Exception ignored.
-Some atoms or residues will be missing in the data structure.
+Some atoms or residues may be missing in the data structure.
 Model 0 contains 1 chains.
 	Chain 'A' contains 1 residues.
 		Residue ('H_PCA', 1, ' ') contains 8 atoms.

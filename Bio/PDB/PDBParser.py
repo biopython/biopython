@@ -150,13 +150,29 @@ class PDBParser:
                     hetero_flag=" "
                 residue_id=(hetero_flag, resseq, icode)
                 # atomic coordinates
-                x=float(line[30:38]) 
-                y=float(line[38:46]) 
-                z=float(line[46:54])
+                try :
+                    x=float(line[30:38]) 
+                    y=float(line[38:46]) 
+                    z=float(line[46:54])
+                except :
+                    #Should we allow parsing to continue in permissive mode?
+                    #If so what coordindates should we default to?  Easier to abort!
+                    raise PDBContructionError("Invalid or missing coordinate(s) at line %i." \
+                                              % global_line_counter)
                 coord=numpy.array((x, y, z), 'f')
                 # occupancy & B factor
-                occupancy=float(line[54:60])
-                bfactor=float(line[60:66])
+                try :
+                    occupancy=float(line[54:60])
+                except :
+                    self._handle_PDB_exception("Invalid or missing occupancy",
+                                               global_line_counter)
+                    occupancy = 0.0 #Is one or zero a good default?
+                try :
+                    bfactor=float(line[60:66])
+                except :
+                    self._handle_PDB_exception("Invalid or missing B factor",
+                                               global_line_counter)
+                    bfactor = 0.0 #The PDB use a default of zero if the data is missing
                 segid=line[72:76]
                 if current_segid!=segid:
                     current_segid=segid
@@ -225,9 +241,9 @@ class PDBParser:
         """
         message="%s at line %i." % (message, line_counter)
         if self.PERMISSIVE:
-            # just print a warning - some residues/atoms will be missing
+            # just print a warning - some residues/atoms may be missing
             print "PDBConstructionException: %s" % message
-            print "Exception ignored.\nSome atoms or residues will be missing in the data structure."
+            print "Exception ignored.\nSome atoms or residues may be missing in the data structure."
         else:
             # exceptions are fatal - raise again with new message (including line nr)
             raise PDBConstructionException(message)
@@ -239,7 +255,8 @@ if __name__=="__main__":
 
     p=PDBParser(PERMISSIVE=1)
 
-    s=p.get_structure("scr", sys.argv[1])
+    filename = sys.argv[1]
+    s=p.get_structure("scr", filename)
 
     for m in s:
         p=m.get_parent()
