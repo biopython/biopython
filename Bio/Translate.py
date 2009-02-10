@@ -42,7 +42,8 @@ class Translator:
         try:
             alphabet = self._encoded[stop_symbol]
         except KeyError:
-            alphabet = Alphabet.HasStopCodon(table.protein_alphabet)
+            alphabet = Alphabet.HasStopCodon(table.protein_alphabet,
+                                             stop_symbol)
             self._encoded[stop_symbol] = alphabet
 
         return Seq.Seq("".join(letters), alphabet)
