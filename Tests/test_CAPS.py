@@ -2,25 +2,18 @@ import unittest
 
 from Bio import CAPS
 from Bio.Restriction import EcoRI, AluI
-
 from Bio import Alphabet
-from Bio.Alphabet import IUPAC
 from Bio.Align.Generic import Alignment
 
-
-
-def createAlignment(sequences):
+def createAlignment(sequences, alphabet):
     """Create an Alignment object from a list of sequences"""
-    alphabet = Alphabet.Gapped(IUPAC.ambiguous_dna)
-    align = Alignment(Alphabet.Gapped(alphabet))
+    align = Alignment(alphabet)
     counter = 0
     for sequence in sequences:
         name = "sequence" + str(counter)
         align.add_sequence(name, sequence)
         counter+=1
     return align
-
-
 
 class TestCAPS(unittest.TestCase):
 
@@ -30,7 +23,7 @@ class TestCAPS(unittest.TestCase):
         alignment = ["gaattc",
                      "gaactc",
                     ]
-        align = createAlignment(alignment)
+        align = createAlignment(alignment, Alphabet.generic_dna)
         map = CAPS.CAPSMap(align, enzymes)
 
         self.assertEqual(len(map.dcuts), 1)
@@ -65,7 +58,7 @@ AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC
 """,
                     ]
         enzymes = [EcoRI, AluI]
-        align = createAlignment(alignment)
+        align = createAlignment(alignment, Alphabet.generic_dna)
         map = CAPS.CAPSMap(align, enzymes)
 
         self.assertEqual(len(map.dcuts), 2)
@@ -85,7 +78,7 @@ AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC
                      "aaaaaaaaaaaaaaaaaaaa",
                     ]
         enzymes = []
-        align = createAlignment(alignment)
+        align = createAlignment(alignment, Alphabet.generic_nucleotide)
         map = CAPS.CAPSMap(align, enzymes)
         self.assertEqual(map.dcuts, [])
 
@@ -95,7 +88,7 @@ AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC
                      "aaaaaaaa",
                      "aaaaaaaaaaaaaa",
                     ]
-        align = createAlignment(alignment)
+        align = createAlignment(alignment, Alphabet.generic_nucleotide)
         self.assertRaises(CAPS.AlignmentHasDifferentLengthsError,
                           CAPS.CAPSMap,
                           align)
