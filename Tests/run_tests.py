@@ -197,35 +197,38 @@ class TestRunner(unittest.TextTestRunner):
         result = self._makeResult()
         output = cStringIO.StringIO()
         # Run the actual test inside a try/except to catch import errors.
+        # Have to do a nested try because try/except/except/finally requires
+        # python 2.5+
         try:
-            stdout = sys.stdout
-            sys.stdout = output
-            module = __import__(name)
-            suite = unittest.TestLoader().loadTestsFromModule(module)
-            if suite.countTestCases()==0:
-                # This is a print-and-compare test instead of a unittest-
-                # type test.
-                test = ComparisonTestCase(name, output)
-                suite = unittest.TestSuite([test])
-            suite.run(result)
-            if result.wasSuccessful():
-                sys.stderr.write("ok\n")
-                return True
-            else:
-                sys.stderr.write("FAIL\n")
-                result.printErrors()
+            try :
+                stdout = sys.stdout
+                sys.stdout = output
+                module = __import__(name)
+                suite = unittest.TestLoader().loadTestsFromModule(module)
+                if suite.countTestCases()==0:
+                    # This is a print-and-compare test instead of a unittest-
+                    # type test.
+                    test = ComparisonTestCase(name, output)
+                    suite = unittest.TestSuite([test])
+                suite.run(result)
+                if result.wasSuccessful():
+                    sys.stderr.write("ok\n")
+                    return True
+                else:
+                    sys.stderr.write("FAIL\n")
+                    result.printErrors()
                 return False
-        except MissingExternalDependencyError, msg:
-            sys.stderr.write("skipping. %s\n" % msg)
-            return True
-        except Exception:
-            # This happened during the import
-            sys.stderr.write("ERROR\n")
-            result.stream.write(result.separator1+"\n")
-            result.stream.write("ERROR: %s\n" % name)
-            result.stream.write(result.separator2+"\n")
-            result.stream.write(traceback.format_exc())
-            return False
+            except MissingExternalDependencyError, msg:
+                sys.stderr.write("skipping. %s\n" % msg)
+                return True
+            except Exception:
+                # This happened during the import
+                sys.stderr.write("ERROR\n")
+                result.stream.write(result.separator1+"\n")
+                result.stream.write("ERROR: %s\n" % name)
+                result.stream.write(result.separator2+"\n")
+                result.stream.write(traceback.format_exc())
+                return False
         finally:
             sys.stdout = stdout
 
