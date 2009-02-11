@@ -260,7 +260,8 @@ class TestRunner(unittest.TextTestRunner):
             sys.stdout = stdout
 
     def runDocTest(self, name):
-        module = __import__(name, fromlist=name.split("."))
+        #Can't use fromlist=name.split(".") until python 2.5+
+        module = __import__(name, None, None, name.split("."))
         sys.stderr.write("%s docstring test ... " % module.__name__)
         suite = doctest.DocTestSuite(module)
         result = self._makeResult()
