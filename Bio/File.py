@@ -93,6 +93,13 @@ class UndoHandle:
     def __getattr__(self, attr):
         return getattr(self._handle, attr)
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self._handle.close()
+
+
 # I could make this faster by using cStringIO.
 # However, cStringIO (in v1.52) does not implement the
 # readlines method.
