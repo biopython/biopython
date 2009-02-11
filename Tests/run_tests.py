@@ -14,6 +14,27 @@ Command line options:
 <test_name>   -- supply the name of one (or more) tests to be run.
                  The .py file extension is optional.
 """
+
+# This is the list of modules containing docstring tests.
+# If you develop docstring tests for other modules, please add
+# those modules here.
+DOCTEST_MODULES = ["Bio.Seq",
+                   "Bio.SeqRecord",
+                   "Bio.SeqIO",
+                   "Bio.Align.Generic",
+                   "Bio.AlignIO",
+                   "Bio.KEGG.Compound",
+                   "Bio.KEGG.Enzyme",
+                   "Bio.Wise",
+                   "Bio.Wise.psw",
+                  ]
+#Silently ignore any doctests for modules requiring numpy!
+try:
+    import numpy
+    DOCTEST_MODULES.extend(["Bio.Statistics.lowess"])
+except ImportError:
+    pass
+
 # standard modules
 import sys
 import cStringIO
@@ -23,7 +44,10 @@ import getopt
 import time
 import traceback
 import unittest
+import doctest
 import distutils.util
+
+
 
 def main(argv):
     # insert our paths in sys.path:
@@ -181,13 +205,16 @@ class TestRunner(unittest.TextTestRunner):
     def __init__(self, tests=[]):
         # if no tests were specified to run, we run them all
         self.tests = tests
-        if not self.tests:
+        if self.tests:
+            self.doctest_modules = []
+        else:
             # Make a list of all applicable test modules.
             names = os.listdir(TestRunner.testdir)
             for name in names:
                 if name[:5] == "test_" and name[-3:] == ".py":
 	            self.tests.append(name[:-3])
             self.tests.sort()
+            self.doctest_modules = DOCTEST_MODULES
         stream = cStringIO.StringIO()
         unittest.TextTestRunner.__init__(self, stream, verbosity=0)
 
@@ -232,20 +259,46 @@ class TestRunner(unittest.TextTestRunner):
         finally:
             sys.stdout = stdout
 
+    def runDocTest(self, name):
+        module = __import__(name, fromlist=name.split("."))
+        sys.stderr.write("%s docstring test ... " % module.__name__)
+        suite = doctest.DocTestSuite(module)
+        result = self._makeResult()
+        suite.run(result)
+        if result.wasSuccessful():
+            sys.stderr.write("ok\n")
+            return True
+        else:
+            sys.stderr.write("FAIL\n")
+            result.printErrors()
+            return False
+
     def run(self):
+        total = 0
         failures = 0
         startTime = time.time()
         for test in self.tests:
             ok = self.runTest(test)
             if not ok:
                 failures += 1
+            total += 1
+        if sys.version_info[:2] < (2, 4):
+            #On python 2.3, doctest uses slightly different formatting
+            #which would be a problem as the expected output won't match.
+            #Also, it can't cope with <BLANKLINE> in a doctest string.
+            sys.stderr.write("Docstring tests require Python 2.4 or later; skipping\n")
+        else:
+            for test in self.doctest_modules:
+                ok = self.runDocTest(test)
+                if not ok:
+                    failures += 1
+                total += 1
         stopTime = time.time()
         timeTaken = stopTime - startTime
         sys.stderr.write(self.stream.getvalue())
         sys.stderr.write('-' * 70 + "\n")
-        n = len(self.tests)
         sys.stderr.write("Ran %d test%s in %.3f seconds\n" %
-                            (n, n != 1 and "s" or "", timeTaken))
+                            (total, total != 1 and "s" or "", timeTaken))
         sys.stderr.write("\n")
         if failures:
             sys.stderr.write("FAILED (failures = %d)\n" % failures)
