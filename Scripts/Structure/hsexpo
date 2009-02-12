@@ -69,16 +69,16 @@ options.exp=options.exp.upper()
 if options.exp[0]=="H" and options.exp[3]=="A":
     hse=HSExposureCA(m, RADIUS)
     if options.exp[-1]=="D":
-        k='EXP_HSEAD'
+        k='EXP_HSE_A_D'
     else:
-        k='EXP_HSEAU'
+        k='EXP_HSE_A_U'
 elif options.exp[0]=="H" and options.exp[3]=="B":
     hse=HSExposureCB(m, RADIUS)
     #hse.write_pymol_script()
     if options.exp[-1]=="D":
-        k='EXP_HSEBD'
+        k='EXP_HSE_B_U'
     else:
-        k='EXP_HSEBU'
+        k='EXP_HSE_B_D'
 elif options.exp=="CN":
     hse=ExposureCN(m, RADIUS)
     k='EXP_CN'
