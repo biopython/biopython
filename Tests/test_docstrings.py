@@ -13,31 +13,39 @@ if sys.version_info[:2] < (2, 4):
           "This unit test requires Python 2.4 or later")
 import doctest, unittest
 
+# This is the list of modules containing docstring tests.
+# If you develop docstring tests for other modules, please add
+# those modules here.
+DOCTEST_MODULES = ["Bio.Seq",
+                   "Bio.SeqRecord",
+                   "Bio.SeqIO",
+                   "Bio.Align.Generic",
+                   "Bio.AlignIO",
+                   "Bio.KEGG.Compound",
+                   "Bio.KEGG.Enzyme",
+                   "Bio.Wise",
+                   "Bio.Wise.psw",
+                  ]
 #Silently ignore any doctests for modules requiring numpy!
-try :
+try:
     import numpy
-    numpy_present = True
-except ImportError :
-    numpy_present = False
+    DOCTEST_MODULES.extend(["Bio.Statistics.lowess"])
+except ImportError:
+    pass
 
 #Assuming we keep adding doctests, we'll need to have this module
 #list populated automatically - or otherwise integrated into the
 #Biopython test framework.
-from Bio import Seq, SeqRecord, SeqIO, AlignIO
-import Bio.KEGG.Compound
-import Bio.KEGG.Enzyme
-import Bio.Align.Generic
-test_modules = [Seq, SeqRecord, SeqIO, AlignIO,
-                Bio.KEGG.Compound,
-                Bio.KEGG.Enzyme,
-                Bio.Align.Generic]
 
-if numpy_present :
-    import Bio.Statistics.lowess
-    test_modules.extend([Bio.Statistics.lowess])
 
-test_suite = unittest.TestSuite([doctest.DocTestSuite(module) \
-                                 for module in test_modules])
+#Can't use fromlist=name.split(".") until python 2.5+
+modules = [doctest.DocTestSuite(module = __import__(name,
+                                                    None,
+                                                    None,
+                                                    name.split("."))) \
+           for name in DOCTEST_MODULES]
+
+test_suite = unittest.TestSuite(modules)
 
 #Use stdout so that run_tests.py can capture the output.
 #Even verbosity=0 outputs something, e.g.
