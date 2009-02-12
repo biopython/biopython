@@ -68,7 +68,7 @@ def main(argv):
     # get the command line options
     try:
         opts, args = getopt.getopt(argv, 'g',
-				   ["generate", "no-gui", "help"])
+                                   ["generate", "no-gui", "help"])
     except getopt.error, msg:
         print msg
         print __doc__
@@ -204,6 +204,7 @@ class TestRunner(unittest.TextTestRunner):
 
     def __init__(self, tests=[]):
         # if no tests were specified to run, we run them all
+        # including the doctests
         self.tests = tests
         if self.tests:
             self.doctest_modules = []
@@ -212,7 +213,7 @@ class TestRunner(unittest.TextTestRunner):
             names = os.listdir(TestRunner.testdir)
             for name in names:
                 if name[:5] == "test_" and name[-3:] == ".py":
-	            self.tests.append(name[:-3])
+                    self.tests.append(name[:-3])
             self.tests.sort()
             self.doctest_modules = DOCTEST_MODULES
         stream = cStringIO.StringIO()
