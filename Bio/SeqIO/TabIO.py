@@ -48,9 +48,19 @@ def TabIterator(handle, alphabet = single_letter_alphabet) :
 
     The first field is taken as the record's .id and .name (regardless of
     any spaces within the text) and the second field is the sequence.
+
+    Any blank lines are ignored.
     """
     for line in handle :
-        title, seq = line.split("\t") #will fail if more than one tab!
+        try :
+            title, seq = line.split("\t") #will fail if more than one tab!
+        except :
+            if line.strip() == "" :
+                #It's a blank line, ignore it
+                continue
+            raise ValueError("Each line should have one tab separating the" + \
+                             " title and sequence, this line has %i tabs: %s" \
+                             % (line.count("\t"), repr(line)))
         title = title.strip()
         seq = seq.strip() #removes the trailing new line
         yield SeqRecord(Seq(seq, alphabet), id = title, name = title)
@@ -77,3 +87,23 @@ class TabWriter(SequentialSequenceWriter):
         assert "\n" not in seq
         assert "\r" not in seq
         self.handle.write("%s\t%s\n" % (title, seq))
+
+
+if __name__ == "__main__" :
+    print "Running quick self test"
+    from StringIO import StringIO
+
+    #This example has a trailing blank line which should be ignored
+    handle = StringIO("Alpha\tAAAAAAA\nBeta\tCCCCCCC\n\n")
+    records = list(TabIterator(handle))
+    assert len(records) == 2
+
+    handle = StringIO("Alpha\tAAAAAAA\tExtra\nBeta\tCCCCCCC\n")
+    try :
+        records = list(TabIterator(handle))
+        assert False, "Should have reject this invalid example!"
+    except ValueError :
+        #Good!
+        pass
+
+    print "Done"    
