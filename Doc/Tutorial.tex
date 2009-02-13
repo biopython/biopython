@@ -6892,6 +6892,58 @@ Ran 4 tests in 0.059s
 
 OK
 \end{verbatim}
+
+  \item To indicate more clearly what each test is doing, you can add
+        docstrings to each test:
+
+\begin{verbatim}
+import unittest
+from Bio import Biospam
+
+class BiospamTestAddition(unittest.TestCase):
+
+    def test_addition1(self):
+        """An addition test"""
+        result = Biospam.addition(2, 3)
+        self.assertEqual(result, 5)
+
+    def test_addition2(self):
+        """A second addition test"""
+        result = Biospam.addition(9, -1)
+        self.assertEqual(result, 8)
+
+class BiospamTestDivision(unittest.TestCase):
+
+    def test_division1(self):
+        """Now let's check division"""
+        result = Biospam.division(3.0, 2.0)
+        self.assertAlmostEqual(result, 1.5)
+
+    def test_division2(self):
+        """A second division test"""
+        result = Biospam.division(10.0, -2.0)
+        self.assertAlmostEqual(result, -5.0)
+
+
+if __name__ == "__main__" :
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)
+\end{verbatim}
+
+        Running the script will now show you:
+
+\begin{verbatim}
+$ python test_BiospamMyModule.py
+An addition test ... ok
+A second addition test ... ok
+Now let's check division ... ok
+A second division test ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.001s
+
+OK
+\end{verbatim}
 \end{itemize}
 
 \section{Writing doctests}
