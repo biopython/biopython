@@ -265,13 +265,18 @@ class TestRunner(unittest.TextTestRunner):
             except MissingExternalDependencyError, msg:
                 sys.stderr.write("skipping. %s\n" % msg)
                 return True
-            except Exception:
+            except Exception, msg:
                 # This happened during the import
                 sys.stderr.write("ERROR\n")
                 result.stream.write(result.separator1+"\n")
                 result.stream.write("ERROR: %s\n" % name)
                 result.stream.write(result.separator2+"\n")
-                result.stream.write(traceback.format_exc())
+                try :
+                    result.stream.write(traceback.format_exc())
+                except AttributeError :
+                    #This method is not available on Python 2.3,
+                    #printing the exception is a simple fall back.
+                    result.stream.write("%s\n" % msg)
                 return False
         finally:
             sys.stdout = stdout
