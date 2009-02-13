@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-__version__ = "$Revision: 1.9 $"
+__version__ = "$Revision: 1.10 $"
 
 import cStringIO
 import doctest, unittest
@@ -59,29 +59,11 @@ class TestWise(unittest.TestCase):
             #Bad!
             self.assert_(False, line)
 
-def run_tests(argv):
-    test_suite = testing_suite()
-    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
-    runner.run(test_suite)
 
-def testing_suite():
-    """Generate the suite of tests.
-    """
-    unittest_suite = unittest.TestSuite()
-
-    test_loader = unittest.TestLoader()
-    test_loader.testMethodPrefix = 'test_'
-    tests = [TestWiseDryRun, TestWise]
-    
-    for test in tests:
-        cur_suite = test_loader.loadTestsFromTestCase(test)
-        unittest_suite.addTest(cur_suite)
-
-    doctest_suite = doctest.DocTestSuite(Wise)
-
-    big_suite = unittest.TestSuite((unittest_suite, doctest_suite))
-
-    return big_suite
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    unittest_suite = unittest.TestLoader().loadTestsFromName("test_Wise")
+    doctest_suite = doctest.DocTestSuite(Wise)
+    suite = unittest.TestSuite((unittest_suite, doctest_suite))
+    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
+    runner.run(suite)

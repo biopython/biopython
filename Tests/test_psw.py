@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-__version__ = "$Revision: 1.4 $"
+__version__ = "$Revision: 1.5 $"
 
 import doctest, unittest
 import random
@@ -119,4 +119,8 @@ def testing_suite():
     return big_suite
 
 if __name__ == "__main__":
-    sys.exit(run_tests(sys.argv))
+    unittest_suite = unittest.TestLoader().loadTestsFromName("test_psw")
+    doctest_suite = doctest.DocTestSuite(psw)
+    suite = unittest.TestSuite((unittest_suite, doctest_suite))
+    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
+    runner.run(suite)
