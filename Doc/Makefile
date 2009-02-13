@@ -1,4 +1,4 @@
-subdirs := cookbook/biopython_test install
+subdirs := install
 
 
 all:  Tutorial.html Tutorial.txt pdf $(subdirs)
