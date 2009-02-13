@@ -6639,6 +6639,11 @@ so you can also just type:
 \begin{verbatim}
 python run_tests.py test_SeqIO test_AlignIO
 \end{verbatim}
+To run the docstring tests (see below), you can use
+\begin{verbatim}
+python run_tests.py doctest
+\end{verbatim}
+By default, \verb|run_tests.py| runs all tests, including the docstring tests.
 
 If an individual test is failing, you can also try running it
 directly, which may give you more information.
@@ -6995,6 +7000,11 @@ Note that if you want to write doctests involving file parsing, defining
 the file location complicates matters.  Ideally use relative paths assuming
 the code will be run from the \verb|Tests| directory, see the
 \verb|Bio.SeqIO| doctests for an example of this.
+
+To run the docstring tests, use
+\begin{verbatim}
+$ python run_tests.py doctest
+\end{verbatim}
 
 \chapter{Advanced}
 \label{chapter:advanced}
