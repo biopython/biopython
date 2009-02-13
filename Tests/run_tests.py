@@ -7,12 +7,14 @@ additional facilities.
 
 Command line options:
 
--g;--generate -- write the output file for a test instead of comparing it.
-                 A test to write the output for must be specified.
---no-gui      -- Obsolete option (there used to be a GUI for the tests).
 --help        -- show usage info
+-g;--generate -- write the output file for a test instead of comparing it.
+                 The name of the  test to write the output for must be
+                 specified.
 <test_name>   -- supply the name of one (or more) tests to be run.
                  The .py file extension is optional.
+doctest       -- run the docstring tests.
+By default, all tests are run.
 """
 
 # This is the list of modules containing docstring tests.
@@ -67,8 +69,7 @@ def main(argv):
     
     # get the command line options
     try:
-        opts, args = getopt.getopt(argv, 'g',
-                                   ["generate", "no-gui", "help"])
+        opts, args = getopt.getopt(argv, 'g', ["generate", "doctest", "help"])
     except getopt.error, msg:
         print msg
         print __doc__
@@ -116,7 +117,7 @@ class ComparisonTestCase(unittest.TestCase):
 
         Arguments:
         o name - The name of the test. The expected output should be
-          stored in the file output/name..
+          stored in the file output/name.
         o output - The output that was generated when this test was run.
         """
         unittest.TestCase.__init__(self)
@@ -206,22 +207,28 @@ class TestRunner(unittest.TextTestRunner):
         # if no tests were specified to run, we run them all
         # including the doctests
         self.tests = tests
-        if self.tests:
-            self.doctest_modules = []
-        else:
+        if not self.tests:
             # Make a list of all applicable test modules.
             names = os.listdir(TestRunner.testdir)
             for name in names:
                 if name[:5] == "test_" and name[-3:] == ".py":
                     self.tests.append(name[:-3])
             self.tests.sort()
-            self.doctest_modules = DOCTEST_MODULES
+            self.tests.append("doctest")
+        if "doctest" in self.tests:
+            self.tests.remove("doctest")
+            if sys.version_info[:2] < (2, 4):
+                #On python 2.3, doctest uses slightly different formatting
+                #which would be a problem as the expected output won't match.
+                #Also, it can't cope with <BLANKLINE> in a doctest string.
+                sys.stderr.write("Skipping doctests which require Python 2.4+\n")
+            else :
+                self.tests.extend(DOCTEST_MODULES)
         stream = cStringIO.StringIO()
         unittest.TextTestRunner.__init__(self, stream, verbosity=0)
 
     def runTest(self, name):
         from Bio import MissingExternalDependencyError
-        sys.stderr.write("%s ... " % name)
         result = self._makeResult()
         output = cStringIO.StringIO()
         # Run the actual test inside a try/except to catch import errors.
@@ -231,13 +238,22 @@ class TestRunner(unittest.TextTestRunner):
             try :
                 stdout = sys.stdout
                 sys.stdout = output
-                module = __import__(name)
-                suite = unittest.TestLoader().loadTestsFromModule(module)
-                if suite.countTestCases()==0:
-                    # This is a print-and-compare test instead of a unittest-
-                    # type test.
-                    test = ComparisonTestCase(name, output)
-                    suite = unittest.TestSuite([test])
+                if name.startswith("test_"):
+                    sys.stderr.write("%s ... " % name)
+                    #It's either a unittest or a print-and-compare test
+                    suite = unittest.TestLoader().loadTestsFromName(name)
+                    if suite.countTestCases()==0:
+                        # This is a print-and-compare test instead of a
+                        # unittest-type test.
+                        test = ComparisonTestCase(name, output)
+                        suite = unittest.TestSuite([test])
+                else :
+                    #It's a doc test
+                    sys.stderr.write("%s docstring test ... " % name)
+                    #Can't use fromlist=name.split(".") until python 2.5+
+                    module = __import__(name, None, None, name.split("."))
+                    suite = doctest.DocTestSuite(module)
+                    del module
                 suite.run(result)
                 if result.wasSuccessful():
                     sys.stderr.write("ok\n")
@@ -260,41 +276,14 @@ class TestRunner(unittest.TextTestRunner):
         finally:
             sys.stdout = stdout
 
-    def runDocTest(self, name):
-        #Can't use fromlist=name.split(".") until python 2.5+
-        module = __import__(name, None, None, name.split("."))
-        sys.stderr.write("%s docstring test ... " % module.__name__)
-        suite = doctest.DocTestSuite(module)
-        result = self._makeResult()
-        suite.run(result)
-        if result.wasSuccessful():
-            sys.stderr.write("ok\n")
-            return True
-        else:
-            sys.stderr.write("FAIL\n")
-            result.printErrors()
-            return False
-
     def run(self):
-        total = 0
         failures = 0
         startTime = time.time()
         for test in self.tests:
             ok = self.runTest(test)
             if not ok:
                 failures += 1
-            total += 1
-        if sys.version_info[:2] < (2, 4):
-            #On python 2.3, doctest uses slightly different formatting
-            #which would be a problem as the expected output won't match.
-            #Also, it can't cope with <BLANKLINE> in a doctest string.
-            sys.stderr.write("Docstring tests require Python 2.4 or later; skipping\n")
-        else:
-            for test in self.doctest_modules:
-                ok = self.runDocTest(test)
-                if not ok:
-                    failures += 1
-                total += 1
+        total = len(self.tests)
         stopTime = time.time()
         timeTaken = stopTime - startTime
         sys.stderr.write(self.stream.getvalue())
