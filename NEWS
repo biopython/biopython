@@ -9,18 +9,22 @@ The latest news is at the top.
 
 ===================================================================
 
-GenomeDiagram by Leighton Pritchard has been integrated into Biopython
-as the Bio.Graphics.GenomeDiagram module  If you use this code, please
-cite the publication Pritchard et al. (2006), Bioinformatics 22 616-617.
-Note that like Bio.Graphics, this requires the ReportLab python library.
+GenomeDiagram by Leighton Pritchard has been integrated into Biopython as
+the Bio.Graphics.GenomeDiagram module  If you use this code, please cite the
+publication Pritchard et al. (2006), Bioinformatics 22 616-617.  Note that
+like Bio.Graphics, this requires the ReportLab python library.
 
-A new module Bio.Motif has been added, which is intended to replace
-the existing Bio.AlignAce and Bio.MEME modules.
+A new module Bio.Motif has been added, which is intended to replace the
+existing Bio.AlignAce and Bio.MEME modules.
 
-The set of NCBI DTD files included with Bio.Entrez has been updated
-with the revised files the NCBI introduced on 1 Jan 2009.
+The set of NCBI DTD files included with Bio.Entrez has been updated with the
+revised files the NCBI introduced on 1 Jan 2009.
 
 Minor fix to BioSQL for retrieving references and comments.
+
+We've also make some changes to our test framework, which is now given a
+whole chapter in the tutorial.  This intended to help new developers or
+contributors wanting to improve our unit test coverage.
 
 ===================================================================
 
