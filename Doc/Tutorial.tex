@@ -6663,7 +6663,7 @@ Importantly, note that the individual unit tests come in two types:
       check some specific aspect of the code.
       These tests should not print any output directly.
 \end{itemize}
-Currently, about half of the Biopython tests are \verb|unittest|-style tests, and half are print-and compare tests.
+Currently, about half of the Biopython tests are \verb|unittest|-style tests, and half are print-and-compare tests.
 
 Running a simple print-and-compare test directly will usually give lots
 of output on screen, but does not check the output matches the expected
@@ -6818,17 +6818,20 @@ We want all the modules in Biopython to have unit tests, and a simple
 print-and-compare test is better than no test at all.  However, although
 there is a steeper learning curve, using the \verb|unittest| framework
 gives a more structured result, and if there is a test failure this can
-clearly pinpoint which part of the test is going wrong.  The tests can
+clearly pinpoint which part of the test is going wrong.  The sub-tests can
 also be run individually which is helpful for testing or debugging.
 
 The \verb|unittest|-framework has been included with Python since version
 2.1, and is documented in the python Library Reference (which I know you
-are keeping under your pillow, as recommended).
+are keeping under your pillow, as recommended).  There is also
+\href{http://docs.python.org/library/unittest.html}{online documentaion
+for unittest}.
 If you are familiar with the \verb|unittest| system (or something similar
 like the nose test framework), you shouldn't have any trouble.  You may
 find looking at the existing example within Biopython helpful too.
 
-Here's a minimal \verb|unittest|-style test script for \verb|Biospam|, which you can copy and paste to get started:
+Here's a minimal \verb|unittest|-style test script for \verb|Biospam|,
+which you can copy and paste to get started:
 
 \begin{verbatim}
 import unittest
@@ -6860,13 +6863,19 @@ if __name__ == "__main__" :
     unittest.main(testRunner=runner)
 \end{verbatim}
 
-In the division tests, we use \verb|assertAlmostEqual| instead of \verb|assertEqual| to avoid tests failing due to roundoff errors; see the \verb|unittest| chapter in the Python documentation for details and for other functionality available in \verb|unittest|.
+In the division tests, we use \verb|assertAlmostEqual| instead of \verb|assertEqual| to avoid tests failing due to roundoff errors; see the \verb|unittest| chapter in the Python documentation for details and for other functionality available in \verb|unittest| (\href{http://docs.python.org/library/unittest.html}{online reference}).
 
 These are the key points of \verb|unittest|-based tests:
 
 \begin{itemize}
   \item Test cases are stored in classes that derive from
     \verb|unittest.TestCase| and cover one basic aspect of your code
+    
+  \item You can use methods \verb|setUp| and \verb|tearDown| for any repeated
+    code which should be run before and after each test method.  For example,
+    the \verb|setUp| method might be used to create an instance of the object
+    you are testing, or open a file handle.  The \verb|tearDown| should do any
+    ``tidying up'', for example closing the file handle.
 
   \item The tests are prefixed with \verb|test_| and each test should cover
     one specific part of what you are trying to test. You can have as
@@ -7661,7 +7670,11 @@ The main biopython release tries to be fairly uniform and interworkable,
 to make it easier for users. You can read about some of (fairly
 informal) coding style guidelines we try to use in biopython in the
 contributing documentation at
-\url{http://biopython.org/wiki/Contributing}. We also try to add code to the distribution along with tests (see section~\ref{sec:regr_test} for more info on the regression testing framework) and documentation, so that everything can stay as workable and well documented as possible. This is, of course, the most ideal situation, under many situations you'll be able to find other people on the list who will be willing to help add documentation or more tests for your code once you make it available. So, to end this paragraph like the last, feel free to start working!
+\url{http://biopython.org/wiki/Contributing}. We also try to add code to the distribution along with tests (see section~\ref{sec:regr_test} for more info on the regression testing framework) and documentation, so that everything can stay as workable and well documented as possible (including docstrings). This is, of course, the most ideal situation, under many situations you'll be able to find other people on the list who will be willing to help add documentation or more tests for your code once you make it available. So, to end this paragraph like the last, feel free to start working!
+
+Please note that to make a code contribution you must have the legal right to contribute it and license it under the Biopython license.  If you wrote it all yourself, and it is not based on any other code, this shouldn't be a problem.  However, there are issues if you want to contribute a derivative work - for example something based on GPL or LPGL licenced code would not be compatible with our license.  If you have any queries on this, please discuss the issue on the biopython-dev mailing list.
+
+Another point of concern for any additions to Biopython regards any build time or run time dependencies.  Generally speak, writing code to interact with a standalone tool (like BLAST, EMBOSS or ClustalW) doesn't present a big problem.  However, any dependency on another library - even a python library (especially one needed in order to compile and install Biopython like NumPy) would need further discussion.
 
 Additionally, if you have code that you don't think fits in the
 distribution, but that you want to make available, we maintain Script
