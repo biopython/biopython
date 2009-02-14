@@ -6639,7 +6639,7 @@ so you can also just type:
 \begin{verbatim}
 python run_tests.py test_SeqIO test_AlignIO
 \end{verbatim}
-To run the docstring tests (see below), you can use
+To run the docstring tests (see section \ref{section:doctest}), you can use
 \begin{verbatim}
 python run_tests.py doctest
 \end{verbatim}
@@ -6951,7 +6951,54 @@ OK
 \end{verbatim}
 \end{itemize}
 
+If your module contains docstring tests (see section \ref{section:doctest}),
+you may want to include those in the tests to be run. You can do so as
+follows by modifying the code under \verb|if __name__ == "__main__":|.
+Here is an example of a complete test script \verb|test_Biospam.py|
+that runs both the unit tests contained in it, as well as the docstring
+tests in the \verb|Biospam| module:
+
+\begin{verbatim}
+from Bio import Biospam
+
+class BiospamTestAddition(unittest.TestCase):
+
+    def test_addition1(self):
+        result = Biospam.addition(2, 3)
+        self.assertEqual(result, 5)
+
+    def test_addition2(self):
+        result = Biospam.addition(9, -1)
+        self.assertEqual(result, 8)
+
+class BiospamTestDivision(unittest.TestCase):
+
+    def test_division1(self):
+        result = Biospam.division(3.0, 2.0)
+        self.assertAlmostEqual(result, 1.5)
+
+    def test_division2(self):
+        result = Biospam.division(10.0, -2.0)
+        self.assertAlmostEqual(result, -5.0)
+
+
+if __name__ == "__main__":
+    unittest_suite = unittest.TestLoader().loadTestsFromName("test_Biospam")
+    doctest_suite = doctest.DocTestSuite(Biospam)
+    suite = unittest.TestSuite((unittest_suite, doctest_suite))
+    runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
+    runner.run(suite)
+\end{verbatim}
+
+This is only relevant if you want to run the docstring tests when you
+exectute \verb|python test_Biospam.py|; with
+\verb|python run_tests.py|, the docstring tests are run automatically
+(assuming they are included in the list of docstring tests in
+\verb|run_tests.py|, see the section below).
+
 \section{Writing doctests}
+\label{section:doctest}
+
 Python modules, classes and functions support built in documentation using
 docstrings.  The \href{http://docs.python.org/library/doctest.html}{doctest
 framework} (included with python) allows the developer to embed working
@@ -7001,7 +7048,7 @@ the file location complicates matters.  Ideally use relative paths assuming
 the code will be run from the \verb|Tests| directory, see the
 \verb|Bio.SeqIO| doctests for an example of this.
 
-To run the docstring tests, use
+To run the docstring tests only, use
 \begin{verbatim}
 $ python run_tests.py doctest
 \end{verbatim}
