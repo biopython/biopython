@@ -3490,6 +3490,21 @@ PDB file parser and structure class implemented in Python.
 The Bio* toolkits--a brief overview.
 \end{verbatim}
 
+\subsection{Parsing GEO records}
+
+GEO (\href{http://www.ncbi.nlm.nih.gov/geo/}{Gene Expression Omnibus}) is a data repository of high-throughput gene expression and hybridization array data. The Geo module can be uased to parse GEO-formatted sequence data.
+
+The following code fragment shows how to parse the example GEO file
+\verb|GSE16.txt| into a record and print the record:
+
+\begin{verbatim}
+>>> from Bio import Geo
+>>> handle = open("GSE16.txt")
+>>> records = Geo.parse(handle)
+>>> for record in records:
+...     print record
+\end{verbatim}
+
 \section{Examples}
 \label{sec:entrez_examples}
 
