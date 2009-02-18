@@ -395,12 +395,12 @@ def _retrieve_comment(adaptor, primary_id):
         "SELECT comment_text FROM comment" \
         " WHERE bioentry_id=%s" \
         " ORDER BY rank", (primary_id,))
-    if qvs == []:
-        comments = [comm[0] for comm in qvs]
-        #Don't want to add an empty list...
-        if comments :
-            return {"comment": comments}
-    return  {}
+    comments = [comm[0] for comm in qvs]
+    #Don't want to add an empty list...
+    if comments :
+        return {"comment": comments}
+    else :
+        return {}
 
 class DBSeqRecord(SeqRecord):
     """BioSQL equivalent of the biopython SeqRecord object.
