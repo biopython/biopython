@@ -346,7 +346,7 @@ def compare_records(old, new) :
     assert not new_keys, "Unexpected new annotation keys: %s" \
            % ", ".join(new_keys)
     missing_keys = set(old.annotations).difference(new.annotations)
-    assert not new_keys, "Unexpectedly missing annotation keys: %s" \
+    assert not missing_keys, "Unexpectedly missing annotation keys: %s" \
            % ", ".join(missing_keys)
     
     #In the short term, just compare any shared keys:
