@@ -131,21 +131,8 @@ class FastaWriter(SequentialSequenceWriter):
         assert "\r" not in title
         self.handle.write(">%s\n" % title)
 
-        try :
-            #The tostring() method is part of the Seq API, we could instead
-            #use str(record.seq) but that would give a string "None" if the
-            #sequence was None, and unpredicatable output if an unexpected
-            #object was present.
-            data = record.seq.tostring()
-        except AttributeError :
-            if data is None :
-                #We could silently treat this as an empty sequence, Seq(""),
-                #but that would be an implict assumption we should avoid.
-                raise TypeError("SeqRecord (id=%s) has None for its sequence." \
-                                % record.id)
-            else :
-                raise TypeError("SeqRecord (id=%s) has an invalid sequence." \
-                                % record.id)
+        data = self._get_seq_string(record) #Catches sequence being None
+
         assert "\n" not in data
         assert "\r" not in data
 

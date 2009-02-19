@@ -231,11 +231,13 @@ class GenBankWriter(SequentialSequenceWriter) :
         #TODO - Force lower case?
         LETTERS_PER_LINE = 60
         SEQUENCE_INDENT = 9
-        seq_len = len(record)
+
+        data = self._get_seq_string(record) #Catches sequence being None
+        seq_len = len(data)
         for line_number in range(0,seq_len,LETTERS_PER_LINE):
             self.handle.write(str(line_number+1).rjust(SEQUENCE_INDENT))
             for words in range(line_number,min(line_number+LETTERS_PER_LINE,seq_len),10):
-                self.handle.write(" %s" % record.seq[words:words+10])
+                self.handle.write(" %s" % data[words:words+10])
             self.handle.write("\n")
         
     def write_record(self, record):

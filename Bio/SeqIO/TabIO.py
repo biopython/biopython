@@ -79,7 +79,7 @@ class TabWriter(SequentialSequenceWriter):
         self._record_written = True
         
         title = self.clean(record.id)
-        seq = record.seq.tostring()
+        seq = self._get_seq_string(record) #Catches sequence being None
         assert "\t" not in title
         assert "\n" not in title
         assert "\r" not in title

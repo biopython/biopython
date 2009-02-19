@@ -145,6 +145,24 @@ class SequenceWriter:
         Use the method write_file() to actually record your sequence records."""
         self.handle = handle
 
+    def _get_seq_string(self, record):
+        """Use this to catch errors like the sequence being None."""
+        try :
+            #The tostring() method is part of the Seq API, we could instead
+            #use str(record.seq) but that would give a string "None" if the
+            #sequence was None, and unpredicatable output if an unexpected
+            #object was present.
+            return record.seq.tostring()
+        except AttributeError :
+            if record.seq is None :
+                #We could silently treat this as an empty sequence, Seq(""),
+                #but that would be an implict assumption we should avoid.
+                raise TypeError("SeqRecord (id=%s) has None for its sequence." \
+                                % record.id)
+            else :
+                raise TypeError("SeqRecord (id=%s) has an invalid sequence." \
+                                % record.id)
+
     def clean(self, text) :
         """Use this to avoid getting newlines in the output."""
         answer = text
