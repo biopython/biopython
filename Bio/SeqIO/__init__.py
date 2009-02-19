@@ -529,7 +529,8 @@ def to_alignment(sequences, alphabet=None, strict=True) :
     from Bio.Alphabet import _consensus_alphabet
     if alphabet is None :
         sequences = list(sequences)
-        alphabet = _consensus_alphabet([rec.seq.alphabet for rec in sequences])
+        alphabet = _consensus_alphabet([rec.seq.alphabet for rec in sequences \
+                                        if rec.seq is not None])
 
     if not (isinstance(alphabet, Alphabet) or isinstance(alphabet, AlphabetEncoder)) :
         raise ValueError("Invalid alphabet")
@@ -577,6 +578,8 @@ def to_alignment(sequences, alphabet=None, strict=True) :
                     raise ValueError("Sequence gap characters != alignment gap char")
             #ToDo, additional checks on the specified alignment...
             #Should we look at the alphabet.contains() method?
+        if record.seq is None :
+            raise TypeError("SeqRecord (id=%s) has None for its sequence." % record.id)
             
         #This is abusing the "private" records list,
         #we should really have a method like add_sequence
