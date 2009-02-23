@@ -8,9 +8,8 @@ Goals:
     May catch some format changes early too.
 """
 import sys
-if sys.modules.has_key('requires_internet'):
-    del sys.modules['requires_internet']
 import requires_internet
+requires_internet.check()
 
 #We want to test these:
 from Bio import Entrez

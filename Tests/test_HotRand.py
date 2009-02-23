@@ -6,9 +6,8 @@ import sys
 import unittest
 
 # local stuff
-if sys.modules.has_key('requires_internet'):
-    del sys.modules['requires_internet']
 import requires_internet
+requires_internet.check()
 
 from Bio.HotRand import HotRandom
 
