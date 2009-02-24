@@ -30,7 +30,8 @@ class _AbstractHSExposure(AbstractPropertyMap):
         @param radius: HSE radius
         @type radius: float
 
-        @param offset: number of flanking residues that are ignored in the calculation            of the number of neighbors
+        @param offset: number of flanking residues that are ignored in the calculation
+        of the number of neighbors
         @type offset: int
 
         @param hse_up_key: key used to store HSEup in the entity.xtra attribute
