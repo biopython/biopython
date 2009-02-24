@@ -3505,6 +3505,27 @@ The following code fragment shows how to parse the example GEO file
 ...     print record
 \end{verbatim}
 
+\section{Using a proxy}
+
+Normally you won't have to worry about using a proxy, but if this is an issue
+on your network here is how to deal with it.  Internally, \verb|Bio.Entrez|
+uses the standard python library \verb|urllib| for accessing the NCBI servers.
+This will check an environment variable called \verb|http_proxy| to configure
+any simple proxy automatically.  Unfortunately this module does not support
+the use of proxies which require authentication.
+
+You may choose to set the \verb|http_proxy| environment variable once (how you
+do this will depend on your operating system).  Alternatively you can set this
+within python at the start of your script, for example:
+
+\begin{verbatim}
+import os
+os.environ["http_proxy"] = "http://proxyhost.example.com:8080"
+\end{verbatim}
+
+\noindent See the \href{http://www.python.org/doc/lib/module-urllib.html}
+{urllib documentation} for more details.
+
 \section{Examples}
 \label{sec:entrez_examples}
 
