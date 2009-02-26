@@ -375,10 +375,16 @@ class Motif(object):
                 else:
                     str = str + " "
             str = str + "\n"
-            
-
         return str
 
+    def __len__(self):
+        """return the length of a motif
+        """
+        if self.length==None:
+            return 0
+        else:
+            return self.length
+        
     def write(self,stream):
         """
         writes the motif to the stream
