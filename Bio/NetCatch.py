@@ -3,7 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
+"""Code for dealing with lists of URLs (OBSOLETE).
+
 NetCatch enables the user to scan a list of labelled urls and select 
 a subset to read into a file.
 
@@ -12,6 +13,9 @@ get_urls_by_label
 get_urls_by_index
 get_urls_by_range
 select_output_file
+
+This module is now considered to be obsolete, and is likely to be deprecated
+in a future release of Biopython, and later removed.
 """
 import os
 import urllib

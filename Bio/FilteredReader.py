@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Code for more fancy file handles.
+"""Code for more fancy file handles (OBSOLETE).
 
 Classes:
 Filtered is a decorator for File that allows the user to filter the output
@@ -21,12 +21,13 @@ filtered_reasder.read()
 All filters in the chain must provide the same interface with a line of text as the single
 input parameter and altered text as the return value.
 
+This module is now considered to be obsolete, and is likely to be deprecated
+in a future release of Biopython, and later removed.
 """
 
 
-
-"""Used for debugging"""
 def dump_saved( name, text, j ):
+    """Used for debugging."""
     dump_file = open( name + '%d' % j, "w" )
     k = 0
     for i in range ( 0, len( text ), 80 ):
