@@ -88,7 +88,7 @@ class PDBIO:
     def set_structure(self, structure):
         self.structure=structure
 
-    def save(self, file, select=Select()):
+    def save(self, file, select=Select(), write_end=0):
         """
         @param file: output file
         @type file: string or filehandle 
@@ -154,6 +154,8 @@ class PDBIO:
                     fp.write("TER\n")
             if model_flag and model_residues_written:
                 fp.write("ENDMDL\n")
+            if write_end:
+                fp.write('END\n')
         if close_file:
             fp.close()
 
@@ -178,7 +180,7 @@ if __name__=="__main__":
     io.set_structure(s1)
     io.save(fp)
     io.set_structure(s2)
-    io.save(fp)
+    io.save(fp, write_end=1)
     fp.close()
 
 
