@@ -9,6 +9,13 @@ The latest news is at the top.
 
 ===================================================================
 
+The SeqRecord object has a new dictionary attribute, letter_annotations,
+which is for holding per-letter-annotation information like sequence
+quality scores or secondary structure predictions.  As part of this work,
+the SeqRecord object can now be sliced to give a new SeqRecord covering
+just part of the sequence.  This will slice the per-letter-annotation to
+match, and will also include any SeqFeature objects as appropriate.
+
 GenomeDiagram by Leighton Pritchard has been integrated into Biopython as
 the Bio.Graphics.GenomeDiagram module  If you use this code, please cite the
 publication Pritchard et al. (2006), Bioinformatics 22 616-617.  Note that
