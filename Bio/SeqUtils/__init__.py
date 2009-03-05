@@ -25,8 +25,13 @@ from Bio.Data import IUPACData, CodonTable
 
 def reverse(seq):
     """Reverse the sequence. Works on string sequences.
+
+    e.g.
+    >>> reverse("ACGGT")
+    'TGGCA'
+    
     """
-    r = map(None, seq)
+    r = list(seq)
     r.reverse()
     return ''.join(r)
 
@@ -40,10 +45,15 @@ def GC(seq):
     >>> from Bio.SeqUtils import GC
     >>> GC("ACTGN")
     40.0
+
+    Note that this will return zero for an empty sequence.
     """
-    gc=sum(map(seq.count,['G','C','g','c','S','s']))
-    if gc == 0: return 0
-    return gc*100.0/len(seq)
+    try :
+        gc = sum(map(seq.count,['G','C','g','c','S','s']))
+        return gc*100.0/len(seq)
+    except ZeroDivisionError :
+        return 0.0
+        
     
 def GC123(seq):
     """Calculates total G+C content plus first, second and third positions.
@@ -325,8 +335,8 @@ def six_frame_translations(seq, genetic_code = 1):
     similar to DNA Striders six-frame translation
 
     e.g.
-    >>> from Bio.SeqUtils import six_frame_translations
-    >>> print six_frame_translations("AUGGCCAUUGUAAUGGGCCGCUGA")
+    from Bio.SeqUtils import six_frame_translations
+    print six_frame_translations("AUGGCCAUUGUAAUGGGCCGCUGA")
     """
     from Bio.Seq import reverse_complement, translate
     anti = reverse_complement(seq)
