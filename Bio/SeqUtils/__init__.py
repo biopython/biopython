@@ -41,16 +41,7 @@ def GC(seq):
     >>> GC("ACTGN")
     40.0
     """
-    #      19/8/03: Iddo: added provision for lowercase
-    #      19/8/03: Iddo: divide by the sequence's length rather than by the
-    #      A+T+G+C number. In that way, make provision for N.
-        
-    d = {}
-    for nt in ['A','T','G','C','a','t','g','c','S','s']:
-        d[nt] = seq.count(nt)
-        gc = d.get('G',0) + d.get('C',0) + d.get('g',0) + d.get('c',0) + \
-             d.get('S',0) + d.get('s',0)
- 
+    gc=sum(map(seq.count,['G','C','g','c','S','s']))
     if gc == 0: return 0
     return gc*100.0/len(seq)
     
