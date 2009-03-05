@@ -398,9 +398,17 @@ class install_data_biopython(install_data):
                     outfile = dst
                 self.outfiles.append(outfile)
 
+#We now define the Biopython version number in Bio/__init__.py
+#Here we can't use "import Bio" then "Bio.__version__" as that would
+#tell us the version of Biopython already installed (if any).
+__version__ = "Undefined"
+for line in open('Bio/__init__.py'):
+    if (line.startswith('__version__')):
+        exec(line.strip())
+
 setup(
     name='biopython',
-    version='1.49',
+    version=__version__,
     author='The Biopython Consortium',
     author_email='biopython@biopython.org',
     url='http://www.biopython.org/',
