@@ -339,28 +339,56 @@ class Alignment:
     def __getitem__(self, index) :
         """Access part of the alignment.
 
+        We'll use the following example alignment here for illustration:
+
+        >>> from Bio.Alphabet import IUPAC, Gapped
+        >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
+        >>> align.add_sequence("Alpha",  "ACTGCTAGCTAG")
+        >>> align.add_sequence("Beta",   "ACT-CTAGCTAG")
+        >>> align.add_sequence("Gamma",  "ACTGCTAGATAG")
+        >>> align.add_sequence("Delta",  "ACTGCTTGCTAG")
+        >>> align.add_sequence("Epsilon","ACTGCTTGATAG")
+        
         You can access a row of the alignment as a SeqRecord using an integer
         index (think of the alignment as a list of SeqRecord objects here):
 
-            first_record = my_alignment[0]
-            last_record = my_alignment[-1]
+        >>> first_record = align[0]
+        >>> print first_record.id, first_record.seq
+        Alpha ACTGCTAGCTAG
+        >>> last_record = align[-1]
+        >>> print last_record.id, last_record.seq
+        Epsilon ACTGCTTGATAG
 
         You can also access use python's slice notation to create a sub-alignment
         containing only some of the SeqRecord objects:
 
-            sub_alignment = my_alignment[2:20]
+        >>> sub_alignment = align[2:5]
+        >>> print sub_alignment
+        Gapped(IUPACUnambiguousDNA(), '-') alignment with 3 rows and 12 columns
+        ACTGCTAGATAG Gamma
+        ACTGCTTGCTAG Delta
+        ACTGCTTGATAG Epsilon
 
-        This includes support for a step,
+        This includes support for a step, i.e. align[start:end:step], which
+        can be used to select every second sequence:
 
-            sub_alignment = my_alignment[start:end:step]
+        >>> sub_alignment = align[::2]
+        >>> print sub_alignment
+        Gapped(IUPACUnambiguousDNA(), '-') alignment with 3 rows and 12 columns
+        ACTGCTAGCTAG Alpha
+        ACTGCTAGATAG Gamma
+        ACTGCTTGATAG Epsilon
 
-        For example to select every second sequence:
+        Or to get a copy of the alignment with the rows in reverse order:
 
-            sub_alignment = my_alignment[::2]
-
-        Or to reverse the row order:
-
-            rev_alignment = my_alignment[::-1]
+        >>> rev_alignment = align[::-1]
+        >>> print rev_alignment
+        Gapped(IUPACUnambiguousDNA(), '-') alignment with 5 rows and 12 columns
+        ACTGCTTGATAG Epsilon
+        ACTGCTTGCTAG Delta
+        ACTGCTAGATAG Gamma
+        ACT-CTAGCTAG Beta
+        ACTGCTAGCTAG Alpha
 
         Right now, these are the ONLY indexing operations supported.  The use of
         a second column based index is under discussion for a future update.
@@ -385,51 +413,10 @@ class Alignment:
 
 def _test():
     """Run the Bio.Seq module's doctests."""
+    print "Running doctests..."
     import doctest
     doctest.testmod()
+    print "Done"
 
 if __name__ == "__main__":
-    print "Doctests..."
     _test()
-    print "Mini self test..."
-
-    raw_data = ["ACGATCAGCTAGCT", "CCGATCAGCTAGCT", "ACGATGAGCTAGCT"]
-    a = Alignment(Alphabet.generic_dna)
-    a.add_sequence("Alpha", raw_data[0], weight=2)
-    a.add_sequence("Beta",  raw_data[1])
-    a.add_sequence("Gamma", raw_data[2])
-
-    print
-    print "str(a):"
-    print str(a)
-    print
-    print "repr(a):"
-    print repr(a)
-    print
-
-    #Iterating over the rows...
-    for rec in a :
-        assert isinstance(rec, SeqRecord)
-    for r,rec in enumerate(a) :
-        assert isinstance(rec, SeqRecord)
-        assert raw_data[r] == rec.seq.tostring()
-        if r==0 : assert rec.annotations['weight']==2
-    print "Alignment iteration as SeqRecord OK"
-
-    print
-    print "SeqRecord access by row:"
-    print a[0].id, "...", a[-1].id
-
-    print
-    for format in ["fasta","phylip","clustal"] :
-        print "="*60
-        print "Using .format('%s')," % format
-        print "="*60
-        print a.format(format)
-
-    print
-    print "Row slicing the alignment:"
-    print a[1:3]
-    print
-    print "Reversing the row order:"
-    print a[::-1]
