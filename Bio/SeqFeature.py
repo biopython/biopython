@@ -229,8 +229,6 @@ class FeatureLocation:
             self._end = ExactPosition(end)
 
     def __str__(self):
-        #TODO - these are not currently implemented as properties, this means
-        #they do not show up via dir(...)
         """Returns a representation of the location (with python counting).
 
         For the simple case this uses the python splicing syntax, [122:150]
@@ -268,6 +266,8 @@ class FeatureLocation:
         case here sucks, but there is really not a general rule you can apply
         to this.
         """
+        #TODO - these are not currently implemented as properties, this means
+        #they do not show up via dir(...)
         if attr == 'start':
             return self._start
         elif attr == 'end':
