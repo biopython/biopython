@@ -127,6 +127,24 @@ class SeqFeature:
 
         return out
 
+    def _shift(self, offset) :
+        """Returns a copy of the feature with its location shifted (PRIVATE).
+
+        The annotation qaulifiers are copied."""
+        answer = SeqFeature(location = self.location._shift(offset),
+                   type = self.type,
+                   location_operator = self.location_operator,
+                   strand = self.strand,
+                   id = self.id,
+                   #qualifiers = dict(self.qualifiers.iteritems()),
+                   #sub_features = [f._shift(offset) for f in self.sub_features],
+                   ref = self.ref,
+                   ref_db = self.ref_db)
+        #TODO - Sort out the use of sub_feature and qualifiers in __init___
+        answer.sub_features = [f._shift(offset) for f in self.sub_features]
+        answer.qualifiers = dict(self.qualifiers.iteritems())
+        return answer
+
 # --- References
 
 # TODO -- Will this hold PubMed and Medline information decently?
@@ -211,6 +229,8 @@ class FeatureLocation:
             self._end = ExactPosition(end)
 
     def __str__(self):
+        #TODO - these are not currently implemented as properties, this means
+        #they do not show up via dir(...)
         """Returns a representation of the location (with python counting).
 
         For the simple case this uses the python splicing syntax, [122:150]
@@ -223,6 +243,11 @@ class FeatureLocation:
         """A string representation of the location for debugging."""
         return "%s(%s,%s)" \
                % (self.__class__, repr(self.start), repr(self.end))
+
+    def _shift(self, offset) :
+        """Returns a copy of the location shifted by the offset (PRIVATE)."""
+        return FeatureLocation(start = self._start._shift(offset),
+                               end = self._end._shift(offset))
 
     def __getattr__(self, attr):
         """Make it easy to get non-fuzzy starts and ends.
@@ -286,7 +311,11 @@ class AbstractPosition:
         assert isinstance(other, AbstractPosition), \
           "We can only do comparisons between Biopython Position objects."
 
-        return cmp(self.position, other.position)  
+        return cmp(self.position, other.position)
+
+    def _shift(self, offset) :
+        #We want this to maintain the subclass when called from a subclass
+        return self.__class__(self.position + offset, self.extension)
             
 class ExactPosition(AbstractPosition):
     """Specify the specific position of a boundary.
