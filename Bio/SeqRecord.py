@@ -12,6 +12,27 @@
 # need to be in sync (this is the BioSQL "Database SeqRecord", see
 # also BioSQL.BioSeq.DBSeq which is the "Database Seq" class)
 
+class _RestrictedDict(dict):
+    """Dict which only allows sequences of given length as values (PRIVATE).
+
+    This simple subclass of the python dictionary is used in the SeqRecord object
+    for holding per-letter-annotations.  This class is intended to prevent simple
+    errors by only allowing python sequences (e.g. lists, strings and tuples) to
+    be stored, and only if their length matches that expected (the length of the
+    SeqRecord's seq object).  It cannot however prevent the entries being edited
+    in situ (for example appending entries to a list).
+    """
+    def __init__(self, length) :
+        """Create an EMPTY restricted dictionary."""
+        dict.__init__(self)
+        self._length = int(length)
+    def __setitem__(self, key, value) :
+        if not hasattr(value,"__len__") or not hasattr(value,"__getitem__") \
+        or len(value) != self._length :
+            raise TypeError("We only allow python sequences (lists, tuples or "
+                            "strings) of length %i." % self._length)
+        dict.__setitem__(self, key, value)
+
 class SeqRecord(object):
     """A SeqRecord object holds a sequence and information about it.
 
@@ -26,6 +47,11 @@ class SeqRecord(object):
     features    - Any (sub)features defined (list of SeqFeature objects)
     annotations - Further information about the whole sequence (dictionary)
                   Most entries are lists of strings.
+    letter_annotations - Per letter/symbol annotation (restricted dictionary).
+                  This holds python sequences (lists, strings or tuples) whose
+                  length matches that of the sequence.  A typical use would be
+                  to hold a list of integers representing sequencing quality
+                  scores, or a string representing the secondary structure.
 
     You will typically use Bio.SeqIO to read in sequences from files as
     SeqRecord objects.  However, you may want to create your own SeqRecord
@@ -83,16 +109,16 @@ class SeqRecord(object):
         """
         if id is not None and not isinstance(id, basestring) :
             #Lots of existing code uses id=None... this may be a bad idea.
-            raise ValueError("id argument should be a string")
+            raise TypeError("id argument should be a string")
         if not isinstance(name, basestring) :
-            raise ValueError("name argument should be a string")
+            raise TypeError("name argument should be a string")
         if not isinstance(description, basestring) :
-            raise ValueError("description argument should be a string")
+            raise TypeError("description argument should be a string")
         if dbxrefs is not None and not isinstance(dbxrefs, list) :
-            raise ValueError("dbxrefs argument should be a list (of strings)")
+            raise TypeError("dbxrefs argument should be a list (of strings)")
         if features is not None and not isinstance(features, list) :
-            raise ValueError("features argument should be a list (of SeqFeature objects)")
-        self.seq = seq
+            raise TypeError("features argument should be a list (of SeqFeature objects)")
+        self._seq = seq
         self.id = id
         self.name = name
         self.description = description
@@ -101,11 +127,170 @@ class SeqRecord(object):
         self.dbxrefs = dbxrefs
         # annotations about the whole sequence
         self.annotations = {}
+
+        # annotations about each letter in the sequence
+        if seq is None :
+            #Should we allow this and use a normal unrestricted dict?
+            self._per_letter_annotations = _RestrictedDict(length=0)
+        else :
+            try :
+                self._per_letter_annotations = _RestrictedDict(length=len(seq))
+            except :
+                raise TypeError("seq argument should be a Seq or MutableSeq")
         
         # annotations about parts of the sequence
         if features is None:
             features = []
         self.features = features
+
+    #TODO - Just make this a read only property?
+    def _set_per_letter_annotations(self, value) :
+        if not isinstance(value, dict) :
+            raise TypeError("The per-letter-annotations should be a "
+                            "(restricted) dictionary.")
+        #Turn this into a restricted-dictionary (and check the entries)
+        try :
+            self._per_letter_annotations = _RestrictedDict(length=len(self.seq))
+        except AttributeError :
+            #e.g. seq is None
+            self._per_letter_annotations = _RestrictedDict(length=0)
+        self._per_letter_annotations.update(value)
+    letter_annotations = property(fget=lambda self : self._per_letter_annotations,
+                                  fset=_set_per_letter_annotations,
+                                  doc="Dictionary of per-letter-annotation for "
+                                      "the sequence (e.g. quality scores)")
+
+    def _set_seq(self, value) :
+        #TODO - Add a deprecation warning that the seq should be write only?
+        if self._per_letter_annotations :
+            #TODO - Make this a warning? Silently empty the dictionary?
+            raise ValueError("You must empty the letter annotations first!")
+        self._seq = value
+        try :
+            self._per_letter_annotations = _RestrictedDict(length=len(self.seq))
+        except AttributeError :
+            #e.g. seq is None
+            self._per_letter_annotations = _RestrictedDict(length=0)
+
+    seq = property(fget=lambda self : self._seq,
+                   fset=_set_seq,
+                   doc="The sequence itself, as a Seq or MutableSeq object.")
+
+    def __getitem__(self, index) :
+        """Returns a sub-sequence or an individual letter.
+
+        Splicing, e.g. my_record[5:10], returns a new SeqRecord for
+        that sub-sequence with most of the annotation preserved.
+        Any per-letter-annotations are sliced to match the requested
+        sub-sequence.  Unless a stride is used, all those features
+        which fall fully within the subsequence are included (with
+        their locations adjusted accordingly).
+
+        Using an integer index, e.g. my_record[5] is shorthand for
+        extracting that letter from the sequence, my_record.seq[5].
+
+        For example, consider this short protein and its secondary
+        structure as encoded by the PDB (e.g. H for alpha helices),
+        plus a simple feature for its histidine self phosphorylation
+        site:
+        
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
+        >>> from Bio.Alphabet import IUPAC
+        >>> rec = SeqRecord(Seq("MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLAT"
+        ...                     "EMMSEQDGYLAESINKDIEECNAIIEQFIDYLR",
+        ...                     IUPAC.protein),
+        ...                 id="1JOY", name="EnvZ",
+        ...                 description="Homodimeric domain of EnvZ from E. coli")
+        >>> rec.letter_annotations["secondary_structure"] = \
+            "  S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  "
+        >>> rec.features.append(SeqFeature(FeatureLocation(20,21),
+        ...                     type = "Site"))
+
+        Now let's have a quick look at the full record,
+        
+        >>> print rec
+        ID: 1JOY
+        Name: EnvZ
+        Description: Homodimeric domain of EnvZ from E. coli
+        Number of features: 1
+        Per letter annotation for: secondary_structure
+        Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR', IUPACProtein())
+        >>> print rec.letter_annotations["secondary_structure"]
+          S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  
+        >>> print rec.features[0].location
+        [20:21]
+
+        Now let's take a sub sequence, here chosen as the first (fractured)
+        alpha helix which includes the histidine phosphorylation site:
+
+        >>> sub = rec[11:41]
+        >>> print sub
+        ID: 1JOY
+        Name: EnvZ
+        Description: Homodimeric domain of EnvZ from E. coli
+        Number of features: 1
+        Per letter annotation for: secondary_structure
+        Seq('RTLLMAGVSHDLRTPLTRIRLATEMMSEQD', IUPACProtein())
+        >>> print sub.letter_annotations["secondary_structure"]
+        HHHHHTTTHHHHHHHHHHHHHHHHHHHHHH
+        >>> print sub.features[0].location
+        [9:10]
+
+        """
+        if isinstance(index, int) :
+            #NOTE - The sequence level annotation like the id, name, etc
+            #do not really apply to a single character.  However, should
+            #we try and expose any per-letter-annotation here?  If so how?
+            return self.seq[index]
+        elif isinstance(index, slice) :
+            answer = self.__class__(self.seq[index],
+                                    id=self.id,
+                                    name=self.name,
+                                    description=self.description)
+            #TODO - The desription may no longer apply.
+            #It would be safer to change it to something
+            #generic like "edited" or the default value.
+            
+            #COPY the annotation dict and dbxefs list:
+            #TODO - These may not apply to a subsequence.
+            #It would be safer just to drop them!
+            answer.annotations = dict(self.annotations.iteritems())
+            answer.dbxrefs = self.dbxrefs[:]
+            
+            #TODO - Cope with strides by generating ambiguous locations?
+            if index.step is None or index.step == 1 :
+                #Select relevant features, add them with shifted locations
+                start = index.start
+                stop = index.stop
+                if (start < 0 or stop < 0) and len(self.seq) == 0 :
+                    raise ValueError, \
+                          "Cannot support negative indices without the sequence length"
+                if start < 0 :
+                    start = len(self.seq) - start
+                if stop < 0  :
+                    stop  = len(self.seq) - stop + 1
+                #assert str(self.seq)[index] == str(self.seq)[start:stop]
+                for f in self.features :
+                    if start <= f.location.start.position \
+                    and f.location.end.position < stop :
+                        answer.features.append(f._shift(-start))
+
+            #Slice all the values to match the sliced sequence
+            #(this should also work with strides, even negative strides):
+            for key, value in self.letter_annotations.iteritems() :
+                answer._per_letter_annotations[key] = value[index]
+
+            return answer
+        raise ValueError, "Invalid index"
+
+    def __iter__(self) :
+        """Iterate over the letters in the sequence.
+
+        Note that this does not facilitate iteration together with any
+        per-letter-annotation."""
+        return iter(self.seq)
 
     def __str__(self) :
         """A human readable summary of the record and its annotation (string).
@@ -149,6 +334,9 @@ class SeqRecord(object):
         lines.append("Number of features: %i" % len(self.features))
         for a in self.annotations:
             lines.append("/%s=%s" % (a, str(self.annotations[a])))
+        if self.letter_annotations :
+            lines.append("Per letter annotation for: " \
+                         + ", ".join(self.letter_annotations.keys()))
         #Don't want to include the entire sequence,
         #and showing the alphabet is useful:
         lines.append(repr(self.seq))
