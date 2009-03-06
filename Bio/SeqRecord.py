@@ -238,6 +238,37 @@ class SeqRecord(object):
         >>> print sub.features[0].location
         [9:10]
 
+        You can also of course omit the start or end values, for
+        example to get the first ten letters only:
+
+        >>> print rec[:10]
+        ID: 1JOY
+        Name: EnvZ
+        Description: Homodimeric domain of EnvZ from E. coli
+        Number of features: 0
+        Per letter annotation for: secondary_structure
+        Seq('MAAGVKQLAD', IUPACProtein())
+
+        Or for the last ten letters:
+
+        >>> print rec[-10:]
+        ID: 1JOY
+        Name: EnvZ
+        Description: Homodimeric domain of EnvZ from E. coli
+        Number of features: 0
+        Per letter annotation for: secondary_structure
+        Seq('IIEQFIDYLR', IUPACProtein())
+
+        If you omit both, then you get a copy of the original record:
+
+        >>> print rec[:]
+        ID: 1JOY
+        Name: EnvZ
+        Description: Homodimeric domain of EnvZ from E. coli
+        Number of features: 1
+        Per letter annotation for: secondary_structure
+        Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR', IUPACProtein())
+
         """
         if isinstance(index, int) :
             #NOTE - The sequence level annotation like the id, name, etc
@@ -262,15 +293,21 @@ class SeqRecord(object):
             #TODO - Cope with strides by generating ambiguous locations?
             if index.step is None or index.step == 1 :
                 #Select relevant features, add them with shifted locations
-                start = index.start
-                stop = index.stop
-                if (start < 0 or stop < 0) and len(self.seq) == 0 :
+                if index.start is None :
+                    start = 0
+                else :
+                    start = index.start
+                if index.stop is None :
+                    stop = -1
+                else :
+                    stop = index.stop
+                if (start < 0 or stop < 0) and self.seq is None or len(self) == 0 :
                     raise ValueError, \
                           "Cannot support negative indices without the sequence length"
                 if start < 0 :
-                    start = len(self.seq) - start
+                    start = len(self) - start
                 if stop < 0  :
-                    stop  = len(self.seq) - stop + 1
+                    stop  = len(self) - stop + 1
                 #assert str(self.seq)[index] == str(self.seq)[start:stop]
                 for f in self.features :
                     if start <= f.location.start.position \
