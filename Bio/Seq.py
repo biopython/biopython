@@ -60,7 +60,6 @@ class Seq(object):
         # Enforce string storage
         assert (type(data) == type("") or # must use a string
                 type(data) == type(u""))  # but can be a unicode string
-
         self._data = data
         self.alphabet = alphabet  # Seq API requirement
  
@@ -209,9 +208,10 @@ class Seq(object):
         return str(other_sequence)
     
     def count(self, sub, start=0, end=sys.maxint):
-        """Count method, like that of a python string.
+        """Non-overlapping count method, like that of a python string.
 
-        This behaves like the python string method of the same name.
+        This behaves like the python string method of the same name,
+        which does a non-overlapping count!
 
         Returns an integer, the number of occurrences of substring
         argument sub in the (sub)sequence given by [start:end].
@@ -233,6 +233,17 @@ class Seq(object):
         1
         >>> print my_seq.count("AT", 2, -1)
         1
+
+        HOWEVER, please note because that python strings and Seq objects (and
+        MutableSeq objects) do a non-overlapping search, so this may not give
+        the answer you expect:
+
+        >>> "AAAA".count("AA")
+        2
+        >>> print Seq("AAAA").count("AA")
+        2
+
+        A non-overlapping search would give the answer as three!
         """
         #If it has one, check the alphabet:
         sub_str = self._get_seq_str_and_check_alphabet(sub)
@@ -852,9 +863,12 @@ class MutableSeq(object):
         raise ValueError("MutableSeq.remove(x): x not in list")
 
     def count(self, sub, start=0, end=sys.maxint):
-        """Count method, like that of a python string.
+        """Non-overlapping count method, like that of a python string.
 
-        Return an integer, the number of occurrences of substring
+        This behaves like the python string method of the same name,
+        which does a non-overlapping count!
+
+        Returns an integer, the number of occurrences of substring
         argument sub in the (sub)sequence given by [start:end].
         Optional arguments start and end are interpreted as in slice
         notation.
@@ -864,7 +878,6 @@ class MutableSeq(object):
         end - optional integer, slice end
 
         e.g.
-        >>> from Bio.Seq import Seq, MutableSeq
         >>> from Bio.Seq import MutableSeq
         >>> my_mseq = MutableSeq("AAAATGA")
         >>> print my_mseq.count("A")
@@ -875,6 +888,17 @@ class MutableSeq(object):
         1
         >>> print my_mseq.count("AT", 2, -1)
         1
+        
+        HOWEVER, please note because that python strings, Seq objects and
+        MutableSeq objects do a non-overlapping search, so this may not give
+        the answer you expect:
+
+        >>> "AAAA".count("AA")
+        2
+        >>> print MutableSeq("AAAA").count("AA")
+        2
+
+        A non-overlapping search would give the answer as three!
         """
         try :
             #TODO - Should we check the alphabet?
