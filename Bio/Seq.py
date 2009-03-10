@@ -478,7 +478,7 @@ class Seq(object):
         elif isinstance(Alphabet._get_base_alphabet(self.alphabet),
                         Alphabet.RNAAlphabet) :
             d = ambiguous_rna_complement
-        if ('U' in self._data or 'u' in self._data) \
+        elif ('U' in self._data or 'u' in self._data) \
         and ('T' in self._data or 't' in self._data):
             #TODO - Handle this cleanly?
             raise ValueError("Mixed RNA/DNA found")
