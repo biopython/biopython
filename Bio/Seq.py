@@ -451,6 +451,16 @@ class Seq(object):
         >>> my_dna.complement()
         Seq('GGGGGCTATC', IUPACUnambiguousDNA())
 
+        You can of course used mixed case sequences,
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_dna
+        >>> my_dna = Seq("CCCCCgatAG", generic_dna)
+        >>> my_dna
+        Seq('CCCCCgatAG', DNAAlphabet())
+        >>> my_dna.complement()
+        Seq('GGGGGctaTC', DNAAlphabet())
+        
         Trying to complement a protein sequence raises an exception.
 
         >>> my_protein = Seq("MAIVMGR", IUPAC.protein)
@@ -468,10 +478,11 @@ class Seq(object):
         elif isinstance(Alphabet._get_base_alphabet(self.alphabet),
                         Alphabet.RNAAlphabet) :
             d = ambiguous_rna_complement
-        elif 'U' in self._data and 'T' in self._data:
+        if ('U' in self._data or 'u' in self._data) \
+        and ('T' in self._data or 't' in self._data):
             #TODO - Handle this cleanly?
             raise ValueError("Mixed RNA/DNA found")
-        elif 'U' in self._data:
+        elif 'U' in self._data or 'u' in self._data:
             d = ambiguous_rna_complement
         else:
             d = ambiguous_dna_complement
