@@ -69,7 +69,7 @@
 
 \title{Biopython Tutorial and Cookbook}
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 3 January 2009 (Biopython 1.49)}
+\date{Last Update -- 10 March 2009 (Biopython 1.49)}
 
 \maketitle
 \tableofcontents
@@ -2931,7 +2931,7 @@ To paraphrase:
 \begin{itemize}
 \item For any series of more than 100 requests, do this at weekends or outside USA peak times.  This is up to you to obey.
 \item Use the \url{http://eutils.ncbi.nlm.nih.gov} address, not the standard NCBI Web address.  Biopython uses this web address.
-\item Make no more than one request every 3 seconds.  This is automatically enforced by Biopython.
+\item Make no more than three requests every seconds (relaxed from at most one request every three seconds in early 2009).  This is automatically enforced by Biopython.
 \item Use the optional email parameter so the NCBI can contact you if there is a problem.  You can either explicitly set the email address as a parameter with each call to Entrez (e.g., include {\tt email = "A.N.Other@example.com"} in the argument list), or as of Biopython 1.48, you can set a global email address:
 \begin{verbatim}
 >>> from Bio import Entrez
@@ -5465,7 +5465,7 @@ like $F_{st}$, or allele counts.
 
 \chapter{Supervised learning methods}
 
-%Note the supervised learning methods described in this chapter all require Numerical Python (numpy) to be installed.
+Note the supervised learning methods described in this chapter all require Numerical Python (numpy) to be installed.
 
 \section{The Logistic Regression Model}
 \label{sec:LogisticRegression}

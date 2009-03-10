@@ -296,8 +296,9 @@ def _open(cgi, params={}):
     This function also enforces the "three second rule" to avoid abusing
     the NCBI servers.
     """
-    # NCBI requirement: At least three seconds between queries
-    delay = 3.0
+    # NCBI requirement: At most three queries per second.
+    # Equivalently, at least a third of second between queries
+    delay = 0.333333334
     current = time.time()
     wait = _open.previous + delay - current
     if wait > 0:
