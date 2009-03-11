@@ -7,7 +7,8 @@
 # as part of this package.
 """Represent a sequence or mutable sequence, with an alphabet."""
 
-import string, array
+import string #for maketrans only
+import array
 import sys
 
 #TODO - Remove this work around once we drop python 2.3 support
@@ -20,6 +21,28 @@ import Alphabet
 from Alphabet import IUPAC
 from Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 from Bio.Data import CodonTable
+
+def _maketrans(complement_mapping) :
+    """Makes a python string translation table (PRIVATE).
+
+    complement_mapping - a dictionary such as ambiguous_dna_complement
+    and ambiguous_rna_complement from Data.IUPACData.
+
+    Returns a translation table (a string of length 256) for use with the
+    python string's translate method to use in a (reverse) complement.
+    
+    Compatible with lower case and upper case sequences.
+
+    For internal use only.
+    """
+    before = ''.join(complement_mapping.keys())
+    after  = ''.join(complement_mapping.values())
+    before = before + before.lower()
+    after  = after + after.lower()
+    return string.maketrans(before, after)
+
+_dna_complement_table = _maketrans(ambiguous_dna_complement)
+_rna_complement_table = _maketrans(ambiguous_rna_complement)
 
 class Seq(object):
     """A read-only sequence object (essentially a string with an alphabet).
@@ -235,7 +258,7 @@ class Seq(object):
         1
 
         HOWEVER, please note because that python strings and Seq objects (and
-        MutableSeq objects) do a non-overlapping search, so this may not give
+        MutableSeq objects) do a non-overlapping search, this may not give
         the answer you expect:
 
         >>> "AAAA".count("AA")
@@ -422,24 +445,6 @@ class Seq(object):
         strip_str = self._get_seq_str_and_check_alphabet(chars)
         return Seq(str(self).rstrip(strip_str), self.alphabet)
 
-    def __maketrans(self, alphabet) :
-        """Seq.__maketrans(alphabet) -> translation table (PRIVATE).
-
-        Return a translation table for use with complement()
-        and reverse_complement().
-
-        Compatible with lower case and upper case sequences.
-
-        alphabet is a dictionary as implement in Data.IUPACData
-
-        For internal use only.
-        """
-        before = ''.join(alphabet.keys())
-        after  = ''.join(alphabet.values())
-        before = before + before.lower()
-        after  = after + after.lower()
-        return string.maketrans(before, after)
-
     def complement(self):
         """Returns the complement sequence. New Seq object.
 
@@ -455,11 +460,14 @@ class Seq(object):
 
         >>> from Bio.Seq import Seq
         >>> from Bio.Alphabet import generic_dna
-        >>> my_dna = Seq("CCCCCgatAG", generic_dna)
+        >>> my_dna = Seq("CCCCCgatA-GD", generic_dna)
         >>> my_dna
-        Seq('CCCCCgatAG', DNAAlphabet())
+        Seq('CCCCCgatA-GD', DNAAlphabet())
         >>> my_dna.complement()
-        Seq('GGGGGctaTC', DNAAlphabet())
+        Seq('GGGGGctaT-CH', DNAAlphabet())
+
+        Note in the above example, ambigusous character D denotes
+        G, A or T so its complement is H (for C, T or A).
         
         Trying to complement a protein sequence raises an exception.
 
@@ -474,19 +482,18 @@ class Seq(object):
             raise ValueError("Proteins do not have complements!")
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.DNAAlphabet) :
-            d = ambiguous_dna_complement
+            ttable = _dna_complement_table
         elif isinstance(Alphabet._get_base_alphabet(self.alphabet),
                         Alphabet.RNAAlphabet) :
-            d = ambiguous_rna_complement
+            ttable = _rna_complement_table
         elif ('U' in self._data or 'u' in self._data) \
         and ('T' in self._data or 't' in self._data):
             #TODO - Handle this cleanly?
             raise ValueError("Mixed RNA/DNA found")
         elif 'U' in self._data or 'u' in self._data:
-            d = ambiguous_rna_complement
+            ttable = _rna_complement_table
         else:
-            d = ambiguous_dna_complement
-        ttable = self.__maketrans(d)
+            ttable = _dna_complement_table
         #Much faster on really long sequences than the previous loop based one.
         #thx to Michael Palmer, University of Waterloo
         s = str(self).translate(ttable)
@@ -497,11 +504,24 @@ class Seq(object):
 
         >>> from Bio.Seq import Seq
         >>> from Bio.Alphabet import IUPAC
-        >>> my_dna = Seq("CCCCCGATAG", IUPAC.unambiguous_dna)
+        >>> my_dna = Seq("CCCCCGATAGNR", IUPAC.ambiguous_dna)
         >>> my_dna
-        Seq('CCCCCGATAG', IUPACUnambiguousDNA())
+        Seq('CCCCCGATAGNR', IUPACAmbiguousDNA())
         >>> my_dna.reverse_complement()
-        Seq('CTATCGGGGG', IUPACUnambiguousDNA())
+        Seq('YNCTATCGGGGG', IUPACAmbiguousDNA())
+
+        Note in the above example, since R = G or A, its complement
+        is Y (which denotes  C or T).
+
+        You can of course used mixed case sequences,
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_dna
+        >>> my_dna = Seq("CCCCCgatA-G", generic_dna)
+        >>> my_dna
+        Seq('CCCCCgatA-G', DNAAlphabet())
+        >>> my_dna.reverse_complement()
+        Seq('C-TatcGGGGG', DNAAlphabet())
 
         Trying to complement a protein sequence raises an exception.
 
@@ -901,7 +921,7 @@ class MutableSeq(object):
         1
         
         HOWEVER, please note because that python strings, Seq objects and
-        MutableSeq objects do a non-overlapping search, so this may not give
+        MutableSeq objects do a non-overlapping search, this may not give
         the answer you expect:
 
         >>> "AAAA".count("AA")
@@ -1197,8 +1217,8 @@ def reverse_complement(sequence):
     Supports unambiguous and ambiguous nucleotide sequences.
 
     e.g.
-    >>> reverse_complement("ACTGN")
-    'NCAGT'
+    >>> reverse_complement("ACTG-N")
+    'N-CAGT'
     """
     if isinstance(sequence, Seq) :
         #Return a Seq
