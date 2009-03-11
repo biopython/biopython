@@ -1217,8 +1217,8 @@ def reverse_complement(sequence):
     Supports unambiguous and ambiguous nucleotide sequences.
 
     e.g.
-    >>> reverse_complement("ACTG-N")
-    'N-CAGT'
+    >>> reverse_complement("ACTG-NH")
+    'DN-CAGT'
     """
     if isinstance(sequence, Seq) :
         #Return a Seq
@@ -1227,11 +1227,19 @@ def reverse_complement(sequence):
         #Return a Seq
         #Don't use the MutableSeq reverse_complement method as it is 'in place'.
         return sequence.toseq().reverse_complement()
-    else :
-        #Assume its a string, turn it into a Seq,
-        #do the reverse complement, and turn this back to a string
-        #TODO - Find a more efficient way to do this without code duplication?
-        return Seq(sequence).reverse_complement().tostring()
+
+    #Assume its a string.
+    #In order to avoid some code duplication, the old code would turn the string
+    #into a Seq, use the reverse_complement method, and convert back to a string.
+    #This worked, but is over five times slower on short sequences!
+    if ('U' in sequence or 'u' in sequence) \
+    and ('T' in sequence or 't' in sequence):
+        raise ValueError("Mixed RNA/DNA found")
+    elif 'U' in sequence or 'u' in sequence:
+        ttable = _rna_complement_table
+    else:
+        ttable = _dna_complement_table
+    return sequence.translate(ttable)[::-1]
 
 def _test():
     """Run the Bio.Seq module's doctests."""
