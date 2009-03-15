@@ -5,15 +5,52 @@ import string
 from Bio import Seq
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
+from Bio import Translate
+
+# use the standard table
+trans = Translate.unambiguous_dna_by_id[1]
+
+# Do some simple tests first
+s = "T"
+dna = Seq.Seq(s, IUPAC.unambiguous_dna)
+protein = trans.translate_to_stop(dna)
+assert  protein.tostring()==""
+
+s = "TC"
+dna = Seq.Seq(s, IUPAC.unambiguous_dna)
+protein = trans.translate_to_stop(dna)
+assert protein.tostring()==""
+
+s = "GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCATATT"
+dna = Seq.Seq(s, IUPAC.unambiguous_dna)
+protein = trans.translate_to_stop(dna)
+assert protein.tostring()=='ENSFSLDFL'
+
+s = "GAA"
+dna = Seq.Seq(s, IUPAC.unambiguous_dna)
+trans = Translate.unambiguous_dna_by_id[ 15 ]
+protein = trans.translate_to_stop(dna)
+assert protein.tostring()=="E"
+
+s = "ATA"
+dna = Seq.Seq(s, IUPAC.unambiguous_dna)
+trans = Translate.unambiguous_dna_by_name[ 'Vertebrate Mitochondrial' ]
+protein = trans.translate_to_stop(dna)
+assert protein.tostring()=="M"
+
+s = "GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCATATT"
+dna = Seq.Seq(s, IUPAC.unambiguous_dna)
+trans = Translate.unambiguous_dna_by_name[ 'SGC8' ]
+protein = trans.translate_to_stop(dna)
+assert protein.tostring()=='ENSFSLDFLWNPSPSNDAWDSSY'
+
+# use the standard table
+trans = Translate.unambiguous_dna_by_id[1]
 
 s = "TCAAAAAGGTGCATCTAGATG"
 print "Starting with", s
 dna = Seq.Seq(s, IUPAC.unambiguous_dna)
 
-from Bio import Translate
-
-# use the standard table
-trans = Translate.unambiguous_dna_by_id[1]
 
 protein = trans.translate_to_stop(dna)
 assert isinstance(protein.alphabet, IUPAC.IUPACProtein)
