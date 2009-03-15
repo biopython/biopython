@@ -1,11 +1,28 @@
 # Make sure the translation functions work.
-import string
 # Start simple - unambiguous DNA to unambiguous protein
 
 from Bio import Seq
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
-from Bio import Translate
+from Bio import Transcribe, Translate
+
+# First, test the transcription functions
+
+s = "ATA"
+dna = Seq.Seq(s, IUPAC.unambiguous_dna)
+rna = Transcribe.unambiguous_transcriber.transcribe( dna )
+assert rna.tostring()=="AUA"
+
+s = "GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCATATT"
+dna = Seq.Seq(s, IUPAC.unambiguous_dna)
+rna = Transcribe.unambiguous_transcriber.transcribe( dna )
+assert rna.tostring()=='GAAAAUUCAUUUUCUUUGGACUUUCUCUGAAAUCCGAGUCCUAGGAAAGAUGCGUGAGAUUCUUCAUAUU'
+
+s = "GAAAAUUCAUUUUCUUUGGACUUUCUCUGAAAUCCGAGUCCUAGGAAAGAUGCGUGAGAUUCUUCAUAUU"
+rna = Seq.Seq(s, IUPAC.unambiguous_rna)
+dna = Transcribe.unambiguous_transcriber.back_transcribe( rna )
+assert dna.tostring()=='GAAAATTCATTTTCTTTGGACTTTCTCTGAAATCCGAGTCCTAGGAAAGATGCGTGAGATTCTTCATATT'
+
 
 # use the standard table
 trans = Translate.unambiguous_dna_by_id[1]
@@ -70,12 +87,12 @@ p2 = Translate.unambiguous_dna_by_id[2].translate_to_stop(dna)
 print len(p2), "SGC1 has a stop codon"
 print p2.tostring()
 p2 = Translate.unambiguous_dna_by_id[2].translate(dna)
-print "Actually, there are", string.count(p2.data, "*"), "stops."
+print "Actually, there are", p2.data.count("*"), "stops."
 print p2.tostring()
 
 # Make sure I can change the stop character
 p2 = Translate.unambiguous_dna_by_id[2].translate(dna, "+")
-print "Yep,", string.count(p2.data, "+"), "stops."
+print "Yep,", p2.data.count("+"), "stops."
 print p2.tostring()
 
 
@@ -99,7 +116,7 @@ print repr(gapped_protein.data), "==", repr(double_back_protein2.data)
 
 # Some of the same things, with RNA
 # (The code is the same, so I'm not doing all of the tests.)
-rna = Seq.Seq(string.replace(s, "T", "U"), IUPAC.unambiguous_rna)
+rna = Seq.Seq(s.replace("T", "U"), IUPAC.unambiguous_rna)
 rna_trans = Translate.unambiguous_rna_by_id[1]
 
 print "RNA translation ...",
@@ -115,7 +132,7 @@ assert gapped_protein.data == gapped_protein_from_rna.data
 print "works."
 
 back_rna = rna_trans.back_translate(protein_from_rna)
-assert string.replace(back_dna.data, "T", "U") == back_rna.data
+assert back_dna.data.replace("T", "U") == back_rna.data
 
 # some tests for "by name"
 trans = Translate.unambiguous_dna_by_name[ 'Vertebrate Mitochondrial' ]
