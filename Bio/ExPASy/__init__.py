@@ -15,6 +15,9 @@ get_prosite_raw   Interface to the get-prosite-raw CGI script.
 get_sprot_raw     Interface to the get-sprot-raw CGI script.
 sprot_search_ful  Interface to the sprot-search-ful CGI script.
 sprot_search_de   Interface to the sprot-search-de CGI script.
+
+The function scanprosite1 is OBSOLETE; please see the
+Bio.ExPASy.ScanProsite module for this functionality.
 """
 
 import urllib
@@ -110,4 +113,31 @@ def sprot_search_de(text, swissprot=1, trembl=None,
     options = urllib.urlencode(variables)
     fullcgi = "%s?%s" % (cgi, options)
     handle = urllib.urlopen(fullcgi)
+    return handle
+
+def scanprosite1(seq=None, id=None, exclude_frequent=None,
+                 cgi='http://www.expasy.org/cgi-bin/scanprosite/scanprosite?1'):
+    """scanprosite1(seq=None, id=None, exclude_frequent=None,
+    cgi='http://www.expasy.org/cgi-bin/scanprosite/scanprosite?1') -> handle
+
+    Scan a sequence for a Prosite pattern.  Either a sequence or a SwissProt/
+    trEMBL sequence can be passed.  exclude_frequent specifies whether to
+    exclude patterns with high probability.
+
+    """
+    import warnings
+    warnings.warn("Bio.ExPASy.scanprosite1() has been deprecated, and we" \
+                  +" intend to remove it in a future release of Biopython."\
+                  +" Please use the Bio.ExPASy.ScanProsite module instead,"\
+                  +" as described in the Tutorial.",
+                  DeprecationWarning)
+    variables = {}
+    if seq:
+        variables['SEQ'] = seq
+    if id:
+        variables['ID'] = id
+    if exclude_frequent:
+        variables['box'] = 'ok'
+    options = urllib.urlencode(variables)
+    handle = urllib.urlopen(cgi, options)
     return handle
