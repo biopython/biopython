@@ -3693,6 +3693,49 @@ class TestPrositePattern(unittest.TestCase):
                     self.assertEqual(str(p), pattern)
                     pattern = ""
 
+    def test_conversion(self):
+        "Test a conversion of a prosite pattern to a regular expression."
+
+        pattern = '[LIV]-G-{P}-G-{P}-[FYWMGSTNH]-[SGA]-{PW}-[LIVCAT]-{PD}-x-[GSTACLIVMFY]-x(5,18)-[LIVMFYWCSTAR]-[AIVP]-[LIVMFAGCKR]-K.'
+        regular_expression = Pattern.prosite_to_re( pattern )
+	self.assertEqual(regular_expression, '[LIV]G[^P]G[^P][FYWMGSTNH][SGA][^PW][LIVCAT][^PD].[GSTACLIVMFY].{5,18}[LIVMFYWCSTAR][AIVP][LIVMFAGCKR]K')
+
+        pattern = '[IV]-x-D-S-[GAS]-[GASC]-[GAST]-[GA]-T.'
+        regular_expression = Pattern.prosite_to_re(pattern)
+	self.assertEqual(regular_expression, '[IV].DS[GAS][GASC][GAST][GA]T')
+
+        pattern = 'G-[LIVM]-x(3)-E-[LIV]-T-[LF]-R.'
+        regular_expression = Pattern.prosite_to_re(pattern)
+	self.assertEqual(regular_expression, 'G[LIVM].{3}E[LIV]T[LF]R')
+
+        pattern = '[DESH]-x(4,5)-[STVG]-x-[AS]-[FYI]-K-[DLIFSA]-[RVMF]-[GA]-[LIVMGA].'
+        regular_expression = Pattern.prosite_to_re(pattern)
+	self.assertEqual(regular_expression, '[DESH].{4,5}[STVG].[AS][FYI]K[DLIFSA][RVMF][GA][LIVMGA]')
+
+        pattern = 'W-[IV]-[STA]-[RK]-x-[DE]-Y-[DNE]-[DE].'
+        regular_expression = Pattern.prosite_to_re(pattern)
+	self.assertEqual(regular_expression, 'W[IV][STA][RK].[DE]Y[DNE][DE]')
+
+    def test_verify_pattern( self ):
+        "Test verification of a pattern"
+
+        # Good patterns
+        pattern = 'W-[IV]-[STA]-[RK]-x-[DE]-Y-[DNE]-[DE].'
+	self.assert_(Pattern.verify_pattern(pattern))
+
+        pattern = '[LIV]-G-{P}-G-{P}-[FYWMGSTNH]-[SGA]-{PW}-[LIVCAT]-{PD}-x-[GSTACLIVMFY]-x(5,18)-[LIVMFYWCSTAR]-[AIVP]-[LIVMFAGCKR]-K.'
+	self.assert_(Pattern.verify_pattern(pattern))
+
+        # Bad patterns
+        pattern = 'W-[IV]-[STA*]-[RK]-x-[DE]-Y-[DNE]-[DE].'
+	self.assert_(not Pattern.verify_pattern(pattern))
+
+        pattern = 'W-[IV]-[STA-[RK]-x-[DE]-Y-[DNE]-[DE].'
+	self.assert_(not Pattern.verify_pattern(pattern))
+
+        pattern = '[LIV]-G-P}-G-{P}-[FYWMGSTNH]-[SGA]-{PW}-[LIVCAT]-{PD}-x-[GSTACLIVMFY]-x(5,18)-[LIVMFYWCSTAR]-[AIVP]-[LIVMFAGCKR]-K.'
+	self.assert_(not Pattern.verify_pattern(pattern))
+
 
 class TestPrositeRead(unittest.TestCase):
 
