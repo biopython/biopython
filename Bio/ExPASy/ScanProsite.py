@@ -4,6 +4,11 @@ from xml.sax.expatreader import ExpatParser
 from xml.sax._exceptions import SAXParseException
 
 class Record(list):
+    """\
+This record is a list containing the search results returned by
+ScanProsite. The record also contains the data members n_match, n_seq,
+capped, and warning."""
+
     def __init__(self):
         self.n_match = None
         self.n_seq = None
@@ -23,7 +28,7 @@ def scan(seq="", mirror='http://www.expasy.org', output='xml', **keywords):
     
     Further search parameters can be passed as keywords; see the
     documentation for programmatic access to ScanProsite at
-    http://au.expasy.org/tools/scanprosite/ScanPrositeREST.html
+    http://www.expasy.org/tools/scanprosite/ScanPrositeREST.html
     for a description of such parameters.
 
     This function returns a handle to the search results returned by
