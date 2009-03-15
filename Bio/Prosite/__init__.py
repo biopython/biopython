@@ -5,6 +5,28 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """
+This module is OBSOLETE.
+Most of the functionality in this module has moved to Bio.ExPASy.Prosite;
+please see
+
+Bio.ExPASy.Prosite.read          To read a Prosite file containing one entry.
+Bio.ExPASy.Prosite.parse         Iterates over entries in a Prosite file.
+Bio.ExPASy.Prosite.Record        Holds Prosite data.
+
+For
+scan_sequence_expasy  Scan a sequence for occurrences of Prosite patterns.
+_extract_pattern_hits Extract Prosite patterns from a web page.
+PatternHit            Holds data from a hit against a Prosite pattern.
+please see the new module Bio.ExPASy.ScanProsite.
+
+The other functions and classes in Bio.Prosite (including
+Bio.Prosite.index_file and Bio.Prosite.Dictionary) are considered deprecated,
+and were not moved to Bio.ExPASy.Prosite. If you use this functionality,
+please contact the Biopython developers at biopython-dev@biopython.org to
+avoid permanent removal of this module from Biopython.
+
+
+
 This module provides code to work with the prosite dat file from
 Prosite.
 http://www.expasy.ch/prosite/
