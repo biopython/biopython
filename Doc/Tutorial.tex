@@ -4297,6 +4297,66 @@ and similarly for a Prosite documentation record:
 
 For these functions, an invalid accession number returns an error message in HTML format.
 
+\section{Scanning the Prosite database}
+
+\href{http://www.expasy.org/tools/scanprosite/}{ScanProsite} allows you to scan protein sequences online against the Prosite database by providing a UniProt or PDB sequence identifier or the sequence itself. For more information about ScanProsite, please see the \href{http://www.expasy.org/tools/scanprosite/scanprosite-doc.html}{ScanProsite documentation} as well as the \href{http://www.expasy.org/tools/scanprosite/ScanPrositeREST.html}{documentation for programmatic access of ScanProsite}.
+
+You can use Biopython's \verb+Bio.ExPASy.ScanProsite+ module to scan the Prosite database from Python. This module both helps you to access ScanProsite programmatically, and to parse the results returned by ScanProsite. To scan for Prosite patterns in the following protein sequence:
+
+\begin{verbatim}
+MEHKEVVLLLLLFLKSGQGEPLDDYVNTQGASLFSVTKKQLGAGSIEECAAKCEEDEEFT
+CRAFQYHSKEQQCVIMAENRKSSIIIRMRDVVLFEKKVYLSECKTGNGKNYRGTMSKTKN
+\end{verbatim}
+
+you can use the following code:
+
+\begin{verbatim}
+>>> sequence = "MEHKEVVLLLLLFLKSGQGEPLDDYVNTQGASLFSVTKKQLGAGSIEECAAKCEEDEEFT
+CRAFQYHSKEQQCVIMAENRKSSIIIRMRDVVLFEKKVYLSECKTGNGKNYRGTMSKTKN"
+>>> from Bio.ExPASy import ScanProsite
+>>> handle = ScanProsite.scan(seq=sequence)
+\end{verbatim}
+
+By executing \verb+handle.read()+, you can obtain the search results in raw XML format. Instead, let's use \verb+Bio.ExPASy.ScanProsite.read+ to parse the raw XML into a Python object:
+
+\begin{verbatim}
+>>> result = ScanProsite.read(handle)
+>>> type(result)
+<class 'Bio.ExPASy.ScanProsite.Record'>
+\end{verbatim}
+
+A \verb+Bio.ExPASy.ScanProsite.Record+ object is derived from a list, with each element in the list storing one ScanProsite hit. This object also stores the number of hits, as well as the number of search sequences, as returned by ScanProsite. This ScanProsite search resulted in six hits:
+
+\begin{verbatim}
+>>> result.n_seq
+1
+>>> result.n_match
+6
+>>> len(result)
+6
+>>> result[0]
+{'signature_ac': u'PS50948', 'level': u'0', 'stop': 98, 'sequence_ac': u'USERSEQ1', 'start': 16, 'score': u'8.873'}
+>>> result[1]
+{'start': 37, 'stop': 39, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00005'}
+>>> result[2]
+{'start': 45, 'stop': 48, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00006'}
+>>> result[3]
+{'start': 60, 'stop': 62, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00005'}
+>>> result[4]
+{'start': 80, 'stop': 83, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00004'}
+>>> result[5]
+{'start': 106, 'stop': 111, 'sequence_ac': u'USERSEQ1', 'signature_ac': u'PS00008'}
+\end{verbatim}
+
+Other ScanProsite parameters can be passed as keyword arguments; see the \href{http://www.expasy.org/tools/scanprosite/ScanPrositeREST.html}{documentation for programmatic access of ScanProsite} for more information. As an example, passing \verb+lowscore=1+ to include matches with low level scores lets use find one additional hit:
+
+\begin{verbatim}
+>>> handle = ScanProsite.scan(seq=sequence, lowscore=1)
+>>> result = ScanProsite.read(handle)
+>>> result.n_match
+7
+\end{verbatim}
+
 \chapter{Going 3D: The PDB module}
 
 Biopython also allows you to explore the extensive realm of macromolecular structure.
