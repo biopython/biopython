@@ -11,15 +11,24 @@ class Record(list):
         self.warning = None
 
 
-def scan(mirror='http://www.expasy.org', seq="", output='xml', **keywords):
-    """Helper function to build the URL and open a handle to it (PRIVATE).
+def scan(seq="", mirror='http://www.expasy.org', output='xml', **keywords):
+    """Execute a ScanProsite search.
 
-    Open a handle to Entrez.  cgi is the URL for the cgi script to access.
-    params is a dictionary with the options to pass to it.  Does some
-    simple error checking, and will raise an IOError if it encounters one.
+    mirror:      The ScanProsite mirror to be used
+                 (default: http://www.expasy.org).
+    seq:         The query sequence, or UniProtKB (Swiss-Prot,
+                 TrEMBL) accession
+    output:      Format of the search results
+                 (default: xml)
+    
+    Further search parameters can be passed as keywords; see the
+    documentation for programmatic access to ScanProsite at
+    http://au.expasy.org/tools/scanprosite/ScanPrositeREST.html
+    for a description of such parameters.
 
-    This function also enforces the "three second rule" to avoid abusing
-    the NCBI servers.
+    This function returns a handle to the search results returned by
+    ScanProsite. Search results in the XML format can be parsed into a
+    Python object, by using the Bio.ExPASy.ScanProsite.read function.
     """
     parameters = {'seq': seq,
                   'output': output}
@@ -32,6 +41,7 @@ def scan(mirror='http://www.expasy.org', seq="", output='xml', **keywords):
     return handle
 
 def read(handle):
+    "Parse search results returned by ScanProsite into a Python object"
     content_handler = ContentHandler()
     saxparser = Parser()
     saxparser.setContentHandler(content_handler)
