@@ -4,9 +4,27 @@
 # as part of this package.
 
 """
+This module is OBSOLETE.
+Most of the functionality in this module has moved to Bio.ExPASy.Prodoc;
+please see
+
+Bio.ExPASy.Prodoc.read          To read a Prodoc file containing one entry.
+Bio.ExPASy.Prodoc.parse         Iterates over entries in a Prodoc file.
+Bio.ExPASy.Prodoc.Record        Holds Prodoc data.
+Bio.ExPASy.Prodoc.Reference     Holds data from a Prodoc reference.
+
+The other functions and classes in Bio.Prosite.Prodoc (including
+Bio.Prosite.Prodoc.index_file and Bio.Prosite.Prodoc.Dictionary) are
+considered deprecated, and were not moved to Bio.ExPASy.Prodoc. If you use
+this functionality, please contact the Biopython developers at
+biopython-dev@biopython.org to avoid permanent removal of this module from
+Biopython.
+
+
+
+
 This module provides code to work with the prosite.doc file from
-Prosite.
-http://www.expasy.ch/prosite/
+Prosite, available at http://www.expasy.ch/prosite/.
 
 Tested with:
 Release 15.0, July 1998
