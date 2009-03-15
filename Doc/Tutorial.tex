@@ -96,7 +96,7 @@ The main Biopython releases have lots of functionality, including:
     \item FASTA
     \item GenBank
     \item PubMed and Medline
-    \item ExPASy files, like Enzyme, Prodoc and Prosite
+    \item ExPASy files, like Enzyme and Prosite
     \item SCOP, including `dom' and `lin' files
     \item UniGene
     \item SwissProt
@@ -108,7 +108,7 @@ The main Biopython releases have lots of functionality, including:
 
   \begin{itemize}
     \item NCBI -- Blast, Entrez and PubMed services
-    \item ExPASy -- Prodoc and Prosite entries
+    \item ExPASy -- Prosite entries
   \end{itemize}
 
   \item Interfaces to common bioinformatics programs such as:
@@ -3923,10 +3923,10 @@ out_handle.close()
 
 And finally, don't forget to include your \emph{own} email address in the Entrez calls.
 
-\chapter{Swiss-Prot, Prosite, Prodoc, and ExPASy}
+\chapter{Swiss-Prot, Prosite, and ExPASy}
 \label{chapter:swiss_prot}
 
-\section{Bio.SwissProt: Parsing Swiss-Prot files}
+\section{Parsing Swiss-Prot files}
 
 Swiss-Prot (\url{http://www.expasy.org/sprot}) is a hand-curated database of protein sequences.  Biopython can parse the ``plain text'' Swiss-Prot file format, which is still used for the UniProt Knowledgebase which combined Swiss-Prot, TrEMBL and PIR-PSD.  We do not (yet) support the UniProtKB XML file format.
 
@@ -3957,7 +3957,7 @@ To parse a Swiss-Prot record, we first get a handle to a Swiss-Prot record. Ther
 \end{itemize}
 The key point is that for the parser, it doesn't matter how the handle was created, as long as it points to data in the Swiss-Prot format.
 
-We can use Bio.SeqIO as described in Section~\ref{sec:SeqIO_ExPASy_and_SwissProt} to get file format agnostic \verb|SeqRecord| objects.  Alternatively, we can get \verb|Bio.SwissProt.SProt.Record| objects which are a much closer match to the underlying file format, using following code.
+We can use \verb+Bio.SeqIO+ as described in Section~\ref{sec:SeqIO_ExPASy_and_SwissProt} to get file format agnostic \verb|SeqRecord| objects.  Alternatively, we can use \verb+Bio.SwissProt+ get \verb|Bio.SwissProt.SProt.Record| objects, which are a much closer match to the underlying file format.
 
 To read one Swiss-Prot record from the handle, we use the function \verb|read()|:
 \begin{verbatim}
@@ -4088,21 +4088,21 @@ protein.
 ...
 \end{verbatim}
 
-\section{Bio.Prosite: Parsing Prosite records}
+\section{Parsing Prosite records}
 
-Prosite is a database containing protein domains, protein families, functional sites, as well as the patterns and profiles to recognize them. Prosite was developed in parallel with Swiss-Prot. In Biopython, a Prosite record is represented by the \verb|Bio.Prosite.Record| class, whose members correspond to the different fields in a Prosite record.
+Prosite is a database containing protein domains, protein families, functional sites, as well as the patterns and profiles to recognize them. Prosite was developed in parallel with Swiss-Prot. In Biopython, a Prosite record is represented by the \verb|Bio.ExPASy.Prosite.Record| class, whose members correspond to the different fields in a Prosite record.
 
 In general, a Prosite file can contain more than one Prosite records. For example, the full set of Prosite records, which can be downloaded as a single file (\verb|prosite.dat|) from the \href{ftp://ftp.expasy.org/databases/prosite/prosite.dat}{ExPASy FTP site}, contains 2073 records in (version 20.24 released on 4 December 2007). To parse such a file, we again make use of an iterator:
 
 \begin{verbatim}
->>> from Bio import Prosite
+>>> from Bio.ExPASy import Prosite
 >>> handle = open("myprositefile.dat")
 >>> records = Prosite.parse(handle)
 \end{verbatim}
 
 We can now take the records one at a time and print out some information. For example, using the file containing the complete Prosite database, we'd find
 \begin{verbatim}
->>> from Bio import Prosite
+>>> from Bio.ExPASy import Prosite
 >>> handle = open("prosite.dat")
 >>> records = Prosite.parse(handle)
 >>> record = records.next()
@@ -4129,7 +4129,7 @@ We can now take the records one at a time and print out some information. For ex
 \end{verbatim}
 and so on. If you're interested in how many Prosite records there are, you could use
 \begin{verbatim}
->>> from Bio import Prosite
+>>> from Bio.ExPASy import Prosite
 >>> handle = open("prosite.dat")
 >>> records = Prosite.parse(handle)
 >>> n = 0
@@ -4141,34 +4141,34 @@ and so on. If you're interested in how many Prosite records there are, you could
 
 To read exactly one Prosite from the handle, you can use the \verb|read| function:
 \begin{verbatim}
->>> from Bio import Prosite
+>>> from Bio.ExPASy import Prosite
 >>> handle = open("mysingleprositerecord.dat")
 >>> record = Prosite.read(handle)
 \end{verbatim}
 This function raises a ValueError if no Prosite record is found, and also if more than one Prosite record is found.
 
-\section{Bio.Prosite.Prodoc: Parsing Prodoc records}
+\section{Parsing Prosite documentation records}
 
-In the Prosite example above, the \verb|record.pdoc| accession numbers \verb|'PDOC00001'|, \verb|'PDOC00004'|, \verb|'PDOC00005'| and so on refer to Prodoc records, which contain the Prosite Documentation. The Prodoc records are available from ExPASy as individual files, and as one file (\verb|prosite.doc|) containing all Prodoc records.
+In the Prosite example above, the \verb|record.pdoc| accession numbers \verb|'PDOC00001'|, \verb|'PDOC00004'|, \verb|'PDOC00005'| and so on refer to Prosite documentation. The Prosite documentation records are available from ExPASy as individual files, and as one file (\verb|prosite.doc|) containing all Prosite documentation records.
 
-We use the parser in \verb|Bio.Prosite.Prodoc| to parse Prodoc records. For example, to create a list of all Prodoc accession numbers, you can use
+We use the parser in \verb|Bio.ExPASy.Prodoc| to parse Prosite documentation records. For example, to create a list of all accession numbers of Prosite documentation record, you can use
 
 \begin{verbatim}
->>> from Bio.Prosite import Prodoc
+>>> from Bio.ExPASy import Prodoc
 >>> handle = open("prosite.doc")
 >>> records = Prodoc.parse(handle)
 >>> accessions = [record.accession for record in records]
 \end{verbatim}
 
-Again a \verb|read()| function is provided to read exactly one Prodoc record from the handle.
+Again a \verb|read()| function is provided to read exactly one Prosite documentation record from the handle.
 
-\section{Bio.ExPASy: Accessing the ExPASy server}
+\section{Accessing the ExPASy server}
 
-Swiss-Prot, Prosite, and Prodoc records can be downloaded from the ExPASy web server at \url{http://www.expasy.org}. Six kinds of queries are available from ExPASy:
+Swiss-Prot, Prosite, and Prosite documentation records can be downloaded from the ExPASy web server at \url{http://www.expasy.org}. Six kinds of queries are available from ExPASy:
 \begin{description}
-\item[get\_prodoc\_entry]To download a Prodoc record in HTML format
+\item[get\_prodoc\_entry]To download a Prosite documentation record in HTML format
 \item[get\_prosite\_entry]To download a Prosite record in HTML format
-\item[get\_prosite\_raw]To download a Prosite or Prodoc record in raw format
+\item[get\_prosite\_raw]To download a Prosite or Prosite documentation record in raw format
 \item[get\_sprot\_raw]To download a Swiss-Prot record in raw format
 \item[sprot\_search\_ful]To search for a Swiss-Prot record
 \item[sprot\_search\_de]To search for a Swiss-Prot record
@@ -4240,11 +4240,11 @@ however, accession numbers are quite easily extractable:
 ...     ids = re.findall(r'href="/cgi-bin/niceprot\.pl\?(\w+)"', html_results)
 \end{verbatim}
 
-\subsection{Retrieving Prosite and Prodoc records}
+\subsection{Retrieving Prosite and Prosite documentation records}
 
-Prosite and Prodoc records can be retrieved either in HTML format, or in raw format. To parse Prosite and Prodoc records with Biopython, you should retrieve the records in raw format. For other purposes, however, you may be interested in these records in HTML format.
+Prosite and Prosite documentation records can be retrieved either in HTML format, or in raw format. To parse Prosite and Prosite documentation records with Biopython, you should retrieve the records in raw format. For other purposes, however, you may be interested in these records in HTML format.
 
-To retrieve a Prosite or Prodoc record in raw format, use \verb|get_prosite_raw()|. Although this function has \verb|prosite| in the name, it can be used for Prodoc records as well. For example, to download a Prosite record and print it out in raw text format, use
+To retrieve a Prosite or Prosite documentation record in raw format, use \verb|get_prosite_raw()|. For example, to download a Prosite record and print it out in raw text format, use
 
 \begin{verbatim}
 >>> from Bio import ExPASy
@@ -4262,18 +4262,18 @@ To retrieve a Prosite record and parse it into a \verb|Bio.Prosite.Record| objec
 >>> record = Prosite.read(handle)
 \end{verbatim}
 
-Finally, to retrieve a Prodoc record and parse it into a \verb|Bio.Prosite.Prodoc.Record| object, use
+The same function can be used to retrieve a Prosite documentation record and parse it into a \verb|Bio.ExPASy.Prodoc.Record| object:
 
 \begin{verbatim}
 >>> from Bio import ExPASy
->>> from Bio.Prosite import Prodoc
+>>> from Bio.ExPASy import Prodoc
 >>> handle = ExPASy.get_prosite_raw('PDOC00001')
 >>> record = Prodoc.read(handle)
 \end{verbatim}
 
 For non-existing accession numbers, \verb|ExPASy.get_prosite_raw| returns a handle to an emptry string. When faced with an empty string, \verb|Prosite.read| and \verb|Prodoc.read| will raise a ValueError. You can catch these exceptions to detect invalid accession numbers.
 
-The functions \verb|get_prosite_entry()| and \verb|get_prodoc_entry()| are used to download Prosite and Prodoc records in HTML format. To create a web page showing one Prosite record, you can use
+The functions \verb|get_prosite_entry()| and \verb|get_prodoc_entry()| are used to download Prosite and Prosite documentation records in HTML format. To create a web page showing one Prosite record, you can use
 
 \begin{verbatim}
 >>> from Bio import ExPASy
@@ -4284,7 +4284,7 @@ The functions \verb|get_prosite_entry()| and \verb|get_prodoc_entry()| are used 
 >>> output.close()
 \end{verbatim}
 
-and similarly for a Prodoc record:
+and similarly for a Prosite documentation record:
 
 \begin{verbatim}
 >>> from Bio import ExPASy
