@@ -245,6 +245,7 @@ PACKAGES = [
     'Bio.Enzyme',
     'Bio.EUtils',
     'Bio.EUtils.DTDs',
+    'Bio.ExPASy',
     'Bio.Fasta',
     'Bio.FSSP',
     'Bio.GA',
