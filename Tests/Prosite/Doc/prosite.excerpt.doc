@@ -1,0 +1,252 @@
+{PDOC00000}
+{BEGIN}
+**********************************
+*** PROSITE documentation file ***
+**********************************
+
+Release 20.43 of 10-Feb-2009.
+
+PROSITE is developed by the Swiss Institute of Bioinformatics (SIB) under
+the responsability of Amos Bairoch and Nicolas Hulo.
+
+This release was prepared by: Nicolas Hulo, Virginie Bulliard, Petra
+Langendijk-Genevaux and Christian Sigrist with the help of Edouard
+de Castro, Lorenzo Cerutti, Corinne Lachaize and Amos Bairoch.
+
+
+See: http://www.expasy.org/prosite/
+Email: prosite@expasy.org
+
+Acknowledgements:
+
+ - To all those mentioned in this document who have reviewed the entry(ies)
+   for which they are listed as experts. With specific thanks to Rein Aasland,
+   Mark Boguski, Peer Bork, Josh Cherry, Andre Chollet, Frank Kolakowski,
+   David Landsman, Bernard Henrissat, Eugene Koonin, Steve Henikoff, Manuel
+   Peitsch and Jonathan Reizer.
+ - Jim Apostolopoulos is the author of the PDOC00699 entry.
+ - Brigitte Boeckmann is the author of the PDOC00691, PDOC00703, PDOC00829,
+   PDOC00796, PDOC00798, PDOC00799, PDOC00906, PDOC00907, PDOC00908,
+   PDOC00912, PDOC00913, PDOC00924, PDOC00928, PDOC00929, PDOC00955,
+   PDOC00961, PDOC00966, PDOC00988 and PDOC50020 entries.
+ - Jean-Louis Boulay is the author of the PDOC01051, PDOC01050, PDOC01052,
+   PDOC01053 and PDOC01054 entries.
+ - Ryszard Brzezinski is the author of the PDOC60000 entry.
+ - Elisabeth Coudert is the author of the PDOC00373 entry.
+ - Kirill Degtyarenko is the author of the PDOC60001 entry.
+ - Christian Doerig is the author of the PDOC01049 entry.
+ - Kay Hofmann is the author of the PDOC50003, PDOC50006, PDOC50007 and
+   PDOC50017 entries.
+ - Chantal Hulo is the author of the PDOC00987 entry.
+ - Karine Michoud is the author of the PDOC01044 and PDOC01042 entries.
+ - Yuri Panchin is the author of the PDOC51013 entry.
+ - S. Ramakumar is the author of the PDOC51052, PDOC60004, PDOC60010,
+   PDOC60011, PDOC60015, PDOC60016, PDOC60018, PDOC60020, PDOC60021,
+   PDOC60022, PDOC60023, PDOC60024, PDOC60025, PDOC60026, PDOC60027,
+   PDOC60028, PDOC60029 and PDOC60030 entries.
+ - Keith Robison is the author of the PDOC00830 and PDOC00861 entries.
+
+   ------------------------------------------------------------------------
+   PROSITE is copyright.   It  is  produced  by  the  Swiss  Institute   of
+   Bioinformatics (SIB). There are no restrictions on its use by non-profit
+   institutions as long as its  content is in no way modified. Usage by and
+   for commercial  entities requires a license agreement.   For information
+   about  the  licensing  scheme   send  an  email to license@isb-sib.ch or
+   see: http://www.expasy.org/prosite/prosite_license.htm.
+   ------------------------------------------------------------------------
+
++------------------------------------------------------------------------+
+PROSITE is copyright.   It  is  produced  by  the  Swiss  Institute   of
+Bioinformatics (SIB). There are no restrictions on its use by non-profit
+institutions as long as its  content is in no way modified. Usage by and
+for commercial  entities requires a license agreement.   For information
+about  the  licensing  scheme   send  an  email to license@isb-sib.ch or
+see: http://www.expasy.org/prosite/prosite_license.htm.
++------------------------------------------------------------------------+
+
+{END}
+{PDOC00001}
+{PS00001; ASN_GLYCOSYLATION}
+{BEGIN}
+************************
+* N-glycosylation site *
+************************
+
+It has been known for a long time [1] that potential N-glycosylation sites are
+specific to the consensus sequence Asn-Xaa-Ser/Thr.  It must be noted that the
+presence of the consensus  tripeptide  is  not sufficient  to conclude that an
+asparagine residue is glycosylated, due to  the fact that the  folding of  the
+protein plays an important  role in the  regulation of N-glycosylation [2]. It
+has been shown [3] that  the  presence of proline between Asn and Ser/Thr will
+inhibit N-glycosylation; this  has  been confirmed by a recent [4] statistical
+analysis of glycosylation sites, which also  shows that about 50% of the sites
+that have a proline C-terminal to Ser/Thr are not glycosylated.
+
+It must also  be noted that there  are  a few  reported cases of glycosylation
+sites with the pattern Asn-Xaa-Cys; an  experimentally demonstrated occurrence
+of such a non-standard site is found in the plasma protein C [5].
+
+-Consensus pattern: N-{P}-[ST]-{P}
+                    [N is the glycosylation site]
+-Last update: May 1991 / Text revised.
+
+[ 1] Marshall R.D.
+     "Glycoproteins."
+     Annu. Rev. Biochem. 41:673-702(1972).
+     PubMed=4563441; DOI=10.1146/annurev.bi.41.070172.003325
+[ 2] Pless D.D., Lennarz W.J.
+     "Enzymatic conversion of proteins to glycoproteins."
+     Proc. Natl. Acad. Sci. U.S.A. 74:134-138(1977).
+     PubMed=264667
+[ 3] Bause E.
+     "Structural requirements of N-glycosylation of proteins. Studies with
+     proline peptides as conformational probes."
+     Biochem. J. 209:331-336(1983).
+     PubMed=6847620
+[ 4] Gavel Y., von Heijne G.
+     "Sequence differences between glycosylated and non-glycosylated
+     Asn-X-Thr/Ser acceptor sites: implications for protein engineering."
+     Protein Eng. 3:433-442(1990).
+     PubMed=2349213
+[ 5] Miletich J.P., Broze G.J. Jr.
+     "Beta protein C is not glycosylated at asparagine 329. The rate of
+     translation may influence the frequency of usage at
+     asparagine-X-cysteine sites."
+     J. Biol. Chem. 265:11397-11404(1990).
+     PubMed=1694179
+
++------------------------------------------------------------------------+
+PROSITE is copyright.   It  is  produced  by  the  Swiss  Institute   of
+Bioinformatics (SIB). There are no restrictions on its use by non-profit
+institutions as long as its  content is in no way modified. Usage by and
+for commercial  entities requires a license agreement.   For information
+about  the  licensing  scheme   send  an  email to license@isb-sib.ch or
+see: http://www.expasy.org/prosite/prosite_license.htm.
++------------------------------------------------------------------------+
+
+{END}
+{PDOC00004}
+{PS00004; CAMP_PHOSPHO_SITE}
+{BEGIN}
+****************************************************************
+* cAMP- and cGMP-dependent protein kinase phosphorylation site *
+****************************************************************
+
+There has been a  number of studies  relative to the  specificity of cAMP- and
+cGMP-dependent protein kinases [1,2,3].  Both types of kinases appear to share
+a preference  for  the  phosphorylation  of serine or threonine residues found
+close to at least  two consecutive N-terminal  basic residues. It is important
+to note that there are quite a number of exceptions to this rule.
+
+-Consensus pattern: [RK](2)-x-[ST]
+                    [S or T is the phosphorylation site]
+-Last update: June 1988 / First entry.
+
+[ 1] Fremisco J.R., Glass D.B., Krebs E.G.
+     J. Biol. Chem. 255:4240-4245(1980).
+[ 2] Glass D.B., Smith S.B.
+     "Phosphorylation by cyclic GMP-dependent protein kinase of a synthetic
+     peptide corresponding to the autophosphorylation site in the enzyme."
+     J. Biol. Chem. 258:14797-14803(1983).
+     PubMed=6317673
+[ 3] Glass D.B., el-Maghrabi M.R., Pilkis S.J.
+     "Synthetic peptides corresponding to the site phosphorylated in
+     6-phosphofructo-2-kinase/fructose-2,6-bisphosphatase as substrates of
+     cyclic nucleotide-dependent protein kinases."
+     J. Biol. Chem. 261:2987-2993(1986).
+     PubMed=3005275
+
++------------------------------------------------------------------------+
+PROSITE is copyright.   It  is  produced  by  the  Swiss  Institute   of
+Bioinformatics (SIB). There are no restrictions on its use by non-profit
+institutions as long as its  content is in no way modified. Usage by and
+for commercial  entities requires a license agreement.   For information
+about  the  licensing  scheme   send  an  email to license@isb-sib.ch or
+see: http://www.expasy.org/prosite/prosite_license.htm.
++------------------------------------------------------------------------+
+
+{END}
+{PDOC60030}
+{PS60030; BACTERIOCIN_IIA}
+{BEGIN}
+******************************************
+* Bacteriocin class IIa family signature *
+******************************************
+
+Many Gram-positive  bacteria  produce  ribosomally  synthesized  antimicrobial
+peptides, often  termed  bacteriocins. One important and well studied class of
+bacteriocins is the class IIa or pediocin-like bacteriocins produced by lactic
+acid bacteria.  All  class  IIa  bacteriocins  are produced by food-associated
+strains, isolated  from  a  variety of food products of industrial and natural
+origins, including  meat  products,  dairy  products and vegetables. Class IIa
+bacteriocins are all cationic, display anti-Listeria activity, and kill target
+cells by permeabilizing the cell membrane [1-3].
+
+Class IIa  bacteriocins  contain  between  37  and 48 residues. Based on their
+primary structures,  the  peptide  chains  of  class  IIa  bacteriocins may be
+divided roughly into two regions: a hydrophilic, cationic and highly conserved
+N-terminal region,  and  a  less  conserved hydrophobic/amphiphilic C-terminal
+region. The  N-terminal  region  contains  the conserved Y-G-N-G-V/L 'pediocin
+box' motif  and  two conserved cysteine residues joined by a disulfide bridge.
+It forms  a  three-stranded antiparallel beta-sheet supported by the conserved
+disulfide bridge  (see <PDB:1OG7>). This cationic N-terminal beta-sheet domain
+mediates binding of the class IIa bacteriocin to the target cell membrane. The
+C-terminal region forms a hairpin-like domain (see <PDB:1OG7>) that penetrates
+into the  hydrophobic  part  of  the  target  cell membrane, thereby mediating
+leakage through  the  membrane.  The  two domains are joined by a hinge, which
+enables movement of the domains relative to each other [2,3].
+
+Some proteins  known  to belong to the class IIa bacteriocin family are listed
+below:
+
+ - Pediococcus acidilactici pediocin PA-1.
+ - Leuconostoc mesenteroides mesentericin Y105.
+ - Carnobacterium piscicola carnobacteriocin B2.
+ - Lactobacillus sake sakacin P.
+ - Enterococcus faecium enterocin A.
+ - Enterococcus faecium enterocin P.
+ - Leuconostoc gelidum leucocin A.
+ - Lactobacillus curvatus curvacin A.
+ - Listeria innocua listeriocin 743A.
+
+The pattern  we  developed  for  the  class  IIa bacteriocin family covers the
+'pediocin box' motif.
+
+-Conserved pattern: Y-G-N-G-[VL]-x-C-x(4)-C
+-Sequences known to belong to this class detected by the pattern: ALL.
+-Other sequence(s) detected in Swiss-Prot: NONE.
+
+-Expert(s) to contact by email:
+           Ramakumar S.; ramak@physics.iisc.ernet.in
+
+-Last update: March 2006 / First entry.
+
+[ 1] Ennahar S., Sonomoto K., Ishizaki A.
+     "Class IIa bacteriocins from lactic acid bacteria: antibacterial
+     activity and food preservation."
+     J. Biosci. Bioeng. 87:705-716(1999).
+     PubMed=16232543
+[ 2] Johnsen L., Fimland G., Nissen-Meyer J.
+     "The C-terminal domain of pediocin-like antimicrobial peptides (class
+     IIa bacteriocins) is involved in specific recognition of the
+     C-terminal part of cognate immunity proteins and in determining the
+     antimicrobial spectrum."
+     J. Biol. Chem. 280:9243-9250(2005).
+     PubMed=15611086; DOI=10.1074/jbc.M412712200
+[ 3] Fimland G., Johnsen L., Dalhus B., Nissen-Meyer J.
+     "Pediocin-like antimicrobial peptides (class IIa bacteriocins) and
+     their immunity proteins: biosynthesis, structure, and mode of
+     action."
+     J. Pept. Sci. 11:688-696(2005).
+     PubMed=16059970; DOI=10.1002/psc.699
+
++------------------------------------------------------------------------+
+PROSITE is copyright.   It  is  produced  by  the  Swiss  Institute   of
+Bioinformatics (SIB). There are no restrictions on its use by non-profit
+institutions as long as its  content is in no way modified. Usage by and
+for commercial  entities requires a license agreement.   For information
+about  the  licensing  scheme   send  an  email to license@isb-sib.ch or
+see: http://www.expasy.org/prosite/prosite_license.htm.
++------------------------------------------------------------------------+
+
+{END}
