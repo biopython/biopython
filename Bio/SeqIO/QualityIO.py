@@ -118,7 +118,7 @@ FASTQ file:
     @EAS54_6_R1_2_1_443_348
     GTTGCTTCTGGCGTGGGTGGGGGGG
     +
-    YYYYYYYYYYYWYUYYLUYQWQQQQ
+    ZZZZZZZZZZZXZVZZMVZRXRRRR
     <BLANKLINE>
     
 If you wanted to trim your sequences (perhaps to remove low quality regions,
