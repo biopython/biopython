@@ -124,6 +124,10 @@ embl      - The EMBL flat file format. Uses Bio.GenBank internally.
 fasta     - The generic sequence file format where each record starts with
             an identifer line starting with a ">" character, followed by
             lines of sequence.
+fastq     - A "FASTA like" format used by Sanger which also stores PHRED
+            sequence quality values.
+fastq-solexa - The Solexa/Illumnia variant of the Sanger FASTQ format which
+            encodes Solexa quality scores (not PHRED quality scores).
 genbank   - The GenBank or GenPept flat file format.
 ig        - The IntelliGenetics file format, apparently the same as the
             MASE alignment format.
@@ -135,7 +139,9 @@ swiss     - Plain text Swiss-Prot aka UniProt format.
 tab       - Simple two column tab separated sequence files, where each
             line holds a record's identifier and sequence. For example,
             this is used as by Aligent's eArray software when saving
-            microarray probes in a minimal tab delimited text file. 
+            microarray probes in a minimal tab delimited text file.
+qual      - A "FASTA like" format holding PHRED quality values from sequencing
+            DNA, but no actual sequences (usually in separate FASTA files).
 
 Note that while Bio.SeqIO can read all the above file formats, it cannot write
 to all of them.
@@ -215,6 +221,8 @@ import PhdIO
 import PirIO
 import SwissIO
 import TabIO
+import QualityIO #FastQ and qual files
+
 
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl where possible.
@@ -236,11 +244,17 @@ _FormatToIterator ={"fasta" : FastaIO.FastaIterator,
                     "ace" : AceIO.AceIterator,
                     "tab" : TabIO.TabIterator,
                     "pir" : PirIO.PirIterator,
+                    "fastq" : QualityIO.FastqPhredIterator,
+                    "fastq-solexa" : QualityIO.FastqSolexaIterator,
+                    "qual" : QualityIO.QualPhredIterator,
                     }
 
 _FormatToWriter ={"fasta" : FastaIO.FastaWriter,
                   "genbank" : InsdcIO.GenBankWriter,
                   "tab" : TabIO.TabWriter,
+                  "fastq" : QualityIO.FastqPhredWriter,
+                  "fastq-solexa" : QualityIO.FastqSolexaWriter,
+                  "qual" : QualityIO.QualPhredWriter,
                   }
 
 def write(sequences, handle, format) :
