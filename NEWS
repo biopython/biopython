@@ -24,6 +24,10 @@ like Bio.Graphics, this requires the ReportLab python library.
 A new module Bio.Motif has been added, which is intended to replace the
 existing Bio.AlignAce and Bio.MEME modules.
 
+Bio.SeqIO can now read and write FASTQ and QUAL quality files using PHRED
+quality scores (Sanger style, also used for Roche 454 sequencing), and FASTQ
+files using Solexa/Illumina quality scores.
+
 The set of NCBI DTD files included with Bio.Entrez has been updated with the
 revised files the NCBI introduced on 1 Jan 2009.
 
