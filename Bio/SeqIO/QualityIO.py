@@ -545,7 +545,7 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
     64.  Solexa scores are scaled differently to PHRED scores, and Biopython
     will NOT perform any automatic conversion when loading.
 
-    For example, consider a file containing these ten records:
+    For example, consider a file containing these five records:
 
         @SLXA-B3_649_FC8437_R1_1_1_610_79
         GATGTGCAATACCTTTGTAGAGGAA
