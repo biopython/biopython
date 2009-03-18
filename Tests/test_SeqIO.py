@@ -162,7 +162,7 @@ test_files = [ \
     ("fastq", True, 'Quality/example.fastq', 3),
     ("fastq", True, 'Quality/tricky.fastq', 4),
     ("fastq-solexa", True, 'Quality/solexa.fastq', 1),
-    ("fastq-solexa", True, 'Quality/solexa_reads.fastq', 12),
+    ("fastq-solexa", True, 'Quality/solexa_example.fastq', 5),
     ]
 
 # This is a list of two-tuples.  Each tuple contains a

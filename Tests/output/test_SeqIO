@@ -1944,24 +1944,24 @@ Testing reading fastq-solexa format file Quality/solexa.fastq as an alignment
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
-Testing reading fastq-solexa format file Quality/solexa_reads.fastq
- ID and Name='FC003_30TKDAAXX_4:7:1:772:209',
- Seq='GAAAATAAGAAACATAAAAGTAACTATTAATGTTTCTTTA...TTCCTTC', length=54
- ID and Name='FC003_30TKDAAXX_4:7:1:1636:1746',
- Seq='GTTTTTGCGGGTCGAAGAAGCGGCCGCTGGCCTTGTCGCG...GTGTGTT', length=54
- ID and Name='FC003_30TKDAAXX_4:7:1:885:208',
- Seq='GGAAAGGAATATGGGGAAATATCTAGGAAAATGGCGATAA...AAAACCA', length=54
+Testing reading fastq-solexa format file Quality/solexa_example.fastq
+ ID and Name='SLXA-B3_649_FC8437_R1_1_1_610_79',
+ Seq='GATGTGCAATACCTTTGTAGAGGAA', length=25
+ ID and Name='SLXA-B3_649_FC8437_R1_1_1_397_389',
+ Seq='GGTTTGAGAAAGAGAAATGAGATAA', length=25
+ ID and Name='SLXA-B3_649_FC8437_R1_1_1_850_123',
+ Seq='GAGGGTGTTGATCATGATGATGGCG', length=25
  ...
- ID and Name='FC003_30TKDAAXX_4:7:1:1741:1683',
- Seq='GATCTTCGTAAATCTGACGGGTATCGTGCAACAGCCGGCC...GTGCTTT', length=54
-Testing reading fastq-solexa format file Quality/solexa_reads.fastq as an alignment
- GGGGGGGGGGGG alignment column 0
- ATGCACTTAAAA alignment column 1
- ATAATAATAATT alignment column 2
- ATATGAGGGCAC alignment column 3
- ATATGGAAGCAT alignment column 4
- |||||||||||| ...
- CTATAGTTTAGT alignment column 53
+ ID and Name='SLXA-B3_649_FC8437_R1_1_1_183_714',
+ Seq='GTATTATTTAATGGCATACACTCAA', length=25
+Testing reading fastq-solexa format file Quality/solexa_example.fastq as an alignment
+ GGGGG alignment column 0
+ AGAGT alignment column 1
+ TTGAA alignment column 2
+ GTGAT alignment column 3
+ TTGAT alignment column 4
+ ||||| ...
+ AAGGA alignment column 24
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
@@ -1971,7 +1971,7 @@ Testing reading fastq-solexa format file Quality/solexa_reads.fastq as an alignm
  Checking can write/read as 'qual' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
- Failed: Locus identifier 'FC003_30TKDAAXX_4:7:1:1741:1683' is too long
+ Failed: Locus identifier 'SLXA-B3_649_FC8437_R1_1_1_183_714' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
