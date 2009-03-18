@@ -23,7 +23,8 @@ dna_alphas = [Alphabet.generic_dna]
 rna_alphas = [Alphabet.generic_rna]
 nucleotide_alphas = [Alphabet.generic_nucleotide,
                      Alphabet.Gapped(Alphabet.generic_nucleotide)]
-no_alpha_formats = ["fasta","clustal","phylip","tab","ig","stockholm","emboss"]
+no_alpha_formats = ["fasta","clustal","phylip","tab","ig","stockholm","emboss",
+                    "fastq","fastq-solexa","qual"]
 
 #List of formats including alignment only file formats we can read AND write.
 #The list is initially hard coded to preserve the original order of the unit
@@ -155,6 +156,13 @@ test_files = [ \
     ("pir", False, 'NBRF/DMA_nuc.pir', 4),
     ("pir", False, 'NBRF/DMB_prot.pir', 6),
     ("pir", True,  'NBRF/clustalw.pir', 2),
+#Following quality files are also used in the Bio.SeqIO.QualityIO doctests:
+    ("fasta", True, 'Quality/example.fasta', 3),
+    #("qual",  True, 'Quality/example.qual',  3),
+    ("fastq", True, 'Quality/example.fastq', 3),
+    ("fastq", True, 'Quality/tricky.fastq', 4),
+    ("fastq-solexa", True, 'Quality/solexa.fastq', 1),
+    ("fastq-solexa", True, 'Quality/solexa_reads.fastq', 12),
     ]
 
 # This is a list of two-tuples.  Each tuple contains a
@@ -287,6 +295,8 @@ def check_simple_write_read(records, indent=" ") :
             if format == "genbank" :
                 #The GenBank parser will convert everything to upper case.
                 assert r1.seq.tostring().upper() == r2.seq.tostring()
+            elif format == "qual" :
+                assert r2.seq is None
             else :
                 assert r1.seq.tostring() == r2.seq.tostring()
             #Beware of different quirks and limitations in the

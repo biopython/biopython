@@ -1832,6 +1832,149 @@ Testing reading pir format file NBRF/clustalw.pir as an alignment
  Failed: Locus identifier '815Parelaphostrongylus_odocoil' is too long
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
+Testing reading fasta format file Quality/example.fasta
+ ID and Name='EAS54_6_R1_2_1_413_324',
+ Seq='CCCTTCTTGTCTTCAGCGTTTCTCC', length=25
+ ID and Name='EAS54_6_R1_2_1_540_792',
+ Seq='TTGGCAGGCCAAGGCCGATGGATCA', length=25
+ ID and Name='EAS54_6_R1_2_1_443_348',
+ Seq='GTTGCTTCTGGCGTGGGTGGGGGGG', length=25
+Testing reading fasta format file Quality/example.fasta as an alignment
+ CTG alignment column 0
+ CTT alignment column 1
+ CGT alignment column 2
+ TGG alignment column 3
+ TCC alignment column 4
+ ||| ...
+ CAG alignment column 24
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Failed: Repeated identifier, possibly due to truncation
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fastq' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).
+ Checking can write/read as 'qual' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).
+ Checking can write/read as 'fastq-solexa' format
+ Failed: No suitable quality scores found in letter_annotation of SeqRecord (id=EAS54_6_R1_2_1_443_348).
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'EAS54_6_R1_2_1_443_348' is too long
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
+Testing reading fastq format file Quality/example.fastq
+ ID and Name='EAS54_6_R1_2_1_413_324',
+ Seq='CCCTTCTTGTCTTCAGCGTTTCTCC', length=25
+ ID and Name='EAS54_6_R1_2_1_540_792',
+ Seq='TTGGCAGGCCAAGGCCGATGGATCA', length=25
+ ID and Name='EAS54_6_R1_2_1_443_348',
+ Seq='GTTGCTTCTGGCGTGGGTGGGGGGG', length=25
+Testing reading fastq format file Quality/example.fastq as an alignment
+ CTG alignment column 0
+ CTT alignment column 1
+ CGT alignment column 2
+ TGG alignment column 3
+ TCC alignment column 4
+ ||| ...
+ CAG alignment column 24
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Failed: Repeated identifier, possibly due to truncation
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fastq' format
+ Checking can write/read as 'qual' format
+ Checking can write/read as 'fastq-solexa' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'EAS54_6_R1_2_1_443_348' is too long
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
+Testing reading fastq format file Quality/tricky.fastq
+ ID and Name='071113_EAS56_0053:1:1:998:236',
+ Seq='TTTCTTGCCCCCATAGACTGAGACCTTCCCTAAATA', length=36
+ ID and Name='071113_EAS56_0053:1:1:182:712',
+ Seq='ACCCAGCTAATTTTTGTATTTTTGTTAGAGACAGTG', length=36
+ ID and Name='071113_EAS56_0053:1:1:153:10',
+ Seq='TGTTCTGAAGGAAGGTGTGCGTGCGTGTGTGTGTGT', length=36
+ ID and Name='071113_EAS56_0053:1:3:990:501',
+ Seq='TGGGAGGTTTTATGTGGAAAGCAGCAATGTACAAGA', length=36
+Testing reading fastq format file Quality/tricky.fastq as an alignment
+ TATT alignment column 0
+ TCGG alignment column 1
+ TCTG alignment column 2
+ CCTG alignment column 3
+ TACA alignment column 4
+ |||| ...
+ AGTA alignment column 35
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Failed: Repeated identifier, possibly due to truncation
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fastq' format
+ Checking can write/read as 'qual' format
+ Checking can write/read as 'fastq-solexa' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier '071113_EAS56_0053:1:3:990:501' is too long
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
+Testing reading fastq-solexa format file Quality/solexa.fastq
+ ID and Name='slxa_0013_1_0001_24',
+ Seq='ACAAAAATCACAAGCATTCTTATACACC', length=28
+Testing reading fastq-solexa format file Quality/solexa.fastq as an alignment
+ A alignment column 0
+ C alignment column 1
+ A alignment column 2
+ A alignment column 3
+ A alignment column 4
+ | ...
+ C alignment column 27
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fastq' format
+ Checking can write/read as 'qual' format
+ Checking can write/read as 'fastq-solexa' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'slxa_0013_1_0001_24' is too long
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
+Testing reading fastq-solexa format file Quality/solexa_reads.fastq
+ ID and Name='FC003_30TKDAAXX_4:7:1:772:209',
+ Seq='GAAAATAAGAAACATAAAAGTAACTATTAATGTTTCTTTA...TTCCTTC', length=54
+ ID and Name='FC003_30TKDAAXX_4:7:1:1636:1746',
+ Seq='GTTTTTGCGGGTCGAAGAAGCGGCCGCTGGCCTTGTCGCG...GTGTGTT', length=54
+ ID and Name='FC003_30TKDAAXX_4:7:1:885:208',
+ Seq='GGAAAGGAATATGGGGAAATATCTAGGAAAATGGCGATAA...AAAACCA', length=54
+ ...
+ ID and Name='FC003_30TKDAAXX_4:7:1:1741:1683',
+ Seq='GATCTTCGTAAATCTGACGGGTATCGTGCAACAGCCGGCC...GTGCTTT', length=54
+Testing reading fastq-solexa format file Quality/solexa_reads.fastq as an alignment
+ GGGGGGGGGGGG alignment column 0
+ ATGCACTTAAAA alignment column 1
+ ATAATAATAATT alignment column 2
+ ATATGAGGGCAC alignment column 3
+ ATATGGAAGCAT alignment column 4
+ |||||||||||| ...
+ CTATAGTTTAGT alignment column 53
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Failed: Repeated identifier, possibly due to truncation
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fastq' format
+ Checking can write/read as 'qual' format
+ Checking can write/read as 'fastq-solexa' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'FC003_30TKDAAXX_4:7:1:1741:1683' is too long
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Finished tested reading files
 
 Starting testing writing records
