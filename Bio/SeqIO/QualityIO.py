@@ -541,40 +541,126 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
     """Parsing the Solexa/Illumina FASTQ like files (which differ in the quality mapping).
 
     For each sequence in Solexa/Illumina FASTQ files there is a matching string
-    encoding the Solexa integer qualities using ASCII values with an offset of 64.
+    encoding the Solexa integer qualities using ASCII values with an offset of
+    64.  Solexa scores are scaled differently to PHRED scores, and Biopython
+    will NOT perform any automatic conversion when loading.
 
-    For example, consider a file containing this (single) record:
+    For example, consider a file containing these ten records:
 
-        @slxa_0013_1_0001_24
-        ACAAAAATCACAAGCATTCTTATACACC
-        +slxa_0013_1_0001_24
-        ??????????????????:??<?<-6%.
+        @SLXA-B3_649_FC8437_R1_1_1_610_79
+        GATGTGCAATACCTTTGTAGAGGAA
+        +SLXA-B3_649_FC8437_R1_1_1_610_79
+        YYYYYYYYYYYYYYYYYYWYWYYSU
+        @SLXA-B3_649_FC8437_R1_1_1_397_389
+        GGTTTGAGAAAGAGAAATGAGATAA
+        +SLXA-B3_649_FC8437_R1_1_1_397_389
+        YYYYYYYYYWYYYYWWYYYWYWYWW
+        @SLXA-B3_649_FC8437_R1_1_1_850_123
+        GAGGGTGTTGATCATGATGATGGCG
+        +SLXA-B3_649_FC8437_R1_1_1_850_123
+        YYYYYYYYYYYYYWYYWYYSYYYSY
+        @SLXA-B3_649_FC8437_R1_1_1_362_549
+        GGAAACAAAGTTTTTCTCAACATAG
+        +SLXA-B3_649_FC8437_R1_1_1_362_549
+        YYYYYYYYYYYYYYYYYYWWWWYWY
+        @SLXA-B3_649_FC8437_R1_1_1_183_714
+        GTATTATTTAATGGCATACACTCAA
+        +SLXA-B3_649_FC8437_R1_1_1_183_714
+        YYYYYYYYYYWYYYYWYWWUWWWQQ
 
     Using this module directly you might run:
 
-    >>> handle = open("Quality/solexa.fastq", "rU")
+    >>> handle = open("Quality/solexa_example.fastq", "rU")
     >>> for record in FastqSolexaIterator(handle) :
     ...     print record.id, record.seq
-    slxa_0013_1_0001_24 ACAAAAATCACAAGCATTCTTATACACC
+    SLXA-B3_649_FC8437_R1_1_1_610_79 GATGTGCAATACCTTTGTAGAGGAA
+    SLXA-B3_649_FC8437_R1_1_1_397_389 GGTTTGAGAAAGAGAAATGAGATAA
+    SLXA-B3_649_FC8437_R1_1_1_850_123 GAGGGTGTTGATCATGATGATGGCG
+    SLXA-B3_649_FC8437_R1_1_1_362_549 GGAAACAAAGTTTTTCTCAACATAG
+    SLXA-B3_649_FC8437_R1_1_1_183_714 GTATTATTTAATGGCATACACTCAA
     >>> handle.close()
 
     Typically however, you would call this via Bio.SeqIO instead with "fastq" as
     the format:
 
     >>> from Bio import SeqIO
-    >>> handle = open("Quality/solexa.fastq", "rU")
+    >>> handle = open("Quality/solexa_example.fastq", "rU")
     >>> for record in SeqIO.parse(handle, "fastq-solexa") :
     ...     print record.id, record.seq
-    slxa_0013_1_0001_24 ACAAAAATCACAAGCATTCTTATACACC
+    SLXA-B3_649_FC8437_R1_1_1_610_79 GATGTGCAATACCTTTGTAGAGGAA
+    SLXA-B3_649_FC8437_R1_1_1_397_389 GGTTTGAGAAAGAGAAATGAGATAA
+    SLXA-B3_649_FC8437_R1_1_1_850_123 GAGGGTGTTGATCATGATGATGGCG
+    SLXA-B3_649_FC8437_R1_1_1_362_549 GGAAACAAAGTTTTTCTCAACATAG
+    SLXA-B3_649_FC8437_R1_1_1_183_714 GTATTATTTAATGGCATACACTCAA
     >>> handle.close()
 
     If you want to look at the qualities, they are record in each record's
     per-letter-annotation dictionary as a simple list of integers:
 
     >>> print record.letter_annotations["solexa_quality"]
+    [25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 23, 25, 25, 25, 25, 23, 25, 23, 23, 21, 23, 23, 23, 17, 17]
+
+    These scores aren't very good, but they are high enough that they map
+    almost exactly onto PHRED scores:
+    
+    >>> print "%0.2f" % phred_quality_from_solexa(25)
+    25.01
+    
+    Let's look at another example read which is even worse, where there are
+    more noticeable differences between the Solexa and PHRED scores:
+
+         @slxa_0013_1_0001_24
+         ACAAAAATCACAAGCATTCTTATACACC
+         +slxa_0013_1_0001_24
+         ??????????????????:??<?<-6%.
+
+    Again, you would typically use Bio.SeqIO to read this file in (rather than
+    calling the Bio.SeqIO.QualtityIO module directly).  Most FASTQ files will
+    contain thousands of reads, so you would normally use Bio.SeqIO.parse()
+    as shown above.  This example has only as one entry, so instead we can
+    use the Bio.SeqIO.read() function:
+
+    >>> from Bio import SeqIO
+    >>> handle = open("Quality/solexa.fastq", "rU")
+    >>> record = SeqIO.read(handle, "fastq-solexa")
+    >>> handle.close()
+    >>> print record.id, record.seq
+    slxa_0013_1_0001_24 ACAAAAATCACAAGCATTCTTATACACC
+    >>> print record.letter_annotations["solexa_quality"]
     [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -6, -1, -1, -4, -1, -4, -19, -10, -27, -18]
 
-    From these scores, this is a very bad quality read!
+    These quality scores are so low that when converted from the Solexa
+    scheme into PHRED scores they look quite different:
+
+    >>> print "%0.2f" % phred_quality_from_solexa(-1)
+    2.54
+    
+    Note you can use the Bio.Seq.write() function or the SeqRecord's format
+    method to output the record(s):
+
+    >>> print record.format("fastq-solexa")
+    @slxa_0013_1_0001_24
+    ACAAAAATCACAAGCATTCTTATACACC
+    +
+    ??????????????????:??<?<-6%.
+    <BLANKLINE>
+
+    Note this output is slightly different from the input file as Biopython
+    has left out the optional repetition of the sequence identifier on the "+"
+    line.  If you want the to use PHRED scores, use "fastq" or "qual" as the
+    output format instead, and Biopython will do the conversion for you:
+    
+    >>> print record.format("fastq")
+    @slxa_0013_1_0001_24
+    ACAAAAATCACAAGCATTCTTATACACC
+    +
+    $$$$$$$$$$$$$$$$$$"$$"$"!!!!
+    <BLANKLINE>
+
+    >>> print record.format("qual")
+    >slxa_0013_1_0001_24
+    3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 1 3 3 1 3 1 0 0 0 0
+    <BLANKLINE>
     """
     for title_line, seq_string, quality_string in FastqGeneralIterator(handle) :
         if title2ids :
