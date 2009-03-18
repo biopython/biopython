@@ -68,8 +68,7 @@ class Entity:
         child=self.child_dict[id] 
         child.detach_parent()
         del self.child_dict[id]
-        self.child_list=self.child_dict.values()
-        self.child_list.sort(self._sort)
+        self.child_list.remove(child)
 
     def add(self, entity):
         "Add a child to the Entity."
@@ -79,7 +78,6 @@ class Entity:
                 "%s defined twice" % str(entity_id))
         entity.set_parent(self)
         self.child_list.append(entity)
-        #self.child_list.sort(self._sort)
         self.child_dict[entity_id]=entity
     
     def get_iterator(self):
