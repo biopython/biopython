@@ -5,6 +5,7 @@ o Record - All of the information in a GenBank record.
 o Reference - hold reference data for a record.
 o Feature - Hold the information in a Feature Table.
 o Qualifier - Qualifiers on a Feature.
+17-MAR-2009: added support for WGS and WGS_SCAFLD lines.  Ying Huang & Iddo Friedberg
 """
 # local stuff
 import Bio.GenBank
@@ -176,6 +177,8 @@ class Record:
         self.sequence = ''
         self.contig = ''
         self.primary=[]
+        self.wgs = ''
+        self.wgs_scafld = []
 
     def __str__(self):
         """Provide a GenBank formatted output option for a Record.
@@ -212,6 +215,8 @@ class Record:
         output += self._base_count_line()
         output += self._origin_line()
         output += self._sequence_line()
+        output += self._wgs_line()
+        output += self._wgs_scafld_line()
         output += self._contig_line()
         output += "//"
         return output
@@ -463,6 +468,20 @@ class Record:
                 cur_seq_pos += 60
         return output
 
+	def _wgs_line(self):
+		output = ""
+		if self.wgs:
+			output += Record.BASE_FORMAT % "WGS"
+			output += self.wgs
+		return output
+
+	def _wgs_scafld_line(self):
+		output = ""
+		if self.wgs_scafld:
+			output += Record.BASE_FORMAT % "WGS_SCAFLD"
+			output += self.wgs_scafld
+		return output
+		
     def _contig_line(self):
         """Output for CONTIG location information from RefSeq.
         """
@@ -472,6 +491,7 @@ class Record:
             output += _wrapped_genbank(self.contig,
                                        Record.GB_BASE_INDENT, split_char = ',')
         return output
+        
 
 class Reference:
     """Hold information from a GenBank reference.

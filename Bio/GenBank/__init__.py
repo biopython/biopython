@@ -44,6 +44,15 @@ Functions:
 search_for            Do a query against GenBank (DEPRECATED).
 download_many         Download many GenBank records (DEPRECATED).
 
+17-MAR-2009: added wgs, wgs_scafld for GenBank whole genome shotgun master records.
+These are GenBank files that summarize the content of a project, and provide lists of
+scaffold and contig files in the project. These will be in annotations['wgs'] and
+annotations['wgs_scafld']. These GenBank files do not have sequences. See
+http://groups.google.com/group/bionet.molbio.genbank/browse_thread/thread/51fb88bf39e7dc36
+
+http://is.gd/nNgk
+for more details of this format, and an example.
+Added by Ying Huang & Iddo Friedberg
 """
 import cStringIO
 
@@ -356,6 +365,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 #Use the FIRST accession as the ID, not the first on this line!
                 self.data.id = self.data.annotations['accessions'][0]
 
+    def wgs(self, content):
+        self.data.annotations['wgs'] = content.split('-')
+
+    def add_wgs_scafld(self, content):
+        self.data.annotations.setdefault('wgs_scafld',[]).append(content.split('-'))
+
     def nid(self, content):
         self.data.annotations['nid'] = content
 
@@ -363,7 +378,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self.data.annotations['pid'] = content
 
     def version(self, version_id):
-        #Want to use the versioned accension as the record.id
+        #Want to use the versioned accession as the record.id
         #This comes from the VERSION line in GenBank files, or the
         #obsolete SV line in EMBL.  For the new EMBL files we need
         #both the version suffix from the ID line and the accession
@@ -1046,6 +1061,12 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_feature = None
         self._cur_qualifier = None
         
+    def wgs(self, content):
+        self.data.wgs = content.split('-')
+
+    def add_wgs_scafld(self, content):
+        self.data.wgs_scafld.append(content.split('-'))
+
     def locus(self, content):
         self.data.locus = content
 

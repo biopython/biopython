@@ -14,8 +14,18 @@
 # http://www.insdc.org/files/feature_table.html
 # http://www.ncbi.nlm.nih.gov/projects/collab/FT/index.html
 # ftp://ftp.ncbi.nih.gov/genbank/docs/
+#
+# 17-MAR-2009: added wgs, wgs_scafld for GenBank whole genome shotgun master records.
+# These are GenBank files that summarize the content of a project, and provide lists of
+# scaffold and contig files in the project. These will be in annotations['wgs'] and
+# annotations['wgs_scafld']. These GenBank files do not have sequences. See
+# http://groups.google.com/group/bionet.molbio.genbank/browse_thread/thread/51fb88bf39e7dc36
+# http://is.gd/nNgk
+# for more details of this format, and an example.
+# Added by Ying Huang & Iddo Friedberg
 
 import sys
+import os
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_alphabet, generic_protein
@@ -719,7 +729,7 @@ class GenBankScanner(InsdcScanner) :
     FEATURE_END_MARKERS = []
     FEATURE_QUALIFIER_INDENT = 21
     FEATURE_QUALIFIER_SPACER = " " * FEATURE_QUALIFIER_INDENT
-    SEQUENCE_HEADERS=["CONTIG", "ORIGIN", "BASE COUNT"] # trailing spaces removed
+    SEQUENCE_HEADERS=["CONTIG", "ORIGIN", "BASE COUNT", "WGS"] # trailing spaces removed
 
     def parse_footer(self) :
         """returns a tuple containing a list of any misc strings, and the sequence"""
@@ -728,8 +738,10 @@ class GenBankScanner(InsdcScanner) :
 
         misc_lines = []
         while self.line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS \
-        or self.line[:self.HEADER_WIDTH] == " "*self.HEADER_WIDTH :
-            if self.line[-1] == "\n" : self.line = self.line[:-1]
+        or self.line[:self.HEADER_WIDTH] == " "*self.HEADER_WIDTH \
+        or "WGS" == self.line[:3]:
+#            if self.line[-1] == "\n" : self.line = self.line[:-1]
+            self.line = self.line.rstrip(os.linesep)
             misc_lines.append(self.line)
             self.line = self.handle.readline()
             if not self.line :
@@ -773,7 +785,7 @@ class GenBankScanner(InsdcScanner) :
 
         #Have to break up the locus line, and handle the different bits of it.
         #There are at least two different versions of the locus line...
-        if line[29:33] in [' bp ', ' aa '] :
+        if line[29:33] in [' bp ', ' aa ',' rc '] :
             #Old...
             #
             #    Positions  Contents
@@ -792,7 +804,7 @@ class GenBankScanner(InsdcScanner) :
             #    55:62      space
             #    62:73      Date, in the form dd-MMM-yyyy (e.g., 15-MAR-1991)
             #
-            assert line[29:33] in [' bp ', ' aa '] , \
+            assert line[29:33] in [' bp ', ' aa ',' rc '] , \
                    'LOCUS line does not contain size units at expected position:\n' + line
             assert line[41:42] == ' ', \
                    'LOCUS line does not contain space at position 42:\n' + line
@@ -833,7 +845,7 @@ class GenBankScanner(InsdcScanner) :
 
             consumer.data_file_division(line[52:55])
             consumer.date(line[62:73])
-        elif line[40:44] in [' bp ', ' aa '] :
+        elif line[40:44] in [' bp ', ' aa ',' rc '] :
             #New...
             #
             #    Positions  Contents
@@ -853,7 +865,7 @@ class GenBankScanner(InsdcScanner) :
             #    67:68      space
             #    68:79      Date, in the form dd-MMM-yyyy (e.g., 15-MAR-1991)
             #
-            assert line[40:44] in [' bp ', ' aa '] , \
+            assert line[40:44] in [' bp ', ' aa ',' rc '] , \
                    'LOCUS line does not contain size units at expected position:\n' + line
             assert line[44:47] in ['   ', 'ss-', 'ds-', 'ms-'], \
                    'LOCUS line does not have valid strand type (Single stranded, ...):\n' + line
@@ -1103,6 +1115,12 @@ class GenBankScanner(InsdcScanner) :
                     if line :
                         if self.debug : print "origin_name = " + line
                         consumer.origin_name(line)
+                if line.find("WGS ")==0 :                        
+                    line = line[3:].strip()
+                    consumer.wgs(line)
+                if line.find("WGS_SCAFLD")==0 :                        
+                    line = line[10:].strip()
+                    consumer.add_wgs_scafld(line)
                 if line.find("CONTIG")==0 :
                     line = line[6:].strip()
                     contig_location = line
