@@ -799,14 +799,9 @@ class QualPhredWriter(SequentialSequenceWriter):
         assert "\r" not in title
         self.handle.write(">%s\n" % title)
 
-        try :
-            #This rounds to the nearest integer.
-            #TODO - can we put a float in a qual file?
-            qualities = [("%i" % round(q,0)) for q in _get_phred_quality(record)]
-        except KeyError :
-            #TODO - Look for Solexa qualities and convert them?
-            raise ValueError("No PHRED quality information found in record %s" \
-                             % record.id)
+        #This rounds to the nearest integer.
+        #TODO - can we put a float in a qual file?
+        qualities = [("%i" % round(q,0)) for q in _get_phred_quality(record)]
 
         if self.wrap :
             while qualities :
