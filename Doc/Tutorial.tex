@@ -69,7 +69,7 @@
 
 \title{Biopython Tutorial and Cookbook}
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 10 March 2009 (Biopython 1.49)}
+\date{Last Update -- 18 March 2009 (Biopython 1.49+)}
 
 \maketitle
 \tableofcontents
@@ -459,7 +459,20 @@ You can access elements of the sequence in the same way as for strings (but reme
 >>> print my_seq[-1] #last element
 \end{verbatim}
 
-The \verb|Seq| object has a \verb|.count()| method, just like a string:
+The \verb|Seq| object has a \verb|.count()| method, just like a string.
+Note that this means that like a Python string, this gives a
+\emph{non-overlapping} count:
+
+\begin{verbatim}
+>>> "AAAA".count("A")
+2
+>>> Seq("AAAA").count("A")
+2
+\end{verbatim}
+
+\noindent For some biological uses, you may actually want an overlapping count
+(i.e. $3$ in this trivial example). When searching for single letters, this
+makes no difference:
 
 \begin{verbatim}
 >>> len(my_seq)
@@ -562,9 +575,7 @@ Naturally, you can in principle add any two Seq objects together - just like you
 \begin{verbatim}
 >>> protein_seq + dna_seq
 Traceback (most recent call last):
-  File "<stdin>", line 1, in ?
-  File "/usr/local/lib/python2.4/site-packages/Bio/Seq.py", line 42, in __add__
-    raise TypeError, ("incompatable alphabets", str(self.alphabet),
+...
 TypeError: ('incompatable alphabets', 'IUPACProtein()', 'IUPACUnambiguousDNA()')
 \end{verbatim}
 
@@ -618,10 +629,7 @@ In all of these operations, the alphabet property is maintained. This is very us
 >>> from Bio.Alphabet import IUPAC
 >>> protein_seq = Seq("EVRNAK", IUPAC.protein)
 >>> protein_seq.complement()
-Traceback (most recent call last):
-  File "<stdin>", line 1, in ?
-  File "/usr/local/lib/python2.4/site-packages/Bio/Seq.py", line 108, in complement
-    raise ValueError, "Proteins do not have complements!"
+...
 ValueError: Proteins do not have complements!
 \end{verbatim}
 
@@ -721,7 +729,7 @@ Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
 
 You should notice in the above protein sequences that in addition to the end stop character, there is an internal stop as well.  This was a deliberate choice of example, as it gives an excuse to talk about some optional arguments, including different translation tables (Genetic Codes).
 
-The translation tables available in Biopython are based on those from the NCBI (see the next section of this tutorial).  By default, translation will use the \emph{standard} genetic code (NCBI table id 1).
+The translation tables available in Biopython are based on those \href{http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi}{from the NCBI} (see the next section of this tutorial).  By default, translation will use the \emph{standard} genetic code (NCBI table id 1).
 Suppose we are dealing with a mitochondrial sequence.  We need to tell the translation function to use the relevant genetic code instead:
 \begin{verbatim}
 >>> coding_dna.translate(table="Vertebrate Mitochondrial")
@@ -765,7 +773,8 @@ function instead, see Section~\ref{sec:seq-module-functions}.
 In the previous sections we talked about the \verb|Seq| object translation method (and mentioned the equivalent function in the \verb|Bio.Seq| module -- see
 Section~\ref{sec:seq-module-functions}).
 Internally these use codon table objects derived from the NCBI information at
-\url{ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}.
+\url{ftp://ftp.ncbi.nlm.nih.gov/entrez/misc/data/gc.prt}, also shown on
+\url{http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi} in a much more readable layout.
 
 As before, let's just focus on two choices: the Standard translation table, and the
 translation table for Vertebrate Mitochondrial DNA. 
@@ -930,7 +939,7 @@ there are module level functions in \verb|Bio.Seq| will accept plain python stri
 'AVMGRWKGGRAAG*'
 \end{verbatim}
 
-\noindent You are however, encouraged to work with \verb|Seq| objects by default.
+\noindent You are, however, encouraged to work with \verb|Seq| objects by default.
 
 \chapter{Sequence Input/Output}
 \label{chapter:Bio.SeqIO}
