@@ -1614,7 +1614,9 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
                         passed as a string or integer.
     show_gi             Show GI's in deflines?  T/F
     seqalign_file       seqalign file to output.
-
+    outfile             Output file for report.  Filename to write to, if
+                        ommitted standard output is used (which you can access
+                        from the returned handles).
     """
 
     _security_check_parameters(keywds)
@@ -1653,7 +1655,8 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
         'alignments' : '-b',
         'align_view' : '-m',
         'show_gi' : '-I',
-        'seqalign_file' : '-O'
+        'seqalign_file' : '-O',
+        'outfile' : '-o',
         }
 
     params = []
@@ -1728,6 +1731,9 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
     restart_infile      Input file for PSI-BLAST restart.
     hit_infile          Hit file for PHI-BLAST.
     matrix_outfile      Output file for PSI-BLAST matrix in ASCII.
+    align_outfile       Output file for alignment.  Filename to write to, if
+                        ommitted standard output is used (which you can access
+                        from the returned handles).
 
     align_infile        Input alignment file for PSI-BLAST restart.
     
@@ -1778,7 +1784,7 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
         'restart_infile' : '-R',
         'hit_infile' : '-k',
         'matrix_outfile' : '-Q',
-        'align_infile' : '-B'
+        'align_infile' : '-B',
         }
 
     params = []
@@ -1844,8 +1850,9 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
                         passed as a string or integer.
     show_gi             Show GI's in deflines?  T/F
     seqalign_file       seqalign file to output.
-    align_outfile       Output file for alignment.
-    
+    align_outfile       Output file for alignment.  Filename to write to, if
+                        ommitted standard output is used (which you can access
+                        from the returned handles).
     """
 
     _security_check_parameters(keywds)
@@ -1877,7 +1884,7 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
         'align_view' : '-m',
         'show_gi' : '-I',
         'seqalign_file' : '-O',
-        'align_outfile' : '-o'
+        'align_outfile' : '-o',
         }
         
     params = []
