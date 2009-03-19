@@ -389,14 +389,15 @@ class StockholmIterator(AlignmentIterator) :
                 #Ignore it?
                 record.annotations["GS:" + feature] = ", ".join(seq_data[feature])
 
+        #Now record the per-letter-annotations
         seq_col_data = self._get_meta_data(identifier, self.seq_col_annotation)
         for feature in seq_col_data :
             #Note this dictionary contains strings!
             if feature in self.pfam_gr_mapping :
-                record.annotations[self.pfam_gr_mapping[feature]] = seq_col_data[feature]
+                record.letter_annotations[self.pfam_gr_mapping[feature]] = seq_col_data[feature]
             else :
                 #Ignore it?
-                record.annotations["GR:" + feature] = seq_col_data[feature]
+                record.letter_annotations["GR:" + feature] = seq_col_data[feature]
     
 if __name__ == "__main__" :
     print "Testing..."
@@ -464,11 +465,12 @@ AE007476.1         UUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
     assert record.id == 'O31699/88-139'
     assert record.name == 'O31699'
     assert record.description == 'O31699/88-139'
-    assert len(record.annotations)==4+1 #weight
+    assert len(record.annotations)==3+1 #weight
     assert record.annotations["accession"]=='O31699'
     assert record.annotations["start"]==88
     assert record.annotations["end"]==139
-    assert record.annotations["active_site"]=='________________*__________________________'
+    assert len(record.letter_annotations)==1
+    assert record.letter_annotations["active_site"]=='________________*__________________________'
 
     iterator = StockholmIterator(StringIO(sth_example))
     count=0
@@ -482,11 +484,12 @@ AE007476.1         UUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
     assert record.id == 'O83071/192-246'
     assert record.name == 'O83071'
     assert record.description == 'O83071/192-246'
-    assert len(record.annotations)==4 + 1#weight
+    assert len(record.annotations)==3 + 1#weight
     assert record.annotations["accession"]=='O83071'
     assert record.annotations["start"]==192
     assert record.annotations["end"]==246
-    assert record.annotations["surface_accessibility"]=="999887756453524252..55152525....36463774777"
+    assert len(record.letter_annotations)==1
+    assert record.letter_annotations["surface_accessibility"]=="999887756453524252..55152525....36463774777"
 
     assert [[r.id for r in a.get_all_seqs()] \
             for a in StockholmIterator(StringIO(sth_example))] \
@@ -507,13 +510,13 @@ AE007476.1         UUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
     record = iterator.next()
     assert record.id == "AP001509.1"
     assert len(record.seq) == 104
-    assert "secondary_structure" in record.annotations
-    assert len(record.annotations["secondary_structure"]) == 104
+    assert "secondary_structure" in record.letter_annotations
+    assert len(record.letter_annotations["secondary_structure"]) == 104
     record = iterator.next()
     assert record.id == "AE007476.1"
     assert len(record.seq) == 104
-    assert "secondary_structure" in record.annotations
-    assert len(record.annotations["secondary_structure"]) == 104
+    assert "secondary_structure" in record.letter_annotations
+    assert len(record.letter_annotations["secondary_structure"]) == 104
     try :
         record = iterator.next()
     except StopIteration :
