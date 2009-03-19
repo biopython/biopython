@@ -132,9 +132,7 @@ Cluster/TreeView program, and stores the data in a Record object"""
     self.eorder = None
     self.uniqid = None
     if not handle: return
-    lines = handle.readlines()
-    lines = [line.strip("\r\n").split("\t") for line in lines]
-    line = lines[0]
+    line = handle.readline().strip("\r\n").split("\t")
     n = len(line)
     self.uniqid = line[0]
     self.expid = []
@@ -154,7 +152,8 @@ Cluster/TreeView program, and stores the data in a Record object"""
     self.data = []
     self.mask = []
     needmask = 0
-    for line in lines[1:]:
+    for line in handle:
+      line = line.strip("\r\n").split("\t")
       assert len(line)==n, "Line with %d columns found (expected %d)" % (len(line), n)
       if line[0]=="EWEIGHT":
         i = max(cols) + 1
