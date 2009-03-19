@@ -7,6 +7,121 @@ Bio.AlignIO support for the "stockholm" format (used in the PFAM database).
 
 You are expected to use this module via the Bio.AlignIO functions (or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
+
+For example, consider a Stockholm alignment file containing the following:
+
+    # STOCKHOLM 1.0
+    #=GC SS_cons       .................<<<<<<<<...<<<<<<<........>>>>>>>..
+    AP001509.1         UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGU
+    #=GR AP001509.1 SS -----------------<<<<<<<<---..<<-<<-------->>->>..--
+    AE007476.1         AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGU
+    #=GR AE007476.1 SS -----------------<<<<<<<<-----<<.<<-------->>.>>----
+
+    #=GC SS_cons       ......<<<<<<<.......>>>>>>>..>>>>>>>>...............
+    AP001509.1         CUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
+    #=GR AP001509.1 SS -------<<<<<--------->>>>>--->>>>>>>>---------------
+    AE007476.1         UUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
+    #=GR AE007476.1 SS ------.<<<<<--------->>>>>.-->>>>>>>>---------------
+    //
+
+This is a single multiple sequence alignment, so you would probably load this
+using the Bio.AlignIO.read() function:
+
+    >>> from Bio import AlignIO
+    >>> handle = open("Stockholm/simple.sth", "rU")
+    >>> align = AlignIO.read(handle, "stockholm")
+    >>> handle.close()
+    >>> print align
+    SingleLetterAlphabet() alignment with 2 rows and 104 columns
+    UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-G...UGU AP001509.1
+    AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-C...GAU AE007476.1
+    >>> for record in align :
+    ...     print record.id, len(record)
+    AP001509.1 104
+    AE007476.1 104
+
+This example file is clearly using RNA, so you might want the Alignment object
+(and its SeqRecord objects it holds) to reflect this, rather than simple using
+the default single letter alphabet as shown above.  You can do this with an
+optional argument to the Bio.AlignIO.read() function:
+
+    >>> from Bio import AlignIO
+    >>> from Bio.Alphabet import generic_rna
+    >>> handle = open("Stockholm/simple.sth", "rU")
+    >>> align = AlignIO.read(handle, "stockholm", alphabet=generic_rna)
+    >>> handle.close()
+    >>> print align
+    RNAAlphabet() alignment with 2 rows and 104 columns
+    UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-G...UGU AP001509.1
+    AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-C...GAU AE007476.1
+
+In addition to the sequences themselves, this example alignment also includes
+some GR lines for the secondary structure of the sequences.  These are strings,
+with one character for each letter in the associated sequence:
+
+    >>> for record in align :
+    ...     print record.id
+    ...     print record.seq
+    ...     print record.letter_annotations['secondary_structure']
+    AP001509.1
+    UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
+    -----------------<<<<<<<<---..<<-<<-------->>->>..---------<<<<<--------->>>>>--->>>>>>>>---------------
+    AE007476.1
+    AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
+    -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
+
+Any general annotation for each row is recorded in the SeqRecord's annotations
+dictionary.  You can output this alignment in many different file formats using
+Bio.AlignIO.write(), or the Alignment object's format method:
+
+    >>> print align.format("fasta")
+    >AP001509.1
+    UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-A
+    GGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
+    >AE007476.1
+    AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAA
+    GGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
+    <BLANKLINE>
+
+Most output formats won't be able to hold the annotation possible in a Stockholm file:
+
+    >>> print align.format("stockholm")
+    # STOCKHOLM 1.0
+    #=GF SQ 2
+    AP001509.1 UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
+    #=GS AP001509.1 AC AP001509.1
+    #=GS AP001509.1 DE AP001509.1
+    #=GR AP001509.1 SS -----------------<<<<<<<<---..<<-<<-------->>->>..---------<<<<<--------->>>>>--->>>>>>>>---------------
+    AE007476.1 AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
+    #=GS AE007476.1 AC AE007476.1
+    #=GS AE007476.1 DE AE007476.1
+    #=GR AE007476.1 SS -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
+    //
+    <BLANKLINE>
+
+Note that when writing Stockholm files, Biopython does not break long sequences up and
+interleave them (as in the input file shown above).  The standard allows this simpler
+layout, and it is more likely to be understood by other tools. 
+    
+Finally, as an aside, it can sometimes be useful to use Bio.SeqIO.parse() to iterate over
+the two rows as SeqRecord objects - rather than working with Alignnment objects.
+Again, if you want to you can specify this is RNA:
+
+    >>> from Bio import SeqIO
+    >>> from Bio.Alphabet import generic_rna
+    >>> handle = open("Stockholm/simple.sth", "rU")
+    >>> for record in SeqIO.parse(handle, "stockholm", alphabet=generic_rna) :
+    ...     print record.id
+    ...     print record.seq
+    ...     print record.letter_annotations['secondary_structure']
+    AP001509.1
+    UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-GAUGAGGGUCUCUAC-AGGUA-CCGUAAA-UACCUAGCUACGAAAAGAAUGCAGUUAAUGU
+    -----------------<<<<<<<<---..<<-<<-------->>->>..---------<<<<<--------->>>>>--->>>>>>>>---------------
+    AE007476.1
+    AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
+    -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
+    >>> handle.close()
+
 """
 from Bio.Align.Generic import Alignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
@@ -113,22 +228,25 @@ class StockholmWriter(SequentialAlignmentWriter) :
             self.handle.write("#=GS %s DR %s\n" \
                 % (seq_name, self.clean(xref)))
 
-        #GS/GR = other per sequence annotation
-        for key in record.annotations :
+        #GS = other per sequence annotation
+        for key, value in record.annotations.iteritems() :
             if key in self.pfam_gs_mapping :
                 self.handle.write("#=GS %s %s %s\n" \
                                   % (seq_name,
                                      self.clean(self.pfam_gs_mapping[key]),
-                                     self.clean(str(record.annotations[key]))))
-            elif key in self.pfam_gr_mapping :
-                if len(str(record.annotations[key]))==len(record.seq) :
-                    self.handle.write("#=GR %s %s %s\n" \
-                                      % (seq_name,
-                                         self.clean(self.pfam_gr_mapping[key]),
-                                         self.clean((record.annotations[key]))))
-                else :
-                    #Should we print a warning?
-                    pass
+                                     self.clean(str(value))))
+            else :
+                #It doesn't follow the PFAM standards, but should we record
+                #this data anyway?
+                pass
+
+        #GR = per row per column sequence annotation
+        for key, value in record.letter_annotations.iteritems() :
+            if key in self.pfam_gr_mapping and len(str(value))==len(record.seq) :
+                self.handle.write("#=GR %s %s %s\n" \
+                                  % (seq_name,
+                                     self.clean(self.pfam_gr_mapping[key]),
+                                     self.clean(str(value))))
             else :
                 #It doesn't follow the PFAM standards, but should we record
                 #this data anyway?
@@ -399,6 +517,27 @@ class StockholmIterator(AlignmentIterator) :
                 #Ignore it?
                 record.letter_annotations["GR:" + feature] = seq_col_data[feature]
     
+def _test():
+    """Run the Bio.SeqIO module's doctests.
+
+    This will try and locate the unit tests directory, and run the doctests
+    from there in order that the relative paths used in the examples work.
+    """
+    import doctest
+    import os
+    if os.path.isdir(os.path.join("..","..","Tests")) :
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("..","..","Tests"))
+        assert os.path.isfile("Stockholm/simple.sth")
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
+        
+if __name__ == "__main__" :
+    _test()
+
 if __name__ == "__main__" :
     print "Testing..."
     from cStringIO import StringIO
