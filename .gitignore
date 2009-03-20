@@ -1,0 +1,16 @@
+#Ignore the build directory (and its sub-directories):
+build
+ 
+#Ignore backup files from some Unix editors,
+*~
+ 
+#Ignore all compiled python files (e.g. from running the unit tests):
+*.pyc
+ 
+#The graphics unit tests produce output files for human inspection
+#(at the time of writing, only PDF files are created but I expect
+#this to change).
+Tests/Graphics/*.pdf
+Tests/Graphics/*.eps
+Tests/Graphics/*.svg
+Tests/Graphics/*.png
