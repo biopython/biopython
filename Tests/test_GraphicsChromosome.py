@@ -9,7 +9,6 @@ Graphics.DisplayRepresentation classes.
 # standard library
 import os
 import sys
-import string
 import random
 import cStringIO
 import unittest
@@ -106,7 +105,7 @@ def load_chromosome(chr_name):
 
 # --- stuff for generating random organisms
 color_choices = (colors.red, colors.blue)
-letter_choices = string.digits + string.uppercase
+letter_choices = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 num_possible_segments = 500
 color_prob = .3
 id_prob = .025
@@ -169,19 +168,32 @@ class OrganismGraphicTest(unittest.TestCase):
 
         pdf_organism.draw(self.test_file, "Test organism")
 
-    def test_simple_organism_ps(self):
-        """Output a simple organism to a postscript file.
-        """
-        ps_organism = BasicChromosome.Organism('eps')
 
-        ps_file = os.path.join("Graphics", "organism.eps")
+    def _simple_organism(self, filename, format):
+        """Output a simple organism to given format."""
+        test_organism = BasicChromosome.Organism(format)
+        test_file = os.path.join("Graphics", filename)
 
         # add chromosomes
         for chr_name in ["I", "II", "III", "IV"]:
             cur_chromosome = load_chromosome(chr_name)
-            ps_organism.add(cur_chromosome)
+            test_organism.add(cur_chromosome)
+        test_organism.draw(test_file, "Test organism")
+        
+    def test_simple_organism_ps(self):
+        """Output a simple organism to a postscript file.
+        """
+        self._simple_organism("organism.eps", "ps")
 
-        ps_organism.draw(ps_file, "Test organism")
+    def test_simple_organism_pdf(self):
+        """Output a simple organism to a PDF file.
+        """
+        self._simple_organism("organism.pdf", "pdf")
+
+    def test_simple_organism_svg(self):
+        """Output a simple organism to an SVG file.
+        """
+        self._simple_organism("organism.svg", "svg")
      
     def test_random_organism(self):
         """Generate an organism with random chromosome info.

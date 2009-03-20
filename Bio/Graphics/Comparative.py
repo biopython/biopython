@@ -15,6 +15,8 @@ from reportlab.graphics.shapes import Drawing, String, Group
 from reportlab.graphics import renderPDF, renderPS
 from reportlab.graphics.charts.markers import *
 
+from Bio.Graphics import _write
+
 class ComparativeScatterPlot:
     """Display a scatter-type plot comparing two different kinds of info.
 
@@ -71,15 +73,7 @@ class ComparativeScatterPlot:
         start_y = .5 * inch
         self._draw_scatter_plot(cur_drawing, start_x, start_y, end_x, end_y)
 
-        if self.output_format == 'pdf':
-            out_canvas = canvas.Canvas(output_file, pagesize = self.page_size)
-            renderPDF.draw(cur_drawing, out_canvas, 0, 0)
-            out_canvas.showPage()
-            out_canvas.save()
-        elif self.output_format == 'eps':
-            renderPS.drawToFile(cur_drawing, output_file)
-        else:
-            raise ValueError("Invalid output format %s" % self.output_format)
+        return _write(cur_drawing, output_file, self.output_format)
 
     def _draw_title(self, cur_drawing, title, width, height):
         """Add a title to the page we are outputting.

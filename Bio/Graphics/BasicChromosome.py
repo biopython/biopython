@@ -22,11 +22,8 @@ For providing drawing capabilities, these classes use reportlab:
 
 http://www.reportlab.com
 
-This provides nice output in pdf, which it should be possible to convert
-to a wide variety of other formats.
-
-There is also the start of support for other formats (such as eps), but it
-doesn't seem to be quite working right for me yet...
+This provides nice output in PDF, SVG and postscript.  If you have
+reportlab's renderPM module installed you can also use PNG etc.
 """
 # standard library
 import os
@@ -40,6 +37,8 @@ from reportlab.lib import colors
 from reportlab.graphics.shapes import Drawing, String, Line, Rect, Wedge
 from reportlab.graphics import renderPDF, renderPS
 from reportlab.graphics.widgetbase import Widget
+
+from Bio.Graphics import _write
 
 class _ChromosomeComponent(Widget):
     """Base class specifying the interface for a component of the system.
@@ -93,8 +92,6 @@ class Organism(_ChromosomeComponent):
     Chromosomes should be added and removed from the Organism via the
     add and remove functions.
     """
-    VALID_FORMATS = ['pdf', 'eps']
-    
     def __init__(self, output_format = 'pdf'):
         _ChromosomeComponent.__init__(self)
 
@@ -102,9 +99,6 @@ class Organism(_ChromosomeComponent):
         self.page_size = letter
         self.title_size = 20
 
-        assert output_format in self.VALID_FORMATS, \
-               "Unsupported format: %s, choices are: %s" % (output_format,
-                                                            self.VALID_FORMATS)
         self.output_format = output_format
 
     def draw(self, output_file, title):
@@ -145,15 +139,7 @@ class Organism(_ChromosomeComponent):
 
         self._draw_legend(cur_drawing, 2.5 * inch, width)
 
-        if self.output_format == 'pdf':
-            out_canvas = canvas.Canvas(output_file, pagesize = self.page_size)
-            renderPDF.draw(cur_drawing, out_canvas, 0, 0)
-            out_canvas.showPage()
-            out_canvas.save()
-        elif self.output_format == 'eps':
-            renderPS.drawToFile(cur_drawing, output_file)
-        else:
-            raise ValueError("Invalid output format %s" % self.output_format)
+        return _write(cur_drawing, output_file, self.output_format)
 
     def _draw_title(self, cur_drawing, title, width, height):
         """Write out the title of the organism figure.

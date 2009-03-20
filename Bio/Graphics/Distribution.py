@@ -22,6 +22,8 @@ from reportlab.graphics.charts.barcharts import BarChartProperties
 from reportlab.graphics.widgetbase import TypedPropertyCollection
 from reportlab.graphics import renderPDF, renderPS
 
+from Bio.Graphics import _write
+
 class DistributionPage:
     """Display a grouping of distributions on a page.
 
@@ -68,16 +70,7 @@ class DistributionPage:
                                  cur_y_pos, y_pos_change, num_y_rows)
         self._draw_legend(cur_drawing, 2.5 * inch, width)
 
-        if self.output_format == 'pdf':
-            out_canvas = canvas.Canvas(output_file, pagesize = self.page_size)
-            renderPDF.draw(cur_drawing, out_canvas, 0, 0)
-            out_canvas.showPage()
-            out_canvas.save()
-        elif self.output_format == 'eps':
-            renderPS.drawToFile(cur_drawing, output_file)
-        else:
-            raise ValueError("Invalid output format %s" % self.output_format)
-
+        return _write(cur_drawing, output_file, self.output_format)
 
     def _draw_title(self, cur_drawing, title, width, height):
         """Add the title of the figure to the drawing.

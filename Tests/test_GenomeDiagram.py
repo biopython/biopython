@@ -220,6 +220,7 @@ class DiagramTest(unittest.TestCase):
     def test_write_arguments(self) :
         """Check how the write methods respond to output format arguments."""
         gdd = Diagram('Test Diagram')
+        gdd.drawing = None #Hack - need the ReportLab drawing object to be created.
         filename = os.path.join("Graphics","error.txt")
         #We (now) allow valid formats in any case.
         for output in ["XXX","xxx",None,123,5.9] :
@@ -239,7 +240,7 @@ class DiagramTest(unittest.TestCase):
                 pass
 
     def test_partial_diagram(self) :
-        """construct and draw PDF for just part of a SeqRecord."""
+        """construct and draw SVG and PDF for just part of a SeqRecord."""
         genbank_entry = self.record
         start = 6500
         end = 8750
@@ -268,6 +269,15 @@ class DiagramTest(unittest.TestCase):
             if feature.location.start.position > end :
                 #Out of frame (too far right)
                 continue
+
+            #This URL should work in SVG output from recent versions
+            #of ReportLab.  You need something newer than ReportLab 2.3
+            try :
+                url = "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi"+\
+                      "?db=protein&id=%s" % feature.qualifiers["protein_id"][0]
+            except KeyError :
+                url = None
+                
             #Note that I am using strings for color names, instead
             #of passing in color objects.  This should also work!
             if len(gds_features) % 2 == 0 :
@@ -277,6 +287,7 @@ class DiagramTest(unittest.TestCase):
             #Checking it can cope with the old UK spelling colour.
             #Also show the labels perpendicular to the track.
             gds_features.add_feature(feature, colour=color,
+                                     url = url,
                                      sigil="ARROW",
                                      label_position = "start",
                                      label_size = 8,
@@ -295,6 +306,11 @@ class DiagramTest(unittest.TestCase):
         assert open(output_filename).read().replace("\r\n","\n") \
                == gdd.write_to_string('PDF').replace("\r\n","\n")
 
+        output_filename = os.path.join('Graphics', 'GD_region_linear.svg')
+        gdd.write(output_filename, 'SVG')
+        output_filename = os.path.join('Graphics', 'GD_region_linear.png')
+        gdd.write(output_filename, 'PNG')
+
         #Circular with a particular start/end is a bit odd, but by setting
         #circular=False (above) a sweep of 90% is used (a wedge is left out)
         gdd.draw(format='circular',
@@ -302,6 +318,10 @@ class DiagramTest(unittest.TestCase):
                  start=start, end=end)
         output_filename = os.path.join('Graphics', 'GD_region_circular.pdf')
         gdd.write(output_filename, 'PDF')
+        output_filename = os.path.join('Graphics', 'GD_region_circular.svg')
+        gdd.write(output_filename, 'SVG')
+        output_filename = os.path.join('Graphics', 'GD_region_circular.png')
+        gdd.write(output_filename, 'PNG')
 
     def test_diagram_via_methods_pdf(self) :
         """Construct and draw PDF using method approach."""

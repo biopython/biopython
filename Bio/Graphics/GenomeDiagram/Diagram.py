@@ -45,6 +45,8 @@ from Track import Track
 # Builtins
 import sys
 
+from Bio.Graphics import _write
+
 #------------------------------------------------------------------------------
 # CLASSES
 
@@ -256,9 +258,9 @@ class Diagram(object):
         previous settings for the diagram object.
         """
         # Pass the parameters to the drawer objects that will build the 
-    # diagrams.  At the moment, we detect overrides with an or in the 
-    # Instantiation arguments, but I suspect there's a neater way to do 
-    # this.
+        # diagrams.  At the moment, we detect overrides with an or in the 
+        # Instantiation arguments, but I suspect there's a neater way to do 
+        # this.
         if format == 'linear':
             drawer = LinearDrawer(self, pagesize or self.pagesize, 
                                   orientation or self.orientation, 
@@ -301,37 +303,7 @@ class Diagram(object):
 
             No return value.
         """
-        formatdict = {'PS': renderPS,
-                      'PDF': renderPDF,
-                      'SVG': renderSVG,
-                      'JPG': renderPM,
-                      'BMP': renderPM,
-                      'GIF': renderPM,
-                      'PNG': renderPM,
-                      'TIFF': renderPM,
-                      'TIF': renderPM
-                      }
-        try :
-            #If output is not a string, then .upper() will trigger
-            #an attribute error...
-            drawmethod = formatdict[output.upper()] # select drawing method
-        except (KeyError,AttributeError) :
-            raise ValueError("Output format should be one of %s" \
-                             % ", ".join(formatdict))
-
-        if drawmethod is None :
-            #i.e. We wanted renderPM but it isn't installed
-            #See the import at the top of the module.
-            from Bio import MissingExternalDependencyError
-            raise MissingExternalDependencyError( \
-                "Please install ReportLab's renderPM module")
-
-        #To file
-        if drawmethod == renderPM:
-            return drawmethod.drawToFile(self.drawing, filename,
-                                         output, dpi=dpi)
-        else:
-            return drawmethod.drawToFile(self.drawing, filename)
+        return _write(self.drawing, filename, output, dpi=dpi)
         
     def write_to_string(self, output='PS', dpi=72):
         """ write(self, output='PS')
