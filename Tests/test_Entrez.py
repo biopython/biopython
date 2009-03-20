@@ -3457,14 +3457,17 @@ class EFetchTest(unittest.TestCase):
         assert record[0]["NlmUniqueID"]=="100971611"
         assert record[0]["Title"]=="21st century science & technology"
         assert record[0]["MedlineTA"]=="21st Century Sci Technol"
-        assert len(record[0]["PublicationInfo"])==5
+        assert len(record[0]["PublicationInfo"])==8
         assert record[0]["PublicationInfo"]["Country"]=="United States"
-        assert record[0]["PublicationInfo"]["Place"]=="[Washington, D.C. :"
-        assert record[0]["PublicationInfo"]["Publisher"]=="21st Century Science Associates,"
+        assert record[0]["PublicationInfo"]["Place"]==["[Washington, D.C. :"]
+        assert record[0]["PublicationInfo"]["Publisher"]==["21st Century Science Associates,"]
         assert record[0]["PublicationInfo"]["PublicationFirstYear"]=="1988"
-        assert record[0]["PublicationInfo"]["Frequency"]=="Quarterly,"
-        assert record[0]["ISSN"]=="0895-6820"
-        assert record[0]["ISSN"].attributes["IssnType"]=="Print"
+        assert record[0]["PublicationInfo"]["Frequency"]==["Quarterly,"]
+        assert record[0]["PublicationInfo"]["Imprint"]==[]
+        assert record[0]["PublicationInfo"]["DateIssued"]==[]
+        assert record[0]["PublicationInfo"]["DatesOfSerialPublication"]==[]
+        assert record[0]["ISSN"]==["0895-6820"]
+        assert record[0]["ISSN"][0].attributes["IssnType"]=="Print"
         assert record[0]["Language"]==["eng"]
         assert record[0]["AcidFreeYN"]=="N"
         assert record[0]["MinorTitleChangeYN"]=="N"
@@ -3494,15 +3497,18 @@ class EFetchTest(unittest.TestCase):
         assert record[1]["NlmUniqueID"]=="100939625"
         assert record[1]["Title"]=="AIHAJ : a journal for the science of occupational and environmental\nhealth and safety"
         assert record[1]["MedlineTA"]=="AIHAJ"
-        assert len(record[1]["PublicationInfo"])==6
+        assert len(record[1]["PublicationInfo"])==9
         assert record[1]["PublicationInfo"]["Country"]=="United States"
-        assert record[1]["PublicationInfo"]["Place"]=="Fairfax, VA :"
-        assert record[1]["PublicationInfo"]["Publisher"]=="American Industrial Hygiene Association,"
+        assert record[1]["PublicationInfo"]["Place"]==["Fairfax, VA :"]
+        assert record[1]["PublicationInfo"]["Publisher"]==["American Industrial Hygiene Association,"]
         assert record[1]["PublicationInfo"]["PublicationFirstYear"]=="2000"
         assert record[1]["PublicationInfo"]["PublicationEndYear"]=="2001"
-        assert record[1]["PublicationInfo"]["Frequency"]=="Bimonthly"
-        assert record[1]["ISSN"]=="1529-8663"
-        assert record[1]["ISSN"].attributes["IssnType"]=="Print"
+        assert record[1]["PublicationInfo"]["Frequency"]==["Bimonthly"]
+        assert record[1]["PublicationInfo"]["Imprint"]==[]
+        assert record[1]["PublicationInfo"]["DateIssued"]==[]
+        assert record[1]["PublicationInfo"]["DatesOfSerialPublication"]==[]
+        assert record[1]["ISSN"]==["1529-8663"]
+        assert record[1]["ISSN"][0].attributes["IssnType"]=="Print"
         assert record[1]["Language"]==["eng"]
         assert record[1]["AcidFreeYN"]=="N"
         assert record[1]["ContinuationNotes"]=="Continues: American Industrial Hygiene Association\njournal. Continued by: AIHA journal. "
@@ -3510,17 +3516,17 @@ class EFetchTest(unittest.TestCase):
         assert len(record[1]["IndexingHistoryList"])==2
         assert record[1]["IndexingHistoryList"][0].attributes["CitationSubset"]=="IM"
         assert record[1]["IndexingHistoryList"][0].attributes["IndexingTreatment"]=="Full"
-        assert record[1]["IndexingHistoryList"][0].attributes["IndexingStatus"]=="Currently-indexed-Title-changed"
-        assert record[1]["IndexingHistoryList"][0]["DateOfAction"]["Year"]=="2000"
-        assert record[1]["IndexingHistoryList"][0]["DateOfAction"]["Month"]=="03"
-        assert record[1]["IndexingHistoryList"][0]["DateOfAction"]["Day"]=="24"
-        assert record[1]["IndexingHistoryList"][0]["Coverage"]=="v61n1,Jan./Feb. 2000-v62n6,Nov./Dec. 2001"
+        assert record[1]["IndexingHistoryList"][0].attributes["IndexingStatus"]=="Continued-by-another-indexed-title"
+        assert record[1]["IndexingHistoryList"][0]["DateOfAction"]["Year"]=="2002"
+        assert record[1]["IndexingHistoryList"][0]["DateOfAction"]["Month"]=="06"
+        assert record[1]["IndexingHistoryList"][0]["DateOfAction"]["Day"]=="03"
         assert record[1]["IndexingHistoryList"][1].attributes["CitationSubset"]=="IM"
         assert record[1]["IndexingHistoryList"][1].attributes["IndexingTreatment"]=="Full"
-        assert record[1]["IndexingHistoryList"][1].attributes["IndexingStatus"]=="Continued-by-another-indexed-title"
-        assert record[1]["IndexingHistoryList"][1]["DateOfAction"]["Year"]=="2002"
-        assert record[1]["IndexingHistoryList"][1]["DateOfAction"]["Month"]=="06"
-        assert record[1]["IndexingHistoryList"][1]["DateOfAction"]["Day"]=="03"
+        assert record[1]["IndexingHistoryList"][1].attributes["IndexingStatus"]=="Currently-indexed-Title-changed"
+        assert record[1]["IndexingHistoryList"][1]["DateOfAction"]["Year"]=="2000"
+        assert record[1]["IndexingHistoryList"][1]["DateOfAction"]["Month"]=="03"
+        assert record[1]["IndexingHistoryList"][1]["DateOfAction"]["Day"]=="24"
+        assert record[1]["IndexingHistoryList"][1]["Coverage"]=="v61n1,Jan./Feb. 2000-v62n6,Nov./Dec. 2001"
         assert record[1]["CurrentlyIndexedYN"]=="N"
         assert record[1]["IndexOnlineYN"]=="N"
         assert record[1]["IndexingSubset"]=="IM"
@@ -3542,14 +3548,20 @@ class EFetchTest(unittest.TestCase):
         assert record[2]["NlmUniqueID"]=="8403252"
         assert record[2]["Title"]=="Acta crystallographica. Section B, Structural science"
         assert record[2]["MedlineTA"]=="Acta Crystallogr B"
-        assert len(record[2]["PublicationInfo"])==5
+        assert len(record[2]["PublicationInfo"])==8
         assert record[2]["PublicationInfo"]["Country"]=="Denmark"
-        assert record[2]["PublicationInfo"]["Place"]=="Copenhagen"
-        assert record[2]["PublicationInfo"]["Publisher"]=="Munksgaard International Publishers For The International\nUnion Of Crystallography"
+        assert record[2]["PublicationInfo"]["Place"]==["Copenhagen"]
+        assert record[2]["PublicationInfo"]["Publisher"]==["Munksgaard International Publishers For The International\nUnion Of Crystallography"]
         assert record[2]["PublicationInfo"]["PublicationFirstYear"]=="1983"
-        assert record[2]["PublicationInfo"]["Frequency"]=="Bimonthly"
-        assert record[2]["ISSN"]=="0108-7681"
-        assert record[2]["ISSN"].attributes["IssnType"]=="Print"
+        assert record[2]["PublicationInfo"]["Frequency"]==["Bimonthly"]
+        assert record[2]["PublicationInfo"]["Imprint"]==[]
+        assert record[2]["PublicationInfo"]["DateIssued"]==[]
+        assert record[2]["PublicationInfo"]["DatesOfSerialPublication"]==[]
+        assert len(record[2]["ISSN"])==2
+        assert record[2]["ISSN"][0]=="0108-7681"
+        assert record[2]["ISSN"][0].attributes["IssnType"]=="Print"
+        assert record[2]["ISSN"][1]=="1600-5740"
+        assert record[2]["ISSN"][1].attributes["IssnType"]=="Electronic"
         assert record[2]["ISOAbbreviation"]=="Acta Crystallogr., B"
         assert record[2]["Language"]==["eng", "fre", "ger"]
         assert record[2]["AcidFreeYN"]=="N"
@@ -3565,10 +3577,10 @@ class EFetchTest(unittest.TestCase):
         assert record[2]["IndexingHistoryList"][0]["DateOfAction"]["Day"]=="06"
         assert record[2]["IndexingHistoryList"][0]["Coverage"]=="v44n1, 1988-"
         assert record[2]["CurrentlyIndexedYN"]=="Y"
-        assert record[2]["CurrentlyIndexedForSubset"]==""
-        assert record[2]["CurrentlyIndexedForSubset"].attributes["CurrentSubset"]=="IM"
-        assert record[2]["CurrentlyIndexedForSubset"].attributes["CurrentIndexingTreatment"]=="Selective"
-        assert record[2]["IndexOnlineYN"]=="N"
+        assert record[2]["CurrentlyIndexedForSubset"]==[""]
+        assert record[2]["CurrentlyIndexedForSubset"][0].attributes["CurrentSubset"]=="IM"
+        assert record[2]["CurrentlyIndexedForSubset"][0].attributes["CurrentIndexingTreatment"]=="Selective"
+        assert record[2]["IndexOnlineYN"]=="Y"
         assert record[2]["IndexingSubset"]=="IM"
         assert record[2]["BroadJournalHeadingList"][0]=="Chemistry, Analytical"
         assert len(record[2]["CrossReferenceList"])==4
@@ -3585,8 +3597,8 @@ class EFetchTest(unittest.TestCase):
         assert record[2]["IlsCreatedTimestamp"]["Month"]=="11"
         assert record[2]["IlsCreatedTimestamp"]["Day"]=="05"
         assert record[2]["IlsUpdatedTimestamp"]["Year"]=="2008"
-        assert record[2]["IlsUpdatedTimestamp"]["Month"]=="04"
-        assert record[2]["IlsUpdatedTimestamp"]["Day"]=="04"
+        assert record[2]["IlsUpdatedTimestamp"]["Month"]=="10"
+        assert record[2]["IlsUpdatedTimestamp"]["Day"]=="15"
 
     def test_omim(self):
         '''Test parsing XML returned by EFetch, OMIM database
