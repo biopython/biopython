@@ -33,10 +33,6 @@ be used directly.
 # written solution, since the number of DTDs is rather large and their
 # contents may change over time. About half the code in this parser deals
 # wih parsing the DTD, and the other half with the XML itself.
-#
-# One type of query (EFetch on the Journals database) returns an XML without
-# an associated DTD. These files are handled using the hand-written
-# SerialSet.py
 
 
 import os.path
@@ -82,7 +78,6 @@ class DataHandler:
         self.structures = {}
         self.items = []
         self.dtd_dir = dtd_dir
-        self.initialized = False
 
     def run(self, handle):
         """Set up the parser and let it parse the XML results"""
@@ -97,12 +92,6 @@ class DataHandler:
         return self.object
 
     def startElement(self, name, attrs):
-        if not self.initialized:
-            # This XML file does not have a DTD; load its definitions here
-            # using the first element in the XML. As far as I know, this
-            # occurs only for EFetch results downloaded from the Journals
-            # database.
-            self.load_definitions(name)
         self.content = ""
         if name in self.lists:
             object = ListElement()
@@ -128,6 +117,9 @@ class DataHandler:
         elif name in self.strings + self.errors + self.integers:
             self.attributes = attrs
             return
+        else:
+            # Element not found in DTD; this will not be stored in the record
+            object = ""
         if object!="":
             object.tag = name
             if attrs:
@@ -269,7 +261,6 @@ class DataHandler:
         we try to download it. In practice, this may fail though, if the XML
         relies on many interrelated DTDs. If new DTDs appear, putting them in
         Bio/Entrez/DTDs will allow the parser to see them."""
-        self.initialized = True
         location, filename = os.path.split(systemId)
         path = os.path.join(self.dtd_dir, filename)
         try:
@@ -293,23 +284,3 @@ class DataHandler:
         parser.ElementDeclHandler = self.elementDecl
         parser.ParseFile(handle)
         return 1
-
-    def load_definitions(self, filename):
-        """This function is only needed if the XML does not specify a DTD.
-        As far as I can tell, this only occurs for EFetch results from the
-        Journals database. Use a hand-written set of definitions instead."""
-        self.initialized = True
-        if filename=="SerialSet":
-            # EFetch results from the Journals database
-            import  SerialSet as module
-        else:
-            import warnings
-            warnings.warn("No parser available for %s; skipping its elements" % filename)
-            return
-        self.errors.extend(module.errors)
-        self.integers.extend(module.integers)
-        self.strings.extend(module.strings)
-        self.lists.extend(module.lists)
-        self.dictionaries.extend(module.dictionaries)
-        self.structures.update(module.structures)
-        self.items.extend(module.items)

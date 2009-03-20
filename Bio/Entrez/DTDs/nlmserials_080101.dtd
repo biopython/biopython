@@ -1,0 +1,134 @@
+<!-- NLM Serials DTD
+                  
+
+       Comments and suggestions are welcome.
+       January 1, 2008
+
+       SEE http://www.nlm.nih.gov/databases/dtd/nlmserials_090101.dtd FOR THE
+       FORTHCOMING NLMSERIALS DTD DATED JANUARY 1, 2009 FOR FUTURE USE.
+
+
+       This is the DTD which the U.S. National Library of Medicine 
+       has written for External Use. 
+       
+
+     NOTE:  The use of "Medline" in a DTD or element name does not mean the record 
+     represents a citation from a Medline-selected journal.  When the NLM DTDs and 
+     XML elements were first created, MEDLINE records were the only data exported.  
+     Now NLM exports citations other than MEDLINE records using these tools. To 
+     minimize unnecessary disruption to users of the data and tools, NLM has 
+     retained the original DTD and element names (e.g., NLMMedline DTD, MedlineTA,
+     MedlineJournalInfo)).  
+
+
+                
+           
+
+* = 0 or more occurrences (optional element, repeatable)
+? = 0 or 1 occurrences (optional element, at most 1)
++ = 1 or more occurrences (required element, repeatable)
+| = choice, one or the other but not both 
+no symbol = required element
+
+-->
+<!-- ================================================================= -->
+<!--   Revision Notes Section 
+
+
+  The following changes were made in the nlmserials_080101.dtd:
+  
+       a.  Changed entity reference from "nlmcommon_070101.dtd"
+           to: "nlmcommon_080101.dtd"
+  
+       b.  Added elements ISSNLinking, CurrentlyIndexedForSubset, PMCHoldings 
+           and PMCEmbargo to Serial element
+
+       c.  Added PMC attribute to Serial element
+
+       d.  Added CurrentSubset and CurrentIndexingTreatment attribute to 
+           CurrentlyIndexedForSubset element
+
+       e.  Added value of S to XrType attribute in CrossReference element
+
+       f.  Added EIdType entity with doi and url values 
+  
+       g.  Removed value of G from CitationSubset
+  
+      
+-->
+<!-- ============================================================= -->
+<!--  external DTD entities   -->
+<!ENTITY % ArticleTitle.Ref "ArticleTitle?">
+<!ENTITY % EIdType "(doi | url) #REQUIRED">
+<!ENTITY % ISSN.Ref "ISSN*">
+<!ENTITY % PubDate.Ref "PubDate?">
+<!ENTITY % GrantID.Ref "GrantID?">
+<!ENTITY % Acronym.Ref "Acronym?">
+<!ENTITY % Agency.Ref "Agency?">
+<!ENTITY % DatedCreated.Ref "DateCreated">
+<!ENTITY % PublicationType.Ref  "PublicationTypeList">
+<!-- ============================================================== -->
+<!-- ====================================================================== -->
+<!-- internal DTD entities -->
+<!ENTITY % NlmUniqueID.Ref "NlmUniqueID">
+<!-- ====================================================================== -->
+<!-- Reference to Where the NLMCOMMON DTD is located  -->
+<!ENTITY % NlmCommon PUBLIC "-//NLM//DTD Common, 1st January 2008//EN" 
+"nlmcommon_080101.dtd" > 
+%NlmCommon;
+<!-- ================================================================= -->
+<!-- ================================================================= -->
+<!ELEMENT SerialsSet (Serial+)>
+<!-- ================================================================= -->
+<!-- This is the top level element for Serial -->
+<!ELEMENT Serial (%NlmUniqueID.Ref;, Title, MedlineTA?, PublicationInfo?, 
+                  %ISSN.Ref;,ISSNLinking?,ISOAbbreviation?, Language*,
+                  AcidFreeYN?, Coden?, ContinuationNotes?, CurrentFormatStatus?, 
+                  MinorTitleChangeYN?, IndexingHistoryList?, CurrentlyIndexedYN?,
+                  CurrentlyIndexedForSubset*, IndexOnlineYN?, IndexingSubset?, 
+                  PMCHoldings?, PMCEmbargo?, BroadJournalHeadingList?, 
+                  CrossReferenceList?, SortSerialName, IlsCreatedTimestamp?,
+                  IlsUpdatedTimestamp?,DeletedTimestamp?)>
+<!ATTLIST Serial
+         DataCreationMethod (P | K | O) #IMPLIED
+         PMC (Yes | Forthcoming) #IMPLIED
+>
+<!-- End of Serial group -->
+<!-- ================================================================= -->
+<!--        Further Definition of NLM Tags                     -->
+<!ELEMENT AcidFreeYN (#PCDATA)>
+<!ELEMENT ContinuationNotes (#PCDATA)>
+<!ELEMENT CoverageNote (#PCDATA)>
+<!ELEMENT CrossReference (XrTitle)>
+<!ATTLIST CrossReference
+	XrType (A | X | S) #REQUIRED
+>
+<!ELEMENT CrossReferenceList (CrossReference+)>
+<!ELEMENT CurrentFormatStatus (#PCDATA)>
+<!ELEMENT CurrentlyIndexedForSubset (#PCDATA)>
+<!ATTLIST CurrentlyIndexedForSubset
+        CurrentSubset  (AIM | D | E | H | IM | K | N | Q | QIS | S | T | X) #REQUIRED
+        CurrentIndexingTreatment (Full | Selective) #REQUIRED
+>
+<!ELEMENT CurrentlyIndexedYN (#PCDATA)>
+<!ELEMENT DateOfAction (%normal.date;)>
+<!ELEMENT DeletedTimestamp (%normal.date;)>
+<!ELEMENT IlsCreatedTimestamp (%normal.date;)>
+<!ELEMENT IlsUpdatedTimestamp (%normal.date;)>
+<!ELEMENT IndexingHistory (DateOfAction,Coverage?,CoverageNote?)>
+<!ATTLIST IndexingHistory
+          CitationSubset (AIM | B | C | D | E | F | H | IM | 
+                         J | K | N | OM | P | Q | QIS | R | S | T | X) #REQUIRED
+          IndexingTreatment %IndexingTreatment; 
+          IndexingStatus  %IndexingStatus;
+>
+<!ELEMENT IndexingHistoryList (IndexingHistory+)>
+<!ELEMENT IndexingSubset (#PCDATA)>
+<!ELEMENT IndexOnlineYN (#PCDATA) >
+<!ELEMENT MinorTitleChangeYN (#PCDATA)>
+<!ELEMENT PMCEmbargo (#PCDATA)>
+<!ELEMENT PMCHoldings (#PCDATA)>
+<!ELEMENT SortSerialName (#PCDATA)>
+<!ELEMENT XrTitle (#PCDATA)>
+<!-- This is the end for Serial -->
+<!-- ================================================================= -->
