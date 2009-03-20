@@ -421,7 +421,7 @@ if db_name in server.keys() :
     #Might exist from a failed test run...
     #db = server[db_name]
     server.remove_database(db_name)
-    server.adaptor.conn.commit()
+    server.commit()
 
 print "(Re)creating empty sub-database '%s'" % db_name
 db = server.new_database(db_name)
@@ -435,7 +435,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
     assert count == t_count
     
     #print " - Committing %i records" % count
-    server.adaptor.conn.commit()
+    server.commit()
     
     iterator = SeqIO.parse(handle=open(t_filename,"r"), format=t_format)
     for record in iterator :
@@ -481,7 +481,7 @@ print "Removing (deleting) '%s'" % db_name
 server.remove_database(db_name)
 
 print "Committing remaining changes"
-server.adaptor.conn.commit()
+server.commit()
 
 print "Closing connection"
-server.adaptor.conn.close()
+server.close()

@@ -71,15 +71,15 @@ def create_database():
     sql = r"CREATE DATABASE " + TESTDB
     server.adaptor.execute(sql, ())
 
-    server.adaptor.conn.close()
+    server.close()
 
     # now open a connection to load the database
     server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                           user = DBUSER, passwd = DBPASSWD,
                                           host = DBHOST, db = TESTDB)
     server.load_database_sql(SQL_FILE)
-    server.adaptor.conn.commit()
-    server.adaptor.conn.close()
+    server.commit()
+    server.close()
 
 def load_database(gb_handle):
     """Load a GenBank file into a BioSQL database.
@@ -100,8 +100,8 @@ def load_database(gb_handle):
     iterator = GenBank.Iterator(gb_handle, parser)
     # finally put it in the database
     db.load(iterator)
-    server.adaptor.conn.commit()
-    server.adaptor.conn.close()
+    server.commit()
+    server.close()
 
 class ReadTest(unittest.TestCase):
     """Test reading a database from an already built database.
@@ -116,16 +116,17 @@ class ReadTest(unittest.TestCase):
         load_database(gb_handle)
         gb_handle.close()
             
-        server = BioSeqDatabase.open_database(driver = DBDRIVER,
+        self.server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                               user = DBUSER, 
                                               passwd = DBPASSWD,
                                               host = DBHOST, db = TESTDB)
             
-        self.db = server["biosql-test"]
+        self.db = self.server["biosql-test"]
 
     def tearDown(self):
-        self.db.adaptor.conn.close()
+        self.server.close()
         del self.db
+        del self.server
 
     def test_get_db_items(self):
         """Get a list of all items in the database.
@@ -167,16 +168,17 @@ class SeqInterfaceTest(unittest.TestCase):
         load_database(gb_handle)
         gb_handle.close()
 
-        server = BioSeqDatabase.open_database(driver = DBDRIVER,
+        self.server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                               user = DBUSER, passwd = DBPASSWD,
                                               host = DBHOST, db = TESTDB)
-        self.db = server["biosql-test"]
+        self.db = self.server["biosql-test"]
         self.item = self.db.lookup(accession = "X62281")
 
     def tearDown(self):
-        self.db.adaptor.conn.close()
+        self.server.close()
         del self.db
         del self.item
+        del self.server
     
     def test_seq_record(self):
         """Make sure SeqRecords from BioSQL implement the right interface.
@@ -294,18 +296,18 @@ class LoaderTest(unittest.TestCase):
         
         # load the database
         db_name = "biosql-test"
-        server = BioSeqDatabase.open_database(driver = DBDRIVER,
+        self.server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                               user = DBUSER, passwd = DBPASSWD,
                                               host = DBHOST, db = TESTDB)
         
         # remove the database if it already exists
         try:
-            server[db_name]
-            server.remove_database(db_name)
+            self.server[db_name]
+            self.server.remove_database(db_name)
         except KeyError:
             pass
         
-        self.db = server.new_database(db_name)
+        self.db = self.server.new_database(db_name)
 
         # get the GenBank file we are going to put into it
         input_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
@@ -314,8 +316,9 @@ class LoaderTest(unittest.TestCase):
         self.iterator = GenBank.Iterator(handle, parser)
 
     def tearDown(self):
-        self.db.adaptor.conn.close()
+        self.server.close()
         del self.db
+        del self.server
 
     def test_load_database(self):
         """Load SeqRecord objects into a BioSQL database.
@@ -347,14 +350,15 @@ class InDepthLoadTest(unittest.TestCase):
         load_database(gb_handle)
         gb_handle.close()
 
-        server = BioSeqDatabase.open_database(driver = DBDRIVER,
+        self.server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                               user = DBUSER, passwd = DBPASSWD,
                                               host = DBHOST, db = TESTDB)
-        self.db = server["biosql-test"]
+        self.db = self.server["biosql-test"]
 
     def tearDown(self):
-        self.db.adaptor.conn.close()
+        self.server.close()
         del self.db
+        del self.server
 
     def test_record_loading(self):
         """Make sure all records are correctly loaded.

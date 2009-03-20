@@ -146,6 +146,18 @@ class DBServer:
             raise ValueError("Module %s not supported by the loader." %
                     (self.module_name))
 
+    def commit(self):
+        """Commits the current transaction to the database."""
+        return self.adaptor.commit()
+
+    def rollback(self):
+        """Rolls backs the current transaction."""
+        return self.adaptor.rollback()
+
+    def close(self):
+        """Close the connection. No further activity possible."""
+        return self.adaptor.close()
+
 class Adaptor:
     def __init__(self, conn, dbutils):
         self.conn = conn
@@ -429,4 +441,3 @@ class BioSeqDatabase:
             num_records += 1
             db_loader.load_seqrecord(cur_record)
         return num_records
-

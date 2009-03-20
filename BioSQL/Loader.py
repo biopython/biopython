@@ -611,6 +611,9 @@ class DatabaseLoader:
         if not comment:
             return
         comment = comment.replace('\n', ' ')
+        
+        #TODO - Store each line as a separate entry?  This would preserve
+        #the newlines, but we should check BioPerl etc to be consistent.
 
         sql = "INSERT INTO comment (bioentry_id, comment_text, rank)" \
               " VALUES (%s, %s, %s)"
