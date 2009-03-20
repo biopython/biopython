@@ -272,7 +272,19 @@ def check_simple_write_read(records, indent=" ") :
         except (TypeError, ValueError), e :
             #This is often expected to happen, for example when we try and
             #write sequences of different lengths to an alignment file.
-            print indent+"Failed: %s" % str(e)
+            if "len()" in str(e) :
+                #Python 2.4.3,
+                #>>> len(None)
+                #...
+                #TypeError: len() of unsized object
+                #
+                #Python 2.5.2,
+                #>>> len(None)
+                #...
+                #TypeError: object of type 'NoneType' has no len()
+                print "Failed: Probably len() of None"
+            else :
+                print indent+"Failed: %s" % str(e)
             assert format != t_format, \
                    "Should be able to re-write in the original format!"
             #Carry on to the next format:
