@@ -5,7 +5,10 @@
 # Dec 15 1999 available from EBI, but the documentation is not
 # completely internally consistent much less agree with real-life
 # examples.  Conflicts resolved to agree with real examples.
-
+#
+# This does NOT cope with the Gap(), Gap(X), or Gap(unkXXX) tokens used
+# in CONTIG lines, which are otherwise similar to feature locations.
+#
 # Uses John Aycock's SPARK for parsing
 from Bio.Parsers.spark import GenericScanner, GenericParser
 
