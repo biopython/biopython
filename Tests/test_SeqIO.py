@@ -25,6 +25,7 @@ nucleotide_alphas = [Alphabet.generic_nucleotide,
                      Alphabet.Gapped(Alphabet.generic_nucleotide)]
 no_alpha_formats = ["fasta","clustal","phylip","tab","ig","stockholm","emboss",
                     "fastq","fastq-solexa","qual"]
+possible_None_seq_formats = ["qual"] #include genbank and embl too?
 
 #List of formats including alignment only file formats we can read AND write.
 #The list is initially hard coded to preserve the original order of the unit
@@ -158,7 +159,7 @@ test_files = [ \
     ("pir", True,  'NBRF/clustalw.pir', 2),
 #Following quality files are also used in the Bio.SeqIO.QualityIO doctests:
     ("fasta", True, 'Quality/example.fasta', 3),
-    #("qual",  True, 'Quality/example.qual',  3),
+    ("qual",  False, 'Quality/example.qual',  3),
     ("fastq", True, 'Quality/example.fastq', 3),
     ("fastq", True, 'Quality/tricky.fastq', 4),
     ("fastq-solexa", True, 'Quality/solexa.fastq', 1),
@@ -212,7 +213,8 @@ def records_match(record_one, record_two) :
         return False
     if record_one.description != record_two.description :
         return False
-    if record_one.seq.tostring() != record_two.seq.tostring() :
+    if record_one.seq is not None and record_two.seq is not None \
+    and record_one.seq.tostring() != record_two.seq.tostring() :
         return False
     #Close enough... should I check for features, annotation etc?
     return True
@@ -223,11 +225,14 @@ def record_summary(record, indent=" ") :
         answer = "%sID and Name='%s',\n%sSeq='" % (indent, record.id, indent)
     else :
         answer = "%sID = '%s', Name='%s',\n%sSeq='" % (indent, record.id, record.name, indent)
-    if len(record.seq) > 50 :
-        answer += record.seq[:40].tostring() + "..." + record.seq[-7:].tostring()
+    if record.seq is None :
+        answer += "None"
     else :
-        answer += record.seq.tostring()
-    answer += "', length=%i" % (len(record.seq))
+        if len(record.seq) > 50 :
+            answer += record.seq[:40].tostring() + "..." + record.seq[-7:].tostring()
+        else :
+            answer += record.seq.tostring()
+        answer += "', length=%i" % (len(record.seq))
     return answer
 
 def col_summary(col_text) :
@@ -264,7 +269,7 @@ def check_simple_write_read(records, indent=" ") :
         try :
             c = SeqIO.write(sequences=records, handle=handle, format=format)
             assert c == len(records)
-        except ValueError, e :
+        except (TypeError, ValueError), e :
             #This is often expected to happen, for example when we try and
             #write sequences of different lengths to an alignment file.
             print indent+"Failed: %s" % str(e)
@@ -386,7 +391,10 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
 
         #Check returned expected object type
         assert isinstance(record, SeqRecord)
-        assert isinstance(record.seq, Seq)
+        if t_format in possible_None_seq_formats :
+            assert isinstance(record.seq, Seq) or record.seq is None
+        else :
+            assert isinstance(record.seq, Seq)
         assert isinstance(record.id, basestring)
         assert isinstance(record.name, basestring)
         assert isinstance(record.description, basestring)
@@ -435,11 +443,19 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
 
     # Check alphabets
     for record in records :
+        if record.seq is None :
+            assert t_format in possible_None_seq_formats
+            base_alpha = None
+            continue
         base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
         assert isinstance(base_alpha, Alphabet.SingleLetterAlphabet)
         if t_format in no_alpha_formats :
             assert base_alpha == Alphabet.single_letter_alphabet # Too harsh?
-    if isinstance(base_alpha, Alphabet.ProteinAlphabet) :
+    if base_alpha is None :
+        good = []
+        bad =[]
+        given_alpha=None
+    elif isinstance(base_alpha, Alphabet.ProteinAlphabet) :
         good = protein_alphas
         bad = dna_alphas + rna_alphas + nucleotide_alphas
     elif isinstance(base_alpha, Alphabet.RNAAlphabet) :
