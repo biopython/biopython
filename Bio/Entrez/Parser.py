@@ -266,20 +266,33 @@ class DataHandler:
         try:
             handle = open(path)
         except IOError:
-            import warnings, urllib
-            if systemId.startswith("http") :
-                #Does this ever happen?
-                url = systemId
-            else :
-                #Note - what if systemId is a relative URL?
-                url = "http://www.ncbi.nlm.nih.gov/dtd/"+systemId
-                #There is also to option of using the following base URL,
-                #http://eutils.ncbi.nlm.nih.gov/entrez/query/DTD/
-                #However, from personal experience, this only hosts a
-                #partial subset of all the DTD files in use by Entrez.
-            warnings.warn("Missing %s, trying access it from %s" \
-                          % (filename, url))
-            handle = urllib.urlopen(url)
+            message = """\
+Unable to load DTD file %s.
+
+Bio.Entrez uses NCBI's DTD files to parse XML files returned by NCBI Entrez.
+Though most of NCBI's DTD files are included in the Biopython distribution,
+sometimes you may find that a particular DTD file is missing. In such a
+case, you can download the DTD file from NCBI and install it manually.
+
+Usually, you can find missing DTD files at either
+    http://www.ncbi.nlm.nih.gov/dtd/
+or
+    http://eutils.ncbi.nlm.nih.gov/entrez/query/DTD/
+If you cannot find %s there, you may also try to search
+for it with a search engine such as Google.
+
+Please save %s in the directory
+%s
+in order for Bio.Entrez to find it.
+Alternatively, you can save %s in the directory
+Bio/Entrez/DTDs in the Biopython distribution, and reinstall Biopython.
+
+Please also inform the Biopython developers by sending an email to
+biopython-dev@biopython.org to inform us about this missing DTD, so that we
+can include it with the next release of Biopython.
+""" % (filename, filename, filename, self.dtd_dir, filename)
+            raise RuntimeError(message)
+            
         parser = self.parser.ExternalEntityParserCreate(context)
         parser.ElementDeclHandler = self.elementDecl
         parser.ParseFile(handle)
