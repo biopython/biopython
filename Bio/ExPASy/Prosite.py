@@ -1,6 +1,7 @@
 # Copyright 1999 by Jeffrey Chang.  All rights reserved.
 # Copyright 2000 by Jeffrey Chang.  All rights reserved.
 # Revisions Copyright 2007 by Peter Cock.  All rights reserved.
+# Revisions Copyright 2009 by Michiel de Hoon.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -22,6 +23,12 @@ Record                Holds Prosite data.
 """
 
 def parse(handle):
+    """Parse Prosite records.
+
+    This function is for parsing Prosite files containing multiple
+    records.
+
+    handle   - handle to the file."""
     while True:
         record = __read(handle)
         if not record:
@@ -29,6 +36,13 @@ def parse(handle):
         yield record
 
 def read(handle):
+    """Read one Prosite record.
+
+    This function is for parsing Prosite files containing
+    exactly one record.
+
+    handle   - handle to the file."""
+
     record = __read(handle)
     # We should have reached the end of the record by now
     remainder = handle.read()

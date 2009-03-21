@@ -1,4 +1,5 @@
 # Copyright 1999 by Jeffrey Chang.  All rights reserved.
+# Copyright 2009 by Michiel de Hoon.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -7,6 +8,8 @@
 This module provides code to work with the enzyme.dat file from
 Enzyme.
 http://www.expasy.ch/enzyme/
+
+Testing with the release of 03-Mar-2009.
 
 Functions:
 read       Reads a file containing one ENZYME entry
@@ -18,6 +21,13 @@ Record     Holds ENZYME data.
 """
 
 def parse(handle):
+    """Parse ENZYME records.
+
+    This function is for parsing ENZYME files containing multiple
+    records.
+
+    handle   - handle to the file."""
+
     while True:
         record = __read(handle)
         if not record:
@@ -25,6 +35,13 @@ def parse(handle):
         yield record
 
 def read(handle):
+    """Read one ENZYME record.
+
+    This function is for parsing ENZYME files containing
+    exactly one record.
+
+    handle   - handle to the file."""
+
     record = __read(handle)
     # We should have reached the end of the record by now
     remainder = handle.read()
@@ -33,6 +50,8 @@ def read(handle):
     return record
 
 class Record(dict):
+    "Holds information from a ENZYME record as a Python dictionary"
+
     def __init__(self):
         dict.__init__(self)
         self["ID"] = ''
