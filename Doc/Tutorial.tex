@@ -2929,6 +2929,11 @@ The output returned by the Entrez Programming Utilities is typically in XML form
 \end{enumerate}
 For the DOM and SAX parsers, see the Python documentation. The parser in \verb+Bio.Entrez+ is discussed below.
 
+NCBI uses DTD (Document Type Definition) files to describe the structure of the information contained in XML files. Most of the DTD files used by NCBI are included in the Biopython distribution. The \verb+Bio.Entrez+ parser makes use of the DTD files when parsing an XML file returned by NCBI Entrez.
+
+Occasionally, you may find that the DTD file associated with a specific XML file is missing in the Biopython distribution. In particular, this may happen when NCBI updates its DTD files. If this happens, \verb+Entrez.read+ will give an error message showing which DTD file is missing. You can download the DTD file from NCBI; most DTD files can be found at \url{http://www.ncbi.nlm.nih.gov/dtd/} or \url{http://eutils.ncbi.nlm.nih.gov/entrez/query/DTD/}. After downloading, the DTD file should be stored in the directory \verb+...site-packages/Bio/Entrez/DTDs+, containing the other DTD files. Alternatively, you can add the DTD file to the \verb+Bio/Entrez/DTDs+ directory in the Biopython distribition, and reinstall Biopython. This will install the new DTD file in the correct location together with the other DTD files.
+
+
 The Entrez Programming Utilities can also generate output in other formats, such as the Fasta or GenBank file formats for sequence databases, or the MedLine format for the literature database, discussed in Section~\ref{sec:entrez-specialized-parsers}.
 
 \section{Entrez Guidelines}
