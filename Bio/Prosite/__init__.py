@@ -4,8 +4,8 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-This module is OBSOLETE.
+"""Module for working with Prosite files from ExPASy (OBSOLETE).
+
 Most of the functionality in this module has moved to Bio.ExPASy.Prosite;
 please see
 
@@ -24,7 +24,6 @@ Bio.Prosite.index_file and Bio.Prosite.Dictionary) are considered deprecated,
 and were not moved to Bio.ExPASy.Prosite. If you use this functionality,
 please contact the Biopython developers at biopython-dev@biopython.org to
 avoid permanent removal of this module from Biopython.
-
 
 
 This module provides code to work with the prosite dat file from
