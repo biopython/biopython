@@ -169,6 +169,11 @@ and HTML formats
 
 \begin{enumerate}
 
+  \item \emph{How do I cite Biopython in a scientific publication?} \\
+  Please cite our application note, Cock \textit{et al.} 2009,
+  \href{http://dx.doi.org/10.1093/bioinformatics/btp163}{doi:10.1093/bioinformatics/btp163},
+  and/or one of the publications listed on our website describing specific modules within Biopython.
+
   \item \emph{Which ``Numerical Python'' do I need?} \\
   For Biopython 1.48 or earlier, you need the old Numeric module.
   For Biopython 1.49 onwards, you need the newer NumPy instead.
@@ -699,7 +704,7 @@ Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
 
 \emph{Note:} The \verb|Seq| object's \verb|transcribe| and \verb|back_transcribe| methods
 are new in Biopython 1.49.  For older releases you would have to use the \verb|Bio.Seq|
-module's function instead, see Section~\ref{sec:seq-module-functions}.
+module's functions instead, see Section~\ref{sec:seq-module-functions}.
 
 \section{Translation}
 Sticking with the same example discussed in the transcription section above,
@@ -792,7 +797,7 @@ Alternatively, these tables are labeled with ID numbers 1 and 2, respectively:
 >>> mito_table = CodonTable.unambiguous_dna_by_id[2]
 \end{verbatim}
 
-You compare the actual tables visually by printing them:
+You can compare the actual tables visually by printing them:
 \begin{verbatim}
 >>> print standard_table
 Table 1 Standard, SGC0
