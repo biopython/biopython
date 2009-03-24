@@ -720,6 +720,13 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
     >>> print record.letter_annotations["phred_quality"]
     [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
 
+    The internal details are a little complicated, but you can still slice one
+    of these SeqRecord objects:
+
+    >>> sub_record = record[5:10]
+    >>> print sub_record.id, sub_record.letter_annotations["phred_quality"]
+    EAS54_6_R1_2_1_443_348 [26, 26, 26, 26, 26]
+
     """
     #Skip any text before the first record (e.g. blank lines, comments)
     while True :

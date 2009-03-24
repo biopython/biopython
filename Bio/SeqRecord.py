@@ -276,7 +276,16 @@ class SeqRecord(object):
             #we try and expose any per-letter-annotation here?  If so how?
             return self.seq[index]
         elif isinstance(index, slice) :
-            answer = self.__class__(self.seq[index],
+            if self.seq is None :
+                #Special case, e.g. qual files
+                #Need an evil hack to the length...
+                #introducing an UnknownSeq class could be nicer.
+                sub_seq = None
+                parent_length = self.letter_annotations._length
+            else :
+                sub_seq = self.seq[index]
+                parent_length = len(self.seq)
+            answer = self.__class__(sub_seq,
                                     id=self.id,
                                     name=self.name,
                                     description=self.description)
@@ -301,13 +310,13 @@ class SeqRecord(object):
                     stop = -1
                 else :
                     stop = index.stop
-                if (start < 0 or stop < 0) and self.seq is None or len(self) == 0 :
+                if (start < 0 or stop < 0) and parent_length == 0 :
                     raise ValueError, \
                           "Cannot support negative indices without the sequence length"
                 if start < 0 :
-                    start = len(self) - start
+                    start = parent_length - start
                 if stop < 0  :
-                    stop  = len(self) - stop + 1
+                    stop  = parent_length - stop + 1
                 #assert str(self.seq)[index] == str(self.seq)[start:stop]
                 for f in self.features :
                     if start <= f.location.start.position \
@@ -316,6 +325,10 @@ class SeqRecord(object):
 
             #Slice all the values to match the sliced sequence
             #(this should also work with strides, even negative strides):
+            if self.seq is None :
+                #Special case, e.g. qual files, with evil hack
+                answer._per_letter_annotations._length = \
+                                       len(([0]*parent_length)[index])
             for key, value in self.letter_annotations.iteritems() :
                 answer._per_letter_annotations[key] = value[index]
 
