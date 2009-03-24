@@ -64,7 +64,9 @@ class Primer3Commandline(Application.AbstractCommandline):
            _Option(["-mispriminglibraryfile"], ["input"], None, 0),
            _Option(["-maxmispriming"], ["input"], None, 0),
            _Option(["-oligomishyblibraryfile"], ["input"], None, 0),
-           _Option(["-oligomaxmishyb"], ["input"], None, 0),]
+           _Option(["-oligomaxmishyb"], ["input"], None, 0),
+           _Option(["-explainflag"], ["input"], None, 0),
+           ]
 
 class PrimerSearchCommandline(Application.AbstractCommandline):
     """Commandline object for the primersearch program from EMBOSS.
