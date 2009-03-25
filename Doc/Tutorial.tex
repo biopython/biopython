@@ -117,7 +117,7 @@ The main Biopython releases have lots of functionality, including:
 
   \begin{itemize}
     \item NCBI -- Blast, Entrez and PubMed services
-    \item ExPASy -- Prosite entries
+    \item ExPASy -- Swiss-Prot and Prosite entries, as well as Prosite searches
   \end{itemize}
 
   \item Interfaces to common bioinformatics programs such as:
@@ -3951,7 +3951,7 @@ out_handle.close()
 
 And finally, don't forget to include your \emph{own} email address in the Entrez calls.
 
-\chapter{Swiss-Prot, Prosite, and ExPASy}
+\chapter{Swiss-Prot and ExPASy}
 \label{chapter:swiss_prot}
 
 \section{Parsing Swiss-Prot files}
@@ -4120,7 +4120,7 @@ protein.
 
 Prosite is a database containing protein domains, protein families, functional sites, as well as the patterns and profiles to recognize them. Prosite was developed in parallel with Swiss-Prot. In Biopython, a Prosite record is represented by the \verb|Bio.ExPASy.Prosite.Record| class, whose members correspond to the different fields in a Prosite record.
 
-In general, a Prosite file can contain more than one Prosite records. For example, the full set of Prosite records, which can be downloaded as a single file (\verb|prosite.dat|) from the \href{ftp://ftp.expasy.org/databases/prosite/prosite.dat}{ExPASy FTP site}, contains 2073 records in (version 20.24 released on 4 December 2007). To parse such a file, we again make use of an iterator:
+In general, a Prosite file can contain more than one Prosite records. For example, the full set of Prosite records, which can be downloaded as a single file (\verb|prosite.dat|) from the \href{ftp://ftp.expasy.org/databases/prosite/prosite.dat}{ExPASy FTP site}, contains 2073 records (version 20.24 released on 4 December 2007). To parse such a file, we again make use of an iterator:
 
 \begin{verbatim}
 >>> from Bio.ExPASy import Prosite
@@ -4189,6 +4189,70 @@ We use the parser in \verb|Bio.ExPASy.Prodoc| to parse Prosite documentation rec
 \end{verbatim}
 
 Again a \verb|read()| function is provided to read exactly one Prosite documentation record from the handle.
+
+\section{Parsing Enzyme records}
+
+ExPASy's Enzyme database is a repository of information on enzyme nomenclature. A typical Enzyme record looks as follows:
+
+\begin{verbatim}
+ID   3.1.1.34
+DE   Lipoprotein lipase.
+AN   Clearing factor lipase.
+AN   Diacylglycerol lipase.
+AN   Diglyceride lipase.
+CA   Triacylglycerol + H(2)O = diacylglycerol + a carboxylate.
+CC   -!- Hydrolyzes triacylglycerols in chylomicrons and very low-density
+CC       lipoproteins (VLDL).
+CC   -!- Also hydrolyzes diacylglycerol.
+PR   PROSITE; PDOC00110;
+DR   P11151, LIPL_BOVIN ;  P11153, LIPL_CAVPO ;  P11602, LIPL_CHICK ;
+DR   P55031, LIPL_FELCA ;  P06858, LIPL_HUMAN ;  P11152, LIPL_MOUSE ;
+DR   O46647, LIPL_MUSVI ;  P49060, LIPL_PAPAN ;  P49923, LIPL_PIG   ;
+DR   Q06000, LIPL_RAT   ;  Q29524, LIPL_SHEEP ;
+//
+\end{verbatim}
+
+In this example, the first line shows the EC (Enzyme Commission) number of lipoprotein lipase (second line). Alternative names of lipoprotein lipase are "clearing factor lipase", "diacylglycerol lipase", and "diglyceride lipase" (lines 3 through 5). The line starting with "CA" shows the catalytic activity of this enzyme. Comment lines start with "CC". The "PR" line shows references to the Prosite Documentation records, and the "DR" lines show references to Swiss-Prot records. Not of these entries are necessarily present in an Enzyme record.
+
+In Biopython, an Enzyme record is represented by the \verb|Bio.ExPASy.Enzyme.Record| class. This record derives from a Python dictionary and has keys corresponding to the two-letter codes used in Enzyme files. To read an Enzyme file containing one Enzyme record, use the \verb+read+ function in \verb|Bio.ExPASy.Enzyme|:
+
+\begin{verbatim}
+>>> from Bio.ExPASy import Enzyme
+>>> handle = open("lipoprotein.txt")
+>>> record = Enzyme.read(handle)
+>>> record["ID"]
+'3.1.1.34'
+>>> record["DE"]
+'Lipoprotein lipase.'
+>>> record["AN"]
+['Clearing factor lipase.', 'Diacylglycerol lipase.', 'Diglyceride lipase.']
+>>> record["CA"]
+'Triacylglycerol + H(2)O = diacylglycerol + a carboxylate.'
+>>> record["CC"]
+['Hydrolyzes triacylglycerols in chylomicrons and very low-density lipoproteins
+(VLDL).', 'Also hydrolyzes diacylglycerol.']
+>>> record["PR"]
+['PDOC00110']
+>>> record["DR"]
+[['P11151', 'LIPL_BOVIN'], ['P11153', 'LIPL_CAVPO'], ['P11602', 'LIPL_CHICK'],
+['P55031', 'LIPL_FELCA'], ['P06858', 'LIPL_HUMAN'], ['P11152', 'LIPL_MOUSE'],
+['O46647', 'LIPL_MUSVI'], ['P49060', 'LIPL_PAPAN'], ['P49923', 'LIPL_PIG'],
+['Q06000', 'LIPL_RAT'], ['Q29524', 'LIPL_SHEEP']]
+\end{verbatim}
+The \verb+read+ function raises a ValueError if no Enzyme record is found, and also if more than one Enzyme record is found.
+
+The full set of Enzyme records can be downloaded as a single file (\verb|enzyme.dat|) from the \href{ftp://ftp.expasy.org/databases/enzyme/enzyme.dat}{ExPASy FTP site}, containing 4877 records (release of 3 March 2009). To parse such a file containing multiple Enzyme records, use the \verb+parse+ function in \verb+Bio.ExPASy.Enzyme+ to obtain an iterator:
+
+\begin{verbatim}
+>>> from Bio.ExPASy import Enzyme
+>>> handle = open("enzyme.dat")
+>>> records = Enzyme.parse(handle)
+\end{verbatim}
+
+We can now iterate over the records one at a time. For example, we can make a list of all EC numbers for which an Enzyme record is available:
+\begin{verbatim}
+>>> ecnumbers = [record["ID"] for record in records]
+\end{verbatim}
 
 \section{Accessing the ExPASy server}
 
