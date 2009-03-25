@@ -1,11 +1,7 @@
 ID   5.1.2.1
 DE   Lactate racemase.
-AN   Lacticoracemase.
-AN   Lactic acid racemase.
 AN   Hydroxyacid racemase.
+AN   Lactic acid racemase.
+AN   Lacticoracemase.
 CA   (S)-lactate = (R)-lactate.
-DR   BRENDA; 5.1.2.1.
-DR   EMP/PUMA; 5.1.2.1.
-DR   WIT; 5.1.2.1.
-DR   KYOTO UNIVERSITY LIGAND CHEMICAL DATABASE; 5.1.2.1.
 //
