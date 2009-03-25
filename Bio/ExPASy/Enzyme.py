@@ -9,7 +9,7 @@ This module provides code to work with the enzyme.dat file from
 Enzyme.
 http://www.expasy.ch/enzyme/
 
-Testing with the release of 03-Mar-2009.
+Tested with the release of 03-Mar-2009.
 
 Functions:
 read       Reads a file containing one ENZYME entry
@@ -49,8 +49,23 @@ def read(handle):
         raise ValueError("More than one ENZYME record found")
     return record
 
+
 class Record(dict):
-    "Holds information from a ENZYME record as a Python dictionary"
+    """\
+Holds information from an ExPASy ENZYME record as a Python dictionary.
+
+Each record contains the following keys:
+    ID: EC number
+    DE: Recommended name
+    AN: Alternative names (if any)
+    CA: Catalytic activity
+    CF: Cofactors (if any)
+    PR: Pointers to the Prosite documentation entrie(s) that
+        correspond to the enzyme (if any)
+    DR: Pointers to the Swiss-Prot protein sequence entrie(s)
+        that correspond to the enzyme (if any)
+    CC: Comments
+"""
 
     def __init__(self):
         dict.__init__(self)
@@ -60,7 +75,6 @@ class Record(dict):
         self["CA"] = ''
         self["CF"] = ''
         self["CC"] = []   # one comment per line
-        self["DI"] = ""
         self["PR"] = []
         self["DR"] = []
     
@@ -76,13 +90,12 @@ class Record(dict):
             return "%s ( )" % (self.__class__.__name__)
             
     def __str__(self):
-        output = "ID: " + self.ID
+        output = "ID: " + self["ID"]
         output += " DE: " + self["DE"]
         output += " AN: " + repr(self["AN"])
         output += " CA: '" + self["CA"] + "'"
         output += " CF: " + self["CF"]
         output += " CC: " + repr(self["CC"])
-        output += " DI: " + self["DI"]
         output += " PR: " + repr(self["PR"])
         output += " DR: %d Records" % len(self["DR"])
         return output
@@ -92,7 +105,7 @@ class Record(dict):
 def __read(handle):
     record = None
     for line in handle:
-        key, value = line[:2], line[5:].strip()
+        key, value = line[:2], line[5:].rstrip()
         if key=="ID":
             record = Record()
             record["ID"] = value
@@ -106,16 +119,16 @@ def __read(handle):
         elif key=="CA":
             record["CA"] += value
         elif key=="DR":
-            pair_data = value.split(';')
+            pair_data = value.rstrip(";").split(';')
             for pair in pair_data:
-                if not pair: continue
                 t1, t2 = pair.split(',')
-                row = t1.strip(), t2.strip()
+                row = [t1.strip(), t2.strip()]
                 record["DR"].append(row)
         elif key=="CF":
-            record["CF"] += " " + value
-        elif key=="DI":
-            record["DI"] = value
+            if record["CF"]:
+                record["CF"] += " " + value
+            else:
+                record["CF"] = value
         elif key=="PR":
             assert value.startswith("PROSITE; ")
             value = value[9:].rstrip(";")
