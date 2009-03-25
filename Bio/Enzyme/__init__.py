@@ -5,8 +5,12 @@
 
 """
 This module provides code to work with the enzyme.dat file from
-Enzyme.
+Enzyme (OBSOLETE as of Biopython version 1.50).
 http://www.expasy.ch/enzyme/
+
+The functionality of Bio.Enzyme has moved to Bio.ExPASy.Enzyme;
+please use that module instead of Bio.Enzyme. Most likely, Bio.Enzyme
+will be deprecated in a future release of Biopython.
 
 
 Classes:
