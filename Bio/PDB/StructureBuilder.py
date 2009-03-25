@@ -33,7 +33,7 @@ class StructureBuilder:
         self.header={}
 
     def _is_completely_disordered(self, residue):
-        "Return 1 if all atoms in the residue have a non blanc altloc."
+        "Return 1 if all atoms in the residue have a non blank altloc."
         atom_list=residue.get_unpacked_list()
         for atom in atom_list:
             altloc=atom.get_altloc()
@@ -137,7 +137,7 @@ class StructureBuilder:
                 else:
                     # Make a new DisorderedResidue object and put all
                     # the Residue objects with the id (field, resseq, icode) in it.
-                    # These residues each should have non-blanc altlocs for all their atoms.
+                    # These residues each should have non-blank altlocs for all their atoms.
                     # If not, the PDB file probably contains an error. 
                     if not self._is_completely_disordered(duplicate_residue):
                         # if this exception is ignored, a residue will be missing
@@ -199,7 +199,7 @@ class StructureBuilder:
                     duplicate_atom.disordered_add(atom)     
                 else:
                     # This is an error in the PDB file:
-                    # a disordered atom is found with a blanc altloc
+                    # a disordered atom is found with a blank altloc
                     # Detach the duplicate atom, and put it in a 
                     # DisorderedAtom object together with the current 
                     # atom.
@@ -210,7 +210,7 @@ class StructureBuilder:
                     disordered_atom.disordered_add(duplicate_atom)
                     residue.flag_disordered()
                     if __debug__:
-                        sys.stderr.write("WARNING: disordered atom found with blanc altloc before line %i.\n"  
+                        sys.stderr.write("WARNING: disordered atom found with blank altloc before line %i.\n"  
                                 % self.line_counter)
             else:
                 # The residue does not contain this disordered atom
