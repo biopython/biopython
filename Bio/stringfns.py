@@ -13,7 +13,6 @@ Functions:
 splitany       Split a string using many delimiters.
 find_anychar   Find one of a list of characters in a string.
 rfind_anychar  Find one of a list of characters in a string, from end to start.
-starts_with    Check whether a string starts with another string [DEPRECATED].
 
 """
 import warnings

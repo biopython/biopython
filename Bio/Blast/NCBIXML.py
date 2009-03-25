@@ -142,19 +142,6 @@ class BlastParser(_XMLparser):
         self._parameters = Record.Parameters()
         self._parameters.filter = None #Maybe I should update the class?
 
-    def parse(self, handler):
-        """Parses the XML data
-
-        handler -- file handler or StringIO
-
-        This method returns a list of Blast record objects.
-        """
-        import warnings
-        warnings.warn("Bio.Blast.NCBIXML.BlastParser.parse has been deprecated; please use Bio.Blast.NCBIXML.parse instead", DeprecationWarning)
-        self.reset()
-        self._parser.parse(handler)
-        return self._records
-
     def _start_Iteration(self):
         self._blast = Record.Blast()
         pass

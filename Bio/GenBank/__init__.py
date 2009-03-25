@@ -21,7 +21,6 @@ alternative from the FeatureParser (used in Bio.SeqIO).
 
 Classes:
 Iterator              Iterate through a file of GenBank entries
-Dictionary            Access a GenBank file using a dictionary interface.
 ErrorFeatureParser    Catch errors caused during parsing.
 FeatureParser         Parse GenBank data in SeqRecord and SeqFeature objects.
 RecordParser          Parse GenBank data into a Record object.

@@ -3,7 +3,6 @@
 Classes:
 Record             Holds FASTA sequence data.
 Iterator           Iterates over sequence data in a FASTA file.
-Dictionary         Accesses a FASTA file using a dictionary interface.
 RecordParser       Parses FASTA sequence data into a Record object.
 SequenceParser     Parses FASTA sequence data into a SeqRecord object.
 
