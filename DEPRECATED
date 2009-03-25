@@ -5,8 +5,8 @@ to find documentation about how to update your code to work again.
 Bio.Prosite and Bio.Enzyme
 ==========================
 Declared obsolete in Release 1.50, will be deprecated in a subsequent release.
-Most of the functionality has moved to Bio.ExPASy.Prosite and Bio.Enzyme,
-respectively.
+Most of the functionality has moved to Bio.ExPASy.Prosite and
+Bio.ExPASy.Enzyme, respectively.
 
 Bio.EZRetrieve, Bio.NetCatch, Bio.File.SGMLHandle, Bio.FilteredReader
 =====================================================================
