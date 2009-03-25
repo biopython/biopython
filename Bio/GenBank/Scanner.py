@@ -443,7 +443,9 @@ class InsdcScanner :
             self.parse_header() # ignore header lines!
             feature_tuples = self.parse_features()
             #self.parse_footer() # ignore footer lines!
-            for line in self.handle :
+            while True :
+                line = self.handle.readline()
+                if not line : break
                 if line[:2]=="//" : break
             self.line = line.rstrip()
 
