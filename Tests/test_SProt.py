@@ -30,7 +30,7 @@ for test_file in test_files:
 
     print "*Using RecordParser"
     test_handle = open(datafile)
-    record = SwissProt.read(test_handle)
+    record = SProt.read(test_handle)
     test_handle.close()
 
     # test a couple of things on the record -- this is not exhaustive
@@ -74,7 +74,7 @@ for test_file in test_files:
     
     # With the RecordParser
     test_handle = open(datafile)
-    records = list(SwissProt.parse(test_handle))
+    records = list(SProt.parse(test_handle))
     test_handle.close()
 
     assert len(records) == 1
