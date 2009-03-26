@@ -41,6 +41,38 @@ from Bio import Seq
 from Bio import SeqRecord
 from Bio.ParserSupport import *
 
+# The parse(), read() functions can probably be simplified if we don't
+# use the "parser = RecordParser(); parser.parse(handle)" approach.
+def parse(handle):
+    from SProt import RecordParser
+    import cStringIO
+    parser = RecordParser()
+    text = ""
+    for line in handle:
+        text += line
+        if line[:2]=='//':
+            handle = cStringIO.StringIO(text)
+            record = parser.parse(handle)
+            text = ""
+            yield record
+
+def read(handle):
+    from SProt import RecordParser
+    parser = RecordParser()
+    try:
+        record = parser.parse(handle)
+    except ValueError, error:
+        if error.message.startswith("Line does not start with 'ID':"): 
+            raise ValueError("No SwissProt record found")
+        else:
+            raise error
+    # We should have reached the end of the record by now
+    remainder = handle.read()
+    if remainder:
+        raise ValueError("More than one SwissProt record found")
+    return record
+
+
 _CHOMP = " \n\r\t.,;" #whitespace and trailing punctuation
 
 class Record:
