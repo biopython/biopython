@@ -180,11 +180,18 @@ class SeqRecord(object):
         """Returns a sub-sequence or an individual letter.
 
         Splicing, e.g. my_record[5:10], returns a new SeqRecord for
-        that sub-sequence with most of the annotation preserved.
+        that sub-sequence with approriate annotation preserved.  The
+        name, id and description are kept.
+
         Any per-letter-annotations are sliced to match the requested
         sub-sequence.  Unless a stride is used, all those features
         which fall fully within the subsequence are included (with
         their locations adjusted accordingly).
+
+        However, the annotations dictionary and the dbxrefs list are
+        not used for the new SeqRecord, as in general they may not
+        apply to the subsequence.  If you want to preserve them, you
+        must explictly copy them to the new SeqRecord yourself.
 
         Using an integer index, e.g. my_record[5] is shorthand for
         extracting that letter from the sequence, my_record.seq[5].
@@ -293,11 +300,10 @@ class SeqRecord(object):
             #It would be safer to change it to something
             #generic like "edited" or the default value.
             
-            #COPY the annotation dict and dbxefs list:
-            #TODO - These may not apply to a subsequence.
-            #It would be safer just to drop them!
-            answer.annotations = dict(self.annotations.iteritems())
-            answer.dbxrefs = self.dbxrefs[:]
+            #Don't copy the annotation dict and dbxefs list,
+            #they may not apply to a subsequence.
+            #answer.annotations = dict(self.annotations.iteritems())
+            #answer.dbxrefs = self.dbxrefs[:]
             
             #TODO - Cope with strides by generating ambiguous locations?
             if index.step is None or index.step == 1 :
