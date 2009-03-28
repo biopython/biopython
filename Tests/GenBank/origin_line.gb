@@ -1,5 +1,5 @@
-LOCUS       NC_002678 7036074 bp    DNA   circular  BCT       28-MAR-2001
-DEFINITION  Mesorhizobium loti, complete genome.
+LOCUS       NC_002678     180 bp    DNA   circular  BCT       28-MAR-2001
+DEFINITION  Mesorhizobium loti, complete genome (edited).
 ACCESSION   NC_002678
 VERSION     NC_002678.1  GI:13470324
 KEYWORDS    .
@@ -16,7 +16,7 @@ REFERENCE   1  (sites)
   TITLE     Complete genome structure of the nitrogen-fixing symbiotic
             bacterium Mesorhizobium loti
   JOURNAL   DNA Res. 7, 331-338 (2000)
-REFERENCE   2  (bases 1 to 7036074)
+REFERENCE   2  (bases 1 to 180)
   AUTHORS   Kaneko,T.
   TITLE     Direct Submission
   JOURNAL   Submitted (05-DEC-2000) Takakazu Kaneko, Kazusa DNA Research
@@ -26,12 +26,12 @@ REFERENCE   2  (bases 1 to 7036074)
             URL:http://www.kazusa.or.jp/rhizobase/, Tel:81-438-52-3935,
             Fax:81-438-52-3934)
 FEATURES             Location/Qualifiers
-     source          1..7036074
+     source          1..180
                      /organism="Mesorhizobium loti"
                      /strain="MAFF303099"
                      /db_xref="taxon:381"
-     gene            287..1084
-                     /gene="mlr0002"
+     gene            20..120
+                     /gene="fake"
 BASE COUNT  1311257 a2224835 c2190093 g1309889 t
 ORIGIN      
         1 ttaattaact gtcttcgatt gcgtttaatt gacggttttc gattaaaagc ggtaccgggg
