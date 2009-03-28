@@ -356,7 +356,7 @@ class PPBuilder(_PPBuilder):
             for cc in clist:
                 # To form a peptide bond, N and C must be 
                 # within radius and have the same altloc
-                # identifier or one altloc blanc
+                # identifier or one altloc blank
                 n_altloc=nn.get_altloc()
                 c_altloc=cc.get_altloc()
                 if n_altloc==c_altloc or n_altloc==" " or c_altloc==" ": 

@@ -43,7 +43,7 @@ class Chain(Entity):
         """
         A residue id is normally a tuple (hetero flag, sequence identifier, 
         insertion code). Since for most residues the hetero flag and the 
-        insertion code are blanc (i.e. " "), you can just use the sequence 
+        insertion code are blank (i.e. " "), you can just use the sequence 
         identifier to index a residue in a chain. The _translate_id method
         translates the sequence identifier to the (" ", sequence identifier,
         " ") tuple. 
