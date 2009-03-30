@@ -204,7 +204,7 @@ and HTML formats
   You need Biopython 1.49 or later.  Alternatively, use the \verb|Bio.Seq| module functions described in Section~\ref{sec:seq-module-functions}.
 
   \item \emph{Why doesn't} \verb|Bio.SeqIO| \emph{work? It imports fine but there is no parse function etc.} \\
-  You need Biopython 1.43 or later.  Older versions did contain some related code under the \verb|Bio.SeqIO| name which has since been deprecated - and this is why the import ``works''.
+  You need Biopython 1.43 or later.  Older versions did contain some related code under the \verb|Bio.SeqIO| name which has since been removed - and this is why the import ``works''.
 
   \item \emph{Why doesn't} \verb|Bio.SeqIO.read()| \emph{work? The module imports fine but there is no read function!} \\
   You need Biopython 1.45 or later.
@@ -2956,8 +2956,9 @@ For the DOM and SAX parsers, see the Python documentation. The parser in \verb+B
 
 NCBI uses DTD (Document Type Definition) files to describe the structure of the information contained in XML files. Most of the DTD files used by NCBI are included in the Biopython distribution. The \verb+Bio.Entrez+ parser makes use of the DTD files when parsing an XML file returned by NCBI Entrez.
 
-Occasionally, you may find that the DTD file associated with a specific XML file is missing in the Biopython distribution. In particular, this may happen when NCBI updates its DTD files. If this happens, \verb+Entrez.read+ will give an error message showing which DTD file is missing. You can download the DTD file from NCBI; most DTD files can be found at \url{http://www.ncbi.nlm.nih.gov/dtd/} or \url{http://eutils.ncbi.nlm.nih.gov/entrez/query/DTD/}. After downloading, the DTD file should be stored in the directory \verb+...site-packages/Bio/Entrez/DTDs+, containing the other DTD files. Alternatively, you can add the DTD file to the \verb+Bio/Entrez/DTDs+ directory in the Biopython distribition, and reinstall Biopython. This will install the new DTD file in the correct location together with the other DTD files.
-
+Occasionally, you may find that the DTD file associated with a specific XML file is missing in the Biopython distribution. In particular, this may happen when NCBI updates its DTD files. If this happens, \verb+Entrez.read+ will give an error message showing which DTD file is missing.
+You can download the DTD file from NCBI; most can be found at \url{http://www.ncbi.nlm.nih.gov/dtd/} or \url{http://eutils.ncbi.nlm.nih.gov/entrez/query/DTD/}.
+After downloading, the DTD file should be stored in the directory \verb+...site-packages/Bio/Entrez/DTDs+, containing the other DTD files.  Alternatively, if you installed Biopython from source, you can add the DTD file to the source code's \verb+Bio/Entrez/DTDs+ directory, and reinstall Biopython. This will install the new DTD file in the correct location together with the other DTD files.
 
 The Entrez Programming Utilities can also generate output in other formats, such as the Fasta or GenBank file formats for sequence databases, or the MedLine format for the literature database, discussed in Section~\ref{sec:entrez-specialized-parsers}.
 
@@ -3121,10 +3122,10 @@ EPost uploads a list of UIs for use in subsequent search strategies; see the
 \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/epost\_help.html}{EPost help page} for more information. It is available from Biopython through
 the \verb+Bio.Entrez.epost()+ function.
 
-To give an example of when this is useful, suppose you have a long list IDs
+To give an example of when this is useful, suppose you have a long list of IDs
 you want to download using EFetch (maybe sequences, maybe citations --
 anything). When you make a  request with EFetch your list of IDs, the database
-etc are all turned into a long URL sent to the server.  If your list of IDs is
+etc, are all turned into a long URL sent to the server.  If your list of IDs is
 long, this URL gets long, and long URLs can break (e.g. some proxies don't
 cope well).
 
@@ -3531,7 +3532,10 @@ The Bio* toolkits--a brief overview.
 
 \subsection{Parsing GEO records}
 
-GEO (\href{http://www.ncbi.nlm.nih.gov/geo/}{Gene Expression Omnibus}) is a data repository of high-throughput gene expression and hybridization array data. The Geo module can be uased to parse GEO-formatted sequence data.
+GEO (\href{http://www.ncbi.nlm.nih.gov/geo/}{Gene Expression Omnibus})
+is a data repository of high-throughput gene expression and hybridization
+array data. The \verb|Bio.Geo| module can be used to parse GEO-formatted
+data.
 
 The following code fragment shows how to parse the example GEO file
 \verb|GSE16.txt| into a record and print the record:
@@ -3543,6 +3547,30 @@ The following code fragment shows how to parse the example GEO file
 >>> for record in records:
 ...     print record
 \end{verbatim}
+
+You can search the ``gds'' database (GEO datasets) with ESearch:
+
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com" # Always tell NCBI who you are
+>>> handle = Entrez.esearch(db="gds",term="GSE16")
+>>> record = Entrez.read(handle)
+>>> record["Count"]
+2
+>>> record["IdList"]
+['200000016', '100000028']
+\end{verbatim}
+
+From the Entrez website, UID ``200000016'' is GDS16 while the other hit
+``100000028'' is for the associated platform, GPL28.  Unfortunately, at the
+time of writing the NCBI don't seem to support downloading GEO files using
+Entrez (not as XML, nor in the \textit{Simple Omnibus Format in Text} (SOFT)
+format).
+
+However, it is actually pretty straight forward to download the GEO files by FTP
+from \url{ftp://ftp.ncbi.nih.gov/pub/geo/} instead.  In this case you might want
+\url{ftp://ftp.ncbi.nih.gov/pub/geo/DATA/SOFT/by_series/GSE16/GSE16_family.soft.gz}
+(a compressed file, see the python module gzip).
 
 \section{Using a proxy}
 
