@@ -71,14 +71,25 @@
 \title{Biopython Tutorial and Cookbook}
 \end{htmlonly}
 \begin{latexonly}
-\title{Biopython Tutorial and Cookbook\\
-%Hack to get the logo on the PDF front page, not sure how to tweak the vertical spacing...
-\includegraphics[width=\textwidth]{images/biopython.jpg}}
+\title{
+%Hack to get the logo on the PDF front page:
+\includegraphics[width=\textwidth]{images/biopython.jpg}\\
+%Hack to get some white space using a blank line:
+~\\
+Biopython Tutorial and Cookbook}
 \end{latexonly}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
 \date{Last Update -- 23 March 2009 (Biopython 1.49+)}
+
+%Hack to get the logo at the start of the HTML front page:
+%(hopefully this isn't going to be too wide for most people)
+\begin{rawhtml}
+<P ALIGN="center">
+<IMG ALIGN="center" SRC="images/biopython.jpg" TITLE="Biopython Logo" ALT="[Biopython Logo]" width="1024" height="288" />
+</p>
+\end{rawhtml}
 
 \maketitle
 \tableofcontents
