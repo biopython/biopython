@@ -309,6 +309,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._cur_feature = None
         self._cur_qualifier_key = None
         self._cur_qualifier_value = None
+        self._expected_size = None
 
     def locus(self, locus_name):
         """Set the locus name is set as the name of the Sequence.
@@ -316,7 +317,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self.data.name = locus_name
 
     def size(self, content):
-        pass
+        """Record the sequence length."""
+        self._expected_size = int(content)
 
     def residue_type(self, type):
         """Record the sequence type so we can choose an appropriate alphabet.
@@ -1020,6 +1022,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         # now set the sequence
         sequence = "".join(self._seq_data)
+
+        if self._expected_size is not None \
+        and len(sequence) != 0 \
+        and self._expected_size != len(sequence) :
+            raise ValueError("Expected sequence length %i, found %i." \
+                             % (self._expected_size, len(sequence)))
 
         if self._seq_type:
             # mRNA is really also DNA, since it is actually cDNA

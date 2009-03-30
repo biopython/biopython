@@ -3397,7 +3397,7 @@ DB cross refs []
 Seq: Seq('TTAATTAACTGTCTTCGATTGCGTTTAATTGACGGTTTTCGATTAAAAGCGGTA...CGC', IUPACAmbiguousDNA())
 Id: NC_002678.1
 Name: NC_002678
-Description Mesorhizobium loti, complete genome.
+Description Mesorhizobium loti, complete genome (edited).
 Annotations***
 Key: accessions
 Value: ['NC_002678']
@@ -3419,7 +3419,7 @@ medline id:
 pubmed id: 
 comment: 
 
-location: [0:7036074]
+location: [0:180]
 authors: Kaneko,T.
 title: Direct Submission
 journal: Submitted (05-DEC-2000) Takakazu Kaneko, Kazusa DNA Research Institute, The First Laboratory for Plant Gene Research; Yana 1532-3, Kisarazu, Chiba 292-0812, Japan (E-mail:kaneko@kazusa.or.jp, URL:http://www.kazusa.or.jp/rhizobase/, Tel:81-438-52-3935, Fax:81-438-52-3934)
@@ -3435,7 +3435,7 @@ Key: taxonomy
 Value: ['Bacteria', 'Proteobacteria', 'alpha subdivision', 'Rhizobiaceae group', 'Phyllobacteriaceae', 'Mesorhizobium']
 Feaures
 type: source
-location: [0:7036074]
+location: [0:180]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -3444,11 +3444,11 @@ qualifiers:
 	Key: strain, Value: ['MAFF303099']
 
 type: gene
-location: [286:1084]
+location: [19:120]
 ref: None:None
 strand: 1
 qualifiers: 
-	Key: gene, Value: ['mlr0002']
+	Key: gene, Value: ['fake']
 
 DB cross refs []
 ***Record from blank_seq.gb with the FeatureParser
@@ -5105,20 +5105,20 @@ key: /db_xref= value: "LocusID:55735"
 ***Record from origin_line.gb with the RecordParser
 sequence length: 180
 locus: NC_002678
-definition: Mesorhizobium loti, complete genome.
+definition: Mesorhizobium loti, complete genome (edited).
 accession: ['NC_002678']
 reference title: Complete genome structure of the nitrogen-fixing symbiotic bacterium Mesorhizobium loti
 reference title: Direct Submission
 feature key: source
-location: 1..7036074
+location: 1..180
 num qualifiers: 3
 key: /organism= value: "Mesorhizobium loti"
 key: /strain= value: "MAFF303099"
 key: /db_xref= value: "taxon:381"
 feature key: gene
-location: 287..1084
+location: 20..120
 num qualifiers: 1
-key: /gene= value: "mlr0002"
+key: /gene= value: "fake"
 ***Record from blank_seq.gb with the RecordParser
 sequence length: 360
 locus: NP_001832

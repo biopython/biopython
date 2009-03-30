@@ -111,7 +111,7 @@ class NexusTest1(unittest.TestCase):
 
         # now we check excluding characters, deleting taxa,
         # and exporting adjusted sets
-        f1=tempfile.NamedTemporaryFile(mode='r+w+b')
+        f1=tempfile.NamedTemporaryFile()
         n.write_nexus_data(f1,
                            delete=['t1','t7'],
                            exclude=n.invert(n.charsets['big']))
@@ -183,7 +183,7 @@ class NexusTest1(unittest.TestCase):
              "goodnames": ['t5', 't6', 't8', 't9'],
             })
 
-        f2=tempfile.NamedTemporaryFile(mode='r+w+b')
+        f2=tempfile.NamedTemporaryFile()
         n.write_nexus_data(f2,
                            delete=['t2_the_name'],
                            exclude=range(3,40,4))
