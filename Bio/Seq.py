@@ -858,7 +858,7 @@ class UnknownSeq(Seq):
 
         """
         if len(sub) == 1 :
-            if sub == self._character :
+            if str(sub) == self._character :
                 return self._length
             else :
                 return 0
