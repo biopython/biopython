@@ -139,6 +139,43 @@ class StringMethodTests(unittest.TestCase):
         """Check matches the python string rstrip method."""
         self._test_method("rstrip", apply_str=True)
 
+    def test_length(self) :
+        """Check matches the python string __len__ method."""
+        for example1 in self._examples :
+            str1 = str(example1)
+            self.assertEqual(len(example1), len(str1))
+
+    def test_getitem(self) :
+        """Check slicing and indexing works like a string."""
+        for example1 in self._examples :
+            str1 = str(example1)
+            for i in self._start_end_values :
+                if abs(i) < len(example1) :
+                    self.assertEqual(str(example1[i]), str1[i])
+                self.assertEqual(str(example1[:i]), str1[:i])
+                self.assertEqual(str(example1[i:]), str1[i:])
+                for j in self._start_end_values :
+                    self.assertEqual(str(example1[i:j]), str1[i:j])
+                    for step in range(-3,4):
+                        if step == 0 :
+                            try :
+                                print example1[i:j:step]
+                                self._assert(False) #Should fail!
+                            except ValueError :
+                                pass
+                        else :
+                            self.assertEqual(str(example1[i:j:step]), \
+                                             str1[i:j:step])
+
+    def test_tostring(self) :
+        """Check str(obj) and obj.tostring() match.
+
+        Also check the obj.data attribute for non-MutableSeq objects."""
+        for example1 in self._examples :
+            str1 = str(example1)
+            self.assertEqual(example1.tostring(), str1)
+            if not isinstance(example1, MutableSeq) :
+                self.assertEqual(example1.data, str1)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
