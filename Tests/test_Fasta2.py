@@ -4,10 +4,6 @@
 # as part of this package.
 
 import os
-import string
-from types import *
-from Bio import File
-from Bio import ParserSupport
 from Bio import Fasta
 from Bio import Alphabet
 
@@ -19,14 +15,14 @@ def title_to_ids(title):
     """
     # first split the id information from the description
     # the first item is the id info block, the rest is the description
-    all_info = string.split(title, " ")
+    all_info = title.split(" ")
     id_info = all_info[0]
     rest = all_info[1:]
-    descr = string.join(rest, " ")
+    descr = " ".join(rest)
 
     # now extract the ids from the id block
     # gi|5690369|gb|AF158246.1|AF158246
-    id_info_items = string.split(id_info, "|")
+    id_info_items = id_info.split("|")
     id = id_info_items[3] # the id with version info
     name = id_info_items[4] # the id without version info
 
