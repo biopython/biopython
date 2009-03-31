@@ -25,6 +25,7 @@ DDBJ (DNA Data Bank of Japan)
 http://www.ddbj.nig.ac.jp/
 """
 
+from Bio.Seq import UnknownSeq
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner
 from Bio import Alphabet
 from Interfaces import SequentialSequenceWriter
@@ -231,6 +232,11 @@ class GenBankWriter(SequentialSequenceWriter) :
         #TODO - Force lower case?
         LETTERS_PER_LINE = 60
         SEQUENCE_INDENT = 9
+
+        if isinstance(record.seq, UnknownSeq) :
+            #We have already recorded the length, and there is no need
+            #to record a long sequence of NNNNNNN...NNN or whatever.
+            return
 
         data = self._get_seq_string(record) #Catches sequence being None
         seq_len = len(data)

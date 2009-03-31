@@ -936,24 +936,10 @@ Testing reading genbank format file GenBank/one_of.gb
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/NT_019265.gb
  ID = 'NT_019265.6', Name='NT_019265',
- Seq='', length=0
- Checking can write/read as 'fasta' format
- Checking can write/read as 'clustal' format
- Failed: Non-empty sequences are required
- Checking can write/read as 'phylip' format
- Failed: Non-empty sequences are required
- Checking can write/read as 'stockholm' format
- Failed: Non-empty sequences are required
- Checking can write/read as 'fastq' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NT_019265.6).
+ Seq='NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN', length=1250660
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NT_019265.6).
- Checking can write/read as 'fastq-solexa' format
- Failed: No suitable quality scores found in letter_annotation of SeqRecord (id=NT_019265.6).
  Checking can write/read as 'genbank' format
- Checking can write/read as 'tab' format
- Checking can write/read as 'nexus' format
- Failed: Non-empty sequences are required
 Testing reading genbank format file GenBank/origin_line.gb
  ID = 'NC_002678.1', Name='NC_002678',
  Seq='TTAATTAACTGTCTTCGATTGCGTTTAATTGACGGTTTTC...TCAGCGC', length=180
@@ -1865,30 +1851,24 @@ Testing reading fasta format file Quality/example.fasta as an alignment
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading qual format file Quality/example.qual
  ID and Name='EAS54_6_R1_2_1_413_324',
- Seq='None
+ Seq='?????????????????????????', length=25
  ID and Name='EAS54_6_R1_2_1_540_792',
- Seq='None
+ Seq='?????????????????????????', length=25
  ID and Name='EAS54_6_R1_2_1_443_348',
- Seq='None
+ Seq='?????????????????????????', length=25
  Checking can write/read as 'fasta' format
- Failed: SeqRecord (id=EAS54_6_R1_2_1_443_348) has None for its sequence.
  Checking can write/read as 'clustal' format
-Failed: Probably len() of None
  Checking can write/read as 'phylip' format
-Failed: Probably len() of None
+ Failed: Repeated identifier, possibly due to truncation
  Checking can write/read as 'stockholm' format
-Failed: Probably len() of None
  Checking can write/read as 'fastq' format
- Failed: No sequence for record EAS54_6_R1_2_1_443_348
  Checking can write/read as 'qual' format
  Checking can write/read as 'fastq-solexa' format
- Failed: No sequence for record EAS54_6_R1_2_1_443_348
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'EAS54_6_R1_2_1_443_348' is too long
  Checking can write/read as 'tab' format
- Failed: SeqRecord (id=EAS54_6_R1_2_1_443_348) has None for its sequence.
  Checking can write/read as 'nexus' format
-Failed: Probably len() of None
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fastq format file Quality/example.fastq
  ID and Name='EAS54_6_R1_2_1_413_324',
  Seq='CCCTTCTTGTCTTCAGCGTTTCTCC', length=25

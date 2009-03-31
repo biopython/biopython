@@ -998,7 +998,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         """
         from Bio import Alphabet
         from Bio.Alphabet import IUPAC
-        from Bio.Seq import Seq
+        from Bio.Seq import Seq, UnknownSeq
 
         #Try and append the version number to the accession for the full id
         if self.data.id is None :
@@ -1053,7 +1053,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 raise ValueError("Could not determine alphabet for seq_type %s"
                                  % self._seq_type)
 
-        self.data.seq = Seq(sequence, seq_alphabet)
+        if not sequence and self.__expected_size :
+            self.data.seq = UnknownSeq(self._expected_size, seq_alphabet)
+        else :
+            self.data.seq = Seq(sequence, seq_alphabet)
 
 class _RecordConsumer(_BaseGenBankConsumer):
     """Create a GenBank Record object from scanner generated information.

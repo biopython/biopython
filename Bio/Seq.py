@@ -1,6 +1,6 @@
 # Copyright 2000-2002 Brad Chapman.
 # Copyright 2004-2005 by M de Hoon.
-# Copyright 2007-2008 by Peter Cock.
+# Copyright 2007-2009 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -94,7 +94,7 @@ class Seq(object):
         warnings.warn("Writing to the Seq object's .data propery is deprecated.",
                       DeprecationWarning)
         self._data = value
-    data = property(fget= lambda self : self._data,
+    data = property(fget= lambda self : str(self),
                     fset=_set_data,
                     doc="Sequence as a string (DEPRECATED)")
 
@@ -191,8 +191,8 @@ class Seq(object):
 
         Although not formally deprecated, you are now encouraged to use
         str(my_seq) instead of my_seq.tostring()."""
-        return self._data
-
+        return str(self)
+    
     def tomutable(self):   # Needed?  Or use a function?
         """Returns the full sequence as a MutableSeq object.
 
@@ -703,6 +703,277 @@ class Seq(object):
         else :
             alphabet = codon_table.protein_alphabet
         return Seq(protein, alphabet)
+
+class UnknownSeq(Seq):
+    """A read-only sequence object of known length but unknown contents.
+
+    If you have an unknown sequence, you can represent this with a normal
+    Seq object, for example:
+
+    >>> my_seq = Seq("N"*5)
+    >>> my_seq
+    Seq('NNNNN', Alphabet())
+    >>> len(my_seq)
+    5
+    >>> print my_seq
+    NNNNN
+
+    However, this is rather wasteful of memory (especially for large
+    sequences), which is where this class is most usefull:
+
+    >>> unk_five = UnknownSeq(5)
+    >>> unk_five
+    UnknownSeq(5, alphabet = Alphabet(), character = '?')
+    >>> len(unk_five)
+    5
+    >>> print(unk_five)
+    ?????
+
+    You can add unknown sequence together, provided their alphabets and
+    characters are compatible, and get another memory saving UnknownSeq:
+
+    >>> unk_four = UnknownSeq(4)
+    >>> unk_four
+    UnknownSeq(4, alphabet = Alphabet(), character = '?')
+    >>> unk_four + unk_five
+    UnknownSeq(9, alphabet = Alphabet(), character = '?')
+
+    If the alphabet to characters don't match up, the addition gives an
+    ordinary Seq object:
+    
+    >>> unk_nnnn = UnknownSeq(4, character = "N")
+    >>> unk_nnnn
+    UnknownSeq(4, alphabet = Alphabet(), character = 'N')
+    >>> unk_nnnn + unk_four
+    Seq('NNNN????', Alphabet())
+
+    Combining with a real Seq gives a new Seq object:
+
+    >>> known_seq = Seq("ACGT")
+    >>> unk_four + known_seq
+    Seq('????ACGT', Alphabet())
+    >>> known_seq + unk_four
+    Seq('ACGT????', Alphabet())
+
+    """
+    def __init__(self, length, alphabet = Alphabet.generic_alphabet, character = None) :
+        """Create a new UnknownSeq object.
+
+        If character is ommited, it is determed from the alphabet, "N" for
+        nucleotides, "X" for proteins, and "?" otherwise.
+        """
+        self._length = int(length)
+        if self._length < 0 :
+            #TODO - Block zero length UnknownSeq?  You can just use a Seq!
+            raise ValueError("Length must not be negative.")
+        self.alphabet = alphabet
+        if character :
+            if len(character) != 1 :
+                raise ValueError("character argument should be a single letter string.")
+            self._character = character
+        else :
+            base = Alphabet._get_base_alphabet(alphabet)
+            #TODO? Check the case of the letters in the alphabet?
+            #We may have to use "n" instead of "N" etc.
+            if isinstance(base, Alphabet.NucleotideAlphabet) :
+                self._character = "N"
+            elif isinstance(base, Alphabet.ProteinAlphabet) :
+                self._character = "X"
+            else :
+                self._character = "?"
+
+    def __len__(self) :
+        """Returns the stated length of the unknown sequence."""
+        return self._length
+    
+    def __str__(self) :
+        """Returns the unknown sequence as full string of the given length."""
+        return self._character * self._length
+
+    def __repr__(self):
+        return "UnknownSeq(%i, alphabet = %s, character = %s)" \
+               % (self._length, repr(self.alphabet), repr(self._character))
+
+    def __add__(self, other) :
+        if isinstance(other, UnknownSeq) \
+        and other._character == self._character :
+            #TODO - Check the alphabets match
+            return UnknownSeq(len(self)+len(other),
+                              self.alphabet, self._character)
+        #Offload to the base class...
+        return Seq(str(self), self.alphabet) + other
+
+    def __radd__(self, other) :
+        if isinstance(other, UnknownSeq) \
+        and other._character == self._character :
+            #TODO - Check the alphabets match
+            return UnknownSeq(len(self)+len(other),
+                              self.alphabet, self._character)
+        #Offload to the base class...
+        return other + Seq(str(self), self.alphabet)
+
+    def __getitem__(self, index):
+        if isinstance(index, int) :
+            #TODO - Check the bounds without wasting memory
+            return str(self)[index]
+        else :
+            #TODO - Work out the length without wasting memory
+            return UnknownSeq(len(("#"*self._length)[index]),
+                              self.alphabet, self._character)
+
+    def count(self, sub, start=0, end=sys.maxint):
+        """Non-overlapping count method, like that of a python string.
+
+        This behaves like the python string (and Seq object) method of the
+        same name, which does a non-overlapping count!
+
+        Returns an integer, the number of occurrences of substring
+        argument sub in the (sub)sequence given by [start:end].
+        Optional arguments start and end are interpreted as in slice
+        notation.
+    
+        sub - a string or another Seq object to look for
+        start - optional integer, slice start
+        end - optional integer, slice end
+
+        >>> "NNNN".count("N")
+        4
+        >>> Seq("NNNN").count("N")
+        4
+        >>> UnknownSeq(4, character="N").count("N")
+        4
+        >>> UnknownSeq(4, character="N").count("A")
+        0
+        >>> UnknownSeq(4, character="N").count("AA")
+        0
+
+        HOWEVER, please note because that python strings and Seq objects (and
+        MutableSeq objects) do a non-overlapping search, this may not give
+        the answer you expect:
+
+        >>> UnknownSeq(4, character="N").count("NN")
+        2
+        >>> UnknownSeq(4, character="N").count("NNN")
+        1
+
+        """
+        if len(sub) == 1 :
+            if sub == self._character :
+                return self._length
+            else :
+                return 0
+        else :
+            if set(sub) == set(self._character) :
+                return self._length // len(sub)
+            else :
+                return 0
+
+    def complement(self) :
+        """The complement of an unknown nucleotide equals itself.
+
+        >>> my_nuc = UnknownSeq(8)
+        >>> my_nuc
+        UnknownSeq(8, alphabet = Alphabet(), character = '?')
+        >>> print my_nuc
+        ????????
+        >>> my_nuc.complement()
+        UnknownSeq(8, alphabet = Alphabet(), character = '?')
+        >>> print my_nuc.complement()
+        ????????
+
+        """
+        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
+                      Alphabet.ProteinAlphabet) :
+            raise ValueError("Proteins do not have complements!")
+        return self
+
+    def reverse_complement(self) :
+        """The reverse complement of an unknown nucleotide equals itself.
+
+        >>> my_nuc = UnknownSeq(10)
+        >>> my_nuc
+        UnknownSeq(10, alphabet = Alphabet(), character = '?')
+        >>> print my_nuc
+        ??????????
+        >>> my_nuc.reverse_complement()
+        UnknownSeq(10, alphabet = Alphabet(), character = '?')
+        >>> print my_nuc.reverse_complement()
+        ??????????
+
+        """
+        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
+                      Alphabet.ProteinAlphabet) :
+            raise ValueError("Proteins do not have complements!")
+        return self
+
+    def transcribe(self) :
+        """Returns unknown RNA sequence from an unknown DNA sequence.
+
+        >>> my_dna = UnknownSeq(10, character="N")
+        >>> my_dna
+        UnknownSeq(10, alphabet = Alphabet(), character = 'N')
+        >>> print my_dna
+        NNNNNNNNNN
+        >>> my_rna = my_dna.transcribe()
+        >>> my_rna
+        UnknownSeq(10, alphabet = RNAAlphabet(), character = 'N')
+        >>> print my_rna
+        NNNNNNNNNN
+
+        """
+        #Offload the alphabet stuff
+        s = Seq(self._character, self.alphabet).transcribe()
+        return UnknownSeq(self._length, s.alphabet, self._character)
+
+    def back_transcribe(self) :
+        """Returns unknown DNA sequence from an unknown RNA sequence.
+
+        >>> my_rna = UnknownSeq(20, character="N")
+        >>> my_rna
+        UnknownSeq(20, alphabet = Alphabet(), character = 'N')
+        >>> print my_rna
+        NNNNNNNNNNNNNNNNNNNN
+        >>> my_dna = my_rna.back_transcribe()
+        >>> my_dna
+        UnknownSeq(20, alphabet = DNAAlphabet(), character = 'N')
+        >>> print my_dna
+        NNNNNNNNNNNNNNNNNNNN
+        
+        """
+        #Offload the alphabet stuff
+        s = Seq(self._character, self.alphabet).back_transcribe()
+        return UnknownSeq(self._length, s.alphabet, self._character)
+
+    def translate(self, **kwargs) :
+        """Translate an unknown nucleotide sequence into an unknown protein.
+
+        e.g.
+        >>> my_seq = UnknownSeq(11, character="N")
+        >>> print my_seq
+        NNNNNNNNNNN
+        >>> my_protein = my_seq.translate()
+        >>> my_protein
+        UnknownSeq(3, alphabet = ProteinAlphabet(), character = 'X')
+        >>> print my_protein
+        XXX
+
+        In comparison, using a normal Seq object:
+
+        >>> my_seq = Seq("NNNNNNNNNNN")
+        >>> print my_seq
+        NNNNNNNNNNN
+        >>> my_protein = my_seq.translate()
+        >>> my_protein
+        Seq('XXX', ExtendedIUPACProtein())
+        >>> print my_protein
+        XXX
+
+        """
+        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
+                      Alphabet.ProteinAlphabet) :
+            raise ValueError("Proteins cannot be translated!")
+        return UnknownSeq(self._length//3, Alphabet.generic_protein, "X")
+
 
 class MutableSeq(object):
     """An editable sequence object (with an alphabet).

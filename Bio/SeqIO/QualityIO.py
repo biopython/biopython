@@ -155,11 +155,11 @@ You can of course read in a QUAL file, such as the one we just created:
     >>> from Bio import SeqIO
     >>> for record in SeqIO.parse(open("Quality/temp.qual"), "qual") :
     ...     print record.id, record.seq
-    EAS54_6_R1_2_1_413_324 None
-    EAS54_6_R1_2_1_540_792 None
-    EAS54_6_R1_2_1_443_348 None
+    EAS54_6_R1_2_1_413_324 ?????????????????????????
+    EAS54_6_R1_2_1_540_792 ?????????????????????????
+    EAS54_6_R1_2_1_443_348 ?????????????????????????
 
-Notice that QUAL files don't have a sequence present!  But the quality
+Notice that QUAL files don't have a proper sequence present!  But the quality
 information is there:
 
     >>> print record
@@ -168,7 +168,7 @@ information is there:
     Description: EAS54_6_R1_2_1_443_348
     Number of features: 0
     Per letter annotation for: phred_quality
-    None
+    UnknownSeq(25, alphabet = SingleLetterAlphabet(), character = '?')
     >>> print record.letter_annotations["phred_quality"]
     [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
 
@@ -205,7 +205,7 @@ automatically.
 #See also http://blog.malde.org/index.php/2008/09/09/the-fastq-file-format-for-sequences/
 
 from Bio.Alphabet import single_letter_alphabet
-from Bio.Seq import Seq
+from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqRecord import SeqRecord
 from Interfaces import SequentialSequenceWriter
 from math import log
@@ -696,9 +696,9 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
     >>> handle = open("Quality/example.qual", "rU")
     >>> for record in QualPhredIterator(handle) :
     ...     print record.id, record.seq
-    EAS54_6_R1_2_1_413_324 None
-    EAS54_6_R1_2_1_540_792 None
-    EAS54_6_R1_2_1_443_348 None
+    EAS54_6_R1_2_1_413_324 ?????????????????????????
+    EAS54_6_R1_2_1_540_792 ?????????????????????????
+    EAS54_6_R1_2_1_443_348 ?????????????????????????
     >>> handle.close()
 
     Typically however, you would call this via Bio.SeqIO instead with "qual" as
@@ -708,13 +708,29 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
     >>> handle = open("Quality/example.qual", "rU")
     >>> for record in SeqIO.parse(handle, "qual") :
     ...     print record.id, record.seq
-    EAS54_6_R1_2_1_413_324 None
-    EAS54_6_R1_2_1_540_792 None
-    EAS54_6_R1_2_1_443_348 None
+    EAS54_6_R1_2_1_413_324 ?????????????????????????
+    EAS54_6_R1_2_1_540_792 ?????????????????????????
+    EAS54_6_R1_2_1_443_348 ?????????????????????????
     >>> handle.close()
 
     Becase QUAL files don't contain the sequence string itself, the seq property
-    is set to None.  However, the quality scores themselves are available as a list
+    is set to an UnknownSeq object.  As no alphabet was given, this has defaulted
+    to a generic single letter alphabet and the character "?" used.
+
+    By specifying a nucleotide alphabet, "N" is used instead:
+
+    >>> from Bio import SeqIO
+    >>> from Bio.Alphabet import generic_dna
+    >>> handle = open("Quality/example.qual", "rU")
+    >>> for record in SeqIO.parse(handle, "qual", alphabet=generic_dna) :
+    ...     print record.id, record.seq
+    EAS54_6_R1_2_1_413_324 NNNNNNNNNNNNNNNNNNNNNNNNN
+    EAS54_6_R1_2_1_540_792 NNNNNNNNNNNNNNNNNNNNNNNNN
+    EAS54_6_R1_2_1_443_348 NNNNNNNNNNNNNNNNNNNNNNNNN
+    >>> handle.close()
+
+
+    However, the quality scores themselves are available as a list
     of integers in each record's per-letter-annotation:
 
     >>> print record.letter_annotations["phred_quality"]
@@ -761,11 +777,8 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
                                  % (id, min(qualities), max(qualities)))
         
         #Return the record and then continue...
-        #TODO - Introduce an UnkownSeq object?  We know its length...
-        record = SeqRecord(None, id = id, name = name, description = descr)
-        #Tricky required here because the letter_annotation dict will
-        #have defaulted to an expected length of zero!
-        record.letter_annotations._length = len(qualities) #Hack!
+        record = SeqRecord(UnknownSeq(len(qualities), alphabet),
+                           id = id, name = name, description = descr)
         record.letter_annotations["phred_quality"] = qualities
         yield record
 

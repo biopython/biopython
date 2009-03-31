@@ -284,15 +284,9 @@ class SeqRecord(object):
             return self.seq[index]
         elif isinstance(index, slice) :
             if self.seq is None :
-                #Special case, e.g. qual files
-                #Need an evil hack to the length...
-                #introducing an UnknownSeq class could be nicer.
-                sub_seq = None
-                parent_length = self.letter_annotations._length
-            else :
-                sub_seq = self.seq[index]
-                parent_length = len(self.seq)
-            answer = self.__class__(sub_seq,
+                raise ValueError("If the sequence is None, we cannot slice it.")
+            parent_length = len(self)
+            answer = self.__class__(self.seq[index],
                                     id=self.id,
                                     name=self.name,
                                     description=self.description)
@@ -331,10 +325,6 @@ class SeqRecord(object):
 
             #Slice all the values to match the sliced sequence
             #(this should also work with strides, even negative strides):
-            if self.seq is None :
-                #Special case, e.g. qual files, with evil hack
-                answer._per_letter_annotations._length = \
-                                       len(([0]*parent_length)[index])
             for key, value in self.letter_annotations.iteritems() :
                 answer._per_letter_annotations[key] = value[index]
 
