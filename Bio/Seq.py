@@ -857,14 +857,23 @@ class UnknownSeq(Seq):
         1
 
         """
-        if len(sub) == 1 :
-            if str(sub) == self._character :
-                return self._length
+        sub_str = self._get_seq_str_and_check_alphabet(sub)
+        if len(sub_str) == 1 :
+            if str(sub_str) == self._character :
+                if start==0 and end >= self._length :
+                    return self._length
+                else :
+                    #This could be done more cleverly...
+                    return str(self).count(sub_str, start, end)
             else :
                 return 0
         else :
-            if set(sub) == set(self._character) :
-                return self._length // len(sub)
+            if set(sub_str) == set(self._character) :
+                if start==0 and end >= self._length :
+                    return self._length // len(sub_str)
+                else :
+                    #This could be done more cleverly...
+                    return str(self).count(sub_str, start, end)
             else :
                 return 0
 
