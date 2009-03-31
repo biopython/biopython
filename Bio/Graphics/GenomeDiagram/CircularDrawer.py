@@ -976,7 +976,6 @@ class CircularDrawer(AbstractDrawer):
             # Calculate trig values for angle and coordinates
             startcos, startsin = cos(startangle), sin(startangle)
             endcos, endsin = cos(endangle), sin(endangle)
-            boxes = Group()     # Holds arc elements
             x0,y0 = self.xcenter, self.ycenter      # origin of the circle
             x1,y1 = (x0+inner_radius*startsin, y0+inner_radius*startcos)
             x2,y2 = (x0+inner_radius*endsin, y0+inner_radius*endcos)
@@ -1043,7 +1042,6 @@ class CircularDrawer(AbstractDrawer):
         x0,y0 = self.xcenter, self.ycenter      # origin of the circle
         if abs(headangle_delta) >= abs(angle) :
             #Cheat and just use a triangle.
-            boxes = Group()     # Holds arc elements
             if orientation=="right" :
                 x1,y1 = (x0+inner_radius*startsin, y0+inner_radius*startcos)
                 x2,y2 = (x0+outer_radius*startsin, y0+outer_radius*startcos)
