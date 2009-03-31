@@ -39,9 +39,10 @@ class StringMethodTests(unittest.TestCase):
     for seq in _examples[:] :
         if isinstance(seq, Seq) :
             _examples.append(seq.tomutable())
+    _start_end_values = [0, 1, 2, 1000, -1, -2, -999]
 
 
-    def _test_method(self, method_name, apply_str=False) :
+    def _test_method(self, method_name, apply_str=False, start_end=False) :
         """Check this method matches the plain string's method."""
         assert isinstance(method_name, str)
         for example1 in self._examples :
@@ -86,17 +87,49 @@ class StringMethodTests(unittest.TestCase):
                     #TODO - Check the alphabets do clash!
                     pass
 
+                if start_end :
+                    for start in self._start_end_values :
+                        i = getattr(example1,method_name)(str2, start)
+                        j = getattr(str1,method_name)(str2, start)
+                        if apply_str :
+                            i = str(i)
+                            j = str(j)
+                        if i != j :
+                            raise ValueError("%s.%s(%s, %i) = %i, not %i" \
+                                             % (repr(example1),
+                                                method_name,
+                                                repr(str2),
+                                                start,
+                                                i,
+                                                j))
+                        
+                        for end in self._start_end_values :
+                            i = getattr(example1,method_name)(str2, start, end)
+                            j = getattr(str1,method_name)(str2, start, end)
+                            if apply_str :
+                                i = str(i)
+                                j = str(j)
+                            if i != j :
+                                raise ValueError("%s.%s(%s, %i, %i) = %i, not %i" \
+                                                 % (repr(example1),
+                                                    method_name,
+                                                    repr(str2),
+                                                    start,
+                                                    end,
+                                                    i,
+                                                    j))
+
     def test_count(self) :
         """Check matches the python string count method."""
-        self._test_method("count")
+        self._test_method("count", start_end=True)
 
     def test_find(self) :
         """Check matches the python string find method."""
-        self._test_method("find")
+        self._test_method("find", start_end=True)
 
     def test_rfind(self) :
         """Check matches the python string rfind method."""
-        self._test_method("rfind")
+        self._test_method("rfind", start_end=True)
 
     def test_strip(self) :
         """Check matches the python string strip method."""
