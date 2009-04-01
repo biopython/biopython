@@ -1,6 +1,6 @@
 # Copyright 2000 by Bertrand Frottier .  All rights reserved.
 # Revisions 2005-2006 copyright Michiel de Hoon
-# Revisions 2006-2008 copyright Peter Cock
+# Revisions 2006-2009 copyright Peter Cock
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -169,6 +169,19 @@ class BlastParser(_XMLparser):
         if not hasattr(self._blast, "query_letters") \
         or not self._blast.query_letters :
             self._blast.query_letters = self._header.query_letters
+
+        # Hack to record the query length as both the query_letters and
+        # query_length properties (as in the plain text parser, see
+        # Bug 2176 comment 11):
+        self._blast.query_length = self._blast.query_letters
+        # Perhaps in the long term we should deprecate one, but I would
+        # prefer to drop query_letters - so we need a transition period
+        # with both.
+
+        # Hack to record the claimed database size as database_length
+        # (as well as in num_letters_in_database, see Bug 2176 comment 12):
+        self._blast.database_length = self._blast.num_letters_in_database
+        # TODO? Deprecate database_letters?
 
         # Apply the "top level" parameter information
         self._blast.matrix = self._parameters.matrix
