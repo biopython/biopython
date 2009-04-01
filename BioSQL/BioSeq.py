@@ -14,7 +14,7 @@ a biopython-like Seq interface.
 """
 
 from Bio import Alphabet
-from Bio.Seq import Seq
+from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqFeature
 
@@ -125,30 +125,57 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
 
 
 def _retrieve_seq(adaptor, primary_id):
+    #The database schema ensures there will be only one matching
+    #row in the table.
+
+    #If an UnknownSeq was recorded, seq will be NULL,
+    #but length will be populated.  This means length(seq)
+    #will return None.
     seqs = adaptor.execute_and_fetchall(
-        "SELECT alphabet, length(seq) FROM biosequence" \
+        "SELECT alphabet, length, length(seq) FROM biosequence" \
         " WHERE bioentry_id = %s", (primary_id,))
-    if seqs:
-        moltype, length = seqs[0]
-        moltype = moltype.lower() #might be upper case in database
-        #We have no way of knowing if these sequences will use IUPAC
-        #alphabets, and we certainly can't assume they are unambiguous!
-        if moltype == "dna":
-            alphabet = Alphabet.generic_dna
-        elif moltype == "rna":
-            alphabet = Alphabet.generic_rna
-        elif moltype == "protein":
-            alphabet = Alphabet.generic_protein
-        elif moltype == "unknown":
-            #This is used in BioSQL/Loader.py and would happen
-            #for any generic or nucleotide alphabets.
-            alphabet = Alphabet.single_letter_alphabet
-        else:
-            raise AssertionError("Unknown moltype: %s" % moltype)
-        seq = DBSeq(primary_id, adaptor, alphabet, 0, int(length))
-        return seq
+    if not seqs : return
+    assert len(seqs) == 1        
+    moltype, given_length, length = seqs[0]
+
+    try :
+        length = int(length)
+        given_length = int(length)
+        assert length == given_length
+        have_seq = True
+    except TypeError :
+        assert length is None
+        seqs = adaptor.execute_and_fetchall(
+            "SELECT alphabet, length, seq FROM biosequence" \
+            " WHERE bioentry_id = %s", (primary_id,))
+        assert len(seqs) == 1
+        moltype, given_length, seq = seqs[0]
+        assert seq is None or seq==""
+        length = int(given_length)
+        have_seq = False
+        del seq
+    del given_length
+        
+    moltype = moltype.lower() #might be upper case in database
+    #We have no way of knowing if these sequences will use IUPAC
+    #alphabets, and we certainly can't assume they are unambiguous!
+    if moltype == "dna":
+        alphabet = Alphabet.generic_dna
+    elif moltype == "rna":
+        alphabet = Alphabet.generic_rna
+    elif moltype == "protein":
+        alphabet = Alphabet.generic_protein
+    elif moltype == "unknown":
+        #This is used in BioSQL/Loader.py and would happen
+        #for any generic or nucleotide alphabets.
+        alphabet = Alphabet.single_letter_alphabet
     else:
-        return None
+        raise AssertionError("Unknown moltype: %s" % moltype)
+
+    if have_seq :
+        return DBSeq(primary_id, adaptor, alphabet, 0, int(length))
+    else :
+        return UnknownSeq(length, alphabet)
 
 def _retrieve_dbxrefs(adaptor, primary_id):
     """Retrieve the database cross references for the sequence."""

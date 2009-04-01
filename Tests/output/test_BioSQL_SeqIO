@@ -236,7 +236,7 @@ Testing loading from genbank format file GenBank/one_of.gb
  - Retrieving by accession 'U18266', OK
  - Retrieving by GI '885676', OK
 Testing loading from genbank format file GenBank/NT_019265.gb
- -  [2jmj7l5rSw0yVb/vlWAYkK/YBwk] len 0, NT_019265.6
+ - UnknownSeq(1250660, alphabet = IUPACAmbiguousDNA(), character = 'N'), NT_019265.6
  - Retrieving by name/display_id 'NT_019265', OK
  - Retrieving by version 'NT_019265.6', OK
  - Retrieving by accession 'NT_019265', OK

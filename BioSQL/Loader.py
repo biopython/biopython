@@ -22,6 +22,7 @@ from time import gmtime, strftime
 from Bio import Alphabet
 from Bio.SeqUtils.CheckSum import crc64
 from Bio import Entrez
+from Bio.Seq import UnknownSeq
 
 class DatabaseLoader:
     """Object used to load SeqRecord objects into a BioSQL database."""
@@ -582,6 +583,11 @@ class DatabaseLoader:
         record - a SeqRecord object with a seq property
         bioentry_id - corresponding database identifier
         """
+        if record.seq is None :
+            #The biosequence table entry is optional, so if we haven't
+            #got a sequence, we don't need to write to the table.
+            return
+        
         # determine the string representation of the alphabet
         if isinstance(record.seq.alphabet, Alphabet.DNAAlphabet):
             alphabet = "dna"
@@ -592,12 +598,17 @@ class DatabaseLoader:
         else:
             alphabet = "unknown"
 
+        if isinstance(record.seq, UnknownSeq) :
+            seq_str = None
+        else :
+            seq_str = str(record.seq)
+
         sql = r"INSERT INTO biosequence (bioentry_id, version, " \
               r"length, seq, alphabet) " \
               r"VALUES (%s, 0, %s, %s, %s)"
         self.adaptor.execute(sql, (bioentry_id,
-                                   len(record.seq.data),
-                                   record.seq.data,
+                                   len(record.seq),
+                                   seq_str,
                                    alphabet))
 
     def _load_comment(self, record, bioentry_id):
@@ -606,18 +617,20 @@ class DatabaseLoader:
         record - a SeqRecord object with an annotated comment
         bioentry_id - corresponding database identifier
         """
-        # Assume annotations['comment'] is not a list
-        comment = record.annotations.get('comment')
-        if not comment:
+        comments = record.annotations.get('comment')
+        if not comments:
             return
-        comment = comment.replace('\n', ' ')
-        
-        #TODO - Store each line as a separate entry?  This would preserve
-        #the newlines, but we should check BioPerl etc to be consistent.
+        if not isinstance(comments, list) :
+            #It should be a string then...
+            comments = [comments]
 
-        sql = "INSERT INTO comment (bioentry_id, comment_text, rank)" \
-              " VALUES (%s, %s, %s)"
-        self.adaptor.execute(sql, (bioentry_id, comment, 1))
+        for index, comment in enumerate(comments) :
+            comment = comment.replace('\n', ' ')
+            #TODO - Store each line as a separate entry?  This would preserve
+            #the newlines, but we should check BioPerl etc to be consistent.
+            sql = "INSERT INTO comment (bioentry_id, comment_text, rank)" \
+                  " VALUES (%s, %s, %s)"
+            self.adaptor.execute(sql, (bioentry_id, comment, index+1))
         
     def _load_annotations(self, record, bioentry_id) :
         """Record a SeqRecord's misc annotations in the database (PRIVATE).

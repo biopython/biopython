@@ -16,6 +16,7 @@ except NameError:
 
 from Bio import MissingExternalDependencyError
 from Bio import SeqIO
+from Bio.Seq import UnknownSeq
 from StringIO import StringIO
 from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqFeature import ExactPosition
@@ -114,6 +115,8 @@ test_files = [ \
 #####################################################################
 
 def checksum_summary(record) :
+    if isinstance(record.seq, UnknownSeq) :
+        return repr(record.seq)
     if len(record.seq) < 25 :
         short = record.seq.tostring()
     else :
@@ -269,6 +272,11 @@ def compare_sequences(old, new) :
     """Compare two Seq or DBSeq objects"""
     assert len(old) == len(new)
     assert old.tostring() == new.tostring()
+
+    if isinstance(old, UnknownSeq) :
+        assert isinstance(new, UnknownSeq)
+    else :
+        assert not isinstance(new, UnknownSeq)
 
     l = len(old)
     s = old.tostring()
