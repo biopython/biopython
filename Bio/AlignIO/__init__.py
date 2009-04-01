@@ -198,6 +198,8 @@ def write(alignments, handle, format) :
         #TODO - Can we make one call to SeqIO.write() and count the alignments?
         count = 0
         for alignment in alignments :
+            if not isinstance(alignment, Alignment) :
+                raise TypeError("Expect a list or iterator of Alignment objects.")
             SeqIO.write(alignment, handle, format)
             count += 1
     elif format in _FormatToIterator or format in SeqIO._FormatToIterator :
