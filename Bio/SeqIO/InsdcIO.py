@@ -1,4 +1,4 @@
-# Copyright 2007, 2008 by Peter Cock.  All rights reserved.
+# Copyright 2007-2009 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -296,10 +296,19 @@ class GenBankWriter(SequentialSequenceWriter) :
 
         #TODO - References...
         handle.write("FEATURES             Location/Qualifiers\n")
-        #TODO - Features...
+        for feature in record.features :
+            self._write_feature(feature) 
         handle.write("ORIGIN\n")
         self._write_sequence(record)
         handle.write("//\n")
+
+    def _write_feature(self, feature):
+        """Write a single SeqFeature object to features table.
+
+        Not implemented yet, but this stub exists in the short term to
+        facilitate working on writing GenBank files with a sub-class."""
+        #TODO - Features...
+        pass
 
 if __name__ == "__main__" :
     print "Quick self test"
