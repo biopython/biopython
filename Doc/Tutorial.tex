@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 23 March 2009 (Biopython 1.49+)}
+\date{Last Update -- 2 April 2009 (Biopython 1.49+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -6067,6 +6067,103 @@ This section will describe the \verb|Bio.MaximumEntropy| module.
 \section{Markov Models}
 
 This section will describe the \verb|Bio.MarkovModel| and/or \verb|Bio.HMM.MarkovModel| modules.
+
+\chapter{Graphics including GenomeDiagram}
+\label{chapter:graphics}
+
+The \verb|Bio.Graphics| module depends on the third party python library
+\href{http://www.reportlab.org}{ReportLab}.  Although focused on producing PDF files,
+ReportLab can also create encapsulated postscript (EPS) and (SVG) files.  In addition
+to these vector based images, provided certain further dependencies such as the
+\href{http://www.pythonware.com/products/pil/}{Python Imaging Library (PIL)} are
+installed, ReportLab can also output bitmap images (including JPEG, PNG, GIF, BMP
+and PICT formats).
+
+\section{Chromosomes}
+
+The \verb|Bio.Graphics.BasicChromosome| module allows drawing of simple chromosomes.
+Here is a very simple example - for which we'll use \textit{Arabidopsis thaliana}.
+
+I first downloaded the five sequenced chromosomes from the NCBI's FTP site
+\url{ftp://ftp.ncbi.nlm.nih.gov/genomes/Arabidopsis_thaliana} and then parsed
+them with \verb|Bio.SeqIO| to find out their lengths.  You could use the
+GenBank files for this, but it is faster to use the FASTA files for the
+whole chromosomes:
+
+\begin{verbatim}
+from Bio import SeqIO
+entries = [("Chr I","CHR_I/NC_003070.fna"),
+          ("Chr II","CHR_II/NC_003071.fna"),
+          ("Chr III","CHR_III/NC_003074.fna"),
+          ("Chr IV","CHR_IV/NC_003075.fna"),
+          ("Chr V","CHR_V/NC_003076.fna")]
+for (name, filename) in entries :
+   record = SeqIO.read(open(filename),"fasta")
+   print name, len(record)
+\end{verbatim}
+
+\noindent This gave the lengths of the five chromosomes, which we'll now use in
+the following short demonstration of the \verb| BasicChromosome| module:
+
+\begin{verbatim}
+from Bio.Graphics import BasicChromosome
+
+entries = [("Chr I", 30432563),
+           ("Chr II", 19705359),
+           ("Chr III", 23470805),
+           ("Chr IV", 18585042),
+           ("Chr V", 26992728)]
+
+max_length = max([length for name, length in entries])
+          
+chr_diagram = BasicChromosome.Organism()
+for name, length in entries :
+   cur_chromosome = BasicChromosome.Chromosome(name)
+   #Set the length, adding and extra 20 percent for the tolomeres:
+   cur_chromosome.scale_num = max_length * 1.2
+   
+   #Add an opening telomere
+   start = BasicChromosome.TelomereSegment()
+   start.scale = 0.1 * max_length
+   cur_chromosome.add(start)
+
+   #Add a body - using bp as the scale length here.
+   body = BasicChromosome.ChromosomeSegment()
+   body.scale = length
+   cur_chromosome.add(body)
+
+   #Add a closing telomere
+   end = BasicChromosome.TelomereSegment(inverted=True)
+   end.scale = 0.1 * max_length
+   cur_chromosome.add(end)
+
+   #This chromosome is done
+   chr_diagram.add(cur_chromosome)
+
+chr_diagram.draw("simple_chrom.pdf", "Arabidopsis thaliana")
+\end{verbatim}
+
+This should create a very simple PDF file, shown
+\begin{htmlonly}
+here:
+\label{fig:blastrecord}
+\imgsrc[width=650, height=574]{images/simple_chrom.png}
+\end{htmlonly}
+\begin{latexonly}
+in Figure~\ref{fig:simplechromosome}.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{images/simple_chrom.png}
+\caption{Simple chromosome diagram for \textit{Arabidopsis thaliana}.}
+\label{fig:simplechromosome}
+\end{figure}
+\end{latexonly}
+This example is deliberately short and sweet. One thing you might want to try is
+showing the location of features of interest - perhaps SNPs or genes.  Currently
+the \verb|ChromosomeSegment| object doesn't support sub-segments which would be
+one approach.  Instead, you must replace the single large segment with lots of
+smaller segments, maybe white ones for the boring regions, and colored ones for
+the regions of interest.
 
 \chapter{Cookbook -- Cool things to do with it}
 \label{chapter:cookbook}
