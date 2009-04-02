@@ -6079,6 +6079,63 @@ to these vector based images, provided certain further dependencies such as the
 installed, ReportLab can also output bitmap images (including JPEG, PNG, GIF, BMP
 and PICT formats).
 
+\section{GenomeDiagram}
+\label{sec:genomediagram}
+
+The \verb|Bio.Graphics.GenomeDiagram| module is a new addition to Biopython 1.50,
+having previously been available as a separate Python module dependent on Biopython.
+GenomeDiagram is described in the Bioinformatics journal publication Pritchard et al. (2006),
+\href{http://dx.doi.org/10.1093/bioinformatics/btk021}{doi:10.1093/bioinformatics/btk021},
+and there are several examples images and documentation for the old separate version
+available at \url{http://bioinf.scri.ac.uk/lp/programs.php#genomediagram}.
+
+\subsection{Introduction}
+
+As the name might suggest, GenomeDiagram was designed for drawing whole genomes, in
+particular prokaryotic genomes, either as linear diagrams (optionally broken up into
+fragments to fit better) or as circular wheel diagrams.  It proves also well suited
+to drawing quite detailed figures for smaller genomes such as phage or mitochrondia.
+
+This module is easiest to use if you have your genome loaded as a \verb|SeqRecord|
+object containing lots of \verb|SeqFeature| objects - for example as loaded from a
+GenBank file (see Chapter~\ref{chapter:Bio.SeqIO}).
+
+\subsection{Converting old code}
+
+If you have old code written using the standalone version of GenomeDiagram, and
+you want to switch it over to using the new version included with Biopython then
+you will have to make a few changes - most importantly to your import statements.
+
+Also, the older version of GenomeDiagram used only the UK spellings of color and
+center (colour and centre).  As part of the integration into Biopython, both
+forms can now be used for argument names. However, at some point in the future the
+UK spellings may be deprecated.
+
+For example, if you used to have:
+\begin{verbatim}
+from GenomeDiagram import GDFeatureSet, GDDiagramfrom GenomeDiagram.GDColours import GDColourTranslator
+
+gdd = GDDiagram("An example")
+...
+\end{verbatim}
+you could just switch the import statements like this:
+\begin{verbatim}
+from Bio.Graphics.GenomeDiagram import FeatureSet as GDFeatureSet, Diagram as GDDiagramfrom Bio.Graphics.GenomeDiagram.GDColours import ColorTranslator as GDColourTranslator
+
+gdd = GDDiagram("An example")
+...
+\end{verbatim}
+and hopefully that should be enough.  In the long term you might want to
+switch to the new names, but you would have to change more of your code:
+\begin{verbatim}
+from Bio.Graphics.GenomeDiagram import FeatureSet, Diagramfrom Bio.Graphics.GenomeDiagram.GDColours import ColorTranslator
+
+gdd = Diagram("An example")
+...
+\end{verbatim}
+
+If you run into difficulties, please ask on the Biopython mailing list for advice.
+
 \section{Chromosomes}
 
 The \verb|Bio.Graphics.BasicChromosome| module allows drawing of simple chromosomes.
@@ -7047,10 +7104,8 @@ Ran 107 tests in 86.127 seconds
 \subsection{Writing a print-and-compare test}
 
 A print-and-compare style test should be much simpler for beginners
-or novice to write - essentially its just an example script using
-your new module.  Note that you should try and avoid anything which
-might be platform specific, such as printing floating point numbers
-without using an explicit formatting string.
+or novices to write - essentially it is just an example script using
+your new module.
 
 Here is what you should do to make a print-and-compare test for the
 \verb|Biospam| module.
@@ -7062,9 +7117,14 @@ Here is what you should do to make a print-and-compare test for the
 
     \item This script should live in the Tests directory
       
-     \item The script should test all of the important functionality of the module (the more you test the better your test is, of course!).
+     \item The script should test all of the important functionality
+     of the module (the more you test the better your test is, of course!).
     
-     \item Try to avoid anything which might be platform specific, such as printing floating point numbers without using an explicit formatting string.
+     \item Try to avoid anything which might be platform specific,
+     such as printing floating point numbers without using an explicit
+     formatting string to avoid having too many decimal places
+     (different platforms can give very slightly different values).
+
   \end{itemize}
       
   \item If the script requires files to do the testing, these should go in
@@ -7107,8 +7167,8 @@ Here is what you should do to make a print-and-compare test for the
        with \verb|python run_tests.py|. This will run all of the tests, and
        you should see your test run (and pass!).
       
-  \item That's it! Now you've got a nice test for your module ready to check into CVS.
-       Congratulations!
+  \item That's it! Now you've got a nice test for your module ready to check in,
+  or submit to Biopython.  Congratulations!
 \end{enumerate}
 
 As an example, the \verb|test_Biospam.py| test script to test the
@@ -7205,9 +7265,6 @@ These are the key points of \verb|unittest|-based tests:
     one specific part of what you are trying to test. You can have as
     many tests as you want in a class.
 
-  \item You can add documentation strings to each test. These are shown when
-    running the tests, which can be useful information if a test is failing.
-
   \item At the end of the test script, you can use
 \begin{verbatim}
 if __name__ == "__main__" :
@@ -7232,7 +7289,8 @@ OK
 \end{verbatim}
 
   \item To indicate more clearly what each test is doing, you can add
-        docstrings to each test:
+        docstrings to each test.  These are shown when running the tests,
+        which can be useful information if a test is failing.
 
 \begin{verbatim}
 import unittest
@@ -7286,35 +7344,10 @@ OK
 
 If your module contains docstring tests (see section \ref{section:doctest}),
 you may want to include those in the tests to be run. You can do so as
-follows by modifying the code under \verb|if __name__ == "__main__":|.
-Here is an example of a complete test script \verb|test_Biospam.py|
-that runs both the unit tests contained in it, as well as the docstring
-tests in the \verb|Biospam| module:
+follows by modifying the code under \verb|if __name__ == "__main__":|
+to look like this:
 
 \begin{verbatim}
-from Bio import Biospam
-
-class BiospamTestAddition(unittest.TestCase):
-
-    def test_addition1(self):
-        result = Biospam.addition(2, 3)
-        self.assertEqual(result, 5)
-
-    def test_addition2(self):
-        result = Biospam.addition(9, -1)
-        self.assertEqual(result, 8)
-
-class BiospamTestDivision(unittest.TestCase):
-
-    def test_division1(self):
-        result = Biospam.division(3.0, 2.0)
-        self.assertAlmostEqual(result, 1.5)
-
-    def test_division2(self):
-        result = Biospam.division(10.0, -2.0)
-        self.assertAlmostEqual(result, -5.0)
-
-
 if __name__ == "__main__":
     unittest_suite = unittest.TestLoader().loadTestsFromName("test_Biospam")
     doctest_suite = doctest.DocTestSuite(Biospam)
