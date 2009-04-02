@@ -125,8 +125,8 @@ except IOError, err :
     #Ideally we'd catch the return code and raise the specific
     #error for "invalid format", rather than just notice there
     #is not output file.
-    print err
-    #python 2.3 on Windows gives (0, 'Error')
+    #Note:
+    #Python 2.3 on Windows gives (0, 'Error')
     #Python 2.5 on Windows gives [Errno 0] Error
     assert "invalid format" in str(err) \
            or "not produced" in str(err) \
