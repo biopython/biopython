@@ -143,10 +143,10 @@ handle.close()
 #(See Bug 2804, this will produce so much output on stdout that
 #subprocess could suffer a deadlock and hang).  Using all the
 #records should show the deadlock but is very slow - just thirty
-#seems to lockup on Mac OS X (without the fix).
+#seems to lockup on Mac OS X, even 20 on Linux (without the fix).
 temp_large_fasta_file = "temp_cw_prot.fasta"
 handle = open(temp_large_fasta_file, "w")
-records = list(SeqIO.parse(open("NBRF/Cw_prot.pir", "Ur"), "pir"))[:40]
+records = list(SeqIO.parse(open("NBRF/Cw_prot.pir", "rU"), "pir"))[:40]
 SeqIO.write(records, handle, "fasta")
 handle.close()
 del handle, records
