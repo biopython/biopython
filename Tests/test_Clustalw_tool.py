@@ -86,8 +86,12 @@ try :
     assert False, "Should have failed, returned %s" % repr(align)
 except IOError, err :
     print "Failed (good)"
+    #Python 2.3 on Windows gives (0, 'Error')
+    #Python 2.5 on Windows gives [Errno 0] Error
     assert "Cannot open sequence file" in str(err) \
-           or "not produced" in str(err)
+           or "not produced" in str(err) \
+           or str(err) == "[Errno 0] Error" \
+           or str(err) == "(0, 'Error')", str(err)
 
 print
 print "Single sequence"
@@ -107,8 +111,6 @@ except ValueError, err :
     #Ideally we'd get an IOError but sometimes we don't seem to
     #get a return value from clustalw.  If so, then there is a
     #ValueError when the parsing fails.
-if os.path.isfile("Fasta/f001.aln") :
-    os.remove("Fasta/f001.aln")
 
 print
 print "Invalid sequence"
@@ -123,10 +125,13 @@ except IOError, err :
     #Ideally we'd catch the return code and raise the specific
     #error for "invalid format", rather than just notice there
     #is not output file.
+    print err
+    #python 2.3 on Windows gives (0, 'Error')
+    #Python 2.5 on Windows gives [Errno 0] Error
     assert "invalid format" in str(err) \
-           or "not produced" in str(err)
-if os.path.isfile("Medline/pubmed_result1.aln") :
-    os.remove("Medline/pubmed_result1.aln")
+           or "not produced" in str(err) \
+           or str(err) == "[Errno 0] Error" \
+           or str(err) == "(0, 'Error')", str(err)
 
 #################################################################
 print
@@ -178,7 +183,7 @@ for input_file, output_file, newtree_file in [
     if newtree_file is not None :
         cline.set_new_guide_tree(newtree_file)
 
-    if sys.platform=="win32"  and sys.version_info[:2] < (2,4 ):
+    if sys.platform=="win32" and sys.version_info[:2] < (2,4 ):
         if " " in input_file or " " in output_file \
         or (newtree_file is not None and " " in newtree_file) :
             #This will fail on Python 2.3 ... cheat so the
@@ -213,6 +218,10 @@ for input_file, output_file, newtree_file in [
     os.remove(tree_file)
 
 #Clean up any stray temp files..
+if os.path.isfile("Fasta/f001.aln") :
+    os.remove("Fasta/f001.aln")
+if os.path.isfile("Medline/pubmed_result1.aln") :
+    os.remove("Medline/pubmed_result1.aln")
 if os.path.isfile(temp_filename_with_spaces) :   
     os.remove(temp_filename_with_spaces)
 if os.path.isfile(temp_large_fasta_file) :
