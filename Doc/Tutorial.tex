@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 2 April 2009 (Biopython 1.49+)}
+\date{Last Update -- 3 April 2009 (Biopython 1.49+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -6081,6 +6081,7 @@ and PICT formats).
 
 \section{GenomeDiagram}
 \label{sec:genomediagram}
+\subsection{Introduction}
 
 The \verb|Bio.Graphics.GenomeDiagram| module is a new addition to Biopython 1.50,
 having previously been available as a separate Python module dependent on Biopython.
@@ -6089,16 +6090,138 @@ GenomeDiagram is described in the Bioinformatics journal publication Pritchard e
 and there are several examples images and documentation for the old separate version
 available at \url{http://bioinf.scri.ac.uk/lp/programs.php#genomediagram}.
 
-\subsection{Introduction}
-
 As the name might suggest, GenomeDiagram was designed for drawing whole genomes, in
 particular prokaryotic genomes, either as linear diagrams (optionally broken up into
 fragments to fit better) or as circular wheel diagrams.  It proves also well suited
-to drawing quite detailed figures for smaller genomes such as phage or mitochrondia.
+to drawing quite detailed figures for smaller genomes such as phage, plasmids or
+mitochrondia.
 
 This module is easiest to use if you have your genome loaded as a \verb|SeqRecord|
 object containing lots of \verb|SeqFeature| objects - for example as loaded from a
 GenBank file (see Chapter~\ref{chapter:Bio.SeqIO}).
+
+\subsection{Diagrams, tracks, feature-sets and features}
+
+GenomeDiagram uses a nested set of objects.  At the top level, you have a diagram
+object representing a sequence (or sequence region) along the horizontal axis (or
+circle).  A diagram can contain one or more tracks, shown stacked vertically (or
+radially on circular diagrams).  These will all have the same length and represent
+the same sequence region.  You might use one track to show the gene locations,
+another to show regulatory regions, and a third track to show the GC percentage.
+
+The most commonly used type of track will contain features, bundled together in
+feature-sets.  You might choose to use one feature-set for all your CDS features,
+and another for tRNA features.  This isn't required - they can all go in the same
+feature-set, but it makes it easier to update the properties of just selected
+features (e.g. make all the tRNA features red).
+
+There are two main ways to build up a complete diagram.  Firstly, the top down
+approach where you create a diagram object, and then using its methods add
+track(s), and use the track methods to add feature-set(s), and use their
+methods to add the features.  Secondly, you can create the individual objects
+separately (in whatever order suits your code), and them combine them.
+
+\subsection{A top down example}
+
+We're going to draw a whole genome from a \verb|SeqRecord| object read in from
+a GenBank file (see Chapter~\ref{chapter:Bio.SeqIO}).  This example uses the
+pPCP1 plasmid from \textit{Yersinia pestis biovar Microtus}, the file is
+included with the Biopython unit tests under the GenBank folder, or online
+\href{http://biopython.org/SRC/biopython/Tests/GenBank/NC_005816.gb}
+{\texttt{NC\_005816.gb}} from our website.
+
+\begin{verbatim}
+from reportlab.lib import colors
+from reportlab.lib.units import cm
+from Bio.Graphics.GenomeDiagram import Diagram
+from Bio import SeqIO
+record = SeqIO.read(open("NC_005816.gb"), "genbank")
+gd_diagram = Diagram("Yersinia pestis biovar Microtus plasmid pPCP1")
+\end{verbatim}
+
+We're using the top down approach, so next we create a track, and then
+a feature set:
+
+\begin{verbatim}
+#Add a track for our features,
+gdt_features = gd_diagram.new_track(1, name="Annotated Features")
+
+#We'll just use one feature set for all our features,
+gds_features = gdt_features.new_set()
+\end{verbatim}
+
+Now the fun part - we take each gene \verb|SeqFeature| objects in our
+\verb|SeqRecord|, and use it to generate a feature on the diagram. I'm
+going color them blue, alternating between a dark blue and a light blue.
+\begin{verbatim}
+for feature in record.features:
+    if feature.type != "gene" :
+        #Exclude this feature
+        continue
+    if len(gds_features) % 2 == 0 :
+        color = colors.blue
+    else :
+        color = colors.lightblue
+    gds_features.add_feature(feature, color=color, label=True)
+\end{verbatim}
+
+Now we come to actually making the output file.  This happens in two steps,
+first we call the \verb|draw| method, which creates all the shapes using
+ReportLab objects.  Then we call the \verb|write| method which renders these
+to the requested file format.  Note you can output in multiple file formats:
+
+\begin{verbatim}
+gd_diagram.draw(format="linear", orientation="landscape",
+     tracklines=0, pagesize='A4', fragments=6)
+gd_diagram.write("plasmid_linear.pdf", "PDF")
+gd_diagram.write("plasmid_linear.eps", "EPS")
+gd_diagram.write("plasmid_linear.svg", "SVG")
+\end{verbatim}
+
+Also, provided you have the dependencies installed, you can also do bitmaps,
+for example:
+
+\begin{verbatim}
+gd_diagram.write("plasmid_linear.png", "PNG")
+\end{verbatim}
+
+\begin{htmlonly}
+\imgsrc[width=650, height=400]{images/plasmid_linear.png}
+\end{htmlonly}
+\begin{latexonly}
+The expected output is shown in Figure~\ref{fig:plasmid_linear}.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{images/plasmid_linear.png}
+\caption{Simple linear diagram for \textit{Yersinia pestis biovar Microtus} plasmid pPCP1.}
+\label{fig:plasmid_linear}
+\end{figure}
+\end{latexonly}
+Notice that the \verb|fragments| argument which we set to six controls how
+many pieces the genome gets broken up into.
+
+If you want to do a circular figure, then try this:
+
+\begin{verbatim}
+gd_diagram.move_track(1,3) # move track to make an empty space in the middle
+gd_diagram.draw(format="circular", tracklines=False,
+         pagesize=(20*cm,20*cm), circular=True)
+gd_diagram.write("plasmid_circular.pdf", "PDF")
+\end{verbatim}
+
+\begin{htmlonly}
+\imgsrc[width=400, height=400]{images/plasmid_circular.png}
+\end{htmlonly}
+\begin{latexonly}
+The expected output is shown in Figure~\ref{fig:plasmid_circular}.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=8cm,height=8cm]{images/plasmid_circular.png}
+\caption{Simple circular diagram for \textit{Yersinia pestis biovar Microtus} plasmid pPCP1.}
+\label{fig:plasmid_circular}
+\end{figure}
+\end{latexonly}
+These figures are not very exciting, but we've only just got started.
 
 \subsection{Converting old code}
 
@@ -6113,14 +6236,16 @@ UK spellings may be deprecated.
 
 For example, if you used to have:
 \begin{verbatim}
-from GenomeDiagram import GDFeatureSet, GDDiagramfrom GenomeDiagram.GDColours import GDColourTranslator
+from GenomeDiagram import GDFeatureSet, GDDiagram
+from GenomeDiagram.GDColours import GDColourTranslator
 
 gdd = GDDiagram("An example")
 ...
 \end{verbatim}
 you could just switch the import statements like this:
 \begin{verbatim}
-from Bio.Graphics.GenomeDiagram import FeatureSet as GDFeatureSet, Diagram as GDDiagramfrom Bio.Graphics.GenomeDiagram.GDColours import ColorTranslator as GDColourTranslator
+from Bio.Graphics.GenomeDiagram import FeatureSet as GDFeatureSet, Diagram as GDDiagram
+from Bio.Graphics.GenomeDiagram.GDColours import ColorTranslator as GDColourTranslator
 
 gdd = GDDiagram("An example")
 ...
@@ -6128,7 +6253,8 @@ gdd = GDDiagram("An example")
 and hopefully that should be enough.  In the long term you might want to
 switch to the new names, but you would have to change more of your code:
 \begin{verbatim}
-from Bio.Graphics.GenomeDiagram import FeatureSet, Diagramfrom Bio.Graphics.GenomeDiagram.GDColours import ColorTranslator
+from Bio.Graphics.GenomeDiagram import FeatureSet, Diagram
+from Bio.Graphics.GenomeDiagram.GDColours import ColorTranslator
 
 gdd = Diagram("An example")
 ...
@@ -6203,7 +6329,7 @@ chr_diagram.draw("simple_chrom.pdf", "Arabidopsis thaliana")
 This should create a very simple PDF file, shown
 \begin{htmlonly}
 here:
-\label{fig:blastrecord}
+\label{fig:simplechromosome}
 \imgsrc[width=650, height=574]{images/simple_chrom.png}
 \end{htmlonly}
 \begin{latexonly}
