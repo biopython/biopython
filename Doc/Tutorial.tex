@@ -6133,21 +6133,19 @@ included with the Biopython unit tests under the GenBank folder, or online
 \begin{verbatim}
 from reportlab.lib import colors
 from reportlab.lib.units import cm
-from Bio.Graphics.GenomeDiagram import Diagram
+from Bio.Graphics import GenomeDiagram
 from Bio import SeqIO
 record = SeqIO.read(open("NC_005816.gb"), "genbank")
-gd_diagram = Diagram("Yersinia pestis biovar Microtus plasmid pPCP1")
 \end{verbatim}
 
-We're using the top down approach, so next we create a track, and then
-a feature set:
+We're using a top down approach, so after loading in our sequence we next
+create an empty diagram, then add an (empty) track, and to that add an
+(empty) feature set:
 
 \begin{verbatim}
-#Add a track for our features,
-gdt_features = gd_diagram.new_track(1, name="Annotated Features")
-
-#We'll just use one feature set for all our features,
-gds_features = gdt_features.new_set()
+gd_diagram = GenomeDiagram.Diagram("Yersinia pestis biovar Microtus plasmid pPCP1")
+gd_track_for_features = gd_diagram.new_track(1, name="Annotated Features")
+gd_feature_set = gd_track_for_features.new_set()
 \end{verbatim}
 
 Now the fun part - we take each gene \verb|SeqFeature| objects in our
@@ -6158,11 +6156,11 @@ for feature in record.features:
     if feature.type != "gene" :
         #Exclude this feature
         continue
-    if len(gds_features) % 2 == 0 :
+    if len(gd_feature_set) % 2 == 0 :
         color = colors.blue
     else :
         color = colors.lightblue
-    gds_features.add_feature(feature, color=color, label=True)
+    gd_feature_set.add_feature(feature, color=color, label=True)
 \end{verbatim}
 
 Now we come to actually making the output file.  This happens in two steps,
@@ -6222,6 +6220,44 @@ The expected output is shown in Figure~\ref{fig:plasmid_circular}.
 \end{figure}
 \end{latexonly}
 These figures are not very exciting, but we've only just got started.
+
+\subsection{A bottom up example}
+Now let's produce exactly the same figures, but using the bottom up approach.
+This means we create the different objects directly (and this can be done in
+almost any order) and then combine them.
+
+\begin{verbatim}
+from reportlab.lib import colors
+from reportlab.lib.units import cm
+from Bio.Graphics import GenomeDiagram
+from Bio import SeqIO
+record = SeqIO.read(open("NC_005816.gb"), "genbank")
+
+#Create the feature set and its feature objects,
+gd_feature_set = GenomeDiagram.FeatureSet()
+for feature in record.features:
+    if feature.type != "gene" :
+        #Exclude this feature
+        continue
+    if len(gd_feature_set) % 2 == 0 :
+        color = colors.blue
+    else :
+        color = colors.lightblue
+    gd_feature_set.add_feature(feature, color=color, label=True)
+#(this for loop is the same as in the previous example)
+
+#Create a track, and a diagram
+gd_track_for_features = GenomeDiagram.Track(name="Annotated Features")
+gd_diagram = GenomeDiagram.Diagram("Yersinia pestis biovar Microtus plasmid pPCP1")
+
+#Now have to glue the bits together...
+gd_track_for_features.add_set(gd_feature_set)
+gd_diagram.add_track(gd_track_for_features, 1)
+\end{verbatim}
+
+You can now call the \verb|draw| and \verb|write| methods as before to produce
+a linear or circular diagram, using the code at the end of the top-down example
+above.  The figures should be identical.
 
 \subsection{Converting old code}
 
