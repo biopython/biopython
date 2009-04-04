@@ -123,7 +123,6 @@ class EmbossIterator(AlignmentIterator) :
                              % (number_of_seqs, self.records_per_alignment))
 
         seqs = ["" for id in ids]
-        seq_starts = dict() #starting coordinate of sequence (not always one!) 
         index = 0
 
         #Parse the seqs
@@ -153,10 +152,8 @@ class EmbossIterator(AlignmentIterator) :
                     elif start == len(seqs[index].replace("-","")) :
                         #Special case when one sequence ends long before the other
                         assert len(seq.replace("-","")) == 0, line
-                    elif id not in seq_starts :
-                        seq_starts[id] = start
                     else :
-                        assert start == seq_starts[id] + len(seqs[index].replace("-","")), \
+                        assert start - 1 == len(seqs[index].replace("-","")), \
                         "Found %i chars so far for sequence %i (%s), file says start %i:\n%s" \
                             % (len(seqs[index].replace("-","")), index, id,
                                start, seqs[index])
@@ -164,9 +161,9 @@ class EmbossIterator(AlignmentIterator) :
                     seqs[index] += seq
 
                     #Check the end ...
-                    assert end == seq_starts[id] -1 + len(seqs[index].replace("-","")), \
-                        "Found %i chars so far for %s, file says start %i and end %i:\n%s" \
-                            % (len(seqs[index]), id, seq_starts[id], end, repr(seqs[index]))
+                    assert end == len(seqs[index].replace("-","")), \
+                        "Found %i chars so far for %s, file says end %i:\n%s" \
+                            % (len(seqs[index]), id, end, repr(seqs[index]))
 
                     index += 1
                     if index >= number_of_seqs :
