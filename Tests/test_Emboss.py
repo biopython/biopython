@@ -22,7 +22,7 @@ except ImportError :
 
 #################################################################
 
-exes_wanted = ["water", "needle"]
+exes_wanted = ["water", "needle", "seqret"]
 exes = dict() #Dictionary mapping from names to exe locations
 if sys.platform=="win32" :
     #TODO - Find out where the default install goes, and/or
@@ -43,6 +43,55 @@ if len(exes) < len(exes_wanted) :
 
 #################################################################
 
+class SeqRetTests(unittest.TestCase):
+    """Check EMBOSS seqret against Bio.SeqIO for converting files."""
+    def emboss_convert(self, filename, old_format, new_format):
+        """Run seqret, returns handle."""
+        #TODO - Support seqret in Bio.Emboss.Applications
+        #(ideally with the -auto and -filter arguments)
+        #Setup, this assumes for all the format names used
+        #Biopython and EMBOSS names are consistent!
+        cline = exes["seqret"]
+        cline += " -sequence " + filename
+        cline += " -sformat " + old_format
+        cline += " -osformat " + new_format
+        cline += " -auto" #no prompting
+        cline += " -filter" #use stdout
+        #Run the tool,
+        child = subprocess.Popen(str(cline),
+                                 stdin=subprocess.PIPE,
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 shell=(sys.platform!="win32"))
+        child.stdin.close()
+        return child.stdout
+
+    def compare_records(self, old_list, new_list) :
+        """Check two lists of SeqRecords agree."""
+        self.assertEqual(len(old_list), len(new_list))
+        for old, new in zip(old_list, new_list) :
+            self.assertEqual(str(old.seq).upper(), str(new.seq).upper())
+        return True
+        
+    def check_can_read_emboss_conversion(self, filename, old_format, new_format) :
+        """Can Bio.SeqIO read seqret's conversion of the file?"""
+        self.assert_(os.path.isfile(filename))
+        old_records = list(SeqIO.parse(open(filename), old_format))
+        handle = self.emboss_convert(filename, old_format, new_format)
+        new_records = list(SeqIO.parse(handle, new_format))
+        self.compare_records(old_records, new_records)
+
+    def test_genbank(self) :
+        """Can we read EMBOSS's conversions of a GenBank file?"""
+        self.check_can_read_emboss_conversion("GenBank/cor6_6.gb", "genbank", "genbank")
+        self.check_can_read_emboss_conversion("GenBank/cor6_6.gb", "genbank", "fasta")
+        self.check_can_read_emboss_conversion("GenBank/cor6_6.gb", "genbank", "pir")
+        self.check_can_read_emboss_conversion("GenBank/cor6_6.gb", "genbank", "embl")
+        #TODO: Why can't we read EMBOSS's swiss output?
+        #self.check_can_read_emboss_conversion("GenBank/cor6_6.gb", "genbank", "swiss")
+        
+    
+        
 class PairwiseAlignmentTests(unittest.TestCase):
     """Run pairwise alignments with water and needle, and parse them."""
     def pairwise_alignment_check(self, query_seq,
