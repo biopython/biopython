@@ -1,4 +1,4 @@
-# Copyright 2008 by Peter Cock.  All rights reserved.
+# Copyright 2008-2009 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -123,6 +123,7 @@ class EmbossIterator(AlignmentIterator) :
                              % (number_of_seqs, self.records_per_alignment))
 
         seqs = ["" for id in ids]
+        seq_starts = dict() #starting coordinate of sequence (not always one!) 
         index = 0
 
         #Parse the seqs
@@ -135,6 +136,8 @@ class EmbossIterator(AlignmentIterator) :
                     #(an aligned seq is broken up into multiple lines)
                     id, start = id_start
                     seq, end = seq_end
+                    start = int(start)
+                    end = int(end)
 
                     #The identifier is truncated...
                     assert 0 <= index and index < number_of_seqs, \
@@ -143,25 +146,27 @@ class EmbossIterator(AlignmentIterator) :
                     assert id==ids[index] or id == ids[index][:len(id)]
 
                     #Check the start...
-                    if int(start) == 0:
+                    if start == 0:
                         #Special case when one sequence starts long before the other
                         assert len(seqs[index].replace("-",""))==0
                         assert len(seq.replace("-","")) == 0, line
-                    elif int(start) == len(seqs[index].replace("-","")) :
+                    elif start == len(seqs[index].replace("-","")) :
                         #Special case when one sequence ends long before the other
                         assert len(seq.replace("-","")) == 0, line
+                    elif id not in seq_starts :
+                        seq_starts[id] = start
                     else :
-                        assert int(start) - 1 == len(seqs[index].replace("-","")), \
+                        assert start == seq_starts[id] + len(seqs[index].replace("-","")), \
                         "Found %i chars so far for sequence %i (%s), file says start %i:\n%s" \
                             % (len(seqs[index].replace("-","")), index, id,
-                               int(start), seqs[index])
+                               start, seqs[index])
                     
                     seqs[index] += seq
 
                     #Check the end ...
-                    assert int(end) == len(seqs[index].replace("-","")), \
-                        "Found %i chars so far for %s, file says end %i:\n%s" \
-                            % (len(seqs[index]), id, int(end), repr(seqs[index]))
+                    assert end == seq_starts[id] -1 + len(seqs[index].replace("-","")), \
+                        "Found %i chars so far for %s, file says start %i and end %i:\n%s" \
+                            % (len(seqs[index]), id, seq_starts[id], end, repr(seqs[index]))
 
                     index += 1
                     if index >= number_of_seqs :
