@@ -73,24 +73,34 @@ class SeqRetTests(unittest.TestCase):
             self.assertEqual(str(old.seq).upper(), str(new.seq).upper())
         return True
         
-    def check_can_read_emboss_conversion(self, filename, old_format, new_format) :
+    def check_can_read_emboss_conversion(self, filename, old_format,
+                              new_formats=["genbank","fasta","pir","embl"]) :
         """Can Bio.SeqIO read seqret's conversion of the file?"""
+        #TODO: Why can't we read EMBOSS's swiss output?
         self.assert_(os.path.isfile(filename))
         old_records = list(SeqIO.parse(open(filename), old_format))
-        handle = self.emboss_convert(filename, old_format, new_format)
-        new_records = list(SeqIO.parse(handle, new_format))
-        self.compare_records(old_records, new_records)
+        for new_format in new_formats :
+            handle = self.emboss_convert(filename, old_format, new_format)
+            new_records = list(SeqIO.parse(handle, new_format))
+            self.compare_records(old_records, new_records)
 
     def test_genbank(self) :
         """Can we read EMBOSS's conversions of a GenBank file?"""
-        self.check_can_read_emboss_conversion("GenBank/cor6_6.gb", "genbank", "genbank")
-        self.check_can_read_emboss_conversion("GenBank/cor6_6.gb", "genbank", "fasta")
-        self.check_can_read_emboss_conversion("GenBank/cor6_6.gb", "genbank", "pir")
-        self.check_can_read_emboss_conversion("GenBank/cor6_6.gb", "genbank", "embl")
-        #TODO: Why can't we read EMBOSS's swiss output?
-        #self.check_can_read_emboss_conversion("GenBank/cor6_6.gb", "genbank", "swiss")
-        
-    
+        self.check_can_read_emboss_conversion("GenBank/cor6_6.gb", "genbank")
+
+    def test_embl(self) :
+        """Can we read EMBOSS's conversions of an EMBL file?"""
+        self.check_can_read_emboss_conversion("EMBL/U87107.embl", "embl")
+
+    def test_pir(self) :
+        """Can we read EMBOSS's conversions of a PIR file?"""
+        #Skip genbank here, EMBOSS mangles the LOCUS line:
+        self.check_can_read_emboss_conversion("NBRF/clustalw.pir", "pir",
+                               new_formats=["fasta","pir","embl"])
+        #Skip EMBL here, EMBOSS mangles the ID line
+        self.check_can_read_emboss_conversion("NBRF/DMB_prot.pir", "pir",
+                               new_formats=["genbank","fasta","pir"])
+                               
         
 class PairwiseAlignmentTests(unittest.TestCase):
     """Run pairwise alignments with water and needle, and parse them."""
