@@ -43,64 +43,142 @@ if len(exes) < len(exes_wanted) :
 
 #################################################################
 
+#Top level function as this makes it easier to use for debugging:
+def emboss_convert(filename, old_format, new_format):
+    """Run seqret, returns handle."""
+    #TODO - Support seqret in Bio.Emboss.Applications
+    #(ideally with the -auto and -filter arguments)
+    #Setup, this assumes for all the format names used
+    #Biopython and EMBOSS names are consistent!
+    cline = exes["seqret"]
+    cline += " -sequence " + filename
+    cline += " -sformat " + old_format
+    cline += " -osformat " + new_format
+    cline += " -auto" #no prompting
+    cline += " -filter" #use stdout
+    #Run the tool,
+    child = subprocess.Popen(str(cline),
+                             stdin=subprocess.PIPE,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             shell=(sys.platform!="win32"))
+    child.stdin.close()
+    return child.stdout
+
+def compare_records(old_list, new_list) :
+    """Check two lists of SeqRecords agree."""
+    if len(old_list) != len(new_list) :
+        return False
+    for old, new in zip(old_list, new_list) :
+        #TODO - check annotation
+        if old.id != new.id and old.name != new.name :
+            return False
+        if str(old.seq).upper() != str(new.seq).upper() :
+            return False
+        if old.features and new.features \
+        and len(old.features) != len(new.features) :
+            return False
+    return True
+
+def compare_alignments(old_list, new_list) :
+    """Check two lists of Alignments agree."""
+    if len(old_list) != len(new_list) :
+        return False
+    for old, new in zip(old_list, new_list) :
+        if len(old) != len(new) :
+            return False
+        for r1, r2 in zip(old, new) :
+            if str(r1.seq).upper() != str(r2.seq).upper() :
+                return False
+            #TODO - Be flexible on the names, PHYLIP truncates them.
+    return True
+
 class SeqRetTests(unittest.TestCase):
     """Check EMBOSS seqret against Bio.SeqIO for converting files."""
-    def emboss_convert(self, filename, old_format, new_format):
-        """Run seqret, returns handle."""
-        #TODO - Support seqret in Bio.Emboss.Applications
-        #(ideally with the -auto and -filter arguments)
-        #Setup, this assumes for all the format names used
-        #Biopython and EMBOSS names are consistent!
-        cline = exes["seqret"]
-        cline += " -sequence " + filename
-        cline += " -sformat " + old_format
-        cline += " -osformat " + new_format
-        cline += " -auto" #no prompting
-        cline += " -filter" #use stdout
-        #Run the tool,
-        child = subprocess.Popen(str(cline),
-                                 stdin=subprocess.PIPE,
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 shell=(sys.platform!="win32"))
-        child.stdin.close()
-        return child.stdout
-
-    def compare_records(self, old_list, new_list) :
-        """Check two lists of SeqRecords agree."""
-        self.assertEqual(len(old_list), len(new_list))
-        for old, new in zip(old_list, new_list) :
-            self.assertEqual(str(old.seq).upper(), str(new.seq).upper())
-        return True
-        
-    def check_can_read_emboss_conversion(self, filename, old_format,
-                              new_formats=["genbank","fasta","pir","embl"]) :
+    def check_EMBOSS_to_SeqIO(self, filename, old_format,
+                              skip_formats=[]) :
         """Can Bio.SeqIO read seqret's conversion of the file?"""
         #TODO: Why can't we read EMBOSS's swiss output?
+        #TODO: Why does EMBOSS seem to add the digit 1 to ig sequences?
         self.assert_(os.path.isfile(filename))
         old_records = list(SeqIO.parse(open(filename), old_format))
-        for new_format in new_formats :
-            handle = self.emboss_convert(filename, old_format, new_format)
+        for new_format in ["genbank","fasta","pir","embl"] :
+            if new_format in skip_formats :
+                continue
+            handle = emboss_convert(filename, old_format, new_format)
             new_records = list(SeqIO.parse(handle, new_format))
-            self.compare_records(old_records, new_records)
+            if not compare_records(old_records, new_records) :
+                raise ValueError("Disagree on %s file %s in %s format." \
+                                 % (old_format, filename, new_format))
 
     def test_genbank(self) :
         """Can we read EMBOSS's conversions of a GenBank file?"""
-        self.check_can_read_emboss_conversion("GenBank/cor6_6.gb", "genbank")
+        self.check_EMBOSS_to_SeqIO("GenBank/cor6_6.gb", "genbank")
 
     def test_embl(self) :
-        """Can we read EMBOSS's conversions of an EMBL file?"""
-        self.check_can_read_emboss_conversion("EMBL/U87107.embl", "embl")
+        """Can SeqIO we read EMBOSS's conversions of an EMBL file?"""
+        self.check_EMBOSS_to_SeqIO("EMBL/U87107.embl", "embl")
+
+    #def test_ig(self) :
+    #    """Can SeqIO read EMBOSS's conversions of an IntelliGenetics file?"""
+    #    self.check_EMBOSS_to_SeqIO("IntelliGenetics/TAT_mase_nuc.txt", "ig")
+    #    self.check_EMBOSS_to_SeqIO("IntelliGenetics/VIF_mase-pro.txt", "ig")
+    #    self.check_EMBOSS_to_SeqIO("IntelliGenetics/vpu_nucaligned.txt", "ig")
 
     def test_pir(self) :
         """Can we read EMBOSS's conversions of a PIR file?"""
         #Skip genbank here, EMBOSS mangles the LOCUS line:
-        self.check_can_read_emboss_conversion("NBRF/clustalw.pir", "pir",
-                               new_formats=["fasta","pir","embl"])
+        self.check_EMBOSS_to_SeqIO("NBRF/clustalw.pir", "pir",
+                               skip_formats=["genbank"])
         #Skip EMBL here, EMBOSS mangles the ID line
-        self.check_can_read_emboss_conversion("NBRF/DMB_prot.pir", "pir",
-                               new_formats=["genbank","fasta","pir"])
-                               
+        self.check_EMBOSS_to_SeqIO("NBRF/DMB_prot.pir", "pir",
+                               skip_formats=["embl"])
+    def test_clustalw(self) :
+        """Can SeqIO read EMBOSS's conversions of a Clustalw file?"""
+        self.check_EMBOSS_to_SeqIO("Clustalw/hedgehog.aln", "clustal",
+                                   skip_formats=["embl","genbank"])
+        self.check_EMBOSS_to_SeqIO("Clustalw/opuntia.aln", "clustal",
+                                   skip_formats=["embl","genbank"])
+
+    def check_EMBOSS_to_AlignIO(self, filename, old_format,
+                              skip_formats=[]) :
+        """Can Bio.AlignIO read seqret's conversion of the file?"""
+        self.assert_(os.path.isfile(filename), filename)
+        old_aligns = list(AlignIO.parse(open(filename), old_format))
+        formats = ["clustal", "phylip"]
+        if len(old_aligns) == 1 :
+            formats.extend(["fasta","nexus"])
+        for new_format in formats :
+            if new_format in skip_formats :
+                continue
+            handle = emboss_convert(filename, old_format, new_format)
+            try :
+                new_aligns = list(AlignIO.parse(handle, new_format))
+            except :
+                raise ValueError("Can't parse %s file %s in %s format." \
+                                 % (old_format, filename, new_format))
+            if not compare_alignments(old_aligns, new_aligns) :
+                raise ValueError("Disagree on %s file %s in %s format." \
+                                 % (old_format, filename, new_format))
+
+    def test_align_clustalw(self) :
+        """Can AlignIO read EMBOSS's conversions of a Clustalw file?"""
+        self.check_EMBOSS_to_AlignIO("Clustalw/hedgehog.aln", "clustal")
+        self.check_EMBOSS_to_AlignIO("Clustalw/opuntia.aln", "clustal")
+        self.check_EMBOSS_to_AlignIO("Clustalw/odd_consensus.aln", "clustal",
+                               skip_formats=["nexus"]) #TODO - why not nexus?
+        self.check_EMBOSS_to_AlignIO("Clustalw/protein.aln", "clustal")
+        self.check_EMBOSS_to_AlignIO("Clustalw/promals3d.aln", "clustal")
+
+    def test_clustalw(self) :
+        """Can we read EMBOSS's conversions of a PHYLIP file?"""
+        self.check_EMBOSS_to_AlignIO("Phylip/horses.phy", "phylip")
+        self.check_EMBOSS_to_AlignIO("Phylip/hennigian.phy", "phylip")
+        self.check_EMBOSS_to_AlignIO("Phylip/reference_dna.phy", "phylip")
+        self.check_EMBOSS_to_AlignIO("Phylip/reference_dna2.phy", "phylip")
+        self.check_EMBOSS_to_AlignIO("Phylip/interlaced.phy", "phylip")
+        self.check_EMBOSS_to_AlignIO("Phylip/interlaced2.phy", "phylip")
+        self.check_EMBOSS_to_AlignIO("Phylip/random.phy", "phylip")
         
 class PairwiseAlignmentTests(unittest.TestCase):
     """Run pairwise alignments with water and needle, and parse them."""
