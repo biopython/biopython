@@ -477,14 +477,12 @@ class Seq(object):
            ...
         ValueError: Proteins do not have complements!
         """
-        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
-                      Alphabet.ProteinAlphabet) :
+        base = Alphabet._get_base_alphabet(self.alphabet)
+        if isinstance(base, Alphabet.ProteinAlphabet) :
             raise ValueError("Proteins do not have complements!")
-        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
-                      Alphabet.DNAAlphabet) :
+        if isinstance(base, Alphabet.DNAAlphabet) :
             ttable = _dna_complement_table
-        elif isinstance(Alphabet._get_base_alphabet(self.alphabet),
-                        Alphabet.RNAAlphabet) :
+        elif isinstance(base, Alphabet.RNAAlphabet) :
             ttable = _rna_complement_table
         elif ('U' in self._data or 'u' in self._data) \
         and ('T' in self._data or 't' in self._data):
@@ -496,8 +494,7 @@ class Seq(object):
             ttable = _dna_complement_table
         #Much faster on really long sequences than the previous loop based one.
         #thx to Michael Palmer, University of Waterloo
-        s = str(self).translate(ttable)
-        return Seq(s, self.alphabet)
+        return Seq(str(self).translate(ttable), self.alphabet)
 
     def reverse_complement(self):
         """Returns the reverse complement sequence. New Seq object.
@@ -554,11 +551,10 @@ class Seq(object):
            ...
         ValueError: Proteins cannot be transcribed!
         """
-        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
-                      Alphabet.ProteinAlphabet) :
+        base = Alphabet._get_base_alphabet(self.alphabet)
+        if isinstance(base, Alphabet.ProteinAlphabet) :
             raise ValueError("Proteins cannot be transcribed!")
-        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
-                      Alphabet.RNAAlphabet) :
+        if isinstance(base, Alphabet.RNAAlphabet) :
             raise ValueError("RNA cannot be transcribed!")
 
         if self.alphabet==IUPAC.unambiguous_dna:
@@ -590,11 +586,10 @@ class Seq(object):
            ...
         ValueError: Proteins cannot be back transcribed!
         """
-        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
-                      Alphabet.ProteinAlphabet) :
+        base = Alphabet._get_base_alphabet(self.alphabet)
+        if isinstance(base, Alphabet.ProteinAlphabet) :
             raise ValueError("Proteins cannot be back transcribed!")
-        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
-                      Alphabet.DNAAlphabet) :
+        if isinstance(base, Alphabet.DNAAlphabet) :
             raise ValueError("DNA cannot be back transcribed!")
 
         if self.alphabet==IUPAC.unambiguous_rna:
