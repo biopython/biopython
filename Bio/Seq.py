@@ -466,7 +466,7 @@ class Seq(object):
         >>> my_dna.complement()
         Seq('GGGGGctaT-CH', DNAAlphabet())
 
-        Note in the above example, ambigusous character D denotes
+        Note in the above example, ambiguous character D denotes
         G, A or T so its complement is H (for C, T or A).
         
         Trying to complement a protein sequence raises an exception.
@@ -667,26 +667,31 @@ class Seq(object):
                       Alphabet.ProteinAlphabet) :
             raise ValueError("Proteins cannot be translated!")
         if self.alphabet==IUPAC.unambiguous_dna:
+            #Will use standard IUPAC protein alphabet, no need for X
             if table_id is None:
                 codon_table = CodonTable.unambiguous_dna_by_name[table]
             else:
                 codon_table = CodonTable.unambiguous_dna_by_id[table_id]
-        elif self.alphabet==IUPAC.ambiguous_dna:
-            if table_id is None:
-                codon_table = CodonTable.ambiguous_dna_by_name[table]
-            else:
-                codon_table = CodonTable.ambiguous_dna_by_id[table_id]
+        #elif self.alphabet==IUPAC.ambiguous_dna:
+        #    if table_id is None:
+        #        codon_table = CodonTable.ambiguous_dna_by_name[table]
+        #    else:
+        #        codon_table = CodonTable.ambiguous_dna_by_id[table_id]
         elif self.alphabet==IUPAC.unambiguous_rna:
+            #Will use standard IUPAC protein alphabet, no need for X
             if table_id is None:
                 codon_table = CodonTable.unambiguous_rna_by_name[table]
             else:
                 codon_table = CodonTable.unambiguous_rna_by_id[table_id]
-        elif self.alphabet==IUPAC.ambiguous_rna:
-            if table_id is None:
-                codon_table = CodonTable.ambiguous_rna_by_name[table]
-            else:
-                codon_table = CodonTable.ambiguous_rna_by_id[table_id]
+        #elif self.alphabet==IUPAC.ambiguous_rna:
+        #    if table_id is None:
+        #        codon_table = CodonTable.ambiguous_rna_by_name[table]
+        #    else:
+        #        codon_table = CodonTable.ambiguous_rna_by_id[table_id]
         else:
+            #This will use the extend IUPAC protein alphabet with X etc.
+            #The same table can be used for RNA or DNA (we use this for
+            #translating strings).
             if table_id is None:
                 codon_table = CodonTable.ambiguous_generic_by_name[table]
             else:
