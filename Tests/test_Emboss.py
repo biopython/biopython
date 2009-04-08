@@ -13,6 +13,7 @@ from Bio.Emboss import Applications
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio import MissingExternalDependencyError
+from Bio.Alphabet import generic_protein, generic_dna
 
 try :
     import subprocess
@@ -71,9 +72,12 @@ def compare_records(old_list, new_list) :
         return False
     for old, new in zip(old_list, new_list) :
         #TODO - check annotation
-        if old.id != new.id and old.name != new.name :
+        if old.id != new.id and old.name != new.name \
+        and not new.id.endswith(old.id) and not old.id.endswith(new.id) :
+            #print >> sys.stderr, "\nOld: %s\nNew: %s\n" % (repr(old), repr(new))
             return False
         if str(old.seq).upper() != str(new.seq).upper() :
+            #print >> sys.stderr, "\nOld: %s\nNew: %s\n" % (old.seq, new.seq)
             return False
         if old.features and new.features \
         and len(old.features) != len(new.features) :
@@ -95,6 +99,28 @@ def compare_alignments(old_list, new_list) :
 
 class SeqRetTests(unittest.TestCase):
     """Check EMBOSS seqret against Bio.SeqIO for converting files."""
+
+    def check_SeqIO_to_EMBOSS(self, records, skip_formats=[]) :
+        """Can Bio.SeqIO write files seqret can read back?"""
+        for temp_format in ["genbank","fasta"] :
+            if temp_format in skip_formats :
+                continue
+            #TODO - Handle this with a pipe?
+            #i.e. can Bio.SeqIO write to the stdin of seqret?
+            filename = "Emboss/temp_%s.txt" % temp_format
+            temp_handle = open(filename,"w")
+            SeqIO.write(records, temp_handle, temp_format)
+            temp_handle.flush()
+            temp_handle.close()
+            
+            handle = emboss_convert(filename, temp_format, "fasta")
+            new_records = list(SeqIO.parse(handle, "fasta"))
+
+            if not compare_records(records, new_records) :
+                raise ValueError("Disagree on file %s in %s format." \
+                                 % (filename, temp_format))
+            os.remove(filename)
+            
     def check_EMBOSS_to_SeqIO(self, filename, old_format,
                               skip_formats=[]) :
         """Can Bio.SeqIO read seqret's conversion of the file?"""
@@ -111,38 +137,51 @@ class SeqRetTests(unittest.TestCase):
                 raise ValueError("Disagree on %s file %s in %s format." \
                                  % (old_format, filename, new_format))
 
+    def check_SeqIO_with_EMBOSS(self, filename, old_format, skip_formats=[]):
+        #TODO - May need to supply the sequence alphabet for parsing.
+        #Check EMBOSS can read Bio.SeqIO output...
+        records = list(SeqIO.parse(open(filename), old_format))
+        self.check_SeqIO_to_EMBOSS(records, skip_formats)
+        #Check Bio.SeqIO can read EMBOSS seqret output...
+        self.check_EMBOSS_to_SeqIO(filename, old_format, skip_formats)
+
     def test_genbank(self) :
-        """Can we read EMBOSS's conversions of a GenBank file?"""
-        self.check_EMBOSS_to_SeqIO("GenBank/cor6_6.gb", "genbank")
+        """SeqIO & EMBOSS reading each other's conversions of a GenBank file."""
+        self.check_SeqIO_with_EMBOSS("GenBank/cor6_6.gb", "genbank")
 
     def test_embl(self) :
-        """Can SeqIO we read EMBOSS's conversions of an EMBL file?"""
-        self.check_EMBOSS_to_SeqIO("EMBL/U87107.embl", "embl")
+        """SeqIO & EMBOSS reading each other's conversions of an EMBL file."""
+        self.check_SeqIO_with_EMBOSS("EMBL/U87107.embl", "embl")
 
-    #def test_ig(self) :
-    #    """Can SeqIO read EMBOSS's conversions of an IntelliGenetics file?"""
-    #    self.check_EMBOSS_to_SeqIO("IntelliGenetics/TAT_mase_nuc.txt", "ig")
-    #    self.check_EMBOSS_to_SeqIO("IntelliGenetics/VIF_mase-pro.txt", "ig")
-    #    self.check_EMBOSS_to_SeqIO("IntelliGenetics/vpu_nucaligned.txt", "ig")
+    def test_ig(self) :
+        """SeqIO & EMBOSS reading each other's conversions of an ig file."""
+        #TODO - Why does EMBOSS add the digit one to its output in ig format?
+        records = list(SeqIO.parse(open("IntelliGenetics/VIF_mase-pro.txt"),
+                                   "ig", generic_protein))
+        self.check_SeqIO_to_EMBOSS(records)
+        #TODO - What does a % in an ig sequence mean?
+        #e.g. "IntelliGenetics/vpu_nucaligned.txt"
+        #and  "IntelliGenetics/TAT_mase_nuc.txt"
+        #EMBOSS seems to ignore them.
 
     def test_pir(self) :
-        """Can we read EMBOSS's conversions of a PIR file?"""
+        """SeqIO & EMBOSS reading each other's conversions of a PIR file."""
         #Skip genbank here, EMBOSS mangles the LOCUS line:
-        self.check_EMBOSS_to_SeqIO("NBRF/clustalw.pir", "pir",
+        self.check_SeqIO_with_EMBOSS("NBRF/clustalw.pir", "pir",
                                skip_formats=["genbank"])
         #Skip EMBL here, EMBOSS mangles the ID line
-        self.check_EMBOSS_to_SeqIO("NBRF/DMB_prot.pir", "pir",
+        self.check_SeqIO_with_EMBOSS("NBRF/DMB_prot.pir", "pir",
                                skip_formats=["embl"])
     def test_clustalw(self) :
-        """Can SeqIO read EMBOSS's conversions of a Clustalw file?"""
-        self.check_EMBOSS_to_SeqIO("Clustalw/hedgehog.aln", "clustal",
+        """SeqIO & EMBOSS reading each other's conversions of a Clustalw file."""
+        self.check_SeqIO_with_EMBOSS("Clustalw/hedgehog.aln", "clustal",
                                    skip_formats=["embl","genbank"])
-        self.check_EMBOSS_to_SeqIO("Clustalw/opuntia.aln", "clustal",
+        self.check_SeqIO_with_EMBOSS("Clustalw/opuntia.aln", "clustal",
                                    skip_formats=["embl","genbank"])
 
     def check_EMBOSS_to_AlignIO(self, filename, old_format,
                               skip_formats=[]) :
-        """Can Bio.AlignIO read seqret's conversion of the file?"""
+        """Can AlignIO read seqret's conversion of the file?"""
         self.assert_(os.path.isfile(filename), filename)
         old_aligns = list(AlignIO.parse(open(filename), old_format))
         formats = ["clustal", "phylip"]
