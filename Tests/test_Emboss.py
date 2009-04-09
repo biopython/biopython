@@ -26,17 +26,26 @@ except ImportError :
 exes_wanted = ["water", "needle", "seqret"]
 exes = dict() #Dictionary mapping from names to exe locations
 if sys.platform=="win32" :
-    #TODO - Find out where the default install goes, and/or
-    #if we can use the registry to find it.
-    raise MissingExternalDependencyError(\
-        "Auto-detection of EMBOSS on Windows not supported (yet).")
+    #The default installation path is C:\mEMBOSS which contains the exes.
+    #EMBOSS also sets an environment variable which we will check for.
+    try :
+        path = os.environ["EMBOSS_ROOT"]
+    except KeyError :
+        #print >> sys.stderr, "Missing EMBOSS_ROOT environment variable!"
+        raise MissingExternalDependencyError(\
+            "Install EMBOSS if you want to use Bio.EMBOSS.")
+    if os.path.isdir(path) :
+        for name in exes_wanted :
+            if os.path.isfile(os.path.join(path, name+".exe")) :
+                exes[name] = os.path.join(path, name+".exe")
+    del path, name
 else :
     import commands
     for name in exes_wanted :
         #This will "just work" if installed on the path as normal on Unix
-        output = commands.getoutput("%s -help" % name)
-        if "not found" not in output :
+        if "not found" not in commands.getoutput("%s -help" % name) :
             exes[name] = name
+    del name
 
 if len(exes) < len(exes_wanted) :
     raise MissingExternalDependencyError(\
@@ -261,9 +270,11 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #Run the tool,
         result, out, err = generic_run(cline)
         #Check it worked,
-        self.assertEqual(result.return_code, 0)
+        errors = err.read().strip()
+        self.assert_(errors.startswith("Smith-Waterman local alignment"), errors)
         self.assertEqual(out.read().strip(), "")
-        self.assertEqual(err.read().strip(), "Smith-Waterman local alignment.")
+        if result.return_code != 0 : print >> sys.stderr, "\n%s"%cline
+        self.assertEqual(result.return_code, 0)
         filename = result.get_result("-outfile")
         self.assertEqual(filename, "Emboss/temp_test.water")
         assert os.path.isfile(filename)
@@ -343,10 +354,11 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #Run the tool,
         result, out, err = generic_run(cline)
         #Check it worked,
-        if result.return_code != 0 : print cline
-        self.assertEqual(result.return_code, 0)
+        errors = err.read().strip()
+        self.assert_(errors.startswith("Smith-Waterman local alignment"), errors)
         self.assertEqual(out.read().strip(), "")
-        self.assertEqual(err.read().strip(), "Smith-Waterman local alignment.")
+        if result.return_code != 0 : print >> sys.stderr, "\n%s"%cline
+        self.assertEqual(result.return_code, 0)
         self.assertEqual(result.get_result("-outfile"), out_file)
         assert os.path.isfile(out_file)
         #Check we can parse the output and it is sensible...
@@ -376,10 +388,11 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #Run the tool,
         result, out, err = generic_run(cline)
         #Check it worked,
-        if result.return_code != 0 : print cline
-        self.assertEqual(result.return_code, 0)
+        errors = err.read().strip()
+        self.assert_(errors.startswith("Smith-Waterman local alignment"), errors)
         self.assertEqual(out.read().strip(), "")
-        self.assertEqual(err.read().strip(), "Smith-Waterman local alignment.")
+        if result.return_code != 0 : print >> sys.stderr, "\n%s"%cline
+        self.assertEqual(result.return_code, 0)
         self.assertEqual(result.get_result("-outfile"), out_file)
         assert os.path.isfile(out_file)
         #Check we can parse the output and it is sensible...
@@ -409,10 +422,11 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #Run the tool,
         result, out, err = generic_run(cline)
         #Check it worked,
-        if result.return_code != 0 : print cline
-        self.assertEqual(result.return_code, 0)
+        errors = err.read().strip()
+        self.assert_(errors.startswith("Smith-Waterman local alignment"), errors)
         self.assertEqual(out.read().strip(), "")
-        self.assertEqual(err.read().strip(), "Smith-Waterman local alignment.")
+        if result.return_code != 0 : print >> sys.stderr, "\n%s"%cline
+        self.assertEqual(result.return_code, 0)
         self.assertEqual(result.get_result("-outfile"), out_file)
         assert os.path.isfile(out_file)
         #Check we can parse the output and it is sensible...
