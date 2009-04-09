@@ -109,8 +109,13 @@ def compare_alignments(old_list, new_list) :
 class SeqRetTests(unittest.TestCase):
     """Check EMBOSS seqret against Bio.SeqIO for converting files."""
 
-    def check_SeqIO_to_EMBOSS(self, records, skip_formats=[]) :
+    def check_SeqIO_to_EMBOSS(self, in_filename, in_format, skip_formats=[],
+                              alphabet=None) :
         """Can Bio.SeqIO write files seqret can read back?"""
+        if alphabet :
+            records = list(SeqIO.parse(open(in_filename), in_format, alphabet))
+        else :
+            records = list(SeqIO.parse(open(in_filename), in_format))
         for temp_format in ["genbank","fasta"] :
             if temp_format in skip_formats :
                 continue
@@ -126,8 +131,8 @@ class SeqRetTests(unittest.TestCase):
             new_records = list(SeqIO.parse(handle, "fasta"))
 
             if not compare_records(records, new_records) :
-                raise ValueError("Disagree on file %s in %s format." \
-                                 % (filename, temp_format))
+                raise ValueError("Disagree on file %s %s in %s format." \
+                                 % (in_format, in_filename, temp_format))
             os.remove(filename)
             
     def check_EMBOSS_to_SeqIO(self, filename, old_format,
@@ -149,8 +154,7 @@ class SeqRetTests(unittest.TestCase):
     def check_SeqIO_with_EMBOSS(self, filename, old_format, skip_formats=[]):
         #TODO - May need to supply the sequence alphabet for parsing.
         #Check EMBOSS can read Bio.SeqIO output...
-        records = list(SeqIO.parse(open(filename), old_format))
-        self.check_SeqIO_to_EMBOSS(records, skip_formats)
+        self.check_SeqIO_to_EMBOSS(filename, old_format, skip_formats)
         #Check Bio.SeqIO can read EMBOSS seqret output...
         self.check_EMBOSS_to_SeqIO(filename, old_format, skip_formats)
 
@@ -165,9 +169,8 @@ class SeqRetTests(unittest.TestCase):
     def test_ig(self) :
         """SeqIO & EMBOSS reading each other's conversions of an ig file."""
         #TODO - Why does EMBOSS add the digit one to its output in ig format?
-        records = list(SeqIO.parse(open("IntelliGenetics/VIF_mase-pro.txt"),
-                                   "ig", generic_protein))
-        self.check_SeqIO_to_EMBOSS(records)
+        self.check_SeqIO_to_EMBOSS("IntelliGenetics/VIF_mase-pro.txt", "ig",
+                                   alphabet=generic_protein)
         #TODO - What does a % in an ig sequence mean?
         #e.g. "IntelliGenetics/vpu_nucaligned.txt"
         #and  "IntelliGenetics/TAT_mase_nuc.txt"
@@ -182,7 +185,6 @@ class SeqRetTests(unittest.TestCase):
         #Skip GenBank, EMBOSS 6.0.1 on Windows won't output proteins as GenBank
         self.check_SeqIO_with_EMBOSS("NBRF/DMB_prot.pir", "pir",
                                skip_formats=["embl","genbank"])
-
     def test_clustalw(self) :
         """SeqIO & EMBOSS reading each other's conversions of a Clustalw file."""
         self.check_SeqIO_with_EMBOSS("Clustalw/hedgehog.aln", "clustal",
