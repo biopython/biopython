@@ -14,6 +14,7 @@ from Bio import SeqIO
 from Bio import AlignIO
 from Bio import MissingExternalDependencyError
 from Bio.Alphabet import generic_protein, generic_dna
+from Bio.Seq import Seq, translate
 
 try :
     import subprocess
@@ -23,7 +24,7 @@ except ImportError :
 
 #################################################################
 
-exes_wanted = ["water", "needle", "seqret"]
+exes_wanted = ["water", "needle", "seqret", "transeq"]
 exes = dict() #Dictionary mapping from names to exe locations
 if sys.platform=="win32" :
     #The default installation path is C:\mEMBOSS which contains the exes.
@@ -538,6 +539,92 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #Check no error output:
         assert child.stderr.read() == ""
         assert 0 == child.wait()
+
+def emboss_translate(sequence, table=None, frame=None) :
+    """Call transeq, returns protein sequence as string."""
+    #TODO - Support transeq in Bio.Emboss.Applications?
+    #(doesn't seem worthwhile as Biopython can do translations)
+
+    if not sequence :
+        raise ValueError(sequence)
+
+    #Setup,
+    cline = exes["transeq"]
+    cline += " -sequence asis:%s" % sequence
+    cline += " -auto" #no prompting
+    cline += " -filter" #use stdout
+    if table is not None:
+        cline += " -table %s" % str(table)
+    if frame is not None:
+        cline += " -frame %s" % str(frame)
+    #Run the tool,
+    child = subprocess.Popen(str(cline),
+                             stdin=subprocess.PIPE,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             shell=(sys.platform!="win32"))
+    child.stdin.close()
+    #Check no error output:
+    err = child.stderr.read()
+    if err != "" :
+        raise ValueError(str(cline) + "\n" + err)
+
+    #Check we could read it's output
+    record = SeqIO.read(child.stdout, "fasta")
+
+    if 0 != child.wait() :
+        raise ValueError(str(cline))
+    if not record.id.startswith("asis") :
+        raise ValueError(str(cline))
+
+    return str(record.seq)
+
+class TranslationTests(unittest.TestCase):
+    """Run pairwise alignments with water and needle, and parse them."""
+
+    _examples = [Seq("ACGTGACTGACGTAGCATGCCACTAGG"),
+                 Seq("TAN", generic_dna),
+                 Seq("ACGGGGGGGGTAAGTGGTGTGTGTGTAGT", generic_dna),
+                 ]
+
+    def tearDown(self) :
+        clean_up()
+
+    def check_answer(self, sequence, translation) :
+        #Seq method:
+        self.assertEqual(translation, str(sequence.translate()))
+        #translate function on a Seq:
+        self.assertEqual(translation, str(translate(sequence)))
+        #translate function on a string:
+        self.assertEqual(translation, translate(str(sequence)))        
+
+    def test_simple(self) :
+        """transeq vs Bio.Seq for simple translations (including alt tables)."""
+        for sequence in self._examples :
+            #EMBOSS treats spare residues differently... avoid this issue
+            if len(sequence) % 3 != 0 :
+                sequence = sequence[:-(len(sequence)%3)]
+            self.assertEqual(len(sequence) % 3, 0)
+            self.assert_(len(sequence) > 0)
+
+            translation = emboss_translate(sequence)
+            #Seq method:
+            self.assertEqual(translation, str(sequence.translate()))
+            #translate function on a Seq:
+            self.assertEqual(translation, str(translate(sequence)))
+            #translate function on a string:
+            self.assertEqual(translation, translate(str(sequence)))
+
+            for table in [1,2,3,4,5,6,9,10,11,12,13,14,15] :
+                translation = emboss_translate(sequence, table)
+                #Seq method:
+                self.assertEqual(translation, str(sequence.translate(table)))
+                #translate function on a Seq:
+                self.assertEqual(translation, str(translate(sequence,table)))
+                #translate function on a string:
+                self.assertEqual(translation, translate(str(sequence),table))
+        
+        
         
 def clean_up() :
     """Fallback clean up method to remove temp files."""
