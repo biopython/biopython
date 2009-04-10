@@ -80,9 +80,11 @@ def compare_records(old_list, new_list) :
     if len(old_list) != len(new_list) :
         raise ValueError("%i vs %i records" % (len(old_list), len(new_list)))
     for old, new in zip(old_list, new_list) :
-        #TODO - check annotation
+        #Note the name matching is a bit fuzzy, e.g. truncation and
+        #no spaces in PHYLIP files.
         if old.id != new.id and old.name != new.name \
-        and not new.id.endswith(old.id) and not old.id.endswith(new.id) :
+        and (old.id not in new.id) and (new.id not in old.id) \
+        and (old.id.replace(" ","_") != new.id.replace(" ","_")) :
             raise ValueError("'%s' or '%s' vs '%s' or '%s' records" \
                              % (old.id, old.name, new.id, new.name))
 
@@ -92,6 +94,7 @@ def compare_records(old_list, new_list) :
         and len(old.features) != len(new.features) :
             raise ValueError("%i vs %i features" \
                              % (len(old.features, len(new.features))))
+        #TODO - check annotation
     return True
 
 def compare_alignments(old_list, new_list) :
@@ -102,14 +105,14 @@ def compare_alignments(old_list, new_list) :
         if len(old) != len(new) :
             raise ValueError("Alignment with %i vs %i records" \
                              % (len(old), len(new)))
-        for r1, r2 in zip(old, new) :
-            if str(r1.seq).upper() != str(r2.seq).upper() :
-                raise ValueError("'%s' vs '%s'" % (r1.seq, r2.seq))
-            #TODO - Be flexible on the names, PHYLIP truncates them.
+        compare_records(old,new)
     return True
 
-class SeqRetTests(unittest.TestCase):
+class SeqRetSeqIOTests(unittest.TestCase):
     """Check EMBOSS seqret against Bio.SeqIO for converting files."""
+
+    def tearDown(self) :
+        clean_up()
 
     def check_SeqIO_to_EMBOSS(self, in_filename, in_format, skip_formats=[],
                               alphabet=None) :
@@ -158,7 +161,6 @@ class SeqRetTests(unittest.TestCase):
 
     def check_SeqIO_with_EMBOSS(self, filename, old_format, skip_formats=[],
                                 alphabet=None):
-        #TODO - May need to supply the sequence alphabet for parsing.
         #Check EMBOSS can read Bio.SeqIO output...
         self.check_SeqIO_to_EMBOSS(filename, old_format, skip_formats,
                                    alphabet)
@@ -198,6 +200,12 @@ class SeqRetTests(unittest.TestCase):
         self.check_SeqIO_with_EMBOSS("Clustalw/opuntia.aln", "clustal",
                                    skip_formats=["embl","genbank"])
 
+class SeqRetAlignIOTests(unittest.TestCase):
+    """Check EMBOSS seqret against Bio.SeqIO for converting files."""
+
+    def tearDown(self) :
+        clean_up()
+
     def check_EMBOSS_to_AlignIO(self, filename, old_format,
                               skip_formats=[]) :
         """Can AlignIO read seqret's conversion of the file?"""
@@ -221,27 +229,82 @@ class SeqRetTests(unittest.TestCase):
                 raise ValueError("Disagree on %s file %s in %s format: %s" \
                                  % (old_format, filename, new_format, err))
 
+    def check_AlignIO_to_EMBOSS(self, in_filename, in_format, skip_formats=[],
+                                alphabet=None) :
+        """Can Bio.AlignIO write files seqret can read back?"""
+        if alphabet :
+            old_aligns = list(AlignIO.parse(open(in_filename), in_format,
+                                            alphabet))
+        else :
+            old_aligns = list(AlignIO.parse(open(in_filename), in_format))
+
+        formats = ["clustal", "phylip", "ig"]
+        if len(old_aligns) == 1 :
+            formats.extend(["fasta","nexus"])
+        for temp_format in formats :
+            if temp_format in skip_formats :
+                continue
+            #TODO - Handle this with a pipe?
+            #i.e. can Bio.SeqIO write to the stdin of seqret?
+            filename = "Emboss/temp_%s.txt" % temp_format
+            temp_handle = open(filename,"w")
+            try :
+                AlignIO.write(old_aligns, temp_handle, temp_format)
+            except ValueError :
+                #e.g. NEXUS file without knowing alphabet
+                #This should be tested by test_AlignIO
+                temp_handle.close()
+                os.remove(filename)
+                continue
+            temp_handle.flush()
+            temp_handle.close()
+
+            #PHYLIP is a simple format which explicitly supports
+            #multiple alignments (unlike FASTA).
+            handle = emboss_convert(filename, temp_format, "phylip")
+            new_aligns = list(AlignIO.parse(handle, "phylip"))
+
+            try :
+                self.assert_(compare_alignments(old_aligns, new_aligns))
+            except ValueError, err :
+                raise ValueError("Disagree on file %s %s in %s format: %s" \
+                                 % (in_format, in_filename, temp_format, err))
+            os.remove(filename)
+
+    def check_AlignIO_with_EMBOSS(self, filename, old_format, skip_formats=[],
+                                  alphabet=None):
+        #Check EMBOSS can read Bio.AlignIO output...
+        self.check_AlignIO_to_EMBOSS(filename, old_format, skip_formats,
+                                   alphabet)
+        #Check Bio.AlignIO can read EMBOSS seqret output...
+        self.check_EMBOSS_to_AlignIO(filename, old_format, skip_formats)
+        
     def test_align_clustalw(self) :
-        """Can AlignIO read EMBOSS's conversions of a Clustalw file?"""
-        self.check_EMBOSS_to_AlignIO("Clustalw/hedgehog.aln", "clustal")
-        self.check_EMBOSS_to_AlignIO("Clustalw/opuntia.aln", "clustal")
-        self.check_EMBOSS_to_AlignIO("Clustalw/odd_consensus.aln", "clustal",
+        """AlignIO & EMBOSS reading each other's conversions of a ClustalW file."""
+        self.check_AlignIO_with_EMBOSS("Clustalw/hedgehog.aln", "clustal")
+        self.check_AlignIO_with_EMBOSS("Clustalw/opuntia.aln", "clustal")
+        self.check_AlignIO_with_EMBOSS("Clustalw/odd_consensus.aln", "clustal",
                                skip_formats=["nexus"]) #TODO - why not nexus?
-        self.check_EMBOSS_to_AlignIO("Clustalw/protein.aln", "clustal")
-        self.check_EMBOSS_to_AlignIO("Clustalw/promals3d.aln", "clustal")
+        self.check_AlignIO_with_EMBOSS("Clustalw/protein.aln", "clustal")
+        self.check_AlignIO_with_EMBOSS("Clustalw/promals3d.aln", "clustal")
 
     def test_clustalw(self) :
-        """Can we read EMBOSS's conversions of a PHYLIP file?"""
-        self.check_EMBOSS_to_AlignIO("Phylip/horses.phy", "phylip")
-        self.check_EMBOSS_to_AlignIO("Phylip/hennigian.phy", "phylip")
-        self.check_EMBOSS_to_AlignIO("Phylip/reference_dna.phy", "phylip")
-        self.check_EMBOSS_to_AlignIO("Phylip/reference_dna2.phy", "phylip")
-        self.check_EMBOSS_to_AlignIO("Phylip/interlaced.phy", "phylip")
-        self.check_EMBOSS_to_AlignIO("Phylip/interlaced2.phy", "phylip")
-        self.check_EMBOSS_to_AlignIO("Phylip/random.phy", "phylip")
+        """AlignIO & EMBOSS reading each other's conversions of a PHYLIP file."""
+        self.check_AlignIO_with_EMBOSS("Phylip/horses.phy", "phylip")
+        self.check_AlignIO_with_EMBOSS("Phylip/hennigian.phy", "phylip")
+        self.check_AlignIO_with_EMBOSS("Phylip/reference_dna.phy", "phylip")
+        self.check_AlignIO_with_EMBOSS("Phylip/reference_dna2.phy", "phylip")
+        self.check_AlignIO_with_EMBOSS("Phylip/interlaced.phy", "phylip")
+        self.check_AlignIO_with_EMBOSS("Phylip/interlaced2.phy", "phylip")
+        self.check_AlignIO_with_EMBOSS("Phylip/random.phy", "phylip")
+
         
 class PairwiseAlignmentTests(unittest.TestCase):
     """Run pairwise alignments with water and needle, and parse them."""
+
+    def tearDown(self) :
+        clean_up()
+        
     def pairwise_alignment_check(self, query_seq,
                                  targets, alignments,
                                  local=True) :
