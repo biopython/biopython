@@ -76,33 +76,35 @@ def emboss_convert(filename, old_format, new_format):
     return child.stdout
 
 def compare_records(old_list, new_list) :
-    """Check two lists of SeqRecords agree."""
+    """Check two lists of SeqRecords agree, raises a ValueError if mismatch."""
     if len(old_list) != len(new_list) :
-        return False
+        raise ValueError("%i vs %i records" % (len(old_list), len(new_list)))
     for old, new in zip(old_list, new_list) :
         #TODO - check annotation
         if old.id != new.id and old.name != new.name \
         and not new.id.endswith(old.id) and not old.id.endswith(new.id) :
-            #print >> sys.stderr, "\nOld: %s\nNew: %s\n" % (repr(old), repr(new))
-            return False
+            raise ValueError("'%s' or '%s' vs '%s' or '%s' records" \
+                             % (old.id, old.name, new.id, new.name))
+
         if str(old.seq).upper() != str(new.seq).upper() :
-            #print >> sys.stderr, "\nOld: %s\nNew: %s\n" % (old.seq, new.seq)
-            return False
+            raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
         if old.features and new.features \
         and len(old.features) != len(new.features) :
-            return False
+            raise ValueError("%i vs %i features" \
+                             % (len(old.features, len(new.features))))
     return True
 
 def compare_alignments(old_list, new_list) :
-    """Check two lists of Alignments agree."""
+    """Check two lists of Alignments agree, raises a ValueError if mismatch."""
     if len(old_list) != len(new_list) :
-        return False
+        raise ValueError("%i vs %i alignments" % (len(old_list), len(new_list)))
     for old, new in zip(old_list, new_list) :
         if len(old) != len(new) :
-            return False
+            raise ValueError("Alignment with %i vs %i records" \
+                             % (len(old), len(new)))
         for r1, r2 in zip(old, new) :
             if str(r1.seq).upper() != str(r2.seq).upper() :
-                return False
+                raise ValueError("'%s' vs '%s'" % (r1.seq, r2.seq))
             #TODO - Be flexible on the names, PHYLIP truncates them.
     return True
 
@@ -130,9 +132,11 @@ class SeqRetTests(unittest.TestCase):
             handle = emboss_convert(filename, temp_format, "fasta")
             new_records = list(SeqIO.parse(handle, "fasta"))
 
-            if not compare_records(records, new_records) :
-                raise ValueError("Disagree on file %s %s in %s format." \
-                                 % (in_format, in_filename, temp_format))
+            try :
+                self.assert_(compare_records(records, new_records))
+            except ValueError, err :
+                raise ValueError("Disagree on file %s %s in %s format: %s" \
+                                 % (in_format, in_filename, temp_format, err))
             os.remove(filename)
             
     def check_EMBOSS_to_SeqIO(self, filename, old_format,
@@ -146,9 +150,11 @@ class SeqRetTests(unittest.TestCase):
                 continue
             handle = emboss_convert(filename, old_format, new_format)
             new_records = list(SeqIO.parse(handle, new_format))
-            if not compare_records(old_records, new_records) :
-                raise ValueError("Disagree on %s file %s in %s format." \
-                                 % (old_format, filename, new_format))
+            try :
+                self.assert_(compare_records(old_records, new_records))
+            except ValueError, err:
+                raise ValueError("Disagree on %s file %s in %s format: %s" \
+                                 % (old_format, filename, new_format, err))
 
     def check_SeqIO_with_EMBOSS(self, filename, old_format, skip_formats=[],
                                 alphabet=None):
@@ -197,7 +203,7 @@ class SeqRetTests(unittest.TestCase):
         """Can AlignIO read seqret's conversion of the file?"""
         self.assert_(os.path.isfile(filename), filename)
         old_aligns = list(AlignIO.parse(open(filename), old_format))
-        formats = ["clustal", "phylip"]
+        formats = ["clustal", "phylip", "ig"]
         if len(old_aligns) == 1 :
             formats.extend(["fasta","nexus"])
         for new_format in formats :
@@ -209,9 +215,11 @@ class SeqRetTests(unittest.TestCase):
             except :
                 raise ValueError("Can't parse %s file %s in %s format." \
                                  % (old_format, filename, new_format))
-            if not compare_alignments(old_aligns, new_aligns) :
-                raise ValueError("Disagree on %s file %s in %s format." \
-                                 % (old_format, filename, new_format))
+            try :
+                self.assert_(compare_alignments(old_aligns, new_aligns))
+            except ValueError, err :
+                raise ValueError("Disagree on %s file %s in %s format: %s" \
+                                 % (old_format, filename, new_format, err))
 
     def test_align_clustalw(self) :
         """Can AlignIO read EMBOSS's conversions of a Clustalw file?"""
