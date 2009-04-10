@@ -75,13 +75,17 @@ if __name__ == "__main__" :
     print "Running quick self test"
     
     import os
-    for filename in os.listdir("../../Tests/Intelligenetics/") :
-        if os.path.splitext(filename)[-1] == ".txt" :
-            print
-            print filename
-            print "-"*len(filename)
-            handle = open(os.path.join("../../Tests/Intelligenetics/", filename))
-            for record in IgIterator(handle) :
-                print record.id, len(record)
-            handle.close()
-    print "Done"
+    path = "../../Tests/IntelliGenetics/"
+    if os.path.isdir(path) :
+        for filename in os.listdir(path) :
+            if os.path.splitext(filename)[-1] == ".txt" :
+                print
+                print filename
+                print "-"*len(filename)
+                handle = open(os.path.join(path, filename))
+                for record in IgIterator(handle) :
+                    print record.id, len(record)
+                handle.close()
+        print "Done"
+    else :
+        print "Could not find input files"
