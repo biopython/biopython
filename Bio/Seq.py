@@ -311,11 +311,19 @@ class Seq(object):
         end - optional integer, slice end
 
         Returns -1 if the subsequence is NOT found.
+
+        e.g. Locating the last typical start codon, AUG, in an RNA sequence:
+        
+        >>> from Bio.Seq import Seq
+        >>> my_rna = Seq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
+        >>> my_rna.rfind("AUG")
+        15
+        
         """
         #If it has one, check the alphabet:
         sub_str = self._get_seq_str_and_check_alphabet(sub)
         return str(self).rfind(sub_str, start, end)
-    
+
     def split(self, sep=None, maxsplit=-1) :
         """Split method, like that of a python string.
 
