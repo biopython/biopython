@@ -139,10 +139,9 @@ class SeqRetTests(unittest.TestCase):
                               skip_formats=[]) :
         """Can Bio.SeqIO read seqret's conversion of the file?"""
         #TODO: Why can't we read EMBOSS's swiss output?
-        #TODO: Why does EMBOSS seem to add the digit 1 to ig sequences?
         self.assert_(os.path.isfile(filename))
         old_records = list(SeqIO.parse(open(filename), old_format))
-        for new_format in ["genbank","fasta","pir","embl"] :
+        for new_format in ["genbank","fasta","pir","embl", "ig"] :
             if new_format in skip_formats :
                 continue
             handle = emboss_convert(filename, old_format, new_format)
@@ -151,10 +150,12 @@ class SeqRetTests(unittest.TestCase):
                 raise ValueError("Disagree on %s file %s in %s format." \
                                  % (old_format, filename, new_format))
 
-    def check_SeqIO_with_EMBOSS(self, filename, old_format, skip_formats=[]):
+    def check_SeqIO_with_EMBOSS(self, filename, old_format, skip_formats=[],
+                                alphabet=None):
         #TODO - May need to supply the sequence alphabet for parsing.
         #Check EMBOSS can read Bio.SeqIO output...
-        self.check_SeqIO_to_EMBOSS(filename, old_format, skip_formats)
+        self.check_SeqIO_to_EMBOSS(filename, old_format, skip_formats,
+                                   alphabet)
         #Check Bio.SeqIO can read EMBOSS seqret output...
         self.check_EMBOSS_to_SeqIO(filename, old_format, skip_formats)
 
@@ -168,7 +169,6 @@ class SeqRetTests(unittest.TestCase):
 
     def test_ig(self) :
         """SeqIO & EMBOSS reading each other's conversions of an ig file."""
-        #TODO - Why does EMBOSS add the digit one to its output in ig format?
         self.check_SeqIO_to_EMBOSS("IntelliGenetics/VIF_mase-pro.txt", "ig",
                                    alphabet=generic_protein)
         #TODO - What does a % in an ig sequence mean?

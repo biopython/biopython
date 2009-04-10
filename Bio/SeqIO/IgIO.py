@@ -61,9 +61,15 @@ def IgIterator(handle, alphabet = single_letter_alphabet) :
             if line[0] == ";": break
             #Remove trailing whitespace, and any internal spaces
             seq_lines.append(line.rstrip().replace(" ",""))
+        seq_str = "".join(seq_lines)
+        if seq_str.endswith("1") :
+            #Remove the optional terminator (digit one)
+            seq_str = seq_str[:-1]
+        if "1" in seq_str :
+            raise ValueError("Potential terminator digit one found within sequence.")
                 
         #Return the record and then continue...
-        record= SeqRecord(Seq("".join(seq_lines), alphabet),
+        record= SeqRecord(Seq(seq_str, alphabet),
                           id = title, name = title)
         record.annotations['comment'] = "\n".join(comment_lines)
         yield record
