@@ -548,20 +548,30 @@ class PairwiseAlignmentTests(unittest.TestCase):
         assert 0 == child.wait()
 
 #Top level function as this makes it easier to use for debugging:
-def emboss_translate(sequence_or_filename, table=None, frame=None) :
+def emboss_translate(sequence, table=None, frame=None) :
     """Call transeq, returns protein sequence as string."""
     #TODO - Support transeq in Bio.Emboss.Applications?
     #(doesn't seem worthwhile as Biopython can do translations)
 
-    if not sequence_or_filename :
+    if not sequence :
         raise ValueError(sequence)
 
     #Setup,
     cline = exes["transeq"]
-    if os.path.isfile(str(sequence_or_filename)) :
-        cline += " -sequence %s" % sequence_or_filename
+
+    if len(sequence) < 100 :
+        filename = None
+        cline += " -sequence asis:%s" % sequence
     else :
-        cline += " -sequence asis:%s" % sequence_or_filename
+        #There are limits on command line string lengths...
+        #use a temp file instead.
+        filename = "Emboss/temp_transeq.txt"
+        handle = open(filename,"w")
+        SeqIO.write([SeqRecord(sequence, id="Test")], handle, "fasta")
+        handle.flush()
+        handle.close()
+        cline += " -sequence %s" % filename
+
     cline += " -auto" #no prompting
     cline += " -filter" #use stdout
     if table is not None:
@@ -585,9 +595,14 @@ def emboss_translate(sequence_or_filename, table=None, frame=None) :
 
     if 0 != child.wait() :
         raise ValueError(str(cline))
-    #if not record.id.startswith("asis") :
-    #    raise ValueError(str(cline))
-
+    
+    if filename :
+        os.remove(filename)
+        if not record.id.startswith("Test") :
+            raise ValueError(str(cline))
+    else :
+        if not record.id.startswith("asis") :
+            raise ValueError(str(cline))
     return str(record.seq)
 
 #Top level function as this makes it easier to use for debugging:
@@ -647,21 +662,15 @@ class TranslationTests(unittest.TestCase):
             self.assert_(len(sequence) > 0)
             self.check(sequence)
 
-    def check(self, sequence, filename=None) :
+    def check(self, sequence) :
         """Compare our translation to EMBOSS's using all tables.
 
         Takes a Seq object (and a filename containing it)."""
-        if filename :
-            translation = emboss_translate(filename)
-        else :
-            translation = emboss_translate(sequence)
+        translation = emboss_translate(sequence)
         self.assert_(check_translation(sequence, translation))
 
         for table in [1,2,3,4,5,6,9,10,11,12,13,14,15] :
-            if filename :
-                translation = emboss_translate(filename, table)
-            else :
-                translation = emboss_translate(sequence, table)
+            translation = emboss_translate(sequence, table)
             self.assert_(check_translation(sequence, translation, table))
         return True
 
@@ -669,15 +678,9 @@ class TranslationTests(unittest.TestCase):
         sequence = Seq("".join([c1+c3+c3 \
                        for c1 in letters \
                        for c2 in letters \
-                       for c3 in letters]),     generic_nucleotide)
-        record = SeqRecord(sequence, id="Test")
-        filename = "Emboss/temp_transeq.txt"
-        handle = open(filename,"w")
-        SeqIO.write([record], handle, "fasta")
-        handle.flush()
-        handle.close()
-        self.check(sequence, filename)
-        os.remove(filename)
+                       for c3 in letters]),
+                       generic_nucleotide)
+        self.check(sequence)
         
     def test_all_unambig_dna_codons(self) :
         """transeq vs Bio.Seq on unambiguous DNA codons (inc. alt tables)."""
