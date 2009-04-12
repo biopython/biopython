@@ -16,7 +16,6 @@ from Bio import MissingExternalDependencyError
 from Bio.Alphabet import generic_protein, generic_dna, generic_nucleotide
 from Bio.Seq import Seq, translate
 from Bio.SeqRecord import SeqRecord
-#from Bio.Data.IUPACData import ambiguous_dna_letters, ambiguous_rna_letters
 
 try :
     import subprocess
@@ -78,6 +77,7 @@ def emboss_convert(filename, old_format, new_format):
     child.stdin.close()
     return child.stdout
 
+#Top level function as this makes it easier to use for debugging:
 def compare_records(old_list, new_list) :
     """Check two lists of SeqRecords agree, raises a ValueError if mismatch."""
     if len(old_list) != len(new_list) :
@@ -104,6 +104,7 @@ def compare_records(old_list, new_list) :
         #TODO - check annotation
     return True
 
+#Top level function as this makes it easier to use for debugging:
 def compare_alignments(old_list, new_list) :
     """Check two lists of Alignments agree, raises a ValueError if mismatch."""
     if len(old_list) != len(new_list) :
@@ -546,6 +547,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         assert child.stderr.read() == ""
         assert 0 == child.wait()
 
+#Top level function as this makes it easier to use for debugging:
 def emboss_translate(sequence_or_filename, table=None, frame=None) :
     """Call transeq, returns protein sequence as string."""
     #TODO - Support transeq in Bio.Emboss.Applications?
@@ -588,70 +590,93 @@ def emboss_translate(sequence_or_filename, table=None, frame=None) :
 
     return str(record.seq)
 
+#Top level function as this makes it easier to use for debugging:
+def check_translation(sequence, translation, table=None) :
+    if table is None :
+        #Seq method:
+        if translation != str(sequence.translate()) \
+        or translation != str(translate(sequence)) \
+        or translation != translate(str(sequence)) :
+            raise ValueError("%s -> %s" % (sequence, translation))
+    else:
+        if translation != str(sequence.translate(table)) \
+        or translation != str(translate(sequence,table)) \
+        or translation != translate(str(sequence),table) :
+            raise ValueError("%s -> %s (table %s)" \
+                             % (sequence, translation, table))
+    return True
+
 class TranslationTests(unittest.TestCase):
     """Run pairwise alignments with water and needle, and parse them."""
 
     def tearDown(self) :
         clean_up()
 
-    def check_answer(self, sequence, translation, table=None) :
-        if table is None :
-            #Seq method:
-            self.assertEqual(translation, str(sequence.translate()))
-            #translate function on a Seq:
-            self.assertEqual(translation, str(translate(sequence)))
-            #translate function on a string:
-            self.assertEqual(translation, translate(str(sequence)))
-        else:
-            #Seq method:
-            self.assertEqual(translation, str(sequence.translate(table)))
-            #translate function on a Seq:
-            self.assertEqual(translation, str(translate(sequence,table)))
-            #translate function on a string:
-            self.assertEqual(translation, translate(str(sequence),table))
-
     def test_simple(self) :
         """transeq vs Bio.Seq for simple translations (including alt tables)."""
 
         examples = [Seq("ACGTGACTGACGTAGCATGCCACTAGG"),
-                    Seq("TAN", generic_dna),
+                    #Unamibguous TA? codons:
+                    Seq("TAATACTATTAG", generic_dna),
+                    #Most of the ambiguous TA? codons:
+                    Seq("TANTARTAYTAMTAKTAHTABTADTAV", generic_dna),
+                    #Problem cases,
+                    #
+                    #Seq("TAW", generic_dna),
+                    #W = A or T, but EMBOSS does TAW -> X
+                    #TAA -> Y, TAT ->Y, so in Biopython TAW -> Y
+                    #
+                    #Seq("TAS", generic_dna),
+                    #S = C or G, but EMBOSS does TAS -> Y
+                    #TAG -> *, TAC ->Y, so in Biopython TAS -> X (Y or *)
+                    #
+                    #Seq("AAS", generic_dna),
+                    #On table 9, EMBOSS gives N, we give X.
+                    #S = C or G, so according to my reading of
+                    #table 9 on the NCBI page, AAC=N, AAG=K
+                    #suggesting this is a bug in EMBOSS.
+                    #
                     Seq("ACGGGGGGGGTAAGTGGTGTGTGTGTAGT", generic_dna),
                     ]
-
+        
         for sequence in examples :
             #EMBOSS treats spare residues differently... avoid this issue
             if len(sequence) % 3 != 0 :
                 sequence = sequence[:-(len(sequence)%3)]
             self.assertEqual(len(sequence) % 3, 0)
             self.assert_(len(sequence) > 0)
+            self.check(sequence)
 
+    def check(self, sequence, filename=None) :
+        """Compare our translation to EMBOSS's using all tables.
+
+        Takes a Seq object (and a filename containing it)."""
+        if filename :
+            translation = emboss_translate(filename)
+        else :
             translation = emboss_translate(sequence)
-            self.check_answer(sequence, translation)
+        self.assert_(check_translation(sequence, translation))
 
-            for table in [1,2,3,4,5,6,9,10,11,12,13,14,15] :
+        for table in [1,2,3,4,5,6,9,10,11,12,13,14,15] :
+            if filename :
+                translation = emboss_translate(filename, table)
+            else :
                 translation = emboss_translate(sequence, table)
-                self.check_answer(sequence, translation, table)
+            self.assert_(check_translation(sequence, translation, table))
+        return True
 
     def translate_all_codons(self, letters) :
         sequence = Seq("".join([c1+c3+c3 \
                        for c1 in letters \
                        for c2 in letters \
-                       for c3 in letters]), generic_nucleotide)
+                       for c3 in letters]),     generic_nucleotide)
         record = SeqRecord(sequence, id="Test")
-
         filename = "Emboss/temp_transeq.txt"
         handle = open(filename,"w")
         SeqIO.write([record], handle, "fasta")
         handle.flush()
         handle.close()
-
-        translation = emboss_translate(filename)
-        self.check_answer(sequence, translation)
-
-        for table in [1,2,3,4,5,6,9,10,11,12,13,14,15] :
-            translation = emboss_translate(filename, table)
-            self.check_answer(sequence, translation, table)
-        
+        self.check(sequence, filename)
         os.remove(filename)
         
     def test_all_unambig_dna_codons(self) :
@@ -662,14 +687,9 @@ class TranslationTests(unittest.TestCase):
         """transeq vs Bio.Seq on unambiguous RNA codons (inc. alt tables)."""
         self.translate_all_codons("AUCGaucg")
 
-    #TODO:   
-    #def test_all_ambig_dna_codons(self) :
-    #    """transeq vs Bio.Seq on ambiguous DNA codons (inc. alt tables)."""
-    #    self.translate_all_codons(ambiguous_dna_letters)
-    #
-    #def test_all_ambig_rna_codons(self) :
-    #    """transeq vs Bio.Seq on ambiguous RNA codons (inc. alt tables)."""
-    #    self.translate_all_codons(ambiguous_rna_letters)
+    def test_mixed_unambig_rna_codons(self) :
+        """transeq vs Bio.Seq on unambiguous DNA/RNA codons (inc. alt tables)."""
+        self.translate_all_codons("ATUCGatucg")
         
 def clean_up() :
     """Fallback clean up method to remove temp files."""
