@@ -6405,6 +6405,104 @@ the regions of interest.
 \chapter{Cookbook -- Cool things to do with it}
 \label{chapter:cookbook}
 
+\section{Working with sequence files}
+
+This section shows some more examples of sequence input/output, using the
+\verb|Bio.SeqIO| module described in Chapter~\ref{chapter:Bio.SeqIO}.
+
+\subsection{Producing randomised genomes}
+
+Let's suppose you are looking at genome sequence, hunting for some sequence
+feature -- maybe extreme local GC\% bias, or possible restriction digest sites.
+Once you've got your python code working on the real genome it may be sensible
+to try running the same search on randomised versions of the same genome for
+statistical analysis (after all, any ``features'' you've found could just be
+there just by chance).
+
+For this discussion, we'll use the GenBank file for the pPCP1 plasmid from
+\textit{Yersinia pestis biovar Microtus}.  The file is included with the
+Biopython unit tests under the GenBank folder, or you can get it from our
+website, \href{http://biopython.org/SRC/biopython/Tests/GenBank/NC_005816.gb}
+{\texttt{NC\_005816.gb}}.  
+This file contains one and only one record, so we can read it in as a
+\verb|SeqRecord| using the \verb|Bio.SeqIO.read()| function:
+
+\begin{verbatim}
+from Bio import SeqIO
+original_rec = SeqIO.read(open("NC_005816.gb"),"genbank")
+\end{verbatim}
+
+So, how can we generate a shuffled versions of the original sequence?  I would
+use the built in python \verb|random| module for this, in particular the function
+\verb|random.shuffle| -- but this works on a Python list.  Our sequence is a
+\verb|Seq| object, so in order to shuffle it we need to turn it into a list:
+
+\begin{verbatim}
+import random
+nuc_list = list(original_rec.seq)
+random.shuffle(nuc_list) #acts in situ!
+\end{verbatim}
+
+Now, in order to use \verb|Bio.SeqIO| to output the shuffled sequence, we need
+to construct a new \verb|SeqRecord| with a new \verb|Seq| object using this
+shuffled list.  In order to do this, we need to turn the list of nucleotides
+(single letter strings) into a long string -- the standard Python way to do
+this is with the string object's join method.
+
+\begin{verbatim}
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet), \
+                         id="Shuffled", description="Based on %s" % original_rec.id)
+\end{verbatim}
+
+Let's put all these pieces together to make a complete Python script which
+generates a single FASTA file containing 30 randomly shuffled versions of
+the original sequence.
+
+This first version just uses a big for loop and writes out the records one by one:
+
+\begin{verbatim}
+import random
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from Bio import SeqIO
+
+original_rec = SeqIO.read(open("NC_005816.gb"),"genbank")
+
+handle = open("shuffled.fasta", "w")
+for i in range(30) :
+    nuc_list = list(original_rec.seq)
+    random.shuffle(nuc_list)
+    shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet), \
+                             id="Shuffled%i" % (i+1), \
+                             description="Based on %s" % original_rec.id)
+    handle.write(shuffled_rec.format("fasta"))
+handle.close()
+\end{verbatim}
+
+Personally I prefer the following version using a function to shuffle the record
+and a generator expression instead of the for loop:
+
+\begin{verbatim}
+import random
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from Bio import SeqIO
+
+def shuffle_record(record, new_id) :
+    nuc_list = list(record.seq)
+    random.shuffle(nuc_list)
+    return SeqRecord(Seq("".join(nuc_list), record.seq.alphabet), \
+           id=new_id, description="Based on %s" % original_rec.id)
+   
+original_rec = SeqIO.read(open("NC_005816.gb"),"genbank")
+shuffled_recs = (shuffle_record(original_rec, "Shuffled%i" % (i+1)) for i in range(30))
+handle = open("shuffled.fasta", "w")
+SeqIO.write(shuffled_recs, handle, "fasta")
+handle.close()
+\end{verbatim}
+
 \section{Sequence parsing plus simple plots}
 \label{seq:sequence-parsing-plus-pylab}
 
