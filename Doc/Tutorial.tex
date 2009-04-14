@@ -951,12 +951,76 @@ Seq('AGCCCGTGGGAAAGTCGCCGGGTAATGTACCG', IUPACUnambiguousDNA())
 
 You can also get a string from a \verb|MutableSeq| object just like from a \verb|Seq| object (Section~\ref{sec:seq-to-string}).
 
+\section{UnknownSeq objects}
+Biopython 1.50 introduced another basic sequence object, the \verb|UnknownSeq| object.
+This is a subclass of the basic \verb|Seq| object and its purpose is to represent a
+sequence where we know the length, but not the actual letters making it up.
+You could of course use a normal \verb|Seq| object in this situation, but it wastes
+rather a lot of memory to hold a string of a million ``N'' characters when you could
+just store a single letter ``N'' and the desired length as an integer.
+
+\begin{verbatim}
+>>> from Bio.Seq import UnknownSeq
+>>> unk = UnknownSeq(20)
+>>> unk
+UnknownSeq(20, alphabet = Alphabet(), character = '?')
+>>> print unk
+????????????????????
+>>> len(unk)
+20
+\end{verbatim}
+
+You can of course specify an alphabet, meaning for nucleotide sequences
+the letter defaults to ``N'' and for proteins ``X'', rather than just ``?''.
+
+\begin{verbatim}
+>>> from Bio.Seq import UnknownSeq
+>>> from Bio.Alphabet import IUPAC
+>>> unk_dna = UnknownSeq(20, alphabet=IUPAC.ambiguous_dna)
+>>> unk_dna
+UnknownSeq(20, alphabet = IUPACAmbiguousDNA(), character = 'N')
+>>> print unk_dna
+NNNNNNNNNNNNNNNNNNNN
+\end{verbatim}
+
+You can use all the usual \verb|Seq| object methods too, note these give back
+memory saving \verb|UnknownSeq| objects where appropriate as you might expect:
+
+\begin{verbatim}
+>>> unk_dna
+UnknownSeq(20, alphabet = IUPACAmbiguousDNA(), character = 'N')
+>>> unk_dna.complement()
+UnknownSeq(20, alphabet = IUPACAmbiguousDNA(), character = 'N')
+>>> unk_dna.reverse_complement()
+UnknownSeq(20, alphabet = IUPACAmbiguousDNA(), character = 'N')
+>>> unk_dna.transcribe()
+UnknownSeq(20, alphabet = IUPACAmbiguousRNA(), character = 'N')
+>>> unk_protein = unk_dna.translate()
+>>> unk_protein
+UnknownSeq(6, alphabet = ProteinAlphabet(), character = 'X')
+>>> print unk_protein
+XXXXXX
+>>> len(unk_protein)
+6
+\end{verbatim}
+
+You may be able to find a use for the \verb|UnknownSeq| object in your own
+code, but it is more likely that you will first come across them in a
+\verb|SeqRecord| object created by \verb|Bio.SeqIO|
+(see Chapter~\ref{chapter:Bio.SeqIO}).
+Some sequence file formats don't always include the actual sequence, for
+example GenBank and EMBL files may include a list of features but for the
+sequence just present the contig information.  Alternatively, the QUAL files
+used in sequencing work hold quality scores but they \emph{never} contain a
+sequence -- instead there is a partner FASTA file which \emph{does} have the
+sequence.
+
 \section{Working with directly strings}
 \label{sec:seq-module-functions}
 To close this chapter, for those you who \emph{really} don't want to use the sequence
 objects (or who prefer a functional programming style to an object orientated one),
-there are module level functions in \verb|Bio.Seq| will accept plain python strings,
-\verb|Seq| objects or \verb|MutableSeq| objects:
+there are module level functions in \verb|Bio.Seq| will accept plain Python strings,
+\verb|Seq| objects (including \verb|UnknownSeq| objects) or \verb|MutableSeq| objects:
 
 \begin{verbatim}
 >>> from Bio.Seq import reverse_complement, transcribe, back_transcribe, translate
@@ -2939,19 +3003,19 @@ current versions of RPS-BLAST.
 \chapter{Accessing NCBI's Entrez databases}
 \label{chapter:entrez}
 
-Entrez (\url{http://www.ncbi.nlm.nih.gov/Entrez}) is a data retrieval system that provides users access to NCBI's databases such as PubMed, GenBank, GEO, and many others. You can access Entrez from a web browser to manually enter queries, or you can use Biopython's \verb+Bio.Entrez+ module for programmatic access to Entrez. The latter allows you for example to search PubMed or download GenBank records from within a Python script.
+Entrez (\url{http://www.ncbi.nlm.nih.gov/Entrez}) is a data retrieval system that provides users access to NCBI's databases such as PubMed, GenBank, GEO, and many others. You can access Entrez from a web browser to manually enter queries, or you can use Biopython's \verb+Bio.Entrez+ module for programmatic access to Entrez. The latter allows you for example to search PubMed or download GenBank records from within a python script.
 
 The \verb+Bio.Entrez+ module makes use of the Entrez Programming Utilities (also known as EUtils), consisting of eight tools that are described in detail on NCBI's page at \url{http://www.ncbi.nlm.nih.gov/entrez/utils/}.
-Each of these tools corresponds to one Python function in the \verb+Bio.Entrez+ module, as described in the sections below. This module makes sure that the correct URL is used for the queries, and that not more than one request is made every three seconds, as required by NCBI.
+Each of these tools corresponds to one python function in the \verb+Bio.Entrez+ module, as described in the sections below. This module makes sure that the correct URL is used for the queries, and that not more than one request is made every three seconds, as required by NCBI.
 
 The output returned by the Entrez Programming Utilities is typically in XML format. To parse such output, you have several options:
 \begin{enumerate}
-  \item Use \verb+Bio.Entrez+'s parser to parse the XML output into a Python object;
-  \item Use the DOM (Document Object Model) parser in Python's standard library;
-  \item Use the SAX (Simple API for XML) parser in Python's standard library;
+  \item Use \verb+Bio.Entrez+'s parser to parse the XML output into a python object;
+  \item Use the DOM (Document Object Model) parser in python's standard library;
+  \item Use the SAX (Simple API for XML) parser in python's standard library;
   \item Read the XML output as raw text, and parse it by string searching and manipulation.
 \end{enumerate}
-For the DOM and SAX parsers, see the Python documentation. The parser in \verb+Bio.Entrez+ is discussed below.
+For the DOM and SAX parsers, see the python documentation. The parser in \verb+Bio.Entrez+ is discussed below.
 
 NCBI uses DTD (Document Type Definition) files to describe the structure of the information contained in XML files. Most of the DTD files used by NCBI are included in the Biopython distribution. The \verb+Bio.Entrez+ parser makes use of the DTD files when parsing an XML file returned by NCBI Entrez.
 
@@ -3041,7 +3105,7 @@ The variable \verb+result+ now contains a list of databases in XML format:
 </eInfoResult>
 \end{verbatim}
 
-Since this is a fairly simple XML file, we could extract the information it contains simply by string searching. Using \verb+Bio.Entrez+'s parser instead, we can directly parse this XML file into a Python object:
+Since this is a fairly simple XML file, we could extract the information it contains simply by string searching. Using \verb+Bio.Entrez+'s parser instead, we can directly parse this XML file into a python object:
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> handle = Entrez.einfo()
@@ -3329,7 +3393,7 @@ ELink, available from Biopython as \verb+Bio.Entrez.elink()+, can be used to fin
 >>> record = Entrez.read(handle)
 \end{verbatim}
 
-The \verb+record+ variable consists of a Python list, one for each database in which we searched. Since we specified only one PubMed ID to search for, \verb+record+ contains only one item. This item is a dictionary containing information about our search term, as well as all the related items that were found:
+The \verb+record+ variable consists of a python list, one for each database in which we searched. Since we specified only one PubMed ID to search for, \verb+record+ contains only one item. This item is a dictionary containing information about our search term, as well as all the related items that were found:
 
 \begin{verbatim}
 >>> record[0]['DbFrom']
@@ -3459,7 +3523,7 @@ We first open the file and then parse it:
 >>> input = open("pubmed_result1.txt")
 >>> record = Medline.read(input)
 \end{verbatim}
-The \verb+record+ now contains the Medline record as a Python dictionary:
+The \verb+record+ now contains the Medline record as a python dictionary:
 \begin{verbatim}
 >>> record["PMID"]
 '12230038'
@@ -3686,7 +3750,7 @@ Hopefully this section gave you an idea of the power and flexibility of the Entr
 \subsection{Searching, downloading, and parsing Entrez Nucleotide records}
 \label{subsec:entrez_example_genbank}
 
-Here we'll show a simple example of performing a remote Entrez query. In section~\ref{sec:orchids} of the parsing examples, we talked about using NCBI's Entrez website to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a Python script. In this example, we'll just show how to connect, get the results, and parse them, with the Entrez module doing all of the work.
+Here we'll show a simple example of performing a remote Entrez query. In section~\ref{sec:orchids} of the parsing examples, we talked about using NCBI's Entrez website to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a python script. In this example, we'll just show how to connect, get the results, and parse them, with the Entrez module doing all of the work.
 
 First, we use EGQuery to find out the number of results we will get before actually downloading them.  EGQuery will tell us how many search results were found in each of the databases, but for this example we are only interested in nucleotides:
 \begin{verbatim}
@@ -3707,7 +3771,7 @@ So, we expect to find 814 Entrez Nucleotide records (this is the number I obtain
 >>> record = Entrez.read(handle)
 \end{verbatim}
 
-Here, \verb+record+ is a Python dictionary containing the search results and some auxiliary information. Just for information, let's look at what is stored in this dictionary:
+Here, \verb+record+ is a python dictionary containing the search results and some auxiliary information. Just for information, let's look at what is stored in this dictionary:
 \begin{verbatim}
 >>> print record.keys()
 [u'Count', u'RetMax', u'IdList', u'TranslationSet', u'RetStart', u'QueryTranslation']
@@ -3826,7 +3890,7 @@ REFERENCE   1  (bases 1 to 892)
 ...
 \end{verbatim}
 
-In this case, we are just getting the raw records. To get the records in a more Python-friendly form, we can use \verb+Bio.SeqIO+ to parse the GenBank data into \verb|SeqRecord| objects, including \verb|SeqFeature| objects (see Chapter~\ref{chapter:Bio.SeqIO}):
+In this case, we are just getting the raw records. To get the records in a more python-friendly form, we can use \verb+Bio.SeqIO+ to parse the GenBank data into \verb|SeqRecord| objects, including \verb|SeqFeature| objects (see Chapter~\ref{chapter:Bio.SeqIO}):
 
 \begin{verbatim}
 >>> from Bio import SeqIO
@@ -4140,7 +4204,7 @@ ID   3Fe-4S.
 ...
 \end{verbatim}
 
-The entries in this file can be parsed by the \verb+parse+ function in the \verb+Bio.SwissProt.KeyWList+ module. Each entry is then stored as a \verb+Bio.SwissProt.KeyWList.Record+, which is a Python dictionary.
+The entries in this file can be parsed by the \verb+parse+ function in the \verb+Bio.SwissProt.KeyWList+ module. Each entry is then stored as a \verb+Bio.SwissProt.KeyWList.Record+, which is a python dictionary.
 
 \begin{verbatim}
 >>> from Bio.SwissProt import KeyWList
@@ -4258,7 +4322,7 @@ DR   Q06000, LIPL_RAT   ;  Q29524, LIPL_SHEEP ;
 
 In this example, the first line shows the EC (Enzyme Commission) number of lipoprotein lipase (second line). Alternative names of lipoprotein lipase are "clearing factor lipase", "diacylglycerol lipase", and "diglyceride lipase" (lines 3 through 5). The line starting with "CA" shows the catalytic activity of this enzyme. Comment lines start with "CC". The "PR" line shows references to the Prosite Documentation records, and the "DR" lines show references to Swiss-Prot records. Not of these entries are necessarily present in an Enzyme record.
 
-In Biopython, an Enzyme record is represented by the \verb|Bio.ExPASy.Enzyme.Record| class. This record derives from a Python dictionary and has keys corresponding to the two-letter codes used in Enzyme files. To read an Enzyme file containing one Enzyme record, use the \verb+read+ function in \verb|Bio.ExPASy.Enzyme|:
+In Biopython, an Enzyme record is represented by the \verb|Bio.ExPASy.Enzyme.Record| class. This record derives from a python dictionary and has keys corresponding to the two-letter codes used in Enzyme files. To read an Enzyme file containing one Enzyme record, use the \verb+read+ function in \verb|Bio.ExPASy.Enzyme|:
 
 \begin{verbatim}
 >>> from Bio.ExPASy import Enzyme
@@ -4309,7 +4373,7 @@ Swiss-Prot, Prosite, and Prosite documentation records can be downloaded from th
 \item[sprot\_search\_ful]To search for a Swiss-Prot record
 \item[sprot\_search\_de]To search for a Swiss-Prot record
 \end{description}
-To access this web server from a Python script, we use the \verb|Bio.ExPASy| module.
+To access this web server from a python script, we use the \verb|Bio.ExPASy| module.
 
 \subsection{Retrieving a Swiss-Prot record}
 \label{subsec:expasy_swissprot}
@@ -4437,7 +4501,7 @@ For these functions, an invalid accession number returns an error message in HTM
 
 \href{http://www.expasy.org/tools/scanprosite/}{ScanProsite} allows you to scan protein sequences online against the Prosite database by providing a UniProt or PDB sequence identifier or the sequence itself. For more information about ScanProsite, please see the \href{http://www.expasy.org/tools/scanprosite/scanprosite-doc.html}{ScanProsite documentation} as well as the \href{http://www.expasy.org/tools/scanprosite/ScanPrositeREST.html}{documentation for programmatic access of ScanProsite}.
 
-You can use Biopython's \verb+Bio.ExPASy.ScanProsite+ module to scan the Prosite database from Python. This module both helps you to access ScanProsite programmatically, and to parse the results returned by ScanProsite. To scan for Prosite patterns in the following protein sequence:
+You can use Biopython's \verb+Bio.ExPASy.ScanProsite+ module to scan the Prosite database from python. This module both helps you to access ScanProsite programmatically, and to parse the results returned by ScanProsite. To scan for Prosite patterns in the following protein sequence:
 
 \begin{verbatim}
 MEHKEVVLLLLLFLKSGQGEPLDDYVNTQGASLFSVTKKQLGAGSIEECAAKCEEDEEFT
@@ -4453,7 +4517,7 @@ CRAFQYHSKEQQCVIMAENRKSSIIIRMRDVVLFEKKVYLSECKTGNGKNYRGTMSKTKN"
 >>> handle = ScanProsite.scan(seq=sequence)
 \end{verbatim}
 
-By executing \verb+handle.read()+, you can obtain the search results in raw XML format. Instead, let's use \verb+Bio.ExPASy.ScanProsite.read+ to parse the raw XML into a Python object:
+By executing \verb+handle.read()+, you can obtain the search results in raw XML format. Instead, let's use \verb+Bio.ExPASy.ScanProsite.read+ to parse the raw XML into a python object:
 
 \begin{verbatim}
 >>> result = ScanProsite.read(handle)
@@ -6089,7 +6153,7 @@ and PICT formats).
 \subsection{Introduction}
 
 The \verb|Bio.Graphics.GenomeDiagram| module is a new addition to Biopython 1.50,
-having previously been available as a separate Python module dependent on Biopython.
+having previously been available as a separate python module dependent on Biopython.
 GenomeDiagram is described in the Bioinformatics journal publication Pritchard et al. (2006),
 \href{http://dx.doi.org/10.1093/bioinformatics/btk021}{doi:10.1093/bioinformatics/btk021},
 and there are several examples images and documentation for the old separate version
@@ -6427,7 +6491,7 @@ original_rec = SeqIO.read(open("NC_005816.gb"),"genbank")
 
 So, how can we generate a shuffled versions of the original sequence?  I would
 use the built in python \verb|random| module for this, in particular the function
-\verb|random.shuffle| -- but this works on a Python list.  Our sequence is a
+\verb|random.shuffle| -- but this works on a python list.  Our sequence is a
 \verb|Seq| object, so in order to shuffle it we need to turn it into a list:
 
 \begin{verbatim}
@@ -6439,7 +6503,7 @@ random.shuffle(nuc_list) #acts in situ!
 Now, in order to use \verb|Bio.SeqIO| to output the shuffled sequence, we need
 to construct a new \verb|SeqRecord| with a new \verb|Seq| object using this
 shuffled list.  In order to do this, we need to turn the list of nucleotides
-(single letter strings) into a long string -- the standard Python way to do
+(single letter strings) into a long string -- the standard python way to do
 this is with the string object's join method.
 
 \begin{verbatim}
@@ -6449,7 +6513,7 @@ shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet), \
                          id="Shuffled", description="Based on %s" % original_rec.id)
 \end{verbatim}
 
-Let's put all these pieces together to make a complete Python script which
+Let's put all these pieces together to make a complete python script which
 generates a single FASTA file containing 30 randomly shuffled versions of
 the original sequence.
 
@@ -7332,7 +7396,7 @@ The \verb|Bio.InterPro.Record| contains:
 Biopython has a regression testing framework (the file
 \verb|run_tests.py|) based on
 \href{http://docs.python.org/library/unittest.html}{unittest},
-the standard unit testing framework for Python.  Providing comprehensive
+the standard unit testing framework for python.  Providing comprehensive
 tests for modules is one of the most important aspects of making sure that
 the Biopython code is as bug-free as possible before going out.
 It also tends to be one of the most undervalued aspects of contributing.
@@ -7561,7 +7625,7 @@ gives a more structured result, and if there is a test failure this can
 clearly pinpoint which part of the test is going wrong.  The sub-tests can
 also be run individually which is helpful for testing or debugging.
 
-The \verb|unittest|-framework has been included with Python since version
+The \verb|unittest|-framework has been included with python since version
 2.1, and is documented in the python Library Reference (which I know you
 are keeping under your pillow, as recommended).  There is also
 \href{http://docs.python.org/library/unittest.html}{online documentaion
@@ -7603,7 +7667,7 @@ if __name__ == "__main__" :
     unittest.main(testRunner=runner)
 \end{verbatim}
 
-In the division tests, we use \verb|assertAlmostEqual| instead of \verb|assertEqual| to avoid tests failing due to roundoff errors; see the \verb|unittest| chapter in the Python documentation for details and for other functionality available in \verb|unittest| (\href{http://docs.python.org/library/unittest.html}{online reference}).
+In the division tests, we use \verb|assertAlmostEqual| instead of \verb|assertEqual| to avoid tests failing due to roundoff errors; see the \verb|unittest| chapter in the python documentation for details and for other functionality available in \verb|unittest| (\href{http://docs.python.org/library/unittest.html}{online reference}).
 
 These are the key points of \verb|unittest|-based tests:
 
@@ -8483,7 +8547,7 @@ Handles are regularly used in Biopython for passing information to parsers.
 
 One useful thing is to be able to turn information contained in a
 string into a handle. The following example shows how to do this using
-\verb|cStringIO| from the Python standard library:
+\verb|cStringIO| from the python standard library:
 
 \begin{verbatim}
 >>> my_info = 'A string\n with multiple lines.'
