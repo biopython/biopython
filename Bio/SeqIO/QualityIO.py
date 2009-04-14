@@ -29,8 +29,8 @@ Pe = 0.00000001,  Q = 80
 Pe = 0.000000001, Q = 90
 
 In the QUAL format these quality values are held as space separated text in
-a FASTA like file format.  In the FASTQ format, the each quality values is
-encoded with a single ASCI character using chr(Q+33), meaning zero maps to the
+a FASTA like file format.  In the FASTQ format, each quality values is encoded
+with a single ASCI character using chr(Q+33), meaning zero maps to the
 character "!" and for example 90 maps to "{".  The sequences and quality are
 then stored in pairs in a FASTA like format.
 
@@ -45,7 +45,10 @@ Confusingly Solexa produces a FASTQ like file but using their own score
 mapping instead.
 
 Also note that Roche 454 sequencers can output files in the QUAL format, and
-thankfully they use PHREP style scores like Sanger.
+thankfully they use PHREP style scores like Sanger.  To extract QUAL files from
+a Roche 454 SFF binary file, use the Roche off instrument command line tool
+"sffinfo" with the -q or -qual argument.  You can extract a matching FASTA file
+using the -s or -seq argument instead.
 
 You are expected to use this module via the Bio.SeqIO functions, with the
 following format names:
@@ -594,7 +597,7 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
     SLXA-B3_649_FC8437_R1_1_1_183_714 GTATTATTTAATGGCATACACTCAA
     >>> handle.close()
 
-    If you want to look at the qualities, they are record in each record's
+    If you want to look at the qualities, they are recorded in each record's
     per-letter-annotation dictionary as a simple list of integers:
 
     >>> print record.letter_annotations["solexa_quality"]
@@ -629,13 +632,13 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
     >>> print record.letter_annotations["solexa_quality"]
     [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -6, -1, -1, -4, -1, -4, -19, -10, -27, -18]
 
-    These quality scores are so low that when converted from the Solexa
-    scheme into PHRED scores they look quite different:
+    These quality scores are so low that when converted from the Solexa scheme
+    into PHRED scores they look quite different:
 
     >>> print "%0.2f" % phred_quality_from_solexa(-1)
     2.54
     
-    Note you can use the Bio.Seq.write() function or the SeqRecord's format
+    Note you can use the Bio.SeqIO.write() function or the SeqRecord's format
     method to output the record(s):
 
     >>> print record.format("fastq-solexa")
@@ -701,8 +704,8 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
     EAS54_6_R1_2_1_443_348 ?????????????????????????
     >>> handle.close()
 
-    Typically however, you would call this via Bio.SeqIO instead with "qual" as
-    the format:
+    Typically however, you would call this via Bio.SeqIO instead with "qual"
+    as the format:
 
     >>> from Bio import SeqIO
     >>> handle = open("Quality/example.qual", "rU")
@@ -713,9 +716,10 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
     EAS54_6_R1_2_1_443_348 ?????????????????????????
     >>> handle.close()
 
-    Becase QUAL files don't contain the sequence string itself, the seq property
-    is set to an UnknownSeq object.  As no alphabet was given, this has defaulted
-    to a generic single letter alphabet and the character "?" used.
+    Becase QUAL files don't contain the sequence string itself, the seq
+    property is set to an UnknownSeq object.  As no alphabet was given, this
+    has defaulted to a generic single letter alphabet and the character "?"
+    used.
 
     By specifying a nucleotide alphabet, "N" is used instead:
 
@@ -729,15 +733,13 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
     EAS54_6_R1_2_1_443_348 NNNNNNNNNNNNNNNNNNNNNNNNN
     >>> handle.close()
 
-
-    However, the quality scores themselves are available as a list
-    of integers in each record's per-letter-annotation:
+    However, the quality scores themselves are available as a list of integers
+    in each record's per-letter-annotation:
 
     >>> print record.letter_annotations["phred_quality"]
     [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
 
-    The internal details are a little complicated, but you can still slice one
-    of these SeqRecord objects:
+    You can still slice one of these SeqRecord objects with an UnknownSeq:
 
     >>> sub_record = record[5:10]
     >>> print sub_record.id, sub_record.letter_annotations["phred_quality"]
@@ -802,8 +804,9 @@ class FastqPhredWriter(SequentialSequenceWriter):
 
     You might want to do this if the original file included extra line breaks,
     which while valid may not be supported by all tools.  The output file from
-    Biopython will have each sequence on a single line, and each quality string
-    on a single line (which is considered desirable for maximum compatibility).
+    Biopython will have each sequence on a single line, and each quality
+    string on a single line (which is considered desirable for maximum
+    compatibility).
 
     In this next example, a Solexa FASTQ file is converted into a standard
     Sanger style FASTQ file using PHRED qualities:
@@ -935,11 +938,12 @@ class FastqSolexaWriter(SequentialSequenceWriter):
 
     You might want to do this if the original file included extra line breaks,
     which while valid may not be supported by all tools.  The output file from
-    Biopython will have each sequence on a single line, and each quality string
-    on a single line (which is considered desirable for maximum compatibility).
+    Biopython will have each sequence on a single line, and each quality
+    string on a single line (which is considered desirable for maximum
+    compatibility).
 
-    This code is also called if you use the .format("fastq-solexa") method of a
-    SeqRecord.
+    This code is also called if you use the .format("fastq-solexa") method of
+    a SeqRecord.
     """
     def write_record(self, record):
         """Write a single FASTQ record to the file."""
@@ -998,15 +1002,15 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet = single_letter_
     EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG
 
     As with the FASTQ or QUAL parsers, if you want to look at the qualities,
-    they are in each record's per-letter-annotation dictionary as a simple list
-    of integers:
+    they are in each record's per-letter-annotation dictionary as a simple
+    list of integers:
 
     >>> print record.letter_annotations["phred_quality"]
     [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
 
-    If you have access to data as a FASTQ format file, using that directly would
-    be simpler and more straight forward.  Note that you can easily use this
-    function to convert paired FASTA and QUAL files into FASTQ files:
+    If you have access to data as a FASTQ format file, using that directly
+    would be simpler and more straight forward.  Note that you can easily use
+    this function to convert paired FASTA and QUAL files into FASTQ files:
 
     >>> from Bio import SeqIO
     >>> rec_iter = PairedFastaQualIterator(open("Quality/example.fasta", "rU"),
