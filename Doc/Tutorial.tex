@@ -658,6 +658,9 @@ In all of these operations, the alphabet property is maintained. This is very us
 ValueError: Proteins do not have complements!
 \end{verbatim}
 
+The example in Section~\ref{sec:SeqIO-reverse-complement} combines the \verb|Seq|
+object's reverse complement method with \verb|Bio.SeqIO| for sequence input/ouput.
+
 \section{Transcription}
 Before talking about transcription, I want to try and clarify the strand issue.
 Consider the following (made up) stretch of double stranded DNA which
@@ -727,6 +730,7 @@ are new in Biopython 1.49.  For older releases you would have to use the \verb|B
 module's functions instead, see Section~\ref{sec:seq-module-functions}.
 
 \section{Translation}
+\label{sec:translation}
 Sticking with the same example discussed in the transcription section above,
 now let's translate this mRNA into the corresponding protein sequence - again taking
 advantage of one of the \verb|Seq| object's biological methods:
@@ -788,6 +792,9 @@ Finally, you can even specify the stop symbol if you don't like the default aste
 >>> coding_dna.translate(table=2, stop_symbol="@")
 Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '@'))
 \end{verbatim}
+
+The example in Section~\ref{sec:SeqIO-translate} combines the \verb|Seq| object's
+translate method with \verb|Bio.SeqIO| for sequence input/ouput.
 
 \emph{Note:} The \verb|Seq| object's \verb|translate| method is new in Biopython 1.49.
 For older releases you would have to use the \verb|Bio.Seq| module's \verb|translate|
@@ -1595,7 +1602,7 @@ SeqIO.write(SeqIO.parse(open("ls_orchid.gbk"), "genbank"), open("my_example.faa"
 \end{verbatim}
 
 \subsection{Converting a file of sequences to their reverse complements}
-
+\label{sec:SeqIO-reverse-complement}
 Suppose you had a file of nucleotide sequences, and you wanted to turn it into a file containing their reverse complement sequences.  This time a little bit of work is required to transform the \verb|SeqRecord| objects we get from our input file into something suitable for saving to our output file.
 
 To start with, we'll use \verb|Bio.SeqIO.parse()| to load some nucleotide
@@ -1620,11 +1627,9 @@ from Bio.SeqRecord import SeqRecord
 
 def make_rc_record(record) :
     """Returns a new SeqRecord with the reverse complement sequence."""
-    rc_rec = SeqRecord(seq = record.seq.reverse_complement(), \
-                       id = "rc_" + record.id, \
-                       name = "rc_" + record.name, \
-                       description = "reverse complement")
-    return rc_rec
+    return SeqRecord(seq = record.seq.reverse_complement(), \
+                     id = "rc_" + record.id, \
+                     description = "reverse complement")
 \end{verbatim}
 
 We can then use this to turn the input records into reverse complement records ready for output.  If you don't mind about having all the records in memory at once, then the python \verb|map()| function is a very intuitive way of doing this:
@@ -1632,7 +1637,7 @@ We can then use this to turn the input records into reverse complement records r
 \begin{verbatim}
 from Bio import SeqIO
 
-in_handle = open("ls_orchid.fasta", "r")
+in_handle = open("ls_orchid.fasta")
 records = map(make_rc_record, SeqIO.parse(in_handle, "fasta"))
 in_handle.close()
 
@@ -1659,34 +1664,22 @@ That would create an in memory list of reverse complement records where the sequ
 records = (make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta") if len(rec)<700)
 \end{verbatim}
 
-If you like compact code, and don't mind being lax about closing file handles, we can reduce this to one long line:
+If you don't mind being lax about closing input file handles, we have:
 
 \begin{verbatim}
 from Bio import SeqIO
-SeqIO.write((make_rc_record(rec) for rec in \
-            SeqIO.parse(open("ls_orchid.fasta", "r"), "fasta") if len(rec) < 700), \
-            open("rev_comp.fasta", "w"), "fasta")
-\end{verbatim}
 
-Personally, I think the above snippet of code is a little too compact, and I find the following much easier to read:
-
-\begin{verbatim}
-from Bio import SeqIO
 records = (make_rc_record(rec) for rec in \
-           SeqIO.parse(open("ls_orchid.fasta", "r"), "fasta") \
+           SeqIO.parse(open("ls_orchid.fasta"), "fasta") \
            if len(rec) < 700)
-SeqIO.write(records, open("rev_comp.fasta", "w"), "fasta")
+
+out_handle = open("rev_comp.fasta", "w")
+SeqIO.write(records, out_handle, "fasta")
+out_handle.close()
 \end{verbatim}
 
-\noindent or, for Python 2.3 with a list comprehension,
-
-\begin{verbatim}
-from Bio import SeqIO
-records = [make_rc_record(rec) for rec in \
-           SeqIO.parse(open("ls_orchid.fasta", "r"), "fasta") \
-           if len(rec) < 700]
-SeqIO.write(records, open("rev_comp.fasta", "w"), "fasta")
-\end{verbatim}
+There is a related example in Section~\ref{sec:SeqIO-translate}, translating each
+record in the FASTA file from nucleotides to amino acids.
 
 \subsection{Getting your SeqRecord objects as formatted strings}
 \label{sec:Bio.SeqIO-and-StringIO}
@@ -6460,7 +6453,9 @@ Let's put all these pieces together to make a complete Python script which
 generates a single FASTA file containing 30 randomly shuffled versions of
 the original sequence.
 
-This first version just uses a big for loop and writes out the records one by one:
+This first version just uses a big for loop and writes out the records one by one
+(using the \verb|SeqRecord|'s format method described in
+Section~\ref{sec:Bio.SeqIO-and-StringIO}):
 
 \begin{verbatim}
 import random
@@ -6490,18 +6485,65 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 
-def shuffle_record(record, new_id) :
+def make_shuffle_record(record, new_id) :
     nuc_list = list(record.seq)
     random.shuffle(nuc_list)
     return SeqRecord(Seq("".join(nuc_list), record.seq.alphabet), \
            id=new_id, description="Based on %s" % original_rec.id)
    
 original_rec = SeqIO.read(open("NC_005816.gb"),"genbank")
-shuffled_recs = (shuffle_record(original_rec, "Shuffled%i" % (i+1)) for i in range(30))
+shuffled_recs = (make_shuffle_record(original_rec, "Shuffled%i" % (i+1)) \
+                 for i in range(30))
 handle = open("shuffled.fasta", "w")
 SeqIO.write(shuffled_recs, handle, "fasta")
 handle.close()
 \end{verbatim}
+
+\subsection{Translating a FASTA file of CDS entries}
+\label{sec:SeqIO-translate}
+Suppose you've got an input file of CDS entries for some organism, and you
+want to generate a new FASTA file containing their protein sequences.  i.e.
+Take each nucleotide sequence from the original file, and translate it.
+
+Back in Section~\ref{sec:translation} we saw how to use the \verb|Seq|
+object's translate method.  We can combine this with \verb|Bio.SeqIO| as
+shown in the reverse complement example in Section~\ref{sec:SeqIO-reverse-complement}.
+The key point is that for each nucleotide \verb|SeqRecord|, we need to create
+a protein \verb|SeqRecord| - and take care of naming it.
+
+You can write you own function to do this, choosing suitable protein identifiers
+for your sequences, and the appropriate genetic code.  In this example we just
+use the default table and add a prefix to the identifier:
+
+\begin{verbatim}
+from Bio.SeqRecord import SeqRecord
+def make_protein_record(nuc_record) :
+    """Returns a new SeqRecord with the translated sequence (default table)."""
+    return SeqRecord(seq = nuc_record.seq.translate(to_stop=True), \
+                     id = "trans_" + nuc_record.id, \
+                     description = "translation to first stop, with default table")
+\end{verbatim}
+
+We can then use this function to turn the input nucleotide records into protein
+records ready for output.  An elegant way and memory efficient way to do this
+is with a generator expression:
+
+\begin{verbatim}
+from Bio import SeqIO
+
+proteins = (make_protein_record(nuc_rec) for nuc_rec in \
+            SeqIO.parse(open("ls_orchid.fasta"), "fasta"))
+
+out_handle = open("translations.fasta", "w")
+SeqIO.write(proteins, out_handle, "fasta")
+out_handle.close()
+\end{verbatim}
+
+This should work on any FASTA file of coding sequences.  We're just reused
+\href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta}
+as an example here, but you'll find several of the translations it gives are actually
+very very short -- if you recall many of these orchid sequences are actually rRNA
+sequences so translating them isn't actually biologically meaningful.
 
 \section{Sequence parsing plus simple plots}
 \label{seq:sequence-parsing-plus-pylab}
