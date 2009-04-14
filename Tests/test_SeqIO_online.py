@@ -49,16 +49,17 @@ del id_list, handle, identifier, records, record
 #####################################################################
 
 print "Checking Bio.Entrez.efetch()"
-for database, format, entry in [("genome","fasta","X52960"),
-                                ("genome","genbank","X52960"),
-                                ("nucleotide", "fasta", "6273291"),
-                                ("nucleotide", "genbank", "6273291"),
-                                ("protein", "fasta", "16130152"),
-                                ("protein", "genbank", "16130152")] :
+for database, format, rettype, entry in [
+                                ("genome","fasta","fasta","X52960"),
+                                ("genome","genbank","gb","X52960"),
+                                ("nucleotide","fasta","fasta","6273291"),
+                                ("nucleotide","genbank","gb","6273291"),
+                                ("protein","fasta","fasta","16130152"),
+                                ("protein","genbank","gp","16130152")] :
     print "- Fetching %s from %s as %s" % (entry, database, format)
     handle = Entrez.efetch(db=database,
                            id=entry,
-                           rettype=format)
+                           rettype=rettype)
     record = SeqIO.read(handle, format) # checks there is exactly one record
     handle.close()
     print "  Got " + checksum_summary(record)
