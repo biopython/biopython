@@ -6545,6 +6545,40 @@ as an example here, but you'll find several of the translations it gives are act
 very very short -- if you recall many of these orchid sequences are actually rRNA
 sequences so translating them isn't actually biologically meaningful.
 
+\subsection{Simple quality filtering for FASTQ files}
+
+The FASTQ file format was introduced at Sanger and is now widely used for
+holding nucleotide sequencing reads together with their quality scores.
+FASTQ files (and the related QUAL files) are an excellent example of
+per-letter-annotation, because for each nucleotide in the sequence there is
+an associated quality score.  Any per-letter-annotation is held in a
+\verb|SeqRecord| in the \verb|letter_annotations| dictionary as a list,
+tuple or string (with the same number of elements as the sequence length).
+
+One common task is taking a large set of sequencing reads and filtering them
+(or cropping them) based on their quality scores.
+The following example is very simplistic, but should illustrate the basics of
+working with quality data in a \verb|SeqRecord| object.  All we are going to
+do here is read in a file of FASTQ data, and filter it to pick out only those
+records whose PHRED quality scores are all above some threshold (here 30).
+
+\begin{verbatim}
+from Bio import SeqIO
+
+good_reads = (record for record in \
+             SeqIO.parse(open("original.fastq"), "fastq") \
+             if min(record.letter_annotations["phred_quality"]) >= 30)
+
+out_handle = open("good_quality.fastq", "w")
+SeqIO.write(good_reads, out_handle, "fastq")
+out_handle.close()
+\end{verbatim}
+
+FASTQ files can contain millions of entries, so it is best to avoid loading
+them all into memory at once.  This example uses a generator expression, which
+means only one \verb|SeqRecord| is created at a time - avoiding any memory
+limitations.
+
 \section{Sequence parsing plus simple plots}
 \label{seq:sequence-parsing-plus-pylab}
 
