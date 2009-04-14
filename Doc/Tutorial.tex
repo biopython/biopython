@@ -1278,27 +1278,10 @@ Section~\ref{sec:efetch} talks about the Entrez EFetch interface in more detail,
 but for now let's just connect to the NCBI and get a few \textit{Opuntia} (prickly-pear)
 proteins from GenBank using their GI numbers.
 
-First of all, let's fetch just one record.  Remember, when you expect the handle
-to contain one and only one record, use the \verb|Bio.SeqIO.read()| function:
-
-\begin{verbatim}
-from Bio import Entrez
-form Bio import SeqIO
-handle = Entrez.efetch(db="protein", rettype="genbank", id="6273291")
-seq_record = SeqIO.read(handle, "genbank")
-handle.close()
-print "%s with %i features" % (seq_record.id, len(seq_record.features))
-\end{verbatim}
-
-\noindent Expected output:
-
-\begin{verbatim}
-gi|6273291|gb|AF191665.1|AF191665 with 3 features
-\end{verbatim}
-
-The NCBI will also let you ask for the file in other formats, for example as a
-FASTA file.  If you don't care about the annotations and features in a GenBank
-file, this is a better choice to download because it's a smaller file:
+First of all, let's fetch just one record.  If you don't care about the
+annotations and features downloading a FASTA file is a good choice as these
+are compact.  Now remember, when you expect the handle to contain one and
+only one record, use the \verb|Bio.SeqIO.read()| function:
 
 \begin{verbatim}
 from Bio import Entrez
@@ -1312,7 +1295,30 @@ print "%s with %i features" % (seq_record.id, len(seq_record.features))
 \noindent Expected output:
 
 \begin{verbatim}
-gi|6273291|gb|AF191665.1|AF191665 with 0 features
+gi|6273291|gb|AF191665.1|AF191665 with 3 features
+\end{verbatim}
+
+The NCBI will also let you ask for the file in other formats, in particular as
+a GenBank file:
+
+\begin{verbatim}
+from Bio import Entrez
+from Bio import SeqIO
+handle = Entrez.efetch(db="nucleotide", rettype="gb", id="6273291")
+seq_record = SeqIO.read(handle, "genbank")
+handle.close()
+print "%s with %i features" % (seq_record.id, len(seq_record.features))
+\end{verbatim}
+
+Until Easter 2009, the Entrez EFetch API let you use ``genbank''
+as the return type, however the NCBI now insist on using the official
+return types of ``gb'' (or ``gp'' for proteins) as described on
+\href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq_help.html}
+{EFetch for Sequence and other Molecular Biology Databases}.
+The expected output of this example is:
+
+\begin{verbatim}
+AF191665.1 with 3 features
 \end{verbatim}
 
 Now let's fetch several records.  This time the handle contains multiple records,
@@ -1321,7 +1327,7 @@ so we must use the \verb|Bio.SeqIO.parse()| function:
 \begin{verbatim}
 from Bio import Entrez
 form Bio import SeqIO
-handle = Entrez.efetch(db="protein", rettype="genbank", \
+handle = Entrez.efetch(db="nucleotide", rettype="gb", \
                        id="6273291,6273290,6273289")
 for seq_record in SeqIO.parse(handle, "genbank") :
     print seq_record.id, seq_record.description[:50] + "..."
@@ -3181,12 +3187,14 @@ ESummary retrieves document summaries from a list of primary IDs (see the  \href
 EFetch is what you use when you want to retrieve a full record from Entrez.
 This covers several possible databases, as described on the main \href{http://eutils.ncbi.nlm.nih.gov/entrez/query/static/efetch\_help.html}{EFetch Help page}.
 
-From the \emph{Cypripedioideae} example above, we can download GenBank record 186972394 using \verb+Bio.Entrez.efetch+:
+From the \emph{Cypripedioideae} example above, we can download GenBank record 186972394 using \verb+Bio.Entrez.efetch+ (see the documentation on
+\href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq_help.html}
+{EFetch for Sequence and other Molecular Biology Databases}):
 
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
->>> handle = Entrez.efetch(db="nucleotide", id="186972394", rettype="genbank")
+>>> handle = Entrez.efetch(db="nucleotide", id="186972394", rettype="gb")
 >>> print handle.read()
 LOCUS       EU490707                1302 bp    DNA     linear   PLN 05-MAY-2008
 DEFINITION  Selenipedium aequinoctiale maturase K (matK) gene, partial cds;
@@ -3260,13 +3268,17 @@ ORIGIN
 //
 \end{verbatim}
 
-The argument \verb+rettype="genbank"+ lets us download this record in the GenBank format. Alternatively, you could for example use \verb+rettype="fasta"+ to get the Fasta-format; see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq\_help.html}{EFetch Sequences Help page} for other options. The available formats depend on which database you are downloading from - see the main \href{http://eutils.ncbi.nlm.nih.gov/entrez/query/static/efetch\_help.html}{EFetch Help page}.
+The argument \verb+rettype="gb"+ lets us download this record in the GenBank format.
+Note that until Easter 2009, the Entrez EFetch API let you use ``genbank'' as the
+return type, however the NCBI now insist on using the official return types of
+``gb'' (or ``gp'' for proteins) as described on online.
+Alternatively, you could for example use \verb+rettype="fasta"+ to get the Fasta-format; see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq\_help.html}{EFetch Sequences Help page} for other options. The available formats depend on which database you are downloading from - see the main \href{http://eutils.ncbi.nlm.nih.gov/entrez/query/static/efetch\_help.html}{EFetch Help page}.
 
 If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see Chapter~\ref{chapter:Bio.SeqIO}), you could directly parse it into a \verb+SeqRecord+:
 
 \begin{verbatim}
 >>> from Bio import Entrez, SeqIO
->>> handle = Entrez.efetch(db="nucleotide", id="186972394",rettype="genbank")
+>>> handle = Entrez.efetch(db="nucleotide", id="186972394",rettype="gb")
 >>> record = SeqIO.read(handle, "genbank")
 >>> print record
 ID: EU490707.1
@@ -3286,7 +3298,7 @@ Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
 filename = "gi_186972394.gbk"
 if not os.path.isfile(filename) :
     print "Downloading..."
-    net_handle = Entrez.efetch(db="nucleotide",id="186972394",rettype="genbank")
+    net_handle = Entrez.efetch(db="nucleotide",id="186972394",rettype="gb")
     out_handle = open(filename, "w")
     out_handle.write(net_handle.read())
     out_handle.close()
@@ -3424,7 +3436,7 @@ The \verb|Bio.Entrez.read()| function can parse most (if not all) XML output ret
 
 To request a specific file format from Entrez using \verb|Bio.Entrez.efetch()| requires specifying the \verb|rettype| and/or \verb|retmode| optional arguments.  The different combinations are described for each database type on the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html}{NCBI efetch webpage}.
 
-One obvious case is you may prefer to download sequences in the FASTA or GenBank plain text formats (which can then be parsed with \verb|Bio.SeqIO|, see Sections~\ref{sec:SeqIO_GenBank_Online} and~\ref{sec:efetch}).  For the literature databases, Biopython contains a parser for the \verb+MEDLINE+ format used in PubMed.
+One obvious case is you may prefer to download sequences in the FASTA or GenBank/GenPept plain text formats (which can then be parsed with \verb|Bio.SeqIO|, see Sections~\ref{sec:SeqIO_GenBank_Online} and~\ref{sec:efetch}).  For the literature databases, Biopython contains a parser for the \verb+MEDLINE+ format used in PubMed.
 
 \subsection{Parsing Medline records}
 \label{subsec:entrez-and-medline}
@@ -3798,7 +3810,7 @@ Now we use these GIs to download the GenBank records - note that you have to sup
 
 \begin{verbatim}
 >>> gi_str = ",".join(gi_list)
->>> handle = Entrez.efetch(db="nuccore", id=gi_str, rettype="genbank")
+>>> handle = Entrez.efetch(db="nuccore", id=gi_str, rettype="gb")
 \end{verbatim}
 
 If you want to look at the raw GenBank files, you can read from this handle and print out the result:
@@ -3825,7 +3837,7 @@ In this case, we are just getting the raw records. To get the records in a more 
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> handle = Entrez.efetch(db="nuccore", id=gi_str, rettype="genbank")
+>>> handle = Entrez.efetch(db="nuccore", id=gi_str, rettype="gb")
 >>> records = SeqIO.parse(handle, "genbank")
 \end{verbatim}
 
