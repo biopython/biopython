@@ -1356,7 +1356,7 @@ only one record, use the \verb|Bio.SeqIO.read()| function:
 
 \begin{verbatim}
 from Bio import Entrez
-form Bio import SeqIO
+from Bio import SeqIO
 handle = Entrez.efetch(db="protein", rettype="fasta", id="6273291")
 seq_record = SeqIO.read(handle, "fasta")
 handle.close()
@@ -1397,7 +1397,7 @@ so we must use the \verb|Bio.SeqIO.parse()| function:
 
 \begin{verbatim}
 from Bio import Entrez
-form Bio import SeqIO
+from Bio import SeqIO
 handle = Entrez.efetch(db="nucleotide", rettype="gb", \
                        id="6273291,6273290,6273289")
 for seq_record in SeqIO.parse(handle, "genbank") :
