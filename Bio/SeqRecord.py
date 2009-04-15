@@ -6,6 +6,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Represent a Sequence Record, a sequence with annotation."""
+__docformat__ = "epytext en" #Simple markup to show doctests nicely
 
 # NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
@@ -37,27 +38,26 @@ class SeqRecord(object):
     """A SeqRecord object holds a sequence and information about it.
 
     Main attributes:
-    id          - Identifier such as a locus tag (string)
-    seq         - The sequence itself (Seq object)
+     - id          - Identifier such as a locus tag (string)
+     - seq         - The sequence itself (Seq object)
 
     Additional attributes:
-    name        - Sequence name, e.g. gene name (string)
-    description - Additional text (string)
-    dbxrefs     - List of database cross references (list of strings)
-    features    - Any (sub)features defined (list of SeqFeature objects)
-    annotations - Further information about the whole sequence (dictionary)
-                  Most entries are lists of strings.
-    letter_annotations - Per letter/symbol annotation (restricted dictionary).
-                  This holds python sequences (lists, strings or tuples) whose
-                  length matches that of the sequence.  A typical use would be
-                  to hold a list of integers representing sequencing quality
-                  scores, or a string representing the secondary structure.
+     - name        - Sequence name, e.g. gene name (string)
+     - description - Additional text (string)
+     - dbxrefs     - List of database cross references (list of strings)
+     - features    - Any (sub)features defined (list of SeqFeature objects)
+     - annotations - Further information about the whole sequence (dictionary)
+                     Most entries are lists of strings.
+     - letter_annotations - Per letter/symbol annotation (restricted dictionary).
+                     This holds python sequences (lists, strings or tuples) whose
+                     length matches that of the sequence.  A typical use would be
+                     to hold a list of integers representing sequencing quality
+                     scores, or a string representing the secondary structure.
 
     You will typically use Bio.SeqIO to read in sequences from files as
     SeqRecord objects.  However, you may want to create your own SeqRecord
-    objects directly (see the __init__ method for further details).
+    objects directly (see the __init__ method for further details):
 
-    e.g.
     >>> from Bio.Seq import Seq
     >>> from Bio.SeqRecord import SeqRecord
     >>> from Bio.Alphabet import IUPAC
@@ -88,12 +88,12 @@ class SeqRecord(object):
         """Create a SeqRecord.
 
         Arguments:
-        seq         - Sequence, required (Seq object)
-        id          - Sequence identifier, recommended (string)
-        name        - Sequence name, optional (string)
-        description - Sequence description, optional (string)
-        dbxrefs     - Database cross references, optional (list of strings)
-        features    - Any (sub)features, optional (list of SeqFeature objects)
+         - seq         - Sequence, required (Seq object)
+         - id          - Sequence identifier, recommended (string)
+         - name        - Sequence name, optional (string)
+         - description - Sequence description, optional (string)
+         - dbxrefs     - Database cross references, optional (list of strings)
+         - features    - Any (sub)features, optional (list of SeqFeature objects)
 
         You will typically use Bio.SeqIO to read in sequences from files as
         SeqRecord objects.  However, you may want to create your own SeqRecord
@@ -200,7 +200,7 @@ class SeqRecord(object):
         structure as encoded by the PDB (e.g. H for alpha helices),
         plus a simple feature for its histidine self phosphorylation
         site:
-        
+
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
@@ -216,7 +216,7 @@ class SeqRecord(object):
         ...                     type = "Site"))
 
         Now let's have a quick look at the full record,
-        
+
         >>> print rec
         ID: 1JOY
         Name: EnvZ
@@ -266,7 +266,8 @@ class SeqRecord(object):
         Per letter annotation for: secondary_structure
         Seq('IIEQFIDYLR', IUPACProtein())
 
-        If you omit both, then you get a copy of the original record:
+        If you omit both, then you get a copy of the original record (although
+        lacking the annotations and dbxrefs):
 
         >>> print rec[:]
         ID: 1JOY
@@ -275,7 +276,6 @@ class SeqRecord(object):
         Number of features: 1
         Per letter annotation for: secondary_structure
         Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR', IUPACProtein())
-
         """
         if isinstance(index, int) :
             #NOTE - The sequence level annotation like the id, name, etc
@@ -335,16 +335,16 @@ class SeqRecord(object):
         """Iterate over the letters in the sequence.
 
         Note that this does not facilitate iteration together with any
-        per-letter-annotation."""
+        per-letter-annotation.
+        """
         return iter(self.seq)
 
     def __str__(self) :
         """A human readable summary of the record and its annotation (string).
 
         The python built in function str works by calling the object's ___str__
-        method.
-        
-        e.g.
+        method.  e.g.
+
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.Alphabet import IUPAC
@@ -392,9 +392,8 @@ class SeqRecord(object):
         """A concise summary of the record for debugging (string).
 
         The python built in function repr works by calling the object's ___repr__
-        method.
-        
-        e.g.
+        method.  e.g.
+
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.Alphabet import generic_protein
@@ -426,9 +425,8 @@ class SeqRecord(object):
 
         The format should be a lower case string supported as an output
         format by Bio.SeqIO, which is used to turn the SeqRecord into a
-        string.
+        string.  e.g.
 
-        e.g.
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.Alphabet import IUPAC
