@@ -246,7 +246,7 @@ class Motif(object):
         sx = 0  # \sum x
         sy = 0  # \sum y
         syy = 0 # \sum x^2
-        norm=self.length
+        norm=max(self.length,offset+motif.length)
         
         for pos in range(max(self.length,offset+motif.length)):
             for l in self.alphabet.letters:
@@ -260,8 +260,7 @@ class Motif(object):
 
         norm *= len(self.alphabet.letters)
         s1 = (sxy - sx*sy*1.0/norm)
-        s2 = (sxx - sx*sx*1.0/norm)*(syy- sy*sy*1.0/norm)
-
+        s2 = (norm*sxx - sx*sx*1.0)*(norm*syy- sy*sy*1.0)
         return s1/math.sqrt(s2)
 
     def dist_product(self,other):
@@ -292,13 +291,7 @@ class Motif(object):
         """
         Calculates the dpq distance measure between motifs.
 
-        It is calculated as a maximal value of the formula:
-
-        \sqrt{\sum_{i=1}^{alignment.len()} \sum_{k=1}^alphabet.len() \
-       \{ m1[i].freq(alphabet[k])*log_2(m1[i].freq(alphabet[k])/m2[i].freq(alphabet[k])) +
-          m2[i].freq(alphabet[k])*log_2(m2[i].freq(alphabet[k])/m1[i].freq(alphabet[k])) 
-       }
-
+        It is calculated as a maximal value of DPQ formula:
         over possible non-spaced alignemts of two motifs.
         reference to the measure:
         D. M Endres and J. E Schindelin, "A new metric for probability distributions", IEEE transactions on Information Theory 49, no. 7 (July 2003): 1858-1860.

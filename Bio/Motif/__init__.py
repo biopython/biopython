@@ -11,10 +11,9 @@ It also inlcudes functionality for parsing AlignACE and MEME programs
 """
 from __future__ import generators
 from Motif import Motif
-from AlignAceParser import AlignAceParser, CompareAceParser
-from MEMEParser import MEMEParser,MASTParser
+from Parsers.AlignAce import AlignAceParser, CompareAceParser, AlignAce
+from Parsers.MEME import MEMEParser,MASTParser
 from Thresholds import score_distribution
-from AlignAceStandalone import AlignAce
 
 _parsers={"AlignAce":AlignAceParser,
           "MEME":MEMEParser,
