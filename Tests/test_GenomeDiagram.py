@@ -26,13 +26,13 @@ from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio import SeqUtils
 
 # Bio.Graphics.GenomeDiagram
-from Bio.Graphics.GenomeDiagram.FeatureSet import FeatureSet
-from Bio.Graphics.GenomeDiagram.GraphSet import GraphSet
-from Bio.Graphics.GenomeDiagram.Track import Track
+from Bio.Graphics.GenomeDiagram import FeatureSet, GraphSet, Track, Diagram
 #from Bio.Graphics.GenomeDiagram.Utilities import *
-from Bio.Graphics.GenomeDiagram import Diagram
-from Bio.Graphics.GenomeDiagram.Colors import ColorTranslator
-from Bio.Graphics.GenomeDiagram.Graph import GraphData
+
+#Currently private, but we test them here:
+from Bio.Graphics.GenomeDiagram._Graph import GraphData
+from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator
+
 
 ###############################################################################
 # Utility functions for graph plotting, originally in GenomeDiagram.Utilities #

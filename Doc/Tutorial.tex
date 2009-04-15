@@ -6354,7 +6354,6 @@ gdd = GDDiagram("An example")
 you could just switch the import statements like this:
 \begin{verbatim}
 from Bio.Graphics.GenomeDiagram import FeatureSet as GDFeatureSet, Diagram as GDDiagram
-from Bio.Graphics.GenomeDiagram.GDColours import ColorTranslator as GDColourTranslator
 
 gdd = GDDiagram("An example")
 ...
@@ -6363,9 +6362,15 @@ and hopefully that should be enough.  In the long term you might want to
 switch to the new names, but you would have to change more of your code:
 \begin{verbatim}
 from Bio.Graphics.GenomeDiagram import FeatureSet, Diagram
-from Bio.Graphics.GenomeDiagram.GDColours import ColorTranslator
 
 gdd = Diagram("An example")
+...
+\end{verbatim}
+or:
+\begin{verbatim}
+from Bio.Graphics import GenomeDiagram
+
+gdd = GenomeDiagram.Diagram("An example")
 ...
 \end{verbatim}
 
