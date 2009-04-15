@@ -5,7 +5,8 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Represent a sequence or mutable sequence, with an alphabet."""
+"""Provides objects to represent biological sequences with alphabets."""
+__docformat__ ="epytext en" #Don't just use plain text in epydoc API pages!
 
 import string #for maketrans only
 import array

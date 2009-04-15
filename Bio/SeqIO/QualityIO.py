@@ -209,6 +209,8 @@ using ("fastq" for the Sanger standard using PHRED values, or "fastq-solexa"
 for the Solexa/Illumina variant), as this cannot be detected reliably
 automatically.
 """
+__docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
+
 #See also http://blog.malde.org/index.php/2008/09/09/the-fastq-file-format-for-sequences/
 
 from Bio.Alphabet import single_letter_alphabet
