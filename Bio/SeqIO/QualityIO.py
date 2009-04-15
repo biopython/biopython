@@ -450,19 +450,18 @@ def FastqGeneralIterator(handle) :
         
 #This is a generator function!
 def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = None) :
-    """Generator function to iterate over Fastq records (as SeqRecord objects).
+    """Generator function to iterate over FASTQ records (as SeqRecord objects).
 
-    handle - input file
-    alphabet - optional alphabet
-    title2ids - A function that, when given the title of the FASTA
-    file (without the beginning >), will return the id, name and
-    description (in that order) for the record as a tuple of strings.
+     - handle - input file
+     - alphabet - optional alphabet
+     - title2ids - A function that, when given the title line from the FASTQ
+                   file (without the beginning >), will return the id, name and
+                   description (in that order) for the record as a tuple of
+                   strings.  If this is not given, then the entire title line
+                   will be used as the description, and the first word as the
+                   id and name.
 
-    If this is not given, then the entire title line will be used
-    as the description, and the first word as the id and name.
-
-    Note that use of title2ids matches that of Bio.Fasta.SequenceParser
-    but the defaults are slightly different.
+    Note that use of title2ids matches that of Bio.SeqIO.FastaIO.
 
     For each sequence in a (Sanger style) FASTQ file there is a matching string
     encoding the PHRED qualities (integers between 0 and about 90) using ASCII
@@ -547,6 +546,8 @@ def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = No
 #This is a generator function!
 def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = None) :
     """Parsing the Solexa/Illumina FASTQ like files (which differ in the quality mapping).
+
+    The optional arguments are the same as those for the FastqPhredIterator.
 
     For each sequence in Solexa/Illumina FASTQ files there is a matching string
     encoding the Solexa integer qualities using ASCII values with an offset
