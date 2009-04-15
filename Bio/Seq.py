@@ -5,7 +5,12 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Provides objects to represent biological sequences with alphabets."""
+"""Provides objects to represent biological sequences with alphabets.
+
+See also U{http://biopython.org/wiki/Seq} and the chapter in our tutorial:
+ - U{http://biopython.org/DIST/docs/tutorial/Tutorial.html}
+ - U{http://biopython.org/DIST/docs/tutorial/Tutorial.pdf}
+"""
 __docformat__ ="epytext en" #Don't just use plain text in epydoc API pages!
 
 import string #for maketrans only
@@ -26,8 +31,9 @@ from Bio.Data import CodonTable
 def _maketrans(complement_mapping) :
     """Makes a python string translation table (PRIVATE).
 
-    complement_mapping - a dictionary such as ambiguous_dna_complement
-    and ambiguous_rna_complement from Data.IUPACData.
+    Arguments:
+     - complement_mapping - a dictionary such as ambiguous_dna_complement
+       and ambiguous_rna_complement from Data.IUPACData.
 
     Returns a translation table (a string of length 256) for use with the
     python string's translate method to use in a (reverse) complement.
@@ -63,8 +69,8 @@ class Seq(object):
         """Create a Seq object.
 
         Arguments:
-        seq      - Sequence, required (string)
-        alphabet - Optional argument, an Alphabet object from Bio.Alphabet
+         - seq      - Sequence, required (string)
+         - alphabet - Optional argument, an Alphabet object from Bio.Alphabet
         
         You will typically use Bio.SeqIO to read in sequences from files as
         SeqRecord objects, whose sequence will be exposed as a Seq object via
@@ -242,9 +248,10 @@ class Seq(object):
         Optional arguments start and end are interpreted as in slice
         notation.
     
-        sub - a string or another Seq object to look for
-        start - optional integer, slice start
-        end - optional integer, slice end
+        Arguments:
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
 
         e.g.
 
@@ -282,9 +289,10 @@ class Seq(object):
         Returns an integer, the index of the first occurrence of substring
         argument sub in the (sub)sequence given by [start:end].
 
-        sub - a string or another Seq object to look for
-        start - optional integer, slice start
-        end - optional integer, slice end
+        Arguments:
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
 
         Returns -1 if the subsequence is NOT found.
 
@@ -307,9 +315,10 @@ class Seq(object):
         Returns an integer, the index of the last (right most) occurrence of
         substring argument sub in the (sub)sequence given by [start:end].
 
-        sub - a string or another Seq object to look for
-        start - optional integer, slice start
-        end - optional integer, slice end
+        Arguments:
+         - sub - a string or another Seq object to look for
+         - start - optional integer, slice start
+         - end - optional integer, slice end
 
         Returns -1 if the subsequence is NOT found.
 
@@ -615,6 +624,7 @@ class Seq(object):
         nucleotide or generic alphabet.  Trying to translate a protein
         sequence raises an exception.
 
+        Arguments:
          - table - Which codon table to use?  This can be either a name
                    (string) or an NCBI identifier (integer).  This defaults
                    to the "Standard" table.
@@ -839,6 +849,7 @@ class UnknownSeq(Seq):
         Optional arguments start and end are interpreted as in slice
         notation.
     
+        Arguments:
          - sub - a string or another Seq object to look for
          - start - optional integer, slice start
          - end - optional integer, slice end
@@ -1187,6 +1198,7 @@ class MutableSeq(object):
         Optional arguments start and end are interpreted as in slice
         notation.
     
+        Arguments:
          - sub - a string or another Seq object to look for
          - start - optional integer, slice start
          - end - optional integer, slice end
@@ -1377,6 +1389,7 @@ def _translate_str(sequence, table, stop_symbol="*",
                    to_stop=False, pos_stop="X") :
     """Helper function to translate a nucleotide string (PRIVATE).
 
+    Arguments:
      - sequence    - a string
      - table       - a CodonTable object (NOT a table name or id number)
      - stop_symbol - a single character string, what to use for terminators.
@@ -1440,6 +1453,7 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False):
     If given a string, returns a new string object. Given a Seq or
     MutableSeq, returns a Seq object with a protein alphabet.
 
+    Arguments:
      - table - Which codon table to use?  This can be either a name
                (string) or an NCBI identifier (integer).  Defaults
                to the "Standard" table.
