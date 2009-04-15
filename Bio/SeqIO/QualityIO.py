@@ -175,6 +175,12 @@ information is there:
     >>> print record.letter_annotations["phred_quality"]
     [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
 
+Just to keep things tidy, if you are following this example yourself, you can
+delete this temporary file now:
+
+    >>> import os
+    >>> os.remove("Quality/temp.qual")
+
 Sometimes you won't have a FASTQ file, but rather just a pair of FASTA and QUAL
 files.  Because the Bio.SeqIO system is designed for reading single files, you
 would have to read the two in separately and then combine the data.  However,
@@ -820,6 +826,13 @@ class FastqPhredWriter(SequentialSequenceWriter):
 
     This code is also called if you use the .format("fastq") method of a
     SeqRecord.
+
+    P.S. To avoid cluttering up your working directory, you can delete this
+    temporary file now:
+
+    >>> import os
+    >>> os.remove("Quality/temp.fastq")
+
     """
     def write_record(self, record):
         """Write a single FASTQ record to the file."""
@@ -857,6 +870,11 @@ class QualPhredWriter(SequentialSequenceWriter):
 
     This code is also called if you use the .format("qual") method of a
     SeqRecord.
+
+    P.S. Don't forget to clean up the temp file if you don't need it anymore:
+
+    >>> import os
+    >>> os.remove("Quality/temp.qual")
     """
     def __init__(self, handle, wrap=60, record2title=None):
         """Create a QUAL writer.
@@ -944,6 +962,11 @@ class FastqSolexaWriter(SequentialSequenceWriter):
 
     This code is also called if you use the .format("fastq-solexa") method of
     a SeqRecord.
+
+    P.S. Don't forget to delete the temp file if you don't need it anymore:
+
+    >>> import os
+    >>> os.remove("Quality/temp.fastq")
     """
     def write_record(self, record):
         """Write a single FASTQ record to the file."""
@@ -1019,7 +1042,11 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet = single_letter_
     >>> SeqIO.write(rec_iter, out_handle, "fastq")
     3
     >>> out_handle.close()
-    
+
+    And don't forget to clean up the temp file if you don't need it anymore:
+
+    >>> import os
+    >>> os.remove("Quality/temp.fastq")    
     """
     from Bio.SeqIO.FastaIO import FastaIterator    
     fasta_iter = FastaIterator(fasta_handle, alphabet=alphabet, title2ids=title2ids)
