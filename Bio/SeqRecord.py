@@ -103,7 +103,10 @@ class SeqRecord(object):
         unique id string for each record.  This is especially important
         if you wish to write your sequences to a file.
 
-        You can create a 'blank' SeqRecord object, and then populated the
+        If you don't have the actual sequence, but you do know its length,
+        then using the UnknownSeq object from Bio.Seq is appropriate.
+
+        You can create a 'blank' SeqRecord object, and then populate the
         attributes later.  Note that currently the annotations dictionary
         cannot be specified when creating the SeqRecord.
         """
