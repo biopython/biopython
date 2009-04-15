@@ -18,20 +18,19 @@ are used containing the sequence and the quality information separately.
 
 The PHRED software reads DNA sequencing trace files, calls bases, and
 assigns a quality value between 0 and 90 to each called base using a logged
-transformation of the error probability, Q = -10 log10( Pe ).
+transformation of the error probability, Q = -10 log10( Pe ), for example::
 
-e.g.
-Pe = 0.0,         Q =  0
-Pe = 0.1,         Q = 10
-Pe = 0.01,        Q = 20
-...
-Pe = 0.00000001,  Q = 80
-Pe = 0.000000001, Q = 90
+    Pe = 0.0,         Q =  0
+    Pe = 0.1,         Q = 10
+    Pe = 0.01,        Q = 20
+    ...
+    Pe = 0.00000001,  Q = 80
+    Pe = 0.000000001, Q = 90
 
 In the QUAL format these quality values are held as space separated text in
 a FASTA like file format.  In the FASTQ format, each quality values is encoded
 with a single ASCI character using chr(Q+33), meaning zero maps to the
-character "!" and for example 90 maps to "{".  The sequences and quality are
+character "!" and for example 80 maps to "q".  The sequences and quality are
 then stored in pairs in a FASTA like format.
 
 Unfortunately there is no official document describing the FASTQ file format,
@@ -52,12 +51,12 @@ using the -s or -seq argument instead.
 
 You are expected to use this module via the Bio.SeqIO functions, with the
 following format names:
-* "fastq" means Sanger style FASTQ files using PHRED scores.
-* "fastq-solexa" means Solexa/Illumina style FASTQ files.
-* "qual" means simple quality files using PHRED scores.
+ - "fastq" means Sanger style FASTQ files using PHRED scores.
+ - "fastq-solexa" means Solexa/Illumina style FASTQ files.
+ - "qual" means simple quality files using PHRED scores.
 
 For example, consider the following short FASTQ file (extracted from a real
-NCBI dataset):
+NCBI dataset)::
 
     @EAS54_6_R1_2_1_413_324
     CCCTTCTTGTCTTCAGCGTTTCTCC
@@ -123,7 +122,7 @@ FASTQ file:
     +
     ZZZZZZZZZZZXZVZZMVZRXRRRR
     <BLANKLINE>
-    
+
 If you wanted to trim your sequences (perhaps to remove low quality regions,
 or to remove a primer sequence), try slicing the SeqRecord objects.  e.g.
 
@@ -192,9 +191,8 @@ then a simple dictionary approach would work:
 
     >>> from Bio import SeqIO
     >>> reads = SeqIO.to_dict(SeqIO.parse(open("Quality/example.fasta"), "fasta"))
-    >>> for record in SeqIO.parse(open("Quality/example.qual"), "qual") :
-    ...     reads[record.id].letter_annotations["phred_quality"] = \
-                                        record.letter_annotations["phred_quality"]
+    >>> for rec in SeqIO.parse(open("Quality/example.qual"), "qual") :
+    ...     reads[rec.id].letter_annotations["phred_quality"]=rec.letter_annotations["phred_quality"]
 
 You can then access any record by its key, and get both the sequence and the
 quality scores.
@@ -323,7 +321,7 @@ def FastqGeneralIterator(handle) :
     this can cause problems as this is also the marker for the start of
     a new sequence.  In fact, the "+" sign can also appear as well.  Some
     sources recommended having no line breaks in the  quality to avoid this,
-    but even that is not enough, this example consider:
+    but even that is not enough, consider this example::
 
         @071113_EAS56_0053:1:1:998:236
         TTTCTTGCCCCCATAGACTGAGACCTTCCCTAAATA
@@ -468,8 +466,8 @@ def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = No
     encoding the PHRED qualities (integers between 0 and about 90) using ASCII
     values with an offset of 33.
 
-    For example, consider a file containing three short reads:
-    
+    For example, consider a file containing three short reads::
+
         @EAS54_6_R1_2_1_413_324
         CCCTTCTTGTCTTCAGCGTTTCTCC
         +
@@ -514,7 +512,6 @@ def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = No
 
     >>> print record.letter_annotations["phred_quality"]
     [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
-
     """
     for title_line, seq_string, quality_string in FastqGeneralIterator(handle) :
         if title2ids :
@@ -550,12 +547,12 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
     """Parsing the Solexa/Illumina FASTQ like files (which differ in the quality mapping).
 
     For each sequence in Solexa/Illumina FASTQ files there is a matching string
-    encoding the Solexa integer qualities using ASCII values with an offset of
-    64.  Solexa scores are scaled differently to PHRED scores, and Biopython
+    encoding the Solexa integer qualities using ASCII values with an offset
+    of 64.  Solexa scores are scaled differently to PHRED scores, and Biopython
     will NOT perform any automatic conversion when loading.
 
-    For example, consider a file containing these five records:
-
+    For example, consider a file containing these five records::
+        
         @SLXA-B3_649_FC8437_R1_1_1_610_79
         GATGTGCAATACCTTTGTAGAGGAA
         +SLXA-B3_649_FC8437_R1_1_1_610_79
@@ -576,7 +573,7 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
         GTATTATTTAATGGCATACACTCAA
         +SLXA-B3_649_FC8437_R1_1_1_183_714
         YYYYYYYYYYWYYYYWYWWUWWWQQ
-
+        
     Using this module directly you might run:
 
     >>> handle = open("Quality/solexa_example.fastq", "rU")
@@ -611,12 +608,12 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
 
     These scores aren't very good, but they are high enough that they map
     almost exactly onto PHRED scores:
-    
+
     >>> print "%0.2f" % phred_quality_from_solexa(25)
     25.01
-    
+
     Let's look at another example read which is even worse, where there are
-    more noticeable differences between the Solexa and PHRED scores:
+    more noticeable differences between the Solexa and PHRED scores::
 
          @slxa_0013_1_0001_24
          ACAAAAATCACAAGCATTCTTATACACC
@@ -643,7 +640,7 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
 
     >>> print "%0.2f" % phred_quality_from_solexa(-1)
     2.54
-    
+
     Note you can use the Bio.SeqIO.write() function or the SeqRecord's format
     method to output the record(s):
 
@@ -658,7 +655,7 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
     has left out the optional repetition of the sequence identifier on the "+"
     line.  If you want the to use PHRED scores, use "fastq" or "qual" as the
     output format instead, and Biopython will do the conversion for you:
-    
+
     >>> print record.format("fastq")
     @slxa_0013_1_0001_24
     ACAAAAATCACAAGCATTCTTATACACC
@@ -688,7 +685,7 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
 def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = None) :
     """For QUAL files which include PHRED quality scores, but no sequence.
 
-    For example, consider this short QUAL file:
+    For example, consider this short QUAL file::
 
         >EAS54_6_R1_2_1_413_324
         26 26 18 26 26 26 26 26 26 26 26 26 26 26 26 22 26 26 26 26
@@ -750,7 +747,6 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
     >>> sub_record = record[5:10]
     >>> print sub_record.id, sub_record.letter_annotations["phred_quality"]
     EAS54_6_R1_2_1_443_348 [26, 26, 26, 26, 26]
-
     """
     #Skip any text before the first record (e.g. blank lines, comments)
     while True :
@@ -989,7 +985,7 @@ class FastqSolexaWriter(SequentialSequenceWriter):
 def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet = single_letter_alphabet, title2ids = None) :
     """Iterator to parse a matched pair of FASTA and QUAL files into SeqRecord objects.
 
-    For example, consider this short QUAL file:
+    For example, consider this short QUAL file::
 
         >EAS54_6_R1_2_1_413_324
         26 26 18 26 26 26 26 26 26 26 26 26 26 26 26 22 26 26 26 26
@@ -1001,7 +997,7 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet = single_letter_
         26 26 26 26 26 26 26 26 26 26 26 24 26 22 26 26 13 22 26 18
         24 18 18 18 18
     
-    And a matching FASTA file:
+    And a matching FASTA file::
 
         >EAS54_6_R1_2_1_413_324
         CCCTTCTTGTCTTCAGCGTTTCTCC
