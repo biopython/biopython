@@ -9,6 +9,22 @@ The latest news is at the top.
 
 ===================================================================
 
+See the notes below for the Biopython 1.50 beta release for more details,
+but the highlights are:
+* The SeqRecord supports slicing and per-letter-annotation
+* Bio.SeqIO can read and write FASTQ and QUAL files
+* Bio.Seq now has an UnknownSeq object
+* GenomeDiagram has been integrated into Biopython
+* New module Bio.Motif will later replace Bio.AlignAce and Bio.MEME
+* This will be the final release to support Python 2.3
+* This will be the final release with Martel and Bio.Mindy
+
+Since the 1.50 beta release:
+* The NCBI's Entrez EFetch no longer supports rettype="genbank"
+* A few more unit tests were added
+
+===================================================================
+
 April 3, 2008: Biopython 1.50 beta released.
 
 The SeqRecord object has a new dictionary attribute, letter_annotations,
