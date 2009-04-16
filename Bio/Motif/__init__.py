@@ -10,9 +10,10 @@ as well as methods for motif comparisons and motif searching in sequences.
 It also inlcudes functionality for parsing AlignACE and MEME programs
 """
 from _Motif import Motif
-from Parsers.AlignAce import AlignAceParser, CompareAceParser, AlignAce
+from Parsers.AlignAce import AlignAceParser, CompareAceParser
+from Applications.AlignAce import  AlignAce
 from Parsers.MEME import MEMEParser,MASTParser
-from Thresholds import score_distribution
+from Thresholds import ScoreDistribution
 
 _parsers={"AlignAce":AlignAceParser,
           "MEME":MEMEParser,
