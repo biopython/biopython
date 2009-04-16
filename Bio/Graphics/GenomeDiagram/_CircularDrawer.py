@@ -38,7 +38,6 @@ from _FeatureSet import FeatureSet
 from _GraphSet import GraphSet
 
 from math import ceil, pi, cos, sin, asin
-from string import join
 
 class CircularDrawer(AbstractDrawer):
     """ CircularDrawer(AbstractDrawer)
@@ -769,7 +768,7 @@ class CircularDrawer(AbstractDrawer):
                         for limit, x, y, in [(graph_label_min, x0, y0),
                                              (graph_label_max, x1, y1),
                                              (graph_label_mid, xmid, ymid)]:
-                            label = String(0, 0, join(limit, ';'),
+                            label = String(0, 0, ";".join(limit),
                                            fontName=track.scale_font,
                                            fontSize=track.scale_fontsize,
                                            fillColor=track.scale_color)

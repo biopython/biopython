@@ -30,7 +30,6 @@
 # ReportLab imports
 from reportlab.lib import colors
 
-from string import join
 from math import sqrt
 
 class GraphData:
@@ -277,8 +276,6 @@ class GraphData:
         outstr.append("Sample SD: %.3f" % self.stdev())
         outstr.append("Minimum: %s\n1Q: %s\n2Q: %s\n3Q: %s\nMaximum: %s" % self.quartiles())
         outstr.append("Sequence Range: %s..%s" % self.range())
-
-        outstr = join(outstr, '\n')
-        return outstr
+        return "\n".join(outstr)
 
 

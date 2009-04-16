@@ -44,8 +44,6 @@ from reportlab.lib import pagesizes
 from reportlab.lib import colors
 from reportlab.graphics.shapes import *
 
-
-from string import lower
 from math import pi
 
 ################################################################################
@@ -410,7 +408,7 @@ class AbstractDrawer:
             raise ValueError, "Page size %s not recognised" % pagesize        
         shortside, longside = min(pagesize), max(pagesize)
 
-        orientation = lower(orientation)
+        orientation = orientation.lower()
         if orientation not in ('landscape', 'portrait'):
             raise ValueError, "Orientation %s not recognised" % orientation
         if orientation == 'landscape':
