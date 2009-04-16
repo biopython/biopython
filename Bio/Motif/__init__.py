@@ -11,7 +11,6 @@ It also inlcudes functionality for parsing AlignACE and MEME programs
 """
 from _Motif import Motif
 from Parsers.AlignAce import AlignAceParser, CompareAceParser
-from Applications.AlignAce import  AlignAce
 from Parsers.MEME import MEMEParser,MASTParser
 from Thresholds import ScoreDistribution
 
