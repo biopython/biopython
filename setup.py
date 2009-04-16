@@ -268,6 +268,7 @@ PACKAGES = [
     'Bio.Medline',
     'Bio.MEME',
     'Bio.Motif',
+    'Bio.Motif.Parsers',
     'Bio.MetaTool',
     'Bio.Mindy',
     'Bio.NBRF',
