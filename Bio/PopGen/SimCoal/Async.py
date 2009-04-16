@@ -14,14 +14,13 @@ import os
 import tarfile
 import tempfile
 
-import SimCoalController
+from Controller import SimCoalController
 import Cache
-import Config
-import Async
 
 class SimCoalCache(Cache.SimCoalCache):
-    def __init__(self, simcoalDir = None):
-        Cache.SimCoalCache.__init__(self, simcoalDir)
+    def __init__(self, data_dir, simcoal_dir):
+        self.data_dir = data_dir
+        Cache.SimCoalCache.__init__(self, data_dir, simcoal_dir)
 
     def runJob(self, parameters, inputFiles):
         parFile = parameters['parFile']
@@ -30,7 +29,7 @@ class SimCoalCache(Cache.SimCoalCache):
         f = inputFiles[parFile]
         text = f.read()
         f.close()
-        w = open (os.sep.join([Config.dataDir, 'SimCoal', 'runs', parFile]), 'w')
+        w = open (os.sep.join([self.data_dir, 'SimCoal', 'runs', parFile]), 'w')
         w.write(text)
         w.close()
         self.run_simcoal(parFile, numSims, ploydi)
