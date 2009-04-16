@@ -32,6 +32,7 @@ DOCTEST_MODULES = ["Bio.Seq",
                    "Bio.KEGG.Enzyme",
                    "Bio.Wise",
                    "Bio.Wise.psw",
+                   "Bio.Motif",
                   ]
 #Silently ignore any doctests for modules requiring numpy!
 try:
