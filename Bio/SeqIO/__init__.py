@@ -509,8 +509,8 @@ def to_dict(sequences, key_function=None) :
     >>> from Bio.SeqUtils.CheckSum import seguid
     >>> handle = open("GenBank/cor6_6.gb", "rU")
     >>> format = "genbank"
-    >>> seguid_dict = SeqIO.to_dict(SeqIO.parse(handle, format), \
-                                    key_function = lambda rec : seguid(rec.seq))
+    >>> seguid_dict = SeqIO.to_dict(SeqIO.parse(handle, format),
+    ...               key_function = lambda rec : seguid(rec.seq))
     >>> for key, record in seguid_dict.iteritems() :
     ...     print key, record.id
     SabZaA4V2eLE9/2Fm5FnyYy07J4 X55053.1
