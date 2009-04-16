@@ -220,7 +220,6 @@ See also http://biopython.org/wiki/SeqIO_dev
 """
 
 import os
-from StringIO import StringIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align.Generic import Alignment
@@ -319,7 +318,7 @@ def write(sequences, handle, format) :
     return count
     
 def parse(handle, format, alphabet=None) :
-    """Turns a sequence file into an iterator returning SeqRecords.
+    r"""Turns a sequence file into an iterator returning SeqRecords.
 
      - handle   - handle to the file.
      - format   - lower case string describing the file format.
@@ -356,13 +355,20 @@ def parse(handle, format, alphabet=None) :
     If you have a string 'data' containing the file contents, you must
     first turn this into a handle in order to parse it:
 
-    from Bio import SeqIO
-    from StringIO import StringIO
-    my_iterator = SeqIO.parse(StringIO(data), format)
+    >>> data = ">Alpha\nACCGGATGTA\n>Beta\nAGGCTCGGTTA\n"
+    >>> from Bio import SeqIO
+    >>> from StringIO import StringIO
+    >>> for record in SeqIO.parse(StringIO(data), "fasta") :
+    ...     print record.id, record.seq
+    Alpha ACCGGATGTA
+    Beta AGGCTCGGTTA
 
     Use the Bio.SeqIO.read(handle, format) function when you expect a single
     record only.
     """
+    #NOTE - The above docstring has some raw \n characters needed
+    #for the StringIO example, hense the whole docstring is in raw
+    #string more (see the leading r before the opening quote).
     from Bio import AlignIO
 
     #Try and give helpful error messages:
