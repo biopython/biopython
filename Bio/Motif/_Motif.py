@@ -734,9 +734,9 @@ class Motif(object):
         """Returns a string representation of the Motif in a given format
 
         Currently supported fromats:
-        - jaspar-pfm : JASPAR Position Frequency Matrix
-        - transfac : TRANSFAC like files
-        - fasta : FASTA file with instances
+         - jaspar-pfm : JASPAR Position Frequency Matrix
+         - transfac : TRANSFAC like files
+         - fasta : FASTA file with instances
         """
 
         formatters={
