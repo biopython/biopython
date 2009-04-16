@@ -878,20 +878,21 @@ class QualPhredWriter(SequentialSequenceWriter):
     def __init__(self, handle, wrap=60, record2title=None):
         """Create a QUAL writer.
 
-        handle - Handle to an output file, e.g. as returned
-                 by open(filename, "w")
-        wrap -   Optional line length used to wrap sequence lines.
-                 Defaults to wrapping the sequence at 60 characters
-                 Use zero (or None) for no wrapping, giving a single
-                 long line for the sequence.
-        record2title - Optional function to return the text to be
-                 used for the title line of each record.  By default the
-                 a combination of the record.id and record.description
-                 is used.  If the record.description starts with the
-                 record.id, then just the record.description is used.
+        Arguments:
+         - handle - Handle to an output file, e.g. as returned
+                    by open(filename, "w")
+         - wrap   - Optional line length used to wrap sequence lines.
+                    Defaults to wrapping the sequence at 60 characters
+                    Use zero (or None) for no wrapping, giving a single
+                    long line for the sequence.
+         - record2title - Optional function to return the text to be
+                    used for the title line of each record.  By default
+                    a combination of the record.id and record.description
+                    is used.  If the record.description starts with the
+                    record.id, then just the record.description is used.
 
         The record2title argument is present for consistency with the
-        FastaWriter class.
+        Bio.SeqIO.FastaIO writer class.
         """
         SequentialSequenceWriter.__init__(self, handle)
         #self.handle = handle
@@ -932,7 +933,8 @@ class QualPhredWriter(SequentialSequenceWriter):
         if self.wrap :
             while qualities :
                 line=qualities.pop(0)
-                while qualities and len(line) + 1 + len(qualities[0]) < self.wrap :
+                while qualities \
+                and len(line) + 1 + len(qualities[0]) < self.wrap :
                     line += " " + qualities.pop(0)
                 self.handle.write(line + "\n")
         else :
@@ -953,11 +955,11 @@ class FastqSolexaWriter(SequentialSequenceWriter):
     1
     >>> out_handle.close()
 
-    You might want to do this if the original file included extra line breaks,
-    which while valid may not be supported by all tools.  The output file from
-    Biopython will have each sequence on a single line, and each quality
-    string on a single line (which is considered desirable for maximum
-    compatibility).
+    You might want to do this if the original file included extra line
+    breaks, which (while valid) may not be supported by all tools.  The
+    output file from Biopython will have each sequence on a single line, and
+    each quality string on a single line (which is considered desirable for
+    maximum compatibility).
 
     This code is also called if you use the .format("fastq-solexa") method of
     a SeqRecord.
@@ -986,7 +988,7 @@ class FastqSolexaWriter(SequentialSequenceWriter):
         self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities))
         
 def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet = single_letter_alphabet, title2ids = None) :
-    """Iterator to parse a matched pair of FASTA and QUAL files into SeqRecord objects.
+    """Iterate over matched FASTA and QUAL files as SeqRecord objects.
 
     For example, consider this short QUAL file::
 
@@ -1009,11 +1011,12 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet = single_letter_
         >EAS54_6_R1_2_1_443_348
         GTTGCTTCTGGCGTGGGTGGGGGGG
 
-    You can parse these separately using Bio.SeqIO with the "qual" and "fasta"
-    formats, but then you'll get a group of SeqRecord objects with no sequence,
-    and a matching group with the sequence but not the qualities.  Because it
-    only deals with one input file handle, Bio.SeqIO can't be used to read the
-    two files together - but this function can!  For example,
+    You can parse these separately using Bio.SeqIO with the "qual" and
+    "fasta" formats, but then you'll get a group of SeqRecord objects with
+    no sequence, and a matching group with the sequence but not the
+    qualities.  Because it only deals with one input file handle, Bio.SeqIO
+    can't be used to read the two files together - but this function can!
+    For example,
     
     >>> rec_iter = PairedFastaQualIterator(open("Quality/example.fasta", "rU"),
     ...                                    open("Quality/example.qual", "rU"))
@@ -1048,8 +1051,10 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet = single_letter_
     >>> os.remove("Quality/temp.fastq")    
     """
     from Bio.SeqIO.FastaIO import FastaIterator    
-    fasta_iter = FastaIterator(fasta_handle, alphabet=alphabet, title2ids=title2ids)
-    qual_iter = QualPhredIterator(qual_handle, alphabet=alphabet, title2ids=title2ids)
+    fasta_iter = FastaIterator(fasta_handle, alphabet=alphabet, \
+                               title2ids=title2ids)
+    qual_iter = QualPhredIterator(qual_handle, alphabet=alphabet, \
+                                  title2ids=title2ids)
 
     #Using zip(...) would create a list loading everything into memory!
     #It would also not catch any extra records found in only one file.
