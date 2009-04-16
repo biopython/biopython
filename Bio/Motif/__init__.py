@@ -9,7 +9,7 @@ it contains the core Motif class containing various I/O methods
 as well as methods for motif comparisons and motif searching in sequences.
 It also inlcudes functionality for parsing AlignACE and MEME programs
 """
-from Motif import Motif
+from _Motif import Motif
 from Parsers.AlignAce import AlignAceParser, CompareAceParser, AlignAce
 from Parsers.MEME import MEMEParser,MASTParser
 from Thresholds import score_distribution
@@ -19,13 +19,13 @@ _parsers={"AlignAce":AlignAceParser,
           }
 
 def _from_pfm(handle):
-    return Motif().from_jaspar_pfm(handle)
+    return Motif()._from_jaspar_pfm(handle)
 
 def _from_sites(handle):
-    return Motif().from_jaspar_sites(handle)
+    return Motif()._from_jaspar_sites(handle)
 
-_readers={"pfm": _from_pfm,
-          "sites": _from_sites
+_readers={"jaspar-pfm": _from_pfm,
+          "jaspar-sites": _from_sites
           }
 
 
@@ -39,8 +39,8 @@ def parse(handle,format):
 
     You can also use single-motif formats, although the Bio.Motif.read()
     function is simpler to use in this situation.
-     - pfm
-     - sites
+     - jaspar-pfm
+     - jaspar-sites
 
     For example:
 
@@ -86,7 +86,7 @@ def read(handle,format):
     reading a pfm file:
 
     >>> from Bio import Motif
-    >>> motif = Motif.read(open("Motif/SRF.pfm"),"pfm")
+    >>> motif = Motif.read(open("Motif/SRF.pfm"),"jaspar-pfm")
     >>> motif.consensus()
     Seq('GCCCATATATGG', IUPACUnambiguousDNA())
 

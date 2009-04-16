@@ -50,36 +50,34 @@ class MotifTestsBasic(unittest.TestCase):
     def test_pfm_parsing(self):
         """Test to be sure that Motif can parse pfm  files.
         """
-        motif= Motif.Motif()
-        motif.from_jaspar_pfm(self.PFMin)
+        motif= Motif.read(self.PFMin,"jaspar-pfm")
         assert motif.length==12
 
     def test_sites_parsing(self):
         """Test to be sure that Motif can parse sites files.
         """
-        motif= Motif.Motif()
-        motif.from_jaspar_sites(self.SITESin)
+        motif= Motif.read(self.SITESin,"jaspar-sites")
         assert motif.length==6
 
     def test_FAoutput(self):
         """Ensure that we can write proper FASTA output files.
         """
         output_handle = open(self.FAout, "w")
-        output_handle.write(self.m.to_fasta())
+        output_handle.write(self.m.format("fasta"))
         output_handle.close()
 
     def test_TFoutput(self):
         """Ensure that we can write proper TransFac output files.
         """
         output_handle = open(self.TFout, "w")
-        output_handle.write(self.m.to_transfac())
+        output_handle.write(self.m.format("transfac"))
         output_handle.close()
 
     def test_pfm_output(self):
         """Ensure that we can write proper pfm output files.
         """
         output_handle = open(self.PFMout, "w")
-        output_handle.write(self.m.to_transfac())
+        output_handle.write(self.m.format("jaspar-pfm"))
         output_handle.close()
         
         

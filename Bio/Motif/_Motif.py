@@ -339,7 +339,7 @@ class Motif(object):
             s+=dpq(f1,f2,self.alphabet)
         return s
             
-    def read(self,stream):
+    def _read(self,stream):
         """Reads the motif from the stream (in AlignAce format).
 
         the self.alphabet variable must be set beforehand.
@@ -377,7 +377,7 @@ class Motif(object):
         else:
             return self.length
         
-    def write(self,stream):
+    def _write(self,stream):
         """
         writes the motif to the stream
         """
@@ -386,10 +386,12 @@ class Motif(object):
             
             
 
-    def to_fasta(self):
+    def _to_fasta(self):
         """
         FASTA representation of motif
         """
+        if not self.has_instances:
+            self.make_instances_from_counts()
         str = ""
         for i,inst in enumerate(self.instances):
             str = str + "> instance %d\n"%i + inst.tostring() + "\n"
@@ -419,15 +421,15 @@ class Motif(object):
         return res
 
         
-    def from_jaspar_pfm(self,stream,make_instances=False):
+    def _from_jaspar_pfm(self,stream,make_instances=False):
         """
         reads the motif from Jaspar .pfm file
 
         The instances are fake, but the pwm is accurate.
         """
-        return self.from_horiz_matrix(stream,letters="ACGT",make_instances=make_instances)
+        return self._from_horiz_matrix(stream,letters="ACGT",make_instances=make_instances)
 
-    def from_vert_matrix(self,stream,letters=None,make_instances=False):
+    def _from_vert_matrix(self,stream,letters=None,make_instances=False):
         """reads a vertical count matrix from stream and fill in the counts.
         """
 
@@ -448,7 +450,7 @@ class Motif(object):
             self.make_instances_from_counts()
         return self
         
-    def from_horiz_matrix(self,stream,letters=None,make_instances=False):
+    def _from_horiz_matrix(self,stream,letters=None,make_instances=False):
         """reads a horizontal count matrix from stream and fill in the counts.
         """
         if letters==None:
@@ -527,7 +529,7 @@ class Motif(object):
         self.counts=counts
         return counts
 
-    def from_jaspar_sites(self,stream):
+    def _from_jaspar_sites(self,stream):
         """
         reads the motif from Jaspar .sites file
 
@@ -615,7 +617,7 @@ class Motif(object):
         """
         import urllib
         import urllib2
-        al= self.to_fasta()
+        al= self._to_fasta()
         url = 'http://weblogo.berkeley.edu/logo.cgi'
         values = {'sequence' : al,
                   'format' : format,
@@ -662,7 +664,7 @@ class Motif(object):
         f.close()
   
 
-    def to_transfac(self):
+    def _to_transfac(self):
         """Write the representation of a motif in TRANSFAC format
         """
         res="XX\nTY Motif\n" #header
@@ -687,7 +689,7 @@ class Motif(object):
         res+="XX\n"
         return res
 
-    def to_vertical_matrix(self,letters=None):
+    def _to_vertical_matrix(self,letters=None):
         """Return string representation of the motif as  a matrix.
         
         """
@@ -701,7 +703,7 @@ class Motif(object):
             res+="\n"
         return res
     
-    def to_horizontal_matrix(self,letters=None,normalized=True):
+    def _to_horizontal_matrix(self,letters=None,normalized=True):
         """Return string representation of the motif as  a matrix.
         
         """
@@ -723,7 +725,27 @@ class Motif(object):
                 res+="\n"
         return res
 
-    def to_jaspar_pfm(self):
+    def _to_jaspar_pfm(self):
         """Returns the pfm representation of the motif
         """
-        return self.to_horizontal_matrix(normalized=False,letters="ACGT")
+        return self._to_horizontal_matrix(normalized=False,letters="ACGT")
+
+    def format(self,format):
+        """Returns a string representation of the Motif in a given format
+
+        Currently supported fromats:
+        - jaspar-pfm : JASPAR Position Frequency Matrix
+        - transfac : TRANSFAC like files
+        - fasta : FASTA file with instances
+        """
+
+        formatters={
+            "jaspar-pfm":   self._to_jaspar_pfm,
+            "transfac":     self._to_transfac,
+            "fasta" :       self._to_fasta,
+            }
+
+        try:
+            return formatters[format]()
+        except KeyError:
+            raise ValueError("Wrong format type")
