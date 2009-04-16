@@ -11,7 +11,6 @@ Changes:
 26.08.2007 - added a DPQ measure   (Bartek Wilczynski)
 9.2007 (BW) : added the .to_fasta() and .weblogo() methods allowing to use the Berkeley weblogo server at http://weblogo.berkeley.edu/
 """
-from __future__ import generators
 from Bio.Seq import Seq
 from Bio.SubsMat import FreqTable
 from Bio.Alphabet import IUPAC
@@ -429,7 +428,7 @@ class Motif(object):
         return self.from_horiz_matrix(stream,letters="ACGT",make_instances=make_instances)
 
     def from_vert_matrix(self,stream,letters=None,make_instances=False):
-        """reads a horizontal count matrix from stream and fill in the counts.
+        """reads a vertical count matrix from stream and fill in the counts.
         """
 
         self.counts = {}
