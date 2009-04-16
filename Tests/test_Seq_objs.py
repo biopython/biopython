@@ -131,6 +131,48 @@ class StringMethodTests(unittest.TestCase):
         """Check matches the python string rfind method."""
         self._test_method("rfind", start_end=True)
 
+    def test_startswith(self) :
+        """Check matches the python string startswith method."""
+        self._test_method("startswith", start_end=True)
+        #Now check with a tuple of sub sequences
+        for example1 in self._examples :
+            if not hasattr(example1, "startswith") :
+                #e.g. MutableSeq does not support this
+                continue
+            subs = tuple([example1[start:start+2] for start \
+                          in range(0, len(example1)-2,3)])
+            subs_str = tuple([str(s) for s in subs])
+
+            self.assertEqual(str(example1).startswith(subs_str),
+                             example1.startswith(subs))
+            self.assertEqual(str(example1).startswith(subs_str),
+                             example1.startswith(subs_str)) #strings!
+            self.assertEqual(str(example1).startswith(subs_str,3),
+                             example1.startswith(subs,3))
+            self.assertEqual(str(example1).startswith(subs_str,2,6),
+                             example1.startswith(subs,2,6))        
+
+    def test_endswith(self) :
+        """Check matches the python string endswith method."""
+        self._test_method("endswith", start_end=True)
+        #Now check with a tuple of sub sequences
+        for example1 in self._examples :
+            if not hasattr(example1, "endswith") :
+                #e.g. MutableSeq does not support this
+                continue
+            subs = tuple([example1[start:start+2] for start \
+                          in range(0, len(example1)-2,3)])
+            subs_str = tuple([str(s) for s in subs])
+
+            self.assertEqual(str(example1).endswith(subs_str),
+                             example1.endswith(subs))
+            self.assertEqual(str(example1).startswith(subs_str),
+                             example1.startswith(subs_str)) #strings!
+            self.assertEqual(str(example1).endswith(subs_str,3),
+                             example1.endswith(subs,3))
+            self.assertEqual(str(example1).endswith(subs_str,2,6),
+                             example1.endswith(subs,2,6))
+
     def test_strip(self) :
         """Check matches the python string strip method."""
         self._test_method("strip", pre_comp_function=str)

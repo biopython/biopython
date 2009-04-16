@@ -323,7 +323,7 @@ class Seq(object):
         Returns -1 if the subsequence is NOT found.
 
         e.g. Locating the last typical start codon, AUG, in an RNA sequence:
-        
+
         >>> from Bio.Seq import Seq
         >>> my_rna = Seq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
         >>> my_rna.rfind("AUG")
@@ -332,6 +332,65 @@ class Seq(object):
         #If it has one, check the alphabet:
         sub_str = self._get_seq_str_and_check_alphabet(sub)
         return str(self).rfind(sub_str, start, end)
+
+    def startswith(self, prefix, start=0, end=sys.maxint) :
+        """Does the Seq start with the given prefix?  Returns True/False.
+
+        This behaves like the python string method of the same name.
+
+        Return True if the sequence starts with the specified prefix
+        (a string or another Seq object), False otherwise.
+        With optional start, test sequence beginning at that position.
+        With optional end, stop comparing sequence at that position.
+        prefix can also be a tuple of strings to try.  e.g.
+        
+        >>> from Bio.Seq import Seq
+        >>> my_rna = Seq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
+        >>> my_rna.startswith("GUC")
+        True
+        >>> my_rna.startswith("AUG")
+        False
+        >>> my_rna.startswith("AUG", 3)
+        True
+        >>> my_rna.startswith(("UCC","UCA","UCG"),1)
+        True
+        """
+        #If it has one, check the alphabet:
+        if isinstance(prefix, tuple) :
+            prefix_str = tuple(self._get_seq_str_and_check_alphabet(p)
+                               for p in prefix)
+        else :
+            prefix_str = self._get_seq_str_and_check_alphabet(prefix)
+        return str(self).startswith(prefix_str, start, end)
+
+    def endswith(self, suffix, start=0, end=sys.maxint) :
+        """Does the Seq end with the given suffix?  Returns True/False.
+
+        This behaves like the python string method of the same name.
+
+        Return True if the sequence ends with the specified suffix
+        (a string or another Seq object), False otherwise.
+        With optional start, test sequence beginning at that position.
+        With optional end, stop comparing sequence at that position.
+        suffix can also be a tuple of strings to try.  e.g.
+
+        >>> from Bio.Seq import Seq
+        >>> my_rna = Seq("GUCAUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUUG")
+        >>> my_rna.endswith("UUG")
+        True
+        >>> my_rna.endswith("AUG")
+        False
+        >>> my_rna.endswith("AUG", 0, 18)
+        True
+        """        
+        #If it has one, check the alphabet:
+        if isinstance(suffix, tuple) :
+            suffix_str = tuple(self._get_seq_str_and_check_alphabet(s)
+                               for s in suffix)
+        else :
+            suffix_str = self._get_seq_str_and_check_alphabet(suffix)
+        return str(self).endswith(suffix_str, start, end)
+
 
     def split(self, sep=None, maxsplit=-1) :
         """Split method, like that of a python string.
@@ -756,7 +815,7 @@ class UnknownSeq(Seq):
     >>> unk_four + unk_five
     UnknownSeq(9, alphabet = Alphabet(), character = '?')
 
-    If the alphabet to characters don't match up, the addition gives an
+    If the alphabet or characters don't match up, the addition gives an
     ordinary Seq object:
     
     >>> unk_nnnn = UnknownSeq(4, character = "N")
