@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 3 April 2009 (Biopython 1.50 \textit{beta})}
+\date{Last Update -- 17 April 2009 (Biopython 1.50 \textit{beta})}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -207,7 +207,7 @@ and HTML formats
   You need Biopython 1.43 or later.  Older versions did contain some related code under the \verb|Bio.SeqIO| name which has since been removed - and this is why the import ``works''.
 
   \item \emph{Why doesn't} \verb|Bio.SeqIO.read()| \emph{work? The module imports fine but there is no read function!} \\
-  You need Biopython 1.45 or later.
+  You need Biopython 1.45 or later.  Or, use \texttt{Bio.SeqIO.parse(...).next()} instead.
 
   \item \emph{Why isn't} \verb|Bio.AlignIO| \emph{present? The module import fails!} \\
   You need Biopython 1.46 or later.
@@ -222,7 +222,7 @@ and HTML formats
   You need Biopython 1.45 or later.  Alternatively, rather than \verb|str(my_seq)|, use \verb|my_seq.tostring()| (which will also work on recent versions of Biopython).
   
   \item \emph{Why doesn't} \verb|Bio.Blast| \emph{work with the latest plain text NCBI blast output?} \\
-  The NCBI keep tweaking the plain text output from the BLAST tools, and keeping our parser up to date is an ongoing struggle.  We recommend you use the XML output instead, which is designed to be read by a computer program.
+  The NCBI keep tweaking the plain text output from the BLAST tools, and keeping our parser up to date was an ongoing struggle.  We recommend you use the XML output instead, which is designed to be read by a computer program.
 
   \item \emph{Why doesn't} \verb|Bio.Entrez.read()| \emph{work? The module imports fine but there is no read function!} \\
   You need Biopython 1.46 or later.
@@ -233,7 +233,10 @@ and HTML formats
   (fast lexical analyzer generator). At the time of writing, you'll have install
   flex, then tweak your Biopython \verb|setup.py| file and reinstall from source.
 
-  \item \emph{I looked in a directory for code, but I couldn't seem to find the code that does something. Where's it hidden?} \\
+  \item \emph{Why doesn't} \verb|Bio.Blast.NCBIXML.read()| \emph{work? The module imports but there is no read function!} \\
+  You need Biopython 1.50 or later.  Or, use \texttt{Bio.Blast.NCBIXML.parse(...).next()} instead.
+
+  \item \emph{I looked in a directory for code, but I couldn't find the code that does something. Where's it hidden?} \\
   One thing to know is that we put code in \verb|__init__.py| files. If you are not used to looking for code in this file this can be confusing. The reason we do this is to make the imports easier for users. For instance, instead of having to do a ``repetitive'' import like \verb|from Bio.GenBank import GenBank|, you can just use \verb|from Bio import GenBank|.
 
 \end{enumerate}
@@ -2688,29 +2691,38 @@ need to do is to open the file for reading:
 \end{verbatim}
 
 Now that we've got a handle, we are ready to parse the output. The
-code to parse it is really quite small:
+code to parse it is really quite small.  If you expect a single
+BLAST result (i.e. you used a single query):
+
+\begin{verbatim}
+>>> from Bio.Blast import NCBIXML
+>>> blast_record = NCBIXML.read(result_handle)
+\end{verbatim}
+
+\noindent or, if you have lots of results (i.e. multiple query sequences):
 
 \begin{verbatim}
 >>> from Bio.Blast import NCBIXML
 >>> blast_records = NCBIXML.parse(result_handle)
 \end{verbatim}
 
-To understand what \verb|NCBIXML.parse| returns, there are two things
-that you need to keep in mind:
-\begin{itemize}
-\item The BLAST output may contain the output of more than
-one BLAST search. This will for example be the case if you ran BLAST locally
-on a Fasta file containing more than one sequence. For each sequence, the
-BLAST parser will return one BLAST record.
-\item The BLAST output may therefore be huge.
-\end{itemize}
+Just like \verb|Bio.SeqIO| and \verb|Bio.AlignIO|
+(see Chapters~\ref{chapter:Bio.SeqIO} and~\ref{chapter:Bio.AlignIO}),
+we have a pair of input functions, \verb|read| and \verb|parse|, where
+\verb|read| is for when you have exactly one object, and \verb|parse|
+is an iterator for when you can have lots of objects -- but instead of
+getting \verb|SeqRecord| or \verb|Alignment| objects, we get BLAST
+record objects.
 
-To be able to handle these situations, \verb|NCBIXML.parse()| returns an
-iterator (like \verb|Bio.SeqIO.parse()|, see Chapter~\ref{chapter:Bio.SeqIO}).
-In plain English, an iterator allows you to step through the BLAST output,
-retrieving BLAST records one by one for each BLAST search:
+To be able to handle the situation where the BLAST file may be huge,
+containing thousands of results, \verb|NCBIXML.parse()| returns an
+iterator. In plain English, an iterator allows you to step through
+the BLAST output, retrieving BLAST records one by one for each BLAST
+search result:
 
 \begin{verbatim}
+>>> from Bio.Blast import NCBIXML
+>>> blast_records = NCBIXML.parse(result_handle)
 >>> blast_record = blast_records.next()
 # ... do something with blast_record
 >>> blast_record = blast_records.next()
@@ -2744,7 +2756,14 @@ save them all in a list.
 Usually, you'll be running one BLAST search at a time. Then, all you need
 to do is to pick up the first (and only) BLAST record in \verb|blast_records|:
 \begin{verbatim}
+>>> from Bio.Blast import NCBIXML
+>>> blast_records = NCBIXML.parse(result_handle)
 >>> blast_record = blast_records.next()
+\end{verbatim}
+\noindent or more elegantly:
+\begin{verbatim}
+>>> from Bio.Blast import NCBIXML
+>>> blast_record = NCBIXML.read(result_handle)
 \end{verbatim}
 
 I guess by now you're wondering what is in a BLAST record.
