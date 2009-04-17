@@ -331,3 +331,5 @@ gi|151567870|pdb|2PM9|B Chain B, Crystal Structure 297 bp 2 HSPs
 ************************************************** TESTING xbt007.xml
 gi|585505|sp|Q08386|MOPB_RHOCA - no hits
 gi|129628|sp|P07175.1|PARA_AGRTU - no hits
+************************************************** TESTING blastp_no_hits.xml
+lcl|1_0 - no hits

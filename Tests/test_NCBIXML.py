@@ -22,10 +22,12 @@ detailed_tests = [
     'xbt001.xml', # BLASTP 2.2.12, gi|49176427|ref|NP_418280.3|
     'xbt002.xml', # BLASTN 2.2.12, gi|1348916|gb|G26684.1|G26684
     'xbt006.xml',
+    'blastp_no_hits.xml', #BLASTP 2.2.18, Fake query
     ]
 
 for test in detailed_tests :
-    assert test in all_tests
+    if test not in all_tests :
+        all_tests.append(test)
 
 ### NCBIXML.BlastParser
 
@@ -34,11 +36,11 @@ print "Running tests on NCBIXML.BlastParser"
 for test in all_tests:
     print "*" * 50, "TESTING %s" % test
     datafile = os.path.join("Blast", test)
-    input = open(datafile)
+    records = NCBIXML.parse(open(datafile))
 
-    records = NCBIXML.parse(input)
-
+    count = 0
     for record in records:
+        count += 1
         alignments = record.alignments
         if not alignments :
             print '%s - no hits' % record.query_id
@@ -72,3 +74,13 @@ for test in all_tests:
                     print hsp.query[:75] + '...'
                     print hsp.match[:75] + '...'
                     print hsp.sbjct[:75] + '...'
+    
+    if count == 1 :
+        record = NCBIXML.read(open(datafile))
+    else :
+        try :
+            record = NCBIXML.read(open(datafile))
+            assert False, "NCBIXML.read(...) should reject %i records" % count
+        except ValueError :
+            #Good!
+            pass
