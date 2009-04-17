@@ -148,6 +148,7 @@ names are also used in Bio.AlignIO and include the following:
  - fastq-solexa - The Solexa/Illumnia variant of the Sanger FASTQ format which
                   encodes Solexa quality scores (not PHRED quality scores).
  - genbank - The GenBank or GenPept flat file format.
+ - gb      - An alias for "genbank", for consistency with NCBI Entrez Utilities
  - ig      - The IntelliGenetics file format, apparently the same as the
              MASE alignment format.
  - phd     - Output from PHRED, used by PHRAP and CONSED for input.
@@ -246,6 +247,7 @@ import QualityIO #FastQ and qual files
 #Most alignment file formats will be handled via Bio.AlignIO
 
 _FormatToIterator ={"fasta" : FastaIO.FastaIterator,
+                    "gb" : InsdcIO.GenBankIterator,
                     "genbank" : InsdcIO.GenBankIterator,
                     "genbank-cds" : InsdcIO.GenBankCdsFeatureIterator,
                     "embl" : InsdcIO.EmblIterator,
@@ -262,6 +264,7 @@ _FormatToIterator ={"fasta" : FastaIO.FastaIterator,
                     }
 
 _FormatToWriter ={"fasta" : FastaIO.FastaWriter,
+                  "gb" : InsdcIO.GenBankWriter,
                   "genbank" : InsdcIO.GenBankWriter,
                   "tab" : TabIO.TabWriter,
                   "fastq" : QualityIO.FastqPhredWriter,

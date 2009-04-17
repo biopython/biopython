@@ -1042,7 +1042,13 @@ there are module level functions in \verb|Bio.Seq| will accept plain Python stri
 
 In this chapter we'll discuss in more detail the \verb|Bio.SeqIO| module, which was briefly introduced in Chapter~\ref{chapter:quick-start}. This aims to provide a simple interface for working with assorted sequence file formats in a uniform way.
 
-The ``catch'' is that you have to work with \verb|SeqRecord| objects - which contain a \verb|Seq| object (as described in Chapter~\ref{chapter:Bio.Seq}) plus annotation like an identifier and description.  We'll introduce the basics of \verb|SeqRecord| object in this chapter, but see Section~\ref{sec:advanced-seq} for more details.
+The ``catch'' is that you have to work with \verb|SeqRecord| objects - which contain a \verb|Seq| object (as described in Chapter~\ref{chapter:Bio.Seq}) plus annotation like an identifier and description.  We'll introduce the basics of \verb|SeqRecord| object in this chapter, but see Section~\ref{sec:advanced-seq}, the \verb|SeqRecord| wiki page (\url{http://biopython.org/wiki/SeqRecord}), and in the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html}{online}):
+
+\begin{verbatim}
+>>> from Bio.SeqRecord import SeqRecord
+>>> help(SeqRecord)
+...
+\end{verbatim}
 
 \section{Parsing or Reading Sequences}
 
@@ -1085,7 +1091,13 @@ for seq_record in SeqIO.parse(handle, "genbank") :
 handle.close()
 \end{verbatim}
 
-Similarly, if you wanted to read in a file in another file format, then assuming \verb|Bio.SeqIO.parse()| supports it you would just need to change the format string as appropriate, for example ``swiss'' for SwissProt files or ``embl'' for EMBL text files. There is a full listing on the wiki page (\url{http://biopython.org/wiki/SeqIO}).
+Similarly, if you wanted to read in a file in another file format, then assuming \verb|Bio.SeqIO.parse()| supports it you would just need to change the format string as appropriate, for example ``swiss'' for SwissProt files or ``embl'' for EMBL text files. There is a full listing on the wiki page (\url{http://biopython.org/wiki/SeqIO}) and in the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html}{online}):
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> help(SeqIO)
+...
+\end{verbatim}
 
 Another very common way to use a python iterator is within a list comprehension (or
 a generator expression).  For example, if all you wanted to extract from the file was
@@ -1376,7 +1388,7 @@ a GenBank file:
 from Bio import Entrez
 from Bio import SeqIO
 handle = Entrez.efetch(db="nucleotide", rettype="gb", id="6273291")
-seq_record = SeqIO.read(handle, "genbank")
+seq_record = SeqIO.read(handle, "gb") #using "gb" as an alias for "genbank"
 handle.close()
 print "%s with %i features" % (seq_record.id, len(seq_record.features))
 \end{verbatim}
@@ -1386,6 +1398,9 @@ as the return type, however the NCBI now insist on using the official
 return types of ``gb'' (or ``gp'' for proteins) as described on
 \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq_help.html}
 {EFetch for Sequence and other Molecular Biology Databases}.
+As a result, in Biopython 1.50 onwards, we support ``gb'' as an
+alias for ``genbank'' in \verb|Bio.SeqIO|.
+
 The expected output of this example is:
 
 \begin{verbatim}
@@ -1400,7 +1415,7 @@ from Bio import Entrez
 from Bio import SeqIO
 handle = Entrez.efetch(db="nucleotide", rettype="gb", \
                        id="6273291,6273290,6273289")
-for seq_record in SeqIO.parse(handle, "genbank") :
+for seq_record in SeqIO.parse(handle, "gb") :
     print seq_record.id, seq_record.description[:50] + "..."
     print "Sequence length %i," % len(seq_record),
     print "%i features," % len(seq_record.features),
@@ -1971,7 +1986,13 @@ However, as you should expect, if you check each \verb|SeqRecord| there is no an
 
 Note that rather than using the Sanger website, you could have used \verb|Bio.AlignIO| to convert the original Stockholm format file into a FASTA file yourself (see below).
 
-With any supported file format, you can load an alignment in exactly the same way just by changing the format string.  For example, use ``phylip'' for PHYLIP files, ``nexus'' for NEXUS files or ``emboss'' for the alignments output by the EMBOSS tools.  There is a full listing on the wiki page (\url{http://biopython.org/wiki/AlignIO}).
+With any supported file format, you can load an alignment in exactly the same way just by changing the format string.  For example, use ``phylip'' for PHYLIP files, ``nexus'' for NEXUS files or ``emboss'' for the alignments output by the EMBOSS tools.  There is a full listing on the wiki page (\url{http://biopython.org/wiki/AlignIO}) and in the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.AlignIO-module.html}{online}):
+
+\begin{verbatim}
+>>> from Bio import AlignIO
+>>> help(AlignIO)
+...
+\end{verbatim}
 
 \subsection{Multiple Alignments}
 
@@ -3895,7 +3916,7 @@ In this case, we are just getting the raw records. To get the records in a more 
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> handle = Entrez.efetch(db="nuccore", id=gi_str, rettype="gb")
->>> records = SeqIO.parse(handle, "genbank")
+>>> records = SeqIO.parse(handle, "gb")
 \end{verbatim}
 
 \noindent We can now step through the records and look at the information we are interested in:
