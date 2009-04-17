@@ -6950,6 +6950,7 @@ data = [[(seq_one[i:i+window] <> seq_two[j:j+window]) \
        for i in range(len(seq_two)-window)]
 \end{verbatim}
 
+Note that we have \emph{not} checked for reverse complement matches here.
 Now we'll use the matplotlib's \verb|pylab.imshow()| function to display this data,
 first requesting the gray color scheme so this is done in black and white:
 
@@ -7024,6 +7025,7 @@ for section in matches :
 \noindent We are now ready to draw the revised dot plot as a scatter plot:
 \begin{verbatim}
 import pylab
+pylab.cla() #clear any prior graph
 pylab.gray()
 pylab.scatter(x,y)
 pylab.xlim(0, len(rec_one)-window)
@@ -7053,6 +7055,9 @@ pylab.show()
 \label{fig:nuc-dot-plot-scatter}
 \end{figure}\end{latexonly}
 Personally I find this second plot much easier to read!
+Again note that we have \emph{not} checked for reverse complement matches
+here -- you could extend this example to do this, and perhaps plot the forward
+matches in one color and the reverse matches in another.
 
 \section{Dealing with alignments}
 
