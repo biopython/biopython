@@ -6629,24 +6629,115 @@ One common task is taking a large set of sequencing reads and filtering them
 The following example is very simplistic, but should illustrate the basics of
 working with quality data in a \verb|SeqRecord| object.  All we are going to
 do here is read in a file of FASTQ data, and filter it to pick out only those
-records whose PHRED quality scores are all above some threshold (here 30).
+records whose PHRED quality scores are all above some threshold (here 20).
+
+For this example we'll use some real data downloaded from the NCBI,
+\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}
+(8MB) which unzips to a 23MB file \texttt{SRR014849.fastq}.
 
 \begin{verbatim}
 from Bio import SeqIO
 
 good_reads = (record for record in \
-             SeqIO.parse(open("original.fastq"), "fastq") \
-             if min(record.letter_annotations["phred_quality"]) >= 30)
+             SeqIO.parse(open("SRR014849.fastq"), "fastq") \
+             if min(record.letter_annotations["phred_quality"]) >= 20)
 
 out_handle = open("good_quality.fastq", "w")
-SeqIO.write(good_reads, out_handle, "fastq")
+count = SeqIO.write(good_reads, out_handle, "fastq")
 out_handle.close()
+print "Saved %i reads" % count
 \end{verbatim}
+
+\noindent This pulled out only $412$ reads - maybe this dataset hasn't been
+quality trimmed yet?
 
 FASTQ files can contain millions of entries, so it is best to avoid loading
 them all into memory at once.  This example uses a generator expression, which
 means only one \verb|SeqRecord| is created at a time - avoiding any memory
 limitations.
+
+\subsection{Trimming off primer sequences}
+
+For this example I'm going to pretend that \texttt{GTTGGAACCG} is a 3' primer
+sequence we want to look for in some FASTQ formatted read data.  As in the example
+above, we'll use the \texttt{SRR014849.fastq} file downloaded from the NCBI
+(\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}).
+The same approach would work with any other supported file format (e.g. FASTA files).
+
+This code uses \verb|Bio.SeqIO| with a generator expression (to avoid loading
+all the sequences into memory at once), and the \verb|Seq| object's
+\verb|startswith| method to spot the primer sequence:
+
+\begin{verbatim}
+from Bio import SeqIO
+primer_reads = (record for record in \
+                SeqIO.parse(open("SRR014849.fastq"), "fastq") \
+                if record.seq.startswith("GTTGGAACCG"))
+out_handle = open("with_primer.fastq", "w")
+count = SeqIO.write(primer_reads, out_handle, "fastq")
+out_handle.close()
+print "Saved %i reads" % count
+\end{verbatim}
+
+\noindent That should find $500$ reads from \texttt{SRR014849.fastq} and save them to
+a new FASTQ file, \texttt{with\_primer.fastq}.
+
+Now suppose that instead you wanted to make a FASTQ file containing these $500$ reads
+but with the primer sequence removed?  That's just a small change as we can slice the
+\verb|SeqRecord| to remove the first ten letters (the length of our primer):
+
+\begin{verbatim}
+from Bio import SeqIO
+trimmed_primer_reads = (record[10:] for record in \
+                        SeqIO.parse(open("SRR014849.fastq"), "fastq") \
+                        if record.seq.startswith("GTTGGAACCG"))
+out_handle = open("with_primer_trimmed.fastq", "w")
+count = SeqIO.write(trimmed_primer_reads, out_handle, "fastq")
+out_handle.close()
+print "Saved %i reads" % count
+\end{verbatim}
+
+\noindent Again, that should pull out the $500$ reads from \texttt{SRR014849.fastq},
+but this time strip off the first ten characters, and save them to another new
+FASTQ file, \texttt{with\_primer\_trimmed.fastq}.
+
+Finally, suppose you want to create a new FASTQ file where these $500$ reads have
+their primer removed, but all the other reads are kept as they were?
+
+\begin{verbatim}
+from Bio import SeqIO
+def trim_primer(record, primer) :
+    if record.seq.startswith(primer) :
+        return record[len(primer):]
+    else :
+        return record
+
+trimmed_reads = (trim_primer(record, "GTTGGAACCG") for record in \
+                 SeqIO.parse(open("SRR014849.fastq"), "fastq"))
+out_handle = open("trimmed.fastq", "w")
+count = SeqIO.write(trimmed_reads, out_handle, "fastq")
+out_handle.close()
+print "Saved %i reads" % count
+\end{verbatim}
+
+This takes longer, as this time the output file contains all $94696$ reads.
+Again, we're used a generator expression to avoid any memory problems.  You might
+prefer to use a for loop:
+
+\begin{verbatim}
+from Bio import SeqIO
+out_handle = open("trimmed.fastq", "w")
+for record in SeqIO.parse(open("SRR014849.fastq"),"fastq") :
+    if record.seq.startswith("GTTGGAACCG") :
+        out_handle.write(record[10:].format("fastq"))
+    else :
+        out_handle.write(record.format("fastq"))
+out_handle.close()
+\end{verbatim}
+
+In this case the for loop looks simpler, but putting the trim logic into a
+function is more tidy, and makes it easier to adjust the trimming later on.
+For example, you might decide to look for a 5' primer as well.
 
 \section{Sequence parsing plus simple plots}
 \label{seq:sequence-parsing-plus-pylab}
