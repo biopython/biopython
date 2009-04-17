@@ -16,12 +16,13 @@ __docformat__ = "epytext en" #Simple markup to show doctests nicely
 class _RestrictedDict(dict):
     """Dict which only allows sequences of given length as values (PRIVATE).
 
-    This simple subclass of the python dictionary is used in the SeqRecord object
-    for holding per-letter-annotations.  This class is intended to prevent simple
-    errors by only allowing python sequences (e.g. lists, strings and tuples) to
-    be stored, and only if their length matches that expected (the length of the
-    SeqRecord's seq object).  It cannot however prevent the entries being edited
-    in situ (for example appending entries to a list).
+    This simple subclass of the python dictionary is used in the SeqRecord
+    object for holding per-letter-annotations.  This class is intended to
+    prevent simple errors by only allowing python sequences (e.g. lists,
+    strings and tuples) to be stored, and only if their length matches that
+    expected (the length of the SeqRecord's seq object).  It cannot however
+    prevent the entries being edited in situ (for example appending entries
+    to a list).
     """
     def __init__(self, length) :
         """Create an EMPTY restricted dictionary."""
@@ -48,11 +49,12 @@ class SeqRecord(object):
      - features    - Any (sub)features defined (list of SeqFeature objects)
      - annotations - Further information about the whole sequence (dictionary)
                      Most entries are lists of strings.
-     - letter_annotations - Per letter/symbol annotation (restricted dictionary).
-                     This holds python sequences (lists, strings or tuples) whose
-                     length matches that of the sequence.  A typical use would be
-                     to hold a list of integers representing sequencing quality
-                     scores, or a string representing the secondary structure.
+     - letter_annotations - Per letter/symbol annotation (restricted
+                     dictionary). This holds python sequences (lists, strings
+                     or tuples) whose length matches that of the sequence.
+                     A typical use would be to hold a list of integers
+                     representing sequencing quality scores, or a string
+                     representing the secondary structure.
 
     You will typically use Bio.SeqIO to read in sequences from files as
     SeqRecord objects.  However, you may want to create your own SeqRecord
@@ -64,11 +66,11 @@ class SeqRecord(object):
     >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
     ...                         IUPAC.protein),
     ...                    id="YP_025292.1", name="HokC",
-    ...                    description="toxic membrane protein, small")
+    ...                    description="toxic membrane protein")
     >>> print record
     ID: YP_025292.1
     Name: HokC
-    Description: toxic membrane protein, small
+    Description: toxic membrane protein
     Number of features: 0
     Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())
 
@@ -78,7 +80,7 @@ class SeqRecord(object):
     Bio.SeqIO internally:
 
     >>> print record.format("fasta")
-    >YP_025292.1 toxic membrane protein, small
+    >YP_025292.1 toxic membrane protein
     MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
     <BLANKLINE>
     """
@@ -88,7 +90,7 @@ class SeqRecord(object):
         """Create a SeqRecord.
 
         Arguments:
-         - seq         - Sequence, required (Seq object)
+         - seq         - Sequence, required (Seq or Mutable object)
          - id          - Sequence identifier, recommended (string)
          - name        - Sequence name, optional (string)
          - description - Sequence description, optional (string)
@@ -107,8 +109,9 @@ class SeqRecord(object):
         then using the UnknownSeq object from Bio.Seq is appropriate.
 
         You can create a 'blank' SeqRecord object, and then populate the
-        attributes later.  Note that currently the annotations dictionary
-        cannot be specified when creating the SeqRecord.
+        attributes later.  Note that currently the annotations and the
+        letter_annotations dictionaries cannot be specified when creating
+        the SeqRecord.
         """
         if id is not None and not isinstance(id, basestring) :
             #Lots of existing code uses id=None... this may be a bad idea.
@@ -158,10 +161,57 @@ class SeqRecord(object):
             #e.g. seq is None
             self._per_letter_annotations = _RestrictedDict(length=0)
         self._per_letter_annotations.update(value)
-    letter_annotations = property(fget=lambda self : self._per_letter_annotations,
-                                  fset=_set_per_letter_annotations,
-                                  doc="Dictionary of per-letter-annotation for "
-                                      "the sequence (e.g. quality scores)")
+    letter_annotations = property( \
+        fget=lambda self : self._per_letter_annotations,
+        fset=_set_per_letter_annotations,
+        doc="""Dictionary of per-letter-annotation for the sequence.
+
+        For example, this can hold quality scores used in FASTQ or QUAL files.
+        Consider this example using Bio.SeqIO to read in an example Solexa
+        variant FASTQ file as a SeqRecord:
+
+        >>> from Bio import SeqIO
+        >>> handle = open("Quality/solexa.fastq", "rU")
+        >>> record = SeqIO.read(handle, "fastq-solexa")
+        >>> handle.close()
+        >>> print record.id, record.seq
+        slxa_0013_1_0001_24 ACAAAAATCACAAGCATTCTTATACACC
+        >>> print record.letter_annotations.keys()
+        ['solexa_quality']
+        >>> print record.letter_annotations["solexa_quality"]
+        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -6, -1, -1, -4, -1, -4, -19, -10, -27, -18]
+
+        The per-letter-annotaions get sliced automatically if you slice the
+        parent SeqRecord, for example taking the last ten bases:
+
+        >>> sub_record = record[-10:]
+        >>> print sub_record.id, sub_record.seq
+        slxa_0013_1_0001_24 CTTATACACC
+        >>> print sub_record.letter_annotations["solexa_quality"]
+        [-6, -1, -1, -4, -1, -4, -19, -10, -27, -18]
+
+        Any python sequence (i.e. list, tuple or string) can be recorded in
+        the SeqRecord's letter_annotations dictionary as long as the length
+        matches that of the SeqRecord's sequence.  e.g.
+
+        >>> len(sub_record.letter_annotations)
+        1
+        >>> sub_record.letter_annotations["dummy"] = "abcdefghij"
+        >>> len(sub_record.letter_annotations)
+        2
+
+        You can delete entries from the letter_annotations dictionary as usual:
+
+        >>> del sub_record.letter_annotations["solexa_quality"]
+        >>> sub_record.letter_annotations
+        {'dummy': 'abcdefghij'}
+
+        You can completely clear the dictionary easily as follows:
+
+        >>> sub_record.letter_annotations = {}
+        >>> sub_record.letter_annotations
+        {}
+        """)
 
     def _set_seq(self, value) :
         #TODO - Add a deprecation warning that the seq should be write only?
@@ -279,6 +329,14 @@ class SeqRecord(object):
         Number of features: 1
         Per letter annotation for: secondary_structure
         Seq('MAAGVKQLADDRTLLMAGVSHDLRTPLTRIRLATEMMSEQDGYLAESINKDIEE...YLR', IUPACProtein())
+
+        Finally, indexing with a simple integer is shorthand for pulling out
+        that letter from the sequence directly:
+
+        >>> rec[5]
+        'K'
+        >>> rec.seq[5]
+        'K'
         """
         if isinstance(index, int) :
             #NOTE - The sequence level annotation like the id, name, etc
@@ -337,8 +395,53 @@ class SeqRecord(object):
     def __iter__(self) :
         """Iterate over the letters in the sequence.
 
+        For example, using Bio.SeqIO to read in a protein FASTA file:
+
+        >>> from Bio import SeqIO
+        >>> record = SeqIO.read(open("Amino/loveliesbleeding.pro"),"fasta")
+        >>> for amino in record :
+        ...     print amino
+        ...     if amino == "L" : break
+        X
+        A
+        G
+        L
+        >>> print record.seq[3]
+        L
+
+        This is just a shortcut for iterating over the sequence directly:
+
+        >>> for amino in record.seq :
+        ...     print amino
+        ...     if amino == "L" : break
+        X
+        A
+        G
+        L
+        >>> print record.seq[3]
+        L
+        
         Note that this does not facilitate iteration together with any
-        per-letter-annotation.
+        per-letter-annotation.  However, you can achieve that using the
+        python zip function on the record (or its sequence) and the relevant
+        per-letter-annotation:
+        
+        >>> from Bio import SeqIO
+        >>> rec = SeqIO.read(open("Quality/solexa.fastq", "rU"),
+        ...                  "fastq-solexa")
+        >>> print rec.id, rec.seq
+        slxa_0013_1_0001_24 ACAAAAATCACAAGCATTCTTATACACC
+        >>> print rec.letter_annotations.keys()
+        ['solexa_quality']
+        >>> for nuc, qual in zip(rec,rec.letter_annotations["solexa_quality"]) :
+        ...     if qual < -10 :
+        ...         print nuc, qual
+        C -19
+        C -27
+        C -18
+
+        You may agree that using zip(rec.seq, ...) is more explicit than using
+        zip(rec, ...) as shown above.
         """
         return iter(self.seq)
 
@@ -424,7 +527,7 @@ class SeqRecord(object):
                             self.description, self.dbxrefs)))
 
     def format(self, format) :
-        """Returns the record as a string in the specified file format.
+        r"""Returns the record as a string in the specified file format.
 
         The format should be a lower case string supported as an output
         format by Bio.SeqIO, which is used to turn the SeqRecord into a
@@ -436,9 +539,11 @@ class SeqRecord(object):
         >>> record = SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
         ...                         IUPAC.protein),
         ...                    id="YP_025292.1", name="HokC",
-        ...                    description="toxic membrane protein, small")
+        ...                    description="toxic membrane protein")
+        >>> record.format("fasta")
+        '>YP_025292.1 toxic membrane protein\nMKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF\n'
         >>> print record.format("fasta")
-        >YP_025292.1 toxic membrane protein, small
+        >YP_025292.1 toxic membrane protein
         MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
         <BLANKLINE>
 
@@ -474,7 +579,17 @@ class SeqRecord(object):
             return str(self)    
 
     def __len__(self) :
-        """Returns the length of the sequence."""
+        """Returns the length of the sequence.
+
+        For example, using Bio.SeqIO to read in a FASTA nucleotide file:
+
+        >>> from Bio import SeqIO
+        >>> record = SeqIO.read(open("Nucleic/sweetpea.nu"),"fasta")
+        >>> len(record)
+        309
+        >>> len(record.seq)
+        309
+        """
         return len(self.seq)
 
     def __nonzero__(self) :
@@ -493,11 +608,21 @@ class SeqRecord(object):
         return True
 
 def _test():
-    """Run the Bio.SeqRecord module's doctests."""
-    print "Runing doctests..."
+    """Run the Bio.SeqRecord module's doctests (PRIVATE).
+
+    This will try and locate the unit tests directory, and run the doctests
+    from there in order that the relative paths used in the examples work.
+    """
     import doctest
-    doctest.testmod()
-    print "Done"
+    import os
+    if os.path.isdir(os.path.join("..","Tests")) :
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("..","Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
 
 if __name__ == "__main__":
     _test()
