@@ -984,7 +984,7 @@ class CircularDrawer(AbstractDrawer):
 
     def _draw_arc_arrow(self, inner_radius, outer_radius, startangle, endangle,
                   color, border=None,
-                  shaft_height_ratio=0.4, head_length_ratio=1.0, orientation='right',
+                  shaft_height_ratio=0.4, head_length_ratio=0.5, orientation='right',
                   colour=None, **kwargs):
         """Draw an arrow along an arc."""
         #Let the UK spelling (colour) override the USA spelling (color)

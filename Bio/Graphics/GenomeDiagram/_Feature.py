@@ -134,7 +134,7 @@ class Feature:
         self._feature = None            # Bio.SeqFeature object to wrap
         self.hide = 0                   # show by default
         self.sigil = 'BOX'
-        self.arrowhead_length = 1.0 # 100% of the box height
+        self.arrowhead_length = 0.5 # 50% of the box height
         self.arrowshaft_height = 0.4 # 40% of the box height
         self.name_qualifiers = ['gene', 'label', 'name', 'locus_tag', 'product']
         self.label = label

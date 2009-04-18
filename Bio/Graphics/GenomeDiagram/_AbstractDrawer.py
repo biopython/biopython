@@ -157,7 +157,7 @@ def draw_polygon(list_of_points,
 
 
 def draw_arrow((x1, y1), (x2, y2), color=colors.lightgreen, border=None,
-               shaft_height_ratio=0.4, head_length_ratio=1.0, orientation='right',
+               shaft_height_ratio=0.4, head_length_ratio=0.5, orientation='right',
                colour=None, **kwargs):
     """ Returns a closed path object representing an arrow enclosed by the
         box with corners at {(x1,y1),(x2,y2)}, a shaft height
