@@ -357,11 +357,18 @@ class Seq(object):
         """
         #If it has one, check the alphabet:
         if isinstance(prefix, tuple) :
-            prefix_str = tuple(self._get_seq_str_and_check_alphabet(p)
-                               for p in prefix)
+            #TODO - Once we drop support for Python 2.4, instead of this
+            #loop offload to the string method (requires Python 2.5+).
+            #Check all the alphabets first...
+            prefix_strings = [self._get_seq_str_and_check_alphabet(p) \
+                              for p in prefix]
+            for prefix_str in prefix_strings :
+                if str(self).startswith(prefix_str, start, end) :
+                    return True
+            return False
         else :
             prefix_str = self._get_seq_str_and_check_alphabet(prefix)
-        return str(self).startswith(prefix_str, start, end)
+            return str(self).startswith(prefix_str, start, end)
 
     def endswith(self, suffix, start=0, end=sys.maxint) :
         """Does the Seq end with the given suffix?  Returns True/False.
@@ -382,14 +389,23 @@ class Seq(object):
         False
         >>> my_rna.endswith("AUG", 0, 18)
         True
+        >>> my_rna.endswith(("UCC","UCA","UUG"))
+        True
         """        
         #If it has one, check the alphabet:
         if isinstance(suffix, tuple) :
-            suffix_str = tuple(self._get_seq_str_and_check_alphabet(s)
-                               for s in suffix)
+            #TODO - Once we drop support for Python 2.4, instead of this
+            #loop offload to the string method (requires Python 2.5+).
+            #Check all the alphabets first...
+            suffix_strings = [self._get_seq_str_and_check_alphabet(p) \
+                              for p in suffix]
+            for suffix_str in suffix_strings :
+                if str(self).endswith(suffix_str, start, end) :
+                    return True
+            return False
         else :
             suffix_str = self._get_seq_str_and_check_alphabet(suffix)
-        return str(self).endswith(suffix_str, start, end)
+            return str(self).endswith(suffix_str, start, end)
 
 
     def split(self, sep=None, maxsplit=-1) :
