@@ -25,7 +25,7 @@ nucleotide_alphas = [Alphabet.generic_nucleotide,
                      Alphabet.Gapped(Alphabet.generic_nucleotide)]
 no_alpha_formats = ["fasta","clustal","phylip","tab","ig","stockholm","emboss",
                     "fastq","fastq-solexa","qual"]
-possible_unknown_seq_formats = ["qual", "genbank", "embl"]
+possible_unknown_seq_formats = ["qual", "genbank", "gb", "embl"]
 
 #List of formats including alignment only file formats we can read AND write.
 #The list is initially hard coded to preserve the original order of the unit
@@ -37,6 +37,7 @@ for format in SeqIO._FormatToWriter :
 for format in AlignIO._FormatToWriter :
     if format not in test_write_read_alignment_formats :
         test_write_read_alignment_formats.append(format)
+test_write_read_alignment_formats.remove("gb") #an alias for genbank
 
 # test_files is a list of tuples containing:
 # - string:  file format
@@ -315,7 +316,7 @@ def check_simple_write_read(records, indent=" ") :
             #many formats can't store more than that.
 
             #Check the sequence
-            if format == "genbank" :
+            if format in ["gb", "genbank"] :
                 #The GenBank parser will convert everything to upper case.
                 assert r1.seq.tostring().upper() == r2.seq.tostring()
             elif format == "qual" :
