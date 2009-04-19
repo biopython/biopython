@@ -1074,6 +1074,8 @@ class CircularDrawer(AbstractDrawer):
         else :
             p = ArcPath(strokeColor=strokecolor,
                         fillColor=color,
+                        #default is mitre/miter which can stick out too much:
+                        strokeLineJoin=1, #1=round
                         strokewidth=0)
             #Note reportlab counts angles anti-clockwise from the horizontal
             #(as in mathematics, e.g. complex numbers and polar coordinates)
