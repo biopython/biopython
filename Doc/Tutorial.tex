@@ -18,7 +18,7 @@
 % You will also need the pictures included in the document, which are
 % UMLish diagrams created by Dia
 % (http://www.lysator.liu.se/~alla/dia/dia.html).
-% These diagrams are available from biopython CVS in the original dia
+% These diagrams are available from Biopython CVS in the original dia
 % format, which you can easily save as .png format using Dia itself.
 % They are also checked in as the png files, so if you make
 % modifications to the original dia files, the png files should also be
@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 17 April 2009 (Biopython 1.50 \textit{beta})}
+\date{Last Update -- 20 April 2009 (Biopython 1.50)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -99,7 +99,7 @@ Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
 
 \section{What is Biopython?}
 
-The Biopython Project is an international association of developers of freely available Python (\url{http://www.python.org}) tools for computational molecular biology. The web site \url{http://www.biopython.org} provides an online resource for modules, scripts, and web links for developers of Python-based software for life science research.
+The Biopython Project is an international association of developers of freely available python (\url{http://www.python.org}) tools for computational molecular biology. The web site \url{http://www.biopython.org} provides an online resource for modules, scripts, and web links for developers of python-based software for life science research.
 
 Basically, we just like to program in python and want to make it as easy as possible to use python for bioinformatics by creating high-quality, reusable modules and scripts.
 
@@ -135,7 +135,8 @@ The main Biopython releases have lots of functionality, including:
 
   \begin{itemize}
     \item Standalone Blast from NCBI
-    \item Clustalw alignment program.
+    \item Clustalw alignment program
+    \item EMBOSS command line tools
   \end{itemize}
 
   \item A standard sequence class that deals with sequences, ids on sequences, and sequence features.
@@ -179,7 +180,7 @@ sudo python setup.py install
 but its better to make sure everything seems to be working.)
 
 The longer version of our installation instructions covers
-installation of Python, Biopython dependencies and Biopython itself.
+installation of python, Biopython dependencies and Biopython itself.
 It is available in PDF
 (\url{http://biopython.org/DIST/docs/install/Installation.pdf})
 and HTML formats
@@ -193,6 +194,10 @@ and HTML formats
   Please cite our application note, Cock \textit{et al.} 2009,
   \href{http://dx.doi.org/10.1093/bioinformatics/btp163}{doi:10.1093/bioinformatics/btp163},
   and/or one of the publications listed on our website describing specific modules within Biopython.
+
+  \item \emph{How should I capitalize ``Biopython''?  Is ``BioPython'' OK?} \\
+  The correct capitalization is ``Biopython'', not ``BioPython'' (even though
+  that would have matched BioPerl, BioJava and BioRuby).
 
   \item \emph{Which ``Numerical Python'' do I need?} \\
   For Biopython 1.48 or earlier, you need the old Numeric module.
@@ -254,7 +259,7 @@ Now that that is all out of the way, let's get into what we can do with Biopytho
 
 As mentioned in the introduction, Biopython is a set of libraries to provide the ability to deal with ``things'' of interest to biologists working on the computer. In general this means that you will need to have at least some programming experience (in python, of course!) or at least an interest in learning to program. Biopython's job is to make your job easier as a programmer by supplying reusable libraries so that you can focus on answering your specific question of interest, instead of focusing on the internals of parsing a particular file format (of course, if you want to help by writing a parser that doesn't exist and contributing it to Biopython, please go ahead!). So Biopython's job is to make you happy!
 
-One thing to note about Biopython is that it often provides multiple ways of ``doing the same thing.'' Things have improved in recent releases, but this can still be frustrating as in Python there should ideally be one right way to do something. However, this can also be a real benefit because it gives you lots of flexibility and control over the libraries. The tutorial helps to show you the common or easy ways to do things so that you can just make things work. To learn more about the alternative possibilities, look in the Cookbook (Chapter~\ref{chapter:cookbook}, this has some cools tricks and tips), the Advanced section (Chapter~\ref{chapter:advanced}), the built in ``docstrings'' (via the python help command, or the \href{http://biopython.org/DIST/docs/api/}{API documentation}) or ultimately the code itself.
+One thing to note about Biopython is that it often provides multiple ways of ``doing the same thing.'' Things have improved in recent releases, but this can still be frustrating as in python there should ideally be one right way to do something. However, this can also be a real benefit because it gives you lots of flexibility and control over the libraries. The tutorial helps to show you the common or easy ways to do things so that you can just make things work. To learn more about the alternative possibilities, look in the Cookbook (Chapter~\ref{chapter:cookbook}, this has some cools tricks and tips), the Advanced section (Chapter~\ref{chapter:advanced}), the built in ``docstrings'' (via the python help command, or the \href{http://biopython.org/DIST/docs/api/}{API documentation}) or ultimately the code itself.
 
 \section{Working with sequences}
 \label{sec:sequences}
@@ -417,7 +422,7 @@ Now that you've made it this far, you hopefully have a good understanding of the
 
 Once you get a picture of what you want to do, and what libraries in Biopython will do it, you should take a peak at the Cookbook (Chapter~\ref{chapter:cookbook}), which may have example code to do something similar to what you want to do.
 
-If you know what you want to do, but can't figure out how to do it, please feel free to post questions to the main biopython list (see \url{http://biopython.org/wiki/Mailing_lists}). This will not only help us answer your question, it will also allow us to improve the documentation so it can help the next person do what you want to do.
+If you know what you want to do, but can't figure out how to do it, please feel free to post questions to the main Biopython list (see \url{http://biopython.org/wiki/Mailing_lists}). This will not only help us answer your question, it will also allow us to improve the documentation so it can help the next person do what you want to do.
 
 Enjoy the code!
 
@@ -482,13 +487,13 @@ print len(letter)
 You can access elements of the sequence in the same way as for strings (but remember, python counts from zero!):
 
 \begin{verbatim}
->>> print my_seq[0] #first element
->>> print my_seq[2] #third element
->>> print my_seq[-1] #last element
+>>> print my_seq[0] #first letter
+>>> print my_seq[2] #third letter
+>>> print my_seq[-1] #last letter
 \end{verbatim}
 
 The \verb|Seq| object has a \verb|.count()| method, just like a string.
-Note that this means that like a Python string, this gives a
+Note that this means that like a python string, this gives a
 \emph{non-overlapping} count:
 
 \begin{verbatim}
@@ -898,7 +903,7 @@ to do your own gene finding:
 \section{MutableSeq objects}
 \label{sec:mutable-seq}
 
-Just like the normal python string, the \verb|Seq| object is ``read only'', or in python terminology, immutable.  Apart from the wanting the \verb|Seq| object to act like a string, this is also a useful default since in many biological applications you want to ensure you are not changing your sequence data:
+Just like the normal python string, the \verb|Seq| object is ``read only'', or in python terminology, immutable.  Apart from wanting the \verb|Seq| object to act like a string, this is also a useful default since in many biological applications you want to ensure you are not changing your sequence data:
 
 \begin{verbatim}
 >>> from Bio.Seq import Seq
@@ -1022,7 +1027,7 @@ sequence.
 \label{sec:seq-module-functions}
 To close this chapter, for those you who \emph{really} don't want to use the sequence
 objects (or who prefer a functional programming style to an object orientated one),
-there are module level functions in \verb|Bio.Seq| will accept plain Python strings,
+there are module level functions in \verb|Bio.Seq| will accept plain python strings,
 \verb|Seq| objects (including \verb|UnknownSeq| objects) or \verb|MutableSeq| objects:
 
 \begin{verbatim}
@@ -1121,7 +1126,7 @@ comprehension like this in Section~\ref{seq:sequence-parsing-plus-pylab}
 
 \subsection{Iterating over the records in a sequence file}
 
-In the above examples, we have usually used a for loop to iterate over all the records one by one.  You can use the for loop with all sorts of Python objects (including lists, tuples and strings) which support the iteration interface.
+In the above examples, we have usually used a for loop to iterate over all the records one by one.  You can use the for loop with all sorts of python objects (including lists, tuples and strings) which support the iteration interface.
 
 The object returned by \verb|Bio.SeqIO| is actually an iterator which returns \verb|SeqRecord| objects.  You get to see each record in turn, but once and only once.  The plus point is that an iterator can save you memory when dealing with large files.
 
@@ -1143,7 +1148,7 @@ print second_record.description
 handle.close()
 \end{verbatim}
 
-Note that if you try and use \verb|.next()| and there are no more results, you'll either get back the special Python object \verb|None| or a \verb|StopIteration| exception.
+Note that if you try and use \verb|.next()| and there are no more results, you'll either get back the special python object \verb|None| or a \verb|StopIteration| exception.
 
 One special case to consider is when your sequence files have multiple records, but you only want the first one.  In this situation the following code is very concise:
 
@@ -1158,7 +1163,7 @@ This will check there are no extra unexpected records present.
 
 \subsection{Getting a list of the records in a sequence file}
 
-In the previous section we talked about the fact that \verb|Bio.SeqIO.parse()| gives you a \verb|SeqRecord| iterator, and that you get the records one by one.  Very often you need to be able to access the records in any order. The Python \verb|list| data type is perfect for this, and we can turn the record iterator into a list of \verb|SeqRecord| objects using the built-in Python function \verb|list()| like so:
+In the previous section we talked about the fact that \verb|Bio.SeqIO.parse()| gives you a \verb|SeqRecord| iterator, and that you get the records one by one.  Very often you need to be able to access the records in any order. The python \verb|list| data type is perfect for this, and we can turn the record iterator into a list of \verb|SeqRecord| objects using the built-in python function \verb|list()| like so:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1169,13 +1174,13 @@ handle.close()
 print "Found %i records" % len(records)
 
 print "The last record"
-last_record = records[-1] #using Python's list tricks
+last_record = records[-1] #using python's list tricks
 print last_record.id
 print repr(last_record.seq)
 print len(last_record)
 
 print "The first record"
-first_record = records[0] #remember, Python counts from zero
+first_record = records[0] #remember, python counts from zero
 print first_record.id
 print repr(first_record.seq)
 print len(first_record)
@@ -1473,7 +1478,7 @@ Length 394
 
 \section{Sequence files as Dictionaries}
 
-The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database using the Python \verb|dictionary| data type (like a hash in Perl). This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
+The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database using the python \verb|dictionary| data type (like a hash in Perl). This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
 
 You can use the function \verb|Bio.SeqIO.to_dict()| to make a SeqRecord dictionary (in memory).  By default this will use each record's identifier (i.e. the \verb|.id| attribute) as the key.  Let's try this using our GenBank file:
 
@@ -1484,7 +1489,7 @@ orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, "genbank"))
 handle.close()
 \end{verbatim}
 
-Since this variable \verb|orchid_dict| is an ordinary Python dictionary, we can look at all of the keys we have available:
+Since this variable \verb|orchid_dict| is an ordinary python dictionary, we can look at all of the keys we have available:
 
 \begin{verbatim}
 >>> print orchid_dict.keys()
@@ -2613,7 +2618,7 @@ form. However, the \verb|parse| function of the BLAST parser (described
 in~\ref{sec:parsing-blast}) takes a file-handle-like object, not a
 plain string. To get a handle, there are two things you can do:
 \begin{itemize}
-\item Use the Python standard library module \verb|cStringIO|. The
+\item Use the python standard library module \verb|cStringIO|. The
 following code will turn the plain string into a handle, which we can
 feed directly into the BLAST parser:
 \begin{verbatim}
@@ -2668,7 +2673,7 @@ The important point is that you do not have to use Biopython
 scripts to fetch the data in order to be able to parse it.
 
 Doing things in one of these ways, you then need to get a handle
-to the results. In Python, a handle is just a nice general way of
+to the results. In python, a handle is just a nice general way of
 describing input to any info source so that the info can be retrieved
 using \verb|read()| and \verb|readline()| functions. This is the type
 of input the BLAST parser (and most other Biopython parsers) take.
@@ -6890,7 +6895,7 @@ pylab.show()
 \end{verbatim}
 
 %
-% Have a HTML version and a PDF version to display nicely...
+% Have an HTML version and a PDF version to display nicely...
 %
 \begin{htmlonly}
 \noindent As in the previous example, that should pop up a new window containing a graph:
@@ -6900,7 +6905,7 @@ pylab.show()
 \end{htmlonly}
 %
 % Now the PDF equivalent where we cannot always expect the figure
-% to be positioned right next to the text, so will use a reference.
+% to be positioned right next to the text, so we'll use a reference.
 %
 \begin{latexonly}
 \begin{figure}[htbp]
@@ -6931,7 +6936,7 @@ in the plot below).
 
 %
 % Now the PDF equivalent where we cannot always expect the figure
-% to be positioned right next to the text, so will use a reference.
+% to be positioned right next to the text, so we'll use a reference.
 %
 \begin{latexonly}
 \begin{figure}[htbp]
@@ -6954,10 +6959,10 @@ rec_two = record_iterator.next()
 handle.close()
 \end{verbatim}
 
-We're going to show two approaches.  Firstly, a simple naive implementation which
-compares all the window sized sub-sequences to each other to compiles a similarity
-matrix.  You could construct a matrix or array
-object, but here we just use a list of lists of booleans created with a nested list
+We're going to show two approaches.  Firstly, a simple naive implementation
+which compares all the window sized sub-sequences to each other to compiles a
+similarity matrix.  You could construct a matrix or array object, but here we
+just use a list of lists of booleans created with a nested list
 comprehension:
 
 \begin{verbatim}
@@ -6970,8 +6975,9 @@ data = [[(seq_one[i:i+window] <> seq_two[j:j+window]) \
 \end{verbatim}
 
 Note that we have \emph{not} checked for reverse complement matches here.
-Now we'll use the matplotlib's \verb|pylab.imshow()| function to display this data,
-first requesting the gray color scheme so this is done in black and white:
+Now we'll use the matplotlib's \verb|pylab.imshow()| function to display this
+data, first requesting the gray color scheme so this is done in black and
+white:
 
 \begin{verbatim}
 import pylab
@@ -7000,17 +7006,20 @@ pylab.show()
 %
 % The text now continues...
 %
-As you might have expected, these two sequences are very similar with a partial line
-of window sized matches along the diagonal.  There are no off diagonal matches which
-would be indicative of inversions or other interesting events.
+As you might have expected, these two sequences are very similar with a
+partial line of window sized matches along the diagonal.  There are no off
+diagonal matches which would be indicative of inversions or other interesting
+events.
 
 The above code works fine on small examples, but there are two problems
 applying this to larger sequences, which we will address below.
-First off all, this brute force approach to the all against all comparisons is very slow.
-Instead, we'll compile dictionaries mapping the window sized sub-sequences to their locations, and then take the set intersection to find those sub-sequences found in both sequences.
-This uses more memory, but is \emph{much} faster.
-Secondly, the \verb|pylab.imshow()| function is limited in
-the size of matrix it can display.  As an alternative, we'll use the \verb|pylab.scatter()| function.
+First off all, this brute force approach to the all against all comparisons
+is very slow.  Instead, we'll compile dictionaries mapping the window sized
+sub-sequences to their locations, and then take the set intersection to find
+those sub-sequences found in both sequences. This uses more memory, but is
+\emph{much} faster.  Secondly, the \verb|pylab.imshow()| function is limited
+in the size of matrix it can display.  As an alternative, we'll use the
+\verb|pylab.scatter()| function.
 
 We start by creating dictionaries mapping the window-sized sub-sequences to locations:
 \begin{verbatim}
@@ -7074,8 +7083,8 @@ pylab.show()
 \label{fig:nuc-dot-plot-scatter}
 \end{figure}\end{latexonly}
 Personally I find this second plot much easier to read!
-Again note that we have \emph{not} checked for reverse complement matches
-here -- you could extend this example to do this, and perhaps plot the forward
+Again note that we have \emph{not} checked for reverse complement matches here
+-- you could extend this example to do this, and perhaps plot the forward
 matches in one color and the reverse matches in another.
 
 \section{Dealing with alignments}
@@ -7385,7 +7394,7 @@ Biopython provides a ton of common substitution matrices, and also provides func
 A very cool thing that you can do easily with the substitution matrix
 classes is to create your own substitution matrix from an
 alignment. In practice, this is normally done with protein
-alignments. In this example, we'll first get a biopython alignment
+alignments. In this example, we'll first get a Biopython alignment
 object and then get a summary object to calculate info about the
 alignment. The file containing \href{examples/protein.aln}{protein.aln}
 (also available online
@@ -8534,7 +8543,7 @@ The main forums for discussing feature requests and potential bugs are the
 \href{http://biopython.org/wiki/Mailing_lists}{Biopython mailing lists}:
 
 \begin{itemize}
-  \item \mailto{biopython@biopython.org} -- An unmoderated list for discussion of anything to do with biopython.
+  \item \mailto{biopython@biopython.org} -- An unmoderated list for discussion of anything to do with Biopython.
 
   \item \mailto{biopython-dev@biopython.org} -- A more development oriented list that is mainly used by developers (but anyone is free to contribute!).
 \end{itemize}
@@ -8588,14 +8597,14 @@ python setup.py bdist_rpm
 
 This will create an RPM for your specific platform and a source RPM in the directory \verb|dist|. This RPM should be good and ready to go, so this is all you need to do! Nice and easy.
 
-\item[Macintosh] -- Since Apple moved Mac OS X, things have become much easier on the Mac.  We generally
+\item[Macintosh] -- Since Apple moved to Mac OS X, things have become much easier on the Mac.  We generally
 treat it as just another Unix variant, and installing Biopython from source is just as easy as on Linux.
 The easiest way to get all the GCC compilers etc installed is to install Apple's X-Code.
 We might be able to provide click and run installers for Mac OS X, but to date there hasn't been any demand.
 
 \end{description}
 
-Once you've got a package, please test it on your system to make sure it installs everything in a good way and seems to work properly. Once you feel good about it, send it off to one of the biopython developers (write to our main list serve at biopython@biopython.org if you're not sure who to send it to) and you've done it. Thanks!
+Once you've got a package, please test it on your system to make sure it installs everything in a good way and seems to work properly. Once you feel good about it, send it off to one of the Biopython developers (write to our main mailing list at biopython@biopython.org if you're not sure who to send it to) and you've done it. Thanks!
 
 \section{Contributing Unit Tests}
 
@@ -8606,15 +8615,15 @@ consider extending our unit test coverage.  We've devoted all of Chapter~\ref{se
 
 There are no barriers to joining Biopython code development other
 than an interest in creating biology-related code in python. The
-best place to express an interest is on the biopython mailing lists
+best place to express an interest is on the Biopython mailing lists
 -- just let us know you are interested in coding and what kind of
 stuff you want to work on. Normally, we try to have some discussion
 on modules before coding them, since that helps generate good ideas
 -- then just feel free to jump right in and start coding!
 
-The main biopython release tries to be fairly uniform and interworkable,
+The main Biopython release tries to be fairly uniform and interworkable,
 to make it easier for users. You can read about some of (fairly
-informal) coding style guidelines we try to use in biopython in the
+informal) coding style guidelines we try to use in Biopython in the
 contributing documentation at
 \url{http://biopython.org/wiki/Contributing}. We also try to add code to the distribution along with tests (see Chapter~\ref{sec:regr_test} for more info on the regression testing framework) and documentation, so that everything can stay as workable and well documented as possible (including docstrings). This is, of course, the most ideal situation, under many situations you'll be able to find other people on the list who will be willing to help add documentation or more tests for your code once you make it available. So, to end this paragraph like the last, feel free to start working!
 
@@ -8628,10 +8637,10 @@ Central (\url{http://biopython.org/wiki/Scriptcentral})
 which has pointers to freely available code in python for bioinformatics.
 
 Hopefully this documentation has got you excited enough about
-biopython to try it out (and most importantly, contribute!). Thanks
+Biopython to try it out (and most importantly, contribute!). Thanks
 for reading all the way through!
 
-\chapter{Appendix: Useful stuff about Python}
+\chapter{Appendix: Useful stuff about python}
 \label{sec:appendix}
 
 If you haven't spent a lot of time programming in python, many
