@@ -220,6 +220,8 @@ def draw_arrow((x1, y1), (x2, y2), color=colors.lightgreen, border=None,
                    strokeColor=strokecolor,
                    #strokeWidth=max(1, int(boxheight/40.)),
                    strokeWidth=1,
+                   #default is mitre/miter which can stick out too much:
+                   strokeLineJoin=1, #1=round
                    fillColor=color)
 
 def angle2trig(theta):
