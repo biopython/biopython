@@ -287,13 +287,21 @@ class Motif(object):
         return s/i
 
     def dist_dpq(self,other):
-        """
-        Calculates the dpq distance measure between motifs.
+        r"""Calculates the DPQ distance measure between motifs.
 
-        It is calculated as a maximal value of DPQ formula:
-        over possible non-spaced alignemts of two motifs.
-        reference to the measure:
-        D. M Endres and J. E Schindelin, "A new metric for probability distributions", IEEE transactions on Information Theory 49, no. 7 (July 2003): 1858-1860.
+        It is calculated as a maximal value of DPQ formula (shown using LaTeX
+        markup, familiar to mathematicians):
+        
+        \sqrt{\sum_{i=1}^{alignment.len()} \sum_{k=1}^alphabet.len() \
+        \{ m1[i].freq(alphabet[k])*log_2(m1[i].freq(alphabet[k])/m2[i].freq(alphabet[k])) +
+           m2[i].freq(alphabet[k])*log_2(m2[i].freq(alphabet[k])/m1[i].freq(alphabet[k]))
+        }
+        
+        over possible non-spaced alignemts of two motifs.  See this reference:
+
+        D. M Endres and J. E Schindelin, "A new metric for probability
+        distributions", IEEE transactions on Information Theory 49, no. 7
+        (July 2003): 1858-1860.
         """
         
         min_d=float("inf")
