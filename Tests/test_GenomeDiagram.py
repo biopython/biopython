@@ -226,7 +226,7 @@ class LinearSigilsTest(unittest.TestCase):
         feature = SeqFeature(FeatureLocation(25, 125), strand=+1)
         self.gds_features.add_feature(feature, name="Forward", **kwargs)
         feature = SeqFeature(FeatureLocation(150, 250), strand=None)
-        self.gds_features.add_feature(feature, name="Standless", **kwargs)
+        self.gds_features.add_feature(feature, name="Strandless", **kwargs)
         feature = SeqFeature(FeatureLocation(275, 375), strand=-1)
         self.gds_features.add_feature(feature, name="Reverse", **kwargs)
 
