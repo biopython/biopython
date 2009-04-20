@@ -32,8 +32,7 @@
 # ReportLab imports
 from reportlab.lib import colors
 
-from Graph import GraphData
-from string import join
+from _Graph import GraphData
 
 class GraphSet:
     """ GraphSet
@@ -200,8 +199,7 @@ class GraphSet:
             outstr.append("%d graphs" % len(self._graphs))
             for key in self._graphs:
                 outstr.append("%s" % self._graphs[key])
-            outstr = join(outstr, '\n')
-            return outstr
+            return "\n".join(outstr)
 
 
     def __len__(self):

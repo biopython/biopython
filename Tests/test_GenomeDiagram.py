@@ -26,13 +26,13 @@ from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio import SeqUtils
 
 # Bio.Graphics.GenomeDiagram
-from Bio.Graphics.GenomeDiagram.FeatureSet import FeatureSet
-from Bio.Graphics.GenomeDiagram.GraphSet import GraphSet
-from Bio.Graphics.GenomeDiagram.Track import Track
+from Bio.Graphics.GenomeDiagram import FeatureSet, GraphSet, Track, Diagram
 #from Bio.Graphics.GenomeDiagram.Utilities import *
-from Bio.Graphics.GenomeDiagram import Diagram
-from Bio.Graphics.GenomeDiagram.Colors import ColorTranslator
-from Bio.Graphics.GenomeDiagram.Graph import GraphData
+
+#Currently private, but we test them here:
+from Bio.Graphics.GenomeDiagram._Graph import GraphData
+from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator
+
 
 ###############################################################################
 # Utility functions for graph plotting, originally in GenomeDiagram.Utilities #
@@ -201,12 +201,90 @@ class GraphTest(unittest.TestCase):
         self.data = [(1, 10), (5, 15), (20, 40)]
         
     def test_slicing(self):
+        """Check GraphData slicing."""
         gd = GraphData()
         gd.set_data(self.data)
         gd.add_point((10, 20))
         
         assert gd[4:16] == [(5, 15), (10, 20)], \
                 "Unable to insert and retrieve points correctly"
+class LinearSigilsTest(unittest.TestCase):
+    """Check the different feature sigils.
+
+    These figures are intended to be used in the Tutorial..."""
+    def setUp(self) :
+        self.gdd = Diagram('Test Diagram', circular=False,
+                           y=0.01, yt=0.01, yb=0.01,
+                           x=0.01, xl=0.01, xr=0.01)
+
+    def add_track_with_sigils(self, **kwargs) :
+        #Add a track of features,
+        self.gdt_features = self.gdd.new_track(1, greytrack=False)
+        #We'll just use one feature set for these features,
+        self.gds_features = self.gdt_features.new_set()
+        #Add three features to show the strand options,
+        feature = SeqFeature(FeatureLocation(25, 125), strand=+1)
+        self.gds_features.add_feature(feature, name="Forward", **kwargs)
+        feature = SeqFeature(FeatureLocation(150, 250), strand=None)
+        self.gds_features.add_feature(feature, name="Strandless", **kwargs)
+        feature = SeqFeature(FeatureLocation(275, 375), strand=-1)
+        self.gds_features.add_feature(feature, name="Reverse", **kwargs)
+
+    def finish(self, name) :
+        #And draw it...
+        tracks = len(self.gdd.tracks)
+        #Work arround the page orientation code being too clever
+        #and flipping the h & w round:
+        if tracks <= 3 :
+            orient = "landscape"
+        else :
+            orient = "portrait"
+        self.gdd.draw(format='linear', orientation=orient,
+                      tracklines=False,
+                      pagesize=(15*cm,5*cm*tracks),
+                      fragments=1,
+                      start=0, end=400)
+        self.gdd.write(os.path.join('Graphics', name+".pdf"), "pdf")
+        #For the tutorial this might be useful:
+        #self.gdd.write(os.path.join('Graphics', name+".png"), "png")
+
+    def test_labels(self) :
+        """Feature labels."""
+        self.add_track_with_sigils(label=True)
+        self.add_track_with_sigils(label=True, color="green",
+                                   label_size=25, label_angle=0)
+        self.add_track_with_sigils(label=True, color="purple",
+                                   label_position="end",
+                                   label_size=4, label_angle=90)
+        self.add_track_with_sigils(label=True, color="blue",
+                                   label_position="middle",
+                                   label_size=6, label_angle=-90)
+        self.assertEqual(len(self.gdd.tracks), 4)
+        self.finish("GD_sigil_labels")
+
+    def test_arrow_shafts(self) :
+        """Feature arrow sigils, varying shafts."""
+        self.add_track_with_sigils(sigil="ARROW")
+        self.add_track_with_sigils(sigil="ARROW", color="brown",
+                                   arrowshaft_height=1.0)
+        self.add_track_with_sigils(sigil="ARROW", color="teal",
+                                   arrowshaft_height=0.2)
+        self.add_track_with_sigils(sigil="ARROW", color="darkgreen",
+                                   arrowshaft_height=0.1)
+        self.assertEqual(len(self.gdd.tracks), 4)
+        self.finish("GD_sigil_arrow_shafts")        
+
+    def test_arrow_heads(self) :
+        """Feature arrow sigils, varying heads."""
+        self.add_track_with_sigils(sigil="ARROW")
+        self.add_track_with_sigils(sigil="ARROW", color="blue",
+                                   arrowhead_length=0.25)
+        self.add_track_with_sigils(sigil="ARROW", color="orange",
+                                   arrowhead_length=1)
+        self.add_track_with_sigils(sigil="ARROW", color="red",
+                                   arrowhead_length=10000) #Triangles
+        self.assertEqual(len(self.gdd.tracks), 4)
+        self.finish("GD_sigil_arrows")        
 
 
 class DiagramTest(unittest.TestCase):

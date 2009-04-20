@@ -38,10 +38,9 @@ from reportlab.pdfbase import _fontdata
 from reportlab.lib import colors
 
 # GenomeDiagram
-from Feature import Feature
+from _Feature import Feature
 
 # Builtins
-from string import join
 import re
 
 #------------------------------------------------------------------------------
@@ -248,8 +247,7 @@ class FeatureSet(object):
             outstr.append("%d features" % len(self.features))
             for key in self.features:
                 outstr.append("feature: %s" % self.features[key])
-            outstr = join(outstr, '\n')
-            return outstr
+            return "\n".join(outstr)
 
     def __len__(self):
         """ __len__(self) -> int
@@ -274,8 +272,7 @@ class FeatureSet(object):
         """
         outstr = ["\n<%s: %s %d features>" % (self.__class__, self.name, 
 					      len(self.features))]
-        outstr = join(outstr, '\n')
-        return outstr
+        return "\n".join(outstr)
 
 ################################################################################
 # RUN AS SCRIPT

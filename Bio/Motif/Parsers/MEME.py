@@ -8,8 +8,97 @@ from Bio.Alphabet import IUPAC
 from Bio import File
 from Bio.ParserSupport import *
 from Bio import Seq
-import MEMEMotif as Motif
 import re
+from math import sqrt
+import sys
+from Bio.Motif import Motif
+
+class MEMEMotif (Motif):
+    """A subclass of Motif used in parsing MEME (and MAST) output.
+    
+    This sublcass defines functions and data specific to MEME motifs. 
+    This includes the evalue for a motif and the PSSM of the motif.
+    
+    Methods:
+    add_instance_from_values (name = 'default', pvalue = 1, sequence = 'ATA', start = 0, strand = +): create a new instance of the motif with the specified values.
+    add_to_pssm (position): add a new position to the pssm. The position should be a list of nucleotide/amino acid frequencies
+    add_to_logodds (position): add a new position to the log odds matrix. The position should be a tuple of log odds values for the nucleotide/amino acid at that position.
+    compare_motifs (other_motif): returns the maximum correlation between this motif and other_motif
+    """
+    def __init__ (self):
+        Motif.__init__(self)
+        self.evalue = 0.0
+    
+    def _numoccurrences (self, number):
+        if type(number) == int:
+            self.num_occurrences = number
+        else:
+            number = int(number)
+            self.num_occurrences = number
+
+    def get_instance_by_name (self,name):
+        for i in self.instances:
+            if i.sequence_name == name:
+                return i
+        return None
+
+    def add_instance_from_values (self, name = 'default', pvalue = 1, sequence = 'ATA', start = 0, strand = '+'):
+        inst = MEMEInstance(sequence,self.alphabet)
+        inst._pvalue(pvalue)
+        inst._seqname(name)
+        inst._start(start)
+        inst._strand(strand)
+        if self.length:
+            inst._length(self.length)
+        if self.name:
+            inst._motifname(self.name)
+        self.add_instance(inst)
+    
+    def _evalue (self, evalue):
+        if type(evalue) == float:
+            self.evalue = evalue
+        else:
+            evalue = float(evalue)
+            self.evalue = evalue
+    
+
+class MEMEInstance(Seq.Seq):
+    """A class describing the instances of a MEME motif, and the data thereof. 
+    """
+    def __init__ (self,*args,**kwds):
+        Seq.Seq.__init__(self,*args,**kwds)
+        self.sequence_name = ""
+        self.start = 0
+        self.pvalue = 1.0
+        self.strand = 0
+        self.length = 0
+        self.motif_name = ""
+        
+    
+    def _seqname (self, name):
+        self.sequence_name = name
+        
+    def _motifname (self, name):
+        self.motif_name = name
+    
+    def _start (self,start):
+        start = int(start)
+        self.start = start
+    
+    def _pvalue (self,pval):
+        pval = float(pval)
+        self.pvalue = pval
+    
+    def _score (self, score):
+        score = float(score)
+        self.score = score
+    
+    def _strand (self, strand):
+        self.strand = strand
+    
+    def _length (self, length):
+        self.length = length
+    
 
 class MEMERecord:
     """A class for holding the results of a MEME run.
@@ -41,12 +130,12 @@ class MEMEParser (AbstractParser):
     
     Example:
     
-    f = open("meme.output.txt")
-    parser = MEMEParser()
-    meme_record = parser.parse(f)
-    for motif in meme_record.motifs:
-        for instance in motif.instances:
-            print instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue
+    >>>f = open("meme.output.txt")
+    >>>parser = MEMEParser()
+    >>>meme_record = parser.parse(f)
+    >>>for motif in meme_record.motifs:
+    ...    for instance in motif.instances:
+    ...        print instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue
     
     """
     def __init__ (self):
@@ -175,7 +264,7 @@ class _MEMEConsumer:
     def _add_motif_with_info (self, line):
         line = line.strip()
         ls = line.split()
-        motif = Motif.MEMEMotif()
+        motif = MEMEMotif()
         #motif.length=ls[4]
         motif._numoccurrences(ls[7])
         motif._evalue(ls[13])
@@ -248,7 +337,7 @@ class _MASTConsumer:
     def _add_motif (self, line):
         line = line.strip()
         ls = line.split()
-        m = Motif.MEMEMotif()
+        m = MEMEMotif()
         m.alphabet=self.data.alphabet
         m.length=ls[1]
         name = ls[0]
@@ -265,7 +354,7 @@ class _MASTConsumer:
         start = 0
         for i in range(0,len(ds)):
             if ds[i].find('[') != -1 or ds[i].find('<') != -1:
-                inst = Motif.Instance()
+                inst = MEMEInstance()
                 inst._seqname (self._current_seq)
                 inst._start (start)
                 r = re.compile('\d+')
@@ -290,7 +379,7 @@ class _MASTConsumer:
         start = 0
         for i in range(0,len(ds)):
             if ds[i].find('+') != -1 or ds[i].find('-') != -1:
-                inst = Motif.Instance()
+                inst = MEMEInstance()
                 inst._seqname (ls[0])
                 inst._start (start)
                 r = re.compile('\d+')
@@ -316,7 +405,7 @@ class _MASTConsumer:
         start = 0
         for i in range(0,len(ds)):
             if ds[i].find('[') != -1 or ds[i].find('<') != -1:
-                inst = Motif.Instance()
+                inst = MEMEInstance()
                 inst._seqname (self._current_seq)
                 inst._start (start)
                 r = re.compile('\d+')
@@ -458,12 +547,12 @@ class MASTParser(AbstractParser):
     
     Example:
     
-    f = open("mast_file.txt")
-    parser = MASTParser()
-    mast_record = parser.parse(f)
-    for motif in mast_record.motifs:
-        for instance in motif.instances:
-            print instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue
+    >>>f = open("mast_file.txt")
+    >>>parser = MASTParser()
+    >>>mast_record = parser.parse(f)
+    >>>for motif in mast_record.motifs:
+    >>>    for instance in motif.instances:
+    >>>        print instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue
     """
     def __init__ (self):
         self._consumer = _MASTConsumer()
@@ -561,13 +650,13 @@ class MASTRecord:
     
     Methods:
     get_motif_matches_for_sequence(sequence_name): returns all of the
-        motif matches within a given sequence. The matches are objects of
-        the class MEME.Motif.Instance
+    motif matches within a given sequence. The matches are objects of
+    the class MEMEInstance
     get_motif_matches (motif_name): returns all of the matches for a motif
-        in the sequences searched. The matches returned are of class 
-        MEME.Motif.Instance
+    in the sequences searched. The matches returned are of class 
+    MEMEInstance
     get_motif_by_name (motif_name): returns a MEMEMotif with the given
-        name.
+    name.
     """
     def __init__ (self):
         self.sequences = []

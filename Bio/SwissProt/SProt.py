@@ -5,8 +5,10 @@
 
 """
 This module provides code to work with the sprotXX.dat file from
-SwissProt.
+Utilities for working with FASTA-formatted sequences (OBSOLETE).
 http://www.expasy.ch/sprot/sprot-top.html
+
+Please see Bio.SwissProt for alternatives for the functionality in this module.
 
 Tested with:
 Release 37, Release 38, Release 39

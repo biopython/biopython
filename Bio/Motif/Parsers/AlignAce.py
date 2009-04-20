@@ -2,13 +2,13 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-Classes for pparsing AlignAce and CompareACE files
+"""Parsing AlignACE and CompareACE files: AlignAceParser,CompareAceParser
 """
 #changed string.atof to float, for compatibility with python 2.6 and 3k, BW
 
+from Bio import File
 from Bio.ParserSupport import *
-from Motif import Motif
+from Bio.Motif import Motif
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 

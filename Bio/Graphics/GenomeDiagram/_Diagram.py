@@ -38,9 +38,9 @@ except ImportError:
 from reportlab.lib import pagesizes
 
 # GenomeDiagram
-from LinearDrawer import LinearDrawer
-from CircularDrawer import CircularDrawer
-from Track import Track
+from _LinearDrawer import LinearDrawer
+from _CircularDrawer import CircularDrawer
+from _Track import Track
 
 # Builtins
 import sys

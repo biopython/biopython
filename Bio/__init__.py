@@ -10,7 +10,7 @@ of freely available Python tools for computational molecular biology.
 http://biopython.org
 """
 
-__version__ = "1.49+" #The plus indicates this is unreleased CVS code
+__version__ = "1.50"
 
 class MissingExternalDependencyError(Exception):
     pass

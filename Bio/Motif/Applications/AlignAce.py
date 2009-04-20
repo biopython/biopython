@@ -2,10 +2,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
-"""
-
-This module provides code to work with the standalone version of AlignACE, 
+"""This module provides code to work with the standalone version of AlignACE, 
 for motif search in DNA sequences.
 
 AlignACE homepage:
@@ -29,14 +26,9 @@ AlignAce - runs the AlignACE standalone prgram and returns the
 ApplicationResult object
 CompareAce - runs the AlignACE standalone prgram and returns the ApplicationResult object
 """
-
-import os
-
-from Bio import File
-from Bio.ParserSupport import *
 from Bio import Application
 from Bio.Application import _Option,_Argument
-import AlignAceParser
+import os
 
 
 class AlignAceCommandline(Application.AbstractCommandline):
@@ -151,4 +143,3 @@ def CompareAce( cmd="CompareACE", **keywds):
         CompareCmd.set_parameter(par,val)
 
     return CompareCmd.run()
-

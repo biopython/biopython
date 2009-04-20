@@ -11,30 +11,28 @@ from sys import exit
 import os
 import tarfile
 import tempfile
-import SimCoalController
-import Config
+from Controller import SimCoalController
 
 class SimCoalCache:
-    def __init__(self, simcoalDir = None):
+    def __init__(self, data_dir, simcoal_dir):
         """Initializes the cache.
         
-        simcoalDir - where the binaries are
+        data_dir - Where the cache can be found
+        simcoal_dir - where the binaries are
 
-        IMPORTANT: The cache only makes sense if the file nameunivically
+        IMPORTANT: The cache only makes sense if the file name univocally
         identifies the model.
           For now use use the model name as key,
           and it will probably stay like that.
         """
-        self.cacheDir = os.sep.join([Config.dataDir, 'SimCoal', 'cache'])
-        if simcoalDir == None:
-            self.simcoalDir = Config.simcoalDir
-        else:
-            self.simcoalDir = simcoalDir
+        self.dataDir = data_dir
+        self.cacheDir = os.sep.join([data_dir, 'SimCoal', 'cache'])
+        self.simcoalDir = simcoal_dir
 
 
     def run_simcoal(self, par_file, num_sims, ploydi = '1', parDir = None):
         if parDir == None:
-            parDir = os.sep.join([Config.dataDir, 'SimCoal', 'runs'])
+            parDir = os.sep.join([self.dataDir, 'SimCoal', 'runs'])
         par_file_root = par_file[:-4]
         tar_name = os.sep.join([self.cacheDir, ploydi, par_file_root + 
             '.tar.bz2'])

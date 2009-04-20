@@ -33,12 +33,11 @@ from reportlab.pdfbase import _fontdata
 from reportlab.graphics.shapes import ArcPath
 
 # GenomeDiagram imports
-from AbstractDrawer import AbstractDrawer, draw_polygon, intermediate_points
-from FeatureSet import FeatureSet
-from GraphSet import GraphSet
+from _AbstractDrawer import AbstractDrawer, draw_polygon, intermediate_points
+from _FeatureSet import FeatureSet
+from _GraphSet import GraphSet
 
 from math import ceil, pi, cos, sin, asin
-from string import join
 
 class CircularDrawer(AbstractDrawer):
     """ CircularDrawer(AbstractDrawer)
@@ -769,7 +768,7 @@ class CircularDrawer(AbstractDrawer):
                         for limit, x, y, in [(graph_label_min, x0, y0),
                                              (graph_label_max, x1, y1),
                                              (graph_label_mid, xmid, ymid)]:
-                            label = String(0, 0, join(limit, ';'),
+                            label = String(0, 0, ";".join(limit),
                                            fontName=track.scale_font,
                                            fontSize=track.scale_fontsize,
                                            fillColor=track.scale_color)
@@ -985,7 +984,7 @@ class CircularDrawer(AbstractDrawer):
 
     def _draw_arc_arrow(self, inner_radius, outer_radius, startangle, endangle,
                   color, border=None,
-                  shaft_height_ratio=0.4, head_length_ratio=1.0, orientation='right',
+                  shaft_height_ratio=0.4, head_length_ratio=0.5, orientation='right',
                   colour=None, **kwargs):
         """Draw an arrow along an arc."""
         #Let the UK spelling (colour) override the USA spelling (color)
@@ -1054,6 +1053,8 @@ class CircularDrawer(AbstractDrawer):
         elif orientation=="right" :
             p = ArcPath(strokeColor=strokecolor,
                         fillColor=color,
+                        #default is mitre/miter which can stick out too much:
+                        strokeLineJoin=1, #1=round
                         strokewidth=0)
             #Note reportlab counts angles anti-clockwise from the horizontal
             #(as in mathematics, e.g. complex numbers and polar coordinates)
@@ -1073,6 +1074,8 @@ class CircularDrawer(AbstractDrawer):
         else :
             p = ArcPath(strokeColor=strokecolor,
                         fillColor=color,
+                        #default is mitre/miter which can stick out too much:
+                        strokeLineJoin=1, #1=round
                         strokewidth=0)
             #Note reportlab counts angles anti-clockwise from the horizontal
             #(as in mathematics, e.g. complex numbers and polar coordinates)

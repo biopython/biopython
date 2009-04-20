@@ -3,10 +3,11 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-from __future__ import generators
+"""Approximate calculation of appropriate thresholds for motif finding
+"""
 import math,random
 
-class score_distribution:
+class ScoreDistribution:
     """ Class representing approximate score distribution for a given motif.
 
     Utilizes a dynamic programming approch to calculate the distribution of

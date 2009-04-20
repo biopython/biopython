@@ -16,7 +16,6 @@ biopdb_faq.pdf: biopdb_faq.tex
 
 Tutorial.html: Tutorial.tex
 	hevea -fix Tutorial.tex
-	hacha Tutorial.html
 
 Tutorial.txt: Tutorial.tex
 	hevea -fix -text Tutorial.tex
@@ -26,6 +25,7 @@ clean-subdirs: $(subdirs)
 
 clean: clean-subdirs
 	rm -f Tutorial.aux
+	rm -f Tutorial.toc
 	rm -f Tutorial.log
 	rm -f Tutorial.out
 	rm -f Tutorial.haux

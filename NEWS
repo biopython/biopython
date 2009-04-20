@@ -3,11 +3,36 @@ News for the Biopython Project
 
 This file contains release notes and general news about the Biopython
 project.  See also the DEPRECATED file which tracks the removal of
-obsolete modules or functions.
+obsolete modules or functions, and http://biopython.org/wiki/News online.
 
 The latest news is at the top.
 
 ===================================================================
+
+April 20, 2008: Biopython 1.50 released.
+
+See the notes below for the Biopython 1.50 beta release for more details,
+but the highlights are:
+* The SeqRecord supports slicing and per-letter-annotation
+* Bio.SeqIO can read and write FASTQ and QUAL files
+* Bio.Seq now has an UnknownSeq object
+* GenomeDiagram has been integrated into Biopython
+* New module Bio.Motif will later replace Bio.AlignAce and Bio.MEME
+* This will be the final release to support Python 2.3
+* This will be the final release with Martel and Bio.Mindy
+
+Since the 1.50 beta release:
+* The NCBI's Entrez EFetch no longer supports rettype="genbank"
+  and "gb" (or "gp") should be used instead.
+* Bio.SeqIO now supports "gb" as an alias for "genbank".
+* The Seq object now has string-like startswith and endswith methods
+* Bio.Blast.NCBIXML now has a read function for single record files
+* A few more unit tests were added
+* More documentation
+
+===================================================================
+
+April 3, 2008: Biopython 1.50 beta released.
 
 The SeqRecord object has a new dictionary attribute, letter_annotations,
 which is for holding per-letter-annotation information like sequence
@@ -15,6 +40,15 @@ quality scores or secondary structure predictions.  As part of this work,
 the SeqRecord object can now be sliced to give a new SeqRecord covering
 just part of the sequence.  This will slice the per-letter-annotation to
 match, and will also include any SeqFeature objects as appropriate.
+
+Bio.SeqIO can now read and write FASTQ and QUAL quality files using PHRED
+quality scores (Sanger style, also used for Roche 454 sequencing), and FASTQ
+files using Solexa/Illumina quality scores.
+
+The Bio.Seq module now has an UnknownSeq object, used for when we have a
+sequence of known length, but unknown content.  This is used in parsing
+GenBank and EMBL files where the sequence may not be present (e.g. for a
+contig record) and when parsing QUAL files (which don't have the sequence)
 
 GenomeDiagram by Leighton Pritchard has been integrated into Biopython as
 the Bio.Graphics.GenomeDiagram module  If you use this code, please cite the
@@ -24,16 +58,12 @@ like Bio.Graphics, this requires the ReportLab python library.
 A new module Bio.Motif has been added, which is intended to replace the
 existing Bio.AlignAce and Bio.MEME modules.
 
-Bio.SeqIO can now read and write FASTQ and QUAL quality files using PHRED
-quality scores (Sanger style, also used for Roche 454 sequencing), and FASTQ
-files using Solexa/Illumina quality scores.
-
 The set of NCBI DTD files included with Bio.Entrez has been updated with the
 revised files the NCBI introduced on 1 Jan 2009.
 
 Minor fix to BioSQL for retrieving references and comments.
 
-We've also make some changes to our test framework, which is now given a
+We've also made some changes to our test framework, which is now given a
 whole chapter in the tutorial.  This intended to help new developers or
 contributors wanting to improve our unit test coverage.
 

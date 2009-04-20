@@ -2,6 +2,20 @@ This file provides documentation for modules in Biopython that have been moved
 or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
 
+Bio.Entrez.efetch and rettype="genbank"
+=======================================
+As of Easter 2009, the NCBI have stopped supporting the unofficial return type
+of "genbank" in EFetch.  Instead we should be using "gb" (GenBank) or "gp"
+(GenPept).  Bio.Entrez.efetch will correct this automatically, but issues a
+deprecation warning.
+
+Bio.SwissProt.SProt
+===================
+Declared obsolete in Release 1.50, and is likely to be deprecated in a future
+release. Most of the functionality in Bio.SwissProt.SProt is available from
+Bio.SwissProt. Note that Bio.SeqIO currently still uses Bio.SwissProt.SProt;
+this will have to be rectified in a future release.
+
 Bio.Prosite and Bio.Enzyme
 ==========================
 Declared obsolete in Release 1.50, will be deprecated in a subsequent release.

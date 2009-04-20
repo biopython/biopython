@@ -61,9 +61,15 @@ def IgIterator(handle, alphabet = single_letter_alphabet) :
             if line[0] == ";": break
             #Remove trailing whitespace, and any internal spaces
             seq_lines.append(line.rstrip().replace(" ",""))
+        seq_str = "".join(seq_lines)
+        if seq_str.endswith("1") :
+            #Remove the optional terminator (digit one)
+            seq_str = seq_str[:-1]
+        if "1" in seq_str :
+            raise ValueError("Potential terminator digit one found within sequence.")
                 
         #Return the record and then continue...
-        record= SeqRecord(Seq("".join(seq_lines), alphabet),
+        record= SeqRecord(Seq(seq_str, alphabet),
                           id = title, name = title)
         record.annotations['comment'] = "\n".join(comment_lines)
         yield record
@@ -75,13 +81,17 @@ if __name__ == "__main__" :
     print "Running quick self test"
     
     import os
-    for filename in os.listdir("../../Tests/Intelligenetics/") :
-        if os.path.splitext(filename)[-1] == ".txt" :
-            print
-            print filename
-            print "-"*len(filename)
-            handle = open(os.path.join("../../Tests/Intelligenetics/", filename))
-            for record in IgIterator(handle) :
-                print record.id, len(record)
-            handle.close()
-    print "Done"
+    path = "../../Tests/IntelliGenetics/"
+    if os.path.isdir(path) :
+        for filename in os.listdir(path) :
+            if os.path.splitext(filename)[-1] == ".txt" :
+                print
+                print filename
+                print "-"*len(filename)
+                handle = open(os.path.join(path, filename))
+                for record in IgIterator(handle) :
+                    print record.id, len(record)
+                handle.close()
+        print "Done"
+    else :
+        print "Could not find input files"

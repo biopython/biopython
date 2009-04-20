@@ -100,18 +100,18 @@ def do_alignment(command_line, alphabet=None):
                                          stderr=subprocess.PIPE,
                                          shell=(sys.platform!="win32")
                                          )
-        child_process.stdin.close()
-        status = child_process.wait()
+        #Use .communicate as can get deadlocks with .wait(), see Bug 2804
+        child_process.communicate() #ignore the stdout and strerr data
+        value = child_process.returncode
     except ImportError :
         #Fall back for python 2.3
         run_clust = os.popen(str(command_line))
         status = run_clust.close()
+        # The exit status is the second byte of the termination status
+        # TODO - Check this holds on win32...
+        value = 0
+        if status: value = status / 256
 
-    
-    # The exit status is the second byte of the termination status
-    # TODO - Check this holds on win32...
-    value = 0
-    if status: value = status / 256
     # check the return value for errors, as on 1.81 the return value
     # from Clustalw is actually helpful for figuring out errors
     # 1 => bad command line option

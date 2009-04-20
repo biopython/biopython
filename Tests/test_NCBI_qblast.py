@@ -68,9 +68,7 @@ for program,database,query,e_value,entrez_filter,expected_hits in tests :
     except HTTPError :
         #e.g. a proxy error
         raise MissingExternalDependencyError("internet connection failed")
-    records = list(NCBIXML.parse(handle))
-    assert len(records)==1
-    record = records[0]
+    record = NCBIXML.read(handle)
 
     if record.query == "No definition line" :
         #We used a sequence as the query

@@ -29,6 +29,9 @@ if sys.version_info[:2] < (2, 3):
     print "Biopython requires Python 2.3 or better.  Python %d.%d detected" % \
           sys.version_info[:2]
     sys.exit(-1)
+elif sys.version_info[:2] == (2, 3):
+    print >> sys.stderr, \
+          "This should be the last release of Biopython for Python 2.3"
 
 from distutils.core import setup
 from distutils.core import Command
@@ -268,6 +271,8 @@ PACKAGES = [
     'Bio.Medline',
     'Bio.MEME',
     'Bio.Motif',
+    'Bio.Motif.Parsers',
+    #'Bio.Motif.Applications', #New, deliberately left out for Biopython 1.50 
     'Bio.MetaTool',
     'Bio.Mindy',
     'Bio.NBRF',

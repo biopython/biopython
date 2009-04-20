@@ -9,38 +9,60 @@ it contains the core Motif class containing various I/O methods
 as well as methods for motif comparisons and motif searching in sequences.
 It also inlcudes functionality for parsing AlignACE and MEME programs
 """
-from __future__ import generators
-from Motif import Motif
-from AlignAceParser import AlignAceParser, CompareAceParser
-from MEMEParser import MEMEParser,MASTParser
-from Thresholds import score_distribution
-from AlignAceStandalone import AlignAce
+from _Motif import Motif
+from Parsers.AlignAce import AlignAceParser, CompareAceParser
+from Parsers.MEME import MEMEParser,MASTParser
+from Thresholds import ScoreDistribution
 
 _parsers={"AlignAce":AlignAceParser,
           "MEME":MEMEParser,
           }
 
 def _from_pfm(handle):
-    return Motif().from_jaspar_pfm(handle)
+    return Motif()._from_jaspar_pfm(handle)
 
 def _from_sites(handle):
-    return Motif().from_jaspar_sites(handle)
+    return Motif()._from_jaspar_sites(handle)
 
-_readers={"pfm": _from_pfm,
-          "sites": _from_sites
+_readers={"jaspar-pfm": _from_pfm,
+          "jaspar-sites": _from_sites
           }
+
 
           
 def parse(handle,format):
     """Parses an output file of motif finding programs.
 
     Currently supported formats:
-    -AlignAce
-    -MEME
+     - AlignAce
+     - MEME
 
-    you can also use single-motif formats:
-    -pfm
-    -sites
+    You can also use single-motif formats, although the Bio.Motif.read()
+    function is simpler to use in this situation.
+     - jaspar-pfm
+     - jaspar-sites
+
+    For example:
+
+    >>> from Bio import Motif
+    >>> for motif in Motif.parse(open("Motif/alignace.out"),"AlignAce") :
+    ...     print motif.consensus()
+    TCTACGATTGAG
+    CTGCACCTAGCTACGAGTGAG
+    GTGCCCTAAGCATACTAGGCG
+    GCCACTAGCATAGCAGGGGGC
+    CGACTCAGAGGTT
+    CCACGCTAAGAGAAGTGCCGGAG
+    GCACGTCCCTGATCA
+    GTCCATCGCAAAGCTTGGGGC
+    GAGATCAGAGGGCCG
+    TGTACGCGGGG
+    GACCAGAGCCTCGCATGGGGG
+    AGCGCGCGTG
+    GCCGGTTGCTGTTCATTAGG
+    ACCGACGGCAGCTAAAAGGG
+    GACGCCGGGGAT
+    CGACTCGCGCTTACAAGG
     """
     try:
         parser=_parsers[format]
@@ -59,15 +81,76 @@ def parse(handle,format):
 def read(handle,format):
     """Reads a motif from a handle using a specified file-format.
 
-    Currently supported formats:
-    -sites
-    -pfm
+    This supports the same formats as Bio.Motif.parse(), but
+    only for files containing exactly one record.  For example,
+    reading a pfm file:
 
-    yau can also use parser formats to get the first motif
+    >>> from Bio import Motif
+    >>> motif = Motif.read(open("Motif/SRF.pfm"),"jaspar-pfm")
+    >>> motif.consensus()
+    Seq('GCCCATATATGG', IUPACUnambiguousDNA())
+
+    Or a single-motif MEME file,
+
+    >>> from Bio import Motif
+    >>> motif =  Motif.read(open("Motif/meme.out"),"MEME")
+    >>> motif.consensus()
+    Seq('CTCAATCGTA', IUPACUnambiguousDNA())
+
+    If the handle contains no records, or more than one record,
+    an exception is raised:
+
+    >>> from Bio import Motif
+    >>> motif = Motif.read(open("Motif/alignace.out"),"AlignAce")
+    Traceback (most recent call last):
+        ...
+    ValueError: More than one motif found in handle
+
+    If however you want the first record from a file containing
+    multiple records this function would raise an exception (as
+    shown in the example above).  Instead use:
+
+    >>> from Bio import Motif
+    >>> motif = Motif.parse(open("Motif/alignace.out"),"AlignAce").next()
+    >>> motif.consensus()
+    Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
+
+    Use the Bio.Motif.parse(handle, format) function if you want
+    to read multiple records from the handle.
     """
-    return parse(handle,format).next()
+    iterator = parse(handle, format)
+    try :
+        first = iterator.next()
+    except StopIteration :
+        first = None
+    if first is None :
+        raise ValueError("No motifs found in handle")
+    try :
+        second = iterator.next()
+    except StopIteration :
+        second = None
+    if second is not None :
+        raise ValueError("More than one motif found in handle")
+    return first
 
 
-        
-        
-    
+def _test():
+    """Run the Bio.Motif module's doctests.
+
+    This will try and locate the unit tests directory, and run the doctests
+    from there in order that the relative paths used in the examples work.
+    """
+    import doctest
+    import os
+    if os.path.isdir(os.path.join("..","..","Tests")) :
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("..","..","Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
+
+if __name__ == "__main__":
+    #Run the doctests
+    _test()

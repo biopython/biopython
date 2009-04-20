@@ -1,6 +1,6 @@
 # Copyright 2000 by Bertrand Frottier .  All rights reserved.
 # Revisions 2005-2006 copyright Michiel de Hoon
-# Revisions 2006-2008 copyright Peter Cock
+# Revisions 2006-2009 copyright Peter Cock
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -9,15 +9,16 @@ following the DTD available on the NCBI FTP
 ftp://ftp.ncbi.nlm.nih.gov/blast/documents/xml/NCBI_BlastOutput.dtd
 
 Classes:
-BlastParser         Parses XML output from BLAST.
+BlastParser         Parses XML output from BLAST (direct use discouraged).
                     This (now) returns a list of Blast records.
                     Historically it returned a single Blast record.
+                    You are expected to use this via the parse function.
 
-_XMLParser          Generic SAX parser.
+_XMLParser          Generic SAX parser (private).
 
 Functions:
 parse               Incremental parser, this is an iterator that returns
-                    Blast records.
+                    Blast records.  It uses the BlastParser internally.
 """
 from Bio.Blast import Record
 import xml.sax
@@ -169,6 +170,19 @@ class BlastParser(_XMLparser):
         if not hasattr(self._blast, "query_letters") \
         or not self._blast.query_letters :
             self._blast.query_letters = self._header.query_letters
+
+        # Hack to record the query length as both the query_letters and
+        # query_length properties (as in the plain text parser, see
+        # Bug 2176 comment 12):
+        self._blast.query_length = self._blast.query_letters
+        # Perhaps in the long term we should deprecate one, but I would
+        # prefer to drop query_letters - so we need a transition period
+        # with both.
+
+        # Hack to record the claimed database size as database_length
+        # (as well as in num_letters_in_database, see Bug 2176 comment 13):
+        self._blast.database_length = self._blast.num_letters_in_database
+        # TODO? Deprecate database_letters next?
 
         # Apply the "top level" parameter information
         self._blast.matrix = self._parameters.matrix
@@ -535,6 +549,32 @@ class BlastParser(_XMLparser):
         """
         self._blast.ka_params = self._blast.ka_params + (float(self._value),)
     
+def read(handle, debug=0):
+   """Returns a single Blast record (assumes just one query).
+
+   This function is for use when there is one and only one BLAST
+   result in your XML file.
+
+   Use the Bio.Blast.NCBIXML.parse() function if you expect more than
+   one BLAST record (i.e. if you have more than one query sequence).
+
+   """
+   iterator = parse(handle, debug)
+   try :
+       first = iterator.next()
+   except StopIteration :
+       first = None
+   if first is None :
+       raise ValueError("No records found in handle")
+   try :
+       second = iterator.next()
+   except StopIteration :
+       second = None
+   if second is not None :
+       raise ValueError("More than one record found in handle")
+   return first
+
+
 def parse(handle, debug=0):
     """Returns an iterator a Blast record for each query.
 

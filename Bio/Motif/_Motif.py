@@ -11,7 +11,6 @@ Changes:
 26.08.2007 - added a DPQ measure   (Bartek Wilczynski)
 9.2007 (BW) : added the .to_fasta() and .weblogo() methods allowing to use the Berkeley weblogo server at http://weblogo.berkeley.edu/
 """
-from __future__ import generators
 from Bio.Seq import Seq
 from Bio.SubsMat import FreqTable
 from Bio.Alphabet import IUPAC
@@ -246,7 +245,7 @@ class Motif(object):
         sx = 0  # \sum x
         sy = 0  # \sum y
         syy = 0 # \sum x^2
-        norm=self.length
+        norm=max(self.length,offset+motif.length)
         
         for pos in range(max(self.length,offset+motif.length)):
             for l in self.alphabet.letters:
@@ -260,8 +259,7 @@ class Motif(object):
 
         norm *= len(self.alphabet.letters)
         s1 = (sxy - sx*sy*1.0/norm)
-        s2 = (sxx - sx*sx*1.0/norm)*(syy- sy*sy*1.0/norm)
-
+        s2 = (norm*sxx - sx*sx*1.0)*(norm*syy- sy*sy*1.0)
         return s1/math.sqrt(s2)
 
     def dist_product(self,other):
@@ -289,19 +287,21 @@ class Motif(object):
         return s/i
 
     def dist_dpq(self,other):
-        """
-        Calculates the dpq distance measure between motifs.
+        r"""Calculates the DPQ distance measure between motifs.
 
-        It is calculated as a maximal value of the formula:
-
+        It is calculated as a maximal value of DPQ formula (shown using LaTeX
+        markup, familiar to mathematicians):
+        
         \sqrt{\sum_{i=1}^{alignment.len()} \sum_{k=1}^alphabet.len() \
-       \{ m1[i].freq(alphabet[k])*log_2(m1[i].freq(alphabet[k])/m2[i].freq(alphabet[k])) +
-          m2[i].freq(alphabet[k])*log_2(m2[i].freq(alphabet[k])/m1[i].freq(alphabet[k])) 
-       }
+        \{ m1[i].freq(alphabet[k])*log_2(m1[i].freq(alphabet[k])/m2[i].freq(alphabet[k])) +
+           m2[i].freq(alphabet[k])*log_2(m2[i].freq(alphabet[k])/m1[i].freq(alphabet[k]))
+        }
+        
+        over possible non-spaced alignemts of two motifs.  See this reference:
 
-        over possible non-spaced alignemts of two motifs.
-        reference to the measure:
-        D. M Endres and J. E Schindelin, "A new metric for probability distributions", IEEE transactions on Information Theory 49, no. 7 (July 2003): 1858-1860.
+        D. M Endres and J. E Schindelin, "A new metric for probability
+        distributions", IEEE transactions on Information Theory 49, no. 7
+        (July 2003): 1858-1860.
         """
         
         min_d=float("inf")
@@ -347,7 +347,7 @@ class Motif(object):
             s+=dpq(f1,f2,self.alphabet)
         return s
             
-    def read(self,stream):
+    def _read(self,stream):
         """Reads the motif from the stream (in AlignAce format).
 
         the self.alphabet variable must be set beforehand.
@@ -385,7 +385,7 @@ class Motif(object):
         else:
             return self.length
         
-    def write(self,stream):
+    def _write(self,stream):
         """
         writes the motif to the stream
         """
@@ -394,10 +394,12 @@ class Motif(object):
             
             
 
-    def to_fasta(self):
+    def _to_fasta(self):
         """
         FASTA representation of motif
         """
+        if not self.has_instances:
+            self.make_instances_from_counts()
         str = ""
         for i,inst in enumerate(self.instances):
             str = str + "> instance %d\n"%i + inst.tostring() + "\n"
@@ -427,16 +429,16 @@ class Motif(object):
         return res
 
         
-    def from_jaspar_pfm(self,stream,make_instances=False):
+    def _from_jaspar_pfm(self,stream,make_instances=False):
         """
         reads the motif from Jaspar .pfm file
 
         The instances are fake, but the pwm is accurate.
         """
-        return self.from_horiz_matrix(stream,letters="ACGT",make_instances=make_instances)
+        return self._from_horiz_matrix(stream,letters="ACGT",make_instances=make_instances)
 
-    def from_vert_matrix(self,stream,letters=None,make_instances=False):
-        """reads a horizontal count matrix from stream and fill in the counts.
+    def _from_vert_matrix(self,stream,letters=None,make_instances=False):
+        """reads a vertical count matrix from stream and fill in the counts.
         """
 
         self.counts = {}
@@ -456,7 +458,7 @@ class Motif(object):
             self.make_instances_from_counts()
         return self
         
-    def from_horiz_matrix(self,stream,letters=None,make_instances=False):
+    def _from_horiz_matrix(self,stream,letters=None,make_instances=False):
         """reads a horizontal count matrix from stream and fill in the counts.
         """
         if letters==None:
@@ -535,7 +537,7 @@ class Motif(object):
         self.counts=counts
         return counts
 
-    def from_jaspar_sites(self,stream):
+    def _from_jaspar_sites(self,stream):
         """
         reads the motif from Jaspar .sites file
 
@@ -623,7 +625,7 @@ class Motif(object):
         """
         import urllib
         import urllib2
-        al= self.to_fasta()
+        al= self._to_fasta()
         url = 'http://weblogo.berkeley.edu/logo.cgi'
         values = {'sequence' : al,
                   'format' : format,
@@ -670,7 +672,7 @@ class Motif(object):
         f.close()
   
 
-    def to_transfac(self):
+    def _to_transfac(self):
         """Write the representation of a motif in TRANSFAC format
         """
         res="XX\nTY Motif\n" #header
@@ -695,7 +697,7 @@ class Motif(object):
         res+="XX\n"
         return res
 
-    def to_vertical_matrix(self,letters=None):
+    def _to_vertical_matrix(self,letters=None):
         """Return string representation of the motif as  a matrix.
         
         """
@@ -709,7 +711,7 @@ class Motif(object):
             res+="\n"
         return res
     
-    def to_horizontal_matrix(self,letters=None,normalized=True):
+    def _to_horizontal_matrix(self,letters=None,normalized=True):
         """Return string representation of the motif as  a matrix.
         
         """
@@ -731,7 +733,27 @@ class Motif(object):
                 res+="\n"
         return res
 
-    def to_jaspar_pfm(self):
+    def _to_jaspar_pfm(self):
         """Returns the pfm representation of the motif
         """
-        return self.to_horizontal_matrix(normalized=False,letters="ACGT")
+        return self._to_horizontal_matrix(normalized=False,letters="ACGT")
+
+    def format(self,format):
+        """Returns a string representation of the Motif in a given format
+
+        Currently supported fromats:
+         - jaspar-pfm : JASPAR Position Frequency Matrix
+         - transfac : TRANSFAC like files
+         - fasta : FASTA file with instances
+        """
+
+        formatters={
+            "jaspar-pfm":   self._to_jaspar_pfm,
+            "transfac":     self._to_transfac,
+            "fasta" :       self._to_fasta,
+            }
+
+        try:
+            return formatters[format]()
+        except KeyError:
+            raise ValueError("Wrong format type")

@@ -50,11 +50,11 @@ del id_list, handle, identifier, records, record
 
 print "Checking Bio.Entrez.efetch()"
 for database, format, entry in [("genome","fasta","X52960"),
-                                ("genome","genbank","X52960"),
+                                ("genome","gb","X52960"),
                                 ("nucleotide", "fasta", "6273291"),
-                                ("nucleotide", "genbank", "6273291"),
+                                ("nucleotide", "gb", "6273291"),
                                 ("protein", "fasta", "16130152"),
-                                ("protein", "genbank", "16130152")] :
+                                ("protein", "gb", "16130152")] :
     print "- Fetching %s from %s as %s" % (entry, database, format)
     handle = Entrez.efetch(db=database,
                            id=entry,

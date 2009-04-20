@@ -31,10 +31,8 @@ scale_fontsize    http://www.biopython.org
 from reportlab.lib import colors
 
 # GenomeDiagram imports
-from FeatureSet import FeatureSet
-from GraphSet import GraphSet
-
-from string import join
+from _FeatureSet import FeatureSet
+from _GraphSet import GraphSet
 
 class Track:
     """ Track
@@ -348,8 +346,7 @@ class Track:
             outstr.append("%d sets" % len(self._sets))
             for key in self._sets:
                 outstr.append("set: %s" % self._sets[key])
-            outstr = join(outstr, '\n')
-            return outstr                
+            return "\n".join(outstr)      
 
 
     def __getitem__(self, key):
@@ -369,8 +366,7 @@ class Track:
         """
         outstr = ["\n<%s: %s>" % (self.__class__, self.name)]
         outstr.append("%d sets" % len(self._sets))
-        outstr = join(outstr, '\n')
-        return outstr    
+        return "\n".join(outstr)
     
 
 
@@ -383,8 +379,8 @@ if __name__ == '__main__':
     # test code
     from Bio import GenBank
     from Bio.SeqFeature import SeqFeature
-    from FeatureSet import FeatureSet
-    from GraphSet import GraphSet
+    from _FeatureSet import FeatureSet
+    from _GraphSet import GraphSet
     from random import normalvariate
     
     parser = GenBank.FeatureParser()

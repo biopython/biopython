@@ -5,13 +5,13 @@ Checking Bio.ExPASy.get_sprot_raw()
 Checking Bio.Entrez.efetch()
 - Fetching X52960 from genome as fasta
   Got TGGCTCGAACTGACTAGAA...GCT [Ktxz0HgMlhQmrKTuZpOxPZJ6zGU] len 248
-- Fetching X52960 from genome as genbank
+- Fetching X52960 from genome as gb
   Got TGGCTCGAACTGACTAGAA...GCT [Ktxz0HgMlhQmrKTuZpOxPZJ6zGU] len 248
 - Fetching 6273291 from nucleotide as fasta
   Got TATACATTAAAGGAGGGGG...AGA [bLhlq4mEFJOoS9PieOx4nhGnjAQ] len 902
-- Fetching 6273291 from nucleotide as genbank
+- Fetching 6273291 from nucleotide as gb
   Got TATACATTAAAGGAGGGGG...AGA [bLhlq4mEFJOoS9PieOx4nhGnjAQ] len 902
 - Fetching 16130152 from protein as fasta
   Got MKVKVLSLLVPALLVAGAA...YQF [fCjcjMFeGIrilHAn6h+yju267lg] len 367
-- Fetching 16130152 from protein as genbank
+- Fetching 16130152 from protein as gb
   Got MKVKVLSLLVPALLVAGAA...YQF [fCjcjMFeGIrilHAn6h+yju267lg] len 367

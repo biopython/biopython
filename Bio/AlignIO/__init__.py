@@ -11,6 +11,11 @@ format names (lower case strings).  From the user's perspective, you can read
 in a PHYLIP file containing one or more alignments using Bio.AlignIO, or you
 can read in the sequences within these alignmenta using Bio.SeqIO.
 
+Bio.AlignIO is also documented at U{http://biopython.org/wiki/AlignIO} and by
+a whole chapter in our tutorial:
+ - U{http://biopython.org/DIST/docs/tutorial/Tutorial.html}
+ - U{http://biopython.org/DIST/docs/tutorial/Tutorial.pdf}  
+
 Input
 =====
 For the typical special case when your file or handle contains one and only
@@ -19,52 +24,39 @@ handle, format string and optional number of sequences per alignment.  It will
 return a single Alignment object (or raise an exception if there isn't just
 one alignment):
 
-    from Bio import AlignIO
-    handle = open("example.aln", "rU")
-    align = AlignIO.read(handle, "clustal")
-    handle.close()
-    print align
+    >>> from Bio import AlignIO
+    >>> handle = open("Phylip/interlaced.phy", "rU")
+    >>> align = AlignIO.read(handle, "phylip")
+    >>> handle.close()
+    >>> print align
+    SingleLetterAlphabet() alignment with 3 rows and 384 columns
+    -----MKVILLFVLAVFTVFVSS---------------RGIPPE...I-- CYS1_DICDI
+    MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPVTDRAASTL...VAA ALEU_HORVU
+    ------MWATLPLLCAGAWLLGV--------PVCGAAELSVNSL...PLV CATH_HUMAN
 
 For the general case, when the handle could contain any number of alignments,
 use the function Bio.AlignIO.parse(...) which takes the same arguments, but
-returns an iterator giving Alignment objects.  For example, using the output
-from the EMBOSS water or needle pairwise alignment prorams:
-
-    from Bio import AlignIO
-    handle = open("example.txt", "rU")
-    for alignment in AlignIO.parse(handle, "emboss") :
-        print alignment
-
+returns an iterator giving Alignment objects (typically used in a for loop).
 If you want random access to the alignments by number, turn this into a list:
 
-    from Bio import AlignIO
-    handle = open("example.aln", "rU")
-    alignments = list(AlignIO.parse(handle, "clustal"))
-    print alignments[0]
+    >>> from Bio import AlignIO
+    >>> handle = open("Emboss/needle.txt", "rU")
+    >>> alignments = list(AlignIO.parse(handle, "emboss"))
+    >>> print alignments[2]
+    SingleLetterAlphabet() alignment with 2 rows and 120 columns
+    -KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIVTKER...--- ref_rec
+    LHIVVVDDDPGTCVYIESVFAELGHTCKSFVRPEAAEEYILTHP...HKE gi|94967506|receiver
 
 Most alignment file formats can be concatenated so as to hold as many
 different multiple sequence alignments as possible.  One common example
 is the output of the tool seqboot in the PHLYIP suite.  Sometimes there
 can be a file header and footer, as seen in the EMBOSS alignment output.
 
-There is an optional argument for the number of sequences per alignment which
-is usually only needed with the alignments stored in the FASTA format.
-Without this information, there is no clear way to tell if you have say a
-single alignment of 20 sequences, or four alignments of 5 sequences.  e.g.
-
-    from Bio import AlignIO
-    handle = open("example.faa", "rU")
-    for alignment in AlignIO.parse(handle, "fasta", seq_count=5) :
-        print alignment
-
-The above code would split up the FASTA files, and try and batch every five
-sequences into an alignment.
-
 Output
 ======
 Use the function Bio.AlignIO.write(...), which takes a complete set of
 Alignment objects (either as a list, or an iterator), an output file handle
-and of course the file format.
+and of course the file format::
 
     from Bio import AlignIO
     alignments = ...
@@ -83,21 +75,21 @@ File Formats
 When specifying the file format, use lowercase strings.  The same format
 names are also used in Bio.SeqIO and include the following:
 
-clustal   - Ouput from Clustal W or X, see also the module Bio.Clustalw
-            which can be used to run the command line tool from Biopython.
-emboss    - The "pairs" and "simple" alignment format from the EMBOSS tools.
-fasta     - The generic sequence file format where each record starts with a
-            identifer line starting with a ">" character, followed by lines
-            of sequence.
-fasta-m10 - For the pairswise alignments output by Bill Pearson's FASTA
-            tools when used with the -m 10 command line option for machine
-            readable output.
-ig        - The IntelliGenetics file format, apparently the same as the
-            MASE alignment format.
-nexus     - Output from NEXUS, see also the module Bio.Nexus which can also
-            read any phylogenetic trees in these files.
-phylip    - Used by the PHLIP tools.
-stockholm - A richly annotated alignment file format used by PFAM.
+ - clustal   - Ouput from Clustal W or X, see also the module Bio.Clustalw
+               which can be used to run the command line tool from Biopython.
+ - emboss    - EMBOSS tools' "pairs" and "simple" alignment formats.
+ - fasta     - The generic sequence file format where each record starts with
+               an identifer line starting with a ">" character, followed by
+               lines of sequence.
+ - fasta-m10 - For the pairswise alignments output by Bill Pearson's FASTA
+               tools when used with the -m 10 command line option for machine
+               readable output.
+ - ig        - The IntelliGenetics file format, apparently the same as the
+               MASE alignment format.
+ - nexus     - Output from NEXUS, see also the module Bio.Nexus which can also
+               read any phylogenetic trees in these files.
+ - phylip    - Used by the PHLIP tools.
+ - stockholm - A richly annotated alignment file format used by PFAM.
 
 Note that while Bio.AlignIO can read all the above file formats, it cannot
 write to all of them.
@@ -105,15 +97,8 @@ write to all of them.
 You can also use any file format supported by Bio.SeqIO, such as "fasta" or
 "ig" (which are listed above), PROVIDED the sequences in your file are all the
 same length.
-
-Further Information
-===================
-See the wiki page http://biopython.org/wiki/AlignIO and also the Bio.AlignIO
-chapter in the Biopython Tutorial and Cookbook which is also available online:
-
-http://biopython.org/DIST/docs/tutorial/Tutorial.html
-http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
 """
+__docformat__ = "epytext en" #not just plaintext
 
 #TODO
 # - define policy on reading aligned sequences with gaps in
@@ -167,9 +152,10 @@ _FormatToWriter ={#"fasta" is done via Bio.SeqIO
 def write(alignments, handle, format) :
     """Write complete set of alignments to a file.
 
-    sequences - A list (or iterator) of Alignment objects
-    handle    - File handle object to write to
-    format    - lower case string describing the file format to write.
+    Arguments:
+     - sequences - A list (or iterator) of Alignment objects
+     - handle    - File handle object to write to
+     - format    - lower case string describing the file format to write.
 
     You should close the handle after calling this function.
 
@@ -198,6 +184,8 @@ def write(alignments, handle, format) :
         #TODO - Can we make one call to SeqIO.write() and count the alignments?
         count = 0
         for alignment in alignments :
+            if not isinstance(alignment, Alignment) :
+                raise TypeError("Expect a list or iterator of Alignment objects.")
             SeqIO.write(alignment, handle, format)
             count += 1
     elif format in _FormatToIterator or format in SeqIO._FormatToIterator :
@@ -214,12 +202,14 @@ def write(alignments, handle, format) :
 def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None) :
     """Uses Bio.SeqIO to create an Alignment iterator (PRIVATE).
 
-    handle   - handle to the file.
-    format   - string describing the file format.
-    alphabet - optional Alphabet object, useful when the sequence type cannot
-               be automatically inferred from the file itself (e.g. fasta)
-    seq_count- Optional integer, number of sequences expected in
-               each alignment.  Recommended for fasta format files.
+    Arguments:
+     - handle    - handle to the file.
+     - format    - string describing the file format.
+     - alphabet  - optional Alphabet object, useful when the sequence type
+                   cannot be automatically inferred from the file itself
+                   (e.g. fasta, phylip, clustal)
+     - seq_count - Optional integer, number of sequences expected in each
+                   alignment.  Recommended for fasta format files.
 
     If count is omitted (default) then all the sequences in
     the file are combined into a single Alignment.
@@ -272,12 +262,14 @@ def _force_alphabet(alignment_iterator, alphabet) :
 def parse(handle, format, seq_count=None, alphabet=None) :
     """Turns a sequence file into an iterator returning Alignment objects.
 
-    handle   - handle to the file.
-    format   - string describing the file format.
-    alphabet - optional Alphabet object, useful when the sequence type cannot
-               be automatically inferred from the file itself (e.g. phylip)
-    seq_count- Optional integer, number of sequences expected in
-               each alignment.  Recommended for fasta format files.
+    Arguments:
+     - handle    - handle to the file.
+     - format    - string describing the file format.
+     - alphabet  - optional Alphabet object, useful when the sequence type
+                   cannot be automatically inferred from the file itself
+                   (e.g. fasta, phylip, clustal)
+     - seq_count - Optional integer, number of sequences expected in each
+                   alignment.  Recommended for fasta format files.
 
     If you have the file name in a string 'filename', use:
 
@@ -338,12 +330,14 @@ def parse(handle, format, seq_count=None, alphabet=None) :
 def read(handle, format, seq_count=None, alphabet=None) :
     """Turns an alignment file into a single Alignment object.
 
-    handle   - handle to the file.
-    format   - string describing the file format.
-    alphabet - optional Alphabet object, useful when the sequence type cannot
-               be automatically inferred from the file itself (e.g. phylip)
-    seq_count- Optional interger, number of sequences expected in
-               the alignment to check you got what you expected.
+    Arguments:
+     - handle    - handle to the file.
+     - format    - string describing the file format.
+     - alphabet  - optional Alphabet object, useful when the sequence type
+                   cannot be automatically inferred from the file itself
+                   (e.g. fasta, phylip, clustal)
+     - seq_count - Optional integer, number of sequences expected in each
+                   alignment.  Recommended for fasta format files.
 
     If the handle contains no alignments, or more than one alignment,
     an exception is raised.  For example, using a PFAM/Stockholm file
@@ -358,6 +352,15 @@ def read(handle, format, seq_count=None, alphabet=None) :
 
     If however you want the first alignment from a file containing
     multiple alignments this function would raise an exception.
+
+    >>> from Bio import AlignIO
+    >>> filename = "Emboss/needle.txt"
+    >>> format = "emboss"
+    >>> alignment = AlignIO.read(open(filename, "rU"), format)
+    Traceback (most recent call last):
+        ...
+    ValueError: More than one record found in handle
+
     Instead use:
 
     >>> from Bio import AlignIO
@@ -367,7 +370,7 @@ def read(handle, format, seq_count=None, alphabet=None) :
     >>> print "First alignment has length", alignment.get_alignment_length()
     First alignment has length 124
 
-    Use the Bio.AlignIO.parse() function if you want to read multiple
+    You must use the Bio.AlignIO.parse() function if you want to read multiple
     records from the handle.
     """
     iterator = parse(handle, format, seq_count, alphabet)

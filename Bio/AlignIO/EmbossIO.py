@@ -1,4 +1,4 @@
-# Copyright 2008 by Peter Cock.  All rights reserved.
+# Copyright 2008-2009 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -123,6 +123,7 @@ class EmbossIterator(AlignmentIterator) :
                              % (number_of_seqs, self.records_per_alignment))
 
         seqs = ["" for id in ids]
+        seq_starts = []
         index = 0
 
         #Parse the seqs
@@ -135,6 +136,14 @@ class EmbossIterator(AlignmentIterator) :
                     #(an aligned seq is broken up into multiple lines)
                     id, start = id_start
                     seq, end = seq_end
+                    if start==end :
+                        #Special case,
+                        assert len(seq.replace("-",""))==0
+                        start = int(start)
+                        end = int(end)
+                    else :
+                        start = int(start)-1 #python counting
+                        end = int(end)
 
                     #The identifier is truncated...
                     assert 0 <= index and index < number_of_seqs, \
@@ -142,26 +151,22 @@ class EmbossIterator(AlignmentIterator) :
                            % (index, number_of_seqs)
                     assert id==ids[index] or id == ids[index][:len(id)]
 
+                    if len(seq_starts) == index :
+                        #Record the start
+                        seq_starts.append(start)
+
                     #Check the start...
-                    if int(start) == 0:
-                        #Special case when one sequence starts long before the other
-                        assert len(seqs[index].replace("-",""))==0
-                        assert len(seq.replace("-","")) == 0, line
-                    elif int(start) == len(seqs[index].replace("-","")) :
-                        #Special case when one sequence ends long before the other
-                        assert len(seq.replace("-","")) == 0, line
-                    else :
-                        assert int(start) - 1 == len(seqs[index].replace("-","")), \
-                        "Found %i chars so far for sequence %i (%s), file says start %i:\n%s" \
-                            % (len(seqs[index].replace("-","")), index, id,
-                               int(start), seqs[index])
+                    assert start - seq_starts[index] == len(seqs[index].replace("-","")), \
+                    "Found %i chars so far for sequence %i (%s, %s), line says start %i:\n%s" \
+                        % (len(seqs[index].replace("-","")), index, id, seqs[index],
+                           start, line)
                     
                     seqs[index] += seq
 
                     #Check the end ...
-                    assert int(end) == len(seqs[index].replace("-","")), \
+                    assert end == seq_starts[index] + len(seqs[index].replace("-","")), \
                         "Found %i chars so far for %s, file says end %i:\n%s" \
-                            % (len(seqs[index]), id, int(end), repr(seqs[index]))
+                            % (len(seqs[index]), id, end, repr(seqs[index]))
 
                     index += 1
                     if index >= number_of_seqs :
@@ -563,7 +568,6 @@ asis             311 -----------------    311
 #---------------------------------------
 #---------------------------------------"""
 
-
     from StringIO import StringIO
 
     alignments = list(EmbossIterator(StringIO(pair_example)))
@@ -587,12 +591,6 @@ asis             311 -----------------    311
     assert [r.id for r in alignments[1].get_all_seqs()] \
            == ["IXI_234", "IXI_235", "IXI_236", "IXI_237"]
 
-
-    #for a in EmbossIterator(StringIO(pair_example2)) :
-    #    print "Next:"
-    #    for r in a.get_all_seqs() :
-    #        print r.seq.tostring()[:20] + "...", r.id
-    
     alignments = list(EmbossIterator(StringIO(pair_example2)))
     assert len(alignments) == 5
     assert len(alignments[0].get_all_seqs()) == 2

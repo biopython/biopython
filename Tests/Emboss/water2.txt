@@ -1,0 +1,38 @@
+########################################
+# Program: water
+# Rundate: Sat Apr 04 2009 22:08:44
+# Commandline: water
+#    -asequence asis:ACACACTCACACACACTTGGTCAGAGATGCTGTGCTTCTTGGAAGCAAGGNCTCAAAGGCAAGGTGCACGCAGAGGGACGTTTGAGTCTGGGATGAAGCATGTNCGTATTATTTATATGATGGAATTTCACGTTTTTATG
+#    -bsequence asis:CGTTTGAGTACTGGGATG
+#    -gapopen 10
+#    -gapextend 0.5
+#    -filter
+# Align_format: srspair
+# Report_file: stdout
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: asis
+# 2: asis
+# Matrix: EDNAFULL
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 18
+# Identity:      17/18 (94.4%)
+# Similarity:    17/18 (94.4%)
+# Gaps:           1/18 ( 5.6%)
+# Score: 75.0
+# 
+#
+#=======================================
+
+asis              79 CGTTTGAGT-CTGGGATG     95
+                     ||||||||| ||||||||
+asis               1 CGTTTGAGTACTGGGATG     18
+
+
+#---------------------------------------
+#---------------------------------------

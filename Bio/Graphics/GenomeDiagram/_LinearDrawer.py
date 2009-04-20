@@ -31,13 +31,12 @@ from reportlab.graphics.shapes import *
 from reportlab.lib import colors
 
 # GenomeDiagram imports
-from AbstractDrawer import AbstractDrawer, draw_box, draw_arrow
-from AbstractDrawer import intermediate_points, angle2trig
-from FeatureSet import FeatureSet
-from GraphSet import GraphSet
+from _AbstractDrawer import AbstractDrawer, draw_box, draw_arrow
+from _AbstractDrawer import intermediate_points, angle2trig
+from _FeatureSet import FeatureSet
+from _GraphSet import GraphSet
 
 from math import ceil
-from string import join
 
 class LinearDrawer(AbstractDrawer):
     """ LinearDrawer(AbstractDrawer)
@@ -563,9 +562,9 @@ class LinearDrawer(AbstractDrawer):
                         tbtm = btm + self.fragment_lines[fragment][0]
                         tctr = ctr + self.fragment_lines[fragment][0]
                         ttop = top + self.fragment_lines[fragment][0]
-                        for val, pos in [(join(graph_label_min, ';'), tbtm),
-                                         (join(graph_label_max, ';'), ttop),
-                                         (join(graph_label_mid, ';'), tctr)]:
+                        for val, pos in [(";".join(graph_label_min), tbtm),
+                                         (";".join(graph_label_max), ttop),
+                                         (";".join(graph_label_mid), tctr)]:
                             label = String(0, 0, val,
                                            fontName=track.scale_font,
                                            fontSize=track.scale_fontsize,

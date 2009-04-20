@@ -74,11 +74,87 @@ if not clustalw_exe :
 
 #################################################################
 
+print "Checking error conditions"
+print "========================="
+
+print "Empty file"
+input_file = "does_not_exist.fasta"
+assert not os.path.isfile(input_file)
+cline = MultipleAlignCL(input_file, command=clustalw_exe)
+try :
+    align = Clustalw.do_alignment(cline)
+    assert False, "Should have failed, returned %s" % repr(align)
+except IOError, err :
+    print "Failed (good)"
+    #Python 2.3 on Windows gives (0, 'Error')
+    #Python 2.5 on Windows gives [Errno 0] Error
+    assert "Cannot open sequence file" in str(err) \
+           or "not produced" in str(err) \
+           or str(err) == "[Errno 0] Error" \
+           or str(err) == "(0, 'Error')", str(err)
+
+print
+print "Single sequence"
+input_file = "Fasta/f001"
+assert os.path.isfile(input_file)
+assert len(list(SeqIO.parse(open(input_file),"fasta")))==1
+cline = MultipleAlignCL(input_file, command=clustalw_exe)
+try :
+    align = Clustalw.do_alignment(cline)
+    assert False, "Should have failed, returned %s" % repr(align)
+except IOError, err :
+    print "Failed (good)"
+    assert "has only one sequence present" in str(err)
+except ValueError, err :
+    print "Failed (good)"
+    assert str(err) == "No records found in handle"
+    #Ideally we'd get an IOError but sometimes we don't seem to
+    #get a return value from clustalw.  If so, then there is a
+    #ValueError when the parsing fails.
+
+print
+print "Invalid sequence"
+input_file = "Medline/pubmed_result1.txt"
+assert os.path.isfile(input_file)
+cline = MultipleAlignCL(input_file, command=clustalw_exe)
+try :
+    align = Clustalw.do_alignment(cline)
+    assert False, "Should have failed, returned %s" % repr(align)
+except IOError, err :
+    print "Failed (good)"
+    #Ideally we'd catch the return code and raise the specific
+    #error for "invalid format", rather than just notice there
+    #is not output file.
+    #Note:
+    #Python 2.3 on Windows gives (0, 'Error')
+    #Python 2.5 on Windows gives [Errno 0] Error
+    assert "invalid format" in str(err) \
+           or "not produced" in str(err) \
+           or str(err) == "[Errno 0] Error" \
+           or str(err) == "(0, 'Error')", str(err)
+
+#################################################################
+print
+print "Checking normal situations"
+print "=========================="
+
 #Create a temp fasta file with a space in the name
 temp_filename_with_spaces = "Clustalw/temp horses.fasta"
 handle = open(temp_filename_with_spaces, "w")
 SeqIO.write(SeqIO.parse(open("Phylip/hennigian.phy"),"phylip"),handle, "fasta")
 handle.close()
+
+#Create a large input file by converting another example file
+#(See Bug 2804, this will produce so much output on stdout that
+#subprocess could suffer a deadlock and hang).  Using all the
+#records should show the deadlock but is very slow - just thirty
+#seems to lockup on Mac OS X, even 20 on Linux (without the fix).
+temp_large_fasta_file = "temp_cw_prot.fasta"
+handle = open(temp_large_fasta_file, "w")
+records = list(SeqIO.parse(open("NBRF/Cw_prot.pir", "rU"), "pir"))[:40]
+SeqIO.write(records, handle, "fasta")
+handle.close()
+del handle, records
 
 for input_file, output_file, newtree_file in [
     ("Fasta/f002", "temp_test.aln", None),
@@ -88,8 +164,11 @@ for input_file, output_file, newtree_file in [
     ("Registry/seqs.fasta", "temp_test.aln", "temp with space.dnd"),
     (temp_filename_with_spaces, "temp_test.aln", None),
     (temp_filename_with_spaces, "temp with space.aln", None),
+    (temp_large_fasta_file, "temp_cw_prot.aln", None),
     ] :
-    input_records = SeqIO.to_dict(SeqIO.parse(open(input_file),"fasta"))
+    #Note that ClustalW will map ":" to "_" in it's output file
+    input_records = SeqIO.to_dict(SeqIO.parse(open(input_file),"fasta"),
+                                  lambda rec : rec.id.replace(":","_"))
     if os.path.isfile(output_file) :
         os.remove(output_file)
     print "Calling clustalw on %s (with %i records)" \
@@ -104,7 +183,7 @@ for input_file, output_file, newtree_file in [
     if newtree_file is not None :
         cline.set_new_guide_tree(newtree_file)
 
-    if sys.platform=="win32"  and sys.version_info[:2] < (2,4 ):
+    if sys.platform=="win32" and sys.version_info[:2] < (2,4 ):
         if " " in input_file or " " in output_file \
         or (newtree_file is not None and " " in newtree_file) :
             #This will fail on Python 2.3 ... cheat so the
@@ -139,6 +218,13 @@ for input_file, output_file, newtree_file in [
     os.remove(tree_file)
 
 #Clean up any stray temp files..
+if os.path.isfile("Fasta/f001.aln") :
+    os.remove("Fasta/f001.aln")
+if os.path.isfile("Medline/pubmed_result1.aln") :
+    os.remove("Medline/pubmed_result1.aln")
 if os.path.isfile(temp_filename_with_spaces) :   
     os.remove(temp_filename_with_spaces)
+if os.path.isfile(temp_large_fasta_file) :
+    os.remove(temp_large_fasta_file)
+
 print "Done"

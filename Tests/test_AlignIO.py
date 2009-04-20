@@ -5,6 +5,7 @@
 
 import os
 from StringIO import StringIO
+from Bio import SeqIO
 from Bio import AlignIO
 from Bio.Align.Generic import Alignment
 from Bio.Align import AlignInfo
@@ -46,6 +47,7 @@ test_files = [ \
     ("emboss", 2, 5, 'Emboss/needle.txt'),
     ("emboss", 2, 1, 'Emboss/needle_asis.txt'),
     ("emboss", 2, 1, 'Emboss/water.txt'),
+    ("emboss", 2, 1, 'Emboss/water2.txt'),
     ("fasta-m10", 2, 4, 'Fasta/output001.m10'),
     ("fasta-m10", 2, 6, 'Fasta/output002.m10'),
     ("fasta-m10", 2, 3, 'Fasta/output003.m10'),
@@ -180,6 +182,20 @@ for t_format in AlignIO._FormatToIterator :
      alignments = list(AlignIO.parse(handle, t_format))
      assert len(alignments) == 0
 
+#Check writers reject non-alignments
+list_of_records = list(AlignIO.read(open("Clustalw/opuntia.aln"),"clustal"))
+for t_format in list(AlignIO._FormatToWriter)+list(SeqIO._FormatToWriter) :
+    handle = StringIO()
+    try :
+        AlignIO.write([list_of_records], handle, t_format)
+        assert False, "Writing non-alignment to %s format should fail!" \
+            % t_format
+    except (TypeError, AttributeError, ValueError) :
+        pass
+    del handle
+del list_of_records, t_format
+
+#Main tests...
 for (t_format, t_per, t_count, t_filename) in test_files :
     print "Testing reading %s format file %s with %i alignments" \
           % (t_format, t_filename, t_count)

@@ -1,4 +1,4 @@
-# Copyright 2007, 2008 by Peter Cock.  All rights reserved.
+# Copyright 2007-2009 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -25,6 +25,7 @@ DDBJ (DNA Data Bank of Japan)
 http://www.ddbj.nig.ac.jp/
 """
 
+from Bio.Seq import UnknownSeq
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner
 from Bio import Alphabet
 from Interfaces import SequentialSequenceWriter
@@ -232,6 +233,11 @@ class GenBankWriter(SequentialSequenceWriter) :
         LETTERS_PER_LINE = 60
         SEQUENCE_INDENT = 9
 
+        if isinstance(record.seq, UnknownSeq) :
+            #We have already recorded the length, and there is no need
+            #to record a long sequence of NNNNNNN...NNN or whatever.
+            return
+
         data = self._get_seq_string(record) #Catches sequence being None
         seq_len = len(data)
         for line_number in range(0,seq_len,LETTERS_PER_LINE):
@@ -290,10 +296,19 @@ class GenBankWriter(SequentialSequenceWriter) :
 
         #TODO - References...
         handle.write("FEATURES             Location/Qualifiers\n")
-        #TODO - Features...
+        for feature in record.features :
+            self._write_feature(feature) 
         handle.write("ORIGIN\n")
         self._write_sequence(record)
         handle.write("//\n")
+
+    def _write_feature(self, feature):
+        """Write a single SeqFeature object to features table.
+
+        Not implemented yet, but this stub exists in the short term to
+        facilitate working on writing GenBank files with a sub-class."""
+        #TODO - Features...
+        pass
 
 if __name__ == "__main__" :
     print "Quick self test"
