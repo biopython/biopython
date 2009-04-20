@@ -6236,6 +6236,7 @@ methods to add the features.  Secondly, you can create the individual objects
 separately (in whatever order suits your code), and them combine them.
 
 \subsection{A top down example}
+\label{sec:gd_top_down}
 
 We're going to draw a whole genome from a \verb|SeqRecord| object read in from
 a GenBank file (see Chapter~\ref{chapter:Bio.SeqIO}).  This example uses the
@@ -6283,8 +6284,8 @@ ReportLab objects.  Then we call the \verb|write| method which renders these
 to the requested file format.  Note you can output in multiple file formats:
 
 \begin{verbatim}
-gd_diagram.draw(format="linear", orientation="landscape",
-     tracklines=0, pagesize='A4', fragments=6)
+gd_diagram.draw(format="linear", orientation="landscape", pagesize='A4',
+                fragments=4, start=0, end=len(record))
 gd_diagram.write("plasmid_linear.pdf", "PDF")
 gd_diagram.write("plasmid_linear.eps", "EPS")
 gd_diagram.write("plasmid_linear.svg", "SVG")
@@ -6299,7 +6300,7 @@ gd_diagram.write("plasmid_linear.png", "PNG")
 
 \begin{htmlonly}
 %The blank line below is important to start a new paragraph
-\imgsrc[width=650, height=400]{images/plasmid_linear.png}
+\imgsrc[width=550, height=400]{images/plasmid_linear.png}
 
 \end{htmlonly}
 \begin{latexonly}
@@ -6311,15 +6312,15 @@ The expected output is shown in Figure~\ref{fig:plasmid_linear}.
 \label{fig:plasmid_linear}
 \end{figure}
 \end{latexonly}
-Notice that the \verb|fragments| argument which we set to six controls how
+Notice that the \verb|fragments| argument which we set to four controls how
 many pieces the genome gets broken up into.
 
 If you want to do a circular figure, then try this:
 
 \begin{verbatim}
 gd_diagram.move_track(1,3) # move track to make an empty space in the middle
-gd_diagram.draw(format="circular", tracklines=False,
-         pagesize=(20*cm,20*cm), circular=True)
+gd_diagram.draw(format="circular", circular=True, pagesize=(20*cm,20*cm),
+                start=0, end=len(record))
 gd_diagram.write("plasmid_circular.pdf", "PDF")
 \end{verbatim}
 
@@ -6377,9 +6378,8 @@ You can now call the \verb|draw| and \verb|write| methods as before to produce
 a linear or circular diagram, using the code at the end of the top-down example
 above.  The figures should be identical.
 
-
 \subsection{Features without a SeqFeature}
-\label{sec:gb_features_without_seqfeatures}
+\label{sec:gd_features_without_seqfeatures}
 
 In the above example we used a \verb|SeqRecord|'s \verb|SeqFeature| objects
 to build our diagram.  Sometimes you won't have \verb|SeqFeature| objects,
@@ -6412,8 +6412,8 @@ gds_features.add_feature(feature, name="Standless", label=True)
 feature = SeqFeature(FeatureLocation(275, 375), strand=-1)
 gds_features.add_feature(feature, name="Reverse", label=True)
 
-gdd.draw(format='linear', tracklines=False,
-         pagesize=(15*cm,4*cm), fragments=1, start=0, end=400)
+gdd.draw(format='linear', pagesize=(15*cm,4*cm), fragments=1,
+         start=0, end=400)
 gdd.write("GD_labels_default.pdf", "pdf")
 \end{verbatim}
 
@@ -6429,7 +6429,7 @@ Notice that we have used the \texttt{name} argument here to specify the
 caption text for these features.  This is discussed in more detail next.
 
 \subsection{Feature captions}
-\label{sec:gb_feature_captions}
+\label{sec:gd_feature_captions}
 
 Recall we used the following (where \texttt{feature} was a
 \verb|SeqFeature| object) to add a feature to the diagram:
@@ -6451,7 +6451,7 @@ gd_feature_set.add_feature(feature, color=color, label=True, name="My Gene")
 In addition to the caption text for each feature's label, you can also choose
 the font, position (this defaults to the start of the sigil, you can also
 choose the middle or at the end) and orientation (for linear diagrams only,
-this defaults to rotated by $45\deg$):
+this defaults to rotated by $45$ degrees:
 
 \begin{verbatim}
 #Large font, parallel with the track
@@ -6486,20 +6486,23 @@ the tracks in Figure~\ref{fig:gd_sigil_labels}.
 \includegraphics[width=0.8\textwidth]{images/GD_sigil_labels.png}
 \caption{Simple GenomeDiagram showing label options.
 The top plot in pale green shows the default label settings (see
-Section~\ref{sec:gb_features_without_seqfeatures}) while the rest show
+Section~\ref{sec:gd_features_without_seqfeatures}) while the rest show
 variations in the label size, position and orientation (see
-Section~\ref{sec:gb_feature_captions}).
+Section~\ref{sec:gd_feature_captions}).
 }
 \label{fig:gd_sigil_labels}
 \end{figure}
 \end{latexonly}
+
+We've not shown it here, but you can also set \texttt{label\_color} to
+control the label's color (used in Section~\ref{sec:gd_nice_example}).
 
 You'll notice the default font is quite small - this makes sense because
 you will usually be drawing many (small) features on a page, not just a
 few large ones as shown here.
 
 \subsection{Feature sigils}
-\label{sec:gb_arrow_sigils}
+\label{sec:gd_arrow_sigils}
 
 The examples above have all just used the default sigil for the feature, a
 plain box, but you can also use \emph{arrows} instead.  Note this wasn't
@@ -6554,7 +6557,7 @@ gd_feature_set.add_feature(feature, sigil="ARROW", color="darkgreen",
 \centering
 \includegraphics[width=0.8\textwidth]{images/GD_sigil_arrow_shafts.png}
 \caption{Simple GenomeDiagram showing arrow shaft options
-(see Section~\ref{sec:gb_arrow_sigils})}
+(see Section~\ref{sec:gd_arrow_sigils})}
 \label{fig:gd_sigil_arrow_shafts}
 \end{figure}
 \end{latexonly}
@@ -6586,8 +6589,81 @@ gd_feature_set.add_feature(feature, sigil="ARROW", color="red",
 \centering
 \includegraphics[width=0.8\textwidth]{images/GD_sigil_arrow_heads.png}
 \caption{Simple GenomeDiagram showing arrow head options
-(see Section~\ref{sec:gb_arrow_sigils})}
+(see Section~\ref{sec:gd_arrow_sigils})}
 \label{fig:gd_sigil_arrow_heads}
+\end{figure}
+\end{latexonly}
+
+\subsection{A nice example}
+\label{sec:gd_nice_example}
+
+Now let's return to the pPCP1 plasmid from \textit{Yersinia pestis biovar
+Microtus}, and the top down approach used in Section~\ref{sec:gd_top_down},
+but take advantage of the sigil options we've now discussed.  This time
+we'll use arrows for the genes, and overlay them with strandless features
+(as plain boxes) showing the position of some restriction digest sites.
+
+\begin{verbatim}
+from reportlab.lib import colors
+from Bio.Graphics import GenomeDiagram
+from Bio import SeqIO
+from Bio.SeqFeature import SeqFeature, FeatureLocation
+
+record = SeqIO.read(open("NC_005816.gb"), "genbank")
+
+gd_diagram = GenomeDiagram.Diagram("Yersinia pestis biovar Microtus plasmid pPCP1")
+gd_track_for_features = gd_diagram.new_track(1, name="Annotated Features")
+gd_feature_set = gd_track_for_features.new_set()
+
+for feature in record.features:
+    if feature.type != "gene" :
+        #Exclude this feature
+        continue
+    if len(gd_feature_set) % 2 == 0 :
+        color = colors.blue
+    else :
+        color = colors.lightblue
+    gd_feature_set.add_feature(feature, sigil="ARROW",
+                               color=color, label=True,
+                               label_size = 14, label_angle=0)
+
+#I want to include some strandless features, so for an example
+#will use EcoRI recognition sites etc.
+for site, name, color in [("GAATTC","EcoRI",colors.green),
+                          ("CCCGGG","SmaI",colors.orange),
+                          ("AAGCTT","HindIII",colors.red),
+                          ("GGATCC","BamHI",colors.purple)] :
+    index = 0
+    while True :
+        index  = record.seq.find(site, start=index)
+        if index == -1 : break
+        feature = SeqFeature(FeatureLocation(index, index+len(site)))
+        gd_feature_set.add_feature(feature, color=color, name=name,
+                                   label=True, label_size = 10,
+                                   label_color=color)
+        index += len(site)
+
+gd_diagram.draw(format="linear", pagesize='A4', fragments=4,
+                start=0, end=len(record))
+gd_diagram.write("plasmid_linear_nice.pdf", "PDF")
+gd_diagram.write("plasmid_linear_nice.eps", "EPS")
+gd_diagram.write("plasmid_linear_nice.svg", "SVG")
+\end{verbatim}
+
+\begin{htmlonly}
+\noindent And the output:
+
+\imgsrc[width=550, height=400]{images/plasmid_linear_nice.png}
+
+\end{htmlonly}
+\begin{latexonly}
+\noindent The expected output is shown in Figure~\ref{fig:plasmid_linear_nice}.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{images/plasmid_linear_nice.png}
+\caption{Linear diagram for \textit{Yersinia pestis biovar Microtus} plasmid
+pPCP1 showing selected restriction digest sites.}
+\label{fig:plasmid_linear_nice}
 \end{figure}
 \end{latexonly}
 
