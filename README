@@ -26,24 +26,21 @@ python setup.py install
 **System Requirements**
 
 o "Python 2.3, 2.4, 2.5 or 2.6":http://www.python.org/
-  Note that support for Python 2.3 is likely to be dropped in a few
-  releases time.  Given that Python 2.6 is still very new, it would be
-  prudent to opt for Python 2.5 or 2.4 at this time.
+  Note that Biopython 1.50 is expected to the our final release to support
+  Python 2.3.  Given that Python 2.6 is still very new, it would be prudent
+  to opt for Python 2.5 or 2.4 at this time.
 
 o "NumPy":http://numpy.scipy.org/ (optional, but strongly recommended)
   This package is only used in the computationally-oriented modules.
-  It is required for Bio.Cluster and a few other modules.  If you
-  think you might need these modules, then please install NumPy
-  first. Also, please install if you are seeing
-  error messages such as:
-  ImportError: No module named numpy
-  Please note that this is the current NumPy distribution. The older
-  Numeric library is no longer supported in Biopython.
+  It is required for Bio.Cluster, Bio.PDB and a few other modules.  If you
+  think you might need these modules, then please install NumPy first BEFORE
+  installing Biopython. The older Numeric library is no longer supported in
+  Biopython.
 
 o "ReportLab":http://www.reportlab.org/downloads.html (optional)
-  This package is used in some code that generates graphical displays
-  of chromosomes.  If you do not need this functionality, you will not
-  need to install this package.
+  This package is only used in Bio.Graphics, so if you do not need this
+  functionality, you will not need to install this package.  You can install
+  it later if needed.
 
 o "psycopg":http://initd.org/software/psycopg/ (optional) or
   "pgdb":http://www.druid.net/pygresql/ (optional)
@@ -67,8 +64,9 @@ install such as standalone NCBI BLAST or ClustalW.
 Installation should be as simple as going to the biopython source code
 directory, and typing:
 
-	'python setup.py install'
-
+	'python setup.py build'
+	'python setup.py test'
+	'sudo python setup.py install'
 
 If you need to do additional configuration, e.g. changing the base
 directory, please type 'python setup.py', or see the documentation for
@@ -77,9 +75,9 @@ Distutils.
 
 **Testing**
 
-Biopython includes a suite of regression tests to check if 
-everything is running correctly.  To do the tests, go to the
-biopython source code directory and type:
+Biopython includes a suite of regression tests to check if everything is
+running correctly.  To do the tests, go to the biopython source code directory
+and type:
 
 	'python setup.py test'
 
@@ -103,7 +101,7 @@ to see if it has already been reported (and hopefully fixed).
 If you suspect the problem lies within a parser, it is likely that the
 data format has changed and broken the parsing code.  (The BLAST and
 GenBank formats seem to be particularly fragile.)  Thus, the parsing
-code in Biopython is updated faster than we can build Biopython
+code in Biopython is sometimes updated faster than we can build Biopython
 releases.  You can get the most recent parser by pulling the relevant
 files (e.g. the ones in Bio.SeqIO or Bio.Blast) out of 
 "anonymous cvs":http://cvs.biopython.org/ .
