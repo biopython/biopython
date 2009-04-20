@@ -199,6 +199,15 @@ and HTML formats
   The correct capitalization is ``Biopython'', not ``BioPython'' (even though
   that would have matched BioPerl, BioJava and BioRuby).
 
+  \item \emph{Where is the latest version of this document?}\\
+  If you download a Biopython source code archive, it will include the
+  relevant version in both HTML and PDF formats.  The latest published
+  version of this document is online at:
+  \begin{itemize}
+  \item \url{http://biopython.org/DIST/docs/tutorial/Tutorial.html}
+  \item \url{http://biopython.org/DIST/docs/tutorial/Tutorial.pdf}
+  \end{itemize}
+  
   \item \emph{Which ``Numerical Python'' do I need?} \\
   For Biopython 1.48 or earlier, you need the old Numeric module.
   For Biopython 1.49 onwards, you need the newer NumPy instead.
@@ -218,7 +227,7 @@ and HTML formats
   You need Biopython 1.46 or later.
 
   \item \emph{What file formats do} \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{read and write?} \\
-  See \url{http://biopython.org/wiki/SeqIO} and \url{http://biopython.org/wiki/AlignIO} on the wiki for the latest listing.
+  Check the built in docstrings (\texttt{from Bio import SeqIO}, then \texttt{help(SeqIO)}), or see \url{http://biopython.org/wiki/SeqIO} and \url{http://biopython.org/wiki/AlignIO} on the wiki for the latest listing.
   
   \item \emph{Why don't the } \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{input functions let me provide a sequence alphabet?} \\
   You need Biopython 1.49 or later.
@@ -6595,7 +6604,7 @@ gd_feature_set.add_feature(feature, sigil="ARROW", color="red",
 \end{latexonly}
 
 \subsection{A nice example}
-\label{sec:gd_nice_example}
+
 
 Now let's return to the pPCP1 plasmid from \textit{Yersinia pestis biovar
 Microtus}, and the top down approach used in Section~\ref{sec:gd_top_down},
@@ -6662,10 +6671,27 @@ gd_diagram.write("plasmid_linear_nice.svg", "SVG")
 \centering
 \includegraphics[width=0.8\textwidth]{images/plasmid_linear_nice.png}
 \caption{Linear diagram for \textit{Yersinia pestis biovar Microtus} plasmid
-pPCP1 showing selected restriction digest sites.}
+pPCP1 showing selected restriction digest sites (see
+Section~\ref{sec:gd_nice_example}).}
 \label{fig:plasmid_linear_nice}
 \end{figure}
 \end{latexonly}
+
+\subsection{Further options}
+
+All the examples so far have used a single track, but you can have more than
+one track -- for example show the genes on one, and repeat regions on another.
+You can also enable tick marks to show the scale -- after all every graph
+should show its units.
+
+Also, we have only used the \verb|FeatureSet| so far. GenomeDiagram also has
+a \verb|GraphSet| which can be used for show line graphs, bar charts and heat
+plots (e.g. to show plots of GC\% on a track parallel to the features).
+
+These options are not covered here yet, so for now we refer you to the
+\href{http://bioinf.scri.ac.uk/lp/downloads/programs/genomediagram/userguide.pdf}
+{User Guide (PDF)} included with the standalone version of GenomeDiagram (but
+please read the next section first), and the docstrings.
 
 \subsection{Converting old code}
 
