@@ -3,11 +3,13 @@ News for the Biopython Project
 
 This file contains release notes and general news about the Biopython
 project.  See also the DEPRECATED file which tracks the removal of
-obsolete modules or functions.
+obsolete modules or functions, and http://biopython.org/wiki/News online.
 
 The latest news is at the top.
 
 ===================================================================
+
+April 20, 2008: Biopython 1.50 released.
 
 See the notes below for the Biopython 1.50 beta release for more details,
 but the highlights are:
@@ -21,7 +23,12 @@ but the highlights are:
 
 Since the 1.50 beta release:
 * The NCBI's Entrez EFetch no longer supports rettype="genbank"
+  and "gb" (or "gp") should be used instead.
+* Bio.SeqIO now supports "gb" as an alias for "genbank".
+* The Seq object now has string-like startswith and endswith methods
+* Bio.Blast.NCBIXML now has a read function for single record files
 * A few more unit tests were added
+* More documentation
 
 ===================================================================
 
