@@ -167,46 +167,16 @@ class Feature:
         self.locations = []
         bounds = []
         if self._feature.sub_features == []:
-            if '^' in str(self._feature.location._start):
-                self.hide = 1       # The GenBank parser doesn't behave properly, so don't show the feature
-                #print self._feature.location, dir(self._feature.location)
-                start, end = str(self._feature.location._start).split('^')
-            else:
-                start = str(self._feature.location._start)  # Feature start
-                end = str(self._feature.location._end)      # Feature end
-            while start[0] not in string.digits:        # Remove extraneous leading chars
-                #print start
-                start = start[1:]
-            while end[0] not in string.digits:
-                #print end
-                end = end[1:]
-            while end[-1] not in string.digits:
-                #print end
-                end = end[:-1]
-            start, end = int(start), int(end)
+            start = self._feature.location.nofuzzy_start
+            end = self._feature.location.nofuzzy_end
             #if start > end and self.strand == -1:
             #    start, end = end, start
             self.locations.append((start, end))
             bounds += [start, end]
         else:
             for subfeature in self._feature.sub_features:
-                if '^' in str(subfeature.location._start):                    
-                    self.hide = 1
-                    start, end = str(subfeature.location._start).split('^')
-                else:
-                    start = str(subfeature.location._start)  # Feature start
-                    end = str(subfeature.location._end)      # Feature end
-                while start[0] not in string.digits:        # Remove extraneous leading chars
-                    #print start
-                    start = start[1:]
-                while end[0] not in string.digits:
-                    #print end
-                    end = end[1:]
-                try:
-                    start, end = int(start), int(end)
-                except:
-                    #print start, end
-                    sys.exit(1)
+                start = self._feature.location.nofuzzy_start
+                end = self._feature.location.nofuzzy_end
                 #if start > end and self.strand == -1:
                 #    start, end = end, start
                 self.locations.append((start, end))                

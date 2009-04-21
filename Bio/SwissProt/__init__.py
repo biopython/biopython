@@ -310,13 +310,14 @@ def _read_dt(record, line):
         # integer versioned
         else:
             version = int(str_version)
+        date = cols[0]
 
         if 'CREATED' in uprline:
-            record.created = cols[1], version
+            record.created = date, version
         elif 'LAST SEQUENCE UPDATE' in uprline:
-            record.sequence_update = cols[1], version
+            record.sequence_update = date, version
         elif 'LAST ANNOTATION UPDATE' in uprline:
-            record.annotation_update = cols[1], version
+            record.annotation_update = date, version
         else:
             assert False, "Shouldn't reach this line!"
     elif 'INTEGRATED INTO' in uprline \
@@ -346,15 +347,16 @@ def _read_dt(record, line):
             version = int(cols[-1])
         except ValueError :
             version = 0
+        date = cols[0].rstrip(",")
 
         # Re-use the historical property names, even though
         # the meaning has changed slighty:
         if "INTEGRATED"  in uprline:
-            record.created = cols[1], version
+            record.created = date, version
         elif 'SEQUENCE VERSION' in uprline:
-            record.sequence_update = cols[1], version
+            record.sequence_update = date, version
         elif 'ENTRY VERSION' in uprline:
-            record.annotation_update = cols[1], version
+            record.annotation_update = date, version
         else:
             assert False, "Shouldn't reach this line!"
     else:

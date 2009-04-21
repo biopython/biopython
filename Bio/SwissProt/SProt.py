@@ -1034,7 +1034,7 @@ class _SequenceConsumer(AbstractConsumer):
             
                     
     def date(self, line):
-        date_str = line.split()[0]
+        date_str = line.split()[1]
         uprline = line.upper()
         if uprline.find('CREATED') >= 0 :
             #Try and agree with SeqRecord convention from the GenBank parser,
@@ -1046,6 +1046,12 @@ class _SequenceConsumer(AbstractConsumer):
         elif uprline.find('LAST ANNOTATION UPDATE') >= 0:
             #There is no existing convention from the GenBank SeqRecord parser
             self.data.annotations['date_last_annotation_update'] = date_str
+        elif uprline.find('INTEGRATED INTO') >= 0:
+            self.data.annotations['date'] = date_str.rstrip(",")
+        elif uprline.find('SEQUENCE VERSION') >= 0:
+            self.data.annotations['date_last_sequence_update'] = date_str.rstrip(",")
+        elif uprline.find('ENTRY VERSION') >= 0:
+            self.data.annotations['date_last_annotation_update'] = date_str.rstrip(",")
 
     def keyword(self, line):
         #Try and agree with SeqRecord convention from the GenBank parser,

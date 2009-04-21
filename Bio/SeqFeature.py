@@ -247,47 +247,45 @@ class FeatureLocation:
         return FeatureLocation(start = self._start._shift(offset),
                                end = self._end._shift(offset))
 
-    def __getattr__(self, attr):
-        """Make it easy to get non-fuzzy starts and ends.
+    start = property(fget= lambda self : self._start,
+                     doc="Start location (possibly a fuzzy position).")
 
-        We override get_attribute here so that in non-fuzzy cases we
-        can just return the start and end position without any hassle.
+    end = property(fget= lambda self : self._end,
+                   doc="End location (possibly a fuzzy position).")
 
-        To get fuzzy start and ends, just ask for item.start and
-        item.end. To get non-fuzzy attributes (ie. the position only)
-        ask for 'item.nofuzzy_start', 'item.nofuzzy_end'. These should return
+    def _get_nofuzzy_start(self) :
+        #TODO - Do we still use the BetweenPosition class?
+        if ((self._start == self._end) and isinstance(self._start,
+             BetweenPosition)):
+            return self._start.position
+        else:
+            return min(self._start.position,
+                       self._start.position + self._start.extension)
+    nofuzzy_start = property(fget=_get_nofuzzy_start,
+        doc="""Start position (integer, approximated if fuzzy).
+
+        To get non-fuzzy attributes (ie. the position only) ask for
+        'location.nofuzzy_start', 'location.nofuzzy_end'. These should return
         the largest range of the fuzzy position. So something like:
         (10.20)..(30.40) should return 10 for start, and 40 for end.
+        """)
 
-        The special tricky case where is when we have a single between position
-        argument like 2^3 for the range. We want nofuzzy_start and nofuzzy_end
-        to give a reasonable approximation of what this really means, which
-        is an empty string -- so the same position for both. Doing a special
-        case here sucks, but there is really not a general rule you can apply
-        to this.
-        """
-        #TODO - these are not currently implemented as properties, this means
-        #they do not show up via dir(...)
-        if attr == 'start':
-            return self._start
-        elif attr == 'end':
-            return self._end
-        elif attr == 'nofuzzy_start':
-            if ((self._start == self._end) and isinstance(self._start,
-                 BetweenPosition)):
-                return self._start.position
-            else:
-                return min(self._start.position,
-                           self._start.position + self._start.extension)
-        elif attr == 'nofuzzy_end':
-            if ((self._start == self._end) and isinstance(self._start,
-                 BetweenPosition)):
-                return self._end.position
-            else:
-                return max(self._end.position,
-                           self._end.position + self._end.extension)
+    def _get_nofuzzy_end(self) :
+        #TODO - Do we still use the BetweenPosition class?
+        if ((self._start == self._end) and isinstance(self._start,
+             BetweenPosition)):
+            return self._end.position
         else:
-            raise AttributeError("Cannot evaluate attribute %s." % attr)
+            return max(self._end.position,
+                       self._end.position + self._end.extension)
+    nofuzzy_end = property(fget=_get_nofuzzy_end,
+        doc="""End position (integer, approximated if fuzzy).
+
+        To get non-fuzzy attributes (ie. the position only) ask for
+        'location.nofuzzy_start', 'location.nofuzzy_end'. These should return
+        the largest range of the fuzzy position. So something like:
+        (10.20)..(30.40) should return 10 for start, and 40 for end.
+        """)
 
 class AbstractPosition:
     """Abstract base class representing a position.
