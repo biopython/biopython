@@ -1,0 +1,490 @@
+ID   AE017046; SV 1; circular; genomic DNA; STD; PRO; 9609 BP.
+XX
+AC   AE017046;
+XX
+DT   12-MAR-2004 (Rel. 79, Created)
+DT   14-NOV-2006 (Rel. 89, Last updated, Version 5)
+XX
+DE   Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete
+DE   sequence.
+XX
+KW   .
+XX
+OS   Yersinia pestis biovar Microtus str. 91001
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacteriales;
+OC   Enterobacteriaceae; Yersinia.
+OG   Plasmid pPCP1
+XX
+RN   [1]
+RP   1-9609
+RX   DOI; 10.1093/dnares/11.3.179.
+RX   PUBMED; 15368893.
+RA   Song Y., Tong Z., Wang J., Wang L., Guo Z., Han Y., Zhang J., Pei D.,
+RA   Zhou D., Qin H., Pang X., Han Y., Zhai J., Li M., Cui B., Qi Z., Jin L.,
+RA   Dai R., Chen F., Li S., Ye C., Du Z., Lin W., Wang J., Yu J., Yang H.,
+RA   Wang J., Huang P., Yang R.;
+RT   "Complete genome sequence of Yersinia pestis strain 91001, an isolate
+RT   avirulent to humans";
+RL   DNA Res. 11(3):179-197(2004).
+XX
+RN   [2]
+RP   1-9609
+RX   DOI; 10.1128/JB.186.15.5147-5152.2004.
+RX   PUBMED; 15262951.
+RA   Zhou D., Tong Z., Song Y., Han Y., Pei D., Pang X., Zhai J., Li M., Cui B.,
+RA   Qi Z., Jin L., Dai R., Du Z., Wang J., Guo Z., Wang J., Huang P., Yang R.;
+RT   "Genetics of metabolic variations between Yersinia pestis biovars and the
+RT   proposal of a new biovar, microtus";
+RL   J. Bacteriol. 186(15):5147-5152(2004).
+XX
+RN   [3]
+RP   1-9609
+RA   Song Y., Tong Z., Wang L., Han Y., Zhang J., Pei D., Wang J., Zhou D.,
+RA   Han Y., Pang X., Zhai J., Chen F., Qin H., Wang J., Li S., Guo Z., Ye C.,
+RA   Du Z., Lin W., Wang J., Yu J., Yang H., Wang J., Huang P., Yang R.;
+RT   ;
+RL   Submitted (24-APR-2003) to the EMBL/GenBank/DDBJ databases.
+RL   The Institute of Microbiology and Epidemiology, Academy of Military Medical
+RL   Sciences, No. 20, Dongdajie Street, Fengtai District, Beijing 100071,
+RL   People's Republic of China
+XX
+DR   GR; AE017046_GR.
+DR   RFAM; RF00106; RNAI.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..9609
+FT                   /organism="Yersinia pestis biovar Microtus str. 91001"
+FT                   /plasmid="pPCP1"
+FT                   /strain="91001"
+FT                   /mol_type="genomic DNA"
+FT                   /note="biovar: Microtus"
+FT                   /db_xref="taxon:229193"
+FT   repeat_region   1..1954
+FT                   /mobile_element="insertion sequence:IS100"
+FT   gene            87..1109
+FT                   /locus_tag="YP_pPCP01"
+FT                   /old_locus_tag="pPCP01"
+FT   CDS             87..1109
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /locus_tag="YP_pPCP01"
+FT                   /old_locus_tag="pPCP01"
+FT                   /product="putative transposase"
+FT                   /note="similar to corresponding CDS from previously
+FT                   sequenced pPCP plasmid of Yersinia pestis KIM (AF053945)
+FT                   and CO92 (AL109969), also many transposase entries for
+FT                   insertion sequence IS100 of Yersinia pestis. Contains
+FT                   IS21-like element transposase, HTH domain
+FT                   (Interpro|IPR007101)"
+FT                   /db_xref="GOA:Q7ARN5"
+FT                   /db_xref="InterPro:IPR017894"
+FT                   /db_xref="UniProtKB/TrEMBL:Q7ARN5"
+FT                   /protein_id="AAS58758.1"
+FT                   /translation="MVTFETVMEIKILHKQGMSSRAIARELGISRNTVKRYLQAKSEPP
+FT                   KYTPRPAVASLLDEYRDYIRQRIADAHPYKIPATVIAREIRDQGYRGGMTILRAFIRSL
+FT                   SVPQEQEPAVRFETEPGRQMQVDWGTMRNGRSPLHVFVAVLGYSRMLYIEFTDNMRYDT
+FT                   LETCHRNAFRFFGGVPREVLYDNMKTVVLQRDAYQTGQHRFHPSLWQFGKEMGFSPRLC
+FT                   RPFRAQTKGKVERMVQYTRNSFYIPLMTRLRPMGITVDVETANRHGLRWLHDVANQRKH
+FT                   ETIQARPCDRWLEEQQSMLALPPEKKEYDVHLDENLVNFDKHPLHHPLSIYDSFCRGVA
+FT                   "
+FT   gene            1106..1888
+FT                   /locus_tag="YP_pPCP02"
+FT                   /old_locus_tag="pPCP02"
+FT   CDS             1106..1888
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /locus_tag="YP_pPCP02"
+FT                   /old_locus_tag="pPCP02"
+FT                   /product="putative ATP-binding protein"
+FT                   /note="similar to corresponding CDS form previously
+FT                   sequenced pPCP plasmid of Yersinia pestis KIM (AF053945)
+FT                   and CO92 (AL109969), also many ATP-binding protein entries
+FT                   for insertion sequence IS100 of Yersinia pestis. Contains
+FT                   Chaperonin clpA/B (Interpro|IPR001270). Contains
+FT                   ATP/GTP-binding site motif A (P-loop) (Interpro|IPR001687,
+FT                   Molecular Function: ATP binding (GO:0005524)). Contains
+FT                   Bacterial chromosomal replication initiator protein, DnaA
+FT                   (Interpro|IPR001957, Molecular Function: DNA binding
+FT                   (GO:0003677), Molecular Function: DNA replication origin
+FT                   binding (GO:0003688), Molecular Function: ATP binding
+FT                   (GO:0005524), Biological Process: DNA replication
+FT                   initiation (GO:0006270), Biological Process: regulation of
+FT                   DNA replication (GO:0006275)). Contains AAA ATPase
+FT                   (Interpro|IPR003593, Molecular Function: nucleotide binding
+FT                   (GO:0000166))"
+FT                   /db_xref="GOA:Q7ARK4"
+FT                   /db_xref="InterPro:IPR003593"
+FT                   /db_xref="UniProtKB/TrEMBL:Q7ARK4"
+FT                   /protein_id="AAS58759.1"
+FT                   /translation="MMMELQHQRLMALAGQLQLESLISAAPALSQQAVDQEWSYMDFLE
+FT                   HLLHEEKLARHQRKQAMYTRMAAFPAVKTFEEYDFTFATGAPQKQLQSLRSLSFIERNE
+FT                   NIVLLGPSGVGKTHLAIAMGYEAVRAGIKVRFTTAADLLLQLSTAQRQGRYKTTLQRGV
+FT                   MAPRLLIIDEIGYLPFSQEEAKLFFQVIAKRYEKSAMILTSNLPFGQWDQTFAGDAALT
+FT                   SAMLDRILHHSHVVQIKGESYRLRQKRKAGVIAEANPE"
+FT   gene            2925..3119
+FT                   /gene="rop"
+FT                   /locus_tag="YP_pPCP03"
+FT                   /old_locus_tag="pPCP03"
+FT                   /note="synonym: rom"
+FT   CDS             2925..3119
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /gene="rop"
+FT                   /locus_tag="YP_pPCP03"
+FT                   /old_locus_tag="pPCP03"
+FT                   /product="putative replication regulatory protein"
+FT                   /note="Best Blastp hit =gi|16082682|ref|NP_395229.1|
+FT                   (NC_003132) putative replication regulatory protein
+FT                   [Yersinia pestis], gi|5763813|emb|CAB531 66.1| (AL109969)
+FT                   putative replication regulatory protein [Yersinia pestis];
+FT                   similar to gb|AAK91579.1| (AY048853), RNAI modulator
+FT                   protein Rom [Salmonella choleraesuis], Contains Regulatory
+FT                   protein Rop (Interpro|IPR000769)"
+FT                   /db_xref="HSSP:1ROP"
+FT                   /db_xref="InterPro:IPR000769"
+FT                   /db_xref="UniProtKB/TrEMBL:Q9S1E1"
+FT                   /protein_id="AAS58760.1"
+FT                   /translation="MNKQQQTALNMARFIRSQSLILLEKLDALDADEQAAMCERLHELA
+FT                   EELQNSIQARFEAESETGT"
+FT   gene            3486..3857
+FT                   /locus_tag="YP_pPCP04"
+FT                   /old_locus_tag="pPCP04"
+FT   CDS             3486..3857
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /locus_tag="YP_pPCP04"
+FT                   /old_locus_tag="pPCP04"
+FT                   /product="conserved hypothetical protein"
+FT                   /note="Best Blastp hit = gi|321919|pir||JQ1541 hypothetical
+FT                   16.9K protein - Salmonella typhi murium plasmid NTP16."
+FT                   /db_xref="UniProtKB/TrEMBL:Q74YE8"
+FT                   /protein_id="AAS58761.1"
+FT                   /translation="MSKKRRPQKRPRRRRFFHRLRPPDEHHKNRRSSQRWRNPTGLKDT
+FT                   RRFPPEAPSCALLFRPCRLPDTSPPFSLREAWRFLIAHAVGISVRCRSFAPSWAVCTNP
+FT                   PFSPTTAPYPVTIVLSPTR"
+FT   misc_feature    3498..3626
+FT                   /locus_tag="YP_pPCP04"
+FT                   /old_locus_tag="pPCP04"
+FT                   /note="ProfileScan match to entry PS50323 ARG_RICH, E-value
+FT                   8.981"
+FT   gene            4343..4780
+FT                   /gene="pim"
+FT                   /locus_tag="YP_pPCP05"
+FT                   /old_locus_tag="pPCP05"
+FT   CDS             4343..4780
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /gene="pim"
+FT                   /locus_tag="YP_pPCP05"
+FT                   /old_locus_tag="pPCP05"
+FT                   /product="pesticin immunity protein"
+FT                   /note="similar to many previously sequenced pesticin
+FT                   immunity protein entries of Yersinia pestis plasmid pPCP,
+FT                   e.g. gi| 16082683|,ref|NP_395230.1| (NC_003132) ,
+FT                   gi|1200166|emb|CAA90861.1| (Z54145 ) , gi|1488655|
+FT                   emb|CAA63439.1| (X92856) , gi|2996219|gb|AAC62543.1|
+FT                   (AF053945) , and gi|5763814|emb|CAB531 67.1| (AL109969)"
+FT                   /db_xref="UniProtKB/TrEMBL:Q74YE7"
+FT                   /protein_id="AAS58762.1"
+FT                   /translation="MGGGMISKLFCLALIFLSSSGLAEKNTYTAKDILQNLELNTFGNS
+FT                   LSHGIYGKQTTFKQTEFTNIKSNTKKHIALINKDNSWMISLKILGIKRDEYTVCFEDFS
+FT                   LIRPPTYVAIHPLLIKKVKSGNFIVVKEIKKSIPGCTVYYH"
+FT   gene            complement(4815..5888)
+FT                   /gene="pst"
+FT                   /locus_tag="YP_pPCP06"
+FT                   /old_locus_tag="pPCP06"
+FT   CDS             complement(4815..5888)
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /gene="pst"
+FT                   /locus_tag="YP_pPCP06"
+FT                   /old_locus_tag="pPCP06"
+FT                   /product="pesticin"
+FT                   /note="Best Blastp hit =|16082684|ref|NP_395231.1|
+FT                   (NC_003132) pesticin [Yersinia pestis],
+FT                   gi|984824|gb|AAA75369.1| (U31974) pesticin [Yersinia
+FT                   pestis], gi|1488654|emb|CAA63438.1| (X92856) pesticin
+FT                   [Yersinia pestis], gi|2996220|gb|AAC62544.1| (AF053945)
+FT                   pesticin [Yersinia pestis], gi|5763815|emb|CAB53168.1|
+FT                   (AL1099 69) pesticin [Yersinia pestis]"
+FT                   /db_xref="UniProtKB/TrEMBL:Q57159"
+FT                   /protein_id="AAS58763.1"
+FT                   /translation="MSDTMVVNGSGGVPAFLFSGSTLSSYRPNFEANSITIALPHYVDL
+FT                   PGRSNFKLMYIMGFPIDTEMEKDSEYSNKIRQESKISKTEGTVSYEQKITVETGQEKDG
+FT                   VKVYRVMVLEGTIAESIEHLDKKENEDILNNNRNRIVLADNTVINFDNISQLKEFLRRS
+FT                   VNIVDHDIFSSNGFEGFNPTSHFPSNPSSDYFNSTGVTFGSGVDLGQRSKQDLLNDGVP
+FT                   QYIADRLDGYYMLRGKEAYDKVRTAPLTLSDNEAHLLSNIYIDKFSHKIEGLFNDANIG
+FT                   LRFSDLPLRTRTALVSIGYQKGFKLSRTAPTVWNKVIAKDWNGLVNAFNNIVDGMSDRR
+FT                   KREGALVQKDIDSGLLK"
+FT   variation       5910..5911
+FT                   /replace=""
+FT                   /note="compared to AF053945"
+FT   variation       5933^5934
+FT                   /replace="a"
+FT                   /note="compared to AL109969"
+FT   variation       5933^5934
+FT                   /replace="aa"
+FT                   /note="compared to AF053945"
+FT   variation       5948
+FT                   /replace="c"
+FT                   /note="compared to AL109969"
+FT   gene            6005..6421
+FT                   /locus_tag="YP_pPCP07"
+FT                   /old_locus_tag="pPCP07"
+FT   CDS             6005..6421
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /locus_tag="YP_pPCP07"
+FT                   /old_locus_tag="pPCP07"
+FT                   /product="conserved hypothetical proteins"
+FT                   /note="Best Blastp hit = gi|16082685|ref|NP_395232.1|
+FT                   (NC_003132) hypothetical protein [Yersinia pestis],
+FT                   gi|5763816|emb|CAB53169.1| (AL109969) hypothetical protein
+FT                   [Yersinia pestis]"
+FT                   /db_xref="UniProtKB/TrEMBL:Q9S1E0"
+FT                   /protein_id="AAS58764.1"
+FT                   /translation="MKFHFCDLNHSYKNQEGKIRSRKTAPGNIRKKQKGDNVSKTKSGR
+FT                   HRLSKTDKRLLAALVVAGYEERTARDLIQKHVYTLTQADLRHLVSEISNGVGQSQAYDA
+FT                   IYQARRIRLARKYLSGKKPEGVEPREGQEREDLP"
+FT   variation       6525
+FT                   /replace="c"
+FT                   /note="compared to AF053945 and AL109969"
+FT   gene            6664..7602
+FT                   /gene="pla"
+FT                   /locus_tag="YP_pPCP08"
+FT                   /old_locus_tag="pPCP08"
+FT   CDS             6664..7602
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /gene="pla"
+FT                   /locus_tag="YP_pPCP08"
+FT                   /old_locus_tag="pPCP08"
+FT                   /product="plasminogen activator"
+FT                   /note="similar to many previosly sequenced
+FT                   coagulase/fibrinolysin precursor (plasminogen activator )
+FT                   of Yersinia pestis plasmid pPCP from difference strains,
+FT                   e.g. gi|16082686|ref|NP_395233.1| , gi|116897|sp|P17811|,
+FT                   gi|96995|pir||A30916 , gi|48630|emb|CAA33235.1| ( X15136),
+FT                   gi|2996221|gb|AAC62545.1| (AF053945),and
+FT                   gi|5763817|emb|CAB53170.1| (AL109969 ); The 279th aa is T
+FT                   (Thr) in reference entries, and in this sequence it is
+FT                   I(Ile). Contains Omptin serine protease
+FT                   (Interpro|IPR000036, Biological Process: proteolysis and
+FT                   peptidolysis (GO:0006508), Molecular Function: serine-type
+FT                   peptidase (GO:0008236), Cellular Component: external outer
+FT                   membrane (sensu Gram-negative Bacteria) (GO:0009279))"
+FT                   /db_xref="GOA:P17811"
+FT                   /db_xref="HSSP:1I78"
+FT                   /db_xref="InterPro:IPR001702"
+FT                   /db_xref="UniProtKB/Swiss-Prot:P17811"
+FT                   /protein_id="AAS58765.1"
+FT                   /translation="MKKSSIVATIITILSGSANAASSQLIPNISPDSFTVAASTGMLSG
+FT                   KSHEMLYDAETGRKISQLDWKIKNVAILKGDISWDPYSFLTLNARGWTSLASGSGNMDD
+FT                   YDWMNENQSEWTDHSSHPATNVNHANEYDLNVKGWLLQDENYKAGITAGYQETRFSWTA
+FT                   TGGSYSYNNGAYTGNFPKGVRVIGYNQRFSMPYIGLAGQYRINDFELNALFKFSDWVRA
+FT                   HDNDEHYMRDLTFREKTSGSRYYGTVINAGYYVTPNAKVFAEFTYSKYDEGKGGTQIID
+FT                   KNSGDSVSIGGDAAGISNKNYTVTAGLQYRF"
+FT   gene            complement(7789..8088)
+FT                   /locus_tag="YP_pPCP09"
+FT                   /old_locus_tag="pPCP09"
+FT   CDS             complement(7789..8088)
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /locus_tag="YP_pPCP09"
+FT                   /old_locus_tag="pPCP09"
+FT                   /product="putative transcriptional regulator"
+FT                   /note="Best Blastp hit = gi|16082687|ref|NP_395234.1|
+FT                   (NC_003132) putative transcriptional regulator [Yersinia
+FT                   pestis], gi|5763818|emb|CAB53171.1| (AL109969) putative
+FT                   transcriptional regulator [Yersinia pestis]."
+FT                   /db_xref="GOA:Q9S1D9"
+FT                   /db_xref="InterPro:IPR001387"
+FT                   /db_xref="UniProtKB/TrEMBL:Q9S1D9"
+FT                   /protein_id="AAS58766.1"
+FT                   /translation="MRTLDEVIASRSPESQTRIKEMADEMILEVGLQMMREELQLSQKQ
+FT                   VAEAMGISQPAVTKLEQRGNDLKLATLKRYVEAMGGKLSLDVELPTGRRVAFHV"
+FT   gene            complement(8088..8360)
+FT                   /locus_tag="YP_pPCP10"
+FT                   /old_locus_tag="pPCP10"
+FT   CDS             complement(8088..8360)
+FT                   /codon_start=1
+FT                   /transl_table=11
+FT                   /locus_tag="YP_pPCP10"
+FT                   /old_locus_tag="pPCP10"
+FT                   /product="conserved hypothetical protein"
+FT                   /note="Best Blastp hit = gi|16082688|ref|NP_395235.1|
+FT                   (NC_003132) hypothetical protein [ Yersinia pestis],
+FT                   gi|5763819|emb|CAB53172.1| (AL109969) hypothetical protein
+FT                   [Yersinia pestis]"
+FT                   /db_xref="UniProtKB/TrEMBL:Q74YE3"
+FT                   /protein_id="AAS58767.1"
+FT                   /translation="MADLKKLQVYGPELPRPYADTVKGSRYKNMKELRVQFSGRPIRAF
+FT                   YAFDPIRRAIVLCAGDKSNDKRFYEKLVRIAEDEFTAHLNTLESK"
+FT   variation       8529^8530
+FT                   /replace="tt"
+FT                   /note="compared to AL109969"
+XX
+SQ   Sequence 9609 BP; 2792 A; 2250 C; 2099 G; 2468 T; 0 other;
+     tgtaacgaac ggtgcaatag tgatccacac ccaacgcctg aaatcagatc cagggggtaa        60
+     tctgctctcc tgattcagga gagtttatgg tcacttttga gacagttatg gaaattaaaa       120
+     tcctgcacaa gcagggaatg agtagccggg cgattgccag agaactgggg atctcccgca       180
+     ataccgttaa acgttatttg caggcaaaat ctgagccgcc aaaatatacg ccgcgacctg       240
+     ctgttgcttc actcctggat gaataccggg attatattcg tcaacgcatc gccgatgctc       300
+     atccttacaa aatcccggca acggtaatcg ctcgcgagat cagagaccag ggatatcgtg       360
+     gcggaatgac cattctcagg gcattcattc gttctctctc ggttcctcag gagcaggagc       420
+     ctgccgttcg gttcgaaact gaacccggac gacagatgca ggttgactgg ggcactatgc       480
+     gtaatggtcg ctcaccgctt cacgtgttcg ttgctgttct cggatacagc cgaatgctgt       540
+     acatcgaatt cactgacaat atgcgttatg acacgctgga gacctgccat cgtaatgcgt       600
+     tccgcttctt tggtggtgtg ccgcgcgaag tgttgtatga caatatgaaa actgtggttc       660
+     tgcaacgtga cgcatatcag accggtcagc accggttcca tccttcgctg tggcagttcg       720
+     gcaaggagat gggcttctct ccccgactgt gtcgcccctt cagggcacag actaaaggta       780
+     aggtggaacg gatggtgcag tacacccgta acagttttta catcccacta atgactcgcc       840
+     tgcgcccgat ggggatcact gtcgatgttg aaacagccaa ccgccacggt ctgcgctggc       900
+     tgcacgatgt cgctaaccaa cgaaagcatg aaacaatcca ggcccgtccc tgcgatcgct       960
+     ggctcgaaga gcagcagtcc atgctggcac tgcctccgga gaaaaaagag tatgacgtgc      1020
+     atcttgatga aaatctggtg aacttcgaca aacaccccct gcatcatcca ctctccatct      1080
+     acgactcatt ctgcagagga gtggcgtgat gatggaactg caacatcaac gactgatggc      1140
+     gctcgccggg cagttgcaac tggaaagcct tataagcgca gcgcctgcgc tgtcacaaca      1200
+     ggcagtagac caggaatgga gttatatgga cttcctggag catctgcttc atgaagaaaa      1260
+     actggcacgt catcaacgta aacaggcgat gtatacccga atggcagcct tcccggcggt      1320
+     gaaaacgttc gaagagtatg acttcacatt cgccaccgga gcaccgcaga agcaactcca      1380
+     gtcgttacgc tcactcagct tcatagaacg taatgaaaat atcgtattac tggggccatc      1440
+     aggtgtgggg aaaacccatc tggcaatagc gatgggctat gaagcagtcc gtgcaggtat      1500
+     caaagttcgc ttcacaacag cagcagatct gttacttcag ttatctacgg cacaacgtca      1560
+     gggccgttat aaaacgacgc ttcagcgtgg agtaatggcc ccccgcctgc tcatcattga      1620
+     tgaaataggc tatctgccgt tcagtcagga agaagcaaag ctgttcttcc aggtcatcgc      1680
+     taaacgttac gaaaagagcg caatgatcct gacatccaat ctgccgttcg ggcagtggga      1740
+     tcaaacgttc gccggtgatg cagcactgac ctcagcgatg ctggaccgta tcttacacca      1800
+     ctcacatgtc gttcaaatca aaggagaaag ctatcgactc agacagaaac gaaaggccgg      1860
+     ggttatagca gaagctaatc ctgagtaaaa cggtggatca atattgggcc gttggtggag      1920
+     atataagtgg atcacttttc atccgtcgtt gacaccctga tgaattcacg tgttcacgcc      1980
+     tgaataacaa gaatgccgga gatacgcagt catatttttt acacaattct ctaatcccga      2040
+     caaggtcgta ggtcgttata ggaaaattct tagcaccatt ccggaacaat cagaacagca      2100
+     ggccatgaac gactgacaac attacgaata taaaaaacgc acccgggcca gacattcccc      2160
+     ctactgatta aaccagccgg acttgtccac ggaacggtct ttttaaaccg acacacagtc      2220
+     tgagtacaga tacatgtcac gatgatgcag gattagcgga agagtgtgag cacgtttccg      2280
+     ggaactgtgg tgaaccatag ctcaatattc gagtgagggc ataccggaaa cgcgctcaga      2340
+     ttcgttgtaa cgcgattttc cgtaccgggc aattttttca gttgtttttt cgtttcatgt      2400
+     cgtcagaaac gttctgagcg cgtttccggc atctgatgct acgcaaacca tccccatggt      2460
+     cagttgacag ccggaaacac gcgggtgtcg ttttagcgta tcgacgggac ggcgtcgaga      2520
+     agcacaaaaa acagatgttg tactcagtca gttgttttac agacagcact gcggcagatt      2580
+     gaaaaagtac cgtactttca ggaatgtcca gaaaccatgt gtcagacttc gttctccccc      2640
+     ttccgggtga atttttttgt catccgttca ggaatctctt tataacgatt actccatttc      2700
+     aggatttttt atgtggcgtt tactacaggc aggatattca aaggcaaaaa aatcccccgg      2760
+     aacaggcgga acccggacag ggggagaacg aatcgctaaa taattttcgt agttgtattt      2820
+     cccatcgttg ctactgcaac gggatgaatt tgccgcagtt tatcctgtaa aacaatcctg      2880
+     atttactcac actccacata tcactgacgg agcacaacgg aatagtgaac aaacaacaac      2940
+     aaactgcgct gaatatggcg cgatttatca gaagccagag cctgatactg cttgaaaaac      3000
+     tggatgctct ggatgccgac gagcaggcgg ccatgtgtga acgactgcac gaactcgcgg      3060
+     aagaactcca gaacagcatc caggctcgct ttgaagccga aagtgaaaca ggaacataac      3120
+     gaagctcccg gagacggtca cagcttgtct gtgaacggat gccgggagca gacaagcccg      3180
+     tcagggcgcg tcagcgggtt ttagcgggtg tcggggcgca gccatgaccc agtcacgtag      3240
+     cgatagcgga gtgtatactg gcttagtcat gcggcatcag tgcggattgt atgaaaagtg      3300
+     caccatgtac ggtgtgaaat gccgcacaga tgcgtaagga gaacatgcag atgccgatgc      3360
+     tcttccgctt cctcgctcac tgactcgctg cgctcggtcg ttcggctgcg gcgagcggtg      3420
+     tctgctcact caaaagcggt gatactgtta tccacacaat caggggataa cgccggaaag      3480
+     aacatgtgag caaaaaacga agaccccaga aaaggccgcg ccggaggcgc tttttccata      3540
+     ggctccgccc ccctgacgag catcacaaaa atcgacgctc aagtcagagg tggcgaaacc      3600
+     cgacaggact taaagatacc aggcgtttcc ccccggaagc tccctcgtgc gctctcctgt      3660
+     tccgaccctg ccgcttaccg gatacctctc cgcctttctc ccttcgggaa gcgtggcgct      3720
+     ttctcatagc tcacgctgtt ggtatctcag ttcggtgtag gtcgttcgct ccaagctggg      3780
+     ctgtgtgcac gaaccccccg ttcagcccga ccactgcgcc ttatccggta actatcgtct      3840
+     tgagtccaac ccggtaagac acgactttac gccactggca gcagccattg gtaactgaaa      3900
+     agtggattta gatacgcaga actcttgaag ttgaagcctt atcgcggcta cactgaaagg      3960
+     acagcatttg gtatctgtgc tccacttaag ccagctacca caggttagaa agcctgagaa      4020
+     acttctaacc ttcgaaagaa cccacgcctg agaacgtggg ttttttcgtt tacaggcagc      4080
+     agattacgcg cagaaaaaaa ggatctcaag aagatccttt gatcttttct actgaattgc      4140
+     gctcccgatc agttcagcag aagattatga tggggttcta tgggtattgc tgcggtaaca      4200
+     cccatgttac ttgaggttgt atgtagtctg tgtagaatta tacacataag gcttaaactg      4260
+     ctcttttttt tcaatatgca attggaagtt cattgactac ataaatagat tattccaaat      4320
+     aatttattta tgtaagaaca ggatgggagg gggaatgatc tcaaagttat tttgcttggc      4380
+     tctcatattt ttatcatcaa gtggccttgc agaaaaaaac acatatacag caaaagacat      4440
+     cttgcaaaac ctagaattaa atacctttgg caattcattg tctcatggca tctatgggaa      4500
+     acagacaacc ttcaagcaaa ccgagtttac aaatattaaa agcaacacca aaaaacacat      4560
+     tgcacttatc aataaagaca actcatggat gatatcatta aaaatactag gaattaagag      4620
+     agatgagtat actgtctgtt ttgaagattt ctctctaata agaccgccaa catatgtagc      4680
+     catacatcct ctacttataa aaaaagtaaa atctggaaac tttatagtag tgaaagaaat      4740
+     aaagaaatct atccctggtt gcactgtata ttatcattaa tagcaagccc ctcattatta      4800
+     tgaggggctc atggttattt taacaatcca ctatcgatat ctttttgcac cagagcgccc      4860
+     tctcgtttac gtctgtcaga cattccatca acaatattat taaaagcatt tacaaggcca      4920
+     ttccagtctt ttgcgataac tttattccat actgtgggag cagttctgga taacttaaac      4980
+     cctttttgat atccaataga caccagtgct gtacgggttc tcaacggtaa atcgctgaac      5040
+     cgaagaccga tattagcgtc attgaaaaga ccttcaatct tatgtgagaa tttatcaata      5100
+     taaatattag ataagagatg agcttcatta tcagaaagcg tcagaggtgc tgttctcact      5160
+     ttatcataag cctccttccc tcgaagcata taatacccat caagtctatc tgcaatatac      5220
+     tgagggacac cgtcattcaa taaatcctgt ttgcttcgct gaccaaggtc aaccccggaa      5280
+     ccgaatgtaa caccggtact gttaaaataa tcgctactag gattagacgg aaaatgactt      5340
+     gtcggattaa acccttcaaa accattactg gagaaaatat cgtggtcaac aatatttacc      5400
+     gaacgacgta aaaattcctt cagttgacta atattgtcaa agttaatgac agtgttgtcc      5460
+     gctaggacga tgcgatttcg gttattattc agaatgtctt cgttctcttt cttatcgaga      5520
+     tgttcaatag attcggcaat cgttccctca agaaccatga cacggtagac tttcacaccg      5580
+     tctttttcct gacctgtttc aacagttatt ttctgttcgt aagacacggt cccttcagtt      5640
+     tttgaaattt tactttcctg gcggatctta tttgaatatt cactgtcttt ctccatctcc      5700
+     gtatcaatcg gaaaccccat aatgtacatc agtttaaaat tactccggcc aggcagatcc      5760
+     acataatgtg gtaatgcaat tgtaatcgaa ttagcttcaa aatttggtct gtaactgctt      5820
+     aatgtacttc cggaaaagag aaaagccgga acaccacctg aaccattcac taccattgta      5880
+     tctgacataa aaattcctct ttaacacata aaaaaaacaa taagttaaaa aaatactgta      5940
+     cataaaagca ctgtttttat gtacagtaat aaaattacgc cgctttattt tctctgtcaa      6000
+     taatatgaaa tttcattttt gtgatctgaa tcactcttat aaaaatcagg aagggaagat      6060
+     tcgcagcaga aaaacagcac cgggtaacat cagaaaaaaa cagaaaggag ataacgtgag      6120
+     caaaacaaaa tctggtcgcc accgactgag caaaacagac aaacgcctgc tggctgcact      6180
+     tgtcgttgcc ggatacgaag aacggacagc ccgtgacctc atccagaaac acgtttacac      6240
+     actgacacag gccgacctgc gccatctggt cagtgaaatc agtaacggtg tgggacagtc      6300
+     acaggcctac gatgcgattt accaggcgag acgcattcgt ctcgcccgta aatacctgag      6360
+     cggaaaaaaa ccggaagggg tggaaccccg ggaagggcag gaacgggaag atttaccata      6420
+     actcccgtta tcagtaccat cggctcaacg ctcgttgtcg gatctgaaaa attcgctcaa      6480
+     aagatcatat ttccctggat attttccacc gtttcttatg tgagaaaagt cacataattc      6540
+     tgtcagacga cgagaaaacg gatatcgatt attgtttaat atttttacat tattaaaaat      6600
+     gaaattagat aatcagatac aaataatatg ttttcgttca tgcagagaga ttaagggtgt      6660
+     ctaatgaaga aaagttctat tgtggcaacc attataacta ttctgtccgg gagtgctaat      6720
+     gcagcatcat ctcagttaat accaaatata tcccctgaca gctttacagt tgcagcctcc      6780
+     accgggatgc tgagtggaaa gtctcatgaa atgctttatg acgcagaaac aggaagaaag      6840
+     atcagccagt tagactggaa gatcaaaaat gtcgctatcc tgaaaggtga tatatcctgg      6900
+     gatccatact catttctgac cctgaatgcc agggggtgga cgtctctggc ttccgggtca      6960
+     ggtaatatgg atgactacga ctggatgaat gaaaatcaat ctgagtggac agatcactca      7020
+     tctcatcctg ctacaaatgt taatcatgcc aatgaatatg acctcaatgt gaaaggctgg      7080
+     ttactccagg atgagaatta taaagcaggt ataacagcag gatatcagga aacacgtttc      7140
+     agttggacag ctacaggtgg ttcatatagt tataataatg gagcttatac cggaaacttc      7200
+     ccgaaaggag tgcgggtaat aggttataac cagcgctttt ctatgccata tattggactt      7260
+     gcaggccagt atcgcattaa tgattttgag ttaaatgcat tatttaaatt cagcgactgg      7320
+     gttcgggcac atgataatga tgagcactat atgagagatc ttactttccg tgagaagaca      7380
+     tccggctcac gttattatgg taccgtaatt aacgctggat attatgtcac acctaatgcc      7440
+     aaagtctttg cggaatttac atacagtaaa tatgatgagg gcaaaggagg tactcagatc      7500
+     attgataaga atagtggaga ttctgtctct attggcggag atgctgccgg tatttccaat      7560
+     aaaaattata ctgtgacggc gggtctgcaa tatcgcttct gaaaaataca gatcatatct      7620
+     ctcttttcat cctcccctag cggggaggat gtctgtggaa aggaggttgg tgtttgacca      7680
+     accttcagat gtgtgaaaaa tcaccttttt caccataatg acggggcgct cattctgttg      7740
+     ttttgccttg acattctcca cgtctttcag ggcatggaga aggtcaaatt agacatggaa      7800
+     cgctactctc cttcctgtag gaagctcaac atccaagctt aatttgcctc ccattgcttc      7860
+     aacgtaacgc tttaacgtcg ccagctttaa atcatttccg cgctgctcca gctttgttac      7920
+     tgctggctgg cttataccca tcgcctcagc aacttgtttt tgtgataact ggagttcttc      7980
+     acgcatcatc tgcaagccga cctcaagaat catctcatct gccatttctt taattcgtgt      8040
+     ctggctttca ggtgaacgac tggcaatcac ctcatctaat gttctcatta cttgctctcc      8100
+     agtgtgttca gatgtgctgt aaattcatcc tcagctatac gcaccagttt ttcataaaac      8160
+     cgcttatcat tacttttatc tcctgcacaa agaacgatag cccgacgaat cggatcgaac      8220
+     gcataaaagg ctcttatcgg acggccagaa aactgaacgc gaagctcttt catatttttg      8280
+     taccgagaac ctttcacggt atcggcatat ggcctgggta actcaggtcc gtaaacctgt      8340
+     agctttttca aatcagccaa aaccttttcc tgaagagcgt cttcttgctc atttagccag      8400
+     tcgtcaaatc gctggctaaa aagtaccatc cacatgctca accctataac ctgtagctta      8460
+     ccccactaac aatataacct acgagttata ttttcaagaa aagctggcta tttaacataa      8520
+     cggcaatttg tacgcaccac tgaaatgcgt tcagcgcgat cacggcaaca gacaggcaaa      8580
+     aatagcaaca aacctcccga aaaaccgccg cgatcgcgcc tgataaattt taaccttatg      8640
+     catatctatg cagccaggcg aatcacgaac gaattgcctg cctgatgtaa ctgaaacggg      8700
+     tgttttttcc tgatttggtg ggcgtggaag acggaacatg aacgggaaaa cagaattcat      8760
+     gccagatgag cgcgatctgg caattaaggc aaaacacagc aacaaagaca cgccagaatc      8820
+     gcgcccggat atgttttaac gcgattttca gactcagaca aattcagcag aatgctactc      8880
+     cattcaccgg gctgatggtg aatacatgcg tatccaggat gagtacattt ctggctctgc      8940
+     cacagctctg tctgttggca gctttcgcct gtccggaaac ctgcttaaaa cgctcccgaa      9000
+     aggcctctga accagaaagc aacaaaacac aggccattaa gtaaatcgcg ttaaaacacg      9060
+     tctgatggat tgctgcaaaa aaaagtccct aatggagcag ggactgttaa acccagtgaa      9120
+     tagcgtctaa attaaagtaa gaatacgacc aggtactctt cagaaaagag attaatccac      9180
+     cgcacagaat aatcaacagt aaaaacaaac aaccctgatt ttttattttt ctttttttcg      9240
+     ataaaaacaa aattaaagaa ataattaatc agaacattcc ttaacttcag ggcattgcct      9300
+     gtgttccatt ttgtgattag tctgaaactt ccgaaggtgg ataacacccg gtattttttt      9360
+     gctcacataa agcccctcct tcaggcagag gggctttttc tttgccacca cataaaaaag      9420
+     gccctcacag gaggtgttct gtgagggcgt atgataagga ctgaatcgat ggttaatatg      9480
+     tctagtcctg acttttgcat ctccgaatat aaaaccctgt ttaacggcat gcaaaaccaa      9540
+     aaaataaaaa tgtgacatcg caatgccaga taatattgac gcatgaggga atgcgtaccc      9600
+     cgacccctg                                                              9609
+//
