@@ -46,7 +46,7 @@ def compare_records(old_list, new_list) :
             return False
     return True
 
-def compare_feature(old, new) :
+def compare_feature(old, new, ignore_sub_features=False) :
     """Check two SeqFeatures agree."""
     if old.type != new.type :
         raise ValueError("Type %s versus %s" % (old.type, new.type))
@@ -59,21 +59,31 @@ def compare_feature(old, new) :
         raise ValueError("%s versus %s" % (old.location.start, new.location.start))
     if old.location.end != new.location.end :
         raise ValueError("%s versus %s" % (old.location.end, new.location.end))
-    if len(old.sub_features) != len(new.sub_features) :
-        raise ValueError("Different sub features")
-    for a,b in zip(old.sub_features, new.sub_features) :
-        if not compare_feature(a,b) :
-            return False
-    #TODO - Check qualifiers?
+    if not ignore_sub_features :
+        if len(old.sub_features) != len(new.sub_features) :
+            raise ValueError("Different sub features")
+        for a,b in zip(old.sub_features, new.sub_features) :
+            if not compare_feature(a,b) :
+                return False
+    #This only checks key shared qualifiers
+    #Would a white list be easier?
+    #for key in ["name","gene","translation","codon_table","codon_start","locus_tag"] :
+    for key in set(old.qualifiers.keys()).intersection(new.qualifiers.keys()):
+        if key in ["db_xref","protein_id","product","note"] :
+            #EMBL and GenBank files are use different references/notes/etc
+            continue
+        if old.qualifiers[key] != new.qualifiers[key] :
+            raise ValueError("Qualifier mis-match for %s:\n%s\n%s" \
+                             % (key, old.qualifiers[key], new.qualifiers[key]))
     return True
 
-def compare_features(old_list, new_list) :
+def compare_features(old_list, new_list, ignore_sub_features=False) :
     """Check two lists of SeqFeatures agree, raises a ValueError if mismatch."""
     if len(old_list) != len(new_list) :
         raise ValueError("%i vs %i features" % (len(old_list), len(new_list)))
     for old, new in zip(old_list, new_list) :
         #This assumes they are in the same order
-        if not compare_feature(old,new) :
+        if not compare_feature(old,new,ignore_sub_features) :
             return False
     return True
 
@@ -152,6 +162,8 @@ class NC_005816(unittest.TestCase):
                              len(f_seq))
             self.assertEqual(str(fa_record.seq),
                              str(f_seq))
+
+
 
 class NC_006980(NC_005816):
     #This includes several joins and fuzzy joins :)
