@@ -1,6 +1,6 @@
 import numpy
 
-from Pycluster.cluster import *
+from cluster import *
 
 def _treesort(order, nodeorder, nodecounts, tree):
     # Find the order of the nodes consistent with the hierarchical clustering
