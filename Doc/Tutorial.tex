@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 20 April 2009 (Biopython 1.50)}
+\date{Last Update -- 23 April 2009 (Biopython 1.50)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -6526,7 +6526,7 @@ gd_feature_set.add_feature(feature)
 gd_feature_set.add_feature(feature, sigil="BOX")
 
 #Or opt for an arrow:
-gd_feature_set.add_feature(feature, sigil="BOX")
+gd_feature_set.add_feature(feature, sigil="ARROW")
 \end{verbatim}
 
 The default arrows are show at the top of
@@ -6620,7 +6620,7 @@ from Bio.SeqFeature import SeqFeature, FeatureLocation
 
 record = SeqIO.read(open("NC_005816.gb"), "genbank")
 
-gd_diagram = GenomeDiagram.Diagram("Yersinia pestis biovar Microtus plasmid pPCP1")
+gd_diagram = GenomeDiagram.Diagram(record.id)
 gd_track_for_features = gd_diagram.new_track(1, name="Annotated Features")
 gd_feature_set = gd_track_for_features.new_set()
 
@@ -6980,6 +6980,7 @@ very very short -- if you recall many of these orchid sequences are actually rRN
 sequences so translating them isn't actually biologically meaningful.
 
 \subsection{Simple quality filtering for FASTQ files}
+\label{sec:FASTQ-filtering-example}
 
 The FASTQ file format was introduced at Sanger and is now widely used for
 holding nucleotide sequencing reads together with their quality scores.
@@ -7004,8 +7005,8 @@ For this example we'll use some real data downloaded from the NCBI,
 from Bio import SeqIO
 
 good_reads = (record for record in \
-             SeqIO.parse(open("SRR014849.fastq"), "fastq") \
-             if min(record.letter_annotations["phred_quality"]) >= 20)
+              SeqIO.parse(open("SRR014849.fastq"), "fastq") \
+              if min(record.letter_annotations["phred_quality"]) >= 20)
 
 out_handle = open("good_quality.fastq", "w")
 count = SeqIO.write(good_reads, out_handle, "fastq")
@@ -8317,6 +8318,13 @@ $ python run_tests.py doctest
 
 You read all about the basic Biopython sequence class in Chapter~\ref{chapter:Bio.Seq}, which described how to do many useful things with just the sequence. However, many times sequences have important additional properties associated with them -- as you will have seen with the \verb|SeqRecord| object in Chapter~\ref{chapter:Bio.SeqIO}.
 This section describes how Biopython handles these higher level descriptions of a sequence.
+See also the \href{http://biopython.org/wiki/SeqRecord}{SeqRecord wiki page} and its built in API documentation (available \href{http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html}{online}):
+
+\begin{verbatim}
+>>> from Bio.SeqRecord import SeqRecord
+>>> help(SeqRecord)
+...
+\end{verbatim}
 
 \subsection{Sequence IDs and Descriptions -- dealing with SeqRecords}
 
@@ -8336,6 +8344,8 @@ Immediately above the Sequence class is the Sequence Record class, defined in th
   \item[features] -- A list of \verb|SeqFeature| objects with more structured information about the features on a sequence. The structure of sequence features is described below in Section~\ref{sec:seq_features}.
   
   \item[dbxrefs] - A list of database cross-references as strings.
+
+  \item[letter\_annotations] -- Holds per-letter-annotations using a (restricted) dictionary of additional information about the letters in the sequence. The keys are the name of the information, and the information is contained in the value as a python sequence (i.e. a list, tuple or string) with the same length as the sequence itself.  This is often used for quality scores (e.g. Section~\ref{sec:FASTQ-filtering-example}) or secondary structure information.
 \end{description}
 
 Using a \verb|SeqRecord| class is not very complicated, since all of the information is stored as attributes of the class. Initializing the class just involves passing a \verb|Seq| object to the \verb|SeqRecord|:
@@ -8492,9 +8502,11 @@ We can access the fuzzy start and end positions using the start and end attribut
 
 \begin{verbatim}
 >>> my_location.start
-<Bio.SeqFeature.AfterPosition instance at 0x101d7164>
+Bio.SeqFeature.AfterPosition(5)
 >>> print my_location.start
 >5
+>>> my_location.end
+Bio.SeqFeature.BetweenPosition(8,1)
 >>> print my_location.end
 (8^9)
 \end{verbatim}
@@ -8517,7 +8529,9 @@ Similary, to make it easy to create a position without worrying about fuzzy posi
 >>> print exact_location
 [5:8]
 >>> exact_location.start
-<Bio.SeqFeature.ExactPosition instance at 0x101dcab4>
+Bio.SeqFeature.ExactPosition(5)
+>>> exact_location.nofuzzy_start
+5
 \end{verbatim}
 
 That is all of the nitty gritty about dealing with fuzzy positions in Biopython. It has been designed so that dealing with fuzziness is not that much more complicated than dealing with exact positions, and hopefully you find that true!
@@ -8550,9 +8564,8 @@ necessary in the current application.
 
 This is a very flexible framework, which is advantageous if you want to
 be able to parse a file format into more than one representation.  For
-example, both the \verb|Bio.GenBank| and \verb|Bio.SwissProt| modules
-use this to read their file formats as both generic \verb|SeqRecord| objects
-and file-format-specific record objects.
+example, both the \verb|Bio.GenBank| modules use this construct either
+\verb|SeqRecord| objects or file-format-specific record objects.
 
 More recently, many of the parsers added for \verb|Bio.SeqIO| and
 \verb|Bio.AlignIO| take a much simpler approach, but only generate a
