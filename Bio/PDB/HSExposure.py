@@ -4,7 +4,7 @@
 # as part of this package.
 
 from math import pi
-import sys
+import warnings
 
 from Bio.PDB import *
 from AbstractPropertyMap import AbstractPropertyMap
@@ -201,7 +201,7 @@ class HSExposureCA(_AbstractHSExposure):
         @type filename: string
         """
         if len(self.ca_cb_list)==0:
-            sys.stderr.write("Nothing to draw.\n")
+            warnings.warn("Nothing to draw.", RuntimeWarning)
             return
         fp=open(filename, "w")
         fp.write("from pymol.cgo import *\n")

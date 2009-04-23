@@ -2,9 +2,17 @@ test_PDB
 PDBConstructionException: Atom N defined twice in residue <Residue ARG het=  resseq=2 icode= > at line 19.
 Exception ignored.
 Some atoms or residues may be missing in the data structure.
+WARNING: disordered atom found with blank altloc before line 31.
+
+WARNING: Residue (' ', 4, ' ') redefined at line 41.
 PDBConstructionException: Blank altlocs in duplicate residue SER (' ', 4, ' ') at line 41.
 Exception ignored.
 Some atoms or residues may be missing in the data structure.
+WARNING: Residue (' ', 10, ' ') redefined at line 73.
+WARNING: Residue (' ', 14, ' ') redefined at line 104.
+WARNING: Residue (' ', 16, ' ') redefined at line 133.
+WARNING: Residue (' ', 80, ' ') redefined at line 631.
+WARNING: Residue (' ', 81, ' ') redefined at line 644.
 PDBConstructionException: Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 820.
 Exception ignored.
 Some atoms or residues may be missing in the data structure.
