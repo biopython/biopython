@@ -18,7 +18,7 @@ from Chain import Chain
 from Residue import Residue, DisorderedResidue
 from Atom import Atom, DisorderedAtom 
 
-from PDBExceptions import PDBConstructionException
+from PDBExceptions import PDBConstructionException, PDBConstructionWarning
 
 
 class StructureBuilder:
@@ -82,7 +82,7 @@ class StructureBuilder:
             if __debug__:
                 warnings.warn("WARNING: Chain %s is discontinuous at line %i."
                               % (chain_id, self.line_counter),
-                              RuntimeWarning)
+                              PDBConstructionWarning)
         else:
             self.chain=Chain(chain_id)
             self.model.add(self.chain)
@@ -119,7 +119,7 @@ class StructureBuilder:
                     warnings.warn("WARNING: Residue ('%s', %i, '%s') "
                                   "redefined at line %i."
                                   % (field, resseq, icode, self.line_counter),
-                                  RuntimeWarning)
+                                  PDBConstructionWarning)
                 duplicate_residue=self.chain[res_id]
                 if duplicate_residue.is_disordered()==2:
                     # The residue in the chain is a DisorderedResidue object.
@@ -192,7 +192,7 @@ class StructureBuilder:
                                       "only in spaces at line %i."
                                       % (duplicate_fullname, fullname,
                                          self.line_counter),
-                                      RuntimeWarning)
+                                      PDBConstructionWarning)
         atom=self.atom=Atom(name, coord, b_factor, occupancy, altloc, fullname, serial_number)
         if altloc!=" ":
             # The atom is disordered
@@ -216,7 +216,8 @@ class StructureBuilder:
                     if __debug__:
                         warnings.warn("WARNING: disordered atom found "
                                       "with blank altloc before line %i.\n"
-                                      % self.line_counter, RuntimeWarning)
+                                      % self.line_counter,
+                                      PDBConstructionWarning)
             else:
                 # The residue does not contain this disordered atom
                 # so we create a new one.
