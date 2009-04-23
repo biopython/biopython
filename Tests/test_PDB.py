@@ -10,8 +10,10 @@ except ImportError :
     raise MissingExternalDependencyError(\
         "Install NumPy if you want to use Bio.PDB.")
 
-import sys
-# Redirect stderr so user does not see warnings
+import warnings
+def send_warnings_to_stdout(message, category, filename, lineno, file=None):
+    print message
+warnings.showwarning = send_warnings_to_stdout
 
 def quick_neighbor_search_test() :
     #Based on the self test in Bio.PDB.NeighborSearch
@@ -89,12 +91,4 @@ def run_test():
     print "NeighborSearch test"
     quick_neighbor_search_test()
 
-                    
-
-old_stderr = sys.stderr
-# Hide stderr output for user
-sys.stderr=TheVoid()
-try:
-    run_test()
-finally:
-    sys.stderr = old_stderr
+run_test()

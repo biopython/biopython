@@ -35,7 +35,8 @@
 
 __doc__="Access the PDB over the internet (for example to download structures)."
 
-import urllib, re, os, sys
+import urllib, re, os
+from warnings import warn
 
 class PDBList:
     """
@@ -147,7 +148,7 @@ drwxrwxr-x   2 1002     sysadmin     512 Oct 14 02:14 20031013
         Returns a list of PDB codes in the index file.
         """
         entries = []
-        print "retrieving index file. Takes about 5 MB."
+        warnings.warn("retrieving index file. Takes about 5 MB.")
         url = urllib.urlopen(self.pdb_server+'/pub/pdb/derived_data/index/entries.idx')
         # extract four-letter-codes
         entries = map(lambda x: x[:4], \
@@ -232,11 +233,12 @@ OBSLTE     26-SEP-03 1DYV      1UN2
         # check whether the file exists
         if not self.overwrite:
             if os.path.exists(final_file):
-                print "file exists, not retrieved",final_file
+                warnings.warn("file exists, not retrieved %s" % final_file,
+                              RuntimeError)
                 return final_file
 
         # Retrieve the file
-        print 'retrieving',url                    
+        warnings.warn('retrieving %s' % url)
         lines=urllib.urlopen(url).read()
         open(filename,'wb').write(lines)
         # uncompress the file
@@ -260,10 +262,10 @@ OBSLTE     26-SEP-03 1DYV      1UN2
 
         for pdb_code in new+modified:
             try:
-                print 'retrieving %s'%(pdb_code)            
+                warnings.warn('retrieving %s' % pdb_code)
                 self.retrieve_pdb_file(pdb_code)
             except:
-                print 'error %s'%(pdb_code)
+                warnings.warn('error %s' % pdb_code, RuntimeError)
                 # you can insert here some more log notes that
                 # something has gone wrong.            
 
@@ -311,7 +313,7 @@ OBSLTE     26-SEP-03 1DYV      1UN2
     def get_seqres_file(self,savefile='pdb_seqres.txt'):
         """Retrieves a (big) file containing all the sequences 
         of PDB entries and writes it to a file."""
-        print "retrieving sequence file. Takes about 15 MB."
+        warnings.warn("retrieving sequence file. Takes about 15 MB.")
         url = urllib.urlopen(self.pdb_server+'/pub/pdb/derived_data/pdb_seqres.txt')        
         file = url.readlines()
         open(savefile,'w').writelines(file)
@@ -319,6 +321,9 @@ OBSLTE     26-SEP-03 1DYV      1UN2
 
 
 if __name__ == '__main__':
+
+    import sys
+
     doc = """PDBList.py
     (c) Kristian Rother 2003, Contributed to BioPython
 
@@ -367,7 +372,4 @@ if __name__ == '__main__':
         elif re.search('^\d...$',sys.argv[1]):
             # get single PDB entry
             pl.retrieve_pdb_file(sys.argv[1],pdir=pdb_path)
-        
-
-        
 

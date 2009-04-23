@@ -3,6 +3,9 @@ build
  
 #Ignore backup files from some Unix editors,
 *~
+
+#Ignore these hidden files from Mac OS X
+.DS_Store
  
 #Ignore all compiled python files (e.g. from running the unit tests):
 *.pyc

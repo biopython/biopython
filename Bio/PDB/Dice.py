@@ -4,7 +4,7 @@
 # as part of this package.
 
 import re
-
+import warnings
 from Bio.PDB.PDBIO import PDBIO
 
 
@@ -41,7 +41,8 @@ class ChainSelector:
             # skip HETATMS
             return 0
         if icode!=" ":
-            print "WARNING: Icode at ", residue.get_id()
+            warnings.warn("WARNING: Icode at %s" % residue.get_id(),
+                          RuntimeError)
         if self.start<=resseq<=self.end:
             return 1
         return 0

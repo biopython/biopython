@@ -69,6 +69,10 @@ test_files = [ \
     ("fasta",  False, 'Fasta/f002', 3), #DNA
     #("fasta", False, 'Fasta/f003', 2), #Protein with comments
     ("fasta",  False, 'Fasta/fa01', 2), #Protein with gaps
+#Following are also used in test_SeqIO_features.py, see also NC_005816.gb
+    ("fasta",  False, 'GenBank/NC_005816.fna', 1),
+    ("fasta",  False, 'GenBank/NC_005816.ffn', 10),
+    ("fasta",  False, 'GenBank/NC_005816.faa', 10),
 #Following examples are also used in test_GFF.py
     ("fasta",  False, 'GFF/NC_001802.fna', 1), #upper case
     ("fasta",  False, 'GFF/NC_001802lc.fna', 1), #lower case
@@ -110,7 +114,8 @@ test_files = [ \
     ("genbank",False, 'GenBank/origin_line.gb', 1),
     ("genbank",False, 'GenBank/blank_seq.gb', 1),
     ("genbank",False, 'GenBank/dbsource_wrap.gb', 1),
-    ("genbank",False, 'GenBank/NC_005816.gb', 1),
+    ("genbank",False, 'GenBank/NC_005816.gb', 1), #See also AE017046.embl
+    #("genbank",False, 'GenBank/NC_006980.gb', 1), #Slow!
 # The next example is a truncated copy of gbvrl1.seq from
 # ftp://ftp.ncbi.nih.gov/genbank/gbvrl1.seq.gz
 # This includes an NCBI header, and the first three records:
@@ -123,6 +128,7 @@ test_files = [ \
     ("embl",   False, 'EMBL/SC10H5.embl', 1), # Pre 2006 style ID line
     ("embl",   False, 'EMBL/U87107.embl', 1), # Old ID line with SV line
     ("embl",   False, 'EMBL/AAA03323.embl', 1), # 2008, PA line but no AC
+    ("embl",   False, 'EMBL/AE017046.embl', 1), #See also NC_005816.gb
     ("stockholm", True,  'Stockholm/simple.sth', 2),
     ("stockholm", True,  'Stockholm/funny.sth', 5),
 #Following PHYLIP files are currently only used here and in test_AlignIO.py,
