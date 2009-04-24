@@ -3695,6 +3695,86 @@ from \url{ftp://ftp.ncbi.nih.gov/pub/geo/} instead.  In this case you might want
 \url{ftp://ftp.ncbi.nih.gov/pub/geo/DATA/SOFT/by_series/GSE16/GSE16_family.soft.gz}
 (a compressed file, see the python module gzip).
 
+\subsection{Parsing UniGene records}
+
+UniGene is an NCBI database of the transcriptome, with each UniGene record showing the set of transcripts that are associated with a particular gene in a specific organism. A typical UniGene record looks like this:
+
+\begin{verbatim}
+ID          Hs.2
+TITLE       N-acetyltransferase 2 (arylamine N-acetyltransferase)
+GENE        NAT2
+CYTOBAND    8p22
+GENE_ID     10
+LOCUSLINK   10
+HOMOL       YES
+EXPRESS      bone| connective tissue| intestine| liver| liver tumor| normal| soft tissue/muscle tissue tumor| adult
+RESTR_EXPR   adult
+CHROMOSOME  8
+STS         ACC=PMC310725P3 UNISTS=272646
+STS         ACC=WIAF-2120 UNISTS=44576
+STS         ACC=G59899 UNISTS=137181
+...
+STS         ACC=GDB:187676 UNISTS=155563
+PROTSIM     ORG=10090; PROTGI=6754794; PROTID=NP_035004.1; PCT=76.55; ALN=288
+PROTSIM     ORG=9796; PROTGI=149742490; PROTID=XP_001487907.1; PCT=79.66; ALN=288
+PROTSIM     ORG=9986; PROTGI=126722851; PROTID=NP_001075655.1; PCT=76.90; ALN=288
+...
+PROTSIM     ORG=9598; PROTGI=114619004; PROTID=XP_519631.2; PCT=98.28; ALN=288
+
+SCOUNT      38
+SEQUENCE    ACC=BC067218.1; NID=g45501306; PID=g45501307; SEQTYPE=mRNA
+SEQUENCE    ACC=NM_000015.2; NID=g116295259; PID=g116295260; SEQTYPE=mRNA
+SEQUENCE    ACC=D90042.1; NID=g219415; PID=g219416; SEQTYPE=mRNA
+SEQUENCE    ACC=D90040.1; NID=g219411; PID=g219412; SEQTYPE=mRNA
+SEQUENCE    ACC=BC015878.1; NID=g16198419; PID=g16198420; SEQTYPE=mRNA
+SEQUENCE    ACC=CR407631.1; NID=g47115198; PID=g47115199; SEQTYPE=mRNA
+SEQUENCE    ACC=BG569293.1; NID=g13576946; CLONE=IMAGE:4722596; END=5'; LID=6989; SEQTYPE=EST; TRACE=44157214
+...
+SEQUENCE    ACC=AU099534.1; NID=g13550663; CLONE=HSI08034; END=5'; LID=8800; SEQTYPE=EST
+//
+\end{verbatim}
+
+This particular record shows the set of transcripts (shown in the \verb+SEQUENCE+ lines) that originate from the human gene NAT2, encoding en N-acetyltransferase. The \verb+PROTSIM+ lines show proteins with significant similarity to NAT2, whereas the \verb+STS+ lines show the corresponding sequence-tagged sites in the genome.
+
+To parse UniGene files, use the \verb+Bio.UniGene+ module:
+\begin{verbatim}
+>>> from Bio import UniGene
+>>> input = open("myunigenefile.data")
+>>> record = UniGene.read(input)
+\end{verbatim}
+
+The \verb+record+ returned by \verb+UniGene.read+ is a Python object with attributes corresponding to the fields in the UniGene record. For example,
+\begin{verbatim}
+>>> record.ID
+"Hs.2"
+>>> record.title
+"N-acetyltransferase 2 (arylamine N-acetyltransferase)"
+\end{verbatim}
+
+The \verb+EXPRESS+ and \verb+RESTR_EXPR+ lines are stored as Python lists of strings:
+\begin{verbatim}
+['bone', 'connective tissue', 'intestine', 'liver', 'liver tumor', 'normal', 'soft tissue/muscle tissue tumor', 'adult']
+\end{verbatim}
+
+Specialized objects are returned for the \verb+STS+, \verb+PROTSIM+, and \verb+SEQUENCE+ lines, storing the keys shown in each line as attributes:
+\begin{verbatim}
+>>> record.sts[0].acc
+'PMC310725P3'
+>>> record.sts[0].unists
+'272646'
+\end{verbatim}
+and similarly for the \verb+PROTSIM+ and \verb+SEQUENCE+ lines.
+
+To parse a file containing more than one UniGene record, use the \verb+parse+ function in \verb+Bio.UniGene+:
+
+\begin{verbatim}
+>>> from Bio import UniGene
+>>> input = open("unigenerecords.data")
+>>> records = UniGene.parse(input)
+>>> for record in records:
+...     print record.ID
+\end{verbatim}
+
 \section{Using a proxy}
 
 Normally you won't have to worry about using a proxy, but if this is an issue
