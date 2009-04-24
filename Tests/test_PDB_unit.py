@@ -20,9 +20,10 @@ except ImportError :
         "Install NumPy if you want to use Bio.PDB.")
  
 from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder
+from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.NeighborSearch import NeighborSearch
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
-  
+
 class PDBNeighborTest(unittest.TestCase):
     def setUp(self):
         warnings.resetwarnings()
@@ -52,14 +53,8 @@ class PDBExceptionTest(unittest.TestCase):
         self.assertRaises(PDBConstructionException,
                 parser.get_structure, "example", "PDB/a_structure.pdb")
 
-    def test_warnings(self):
-        """Check warnings: Parse a flawed PDB file in permissive mode."""        
-        warnings.resetwarnings()
-        warnings.simplefilter('error', PDBConstructionWarning)
-        parser = PDBParser(PERMISSIVE=True)
-        self.assertRaises(PDBConstructionWarning,
-                parser.get_structure, "example", "PDB/a_structure.pdb")
-
+    #TODO - check get expected warnings, may require Python 2.6+
+    #See Bug 2820
 
 class PDBParseTest(unittest.TestCase):
     def setUp(self):
@@ -299,6 +294,88 @@ class PDBParseTest(unittest.TestCase):
                 elif disorder_lvl == 2:
                     # Point mutation -- check residue names
                     self.assertEquals(residue.disordered_get_id_list(), res[2])
+
+class Exposure(unittest.TestCase):
+    "Testing Bio.PDB.HSExposure."
+    def setUp(self) :
+        warnings.resetwarnings()
+        warnings.simplefilter('ignore', PDBConstructionWarning)
+        pdb_filename = "PDB/a_structure.pdb"
+        structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
+        self.model=structure[1]
+        #Look at first chain only
+        a_residues=list(self.model["A"].child_list)
+        self.assertEqual(86, len(a_residues))
+        self.assertEqual(a_residues[0].get_resname(), "CYS")
+        self.assertEqual(a_residues[1].get_resname(), "ARG")
+        self.assertEqual(a_residues[2].get_resname(), "CYS")
+        self.assertEqual(a_residues[3].get_resname(), "GLY")
+        #...
+        self.assertEqual(a_residues[-3].get_resname(), "TYR")
+        self.assertEqual(a_residues[-2].get_resname(), "ARG")
+        self.assertEqual(a_residues[-1].get_resname(), "CYS")
+        self.a_residues = a_residues
+        self.radius = 13.0
+
+    def test_HSExposureCA(self) :
+        """HSExposureCA."""
+        hse = HSExposureCA(self.model, self.radius)
+        residues = self.a_residues
+        self.assertEqual(0, len(residues[0].xtra))
+        self.assertEqual(0, len(residues[1].xtra))
+        self.assertEqual(3, len(residues[2].xtra))
+        self.assertAlmostEqual(0.81250973133184456, residues[2].xtra["EXP_CB_PCB_ANGLE"])
+        self.assertEqual(14, residues[2].xtra["EXP_HSE_A_D"])
+        self.assertEqual(14, residues[2].xtra["EXP_HSE_A_U"])
+        self.assertEqual(3, len(residues[3].xtra))
+        self.assertAlmostEqual(1.3383737, residues[3].xtra["EXP_CB_PCB_ANGLE"])
+        self.assertEqual(13, residues[3].xtra["EXP_HSE_A_D"])
+        self.assertEqual(16, residues[3].xtra["EXP_HSE_A_U"])
+        #...
+        self.assertEqual(3, len(residues[-2].xtra))
+        self.assertAlmostEqual(0.77124014456278489, residues[-2].xtra["EXP_CB_PCB_ANGLE"])
+        self.assertEqual(24, residues[-2].xtra["EXP_HSE_A_D"])
+        self.assertEqual(24, residues[-2].xtra["EXP_HSE_A_U"])
+        self.assertEqual(0, len(residues[-1].xtra))
+
+    def test_HSExposureCB(self) :
+        """HSExposureCB."""
+        hse = HSExposureCB(self.model, self.radius)
+        residues = self.a_residues
+        self.assertEqual(0, len(residues[0].xtra))
+        self.assertEqual(2, len(residues[1].xtra))
+        self.assertEqual(20, residues[1].xtra["EXP_HSE_B_D"])
+        self.assertEqual(5, residues[1].xtra["EXP_HSE_B_U"])
+        self.assertEqual(2, len(residues[2].xtra))
+        self.assertEqual(10, residues[2].xtra["EXP_HSE_B_D"])
+        self.assertEqual(18, residues[2].xtra["EXP_HSE_B_U"])
+        self.assertEqual(2, len(residues[3].xtra))
+        self.assertEqual(7, residues[3].xtra["EXP_HSE_B_D"])
+        self.assertEqual(22, residues[3].xtra["EXP_HSE_B_U"])
+        #...
+        self.assertEqual(2, len(residues[-2].xtra))
+        self.assertEqual(14, residues[-2].xtra["EXP_HSE_B_D"])
+        self.assertEqual(34, residues[-2].xtra["EXP_HSE_B_U"])
+        self.assertEqual(2, len(residues[-1].xtra))
+        self.assertEqual(23, residues[-1].xtra["EXP_HSE_B_D"])
+        self.assertEqual(15, residues[-1].xtra["EXP_HSE_B_U"])
+
+    def test_ExposureCN(self) :
+        """HSExposureCN."""
+        hse = ExposureCN(self.model, self.radius)
+        residues = self.a_residues
+        self.assertEqual(0, len(residues[0].xtra))
+        self.assertEqual(1, len(residues[1].xtra))
+        self.assertEqual(25, residues[1].xtra["EXP_CN"])
+        self.assertEqual(1, len(residues[2].xtra))
+        self.assertEqual(28, residues[2].xtra["EXP_CN"])
+        self.assertEqual(1, len(residues[3].xtra))
+        self.assertEqual(29, residues[3].xtra["EXP_CN"])
+        #...
+        self.assertEqual(1, len(residues[-2].xtra))
+        self.assertEqual(48, residues[-2].xtra["EXP_CN"])
+        self.assertEqual(1, len(residues[-1].xtra))
+        self.assertEqual(38, residues[-1].xtra["EXP_CN"])
 
 # -------------------------------------------------------------
 
