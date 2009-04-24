@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 23 April 2009 (Biopython 1.50)}
+\date{Last Update -- 24 April 2009 (Biopython 1.50)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -439,7 +439,7 @@ Enjoy the code!
 \label{chapter:Bio.Seq}
 
 Biological sequences are arguably the central object in Bioinformatics, and in this chapter we'll introduce the Biopython mechanism for dealing with sequences, the \verb|Seq| object.
-In Chapter~\ref{chapter:Bio.SeqIO} on Sequence Input/Output (and Section~\ref{sec:advanced-seq}), we'll see that the \verb|Seq| object is also used in the \verb|SeqRecord| object, which combines the sequence information with any annotation.
+In Chapter~\ref{chapter:Bio.SeqIO} on Sequence Input/Output, we'll see that the \verb|Seq| object is also used in the \verb|SeqRecord| object, which combines the sequence information with any annotation.
 
 Sequences are essentially strings of letters like \verb|AGTACACTGGT|, which seems very natural since this is the most common way that sequences are seen in biological file formats.
 
@@ -1054,12 +1054,20 @@ there are module level functions in \verb|Bio.Seq| will accept plain python stri
 
 \noindent You are, however, encouraged to work with \verb|Seq| objects by default.
 
-\chapter{Sequence Input/Output}
+\chapter{SeqRecord objects and Sequence Input/Output}
 \label{chapter:Bio.SeqIO}
 
 In this chapter we'll discuss in more detail the \verb|Bio.SeqIO| module, which was briefly introduced in Chapter~\ref{chapter:quick-start}. This aims to provide a simple interface for working with assorted sequence file formats in a uniform way.
+See also the \verb|Bio.SeqIO| wiki page (\url{http://biopython.org/wiki/SeqIO}), and in the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html}{online}):
 
-The ``catch'' is that you have to work with \verb|SeqRecord| objects - which contain a \verb|Seq| object (as described in Chapter~\ref{chapter:Bio.Seq}) plus annotation like an identifier and description.  We'll introduce the basics of \verb|SeqRecord| object in this chapter, but see Section~\ref{sec:advanced-seq}, the \verb|SeqRecord| wiki page (\url{http://biopython.org/wiki/SeqRecord}), and in the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html}{online}):
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> help(SeqIO)
+...
+\end{verbatim}
+
+The ``catch'' is that you have to work with \verb|SeqRecord| objects - which contain a \verb|Seq| object (as described in Chapter~\ref{chapter:Bio.Seq}) plus annotation like an identifier and description.
+We'll introduce the basics of \verb|SeqRecord| object in this chapter, see also the \verb|SeqRecord| wiki page (\url{http://biopython.org/wiki/SeqRecord}), and in the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html}{online}):
 
 \begin{verbatim}
 >>> from Bio.SeqRecord import SeqRecord
@@ -1067,7 +1075,73 @@ The ``catch'' is that you have to work with \verb|SeqRecord| objects - which con
 ...
 \end{verbatim}
 
+\section{The SeqRecord object}
+\label{sec:SeqRecord}
+
+Chapter~\ref{chapter:Bio.Seq} introduced the sequence classes.  Immediately ``above'' the \verb|Seq| class is the Sequence Record class, defined in the \verb|Bio.SeqRecord| module. This class allows higher level features such as identifiers and features to be associated with the sequence, and is used thoughout the sequence input/output interface \verb|Bio.SeqIO|, described in this chapter. The \verb|SeqRecord|class itself is quite simple, and offers the following information as attributes:
+
+\begin{description}
+  \item[seq] -- The sequence itself, a \verb|Seq| object.
+
+  \item[id] -- The primary ID used to identify the sequence -- a string. In most cases this is something like an accession number.
+
+  \item[name] -- A ``common'' name/id for the sequence -- a string. In some cases this will be the same as the accession number, but it could also be a clone name. I think of this as being analagous to the LOCUS id in a GenBank record.
+
+  \item[description] -- A human readible description or expressive name for the sequence -- a string.
+  
+  \item[letter\_annotations] -- Holds per-letter-annotations using a (restricted) dictionary of additional information about the letters in the sequence. The keys are the name of the information, and the information is contained in the value as a python sequence (i.e. a list, tuple or string) with the same length as the sequence itself.  This is often used for quality scores (e.g. Section~\ref{sec:FASTQ-filtering-example}) or secondary structure information.
+
+  \item[annotations] -- A dictionary of additional information about the sequence. The keys are the name of the information, and the information is contained in the value. This allows the addition of more ``unstructed'' information to the sequence.
+
+  \item[features] -- A list of \verb|SeqFeature| objects with more structured information about the features on a sequence. The structure of sequence features is described below in Section~\ref{sec:seq_features}.
+  
+  \item[dbxrefs] - A list of database cross-references as strings.
+\end{description}
+
+
+Using a \verb|SeqRecord| class is not very complicated, since all of the information is stored as attributes of the class. Usually you won't create a \verb|SeqRecord| ``by hand'', but instead use \verb|Bio.SeqIO| to read in a sequence file for you (see Section~\ref{sec:Bio.SeqIO-input} below).  However, creating \verb|SeqRecord| can be quite simple - at a minimum you just need a \verb|Seq| object:
+
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> simple_seq = Seq("GATC")
+>>> from Bio.SeqRecord import SeqRecord
+>>> simple_seq_r = SeqRecord(simple_seq)
+\end{verbatim}
+
+Additionally, you can also pass the id, name and description to the initialization function, but if not they will be set as strings indicating they are unknown, and can be modified subsequently:
+
+\begin{verbatim}
+>>> simple_seq_r.id
+'<unknown id>'
+>>> simple_seq_r.id = "AC12345"
+>>> simple_seq_r.description = "Made up sequence I wish I could write a paper about"
+>>> print simple_seq_r.description
+Made up sequence I wish I could write a paper about
+>>> simple_seq_r.seq
+Seq('GATC', Alphabet())
+\end{verbatim}
+
+Including an identifier is very important if you want to output your \verb|SeqRecord| to a file.  You would normally include this when creating the object:
+
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> simple_seq = Seq("GATC")
+>>> from Bio.SeqRecord import SeqRecord
+>>> simple_seq_r = SeqRecord(simple_seq, id="AC12345")
+\end{verbatim}
+
+Adding annotations is almost as easy, and just involves dealing directly with the annotation dictionary:
+
+\begin{verbatim}
+>>> simple_seq_r.annotations["evidence"] = "None. I just made it up."
+>>> print simple_seq_r.annotations
+{'evidence': 'None. I just made it up.'}
+\end{verbatim}
+
+That's just about all there is to it! Next, you may want to learn about \verb|SeqFeature| objects, which offer an additional structured way to represent information about a sequence (see Section~\ref{sec:seq_features}), but the next section dives into how to read in sequence files as \verb|SeqRecord| objects.
+
 \section{Parsing or Reading Sequences}
+\label{sec:Bio.SeqIO-input}
 
 The workhorse function \verb|Bio.SeqIO.parse()| is used to read in sequence data as SeqRecord objects.  This function expects two arguments:
 
@@ -1108,13 +1182,7 @@ for seq_record in SeqIO.parse(handle, "genbank") :
 handle.close()
 \end{verbatim}
 
-Similarly, if you wanted to read in a file in another file format, then assuming \verb|Bio.SeqIO.parse()| supports it you would just need to change the format string as appropriate, for example ``swiss'' for SwissProt files or ``embl'' for EMBL text files. There is a full listing on the wiki page (\url{http://biopython.org/wiki/SeqIO}) and in the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html}{online}):
-
-\begin{verbatim}
->>> from Bio import SeqIO
->>> help(SeqIO)
-...
-\end{verbatim}
+Similarly, if you wanted to read in a file in another file format, then assuming \verb|Bio.SeqIO.parse()| supports it you would just need to change the format string as appropriate, for example ``swiss'' for SwissProt files or ``embl'' for EMBL text files. There is a full listing on the wiki page (\url{http://biopython.org/wiki/SeqIO}) and in the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html}{online}).
 
 Another very common way to use a python iterator is within a list comprehension (or
 a generator expression).  For example, if all you wanted to extract from the file was
@@ -6913,6 +6981,7 @@ the regions of interest.
 \label{chapter:cookbook}
 
 \section{Working with sequence files}
+\label{seq:cookbook-sequences}
 
 This section shows some more examples of sequence input/output, using the
 \verb|Bio.SeqIO| module described in Chapter~\ref{chapter:Bio.SeqIO}.
@@ -8374,8 +8443,6 @@ except ImportError:
     pass
 \end{verbatim}
 
-
-
 Note that we regard doctests primarily as documentation, so you should
 stick to typical usage. Generally complicated examples dealing with error
 conditions and the like would be best left to a dedicated unit test.
@@ -8396,71 +8463,8 @@ $ python run_tests.py doctest
 \section{The SeqRecord and SeqFeature classes}
 \label{sec:advanced-seq}
 
-You read all about the basic Biopython sequence class in Chapter~\ref{chapter:Bio.Seq}, which described how to do many useful things with just the sequence. However, many times sequences have important additional properties associated with them -- as you will have seen with the \verb|SeqRecord| object in Chapter~\ref{chapter:Bio.SeqIO}.
+You read all about the basic Biopython sequence class in Chapter~\ref{chapter:Bio.Seq}, which described how to do many useful things with just the sequence. Chapter~\ref{chapter:Bio.SeqIO} introduced the \verb|SeqRecord| class, which can hold annotation including a list of \verb|SeqFeature| objects.
 This section describes how Biopython handles these higher level descriptions of a sequence.
-See also the \href{http://biopython.org/wiki/SeqRecord}{SeqRecord wiki page} and its built in API documentation (available \href{http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html}{online}):
-
-\begin{verbatim}
->>> from Bio.SeqRecord import SeqRecord
->>> help(SeqRecord)
-...
-\end{verbatim}
-
-\subsection{Sequence IDs and Descriptions -- dealing with SeqRecords}
-
-Immediately above the Sequence class is the Sequence Record class, defined in the \verb|Bio.SeqRecord| module. This class allows higher level features such as ids and features to be associated with the sequence, and is used thoughout the sequence input/output interface \verb|Bio.SeqIO|, described in Chapter~\ref{chapter:Bio.SeqIO}. The \verb|SeqRecord|class itself is very simple, and offers the following information as attributes:
-
-\begin{description}
-  \item[seq] -- The sequence itself -- A \verb|Seq| object
-
-  \item[id] -- The primary ID used to identify the sequence -- a string. In most cases this is something like an accession number.
-
-  \item[name] -- A ``common'' name/id for the sequence -- a string. In some cases this will be the same as the accession number, but it could also be a clone name. I think of this as being analagous to the LOCUS id in a GenBank record.
-
-  \item[description] -- A human readible description or expressive name for the sequence -- as string. This is similar to what follows the id information in a FASTA formatted entry.
-
-  \item[annotations] -- A dictionary of additional information about the sequence. The keys are the name of the information, and the information is contained in the value. This allows the addition of more ``unstructed'' information to the sequence.
-
-  \item[features] -- A list of \verb|SeqFeature| objects with more structured information about the features on a sequence. The structure of sequence features is described below in Section~\ref{sec:seq_features}.
-  
-  \item[dbxrefs] - A list of database cross-references as strings.
-
-  \item[letter\_annotations] -- Holds per-letter-annotations using a (restricted) dictionary of additional information about the letters in the sequence. The keys are the name of the information, and the information is contained in the value as a python sequence (i.e. a list, tuple or string) with the same length as the sequence itself.  This is often used for quality scores (e.g. Section~\ref{sec:FASTQ-filtering-example}) or secondary structure information.
-\end{description}
-
-Using a \verb|SeqRecord| class is not very complicated, since all of the information is stored as attributes of the class. Initializing the class just involves passing a \verb|Seq| object to the \verb|SeqRecord|:
-
-\begin{verbatim}
->>> from Bio.Seq import Seq
->>> simple_seq = Seq("GATC")
->>> from Bio.SeqRecord import SeqRecord
->>> simple_seq_r = SeqRecord(simple_seq)
-\end{verbatim}
-
-Additionally, you can also pass the id, name and description to the initialization function, but if not they will be set as strings indicating they are unknown, and can be modified subsequently:
-
-\begin{verbatim}
->>> simple_seq_r.id
-'<unknown id>'
->>> simple_seq_r.id = 'AC12345'
->>> simple_seq_r.description = 'My little made up sequence I wish I could
-write a paper about and submit to GenBank'
->>> print simple_seq_r.description
-My little made up sequence I wish I could write a paper about and submit
-to GenBank
->>> simple_seq_r.seq
-Seq('GATC', Alphabet())
-\end{verbatim}
-
-Adding annotations is almost as easy, and just involves dealing directly with the annotation dictionary:
-
-\begin{verbatim}
->>> simple_seq_r.annotations['evidence'] = 'None. I just made it up.'
->>> print simple_seq_r.annotations
-{'evidence': 'None. I just made it up.'}
-\end{verbatim}
-
-That's just about all there is to it! Next, you may want to learn about SeqFeatures, which offer an additional structured way to represent information about a sequence.
 
 \subsection{Features and Annotations -- SeqFeatures}
 \label{sec:seq_features}
@@ -8486,6 +8490,7 @@ The first level of dealing with sequence features is the \verb|SeqFeature| class
  
 
   \item[sub\_features] -- A very important feature of a feature is that it can have additional \verb|sub_features| underneath it. This allows nesting of features, and helps us to deal with things such as the GenBank/EMBL feature lines in a (we hope) intuitive way.
+  
 \end{description}
 
 To show an example of SeqFeatures in action, let's take a look at the following feature from a GenBank feature table:
