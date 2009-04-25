@@ -274,7 +274,6 @@ PACKAGES = [
     'Bio.Motif.Parsers',
     #'Bio.Motif.Applications', #New, deliberately left out for Biopython 1.50 
     'Bio.MetaTool',
-    'Bio.Mindy',
     'Bio.NBRF',
     'Bio.Ndb',
     'Bio.NeuralNetwork',
@@ -305,13 +304,10 @@ PACKAGES = [
     'Bio.SVDSuperimposer',
     'Bio.SwissProt',
     'Bio.UniGene',
-    'Bio.writers',
-    'Bio.writers.SeqRecord',
     'Bio.Wise',
     'Bio.WWW',
     #Other top level packages,
     'BioSQL',
-    'Martel', #Deprecated as of Biopython 1.49
     ]
 
 # packages that require Numeric Python
