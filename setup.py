@@ -308,6 +308,7 @@ PACKAGES = [
     'Bio.WWW',
     #Other top level packages,
     'BioSQL',
+    'Martel', #Deprecated as of Biopython 1.49
     ]
 
 # packages that require Numeric Python
