@@ -137,23 +137,22 @@ class AbstractCommandline:
             if parameter.is_required and not(parameter.is_set):
                 raise ValueError("Parameter %s is not set." % parameter.names)
             if parameter.is_set:
+                #This will include a trailing space:
                 commandline += str(parameter)
-
         return commandline
 
     def set_parameter(self, name, value = None):
         """Set a commandline option for a program.
         """
-        set_option = 0
+        set_option = False
         for parameter in self.parameters:
             if name in parameter.names:
                 if value is not None:
                     self._check_value(value, name, parameter.checker_function)
                     parameter.value = value
-                parameter.is_set = 1
-                set_option = 1
-
-        if set_option == 0:
+                parameter.is_set = True
+                set_option = True
+        if not set_option :
             raise ValueError("Option name %s was not found." % name)
 
     def _check_value(self, value, name, check_function):
@@ -164,6 +163,7 @@ class AbstractCommandline:
         this function will raise an error if the value is not valid, or
         finish silently otherwise.
         """
+        #TODO - Allow check_function to return True/False?
         if check_function is not None:
             is_good = check_function(value)
             if is_good in [0, 1]: # if we are dealing with a good/bad check
@@ -205,14 +205,14 @@ class _AbstractParameter:
     o value -- the value of a parameter
     """
     def __init__(self, names = [], types = [], checker_function = None, 
-                 is_required = 0, description = ""):
+                 is_required = False, description = ""):
         self.names = names
         self.param_types = types
         self.checker_function = checker_function
         self.description = description
         self.is_required = is_required
 
-        self.is_set = 0
+        self.is_set = False
         self.value = None
 
 class _Option(_AbstractParameter):
@@ -222,6 +222,8 @@ class _Option(_AbstractParameter):
     """
     def __str__(self):
         """Return the value of this option for the commandline.
+
+        Includes a trailing space.
         """
         # first deal with long options
         if self.names[0].find("--") >= 0:
@@ -237,14 +239,13 @@ class _Option(_AbstractParameter):
                 output += "%s " % self.value
         else:
             raise ValueError("Unrecognized option type: %s" % self.names[0])
-
         return output
 
 class _Argument(_AbstractParameter):
     """Represent an argument on a commandline.
     """
     def __str__(self):
-        if self.value is not None:
-            return "%s " % self.value
-        else:
+        if self.value is None:
             return " "
+        else :
+            return "%s " % self.value
