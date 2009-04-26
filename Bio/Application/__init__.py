@@ -195,6 +195,8 @@ class _AbstractParameter:
     raise an error when given a bad value, or return a [0, 1] decision on
     whether the value is correct.
 
+    o equate -- should an equals sign be inserted if a value is used?
+
     o description -- a description of the option.
 
     o is_required -- a flag to indicate if the parameter must be set for
@@ -205,11 +207,12 @@ class _AbstractParameter:
     o value -- the value of a parameter
     """
     def __init__(self, names = [], types = [], checker_function = None, 
-                 is_required = False, description = ""):
+                 is_required = False, description = "", equate=True):
         self.names = names
         self.param_types = types
         self.checker_function = checker_function
         self.description = description
+        self.equate = equate
         self.is_required = is_required
 
         self.is_set = False
@@ -225,21 +228,16 @@ class _Option(_AbstractParameter):
 
         Includes a trailing space.
         """
-        # first deal with long options
-        if self.names[0].find("--") >= 0:
-            output = "%s" % self.names[0]
-            if self.value is not None:
-                output += "=%s " % self.value
-            else:
-                output += " "
-        # now short options
-        elif self.names[0].find("-") >= 0:
-            output = "%s " % self.names[0]
-            if self.value is not None:
-                output += "%s " % self.value
-        else:
-            raise ValueError("Unrecognized option type: %s" % self.names[0])
-        return output
+        # Note: Before equate was handled explicitly, the old
+        # code would do either "--name " or "--name=value ",
+        # or " -name " or " -name value ".  This choice is now
+        # now made explicitly when setting up the option.
+        if self.value is None :
+            return "%s " % self.names[0]
+        elif self.equate :
+            return "%s=%s " % (self.names[0], self.value)
+        else :
+            return "%s %s " % (self.names[0], self.value)
 
 class _Argument(_AbstractParameter):
     """Represent an argument on a commandline.
