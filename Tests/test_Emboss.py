@@ -542,7 +542,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         self.assertEqual(out.read().strip(), "")
         if result.return_code != 0 : print >> sys.stderr, "\n%s"%cline
         self.assertEqual(result.return_code, 0)
-        self.assertEqual(result.get_result("outfile"), out_file)
+        #Should be able to access this via any alias:
+        self.assertEqual(result.get_result("-outfile"), out_file)
         assert os.path.isfile(out_file)
         #Check we can parse the output and it is sensible...
         self.pairwise_alignment_check(query,

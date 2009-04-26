@@ -109,8 +109,19 @@ class ApplicationResult:
 
     def get_result(self, output_name):
         """Retrieve result information for the given output.
+
+        Supports any of the defined parameters aliases (assuming the
+        parameter is defined as an output).
         """
-        return self._results[output_name]
+        try :
+            return self._results[output_name]
+        except KeyError, err :
+            #Try the aliases...
+            for parameter in self._cl.parameters:
+                if output_name in parameter.names :
+                    return self._results[parameter.names[-1]]
+            #No, really was a key error:
+            raise err
 
     def available_results(self):
         """Retrieve a list of all available results.
