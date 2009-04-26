@@ -314,8 +314,39 @@ class WaterCommandline(Application.AbstractCommandline):
                  "Matrix file"),
          _Option(["-similarity","similarity"], ["input"], None, 0,
                  "Display percent identity and similarity"),
-         _Option(["-nosimilarity","nosimilarity"], ["input"], None, 0,
-                 "Do not display percent identity and similarity"),
+         _Option(["-snucleotide","snucleotide"], ["input"], None, 0,
+                 "Sequences are nucleotide (boolean)"),
+         _Option(["-sprotein","sprotein"], ["input"], None, 0,
+                 "Sequences are protein (boolean)"),
+         _Option(["-aformat","aformat"], ["input"], None, 0,
+                 "Display output in a different specified output format")]
+
+class NeedleCommandline(Application.AbstractCommandline):
+    """Commandline object for the needle program from EMBOSS.
+    """
+    def __init__(self, cmd = "needle"):
+        Application.AbstractCommandline.__init__(self)
+        self.program_name = cmd
+
+        self.parameters = \
+         [_Option(["-asequence","asequence"], ["input", "file"], None, 1,
+                  "First sequence to align"),
+         _Option(["-bsequence","bsequence"], ["input", "file"], None, 1,
+                  "Second sequence to align"),
+         _Option(["-gapopen","gapopen"], ["input"], None, 1,
+                 "Gap open penalty"),
+         _Option(["-gapextend","gapextend"], ["input"], None, 1,
+                 "Gap extension penalty"),
+         _Option(["-outfile","outfile"], ["output", "file"], None, 1,
+                 "Output file for the alignment"),
+         _Option(["-datafile","datafile"], ["input", "file"], None, 0,
+                 "Matrix file"),
+         _Option(["-similarity","similarity"], ["input"], None, 0,
+                 "Display percent identity and similarity"),
+         _Option(["-snucleotide","snucleotide"], ["input"], None, 0,
+                 "Sequences are nucleotide (boolean)"),
+         _Option(["-sprotein","sprotein"], ["input"], None, 0,
+                 "Sequences are protein (boolean)"),
          _Option(["-aformat","aformat"], ["input"], None, 0,
                  "Display output in a different specified output format")]
 
