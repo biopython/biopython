@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 24 April 2009 (Biopython 1.50)}
+\date{Last Update -- 27 April 2009 (Biopython 1.50+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -103,7 +103,7 @@ The Biopython Project is an international association of developers of freely av
 
 Basically, we just like to program in python and want to make it as easy as possible to use python for bioinformatics by creating high-quality, reusable modules and scripts.
 
-\subsection{What can I find in the Biopython package}
+\section{What can I find in the Biopython package}
 
 The main Biopython releases have lots of functionality, including:
 
@@ -249,7 +249,13 @@ and HTML formats
 
   \item \emph{Why doesn't} \verb|Bio.Blast.NCBIXML.read()| \emph{work? The module imports but there is no read function!} \\
   You need Biopython 1.50 or later.  Or, use \texttt{Bio.Blast.NCBIXML.parse(...).next()} instead.
-
+  
+  \item \emph{Why doesn't my} \verb|SeqRecord| \emph{object have a} \verb|letter_annotations| \emph{attribute?} \\
+  Per-letter-annotation support was added in Biopython 1.50.
+  
+ \item \emph{Why can't I slice my} \verb|SeqRecord| \emph{to get a sub-record?} \\
+  You need Biopython 1.50 or later.
+  
   \item \emph{I looked in a directory for code, but I couldn't find the code that does something. Where's it hidden?} \\
   One thing to know is that we put code in \verb|__init__.py| files. If you are not used to looking for code in this file this can be confusing. The reason we do this is to make the imports easier for users. For instance, instead of having to do a ``repetitive'' import like \verb|from Bio.GenBank import GenBank|, you can just use \verb|from Bio import GenBank|.
 
@@ -1058,7 +1064,7 @@ there are module level functions in \verb|Bio.Seq| will accept plain python stri
 \label{chapter:Bio.SeqIO}
 
 In this chapter we'll discuss in more detail the \verb|Bio.SeqIO| module, which was briefly introduced in Chapter~\ref{chapter:quick-start}. This aims to provide a simple interface for working with assorted sequence file formats in a uniform way.
-See also the \verb|Bio.SeqIO| wiki page (\url{http://biopython.org/wiki/SeqIO}), and in the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html}{online}):
+See also the \verb|Bio.SeqIO| wiki page (\url{http://biopython.org/wiki/SeqIO}), and the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html}{online}):
 
 \begin{verbatim}
 >>> from Bio import SeqIO
@@ -1067,7 +1073,7 @@ See also the \verb|Bio.SeqIO| wiki page (\url{http://biopython.org/wiki/SeqIO}),
 \end{verbatim}
 
 The ``catch'' is that you have to work with \verb|SeqRecord| objects - which contain a \verb|Seq| object (as described in Chapter~\ref{chapter:Bio.Seq}) plus annotation like an identifier and description.
-We'll introduce the basics of \verb|SeqRecord| object in this chapter, see also the \verb|SeqRecord| wiki page (\url{http://biopython.org/wiki/SeqRecord}), and in the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html}{online}):
+We'll introduce the basics of \verb|SeqRecord| object in this chapter, see also the \verb|SeqRecord| wiki page (\url{http://biopython.org/wiki/SeqRecord}), and the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html}{online}):
 
 \begin{verbatim}
 >>> from Bio.SeqRecord import SeqRecord
@@ -2988,9 +2994,7 @@ If you also read the section~\ref{sec:parsing-blast} on parsing BLAST XML output
 
 Sure, parsing one record is great, but I've got a BLAST file with tons of records -- how can I parse them all? Well, fear not, the answer lies in the very next section.
 
-\subsection{Parsing a file full of BLAST runs}
-
-Of course, local blast is cool because you can run a whole bunch of sequences against a database and get back a nice report on all of it. So, Biopython definitely has facilities to make it easy to parse humongous files without memory problems.
+\subsection{Parsing a plain-text BLAST file full of BLAST runs}
 
 We can do this using the blast iterator. To set up an iterator, we first set up a parser, to parse our blast reports in Blast Record objects:
 
@@ -3040,7 +3044,7 @@ Each call to next will return a new record that we can deal with. Now we can ite
 
 The iterator allows you to deal with huge blast records without any memory problems, since things are read in one at a time. I have parsed tremendously huge files without any problems using this.
 
-\subsection{Finding a bad record somewhere in a huge file}
+\subsection{Finding a bad record somewhere in a huge plain-text BLAST file}
 
 One really ugly problem that happens to me is that I'll be parsing a huge blast file for a while, and the parser will bomb out with a ValueError. This is a serious problem, since you can't tell if the ValueError is due to a parser problem, or a problem with the BLAST. To make it even worse, you have no idea where the parse failed, so you can't just ignore the error, since this could be ignoring an important data point.
 
