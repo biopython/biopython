@@ -123,8 +123,8 @@ The deprecated functions blast and blasturl were removed in Release 1.44.
 
 Bio.Saf
 =======
-Deprecated as of Release 1.48, as it appears to have no users, and relies
-on Martel which doesn't work properly with mxTextTools 3.0.
+Deprecated as of Release 1.48, removed in Release 1.51.  If useful, a parser
+for this "simple alignment format" could be developed for Bio.AlignIO instead.
 
 Bio.NBRF
 ========
