@@ -397,6 +397,7 @@ To build it, use the standard python build procedure:
 
 \begin{verbatim}
 $ python setup.py build
+$ python setup.py test
 \end{verbatim}
 
 Then become root, and install it, again using the standard python
@@ -557,38 +558,28 @@ This does not install the documentation, tests, example code or source code, so 
 \subsection{Installing from source on Windows}
 \label{sec:windows_install}
 
-This section deals with installing the source (i.~e.~from CVS or from a source zip file) on a Windows machine. Much of the information from the UNIX install applies here, so it would be good to read section~\ref{sec:unix_install} before starting. Also, a little warning -- I (Brad) am writing these instructions based on very limited experience with Windows; I am basically a UNIX geek. So if you know more about Windows and want to add/correct things in this section, please feel let us know!
+This section deals with installing the source (i.~e.~from CVS or from a source zip file) on a Windows machine. Much of the information from the UNIX install applies here, so it would be good to read section~\ref{sec:unix_install} before starting.  You will need a suitable C compiler.
+What you choose may depend on your version of Python.
 
-I have successfully managed to use distutils to compile Biopython with Borland's free C++ compiler (available from \ahrefurl{\url{http://www.inprise.com/bcppbuilder/freecompiler/}}). It should also be possible with other Distutils supported compilers (please provide info if you've done this!).
-
-\begin{enumerate}
-  \item Borland C++ compiler
-
-\begin{itemize}
-  \item First you need to install and setup Borland C++. There are instructions on the Borland page and on the web, so you should follow these.
- 
-  \item Now you have to get python, which is compiled with a Microsoft compiler, able to live happily with Borland compiled extensions. Gordon Williams has an excellent page describing doing this (\ahrefurl{\url{http://www.cyberus.ca/~g_will/pyExtenDL.shtml}}), which is where I learned everything I know. Basically, what I did was run the Borland supplied tool \verb|COFF2OMF| on the python20.lib file:
+For Python 2.6 we currently use Microsoft's free VC++ 2008 Express Edition from \ahrefurl{\url{http://www.microsoft.com/express/download/}}, installation of this is pretty simple.  Then go to the Biopython source directory and run:
 
 \begin{verbatim}
-> COFF2OMF python20.lib python20-borland.lib
+c:\python26\python setup.py build
+c:\python26\python setup.py test
+c:\python26\python setup.py install
 \end{verbatim}
 
-Then I just renamed \verb|python20.lib| to \verb|python20-orig.lib| and renamed \verb|python20-borland.lib| to \verb|python20.lib|, so that distutils will link against this ``Borland friendly'' python library.
-
-  \item Now that that is ready, we are at the easy part -- using distutils to build it. All I did was:
+For older versions of Python, we use mingw32 installed from cygwin (\ahrefurl{\url{http://www.cygwin.com}}).  Once everything is setup (which is a bit complicated), you would again get the source, and from that directory run:
 
 \begin{verbatim}
-> python setup.py build --compiler=bcpp
-> python setup.py install
+c:\python25\python setup.py build --compiler=mingw32
+c:\python25\python setup.py test
+c:\python25\python setup.py install
 \end{verbatim}
 
-and voila!, it's installed. 
+Previously (back on Python 2.0), Brad has also managed to use Borland's free C++ compiler (available from \ahrefurl{\url{http://www.inprise.com/bcppbuilder/freecompiler/}}), but this required extra work.
 
-\end{itemize}
-
-\end{enumerate}
-
-Now that you've got everything installed, skip on ahead to section~\ref{sec:is_working} to make sure everything worked.
+Now that you've got everything installed, carry on ahead to section~\ref{sec:is_working} to make sure everything worked.
 
 \section{Making sure everything worked}
 \label{sec:is_working}
@@ -615,13 +606,13 @@ Seq('DQK', HasStopCodon(IUPACProtein(), '*'))
 
 If this worked properly, then it looks like Biopython is in a happy place where python can find it, so now you might want to do some more rigorous tests. The \verb|Tests| directory inside the distribution contains a number of tests you can run to make sure all of the different parts of biopython are working. These should all work just by running \verb|python test_WhateverTheTestIs.py|. 
 
-You can also run all of the tests using a nice graphical interface supplied by using PyUnit. To do this, you just need to be in the installation directory and type:
+If you didn't do this earlier, you should also all of our tests. To do this, you just need to be in the source code installation directory and type:
 
 \begin{verbatim}
 python setup.py test
 \end{verbatim}
 
-This should start up a Tk based graphical user interface (or default to the command line if you don't have Tkinter installed), which you can run the tests from. You can also run them by typing \verb|python run_tests.py| in the Tests directory.
+You can also run them by typing \verb|python run_tests.py| in the Tests sub directory.
 
 If you've made it this far, you've gotten Biopython installed and running.
 Congratulations!
