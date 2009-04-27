@@ -291,17 +291,21 @@ company has some commercial products as well, but just scroll down their
 page to the Open Source software section for the base ReportLab
 downloads.
 
+If you want to generate bitmap images, you will also need the ReportLab
+module renderPM.  This in turn requires the
+\href{http://www.pythonware.com/products/pil/}{Python Imaging Library (PIL)}.
+
 \subsubsection{UNIX and Mac OS X systems}
 
 For UNIX installs, you should download the tarred and gzipped version of
 the ReportLab distribution. At the time of this writing, this is called
-\verb|ReportLab_1_20.tgz|. First, unpack the distribution and change
+\verb|ReportLab_2_3.tar.gz|. First, unpack the distribution and change
 into the created directory:
 
 \begin{verbatim}
-$ gunzip ReportLab_1_20.tgz 
-$ tar -xvpf ReportLab_1_20.tar
-$ cd reportlab_1_20/
+$ gunzip ReportLab_2_3.tar.gz
+$ tar -xvpf ReportLab_2_3.tar
+$ cd reportlab_2_3/
 \end{verbatim}
 
 Once again, ReportLab uses the standard python installation system which
@@ -320,25 +324,7 @@ $ python setup.py install
 
 \subsubsection{Windows systems}
 
-ReportLab does not have a graphical windows installer like the other
-Biopython requirements. Luckily, it doesn't require any compilation
-steps to work properly, so the installation is still quite easy. 
-
-First, download the zipped distribution from the download site listed
-above. At the current time this is called \verb|ReportLab_1_20.zip|. You
-can also download the tarred/gzipped file (with a \verb|.tgz|
-extension), but Windows handles zipped files better.
-
-Secondly, unzip the downloaded file. WinZip is a common freely available
-program for doing this
-(\ahrefurl{\url{http://www.winzip.com/ddchomea.htm}}). The unzip process
-should create a \verb|reportlab| directory.
-
-Finally, drag the created \verb|reportlab| directory to the standard
-directory for Python extensions. On current versions of python with a
-standard installation this would be something like 
-\verb|C:/Python24/Lib/site-packages|. All you have to do is drag it over
-and you should be all set. Nice and easy.
+ReportLab now has graphical windows installers.  Nice and easy.
 
 \subsubsection{Making sure it installed correctly}
 
@@ -357,8 +343,8 @@ Type "help", "copyright", "credits" or "license" for more information.
 Depending on your version of python and what you have installed, you may
 get the following warning message: 
 \verb|Warn: Python Imaging Library not available|.  This isn't anything
-to worry about since the Biopython parts that use ReportLab will work
-just fine without it.
+to worry about unless you want to produce bitmap images, since the
+Biopython parts that use ReportLab will work just fine without it.
 
 \subsection{Database Access (MySQLdb, ...) (optional)}
 
