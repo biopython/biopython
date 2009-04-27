@@ -116,7 +116,6 @@ Bio.Sequencing.Ace.Iterator --> Bio.Sequencing.Ace.parse(handle)
 Bio.Sequencing.Phd.RecordParser --> Bio.Sequencing.Phd.read(handle)
 Bio.Sequencing.Phd.Iterator --> Bio.Sequencing.Phd.parse(handle)
 
-
 Bio.Blast.NCBIWWW
 =================
 The HTML BLAST parser was deprecated as of Release 1.48.
@@ -129,7 +128,8 @@ on Martel which doesn't work properly with mxTextTools 3.0.
 
 Bio.NBRF
 ========
-Deprecated as of Release 1.48 in favor of the "pir" format in Bio.SeqIO
+Deprecated as of Release 1.48 in favor of the "pir" format in Bio.SeqIO,
+removed in Release 1.51.
 
 Bio.IntelliGenetics
 ===================
