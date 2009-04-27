@@ -1021,7 +1021,9 @@ class CircularDrawer(AbstractDrawer):
         shaft_height = boxheight*shaft_height_ratio
         shaft_inner_radius = middle_radius - 0.5*shaft_height
         shaft_outer_radius = middle_radius + 0.5*shaft_height
-        headangle_delta = abs(angle)*max(0.0,min(1.0,(abs(boxheight)*head_length_ratio)/middle_radius))
+        headangle_delta = max(0.0,min(abs(boxheight)*head_length_ratio/middle_radius, abs(angle)))
+        if angle < 0 :
+            headangle_delta *= -1 #reverse it
         if orientation=="right" :
             headangle = endangle-headangle_delta
         else :
@@ -1075,6 +1077,8 @@ class CircularDrawer(AbstractDrawer):
                      90 - (headangle * 180 / pi), 90 - (startangle * 180 / pi),
                      reverse=True)
             p.lineTo(x0+outer_radius*headsin, y0+outer_radius*headcos)
+            #TODO - two staight lines is only a good approximation for small
+            #head angle, in general will need to curved lines here:
             p.lineTo(x0+middle_radius*endsin, y0+middle_radius*endcos)
             p.lineTo(x0+inner_radius*headsin, y0+inner_radius*headcos)
             p.closePath()
@@ -1096,6 +1100,8 @@ class CircularDrawer(AbstractDrawer):
                      90 - (endangle * 180 / pi), 90 - (headangle * 180 / pi),
                      reverse=False)
             p.lineTo(x0+outer_radius*headsin, y0+outer_radius*headcos)
+            #TODO - two staight lines is only a good approximation for small
+            #head angle, in general will need to curved lines here:
             p.lineTo(x0+middle_radius*startsin, y0+middle_radius*startcos)
             p.lineTo(x0+inner_radius*headsin, y0+inner_radius*headcos)
             p.closePath()
