@@ -75,7 +75,9 @@ Deprecated in Release 1.49, as the website this parsed has been redesigned.
 
 Martel
 ======
-Declared obsolete in Release 1.48, deprecated in Release 1.49.
+Declared obsolete in Release 1.48, deprecated in Release 1.49, and removed
+in Release 1.51.  The source code for Martel is still in our repository if
+anyone wanted to develop this outside of Biopython.
 
 Bio.Mindy and associated modules.
 =================================
