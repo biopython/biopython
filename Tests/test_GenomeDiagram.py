@@ -208,6 +208,69 @@ class GraphTest(unittest.TestCase):
         
         assert gd[4:16] == [(5, 15), (10, 20)], \
                 "Unable to insert and retrieve points correctly"
+
+
+class LabelTest(unittest.TestCase) :
+    """Check label positioning."""
+    def setUp(self) :
+        self.gdd = Diagram('Test Diagram', circular=False,
+                           y=0.01, yt=0.01, yb=0.01,
+                           x=0.01, xl=0.01, xr=0.01)
+
+    def finish(self, name, circular=True) :
+        #And draw it...
+        tracks = len(self.gdd.tracks)
+        #Work arround the page orientation code being too clever
+        #and flipping the h & w round:
+        if tracks <= 3 :
+            orient = "landscape"
+        else :
+            orient = "portrait"
+        self.gdd.draw(format='linear', orientation=orient,
+                      tracklines=False,
+                      pagesize=(15*cm,5*cm*tracks),
+                      fragments=1,
+                      start=0, end=400)
+        self.gdd.write(os.path.join('Graphics', name+".pdf"), "pdf")
+        #For the tutorial this might be useful:
+        #self.gdd.write(os.path.join('Graphics', name+".png"), "png")
+        if circular :
+            #Circular diagram - move tracks to make an empty space in the middle
+            for track_number in self.gdd.tracks.keys() :
+                self.gdd.move_track(track_number,track_number+1)
+            self.gdd.draw(tracklines=False,
+                          pagesize=(15*cm,15*cm),
+                          fragments=1,
+                          start=0, end=400)
+            self.gdd.write(os.path.join('Graphics', name+"_c.pdf"), "pdf")
+    
+    def add_track_with_sigils(self, **kwargs) :
+        self.gdt_features = self.gdd.new_track(1, greytrack=False)
+        self.gds_features = self.gdt_features.new_set()
+        for i in range(18) :
+            start = int((400 * i)/18.0)
+            end = start + 17
+            if i % 3 == 0 :
+                strand=None
+                name = "Strandless"
+                color=colors.orange
+            elif i % 3 == 1 :
+                strand=+1
+                name="Forward"
+                color=colors.red
+            else :
+                strand = -1
+                name="Reverse"
+                color=colors.blue
+            feature = SeqFeature(FeatureLocation(start, end), strand=strand)
+            self.gds_features.add_feature(feature, name=name,
+                                          color=color, label=True, **kwargs)
+
+    def test_label_default(self) :
+        """Feature labels - default."""
+        self.add_track_with_sigils()
+        self.finish("labels_default")
+
 class SigilsTest(unittest.TestCase):
     """Check the different feature sigils.
 
