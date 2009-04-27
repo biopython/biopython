@@ -1042,8 +1042,9 @@ class CircularDrawer(AbstractDrawer):
         headcos, headsin = cos(headangle), sin(headangle)
         endcos, endsin = cos(endangle), sin(endangle)
         x0,y0 = self.xcenter, self.ycenter      # origin of the circle
-        if 0.1 >= abs(angle) and abs(headangle_delta) >= abs(angle) :
-            #If the angle is small, cheat and just use a triangle.
+        if 0.5 >= abs(angle) and abs(headangle_delta) >= abs(angle) :
+            #If the angle is small, and the arrow is all head,
+            #cheat and just use a triangle.
             if orientation=="right" :
                 x1,y1 = (x0+inner_radius*startsin, y0+inner_radius*startcos)
                 x2,y2 = (x0+outer_radius*startsin, y0+outer_radius*startcos)
@@ -1077,10 +1078,25 @@ class CircularDrawer(AbstractDrawer):
                      90 - (headangle * 180 / pi), 90 - (startangle * 180 / pi),
                      reverse=True)
             p.lineTo(x0+outer_radius*headsin, y0+outer_radius*headcos)
-            #TODO - two staight lines is only a good approximation for small
-            #head angle, in general will need to curved lines here:
-            p.lineTo(x0+middle_radius*endsin, y0+middle_radius*endcos)
-            p.lineTo(x0+inner_radius*headsin, y0+inner_radius*headcos)
+            if abs(angle) < 0.5 :
+                p.lineTo(x0+middle_radius*endsin, y0+middle_radius*endcos)
+                p.lineTo(x0+inner_radius*headsin, y0+inner_radius*headcos)
+            else :
+                dx = min(0.1, abs(angle)/50.0) #auto-scale number of steps
+                x = dx
+                while x < 1 :
+                    r = outer_radius - x*(outer_radius-middle_radius)
+                    a = headangle + x*(endangle-headangle)
+                    p.lineTo(x0+r*sin(a), y0+r*cos(a))
+                    x += dx
+                p.lineTo(x0+middle_radius*endsin, y0+middle_radius*endcos)
+                x = dx
+                while x < 1 :
+                    r = middle_radius - x*(middle_radius-inner_radius)
+                    a = headangle + (1-x)*(endangle-headangle)
+                    p.lineTo(x0+r*sin(a), y0+r*cos(a))
+                    x += dx
+                p.lineTo(x0+inner_radius*headsin, y0+inner_radius*headcos)
             p.closePath()
             return p
         else :
@@ -1102,8 +1118,25 @@ class CircularDrawer(AbstractDrawer):
             p.lineTo(x0+outer_radius*headsin, y0+outer_radius*headcos)
             #TODO - two staight lines is only a good approximation for small
             #head angle, in general will need to curved lines here:
-            p.lineTo(x0+middle_radius*startsin, y0+middle_radius*startcos)
-            p.lineTo(x0+inner_radius*headsin, y0+inner_radius*headcos)
+            if abs(angle) < 0.5 :
+                p.lineTo(x0+middle_radius*startsin, y0+middle_radius*startcos)
+                p.lineTo(x0+inner_radius*headsin, y0+inner_radius*headcos)
+            else :
+                dx = min(0.1, abs(angle)/50.0) #auto-scale number of steps
+                x = dx
+                while x < 1 :
+                    r = outer_radius - x*(outer_radius-middle_radius)
+                    a = headangle + x*(startangle-headangle)
+                    p.lineTo(x0+r*sin(a), y0+r*cos(a))
+                    x += dx
+                p.lineTo(x0+middle_radius*startsin, y0+middle_radius*startcos)
+                x = dx
+                while x < 1 :
+                    r = middle_radius - x*(middle_radius-inner_radius)
+                    a = headangle + (1-x)*(startangle-headangle)
+                    p.lineTo(x0+r*sin(a), y0+r*cos(a))
+                    x += dx
+                p.lineTo(x0+inner_radius*headsin, y0+inner_radius*headcos)
             p.closePath()
             return p
 
