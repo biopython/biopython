@@ -133,7 +133,8 @@ Deprecated as of Release 1.48 in favor of the "pir" format in Bio.SeqIO
 
 Bio.IntelliGenetics
 ===================
-Deprecated as of Release 1.48 in favor of the "ig" format in Bio.SeqIO
+Deprecated as of Release 1.48 in favor of the "ig" format in Bio.SeqIO,
+removed in Release 1.51.
 
 Bio.SeqIO submodules PhylipIO, ClustalIO, NexusIO and StockholmIO
 =================================================================
