@@ -90,8 +90,8 @@ and Bio.Emboss.PrimerSearch instead.
 
 Bio.MetaTool
 ============
-Deprecated in Release 1.48, this was a parser for the output of MetaTool 3.5
-which is now obsolete.
+Deprecated in Release 1.48, and removed in Release 1.51, this was a parser
+for the output of MetaTool 3.5 which is now obsolete.
 
 Bio.GenBank
 ===========
