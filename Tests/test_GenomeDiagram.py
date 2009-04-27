@@ -208,7 +208,7 @@ class GraphTest(unittest.TestCase):
         
         assert gd[4:16] == [(5, 15), (10, 20)], \
                 "Unable to insert and retrieve points correctly"
-class LinearSigilsTest(unittest.TestCase):
+class SigilsTest(unittest.TestCase):
     """Check the different feature sigils.
 
     These figures are intended to be used in the Tutorial..."""
@@ -230,7 +230,7 @@ class LinearSigilsTest(unittest.TestCase):
         feature = SeqFeature(FeatureLocation(275, 375), strand=-1)
         self.gds_features.add_feature(feature, name="Reverse", **kwargs)
 
-    def finish(self, name) :
+    def finish(self, name, circular=True) :
         #And draw it...
         tracks = len(self.gdd.tracks)
         #Work arround the page orientation code being too clever
@@ -247,6 +247,15 @@ class LinearSigilsTest(unittest.TestCase):
         self.gdd.write(os.path.join('Graphics', name+".pdf"), "pdf")
         #For the tutorial this might be useful:
         #self.gdd.write(os.path.join('Graphics', name+".png"), "png")
+        if circular :
+            #Circular diagram - move tracks to make an empty space in the middle
+            for track_number in self.gdd.tracks.keys() :
+                self.gdd.move_track(track_number,track_number+1)
+            self.gdd.draw(tracklines=False,
+                          pagesize=(15*cm,15*cm),
+                          fragments=1,
+                          start=0, end=400)
+            self.gdd.write(os.path.join('Graphics', name+"_c.pdf"), "pdf")
 
     def test_labels(self) :
         """Feature labels."""
@@ -260,7 +269,7 @@ class LinearSigilsTest(unittest.TestCase):
                                    label_position="middle",
                                    label_size=6, label_angle=-90)
         self.assertEqual(len(self.gdd.tracks), 4)
-        self.finish("GD_sigil_labels")
+        self.finish("GD_sigil_labels", circular=False)
 
     def test_arrow_shafts(self) :
         """Feature arrow sigils, varying shafts."""
@@ -284,7 +293,52 @@ class LinearSigilsTest(unittest.TestCase):
         self.add_track_with_sigils(sigil="ARROW", color="red",
                                    arrowhead_length=10000) #Triangles
         self.assertEqual(len(self.gdd.tracks), 4)
-        self.finish("GD_sigil_arrows")        
+        self.finish("GD_sigil_arrows")
+
+    def test_small_arrow_heads(self) :
+        """Feature arrow sigil heads within bounding box."""
+        #Add a track of features, bigger height to emphasise any sigil errors
+        self.gdt_features = self.gdd.new_track(1, greytrack=True, height=3)
+        #We'll just use one feature set for these features,
+        self.gds_features = self.gdt_features.new_set()
+        #Green arrows just have small heads (meaning if there is a mitre
+        #it will escape the bounding box).  Red arrows are small triangles.
+        feature = SeqFeature(FeatureLocation(15, 30), strand=+1)
+        self.gds_features.add_feature(feature, color="grey")
+        self.gds_features.add_feature(feature, name="Forward", sigil="ARROW",
+                                      arrowhead_length=0.05)
+        feature = SeqFeature(FeatureLocation(55, 60), strand=+1)
+        self.gds_features.add_feature(feature, color="grey")
+        self.gds_features.add_feature(feature, name="Forward", sigil="ARROW",
+                                      arrowhead_length=1000, color="red")
+        feature = SeqFeature(FeatureLocation(75, 125), strand=+1)
+        self.gds_features.add_feature(feature, color="grey")
+        self.gds_features.add_feature(feature, name="Forward", sigil="ARROW",
+                                      arrowhead_length=0.05)
+        feature = SeqFeature(FeatureLocation(140, 155), strand=None)
+        self.gds_features.add_feature(feature, color="grey")
+        self.gds_features.add_feature(feature, name="Strandless", sigil="ARROW",
+                                      arrowhead_length=0.05)
+        feature = SeqFeature(FeatureLocation(180, 185), strand=None)
+        self.gds_features.add_feature(feature, color="grey")
+        self.gds_features.add_feature(feature, name="Strandless", sigil="ARROW",
+                                      arrowhead_length=1000, color="red")
+        feature = SeqFeature(FeatureLocation(200, 250), strand=None)
+        self.gds_features.add_feature(feature, color="grey")
+        self.gds_features.add_feature(feature, name="Strandless", sigil="ARROW",
+                                      arrowhead_length=0.05)
+        feature = SeqFeature(FeatureLocation(265, 280), strand=-1)
+        self.gds_features.add_feature(feature, name="Reverse", sigil="ARROW",
+                                      arrowhead_length=0.05)
+        feature = SeqFeature(FeatureLocation(305, 310), strand=-1)
+        self.gds_features.add_feature(feature, color="grey")
+        self.gds_features.add_feature(feature, name="Reverse", sigil="ARROW",
+                                      arrowhead_length=1000, color="red")
+        feature = SeqFeature(FeatureLocation(325, 375), strand=-1)
+        self.gds_features.add_feature(feature, color="grey")
+        self.gds_features.add_feature(feature, name="Reverse", sigil="ARROW",
+                                      arrowhead_length=0.05)
+        self.finish("GD_sigil_arrows_small")
 
 
 class DiagramTest(unittest.TestCase):
