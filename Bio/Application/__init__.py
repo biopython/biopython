@@ -21,7 +21,7 @@ def generic_run(commandline):
 
     #Try and use subprocess (available in python 2.4+)
     try :
-        import subprocess, sys
+        import subprocess
         #We don't need to supply any piped input, but we setup the
         #standard input pipe anyway as a work around for a python
         #bug if this is called from a Windows GUI program.  For
