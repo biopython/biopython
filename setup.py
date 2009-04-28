@@ -232,6 +232,7 @@ def is_Numpy_installed():
 PACKAGES = [
     'Bio',
     'Bio.Align',
+    'Bio.Align.Applications',
     'Bio.AlignIO',
     'Bio.AlignAce',
     'Bio.Alphabet',
