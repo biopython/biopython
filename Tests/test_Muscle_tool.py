@@ -70,11 +70,11 @@ class SimpleAlignTest(unittest.TestCase) :
         cline.set_parameter("stable")
         #Use fast options
         cline.set_parameter("maxiters", 1)
-        #cline.set_parameter("diags")
+        cline.set_parameter("diags")
         #Use clustal output
         cline.set_parameter("clwstrict")
         #TODO - Fix the trailing space!
-        self.assertEqual(str(cline).rstrip(), "muscle -in temp_cw_prot.fasta -maxiters 1 -clwstrict -stable")
+        self.assertEqual(str(cline).rstrip(), "muscle -in temp_cw_prot.fasta -diags -maxiters 1 -clwstrict -stable")
         result, out_handle, err_handle = generic_run(cline)
         align = AlignIO.read(out_handle, "clustal")
         self.assertEqual(len(records), len(align))

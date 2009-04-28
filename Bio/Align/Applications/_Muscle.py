@@ -52,7 +52,12 @@ class MuscleCommandline(Application.AbstractCommandline):
                     None, 0, "Output filename",
                     0), #No equate
 
-            _Option(["-profile", "profile"], ["input", "file"],
+            _Option(["-diags", "diags"], ["input"],
+                    lambda x: 0, #Does not take a value
+                    0, "Find diagonals (faster for similar sequences)",
+                    0), #No equate
+            
+            _Option(["-profile", "profile"], ["input"],
                     lambda x: 0, #Does not take a value
                     0, "Perform a profile alignment",
                     0), #No equate
