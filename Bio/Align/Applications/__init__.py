@@ -5,3 +5,4 @@
 """Alignment command line tool wrappers."""
 from _Muscle import MuscleCommandline
 from _Clustalw import ClustalwCommandline
+from _Prank import PrankCommandline
