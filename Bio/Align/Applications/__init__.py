@@ -6,3 +6,4 @@
 from _Muscle import MuscleCommandline
 from _Clustalw import ClustalwCommandline
 from _Prank import PrankCommandline
+from _Mafft import MafftCommandline
