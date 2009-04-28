@@ -503,18 +503,36 @@ as well (normally called something like \verb|python-devel-2.5.rpm|).
 
 \end{enumerate}
 
-\subsubsection{Installation on FreeBSD}
+\subsubsection{Using the Python package index}
 
-Johann Visagie has been kind enough to create (and keep updated) a FreeBSD port of Biopython. Thanks to the wonders of the ports system, this means that all you need to do to install Biopython on FreeBSD is do the following as root:
+Another simple option is to use the Python package index
+(\ahrefurl{\url{http://pypi.python.org/pypi}}) with the \verb|easy_install|
+command:
 
 \begin{verbatim}
-cd /usr/ports/biology/py-biopython
-make install
+easy_install -f http://biopython.org/DIST/ biopython
 \end{verbatim}
 
-And voila! It's installed. 
+If Python is installed in the standard location, you will need administrator
+privileges to do this; the \verb|sudo| command works well:
 
-If you want more information on FreeBSD and things, Johann has written a nice primer for his FreeBSD EMBOSS port. This has lots of generally useful information, such as how to keep your ports tree up to date. If you are new to FreeBSD, you should definitely check it out at \ahrefurl{\url{ftp://ftp.no.embnet.org/pub/EMBOSS-extras/EMBOSS-FreeBSD-HOWTO.txt}}.
+\begin{verbatim}
+sudo easy_install -f http://biopython.org/DIST/ biopython
+\end{verbatim}
+
+% FreeBSD port not up to date
+% \subsubsection{Installation on FreeBSD}
+% 
+% Johann Visagie has been kind enough to create (and keep updated) a FreeBSD port of Biopython. Thanks to the wonders of the ports system, this means that all you need to do to install Biopython on FreeBSD is do the following as root:
+% 
+% \begin{verbatim}
+% cd /usr/ports/biology/py-biopython
+% make install
+% \end{verbatim}
+% 
+% And voila! It's installed. 
+% 
+% If you want more information on FreeBSD and things, Johann has written a nice primer for his FreeBSD EMBOSS port. This has lots of generally useful information, such as how to keep your ports tree up to date. If you are new to FreeBSD, you should definitely check it out at \ahrefurl{\url{ftp://ftp.no.embnet.org/pub/EMBOSS-extras/EMBOSS-FreeBSD-HOWTO.txt}}.
 
 \subsubsection{Installation on Mac OS X using the fink package manager}
 
