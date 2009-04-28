@@ -17,20 +17,26 @@ from Bio import AlignIO
 
 muscle_exe = None
 if sys.platform=="win32" :
-    #TODO - Check the path?
     try :
         #This can vary depending on the Windows language.
         prog_files = os.environ["PROGRAMFILES"]
     except KeyError :
         prog_files = r"C:\Program Files"
-    #For Windows, MUSCLE 3.6 just comes as a zip file which contains the
-    #muscle3.6 directory which the user could put anywhere.  We'll try a
-    #few common locations under Proram Files...
-    likely_dirs = ["Muscle", "Muscle3.6", "Muscle3.7", "Muscle3.8",""]
+    #For Windows, MUSCLE just comes as a zip file which contains the
+    #a Muscle directory with the muscle.exe file plus a readme etc,
+    #which the user could put anywhere.  We'll try a few sensible
+    #locations under Program Files... and then the full path.
+    likely_dirs = ["", #Current dir
+                   prog_files,
+                   os.path.join(prog_files,"Muscle3.6"),
+                   os.path.join(prog_files,"Muscle3.7"),
+                   os.path.join(prog_files,"Muscle3.8"),
+                   os.path.join(prog_files,"Muscle3.9"),
+                   os.path.join(prog_files,"Muscle")] + sys.path
     for folder in likely_dirs :
-        if os.path.isdir(os.path.join(prog_files, folder)) :
-            if os.path.isfile(os.path.join(prog_files, folder, "muscle.exe")) :
-                muscle_exe = os.path.join(prog_files, folder, "muscle.exe")
+        if os.path.isdir(folder) :
+            if os.path.isfile(os.path.join(folder, "muscle.exe")) :
+                muscle_exe = os.path.join(folder, "muscle.exe")
                 break
         if muscle_exe : break
 else :

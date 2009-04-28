@@ -15,7 +15,23 @@ from Bio.Align.Applications import PrankCommandline
 
 prank_exe = None
 if sys.platform=="win32":
-    raise MissingExternalDependencyError("Testing with PRANK not implemented on Windows yet")
+    try :
+        #This can vary depending on the Windows language.
+        prog_files = os.environ["PROGRAMFILES"]
+    except KeyError :
+        prog_files = r"C:\Program Files"
+    #For Windows, PRANK just comes as a zip file which contains the
+    #prank.exe file which the user could put anywhere.  We'll try a few
+    #sensible locations under Program Files... and then the full path.
+    likely_dirs = ["", #Current dir
+                   prog_files,
+                   os.path.join(prog_files,"Prank")] + sys.path
+    for folder in likely_dirs :
+        if os.path.isdir(folder) :
+            if os.path.isfile(os.path.join(folder, "prank.exe")) :
+                prank_exe = os.path.join(folder, "prank.exe")
+                break
+        if prank_exe : break
 else :
     import commands
     output = commands.getoutput("prank")
