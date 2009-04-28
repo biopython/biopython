@@ -17,7 +17,22 @@ from Bio import AlignIO
 
 muscle_exe = None
 if sys.platform=="win32" :
-    raise MissingExternalDependencyError("Testing with MUSCLE not implemented on Windows yet")
+    #TODO - Check the path?
+    try :
+        #This can vary depending on the Windows language.
+        prog_files = os.environ["PROGRAMFILES"]
+    except KeyError :
+        prog_files = r"C:\Program Files"
+    #For Windows, MUSCLE 3.6 just comes as a zip file which contains the
+    #muscle3.6 directory which the user could put anywhere.  We'll try a
+    #few common locations under Proram Files...
+    likely_dirs = ["Muscle", "Muscle3.6", "Muscle3.7", "Muscle3.8",""]
+    for folder in likely_dirs :
+        if os.path.isdir(os.path.join(prog_files, folder)) :
+            if os.path.isfile(os.path.join(prog_files, folder, "muscle.exe")) :
+                muscle_exe = os.path.join(prog_files, folder, "muscle.exe")
+                break
+        if muscle_exe : break
 else :
     import commands
     output = commands.getoutput("muscle")
@@ -74,7 +89,7 @@ class MuscleApplication(unittest.TestCase):
         self.assertEqual(str(cmdline), muscle_exe +\
                          " -in Fasta/f002 -out " + \
                         "Fasta/temp_align_out2.fa -objscore sp -noanchors ")
-	stdin, stdout, stderr = generic_run(cmdline)
+        stdin, stdout, stderr = generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
         self.assertEqual(stdout.read(), "")
         self.assert_("ERROR" not in stderr.read())
@@ -160,7 +175,8 @@ class SimpleAlignTest(unittest.TestCase) :
         #Use clustal output
         cline.set_parameter("clwstrict")
         #TODO - Fix the trailing space!
-        self.assertEqual(str(cline).rstrip(), "muscle -in Fasta/f002 -clwstrict -stable")
+        self.assertEqual(str(cline).rstrip(), muscle_exe + \
+                         " -in Fasta/f002 -clwstrict -stable")
         result, out_handle, err_handle = generic_run(cline)
         align = AlignIO.read(out_handle, "clustal")
         self.assertEqual(len(records),len(align))
@@ -193,7 +209,9 @@ class SimpleAlignTest(unittest.TestCase) :
         #No progress reports to stderr
         cline.set_parameter("quiet")
         #TODO - Fix the trailing space!
-        self.assertEqual(str(cline).rstrip(), "muscle -in temp_cw_prot.fasta -diags -maxhours 0.1 -maxiters 1 -clwstrict -stable -quiet")
+        self.assertEqual(str(cline).rstrip(), muscle_exe + \
+                         " -in temp_cw_prot.fasta -diags -maxhours 0.1" + \
+                         " -maxiters 1 -clwstrict -stable -quiet")
         result, out_handle, err_handle = generic_run(cline)
         align = AlignIO.read(out_handle, "clustal")
         self.assertEqual(len(records), len(align))
