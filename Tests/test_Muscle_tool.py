@@ -30,6 +30,95 @@ if not muscle_exe :
 
 #################################################################
 
+class MuscleApplication(unittest.TestCase):
+    
+    def setUp(self):
+        self.infile1  = "Fasta/f002"
+        self.infile2  = "Fasta/fa01"
+        self.infile3  = "Fasta/f001"
+        self.outfile1 = "Fasta/temp_align_out1.fa"
+        self.outfile2 = "Fasta/temp_align_out2.fa"
+        self.outfile3 = "Fasta/temp_align_out3.fa"
+        self.outfile4 = "Fasta/temp_align_out4.fa"
+
+    def tearDown(self):
+        if os.path.isfile(self.outfile1):
+            os.remove(self.outfile1)
+        if os.path.isfile(self.outfile2):
+            os.remove(self.outfile2)
+        if os.path.isfile(self.outfile3):
+            os.remove(self.outfile3)
+        if os.path.isfile(self.outfile4):
+            os.remove(self.outfile4)
+
+    def test_Muscle_simple(self):
+        """Simple round-trip through app just infile and outfile."""
+        cmdline = MuscleCommandline(muscle_exe)
+        cmdline.set_parameter("in", self.infile1)
+        cmdline.set_parameter("out", self.outfile1)
+        self.assertEqual(str(cmdline), muscle_exe + " -in Fasta/f002 -out " + \
+                         "Fasta/temp_align_out1.fa ")
+        stdin, stdout, stderr = generic_run(cmdline)
+        self.assertEqual(stdin.return_code, 0)
+        self.assertEqual(stdout.read(), "")
+        self.assert_("ERROR" not in stderr.read())
+        self.assertEqual(str(stdin._cl), str(cmdline))
+
+    def test_Muscle_with_options(self):
+        """Round-trip through app with a switch and valued option."""
+        cmdline = MuscleCommandline(muscle_exe)
+        cmdline.set_parameter("in", self.infile1)
+        cmdline.set_parameter("out", self.outfile2)
+        cmdline.set_parameter("objscore", "sp")
+        cmdline.set_parameter("noanchors")
+        self.assertEqual(str(cmdline), muscle_exe +\
+                         " -in Fasta/f002 -out " + \
+                        "Fasta/temp_align_out2.fa -objscore sp -noanchors ")
+	stdin, stdout, stderr = generic_run(cmdline)
+        self.assertEqual(stdin.return_code, 0)
+        self.assertEqual(stdout.read(), "")
+        self.assert_("ERROR" not in stderr.read())
+        self.assertEqual(str(stdin._cl), str(cmdline))
+
+    def test_Muscle_profile_simple(self):
+        """Simple round-trip through app doing a profile alignment."""
+        cmdline = MuscleCommandline(muscle_exe)
+        cmdline.set_parameter("out", self.outfile3)
+        cmdline.set_parameter("profile")
+        cmdline.set_parameter("in1", self.infile2)
+        cmdline.set_parameter("in2", self.infile3)
+        self.assertEqual(str(cmdline), muscle_exe + \
+                         " -out Fasta/temp_align_out3.fa " + \
+                         "-profile -in1 Fasta/fa01 -in2 Fasta/f001 ")
+        stdin, stdout, stderr = generic_run(cmdline)
+        self.assertEqual(stdin.return_code, 0)
+        self.assertEqual(stdout.read(), "")
+        self.assert_("ERROR" not in stderr.read())
+        self.assertEqual(str(stdin._cl), str(cmdline))
+
+    def test_Muscle_profile_with_options(self):
+        """Profile alignment, and switch and valued options. """
+        cmdline = MuscleCommandline(muscle_exe)
+        cmdline.set_parameter("out", self.outfile4)
+        cmdline.set_parameter("profile")
+        cmdline.set_parameter("in1", self.infile2)
+        cmdline.set_parameter("in2", self.infile3)
+        cmdline.set_parameter("cluster1", "neighborjoining")
+        cmdline.set_parameter("stable")
+        self.assertEqual(str(cmdline), muscle_exe + \
+                         " -out Fasta/temp_align_out4.fa " + \
+                         "-profile -in1 Fasta/fa01 -in2 Fasta/f001 -cluster1 " + \
+                         "neighborjoining -stable ")
+        """
+        #TODO - Why doesn't this work with MUSCLE 3.6 on the Mac?
+        #It may be another bug fixed in MUSCLE 3.7 ...
+        stdin, stdout, stderr = generic_run(cmdline)
+        self.assertEqual(stdin.return_code, 0)
+        self.assertEqual(stdout.read(), "")
+        self.assert_("ERROR" not in stderr.read())
+        self.assertEqual(str(stdin._cl), str(cmdline))
+        """
+
 class SimpleAlignTest(unittest.TestCase) :
     """Simple MUSCLE tests."""
 
@@ -41,7 +130,7 @@ class SimpleAlignTest(unittest.TestCase) :
         records = list(SeqIO.parse(open(input_file),"fasta"))
         #Prepare the command...
         cline = MuscleCommandline(muscle_exe)
-        cline.set_parameter("input", input_file)
+        cline.set_parameter("in", input_file)
         #Preserve input record order (makes checking output easier)
         cline.set_parameter("stable")
         #Set some others options just to test them
@@ -65,7 +154,7 @@ class SimpleAlignTest(unittest.TestCase) :
         records = list(SeqIO.parse(open(input_file),"fasta"))
         #Prepare the command...
         cline = MuscleCommandline(muscle_exe)
-        cline.set_parameter("input", input_file)
+        cline.set_parameter("in", input_file)
         #Preserve input record order (makes checking output easier)
         cline.set_parameter("stable")
         #Use clustal output
@@ -91,7 +180,7 @@ class SimpleAlignTest(unittest.TestCase) :
         handle.close()
         #Prepare the command...
         cline = MuscleCommandline(muscle_exe)
-        cline.set_parameter("input", temp_large_fasta_file)
+        cline.set_parameter("in", temp_large_fasta_file)
         #Preserve input record order
         cline.set_parameter("stable")
         #Use fast options
