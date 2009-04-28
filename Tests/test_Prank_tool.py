@@ -13,14 +13,17 @@ from Bio import Application
 from Bio import MissingExternalDependencyError
 from Bio.Align.Applications import PrankCommandline
 
-app_name = "prank"
-if sys.platform=="win32" :
+prank_exe = None
+if sys.platform=="win32":
     raise MissingExternalDependencyError("Testing with PRANK not implemented on Windows yet")
 else :
     import commands
-    if "not found" in commands.getoutput("%s -help" % app_name):
-        raise MissingExternalDependencyError(\
-            "Alignment application PRANK not found.")
+    output = commands.getoutput("prank")
+    if "not found" not in output and "prank" in output.lower():
+        prank_exe = "prank"
+if not prank_exe:
+    raise MissingExternalDependencyError(\
+        "Install PRANK if you want to use the Bio.Align.Applications wrapper.")
 
 class PrankApplication(unittest.TestCase):
     
@@ -52,9 +55,9 @@ class PrankApplication(unittest.TestCase):
         """Simple round-trip through app with infile.
         output.?.??? files written to cwd - no way to redirect
         """
-        cmdline = PrankCommandline()
+        cmdline = PrankCommandline(prank_exe)
         cmdline.set_parameter("d", self.infile1)
-        self.assertEqual(str(cmdline), app_name + " -d=Fasta/f002 ")
+        self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/f002 ")
         stdin, stdout, stderr = Application.generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
         self.assert_("Total time" in stdout.read())
@@ -65,12 +68,12 @@ class PrankApplication(unittest.TestCase):
         """Simple round-trip through app with infile, output in NEXUS
         output.?.??? files written to cwd - no way to redirect
         """
-        cmdline = PrankCommandline()
+        cmdline = PrankCommandline(prank_exe)
         cmdline.set_parameter("d", self.infile1)
         cmdline.set_parameter("f", 17) #17. NEXUS FORMAT
         cmdline.set_parameter("-noxml")
         cmdline.set_parameter("notree")
-        self.assertEqual(str(cmdline), app_name + " -d=Fasta/f002 -f=17 -noxml -notree ")
+        self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/f002 -f=17 -noxml -notree ")
         stdin, stdout, stderr = Application.generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
         self.assert_("Total time" in stdout.read())
@@ -79,7 +82,7 @@ class PrankApplication(unittest.TestCase):
 
     def test_Prank_complex_command_line(self):
         """Round-trip with complex command line."""
-        cmdline = PrankCommandline()
+        cmdline = PrankCommandline(prank_exe)
         cmdline.set_parameter("d", self.infile1)
         cmdline.set_parameter("-noxml")
         cmdline.set_parameter("notree")
@@ -90,7 +93,7 @@ class PrankApplication(unittest.TestCase):
         cmdline.set_parameter("-skipins")
         cmdline.set_parameter("-once")
         cmdline.set_parameter("realbranches")
-        self.assertEqual(str(cmdline), app_name + " -d=Fasta/f002 -noxml" + \
+        self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/f002 -noxml" + \
                          " -notree -dots -gaprate=0.321 -gapext=0.6 -kappa=3" + \
                          " -once -skipins -realbranches ")
         stdin, stdout, stderr = Application.generic_run(cmdline)
