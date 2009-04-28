@@ -225,11 +225,11 @@ for input_file, output_file, newtree_file in [
 
     #And again, but this time using Bio.Align.Applications wrapper
     cline = ClustalwCommandline(clustalw_exe)
-    #TODO - Have the command line object do filename escaping?
-    cline.set_parameter("infile", Clustalw._escape_filename(input_file))
-    cline.set_parameter("outfile", Clustalw._escape_filename(output_file))
+    #Any filesnames with spaces should get escaped with quotes automatically:
+    cline.set_parameter("infile", input_file)
+    cline.set_parameter("outfile", output_file)
     if newtree_file is not None :
-        cline.set_parameter("newtree", Clustalw._escape_filename(newtree_file))
+        cline.set_parameter("newtree", newtree_file)
         #I don't just want the tree, also want the alignment:
         cline.set_parameter("align")
     #print cline

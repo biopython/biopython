@@ -160,7 +160,10 @@ class AbstractCommandline:
             if name in parameter.names:
                 if value is not None:
                     self._check_value(value, name, parameter.checker_function)
-                    parameter.value = value
+                    if "file" in parameter.param_types :
+                        parameter.value = _escape_filename(value)
+                    else :
+                        parameter.value = value
                 parameter.is_set = True
                 set_option = True
         if not set_option :
@@ -199,7 +202,9 @@ class _AbstractParameter:
 
     o param_type -- a list of string describing the type of parameter, 
     which can help let programs know how to use it. Example descriptions
-    include 'input', 'output', 'file'
+    include 'input', 'output', 'file'.  Note that if 'file' is included,
+    these argument values will automatically be escaped if the filename
+    contains spaces.
 
     o checker_function -- a reference to a function that will determine
     if a given value is valid for this parameter. This function can either
@@ -258,3 +263,48 @@ class _Argument(_AbstractParameter):
             return " "
         else :
             return "%s " % self.value
+
+def _escape_filename(filename) :
+    """Escape filenames with spaces by adding quotes (PRIVATE).
+
+    Note this will not add quotes if they are already included:
+    
+    >>> print _escape_filename('example with spaces')
+    "example with spaces"
+    >>> print _escape_filename('"example with spaces"')
+    "example with spaces"
+    """
+    #Is adding the following helpful
+    #if os.path.isfile(filename) :
+    #    #On Windows, if the file exists, we can ask for
+    #    #its alternative short name (DOS style 8.3 format)
+    #    #which has no spaces in it.  Note that this name
+    #    #is not portable between machines, or even folder!
+    #    try :
+    #        import win32api
+    #        short = win32api.GetShortPathName(filename)
+    #        assert os.path.isfile(short)
+    #        return short
+    #    except ImportError :
+    #        pass
+    if " " not in filename :
+        return filename
+    #We'll just quote it - works on Windows, Mac OS X etc
+    if filename.startswith('"') and filename.endswith('"') :
+        #Its already quoted
+        return filename
+    else :
+        return '"%s"' % filename
+
+def _test():
+    """Run the Bio.Motif module's doctests.
+
+    This will try and locate the unit tests directory, and run the doctests
+    from there in order that the relative paths used in the examples work.
+    """
+    import doctest
+    doctest.testmod(verbose=1)
+
+if __name__ == "__main__":
+    #Run the doctests
+    _test()
