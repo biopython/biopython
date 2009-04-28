@@ -3,8 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-Bio.Application command line for the multiple alignment program ClustalW
+"""Command line wrapper for the multiple alignment program Clustal W.
 
 http://www.clustal.org/
 
