@@ -4,9 +4,6 @@
 # as part of this package.
 """Command line wrapper for the multiple alignment programme MAFFT.
 
-Supports the commands: "mafft", "linsi", "ginsi", "einsi", "fftnsi",
-                       "fftns", "nwns", "nwnsi", and "mafft-profile".
-
 http://align.bmr.kyushu-u.ac.jp/mafft/software/
 
 Citations:

@@ -3,12 +3,17 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Command line wrapper for the multiple alignment program MUSCLE.
+
 http://www.drive5.com/muscle/
+
 Citations:
+
 Edgar, Robert C. (2004), MUSCLE: multiple sequence alignment with high accuracy
 and high throughput, Nucleic Acids Research 32(5), 1792-97.
+
 Edgar, R.C. (2004) MUSCLE: a multiple sequence alignment method with reduced
 time and space complexity. BMC Bioinformatics 5(1): 113.
+
 Last checked against version: 3.7
 """
 import types
