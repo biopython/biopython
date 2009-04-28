@@ -434,7 +434,8 @@ class CircularDrawer(AbstractDrawer):
             labelgroup = Group(label)
             label_angle = startangle + 0.5 * pi     # Make text radial
             sinval, cosval = startsin, startcos
-            if feature.strand == 1:    # Feature is on top, or covers both strands
+            if feature.strand != -1:
+                # Feature is on top, or covers both strands
                 if startangle < pi: # Turn text round and anchor end to inner radius
                     sinval, cosval = endsin, endcos
                     label_angle = endangle - 0.5 * pi
@@ -444,30 +445,19 @@ class CircularDrawer(AbstractDrawer):
                 sinlabel = sin(label_angle)    
                 labelgroup.transform = (coslabel,-sinlabel,sinlabel,coslabel,
                                         pos, self.ycenter+top*cosval)
-            elif feature.strand == -1:                           # Feature on bottom strand
-                if startangle > pi: # Anchor end to inner radius
-                    labelgroup.contents[0].textAnchor='end'
-                else:               # Turn text round
+            else :
+                # Feature on bottom strand
+                if startangle < pi: # Turn text round and anchor end to inner radius
                     sinval, cosval = endsin, endcos
-                    label_angle += pi
-                pos = self.xcenter+btm*sinval
-                coslabel = cos(label_angle)
-                sinlabel = sin(label_angle)
-                #labelgroup.transform = (coslabel,-sinlabel,sinlabel,coslabel,
-                #                        pos, self.ycenter+btm*cosval)
-                labelgroup.transform = (coslabel,-sinlabel,sinlabel,coslabel,
-                                        pos, self.ycenter+btm*cosval)
-            else:   # feature.strand == 0
-                if startangle > pi: # Anchor end to inner radius
-                    labelgroup.contents[0].textAnchor='end'
-                    sinval, cosval = endsin, endcos
-                else:               # Turn text round
-                    label_angle += pi
+                    label_angle = endangle - 0.5 * pi
+                else :
+                    labelgroup.contents[0].textAnchor = 'end'
                 pos = self.xcenter+btm*sinval
                 coslabel = cos(label_angle)
                 sinlabel = sin(label_angle)
                 labelgroup.transform = (coslabel,-sinlabel,sinlabel,coslabel,
                                         pos, self.ycenter+btm*cosval)
+
         else:
             labelgroup = None
         #if locstart > locend:
