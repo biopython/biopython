@@ -271,7 +271,7 @@ PACKAGES = [
     'Bio.MEME',
     'Bio.Motif',
     'Bio.Motif.Parsers',
-    #'Bio.Motif.Applications', #New, deliberately left out for Biopython 1.50 
+    'Bio.Motif.Applications',
     'Bio.Ndb',
     'Bio.NeuralNetwork',
     'Bio.NeuralNetwork.BackPropagation',
