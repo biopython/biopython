@@ -408,7 +408,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         result, out, err = generic_run(cline)
         #Check it worked,
         errors = err.read().strip()
-        self.assert_(errors.startswith("Needleman-Wunsch global alignment."), errors)
+        self.assert_(errors.startswith("Needleman-Wunsch global alignment"), errors)
         self.assertEqual(out.read().strip(), "")
         if result.return_code != 0 : print >> sys.stderr, "\n%s"%cline
         self.assertEqual(result.return_code, 0)
