@@ -1,18 +1,39 @@
-"""Definitions for interacting with AlignAce.
-"""
-from Bio import Application
-from Bio.Application import _Option,_Argument
+# Copyright 2003-2009 by Bartek Wilczynski.  All rights reserved.
+# Revisions copyright 2009 by Peter Cock.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+"""This module provides code to work with the standalone version of AlignACE, 
+for motif search in DNA sequences.
 
-class AlignAceCommandline(Application.AbstractCommandline):
+AlignACE homepage:
+
+http://atlas.med.harvard.edu/
+
+AlignACE Citations:
+
+Computational identification of cis-regulatory elements associated with 
+groups of functionally related genes in Saccharomyces cerevisiae, 
+Hughes, JD, Estep, PW, Tavazoie S, & GM Church, Journal of Molecular 
+Biology 2000 Mar 10;296(5):1205-14.
+
+Finding DNA Regulatory Motifs within Unaligned Non-Coding Sequences 
+Clustered by Whole-Genome mRNA Quantitation, 
+Roth, FR, Hughes, JD, Estep, PE & GM Church, Nature Biotechnology 
+1998 Oct;16(10):939-45. 
+
+"""
+from Bio.Application import AbstractCommandline, _Option, _Argument
+
+
+class AlignAceCommandline(AbstractCommandline):
     """Create a commandline for the AlignAce program.
 
     XXX This could use more checking for valid paramters to the program.
     """
     def __init__(self, cmd = "AlignACE"):
-
         Application.AbstractCommandline.__init__(self)
         self.program_name = cmd
-
         self.parameters = \
           [
             _Option(["-i","input"],["input"],lambda x : x.__class__== str,1,
@@ -40,27 +61,19 @@ class AlignAceCommandline(Application.AbstractCommandline):
                     "1/undersample"),
           ]
 
-    def run(self):
-        return Application.generic_run(self)
 
-
-
-class CompareAceCommandline(Application.AbstractCommandline):
+class CompareAceCommandline(AbstractCommandline):
     """Create a commandline for the CompareAce program.
 
     XXX This could use more checking for valid paramters to the program.
     """
     def __init__(self, cmd = "CompareACE"):
-
         import os.path
         Application.AbstractCommandline.__init__(self)
         self.program_name = cmd
-
         self.parameters = \
           [
             _Argument(["motif1"],["input","file"], os.path.exists,1,"name of file containing motif 1"),
             _Argument(["motif2"],["input","file"], os.path.exists,1,"name of file containing motif 2"),
           ]
 
-    def run(self):
-        return Application.generic_run(self)

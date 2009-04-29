@@ -21,7 +21,7 @@ def generic_run(commandline):
 
     #Try and use subprocess (available in python 2.4+)
     try :
-        import subprocess, sys
+        import subprocess
         #We don't need to supply any piped input, but we setup the
         #standard input pipe anyway as a work around for a python
         #bug if this is called from a Windows GUI program.  For
@@ -109,8 +109,19 @@ class ApplicationResult:
 
     def get_result(self, output_name):
         """Retrieve result information for the given output.
+
+        Supports any of the defined parameters aliases (assuming the
+        parameter is defined as an output).
         """
-        return self._results[output_name]
+        try :
+            return self._results[output_name]
+        except KeyError, err :
+            #Try the aliases...
+            for parameter in self._cl.parameters:
+                if output_name in parameter.names :
+                    return self._results[parameter.names[-1]]
+            #No, really was a key error:
+            raise err
 
     def available_results(self):
         """Retrieve a list of all available results.
@@ -137,23 +148,25 @@ class AbstractCommandline:
             if parameter.is_required and not(parameter.is_set):
                 raise ValueError("Parameter %s is not set." % parameter.names)
             if parameter.is_set:
+                #This will include a trailing space:
                 commandline += str(parameter)
-
         return commandline
 
     def set_parameter(self, name, value = None):
         """Set a commandline option for a program.
         """
-        set_option = 0
+        set_option = False
         for parameter in self.parameters:
             if name in parameter.names:
                 if value is not None:
                     self._check_value(value, name, parameter.checker_function)
-                    parameter.value = value
-                parameter.is_set = 1
-                set_option = 1
-
-        if set_option == 0:
+                    if "file" in parameter.param_types :
+                        parameter.value = _escape_filename(value)
+                    else :
+                        parameter.value = value
+                parameter.is_set = True
+                set_option = True
+        if not set_option :
             raise ValueError("Option name %s was not found." % name)
 
     def _check_value(self, value, name, check_function):
@@ -164,6 +177,7 @@ class AbstractCommandline:
         this function will raise an error if the value is not valid, or
         finish silently otherwise.
         """
+        #TODO - Allow check_function to return True/False?
         if check_function is not None:
             is_good = check_function(value)
             if is_good in [0, 1]: # if we are dealing with a good/bad check
@@ -188,12 +202,16 @@ class _AbstractParameter:
 
     o param_type -- a list of string describing the type of parameter, 
     which can help let programs know how to use it. Example descriptions
-    include 'input', 'output', 'file'
+    include 'input', 'output', 'file'.  Note that if 'file' is included,
+    these argument values will automatically be escaped if the filename
+    contains spaces.
 
     o checker_function -- a reference to a function that will determine
     if a given value is valid for this parameter. This function can either
     raise an error when given a bad value, or return a [0, 1] decision on
     whether the value is correct.
+
+    o equate -- should an equals sign be inserted if a value is used?
 
     o description -- a description of the option.
 
@@ -205,14 +223,15 @@ class _AbstractParameter:
     o value -- the value of a parameter
     """
     def __init__(self, names = [], types = [], checker_function = None, 
-                 is_required = 0, description = ""):
+                 is_required = False, description = "", equate=True):
         self.names = names
         self.param_types = types
         self.checker_function = checker_function
         self.description = description
+        self.equate = equate
         self.is_required = is_required
 
-        self.is_set = 0
+        self.is_set = False
         self.value = None
 
 class _Option(_AbstractParameter):
@@ -222,29 +241,70 @@ class _Option(_AbstractParameter):
     """
     def __str__(self):
         """Return the value of this option for the commandline.
-        """
-        # first deal with long options
-        if self.names[0].find("--") >= 0:
-            output = "%s" % self.names[0]
-            if self.value is not None:
-                output += "=%s " % self.value
-            else:
-                output += " "
-        # now short options
-        elif self.names[0].find("-") >= 0:
-            output = "%s " % self.names[0]
-            if self.value is not None:
-                output += "%s " % self.value
-        else:
-            raise ValueError("Unrecognized option type: %s" % self.names[0])
 
-        return output
+        Includes a trailing space.
+        """
+        # Note: Before equate was handled explicitly, the old
+        # code would do either "--name " or "--name=value ",
+        # or " -name " or " -name value ".  This choice is now
+        # now made explicitly when setting up the option.
+        if self.value is None :
+            return "%s " % self.names[0]
+        elif self.equate :
+            return "%s=%s " % (self.names[0], self.value)
+        else :
+            return "%s %s " % (self.names[0], self.value)
 
 class _Argument(_AbstractParameter):
     """Represent an argument on a commandline.
     """
     def __str__(self):
-        if self.value is not None:
-            return "%s " % self.value
-        else:
+        if self.value is None:
             return " "
+        else :
+            return "%s " % self.value
+
+def _escape_filename(filename) :
+    """Escape filenames with spaces by adding quotes (PRIVATE).
+
+    Note this will not add quotes if they are already included:
+    
+    >>> print _escape_filename('example with spaces')
+    "example with spaces"
+    >>> print _escape_filename('"example with spaces"')
+    "example with spaces"
+    """
+    #Is adding the following helpful
+    #if os.path.isfile(filename) :
+    #    #On Windows, if the file exists, we can ask for
+    #    #its alternative short name (DOS style 8.3 format)
+    #    #which has no spaces in it.  Note that this name
+    #    #is not portable between machines, or even folder!
+    #    try :
+    #        import win32api
+    #        short = win32api.GetShortPathName(filename)
+    #        assert os.path.isfile(short)
+    #        return short
+    #    except ImportError :
+    #        pass
+    if " " not in filename :
+        return filename
+    #We'll just quote it - works on Windows, Mac OS X etc
+    if filename.startswith('"') and filename.endswith('"') :
+        #Its already quoted
+        return filename
+    else :
+        return '"%s"' % filename
+
+def _test():
+    """Run the Bio.Motif module's doctests.
+
+    This will try and locate the unit tests directory, and run the doctests
+    from there in order that the relative paths used in the examples work.
+    """
+    import doctest
+    doctest.testmod(verbose=1)
+
+if __name__ == "__main__":
+    #Run the doctests
+    _test()

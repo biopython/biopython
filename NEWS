@@ -9,6 +9,14 @@ The latest news is at the top.
 
 ===================================================================
 
+Our deprecated parsing infrastructure (Martel and Bio.Mindy) which had been
+removed.  This means Biopython no longer has any dependance on mxTextTools.
+
+A few cosmetic issues in GenomeDiagram with arrow sigils on circular diagrams
+have been fixed.
+
+===================================================================
+
 April 20, 2008: Biopython 1.50 released.
 
 See the notes below for the Biopython 1.50 beta release for more details,

@@ -40,7 +40,7 @@ import re
 from Bio import File
 from Bio.ParserSupport import *
 from Bio.Blast import Record
-
+from Bio.Application import _escape_filename
 
 class LowQualityBlastError(Exception):
     """Error caused by running a low quality sequence through BLAST.
@@ -1956,30 +1956,6 @@ def _safe_float(str):
     # try again.
     return float(str)
 
-def _escape_filename(filename) :
-    """Escape filenames with spaces (PRIVATE)."""
-    if " " not in filename :
-        return filename
-
-    #See Bug 2480 - is adding the following helpful?
-    #if os.path.isfile(filename) :
-    #    #On Windows, if the file exists, we can ask for
-    #    #its alternative short name (DOS style 8.3 format)
-    #    #which has no spaces in it.
-    #    try :
-    #        import win32api
-    #        short = win32api.GetShortPathName(filename)
-    #        assert os.path.isfile(short)
-    #        return short
-    #    except ImportError :
-    #        pass
-
-    #We'll just quote it - works on Mac etc
-    if filename.startswith('"') and filename.endswith('"') :
-        #Its already quoted
-        return filename
-    else :
-        return '"%s"' % filename
 
 def _invoke_blast(blast_cmd, params) :
     """Start BLAST and returns handles for stdout and stderr (PRIVATE).

@@ -28,6 +28,7 @@ import sys
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Align.Generic import Alignment
+from Bio.Application import _escape_filename
 
 def parse_file(file_name, alphabet = IUPAC.unambiguous_dna, debug_level = 0):
     """Parse the given file into a clustal aligment object.
@@ -184,22 +185,6 @@ class ClustalAlignment(Alignment):
         AlignIO.write([self], handle, "clustal")
         handle.seek(0)
         return handle.read()
-            
-def _escape_filename(filename) :
-    """Escape filenames with spaces (PRIVATE).
-
-    NOTE - This code is duplicated in Bio.Blast.NCBIStandalone,
-    scope for refactoring!
-    """
-    if " " not in filename :
-        return filename
-
-    #We'll just quote it - works on Mac etc
-    if filename.startswith('"') and filename.endswith('"') :
-        #Its already quoted
-        return filename
-    else :
-        return '"%s"' % filename
 
 class MultipleAlignCL:
     """Represent a clustalw multiple alignment command line.

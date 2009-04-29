@@ -11,7 +11,8 @@ except ImportError :
         "Install NumPy if you want to use Bio.PDB.")
 
 import warnings
-def send_warnings_to_stdout(message, category, filename, lineno, file=None):
+def send_warnings_to_stdout(message, category, filename, lineno,
+                            file=None, line=None):
     print message
 warnings.showwarning = send_warnings_to_stdout
 

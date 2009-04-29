@@ -75,20 +75,15 @@ Deprecated in Release 1.49, as the website this parsed has been redesigned.
 
 Martel
 ======
-Declared obsolete in Release 1.48, deprecated in Release 1.49.
+Declared obsolete in Release 1.48, deprecated in Release 1.49, and removed
+in Release 1.51.  The source code for Martel is still in our repository if
+anyone wanted to develop this outside of Biopython.
 
-Bio.Mindy
-=========
-Declared obsolete in Release 1.48, deprecated in Release 1.49.
-
-Bio.builders, Bio.Std, Bio.StdHandler, Bio.Decode and Bio.DBXRef
-================================================================
-Part of the Martel/Mindy parsing infrastructure, these were deprecated in
-Release 1.49.
-
-Bio.Writer and Bio.writers
-==========================
-Deprecated in Release 1.48.
+Bio.Mindy and associated modules.
+=================================
+Declared obsolete in Release 1.48, deprecated in Release 1.49, removed in
+Release 1.51.  This includes the Bio.Writer, Bio.writers, Bio.builders,
+Bio.Std, Bio.StdHandler, Bio.Decode and Bio.DBXRef modules
 
 Bio.Emboss.Primer
 =================
@@ -97,8 +92,8 @@ and Bio.Emboss.PrimerSearch instead.
 
 Bio.MetaTool
 ============
-Deprecated in Release 1.48, this was a parser for the output of MetaTool 3.5
-which is now obsolete.
+Deprecated in Release 1.48, and removed in Release 1.51, this was a parser
+for the output of MetaTool 3.5 which is now obsolete.
 
 Bio.GenBank
 ===========
@@ -123,7 +118,6 @@ Bio.Sequencing.Ace.Iterator --> Bio.Sequencing.Ace.parse(handle)
 Bio.Sequencing.Phd.RecordParser --> Bio.Sequencing.Phd.read(handle)
 Bio.Sequencing.Phd.Iterator --> Bio.Sequencing.Phd.parse(handle)
 
-
 Bio.Blast.NCBIWWW
 =================
 The HTML BLAST parser was deprecated as of Release 1.48.
@@ -131,16 +125,18 @@ The deprecated functions blast and blasturl were removed in Release 1.44.
 
 Bio.Saf
 =======
-Deprecated as of Release 1.48, as it appears to have no users, and relies
-on Martel which doesn't work properly with mxTextTools 3.0.
+Deprecated as of Release 1.48, removed in Release 1.51.  If useful, a parser
+for this "simple alignment format" could be developed for Bio.AlignIO instead.
 
 Bio.NBRF
 ========
-Deprecated as of Release 1.48 in favor of the "pir" format in Bio.SeqIO
+Deprecated as of Release 1.48 in favor of the "pir" format in Bio.SeqIO,
+removed in Release 1.51.
 
 Bio.IntelliGenetics
 ===================
-Deprecated as of Release 1.48 in favor of the "ig" format in Bio.SeqIO
+Deprecated as of Release 1.48 in favor of the "ig" format in Bio.SeqIO,
+removed in Release 1.51.
 
 Bio.SeqIO submodules PhylipIO, ClustalIO, NexusIO and StockholmIO
 =================================================================

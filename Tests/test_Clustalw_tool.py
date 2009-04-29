@@ -15,9 +15,12 @@ except NameError:
 
 import sys
 import os
-from Bio import Clustalw
-from Bio.Clustalw import MultipleAlignCL
+from Bio import Clustalw #old!
+from Bio.Clustalw import MultipleAlignCL #old!
 from Bio import SeqIO
+from Bio import AlignIO
+from Bio.Align.Applications import ClustalwCommandline #new!
+from Bio.Application import generic_run
 
 #################################################################
 
@@ -204,6 +207,43 @@ for input_file, output_file, newtree_file in [
         assert str(record.seq) == str(output_records[record.id].seq)
         assert str(record.seq).replace("-","") == \
                str(input_records[record.id].seq)
+
+    #Clean up...
+    os.remove(output_file)
+
+    #Check the DND file was created.
+    #TODO - Try and parse this with Bio.Nexus?
+    if newtree_file is not None :
+        tree_file = newtree_file
+    else :
+        #Clustalw will name it based on the input file
+        tree_file = os.path.splitext(input_file)[0] + ".dnd"
+    assert os.path.isfile(tree_file), \
+           "Did not find tree file %s" % tree_file
+    os.remove(tree_file)
+
+
+    #And again, but this time using Bio.Align.Applications wrapper
+    cline = ClustalwCommandline(clustalw_exe)
+    #Any filesnames with spaces should get escaped with quotes automatically:
+    cline.set_parameter("infile", input_file)
+    cline.set_parameter("outfile", output_file)
+    if newtree_file is not None :
+        cline.set_parameter("newtree", newtree_file)
+        #I don't just want the tree, also want the alignment:
+        cline.set_parameter("align")
+    #print cline
+    return_code, out_handle, err_handle = generic_run(cline)
+    assert out_handle.read().strip().startswith("CLUSTAL")
+    assert err_handle.read().strip() == ""
+    align = AlignIO.read(open(output_file), "clustal")
+    assert set(input_records.keys()) == set(output_records.keys())
+    for record in align :
+        assert str(record.seq) == str(output_records[record.id].seq)
+        assert str(record.seq).replace("-","") == \
+               str(input_records[record.id].seq)
+
+    #Clean up...
     os.remove(output_file)
 
     #Check the DND file was created.

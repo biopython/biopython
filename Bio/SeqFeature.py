@@ -38,7 +38,7 @@ o BeforePosition - Specify the position as being found before some base.
 o AfterPosition - Specify the position as being found after some base.
 """
 
-class SeqFeature:
+class SeqFeature(object):
     """Represent a Sequence Feature on an object.
 
     Attributes:
@@ -148,7 +148,7 @@ class SeqFeature:
 # --- References
 
 # TODO -- Will this hold PubMed and Medline information decently?
-class Reference:
+class Reference(object):
     """Represent a Generic Reference object.
 
     Attributes:
@@ -192,7 +192,7 @@ class Reference:
 
 # --- Handling feature locations
 
-class FeatureLocation:
+class FeatureLocation(object):
     """Specify the location of a feature along a sequence.
 
     This attempts to deal with fuzziness of position ends, but also
@@ -248,10 +248,10 @@ class FeatureLocation:
                                end = self._end._shift(offset))
 
     start = property(fget= lambda self : self._start,
-                     doc="Start location (possibly a fuzzy position).")
+                 doc="Start location (possibly a fuzzy position, read only).")
 
     end = property(fget= lambda self : self._end,
-                   doc="End location (possibly a fuzzy position).")
+                   doc="End location (possibly a fuzzy position, read only).")
 
     def _get_nofuzzy_start(self) :
         #TODO - Do we still use the BetweenPosition class?
@@ -262,7 +262,7 @@ class FeatureLocation:
             return min(self._start.position,
                        self._start.position + self._start.extension)
     nofuzzy_start = property(fget=_get_nofuzzy_start,
-        doc="""Start position (integer, approximated if fuzzy).
+        doc="""Start position (integer, approximated if fuzzy, read only).
 
         To get non-fuzzy attributes (ie. the position only) ask for
         'location.nofuzzy_start', 'location.nofuzzy_end'. These should return
@@ -279,7 +279,7 @@ class FeatureLocation:
             return max(self._end.position,
                        self._end.position + self._end.extension)
     nofuzzy_end = property(fget=_get_nofuzzy_end,
-        doc="""End position (integer, approximated if fuzzy).
+        doc="""End position (integer, approximated if fuzzy, read only).
 
         To get non-fuzzy attributes (ie. the position only) ask for
         'location.nofuzzy_start', 'location.nofuzzy_end'. These should return
@@ -287,7 +287,7 @@ class FeatureLocation:
         (10.20)..(30.40) should return 10 for start, and 40 for end.
         """)
 
-class AbstractPosition:
+class AbstractPosition(object):
     """Abstract base class representing a position.
     """
     def __init__(self, position, extension):
@@ -470,8 +470,8 @@ class OneOfPosition(AbstractPosition):
         # replace the last comma with the closing parenthesis
         out = out[:-1] + ")"
         return out
-              
-class PositionGap:
+
+class PositionGap(object):
     """Simple class to hold information about a gap between positions.
     """
     def __init__(self, gap_size):
