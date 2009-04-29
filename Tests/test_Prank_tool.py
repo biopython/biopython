@@ -10,6 +10,8 @@ import sys
 import os
 import unittest
 from Bio import Application
+from Bio import AlignIO
+from Bio import SeqIO
 from Bio import MissingExternalDependencyError
 from Bio.Align.Applications import PrankCommandline
 
@@ -44,7 +46,7 @@ if not prank_exe:
 class PrankApplication(unittest.TestCase):
     
     def setUp(self):
-        self.infile1 = "Fasta/f002"
+        self.infile1 = "Fasta/fa01"
 
     def tearDown(self):
         """
@@ -73,7 +75,7 @@ class PrankApplication(unittest.TestCase):
         """
         cmdline = PrankCommandline(prank_exe)
         cmdline.set_parameter("d", self.infile1)
-        self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/f002 ")
+        self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01 ")
         stdin, stdout, stderr = Application.generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
         self.assert_("Total time" in stdout.read())
@@ -84,17 +86,27 @@ class PrankApplication(unittest.TestCase):
         """Simple round-trip through app with infile, output in NEXUS
         output.?.??? files written to cwd - no way to redirect
         """
+        records = list(SeqIO.parse(open(self.infile1),"fasta"))
         cmdline = PrankCommandline(prank_exe)
         cmdline.set_parameter("d", self.infile1)
         cmdline.set_parameter("f", 17) #17. NEXUS FORMAT
         cmdline.set_parameter("-noxml")
         cmdline.set_parameter("notree")
-        self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/f002 -f=17 -noxml -notree ")
+        self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01 -f=17 -noxml -notree ")
         stdin, stdout, stderr = Application.generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
         self.assert_("Total time" in stdout.read())
         self.assertEqual(stderr.read(), "")
         self.assertEqual(str(stdin._cl), str(cmdline))
+        out_handle = open("output.2.nex", "r")
+        align = AlignIO.read(out_handle, "nexus")
+        out_handle.close()
+        for old, new in zip(records, align) :
+            #Prank automatically reduces name to 9 chars
+            self.assertEqual(old.id[:9], new.id)
+            #infile1 has alignment gaps in it
+            self.assertEqual(str(new.seq).replace("-",""),
+                             str(old.seq).replace("-",""))
 
     def test_Prank_complex_command_line(self):
         """Round-trip with complex command line."""
@@ -109,7 +121,7 @@ class PrankApplication(unittest.TestCase):
         cmdline.set_parameter("-skipins")
         cmdline.set_parameter("-once")
         cmdline.set_parameter("realbranches")
-        self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/f002 -noxml" + \
+        self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01 -noxml" + \
                          " -notree -dots -gaprate=0.321 -gapext=0.6 -kappa=3" + \
                          " -once -skipins -realbranches ")
         stdin, stdout, stderr = Application.generic_run(cmdline)
