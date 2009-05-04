@@ -27,15 +27,12 @@ Last checked against version: 6.626b (2009/03/16)
 """
 import os
 import types
-from Bio import Application
-from Bio.Application import _Option
-from Bio.Application import _Argument
-class MafftCommandline(Application.AbstractCommandline):
+from Bio.Application import _Option, _Argument, AbstractCommandline
+
+class MafftCommandline(AbstractCommandline):
     """Command line wrapper for the multiple alignment program MAFFT."""
-    def __init__(self, cmd = "mafft"):
+    def __init__(self, cmd="mafft", **kwargs):
         BLOSUM_MATRICES = ["30","45","62","80"]
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
         self.parameters = \
             [
             #**** Algorithm ****
@@ -372,4 +369,4 @@ class MafftCommandline(Application.AbstractCommandline):
             _Argument(["input1"], ["input"], os.path.exists, 0,
                       "Second input file name for the mafft-profile command")
             ]
-
+        AbstractCommandline.__init__(self, cmd, **kwargs)

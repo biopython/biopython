@@ -74,11 +74,12 @@ class MuscleApplication(unittest.TestCase):
 
     def test_Muscle_simple(self):
         """Simple round-trip through app just infile and outfile."""
-        cmdline = MuscleCommandline(muscle_exe)
-        cmdline.set_parameter("in", self.infile1)
-        cmdline.set_parameter("out", self.outfile1)
+        cmdline = MuscleCommandline(muscle_exe,
+                                    input=self.infile1,
+                                    out=self.outfile1)
         self.assertEqual(str(cmdline), muscle_exe + " -in Fasta/f002 -out " + \
                          "Fasta/temp_align_out1.fa ")
+        self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
         self.assertEqual(stdout.read(), "")
@@ -88,13 +89,15 @@ class MuscleApplication(unittest.TestCase):
     def test_Muscle_with_options(self):
         """Round-trip through app with a switch and valued option."""
         cmdline = MuscleCommandline(muscle_exe)
-        cmdline.set_parameter("in", self.infile1)
+        cmdline.set_parameter("input", self.infile1) #"input" is alias for "in"
         cmdline.set_parameter("out", self.outfile2)
-        cmdline.set_parameter("objscore", "sp")
+        #Use property:
+        cmdline.objscore = "sp"
         cmdline.set_parameter("noanchors")
         self.assertEqual(str(cmdline), muscle_exe +\
                          " -in Fasta/f002 -out " + \
                         "Fasta/temp_align_out2.fa -objscore sp -noanchors ")
+        self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
         self.assertEqual(stdout.read(), "")
@@ -111,6 +114,7 @@ class MuscleApplication(unittest.TestCase):
         self.assertEqual(str(cmdline), muscle_exe + \
                          " -out Fasta/temp_align_out3.fa " + \
                          "-profile -in1 Fasta/fa01 -in2 Fasta/f001 ")
+        self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
         self.assertEqual(stdout.read(), "")
@@ -119,17 +123,17 @@ class MuscleApplication(unittest.TestCase):
 
     def test_Muscle_profile_with_options(self):
         """Profile alignment, and switch and valued options. """
-        cmdline = MuscleCommandline(muscle_exe)
-        cmdline.set_parameter("out", self.outfile4)
+        #Using some keyword arguments,
+        cmdline = MuscleCommandline(muscle_exe, out=self.outfile4,
+                                    in1=self.infile2, in2=self.infile3)
         cmdline.set_parameter("profile")
-        cmdline.set_parameter("in1", self.infile2)
-        cmdline.set_parameter("in2", self.infile3)
         cmdline.set_parameter("cluster1", "neighborjoining")
         cmdline.set_parameter("stable")
         self.assertEqual(str(cmdline), muscle_exe + \
                          " -out Fasta/temp_align_out4.fa " + \
                          "-profile -in1 Fasta/fa01 -in2 Fasta/f001 -cluster1 " + \
                          "neighborjoining -stable ")
+        self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         """
         #TODO - Why doesn't this work with MUSCLE 3.6 on the Mac?
         #It may be another bug fixed in MUSCLE 3.7 ...
@@ -150,15 +154,15 @@ class SimpleAlignTest(unittest.TestCase) :
         self.assert_(os.path.isfile(input_file))
         records = list(SeqIO.parse(open(input_file),"fasta"))
         #Prepare the command...
-        cline = MuscleCommandline(muscle_exe)
-        cline.set_parameter("in", input_file)
+        cmdline = MuscleCommandline(muscle_exe)
+        cmdline.set_parameter("in", input_file)
         #Preserve input record order (makes checking output easier)
-        cline.set_parameter("stable")
+        cmdline.set_parameter("stable")
         #Set some others options just to test them
-        cline.set_parameter("maxiters", 2)
+        cmdline.set_parameter("maxiters", 2)
         #TODO - Fix the trailing space!
-        self.assertEqual(str(cline).rstrip(), "muscle -in Fasta/f002 -maxiters 2 -stable")
-        result, out_handle, err_handle = generic_run(cline)
+        self.assertEqual(str(cmdline).rstrip(), "muscle -in Fasta/f002 -maxiters 2 -stable")
+        result, out_handle, err_handle = generic_run(cmdline)
         print err_handle.read()
         print out_handle.read()
         align = AlignIO.read(out_handle, "fasta")
@@ -174,16 +178,17 @@ class SimpleAlignTest(unittest.TestCase) :
         self.assert_(os.path.isfile(input_file))
         records = list(SeqIO.parse(open(input_file),"fasta"))
         #Prepare the command...
-        cline = MuscleCommandline(muscle_exe)
-        cline.set_parameter("in", input_file)
+        cmdline = MuscleCommandline(muscle_exe)
+        cmdline.set_parameter("in", input_file)
         #Preserve input record order (makes checking output easier)
-        cline.set_parameter("stable")
+        cmdline.set_parameter("stable")
         #Use clustal output
-        cline.set_parameter("clwstrict")
+        cmdline.set_parameter("clwstrict")
         #TODO - Fix the trailing space!
-        self.assertEqual(str(cline).rstrip(), muscle_exe + \
+        self.assertEqual(str(cmdline).rstrip(), muscle_exe + \
                          " -in Fasta/f002 -clwstrict -stable")
-        result, out_handle, err_handle = generic_run(cline)
+        self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
+        result, out_handle, err_handle = generic_run(cmdline)
         align = AlignIO.read(out_handle, "clustal")
         self.assertEqual(len(records),len(align))
         for old, new in zip(records, align) :
@@ -201,24 +206,25 @@ class SimpleAlignTest(unittest.TestCase) :
         SeqIO.write(records, handle, "fasta")
         handle.close()
         #Prepare the command...
-        cline = MuscleCommandline(muscle_exe)
-        cline.set_parameter("in", temp_large_fasta_file)
+        cmdline = MuscleCommandline(muscle_exe)
+        cmdline.set_parameter("in", temp_large_fasta_file)
         #Preserve input record order
-        cline.set_parameter("stable")
+        cmdline.set_parameter("stable")
         #Use fast options
-        cline.set_parameter("maxiters", 1)
-        cline.set_parameter("diags")
+        cmdline.set_parameter("maxiters", 1)
+        cmdline.set_parameter("diags")
         #Use clustal output
-        cline.set_parameter("clwstrict")
+        cmdline.set_parameter("clwstrict")
         #Shoudn't need this, but just to make sure it is accepted
-        cline.set_parameter("maxhours", 0.1)
+        cmdline.set_parameter("maxhours", 0.1)
         #No progress reports to stderr
-        cline.set_parameter("quiet")
+        cmdline.set_parameter("quiet")
         #TODO - Fix the trailing space!
-        self.assertEqual(str(cline).rstrip(), muscle_exe + \
+        self.assertEqual(str(cmdline).rstrip(), muscle_exe + \
                          " -in temp_cw_prot.fasta -diags -maxhours 0.1" + \
                          " -maxiters 1 -clwstrict -stable -quiet")
-        result, out_handle, err_handle = generic_run(cline)
+        self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
+        result, out_handle, err_handle = generic_run(cmdline)
         align = AlignIO.read(out_handle, "clustal")
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align) :

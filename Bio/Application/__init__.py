@@ -1,3 +1,9 @@
+# Copyright 2001-2004 Brad Chapman.
+# Revisions copyright 2009 by Peter Cock.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """General mechanisms to access applications in biopython.
 """
 import os, sys
@@ -14,7 +20,7 @@ def generic_run(commandline):
     standard output and standard error.
 
     WARNING - This will read in the full program output into memory!
-    This may be in issue when the program write a large amount of
+    This may be in issue when the program writes a large amount of
     data to standard output.
     """
     # print str(commandline)
@@ -130,28 +136,160 @@ class ApplicationResult:
         result_names.sort()
         return result_names
 
-class AbstractCommandline:
-    """Generic interface for running applications from biopython.
+class AbstractCommandline(object):
+    """Generic interface for constructing command line strings.
 
     This class shouldn't be called directly; it should be subclassed to
     provide an implementation for a specific application.
+
+    For a usage example we'll show one of the EMBOSS wrappers.  You can set
+    options when creating the wrapper object using keyword arguments - or later
+    using their corresponding properties:
+
+    >>> from Bio.Emboss.Applications import WaterCommandline
+    >>> cline = WaterCommandline(gapopen=10, gapextend=0.5)
+    >>> cline
+    WaterCommandline(cmd='water', gapopen=10, gapextend=0.5)
+
+    You can instead manipulate the parameters via their properties, e.g.
+
+    >>> cline.gapopen
+    10
+    >>> cline.gapopen = 20
+    >>> cline
+    WaterCommandline(cmd='water', gapopen=20, gapextend=0.5)
+
+    You can clear a parameter you have already added by 'deleting' the
+    corresponding property:
+
+    >>> del cline.gapopen
+    >>> cline.gapopen
+    >>> cline
+    WaterCommandline(cmd='water', gapextend=0.5)
+
+    Once you have set the parameters you need, turn the object into a string:
+
+    >>> str(cline)
+    Traceback (most recent call last):
+    ...
+    ValueError: Parameter asequence is not set.
+
+    In this case the wrapper knows certain arguments are required to construct
+    a valid command line for the tool.  For complete example,
+
+    >>> from Bio.Emboss.Applications import WaterCommandline
+    >>> cline = WaterCommandline(gapopen=10, gapextend=0.5)
+    >>> cline.asequence = "asis:ACCCGGGCGCGGT"
+    >>> cline.bsequence = "asis:ACCCGAGCGCGGT"
+    >>> cline.outfile = "temp_water.txt"
+    >>> print cline
+    water -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 -outfile=temp_water.txt 
+    >>> cline
+    WaterCommandline(cmd='water', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5, outfile='temp_water.txt')
+
+    You would typically run the command line via a standard python operating
+    system call (e.g. using the subprocess module).  Bio.Application includes
+    a simple wrapper function generic_run which may be suitable.
     """
-    def __init__(self):
-        self.program_name = ""
-        self.parameters = []
+    def __init__(self, cmd, **kwargs):
+        """Init method - should be subclassed!
+
+        The subclass methods should look like this:
+
+        def __init__(self, cmd="muscle", **kwargs) :
+            self.parameters = [...]
+            AbstractCommandline.__init__(self, cmd, **kwargs)
+
+        i.e. There should have an optional argument "cmd" to set the location
+        of the executable (with a sensible default which should work if the
+        command is on the path on Unix), and keyword arguments.  It should
+        then define a list of parameters, all objects derevied from the base
+        class _AbstractParameter.
+
+        The keyword arguments should be any valid parameter name, and will
+        be used to set the associated parameter.
+        """
+        self.program_name = cmd
+        parameters = self.parameters
+        #Create properties for each parameter at run time
+        for p in parameters :
+            name = p.names[-1]
+            #Beware of binding-versus-assignment confusion issues
+            def getter(name) :
+                return lambda x : x._get_parameter(name)
+            def setter(name) :
+                return lambda x, value : x.set_parameter(name, value)
+            def deleter(name) :
+                return lambda x : x._clear_parameter(name)
+            prop = property(getter(name), setter(name), deleter(name),
+                            p.description)
+            setattr(self.__class__, name, prop) #magic!
+        for key, value in kwargs.iteritems() :
+            self.set_parameter(key, value)
     
     def __str__(self):
-        """Make the commandline with the currently set options.
+        """Make the commandline string with the currently set options.
+
+        e.g.
+        >>> from Bio.Emboss.Applications import WaterCommandline
+        >>> cline = WaterCommandline(gapopen=10, gapextend=0.5)
+        >>> cline.asequence = "asis:ACCCGGGCGCGGT"
+        >>> cline.bsequence = "asis:ACCCGAGCGCGGT"
+        >>> cline.outfile = "temp_water.txt"
+        >>> print cline
+        water -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 -outfile=temp_water.txt 
+        >>> str(cline)
+        'water -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 -outfile=temp_water.txt '
         """
         commandline = "%s " % self.program_name
         for parameter in self.parameters:
             if parameter.is_required and not(parameter.is_set):
-                raise ValueError("Parameter %s is not set." % parameter.names)
+                raise ValueError("Parameter %s is not set." % parameter.names[-1])
             if parameter.is_set:
                 #This will include a trailing space:
                 commandline += str(parameter)
         return commandline
 
+    def __repr__(self):
+        """Return a representation of the command line object for debugging.
+
+        e.g.
+        >>> from Bio.Emboss.Applications import WaterCommandline
+        >>> cline = WaterCommandline(gapopen=10, gapextend=0.5)
+        >>> cline.asequence = "asis:ACCCGGGCGCGGT"
+        >>> cline.bsequence = "asis:ACCCGAGCGCGGT"
+        >>> cline.outfile = "temp_water.txt"
+        >>> print cline
+        water -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 -outfile=temp_water.txt 
+        >>> cline
+        WaterCommandline(cmd='water', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5, outfile='temp_water.txt')
+        """
+        answer = "%s(cmd=%s" % (self.__class__.__name__, repr(self.program_name))
+        for parameter in self.parameters:
+            if parameter.is_set:
+                answer += ", %s=%s" \
+                          % (parameter.names[-1], repr(parameter.value))
+        answer += ")"
+        return answer
+
+    def _get_parameter(self, name) :
+        """Get a commandline option value."""
+        for parameter in self.parameters:
+            if name in parameter.names:
+                return parameter.value
+        raise ValueError("Option name %s was not found." % name)
+
+    def _clear_parameter(self, name) :
+        """Reset or clear a commandline option value."""
+        cleared_option = False
+        for parameter in self.parameters:
+            if name in parameter.names:
+                parameter.value = None
+                parameter.is_set = False
+                cleared_option = True
+        if not cleared_option :
+            raise ValueError("Option name %s was not found." % name)
+        
     def set_parameter(self, name, value = None):
         """Set a commandline option for a program.
         """
@@ -160,10 +298,7 @@ class AbstractCommandline:
             if name in parameter.names:
                 if value is not None:
                     self._check_value(value, name, parameter.checker_function)
-                    if "file" in parameter.param_types :
-                        parameter.value = _escape_filename(value)
-                    else :
-                        parameter.value = value
+                    parameter.value = value
                 parameter.is_set = True
                 set_option = True
         if not set_option :
@@ -250,10 +385,14 @@ class _Option(_AbstractParameter):
         # now made explicitly when setting up the option.
         if self.value is None :
             return "%s " % self.names[0]
-        elif self.equate :
-            return "%s=%s " % (self.names[0], self.value)
+        if "file" in self.param_types :
+            v = _escape_filename(self.value)
         else :
-            return "%s %s " % (self.names[0], self.value)
+            v = str(self.value)
+        if self.equate :
+            return "%s=%s " % (self.names[0], v)
+        else :
+            return "%s %s " % (self.names[0], v)
 
 class _Argument(_AbstractParameter):
     """Represent an argument on a commandline.
@@ -297,7 +436,7 @@ def _escape_filename(filename) :
         return '"%s"' % filename
 
 def _test():
-    """Run the Bio.Motif module's doctests.
+    """Run the Bio.Application module's doctests.
 
     This will try and locate the unit tests directory, and run the doctests
     from there in order that the relative paths used in the examples work.

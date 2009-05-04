@@ -17,12 +17,11 @@ time and space complexity. BMC Bioinformatics 5(1): 113.
 Last checked against version: 3.7
 """
 import types
-from Bio import Application
-from Bio.Application import _Option
-from Bio.Application import _Argument
-class MuscleCommandline(Application.AbstractCommandline):
+from Bio.Application import _Option, AbstractCommandline
+
+class MuscleCommandline(AbstractCommandline):
     """Command line wrapper for the multiple alignment program MUSCLE."""
-    def __init__(self, cmd = "muscle"):
+    def __init__(self, cmd="muscle", **kwargs):
         CLUSTERING_ALGORITHMS   = ["upgma", "upgmb", "neighborjoining"]
         DISTANCE_MEASURES_ITER1 = ["kmer6_6", "kmer20_3", "kmer20_4", "kbit20_3",
                                    "kmer4_6"]
@@ -33,11 +32,10 @@ class MuscleCommandline(Application.AbstractCommandline):
         SEQUENCE_TYPES          = ["protein", "nucleo", "auto"]
         WEIGHTING_SCHEMES       = ["none", "clustalw", "henikoff", "henikoffpb",
                                    "gsc", "threeway"]
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
         self.parameters = \
            [
-            _Option(["-in", "in"], ["input", "file"],
+            #Can't use "in" as the final alias as this is a reserved word in python:
+            _Option(["-in", "in", "input"], ["input", "file"],
                     None, 0, "Input filename",
                     0), #No equate
             _Option(["-out", "out"], ["output", "file"],
@@ -497,3 +495,4 @@ class MuscleCommandline(Application.AbstractCommandline):
                     "Write version string to stdout and exit",
                     0)
            ]
+        AbstractCommandline.__init__(self, cmd, **kwargs)

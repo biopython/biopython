@@ -1,18 +1,13 @@
 """Definitions for interacting with AlignAce.
 """
-from Bio import Application
-from Bio.Application import _Option,_Argument
+from Bio.Application import _Option,_Argument, AbstractCommandline
 
-class AlignAceCommandline(Application.AbstractCommandline):
+class AlignAceCommandline(AbstractCommandline):
     """Create a commandline for the AlignAce program.
 
     XXX This could use more checking for valid paramters to the program.
     """
-    def __init__(self, cmd = "AlignACE"):
-
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
-
+    def __init__(self, cmd="AlignACE", **kwargs):
         self.parameters = \
           [
             _Option(["-i","input"],["input"],lambda x : x.__class__== str,1,
@@ -39,6 +34,7 @@ class AlignAceCommandline(Application.AbstractCommandline):
             _Option(["-oversample","oversample"],["input"],lambda x : x.__class__== int,0,
                     "1/undersample"),
           ]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
     def run(self):
         return Application.generic_run(self)
@@ -50,17 +46,14 @@ class CompareAceCommandline(Application.AbstractCommandline):
 
     XXX This could use more checking for valid paramters to the program.
     """
-    def __init__(self, cmd = "CompareACE"):
-
+    def __init__(self, cmd="CompareACE", **kwargs):
         import os.path
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
-
         self.parameters = \
           [
             _Argument(["motif1"],["input","file"], os.path.exists,1,"name of file containing motif 1"),
             _Argument(["motif2"],["input","file"], os.path.exists,1,"name of file containing motif 2"),
           ]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
     def run(self):
         return Application.generic_run(self)

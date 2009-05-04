@@ -16,16 +16,12 @@ Last checked against versions: 1.83 and 2.0.10
 """
 import os
 import types
-from Bio import Application
-from Bio.Application import _Option
-from Bio.Application import _Argument
+from Bio.Application import _Option, AbstractCommandline
 
-class ClustalwCommandline(Application.AbstractCommandline):
+class ClustalwCommandline(AbstractCommandline):
     """Command line wrapper for clustalw (version one or two)."""
     #TODO - Should we default to cmd="clustalw2" now?
-    def __init__(self, cmd="clustalw"):
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
+    def __init__(self, cmd="clustalw", **kwargs):
         self.parameters = \
             [
             _Option(["-infile", "-INFILE", "INFILE", "infile"],
@@ -505,4 +501,4 @@ class ClustalwCommandline(Application.AbstractCommandline):
                     "NJ or UPGMA",
                     False)
             ]
-
+        AbstractCommandline.__init__(self, cmd, **kwargs)

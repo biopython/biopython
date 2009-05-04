@@ -18,16 +18,12 @@ errors in sequence alignment and evolutionary analysis. Science, 320: 1632.
 Last checked agains version: 081202
 """
 import types
-from Bio import Application
-from Bio.Application import _Option
-from Bio.Application import _Argument
+from Bio.Application import _Option, AbstractCommandline
 
-class PrankCommandline(Application.AbstractCommandline):
+class PrankCommandline(AbstractCommandline):
     """Command line wrapper for the multiple alignment program PRANK."""
-    def __init__(self, cmd = "prank"):
+    def __init__(self, cmd="prank", **kwargs):
         OUTPUT_FORMAT_VALUES = range(1,18)
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
         self.parameters = \
             [
             ################## input/output parameters: ##################
@@ -265,4 +261,4 @@ class PrankCommandline(Application.AbstractCommandline):
                     "not perform alignment",
                     0)
             ]
-
+        AbstractCommandline.__init__(self, cmd, **kwargs)

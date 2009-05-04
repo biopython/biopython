@@ -1,19 +1,21 @@
+# Copyright 2001-2009 Brad Chapman.
+# Revisions copyright 2009 by Peter Cock.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """Code to interact with and run various EMBOSS programs.
 
 These classes follow the AbstractCommandline interfaces for running
 programs.
 """
 
-from Bio import Application
-from Bio.Application import _Option
+from Bio.Application import _Option, AbstractCommandline
 
-class Primer3Commandline(Application.AbstractCommandline):
+class Primer3Commandline(AbstractCommandline):
     """Commandline object for the Primer3 interface from EMBOSS.
     """
-    def __init__(self, cmd = "eprimer3"):
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
-
+    def __init__(self, cmd="eprimer3", **kwargs):
         self.parameters = \
           [_Option(["-sequence","sequence"], ["input"], None, 1,
                    "Sequence to choose primers from"),
@@ -67,12 +69,14 @@ class Primer3Commandline(Application.AbstractCommandline):
            _Option(["-oligomaxmishyb","oligomaxmishyb"], ["input"], None, 0),
            _Option(["-explainflag","explainflag"], ["input"], None, 0),
            ]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
-class PrimerSearchCommandline(Application.AbstractCommandline):
+        
+class PrimerSearchCommandline(AbstractCommandline):
     """Commandline object for the primersearch program from EMBOSS.
     """
-    def __init__(self, cmd = "primersearch"):
-        Application.AbstractCommandline.__init__(self)
+    def __init__(self, cmd="primersearch", **kwargs):
+        AbstractCommandline.__init__(self)
         self.program_name = cmd
 
         self.parameters = \
@@ -85,15 +89,12 @@ class PrimerSearchCommandline(Application.AbstractCommandline):
           _Option(["-mismatchpercent","mismatchpercent"], ["input"], None, 1,
                   "Allowed percentage mismatch.")]
 
-class EProtDistCommandline(Application.AbstractCommandline):
+class EProtDistCommandline(AbstractCommandline):
     """Commandline object for the eprotdist program from EMBOSS.
 
     This is an EMBOSS wrapper around protdist from PHYLIP.
     """
-    def __init__(self, cmd = "eprotdist"):
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
-
+    def __init__(self, cmd="eprotdist", **kwargs):
         self.parameters = \
          [_Option(["-msf","msf"], ["input"], None, 1,
                   "File containing sequences"),
@@ -123,16 +124,15 @@ class EProtDistCommandline(Application.AbstractCommandline):
                   "Print indications of progress of run"),
           _Option(["-basefrequency","basefrequency"], ["input"], None, 0,
                   "Use empirical base frequencies")]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
-class ENeighborCommandline(Application.AbstractCommandline):
+
+class ENeighborCommandline(AbstractCommandline):
     """Commandline object for the eneighbor program from EMBOSS.
 
     This is an EMBOSS wrapper around neighbor from PHYLIP.
     """
-    def __init__(self, cmd = "eneighbor"):
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
-
+    def __init__(self, cmd="eneighbor", **kwargs):
         self.parameters = \
          [_Option(["-infile","infile"], ["input"], None, 1,
                   "infile value"),
@@ -168,16 +168,14 @@ class ENeighborCommandline(Application.AbstractCommandline):
                   "Print out the data at start of run"),
           _Option(["-progress","progress"], ["input"], None, 0,
                   "Print indications of progress of run")]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
-class EProtParsCommandline(Application.AbstractCommandline):
+class EProtParsCommandline(AbstractCommandline):
     """Commandline object for the eprotpars program from EMBOSS.
 
     This is an EMBOSS wrapper around protpars from PHYLIP.
     """
-    def __init__(self, cmd = "eprotpars"):
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
-
+    def __init__(self, cmd="eprotpars", **kwargs):
         self.parameters = \
          [_Option(["-msf","msf"], ["input", "file"], None, 1,
                   "Sequences file to be read in"),
@@ -219,16 +217,15 @@ class EProtParsCommandline(Application.AbstractCommandline):
                   "Do not create a tree file"),
           _Option(["-treefile","treefile"], ["output", "file"], None, 0,
                   "Output treefile name")]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
-class EConsenseCommandline(Application.AbstractCommandline):
+
+class EConsenseCommandline(AbstractCommandline):
     """Commandline object for the econsense program from EMBOSS.
 
     This is an EMBOSS wrapper around consense from PHYLIP.
     """
-    def __init__(self, cmd = "econsense"):
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
-
+    def __init__(self, cmd="econsense", **kwargs):
         self.parameters = \
          [_Option(["-infile","infile"], ["input", "file"], None, 1,
                   "file to read in (New Hampshire standard form)"),
@@ -258,16 +255,14 @@ class EConsenseCommandline(Application.AbstractCommandline):
                   "Do not print out the sets of species"),
           _Option(["-printsets","printsets"], ["input"], None, 0,
                   "Print out the sets of species")]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
-class ESeqBootCommandline(Application.AbstractCommandline):
+class ESeqBootCommandline(AbstractCommandline):
     """Commandline object for the eseqboot program from EMBOSS.
 
     This is an EMBOSS wrapper around seqboot from PHYLIP.
     """
-    def __init__(self, cmd = "eseqboot"):
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
-
+    def __init__(self, cmd="eseqboot", **kwargs):
         self.parameters = \
          [_Option(["-datafile","datafile"], ["input", "file"], None, 1,
                   "Input file"),
@@ -291,14 +286,12 @@ class ESeqBootCommandline(Application.AbstractCommandline):
                   "Print out the data at start of run"),
           _Option(["-progress","progress"], ["input"], None, 0,
                   "Print indications of progress of run")]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
-class WaterCommandline(Application.AbstractCommandline):
+class WaterCommandline(AbstractCommandline):
     """Commandline object for the water program from EMBOSS.
     """
-    def __init__(self, cmd = "water"):
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
-
+    def __init__(self, cmd="water", **kwargs):
         self.parameters = \
          [_Option(["-asequence","asequence"], ["input", "file"], None, 1,
                   "First sequence to align"),
@@ -320,14 +313,13 @@ class WaterCommandline(Application.AbstractCommandline):
                  "Sequences are protein (boolean)"),
          _Option(["-aformat","aformat"], ["input"], None, 0,
                  "Display output in a different specified output format")]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
-class NeedleCommandline(Application.AbstractCommandline):
+
+class NeedleCommandline(AbstractCommandline):
     """Commandline object for the needle program from EMBOSS.
     """
-    def __init__(self, cmd = "needle"):
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
-
+    def __init__(self, cmd="needle", **kwargs):
         self.parameters = \
          [_Option(["-asequence","asequence"], ["input", "file"], None, 1,
                   "First sequence to align"),
@@ -349,14 +341,13 @@ class NeedleCommandline(Application.AbstractCommandline):
                  "Sequences are protein (boolean)"),
          _Option(["-aformat","aformat"], ["input"], None, 0,
                  "Display output in a different specified output format")]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
-class FuzznucCommandline(Application.AbstractCommandline):
+
+class FuzznucCommandline(AbstractCommandline):
     """Commandline object for the fuzznuc program from EMBOSS.
     """
-    def __init__(self, cmd = "fuzznuc"):
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
-
+    def __init__(self, cmd="fuzznuc", **kwargs):
         self.parameters = [
          _Option(["-sequence","sequence"], ["input"], None, 1,
                  "Sequence database USA"),
@@ -370,14 +361,13 @@ class FuzznucCommandline(Application.AbstractCommandline):
                  "Search complementary strand"),
          _Option(["-rformat","rformat"], ["input"], None, 0,
                  "Specify the report format to output in.")]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
-class Est2GenomeCommandline(Application.AbstractCommandline):
+
+class Est2GenomeCommandline(AbstractCommandline):
     """Commandline object for the est2genome program from EMBOSS.
     """
-    def __init__(self, cmd = "est2genome"):
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
-
+    def __init__(self, cmd="est2genome", **kwargs):
         self.parameters = [
          _Option(["-est","est"], ["input"], None, 1,
                  "EST sequence(s)"),
@@ -419,14 +409,13 @@ class Est2GenomeCommandline(Application.AbstractCommandline):
          _Option(["-width","width"], ["input"], None, 0,
                  "Alignment width")
         ]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
-class ETandemCommandline(Application.AbstractCommandline):
+
+class ETandemCommandline(AbstractCommandline):
     """Commandline object for the etandem program from EMBOSS.
     """
-    def __init__(self, cmd = "etandem"):
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
-
+    def __init__(self, cmd="etandem", **kwargs):
         self.parameters = [
          _Option(["-sequence","sequence"], ["input", "file"], None, 1,
                  "Sequence"),
@@ -444,14 +433,13 @@ class ETandemCommandline(Application.AbstractCommandline):
                    "Allow uniform consensus"),
          _Option(["-rformat","rformat"], ["output"], None, 0,
                  "Output report format")]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
-class EInvertedCommandline(Application.AbstractCommandline):
+
+class EInvertedCommandline(AbstractCommandline):
     """Commandline object for the einverted program from EMBOSS.
     """
-    def __init__(self, cmd = "einverted"):
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
-
+    def __init__(self, cmd="einverted", **kwargs):
         self.parameters = [
          _Option(["-sequence","sequence"], ["input", "file"], None, 1,
                  "Sequence"),
@@ -468,14 +456,13 @@ class EInvertedCommandline(Application.AbstractCommandline):
          _Option(["-maxrepeat","maxrepeat"], ["input"], None, 0,
                  "Maximum separation between the start and end of repeat"),
          ]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
-class PalindromeCommandline(Application.AbstractCommandline):
+
+class PalindromeCommandline(AbstractCommandline):
     """Commandline object for the palindrome program from EMBOSS.
     """
-    def __init__(self, cmd = "palindrome"):
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
-
+    def __init__(self, cmd="palindrome", **kwargs):
         self.parameters = [
          _Option(["-sequence","sequence"], ["input", "file"], None, 1,
                  "Sequence"),
@@ -492,14 +479,13 @@ class PalindromeCommandline(Application.AbstractCommandline):
          _Option(["-outfile","outfile"], ["output", "file"] , None, 1,
                  "Output report file name"),
          ]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
-class TranalignCommandline(Application.AbstractCommandline):
+
+class TranalignCommandline(AbstractCommandline):
     """Commandline object for the tranalign program from EMBOSS.
     """
-    def __init__(self, cmd = "tranalign"):
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
-
+    def __init__(self, cmd="tranalign", **kwargs):
         self.parameters = [
          _Option(["-asequence","asequence"], ["input", "file"], None, 1,
                  "Nucleotide sequences to be aligned."),
@@ -509,14 +495,13 @@ class TranalignCommandline(Application.AbstractCommandline):
                  "Output sequence file."),
          _Option(["-table","table"], ["input"], None, 0,
                  "Code to use")]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
-class DiffseqCommandline(Application.AbstractCommandline):
+
+class DiffseqCommandline(AbstractCommandline):
     """Commandline object for the diffseq program from EMBOSS.
     """
-    def __init__(self, cmd = "diffseq"):
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
-
+    def __init__(self, cmd="diffseq", **kwargs):
         self.parameters = [
          _Option(["-asequence","asequence"], ["input", "file"], None, 1,
                  "First sequence to compare"),
@@ -533,14 +518,13 @@ class DiffseqCommandline(Application.AbstractCommandline):
          _Option(["-rformat","rformat"], ["output"], None, 0,
                  "Output report file format")
          ]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
-class IepCommandline(Application.AbstractCommandline):
+
+class IepCommandline(AbstractCommandline):
     """Commandline for EMBOSS iep: calculated isoelectric point and charge.
     """
-    def __init__(self, cmd = "iep"):
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
-
+    def __init__(self, cmd="iep", **kwargs):
         self.parameters = [
          _Option(["-sequence","sequence"], ["input", "file"], None, 1,
                 "Protein sequence(s) filename"),
@@ -551,3 +535,4 @@ class IepCommandline(Application.AbstractCommandline):
          _Option(["-disulphides","disulphides"], ["input"], None, 0),
          _Option(["-notermini","notermini"], ["input"], None, 0),
          ]
+        AbstractCommandline.__init__(self, cmd, **kwargs)

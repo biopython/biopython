@@ -224,14 +224,18 @@ for input_file, output_file, newtree_file in [
 
 
     #And again, but this time using Bio.Align.Applications wrapper
-    cline = ClustalwCommandline(clustalw_exe)
-    #Any filesnames with spaces should get escaped with quotes automatically:
-    cline.set_parameter("infile", input_file)
-    cline.set_parameter("outfile", output_file)
+    #Any filesnames with spaces should get escaped with quotes automatically.
+    #Using keyword arguments here.
+    cline = ClustalwCommandline(clustalw_exe,
+                                infile=input_file,
+                                outfile=output_file)
+    assert str(eval(repr(cline)))==str(cline)
     if newtree_file is not None :
-        cline.set_parameter("newtree", newtree_file)
+        #Test using a property:
+        cline.newtree = newtree_file
         #I don't just want the tree, also want the alignment:
         cline.set_parameter("align")
+        assert str(eval(repr(cline)))==str(cline)
     #print cline
     return_code, out_handle, err_handle = generic_run(cline)
     assert out_handle.read().strip().startswith("CLUSTAL")

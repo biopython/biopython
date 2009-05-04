@@ -9,7 +9,7 @@ import sys
 import unittest
 
 from Bio.Application import generic_run
-from Bio.Emboss import Applications
+from Bio.Emboss.Applications import WaterCommandline, NeedleCommandline
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio import MissingExternalDependencyError
@@ -343,13 +343,15 @@ class PairwiseAlignmentTests(unittest.TestCase):
 
     def test_water_file(self):
         """water with the asis trick, output to a file."""
-        #Setup,
-        cline = Applications.WaterCommandline(cmd=exes["water"])
-        cline.set_parameter("-asequence", "asis:ACCCGGGCGCGGT")
+        #Setup, try a mixture of keyword arguments and later additions:
+        cline = WaterCommandline(cmd=exes["water"],
+                                 gapopen="10", gapextend="0.5")
+        #Try using both human readable names, and the literal ones:
+        cline.set_parameter("asequence", "asis:ACCCGGGCGCGGT")
         cline.set_parameter("-bsequence", "asis:ACCCGAGCGCGGT")
-        cline.set_parameter("-gapopen", "10")
-        cline.set_parameter("-gapextend", "0.5")
-        cline.set_parameter("-outfile", "Emboss/temp_test.water")
+        #Try using a property set here:
+        cline.outfile = "Emboss/temp_test.water"
+        self.assertEqual(str(eval(repr(cline))), str(cline))
         #Run the tool,
         result, out, err = generic_run(cline)
         #Check it worked,
@@ -396,7 +398,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
     def test_needle_file(self):
         """needle with the asis trick, output to a file."""
         #Setup,
-        cline = Applications.WaterCommandline(cmd=exes["needle"])
+        cline = NeedleCommandline(cmd=exes["needle"])
         cline.set_parameter("-asequence", "asis:ACCCGGGCGCGGT")
         cline.set_parameter("-bsequence", "asis:ACCCGAGCGCGGT")
         cline.set_parameter("-gapopen", "10")
@@ -404,6 +406,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #EMBOSS would guess this, but let's be explicit:
         cline.set_parameter("-snucleotide", "True")
         cline.set_parameter("-outfile", "Emboss/temp_test.needle")
+        self.assertEqual(str(eval(repr(cline))), str(cline))
         #Run the tool,
         result, out, err = generic_run(cline)
         #Check it worked,
@@ -458,12 +461,13 @@ class PairwiseAlignmentTests(unittest.TestCase):
         self.assert_(os.path.isfile(in_file))
         if os.path.isfile(out_file) :
             os.remove(out_file)
-        cline = Applications.WaterCommandline(cmd=exes["water"])
+        cline = WaterCommandline(cmd=exes["water"])
         cline.set_parameter("-asequence", "asis:%s" % query)
         cline.set_parameter("-bsequence", in_file)
         cline.set_parameter("-gapopen", "10")
         cline.set_parameter("-gapextend", "0.5")
         cline.set_parameter("-outfile", out_file)
+        self.assertEqual(str(eval(repr(cline))), str(cline))
         #Run the tool,
         result, out, err = generic_run(cline)
         #Check it worked,
@@ -491,13 +495,14 @@ class PairwiseAlignmentTests(unittest.TestCase):
         self.assert_(os.path.isfile(in_file))
         if os.path.isfile(out_file) :
             os.remove(out_file)
-        cline = Applications.WaterCommandline(cmd=exes["water"])
-        cline.set_parameter("-asequence", "asis:%s" % query)
-        cline.set_parameter("-bsequence", in_file)
+        cline = WaterCommandline(cmd=exes["water"])
+        cline.set_parameter("asequence", "asis:%s" % query)
+        cline.set_parameter("bsequence", in_file)
         #TODO - Tell water this is a GenBank file!
-        cline.set_parameter("-gapopen", "1")
-        cline.set_parameter("-gapextend", "0.5")
-        cline.set_parameter("-outfile", out_file)
+        cline.set_parameter("gapopen", "1")
+        cline.set_parameter("gapextend", "0.5")
+        cline.set_parameter("outfile", out_file)
+        self.assertEqual(str(eval(repr(cline))), str(cline))
         #Run the tool,
         result, out, err = generic_run(cline)
         #Check it worked,
@@ -525,7 +530,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         self.assert_(os.path.isfile(in_file))
         if os.path.isfile(out_file) :
             os.remove(out_file)
-        cline = Applications.WaterCommandline(cmd=exes["water"])
+        cline = WaterCommandline(cmd=exes["water"])
         cline.set_parameter("-asequence", "asis:%s" % query)
         cline.set_parameter("-bsequence", in_file)
         #EMBOSS should work this out, but let's be explicit:
@@ -534,6 +539,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         cline.set_parameter("-gapopen", "20")
         cline.set_parameter("-gapextend", "5")
         cline.set_parameter("-outfile", out_file)
+        self.assertEqual(str(eval(repr(cline))), str(cline))
         #Run the tool,
         result, out, err = generic_run(cline)
         #Check it worked,

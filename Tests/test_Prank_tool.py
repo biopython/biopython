@@ -76,6 +76,7 @@ class PrankApplication(unittest.TestCase):
         cmdline = PrankCommandline(prank_exe)
         cmdline.set_parameter("d", self.infile1)
         self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01 ")
+        self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = Application.generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
         self.assert_("Total time" in stdout.read())
@@ -87,12 +88,15 @@ class PrankApplication(unittest.TestCase):
         output.?.??? files written to cwd - no way to redirect
         """
         records = list(SeqIO.parse(open(self.infile1),"fasta"))
-        cmdline = PrankCommandline(prank_exe)
-        cmdline.set_parameter("d", self.infile1)
-        cmdline.set_parameter("f", 17) #17. NEXUS FORMAT
+        #Try using keyword argument,
+        cmdline = PrankCommandline(prank_exe, d=self.infile1)
+        #Try using a property,
+        cmdline.d = self.infile1
+        cmdline.f = 17 # NEXUS format
         cmdline.set_parameter("-noxml")
         cmdline.set_parameter("notree")
         self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01 -f=17 -noxml -notree ")
+        self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = Application.generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
         self.assert_("Total time" in stdout.read())
@@ -117,13 +121,15 @@ class PrankApplication(unittest.TestCase):
         cmdline.set_parameter("-gaprate", 0.321)
         cmdline.set_parameter("gapext", 0.6)
         cmdline.set_parameter("-dots")
-        cmdline.set_parameter("-kappa", 3)
+        #Try using a property:
+        cmdline.kappa = 3
         cmdline.set_parameter("-skipins")
         cmdline.set_parameter("-once")
         cmdline.set_parameter("realbranches")
         self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01 -noxml" + \
                          " -notree -dots -gaprate=0.321 -gapext=0.6 -kappa=3" + \
                          " -once -skipins -realbranches ")
+        self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = Application.generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
         self.assert_("Total time" in stdout.read())
