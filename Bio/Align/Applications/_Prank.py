@@ -18,7 +18,7 @@ errors in sequence alignment and evolutionary analysis. Science, 320: 1632.
 Last checked agains version: 081202
 """
 import types
-from Bio.Application import _Option, AbstractCommandline
+from Bio.Application import _Option, _Switch, AbstractCommandline
 
 class PrankCommandline(AbstractCommandline):
     """Command line wrapper for the multiple alignment program PRANK."""
@@ -59,44 +59,22 @@ class PrankCommandline(AbstractCommandline):
                     "4. EMBL       	14. PIR/CODATA\n" + \
                     "6. DNAStrider 	15. MSF\n" + \
                     "7. Fitch      	17. PAUP/NEXUS"),
-            #-noxml [do not output xml-files]
-            _Option(["-noxml", "noxml"], ["input"],
-                    lambda x: 0, # Does not take a value
-                    0,
-                    "Do not output XML files",
-                    0), #No equate
-            #-notree [do not output dnd-files]
-            _Option(["-notree", "notree"], ["input"],
-                    lambda x: 0, # Does not take a value
-                    0,
-                    "Do not output dnd tree files",
-                    0), #No equate
-            #-shortnames [truncate names at first space]
-            _Option(["-shortnames", "shortnames"], ["input"],
-                    lambda x: 0, # Does not take a value
-                    0,
-                    "Truncate names at first space",
-                    0),
-            #-quiet
-            _Option(["-quiet", "quiet"], ["input"],
-                    lambda x: 0, # Does not take a value
-                    0,
-                    "Reduce verbosity",
-                    0),
+            _Switch(["-noxml", "noxml"], ["input"],
+                    "Do not output XML files"),
+            _Switch(["-notree", "notree"], ["input"],
+                    "Do not output dnd tree files"),
+            _Switch(["-shortnames", "shortnames"], ["input"],
+                    "Truncate names at first space"),
+            _Switch(["-quiet", "quiet"], ["input"],
+                    "Reduce verbosity"),
             ####################### model parameters: ######################
             #+F [force insertions to be always skipped]
             #-F [equivalent]
-            _Option(["-F", "+F", "F"], ["input"],
-                    lambda x: 0, # Does not take a value
-                    0,
-                    "Force insertions to be always skipped: same as +F",
-                    0),
+            _Switch(["-F", "+F", "F"], ["input"],
+                    "Force insertions to be always skipped: same as +F"),
             #-dots [show insertion gaps as dots]
-            _Option(["-dots", "dots"], ["input"],
-                    lambda x: 0, # Does not take a value
-                    0,
-                    "Show insertion gaps as dots",
-                    0),
+            _Switch(["-dots", "dots"], ["input"],
+                    "Show insertion gaps as dots"),
             #-gaprate=# [gap opening rate; default: dna 0.025 / prot 0.0025]
             _Option(["-gaprate", "gaprate"], ["input"],
                     lambda x: isinstance(x, types.FloatType), 
@@ -150,42 +128,18 @@ class PrankCommandline(AbstractCommandline):
                     0,
                     "Expected pairwise distance for computing guidetree. " + \
                     "Default: dna 0.25 / prot 0.5"),
-            #-once [run only once; default: twice if no guidetree given]
-            _Option(["-once", "once"], ["input"],
-                    lambda x: 0, #Does not take a value,
-                    0,
-                    "Run only once. Default: twice if no guidetree given",
-                    0),
-            #-twice [run always twice]
-            _Option(["-twice", "twice"], ["input"],
-                    lambda x: 0, #Does not take a value,
-                    0,
-                    "Always run twice",
-                    0),
-            #-skipins [skip insertions in posterior support]
-            _Option(["-skipins", "skipins"], ["input"],
-                    lambda x: 0, #Does not take a value,
-                    0,
-                    "Skip insertions in posterior support",
-                    0),
-            #-uselogs [slower but should work for a greater number of sequences]
-            _Option(["-uselogs", "uselogs"], ["input"],
-                    lambda x: 0, #Does not take a value,
-                    0,
-                    "Slower but should work for a greater number of sequences",
-                    0),
-            #-writeanc [output ancestral sequences]
-            _Option(["-writeanc", "writeanc"], ["input"],
-                    lambda x: 0, #Does not take a value,
-                    0,
-                    "Output ancestral sequences",
-                    0),
-            #-printnodes [output each node; mostly for debugging]
-            _Option(["-printnodes", "printnodes"], ["input"],
-                    lambda x: 0, #Does not take a value,
-                    0,
-                    "Output each node; mostly for debugging",
-                    0),
+            _Switch(["-once", "once"], ["input"],
+                    "Run only once. Default: twice if no guidetree given"),
+            _Switch(["-twice", "twice"], ["input"],
+                    "Always run twice"),
+            _Switch(["-skipins", "skipins"], ["input"],
+                    "Skip insertions in posterior support"),
+            _Switch(["-uselogs", "uselogs"], ["input"],
+                    "Slower but should work for a greater number of sequences"),
+            _Switch(["-writeanc", "writeanc"], ["input"],
+                    "Output ancestral sequences"),
+            _Switch(["-printnodes", "printnodes"], ["input"],
+                    "Output each node; mostly for debugging"),
             #-matresize=# [matrix resizing multiplier]
             # Doesnt specify type but Float and Int work
             _Option(["-matresize", "matresize"], ["input"],
@@ -200,18 +154,10 @@ class PrankCommandline(AbstractCommandline):
                               types.IntType),
                     0,
                     "Matrix initial size multiplier"),
-            #-longseq [save space in pairwise alignments]
-            _Option(["-longseq", "longseq"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Save space in pairwise alignments",
-                    0),
-            #-pwgenomic [do pairwise alignment, no guidetree]
-            _Option(["-pwgenomic", "pwgenomic"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Do pairwise alignment, no guidetree",
-                    0),
+            _Switch(["-longseq", "longseq"], ["input"],
+                    "Save space in pairwise alignments"),
+            _Switch(["-pwgenomic", "pwgenomic"], ["input"],
+                    "Do pairwise alignment, no guidetree"),
             #-pwgenomicdist=# [distance for pairwise alignment; default: 0.3]
             _Option(["-pwgenomicdist", "pwgenomicdist"], ["input"],
                     lambda x: isinstance(x, types.FloatType),
@@ -240,25 +186,13 @@ class PrankCommandline(AbstractCommandline):
                     0,
                     "Disable branch length truncation",
                     0),
-            #-translate [translate to protein]
-            _Option(["-translate", "translate"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Translate to protein",
-                    0),
-            #-mttranslate [translate to protein using mt table]
-            _Option(["-mttranslate", "mttranslate"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Translate to protein using mt table",
-                    0),
+            _Switch(["-translate", "translate"], ["input"],
+                    "Translate to protein"),
+            _Switch(["-mttranslate", "mttranslate"], ["input"],
+                    "Translate to protein using mt table"),
             ###################### other: ####################
-            #-convert [no alignment, just convert to another format]
-            _Option(["-convert", "convert"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
+            _Switch(["-convert", "convert"], ["input"],
                     "Convert input alignment to new format. Do " + \
-                    "not perform alignment",
-                    0)
+                    "not perform alignment")
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)

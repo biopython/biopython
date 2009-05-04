@@ -234,7 +234,7 @@ for input_file, output_file, newtree_file in [
         #Test using a property:
         cline.newtree = newtree_file
         #I don't just want the tree, also want the alignment:
-        cline.set_parameter("align")
+        cline.align = True
         assert str(eval(repr(cline)))==str(cline)
     #print cline
     return_code, out_handle, err_handle = generic_run(cline)

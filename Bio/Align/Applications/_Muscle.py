@@ -17,7 +17,7 @@ time and space complexity. BMC Bioinformatics 5(1): 113.
 Last checked against version: 3.7
 """
 import types
-from Bio.Application import _Option, AbstractCommandline
+from Bio.Application import _Option, _Switch, AbstractCommandline
 
 class MuscleCommandline(AbstractCommandline):
     """Command line wrapper for the multiple alignment program MUSCLE."""
@@ -41,14 +41,10 @@ class MuscleCommandline(AbstractCommandline):
             _Option(["-out", "out"], ["output", "file"],
                     None, 0, "Output filename",
                     0), #No equate
-            _Option(["-diags", "diags"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0, "Find diagonals (faster for similar sequences)",
-                    0), #No equate
-            _Option(["-profile", "profile"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0, "Perform a profile alignment",
-                    0), #No equate
+            _Switch(["-diags", "diags"], ["input"],
+                    "Find diagonals (faster for similar sequences)"),
+            _Switch(["-profile", "profile"], ["input"],
+                    "Perform a profile alignment"),
             _Option(["-in1", "in1"], ["input", "file"],
                     None, 0,
                     "First input filename for profile alignment",
@@ -332,76 +328,52 @@ class MuscleCommandline(AbstractCommandline):
             # will html be used. I kid ye not.
             #clw                no              Write output in CLUSTALW format (default is
             #                                   FASTA).
-            _Option(["-clw", "clw"], ["input"],
-                    lambda x: 0, #Does not take a value,
-                    0,
-                    "Write output in CLUSTALW format",
-                    0),
+            _Switch(["-clw", "clw"], ["input"],
+                    "Write output in CLUSTALW format (with a MUSCLE header). "
+                    "If you want to parse the output with Bio.AlignIO in "
+                    "Biopython, use the clwstrict output switch instead."),
             #clwstrict          no              Write output in CLUSTALW format with the
             #                                   "CLUSTAL W (1.81)" header rather than the
             #                                   MUSCLE version. This is useful when a post-
             #                                   processing step is picky about the file
             #                                   header.
-            _Option(["-clwstrict", "clwstrict"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Write output in CLUSTALW format with vers. 1.81 header",
-                    0),
+            _Switch(["-clwstrict", "clwstrict"], ["input"],
+                    "Write output in CLUSTALW format with vers. 1.81 header, "
+                    "this is useful for parsing with Bio.AlignIO in Biopython."),
             #fasta              yes             Write output in FASTA format. Alternatives
             #                                   include clw,
             #                                   clwstrict, msf and html.
-            _Option(["-fasta", "fasta"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Write output in FASTA format",
-                    0),
+            _Switch(["-fasta", "fasta"], ["input"],
+                    "Write output in FASTA format"),
             #html               no              Write output in HTML format (default is
             #                                   FASTA).
-            _Option(["-html", "html"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Write output in HTML format",
-                    0),
+            _Switch(["-html", "html"], ["input"],
+                    "Write output in HTML format"),
             #msf                no              Write output in MSF format (default is
             #                                   FASTA).
-            _Option(["-msf", "msf"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Write output in MSF format",
-                    0),
+            _Switch(["-msf", "msf"], ["input"],
+                    "Write output in MSF format"),
             ############## END FORMATS ###################################
             #anchors            yes             Use anchor optimization in tree dependent
             #                                   refinement iterations.
-            _Option(["-anchors", "anchors"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
+            _Switch(["-anchors", "anchors"], ["input"],
                     "Use anchor optimisation in tree dependent " + \
-                    "refinement iterations",
-                    0),
+                    "refinement iterations"),
             #noanchors          no              Disable anchor optimization. Default is
             #                                   anchors.
-            _Option(["-noanchors", "noanchors"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
+            _Switch(["-noanchors", "noanchors"], ["input"],
                     "Do not use anchor optimisation in tree dependent " + \
-                    "refinement iterations",
-                    0),
+                    "refinement iterations"),
             #group              yes             Group similar sequences together in the
             #                                   output. This is the default. See also
             #                                   stable.
-            _Option(["-group", "group"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Group similar sequences in output",
-                    0),
+            _Switch(["-group", "group"], ["input"],
+                    "Group similar sequences in output"),
             #stable             no              Preserve input order of sequences in output
             #                                   file. Default is to group sequences by
             #                                   similarity (group).
-            _Option(["-stable", "stable"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Do not group similar sequences in output",
-                    0),
+            _Switch(["-stable", "stable"], ["input"],
+                    "Do not group similar sequences in output"),
             ############## log-expectation profile score ######################
             # One of either -le, -sp, or -sv
             #
@@ -413,63 +385,39 @@ class MuscleCommandline(AbstractCommandline):
             #le                 maybe           Use log-expectation profile score (VTML240).
             #                                    Alternatives are to use sp or sv. This is
             #                                    the default for amino acid sequences.
-            _Option(["-le", "le"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Use log-expectation profile score (VTML240)",
-                    0),
+            _Switch(["-le", "le"], ["input"],
+                    "Use log-expectation profile score (VTML240)"),
             #sv                 no              Use sum-of-pairs profile score (VTML240).
             #                                   Default is le.
-            _Option(["-sv", "sv"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Use sum-of-pairs profile score (VTML240)",
-                    0),
+            _Switch(["-sv", "sv"], ["input"],
+                    "Use sum-of-pairs profile score (VTML240)"),
             #sp                 no              Use sum-of-pairs protein profile score
             #                                   (PAM200). Default is le.
-            _Option(["-sp", "sp"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Use sum-of-pairs protein profile score (PAM200)",
-                    0),
+            _Switch(["-sp", "sp"], ["input"],
+                    "Use sum-of-pairs protein profile score (PAM200)"),
             #spn                maybe           Use sum-of-pairs nucleotide profile score
             #                                   (BLASTZ parameters). This is the only option
             #                                   for nucleotides, and is therefore the
             #                                   default.
-            _Option(["-spn", "spn"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Use sum-of-pairs protein nucleotide profile score",
-                    0),
+            _Switch(["-spn", "spn"], ["input"],
+                    "Use sum-of-pairs protein nucleotide profile score"),
             ############## END log-expectation profile score ######################
             #quiet              no              Do not display progress messages.
-            _Option(["-quiet", "quiet"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Use sum-of-pairs protein nucleotide profile score",
-                    0),
+            _Switch(["-quiet", "quiet"], ["input"],
+                    "Use sum-of-pairs protein nucleotide profile score"),
             #refine             no              Input file is already aligned, skip first
             #                                   two iterations and begin tree dependent
             #                                   refinement.
-            _Option(["-refine", "refine"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Only do tree dependent refinement",
-                    0),
+            _Switch(["-refine", "refine"], ["input"],
+                    "Only do tree dependent refinement"),
             #core               yes in muscle,  Do not catch exceptions.
             #                   no in muscled.
-            _Option(["-core", "core"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Catch exceptions",
-                    0),
+            _Switch(["-core", "core"], ["input"],
+                    "Catch exceptions"),
             #nocore             no in muscle,   Catch exceptions and give an error message
             #                   yes in muscled. if possible.
-            _Option(["-nocore", "nocore"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Do not catch exceptions",
-                    0),
+            _Switch(["-nocore", "nocore"], ["input"],
+                    "Do not catch exceptions"),
             #termgapsfull       no              Terminal gaps penalized with full penalty.
             #                                   [1] Not fully supported in this version.
             #
@@ -483,16 +431,10 @@ class MuscleCommandline(AbstractCommandline):
             #                                   [1] Not fully supported in this version.
             #verbose            no              Write parameter settings and progress
             #                                   messages to log file.
-            _Option(["-verbose", "verbose"], ["input"],
-                    lambda x: 0, #Does not take a value
-                    0,
-                    "Write parameter settings and progress",
-                    0),
+            _Switch(["-verbose", "verbose"], ["input"],
+                    "Write parameter settings and progress"),
             #version            no              Write version string to stdout and exit.
-            _Option(["-version", "version"], ["input"],
-                    lambda x: 0, #Does not take a value,
-                    0,
-                    "Write version string to stdout and exit",
-                    0)
+            _Switch(["-version", "version"], ["input"],
+                    "Write version string to stdout and exit"),
            ]
         AbstractCommandline.__init__(self, cmd, **kwargs)

@@ -267,8 +267,11 @@ class AbstractCommandline(object):
         answer = "%s(cmd=%s" % (self.__class__.__name__, repr(self.program_name))
         for parameter in self.parameters:
             if parameter.is_set:
-                answer += ", %s=%s" \
-                          % (parameter.names[-1], repr(parameter.value))
+                if isinstance(parameter, _Switch):
+                    answer += ", %s=True" % parameter.names[-1]
+                else :
+                    answer += ", %s=%s" \
+                              % (parameter.names[-1], repr(parameter.value))
         answer += ")"
         return answer
 
@@ -296,11 +299,20 @@ class AbstractCommandline(object):
         set_option = False
         for parameter in self.parameters:
             if name in parameter.names:
-                if value is not None:
-                    self._check_value(value, name, parameter.checker_function)
-                    parameter.value = value
-                parameter.is_set = True
-                set_option = True
+                if isinstance(parameter, _Switch) :
+                    if value is None :
+                        import warnings
+                        warnings.warn("For a switch type argument like %s, "
+                                      "we expect a boolean.  None is treated "
+                                      "as FALSE!" % parameter.names[-1])
+                    parameter.is_set = bool(value)
+                    set_option = True
+                else :
+                    if value is not None:
+                        self._check_value(value, name, parameter.checker_function)
+                        parameter.value = value
+                    parameter.is_set = True
+                    set_option = True
         if not set_option :
             raise ValueError("Option name %s was not found." % name)
 
@@ -325,6 +337,21 @@ class _AbstractParameter:
     """A class to hold information about a parameter for a commandline.
 
     Do not use this directly, instead use one of the subclasses.
+    """
+    def __init__(self) :
+        raise NotImplementedError
+
+    def __str__(self) :
+        raise NotImplementedError
+
+class _Option(_AbstractParameter):
+    """Represent an option that can be set for a program.
+
+    This holds UNIXish options like --append=yes and -a yes,
+    where a value (here "yes") is generally expected.
+
+    For UNIXish options like -kimura in clustalw which don't
+    take a value, use the _Switch object instead.
 
     Attributes:
 
@@ -335,7 +362,7 @@ class _AbstractParameter:
     is assumed to be a "human readable" name describing the option in one
     word.
 
-    o param_type -- a list of string describing the type of parameter, 
+    o param_types -- a list of string describing the type of parameter, 
     which can help let programs know how to use it. Example descriptions
     include 'input', 'output', 'file'.  Note that if 'file' is included,
     these argument values will automatically be escaped if the filename
@@ -369,11 +396,6 @@ class _AbstractParameter:
         self.is_set = False
         self.value = None
 
-class _Option(_AbstractParameter):
-    """Represent an option that can be set for a program.
-
-    This holds UNIXish options like --append=yes and -a yes
-    """
     def __str__(self):
         """Return the value of this option for the commandline.
 
@@ -394,9 +416,63 @@ class _Option(_AbstractParameter):
         else :
             return "%s %s " % (self.names[0], v)
 
+class _Switch(_AbstractParameter):
+    """Represent an optional argument switch for a program.
+
+    This holds UNIXish options like -kimura in clustalw which don't
+    take a value, they are either included in the command string
+    or omitted.
+
+    o names -- a list of string names by which the parameter can be
+    referenced (ie. ["-a", "--append", "append"]). The first name in
+    the list is considered to be the one that goes on the commandline,
+    for those parameters that print the option. The last name in the list
+    is assumed to be a "human readable" name describing the option in one
+    word.
+
+    o param_types -- a list of string describing the type of parameter, 
+    which can help let programs know how to use it. Example descriptions
+    include 'input', 'output', 'file'.  Note that if 'file' is included,
+    these argument values will automatically be escaped if the filename
+    contains spaces.
+
+    o description -- a description of the option.
+
+    o is_set -- if the parameter has been set
+
+    NOTE - There is no value attribute, see is_set instead,
+    """
+    def __init__(self, names = [], types = [], description = ""):
+        self.names = names
+        self.param_types = types
+        self.description = description
+        self.is_set = False
+        self.is_required = False
+
+    def __str__(self):
+        """Return the value of this option for the commandline.
+
+        Includes a trailing space.
+        """
+        assert not hasattr(self, "value")
+        if self.is_set :
+            return "%s " % self.names[0]
+        else :
+            return ""
+
 class _Argument(_AbstractParameter):
     """Represent an argument on a commandline.
     """
+    def __init__(self, names = [], types = [], checker_function = None, 
+                 is_required = False, description = ""):
+        self.names = names
+        self.param_types = types
+        self.checker_function = checker_function
+        self.description = description
+        self.is_required = is_required
+        self.is_set = False
+        self.value = None
+
     def __str__(self):
         if self.value is None:
             return " "

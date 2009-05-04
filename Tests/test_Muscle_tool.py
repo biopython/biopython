@@ -93,7 +93,7 @@ class MuscleApplication(unittest.TestCase):
         cmdline.set_parameter("out", self.outfile2)
         #Use property:
         cmdline.objscore = "sp"
-        cmdline.set_parameter("noanchors")
+        cmdline.noanchors = True
         self.assertEqual(str(cmdline), muscle_exe +\
                          " -in Fasta/f002 -out " + \
                         "Fasta/temp_align_out2.fa -objscore sp -noanchors ")
@@ -108,7 +108,7 @@ class MuscleApplication(unittest.TestCase):
         """Simple round-trip through app doing a profile alignment."""
         cmdline = MuscleCommandline(muscle_exe)
         cmdline.set_parameter("out", self.outfile3)
-        cmdline.set_parameter("profile")
+        cmdline.set_parameter("profile", True)
         cmdline.set_parameter("in1", self.infile2)
         cmdline.set_parameter("in2", self.infile3)
         self.assertEqual(str(cmdline), muscle_exe + \
@@ -125,10 +125,9 @@ class MuscleApplication(unittest.TestCase):
         """Profile alignment, and switch and valued options. """
         #Using some keyword arguments,
         cmdline = MuscleCommandline(muscle_exe, out=self.outfile4,
-                                    in1=self.infile2, in2=self.infile3)
-        cmdline.set_parameter("profile")
-        cmdline.set_parameter("cluster1", "neighborjoining")
-        cmdline.set_parameter("stable")
+                                    in1=self.infile2, in2=self.infile3,
+                                    profile=True, stable=True,
+                                    cluster1="neighborjoining")
         self.assertEqual(str(cmdline), muscle_exe + \
                          " -out Fasta/temp_align_out4.fa " + \
                          "-profile -in1 Fasta/fa01 -in2 Fasta/f001 -cluster1 " + \
@@ -181,9 +180,9 @@ class SimpleAlignTest(unittest.TestCase) :
         cmdline = MuscleCommandline(muscle_exe)
         cmdline.set_parameter("in", input_file)
         #Preserve input record order (makes checking output easier)
-        cmdline.set_parameter("stable")
+        cmdline.set_parameter("stable", True) #Default None treated as False!
         #Use clustal output
-        cmdline.set_parameter("clwstrict")
+        cmdline.set_parameter("clwstrict", True) #Default None treated as False!
         #TODO - Fix the trailing space!
         self.assertEqual(str(cmdline).rstrip(), muscle_exe + \
                          " -in Fasta/f002 -clwstrict -stable")
@@ -209,16 +208,16 @@ class SimpleAlignTest(unittest.TestCase) :
         cmdline = MuscleCommandline(muscle_exe)
         cmdline.set_parameter("in", temp_large_fasta_file)
         #Preserve input record order
-        cmdline.set_parameter("stable")
+        cmdline.set_parameter("stable", True) #Default None treated as False!
         #Use fast options
         cmdline.set_parameter("maxiters", 1)
-        cmdline.set_parameter("diags")
+        cmdline.set_parameter("diags", True) #Default None treated as False!
         #Use clustal output
-        cmdline.set_parameter("clwstrict")
+        cmdline.set_parameter("clwstrict", True) #Default None treated as False!
         #Shoudn't need this, but just to make sure it is accepted
         cmdline.set_parameter("maxhours", 0.1)
         #No progress reports to stderr
-        cmdline.set_parameter("quiet")
+        cmdline.set_parameter("quiet", True) #Default None treated as False!
         #TODO - Fix the trailing space!
         self.assertEqual(str(cmdline).rstrip(), muscle_exe + \
                          " -in temp_cw_prot.fasta -diags -maxhours 0.1" + \
