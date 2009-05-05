@@ -827,11 +827,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             #is just "3".  Similarly, "2^5" is just "3..4"
         # check if we just have a single base
         elif not(isinstance(range_info, LocationParser.Range)):
-            pos = self._get_position(range_info)
+            #A single base like "785" becomes [784:785] in python
+            s_pos = self._get_position(range_info)
             # move the single position back one to be consistent with how
             # python indexes numbers (starting at 0)
-            pos.position = pos.position  - 1
-            return SeqFeature.FeatureLocation(pos, pos)
+            s_pos.position = s_pos.position  - 1
+            e_pos = self._get_position(range_info)
+            return SeqFeature.FeatureLocation(s_pos, e_pos)
         # otherwise we need to get both sides of the range
         else:
             # get *Position objects for the start and end
