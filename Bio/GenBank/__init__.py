@@ -843,7 +843,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             start_pos.position, end_pos.position = \
               self._convert_to_python_numbers(start_pos.position,
                                               end_pos.position)
-
+            #If the start location is a one-of position, we also need to
+            #adjust their positions to use python counting.
+            if isinstance(start_pos, SeqFeature.OneOfPosition) :
+                for p in start_pos.position_choices :
+                    p.position -= 1
+                
             return SeqFeature.FeatureLocation(start_pos, end_pos)
 
     def _get_position(self, position):
