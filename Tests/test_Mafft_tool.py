@@ -38,16 +38,16 @@ class MafftApplication(unittest.TestCase):
         """Simple round-trip through app with infile.
         Result passed to stdout.
         """
-        cmdline = MafftCommandline(mafft_exe)
-        cmdline.set_parameter("input", self.infile1)
+        #Use a keyword argument at init,
+        cmdline = MafftCommandline(mafft_exe, input=self.infile1)
+        self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = Application.generic_run(cmdline)
         stderr_string = stderr.read()
-        
-        self.assert_(stdin.return_code == 0)
+        self.assertEqual(stdin.return_code, 0)
         self.assert_(stdout.read().startswith(">gi|1348912|gb|G26680|G26680"))
         self.assert_("STEP     2 / 2 d" in stderr_string)
         self.assert_("$#=0" not in stderr_string)
-        self.assert_(str(stdin._cl) == "mafft Fasta/f002 ")
+        self.assertEqual(str(stdin._cl), "mafft Fasta/f002 ")
 
     def test_Mafft_with_options(self):
         """Simple round-trip through app with infile and options.
@@ -56,9 +56,9 @@ class MafftApplication(unittest.TestCase):
         cmdline = MafftCommandline(mafft_exe)
         cmdline.set_parameter("input", self.infile1)
         cmdline.set_parameter("maxiterate", 100)
-        cmdline.set_parameter("--localpair")
+        cmdline.set_parameter("--localpair", True)
+        self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = Application.generic_run(cmdline)
-        
         self.assert_(stdin.return_code == 0)
         self.assert_(stdout.read().startswith(">gi|1348912|gb|G26680|G26680"))
         self.assert_("$#=0" not in stderr.read())
@@ -67,38 +67,38 @@ class MafftApplication(unittest.TestCase):
     def test_Mafft_with_Clustalw_output(self):
         """Simple round-trip through app with clustal output"""
         cmdline = MafftCommandline(mafft_exe)
-        cmdline.set_parameter("input", self.infile1)
-        cmdline.set_parameter("--clustalout")
+        #Use some properties:
+        cmdline.input = self.infile1
+        cmdline.clustalout = True
+        self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = Application.generic_run(cmdline)
-        
-        self.assert_(stdin.return_code == 0)
+        self.assertEqual(stdin.return_code, 0)
         self.assert_(stdout.read().startswith("CLUSTAL format alignment by MAFFT"))
         self.assert_("$#=0" not in stderr.read())
-        self.assert_(str(stdin._cl) == "mafft --clustalout Fasta/f002 ")
+        self.assertEqual(str(stdin._cl), "mafft --clustalout Fasta/f002 ")
 
     def test_Mafft_with_complex_command_line(self):
         """Round-trip with complex command line."""
         cmdline = MafftCommandline(mafft_exe)
         cmdline.set_parameter("input", self.infile1)
-        cmdline.set_parameter("--localpair")
+        cmdline.set_parameter("--localpair", True)
         cmdline.set_parameter("--weighti", 4.2)
         cmdline.set_parameter("retree", 5)
         cmdline.set_parameter("maxiterate", 200)
-        cmdline.set_parameter("--nofft")
+        cmdline.set_parameter("--nofft", True)
         cmdline.set_parameter("op", 2.04)
         cmdline.set_parameter("--ep", 0.51)
         cmdline.set_parameter("--lop", 0.233)
         cmdline.set_parameter("lep", 0.2)
-        cmdline.set_parameter("--reorder")
-        cmdline.set_parameter("--treeout")
-        cmdline.set_parameter("nuc")
-
+        cmdline.set_parameter("--reorder", True)
+        cmdline.set_parameter("--treeout", True)
+        cmdline.set_parameter("nuc", True)
+        self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = Application.generic_run(cmdline)
-
-        self.assert_(stdin.return_code == 0)
+        self.assertEqual(stdin.return_code, 0)
         self.assert_(stdout.read().startswith(">gi|1348912|gb|G26680|G26680"))
         self.assert_("$#=0" not in stderr.read())
-        self.assert_(str(stdin._cl) == "mafft --localpair --weighti 4.2 --retree 5 --maxiterate 200 --nofft --op 2.04 --ep 0.51 --lop 0.233 --lep 0.2 --reorder --treeout --nuc Fasta/f002 ")
+        self.assertEqual(str(stdin._cl), "mafft --localpair --weighti 4.2 --retree 5 --maxiterate 200 --nofft --op 2.04 --ep 0.51 --lop 0.233 --lep 0.2 --reorder --treeout --nuc Fasta/f002 ")
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
