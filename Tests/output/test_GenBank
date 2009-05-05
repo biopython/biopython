@@ -314,13 +314,13 @@ strand: 1
 qualifiers: 
 
 type: polyA_site
-location: [784:784]
+location: [784:785]
 ref: None:None
 strand: 1
 qualifiers: 
 
 type: polyA_site
-location: [799:799]
+location: [799:800]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -407,7 +407,7 @@ qualifiers:
     Key: note, Value: ['putative']
 
 type: polyA_site
-location: [440:440]
+location: [440:441]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -2805,7 +2805,7 @@ qualifiers:
     Key: organism, Value: ['Homo sapiens']
 
 type: 5'UTR
-location: [one-of(1888,1901):2200]
+location: [one-of(1887,1900):2200]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -2856,7 +2856,7 @@ qualifiers:
 
 
 type: exon
-location: [one-of(1888,1901):2479]
+location: [one-of(1887,1900):2479]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -3284,7 +3284,7 @@ qualifiers:
     Key: standard_name, Value: ['RP11-242F24']
 
 type: variation
-location: [217507:217507]
+location: [217507:217508]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -3614,7 +3614,7 @@ qualifiers:
     Key: product, Value: ['Neurotoxin III']
 
 type: Bond
-location: [11:62]
+location: [11:63]
 ref: None:None
 strand: None
 qualifiers: 
@@ -3622,41 +3622,20 @@ qualifiers:
     Key: note, Value: ['BY SIMILARITY.']
 Sub-Features
 type: Bond
-location: [11:11]
+location: [11:12]
 ref: None:None
 strand: None
 qualifiers: 
 
 type: Bond
-location: [62:62]
-ref: None:None
-strand: None
-qualifiers: 
-
-
-type: Bond
-location: [15:35]
-ref: None:None
-strand: None
-qualifiers: 
-    Key: bond_type, Value: ['disulfide']
-    Key: note, Value: ['BY SIMILARITY.']
-Sub-Features
-type: Bond
-location: [15:15]
-ref: None:None
-strand: None
-qualifiers: 
-
-type: Bond
-location: [35:35]
+location: [62:63]
 ref: None:None
 strand: None
 qualifiers: 
 
 
 type: Bond
-location: [21:45]
+location: [15:36]
 ref: None:None
 strand: None
 qualifiers: 
@@ -3664,20 +3643,20 @@ qualifiers:
     Key: note, Value: ['BY SIMILARITY.']
 Sub-Features
 type: Bond
-location: [21:21]
+location: [15:16]
 ref: None:None
 strand: None
 qualifiers: 
 
 type: Bond
-location: [45:45]
+location: [35:36]
 ref: None:None
 strand: None
 qualifiers: 
 
 
 type: Bond
-location: [25:47]
+location: [21:46]
 ref: None:None
 strand: None
 qualifiers: 
@@ -3685,20 +3664,41 @@ qualifiers:
     Key: note, Value: ['BY SIMILARITY.']
 Sub-Features
 type: Bond
-location: [25:25]
+location: [21:22]
 ref: None:None
 strand: None
 qualifiers: 
 
 type: Bond
-location: [47:47]
+location: [45:46]
+ref: None:None
+strand: None
+qualifiers: 
+
+
+type: Bond
+location: [25:48]
+ref: None:None
+strand: None
+qualifiers: 
+    Key: bond_type, Value: ['disulfide']
+    Key: note, Value: ['BY SIMILARITY.']
+Sub-Features
+type: Bond
+location: [25:26]
+ref: None:None
+strand: None
+qualifiers: 
+
+type: Bond
+location: [47:48]
 ref: None:None
 strand: None
 qualifiers: 
 
 
 type: Site
-location: [63:63]
+location: [63:64]
 ref: None:None
 strand: None
 qualifiers: 
@@ -4155,7 +4155,7 @@ qualifiers:
     Key: replace, Value: ['aa']
 
 type: variation
-location: [5947:5947]
+location: [5947:5948]
 ref: None:None
 strand: 1
 qualifiers: 
@@ -4185,7 +4185,7 @@ qualifiers:
     Key: translation, Value: ['MKFHFCDLNHSYKNQEGKIRSRKTAPGNIRKKQKGDNVSKTKSGRHRLSKTDKRLLAALVVAGYEERTARDLIQKHVYTLTQADLRHLVSEISNGVGQSQAYDAIYQARRIRLARKYLSGKKPEGVEPREGQEREDLP']
 
 type: variation
-location: [6524:6524]
+location: [6524:6525]
 ref: None:None
 strand: 1
 qualifiers: 
