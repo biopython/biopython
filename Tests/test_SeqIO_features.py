@@ -13,8 +13,19 @@ import unittest
 from Bio import SeqIO
 from Bio.Seq import Seq, UnknownSeq, MutableSeq
 from Bio.SeqRecord import SeqRecord
+from StringIO import StringIO
 
 #Top level function as this makes it easier to use for debugging:
+def write_read(filename, in_format="gb", out_format="gb") :
+    gb_records = list(SeqIO.parse(open(filename),in_format))
+    #Write it out...
+    handle = StringIO()
+    SeqIO.write(gb_records, handle, out_format)
+    handle.seek(0)
+    #Now load it back and check it agrees,
+    gb_records2 = list(SeqIO.parse(handle,out_format))
+    compare_records(gb_records, gb_records2)
+
 def compare_record(old, new, ignore_name=False) :
     #Note the name matching is a bit fuzzy
     if not ignore_name \
@@ -33,16 +44,19 @@ def compare_record(old, new, ignore_name=False) :
     if old.features and new.features :
         return compare_features(old.features, new.features)
     #Just insist on at least one word in common:
-    if not set(old.description.split()).intersection(new.description.split()):
-        raise ValueError("%s versus %s" % (old.description, new.description))
+    if (old.description or new.description) \
+    and not set(old.description.split()).intersection(new.description.split()):
+        raise ValueError("%s versus %s" \
+                         % (repr(old.description), repr(new.description)))
     #TODO - check annotation
+    return True
 
-def compare_records(old_list, new_list) :
+def compare_records(old_list, new_list, ignore_name=False) :
     """Check two lists of SeqRecords agree, raises a ValueError if mismatch."""
     if len(old_list) != len(new_list) :
         raise ValueError("%i vs %i records" % (len(old_list), len(new_list)))
     for old, new in zip(old_list, new_list) :
-        if not compare_record(old,new) :
+        if not compare_record(old,new,ignore_name) :
             return False
     return True
 
@@ -52,13 +66,16 @@ def compare_feature(old, new, ignore_sub_features=False) :
         raise ValueError("Type %s versus %s" % (old.type, new.type))
     if old.location.nofuzzy_start != new.location.nofuzzy_start \
     or old.location.nofuzzy_end != new.location.nofuzzy_end :
-        raise ValueError("%s versus %s" % (old.location, new.location))
+        raise ValueError("%s versus %s:\n%s\nvs:\n%s" \
+                         % (old.location, new.location, str(old), str(new)))
     if old.strand != new.strand :
-        raise ValueError("Different strand")
+        raise ValueError("Different strand:\n%s\nvs:\n%s" % (str(old), str(new)))
     if old.location.start != new.location.start :
-        raise ValueError("%s versus %s" % (old.location.start, new.location.start))
+        raise ValueError("Start %s versus %s:\n%s\nvs:\n%s" \
+                         % (old.location.start, new.location.start, str(old), str(new)))
     if old.location.end != new.location.end :
-        raise ValueError("%s versus %s" % (old.location.end, new.location.end))
+        raise ValueError("End %s versus %s:\n%s\nvs:\n%s" \
+                         % (old.location.end, new.location.end, str(old), str(new)))
     if not ignore_sub_features :
         if len(old.sub_features) != len(new.sub_features) :
             raise ValueError("Different sub features")
@@ -164,7 +181,6 @@ class NC_005816(unittest.TestCase):
                              str(f_seq))
 
 
-
 class NC_006980(NC_005816):
     #This includes several joins and fuzzy joins :)
     basename = "NC_006980"
@@ -174,6 +190,69 @@ class NC_006980(NC_005816):
     __doc__ = "Tests using %s GenBank and FASTA files from the NCBI" % basename
     #TODO - neat way to change the docstrings...
 
+class TestWriteRead(unittest.TestCase) :
+    """Test can write and read back files."""
+
+    #Slow:
+    #def test_NC_006980(self) :
+    #    """Write and read back NC_006980.gb"""
+    #    write_read(os.path.join("GenBank", "NC_006980.gb"), "gb", "gb")
+
+    def test_NC_005816(self) :
+        """Write and read back NC_005816.gb"""
+        write_read(os.path.join("GenBank", "NC_005816.gb"), "gb", "gb")
+
+    def test_gbvrl1_start(self) :
+        """Write and read back gbvrl1_start.seq"""
+        write_read(os.path.join("GenBank", "gbvrl1_start.seq"), "gb", "gb")
+
+    def test_NT_019265(self) :
+        """Write and read back NT_019265.gb"""
+        write_read(os.path.join("GenBank", "NT_019265.gb"), "gb", "gb")
+
+    def test_cor6(self) :
+        """Write and read back cor6_6.gb"""
+        write_read(os.path.join("GenBank", "cor6_6.gb"), "gb", "gb")
+
+    def test_arab1(self) :
+        """Write and read back arab1.gb"""
+        write_read(os.path.join("GenBank", "arab1.gb"), "gb", "gb")
+
+    def test_one_of(self) :
+        """Write and read back of_one.gb"""
+        write_read(os.path.join("GenBank", "one_of.gb"), "gb", "gb")
+
+    def test_pri1(self) :
+        """Write and read back pri1.gb"""
+        write_read(os.path.join("GenBank", "pri1.gb"), "gb", "gb")
+
+    def test_noref(self) :
+        """Write and read back noref.gb"""
+        write_read(os.path.join("GenBank", "noref.gb"), "gb", "gb")
+
+    def test_origin_line(self) :
+        """Write and read back origin_line.gb"""
+        write_read(os.path.join("GenBank", "origin_line.gb"), "gb", "gb")
+
+    def test_dbsource_wrap(self) :
+        """Write and read back dbsource_wrap.gb"""
+        write_read(os.path.join("GenBank", "dbsource_wrap.gb"), "gb", "gb")
+
+    def test_blank_seq(self) :
+        """Write and read back blank_seq.gb"""
+        write_read(os.path.join("GenBank", "blank_seq.gb"), "gb", "gb")
+
+    def test_extra_keywords(self) :
+        """Write and read back extra_keywords.gb"""
+        write_read(os.path.join("GenBank", "extra_keywords.gb"), "gb", "gb")
+
+    def test_protein_refseq(self) :
+        """Write and read back protein_refseq.gb"""
+        write_read(os.path.join("GenBank", "protein_refseq.gb"), "gb", "gb")
+
+    def test_protein_refseq2(self) :
+        """Write and read back protein_refseq2.gb"""
+        write_read(os.path.join("GenBank", "protein_refseq2.gb"), "gb", "gb")
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
