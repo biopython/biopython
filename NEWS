@@ -10,10 +10,19 @@ The latest news is at the top.
 ===================================================================
 
 Our deprecated parsing infrastructure (Martel and Bio.Mindy) which had been
-removed.  This means Biopython no longer has any dependance on mxTextTools.
+removed.  This means Biopython no longer has any dependence on mxTextTools.
 
 A few cosmetic issues in GenomeDiagram with arrow sigils on circular diagrams
 have been fixed.
+
+Bio.SeqIO will now write GenBank files with the feature table (previously
+omitted), and a couple of obscure errors parsing ambiguous locations have
+been fixed.
+
+Our command line wrapper objects have been updated to support accessing
+parameters via python properties, and setting of parameters at initiation
+with keyword arguments.  Additionally Cymon Cox has contributed several new
+multiple alignment wrappers under Bio.Align.Applications.
 
 ===================================================================
 
