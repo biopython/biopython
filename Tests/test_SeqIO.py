@@ -116,7 +116,6 @@ test_files = [ \
     ("genbank",False, 'GenBank/blank_seq.gb', 1),
     ("genbank",False, 'GenBank/dbsource_wrap.gb', 1),
     ("genbank",False, 'GenBank/NC_005816.gb', 1), #See also AE017046.embl
-    #("genbank",False, 'GenBank/NC_006980.gb', 1), #Slow!
     ("genbank",False, 'GenBank/NC_000932.gb', 1),
 # The next example is a truncated copy of gbvrl1.seq from
 # ftp://ftp.ncbi.nih.gov/genbank/gbvrl1.seq.gz

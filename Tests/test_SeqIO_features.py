@@ -225,23 +225,8 @@ class NC_005816(NC_000932):
                              str(f_seq))
 
 
-class NC_006980(NC_005816):
-    #This includes several joins and fuzzy joins :)
-    basename = "NC_006980"
-    #emblname = "CM000429"
-    emblname = None
-    table = 1
-    skip_trans_test = ["gi|126643907|ref|XP_001388140.1|"]
-    __doc__ = "Tests using %s GenBank and FASTA files from the NCBI" % basename
-    #TODO - neat way to change the docstrings...
-
 class TestWriteRead(unittest.TestCase) :
     """Test can write and read back files."""
-
-    #Slow:
-    #def test_NC_006980(self) :
-    #    """Write and read back NC_006980.gb"""
-    #    write_read(os.path.join("GenBank", "NC_006980.gb"), "gb", "gb")
 
     def test_NC_005816(self) :
         """Write and read back NC_005816.gb"""
