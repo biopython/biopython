@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 27 April 2009 (Biopython 1.50+)}
+\date{Last Update -- 6 May 2009 (Biopython 1.50+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -7257,6 +7257,142 @@ out_handle.close()
 In this case the for loop looks simpler, but putting the trim logic into a
 function is more tidy, and makes it easier to adjust the trimming later on.
 For example, you might decide to look for a 5' primer as well.
+
+\subsection{Identifying open reading frames}
+
+A very simplistic first step at identifying possible genes is to look for
+open reading frames (ORFs).  By this we mean look in all six frames for long
+regions without stop codons.  Of course, to find a gene you would also need
+to worry about locating a start codon, possible promoters - and in Eukaryotes
+there are introns to worry about too.  However, This approach is still useful
+in viruses and Prokaryotes.
+
+To show how you might approach this with Biopython, we'll need a sequence to
+search, and as an example we'll again use the bacterial plasmid
+\href{http://biopython.org/SRC/biopython/Tests/GenBank/NC_005816.gb}
+{\texttt{NC\_005816.gb}}. This is a bacterial sequence, so we'll want to use
+NCBI codon table 11 (see Section~\ref{sec:translation} about translation).
+
+\begin{verbatim}
+from Bio import SeqIO 
+record = SeqIO.read(open("NC_005816.gb"),"genbank")
+table = 11
+min_pro_len = 100
+\end{verbatim}
+
+Here is a neat trick using the \verb|Seq| object's \verb|split| method to
+get a list of all the possible ORF translations in the first frame:
+
+\begin{verbatim}
+for strand, nuc in [(+1, record.seq), (-1, record.seq.reverse_complement())] :
+    for frame in range(3) :
+        for pro in nuc[frame:].translate(table).split("*") :
+            if len(pro) >= min_pro_len :
+                print "%s...%s - length %i, strand %i, frame %i" \
+                      % (pro[:30], pro[-3:], len(pro), strand, frame)
+\end{verbatim}
+
+\noindent This should give:
+
+\begin{verbatim}
+GCLMKKSSIVATIITILSGSANAASSQLIP...YRF - length 315, strand 1, frame 0
+KSGELRQTPPASSTLHLRLILQRSGVMMEL...NPE - length 285, strand 1, frame 1
+GLNCSFFSICNWKFIDYINRLFQIIYLCKN...YYH - length 176, strand 1, frame 1
+VKKILYIKALFLCTVIKLRRFIFSVNNMKF...DLP - length 165, strand 1, frame 1
+NQIQGVICSPDSGEFMVTFETVMEIKILHK...GVA - length 355, strand 1, frame 2
+RRKEHVSKKRRPQKRPRRRRFFHRLRPPDE...PTR - length 128, strand 1, frame 2
+TGKQNSCQMSAIWQLRQNTATKTRQNRARI...AIK - length 100, strand 1, frame 2
+QGSGYAFPHASILSGIAMSHFYFLVLHAVK...CSD - length 114, strand -1, frame 0
+IYSTSEHTGEQVMRTLDEVIASRSPESQTR...FHV - length 111, strand -1, frame 0
+WGKLQVIGLSMWMVLFSQRFDDWLNEQEDA...ESK - length 125, strand -1, frame 1
+RGIFMSDTMVVNGSGGVPAFLFSGSTLSSY...LLK - length 361, strand -1, frame 1
+WDVKTVTGVLHHPFHLTFSLCPEGATQSGR...VKR - length 111, strand -1, frame 1
+LSHTVTDFTDQMAQVGLCQCVNVFLDEVTG...KAA - length 107, strand -1, frame 2
+RALTGLSAPGIRSQTSCDRLRELRYVPVSL...PLQ - length 119, strand -1, frame 2
+\end{verbatim}
+
+Note that here we are counting the frames from the 3' end of \emph{each}
+strand. It is sometimes easier to always count from the 3' end of the
+\emph{forward} strand.
+
+You could easily edit the above loop based code to build up a list of the
+candidate proteins, or convert this to a list comprehension.  Now, one thing
+this code doesn't do is keep track of where the proteins are.  You could
+tackle this in several ways.  For example,
+
+\begin{verbatim}
+from Bio import SeqIO 
+record = SeqIO.read(open("NC_005816.gb"),"genbank")
+table = 11
+min_pro_len = 100
+
+def find_orfs(seq, trans_table, min_protein_length) :
+    answer = []
+    seq_len = len(seq)
+    for strand, nuc in [(+1, seq), (-1, seq.reverse_complement())] :
+        for frame in range(3) :
+            trans = str(nuc[frame:].translate(trans_table))
+            trans_len = len(trans)
+            aa_start = 0
+            aa_end = 0
+            while aa_start < trans_len :
+                aa_end = trans.find("*", aa_start)
+                if aa_end == -1 :
+                    aa_end = trans_len
+                if aa_end-aa_start >= min_protein_length :
+                    if strand == 1 :
+                        start = frame+aa_start*3
+                        end = min(seq_len,frame+aa_end*3+3)
+                    else :
+                        start = seq_len-frame-aa_end*3-3
+                        end = seq_len-frame-aa_start*3                        
+                    answer.append((start, end, strand,
+                                   trans[aa_start:aa_end]))
+                aa_start = aa_end+1
+    answer.sort()
+    return answer
+
+orf_list = find_orfs(record.seq, table, min_pro_len)
+for start, end, strand, pro in orf_list :
+    print "%s...%s - length %i, strand %i, %i:%i" \
+          % (pro[:30], pro[-3:], len(pro), strand, start, end)
+\end{verbatim}
+
+\noindent And the output:
+
+\begin{verbatim}
+NQIQGVICSPDSGEFMVTFETVMEIKILHK...GVA - length 355, strand 1, 41:1109
+WDVKTVTGVLHHPFHLTFSLCPEGATQSGR...VKR - length 111, strand -1, 491:827
+KSGELRQTPPASSTLHLRLILQRSGVMMEL...NPE - length 285, strand 1, 1030:1888
+RALTGLSAPGIRSQTSCDRLRELRYVPVSL...PLQ - length 119, strand -1, 2830:3190
+RRKEHVSKKRRPQKRPRRRRFFHRLRPPDE...PTR - length 128, strand 1, 3470:3857
+GLNCSFFSICNWKFIDYINRLFQIIYLCKN...YYH - length 176, strand 1, 4249:4780
+RGIFMSDTMVVNGSGGVPAFLFSGSTLSSY...LLK - length 361, strand -1, 4814:5900
+VKKILYIKALFLCTVIKLRRFIFSVNNMKF...DLP - length 165, strand 1, 5923:6421
+LSHTVTDFTDQMAQVGLCQCVNVFLDEVTG...KAA - length 107, strand -1, 5974:6298
+GCLMKKSSIVATIITILSGSANAASSQLIP...YRF - length 315, strand 1, 6654:7602
+IYSTSEHTGEQVMRTLDEVIASRSPESQTR...FHV - length 111, strand -1, 7788:8124
+WGKLQVIGLSMWMVLFSQRFDDWLNEQEDA...ESK - length 125, strand -1, 8087:8465
+TGKQNSCQMSAIWQLRQNTATKTRQNRARI...AIK - length 100, strand 1, 8741:9044
+QGSGYAFPHASILSGIAMSHFYFLVLHAVK...CSD - length 114, strand -1, 9264:9609
+\end{verbatim}
+
+If you comment out the sort statement, then the protein sequences will be
+shown in the same order as before, so you can check this is doing the same
+thing.  Here we have sorted them by location to make it easier to compare
+to the actual annotation in the GenBank file (as visualised in
+Section~\ref{sec:gd_nice_example}).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+If however all you want to find are the locations of the open reading frames,
+then it is a waste of time to translate every possible codon, including doing
+the reverse complement to search the reverse strand too.  All you need to do
+is search for the possible stop codons (and their reverse complements).  Using
+regular expressions is an obvious approach here -- these are an extremely
+powerful (but rather complex) way of describing search strings, which are
+supported in lots of programming languages and also command line tools like
+\texttt{grep} as well).  You can find whole books about this topic!
+
 
 \section{Sequence parsing plus simple plots}
 \label{seq:sequence-parsing-plus-pylab}
