@@ -104,20 +104,75 @@ def compare_features(old_list, new_list, ignore_sub_features=False) :
             return False
     return True
 
-class NC_005816(unittest.TestCase):
+from Bio.Data import CodonTable
+def methionine_translate(nuc, table) :
+    """Hack until we fix Bug 2783."""
+    translation = nuc.translate(table)
+    start_codons = CodonTable.ambiguous_dna_by_id[table].start_codons
+    #There may not be a start codon, for example:
+    #Consider NC_006980, protein ID XP_627884.1, <58180..59604, RVSSSSLLF...
+    if str(nuc)[:3] in start_codons and translation[0] != "M" :
+        translation = Seq("M", translation.alphabet) + translation[1:]
+    return translation
+
+#TODO - Add this functionality to Biopython itself...
+def get_feature_nuc(f, parent_seq) :
+    if f.sub_features :
+        if f.location_operator!="join":
+            raise ValueError(f.location_operator)
+        #TODO - This should recurse to cope with join(complement(...),...) properly
+        #for mixed-strand features, BUT that is impossible with the current GenBank
+        #parser due to how the strand is recorded on both the parent and subfeatures.
+        f_subs = [parent_seq[f_sub.location.nofuzzy_start:f_sub.location.nofuzzy_end] \
+                  for f_sub in f.sub_features]
+        #f_subs = [get_feature_nuc(f_sub, parent_seq) for f_sub in f.sub_features]
+        #TODO - Join support in Seq object?  But how to deal with alphabets...
+        f_seq = Seq("".join(map(str,f_subs)),f_subs[0].alphabet)
+    else :
+        f_seq = parent_seq[f.location.nofuzzy_start:f.location.nofuzzy_end]
+    if f.strand == -1 : f_seq = f_seq.reverse_complement()
+    return f_seq
+
+class NC_000932(unittest.TestCase):
+    #This includes an evil dual strand gene (trans-splicing!)
+    basename = "NC_000932"
+    emblname = None
+    table = 11
+    skip_trans_test = ["gi|7525080|ref|NP_051037.1|", #Trans-splicing
+                       "gi|7525057|ref|NP_051038.1|", #Trans-splicing
+                       "gi|90110725|ref|NP_051109.2|", #Invalid annotation? No start codon
+                       ]
+    __doc__ = "Tests using %s GenBank and FASTA files from the NCBI" % basename
+    #TODO - neat way to change the docstrings...
+
+    #These tests only need the GenBank file and the FAA file:
+    def test_CDS(self) :
+        #"""Checking GenBank CDS translations vs FASTA faa file."""
+        filename = os.path.join("GenBank",self.basename+".gb")
+        gb_cds = list(SeqIO.parse(open(filename),"genbank-cds"))
+        gb_record = SeqIO.read(open(filename),"genbank")
+        filename = os.path.join("GenBank",self.basename+".faa")
+        fasta = list(SeqIO.parse(open(filename),"fasta"))
+        compare_records(gb_cds, fasta)
+        cds_features = [f for f in gb_record.features if f.type=="CDS"]
+        self.assertEqual(len(cds_features), len(fasta))
+        for f, r in zip(cds_features, fasta) :
+            if r.id in self.skip_trans_test :
+                continue
+            #Get the nucleotides and translate them
+            nuc = get_feature_nuc(f, gb_record.seq)
+            pro = methionine_translate(nuc, self.table)
+            if pro[-1] == "*" :
+                self.assertEqual(str(pro)[:-1], str(r.seq))
+            else :
+                self.assertEqual(str(pro), str(r.seq))
+
+class NC_005816(NC_000932):
     basename = "NC_005816"
     emblname = "AE017046"
     table = 11
     skip_trans_test = []
     __doc__ = "Tests using %s GenBank and FASTA files from the NCBI" % basename
-    
-    def test_CDS(self) :
-        #"""Checking GenBank CDS translations vs FASTA faa file."""
-        filename = os.path.join("GenBank",self.basename+".gb")
-        gb_cds = list(SeqIO.parse(open(filename),"genbank-cds"))
-        filename = os.path.join("GenBank",self.basename+".faa")
-        fasta = list(SeqIO.parse(open(filename),"fasta"))
-        compare_records(gb_cds, fasta)
 
     def test_Translations(self):
         #"""Checking translation of FASTA features (faa vs ffn)."""
@@ -127,10 +182,7 @@ class NC_005816(unittest.TestCase):
         ffn_records = list(SeqIO.parse(open(filename),"fasta"))
         self.assertEqual(len(faa_records),len(ffn_records))
         for faa, fna in zip(faa_records, ffn_records) :
-            translation = fna.seq.translate(self.table)
-            if translation[0] != "M" and faa.seq[0] == "M" :
-                #Hack until we fix Bug 2783
-                translation = Seq("M", translation.alphabet) + translation[1:]
+            translation = methionine_translate(fna.seq, self.table)
             if faa.id in self.skip_trans_test :
                 continue
             if (str(translation) != str(faa.seq)) \
@@ -141,7 +193,7 @@ class NC_005816(unittest.TestCase):
                                  % (fna.format("fasta"),
                                     t.format("fasta"),
                                     faa.format("fasta")))
-
+    
     def test_Genome(self) :
         #"""Checking GenBank sequence vs FASTA fna file."""
         filename = os.path.join("GenBank",self.basename+".gb")
@@ -166,15 +218,7 @@ class NC_005816(unittest.TestCase):
         #This assumes they are in the same order...
         for fa_record, f in zip(fa_records, features) :
             #TODO - check the FASTA ID line against the co-ordinates?
-            if f.sub_features :
-                #TODO - Add this functionality to Biopython itself...
-                self.assertEqual(f.location_operator,"join")
-                f_subs = [gb_record.seq[f_sub.location.nofuzzy_start:f_sub.location.nofuzzy_end] \
-                          for f_sub in f.sub_features]
-                f_seq = Seq("".join(map(str,f_subs)),f_subs[0].alphabet)
-            else :
-                f_seq = gb_record.seq[f.location.nofuzzy_start:f.location.nofuzzy_end]
-            if f.strand == -1 : f_seq = f_seq.reverse_complement()
+            f_seq = get_feature_nuc(f, gb_record.seq)
             self.assertEqual(len(fa_record.seq),
                              len(f_seq))
             self.assertEqual(str(fa_record.seq),
@@ -184,6 +228,7 @@ class NC_005816(unittest.TestCase):
 class NC_006980(NC_005816):
     #This includes several joins and fuzzy joins :)
     basename = "NC_006980"
+    #emblname = "CM000429"
     emblname = None
     table = 1
     skip_trans_test = ["gi|126643907|ref|XP_001388140.1|"]

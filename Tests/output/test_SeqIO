@@ -460,6 +460,34 @@ Testing reading fasta format file GenBank/NC_005816.faa
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
+Testing reading fasta format file GenBank/NC_000932.faa
+ ID and Name='gi|7525080|ref|NP_051037.1|',
+ Seq='MPTIKQLIRNTRQPIRNVTKSPALRGCPQRRGTCTRVYTI...YGVKKPK', length=123
+ ID and Name='gi|7525013|ref|NP_051039.1|',
+ Seq='MTAILERRESESLWGRFCNWITSTENRLYIGWFGVLMIPT...EAPSTNG', length=353
+ ID and Name='gi|126022795|ref|NP_051040.2|',
+ Seq='MDKFQGYLEFDGARQQSFLYPLFFREYIYVLAYDHGLNRL...NDLVNHE', length=504
+ ...
+ ID and Name='gi|7525099|ref|NP_051123.1|',
+ Seq='MAIHLYKTSTPSTRNGAVDSQVKSNPRNNLICGQHHCGKG...ILRRRSK', length=274
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'fastq' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).
+ Checking can write/read as 'qual' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).
+ Checking can write/read as 'fastq-solexa' format
+ Failed: No suitable quality scores found in letter_annotation of SeqRecord (id=gi|7525099|ref|NP_051123.1|).
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|7525099|ref|NP_051123.1|' is too long
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
 Testing reading fasta format file GFF/NC_001802.fna
  ID and Name='gi|9629357|ref|NC_001802.1|',
  Seq='GGTCTCTCTGGTTAGACCAGATCTGAGCCTGGGAGCTCTC...GTGCTTC', length=9181
@@ -1075,6 +1103,22 @@ Testing reading genbank format file GenBank/NC_005816.gb
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NC_005816.1).
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotation of SeqRecord (id=NC_005816.1).
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+Testing reading genbank format file GenBank/NC_000932.gb
+ ID = 'NC_000932.1', Name='NC_000932',
+ Seq='ATGGGCGAACGACGGGAATTGAACCCGCGATGGTGAATTC...GGGCATC', length=154478
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fastq' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NC_000932.1).
+ Checking can write/read as 'qual' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NC_000932.1).
+ Checking can write/read as 'fastq-solexa' format
+ Failed: No suitable quality scores found in letter_annotation of SeqRecord (id=NC_000932.1).
  Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
