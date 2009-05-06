@@ -133,10 +133,11 @@ def get_feature_nuc(f, parent_seq) :
     if f.strand == -1 : f_seq = f_seq.reverse_complement()
     return f_seq
 
+        
 class NC_000932(unittest.TestCase):
     #This includes an evil dual strand gene (trans-splicing!)
     basename = "NC_000932"
-    emblname = None
+    emblname = None # "AP000423" has different annotation (e.g. more CDS)
     table = 11
     skip_trans_test = ["gi|7525080|ref|NP_051037.1|", #Trans-splicing
                        "gi|7525057|ref|NP_051038.1|", #Trans-splicing
@@ -145,14 +146,20 @@ class NC_000932(unittest.TestCase):
     __doc__ = "Tests using %s GenBank and FASTA files from the NCBI" % basename
     #TODO - neat way to change the docstrings...
 
+    def setUp(self) :
+        self.gb_filename = os.path.join("GenBank",self.basename+".gb")
+        self.ffn_filename = os.path.join("GenBank",self.basename+".ffn")
+        self.faa_filename = os.path.join("GenBank",self.basename+".faa")
+        self.fna_filename = os.path.join("GenBank",self.basename+".fna")
+        if self.emblname :
+            self.embl_filename = os.path.join("EMBL",self.emblname+".embl")
+
     #These tests only need the GenBank file and the FAA file:
     def test_CDS(self) :
         #"""Checking GenBank CDS translations vs FASTA faa file."""
-        filename = os.path.join("GenBank",self.basename+".gb")
-        gb_cds = list(SeqIO.parse(open(filename),"genbank-cds"))
-        gb_record = SeqIO.read(open(filename),"genbank")
-        filename = os.path.join("GenBank",self.basename+".faa")
-        fasta = list(SeqIO.parse(open(filename),"fasta"))
+        gb_record = SeqIO.read(open(self.gb_filename),"genbank")
+        gb_cds = list(SeqIO.parse(open(self.gb_filename),"genbank-cds"))
+        fasta = list(SeqIO.parse(open(self.faa_filename),"fasta"))
         compare_records(gb_cds, fasta)
         cds_features = [f for f in gb_record.features if f.type=="CDS"]
         self.assertEqual(len(cds_features), len(fasta))
@@ -174,12 +181,17 @@ class NC_005816(NC_000932):
     skip_trans_test = []
     __doc__ = "Tests using %s GenBank and FASTA files from the NCBI" % basename
 
+    def test_GenBank_vs_EMBL(self) :
+        if not self.emblname :
+            return
+        gb_record = SeqIO.read(open(self.gb_filename),"genbank")
+        embl_record = SeqIO.read(open(self.embl_filename),"embl")
+        return compare_record(gb_record, embl_record, ignore_name=True)
+
     def test_Translations(self):
         #"""Checking translation of FASTA features (faa vs ffn)."""
-        filename = os.path.join("GenBank",self.basename+".faa")
-        faa_records = list(SeqIO.parse(open(filename),"fasta"))
-        filename = os.path.join("GenBank",self.basename+".ffn")
-        ffn_records = list(SeqIO.parse(open(filename),"fasta"))
+        faa_records = list(SeqIO.parse(open(self.faa_filename),"fasta"))
+        ffn_records = list(SeqIO.parse(open(self.ffn_filename),"fasta"))
         self.assertEqual(len(faa_records),len(ffn_records))
         for faa, fna in zip(faa_records, ffn_records) :
             translation = methionine_translate(fna.seq, self.table)
@@ -196,24 +208,19 @@ class NC_005816(NC_000932):
     
     def test_Genome(self) :
         #"""Checking GenBank sequence vs FASTA fna file."""
-        filename = os.path.join("GenBank",self.basename+".gb")
-        gb_record = SeqIO.read(open(filename),"genbank")
-        filename = os.path.join("GenBank",self.basename+".fna")
-        fa_record = SeqIO.read(open(filename),"fasta")
+        gb_record = SeqIO.read(open(self.gb_filename),"genbank")
+        fa_record = SeqIO.read(open(self.fna_filename),"fasta")
         compare_record(gb_record, fa_record)
         if self.emblname is None :
             return
-        filename = os.path.join("EMBL",self.emblname+".embl")
-        embl_record = SeqIO.read(open(filename),"embl")
+        embl_record = SeqIO.read(open(self.embl_filename),"embl")
         compare_record(gb_record, embl_record, ignore_name=True)
 
     def test_Features(self) :
         #"""Checking GenBank features sequences vs FASTA ffn file."""
-        filename = os.path.join("GenBank",self.basename+".gb")
-        gb_record = SeqIO.read(open(filename),"genbank")
+        gb_record = SeqIO.read(open(self.gb_filename),"genbank")
         features = [f for f in gb_record.features if f.type=="CDS"]
-        filename = os.path.join("GenBank",self.basename+".ffn")
-        fa_records = list(SeqIO.parse(open(filename),"fasta"))
+        fa_records = list(SeqIO.parse(open(self.ffn_filename),"fasta"))
         self.assertEqual(len(fa_records), len(features))
         #This assumes they are in the same order...
         for fa_record, f in zip(fa_records, features) :
