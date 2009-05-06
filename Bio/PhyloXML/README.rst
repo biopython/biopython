@@ -15,7 +15,23 @@ project aims to build a similar module for the popular Biopython package.
 Core Elements
 -------------
 
-[todo]
+Tier 1:
+    branch_length
+    clade
+    code
+    confidence
+    name
+    phylogeny
+    phyloxml
+    taxonomy
+
+Tier 2:
+    domain
+    domain_architecture
+    duplications
+    events
+    sequence
+    speciations
 
 
 See Also
@@ -38,27 +54,22 @@ BioRuby implementation (current): http://socghop.appspot.com/student_project/sho
 Timeline
 --------
 
-:4/20:
-    Getting started:
+:Backlog:
+    - Start a PhyloXML page on the Biopython wiki
+        - sing praises of xml.etree, list 3rd-party equivalents for Py2.4
+        - explain use cases
 
+:Done:
     - Add sample phyloXML files from phyloxml.org to this repository
     - Add a list of "core" elements to this file
-    - Start a PhyloXML page on the Biopython wiki
-
-        - http://biopython.org/wiki/Active_projects
-
-:4/27:
-    Community bonding:
-
-    - Review existing modules for ideas and conventions
-    - Discuss some topics on biopython-dev:
-
-        - repository layout
-        - xml.sax vs. xml.etree and Python 2.4 compatibility timeline
-        - warning/logging/strictness system for parsing odd or malformed files
+    - Review existing modules for ideas and conventions [*ongoing*]
+    - Discuss xml.sax vs. xml.etree and Python 2.4 compatibility on biopython-dev
+    - Choose a warning system [*will match Bio.PDB, using warnings module*]
+    - Decide repository layout [*code in Bio/PhyloXML/, tests in Tests/*]
+    - Unit tests:
+        - no-op parsing of small example phyloXML files with xml.etree
 
 :5/4:
-    - Hash out these topics on biopython-dev
     - Document decisions here and on the wiki page
     - Start writing unit tests for basic XML parsing
 
@@ -67,7 +78,7 @@ Timeline
 
     - Write unit tests that fail:
 
-        - no-op parsing of phyloXML files with xml.sax or xml.etree
+        - no-op parsing of a large zipped phyloXML file
         - basic loading of the root node into a Python object
         - loading core elements
 
