@@ -13,3 +13,6 @@ class PDBException(Exception):
 # data structure
 class PDBConstructionException(Exception):
     pass
+
+class PDBConstructionWarning(Warning):
+    pass

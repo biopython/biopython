@@ -8,7 +8,7 @@ Bio.AlignIO support for the "stockholm" format (used in the PFAM database).
 You are expected to use this module via the Bio.AlignIO functions (or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
 
-For example, consider a Stockholm alignment file containing the following:
+For example, consider a Stockholm alignment file containing the following::
 
     # STOCKHOLM 1.0
     #=GC SS_cons       .................<<<<<<<<...<<<<<<<........>>>>>>>..
@@ -102,7 +102,7 @@ Most output formats won't be able to hold the annotation possible in a Stockholm
 Note that when writing Stockholm files, Biopython does not break long sequences up and
 interleave them (as in the input file shown above).  The standard allows this simpler
 layout, and it is more likely to be understood by other tools. 
-    
+
 Finally, as an aside, it can sometimes be useful to use Bio.SeqIO.parse() to iterate over
 the two rows as SeqRecord objects - rather than working with Alignnment objects.
 Again, if you want to you can specify this is RNA:
@@ -122,7 +122,16 @@ Again, if you want to you can specify this is RNA:
     -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
     >>> handle.close()
 
+Remember that if you slice a SeqRecord, the per-letter-annotions like the
+secondary structure string here, are also sliced:
+
+    >>> sub_record = record[10:20]
+    >>> print sub_record.seq
+    AUCGUUUUAC
+    >>> print sub_record.letter_annotations['secondary_structure']
+    -------<<<
 """
+__docformat__ = "epytext en" #not just plaintext
 from Bio.Align.Generic import Alignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
@@ -460,15 +469,15 @@ class StockholmIterator(AlignmentIterator) :
         suffix.
 
         In the example below, the suffix is required to match the AC, but must
-        be removed to match the OS and OC meta-data.
+        be removed to match the OS and OC meta-data::
 
-        # STOCKHOLM 1.0
-        #=GS Q9PN73_CAMJE/149-220  AC Q9PN73
-        ...
-        Q9PN73_CAMJE/149-220               NKA...
-        ...
-        #=GS Q9PN73_CAMJE OS Campylobacter jejuni
-        #=GS Q9PN73_CAMJE OC Bacteria 
+            # STOCKHOLM 1.0
+            #=GS Q9PN73_CAMJE/149-220  AC Q9PN73
+            ...
+            Q9PN73_CAMJE/149-220               NKA...
+            ...
+            #=GS Q9PN73_CAMJE OS Campylobacter jejuni
+            #=GS Q9PN73_CAMJE OC Bacteria 
 
         This function will return an empty dictionary if no data is found."""
         name, start, end = self._identifier_split(identifier)

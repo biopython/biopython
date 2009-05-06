@@ -76,7 +76,8 @@ class MMCIF2Dict(UserDict):
                         token, value=get_token()  
                         # print token, value
                     if pos!=nr_fields-1:
-                        print "ERROR: broken name-data pair (data missing)!"
+                        warnings.warn("ERROR: broken name-data pair "
+                                      "(data missing)!", RuntimeError)
                     # The last token was not used, so
                     # don't set token to None! (this means the 
                     # last parsed token goes through the loop again)
@@ -87,7 +88,8 @@ class MMCIF2Dict(UserDict):
                     # print token, value
                     mmcif_dict[value]=data
                     if next_token<4:
-                        print "ERROR: broken name-data pair (name-non data pair)!"  
+                        warnings.warn("ERROR: broken name-data pair "
+                                      "(name-non data pair)!", RuntimeError)
                         # print token, value
                     else:   
                         # get next token
@@ -102,8 +104,9 @@ class MMCIF2Dict(UserDict):
                 token=None
             else:
                 # we found some complete garbage
-                print "ERROR: broken name-data pair (missing name)!"
-                print token, value
+                warnings.warn("ERROR: broken name-data pair "
+                              "(missing name)!\n%s %s" % (token, value),
+                              RuntimeError)
                 mmcif_dict[None].append(value)
                 # get next token
                 token=None

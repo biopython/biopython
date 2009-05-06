@@ -50,7 +50,7 @@ clusterdll_init (HANDLE h, DWORD reason, void* foo)
 
 /* ************************************************************************ */
 
-double CALL mean(int n, double x[])
+double mean(int n, double x[])
 { double result = 0.;
   int i;
   for (i = 0; i < n; i++) result += x[i];
@@ -60,7 +60,7 @@ double CALL mean(int n, double x[])
 
 /* ************************************************************************ */
 
-double CALL median (int n, double x[])
+double median (int n, double x[])
 /*
 Find the median of X(1), ... , X(N), using as much of the quicksort
 algorithm as is needed to isolate it.
@@ -176,7 +176,7 @@ int compare(const void* a, const void* b)
 
 /* ---------------------------------------------------------------------- */
 
-void CALL sort(int n, const double data[], int index[])
+void sort(int n, const double data[], int index[])
 /* Sets up an index table given the data, such that data[index[]] is in
  * increasing order. Sorting is done on the indices; the array data
  * is unchanged.
@@ -323,7 +323,7 @@ the shortest distance.
 
 /* ********************************************************************* */
 
-void CALL svd(int m, int n, double** u, double w[], double** v, int* ierr)
+void svd(int m, int n, double** u, double w[], double** v, int* ierr)
 /*
  *   This subroutine is a translation of the Algol procedure svd,
  *   Num. Math. 14, 403-420(1970) by Golub and Reinsch.
@@ -2234,7 +2234,7 @@ kmedians(int nclusters, int nrows, int ncolumns, double** data, int** mask,
 
 /* ********************************************************************* */
 
-void CALL kcluster (int nclusters, int nrows, int ncolumns,
+void kcluster (int nclusters, int nrows, int ncolumns,
   double** data, int** mask, double weight[], int transpose,
   int npass, char method, char dist,
   int clusterid[], double* error, int* ifound)
@@ -2400,7 +2400,7 @@ number of clusters is larger than the number of elements being clustered,
 
 /* *********************************************************************** */
 
-void CALL kmedoids (int nclusters, int nelements, double** distmatrix,
+void kmedoids (int nclusters, int nelements, double** distmatrix,
   int npass, int clusterid[], double* error, int* ifound)
 /*
 Purpose
@@ -2574,7 +2574,7 @@ to 0. If kmedoids fails due to a memory allocation error, ifound is set to -1.
 
 /* ******************************************************************** */
 
-double** CALL distancematrix (int nrows, int ncolumns, double** data,
+double** distancematrix (int nrows, int ncolumns, double** data,
   int** mask, double weights[], char dist, int transpose)
 /*
 Purpose
@@ -3385,7 +3385,7 @@ If a memory error occurs, palcluster returns NULL.
 
 /* ******************************************************************* */
 
-Node* CALL treecluster (int nrows, int ncolumns, double** data, int** mask,
+Node* treecluster (int nrows, int ncolumns, double** data, int** mask,
   double weight[], int transpose, char dist, char method, double** distmatrix)
 /*
 Purpose
@@ -3791,7 +3791,7 @@ void somassign (int nrows, int ncolumns, double** data, int** mask,
 
 /* ******************************************************************* */
 
-void CALL somcluster (int nrows, int ncolumns, double** data, int** mask,
+void somcluster (int nrows, int ncolumns, double** data, int** mask,
   const double weight[], int transpose, int nxgrid, int nygrid,
   double inittau, int niter, char dist, double*** celldata, int clusterid[][2])
 /*
@@ -3904,7 +3904,7 @@ somcluster.
 
 /* ******************************************************************** */
 
-double CALL clusterdistance (int nrows, int ncolumns, double** data,
+double clusterdistance (int nrows, int ncolumns, double** data,
   int** mask, double weight[], int n1, int n2, int index1[], int index2[],
   char dist, char method, int transpose)
               

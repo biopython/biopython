@@ -4,13 +4,12 @@
 # as part of this package.  
 
 # Python stuff
-import sys
-
+import warnings
 import numpy
 
 # My stuff
 from StructureBuilder import StructureBuilder
-from PDBExceptions import PDBConstructionException
+from PDBExceptions import PDBConstructionException, PDBConstructionWarning
 from parse_pdb_header import _parse_pdb_header_list
 
 __doc__="Parser for PDB files."
@@ -242,8 +241,10 @@ class PDBParser:
         message="%s at line %i." % (message, line_counter)
         if self.PERMISSIVE:
             # just print a warning - some residues/atoms may be missing
-            print "PDBConstructionException: %s" % message
-            print "Exception ignored.\nSome atoms or residues may be missing in the data structure."
+            warnings.warn("PDBConstructionException: %s\n"
+                          "Exception ignored.\n"
+                          "Some atoms or residues may be missing in the data structure."
+                          % message, PDBConstructionWarning)
         else:
             # exceptions are fatal - raise again with new message (including line nr)
             raise PDBConstructionException(message)

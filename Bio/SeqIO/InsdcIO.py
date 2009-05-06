@@ -29,12 +29,15 @@ from Bio.Seq import UnknownSeq
 from Bio.GenBank.Scanner import GenBankScanner, EmblScanner
 from Bio import Alphabet
 from Interfaces import SequentialSequenceWriter
+from Bio import SeqFeature
 
 # NOTE
 # ====
 # The "brains" for parsing GenBank and EMBL files (and any
 # other flat file variants from the INSDC in future) is in
 # Bio.GenBank.Scanner (plus the _FeatureConsumer in Bio.GenBank)
+# However, all the writing code is in this file.
+
 
 def GenBankIterator(handle) :
     """Breaks up a Genbank file into SeqRecord objects.
@@ -78,9 +81,66 @@ def EmblCdsFeatureIterator(handle, alphabet=Alphabet.generic_protein) :
     #This calls a generator function:
     return EmblScanner(debug=0).parse_cds_features(handle, alphabet)
 
+def _insdc_feature_position_string(pos, offset=0):
+    """Build a GenBank/EMBL position string (PRIVATE).
+
+    Use offset=1 to add one to convert a start position from python counting.
+    """
+    if isinstance(pos, SeqFeature.ExactPosition) :
+        return "%i" % (pos.position+offset)
+    elif isinstance(pos, SeqFeature.WithinPosition) :
+        return "(%i.%i)" % (pos.position + offset,
+                            pos.position + pos.extension + offset)
+    elif isinstance(pos, SeqFeature.BetweenPosition) :
+        return "(%i^%i)" % (pos.position + offset,
+                            pos.position + pos.extension + offset)
+    elif isinstance(pos, SeqFeature.BeforePosition) :
+        return ">%i" % (pos.position + offset)
+    elif isinstance(pos, SeqFeature.AfterPosition) :
+        return "<%i" % (pos.position + offset)
+    elif isinstance(pos, SeqFeature.OneOfPosition):
+        return "one-of(%s)" \
+               % ",".join([_insdc_feature_position_string(p,offset) \
+                           for p in pos.position_choices])
+    elif isinstance(pos, SeqFeature.AbstractPosition) :
+        raise NotImplementedError("Please report this as a bug in Biopython.")
+    else :
+        raise ValueError("Expected a SeqFeature position object.")
+
+    
+def _insdc_feature_location_string(feature):
+    """Build a GenBank/EMBL location string from a SeqFeature (PRIVATE)."""
+    if feature.sub_features :
+        #Recursive!  Typically a join
+        assert feature.location_operator != ""
+        location = "%s(%s)" % (feature.location_operator,
+                               ",".join([_insdc_feature_location_string(f) \
+                                         for f in feature.sub_features]))
+    else :
+        #Non-recursive.
+        #assert feature.location_operator == "", \
+        #       "%s has no subfeatures but location_operator %s" \
+        #       % (repr(feature), feature.location_operator)
+        if feature.location.start==feature.location.end \
+        and isinstance(feature.location.end, SeqFeature.ExactPosition):
+            #Special case, 12^13 gets mapped to location 12:12
+            #(a zero length slice, meaning the point between two letters)
+            location = "%i^%i" % (feature.location.end.position,
+                                  feature.location.end.position+1)
+        else :
+            #Typical case, e.g. 12..15 gets mapped to 11:15
+            location = _insdc_feature_position_string(feature.location.start, +1) \
+                       + ".." + \
+                       _insdc_feature_position_string(feature.location.end)
+    if feature.strand == -1 :
+        location = "complement(%s)" % location
+    return location
+
+
 class GenBankWriter(SequentialSequenceWriter) :
     HEADER_WIDTH = 12
     MAX_WIDTH = 80
+    QUALIFIER_INDENT = 21
     
     def _write_single_line(self, tag, text) :
         "Used in the the 'header' of each GenBank record."""
@@ -302,18 +362,134 @@ class GenBankWriter(SequentialSequenceWriter) :
         self._write_sequence(record)
         handle.write("//\n")
 
-    def _write_feature(self, feature):
-        """Write a single SeqFeature object to features table.
+    def _write_feature_qualifier(self, key, value=None, quote=None) :
+        if not value :
+            self.handle.write("%s/%s\n" % (" "*self.QUALIFIER_INDENT, key))
+            return
+        #Quick hack with no line wrapping, may be useful for testing:
+        #self.handle.write('%s/%s="%s"\n' % (" "*self.QUALIFIER_INDENT, key, value))
+        if quote is None :
+            #Try to mimic unwritten rules about when quotes can be left out:
+            if isinstance(value, int) or isinstance(value, long) :
+                quote = False
+            else :
+                quote = True
+        if quote :
+            line = '%s/%s="%s"' % (" "*self.QUALIFIER_INDENT, key, value)
+        else :
+            line = '%s/%s=%s' % (" "*self.QUALIFIER_INDENT, key, value)
+        if len(line) < self.MAX_WIDTH :
+            self.handle.write(line+"\n")
+            return
+        while line.lstrip() :
+            if len(line) < self.MAX_WIDTH :
+                self.handle.write(line+"\n")
+                return
+            #Insert line break...
+            for index in range(min(len(line)-1,self.MAX_WIDTH),self.QUALIFIER_INDENT+1,-1) :
+                if line[index]==" " : break
+            if line[index] != " " :
+                #No nice place to break...
+                index = self.MAX_WIDTH
+            self.handle.write(line[:index] + "\n")
+            line = " "*self.QUALIFIER_INDENT + line[index:].lstrip()
 
-        Not implemented yet, but this stub exists in the short term to
-        facilitate working on writing GenBank files with a sub-class."""
-        #TODO - Features...
-        pass
+    def _write_feature(self, feature):
+        """Write a single SeqFeature object to features table."""
+        assert feature.type, feature
+        #TODO - Line wrapping for long locations!
+        location = _insdc_feature_location_string(feature)
+        line = ("     %s                " % feature.type)[:self.QUALIFIER_INDENT] \
+               + location + "\n"
+        self.handle.write(line)
+        #Now the qualifiers...
+        for key, values in feature.qualifiers.iteritems() :
+            if values :
+                for value in values :
+                    self._write_feature_qualifier(key, value)
+            else :
+                #e.g. a /psuedo entry
+                self._write_feature_qualifier(key)
+
 
 if __name__ == "__main__" :
     print "Quick self test"
     import os
     from StringIO import StringIO
+
+    def compare_record(old, new) :
+        if old.id != new.id and old.name != new.name :
+            raise ValueError("'%s' or '%s' vs '%s' or '%s' records" \
+                             % (old.id, old.name, new.id, new.name))
+        if len(old.seq) != len(new.seq) :
+            raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
+        if str(old.seq).upper() != str(new.seq).upper() :
+            if len(old.seq) < 200 :
+                raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
+            else :
+                raise ValueError("'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100]))
+        if old.features and new.features :
+            return compare_features(old.features, new.features)
+        #Just insist on at least one word in common:
+        if (old.description or new.description) \
+        and not set(old.description.split()).intersection(new.description.split()):
+            raise ValueError("%s versus %s" \
+                             % (repr(old.description), repr(new.description)))
+        #TODO - check annotation
+        return True
+
+    def compare_records(old_list, new_list) :
+        """Check two lists of SeqRecords agree, raises a ValueError if mismatch."""
+        if len(old_list) != len(new_list) :
+            raise ValueError("%i vs %i records" % (len(old_list), len(new_list)))
+        for old, new in zip(old_list, new_list) :
+            if not compare_record(old,new) :
+                return False
+        return True
+
+    def compare_feature(old, new, ignore_sub_features=False) :
+        """Check two SeqFeatures agree."""
+        if old.type != new.type :
+            raise ValueError("Type %s versus %s" % (old.type, new.type))
+        if old.location.nofuzzy_start != new.location.nofuzzy_start \
+        or old.location.nofuzzy_end != new.location.nofuzzy_end :
+            raise ValueError("%s versus %s:\n%s\nvs:\n%s" \
+                             % (old.location, new.location, str(old), str(new)))
+        if old.strand != new.strand :
+            raise ValueError("Different strand:\n%s\nvs:\n%s" % (str(old), str(new)))
+        if old.location.start != new.location.start :
+            raise ValueError("Start %s versus %s:\n%s\nvs:\n%s" \
+                             % (old.location.start, new.location.start, str(old), str(new)))
+        if old.location.end != new.location.end :
+            raise ValueError("End %s versus %s:\n%s\nvs:\n%s" \
+                             % (old.location.end, new.location.end, str(old), str(new)))
+        if not ignore_sub_features :
+            if len(old.sub_features) != len(new.sub_features) :
+                raise ValueError("Different sub features")
+            for a,b in zip(old.sub_features, new.sub_features) :
+                if not compare_feature(a,b) :
+                    return False
+        #This only checks key shared qualifiers
+        #Would a white list be easier?
+        #for key in ["name","gene","translation","codon_table","codon_start","locus_tag"] :
+        for key in set(old.qualifiers.keys()).intersection(new.qualifiers.keys()):
+            if key in ["db_xref","protein_id","product","note"] :
+                #EMBL and GenBank files are use different references/notes/etc
+                continue
+            if old.qualifiers[key] != new.qualifiers[key] :
+                raise ValueError("Qualifier mis-match for %s:\n%s\n%s" \
+                                 % (key, old.qualifiers[key], new.qualifiers[key]))
+        return True
+
+    def compare_features(old_list, new_list, ignore_sub_features=False) :
+        """Check two lists of SeqFeatures agree, raises a ValueError if mismatch."""
+        if len(old_list) != len(new_list) :
+            raise ValueError("%i vs %i features" % (len(old_list), len(new_list)))
+        for old, new in zip(old_list, new_list) :
+            #This assumes they are in the same order
+            if not compare_feature(old,new,ignore_sub_features) :
+                return False
+        return True
 
     def check_genbank_writer(records) :
         handle = StringIO()
@@ -321,25 +497,7 @@ if __name__ == "__main__" :
         handle.seek(0)
 
         records2 = list(GenBankIterator(handle))
-
-        assert len(records) == len(records2)
-        for r1, r2 in zip(records, records2) :
-            #The SwissProt parser may leave \n in the description...
-            assert r1.description.replace("\n", " ") == r2.description
-            assert r1.id == r2.id
-            assert r1.name == r2.name
-            assert str(r1.seq) == str(r2.seq)
-            for key in ["gi", "keywords", "source", "taxonomy"] :
-                if key in r1.annotations :
-                    assert r1.annotations[key] == r2.annotations[key], key
-            for key in ["organism"] :
-                if key in r1.annotations :
-                    v1 = r1.annotations[key]
-                    v2 = r2.annotations[key]
-                    assert isinstance(v1, str) and isinstance(v2, str)
-                    #SwissProt organism can be too long to record in GenBank format
-                    assert v1 == v2 or \
-                           (v2.endswith("...") and v1.startswith(v2[:-3])), key
+        assert compare_records(records, records2)
 
     for filename in os.listdir("../../Tests/GenBank") :
         if not filename.endswith(".gbk") and not filename.endswith(".gb") :
