@@ -181,11 +181,8 @@ class PrankCommandline(AbstractCommandline):
                     0,
                     "Use maximum branch lengths of input value"),
             #-realbranches [disable branch length truncation]
-            _Option(["-realbranches", "realbranches"], ["input"],
-                    lambda x: isinstance(x, types.FloatType),
-                    0,
-                    "Disable branch length truncation",
-                    0),
+            _Switch(["-realbranches", "realbranches"], ["input"],
+                    "Disable branch length truncation"),
             _Switch(["-translate", "translate"], ["input"],
                     "Translate to protein"),
             _Switch(["-mttranslate", "mttranslate"], ["input"],
