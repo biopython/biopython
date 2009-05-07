@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 6 May 2009 (Biopython 1.50+)}
+\date{Last Update -- 7 May 2009 (Biopython 1.50+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -7262,26 +7262,29 @@ For example, you might decide to look for a 5' primer as well.
 
 A very simplistic first step at identifying possible genes is to look for
 open reading frames (ORFs).  By this we mean look in all six frames for long
-regions without stop codons.  Of course, to find a gene you would also need
-to worry about locating a start codon, possible promoters - and in Eukaryotes
-there are introns to worry about too.  However, This approach is still useful
-in viruses and Prokaryotes.
+regions without stop codons -- an ORF is just a region of nucleotides with
+no in frame stop codons.
+
+Of course, to find a gene you would also need to worry about locating a start
+codon, possible promoters -- and in Eukaryotes there are introns to worry about
+too.  However, this approach is still useful in viruses and Prokaryotes.
 
 To show how you might approach this with Biopython, we'll need a sequence to
-search, and as an example we'll again use the bacterial plasmid
-\href{http://biopython.org/SRC/biopython/Tests/GenBank/NC_005816.gb}
-{\texttt{NC\_005816.gb}}. This is a bacterial sequence, so we'll want to use
+search, and as an example we'll again use the bacterial plasmid -- although
+this time we'll start with a plain FASTA file with no pre-marked genes:
+\href{http://biopython.org/SRC/biopython/Tests/GenBank/NC_005816.fna}
+{\texttt{NC\_005816.fna}}. This is a bacterial sequence, so we'll want to use
 NCBI codon table 11 (see Section~\ref{sec:translation} about translation).
 
 \begin{verbatim}
 from Bio import SeqIO 
-record = SeqIO.read(open("NC_005816.gb"),"genbank")
+record = SeqIO.read(open("NC_005816.fna"),"fasta")
 table = 11
 min_pro_len = 100
 \end{verbatim}
 
 Here is a neat trick using the \verb|Seq| object's \verb|split| method to
-get a list of all the possible ORF translations in the first frame:
+get a list of all the possible ORF translations in the six reading frames:
 
 \begin{verbatim}
 for strand, nuc in [(+1, record.seq), (-1, record.seq.reverse_complement())] :
@@ -7311,14 +7314,18 @@ LSHTVTDFTDQMAQVGLCQCVNVFLDEVTG...KAA - length 107, strand -1, frame 2
 RALTGLSAPGIRSQTSCDRLRELRYVPVSL...PLQ - length 119, strand -1, frame 2
 \end{verbatim}
 
-Note that here we are counting the frames from the 3' end of \emph{each}
-strand. It is sometimes easier to always count from the 3' end of the
-\emph{forward} strand.
+Note that here we are counting the frames from the 5' end (start) of
+\emph{each} strand. It is sometimes easier to always count from the 5' end
+(start) of the \emph{forward} strand.
 
 You could easily edit the above loop based code to build up a list of the
 candidate proteins, or convert this to a list comprehension.  Now, one thing
-this code doesn't do is keep track of where the proteins are.  You could
-tackle this in several ways.  For example,
+this code doesn't do is keep track of where the proteins are.
+
+You could tackle this in several ways.  For example, the following code tracks
+the locations in terms of the protein counting, and converts back to the
+parent sequence by multiplying by three, then adjusting for the frame and
+strand:
 
 \begin{verbatim}
 from Bio import SeqIO 
@@ -7383,7 +7390,6 @@ thing.  Here we have sorted them by location to make it easier to compare
 to the actual annotation in the GenBank file (as visualised in
 Section~\ref{sec:gd_nice_example}).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 If however all you want to find are the locations of the open reading frames,
 then it is a waste of time to translate every possible codon, including doing
 the reverse complement to search the reverse strand too.  All you need to do
