@@ -43,8 +43,8 @@ class DialignApplication(unittest.TestCase):
     def test_Dialign_simple(self):
         """Simple round-trip through app with infile.
         """
-        cmdline = DialignCommandline(dialign_exe)
-        cmdline.set_parameter("input", self.infile1)
+        #Test using keyword arguments:
+        cmdline = DialignCommandline(dialign_exe, input=self.infile1)
         stdin, stdout, stderr = Application.generic_run(cmdline)
         
         self.assert_(stdin.return_code == 0)
@@ -72,8 +72,9 @@ class DialignApplication(unittest.TestCase):
         """Simple round-trip through app with infile, output MSF
         """
         cmdline = DialignCommandline(dialign_exe)
-        cmdline.set_parameter("input", self.infile1)
-        cmdline.set_parameter("-msf", True)
+        #Test with properties
+        cmdline.input = self.infile1
+        cmdline.msf = True
         stdin, stdout, stderr = Application.generic_run(cmdline)
         
         self.assert_(stdin.return_code == 0)
