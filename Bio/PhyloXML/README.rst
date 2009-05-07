@@ -37,40 +37,47 @@ Tier 2:
 See Also
 --------
 
-PhyloXML homepage: http://www.phyloxml.org/
+Project page on NESCent:
+https://www.nescent.org/wg_phyloinformatics/PhyloSoC:Biopython_support_for_parsing_and_writing_phyloXML
 
-Biopython wiki: http://biopython.org/wiki/Active_projects
+Biopython wiki doc:
+http://biopython.org/wiki/PhyloXML
 
-This GitHub branch: http://github.com/etal/biopython/tree/phyloxml
+PhyloXML homepage:
+http://www.phyloxml.org/
 
-GSoC project page: http://socghop.appspot.com/student_project/show/google/gsoc2009/nescent/t124022798969
+GSoC project proposal:
+http://socghop.appspot.com/student_project/show/google/gsoc2009/nescent/t124022798969
 
-BioPerl implementation (2008): http://www.bioperl.org/wiki/Phyloxml_Project_Demo
-
-BioRuby implementation (current): http://socghop.appspot.com/student_project/show/google/gsoc2009/nescent/t124022800294
-
+This GitHub branch:
+http://github.com/etal/biopython/tree/phyloxml
 
 
 Timeline
 --------
 
 :Backlog:
-    - Start a PhyloXML page on the Biopython wiki
-        - sing praises of xml.etree, list 3rd-party equivalents for Py2.4
-        - explain use cases
+    Documentation on Biopython wiki:
+
+    - explain use cases
 
 :Done:
     - Add sample phyloXML files from phyloxml.org to this repository
     - Add a list of "core" elements to this file
     - Review existing modules for ideas and conventions [*ongoing*]
-    - Discuss xml.sax vs. xml.etree and Python 2.4 compatibility on biopython-dev
+    - Choose an XML parser [*xml.etree, or lxml/elementtree for Py2.4*]
     - Choose a warning system [*will match Bio.PDB, using warnings module*]
     - Decide repository layout [*code in Bio/PhyloXML/, tests in Tests/*]
-    - Unit tests:
-        - no-op parsing of small example phyloXML files with xml.etree
+
+    Unit tests:
+
+    - no-op parsing of small example phyloXML files with xml.etree
+
+    Documentation (Biopython wiki):
+
+    - Explain xml.etree, list 3rd-party equivalents for Py2.4
 
 :5/4:
-    - Document decisions here and on the wiki page
     - Start writing unit tests for basic XML parsing
 
 :5/11:
@@ -87,7 +94,7 @@ Timeline
 
     - Write a simple base class for all phyloXML elements ::
 
-        class Tree(object): ...
+        class PhyloElement(object): ...
 
     - Write an easy wrapper function for loading local files by name ::
 
@@ -95,7 +102,7 @@ Timeline
 
     - Create a specific exception to raise for invalid phyloXML files ::
 
-        class ParseException(Exception): pass
+        class PhyloXMLError(Exception): pass
 
 :6/8:
     Map nodes to classes:
