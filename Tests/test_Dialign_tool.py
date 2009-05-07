@@ -13,13 +13,21 @@ from Bio.Align.Applications import DialignCommandline
 
 dialign_exe = None
 if sys.platform=="win32":
-    raise MissingExternalDependencyError("Testing with DIALIGN2-2 not implemented on Windows yet")
-
+    raise MissingExternalDependencyError("DIALIGN2-2 not available on Windows")
 else :
     import commands
     output = commands.getoutput("dialign2-2")
     if "not found" not in output and "dialign2-2" in output.lower():
         dialign_exe = "dialign2-2"
+        #This check is currently not needed, as if the environment variable
+        #is missing the tool outputs this:
+        #
+        #    Please set the environmentvariable DIALIGN2_DIR 
+        #    as described in the README file 
+        #
+        #if "DIALIGN2_DIR" not in os.environ :
+        #    raise MissingExternalDependencyError(\
+        #        "Environment variable DIALIGN2_DIR for DIALIGN2-2 missing.")
 
 if not dialign_exe:
     raise MissingExternalDependencyError(\
