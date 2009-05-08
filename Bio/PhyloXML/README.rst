@@ -70,6 +70,10 @@ Timeline
     - Choose a warning system [*will match Bio.PDB, using warnings module*]
     - Decide repository layout [*code in Bio/PhyloXML/, tests in Tests/*]
 
+    Code:
+
+    - Wrapper function for loading local files by name [*__init__.read()*]
+
     Unit tests:
 
     - no-op parsing of small example phyloXML files with xml.etree
@@ -89,9 +93,6 @@ Timeline
 
         class PhyloElement(object): ...
 
-    - Write an easy wrapper function for loading local files by name ::
-
-        def read(path): ...
 
     - Create a specific exception to raise for invalid phyloXML files ::
 
