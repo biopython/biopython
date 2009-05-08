@@ -28,12 +28,6 @@ classify       Classify an observation into a class.
 
 import numpy
 
-#TODO - Remove this work around once we drop python 2.3 support
-try:
-    set
-except NameError:
-    from sets import Set as set
-
 def _contents(items):
     term = 1.0/len(items)
     counts = {}

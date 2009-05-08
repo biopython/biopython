@@ -178,12 +178,7 @@ def molecular_weight(seq):
     """Calculate the molecular weight of a DNA sequence."""
     if type(seq) == type(''): seq = Seq(seq, IUPAC.unambiguous_dna)
     weight_table = IUPACData.unambiguous_dna_weights
-    #TODO, use a generator expession once we drop Python 2.3?
-    #e.g. return sum(weight_table[x] for x in seq)
-    total = 0
-    for x in seq:
-        total += weight_table[x]
-    return total
+    return sum(weight_table[x] for x in seq)
 
 def nt_search(seq, subseq):
     """Search for a DNA subseq in sequence.

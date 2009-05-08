@@ -15,12 +15,6 @@ XXX ref
 
 import numpy
 
-#TODO - Remove this work around once we drop python 2.3 support
-try:
-    set
-except NameError:
-    from sets import Set as set
-
 #These are module level defaults, which in theory users might change
 #at run time to adjust the behaviour of the train function:
 MAX_IIS_ITERATIONS = 10000    # Maximum iterations for IIS.
