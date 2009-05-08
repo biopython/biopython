@@ -70,10 +70,12 @@ def compare_feature(old, new, ignore_sub_features=False) :
                          % (old.location, new.location, str(old), str(new)))
     if old.strand != new.strand :
         raise ValueError("Different strand:\n%s\nvs:\n%s" % (str(old), str(new)))
-    if old.location.start != new.location.start :
+    if old.location.start != new.location.start \
+    or str(old.location.start) != str(new.location.start) :
         raise ValueError("Start %s versus %s:\n%s\nvs:\n%s" \
                          % (old.location.start, new.location.start, str(old), str(new)))
-    if old.location.end != new.location.end :
+    if old.location.end != new.location.end \
+    or str(old.location.end) != str(new.location.end) :
         raise ValueError("End %s versus %s:\n%s\nvs:\n%s" \
                          % (old.location.end, new.location.end, str(old), str(new)))
     if not ignore_sub_features :
