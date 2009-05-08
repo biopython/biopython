@@ -18,6 +18,7 @@ from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition, \
                            BeforePosition, AfterPosition, OneOfPosition, \
                            WithinPosition
 from StringIO import StringIO
+from Bio.SeqIO.InsdcIO import _insdc_feature_location_string
 
 #Top level function as this makes it easier to use for debugging:
 def write_read(filename, in_format="gb", out_format="gb") :
@@ -155,11 +156,17 @@ class FeatureWriting(unittest.TestCase) :
         #Note we don't have to explicitly give an ExactPosition object,
         #and integer will also work:
         f = SeqFeature(FeatureLocation(10,20), strand=+1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "11..20")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(30,40), strand=-1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(31..40)")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(ExactPosition(50),ExactPosition(60)), \
                        strand=+1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "51..60")
         self.record.features.append(f)
         self.write_read_check()
 
@@ -167,8 +174,12 @@ class FeatureWriting(unittest.TestCase) :
         """Features: write/read simple between locations."""
         #Note we don't use the BetweenPosition any more!
         f = SeqFeature(FeatureLocation(10,10), strand=+1, type="variation")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "10^11")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(20,20), strand=-1, type="variation")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(20^21)")
         self.record.features.append(f)
         self.write_read_check()
 
@@ -231,21 +242,33 @@ class FeatureWriting(unittest.TestCase) :
         """Features: write/read simple before locations."""
         f = SeqFeature(FeatureLocation(BeforePosition(5),10), \
                        strand=+1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "<6..10")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(BeforePosition(15),BeforePosition(20)), \
                        strand=+1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "<16..<20")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(25,BeforePosition(30)), \
                        strand=+1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "26..<30")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(BeforePosition(35),40), \
-                       strand=+1, type="CDS")
+                       strand=-1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(<36..40)")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(BeforePosition(45),BeforePosition(50)), \
-                       strand=+1, type="CDS")
+                       strand=-1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(<46..<50)")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(55,BeforePosition(60)), \
-                       strand=+1, type="CDS")
+                       strand=-1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(56..<60)")
         self.record.features.append(f)
         self.write_read_check()
         
@@ -253,21 +276,33 @@ class FeatureWriting(unittest.TestCase) :
         """Features: write/read simple after locations."""
         f = SeqFeature(FeatureLocation(AfterPosition(5),10), \
                        strand=+1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         ">6..10")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(AfterPosition(15),AfterPosition(20)), \
                        strand=+1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         ">16..>20")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(25,AfterPosition(30)), \
                        strand=+1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "26..>30")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(AfterPosition(35),40), \
-                       strand=+1, type="CDS")
+                       strand=-1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(>36..40)")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(AfterPosition(45),AfterPosition(50)), \
-                       strand=+1, type="CDS")
+                       strand=-1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(>46..>50)")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(55,AfterPosition(60)), \
-                       strand=+1, type="CDS")
+                       strand=-1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(56..>60)")
         self.record.features.append(f)
         self.write_read_check()
 
@@ -275,23 +310,35 @@ class FeatureWriting(unittest.TestCase) :
         """Features: write/read simple one-of locations."""
         start = OneOfPosition([ExactPosition(0),ExactPosition(3),ExactPosition(6)])
         f = SeqFeature(FeatureLocation(start,21), strand=+1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "one-of(1,4,7)..21")
         self.record.features.append(f)
         start = OneOfPosition([ExactPosition(x) for x in [10,13,16]])
         end = OneOfPosition([ExactPosition(x) for x in [41,44,50]])
         f = SeqFeature(FeatureLocation(start,end), strand=+1, type="gene")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "one-of(11,14,17)..one-of(41,44,50)")
         self.record.features.append(f)
         end = OneOfPosition([ExactPosition(x) for x in [30,33]])
         f = SeqFeature(FeatureLocation(27,end), strand=+1, type="gene")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "28..one-of(30,33)")
         self.record.features.append(f)
         start = OneOfPosition([ExactPosition(x) for x in [36,40]])
-        f = SeqFeature(FeatureLocation(start,46), strand=+1, type="CDS")
+        f = SeqFeature(FeatureLocation(start,46), strand=-1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(one-of(37,41)..46)")
         self.record.features.append(f)
         start = OneOfPosition([ExactPosition(x) for x in [45,60]])
         end = OneOfPosition([ExactPosition(x) for x in [70,90]])
-        f = SeqFeature(FeatureLocation(start,end), strand=+1, type="CDS")
+        f = SeqFeature(FeatureLocation(start,end), strand=-1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(one-of(46,61)..one-of(70,90))")
         self.record.features.append(f)
         end = OneOfPosition([ExactPosition(x) for x in [60,63]])
-        f = SeqFeature(FeatureLocation(55,end), strand=+1, type="tRNA")
+        f = SeqFeature(FeatureLocation(55,end), strand=-1, type="tRNA")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(56..one-of(60,63))")
         self.record.features.append(f)
         self.write_read_check()
 
@@ -299,33 +346,45 @@ class FeatureWriting(unittest.TestCase) :
         """Features: write/read simple within locations."""
         f = SeqFeature(FeatureLocation(WithinPosition(2,6),10), \
                        strand=+1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "(3.9)..10")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(WithinPosition(12,6),
                                        WithinPosition(20,8)), \
                        strand=+1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "(13.19)..(20.28)")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(25,WithinPosition(30,3)), \
                        strand=+1, type="misc_feature")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "26..(30.33)")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(WithinPosition(35,4),40), \
-                       strand=+1, type="rRNA")
+                       strand=-1, type="rRNA")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement((36.40)..40)")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(WithinPosition(45,2),
                                        WithinPosition(50,3)), \
-                       strand=+1, type="repeat_region")
+                       strand=-1, type="repeat_region")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement((46.48)..(50.53))")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(55,WithinPosition(60,5)), \
-                       strand=+1, type="CDS")
+                       strand=-1, type="CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(56..(60.65))")
         self.record.features.append(f)
         self.write_read_check()
         
 class NC_000932(unittest.TestCase):
-    #This includes an evil dual strand gene (trans-splicing!)
+    #This includes an evil dual strand gene
     basename = "NC_000932"
     emblname = None # "AP000423" has different annotation (e.g. more CDS)
     table = 11
-    skip_trans_test = ["gi|7525080|ref|NP_051037.1|", #Trans-splicing
-                       "gi|7525057|ref|NP_051038.1|", #Trans-splicing
+    skip_trans_test = ["gi|7525080|ref|NP_051037.1|", #dual-strand
+                       "gi|7525057|ref|NP_051038.1|", #dual-strand
                        "gi|90110725|ref|NP_051109.2|", #Invalid annotation? No start codon
                        ]
     __doc__ = "Tests using %s GenBank and FASTA files from the NCBI" % basename
