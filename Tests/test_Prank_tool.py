@@ -124,7 +124,7 @@ class PrankApplication(unittest.TestCase):
         cmdline.kappa = 3
         cmdline.skipins = True
         cmdline.set_parameter("-once", True)
-        cmdline.set_parameter("realbranches") #i.e. None, TODO: check this.
+        cmdline.realbranches = True
         self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01 -noxml" + \
                          " -notree -dots -gaprate=0.321 -gapext=0.6 -kappa=3" + \
                          " -once -skipins -realbranches ")
