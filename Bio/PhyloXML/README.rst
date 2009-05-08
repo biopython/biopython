@@ -73,6 +73,8 @@ Timeline
     Code:
 
     - Wrapper function for loading local files by name [*__init__.read()*]
+    - Specific exception and warning to raise for invalid phyloXML files
+      [*Exceptions.py*]
     - Simple base class for all phyloXML elements [*Parser.PhyloElement*]
 
     Unit tests:
@@ -85,14 +87,6 @@ Timeline
     Documentation (Biopython wiki):
 
     - Explain xml.etree, list 3rd-party equivalents for Py2.4
-
-
-:6/1:
-    Parsing from file:
-
-    - Create a specific exception to raise for invalid phyloXML files ::
-
-        class PhyloXMLError(Exception): pass
 
 :6/8:
     Map nodes to classes:
