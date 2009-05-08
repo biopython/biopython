@@ -7,6 +7,7 @@
 import os
 import sys
 import unittest
+import subprocess
 
 from Bio.Application import generic_run
 from Bio.Emboss.Applications import WaterCommandline, NeedleCommandline
@@ -16,12 +17,6 @@ from Bio import MissingExternalDependencyError
 from Bio.Alphabet import generic_protein, generic_dna, generic_nucleotide
 from Bio.Seq import Seq, translate
 from Bio.SeqRecord import SeqRecord
-
-try :
-    import subprocess
-except ImportError :
-    raise MissingExternalDependencyError(\
-        "Python 2.3 not supported, this needs the subprocess module.")
 
 #################################################################
 

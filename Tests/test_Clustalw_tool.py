@@ -1,4 +1,4 @@
-# Copyright 2008 by Peter Cock.  All rights reserved.
+# Copyright 2008-2009 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -6,12 +6,6 @@
 #TODO - Clean up the extra files created by clustalw?  e.g. *.dnd
 #and *.aln where we have not requested an explicit name?
 from Bio import MissingExternalDependencyError
-
-#TODO - Remove this work around once we drop python 2.3 support
-try:
-    set = set
-except NameError:
-    from sets import Set as set
 
 import sys
 import os
@@ -89,7 +83,7 @@ try :
     assert False, "Should have failed, returned %s" % repr(align)
 except IOError, err :
     print "Failed (good)"
-    #Python 2.3 on Windows gives (0, 'Error')
+    #Python 2.3 on Windows gave (0, 'Error')
     #Python 2.5 on Windows gives [Errno 0] Error
     assert "Cannot open sequence file" in str(err) \
            or "not produced" in str(err) \
@@ -129,7 +123,7 @@ except IOError, err :
     #error for "invalid format", rather than just notice there
     #is not output file.
     #Note:
-    #Python 2.3 on Windows gives (0, 'Error')
+    #Python 2.3 on Windows gave (0, 'Error')
     #Python 2.5 on Windows gives [Errno 0] Error
     assert "invalid format" in str(err) \
            or "not produced" in str(err) \
@@ -185,14 +179,6 @@ for input_file, output_file, newtree_file in [
     cline.set_output(output_file)
     if newtree_file is not None :
         cline.set_new_guide_tree(newtree_file)
-
-    if sys.platform=="win32" and sys.version_info[:2] < (2,4 ):
-        if " " in input_file or " " in output_file \
-        or (newtree_file is not None and " " in newtree_file) :
-            #This will fail on Python 2.3 ... cheat so the
-            #print-and-compare output matches!
-            print "Got an alignment, %i sequences" % (len(input_records))
-            continue
 
     #Run the command...
     align = Clustalw.do_alignment(cline)

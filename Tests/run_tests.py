@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """Run a set of PyUnit-based regression tests.
 
 This will find all modules whose name is "test_*.py" in the test
@@ -222,13 +225,7 @@ class TestRunner(unittest.TextTestRunner):
             self.tests.append("doctest")
         if "doctest" in self.tests:
             self.tests.remove("doctest")
-            if sys.version_info[:2] < (2, 4):
-                #On python 2.3, doctest uses slightly different formatting
-                #which would be a problem as the expected output won't match.
-                #Also, it can't cope with <BLANKLINE> in a doctest string.
-                sys.stderr.write("Skipping doctests which require Python 2.4+\n")
-            else :
-                self.tests.extend(DOCTEST_MODULES)
+            self.tests.extend(DOCTEST_MODULES)
         stream = cStringIO.StringIO()
         unittest.TextTestRunner.__init__(self, stream, verbosity=0)
 
@@ -276,12 +273,7 @@ class TestRunner(unittest.TextTestRunner):
                 result.stream.write(result.separator1+"\n")
                 result.stream.write("ERROR: %s\n" % name)
                 result.stream.write(result.separator2+"\n")
-                try :
-                    result.stream.write(traceback.format_exc())
-                except AttributeError :
-                    #This method is not available on Python 2.3,
-                    #printing the exception is a simple fall back.
-                    result.stream.write("%s\n" % msg)
+                result.stream.write(traceback.format_exc())
                 return False
         finally:
             sys.stdout = stdout

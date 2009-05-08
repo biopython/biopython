@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-__version__ = "$Revision: 1.5 $"
+__version__ = "$Revision: 1.6 $"
 
 import doctest, unittest
 import random
@@ -12,14 +12,6 @@ import sys
 if sys.modules.has_key('requires_wise'):
     del sys.modules['requires_wise']
 import requires_wise
-
-from Bio import MissingExternalDependencyError
-if sys.version_info[:2] < (2, 4):
-    #On python 2.3, doctest uses slightly different formatting
-    #which would be a problem as the expected output won't match.
-    #Also, it can't cope with <BLANKLINE> in a doctest string.
-    raise MissingExternalDependencyError(\
-          "This unit test requires Python 2.4 or later")
 
 from Bio.Wise import psw
 

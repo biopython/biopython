@@ -1,8 +1,6 @@
-#TODO - Remove this work around once we drop python 2.3 support
-try:
-    set = set
-except NameError:
-    from sets import Set as set
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
 from Bio import Seq
 from Bio.Alphabet import IUPAC
@@ -256,21 +254,13 @@ for a in dna + rna + nuc + protein :
         #Now check splits
         assert [x.tostring() for x in a.split(chars)] \
                == a.tostring().split(str(chars))
-        try :
-            assert [x.tostring() for x in a.rsplit(chars)] \
-                   == a.tostring().rsplit(str(chars))
-        except AttributeError :
-            #Python 2.3 string lacks the rsplit method
-            pass
+        assert [x.tostring() for x in a.rsplit(chars)] \
+               == a.tostring().rsplit(str(chars))
         for max_sep in [0,1,2,999] :
             assert [x.tostring() for x in a.split(chars, max_sep)] \
                    == a.tostring().split(str(chars), max_sep)
-            try :
-                assert [x.tostring() for x in a.rsplit(chars, max_sep)] \
-                       == a.tostring().rsplit(str(chars), max_sep)
-            except AttributeError :
-                #Python 2.3 string lacks the rsplit method
-                pass
+            assert [x.tostring() for x in a.rsplit(chars, max_sep)] \
+                   == a.tostring().rsplit(str(chars), max_sep)
 del a, alpha, chars, str_chars, test_chars
 del dna, rna, nuc, protein
 ###########################################################################
