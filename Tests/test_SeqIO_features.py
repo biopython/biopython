@@ -10,9 +10,12 @@ and confirms they are consistent using our different parsers.
 """
 import os
 import unittest
+from Bio.Alphabet import generic_dna
 from Bio import SeqIO
 from Bio.Seq import Seq, UnknownSeq, MutableSeq
 from Bio.SeqRecord import SeqRecord
+from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition, \
+                           BeforePosition, AfterPosition, OneOfPosition
 from StringIO import StringIO
 
 #Top level function as this makes it easier to use for debugging:
@@ -134,6 +137,98 @@ def get_feature_nuc(f, parent_seq) :
         f_seq = parent_seq[f.location.nofuzzy_start:f.location.nofuzzy_end]
     if f.strand == -1 : f_seq = f_seq.reverse_complement()
     return f_seq
+
+class FeatureWriting(unittest.TestCase) :
+    def setUp(self) :
+        self.record = SeqRecord(Seq("ACGT"*100, generic_dna),
+                                id="Test", name="Test", description="Test")
+    def write_read_check(self) :
+        handle = StringIO()
+        SeqIO.write([self.record], handle, "gb")
+        handle.seek(0)
+        record2 = SeqIO.read(handle, "gb")
+        return compare_record(self.record, record2)
+
+    def test_exact(self) :
+        """Features: write/read simple exact locations."""
+        #Note we don't have to explicitly give an ExactPosition object,
+        #and integer will also work:
+        f = SeqFeature(FeatureLocation(10,20), strand=+1, type="CDS")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(30,40), strand=-1, type="CDS")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(ExactPosition(50),ExactPosition(60)), \
+                       strand=+1, type="CDS")
+        self.record.features.append(f)
+        self.write_read_check()
+
+    def test_before(self) :
+        """Features: write/read simple before locations."""
+        f = SeqFeature(FeatureLocation(BeforePosition(5),10), \
+                       strand=+1, type="CDS")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(BeforePosition(15),BeforePosition(20)), \
+                       strand=+1, type="CDS")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(25,BeforePosition(30)), \
+                       strand=+1, type="CDS")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(BeforePosition(35),40), \
+                       strand=+1, type="CDS")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(BeforePosition(45),BeforePosition(50)), \
+                       strand=+1, type="CDS")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(55,BeforePosition(60)), \
+                       strand=+1, type="CDS")
+        self.record.features.append(f)
+        self.write_read_check()
+        
+    def test_after(self) :
+        """Features: write/read simple after locations."""
+        f = SeqFeature(FeatureLocation(AfterPosition(5),10), \
+                       strand=+1, type="CDS")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(AfterPosition(15),AfterPosition(20)), \
+                       strand=+1, type="CDS")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(25,AfterPosition(30)), \
+                       strand=+1, type="CDS")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(AfterPosition(35),40), \
+                       strand=+1, type="CDS")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(AfterPosition(45),AfterPosition(50)), \
+                       strand=+1, type="CDS")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(55,AfterPosition(60)), \
+                       strand=+1, type="CDS")
+        self.record.features.append(f)
+        self.write_read_check()
+
+    def test_oneof(self) :
+        """Features: write/read simple one-of locations."""
+        start = OneOfPosition([ExactPosition(0),ExactPosition(3),ExactPosition(6)])
+        f = SeqFeature(FeatureLocation(start,21), strand=+1, type="CDS")
+        self.record.features.append(f)
+        start = OneOfPosition([ExactPosition(x) for x in [10,13,16]])
+        end = OneOfPosition([ExactPosition(x) for x in [41,44,50]])
+        f = SeqFeature(FeatureLocation(start,end), strand=+1, type="gene")
+        self.record.features.append(f)
+        end = OneOfPosition([ExactPosition(x) for x in [30,33]])
+        f = SeqFeature(FeatureLocation(27,end), strand=+1, type="gene")
+        self.record.features.append(f)
+        start = OneOfPosition([ExactPosition(x) for x in [36,40]])
+        f = SeqFeature(FeatureLocation(start,46), strand=+1, type="CDS")
+        self.record.features.append(f)
+        start = OneOfPosition([ExactPosition(x) for x in [45,60]])
+        end = OneOfPosition([ExactPosition(x) for x in [70,90]])
+        f = SeqFeature(FeatureLocation(start,end), strand=+1, type="CDS")
+        self.record.features.append(f)
+        end = OneOfPosition([ExactPosition(x) for x in [60,63]])
+        f = SeqFeature(FeatureLocation(55,end), strand=+1, type="tRNA")
+        self.record.features.append(f)
+        self.write_read_check()
 
         
 class NC_000932(unittest.TestCase):
