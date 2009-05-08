@@ -23,6 +23,7 @@ o MultipleAlignCL"""
 # standard library
 import os
 import sys
+import subprocess
 
 # biopython
 from Bio import Alphabet
@@ -88,33 +89,24 @@ def do_alignment(command_line, alphabet=None):
     o A clustal alignment object corresponding to the created alignment.
     If the alignment type was not a clustal object, None is returned.
     """
-    #Try and use subprocess (available in python 2.4+)
-    try :
-        import subprocess
-        #We don't need to supply any piped input, but we setup the
-        #standard input pipe anyway as a work around for a python
-        #bug if this is called from a Windows GUI program.  For
-        #details, see http://bugs.python.org/issue1124861
-        child_process = subprocess.Popen(str(command_line),
-                                         stdin=subprocess.PIPE,
-                                         stdout=subprocess.PIPE,
-                                         stderr=subprocess.PIPE,
-                                         shell=(sys.platform!="win32")
-                                         )
-        #Use .communicate as can get deadlocks with .wait(), see Bug 2804
-        child_process.communicate() #ignore the stdout and strerr data
-        value = child_process.returncode
-    except ImportError :
-        #Fall back for python 2.3
-        run_clust = os.popen(str(command_line))
-        status = run_clust.close()
-        # The exit status is the second byte of the termination status
-        # TODO - Check this holds on win32...
-        value = 0
-        if status: value = status / 256
+    #We don't need to supply any piped input, but we setup the
+    #standard input pipe anyway as a work around for a python
+    #bug if this is called from a Windows GUI program.  For
+    #details, see http://bugs.python.org/issue1124861
+    child_process = subprocess.Popen(str(command_line),
+                                     stdin=subprocess.PIPE,
+                                     stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE,
+                                     shell=(sys.platform!="win32")
+                                     )
+    #Use .communicate as can get deadlocks with .wait(), see Bug 2804
+    child_process.communicate() #ignore the stdout and strerr data
+    value = child_process.returncode
 
     # check the return value for errors, as on 1.81 the return value
     # from Clustalw is actually helpful for figuring out errors
+    # TODO - Update this for new error codes using in clustalw 2
+
     # 1 => bad command line option
     if value == 1:
         raise ValueError("Bad command line option in the command: %s"
@@ -166,10 +158,8 @@ class ClustalAlignment(Alignment):
     
     def __init__(self, alphabet = Alphabet.Gapped(IUPAC.ambiguous_dna)):
         Alignment.__init__(self, alphabet)
-
         # represent all of those stars in the aln output format
         self._star_info = ''
-        
         self._version = ''
 
     def __str__(self):

@@ -8,6 +8,7 @@
 """
 import os, sys
 import StringIO
+import subprocess
 
 from Bio import File
 
@@ -23,68 +24,24 @@ def generic_run(commandline):
     This may be in issue when the program writes a large amount of
     data to standard output.
     """
-    # print str(commandline)
-
-    #Try and use subprocess (available in python 2.4+)
-    try :
-        import subprocess
-        #We don't need to supply any piped input, but we setup the
-        #standard input pipe anyway as a work around for a python
-        #bug if this is called from a Windows GUI program.  For
-        #details, see http://bugs.python.org/issue1124861
-        child = subprocess.Popen(str(commandline),
-                                 stdin=subprocess.PIPE,
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 shell=(sys.platform!="win32"))
-        child.stdin.close()
-        r = child.stdout
-        e = child.stderr 
-
-        r_out = r.read()
-        e_out = e.read()
-        r.close()
-        e.close()
-
-        # capture error code
-        error_code = child.wait()
-
-    except ImportError :
-        #For python 2.3 can't use subprocess, using popen2 instead
-        #(deprecated in python 2.6)
-        import popen2
-        if sys.platform[:3]=='win':
-            # Windows does not have popen2.Popen3
-            r, w, e = popen2.popen3(str(commandline))
-        
-            r_out = r.read()
-            e_out = e.read()
-            w.close()
-            r.close()
-            e.close()
-
-            # No way to get the error code; setting it to a dummy variable
-            error_code = 0
-
-        else:
-            child = popen2.Popen3(str(commandline), 1)
-            # get information and close the files, so if we call this function
-            # repeatedly we won't end up with too many open files
-
-            # here are the file descriptors
-            r = child.fromchild
-            w = child.tochild
-            e = child.childerr
-        
-            r_out = r.read()
-            e_out = e.read()
-            w.close()
-            r.close()
-            e.close()
-        
-            # capture error code
-            error_code = os.WEXITSTATUS(child.wait())
-
+    #We don't need to supply any piped input, but we setup the
+    #standard input pipe anyway as a work around for a python
+    #bug if this is called from a Windows GUI program.  For
+    #details, see http://bugs.python.org/issue1124861
+    child = subprocess.Popen(str(commandline),
+                             stdin=subprocess.PIPE,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             shell=(sys.platform!="win32"))
+    child.stdin.close()
+    r = child.stdout
+    e = child.stderr 
+    r_out = r.read()
+    e_out = e.read()
+    r.close()
+    e.close()
+    # capture error code:
+    error_code = child.wait()
     return ApplicationResult(commandline, error_code), \
            File.UndoHandle(StringIO.StringIO(r_out)), \
            File.UndoHandle(StringIO.StringIO(e_out))
