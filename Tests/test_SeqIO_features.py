@@ -163,6 +163,15 @@ class FeatureWriting(unittest.TestCase) :
         self.record.features.append(f)
         self.write_read_check()
 
+    def test_between(self) :
+        """Features: write/read simple between locations."""
+        #Note we don't use the BetweenPosition any more!
+        f = SeqFeature(FeatureLocation(10,10), strand=+1, type="variation")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(20,20), strand=-1, type="variation")
+        self.record.features.append(f)
+        self.write_read_check()
+
     def add_join_feature(self, f_list, ftype="misc_feature"):
         strands = set(f.strand for f in f_list)
         if len(strands)==1 :
@@ -194,6 +203,29 @@ class FeatureWriting(unittest.TestCase) :
         f3 = SeqFeature(FeatureLocation(345,350), strand=-1)
         self.add_join_feature([f1,f2,f3])
         self.write_read_check()
+
+    def test_fuzzy_join(self):
+        """Features: write/read fuzzy join locations."""
+        f1 = SeqFeature(FeatureLocation(BeforePosition(10),20), strand=+1)
+        f2 = SeqFeature(FeatureLocation(25,AfterPosition(40)), strand=+1)
+        self.add_join_feature([f1,f2])
+        f1 = SeqFeature(FeatureLocation(OneOfPosition([ExactPosition(107),
+                                                       ExactPosition(110)]),120),
+                        strand=+1)
+        f2 = SeqFeature(FeatureLocation(125,140), strand=+1)
+        f3 = SeqFeature(FeatureLocation(145,150), strand=+1)
+        self.add_join_feature([f1,f2,f3], ftype="CDS")
+        f1 = SeqFeature(FeatureLocation(BeforePosition(210),220), strand=-1)
+        f2 = SeqFeature(FeatureLocation(225,WithinPosition(240,4)), strand=-1)
+        self.add_join_feature([f1,f2], ftype="gene")
+        f1 = SeqFeature(FeatureLocation(AfterPosition(310),320), strand=-1)
+        f2 = SeqFeature(FeatureLocation(325,OneOfPosition([ExactPosition(340),
+                                                           ExactPosition(337)])),
+                        strand=-1)
+        f3 = SeqFeature(FeatureLocation(345,WithinPosition(350,5)), strand=-1)
+        self.add_join_feature([f1,f2,f3])
+        self.write_read_check()
+
 
     def test_before(self) :
         """Features: write/read simple before locations."""
