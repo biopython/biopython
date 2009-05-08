@@ -9,11 +9,14 @@ The latest news is at the top.
 
 ===================================================================
 
+Biopython no longer supports Python 2.3.  Currently we support Python 2.4,
+2.5 and 2.6.
+
 Our deprecated parsing infrastructure (Martel and Bio.Mindy) which had been
 removed.  This means Biopython no longer has any dependence on mxTextTools.
 
-A few cosmetic issues in GenomeDiagram with arrow sigils on circular diagrams
-have been fixed.
+A few cosmetic issues in GenomeDiagram with arrow sigils and labels on
+circular diagrams have been fixed.
 
 Bio.SeqIO will now write GenBank files with the feature table (previously
 omitted), and a couple of obscure errors parsing ambiguous locations have

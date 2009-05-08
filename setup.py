@@ -7,7 +7,7 @@ just type the command:
 python setup.py install
 
 For more in-depth instructions, see the installation section of the
-biopython manual, linked to from:
+Biopython manual, linked to from:
 
 http://biopython.org/wiki/Documentation
 
@@ -25,13 +25,10 @@ import sys
 import os
 
 # Make sure I have the right Python version.
-if sys.version_info[:2] < (2, 3):
-    print "Biopython requires Python 2.3 or better.  Python %d.%d detected" % \
+if sys.version_info[:2] < (2, 4):
+    print "Biopython requires Python 2.4 or better.  Python %d.%d detected" % \
           sys.version_info[:2]
     sys.exit(-1)
-elif sys.version_info[:2] == (2, 3):
-    print >> sys.stderr, \
-          "This should be the last release of Biopython for Python 2.3"
 
 from distutils.core import setup
 from distutils.core import Command

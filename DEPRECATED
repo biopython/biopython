@@ -2,6 +2,11 @@ This file provides documentation for modules in Biopython that have been moved
 or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
 
+Python 2.3
+==========
+No longer supported as of Release 1.51, having triggered a warning with
+Release 1.50, with a mention in the release notes for Release 1.49.
+
 Bio.Entrez.efetch and rettype="genbank"
 =======================================
 As of Easter 2009, the NCBI have stopped supporting the unofficial return type
