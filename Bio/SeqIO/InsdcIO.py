@@ -107,34 +107,64 @@ def _insdc_feature_position_string(pos, offset=0):
     else :
         raise ValueError("Expected a SeqFeature position object.")
 
-    
+
+def _insdc_location_string_ignoring_strand_and_subfeatures(feature) :
+    if feature.location.start==feature.location.end \
+    and isinstance(feature.location.end, SeqFeature.ExactPosition):
+        #Special case, 12^13 gets mapped to location 12:12
+        #(a zero length slice, meaning the point between two letters)
+        return "%i^%i" % (feature.location.end.position,
+                          feature.location.end.position+1)
+    else :
+        #Typical case, e.g. 12..15 gets mapped to 11:15
+        return _insdc_feature_position_string(feature.location.start, +1) \
+               + ".." + \
+               _insdc_feature_position_string(feature.location.end)
+
 def _insdc_feature_location_string(feature):
     """Build a GenBank/EMBL location string from a SeqFeature (PRIVATE)."""
-    if feature.sub_features :
-        #Recursive!  Typically a join
-        assert feature.location_operator != ""
-        location = "%s(%s)" % (feature.location_operator,
-                               ",".join([_insdc_feature_location_string(f) \
-                                         for f in feature.sub_features]))
-    else :
+    # Have a choice of how to show joins on the reverse complement strand,
+    # complement(join(1,10),(20,100)) vs join(complement(20,100),complement(1,10))
+    # Notice that the order of the entries gets flipped!
+    #
+    # GenBank and EMBL would both use now complement(join(1,10),(20,100))
+    # which is shorter at least.
+    #
+    # In the above situations, we expect the parent feature and the two children
+    # to all be marked as strand==-1, and in the order 0:10 then 19:100.
+    #
+    # Also need to consider dual-strand examples like these from the Arabidopsis
+    # thaliana chloroplast NC_000932: join(complement(69611..69724),139856..140650)
+    # gene ArthCp047, GeneID:844801 or its CDS which is even better due to a splice:
+    # join(complement(69611..69724),139856..140087,140625..140650)
+    # protein NP_051038.1 GI:7525057
+    #
+
+    if not feature.sub_features :
         #Non-recursive.
         #assert feature.location_operator == "", \
         #       "%s has no subfeatures but location_operator %s" \
         #       % (repr(feature), feature.location_operator)
-        if feature.location.start==feature.location.end \
-        and isinstance(feature.location.end, SeqFeature.ExactPosition):
-            #Special case, 12^13 gets mapped to location 12:12
-            #(a zero length slice, meaning the point between two letters)
-            location = "%i^%i" % (feature.location.end.position,
-                                  feature.location.end.position+1)
-        else :
-            #Typical case, e.g. 12..15 gets mapped to 11:15
-            location = _insdc_feature_position_string(feature.location.start, +1) \
-                       + ".." + \
-                       _insdc_feature_position_string(feature.location.end)
+        location = _insdc_location_string_ignoring_strand_and_subfeatures(feature)
+        if feature.strand == -1 :
+            location = "complement(%s)" % location
+        return location
+    # As noted above, treat reverse complement strand features carefully:
     if feature.strand == -1 :
-        location = "complement(%s)" % location
-    return location
+        for f in feature.sub_features :
+            assert f.strand == -1
+        return "complement(%s(%s))" \
+               % (feature.location_operator,
+                  ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(f) \
+                           for f in feature.sub_features))
+    #if feature.strand == +1 :
+    #    for f in feature.sub_features :
+    #        assert f.strand == +1
+    #This covers typical forward strand features, and also an evil mixed strand:
+    assert feature.location_operator != ""
+    return  "%s(%s)" % (feature.location_operator,
+                        ",".join([_insdc_feature_location_string(f) \
+                                  for f in feature.sub_features]))
 
 
 class GenBankWriter(SequentialSequenceWriter) :

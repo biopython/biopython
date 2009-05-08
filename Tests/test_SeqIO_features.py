@@ -184,6 +184,8 @@ class FeatureWriting(unittest.TestCase) :
         self.write_read_check()
 
     def make_join_feature(self, f_list, ftype="misc_feature"):
+        #NOTE - Does NOT reorder the sub-features (which you may
+        #want to do for reverse strand features...)
         strands = set(f.strand for f in f_list)
         if len(strands)==1 :
             strand = f_list[0].strand
@@ -215,11 +217,15 @@ class FeatureWriting(unittest.TestCase) :
         f1 = SeqFeature(FeatureLocation(210,220), strand=-1)
         f2 = SeqFeature(FeatureLocation(225,240), strand=-1)
         f = self.make_join_feature([f1,f2], ftype="gene")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(join(211..220,226..240))")
         self.record.features.append(f)
         f1 = SeqFeature(FeatureLocation(310,320), strand=-1)
         f2 = SeqFeature(FeatureLocation(325,340), strand=-1)
         f3 = SeqFeature(FeatureLocation(345,350), strand=-1)
         f = self.make_join_feature([f1,f2,f3], "CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(join(311..320,326..340,346..350))")
         self.record.features.append(f)
         self.write_read_check()
 
@@ -243,6 +249,8 @@ class FeatureWriting(unittest.TestCase) :
         f1 = SeqFeature(FeatureLocation(BeforePosition(210),220), strand=-1)
         f2 = SeqFeature(FeatureLocation(225,WithinPosition(240,4)), strand=-1)
         f = self.make_join_feature([f1,f2], "gene")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(join(<211..220,226..(240.244)))")
         self.record.features.append(f)
         f1 = SeqFeature(FeatureLocation(AfterPosition(310),320), strand=-1)
         f2 = SeqFeature(FeatureLocation(325,OneOfPosition([ExactPosition(340),
@@ -250,6 +258,8 @@ class FeatureWriting(unittest.TestCase) :
                         strand=-1)
         f3 = SeqFeature(FeatureLocation(345,WithinPosition(350,5)), strand=-1)
         f = self.make_join_feature([f1,f2,f3], "CDS")
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(join(>311..320,326..one-of(340,337),346..(350.355)))")
         self.record.features.append(f)
         self.write_read_check()
 
