@@ -73,6 +73,7 @@ Timeline
     Code:
 
     - Wrapper function for loading local files by name [*__init__.read()*]
+    - Simple base class for all phyloXML elements [*Parser.PhyloElement*]
 
     Unit tests:
 
@@ -89,11 +90,6 @@ Timeline
 :6/1:
     Parsing from file:
 
-    - Write a simple base class for all phyloXML elements ::
-
-        class PhyloElement(object): ...
-
-
     - Create a specific exception to raise for invalid phyloXML files ::
 
         class PhyloXMLError(Exception): pass
@@ -101,9 +97,11 @@ Timeline
 :6/8:
     Map nodes to classes:
 
+    - Locate existing Biopython classes to reuse as tree elements
+
     - Write classes corresponding to "core" XML elements
 
-    - Instantiate from XML nodes (sax events or etree elements)
+    - Instantiate from XML nodes (etree "end" events)
 
 :6/15:
     Verification and documentation:
