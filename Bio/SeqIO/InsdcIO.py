@@ -95,9 +95,9 @@ def _insdc_feature_position_string(pos, offset=0):
         return "(%i^%i)" % (pos.position + offset,
                             pos.position + pos.extension + offset)
     elif isinstance(pos, SeqFeature.BeforePosition) :
-        return ">%i" % (pos.position + offset)
-    elif isinstance(pos, SeqFeature.AfterPosition) :
         return "<%i" % (pos.position + offset)
+    elif isinstance(pos, SeqFeature.AfterPosition) :
+        return ">%i" % (pos.position + offset)
     elif isinstance(pos, SeqFeature.OneOfPosition):
         return "one-of(%s)" \
                % ",".join([_insdc_feature_position_string(p,offset) \
