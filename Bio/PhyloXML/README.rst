@@ -30,6 +30,7 @@ Tier 2:
     domain_architecture
     duplications
     events
+    scientific_name
     sequence
     speciations
 
@@ -72,22 +73,14 @@ Timeline
     Unit tests:
 
     - no-op parsing of small example phyloXML files with xml.etree
+    - no-op parsing of a large zipped phyloXML file
+    - basic loading of the root node into a Python object
+    - loading core elements
 
     Documentation (Biopython wiki):
 
     - Explain xml.etree, list 3rd-party equivalents for Py2.4
 
-:5/4:
-    - Start writing unit tests for basic XML parsing
-
-:5/11:
-    Coding should be underway now.
-
-    - Write unit tests that fail:
-
-        - no-op parsing of a large zipped phyloXML file
-        - basic loading of the root node into a Python object
-        - loading core elements
 
 :6/1:
     Parsing from file:
@@ -98,7 +91,7 @@ Timeline
 
     - Write an easy wrapper function for loading local files by name ::
 
-        def load(path): ...
+        def read(path): ...
 
     - Create a specific exception to raise for invalid phyloXML files ::
 
