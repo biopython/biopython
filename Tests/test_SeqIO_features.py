@@ -15,7 +15,8 @@ from Bio import SeqIO
 from Bio.Seq import Seq, UnknownSeq, MutableSeq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition, \
-                           BeforePosition, AfterPosition, OneOfPosition
+                           BeforePosition, AfterPosition, OneOfPosition, \
+                           WithinPosition
 from StringIO import StringIO
 
 #Top level function as this makes it easier to use for debugging:
@@ -162,6 +163,38 @@ class FeatureWriting(unittest.TestCase) :
         self.record.features.append(f)
         self.write_read_check()
 
+    def add_join_feature(self, f_list, ftype="misc_feature"):
+        strands = set(f.strand for f in f_list)
+        if len(strands)==1 :
+            strand = f_list[0].strand
+        else :
+            strand = None
+        for f in f_list :
+            f.type=ftype
+        jf = SeqFeature(FeatureLocation(f_list[0].location.start,
+                                        f_list[-1].location.end),
+                        type=ftype, strand=strand, location_operator="join")
+        jf.sub_features = f_list
+        self.record.features.append(jf)
+        
+    def test_join(self):
+        """Features: write/read simple join locations."""
+        f1 = SeqFeature(FeatureLocation(10,20), strand=+1)
+        f2 = SeqFeature(FeatureLocation(25,40), strand=+1)
+        self.add_join_feature([f1,f2])
+        f1 = SeqFeature(FeatureLocation(110,120), strand=+1)
+        f2 = SeqFeature(FeatureLocation(125,140), strand=+1)
+        f3 = SeqFeature(FeatureLocation(145,150), strand=+1)
+        self.add_join_feature([f1,f2,f3], ftype="CDS")
+        f1 = SeqFeature(FeatureLocation(210,220), strand=-1)
+        f2 = SeqFeature(FeatureLocation(225,240), strand=-1)
+        self.add_join_feature([f1,f2], ftype="gene")
+        f1 = SeqFeature(FeatureLocation(310,320), strand=-1)
+        f2 = SeqFeature(FeatureLocation(325,340), strand=-1)
+        f3 = SeqFeature(FeatureLocation(345,350), strand=-1)
+        self.add_join_feature([f1,f2,f3])
+        self.write_read_check()
+
     def test_before(self) :
         """Features: write/read simple before locations."""
         f = SeqFeature(FeatureLocation(BeforePosition(5),10), \
@@ -230,6 +263,29 @@ class FeatureWriting(unittest.TestCase) :
         self.record.features.append(f)
         self.write_read_check()
 
+    def test_within(self):
+        """Features: write/read simple within locations."""
+        f = SeqFeature(FeatureLocation(WithinPosition(2,6),10), \
+                       strand=+1, type="CDS")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(WithinPosition(12,6),
+                                       WithinPosition(20,8)), \
+                       strand=+1, type="CDS")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(25,WithinPosition(30,3)), \
+                       strand=+1, type="misc_feature")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(WithinPosition(35,4),40), \
+                       strand=+1, type="rRNA")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(WithinPosition(45,2),
+                                       WithinPosition(50,3)), \
+                       strand=+1, type="repeat_region")
+        self.record.features.append(f)
+        f = SeqFeature(FeatureLocation(55,WithinPosition(60,5)), \
+                       strand=+1, type="CDS")
+        self.record.features.append(f)
+        self.write_read_check()
         
 class NC_000932(unittest.TestCase):
     #This includes an evil dual strand gene (trans-splicing!)
