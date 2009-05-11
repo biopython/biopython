@@ -3467,6 +3467,7 @@ If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see 
 >>> from Bio import Entrez, SeqIO
 >>> handle = Entrez.efetch(db="nucleotide", id="186972394",rettype="gb")
 >>> record = SeqIO.read(handle, "genbank")
+>>> handle.close()
 >>> print record
 ID: EU490707.1
 Name: EU490707
@@ -3503,6 +3504,7 @@ To get the output in XML format, which you can parse using the \verb+Bio.Entrez.
 >>> from Bio import Entrez
 >>> handle = Entrez.efetch(db="nucleotide", id="186972394", retmode="xml")
 >>> record = Entrez.read(handle)
+>>> handle.close()
 >>> record[0]["GBSeq_definition"] 
 'Selenipedium aequinoctiale maturase K (matK) gene, partial cds; chloroplast'
 >>> record[0]["GBSeq_source"] 
@@ -3513,70 +3515,69 @@ If you want to perform a search with \verb|Bio.Entrez.esearch()|, and then downl
 
 \section{ELink: Searching for related items in NCBI Entrez}
 
-ELink, available from Biopython as \verb+Bio.Entrez.elink()+, can be used to find related items in the NCBI Entrez databases. For example, let's try to find articles related to the one Harry Mangalam wrote in 2002 about the BioPerl, Biopython, and BioJava projects (Briefings in Bioinformatics, 3(3): 296-302). The PubMed ID of this article is 12230038. Now we use \verb+Bio.Entrez.elink+ to find all related items to this article:
+ELink, available from Biopython as \verb+Bio.Entrez.elink()+, can be used to find related items in the NCBI Entrez databases. For example, let's try to find articles related to the Biopython application note published in \textit{Bioinformatics} in 2009. The PubMed ID of this article is 12230038. Now we use \verb+Bio.Entrez.elink+ to find all related items to this article:
 
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"
->>> pmid = "12230038"
->>> handle = Entrez.elink(dbfrom='pubmed', id=pmid)
+>>> pmid = "19304878"
+>>> handle = Entrez.elink(dbfrom="pubmed", id=pmid)
 >>> record = Entrez.read(handle)
+>>> handle.close()
 \end{verbatim}
 
 The \verb+record+ variable consists of a python list, one for each database in which we searched. Since we specified only one PubMed ID to search for, \verb+record+ contains only one item. This item is a dictionary containing information about our search term, as well as all the related items that were found:
 
 \begin{verbatim}
->>> record[0]['DbFrom']
+>>> record[0]["DbFrom"]
 'pubmed'
->>> record[0]['IdList']
-['12230038']
+>>> record[0]["IdList"]
+['19304878']
 \end{verbatim}
 
-The \verb+"LinkSetDb"+ key contains the search results, stored as a list consisting of one item for each target database. In our search results, we only find hits in the PubMed database:
+The \verb+"LinkSetDb"+ key contains the search results, stored as a list consisting of one item for each target database. In our search results, we only find hits in the PubMed database (although sub-diveded into categories):
 
 \begin{verbatim}
->>> len(record[0]['LinkSetDb'])
-1
->>> record[0]['LinkSetDb'][0]['DbTo']
-'pubmed'
+>>> len(record[0]["LinkSetDb"])
+5
+>>> for linksetdb in record[0]['LinkSetDb'] :
+...     print linksetdb["DbTo"], linksetdb["LinkName"], len(linksetdb["Link"])
+... 
+pubmed pubmed_pubmed 110
+pubmed pubmed_pubmed_combined 6
+pubmed pubmed_pubmed_five 6
+pubmed pubmed_pubmed_reviews 5
+pubmed pubmed_pubmed_reviews_five 5
 \end{verbatim}
 
-The actual search results are stored as under the \verb+"Link"+ key. In total, 134 items were found:
-
-\begin{verbatim}
->>> len(record[0]['LinkSetDb'][0]['Link'])
-134
-\end{verbatim}
-
+The actual search results are stored as under the \verb+"Link"+ key. In total, 110 items were found under
+standard search.
 Let's now at the first search result:
 \begin{verbatim}
 >>> record[0]['LinkSetDb'][0]['Link'][0]
-{u'Score': '2147483647', u'Id': '12230038'}
+{u'Id': '19304878'}
 \end{verbatim}
 
-This is the article we searched for, which doesn't help us much, so let's look at the second search result:
+\noindent This is the article we searched for, which doesn't help us much, so let's look at the second search result:
 
 \begin{verbatim}
 >>> record[0]['LinkSetDb'][0]['Link'][1]
-{u'Score': '36245843', u'Id': '17316423'}
+{u'Id': '14630660'}
 \end{verbatim}
 
-This paper, with PubMed ID 17316423, is most closely related to the paper by Harry Mangalam. If you look up this paper in PubMed, you'll see that this is a paper published in BMC Bioinformatics about the Bioclipse software project.
+\noindent This paper, with PubMed ID 17316423, is about the Biopython PDB parser.
 
 We can use a loop to print out all PubMed IDs:
 \begin{verbatim}
 >>> for link in record[0]["LinkSetDb"][0]['Link'] :
 ...     print link
 ...
-{u'Score': '2147483647', u'Id': '12230038'}
-{u'Score': '36245843', u'Id': '17316423'}
-{u'Score': '34527046', u'Id': '18174185'}
-{u'Score': '33170001', u'Id': '11928498'}
-{u'Score': '32284469', u'Id': '17441614'}
-{u'Score': '31719319', u'Id': '17291351'}
-{u'Score': '31123154', u'Id': '15572471'}
-{u'Score': '31002490', u'Id': '16539535'}
-{u'Score': '30946408', u'Id': '17384428'}
+{u'Id': '19304878'}
+{u'Id': '14630660'}
+{u'Id': '18689808'}
+{u'Id': '17121776'}
+{u'Id': '16377612'}
+{u'Id': '12368254'}
 ......
 \end{verbatim}
 
