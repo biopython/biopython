@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 7 May 2009 (Biopython 1.50+)}
+\date{Last Update -- 11 May 2009 (Biopython 1.50+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -3275,9 +3275,9 @@ To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For exampl
 >>> handle = Entrez.esearch(db="pubmed", term="biopython")
 >>> record = Entrez.read(handle)
 >>> record["IdList"]
-['16403221', '16377612', '14871861', '14630660', '12230038']
+['19304878', '18606172', '16403221', '16377612', '14871861', '14630660', '12230038']
 \end{verbatim}
-In this output, you see five PubMed IDs (16403221, 16377612, 14871861, 14630660, 12230038), which can be retrieved by EFetch (see section \ref{sec:efetch}).
+In this output, you see seven PubMed IDs (including 19304878 which is the PMID for the Biopython application notes), which can be retrieved by EFetch (see section \ref{sec:efetch}).
 
 You can also use ESearch to search GenBank. Here we'll do a quick search for the \emph{matK} gene in \emph{Cypripedioideae} orchids:
 
@@ -3287,9 +3287,13 @@ You can also use ESearch to search GenBank. Here we'll do a quick search for the
 >>> record["Count"]
 '25'
 >>> record["IdList"]
-['186972394', '186972384', '186972382', '186972378', ..., '61585484']
+['126789333', '37222967', '37222966', '37222965', ..., '61585492']
 \end{verbatim}
-Each of the IDs (186972394, 186972384, 186972382, \ldots) is a GenBank identifier. See section~\ref{sec:efetch} for information on how to actually download these GenBank records.
+
+\noindent Each of the IDs (126789333, 37222967, 37222966, \ldots) is a GenBank identifier.
+See section~\ref{sec:efetch} for information on how to actually download these GenBank records.
+
+Note that instead of a species name like \texttt{Cypripedioideae[Orgn]}, you can restrict the search using an NCBI taxon identifier, here this would be \texttt{txid158330[Orgn]}.  This isn't currently documented on the ESearch help page - the NCBI explained this in reply to an email query.  You can often deduce the search term formatting by playing with the Entrez web interface.  For example, including \texttt{complete[prop]} in a genome search restricts to just completed genomes.
 
 As a final example, let's get a list of computational journal titles:
 \begin{verbatim}
@@ -3327,14 +3331,14 @@ Let's look at a simple example to see how EPost works -- uploading some PubMed i
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
->>> id_list = ['18606172', '16403221', '16377612', '14871861', '14630660']
+>>> id_list = ["19304878", "18606172", "16403221", "16377612", "14871861", "14630660"]
 >>> print Entrez.epost("pubmed", id=",".join(id_list)).read()
 <?xml version="1.0"?>
 <!DOCTYPE ePostResult PUBLIC "-//NLM//DTD ePostResult, 11 May 2002//EN"
  "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/ePost_020511.dtd">
 <ePostResult>
 	<QueryKey>1</QueryKey>
-	<WebEnv>06QtR6pVc1VZEbFZYgmSORUbB71DSx9I5N6bFCcW46LpYQ1Y...0002SID</WebEnv>
+	<WebEnv>NCID_01_206841095_130.14.22.101_9001_1242061629</WebEnv>
 </ePostResult>
 \end{verbatim}
 \noindent The returned XML includes two important strings, \verb|QueryKey| and \verb|WebEnv| which together define your history session.
@@ -3342,7 +3346,7 @@ You would extract these values for use with another Entrez call such as EFetch:
 \begin{verbatim}
 from Bio import Entrez
 Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
-id_list = ['18606172', '16403221', '16377612', '14871861', '14630660']
+id_list = ["19304878", "18606172", "16403221", "16377612", "14871861", "14630660"]
 search_results = Entrez.read(Entrez.epost("pubmed", id=",".join(id_list)))
 webenv = search_results["WebEnv"]
 query_key = search_results["QueryKey"] 
@@ -3688,7 +3692,7 @@ Instead of parsing Medline records stored in files, you can also parse Medline r
 >>> handle = Entrez.esearch(db="pubmed",term="biopython")
 >>> record = Entrez.read(handle)
 >>> record["IdList"]
-['18606172', '16403221', '16377612', '14871861', '14630660', '12230038']
+['19304878', '18606172', '16403221', '16377612', '14871861', '14630660', '12230038']
 \end{verbatim}
 We now use \verb+Bio.Entrez.efetch+ to download these Medline records:
 \begin{verbatim}
@@ -3701,6 +3705,7 @@ Here, we specify \verb+rettype="medline", retmode="text"+ to obtain the Medline 
 >>> records = Medline.parse(handle)
 >>> for record in records:
 ...     print record["AU"]
+['Cock PJ', 'Antao T', 'Chang JT', 'Chapman BA', 'Cox CJ', 'Dalke A', ..., 'de Hoon MJ']
 ['Munteanu CR', 'Gonzalez-Diaz H', 'Magalhaes AL']
 ['Casbon JA', 'Crooks GE', 'Saqi MA']
 ['Pritchard L', 'White JA', 'Birch PR', 'Toth IK']
@@ -3716,14 +3721,21 @@ For comparison, here we show an example using the XML format:
 >>> records = Entrez.read(handle)
 >>> for record in records:
 ...     print record["MedlineCitation"]["Article"]["ArticleTitle"]
-Enzymes/non-enzymes classification model complexity based on composition, sequence, 3D
- and topological indices.
+Biopython: freely available Python tools for computational molecular biology and
+ bioinformatics.
+Enzymes/non-enzymes classification model complexity based on composition, sequence,
+ 3D and topological indices.
 A high level interface to SCOP and ASTRAL implemented in python.
 GenomeDiagram: a python package for the visualization of large-scale genomic data.
 Open source clustering software.
 PDB file parser and structure class implemented in Python.
 The Bio* toolkits--a brief overview.
 \end{verbatim}
+
+Note that in post of these examples, for simplicity we have naively combined ESearch and EFetch.
+In this situation, the NCBI would expect you to use their history feature,
+as illustrated in Section~\ref{sec:entrez-webenv}.
+
 
 \subsection{Parsing GEO records}
 
@@ -4120,7 +4132,7 @@ AF191659, length 894, with 3 features
 AF191658, length 896, with 3 features
 \end{verbatim}
 
-Using these automated query retrieval functionality is a big plus over doing things by hand.   Although the module should obey the NCBI's three-second rule, the NCBI have other recommendations like avoiding peak hours.  See Section~\ref{sec:entrez-guidelines}.
+Using these automated query retrieval functionality is a big plus over doing things by hand.   Although the module should obey the NCBI's max three queries per second rule, the NCBI have other recommendations like avoiding peak hours.  See Section~\ref{sec:entrez-guidelines}.
 In particular, please note that for simplicity, this example does not use the WebEnv history feature.  You should use this for any non-trivial search and download work, see Section~\ref{sec:entrez-webenv}.
 
 Finally, if plan to repeat your analysis, rather than downloading the files from the NCBI and parsing them immediately (as shown in this example), you should just download the records \emph{once} and save them to your hard disk, and then parse the local file.
@@ -4185,13 +4197,13 @@ However, the approved approach is to run the search with the history
 feature.  Then, we can fetch the results by reference to the search
 results - which the NCBI can anticipate and cache.
 
-To do this, you call \verb|Bio.Entrez.esearch()| as normal, but with the
+To do this, call \verb|Bio.Entrez.esearch()| as normal, but with the
 additional argument of \verb|usehistory="y"|,
 
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "history.user@example.com"
->>> search_handle = Entrez.esearch(db="nucleotide",term="Opuntia and rpl16",
+>>> search_handle = Entrez.esearch(db="nucleotide",term="Opuntia[orgn] and rpl16",
                                    usehistory="y")
 >>> search_results = Entrez.read(search_handle)
 >>> search_handle.close()
@@ -7333,7 +7345,7 @@ record = SeqIO.read(open("NC_005816.gb"),"genbank")
 table = 11
 min_pro_len = 100
 
-def find_orfs(seq, trans_table, min_protein_length) :
+def find_orfs_with_trans(seq, trans_table, min_protein_length) :
     answer = []
     seq_len = len(seq)
     for strand, nuc in [(+1, seq), (-1, seq.reverse_complement())] :
@@ -7359,7 +7371,7 @@ def find_orfs(seq, trans_table, min_protein_length) :
     answer.sort()
     return answer
 
-orf_list = find_orfs(record.seq, table, min_pro_len)
+orf_list = find_orfs_with_trans(record.seq, table, min_pro_len)
 for start, end, strand, pro in orf_list :
     print "%s...%s - length %i, strand %i, %i:%i" \
           % (pro[:30], pro[-3:], len(pro), strand, start, end)
