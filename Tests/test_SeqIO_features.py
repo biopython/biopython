@@ -505,6 +505,10 @@ class NC_005816(NC_000932):
 class TestWriteRead(unittest.TestCase) :
     """Test can write and read back files."""
 
+    def test_NC_000932(self) :
+        """Write and read back NC_000932.gb"""
+        write_read(os.path.join("GenBank", "NC_000932.gb"), "gb", "gb")
+
     def test_NC_005816(self) :
         """Write and read back NC_005816.gb"""
         write_read(os.path.join("GenBank", "NC_005816.gb"), "gb", "gb")
