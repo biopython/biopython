@@ -10,7 +10,6 @@ You are expected to use this module via the Bio.AlignIO functions (or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
 """
 
-
 from Bio.Align.Generic import Alignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
@@ -35,7 +34,6 @@ class ClustalWriter(SequentialAlignmentWriter) :
         else :
             #e.g. 1.81 or 1.83
             output = "CLUSTAL X (%s) multiple sequence alignment\n\n\n" % version
-        
         
         cur_char = 0
         max_length = len(alignment._records[0].seq)
@@ -77,11 +75,9 @@ class ClustalWriter(SequentialAlignmentWriter) :
 
 class ClustalIterator(AlignmentIterator) :
     """Clustalw alignment iterator."""
-    
+
     def next(self) :
-
         handle = self.handle
-
         try :
             #Header we saved from when we were parsing
             #the previous alignment.
@@ -91,9 +87,13 @@ class ClustalIterator(AlignmentIterator) :
             line = handle.readline()
         if not line:
             return None
-        if line[:7] != 'CLUSTAL':
-            raise ValueError("Did not find CLUSTAL header")
 
+        #Whitelisted headers we know about
+        known_headers = ['CLUSTAL', 'PROBCONS', 'MUSCLE']
+        if line.strip().split()[0] not in known_headers:
+            raise ValueError("%s is not a known CLUSTAL header: %s" % \
+                             (line.strip().split()[0],
+                              ", ".join(known_headers)))
 
         # find the clustal version in the header line
         version = None
@@ -102,7 +102,7 @@ class ClustalIterator(AlignmentIterator) :
                 word = word[1:-1]
             if word[0] in '0123456789':
                 version = word
-        
+                break
 
         #There should be two blank lines after the header line
         line = handle.readline()
@@ -185,7 +185,7 @@ class ClustalIterator(AlignmentIterator) :
                 if not line : break # end of file
             if not line : break # end of file
 
-            if line[:7] == 'CLUSTAL':
+            if line.split(None,1)[0] in known_headers:
                 #Found concatenated alignment.
                 done = True
                 self._header = line
