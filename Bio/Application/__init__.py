@@ -245,7 +245,10 @@ class AbstractCommandline(object):
         """Get a commandline option value."""
         for parameter in self.parameters:
             if name in parameter.names:
-                return parameter.value
+                if isinstance(parameter, _Switch) :
+                    return parameter.is_set
+                else :
+                    return parameter.value
         raise ValueError("Option name %s was not found." % name)
 
     def _clear_parameter(self, name) :

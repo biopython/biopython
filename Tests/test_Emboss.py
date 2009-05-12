@@ -589,6 +589,34 @@ class PairwiseAlignmentTests(unittest.TestCase):
         assert child.stderr.read() == ""
         assert 0 == child.wait()
 
+    def test_water_needs_output(self):
+        """water without output file or stdout/filter should give error."""
+        cline = WaterCommandline(cmd=exes["water"],
+                                 asequence="asis:ACCCGGGCGCGGT",
+                                 bsequence="asis:ACCCGAGCGCGGT",
+                                 gapopen=10,
+                                 gapextend=0.5,
+                                 auto=True)
+        self.assert_(cline.auto)
+        self.assert_(not cline.stdout)
+        self.assert_(not cline.filter)
+        self.assertEqual(cline.outfile, None)
+        self.assertRaises(ValueError, str, cline)
+
+    def test_needle_needs_output(self):
+        """needle without output file or stdout/filter should give error."""
+        cline = NeedleCommandline(cmd=exes["needle"],
+                                 asequence="asis:ACCCGGGCGCGGT",
+                                 bsequence="asis:ACCCGAGCGCGGT",
+                                 gapopen=10,
+                                 gapextend=0.5,
+                                 auto=True)
+        self.assert_(cline.auto)
+        self.assert_(not cline.stdout)
+        self.assert_(not cline.filter)
+        self.assertEqual(cline.outfile, None)
+        self.assertRaises(ValueError, str, cline)
+
 #Top level function as this makes it easier to use for debugging:
 def emboss_translate(sequence, table=None, frame=None) :
     """Call transeq, returns protein sequence as string."""

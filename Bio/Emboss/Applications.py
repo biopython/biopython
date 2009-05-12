@@ -81,6 +81,15 @@ class _EmbossCommandLine(AbstractCommandline) :
             self.parameters = extra_parameters
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
+    def __str__(self) :
+        #Check the outfile, filter, or stdout option has been set.
+        #We can't simply do this via the required flag for the outfile
+        #output - this seems the simplest solution.
+        if not (self.outfile or self.filter or self.stdout) :
+            raise ValueError("You must either set outfile (output filename), "
+                             "or enable filter or stdout (output to stdout).")
+        return AbstractCommandline.__str__(self)
+
 
 class Primer3Commandline(_EmbossCommandLine):
     """Commandline object for the Primer3 interface from EMBOSS.
