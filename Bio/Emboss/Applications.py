@@ -17,7 +17,8 @@ class _EmbossCommandLine(AbstractCommandline) :
 
     This is provided for subclassing, it deals with shared options
     common to all the EMBOSS tools:
-    
+     - outfile            Output filename
+
     General qualifiers:
      - auto               Turn off prompts
      - stdout             Write standard output
@@ -34,9 +35,9 @@ class _EmbossCommandLine(AbstractCommandline) :
      - die                Report dying program messages
     """
     def __init__(self, cmd="eprimer3", **kwargs):
-        #Insert extra parameters - at the start in case there are
-        #any arguments which must come last:
-        self.parameters = [\
+        extra_parameters = [\
+           _Option(["-outfile","outfile"], ["output", "file"], None, 0,
+                   "Output filename"),
            _Switch(["-auto","auto"], [],
                    """Turn off prompts.
            
@@ -70,7 +71,14 @@ class _EmbossCommandLine(AbstractCommandline) :
                    "Report errors."),
            _Switch(["-die","die"], [],
                    "Report dying program messages."),
-            ] + self.parameters
+            ]
+        try :
+            #Insert extra parameters - at the start just in case there
+            #are any arguments which must come last:
+            self.parameters = extra_parameters + self.parameters
+        except AttributeError:
+            #Should we raise an error?  The subclass should have set this up!
+            self.parameters = extra_parameters
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
@@ -81,8 +89,6 @@ class Primer3Commandline(_EmbossCommandLine):
         self.parameters = \
           [_Option(["-sequence","sequence"], ["input"], None, 1,
                    "Sequence to choose primers from"),
-           _Option(["-outfile","outfile"], ["output", "file"], None, 0,
-                   "Output file name"),
            _Option(["-task","task"], ["input"], None, 0),
            _Option(["-numreturn","numreturn"], ["input"], None, 0),
            _Option(["-includedregion","includedregion"], ["input"], None, 0),
@@ -144,12 +150,26 @@ class PrimerSearchCommandline(_EmbossCommandLine):
           _Option(["-primers","primers"], ["input", "file"], None, 1,
                   "File containing the primer pairs to search for."),
           #Including -out and out for backwards compatibility only!
-          _Option(["-outfile","-out","out","outfile"], ["output", "file"], None, 0,
-                  "Name of the output file."),
+          #_Option(["-outfile","-out","out","outfile"], ["output", "file"], None, 0,
+          #        "Name of the output file."),
           _Option(["-mismatchpercent","mismatchpercent"], ["input"], None, 1,
                   "Allowed percentage mismatch.")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
+    def set_parameter(self, name, value=None) :
+        #Due to a historical inconsistency, the PrimerSearchCommandline
+        #wrapper used -out and out, rather than -output and output like all
+        #the other EMBOSS wrappers.  I want to implement this paramter via
+        #the common _EmbossCommandLine base class, hence this hack for
+        #backwards compatibility:
+        if name in ["out", "-out"] :
+            import warnings
+            warnings.warn('Aliases "-out" and "out" are deprecated, please use '
+                          'either "-outfile" or "outfile" with set_parameter '
+                          'instead, or use the outfile property.',
+                          DeprecationWarning)
+            name = "outfile"
+        _EmbossCommandLine.set_parameter(self, name, value)
 
 class EProtDistCommandline(_EmbossCommandLine):
     """Commandline object for the eprotdist program from EMBOSS.
@@ -160,8 +180,6 @@ class EProtDistCommandline(_EmbossCommandLine):
         self.parameters = \
          [_Option(["-msf","msf"], ["input"], None, 1,
                   "File containing sequences"),
-          _Option(["-outfile","outfile"], ["output"], None, 0,
-                  "Output file name"),
           _Option(["-method","method"], ["input"], None, 1,
                   "Choose the method to use"),
           _Option(["-categ","categ"], ["input"], None, 0,
@@ -198,8 +216,6 @@ class ENeighborCommandline(_EmbossCommandLine):
         self.parameters = \
          [_Option(["-infile","infile"], ["input"], None, 1,
                   "infile value"),
-          _Option(["-outfile","outfile"], ["output"], None, 0,
-                  "Output file name"),
           _Option(["-trout","trout"], ["input"], None, 1,
                   "Create a tree file"),
           _Option(["-treefile","treefile"], ["input"], None, 1,
@@ -232,7 +248,6 @@ class ENeighborCommandline(_EmbossCommandLine):
                   "Print indications of progress of run")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
-
 class EProtParsCommandline(_EmbossCommandLine):
     """Commandline object for the eprotpars program from EMBOSS.
 
@@ -242,8 +257,6 @@ class EProtParsCommandline(_EmbossCommandLine):
         self.parameters = \
          [_Option(["-msf","msf"], ["input", "file"], None, 1,
                   "Sequences file to be read in"),
-          _Option(["-outfile","outfile"], ["output", "file"], None, 0,
-                  "Output file"),
           _Option(["-besttree","besttree"], ["input"], None, 0,
                   "Search for the best tree"),
           _Option(["-random","random"], ["input"], None, 0,
@@ -292,8 +305,6 @@ class EConsenseCommandline(_EmbossCommandLine):
         self.parameters = \
          [_Option(["-infile","infile"], ["input", "file"], None, 1,
                   "file to read in (New Hampshire standard form)"),
-          _Option(["-outfile","outfile"], ["output", "file"], None, 0,
-                  "Output file name"),
           _Option(["-notrout","notrout"], ["input"], None, 0,
                   "Do not create a tree file"),
           _Option(["-trout","trout"], ["input"], None, 0,
@@ -320,7 +331,6 @@ class EConsenseCommandline(_EmbossCommandLine):
                   "Print out the sets of species")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
-
 class ESeqBootCommandline(_EmbossCommandLine):
     """Commandline object for the eseqboot program from EMBOSS.
 
@@ -330,8 +340,6 @@ class ESeqBootCommandline(_EmbossCommandLine):
         self.parameters = \
          [_Option(["-datafile","datafile"], ["input", "file"], None, 1,
                   "Input file"),
-          _Option(["-outfile","outfile"], ["output", "file"], None, 0,
-                  "Output file name"),
           _Option(["-randseed","randseed"], ["input"], None, 1,
                   "Random number seed (must be odd)"),
           _Option(["-method","method"], ["input"], None, 1,
@@ -352,7 +360,6 @@ class ESeqBootCommandline(_EmbossCommandLine):
                   "Print indications of progress of run")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
-
 class WaterCommandline(_EmbossCommandLine):
     """Commandline object for the water program from EMBOSS.
     """
@@ -366,8 +373,6 @@ class WaterCommandline(_EmbossCommandLine):
                  "Gap open penalty"),
          _Option(["-gapextend","gapextend"], ["input"], None, 1,
                  "Gap extension penalty"),
-         _Option(["-outfile","outfile"], ["output", "file"], None, 0,
-                 "Output file for the alignment"),
          _Option(["-datafile","datafile"], ["input", "file"], None, 0,
                  "Matrix file"),
          _Option(["-similarity","similarity"], ["input"], None, 0,
@@ -394,8 +399,6 @@ class NeedleCommandline(_EmbossCommandLine):
                  "Gap open penalty"),
          _Option(["-gapextend","gapextend"], ["input"], None, 1,
                  "Gap extension penalty"),
-         _Option(["-outfile","outfile"], ["output", "file"], None, 0,
-                 "Output file for the alignment"),
          _Option(["-datafile","datafile"], ["input", "file"], None, 0,
                  "Matrix file"),
          _Option(["-similarity","similarity"], ["input"], None, 0,
@@ -420,8 +423,6 @@ class FuzznucCommandline(_EmbossCommandLine):
                  "Search pattern, using standard IUPAC one-letter codes"),
          _Option(["-mismatch","mismatch"], ["input"], None, 1,
                  "Number of mismatches"),
-         _Option(["-outfile","outfile"], ["output", "file"], None, 0,
-                 "Output report file name"),
          _Option(["-complement","complement"], ["input"], None, 0,
                  "Search complementary strand"),
          _Option(["-rformat","rformat"], ["input"], None, 0,
@@ -438,8 +439,6 @@ class Est2GenomeCommandline(_EmbossCommandLine):
                  "EST sequence(s)"),
          _Option(["-genome","genome"], ["input"], None, 1,
                  "Genomic sequence"),
-         _Option(["-outfile","outfile"], ["output", "file"], None, 0,
-                 "Output file name"),
          _Option(["-match","match"], ["input"], None, 0, 
                  "Score for matching two bases"),
          _Option(["-mismatch","mismatch"], ["input"], None, 0,
@@ -488,8 +487,6 @@ class ETandemCommandline(_EmbossCommandLine):
                  "Minimum repeat size"),
          _Option(["-maxrepeat","maxrepeat"], ["input"], None, 1,
                  "Maximum repeat size"),
-         _Option(["-outfile","outfile"], ["output", "file"] , None, 0,
-                 "Output report file name"),
          _Option(["-threshold","threshold"], ["input"], None, 0,
                  "Threshold score"),
          _Option(["-mismatch","mismatch"], ["input"], None, 0,
@@ -516,8 +513,6 @@ class EInvertedCommandline(_EmbossCommandLine):
                  "Match score"),
          _Option(["-mismatch","mismatch"], ["input"], None, 1,
                    "Mismatch score"),
-         _Option(["-outfile","outfile"], ["output", "file"] , None, 0,
-                 "Output report file name"),
          _Option(["-maxrepeat","maxrepeat"], ["input"], None, 0,
                  "Maximum separation between the start and end of repeat"),
          ]
@@ -541,8 +536,6 @@ class PalindromeCommandline(_EmbossCommandLine):
                  "Number of mismatches allowed"),
          _Option(["-overlap","overlap"], ["input"], None, 1,
                  "Report overlapping matches"),
-         _Option(["-outfile","outfile"], ["output", "file"] , None, 0,
-                 "Output report file name"),
          ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
@@ -574,8 +567,6 @@ class DiffseqCommandline(_EmbossCommandLine):
                  "Second sequence to compare"),
          _Option(["-wordsize","wordsize"], ["input"], None, 1,
                  "Word size to use for comparisons (10 default)"),
-         _Option(["-outfile","outfile"], ["output", "file"], None, 0,
-                "Output report file name"),
          _Option(["-aoutfeat","aoutfeat"], ["output", "file"], None, 1,
                 "File for output of first sequence's features"),
          _Option(["-boutfeat","boutfeat"], ["output", "file"], None, 1,
@@ -593,8 +584,6 @@ class IepCommandline(_EmbossCommandLine):
         self.parameters = [
          _Option(["-sequence","sequence"], ["input", "file"], None, 1,
                 "Protein sequence(s) filename"),
-         _Option(["-outfile","outfile"], ["output", "file"], None, 0,
-                "Output report file name"),
          _Option(["-amino","amino"], ["input"], None, 0),
          _Option(["-lysinemodified","lysinemodified"], ["input"], None, 0),
          _Option(["-disulphides","disulphides"], ["input"], None, 0),
