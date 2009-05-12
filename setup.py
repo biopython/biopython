@@ -33,11 +33,9 @@ if sys.version_info[:2] < (2, 4):
 from distutils.core import setup
 from distutils.core import Command
 from distutils.command.install import install
-from distutils.command.install_data import install_data
 from distutils.command.build_py import build_py
 from distutils.command.build_ext import build_ext
 from distutils.extension import Extension
-from distutils import sysconfig
 
 def get_yes_or_no(question, default):
     if default:
@@ -136,27 +134,6 @@ class build_py_biopython(build_py):
         if is_Numpy_installed():
             self.packages.extend(NUMPY_PACKAGES)
         build_py.run(self)
-
-        # In addition to installing the data files, we also need to make
-        # sure that they are copied to the build directory. Otherwise,
-        # the unit tests will fail because they cannot find the data files
-        # in the build directory.
-        # This is taken care of automatically in Python 2.4 or higher by
-        # using package_data.
-
-        import glob
-        data_files = self.distribution.data_files
-        for entry in data_files:
-            if type(entry) is not type(""):
-                raise ValueError, "data_files must be strings"
-            # Unix- to platform-convention conversion
-            entry = os.sep.join(entry.split("/"))
-            filenames = glob.glob(entry)
-            for filename in filenames:
-                dst = os.path.join(self.build_lib, filename)
-                dstdir = os.path.split(dst)[0]
-                self.mkpath(dstdir)
-                self.copy_file(filename, dst)
 
 
 class build_ext_biopython(build_ext):
@@ -353,47 +330,6 @@ EXTENSIONS = [
               ),
     ]
 
-DATA_FILES=[
-    "Bio/Entrez/DTDs/*.dtd",
-    "Bio/EUtils/DTDs/*.dtd",
-    "Bio/PopGen/SimCoal/data/*.par"
-    ]
-
-# EUtils contains dtd files that need to be installed in the same
-# directory as the python modules.  Distutils doesn't have a simple
-# way of handling this, and we need to subclass install_data.  This
-# code is adapted from the mx.TextTools distribution.
-
-# We can use package_data instead once we require Python 2.4 or higher.
-
-class install_data_biopython(install_data):
-    def finalize_options(self):
-        if self.install_dir is None:
-            installobj = self.distribution.get_command_obj('install')
-            self.install_dir = installobj.install_platlib
-        install_data.finalize_options(self)
-
-    def run (self):
-        import glob
-        if not self.dry_run:
-            self.mkpath(self.install_dir)
-        data_files = self.get_inputs()
-        for entry in data_files:
-            if type(entry) is not type(""):
-                raise ValueError, "data_files must be strings"
-            # Unix- to platform-convention conversion
-            entry = os.sep.join(entry.split("/"))
-            filenames = glob.glob(entry)
-            for filename in filenames:
-                dst = os.path.join(self.install_dir, filename)
-                dstdir = os.path.split(dst)[0]
-                if not self.dry_run:
-                    self.mkpath(dstdir)
-                    outfile = self.copy_file(filename, dst)[0]
-                else:
-                    outfile = dst
-                self.outfiles.append(outfile)
-
 #We now define the Biopython version number in Bio/__init__.py
 #Here we can't use "import Bio" then "Bio.__version__" as that would
 #tell us the version of Biopython already installed (if any).
@@ -414,16 +350,16 @@ setup(
         "install" : install_biopython,
         "build_py" : build_py_biopython,
         "build_ext" : build_ext_biopython,
-        "install_data" : install_data_biopython,
         "test" : test_biopython,
         },
     packages=PACKAGES,
     ext_modules=EXTENSIONS,
-    data_files=DATA_FILES,
+    package_data = {'Bio.Entrez': ['DTDs/*.dtd'],
+                    'Bio.EUtils': ['DTDs/*.dtd'],
+                    'Bio.PopGen': ['SimCoal/data/*.par'],
+                   },
     #install_requires = ['numpy>=1.0'],
     #extras_require = {
     #    'PDF' : ['reportlab>=2.0']
     #    }
-    # package_data = {'Bio.Entrez': ['DTDs/*.dtd']}
-    ## Use this once we require Python version >= 2.4.
     )
