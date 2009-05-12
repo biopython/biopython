@@ -8,3 +8,5 @@ from _Clustalw import ClustalwCommandline
 from _Prank import PrankCommandline
 from _Mafft import MafftCommandline
 from _Dialign import DialignCommandline
+from _Probcons import ProbconsCommandline
+from _TCoffee import TCoffeeCommandline
