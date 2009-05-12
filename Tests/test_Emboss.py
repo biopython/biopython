@@ -368,12 +368,23 @@ class PairwiseAlignmentTests(unittest.TestCase):
         
     def test_water_piped(self):
         """water with asis trick, output piped to stdout."""
+        cline = WaterCommandline(cmd=exes["water"],
+                                 asequence="asis:ACCCGGGCGCGGT",
+                                 bsequence="asis:ACCCGAGCGCGGT",
+                                 auto=True, filter=True)
+        cline.gapopen = 10
+        cline.gapextend = 0.5
         #TODO - Support -auto and -filter in Bio.Emboss.Applications
-        cline = exes["water"]
-        cline += " -asequence asis:ACCCGGGCGCGGT"
-        cline += " -bsequence asis:ACCCGAGCGCGGT"
-        cline += " -auto" #no prompting
-        cline += " -filter" #use stdout
+        #cline = exes["water"]
+        #cline += " -asequence asis:ACCCGGGCGCGGT"
+        #cline += " -bsequence asis:ACCCGAGCGCGGT"
+        #cline += " -auto" #no prompting
+        #cline += " -filter" #use stdout
+        self.assertEqual(str(cline).rstrip(),
+                         exes["water"] + " -auto -filter" \
+                         + " -asequence=asis:ACCCGGGCGCGGT" \
+                         + " -bsequence=asis:ACCCGAGCGCGGT" \
+                         + " -gapopen=10 -gapextend=0.5")
         #Run the tool,
         child = subprocess.Popen(str(cline),
                                  stdin=subprocess.PIPE,
