@@ -371,15 +371,9 @@ class PairwiseAlignmentTests(unittest.TestCase):
         cline = WaterCommandline(cmd=exes["water"],
                                  asequence="asis:ACCCGGGCGCGGT",
                                  bsequence="asis:ACCCGAGCGCGGT",
+                                 gapopen=10,
+                                 gapextend=0.5,
                                  auto=True, filter=True)
-        cline.gapopen = 10
-        cline.gapextend = 0.5
-        #TODO - Support -auto and -filter in Bio.Emboss.Applications
-        #cline = exes["water"]
-        #cline += " -asequence asis:ACCCGGGCGCGGT"
-        #cline += " -bsequence asis:ACCCGAGCGCGGT"
-        #cline += " -auto" #no prompting
-        #cline += " -filter" #use stdout
         self.assertEqual(str(cline).rstrip(),
                          exes["water"] + " -auto -filter" \
                          + " -asequence=asis:ACCCGGGCGCGGT" \
@@ -434,14 +428,17 @@ class PairwiseAlignmentTests(unittest.TestCase):
 
     def test_needle_piped(self):
         """needle with asis trick, output piped to stdout."""
-        #TODO - Support needle in Bio.Emboss.Applications
-        #(ideally with the -auto and -filter arguments)
-        #Setup,
-        cline = exes["needle"]
-        cline += " -asequence asis:ACCCGGGCGCGGT"
-        cline += " -bsequence asis:ACCCGAGCGCGGT"
-        cline += " -auto" #no prompting
-        cline += " -filter" #use stdout
+        cline = NeedleCommandline(cmd=exes["needle"],
+                                 asequence="asis:ACCCGGGCGCGGT",
+                                 bsequence="asis:ACCCGAGCGCGGT",
+                                 gapopen=10,
+                                 gapextend=0.5,
+                                 auto=True, filter=True)
+        self.assertEqual(str(cline).rstrip(),
+                         exes["needle"] + " -auto -filter" \
+                         + " -asequence=asis:ACCCGGGCGCGGT" \
+                         + " -bsequence=asis:ACCCGAGCGCGGT" \
+                         + " -gapopen=10 -gapextend=0.5")
         #Run the tool,
         child = subprocess.Popen(str(cline),
                                  stdin=subprocess.PIPE,
