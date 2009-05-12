@@ -138,9 +138,6 @@ class PrimerSearchCommandline(_EmbossCommandLine):
     """Commandline object for the primersearch program from EMBOSS.
     """
     def __init__(self, cmd="primersearch", **kwargs):
-        _EmbossCommandLine.__init__(self)
-        self.program_name = cmd
-
         self.parameters = \
          [_Option(["-sequences","sequences"], ["input"], None, 1,
                   "Sequence to look for the primer pairs in."),
@@ -151,6 +148,8 @@ class PrimerSearchCommandline(_EmbossCommandLine):
                   "Name of the output file."),
           _Option(["-mismatchpercent","mismatchpercent"], ["input"], None, 1,
                   "Allowed percentage mismatch.")]
+        _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
 
 class EProtDistCommandline(_EmbossCommandLine):
     """Commandline object for the eprotdist program from EMBOSS.
@@ -232,6 +231,7 @@ class ENeighborCommandline(_EmbossCommandLine):
           _Option(["-progress","progress"], ["input"], None, 0,
                   "Print indications of progress of run")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
 
 class EProtParsCommandline(_EmbossCommandLine):
     """Commandline object for the eprotpars program from EMBOSS.
@@ -320,6 +320,7 @@ class EConsenseCommandline(_EmbossCommandLine):
                   "Print out the sets of species")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
+
 class ESeqBootCommandline(_EmbossCommandLine):
     """Commandline object for the eseqboot program from EMBOSS.
 
@@ -350,6 +351,7 @@ class ESeqBootCommandline(_EmbossCommandLine):
           _Option(["-progress","progress"], ["input"], None, 0,
                   "Print indications of progress of run")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
 
 class WaterCommandline(_EmbossCommandLine):
     """Commandline object for the water program from EMBOSS.
