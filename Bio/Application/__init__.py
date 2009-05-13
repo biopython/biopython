@@ -129,7 +129,7 @@ class AbstractCommandline(object):
     >>> str(cline)
     Traceback (most recent call last):
     ...
-    ValueError: Parameter asequence is not set.
+    ValueError: You must either set outfile (output filename), or enable filter or stdout (output to stdout).
 
     In this case the wrapper knows certain arguments are required to construct
     a valid command line for the tool.  For complete example,
@@ -140,32 +140,32 @@ class AbstractCommandline(object):
     >>> cline.bsequence = "asis:ACCCGAGCGCGGT"
     >>> cline.outfile = "temp_water.txt"
     >>> print cline
-    water -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 -outfile=temp_water.txt 
+    water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 
     >>> cline
-    WaterCommandline(cmd='water', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5, outfile='temp_water.txt')
+    WaterCommandline(cmd='water', outfile='temp_water.txt', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5)
 
     You would typically run the command line via a standard python operating
     system call (e.g. using the subprocess module).  Bio.Application includes
     a simple wrapper function generic_run which may be suitable.
     """
     def __init__(self, cmd, **kwargs):
-        """Init method - should be subclassed!
-
-        The subclass methods should look like this:
-
-        def __init__(self, cmd="muscle", **kwargs) :
-            self.parameters = [...]
-            AbstractCommandline.__init__(self, cmd, **kwargs)
-
-        i.e. There should have an optional argument "cmd" to set the location
-        of the executable (with a sensible default which should work if the
-        command is on the path on Unix), and keyword arguments.  It should
-        then define a list of parameters, all objects derevied from the base
-        class _AbstractParameter.
-
-        The keyword arguments should be any valid parameter name, and will
-        be used to set the associated parameter.
-        """
+        """Create a new instance of a command line wrapper object."""
+        # Init method - should be subclassed!
+        # 
+        # The subclass methods should look like this:
+        # 
+        # def __init__(self, cmd="muscle", **kwargs) :
+        #     self.parameters = [...]
+        #     AbstractCommandline.__init__(self, cmd, **kwargs)
+        # 
+        # i.e. There should have an optional argument "cmd" to set the location
+        # of the executable (with a sensible default which should work if the
+        # command is on the path on Unix), and keyword arguments.  It should
+        # then define a list of parameters, all objects derevied from the base
+        # class _AbstractParameter.
+        # 
+        # The keyword arguments should be any valid parameter name, and will
+        # be used to set the associated parameter.
         self.program_name = cmd
         try :
             parameters = self.parameters
@@ -187,8 +187,15 @@ class AbstractCommandline(object):
                 return lambda x, value : x.set_parameter(name, value)
             def deleter(name) :
                 return lambda x : x._clear_parameter(name)
-            prop = property(getter(name), setter(name), deleter(name),
-                            p.description)
+            doc = p.description
+            if isinstance(p, _Switch) :
+                doc += "\n\nThis property controls the addition of the %s " \
+                       "switch, treat this property as a boolean." % p.names[0]
+            else :
+                doc += "\n\nThis controls the addition of the %s parameter " \
+                       "and its associated value.  Set this property to the " \
+                       "argument value required." % p.names[0]
+            prop = property(getter(name), setter(name), deleter(name), doc)
             setattr(self.__class__, name, prop) #magic!
         for key, value in kwargs.iteritems() :
             self.set_parameter(key, value)
@@ -203,9 +210,9 @@ class AbstractCommandline(object):
         >>> cline.bsequence = "asis:ACCCGAGCGCGGT"
         >>> cline.outfile = "temp_water.txt"
         >>> print cline
-        water -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 -outfile=temp_water.txt 
+        water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 
         >>> str(cline)
-        'water -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 -outfile=temp_water.txt '
+        'water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 '
         """
         commandline = "%s " % self.program_name
         for parameter in self.parameters:
@@ -226,9 +233,9 @@ class AbstractCommandline(object):
         >>> cline.bsequence = "asis:ACCCGAGCGCGGT"
         >>> cline.outfile = "temp_water.txt"
         >>> print cline
-        water -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 -outfile=temp_water.txt 
+        water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 
         >>> cline
-        WaterCommandline(cmd='water', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5, outfile='temp_water.txt')
+        WaterCommandline(cmd='water', outfile='temp_water.txt', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5)
         """
         answer = "%s(cmd=%s" % (self.__class__.__name__, repr(self.program_name))
         for parameter in self.parameters:
