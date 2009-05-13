@@ -259,40 +259,17 @@ class MafftCommandline(AbstractCommandline):
             # form: "mafft --seed align1 --seed align2 [etc] input"
             # Effectively for n number of seed alignments. Here we're going to
             # assume 6 extra are enough
-            _Option(["--seed", "seed"], ["input"], os.path.exists, 0,
+            _Option(["--seed", "seed"], ["input", "file"], os.path.exists, 0,
                     "Seed alignments given in alignment_n (fasta format) " + \
                     "are aligned with sequences in input.",
                     0),
-            #SEED 1
-            _Option(["--seed", "seed1"], ["input"], os.path.exists, 0,
-                    "Seed alignments given in alignment_n (fasta format) " + \
-                    "are aligned with sequences in input.",
-                    0),
-            #SEED 2
-            _Option(["--seed", "seed2"], ["input"], os.path.exists, 0,
-                    "Seed alignments given in alignment_n (fasta format) " + \
-                    "are aligned with sequences in input.",
-                    0),
-            #SEED 3
-            _Option(["--seed", "seed3"], ["input"], os.path.exists, 0,
-                    "Seed alignments given in alignment_n (fasta format) " + \
-                    "are aligned with sequences in input.",
-                    0),
-            #SEED 4
-            _Option(["--seed", "seed4"], ["input"], os.path.exists, 0,
-                    "Seed alignments given in alignment_n (fasta format) " + \
-                    "are aligned with sequences in input.",
-                     False),
-            #SEED 5
-            _Option(["--seed", "seed5"], ["input"], os.path.exists, 0,
-                    "Seed alignments given in alignment_n (fasta format) " + \
-                    "are aligned with sequences in input.",
-                    0),
-            #SEED 6
-            _Option(["--seed", "seed6"], ["input"], os.path.exists, 0,
-                    "Seed alignments given in alignment_n (fasta format) " + \
-                    "are aligned with sequences in input.",
-                    0),
+            #The old solution of also defining extra parameters with
+            #["--seed", "seed1"] etc worked, but clashes with the recent
+            #code in the base class to look for duplicate paramters and raise
+            #an error.  Perhaps that check should be ignored here, or maybe
+            #we can handle this more elegantly...
+            #TODO - Create an _OptionList parameter which allows a list to be
+            #assigned to the value?
             ####################### END SEEDS  ################################
             #The input (must be FASTA format)
             _Argument(["input"], ["input"], os.path.exists, 1,
