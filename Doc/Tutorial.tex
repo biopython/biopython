@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 27 April 2009 (Biopython 1.50+)}
+\date{Last Update -- 11 May 2009 (Biopython 1.50+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -3275,9 +3275,9 @@ To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For exampl
 >>> handle = Entrez.esearch(db="pubmed", term="biopython")
 >>> record = Entrez.read(handle)
 >>> record["IdList"]
-['16403221', '16377612', '14871861', '14630660', '12230038']
+['19304878', '18606172', '16403221', '16377612', '14871861', '14630660', '12230038']
 \end{verbatim}
-In this output, you see five PubMed IDs (16403221, 16377612, 14871861, 14630660, 12230038), which can be retrieved by EFetch (see section \ref{sec:efetch}).
+In this output, you see seven PubMed IDs (including 19304878 which is the PMID for the Biopython application notes), which can be retrieved by EFetch (see section \ref{sec:efetch}).
 
 You can also use ESearch to search GenBank. Here we'll do a quick search for the \emph{matK} gene in \emph{Cypripedioideae} orchids:
 
@@ -3287,9 +3287,13 @@ You can also use ESearch to search GenBank. Here we'll do a quick search for the
 >>> record["Count"]
 '25'
 >>> record["IdList"]
-['186972394', '186972384', '186972382', '186972378', ..., '61585484']
+['126789333', '37222967', '37222966', '37222965', ..., '61585492']
 \end{verbatim}
-Each of the IDs (186972394, 186972384, 186972382, \ldots) is a GenBank identifier. See section~\ref{sec:efetch} for information on how to actually download these GenBank records.
+
+\noindent Each of the IDs (126789333, 37222967, 37222966, \ldots) is a GenBank identifier.
+See section~\ref{sec:efetch} for information on how to actually download these GenBank records.
+
+Note that instead of a species name like \texttt{Cypripedioideae[Orgn]}, you can restrict the search using an NCBI taxon identifier, here this would be \texttt{txid158330[Orgn]}.  This isn't currently documented on the ESearch help page - the NCBI explained this in reply to an email query.  You can often deduce the search term formatting by playing with the Entrez web interface.  For example, including \texttt{complete[prop]} in a genome search restricts to just completed genomes.
 
 As a final example, let's get a list of computational journal titles:
 \begin{verbatim}
@@ -3327,14 +3331,14 @@ Let's look at a simple example to see how EPost works -- uploading some PubMed i
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
->>> id_list = ['18606172', '16403221', '16377612', '14871861', '14630660']
+>>> id_list = ["19304878", "18606172", "16403221", "16377612", "14871861", "14630660"]
 >>> print Entrez.epost("pubmed", id=",".join(id_list)).read()
 <?xml version="1.0"?>
 <!DOCTYPE ePostResult PUBLIC "-//NLM//DTD ePostResult, 11 May 2002//EN"
  "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/ePost_020511.dtd">
 <ePostResult>
 	<QueryKey>1</QueryKey>
-	<WebEnv>06QtR6pVc1VZEbFZYgmSORUbB71DSx9I5N6bFCcW46LpYQ1Y...0002SID</WebEnv>
+	<WebEnv>NCID_01_206841095_130.14.22.101_9001_1242061629</WebEnv>
 </ePostResult>
 \end{verbatim}
 \noindent The returned XML includes two important strings, \verb|QueryKey| and \verb|WebEnv| which together define your history session.
@@ -3342,7 +3346,7 @@ You would extract these values for use with another Entrez call such as EFetch:
 \begin{verbatim}
 from Bio import Entrez
 Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
-id_list = ['18606172', '16403221', '16377612', '14871861', '14630660']
+id_list = ["19304878", "18606172", "16403221", "16377612", "14871861", "14630660"]
 search_results = Entrez.read(Entrez.epost("pubmed", id=",".join(id_list)))
 webenv = search_results["WebEnv"]
 query_key = search_results["QueryKey"] 
@@ -3463,6 +3467,7 @@ If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see 
 >>> from Bio import Entrez, SeqIO
 >>> handle = Entrez.efetch(db="nucleotide", id="186972394",rettype="gb")
 >>> record = SeqIO.read(handle, "genbank")
+>>> handle.close()
 >>> print record
 ID: EU490707.1
 Name: EU490707
@@ -3499,6 +3504,7 @@ To get the output in XML format, which you can parse using the \verb+Bio.Entrez.
 >>> from Bio import Entrez
 >>> handle = Entrez.efetch(db="nucleotide", id="186972394", retmode="xml")
 >>> record = Entrez.read(handle)
+>>> handle.close()
 >>> record[0]["GBSeq_definition"] 
 'Selenipedium aequinoctiale maturase K (matK) gene, partial cds; chloroplast'
 >>> record[0]["GBSeq_source"] 
@@ -3509,70 +3515,69 @@ If you want to perform a search with \verb|Bio.Entrez.esearch()|, and then downl
 
 \section{ELink: Searching for related items in NCBI Entrez}
 
-ELink, available from Biopython as \verb+Bio.Entrez.elink()+, can be used to find related items in the NCBI Entrez databases. For example, let's try to find articles related to the one Harry Mangalam wrote in 2002 about the BioPerl, Biopython, and BioJava projects (Briefings in Bioinformatics, 3(3): 296-302). The PubMed ID of this article is 12230038. Now we use \verb+Bio.Entrez.elink+ to find all related items to this article:
+ELink, available from Biopython as \verb+Bio.Entrez.elink()+, can be used to find related items in the NCBI Entrez databases. For example, let's try to find articles related to the Biopython application note published in \textit{Bioinformatics} in 2009. The PubMed ID of this article is 12230038. Now we use \verb+Bio.Entrez.elink+ to find all related items to this article:
 
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"
->>> pmid = "12230038"
->>> handle = Entrez.elink(dbfrom='pubmed', id=pmid)
+>>> pmid = "19304878"
+>>> handle = Entrez.elink(dbfrom="pubmed", id=pmid)
 >>> record = Entrez.read(handle)
+>>> handle.close()
 \end{verbatim}
 
 The \verb+record+ variable consists of a python list, one for each database in which we searched. Since we specified only one PubMed ID to search for, \verb+record+ contains only one item. This item is a dictionary containing information about our search term, as well as all the related items that were found:
 
 \begin{verbatim}
->>> record[0]['DbFrom']
+>>> record[0]["DbFrom"]
 'pubmed'
->>> record[0]['IdList']
-['12230038']
+>>> record[0]["IdList"]
+['19304878']
 \end{verbatim}
 
-The \verb+"LinkSetDb"+ key contains the search results, stored as a list consisting of one item for each target database. In our search results, we only find hits in the PubMed database:
+The \verb+"LinkSetDb"+ key contains the search results, stored as a list consisting of one item for each target database. In our search results, we only find hits in the PubMed database (although sub-diveded into categories):
 
 \begin{verbatim}
->>> len(record[0]['LinkSetDb'])
-1
->>> record[0]['LinkSetDb'][0]['DbTo']
-'pubmed'
+>>> len(record[0]["LinkSetDb"])
+5
+>>> for linksetdb in record[0]['LinkSetDb'] :
+...     print linksetdb["DbTo"], linksetdb["LinkName"], len(linksetdb["Link"])
+... 
+pubmed pubmed_pubmed 110
+pubmed pubmed_pubmed_combined 6
+pubmed pubmed_pubmed_five 6
+pubmed pubmed_pubmed_reviews 5
+pubmed pubmed_pubmed_reviews_five 5
 \end{verbatim}
 
-The actual search results are stored as under the \verb+"Link"+ key. In total, 134 items were found:
-
-\begin{verbatim}
->>> len(record[0]['LinkSetDb'][0]['Link'])
-134
-\end{verbatim}
-
+The actual search results are stored as under the \verb+"Link"+ key. In total, 110 items were found under
+standard search.
 Let's now at the first search result:
 \begin{verbatim}
 >>> record[0]['LinkSetDb'][0]['Link'][0]
-{u'Score': '2147483647', u'Id': '12230038'}
+{u'Id': '19304878'}
 \end{verbatim}
 
-This is the article we searched for, which doesn't help us much, so let's look at the second search result:
+\noindent This is the article we searched for, which doesn't help us much, so let's look at the second search result:
 
 \begin{verbatim}
 >>> record[0]['LinkSetDb'][0]['Link'][1]
-{u'Score': '36245843', u'Id': '17316423'}
+{u'Id': '14630660'}
 \end{verbatim}
 
-This paper, with PubMed ID 17316423, is most closely related to the paper by Harry Mangalam. If you look up this paper in PubMed, you'll see that this is a paper published in BMC Bioinformatics about the Bioclipse software project.
+\noindent This paper, with PubMed ID 17316423, is about the Biopython PDB parser.
 
 We can use a loop to print out all PubMed IDs:
 \begin{verbatim}
 >>> for link in record[0]["LinkSetDb"][0]['Link'] :
 ...     print link
 ...
-{u'Score': '2147483647', u'Id': '12230038'}
-{u'Score': '36245843', u'Id': '17316423'}
-{u'Score': '34527046', u'Id': '18174185'}
-{u'Score': '33170001', u'Id': '11928498'}
-{u'Score': '32284469', u'Id': '17441614'}
-{u'Score': '31719319', u'Id': '17291351'}
-{u'Score': '31123154', u'Id': '15572471'}
-{u'Score': '31002490', u'Id': '16539535'}
-{u'Score': '30946408', u'Id': '17384428'}
+{u'Id': '19304878'}
+{u'Id': '14630660'}
+{u'Id': '18689808'}
+{u'Id': '17121776'}
+{u'Id': '16377612'}
+{u'Id': '12368254'}
 ......
 \end{verbatim}
 
@@ -3688,7 +3693,7 @@ Instead of parsing Medline records stored in files, you can also parse Medline r
 >>> handle = Entrez.esearch(db="pubmed",term="biopython")
 >>> record = Entrez.read(handle)
 >>> record["IdList"]
-['18606172', '16403221', '16377612', '14871861', '14630660', '12230038']
+['19304878', '18606172', '16403221', '16377612', '14871861', '14630660', '12230038']
 \end{verbatim}
 We now use \verb+Bio.Entrez.efetch+ to download these Medline records:
 \begin{verbatim}
@@ -3701,6 +3706,7 @@ Here, we specify \verb+rettype="medline", retmode="text"+ to obtain the Medline 
 >>> records = Medline.parse(handle)
 >>> for record in records:
 ...     print record["AU"]
+['Cock PJ', 'Antao T', 'Chang JT', 'Chapman BA', 'Cox CJ', 'Dalke A', ..., 'de Hoon MJ']
 ['Munteanu CR', 'Gonzalez-Diaz H', 'Magalhaes AL']
 ['Casbon JA', 'Crooks GE', 'Saqi MA']
 ['Pritchard L', 'White JA', 'Birch PR', 'Toth IK']
@@ -3716,14 +3722,21 @@ For comparison, here we show an example using the XML format:
 >>> records = Entrez.read(handle)
 >>> for record in records:
 ...     print record["MedlineCitation"]["Article"]["ArticleTitle"]
-Enzymes/non-enzymes classification model complexity based on composition, sequence, 3D
- and topological indices.
+Biopython: freely available Python tools for computational molecular biology and
+ bioinformatics.
+Enzymes/non-enzymes classification model complexity based on composition, sequence,
+ 3D and topological indices.
 A high level interface to SCOP and ASTRAL implemented in python.
 GenomeDiagram: a python package for the visualization of large-scale genomic data.
 Open source clustering software.
 PDB file parser and structure class implemented in Python.
 The Bio* toolkits--a brief overview.
 \end{verbatim}
+
+Note that in post of these examples, for simplicity we have naively combined ESearch and EFetch.
+In this situation, the NCBI would expect you to use their history feature,
+as illustrated in Section~\ref{sec:entrez-webenv}.
+
 
 \subsection{Parsing GEO records}
 
@@ -4120,7 +4133,7 @@ AF191659, length 894, with 3 features
 AF191658, length 896, with 3 features
 \end{verbatim}
 
-Using these automated query retrieval functionality is a big plus over doing things by hand.   Although the module should obey the NCBI's three-second rule, the NCBI have other recommendations like avoiding peak hours.  See Section~\ref{sec:entrez-guidelines}.
+Using these automated query retrieval functionality is a big plus over doing things by hand.   Although the module should obey the NCBI's max three queries per second rule, the NCBI have other recommendations like avoiding peak hours.  See Section~\ref{sec:entrez-guidelines}.
 In particular, please note that for simplicity, this example does not use the WebEnv history feature.  You should use this for any non-trivial search and download work, see Section~\ref{sec:entrez-webenv}.
 
 Finally, if plan to repeat your analysis, rather than downloading the files from the NCBI and parsing them immediately (as shown in this example), you should just download the records \emph{once} and save them to your hard disk, and then parse the local file.
@@ -4185,13 +4198,13 @@ However, the approved approach is to run the search with the history
 feature.  Then, we can fetch the results by reference to the search
 results - which the NCBI can anticipate and cache.
 
-To do this, you call \verb|Bio.Entrez.esearch()| as normal, but with the
+To do this, call \verb|Bio.Entrez.esearch()| as normal, but with the
 additional argument of \verb|usehistory="y"|,
 
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "history.user@example.com"
->>> search_handle = Entrez.esearch(db="nucleotide",term="Opuntia and rpl16",
+>>> search_handle = Entrez.esearch(db="nucleotide",term="Opuntia[orgn] and rpl16",
                                    usehistory="y")
 >>> search_results = Entrez.read(search_handle)
 >>> search_handle.close()
@@ -7257,6 +7270,148 @@ out_handle.close()
 In this case the for loop looks simpler, but putting the trim logic into a
 function is more tidy, and makes it easier to adjust the trimming later on.
 For example, you might decide to look for a 5' primer as well.
+
+\subsection{Identifying open reading frames}
+
+A very simplistic first step at identifying possible genes is to look for
+open reading frames (ORFs).  By this we mean look in all six frames for long
+regions without stop codons -- an ORF is just a region of nucleotides with
+no in frame stop codons.
+
+Of course, to find a gene you would also need to worry about locating a start
+codon, possible promoters -- and in Eukaryotes there are introns to worry about
+too.  However, this approach is still useful in viruses and Prokaryotes.
+
+To show how you might approach this with Biopython, we'll need a sequence to
+search, and as an example we'll again use the bacterial plasmid -- although
+this time we'll start with a plain FASTA file with no pre-marked genes:
+\href{http://biopython.org/SRC/biopython/Tests/GenBank/NC_005816.fna}
+{\texttt{NC\_005816.fna}}. This is a bacterial sequence, so we'll want to use
+NCBI codon table 11 (see Section~\ref{sec:translation} about translation).
+
+\begin{verbatim}
+from Bio import SeqIO 
+record = SeqIO.read(open("NC_005816.fna"),"fasta")
+table = 11
+min_pro_len = 100
+\end{verbatim}
+
+Here is a neat trick using the \verb|Seq| object's \verb|split| method to
+get a list of all the possible ORF translations in the six reading frames:
+
+\begin{verbatim}
+for strand, nuc in [(+1, record.seq), (-1, record.seq.reverse_complement())] :
+    for frame in range(3) :
+        for pro in nuc[frame:].translate(table).split("*") :
+            if len(pro) >= min_pro_len :
+                print "%s...%s - length %i, strand %i, frame %i" \
+                      % (pro[:30], pro[-3:], len(pro), strand, frame)
+\end{verbatim}
+
+\noindent This should give:
+
+\begin{verbatim}
+GCLMKKSSIVATIITILSGSANAASSQLIP...YRF - length 315, strand 1, frame 0
+KSGELRQTPPASSTLHLRLILQRSGVMMEL...NPE - length 285, strand 1, frame 1
+GLNCSFFSICNWKFIDYINRLFQIIYLCKN...YYH - length 176, strand 1, frame 1
+VKKILYIKALFLCTVIKLRRFIFSVNNMKF...DLP - length 165, strand 1, frame 1
+NQIQGVICSPDSGEFMVTFETVMEIKILHK...GVA - length 355, strand 1, frame 2
+RRKEHVSKKRRPQKRPRRRRFFHRLRPPDE...PTR - length 128, strand 1, frame 2
+TGKQNSCQMSAIWQLRQNTATKTRQNRARI...AIK - length 100, strand 1, frame 2
+QGSGYAFPHASILSGIAMSHFYFLVLHAVK...CSD - length 114, strand -1, frame 0
+IYSTSEHTGEQVMRTLDEVIASRSPESQTR...FHV - length 111, strand -1, frame 0
+WGKLQVIGLSMWMVLFSQRFDDWLNEQEDA...ESK - length 125, strand -1, frame 1
+RGIFMSDTMVVNGSGGVPAFLFSGSTLSSY...LLK - length 361, strand -1, frame 1
+WDVKTVTGVLHHPFHLTFSLCPEGATQSGR...VKR - length 111, strand -1, frame 1
+LSHTVTDFTDQMAQVGLCQCVNVFLDEVTG...KAA - length 107, strand -1, frame 2
+RALTGLSAPGIRSQTSCDRLRELRYVPVSL...PLQ - length 119, strand -1, frame 2
+\end{verbatim}
+
+Note that here we are counting the frames from the 5' end (start) of
+\emph{each} strand. It is sometimes easier to always count from the 5' end
+(start) of the \emph{forward} strand.
+
+You could easily edit the above loop based code to build up a list of the
+candidate proteins, or convert this to a list comprehension.  Now, one thing
+this code doesn't do is keep track of where the proteins are.
+
+You could tackle this in several ways.  For example, the following code tracks
+the locations in terms of the protein counting, and converts back to the
+parent sequence by multiplying by three, then adjusting for the frame and
+strand:
+
+\begin{verbatim}
+from Bio import SeqIO 
+record = SeqIO.read(open("NC_005816.gb"),"genbank")
+table = 11
+min_pro_len = 100
+
+def find_orfs_with_trans(seq, trans_table, min_protein_length) :
+    answer = []
+    seq_len = len(seq)
+    for strand, nuc in [(+1, seq), (-1, seq.reverse_complement())] :
+        for frame in range(3) :
+            trans = str(nuc[frame:].translate(trans_table))
+            trans_len = len(trans)
+            aa_start = 0
+            aa_end = 0
+            while aa_start < trans_len :
+                aa_end = trans.find("*", aa_start)
+                if aa_end == -1 :
+                    aa_end = trans_len
+                if aa_end-aa_start >= min_protein_length :
+                    if strand == 1 :
+                        start = frame+aa_start*3
+                        end = min(seq_len,frame+aa_end*3+3)
+                    else :
+                        start = seq_len-frame-aa_end*3-3
+                        end = seq_len-frame-aa_start*3                        
+                    answer.append((start, end, strand,
+                                   trans[aa_start:aa_end]))
+                aa_start = aa_end+1
+    answer.sort()
+    return answer
+
+orf_list = find_orfs_with_trans(record.seq, table, min_pro_len)
+for start, end, strand, pro in orf_list :
+    print "%s...%s - length %i, strand %i, %i:%i" \
+          % (pro[:30], pro[-3:], len(pro), strand, start, end)
+\end{verbatim}
+
+\noindent And the output:
+
+\begin{verbatim}
+NQIQGVICSPDSGEFMVTFETVMEIKILHK...GVA - length 355, strand 1, 41:1109
+WDVKTVTGVLHHPFHLTFSLCPEGATQSGR...VKR - length 111, strand -1, 491:827
+KSGELRQTPPASSTLHLRLILQRSGVMMEL...NPE - length 285, strand 1, 1030:1888
+RALTGLSAPGIRSQTSCDRLRELRYVPVSL...PLQ - length 119, strand -1, 2830:3190
+RRKEHVSKKRRPQKRPRRRRFFHRLRPPDE...PTR - length 128, strand 1, 3470:3857
+GLNCSFFSICNWKFIDYINRLFQIIYLCKN...YYH - length 176, strand 1, 4249:4780
+RGIFMSDTMVVNGSGGVPAFLFSGSTLSSY...LLK - length 361, strand -1, 4814:5900
+VKKILYIKALFLCTVIKLRRFIFSVNNMKF...DLP - length 165, strand 1, 5923:6421
+LSHTVTDFTDQMAQVGLCQCVNVFLDEVTG...KAA - length 107, strand -1, 5974:6298
+GCLMKKSSIVATIITILSGSANAASSQLIP...YRF - length 315, strand 1, 6654:7602
+IYSTSEHTGEQVMRTLDEVIASRSPESQTR...FHV - length 111, strand -1, 7788:8124
+WGKLQVIGLSMWMVLFSQRFDDWLNEQEDA...ESK - length 125, strand -1, 8087:8465
+TGKQNSCQMSAIWQLRQNTATKTRQNRARI...AIK - length 100, strand 1, 8741:9044
+QGSGYAFPHASILSGIAMSHFYFLVLHAVK...CSD - length 114, strand -1, 9264:9609
+\end{verbatim}
+
+If you comment out the sort statement, then the protein sequences will be
+shown in the same order as before, so you can check this is doing the same
+thing.  Here we have sorted them by location to make it easier to compare
+to the actual annotation in the GenBank file (as visualised in
+Section~\ref{sec:gd_nice_example}).
+
+If however all you want to find are the locations of the open reading frames,
+then it is a waste of time to translate every possible codon, including doing
+the reverse complement to search the reverse strand too.  All you need to do
+is search for the possible stop codons (and their reverse complements).  Using
+regular expressions is an obvious approach here -- these are an extremely
+powerful (but rather complex) way of describing search strings, which are
+supported in lots of programming languages and also command line tools like
+\texttt{grep} as well).  You can find whole books about this topic!
+
 
 \section{Sequence parsing plus simple plots}
 \label{seq:sequence-parsing-plus-pylab}

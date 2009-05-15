@@ -85,7 +85,7 @@ def epost(db, cgi=None, **keywds):
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi'
     variables = {'db' : db}
     variables.update(keywds)
-    return _open(cgi, variables)
+    return _open(cgi, variables, post=True)
 
 def efetch(db, cgi=None, **keywds):
     """Fetches Entrez results which are returned as a handle.
@@ -297,15 +297,15 @@ def read(handle):
     record = handler.run(handle)
     return record
 
-def _open(cgi, params={}):
+def _open(cgi, params={}, post=False):
     """Helper function to build the URL and open a handle to it (PRIVATE).
 
     Open a handle to Entrez.  cgi is the URL for the cgi script to access.
     params is a dictionary with the options to pass to it.  Does some
     simple error checking, and will raise an IOError if it encounters one.
 
-    This function also enforces the "three second rule" to avoid abusing
-    the NCBI servers.
+    This function also enforces the "up to three queries per second rule"
+    to avoid abusing the NCBI servers.
     """
     # NCBI requirement: At most three queries per second.
     # Equivalently, at least a third of second between queries
@@ -330,8 +330,13 @@ def _open(cgi, params={}):
             params["email"] = email
     # Open a handle to Entrez.
     options = urllib.urlencode(params, doseq=True)
-    cgi += "?" + options
-    handle = urllib.urlopen(cgi)
+    if post :
+        #HTTP POST
+        handle = urllib.urlopen(cgi, data=options)
+    else :
+        #HTTP GET
+        cgi += "?" + options
+        handle = urllib.urlopen(cgi)
 
     # Wrap the handle inside an UndoHandle.
     uhandle = File.UndoHandle(handle)
@@ -360,6 +365,9 @@ def _open(cgi, params={}):
         #  "The proxy server received an invalid
         #   response from an upstream server."
         raise IOError("Bad Gateway!")
+    elif "<title>414 Request-URI Too Large</title>" in data \
+    or "<h1>Request-URI Too Large</h1>" in data :
+        raise IOError("Requested URL too long (try using EPost?)")
     elif data.startswith("Error:") :
         #e.g. 'Error: Your session has expired. Please repeat your search.\n'
         raise IOError(data.strip())

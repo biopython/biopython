@@ -81,12 +81,6 @@
 import re
 import itertools
 
-#TODO - Remove this work around once we drop python 2.3 support
-try:
-   set = set
-except NameError:
-   from sets import Set as set
-
 from Bio.Seq import Seq, MutableSeq
 from Bio.Alphabet import IUPAC
 

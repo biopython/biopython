@@ -16,16 +16,12 @@ Last checked against versions: 1.83 and 2.0.10
 """
 import os
 import types
-from Bio import Application
-from Bio.Application import _Option
-from Bio.Application import _Argument
+from Bio.Application import _Option, _Switch, AbstractCommandline
 
-class ClustalwCommandline(Application.AbstractCommandline):
+class ClustalwCommandline(AbstractCommandline):
     """Command line wrapper for clustalw (version one or two)."""
     #TODO - Should we default to cmd="clustalw2" now?
-    def __init__(self, cmd="clustalw"):
-        Application.AbstractCommandline.__init__(self)
-        self.program_name = cmd
+    def __init__(self, cmd="clustalw", **kwargs):
         self.parameters = \
             [
             _Option(["-infile", "-INFILE", "INFILE", "infile"],
@@ -47,54 +43,33 @@ class ClustalwCommandline(Application.AbstractCommandline):
                     "Profiles (old alignment).",
                     True),
             ################## VERBS (do things) #############################
-            _Option(["-options", "-OPTIONS", "OPTIONS", "options"],
+            _Switch(["-options", "-OPTIONS", "OPTIONS", "options"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "List the command line parameters",
-                    False),
-            _Option(["-help", "-HELP", "HELP", "help"],
+                    "List the command line parameters"),
+            _Switch(["-help", "-HELP", "HELP", "help"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Outline the command line params.",
-                    False),
-            _Option(["-check", "-CHECK", "CHECK", "check"],
+                    "Outline the command line params."),
+            _Switch(["-check", "-CHECK", "CHECK", "check"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Outline the command line params.",
-                    False),
-            _Option(["-fullhelp", "-FULLHELP", "FULLHELP", "fullhelp"],
+                    "Outline the command line params."),
+            _Switch(["-fullhelp", "-FULLHELP", "FULLHELP", "fullhelp"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Output full help content.",
-                    False),
-            _Option(["-align", "-ALIGN", "ALIGN", "align"],
+                    "Output full help content."),
+            _Switch(["-align", "-ALIGN", "ALIGN", "align"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Do full multiple alignment.",
-                    False),
-            _Option(["-tree", "-TREE", "TREE", "tree"],
+                    "Do full multiple alignment."),
+            _Switch(["-tree", "-TREE", "TREE", "tree"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Calculate NJ tree.",
-                    False),
+                    "Calculate NJ tree."),
             _Option(["-bootstrap", "-BOOTSTRAP", "BOOTSTRAP", "bootstrap"],
                     ["input"],
                     lambda x: isinstance(x, types.IntType),
                     False,
                     "Bootstrap a NJ tree (n= number of bootstraps; def. = 1000).",
                     True),
-            _Option(["-convert", "-CONVERT", "CONVERT", "convert"],
+            _Switch(["-convert", "-CONVERT", "CONVERT", "convert"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Output the input sequences in a different file format.",
-                    False),
+                    "Output the input sequences in a different file format."),
             ##################### PARAMETERS (set things) #########################
             # ***General settings:****
             # Makes no sense in biopython
@@ -104,24 +79,18 @@ class ClustalwCommandline(Application.AbstractCommandline):
             #        False,
             #        "read command line, then enter normal interactive menus",
             #        False),
-            _Option(["-quicktree", "-QUICKTREE", "QUICKTREE", "quicktree"],
+            _Switch(["-quicktree", "-QUICKTREE", "QUICKTREE", "quicktree"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Use FAST algorithm for the alignment guide tree",
-                    False),
+                    "Use FAST algorithm for the alignment guide tree"),
             _Option(["-type", "-TYPE", "TYPE", "type"],
                     ["input"],
                     lambda x: x in ["PROTEIN", "DNA", "protein", "dna"],
                     False,
                     "PROTEIN or DNA sequences",
                     True),
-            _Option(["-negative", "-NEGATIVE", "NEGATIVE", "negative"],
+            _Switch(["-negative", "-NEGATIVE", "NEGATIVE", "negative"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Protein alignment with negative values in matrix",
-                    False),
+                    "Protein alignment with negative values in matrix"),
             _Option(["-outfile", "-OUTFILE", "OUTFILE", "outfile"],
                     ["input", "file"],
                     None,
@@ -172,18 +141,12 @@ class ClustalwCommandline(Application.AbstractCommandline):
                     False,
                     "Maximum allowed input sequence length",
                     True),
-            _Option(["-quiet", "-QUIET", "QUIET", "quiet"],
+            _Switch(["-quiet", "-QUIET", "QUIET", "quiet"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Reduce console output to minimum",
-                    False),
-            _Option(["-stats", "-STATS", "STATS", "stats"],
+                    "Reduce console output to minimum"),
+            _Switch(["-stats", "-STATS", "STATS", "stats"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Log some alignents statistics to file",
-                    False),
+                    "Log some alignents statistics to file"),
             # ***Fast Pairwise Alignments:***
             _Option(["-ktuple", "-KTUPLE", "KTUPLE", "ktuple"],
                     ["input"],
@@ -292,12 +255,9 @@ class ClustalwCommandline(Application.AbstractCommandline):
                     False,
                     "Gap extension penalty",
                     True),
-            _Option(["-endgaps", "-ENDGAPS", "ENDGAPS", "endgaps"],
+            _Switch(["-endgaps", "-ENDGAPS", "ENDGAPS", "endgaps"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "No end gap separation pen.",
-                    False),
+                    "No end gap separation pen."),
             _Option(["-gapdist", "-GAPDIST", "GAPDIST", "gapdist"],
                     ["input"],
                     lambda x: isinstance(x, types.IntType) or \
@@ -305,24 +265,15 @@ class ClustalwCommandline(Application.AbstractCommandline):
                     False,
                     "Gap separation pen. range",
                     False),
-            _Option(["-nopgap", "-NOPGAP", "NOPGAP", "nopgap"],
+            _Switch(["-nopgap", "-NOPGAP", "NOPGAP", "nopgap"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Residue-specific gaps off",
-                    False),
-            _Option(["-nohgap", "-NOHGAP", "NOHGAP", "nohgap"],
+                    "Residue-specific gaps off"),
+            _Switch(["-nohgap", "-NOHGAP", "NOHGAP", "nohgap"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Hydrophilic gaps off",
-                    False),
-            _Option(["-hgapresidues", "-HGAPRESIDUES", "HGAPRESIDUES", "hgapresidues"],
+                    "Hydrophilic gaps off"),
+            _Switch(["-hgapresidues", "-HGAPRESIDUES", "HGAPRESIDUES", "hgapresidues"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "List hydrophilic res.",
-                    False),
+                    "List hydrophilic res."),
             _Option(["-maxdiv", "-MAXDIV", "MAXDIV", "maxdiv"],
                     ["input"],
                     lambda x: isinstance(x, types.IntType) or \
@@ -350,19 +301,13 @@ class ClustalwCommandline(Application.AbstractCommandline):
                     False,
                     "maximum number of iterations to perform",
                     False),
-            _Option(["-noweights", "-NOWEIGHTS", "NOWEIGHTS", "noweights"],
+            _Switch(["-noweights", "-NOWEIGHTS", "NOWEIGHTS", "noweights"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Disable sequence weighting",
-                    False),
+                    "Disable sequence weighting"),
             # ***Profile Alignments:***
-            _Option(["-profile", "-PROFILE", "PROFILE", "profile"],
+            _Switch(["-profile", "-PROFILE", "PROFILE", "profile"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Merge two alignments by profile alignment",
-                    False),
+                    "Merge two alignments by profile alignment"),
             _Option(["-newtree1", "-NEWTREE1", "NEWTREE1", "newtree1"],
                     ["output", "file"],
                     None,
@@ -388,24 +333,15 @@ class ClustalwCommandline(Application.AbstractCommandline):
                     "File name of guide tree for profile2",
                     True),
             # ***Sequence to Profile Alignments:***
-            _Option(["-sequences", "-SEQUENCES", "SEQUENCES", "sequences"],
+            _Switch(["-sequences", "-SEQUENCES", "SEQUENCES", "sequences"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Sequentially add profile2 sequences to profile1 alignment",
-                    False),
-            _Option(["-nosecstr1", "-NOSECSTR1", "NOSECSTR1", "nosecstr1"],
+                    "Sequentially add profile2 sequences to profile1 alignment"),
+            _Switch(["-nosecstr1", "-NOSECSTR1", "NOSECSTR1", "nosecstr1"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Do not use secondary structure-gap penalty mask for profile 1",
-                    False),
-            _Option(["-nosecstr2", "-NOSECSTR2", "NOSECSTR2", "nosecstr2"],
+                    "Do not use secondary structure-gap penalty mask for profile 1"),
+            _Switch(["-nosecstr2", "-NOSECSTR2", "NOSECSTR2", "nosecstr2"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Do not use secondary structure-gap penalty mask for profile 2",
-                    False),
+                    "Do not use secondary structure-gap penalty mask for profile 2"),
             # ***Structure Alignments:***
             _Option(["-secstrout", "-SECSTROUT", "SECSTROUT", "secstrout"],
                     ["input"],
@@ -480,18 +416,12 @@ class ClustalwCommandline(Application.AbstractCommandline):
                     False,
                     "Seed number for bootstraps.",
                     True),
-            _Option(["-kimura", "-KIMURA", "KIMURA", "kimura"],
+            _Switch(["-kimura", "-KIMURA", "KIMURA", "kimura"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Use Kimura's correction.",
-                    False),
-            _Option(["-tossgaps", "-TOSSGAPS", "TOSSGAPS", "tossgaps"],
+                    "Use Kimura's correction."),
+            _Switch(["-tossgaps", "-TOSSGAPS", "TOSSGAPS", "tossgaps"],
                     ["input"],
-                    lambda x: 0, #Does not take value
-                    False,
-                    "Ignore positions with gaps.",
-                    False),
+                    "Ignore positions with gaps."),
             _Option(["-bootlabels", "-BOOTLABELS", "BOOTLABELS", "bootlabels"],
                     ["input"],
                     lambda x: x in ["NODE", "BRANCH", "node", "branch"],
@@ -505,4 +435,4 @@ class ClustalwCommandline(Application.AbstractCommandline):
                     "NJ or UPGMA",
                     False)
             ]
-
+        AbstractCommandline.__init__(self, cmd, **kwargs)

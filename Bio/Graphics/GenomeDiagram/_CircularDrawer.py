@@ -945,8 +945,8 @@ class CircularDrawer(AbstractDrawer):
         elif border is not None:
             strokecolor = border
 
-        angle = float(endangle - startangle)    # angle subtended by arc
-        if angle>.01:  # Wide arc, represent with multiple boxes
+        if abs(float(endangle - startangle))>.01:
+            # Wide arc, must use full curves
             p = ArcPath(strokeColor=strokecolor,
                         fillColor=color,
                         strokewidth=0)

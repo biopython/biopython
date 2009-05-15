@@ -17,12 +17,6 @@ import string #for maketrans only
 import array
 import sys
 
-#TODO - Remove this work around once we drop python 2.3 support
-try:
-    set = set
-except NameError:
-    from sets import Set as set
-
 import Alphabet
 from Alphabet import IUPAC
 from Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
@@ -466,17 +460,8 @@ class Seq(object):
         """
         #If it has one, check the alphabet:
         sep_str = self._get_seq_str_and_check_alphabet(sep)
-        try :
-            return [Seq(part, self.alphabet) \
-                    for part in str(self).rsplit(sep_str, maxsplit)]
-        except AttributeError :
-            #Python 2.3 doesn't have a string rsplit method, which we can
-            #word around by reversing the sequence, using (left) split,
-            #and then reversing the answer. Not very efficient!
-            words = [Seq(word[::-1], self.alphabet) for word \
-                     in str(self)[::-1].split(sep_str[::-1], maxsplit)]
-            words.reverse()
-            return words
+        return [Seq(part, self.alphabet) \
+                for part in str(self).rsplit(sep_str, maxsplit)]
 
     def strip(self, chars=None) :
         """Returns a new Seq object with leading and trailing ends stripped.

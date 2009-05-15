@@ -5,12 +5,6 @@
 
 import os
 
-#TODO - Remove this work around once we drop python 2.3 support
-try:
-    set = set
-except NameError:
-    from sets import Set as set
-
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
@@ -73,6 +67,7 @@ test_files = [ \
     ("fasta",  False, 'GenBank/NC_005816.fna', 1),
     ("fasta",  False, 'GenBank/NC_005816.ffn', 10),
     ("fasta",  False, 'GenBank/NC_005816.faa', 10),
+    ("fasta",  False, 'GenBank/NC_000932.faa', 85),
 #Following examples are also used in test_GFF.py
     ("fasta",  False, 'GFF/NC_001802.fna', 1), #upper case
     ("fasta",  False, 'GFF/NC_001802lc.fna', 1), #lower case
@@ -115,7 +110,7 @@ test_files = [ \
     ("genbank",False, 'GenBank/blank_seq.gb', 1),
     ("genbank",False, 'GenBank/dbsource_wrap.gb', 1),
     ("genbank",False, 'GenBank/NC_005816.gb', 1), #See also AE017046.embl
-    #("genbank",False, 'GenBank/NC_006980.gb', 1), #Slow!
+    ("genbank",False, 'GenBank/NC_000932.gb', 1),
 # The next example is a truncated copy of gbvrl1.seq from
 # ftp://ftp.ncbi.nih.gov/genbank/gbvrl1.seq.gz
 # This includes an NCBI header, and the first three records:

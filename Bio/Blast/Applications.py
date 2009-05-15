@@ -1,18 +1,12 @@
 """Definitions for interacting with Blast related applications.
 """
-from Bio import Application
-from Bio.Application import _Option
+from Bio.Application import _Option, AbstractCommandline
 
-class FastacmdCommandline(Application.AbstractCommandline):
+class FastacmdCommandline(AbstractCommandline):
     """Create a commandline for the fasta program from NCBI.
 
     """
-
-    def __init__(self, fastacmd = "fastacmd"):
-        Application.AbstractCommandline.__init__(self)
-        
-        self.program_name = fastacmd
-
+    def __init__(self, cmd="fastacmd", **kwargs):
         self.parameters = \
           [
            _Option(["-d", "database"], ["input"], None, 1,
@@ -20,17 +14,16 @@ class FastacmdCommandline(Application.AbstractCommandline):
            _Option(["-s", "search_string"], ["input"], None, 1,
                    "The id to search for.")
           ]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
+
   
-class BlastallCommandline(Application.AbstractCommandline):
+class BlastallCommandline(AbstractCommandline):
     """Create a commandline for the blastall program from NCBI.
 
-    XXX This could use more checking for valid paramters to the program.
+    TODO - This could use more checking for valid parameters to the program.
+    TODO - Missing at least: -q -D -r -l -V
     """
-    def __init__(self, blastcmd = "blastall"):
-        Application.AbstractCommandline.__init__(self)
-
-        self.program_name = blastcmd
-
+    def __init__(self, cmd="blastall",**kwargs):
         self.parameters = \
           [# Scoring options
            _Option(["-M", "matrix"], ["input"], None, 0, 
@@ -43,8 +36,9 @@ class BlastallCommandline(Application.AbstractCommandline):
                     "Multiple hits window size"),
            _Option(["-j", "npasses"], ["input"], None, 0,
                     "Number of passes"),
-           _Option(["-p", "passes"], ["input"], None, 0,
-                   "Hits/passes.  Integer 0-2."),
+           _Option(["-P", "passes"], ["input"], None, 0,
+                   "Hits/passes.  Integer 0-2. 0 for multiple hit, "
+                   "1 for single hit (does not apply to blastn)"),
 
             # Algorithm options
            _Option(["-g", "gapped"], ["input"], None, 0, 
@@ -61,7 +55,7 @@ class BlastallCommandline(Application.AbstractCommandline):
                    "Threshold for extending hits."),
            _Option(["-L", "region_length"], ["input"], None, 0, 
                    "Length of region used to judge hits."),
-           _Option(["-Z", "db_length"], ["input"], None, 0, 
+           _Option(["-z", "db_length"], ["input"], None, 0, 
                    "Effective database length."),
            _Option(["-Y", "search_length"], ["input"], None, 0, 
                    "Effective length of search space."),
@@ -120,3 +114,4 @@ class BlastallCommandline(Application.AbstractCommandline):
            _Option(["-B", "align_infile"], ["input", "file"], None, 0, 
                    "Input alignment file for PSI-BLAST restart.")
           ] 
+        AbstractCommandline.__init__(self, cmd, **kwargs)

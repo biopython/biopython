@@ -1,7 +1,14 @@
+# Copyright 2001-2004 Brad Chapman.
+# Revisions copyright 2009 by Peter Cock.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """General mechanisms to access applications in biopython.
 """
 import os, sys
 import StringIO
+import subprocess
 
 from Bio import File
 
@@ -14,71 +21,27 @@ def generic_run(commandline):
     standard output and standard error.
 
     WARNING - This will read in the full program output into memory!
-    This may be in issue when the program write a large amount of
+    This may be in issue when the program writes a large amount of
     data to standard output.
     """
-    # print str(commandline)
-
-    #Try and use subprocess (available in python 2.4+)
-    try :
-        import subprocess
-        #We don't need to supply any piped input, but we setup the
-        #standard input pipe anyway as a work around for a python
-        #bug if this is called from a Windows GUI program.  For
-        #details, see http://bugs.python.org/issue1124861
-        child = subprocess.Popen(str(commandline),
-                                 stdin=subprocess.PIPE,
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 shell=(sys.platform!="win32"))
-        child.stdin.close()
-        r = child.stdout
-        e = child.stderr 
-
-        r_out = r.read()
-        e_out = e.read()
-        r.close()
-        e.close()
-
-        # capture error code
-        error_code = child.wait()
-
-    except ImportError :
-        #For python 2.3 can't use subprocess, using popen2 instead
-        #(deprecated in python 2.6)
-        import popen2
-        if sys.platform[:3]=='win':
-            # Windows does not have popen2.Popen3
-            r, w, e = popen2.popen3(str(commandline))
-        
-            r_out = r.read()
-            e_out = e.read()
-            w.close()
-            r.close()
-            e.close()
-
-            # No way to get the error code; setting it to a dummy variable
-            error_code = 0
-
-        else:
-            child = popen2.Popen3(str(commandline), 1)
-            # get information and close the files, so if we call this function
-            # repeatedly we won't end up with too many open files
-
-            # here are the file descriptors
-            r = child.fromchild
-            w = child.tochild
-            e = child.childerr
-        
-            r_out = r.read()
-            e_out = e.read()
-            w.close()
-            r.close()
-            e.close()
-        
-            # capture error code
-            error_code = os.WEXITSTATUS(child.wait())
-
+    #We don't need to supply any piped input, but we setup the
+    #standard input pipe anyway as a work around for a python
+    #bug if this is called from a Windows GUI program.  For
+    #details, see http://bugs.python.org/issue1124861
+    child = subprocess.Popen(str(commandline),
+                             stdin=subprocess.PIPE,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             shell=(sys.platform!="win32"))
+    child.stdin.close()
+    r = child.stdout
+    e = child.stderr 
+    r_out = r.read()
+    e_out = e.read()
+    r.close()
+    e.close()
+    # capture error code:
+    error_code = child.wait()
     return ApplicationResult(commandline, error_code), \
            File.UndoHandle(StringIO.StringIO(r_out)), \
            File.UndoHandle(StringIO.StringIO(e_out))
@@ -130,42 +93,202 @@ class ApplicationResult:
         result_names.sort()
         return result_names
 
-class AbstractCommandline:
-    """Generic interface for running applications from biopython.
+class AbstractCommandline(object):
+    """Generic interface for constructing command line strings.
 
     This class shouldn't be called directly; it should be subclassed to
     provide an implementation for a specific application.
+
+    For a usage example we'll show one of the EMBOSS wrappers.  You can set
+    options when creating the wrapper object using keyword arguments - or later
+    using their corresponding properties:
+
+    >>> from Bio.Emboss.Applications import WaterCommandline
+    >>> cline = WaterCommandline(gapopen=10, gapextend=0.5)
+    >>> cline
+    WaterCommandline(cmd='water', gapopen=10, gapextend=0.5)
+
+    You can instead manipulate the parameters via their properties, e.g.
+
+    >>> cline.gapopen
+    10
+    >>> cline.gapopen = 20
+    >>> cline
+    WaterCommandline(cmd='water', gapopen=20, gapextend=0.5)
+
+    You can clear a parameter you have already added by 'deleting' the
+    corresponding property:
+
+    >>> del cline.gapopen
+    >>> cline.gapopen
+    >>> cline
+    WaterCommandline(cmd='water', gapextend=0.5)
+
+    Once you have set the parameters you need, turn the object into a string:
+
+    >>> str(cline)
+    Traceback (most recent call last):
+    ...
+    ValueError: You must either set outfile (output filename), or enable filter or stdout (output to stdout).
+
+    In this case the wrapper knows certain arguments are required to construct
+    a valid command line for the tool.  For complete example,
+
+    >>> from Bio.Emboss.Applications import WaterCommandline
+    >>> cline = WaterCommandline(gapopen=10, gapextend=0.5)
+    >>> cline.asequence = "asis:ACCCGGGCGCGGT"
+    >>> cline.bsequence = "asis:ACCCGAGCGCGGT"
+    >>> cline.outfile = "temp_water.txt"
+    >>> print cline
+    water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 
+    >>> cline
+    WaterCommandline(cmd='water', outfile='temp_water.txt', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5)
+
+    You would typically run the command line via a standard python operating
+    system call (e.g. using the subprocess module).  Bio.Application includes
+    a simple wrapper function generic_run which may be suitable.
     """
-    def __init__(self):
-        self.program_name = ""
-        self.parameters = []
+    def __init__(self, cmd, **kwargs):
+        """Create a new instance of a command line wrapper object."""
+        # Init method - should be subclassed!
+        # 
+        # The subclass methods should look like this:
+        # 
+        # def __init__(self, cmd="muscle", **kwargs) :
+        #     self.parameters = [...]
+        #     AbstractCommandline.__init__(self, cmd, **kwargs)
+        # 
+        # i.e. There should have an optional argument "cmd" to set the location
+        # of the executable (with a sensible default which should work if the
+        # command is on the path on Unix), and keyword arguments.  It should
+        # then define a list of parameters, all objects derevied from the base
+        # class _AbstractParameter.
+        # 
+        # The keyword arguments should be any valid parameter name, and will
+        # be used to set the associated parameter.
+        self.program_name = cmd
+        try :
+            parameters = self.parameters
+        except AttributeError :
+            raise AttributeError("Subclass should have defined self.parameters")
+        #Create properties for each parameter at run time
+        aliases = set()
+        for p in parameters :
+            for name in p.names :
+                if name in aliases :
+                    raise ValueError("Parameter alias %s multiply defined" \
+                                     % name)
+                aliases.add(name)
+            name = p.names[-1]
+            #Beware of binding-versus-assignment confusion issues
+            def getter(name) :
+                return lambda x : x._get_parameter(name)
+            def setter(name) :
+                return lambda x, value : x.set_parameter(name, value)
+            def deleter(name) :
+                return lambda x : x._clear_parameter(name)
+            doc = p.description
+            if isinstance(p, _Switch) :
+                doc += "\n\nThis property controls the addition of the %s " \
+                       "switch, treat this property as a boolean." % p.names[0]
+            else :
+                doc += "\n\nThis controls the addition of the %s parameter " \
+                       "and its associated value.  Set this property to the " \
+                       "argument value required." % p.names[0]
+            prop = property(getter(name), setter(name), deleter(name), doc)
+            setattr(self.__class__, name, prop) #magic!
+        for key, value in kwargs.iteritems() :
+            self.set_parameter(key, value)
     
     def __str__(self):
-        """Make the commandline with the currently set options.
+        """Make the commandline string with the currently set options.
+
+        e.g.
+        >>> from Bio.Emboss.Applications import WaterCommandline
+        >>> cline = WaterCommandline(gapopen=10, gapextend=0.5)
+        >>> cline.asequence = "asis:ACCCGGGCGCGGT"
+        >>> cline.bsequence = "asis:ACCCGAGCGCGGT"
+        >>> cline.outfile = "temp_water.txt"
+        >>> print cline
+        water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 
+        >>> str(cline)
+        'water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 '
         """
         commandline = "%s " % self.program_name
         for parameter in self.parameters:
             if parameter.is_required and not(parameter.is_set):
-                raise ValueError("Parameter %s is not set." % parameter.names)
+                raise ValueError("Parameter %s is not set." % parameter.names[-1])
             if parameter.is_set:
                 #This will include a trailing space:
                 commandline += str(parameter)
         return commandline
 
+    def __repr__(self):
+        """Return a representation of the command line object for debugging.
+
+        e.g.
+        >>> from Bio.Emboss.Applications import WaterCommandline
+        >>> cline = WaterCommandline(gapopen=10, gapextend=0.5)
+        >>> cline.asequence = "asis:ACCCGGGCGCGGT"
+        >>> cline.bsequence = "asis:ACCCGAGCGCGGT"
+        >>> cline.outfile = "temp_water.txt"
+        >>> print cline
+        water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 
+        >>> cline
+        WaterCommandline(cmd='water', outfile='temp_water.txt', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5)
+        """
+        answer = "%s(cmd=%s" % (self.__class__.__name__, repr(self.program_name))
+        for parameter in self.parameters:
+            if parameter.is_set:
+                if isinstance(parameter, _Switch):
+                    answer += ", %s=True" % parameter.names[-1]
+                else :
+                    answer += ", %s=%s" \
+                              % (parameter.names[-1], repr(parameter.value))
+        answer += ")"
+        return answer
+
+    def _get_parameter(self, name) :
+        """Get a commandline option value."""
+        for parameter in self.parameters:
+            if name in parameter.names:
+                if isinstance(parameter, _Switch) :
+                    return parameter.is_set
+                else :
+                    return parameter.value
+        raise ValueError("Option name %s was not found." % name)
+
+    def _clear_parameter(self, name) :
+        """Reset or clear a commandline option value."""
+        cleared_option = False
+        for parameter in self.parameters:
+            if name in parameter.names:
+                parameter.value = None
+                parameter.is_set = False
+                cleared_option = True
+        if not cleared_option :
+            raise ValueError("Option name %s was not found." % name)
+        
     def set_parameter(self, name, value = None):
         """Set a commandline option for a program.
         """
         set_option = False
         for parameter in self.parameters:
             if name in parameter.names:
-                if value is not None:
-                    self._check_value(value, name, parameter.checker_function)
-                    if "file" in parameter.param_types :
-                        parameter.value = _escape_filename(value)
-                    else :
+                if isinstance(parameter, _Switch) :
+                    if value is None :
+                        import warnings
+                        warnings.warn("For a switch type argument like %s, "
+                                      "we expect a boolean.  None is treated "
+                                      "as FALSE!" % parameter.names[-1])
+                    parameter.is_set = bool(value)
+                    set_option = True
+                else :
+                    if value is not None:
+                        self._check_value(value, name, parameter.checker_function)
                         parameter.value = value
-                parameter.is_set = True
-                set_option = True
+                    parameter.is_set = True
+                    set_option = True
         if not set_option :
             raise ValueError("Option name %s was not found." % name)
 
@@ -190,6 +313,21 @@ class _AbstractParameter:
     """A class to hold information about a parameter for a commandline.
 
     Do not use this directly, instead use one of the subclasses.
+    """
+    def __init__(self) :
+        raise NotImplementedError
+
+    def __str__(self) :
+        raise NotImplementedError
+
+class _Option(_AbstractParameter):
+    """Represent an option that can be set for a program.
+
+    This holds UNIXish options like --append=yes and -a yes,
+    where a value (here "yes") is generally expected.
+
+    For UNIXish options like -kimura in clustalw which don't
+    take a value, use the _Switch object instead.
 
     Attributes:
 
@@ -200,7 +338,7 @@ class _AbstractParameter:
     is assumed to be a "human readable" name describing the option in one
     word.
 
-    o param_type -- a list of string describing the type of parameter, 
+    o param_types -- a list of string describing the type of parameter, 
     which can help let programs know how to use it. Example descriptions
     include 'input', 'output', 'file'.  Note that if 'file' is included,
     these argument values will automatically be escaped if the filename
@@ -234,11 +372,6 @@ class _AbstractParameter:
         self.is_set = False
         self.value = None
 
-class _Option(_AbstractParameter):
-    """Represent an option that can be set for a program.
-
-    This holds UNIXish options like --append=yes and -a yes
-    """
     def __str__(self):
         """Return the value of this option for the commandline.
 
@@ -250,14 +383,72 @@ class _Option(_AbstractParameter):
         # now made explicitly when setting up the option.
         if self.value is None :
             return "%s " % self.names[0]
-        elif self.equate :
-            return "%s=%s " % (self.names[0], self.value)
+        if "file" in self.param_types :
+            v = _escape_filename(self.value)
         else :
-            return "%s %s " % (self.names[0], self.value)
+            v = str(self.value)
+        if self.equate :
+            return "%s=%s " % (self.names[0], v)
+        else :
+            return "%s %s " % (self.names[0], v)
+
+class _Switch(_AbstractParameter):
+    """Represent an optional argument switch for a program.
+
+    This holds UNIXish options like -kimura in clustalw which don't
+    take a value, they are either included in the command string
+    or omitted.
+
+    o names -- a list of string names by which the parameter can be
+    referenced (ie. ["-a", "--append", "append"]). The first name in
+    the list is considered to be the one that goes on the commandline,
+    for those parameters that print the option. The last name in the list
+    is assumed to be a "human readable" name describing the option in one
+    word.
+
+    o param_types -- a list of string describing the type of parameter, 
+    which can help let programs know how to use it. Example descriptions
+    include 'input', 'output', 'file'.  Note that if 'file' is included,
+    these argument values will automatically be escaped if the filename
+    contains spaces.
+
+    o description -- a description of the option.
+
+    o is_set -- if the parameter has been set
+
+    NOTE - There is no value attribute, see is_set instead,
+    """
+    def __init__(self, names = [], types = [], description = ""):
+        self.names = names
+        self.param_types = types
+        self.description = description
+        self.is_set = False
+        self.is_required = False
+
+    def __str__(self):
+        """Return the value of this option for the commandline.
+
+        Includes a trailing space.
+        """
+        assert not hasattr(self, "value")
+        if self.is_set :
+            return "%s " % self.names[0]
+        else :
+            return ""
 
 class _Argument(_AbstractParameter):
     """Represent an argument on a commandline.
     """
+    def __init__(self, names = [], types = [], checker_function = None, 
+                 is_required = False, description = ""):
+        self.names = names
+        self.param_types = types
+        self.checker_function = checker_function
+        self.description = description
+        self.is_required = is_required
+        self.is_set = False
+        self.value = None
+
     def __str__(self):
         if self.value is None:
             return " "
@@ -297,7 +488,7 @@ def _escape_filename(filename) :
         return '"%s"' % filename
 
 def _test():
-    """Run the Bio.Motif module's doctests.
+    """Run the Bio.Application module's doctests.
 
     This will try and locate the unit tests directory, and run the doctests
     from there in order that the relative paths used in the examples work.

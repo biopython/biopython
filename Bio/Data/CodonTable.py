@@ -1,8 +1,6 @@
-#TODO - Remove this work around once we drop python 2.3 support
-try:
-   set = set
-except NameError:
-   from sets import Set as set
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
