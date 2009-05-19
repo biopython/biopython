@@ -1964,30 +1964,20 @@ def _invoke_blast(blast_cmd, params) :
     """
     if not os.path.exists(blast_cmd):
         raise ValueError("BLAST executable does not exist at %s" % blast_cmd)
-
     cmd_string = " ".join([_escape_filename(blast_cmd)] + params)
+    import subprocess, sys
+    #We don't need to supply any piped input, but we setup the
+    #standard input pipe anyway as a work around for a python
+    #bug if this is called from a Windows GUI program.  For
+    #details, see http://bugs.python.org/issue1124861
+    blast_process = subprocess.Popen(cmd_string,
+                                     stdin=subprocess.PIPE,
+                                     stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE,
+                                     shell=(sys.platform!="win32"))
+    blast_process.stdin.close()
+    return blast_process.stdout, blast_process.stderr
 
-    #Try and use subprocess (available in python 2.4+)
-    try :
-        import subprocess, sys
-        #We don't need to supply any piped input, but we setup the
-        #standard input pipe anyway as a work around for a python
-        #bug if this is called from a Windows GUI program.  For
-        #details, see http://bugs.python.org/issue1124861
-        blast_process = subprocess.Popen(cmd_string,
-                                         stdin=subprocess.PIPE,
-                                         stdout=subprocess.PIPE,
-                                         stderr=subprocess.PIPE,
-                                         shell=(sys.platform!="win32"))
-        blast_process.stdin.close()
-        return blast_process.stdout, blast_process.stderr
-    except ImportError :
-        #subprocess isn't available on python 2.3
-        #Note os.popen3 is deprecated in python 2.6
-        write_handle, result_handle, error_handle \
-                      = os.popen3(cmd_string)
-        write_handle.close()
-        return result_handle, error_handle
 
 def _security_check_parameters(param_dict) :
     """Look for any attempt to insert a command into a parameter.
