@@ -781,15 +781,15 @@ class LinearDrawer(AbstractDrawer):
 
         strand = feature.strand
         # Get sigil for the feature, location dependent on the feature strand
-        if strand == 0:
-            sigil = method((x0, btm), (x1, top), color=feature.color,
-                           **kwargs)
         if strand == 1:
             sigil = method((x0, ctr), (x1, top), color=feature.color,
                            orientation='right', **kwargs)
-        if strand == -1:
+        elif strand == -1:
             sigil = method((x1, btm), (x0, ctr), color=feature.color,
                            orientation='left', **kwargs)
+        else :
+            sigil = method((x0, btm), (x1, top), color=feature.color,
+                           **kwargs)
         if feature.label:   # Feature requires a label
             label = String(0, 0, feature.name,
                            fontName=feature.label_font,

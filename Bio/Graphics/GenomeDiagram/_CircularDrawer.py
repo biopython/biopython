@@ -417,15 +417,15 @@ class CircularDrawer(AbstractDrawer):
             border = colors.black
         else:
             border = feature.color
-        if feature.strand == 0:
-            sigil = method(btm, top, startangle, endangle, feature.color,
-                           border, **kwargs)
         if feature.strand == 1:
             sigil = method(ctr, top, startangle, endangle, feature.color,
                            border, orientation='right', **kwargs)
-        if feature.strand == -1:
+        elif feature.strand == -1:
             sigil = method(btm, ctr, startangle, endangle, feature.color,
                            border, orientation='left', **kwargs)
+        else :
+            sigil = method(btm, top, startangle, endangle, feature.color,
+                           border, **kwargs)
         if feature.label:   # Feature needs a label
             label = String(0, 0, feature.name.strip(),
                            fontName=feature.label_font,
