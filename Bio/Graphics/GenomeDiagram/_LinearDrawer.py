@@ -602,7 +602,7 @@ class LinearDrawer(AbstractDrawer):
             tctr = ctr + self.fragment_lines[fragment][0]
             ttop = top + self.fragment_lines[fragment][0]  
             box = draw_box((self.x0, tbtm), (self.xlim, ttop),  # Grey track bg
-                           colors.Color(0.98,0.98, 0.98))       # is just a box
+                           colors.Color(0.96,0.96, 0.96))       # is just a box
             greytrack_bgs.append(box)
 
             if track.greytrack_labels:  # If labels are required

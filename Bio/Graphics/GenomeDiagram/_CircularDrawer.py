@@ -869,11 +869,11 @@ class CircularDrawer(AbstractDrawer):
             #Make a partial circle, a large arc box
             #This method assumes the correct center for us.
             bg = self._draw_arc(btm, top, 0, 2*pi*self.sweep,
-                                colors.Color(0.98, 0.98, 0.98))
+                                colors.Color(0.96, 0.96, 0.96))
         else :
             #Make a full circle (using a VERY thick linewidth)
             bg = Circle(self.xcenter, self.ycenter, ctr, 
-                        strokeColor = colors.Color(0.98, 0.98, 0.98),
+                        strokeColor = colors.Color(0.96, 0.96, 0.96),
                         fillColor=None, strokeWidth=top-btm)
         greytrack_bgs.append(bg)
 
