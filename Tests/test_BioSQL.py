@@ -348,6 +348,28 @@ class InDepthLoadTest(unittest.TestCase):
         del self.db
         del self.server
 
+    def test_reload(self):
+        """Make sure can't import records twice."""
+        gb_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
+        gb_handle = open(gb_file, "r")
+        record = SeqIO.parse(gb_handle, "gb").next()
+        gb_handle.close()
+        #Should be in database already...
+        db_record = self.db.lookup(accession = "X55053")
+        self.assertEqual(db_record.id, record.id)
+        self.assertEqual(db_record.name, record.name)
+        self.assertEqual(db_record.description, record.description)
+        self.assertEqual(str(db_record.seq), str(record.seq))
+        #Good... now try reloading it!
+        try :
+            count = self.db.load([record])
+        except Exception, err :
+            #e.g. IntegrityError with MySQL
+            #Can we catch this in general?
+            self.assert_("duplicate" in str(err).lower())
+            count = 0
+        self.assertEqual(count,0)
+
     def test_record_loading(self):
         """Make sure all records are correctly loaded.
         """
