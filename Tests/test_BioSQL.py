@@ -349,10 +349,12 @@ class DupLoadTest(unittest.TestCase) :
         record = SeqRecord(Seq("ATGCTATGACTAT", Alphabet.generic_dna),id="Test1")
         try :
             count = self.db.load([record,record])
-            raise Exception("Should have failed!")
         except Exception, err :
+            #Good!
             self.assert_("IntegrityError" == err.__class__.__name__, \
                          err.__class__.__name__ + "\n" + str(err))
+            return
+        raise Exception("Should have failed! Loaded %i records" % count)
 
     def test_duplicate_load2(self):
         """Make sure can't import a single record twice (in steps)."""
@@ -361,10 +363,12 @@ class DupLoadTest(unittest.TestCase) :
         self.assertEqual(count,1)
         try :
             count = self.db.load([record])
-            raise Exception("Should have failed!")
         except Exception, err :
+            #Good!
             self.assert_("IntegrityError" == err.__class__.__name__, \
                          err.__class__.__name__ + "\n" + str(err))
+            return
+        raise Exception("Should have failed! Loaded %i records" % count)
 
     def test_duplicate_load3(self):
         """Make sure can't import a single record twice (in steps with commit)."""
@@ -374,10 +378,12 @@ class DupLoadTest(unittest.TestCase) :
         self.server.commit()
         try :
             count = self.db.load([record])
-            raise Exception("Should have failed!")
         except Exception, err :
+            #Good!
             self.assert_("IntegrityError" == err.__class__.__name__, \
                          err.__class__.__name__ + "\n" + str(err))
+            return
+        raise Exception("Should have failed! Loaded %i records" % count)
 
     def test_duplicate_id_load(self):
         """Make sure can't import records with same ID (in one go)."""
@@ -385,10 +391,12 @@ class DupLoadTest(unittest.TestCase) :
         record2 = SeqRecord(Seq("GGGATGCGACTAT", Alphabet.generic_dna),id="TestA")
         try :
             count = self.db.load([record1,record2])
-            raise Exception("Should have failed!")
         except Exception, err :
+            #Good!
             self.assert_("IntegrityError" == err.__class__.__name__, \
                          err.__class__.__name__ + "\n" + str(err))
+            return
+        raise Exception("Should have failed! Loaded %i records" % count)
 
     def test_duplicate_id_load2(self):
         """Make sure can't import records with same ID (in steps)."""
@@ -398,10 +406,12 @@ class DupLoadTest(unittest.TestCase) :
         self.assertEqual(count, 1)
         try :
             count = self.db.load([record2])
-            raise Exception("Should have failed!")
         except Exception, err :
+            #Good!
             self.assert_("IntegrityError" == err.__class__.__name__, \
                          err.__class__.__name__ + "\n" + str(err))
+            return
+        raise Exception("Should have failed! Loaded %i records" % count)
 
     def test_duplicate_id_load3(self):
         """Make sure can't import records with same ID (in steps with commit)."""
@@ -412,10 +422,12 @@ class DupLoadTest(unittest.TestCase) :
         self.server.commit()
         try :
             count = self.db.load([record2])
-            raise Exception("Should have failed!")
         except Exception, err :
+            #Good!
             self.assert_("IntegrityError" == err.__class__.__name__, \
                          err.__class__.__name__ + "\n" + str(err))
+            return
+        raise Exception("Should have failed! Loaded %i records" % count)
 
 class InDepthLoadTest(unittest.TestCase):
     """Make sure we are loading and retreiving in a semi-lossless fashion.
@@ -451,10 +463,12 @@ class InDepthLoadTest(unittest.TestCase):
         #Good... now try reloading it!
         try :
             count = self.db.load([record])
-            raise Exception("Should have failed!")
         except Exception, err :
+            #Good!
             self.assert_("IntegrityError" == err.__class__.__name__, \
                          err.__class__.__name__ + "\n" + str(err))
+            return
+        raise Exception("Should have failed! Loaded %i records" % count)
 
     def test_record_loading(self):
         """Make sure all records are correctly loaded.
