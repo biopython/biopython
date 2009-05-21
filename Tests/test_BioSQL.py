@@ -40,7 +40,7 @@ except Exception, e :
   
 
 def create_database():
-    """Create an empty BioSQL database."""
+    """Delete any existing BioSQL test database, then (re)create an empty BioSQL database."""
     # first open a connection to create the database
     server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                           user = DBUSER, passwd = DBPASSWD,
@@ -83,7 +83,7 @@ def create_database():
     server.close()
 
 def load_database(gb_handle):
-    """Load a GenBank file into a BioSQL database.
+    """Load a GenBank file into a new BioSQL database.
     
     This is useful for running tests against a newly created database.
     """
@@ -333,10 +333,14 @@ class LoaderTest(unittest.TestCase):
 class DupLoadTest(unittest.TestCase) :
     """Check a few duplicate conditions fail."""
     def setUp(self):
+        #drop any old database and create a new one:
+        create_database()
+        #connect to new database:
         self.server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                               user = DBUSER, passwd = DBPASSWD,
                                               host = DBHOST, db = TESTDB)
-        self.db = self.server["biosql-test"]
+        #Create new namespace within new empty database:
+        self.db = self.server.new_database("biosql-test")
 
     def tearDown(self):
         self.server.rollback()
