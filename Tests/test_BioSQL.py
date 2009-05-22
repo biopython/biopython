@@ -374,58 +374,12 @@ class DupLoadTest(unittest.TestCase) :
             return
         raise Exception("Should have failed! Loaded %i records" % count)
 
-    def test_duplicate_load3(self):
-        """Make sure can't import a single record twice (in steps with commit)."""
-        record = SeqRecord(Seq("ATGCTATGACTAT", Alphabet.generic_dna),id="Test3")
-        count = self.db.load([record])
-        self.assertEqual(count,1)
-        self.server.commit()
-        try :
-            count = self.db.load([record])
-        except Exception, err :
-            #Good!
-            self.assert_("IntegrityError" == err.__class__.__name__, \
-                         err.__class__.__name__ + "\n" + str(err))
-            return
-        raise Exception("Should have failed! Loaded %i records" % count)
-
     def test_duplicate_id_load(self):
         """Make sure can't import records with same ID (in one go)."""
         record1 = SeqRecord(Seq("ATGCTATGACTAT", Alphabet.generic_dna),id="TestA")
         record2 = SeqRecord(Seq("GGGATGCGACTAT", Alphabet.generic_dna),id="TestA")
         try :
             count = self.db.load([record1,record2])
-        except Exception, err :
-            #Good!
-            self.assert_("IntegrityError" == err.__class__.__name__, \
-                         err.__class__.__name__ + "\n" + str(err))
-            return
-        raise Exception("Should have failed! Loaded %i records" % count)
-
-    def test_duplicate_id_load2(self):
-        """Make sure can't import records with same ID (in steps)."""
-        record1 = SeqRecord(Seq("ATGCTATGACTAT", Alphabet.generic_dna),id="TestB")
-        record2 = SeqRecord(Seq("GGGATGCGACTAT", Alphabet.generic_dna),id="TestB")
-        count = self.db.load([record1])
-        self.assertEqual(count, 1)
-        try :
-            count = self.db.load([record2])
-        except Exception, err :
-            #Good!
-            self.assert_("IntegrityError" == err.__class__.__name__, \
-                         err.__class__.__name__ + "\n" + str(err))
-            return
-        raise Exception("Should have failed! Loaded %i records" % count)
-
-    def test_duplicate_id_load3(self):
-        """Make sure can't import records with same ID (in steps with commit)."""
-        record1 = SeqRecord(Seq("ATGCTATGACTAT", Alphabet.generic_dna),id="TestC")
-        record2 = SeqRecord(Seq("GGGATGCGACTAT", Alphabet.generic_dna),id="TestC")
-        count = self.db.load([record1])
-        self.assertEqual(count, 1)
-        self.server.commit()
-        try :
-            count = self.db.load([record2])
         except Exception, err :
             #Good!
             self.assert_("IntegrityError" == err.__class__.__name__, \
@@ -451,6 +405,16 @@ class InDepthLoadTest(unittest.TestCase):
         self.server.close()
         del self.db
         del self.server
+
+    def test_transfer(self):
+        """Make sure can load record into another namespace."""
+        #Should be in database already...
+        db_record = self.db.lookup(accession = "X55053")
+        #Make a new namespace
+        db2 = self.server.new_database("biosql-test-alt")
+        #Should be able to load this DBSeqRecord there...
+        count = db2.load([db_record])
+        self.assertEqual(count,1)
 
     def test_reload(self):
         """Make sure can't reimport existing records."""
