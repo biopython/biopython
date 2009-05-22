@@ -570,6 +570,7 @@ class DatabaseLoader:
         # 14-SEP-2000
         date = record.annotations.get("date",
                                       strftime("%d-%b-%Y", gmtime()).upper())
+        if isinstance(date, list) : date = date[0]
         annotation_tags_id = self._get_ontology_id("Annotation Tags")
         date_id = self._get_term_id("date_changed", annotation_tags_id)
         sql = r"INSERT INTO bioentry_qualifier_value" \
