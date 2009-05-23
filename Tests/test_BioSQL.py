@@ -4,6 +4,7 @@
 # standard library
 import os
 import unittest
+from StringIO import StringIO
 
 # local stuff
 from Bio import MissingExternalDependencyError
@@ -37,7 +38,8 @@ except Exception, e :
     message = "Connection failed, check settings in Tests/setup_BioSQL.py "\
               "if you plan to use BioSQL: %s" % str(e)
     raise MissingExternalDependencyError(message)
-  
+
+from seq_tests_common import compare_records
 
 def create_database():
     """Delete any existing BioSQL test database, then (re)create an empty BioSQL database."""
@@ -388,6 +390,81 @@ class DupLoadTest(unittest.TestCase) :
                          err.__class__.__name__ + "\n" + str(err))
             return
         raise Exception("Should have failed! Loaded %i records" % count)
+
+class ClosedLoopTest(unittest.TestCase):
+    """Test file -> BioSQL -> file."""
+    #NOTE - For speed I don't bother to create a new database each time,
+    #simple a new unique namespace is used for each test.
+    
+    def test_NC_005816(self) :
+        """GenBank file to BioSQL and back to a GenBank file, NC_005816."""
+        self.loop(os.path.join(os.getcwd(), "GenBank", "NC_005816.gb"), "gb")
+
+    def test_NC_000932(self) :
+        """GenBank file to BioSQL and back to a GenBank file, NC_000932."""
+        self.loop(os.path.join(os.getcwd(), "GenBank", "NC_000932.gb"), "gb")
+
+    def test_NT_019265(self) :
+        """GenBank file to BioSQL and back to a GenBank file, NT_019265."""
+        self.loop(os.path.join(os.getcwd(), "GenBank", "NT_019265.gb"), "gb")
+
+    def test_protein_refseq2(self) :
+        """GenBank file to BioSQL and back to a GenBank file, protein_refseq2."""
+        self.loop(os.path.join(os.getcwd(), "GenBank", "protein_refseq2.gb"), "gb")
+
+    def test_no_ref(self) :
+        """GenBank file to BioSQL and back to a GenBank file, noref."""
+        self.loop(os.path.join(os.getcwd(), "GenBank", "noref.gb"), "gb")
+
+    def test_one_of(self) :
+        """GenBank file to BioSQL and back to a GenBank file, one_of."""
+        self.loop(os.path.join(os.getcwd(), "GenBank", "one_of.gb"), "gb")
+
+    def test_cor6_6(self) :
+        """GenBank file to BioSQL and back to a GenBank file, cor6_6."""
+        self.loop(os.path.join(os.getcwd(), "GenBank", "cor6_6.gb"), "gb")
+
+    def test_arab1(self) :
+        """GenBank file to BioSQL and back to a GenBank file, arab1."""
+        self.loop(os.path.join(os.getcwd(), "GenBank", "arab1.gb"), "gb")
+
+    def loop(self, filename, format):
+        original_records = list(SeqIO.parse(open(filename, "rU"), format))
+        # now open a connection to load the database
+        server = BioSeqDatabase.open_database(driver = DBDRIVER,
+                                              user = DBUSER, passwd = DBPASSWD,
+                                              host = DBHOST, db = TESTDB)
+        db_name = "test_%s" % filename #new namespace!
+        db = server.new_database(db_name)
+        count = db.load(original_records)
+        self.assertEqual(count, len(original_records))
+        server.commit()
+        #Now read them back...
+        biosql_records = [db.lookup(name=rec.name) \
+                          for rec in original_records]
+        #And check they agree
+        self.assertEqual(len(biosql_records), len(original_records))
+        for old, new in zip(original_records,biosql_records) :
+            self.assert_(compare_records(old, new))
+        #Now write to a handle...
+        handle = StringIO()
+        SeqIO.write(biosql_records, handle, "gb")
+        #Now read them back...
+        handle.seek(0)
+        new_records = list(SeqIO.parse(handle, "gb"))
+        #And check they still agree
+        self.assertEqual(len(new_records), len(original_records))
+        for old, new in zip(original_records, new_records) :
+            #TODO - remove this hack because we don't yet write these (yet):
+            for key in ["comment", "references", "db_source"] :
+                if key in old.annotations and key not in new.annotations:
+                    del old.annotations[key]
+            #TODO - remove this hack one we write the date properly:
+            del old.annotations["date"]
+            del new.annotations["date"]
+            self.assert_(compare_records(old, new))
+        #Done
+        server.close()
 
 class InDepthLoadTest(unittest.TestCase):
     """Make sure we are loading and retreiving in a semi-lossless fashion.
