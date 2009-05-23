@@ -194,6 +194,7 @@ class SeqInterfaceTest(unittest.TestCase):
         # a dictionary
         for feature in test_record.features:
             self.assert_(isinstance(feature, SeqFeature))
+        s = str(test_record) #shouldn't cause any errors!
 
     def test_seq(self):
         """Make sure Seqs from BioSQL implement the right interface.
@@ -204,6 +205,7 @@ class SeqInterfaceTest(unittest.TestCase):
         data = test_seq.data
         self.assertEqual(type(data), type(""))
         string_rep = test_seq.tostring()
+        self.assertEqual(string_rep, str(test_seq)) #check __str__ too
         self.assertEqual(type(string_rep), type(""))
         self.assertEqual(len(test_seq), 880)
         
