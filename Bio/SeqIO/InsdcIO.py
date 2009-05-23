@@ -256,7 +256,7 @@ class GenBankWriter(SequentialSequenceWriter) :
             division = "UNK"
         if division not in ["PRI","ROD","MAM","VRT","INV","PLN","BCT",
                             "VRL","PHG","SYN","UNA","EST","PAT","STS",
-                            "GSS","HTG","HTC","ENV"] :
+                            "GSS","HTG","HTC","ENV","CON"] :
             division = "UNK"
         
         assert len(units) == 2
