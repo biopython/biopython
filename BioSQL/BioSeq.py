@@ -10,12 +10,15 @@
 """Implementations of Biopython-like Seq objects on top of BioSQL.
 
 This allows retrival of items stored in a BioSQL database using
-a biopython-like Seq interface.
+a biopython-like SeqRecord and Seq interface.
+
+Note: Currently we do not support recording per-letter-annotations
+(like quality scores) in BioSQL.
 """
 
 from Bio import Alphabet
 from Bio.Seq import Seq, UnknownSeq
-from Bio.SeqRecord import SeqRecord
+from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import SeqFeature
 
 class DBSeq(Seq):  # This implements the biopython Seq interface
@@ -448,6 +451,15 @@ class DBSeqRecord(SeqRecord):
             self.id = "%s.%s" % (accession, version)
         else:
             self.id = accession
+        #We don't yet record any per-letter-annotations in the
+        #BioSQL database, but we should set this property up
+        #for completeness (and the __str__ method).
+        try :
+            length = len(self.seq)
+        except :
+            #Could be no sequence in the database!
+            length = 0
+        self._per_letter_annotations = _RestrictedDict(length=length)
 
     def __get_seq(self):
         if not hasattr(self, "_seq"):
