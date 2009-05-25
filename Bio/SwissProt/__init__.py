@@ -68,7 +68,7 @@ class Record:
         self.sequence_update = None
         self.annotation_update = None
         
-        self.description = ''
+        self.description = []
         self.gene_name = ''
         self.organism = ''
         self.organelle = ''
@@ -152,7 +152,7 @@ def _read(handle):
         elif key=='DT':
             _read_dt(record, line)
         elif key=='DE':
-            record.description += line[5:]
+            record.description.append(value.strip())
         elif key=='GN':
             record.gene_name += line[5:]
         elif key=='OS':
@@ -220,8 +220,9 @@ def _read(handle):
         elif key=='  ':
             _sequence_lines.append(value.replace(" ", "").rstrip())
         elif key=='//':
+            # Join the DE lines
+            record.description = " ".join(record.description)
             # Remove trailing newlines
-            record.description = record.description.rstrip()
             record.gene_name   = record.gene_name.rstrip()
             record.organism    = record.organism.rstrip()
             record.organelle   = record.organelle.rstrip()

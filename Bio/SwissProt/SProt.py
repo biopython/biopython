@@ -656,7 +656,7 @@ class _RecordConsumer(AbstractConsumer):
             raise ValueError("I don't understand the date line %s" % line)
     
     def description(self, line):
-        self.data.description += line[5:]
+        self.data.description += line[5:].strip() + " "
     
     def gene_name(self, line):
         self.data.gene_name += line[5:]
@@ -987,8 +987,7 @@ class _SequenceConsumer(AbstractConsumer):
         #self.data.id = ids[0]
 
     def description(self, line):
-        self.data.description = self.data.description + \
-                                line[5:].strip() + "\n"
+        self.data.description += line[5:].strip() + " "
         
     def sequence_data(self, line):
         #It should be faster to make a list of strings, and join them at the end.

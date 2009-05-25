@@ -197,9 +197,7 @@ secretory vesicles.";""")
 
         self.assertEqual(seq_record.id, "P42655")
         self.assertEqual(seq_record.name, "143E_HUMAN")
-        self.assertEqual(seq_record.description, """\
-14-3-3 PROTEIN EPSILON (MITOCHONDRIAL IMPORT STIMULATION FACTOR L
-SUBUNIT) (PROTEIN KINASE C INHIBITOR PROTEIN-1) (KCIP-1) (14-3-3E).""")
+        self.assertEqual(seq_record.description, "14-3-3 PROTEIN EPSILON (MITOCHONDRIAL IMPORT STIMULATION FACTOR L SUBUNIT) (PROTEIN KINASE C INHIBITOR PROTEIN-1) (KCIP-1) (14-3-3E).")
         self.assertEqual(repr(seq_record.seq), "Seq('MDDREDLVYQAKLAEQAERYDEMVESMKKVAGMDVELTVEERNLLSVAYKNVIG...ENQ', ProteinAlphabet())")
 
         test_handle = open(datafile)
@@ -540,9 +538,7 @@ fin whale, two species that can hybridize in nature.";""")
 
         self.assertEqual(seq_record.id, "P39896")
         self.assertEqual(seq_record.name, "TCMO_STRGA")
-        self.assertEqual(seq_record.description, """\
-TETRACENOMYCIN POLYKETIDE SYNTHESIS 8-O-METHYL TRANSFERASE TCMO
-(EC 2.1.1.-).""")
+        self.assertEqual(seq_record.description, "TETRACENOMYCIN POLYKETIDE SYNTHESIS 8-O-METHYL TRANSFERASE TCMO (EC 2.1.1.-).")
         self.assertEqual(repr(seq_record.seq), "Seq('MTPHTHVRGPGDILQLTMAFYGSRALISAVELDLFTLLAGKPLPLGELCERAGI...KPR', ProteinAlphabet())")
 
         test_handle = open(datafile)
@@ -1234,9 +1230,7 @@ novel 5-HT4 splice variant.";""")
 
         self.assertEqual(seq_record.id, "P16235")
         self.assertEqual(seq_record.name, "LSHR_RAT")
-        self.assertEqual(seq_record.description, """\
-LUTROPIN-CHORIOGONADOTROPIC HORMONE RECEPTOR PRECURSOR (LH/CG-R)
-(LSH-R) (LUTEINIZING HORMONE RECEPTOR).""")
+        self.assertEqual(seq_record.description, "LUTROPIN-CHORIOGONADOTROPIC HORMONE RECEPTOR PRECURSOR (LH/CG-R) (LSH-R) (LUTEINIZING HORMONE RECEPTOR).")
         self.assertEqual(repr(seq_record.seq), "Seq('MGRRVPALRQLLVLAVLLLKPSQLQSRELSGSRCPEPCDCAPDGALRCPGPRAG...LTH', ProteinAlphabet())")
 
         test_handle = open(datafile)
