@@ -386,12 +386,15 @@ def _read_ox(record, line):
 def _read_oh(record, line):
     # Line type OH (Organism Host) for viral hosts
     # same code as in taxonomy_id()
-    if record.host_organism:
-        ids = line[5:].rstrip().rstrip(";")
-    else:
-        descr, ids = line[5:].rstrip().rstrip(";").split("=")
+    line = line[5:].rstrip().rstrip(";")
+    index = line.find('=')
+    if index >= 0:
+        descr = line[:index]
         assert descr == "NCBI_TaxID", "Unexpected taxonomy type %s" % descr
-    record.host_organism.extend(ids.split(', '))
+        ids = line[index+1:].split(',')
+    else:
+        ids = line.split(',')
+    record.host_organism.extend([id.strip() for id in ids])
 
 
 def _read_rn(reference, rn):
