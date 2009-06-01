@@ -1,6 +1,6 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
-# Revisions 2007-2008 copyright by Peter Cock.  All rights reserved.
-# Revisions 2008 copyright by Cymon J. Cox.  All rights reserved.
+# Revisions 2007-2009 copyright by Peter Cock.  All rights reserved.
+# Revisions 2008-2009 copyright by Cymon J. Cox.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -354,8 +354,10 @@ def _retrieve_reference(adaptor, primary_id):
     references = []
     for start, end, location, title, authors, dbname, accession in refs:
         reference = SeqFeature.Reference()
-        if start: start -= 1
-        reference.location = [SeqFeature.FeatureLocation(start, end)]
+        #If the start/end are missing, reference.location is an empty list
+        if (start is not None) or (end is not None) :
+            if start is not None: start -= 1 #python counting
+            reference.location = [SeqFeature.FeatureLocation(start, end)]
         #Don't replace the default "" with None.
         if authors : reference.authors = authors
         if title : reference.title = title

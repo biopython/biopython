@@ -1,6 +1,9 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 from Bio.Seq import UnknownSeq
 from Bio.SeqUtils.CheckSum import seguid
-from Bio.SeqFeature import ExactPosition
+from Bio.SeqFeature import ExactPosition, FeatureLocation
 
 def checksum_summary(record) :
     if isinstance(record.seq, UnknownSeq) :
@@ -14,7 +17,11 @@ def checksum_summary(record) :
            % (short, seguid(record.seq), len(record.seq))
 
 def compare_references(old_r, new_r) :
-    """Compare two Reference objects"""
+    """Compare two Reference objects
+
+    Note new_r is assumed to be a BioSQL DBSeqRecord, due to limitations
+    of the BioSQL table structure.
+    """
     assert old_r.title == new_r.title, \
            "%s vs %s" % (old_r.title, new_r.title)
     assert old_r.authors == new_r.authors, \
@@ -24,11 +31,12 @@ def compare_references(old_r, new_r) :
     assert old_r.medline_id == new_r.medline_id, \
            "%s vs %s" % (old_r.medline_id, new_r.medline_id)
 
-    #TODO assert old_r.pubmed_id == new_r.pubmed_id
-    #Looking at BioSQL/BioSeq.py function _retrieve_reference
-    #it seems that it will get either the MEDLINE or PUBMED,
-    #but not both.  I *think* the current schema does not allow
-    #us to store both... must confirm this.
+    if old_r.pubmed_id and new_r.pubmed_id :
+        assert old_r.pubmed_id == new_r.pubmed_id
+        #Looking at BioSQL/BioSeq.py function _retrieve_reference
+        #it seems that it will get either the MEDLINE or PUBMED,
+        #but not both.  I *think* the current schema does not allow
+        #us to store both... must confirm this.
     
     #TODO - assert old_r.comment == new_r.comment
     #Looking at the tables, I *think* the current schema does not
@@ -40,10 +48,16 @@ def compare_references(old_r, new_r) :
     #allow us to store a consortium.
     assert new_r.consrtm == ""
     
-    #TODO - reference location?
-    #The parser seems to give a location object (i.e. which
-    #nucleotides from the file is the reference for), while the
-    #we seem to use the database to hold the journal details (!)
+    if len(old_r.location) == 0 :
+        assert len(new_r.location) == 0
+    else :
+        #BioSQL can only store ONE location!
+        #TODO - Check BioPerl with a GenBank file with multiple ref locations
+        assert isinstance(old_r.location[0], FeatureLocation)
+        assert isinstance(new_r.location[0], FeatureLocation)
+        assert old_r.location[0].start == new_r.location[0].start and \
+               old_r.location[0].end == new_r.location[0].end
+
     return True
 
 def compare_features(old_f, new_f) :
