@@ -8,17 +8,5 @@
 See www.phyloxml.org for more info about the format.
 """
 
-import zipfile
-
 from Parser import parse
-
-
-def read(fname):
-    if zipfile.is_zipfile(fname):
-        z = zipfile.ZipFile(fname)
-        tree = parse(z.open(z.filelist[0].filename))
-        z.close()
-    else:
-        tree = parse(fname)
-    return tree
 
