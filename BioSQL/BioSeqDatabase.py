@@ -1,5 +1,5 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
-# Revisions 2007-2008 by Peter Cock.
+# Revisions 2007-2009 by Peter Cock.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -330,6 +330,20 @@ class BioSeqDatabase:
         self.adaptor = adaptor
         self.name = name
         self.dbid = self.adaptor.fetch_dbid_by_dbname(name)
+        # TODO - Remove the following once BioSQL Bug 2839 is fixed.
+        # Test for RULES in PostgreSQL schema, see also Bug 2833.
+        if "psycopg" in self.adaptor.conn.__class__.__module__:
+            sql = "SELECT ev_class FROM pg_rewrite WHERE " + \
+                  "rulename='rule_bioentry_i1' OR " + \
+                  "rulename='rule_bioentry_i2';"
+            if self.adaptor.execute_and_fetchall(sql):
+                import warnings
+                warnings.warn("Your BioSQL PostgreSQL schema includes "
+                              "some rules required for bioperl-db but"
+                              "which can cause problems loading data "
+                              "using Biopython (see Bug 2839). If you do "
+                              "not use BioPerl, please remove these rules.")
+
     def __repr__(self):
         return "BioSeqDatabase(%r, %r)" % (self.adaptor, self.name)
         
