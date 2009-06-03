@@ -16,19 +16,19 @@ Links
 =====
 
 Project page on NESCent:
-https://www.nescent.org/wg_phyloinformatics/PhyloSoC:Biopython_support_for_parsing_and_writing_phyloXML
+    https://www.nescent.org/wg_phyloinformatics/PhyloSoC:Biopython_support_for_parsing_and_writing_phyloXML
 
 Biopython wiki doc:
-http://biopython.org/wiki/PhyloXML
+    http://biopython.org/wiki/PhyloXML
 
 PhyloXML homepage:
-http://www.phyloxml.org/
+    http://www.phyloxml.org/
 
 GSoC project proposal:
-http://socghop.appspot.com/student_project/show/google/gsoc2009/nescent/t124022798969
+    http://socghop.appspot.com/student_project/show/google/gsoc2009/nescent/t124022798969
 
 This GitHub branch:
-http://github.com/etal/biopython/tree/phyloxml
+    http://github.com/etal/biopython/tree/phyloxml
 
 
 Timeline
@@ -130,19 +130,19 @@ See:
     * http://www.phyloxml.org/documentation/version_100/phyloxml.xsd.html
     * http://www.phyloxml.org/examples/phyloxml_examples.xml
 
-Tier 0:
+Tier 0 (essential tree structure):
     phyloxml
     phylogeny
     clade
 
-Tier 1:
+Tier 1 (used in all example files):
     branch_length
     code
     confidence
     name
     taxonomy
 
-Tier 2:
+Tier 2 (used in at least one example file, but not all):
     domain
     domain_architecture
     duplications
@@ -151,19 +151,44 @@ Tier 2:
     sequence
     speciations
 
-Tier 3:
+Tier 3 (not found in example files):
+    absent
+    accession
+    alt
+    annotation
+    bc
     binary_characters
+    blue
+    clade_relation
     color
     common_name
     date
+    desc
+    description
     distribution
-    events
+    gained
+    green
+    id
+    lat
     location
+    long
+    losses
+    lost
+    mol_seq
     node_id
+    point
+    polygon
+    present
     property
+    rank
+    red
     reference
+    sequence_relation
+    symbol
+    type
+    uri
+    value
     width
-    ...
 
 
 Namespaces:

@@ -30,41 +30,59 @@ except ImportError:
                             "want to use Bio.PhyloXML.")
 
 # Lookup table used to instantiate elements by XML tag
-# TODO: find the rest of the tags and corresponding classes
 tags_to_classes = {
-        # Tier 0
-        'phyloxml': Phyloxml,
-        'phylogeny': Phylogeny,
-        'clade':    Clade,
-
-        # Tier 1
-        'branch_length': None,
-        'code':     None,
-        'confidence': None,
-        'name':     None,
-        'taxonomy': None,
-
-        # Tier 2
-        'domain':   None,
-        'domain_architecture': None,
-        'duplications': None,
-        'events':   None,
-        'scientific_name': None,
-        'sequence': None,
-        'speciations':  None,
-
-        # Tier 3
-        'binary_characters': None,
-        'color':    None,
-        'common_name': None,
-        'date':     None,
-        'distribution': None,
-        'events':   None,
-        'location': None,
-        'node_id':  None,
-        'property': None,
-        'reference': None,
-        'width':    None,
+        'absent':       BinaryCharacterList,
+        'accession':    Accession,
+        'alt':          float,  # decimal
+        'annotation':   Annotation,
+        'bc':           Token,
+        'binary_characters': BinaryCharacters,
+        'blue':         int, # unsignedByte
+        'branch_length': float,  # double
+        'clade':        Clade,
+        'clade_relation': CladeRelation,
+        'code':         TaxonomyCode,
+        'color':        BranchColor,
+        'common_name':  Token,
+        'confidence':   Confidence,
+        'date':         Date,
+        'desc':         Token,
+        'description':  Token,
+        'distribution': Distribution,
+        'domain':       ProteinDomain,
+        'domain_architecture': DomainArchitecture,
+        'duplications': int, # nonNegativeInteger
+        'events':       Events,
+        'gained':       BinaryCharacterList,
+        'green':        int, # unsignedByte
+        'id':           Id,
+        'lat':          float,  # decimal
+        'location':     Token,
+        'long':         float,  # decimal
+        'losses':       int, # nonNegativeInteger
+        'lost':         BinaryCharacterList,
+        'mol_seq':      MolSeq,
+        'name':         Token,
+        'node_id':      Id,
+        'phylogeny':    Phylogeny,
+        'phyloxml':     Phyloxml,
+        'point':        Point,
+        'polygon':      Polygon,
+        'present':      BinaryCharacterList,
+        'property':     Property,
+        'rank':         Rank,
+        'red':          int, # unsignedByte
+        'reference':    Reference,
+        'scientific_name': Token,
+        'sequence':     Sequence,
+        'sequence_relation': SequenceRelation,
+        'speciations':  int, # nonNegativeInteger
+        'symbol':       SequenceSymbol,
+        'taxonomy':     Taxonomy,
+        'type':         EventType,
+        'uri':          Uri,
+        'value':        float, # decimal
+        'width':        float, # double
         }
 
 
@@ -126,6 +144,13 @@ class PhyloElement(object):
 
 class Other(PhyloElement):
     """Container for non-phyloXML elements in the tree."""
+
+
+class Token(object):
+    """Simple class for nodes containing only a string."""
+    def __init__(self, tag, text):
+        self.tag = tag
+        self.text = text
 
 
 # Core elements
