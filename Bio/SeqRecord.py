@@ -380,6 +380,13 @@ class SeqRecord(object):
                     stop  = parent_length - stop + 1
                 #assert str(self.seq)[index] == str(self.seq)[start:stop]
                 for f in self.features :
+                    if f.ref or f.ref_db :
+                        #TODO - Implement this (with lots of tests)?
+                        import warnings
+                        warnings.warn("When slicing SeqRecord objects, any "
+                              "SeqFeature referencing other sequences (e.g. "
+                              "from segmented GenBank records) is ignored.")
+                        continue
                     if start <= f.location.start.position \
                     and f.location.end.position < stop :
                         answer.features.append(f._shift(-start))
