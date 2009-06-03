@@ -14,9 +14,11 @@ import zipfile
 from Bio import PhyloXML
 from Bio.PhyloXML import Parser
 
+
 # Example PhyloXML files
 example_apaf = 'PhyloXML/apaf.xml'
 example_bcl2 = 'PhyloXML/bcl_2.xml'
+example_phylo = 'PhyloXML/phyloxml_examples.xml'
 example_zip = 'PhyloXML/ncbi_taxonomy_mollusca.xml.zip'
 
 
@@ -26,12 +28,14 @@ def unzip(fname):
     z = zipfile.ZipFile(fname)
     return z.open(z.filelist[0].filename)
 
+all_examples = (example_apaf, example_bcl2, example_phylo, unzip(example_zip))
+
 
 class ParseNoOp(unittest.TestCase):
     """Tests for basic availability of library functions needed for parsing."""
     def test_noop(self):
         """Parse an XML document and dump its tags to standard output."""
-        for source in (example_apaf, example_bcl2):
+        for source in (example_apaf, example_bcl2, example_phylo):
             Parser._dump_tags(source)
 
     def test_zip(self):
@@ -42,19 +46,14 @@ class ParseNoOp(unittest.TestCase):
 class ParsePhylo(unittest.TestCase):
     """Tests for proper parsing of example phyloXML files."""
     def test_root(self):
-        """Read small example files to produce a tree object."""
-        for source in (example_apaf, example_bcl2):
+        """Read each example files to produce a tree object."""
+        for source in all_examples:
             tree = PhyloXML.read(source)
             self.assert_(tree)
 
-    def test_zip(self):
-        """Read a large Zip-compressed file to produce a tree object."""
-        tree = PhyloXML.read(unzip(example_zip))
-        self.assert_(tree)
-
     def test_core(self):
         """Verify the presence of core elements within the tree."""
-        for source in (example_apaf, example_bcl2, unzip(example_zip)):
+        for source in all_examples:
             tree = PhyloXML.read(source)
             self.assert_(len(tree.clades))
 
