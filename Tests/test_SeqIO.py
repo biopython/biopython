@@ -207,8 +207,10 @@ test_records[4][0][2].annotations["comment"] = "More%sof" % os.linesep \
 # Add a float too:
 test_records[4][0][2].annotations["weight"] = 2.5
 
-def records_match(record_one, record_two) :
-    """This is meant to be a strict comparison for exact agreement"""
+def compare_record(record_one, record_two) :
+    """This is meant to be a strict comparison for exact agreement..."""
+    assert isinstance(record_one, SeqRecord)
+    assert isinstance(record_two, SeqRecord)
     if record_one.id != record_two.id :
         return False
     if record_one.name != record_two.name :
@@ -438,10 +440,10 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
                 
             
         #Check the lists obtained by the different methods agree
-        assert records_match(record, records2[i])
-        assert records_match(record, records3[i])
-        assert records_match(record, records4[i])
-        assert records_match(record, records5[i])
+        assert compare_record(record, records2[i])
+        assert compare_record(record, records3[i])
+        assert compare_record(record, records4[i])
+        assert compare_record(record, records5[i])
 
         if i < 3 :
             print record_summary(record)
@@ -525,7 +527,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
         #Check the record order agrees, and double check the
         #sequence lengths all agree too.
         for i in range(t_count) :
-            assert records_match(records[i], alignment.get_all_seqs()[i])
+            assert compare_record(records[i], alignment.get_all_seqs()[i])
             assert len(records[i].seq) == alignment_len
 
         print alignment_summary(alignment)
@@ -583,7 +585,7 @@ for (records, descr) in test_records :
             else :
                 assert record.id == new_record.id
             assert record.seq.tostring() == new_record.seq.tostring()
-            #Using records_match(record, new_record) is too strict
+            #Using compare_record(record, new_record) is too strict
 
         #Close now, after checking, so that it can be used at the console for debugging
         handle.close()

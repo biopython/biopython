@@ -42,7 +42,7 @@ except Exception, e :
               "if you plan to use BioSQL: %s" % str(e)
     raise MissingExternalDependencyError(message)
 
-from seq_tests_common import compare_records
+from seq_tests_common import compare_record, compare_records
 
 def create_database():
     """Delete any existing BioSQL test database, then (re)create an empty BioSQL database."""
@@ -446,9 +446,7 @@ class ClosedLoopTest(unittest.TestCase):
         biosql_records = [db.lookup(name=rec.name) \
                           for rec in original_records]
         #And check they agree
-        self.assertEqual(len(biosql_records), len(original_records))
-        for old, new in zip(original_records,biosql_records) :
-            self.assert_(compare_records(old, new))
+        self.assert_(compare_records(original_records, biosql_records))
         #Now write to a handle...
         handle = StringIO()
         SeqIO.write(biosql_records, handle, "gb")
@@ -465,7 +463,7 @@ class ClosedLoopTest(unittest.TestCase):
             #TODO - remove this hack one we write the date properly:
             del old.annotations["date"]
             del new.annotations["date"]
-            self.assert_(compare_records(old, new))
+            self.assert_(compare_record(old, new))
         #Done
         server.close()
 
@@ -521,9 +519,7 @@ class TransferTest(unittest.TestCase):
         biosql_records = [db.lookup(name=rec.name) \
                           for rec in original_records]
         #And check they agree
-        self.assertEqual(len(biosql_records), len(original_records))
-        for old, new in zip(original_records,biosql_records) :
-            self.assert_(compare_records(old, new))
+        self.assert_(compare_records(original_records, biosql_records))
         #Now write to a second name space...
         db_name = "test_trans2_%s" % filename #new namespace!
         db = server.new_database(db_name)
@@ -533,9 +529,7 @@ class TransferTest(unittest.TestCase):
         biosql_records2 = [db.lookup(name=rec.name) \
                           for rec in original_records]
         #And check they also agree
-        self.assertEqual(len(biosql_records2), len(original_records))
-        for old, new in zip(original_records,biosql_records2) :
-            self.assert_(compare_records(old, new))
+        self.assert_(compare_records(original_records, biosql_records2))
         #Done
         server.close()
 

@@ -3,7 +3,8 @@
 # as part of this package.
 from Bio.Seq import UnknownSeq
 from Bio.SeqUtils.CheckSum import seguid
-from Bio.SeqFeature import ExactPosition, FeatureLocation
+from Bio.SeqFeature import ExactPosition, FeatureLocation, SeqFeature
+from Bio.SeqRecord import SeqRecord
 
 def checksum_summary(record) :
     if isinstance(record.seq, UnknownSeq) :
@@ -16,7 +17,7 @@ def checksum_summary(record) :
     return "%s [%s] len %i" \
            % (short, seguid(record.seq), len(record.seq))
 
-def compare_references(old_r, new_r) :
+def compare_reference(old_r, new_r) :
     """Compare two Reference objects
 
     Note new_r is assumed to be a BioSQL DBSeqRecord, due to limitations
@@ -60,8 +61,10 @@ def compare_references(old_r, new_r) :
 
     return True
 
-def compare_features(old_f, new_f) :
+def compare_feature(old_f, new_f) :
     """Compare two SeqFeature objects"""
+    assert isinstance(old_f, SeqFeature)
+    assert isinstance(new_f, SeqFeature)
 
     assert old_f.type == new_f.type, \
         "%s -> %s" % (old_f.type, new_f.type) 
@@ -172,7 +175,7 @@ def compare_features(old_f, new_f) :
                 "%s -> %s" % (old_f.qualifiers[key], new_f.qualifiers[key])
     return True
 
-def compare_sequences(old, new) :
+def compare_sequence(old, new) :
     """Compare two Seq or DBSeq objects"""
     assert len(old) == len(new)
     assert old.tostring() == new.tostring()
@@ -231,11 +234,22 @@ def compare_sequences(old, new) :
     assert s == old[:].tostring()
     assert s == new[:].tostring()
     return True
-                
-def compare_records(old, new) :
+
+def compare_features(old_list, new_list) :
+    assert isinstance(old_list, list)
+    assert isinstance(new_list, list)
+    assert len(old_list) == len(new_list)
+    for old_f, new_f in zip(old_list, new_list) :
+        if not compare_feature(old_f, new_f) :
+            return False
+    return True
+        
+def compare_record(old, new) :
     """Compare two SeqRecord or DBSeqRecord objects"""
+    assert isinstance(old, SeqRecord)
+    assert isinstance(new, SeqRecord)
     #Sequence:
-    compare_sequences(old.seq, new.seq)
+    compare_sequence(old.seq, new.seq)
     #Basics:
     assert old.id == new.id
     assert old.name == new.name
@@ -244,10 +258,8 @@ def compare_records(old, new) :
            "dbxrefs mismatch\nOld: %s\nNew: %s" \
            % (old.dbxrefs, new.dbxrefs)
     #Features:
-    assert len(old.features) == len(new.features)
-    for old_f, new_f in zip(old.features, new.features) :
-        if not compare_features(old_f, new_f) :
-            return False
+    if not compare_features(old.features, new.features) :
+        return False
 
     #Annotation:
     #We are expecting to see some "extra" annotations appearing,
@@ -271,7 +283,7 @@ def compare_records(old, new) :
         if key == "references" :
             assert len(old.annotations[key]) == len(new.annotations[key])
             for old_r, new_r in zip(old.annotations[key], new.annotations[key]) :
-                compare_references(old_r, new_r)
+                compare_reference(old_r, new_r)
         elif key == "comment":
             if isinstance(old.annotations[key], list):
                 old_comment = [comm.replace("\n", " ") for comm in \
@@ -308,4 +320,13 @@ def compare_records(old, new) :
             assert old.annotations[key] == [new.annotations[key]], \
                 "Annotation '%s' changed by load/retrieve\nWas:%s\nNow:%s" \
                 % (key, old.annotations[key], new.annotations[key])
+    return True
+
+def compare_records(old_list, new_list) :
+    assert isinstance(old_list, list)
+    assert isinstance(new_list, list)
+    assert len(old_list) == len(new_list)
+    for old_r, new_r in zip(old_list, new_list) :
+        if not compare_record(old_r, new_r) :
+            return False
     return True

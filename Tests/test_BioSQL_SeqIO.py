@@ -28,9 +28,7 @@ except (NameError, ImportError) :
               "if you plan to use BioSQL."
     raise MissingExternalDependencyError(message)
 
-from seq_tests_common import checksum_summary, compare_references, \
-                             compare_features, compare_sequences, \
-                             compare_records
+from seq_tests_common import checksum_summary, compare_record
 
 db_name = "biosql-seqio-test"
 #####################################################################
@@ -156,16 +154,16 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
         key = record.name
         print " - Retrieving by name/display_id '%s'," % key,
         db_rec = db.lookup(name=key)
-        compare_records(record, db_rec)
+        compare_record(record, db_rec)
         db_rec = db.lookup(display_id=key)
-        compare_records(record, db_rec)
+        compare_record(record, db_rec)
         print "OK"
 
         key = record.id
         if key.count(".")==1 and key.split(".")[1].isdigit() :
             print " - Retrieving by version '%s'," % key,
             db_rec = db.lookup(version=key)
-            compare_records(record, db_rec)
+            compare_record(record, db_rec)
             print "OK"
         
         if "accessions" in record.annotations :
@@ -175,7 +173,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
                 try :
                     print " - Retrieving by accession '%s'," % key,
                     db_rec = db.lookup(accession=key)
-                    compare_records(record, db_rec)
+                    compare_record(record, db_rec)
                     print "OK"
                 except IndexError :
                     print "Failed"
@@ -186,7 +184,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
             if key != record.id :
                 print " - Retrieving by GI '%s'," % key,
                 db_rec = db.lookup(primary_id=key)
-                compare_records(record, db_rec)
+                compare_record(record, db_rec)
                 print "OK"
 
 print "Removing (deleting) '%s'" % db_name
