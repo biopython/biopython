@@ -240,6 +240,13 @@ def _retrieve_features(adaptor, primary_id):
                 start -= 1
             if strand == 0:
                 strand = None
+            if strand not in (+1, -1, None) :
+                raise ValueError("Invalid strand %s found in database for " \
+                                 "seqfeature_id %s" % (strand, seqfeature_id))
+            if end < start :
+                import warnings
+                warnings.warn("Inverted location start/end (%i and %i) for " \
+                              "seqfeature_id %s" % (start, end, seqfeature_id))
             locations.append( (location_id, start, end, strand) )
         # Get possible remote reference information
         remote_results = adaptor.execute_and_fetchall(
