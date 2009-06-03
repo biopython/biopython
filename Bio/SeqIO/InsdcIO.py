@@ -208,6 +208,15 @@ class GenBankWriter(SequentialSequenceWriter) :
             self._write_single_line("", text)
         assert not words
 
+    def _write_multi_entries(self, tag, text_list) :
+        #used for DBLINK and any similar later line types.
+        #If the list of strings is empty, nothing is written.
+        for i, text in enumerate(text_list) :
+            if i==0 :
+                self._write_single_line(tag, text)
+            else :
+                self._write_single_line("", text)
+
     def _write_the_first_line(self, record) :
         """Write the LOCUS line."""
         
@@ -362,6 +371,11 @@ class GenBankWriter(SequentialSequenceWriter) :
             self._write_single_line("VERSION", "%s  GI:%s" % (acc_with_version,gi))
         else :
             self._write_single_line("VERSION", "%s" % (acc_with_version))
+
+        #The NCBI only expect two types of link so far,
+        #e.g. "Project:28471" and "Trace Assembly Archive:123456"
+        #TODO - Filter the dbxrefs list to just these?
+        self._write_multi_entries("DBLINK", record.dbxrefs)
 
         try :
             #List of strings
