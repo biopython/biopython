@@ -789,6 +789,12 @@ class DatabaseLoader:
         """
         # TODO - Record an ontology for the locations (using location.term_id)
         # which for now as in BioPerl we leave defaulting to NULL.
+        if feature.location_operator and feature.location_operator != "join" :
+            # e.g. order locations... we don't record "order" so it
+            # will become a "join" on reloading. What does BioPerl do?
+            import warnings
+            warnings.warn("%s location operators are not fully supported" \
+                          % feature.location_operator)
         
         # two cases, a simple location or a split location
         if not feature.sub_features:    # simple location
@@ -817,6 +823,8 @@ class DatabaseLoader:
 
         # TODO - Record an ontology term for the location (location.term_id)
         # which for now like BioPerl we'll leave as NULL.
+        # This might allow us to record "between" positions properly, but I
+        # doesn't really see how it could work for before/after fuzzy positions
         loc_term_id = None
 
         if feature.ref:
