@@ -390,6 +390,15 @@ class GenBankWriter(SequentialSequenceWriter) :
             keywords = "."
         self._write_multi_line("KEYWORDS", keywords)
 
+        if "segment" in record.annotations :
+            #Deal with SEGMENT line found only in segmented records,
+            #e.g. AH000819
+            segment = record.annotations["segment"]
+            if isinstance(segment, list) :
+                assert len(segment)==1, segment
+                segment = segment[0]
+            self._write_single_line("SEGMENT", segment)
+
         self._write_multi_line("SOURCE", \
                                 self._get_annotation_str(record, "source"))
         #The ORGANISM line MUST be a single line, as any continuation is the taxonomy
