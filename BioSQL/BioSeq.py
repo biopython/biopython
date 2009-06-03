@@ -309,7 +309,14 @@ def _retrieve_features(adaptor, primary_id):
             start = locations[0][1]
             end = locations[-1][2]
             feature.location = SeqFeature.FeatureLocation(start, end)
-            feature.strand = feature.sub_features[0].strand
+            # To get the parent strand (as done when parsing GenBank files),
+            # need to consider evil mixed strand examples like this,
+            # join(complement(69611..69724),139856..140087,140625..140650)
+            strands = set(sf.strand for sf in feature.sub_features)
+            if len(strands)==1 :
+                feature.strand = feature.sub_features[0].strand
+            else :
+                feature.strand = None # i.e. mixed strands
 
         seq_feature_list.append(feature)
 
