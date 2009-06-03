@@ -33,15 +33,10 @@ def generic_run(commandline):
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
                              shell=(sys.platform!="win32"))
-    child.stdin.close()
-    r = child.stdout
-    e = child.stderr 
-    r_out = r.read()
-    e_out = e.read()
-    r.close()
-    e.close()
+    #Use .communicate as might get deadlocks with .wait(), see Bug 2804/2806
+    r_out, e_out = child.communicate()
     # capture error code:
-    error_code = child.wait()
+    error_code = child.returncode
     return ApplicationResult(commandline, error_code), \
            File.UndoHandle(StringIO.StringIO(r_out)), \
            File.UndoHandle(StringIO.StringIO(e_out))
