@@ -109,15 +109,21 @@ def _insdc_feature_position_string(pos, offset=0):
 
 
 def _insdc_location_string_ignoring_strand_and_subfeatures(feature) :
+    if feature.ref :
+        ref = "%s:" % feature.ref
+    else :
+        ref = ""
+    assert not feature.ref_db
     if feature.location.start==feature.location.end \
     and isinstance(feature.location.end, SeqFeature.ExactPosition):
         #Special case, 12^13 gets mapped to location 12:12
         #(a zero length slice, meaning the point between two letters)
-        return "%i^%i" % (feature.location.end.position,
-                          feature.location.end.position+1)
+        return "%s%i^%i" % (ref, feature.location.end.position,
+                            feature.location.end.position+1)
     else :
         #Typical case, e.g. 12..15 gets mapped to 11:15
-        return _insdc_feature_position_string(feature.location.start, +1) \
+        return ref \
+               + _insdc_feature_position_string(feature.location.start, +1) \
                + ".." + \
                _insdc_feature_position_string(feature.location.end)
 
