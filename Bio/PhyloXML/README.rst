@@ -12,31 +12,8 @@ A Bioperl driver for phyloXML was created during the 2008 Summer of Code; this
 project aims to build a similar module for the popular Biopython package.
 
 
-Core Elements
--------------
-
-Tier 1:
-    branch_length
-    clade
-    code
-    confidence
-    name
-    phylogeny
-    phyloxml
-    taxonomy
-
-Tier 2:
-    domain
-    domain_architecture
-    duplications
-    events
-    scientific_name
-    sequence
-    speciations
-
-
-See Also
---------
+Links
+=====
 
 Project page on NESCent:
 https://www.nescent.org/wg_phyloinformatics/PhyloSoC:Biopython_support_for_parsing_and_writing_phyloXML
@@ -55,7 +32,7 @@ http://github.com/etal/biopython/tree/phyloxml
 
 
 Timeline
---------
+========
 
 :Backlog:
     Documentation on Biopython wiki:
@@ -141,4 +118,228 @@ Timeline
 :8/3:
     - Run tests and benchmarks on alternate platforms and document results
     - Discuss merging back upstream
+
+
+Notes
+=====
+
+Core Elements
+-------------
+
+See:
+    * http://www.phyloxml.org/documentation/version_100/phyloxml.xsd.html
+    * http://www.phyloxml.org/examples/phyloxml_examples.xml
+
+Tier 0:
+    phyloxml
+    phylogeny
+    clade
+
+Tier 1:
+    branch_length
+    code
+    confidence
+    name
+    taxonomy
+
+Tier 2:
+    domain
+    domain_architecture
+    duplications
+    events
+    scientific_name
+    sequence
+    speciations
+
+Tier 3:
+    binary_characters
+    color
+    common_name
+    date
+    distribution
+    events
+    location
+    node_id
+    property
+    reference
+    width
+    ...
+
+
+Namespaces:
+
+    :xml:   http://www.w3.org/XML/1998/namespace
+    :phy:   http://www.phyloxml.org
+    :xs:    http://www.w3.org/2001/XMLSchema
+
+
+Diagram
+-------
+
+::
+
+    phyloxml
+        { xsi:schemaLocation="..."}
+        phylogeny * (none)
+            { rooted=bool
+              rerootable=bool
+              branch_length_unit=token
+              type=token
+            }
+            name ? (token)
+            id ? (token)
+                { type=token }
+            description ? (token)
+            date ? (token or number)
+                { unit=token
+                  range=
+                }
+                desc ? (token)
+                value ? (token?)
+            confidence * (double)
+                { type=token }
+            clade ? (none)
+                { branch_length=number
+                  id_source=identifier
+                }
+                name ^
+                branch_length ?     # same as using the attribute
+                confidence ^
+                width ?
+                color ?
+                    red (byte)
+                    green (byte)
+                    blue (byte)
+                node_id ?           # see id
+                taxonomy *
+                    { type=
+                      id_source=
+                    }
+                    id ^
+                    code ? ( [a-zA-Z0-9_]{2,10} )   # see TaxonomyCode
+                    scientific_name ? (token)
+                    common_name * (token)
+                    rank ? (one of:
+                        ['domain', 'kingdom', 'subkingdom', 'branch',
+                        'infrakingdom', 'superphylum', 'phylum', 'subphylum',
+                        'infraphylum', 'microphylum', 'superdivision',
+                        'division', 'subdivision', 'infradivision',
+                        'superclass', 'class', 'subclass', 'infraclass',
+                        'superlegion', 'legion', 'sublegion', 'infralegion',
+                        'supercohort', 'cohort', 'subcohort', 'infracohort',
+                        'superorder', 'order', 'suborder', 'superfamily',
+                        'family', 'subfamily', 'supertribe', 'tribe',
+                        'subtribe', 'infratribe', 'genus', 'subgenus',
+                        'superspecies', 'species', 'subspecies', 'variety',
+                        'subvariety', 'form', 'subform', 'cultivar', 'unknown',
+                        'other'] )
+                    uri ? (token, generally URL)
+                        { desc=token
+                          type=token
+                        }
+                    OTHER *
+                sequence *
+                    { type=token
+                      id_source=token
+                      id_ref=identifier
+                    }
+                    symbol ? ( \S{1,10} )
+                    accession ? (token)
+                        { source=token }
+                    name ^
+                    location ?
+                    mol_seq ? ( [a-zA-Z\.\-\?\*_]+ )
+                    uri ^
+                    annotation +
+                        { ref=[a-zA-Z0-9_]+:[a-zA-Z0-9_\.\-\s]+
+                          source=token
+                          evidence=
+                          type=
+                        }
+                        desc ^
+                        confidence ^
+                        property * (none)
+                            { ref=^
+                              unit=a-zA-Z0-9_]+:[a-zA-Z0-9_\.\-\s]+
+                              datatype=
+                                ['xsd:string', 'xsd:boolean', 'xsd:decimal',
+                                'xsd:float', 'xsd:double', 'xsd:duration',
+                                'xsd:dateTime', 'xsd:time', 'xsd:date',
+                                'xsd:gYearMonth', 'xsd:gYear', 'xsd:gMonthDay',
+                                'xsd:gDay', 'xsd:gMonth', 'xsd:hexBinary',
+                                'xsd:base64Binary', 'xsd:anyURI',
+                                'xsd:normalizedString', 'xsd:token',
+                                'xsd:integer', 'xsd:nonPositiveInteger',
+                                'xsd:negativeInteger', 'xsd:long', 'xsd:int',
+                                'xsd:short', 'xsd:byte',
+                                'xsd:nonNegativeInteger', 'xsd:unsignedLong',
+                                'xsd:unsignedInt', 'xsd:unsignedShort',
+                                'xsd:unsignedByte', 'xsd:positiveInteger']
+                              applies_to=
+                                ['phylogeny', 'clade', 'node', 'annotation',
+                                'parent_branch', 'other']
+                              id_ref=identifier
+                            }
+                        uri ^
+                    domain_architecture ?
+                        { length=int }
+                        domain + (token)
+                            { from=int >0
+                              to=int >0
+                              confidence=double
+                              id=token
+                            }
+                    OTHER *
+                events ?
+                    type ? (one of:
+                        ['transfer', 'fusion', 'speciation_or_duplication',
+                        'other', 'mixed', 'unassigned'] )   # see EventType
+                    duplications ?
+                    speciations ?
+                    losses ?
+                    confidence ^
+                binary_characters ? (none)
+                    { type=
+                      gained_count=
+                      lost_count=
+                      present_count=
+                      absent_count=
+                    }
+                    gained ?            # see BinaryCharacterList for these
+                        bc + (token)
+                    lost ?
+                    present ?
+                    absent ?
+                distribution * (none)
+                    desc ^
+                    point * (none)
+                        { geodetic_datum="WGS84" }
+                        lat (double)
+                        long (double)
+                        alt ? (int?)
+                    polygon * (none)    # list of at least 3 points
+                        point {3,} ^
+                date ^
+                reference * (none)
+                    { doi=[a-zA-Z0-9_\.]+/[a-zA-Z0-9_\.]+ }
+                    desc ^
+                property ^
+                clade ^
+            clade_relation * (none)
+                { id_ref_0=identifier
+                  id_ref_1=identifier
+                  distance=
+                  type=token
+                }
+                confidence ^
+            sequence_relation *
+                { id_ref_0=identifier
+                  id_ref_1=identifier
+                  distance=
+                  type=SequenceRelationType
+                }
+                confidence ^
+            property ^
+            OTHER *
+        NOT *                       # arbitrary elements from other namespaces
 
