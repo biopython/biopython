@@ -332,17 +332,22 @@ class BioSeqDatabase:
         self.dbid = self.adaptor.fetch_dbid_by_dbname(name)
         # TODO - Remove the following once BioSQL Bug 2839 is fixed.
         # Test for RULES in PostgreSQL schema, see also Bug 2833.
+        self._postgres_rules_present= False
         if "psycopg" in self.adaptor.conn.__class__.__module__:
             sql = "SELECT ev_class FROM pg_rewrite WHERE " + \
                   "rulename='rule_bioentry_i1' OR " + \
                   "rulename='rule_bioentry_i2';"
             if self.adaptor.execute_and_fetchall(sql):
                 import warnings
-                warnings.warn("Your BioSQL PostgreSQL schema includes "
-                              "some rules required for bioperl-db but"
-                              "which can cause problems loading data "
-                              "using Biopython (see Bug 2839). If you do "
-                              "not use BioPerl, please remove these rules.")
+                warnings.warn("Your BioSQL PostgreSQL schema includes some "
+                              "rules currently required for bioperl-db but "
+                              "which may cause problems loading data using"
+                              "Biopython (see BioSQL Bug 2839). If you do not "
+                              "use BioPerl, please remove these rules. "
+                              "Biopython should cope with the rules present, "
+                              "but with a performance penalty when loading "
+                              "new records.")
+                self._postgres_rules_present = True
 
     def __repr__(self):
         return "BioSeqDatabase(%r, %r)" % (self.adaptor, self.name)
@@ -453,5 +458,28 @@ class BioSeqDatabase:
         num_records = 0
         for cur_record in record_iterator :
             num_records += 1
+            #Hack to work arround BioSQL Bug 2839 - If using PostgreSQL and
+            #the RULES are present check for a duplicate record before loading
+            if self._postgres_rules_present:
+                #Recreate what the Loader's _load_bioentry_table will do:
+                if cur_record.id.count(".") == 1:
+                    accession, version = cur_record.id.split('.')
+                    try :
+                        version = int(version)
+                    except ValueError :
+                        accession = cur_record.id
+                        version = 0
+                else:
+                    accession = cur_record.id
+                    version = 0
+                gi = cur_record.annotations.get("gi", None)
+                sql = "SELECT bioentry_id FROM bioentry WHERE (identifier " + \
+                      "= '%s' AND biodatabase_id = '%s') OR (accession = " + \
+                      "'%s' AND version = '%s' AND biodatabase_id = '%s')"
+                self.adaptor.execute(sql % (gi, self.dbid, accession, version, self.dbid))
+                if self.adaptor.cursor.fetchone():
+                    raise self.adaptor.conn.IntegrityError("Duplicate record " 
+                        "detected: record has not been inserted")
+            #End of hack
             db_loader.load_seqrecord(cur_record)
         return num_records
