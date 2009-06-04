@@ -128,7 +128,6 @@ def read(handle):
     event, root = context.next()
     phyloxml = Phyloxml(attrib=root.attrib)
     for event, elem in context:
-        # phylogeny = None
         if event == 'start' and local(elem.tag) == 'phylogeny':
             phylogeny = parse_phylogeny(elem, context)
             # warnings.warn('Built a phylogeny %s, contents:' % repr(phylogeny))
@@ -136,7 +135,7 @@ def read(handle):
             phyloxml.phylogenies.append(phylogeny)
             continue
         if event == 'end':
-            # deal with Other items
+            # Deal with Other items
             root.clear()
             pass
     return phyloxml
@@ -159,17 +158,38 @@ def parse_phylogeny(parent, context):
             if local(elem.tag) == 'phylogeny':
                 parent.clear()
                 break
-            # handle the other non-recursive children
+            # Handle the other non-recursive children
             if local(elem.tag) == 'name': 
-                phylogeny.name = elem.text
+                phylogeny.name = Token('name', elem.text)
                 elem.clear()
-            elif local(elem.tag) == 'XXX':
-                pass
-            # ...
+            elif local(elem.tag) == 'id':
+                phylogeny.id = Id(text=elem.text)
+                elem.clear()
+            elif local(elem.tag) == 'description':
+                phylogeny.description = Token('description', elem.text)
+                elem.clear()
+            elif local(elem.tag) == 'date':
+                phylogeny.date = Date(text=elem.text)
+                elem.clear()
+            elif local(elem.tag) == 'confidence':
+                phylogeny.confidence = Confidence(text=elem.text)
+                elem.clear()
+            elif local(elem.tag) == 'clade_relation':
+                phylogeny.clade_relation = CladeRelation(text=elem.text)
+                elem.clear()
+            elif local(elem.tag) == 'sequence_relation':
+                phylogeny.sequence_relation = SequenceRelation(text=elem.text)
+                elem.clear()
+            elif local(elem.tag) == 'property':
+                phylogeny.properties = [Property(text=elem.text)]
+                elem.clear()
             else:
                 # Unknown tag
-                # ...
-                pass
+                if hasattr(phylogeny, 'other'):
+                    phylogeny.other.append(Other(elem.attrib, elem.text))
+                else:
+                    phylogeny.other = [Other(elem.attrib, elem.text)]
+                elem.clear()
     return phylogeny
 
 
