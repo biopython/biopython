@@ -291,6 +291,30 @@ class Phylogeny(PhyloElement):
         self.__dict__.update(self._attrib)
         self.clades = []
 
+    # From Bioperl's Bio::Tree::TreeI
+
+    def get_leaf_nodes(self):
+        """Request the taxa (leaves of the tree)."""
+        raise NotImplementedError
+
+    def get_root_node(self):
+        """Get the root node of this tree."""
+        return self
+
+    def total_branch_length(self):
+        """Get the total length of this tree (sum of all branch lengths)."""
+        raise NotImplementedError
+
+    # From Bioperl's Bio::Tree::TreeFunctionsI
+
+    # find_node -- by name or other standard field
+    # remove_node
+    # get_lca (lowest common ancestor)
+    # distance (between 2 nodes, specified however)
+    # is_monophyletic
+    # is_paraphyletic
+    # reroot
+
 
 class Clade(PhyloElement):
     """Describes a branch of the current phylogenetic tree.
