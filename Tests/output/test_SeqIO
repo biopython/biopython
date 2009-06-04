@@ -1688,11 +1688,11 @@ Testing reading ace format file Ace/contig1.ace
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'fastq' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Contig2).
+ Failed: A quality value of None was found
  Checking can write/read as 'qual' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Contig2).
+ Failed: A quality value of None was found
  Checking can write/read as 'fastq-solexa' format
- Failed: No suitable quality scores found in letter_annotation of SeqRecord (id=Contig2).
+ Failed: PHRED quality zero maps onto a Solexa quality of minus infinity!
  Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
@@ -1705,11 +1705,11 @@ Testing reading ace format file Ace/consed_sample.ace
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fastq' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Contig1).
+ Failed: A quality value of None was found
  Checking can write/read as 'qual' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Contig1).
+ Failed: A quality value of None was found
  Checking can write/read as 'fastq-solexa' format
- Failed: No suitable quality scores found in letter_annotation of SeqRecord (id=Contig1).
+ Failed: PHRED quality zero maps onto a Solexa quality of minus infinity!
  Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
@@ -1721,11 +1721,11 @@ Testing reading ace format file Ace/seq.cap.ace
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fastq' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Contig1).
+ Failed: A quality value of None was found
  Checking can write/read as 'qual' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Contig1).
+ Failed: A quality value of None was found
  Checking can write/read as 'fastq-solexa' format
- Failed: No suitable quality scores found in letter_annotation of SeqRecord (id=Contig1).
+ Failed: PHRED quality of None can't be transformed to a Solexa quality
  Checking can write/read as 'genbank' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
