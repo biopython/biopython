@@ -20,7 +20,7 @@ The PHRED software reads DNA sequencing trace files, calls bases, and
 assigns a quality value between 0 and 90 to each called base using a logged
 transformation of the error probability, Q = -10 log10( Pe ), for example::
 
-    Pe = 0.0,         Q =  0
+    Pe = 1.0,         Q =  0
     Pe = 0.1,         Q = 10
     Pe = 0.01,        Q = 20
     ...
@@ -240,8 +240,22 @@ def solexa_quality_from_phred(phred_quality) :
     9.54
     >>> print "%0.2f" % round(solexa_quality_from_phred(1),2)
     -5.87
+    >>> print "%0.2f" % round(solexa_quality_from_phred(0),2)
+    Traceback (most recent call last):
+        ...
+    ValueError: PHRED quality zero maps onto a Solexa quality of minus infinity!
     """
-    return 10*log(10**(phred_quality/10.0) - 1, 10)
+    if phred_quality > 0 :
+        return 10*log(10**(phred_quality/10.0) - 1, 10)
+    elif phred_quality == 0 :
+        raise ValueError("PHRED quality zero maps onto a "
+                         "Solexa quality of minus infinity!")
+    elif phred_quality is None :
+        #TODO - Would returning None be nicer?
+        raise TypeError("PHRED quality of None can't be "
+                        "transformed to a Solexa quality")
+    else :
+        raise ValueError("PHRED qualities must be positive (or zero)")
 
 def phred_quality_from_solexa(solexa_quality) :
     """Convert a Solexa quality (which can be negative) to a PHRED quality.
@@ -841,17 +855,24 @@ class FastqPhredWriter(SequentialSequenceWriter):
 
         #TODO - Is an empty sequence allowed in FASTQ format?
         assert SANGER_SCORE_OFFSET == ord("!")
-        #This rounds to the nearest integer:
-        qualities = "".join([chr(int(round(q+SANGER_SCORE_OFFSET,0))) for q \
-                             in _get_phred_quality(record)])
+        qualities = _get_phred_quality(record)
+        try :
+            #This rounds to the nearest integer:
+            qualities_str = "".join([chr(int(round(q+SANGER_SCORE_OFFSET,0))) for q \
+                                 in qualities])
+        except TypeError, e :
+            if None in qualities :
+                raise TypeError("A quality value of None was found")
+            else :
+                raise e
         if record.seq is None:
             raise ValueError("No sequence for record %s" % record.id)
-        if len(qualities) != len(record) :
+        if len(qualities_str) != len(record) :
             raise ValueError("Record %s has sequence length %i but %i quality scores" \
-                             % (record.id, len(record), len(qualities)))
+                             % (record.id, len(record), len(qualities_str)))
 
         title = self.clean(record.id) #TODO - add the description too? cf Fasta output
-        self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities))
+        self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities_str))
 
 class QualPhredWriter(SequentialSequenceWriter):
     """Class to write QUAL format files (using PHRED quality scores).
@@ -926,19 +947,26 @@ class QualPhredWriter(SequentialSequenceWriter):
         assert "\r" not in title
         self.handle.write(">%s\n" % title)
 
-        #This rounds to the nearest integer.
-        #TODO - can we put a float in a qual file?
-        qualities = [("%i" % round(q,0)) for q in _get_phred_quality(record)]
+        qualities = _get_phred_quality(record)
+        try :
+            #This rounds to the nearest integer.
+            #TODO - can we record a float in a qual file?
+            qualities_strs = [("%i" % round(q,0)) for q in qualities]
+        except TypeError, e :
+            if None in qualities :
+                raise TypeError("A quality value of None was found")
+            else :
+                raise e
 
         if self.wrap :
-            while qualities :
-                line=qualities.pop(0)
-                while qualities \
-                and len(line) + 1 + len(qualities[0]) < self.wrap :
-                    line += " " + qualities.pop(0)
+            while qualities_strs :
+                line=qualities_strs.pop(0)
+                while qualities_strs \
+                and len(line) + 1 + len(qualities_strs[0]) < self.wrap :
+                    line += " " + qualities_strs.pop(0)
                 self.handle.write(line + "\n")
         else :
-            data = " ".join(qualities)
+            data = " ".join(qualities_strs)
             self.handle.write(data + "\n")
 
 class FastqSolexaWriter(SequentialSequenceWriter):
