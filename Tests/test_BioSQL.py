@@ -652,6 +652,10 @@ class InDepthLoadTest(unittest.TestCase):
         # mRNA, so really cDNA, so the strand should be 1 (not complemented)
         self.assertEqual(test_feature.strand, 1)
 
+#Some of the unit tests don't create their own database,
+#so just in case there is no database already:
+create_database()
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
