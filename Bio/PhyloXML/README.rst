@@ -143,51 +143,52 @@ Tier 1 (used in all example files):
     taxonomy
 
 Tier 2 (used in at least one example file, but not all):
-    domain
-    domain_architecture
-    duplications
-    events
-    scientific_name
-    sequence
-    speciations
-
-Tier 3 (not found in example files):
-    absent
     accession
     alt
     annotation
-    bc
-    binary_characters
-    blue
     clade_relation
-    color
     common_name
     date
     desc
     description
     distribution
-    gained
-    green
+    domain
+    domain_architecture
+    duplications
+    events
     id
     lat
-    location
     long
-    losses
-    lost
     mol_seq
-    node_id
     point
-    polygon
-    present
     property
     rank
-    red
-    reference
+    scientific_name
+    seq
+    sequence
     sequence_relation
+    speciations
     symbol
-    type
     uri
     value
+
+Tier 3 (not found in example files):
+    absent
+    bc
+    binary_characters
+    blue
+    color
+    gained
+    green
+    location
+    losses
+    lost
+    node_id
+    polygon
+    present
+    red
+    reference
+    type
     width
 
 
