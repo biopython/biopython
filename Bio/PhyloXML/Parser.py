@@ -29,110 +29,192 @@ except ImportError:
                             "Use Python 2.5+, lxml or elementtree if you " \
                             "want to use Bio.PhyloXML.")
 
+
 # Lookup table used to instantiate elements by XML tag
-tags_to_classes = {
-        'absent':       BinaryCharacterList,
-        'accession':    Accession,
-        'alt':          float,  # decimal
-        'annotation':   Annotation,
-        'bc':           Token,
-        'binary_characters': BinaryCharacters,
-        'blue':         int, # unsignedByte
-        'branch_length': float,  # double
-        'clade':        Clade,
-        'clade_relation': CladeRelation,
-        'code':         TaxonomyCode,
-        'color':        BranchColor,
-        'common_name':  Token,
-        'confidence':   Confidence,
-        'date':         Date,
-        'desc':         Token,
-        'description':  Token,
-        'distribution': Distribution,
-        'domain':       ProteinDomain,
-        'domain_architecture': DomainArchitecture,
-        'duplications': int, # nonNegativeInteger
-        'events':       Events,
-        'gained':       BinaryCharacterList,
-        'green':        int, # unsignedByte
-        'id':           Id,
-        'lat':          float,  # decimal
-        'location':     Token,
-        'long':         float,  # decimal
-        'losses':       int, # nonNegativeInteger
-        'lost':         BinaryCharacterList,
-        'mol_seq':      MolSeq,
-        'name':         Token,
-        'node_id':      Id,
-        'phylogeny':    Phylogeny,
-        'phyloxml':     Phyloxml,
-        'point':        Point,
-        'polygon':      Polygon,
-        'present':      BinaryCharacterList,
-        'property':     Property,
-        'rank':         Rank,
-        'red':          int, # unsignedByte
-        'reference':    Reference,
-        'scientific_name': Token,
-        'sequence':     Sequence,
-        'sequence_relation': SequenceRelation,
-        'speciations':  int, # nonNegativeInteger
-        'symbol':       SequenceSymbol,
-        'taxonomy':     Taxonomy,
-        'type':         EventType,
-        'uri':          Uri,
-        'value':        float, # decimal
-        'width':        float, # double
-        }
+# tags_to_classes = {
+        ## special cases for parsing
+#         'phylogeny':    Phylogeny,
+#         'phyloxml':     Phyloxml,
+#         'clade':        Clade,
+        ## no special handling
+#         'absent':       BinaryCharacterList,
+#         'accession':    Accession,
+#         'alt':          float,  # decimal
+#         'annotation':   Annotation,
+#         'bc':           Token,
+#         'binary_characters': BinaryCharacters,
+#         'blue':         int, # unsignedByte
+#         'branch_length': float,  # double
+#         'clade_relation': CladeRelation,
+#         'code':         TaxonomyCode,
+#         'color':        BranchColor,
+#         'common_name':  Token,
+#         'confidence':   Confidence,
+#         'date':         Date,
+#         'desc':         Token,
+#         'description':  Token,
+#         'distribution': Distribution,
+#         'domain':       ProteinDomain,
+#         'domain_architecture': DomainArchitecture,
+#         'duplications': int, # nonNegativeInteger
+#         'events':       Events,
+#         'gained':       BinaryCharacterList,
+#         'green':        int, # unsignedByte
+#         'id':           Id,
+#         'lat':          float,  # decimal
+#         'location':     Token,
+#         'long':         float,  # decimal
+#         'losses':       int, # nonNegativeInteger
+#         'lost':         BinaryCharacterList,
+#         'mol_seq':      MolSeq,
+#         'name':         Token,
+#         'node_id':      Id,
+#         'point':        Point,
+#         'polygon':      Polygon,
+#         'present':      BinaryCharacterList,
+#         'property':     Property,
+#         'rank':         Rank,
+#         'red':          int, # unsignedByte
+#         'reference':    Reference,
+#         'scientific_name': Token,
+#         'seq':          Sequence,
+#         'sequence':     Sequence,
+#         'sequence_relation': SequenceRelation,
+#         'speciations':  int, # nonNegativeInteger
+#         'symbol':       SequenceSymbol,
+#         'taxonomy':     Taxonomy,
+#         'type':         EventType,
+#         'uri':          Uri,
+#         'value':        float, # decimal
+#         'width':        float, # double
+#         }
 
 
-
-def _dump_tags(source):
+def _dump_tags(handle):
     """Extract tags from an XML document and print them to standard output.
     
     This function is meant for testing and debugging only.
     """
     events = ('start', 'end')
-    for event, elem in ElementTree.iterparse(source, events=events):
+    for event, elem in ElementTree.iterparse(handle, events=events):
         if event == 'start':
             print elem.tag
         else:
             elem.clear()
 
 
-def read(source):
+def read(handle):
     """Parse a phyloXML file or stream and build a tree of Biopython objects.
 
     The children of the root node are phylogenies and possibly other arbitrary
     (non-phyloXML) objects.
+
+    To minimize memory use, the tree of ElementTree parsing events is cleared
+    after completing each phylogeny, clade, and top-level 'other' element.
+    Elements below the clade level are kept in memory until parsing of the
+    current clade is finished -- this shouldn't be a problem because clade is
+    the main recursive element, and non-clade nodes below this level are of
+    bounded size.
     """
-    events = ('start', 'end')
-    for event, elem in ElementTree.iterparse(source, events=events):
-        if event == 'start':
-            pass
+    # get an iterable context for XML parsing events
+    context = iter(ElementTree.iterparse(handle, events=('start', 'end')))
+    event, root = context.next()
+    phyloxml = Phyloxml(root)
+    for event, elem in context:
+        # phylogeny = None
+        if event == 'start' and elem.tag == 'phylogeny':
+            phylogeny = parse_phylogeny(elem, context)
+            phyloxml.phylogenies.append(phylogeny)
+            continue
+        if event == 'end':
+            # deal with Other items
+            root.clear()
+    return phyloxml
+
+
+def parse_phylogeny(parent, context):
+    """Parse a single phylogeny within the phyloXML tree.
+
+    Recursively builds a phylogenetic tree with help from parse_clade, then
+    clears the XML event history for the phylogeny element and returns control
+    to the top-level parsing function.
+    """
+    phylogeny = Phylogeny(parent)
+    for event, elem in context:
+        if event == 'start' and elem.tag == 'clade':
+            clade = parse_clade(elem, context)
+            phylogeny.clades.append(clade)
+            continue
+        if event == 'end':
+            if elem.tag == 'phylogeny':
+                parent.clear()
+                break
+            # handle the other non-recursive children
+            if elem.tag == 'name': 
+                phylogeny.name = elem.text
+                elem.clear()
+            elif elem.tag == 'XXX':
+                pass
+            # ...
+            else:
+                # Unknown tag
+                # ...
+                pass
+    return phylogeny
+
+
+def parse_clade(parent, context):
+    clade = Clade(parent)
+    # clade_depth = 0
+    # node = tags_to_classes.get(parent.tag, Other)(parent)
+    for event, elem in context:
+        if event == 'start' and elem.tag == 'clade':
+            # clade_depth += 1
+            subclade = parse_clade(elem, context)
+            clade.clades.append(subclade)
+            continue
+        if event == 'end' and elem.tag == 'clade':
+            # clade_depth -= 1
+            parent.clear()
+            break
+    return clade
+
+
+def parse_other(parent, context):
+    node = Other(parent)
+    tag_depth = 0
+    for event, elem in context:
+        if event == 'start' and elem.tag == parent.tag:
+            tag_depth += 1
+            continue
+        if elem.tag == parent.tag:
+            tag_depth -= 1
+            if tag_depth == 0:
+                parent.clear()
+                break
         else:
-            # dispatch by elem.tag
-            obj = get_phylo_obj(elem.tag, elem.attrib, elem.text)
-            # instantiate a node
-
-
-def get_phylo_obj(tag, attrib, text):
-    # look up the class by tag
-    constructor = tags_to_classes.get(tag, Other)
-    return constructor(attrib, text, None)
-
+            constructor = tags_to_classes.get(elem.tag, Other)
+            if constructor in (int, float, Token):
+                obj = constructor(elem.tag, elem.text)
+            else:
+                obj = constructor(elem.attrib, elem.text)
+            node.add_child(obj)
+            elem.clear()
+    return node
 
 # ---------------------------------------------------------------------
 # Classes instantiated from phyloXML nodes
 
 class PhyloElement(object):
     """Base class for all PhyloXML objects."""
-    def __init__(self, attrib, text, children):
-        self._attrib = attrib
-        self._text = text
-        self._children = children
+    def __init__(self, attrib=None, text=None):
+        if attrib is not None:
+            self._attrib = attrib
+        if text is not None:
+            self._text = text
+        # self._children = []
         # Munge each of these into properties
-        self._expose
+        self._expose()
 
     def _expose(self):
         """Produce a useful interface for protected data.
@@ -144,6 +226,14 @@ class PhyloElement(object):
 
 class Other(PhyloElement):
     """Container for non-phyloXML elements in the tree."""
+    def add_child(self, tag, obj):
+        if tag in self.__dict__:
+            if isinstance(getattr(self, tag), list):
+                getattr(self, tag).append(obj)
+            else:
+                setattr(self, tag, [getattr(self, tag), obj])
+        else:
+            setattr(self, tag, obj)
 
 
 class Token(object):
@@ -161,6 +251,9 @@ class Phyloxml(PhyloElement):
     Contains an arbitrary number of Phylogeny elements, possibly followed by
     elements from other namespaces.
     """
+    def _expose(self):
+        self.phylogenies = []
+        self.other = []
 
 
 class Phylogeny(PhyloElement):
@@ -186,6 +279,7 @@ class Phylogeny(PhyloElement):
     """
     def _expose(self):
         self.__dict__.update(self._attrib)
+        self.clades = []
 
 
 class Clade(PhyloElement):
@@ -234,6 +328,7 @@ class Clade(PhyloElement):
     """
     def _expose(self):
         self.__dict__.update(self._attrib)
+        self.clades = []
 
 
 # Complex types
