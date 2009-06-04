@@ -28,7 +28,6 @@ def unzip(fname):
     z = zipfile.ZipFile(fname)
     return z.open(z.filelist[0].filename)
 
-all_examples = (example_apaf, example_bcl2, example_phylo, unzip(example_zip))
 
 
 class ParseNoOp(unittest.TestCase):
@@ -45,17 +44,23 @@ class ParseNoOp(unittest.TestCase):
 
 class ParsePhylo(unittest.TestCase):
     """Tests for proper parsing of example phyloXML files."""
+    def setUp(self):
+        self.all_examples = (example_apaf, example_bcl2,
+                             example_phylo, unzip(example_zip))
+
     def test_root(self):
         """Read each example files to produce a tree object."""
-        for source in all_examples:
+        for source in self.all_examples:
             tree = PhyloXML.read(source)
             self.assert_(tree)
 
     def test_core(self):
         """Verify the presence of core elements within the tree."""
-        for source in all_examples:
-            tree = PhyloXML.read(source)
-            self.assert_(len(tree.clades))
+        for source in self.all_examples:
+            phylo = PhyloXML.read(source)
+            # warnings.warn('Phylo %s has %d phylogenies'
+            #               % (str(source), len(phylo.phylogenies)))
+            self.assert_(len(phylo.phylogenies))
 
 
 if __name__ == '__main__':
