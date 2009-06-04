@@ -17,7 +17,8 @@ to bundle a FASTA sequence and its PHRED quality data (integers between 0 and
 are used containing the sequence and the quality information separately.
 
 The PHRED software reads DNA sequencing trace files, calls bases, and
-assigns a quality value between 0 and 90 to each called base using a logged
+assigns a quality value between 0 and 93 (at least, 93 is the upper bound
+according to the maq tool's documentation) to each called base using a logged
 transformation of the error probability, Q = -10 log10( Pe ), for example::
 
     Pe = 1.0,         Q =  0
@@ -550,10 +551,10 @@ def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = No
         #    raise ValueError("The quality string should always start with a ! character.")
         qualities = [ord(letter)-SANGER_SCORE_OFFSET for letter in quality_string]
         if qualities :
-            if min(qualities) < 0 or max(qualities) > 90 :
-                raise ValueError("Quality score outside 0 to 90 found - these are perhaps "
-                                 "in a Solexa/Illumina format, not the Sanger FASTQ format "
-                                 "which uses PHRED scores.")
+            if min(qualities) < 0 or max(qualities) > 93 :
+                raise ValueError("Quality score outside 0 to 93 found - these are probably "
+                                 "in Solexa/Illumina FASTQ format, not the Sanger FASTQ "
+                                 "format which uses PHRED scores.")
         record.letter_annotations["phred_quality"] = qualities
         yield record
 
