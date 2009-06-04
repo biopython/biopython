@@ -59,7 +59,7 @@ Timeline
     - no-op parsing of small example phyloXML files with xml.etree
     - no-op parsing of a large zipped phyloXML file
     - basic loading of the root node into a Python object
-    - loading core elements
+    - creating a list of phylogeny objects under the root node
 
     Documentation (Biopython wiki):
 
@@ -71,6 +71,10 @@ Timeline
     - Locate existing Biopython classes to reuse as tree elements
 
     - Write classes corresponding to "core" XML elements
+
+        - Tier 0
+        - Tier 1
+        - Tier 2
 
     - Instantiate from XML nodes (etree "end" events)
 

@@ -7,6 +7,8 @@
 
 """
 
+import warnings
+
 try:
     from xml.etree import cElementTree as ElementTree
 except ImportError:
@@ -31,7 +33,7 @@ except ImportError:
 
 
 # Lookup table used to instantiate elements by XML tag
-# tags_to_classes = {
+tags_to_classes = {
         ## special cases for parsing
 #         'phylogeny':    Phylogeny,
 #         'phyloxml':     Phyloxml,
@@ -87,7 +89,12 @@ except ImportError:
 #         'uri':          Uri,
 #         'value':        float, # decimal
 #         'width':        float, # double
-#         }
+        }
+
+def local(tag):
+    if tag[0] == '{':
+        return tag.rsplit('}', 1)[1]
+    return tag
 
 
 def _dump_tags(handle):
@@ -98,7 +105,7 @@ def _dump_tags(handle):
     events = ('start', 'end')
     for event, elem in ElementTree.iterparse(handle, events=events):
         if event == 'start':
-            print elem.tag
+            print local(elem.tag)
         else:
             elem.clear()
 
@@ -119,16 +126,19 @@ def read(handle):
     # get an iterable context for XML parsing events
     context = iter(ElementTree.iterparse(handle, events=('start', 'end')))
     event, root = context.next()
-    phyloxml = Phyloxml(root)
+    phyloxml = Phyloxml(attrib=root.attrib)
     for event, elem in context:
         # phylogeny = None
-        if event == 'start' and elem.tag == 'phylogeny':
+        if event == 'start' and local(elem.tag) == 'phylogeny':
             phylogeny = parse_phylogeny(elem, context)
+            # warnings.warn('Built a phylogeny %s, contents:' % repr(phylogeny))
+            # warnings.warn(repr(phylogeny.__dict__))
             phyloxml.phylogenies.append(phylogeny)
             continue
         if event == 'end':
             # deal with Other items
             root.clear()
+            pass
     return phyloxml
 
 
@@ -139,21 +149,21 @@ def parse_phylogeny(parent, context):
     clears the XML event history for the phylogeny element and returns control
     to the top-level parsing function.
     """
-    phylogeny = Phylogeny(parent)
+    phylogeny = Phylogeny(attrib=parent.attrib)
     for event, elem in context:
-        if event == 'start' and elem.tag == 'clade':
+        if event == 'start' and local(elem.tag) == 'clade':
             clade = parse_clade(elem, context)
             phylogeny.clades.append(clade)
             continue
         if event == 'end':
-            if elem.tag == 'phylogeny':
+            if local(elem.tag) == 'phylogeny':
                 parent.clear()
                 break
             # handle the other non-recursive children
-            if elem.tag == 'name': 
+            if local(elem.tag) == 'name': 
                 phylogeny.name = elem.text
                 elem.clear()
-            elif elem.tag == 'XXX':
+            elif local(elem.tag) == 'XXX':
                 pass
             # ...
             else:
@@ -164,16 +174,16 @@ def parse_phylogeny(parent, context):
 
 
 def parse_clade(parent, context):
-    clade = Clade(parent)
+    clade = Clade(attrib=parent.attrib)
     # clade_depth = 0
-    # node = tags_to_classes.get(parent.tag, Other)(parent)
+    # node = tags_to_classes.get(local(parent.tag), Other)(parent)
     for event, elem in context:
-        if event == 'start' and elem.tag == 'clade':
+        if event == 'start' and local(elem.tag) == 'clade':
             # clade_depth += 1
             subclade = parse_clade(elem, context)
             clade.clades.append(subclade)
             continue
-        if event == 'end' and elem.tag == 'clade':
+        if event == 'end' and local(elem.tag) == 'clade':
             # clade_depth -= 1
             parent.clear()
             break
@@ -181,21 +191,21 @@ def parse_clade(parent, context):
 
 
 def parse_other(parent, context):
-    node = Other(parent)
+    node = Other(attrib=parent.attrib, text=parent.text)
     tag_depth = 0
     for event, elem in context:
-        if event == 'start' and elem.tag == parent.tag:
+        if event == 'start' and local(elem.tag) == local(parent.tag):
             tag_depth += 1
             continue
-        if elem.tag == parent.tag:
+        if local(elem.tag) == local(parent.tag):
             tag_depth -= 1
             if tag_depth == 0:
                 parent.clear()
                 break
         else:
-            constructor = tags_to_classes.get(elem.tag, Other)
+            constructor = tags_to_classes.get(local(elem.tag), Other)
             if constructor in (int, float, Token):
-                obj = constructor(elem.tag, elem.text)
+                obj = constructor(local(elem.tag), elem.text)
             else:
                 obj = constructor(elem.attrib, elem.text)
             node.add_child(obj)

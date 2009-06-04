@@ -48,19 +48,17 @@ class ParsePhylo(unittest.TestCase):
         self.all_examples = (example_apaf, example_bcl2,
                              example_phylo, unzip(example_zip))
 
-    def test_root(self):
-        """Read each example files to produce a tree object."""
-        for source in self.all_examples:
-            tree = PhyloXML.read(source)
-            self.assert_(tree)
-
-    def test_core(self):
-        """Verify the presence of core elements within the tree."""
+    def test_create(self):
+        """Read each example file to produce a phyloXML object."""
         for source in self.all_examples:
             phylo = PhyloXML.read(source)
-            # warnings.warn('Phylo %s has %d phylogenies'
-            #               % (str(source), len(phylo.phylogenies)))
-            self.assert_(len(phylo.phylogenies))
+            self.assert_(phylo)
+
+    def test_count_phylogenies(self):
+        """Count the number of phylogenies within each file."""
+        for source, count in zip(self.all_examples, (1, 1, 13, 1)):
+            phylo = PhyloXML.read(source)
+            self.assertEquals(len(phylo.phylogenies), count)
 
 
 if __name__ == '__main__':
