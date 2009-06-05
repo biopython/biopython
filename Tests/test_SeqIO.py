@@ -220,7 +220,12 @@ def compare_record(record_one, record_two) :
     if record_one.seq is not None and record_two.seq is not None \
     and record_one.seq.tostring() != record_two.seq.tostring() :
         return False
-    #Close enough... should I check for features, annotation etc?
+    #TODO - check features and annotation (see code for BioSQL tests)
+    for key in set(record_one.letter_annotations).intersection( \
+                   record_two.letter_annotations) :
+        if record_one.letter_annotations[key] != \
+           record_two.letter_annotations[key] :
+            return False
     return True
 
 def record_summary(record, indent=" ") :
