@@ -51,11 +51,17 @@ def create_database():
                                           user = DBUSER, passwd = DBPASSWD,
                                           host = DBHOST)
 
-    # Auto-commit: postgresql cannot drop database in a transaction
-    try:
-        server.adaptor.autocommit()
-    except AttributeError:
-        pass
+    if DBDRIVER == "pgdb":
+        # The pgdb postgres driver does not support autocommit, so here we 
+        # commit the current transaction so that 'drop database' query will
+        # be outside a transaction block
+        server.adaptor.cursor.execute("COMMIT")
+    else:
+        # Auto-commit: postgresql cannot drop database in a transaction
+        try:
+            server.adaptor.autocommit()
+        except AttributeError:
+            pass
 
     # drop anything in the database
     try:
@@ -67,7 +73,8 @@ def create_database():
 
         sql = r"DROP DATABASE " + TESTDB
         server.adaptor.cursor.execute(sql, ())
-    except server.module.OperationalError: # the database doesn't exist
+    except (server.module.OperationalError,
+            server.module.DatabaseError), e: # the database doesn't exist
         pass
     except (server.module.IntegrityError,
             server.module.ProgrammingError), e: # ditto--perhaps

@@ -134,7 +134,7 @@ class DBServer:
         # 1. PostgreSQL can load it all at once and actually needs to
         # due to FUNCTION defines at the end of the SQL which mess up
         # the splitting by semicolons
-        if self.module_name in ["psycopg", "psycopg2"]:
+        if self.module_name in ["psycopg", "psycopg2", "pgdb"]:
             self.adaptor.cursor.execute(sql)
         # 2. MySQL needs the database loading split up into single lines of
         # SQL executed one at a time
@@ -333,7 +333,8 @@ class BioSeqDatabase:
         # TODO - Remove the following once BioSQL Bug 2839 is fixed.
         # Test for RULES in PostgreSQL schema, see also Bug 2833.
         self._postgres_rules_present= False
-        if "psycopg" in self.adaptor.conn.__class__.__module__:
+        if "psycopg" in self.adaptor.conn.__class__.__module__ or \
+           "pgdb" in self.adaptor.conn.__class__.__module__ :
             sql = "SELECT ev_class FROM pg_rewrite WHERE " + \
                   "rulename='rule_bioentry_i1' OR " + \
                   "rulename='rule_bioentry_i2';"
@@ -341,7 +342,7 @@ class BioSeqDatabase:
                 import warnings
                 warnings.warn("Your BioSQL PostgreSQL schema includes some "
                               "rules currently required for bioperl-db but "
-                              "which may cause problems loading data using"
+                              "which may cause problems loading data using "
                               "Biopython (see BioSQL Bug 2839). If you do not "
                               "use BioPerl, please remove these rules. "
                               "Biopython should cope with the rules present, "
