@@ -27,6 +27,11 @@ parameters via python properties, and setting of parameters at initiation
 with keyword arguments.  Additionally Cymon Cox has contributed several new
 multiple alignment wrappers under Bio.Align.Applications.
 
+A few more issues with Biopython's BioSQL support have been fixed (mostly by
+Cymon Cox). In particular, the default PostgreSQL schema includes some rules
+intended for BioPerl support only, which were causing problems in Biopython
+(see BioSQL bug 2839).
+
 ===================================================================
 
 April 20, 2008: Biopython 1.50 released.
