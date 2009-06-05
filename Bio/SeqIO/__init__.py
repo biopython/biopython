@@ -144,9 +144,12 @@ names are also used in Bio.AlignIO and include the following:
              an identifer line starting with a ">" character, followed by
              lines of sequence.
  - fastq   - A "FASTA like" format used by Sanger which also stores PHRED
-             sequence quality values.
- - fastq-solexa - The Solexa/Illumnia variant of the Sanger FASTQ format which
-                  encodes Solexa quality scores (not PHRED quality scores).
+             sequence quality values (with an ASCII offset of 33).
+ - fastq-solexa - Original Solexa/Illumnia variant of the FASTQ format which
+             encodes Solexa quality scores (not PHRED quality scores) with an
+             ASCII offset of 64.
+ - fastq-illumina - Solexa/Illumnia 1.3+ variant of the FASTQ format which
+             encodes PHRED quality scores with an ASCII offset of 64 (not 33).
  - genbank - The GenBank or GenPept flat file format.
  - gb      - An alias for "genbank", for consistency with NCBI Entrez Utilities
  - ig      - The IntelliGenetics file format, apparently the same as the
@@ -260,6 +263,7 @@ _FormatToIterator ={"fasta" : FastaIO.FastaIterator,
                     "pir" : PirIO.PirIterator,
                     "fastq" : QualityIO.FastqPhredIterator,
                     "fastq-solexa" : QualityIO.FastqSolexaIterator,
+                    "fastq-illumina" : QualityIO.FastqIlluminaIterator,
                     "qual" : QualityIO.QualPhredIterator,
                     }
 
@@ -269,6 +273,7 @@ _FormatToWriter ={"fasta" : FastaIO.FastaWriter,
                   "tab" : TabIO.TabWriter,
                   "fastq" : QualityIO.FastqPhredWriter,
                   "fastq-solexa" : QualityIO.FastqSolexaWriter,
+                  "fastq-illumina" : QualityIO.FastqSolexaWriter,
                   "qual" : QualityIO.QualPhredWriter,
                   }
 
