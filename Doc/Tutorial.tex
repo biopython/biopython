@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 11 May 2009 (Biopython 1.50+)}
+\date{Last Update -- 8 June 2009 (Biopython 1.50+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -1553,7 +1553,7 @@ print seq_record.annotations["keywords"]
 \begin{verbatim}
 O23729
 CHS3_BROFI
-Chalcone synthase 3 (EC 2.3.1.74) (Naringenin-chalcone synthase 3).
+RecName: Full=Chalcone synthase 3; EC=2.3.1.74; AltName: Full=Naringenin-chalcone synthase 3;
 Seq('MAPAMEEIRQAQRAEGPAAVLAIGTSTPPNALYQADYPDYYFRITKSEHLTELK...GAE', ProteinAlphabet())
 Length 394
 ['Acyltransferase', 'Flavonoid biosynthesis', 'Transferase']
@@ -4324,7 +4324,7 @@ This function should be used if the handle points to exactly one Swiss-Prot reco
 We can now print out some information about this record:
 \begin{verbatim}
 >>> print record.description
-CHALCONE SYNTHASE 3 (EC 2.3.1.74) (NARINGENIN-CHALCONE SYNTHASE 3).
+'RecName: Full=Chalcone synthase 3; EC=2.3.1.74; AltName: Full=Naringenin-chalcone synthase 3;'
 >>> for ref in record.references:
 ...     print "authors:", ref.authors
 ...     print "title:", ref.title
@@ -4333,8 +4333,7 @@ authors: Liew C.F., Lim S.H., Loh C.S., Goh C.J.;
 title: "Molecular cloning and sequence analysis of chalcone synthase cDNAs of
 Bromheadia finlaysoniana.";
 >>> print record.organism_classification
-['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta',
-'Magnoliophyta', 'Liliopsida', 'Asparagales', 'Orchidaceae', 'Bromheadia']
+['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'Liliopsida', 'Asparagales', 'Orchidaceae', 'Epidendroideae', 'higher Epidendroideae', 'Cymbidieae', 'Bromheadiinae', 'Bromheadia']
 \end{verbatim}
 
 To parse a file that contains more than one Swiss-Prot record, we use the \verb|parse| function instead. This function allows us to iterate over the records in the file.
@@ -4345,27 +4344,30 @@ You can download this from the \href{ftp://ftp.expasy.org/databases/uniprot/curr
 As described at the start of this section, you can use the python library \verb|gzip| to open and uncompress a \texttt{.gz} file, like this:
 
 \begin{verbatim}
-import gzip
-handle = gzip.open("uniprot_sprot.dat.gz")
+>>> import gzip
+>>> handle = gzip.open("uniprot_sprot.dat.gz")
 \end{verbatim}
 
 However, uncompressing a large file takes time, and each time you open the file for reading in this way, it has to be decompressed on the fly.  So, if you can spare the disk space you'll save time in the long run if you first decompress the file to disk, to get the \verb|uniprot_sprot.dat| file inside.  Then you can open the file for reading as usual:
 
 \begin{verbatim}
-handle = open("uniprot_sprot.dat")
+>>> handle = open("uniprot_sprot.dat")
 \end{verbatim}
 
-As of August 2008, the full Swiss-Prot database downloaded from ExPASy contained 290484 Swiss-Prot records.  One concise way to build up a list of the record descriptions is with a list comprehension: 
+As of June 2009, the full Swiss-Prot database downloaded from ExPASy contained 468851 Swiss-Prot records.  One concise way to build up a list of the record descriptions is with a list comprehension: 
 \begin{verbatim}
 >>> from Bio import SwissProt
 >>> handle = open("uniprot_sprot.dat")
 >>> descriptions = [record.description for record in SwissProt.parse(handle)]
 >>> len(descriptions)
-290484
->>> descriptions[:3]
-['104 kDa microneme/rhoptry antigen precursor (p104).',
- '104 kDa microneme/rhoptry antigen precursor (p104).',
- 'Protein 108 precursor.']
+468851
+>>> descriptions[:5]
+['RecName: Full=Protein MGF 100-1R;',
+ 'RecName: Full=Protein MGF 100-1R;',
+ 'RecName: Full=Protein MGF 100-1R;',
+ 'RecName: Full=Protein MGF 100-1R;',
+ 'RecName: Full=Protein MGF 100-2L;']
+
 \end{verbatim}
 
 Or, using a for loop over the record iterator:
@@ -4377,10 +4379,10 @@ Or, using a for loop over the record iterator:
 ...     descriptions.append(record.description)
 ...
 >>> len(descriptions)
-290484
+468851
 \end{verbatim}
 
-Because this is such a large input file, either way takes about seven minutes on my new desktop computer (using the uncompressed \verb|uniprot_sprot.dat| file as input).
+Because this is such a large input file, either way takes about eleven minutes on my new desktop computer (using the uncompressed \verb|uniprot_sprot.dat| file as input).
 
 It is equally easy to extract any kind of information you'd like from Swiss-Prot records. To see the members of a Swiss-Prot record, use
 \begin{verbatim}
