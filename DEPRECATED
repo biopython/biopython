@@ -16,10 +16,10 @@ deprecation warning.
 
 Bio.SwissProt.SProt
 ===================
-Declared obsolete in Release 1.50, and is likely to be deprecated in a future
-release. Most of the functionality in Bio.SwissProt.SProt is available from
-Bio.SwissProt. Note that Bio.SeqIO currently still uses Bio.SwissProt.SProt;
-this will have to be rectified in a future release.
+Declared obsolete in Release 1.50, and deprecated for Release 1.51. Most of the
+functionality in Bio.SwissProt.SProt is available from Bio.SwissProt. Bio.SeqIO
+currently uses Bio.SwissProt instead of Bio.SwissProt.SProt to parse SwissProt
+files.
 
 Bio.Prosite and Bio.Enzyme
 ==========================

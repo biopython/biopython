@@ -5,7 +5,7 @@
 
 """
 This module provides code to work with the sprotXX.dat file from
-Utilities for working with FASTA-formatted sequences (OBSOLETE).
+Utilities for working with FASTA-formatted sequences (DEPRECATED).
 http://www.expasy.ch/sprot/sprot-top.html
 
 Please see Bio.SwissProt for alternatives for the functionality in this module.
@@ -34,6 +34,10 @@ Functions:
 index_file         Index a SwissProt file for a Dictionary.
 
 """
+import warnings
+warnings.warn("Bio.SwissProt.SProt is deprecated. Please use the functions Bio.SwissProt.parse or Bio.SwissProt.read if you want to get a SwissProt.Record, or Bio.SeqIO.parse or Bio.SeqIO.read if you want to get a SeqRecord. If these solutions do not work for you, please get in contact with the Biopython developers (biopython-dev@biopython.org).",
+              DeprecationWarning)
+
 from types import *
 import os
 from Bio import File
@@ -176,7 +180,6 @@ class Iterator:
         If set to None, then the raw contents of the file will be returned.
 
         """
-        import warnings
         warnings.warn("Bio.SwissProt.SProt.Iterator is deprecated. Please use the function Bio.SwissProt.parse instead if you want to get a SwissProt.SProt.Record, or Bio.SeqIO.parse if you want to get a SeqRecord. If these solutions do not work for you, please get in contact with the Biopython developers (biopython-dev@biopython.org).",
               DeprecationWarning)
 
