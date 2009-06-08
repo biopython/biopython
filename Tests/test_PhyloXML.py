@@ -60,6 +60,88 @@ class ParsePhylo(unittest.TestCase):
             phylo = PhyloXML.read(source)
             self.assertEquals(len(phylo.phylogenies), count)
 
+    def test_topology_3_clades(self):
+        """Check simple tree topologies, three clades deep."""
+        for source, counts in zip(self.all_examples, (
+            # num phylogenies, lvl-2 clades, sub-clade counts, lvl-3 clades
+            (1, ( ( (2, (2, 2)),
+                    (2, (2, 2)),
+                  ),
+                ),
+            ),  # apaf
+            (1, ( ( (2, (2, 2)),
+                    (2, (2, 2)),
+                  ),
+                ),
+            ),  # bcl_2
+            (13, (( (2, (0, 0)),
+                    (0, ()),
+                  ),
+                  (
+                    (2, (0, 0)),
+                    (0, ()),
+                  ),
+                  ( (2, (0, 0)),
+                    (0, ()),
+                  ),
+                  (
+                    (2, (0, 0)),
+                    (0, ()),
+                  ),
+                  ( (2, (0, 0)),
+                    (0, ()),
+                  ),
+                  ( (2, (0, 0)),
+                    (0, ()),
+                  ),
+                  ( (2, (0, 0)),
+                    (0, ()),
+                  ),
+                  ( (2, (0, 0)),
+                    (0, ()),
+                  ),
+                  ( (2, (0, 0)),
+                    (0, ()),
+                  ),
+                  ( (0, ()),
+                    (2, (0, 0)),
+                  ),
+                  ( (3, (0, 0, 0)),
+                    (0, ()),
+                  ),
+                  ( (2, (0, 0)),
+                    (0, ()),
+                  ),
+                  ( (2, (0, 0)),
+                    (0, ()),
+                  ),
+                ),
+            ), # phylo_example
+            (1, ( ( (3, (5, 1, 4)),
+                    (5, (6, 2, 2, 2, 1)),
+                    (2, (1, 1)),
+                    (1, (2,)),
+                    (2, (4, 4)),
+                    (2, (2, 2)),
+                    (1, (1,)),
+                  ),
+                ),
+            ),   # ncbi zip
+            )):
+            phylo = PhyloXML.read(source)
+            self.assertEquals(len(phylo), counts[0])
+            self.assertEquals(len(phylo), len(counts[1]))
+            for tree, count1 in zip(phylo, counts[1]):
+                # warnings.warn("%s :: %s" % (source, count1))
+                self.assertEquals(len(tree), 1) # True for all examples...
+                self.assertEquals(len(tree.clades[0]), len(count1))
+                for clade, subcounts in zip(tree.clades[0], count1):
+                    self.assertEquals(len(clade), subcounts[0])
+                    for subclade, size in zip(clade, subcounts[1]):
+                        # warnings.warn("\tcompare %d == %d"
+                        #               % (len(subclade), size))
+                        self.assertEquals(len(subclade), size)
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
