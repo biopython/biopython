@@ -12,7 +12,7 @@ The latest news is at the top.
 Biopython no longer supports Python 2.3.  Currently we support Python 2.4,
 2.5 and 2.6.
 
-Our deprecated parsing infrastructure (Martel and Bio.Mindy) which had been
+Our deprecated parsing infrastructure (Martel and Bio.Mindy) has been
 removed.  This means Biopython no longer has any dependence on mxTextTools.
 
 A few cosmetic issues in GenomeDiagram with arrow sigils and labels on
@@ -87,6 +87,10 @@ The set of NCBI DTD files included with Bio.Entrez has been updated with the
 revised files the NCBI introduced on 1 Jan 2009.
 
 Minor fix to BioSQL for retrieving references and comments.
+
+Bio.SwissProt has a new faster parser which will be replacing the older
+slower code in Bio.SwissProt.SProt (which we expect to deprecate in the next
+release).
 
 We've also made some changes to our test framework, which is now given a
 whole chapter in the tutorial.  This intended to help new developers or
