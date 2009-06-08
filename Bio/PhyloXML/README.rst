@@ -53,6 +53,7 @@ Timeline
     - Specific exception and warning to raise for invalid phyloXML files
       [*Exceptions.py*]
     - Simple base class for all phyloXML elements [*Parser.PhyloElement*]
+    - Instantiate Tier 0 elements from XML stream ("end" events)
 
     Unit tests:
 
@@ -75,8 +76,6 @@ Timeline
         - Tier 0
         - Tier 1
         - Tier 2
-
-    - Instantiate from XML nodes (etree "end" events)
 
 :6/15:
     Verification and documentation:
