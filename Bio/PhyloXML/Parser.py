@@ -287,6 +287,10 @@ class Phyloxml(PhyloElement):
         """Iterate through the phylogenetic trees in this object."""
         return iter(self.phylogenies)
 
+    def __len__(self):
+        """Number of phylogenetic trees in this object."""
+        return len(self.phylogenies)
+
 
 class Phylogeny(PhyloElement):
     """A phylogenetic tree.
@@ -316,6 +320,10 @@ class Phylogeny(PhyloElement):
     def __iter__(self):
         """Iterate through the clades (branches) within this phylogeny."""
         return iter(self.clades)
+
+    def __len__(self):
+        """Number of clades directly under this element."""
+        return len(self.clades)
 
     # From Bioperl's Bio::Tree::TreeI
 
@@ -393,6 +401,10 @@ class Clade(PhyloElement):
     def __iter__(self):
         """Iterate through the clades (sub-nodes) within this clade."""
         return iter(self.clades)
+
+    def __len__(self):
+        """Number of clades directy under this element."""
+        return len(self.clades)
 
 
 # Complex types
