@@ -1915,13 +1915,15 @@ SeqIO.write(record_iterator, out_handle, "tab")
 out_handle.close()
 \end{verbatim}
 
-\chapter{Sequence Alignment Input/Output}
+\chapter{Sequence Alignment Input/Output, and Alignment Tools}
 \label{chapter:Bio.AlignIO}
 
 In this chapter we'll discuss the \verb|Bio.AlignIO| module, which is very similar to the \verb|Bio.SeqIO| module from the previous chapter, but deals with \verb|Alignment| objects rather than \verb|SeqRecord| objects. 
-This is new interface in Biopython 1.46, which aims to provide a simple interface for working with assorted sequence alignment file formats in a uniform way.
+This aims to provide a simple interface for working with assorted sequence alignment file formats in a uniform way.
 
 Note that both \verb|Bio.SeqIO| and \verb|Bio.AlignIO| can read and write sequence alignment files.  The appropriate choice will depend largely on what you want to do with the data.
+
+The final part of this chapter is about our command line wrappers for common multiple sequence alignment tools like ClustalW and MUSCLE.
 
 \section{Parsing or Reading Sequence Alignments}
 
@@ -2493,6 +2495,159 @@ clustal_data = out_handle.getvalue()
 print clustal_data
 \end{verbatim}
 
+\section{Alignment Tools}
+\label{sec:alignment-tools}
+
+There are \emph{lots} of algorithms out there for aligning sequences, both pairwise alignments
+and multiple sequence alignments. These calculations are relatively slow, and you generally
+wouldn't want to write such an algorithm in python. Instead, you can use Biopython to invoke
+a command line tool on your behalf. Normally you would:
+\begin{enumerate}
+\item Prepare an input file of your unaligned sequences, typically this will be a FASTA file
+      which you might create using \verb|Bio.SeqIO| (see Chapter~\ref{chapter:Bio.SeqIO}).
+\item Call the command line tool to process this input file, typically via one of Biopython's
+      command line wrappers (which we'll discuss here).
+\item Read the output from the tool, i.e. your aligned sequences, typically using
+      \verb|Bio.AlignIO| (see earlier in this chapter). 
+\end{enumerate}
+
+All the command line wrappers we're going to talk about in this chapter follow the same style.
+You create a command line object specifying the options (e.g. the input filename and the
+output filename), then invoke this command line via a python operating system call (e.g.
+using the subprocess module).
+
+\subsection{EMBOSS needle and water}
+The \href{http://emboss.sourceforge.net/}{EMBOSS} suite includes the \texttt{water} and
+\texttt{needle} tools for Smith-Waterman algorithm local alignment, and Needleman-Wunsch
+global alignment. The tools share the same style interface, so switching between the two
+is trivial -- we'll just use \texttt{needle} here.
+
+Suppose you want to do a global pairwise alignment between two sequences, prepared in
+FASTA format as follows:
+
+\begin{verbatim}
+>HBA_HUMAN
+MVLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHG
+KKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTP
+AVHASLDKFLASVSTVLTSKYR
+\end{verbatim}
+
+\noindent in a file \texttt{alpha.fasta}, and secondly in a file \texttt{beta.fasta}):
+
+\begin{verbatim}
+>HBB_HUMAN
+MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPK
+VKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFG
+KEFTPPVQAAYQKVVAGVANALAHKYH
+\end{verbatim}
+
+Let's start by creating a complete \texttt{needle} command line object in one go:
+
+\begin{verbatim}
+>>> from Bio.Emboss.Applications import NeedleCommandline
+>>> cline = NeedleCommandline(asequence="alpha.faa", bsequence="beta.faa",
+...                           gapopen=10, gapextend=0.5, outfile="needle.txt")
+>>> print cline
+needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5 
+\end{verbatim}
+
+Why not try running this by hand at the command prompt? You should see it does a
+pairwise comparison and records the output in the file \texttt{needle.txt} (in the
+default EMBOSS alignment file format).
+
+You may find that even though you have EMBOSS installed, the above command doesn't
+work - you may get a message about ``command not found'' (especially on Windows).
+This indicated that the EMBOSS tools are not on your PATH (an environment variable,
+a list of directories to be searched). You can either update your PATH setting to
+include the location of your EMBOSS tools (how you do this will depend on your OS),
+or simply type in the full path of the tool. You can also tell Biopython the full
+path to the tool, for example:
+
+\begin{verbatim}
+>>> from Bio.Emboss.Applications import NeedleCommandline
+>>> cline = NeedleCommandline(r"C:\EMBOSS\needle.exe",
+...                           asequence="alpha.faa", bsequence="beta.faa",
+...                           gapopen=10, gapextend=0.5, outfile="needle.txt")
+\end{verbatim}
+
+\noindent Remember in python that for a default string \verb|\n| or \verb|\t| means a
+new line or a tab - which is why we're put a letter ``r'' at the start for a raw string.
+
+At this point it might help to try running the EMBOSS tools yourself by hand at the
+command line, to familiarise yourself the other options and compare them to the
+Biopython help text:
+
+\begin{verbatim}
+>>> from Bio.Emboss.Applications import NeedleCommandline
+>>> help(NeedleCommandline)
+...
+\end{verbatim}
+
+Note that you can also specify (or change or look at) the settings like this:
+
+\begin{verbatim}
+>>> from Bio.Emboss.Applications import NeedleCommandline
+>>> cline = NeedleCommandline()
+>>> cline.asequence="alpha.faa"
+>>> cline.bsequence="beta.faa"
+>>> cline.gapopen=10
+>>> cline.gapextend=0.5
+>>> cline.outfile="needle.txt"
+>>> print cline
+needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5 
+>>> print cline.outfile
+needle.txt
+\end{verbatim}
+
+Next we want to use python to run this command for us - and here there are several
+options. For full control, we recommend you use the built in python \texttt{subprocess}
+module. However, for simple usage Biopython includes a wrapper function that usually
+suffices:
+
+\begin{verbatim}
+>>> from Bio.Application import generic_run
+>>> result, out_handle, err_handle = generic_run(cline)
+>>> print err_handle.read()
+Needleman-Wunsch global alignment of two sequences
+
+>>> print out_handle.read()
+
+>>> print result.return_code
+0
+\end{verbatim}
+
+The \verb|generic_run| function returns three things. First, a result object
+includes the return code, an integer value which by convention is zero when
+successful (check the documentation for particular tools about what return
+codes they might use). Then, two handles which contain the ``standard out''
+(stdout) and ``standard error'' (stderr) text from the tool. These terms
+originate in Unix, and are general the results from the program and any
+progress or error messages. We told EMBOSS to write the output to a file,
+but you \emph{can} tell it to write the output to stdout instead (useful if
+you don't want a temporary output file to get rid of).
+
+In the above, all we really care about is that the return code is zero
+(success). Then we can load the output file with \verb|Bio.AlignIO| as
+discussed earlier in this chapter, as the \texttt{emboss} format:
+
+\begin{verbatim}
+>>> from Bio import AlignIO
+>>> align = AlignIO.read(open("needle.txt"), "emboss")
+>>> print align
+SingleLetterAlphabet() alignment with 2 rows and 149 columns
+MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR HBA_HUMAN
+MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRF...KYH HBB_HUMAN
+\end{verbatim}
+
+This has only scratched the surface of what you can do with \texttt{needle}
+and \texttt{water}. One useful trick is that the second file can contain
+multiple sequences (say five), and then EMBOSS will do five pairwise
+alignments.
+
+Note - Biopython includes its own pairwise alignment code in the \verb|Bio.pairwise2|
+module (written in C for speed, but with a pure python fallback available too). This
+doesn't work with alignment objects, so we have not covered it within this chapter.
+See the module's docstring (built in help) for details.
 
 
 \chapter{BLAST}
