@@ -129,7 +129,7 @@ def read(handle):
     phyloxml = Phyloxml(root.attrib)
     for event, elem in context:
         if event == 'start' and local(elem.tag) == 'phylogeny':
-            phylogeny = parse_phylogeny(elem, context)
+            phylogeny = _parse_phylogeny(elem, context)
             # warnings.warn('Built a phylogeny %s, contents:' % repr(phylogeny))
             # warnings.warn(repr(phylogeny.__dict__))
             phyloxml.phylogenies.append(phylogeny)
@@ -141,7 +141,7 @@ def read(handle):
     return phyloxml
 
 
-def parse_phylogeny(parent, context):
+def _parse_phylogeny(parent, context):
     """Parse a single phylogeny within the phyloXML tree.
 
     Recursively builds a phylogenetic tree with help from parse_clade, then
@@ -151,7 +151,7 @@ def parse_phylogeny(parent, context):
     phylogeny = Phylogeny(attrib=parent.attrib)
     for event, elem in context:
         if event == 'start' and local(elem.tag) == 'clade':
-            clade = parse_clade(elem, context)
+            clade = _parse_clade(elem, context)
             phylogeny.clades.append(clade)
             continue
         if event == 'end':
@@ -193,14 +193,14 @@ def parse_phylogeny(parent, context):
     return phylogeny
 
 
-def parse_clade(parent, context):
+def _parse_clade(parent, context):
     clade = Clade(attrib=parent.attrib)
     # clade_depth = 0
     # node = tags_to_classes.get(local(parent.tag), Other)(parent)
     for event, elem in context:
         if event == 'start' and local(elem.tag) == 'clade':
             # clade_depth += 1
-            subclade = parse_clade(elem, context)
+            subclade = _parse_clade(elem, context)
             clade.clades.append(subclade)
             continue
         if event == 'end' and local(elem.tag) == 'clade':
@@ -210,7 +210,7 @@ def parse_clade(parent, context):
     return clade
 
 
-def parse_other(parent, context):
+def _parse_other(parent, context):
     node = Other(attrib=parent.attrib, text=parent.text)
     tag_depth = 0
     for event, elem in context:
