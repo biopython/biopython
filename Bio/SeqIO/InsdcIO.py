@@ -453,13 +453,28 @@ class GenBankWriter(SequentialSequenceWriter) :
             self.handle.write(line[:index] + "\n")
             line = " "*self.QUALIFIER_INDENT + line[index:].lstrip()
 
+    def _wrap_location(self, location) :
+        """Split a feature location into lines (break at commas)."""
+        #TODO - Rewrite this not to recurse!
+        length = self.MAX_WIDTH - self.QUALIFIER_INDENT
+        if len(location) <= length :
+            return location
+        index = location[:length].rfind(",")
+        if index == -1 :
+            #No good place to split (!)
+            import warnings
+            warnings.warn("Couldn't split location:\n%s" % location)
+            return location
+        return location[:index+1] + "\n" + \
+               " "*self.QUALIFIER_INDENT + self._wrap_location(location[index+1:])
+
     def _write_feature(self, feature):
         """Write a single SeqFeature object to features table."""
         assert feature.type, feature
         #TODO - Line wrapping for long locations!
         location = _insdc_feature_location_string(feature)
         line = ("     %s                " % feature.type)[:self.QUALIFIER_INDENT] \
-               + location + "\n"
+               + self._wrap_location(location) + "\n"
         self.handle.write(line)
         #Now the qualifiers...
         for key, values in feature.qualifiers.iteritems() :
