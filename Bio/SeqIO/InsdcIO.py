@@ -109,15 +109,21 @@ def _insdc_feature_position_string(pos, offset=0):
 
 
 def _insdc_location_string_ignoring_strand_and_subfeatures(feature) :
+    if feature.ref :
+        ref = "%s:" % feature.ref
+    else :
+        ref = ""
+    assert not feature.ref_db
     if feature.location.start==feature.location.end \
     and isinstance(feature.location.end, SeqFeature.ExactPosition):
         #Special case, 12^13 gets mapped to location 12:12
         #(a zero length slice, meaning the point between two letters)
-        return "%i^%i" % (feature.location.end.position,
-                          feature.location.end.position+1)
+        return "%s%i^%i" % (ref, feature.location.end.position,
+                            feature.location.end.position+1)
     else :
         #Typical case, e.g. 12..15 gets mapped to 11:15
-        return _insdc_feature_position_string(feature.location.start, +1) \
+        return ref \
+               + _insdc_feature_position_string(feature.location.start, +1) \
                + ".." + \
                _insdc_feature_position_string(feature.location.end)
 
@@ -208,6 +214,15 @@ class GenBankWriter(SequentialSequenceWriter) :
             self._write_single_line("", text)
         assert not words
 
+    def _write_multi_entries(self, tag, text_list) :
+        #used for DBLINK and any similar later line types.
+        #If the list of strings is empty, nothing is written.
+        for i, text in enumerate(text_list) :
+            if i==0 :
+                self._write_single_line(tag, text)
+            else :
+                self._write_single_line("", text)
+
     def _write_the_first_line(self, record) :
         """Write the LOCUS line."""
         
@@ -256,7 +271,7 @@ class GenBankWriter(SequentialSequenceWriter) :
             division = "UNK"
         if division not in ["PRI","ROD","MAM","VRT","INV","PLN","BCT",
                             "VRL","PHG","SYN","UNA","EST","PAT","STS",
-                            "GSS","HTG","HTC","ENV"] :
+                            "GSS","HTG","HTC","ENV","CON"] :
             division = "UNK"
         
         assert len(units) == 2
@@ -363,12 +378,26 @@ class GenBankWriter(SequentialSequenceWriter) :
         else :
             self._write_single_line("VERSION", "%s" % (acc_with_version))
 
+        #The NCBI only expect two types of link so far,
+        #e.g. "Project:28471" and "Trace Assembly Archive:123456"
+        #TODO - Filter the dbxrefs list to just these?
+        self._write_multi_entries("DBLINK", record.dbxrefs)
+
         try :
             #List of strings
             keywords = "; ".join(record.annotations["keywords"])
         except KeyError :
             keywords = "."
         self._write_multi_line("KEYWORDS", keywords)
+
+        if "segment" in record.annotations :
+            #Deal with SEGMENT line found only in segmented records,
+            #e.g. AH000819
+            segment = record.annotations["segment"]
+            if isinstance(segment, list) :
+                assert len(segment)==1, segment
+                segment = segment[0]
+            self._write_single_line("SEGMENT", segment)
 
         self._write_multi_line("SOURCE", \
                                 self._get_annotation_str(record, "source"))

@@ -1658,17 +1658,16 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
         'seqalign_file' : '-O',
         'outfile' : '-o',
         }
+    from Applications import BlastallCommandline
+    cline = BlastallCommandline(blastcmd)
+    cline.set_parameter(att2param['program'], program)
+    cline.set_parameter(att2param['database'], database)
+    cline.set_parameter(att2param['infile'], infile)
+    cline.set_parameter(att2param['align_view'], str(align_view))
+    for key, value in keywds.iteritems() :
+        cline.set_parameter(att2param[key], str(value))
+    return _invoke_blast(cline)
 
-    params = []
-    params.extend([att2param['program'], program])
-    params.extend([att2param['database'], database])
-    params.extend([att2param['infile'], _escape_filename(infile)])
-    params.extend([att2param['align_view'], str(align_view)])
-
-    for attr in keywds.keys():
-        params.extend([att2param[attr], str(keywds[attr])])
-
-    return _invoke_blast(blastcmd, params)
 
 def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
     """Execute and retrieve data from standalone BLASTPGP as handles.
@@ -1786,16 +1785,15 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
         'matrix_outfile' : '-Q',
         'align_infile' : '-B',
         }
+    from Applications import BlastpgpCommandline
+    cline = BlastpgpCommandline(blastcmd)
+    cline.set_parameter(att2param['database'], database)
+    cline.set_parameter(att2param['infile'], infile)
+    cline.set_parameter(att2param['align_view'], str(align_view))
+    for key, value in keywds.iteritems() :
+        cline.set_parameter(att2param[key], str(value))
+    return _invoke_blast(cline)
 
-    params = []
-    params.extend([att2param['database'], database])
-    params.extend([att2param['infile'], _escape_filename(infile)])
-    params.extend([att2param['align_view'], str(align_view)])
-
-    for attr in keywds.keys():
-        params.extend([att2param[attr], str(keywds[attr])])
-
-    return _invoke_blast(blastcmd, params)
 
 def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
     """Execute and retrieve data from standalone RPS-BLAST as handles.
@@ -1886,17 +1884,16 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
         'seqalign_file' : '-O',
         'align_outfile' : '-o',
         }
-        
-    params = []
 
-    params.extend([att2param['database'], database])
-    params.extend([att2param['infile'], _escape_filename(infile)])
-    params.extend([att2param['align_view'], str(align_view)])
+    from Applications import RpsBlastCommandline
+    cline = RpsBlastCommandline(blastcmd)
+    cline.set_parameter(att2param['database'], database)
+    cline.set_parameter(att2param['infile'], infile)
+    cline.set_parameter(att2param['align_view'], str(align_view))
+    for key, value in keywds.iteritems() :
+        cline.set_parameter(att2param[key], str(value))
+    return _invoke_blast(cline)
 
-    for attr in keywds.keys():
-        params.extend([att2param[attr], str(keywds[attr])])
-
-    return _invoke_blast(blastcmd, params)
 
 def _re_search(regex, line, error_msg):
     m = re.search(regex, line)
@@ -1957,37 +1954,27 @@ def _safe_float(str):
     return float(str)
 
 
-def _invoke_blast(blast_cmd, params) :
+def _invoke_blast(cline) :
     """Start BLAST and returns handles for stdout and stderr (PRIVATE).
 
-    Tries to deal with spaces in the BLAST executable path.
+    Expects a command line wrapper object from Bio.Blast.Applications
     """
+    import subprocess, sys
+    blast_cmd = cline.program_name
     if not os.path.exists(blast_cmd):
         raise ValueError("BLAST executable does not exist at %s" % blast_cmd)
+    #We don't need to supply any piped input, but we setup the
+    #standard input pipe anyway as a work around for a python
+    #bug if this is called from a Windows GUI program.  For
+    #details, see http://bugs.python.org/issue1124861
+    blast_process = subprocess.Popen(str(cline),
+                                     stdin=subprocess.PIPE,
+                                     stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE,
+                                     shell=(sys.platform!="win32"))
+    blast_process.stdin.close()
+    return blast_process.stdout, blast_process.stderr
 
-    cmd_string = " ".join([_escape_filename(blast_cmd)] + params)
-
-    #Try and use subprocess (available in python 2.4+)
-    try :
-        import subprocess, sys
-        #We don't need to supply any piped input, but we setup the
-        #standard input pipe anyway as a work around for a python
-        #bug if this is called from a Windows GUI program.  For
-        #details, see http://bugs.python.org/issue1124861
-        blast_process = subprocess.Popen(cmd_string,
-                                         stdin=subprocess.PIPE,
-                                         stdout=subprocess.PIPE,
-                                         stderr=subprocess.PIPE,
-                                         shell=(sys.platform!="win32"))
-        blast_process.stdin.close()
-        return blast_process.stdout, blast_process.stderr
-    except ImportError :
-        #subprocess isn't available on python 2.3
-        #Note os.popen3 is deprecated in python 2.6
-        write_handle, result_handle, error_handle \
-                      = os.popen3(cmd_string)
-        write_handle.close()
-        return result_handle, error_handle
 
 def _security_check_parameters(param_dict) :
     """Look for any attempt to insert a command into a parameter.

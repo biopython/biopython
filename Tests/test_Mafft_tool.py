@@ -59,10 +59,10 @@ class MafftApplication(unittest.TestCase):
         cmdline.set_parameter("--localpair", True)
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = Application.generic_run(cmdline)
-        self.assert_(stdin.return_code == 0)
+        self.assertEqual(stdin.return_code, 0)
         self.assert_(stdout.read().startswith(">gi|1348912|gb|G26680|G26680"))
         self.assert_("$#=0" not in stderr.read())
-        self.assert_(str(stdin._cl) == "mafft --localpair --maxiterate 100 Fasta/f002 ")
+        self.assertEqual(str(stdin._cl), "mafft --localpair --maxiterate 100 Fasta/f002 ")
 
     def test_Mafft_with_Clustalw_output(self):
         """Simple round-trip through app with clustal output"""
