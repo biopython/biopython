@@ -1,5 +1,6 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
-# Revisions 2007-2009 by Peter Cock.
+# Revisions 2007-2009 copyright by Peter Cock.  All rights reserved.
+# Revisions 2009 copyright by Cymon J. Cox.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -14,6 +15,8 @@ database, and is compatible with the BioSQL standards.
 import BioSeq
 import Loader
 import DBUtils
+
+_POSTGRES_RULES_PRESENT = False # Hack for BioSQL Bug 2839
 
 def open_database(driver = "MySQLdb", **kwargs):
     """Main interface for loading a existing BioSQL-style database.
@@ -53,7 +56,7 @@ def open_database(driver = "MySQLdb", **kwargs):
         if "passwd" in kw:
             kw["password"] = kw["passwd"]
             del kw["passwd"]
-    if driver in ["psycopg", "psycopg2"] and not kw.get("database"):
+    if driver in ["psycopg", "psycopg2", "pgdb"] and not kw.get("database"):
         kw["database"] = "template1"
     try:
         conn = connect(**kw)
@@ -69,8 +72,29 @@ def open_database(driver = "MySQLdb", **kwargs):
         
         dsn = ' '.join(['='.join(i) for i in kw.items()])
         conn = connect(dsn)
-    
-    return DBServer(conn, module)
+
+    server = DBServer(conn, module)
+
+    # TODO - Remove the following once BioSQL Bug 2839 is fixed.
+    # Test for RULES in PostgreSQL schema, see also Bug 2833.
+    if driver in ["psycopg", "psycopg2", "pgdb"]:
+        sql = "SELECT ev_class FROM pg_rewrite WHERE " + \
+              "rulename='rule_bioentry_i1' OR " + \
+              "rulename='rule_bioentry_i2';"
+        if server.adaptor.execute_and_fetchall(sql):
+            import warnings
+            warnings.warn("Your BioSQL PostgreSQL schema includes some "
+                          "rules currently required for bioperl-db but "
+                          "which may cause problems loading data using "
+                          "Biopython (see BioSQL Bug 2839). If you do not "
+                          "use BioPerl, please remove these rules. "
+                          "Biopython should cope with the rules present, "
+                          "but with a performance penalty when loading "
+                          "new records.")
+            global _POSTGRES_RULES_PRESENT
+            _POSTGRES_RULES_PRESENT = True
+
+    return server
 
 class DBServer:
     def __init__(self, conn, module, module_name=None):
@@ -330,25 +354,6 @@ class BioSeqDatabase:
         self.adaptor = adaptor
         self.name = name
         self.dbid = self.adaptor.fetch_dbid_by_dbname(name)
-        # TODO - Remove the following once BioSQL Bug 2839 is fixed.
-        # Test for RULES in PostgreSQL schema, see also Bug 2833.
-        self._postgres_rules_present= False
-        if "psycopg" in self.adaptor.conn.__class__.__module__ or \
-           "pgdb" in self.adaptor.conn.__class__.__module__ :
-            sql = "SELECT ev_class FROM pg_rewrite WHERE " + \
-                  "rulename='rule_bioentry_i1' OR " + \
-                  "rulename='rule_bioentry_i2';"
-            if self.adaptor.execute_and_fetchall(sql):
-                import warnings
-                warnings.warn("Your BioSQL PostgreSQL schema includes some "
-                              "rules currently required for bioperl-db but "
-                              "which may cause problems loading data using "
-                              "Biopython (see BioSQL Bug 2839). If you do not "
-                              "use BioPerl, please remove these rules. "
-                              "Biopython should cope with the rules present, "
-                              "but with a performance penalty when loading "
-                              "new records.")
-                self._postgres_rules_present = True
 
     def __repr__(self):
         return "BioSeqDatabase(%r, %r)" % (self.adaptor, self.name)
@@ -457,11 +462,12 @@ class BioSeqDatabase:
         db_loader = Loader.DatabaseLoader(self.adaptor, self.dbid, \
                                           fetch_NCBI_taxonomy)
         num_records = 0
+        global _POSTGRES_RULES_PRESENT
         for cur_record in record_iterator :
             num_records += 1
             #Hack to work arround BioSQL Bug 2839 - If using PostgreSQL and
             #the RULES are present check for a duplicate record before loading
-            if self._postgres_rules_present:
+            if _POSTGRES_RULES_PRESENT:
                 #Recreate what the Loader's _load_bioentry_table will do:
                 if cur_record.id.count(".") == 1:
                     accession, version = cur_record.id.split('.')
@@ -479,7 +485,12 @@ class BioSeqDatabase:
                       "'%s' AND version = '%s' AND biodatabase_id = '%s')"
                 self.adaptor.execute(sql % (gi, self.dbid, accession, version, self.dbid))
                 if self.adaptor.cursor.fetchone():
-                    raise self.adaptor.conn.IntegrityError("Duplicate record " 
+                    try:
+                        raise self.adaptor.conn.IntegrityError("Duplicate record " 
+                        "detected: record has not been inserted")
+                    except AttributeError: #psycopg version 1
+                        import psycopg
+                        raise psycopg.IntegrityError("Psycopg1: Duplicate record " 
                         "detected: record has not been inserted")
             #End of hack
             db_loader.load_seqrecord(cur_record)
