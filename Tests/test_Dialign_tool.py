@@ -1,4 +1,5 @@
 # Copyright 2009 by Cymon J. Cox.  All rights reserved.
+# Revisions 2009 copyright by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -19,16 +20,17 @@ else :
     output = commands.getoutput("dialign2-2")
     if "not found" not in output and "dialign2-2" in output.lower():
         dialign_exe = "dialign2-2"
-        #This check is currently not needed, as if the environment variable
-        #is missing the tool outputs this:
-        #
-        #    Please set the environmentvariable DIALIGN2_DIR 
-        #    as described in the README file 
-        #
-        #if "DIALIGN2_DIR" not in os.environ :
-        #    raise MissingExternalDependencyError(\
-        #        "Environment variable DIALIGN2_DIR for DIALIGN2-2 missing.")
-
+        if "DIALIGN2_DIR" not in os.environ :
+            raise MissingExternalDependencyError(\
+                "Environment variable DIALIGN2_DIR for DIALIGN2-2 missing.")
+        if not os.path.isdir(os.environ["DIALIGN2_DIR"]) :
+            raise MissingExternalDependencyError(\
+                "Environment variable DIALIGN2_DIR for DIALIGN2-2 is not a valid directory.")
+        if not os.path.isfile(os.path.join(os.environ["DIALIGN2_DIR"], "BLOSUM")) :
+            raise MissingExternalDependencyError(\
+                "Environment variable DIALIGN2_DIR directory missing BLOSUM file.")
+        #TODO - check for tp400_dna, tp400_prot and tp400_trans too?
+        
 if not dialign_exe:
     raise MissingExternalDependencyError(\
         "Install DIALIGN2-2 if you want to use the Bio.Align.Applications wrapper.")
@@ -53,13 +55,15 @@ class DialignApplication(unittest.TestCase):
         """
         #Test using keyword arguments:
         cmdline = DialignCommandline(dialign_exe, input=self.infile1)
+        self.assertEqual(str(cmdline), dialign_exe + " Fasta/f002 ")
         stdin, stdout, stderr = Application.generic_run(cmdline)
-        
+        #If there is a problem, the output can be very helpful to see,
+        #so check this before looking at the return code:
+        self.assertEqual(stderr.read(), "")
+        self.assertEqual(stdout.read(), "")
         self.assertEqual(stdin.return_code, 0)
         self.assert_(os.path.exists(self.outfile1))
-        self.assertEqual(stdout.read(), "")
-        self.assertEqual(stderr.read(), "")
-        self.assertEqual(str(stdin._cl), "dialign2-2 Fasta/f002 ")
+        self.assertEqual(str(stdin._cl), str(cmdline))
 
     def test_Dialign_simple_with_options(self):
         """Simple round-trip through app with infile and options
@@ -68,13 +72,13 @@ class DialignApplication(unittest.TestCase):
         cmdline.set_parameter("input", self.infile1)
         cmdline.set_parameter("-max_link", True)
         cmdline.set_parameter("stars", 4)
+        self.assertEqual(str(cmdline), dialign_exe + " -max_link -stars 4 Fasta/f002 ")
         stdin, stdout, stderr = Application.generic_run(cmdline)
-        
+        self.assertEqual(stderr.read(), "")
+        self.assertEqual(stdout.read(), "")
         self.assertEqual(stdin.return_code, 0)
         self.assert_(os.path.exists(self.outfile1))
-        self.assertEqual(stdout.read(), "")
-        self.assertEqual(stderr.read(), "")
-        self.assertEqual(str(stdin._cl), "dialign2-2 -max_link -stars 4 Fasta/f002 ")
+        self.assertEqual(str(stdin._cl), str(cmdline))
 
     def test_Dialign_simple_with_MSF_output(self):
         """Simple round-trip through app with infile, output MSF
@@ -83,14 +87,14 @@ class DialignApplication(unittest.TestCase):
         #Test with properties
         cmdline.input = self.infile1
         cmdline.msf = True
+        self.assertEqual(str(cmdline), "dialign2-2 -msf Fasta/f002 ")
         stdin, stdout, stderr = Application.generic_run(cmdline)
-        
+        self.assertEqual(stdout.read(), "")
+        self.assertEqual(stderr.read(), "")
         self.assertEqual(stdin.return_code, 0)
         self.assert_(os.path.exists(self.outfile1))
         self.assert_(os.path.exists(self.outfile2))
-        self.assertEqual(stdout.read(), "")
-        self.assertEqual(stderr.read(), "")
-        self.assertEqual(str(stdin._cl), "dialign2-2 -msf Fasta/f002 ")
+        self.assertEqual(str(stdin._cl), str(cmdline))
 
     def test_Dialign_complex_command_line(self):
         """Round-trip through app with complex command line."""
@@ -102,14 +106,13 @@ class DialignApplication(unittest.TestCase):
         cmdline.set_parameter("-ow", True)
         cmdline.set_parameter("mask", True)
         cmdline.set_parameter("-cs", True)
-
+        self.assertEqual(str(cmdline), "dialign2-2 -cs -mask -nt -ow -stars 9 -thr 4 Fasta/f002 ")
         stdin, stdout, stderr = Application.generic_run(cmdline)
-        
+        self.assertEqual(stderr.read(), "")
         self.assertEqual(stdin.return_code, 0)
         self.assert_(os.path.exists(self.outfile1))
         self.assert_(stdout.read().startswith(" e_len = 633"))
-        self.assertEqual(stderr.read(), "")
-        self.assertEqual(str(stdin._cl), "dialign2-2 -cs -mask -nt -ow -stars 9 -thr 4 Fasta/f002 ")
+        self.assertEqual(str(stdin._cl), str(cmdline))
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
