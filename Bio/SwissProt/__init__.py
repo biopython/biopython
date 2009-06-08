@@ -70,7 +70,7 @@ class Record:
         
         self.description = []
         self.gene_name = ''
-        self.organism = ''
+        self.organism = []
         self.organelle = ''
         self.organism_classification = []
         self.taxonomy_id = []
@@ -103,9 +103,9 @@ class Reference:
         self.positions = []
         self.comments = []
         self.references = []
-        self.authors = ''
-        self.title = ''
-        self.location = ''
+        self.authors = []
+        self.title = []
+        self.location = []
 
 
 def parse(handle):
@@ -132,8 +132,12 @@ def read(handle):
 
 def _read(handle):
     record = None
+    unread = ""
     for line in handle:
         key, value = line[:2], line[5:].rstrip()
+        if unread:
+            value = unread + " " + value
+            unread = ""
         if key=='**':
             #See Bug 2353, some files from the EBI have extra lines
             #starting "**" (two asterisks/stars).  They appear
@@ -154,9 +158,11 @@ def _read(handle):
         elif key=='DE':
             record.description.append(value.strip())
         elif key=='GN':
-            record.gene_name += line[5:]
+            if record.gene_name:
+                record.gene_name += " "
+            record.gene_name += value
         elif key=='OS':
-            record.organism += line[5:]
+            record.organism.append(value)
         elif key=='OG':
             record.organelle += line[5:]
         elif key=='OC':
@@ -176,7 +182,7 @@ def _read(handle):
         elif key=='RC':
             assert record.references, "RC: missing RN"
             reference = record.references[-1]
-            _read_rc(reference, value)
+            unread = _read_rc(reference, value)
         elif key=='RX':
             assert record.references, "RX: missing RN"
             reference = record.references[-1]
@@ -184,22 +190,22 @@ def _read(handle):
         elif key=='RL':
             assert record.references, "RL: missing RN"
             reference = record.references[-1]
-            reference.location += line[5:]
+            reference.location.append(value)
         # In UniProt release 1.12 of 6/21/04, there is a new RG
         # (Reference Group) line, which references a group instead of
         # an author.  Each block must have at least 1 RA or RG line.
         elif key=='RA':
             assert record.references, "RA: missing RN"
             reference = record.references[-1]
-            reference.authors += line[5:]
+            reference.authors.append(value)
         elif key=='RG':
             assert record.references, "RG: missing RN"
             reference = record.references[-1]
-            reference.authors += line[5:]
+            reference.authors.append(value)
         elif key=="RT":
             assert record.references, "RT: missing RN"
             reference = record.references[-1]
-            reference.title += line[5:]
+            reference.title.append(value)
         elif key=='CC':
             _read_cc(record, line)
         elif key=='DR':
@@ -220,17 +226,14 @@ def _read(handle):
         elif key=='  ':
             _sequence_lines.append(value.replace(" ", "").rstrip())
         elif key=='//':
-            # Join the DE lines
+            # Join multiline data into one string
             record.description = " ".join(record.description)
-            # Remove trailing newlines
-            record.gene_name   = record.gene_name.rstrip()
-            record.organism    = record.organism.rstrip()
+            record.organism = " ".join(record.organism)
             record.organelle   = record.organelle.rstrip()
             for reference in record.references:
-                # Remove trailing newlines
-                reference.authors = reference.authors.rstrip()
-                reference.title = reference.title.rstrip()
-                reference.location = reference.location.rstrip()
+                reference.authors = " ".join(reference.authors)
+                reference.title = " ".join(reference.title)
+                reference.location = " ".join(reference.location)
             record.sequence = "".join(_sequence_lines)
             return record
         else:
@@ -404,6 +407,10 @@ def _read_rn(reference, rn):
 
 def _read_rc(reference, value):
     cols = value.split(';')
+    if value[-1]==';':
+        unread = ""
+    else:
+        cols, unread = cols[:-1], cols[-1]
     for col in cols:
         if not col:  # last column will be the empty string
             return
@@ -417,6 +424,7 @@ def _read_rc(reference, value):
             comment = reference.comments[-1]
             comment = "%s %s" % (comment, col)
             reference.comments[-1] = comment
+    return unread
 
 
 def _read_rx(reference, value):
@@ -455,7 +463,7 @@ def _read_rx(reference, value):
 
 
 def _read_cc(record, line):
-    key, value = line[5:8], line[8:]
+    key, value = line[5:8], line[9:].rstrip()
     if key=='-!-':   # Make a new comment
         record.comments.append(value)
     elif key=='   ': # add to the previous comment
@@ -463,16 +471,7 @@ def _read_cc(record, line):
             # TCMO_STRGA in Release 37 has comment with no topic
             record.comments.append(value)
         else:
-            record.comments[-1] += value
-    elif key=='---':
-        # If there are no comments, and it's not the closing line,
-        # make a new comment.
-        if not record.comments or record.comments[-1][:3] != '---':
-            record.comments.append(line[5:])
-        else:
-            record.comments[-1] += line[5:]
-    else:  # copyright notice
-        record.comments[-1] += line[5:]
+            record.comments[-1] += " " + value
 
 
 def _read_dr(record, value):
