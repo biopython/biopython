@@ -369,8 +369,7 @@ class DupLoadTest(unittest.TestCase) :
             count = self.db.load([record,record])
         except Exception, err :
             #Good!
-            self.assert_("IntegrityError" == err.__class__.__name__, \
-                         err.__class__.__name__ + "\n" + str(err))
+            self.assertEqual("IntegrityError", err.__class__.__name__)
             return
         raise Exception("Should have failed! Loaded %i records" % count)
 
@@ -383,8 +382,7 @@ class DupLoadTest(unittest.TestCase) :
             count = self.db.load([record])
         except Exception, err :
             #Good!
-            self.assert_("IntegrityError" == err.__class__.__name__, \
-                         err.__class__.__name__ + "\n" + str(err))
+            self.assertEqual("IntegrityError", err.__class__.__name__)
             return
         raise Exception("Should have failed! Loaded %i records" % count)
 
@@ -396,8 +394,7 @@ class DupLoadTest(unittest.TestCase) :
             count = self.db.load([record1,record2])
         except Exception, err :
             #Good!
-            self.assert_("IntegrityError" == err.__class__.__name__, \
-                         err.__class__.__name__ + "\n" + str(err))
+            self.assertEqual("IntegrityError", err.__class__.__name__)
             return
         raise Exception("Should have failed! Loaded %i records" % count)
 
@@ -587,8 +584,7 @@ class InDepthLoadTest(unittest.TestCase):
             count = self.db.load([record])
         except Exception, err :
             #Good!
-            self.assert_("IntegrityError" == err.__class__.__name__, \
-                         err.__class__.__name__ + "\n" + str(err))
+            self.assertEqual("IntegrityError", err.__class__.__name__)
             return
         raise Exception("Should have failed! Loaded %i records" % count)
 
