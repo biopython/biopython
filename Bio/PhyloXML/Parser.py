@@ -126,7 +126,7 @@ def read(handle):
     # get an iterable context for XML parsing events
     context = iter(ElementTree.iterparse(handle, events=('start', 'end')))
     event, root = context.next()
-    phyloxml = Phyloxml(attrib=root.attrib)
+    phyloxml = Phyloxml(root.attrib)
     for event, elem in context:
         if event == 'start' and local(elem.tag) == 'phylogeny':
             phylogeny = parse_phylogeny(elem, context)
@@ -235,27 +235,24 @@ def parse_other(parent, context):
 # ---------------------------------------------------------------------
 # Classes instantiated from phyloXML nodes
 
+# XXX maybe not needed
 class PhyloElement(object):
     """Base class for all PhyloXML objects."""
     def __init__(self, attrib=None, text=None):
-        if attrib is not None:
-            self._attrib = attrib
-        if text is not None:
-            self._text = text
+        self._attrib = attrib
+        self._text = text
         # self._children = []
-        # Munge each of these into properties
-        self._expose()
-
-    def _expose(self):
-        """Produce a useful interface for protected data.
-
-        Overridden by classes that inherit from this.
-        """
-        pass
+        # Munge each of these into attributes
+        if attrib is not None:
+            self.__dict__.update(self._attrib)
 
 
 class Other(PhyloElement):
     """Container for non-phyloXML elements in the tree."""
+    # XXX should assert that the tag namespace is not phyloxml's
+    def __init__(self, attrib):
+        PhyloElement.__init__(self, attrib=attrib)
+
     def add_child(self, tag, obj):
         if tag in self.__dict__:
             if isinstance(getattr(self, tag), list):
@@ -281,9 +278,14 @@ class Phyloxml(PhyloElement):
     Contains an arbitrary number of Phylogeny elements, possibly followed by
     elements from other namespaces.
     """
-    def _expose(self):
+    def __init__(self, attrib):
+        PhyloElement.__init__(self, attrib=attrib)
         self.phylogenies = []
         self.other = []
+
+    def __iter__(self):
+        """Iterate through the phylogenetic trees in this object."""
+        return iter(self.phylogenies)
 
 
 class Phylogeny(PhyloElement):
@@ -307,9 +309,13 @@ class Phylogeny(PhyloElement):
         property
         [other]
     """
-    def _expose(self):
-        self.__dict__.update(self._attrib)
+    def __init__(self, attrib):
+        PhyloElement.__init__(self, attrib=attrib)
         self.clades = []
+
+    def __iter__(self):
+        """Iterate through the clades (branches) within this phylogeny."""
+        return iter(self.clades)
 
     # From Bioperl's Bio::Tree::TreeI
 
@@ -380,9 +386,13 @@ class Clade(PhyloElement):
         property
         clade   (recursive)
     """
-    def _expose(self):
-        self.__dict__.update(self._attrib)
+    def __init__(self, attrib):
+        PhyloElement.__init__(self, attrib=attrib)
         self.clades = []
+
+    def __iter__(self):
+        """Iterate through the clades (sub-nodes) within this clade."""
+        return iter(self.clades)
 
 
 # Complex types
@@ -410,14 +420,20 @@ class BranchColor(PhyloElement):
 class CladeRelation(PhyloElement):
     """
     """
+    def __init__(self, text):
+        PhyloElement.__init__(self, text=text)
 
 class Confidence(PhyloElement):
     """
     """
+    def __init__(self, text):
+        PhyloElement.__init__(self, text=text)
 
 class Date(PhyloElement):
     """
     """
+    def __init__(self, text):
+        PhyloElement.__init__(self, text=text)
 
 class Distribution(PhyloElement):
     """
@@ -434,6 +450,8 @@ class Events(PhyloElement):
 class Id(PhyloElement):
     """
     """
+    def __init__(self, text):
+        PhyloElement.__init__(self, text=text)
 
 class Point(PhyloElement):
     """
@@ -446,6 +464,8 @@ class Polygon(PhyloElement):
 class Property(PhyloElement):
     """
     """
+    def __init__(self, text):
+        PhyloElement.__init__(self, text=text)
 
 class ProteinDomain(PhyloElement):
     """
@@ -462,6 +482,8 @@ class Sequence(PhyloElement):
 class SequenceRelation(PhyloElement):
     """
     """
+    def __init__(self, text):
+        PhyloElement.__init__(self, text=text)
 
 class Taxonomy(PhyloElement):
     """
