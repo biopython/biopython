@@ -61,6 +61,7 @@ Timeline
     - no-op parsing of a large zipped phyloXML file
     - basic loading of the root node into a Python object
     - creating a list of phylogeny objects under the root node
+    - creating trees of at least 3 clades deep
 
     Documentation (Biopython wiki):
 

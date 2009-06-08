@@ -150,37 +150,31 @@ def _parse_phylogeny(parent, context):
     """
     phylogeny = Phylogeny(attrib=parent.attrib)
     for event, elem in context:
-        if event == 'start' and local(elem.tag) == 'clade':
+        tag = local(elem.tag)
+        if event == 'start' and tag == 'clade':
             clade = _parse_clade(elem, context)
             phylogeny.clades.append(clade)
             continue
         if event == 'end':
-            if local(elem.tag) == 'phylogeny':
+            if tag == 'phylogeny':
                 parent.clear()
                 break
             # Handle the other non-recursive children
-            if local(elem.tag) == 'name': 
+            if tag == 'name': 
                 phylogeny.name = Token('name', elem.text)
-                elem.clear()
-            elif local(elem.tag) == 'id':
+            elif tag == 'id':
                 phylogeny.id = Id(text=elem.text)
-                elem.clear()
-            elif local(elem.tag) == 'description':
+            elif tag == 'description':
                 phylogeny.description = Token('description', elem.text)
-                elem.clear()
-            elif local(elem.tag) == 'date':
+            elif tag == 'date':
                 phylogeny.date = Date(text=elem.text)
-                elem.clear()
-            elif local(elem.tag) == 'confidence':
+            elif tag == 'confidence':
                 phylogeny.confidence = Confidence(text=elem.text)
-                elem.clear()
-            elif local(elem.tag) == 'clade_relation':
+            elif tag == 'clade_relation':
                 phylogeny.clade_relation = CladeRelation(text=elem.text)
-                elem.clear()
-            elif local(elem.tag) == 'sequence_relation':
+            elif tag == 'sequence_relation':
                 phylogeny.sequence_relation = SequenceRelation(text=elem.text)
-                elem.clear()
-            elif local(elem.tag) == 'property':
+            elif tag == 'property':
                 phylogeny.properties = [Property(text=elem.text)]
                 elem.clear()
             else:
@@ -189,29 +183,64 @@ def _parse_phylogeny(parent, context):
                     phylogeny.other.append(Other(elem.attrib, elem.text))
                 else:
                     phylogeny.other = [Other(elem.attrib, elem.text)]
-                elem.clear()
+            elem.clear()
     return phylogeny
 
 
 def _parse_clade(parent, context):
     clade = Clade(attrib=parent.attrib)
-    # clade_depth = 0
-    # node = tags_to_classes.get(local(parent.tag), Other)(parent)
     for event, elem in context:
-        if event == 'start' and local(elem.tag) == 'clade':
-            # clade_depth += 1
+        tag = local(elem.tag)
+        if event == 'start' and tag == 'clade':
             subclade = _parse_clade(elem, context)
             clade.clades.append(subclade)
             continue
-        if event == 'end' and local(elem.tag) == 'clade':
-            # clade_depth -= 1
-            parent.clear()
-            break
+        if event == 'end':
+            if tag == 'clade':
+                parent.clear()
+                break
+            # Handle the other non-recursive children
+            if tag == 'name': 
+                clade.name = Token('name', elem.text)
+            elif tag == 'branch_length': 
+                # NB: possible collision with the attribute
+                if hasattr(clade, 'branch_length'):
+                    warnings.warn('Attribute branch_length was already set ' \
+                                  'for this node; overwriting previous value.')
+                clade.branch_length = elem.text
+            elif tag == 'confidence':
+                clade.confidence = Confidence(text=elem.text)
+            elif tag == 'width':
+                clade.width == float(elem.text)
+            elif tag == 'color':
+                clade.color == BranchColor(int(elem.find('red').text),
+                                           int(elem.find('green').text),
+                                           int(elem.find('blue').text))
+            elif tag == 'node_id':
+                clade.node_id == Id(text=elem.text)
+            elif tag == 'taxonomy':
+                clade.taxonomy == Taxonomy(text=elem.text)
+            elif tag == 'sequence':
+                clade.sequence == Sequence(text=elem.text)
+            elif tag == 'events':
+                clade.events == Events(text=elem.text)
+            elif tag == 'binary_characters':
+                clade.binary_characters == BinaryCharacters(text=elem.text)
+            elif tag == 'distribution':
+                clade.distribution == Distribution(text=elem.text)
+            elif tag == 'date':
+                clade.date == Date(text=elem.text)
+            elif tag == 'reference':
+                clade.reference == Reference(text=elem.text)
+            elif tag == 'property':
+                clade.property == Property(text=elem.text)
+            elem.clear()
     return clade
 
 
 def _parse_other(parent, context):
-    node = Other(attrib=parent.attrib, text=parent.text)
+    construct = tags_to_classes.get(local(parent.tag), Other)
+    node = construct(attrib=parent.attrib, text=parent.text)
     tag_depth = 0
     for event, elem in context:
         if event == 'start' and local(elem.tag) == local(parent.tag):
@@ -231,6 +260,7 @@ def _parse_other(parent, context):
             node.add_child(obj)
             elem.clear()
     return node
+
 
 # ---------------------------------------------------------------------
 # Classes instantiated from phyloXML nodes
@@ -315,7 +345,20 @@ class Phylogeny(PhyloElement):
     """
     def __init__(self, attrib):
         PhyloElement.__init__(self, attrib=attrib)
-        self.clades = []
+        # Single values
+        for attr in (
+                # Node attributes
+                'rooted', 'rerootable', 'branch_length_unit', 'type',
+                # Child nodes
+                'name', 'id', 'description', 'date', 'confidence',
+                'clade_relation', 'sequence_relation', 'property'
+                ):
+            if not hasattr(self, attr):
+                setattr(self, attr, None)
+        # Lists
+        for attr in ('clades', 'confidences'):
+            if not hasattr(self, attr):
+                setattr(self, attr, [])
 
     def __iter__(self):
         """Iterate through the clades (branches) within this phylogeny."""
@@ -396,7 +439,21 @@ class Clade(PhyloElement):
     """
     def __init__(self, attrib):
         PhyloElement.__init__(self, attrib=attrib)
-        self.clades = []
+        # Single values
+        for attr in (
+                # Attributes
+                'branch_length', 'id_source',
+                # Child nodes
+                'name', 'width', 'color', 'node_id', 'taxonomy', 'sequence',
+                'events', 'binary_characters', 'distribution', 'date',
+                'reference', 'property',
+                ):
+            if not hasattr(self, attr):
+                setattr(self, attr, [])
+        # Lists
+        for attr in ('clades', 'confidences'):
+            if not hasattr(self, attr):
+                setattr(self, attr, [])
 
     def __iter__(self):
         """Iterate through the clades (sub-nodes) within this clade."""
@@ -428,6 +485,14 @@ class BinaryCharacters(PhyloElement):
 class BranchColor(PhyloElement):
     """
     """
+    def __init__(self, red, green, blue):
+        assert isinstance(int, red)
+        assert isinstance(int, green)
+        assert isinstance(int, blue)
+        self.red = red
+        self.green = green
+        self.blue = blue
+
 
 class CladeRelation(PhyloElement):
     """
