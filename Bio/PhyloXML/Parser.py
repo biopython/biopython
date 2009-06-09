@@ -510,45 +510,78 @@ class BranchColor(PhyloElement):
 
 
 class CladeRelation(PhyloElement):
+    """Expresses a typed relationship between two clades.
+
+    For example, this could be used to describe multiple parents of a clade.
     """
-    """
-    def __init__(self, text):
-        PhyloElement.__init__(self, text=text)
+    def __init__(self, attributes, confidence=None):
+        PhyloElement.__init__(self, attributes)
+        self.confidence = confidence
 
     @classmethod
     def from_element(cls, elem):
-        pass
+        confidence = elem.find('confidence')
+        if confidence is not None:
+            confidence = Confidence.from_element(confidence)
+        return CladeRelation(elem.attributes, confidence)
 
 
 class Confidence(PhyloElement):
+    """A general purpose confidence element.
+
+    For example, this can be used to express the bootstrap support value of a
+    clade (in which case the 'type' attribute is 'bootstrap').
     """
-    """
-    def __init__(self, text):
-        PhyloElement.__init__(self, text=text)
+    def __init__(self, attributes, value):
+        PhyloElement.__init__(self, attributes, value=value)
 
     @classmethod
     def from_element(cls, elem):
-        pass
+        return Confidence(elem.attrib, float(elem.text))
 
 
 class Date(PhyloElement):
+    """A date associated with a clade/node.
+
+    Its value can be numerical by using the 'value' element and/or free text
+    with the 'desc' element' (e.g. 'Silurian'). If a numerical value is used, it
+    is recommended to employ the 'unit' attribute to indicate the type of the
+    numerical value (e.g. 'mya' for 'million years ago'). 
     """
-    """
-    def __init__(self, text):
-        PhyloElement.__init__(self, text=text)
+    def __init__(self, attributes, desc=None, value=None):
+        PhyloElement.__init__(self, attributes, desc=desc, value=value)
 
     @classmethod
     def from_element(cls, elem):
-        pass
+        value = elem.find('value')
+        if value is not None:
+            value = float(value.text)
+        return Date(elem.attrib,
+                desc=get_elem_text(elem, 'desc'),
+                value=get_elem_text(elem, 'value'),
+                )
 
 
 class Distribution(PhyloElement):
+    """Geographic distribution of the items of a clade (species, sequences).
+
+    Intended for phylogeographic applications.
+
+    The location can be described either by free text in the 'desc' element
+    and/or by the coordinates of one or more 'Points' (similar to the 'Point'
+    element in Google's KML format) or by 'Polygons'.
     """
-    """
+    def __init__(self, desc=None, points=[], polygons=[]):
+        PhyloElement.__init__(self, attributes, desc=desc, value=value)
 
     @classmethod
     def from_element(cls, elem):
-        pass
+        return Distribution(desc=get_elem_text(elem, 'desc'),
+                points=[Point.from_element(e)
+                        for e in elem.findall('point')],
+                polygons=[Polygon.from_element(e)
+                          for e in elem.findall('polygon')],
+                )
 
 
 class DomainArchitecture(PhyloElement):
