@@ -103,7 +103,8 @@ Timeline
 :7/6:
     Make it pretty:
 
-    - Write unit tests for Pythonic syntax sugar (e.g.  __getitem__)
+    - Write unit tests for Pythonic syntax sugar (e.g. __getattr__, __getitem__,
+      __contains__)
     - Add the corresponding magic methods to the base class
 
 :7/13:
@@ -135,66 +136,61 @@ See:
     * http://www.phyloxml.org/examples/phyloxml_examples.xml
 
 Tier 0 (essential tree structure):
-    phyloxml
-    phylogeny
-    clade
+
+    - done: phyloxml, phylogeny, clade
 
 Tier 1 (used in all example files):
-    branch_length
-    code
-    confidence
-    name
-    taxonomy
+
+    - to do: code (TaxonomyCode)
+
+    - done: branch_length, confidence, name, taxonomy
 
 Tier 2 (used in at least one example file, but not all):
-    accession
-    alt
-    annotation
-    clade_relation
-    common_name
-    date
-    desc
-    description
-    distribution
-    domain
-    domain_architecture
-    duplications
-    events
-    id
-    lat
-    long
-    mol_seq
-    point
-    property
-    rank
-    scientific_name
-    seq
-    sequence
-    sequence_relation
-    speciations
-    symbol
-    uri
-    value
+
+    - to do:
+        accession,
+        alt,
+        annotation,
+        common_name,
+        description,
+        domain,
+        domain_architecture,
+        duplications,
+        events,
+        id,
+        lat,
+        long,
+        mol_seq,
+        point,
+        property,
+        rank,
+        scientific_name,
+        sequence,
+        sequence_relation,
+        speciations,
+        symbol,
+        uri
+
+    - done: clade_relation, date, desc, value, distribution
 
 Tier 3 (not found in example files):
-    absent
-    bc
-    binary_characters
-    blue
-    color
-    gained
-    green
-    location
-    losses
-    lost
-    node_id
-    polygon
-    present
-    red
-    reference
-    type
-    width
 
+    - to do:
+        absent, 
+        bc, 
+        binary_characters,
+        gained,
+        location,
+        losses,
+        lost,
+        node_id,
+        polygon,
+        present,
+        reference,
+        type,
+        width
+
+    - done: color, red, green, blue
 
 Namespaces:
 
