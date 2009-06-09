@@ -160,6 +160,18 @@ def _parse_phylogeny(parent, context):
     to the top-level parsing function.
     """
     phylogeny = Phylogeny(parent.attrib)
+    complex_types = {
+            # XML tag, class
+            'id':   Id,
+            'date': Date,
+            'clade_relation': CladeRelation,
+            'sequence_relation': SequenceRelation,
+            }
+    list_types = {
+            # XML tag, plural attribute, class
+            'confidence':   ('confidences', Confidence),
+            'property':     ('properties', Property),
+            }
     for event, elem in context:
         tag = local(elem.tag)
         if event == 'start' and tag == 'clade':
@@ -172,24 +184,16 @@ def _parse_phylogeny(parent, context):
                 parent.clear()
                 break
             # Handle the other non-recursive children
-            elif tag == 'id':
-                phylogeny.id = Id(text=elem.text)
-            elif tag == 'date':
-                phylogeny.date = Date(text=elem.text)
-            elif tag == 'clade_relation':
-                phylogeny.clade_relation = CladeRelation(text=elem.text)
-            elif tag == 'sequence_relation':
-                phylogeny.sequence_relation = SequenceRelation(text=elem.text)
+            if tag in complex_types:
+                setattr(phylogeny, tag, complex_types[tag].from_element(elem))
+            elif tag in list_types:
+                attr, cls = list_types[tag]
+                getattr(phylogeny, attr).append(cls.from_element(elem))
             # Simple types
-            if tag == 'name': 
+            elif tag == 'name': 
                 phylogeny.name = str(elem.text)
             elif tag == 'description':
                 phylogeny.description = str(elem.text)
-            # Collections
-            elif tag == 'confidence':
-                phylogeny.confidences.append(Confidence.from_element(elem))
-            elif tag == 'property':
-                phylogeny.properties = [Property(text=elem.text)]
             # Unknown tags
             else:
                 phylogeny.other.append(Other.from_element(elem))
@@ -199,6 +203,23 @@ def _parse_phylogeny(parent, context):
 
 def _parse_clade(parent, context):
     clade = Clade(parent.attrib)
+    complex_types = {
+            # XML tag, class
+            'color':    BranchColor,
+            'node_id':  Id,
+            'events':   Events,
+            'binary_characters': BinaryCharacters,
+            'date':     Date,
+            }
+    list_types = {
+            # XML tag, plural attribute, class
+            'confidence':   ('confidences', Confidence),
+            'taxonomy':     ('taxonomies', Taxonomy),
+            'sequence':     ('sequences', Sequence),
+            'distribution': ('distributions', Distribution),
+            'reference':    ('references', Reference),
+            'property':     ('properties', Property),
+            }
     for event, elem in context:
         tag = local(elem.tag)
         if event == 'start' and tag == 'clade':
@@ -210,40 +231,22 @@ def _parse_clade(parent, context):
                 parent.clear()
                 break
             # Handle the other non-recursive children
+            if tag in complex_types:
+                setattr(clade, tag, complex_types[tag].from_element(elem))
+            elif tag in list_types:
+                attr, cls = list_types[tag]
+                getattr(clade, attr).append(cls.from_element(elem))
+            # Simple types
             elif tag == 'branch_length':
                 # NB: possible collision with the attribute
                 if hasattr(clade, 'branch_length'):
                     warnings.warn('Attribute branch_length was already set for '
                                   'this Clade; overwriting the previous value.')
                 clade.branch_length = elem.text
-            elif tag == 'color':
-                clade.color == BranchColor.from_element(elem)
-            elif tag == 'node_id':
-                clade.node_id == Id(text=elem.text)
-            elif tag == 'events':
-                clade.events == Events(text=elem.text)
-            elif tag == 'binary_characters':
-                clade.binary_characters == BinaryCharacters(text=elem.text)
-            elif tag == 'date':
-                clade.date == Date(text=elem.text)
-            # Simple types
-            if tag == 'name': 
+            elif tag == 'name': 
                 clade.name = str(elem.text)
             elif tag == 'width':
-                clade.width == float(elem.text)
-            # Collections
-            elif tag == 'confidence':
-                clade.confidences.append(Confidence(elem))
-            elif tag == 'taxonomy':
-                clade.taxonomies.append(Taxonomy.from_element(elem))
-            elif tag == 'sequence':
-                clade.sequences.append(Sequence(elem))
-            elif tag == 'distributions':
-                clade.distributions.append(Distribution(elem))
-            elif tag == 'reference':
-                clade.references.append(Reference(elem))
-            elif tag == 'property':
-                clade.properties.append(Property(elem))
+                clade.width = float(elem.text)
             # Unknown tags
             else:
                 clade.other.append(Other.from_element(elem))
@@ -512,11 +515,21 @@ class CladeRelation(PhyloElement):
     def __init__(self, text):
         PhyloElement.__init__(self, text=text)
 
+    @classmethod
+    def from_element(cls, elem):
+        pass
+
+
 class Confidence(PhyloElement):
     """
     """
     def __init__(self, text):
         PhyloElement.__init__(self, text=text)
+
+    @classmethod
+    def from_element(cls, elem):
+        pass
+
 
 class Date(PhyloElement):
     """
@@ -524,9 +537,19 @@ class Date(PhyloElement):
     def __init__(self, text):
         PhyloElement.__init__(self, text=text)
 
+    @classmethod
+    def from_element(cls, elem):
+        pass
+
+
 class Distribution(PhyloElement):
     """
     """
+
+    @classmethod
+    def from_element(cls, elem):
+        pass
+
 
 class DomainArchitecture(PhyloElement):
     """
@@ -535,6 +558,11 @@ class DomainArchitecture(PhyloElement):
 class Events(PhyloElement):
     """
     """
+
+    @classmethod
+    def from_element(cls, elem):
+        pass
+
 
 class Id(PhyloElement):
     """
@@ -556,6 +584,11 @@ class Property(PhyloElement):
     def __init__(self, text):
         PhyloElement.__init__(self, text=text)
 
+    @classmethod
+    def from_element(cls, elem):
+        pass
+
+
 class ProteinDomain(PhyloElement):
     """
     """
@@ -568,11 +601,21 @@ class Sequence(PhyloElement):
     """
     """
 
+    @classmethod
+    def from_element(cls, elem):
+        pass
+
+
 class SequenceRelation(PhyloElement):
     """
     """
     def __init__(self, text):
         PhyloElement.__init__(self, text=text)
+
+    @classmethod
+    def from_element(cls, elem):
+        pass
+
 
 class Taxonomy(PhyloElement):
     """Describe taxonomic information for a clade.
