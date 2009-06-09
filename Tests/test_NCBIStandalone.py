@@ -4,7 +4,6 @@
 # as part of this package.
 
 import os
-import string
 from Bio import ParserSupport
 from Bio.Blast import NCBIStandalone
 
@@ -91,7 +90,7 @@ for test in all_tests:
     except ValueError, x:
         # If it complains that the input is psiblast data, then
         # parse it with the psiblast parser.
-        if string.find(str(x), 'PSI-BLAST data') >= 0:
+        if 'PSI-BLAST data' in str(x):
             rec = pb_parser.parse(open(datafile))
         else:
             raise
