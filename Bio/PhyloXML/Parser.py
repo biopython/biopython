@@ -79,7 +79,6 @@ tags_to_classes = {
 #         'red':          int, # unsignedByte
 #         'reference':    Reference,
 #         'scientific_name': Token,
-#         'seq':          Sequence,
 #         'sequence':     Sequence,
 #         'sequence_relation': SequenceRelation,
 #         'speciations':  int, # nonNegativeInteger
@@ -134,10 +133,11 @@ def read(handle):
             # warnings.warn(repr(phylogeny.__dict__))
             phyloxml.phylogenies.append(phylogeny)
             continue
-        if event == 'end':
-            # Deal with Other items
+        if event == 'end' and local(elem.tag) != 'phyloxml':
+            # Deal with items not specified by phyloXML
+            otr = Other.from_element(elem)
+            phyloxml.other.append(otr)
             root.clear()
-            pass
     return phyloxml
 
 
@@ -179,10 +179,7 @@ def _parse_phylogeny(parent, context):
                 elem.clear()
             else:
                 # Unknown tag
-                if hasattr(phylogeny, 'other'):
-                    phylogeny.other.append(Other(elem.attrib, elem.text))
-                else:
-                    phylogeny.other = [Other(elem.attrib, elem.text)]
+                phylogeny.other.append(Other.from_element(elem))
             elem.clear()
     return phylogeny
 
@@ -202,11 +199,11 @@ def _parse_clade(parent, context):
             # Handle the other non-recursive children
             if tag == 'name': 
                 clade.name = Token('name', elem.text)
-            elif tag == 'branch_length': 
+            elif tag == 'branch_length':
                 # NB: possible collision with the attribute
                 if hasattr(clade, 'branch_length'):
-                    warnings.warn('Attribute branch_length was already set ' \
-                                  'for this node; overwriting previous value.')
+                    warnings.warn('Attribute branch_length was already set for'
+                                  'this Clade; overwriting the previous value.')
                 clade.branch_length = elem.text
             elif tag == 'confidence':
                 clade.confidence = Confidence(text=elem.text)
@@ -238,30 +235,6 @@ def _parse_clade(parent, context):
     return clade
 
 
-def _parse_other(parent, context):
-    construct = tags_to_classes.get(local(parent.tag), Other)
-    node = construct(attrib=parent.attrib, text=parent.text)
-    tag_depth = 0
-    for event, elem in context:
-        if event == 'start' and local(elem.tag) == local(parent.tag):
-            tag_depth += 1
-            continue
-        if local(elem.tag) == local(parent.tag):
-            tag_depth -= 1
-            if tag_depth == 0:
-                parent.clear()
-                break
-        else:
-            constructor = tags_to_classes.get(local(elem.tag), Other)
-            if constructor in (int, float, Token):
-                obj = constructor(local(elem.tag), elem.text)
-            else:
-                obj = constructor(elem.attrib, elem.text)
-            node.add_child(obj)
-            elem.clear()
-    return node
-
-
 # ---------------------------------------------------------------------
 # Classes instantiated from phyloXML nodes
 
@@ -276,21 +249,31 @@ class PhyloElement(object):
         if attrib is not None:
             self.__dict__.update(self._attrib)
 
+    @classmethod
+    def from_element(cls, elem):
+        raise NotImplementedError("This method should be implemented by " \
+                                  "the derived class %s." % cls)
+
 
 class Other(PhyloElement):
     """Container for non-phyloXML elements in the tree."""
-    # XXX should assert that the tag namespace is not phyloxml's
-    def __init__(self, attrib):
-        PhyloElement.__init__(self, attrib=attrib)
+    # ENH: assert that the tag namespace is not phyloxml's
+    def __init__(self, tag, attributes=None, text=None, children=[]):
+        # PhyloElement.__init__(self, attrib=attrib)
+        self.tag = tag
+        self.attributes = attributes
+        self.text = text
+        self.children = children
 
-    def add_child(self, tag, obj):
-        if tag in self.__dict__:
-            if isinstance(getattr(self, tag), list):
-                getattr(self, tag).append(obj)
-            else:
-                setattr(self, tag, [getattr(self, tag), obj])
-        else:
-            setattr(self, tag, obj)
+    def __str__(self):
+        return '<Other %s at %s>' % (self.tag, hex(id(self)))
+
+    @classmethod
+    def from_element(cls, elem):
+        obj = Other(elem.tag, elem.attrib, elem.text)
+        for child in elem.getchildren():
+            obj.children.append(Other.from_element(child))
+        return obj
 
 
 class Token(object):
@@ -356,7 +339,7 @@ class Phylogeny(PhyloElement):
             if not hasattr(self, attr):
                 setattr(self, attr, None)
         # Lists
-        for attr in ('clades', 'confidences'):
+        for attr in ('clades', 'confidences', 'other'):
             if not hasattr(self, attr):
                 setattr(self, attr, [])
 
@@ -397,7 +380,7 @@ class Clade(PhyloElement):
     """Describes a branch of the current phylogenetic tree.
 
     Used recursively, describes the topology of a phylogenetic tree.
-    
+
     The parent branch length of a clade can be described either with the
     'branch_length' element or the 'branch_length' attribute (it is not
     recommended to use both at the same time, though). Usage of the
@@ -412,7 +395,7 @@ class Clade(PhyloElement):
     Element 'width' is the branch width for this clade (including parent
     branch). Both 'color' and 'width' elements apply for the whole clade unless
     overwritten in-sub clades.
-    
+
     Attribute 'id_source' is used to link other elements to a clade (on the
     xml-level).
 
