@@ -542,22 +542,20 @@ Now that you've got everything installed, carry on ahead to section~\ref{sec:is_
 \section{Making sure everything worked}
 \label{sec:is_working}
 
-First, we'll just do a quick test to make sure Biopython is installed correctly. The most important thing is that python can find the biopython installation. Biopython installs into top level \verb|Bio|, \verb|Martel| and \verb|BioSQL| directories, so you'll want to make sure these directories are located in a directory specified 
+First, we'll just do a quick test to make sure Biopython is installed correctly. The most important thing is that python can find the biopython installation. Biopython installs into top level \verb|Bio| and \verb|BioSQL| directories, so you'll want to make sure these directories are located in a directory specified 
 in your\verb| $PYTHONPATH| environmental variable. If you used the default install, this shouldn't be a problem, but if not, you'll need to set the \verb|PYTHONPATH| with something like \verb|export PYTHONPATH = $PYTHONPATH':/directory/where/you/put/Biopython'| (on UNIX). Now that we think we are ready, fire up your python interpreter and follow along with the following code:
 
 \begin{verbatim}
 $ python
-Python 2.4 (#1, Dec  5 2004, 20:47:03)
-[GCC 3.3.3] on cygwin
+Python 2.5 (r25:51908, Nov 23 2006, 18:40:28) 
+[GCC 4.1.1 20061011 (Red Hat 4.1.1-30)] on linux2
 Type "help", "copyright", "credits" or "license" for more information.
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet.IUPAC import unambiguous_dna
 >>> new_seq = Seq('GATCAGAAG', unambiguous_dna)
 >>> new_seq[0:2]
 Seq('GA', IUPACUnambiguousDNA())
->>> from Bio import Translate
->>> translator = Translate.unambiguous_dna_by_name["Standard"]
->>> translator.translate(new_seq)
+>>> new_seq.translate()
 Seq('DQK', HasStopCodon(IUPACProtein(), '*'))
 >>>
 \end{verbatim}
@@ -571,6 +569,7 @@ python setup.py test
 \end{verbatim}
 
 You can also run them by typing \verb|python run_tests.py| in the Tests sub directory.
+See the main Tutorial for further details (there is a whole chapter on the test framework).
 
 If you've made it this far, you've gotten Biopython installed and running.
 Congratulations!
