@@ -365,72 +365,12 @@ these modules.
 
 Historically this was an important Biopython dependency, used extensively
 in a number of parsers.  However, we have gradually phased out its use,
-and as of Biopython 1.49, mxTextTools is only used in a few deprecated
-modules.  You can skip installing this unless you hit an import error
-about mxTextTools when actually using Biopython.
+and as of Biopython 1.50, mxTextTools is no longer used at all.
 
 mxTextTools is available along with the entire mx-base system (which
 contains a number of other useful utilities as well) and the latest
 version is available for download at:
 \ahrefurl{\url{http://www.egenix.com/products/python/mxBase/mxTextTools/}}.
-
-However, we currently recommend you install mxTextTools 2.0, as some of
-the API changes made in 3.0 version were not compatible with Biopython.  Goto
-\ahrefurl{\url{http://www.egenix.com/www2002/python/eGenix-mx-Extensions-v2.x.html/}}
-to download this.
-
-\subsubsection{UNIX and Mac OS X systems}
-
-For UNIX and UNIX-like systems you should download the \verb|tar.gz|
-file from the page listed above. At the current time, this is
-\verb|egenix-mx-base-2.0.6.tar.gz|.
-
-Once you download this, unpack it and change into the created directory:
-
-\begin{verbatim}
-$ gunzip egenix-mx-base-2.0.6.tar.gz 
-$ tar -xvpf egenix-mx-base-2.0.6.tar
-$ cd egenix-mx-base-2.0.6
-\end{verbatim}
-
-To build it, use the standard python build procedure:
-
-\begin{verbatim}
-$ python setup.py build
-$ python setup.py test
-\end{verbatim}
-
-Then become root, and install it, again using the standard python
-mechanism:
-
-\begin{verbatim}
-$ python setup.py install
-\end{verbatim}
-
-\subsubsection{Windows systems}
-
-For Windows operating systems, you should download the Windows installer
-for the version of python you are running. At the current time, this
-would be: \verb|egenix-mx-base-2.0.6.win32-py2.5.exe|.
-
-This is a standard graphical installer, so after download double click
-it and follow the instructions and it should install with no problem.
-You'll have to have Administrator privileges to do this install, as with
-python itself.
-
-\subsubsection{Making sure it installed correctly}
-
-If you've installed mxTextTools correctly, you should be able to fire up
-your python interpreter and import it with no errors:
-
-\begin{verbatim}
-$ python
-Python 2.4 (#1, Dec  5 2004, 20:47:03)
-[GCC 3.3.3] on cygwin
-Type "help", "copyright", "credits" or "license" for more information.
->>> from mx import TextTools
->>>
-\end{verbatim}
 
 \subsection{flex (fast lexical analyzer generator) (optional)}
 
