@@ -202,7 +202,7 @@ def _parse_clade(parent, context):
             elif tag == 'branch_length':
                 # NB: possible collision with the attribute
                 if hasattr(clade, 'branch_length'):
-                    warnings.warn('Attribute branch_length was already set for'
+                    warnings.warn('Attribute branch_length was already set for '
                                   'this Clade; overwriting the previous value.')
                 clade.branch_length = elem.text
             elif tag == 'confidence':
@@ -210,9 +210,7 @@ def _parse_clade(parent, context):
             elif tag == 'width':
                 clade.width == float(elem.text)
             elif tag == 'color':
-                clade.color == BranchColor(int(elem.find('red').text),
-                                           int(elem.find('green').text),
-                                           int(elem.find('blue').text))
+                clade.color == BranchColor.from_element(elem)
             elif tag == 'node_id':
                 clade.node_id == Id(text=elem.text)
             elif tag == 'taxonomy':
@@ -469,12 +467,18 @@ class BranchColor(PhyloElement):
     """
     """
     def __init__(self, red, green, blue):
-        assert isinstance(int, red)
-        assert isinstance(int, green)
-        assert isinstance(int, blue)
+        assert isinstance(red, int)
+        assert isinstance(green, int)
+        assert isinstance(blue, int)
         self.red = red
         self.green = green
         self.blue = blue
+
+    @classmethod
+    def from_element(cls, elem):
+        red, green, blue = (int(elem.find(color).text) for color in
+                            ('red', 'green', 'blue'))
+        return BranchColor(red, green, blue)
 
 
 class CladeRelation(PhyloElement):
