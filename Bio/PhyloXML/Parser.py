@@ -90,11 +90,22 @@ tags_to_classes = {
 #         'width':        float, # double
         }
 
+# Functions I wish ElementTree had
+
 def local(tag):
     if tag[0] == '{':
         return tag.rsplit('}', 1)[1]
     return tag
 
+
+def get_elem_text(elem, tag, default=None):
+    val = elem.find(tag)
+    if val is None:
+        return default
+    return elem.text
+
+
+# Debugging helper
 
 def _dump_tags(handle):
     """Extract tags from an XML document and print them to standard output.
@@ -148,12 +159,13 @@ def _parse_phylogeny(parent, context):
     clears the XML event history for the phylogeny element and returns control
     to the top-level parsing function.
     """
-    phylogeny = Phylogeny(attrib=parent.attrib)
+    phylogeny = Phylogeny(parent.attrib)
     for event, elem in context:
         tag = local(elem.tag)
         if event == 'start' and tag == 'clade':
-            clade = _parse_clade(elem, context)
-            phylogeny.clades.append(clade)
+            assert phylogeny.clade is None, \
+                    "Phylogeny object should only have 1 clade"
+            phylogeny.clade = _parse_clade(elem, context)
             continue
         if event == 'end':
             if tag == 'phylogeny':
@@ -186,7 +198,7 @@ def _parse_phylogeny(parent, context):
 
 
 def _parse_clade(parent, context):
-    clade = Clade(attrib=parent.attrib)
+    clade = Clade(parent.attrib)
     for event, elem in context:
         tag = local(elem.tag)
         if event == 'start' and tag == 'clade':
@@ -208,33 +220,33 @@ def _parse_clade(parent, context):
                 clade.color == BranchColor.from_element(elem)
             elif tag == 'node_id':
                 clade.node_id == Id(text=elem.text)
-            elif tag == 'taxonomy':
-                clade.taxonomy == Taxonomy(text=elem.text)
-            elif tag == 'sequence':
-                clade.sequence == Sequence(text=elem.text)
             elif tag == 'events':
                 clade.events == Events(text=elem.text)
             elif tag == 'binary_characters':
                 clade.binary_characters == BinaryCharacters(text=elem.text)
-            elif tag == 'distribution':
-                clade.distribution == Distribution(text=elem.text)
             elif tag == 'date':
                 clade.date == Date(text=elem.text)
-            elif tag == 'reference':
-                clade.reference == Reference(text=elem.text)
-            elif tag == 'property':
-                clade.property == Property(text=elem.text)
             # Simple types
             if tag == 'name': 
-                clade.name = str('name', elem.text)
+                clade.name = str(elem.text)
             elif tag == 'width':
                 clade.width == float(elem.text)
             # Collections
             elif tag == 'confidence':
-                clade.confidence = Confidence(text=elem.text)
+                clade.confidences.append(Confidence(elem))
+            elif tag == 'taxonomy':
+                clade.taxonomies.append(Taxonomy.from_element(elem))
+            elif tag == 'sequence':
+                clade.sequences.append(Sequence(elem))
+            elif tag == 'distributions':
+                clade.distributions.append(Distribution(elem))
+            elif tag == 'reference':
+                clade.references.append(Reference(elem))
+            elif tag == 'property':
+                clade.properties.append(Property(elem))
             # Unknown tags
             else:
-                phylogeny.other.append(Other.from_element(elem))
+                clade.other.append(Other.from_element(elem))
             elem.clear()
     return clade
 
@@ -245,13 +257,13 @@ def _parse_clade(parent, context):
 # XXX maybe not needed
 class PhyloElement(object):
     """Base class for all PhyloXML objects."""
-    def __init__(self, attrib=None, text=None):
-        self._attrib = attrib
-        self._text = text
-        # self._children = []
-        # Munge each of these into attributes
+    def __init__(self, attrib=None, text=None, **kwargs):
         if attrib is not None:
-            self.__dict__.update(self._attrib)
+            # self._attrib = attrib
+            self.__dict__.update(attrib)
+        # if text is not None:
+        #     self._text = text
+        self.__dict__.update(kwargs)
 
     @classmethod
     def from_element(cls, elem):
@@ -263,7 +275,6 @@ class Other(PhyloElement):
     """Container for non-phyloXML elements in the tree."""
     # ENH: assert that the tag namespace is not phyloxml's
     def __init__(self, tag, attributes=None, text=None, children=[]):
-        # PhyloElement.__init__(self, attrib=attrib)
         self.tag = tag
         self.attributes = attributes
         self.text = text
@@ -275,7 +286,7 @@ class Other(PhyloElement):
     @classmethod
     def from_element(cls, elem):
         obj = Other(elem.tag, elem.attrib, elem.text)
-        for child in elem.getchildren():
+        for child in elem:
             obj.children.append(Other.from_element(child))
         return obj
 
@@ -284,13 +295,19 @@ class Other(PhyloElement):
 
 class Phyloxml(PhyloElement):
     """Root node of the PhyloXML document.
-    
+
     Contains an arbitrary number of Phylogeny elements, possibly followed by
     elements from other namespaces.
+
+    Attributes:
+        (namespace definitions)
+
+    Children:
+        phylogenies []
+        other []
     """
-    def __init__(self, attrib):
-        PhyloElement.__init__(self, attrib=attrib)
-        self.phylogenies = []
+    def __init__(self, attributes, phylogenies=[]):
+        PhyloElement.__init__(self, attributes, phylogenies=phylogenies)
         self.other = []
 
     def __iter__(self):
@@ -316,37 +333,40 @@ class Phylogeny(PhyloElement):
         id
         description
         date
-        confidence
+        confidences []
         clade
-        clade_relation
-        sequence_relation
-        property
-        [other]
+        clade_relations []
+        sequence_relations []
+        properties []
+        other []
     """
-    def __init__(self, attrib):
-        PhyloElement.__init__(self, attrib=attrib)
+    def __init__(self, attributes, **kwargs):
+        PhyloElement.__init__(self, attributes, **kwargs)
         # Single values
         for attr in (
                 # Node attributes
                 'rooted', 'rerootable', 'branch_length_unit', 'type',
                 # Child nodes
-                'name', 'id', 'description', 'date', 'confidence',
-                'clade_relation', 'sequence_relation', 'property'
+                'name', 'id', 'description', 'date', 'clade',
                 ):
             if not hasattr(self, attr):
                 setattr(self, attr, None)
         # Lists
-        for attr in ('clades', 'confidences', 'other'):
+        for attr in (
+                'confidences', 'clade_relations', 'sequence_relations',
+                'properties', 'other',
+                ):
             if not hasattr(self, attr):
                 setattr(self, attr, [])
 
-    def __iter__(self):
-        """Iterate through the clades (branches) within this phylogeny."""
-        return iter(self.clades)
+    # def __iter__(self):
+    #     """Iterate through the clades (branches) within this phylogeny."""
+    #     return iter(self.clade)
 
-    def __len__(self):
-        """Number of clades directly under this element."""
-        return len(self.clades)
+    # def __len__(self):
+    #     """Number of clades directly under this element."""
+        # XXX should only have 1 clade
+        # ENH: count all branches within this tree?
 
     # From Bioperl's Bio::Tree::TreeI
 
@@ -402,36 +422,39 @@ class Clade(PhyloElement):
 
     Children:
         name
-        branch_length   (equivalent to the attribute)
-        confidence
+        branch_length -- equivalent to the attribute
+        confidences []
         width
         color
         node_id
-        taxonomy
-        sequence
+        taxonomies []
+        sequences []
         events
         binary_characters
-        distribution
+        distributions []
         date
-        reference
-        property
-        clade   (recursive)
+        references []
+        properties []
+        clades [] -- recursive
+        other []
     """
-    def __init__(self, attrib):
-        PhyloElement.__init__(self, attrib=attrib)
+    def __init__(self, attributes, **kwargs):
+        PhyloElement.__init__(self, attributes, **kwargs)
         # Single values
         for attr in (
                 # Attributes
                 'branch_length', 'id_source',
                 # Child nodes
-                'name', 'width', 'color', 'node_id', 'taxonomy', 'sequence',
-                'events', 'binary_characters', 'distribution', 'date',
-                'reference', 'property',
+                'name', 'width', 'color', 'node_id', 
+                'events', 'binary_characters', 'date',
                 ):
             if not hasattr(self, attr):
-                setattr(self, attr, [])
-        # Lists
-        for attr in ('clades', 'confidences'):
+                setattr(self, attr, None)
+        # Collections
+        for attr in (
+                'confidences', 'taxonomies', 'sequences', 'distributions',
+                'references', 'properties', 'clades', 'other',
+                ):
             if not hasattr(self, attr):
                 setattr(self, attr, [])
 
@@ -463,7 +486,10 @@ class BinaryCharacters(PhyloElement):
     """
 
 class BranchColor(PhyloElement):
-    """
+    """Indicates the color of a clade when rendered graphically.
+
+    The color applies to the whole clade unless overwritten by the color(s) of
+    sub-clades.
     """
     def __init__(self, red, green, blue):
         assert isinstance(red, int)
@@ -549,8 +575,56 @@ class SequenceRelation(PhyloElement):
         PhyloElement.__init__(self, text=text)
 
 class Taxonomy(PhyloElement):
+    """Describe taxonomic information for a clade.
+
+    Element 'code' is intended to store UniProt/Swiss-Prot style organism codes
+    (e.g. 'APLCA' for the California sea hare 'Aplysia californica').
+
+    Element 'id' is used for a unique identifier of a taxon (for example '6500'
+    with 'ncbi_taxonomy' as 'type' for the California sea hare).
+
+    Attributes:
+        type
+        id_source -- link other elements to a taxonomy (on the XML level)
+
+    Children:
+        id
+        code
+        scientific_name
+        common_names []
+        rank
+        uri
+        other []
     """
-    """
+    def __init__(self, attributes, **kwargs):
+        PhyloElement.__init__(self, attributes, **kwargs)
+        # Single values
+        for attr in (
+                # Attributes
+                'type', 'id_source',
+                # Child nodes
+                'id', 'code', 'scientific_name', 'rank', 'uri',
+                ):
+            if not hasattr(self, attr):
+                setattr(self, attr, None)
+        # Collections
+        for attr in (
+                'common_names', 'other',
+                ):
+            if not hasattr(self, attr):
+                setattr(self, attr, [])
+
+    @classmethod
+    def from_element(cls, elem):
+        return Taxonomy(elem.attrib, 
+                id=Id(get_elem_text(elem, 'id')),
+                code=TaxonomyCode(get_elem_text(elem, 'code')),
+                scientific_name=get_elem_text(elem, ('scientific_name')),
+                common_names=[e.text for e in elem.findall('common_name')],
+                rank=Rank(get_elem_text(elem, 'rank')),
+                uri=Uri(get_elem_text(elem, 'uri')),
+                )
+
 
 class Uri(PhyloElement):
     """
