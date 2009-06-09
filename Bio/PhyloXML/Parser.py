@@ -43,18 +43,18 @@ tags_to_classes = {
 #         'accession':    Accession,
 #         'alt':          float,  # decimal
 #         'annotation':   Annotation,
-#         'bc':           Token,
+#         'bc':           str,
 #         'binary_characters': BinaryCharacters,
 #         'blue':         int, # unsignedByte
 #         'branch_length': float,  # double
 #         'clade_relation': CladeRelation,
 #         'code':         TaxonomyCode,
 #         'color':        BranchColor,
-#         'common_name':  Token,
+#         'common_name':  str,
 #         'confidence':   Confidence,
 #         'date':         Date,
-#         'desc':         Token,
-#         'description':  Token,
+#         'desc':         str,
+#         'description':  str,
 #         'distribution': Distribution,
 #         'domain':       ProteinDomain,
 #         'domain_architecture': DomainArchitecture,
@@ -64,12 +64,12 @@ tags_to_classes = {
 #         'green':        int, # unsignedByte
 #         'id':           Id,
 #         'lat':          float,  # decimal
-#         'location':     Token,
+#         'location':     str,
 #         'long':         float,  # decimal
 #         'losses':       int, # nonNegativeInteger
 #         'lost':         BinaryCharacterList,
 #         'mol_seq':      MolSeq,
-#         'name':         Token,
+#         'name':         str,
 #         'node_id':      Id,
 #         'point':        Point,
 #         'polygon':      Polygon,
@@ -78,7 +78,7 @@ tags_to_classes = {
 #         'rank':         Rank,
 #         'red':          int, # unsignedByte
 #         'reference':    Reference,
-#         'scientific_name': Token,
+#         'scientific_name': str,
 #         'sequence':     Sequence,
 #         'sequence_relation': SequenceRelation,
 #         'speciations':  int, # nonNegativeInteger
@@ -160,25 +160,26 @@ def _parse_phylogeny(parent, context):
                 parent.clear()
                 break
             # Handle the other non-recursive children
-            if tag == 'name': 
-                phylogeny.name = Token('name', elem.text)
             elif tag == 'id':
                 phylogeny.id = Id(text=elem.text)
-            elif tag == 'description':
-                phylogeny.description = Token('description', elem.text)
             elif tag == 'date':
                 phylogeny.date = Date(text=elem.text)
-            elif tag == 'confidence':
-                phylogeny.confidence = Confidence(text=elem.text)
             elif tag == 'clade_relation':
                 phylogeny.clade_relation = CladeRelation(text=elem.text)
             elif tag == 'sequence_relation':
                 phylogeny.sequence_relation = SequenceRelation(text=elem.text)
+            # Simple types
+            if tag == 'name': 
+                phylogeny.name = str(elem.text)
+            elif tag == 'description':
+                phylogeny.description = str(elem.text)
+            # Collections
+            elif tag == 'confidence':
+                phylogeny.confidences.append(Confidence.from_element(elem))
             elif tag == 'property':
                 phylogeny.properties = [Property(text=elem.text)]
-                elem.clear()
+            # Unknown tags
             else:
-                # Unknown tag
                 phylogeny.other.append(Other.from_element(elem))
             elem.clear()
     return phylogeny
@@ -197,18 +198,12 @@ def _parse_clade(parent, context):
                 parent.clear()
                 break
             # Handle the other non-recursive children
-            if tag == 'name': 
-                clade.name = Token('name', elem.text)
             elif tag == 'branch_length':
                 # NB: possible collision with the attribute
                 if hasattr(clade, 'branch_length'):
                     warnings.warn('Attribute branch_length was already set for '
                                   'this Clade; overwriting the previous value.')
                 clade.branch_length = elem.text
-            elif tag == 'confidence':
-                clade.confidence = Confidence(text=elem.text)
-            elif tag == 'width':
-                clade.width == float(elem.text)
             elif tag == 'color':
                 clade.color == BranchColor.from_element(elem)
             elif tag == 'node_id':
@@ -229,6 +224,17 @@ def _parse_clade(parent, context):
                 clade.reference == Reference(text=elem.text)
             elif tag == 'property':
                 clade.property == Property(text=elem.text)
+            # Simple types
+            if tag == 'name': 
+                clade.name = str('name', elem.text)
+            elif tag == 'width':
+                clade.width == float(elem.text)
+            # Collections
+            elif tag == 'confidence':
+                clade.confidence = Confidence(text=elem.text)
+            # Unknown tags
+            else:
+                phylogeny.other.append(Other.from_element(elem))
             elem.clear()
     return clade
 
@@ -272,13 +278,6 @@ class Other(PhyloElement):
         for child in elem.getchildren():
             obj.children.append(Other.from_element(child))
         return obj
-
-
-class Token(object):
-    """Simple class for nodes containing only a string."""
-    def __init__(self, tag, text):
-        self.tag = tag
-        self.text = text
 
 
 # Core elements
