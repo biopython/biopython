@@ -217,6 +217,9 @@ and HTML formats
   \item \emph{Why is the} \verb|Seq| \emph{object missing the (back) transcription \& translation methods described in this Tutorial?} \\
   You need Biopython 1.49 or later.  Alternatively, use the \verb|Bio.Seq| module functions described in Section~\ref{sec:seq-module-functions}.
 
+  \item \emph{Why does't the} \verb|Seq| \emph{object translation method support the} \verb|cds| \emph{option described in this Tutorial?} \\
+  You need Biopython 1.51 or later.
+
   \item \emph{Why doesn't} \verb|Bio.SeqIO| \emph{work? It imports fine but there is no parse function etc.} \\
   You need Biopython 1.43 or later.  Older versions did contain some related code under the \verb|Bio.SeqIO| name which has since been removed - and this is why the import ``works''.
 
@@ -810,11 +813,50 @@ Seq('MAIVMGRWKGAR', IUPACProtein())
 is not translated - and the stop symbol is not included at the end of your protein
 sequence.
 
-Finally, you can even specify the stop symbol if you don't like the default asterisk:
+You can even specify the stop symbol if you don't like the default asterisk:
 \begin{verbatim}
 >>> coding_dna.translate(table=2, stop_symbol="@")
 Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '@'))
 \end{verbatim}
+
+Now, suppose you have a complete coding sequence CDS, which is to say a
+nucleotide sequence (e.g. mRNA -- after any splicing) which is a whole number
+of codons (i.e. the length is a multiple of three), commences with a start
+codon, ends with a stop codon, and has no internal in-frame stop codons.
+In general, given a complete CDS, the default translate method will do what
+you want (perhaps with the \verb|to_stop| option). However, what if your
+sequence uses a non-standard start codon? This happens a lot in bacteria --
+for example the gene yaaX in \texttt{E. coli} K12:
+
+\begin{verbatim}
+>>> gene = Seq("GTGAAAAAGATGCAATCTATCGTACTCGCACTTTCCCTGGTTCTGGTCGCTCCCATGGCA" + \
+...            "GCACAGGCTGCGGAAATTACGTTAGTCCCGTCAGTAAAATTACAGATAGGCGATCGTGAT" + \
+...            "AATCGTGGCTATTACTGGGATGGAGGTCACTGGCGCGACCACGGCTGGTGGAAACAACAT" + \
+...            "TATGAATGGCGAGGCAATCGCTGGCACCTACACGGACCGCCGCCACCGCCGCGCCACCAT" + \
+...            "AAGAAAGCTCCTCATGATCATCACGGCGGTCATGGTCCAGGCAAACATCACCGCTAA",
+...            generic_dna)
+>>> gene.translate(table="Bacterial")
+Seq('VKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HR*',
+HasStopCodon(ExtendedIUPACProtein(), '*')
+>>> gene.translate(table="Bacterial", to_stop=True)
+Seq('VKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HHR',
+ExtendedIUPACProtein())
+\end{verbatim}
+
+\noindent In the bacterial genetic code \texttt{GTG} is a valid start codon,
+and while it does \emph{normally} encode valine, if used as a start codon it
+should be translated as methionine. This happens if you tell Biopython your
+sequence is a complete CDS:
+
+\begin{verbatim}
+>>> gene.translate(table="Bacterial", cds=True)
+Seq('MKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HHR',
+ExtendedIUPACProtein())
+\end{verbatim}
+
+In addition to telling Biopython to translate an alternative start codon as
+methionine, using this option also makes sure your sequence really is a valid
+CDS (you'll get an exception if not).
 
 The example in Section~\ref{sec:SeqIO-translate} combines the \verb|Seq| object's
 translate method with \verb|Bio.SeqIO| for sequence input/ouput.
