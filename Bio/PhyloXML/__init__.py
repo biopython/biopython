@@ -8,5 +8,5 @@
 See www.phyloxml.org for more info about the format.
 """
 
-from Parser import read
+from Parser import read, parse
 
