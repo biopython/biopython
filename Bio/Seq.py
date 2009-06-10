@@ -1549,10 +1549,10 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
         except (KeyError, CodonTable.TranslationError) :
             #Todo? Treat "---" as a special case (gapped translation)
             if codon in table.stop_codons :
-                if to_stop : break
                 if cds :
                     raise CodonTable.TranslationError(\
                         "Extra in frame stop codon found.")
+                if to_stop : break
                 amino_acids.append(stop_symbol)
             elif valid_letters.issuperset(set(codon)) :
                 #Possible stop codon (e.g. NNN or TAN)
