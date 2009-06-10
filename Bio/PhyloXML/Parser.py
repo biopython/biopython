@@ -152,6 +152,19 @@ def read(handle):
     return phyloxml
 
 
+def parse(handle):
+    """Iterate over the phylogenetic trees in a phyloXML file.
+
+    This ignores any additional data stored at the top level, but may be more
+    memory-efficient than the read() function.
+    """
+    context = iter(ElementTree.iterparse(handle, events=('start', 'end')))
+    event, root = context.next()
+    for event, elem in context:
+        if event == 'start' and local(elem.tag) == 'phylogeny':
+            yield _parse_phylogeny(elem, context)
+
+
 def _parse_phylogeny(parent, context):
     """Parse a single phylogeny within the phyloXML tree.
 
@@ -523,7 +536,7 @@ class CladeRelation(PhyloElement):
         confidence = elem.find('confidence')
         if confidence is not None:
             confidence = Confidence.from_element(confidence)
-        return CladeRelation(elem.attributes, confidence)
+        return CladeRelation(elem.attrib, confidence)
 
 
 class Confidence(PhyloElement):
@@ -572,7 +585,7 @@ class Distribution(PhyloElement):
     element in Google's KML format) or by 'Polygons'.
     """
     def __init__(self, desc=None, points=[], polygons=[]):
-        PhyloElement.__init__(self, attributes, desc=desc, value=value)
+        PhyloElement.__init__(self, desc=desc, points=points, polygons=polygons)
 
     @classmethod
     def from_element(cls, elem):
