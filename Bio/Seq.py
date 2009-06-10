@@ -677,7 +677,8 @@ class Seq(object):
             alphabet = Alphabet.generic_dna
         return Seq(str(self).replace("U", "T").replace("u", "t"), alphabet)
 
-    def translate(self, table="Standard", stop_symbol="*", to_stop=False):
+    def translate(self, table="Standard", stop_symbol="*", to_stop=False,
+                  cds=False):
         """Turns a nucleotide sequence into a protein sequence. New Seq object.
 
         This method will translate DNA or RNA sequences, and those with a
@@ -696,7 +697,14 @@ class Seq(object):
                      terminated at the first in frame stop codon (and the
                      stop_symbol is not appended to the returned protein
                      sequence).
-
+         - cds - Boolean, indicates this is a complete CDS.  If True,
+                 this checks the sequence starts with a valid alternative start
+                 codon (which will be translated as methionine, M), that the
+                 sequence length is a multiple of three, and that there is a
+                 single in frame stop codon at the end (this will be excluded
+                 from the protein sequence, regardless of the to_stop option).
+                 If these tests fail, an exception is raised.
+        
         e.g. Using the standard table:
 
         >>> coding_dna = Seq("GTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
@@ -713,6 +721,20 @@ class Seq(object):
         Seq('VAIVMGRWKGAR*', HasStopCodon(ExtendedIUPACProtein(), '*'))
         >>> coding_dna.translate(table=2, to_stop=True)
         Seq('VAIVMGRWKGAR', ExtendedIUPACProtein())
+
+        In fact, GTG is an alternative start codon under NCBI table 2, meaning
+        this sequence could be a complete CDS:
+
+        >>> coding_dna.translate(table=2, cds=True)
+        Seq('MAIVMGRWKGAR', ExtendedIUPACProtein())
+
+        It isn't a valid CDS under NCBI table 1, due to both the start codon and
+        also the in frame stop codons:
+        
+        >>> coding_dna.translate(table=1, cds=True)
+        Traceback (most recent call last):
+            ...
+        TranslationError: First codon 'GTG' is not a start codon
 
         If the sequence has no in-frame stop codon, then the to_stop argument
         has no effect:
@@ -774,7 +796,8 @@ class Seq(object):
                 codon_table = CodonTable.ambiguous_generic_by_name[table]
             else:
                 codon_table = CodonTable.ambiguous_generic_by_id[table_id]
-        protein = _translate_str(str(self), codon_table, stop_symbol, to_stop)
+        protein = _translate_str(str(self), codon_table, \
+                                 stop_symbol, to_stop, cds)
         if stop_symbol in protein :
             alphabet = Alphabet.HasStopCodon(codon_table.protein_alphabet,
                                              stop_symbol = stop_symbol)
@@ -1445,8 +1468,8 @@ def back_transcribe(rna):
     else:
         return rna.replace('U','T').replace('u','t')
     
-def _translate_str(sequence, table, stop_symbol="*",
-                   to_stop=False, pos_stop="X") :
+def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
+                   cds=False, pos_stop="X") :
     """Helper function to translate a nucleotide string (PRIVATE).
 
     Arguments:
@@ -1458,6 +1481,13 @@ def _translate_str(sequence, table, stop_symbol="*",
                      then translation continues to the end.
      - pos_stop    - a single character string for a possible stop codon
                      (e.g. TAN or NNN)
+     - cds - Boolean, indicates this is a complete CDS.  If True, this
+             checks the sequence starts with a valid alternative start
+             codon (which will be translated as methionine, M), that the
+             sequence length is a multiple of three, and that there is a
+             single in frame stop codon at the end (this will be excluded
+             from the protein sequence, regardless of the to_stop option).
+             If these tests fail, an exception is raised.
 
     Returns a string.
 
@@ -1477,6 +1507,16 @@ def _translate_str(sequence, table, stop_symbol="*",
     Traceback (most recent call last):
        ...
     TranslationError: Codon 'TA?' is invalid
+    >>> _translate_str("ATGCCCTAG", table, cds=True)
+    'MP'
+    >>> _translate_str("AAACCCTAG", table, cds=True)
+    Traceback (most recent call last):
+       ...
+    TranslationError: First codon 'AAA' is not a start codon
+    >>> _translate_str("ATGCCCTAGCCCTAG", table, cds=True)
+    Traceback (most recent call last):
+       ...
+    TranslationError: Extra in frame stop codon found.
     """
     sequence = sequence.upper()
     amino_acids = []
@@ -1488,7 +1528,19 @@ def _translate_str(sequence, table, stop_symbol="*",
         #Assume the worst case, ambiguous DNA or RNA:
         valid_letters = set(IUPAC.ambiguous_dna.letters.upper() + \
                             IUPAC.ambiguous_rna.letters.upper())
-
+    if cds :
+        if str(sequence[:3]).upper() not in table.start_codons :
+            raise CodonTable.TranslationError(\
+                "First codon '%s' is not a start codon" % sequence[:3])
+        if len(sequence) % 3 != 0 :
+            raise CodonTable.TranslationError(\
+                "Sequence length %i is not a multiple of three" % len(sequence))
+        if str(sequence[-3:]).upper() not in stop_codons :
+            raise CodonTable.TranslationError(\
+                "Final codon '%s' is not a stop codon (%s)" % sequence[-3:])
+        #Don't translate the stop symbol, and manually translate the M
+        sequence = sequence[3:-3]
+        amino_acids = ["M"]
     n = len(sequence)
     for i in xrange(0,n-n%3,3) :
         codon = sequence[i:i+3]
@@ -1498,6 +1550,9 @@ def _translate_str(sequence, table, stop_symbol="*",
             #Todo? Treat "---" as a special case (gapped translation)
             if codon in table.stop_codons :
                 if to_stop : break
+                if cds :
+                    raise CodonTable.TranslationError(\
+                        "Extra in frame stop codon found.")
                 amino_acids.append(stop_symbol)
             elif valid_letters.issuperset(set(codon)) :
                 #Possible stop codon (e.g. NNN or TAN)
@@ -1507,7 +1562,8 @@ def _translate_str(sequence, table, stop_symbol="*",
                     "Codon '%s' is invalid" % codon)
     return "".join(amino_acids)
 
-def translate(sequence, table="Standard", stop_symbol="*", to_stop=False):
+def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
+              cds=False):
     """Translate a nucleotide sequence into amino acids.
 
     If given a string, returns a new string object. Given a Seq or
@@ -1525,7 +1581,14 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False):
                  True, translation is terminated at the first in
                  frame stop codon (and the stop_symbol is not
                  appended to the returned protein sequence).
-
+     - cds - Boolean, indicates this is a complete CDS.  If True, this
+                 checks the sequence starts with a valid alternative start
+                 codon (which will be translated as methionine, M), that the
+                 sequence length is a multiple of three, and that there is a
+                 single in frame stop codon at the end (this will be excluded
+                 from the protein sequence, regardless of the to_stop option).
+                 If these tests fail, an exception is raised.
+    
     A simple string example using the default (standard) genetic code:
     
     >>> coding_dna = "GTGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG"
@@ -1542,6 +1605,13 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False):
     'VAIVMGRWKGAR*'
     >>> translate(coding_dna, table=2, to_stop=True)
     'VAIVMGRWKGAR'
+
+    In fact this example uses an alternative start codon valid under NCBI table 2,
+    GTG, which means this example is a complete valid CDS which when translated
+    should really start with methionine (not valine):
+    
+    >>> translate(coding_dna, table=2, cds=True)
+    'MAIVMGRWKGAR'
 
     Note that if the sequence has no in-frame stop codon, then the to_stop
     argument has no effect:
@@ -1561,17 +1631,17 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False):
     It will however translate either DNA or RNA.
     """
     if isinstance(sequence, Seq) :
-        return sequence.translate(table, stop_symbol, to_stop)
+        return sequence.translate(table, stop_symbol, to_stop, cds)
     elif isinstance(sequence, MutableSeq):
         #Return a Seq object
-        return sequence.toseq().translate(table, stop_symbol, to_stop)
+        return sequence.toseq().translate(table, stop_symbol, to_stop, cds)
     else:
         #Assume its a string, return a string
         try :
             codon_table = CodonTable.ambiguous_generic_by_id[int(table)]
         except ValueError :
             codon_table = CodonTable.ambiguous_generic_by_name[table]
-        return _translate_str(sequence, codon_table, stop_symbol, to_stop)
+        return _translate_str(sequence, codon_table, stop_symbol, to_stop, cds)
       
 def reverse_complement(sequence):
     """Returns the reverse complement sequence of a nucleotide string.

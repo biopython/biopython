@@ -115,17 +115,6 @@ def compare_features(old_list, new_list, ignore_sub_features=False) :
             return False
     return True
 
-from Bio.Data import CodonTable
-def methionine_translate(nuc, table) :
-    """Hack until we fix Bug 2783."""
-    translation = nuc.translate(table)
-    start_codons = CodonTable.ambiguous_dna_by_id[table].start_codons
-    #There may not be a start codon, for example:
-    #Consider NC_006980, protein ID XP_627884.1, <58180..59604, RVSSSSLLF...
-    if str(nuc)[:3] in start_codons and translation[0] != "M" :
-        translation = Seq("M", translation.alphabet) + translation[1:]
-    return translation
-
 #TODO - Add this functionality to Biopython itself...
 def get_feature_nuc(f, parent_seq) :
     if f.sub_features :
@@ -442,7 +431,7 @@ class NC_000932(unittest.TestCase):
                 continue
             #Get the nucleotides and translate them
             nuc = get_feature_nuc(f, gb_record.seq)
-            pro = methionine_translate(nuc, self.table)
+            pro = nuc.translate(table=self.table, cds=True)
             if pro[-1] == "*" :
                 self.assertEqual(str(pro)[:-1], str(r.seq))
             else :
@@ -468,7 +457,7 @@ class NC_005816(NC_000932):
         ffn_records = list(SeqIO.parse(open(self.ffn_filename),"fasta"))
         self.assertEqual(len(faa_records),len(ffn_records))
         for faa, fna in zip(faa_records, ffn_records) :
-            translation = methionine_translate(fna.seq, self.table)
+            translation = fna.seq.translate(self.table, cds=True)
             if faa.id in self.skip_trans_test :
                 continue
             if (str(translation) != str(faa.seq)) \
