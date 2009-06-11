@@ -90,6 +90,7 @@ tags_to_classes = {
 #         'width':        float, # double
         }
 
+# ---------------------------------------------------------
 # Functions I wish ElementTree had
 
 def local(tag):
@@ -105,20 +106,23 @@ def get_elem_text(elem, tag, default=None):
     return elem.text
 
 
-# Debugging helper
+# ---------------------------------------------------------
+# Utilities
 
-def _dump_tags(handle):
-    """Extract tags from an XML document and print them to standard output.
-    
-    This function is meant for testing and debugging only.
+import sys
+
+def dump_tags(handle, output=sys.stdout):
+    """Extract tags from an XML document, writing them to stdout by default.
+
+    This utility is meant for testing and debugging.
     """
-    events = ('start', 'end')
-    for event, elem in ElementTree.iterparse(handle, events=events):
+    for event, elem in ElementTree.iterparse(handle, events=('start', 'end')):
         if event == 'start':
-            print local(elem.tag)
+            output.write(elem.tag + '\n')
         else:
             elem.clear()
 
+# ---------------------------------------------------------
 
 def read(handle):
     """Parse a phyloXML file or stream and build a tree of Biopython objects.
