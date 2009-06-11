@@ -1774,7 +1774,7 @@ class RestrictionBatch(set) :
         first += [eval(x) for n in suppliers for x in suppliers_dict[n][1]]
         set.__init__(self, first)
         self.mapping = dict.fromkeys(self)
-        self.already_mapped = DNA('')
+        self.already_mapped = None
             
     def __str__(self) :
         if len(self) < 5 :
@@ -1967,18 +1967,22 @@ class RestrictionBatch(set) :
         #   with one unique testing method.
         #
         if isinstance(dna, DNA) :
-            if (dna, linear) == self.already_mapped :
+            # For the searching, we just care about the sequence as a string,
+            # if that is the same we can use the cached search results.
+            # At the time of writing, Seq == method isn't implemented,
+            # and therefore does object identity which is stricter.
+            if (str(dna), linear) == self.already_mapped :
                 return self.mapping
             else :
-                self.already_mapped = dna, linear
+                self.already_mapped = str(dna), linear
                 fseq = FormattedSeq(dna, linear)
                 self.mapping = dict([(x, x.search(fseq)) for x in self])
                 return self.mapping
         elif isinstance(dna, FormattedSeq) :
-            if (dna, dna.linear) == self.already_mapped :
+            if (str(dna), dna.linear) == self.already_mapped :
                 return self.mapping
             else :
-                self.already_mapped = dna, dna.linear
+                self.already_mapped = str(dna), dna.linear
                 self.mapping = dict([(x, x.search(dna)) for x in self])
                 return self.mapping
         raise TypeError("Expected Seq or MutableSeq instance, got %s instead"\
