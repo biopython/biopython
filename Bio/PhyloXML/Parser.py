@@ -140,6 +140,17 @@ def dump_tags(handle, output=sys.stdout):
         else:
             elem.clear()
 
+
+import re
+
+def check_str(text, regexp):
+    """Compare a string to a regexp, and warn if there's no match."""
+    if text is not None and re.match(regexp, text) is None:
+        warnings.warn("String %s doesn't match regexp %s"
+                        % (text, regexp))
+    return text
+
+
 # ---------------------------------------------------------
 
 def read(handle):
@@ -739,7 +750,8 @@ class Taxonomy(PhyloElement):
     def from_element(cls, elem):
         return Taxonomy(elem.attrib, 
                 id=Id(get_elem_text(elem, 'id')),
-                code=TaxonomyCode(get_elem_text(elem, 'code')),
+                code=check_str(get_elem_text(elem, 'code'),
+                               r'[a-zA-Z0-9_]{2,10}'),
                 scientific_name=get_elem_text(elem, ('scientific_name')),
                 common_names=[e.text for e in elem.findall('common_name')],
                 rank=Rank(get_elem_text(elem, 'rank')),
@@ -779,9 +791,6 @@ class SequenceSymbol(PhyloElement):
     pass
 
 class SequenceType(PhyloElement):
-    pass
-
-class TaxonomyCode(PhyloElement):
     pass
 
 class id_ref(PhyloElement):
