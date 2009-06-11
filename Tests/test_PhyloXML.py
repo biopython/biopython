@@ -69,8 +69,8 @@ def _test_read_factory(source, count):
     def test_read(self):
         phylo = PhyloXML.read(source)
         self.assert_(phylo)
-        self.assertEquals(len(phylo), count)
-        # TODO: check existence/length of 'other'
+        self.assertEquals(len(phylo), count[0])
+        self.assertEquals(len(phylo.other), count[1])
     test_read.__doc__ = "Read %s to produce a phyloXML object." % fname
     return test_read
 
@@ -116,12 +116,12 @@ def _test_shape_factory(source, shapes):
 class ParsePhylo(unittest.TestCase):
     """Tests for proper parsing of example phyloXML files."""
 
-    test_read_apaf = _test_read_factory(EX_APAF, 1)
-    test_read_bcl2 = _test_read_factory(EX_BCL2, 1)
-    test_read_phylo = _test_read_factory(EX_PHYLO, 13)
-    test_read_mollusca = _test_read_factory(EX_MOLLUSCA, 1)
-    # test_read_metazoa = _test_read_factory(EX_METAZOA, 1)
-    # test_read_ncbi = _test_read_factory(EX_NCBI, 1)
+    test_read_apaf = _test_read_factory(EX_APAF, (1, 0))
+    test_read_bcl2 = _test_read_factory(EX_BCL2, (1, 0))
+    test_read_phylo = _test_read_factory(EX_PHYLO, (13, 1))
+    test_read_mollusca = _test_read_factory(EX_MOLLUSCA, (1, 0))
+    # test_read_metazoa = _test_read_factory(EX_METAZOA, (1, 0))
+    # test_read_ncbi = _test_read_factory(EX_NCBI, (1, 0))
 
     test_parse_apaf = _test_parse_factory(EX_APAF, 1)
     test_parse_bcl2 = _test_parse_factory(EX_BCL2, 1)
