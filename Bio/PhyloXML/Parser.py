@@ -90,6 +90,12 @@ tags_to_classes = {
 #         'width':        float, # double
         }
 
+NAMESPACES = {
+        'phy':  'http://www.phyloxml.org',
+        'xml':  'http://www.w3.org/XML/1998/namespace',
+        'xs':   'http://www.w3.org/2001/XMLSchema',
+        }
+
 # ---------------------------------------------------------
 # Functions I wish ElementTree had
 
@@ -98,6 +104,18 @@ def local(tag):
         return tag.rsplit('}', 1)[1]
     return tag
 
+def namespace(tag):
+    try:
+        if tag[0] == '{':
+            return tag[1:tag.index('}')]
+    finally:
+        return ''
+
+def split_namespace(tag):
+    parts = tag.split('}')
+    if len(parts) == 1:
+        return ('', parts[0])
+    return (parts[0][1:], parts[1])
 
 def get_elem_text(elem, tag, default=None):
     val = elem.find(tag)
@@ -141,20 +159,25 @@ def read(handle):
     context = iter(ElementTree.iterparse(handle, events=('start', 'end')))
     event, root = context.next()
     phyloxml = Phyloxml(root.attrib)
+    other_depth = 0
     for event, elem in context:
-        if event == 'start' and local(elem.tag) == 'phylogeny':
-            phylogeny = _parse_phylogeny(elem, context)
-            # warnings.warn('Built a phylogeny %s, contents:' % repr(phylogeny))
-            # warnings.warn(repr(phylogeny.__dict__))
-            phyloxml.phylogenies.append(phylogeny)
-            continue
-        if event == 'end' and local(elem.tag) not in ('phyloxml', 'phylogeny'):
+        # print elem.tag, event
+        xmlns, localtag = split_namespace(elem.tag)
+        if event == 'start':
+            if localtag == 'phylogeny' and xmlns == NAMESPACES['phy']:
+                phylogeny = _parse_phylogeny(elem, context)
+                phyloxml.phylogenies.append(phylogeny)
+                continue
+            elif xmlns != NAMESPACES['phy']:
+                other_depth += 1
+        if event == 'end' and xmlns != NAMESPACES['phy']:
             # Deal with items not specified by phyloXML
-            otr = Other.from_element(elem)
-            # warnings.warn('Built %s, contents:' % repr(otr))
-            # warnings.warn(repr(otr.__dict__))
-            phyloxml.other.append(otr)
-            root.clear()
+            other_depth -= 1
+            if other_depth == 0:
+                # We're directly under the root node -- evaluate
+                otr = Other.from_element(elem)
+                phyloxml.other.append(otr)
+                root.clear()
     return phyloxml
 
 
@@ -304,6 +327,7 @@ class Other(PhyloElement):
 
     def __str__(self):
         return '<Other %s at %s>' % (self.tag, hex(id(self)))
+    __repr__ = __str__
 
     @classmethod
     def from_element(cls, elem):
@@ -330,7 +354,8 @@ class Phyloxml(PhyloElement):
         other []
     """
     def __init__(self, attributes, phylogenies=[]):
-        PhyloElement.__init__(self, attributes, phylogenies=phylogenies)
+        self.attributes = attributes
+        self.phylogenies = phylogenies
         self.other = []
 
     def __iter__(self):

@@ -194,8 +194,8 @@ Tier 3 (not found in example files):
 
 Namespaces:
 
-    :xml:   http://www.w3.org/XML/1998/namespace
     :phy:   http://www.phyloxml.org
+    :xml:   http://www.w3.org/XML/1998/namespace
     :xs:    http://www.w3.org/2001/XMLSchema
 
 
