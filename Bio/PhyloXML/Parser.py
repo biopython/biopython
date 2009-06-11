@@ -103,7 +103,7 @@ def get_elem_text(elem, tag, default=None):
     val = elem.find(tag)
     if val is None:
         return default
-    return elem.text
+    return elem.text and elem.text.strip() or None
 
 
 # ---------------------------------------------------------
@@ -148,9 +148,11 @@ def read(handle):
             # warnings.warn(repr(phylogeny.__dict__))
             phyloxml.phylogenies.append(phylogeny)
             continue
-        if event == 'end' and local(elem.tag) != 'phyloxml':
+        if event == 'end' and local(elem.tag) not in ('phyloxml', 'phylogeny'):
             # Deal with items not specified by phyloXML
             otr = Other.from_element(elem)
+            # warnings.warn('Built %s, contents:' % repr(otr))
+            # warnings.warn(repr(otr.__dict__))
             phyloxml.other.append(otr)
             root.clear()
     return phyloxml
@@ -208,9 +210,9 @@ def _parse_phylogeny(parent, context):
                 getattr(phylogeny, attr).append(cls.from_element(elem))
             # Simple types
             elif tag == 'name': 
-                phylogeny.name = str(elem.text)
+                phylogeny.name = elem.text and elem.text.strip()
             elif tag == 'description':
-                phylogeny.description = str(elem.text)
+                phylogeny.description = elem.text and elem.text.strip()
             # Unknown tags
             else:
                 phylogeny.other.append(Other.from_element(elem))
@@ -259,9 +261,9 @@ def _parse_clade(parent, context):
                 if hasattr(clade, 'branch_length'):
                     warnings.warn('Attribute branch_length was already set for '
                                   'this Clade; overwriting the previous value.')
-                clade.branch_length = elem.text
+                clade.branch_length = elem.text.strip()
             elif tag == 'name': 
-                clade.name = str(elem.text)
+                clade.name = elem.text.strip()
             elif tag == 'width':
                 clade.width = float(elem.text)
             # Unknown tags
@@ -305,7 +307,8 @@ class Other(PhyloElement):
 
     @classmethod
     def from_element(cls, elem):
-        obj = Other(elem.tag, elem.attrib, elem.text)
+        obj = Other(elem.tag, elem.attrib,
+                    elem.text and elem.text.strip() or None)
         for child in elem:
             obj.children.append(Other.from_element(child))
         return obj
