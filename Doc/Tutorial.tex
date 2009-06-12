@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 8 June 2009 (Biopython 1.50+)}
+\date{Last Update -- 12 June 2009 (Biopython 1.50+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -7915,6 +7915,61 @@ Again note that we have \emph{not} checked for reverse complement matches here
 -- you could extend this example to do this, and perhaps plot the forward
 matches in one color and the reverse matches in another.
 
+\subsection{Plotting the quality scores of sequencing read data}
+
+If you are working with second generation sequencing data, you may want to try plotting
+the quality data. Here is an example using two FASTQ files containing paired end reads,
+\texttt{SRR001666\_1.fastq} for the forward reads, and  \texttt{SRR001666\_2.fastq} for
+the reverse reads. These were downloaded from the NCBI short read archive (SRA) FTP site
+(see the \href{http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?cmd=viewer&m=data&s=viewer&run=SRR001666}
+{SRR001666 page} and \url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX000/SRX000430/}
+for details).
+
+In the following code the \verb|pylab.subplot(...)| function is used in order to show
+the forward and reverse qualities on two subplots, side by side. There is also a little
+bit of code to only plot the first fifty reads.
+
+\begin{verbatim}
+import pylab
+from Bio import SeqIO
+for subfigure in [1,2] :
+    filename = "SRR001666_%i.fastq" % subfigure
+    pylab.subplot(1, 2, subfigure)
+    for i,record in enumerate(SeqIO.parse(open(filename), "fastq")) :
+        if i >= 50 : break #trick!
+        pylab.plot(record.letter_annotations["phred_quality"])
+    pylab.ylim(0,45)
+    pylab.ylabel("PHRED quality score")
+    pylab.xlabel("Position")
+pylab.savefig("SRR001666.png")
+print "Done"
+\end{verbatim}
+
+You should note that we are using the \verb|Bio.SeqIO| format name \texttt{fastq}
+here because the NCBI has saved these reads using the standard Sanger FASTQ format
+with PHRED scores. However, as you might guess from the read lengths, this data was
+from an Illumina Genome Analyzer and was probably originally in one of the two
+Solexa/Illumina FASTQ variant file formats instead.
+
+This example uses the \verb|pylab.savefig(...)| function instead of
+\verb|pylab.show(...)|, but as mentioned before both are useful.
+\begin{latexonly}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{images/SRR001666.png}
+\caption{Quality plot for some paired end reads.}
+\label{fig:paired-end-qual-plot}
+\end{figure}
+The result is shown in Figure~\ref{fig:paired-end-qual-plot}.
+\end{latexonly}
+\begin{htmlonly}
+Here is the result:
+
+%Blank lines here are important!
+\imgsrc[width=600, height=600]{images/SRR001666.png}
+
+\end{htmlonly}
+
 \section{Dealing with alignments}
 
 It is often very useful to be able to align particular sequences. I do this quite often to get a quick and dirty idea of relationships between sequences. Consequently, it is very nice to be able to quickly write up a python script that does an alignment and gives you back objects that are easy to work with. The alignment related code in Biopython is meant to allow python-level access to alignment programs so that you can run alignments quickly from within scripts.
@@ -9007,13 +9062,16 @@ necessary in the current application.
 
 This is a very flexible framework, which is advantageous if you want to
 be able to parse a file format into more than one representation.  For
-example, both the \verb|Bio.GenBank| modules use this construct either
+example, the \verb|Bio.GenBank| modules uses this construct either
 \verb|SeqRecord| objects or file-format-specific record objects.
 
 More recently, many of the parsers added for \verb|Bio.SeqIO| and
 \verb|Bio.AlignIO| take a much simpler approach, but only generate a
 single object representation (\verb|SeqRecord| and \verb|Alignment| objects
-respectively).
+respectively). In some cases the \verb|Bio.SeqIO| parsers actually wrap
+another Biopython parser - for example, the \verb|Bio.SwissProt| parser
+produces SwissProt format specific record objects, which get converted
+into \verb|SeqRecord| objects.
 
 \section{Substitution Matrices}
 
@@ -9405,7 +9463,7 @@ contributing documentation at
 
 Please note that to make a code contribution you must have the legal right to contribute it and license it under the Biopython license.  If you wrote it all yourself, and it is not based on any other code, this shouldn't be a problem.  However, there are issues if you want to contribute a derivative work - for example something based on GPL or LPGL licenced code would not be compatible with our license.  If you have any queries on this, please discuss the issue on the biopython-dev mailing list.
 
-Another point of concern for any additions to Biopython regards any build time or run time dependencies.  Generally speak, writing code to interact with a standalone tool (like BLAST, EMBOSS or ClustalW) doesn't present a big problem.  However, any dependency on another library - even a python library (especially one needed in order to compile and install Biopython like NumPy) would need further discussion.
+Another point of concern for any additions to Biopython regards any build time or run time dependencies.  Generally speaking, writing code to interact with a standalone tool (like BLAST, EMBOSS or ClustalW) doesn't present a big problem.  However, any dependency on another library - even a python library (especially one needed in order to compile and install Biopython like NumPy) would need further discussion.
 
 Additionally, if you have code that you don't think fits in the
 distribution, but that you want to make available, we maintain Script
