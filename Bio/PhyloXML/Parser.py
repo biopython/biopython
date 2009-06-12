@@ -31,14 +31,16 @@ except ImportError:
                             "Use Python 2.5+, lxml or elementtree if you " \
                             "want to use Bio.PhyloXML.")
 
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from Bio.Alphabet import Alphabet, DNAAlphabet, RNAAlphabet, ProteinAlphabet
 
-# Lookup table used to instantiate elements by XML tag
-tags_to_classes = {
-        ## special cases for parsing
+# Index of phyloxml tags and corresponding classes
+#       ## special cases for parsing
 #         'phylogeny':    Phylogeny,
 #         'phyloxml':     Phyloxml,
 #         'clade':        Clade,
-        ## no special handling
+#       ## no special handling
 #         'absent':       BinaryCharacterList,
 #         'accession':    Accession,
 #         'alt':          float,  # decimal
@@ -88,7 +90,6 @@ tags_to_classes = {
 #         'uri':          Uri,
 #         'value':        float, # decimal
 #         'width':        float, # double
-        }
 
 NAMESPACES = {
         'phy':  'http://www.phyloxml.org',
@@ -531,6 +532,9 @@ class Accession(PhyloElement):
     """
     """
 
+    def __str__(self):
+        return str(self.value)
+
     @classmethod
     def from_element(cls, elem):
         pass
@@ -720,12 +724,14 @@ class Sequence(PhyloElement):
         uri
         annotations []
         domain_architecture
+        other []
     """
     def __init__(self, attributes, **kwargs):
         PhyloElement.__init__(self, attributes, **kwargs)
 
     @classmethod
     def from_element(cls, elem):
+        # TODO: handle "other"
         return cls(elem.attrib,
                 symbol=check_str(get_child_text(elem, 'symbol'), r'\S{1,10}'),
                 accession=get_child_as(elem, 'accession', Accession),
@@ -740,7 +746,41 @@ class Sequence(PhyloElement):
                                                  DomainArchitecture),
                 )
 
-    # TODO: munge into Seq or SeqRecord
+    @classmethod
+    def from_seqrecord(cls, record):
+        attrib = {}
+        if isinstance(record.seq.alphabet, DNAAlphabet):
+            attrib['type'] = 'dna'
+        elif isinstance(record.seq.alphabet, RNAAlphabet):
+            attrib['type'] = 'rna'
+        elif isinstance(record.seq.alphabet, ProteinAlphabet):
+            attrib['type'] = 'aa'
+        kwargs = {
+                'accession': Accession('', record.id),
+                'symbol': record.name,
+                'name': record.description,
+                'mol_seq': str(record.seq),
+                }
+        # Not handled:
+        # attributes: id_ref, id_source
+        # kwargs['location'] = None
+        # kwargs['uri'] = None
+        # kwargs['annotations'] = None
+        # kwargs['domain_architecture'] = None
+        return cls(attrib, **kwargs)
+
+    def to_seqrecord(self):
+        alphabets = {'dna': DNAAlphabet(),
+                     'rna': RNAAlphabet(),
+                     'aa': ProteinAlphabet()}
+        return SeqRecord(
+                Seq(self.mol_seq, alphabets.get(self.type, Alphabet())),
+                id=str(self.accession),
+                name=self.symbol,
+                description=self.name,
+                # dbxrefs=None,
+                # features=None,
+                )
 
 
 class SequenceRelation(PhyloElement):
@@ -841,12 +881,12 @@ class SequenceRelationType(PhyloElement):
 class SequenceType(PhyloElement):
     pass
 
-class id_ref(PhyloElement):
-    pass
+# class id_ref(PhyloElement):
+#     pass
 
-class id_source(PhyloElement):
-    pass
+# class id_source(PhyloElement):
+#     pass
 
-class ref(PhyloElement):
-    pass
+# class ref(PhyloElement):
+#     pass
 
