@@ -117,12 +117,15 @@ def split_namespace(tag):
         return ('', parts[0])
     return (parts[0][1:], parts[1])
 
-def get_elem_text(elem, tag, default=None):
-    val = elem.find(tag)
-    if val is None:
-        return default
-    return elem.text and elem.text.strip() or None
+def get_child_as(parent, tag, cls):
+    child = parent.find(tag)
+    if child is not None:
+        return cls.from_element(child)
 
+def get_child_text(elem, tag, construct=str):
+    child = elem.find(tag)
+    if child is not None:
+        return child.text and construct(child.text.strip()) or None
 
 # ---------------------------------------------------------
 # Utilities
@@ -344,8 +347,7 @@ class Other(PhyloElement):
     def from_element(cls, elem):
         obj = cls(elem.tag, elem.attrib,
                   elem.text and elem.text.strip() or None)
-        for child in elem:
-            obj.children.append(cls.from_element(child))
+        obj.children = [cls.from_element(child) for child in elem]
         return obj
 
 
@@ -472,12 +474,9 @@ class Clade(PhyloElement):
     branch). Both 'color' and 'width' elements apply for the whole clade unless
     overwritten in-sub clades.
 
-    Attribute 'id_source' is used to link other elements to a clade (on the
-    xml-level).
-
     Attributes:
         branch_length
-        id_source
+        id_source -- link other elements to a clade (on the xml-level)
 
     Children:
         name
@@ -532,9 +531,17 @@ class Accession(PhyloElement):
     """
     """
 
+    @classmethod
+    def from_element(cls, elem):
+        pass
+
 class Annotation(PhyloElement):
     """
     """
+
+    @classmethod
+    def from_element(cls, elem):
+        pass
 
 class BinaryCharacterList(PhyloElement):
     """
@@ -579,7 +586,8 @@ class CladeRelation(PhyloElement):
         confidence = elem.find('confidence')
         if confidence is not None:
             confidence = Confidence.from_element(confidence)
-        return cls(elem.attrib, confidence)
+        return cls(elem.attrib,
+                get_child_as(elem, 'confidence', Confidence))
 
 
 class Confidence(PhyloElement):
@@ -609,12 +617,9 @@ class Date(PhyloElement):
 
     @classmethod
     def from_element(cls, elem):
-        value = elem.find('value')
-        if value is not None:
-            value = float(value.text)
         return cls(elem.attrib,
-                desc=get_elem_text(elem, 'desc'),
-                value=get_elem_text(elem, 'value'),
+                desc=get_child_text(elem, 'desc'),
+                value=get_child_text(elem, 'value', float),
                 )
 
 
@@ -632,7 +637,8 @@ class Distribution(PhyloElement):
 
     @classmethod
     def from_element(cls, elem):
-        return cls(desc=get_elem_text(elem, 'desc'),
+        return cls(
+                desc=get_child_text(elem, 'desc'),
                 points=[Point.from_element(e)
                         for e in elem.findall('point')],
                 polygons=[Polygon.from_element(e)
@@ -643,6 +649,10 @@ class Distribution(PhyloElement):
 class DomainArchitecture(PhyloElement):
     """
     """
+
+    @classmethod
+    def from_element(cls, elem):
+        pass
 
 class Events(PhyloElement):
     """
@@ -687,12 +697,50 @@ class Reference(PhyloElement):
     """
 
 class Sequence(PhyloElement):
+    """A molecular sequence (Protein, DNA, RNA) associated with a node.
+
+    'symbol' is a short (maximal ten characters) symbol of the sequence (e.g.
+    'ACTM') whereas 'name' is used for the full name (e.g. 'muscle Actin').
+
+    One intended use for 'id_ref' is to link a sequence to a taxonomy (via the
+    taxonomy's 'id_source') in case of multiple sequences and taxonomies per
+    node. 
+
+    Attributes:
+        type -- type of sequence ('dna', 'rna', or 'aa').
+        id_ref
+        id_source
+
+    Children:
+        symbol
+        accession
+        name
+        location -- location of a sequence on a genome/chromosome.
+        mol_seq -- the actual sequence
+        uri
+        annotations []
+        domain_architecture
     """
-    """
+    def __init__(self, attributes, **kwargs):
+        PhyloElement.__init__(self, attributes, **kwargs)
 
     @classmethod
     def from_element(cls, elem):
-        pass
+        return cls(elem.attrib,
+                symbol=check_str(get_child_text(elem, 'symbol'), r'\S{1,10}'),
+                accession=get_child_as(elem, 'accession', Accession),
+                name=get_child_text(elem, 'name'),
+                location=get_child_text(elem, 'location'),
+                mol_seq=check_str(get_child_text(elem, 'mol_seq'),
+                                  r'[a-zA-Z\.\-\?\*_]+'),
+                uri=get_child_text(elem, 'uri', Uri),
+                annotations=[Annotation.from_element(e)
+                             for e in elem.findall('annotation')],
+                domain_architecture=get_child_as(elem, 'domain_architecture',
+                                                 DomainArchitecture),
+                )
+
+    # TODO: munge into Seq or SeqRecord
 
 
 class SequenceRelation(PhyloElement):
@@ -749,13 +797,13 @@ class Taxonomy(PhyloElement):
     @classmethod
     def from_element(cls, elem):
         return cls(elem.attrib, 
-                id=Id(get_elem_text(elem, 'id')),
-                code=check_str(get_elem_text(elem, 'code'),
+                id=get_child_text(elem, 'id', Id),
+                code=check_str(get_child_text(elem, 'code'),
                                r'[a-zA-Z0-9_]{2,10}'),
-                scientific_name=get_elem_text(elem, ('scientific_name')),
+                scientific_name=get_child_text(elem, 'scientific_name'),
                 common_names=[e.text for e in elem.findall('common_name')],
-                rank=Rank(get_elem_text(elem, 'rank')),
-                uri=Uri(get_elem_text(elem, 'uri')),
+                rank=get_child_text(elem, 'rank', Rank),
+                uri=get_child_text(elem, 'uri', Uri),
                 )
 
 
@@ -775,8 +823,8 @@ class Doi(PhyloElement):
 class EventType(PhyloElement):
     pass
 
-class MolSeq(PhyloElement):
-    pass
+# class MolSeq(PhyloElement):
+#     pass
 
 class PropertyDataType(PhyloElement):
     pass
@@ -787,8 +835,8 @@ class Rank(PhyloElement):
 class SequenceRelationType(PhyloElement):
     pass
 
-class SequenceSymbol(PhyloElement):
-    pass
+# class SequenceSymbol(PhyloElement):
+#     pass
 
 class SequenceType(PhyloElement):
     pass
