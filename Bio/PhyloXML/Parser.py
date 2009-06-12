@@ -342,10 +342,10 @@ class Other(PhyloElement):
 
     @classmethod
     def from_element(cls, elem):
-        obj = Other(elem.tag, elem.attrib,
-                    elem.text and elem.text.strip() or None)
+        obj = cls(elem.tag, elem.attrib,
+                  elem.text and elem.text.strip() or None)
         for child in elem:
-            obj.children.append(Other.from_element(child))
+            obj.children.append(cls.from_element(child))
         return obj
 
 
@@ -562,7 +562,7 @@ class BranchColor(PhyloElement):
     def from_element(cls, elem):
         red, green, blue = (int(elem.find(color).text) for color in
                             ('red', 'green', 'blue'))
-        return BranchColor(red, green, blue)
+        return cls(red, green, blue)
 
 
 class CladeRelation(PhyloElement):
@@ -579,7 +579,7 @@ class CladeRelation(PhyloElement):
         confidence = elem.find('confidence')
         if confidence is not None:
             confidence = Confidence.from_element(confidence)
-        return CladeRelation(elem.attrib, confidence)
+        return cls(elem.attrib, confidence)
 
 
 class Confidence(PhyloElement):
@@ -593,7 +593,7 @@ class Confidence(PhyloElement):
 
     @classmethod
     def from_element(cls, elem):
-        return Confidence(elem.attrib, float(elem.text))
+        return cls(elem.attrib, float(elem.text))
 
 
 class Date(PhyloElement):
@@ -612,7 +612,7 @@ class Date(PhyloElement):
         value = elem.find('value')
         if value is not None:
             value = float(value.text)
-        return Date(elem.attrib,
+        return cls(elem.attrib,
                 desc=get_elem_text(elem, 'desc'),
                 value=get_elem_text(elem, 'value'),
                 )
@@ -632,7 +632,7 @@ class Distribution(PhyloElement):
 
     @classmethod
     def from_element(cls, elem):
-        return Distribution(desc=get_elem_text(elem, 'desc'),
+        return cls(desc=get_elem_text(elem, 'desc'),
                 points=[Point.from_element(e)
                         for e in elem.findall('point')],
                 polygons=[Polygon.from_element(e)
@@ -748,7 +748,7 @@ class Taxonomy(PhyloElement):
 
     @classmethod
     def from_element(cls, elem):
-        return Taxonomy(elem.attrib, 
+        return cls(elem.attrib, 
                 id=Id(get_elem_text(elem, 'id')),
                 code=check_str(get_elem_text(elem, 'code'),
                                r'[a-zA-Z0-9_]{2,10}'),
