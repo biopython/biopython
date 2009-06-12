@@ -739,7 +739,7 @@ class Sequence(PhyloElement):
                 location=get_child_text(elem, 'location'),
                 mol_seq=check_str(get_child_text(elem, 'mol_seq'),
                                   r'[a-zA-Z\.\-\?\*_]+'),
-                uri=get_child_text(elem, 'uri', Uri),
+                uri=get_child_as(elem, 'uri', Uri),
                 annotations=[Annotation.from_element(e)
                              for e in elem.findall('annotation')],
                 domain_architecture=get_child_as(elem, 'domain_architecture',
@@ -842,14 +842,41 @@ class Taxonomy(PhyloElement):
                                r'[a-zA-Z0-9_]{2,10}'),
                 scientific_name=get_child_text(elem, 'scientific_name'),
                 common_names=[e.text for e in elem.findall('common_name')],
-                rank=get_child_text(elem, 'rank', Rank),
-                uri=get_child_text(elem, 'uri', Uri),
+                rank=check_str(get_child_text(elem, 'rank'),
+                               r'(%s)' % '|'.join((
+                                   'domain', 'kingdom', 'subkingdom', 'branch',
+                                   'infrakingdom', 'superphylum', 'phylum',
+                                   'subphylum', 'infraphylum', 'microphylum',
+                                   'superdivision', 'division', 'subdivision',
+                                   'infradivision', 'superclass', 'class',
+                                   'subclass', 'infraclass', 'superlegion',
+                                   'legion', 'sublegion', 'infralegion',
+                                   'supercohort', 'cohort', 'subcohort',
+                                   'infracohort', 'superorder', 'order',
+                                   'suborder', 'superfamily', 'family',
+                                   'subfamily', 'supertribe', 'tribe',
+                                   'subtribe', 'infratribe', 'genus',
+                                   'subgenus', 'superspecies', 'species',
+                                   'subspecies', 'variety', 'subvariety',
+                                   'form', 'subform', 'cultivar', 'unknown',
+                                   'other'))),
+                uri=get_child_as(elem, 'uri', Uri),
                 )
 
 
 class Uri(PhyloElement):
+    """A uniform resource identifier.
+
+    In general, this is expected to be an URL (for example, to link to an image
+    on a website, in which case the 'type' attribute might be 'image' and 'desc'
+    might be 'image of a California sea hare').
     """
-    """
+    def __init__(self, attributes, value=value):
+        PhyloElement.__init__(attributes, value=value)
+        
+    @classmethod
+    def from_element(cls, elem):
+        return cls(elem.attrib, elem.text.strip())
 
 
 # Simple types
@@ -869,8 +896,8 @@ class EventType(PhyloElement):
 class PropertyDataType(PhyloElement):
     pass
 
-class Rank(PhyloElement):
-    pass
+# class Rank(PhyloElement):
+#     pass
 
 class SequenceRelationType(PhyloElement):
     pass
