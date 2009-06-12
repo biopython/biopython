@@ -219,7 +219,6 @@ def _parse_phylogeny(parent, context):
     phylogeny = Phylogeny(parent.attrib)
     complex_types = {
             # XML tag, class
-            'id':   Id,
             'date': Date,
             'clade_relation': CladeRelation,
             'sequence_relation': SequenceRelation,
@@ -249,6 +248,8 @@ def _parse_phylogeny(parent, context):
             # Simple types
             elif tag == 'name': 
                 phylogeny.name = elem.text and elem.text.strip()
+            elif tag == 'id': 
+                phylogeny.id = elem.text and elem.text.strip()
             elif tag == 'description':
                 phylogeny.description = elem.text and elem.text.strip()
             # Unknown tags
@@ -263,7 +264,6 @@ def _parse_clade(parent, context):
     complex_types = {
             # XML tag, class
             'color':    BranchColor,
-            'node_id':  Id,
             'events':   Events,
             'binary_characters': BinaryCharacters,
             'date':     Date,
@@ -300,8 +300,10 @@ def _parse_clade(parent, context):
                     warnings.warn('Attribute branch_length was already set for '
                                   'this Clade; overwriting the previous value.')
                 clade.branch_length = elem.text.strip()
-            elif tag == 'name': 
-                clade.name = elem.text.strip()
+            elif tag == 'name':
+                clade.name = elem.text and elem.text.strip()
+            elif tag == 'node_id':
+                clade.node_id = elem.text and elem.text.strip()
             elif tag == 'width':
                 clade.width = float(elem.text)
             # Unknown tags
@@ -317,7 +319,7 @@ def _parse_clade(parent, context):
 # XXX maybe not needed
 class PhyloElement(object):
     """Base class for all PhyloXML objects."""
-    def __init__(self, attrib=None, text=None, **kwargs):
+    def __init__(self, attrib=None, **kwargs):
         if attrib is not None:
             # self._attrib = attrib
             self.__dict__.update(attrib)
@@ -334,10 +336,10 @@ class PhyloElement(object):
 class Other(PhyloElement):
     """Container for non-phyloXML elements in the tree."""
     # ENH: assert that the tag namespace is not phyloxml's
-    def __init__(self, tag, attributes=None, text=None, children=[]):
+    def __init__(self, tag, attributes=None, value=None, children=[]):
         self.tag = tag
         self.attributes = attributes
-        self.text = text
+        self.value = value
         self.children = children
 
     def __str__(self):
@@ -346,10 +348,10 @@ class Other(PhyloElement):
 
     @classmethod
     def from_element(cls, elem):
-        obj = cls(elem.tag, elem.attrib,
-                  elem.text and elem.text.strip() or None)
-        obj.children = [cls.from_element(child) for child in elem]
-        return obj
+        return cls(elem.tag, elem.attrib,
+                  value=(elem.text and elem.text.strip() or None),
+                  children=[cls.from_element(child) for child in elem],
+                  )
 
 
 # Core elements
@@ -529,23 +531,57 @@ class Clade(PhyloElement):
 # Complex types
 
 class Accession(PhyloElement):
+    """Captures the local part in a sequence identifier.
+
+    Example: In 'UniProtKB:P17304', the value of Accession is 'P17304'  and the
+    'source' attribute is 'UniProtKB'.
     """
-    """
+    def __init__(self, source, value):
+        self.source = source
+        self.value = value
 
     def __str__(self):
         return str(self.value)
 
     @classmethod
     def from_element(cls, elem):
-        pass
+        return cls(elem.get('source'), elem.text.strip())
+
 
 class Annotation(PhyloElement):
+    """The annotation of a molecular sequence.
+
+    It is recommended to annotate by using the optional 'ref' attribute (some
+    examples of acceptable values for the ref attribute: 'GO:0008270',
+    'KEGG:Tetrachloroethene degradation', 'EC:1.1.1.1').
+
+    Attributes:
+        ref
+        source
+        evidence -- describe evidence as free text (e.g. 'experimental')
+        type
+
+    Children:
+        desc -- free text description
+        confidence -- state the type and value of support
+        properties [] -- typed and referenced annotations from external resources
+        uri
     """
-    """
+    def __init__(self, attributes, desc=None, confidence=None, properties=[],
+            uri=None):
+        PhyloElement.__init__(self, attributes, desc=desc,
+                confidence=confidence, properties=properties, uri=uri)
 
     @classmethod
     def from_element(cls, elem):
-        pass
+        return cls(elem.attrib,
+                desc=get_child_text(elem, 'desc'),
+                confidence=get_child_as(elem, 'confidence', Confidence),
+                properties=[Property.from_element(e)
+                            for e in elem.findall('property')],
+                uri=get_child_as(elem, 'uri', Uri),
+                )
+
 
 class BinaryCharacterList(PhyloElement):
     """
@@ -582,14 +618,10 @@ class CladeRelation(PhyloElement):
     For example, this could be used to describe multiple parents of a clade.
     """
     def __init__(self, attributes, confidence=None):
-        PhyloElement.__init__(self, attributes)
-        self.confidence = confidence
+        PhyloElement.__init__(self, attributes, confidence=confidence)
 
     @classmethod
     def from_element(cls, elem):
-        confidence = elem.find('confidence')
-        if confidence is not None:
-            confidence = Confidence.from_element(confidence)
         return cls(elem.attrib,
                 get_child_as(elem, 'confidence', Confidence))
 
@@ -651,27 +683,45 @@ class Distribution(PhyloElement):
 
 
 class DomainArchitecture(PhyloElement):
+    """Domain architecture of a protein.
+
+    Attribute 'length' is the total length of the protein.
     """
-    """
+    def __init__(self, attributes, domains=[]):
+        assert len(domains) >= 1
+        PhyloElement.__init__(self, attributes, domains=domains)
 
     @classmethod
     def from_element(cls, elem):
-        pass
+        return cls(elem.attrib,
+                domains=[ProteinDomain.from_element(e)
+                         for e in elem.findall('domain')],
+                )
+
 
 class Events(PhyloElement):
     """
     """
+    def __init__(self, type=None, duplications=None, speciations=None,
+            losses=None, confidence=None):
+        PhyloElement.__init__(self, type=type, duplications=duplications,
+                speciations=speciations, losses=losses, confidence=confidence)
 
     @classmethod
     def from_element(cls, elem):
-        pass
+        return cls(
+                type=check_str(get_child_text(elem, 'type'),
+                               r'(%s)' % '|'.join((
+                                   'transfer', 'fusion',
+                                   'speciation_or_duplication', 'other',
+                                   'mixed', 'unassigned',
+                                   ))),
+                duplications=get_child_text(elem, 'duplications', int),
+                speciations=get_child_text(elem, 'speciations', int),
+                losses=get_child_text(elem, 'losses', int),
+                confidence=get_child_as(elem, 'confidence', Confidence),
+                )
 
-
-class Id(PhyloElement):
-    """
-    """
-    def __init__(self, text):
-        PhyloElement.__init__(self, text=text)
 
 class Point(PhyloElement):
     """
@@ -682,19 +732,49 @@ class Polygon(PhyloElement):
     """
 
 class Property(PhyloElement):
+    """A typed and referenced property from an external resources.
+
+    The value of a property is its mixed (free text) content. Properties can be
+    attached to 'Phylogeny', 'Clade', and 'Annotation'.
+
+    Attributes:
+        datatype -- indicates the type of a property and is limited to
+            xsd-datatypes (e.g. 'xsd:string', 'xsd:boolean', 'xsd:integer',
+            'xsd:decimal', 'xsd:float', 'xsd:double', 'xsd:date', 'xsd:anyURI').
+
+        applies_to -- indicates the item to which a property applies to (e.g.
+            'node' for the parent node of a clade, 'parent_branch' for the
+            parent branch of a clade).
+
+        id_ref -- allows to attached a property specifically to one element (on
+            the xml-level). Optional attribute 'unit' is used to indicate the
+            unit of the property.
+
+    Example:
+        <property datatype="xsd:integer" ref="NOAA:depth" applies_to="clade"
+        unit="METRIC:m"> 200 </property> 
     """
-    """
-    def __init__(self, text):
-        PhyloElement.__init__(self, text=text)
+    def __init__(self, attributes, value=None):
+        PhyloElement.__init__(self, attributes, value=value)
 
     @classmethod
     def from_element(cls, elem):
-        pass
+        return cls(elem.attrib, value=elem.text.strip())
 
 
 class ProteinDomain(PhyloElement):
+    """Represents an individual domain in a domain architecture.
+
+    The name/unique identifier is described via the 'id' attribute. 'confidence'
+    can be used to store (i.e.) E-values.
     """
-    """
+    def __init__(self, attributes, value=None):
+        PhyloElement.__init__(self, attributes, value=value)
+
+    @classmethod
+    def from_element(cls, elem):
+        return cls(elem.attrib, value=elem.text.strip())
+
 
 class Reference(PhyloElement):
     """
@@ -784,14 +864,19 @@ class Sequence(PhyloElement):
 
 
 class SequenceRelation(PhyloElement):
+    """Express a typed relationship between two sequences.
+
+    For example, this could be used to describe an orthology (in which case
+    attribute 'type' is 'orthology'). 
     """
-    """
-    def __init__(self, text):
-        PhyloElement.__init__(self, text=text)
+    def __init__(self, attributes, confidence=None):
+        PhyloElement.__init__(self, attributes, confidence=confidence)
 
     @classmethod
     def from_element(cls, elem):
-        pass
+        return cls(elem.attrib,
+                confidence=get_child_as(elem, 'confidence', Confidence),
+                )
 
 
 class Taxonomy(PhyloElement):
@@ -837,7 +922,7 @@ class Taxonomy(PhyloElement):
     @classmethod
     def from_element(cls, elem):
         return cls(elem.attrib, 
-                id=get_child_text(elem, 'id', Id),
+                id=get_child_text(elem, 'id'),
                 code=check_str(get_child_text(elem, 'code'),
                                r'[a-zA-Z0-9_]{2,10}'),
                 scientific_name=get_child_text(elem, 'scientific_name'),
@@ -871,8 +956,8 @@ class Uri(PhyloElement):
     on a website, in which case the 'type' attribute might be 'image' and 'desc'
     might be 'image of a California sea hare').
     """
-    def __init__(self, attributes, value=value):
-        PhyloElement.__init__(attributes, value=value)
+    def __init__(self, attributes, value=None):
+        PhyloElement.__init__(self, attributes, value=value)
         
     @classmethod
     def from_element(cls, elem):
@@ -887,8 +972,8 @@ class AppliesTo(PhyloElement):
 class Doi(PhyloElement):
     pass
 
-class EventType(PhyloElement):
-    pass
+# class EventType(PhyloElement):
+#     pass
 
 # class MolSeq(PhyloElement):
 #     pass

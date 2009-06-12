@@ -141,27 +141,31 @@ Tier 0 (essential tree structure):
 
 Tier 1 (used in all example files):
 
-    - to do: code (TaxonomyCode)
-
-    - done: branch_length, confidence, name, taxonomy
+    - done: branch_length, confidence, name, taxonomy, code
 
 Tier 2 (used in at least one example file, but not all):
 
     - to do:
-        accession,
         alt,
+        lat,
+        long,
+        point,
+
+    - done:
+        accession,
         annotation,
+        clade_relation,
         common_name,
+        date,
+        desc,
         description,
+        distribution,
         domain,
         domain_architecture,
         duplications,
         events,
         id,
-        lat,
-        long,
         mol_seq,
-        point,
         property,
         rank,
         scientific_name,
@@ -170,8 +174,7 @@ Tier 2 (used in at least one example file, but not all):
         speciations,
         symbol,
         uri
-
-    - done: clade_relation, date, desc, value, distribution
+        value,
 
 Tier 3 (not found in example files):
 
@@ -180,17 +183,21 @@ Tier 3 (not found in example files):
         bc, 
         binary_characters,
         gained,
-        location,
-        losses,
         lost,
-        node_id,
         polygon,
         present,
         reference,
-        type,
         width
 
-    - done: color, red, green, blue
+    - done:
+        blue,
+        color,
+        green,
+        location,
+        losses,
+        node_id,
+        red,
+        type,
 
 Namespaces:
 
