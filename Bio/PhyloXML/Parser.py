@@ -724,8 +724,25 @@ class Events(PhyloElement):
 
 
 class Point(PhyloElement):
+    """Coordinates of a point, with an optional altitude.
+
+    Used by element 'Distribution'.
+
+    Required attribute 'geodetic_datum' is used to indicate the geodetic datum
+    (also called 'map datum'). For example, Google's KML uses 'WGS84'.
     """
-    """
+    def __init__(self, geodetic_datum, lat, long, alt=None):
+        PhyloElement.__init__(self, dict(geodetic_datum=geodetic_datum),
+                lat=lat, long=long, alt=alt)
+
+    @classmethod
+    def from_element(cls, elem):
+        return cls(elem.get('geodetic_datum'),
+                get_child_text(elem, 'lat', float),
+                get_child_text(elem, 'long', float),
+                alt=get_child_text(elem, 'alt', float),
+                )
+
 
 class Polygon(PhyloElement):
     """

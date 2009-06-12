@@ -145,36 +145,10 @@ Tier 1 (used in all example files):
 
 Tier 2 (used in at least one example file, but not all):
 
-    - to do:
-        alt,
-        lat,
-        long,
-        point,
-
-    - done:
-        accession,
-        annotation,
-        clade_relation,
-        common_name,
-        date,
-        desc,
-        description,
-        distribution,
-        domain,
-        domain_architecture,
-        duplications,
-        events,
-        id,
-        mol_seq,
-        property,
-        rank,
-        scientific_name,
-        sequence,
-        sequence_relation,
-        speciations,
-        symbol,
-        uri
-        value,
+    - done: accession, alt, annotation, clade_relation, common_name, date, desc,
+        description, distribution, domain, domain_architecture, duplications,
+        events, id, lat, long, mol_seq, point, property, rank, scientific_name,
+        sequence, sequence_relation, speciations, symbol, uri value,
 
 Tier 3 (not found in example files):
 
