@@ -39,6 +39,11 @@ Timeline
 
     - explain use cases
 
+    Integration:
+
+    - Play nicely with Nexus, Newick
+    - Identify more Biopython objects to reuse or export to
+
 :Done:
     - Add sample phyloXML files from phyloxml.org to this repository
     - Add a list of "core" elements to this file
@@ -53,7 +58,7 @@ Timeline
     - Specific exception and warning to raise for invalid phyloXML files
       [*Exceptions.py*]
     - Simple base class for all phyloXML elements [*Parser.PhyloElement*]
-    - Instantiate Tier 0 elements from XML stream ("end" events)
+    - Instantiate Tier 0, 1 and 2 elements from an XML stream ("end" events)
 
     Unit tests:
 
@@ -67,17 +72,6 @@ Timeline
 
     - Explain xml.etree, list 3rd-party equivalents for Py2.4
 
-:6/8:
-    Map nodes to classes:
-
-    - Locate existing Biopython classes to reuse as tree elements
-
-    - Write classes corresponding to "core" XML elements
-
-        - Tier 0
-        - Tier 1
-        - Tier 2
-
 :6/15:
     Verification and documentation:
 
@@ -85,6 +79,7 @@ Timeline
     - Test and check parser performance versus Bioperl and Archaeopterix loading
       time
     - Document results of parser testing and performance (on wiki or here)
+    - Document basic usage of the parser on the Biopython wiki
 
 :6/22:
     Serialization back to file:
@@ -105,6 +100,10 @@ Timeline
 
     - Write unit tests for Pythonic syntax sugar (e.g. __getattr__, __getitem__,
       __contains__)
+
+        - PhyloXML.__getitem__(): get the phylogeny with matching name or id
+        - \*.__str__(): pretty representation for printing nodes
+
     - Add the corresponding magic methods to the base class
 
 :7/13:
