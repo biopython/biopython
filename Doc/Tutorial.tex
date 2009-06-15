@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 12 June 2009 (Biopython 1.50+)}
+\date{Last Update -- 15 June 2009 (Biopython 1.50+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -487,6 +487,18 @@ However, where possible you should specify the alphabet explicitly when creating
 Seq('AGTACACTGGT', IUPACUnambiguousDNA())
 >>> my_seq.alphabet
 IUPACUnambiguousDNA()
+\end{verbatim}
+
+Unless of course, this really is an amino acid sequence:
+
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import IUPAC
+>>> my_prot = Seq("AGTACACTGGT", IUPAC.protein)
+>>> my_prot
+Seq('AGTACACTGGT', IUPACProtein())
+>>> my_prot.alphabet
+IUPACProtein()
 \end{verbatim}
 
 \section{Sequences act like strings}
@@ -956,6 +968,70 @@ to do your own gene finding:
 >>> mito_table.forward_table["ACG"]
 'T'
 \end{verbatim}
+
+\section{Comparing Seq objects}
+\label{sec:seq-comparison}
+
+Sequence comparison is actually a very complicated topic, and there is no easy
+way to decide if two sequences are equal. The basic problem is the meaning of
+the letters in a sequence are context dependent - the letter "A" could be part
+of a DNA, RNA or protein sequence. Biopython uses alphabet objects as part of
+each \verb|Seq| object to try and capture this information - so comparing two
+\verb|Seq| objects means considering both the sequence strings \emph{and} the
+alphabets.
+
+For example, you might argue that the two DNA \verb|Seq| objects
+\texttt{Seq("ACGT", IUPAC.unambiguous\_dna)} and
+\texttt{Seq("ACGT", IUPAC.unambiguous\_dna)} should be equal, even though
+they do have different alphabets. Depending on the context this could be
+important.
+
+This gets worse -- suppose you think \texttt{Seq("ACGT",
+IUPAC.unambiguous\_dna)} and \texttt{Seq("ACGT")} (i.e. the default generic
+alphabet) should be equal. Then, logically, \texttt{Seq("ACGT", IUPAC.protein)}
+and \texttt{Seq("ACGT")} should also be equal. Now, in logic if $A=B$ and
+$B=C$, by transitivity we expect $A=C$. So for logical consistency we'd
+require \texttt{Seq("ACGT", IUPAC.unambiguous\_dna)} and \texttt{Seq("ACGT",
+IUPAC.protein)} to be equal -- which most people would agree is just not right.
+
+So, what does Biopython do? Well, the equality test is the default for python
+objects -- it tests to see if they are the same object in memory. This is a
+very strict test:
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import IUPAC
+>>> seq1 = Seq("ACGT", IUPAC.unambiguous_dna)
+>>> seq2 = Seq("ACGT", IUPAC.unambiguous_dna)
+>>> seq1 == seq2
+False
+>>> seq1 == seq1
+True
+\end{verbatim}
+
+If you actually want to do this, you can be more explicit by using the python
+\verb|id| function,
+\begin{verbatim}
+>>> id(seq1) == id(seq2)
+False
+>>> id(seq1) == id(seq1)
+True
+\end{verbatim}
+
+Now, in every day use, your sequences will probably all have the same
+alphabet, or at least all be the same type of sequence (all DNA, all RNA, or
+all protein). What you probably want is to just compare the sequences as
+strings -- so do this explicitly:
+
+\begin{verbatim}
+>>> str(seq1) == str(seq2)
+True
+>>> str(seq1) == str(seq1)
+True
+\end{verbatim}
+
+\noindent As an extension to this, while you can use a python dictionary with
+\verb|Seq| objects as keys, it is generally more useful to use the sequence a
+string for the key. See also Section~\ref{sec:seq-to-string}.
 
 \section{MutableSeq objects}
 \label{sec:mutable-seq}
