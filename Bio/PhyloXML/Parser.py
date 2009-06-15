@@ -145,6 +145,56 @@ def dump_tags(handle, output=sys.stdout):
             elem.clear()
 
 
+def pretty_print(handle, indent=0, show_all=False, output=sys.stdout):
+    """Print a summary of the structure of a PhyloXML file.
+
+    With the show_all option, also prints the primitive (native Python instead
+    of PhyloXML) objects in the object tree.
+    """
+    # Closing over output
+    def print_indented(text, indent):
+        """Write an indented string of text to output."""
+        output.write("%s%s\n" %('\t'*indent, text))
+
+    # Closing over show_all
+    def print_phylo(obj, indent):
+        """Recursively print a PhyloElement object tree."""
+        print_indented(obj.__class__.__name__, indent)
+        indent += 1
+        if show_all:
+            simple_objs = []
+        for attr in obj.__dict__:
+            child = getattr(obj, attr)
+            if isinstance(child, PhyloElement):
+                print_indented(child.__class__.__name__, indent)
+                print_phylo(child, indent)
+            elif show_all:
+                simple_objs.append(attr)
+        if show_all and simple_objs:
+            print_indented(', '.join(simple_objs), indent)
+
+    def print_other(obj, indent):
+        """Recursively print a tree of Other objects."""
+        if show_all:
+            print_indented("%s -- %s" % (obj, obj.attributes.keys()), indent)
+        else:
+            print_indented(obj, indent)
+        indent += 1
+        for child in obj.children:
+            if isinstance(child, Other):
+                print_other(child, indent)
+            else:
+                print '%s%s' % ('\t'*indent, str(child))
+
+    phyloxml = read(handle)
+    print phyloxml.__class__.__name__
+    indent += 1
+    for tree in phyloxml.phylogenies:
+        print_phylo(tree, indent)
+    for otr in phyloxml.other:
+        print_other(otr, indent)
+
+
 import re
 
 def check_str(text, regexp):
@@ -296,7 +346,7 @@ def _parse_clade(parent, context):
             # Simple types
             elif tag == 'branch_length':
                 # NB: possible collision with the attribute
-                if hasattr(clade, 'branch_length'):
+                if hasattr(clade, 'branch_length') and clade.branch_length:
                     warnings.warn('Attribute branch_length was already set for '
                                   'this Clade; overwriting the previous value.')
                 clade.branch_length = elem.text.strip()
@@ -316,42 +366,17 @@ def _parse_clade(parent, context):
 # ---------------------------------------------------------------------
 # Classes instantiated from phyloXML nodes
 
-# XXX maybe not needed
 class PhyloElement(object):
     """Base class for all PhyloXML objects."""
     def __init__(self, attrib=None, **kwargs):
         if attrib is not None:
-            # self._attrib = attrib
             self.__dict__.update(attrib)
-        # if text is not None:
-        #     self._text = text
         self.__dict__.update(kwargs)
 
     @classmethod
     def from_element(cls, elem):
         raise NotImplementedError("This method should be implemented by " \
                                   "the derived class %s." % cls)
-
-
-class Other(PhyloElement):
-    """Container for non-phyloXML elements in the tree."""
-    # ENH: assert that the tag namespace is not phyloxml's
-    def __init__(self, tag, attributes=None, value=None, children=[]):
-        self.tag = tag
-        self.attributes = attributes
-        self.value = value
-        self.children = children
-
-    def __str__(self):
-        return '<Other %s at %s>' % (self.tag, hex(id(self)))
-    __repr__ = __str__
-
-    @classmethod
-    def from_element(cls, elem):
-        return cls(elem.tag, elem.attrib,
-                  value=(elem.text and elem.text.strip() or None),
-                  children=[cls.from_element(child) for child in elem],
-                  )
 
 
 # Core elements
@@ -381,6 +406,27 @@ class Phyloxml(PhyloElement):
     def __len__(self):
         """Number of phylogenetic trees in this object."""
         return len(self.phylogenies)
+
+
+class Other(PhyloElement):
+    """Container for non-phyloXML elements in the tree."""
+    # ENH: assert that the tag namespace is not phyloxml's
+    def __init__(self, tag, attributes=None, value=None, children=[]):
+        self.tag = tag
+        self.attributes = attributes
+        self.value = value
+        self.children = children
+
+    def __str__(self):
+        return '<Other %s at %s>' % (self.tag, hex(id(self)))
+    __repr__ = __str__
+
+    @classmethod
+    def from_element(cls, elem):
+        return cls(elem.tag, elem.attrib,
+                  value=(elem.text and elem.text.strip() or None),
+                  children=[cls.from_element(child) for child in elem],
+                  )
 
 
 class Phylogeny(PhyloElement):
@@ -500,6 +546,8 @@ class Clade(PhyloElement):
         other []
     """
     def __init__(self, attributes, **kwargs):
+        if 'branch_length' in attributes and kwargs.get('branch_length'):
+            warnings.warn('branch_length is being overwritten')
         PhyloElement.__init__(self, attributes, **kwargs)
         # Single values
         for attr in (
