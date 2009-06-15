@@ -267,8 +267,25 @@ def solexa_quality_from_phred(phred_quality) :
     then re-expresses it as a Solexa score. This assumes the error estimates
     are equivalent.
 
-    This will return a floating point number, it is up to you to round this to
-    the nearest integer if appropriate.  e.g.
+    How does this work exactly? Well the PHRED quality is minus ten times the
+    base ten logarithm of the probability of error::
+    
+     phred_quality = -10*log(error,10)
+
+    Therefore, turning this round::
+
+     error = 10 ** (- phred_quality / 10)
+    
+    Now, Solexa qualities use a different log transformation::
+
+     solexa_quality = -10*log(error/(1-error),10)
+
+    After substitution and a little manipulation we get::
+
+      solexa_quality = 10*log(10**(phred_quality/10.0) - 1, 10)
+
+    This is what this function does. It will return a floating point number,
+    it is up to you to round this to the nearest integer if appropriate.  e.g.
 
     >>> print "%0.2f" % round(solexa_quality_from_phred(80),2)
     80.00
@@ -310,6 +327,11 @@ def phred_quality_from_solexa(solexa_quality) :
     then re-expresses it as a PHRED score. This assumes the error estimates
     are equivalent.
 
+    The underlying formulas are given in the documentation for the sister
+    function solexa_quality_from_phred, in this case the operation is::
+    
+     phred_quality = 10*log(10**(solexa_quality/10.0) + 1, 10)
+
     This will return a floating point number, it is up to you to round this to
     the nearest integer if appropriate.  e.g.
 
@@ -323,10 +345,6 @@ def phred_quality_from_solexa(solexa_quality) :
     3.01
     >>> print "%0.2f" % round(phred_quality_from_solexa(-10),2)
     0.41
-
-    Notice that for high quality reads PHRED and Solexa scores are numerically
-    equal. The differences are important for poor quality reads, where PHRED
-    has a minimum of zero but Solexa scores can be negative.
     """
     return 10*log(10**(solexa_quality/10.0) + 1, 10)
 
