@@ -6,7 +6,7 @@
 # This module is for reading and writing FASTQ and QUAL format files as
 # SeqRecord objects, and is expected to be used via the Bio.SeqIO API.
 
-"""Bio.SeqIO support for the "fastq" and "qual" file formats.
+"""Bio.SeqIO support for the FASTQ and QUAL file formats.
 
 Note that you are expected to use this code via the Bio.SeqIO interface, as
 shown below.
@@ -64,11 +64,11 @@ following format names:
 
  - "qual" means simple quality files using PHRED scores (e.g. from Roche 454)
  - "fastq" means Sanger style FASTQ files using PHRED scores and an ASCII
-    offset of 33.
+    offset of 33 (e.g. from the NCBI Short Read Archive).
  - "fastq-solexa" means old Solexa (pre Illumina) style FASTQ files, using
     Solexa scores with an ASCII offset 64.
  - "fastq-illumina" means new Illumina 1.3+ style FASTQ files, using PHRED
-    score but with an ASCII offset 64.
+    scores but with an ASCII offset 64.
 
 We could potentially add support for "qual-solexa" meaning QUAL files which
 contain Solexa scores, but thus far there isn't any reason to use such files.
@@ -131,6 +131,16 @@ Or go back to the FASTQ format,
     ;;;;;;;;;;;9;7;;.7;393333
     <BLANKLINE>
 
+Or, using the Illumina 1.3+ FASTQ encoding (PHRED values with an ASCII offset
+of 64):
+
+    >>> print record.format("fastq-illumina")
+    @EAS54_6_R1_2_1_443_348
+    GTTGCTTCTGGCGTGGGTGGGGGGG
+    +
+    ZZZZZZZZZZZXZVZZMVZRXRRRR
+    <BLANKLINE>
+
 You can also get Biopython to convert the scores and show a Solexa style
 FASTQ file:
 
@@ -140,6 +150,12 @@ FASTQ file:
     +
     ZZZZZZZZZZZXZVZZMVZRXRRRR
     <BLANKLINE>
+
+Notice that this is actually the same output as above using "fastq-illumina"
+as the format! The reason for this is all these scores are high enough that
+the PHRED and Solexa scores are almost equal. The differences become apparent
+for poor quality reads. See the functions solexa_quality_from_phred and
+phred_quality_from_solexa for more details.
 
 If you wanted to trim your sequences (perhaps to remove low quality regions,
 or to remove a primer sequence), try slicing the SeqRecord objects.  e.g.
@@ -245,6 +261,12 @@ SOLEXA_SCORE_OFFSET = 64
 def solexa_quality_from_phred(phred_quality) :
     """Covert a PHRED quality (range 0 to about 90) to a Solexa quality.
 
+    PHRED and Solexa quality scores are both log transformations of a
+    probality of error (high score = low probability of error). This function
+    takes a PHRED score, transforms it back to a probability of error, and
+    then re-expresses it as a Solexa score. This assumes the error estimates
+    are equivalent.
+
     This will return a floating point number, it is up to you to round this to
     the nearest integer if appropriate.  e.g.
 
@@ -262,6 +284,10 @@ def solexa_quality_from_phred(phred_quality) :
     Traceback (most recent call last):
         ...
     ValueError: PHRED quality zero maps onto a Solexa quality of minus infinity!
+
+    Notice that for high quality reads PHRED and Solexa scores are numerically
+    equal. The differences are important for poor quality reads, where PHRED
+    has a minimum of zero but Solexa scores can be negative.
     """
     if phred_quality > 0 :
         return 10*log(10**(phred_quality/10.0) - 1, 10)
@@ -278,6 +304,12 @@ def solexa_quality_from_phred(phred_quality) :
 def phred_quality_from_solexa(solexa_quality) :
     """Convert a Solexa quality (which can be negative) to a PHRED quality.
 
+    PHRED and Solexa quality scores are both log transformations of a
+    probality of error (high score = low probability of error). This function
+    takes a Solexa score, transforms it back to a probability of error, and
+    then re-expresses it as a PHRED score. This assumes the error estimates
+    are equivalent.
+
     This will return a floating point number, it is up to you to round this to
     the nearest integer if appropriate.  e.g.
 
@@ -291,6 +323,10 @@ def phred_quality_from_solexa(solexa_quality) :
     3.01
     >>> print "%0.2f" % round(phred_quality_from_solexa(-10),2)
     0.41
+
+    Notice that for high quality reads PHRED and Solexa scores are numerically
+    equal. The differences are important for poor quality reads, where PHRED
+    has a minimum of zero but Solexa scores can be negative.
     """
     return 10*log(10**(solexa_quality/10.0) + 1, 10)
 
@@ -1032,6 +1068,11 @@ class FastqSolexaWriter(SequentialSequenceWriter):
     This outputs FASTQ files like those from the early Solexa/Illumina
     pipeline, using Solexa scores and an ASCII offset of 64. These are
     NOT compatible with the standard Sanger style PHRED FASTQ files.
+
+    If your records contain a "solexa_quality" entry under letter_annotations,
+    this is used, otherwise any "phred_quality" entry will be used after
+    conversion using the solexa_quality_from_phred function. If neither style
+    of quality scores are present, an exception is raised.
     
     Although you can use this class directly, you are strongly encouraged
     to use the Bio.SeqIO.write() function instead.  For example, this code
@@ -1044,11 +1085,11 @@ class FastqSolexaWriter(SequentialSequenceWriter):
     1
     >>> out_handle.close()
 
-    You might want to do this if the original file included extra line
-    breaks, which (while valid) may not be supported by all tools.  The
-    output file from Biopython will have each sequence on a single line, and
-    each quality string on a single line (which is considered desirable for
-    maximum compatibility).
+    You might want to do this if the original file included extra line breaks,
+    which (while valid) may not be supported by all tools.  The output file
+    from Biopython will have each sequence on a single line, and each quality
+    string on a single line (which is considered desirable for maximum
+    compatibility).
 
     This code is also called if you use the .format("fastq-solexa") method of
     a SeqRecord.
@@ -1083,7 +1124,7 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
     using PHRED scores and an ASCII offset of 64. Note these files are NOT
     compatible with the standard Sanger style PHRED FASTQ files which use an
     ASCII offset of 32.
-    
+
     Although you can use this class directly, you are strongly encouraged to
     use the Bio.SeqIO.write() function with format name "fastq-illumina"
     instead. This code is also called if you use the .format("fastq-illumina")
