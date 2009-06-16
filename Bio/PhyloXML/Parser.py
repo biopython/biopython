@@ -35,61 +35,6 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import Alphabet, DNAAlphabet, RNAAlphabet, ProteinAlphabet
 
-# Index of phyloxml tags and corresponding classes
-#       ## special cases for parsing
-#         'phylogeny':    Phylogeny,
-#         'phyloxml':     Phyloxml,
-#         'clade':        Clade,
-#       ## no special handling
-#         'absent':       BinaryCharacterList,
-#         'accession':    Accession,
-#         'alt':          float,  # decimal
-#         'annotation':   Annotation,
-#         'bc':           str,
-#         'binary_characters': BinaryCharacters,
-#         'blue':         int, # unsignedByte
-#         'branch_length': float,  # double
-#         'clade_relation': CladeRelation,
-#         'code':         TaxonomyCode,
-#         'color':        BranchColor,
-#         'common_name':  str,
-#         'confidence':   Confidence,
-#         'date':         Date,
-#         'desc':         str,
-#         'description':  str,
-#         'distribution': Distribution,
-#         'domain':       ProteinDomain,
-#         'domain_architecture': DomainArchitecture,
-#         'duplications': int, # nonNegativeInteger
-#         'events':       Events,
-#         'gained':       BinaryCharacterList,
-#         'green':        int, # unsignedByte
-#         'id':           Id,
-#         'lat':          float,  # decimal
-#         'location':     str,
-#         'long':         float,  # decimal
-#         'losses':       int, # nonNegativeInteger
-#         'lost':         BinaryCharacterList,
-#         'mol_seq':      MolSeq,
-#         'name':         str,
-#         'node_id':      Id,
-#         'point':        Point,
-#         'polygon':      Polygon,
-#         'present':      BinaryCharacterList,
-#         'property':     Property,
-#         'rank':         Rank,
-#         'red':          int, # unsignedByte
-#         'reference':    Reference,
-#         'scientific_name': str,
-#         'sequence':     Sequence,
-#         'sequence_relation': SequenceRelation,
-#         'speciations':  int, # nonNegativeInteger
-#         'symbol':       SequenceSymbol,
-#         'taxonomy':     Taxonomy,
-#         'type':         EventType,
-#         'uri':          Uri,
-#         'value':        float, # decimal
-#         'width':        float, # double
 
 NAMESPACES = {
         'phy':  'http://www.phyloxml.org',
@@ -166,7 +111,7 @@ def read(handle):
         xmlns, localtag = split_namespace(elem.tag)
         if event == 'start':
             if localtag == 'phylogeny' and xmlns == NAMESPACES['phy']:
-                phylogeny = _parse_phylogeny(elem, context)
+                phylogeny = Parser._parse_phylogeny(elem, context)
                 phyloxml.phylogenies.append(phylogeny)
                 continue
             elif xmlns != NAMESPACES['phy']:
@@ -192,111 +137,186 @@ def parse(handle):
     event, root = context.next()
     for event, elem in context:
         if event == 'start' and local(elem.tag) == 'phylogeny':
-            yield _parse_phylogeny(elem, context)
+            yield Parser._parse_phylogeny(elem, context)
 
 
-def _parse_phylogeny(parent, context):
-    """Parse a single phylogeny within the phyloXML tree.
+class Parser(object):
 
-    Recursively builds a phylogenetic tree with help from parse_clade, then
-    clears the XML event history for the phylogeny element and returns control
-    to the top-level parsing function.
-    """
-    phylogeny = Phylogeny(parent.attrib)
-    complex_types = {
-            # XML tag, class
-            'date': Date,
-            'clade_relation': CladeRelation,
-            'sequence_relation': SequenceRelation,
-            }
-    list_types = {
-            # XML tag, plural attribute, class
-            'confidence':   ('confidences', Confidence),
-            'property':     ('properties', Property),
-            }
-    for event, elem in context:
-        tag = local(elem.tag)
-        if event == 'start' and tag == 'clade':
-            assert phylogeny.clade is None, \
-                    "Phylogeny object should only have 1 clade"
-            phylogeny.clade = _parse_clade(elem, context)
-            continue
-        if event == 'end':
-            if tag == 'phylogeny':
-                parent.clear()
-                break
-            # Handle the other non-recursive children
-            if tag in complex_types:
-                setattr(phylogeny, tag, complex_types[tag].from_element(elem))
-            elif tag in list_types:
-                attr, cls = list_types[tag]
-                getattr(phylogeny, attr).append(cls.from_element(elem))
-            # Simple types
-            elif tag == 'name': 
-                phylogeny.name = elem.text and elem.text.strip()
-            elif tag == 'id': 
-                phylogeny.id = elem.text and elem.text.strip()
-            elif tag == 'description':
-                phylogeny.description = elem.text and elem.text.strip()
-            # Unknown tags
-            else:
-                phylogeny.other.append(Other.from_element(elem))
-            elem.clear()
-    return phylogeny
+    ## Index of phyloxml tags and corresponding classes
 
+    ## special cases for parsing
+    # tags_to_special = {
+    #         'phylogeny':    Phylogeny,
+    #         'phyloxml':     Phyloxml,
+    #         'clade':        Clade,
+    #         }
 
-def _parse_clade(parent, context):
-    clade = Clade(parent.attrib)
-    complex_types = {
-            # XML tag, class
-            'color':    BranchColor,
-            'events':   Events,
-            'binary_characters': BinaryCharacters,
-            'date':     Date,
-            }
-    list_types = {
-            # XML tag, plural attribute, class
-            'confidence':   ('confidences', Confidence),
-            'taxonomy':     ('taxonomies', Taxonomy),
-            'sequence':     ('sequences', Sequence),
-            'distribution': ('distributions', Distribution),
-            'reference':    ('references', Reference),
-            'property':     ('properties', Property),
-            }
-    for event, elem in context:
-        tag = local(elem.tag)
-        if event == 'start' and tag == 'clade':
-            subclade = _parse_clade(elem, context)
-            clade.clades.append(subclade)
-            continue
-        if event == 'end':
-            if tag == 'clade':
-                parent.clear()
-                break
-            # Handle the other non-recursive children
-            if tag in complex_types:
-                setattr(clade, tag, complex_types[tag].from_element(elem))
-            elif tag in list_types:
-                attr, cls = list_types[tag]
-                getattr(clade, attr).append(cls.from_element(elem))
-            # Simple types
-            elif tag == 'branch_length':
-                # NB: possible collision with the attribute
-                if hasattr(clade, 'branch_length') and clade.branch_length:
-                    warnings.warn('Attribute branch_length was already set for '
-                                  'this Clade; overwriting the previous value.')
-                clade.branch_length = elem.text.strip()
-            elif tag == 'name':
-                clade.name = elem.text and elem.text.strip()
-            elif tag == 'node_id':
-                clade.node_id = elem.text and elem.text.strip()
-            elif tag == 'width':
-                clade.width = float(elem.text)
-            # Unknown tags
-            else:
-                clade.other.append(Other.from_element(elem))
-            elem.clear()
-    return clade
+    ## no special handling
+    # tags_to_classes = {
+    #         'absent':       BinaryCharacterList,
+    #         'accession':    Accession,
+    #         'annotation':   Annotation,
+    #         'binary_characters': BinaryCharacters,
+    #         'clade_relation': CladeRelation,
+    #         'code':         TaxonomyCode,
+    #         'color':        BranchColor,
+    #         'confidence':   Confidence,
+    #         'date':         Date,
+    #         'distribution': Distribution,
+    #         'domain':       ProteinDomain,
+    #         'domain_architecture': DomainArchitecture,
+    #         'events':       Events,
+    #         'gained':       BinaryCharacterList,
+    #         'id':           Id,
+    #         'lost':         BinaryCharacterList,
+    #         'mol_seq':      MolSeq,
+    #         'node_id':      Id,
+    #         'point':        Point,
+    #         'polygon':      Polygon,
+    #         'present':      BinaryCharacterList,
+    #         'property':     Property,
+    #         'rank':         Rank,
+    #         'reference':    Reference,
+    #         'sequence':     Sequence,
+    #         'sequence_relation': SequenceRelation,
+    #         'symbol':       SequenceSymbol,
+    #         'taxonomy':     Taxonomy,
+    #         'type':         EventType,
+    #         'uri':          Uri,
+    #         }
+
+    ## primitive types
+    # tags_to_float = {
+    #         'alt':          float,  # decimal
+    #         'branch_length': float, # double
+    #         'lat':          float,  # decimal
+    #         'long':         float,  # decimal
+    #         'value':        float,  # decimal
+    #         'width':        float,  # double
+    #         }
+
+    # tags_to_int = {
+    #         'blue':         int, # unsignedByte
+    #         'duplications': int, # nonNegativeInteger
+    #         'green':        int, # unsignedByte
+    #         'losses':       int, # nonNegativeInteger
+    #         'red':          int, # unsignedByte
+    #         'speciations':  int, # nonNegativeInteger
+    #         }
+
+    # tags_to_str = {
+    #         'bc':           str,
+    #         'common_name':  str,
+    #         'desc':         str,
+    #         'description':  str,
+    #         'location':     str,
+    #         'name':         str,
+    #         'scientific_name': str,
+    #         }
+
+    @staticmethod
+    def _parse_phylogeny(parent, context):
+        """Parse a single phylogeny within the phyloXML tree.
+
+        Recursively builds a phylogenetic tree with help from parse_clade, then
+        clears the XML event history for the phylogeny element and returns
+        control to the top-level parsing function.
+        """
+        phylogeny = Phylogeny(parent.attrib)
+        complex_types = {
+                # XML tag, class
+                'date': Date,
+                'clade_relation': CladeRelation,
+                'sequence_relation': SequenceRelation,
+                }
+        list_types = {
+                # XML tag, plural attribute, class
+                'confidence':   ('confidences', Confidence),
+                'property':     ('properties', Property),
+                }
+        for event, elem in context:
+            tag = local(elem.tag)
+            if event == 'start' and tag == 'clade':
+                assert phylogeny.clade is None, \
+                        "Phylogeny object should only have 1 clade"
+                phylogeny.clade = Parser._parse_clade(elem, context)
+                continue
+            if event == 'end':
+                if tag == 'phylogeny':
+                    parent.clear()
+                    break
+                # Handle the other non-recursive children
+                if tag in complex_types:
+                    setattr(phylogeny, tag, complex_types[tag].from_element(elem))
+                elif tag in list_types:
+                    attr, cls = list_types[tag]
+                    getattr(phylogeny, attr).append(cls.from_element(elem))
+                # Simple types
+                elif tag == 'name': 
+                    phylogeny.name = elem.text and elem.text.strip()
+                elif tag == 'id': 
+                    phylogeny.id = elem.text and elem.text.strip()
+                elif tag == 'description':
+                    phylogeny.description = elem.text and elem.text.strip()
+                # Unknown tags
+                else:
+                    phylogeny.other.append(Other.from_element(elem))
+                elem.clear()
+        return phylogeny
+
+    @staticmethod
+    def _parse_clade(parent, context):
+        clade = Clade(parent.attrib)
+        complex_types = {
+                # XML tag, class
+                'color':    BranchColor,
+                'events':   Events,
+                'binary_characters': BinaryCharacters,
+                'date':     Date,
+                }
+        list_types = {
+                # XML tag, plural attribute, class
+                'confidence':   ('confidences', Confidence),
+                'taxonomy':     ('taxonomies', Taxonomy),
+                'sequence':     ('sequences', Sequence),
+                'distribution': ('distributions', Distribution),
+                'reference':    ('references', Reference),
+                'property':     ('properties', Property),
+                }
+        for event, elem in context:
+            tag = local(elem.tag)
+            if event == 'start' and tag == 'clade':
+                subclade = Parser._parse_clade(elem, context)
+                clade.clades.append(subclade)
+                continue
+            if event == 'end':
+                if tag == 'clade':
+                    parent.clear()
+                    break
+                # Handle the other non-recursive children
+                if tag in complex_types:
+                    setattr(clade, tag, complex_types[tag].from_element(elem))
+                elif tag in list_types:
+                    attr, cls = list_types[tag]
+                    getattr(clade, attr).append(cls.from_element(elem))
+                # Simple types
+                elif tag == 'branch_length':
+                    # NB: possible collision with the attribute
+                    if hasattr(clade, 'branch_length') and clade.branch_length:
+                        warnings.warn('Attribute branch_length was already set for '
+                                    'this Clade; overwriting the previous value.')
+                    clade.branch_length = elem.text.strip()
+                elif tag == 'name':
+                    clade.name = elem.text and elem.text.strip()
+                elif tag == 'node_id':
+                    clade.node_id = elem.text and elem.text.strip()
+                elif tag == 'width':
+                    clade.width = float(elem.text)
+                # Unknown tags
+                else:
+                    clade.other.append(Other.from_element(elem))
+                elem.clear()
+        return clade
 
 
 # ---------------------------------------------------------------------
