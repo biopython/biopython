@@ -114,7 +114,7 @@ The qualities are held as a list of integers in each record's annotation:
     >>> print record.letter_annotations["phred_quality"]
     [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
 
-You can use the SeqRecord format method you can show this in the QUAL format:
+You can use the SeqRecord format method to show this in the QUAL format:
 
     >>> print record.format("qual")
     >EAS54_6_R1_2_1_443_348
@@ -777,7 +777,7 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
 
 #This is a generator function!
 def FastqIlluminaIterator(handle, alphabet = single_letter_alphabet, title2ids = None) :
-    """Parsing new Illumina 1.3+ FASTQ like files (which differ in the quality mapping).
+    """Parse new Illumina 1.3+ FASTQ like files (which differ in the quality mapping).
 
     The optional arguments are the same as those for the FastqPhredIterator.
 
@@ -918,12 +918,12 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
     assert False, "Should not reach this line"
 
 class FastqPhredWriter(SequentialSequenceWriter):
-    """Class to write FASTQ format files (using PHRED quality scores).
+    """Class to write standard FASTQ format files (using PHRED quality scores).
 
     Although you can use this class directly, you are strongly encouraged
     to use the Bio.SeqIO.write() function instead.  For example, this code
-    reads in a FASTQ (PHRED) file and re-saves it as another FASTQ (PHRED)
-    file:
+    reads in a standard Sanger style FASTQ file (using PHRED scores) and
+    re-saves it as another FASTQ (PHRED) file:
 
     >>> from Bio import SeqIO
     >>> record_iterator = SeqIO.parse(open("Quality/example.fastq"), "fastq")
@@ -938,8 +938,9 @@ class FastqPhredWriter(SequentialSequenceWriter):
     string on a single line (which is considered desirable for maximum
     compatibility).
 
-    In this next example, a Solexa FASTQ file is converted into a standard
-    Sanger style FASTQ file using PHRED qualities:
+    In this next example, an old style Solexa/Illumina FASTQ file (using Solexa
+    quality scores) is converted into a standard Sanger style FASTQ file using
+    PHRED qualities:
 
     >>> from Bio import SeqIO
     >>> record_iterator = SeqIO.parse(open("Quality/solexa.fastq"), "fastq-solexa")
@@ -956,7 +957,6 @@ class FastqPhredWriter(SequentialSequenceWriter):
 
     >>> import os
     >>> os.remove("Quality/temp.fastq")
-
     """
     def write_record(self, record):
         """Write a single FASTQ record to the file."""
@@ -1081,7 +1081,7 @@ class QualPhredWriter(SequentialSequenceWriter):
             self.handle.write(data + "\n")
 
 class FastqSolexaWriter(SequentialSequenceWriter):
-    """Write old style Solexa FASTQ format files (with Solexa quality scores).
+    """Write old style Solexa/Illumina FASTQ format files (with Solexa qualities).
 
     This outputs FASTQ files like those from the early Solexa/Illumina
     pipeline, using Solexa scores and an ASCII offset of 64. These are
@@ -1136,7 +1136,7 @@ class FastqSolexaWriter(SequentialSequenceWriter):
         self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities))
 
 class FastqIlluminaWriter(SequentialSequenceWriter):
-    """Write Illumina/Solexa FASTQ format files (with PHRED quality scores).
+    """Write Illumina 1.3+ FASTQ format files (with PHRED quality scores).
 
     This outputs FASTQ files like those from the Solexa/Illumina 1.3+ pipeline,
     using PHRED scores and an ASCII offset of 64. Note these files are NOT
