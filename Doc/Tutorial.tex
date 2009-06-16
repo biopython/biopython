@@ -1211,17 +1211,18 @@ The \verb|SeqRecord|class itself is quite simple, and offers the following infor
 
   \item[description] -- A human readible description or expressive name for the sequence -- a string.
   
-  \item[letter\_annotations] -- Holds per-letter-annotations using a (restricted) dictionary of additional information about the letters in the sequence. The keys are the name of the information, and the information is contained in the value as a python sequence (i.e. a list, tuple or string) with the same length as the sequence itself.  This is often used for quality scores (e.g. Section~\ref{sec:FASTQ-filtering-example}) or secondary structure information.
+  \item[letter\_annotations] -- Holds per-letter-annotations using a (restricted) dictionary of additional information about the letters in the sequence. The keys are the name of the information, and the information is contained in the value as a python sequence (i.e. a list, tuple or string) with the same length as the sequence itself.  This is often used for quality scores (e.g. Section~\ref{sec:FASTQ-filtering-example}) or secondary structure information (e.g. from Stockholm/PFAM alignment files).
 
   \item[annotations] -- A dictionary of additional information about the sequence. The keys are the name of the information, and the information is contained in the value. This allows the addition of more ``unstructed'' information to the sequence.
-
+  
   \item[features] -- A list of \verb|SeqFeature| objects with more structured information about the features on a sequence. The structure of sequence features is described below in Section~\ref{sec:seq_features}.
   
   \item[dbxrefs] - A list of database cross-references as strings.
 \end{description}
 
+\section{Creating a SeqRecord}
 
-Using a \verb|SeqRecord| class is not very complicated, since all of the information is stored as attributes of the class. Usually you won't create a \verb|SeqRecord| ``by hand'', but instead use \verb|Bio.SeqIO| to read in a sequence file for you (see Section~\ref{sec:Bio.SeqIO-input} below).  However, creating \verb|SeqRecord| can be quite simple - at a minimum you just need a \verb|Seq| object:
+Using a \verb|SeqRecord| object is not very complicated, since all of the information is stored as attributes of the class. Usually you won't create a \verb|SeqRecord| ``by hand'', but instead use \verb|Bio.SeqIO| to read in a sequence file for you (see Chapter~\ref{chapter:Bio.SeqIO} and example below).  However, creating \verb|SeqRecord| can be quite simple - at a minimum you just need a \verb|Seq| object:
 
 \begin{verbatim}
 >>> from Bio.Seq import Seq
@@ -1252,8 +1253,166 @@ Including an identifier is very important if you want to output your \verb|SeqRe
 >>> simple_seq_r = SeqRecord(simple_seq, id="AC12345")
 \end{verbatim}
 
+As mentioned above, the \verb|SeqRecord| has an dictionary attribute \verb|annotations|. This is used
+for any miscellaneous annotations that doesn't fit under one of the other more specific attributes.
+Adding annotations is easy, and just involves dealing directly with the annotation dictionary:
+
+\begin{verbatim}
+>>> simple_seq_r.annotations["evidence"] = "None. I just made it up."
+>>> print simple_seq_r.annotations
+{'evidence': 'None. I just made it up.'}
+>>> print simple_seq_r.annotations["evidence"]
+None. I just made it up.
+\end{verbatim}
+
+You'll find that when parsing in GenBank or EMBL files, or reading data from BioSQL, lists of strings are used rather than plain strings for the dictionary values. This makes sense if you are familiar with the GenBank/EMBL feature tables and the BioSQL schema, but can be a little surprising for beginners.
+
+\subsection{SeqRecord objects from FASTA files}
+
+This example uses a fairly large FASTA file containing the whole sequence for \textit{Yersinia pestis biovar Microtus} str. 91001 plasmid pPCP1, originally downloaded from the NCBI.  This file is included with the Biopython unit tests under the GenBank folder, or online \href{http://biopython.org/SRC/biopython/Tests/GenBank/NC_005816.fna}{\texttt{NC\_005816.fna}} from our website.
+
+The file starts like this - and you can check there is only one record present (i.e. only one line starting with a greater than symbol):
+
+\begin{verbatim}
+>gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus ... pPCP1, complete sequence
+TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGGGGGTAATCTGCTCTCC
+...
+\end{verbatim}
+
+Back in Chapter~\ref{chapter:quick-start} you will have seen the function \verb|Bio.SeqIO.parse(...)|
+used to loop over all the records in a file as \verb|SeqRecord| objects. The \verb|Bio.SeqIO| module
+has a sister function for use on files which contain just one record which we'll use here (see Chapter~\ref{chapter:Bio.SeqIO} for details):
+
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> record = SeqIO.read(open("NC_005816.fna"), "fasta")
+>>> record
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
+SingleLetterAlphabet()), id='gi|45478711|ref|NC_005816.1|', name='gi|45478711|ref|NC_005816.1|',
+description='gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus ... sequence',
+dbxrefs=[])
+\end{verbatim}
+
+\noindent Now, let's have a look at the key attributes of this \verb|SeqRecord| individually:
+
+\begin{verbatim}
+>>> record.seq
+Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG', SingleLetterAlphabet())
+\end{verbatim}
+
+Next, the identifiers and description:
+
+\begin{verbatim}
+>>> record.id
+'gi|45478711|ref|NC_005816.1|'
+>>> record.name
+'gi|45478711|ref|NC_005816.1|'
+>>> record.description
+'gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus ... pPCP1, complete sequence'
+\end{verbatim}
+
+As you can see above, the first word of the FASTA record's title line (after removing the greater than symbol) is used for both the \verb|id| and \verb|name| attributes. The whole title line (after removing the greater than symbol) is used for the record description. This is deliberate, and make senses if you have a FASTA file like this:
+
+\begin{verbatim}
+>Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1
+TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGGGGGTAATCTGCTCTCC
+...
+\end{verbatim}
+
+Note that none of the other annotation attributes get populated when reading a FASTA file:
+
+\begin{verbatim}
+>>> record.dbxrefs
+[]
+>>> record.annotations
+{}
+>>> record.letter_annotations
+{}
+>>> record.features
+[]
+\end{verbatim}
+
+In this case our example FASTA file was from the NCBI, and they have a fairly well defined set of conventions for formatting their FASTA lines. This means it would be possible to parse this information and extract the GI number and accession for example. However, FASTA files from other sources vary, so this isn't possible in general.
+
+\subsection{SeqRecord objects from GenBank files}
+
+As in the previous example, we're going to look at the whole sequence for \textit{Yersinia pestis biovar Microtus} str. 91001 plasmid pPCP1, originally downloaded from the NCBI, but this time as a GenBank file.
+Again, this file is included with the Biopython unit tests under the GenBank folder, or online \href{http://biopython.org/SRC/biopython/Tests/GenBank/NC_005816.gb}{\texttt{NC\_005816.gb}} from our website.
+
+This file starts:
+\begin{verbatim}
+LOCUS       NC_005816               9609 bp    DNA     circular BCT 21-JUL-2008
+DEFINITION  Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete
+            sequence.
+ACCESSION   NC_005816
+VERSION     NC_005816.1  GI:45478711
+PROJECT     GenomeProject:10638
+...
+\end{verbatim}
+
+Again, we'll use \verb|Bio.SeqIO| to read this file in, and the code is almost identical to that for a FASTA file (see Chapter~\ref{chapter:Bio.SeqIO} for details):
+
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> record = SeqIO.read(open("NC_005816.gb"), "genbank")
+>>> record
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
+IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
+description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
+dbxrefs=['Project:10638'])
+\end{verbatim}
+
+You should be able to spot some differences already! But taking the attributes individually,
+the sequence string is the same as before, but this time \verb|Bio.SeqIO| has been able to automatically assign a more specific alphabet (see Chapter~\ref{chapter:Bio.SeqIO} for details):
+
+\begin{verbatim}
+>>> record.seq
+Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG', IUPACAmbiguousDNA())
+\end{verbatim}
+
+The \verb|name| comes from the LOCUS line, while the \verb|id| includes the version suffix.
+The description comes from the DEFINITION line:
+
+\begin{verbatim}
+>>> record.id
+'NC_005816.1'
+>>> record.name
+'NC_005816'
+>>> record.description
+'Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.'
+\end{verbatim}
+
+GenBank files don't have any per-letter annotations:
+
+\begin{verbatim}
+>>> record.letter_annotations
+{}
+\end{verbatim}
+
+Most of the annotations information gets recorded in the \verb|annotations| dictionary, for example:
+
+\begin{verbatim}
+>>> len(record.annotations)
+11
+>>> record.annotations["source"]
+'Yersinia pestis biovar Microtus str. 91001'
+\end{verbatim}
+
+The \verb|dbrefs| list gets populated from any PROJECT or DBLINK lines:
+
+\begin{verbatim}
+>>> record.dbxrefs
+['Project:10638']
+\end{verbatim}
+
+Finally, and perhaps most interestingly, all the entries in the features table (e.g. the genes or CDS features) get recorded as \verb|SeqFeature| objects in the \verb|features| list. See Section~\ref{sec:seq_features} for details:
+
+\begin{verbatim}
+>>> len(record.features)
+29
+\end{verbatim}
+
 \section{SeqFeature objects}
-\label{sec:advanced-seq} % TODO - remove this old label?
 \label{sec:seq_features}
 
 Sequence features are an essential part of describing a sequence. Once you get beyond the sequence itself, you need some way to organize and easily get at the more ``abstract'' information that is known about the sequence. While it is probably impossible to develop a general sequence feature class that will cover everything, the Biopython \verb|SeqFeature| class attempts to encapsulate as much of the information about the sequence as possible. The design is heavily based on the GenBank/EMBL feature tables, so if you understand how they look, you'll probably have an easier time grasping the structure of the Biopython classes.
@@ -1408,30 +1567,6 @@ Bio.SeqFeature.ExactPosition(5)
 
 That is all of the nitty gritty about dealing with fuzzy positions in Biopython. It has been designed so that dealing with fuzziness is not that much more complicated than dealing with exact positions, and hopefully you find that true!
 
-\section{SeqRecord per-letter annotations}
-
-As mentioned above, the \verb|SeqRecord| has a (restricted) dictionary attribute \verb|letter_annotations|.
-This is used for any per-letter or per-symbol annotations which apply to the full sequence.
-Two relatively common examples of this are sequencing read quality scores (e.g. from FASTQ files)
-and secondary structure information (e.g. from Stockholm/PFAM alignment files).
-
-\section{SeqRecord annotations}
-
-As mentioned above, the \verb|SeqRecord| has an dictionary attribute \verb|annotations|. This is used
-for any miscellaneous annotations that doesn't fit under one of the other more specific attributes.
-
-Adding annotations easy, and just involves dealing directly with the annotation dictionary:
-
-\begin{verbatim}
->>> simple_seq_r.annotations["evidence"] = "None. I just made it up."
->>> print simple_seq_r.annotations
-{'evidence': 'None. I just made it up.'}
->>> print simple_seq_r.annotations["evidence"]
-None. I just made it up.
-\end{verbatim}
-
-You'll find that when parsing in GenBank or EMBL files, or reading data from BioSQL, lists of strings are used rather than plain strings for the dictionary values. This makes sense if you are familiar with the GenBank/EMBL feature tables and the BioSQL schema, but can be a little surprising for beginners.
-
 \section{References}
 
 Another common annotation related to a sequence is a reference to a journal or other published work dealing with the sequence. We have a fairly simple way of representing a Reference in Biopython -- we have a \verb|Bio.SeqFeature.Reference| class that stores the relevant information about a reference as attributes of an object.
@@ -1440,6 +1575,7 @@ The attributes include things that you would expect to see in a reference like \
 
 A reference also has a \verb|location| object so that it can specify a particular location on the sequence that the reference refers to. For instance, you might have a journal that is dealing with a particular gene located on a BAC, and want to specify that it only refers to this position exactly. The \verb|location| is a potentially fuzzy location, as described in section~\ref{sec:locations}.
 
+Any reference objects are stored as a list in the \verb|SeqRecord| object's \verb|annotations| dictionary under the key ``references''.
 That's all there is too it. References are meant to be easy to deal with, and hopefully general enough to cover lots of usage cases.
 
 \section{The format method}
@@ -1637,9 +1773,8 @@ You can of course still use a for loop with a list of \verb|SeqRecord| objects. 
 
 \subsection{Extracting data}
 
-%TODO - Move most of this to the SeqRecord chapter...
 The \verb|SeqRecord| object and its annotation structures are described more fully in
-Chapter~\ref{chapter:SeqRecord}.  For now, as an example of how annotations are stored, we'll look at the output from parsing the first record in the GenBank file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk}.
+Chapter~\ref{chapter:SeqRecord}.  As an example of how annotations are stored, we'll look at the output from parsing the first record in the GenBank file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk}.
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1668,20 +1803,8 @@ Number of features: 5
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', IUPACAmbiguousDNA())
 \end{verbatim}
 
-This gives a human readable summary of most of the annotation data for the \verb|SeqRecord|.  For any python object you can get some clues as to how to interact with it using the python built in function \verb|dir()| which lists all the properties and methods 
-of an object:
-
-\begin{verbatim}
->>> dir(first_record)
-[..., 'annotations', 'dbxrefs', 'description', 'features', 'format', 'id', 'name', 'seq']
-\end{verbatim}
-
-In the above list, we've omitted the special cases whose names start with an underscore.  You've already met the \verb|SeqRecord| object's \verb|.description|, \verb|.id| and \verb|.name| properties (all simple strings) and the \verb|.seq| property (the sequence itself as a \verb|Seq| object).
-The \verb|.dbxrefs| property is a list of database cross-references (as strings).
-We talked about the \verb|.format()| method in Section~\ref{sec:SeqRecord-format} (see also Section~\ref{sec:Bio.SeqIO-and-StringIO}). 
-
-That leaves two more properties, \verb|.features| which is a list of \verb|SeqFeature| objects (sequence annotation associated with a particular sub-sequence, like genes -- see Section~\ref{sec:seq_features}), and \verb|.annotations| which is a python dictionary used to hold any other annotation (associated with the full sequence, for example a description or the species it is from).
-
+This gives a human readable summary of most of the annotation data for the \verb|SeqRecord|.
+For this example we're going to use the \verb|.annotations| attribute which is just a python dictionary.
 The contents of this annotations dictionary were shown when we printed the record above.
 You can also print them out directly:
 \begin{verbatim}
