@@ -59,7 +59,7 @@ Timeline
       [*Exceptions.py*]
     - Simple base class for all phyloXML elements [*Parser.PhyloElement*]
     - Instantiate Tier 0, 1 and 2 elements from an XML stream ("end" events)
-    - Utilities: dump_tags, pretty_print
+    - Utilities: dump_tags, pretty_print [*Utils.py*]
 
     Unit tests:
 
@@ -84,7 +84,6 @@ Timeline
 
     Code cleanup:
     
-    - Move utility functions to Utils.py
     - Convert from_element methods into separate functions
     - Move PhyloElement objects, minus from_element methods, to Tree.py
     - Use custom exceptions and warnings to indicate noncompliance w/ spec

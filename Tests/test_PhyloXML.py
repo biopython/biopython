@@ -39,18 +39,17 @@ def unzip(fname):
 # Utility tests
 
 class UtilTests(unittest.TestCase):
-    """Tests for basic availability of library functions needed for parsing."""
+    """Tests for various PhyloXML utility functions."""
     def test_dump_tags(self):
         """Count and confirm the number of tags in each example XML file."""
         for source, count in izip(
                 (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA),
                     # unzip(EX_METAZOA), unzip(EX_NCBI),
                     ),
-                (509, 1496, 287, 24311,
-                    # 322367, 972830
-                    )):
+                (509, 1496, 287, 24311, 322367, 972830),
+                ):
             output = StringIO()
-            Parser.dump_tags(source, output)
+            PhyloXML.dump_tags(source, output)
             output.reset()
             self.assertEquals(len(output.readlines()), count)
 
@@ -58,22 +57,18 @@ class UtilTests(unittest.TestCase):
         """Check pretty_print by counting lines of output for each example."""
         for source, count, count_all in izip(
                 (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA),
-                    unzip(EX_METAZOA), unzip(EX_NCBI),
+                    # unzip(EX_METAZOA), unzip(EX_NCBI),
                     ),
-                (60, 65, 114, 113,
-                    116, 119
-                    ),
-                (98, 106, 184, 185,
-                    190, 195
-                    ),
+                (60, 65, 114, 113, 116, 119),
+                (98, 106, 184, 185, 190, 195),
                 ):
             handle = PhyloXML.read(source)
             output = StringIO()
-            Parser.pretty_print(handle, output=output)
+            PhyloXML.pretty_print(handle, output=output)
             output.reset()
             self.assertEquals(len(output.readlines()), count)
             output = StringIO()
-            Parser.pretty_print(handle, show_all=True, output=output)
+            PhyloXML.pretty_print(handle, show_all=True, output=output)
             output.reset()
             self.assertEquals(len(output.readlines()), count_all)
 
