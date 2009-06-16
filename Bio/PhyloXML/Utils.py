@@ -46,9 +46,16 @@ def pretty_print(source, indent=0, show_all=False, output=sys.stdout):
             simple_objs = []
         for attr in obj.__dict__:
             child = getattr(obj, attr)
-            if isinstance(child, Parser.PhyloElement):
-                print_indented(child.__class__.__name__, indent)
+            if isinstance(child, Parser.Other):
+                print_other(child, indent)
+            elif isinstance(child, Parser.PhyloElement):
                 print_phylo(child, indent)
+            elif isinstance(child, list):
+                for elem in child:
+                    if isinstance(elem, Parser.PhyloElement):
+                        print_phylo(elem, indent)
+                    elif show_all:
+                        simple_objs.append(attr)
             elif show_all:
                 simple_objs.append(attr)
         if show_all and simple_objs:

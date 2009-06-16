@@ -54,23 +54,31 @@ class UtilTests(unittest.TestCase):
             self.assertEquals(len(output.readlines()), count)
 
     def test_pretty_print(self):
-        """Check pretty_print by counting lines of output for each example."""
+        """Check pretty_print by counting lines of output for each example.
+
+        The line counts are liable to change whenever the object constructors
+        change.
+        """
         for source, count, count_all in izip(
                 (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA),
                     # unzip(EX_METAZOA), unzip(EX_NCBI),
                     ),
-                (60, 65, 114, 113, 116, 119),
-                (98, 106, 184, 185, 190, 195),
+                # (60, 65, 114, 113, 116, 119),
+                (620, 1047, 241, 24311, 322367, 972830),
+                # (98, 106, 184, 185, 190, 195),
+                (1239, 2093, 477, 48621, 644733, 1945659),
                 ):
             handle = PhyloXML.read(source)
             output = StringIO()
             PhyloXML.pretty_print(handle, output=output)
             output.reset()
             self.assertEquals(len(output.readlines()), count)
+            # print "Obj:", source, len(output.readlines()), 'eq?', count
             output = StringIO()
             PhyloXML.pretty_print(handle, show_all=True, output=output)
             output.reset()
             self.assertEquals(len(output.readlines()), count_all)
+            # print "All:", source, len(output.readlines()), 'eq?', count_all
 
 
 # ---------------------------------------------------------
@@ -87,10 +95,10 @@ def _test_read_factory(source, count):
     if zipfile.is_zipfile(source):
         source = unzip(source)
     def test_read(self):
-        phylo = PhyloXML.read(source)
-        self.assert_(phylo)
-        self.assertEquals(len(phylo), count[0])
-        self.assertEquals(len(phylo.other), count[1])
+        phx = PhyloXML.read(source)
+        self.assert_(phx)
+        self.assertEquals(len(phx), count[0])
+        self.assertEquals(len(phx.other), count[1])
     test_read.__doc__ = "Read %s to produce a phyloXML object." % fname
     return test_read
 
@@ -102,8 +110,8 @@ def _test_parse_factory(source, count):
     if zipfile.is_zipfile(source):
         source = unzip(source)
     def test_parse(self):
-        phylo = PhyloXML.parse(source)
-        self.assertEquals(len(list(phylo)), count)
+        trees = PhyloXML.parse(source)
+        self.assertEquals(len(list(trees)), count)
     test_parse.__doc__ = "Parse the phylogenies in %s." % fname
     return test_parse
 
@@ -119,9 +127,9 @@ def _test_shape_factory(source, shapes):
     if zipfile.is_zipfile(source):
         source = unzip(source)
     def test_shape(self):
-        phylo = PhyloXML.parse(source)
-        # self.assertEquals(len(phylo), len(shapes))
-        for tree, shape_expect in izip(phylo, shapes):
+        trees = PhyloXML.parse(source)
+        # self.assertEquals(len(list(trees)), len(shapes))
+        for tree, shape_expect in izip(trees, shapes):
             # print "%s :: %s" % (source, shape_expect))
             self.assertEquals(len(tree.clade), len(shape_expect))
             for clade, sub_expect in izip(tree.clade, shape_expect):
@@ -218,6 +226,104 @@ class ParseTests(unittest.TestCase):
                   ),
                 ),
             )
+
+
+# ---------------------------------------------------------
+# Tree tests
+
+class TreeTests(unittest.TestCase):
+    """Tests for instantiation and attributes of each complex type."""
+    # NB: also test check_str() regexps wherever they're used
+    def test_Phyloxml(self):
+        """Test instantiation of Phyloxml objects."""
+        for source in (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA)):
+            phx = PhyloXML.read(source)
+            self.assert_(isinstance(phx, Parser.Phyloxml))
+
+    def test_Other(self):
+        """Test instantiation of Other objects."""
+        phyloxml = PhyloXML.read(EX_PHYLO)
+        self.assert_(phyloxml.other)
+        for otr in phyloxml.other:
+            self.assert_(isinstance(otr, Parser.Other))
+
+    def test_Phylogeny(self):
+        """Test instantiation of Phylogeny objects."""
+        for source in (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA)):
+            for tree in PhyloXML.parse(source):
+                self.assert_(isinstance(tree, Parser.Phylogeny))
+
+    def test_Clade(self):
+        """Test instantiation of Clade objects."""
+        pass
+
+    def test_Accession(self):
+        """Test instantiation of Accession objects."""
+        pass
+
+    def test_Annotation(self):
+        """Test instantiation of Annotation objects."""
+        pass
+
+    # BinaryCharacterList -- not implemented
+    # BinaryCharacters -- not implemented
+    # BranchColor -- no example
+
+    def test_CladeRelation(self):
+        """Test instantiation of CladeRelation objects."""
+        pass
+
+    def test_Confidence(self):
+        """Test instantiation of Confidence objects."""
+        pass
+
+    def test_Date(self):
+        """Test instantiation of Date objects."""
+        pass
+
+    def test_Distribution(self):
+        """Test instantiation of Distribution objects."""
+        pass
+
+    def test_DomainArchitecture(self):
+        """Test instantiation of DomainArchitecture objects."""
+        pass
+
+    def test_Events(self):
+        """Test instantiation of Events objects."""
+        pass
+
+    def test_Point(self):
+        """Test instantiation of Point objects."""
+        pass
+
+    # Polygon -- not implemented
+
+    def test_Property(self):
+        """Test instantiation of Property objects."""
+        pass
+
+    def test_ProteinDomain(self):
+        """Test instantiation of ProteinDomain objects."""
+        pass
+
+    # Reference -- not implemented
+
+    def test_Sequence(self):
+        """Test instantiation of Sequence objects."""
+        pass
+
+    def test_SequenceRelation(self):
+        """Test instantiation of SequenceRelation objects."""
+        pass
+
+    def test_Taxonomy(self):
+        """Test instantiation of Taxonomy objects."""
+        pass
+
+    def test_Uri(self):
+        """Test instantiation of Uri objects."""
+        pass
 
 
 # ---------------------------------------------------------
