@@ -24,8 +24,8 @@ EX_BCL2 = 'PhyloXML/bcl_2.xml'
 EX_PHYLO = 'PhyloXML/phyloxml_examples.xml'
 EX_MOLLUSCA = 'PhyloXML/ncbi_taxonomy_mollusca.xml.zip'
 # Big files - not checked into git yet
-# EX_METAZOA = 'PhyloXML/ncbi_taxonomy_metazoa.xml.zip'
-# EX_NCBI = 'PhyloXML/ncbi_taxonomy.xml.zip'
+EX_METAZOA = 'PhyloXML/ncbi_taxonomy_metazoa.xml.zip'
+EX_NCBI = 'PhyloXML/ncbi_taxonomy.xml.zip'
 
 
 def unzip(fname):
@@ -36,10 +36,11 @@ def unzip(fname):
 
 
 # ---------------------------------------------------------
+# Utility tests
 
-class ParseNoOp(unittest.TestCase):
+class UtilTests(unittest.TestCase):
     """Tests for basic availability of library functions needed for parsing."""
-    def test_tag_counts(self):
+    def test_dump_tags(self):
         """Count and confirm the number of tags in each example XML file."""
         for source, count in izip(
                 (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA),
@@ -53,8 +54,32 @@ class ParseNoOp(unittest.TestCase):
             output.reset()
             self.assertEquals(len(output.readlines()), count)
 
+    def test_pretty_print(self):
+        """Check pretty_print by counting lines of output for each example."""
+        for source, count, count_all in izip(
+                (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA),
+                    unzip(EX_METAZOA), unzip(EX_NCBI),
+                    ),
+                (60, 65, 114, 113,
+                    116, 119
+                    ),
+                (98, 106, 184, 185,
+                    190, 195
+                    ),
+                ):
+            handle = PhyloXML.read(source)
+            output = StringIO()
+            Parser.pretty_print(handle, output=output)
+            output.reset()
+            self.assertEquals(len(output.readlines()), count)
+            output = StringIO()
+            Parser.pretty_print(handle, show_all=True, output=output)
+            output.reset()
+            self.assertEquals(len(output.readlines()), count_all)
+
 
 # ---------------------------------------------------------
+# Parser tests
 
 def _test_read_factory(source, count):
     """Generate a test method for read()ing the given source."""
@@ -113,7 +138,7 @@ def _test_shape_factory(source, shapes):
     return test_shape
 
 
-class ParsePhylo(unittest.TestCase):
+class ParseTests(unittest.TestCase):
     """Tests for proper parsing of example phyloXML files."""
 
     test_read_apaf = _test_read_factory(EX_APAF, (1, 0))

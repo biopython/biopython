@@ -145,7 +145,7 @@ def dump_tags(handle, output=sys.stdout):
             elem.clear()
 
 
-def pretty_print(handle, indent=0, show_all=False, output=sys.stdout):
+def pretty_print(source, indent=0, show_all=False, output=sys.stdout):
     """Print a summary of the structure of a PhyloXML file.
 
     With the show_all option, also prints the primitive (native Python instead
@@ -186,8 +186,15 @@ def pretty_print(handle, indent=0, show_all=False, output=sys.stdout):
             else:
                 print '%s%s' % ('\t'*indent, str(child))
 
-    phyloxml = read(handle)
-    print phyloxml.__class__.__name__
+    if isinstance(source, Phylogeny):
+        print_phylo(source)
+        return
+
+    if isinstance(source, Phyloxml):
+        phyloxml = source
+    else:
+        phyloxml = read(source)
+    print_indented(phyloxml.__class__.__name__, indent)
     indent += 1
     for tree in phyloxml.phylogenies:
         print_phylo(tree, indent)
