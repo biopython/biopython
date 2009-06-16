@@ -8,7 +8,7 @@ import unittest
 from Bio.Blast import NCBIStandalone
 
 
-class TestCluster(unittest.TestCase):
+class TestNCBIStandalone(unittest.TestCase):
 
     def test_command_injection(self):
         #Check the simple detection of command injection,
