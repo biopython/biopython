@@ -3129,7 +3129,7 @@ KKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTP
 AVHASLDKFLASVSTVLTSKYR
 \end{verbatim}
 
-\noindent in a file \texttt{alpha.fasta}, and secondly in a file \texttt{beta.fasta}):
+\noindent in a file \texttt{alpha.fasta}, and secondly in a file \texttt{beta.fasta}:
 
 \begin{verbatim}
 >HBB_HUMAN
@@ -3153,7 +3153,7 @@ pairwise comparison and records the output in the file \texttt{needle.txt} (in t
 default EMBOSS alignment file format).
 
 You may find that even though you have EMBOSS installed, the above command doesn't
-work - you may get a message about ``command not found'' (especially on Windows).
+work -- you may get a message about ``command not found'' (especially on Windows).
 This indicated that the EMBOSS tools are not on your PATH (an environment variable,
 a list of directories to be searched). You can either update your PATH setting to
 include the location of your EMBOSS tools (how you do this will depend on your OS),
@@ -3168,7 +3168,7 @@ path to the tool, for example:
 \end{verbatim}
 
 \noindent Remember in python that for a default string \verb|\n| or \verb|\t| means a
-new line or a tab - which is why we're put a letter ``r'' at the start for a raw string.
+new line or a tab -- which is why we're put a letter ``r'' at the start for a raw string.
 
 At this point it might help to try running the EMBOSS tools yourself by hand at the
 command line, to familiarise yourself the other options and compare them to the
@@ -3246,6 +3246,131 @@ module (written in C for speed, but with a pure python fallback available too). 
 doesn't work with alignment objects, so we have not covered it within this chapter.
 See the module's docstring (built in help) for details.
 
+\subsection{ClustalW}
+
+ClustalW is a popular command line tool for multiple sequence alignment
+(there is also a graphical interface called ClustlX). Biopython's
+\verb|Bio.Align.Applications| module has a wrapper for this (and several
+other alignment tools).
+
+Before trying to use ClustalW from with python, you should first try running
+the ClustalW tool yourself by hand at the command line, to familiarise
+yourself the other options. You'll find the Biopython wrapper is very
+faithful to the actual command line API:
+
+\begin{verbatim}
+>>> from Bio.Align.Applications import ClustalwCommandline
+>>> help(ClustalwCommandline)
+...
+\end{verbatim}
+
+For the most basic usage, all you need is to have a FASTA input file, such as
+\href{http://biopython.org/DIST/docs/tutorial/examples/opuntia.fasta}{opuntia.fasta}
+(available online or in the Doc/examples subdirectory of the Biopython source
+code). This is a small FASTA file containing seven prickly-pear DNA sequences
+(from the cactus family \textit{opuntia}).
+
+By default ClustalW will generate an alignment and guide tree file with names
+based on the input FASTA file, in this case \texttt{opuntia.aln} and
+\texttt{opuntia.dnd}, but you can override this or make it explicit:
+
+\begin{verbatim}
+>>> from Bio.Align.Applications import ClustalwCommandline
+>>> cline = ClustalwCommandline("clustalw2", infile="opuntia.fasta")
+>>> print cline
+clustalw2 -infile=opuntia.fasta
+\end{verbatim}
+
+Notice here we have given the executable name as \texttt{clustalw2},
+indicating we have version two installed, which has a different filename to
+version one (\texttt{clustalw}, the default). Fortunately both versions
+support the same set of arguments at the command line (and indeed, should be
+functionally identical).  As noted in the example above, if the tool isn't on
+your path (which is the norm on Windows), you will have to give the full path
+to the executable file -- for example:
+
+\begin{verbatim}
+>>> import os
+>>> from Bio.Align.Applications import ClustalwCommandline
+>>> clustalw_exe = r"C:\Program Files\ClustalW2\clustalw2.exe"
+>>> assert os.path.isfile(clustalw_exe), "Clustal W executable missing"
+>>> cline = ClustalwCommandline(clustalw_exe, infile="opuntia.fasta")
+\end{verbatim}
+
+You can now run this command line, perhaps using the python \verb|subprocess|
+module, or maybe just with our \verb|generic_run| function:
+
+\begin{verbatim}
+>>> from Bio.Application import generic_run
+>>> result, out_handle, err_handle = generic_run(cline)
+>>> print result.return_code
+0
+>>> print err_handle.read()
+
+>>> print out_handle.read()
+...
+\end{verbatim}
+
+If you do print out the handles, you'll see all the voluminous text that
+ClustalW likes to print as it is working -- pages of stuff! There isn't
+much of interest here (unless it fails in which case any error messages
+could be informative!).
+
+What we care about are the two output files, the alignment and the guide
+tree. You should be able to work out how to read in the alignment using
+\verb|Bio.AlignIO| by now:
+
+\begin{verbatim}
+>>> from Bio import AlignIO
+>>> align = AlignIO.read(open("opuntia.aln"), "clustal")
+>>> print align
+SingleLetterAlphabet() alignment with 7 rows and 906 columns
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191
+TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF191
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF191
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF191
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273291|gb|AF191665.1|AF191
+\end{verbatim}
+
+In case you are interested (and this is an aside from the main thrust of this
+chapter), the \texttt{opuntia.dnd} file ClustalW creates is just a standard
+Newick tree file, and \verb|Bio.Nexus| can parse these. You can either parse
+the file directly (as though it were a light weight NEXUS file), or just go
+directly to a tree object:
+
+\begin{verbatim}
+>>> from Bio.Nexus import Trees
+>>> tree_string = open("opuntia.dnd").read()
+>>> tree = Trees.Tree(tree_string)
+>>> print tree
+tree a_tree = ((gi|6273291|gb|AF191665.1|AF191665,(gi|6273290|gb|AF191664.1|AF191664,
+gi|6273289|gb|AF191663.1|AF191663)),(gi|6273287|gb|AF191661.1|AF191661,
+gi|6273286|gb|AF191660.1|AF191660),(gi|6273285|gb|AF191659.1|AF191659,
+gi|6273284|gb|AF191658.1|AF191658));
+>>> print tree.display()
+ #                            taxon   prev      succ    brlen blen (sum) support comment
+ 0                                -   None [1, 6, 9]      0.0        0.0       -       -
+ 1                                -      0    [2, 3]   0.0077     0.0077       -       -
+ 2 gi|6273291|gb|AF191665.1|AF191665     1        []  0.00418    0.01188       -       -
+ 3                                -      1    [4, 5]  0.00083    0.00853       -       -
+ 4 gi|6273290|gb|AF191664.1|AF191664     3        []  0.00189    0.01042       -       -
+ 5 gi|6273289|gb|AF191663.1|AF191663     3        []  0.00145    0.00998       -       -
+ 6                                -      0    [7, 8]  0.00014    0.00014       -       -
+ 7 gi|6273287|gb|AF191661.1|AF191661     6        []  0.00489    0.00503       -       -
+ 8 gi|6273286|gb|AF191660.1|AF191660     6        []  0.00295    0.00309       -       -
+ 9                                -      0  [10, 11]  0.00125    0.00125       -       -
+10 gi|6273285|gb|AF191659.1|AF191659     9        []  0.00094    0.00219       -       -
+11 gi|6273284|gb|AF191658.1|AF191658     9        []  0.00018    0.00143       -       -
+
+Root:  0
+None
+\end{verbatim}
+
+\noindent The spacing has been adjusted here for display purposes.
+The tree object is actuall pretty powerful! Have a look at the list of
+methods with \texttt{dir(tree)} to get a hint of this...
 
 \chapter{BLAST}
 \label{chapter:blast}
