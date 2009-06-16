@@ -1200,7 +1200,7 @@ While this chapter should cover most things to do with the \verb|SeqRecord| obje
 
 The \verb|SeqRecord| (Sequence Record) class is defined in the \verb|Bio.SeqRecord| module. This class allows higher level features such as identifiers and features to be associated with a sequence (see Chapter~\ref{chapter:Bio.Seq}), and is the basic data type for the \verb|Bio.SeqIO| sequence input/output interface (see Chapter~\ref{chapter:Bio.SeqIO}).
 
-The \verb|SeqRecord|class itself is quite simple, and offers the following information as attributes:
+The \verb|SeqRecord| class itself is quite simple, and offers the following information as attributes:
 
 \begin{description}
   \item[seq] -- The sequence itself, typically a \verb|Seq| object.
@@ -1222,7 +1222,7 @@ The \verb|SeqRecord|class itself is quite simple, and offers the following infor
 
 \section{Creating a SeqRecord}
 
-Using a \verb|SeqRecord| object is not very complicated, since all of the information is stored as attributes of the class. Usually you won't create a \verb|SeqRecord| ``by hand'', but instead use \verb|Bio.SeqIO| to read in a sequence file for you (see Chapter~\ref{chapter:Bio.SeqIO} and example below).  However, creating \verb|SeqRecord| can be quite simple - at a minimum you just need a \verb|Seq| object:
+Using a \verb|SeqRecord| object is not very complicated, since all of the information is stored as attributes of the class. Usually you won't create a \verb|SeqRecord| ``by hand'', but instead use \verb|Bio.SeqIO| to read in a sequence file for you (see Chapter~\ref{chapter:Bio.SeqIO} and the examples below).  However, creating \verb|SeqRecord| can be quite simple - at a minimum you just need a \verb|Seq| object:
 
 \begin{verbatim}
 >>> from Bio.Seq import Seq
@@ -1293,7 +1293,7 @@ description='gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus ... se
 dbxrefs=[])
 \end{verbatim}
 
-\noindent Now, let's have a look at the key attributes of this \verb|SeqRecord| individually:
+Now, let's have a look at the key attributes of this \verb|SeqRecord| individually - starting with the \verb|seq| attribute which gives you a \verb|Seq| object:
 
 \begin{verbatim}
 >>> record.seq
@@ -1339,7 +1339,7 @@ In this case our example FASTA file was from the NCBI, and they have a fairly we
 As in the previous example, we're going to look at the whole sequence for \textit{Yersinia pestis biovar Microtus} str. 91001 plasmid pPCP1, originally downloaded from the NCBI, but this time as a GenBank file.
 Again, this file is included with the Biopython unit tests under the GenBank folder, or online \href{http://biopython.org/SRC/biopython/Tests/GenBank/NC_005816.gb}{\texttt{NC\_005816.gb}} from our website.
 
-This file starts:
+This file contains a single record (i.e. only one LOCUS line) and starts:
 \begin{verbatim}
 LOCUS       NC_005816               9609 bp    DNA     circular BCT 21-JUL-2008
 DEFINITION  Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete
@@ -1350,7 +1350,7 @@ PROJECT     GenomeProject:10638
 ...
 \end{verbatim}
 
-Again, we'll use \verb|Bio.SeqIO| to read this file in, and the code is almost identical to that for a FASTA file (see Chapter~\ref{chapter:Bio.SeqIO} for details):
+Again, we'll use \verb|Bio.SeqIO| to read this file in, and the code is almost identical to that for used above for the FASTA file (see Chapter~\ref{chapter:Bio.SeqIO} for details):
 
 \begin{verbatim}
 >>> from Bio.Seq import Seq
@@ -1398,19 +1398,21 @@ Most of the annotations information gets recorded in the \verb|annotations| dict
 'Yersinia pestis biovar Microtus str. 91001'
 \end{verbatim}
 
-The \verb|dbrefs| list gets populated from any PROJECT or DBLINK lines:
+The \verb|dbxrefs| list gets populated from any PROJECT or DBLINK lines:
 
 \begin{verbatim}
 >>> record.dbxrefs
 ['Project:10638']
 \end{verbatim}
 
-Finally, and perhaps most interestingly, all the entries in the features table (e.g. the genes or CDS features) get recorded as \verb|SeqFeature| objects in the \verb|features| list. See Section~\ref{sec:seq_features} for details:
+Finally, and perhaps most interestingly, all the entries in the features table (e.g. the genes or CDS features) get recorded as \verb|SeqFeature| objects in the \verb|features| list.
 
 \begin{verbatim}
 >>> len(record.features)
 29
 \end{verbatim}
+
+We'll talk about \verb|SeqFeature| objects next, in Section~\ref{sec:seq_features}.
 
 \section{SeqFeature objects}
 \label{sec:seq_features}
@@ -1419,7 +1421,7 @@ Sequence features are an essential part of describing a sequence. Once you get b
 
 \subsection{SeqFeatures themselves}
 
-The first level of dealing with sequence features is the \verb|SeqFeature| class itself. This class has a number of attributes, so first we'll list them and there general features, and then work through an example to show how this applies to a real life example, a GenBank feature table. The attributes of a SeqFeature are:
+The first level of dealing with sequence features is the \verb|SeqFeature| class itself. This class has a number of attributes, so first we'll list them and their general features, and then work through an example to show how this applies to a real life example, a GenBank feature table. The attributes of a SeqFeature are:
 
 \begin{description}
   \item[location] -- The location of the \verb|SeqFeature| on the sequence that you are dealing with. The locations end-points may be fuzzy -- section~\ref{sec:locations} has a lot more description on how to deal with descriptions.
@@ -6996,7 +6998,7 @@ mitochrondia.
 
 This module is easiest to use if you have your genome loaded as a \verb|SeqRecord|
 object containing lots of \verb|SeqFeature| objects - for example as loaded from a
-GenBank file (see Chapter~\ref{chapter:Bio.SeqIO}).
+GenBank file (see Chapters~\ref{chapter:SeqRecord} and~\ref{chapter:Bio.SeqIO}).
 
 \subsection{Diagrams, tracks, feature-sets and features}
 
@@ -7017,7 +7019,7 @@ There are two main ways to build up a complete diagram.  Firstly, the top down
 approach where you create a diagram object, and then using its methods add
 track(s), and use the track methods to add feature-set(s), and use their
 methods to add the features.  Secondly, you can create the individual objects
-separately (in whatever order suits your code), and them combine them.
+separately (in whatever order suits your code), and then combine them.
 
 \subsection{A top down example}
 \label{sec:gd_top_down}
@@ -7047,9 +7049,9 @@ gd_track_for_features = gd_diagram.new_track(1, name="Annotated Features")
 gd_feature_set = gd_track_for_features.new_set()
 \end{verbatim}
 
-Now the fun part - we take each gene \verb|SeqFeature| objects in our
+Now the fun part - we take each gene \verb|SeqFeature| object in our
 \verb|SeqRecord|, and use it to generate a feature on the diagram. I'm
-going color them blue, alternating between a dark blue and a light blue.
+going to color them blue, alternating between a dark blue and a light blue.
 \begin{verbatim}
 for feature in record.features:
     if feature.type != "gene" :
@@ -7166,7 +7168,8 @@ above.  The figures should be identical.
 \label{sec:gd_features_without_seqfeatures}
 
 In the above example we used a \verb|SeqRecord|'s \verb|SeqFeature| objects
-to build our diagram.  Sometimes you won't have \verb|SeqFeature| objects,
+to build our diagram (see also Section~\ref{sec:seq_features}).
+Sometimes you won't have \verb|SeqFeature| objects,
 but just the coordinates for a feature you want to draw.  You have to create
 minimal \verb|SeqFeature| object, but this is easy:
 
@@ -7235,7 +7238,7 @@ gd_feature_set.add_feature(feature, color=color, label=True, name="My Gene")
 In addition to the caption text for each feature's label, you can also choose
 the font, position (this defaults to the start of the sigil, you can also
 choose the middle or at the end) and orientation (for linear diagrams only,
-this defaults to rotated by $45$ degrees:
+where this defaults to rotated by $45$ degrees):
 
 \begin{verbatim}
 #Large font, parallel with the track
@@ -7482,15 +7485,12 @@ UK spellings may be deprecated.
 For example, if you used to have:
 \begin{verbatim}
 from GenomeDiagram import GDFeatureSet, GDDiagram
-from GenomeDiagram.GDColours import GDColourTranslator
-
 gdd = GDDiagram("An example")
 ...
 \end{verbatim}
 you could just switch the import statements like this:
 \begin{verbatim}
 from Bio.Graphics.GenomeDiagram import FeatureSet as GDFeatureSet, Diagram as GDDiagram
-
 gdd = GDDiagram("An example")
 ...
 \end{verbatim}
@@ -7498,14 +7498,12 @@ and hopefully that should be enough.  In the long term you might want to
 switch to the new names, but you would have to change more of your code:
 \begin{verbatim}
 from Bio.Graphics.GenomeDiagram import FeatureSet, Diagram
-
 gdd = Diagram("An example")
 ...
 \end{verbatim}
 or:
 \begin{verbatim}
 from Bio.Graphics import GenomeDiagram
-
 gdd = GenomeDiagram.Diagram("An example")
 ...
 \end{verbatim}
@@ -7540,7 +7538,7 @@ for (name, filename) in entries :
 \end{verbatim}
 
 \noindent This gave the lengths of the five chromosomes, which we'll now use in
-the following short demonstration of the \verb| BasicChromosome| module:
+the following short demonstration of the \verb|BasicChromosome| module:
 
 \begin{verbatim}
 from Bio.Graphics import BasicChromosome
@@ -7714,9 +7712,11 @@ handle.close()
 Suppose you've got an input file of CDS entries for some organism, and you
 want to generate a new FASTA file containing their protein sequences.  i.e.
 Take each nucleotide sequence from the original file, and translate it.
-
 Back in Section~\ref{sec:translation} we saw how to use the \verb|Seq|
-object's translate method.  We can combine this with \verb|Bio.SeqIO| as
+object's \verb|translate method|, and the optional \verb|cds| argument
+which enables correct translation of alternative start codons.
+
+We can combine this with \verb|Bio.SeqIO| as
 shown in the reverse complement example in Section~\ref{sec:SeqIO-reverse-complement}.
 The key point is that for each nucleotide \verb|SeqRecord|, we need to create
 a protein \verb|SeqRecord| - and take care of naming it.
@@ -7729,9 +7729,9 @@ use the default table and add a prefix to the identifier:
 from Bio.SeqRecord import SeqRecord
 def make_protein_record(nuc_record) :
     """Returns a new SeqRecord with the translated sequence (default table)."""
-    return SeqRecord(seq = nuc_record.seq.translate(to_stop=True), \
+    return SeqRecord(seq = nuc_record.seq.translate(cds=True), \
                      id = "trans_" + nuc_record.id, \
-                     description = "translation to first stop, with default table")
+                     description = "translation of CDS, using default table")
 \end{verbatim}
 
 We can then use this function to turn the input nucleotide records into protein
@@ -7742,18 +7742,17 @@ is with a generator expression:
 from Bio import SeqIO
 
 proteins = (make_protein_record(nuc_rec) for nuc_rec in \
-            SeqIO.parse(open("ls_orchid.fasta"), "fasta"))
+            SeqIO.parse(open("coding_sequences.fasta"), "fasta"))
 
 out_handle = open("translations.fasta", "w")
 SeqIO.write(proteins, out_handle, "fasta")
 out_handle.close()
 \end{verbatim}
 
-This should work on any FASTA file of coding sequences.  We're just reused
-\href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta}
-as an example here, but you'll find several of the translations it gives are actually
-very very short -- if you recall many of these orchid sequences are actually rRNA
-sequences so translating them isn't actually biologically meaningful.
+This should work on any FASTA file of complete coding sequences.
+If you are working on partial coding sequences, you may prefer to use
+\verb|nuc_record.seq.translate(to_stop=True)| in the example above, as
+this wouldn't check for a valid start codon etc.
 
 \subsection{Simple quality filtering for FASTQ files}
 \label{sec:FASTQ-filtering-example}
