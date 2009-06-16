@@ -1284,7 +1284,7 @@ used to loop over all the records in a file as \verb|SeqRecord| objects. The \ve
 has a sister function for use on files which contain just one record which we'll use here (see Chapter~\ref{chapter:Bio.SeqIO} for details):
 
 \begin{verbatim}
->>> from Bio.Seq import Seq
+>>> from Bio import SeqIO
 >>> record = SeqIO.read(open("NC_005816.fna"), "fasta")
 >>> record
 SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
@@ -1353,7 +1353,7 @@ PROJECT     GenomeProject:10638
 Again, we'll use \verb|Bio.SeqIO| to read this file in, and the code is almost identical to that for used above for the FASTA file (see Chapter~\ref{chapter:Bio.SeqIO} for details):
 
 \begin{verbatim}
->>> from Bio.Seq import Seq
+>>> from Bio import SeqIO
 >>> record = SeqIO.read(open("NC_005816.gb"), "genbank")
 >>> record
 SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
@@ -1618,7 +1618,149 @@ work via this \verb|format()| method.  See also Section~\ref{sec:Bio.SeqIO-and-S
 
 \section{Slicing a SeqRecord}
 \label{sec:SeqRecord-slicing}
-Todo...
+
+One of the new features in Biopython 1.50 was the ability to slice a \verb|SeqRecord|,
+to give you a new \verb|SeqRecord| covering just part of the sequence. What is important
+here is that any per-letter annotations are also sliced, and any features which fall
+completely within the new sequence are preserved (with their locations adjusted).
+
+For example, taking the same GenBank file used earlier:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> record = SeqIO.read(open("NC_005816.gb"), "genbank")
+>>> record
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
+IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
+description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
+dbxrefs=['Project:10638'])
+>>> len(record)
+9609
+>>> len(record.features)
+29
+\end{verbatim}
+
+For this example I'm going to focus in on the \verb|pim| gene, \verb|YP_pPCP05|.
+If you have a look at the GenBank file directly you'll find this gene/CDS has
+location string \texttt{4343..4780}, or in python counting \texttt{4342:4780}.
+From looking at the file you can work out that these are the twelfth and
+thirteenth entries in the file, so in python zero-based counting they are
+entries $11$ and $12$ in the \texttt{features} list:
+
+\begin{verbatim}
+>>> print record.features[11]
+type: gene
+location: [4342:4780]
+ref: None:None
+strand: 1
+qualifiers: 
+    Key: db_xref, Value: ['GeneID:2767712']
+    Key: gene, Value: ['pim']
+    Key: locus_tag, Value: ['YP_pPCP05']
+
+>>> print record.features[12]
+type: CDS
+location: [4342:4780]
+ref: None:None
+strand: 1
+qualifiers: 
+    Key: codon_start, Value: ['1']
+    Key: db_xref, Value: ['GI:45478716', 'GeneID:2767712']
+    Key: gene, Value: ['pim']
+    Key: locus_tag, Value: ['YP_pPCP05']
+    Key: note, Value: ['similar to many previously sequenced pesticin immunity ...']
+    Key: product, Value: ['pesticin immunity protein']
+    Key: protein_id, Value: ['NP_995571.1']
+    Key: transl_table, Value: ['11']
+    Key: translation, Value: ['MGGGMISKLFCLALIFLSSSGLAEKNTYTAKDILQNLELNTFGNSLSH...']
+\end{verbatim}
+
+Let's slice this parent record from 4300 to 4800 (enough to include the \verb|pim|
+gene/CDS), and see how many features we get:
+
+\begin{verbatim}
+>>> sub_record = record[4300:4800]
+>>> sub_record
+SeqRecord(seq=Seq('ATAAATAGATTATTCCAAATAATTTATTTATGTAAGAACAGGATGGGAGGGGGA...TTA',
+IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
+description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
+dbxrefs=[])
+>>> len(sub_record)
+500
+>>> len(sub_record.features)
+2
+\end{verbatim}
+
+Our sub-record just has two features, the gene and CDS entries for \verb|YP_pPCP05|:
+
+\begin{verbatim}
+>>> print sub_record.features[0]
+type: gene
+location: [42:480]
+ref: None:None
+strand: 1
+qualifiers: 
+    Key: db_xref, Value: ['GeneID:2767712']
+    Key: gene, Value: ['pim']
+    Key: locus_tag, Value: ['YP_pPCP05']
+
+>>> print sub_record.features[1]
+type: CDS
+location: [42:480]
+ref: None:None
+strand: 1
+qualifiers: 
+    Key: codon_start, Value: ['1']
+    Key: db_xref, Value: ['GI:45478716', 'GeneID:2767712']
+    Key: gene, Value: ['pim']
+    Key: locus_tag, Value: ['YP_pPCP05']
+    Key: note, Value: ['similar to many previously sequenced pesticin immunity ...']
+    Key: product, Value: ['pesticin immunity protein']
+    Key: protein_id, Value: ['NP_995571.1']
+    Key: transl_table, Value: ['11']
+    Key: translation, Value: ['MGGGMISKLFCLALIFLSSSGLAEKNTYTAKDILQNLELNTFGNSLSH...']
+\end{verbatim}
+
+\noindent Notice that their locations have been adjusted to reflect the new parent sequence!
+
+While Biopython has done something sensible and hopefully intuitive with the features
+(and any per-letter annotation), for the other annotation it is impossible to know if
+this still applies to the sub-sequence or not. To avoid guessing, the \texttt{annotations}
+and \texttt{dbxrefs} are omitted from the sub-record, and it is up to you to transfer
+any relevant information as appropriate.
+
+\begin{verbatim}
+>>> sub_record.annotations
+{}
+>>> sub_record.dbxrefs
+[]
+\end{verbatim}
+
+The same point could be made about the record \texttt{id}, \texttt{name}
+and \texttt{description}, but for practicality these are preserved:
+
+\begin{verbatim}
+>>> sub_record.id
+'NC_005816.1'
+>>> sub_record.name
+'NC_005816'
+>>> sub_record.description
+'Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.'
+\end{verbatim}
+
+\noindent This illustrates the problem nicely though, our new sub-record is
+\emph{not} the complete sequence of the plasmid, so the description is wrong!
+Let's fix this and then view the sub-record as a reduced GenBank file using
+the \texttt{format} method described above in Section~\ref{sec:SeqRecord-format}:
+
+\begin{verbatim}
+>>> sub_record.description = "Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, partial."
+>>> print sub_record.format("genbank")
+...
+\end{verbatim}
+
+See Section~\ref{sec:FASTQ-slicing-off-primer} for a FASTQ example where the
+per-letter annotations (the read quality scores) are also sliced.
 
 \chapter{Sequence Input/Output}
 \label{chapter:Bio.SeqIO}
@@ -7798,6 +7940,7 @@ means only one \verb|SeqRecord| is created at a time - avoiding any memory
 limitations.
 
 \subsection{Trimming off primer sequences}
+\label{sec:FASTQ-slicing-off-primer}
 
 For this example I'm going to pretend that \texttt{GTTGGAACCG} is a 3' primer
 sequence we want to look for in some FASTQ formatted read data.  As in the example
