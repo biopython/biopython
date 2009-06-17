@@ -1293,12 +1293,19 @@ description='gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus ... se
 dbxrefs=[])
 \end{verbatim}
 
-Now, let's have a look at the key attributes of this \verb|SeqRecord| individually - starting with the \verb|seq| attribute which gives you a \verb|Seq| object:
+Now, let's have a look at the key attributes of this \verb|SeqRecord|
+individually -- starting with the \verb|seq| attribute which gives you a
+\verb|Seq| object:
 
 \begin{verbatim}
 >>> record.seq
 Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG', SingleLetterAlphabet())
 \end{verbatim}
+
+\noindent Here \verb|Bio.SeqIO| has defaulted to a generic alphabet, rather
+than guessing that this is DNA. If you know in advance what kind of sequence
+your FASTA file contains, you can tell \verb|Bio.SeqIO| which alphabet to use
+(see Chapter~\ref{chapter:Bio.SeqIO}).
 
 Next, the identifiers and description:
 
@@ -1311,7 +1318,12 @@ Next, the identifiers and description:
 'gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus ... pPCP1, complete sequence'
 \end{verbatim}
 
-As you can see above, the first word of the FASTA record's title line (after removing the greater than symbol) is used for both the \verb|id| and \verb|name| attributes. The whole title line (after removing the greater than symbol) is used for the record description. This is deliberate, and make senses if you have a FASTA file like this:
+As you can see above, the first word of the FASTA record's title line (after
+removing the greater than symbol) is used for both the \verb|id| and
+\verb|name| attributes. The whole title line (after removing the greater than
+symbol) is used for the record description. This is deliberate, partly for
+backwards compatibility reasons, but it also makes sense if you have a FASTA
+file like this:
 
 \begin{verbatim}
 >Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1
@@ -1319,7 +1331,8 @@ TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGGGGGTAATCTGCTCTCC
 ...
 \end{verbatim}
 
-Note that none of the other annotation attributes get populated when reading a FASTA file:
+Note that none of the other annotation attributes get populated when reading a
+FASTA file:
 
 \begin{verbatim}
 >>> record.dbxrefs
@@ -1412,7 +1425,8 @@ Finally, and perhaps most interestingly, all the entries in the features table (
 29
 \end{verbatim}
 
-We'll talk about \verb|SeqFeature| objects next, in Section~\ref{sec:seq_features}.
+\noindent We'll talk about \verb|SeqFeature| objects next, in
+Section~\ref{sec:seq_features}.
 
 \section{SeqFeature objects}
 \label{sec:seq_features}
@@ -1426,17 +1440,16 @@ The first level of dealing with sequence features is the \verb|SeqFeature| class
 \begin{description}
   \item[location] -- The location of the \verb|SeqFeature| on the sequence that you are dealing with. The locations end-points may be fuzzy -- section~\ref{sec:locations} has a lot more description on how to deal with descriptions.
 
-  \item[type] -- This is a textual description of the type of feature (for instance, this will be something like 'CDS' or 'gene').
+  \item[type] -- This is a textual description of the type of feature (for instance, this will be something like `CDS' or `gene').
 
-  \item[ref] -- A reference to a different sequence. Some times features may be ``on'' a particular sequence, but may need to refer to a different sequence, and this provides the reference (normally an accession number). A good example of this is a genomic sequence that has most of a coding sequence, but one of the exons is on a different accession. In this case, the feature would need to refer to this different accession for this missing exon.
+  \item[ref] -- A reference to a different sequence. Some times features may be ``on'' a particular sequence, but may need to refer to a different sequence, and this provides the reference (normally an accession number). A good example of this is a genomic sequence that has most of a coding sequence, but one of the exons is on a different accession. In this case, the feature would need to refer to this different accession for this missing exon. You are most likely to see this in contig GenBank files.
 
   \item[ref\_db] -- This works along with \verb|ref| to provide a cross sequence reference. If there is a reference, \verb|ref_db| will be set as None if the reference is in the same database, and will be set to the name of the database otherwise.
 
-  \item[strand] -- The strand on the sequence that the feature is located on. This may either be '1' for the top strand, '-1' for the bottom strand, or '0' for both strands (or if it doesn't matter). Keep in mind that this only really makes sense for double stranded DNA, and not for proteins or RNA.
+  \item[strand] -- The strand on the sequence that the feature is located on. This may either be $1$ for the top strand, $-1$ for the bottom strand, or $0$ or \texttt{None} for both strands (or if it doesn't matter). Keep in mind that this only really makes sense for double stranded DNA, and not for proteins or RNA.
 
-  \item[qualifiers] -- This is a python dictionary of additional information about the feature. The key is some kind of terse one-word description of what the information contained in the value is about, and the value is the actual information. For example, a common key for a qualifier might be ``evidence'' and the value might be ``computational (non-experimental).'' This is just a way to let the person who is looking at the feature know that it has not be experimentally (i.~e.~in a wet lab) confirmed.
+  \item[qualifiers] -- This is a python dictionary of additional information about the feature. The key is some kind of terse one-word description of what the information contained in the value is about, and the value is the actual information. For example, a common key for a qualifier might be ``evidence'' and the value might be ``computational (non-experimental).'' This is just a way to let the person who is looking at the feature know that it has not be experimentally (i.~e.~in a wet lab) confirmed. Note that other the value will be a list of strings (even when there is only one string). This is a reflection of the feature tables in GenBank/EMBL files.
  
-
   \item[sub\_features] -- A very important feature of a feature is that it can have additional \verb|sub_features| underneath it. This allows nesting of features, and helps us to deal with things such as the GenBank/EMBL feature lines in a (we hope) intuitive way.
   
 \end{description}
@@ -1448,31 +1461,31 @@ To show an example of SeqFeatures in action, let's take a look at the following 
                      /gene="F28B23.12"
 \end{verbatim}
 
-To look at the easiest attributes of the SeqFeature first, if you got a SeqFeature object for this it would have it \verb|type| of 'mRNA', a \verb|strand| of -1 (due to the 'complement'), and would have None for the \verb|ref| and \verb|ref_db| since there are no references to external databases. The \verb|qualifiers| for this SeqFeature would be a python dictionarary that looked like \verb|{'gene' : 'F28B23.12'}|.
+To look at the easiest attributes of the \verb|SeqFeature| first, if you got a \verb|SeqFeature| object for this it would have it \verb|type| of 'mRNA', a \verb|strand| of -1 (due to the `complement'), and would have None for the \verb|ref| and \verb|ref_db| since there are no references to external databases. The \verb|qualifiers| for this SeqFeature would be a python dictionarary that looked like \verb|{'gene' : 'F28B23.12'}|.
 
-Now let's look at the more tricky part, how the 'join' in the location
-line is handled. First, the location for the top level SeqFeature (the
+Now let's look at the more tricky part, how the `join' in the location
+line is handled. First, the location for the top level \verb|SeqFeature| (the
 one we are dealing with right now) is set as going from
-\verb|'<49223' to '>50208'| (see section~\ref{sec:locations} for
+\verb|`<49223' to `>50208'| (see section~\ref{sec:locations} for
 the nitty gritty on how fuzzy locations like this are handled).
 So the location of the top level object is the entire span of the
-feature. So, how do you get at the information in the 'join?'
+feature. So, how do you get at the information in the `join'?
 Well, that's where the \verb|sub_features| go in.
 
-The \verb|sub_features| attribute will have a list with two SeqFeature
+The \verb|sub_features| attribute will have a list with two \verb|SeqFeature|
 objects in it, and these contain the information in the join. Let's
 look at \verb|top_level_feature.sub_features[0]|; the first
-\verb|sub_feature|). This object is a SeqFeature object with a
-\verb|type| of '\verb|mRNA_join|,' a \verb|strand| of -1 (inherited
-from the parent SeqFeature) and a location going from
+\verb|sub_feature|). This object is a \verb|SeqFeature| object with a
+\verb|type| of `\verb|mRNA_join|,' a \verb|strand| of -1 (inherited
+from the parent \verb|SeqFeature|) and a location going from
 \verb|'<49223' to '49300'|.
 
-So, the \verb|sub_features| allow you to get at the internal information if you want it (i.~e.~if you were trying to get only the exons out of a genomic sequence), or just to deal with the broad picture (i.~e.~you just want to know that the coding sequence for a gene lies in a region). Hopefully this structuring makes it easy and intuitive to get at the sometimes complex information that can be contained in a SeqFeature.
+So, the \verb|sub_features| allow you to get at the internal information if you want it (i.~e.~if you were trying to get only the exons out of a genomic sequence), or just to deal with the broad picture (i.~e.~you just want to know that the coding sequence for a gene lies in a region). Hopefully this structuring makes it easy and intuitive to get at the sometimes complex information that can be contained in a \verb|SeqFeature|.
 
 \subsection{Locations}
 \label{sec:locations}
 
-In the section on SeqFeatures above, we skipped over one of the more difficult parts of Features, dealing with the locations. The reason this can be difficult is because of fuzziness of the positions in locations. Before we get into all of this, let's just define the vocabulary we'll use to talk about this. Basically there are two terms we'll use:
+In the section on SeqFeatures above, we skipped over one of the more difficult parts of features, dealing with the locations. The reason this can be difficult is because of fuzziness of the positions in locations. Before we get into all of this, let's just define the vocabulary we'll use to talk about this. Basically there are two terms we'll use:
 
 \begin{description}
   \item[position] -- This refers to a single position on a sequence,
@@ -1491,23 +1504,23 @@ The complication in dealing with locations comes in the positions themselves. In
 
   \item[BeforePosition] -- This class represents a fuzzy position
   that occurs prior to some specified site. In GenBank/EMBL notation,
-  this is represented as something like \verb|'<13'|, signifying that
+  this is represented as something like \verb|`<13'|, signifying that
   the real position is located somewhere less then 13. To get
   the specified upper boundary, look at the \verb|position|
   attribute of the object.
 
   \item[AfterPosition] -- Contrary to \verb|BeforePosition|, this
   class represents a position that occurs after some specified site.
-  This is represented in GenBank as \verb|'>13'|, and like
+  This is represented in GenBank as \verb|`>13'|, and like
   \verb|BeforePosition|, you get the boundary number by looking
   at the \verb|position| attribute of the object.
 
-  \item[WithinPosition] -- This class models a position which occurs somewhere between two specified nucleotides. In GenBank/EMBL notation, this would be represented as '(1.5)', to represent that the position is somewhere within the range 1 to 5. To get the information in this class you have to look at two attributes. The \verb|position| attribute specifies the lower boundary of the range we are looking at, so in our example case this would be one. The \verb|extension| attribute specifies the range to the higher boundary, so in this case it would be 4. So \verb|object.position| is the lower boundary and \verb|object.position + object.extension| is the upper boundary.
+  \item[WithinPosition] -- This class models a position which occurs somewhere between two specified nucleotides. In GenBank/EMBL notation, this would be represented as `(1.5)', to represent that the position is somewhere within the range 1 to 5. To get the information in this class you have to look at two attributes. The \verb|position| attribute specifies the lower boundary of the range we are looking at, so in our example case this would be one. The \verb|extension| attribute specifies the range to the higher boundary, so in this case it would be 4. So \verb|object.position| is the lower boundary and \verb|object.position + object.extension| is the upper boundary.
 
   \item[BetweenPosition] -- This class deals with a position that
   occurs between two coordinates. For instance, you might have a
   protein binding site that occurs between two nucleotides on a
-  sequence. This is represented as \verb|'2^3'|, which indicates that
+  sequence. This is represented as \verb|`2^3'|, which indicates that
   the real position happens between position 2 and 3. Getting
   this information from the object is very similar to
   \verb|WithinPosition|, the \verb|position| attribute specifies
@@ -1640,7 +1653,7 @@ dbxrefs=['Project:10638'])
 29
 \end{verbatim}
 
-For this example I'm going to focus in on the \verb|pim| gene, \verb|YP_pPCP05|.
+For this example we're going to focus in on the \verb|pim| gene, \verb|YP_pPCP05|.
 If you have a look at the GenBank file directly you'll find this gene/CDS has
 location string \texttt{4343..4780}, or in python counting \texttt{4342:4780}.
 From looking at the file you can work out that these are the twelfth and
@@ -2384,14 +2397,33 @@ in_handle.close()
 out_handle.close()
 \end{verbatim}
 
-You {\it can} in fact do this in one line, by being lazy about closing the file handles. This is arguably bad style, but it is very concise:
+In principle, just by changing the filenames and the format names, this code
+could be used to convert between any file formats available in Biopython.
+However, writing some formats requires information (e.g. quality scores) which
+other files formats don't contain. For example, while you can turn a FASTQ
+file into a FASTA file, you can't do the reverse. See also
+Section~\ref{sec:SeqIO-fastq-conversion} in the cookbook chapter which looks
+at inter-converting between different FASTQ formats.
+
+You can simplify this by being lazy about closing the input file handles. This
+is arguably bad style, but it is more concise. Note that you should always
+close your outfile file handles as if you don't, your file may not get flushed
+to disk immediately.
+
+Alternatively, Python 2.6 includes \verb|with| as a new keyword (which can
+also be enabled on Python 2.5):
 
 \begin{verbatim}
+from __future__ import with_statement #Needed on Python 2.5
 from Bio import SeqIO
-SeqIO.write(SeqIO.parse(open("ls_orchid.gbk"), "genbank"), open("my_example.faa", "w"), "fasta")
+
+with in_handle = open("ls_orchid.gbk") :
+    with out_handle = open("my_example.fasta", "w") :
+        SeqIO.write(SeqIO.parse(in_handle, "genbank"), out_handle, "fasta")
 \end{verbatim}
 
-Section~\ref{sec:SeqIO-fastq-conversion} in the cookbook chapter looks at some specific issues with FASTQ files.
+\noindent Behind the scenes this will automatically close the handle handles
+(because the file objects are aware of the \verb|with| statement).
 
 \subsection{Converting a file of sequences to their reverse complements}
 \label{sec:SeqIO-reverse-complement}
@@ -2450,7 +2482,7 @@ records = [make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta")]
 records = [make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta") if len(rec)<700]
 \end{verbatim}
 
-That would create an in memory list of reverse complement records where the sequence length was under 700 base pairs. However, if you are using Python 2.4 or later, we can do exactly the same with a generator expression - but with the advantage that this does not create a list of all the records in memory at once:
+That would create an in memory list of reverse complement records where the sequence length was under 700 base pairs. However, we can do exactly the same with a generator expression - but with the advantage that this does not create a list of all the records in memory at once:
 
 \begin{verbatim}
 records = (make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta") if len(rec)<700)
@@ -7317,7 +7349,7 @@ gd_feature_set = gd_track_for_features.new_set()
 \end{verbatim}
 
 Now the fun part - we take each gene \verb|SeqFeature| object in our
-\verb|SeqRecord|, and use it to generate a feature on the diagram. I'm
+\verb|SeqRecord|, and use it to generate a feature on the diagram. We're
 going to color them blue, alternating between a dark blue and a light blue.
 \begin{verbatim}
 for feature in record.features:
@@ -8067,7 +8099,7 @@ limitations.
 \subsection{Trimming off primer sequences}
 \label{sec:FASTQ-slicing-off-primer}
 
-For this example I'm going to pretend that \texttt{GTTGGAACCG} is a 3' primer
+For this example we're going to pretend that \texttt{GTTGGAACCG} is a 3' primer
 sequence we want to look for in some FASTQ formatted read data.  As in the example
 above, we'll use the \texttt{SRR014849.fastq} file downloaded from the NCBI
 (\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}).
@@ -8176,19 +8208,19 @@ such as read mapping or assembly, qualities of up to about $90$ are possible
 The FASTQ format has the potential to become a \textit{de facto} standard for
 storing the letters and quality scores for a sequencing read in a single plain
 text file. The only fly in the ointment is that there are at least three
-versions of the FASTQ format which are incompatible and in difficult to
+versions of the FASTQ format which are incompatible and difficult to
 distinguish...
 
 \begin{enumerate}
 \item The original Sanger FASTQ format uses PHRED qualities encoded with an
 ASCII offset of 33. The NCBI seems to be using this format in their Short
-Read Archive. We call this the \texttt{fasta} format in \verb|Bio.SeqIO|.
+Read Archive. We call this the \texttt{fastq} format in \verb|Bio.SeqIO|.
 \item Solexa (later bought by Illumina) introduced their own version using
 Solexa qualities encoded with an ASCII offset of 64. We call this the
-\texttt{fasta-solexa} format.
+\texttt{fastq-solexa} format.
 \item Illumina pipeline 1.3 onwards produces FASTQ files with PHRED qualities
 (which is more consistent), but encoded with an ASCII offset of 64. We call
-this the \texttt{fasta-illumina} format.
+this the \texttt{fastq-illumina} format.
 \end{enumerate}
 
 The Solexa quality scores are defined using a different log transformation:
@@ -8233,6 +8265,15 @@ deliberate design choice by Illumina, meaning applications expecting the old
 \texttt{fastq-illumina} files (on good data). Of course, both variants are
 very different from the original \texttt{fasta} standard as used by Sanger,
 the NCBI, and elsewhere.
+
+For more details, see the built in help (also \href{http://www.biopython.org/DIST/docs/api/Bio.SeqIO.QualityIO-module.html}{online}):
+
+\begin{verbatim}
+>>> from Bio.SeqIO import QualityIO
+>>> help(QualityIO)
+...
+\end{verbatim}
+
 
 \subsection{Identifying open reading frames}
 
