@@ -447,9 +447,9 @@ def FastqGeneralIterator(handle) :
     the second record this is unavoidable.  However for the fourth sequence this
     only happens because its quality string is split over two lines.  A naive
     parser could wrongly treat any line starting with an "@" as the beginning of
-    a new sequence!  This code copes with this possible ambiguity by keeping track
-    of the length of the sequence which gives the expected length of the quality
-    string.
+    a new sequence!  This code copes with this possible ambiguity by keeping
+    track of the length of the sequence which gives the expected length of the
+    quality string.
 
     Using this tricky example file as input, this short bit of code demonstrates
     what this parsing function would return:
@@ -982,7 +982,16 @@ class FastqPhredWriter(SequentialSequenceWriter):
             raise ValueError("Record %s has sequence length %i but %i quality scores" \
                              % (record.id, len(record), len(qualities_str)))
 
-        title = self.clean(record.id) #TODO - add the description too? cf Fasta output
+        #FASTQ files can include a description, just like FASTA files
+        #(at least, this is what the NCBI Short Read Archive does)
+        id = self.clean(record.id)
+        description = self.clean(record.description)
+        if description and description.split(None,1)[0]==id :
+            #The description includes the id at the start
+            title = description
+        else :
+            title = "%s %s" % (id, description)        
+
         self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities_str))
 
 class QualPhredWriter(SequentialSequenceWriter):
@@ -1132,7 +1141,16 @@ class FastqSolexaWriter(SequentialSequenceWriter):
             raise ValueError("Record %s has sequence length %i but %i quality scores" \
                              % (record.id, len(record), len(qualities)))
 
-        title = self.clean(record.id) #TODO - add the description too? cf Fasta output
+        #FASTQ files can include a description, just like FASTA files
+        #(at least, this is what the NCBI Short Read Archive does)
+        id = self.clean(record.id)
+        description = self.clean(record.description)
+        if description and description.split(None,1)[0]==id :
+            #The description includes the id at the start
+            title = description
+        else :
+            title = "%s %s" % (id, description)        
+
         self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities))
 
 class FastqIlluminaWriter(SequentialSequenceWriter):
@@ -1163,7 +1181,16 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
             raise ValueError("Record %s has sequence length %i but %i quality scores" \
                              % (record.id, len(record), len(qualities)))
 
-        title = self.clean(record.id) #TODO - add the description too? cf Fasta output
+        #FASTQ files can include a description, just like FASTA files
+        #(at least, this is what the NCBI Short Read Archive does)
+        id = self.clean(record.id)
+        description = self.clean(record.description)
+        if description and description.split(None,1)[0]==id :
+            #The description includes the id at the start
+            title = description
+        else :
+            title = "%s %s" % (id, description)        
+
         self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities))
         
 def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet = single_letter_alphabet, title2ids = None) :
