@@ -180,9 +180,6 @@ class Iterator:
         If set to None, then the raw contents of the file will be returned.
 
         """
-        warnings.warn("Bio.SwissProt.SProt.Iterator is deprecated. Please use the function Bio.SwissProt.parse instead if you want to get a SwissProt.SProt.Record, or Bio.SeqIO.parse if you want to get a SeqRecord. If these solutions do not work for you, please get in contact with the Biopython developers (biopython-dev@biopython.org).",
-              DeprecationWarning)
-
         if type(handle) is not FileType and type(handle) is not InstanceType:
             raise ValueError("I expected a file handle or file-like object")
         self._uhandle = File.UndoHandle(handle)
