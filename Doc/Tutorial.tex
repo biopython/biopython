@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 11 May 2009 (Biopython 1.50+)}
+\date{Last Update -- 15 June 2009 (Biopython 1.50+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -216,6 +216,9 @@ and HTML formats
 
   \item \emph{Why is the} \verb|Seq| \emph{object missing the (back) transcription \& translation methods described in this Tutorial?} \\
   You need Biopython 1.49 or later.  Alternatively, use the \verb|Bio.Seq| module functions described in Section~\ref{sec:seq-module-functions}.
+
+  \item \emph{Why does't the} \verb|Seq| \emph{object translation method support the} \verb|cds| \emph{option described in this Tutorial?} \\
+  You need Biopython 1.51 or later.
 
   \item \emph{Why doesn't} \verb|Bio.SeqIO| \emph{work? It imports fine but there is no parse function etc.} \\
   You need Biopython 1.43 or later.  Older versions did contain some related code under the \verb|Bio.SeqIO| name which has since been removed - and this is why the import ``works''.
@@ -484,6 +487,18 @@ However, where possible you should specify the alphabet explicitly when creating
 Seq('AGTACACTGGT', IUPACUnambiguousDNA())
 >>> my_seq.alphabet
 IUPACUnambiguousDNA()
+\end{verbatim}
+
+Unless of course, this really is an amino acid sequence:
+
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import IUPAC
+>>> my_prot = Seq("AGTACACTGGT", IUPAC.protein)
+>>> my_prot
+Seq('AGTACACTGGT', IUPACProtein())
+>>> my_prot.alphabet
+IUPACProtein()
 \end{verbatim}
 
 \section{Sequences act like strings}
@@ -810,11 +825,50 @@ Seq('MAIVMGRWKGAR', IUPACProtein())
 is not translated - and the stop symbol is not included at the end of your protein
 sequence.
 
-Finally, you can even specify the stop symbol if you don't like the default asterisk:
+You can even specify the stop symbol if you don't like the default asterisk:
 \begin{verbatim}
 >>> coding_dna.translate(table=2, stop_symbol="@")
 Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '@'))
 \end{verbatim}
+
+Now, suppose you have a complete coding sequence CDS, which is to say a
+nucleotide sequence (e.g. mRNA -- after any splicing) which is a whole number
+of codons (i.e. the length is a multiple of three), commences with a start
+codon, ends with a stop codon, and has no internal in-frame stop codons.
+In general, given a complete CDS, the default translate method will do what
+you want (perhaps with the \verb|to_stop| option). However, what if your
+sequence uses a non-standard start codon? This happens a lot in bacteria --
+for example the gene yaaX in \texttt{E. coli} K12:
+
+\begin{verbatim}
+>>> gene = Seq("GTGAAAAAGATGCAATCTATCGTACTCGCACTTTCCCTGGTTCTGGTCGCTCCCATGGCA" + \
+...            "GCACAGGCTGCGGAAATTACGTTAGTCCCGTCAGTAAAATTACAGATAGGCGATCGTGAT" + \
+...            "AATCGTGGCTATTACTGGGATGGAGGTCACTGGCGCGACCACGGCTGGTGGAAACAACAT" + \
+...            "TATGAATGGCGAGGCAATCGCTGGCACCTACACGGACCGCCGCCACCGCCGCGCCACCAT" + \
+...            "AAGAAAGCTCCTCATGATCATCACGGCGGTCATGGTCCAGGCAAACATCACCGCTAA",
+...            generic_dna)
+>>> gene.translate(table="Bacterial")
+Seq('VKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HR*',
+HasStopCodon(ExtendedIUPACProtein(), '*')
+>>> gene.translate(table="Bacterial", to_stop=True)
+Seq('VKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HHR',
+ExtendedIUPACProtein())
+\end{verbatim}
+
+\noindent In the bacterial genetic code \texttt{GTG} is a valid start codon,
+and while it does \emph{normally} encode valine, if used as a start codon it
+should be translated as methionine. This happens if you tell Biopython your
+sequence is a complete CDS:
+
+\begin{verbatim}
+>>> gene.translate(table="Bacterial", cds=True)
+Seq('MKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HHR',
+ExtendedIUPACProtein())
+\end{verbatim}
+
+In addition to telling Biopython to translate an alternative start codon as
+methionine, using this option also makes sure your sequence really is a valid
+CDS (you'll get an exception if not).
 
 The example in Section~\ref{sec:SeqIO-translate} combines the \verb|Seq| object's
 translate method with \verb|Bio.SeqIO| for sequence input/ouput.
@@ -914,6 +968,70 @@ to do your own gene finding:
 >>> mito_table.forward_table["ACG"]
 'T'
 \end{verbatim}
+
+\section{Comparing Seq objects}
+\label{sec:seq-comparison}
+
+Sequence comparison is actually a very complicated topic, and there is no easy
+way to decide if two sequences are equal. The basic problem is the meaning of
+the letters in a sequence are context dependent - the letter "A" could be part
+of a DNA, RNA or protein sequence. Biopython uses alphabet objects as part of
+each \verb|Seq| object to try and capture this information - so comparing two
+\verb|Seq| objects means considering both the sequence strings \emph{and} the
+alphabets.
+
+For example, you might argue that the two DNA \verb|Seq| objects
+\texttt{Seq("ACGT", IUPAC.unambiguous\_dna)} and
+\texttt{Seq("ACGT", IUPAC.unambiguous\_dna)} should be equal, even though
+they do have different alphabets. Depending on the context this could be
+important.
+
+This gets worse -- suppose you think \texttt{Seq("ACGT",
+IUPAC.unambiguous\_dna)} and \texttt{Seq("ACGT")} (i.e. the default generic
+alphabet) should be equal. Then, logically, \texttt{Seq("ACGT", IUPAC.protein)}
+and \texttt{Seq("ACGT")} should also be equal. Now, in logic if $A=B$ and
+$B=C$, by transitivity we expect $A=C$. So for logical consistency we'd
+require \texttt{Seq("ACGT", IUPAC.unambiguous\_dna)} and \texttt{Seq("ACGT",
+IUPAC.protein)} to be equal -- which most people would agree is just not right.
+
+So, what does Biopython do? Well, the equality test is the default for python
+objects -- it tests to see if they are the same object in memory. This is a
+very strict test:
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import IUPAC
+>>> seq1 = Seq("ACGT", IUPAC.unambiguous_dna)
+>>> seq2 = Seq("ACGT", IUPAC.unambiguous_dna)
+>>> seq1 == seq2
+False
+>>> seq1 == seq1
+True
+\end{verbatim}
+
+If you actually want to do this, you can be more explicit by using the python
+\verb|id| function,
+\begin{verbatim}
+>>> id(seq1) == id(seq2)
+False
+>>> id(seq1) == id(seq1)
+True
+\end{verbatim}
+
+Now, in every day use, your sequences will probably all have the same
+alphabet, or at least all be the same type of sequence (all DNA, all RNA, or
+all protein). What you probably want is to just compare the sequences as
+strings -- so do this explicitly:
+
+\begin{verbatim}
+>>> str(seq1) == str(seq2)
+True
+>>> str(seq1) == str(seq1)
+True
+\end{verbatim}
+
+\noindent As an extension to this, while you can use a python dictionary with
+\verb|Seq| objects as keys, it is generally more useful to use the sequence a
+string for the key. See also Section~\ref{sec:seq-to-string}.
 
 \section{MutableSeq objects}
 \label{sec:mutable-seq}
@@ -1553,7 +1671,7 @@ print seq_record.annotations["keywords"]
 \begin{verbatim}
 O23729
 CHS3_BROFI
-Chalcone synthase 3 (EC 2.3.1.74) (Naringenin-chalcone synthase 3).
+RecName: Full=Chalcone synthase 3; EC=2.3.1.74; AltName: Full=Naringenin-chalcone synthase 3;
 Seq('MAPAMEEIRQAQRAEGPAAVLAIGTSTPPNALYQADYPDYYFRITKSEHLTELK...GAE', ProteinAlphabet())
 Length 394
 ['Acyltransferase', 'Flavonoid biosynthesis', 'Transferase']
@@ -1752,6 +1870,7 @@ Suppose you wanted to know how many records the \verb|Bio.SeqIO.write()| functio
 If your records were in a list you could just use \verb|len(my_records)|, however you can't do that when your records come from a generator/iterator.  Therefore as of Biopython 1.49, the \verb|Bio.SeqIO.write()| function returns the number of \verb|SeqRecord| objects written to the file.   
 
 \subsection{Converting between sequence file formats}
+\label{sec:SeqIO-conversion}
 
 In previous example we used a list of \verb|SeqRecord| objects as input to the \verb|Bio.SeqIO.write()| function, but it will also accept a \verb|SeqRecord| iterator like we get from \verb|Bio.SeqIO.parse()| -- this lets us do file conversion very succinctly. For this example we'll read in the GenBank format file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk} and write it out in FASTA format:
 
@@ -1759,7 +1878,8 @@ In previous example we used a list of \verb|SeqRecord| objects as input to the \
 from Bio import SeqIO
 in_handle = open("ls_orchid.gbk", "r")
 out_handle = open("my_example.fasta", "w")
-SeqIO.write(SeqIO.parse(in_handle, "genbank"), out_handle, "fasta")
+records = SeqIO.parse(in_handle, "genbank")
+SeqIO.write(records, out_handle, "fasta")
 in_handle.close()
 out_handle.close()
 \end{verbatim}
@@ -1770,6 +1890,8 @@ You {\it can} in fact do this in one line, by being lazy about closing the file 
 from Bio import SeqIO
 SeqIO.write(SeqIO.parse(open("ls_orchid.gbk"), "genbank"), open("my_example.faa", "w"), "fasta")
 \end{verbatim}
+
+Section~\ref{sec:SeqIO-fastq-conversion} in the cookbook chapter looks at some specific issues with FASTQ files.
 
 \subsection{Converting a file of sequences to their reverse complements}
 \label{sec:SeqIO-reverse-complement}
@@ -1915,13 +2037,15 @@ SeqIO.write(record_iterator, out_handle, "tab")
 out_handle.close()
 \end{verbatim}
 
-\chapter{Sequence Alignment Input/Output}
+\chapter{Sequence Alignment Input/Output, and Alignment Tools}
 \label{chapter:Bio.AlignIO}
 
 In this chapter we'll discuss the \verb|Bio.AlignIO| module, which is very similar to the \verb|Bio.SeqIO| module from the previous chapter, but deals with \verb|Alignment| objects rather than \verb|SeqRecord| objects. 
-This is new interface in Biopython 1.46, which aims to provide a simple interface for working with assorted sequence alignment file formats in a uniform way.
+This aims to provide a simple interface for working with assorted sequence alignment file formats in a uniform way.
 
 Note that both \verb|Bio.SeqIO| and \verb|Bio.AlignIO| can read and write sequence alignment files.  The appropriate choice will depend largely on what you want to do with the data.
+
+The final part of this chapter is about our command line wrappers for common multiple sequence alignment tools like ClustalW and MUSCLE.
 
 \section{Parsing or Reading Sequence Alignments}
 
@@ -2493,6 +2617,159 @@ clustal_data = out_handle.getvalue()
 print clustal_data
 \end{verbatim}
 
+\section{Alignment Tools}
+\label{sec:alignment-tools}
+
+There are \emph{lots} of algorithms out there for aligning sequences, both pairwise alignments
+and multiple sequence alignments. These calculations are relatively slow, and you generally
+wouldn't want to write such an algorithm in python. Instead, you can use Biopython to invoke
+a command line tool on your behalf. Normally you would:
+\begin{enumerate}
+\item Prepare an input file of your unaligned sequences, typically this will be a FASTA file
+      which you might create using \verb|Bio.SeqIO| (see Chapter~\ref{chapter:Bio.SeqIO}).
+\item Call the command line tool to process this input file, typically via one of Biopython's
+      command line wrappers (which we'll discuss here).
+\item Read the output from the tool, i.e. your aligned sequences, typically using
+      \verb|Bio.AlignIO| (see earlier in this chapter). 
+\end{enumerate}
+
+All the command line wrappers we're going to talk about in this chapter follow the same style.
+You create a command line object specifying the options (e.g. the input filename and the
+output filename), then invoke this command line via a python operating system call (e.g.
+using the subprocess module).
+
+\subsection{EMBOSS needle and water}
+The \href{http://emboss.sourceforge.net/}{EMBOSS} suite includes the \texttt{water} and
+\texttt{needle} tools for Smith-Waterman algorithm local alignment, and Needleman-Wunsch
+global alignment. The tools share the same style interface, so switching between the two
+is trivial -- we'll just use \texttt{needle} here.
+
+Suppose you want to do a global pairwise alignment between two sequences, prepared in
+FASTA format as follows:
+
+\begin{verbatim}
+>HBA_HUMAN
+MVLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHG
+KKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTP
+AVHASLDKFLASVSTVLTSKYR
+\end{verbatim}
+
+\noindent in a file \texttt{alpha.fasta}, and secondly in a file \texttt{beta.fasta}):
+
+\begin{verbatim}
+>HBB_HUMAN
+MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPK
+VKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFG
+KEFTPPVQAAYQKVVAGVANALAHKYH
+\end{verbatim}
+
+Let's start by creating a complete \texttt{needle} command line object in one go:
+
+\begin{verbatim}
+>>> from Bio.Emboss.Applications import NeedleCommandline
+>>> cline = NeedleCommandline(asequence="alpha.faa", bsequence="beta.faa",
+...                           gapopen=10, gapextend=0.5, outfile="needle.txt")
+>>> print cline
+needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5 
+\end{verbatim}
+
+Why not try running this by hand at the command prompt? You should see it does a
+pairwise comparison and records the output in the file \texttt{needle.txt} (in the
+default EMBOSS alignment file format).
+
+You may find that even though you have EMBOSS installed, the above command doesn't
+work - you may get a message about ``command not found'' (especially on Windows).
+This indicated that the EMBOSS tools are not on your PATH (an environment variable,
+a list of directories to be searched). You can either update your PATH setting to
+include the location of your EMBOSS tools (how you do this will depend on your OS),
+or simply type in the full path of the tool. You can also tell Biopython the full
+path to the tool, for example:
+
+\begin{verbatim}
+>>> from Bio.Emboss.Applications import NeedleCommandline
+>>> cline = NeedleCommandline(r"C:\EMBOSS\needle.exe",
+...                           asequence="alpha.faa", bsequence="beta.faa",
+...                           gapopen=10, gapextend=0.5, outfile="needle.txt")
+\end{verbatim}
+
+\noindent Remember in python that for a default string \verb|\n| or \verb|\t| means a
+new line or a tab - which is why we're put a letter ``r'' at the start for a raw string.
+
+At this point it might help to try running the EMBOSS tools yourself by hand at the
+command line, to familiarise yourself the other options and compare them to the
+Biopython help text:
+
+\begin{verbatim}
+>>> from Bio.Emboss.Applications import NeedleCommandline
+>>> help(NeedleCommandline)
+...
+\end{verbatim}
+
+Note that you can also specify (or change or look at) the settings like this:
+
+\begin{verbatim}
+>>> from Bio.Emboss.Applications import NeedleCommandline
+>>> cline = NeedleCommandline()
+>>> cline.asequence="alpha.faa"
+>>> cline.bsequence="beta.faa"
+>>> cline.gapopen=10
+>>> cline.gapextend=0.5
+>>> cline.outfile="needle.txt"
+>>> print cline
+needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5 
+>>> print cline.outfile
+needle.txt
+\end{verbatim}
+
+Next we want to use python to run this command for us - and here there are several
+options. For full control, we recommend you use the built in python \texttt{subprocess}
+module. However, for simple usage Biopython includes a wrapper function that usually
+suffices:
+
+\begin{verbatim}
+>>> from Bio.Application import generic_run
+>>> result, out_handle, err_handle = generic_run(cline)
+>>> print err_handle.read()
+Needleman-Wunsch global alignment of two sequences
+
+>>> print out_handle.read()
+
+>>> print result.return_code
+0
+\end{verbatim}
+
+The \verb|generic_run| function returns three things. First, a result object
+includes the return code, an integer value which by convention is zero when
+successful (check the documentation for particular tools about what return
+codes they might use). Then, two handles which contain the ``standard out''
+(stdout) and ``standard error'' (stderr) text from the tool. These terms
+originate in Unix, and are general the results from the program and any
+progress or error messages. We told EMBOSS to write the output to a file,
+but you \emph{can} tell it to write the output to stdout instead (useful if
+you don't want a temporary output file to get rid of).
+
+In the above, all we really care about is that the return code is zero
+(success). Then we can load the output file with \verb|Bio.AlignIO| as
+discussed earlier in this chapter, as the \texttt{emboss} format:
+
+\begin{verbatim}
+>>> from Bio import AlignIO
+>>> align = AlignIO.read(open("needle.txt"), "emboss")
+>>> print align
+SingleLetterAlphabet() alignment with 2 rows and 149 columns
+MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR HBA_HUMAN
+MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRF...KYH HBB_HUMAN
+\end{verbatim}
+
+This has only scratched the surface of what you can do with \texttt{needle}
+and \texttt{water}. One useful trick is that the second file can contain
+multiple sequences (say five), and then EMBOSS will do five pairwise
+alignments.
+
+Note - Biopython includes its own pairwise alignment code in the \verb|Bio.pairwise2|
+module (written in C for speed, but with a pure python fallback available too). This
+doesn't work with alignment objects, so we have not covered it within this chapter.
+See the module's docstring (built in help) for details.
 
 
 \chapter{BLAST}
@@ -4324,7 +4601,7 @@ This function should be used if the handle points to exactly one Swiss-Prot reco
 We can now print out some information about this record:
 \begin{verbatim}
 >>> print record.description
-CHALCONE SYNTHASE 3 (EC 2.3.1.74) (NARINGENIN-CHALCONE SYNTHASE 3).
+'RecName: Full=Chalcone synthase 3; EC=2.3.1.74; AltName: Full=Naringenin-chalcone synthase 3;'
 >>> for ref in record.references:
 ...     print "authors:", ref.authors
 ...     print "title:", ref.title
@@ -4333,8 +4610,7 @@ authors: Liew C.F., Lim S.H., Loh C.S., Goh C.J.;
 title: "Molecular cloning and sequence analysis of chalcone synthase cDNAs of
 Bromheadia finlaysoniana.";
 >>> print record.organism_classification
-['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta',
-'Magnoliophyta', 'Liliopsida', 'Asparagales', 'Orchidaceae', 'Bromheadia']
+['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'Liliopsida', 'Asparagales', 'Orchidaceae', 'Epidendroideae', 'higher Epidendroideae', 'Cymbidieae', 'Bromheadiinae', 'Bromheadia']
 \end{verbatim}
 
 To parse a file that contains more than one Swiss-Prot record, we use the \verb|parse| function instead. This function allows us to iterate over the records in the file.
@@ -4345,27 +4621,30 @@ You can download this from the \href{ftp://ftp.expasy.org/databases/uniprot/curr
 As described at the start of this section, you can use the python library \verb|gzip| to open and uncompress a \texttt{.gz} file, like this:
 
 \begin{verbatim}
-import gzip
-handle = gzip.open("uniprot_sprot.dat.gz")
+>>> import gzip
+>>> handle = gzip.open("uniprot_sprot.dat.gz")
 \end{verbatim}
 
 However, uncompressing a large file takes time, and each time you open the file for reading in this way, it has to be decompressed on the fly.  So, if you can spare the disk space you'll save time in the long run if you first decompress the file to disk, to get the \verb|uniprot_sprot.dat| file inside.  Then you can open the file for reading as usual:
 
 \begin{verbatim}
-handle = open("uniprot_sprot.dat")
+>>> handle = open("uniprot_sprot.dat")
 \end{verbatim}
 
-As of August 2008, the full Swiss-Prot database downloaded from ExPASy contained 290484 Swiss-Prot records.  One concise way to build up a list of the record descriptions is with a list comprehension: 
+As of June 2009, the full Swiss-Prot database downloaded from ExPASy contained 468851 Swiss-Prot records.  One concise way to build up a list of the record descriptions is with a list comprehension: 
 \begin{verbatim}
 >>> from Bio import SwissProt
 >>> handle = open("uniprot_sprot.dat")
 >>> descriptions = [record.description for record in SwissProt.parse(handle)]
 >>> len(descriptions)
-290484
->>> descriptions[:3]
-['104 kDa microneme/rhoptry antigen precursor (p104).',
- '104 kDa microneme/rhoptry antigen precursor (p104).',
- 'Protein 108 precursor.']
+468851
+>>> descriptions[:5]
+['RecName: Full=Protein MGF 100-1R;',
+ 'RecName: Full=Protein MGF 100-1R;',
+ 'RecName: Full=Protein MGF 100-1R;',
+ 'RecName: Full=Protein MGF 100-1R;',
+ 'RecName: Full=Protein MGF 100-2L;']
+
 \end{verbatim}
 
 Or, using a for loop over the record iterator:
@@ -4377,10 +4656,10 @@ Or, using a for loop over the record iterator:
 ...     descriptions.append(record.description)
 ...
 >>> len(descriptions)
-290484
+468851
 \end{verbatim}
 
-Because this is such a large input file, either way takes about seven minutes on my new desktop computer (using the uncompressed \verb|uniprot_sprot.dat| file as input).
+Because this is such a large input file, either way takes about eleven minutes on my new desktop computer (using the uncompressed \verb|uniprot_sprot.dat| file as input).
 
 It is equally easy to extract any kind of information you'd like from Swiss-Prot records. To see the members of a Swiss-Prot record, use
 \begin{verbatim}
@@ -7271,6 +7550,91 @@ In this case the for loop looks simpler, but putting the trim logic into a
 function is more tidy, and makes it easier to adjust the trimming later on.
 For example, you might decide to look for a 5' primer as well.
 
+\subsection{Converting FASTQ files}
+\label{sec:SeqIO-fastq-conversion}
+
+Back in Section~\ref{sec:SeqIO-conversion} we showed how to use
+\verb|Bio.SeqIO| to convert between two file formats. Here we'll go into a
+little more detail regarding FASTQ files which are used in second generation
+DNA sequencing. FASTQ files store both the DNA sequence (as a string) and
+the associated read qualities.
+
+PHRED scores (used in some FASTQ files, and also in QUAL files and ACE
+files) have become a \textit{de facto} standard for representing the
+probability of a sequencing error (here denoted by $P_e$) at a given
+base using a simple base ten log transformation:
+
+\begin{equation}
+Q_\textrm{PHRED} = - 10 \times \textrm{log}_{10} ( P_e )
+\end{equation}
+
+This means a wrong read ($P_e = 1$) gets a PHRED quality of $0$, while a very
+good read like $P_e = 0.00001$ gets a PHRED quality of $50$. While for raw
+sequencing data qualities higher than this are rare, with post processing
+such as read mapping or assembly, qualities of up to about $90$ are possible
+(indeed, the MAQ tool allows for PHRED scores in the range 0 to 93 inclusive).
+
+The FASTQ format has the potential to become a \textit{de facto} standard for
+storing the letters and quality scores for a sequencing read in a single plain
+text file. The only fly in the ointment is that there are at least three
+versions of the FASTQ format which are incompatible and in difficult to
+distinguish...
+
+\begin{enumerate}
+\item The original Sanger FASTQ format uses PHRED qualities encoded with an
+ASCII offset of 33. The NCBI seems to be using this format in their Short
+Read Archive. We call this the \texttt{fasta} format in \verb|Bio.SeqIO|.
+\item Solexa (later bought by Illumina) introduced their own version using
+Solexa qualities encoded with an ASCII offset of 64. We call this the
+\texttt{fasta-solexa} format.
+\item Illumina pipeline 1.3 onwards produces FASTQ files with PHRED qualities
+(which is more consistent), but encoded with an ASCII offset of 64. We call
+this the \texttt{fasta-illumina} format.
+\end{enumerate}
+
+The Solexa quality scores are defined using a different log transformation:
+
+\begin{equation}
+Q_\textrm{Solexa} = - 10 \times \textrm{log}_{10} \left( \frac{P_e}{1-P_e} \right)
+\end{equation}
+
+Given Solexa/Illumina have now moved to using PHRED scores in version 1.3 of
+their pipeline, the Solexa quality scores will gradually fall out of use.
+If you equate the error estimates ($P_e$) these two equations allow conversion
+between the two scoring systems - and Biopython includes functions to do this
+in the \verb|Bio.SeqIO.QualityIO| module, which are called if you use
+\verb|Bio.SeqIO| to convert an old Solexa/Illumina file into a standard Sanger
+FASTQ file:
+
+\begin{verbatim}
+from Bio import SeqIO
+records = SeqIO.parse(open("solexa.fastq"), "fastq-solexa")
+out_handle = open("standard.fastq", "w")
+SeqIO.write(records, handle, "fastq")
+out_handle.close()
+\end{verbatim}
+
+If you want to convert a new Illumina 1.3+ FASTQ file, all that gets changed
+is the ASCII offset because although encoded differently the scores are all
+PHRED qualities:
+
+\begin{verbatim}
+from Bio import SeqIO
+records = SeqIO.parse(open("illumina.fastq"), "fastq-illumina")
+out_handle = open("standard.fastq", "w")
+SeqIO.write(records, handle, "fastq")
+out_handle.close()
+\end{verbatim}
+
+For good quality reads, PHRED and Solexa scores are approximately equal,
+which means since both the \texttt{fasta-solexa} and \texttt{fastq-illumina}
+formats use an ASCII offset of 64 the files are almost the same. This was a
+deliberate design choice by Illumina, meaning applications expecting the old
+\texttt{fasta-solexa} style files will probably be OK using the newer
+\texttt{fastq-illumina} files (on good data). Of course, both variants are
+very different from the original \texttt{fasta} standard as used by Sanger,
+the NCBI, and elsewhere.
+
 \subsection{Identifying open reading frames}
 
 A very simplistic first step at identifying possible genes is to look for
@@ -7715,6 +8079,61 @@ Personally I find this second plot much easier to read!
 Again note that we have \emph{not} checked for reverse complement matches here
 -- you could extend this example to do this, and perhaps plot the forward
 matches in one color and the reverse matches in another.
+
+\subsection{Plotting the quality scores of sequencing read data}
+
+If you are working with second generation sequencing data, you may want to try plotting
+the quality data. Here is an example using two FASTQ files containing paired end reads,
+\texttt{SRR001666\_1.fastq} for the forward reads, and  \texttt{SRR001666\_2.fastq} for
+the reverse reads. These were downloaded from the NCBI short read archive (SRA) FTP site
+(see the \href{http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?cmd=viewer&m=data&s=viewer&run=SRR001666}
+{SRR001666 page} and \url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX000/SRX000430/}
+for details).
+
+In the following code the \verb|pylab.subplot(...)| function is used in order to show
+the forward and reverse qualities on two subplots, side by side. There is also a little
+bit of code to only plot the first fifty reads.
+
+\begin{verbatim}
+import pylab
+from Bio import SeqIO
+for subfigure in [1,2] :
+    filename = "SRR001666_%i.fastq" % subfigure
+    pylab.subplot(1, 2, subfigure)
+    for i,record in enumerate(SeqIO.parse(open(filename), "fastq")) :
+        if i >= 50 : break #trick!
+        pylab.plot(record.letter_annotations["phred_quality"])
+    pylab.ylim(0,45)
+    pylab.ylabel("PHRED quality score")
+    pylab.xlabel("Position")
+pylab.savefig("SRR001666.png")
+print "Done"
+\end{verbatim}
+
+You should note that we are using the \verb|Bio.SeqIO| format name \texttt{fastq}
+here because the NCBI has saved these reads using the standard Sanger FASTQ format
+with PHRED scores. However, as you might guess from the read lengths, this data was
+from an Illumina Genome Analyzer and was probably originally in one of the two
+Solexa/Illumina FASTQ variant file formats instead.
+
+This example uses the \verb|pylab.savefig(...)| function instead of
+\verb|pylab.show(...)|, but as mentioned before both are useful.
+\begin{latexonly}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{images/SRR001666.png}
+\caption{Quality plot for some paired end reads.}
+\label{fig:paired-end-qual-plot}
+\end{figure}
+The result is shown in Figure~\ref{fig:paired-end-qual-plot}.
+\end{latexonly}
+\begin{htmlonly}
+Here is the result:
+
+%Blank lines here are important!
+\imgsrc[width=600, height=600]{images/SRR001666.png}
+
+\end{htmlonly}
 
 \section{Dealing with alignments}
 
@@ -8808,13 +9227,16 @@ necessary in the current application.
 
 This is a very flexible framework, which is advantageous if you want to
 be able to parse a file format into more than one representation.  For
-example, both the \verb|Bio.GenBank| modules use this construct either
+example, the \verb|Bio.GenBank| modules uses this construct either
 \verb|SeqRecord| objects or file-format-specific record objects.
 
 More recently, many of the parsers added for \verb|Bio.SeqIO| and
 \verb|Bio.AlignIO| take a much simpler approach, but only generate a
 single object representation (\verb|SeqRecord| and \verb|Alignment| objects
-respectively).
+respectively). In some cases the \verb|Bio.SeqIO| parsers actually wrap
+another Biopython parser - for example, the \verb|Bio.SwissProt| parser
+produces SwissProt format specific record objects, which get converted
+into \verb|SeqRecord| objects.
 
 \section{Substitution Matrices}
 
@@ -9206,7 +9628,7 @@ contributing documentation at
 
 Please note that to make a code contribution you must have the legal right to contribute it and license it under the Biopython license.  If you wrote it all yourself, and it is not based on any other code, this shouldn't be a problem.  However, there are issues if you want to contribute a derivative work - for example something based on GPL or LPGL licenced code would not be compatible with our license.  If you have any queries on this, please discuss the issue on the biopython-dev mailing list.
 
-Another point of concern for any additions to Biopython regards any build time or run time dependencies.  Generally speak, writing code to interact with a standalone tool (like BLAST, EMBOSS or ClustalW) doesn't present a big problem.  However, any dependency on another library - even a python library (especially one needed in order to compile and install Biopython like NumPy) would need further discussion.
+Another point of concern for any additions to Biopython regards any build time or run time dependencies.  Generally speaking, writing code to interact with a standalone tool (like BLAST, EMBOSS or ClustalW) doesn't present a big problem.  However, any dependency on another library - even a python library (especially one needed in order to compile and install Biopython like NumPy) would need further discussion.
 
 Additionally, if you have code that you don't think fits in the
 distribution, but that you want to make available, we maintain Script
