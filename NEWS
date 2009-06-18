@@ -29,6 +29,11 @@ style FASTQ files using PHRED scores with an ASCII offset of 33), and
 "fastq-solexa" (the original Solexa/Illumina FASTQ format variant holding
 Solexa scores with an ASCII offset of 64) .
 
+For parsing the "swiss" format, Bio.SeqIO now uses the new Bio.SwissProt
+parser, making it about twice as fast as in Biopython 1.50, where the older
+now deprecated Bio.SwissProt.SProt was used. There should be no functional
+differences as a result of this change.
+
 Our command line wrapper objects have been updated to support accessing
 parameters via python properties, and setting of parameters at initiation
 with keyword arguments.  Additionally Cymon Cox has contributed several new
