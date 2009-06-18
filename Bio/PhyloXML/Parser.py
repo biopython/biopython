@@ -635,12 +635,12 @@ class Confidence(PhyloElement):
     For example, this can be used to express the bootstrap support value of a
     clade (in which case the 'type' attribute is 'bootstrap').
     """
-    def __init__(self, attributes, value):
-        PhyloElement.__init__(self, attributes, value=value)
+    def __init__(self, value, type):
+        PhyloElement.__init__(self, None, value=value, type=type)
 
     @classmethod
     def from_element(cls, elem):
-        return cls(elem.attrib, float(elem.text))
+        return cls(float(elem.text), elem.get('type'))
 
 
 class Date(PhyloElement):
@@ -757,6 +757,10 @@ class Property(PhyloElement):
     attached to 'Phylogeny', 'Clade', and 'Annotation'.
 
     Attributes:
+        ref -- reference to an external resource
+
+        unit -- the unit of the property. (optional)
+
         datatype -- indicates the type of a property and is limited to
             xsd-datatypes (e.g. 'xsd:string', 'xsd:boolean', 'xsd:integer',
             'xsd:decimal', 'xsd:float', 'xsd:double', 'xsd:date', 'xsd:anyURI').
@@ -766,19 +770,21 @@ class Property(PhyloElement):
             parent branch of a clade).
 
         id_ref -- allows to attached a property specifically to one element (on
-            the xml-level). Optional attribute 'unit' is used to indicate the
-            unit of the property.
+            the xml-level). (optional)
 
     Example:
         <property datatype="xsd:integer" ref="NOAA:depth" applies_to="clade"
         unit="METRIC:m"> 200 </property> 
     """
-    def __init__(self, attributes, value=None):
-        PhyloElement.__init__(self, attributes, value=value)
+    def __init__(self, value=None, ref=None, unit=None, datatype=None,
+            applies_to=None id_ref=None):
+        assert 
+        PhyloElement.__init__(self, value=value, ref=None, unit=None,
+                datatype=datatype, applies_to=applies_to, id_ref=id_ref)
 
     @classmethod
     def from_element(cls, elem):
-        return cls(elem.attrib, value=elem.text.strip())
+        return cls(value=elem.text.strip(), **elem.attrib)
 
 
 class ProteinDomain(PhyloElement):
@@ -863,16 +869,6 @@ class Sequence(PhyloElement):
                 }
 
         # Unpack record.annotations
-        # Attributes:
-        #     ref
-        #     source
-        #     evidence -- describe evidence as free text (e.g. 'experimental')
-        #     type
-        # Children:
-        #     desc -- free text description
-        #     confidence -- state the type and value of support
-        #     properties [] -- typed and referenced annotations from external resources
-        #     uri
         annot_attrib = {}
         annot_conf = None
         annot_prop = None
@@ -880,24 +876,22 @@ class Sequence(PhyloElement):
         for key in ('ref', 'source', 'evidence', 'type'):
             if key in record.annotations:
                 annot_attrib[key] = record.annotations[key]
-        if 'confidence_val' in record.annotations:
-            annot_conf = Confidence(
-                    (('confidence_type' in record.annotations)
-                        and {'type': record.annotations['confidence_type']}
-                        or None),
-                    record.annotations['confidence_val']
-                    )
-        if 'property' in record.annotations:
-            annot_prop = Property(
-                    record.annotations.get('property_attrs'),
-                    record.annotations['property']
-                    )
+        if 'confidence' in record.annotations:
+            # NB: record.annotations['confidence'] = [value, type]
+            annot_conf = Confidence(*record.annotations['confidence'])
+        if 'property_ref' in record.annotations:
+            # NB: or, let record.annotations.property be a dict
+            annot_prop = Property((key, record.annotations[key])
+                    for key in ('property_ref', 'property_unit',
+                        'property_datatype', 'property_applies_to',
+                        'property_id_ref', 'property_value')
+                    if key in record.annotations)
         if 'uri' in record.annotations:
+            # NB: or, let uri be a dict or [value, desc, type]
             annot_uri = Uri(
-                    (('uri_type' in record.annotations)
-                        and {'type': record.annotations['confidence_type']}
-                        or None),
-                    record.annotations['uri']
+                    record.annotations['uri'],
+                    desc=record.annotations.get('uri_desc'),
+                    type=record.annotations.get('uri_type'),
                     )
         kwargs['annotations'] = [Annotation(annot_attrib, {
             'desc': record.annotations.get('desc', None),
@@ -926,7 +920,7 @@ class Sequence(PhyloElement):
                 # dbxrefs=None,
                 # features=None,
                 )
-        # TODO: seqrec.annotations
+        # TODO: repack seqrec.annotations
         return seqrec
 
 
@@ -1023,12 +1017,15 @@ class Uri(PhyloElement):
     on a website, in which case the 'type' attribute might be 'image' and 'desc'
     might be 'image of a California sea hare').
     """
-    def __init__(self, attributes, value=None):
-        PhyloElement.__init__(self, attributes, value=value)
-        
+    def __init__(self, value, desc=None, type=None):
+        PhyloElement.__init__(self, {'desc': desc, 'type': type}, value=value)
+
     @classmethod
     def from_element(cls, elem):
-        return cls(elem.attrib, elem.text.strip())
+        return cls(elem.text.strip(),
+                desc=elem.get('desc'),
+                type=elem.get('type'),
+                )
 
 
 # Simple types
