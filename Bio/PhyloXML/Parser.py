@@ -46,13 +46,13 @@ NAMESPACES = {
 # Functions I wish ElementTree had
 
 def local(tag):
-    if tag[0] == '{':
-        return tag.rsplit('}', 1)[1]
+    if tag[0] is '{':
+        return tag[tag.index('}')+1:]
     return tag
 
 def namespace(tag):
     try:
-        if tag[0] == '{':
+        if tag[0] is '{':
             return tag[1:tag.index('}')]
     finally:
         return ''
@@ -373,9 +373,8 @@ class Other(PhyloElement):
         self.value = value
         self.children = children
 
-    def __str__(self):
+    def __repr__(self):
         return '<Other %s at %s>' % (self.tag, hex(id(self)))
-    __repr__ = __str__
 
     @classmethod
     def from_element(cls, elem):
@@ -704,8 +703,7 @@ class DomainArchitecture(PhyloElement):
 
 
 class Events(PhyloElement):
-    """
-    """
+    """Events at the root node of a clade (e.g. one gene duplication)."""
     def __init__(self, type=None, duplications=None, speciations=None,
             losses=None, confidence=None):
         PhyloElement.__init__(self, type=type, duplications=duplications,
@@ -928,7 +926,7 @@ class Sequence(PhyloElement):
                 # dbxrefs=None,
                 # features=None,
                 )
-        seqrec.annotations
+        # TODO: seqrec.annotations
         return seqrec
 
 

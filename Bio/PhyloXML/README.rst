@@ -83,7 +83,7 @@ Timeline
     - Document basic usage of the parser on the Biopython wiki
 
     Code cleanup:
-    
+
     - Convert from_element methods into separate functions
     - Move PhyloElement objects, minus from_element methods, to Tree.py
     - Use custom exceptions and warnings to indicate noncompliance w/ spec
