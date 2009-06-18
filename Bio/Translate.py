@@ -1,4 +1,4 @@
-"""Code to translate DNA or RNA into proteins (OBSOLETE).
+"""Code to translate DNA or RNA into proteins (DEPRECATED).
 
 Instead of Bio.Translate, for translation you are now encouraged to use the
 Seq object's translate method, or the translate function in the Bio.Seq
@@ -9,9 +9,19 @@ was concluded that a since a simple back-translation giving a Seq or python
 string could only capture some of the possible back translations, there were
 no practical uses for such a method/function.
 
-This module is now considered to be obsolete, and is likely to be deprecated
-in a future release of Biopython, and later removed.
+This module is now deprecated, and will be removed in a future release of
+Biopython.
 """
+import warnings
+warnings.warn("Bio.Translate and Bio.Transcribe are deprecated, and will be "\
+              "removed in a future release of Biopython. Please use the "\
+              "functions or object methods defined in Bio.Seq instead "\
+              "(described in the tutorial). If you want to continue to use "\
+              "this code, please get in contact with the Biopython developers "\
+              "via the mailing lists to avoid its permanent removal from "
+              +"Biopython.", \
+              DeprecationWarning)
+
 from Bio import Alphabet, Seq
 from Bio.Data import CodonTable
 

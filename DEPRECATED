@@ -59,7 +59,7 @@ next release.
 
 Bio.Transcribe and Bio.Translate
 ================================
-Declared obsolete in Release 1.49.
+Declared obsolete in Release 1.49, deprecated in Release 1.51.
 Please use the methods or functions in Bio.Seq instead.
 
 Bio.mathfns, Bio.stringfns and Bio.listfns (and their C code variants)

@@ -1,11 +1,21 @@
-"""Code to transcribe DNA into RNA or back (OBSOLETE).
+"""Code to transcribe DNA into RNA or back (DEPRECATED).
 
 You are now encouraged to use the Seq object methods or the functions
 in Bio.Seq instead.
 
-This module is now considered to be obsolete, and is likely to be deprecated
-in a future release of Biopython, and later removed.
+This module is now deprecated, and will be removed in a future release of
+Biopython.
 """
+import warnings
+warnings.warn("Bio.Translate and Bio.Transcribe are deprecated, and will be "\
+              "removed in a future release of Biopython. Please use the "\
+              "functions or object methods defined in Bio.Seq instead "\
+              "(described in the tutorial). If you want to continue to use "\
+              "this code, please get in contact with the Biopython developers "\
+              "via the mailing lists to avoid its permanent removal from "
+              +"Biopython.", \
+              DeprecationWarning)
+
 
 from Bio import Alphabet, Seq
 from Bio.Alphabet import IUPAC
