@@ -690,13 +690,14 @@ class DomainArchitecture(PhyloElement):
 
     Attribute 'length' is the total length of the protein.
     """
-    def __init__(self, attributes, domains=[]):
+    def __init__(self, length=None, domains=[]):
         assert len(domains) >= 1
-        PhyloElement.__init__(self, attributes, domains=domains)
+        PhyloElement.__init__(self, length=length, domains=domains)
 
     @classmethod
     def from_element(cls, elem):
-        return cls(elem.attrib,
+        return cls(
+                length=elem.get('length'),
                 domains=[ProteinDomain.from_element(e)
                          for e in elem.findall('domain')],
                 )
@@ -777,8 +778,10 @@ class Property(PhyloElement):
         unit="METRIC:m"> 200 </property> 
     """
     def __init__(self, value=None, ref=None, unit=None, datatype=None,
-            applies_to=None id_ref=None):
-        assert 
+            applies_to=None, id_ref=None):
+        assert ref
+        assert datatype
+        assert applies_to
         PhyloElement.__init__(self, value=value, ref=None, unit=None,
                 datatype=datatype, applies_to=applies_to, id_ref=id_ref)
 
@@ -790,8 +793,11 @@ class Property(PhyloElement):
 class ProteinDomain(PhyloElement):
     """Represents an individual domain in a domain architecture.
 
-    The name/unique identifier is described via the 'id' attribute. 'confidence'
-    can be used to store (i.e.) E-values.
+    Attributes:
+        from (non-negative integer)
+        to (non-negative integer)
+        confidence (float) -- can be used to store (i.e.) E-values.
+        id -- name/unique identifier 
     """
     def __init__(self, attributes, value=None):
         PhyloElement.__init__(self, attributes, value=value)
@@ -879,20 +885,13 @@ class Sequence(PhyloElement):
         if 'confidence' in record.annotations:
             # NB: record.annotations['confidence'] = [value, type]
             annot_conf = Confidence(*record.annotations['confidence'])
-        if 'property_ref' in record.annotations:
-            # NB: or, let record.annotations.property be a dict
-            annot_prop = Property((key, record.annotations[key])
-                    for key in ('property_ref', 'property_unit',
-                        'property_datatype', 'property_applies_to',
-                        'property_id_ref', 'property_value')
-                    if key in record.annotations)
+        if 'properties' in record.annotations:
+            # NB: record.annotations['properties'] = {...}
+            annot_props = [Property(**prop)
+                           for prop in record.annotations['properties']]
         if 'uri' in record.annotations:
-            # NB: or, let uri be a dict or [value, desc, type]
-            annot_uri = Uri(
-                    record.annotations['uri'],
-                    desc=record.annotations.get('uri_desc'),
-                    type=record.annotations.get('uri_type'),
-                    )
+            # NB: record.annotations['uri'] = {...}
+            annot_uri = Uri(**record.annotations['uri'])
         kwargs['annotations'] = [Annotation(annot_attrib, {
             'desc': record.annotations.get('desc', None),
             'confidence': annot_conf,
@@ -900,11 +899,22 @@ class Sequence(PhyloElement):
             'uri': annot_uri,
             })]
 
+        # Unpack record.features
+        if record.features:
+            kwargs['domain_architecture'] = DomainArchitecture(
+                    domains=[ProteinDomain({
+                                'from': feat.location.start + 1,
+                                'to': feat.location.end + 1,
+                                'confidence': feat.qualifiers.get('confidence')
+                                }, value=feat.id)
+                            for feat in record.features],
+                    length=len(record.seq)
+                    )
+
         # Not handled:
         # attributes: id_ref, id_source
         # kwargs['location'] = None
         # kwargs['uri'] = None -- redundant here?
-        # kwargs['domain_architecture'] = None
         return cls(attrib, **kwargs)
 
     def to_seqrecord(self):
