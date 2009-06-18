@@ -903,8 +903,8 @@ class Sequence(PhyloElement):
         if record.features:
             kwargs['domain_architecture'] = DomainArchitecture(
                     domains=[ProteinDomain({
-                                'from': feat.location.start + 1,
-                                'to': feat.location.end + 1,
+                                'from': feat.location.nofuzzy_start + 1,
+                                'to': feat.location.nofuzzy_end + 1,
                                 'confidence': feat.qualifiers.get('confidence')
                                 }, value=feat.id)
                             for feat in record.features],
