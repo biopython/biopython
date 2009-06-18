@@ -400,7 +400,7 @@ class InsdcScanner :
         consumer = _FeatureConsumer(use_fuzziness = 1, 
                     feature_cleaner = FeatureValueCleaner())
 
-        if self.feed(handle, consumer) :
+        if self.feed(handle, consumer, do_features) :
             return consumer.data
         else :
             return None
@@ -417,7 +417,7 @@ class InsdcScanner :
         """
         #This is a generator function
         while True :
-            record = self.parse(handle)
+            record = self.parse(handle, do_features)
             if record is None : break
             assert record.id is not None
             assert record.name != "<unknown name>"
