@@ -600,6 +600,7 @@ def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = No
     >>> print record.letter_annotations["phred_quality"]
     [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
     """
+    assert SANGER_SCORE_OFFSET == ord("!")
     for title_line, seq_string, quality_string in FastqGeneralIterator(handle) :
         if title2ids :
             id, name, descr = title2ids(title_line)
@@ -609,24 +610,12 @@ def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = No
             name = id
         record = SeqRecord(Seq(seq_string, alphabet),
                            id=id, name=name, description=descr)
-        
-        assert SANGER_SCORE_OFFSET == ord("!")
-        #According to BioPerl documentation at least, the first character should
-        #be an "!" (and therefore quality zero).  This seems crazy - what if the
-        #sequence has been trimmed to remove any poor quality sequence?  In any
-        #case real examples from the NCBI don't follow this practice, so we
-        #won't enforce it here.
-        #e.g. ftp://ftp.ncbi.nih.gov/pub/TraceDB/ShortRead/SRA000271/fastq/200x36x36-071113_EAS56_0053-s_1_1.fastq.gz
-        #
-        #if quality_string[0] != "!" :
-        #    raise ValueError("The quality string should always start with a ! character.")
         qualities = [ord(letter)-SANGER_SCORE_OFFSET for letter in quality_string]
-        if qualities :
-            if min(qualities) < 0 or max(qualities) > 93 :
-                raise ValueError("Quality score outside 0 to 93 found - these"
-                                 " are probably in Solexa/Illumina FASTQ "
-                                 "format, not the Sanger FASTQ format which "
-                                 "uses PHRED scores.")
+        if qualities and (min(qualities) < 0 or max(qualities) > 93) :
+            raise ValueError("Quality score outside 0 to 93 found - these"
+                             " are probably in Solexa/Illumina FASTQ "
+                             "format, not the Sanger FASTQ format which "
+                             "uses PHRED scores.")
         record.letter_annotations["phred_quality"] = qualities
         yield record
 
@@ -958,6 +947,8 @@ class FastqPhredWriter(SequentialSequenceWriter):
     >>> import os
     >>> os.remove("Quality/temp.fastq")
     """
+    assert SANGER_SCORE_OFFSET == ord("!")
+
     def write_record(self, record):
         """Write a single FASTQ record to the file."""
         assert self._header_written
@@ -965,7 +956,6 @@ class FastqPhredWriter(SequentialSequenceWriter):
         self._record_written = True
 
         #TODO - Is an empty sequence allowed in FASTQ format?
-        assert SANGER_SCORE_OFFSET == ord("!")
         qualities = _get_phred_quality(record)
         try :
             #This rounds to the nearest integer:
