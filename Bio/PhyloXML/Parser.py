@@ -33,7 +33,7 @@ except ImportError:
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import Alphabet, DNAAlphabet, RNAAlphabet, ProteinAlphabet
+from Bio import Alphabet
 
 
 NAMESPACES = {
@@ -832,7 +832,6 @@ class Sequence(PhyloElement):
 
     @classmethod
     def from_element(cls, elem):
-        # TODO: handle "other"
         return cls(elem.attrib,
                 symbol=check_str(get_child_text(elem, 'symbol'), r'\S{1,10}'),
                 accession=get_child_as(elem, 'accession', Accession),
@@ -845,16 +844,18 @@ class Sequence(PhyloElement):
                              for e in elem.findall('annotation')],
                 domain_architecture=get_child_as(elem, 'domain_architecture',
                                                  DomainArchitecture),
+                # TODO: handle "other"
+                other=[]
                 )
 
     @classmethod
     def from_seqrecord(cls, record):
         attrib = {}
-        if isinstance(record.seq.alphabet, DNAAlphabet):
+        if isinstance(record.seq.alphabet, Alphabet.DNAAlphabet):
             attrib['type'] = 'dna'
-        elif isinstance(record.seq.alphabet, RNAAlphabet):
+        elif isinstance(record.seq.alphabet, Alphabet.RNAAlphabet):
             attrib['type'] = 'rna'
-        elif isinstance(record.seq.alphabet, ProteinAlphabet):
+        elif isinstance(record.seq.alphabet, Alphabet.ProteinAlphabet):
             attrib['type'] = 'aa'
         kwargs = {
                 'accession': Accession('', record.id),
@@ -862,26 +863,73 @@ class Sequence(PhyloElement):
                 'name': record.description,
                 'mol_seq': str(record.seq),
                 }
+
+        # Unpack record.annotations
+        # Attributes:
+        #     ref
+        #     source
+        #     evidence -- describe evidence as free text (e.g. 'experimental')
+        #     type
+        # Children:
+        #     desc -- free text description
+        #     confidence -- state the type and value of support
+        #     properties [] -- typed and referenced annotations from external resources
+        #     uri
+        annot_attrib = {}
+        annot_conf = None
+        annot_prop = None
+        annot_uri = None
+        for key in ('ref', 'source', 'evidence', 'type'):
+            if key in record.annotations:
+                annot_attrib[key] = record.annotations[key]
+        if 'confidence_val' in record.annotations:
+            annot_conf = Confidence(
+                    (('confidence_type' in record.annotations)
+                        and {'type': record.annotations['confidence_type']}
+                        or None),
+                    record.annotations['confidence_val']
+                    )
+        if 'property' in record.annotations:
+            annot_prop = Property(
+                    record.annotations.get('property_attrs'),
+                    record.annotations['property']
+                    )
+        if 'uri' in record.annotations:
+            annot_uri = Uri(
+                    (('uri_type' in record.annotations)
+                        and {'type': record.annotations['confidence_type']}
+                        or None),
+                    record.annotations['uri']
+                    )
+        kwargs['annotations'] = [Annotation(annot_attrib, {
+            'desc': record.annotations.get('desc', None),
+            'confidence': annot_conf,
+            'properties': [annot_prop],
+            'uri': annot_uri,
+            })]
+
         # Not handled:
         # attributes: id_ref, id_source
         # kwargs['location'] = None
-        # kwargs['uri'] = None
-        # kwargs['annotations'] = None
+        # kwargs['uri'] = None -- redundant here?
         # kwargs['domain_architecture'] = None
         return cls(attrib, **kwargs)
 
     def to_seqrecord(self):
-        alphabets = {'dna': DNAAlphabet(),
-                     'rna': RNAAlphabet(),
-                     'aa': ProteinAlphabet()}
-        return SeqRecord(
-                Seq(self.mol_seq, alphabets.get(self.type, Alphabet())),
+        alphabets = {'dna': Alphabet.generic_dna,
+                     'rna': Alphabet.generic_rna,
+                     'aa': Alphabet.generic_protein}
+        seqrec = SeqRecord(
+                Seq(self.mol_seq,
+                    alphabets.get(self.type, Alphabet.generic_alphabet)),
                 id=str(self.accession),
                 name=self.symbol,
                 description=self.name,
                 # dbxrefs=None,
                 # features=None,
                 )
+        seqrec.annotations
+        return seqrec
 
 
 class SequenceRelation(PhyloElement):
