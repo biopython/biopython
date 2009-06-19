@@ -350,10 +350,10 @@ class Phyloxml(PhyloElement):
         phylogenies []
         other []
     """
-    def __init__(self, attributes, phylogenies=[]):
+    def __init__(self, attributes, phylogenies=None, other=None):
         self.attributes = attributes
-        self.phylogenies = phylogenies
-        self.other = []
+        self.phylogenies = phylogenies or []
+        self.other = other or []
 
     def __iter__(self):
         """Iterate through the phylogenetic trees in this object."""
