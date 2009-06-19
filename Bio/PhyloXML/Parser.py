@@ -64,10 +64,10 @@ def split_namespace(tag):
         return ('', parts[0])
     return (parts[0][1:], parts[1])
 
-def get_child_as(parent, tag, cls):
+def get_child_as(parent, tag, construct):
     child = parent.find(tag)
     if child is not None:
-        return cls.from_element(child)
+        return construct(child)
 
 def get_child_text(elem, tag, construct=str):
     child = elem.find(tag)
@@ -226,9 +226,9 @@ class Parser(object):
         phylogeny = Phylogeny(**parent.attrib)
         complex_types = ['date', 'clade_relation', 'sequence_relation']
         list_types = {
-                # XML tag, plural attribute, class
-                'confidence':   ('confidences', Confidence),
-                'property':     ('properties', Property),
+                # XML tag, plural attribute
+                'confidence':   'confidences',
+                'property':     'properties',
                 }
         for event, elem in context:
             tag = local(elem.tag)
@@ -245,8 +245,8 @@ class Parser(object):
                 if tag in complex_types:
                     setattr(phylogeny, tag, getattr(cls, 'to_'+tag)(elem))
                 elif tag in list_types:
-                    attr, klass = list_types[tag]
-                    getattr(phylogeny, attr).append(klass.from_element(elem))
+                    getattr(phylogeny, list_types[tag]).append(
+                            getattr(cls, 'to_'+tag)(elem))
                 # Simple types
                 elif tag == 'name': 
                     phylogeny.name = elem.text and elem.text.strip()
@@ -265,13 +265,13 @@ class Parser(object):
         clade = Clade(**parent.attrib)
         complex_types = ['color', 'events', 'binary_characters', 'date']
         list_types = {
-                # XML tag, plural attribute, class
-                'confidence':   ('confidences', Confidence),
-                'taxonomy':     ('taxonomies', Taxonomy),
-                'sequence':     ('sequences', Sequence),
-                'distribution': ('distributions', Distribution),
-                'reference':    ('references', Reference),
-                'property':     ('properties', Property),
+                # XML tag, plural attribute
+                'confidence':   'confidences',
+                'taxonomy':     'taxonomies',
+                'sequence':     'sequences',
+                'distribution': 'distributions',
+                'reference':    'references',
+                'property':     'properties',
                 }
         for event, elem in context:
             tag = local(elem.tag)
@@ -287,12 +287,13 @@ class Parser(object):
                 if tag in complex_types:
                     setattr(clade, tag, getattr(cls, 'to_'+tag)(elem))
                 elif tag in list_types:
-                    attr, klass = list_types[tag]
-                    getattr(clade, attr).append(klass.from_element(elem))
+                    getattr(clade, list_types[tag]).append(
+                            getattr(cls, 'to_'+tag)(elem))
                 # Simple types
                 elif tag == 'branch_length':
                     # NB: possible collision with the attribute
-                    if hasattr(clade, 'branch_length') and clade.branch_length:
+                    if hasattr(clade, 'branch_length') \
+                            and clade.branch_length is not None:
                         warnings.warn(
                                 'Attribute branch_length was already set for '
                                 'this Clade; overwriting the previous value.',
@@ -316,6 +317,22 @@ class Parser(object):
                   value=(elem.text and elem.text.strip() or None),
                   children=[cls.to_other(child) for child in elem])
 
+    # Complex types
+
+    @classmethod
+    def to_accession(cls, elem):
+        return Accession(elem.text.strip(), elem.get('source'))
+
+    @classmethod
+    def to_annotation(cls, elem):
+        return Annotation(
+                desc=get_child_text(elem, 'desc'),
+                confidence=get_child_as(elem, 'confidence', cls.to_confidence),
+                properties=[cls.to_property(e)
+                            for e in elem.findall('property')],
+                uri=get_child_as(elem, 'uri', cls.to_uri),
+                **elem.attrib)
+
     @classmethod
     def to_binary_characters(cls, elem):
         raise NotImplementedError
@@ -328,7 +345,7 @@ class Parser(object):
         return CladeRelation(
                 elem.get('type'), elem.get('id_ref_0'), elem.get('id_ref_1'),
                 distance=elem.get('distance'),
-                confidence=get_child_as(elem, 'confidence', Confidence))
+                confidence=get_child_as(elem, 'confidence', cls.to_confidence))
 
     @classmethod
     def to_color(cls, elem):
@@ -337,13 +354,39 @@ class Parser(object):
         return BranchColor(red, green, blue)
 
     @classmethod
+    def to_confidence(cls, elem):
+        return Confidence(float(elem.text), elem.get('type'))
+
+    @classmethod
     def to_date(cls, elem):
         return Date(
                 value=get_child_text(elem, 'value', float),
                 desc=get_child_text(elem, 'desc'),
                 unit=elem.get('unit'),
-                range=('range' in elem) and float(elem.get('range')) or None,
-                )
+                range=('range' in elem) and float(elem.get('range')) or None)
+
+    @classmethod
+    def to_distribution(cls, elem):
+        return Distribution(
+                desc=get_child_text(elem, 'desc'),
+                points=[cls.to_point(e)
+                        for e in elem.findall('point')],
+                polygons=[cls.to_polygon(e)
+                          for e in elem.findall('polygon')])
+
+    @classmethod
+    def to_domain(cls, elem):
+        return ProteinDomain(elem.text.strip(),
+                int(elem.get('from')), int(elem.get('to')),
+                confidence=(('confidence' in elem) and elem.get('confidence')
+                            or None),
+                id=elem.get('id'))
+
+    @classmethod
+    def to_domain_architecture(cls, elem):
+        return DomainArchitecture(
+                length=elem.get('length'),
+                domains=[cls.to_domain(e) for e in elem.findall('domain')])
 
     @classmethod
     def to_events(cls, elem):
@@ -357,16 +400,95 @@ class Parser(object):
                 duplications=get_child_text(elem, 'duplications', int),
                 speciations=get_child_text(elem, 'speciations', int),
                 losses=get_child_text(elem, 'losses', int),
-                confidence=get_child_as(elem, 'confidence', Confidence))
+                confidence=get_child_as(elem, 'confidence', cls.to_confidence))
 
+    @classmethod
+    def to_point(cls, elem):
+        return Point(elem.get('geodetic_datum'),
+                get_child_text(elem, 'lat', float),
+                get_child_text(elem, 'long', float),
+                alt=get_child_text(elem, 'alt', float),
+                )
+
+    @classmethod
+    def to_polygon(cls, elem):
+        raise NotImplementedError
+        return Polygon(
+                # TODO
+                )
+
+    @classmethod
+    def to_property(cls, elem):
+        return Property(elem.text.strip(),
+                elem.get('ref'), elem.get('applies_to'), elem.get('datatype'),
+                unit=elem.get('unit'),
+                id_ref=elem.get('id_ref'))
+
+    @classmethod
+    def to_reference(cls, elem):
+        raise NotImplementedError
+        return Reference(
+                # TODO
+                )
+
+    @classmethod
+    def to_sequence(cls, elem):
+        return Sequence(
+                symbol=check_str(get_child_text(elem, 'symbol'), r'\S{1,10}'),
+                accession=get_child_as(elem, 'accession', cls.to_accession),
+                name=get_child_text(elem, 'name'),
+                location=get_child_text(elem, 'location'),
+                mol_seq=check_str(get_child_text(elem, 'mol_seq'),
+                                  r'[a-zA-Z\.\-\?\*_]+'),
+                uri=get_child_as(elem, 'uri', cls.to_uri),
+                domain_architecture=get_child_as(elem, 'domain_architecture',
+                                                 cls.to_domain_architecture),
+                annotations=[cls.to_annotation(e)
+                             for e in elem.findall('annotation')],
+                # TODO: handle "other"
+                other=[],
+                **elem.attrib)
 
     @classmethod
     def to_sequence_relation(cls, elem):
         return SequenceRelation(
                 elem.get('type'), elem.get('id_ref_0'), elem.get('id_ref_1'),
                 distance=elem.get('distance'),
-                confidence=get_child_as(elem, 'confidence', Confidence))
+                confidence=get_child_as(elem, 'confidence', cls.to_confidence))
 
+    @classmethod
+    def to_taxonomy(cls, elem):
+        return Taxonomy(
+                id=get_child_text(elem, 'id'),
+                code=check_str(get_child_text(elem, 'code'),
+                               r'[a-zA-Z0-9_]{2,10}'),
+                scientific_name=get_child_text(elem, 'scientific_name'),
+                common_names=[e.text for e in elem.findall('common_name')],
+                rank=check_str(get_child_text(elem, 'rank'),
+                               r'(%s)' % '|'.join((
+                                   'domain', 'kingdom', 'subkingdom', 'branch',
+                                   'infrakingdom', 'superphylum', 'phylum',
+                                   'subphylum', 'infraphylum', 'microphylum',
+                                   'superdivision', 'division', 'subdivision',
+                                   'infradivision', 'superclass', 'class',
+                                   'subclass', 'infraclass', 'superlegion',
+                                   'legion', 'sublegion', 'infralegion',
+                                   'supercohort', 'cohort', 'subcohort',
+                                   'infracohort', 'superorder', 'order',
+                                   'suborder', 'superfamily', 'family',
+                                   'subfamily', 'supertribe', 'tribe',
+                                   'subtribe', 'infratribe', 'genus',
+                                   'subgenus', 'superspecies', 'species',
+                                   'subspecies', 'variety', 'subvariety',
+                                   'form', 'subform', 'cultivar', 'unknown',
+                                   'other'))),
+                uri=get_child_as(elem, 'uri', cls.to_uri),
+                **elem.attrib)
+
+    @classmethod
+    def to_uri(cls, elem):
+        return Uri(elem.text.strip(),
+                desc=elem.get('desc'), type=elem.get('type'))
 
 
 # ---------------------------------------------------------------------
@@ -595,10 +717,6 @@ class Accession(PhyloElement):
     def __str__(self):
         return str(self.value)
 
-    @classmethod
-    def from_element(cls, elem):
-        return cls(elem.text.strip(), elem.get('source'))
-
 
 class Annotation(PhyloElement):
     """The annotation of a molecular sequence.
@@ -631,16 +749,6 @@ class Annotation(PhyloElement):
             desc=desc, confidence=confidence, uri=uri,
             # Collection
             properties=properties or [])
-
-    @classmethod
-    def from_element(cls, elem):
-        return cls(
-                desc=get_child_text(elem, 'desc'),
-                confidence=get_child_as(elem, 'confidence', Confidence),
-                properties=[Property.from_element(e)
-                            for e in elem.findall('property')],
-                uri=get_child_as(elem, 'uri', Uri),
-                **elem.attrib)
 
 
 class BinaryCharacterList(PhyloElement):
@@ -697,10 +805,6 @@ class Confidence(PhyloElement):
         self.value=value
         self.type=type
 
-    @classmethod
-    def from_element(cls, elem):
-        return cls(float(elem.text), elem.get('type'))
-
 
 class Date(PhyloElement):
     """A date associated with a clade/node.
@@ -732,16 +836,6 @@ class Distribution(PhyloElement):
                 points=points or [],
                 polygons=polygons or [])
 
-    @classmethod
-    def from_element(cls, elem):
-        return cls(
-                desc=get_child_text(elem, 'desc'),
-                points=[Point.from_element(e)
-                        for e in elem.findall('point')],
-                polygons=[Polygon.from_element(e)
-                          for e in elem.findall('polygon')],
-                )
-
 
 class DomainArchitecture(PhyloElement):
     """Domain architecture of a protein.
@@ -752,14 +846,6 @@ class DomainArchitecture(PhyloElement):
     def __init__(self, length=None, domains=None):
         # assert len(domains)
         PhyloElement.__init__(self, length=length, domains=domains)
-
-    @classmethod
-    def from_element(cls, elem):
-        return cls(
-                length=elem.get('length'),
-                domains=[ProteinDomain.from_element(e)
-                         for e in elem.findall('domain')],
-                )
 
 
 class Events(PhyloElement):
@@ -781,14 +867,6 @@ class Point(PhyloElement):
     def __init__(self, geodetic_datum, lat, long, alt=None):
         PhyloElement.__init__(self, dict(geodetic_datum=geodetic_datum),
                 lat=lat, long=long, alt=alt)
-
-    @classmethod
-    def from_element(cls, elem):
-        return cls(elem.get('geodetic_datum'),
-                get_child_text(elem, 'lat', float),
-                get_child_text(elem, 'long', float),
-                alt=get_child_text(elem, 'alt', float),
-                )
 
 
 class Polygon(PhyloElement):
@@ -826,13 +904,6 @@ class Property(PhyloElement):
         PhyloElement.__init__(self, {'unit': unit, 'id_ref': id_ref},
                 value=value, ref=ref, applies_to=applies_to, datatype=datatype)
 
-    @classmethod
-    def from_element(cls, elem):
-        return cls(elem.text.strip(),
-                elem.get('ref'), elem.get('applies_to'), elem.get('datatype'),
-                unit=elem.get('unit'),
-                id_ref=elem.get('id_ref'))
-
 
 class ProteinDomain(PhyloElement):
     """Represents an individual domain in a domain architecture.
@@ -846,14 +917,6 @@ class ProteinDomain(PhyloElement):
     def __init__(self, value, start, end, confidence=None, id=None):
         PhyloElement.__init__(self, {'confidence': confidence, 'id': id},
                 value=value, start=start, end=end)
-
-    @classmethod
-    def from_element(cls, elem):
-        return cls(elem.text.strip(),
-                int(elem.get('from')), int(elem.get('to')),
-                confidence=(('confidence' in elem) and elem.get('confidence')
-                            or None),
-                id=elem.get('id'))
 
 
 class Reference(PhyloElement):
@@ -904,38 +967,19 @@ class Sequence(PhyloElement):
             )
 
     @classmethod
-    def from_element(cls, elem):
-        return cls(
-                symbol=check_str(get_child_text(elem, 'symbol'), r'\S{1,10}'),
-                accession=get_child_as(elem, 'accession', Accession),
-                name=get_child_text(elem, 'name'),
-                location=get_child_text(elem, 'location'),
-                mol_seq=check_str(get_child_text(elem, 'mol_seq'),
-                                  r'[a-zA-Z\.\-\?\*_]+'),
-                uri=get_child_as(elem, 'uri', Uri),
-                domain_architecture=get_child_as(elem, 'domain_architecture',
-                                                 DomainArchitecture),
-                annotations=[Annotation.from_element(e)
-                             for e in elem.findall('annotation')],
-                # TODO: handle "other"
-                other=[],
-                **elem.attrib)
-
-    @classmethod
     def from_seqrecord(cls, record):
-        attrib = {}
-        if isinstance(record.seq.alphabet, Alphabet.DNAAlphabet):
-            attrib['type'] = 'dna'
-        elif isinstance(record.seq.alphabet, Alphabet.RNAAlphabet):
-            attrib['type'] = 'rna'
-        elif isinstance(record.seq.alphabet, Alphabet.ProteinAlphabet):
-            attrib['type'] = 'aa'
         kwargs = {
                 'accession': Accession('', record.id),
                 'symbol': record.name,
                 'name': record.description,
                 'mol_seq': str(record.seq),
                 }
+        if isinstance(record.seq.alphabet, Alphabet.DNAAlphabet):
+            kwargs['type'] = 'dna'
+        elif isinstance(record.seq.alphabet, Alphabet.RNAAlphabet):
+            kwargs['type'] = 'rna'
+        elif isinstance(record.seq.alphabet, Alphabet.ProteinAlphabet):
+            kwargs['type'] = 'aa'
 
         # Unpack record.annotations
         annot_attrib = {}
@@ -979,7 +1023,7 @@ class Sequence(PhyloElement):
         # attributes: id_ref, id_source
         # kwargs['location'] = None
         # kwargs['uri'] = None -- redundant here?
-        return cls(attrib, **kwargs)
+        return Sequence(**kwargs)
 
     def to_seqrecord(self):
         alphabets = {'dna': Alphabet.generic_dna,
@@ -1057,35 +1101,6 @@ class Taxonomy(PhyloElement):
                 other=other or [],
                 )
 
-    @classmethod
-    def from_element(cls, elem):
-        return cls(elem.attrib, 
-                id=get_child_text(elem, 'id'),
-                code=check_str(get_child_text(elem, 'code'),
-                               r'[a-zA-Z0-9_]{2,10}'),
-                scientific_name=get_child_text(elem, 'scientific_name'),
-                common_names=[e.text for e in elem.findall('common_name')],
-                rank=check_str(get_child_text(elem, 'rank'),
-                               r'(%s)' % '|'.join((
-                                   'domain', 'kingdom', 'subkingdom', 'branch',
-                                   'infrakingdom', 'superphylum', 'phylum',
-                                   'subphylum', 'infraphylum', 'microphylum',
-                                   'superdivision', 'division', 'subdivision',
-                                   'infradivision', 'superclass', 'class',
-                                   'subclass', 'infraclass', 'superlegion',
-                                   'legion', 'sublegion', 'infralegion',
-                                   'supercohort', 'cohort', 'subcohort',
-                                   'infracohort', 'superorder', 'order',
-                                   'suborder', 'superfamily', 'family',
-                                   'subfamily', 'supertribe', 'tribe',
-                                   'subtribe', 'infratribe', 'genus',
-                                   'subgenus', 'superspecies', 'species',
-                                   'subspecies', 'variety', 'subvariety',
-                                   'form', 'subform', 'cultivar', 'unknown',
-                                   'other'))),
-                uri=get_child_as(elem, 'uri', Uri),
-                )
-
 
 class Uri(PhyloElement):
     """A uniform resource identifier.
@@ -1096,13 +1111,6 @@ class Uri(PhyloElement):
     """
     def __init__(self, value, desc=None, type=None):
         PhyloElement.__init__(self, {'desc': desc, 'type': type}, value=value)
-
-    @classmethod
-    def from_element(cls, elem):
-        return cls(elem.text.strip(),
-                desc=elem.get('desc'),
-                type=elem.get('type'),
-                )
 
 
 # Simple types
