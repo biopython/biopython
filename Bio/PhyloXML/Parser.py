@@ -367,11 +367,11 @@ class Phyloxml(PhyloElement):
 class Other(PhyloElement):
     """Container for non-phyloXML elements in the tree."""
     # ENH: assert that the tag namespace is not phyloxml's
-    def __init__(self, tag, attributes=None, value=None, children=[]):
+    def __init__(self, tag, attributes=None, value=None, children=None):
         self.tag = tag
         self.attributes = attributes
         self.value = value
-        self.children = children
+        self.children = children or []
 
     def __repr__(self):
         return '<Other %s at %s>' % (self.tag, hex(id(self)))
@@ -570,10 +570,11 @@ class Annotation(PhyloElement):
         properties [] -- typed and referenced annotations from external resources
         uri
     """
-    def __init__(self, attributes, desc=None, confidence=None, properties=[],
-            uri=None):
+    def __init__(self, attributes, desc=None, confidence=None, uri=None,
+            properties=None):
         PhyloElement.__init__(self, attributes, desc=desc,
-                confidence=confidence, properties=properties, uri=uri)
+                confidence=confidence, uri=uri,
+                properties=properties or [])
 
     @classmethod
     def from_element(cls, elem):
@@ -671,8 +672,10 @@ class Distribution(PhyloElement):
     and/or by the coordinates of one or more 'Points' (similar to the 'Point'
     element in Google's KML format) or by 'Polygons'.
     """
-    def __init__(self, desc=None, points=[], polygons=[]):
-        PhyloElement.__init__(self, desc=desc, points=points, polygons=polygons)
+    def __init__(self, desc=None, points=None, polygons=None):
+        PhyloElement.__init__(self, desc=desc,
+                points=points or [],
+                polygons=polygons or [])
 
     @classmethod
     def from_element(cls, elem):
@@ -689,9 +692,10 @@ class DomainArchitecture(PhyloElement):
     """Domain architecture of a protein.
 
     Attribute 'length' is the total length of the protein.
+    'domains' is a list of ProteinDomain objects.
     """
-    def __init__(self, length=None, domains=[]):
-        assert len(domains) >= 1
+    def __init__(self, length=None, domains=None):
+        assert len(domains)
         PhyloElement.__init__(self, length=length, domains=domains)
 
     @classmethod
