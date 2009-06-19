@@ -224,12 +224,7 @@ class Parser(object):
         control to the top-level parsing function.
         """
         phylogeny = Phylogeny(**parent.attrib)
-        complex_types = {
-                # XML tag, class
-                'date': Date,
-                'clade_relation': CladeRelation,
-                'sequence_relation': SequenceRelation,
-                }
+        complex_types = ['date', 'clade_relation', 'sequence_relation']
         list_types = {
                 # XML tag, plural attribute, class
                 'confidence':   ('confidences', Confidence),
@@ -248,7 +243,7 @@ class Parser(object):
                     break
                 # Handle the other non-recursive children
                 if tag in complex_types:
-                    setattr(phylogeny, tag, complex_types[tag].from_element(elem))
+                    setattr(phylogeny, tag, getattr(cls, 'to_'+tag)(elem))
                 elif tag in list_types:
                     attr, klass = list_types[tag]
                     getattr(phylogeny, attr).append(klass.from_element(elem))
@@ -268,13 +263,7 @@ class Parser(object):
     @classmethod
     def _parse_clade(cls, parent, context):
         clade = Clade(**parent.attrib)
-        complex_types = {
-                # XML tag, class
-                'color':    BranchColor,
-                'events':   Events,
-                'binary_characters': BinaryCharacters,
-                'date':     Date,
-                }
+        complex_types = ['color', 'events', 'binary_characters', 'date']
         list_types = {
                 # XML tag, plural attribute, class
                 'confidence':   ('confidences', Confidence),
@@ -296,7 +285,7 @@ class Parser(object):
                     break
                 # Handle the other non-recursive children
                 if tag in complex_types:
-                    setattr(clade, tag, complex_types[tag].from_element(elem))
+                    setattr(clade, tag, getattr(cls, 'to_'+tag)(elem))
                 elif tag in list_types:
                     attr, klass = list_types[tag]
                     getattr(clade, attr).append(klass.from_element(elem))
@@ -325,8 +314,59 @@ class Parser(object):
     def to_other(cls, elem):
         return Other(elem.tag, elem.attrib,
                   value=(elem.text and elem.text.strip() or None),
-                  children=[cls.to_other(child) for child in elem],
-                  )
+                  children=[cls.to_other(child) for child in elem])
+
+    @classmethod
+    def to_binary_characters(cls, elem):
+        raise NotImplementedError
+        return BinaryCharacters(
+                # TODO
+                )
+
+    @classmethod
+    def to_clade_relation(cls, elem):
+        return CladeRelation(
+                elem.get('type'), elem.get('id_ref_0'), elem.get('id_ref_1'),
+                distance=elem.get('distance'),
+                confidence=get_child_as(elem, 'confidence', Confidence))
+
+    @classmethod
+    def to_color(cls, elem):
+        red, green, blue = (get_child_text(elem, color, int) for color in
+                            ('red', 'green', 'blue'))
+        return BranchColor(red, green, blue)
+
+    @classmethod
+    def to_date(cls, elem):
+        return Date(
+                value=get_child_text(elem, 'value', float),
+                desc=get_child_text(elem, 'desc'),
+                unit=elem.get('unit'),
+                range=('range' in elem) and float(elem.get('range')) or None,
+                )
+
+    @classmethod
+    def to_events(cls, elem):
+        return Events(
+                type=check_str(get_child_text(elem, 'type'),
+                               r'(%s)' % '|'.join((
+                                   'transfer', 'fusion',
+                                   'speciation_or_duplication', 'other',
+                                   'mixed', 'unassigned',
+                                   ))),
+                duplications=get_child_text(elem, 'duplications', int),
+                speciations=get_child_text(elem, 'speciations', int),
+                losses=get_child_text(elem, 'losses', int),
+                confidence=get_child_as(elem, 'confidence', Confidence))
+
+
+    @classmethod
+    def to_sequence_relation(cls, elem):
+        return SequenceRelation(
+                elem.get('type'), elem.get('id_ref_0'), elem.get('id_ref_1'),
+                distance=elem.get('distance'),
+                confidence=get_child_as(elem, 'confidence', Confidence))
+
 
 
 # ---------------------------------------------------------------------
@@ -625,12 +665,6 @@ class BranchColor(PhyloElement):
         self.green = green
         self.blue = blue
 
-    @classmethod
-    def from_element(cls, elem):
-        red, green, blue = (int(elem.find(color).text) for color in
-                            ('red', 'green', 'blue'))
-        return cls(red, green, blue)
-
 
 class CladeRelation(PhyloElement):
     """Expresses a typed relationship between two clades.
@@ -651,13 +685,6 @@ class CladeRelation(PhyloElement):
         PhyloElement.__init__(self, {'distance': distance},
                 type=type, id_ref_0=id_ref_0, id_ref_1=id_ref_1,
                 confidence=confidence)
-
-    @classmethod
-    def from_element(cls, elem):
-        return cls(elem.get('type'),
-                elem.get('id_ref_0'), elem.get('id_ref_1'),
-                distance=elem.get('distance'),
-                confidence=get_child_as(elem, 'confidence', Confidence))
 
 
 class Confidence(PhyloElement):
@@ -689,15 +716,6 @@ class Date(PhyloElement):
     def __init__(self, value=None, desc=None, unit=None, range=None):
         PhyloElement.__init__(self, {'unit': unit, 'range': range},
                 value=value, desc=desc)
-
-    @classmethod
-    def from_element(cls, elem):
-        return cls(
-                value=get_child_text(elem, 'value', float),
-                desc=get_child_text(elem, 'desc'),
-                unit=elem.get('unit'),
-                range=('range' in elem) and float(elem.get('range')) or None,
-                )
 
 
 class Distribution(PhyloElement):
@@ -750,21 +768,6 @@ class Events(PhyloElement):
             losses=None, confidence=None):
         PhyloElement.__init__(self, type=type, duplications=duplications,
                 speciations=speciations, losses=losses, confidence=confidence)
-
-    @classmethod
-    def from_element(cls, elem):
-        return cls(
-                type=check_str(get_child_text(elem, 'type'),
-                               r'(%s)' % '|'.join((
-                                   'transfer', 'fusion',
-                                   'speciation_or_duplication', 'other',
-                                   'mixed', 'unassigned',
-                                   ))),
-                duplications=get_child_text(elem, 'duplications', int),
-                speciations=get_child_text(elem, 'speciations', int),
-                losses=get_child_text(elem, 'losses', int),
-                confidence=get_child_as(elem, 'confidence', Confidence),
-                )
 
 
 class Point(PhyloElement):
@@ -1015,13 +1018,6 @@ class SequenceRelation(PhyloElement):
         PhyloElement.__init__(self, {'distance': distance},
                 type=type, id_ref_0=id_ref_0, id_ref_1=id_ref_1,
                 confidence=confidence)
-
-    @classmethod
-    def from_element(cls, elem):
-        return cls(elem.get('type'),
-                elem.get('id_ref_0'), elem.get('id_ref_1'),
-                distance=elem.get('distance'),
-                confidence=get_child_as(elem, 'confidence', Confidence))
 
 
 class Taxonomy(PhyloElement):
