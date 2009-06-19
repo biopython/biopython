@@ -35,6 +35,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import Alphabet
 
+from Exceptions import PhyloXMLError, PhyloXMLWarning
 
 NAMESPACES = {
         'phy':  'http://www.phyloxml.org',
@@ -82,7 +83,7 @@ def check_str(text, regexp):
     """Compare a string to a regexp, and warn if there's no match."""
     if text is not None and re.match(regexp, text) is None:
         warnings.warn("String %s doesn't match regexp %s"
-                        % (text, regexp))
+                        % (text, regexp), PhyloXMLWarning)
     return text
 
 
@@ -303,8 +304,10 @@ class Parser(object):
                 elif tag == 'branch_length':
                     # NB: possible collision with the attribute
                     if hasattr(clade, 'branch_length') and clade.branch_length:
-                        warnings.warn('Attribute branch_length was already set for '
-                                    'this Clade; overwriting the previous value.')
+                        warnings.warn(
+                                'Attribute branch_length was already set for '
+                                'this Clade; overwriting the previous value.',
+                                PhyloXMLWarning)
                     clade.branch_length = elem.text.strip()
                 elif tag == 'name':
                     clade.name = elem.text and elem.text.strip()
