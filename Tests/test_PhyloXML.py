@@ -15,7 +15,7 @@ from itertools import izip
 from cStringIO import StringIO
 
 from Bio import PhyloXML
-from Bio.PhyloXML import Parser
+from Bio.PhyloXML import Tree
 
 
 # Example PhyloXML files
@@ -238,20 +238,20 @@ class TreeTests(unittest.TestCase):
         """Test instantiation of Phyloxml objects."""
         for source in (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA)):
             phx = PhyloXML.read(source)
-            self.assert_(isinstance(phx, Parser.Phyloxml))
+            self.assert_(isinstance(phx, Tree.Phyloxml))
 
     def test_Other(self):
         """Test instantiation of Other objects."""
         phyloxml = PhyloXML.read(EX_PHYLO)
         self.assert_(phyloxml.other)
         for otr in phyloxml.other:
-            self.assert_(isinstance(otr, Parser.Other))
+            self.assert_(isinstance(otr, Tree.Other))
 
     def test_Phylogeny(self):
         """Test instantiation of Phylogeny objects."""
         for source in (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA)):
             for tree in PhyloXML.parse(source):
-                self.assert_(isinstance(tree, Parser.Phylogeny))
+                self.assert_(isinstance(tree, Tree.Phylogeny))
 
     def test_Clade(self):
         """Test instantiation of Clade objects."""

@@ -8,10 +8,9 @@
 """
 
 import sys
-import warnings
 
-from Bio.PhyloXML import Parser
-from Bio.PhyloXML.Parser import ElementTree
+import Tree
+from Parser import ElementTree, read
 
 
 def dump_tags(handle, output=sys.stdout):
@@ -46,13 +45,13 @@ def pretty_print(source, indent=0, show_all=False, output=sys.stdout):
             simple_objs = []
         for attr in obj.__dict__:
             child = getattr(obj, attr)
-            if isinstance(child, Parser.Other):
+            if isinstance(child, Tree.Other):
                 print_other(child, indent)
-            elif isinstance(child, Parser.PhyloElement):
+            elif isinstance(child, Tree.PhyloElement):
                 print_phylo(child, indent)
             elif isinstance(child, list):
                 for elem in child:
-                    if isinstance(elem, Parser.PhyloElement):
+                    if isinstance(elem, Tree.PhyloElement):
                         print_phylo(elem, indent)
                     elif show_all:
                         simple_objs.append(attr)
@@ -69,19 +68,19 @@ def pretty_print(source, indent=0, show_all=False, output=sys.stdout):
             print_indented(obj, indent)
         indent += 1
         for child in obj.children:
-            if isinstance(child, Parser.Other):
+            if isinstance(child, Tree.Other):
                 print_other(child, indent)
             else:
                 print_indented(child, indent)
 
-    if isinstance(source, Parser.Phylogeny):
+    if isinstance(source, Tree.Phylogeny):
         print_phylo(source)
         return
 
-    if isinstance(source, Parser.Phyloxml):
+    if isinstance(source, Tree.Phyloxml):
         phyloxml = source
     else:
-        phyloxml = Parser.read(source)
+        phyloxml = read(source)
     print_indented(phyloxml.__class__.__name__, indent)
     indent += 1
     for tree in phyloxml.phylogenies:
