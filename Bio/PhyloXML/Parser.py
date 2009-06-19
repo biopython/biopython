@@ -122,7 +122,7 @@ def read(handle):
             other_depth -= 1
             if other_depth == 0:
                 # We're directly under the root node -- evaluate
-                otr = Other.from_element(elem)
+                otr = Parser.to_other(elem)
                 phyloxml.other.append(otr)
                 root.clear()
     return phyloxml
@@ -215,8 +215,8 @@ class Parser(object):
     #         'scientific_name': str,
     #         }
 
-    @staticmethod
-    def _parse_phylogeny(parent, context):
+    @classmethod
+    def _parse_phylogeny(cls, parent, context):
         """Parse a single phylogeny within the phyloXML tree.
 
         Recursively builds a phylogenetic tree with help from parse_clade, then
@@ -250,8 +250,8 @@ class Parser(object):
                 if tag in complex_types:
                     setattr(phylogeny, tag, complex_types[tag].from_element(elem))
                 elif tag in list_types:
-                    attr, cls = list_types[tag]
-                    getattr(phylogeny, attr).append(cls.from_element(elem))
+                    attr, klass = list_types[tag]
+                    getattr(phylogeny, attr).append(klass.from_element(elem))
                 # Simple types
                 elif tag == 'name': 
                     phylogeny.name = elem.text and elem.text.strip()
@@ -261,12 +261,12 @@ class Parser(object):
                     phylogeny.description = elem.text and elem.text.strip()
                 # Unknown tags
                 else:
-                    phylogeny.other.append(Other.from_element(elem))
+                    phylogeny.other.append(cls.to_other(elem))
                 elem.clear()
         return phylogeny
 
-    @staticmethod
-    def _parse_clade(parent, context):
+    @classmethod
+    def _parse_clade(cls, parent, context):
         clade = Clade(**parent.attrib)
         complex_types = {
                 # XML tag, class
@@ -298,8 +298,8 @@ class Parser(object):
                 if tag in complex_types:
                     setattr(clade, tag, complex_types[tag].from_element(elem))
                 elif tag in list_types:
-                    attr, cls = list_types[tag]
-                    getattr(clade, attr).append(cls.from_element(elem))
+                    attr, klass = list_types[tag]
+                    getattr(clade, attr).append(klass.from_element(elem))
                 # Simple types
                 elif tag == 'branch_length':
                     # NB: possible collision with the attribute
@@ -317,9 +317,16 @@ class Parser(object):
                     clade.width = float(elem.text)
                 # Unknown tags
                 else:
-                    clade.other.append(Other.from_element(elem))
+                    clade.other.append(cls.to_other(elem))
                 elem.clear()
         return clade
+
+    @classmethod
+    def to_other(cls, elem):
+        return Other(elem.tag, elem.attrib,
+                  value=(elem.text and elem.text.strip() or None),
+                  children=[cls.to_other(child) for child in elem],
+                  )
 
 
 # ---------------------------------------------------------------------
@@ -339,11 +346,6 @@ class PhyloElement(object):
                     for key, val in attrib.iteritems()
                     if val is not None)
         self.__dict__.update(kwargs)
-
-    @classmethod
-    def from_element(cls, elem):
-        raise NotImplementedError("This method should be implemented by " \
-                                  "the derived class %s." % cls)
 
 
 # Core elements
@@ -386,13 +388,6 @@ class Other(PhyloElement):
 
     def __repr__(self):
         return '<Other %s at %s>' % (self.tag, hex(id(self)))
-
-    @classmethod
-    def from_element(cls, elem):
-        return cls(elem.tag, elem.attrib,
-                  value=(elem.text and elem.text.strip() or None),
-                  children=[cls.from_element(child) for child in elem],
-                  )
 
 
 class Phylogeny(PhyloElement):
