@@ -10,8 +10,6 @@ Actually, there are 2 stops.
 SK*CI*M
 Yep, 2 stops.
 SK+CI+M
-TCTAAGCGTTGTATT
-'SKRCI*M' == 'SKRCI*M'
 RNA translation ... works.
 RNA translation to stop ... works.
 Forward ambiguous
