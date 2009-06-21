@@ -362,8 +362,9 @@ def _get_phred_quality(record) :
         return [phred_quality_from_solexa(q) for \
                 q in record.letter_annotations["solexa_quality"]]
     except KeyError :
-        raise ValueError("No suitable quality scores found in letter_annotations "
-                         "of SeqRecord (id=%s)." % record.id)
+        raise ValueError("No suitable quality scores found in "
+                         "letter_annotations of SeqRecord (id=%s)." \
+                         % record.id)
 
 def _get_solexa_quality(record) :
     """Extract Solexa qualities from a SeqRecord's letter_annotations (PRIVATE).
@@ -379,8 +380,9 @@ def _get_solexa_quality(record) :
         return [solexa_quality_from_phred(q) for \
                 q in record.letter_annotations["phred_quality"]]
     except KeyError :
-        raise ValueError("No suitable quality scores found in letter_annotation "
-                         "of SeqRecord (id=%s)." % record.id)
+        raise ValueError("No suitable quality scores found in "
+                         "letter_annotation of SeqRecord (id=%s)." \
+                         % record.id)
 
 
 #TODO - Default to nucleotide or even DNA?
@@ -612,10 +614,10 @@ def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = No
                            id=id, name=name, description=descr)
         qualities = [ord(letter)-SANGER_SCORE_OFFSET for letter in quality_string]
         if qualities and (min(qualities) < 0 or max(qualities) > 93) :
-            raise ValueError("Quality score outside 0 to 93 found - these"
-                             " are probably in Solexa/Illumina FASTQ "
-                             "format, not the Sanger FASTQ format which "
-                             "uses PHRED scores.")
+            raise ValueError("PHRED quality score outside 0 to 93 found - "
+                             "your file is probably not in the standard "
+                             "Sanger FASTQ format. Check if it is one of the"
+                             "Solexa/Illumina variants instead.")
         record.letter_annotations["phred_quality"] = qualities
         yield record
 
@@ -789,13 +791,12 @@ def FastqIlluminaIterator(handle, alphabet = single_letter_alphabet, title2ids =
         record = SeqRecord(Seq(seq_string, alphabet),
                            id=id, name=name, description=descr)
         qualities = [ord(letter)-SOLEXA_SCORE_OFFSET for letter in quality_string]
-        #To strict - after all, this FASTQ file could have been post processed
-        #since comming off the instrument...
-        #if qualities :
-        #    if min(qualities) < 0 or max(qualities) > 40 :
-        #        raise ValueError("PHRED Quality score outside 0 to 40 found - "
-        #                         "this file is probably not in the Illumina "
-        #                         "1.3+ FASTQ format.")
+        if qualities and (min(qualities) < 0 or max(qualities) > 93) :
+            raise ValueError("PHRED quality score outside 0 to 93 found - "
+                             "your file is probably not in the Illumina 1.3+ "
+                             "FASTQ format. Check if it is a standard Sanger "
+                             "FASTQ file or from an older Solexa/Illumina "
+                             "pipeline.")
         record.letter_annotations["phred_quality"] = qualities
         yield record
     
@@ -891,10 +892,11 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
             line = handle.readline()
 
         if qualities :
-            if min(qualities) < 0 or max(qualities) > 90 :
-                raise ValueError(("Quality score range for %s is %i to %i, outside the " \
-                                 +"expected 0 to 90.  Perhaps these are Solexa/Illumina " \
-                                 +"scores, and not PHRED scores?") \
+            if min(qualities) < 0 or max(qualities) > 93 :
+                raise ValueError(("Quality score range for %s is %i to %i, "
+                                  "outside the expected 0 to 93.  Perhaps "
+                                  "these are Solexa/Illumina scores, and not "
+                                  "PHRED scores?") \
                                  % (id, min(qualities), max(qualities)))
         
         #Return the record and then continue...
