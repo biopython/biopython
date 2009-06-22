@@ -401,6 +401,10 @@ class Parser(object):
                 confidence=get_child_as(elem, 'confidence', cls.to_confidence))
 
     @classmethod
+    def to_id(cls, elem):
+        return Tree.Id(elem.text.strip(), elem.get('type'))
+
+    @classmethod
     def to_point(cls, elem):
         return Tree.Point(
                 elem.get('geodetic_datum'),
@@ -458,7 +462,7 @@ class Parser(object):
     @classmethod
     def to_taxonomy(cls, elem):
         return Tree.Taxonomy(
-                id=get_child_text(elem, 'id'),
+                id=get_child_as(elem, 'id', cls.to_id),
                 code=check_str(get_child_text(elem, 'code'),
                                r'[a-zA-Z0-9_]{2,10}'),
                 scientific_name=get_child_text(elem, 'scientific_name'),

@@ -374,6 +374,15 @@ class Events(PhyloElement):
                 speciations=speciations, losses=losses, confidence=confidence)
 
 
+class Id(PhyloElement):
+    """A general purpose identifier element.
+
+    Allows to indicate the type (or source) of an identifier. 
+    """
+    def __init__(self, value, type=None):
+        PhyloElement.__init__(self, {'type': type}, value=value)
+
+
 class Point(PhyloElement):
     """Coordinates of a point, with an optional altitude.
 
@@ -592,7 +601,6 @@ class Taxonomy(PhyloElement):
     with 'ncbi_taxonomy' as 'type' for the California sea hare).
 
     Attributes:
-        type
         id_source -- link other elements to a taxonomy (on the XML level)
 
     Children:
@@ -606,7 +614,7 @@ class Taxonomy(PhyloElement):
     """
     def __init__(self, 
             # Attributes
-            type=None, id_source=None,
+            id_source=None,
             # Child nodes
             id=None, code=None, scientific_name=None, rank=None, uri=None,
             # Collections
