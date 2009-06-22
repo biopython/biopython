@@ -55,7 +55,7 @@ class DialignApplication(unittest.TestCase):
         """
         #Test using keyword arguments:
         cmdline = DialignCommandline(dialign_exe, input=self.infile1)
-        self.assertEqual(str(cmdline), dialign_exe + " Fasta/f002 ")
+        self.assertEqual(str(cmdline), dialign_exe + " Fasta/f002")
         stdin, stdout, stderr = Application.generic_run(cmdline)
         #If there is a problem, the output can be very helpful to see,
         #so check this before looking at the return code:
@@ -72,7 +72,8 @@ class DialignApplication(unittest.TestCase):
         cmdline.set_parameter("input", self.infile1)
         cmdline.set_parameter("-max_link", True)
         cmdline.set_parameter("stars", 4)
-        self.assertEqual(str(cmdline), dialign_exe + " -max_link -stars 4 Fasta/f002 ")
+        self.assertEqual(str(cmdline), dialign_exe + \
+                         " -max_link -stars 4 Fasta/f002")
         stdin, stdout, stderr = Application.generic_run(cmdline)
         self.assertEqual(stderr.read(), "")
         self.assertEqual(stdout.read(), "")
@@ -87,7 +88,7 @@ class DialignApplication(unittest.TestCase):
         #Test with properties
         cmdline.input = self.infile1
         cmdline.msf = True
-        self.assertEqual(str(cmdline), "dialign2-2 -msf Fasta/f002 ")
+        self.assertEqual(str(cmdline), dialign_exe + " -msf Fasta/f002")
         stdin, stdout, stderr = Application.generic_run(cmdline)
         self.assertEqual(stdout.read(), "")
         self.assertEqual(stderr.read(), "")
@@ -106,7 +107,8 @@ class DialignApplication(unittest.TestCase):
         cmdline.set_parameter("-ow", True)
         cmdline.set_parameter("mask", True)
         cmdline.set_parameter("-cs", True)
-        self.assertEqual(str(cmdline), "dialign2-2 -cs -mask -nt -ow -stars 9 -thr 4 Fasta/f002 ")
+        self.assertEqual(str(cmdline), dialign_exe + \
+                         " -cs -mask -nt -ow -stars 9 -thr 4 Fasta/f002")
         stdin, stdout, stderr = Application.generic_run(cmdline)
         self.assertEqual(stderr.read(), "")
         self.assertEqual(stdin.return_code, 0)
