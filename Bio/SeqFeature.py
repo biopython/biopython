@@ -70,7 +70,7 @@ class SeqFeature(object):
     """
     def __init__(self, location = None, type = '', location_operator = '',
                  strand = None, id = "<unknown id>", 
-                 qualifiers = {}, sub_features = [],
+                 qualifiers = None, sub_features = None,
                  ref = None, ref_db = None):
         """Initialize a SeqFeature on a Sequence.
         """
@@ -80,12 +80,12 @@ class SeqFeature(object):
         self.location_operator = location_operator
         self.strand = strand
         self.id = id
-        # XXX right now sub_features and qualifiers cannot be set 
-        # from the initializer because this causes all kinds 
-        # of recursive import problems. I can't understand why this is
-        # at all :-<
-        self.qualifiers = {}
-        self.sub_features = []
+        if qualifiers is None:
+            qualifiers = {}
+        self.qualifiers = qualifiers
+        if sub_features is None:
+            sub_features = []
+        self.sub_features = sub_features
         self.ref = ref 
         self.ref_db = ref_db
 

@@ -133,6 +133,44 @@ def get_feature_nuc(f, parent_seq) :
     if f.strand == -1 : f_seq = f_seq.reverse_complement()
     return f_seq
 
+class SeqRecordCreation(unittest.TestCase):
+    """Test basic creation of SeqRecords.
+    """
+    def test_annotations(self):
+        """Pass in annotations to SeqRecords.
+        """
+        rec = SeqRecord(Seq("ACGT", generic_dna),
+                        id="Test", name="Test", description="Test")
+        assert rec.annotations == {}
+        rec = SeqRecord(Seq("ACGT", generic_dna),
+                        id="Test", name="Test", description="Test",
+                        annotations={"test" : ["a test"]})
+        assert rec.annotations.get("test", "") == ["a test"]
+
+    def test_letter_annotations(self):
+        """Pass in letter annotations to SeqRecords.
+        """
+        rec = SeqRecord(Seq("ACGT", generic_dna),
+                        id="Test", name="Test", description="Test")
+        assert rec.letter_annotations == {}
+        rec = SeqRecord(Seq("ACGT", generic_dna),
+                        id="Test", name="Test", description="Test",
+                        letter_annotations={"test" : [1, 2, 3, 4]})
+        assert rec.letter_annotations.get("test", []) == [1, 2, 3, 4]
+        # XXX should raise an error with incorrect number of letter annotations
+        rec = SeqRecord(Seq("ACGT", generic_dna),
+                        id="Test", name="Test", description="Test",
+                        letter_annotations={"test" : [1, 2, 3]})
+
+    def test_qualifiers(self):
+        """Pass in qualifiers to SeqFeatures.
+        """
+        f = SeqFeature(FeatureLocation(10,20), strand=+1, type="CDS")
+        assert f.qualifiers == {}
+        f = SeqFeature(FeatureLocation(10,20), strand=+1, type="CDS",
+                qualifiers={"test": ["a test"]})
+        assert f.qualifiers.get("test", "") == ["a test"]
+
 class FeatureWriting(unittest.TestCase) :
     def setUp(self) :
         self.record = SeqRecord(Seq("ACGT"*100, generic_dna),
