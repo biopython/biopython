@@ -34,16 +34,6 @@ This GitHub branch:
 Timeline
 ========
 
-:Backlog:
-    Documentation on Biopython wiki:
-
-    - explain use cases
-
-    Integration:
-
-    - Play nicely with Nexus, Newick
-    - Identify more Biopython objects to reuse or export to
-
 :Done:
     - Add sample phyloXML files from phyloxml.org to this repository
     - Add a list of "core" elements to this file
@@ -55,46 +45,50 @@ Timeline
     Code:
 
     - Wrapper function for loading local files by name [*__init__.read()*]
-    - Specific exception and warning to raise for invalid phyloXML files
+    - Specific exception and warning to raise for noncompliant phyloXML files
       [*Exceptions.py*]
-    - Simple base class for all phyloXML elements [*Parser.PhyloElement*]
-    - Instantiate Tier 0, 1 and 2 elements from an XML stream ("end" events)
+    - Simple base class for all phyloXML elements [*Tree.PhyloElement*]
+    - Class definitions Tier 0, 1, and 2 phyloXML types [*Tree.py*]
+    - Parse individual phylogenies or read a complete PhyloXML object from an
+      XML stream [*parse(), read()*]
     - Utilities: dump_tags, pretty_print [*Utils.py*]
+    - Methods to convert PhyloXML objects to core Biopython types:
+
+        - PhyloXML.Sequence to SeqRecord (*in progress*)
 
     Unit tests:
 
-    - no-op parsing of small example phyloXML files with xml.etree
-    - no-op parsing of a large zipped phyloXML file
-    - basic loading of the root node into a Python object
-    - creating a list of phylogeny objects under the root node
-    - creating trees of at least 3 clades deep
+    - no-op parsing of example phyloXML files with xml.etree [*test_dump_tags*]
+    - write a complete, readable representation of a phyloXML object
+      [*test_pretty_print*]
+    - build a complete phyloXML object from each example file
+    - parse individual phylogenies as needed
+    - create trees of at least 3 clades deep
+    - instantiate of Tier 0 elements
 
     Documentation (Biopython wiki):
 
     - Explain xml.etree, list 3rd-party equivalents for Py2.4
 
-:6/15:
-    Verification and documentation:
-
-    - Finish unittests for parsing and instantiating core elements
-    - Test and check parser performance versus Bioperl and Archaeopterix loading
-      time
-    - Document results of parser testing and performance (on wiki or here)
-    - Document basic usage of the parser on the Biopython wiki
-
-    Code cleanup:
-
-    - Convert from_element methods into separate functions
-    - Move PhyloElement objects, minus from_element methods, to Tree.py
-    - Use custom exceptions and warnings to indicate noncompliance w/ spec
-
 :6/22:
-    Serialization back to file:
 
-    - Write unit tests for serialization
+    Unit tests:
+
+    - Instantiation of Tier 1 & 2 elements
+    - Serialization to an output stream
+
+    Code:
+
     - Write serialization methods for each class
     - Write a top-level function for triggering serialization of the whole
       hierarchy
+
+    Documentation (on Biopython wiki):
+
+    - Explain use cases
+    - Basic usage of the parser
+    - Provide guidance on parser performance (parse() is ~4x faster; compare to
+      Bioperl and Archaopterix)
 
 :6/29:
     Verification and documentation:
@@ -112,6 +106,12 @@ Timeline
         - \*.__str__(): pretty representation for printing nodes
 
     - Add the corresponding magic methods to the base class
+
+    Integration:
+
+    - Play nicely with Nexus, Newick
+    - Identify more Biopython objects to reuse or export to
+
 
 :7/13:
     Extend the core to the rest of the spec:
@@ -151,10 +151,11 @@ Tier 1 (used in all example files):
 
 Tier 2 (used in at least one example file, but not all):
 
-    - done: accession, alt, annotation, clade_relation, common_name, date, desc,
+    - done:
+        accession, alt, annotation, clade_relation, common_name, date, desc,
         description, distribution, domain, domain_architecture, duplications,
         events, id, lat, long, mol_seq, point, property, rank, scientific_name,
-        sequence, sequence_relation, speciations, symbol, uri value,
+        sequence, sequence_relation, speciations, symbol, uri, value
 
 Tier 3 (not found in example files):
 
