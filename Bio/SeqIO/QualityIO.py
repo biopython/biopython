@@ -73,8 +73,7 @@ following format names:
 We could potentially add support for "qual-solexa" meaning QUAL files which
 contain Solexa scores, but thus far there isn't any reason to use such files.
 
-For example, consider the following short FASTQ file (extracted from a real
-NCBI dataset)::
+For example, consider the following short FASTQ file::
 
     @EAS54_6_R1_2_1_413_324
     CCCTTCTTGTCTTCAGCGTTTCTCC
@@ -90,10 +89,10 @@ NCBI dataset)::
     ;;;;;;;;;;;9;7;;.7;393333
 
 This contains three reads of length 25.  From the read length these were
-probably originally from an early Solexa/Illumina sequencer but NCBI have
-followed the Sanger FASTQ convention and this actually uses PHRED style
-qualities.  This means we can parse this file using Bio.SeqIO using "fastq"
-as the format name:
+probably originally from an early Solexa/Illumina sequencer but this file
+follows the Sanger FASTQ convention (PHRED style qualities with an ASCII
+offet of 33).  This means we can parse this file using Bio.SeqIO using
+"fastq" as the format name:
 
     >>> from Bio import SeqIO
     >>> for record in SeqIO.parse(open("Quality/example.fastq"), "fastq") :
@@ -156,7 +155,7 @@ as the format! The reason for this is all these scores are high enough that
 the PHRED and Solexa scores are almost equal. The differences become apparent
 for poor quality reads. See the functions solexa_quality_from_phred and
 phred_quality_from_solexa for more details.
-
+ 
 If you wanted to trim your sequences (perhaps to remove low quality regions,
 or to remove a primer sequence), try slicing the SeqRecord objects.  e.g.
 
@@ -242,6 +241,67 @@ It is important that you explicitly tell Bio.SeqIO which FASTQ variant you are
 using ("fastq" for the Sanger standard using PHRED values, "fastq-solexa" for
 the original Solexa/Illumina variant, or "fastq-illumina" for the more recent
 variant), as this cannot be detected reliably automatically.
+
+To illustrate this problem, let's consider an artifical example:
+
+    >>> from Bio.Seq import Seq
+    >>> from Bio.Alphabet import generic_dna
+    >>> from Bio.SeqRecord import SeqRecord
+    >>> test = SeqRecord(Seq("ACGTACGTAC", generic_dna), id="Test",
+    ... description="Made up!")
+    >>> print test.format("fasta")
+    >Test Made up!
+    ACGTACGTAC
+    <BLANKLINE>
+    >>> print test.format("fastq")
+    Traceback (most recent call last):
+     ...
+    ValueError: No suitable quality scores found in letter_annotations of SeqRecord (id=Test).
+
+We created a sample SeqRecord, and can show it in FASTA format - but for QUAL
+or FASTQ format we need to provide some quality scores. These are held as a
+list of integers (one for each base) in the letter_annotations dictionary:
+
+    >>> test.letter_annotations["phred_quality"] = [0,1,2,3,4,5,10,20,30,40]
+    >>> print test.format("qual")
+    >Test Made up!
+    0 1 2 3 4 5 10 20 30 40
+    <BLANKLINE>
+    >>> print test.format("fastq")
+    @Test Made up!
+    ACGTACGTAC
+    +
+    !"#$%&+5?I
+    <BLANKLINE>
+
+We can check this FASTQ encoding - the first PHRED quality was zero, and this
+mapped to "!", while the final score was 40 and this mapped to "I":
+
+    >>> ord("!") - 33
+    0
+    >>> ord("I") - 33
+    40
+
+Similarly, we could produce an Illumina 1.3+ style FASTQ file using PHRED
+scores with an offset of 64:
+
+    >>> print test.format("fastq-illumina")
+    @Test Made up!
+    ACGTACGTAC
+    +
+    @ABCDEJT^h
+    <BLANKLINE>
+
+And we can check this too - the first PHRED score was zero, and this mapped to
+"@", while the final score was 40 and this mapped to "h":
+
+    >>> ord("@") - 64
+    0
+    >>> ord("h") - 64
+    40
+
+Notice how different the standard Sanger FASTQ and the Illumina 1.3+ style
+FASTQ file look here for the same data!
 """
 __docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
 
@@ -381,7 +441,7 @@ def _get_solexa_quality(record) :
                 q in record.letter_annotations["phred_quality"]]
     except KeyError :
         raise ValueError("No suitable quality scores found in "
-                         "letter_annotation of SeqRecord (id=%s)." \
+                         "letter_annotations of SeqRecord (id=%s)." \
                          % record.id)
 
 
@@ -501,9 +561,7 @@ def FastqGeneralIterator(handle) :
                 break
             seq_lines.extend(line.split()) #removes any whitespace
             line = handle.readline()
-
         seq_string = "".join(seq_lines)
-        del seq_lines
 
         quality_lines = []
         line = handle.readline()
@@ -522,9 +580,7 @@ def FastqGeneralIterator(handle) :
                 
             quality_lines.extend(line.split()) #removes any whitespace
             line = handle.readline()
-
         quality_string = "".join(quality_lines)
-        del quality_lines
         
         if len(seq_string) != len(quality_string) :
             raise ValueError("Lengths of sequence and quality values differs "
