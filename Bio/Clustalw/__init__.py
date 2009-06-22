@@ -1,6 +1,15 @@
-# Clustalw modules
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+"""Code for calling ClustalW and parsing its output (semi-obsolete).
 
-"""
+This module has been superseded by the Bio.AlignIO framework for
+alignment parsing, and the ClustalW command line wrapper in
+Bio.Align.Applications for calling the tool. These are both described
+in the current version of the Biopython Tutorial and Cookbook.
+This means Bio.Clustalw is now effectively obsolete and is likely to
+be deprecated and eventually removed in future releases of Biopython.
+
 A set of classes to interact with the multiple alignment command
 line program clustalw. 
 
