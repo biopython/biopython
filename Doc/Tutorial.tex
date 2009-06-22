@@ -1222,7 +1222,7 @@ The \verb|SeqRecord| class itself is quite simple, and offers the following info
 
   \item[annotations] -- A dictionary of additional information about the sequence. The keys are the name of the information, and the information is contained in the value. This allows the addition of more ``unstructed'' information to the sequence.
   
-  \item[features] -- A list of \verb|SeqFeature| objects with more structured information about the features on a sequence. The structure of sequence features is described below in Section~\ref{sec:seq_features}.
+  \item[features] -- A list of \verb|SeqFeature| objects with more structured information about the features on a sequence (e.g. position of genes on a genome, or domains on a protein sequence). The structure of sequence features is described below in Section~\ref{sec:seq_features}.
   
   \item[dbxrefs] - A list of database cross-references as strings.
 \end{description}
@@ -1271,8 +1271,6 @@ Adding annotations is easy, and just involves dealing directly with the annotati
 >>> print simple_seq_r.annotations["evidence"]
 None. I just made it up.
 \end{verbatim}
-
-You'll find that when parsing in GenBank or EMBL files, or reading data from BioSQL, lists of strings are used rather than plain strings for the dictionary values. This makes sense if you are familiar with the GenBank/EMBL feature tables and the BioSQL schema, but can be a little surprising for beginners.
 
 \subsection{SeqRecord objects from FASTA files}
 
@@ -1468,7 +1466,7 @@ To show an example of SeqFeatures in action, let's take a look at the following 
                      /gene="F28B23.12"
 \end{verbatim}
 
-To look at the easiest attributes of the \verb|SeqFeature| first, if you got a \verb|SeqFeature| object for this it would have it \verb|type| of 'mRNA', a \verb|strand| of -1 (due to the `complement'), and would have None for the \verb|ref| and \verb|ref_db| since there are no references to external databases. The \verb|qualifiers| for this SeqFeature would be a Python dictionarary that looked like \verb|{'gene' : 'F28B23.12'}|.
+To look at the easiest attributes of the \verb|SeqFeature| first, if you got a \verb|SeqFeature| object for this it would have it \verb|type| of 'mRNA', a \verb|strand| of -1 (due to the `complement'), and would have None for the \verb|ref| and \verb|ref_db| since there are no references to external databases. The \verb|qualifiers| for this SeqFeature would be a Python dictionarary that looked like \verb|{'gene' : ['F28B23.12']}|.
 
 Now let's look at the more tricky part, how the `join' in the location
 line is handled. First, the location for the top level \verb|SeqFeature| (the
@@ -1481,9 +1479,9 @@ Well, that's where the \verb|sub_features| go in.
 
 The \verb|sub_features| attribute will have a list with two \verb|SeqFeature|
 objects in it, and these contain the information in the join. Let's
-look at \verb|top_level_feature.sub_features[0]|; the first
+look at \verb|top_level_feature.sub_features[0]| (the first
 \verb|sub_feature|). This object is a \verb|SeqFeature| object with a
-\verb|type| of `\verb|mRNA_join|,' a \verb|strand| of -1 (inherited
+\verb|type| of `\verb|mRNA|,' a \verb|strand| of -1 (inherited
 from the parent \verb|SeqFeature|) and a location going from
 \verb|'<49223' to '49300'|.
 
@@ -2510,7 +2508,7 @@ out_handle.close()
 \end{verbatim}
 
 There is a related example in Section~\ref{sec:SeqIO-translate}, translating each
-record in the FASTA file from nucleotides to amino acids.
+record in a FASTA file from nucleotides to amino acids.
 
 \subsection{Getting your SeqRecord objects as formatted strings}
 \label{sec:Bio.SeqIO-and-StringIO}
@@ -3150,143 +3148,28 @@ a command line tool on your behalf. Normally you would:
 All the command line wrappers we're going to talk about in this chapter follow the same style.
 You create a command line object specifying the options (e.g. the input filename and the
 output filename), then invoke this command line via a Python operating system call (e.g.
-using the subprocess module).
+using the \texttt{subprocess} module).
 
-\subsection{EMBOSS needle and water}
-The \href{http://emboss.sourceforge.net/}{EMBOSS} suite includes the \texttt{water} and
-\texttt{needle} tools for Smith-Waterman algorithm local alignment, and Needleman-Wunsch
-global alignment. The tools share the same style interface, so switching between the two
-is trivial -- we'll just use \texttt{needle} here.
-
-Suppose you want to do a global pairwise alignment between two sequences, prepared in
-FASTA format as follows:
+Most of these wrappers are defined in the \verb|Bio.Align.Applications| module:
 
 \begin{verbatim}
->HBA_HUMAN
-MVLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHG
-KKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTP
-AVHASLDKFLASVSTVLTSKYR
-\end{verbatim}
-
-\noindent in a file \texttt{alpha.fasta}, and secondly in a file \texttt{beta.fasta}:
-
-\begin{verbatim}
->HBB_HUMAN
-MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPK
-VKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFG
-KEFTPPVQAAYQKVVAGVANALAHKYH
-\end{verbatim}
-
-Let's start by creating a complete \texttt{needle} command line object in one go:
-
-\begin{verbatim}
->>> from Bio.Emboss.Applications import NeedleCommandline
->>> cline = NeedleCommandline(asequence="alpha.faa", bsequence="beta.faa",
-...                           gapopen=10, gapextend=0.5, outfile="needle.txt")
->>> print cline
-needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5 
-\end{verbatim}
-
-Why not try running this by hand at the command prompt? You should see it does a
-pairwise comparison and records the output in the file \texttt{needle.txt} (in the
-default EMBOSS alignment file format).
-
-You may find that even though you have EMBOSS installed, the above command doesn't
-work -- you may get a message about ``command not found'' (especially on Windows).
-This indicated that the EMBOSS tools are not on your PATH (an environment variable,
-a list of directories to be searched). You can either update your PATH setting to
-include the location of your EMBOSS tools (how you do this will depend on your OS),
-or simply type in the full path of the tool. You can also tell Biopython the full
-path to the tool, for example:
-
-\begin{verbatim}
->>> from Bio.Emboss.Applications import NeedleCommandline
->>> cline = NeedleCommandline(r"C:\EMBOSS\needle.exe",
-...                           asequence="alpha.faa", bsequence="beta.faa",
-...                           gapopen=10, gapextend=0.5, outfile="needle.txt")
-\end{verbatim}
-
-\noindent Remember in Python that for a default string \verb|\n| or \verb|\t| means a
-new line or a tab -- which is why we're put a letter ``r'' at the start for a raw string.
-
-At this point it might help to try running the EMBOSS tools yourself by hand at the
-command line, to familiarise yourself the other options and compare them to the
-Biopython help text:
-
-\begin{verbatim}
->>> from Bio.Emboss.Applications import NeedleCommandline
->>> help(NeedleCommandline)
+>>> import Bio.Align.Applications
+>>> dir(Bio.Align.Applications)
 ...
+['ClustalwCommandline', 'DialignCommandline', 'MafftCommandline', 'MuscleCommandline',
+'PrankCommandline', 'ProbconsCommandline', 'TCoffeeCommandline' ...]
 \end{verbatim}
 
-Note that you can also specify (or change or look at) the settings like this:
-
-\begin{verbatim}
->>> from Bio.Emboss.Applications import NeedleCommandline
->>> cline = NeedleCommandline()
->>> cline.asequence="alpha.faa"
->>> cline.bsequence="beta.faa"
->>> cline.gapopen=10
->>> cline.gapextend=0.5
->>> cline.outfile="needle.txt"
->>> print cline
-needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5 
->>> print cline.outfile
-needle.txt
-\end{verbatim}
-
-Next we want to use Python to run this command for us - and here there are several
-options. For full control, we recommend you use the built in Python \texttt{subprocess}
-module. However, for simple usage Biopython includes a wrapper function that usually
-suffices:
-
-\begin{verbatim}
->>> from Bio.Application import generic_run
->>> result, out_handle, err_handle = generic_run(cline)
->>> print err_handle.read()
-Needleman-Wunsch global alignment of two sequences
-
->>> print out_handle.read()
-
->>> print result.return_code
-0
-\end{verbatim}
-
-The \verb|generic_run| function returns three things. First, a result object
-includes the return code, an integer value which by convention is zero when
-successful (check the documentation for particular tools about what return
-codes they might use). Then, two handles which contain the ``standard out''
-(stdout) and ``standard error'' (stderr) text from the tool. These terms
-originate in Unix, and are general the results from the program and any
-progress or error messages. We told EMBOSS to write the output to a file,
-but you \emph{can} tell it to write the output to stdout instead (useful if
-you don't want a temporary output file to get rid of).
-
-In the above, all we really care about is that the return code is zero
-(success). Then we can load the output file with \verb|Bio.AlignIO| as
-discussed earlier in this chapter, as the \texttt{emboss} format:
-
-\begin{verbatim}
->>> from Bio import AlignIO
->>> align = AlignIO.read(open("needle.txt"), "emboss")
->>> print align
-SingleLetterAlphabet() alignment with 2 rows and 149 columns
-MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR HBA_HUMAN
-MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRF...KYH HBB_HUMAN
-\end{verbatim}
-
-This has only scratched the surface of what you can do with \texttt{needle}
-and \texttt{water}. One useful trick is that the second file can contain
-multiple sequences (say five), and then EMBOSS will do five pairwise
-alignments.
-
-Note - Biopython includes its own pairwise alignment code in the \verb|Bio.pairwise2|
-module (written in C for speed, but with a pure Python fallback available too). This
-doesn't work with alignment objects, so we have not covered it within this chapter.
-See the module's docstring (built in help) for details.
+\noindent (Ignore the entries starting with an underscore -- these have
+special meaning in Python.)
+The module \verb|Bio.Emboss.Applications| has wrappers for some of the
+\href{http://emboss.sourceforge.net/}{EMBOSS suite}, including
+\texttt{needle} and \texttt{water}, which are described below in
+Section~\ref{seq:emboss-needle-water}.
+We won't explore all these alignment tools here in the section, just a
+sample, but the same principles apply.
 
 \subsection{ClustalW}
-
 ClustalW is a popular command line tool for multiple sequence alignment
 (there is also a graphical interface called ClustlX). Biopython's
 \verb|Bio.Align.Applications| module has a wrapper for this (and several
@@ -3324,20 +3207,39 @@ Notice here we have given the executable name as \texttt{clustalw2},
 indicating we have version two installed, which has a different filename to
 version one (\texttt{clustalw}, the default). Fortunately both versions
 support the same set of arguments at the command line (and indeed, should be
-functionally identical).  As noted in the example above, if the tool isn't on
-your path (which is the norm on Windows), you will have to give the full path
-to the executable file -- for example:
+functionally identical).
+
+You may find that even though you have ClustalW installed, the above command
+doesn't work -- you may get a message about ``command not found'' (especially
+on Windows). This indicated that the ClustalW executable is not on your PATH
+(an environment variable, a list of directories to be searched). You can
+either update your PATH setting to include the location of your copy of
+ClustalW tools (how you do this will depend on your OS), or simply type in
+the full path of the tool. You can also tell Biopython the full
+path to the tool, for example:
 
 \begin{verbatim}
 >>> import os
 >>> from Bio.Align.Applications import ClustalwCommandline
->>> clustalw_exe = r"C:\Program Files\ClustalW2\clustalw2.exe"
+>>> clustalw_exe = r"C:\Program Files\new clustal\clustalw2.exe"
 >>> assert os.path.isfile(clustalw_exe), "Clustal W executable missing"
 >>> cline = ClustalwCommandline(clustalw_exe, infile="opuntia.fasta")
 \end{verbatim}
 
+\noindent Remember in Python that for a default string \verb|\n| or \verb|\t|
+means a new line or a tab -- which is why we're put a letter ``r'' at the
+start for a raw string. This is generally good practice when specifying a
+Windows style file name.
+
 You can now run this command line, perhaps using the Python \verb|subprocess|
-module, or maybe just with our \verb|generic_run| function:
+module, or maybe just with our \verb|generic_run| function.
+This returns three things. First, a result object
+includes the return code, an integer value which by convention is zero when
+successful (check the documentation for particular tools about what return
+codes they might use). Then, two handles which contain the ``standard out''
+(stdout) and ``standard error'' (stderr) text from the tool. These terms
+originate in Unix, and are general the results from the program and any
+progress or error messages.
 
 \begin{verbatim}
 >>> from Bio.Application import generic_run
@@ -3410,6 +3312,315 @@ None
 \noindent The spacing has been adjusted here for display purposes.
 The tree object is actuall pretty powerful! Have a look at the list of
 methods with \texttt{dir(tree)} to get a hint of this...
+
+\subsection{MUSCLE}
+MUSCLE is a more recent multiple sequence alignment tool than ClustalW, and
+Biopython also has a wrapper for it under the \verb|Bio.Align.Applications|
+module. As before, we recommend you try using MUSCLE from the command line before
+trying it from within Python, as the Biopython wrapper is very faithful to the
+actual command line API:
+
+\begin{verbatim}
+>>> from Bio.Align.Applications import MuscleCommandline
+>>> help(MuscleCommandline)
+...
+\end{verbatim}
+
+For the most basic usage, all you need is to have a FASTA input file, such as
+\href{http://biopython.org/DIST/docs/tutorial/examples/opuntia.fasta}{opuntia.fasta}
+(available online or in the Doc/examples subdirectory of the Biopython source
+code). You can then tell MUSCLE to read in this FASTA file, and write the
+alignment to an output file:
+
+\begin{verbatim}
+>>> from Bio.Align.Applications import MuscleCommandline
+>>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.txt")
+>>> print cline
+muscle -in opuntia.fasta -out opuntia.txt
+\end{verbatim}
+
+Note that MUSCLE uses ``-in'' and ``-out'' but in Biopython we have to use
+``input'' and ``out'' as the keyword arguments or property names. This is
+because ``in'' is a reserved word in Python.
+
+By default MUSCLE will output the alignment as a FASTA file (using gapped
+sequences). You can also ask for ClustalW-like output:
+
+\begin{verbatim}
+>>> from Bio.Align.Applications import MuscleCommandline
+>>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clw=True)
+>>> print cline
+muscle -in opuntia.fasta -out opuntia.txt -clw
+\end{verbatim}
+
+Or, strict ClustalW output where the original ClustalW header line is
+used for maximum compatibility:
+
+\begin{verbatim}
+>>> from Bio.Align.Applications import MuscleCommandline
+>>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clwstrict=True)
+>>> print cline
+muscle -in opuntia.fasta -out opuntia.txt -clwstrict
+\end{verbatim}
+
+MUSCLE can also output in GCG MSF format (using the \texttt{msf} argument), but
+Biopython can't currently parse that, or using HTML which would give a human
+readable web page (not suitable for parsing).
+
+You can also set the other optional parameters, for example the maximum number
+of iterations. See the built in help for details:
+
+\begin{verbatim}
+>>> from Bio.Align.Applications import MuscleCommandline
+>>> help(MuscleCommandline)
+\end{verbatim}
+
+You might run simple MUSCLE command line string as described above for
+ClustalW, or opt to use the \verb|subprocess| module.
+
+\subsection{MUSCLE using stdout}
+
+Using a MUSCLE command line as in the examples above will write the alignment
+to a file. This means there will be no important information written to the
+standard out (stdout) or standard error (stderr) handles. However, by default
+MUSCLE will write the alignment to standard output (stdout). We can take
+advantage of this to avoid having a temporary output file! For example:
+
+\begin{verbatim}
+>>> from Bio.Align.Applications import MuscleCommandline
+>>> cline = MuscleCommandline(input="opuntia.fasta")
+>>> print cline
+muscle -in opuntia.fasta
+\end{verbatim}
+
+\noindent Now, let's run this can capture the output as handles:
+
+\begin{verbatim}
+>>> from Bio.Application import generic_run
+>>> result, out_handle, err_handle = generic_run(cline)
+>>> print result.return_code
+0
+\end{verbatim}
+
+\noindent Remember, a return code of zero is good -- by convention this means
+no errors. Finally, the output handle should contain our alignment in the
+default FASTA format:
+
+\begin{verbatim}
+>>> from Bio import AlignIO
+>>> align = AlignIO.read(out_handle, "fasta")
+>>> print align
+SingleLetterAlphabet() alignment with 7 rows and 906 columns
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF191663
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273291|gb|AF191665.1|AF191665
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF191664
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191661
+TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF191660
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191659
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191658
+\end{verbatim}
+
+\subsection{MUSCLE using stdin and stdout}
+
+We don't actually \emph{need} to have our FASTA input sequences prepared in a file,
+because by default MUSCLE will read in the input sequence from standard input!
+At this point the limitations of the helper function \verb|generic_run| become
+apparent, so we'll switch to the Python \verb|subprocess| module for full control.
+
+First, we'll need some unaligned sequences in memory as \verb|SeqRecord| objects.
+For this demonstration I'm going to use a filtered version of the original FASTA
+file (using a generator expression), taking just six of the seven sequences:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> records = (r for r in SeqIO.parse(open("opuntia.fasta"), "fasta") if len(r) < 900)
+\end{verbatim}
+
+Then we create the MUSCLE command line, leaving the input and output to their
+defaults (stdin and stdout). I'm also going to ask for strict ClustalW format
+as for the output.
+
+\begin{verbatim}
+>>> from Bio.Align.Applications import MuscleCommandline
+>>> cline = MuscleCommandline(clwstrict=True)
+>>> print cline
+muscle -clwstrict
+\end{verbatim}
+
+Now comes the clever bit using the \verb|subprocess| module:
+
+\begin{verbatim}
+>>> import subprocess
+>>> import sys
+>>> child = subprocess.Popen(str(cline),
+...                          stdin=subprocess.PIPE,...                          stdout=subprocess.PIPE,...                          stderr=subprocess.PIPE,
+...                          shell=(sys.platform!="win32"))                     
+\end{verbatim}
+
+That should start MUSCLE, but it will be sitting waiting for its FASTA input
+sequences, which we must supply via its stdin handle:
+
+\begin{verbatim}
+>>> SeqIO.write(records, child.stdin, "fasta")
+6
+>>> child.stdin.close()
+\end{verbatim}
+
+After writing the six sequences to the handle, MUSCLE will still be waiting
+to see if that is all the FASTA sequences or not -- so we must signal that
+this is all the input data by closing the handle. At that point MUSCLE should
+start to run, and we can ask for the output:
+
+\begin{verbatim}
+>>> from Bio import AlignIO
+>>> align = AlignIO.read(child.stdout, "clustal")
+>>> print align
+SingleLetterAlphabet() alignment with 6 rows and 900 columns
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF19166
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF19166
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF19166
+TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF19166
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF19165
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF19165
+\end{verbatim}
+
+Wow! There we are with a new alignment of just the six records, without having created
+a temporary FASTA input file, or a temporary alignment output file. However, a word of
+caution: Dealing with errors this style of programming is much more complicated. It
+also becomes far harder to diagnose problems, because you can't try running MUSCLE
+manually outside of Biopython (because you don't have the input file to supply).
+There can also be subtle cross platform issues (e.g. Windows versus Linux), and how
+you run your script can have in impact (e.g. at the command line, from IDLE or an
+IDE, or as a GUI script). These are all generic Python issues though, and not
+specific to Biopython.
+
+\subsection{EMBOSS needle and water}
+\label{seq:emboss-needle-water}
+The \href{http://emboss.sourceforge.net/}{EMBOSS} suite includes the \texttt{water} and
+\texttt{needle} tools for Smith-Waterman algorithm local alignment, and Needleman-Wunsch
+global alignment. The tools share the same style interface, so switching between the two
+is trivial -- we'll just use \texttt{needle} here.
+
+Suppose you want to do a global pairwise alignment between two sequences, prepared in
+FASTA format as follows:
+
+\begin{verbatim}
+>HBA_HUMAN
+MVLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHG
+KKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTP
+AVHASLDKFLASVSTVLTSKYR
+\end{verbatim}
+
+\noindent in a file \texttt{alpha.fasta}, and secondly in a file \texttt{beta.fasta}:
+
+\begin{verbatim}
+>HBB_HUMAN
+MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPK
+VKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFG
+KEFTPPVQAAYQKVVAGVANALAHKYH
+\end{verbatim}
+
+Let's start by creating a complete \texttt{needle} command line object in one go:
+
+\begin{verbatim}
+>>> from Bio.Emboss.Applications import NeedleCommandline
+>>> cline = NeedleCommandline(asequence="alpha.faa", bsequence="beta.faa",
+...                           gapopen=10, gapextend=0.5, outfile="needle.txt")
+>>> print cline
+needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5 
+\end{verbatim}
+
+Why not try running this by hand at the command prompt? You should see it does a
+pairwise comparison and records the output in the file \texttt{needle.txt} (in the
+default EMBOSS alignment file format).
+
+Even if you have EMBOSS installed, running this command may not work -- you
+might get a message about ``command not found'' (especially on Windows). This
+probably means that the EMBOSS tools are not on your PATH environment
+variable. You can either update your PATH setting, or simply tell Biopython
+the full path to the tool, for example:
+
+\begin{verbatim}
+>>> from Bio.Emboss.Applications import NeedleCommandline
+>>> cline = NeedleCommandline(r"C:\EMBOSS\needle.exe",
+...                           asequence="alpha.faa", bsequence="beta.faa",
+...                           gapopen=10, gapextend=0.5, outfile="needle.txt")
+\end{verbatim}
+
+\noindent Remember in Python that for a default string \verb|\n| or \verb|\t| means a
+new line or a tab -- which is why we're put a letter ``r'' at the start for a raw string.
+
+At this point it might help to try running the EMBOSS tools yourself by hand at the
+command line, to familiarise yourself the other options and compare them to the
+Biopython help text:
+
+\begin{verbatim}
+>>> from Bio.Emboss.Applications import NeedleCommandline
+>>> help(NeedleCommandline)
+...
+\end{verbatim}
+
+Note that you can also specify (or change or look at) the settings like this:
+
+\begin{verbatim}
+>>> from Bio.Emboss.Applications import NeedleCommandline
+>>> cline = NeedleCommandline()
+>>> cline.asequence="alpha.faa"
+>>> cline.bsequence="beta.faa"
+>>> cline.gapopen=10
+>>> cline.gapextend=0.5
+>>> cline.outfile="needle.txt"
+>>> print cline
+needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5 
+>>> print cline.outfile
+needle.txt
+\end{verbatim}
+
+Next we want to use Python to run this command for us. As explained above,
+for full control, we recommend you use the built in Python \texttt{subprocess}
+module. However, for simple usage Biopython includes a wrapper function that
+usually suffices:
+
+\begin{verbatim}
+>>> from Bio.Application import generic_run
+>>> result, out_handle, err_handle = generic_run(cline)
+>>> print err_handle.read()
+Needleman-Wunsch global alignment of two sequences
+
+>>> print out_handle.read()
+
+>>> print result.return_code
+0
+\end{verbatim}
+
+In the above, all we really care about is that the return code is zero
+(success). Then we can load the output file with \verb|Bio.AlignIO| as
+discussed earlier in this chapter, as the \texttt{emboss} format:
+
+\begin{verbatim}
+>>> from Bio import AlignIO
+>>> align = AlignIO.read(open("needle.txt"), "emboss")
+>>> print align
+SingleLetterAlphabet() alignment with 2 rows and 149 columns
+MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR HBA_HUMAN
+MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRF...KYH HBB_HUMAN
+\end{verbatim}
+
+In this example, we told EMBOSS to write the output to a file, but you
+\emph{can} tell it to write the output to stdout instead (useful if you
+don't want a temporary output file to get rid of), and also read the
+input from stdin (just like in the MUSCLE example in the section above).
+
+This has only scratched the surface of what you can do with \texttt{needle}
+and \texttt{water}. One useful trick is that the second file can contain
+multiple sequences (say five), and then EMBOSS will do five pairwise
+alignments.
+
+Note - Biopython includes its own pairwise alignment code in the \verb|Bio.pairwise2|
+module (written in C for speed, but with a pure Python fallback available too). This
+doesn't work with alignment objects, so we have not covered it within this chapter.
+See the module's docstring (built in help) for details.
+
 
 \chapter{BLAST}
 \label{chapter:blast}
