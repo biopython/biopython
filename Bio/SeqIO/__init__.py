@@ -273,7 +273,7 @@ _FormatToWriter ={"fasta" : FastaIO.FastaWriter,
                   "tab" : TabIO.TabWriter,
                   "fastq" : QualityIO.FastqPhredWriter,
                   "fastq-solexa" : QualityIO.FastqSolexaWriter,
-                  "fastq-illumina" : QualityIO.FastqSolexaWriter,
+                  "fastq-illumina" : QualityIO.FastqIlluminaWriter,
                   "qual" : QualityIO.QualPhredWriter,
                   }
 
