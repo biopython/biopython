@@ -7,9 +7,10 @@
 
 """
 
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio import Alphabet
+from Bio.Seq import Seq
+from Bio.SeqFeature import SeqFeature, FeatureLocation
+from Bio.SeqRecord import SeqRecord
 
 
 class PhyloElement(object):
@@ -441,9 +442,24 @@ class ProteinDomain(PhyloElement):
         confidence (float) -- can be used to store (i.e.) E-values.
         id -- name/unique identifier 
     """
+    # TODO: confirm that 'start' counts from 1, not 0
     def __init__(self, value, start, end, confidence=None, id=None):
         PhyloElement.__init__(self, {'confidence': confidence, 'id': id},
                 value=value, start=start, end=end)
+
+    @classmethod
+    def from_seqfeature(cls):
+        return ProteinDomain(feat.id,
+                feat.location.nofuzzy_start + 1,
+                feat.location.nofuzzy_end,
+                confidence=feat.qualifiers.get('confidence'))
+
+    def to_seqfeature(self):
+        feat = SeqFeature(location=FeatureLocation(self.start, self.end),
+                          id=self.id)
+        if hasattr(self, 'confidence'):
+            feat.qualifiers['confidence'] = self.confidence
+        return feat
 
 
 class Reference(PhyloElement):
@@ -534,17 +550,11 @@ class Sequence(PhyloElement):
             })]
 
         # Unpack record.features
-        # TODO: resolve +/- 1 offset between ProteinDomain and SeqFeature
-        # locations
         if record.features:
             kwargs['domain_architecture'] = DomainArchitecture(
-                    domains=[ProteinDomain(feat.id, 
-                                feat.location.nofuzzy_start + 1,
-                                feat.location.nofuzzy_end + 1,
-                                confidence=feat.qualifiers.get('confidence'),
-                                ) for feat in record.features],
-                    length=len(record.seq)
-                    )
+                    length=len(record.seq),
+                    domains=[ProteinDomain.from_seqfeature(feat)
+                             for feat in record.features])
 
         # Not handled:
         # attributes: id_ref, id_source
