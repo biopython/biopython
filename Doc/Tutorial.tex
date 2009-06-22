@@ -4301,7 +4301,7 @@ To paraphrase:
 In conclusion, be sensible with your usage levels.  If you plan to download lots of data, consider other options.  For example, if you want easy access to all the human genes, consider fetching each chromosome by FTP as a GenBank file, and importing these into your own BioSQL database (see Section~\ref{sec:BioSQL}).
 
 \section{EInfo: Obtaining information about the Entrez databases}
-
+\label{sec:entrez-einfo}
 EInfo provides field index term counts, last update, and available links for each of NCBI's databases. In addition, you can use EInfo to obtain a list of all database names accessible through the Entrez utilities:
 \begin{verbatim}
 >>> from Bio import Entrez
@@ -4392,6 +4392,29 @@ For each of these databases, we can use EInfo again to obtain more information:
 '2008/05/24 06:45'
 \end{verbatim}
 Try \verb+record["DbInfo"].keys()+ for other information stored in this record.
+One of the most useful is a list of possible search fields for use with ESearch:
+
+\begin{verbatim}
+>>> for field in record["DbInfo"]["FieldList"] :
+...     print "%(Name)s, %(FullName)s, %(Description)s" % field
+ALL, All Fields, All terms from all searchable fields
+UID, UID, Unique number assigned to publication
+FILT, Filter, Limits the records
+TITL, Title, Words in title of publication
+WORD, Text Word, Free text associated with publication
+MESH, MeSH Terms, Medical Subject Headings assigned to publication
+MAJR, MeSH Major Topic, MeSH terms of major importance to publication
+AUTH, Author, Author(s) of publication
+JOUR, Journal, Journal abbreviation of publication
+AFFL, Affiliation, Author's institutional affiliation and address
+...
+\end{verbatim}
+
+That's a long list, but indirectly this tells you that for the PubMed
+database, you can do things like \texttt{Jones[AUTH]} to search the
+author field, or \texttt{Sanger[AFFL]} to restrict to authors at the
+Sanger Centre. This can be very handy - especially if you are not so
+familiar with a particular database.
 
 \section{ESearch: Searching the Entrez databases}
 \label{sec:entrez-esearch}
@@ -4406,7 +4429,10 @@ To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For exampl
 \end{verbatim}
 In this output, you see seven PubMed IDs (including 19304878 which is the PMID for the Biopython application notes), which can be retrieved by EFetch (see section \ref{sec:efetch}).
 
-You can also use ESearch to search GenBank. Here we'll do a quick search for the \emph{matK} gene in \emph{Cypripedioideae} orchids:
+You can also use ESearch to search GenBank. Here we'll do a quick
+search for the \emph{matK} gene in \emph{Cypripedioideae} orchids
+(see the Section~\ref{sec:entrez-einfo} about EInfo for one way to
+find out which fields you can search in each Entrez database):
 
 \begin{verbatim}
 >>> handle = Entrez.esearch(db="nucleotide",term="Cypripedioideae[Orgn] AND matK[Gene]")
