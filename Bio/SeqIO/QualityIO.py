@@ -247,11 +247,11 @@ To illustrate this problem, let's consider an artifical example:
     >>> from Bio.Seq import Seq
     >>> from Bio.Alphabet import generic_dna
     >>> from Bio.SeqRecord import SeqRecord
-    >>> test = SeqRecord(Seq("ACGTACGTAC", generic_dna), id="Test",
+    >>> test = SeqRecord(Seq("ACGTACGTA", generic_dna), id="Test",
     ... description="Made up!")
     >>> print test.format("fasta")
     >Test Made up!
-    ACGTACGTAC
+    ACGTACGTA
     <BLANKLINE>
     >>> print test.format("fastq")
     Traceback (most recent call last):
@@ -262,46 +262,85 @@ We created a sample SeqRecord, and can show it in FASTA format - but for QUAL
 or FASTQ format we need to provide some quality scores. These are held as a
 list of integers (one for each base) in the letter_annotations dictionary:
 
-    >>> test.letter_annotations["phred_quality"] = [0,1,2,3,4,5,10,20,30,40]
+    >>> test.letter_annotations["phred_quality"] = [1,2,3,4,5,10,20,30,40]
     >>> print test.format("qual")
     >Test Made up!
-    0 1 2 3 4 5 10 20 30 40
+    1 2 3 4 5 10 20 30 40
     <BLANKLINE>
     >>> print test.format("fastq")
     @Test Made up!
-    ACGTACGTAC
+    ACGTACGTA
     +
-    !"#$%&+5?I
+    "#$%&+5?I
     <BLANKLINE>
 
-We can check this FASTQ encoding - the first PHRED quality was zero, and this
-mapped to "!", while the final score was 40 and this mapped to "I":
+We can check this FASTQ encoding - the first PHRED quality was one, and this
+mapped to a double quote, while the final score was 40 and this mapped to "I":
 
-    >>> ord("!") - 33
-    0
-    >>> ord("I") - 33
+    >>> ord('"') - 33
+    1
+    >>> ord('I') - 33
     40
+    >>> [ord(letter)-33 for letter in '"#$%&+5?I']
+    [1, 2, 3, 4, 5, 10, 20, 30, 40]
 
 Similarly, we could produce an Illumina 1.3+ style FASTQ file using PHRED
 scores with an offset of 64:
 
     >>> print test.format("fastq-illumina")
     @Test Made up!
-    ACGTACGTAC
+    ACGTACGTA
     +
-    @ABCDEJT^h
+    ABCDEJT^h
     <BLANKLINE>
 
-And we can check this too - the first PHRED score was zero, and this mapped to
-"@", while the final score was 40 and this mapped to "h":
+And we can check this too - the first PHRED score was one, and this mapped to
+"A", while the final score was 40 and this mapped to "h":
 
-    >>> ord("@") - 64
-    0
+    >>> ord("A") - 64
+    1
     >>> ord("h") - 64
     40
+    >>> [ord(letter)-64 for letter in "ABCDEJT^h"]
+    [1, 2, 3, 4, 5, 10, 20, 30, 40]
 
 Notice how different the standard Sanger FASTQ and the Illumina 1.3+ style
-FASTQ file look here for the same data!
+FASTQ filea look for the same data! Then we have the older Solexa/Illumina
+format to consider which encodes Solexa scores instead of PHRED scores.
+
+First let's see what Biopython says if we convert the PHRED scores in Solexa
+scores (rounding to one decimal place):
+
+    >>> for q in [1,2,3,4,5,10,20,30,40] :
+    ...     print "PHRED %i maps to Solexa %0.1f" % (q, solexa_quality_from_phred(q))
+    PHRED 1 maps to Solexa -5.9
+    PHRED 2 maps to Solexa -2.3
+    PHRED 3 maps to Solexa -0.0
+    PHRED 4 maps to Solexa 1.8
+    PHRED 5 maps to Solexa 3.3
+    PHRED 10 maps to Solexa 9.5
+    PHRED 20 maps to Solexa 20.0
+    PHRED 30 maps to Solexa 30.0
+    PHRED 40 maps to Solexa 40.0
+
+Now here is the record using the old Solexa style FASTQ file:
+
+    >>> print test.format("fastq-solexa")
+    @Test Made up!
+    ACGTACGTA
+    +
+    :>@BCJT^h
+    <BLANKLINE>
+
+Again, this is using an ASCII offset of 64, so we can check the Solexa scores:
+
+    >>> [ord(letter)-64 for letter in ":>@BCJT^h"]
+    [-6, -2, 0, 2, 3, 10, 20, 30, 40]
+
+This explains why the last few letters of this FASTQ output matched that using
+the Illumina 1.3+ format - high quality PHRED scores and Solexa scores are
+approximately equal.
+
 """
 __docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
 
