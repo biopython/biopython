@@ -1024,6 +1024,7 @@ class FastqPhredWriter(SequentialSequenceWriter):
                 raise TypeError("A quality value of None was found")
             else :
                 raise e
+        
         if record.seq is None:
             raise ValueError("No sequence for record %s" % record.id)
         if len(qualities_str) != len(record) :
@@ -1181,8 +1182,16 @@ class FastqSolexaWriter(SequentialSequenceWriter):
         self._record_written = True
 
         #TODO - Is an empty sequence allowed in FASTQ format?
-        qualities = "".join([chr(int(round(q+SOLEXA_SCORE_OFFSET,0))) for q \
-                             in _get_solexa_quality(record)])
+        qualities = _get_solexa_quality(record)
+        try :
+            qualities_str = "".join([chr(int(round(q+SOLEXA_SCORE_OFFSET,0))) for q \
+                                    in qualities])
+        except TypeError, e :
+            if None in qualities :
+                raise TypeError("A quality value of None was found")
+            else :
+                raise e
+
         if record.seq is None:
             raise ValueError("No sequence for record %s" % record.id)
         if len(qualities) != len(record) :
@@ -1199,7 +1208,7 @@ class FastqSolexaWriter(SequentialSequenceWriter):
         else :
             title = "%s %s" % (id, description)        
 
-        self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities))
+        self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities_str))
 
 class FastqIlluminaWriter(SequentialSequenceWriter):
     """Write Illumina 1.3+ FASTQ format files (with PHRED quality scores).
@@ -1221,8 +1230,16 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
         self._record_written = True
 
         #TODO - Is an empty sequence allowed in FASTQ format?
-        qualities = "".join([chr(int(round(q+SOLEXA_SCORE_OFFSET,0))) for q \
-                             in _get_phred_quality(record)])
+        qualities = _get_phred_quality(record)
+        try :
+            qualities_str = "".join([chr(int(round(q+SOLEXA_SCORE_OFFSET,0))) for q \
+                                     in qualities])
+        except TypeError, e :
+            if None in qualities :
+                raise TypeError("A quality value of None was found")
+            else :
+                raise e
+
         if record.seq is None:
             raise ValueError("No sequence for record %s" % record.id)
         if len(qualities) != len(record) :
@@ -1239,7 +1256,7 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
         else :
             title = "%s %s" % (id, description)        
 
-        self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities))
+        self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities_str))
         
 def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet = single_letter_alphabet, title2ids = None) :
     """Iterate over matched FASTA and QUAL files as SeqRecord objects.
