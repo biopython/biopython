@@ -222,7 +222,7 @@ class Parser(object):
         control to the top-level parsing function.
         """
         phylogeny = Tree.Phylogeny(**parent.attrib)
-        complex_types = ['date', 'clade_relation', 'sequence_relation']
+        complex_types = ['date', 'id', 'clade_relation', 'sequence_relation']
         list_types = {
                 # XML tag, plural attribute
                 'confidence':   'confidences',
@@ -248,8 +248,6 @@ class Parser(object):
                 # Simple types
                 elif tag == 'name': 
                     phylogeny.name = elem.text and elem.text.strip()
-                elif tag == 'id': 
-                    phylogeny.id = elem.text and elem.text.strip()
                 elif tag == 'description':
                     phylogeny.description = elem.text and elem.text.strip()
                 # Unknown tags
