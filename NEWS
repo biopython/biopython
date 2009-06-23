@@ -9,6 +9,8 @@ The latest news is at the top.
 
 ===================================================================
 
+June 23, 2009: Biopython 1.51 beta released.
+
 Biopython no longer supports Python 2.3.  Currently we support Python 2.4,
 2.5 and 2.6.
 

@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 16 June 2009 (Biopython 1.50+)}
+\date{Last Update -- 23 June 2009 (Biopython 1.51 \textit{beta})}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -284,7 +284,7 @@ One thing to note about Biopython is that it often provides multiple ways of ``d
 
 Disputably (of course!), the central object in bioinformatics is the sequence. Thus, we'll start with a quick introduction to the Biopython mechanisms for dealing with sequences, the \verb|Seq| object, which we'll discuss in more detail in Chapter~\ref{chapter:Bio.Seq}.
 
-Most of the time when we think about sequences we have in my mind a string of letters like \verb|'AGTACACTGGT'|. You can create such \verb|Seq| object with this sequence as follows - the ``$>>>$'' represents the Python prompt followed by what you would type in:
+Most of the time when we think about sequences we have in my mind a string of letters like `\verb|AGTACACTGGT|'. You can create such \verb|Seq| object with this sequence as follows - the ``$>>>$'' represents the Python prompt followed by what you would type in:
 
 \begin{verbatim}
 >>> from Bio.Seq import Seq
@@ -3454,7 +3454,9 @@ Now comes the clever bit using the \verb|subprocess| module:
 >>> import subprocess
 >>> import sys
 >>> child = subprocess.Popen(str(cline),
-...                          stdin=subprocess.PIPE,...                          stdout=subprocess.PIPE,...                          stderr=subprocess.PIPE,
+...                          stdin=subprocess.PIPE,
+...                          stdout=subprocess.PIPE,
+...                          stderr=subprocess.PIPE,
 ...                          shell=(sys.platform!="win32"))                     
 \end{verbatim}
 
