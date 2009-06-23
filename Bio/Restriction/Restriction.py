@@ -191,7 +191,7 @@ class FormattedSeq(object) :
         if self.is_linear() :
             data = self.data
         else :
-            data = self.data + self.data[1:size+1]
+            data = self.data + self.data[1:size]
         return [(i.start(), i.group) for i in re.finditer(pattern, data)]
 
     def __getitem__(self, i) :

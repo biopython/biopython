@@ -9,6 +9,8 @@ The latest news is at the top.
 
 ===================================================================
 
+June 23, 2009: Biopython 1.51 beta released.
+
 Biopython no longer supports Python 2.3.  Currently we support Python 2.4,
 2.5 and 2.6.
 
@@ -29,6 +31,11 @@ style FASTQ files using PHRED scores with an ASCII offset of 33), and
 "fastq-solexa" (the original Solexa/Illumina FASTQ format variant holding
 Solexa scores with an ASCII offset of 64) .
 
+For parsing the "swiss" format, Bio.SeqIO now uses the new Bio.SwissProt
+parser, making it about twice as fast as in Biopython 1.50, where the older
+now deprecated Bio.SwissProt.SProt was used. There should be no functional
+differences as a result of this change.
+
 Our command line wrapper objects have been updated to support accessing
 parameters via python properties, and setting of parameters at initiation
 with keyword arguments.  Additionally Cymon Cox has contributed several new
@@ -38,6 +45,10 @@ A few more issues with Biopython's BioSQL support have been fixed (mostly by
 Cymon Cox). In particular, the default PostgreSQL schema includes some rules
 intended for BioPerl support only, which were causing problems in Biopython
 (see BioSQL bug 2839).
+
+There have also been additions to the tutorial, such as the new alignment
+wrappers, with a a whole chapter for the SeqRecord object. We have also
+added to the unit test coverage.
 
 ===================================================================
 

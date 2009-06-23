@@ -25,10 +25,10 @@ possible_unknown_seq_formats = ["qual", "genbank", "gb", "embl"]
 #The list is initially hard coded to preserve the original order of the unit
 #test output, with any new formats added since appended to the end.
 test_write_read_alignment_formats = ["fasta","clustal","phylip","stockholm"]
-for format in SeqIO._FormatToWriter :
+for format in sorted(SeqIO._FormatToWriter) :
     if format not in test_write_read_alignment_formats :
         test_write_read_alignment_formats.append(format)
-for format in AlignIO._FormatToWriter :
+for format in sorted(AlignIO._FormatToWriter) :
     if format not in test_write_read_alignment_formats :
         test_write_read_alignment_formats.append(format)
 test_write_read_alignment_formats.remove("gb") #an alias for genbank

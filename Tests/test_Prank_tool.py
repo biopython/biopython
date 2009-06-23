@@ -75,7 +75,7 @@ class PrankApplication(unittest.TestCase):
         """
         cmdline = PrankCommandline(prank_exe)
         cmdline.set_parameter("d", self.infile1)
-        self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01 ")
+        self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = Application.generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
@@ -94,7 +94,8 @@ class PrankApplication(unittest.TestCase):
         cmdline.d = self.infile1
         cmdline.f = 17 # NEXUS format
         cmdline.set_parameter("notree", True)
-        self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01 -f=17 -noxml -notree ")
+        self.assertEqual(str(cmdline), prank_exe + \
+                         " -d=Fasta/fa01 -f=17 -noxml -notree")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = Application.generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
@@ -127,7 +128,7 @@ class PrankApplication(unittest.TestCase):
         cmdline.realbranches = True
         self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01 -noxml" + \
                          " -notree -dots -gaprate=0.321 -gapext=0.6 -kappa=3" + \
-                         " -once -skipins -realbranches ")
+                         " -once -skipins -realbranches")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = Application.generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)

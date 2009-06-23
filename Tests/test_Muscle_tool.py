@@ -77,8 +77,8 @@ class MuscleApplication(unittest.TestCase):
         cmdline = MuscleCommandline(muscle_exe,
                                     input=self.infile1,
                                     out=self.outfile1)
-        self.assertEqual(str(cmdline), muscle_exe + " -in Fasta/f002 -out " + \
-                         "Fasta/temp_align_out1.fa ")
+        self.assertEqual(str(cmdline), muscle_exe \
+                         + " -in Fasta/f002 -out Fasta/temp_align_out1.fa")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
@@ -95,8 +95,9 @@ class MuscleApplication(unittest.TestCase):
         cmdline.objscore = "sp"
         cmdline.noanchors = True
         self.assertEqual(str(cmdline), muscle_exe +\
-                         " -in Fasta/f002 -out " + \
-                        "Fasta/temp_align_out2.fa -objscore sp -noanchors ")
+                         " -in Fasta/f002" + \
+                         " -out Fasta/temp_align_out2.fa" + \
+                         " -objscore sp -noanchors")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
@@ -112,8 +113,8 @@ class MuscleApplication(unittest.TestCase):
         cmdline.set_parameter("in1", self.infile2)
         cmdline.set_parameter("in2", self.infile3)
         self.assertEqual(str(cmdline), muscle_exe + \
-                         " -out Fasta/temp_align_out3.fa " + \
-                         "-profile -in1 Fasta/fa01 -in2 Fasta/f001 ")
+                         " -out Fasta/temp_align_out3.fa" + \
+                         " -profile -in1 Fasta/fa01 -in2 Fasta/f001")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
@@ -129,9 +130,9 @@ class MuscleApplication(unittest.TestCase):
                                     profile=True, stable=True,
                                     cluster1="neighborjoining")
         self.assertEqual(str(cmdline), muscle_exe + \
-                         " -out Fasta/temp_align_out4.fa " + \
-                         "-profile -in1 Fasta/fa01 -in2 Fasta/f001 -cluster1 " + \
-                         "neighborjoining -stable ")
+                         " -out Fasta/temp_align_out4.fa" + \
+                         " -profile -in1 Fasta/fa01 -in2 Fasta/f001" + \
+                         " -cluster1 neighborjoining -stable")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         """
         #TODO - Why doesn't this work with MUSCLE 3.6 on the Mac?

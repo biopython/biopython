@@ -47,7 +47,8 @@ class MafftApplication(unittest.TestCase):
         self.assert_(stdout.read().startswith(">gi|1348912|gb|G26680|G26680"))
         self.assert_("STEP     2 / 2 d" in stderr_string)
         self.assert_("$#=0" not in stderr_string)
-        self.assertEqual(str(stdin._cl), "mafft Fasta/f002 ")
+        self.assertEqual(str(stdin._cl), mafft_exe \
+                         + " Fasta/f002")
 
     def test_Mafft_with_options(self):
         """Simple round-trip through app with infile and options.
@@ -62,7 +63,8 @@ class MafftApplication(unittest.TestCase):
         self.assertEqual(stdin.return_code, 0)
         self.assert_(stdout.read().startswith(">gi|1348912|gb|G26680|G26680"))
         self.assert_("$#=0" not in stderr.read())
-        self.assertEqual(str(stdin._cl), "mafft --localpair --maxiterate 100 Fasta/f002 ")
+        self.assertEqual(str(stdin._cl), mafft_exe \
+                         + " --localpair --maxiterate 100 Fasta/f002")
 
     def test_Mafft_with_Clustalw_output(self):
         """Simple round-trip through app with clustal output"""
@@ -75,7 +77,8 @@ class MafftApplication(unittest.TestCase):
         self.assertEqual(stdin.return_code, 0)
         self.assert_(stdout.read().startswith("CLUSTAL format alignment by MAFFT"))
         self.assert_("$#=0" not in stderr.read())
-        self.assertEqual(str(stdin._cl), "mafft --clustalout Fasta/f002 ")
+        self.assertEqual(str(stdin._cl), mafft_exe \
+                         + " --clustalout Fasta/f002")
 
     def test_Mafft_with_complex_command_line(self):
         """Round-trip with complex command line."""
@@ -98,7 +101,11 @@ class MafftApplication(unittest.TestCase):
         self.assertEqual(stdin.return_code, 0)
         self.assert_(stdout.read().startswith(">gi|1348912|gb|G26680|G26680"))
         self.assert_("$#=0" not in stderr.read())
-        self.assertEqual(str(stdin._cl), "mafft --localpair --weighti 4.2 --retree 5 --maxiterate 200 --nofft --op 2.04 --ep 0.51 --lop 0.233 --lep 0.2 --reorder --treeout --nuc Fasta/f002 ")
+        self.assertEqual(str(stdin._cl), mafft_exe \
+                         + " --localpair --weighti 4.2 --retree 5 " \
+                         + "--maxiterate 200 --nofft --op 2.04 --ep 0.51" \
+                         + " --lop 0.233 --lep 0.2 --reorder --treeout" \
+                         + " --nuc Fasta/f002")
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

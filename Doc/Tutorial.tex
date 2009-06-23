@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 15 June 2009 (Biopython 1.50+)}
+\date{Last Update -- 23 June 2009 (Biopython 1.51 \textit{beta})}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -99,16 +99,16 @@ Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
 
 \section{What is Biopython?}
 
-The Biopython Project is an international association of developers of freely available python (\url{http://www.python.org}) tools for computational molecular biology. The web site \url{http://www.biopython.org} provides an online resource for modules, scripts, and web links for developers of python-based software for life science research.
+The Biopython Project is an international association of developers of freely available Python (\url{http://www.python.org}) tools for computational molecular biology. The web site \url{http://www.biopython.org} provides an online resource for modules, scripts, and web links for developers of Python-based software for life science research.
 
-Basically, we just like to program in python and want to make it as easy as possible to use python for bioinformatics by creating high-quality, reusable modules and scripts.
+Basically, we just like to program in Python and want to make it as easy as possible to use Python for bioinformatics by creating high-quality, reusable modules and scripts.
 
 \section{What can I find in the Biopython package}
 
 The main Biopython releases have lots of functionality, including:
 
 \begin{itemize}
-  \item The ability to parse bioinformatics files into python utilizable data structures, including support for the following formats:
+  \item The ability to parse bioinformatics files into Python utilizable data structures, including support for the following formats:
 
   \begin{itemize}
     \item Blast output -- both from standalone and WWW Blast
@@ -180,7 +180,7 @@ sudo python setup.py install
 but its better to make sure everything seems to be working.)
 
 The longer version of our installation instructions covers
-installation of python, Biopython dependencies and Biopython itself.
+installation of Python, Biopython dependencies and Biopython itself.
 It is available in PDF
 (\url{http://biopython.org/DIST/docs/install/Installation.pdf})
 and HTML formats
@@ -267,7 +267,7 @@ and HTML formats
 \chapter{Quick Start -- What can you do with Biopython?}
 \label{chapter:quick-start}
 
-This section is designed to get you started quickly with Biopython, and to give a general overview of what is available and how to use it. All of the examples in this section assume that you have some general working knowledge of python, and that you have successfully installed Biopython on your system. If you think you need to brush up on your python, the main python web site provides quite a bit of free documentation to get started with (\url{http://www.python.org/doc/}).
+This section is designed to get you started quickly with Biopython, and to give a general overview of what is available and how to use it. All of the examples in this section assume that you have some general working knowledge of Python, and that you have successfully installed Biopython on your system. If you think you need to brush up on your Python, the main Python web site provides quite a bit of free documentation to get started with (\url{http://www.python.org/doc/}).
 
 Since much biological work on the computer involves connecting with databases on the internet, some of the examples will also require a working internet connection in order to run.
 
@@ -275,16 +275,16 @@ Now that that is all out of the way, let's get into what we can do with Biopytho
 
 \section{General overview of what Biopython provides}
 
-As mentioned in the introduction, Biopython is a set of libraries to provide the ability to deal with ``things'' of interest to biologists working on the computer. In general this means that you will need to have at least some programming experience (in python, of course!) or at least an interest in learning to program. Biopython's job is to make your job easier as a programmer by supplying reusable libraries so that you can focus on answering your specific question of interest, instead of focusing on the internals of parsing a particular file format (of course, if you want to help by writing a parser that doesn't exist and contributing it to Biopython, please go ahead!). So Biopython's job is to make you happy!
+As mentioned in the introduction, Biopython is a set of libraries to provide the ability to deal with ``things'' of interest to biologists working on the computer. In general this means that you will need to have at least some programming experience (in Python, of course!) or at least an interest in learning to program. Biopython's job is to make your job easier as a programmer by supplying reusable libraries so that you can focus on answering your specific question of interest, instead of focusing on the internals of parsing a particular file format (of course, if you want to help by writing a parser that doesn't exist and contributing it to Biopython, please go ahead!). So Biopython's job is to make you happy!
 
-One thing to note about Biopython is that it often provides multiple ways of ``doing the same thing.'' Things have improved in recent releases, but this can still be frustrating as in python there should ideally be one right way to do something. However, this can also be a real benefit because it gives you lots of flexibility and control over the libraries. The tutorial helps to show you the common or easy ways to do things so that you can just make things work. To learn more about the alternative possibilities, look in the Cookbook (Chapter~\ref{chapter:cookbook}, this has some cools tricks and tips), the Advanced section (Chapter~\ref{chapter:advanced}), the built in ``docstrings'' (via the python help command, or the \href{http://biopython.org/DIST/docs/api/}{API documentation}) or ultimately the code itself.
+One thing to note about Biopython is that it often provides multiple ways of ``doing the same thing.'' Things have improved in recent releases, but this can still be frustrating as in Python there should ideally be one right way to do something. However, this can also be a real benefit because it gives you lots of flexibility and control over the libraries. The tutorial helps to show you the common or easy ways to do things so that you can just make things work. To learn more about the alternative possibilities, look in the Cookbook (Chapter~\ref{chapter:cookbook}, this has some cools tricks and tips), the Advanced section (Chapter~\ref{chapter:advanced}), the built in ``docstrings'' (via the Python help command, or the \href{http://biopython.org/DIST/docs/api/}{API documentation}) or ultimately the code itself.
 
 \section{Working with sequences}
 \label{sec:sequences}
 
 Disputably (of course!), the central object in bioinformatics is the sequence. Thus, we'll start with a quick introduction to the Biopython mechanisms for dealing with sequences, the \verb|Seq| object, which we'll discuss in more detail in Chapter~\ref{chapter:Bio.Seq}.
 
-Most of the time when we think about sequences we have in my mind a string of letters like \verb|'AGTACACTGGT'|. You can create such \verb|Seq| object with this sequence as follows - the ``$>>>$'' represents the python prompt followed by what you would type in:
+Most of the time when we think about sequences we have in my mind a string of letters like `\verb|AGTACACTGGT|'. You can create such \verb|Seq| object with this sequence as follows - the ``$>>>$'' represents the Python prompt followed by what you would type in:
 
 \begin{verbatim}
 >>> from Bio.Seq import Seq
@@ -299,7 +299,7 @@ Alphabet()
 
 What we have here is a sequence object with a \emph{generic} alphabet - reflecting the fact we have \emph{not} specified if this is a DNA or protein sequence (okay, a protein with a lot of Alanines, Glycines, Cysteines and Threonines!).  We'll talk more about alphabets in Chapter~\ref{chapter:Bio.Seq}.
 
-In addition to having an alphabet, the \verb|Seq| object differs from the python string in the methods it supports.  You can't do this with a plain string:
+In addition to having an alphabet, the \verb|Seq| object differs from the Python string in the methods it supports.  You can't do this with a plain string:
 
 \begin{verbatim}
 >>> my_seq
@@ -344,7 +344,7 @@ When this tutorial was originally written, this search gave us only 94 hits, whi
 % The GenBank version is actually new - it was created by filtering out the original 94 hits from the
 % latest search of over 400 hits.
 
-If you run the search today, you'll get hundreds of results!  When following the tutorial, if you want to see the same list of genes, just download the two files above or copy them from \verb|docs/examples/| in the Biopython source code.  In Section~\ref{sec:connecting-with-biological-databases} we will look at how to do a search like this from within python.
+If you run the search today, you'll get hundreds of results!  When following the tutorial, if you want to see the same list of genes, just download the two files above or copy them from \verb|docs/examples/| in the Biopython source code.  In Section~\ref{sec:connecting-with-biological-databases} we will look at how to do a search like this from within Python.
 
 \subsection{Simple FASTA parsing example}
 \label{sec:fasta-parsing}
@@ -358,7 +358,7 @@ AATCCGGAGGACCGGTGTACTCAGCTCACCGGGGGCATTGCTCCCGTGGTGACCCTGATTTGTTGTTGGG
 ...
 \end{verbatim}
 
-It contains 94 records, each has a line starting with ``$>$'' (greater-than symbol) followed by the sequence on one or more lines.  Now try this in python:
+It contains 94 records, each has a line starting with ``$>$'' (greater-than symbol) followed by the sequence on one or more lines.  Now try this in Python:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -424,7 +424,7 @@ The next place to look for information about specific parsers and how to do cool
 \section{Connecting with biological databases}
 \label{sec:connecting-with-biological-databases}
 
-One of the very common things that you need to do in bioinformatics is extract information from biological databases. It can be quite tedious to access these databases manually, especially if you have a lot of repetitive work to do. Biopython attempts to save you time and energy by making some on-line databases available from python scripts. Currently, Biopython has code to extract information from the following databases:
+One of the very common things that you need to do in bioinformatics is extract information from biological databases. It can be quite tedious to access these databases manually, especially if you have a lot of repetitive work to do. Biopython attempts to save you time and energy by making some on-line databases available from Python scripts. Currently, Biopython has code to extract information from the following databases:
 
 \begin{itemize}
   \item \href{http://www.ncbi.nlm.nih.gov/Entrez/}{Entrez} (and \href{http://www.ncbi.nlm.nih.gov/PubMed/}{PubMed}) from the NCBI -- See Chapter~\ref{chapter:entrez}.
@@ -432,7 +432,7 @@ One of the very common things that you need to do in bioinformatics is extract i
   \item \href{http://scop.mrc-lmb.cam.ac.uk/scop/}{SCOP} -- See the \verb|Bio.SCOP.search()| function.
 \end{itemize}
 
-The code in these modules basically makes it easy to write python code that interact with the CGI scripts on these pages, so that you can get results in an easy to deal with format. In some cases, the results can be tightly integrated with the Biopython parsers to make it even easier to extract information.
+The code in these modules basically makes it easy to write Python code that interact with the CGI scripts on these pages, so that you can get results in an easy to deal with format. In some cases, the results can be tightly integrated with the Biopython parsers to make it even easier to extract information.
 
 \section{What to do next}
 
@@ -448,11 +448,11 @@ Enjoy the code!
 \label{chapter:Bio.Seq}
 
 Biological sequences are arguably the central object in Bioinformatics, and in this chapter we'll introduce the Biopython mechanism for dealing with sequences, the \verb|Seq| object.
-In Chapter~\ref{chapter:Bio.SeqIO} on Sequence Input/Output, we'll see that the \verb|Seq| object is also used in the \verb|SeqRecord| object, which combines the sequence information with any annotation.
+Chapter~\ref{chapter:SeqRecord} will introduce the related \verb|SeqRecord| object, which combines the sequence information with any annotation, used again in Chapter~\ref{chapter:Bio.SeqIO} for Sequence Input/Output.
 
 Sequences are essentially strings of letters like \verb|AGTACACTGGT|, which seems very natural since this is the most common way that sequences are seen in biological file formats.
 
-There are two important differences between \verb|Seq| objects and standard python strings.
+There are two important differences between \verb|Seq| objects and standard Python strings.
 First of all, they have different methods.  Although the \verb|Seq| object supports many of the same methods as a plain string, its \verb|translate()| method differs by doing biological translation, and there are also additional biologically relevant methods like \verb|reverse_complement()|.
 Secondly, the \verb|Seq| object has an important attribute, \verb|alphabet|, which is an object describing what the individual characters making up the sequence string ``mean'', and how they should be interpreted.  For example, is \verb|AGTACACTGGT| a DNA sequence, or just a protein sequence that happens to be rich in Alanines, Glycines, Cysteines
 and Threonines?
@@ -503,7 +503,7 @@ IUPACProtein()
 
 \section{Sequences act like strings}
 
-In many ways, we can deal with Seq objects as if they were normal python strings, for example getting the length, or iterating over the elements:
+In many ways, we can deal with Seq objects as if they were normal Python strings, for example getting the length, or iterating over the elements:
 
 \begin{verbatim}
 from Bio.Seq import Seq
@@ -514,7 +514,7 @@ for index, letter in enumerate(my_seq) :
 print len(letter)
 \end{verbatim}
 
-You can access elements of the sequence in the same way as for strings (but remember, python counts from zero!):
+You can access elements of the sequence in the same way as for strings (but remember, Python counts from zero!):
 
 \begin{verbatim}
 >>> print my_seq[0] #first letter
@@ -523,7 +523,7 @@ You can access elements of the sequence in the same way as for strings (but reme
 \end{verbatim}
 
 The \verb|Seq| object has a \verb|.count()| method, just like a string.
-Note that this means that like a python string, this gives a
+Note that this means that like a Python string, this gives a
 \emph{non-overlapping} count:
 
 \begin{verbatim}
@@ -559,7 +559,7 @@ While you could use the above snippet of code to calculate a GC\%, note that  th
 
 \noindent Note that using the \verb|Bio.SeqUtils.GC()| function should automatically cope with mixed case sequences and the ambiguous nucleotide S which means G or C.
 
-Also note that just like a normal python string, the \verb|Seq| object is in some ways ``read-only''.  If you need to edit your sequence, for example simulating a point mutation, look at the Section~\ref{sec:mutable-seq} below which talks about the \verb|MutableSeq| object.
+Also note that just like a normal Python string, the \verb|Seq| object is in some ways ``read-only''.  If you need to edit your sequence, for example simulating a point mutation, look at the Section~\ref{sec:mutable-seq} below which talks about the \verb|MutableSeq| object.
 
 \section{Slicing a sequence}
 
@@ -573,11 +573,11 @@ A more complicated example, let's get a slice of the sequence:
 Seq('GATGGGCC', IUPACUnambiguousDNA())
 \end{verbatim}
 
-Two things are interesting to note. First, this follows the normal conventions for python strings.  So the first element of the sequence is 0 (which is normal for computer science, but not so normal for biology). When you do a slice the first item is included (i.e.~4 in this case) and the last is excluded (12 in this case), which is the way things work in python, but of course not necessarily the way everyone in the world would expect. The main goal is to stay consistent with what python does.
+Two things are interesting to note. First, this follows the normal conventions for Python strings.  So the first element of the sequence is 0 (which is normal for computer science, but not so normal for biology). When you do a slice the first item is included (i.e.~4 in this case) and the last is excluded (12 in this case), which is the way things work in Python, but of course not necessarily the way everyone in the world would expect. The main goal is to stay consistent with what Python does.
 
 The second thing to notice is that the slice is performed on the sequence data string, but the new object produced is another \verb|Seq| object which retains the alphabet information from the original \verb|Seq| object.
 
-Also like a python string, you can do slices with a start, stop and \emph{stride} (the step size, which defaults to one).  For example, we can get the first, second and third codon positions of this DNA sequence:
+Also like a Python string, you can do slices with a start, stop and \emph{stride} (the step size, which defaults to one).  For example, we can get the first, second and third codon positions of this DNA sequence:
 
 \begin{verbatim}
 >>> my_seq[0::3]
@@ -588,7 +588,7 @@ Seq('AGGCATGCATC', IUPACUnambiguousDNA())
 Seq('TAGCTAAGAC', IUPACUnambiguousDNA())
 \end{verbatim}
 
-Another stride trick you might have seen with a python string is the use of a -1 stride to reverse the string.  You can do this with a \verb|Seq| object too:
+Another stride trick you might have seen with a Python string is the use of a -1 stride to reverse the string.  You can do this with a \verb|Seq| object too:
 
 \begin{verbatim}
 >>> my_seq[::-1]
@@ -612,7 +612,7 @@ Python does this automatically with a print statement:
 GATCGATGGGCCTATATAGGATCGAAAATCGC
 \end{verbatim}
 
-You can also use the \verb|Seq| object directly with a \verb|%s| placeholder when using the python string formatting or interpolation operator (\verb|%|):
+You can also use the \verb|Seq| object directly with a \verb|%s| placeholder when using the Python string formatting or interpolation operator (\verb|%|):
 \begin{verbatim}
 >>> fasta_format_string = ">Name\n%s\n" % my_seq
 >>> print fasta_format_string
@@ -620,7 +620,10 @@ You can also use the \verb|Seq| object directly with a \verb|%s| placeholder whe
 GATCGATGGGCCTATATAGGATCGAAAATCGC
 \end{verbatim}
 
-\noindent This line of code constructs a simple FASTA format record (without worrying about line wrapping).  Reading and writing FASTA format sequence files is covered in Chapter~\ref{chapter:Bio.SeqIO}, in particular Section~\ref{sec:Bio.SeqIO-and-StringIO} describes a neat way to get a FASTA formatted string.
+\noindent This line of code constructs a simple FASTA format record (without worrying about line wrapping).
+Section~\ref{sec:SeqRecord-format} describes a neat way to get a FASTA formatted
+string from a \verb|SeqRecord| object, while the more general topic of reading and
+writing FASTA format sequence files is covered in Chapter~\ref{chapter:Bio.SeqIO}.
 
 \emph{NOTE:} If you are using Biopython 1.44 or older, using \verb|str(my_seq)|
 will give just a truncated representation.  Instead use \verb|my_seq.tostring()|
@@ -633,7 +636,7 @@ will give just a truncated representation.  Instead use \verb|my_seq.tostring()|
 
 \section{Concatenating or adding sequences}
 
-Naturally, you can in principle add any two Seq objects together - just like you can with python strings to concatenate them.  However, you can't add sequences with incompatible alphabets, such as a protein sequence and a DNA sequence:
+Naturally, you can in principle add any two Seq objects together - just like you can with Python strings to concatenate them.  However, you can't add sequences with incompatible alphabets, such as a protein sequence and a DNA sequence:
 
 \begin{verbatim}
 >>> protein_seq + dna_seq
@@ -875,7 +878,9 @@ translate method with \verb|Bio.SeqIO| for sequence input/ouput.
 
 \emph{Note:} The \verb|Seq| object's \verb|translate| method is new in Biopython 1.49.
 For older releases you would have to use the \verb|Bio.Seq| module's \verb|translate|
-function instead, see Section~\ref{sec:seq-module-functions}.
+function instead, see Section~\ref{sec:seq-module-functions}. The \texttt{cds} option
+is new in Biopython 1.51, and there is no simple way to do this with older versions
+of Biopython.
 
 \section{Translation Tables}
 
@@ -974,7 +979,7 @@ to do your own gene finding:
 
 Sequence comparison is actually a very complicated topic, and there is no easy
 way to decide if two sequences are equal. The basic problem is the meaning of
-the letters in a sequence are context dependent - the letter "A" could be part
+the letters in a sequence are context dependent - the letter ``A'' could be part
 of a DNA, RNA or protein sequence. Biopython uses alphabet objects as part of
 each \verb|Seq| object to try and capture this information - so comparing two
 \verb|Seq| objects means considering both the sequence strings \emph{and} the
@@ -993,8 +998,10 @@ and \texttt{Seq("ACGT")} should also be equal. Now, in logic if $A=B$ and
 $B=C$, by transitivity we expect $A=C$. So for logical consistency we'd
 require \texttt{Seq("ACGT", IUPAC.unambiguous\_dna)} and \texttt{Seq("ACGT",
 IUPAC.protein)} to be equal -- which most people would agree is just not right.
+This transitivity problem would also have implications for using \verb|Seq|
+objects as Python dictionary keys.
 
-So, what does Biopython do? Well, the equality test is the default for python
+So, what does Biopython do? Well, the equality test is the default for Python
 objects -- it tests to see if they are the same object in memory. This is a
 very strict test:
 \begin{verbatim}
@@ -1008,7 +1015,7 @@ False
 True
 \end{verbatim}
 
-If you actually want to do this, you can be more explicit by using the python
+If you actually want to do this, you can be more explicit by using the Python
 \verb|id| function,
 \begin{verbatim}
 >>> id(seq1) == id(seq2)
@@ -1029,14 +1036,14 @@ True
 True
 \end{verbatim}
 
-\noindent As an extension to this, while you can use a python dictionary with
+\noindent As an extension to this, while you can use a Python dictionary with
 \verb|Seq| objects as keys, it is generally more useful to use the sequence a
 string for the key. See also Section~\ref{sec:seq-to-string}.
 
 \section{MutableSeq objects}
 \label{sec:mutable-seq}
 
-Just like the normal python string, the \verb|Seq| object is ``read only'', or in python terminology, immutable.  Apart from wanting the \verb|Seq| object to act like a string, this is also a useful default since in many biological applications you want to ensure you are not changing your sequence data:
+Just like the normal Python string, the \verb|Seq| object is ``read only'', or in Python terminology, immutable.  Apart from wanting the \verb|Seq| object to act like a string, this is also a useful default since in many biological applications you want to ensure you are not changing your sequence data:
 
 \begin{verbatim}
 >>> from Bio.Seq import Seq
@@ -1080,7 +1087,7 @@ MutableSeq('AGCCCGTGGGAAAGTCGCCGGGTAATGTACCG', IUPACUnambiguousDNA())
 
 Do note that unlike the \verb|Seq| object, the \verb|MutableSeq| object's methods like \verb|reverse_complement()| and \verb|reverse()| act in-situ!
 
-An important technical difference between mutable and immutable objects in python means that you can't use a \verb|MutableSeq| object as a dictionary key, but you can use a python string or a \verb|Seq| object in this way.
+An important technical difference between mutable and immutable objects in Python means that you can't use a \verb|MutableSeq| object as a dictionary key, but you can use a Python string or a \verb|Seq| object in this way.
 
 Once you have finished editing your a \verb|MutableSeq| object, it's easy to get back to a read-only \verb|Seq| object should you need to:
 
@@ -1160,7 +1167,7 @@ sequence.
 \label{sec:seq-module-functions}
 To close this chapter, for those you who \emph{really} don't want to use the sequence
 objects (or who prefer a functional programming style to an object orientated one),
-there are module level functions in \verb|Bio.Seq| will accept plain python strings,
+there are module level functions in \verb|Bio.Seq| will accept plain Python strings,
 \verb|Seq| objects (including \verb|UnknownSeq| objects) or \verb|MutableSeq| objects:
 
 \begin{verbatim}
@@ -1178,20 +1185,16 @@ there are module level functions in \verb|Bio.Seq| will accept plain python stri
 
 \noindent You are, however, encouraged to work with \verb|Seq| objects by default.
 
-\chapter{SeqRecord objects and Sequence Input/Output}
-\label{chapter:Bio.SeqIO}
+\chapter{Sequence Record objects}
+\label{chapter:SeqRecord}
 
-In this chapter we'll discuss in more detail the \verb|Bio.SeqIO| module, which was briefly introduced in Chapter~\ref{chapter:quick-start}. This aims to provide a simple interface for working with assorted sequence file formats in a uniform way.
-See also the \verb|Bio.SeqIO| wiki page (\url{http://biopython.org/wiki/SeqIO}), and the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html}{online}):
+Chapter~\ref{chapter:Bio.Seq} introduced the sequence classes.  Immediately ``above'' the \verb|Seq| class is the Sequence Record or \verb|SeqRecord| class, defined in the \verb|Bio.SeqRecord| module. This class allows higher level features such as identifiers and features to be associated with the sequence, and is used thoughout the sequence input/output interface \verb|Bio.SeqIO| described fully in Chapter~\ref{chapter:Bio.SeqIO}.
 
-\begin{verbatim}
->>> from Bio import SeqIO
->>> help(SeqIO)
-...
-\end{verbatim}
+If you are only going to be working with simple data like FASTA files, you can probably skip this chapter
+for now. If on the other hand you are going to be using richly annotated sequence data, say from GenBank
+or EMBL files, this information is quite important.
 
-The ``catch'' is that you have to work with \verb|SeqRecord| objects - which contain a \verb|Seq| object (as described in Chapter~\ref{chapter:Bio.Seq}) plus annotation like an identifier and description.
-We'll introduce the basics of \verb|SeqRecord| object in this chapter, see also the \verb|SeqRecord| wiki page (\url{http://biopython.org/wiki/SeqRecord}), and the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html}{online}):
+While this chapter should cover most things to do with the \verb|SeqRecord| object in this chapter, you may also want to read the \verb|SeqRecord| wiki page (\url{http://biopython.org/wiki/SeqRecord}), and the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqRecord.SeqRecord-class.html}{online}):
 
 \begin{verbatim}
 >>> from Bio.SeqRecord import SeqRecord
@@ -1202,10 +1205,12 @@ We'll introduce the basics of \verb|SeqRecord| object in this chapter, see also 
 \section{The SeqRecord object}
 \label{sec:SeqRecord}
 
-Chapter~\ref{chapter:Bio.Seq} introduced the sequence classes.  Immediately ``above'' the \verb|Seq| class is the Sequence Record class, defined in the \verb|Bio.SeqRecord| module. This class allows higher level features such as identifiers and features to be associated with the sequence, and is used thoughout the sequence input/output interface \verb|Bio.SeqIO|, described in this chapter. The \verb|SeqRecord|class itself is quite simple, and offers the following information as attributes:
+The \verb|SeqRecord| (Sequence Record) class is defined in the \verb|Bio.SeqRecord| module. This class allows higher level features such as identifiers and features to be associated with a sequence (see Chapter~\ref{chapter:Bio.Seq}), and is the basic data type for the \verb|Bio.SeqIO| sequence input/output interface (see Chapter~\ref{chapter:Bio.SeqIO}).
+
+The \verb|SeqRecord| class itself is quite simple, and offers the following information as attributes:
 
 \begin{description}
-  \item[seq] -- The sequence itself, a \verb|Seq| object.
+  \item[seq] -- The sequence itself, typically a \verb|Seq| object.
 
   \item[id] -- The primary ID used to identify the sequence -- a string. In most cases this is something like an accession number.
 
@@ -1213,17 +1218,18 @@ Chapter~\ref{chapter:Bio.Seq} introduced the sequence classes.  Immediately ``ab
 
   \item[description] -- A human readible description or expressive name for the sequence -- a string.
   
-  \item[letter\_annotations] -- Holds per-letter-annotations using a (restricted) dictionary of additional information about the letters in the sequence. The keys are the name of the information, and the information is contained in the value as a python sequence (i.e. a list, tuple or string) with the same length as the sequence itself.  This is often used for quality scores (e.g. Section~\ref{sec:FASTQ-filtering-example}) or secondary structure information.
+  \item[letter\_annotations] -- Holds per-letter-annotations using a (restricted) dictionary of additional information about the letters in the sequence. The keys are the name of the information, and the information is contained in the value as a Python sequence (i.e. a list, tuple or string) with the same length as the sequence itself.  This is often used for quality scores (e.g. Section~\ref{sec:FASTQ-filtering-example}) or secondary structure information (e.g. from Stockholm/PFAM alignment files).
 
   \item[annotations] -- A dictionary of additional information about the sequence. The keys are the name of the information, and the information is contained in the value. This allows the addition of more ``unstructed'' information to the sequence.
-
-  \item[features] -- A list of \verb|SeqFeature| objects with more structured information about the features on a sequence. The structure of sequence features is described below in Section~\ref{sec:seq_features}.
+  
+  \item[features] -- A list of \verb|SeqFeature| objects with more structured information about the features on a sequence (e.g. position of genes on a genome, or domains on a protein sequence). The structure of sequence features is described below in Section~\ref{sec:seq_features}.
   
   \item[dbxrefs] - A list of database cross-references as strings.
 \end{description}
 
+\section{Creating a SeqRecord}
 
-Using a \verb|SeqRecord| class is not very complicated, since all of the information is stored as attributes of the class. Usually you won't create a \verb|SeqRecord| ``by hand'', but instead use \verb|Bio.SeqIO| to read in a sequence file for you (see Section~\ref{sec:Bio.SeqIO-input} below).  However, creating \verb|SeqRecord| can be quite simple - at a minimum you just need a \verb|Seq| object:
+Using a \verb|SeqRecord| object is not very complicated, since all of the information is stored as attributes of the class. Usually you won't create a \verb|SeqRecord| ``by hand'', but instead use \verb|Bio.SeqIO| to read in a sequence file for you (see Chapter~\ref{chapter:Bio.SeqIO} and the examples below).  However, creating \verb|SeqRecord| can be quite simple - at a minimum you just need a \verb|Seq| object:
 
 \begin{verbatim}
 >>> from Bio.Seq import Seq
@@ -1254,15 +1260,539 @@ Including an identifier is very important if you want to output your \verb|SeqRe
 >>> simple_seq_r = SeqRecord(simple_seq, id="AC12345")
 \end{verbatim}
 
-Adding annotations is almost as easy, and just involves dealing directly with the annotation dictionary:
+As mentioned above, the \verb|SeqRecord| has an dictionary attribute \verb|annotations|. This is used
+for any miscellaneous annotations that doesn't fit under one of the other more specific attributes.
+Adding annotations is easy, and just involves dealing directly with the annotation dictionary:
 
 \begin{verbatim}
 >>> simple_seq_r.annotations["evidence"] = "None. I just made it up."
 >>> print simple_seq_r.annotations
 {'evidence': 'None. I just made it up.'}
+>>> print simple_seq_r.annotations["evidence"]
+None. I just made it up.
 \end{verbatim}
 
-That's just about all there is to it! Next, you may want to learn about \verb|SeqFeature| objects, which offer an additional structured way to represent information about a sequence (see Section~\ref{sec:seq_features}), but the next section dives into how to read in sequence files as \verb|SeqRecord| objects.
+\subsection{SeqRecord objects from FASTA files}
+
+This example uses a fairly large FASTA file containing the whole sequence for \textit{Yersinia pestis biovar Microtus} str. 91001 plasmid pPCP1, originally downloaded from the NCBI.  This file is included with the Biopython unit tests under the GenBank folder, or online \href{http://biopython.org/SRC/biopython/Tests/GenBank/NC_005816.fna}{\texttt{NC\_005816.fna}} from our website.
+
+The file starts like this - and you can check there is only one record present (i.e. only one line starting with a greater than symbol):
+
+\begin{verbatim}
+>gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus ... pPCP1, complete sequence
+TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGGGGGTAATCTGCTCTCC
+...
+\end{verbatim}
+
+Back in Chapter~\ref{chapter:quick-start} you will have seen the function \verb|Bio.SeqIO.parse(...)|
+used to loop over all the records in a file as \verb|SeqRecord| objects. The \verb|Bio.SeqIO| module
+has a sister function for use on files which contain just one record which we'll use here (see Chapter~\ref{chapter:Bio.SeqIO} for details):
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> record = SeqIO.read(open("NC_005816.fna"), "fasta")
+>>> record
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
+SingleLetterAlphabet()), id='gi|45478711|ref|NC_005816.1|', name='gi|45478711|ref|NC_005816.1|',
+description='gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus ... sequence',
+dbxrefs=[])
+\end{verbatim}
+
+Now, let's have a look at the key attributes of this \verb|SeqRecord|
+individually -- starting with the \verb|seq| attribute which gives you a
+\verb|Seq| object:
+
+\begin{verbatim}
+>>> record.seq
+Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG', SingleLetterAlphabet())
+\end{verbatim}
+
+\noindent Here \verb|Bio.SeqIO| has defaulted to a generic alphabet, rather
+than guessing that this is DNA. If you know in advance what kind of sequence
+your FASTA file contains, you can tell \verb|Bio.SeqIO| which alphabet to use
+(see Chapter~\ref{chapter:Bio.SeqIO}).
+
+Next, the identifiers and description:
+
+\begin{verbatim}
+>>> record.id
+'gi|45478711|ref|NC_005816.1|'
+>>> record.name
+'gi|45478711|ref|NC_005816.1|'
+>>> record.description
+'gi|45478711|ref|NC_005816.1| Yersinia pestis biovar Microtus ... pPCP1, complete sequence'
+\end{verbatim}
+
+As you can see above, the first word of the FASTA record's title line (after
+removing the greater than symbol) is used for both the \verb|id| and
+\verb|name| attributes. The whole title line (after removing the greater than
+symbol) is used for the record description. This is deliberate, partly for
+backwards compatibility reasons, but it also makes sense if you have a FASTA
+file like this:
+
+\begin{verbatim}
+>Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1
+TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGGGGGTAATCTGCTCTCC
+...
+\end{verbatim}
+
+Note that none of the other annotation attributes get populated when reading a
+FASTA file:
+
+\begin{verbatim}
+>>> record.dbxrefs
+[]
+>>> record.annotations
+{}
+>>> record.letter_annotations
+{}
+>>> record.features
+[]
+\end{verbatim}
+
+In this case our example FASTA file was from the NCBI, and they have a fairly well defined set of conventions for formatting their FASTA lines. This means it would be possible to parse this information and extract the GI number and accession for example. However, FASTA files from other sources vary, so this isn't possible in general.
+
+\subsection{SeqRecord objects from GenBank files}
+
+As in the previous example, we're going to look at the whole sequence for \textit{Yersinia pestis biovar Microtus} str. 91001 plasmid pPCP1, originally downloaded from the NCBI, but this time as a GenBank file.
+Again, this file is included with the Biopython unit tests under the GenBank folder, or online \href{http://biopython.org/SRC/biopython/Tests/GenBank/NC_005816.gb}{\texttt{NC\_005816.gb}} from our website.
+
+This file contains a single record (i.e. only one LOCUS line) and starts:
+\begin{verbatim}
+LOCUS       NC_005816               9609 bp    DNA     circular BCT 21-JUL-2008
+DEFINITION  Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete
+            sequence.
+ACCESSION   NC_005816
+VERSION     NC_005816.1  GI:45478711
+PROJECT     GenomeProject:10638
+...
+\end{verbatim}
+
+Again, we'll use \verb|Bio.SeqIO| to read this file in, and the code is almost identical to that for used above for the FASTA file (see Chapter~\ref{chapter:Bio.SeqIO} for details):
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> record = SeqIO.read(open("NC_005816.gb"), "genbank")
+>>> record
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
+IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
+description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
+dbxrefs=['Project:10638'])
+\end{verbatim}
+
+You should be able to spot some differences already! But taking the attributes individually,
+the sequence string is the same as before, but this time \verb|Bio.SeqIO| has been able to automatically assign a more specific alphabet (see Chapter~\ref{chapter:Bio.SeqIO} for details):
+
+\begin{verbatim}
+>>> record.seq
+Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG', IUPACAmbiguousDNA())
+\end{verbatim}
+
+The \verb|name| comes from the LOCUS line, while the \verb|id| includes the version suffix.
+The description comes from the DEFINITION line:
+
+\begin{verbatim}
+>>> record.id
+'NC_005816.1'
+>>> record.name
+'NC_005816'
+>>> record.description
+'Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.'
+\end{verbatim}
+
+GenBank files don't have any per-letter annotations:
+
+\begin{verbatim}
+>>> record.letter_annotations
+{}
+\end{verbatim}
+
+Most of the annotations information gets recorded in the \verb|annotations| dictionary, for example:
+
+\begin{verbatim}
+>>> len(record.annotations)
+11
+>>> record.annotations["source"]
+'Yersinia pestis biovar Microtus str. 91001'
+\end{verbatim}
+
+The \verb|dbxrefs| list gets populated from any PROJECT or DBLINK lines:
+
+\begin{verbatim}
+>>> record.dbxrefs
+['Project:10638']
+\end{verbatim}
+
+Finally, and perhaps most interestingly, all the entries in the features table (e.g. the genes or CDS features) get recorded as \verb|SeqFeature| objects in the \verb|features| list.
+
+\begin{verbatim}
+>>> len(record.features)
+29
+\end{verbatim}
+
+\noindent We'll talk about \verb|SeqFeature| objects next, in
+Section~\ref{sec:seq_features}.
+
+\section{SeqFeature objects}
+\label{sec:seq_features}
+
+Sequence features are an essential part of describing a sequence. Once you get beyond the sequence itself, you need some way to organize and easily get at the more ``abstract'' information that is known about the sequence. While it is probably impossible to develop a general sequence feature class that will cover everything, the Biopython \verb|SeqFeature| class attempts to encapsulate as much of the information about the sequence as possible. The design is heavily based on the GenBank/EMBL feature tables, so if you understand how they look, you'll probably have an easier time grasping the structure of the Biopython classes.
+
+\subsection{SeqFeatures themselves}
+
+The first level of dealing with sequence features is the \verb|SeqFeature| class itself. This class has a number of attributes, so first we'll list them and their general features, and then work through an example to show how this applies to a real life example, a GenBank feature table. The attributes of a SeqFeature are:
+
+\begin{description}
+  \item[location] -- The location of the \verb|SeqFeature| on the sequence that you are dealing with. The locations end-points may be fuzzy -- section~\ref{sec:locations} has a lot more description on how to deal with descriptions.
+
+  \item[type] -- This is a textual description of the type of feature (for instance, this will be something like `CDS' or `gene').
+
+  \item[ref] -- A reference to a different sequence. Some times features may be ``on'' a particular sequence, but may need to refer to a different sequence, and this provides the reference (normally an accession number). A good example of this is a genomic sequence that has most of a coding sequence, but one of the exons is on a different accession. In this case, the feature would need to refer to this different accession for this missing exon. You are most likely to see this in contig GenBank files.
+
+  \item[ref\_db] -- This works along with \verb|ref| to provide a cross sequence reference. If there is a reference, \verb|ref_db| will be set as None if the reference is in the same database, and will be set to the name of the database otherwise.
+
+  \item[strand] -- The strand on the sequence that the feature is located on. This may either be $1$ for the top strand, $-1$ for the bottom strand, or $0$ or \texttt{None} for both strands (or if it doesn't matter). Keep in mind that this only really makes sense for double stranded DNA, and not for proteins or RNA.
+
+  \item[qualifiers] -- This is a Python dictionary of additional information about the feature. The key is some kind of terse one-word description of what the information contained in the value is about, and the value is the actual information. For example, a common key for a qualifier might be ``evidence'' and the value might be ``computational (non-experimental).'' This is just a way to let the person who is looking at the feature know that it has not be experimentally (i.~e.~in a wet lab) confirmed. Note that other the value will be a list of strings (even when there is only one string). This is a reflection of the feature tables in GenBank/EMBL files.
+ 
+  \item[sub\_features] -- A very important feature of a feature is that it can have additional \verb|sub_features| underneath it. This allows nesting of features, and helps us to deal with things such as the GenBank/EMBL feature lines in a (we hope) intuitive way.
+  
+\end{description}
+
+To show an example of SeqFeatures in action, let's take a look at the following feature from a GenBank feature table:
+
+\begin{verbatim}
+     mRNA            complement(join(<49223..49300,49780..>50208))
+                     /gene="F28B23.12"
+\end{verbatim}
+
+To look at the easiest attributes of the \verb|SeqFeature| first, if you got a \verb|SeqFeature| object for this it would have it \verb|type| of 'mRNA', a \verb|strand| of -1 (due to the `complement'), and would have None for the \verb|ref| and \verb|ref_db| since there are no references to external databases. The \verb|qualifiers| for this SeqFeature would be a Python dictionarary that looked like \verb|{'gene' : ['F28B23.12']}|.
+
+Now let's look at the more tricky part, how the `join' in the location
+line is handled. First, the location for the top level \verb|SeqFeature| (the
+one we are dealing with right now) is set as going from
+\verb|`<49223' to `>50208'| (see section~\ref{sec:locations} for
+the nitty gritty on how fuzzy locations like this are handled).
+So the location of the top level object is the entire span of the
+feature. So, how do you get at the information in the `join'?
+Well, that's where the \verb|sub_features| go in.
+
+The \verb|sub_features| attribute will have a list with two \verb|SeqFeature|
+objects in it, and these contain the information in the join. Let's
+look at \verb|top_level_feature.sub_features[0]| (the first
+\verb|sub_feature|). This object is a \verb|SeqFeature| object with a
+\verb|type| of `\verb|mRNA|,' a \verb|strand| of -1 (inherited
+from the parent \verb|SeqFeature|) and a location going from
+\verb|'<49223' to '49300'|.
+
+So, the \verb|sub_features| allow you to get at the internal information if you want it (i.~e.~if you were trying to get only the exons out of a genomic sequence), or just to deal with the broad picture (i.~e.~you just want to know that the coding sequence for a gene lies in a region). Hopefully this structuring makes it easy and intuitive to get at the sometimes complex information that can be contained in a \verb|SeqFeature|.
+
+\subsection{Locations}
+\label{sec:locations}
+
+In the section on SeqFeatures above, we skipped over one of the more difficult parts of features, dealing with the locations. The reason this can be difficult is because of fuzziness of the positions in locations. Before we get into all of this, let's just define the vocabulary we'll use to talk about this. Basically there are two terms we'll use:
+
+\begin{description}
+  \item[position] -- This refers to a single position on a sequence,
+  which may be fuzzy or not. For instance, 5, 20, \verb|<100| and
+  \verb|3^5| are all positions.
+
+  \item[location] -- A location is two positions that defines a region of a sequence. For instance 5..20 (i.~e.~5 to 20) is a location.
+\end{description}
+
+I just mention this because sometimes I get confused between the two.
+
+The complication in dealing with locations comes in the positions themselves. In biology many times things aren't entirely certain (as much as us wet lab biologists try to make them certain!). For instance, you might do a dinucleotide priming experiment and discover that the start of mRNA transcript starts at one of two sites. This is very useful information, but the complication comes in how to represent this as a position. To help us deal with this, we have the concept of fuzzy positions. Basically there are five types of fuzzy positions, so we have five classes do deal with them:
+
+\begin{description}
+  \item[ExactPosition] -- As its name suggests, this class represents a position which is specified as exact along the sequence. This is represented as just a a number, and you can get the position by looking at the \verb|position| attribute of the object.
+
+  \item[BeforePosition] -- This class represents a fuzzy position
+  that occurs prior to some specified site. In GenBank/EMBL notation,
+  this is represented as something like \verb|`<13'|, signifying that
+  the real position is located somewhere less then 13. To get
+  the specified upper boundary, look at the \verb|position|
+  attribute of the object.
+
+  \item[AfterPosition] -- Contrary to \verb|BeforePosition|, this
+  class represents a position that occurs after some specified site.
+  This is represented in GenBank as \verb|`>13'|, and like
+  \verb|BeforePosition|, you get the boundary number by looking
+  at the \verb|position| attribute of the object.
+
+  \item[WithinPosition] -- This class models a position which occurs somewhere between two specified nucleotides. In GenBank/EMBL notation, this would be represented as `(1.5)', to represent that the position is somewhere within the range 1 to 5. To get the information in this class you have to look at two attributes. The \verb|position| attribute specifies the lower boundary of the range we are looking at, so in our example case this would be one. The \verb|extension| attribute specifies the range to the higher boundary, so in this case it would be 4. So \verb|object.position| is the lower boundary and \verb|object.position + object.extension| is the upper boundary.
+
+  \item[BetweenPosition] -- This class deals with a position that
+  occurs between two coordinates. For instance, you might have a
+  protein binding site that occurs between two nucleotides on a
+  sequence. This is represented as \verb|`2^3'|, which indicates that
+  the real position happens between position 2 and 3. Getting
+  this information from the object is very similar to
+  \verb|WithinPosition|, the \verb|position| attribute specifies
+  the lower boundary (2, in this case) and the \verb|extension|
+  indicates the range to the higher boundary (1 in this case).
+\end{description}
+
+Now that we've got all of the types of fuzzy positions we can have taken care of, we are ready to actually specify a location on a sequence. This is handled by the \verb|FeatureLocation| class. An object of this type basically just holds the potentially fuzzy start and end positions of a feature. You can create a \verb|FeatureLocation| object by creating the positions and passing them in:
+
+\begin{verbatim}
+>>> from Bio import SeqFeature
+>>> start_pos = SeqFeature.AfterPosition(5)
+>>> end_pos = SeqFeature.BetweenPosition(8, 1)
+>>> my_location = SeqFeature.FeatureLocation(start_pos, end_pos)
+\end{verbatim}
+
+If you print out a \verb|FeatureLocation| object, you can get a nice representation of the information:
+
+\begin{verbatim}
+>>> print my_location
+[>5:(8^9)]
+\end{verbatim}
+
+We can access the fuzzy start and end positions using the start and end attributes of the location:
+
+\begin{verbatim}
+>>> my_location.start
+Bio.SeqFeature.AfterPosition(5)
+>>> print my_location.start
+>5
+>>> my_location.end
+Bio.SeqFeature.BetweenPosition(8,1)
+>>> print my_location.end
+(8^9)
+\end{verbatim}
+
+If you don't want to deal with fuzzy positions and just want numbers, you just need to ask for the \verb|nofuzzy_start| and \verb|nofuzzy_end| attributes of the location:
+
+\begin{verbatim}
+>>> my_location.nofuzzy_start
+5
+>>> my_location.nofuzzy_end
+8
+\end{verbatim}
+
+Notice that this just gives you back the position attributes of the fuzzy locations.
+
+Similary, to make it easy to create a position without worrying about fuzzy positions, you can just pass in numbers to the \verb|FeaturePosition| constructors, and you'll get back out \verb|ExactPosition| objects:
+
+\begin{verbatim}
+>>> exact_location = SeqFeature.FeatureLocation(5, 8)
+>>> print exact_location
+[5:8]
+>>> exact_location.start
+Bio.SeqFeature.ExactPosition(5)
+>>> exact_location.nofuzzy_start
+5
+\end{verbatim}
+
+That is all of the nitty gritty about dealing with fuzzy positions in Biopython. It has been designed so that dealing with fuzziness is not that much more complicated than dealing with exact positions, and hopefully you find that true!
+
+\section{References}
+
+Another common annotation related to a sequence is a reference to a journal or other published work dealing with the sequence. We have a fairly simple way of representing a Reference in Biopython -- we have a \verb|Bio.SeqFeature.Reference| class that stores the relevant information about a reference as attributes of an object.
+
+The attributes include things that you would expect to see in a reference like \verb|journal|, \verb|title| and \verb|authors|. Additionally, it also can hold the \verb|medline_id| and \verb|pubmed_id| and a \verb|comment| about the reference. These are all accessed simply as attributes of the object.
+
+A reference also has a \verb|location| object so that it can specify a particular location on the sequence that the reference refers to. For instance, you might have a journal that is dealing with a particular gene located on a BAC, and want to specify that it only refers to this position exactly. The \verb|location| is a potentially fuzzy location, as described in section~\ref{sec:locations}.
+
+Any reference objects are stored as a list in the \verb|SeqRecord| object's \verb|annotations| dictionary under the key ``references''.
+That's all there is too it. References are meant to be easy to deal with, and hopefully general enough to cover lots of usage cases.
+
+\section{The format method}
+\label{sec:SeqRecord-format}
+
+Biopython 1.48 added a new \verb|format()| method to the \verb|SeqRecord| class which
+gives a string containing your record formatted using one of the output file formats
+supported by \verb|Bio.SeqIO|, such as FASTA:
+
+\begin{verbatim}
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from Bio.Alphabet import generic_protein
+
+record = SeqRecord(Seq("MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQALFGD" \
+                      +"GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK" \
+                      +"NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM" \
+                      +"SSAC", generic_protein),
+                   id="gi|14150838|gb|AAK54648.1|AF376133_1",
+                   description="chalcone synthase [Cucumis sativus]")
+                   
+print record.format("fasta")
+\end{verbatim}
+\noindent which should give:
+\begin{verbatim}
+>gi|14150838|gb|AAK54648.1|AF376133_1 chalcone synthase [Cucumis sativus]
+MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQALFGD
+GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK
+NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM
+SSAC
+\end{verbatim}
+
+This \verb|format| method takes a single mandatory argument, a lower case string which is
+supported by \verb|Bio.SeqIO| as an output format (see Chapter~\ref{chapter:Bio.SeqIO}).
+However, some of the file formats \verb|Bio.SeqIO| can write to \emph{require} more than
+one record (typically the case for multiple sequence alignment formats), and thus won't
+work via this \verb|format()| method.  See also Section~\ref{sec:Bio.SeqIO-and-StringIO}.
+
+\section{Slicing a SeqRecord}
+\label{sec:SeqRecord-slicing}
+
+One of the new features in Biopython 1.50 was the ability to slice a \verb|SeqRecord|,
+to give you a new \verb|SeqRecord| covering just part of the sequence. What is important
+here is that any per-letter annotations are also sliced, and any features which fall
+completely within the new sequence are preserved (with their locations adjusted).
+
+For example, taking the same GenBank file used earlier:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> record = SeqIO.read(open("NC_005816.gb"), "genbank")
+>>> record
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
+IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
+description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
+dbxrefs=['Project:10638'])
+>>> len(record)
+9609
+>>> len(record.features)
+29
+\end{verbatim}
+
+For this example we're going to focus in on the \verb|pim| gene, \verb|YP_pPCP05|.
+If you have a look at the GenBank file directly you'll find this gene/CDS has
+location string \texttt{4343..4780}, or in Python counting \texttt{4342:4780}.
+From looking at the file you can work out that these are the twelfth and
+thirteenth entries in the file, so in Python zero-based counting they are
+entries $11$ and $12$ in the \texttt{features} list:
+
+\begin{verbatim}
+>>> print record.features[11]
+type: gene
+location: [4342:4780]
+ref: None:None
+strand: 1
+qualifiers: 
+    Key: db_xref, Value: ['GeneID:2767712']
+    Key: gene, Value: ['pim']
+    Key: locus_tag, Value: ['YP_pPCP05']
+
+>>> print record.features[12]
+type: CDS
+location: [4342:4780]
+ref: None:None
+strand: 1
+qualifiers: 
+    Key: codon_start, Value: ['1']
+    Key: db_xref, Value: ['GI:45478716', 'GeneID:2767712']
+    Key: gene, Value: ['pim']
+    Key: locus_tag, Value: ['YP_pPCP05']
+    Key: note, Value: ['similar to many previously sequenced pesticin immunity ...']
+    Key: product, Value: ['pesticin immunity protein']
+    Key: protein_id, Value: ['NP_995571.1']
+    Key: transl_table, Value: ['11']
+    Key: translation, Value: ['MGGGMISKLFCLALIFLSSSGLAEKNTYTAKDILQNLELNTFGNSLSH...']
+\end{verbatim}
+
+Let's slice this parent record from 4300 to 4800 (enough to include the \verb|pim|
+gene/CDS), and see how many features we get:
+
+\begin{verbatim}
+>>> sub_record = record[4300:4800]
+>>> sub_record
+SeqRecord(seq=Seq('ATAAATAGATTATTCCAAATAATTTATTTATGTAAGAACAGGATGGGAGGGGGA...TTA',
+IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
+description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
+dbxrefs=[])
+>>> len(sub_record)
+500
+>>> len(sub_record.features)
+2
+\end{verbatim}
+
+Our sub-record just has two features, the gene and CDS entries for \verb|YP_pPCP05|:
+
+\begin{verbatim}
+>>> print sub_record.features[0]
+type: gene
+location: [42:480]
+ref: None:None
+strand: 1
+qualifiers: 
+    Key: db_xref, Value: ['GeneID:2767712']
+    Key: gene, Value: ['pim']
+    Key: locus_tag, Value: ['YP_pPCP05']
+
+>>> print sub_record.features[1]
+type: CDS
+location: [42:480]
+ref: None:None
+strand: 1
+qualifiers: 
+    Key: codon_start, Value: ['1']
+    Key: db_xref, Value: ['GI:45478716', 'GeneID:2767712']
+    Key: gene, Value: ['pim']
+    Key: locus_tag, Value: ['YP_pPCP05']
+    Key: note, Value: ['similar to many previously sequenced pesticin immunity ...']
+    Key: product, Value: ['pesticin immunity protein']
+    Key: protein_id, Value: ['NP_995571.1']
+    Key: transl_table, Value: ['11']
+    Key: translation, Value: ['MGGGMISKLFCLALIFLSSSGLAEKNTYTAKDILQNLELNTFGNSLSH...']
+\end{verbatim}
+
+\noindent Notice that their locations have been adjusted to reflect the new parent sequence!
+
+While Biopython has done something sensible and hopefully intuitive with the features
+(and any per-letter annotation), for the other annotation it is impossible to know if
+this still applies to the sub-sequence or not. To avoid guessing, the \texttt{annotations}
+and \texttt{dbxrefs} are omitted from the sub-record, and it is up to you to transfer
+any relevant information as appropriate.
+
+\begin{verbatim}
+>>> sub_record.annotations
+{}
+>>> sub_record.dbxrefs
+[]
+\end{verbatim}
+
+The same point could be made about the record \texttt{id}, \texttt{name}
+and \texttt{description}, but for practicality these are preserved:
+
+\begin{verbatim}
+>>> sub_record.id
+'NC_005816.1'
+>>> sub_record.name
+'NC_005816'
+>>> sub_record.description
+'Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.'
+\end{verbatim}
+
+\noindent This illustrates the problem nicely though, our new sub-record is
+\emph{not} the complete sequence of the plasmid, so the description is wrong!
+Let's fix this and then view the sub-record as a reduced GenBank file using
+the \texttt{format} method described above in Section~\ref{sec:SeqRecord-format}:
+
+\begin{verbatim}
+>>> sub_record.description = "Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, partial."
+>>> print sub_record.format("genbank")
+...
+\end{verbatim}
+
+See Section~\ref{sec:FASTQ-slicing-off-primer} for a FASTQ example where the
+per-letter annotations (the read quality scores) are also sliced.
+
+\chapter{Sequence Input/Output}
+\label{chapter:Bio.SeqIO}
+
+In this chapter we'll discuss in more detail the \verb|Bio.SeqIO| module, which was briefly introduced in Chapter~\ref{chapter:quick-start} and also used in Chapter~\ref{chapter:SeqRecord}. This aims to provide a simple interface for working with assorted sequence file formats in a uniform way.
+See also the \verb|Bio.SeqIO| wiki page (\url{http://biopython.org/wiki/SeqIO}), and the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html}{online}):
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> help(SeqIO)
+...
+\end{verbatim}
+
+The ``catch'' is that you have to work with \verb|SeqRecord| objects (see Chapter~\ref{chapter:SeqRecord}), which contain a \verb|Seq| object (see Chapter~\ref{chapter:Bio.Seq}) plus annotation like an identifier and description.
 
 \section{Parsing or Reading Sequences}
 \label{sec:Bio.SeqIO-input}
@@ -1308,7 +1838,7 @@ handle.close()
 
 Similarly, if you wanted to read in a file in another file format, then assuming \verb|Bio.SeqIO.parse()| supports it you would just need to change the format string as appropriate, for example ``swiss'' for SwissProt files or ``embl'' for EMBL text files. There is a full listing on the wiki page (\url{http://biopython.org/wiki/SeqIO}) and in the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html}{online}).
 
-Another very common way to use a python iterator is within a list comprehension (or
+Another very common way to use a Python iterator is within a list comprehension (or
 a generator expression).  For example, if all you wanted to extract from the file was
 a list of the record identifiers we can easily do this with the following list comprehension:
 
@@ -1327,7 +1857,7 @@ comprehension like this in Section~\ref{seq:sequence-parsing-plus-pylab}
 
 \subsection{Iterating over the records in a sequence file}
 
-In the above examples, we have usually used a for loop to iterate over all the records one by one.  You can use the for loop with all sorts of python objects (including lists, tuples and strings) which support the iteration interface.
+In the above examples, we have usually used a for loop to iterate over all the records one by one.  You can use the for loop with all sorts of Python objects (including lists, tuples and strings) which support the iteration interface.
 
 The object returned by \verb|Bio.SeqIO| is actually an iterator which returns \verb|SeqRecord| objects.  You get to see each record in turn, but once and only once.  The plus point is that an iterator can save you memory when dealing with large files.
 
@@ -1349,7 +1879,7 @@ print second_record.description
 handle.close()
 \end{verbatim}
 
-Note that if you try and use \verb|.next()| and there are no more results, you'll either get back the special python object \verb|None| or a \verb|StopIteration| exception.
+Note that if you try and use \verb|.next()| and there are no more results, you'll either get back the special Python object \verb|None| or a \verb|StopIteration| exception.
 
 One special case to consider is when your sequence files have multiple records, but you only want the first one.  In this situation the following code is very concise:
 
@@ -1364,7 +1894,7 @@ This will check there are no extra unexpected records present.
 
 \subsection{Getting a list of the records in a sequence file}
 
-In the previous section we talked about the fact that \verb|Bio.SeqIO.parse()| gives you a \verb|SeqRecord| iterator, and that you get the records one by one.  Very often you need to be able to access the records in any order. The python \verb|list| data type is perfect for this, and we can turn the record iterator into a list of \verb|SeqRecord| objects using the built-in python function \verb|list()| like so:
+In the previous section we talked about the fact that \verb|Bio.SeqIO.parse()| gives you a \verb|SeqRecord| iterator, and that you get the records one by one.  Very often you need to be able to access the records in any order. The Python \verb|list| data type is perfect for this, and we can turn the record iterator into a list of \verb|SeqRecord| objects using the built-in Python function \verb|list()| like so:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1375,13 +1905,13 @@ handle.close()
 print "Found %i records" % len(records)
 
 print "The last record"
-last_record = records[-1] #using python's list tricks
+last_record = records[-1] #using Python's list tricks
 print last_record.id
 print repr(last_record.seq)
 print len(last_record)
 
 print "The first record"
-first_record = records[0] #remember, python counts from zero
+first_record = records[0] #remember, Python counts from zero
 print first_record.id
 print repr(first_record.seq)
 print len(first_record)
@@ -1406,7 +1936,7 @@ You can of course still use a for loop with a list of \verb|SeqRecord| objects. 
 \subsection{Extracting data}
 
 The \verb|SeqRecord| object and its annotation structures are described more fully in
-Section~\ref{sec:advanced-seq}.  For now, as an example of how annotations are stored, we'll look at the output from parsing the first record in the GenBank file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk}.
+Chapter~\ref{chapter:SeqRecord}.  As an example of how annotations are stored, we'll look at the output from parsing the first record in the GenBank file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk}.
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1435,26 +1965,14 @@ Number of features: 5
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGATGAGACCGTGG...CGC', IUPACAmbiguousDNA())
 \end{verbatim}
 
-This gives a human readable summary of most of the annotation data for the \verb|SeqRecord|.  For any python object you can get some clues as to how to interact with it using the python built in function \verb|dir()| which lists all the properties and methods 
-of an object:
-
-\begin{verbatim}
->>> dir(first_record)
-[..., 'annotations', 'dbxrefs', 'description', 'features', 'format', 'id', 'name', 'seq']
-\end{verbatim}
-
-In the above list, we've omitted the special cases whose names start with an underscore.  You've already met the \verb|SeqRecord| object's \verb|.description|, \verb|.id| and \verb|.name| properties (all simple strings) and the \verb|.seq| property (the sequence itself as a \verb|Seq| object).
-The \verb|.dbxrefs| property is a list of database cross-references (as strings).
-We'll talk about the \verb|.format()| method later (Section~\ref{sec:Bio.SeqIO-and-StringIO}). 
-
-That leaves two more properties, \verb|.features| which is a list of \verb|SeqFeature| objects (sequence annotation associated with a particular sub-sequence, like genes -- see Section~\ref{sec:advanced-seq}), and \verb|.annotations| which is a python dictionary used to hold any other annotation (associated with the full sequence, for example a description or the species it is from).
-
+This gives a human readable summary of most of the annotation data for the \verb|SeqRecord|.
+For this example we're going to use the \verb|.annotations| attribute which is just a Python dictionary.
 The contents of this annotations dictionary were shown when we printed the record above.
 You can also print them out directly:
 \begin{verbatim}
 print first_record.annotations
 \end{verbatim}
-\noindent Like any python dictionary, you can easily get a list of the keys:
+\noindent Like any Python dictionary, you can easily get a list of the keys:
 \begin{verbatim}
 print first_record.annotations.keys()
 \end{verbatim}
@@ -1679,7 +2197,7 @@ Length 394
 
 \section{Sequence files as Dictionaries}
 
-The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database using the python \verb|dictionary| data type (like a hash in Perl). This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
+The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database using the Python \verb|dictionary| data type (like a hash in Perl). This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
 
 You can use the function \verb|Bio.SeqIO.to_dict()| to make a SeqRecord dictionary (in memory).  By default this will use each record's identifier (i.e. the \verb|.id| attribute) as the key.  Let's try this using our GenBank file:
 
@@ -1690,7 +2208,7 @@ orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, "genbank"))
 handle.close()
 \end{verbatim}
 
-Since this variable \verb|orchid_dict| is an ordinary python dictionary, we can look at all of the keys we have available:
+Since this variable \verb|orchid_dict| is an ordinary Python dictionary, we can look at all of the keys we have available:
 
 \begin{verbatim}
 >>> print orchid_dict.keys()
@@ -1709,7 +2227,7 @@ Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguo
 
 So, it is very easy to create an in memory ``database'' of our GenBank records.  Next we'll try this for the FASTA file instead.
 
-Note that those of you with prior python experience should all be able to construct a dictionary like this ``by hand''.  However, typical dictionary construction methods will not deal with the case of repeated keys very nicely.  Using the \verb|Bio.SeqIO.to_dict()| will explicitly check for duplicate keys, and raise an exception if any are found.
+Note that those of you with prior Python experience should all be able to construct a dictionary like this ``by hand''.  However, typical dictionary construction methods will not deal with the case of repeated keys very nicely.  Using the \verb|Bio.SeqIO.to_dict()| will explicitly check for duplicate keys, and raise an exception if any are found.
 
 \subsection{Specifying the dictionary keys}
 
@@ -1786,7 +2304,7 @@ Z78532.1 MN/s0q9zDoCVEEc+k/IFwCNF2pY
 Z78439.1 H+JfaShya/4yyAj7IbMqgNkxdxQ
 \end{verbatim}
 
-Now, recall the \verb|Bio.SeqIO.to_dict()| function's \verb|key_function| argument expects a function which turns a \verb|SeqRecord| into a string.  We can't use the \verb|seguid()| function directly because it expects to be given a \verb|Seq| object (or a string).  However, we can use python's \verb|lambda| feature to create a ``one off'' function to give to \verb|Bio.SeqIO.to_dict()| instead:
+Now, recall the \verb|Bio.SeqIO.to_dict()| function's \verb|key_function| argument expects a function which turns a \verb|SeqRecord| into a string.  We can't use the \verb|seguid()| function directly because it expects to be given a \verb|Seq| object (or a string).  However, we can use Python's \verb|lambda| feature to create a ``one off'' function to give to \verb|Bio.SeqIO.to_dict()| instead:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1884,14 +2402,33 @@ in_handle.close()
 out_handle.close()
 \end{verbatim}
 
-You {\it can} in fact do this in one line, by being lazy about closing the file handles. This is arguably bad style, but it is very concise:
+In principle, just by changing the filenames and the format names, this code
+could be used to convert between any file formats available in Biopython.
+However, writing some formats requires information (e.g. quality scores) which
+other files formats don't contain. For example, while you can turn a FASTQ
+file into a FASTA file, you can't do the reverse. See also
+Section~\ref{sec:SeqIO-fastq-conversion} in the cookbook chapter which looks
+at inter-converting between different FASTQ formats.
+
+You can simplify this by being lazy about closing the input file handles. This
+is arguably bad style, but it is more concise. Note that you should always
+close your outfile file handles as if you don't, your file may not get flushed
+to disk immediately.
+
+Alternatively, Python 2.6 includes \verb|with| as a new keyword (which can
+also be enabled on Python 2.5):
 
 \begin{verbatim}
+from __future__ import with_statement #Needed on Python 2.5
 from Bio import SeqIO
-SeqIO.write(SeqIO.parse(open("ls_orchid.gbk"), "genbank"), open("my_example.faa", "w"), "fasta")
+
+with in_handle = open("ls_orchid.gbk") :
+    with out_handle = open("my_example.fasta", "w") :
+        SeqIO.write(SeqIO.parse(in_handle, "genbank"), out_handle, "fasta")
 \end{verbatim}
 
-Section~\ref{sec:SeqIO-fastq-conversion} in the cookbook chapter looks at some specific issues with FASTQ files.
+\noindent Behind the scenes this will automatically close the handle handles
+(because the file objects are aware of the \verb|with| statement).
 
 \subsection{Converting a file of sequences to their reverse complements}
 \label{sec:SeqIO-reverse-complement}
@@ -1924,7 +2461,7 @@ def make_rc_record(record) :
                      description = "reverse complement")
 \end{verbatim}
 
-We can then use this to turn the input records into reverse complement records ready for output.  If you don't mind about having all the records in memory at once, then the python \verb|map()| function is a very intuitive way of doing this:
+We can then use this to turn the input records into reverse complement records ready for output.  If you don't mind about having all the records in memory at once, then the Python \verb|map()| function is a very intuitive way of doing this:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -1950,7 +2487,7 @@ records = [make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta")]
 records = [make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta") if len(rec)<700]
 \end{verbatim}
 
-That would create an in memory list of reverse complement records where the sequence length was under 700 base pairs. However, if you are using Python 2.4 or later, we can do exactly the same with a generator expression - but with the advantage that this does not create a list of all the records in memory at once:
+That would create an in memory list of reverse complement records where the sequence length was under 700 base pairs. However, we can do exactly the same with a generator expression - but with the advantage that this does not create a list of all the records in memory at once:
 
 \begin{verbatim}
 records = (make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta") if len(rec)<700)
@@ -1971,11 +2508,11 @@ out_handle.close()
 \end{verbatim}
 
 There is a related example in Section~\ref{sec:SeqIO-translate}, translating each
-record in the FASTA file from nucleotides to amino acids.
+record in a FASTA file from nucleotides to amino acids.
 
 \subsection{Getting your SeqRecord objects as formatted strings}
 \label{sec:Bio.SeqIO-and-StringIO}
-Suppose that you don't really want to write your records to a file or handle -- instead you want a string containing the records in a particular file format.  The \verb|Bio.SeqIO| interface is based on handles, but python has a useful built in module which provides a string based handle.
+Suppose that you don't really want to write your records to a file or handle -- instead you want a string containing the records in a particular file format.  The \verb|Bio.SeqIO| interface is based on handles, but Python has a useful built in module which provides a string based handle.
 
 For an example of how you might use this, let's load in a bunch of \verb|SeqRecord| objects from our orchids GenBank file, and create a string containing the records in FASTA format:
 
@@ -1992,32 +2529,7 @@ fasta_data = out_handle.getvalue()
 print fasta_data
 \end{verbatim}
 
-This isn't entirely straightforward the first time you see it!  On the bright side, for the special case where you would like a string containing a \emph{single} record in a particular file format, Biopython 1.48 added a new \verb|format()| method to the \verb|SeqRecord| class:
-
-\begin{verbatim}
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import generic_protein
-
-record = SeqRecord(Seq("MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQALFGD" \
-                      +"GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK" \
-                      +"NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM" \
-                      +"SSAC", generic_protein),
-                   id="gi|14150838|gb|AAK54648.1|AF376133_1",
-                   description="chalcone synthase [Cucumis sativus]")
-                   
-print record.format("fasta")
-\end{verbatim}
-\noindent which should give:
-\begin{verbatim}
->gi|14150838|gb|AAK54648.1|AF376133_1 chalcone synthase [Cucumis sativus]
-MMYQQGCFAGGTVLRLAKDLAENNRGARVLVVCSEITAVTFRGPSETHLDSMVGQALFGD
-GAGAVIVGSDPDLSVERPLYELVWTGATLLPDSEGAIDGHLREVGLTFHLLKDVPGLISK
-NIEKSLKEAFTPLGISDWNSTFWIAHPGGPAILDQVEAKLGLKEEKMRATREVLSEYGNM
-SSAC
-\end{verbatim}
-
-This \verb|format| method takes a single mandatory argument, a lower case string which is supported by \verb|Bio.SeqIO| as an output format.  However, some of the file formats \verb|Bio.SeqIO| can write to \emph{require} more than one record (typically the case for multiple sequence alignment formats), and thus won't work via this \verb|format()| method.
+This isn't entirely straightforward the first time you see it!  On the bright side, for the special case where you would like a string containing a \emph{single} record in a particular file format, Biopython 1.48 added a new \verb|format()| method to the \verb|SeqRecord| class (see Section~\ref{sec:SeqRecord-format}).
 
 Note that although we don't encourage it, you \emph{can} use the \verb|format()| method to write to a file, like this:
 \begin{verbatim}
@@ -2560,7 +3072,7 @@ AlignIO.write([alignment], handle, "phylip")
 handle.close()
 \end{verbatim}
 
-\noindent This code used a python dictionary to record a simple mapping from the new sequence system to the original identifier:
+\noindent This code used a Python dictionary to record a simple mapping from the new sequence system to the original identifier:
 \begin{verbatim}
 {0: 'COATB_BPIKE/30-81', 1: 'Q9T0Q8_BPIKE/1-52', 2: 'COATB_BPI22/32-83', ...}
 \end{verbatim}
@@ -2598,7 +3110,7 @@ alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
 print alignment.format("clustal")
 \end{verbatim}
 
-As described in Section~\ref{sec:Bio.SeqIO-and-StringIO}, the \verb|SeqRecord| object has a similar method using output formats supported by \verb|Bio.SeqIO|.
+As described in Section~\ref{sec:SeqRecord-format}), the \verb|SeqRecord| object has a similar method using output formats supported by \verb|Bio.SeqIO|.
 
 Internally the \verb|format()| method is using the \verb|StringIO| string based handle and calling
 \verb|Bio.AlignIO.write()|.  You can do this in your own code if for example you are using an
@@ -2622,7 +3134,7 @@ print clustal_data
 
 There are \emph{lots} of algorithms out there for aligning sequences, both pairwise alignments
 and multiple sequence alignments. These calculations are relatively slow, and you generally
-wouldn't want to write such an algorithm in python. Instead, you can use Biopython to invoke
+wouldn't want to write such an algorithm in Python. Instead, you can use Biopython to invoke
 a command line tool on your behalf. Normally you would:
 \begin{enumerate}
 \item Prepare an input file of your unaligned sequences, typically this will be a FASTA file
@@ -2635,10 +3147,358 @@ a command line tool on your behalf. Normally you would:
 
 All the command line wrappers we're going to talk about in this chapter follow the same style.
 You create a command line object specifying the options (e.g. the input filename and the
-output filename), then invoke this command line via a python operating system call (e.g.
-using the subprocess module).
+output filename), then invoke this command line via a Python operating system call (e.g.
+using the \texttt{subprocess} module).
+
+Most of these wrappers are defined in the \verb|Bio.Align.Applications| module:
+
+\begin{verbatim}
+>>> import Bio.Align.Applications
+>>> dir(Bio.Align.Applications)
+...
+['ClustalwCommandline', 'DialignCommandline', 'MafftCommandline', 'MuscleCommandline',
+'PrankCommandline', 'ProbconsCommandline', 'TCoffeeCommandline' ...]
+\end{verbatim}
+
+\noindent (Ignore the entries starting with an underscore -- these have
+special meaning in Python.)
+The module \verb|Bio.Emboss.Applications| has wrappers for some of the
+\href{http://emboss.sourceforge.net/}{EMBOSS suite}, including
+\texttt{needle} and \texttt{water}, which are described below in
+Section~\ref{seq:emboss-needle-water}.
+We won't explore all these alignment tools here in the section, just a
+sample, but the same principles apply.
+
+\subsection{ClustalW}
+\label{sec:align_clustal}
+ClustalW is a popular command line tool for multiple sequence alignment
+(there is also a graphical interface called ClustlX). Biopython's
+\verb|Bio.Align.Applications| module has a wrapper for this (and several
+other alignment tools).
+
+Before trying to use ClustalW from within Python, you should first try running
+the ClustalW tool yourself by hand at the command line, to familiarise
+yourself the other options. You'll find the Biopython wrapper is very
+faithful to the actual command line API:
+
+\begin{verbatim}
+>>> from Bio.Align.Applications import ClustalwCommandline
+>>> help(ClustalwCommandline)
+...
+\end{verbatim}
+
+For the most basic usage, all you need is to have a FASTA input file, such as
+\href{http://biopython.org/DIST/docs/tutorial/examples/opuntia.fasta}{opuntia.fasta}
+(available online or in the Doc/examples subdirectory of the Biopython source
+code). This is a small FASTA file containing seven prickly-pear DNA sequences
+(from the cactus family \textit{opuntia}).
+
+By default ClustalW will generate an alignment and guide tree file with names
+based on the input FASTA file, in this case \texttt{opuntia.aln} and
+\texttt{opuntia.dnd}, but you can override this or make it explicit:
+
+\begin{verbatim}
+>>> from Bio.Align.Applications import ClustalwCommandline
+>>> cline = ClustalwCommandline("clustalw2", infile="opuntia.fasta")
+>>> print cline
+clustalw2 -infile=opuntia.fasta
+\end{verbatim}
+
+Notice here we have given the executable name as \texttt{clustalw2},
+indicating we have version two installed, which has a different filename to
+version one (\texttt{clustalw}, the default). Fortunately both versions
+support the same set of arguments at the command line (and indeed, should be
+functionally identical).
+
+You may find that even though you have ClustalW installed, the above command
+doesn't work -- you may get a message about ``command not found'' (especially
+on Windows). This indicated that the ClustalW executable is not on your PATH
+(an environment variable, a list of directories to be searched). You can
+either update your PATH setting to include the location of your copy of
+ClustalW tools (how you do this will depend on your OS), or simply type in
+the full path of the tool. You can also tell Biopython the full
+path to the tool, for example:
+
+\begin{verbatim}
+>>> import os
+>>> from Bio.Align.Applications import ClustalwCommandline
+>>> clustalw_exe = r"C:\Program Files\new clustal\clustalw2.exe"
+>>> assert os.path.isfile(clustalw_exe), "Clustal W executable missing"
+>>> cline = ClustalwCommandline(clustalw_exe, infile="opuntia.fasta")
+\end{verbatim}
+
+\noindent Remember in Python that for a default string \verb|\n| or \verb|\t|
+means a new line or a tab -- which is why we're put a letter ``r'' at the
+start for a raw string. This is generally good practice when specifying a
+Windows style file name.
+
+You can now run this command line, perhaps using the Python \verb|subprocess|
+module, or maybe just with our \verb|generic_run| function.
+This returns three things. First, a result object
+includes the return code, an integer value which by convention is zero when
+successful (check the documentation for particular tools about what return
+codes they might use). Then, two handles which contain the ``standard out''
+(stdout) and ``standard error'' (stderr) text from the tool. These terms
+originate in Unix, and are general the results from the program and any
+progress or error messages.
+
+\begin{verbatim}
+>>> from Bio.Application import generic_run
+>>> result, out_handle, err_handle = generic_run(cline)
+>>> print result.return_code
+0
+>>> print err_handle.read()
+
+>>> print out_handle.read()
+...
+\end{verbatim}
+
+If you do print out the handles, you'll see all the voluminous text that
+ClustalW likes to print as it is working -- pages of stuff! There isn't
+much of interest here (unless it fails in which case any error messages
+could be informative!).
+
+What we care about are the two output files, the alignment and the guide
+tree. You should be able to work out how to read in the alignment using
+\verb|Bio.AlignIO| by now:
+
+\begin{verbatim}
+>>> from Bio import AlignIO
+>>> align = AlignIO.read(open("opuntia.aln"), "clustal")
+>>> print align
+SingleLetterAlphabet() alignment with 7 rows and 906 columns
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191
+TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF191
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF191
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF191
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273291|gb|AF191665.1|AF191
+\end{verbatim}
+
+In case you are interested (and this is an aside from the main thrust of this
+chapter), the \texttt{opuntia.dnd} file ClustalW creates is just a standard
+Newick tree file, and \verb|Bio.Nexus| can parse these. You can either parse
+the file directly (as though it were a light weight NEXUS file), or just go
+directly to a tree object:
+
+\begin{verbatim}
+>>> from Bio.Nexus import Trees
+>>> tree_string = open("opuntia.dnd").read()
+>>> tree = Trees.Tree(tree_string)
+>>> print tree
+tree a_tree = ((gi|6273291|gb|AF191665.1|AF191665,(gi|6273290|gb|AF191664.1|AF191664,
+gi|6273289|gb|AF191663.1|AF191663)),(gi|6273287|gb|AF191661.1|AF191661,
+gi|6273286|gb|AF191660.1|AF191660),(gi|6273285|gb|AF191659.1|AF191659,
+gi|6273284|gb|AF191658.1|AF191658));
+>>> print tree.display()
+ #                            taxon   prev      succ    brlen blen (sum) support comment
+ 0                                -   None [1, 6, 9]      0.0        0.0       -       -
+ 1                                -      0    [2, 3]   0.0077     0.0077       -       -
+ 2 gi|6273291|gb|AF191665.1|AF191665     1        []  0.00418    0.01188       -       -
+ 3                                -      1    [4, 5]  0.00083    0.00853       -       -
+ 4 gi|6273290|gb|AF191664.1|AF191664     3        []  0.00189    0.01042       -       -
+ 5 gi|6273289|gb|AF191663.1|AF191663     3        []  0.00145    0.00998       -       -
+ 6                                -      0    [7, 8]  0.00014    0.00014       -       -
+ 7 gi|6273287|gb|AF191661.1|AF191661     6        []  0.00489    0.00503       -       -
+ 8 gi|6273286|gb|AF191660.1|AF191660     6        []  0.00295    0.00309       -       -
+ 9                                -      0  [10, 11]  0.00125    0.00125       -       -
+10 gi|6273285|gb|AF191659.1|AF191659     9        []  0.00094    0.00219       -       -
+11 gi|6273284|gb|AF191658.1|AF191658     9        []  0.00018    0.00143       -       -
+
+Root:  0
+None
+\end{verbatim}
+
+\noindent The spacing has been adjusted here for display purposes.
+The tree object is actuall pretty powerful! Have a look at the list of
+methods with \texttt{dir(tree)} to get a hint of this...
+
+\subsection{MUSCLE}
+MUSCLE is a more recent multiple sequence alignment tool than ClustalW, and
+Biopython also has a wrapper for it under the \verb|Bio.Align.Applications|
+module. As before, we recommend you try using MUSCLE from the command line before
+trying it from within Python, as the Biopython wrapper is very faithful to the
+actual command line API:
+
+\begin{verbatim}
+>>> from Bio.Align.Applications import MuscleCommandline
+>>> help(MuscleCommandline)
+...
+\end{verbatim}
+
+For the most basic usage, all you need is to have a FASTA input file, such as
+\href{http://biopython.org/DIST/docs/tutorial/examples/opuntia.fasta}{opuntia.fasta}
+(available online or in the Doc/examples subdirectory of the Biopython source
+code). You can then tell MUSCLE to read in this FASTA file, and write the
+alignment to an output file:
+
+\begin{verbatim}
+>>> from Bio.Align.Applications import MuscleCommandline
+>>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.txt")
+>>> print cline
+muscle -in opuntia.fasta -out opuntia.txt
+\end{verbatim}
+
+Note that MUSCLE uses ``-in'' and ``-out'' but in Biopython we have to use
+``input'' and ``out'' as the keyword arguments or property names. This is
+because ``in'' is a reserved word in Python.
+
+By default MUSCLE will output the alignment as a FASTA file (using gapped
+sequences). You can also ask for ClustalW-like output:
+
+\begin{verbatim}
+>>> from Bio.Align.Applications import MuscleCommandline
+>>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clw=True)
+>>> print cline
+muscle -in opuntia.fasta -out opuntia.txt -clw
+\end{verbatim}
+
+Or, strict ClustalW output where the original ClustalW header line is
+used for maximum compatibility:
+
+\begin{verbatim}
+>>> from Bio.Align.Applications import MuscleCommandline
+>>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clwstrict=True)
+>>> print cline
+muscle -in opuntia.fasta -out opuntia.txt -clwstrict
+\end{verbatim}
+
+MUSCLE can also output in GCG MSF format (using the \texttt{msf} argument), but
+Biopython can't currently parse that, or using HTML which would give a human
+readable web page (not suitable for parsing).
+
+You can also set the other optional parameters, for example the maximum number
+of iterations. See the built in help for details:
+
+\begin{verbatim}
+>>> from Bio.Align.Applications import MuscleCommandline
+>>> help(MuscleCommandline)
+\end{verbatim}
+
+You might run simple MUSCLE command line string as described above for
+ClustalW, or opt to use the \verb|subprocess| module.
+
+\subsection{MUSCLE using stdout}
+
+Using a MUSCLE command line as in the examples above will write the alignment
+to a file. This means there will be no important information written to the
+standard out (stdout) or standard error (stderr) handles. However, by default
+MUSCLE will write the alignment to standard output (stdout). We can take
+advantage of this to avoid having a temporary output file! For example:
+
+\begin{verbatim}
+>>> from Bio.Align.Applications import MuscleCommandline
+>>> cline = MuscleCommandline(input="opuntia.fasta")
+>>> print cline
+muscle -in opuntia.fasta
+\end{verbatim}
+
+\noindent Now, let's run this can capture the output as handles:
+
+\begin{verbatim}
+>>> from Bio.Application import generic_run
+>>> result, out_handle, err_handle = generic_run(cline)
+>>> print result.return_code
+0
+\end{verbatim}
+
+\noindent Remember, a return code of zero is good -- by convention this means
+no errors. Finally, the output handle should contain our alignment in the
+default FASTA format:
+
+\begin{verbatim}
+>>> from Bio import AlignIO
+>>> align = AlignIO.read(out_handle, "fasta")
+>>> print align
+SingleLetterAlphabet() alignment with 7 rows and 906 columns
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF191663
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273291|gb|AF191665.1|AF191665
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF191664
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF191661
+TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF191660
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191659
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF191658
+\end{verbatim}
+
+\subsection{MUSCLE using stdin and stdout}
+
+We don't actually \emph{need} to have our FASTA input sequences prepared in a file,
+because by default MUSCLE will read in the input sequence from standard input!
+At this point the limitations of the helper function \verb|generic_run| become
+apparent, so we'll switch to the Python \verb|subprocess| module for full control.
+
+First, we'll need some unaligned sequences in memory as \verb|SeqRecord| objects.
+For this demonstration I'm going to use a filtered version of the original FASTA
+file (using a generator expression), taking just six of the seven sequences:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> records = (r for r in SeqIO.parse(open("opuntia.fasta"), "fasta") if len(r) < 900)
+\end{verbatim}
+
+Then we create the MUSCLE command line, leaving the input and output to their
+defaults (stdin and stdout). I'm also going to ask for strict ClustalW format
+as for the output.
+
+\begin{verbatim}
+>>> from Bio.Align.Applications import MuscleCommandline
+>>> cline = MuscleCommandline(clwstrict=True)
+>>> print cline
+muscle -clwstrict
+\end{verbatim}
+
+Now comes the clever bit using the \verb|subprocess| module:
+
+\begin{verbatim}
+>>> import subprocess
+>>> import sys
+>>> child = subprocess.Popen(str(cline),
+...                          stdin=subprocess.PIPE,
+...                          stdout=subprocess.PIPE,
+...                          stderr=subprocess.PIPE,
+...                          shell=(sys.platform!="win32"))                     
+\end{verbatim}
+
+That should start MUSCLE, but it will be sitting waiting for its FASTA input
+sequences, which we must supply via its stdin handle:
+
+\begin{verbatim}
+>>> SeqIO.write(records, child.stdin, "fasta")
+6
+>>> child.stdin.close()
+\end{verbatim}
+
+After writing the six sequences to the handle, MUSCLE will still be waiting
+to see if that is all the FASTA sequences or not -- so we must signal that
+this is all the input data by closing the handle. At that point MUSCLE should
+start to run, and we can ask for the output:
+
+\begin{verbatim}
+>>> from Bio import AlignIO
+>>> align = AlignIO.read(child.stdout, "clustal")
+>>> print align
+SingleLetterAlphabet() alignment with 6 rows and 900 columns
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF19166
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF19166
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF19166
+TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF19166
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF19165
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF19165
+\end{verbatim}
+
+Wow! There we are with a new alignment of just the six records, without having created
+a temporary FASTA input file, or a temporary alignment output file. However, a word of
+caution: Dealing with errors this style of programming is much more complicated. It
+also becomes far harder to diagnose problems, because you can't try running MUSCLE
+manually outside of Biopython (because you don't have the input file to supply).
+There can also be subtle cross platform issues (e.g. Windows versus Linux), and how
+you run your script can have in impact (e.g. at the command line, from IDLE or an
+IDE, or as a GUI script). These are all generic Python issues though, and not
+specific to Biopython.
 
 \subsection{EMBOSS needle and water}
+\label{seq:emboss-needle-water}
 The \href{http://emboss.sourceforge.net/}{EMBOSS} suite includes the \texttt{water} and
 \texttt{needle} tools for Smith-Waterman algorithm local alignment, and Needleman-Wunsch
 global alignment. The tools share the same style interface, so switching between the two
@@ -2654,7 +3514,7 @@ KKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTP
 AVHASLDKFLASVSTVLTSKYR
 \end{verbatim}
 
-\noindent in a file \texttt{alpha.fasta}, and secondly in a file \texttt{beta.fasta}):
+\noindent in a file \texttt{alpha.fasta}, and secondly in a file \texttt{beta.fasta}:
 
 \begin{verbatim}
 >HBB_HUMAN
@@ -2677,13 +3537,11 @@ Why not try running this by hand at the command prompt? You should see it does a
 pairwise comparison and records the output in the file \texttt{needle.txt} (in the
 default EMBOSS alignment file format).
 
-You may find that even though you have EMBOSS installed, the above command doesn't
-work - you may get a message about ``command not found'' (especially on Windows).
-This indicated that the EMBOSS tools are not on your PATH (an environment variable,
-a list of directories to be searched). You can either update your PATH setting to
-include the location of your EMBOSS tools (how you do this will depend on your OS),
-or simply type in the full path of the tool. You can also tell Biopython the full
-path to the tool, for example:
+Even if you have EMBOSS installed, running this command may not work -- you
+might get a message about ``command not found'' (especially on Windows). This
+probably means that the EMBOSS tools are not on your PATH environment
+variable. You can either update your PATH setting, or simply tell Biopython
+the full path to the tool, for example:
 
 \begin{verbatim}
 >>> from Bio.Emboss.Applications import NeedleCommandline
@@ -2692,8 +3550,8 @@ path to the tool, for example:
 ...                           gapopen=10, gapextend=0.5, outfile="needle.txt")
 \end{verbatim}
 
-\noindent Remember in python that for a default string \verb|\n| or \verb|\t| means a
-new line or a tab - which is why we're put a letter ``r'' at the start for a raw string.
+\noindent Remember in Python that for a default string \verb|\n| or \verb|\t| means a
+new line or a tab -- which is why we're put a letter ``r'' at the start for a raw string.
 
 At this point it might help to try running the EMBOSS tools yourself by hand at the
 command line, to familiarise yourself the other options and compare them to the
@@ -2721,10 +3579,10 @@ needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 
 needle.txt
 \end{verbatim}
 
-Next we want to use python to run this command for us - and here there are several
-options. For full control, we recommend you use the built in python \texttt{subprocess}
-module. However, for simple usage Biopython includes a wrapper function that usually
-suffices:
+Next we want to use Python to run this command for us. As explained above,
+for full control, we recommend you use the built in Python \texttt{subprocess}
+module. However, for simple usage Biopython includes a wrapper function that
+usually suffices:
 
 \begin{verbatim}
 >>> from Bio.Application import generic_run
@@ -2737,16 +3595,6 @@ Needleman-Wunsch global alignment of two sequences
 >>> print result.return_code
 0
 \end{verbatim}
-
-The \verb|generic_run| function returns three things. First, a result object
-includes the return code, an integer value which by convention is zero when
-successful (check the documentation for particular tools about what return
-codes they might use). Then, two handles which contain the ``standard out''
-(stdout) and ``standard error'' (stderr) text from the tool. These terms
-originate in Unix, and are general the results from the program and any
-progress or error messages. We told EMBOSS to write the output to a file,
-but you \emph{can} tell it to write the output to stdout instead (useful if
-you don't want a temporary output file to get rid of).
 
 In the above, all we really care about is that the return code is zero
 (success). Then we can load the output file with \verb|Bio.AlignIO| as
@@ -2761,13 +3609,18 @@ MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR HBA_HUMAN
 MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRF...KYH HBB_HUMAN
 \end{verbatim}
 
+In this example, we told EMBOSS to write the output to a file, but you
+\emph{can} tell it to write the output to stdout instead (useful if you
+don't want a temporary output file to get rid of), and also read the
+input from stdin (just like in the MUSCLE example in the section above).
+
 This has only scratched the surface of what you can do with \texttt{needle}
 and \texttt{water}. One useful trick is that the second file can contain
 multiple sequences (say five), and then EMBOSS will do five pairwise
 alignments.
 
 Note - Biopython includes its own pairwise alignment code in the \verb|Bio.pairwise2|
-module (written in C for speed, but with a pure python fallback available too). This
+module (written in C for speed, but with a pure Python fallback available too). This
 doesn't work with alignment objects, so we have not covered it within this chapter.
 See the module's docstring (built in help) for details.
 
@@ -2780,7 +3633,7 @@ Fortunately, the Biopython folks know this only too well, so they've developed l
 
 Dealing with BLAST can be split up into two steps, both of which can be done from within Biopython.
 Firstly, running BLAST for your query sequence(s), and getting some output.
-Secondly, parsing the BLAST output in python for further analysis.
+Secondly, parsing the BLAST output in Python for further analysis.
 We'll start by talking about running the BLAST command line tools locally, and then discuss running BLAST via the web.
 
 \section{Running BLAST locally}
@@ -2939,7 +3792,7 @@ non-FASTA file format which you can extract using \verb|Bio.SeqIO|
 
 Whatever arguments you give the \verb|qblast()| function, you should
 get back your results in a handle object (by default in XML format).
-The next step would be to parse the XML output into python objects
+The next step would be to parse the XML output into Python objects
 representing the search results (Section~\ref{sec:parsing-blast}),
 but you might want to save a local copy of the output file first.
 
@@ -2978,7 +3831,7 @@ form. However, the \verb|parse| function of the BLAST parser (described
 in~\ref{sec:parsing-blast}) takes a file-handle-like object, not a
 plain string. To get a handle, there are two things you can do:
 \begin{itemize}
-\item Use the python standard library module \verb|cStringIO|. The
+\item Use the Python standard library module \verb|cStringIO|. The
 following code will turn the plain string into a handle, which we can
 feed directly into the BLAST parser:
 \begin{verbatim}
@@ -3033,7 +3886,7 @@ The important point is that you do not have to use Biopython
 scripts to fetch the data in order to be able to parse it.
 
 Doing things in one of these ways, you then need to get a handle
-to the results. In python, a handle is just a nice general way of
+to the results. In Python, a handle is just a nice general way of
 describing input to any info source so that the info can be retrieved
 using \verb|read()| and \verb|readline()| functions. This is the type
 of input the BLAST parser (and most other Biopython parsers) take.
@@ -3406,19 +4259,19 @@ current versions of RPS-BLAST.
 \chapter{Accessing NCBI's Entrez databases}
 \label{chapter:entrez}
 
-Entrez (\url{http://www.ncbi.nlm.nih.gov/Entrez}) is a data retrieval system that provides users access to NCBI's databases such as PubMed, GenBank, GEO, and many others. You can access Entrez from a web browser to manually enter queries, or you can use Biopython's \verb+Bio.Entrez+ module for programmatic access to Entrez. The latter allows you for example to search PubMed or download GenBank records from within a python script.
+Entrez (\url{http://www.ncbi.nlm.nih.gov/Entrez}) is a data retrieval system that provides users access to NCBI's databases such as PubMed, GenBank, GEO, and many others. You can access Entrez from a web browser to manually enter queries, or you can use Biopython's \verb+Bio.Entrez+ module for programmatic access to Entrez. The latter allows you for example to search PubMed or download GenBank records from within a Python script.
 
 The \verb+Bio.Entrez+ module makes use of the Entrez Programming Utilities (also known as EUtils), consisting of eight tools that are described in detail on NCBI's page at \url{http://www.ncbi.nlm.nih.gov/entrez/utils/}.
-Each of these tools corresponds to one python function in the \verb+Bio.Entrez+ module, as described in the sections below. This module makes sure that the correct URL is used for the queries, and that not more than one request is made every three seconds, as required by NCBI.
+Each of these tools corresponds to one Python function in the \verb+Bio.Entrez+ module, as described in the sections below. This module makes sure that the correct URL is used for the queries, and that not more than one request is made every three seconds, as required by NCBI.
 
 The output returned by the Entrez Programming Utilities is typically in XML format. To parse such output, you have several options:
 \begin{enumerate}
-  \item Use \verb+Bio.Entrez+'s parser to parse the XML output into a python object;
-  \item Use the DOM (Document Object Model) parser in python's standard library;
-  \item Use the SAX (Simple API for XML) parser in python's standard library;
+  \item Use \verb+Bio.Entrez+'s parser to parse the XML output into a Python object;
+  \item Use the DOM (Document Object Model) parser in Python's standard library;
+  \item Use the SAX (Simple API for XML) parser in Python's standard library;
   \item Read the XML output as raw text, and parse it by string searching and manipulation.
 \end{enumerate}
-For the DOM and SAX parsers, see the python documentation. The parser in \verb+Bio.Entrez+ is discussed below.
+For the DOM and SAX parsers, see the Python documentation. The parser in \verb+Bio.Entrez+ is discussed below.
 
 NCBI uses DTD (Document Type Definition) files to describe the structure of the information contained in XML files. Most of the DTD files used by NCBI are included in the Biopython distribution. The \verb+Bio.Entrez+ parser makes use of the DTD files when parsing an XML file returned by NCBI Entrez.
 
@@ -3451,7 +4304,7 @@ To paraphrase:
 In conclusion, be sensible with your usage levels.  If you plan to download lots of data, consider other options.  For example, if you want easy access to all the human genes, consider fetching each chromosome by FTP as a GenBank file, and importing these into your own BioSQL database (see Section~\ref{sec:BioSQL}).
 
 \section{EInfo: Obtaining information about the Entrez databases}
-
+\label{sec:entrez-einfo}
 EInfo provides field index term counts, last update, and available links for each of NCBI's databases. In addition, you can use EInfo to obtain a list of all database names accessible through the Entrez utilities:
 \begin{verbatim}
 >>> from Bio import Entrez
@@ -3508,7 +4361,7 @@ The variable \verb+result+ now contains a list of databases in XML format:
 </eInfoResult>
 \end{verbatim}
 
-Since this is a fairly simple XML file, we could extract the information it contains simply by string searching. Using \verb+Bio.Entrez+'s parser instead, we can directly parse this XML file into a python object:
+Since this is a fairly simple XML file, we could extract the information it contains simply by string searching. Using \verb+Bio.Entrez+'s parser instead, we can directly parse this XML file into a Python object:
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> handle = Entrez.einfo()
@@ -3542,6 +4395,29 @@ For each of these databases, we can use EInfo again to obtain more information:
 '2008/05/24 06:45'
 \end{verbatim}
 Try \verb+record["DbInfo"].keys()+ for other information stored in this record.
+One of the most useful is a list of possible search fields for use with ESearch:
+
+\begin{verbatim}
+>>> for field in record["DbInfo"]["FieldList"] :
+...     print "%(Name)s, %(FullName)s, %(Description)s" % field
+ALL, All Fields, All terms from all searchable fields
+UID, UID, Unique number assigned to publication
+FILT, Filter, Limits the records
+TITL, Title, Words in title of publication
+WORD, Text Word, Free text associated with publication
+MESH, MeSH Terms, Medical Subject Headings assigned to publication
+MAJR, MeSH Major Topic, MeSH terms of major importance to publication
+AUTH, Author, Author(s) of publication
+JOUR, Journal, Journal abbreviation of publication
+AFFL, Affiliation, Author's institutional affiliation and address
+...
+\end{verbatim}
+
+That's a long list, but indirectly this tells you that for the PubMed
+database, you can do things like \texttt{Jones[AUTH]} to search the
+author field, or \texttt{Sanger[AFFL]} to restrict to authors at the
+Sanger Centre. This can be very handy - especially if you are not so
+familiar with a particular database.
 
 \section{ESearch: Searching the Entrez databases}
 \label{sec:entrez-esearch}
@@ -3556,7 +4432,10 @@ To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For exampl
 \end{verbatim}
 In this output, you see seven PubMed IDs (including 19304878 which is the PMID for the Biopython application notes), which can be retrieved by EFetch (see section \ref{sec:efetch}).
 
-You can also use ESearch to search GenBank. Here we'll do a quick search for the \emph{matK} gene in \emph{Cypripedioideae} orchids:
+You can also use ESearch to search GenBank. Here we'll do a quick
+search for the \emph{matK} gene in \emph{Cypripedioideae} orchids
+(see the Section~\ref{sec:entrez-einfo} about EInfo for one way to
+find out which fields you can search in each Entrez database):
 
 \begin{verbatim}
 >>> handle = Entrez.esearch(db="nucleotide",term="Cypripedioideae[Orgn] AND matK[Gene]")
@@ -3803,7 +4682,7 @@ ELink, available from Biopython as \verb+Bio.Entrez.elink()+, can be used to fin
 >>> handle.close()
 \end{verbatim}
 
-The \verb+record+ variable consists of a python list, one for each database in which we searched. Since we specified only one PubMed ID to search for, \verb+record+ contains only one item. This item is a dictionary containing information about our search term, as well as all the related items that were found:
+The \verb+record+ variable consists of a Python list, one for each database in which we searched. Since we specified only one PubMed ID to search for, \verb+record+ contains only one item. This item is a dictionary containing information about our search term, as well as all the related items that were found:
 
 \begin{verbatim}
 >>> record[0]["DbFrom"]
@@ -3931,7 +4810,7 @@ We first open the file and then parse it:
 >>> input = open("pubmed_result1.txt")
 >>> record = Medline.read(input)
 \end{verbatim}
-The \verb+record+ now contains the Medline record as a python dictionary:
+The \verb+record+ now contains the Medline record as a Python dictionary:
 \begin{verbatim}
 >>> record["PMID"]
 '12230038'
@@ -4055,7 +4934,7 @@ format).
 However, it is actually pretty straight forward to download the GEO files by FTP
 from \url{ftp://ftp.ncbi.nih.gov/pub/geo/} instead.  In this case you might want
 \url{ftp://ftp.ncbi.nih.gov/pub/geo/DATA/SOFT/by_series/GSE16/GSE16_family.soft.gz}
-(a compressed file, see the python module gzip).
+(a compressed file, see the Python module gzip).
 
 \subsection{Parsing UniGene records}
 
@@ -4141,14 +5020,14 @@ To parse a file containing more than one UniGene record, use the \verb+parse+ fu
 
 Normally you won't have to worry about using a proxy, but if this is an issue
 on your network here is how to deal with it.  Internally, \verb|Bio.Entrez|
-uses the standard python library \verb|urllib| for accessing the NCBI servers.
+uses the standard Python library \verb|urllib| for accessing the NCBI servers.
 This will check an environment variable called \verb|http_proxy| to configure
 any simple proxy automatically.  Unfortunately this module does not support
 the use of proxies which require authentication.
 
 You may choose to set the \verb|http_proxy| environment variable once (how you
 do this will depend on your operating system).  Alternatively you can set this
-within python at the start of your script, for example:
+within Python at the start of your script, for example:
 
 \begin{verbatim}
 import os
@@ -4164,7 +5043,7 @@ os.environ["http_proxy"] = "http://proxyhost.example.com:8080"
 \subsection{PubMed and Medline}
 \label{subsec:pub_med}
 
-If you are in the medical field or interested in human issues (and many times even if you are not!), PubMed (\url{http://www.ncbi.nlm.nih.gov/PubMed/}) is an excellent source of all kinds of goodies. So like other things, we'd like to be able to grab information from it and use it in python scripts.
+If you are in the medical field or interested in human issues (and many times even if you are not!), PubMed (\url{http://www.ncbi.nlm.nih.gov/PubMed/}) is an excellent source of all kinds of goodies. So like other things, we'd like to be able to grab information from it and use it in Python scripts.
 
 In this example, we will query PubMed for all articles having to do with orchids (see section~\ref{sec:orchids} for our motivation). We first check how many of such articles there are:
 
@@ -4188,7 +5067,7 @@ Now we use the \verb+Bio.Entrez.efetch+ function to download the PubMed IDs of t
 \end{verbatim}
 
 
-This returns a python list containing all of the PubMed IDs of articles related to orchids:
+This returns a Python list containing all of the PubMed IDs of articles related to orchids:
 \begin{verbatim}
 ['18680603', '18665331', '18661158', '18627489', '18627452', '18612381',
 '18594007', '18591784', '18589523', '18579475', '18575811', '18575690',
@@ -4230,7 +5109,7 @@ authors: ['Schiestl FP', 'Ayasse M', 'Paulus HF', 'Lofstedt C', 'Hansson BS',
 source: J Comp Physiol [A] 2000 Jun;186(6):567-74
 \end{verbatim}
 
-Especially interesting to note is the list of authors, which is returned as a standard python list. This makes it easy to manipulate and search using standard python tools. For instance, we could loop through a whole bunch of entries searching for a particular author with code like the following:
+Especially interesting to note is the list of authors, which is returned as a standard Python list. This makes it easy to manipulate and search using standard Python tools. For instance, we could loop through a whole bunch of entries searching for a particular author with code like the following:
 \begin{verbatim}
 >>> search_author = "Waits T"
 
@@ -4246,7 +5125,7 @@ Hopefully this section gave you an idea of the power and flexibility of the Entr
 \subsection{Searching, downloading, and parsing Entrez Nucleotide records}
 \label{subsec:entrez_example_genbank}
 
-Here we'll show a simple example of performing a remote Entrez query. In section~\ref{sec:orchids} of the parsing examples, we talked about using NCBI's Entrez website to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a python script. In this example, we'll just show how to connect, get the results, and parse them, with the Entrez module doing all of the work.
+Here we'll show a simple example of performing a remote Entrez query. In section~\ref{sec:orchids} of the parsing examples, we talked about using NCBI's Entrez website to search the NCBI nucleotide databases for info on Cypripedioideae, our friends the lady slipper orchids. Now, we'll look at how to automate that process using a Python script. In this example, we'll just show how to connect, get the results, and parse them, with the Entrez module doing all of the work.
 
 First, we use EGQuery to find out the number of results we will get before actually downloading them.  EGQuery will tell us how many search results were found in each of the databases, but for this example we are only interested in nucleotides:
 \begin{verbatim}
@@ -4267,7 +5146,7 @@ So, we expect to find 814 Entrez Nucleotide records (this is the number I obtain
 >>> record = Entrez.read(handle)
 \end{verbatim}
 
-Here, \verb+record+ is a python dictionary containing the search results and some auxiliary information. Just for information, let's look at what is stored in this dictionary:
+Here, \verb+record+ is a Python dictionary containing the search results and some auxiliary information. Just for information, let's look at what is stored in this dictionary:
 \begin{verbatim}
 >>> print record.keys()
 [u'Count', u'RetMax', u'IdList', u'TranslationSet', u'RetStart', u'QueryTranslation']
@@ -4386,7 +5265,7 @@ REFERENCE   1  (bases 1 to 892)
 ...
 \end{verbatim}
 
-In this case, we are just getting the raw records. To get the records in a more python-friendly form, we can use \verb+Bio.SeqIO+ to parse the GenBank data into \verb|SeqRecord| objects, including \verb|SeqFeature| objects (see Chapter~\ref{chapter:Bio.SeqIO}):
+In this case, we are just getting the raw records. To get the records in a more Python-friendly form, we can use \verb+Bio.SeqIO+ to parse the GenBank data into \verb|SeqRecord| objects, including \verb|SeqFeature| objects (see Chapter~\ref{chapter:Bio.SeqIO}):
 
 \begin{verbatim}
 >>> from Bio import SeqIO
@@ -4618,7 +5497,7 @@ To parse a file that contains more than one Swiss-Prot record, we use the \verb|
 For example, let's parse the full Swiss-Prot database and collect all the descriptions.
 You can download this from the \href{ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.dat.gz}{ExPAYs FTP site} as a single gzipped-file \verb|uniprot_sprot.dat.gz| (about 300MB).  This is a compressed file containing a single file, \verb|uniprot_sprot.dat| (over 1.5GB).
 
-As described at the start of this section, you can use the python library \verb|gzip| to open and uncompress a \texttt{.gz} file, like this:
+As described at the start of this section, you can use the Python library \verb|gzip| to open and uncompress a \texttt{.gz} file, like this:
 
 \begin{verbatim}
 >>> import gzip
@@ -4702,7 +5581,7 @@ ID   3Fe-4S.
 ...
 \end{verbatim}
 
-The entries in this file can be parsed by the \verb+parse+ function in the \verb+Bio.SwissProt.KeyWList+ module. Each entry is then stored as a \verb+Bio.SwissProt.KeyWList.Record+, which is a python dictionary.
+The entries in this file can be parsed by the \verb+parse+ function in the \verb+Bio.SwissProt.KeyWList+ module. Each entry is then stored as a \verb+Bio.SwissProt.KeyWList.Record+, which is a Python dictionary.
 
 \begin{verbatim}
 >>> from Bio.SwissProt import KeyWList
@@ -4820,7 +5699,7 @@ DR   Q06000, LIPL_RAT   ;  Q29524, LIPL_SHEEP ;
 
 In this example, the first line shows the EC (Enzyme Commission) number of lipoprotein lipase (second line). Alternative names of lipoprotein lipase are "clearing factor lipase", "diacylglycerol lipase", and "diglyceride lipase" (lines 3 through 5). The line starting with "CA" shows the catalytic activity of this enzyme. Comment lines start with "CC". The "PR" line shows references to the Prosite Documentation records, and the "DR" lines show references to Swiss-Prot records. Not of these entries are necessarily present in an Enzyme record.
 
-In Biopython, an Enzyme record is represented by the \verb|Bio.ExPASy.Enzyme.Record| class. This record derives from a python dictionary and has keys corresponding to the two-letter codes used in Enzyme files. To read an Enzyme file containing one Enzyme record, use the \verb+read+ function in \verb|Bio.ExPASy.Enzyme|:
+In Biopython, an Enzyme record is represented by the \verb|Bio.ExPASy.Enzyme.Record| class. This record derives from a Python dictionary and has keys corresponding to the two-letter codes used in Enzyme files. To read an Enzyme file containing one Enzyme record, use the \verb+read+ function in \verb|Bio.ExPASy.Enzyme|:
 
 \begin{verbatim}
 >>> from Bio.ExPASy import Enzyme
@@ -4871,7 +5750,7 @@ Swiss-Prot, Prosite, and Prosite documentation records can be downloaded from th
 \item[sprot\_search\_ful]To search for a Swiss-Prot record
 \item[sprot\_search\_de]To search for a Swiss-Prot record
 \end{description}
-To access this web server from a python script, we use the \verb|Bio.ExPASy| module.
+To access this web server from a Python script, we use the \verb|Bio.ExPASy| module.
 
 \subsection{Retrieving a Swiss-Prot record}
 \label{subsec:expasy_swissprot}
@@ -4999,7 +5878,7 @@ For these functions, an invalid accession number returns an error message in HTM
 
 \href{http://www.expasy.org/tools/scanprosite/}{ScanProsite} allows you to scan protein sequences online against the Prosite database by providing a UniProt or PDB sequence identifier or the sequence itself. For more information about ScanProsite, please see the \href{http://www.expasy.org/tools/scanprosite/scanprosite-doc.html}{ScanProsite documentation} as well as the \href{http://www.expasy.org/tools/scanprosite/ScanPrositeREST.html}{documentation for programmatic access of ScanProsite}.
 
-You can use Biopython's \verb+Bio.ExPASy.ScanProsite+ module to scan the Prosite database from python. This module both helps you to access ScanProsite programmatically, and to parse the results returned by ScanProsite. To scan for Prosite patterns in the following protein sequence:
+You can use Biopython's \verb+Bio.ExPASy.ScanProsite+ module to scan the Prosite database from Python. This module both helps you to access ScanProsite programmatically, and to parse the results returned by ScanProsite. To scan for Prosite patterns in the following protein sequence:
 
 \begin{verbatim}
 MEHKEVVLLLLLFLKSGQGEPLDDYVNTQGASLFSVTKKQLGAGSIEECAAKCEEDEEFT
@@ -5015,7 +5894,7 @@ CRAFQYHSKEQQCVIMAENRKSSIIIRMRDVVLFEKKVYLSECKTGNGKNYRGTMSKTKN"
 >>> handle = ScanProsite.scan(seq=sequence)
 \end{verbatim}
 
-By executing \verb+handle.read()+, you can obtain the search results in raw XML format. Instead, let's use \verb+Bio.ExPASy.ScanProsite.read+ to parse the raw XML into a python object:
+By executing \verb+handle.read()+, you can obtain the search results in raw XML format. Instead, let's use \verb+Bio.ExPASy.ScanProsite.read+ to parse the raw XML into a Python object:
 
 \begin{verbatim}
 >>> result = ScanProsite.read(handle)
@@ -6638,7 +7517,7 @@ This section will describe the \verb|Bio.MarkovModel| and/or \verb|Bio.HMM.Marko
 \chapter{Graphics including GenomeDiagram}
 \label{chapter:graphics}
 
-The \verb|Bio.Graphics| module depends on the third party python library
+The \verb|Bio.Graphics| module depends on the third party Python library
 \href{http://www.reportlab.org}{ReportLab}.  Although focused on producing PDF files,
 ReportLab can also create encapsulated postscript (EPS) and (SVG) files.  In addition
 to these vector based images, provided certain further dependencies such as the
@@ -6651,7 +7530,7 @@ and PICT formats).
 \subsection{Introduction}
 
 The \verb|Bio.Graphics.GenomeDiagram| module is a new addition to Biopython 1.50,
-having previously been available as a separate python module dependent on Biopython.
+having previously been available as a separate Python module dependent on Biopython.
 GenomeDiagram is described in the Bioinformatics journal publication Pritchard et al. (2006),
 \href{http://dx.doi.org/10.1093/bioinformatics/btk021}{doi:10.1093/bioinformatics/btk021},
 and there are several examples images and documentation for the old separate version
@@ -6665,7 +7544,7 @@ mitochrondia.
 
 This module is easiest to use if you have your genome loaded as a \verb|SeqRecord|
 object containing lots of \verb|SeqFeature| objects - for example as loaded from a
-GenBank file (see Chapter~\ref{chapter:Bio.SeqIO}).
+GenBank file (see Chapters~\ref{chapter:SeqRecord} and~\ref{chapter:Bio.SeqIO}).
 
 \subsection{Diagrams, tracks, feature-sets and features}
 
@@ -6686,7 +7565,7 @@ There are two main ways to build up a complete diagram.  Firstly, the top down
 approach where you create a diagram object, and then using its methods add
 track(s), and use the track methods to add feature-set(s), and use their
 methods to add the features.  Secondly, you can create the individual objects
-separately (in whatever order suits your code), and them combine them.
+separately (in whatever order suits your code), and then combine them.
 
 \subsection{A top down example}
 \label{sec:gd_top_down}
@@ -6716,9 +7595,9 @@ gd_track_for_features = gd_diagram.new_track(1, name="Annotated Features")
 gd_feature_set = gd_track_for_features.new_set()
 \end{verbatim}
 
-Now the fun part - we take each gene \verb|SeqFeature| objects in our
-\verb|SeqRecord|, and use it to generate a feature on the diagram. I'm
-going color them blue, alternating between a dark blue and a light blue.
+Now the fun part - we take each gene \verb|SeqFeature| object in our
+\verb|SeqRecord|, and use it to generate a feature on the diagram. We're
+going to color them blue, alternating between a dark blue and a light blue.
 \begin{verbatim}
 for feature in record.features:
     if feature.type != "gene" :
@@ -6835,7 +7714,8 @@ above.  The figures should be identical.
 \label{sec:gd_features_without_seqfeatures}
 
 In the above example we used a \verb|SeqRecord|'s \verb|SeqFeature| objects
-to build our diagram.  Sometimes you won't have \verb|SeqFeature| objects,
+to build our diagram (see also Section~\ref{sec:seq_features}).
+Sometimes you won't have \verb|SeqFeature| objects,
 but just the coordinates for a feature you want to draw.  You have to create
 minimal \verb|SeqFeature| object, but this is easy:
 
@@ -6904,7 +7784,7 @@ gd_feature_set.add_feature(feature, color=color, label=True, name="My Gene")
 In addition to the caption text for each feature's label, you can also choose
 the font, position (this defaults to the start of the sigil, you can also
 choose the middle or at the end) and orientation (for linear diagrams only,
-this defaults to rotated by $45$ degrees:
+where this defaults to rotated by $45$ degrees):
 
 \begin{verbatim}
 #Large font, parallel with the track
@@ -7151,15 +8031,12 @@ UK spellings may be deprecated.
 For example, if you used to have:
 \begin{verbatim}
 from GenomeDiagram import GDFeatureSet, GDDiagram
-from GenomeDiagram.GDColours import GDColourTranslator
-
 gdd = GDDiagram("An example")
 ...
 \end{verbatim}
 you could just switch the import statements like this:
 \begin{verbatim}
 from Bio.Graphics.GenomeDiagram import FeatureSet as GDFeatureSet, Diagram as GDDiagram
-
 gdd = GDDiagram("An example")
 ...
 \end{verbatim}
@@ -7167,14 +8044,12 @@ and hopefully that should be enough.  In the long term you might want to
 switch to the new names, but you would have to change more of your code:
 \begin{verbatim}
 from Bio.Graphics.GenomeDiagram import FeatureSet, Diagram
-
 gdd = Diagram("An example")
 ...
 \end{verbatim}
 or:
 \begin{verbatim}
 from Bio.Graphics import GenomeDiagram
-
 gdd = GenomeDiagram.Diagram("An example")
 ...
 \end{verbatim}
@@ -7209,7 +8084,7 @@ for (name, filename) in entries :
 \end{verbatim}
 
 \noindent This gave the lengths of the five chromosomes, which we'll now use in
-the following short demonstration of the \verb| BasicChromosome| module:
+the following short demonstration of the \verb|BasicChromosome| module:
 
 \begin{verbatim}
 from Bio.Graphics import BasicChromosome
@@ -7286,7 +8161,7 @@ This section shows some more examples of sequence input/output, using the
 
 Let's suppose you are looking at genome sequence, hunting for some sequence
 feature -- maybe extreme local GC\% bias, or possible restriction digest sites.
-Once you've got your python code working on the real genome it may be sensible
+Once you've got your Python code working on the real genome it may be sensible
 to try running the same search on randomised versions of the same genome for
 statistical analysis (after all, any ``features'' you've found could just be
 there just by chance).
@@ -7305,8 +8180,8 @@ original_rec = SeqIO.read(open("NC_005816.gb"),"genbank")
 \end{verbatim}
 
 So, how can we generate a shuffled versions of the original sequence?  I would
-use the built in python \verb|random| module for this, in particular the function
-\verb|random.shuffle| -- but this works on a python list.  Our sequence is a
+use the built in Python \verb|random| module for this, in particular the function
+\verb|random.shuffle| -- but this works on a Python list.  Our sequence is a
 \verb|Seq| object, so in order to shuffle it we need to turn it into a list:
 
 \begin{verbatim}
@@ -7318,7 +8193,7 @@ random.shuffle(nuc_list) #acts in situ!
 Now, in order to use \verb|Bio.SeqIO| to output the shuffled sequence, we need
 to construct a new \verb|SeqRecord| with a new \verb|Seq| object using this
 shuffled list.  In order to do this, we need to turn the list of nucleotides
-(single letter strings) into a long string -- the standard python way to do
+(single letter strings) into a long string -- the standard Python way to do
 this is with the string object's join method.
 
 \begin{verbatim}
@@ -7328,7 +8203,7 @@ shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet), \
                          id="Shuffled", description="Based on %s" % original_rec.id)
 \end{verbatim}
 
-Let's put all these pieces together to make a complete python script which
+Let's put all these pieces together to make a complete Python script which
 generates a single FASTA file containing 30 randomly shuffled versions of
 the original sequence.
 
@@ -7383,9 +8258,11 @@ handle.close()
 Suppose you've got an input file of CDS entries for some organism, and you
 want to generate a new FASTA file containing their protein sequences.  i.e.
 Take each nucleotide sequence from the original file, and translate it.
-
 Back in Section~\ref{sec:translation} we saw how to use the \verb|Seq|
-object's translate method.  We can combine this with \verb|Bio.SeqIO| as
+object's \verb|translate method|, and the optional \verb|cds| argument
+which enables correct translation of alternative start codons.
+
+We can combine this with \verb|Bio.SeqIO| as
 shown in the reverse complement example in Section~\ref{sec:SeqIO-reverse-complement}.
 The key point is that for each nucleotide \verb|SeqRecord|, we need to create
 a protein \verb|SeqRecord| - and take care of naming it.
@@ -7398,9 +8275,9 @@ use the default table and add a prefix to the identifier:
 from Bio.SeqRecord import SeqRecord
 def make_protein_record(nuc_record) :
     """Returns a new SeqRecord with the translated sequence (default table)."""
-    return SeqRecord(seq = nuc_record.seq.translate(to_stop=True), \
+    return SeqRecord(seq = nuc_record.seq.translate(cds=True), \
                      id = "trans_" + nuc_record.id, \
-                     description = "translation to first stop, with default table")
+                     description = "translation of CDS, using default table")
 \end{verbatim}
 
 We can then use this function to turn the input nucleotide records into protein
@@ -7411,18 +8288,17 @@ is with a generator expression:
 from Bio import SeqIO
 
 proteins = (make_protein_record(nuc_rec) for nuc_rec in \
-            SeqIO.parse(open("ls_orchid.fasta"), "fasta"))
+            SeqIO.parse(open("coding_sequences.fasta"), "fasta"))
 
 out_handle = open("translations.fasta", "w")
 SeqIO.write(proteins, out_handle, "fasta")
 out_handle.close()
 \end{verbatim}
 
-This should work on any FASTA file of coding sequences.  We're just reused
-\href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta}
-as an example here, but you'll find several of the translations it gives are actually
-very very short -- if you recall many of these orchid sequences are actually rRNA
-sequences so translating them isn't actually biologically meaningful.
+This should work on any FASTA file of complete coding sequences.
+If you are working on partial coding sequences, you may prefer to use
+\verb|nuc_record.seq.translate(to_stop=True)| in the example above, as
+this wouldn't check for a valid start codon etc.
 
 \subsection{Simple quality filtering for FASTQ files}
 \label{sec:FASTQ-filtering-example}
@@ -7468,8 +8344,9 @@ means only one \verb|SeqRecord| is created at a time - avoiding any memory
 limitations.
 
 \subsection{Trimming off primer sequences}
+\label{sec:FASTQ-slicing-off-primer}
 
-For this example I'm going to pretend that \texttt{GTTGGAACCG} is a 3' primer
+For this example we're going to pretend that \texttt{GTTGGAACCG} is a 3' primer
 sequence we want to look for in some FASTQ formatted read data.  As in the example
 above, we'll use the \texttt{SRR014849.fastq} file downloaded from the NCBI
 (\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}).
@@ -7495,7 +8372,8 @@ a new FASTQ file, \texttt{with\_primer.fastq}.
 
 Now suppose that instead you wanted to make a FASTQ file containing these $500$ reads
 but with the primer sequence removed?  That's just a small change as we can slice the
-\verb|SeqRecord| to remove the first ten letters (the length of our primer):
+\verb|SeqRecord| (see Section~\ref{sec:SeqRecord-slicing}) to remove the first ten
+letters (the length of our primer):
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -7565,7 +8443,7 @@ probability of a sequencing error (here denoted by $P_e$) at a given
 base using a simple base ten log transformation:
 
 \begin{equation}
-Q_\textrm{PHRED} = - 10 \times \textrm{log}_{10} ( P_e )
+Q_{\textrm{PHRED}} = - 10 \times \textrm{log}_{10} ( P_e )
 \end{equation}
 
 This means a wrong read ($P_e = 1$) gets a PHRED quality of $0$, while a very
@@ -7577,25 +8455,25 @@ such as read mapping or assembly, qualities of up to about $90$ are possible
 The FASTQ format has the potential to become a \textit{de facto} standard for
 storing the letters and quality scores for a sequencing read in a single plain
 text file. The only fly in the ointment is that there are at least three
-versions of the FASTQ format which are incompatible and in difficult to
+versions of the FASTQ format which are incompatible and difficult to
 distinguish...
 
 \begin{enumerate}
 \item The original Sanger FASTQ format uses PHRED qualities encoded with an
 ASCII offset of 33. The NCBI seems to be using this format in their Short
-Read Archive. We call this the \texttt{fasta} format in \verb|Bio.SeqIO|.
+Read Archive. We call this the \texttt{fastq} format in \verb|Bio.SeqIO|.
 \item Solexa (later bought by Illumina) introduced their own version using
 Solexa qualities encoded with an ASCII offset of 64. We call this the
-\texttt{fasta-solexa} format.
+\texttt{fastq-solexa} format.
 \item Illumina pipeline 1.3 onwards produces FASTQ files with PHRED qualities
 (which is more consistent), but encoded with an ASCII offset of 64. We call
-this the \texttt{fasta-illumina} format.
+this the \texttt{fastq-illumina} format.
 \end{enumerate}
 
 The Solexa quality scores are defined using a different log transformation:
 
 \begin{equation}
-Q_\textrm{Solexa} = - 10 \times \textrm{log}_{10} \left( \frac{P_e}{1-P_e} \right)
+Q_{\textrm{Solexa}} = - 10 \times \textrm{log}_{10} \left( \frac{P_e}{1-P_e} \right)
 \end{equation}
 
 Given Solexa/Illumina have now moved to using PHRED scores in version 1.3 of
@@ -7634,6 +8512,15 @@ deliberate design choice by Illumina, meaning applications expecting the old
 \texttt{fastq-illumina} files (on good data). Of course, both variants are
 very different from the original \texttt{fasta} standard as used by Sanger,
 the NCBI, and elsewhere.
+
+For more details, see the built in help (also \href{http://www.biopython.org/DIST/docs/api/Bio.SeqIO.QualityIO-module.html}{online}):
+
+\begin{verbatim}
+>>> from Bio.SeqIO import QualityIO
+>>> help(QualityIO)
+...
+\end{verbatim}
+
 
 \subsection{Identifying open reading frames}
 
@@ -7781,7 +8668,7 @@ supported in lots of programming languages and also command line tools like
 \label{seq:sequence-parsing-plus-pylab}
 
 This section shows some more examples of sequence parsing, using the \verb|Bio.SeqIO|
-module described in Chapter~\ref{chapter:Bio.SeqIO}, plus the python library matplotlib's \verb|pylab| plotting interface (see \href{http://matplotlib.sourceforge.net/}{the matplotlib website for a tutorial}).  Note that to follow these examples you will need matplotlib installed - but without it you can still try the data parsing bits.
+module described in Chapter~\ref{chapter:Bio.SeqIO}, plus the Python library matplotlib's \verb|pylab| plotting interface (see \href{http://matplotlib.sourceforge.net/}{the matplotlib website for a tutorial}).  Note that to follow these examples you will need matplotlib installed - but without it you can still try the data parsing bits.
 
 \subsection{Histogram of sequence lengths}
 
@@ -8137,97 +9024,14 @@ Here is the result:
 
 \section{Dealing with alignments}
 
-It is often very useful to be able to align particular sequences. I do this quite often to get a quick and dirty idea of relationships between sequences. Consequently, it is very nice to be able to quickly write up a python script that does an alignment and gives you back objects that are easy to work with. The alignment related code in Biopython is meant to allow python-level access to alignment programs so that you can run alignments quickly from within scripts.
-
-\subsection{Clustalw}
-\label{sec:align_clustal}
-
-ClustalX (\url{http://www-igbmc.u-strasbg.fr/BioInfo/ClustalX/Top.html}) is a very nice program for doing multiple alignments. Biopython offers access to alignments in clustal format (these normally have a \verb|*.aln| extension) that are produced by ClustalX. It also offers access to ClustalW, which the is command line version of ClustalX.
-
-We'll need some sequences to align, such as \href{examples/opuntia.fasta}{opuntia.fasta} (also available online \href{http://biopython.org/DIST/docs/tutorial/examples/opuntia.fasta}{here}) which is a small FASTA file containing seven prickly-pear DNA sequences (from the cactus family \textit{opuntia}), which you can also from \verb|Doc/examples/| in the Biopython source distribution.
-
-The first step in interacting with clustalw is to set up a command line you want to pass to the program. ClustalW has a ton of command line options, and if you set a lot of parameters, you can end up typing in a huge ol' command line quite a bit. This command line class models the command line by making all of the options be attributes of the class that can be set. A few convenience functions also exist to set certain parameters, so that some error checking on the parameters can be done.
-
-To create a command line object to do a clustalw multiple alignment we do the following:
-
-\begin{verbatim}
-import os
-from Bio.Clustalw import MultipleAlignCL
-
-cline = MultipleAlignCL("opuntia.fasta")
-cline.set_output("test.aln")
-\end{verbatim}
-
-First we import the \verb|MultipleAlignCL| object, which models running a multiple alignment from clustalw. We then initialize the command line, with a single argument of the fasta file that we are going to be using for the alignment.
-
-The initialization function also takes an optional second argument which specifies the location of the \verb|clustalw| executable.  By default, the commandline will just be invoked with \verb|clustalw|, assuming that you've got it somewhere on your \verb|PATH|.
-If you have installed ClustalW 2, you'd need to tell Biopython to look for \verb|clustalw2| instead.  On Windows, you'll probably need to give the full path - for example:
-
-\begin{verbatim}
-clustalw_exe = r"C:\Program Files\ClustalW2\clustalw2.exe"
-assert os.path.isfile(clustalw_exe), "Clustal W executable missing"
-cline = MultipleAlignCL("opuntia.fasta", clustalw_exe)
-\end{verbatim}
-
-Secondly, we set the output to go to the file \verb|test.aln| (by default, ClustalW would have used the file \verb|opuntia.aln|). The \verb|MultipleAlignCL| object also has numerous other parameters to specify things like output format, gap costs, etc.
-
-We can look at the command line we have generated by invoking the \verb|__str__| member attribute of the \verb|MultipleAlignCL| class. This is done by calling \verb|str(cline)| or simple by printing out the command line with \verb|print cline|. In this case, doing this would give the following output:
-
-\begin{verbatim}
-clustalw opuntia.fasta -OUTFILE=test.aln
-\end{verbatim}
-
-Now that we've set up a simple command line, we now want to run the commandline and collect the results so we can deal with them. This can be done using the \verb|do_alignment| function of \verb|Clustalw| as follows:
-
-\begin{verbatim}
-from Bio import Clustalw
-alignment = Clustalw.do_alignment(cline)
-\end{verbatim}
-
-What happens when you run this if that Biopython executes your command line and runs ClustalW with the given parameters. It then grabs the output, and if it is in a format that Biopython can parse (currently only clustal format), then it will parse the results and return them as an alignment object of the appropriate type. So in this case since we are getting results in the default clustal format, the returned \verb|alignment| object will be a \verb|ClustalAlignment| type.
-
-Once we've got this alignment, we can do some interesting things with it such as get \verb|SeqRecord| objects for all of the sequences involved in the alignment:
-
-\begin{verbatim}
-print "description:", alignment[0].description
-print "sequence:", alignment[0].seq
-\end{verbatim}
-
-This prints out the description and sequence object for the first sequence in the alignment:
-
-\begin{verbatim}
-description: gi|6273285|gb|AF191659.1|AF191
-sequence: Seq('TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAAAAAAATGAAT
-...', IUPACAmbiguousDNA())
-\end{verbatim}
-
-You can also calculate the maximum length of the alignment with:
-
-\begin{verbatim}
-length = alignment.get_alignment_length()
-\end{verbatim}
-
-Finally, to write out the alignment object in the original format, we just need to access the \verb|__str__| function. So doing a \verb|print alignment| gives:
-
-\begin{verbatim}
-CLUSTAL X (1.81) multiple sequence alignment
-
-
-gi|6273285|gb|AF191659.1|AF191      TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
-gi|6273284|gb|AF191658.1|AF191      TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAGAAAGAA
-...
-\end{verbatim}
-
-This makes it easy to write your alignment back into a file with all of the original info intact.
-
-If you want to do more interesting things with an alignment, the best thing to do is to pass the alignment to an alignment information generating object, such as the SummaryInfo object, described in Section~\ref{sec:summary_info}.
+This section can been seen as a follow on to Chapter~\ref{chapter:Bio.AlignIO}.
 
 \subsection{Calculating summary information}
 \label{sec:summary_info}
 
 Once you have an alignment, you are very likely going to want to find out information about it. Instead of trying to have all of the functions that can generate information about an alignment in the alignment object itself, we've tried to separate out the functionality into separate classes, which act on the alignment.
 
-Getting ready to calculate summary information about an object is quick to do. Let's say we've got an alignment object called \verb|alignment|. All we need to do to get an object that will calculate summary information is:
+Getting ready to calculate summary information about an object is quick to do. Let's say we've got an alignment object called \verb|alignment|, for example read in using \verb|Bio.AlignIO.read(...)| as described in Chapter~\ref{chapter:Bio.AlignIO}. All we need to do to get an object that will calculate summary information is:
 
 \begin{verbatim}
 from Bio.Align import AlignInfo
@@ -8422,11 +9226,6 @@ info_content = summary_align.information_content(5, 30, log_base = 10,
 
 Well, now you are ready to calculate information content. If you want to try applying this to some real life problems, it would probably be best to dig into the literature on information content to get an idea of how it is used. Hopefully your digging won't reveal any mistakes made in coding this function!
 
-\subsection{Translating between Alignment formats}
-
-One thing that you always end up having to do is convert between different formats.
-You can do this using the \verb|Bio.AlignIO| module, see Section~\ref{sec:converting-alignments}.
-
 \section{Substitution Matrices}
 \label{sec:sub_matrix}
 
@@ -8594,7 +9393,7 @@ The \verb|Bio.InterPro.Record| contains:
 Biopython has a regression testing framework (the file
 \verb|run_tests.py|) based on
 \href{http://docs.python.org/library/unittest.html}{unittest},
-the standard unit testing framework for python.  Providing comprehensive
+the standard unit testing framework for Python.  Providing comprehensive
 tests for modules is one of the most important aspects of making sure that
 the Biopython code is as bug-free as possible before going out.
 It also tends to be one of the most undervalued aspects of contributing.
@@ -8648,7 +9447,7 @@ directly, which may give you more information.
 Importantly, note that the individual unit tests come in two types:
 \begin{itemize}
 \item Simple print-and-compare scripts.  These unit tests are
-      essentially short example python programs, which print out
+      essentially short example Python programs, which print out
       various output text.  For a test file named \verb|test_XXX.py|
       there will be a matching text file called \verb|test_XXX| under
       the \verb|output| subdirectory which contains the expected
@@ -8823,8 +9622,8 @@ gives a more structured result, and if there is a test failure this can
 clearly pinpoint which part of the test is going wrong.  The sub-tests can
 also be run individually which is helpful for testing or debugging.
 
-The \verb|unittest|-framework has been included with python since version
-2.1, and is documented in the python Library Reference (which I know you
+The \verb|unittest|-framework has been included with Python since version
+2.1, and is documented in the Python Library Reference (which I know you
 are keeping under your pillow, as recommended).  There is also
 \href{http://docs.python.org/library/unittest.html}{online documentaion
 for unittest}.
@@ -8865,7 +9664,7 @@ if __name__ == "__main__" :
     unittest.main(testRunner=runner)
 \end{verbatim}
 
-In the division tests, we use \verb|assertAlmostEqual| instead of \verb|assertEqual| to avoid tests failing due to roundoff errors; see the \verb|unittest| chapter in the python documentation for details and for other functionality available in \verb|unittest| (\href{http://docs.python.org/library/unittest.html}{online reference}).
+In the division tests, we use \verb|assertAlmostEqual| instead of \verb|assertEqual| to avoid tests failing due to roundoff errors; see the \verb|unittest| chapter in the Python documentation for details and for other functionality available in \verb|unittest| (\href{http://docs.python.org/library/unittest.html}{online reference}).
 
 These are the key points of \verb|unittest|-based tests:
 
@@ -8985,7 +9784,7 @@ exectute \verb|python test_Biospam.py|; with
 
 Python modules, classes and functions support built in documentation using
 docstrings.  The \href{http://docs.python.org/library/doctest.html}{doctest
-framework} (included with python) allows the developer to embed working
+framework} (included with Python) allows the developer to embed working
 examples in the docstrings, and have these examples automatically tested.
 
 Currently only a small part of Biopython includes doctests. The
@@ -9037,177 +9836,6 @@ $ python run_tests.py doctest
 
 \chapter{Advanced}
 \label{chapter:advanced}
-
-\section{The SeqRecord and SeqFeature classes}
-\label{sec:advanced-seq}
-
-You read all about the basic Biopython sequence class in Chapter~\ref{chapter:Bio.Seq}, which described how to do many useful things with just the sequence. Chapter~\ref{chapter:Bio.SeqIO} introduced the \verb|SeqRecord| class, which can hold annotation including a list of \verb|SeqFeature| objects.
-This section describes how Biopython handles these higher level descriptions of a sequence.
-
-\subsection{Features and Annotations -- SeqFeatures}
-\label{sec:seq_features}
-
-Sequence features are an essential part of describing a sequence. Once you get beyond the sequence itself, you need some way to organize and easily get at the more ``abstract'' information that is known about the sequence. While it is probably impossible to develop a general sequence feature class that will cover everything, the Biopython \verb|SeqFeature| class attempts to encapsulate as much of the information about the sequence as possible. The design is heavily based on the GenBank/EMBL feature tables, so if you understand how they look, you'll probably have an easier time grasping the structure of the Biopython classes.
-
-\subsubsection{SeqFeatures themselves}
-
-The first level of dealing with sequence features is the \verb|SeqFeature| class itself. This class has a number of attributes, so first we'll list them and there general features, and then work through an example to show how this applies to a real life example, a GenBank feature table. The attributes of a SeqFeature are:
-
-\begin{description}
-  \item[location] -- The location of the \verb|SeqFeature| on the sequence that you are dealing with. The locations end-points may be fuzzy -- section~\ref{sec:locations} has a lot more description on how to deal with descriptions.
-
-  \item[type] -- This is a textual description of the type of feature (for instance, this will be something like 'CDS' or 'gene').
-
-  \item[ref] -- A reference to a different sequence. Some times features may be ``on'' a particular sequence, but may need to refer to a different sequence, and this provides the reference (normally an accession number). A good example of this is a genomic sequence that has most of a coding sequence, but one of the exons is on a different accession. In this case, the feature would need to refer to this different accession for this missing exon.
-
-  \item[ref\_db] -- This works along with \verb|ref| to provide a cross sequence reference. If there is a reference, \verb|ref_db| will be set as None if the reference is in the same database, and will be set to the name of the database otherwise.
-
-  \item[strand] -- The strand on the sequence that the feature is located on. This may either be '1' for the top strand, '-1' for the bottom strand, or '0' for both strands (or if it doesn't matter). Keep in mind that this only really makes sense for double stranded DNA, and not for proteins or RNA.
-
-  \item[qualifiers] -- This is a python dictionary of additional information about the feature. The key is some kind of terse one-word description of what the information contained in the value is about, and the value is the actual information. For example, a common key for a qualifier might be ``evidence'' and the value might be ``computational (non-experimental).'' This is just a way to let the person who is looking at the feature know that it has not be experimentally (i.~e.~in a wet lab) confirmed.
- 
-
-  \item[sub\_features] -- A very important feature of a feature is that it can have additional \verb|sub_features| underneath it. This allows nesting of features, and helps us to deal with things such as the GenBank/EMBL feature lines in a (we hope) intuitive way.
-  
-\end{description}
-
-To show an example of SeqFeatures in action, let's take a look at the following feature from a GenBank feature table:
-
-\begin{verbatim}
-     mRNA            complement(join(<49223..49300,49780..>50208))
-                     /gene="F28B23.12"
-\end{verbatim}
-
-To look at the easiest attributes of the SeqFeature first, if you got a SeqFeature object for this it would have it \verb|type| of 'mRNA', a \verb|strand| of -1 (due to the 'complement'), and would have None for the \verb|ref| and \verb|ref_db| since there are no references to external databases. The \verb|qualifiers| for this SeqFeature would be a python dictionarary that looked like \verb|{'gene' : 'F28B23.12'}|.
-
-Now let's look at the more tricky part, how the 'join' in the location
-line is handled. First, the location for the top level SeqFeature (the
-one we are dealing with right now) is set as going from
-\verb|'<49223' to '>50208'| (see section~\ref{sec:locations} for
-the nitty gritty on how fuzzy locations like this are handled).
-So the location of the top level object is the entire span of the
-feature. So, how do you get at the information in the 'join?'
-Well, that's where the \verb|sub_features| go in.
-
-The \verb|sub_features| attribute will have a list with two SeqFeature
-objects in it, and these contain the information in the join. Let's
-look at \verb|top_level_feature.sub_features[0]|; the first
-\verb|sub_feature|). This object is a SeqFeature object with a
-\verb|type| of '\verb|mRNA_join|,' a \verb|strand| of -1 (inherited
-from the parent SeqFeature) and a location going from
-\verb|'<49223' to '49300'|.
-
-So, the \verb|sub_features| allow you to get at the internal information if you want it (i.~e.~if you were trying to get only the exons out of a genomic sequence), or just to deal with the broad picture (i.~e.~you just want to know that the coding sequence for a gene lies in a region). Hopefully this structuring makes it easy and intuitive to get at the sometimes complex information that can be contained in a SeqFeature.
-
-\subsubsection{Locations}
-\label{sec:locations}
-
-In the section on SeqFeatures above, we skipped over one of the more difficult parts of Features, dealing with the locations. The reason this can be difficult is because of fuzziness of the positions in locations. Before we get into all of this, let's just define the vocabulary we'll use to talk about this. Basically there are two terms we'll use:
-
-\begin{description}
-  \item[position] -- This refers to a single position on a sequence,
-  which may be fuzzy or not. For instance, 5, 20, \verb|<100| and
-  \verb|3^5| are all positions.
-
-  \item[location] -- A location is two positions that defines a region of a sequence. For instance 5..20 (i.~e.~5 to 20) is a location.
-\end{description}
-
-I just mention this because sometimes I get confused between the two.
-
-The complication in dealing with locations comes in the positions themselves. In biology many times things aren't entirely certain (as much as us wet lab biologists try to make them certain!). For instance, you might do a dinucleotide priming experiment and discover that the start of mRNA transcript starts at one of two sites. This is very useful information, but the complication comes in how to represent this as a position. To help us deal with this, we have the concept of fuzzy positions. Basically there are five types of fuzzy positions, so we have five classes do deal with them:
-
-\begin{description}
-  \item[ExactPosition] -- As its name suggests, this class represents a position which is specified as exact along the sequence. This is represented as just a a number, and you can get the position by looking at the \verb|position| attribute of the object.
-
-  \item[BeforePosition] -- This class represents a fuzzy position
-  that occurs prior to some specified site. In GenBank/EMBL notation,
-  this is represented as something like \verb|'<13'|, signifying that
-  the real position is located somewhere less then 13. To get
-  the specified upper boundary, look at the \verb|position|
-  attribute of the object.
-
-  \item[AfterPosition] -- Contrary to \verb|BeforePosition|, this
-  class represents a position that occurs after some specified site.
-  This is represented in GenBank as \verb|'>13'|, and like
-  \verb|BeforePosition|, you get the boundary number by looking
-  at the \verb|position| attribute of the object.
-
-  \item[WithinPosition] -- This class models a position which occurs somewhere between two specified nucleotides. In GenBank/EMBL notation, this would be represented as '(1.5)', to represent that the position is somewhere within the range 1 to 5. To get the information in this class you have to look at two attributes. The \verb|position| attribute specifies the lower boundary of the range we are looking at, so in our example case this would be one. The \verb|extension| attribute specifies the range to the higher boundary, so in this case it would be 4. So \verb|object.position| is the lower boundary and \verb|object.position + object.extension| is the upper boundary.
-
-  \item[BetweenPosition] -- This class deals with a position that
-  occurs between two coordinates. For instance, you might have a
-  protein binding site that occurs between two nucleotides on a
-  sequence. This is represented as \verb|'2^3'|, which indicates that
-  the real position happens between position 2 and 3. Getting
-  this information from the object is very similar to
-  \verb|WithinPosition|, the \verb|position| attribute specifies
-  the lower boundary (2, in this case) and the \verb|extension|
-  indicates the range to the higher boundary (1 in this case).
-\end{description}
-
-Now that we've got all of the types of fuzzy positions we can have taken care of, we are ready to actually specify a location on a sequence. This is handled by the \verb|FeatureLocation| class. An object of this type basically just holds the potentially fuzzy start and end positions of a feature. You can create a \verb|FeatureLocation| object by creating the positions and passing them in:
-
-\begin{verbatim}
->>> from Bio import SeqFeature
->>> start_pos = SeqFeature.AfterPosition(5)
->>> end_pos = SeqFeature.BetweenPosition(8, 1)
->>> my_location = SeqFeature.FeatureLocation(start_pos, end_pos)
-\end{verbatim}
-
-If you print out a \verb|FeatureLocation| object, you can get a nice representation of the information:
-
-\begin{verbatim}
->>> print my_location
-[>5:(8^9)]
-\end{verbatim}
-
-We can access the fuzzy start and end positions using the start and end attributes of the location:
-
-\begin{verbatim}
->>> my_location.start
-Bio.SeqFeature.AfterPosition(5)
->>> print my_location.start
->5
->>> my_location.end
-Bio.SeqFeature.BetweenPosition(8,1)
->>> print my_location.end
-(8^9)
-\end{verbatim}
-
-If you don't want to deal with fuzzy positions and just want numbers, you just need to ask for the \verb|nofuzzy_start| and \verb|nofuzzy_end| attributes of the location:
-
-\begin{verbatim}
->>> my_location.nofuzzy_start
-5
->>> my_location.nofuzzy_end
-8
-\end{verbatim}
-
-Notice that this just gives you back the position attributes of the fuzzy locations.
-
-Similary, to make it easy to create a position without worrying about fuzzy positions, you can just pass in numbers to the \verb|FeaturePosition| constructors, and you'll get back out \verb|ExactPosition| objects:
-
-\begin{verbatim}
->>> exact_location = SeqFeature.FeatureLocation(5, 8)
->>> print exact_location
-[5:8]
->>> exact_location.start
-Bio.SeqFeature.ExactPosition(5)
->>> exact_location.nofuzzy_start
-5
-\end{verbatim}
-
-That is all of the nitty gritty about dealing with fuzzy positions in Biopython. It has been designed so that dealing with fuzziness is not that much more complicated than dealing with exact positions, and hopefully you find that true!
-
-\subsubsection{References}
-
-Another common annotation related to a sequence is a reference to a journal or other published work dealing with the sequence. We have a fairly simple way of representing a Reference in Biopython -- we have a \verb|Bio.SeqFeature.Reference| class that stores the relevant information about a reference as attributes of an object.
-
-The attributes include things that you would expect to see in a reference like \verb|journal|, \verb|title| and \verb|authors|. Additionally, it also can hold the \verb|medline_id| and \verb|pubmed_id| and a \verb|comment| about the reference. These are all accessed simply as attributes of the object.
-
-A reference also has a \verb|location| object so that it can specify a particular location on the sequence that the reference refers to. For instance, you might have a journal that is dealing with a particular gene located on a BAC, and want to specify that it only refers to this position exactly. The \verb|location| is a potentially fuzzy location, as described in section~\ref{sec:locations}.
-
-That's all there is too it. References are meant to be easy to deal with, and hopefully general enough to cover lots of usage cases.
 
 \section{Parser Design}
 
@@ -9613,7 +10241,7 @@ consider extending our unit test coverage.  We've devoted all of Chapter~\ref{se
 \section{Contributing Code}
 
 There are no barriers to joining Biopython code development other
-than an interest in creating biology-related code in python. The
+than an interest in creating biology-related code in Python. The
 best place to express an interest is on the Biopython mailing lists
 -- just let us know you are interested in coding and what kind of
 stuff you want to work on. Normally, we try to have some discussion
@@ -9628,23 +10256,23 @@ contributing documentation at
 
 Please note that to make a code contribution you must have the legal right to contribute it and license it under the Biopython license.  If you wrote it all yourself, and it is not based on any other code, this shouldn't be a problem.  However, there are issues if you want to contribute a derivative work - for example something based on GPL or LPGL licenced code would not be compatible with our license.  If you have any queries on this, please discuss the issue on the biopython-dev mailing list.
 
-Another point of concern for any additions to Biopython regards any build time or run time dependencies.  Generally speaking, writing code to interact with a standalone tool (like BLAST, EMBOSS or ClustalW) doesn't present a big problem.  However, any dependency on another library - even a python library (especially one needed in order to compile and install Biopython like NumPy) would need further discussion.
+Another point of concern for any additions to Biopython regards any build time or run time dependencies.  Generally speaking, writing code to interact with a standalone tool (like BLAST, EMBOSS or ClustalW) doesn't present a big problem.  However, any dependency on another library - even a Python library (especially one needed in order to compile and install Biopython like NumPy) would need further discussion.
 
 Additionally, if you have code that you don't think fits in the
 distribution, but that you want to make available, we maintain Script
 Central (\url{http://biopython.org/wiki/Scriptcentral})
-which has pointers to freely available code in python for bioinformatics.
+which has pointers to freely available code in Python for bioinformatics.
 
 Hopefully this documentation has got you excited enough about
 Biopython to try it out (and most importantly, contribute!). Thanks
 for reading all the way through!
 
-\chapter{Appendix: Useful stuff about python}
+\chapter{Appendix: Useful stuff about Python}
 \label{sec:appendix}
 
-If you haven't spent a lot of time programming in python, many
+If you haven't spent a lot of time programming in Python, many
 questions and problems that come up in using Biopython are often
-related to python itself. This section tries to present some ideas and
+related to Python itself. This section tries to present some ideas and
 code that come up often (at least for us!) while using the Biopython
 libraries. If you have any suggestions for useful pointers that could
 go here, please contribute!
@@ -9679,7 +10307,7 @@ which reads the entire text information from the handle, and
 ``write'' handles, the function \verb|write()| is regularly used.
 
 The most common usage for handles is reading information from a file,
-which is done using the built-in python function \verb|open|. Here, we open a
+which is done using the built-in Python function \verb|open|. Here, we open a
 handle to the file \href{examples/m\_cold.fasta}{m\_cold.fasta}
 (also available online
 \href{http://biopython.org/DIST/docs/tutorial/examples/m\_cold.fasta}{here}):
@@ -9696,7 +10324,7 @@ Handles are regularly used in Biopython for passing information to parsers.
 
 One useful thing is to be able to turn information contained in a
 string into a handle. The following example shows how to do this using
-\verb|cStringIO| from the python standard library:
+\verb|cStringIO| from the Python standard library:
 
 \begin{verbatim}
 >>> my_info = 'A string\n with multiple lines.'

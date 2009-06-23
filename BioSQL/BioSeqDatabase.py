@@ -75,6 +75,14 @@ def open_database(driver = "MySQLdb", **kwargs):
 
     server = DBServer(conn, module)
 
+    if driver == "psycopg" :
+        import warnings
+        warnings.warn("Using BioSQL with psycopg (version one) is deprecated. "
+                      "It still works for now, but we recommend you update "
+                      "to using psycopg2 as a future release of Biopython "
+                      "will drop support for psycop (version one).",
+                      DeprecationWarning)
+
     # TODO - Remove the following once BioSQL Bug 2839 is fixed.
     # Test for RULES in PostgreSQL schema, see also Bug 2833.
     if driver in ["psycopg", "psycopg2", "pgdb"]:

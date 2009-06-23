@@ -73,8 +73,7 @@ following format names:
 We could potentially add support for "qual-solexa" meaning QUAL files which
 contain Solexa scores, but thus far there isn't any reason to use such files.
 
-For example, consider the following short FASTQ file (extracted from a real
-NCBI dataset)::
+For example, consider the following short FASTQ file::
 
     @EAS54_6_R1_2_1_413_324
     CCCTTCTTGTCTTCAGCGTTTCTCC
@@ -90,10 +89,10 @@ NCBI dataset)::
     ;;;;;;;;;;;9;7;;.7;393333
 
 This contains three reads of length 25.  From the read length these were
-probably originally from an early Solexa/Illumina sequencer but NCBI have
-followed the Sanger FASTQ convention and this actually uses PHRED style
-qualities.  This means we can parse this file using Bio.SeqIO using "fastq"
-as the format name:
+probably originally from an early Solexa/Illumina sequencer but this file
+follows the Sanger FASTQ convention (PHRED style qualities with an ASCII
+offet of 33).  This means we can parse this file using Bio.SeqIO using
+"fastq" as the format name:
 
     >>> from Bio import SeqIO
     >>> for record in SeqIO.parse(open("Quality/example.fastq"), "fastq") :
@@ -114,7 +113,7 @@ The qualities are held as a list of integers in each record's annotation:
     >>> print record.letter_annotations["phred_quality"]
     [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
 
-You can use the SeqRecord format method you can show this in the QUAL format:
+You can use the SeqRecord format method to show this in the QUAL format:
 
     >>> print record.format("qual")
     >EAS54_6_R1_2_1_443_348
@@ -156,7 +155,7 @@ as the format! The reason for this is all these scores are high enough that
 the PHRED and Solexa scores are almost equal. The differences become apparent
 for poor quality reads. See the functions solexa_quality_from_phred and
 phred_quality_from_solexa for more details.
-
+ 
 If you wanted to trim your sequences (perhaps to remove low quality regions,
 or to remove a primer sequence), try slicing the SeqRecord objects.  e.g.
 
@@ -242,6 +241,106 @@ It is important that you explicitly tell Bio.SeqIO which FASTQ variant you are
 using ("fastq" for the Sanger standard using PHRED values, "fastq-solexa" for
 the original Solexa/Illumina variant, or "fastq-illumina" for the more recent
 variant), as this cannot be detected reliably automatically.
+
+To illustrate this problem, let's consider an artifical example:
+
+    >>> from Bio.Seq import Seq
+    >>> from Bio.Alphabet import generic_dna
+    >>> from Bio.SeqRecord import SeqRecord
+    >>> test = SeqRecord(Seq("ACGTACGTA", generic_dna), id="Test",
+    ... description="Made up!")
+    >>> print test.format("fasta")
+    >Test Made up!
+    ACGTACGTA
+    <BLANKLINE>
+    >>> print test.format("fastq")
+    Traceback (most recent call last):
+     ...
+    ValueError: No suitable quality scores found in letter_annotations of SeqRecord (id=Test).
+
+We created a sample SeqRecord, and can show it in FASTA format - but for QUAL
+or FASTQ format we need to provide some quality scores. These are held as a
+list of integers (one for each base) in the letter_annotations dictionary:
+
+    >>> test.letter_annotations["phred_quality"] = [1,2,3,4,5,10,20,30,40]
+    >>> print test.format("qual")
+    >Test Made up!
+    1 2 3 4 5 10 20 30 40
+    <BLANKLINE>
+    >>> print test.format("fastq")
+    @Test Made up!
+    ACGTACGTA
+    +
+    "#$%&+5?I
+    <BLANKLINE>
+
+We can check this FASTQ encoding - the first PHRED quality was one, and this
+mapped to a double quote, while the final score was 40 and this mapped to "I":
+
+    >>> ord('"') - 33
+    1
+    >>> ord('I') - 33
+    40
+    >>> [ord(letter)-33 for letter in '"#$%&+5?I']
+    [1, 2, 3, 4, 5, 10, 20, 30, 40]
+
+Similarly, we could produce an Illumina 1.3+ style FASTQ file using PHRED
+scores with an offset of 64:
+
+    >>> print test.format("fastq-illumina")
+    @Test Made up!
+    ACGTACGTA
+    +
+    ABCDEJT^h
+    <BLANKLINE>
+
+And we can check this too - the first PHRED score was one, and this mapped to
+"A", while the final score was 40 and this mapped to "h":
+
+    >>> ord("A") - 64
+    1
+    >>> ord("h") - 64
+    40
+    >>> [ord(letter)-64 for letter in "ABCDEJT^h"]
+    [1, 2, 3, 4, 5, 10, 20, 30, 40]
+
+Notice how different the standard Sanger FASTQ and the Illumina 1.3+ style
+FASTQ filea look for the same data! Then we have the older Solexa/Illumina
+format to consider which encodes Solexa scores instead of PHRED scores.
+
+First let's see what Biopython says if we convert the PHRED scores in Solexa
+scores (rounding to one decimal place):
+
+    >>> for q in [1,2,3,4,5,10,20,30,40] :
+    ...     print "PHRED %i maps to Solexa %0.1f" % (q, solexa_quality_from_phred(q))
+    PHRED 1 maps to Solexa -5.9
+    PHRED 2 maps to Solexa -2.3
+    PHRED 3 maps to Solexa -0.0
+    PHRED 4 maps to Solexa 1.8
+    PHRED 5 maps to Solexa 3.3
+    PHRED 10 maps to Solexa 9.5
+    PHRED 20 maps to Solexa 20.0
+    PHRED 30 maps to Solexa 30.0
+    PHRED 40 maps to Solexa 40.0
+
+Now here is the record using the old Solexa style FASTQ file:
+
+    >>> print test.format("fastq-solexa")
+    @Test Made up!
+    ACGTACGTA
+    +
+    :>@BCJT^h
+    <BLANKLINE>
+
+Again, this is using an ASCII offset of 64, so we can check the Solexa scores:
+
+    >>> [ord(letter)-64 for letter in ":>@BCJT^h"]
+    [-6, -2, 0, 2, 3, 10, 20, 30, 40]
+
+This explains why the last few letters of this FASTQ output matched that using
+the Illumina 1.3+ format - high quality PHRED scores and Solexa scores are
+approximately equal.
+
 """
 __docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
 
@@ -362,8 +461,9 @@ def _get_phred_quality(record) :
         return [phred_quality_from_solexa(q) for \
                 q in record.letter_annotations["solexa_quality"]]
     except KeyError :
-        raise ValueError("No suitable quality scores found in letter_annotations "
-                         "of SeqRecord (id=%s)." % record.id)
+        raise ValueError("No suitable quality scores found in "
+                         "letter_annotations of SeqRecord (id=%s)." \
+                         % record.id)
 
 def _get_solexa_quality(record) :
     """Extract Solexa qualities from a SeqRecord's letter_annotations (PRIVATE).
@@ -379,8 +479,9 @@ def _get_solexa_quality(record) :
         return [solexa_quality_from_phred(q) for \
                 q in record.letter_annotations["phred_quality"]]
     except KeyError :
-        raise ValueError("No suitable quality scores found in letter_annotation "
-                         "of SeqRecord (id=%s)." % record.id)
+        raise ValueError("No suitable quality scores found in "
+                         "letter_annotations of SeqRecord (id=%s)." \
+                         % record.id)
 
 
 #TODO - Default to nucleotide or even DNA?
@@ -447,9 +548,9 @@ def FastqGeneralIterator(handle) :
     the second record this is unavoidable.  However for the fourth sequence this
     only happens because its quality string is split over two lines.  A naive
     parser could wrongly treat any line starting with an "@" as the beginning of
-    a new sequence!  This code copes with this possible ambiguity by keeping track
-    of the length of the sequence which gives the expected length of the quality
-    string.
+    a new sequence!  This code copes with this possible ambiguity by keeping
+    track of the length of the sequence which gives the expected length of the
+    quality string.
 
     Using this tricky example file as input, this short bit of code demonstrates
     what this parsing function would return:
@@ -499,9 +600,7 @@ def FastqGeneralIterator(handle) :
                 break
             seq_lines.extend(line.split()) #removes any whitespace
             line = handle.readline()
-
         seq_string = "".join(seq_lines)
-        del seq_lines
 
         quality_lines = []
         line = handle.readline()
@@ -520,9 +619,7 @@ def FastqGeneralIterator(handle) :
                 
             quality_lines.extend(line.split()) #removes any whitespace
             line = handle.readline()
-
         quality_string = "".join(quality_lines)
-        del quality_lines
         
         if len(seq_string) != len(quality_string) :
             raise ValueError("Lengths of sequence and quality values differs "
@@ -600,6 +697,7 @@ def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = No
     >>> print record.letter_annotations["phred_quality"]
     [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
     """
+    assert SANGER_SCORE_OFFSET == ord("!")
     for title_line, seq_string, quality_string in FastqGeneralIterator(handle) :
         if title2ids :
             id, name, descr = title2ids(title_line)
@@ -609,24 +707,12 @@ def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = No
             name = id
         record = SeqRecord(Seq(seq_string, alphabet),
                            id=id, name=name, description=descr)
-        
-        assert SANGER_SCORE_OFFSET == ord("!")
-        #According to BioPerl documentation at least, the first character should
-        #be an "!" (and therefore quality zero).  This seems crazy - what if the
-        #sequence has been trimmed to remove any poor quality sequence?  In any
-        #case real examples from the NCBI don't follow this practice, so we
-        #won't enforce it here.
-        #e.g. ftp://ftp.ncbi.nih.gov/pub/TraceDB/ShortRead/SRA000271/fastq/200x36x36-071113_EAS56_0053-s_1_1.fastq.gz
-        #
-        #if quality_string[0] != "!" :
-        #    raise ValueError("The quality string should always start with a ! character.")
         qualities = [ord(letter)-SANGER_SCORE_OFFSET for letter in quality_string]
-        if qualities :
-            if min(qualities) < 0 or max(qualities) > 93 :
-                raise ValueError("Quality score outside 0 to 93 found - these"
-                                 " are probably in Solexa/Illumina FASTQ "
-                                 "format, not the Sanger FASTQ format which "
-                                 "uses PHRED scores.")
+        if qualities and (min(qualities) < 0 or max(qualities) > 93) :
+            raise ValueError("PHRED quality score outside 0 to 93 found - "
+                             "your file is probably not in the standard "
+                             "Sanger FASTQ format. Check if it is one of the"
+                             "Solexa/Illumina variants instead.")
         record.letter_annotations["phred_quality"] = qualities
         yield record
 
@@ -777,7 +863,7 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
 
 #This is a generator function!
 def FastqIlluminaIterator(handle, alphabet = single_letter_alphabet, title2ids = None) :
-    """Parsing new Illumina 1.3+ FASTQ like files (which differ in the quality mapping).
+    """Parse new Illumina 1.3+ FASTQ like files (which differ in the quality mapping).
 
     The optional arguments are the same as those for the FastqPhredIterator.
 
@@ -800,13 +886,12 @@ def FastqIlluminaIterator(handle, alphabet = single_letter_alphabet, title2ids =
         record = SeqRecord(Seq(seq_string, alphabet),
                            id=id, name=name, description=descr)
         qualities = [ord(letter)-SOLEXA_SCORE_OFFSET for letter in quality_string]
-        #To strict - after all, this FASTQ file could have been post processed
-        #since comming off the instrument...
-        #if qualities :
-        #    if min(qualities) < 0 or max(qualities) > 40 :
-        #        raise ValueError("PHRED Quality score outside 0 to 40 found - "
-        #                         "this file is probably not in the Illumina "
-        #                         "1.3+ FASTQ format.")
+        if qualities and (min(qualities) < 0 or max(qualities) > 93) :
+            raise ValueError("PHRED quality score outside 0 to 93 found - "
+                             "your file is probably not in the Illumina 1.3+ "
+                             "FASTQ format. Check if it is a standard Sanger "
+                             "FASTQ file or from an older Solexa/Illumina "
+                             "pipeline.")
         record.letter_annotations["phred_quality"] = qualities
         yield record
     
@@ -902,10 +987,11 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
             line = handle.readline()
 
         if qualities :
-            if min(qualities) < 0 or max(qualities) > 90 :
-                raise ValueError(("Quality score range for %s is %i to %i, outside the " \
-                                 +"expected 0 to 90.  Perhaps these are Solexa/Illumina " \
-                                 +"scores, and not PHRED scores?") \
+            if min(qualities) < 0 or max(qualities) > 93 :
+                raise ValueError(("Quality score range for %s is %i to %i, "
+                                  "outside the expected 0 to 93.  Perhaps "
+                                  "these are Solexa/Illumina scores, and not "
+                                  "PHRED scores?") \
                                  % (id, min(qualities), max(qualities)))
         
         #Return the record and then continue...
@@ -918,12 +1004,12 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
     assert False, "Should not reach this line"
 
 class FastqPhredWriter(SequentialSequenceWriter):
-    """Class to write FASTQ format files (using PHRED quality scores).
+    """Class to write standard FASTQ format files (using PHRED quality scores).
 
     Although you can use this class directly, you are strongly encouraged
     to use the Bio.SeqIO.write() function instead.  For example, this code
-    reads in a FASTQ (PHRED) file and re-saves it as another FASTQ (PHRED)
-    file:
+    reads in a standard Sanger style FASTQ file (using PHRED scores) and
+    re-saves it as another FASTQ (PHRED) file:
 
     >>> from Bio import SeqIO
     >>> record_iterator = SeqIO.parse(open("Quality/example.fastq"), "fastq")
@@ -938,8 +1024,9 @@ class FastqPhredWriter(SequentialSequenceWriter):
     string on a single line (which is considered desirable for maximum
     compatibility).
 
-    In this next example, a Solexa FASTQ file is converted into a standard
-    Sanger style FASTQ file using PHRED qualities:
+    In this next example, an old style Solexa/Illumina FASTQ file (using Solexa
+    quality scores) is converted into a standard Sanger style FASTQ file using
+    PHRED qualities:
 
     >>> from Bio import SeqIO
     >>> record_iterator = SeqIO.parse(open("Quality/solexa.fastq"), "fastq-solexa")
@@ -956,8 +1043,9 @@ class FastqPhredWriter(SequentialSequenceWriter):
 
     >>> import os
     >>> os.remove("Quality/temp.fastq")
-
     """
+    assert SANGER_SCORE_OFFSET == ord("!")
+
     def write_record(self, record):
         """Write a single FASTQ record to the file."""
         assert self._header_written
@@ -965,7 +1053,6 @@ class FastqPhredWriter(SequentialSequenceWriter):
         self._record_written = True
 
         #TODO - Is an empty sequence allowed in FASTQ format?
-        assert SANGER_SCORE_OFFSET == ord("!")
         qualities = _get_phred_quality(record)
         try :
             #This rounds to the nearest integer:
@@ -976,13 +1063,23 @@ class FastqPhredWriter(SequentialSequenceWriter):
                 raise TypeError("A quality value of None was found")
             else :
                 raise e
+        
         if record.seq is None:
             raise ValueError("No sequence for record %s" % record.id)
         if len(qualities_str) != len(record) :
             raise ValueError("Record %s has sequence length %i but %i quality scores" \
                              % (record.id, len(record), len(qualities_str)))
 
-        title = self.clean(record.id) #TODO - add the description too? cf Fasta output
+        #FASTQ files can include a description, just like FASTA files
+        #(at least, this is what the NCBI Short Read Archive does)
+        id = self.clean(record.id)
+        description = self.clean(record.description)
+        if description and description.split(None,1)[0]==id :
+            #The description includes the id at the start
+            title = description
+        else :
+            title = "%s %s" % (id, description)        
+
         self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities_str))
 
 class QualPhredWriter(SequentialSequenceWriter):
@@ -1081,7 +1178,7 @@ class QualPhredWriter(SequentialSequenceWriter):
             self.handle.write(data + "\n")
 
 class FastqSolexaWriter(SequentialSequenceWriter):
-    """Write old style Solexa FASTQ format files (with Solexa quality scores).
+    """Write old style Solexa/Illumina FASTQ format files (with Solexa qualities).
 
     This outputs FASTQ files like those from the early Solexa/Illumina
     pipeline, using Solexa scores and an ASCII offset of 64. These are
@@ -1124,19 +1221,36 @@ class FastqSolexaWriter(SequentialSequenceWriter):
         self._record_written = True
 
         #TODO - Is an empty sequence allowed in FASTQ format?
-        qualities = "".join([chr(int(round(q+SOLEXA_SCORE_OFFSET,0))) for q \
-                             in _get_solexa_quality(record)])
+        qualities = _get_solexa_quality(record)
+        try :
+            qualities_str = "".join([chr(int(round(q+SOLEXA_SCORE_OFFSET,0))) for q \
+                                    in qualities])
+        except TypeError, e :
+            if None in qualities :
+                raise TypeError("A quality value of None was found")
+            else :
+                raise e
+
         if record.seq is None:
             raise ValueError("No sequence for record %s" % record.id)
         if len(qualities) != len(record) :
             raise ValueError("Record %s has sequence length %i but %i quality scores" \
                              % (record.id, len(record), len(qualities)))
 
-        title = self.clean(record.id) #TODO - add the description too? cf Fasta output
-        self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities))
+        #FASTQ files can include a description, just like FASTA files
+        #(at least, this is what the NCBI Short Read Archive does)
+        id = self.clean(record.id)
+        description = self.clean(record.description)
+        if description and description.split(None,1)[0]==id :
+            #The description includes the id at the start
+            title = description
+        else :
+            title = "%s %s" % (id, description)        
+
+        self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities_str))
 
 class FastqIlluminaWriter(SequentialSequenceWriter):
-    """Write Illumina/Solexa FASTQ format files (with PHRED quality scores).
+    """Write Illumina 1.3+ FASTQ format files (with PHRED quality scores).
 
     This outputs FASTQ files like those from the Solexa/Illumina 1.3+ pipeline,
     using PHRED scores and an ASCII offset of 64. Note these files are NOT
@@ -1155,16 +1269,33 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
         self._record_written = True
 
         #TODO - Is an empty sequence allowed in FASTQ format?
-        qualities = "".join([chr(int(round(q+SOLEXA_SCORE_OFFSET,0))) for q \
-                             in _get_phred_quality(record)])
+        qualities = _get_phred_quality(record)
+        try :
+            qualities_str = "".join([chr(int(round(q+SOLEXA_SCORE_OFFSET,0))) for q \
+                                     in qualities])
+        except TypeError, e :
+            if None in qualities :
+                raise TypeError("A quality value of None was found")
+            else :
+                raise e
+
         if record.seq is None:
             raise ValueError("No sequence for record %s" % record.id)
         if len(qualities) != len(record) :
             raise ValueError("Record %s has sequence length %i but %i quality scores" \
                              % (record.id, len(record), len(qualities)))
 
-        title = self.clean(record.id) #TODO - add the description too? cf Fasta output
-        self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities))
+        #FASTQ files can include a description, just like FASTA files
+        #(at least, this is what the NCBI Short Read Archive does)
+        id = self.clean(record.id)
+        description = self.clean(record.description)
+        if description and description.split(None,1)[0]==id :
+            #The description includes the id at the start
+            title = description
+        else :
+            title = "%s %s" % (id, description)        
+
+        self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities_str))
         
 def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet = single_letter_alphabet, title2ids = None) :
     """Iterate over matched FASTA and QUAL files as SeqRecord objects.

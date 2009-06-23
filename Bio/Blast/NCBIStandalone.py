@@ -722,13 +722,15 @@ class _Scanner:
         attempt_read_and_call(uhandle, consumer.window_size, start='Window for multiple hits')
         
         read_and_call(uhandle, consumer.dropoff_1st_pass, start='X1')
-        read_and_call(uhandle, consumer.gap_x_dropoff, start='X2')
+        # not TBLASTN
+        attempt_read_and_call(uhandle, consumer.gap_x_dropoff, start='X2')
 
         # not BLASTN, TBLASTX
         attempt_read_and_call(uhandle, consumer.gap_x_dropoff_final,
                               start='X3')
 
-        read_and_call(uhandle, consumer.gap_trigger, start='S1')
+        # not TBLASTN
+        attempt_read_and_call(uhandle, consumer.gap_trigger, start='S1')
         # not in blastx 2.2.1
         # first we make sure we have additional lines to work with, if
         # not then the file is done and we don't have a final S2
@@ -899,8 +901,9 @@ class _AlignmentConsumer:
         self._multiple_alignment = Record.MultipleAlignment()
 
     def title(self, line):
-        self._alignment.title = "%s%s" % (self._alignment.title,
-                                           line.lstrip())
+        if self._alignment.title:
+            self._alignment.title += " "
+        self._alignment.title += line.strip()
 
     def length(self, line):
         #e.g. "Length = 81" or more recently, "Length=428"

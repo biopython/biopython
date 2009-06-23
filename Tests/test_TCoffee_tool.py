@@ -49,10 +49,10 @@ class ProbconsApplication(unittest.TestCase):
         """Round-trip through app and read clustal alignment from file
         """
         cmdline = TCoffeeCommandline(t_coffee_exe, infile=self.infile1)
-        self.assertEqual(str(cmdline), t_coffee_exe + " -infile Fasta/fa01 ")
+        self.assertEqual(str(cmdline), t_coffee_exe + " -infile Fasta/fa01")
         stdin, stdout, stderr = Application.generic_run(cmdline)
         self.assertEquals(stdin.return_code, 0)
-        self.assertEquals(str(stdin._cl), t_coffee_exe + " -infile Fasta/fa01 ")
+        self.assertEquals(str(stdin._cl), t_coffee_exe + " -infile Fasta/fa01")
         self.assert_(stderr.read().strip().startswith("PROGRAM: T-COFFEE"))
         align = AlignIO.read(open(self.outfile1), "clustal")
         records = list(SeqIO.parse(open(self.infile1),"fasta"))
@@ -69,7 +69,7 @@ class ProbconsApplication(unittest.TestCase):
         cmdline.outfile = self.outfile3
         cmdline.output = "pir_aln"
         self.assertEqual(str(cmdline), t_coffee_exe + " -output pir_aln "
-                    "-infile Fasta/fa01 -outfile Fasta/tc_out.pir -quiet ")
+                    "-infile Fasta/fa01 -outfile Fasta/tc_out.pir -quiet")
         stdin, stdout, stderr = Application.generic_run(cmdline)
         self.assertEquals(stdin.return_code, 0)
         self.assertEquals(stderr.read(), "")
@@ -92,7 +92,7 @@ class ProbconsApplication(unittest.TestCase):
         cmdline.type = "protein"
         self.assertEqual(str(cmdline), t_coffee_exe + " -output clustalw_aln "
                          "-infile Fasta/fa01 -outfile Fasta/tc_out.phy "
-                         "-outorder input -gapopen -2 -gapext -5 ")
+                         "-outorder input -gapopen -2 -gapext -5")
         stdin, stdout, stderr = Application.generic_run(cmdline)
         self.assertEquals(stdin.return_code, 0)
         self.assert_(stderr.read().strip().startswith("PROGRAM: T-COFFEE"))

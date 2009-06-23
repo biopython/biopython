@@ -7,6 +7,11 @@ Python 2.3
 No longer supported as of Release 1.51, having triggered a warning with
 Release 1.50, with a mention in the release notes for Release 1.49.
 
+BioSQL and psycopg
+==================
+Support for psycopg (version one) in Biopython's BioSQL code was deprecated
+in Release 1.51, please use psycopg2 instead.
+
 Bio.Entrez.efetch and rettype="genbank"
 =======================================
 As of Easter 2009, the NCBI have stopped supporting the unofficial return type
@@ -59,7 +64,7 @@ next release.
 
 Bio.Transcribe and Bio.Translate
 ================================
-Declared obsolete in Release 1.49.
+Declared obsolete in Release 1.49, deprecated in Release 1.51.
 Please use the methods or functions in Bio.Seq instead.
 
 Bio.mathfns, Bio.stringfns and Bio.listfns (and their C code variants)

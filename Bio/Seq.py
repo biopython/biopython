@@ -122,24 +122,9 @@ class Seq(object):
         """
         return self._data
 
-    """
-    TODO - Work out why this breaks test_Restriction.py
-    (Comparing Seq objects would be nice to have.  May need to think about
-    hashes and the in operator for when have list/dictionary of Seq objects...)
-    def __cmp__(self, other):
-        if hasattr(other, "alphabet") :
-            #other should be a Seq or a MutableSeq
-            if not Alphabet._check_type_compatible([self.alphabet,
-                                                    other.alphabet]) :
-                raise TypeError("Incompatable alphabets %s and %s" \
-                                % (repr(self.alphabet), repr(other.alphabet)))
-            #They should be the same sequence type (or one of them is generic)
-            return cmp(str(self), str(other))
-        elif isinstance(other, basestring) :
-            return cmp(str(self), other)
-        else :
-            raise TypeError
-    """
+    # TODO - Alphabet aware __eq__ etc would be nice, but has implications for
+    # __hash__ and therefore use as dictionary keys. See also:
+    # http://mail.python.org/pipermail/python-dev/2002-December/031455.html
 
     def __len__(self): return len(self._data)       # Seq API requirement
 
@@ -275,6 +260,37 @@ class Seq(object):
         sub_str = self._get_seq_str_and_check_alphabet(sub)
         return str(self).count(sub_str, start, end)
 
+    def __contains__(self, char) :
+        """Implements the 'in' keyword, like a python string.
+
+        e.g.
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_dna, generic_rna, generic_protein
+        >>> my_dna = Seq("ATATGAAATTTGAAAA", generic_dna)
+        >>> "AAA" in my_dna
+        True
+        >>> Seq("AAA") in my_dna
+        True
+        >>> Seq("AAA", generic_dna) in my_dna
+        True
+
+        Like other Seq methods, this will raise a type error if another Seq
+        (or Seq like) object with an incompatible alphabet is used:
+
+        >>> Seq("AAA", generic_rna) in my_dna
+        Traceback (most recent call last):
+           ...
+        TypeError: Incompatable alphabets DNAAlphabet() and RNAAlphabet()
+        >>> Seq("AAA", generic_protein) in my_dna
+        Traceback (most recent call last):
+           ...
+        TypeError: Incompatable alphabets DNAAlphabet() and ProteinAlphabet()
+        """
+        #If it has one, check the alphabet:
+        sub_str = self._get_seq_str_and_check_alphabet(char)
+        return sub_str in str(self)
+
     def find(self, sub, start=0, end=sys.maxint):
         """Find method, like that of a python string.
 
@@ -289,7 +305,7 @@ class Seq(object):
          - end - optional integer, slice end
 
         Returns -1 if the subsequence is NOT found.
-
+        
         e.g. Locating the first typical start codon, AUG, in an RNA sequence:
 
         >>> from Bio.Seq import Seq
