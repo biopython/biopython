@@ -236,22 +236,43 @@ class TreeTests(unittest.TestCase):
     # NB: also test check_str() regexps wherever they're used
     def test_Phyloxml(self):
         """Test instantiation of Phyloxml objects."""
-        for source in (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA)):
-            phx = PhyloXML.read(source)
-            self.assert_(isinstance(phx, Tree.Phyloxml))
+        phx = PhyloXML.read(EX_PHYLO)
+        self.assert_(isinstance(phx, Tree.Phyloxml))
+        self.assert_('schemaLocation' in phx.attributes)
+        for tree in phx:
+            self.assert_(isinstance(tree, Tree.Phylogeny))
+        for otr in phx.other:
+            self.assert_(isinstance(otr, Tree.Other))
 
     def test_Other(self):
         """Test instantiation of Other objects."""
-        phyloxml = PhyloXML.read(EX_PHYLO)
-        self.assert_(phyloxml.other)
-        for otr in phyloxml.other:
-            self.assert_(isinstance(otr, Tree.Other))
+        phx = PhyloXML.read(EX_PHYLO)
+        otr = phx.other[0]
+        self.assert_(isinstance(otr, Tree.Other))
+        self.assertEquals(otr.tag, 'alignment')
+        self.assertEquals(otr.namespace, 'http://example.org/align')
+        self.assertEquals(len(otr.children), 3)
+        for child, name, value in izip(otr, ('A', 'B', 'C'), (
+            'acgtcgcggcccgtggaagtcctctcct', 'aggtcgcggcctgtggaagtcctctcct',
+            'taaatcgc--cccgtgg-agtccc-cct')):
+            self.assertEquals(child.tag, 'seq')
+            self.assertEquals(child.attributes['name'], name)
+            self.assertEquals(child.value, value)
 
     def test_Phylogeny(self):
         """Test instantiation of Phylogeny objects."""
-        for source in (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA)):
-            for tree in PhyloXML.parse(source):
-                self.assert_(isinstance(tree, Tree.Phylogeny))
+        trees = list(PhyloXML.parse(EX_PHYLO))
+        # Monitor lizards
+        self.assertEquals(trees[9].name, 'monitor lizards')
+        self.assertEquals(trees[9].description,
+                'a pylogeny of some monitor lizards')
+        self.assertEquals(trees[9].rooted, True)
+        # Network (unrooted)
+        tree6 = trees[6]
+        self.assertEquals(trees[6].name,
+                'network, node B is connected to TWO nodes: AB and C')
+        self.assertEquals(trees[6].rooted, False)
+        self.assert_(isinstance(trees[6].clade_relation, Tree.CladeRelation))
 
     def test_Clade(self):
         """Test instantiation of Clade objects."""

@@ -84,6 +84,20 @@ def check_str(text, regexp):
                         % (text, regexp), PhyloXMLWarning)
     return text
 
+def str2bool(text):
+    if text == 'true':
+        return True
+    if text == 'false':
+        return False
+    raise ValueError('String could not be converted to boolean: ' + text)
+
+def dict_str2bool(dct, keys):
+    out = dct.copy()
+    for key in keys:
+        if key in out:
+            out[key] = str2bool(out[key])
+    return out
+
 
 # ---------------------------------------------------------
 
@@ -103,7 +117,8 @@ def read(handle):
     # get an iterable context for XML parsing events
     context = iter(ElementTree.iterparse(handle, events=('start', 'end')))
     event, root = context.next()
-    phyloxml = Tree.Phyloxml(root.attrib)
+    phyloxml = Tree.Phyloxml(dict((local(key), val)
+                             for key, val in root.attrib.iteritems()))
     other_depth = 0
     for event, elem in context:
         # print elem.tag, event
@@ -221,7 +236,8 @@ class Parser(object):
         clears the XML event history for the phylogeny element and returns
         control to the top-level parsing function.
         """
-        phylogeny = Tree.Phylogeny(**parent.attrib)
+        phylogeny = Tree.Phylogeny(**dict_str2bool(parent.attrib,
+                                                   ['rooted', 'rerootable']))
         complex_types = ['date', 'id', 'clade_relation', 'sequence_relation']
         list_types = {
                 # XML tag, plural attribute
@@ -309,7 +325,8 @@ class Parser(object):
 
     @classmethod
     def to_other(cls, elem):
-        return Tree.Other(elem.tag, elem.attrib,
+        namespace, localtag = split_namespace(elem.tag)
+        return Tree.Other(localtag, namespace, elem.attrib,
                   value=(elem.text and elem.text.strip() or None),
                   children=[cls.to_other(child) for child in elem])
 

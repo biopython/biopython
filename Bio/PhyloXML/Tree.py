@@ -61,11 +61,17 @@ class Phyloxml(PhyloElement):
 class Other(PhyloElement):
     """Container for non-phyloXML elements in the tree."""
     # ENH: assert that the tag namespace is not phyloxml's
-    def __init__(self, tag, attributes=None, value=None, children=None):
+    def __init__(self, tag, namespace=None, attributes=None, value=None,
+            children=None):
         self.tag = tag
+        self.namespace = namespace
         self.attributes = attributes
         self.value = value
         self.children = children or []
+
+    def __iter__(self):
+        """Iterate through the children of this object (if any)."""
+        return iter(self.children)
 
     def __repr__(self):
         return '<Other %s at %s>' % (self.tag, hex(id(self)))
@@ -100,6 +106,7 @@ class Phylogeny(PhyloElement):
             confidences=None, clade_relations=None, sequence_relations=None,
             properties=None, other=None,
             ):
+        assert isinstance(rooted, bool)
         PhyloElement.__init__(self, {'rerootable': rerootable,
             'branch_length_unit': branch_length_unit, 'type': type},
             rooted=rooted, name=name, id=id, description=description,
