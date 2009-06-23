@@ -46,6 +46,10 @@ Cymon Cox). In particular, the default PostgreSQL schema includes some rules
 intended for BioPerl support only, which were causing problems in Biopython
 (see BioSQL bug 2839).
 
+There have also been additions to the tutorial, such as the new alignment
+wrappers, with a a whole chapter for the SeqRecord object. We have also
+added to the unit test coverage.
+
 ===================================================================
 
 April 20, 2008: Biopython 1.50 released.
