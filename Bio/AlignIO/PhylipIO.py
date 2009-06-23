@@ -1,4 +1,4 @@
-# Copyright 2006-2008 by Peter Cock.  All rights reserved.
+# Copyright 2006-2009 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -19,12 +19,6 @@ character as in the first sequence.  The PHYLIP 3.6 documentation says:
 
 At the time of writing, we do nothing special with a dot/period.
 """
-
-#TODO - Remove this work around once we drop python 2.3 support
-try:
-   set = set
-except NameError:
-   from sets import Set as set
    
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Align.Generic import Alignment

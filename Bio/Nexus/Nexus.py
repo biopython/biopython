@@ -1,14 +1,11 @@
-# Nexus.py - a NEXUS parser
-#
 # Copyright 2005-2008 by Frank Kauff & Cymon J. Cox. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
-# 
-# Bug reports welcome: fkauff@biologie.uni-kl.de
 #
+# Bug reports welcome: fkauff@biologie.uni-kl.de or on Biopython's bugzilla.
+"""Nexus class. Parse the contents of a NEXUS file.
 
-"""Nexus class. Parse the contents of a nexus file.
 Based upon 'NEXUS: An extensible file format for systematic information'
 Maddison, Swofford, Maddison. 1997. Syst. Biol. 46(4):590-621
 """
@@ -27,13 +24,6 @@ except ImportError:
     C=False
 else:
     C=True
-
-try:
-    #Check the built in set function is present (python 2.4+)
-    set = set
-except NameError:
-    #For python 2.3 fall back on the sets module (deprecated in python 2.6)
-    from sets import Set as set
 
 INTERLEAVE=70
 SPECIAL_COMMANDS=['charstatelabels','charlabels','taxlabels', 'taxset', 'charset','charpartition','taxpartition',\

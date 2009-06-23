@@ -11,7 +11,6 @@
 
 import re, time
 from Bio import SeqIO
-from Bio import Translate
 from Bio.Seq import Seq
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
@@ -178,12 +177,7 @@ def molecular_weight(seq):
     """Calculate the molecular weight of a DNA sequence."""
     if type(seq) == type(''): seq = Seq(seq, IUPAC.unambiguous_dna)
     weight_table = IUPACData.unambiguous_dna_weights
-    #TODO, use a generator expession once we drop Python 2.3?
-    #e.g. return sum(weight_table[x] for x in seq)
-    total = 0
-    for x in seq:
-        total += weight_table[x]
-    return total
+    return sum(weight_table[x] for x in seq)
 
 def nt_search(seq, subseq):
     """Search for a DNA subseq in sequence.
@@ -310,6 +304,7 @@ def translate(seq, frame = 1, genetic_code = 1, translator = None):
                   +" to remove it in a future release of Biopython.  Please use"\
                   +" the method or function in Bio.Seq instead, as described in"\
                   +" the Tutorial.", DeprecationWarning)
+    from Bio import Translate #This will also trigger a DeprecationWarning
 
     if frame not in [1,2,3,-1,-2,-3]:
         raise ValueError('invalid frame')

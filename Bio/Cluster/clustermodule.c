@@ -382,7 +382,8 @@ static int*
 parse_clusterid(PyObject* object, PyArrayObject** array, unsigned int nitems,
   int* nclusters)
 /* This function reads the cluster assignments of all items from object */
-{ int i;
+{ unsigned int i;
+  int j;
   npy_intp stride;
   const char* p;
   int* number;
@@ -441,7 +442,7 @@ parse_clusterid(PyObject* object, PyArrayObject** array, unsigned int nitems,
   p = PyArray_BYTES(*array);
   *nclusters = -1;
   for (i = 0; i < nitems; i++, p+=stride)
-  { const int j = (*(int*)p);
+  { j = (*(int*)p);
     if (j > *nclusters) *nclusters = j;
     if (j < 0)
     { strcpy(message, "clusterid contains an invalid cluster number");
@@ -455,13 +456,13 @@ parse_clusterid(PyObject* object, PyArrayObject** array, unsigned int nitems,
   number = calloc(*nclusters, sizeof(int));
   p = PyArray_BYTES(*array);
   for (i = 0; i < nitems; i++, p+=stride)
-  { int j = *((int*)p);
+  { j = *((int*)p);
     number[j]++;
   }
-  for (i = 0; i < (*nclusters); i++) if(number[i]==0) break;
+  for (j = 0; j < (*nclusters); j++) if(number[j]==0) break;
   free(number);
-  if (i < (*nclusters))
-  { sprintf (message, "argument initialid: Cluster %d is empty", i);
+  if (j < (*nclusters))
+  { sprintf (message, "argument initialid: Cluster %d is empty", j);
     PyErr_SetString (PyExc_ValueError, buffer);
     Py_DECREF((PyObject*) (*array));
     return NULL;
@@ -954,26 +955,26 @@ static char PyNode_doc[] =
 
 static PyTypeObject PyNodeType = {
     PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
-    "cluster.Node",            /*tp_name*/
-    sizeof(PyNode),            /*tp_basicsize*/
-    0,                         /*tp_itemsize*/
-    0,                         /*tp_dealloc*/
-    0,                         /*tp_print*/
-    0,                         /*tp_getattr*/
-    0,                         /*tp_setattr*/
-    0,                         /*tp_compare*/
-    (reprfunc)PyNode_repr,     /*tp_repr*/
-    0,                         /*tp_as_number*/
-    0,                         /*tp_as_sequence*/
-    0,                         /*tp_as_mapping*/
-    0,                         /*tp_hash */
-    0,                         /*tp_call*/
-    0,                         /*tp_str*/
-    0,                         /*tp_getattro*/
-    0,                         /*tp_setattro*/
-    0,                         /*tp_as_buffer*/
-    Py_TPFLAGS_DEFAULT,        /*tp_flags*/
+    0,                         /* ob_size */
+    "cluster.Node",            /* tp_name */
+    sizeof(PyNode),            /* tp_basicsize */
+    0,                         /* tp_itemsize */
+    0,                         /* tp_dealloc */
+    0,                         /* tp_print */
+    0,                         /* tp_getattr */
+    0,                         /* tp_setattr */
+    0,                         /* tp_compare */
+    (reprfunc)PyNode_repr,     /* tp_repr */
+    0,                         /* tp_as_number */
+    0,                         /* tp_as_sequence */
+    0,                         /* tp_as_mapping */
+    0,                         /* tp_hash */
+    0,                         /* tp_call */
+    0,                         /* tp_str */
+    0,                         /* tp_getattro */
+    0,                         /* tp_setattro */
+    0,                         /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,        /* tp_flags */
     PyNode_doc,                /* tp_doc */
     0,		               /* tp_traverse */
     0,		               /* tp_clear */

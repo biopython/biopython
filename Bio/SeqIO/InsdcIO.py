@@ -95,9 +95,9 @@ def _insdc_feature_position_string(pos, offset=0):
         return "(%i^%i)" % (pos.position + offset,
                             pos.position + pos.extension + offset)
     elif isinstance(pos, SeqFeature.BeforePosition) :
-        return ">%i" % (pos.position + offset)
-    elif isinstance(pos, SeqFeature.AfterPosition) :
         return "<%i" % (pos.position + offset)
+    elif isinstance(pos, SeqFeature.AfterPosition) :
+        return ">%i" % (pos.position + offset)
     elif isinstance(pos, SeqFeature.OneOfPosition):
         return "one-of(%s)" \
                % ",".join([_insdc_feature_position_string(p,offset) \
@@ -107,34 +107,70 @@ def _insdc_feature_position_string(pos, offset=0):
     else :
         raise ValueError("Expected a SeqFeature position object.")
 
-    
+
+def _insdc_location_string_ignoring_strand_and_subfeatures(feature) :
+    if feature.ref :
+        ref = "%s:" % feature.ref
+    else :
+        ref = ""
+    assert not feature.ref_db
+    if feature.location.start==feature.location.end \
+    and isinstance(feature.location.end, SeqFeature.ExactPosition):
+        #Special case, 12^13 gets mapped to location 12:12
+        #(a zero length slice, meaning the point between two letters)
+        return "%s%i^%i" % (ref, feature.location.end.position,
+                            feature.location.end.position+1)
+    else :
+        #Typical case, e.g. 12..15 gets mapped to 11:15
+        return ref \
+               + _insdc_feature_position_string(feature.location.start, +1) \
+               + ".." + \
+               _insdc_feature_position_string(feature.location.end)
+
 def _insdc_feature_location_string(feature):
     """Build a GenBank/EMBL location string from a SeqFeature (PRIVATE)."""
-    if feature.sub_features :
-        #Recursive!  Typically a join
-        assert feature.location_operator != ""
-        location = "%s(%s)" % (feature.location_operator,
-                               ",".join([_insdc_feature_location_string(f) \
-                                         for f in feature.sub_features]))
-    else :
+    # Have a choice of how to show joins on the reverse complement strand,
+    # complement(join(1,10),(20,100)) vs join(complement(20,100),complement(1,10))
+    # Notice that the order of the entries gets flipped!
+    #
+    # GenBank and EMBL would both use now complement(join(1,10),(20,100))
+    # which is shorter at least.
+    #
+    # In the above situations, we expect the parent feature and the two children
+    # to all be marked as strand==-1, and in the order 0:10 then 19:100.
+    #
+    # Also need to consider dual-strand examples like these from the Arabidopsis
+    # thaliana chloroplast NC_000932: join(complement(69611..69724),139856..140650)
+    # gene ArthCp047, GeneID:844801 or its CDS which is even better due to a splice:
+    # join(complement(69611..69724),139856..140087,140625..140650)
+    # protein NP_051038.1 GI:7525057
+    #
+
+    if not feature.sub_features :
         #Non-recursive.
         #assert feature.location_operator == "", \
         #       "%s has no subfeatures but location_operator %s" \
         #       % (repr(feature), feature.location_operator)
-        if feature.location.start==feature.location.end \
-        and isinstance(feature.location.end, SeqFeature.ExactPosition):
-            #Special case, 12^13 gets mapped to location 12:12
-            #(a zero length slice, meaning the point between two letters)
-            location = "%i^%i" % (feature.location.end.position,
-                                  feature.location.end.position+1)
-        else :
-            #Typical case, e.g. 12..15 gets mapped to 11:15
-            location = _insdc_feature_position_string(feature.location.start, +1) \
-                       + ".." + \
-                       _insdc_feature_position_string(feature.location.end)
+        location = _insdc_location_string_ignoring_strand_and_subfeatures(feature)
+        if feature.strand == -1 :
+            location = "complement(%s)" % location
+        return location
+    # As noted above, treat reverse complement strand features carefully:
     if feature.strand == -1 :
-        location = "complement(%s)" % location
-    return location
+        for f in feature.sub_features :
+            assert f.strand == -1
+        return "complement(%s(%s))" \
+               % (feature.location_operator,
+                  ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(f) \
+                           for f in feature.sub_features))
+    #if feature.strand == +1 :
+    #    for f in feature.sub_features :
+    #        assert f.strand == +1
+    #This covers typical forward strand features, and also an evil mixed strand:
+    assert feature.location_operator != ""
+    return  "%s(%s)" % (feature.location_operator,
+                        ",".join([_insdc_feature_location_string(f) \
+                                  for f in feature.sub_features]))
 
 
 class GenBankWriter(SequentialSequenceWriter) :
@@ -177,6 +213,15 @@ class GenBankWriter(SequentialSequenceWriter) :
             assert len(text) < max_len
             self._write_single_line("", text)
         assert not words
+
+    def _write_multi_entries(self, tag, text_list) :
+        #used for DBLINK and any similar later line types.
+        #If the list of strings is empty, nothing is written.
+        for i, text in enumerate(text_list) :
+            if i==0 :
+                self._write_single_line(tag, text)
+            else :
+                self._write_single_line("", text)
 
     def _write_the_first_line(self, record) :
         """Write the LOCUS line."""
@@ -226,7 +271,7 @@ class GenBankWriter(SequentialSequenceWriter) :
             division = "UNK"
         if division not in ["PRI","ROD","MAM","VRT","INV","PLN","BCT",
                             "VRL","PHG","SYN","UNA","EST","PAT","STS",
-                            "GSS","HTG","HTC","ENV"] :
+                            "GSS","HTG","HTC","ENV","CON"] :
             division = "UNK"
         
         assert len(units) == 2
@@ -333,12 +378,26 @@ class GenBankWriter(SequentialSequenceWriter) :
         else :
             self._write_single_line("VERSION", "%s" % (acc_with_version))
 
+        #The NCBI only expect two types of link so far,
+        #e.g. "Project:28471" and "Trace Assembly Archive:123456"
+        #TODO - Filter the dbxrefs list to just these?
+        self._write_multi_entries("DBLINK", record.dbxrefs)
+
         try :
             #List of strings
             keywords = "; ".join(record.annotations["keywords"])
         except KeyError :
             keywords = "."
         self._write_multi_line("KEYWORDS", keywords)
+
+        if "segment" in record.annotations :
+            #Deal with SEGMENT line found only in segmented records,
+            #e.g. AH000819
+            segment = record.annotations["segment"]
+            if isinstance(segment, list) :
+                assert len(segment)==1, segment
+                segment = segment[0]
+            self._write_single_line("SEGMENT", segment)
 
         self._write_multi_line("SOURCE", \
                                 self._get_annotation_str(record, "source"))
@@ -394,13 +453,28 @@ class GenBankWriter(SequentialSequenceWriter) :
             self.handle.write(line[:index] + "\n")
             line = " "*self.QUALIFIER_INDENT + line[index:].lstrip()
 
+    def _wrap_location(self, location) :
+        """Split a feature location into lines (break at commas)."""
+        #TODO - Rewrite this not to recurse!
+        length = self.MAX_WIDTH - self.QUALIFIER_INDENT
+        if len(location) <= length :
+            return location
+        index = location[:length].rfind(",")
+        if index == -1 :
+            #No good place to split (!)
+            import warnings
+            warnings.warn("Couldn't split location:\n%s" % location)
+            return location
+        return location[:index+1] + "\n" + \
+               " "*self.QUALIFIER_INDENT + self._wrap_location(location[index+1:])
+
     def _write_feature(self, feature):
         """Write a single SeqFeature object to features table."""
         assert feature.type, feature
         #TODO - Line wrapping for long locations!
         location = _insdc_feature_location_string(feature)
         line = ("     %s                " % feature.type)[:self.QUALIFIER_INDENT] \
-               + location + "\n"
+               + self._wrap_location(location) + "\n"
         self.handle.write(line)
         #Now the qualifiers...
         for key, values in feature.qualifiers.iteritems() :

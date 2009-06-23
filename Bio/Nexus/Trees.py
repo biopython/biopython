@@ -1,28 +1,19 @@
-
-#
-# Trees.py 
-#
 # Copyright 2005-2008 by Frank Kauff & Cymon J. Cox. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 #
-# Tree class handles phylogenetic trees. Provides a set of methods to read and write newick-format tree
-# descriptions, get information about trees (monphyly of taxon sets, congruence between trees, common ancestors,...)
-# and to manipulate trees (reroot trees, split terminal nodes).
-#
-# Bug reports welcome: fkauff@biologie.uni-kl.de
-#
+# Bug reports welcome: fkauff@biologie.uni-kl.de or on Biopython's bugzilla.
+"""Tree class to handle phylogenetic trees.
+
+Provides a set of methods to read and write newick-format tree descriptions,
+get information about trees (monphyly of taxon sets, congruence between trees,
+common ancestors,...) and to manipulate trees (reroot trees, split terminal
+nodes).
+"""
 
 import sys, random, copy
 import Nodes
-try:
-    #Check the built in set function is present (python 2.4+)
-    set = set
-except NameError:
-    #For python 2.3 fall back on the sets module (deprecated in python 2.6)
-    from sets import Set as set
-    from sets import ImmutableSet as frozenset
 
 PRECISION_BRANCHLENGTH=6
 PRECISION_SUPPORT=6

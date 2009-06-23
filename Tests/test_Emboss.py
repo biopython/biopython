@@ -7,6 +7,7 @@
 import os
 import sys
 import unittest
+import subprocess
 
 from Bio.Application import generic_run
 from Bio.Emboss.Applications import WaterCommandline, NeedleCommandline
@@ -16,12 +17,6 @@ from Bio import MissingExternalDependencyError
 from Bio.Alphabet import generic_protein, generic_dna, generic_nucleotide
 from Bio.Seq import Seq, translate
 from Bio.SeqRecord import SeqRecord
-
-try :
-    import subprocess
-except ImportError :
-    raise MissingExternalDependencyError(\
-        "Python 2.3 not supported, this needs the subprocess module.")
 
 #################################################################
 
@@ -373,12 +368,17 @@ class PairwiseAlignmentTests(unittest.TestCase):
         
     def test_water_piped(self):
         """water with asis trick, output piped to stdout."""
-        #TODO - Support -auto and -filter in Bio.Emboss.Applications
-        cline = exes["water"]
-        cline += " -asequence asis:ACCCGGGCGCGGT"
-        cline += " -bsequence asis:ACCCGAGCGCGGT"
-        cline += " -auto" #no prompting
-        cline += " -filter" #use stdout
+        cline = WaterCommandline(cmd=exes["water"],
+                                 asequence="asis:ACCCGGGCGCGGT",
+                                 bsequence="asis:ACCCGAGCGCGGT",
+                                 gapopen=10,
+                                 gapextend=0.5,
+                                 auto=True, filter=True)
+        self.assertEqual(str(cline),
+                         exes["water"] + " -auto -filter" \
+                         + " -asequence=asis:ACCCGGGCGCGGT" \
+                         + " -bsequence=asis:ACCCGAGCGCGGT" \
+                         + " -gapopen=10 -gapextend=0.5")
         #Run the tool,
         child = subprocess.Popen(str(cline),
                                  stdin=subprocess.PIPE,
@@ -428,14 +428,17 @@ class PairwiseAlignmentTests(unittest.TestCase):
 
     def test_needle_piped(self):
         """needle with asis trick, output piped to stdout."""
-        #TODO - Support needle in Bio.Emboss.Applications
-        #(ideally with the -auto and -filter arguments)
-        #Setup,
-        cline = exes["needle"]
-        cline += " -asequence asis:ACCCGGGCGCGGT"
-        cline += " -bsequence asis:ACCCGAGCGCGGT"
-        cline += " -auto" #no prompting
-        cline += " -filter" #use stdout
+        cline = NeedleCommandline(cmd=exes["needle"],
+                                 asequence="asis:ACCCGGGCGCGGT",
+                                 bsequence="asis:ACCCGAGCGCGGT",
+                                 gapopen=10,
+                                 gapextend=0.5,
+                                 auto=True, filter=True)
+        self.assertEqual(str(cline),
+                         exes["needle"] + " -auto -filter" \
+                         + " -asequence=asis:ACCCGGGCGCGGT" \
+                         + " -bsequence=asis:ACCCGAGCGCGGT" \
+                         + " -gapopen=10 -gapextend=0.5")
         #Run the tool,
         child = subprocess.Popen(str(cline),
                                  stdin=subprocess.PIPE,
@@ -585,6 +588,34 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #Check no error output:
         assert child.stderr.read() == ""
         assert 0 == child.wait()
+
+    def test_water_needs_output(self):
+        """water without output file or stdout/filter should give error."""
+        cline = WaterCommandline(cmd=exes["water"],
+                                 asequence="asis:ACCCGGGCGCGGT",
+                                 bsequence="asis:ACCCGAGCGCGGT",
+                                 gapopen=10,
+                                 gapextend=0.5,
+                                 auto=True)
+        self.assert_(cline.auto)
+        self.assert_(not cline.stdout)
+        self.assert_(not cline.filter)
+        self.assertEqual(cline.outfile, None)
+        self.assertRaises(ValueError, str, cline)
+
+    def test_needle_needs_output(self):
+        """needle without output file or stdout/filter should give error."""
+        cline = NeedleCommandline(cmd=exes["needle"],
+                                 asequence="asis:ACCCGGGCGCGGT",
+                                 bsequence="asis:ACCCGAGCGCGGT",
+                                 gapopen=10,
+                                 gapextend=0.5,
+                                 auto=True)
+        self.assert_(cline.auto)
+        self.assert_(not cline.stdout)
+        self.assert_(not cline.filter)
+        self.assertEqual(cline.outfile, None)
+        self.assertRaises(ValueError, str, cline)
 
 #Top level function as this makes it easier to use for debugging:
 def emboss_translate(sequence, table=None, frame=None) :

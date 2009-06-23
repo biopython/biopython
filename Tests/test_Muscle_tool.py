@@ -77,8 +77,8 @@ class MuscleApplication(unittest.TestCase):
         cmdline = MuscleCommandline(muscle_exe,
                                     input=self.infile1,
                                     out=self.outfile1)
-        self.assertEqual(str(cmdline), muscle_exe + " -in Fasta/f002 -out " + \
-                         "Fasta/temp_align_out1.fa ")
+        self.assertEqual(str(cmdline), muscle_exe \
+                         + " -in Fasta/f002 -out Fasta/temp_align_out1.fa")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
@@ -95,8 +95,9 @@ class MuscleApplication(unittest.TestCase):
         cmdline.objscore = "sp"
         cmdline.noanchors = True
         self.assertEqual(str(cmdline), muscle_exe +\
-                         " -in Fasta/f002 -out " + \
-                        "Fasta/temp_align_out2.fa -objscore sp -noanchors ")
+                         " -in Fasta/f002" + \
+                         " -out Fasta/temp_align_out2.fa" + \
+                         " -objscore sp -noanchors")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
@@ -112,8 +113,8 @@ class MuscleApplication(unittest.TestCase):
         cmdline.set_parameter("in1", self.infile2)
         cmdline.set_parameter("in2", self.infile3)
         self.assertEqual(str(cmdline), muscle_exe + \
-                         " -out Fasta/temp_align_out3.fa " + \
-                         "-profile -in1 Fasta/fa01 -in2 Fasta/f001 ")
+                         " -out Fasta/temp_align_out3.fa" + \
+                         " -profile -in1 Fasta/fa01 -in2 Fasta/f001")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = generic_run(cmdline)
         self.assertEqual(stdin.return_code, 0)
@@ -129,9 +130,9 @@ class MuscleApplication(unittest.TestCase):
                                     profile=True, stable=True,
                                     cluster1="neighborjoining")
         self.assertEqual(str(cmdline), muscle_exe + \
-                         " -out Fasta/temp_align_out4.fa " + \
-                         "-profile -in1 Fasta/fa01 -in2 Fasta/f001 -cluster1 " + \
-                         "neighborjoining -stable ")
+                         " -out Fasta/temp_align_out4.fa" + \
+                         " -profile -in1 Fasta/fa01 -in2 Fasta/f001" + \
+                         " -cluster1 neighborjoining -stable")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         """
         #TODO - Why doesn't this work with MUSCLE 3.6 on the Mac?
@@ -172,6 +173,27 @@ class SimpleAlignTest(unittest.TestCase) :
     """
 
     def test_simple_clustal(self) :
+        """Simple muscle call using Clustal output with a MUSCLE header."""
+        input_file = "Fasta/f002"
+        self.assert_(os.path.isfile(input_file))
+        records = list(SeqIO.parse(open(input_file),"fasta"))
+        #Prepare the command... use Clustal output (with a MUSCLE header)
+        cmdline = MuscleCommandline(muscle_exe, input=input_file,
+                                    stable=True, clw = True)
+        #TODO - Fix the trailing space!
+        self.assertEqual(str(cmdline).rstrip(), muscle_exe + \
+                         " -in Fasta/f002 -clw -stable")
+        self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
+        result, out_handle, err_handle = generic_run(cmdline)
+        align = AlignIO.read(out_handle, "clustal")
+        self.assertEqual(len(records),len(align))
+        for old, new in zip(records, align) :
+            self.assertEqual(old.id, new.id)
+            self.assertEqual(str(new.seq).replace("-",""), str(old.seq))
+        #Didn't use -quiet so there should be progress reports on stderr,
+        self.assert_(err_handle.read().strip().startswith("MUSCLE"))
+
+    def test_simple_clustal_strict(self) :
         """Simple muscle call using strict Clustal output."""
         input_file = "Fasta/f002"
         self.assert_(os.path.isfile(input_file))
@@ -181,7 +203,7 @@ class SimpleAlignTest(unittest.TestCase) :
         cmdline.set_parameter("in", input_file)
         #Preserve input record order (makes checking output easier)
         cmdline.set_parameter("stable", True) #Default None treated as False!
-        #Use clustal output
+        #Use clustal output (with a CLUSTAL header)
         cmdline.set_parameter("clwstrict", True) #Default None treated as False!
         #TODO - Fix the trailing space!
         self.assertEqual(str(cmdline).rstrip(), muscle_exe + \

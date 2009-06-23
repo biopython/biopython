@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """
 This module provides code for doing logistic regressions.
 
@@ -14,14 +16,6 @@ calculate    Calculate the probabilities of each class, given an observation.
 classify     Classify an observation into a class.
 """
 
-#TODO - Remove this work around once we drop python 2.3 support
-try:
-    set = set
-except NameError:
-    from sets import Set as set
-
-#from numpy import *
-#from numpy.linalg import *
 import numpy
 import numpy.linalg
 

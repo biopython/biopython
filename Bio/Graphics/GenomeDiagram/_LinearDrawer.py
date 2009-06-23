@@ -602,7 +602,7 @@ class LinearDrawer(AbstractDrawer):
             tctr = ctr + self.fragment_lines[fragment][0]
             ttop = top + self.fragment_lines[fragment][0]  
             box = draw_box((self.x0, tbtm), (self.xlim, ttop),  # Grey track bg
-                           colors.Color(0.98,0.98, 0.98))       # is just a box
+                           colors.Color(0.96,0.96, 0.96))       # is just a box
             greytrack_bgs.append(box)
 
             if track.greytrack_labels:  # If labels are required
@@ -781,15 +781,15 @@ class LinearDrawer(AbstractDrawer):
 
         strand = feature.strand
         # Get sigil for the feature, location dependent on the feature strand
-        if strand == 0:
-            sigil = method((x0, btm), (x1, top), color=feature.color,
-                           **kwargs)
         if strand == 1:
             sigil = method((x0, ctr), (x1, top), color=feature.color,
                            orientation='right', **kwargs)
-        if strand == -1:
+        elif strand == -1:
             sigil = method((x1, btm), (x0, ctr), color=feature.color,
                            orientation='left', **kwargs)
+        else :
+            sigil = method((x0, btm), (x1, top), color=feature.color,
+                           **kwargs)
         if feature.label:   # Feature requires a label
             label = String(0, 0, feature.name,
                            fontName=feature.label_font,

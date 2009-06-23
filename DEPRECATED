@@ -2,6 +2,16 @@ This file provides documentation for modules in Biopython that have been moved
 or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
 
+Python 2.3
+==========
+No longer supported as of Release 1.51, having triggered a warning with
+Release 1.50, with a mention in the release notes for Release 1.49.
+
+BioSQL and psycopg
+==================
+Support for psycopg (version one) in Biopython's BioSQL code was deprecated
+in Release 1.51, please use psycopg2 instead.
+
 Bio.Entrez.efetch and rettype="genbank"
 =======================================
 As of Easter 2009, the NCBI have stopped supporting the unofficial return type
@@ -11,10 +21,10 @@ deprecation warning.
 
 Bio.SwissProt.SProt
 ===================
-Declared obsolete in Release 1.50, and is likely to be deprecated in a future
-release. Most of the functionality in Bio.SwissProt.SProt is available from
-Bio.SwissProt. Note that Bio.SeqIO currently still uses Bio.SwissProt.SProt;
-this will have to be rectified in a future release.
+Declared obsolete in Release 1.50, and deprecated for Release 1.51. Most of the
+functionality in Bio.SwissProt.SProt is available from Bio.SwissProt. Bio.SeqIO
+currently uses Bio.SwissProt instead of Bio.SwissProt.SProt to parse SwissProt
+files.
 
 Bio.Prosite and Bio.Enzyme
 ==========================
@@ -54,7 +64,7 @@ next release.
 
 Bio.Transcribe and Bio.Translate
 ================================
-Declared obsolete in Release 1.49.
+Declared obsolete in Release 1.49, deprecated in Release 1.51.
 Please use the methods or functions in Bio.Seq instead.
 
 Bio.mathfns, Bio.stringfns and Bio.listfns (and their C code variants)

@@ -8,6 +8,7 @@
 """
 import os, sys
 import StringIO
+import subprocess
 
 from Bio import File
 
@@ -23,68 +24,19 @@ def generic_run(commandline):
     This may be in issue when the program writes a large amount of
     data to standard output.
     """
-    # print str(commandline)
-
-    #Try and use subprocess (available in python 2.4+)
-    try :
-        import subprocess
-        #We don't need to supply any piped input, but we setup the
-        #standard input pipe anyway as a work around for a python
-        #bug if this is called from a Windows GUI program.  For
-        #details, see http://bugs.python.org/issue1124861
-        child = subprocess.Popen(str(commandline),
-                                 stdin=subprocess.PIPE,
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 shell=(sys.platform!="win32"))
-        child.stdin.close()
-        r = child.stdout
-        e = child.stderr 
-
-        r_out = r.read()
-        e_out = e.read()
-        r.close()
-        e.close()
-
-        # capture error code
-        error_code = child.wait()
-
-    except ImportError :
-        #For python 2.3 can't use subprocess, using popen2 instead
-        #(deprecated in python 2.6)
-        import popen2
-        if sys.platform[:3]=='win':
-            # Windows does not have popen2.Popen3
-            r, w, e = popen2.popen3(str(commandline))
-        
-            r_out = r.read()
-            e_out = e.read()
-            w.close()
-            r.close()
-            e.close()
-
-            # No way to get the error code; setting it to a dummy variable
-            error_code = 0
-
-        else:
-            child = popen2.Popen3(str(commandline), 1)
-            # get information and close the files, so if we call this function
-            # repeatedly we won't end up with too many open files
-
-            # here are the file descriptors
-            r = child.fromchild
-            w = child.tochild
-            e = child.childerr
-        
-            r_out = r.read()
-            e_out = e.read()
-            w.close()
-            r.close()
-            e.close()
-        
-            # capture error code
-            error_code = os.WEXITSTATUS(child.wait())
-
+    #We don't need to supply any piped input, but we setup the
+    #standard input pipe anyway as a work around for a python
+    #bug if this is called from a Windows GUI program.  For
+    #details, see http://bugs.python.org/issue1124861
+    child = subprocess.Popen(str(commandline),
+                             stdin=subprocess.PIPE,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             shell=(sys.platform!="win32"))
+    #Use .communicate as might get deadlocks with .wait(), see Bug 2804/2806
+    r_out, e_out = child.communicate()
+    # capture error code:
+    error_code = child.returncode
     return ApplicationResult(commandline, error_code), \
            File.UndoHandle(StringIO.StringIO(r_out)), \
            File.UndoHandle(StringIO.StringIO(e_out))
@@ -172,7 +124,7 @@ class AbstractCommandline(object):
     >>> str(cline)
     Traceback (most recent call last):
     ...
-    ValueError: Parameter asequence is not set.
+    ValueError: You must either set outfile (output filename), or enable filter or stdout (output to stdout).
 
     In this case the wrapper knows certain arguments are required to construct
     a valid command line for the tool.  For complete example,
@@ -183,36 +135,45 @@ class AbstractCommandline(object):
     >>> cline.bsequence = "asis:ACCCGAGCGCGGT"
     >>> cline.outfile = "temp_water.txt"
     >>> print cline
-    water -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 -outfile=temp_water.txt 
+    water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5
     >>> cline
-    WaterCommandline(cmd='water', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5, outfile='temp_water.txt')
+    WaterCommandline(cmd='water', outfile='temp_water.txt', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5)
 
     You would typically run the command line via a standard python operating
     system call (e.g. using the subprocess module).  Bio.Application includes
     a simple wrapper function generic_run which may be suitable.
     """
     def __init__(self, cmd, **kwargs):
-        """Init method - should be subclassed!
-
-        The subclass methods should look like this:
-
-        def __init__(self, cmd="muscle", **kwargs) :
-            self.parameters = [...]
-            AbstractCommandline.__init__(self, cmd, **kwargs)
-
-        i.e. There should have an optional argument "cmd" to set the location
-        of the executable (with a sensible default which should work if the
-        command is on the path on Unix), and keyword arguments.  It should
-        then define a list of parameters, all objects derevied from the base
-        class _AbstractParameter.
-
-        The keyword arguments should be any valid parameter name, and will
-        be used to set the associated parameter.
-        """
+        """Create a new instance of a command line wrapper object."""
+        # Init method - should be subclassed!
+        # 
+        # The subclass methods should look like this:
+        # 
+        # def __init__(self, cmd="muscle", **kwargs) :
+        #     self.parameters = [...]
+        #     AbstractCommandline.__init__(self, cmd, **kwargs)
+        # 
+        # i.e. There should have an optional argument "cmd" to set the location
+        # of the executable (with a sensible default which should work if the
+        # command is on the path on Unix), and keyword arguments.  It should
+        # then define a list of parameters, all objects derevied from the base
+        # class _AbstractParameter.
+        # 
+        # The keyword arguments should be any valid parameter name, and will
+        # be used to set the associated parameter.
         self.program_name = cmd
-        parameters = self.parameters
+        try :
+            parameters = self.parameters
+        except AttributeError :
+            raise AttributeError("Subclass should have defined self.parameters")
         #Create properties for each parameter at run time
+        aliases = set()
         for p in parameters :
+            for name in p.names :
+                if name in aliases :
+                    raise ValueError("Parameter alias %s multiply defined" \
+                                     % name)
+                aliases.add(name)
             name = p.names[-1]
             #Beware of binding-versus-assignment confusion issues
             def getter(name) :
@@ -221,8 +182,15 @@ class AbstractCommandline(object):
                 return lambda x, value : x.set_parameter(name, value)
             def deleter(name) :
                 return lambda x : x._clear_parameter(name)
-            prop = property(getter(name), setter(name), deleter(name),
-                            p.description)
+            doc = p.description
+            if isinstance(p, _Switch) :
+                doc += "\n\nThis property controls the addition of the %s " \
+                       "switch, treat this property as a boolean." % p.names[0]
+            else :
+                doc += "\n\nThis controls the addition of the %s parameter " \
+                       "and its associated value.  Set this property to the " \
+                       "argument value required." % p.names[0]
+            prop = property(getter(name), setter(name), deleter(name), doc)
             setattr(self.__class__, name, prop) #magic!
         for key, value in kwargs.iteritems() :
             self.set_parameter(key, value)
@@ -237,9 +205,9 @@ class AbstractCommandline(object):
         >>> cline.bsequence = "asis:ACCCGAGCGCGGT"
         >>> cline.outfile = "temp_water.txt"
         >>> print cline
-        water -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 -outfile=temp_water.txt 
+        water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5
         >>> str(cline)
-        'water -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 -outfile=temp_water.txt '
+        'water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5'
         """
         commandline = "%s " % self.program_name
         for parameter in self.parameters:
@@ -248,7 +216,7 @@ class AbstractCommandline(object):
             if parameter.is_set:
                 #This will include a trailing space:
                 commandline += str(parameter)
-        return commandline
+        return commandline.strip() # remove trailing space
 
     def __repr__(self):
         """Return a representation of the command line object for debugging.
@@ -260,9 +228,9 @@ class AbstractCommandline(object):
         >>> cline.bsequence = "asis:ACCCGAGCGCGGT"
         >>> cline.outfile = "temp_water.txt"
         >>> print cline
-        water -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5 -outfile=temp_water.txt 
+        water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5
         >>> cline
-        WaterCommandline(cmd='water', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5, outfile='temp_water.txt')
+        WaterCommandline(cmd='water', outfile='temp_water.txt', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5)
         """
         answer = "%s(cmd=%s" % (self.__class__.__name__, repr(self.program_name))
         for parameter in self.parameters:
@@ -279,7 +247,10 @@ class AbstractCommandline(object):
         """Get a commandline option value."""
         for parameter in self.parameters:
             if name in parameter.names:
-                return parameter.value
+                if isinstance(parameter, _Switch) :
+                    return parameter.is_set
+                else :
+                    return parameter.value
         raise ValueError("Option name %s was not found." % name)
 
     def _clear_parameter(self, name) :

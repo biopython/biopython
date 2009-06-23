@@ -13,12 +13,6 @@ o PSSM
 import math
 import sys
 
-#TODO - Remove this work around once we drop python 2.3 support
-try:
-   set = set
-except NameError:
-   from sets import Set as set
-
 # biopython modules
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC

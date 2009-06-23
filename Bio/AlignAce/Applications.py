@@ -1,6 +1,7 @@
 """Definitions for interacting with AlignAce.
 """
 from Bio.Application import _Option,_Argument, AbstractCommandline
+from Bio.Application import generic_run
 
 class AlignAceCommandline(AbstractCommandline):
     """Create a commandline for the AlignAce program.
@@ -37,11 +38,10 @@ class AlignAceCommandline(AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
     def run(self):
-        return Application.generic_run(self)
+        return generic_run(self)
 
 
-
-class CompareAceCommandline(Application.AbstractCommandline):
+class CompareAceCommandline(AbstractCommandline):
     """Create a commandline for the CompareAce program.
 
     XXX This could use more checking for valid paramters to the program.
@@ -56,4 +56,4 @@ class CompareAceCommandline(Application.AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
     def run(self):
-        return Application.generic_run(self)
+        return generic_run(self)

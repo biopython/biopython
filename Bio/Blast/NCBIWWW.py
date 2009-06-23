@@ -805,6 +805,10 @@ def qblast(program, database, sequence,
                                   {"User-Agent":"BiopythonClient"})
         handle = urllib2.urlopen(request)
         results = handle.read()
+        # Can see an "\n\n" page while results are in progress,
+        # if so just wait a bit longer...
+        if results=="\n\n" :
+            continue
         # XML results don't have the Status tag when finished
         if results.find("Status=") < 0:
             break
