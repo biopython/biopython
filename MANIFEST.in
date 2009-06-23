@@ -22,6 +22,7 @@ recursive-include Doc Makefile
 recursive-include Doc/examples *.aln
 recursive-include Doc/examples *.xpk
 recursive-include Doc/images *.png
+recursive-include Doc/images *.jpg # e.g. the logo for the Tutorial
 
 # Include Bio.Cluster, Bio.Affy and Bio.KDTree
 # Note setup.py will only install these if Numpy is installed.
