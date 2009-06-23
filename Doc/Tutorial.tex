@@ -8443,7 +8443,7 @@ probability of a sequencing error (here denoted by $P_e$) at a given
 base using a simple base ten log transformation:
 
 \begin{equation}
-Q_\textrm{PHRED} = - 10 \times \textrm{log}_{10} ( P_e )
+Q_{\textrm{PHRED}} = - 10 \times \textrm{log}_{10} ( P_e )
 \end{equation}
 
 This means a wrong read ($P_e = 1$) gets a PHRED quality of $0$, while a very
@@ -8473,7 +8473,7 @@ this the \texttt{fastq-illumina} format.
 The Solexa quality scores are defined using a different log transformation:
 
 \begin{equation}
-Q_\textrm{Solexa} = - 10 \times \textrm{log}_{10} \left( \frac{P_e}{1-P_e} \right)
+Q_{\textrm{Solexa}} = - 10 \times \textrm{log}_{10} \left( \frac{P_e}{1-P_e} \right)
 \end{equation}
 
 Given Solexa/Illumina have now moved to using PHRED scores in version 1.3 of
