@@ -36,6 +36,7 @@ exclude Tests/Graphics/*.png
 recursive-exclude Tests/UnitTests *   # Exclude unused testing framework.
 recursive-exclude * .cvsignore
 recursive-exclude * .gitignore
+recursive-exclude * *.pyc # e.g. from running the unit tests 
 
 recursive-exclude Martel *     # We don't distribute Martel now
 
