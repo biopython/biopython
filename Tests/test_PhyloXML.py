@@ -276,7 +276,19 @@ class TreeTests(unittest.TestCase):
 
     def test_Clade(self):
         """Test instantiation of Clade objects."""
-        pass
+        # ENH: check node_id, width (float) -- need an example
+        trees = list(PhyloXML.parse(EX_PHYLO))
+        clade_ab, clade_c = trees[6].clade.clades
+        clade_a, clade_b = clade_ab.clades
+        for clade, id_source, name, blen in izip(
+                (clade_ab, clade_a, clade_b, clade_c),
+                ('ab', 'a', 'b', 'c'),
+                ('AB', 'A', 'B', 'C'),
+                (0.06, 0.102, 0.23, 0.4)):
+            self.assert_(isinstance(clade, Tree.Clade))
+            self.assertEquals(clade.id_source, id_source)
+            self.assertEquals(clade.name, name)
+            self.assertAlmostEqual(clade.branch_length, blen)
 
     def test_Accession(self):
         """Test instantiation of Accession objects."""

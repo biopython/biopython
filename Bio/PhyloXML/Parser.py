@@ -118,7 +118,7 @@ def read(handle):
     context = iter(ElementTree.iterparse(handle, events=('start', 'end')))
     event, root = context.next()
     phyloxml = Tree.Phyloxml(dict((local(key), val)
-                             for key, val in root.attrib.iteritems()))
+                             for key, val in root.items()))
     other_depth = 0
     for event, elem in context:
         # print elem.tag, event
@@ -274,6 +274,8 @@ class Parser(object):
 
     @classmethod
     def _parse_clade(cls, parent, context):
+        if 'branch_length' in parent.keys():
+            parent.set('branch_length', float(parent.get('branch_length')))
         clade = Tree.Clade(**parent.attrib)
         complex_types = ['color', 'events', 'binary_characters', 'date']
         list_types = {
@@ -310,7 +312,7 @@ class Parser(object):
                                 'Attribute branch_length was already set for '
                                 'this Clade; overwriting the previous value.',
                                 PhyloXMLWarning)
-                    clade.branch_length = elem.text.strip()
+                    clade.branch_length = float(elem.text.strip())
                 elif tag == 'name':
                     clade.name = elem.text and elem.text.strip()
                 elif tag == 'node_id':
