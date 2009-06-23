@@ -39,11 +39,11 @@ class ProbconsApplication(unittest.TestCase):
         """Round-trip through app and read fasta alignment from stdout
         """
         cmdline = ProbconsCommandline(probcons_exe, input=self.infile1)
-        self.assertEqual(str(cmdline), probcons_exe + " Fasta/fa01 ")
+        self.assertEqual(str(cmdline), probcons_exe + " Fasta/fa01")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = Application.generic_run(cmdline)
         self.assertEquals(stdin.return_code, 0)
-        self.assertEquals(str(stdin._cl), probcons_exe + " Fasta/fa01 ")
+        self.assertEqual(str(cmdline), str(stdin._cl))
         self.assert_(stderr.read().startswith("\nPROBCONS"))
         align = AlignIO.read(StringIO(stdout.read()), "fasta")
         records = list(SeqIO.parse(open(self.infile1),"fasta"))
@@ -58,11 +58,11 @@ class ProbconsApplication(unittest.TestCase):
         cmdline = ProbconsCommandline(probcons_exe)
         cmdline.set_parameter("input", "Fasta/fa01")
         cmdline.clustalw = True
-        self.assertEqual(str(cmdline), probcons_exe + " -clustalw Fasta/fa01 ")
+        self.assertEqual(str(cmdline), probcons_exe + " -clustalw Fasta/fa01")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdin, stdout, stderr = Application.generic_run(cmdline)
         self.assertEquals(stdin.return_code, 0)
-        self.assertEquals(str(stdin._cl), probcons_exe + " -clustalw Fasta/fa01 ")
+        self.assertEqual(str(cmdline), str(stdin._cl))
         self.assert_(stderr.read().strip().startswith("PROBCONS"))
         #self.assert_(stdout.read().strip().startswith("PROBCONS"))
         align = AlignIO.read(StringIO(stdout.read()), "clustal")
@@ -83,10 +83,9 @@ class ProbconsApplication(unittest.TestCase):
         cmdline.annot = self.annotation_outfile
         self.assertEqual(str(cmdline), probcons_exe + 
                 " -c 4 -ir 222 -pre 1 -annot Fasta/probcons_annot.out "
-                "-a Fasta/fa01 ")
+                "-a Fasta/fa01")
         stdin, stdout, stderr = Application.generic_run(cmdline)
-        self.assertEqual(str(cmdline), probcons_exe + " -c 4 -ir 222 -pre 1 "
-                            "-annot Fasta/probcons_annot.out -a Fasta/fa01 ")
+        self.assertEqual(str(cmdline), str(stdin._cl))
         self.assertEquals(stdin.return_code, 0)
         self.assert_(stderr.read().startswith("\nPROBCONS"))
         self.assert_(stdout.read().startswith(">AK1H_ECOLI/1-378"))
