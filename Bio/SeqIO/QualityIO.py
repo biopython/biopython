@@ -65,8 +65,8 @@ following format names:
  - "qual" means simple quality files using PHRED scores (e.g. from Roche 454)
  - "fastq" means Sanger style FASTQ files using PHRED scores and an ASCII
     offset of 33 (e.g. from the NCBI Short Read Archive).
- - "fastq-solexa" means old Solexa (pre Illumina) style FASTQ files, using
-    Solexa scores with an ASCII offset 64.
+ - "fastq-solexa" means old Solexa (and also very early Illumina) style FASTQ
+    files, using Solexa scores with an ASCII offset 64.
  - "fastq-illumina" means new Illumina 1.3+ style FASTQ files, using PHRED
     scores but with an ASCII offset 64.
 
@@ -305,7 +305,7 @@ And we can check this too - the first PHRED score was one, and this mapped to
     [1, 2, 3, 4, 5, 10, 20, 30, 40]
 
 Notice how different the standard Sanger FASTQ and the Illumina 1.3+ style
-FASTQ filea look for the same data! Then we have the older Solexa/Illumina
+FASTQ files look for the same data! Then we have the older Solexa/Illumina
 format to consider which encodes Solexa scores instead of PHRED scores.
 
 First let's see what Biopython says if we convert the PHRED scores in Solexa
@@ -872,7 +872,19 @@ def FastqIlluminaIterator(handle, alphabet = single_letter_alphabet, title2ids =
 
     NOTE - Older versions of the Solexa/Illumina pipeline encoded Solexa scores
     with an ASCII offset of 64. They are approximately equal but only for high
-    qaulity reads.
+    qaulity reads. If you have an old Solexa/Illumina file with negative
+    Solexa scores, and try and read this as an Illumina 1.3+ file it will fail:
+
+    >>> from Bio import SeqIO
+    >>> record = SeqIO.read(open("Quality/solexa.fastq"), "fastq-solexa")
+    >>> print record.id, record.seq
+    slxa_0013_1_0001_24 ACAAAAATCACAAGCATTCTTATACACC
+    >>> print record.letter_annotations["solexa_quality"]
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -6, -1, -1, -4, -1, -4, -19, -10, -27, -18]
+    >>> record2 = SeqIO.read(open("Quality/solexa.fastq"), "fastq-illumina")
+    Traceback (most recent call last):
+       ...
+    ValueError: PHRED quality score outside 0 to 93 found - your file is probably not in the Illumina 1.3+ FASTQ format. Check if it is a standard Sanger FASTQ file or from an older Solexa/Illumina pipeline.
 
     NOTE - True Sanger style FASTQ files use PHRED scores with an offset of 33.
     """
