@@ -290,6 +290,8 @@ class BranchColor(PhyloElement):
 
     The color applies to the whole clade unless overwritten by the color(s) of
     sub-clades.
+
+    Color values should be unsigned bytes, or integers from 0 to 255.
     """
     def __init__(self, red, green, blue):
         assert isinstance(red, int)
@@ -298,6 +300,21 @@ class BranchColor(PhyloElement):
         self.red = red
         self.green = green
         self.blue = blue
+
+    def to_rgb(self):
+        """Return a 24-bit hexadecimal RGB representation of this color.
+
+        The returned string is suitable for use in HTML/CSS.
+
+        Example:
+
+        >>> bc = BranchColor(12, 200, 100)
+        >>> bc.to_rgb()
+        '0cc864'
+        """
+        return hex(self.red * (16**4)
+                + self.green * (16**2)
+                + self.blue)[2:].zfill(6)
 
 
 class CladeRelation(PhyloElement):
