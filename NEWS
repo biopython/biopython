@@ -9,10 +9,12 @@ The latest news is at the top.
 
 ===================================================================
 
+June 23, 2009: Biopython 1.51 beta released.
+
 Biopython no longer supports Python 2.3.  Currently we support Python 2.4,
 2.5 and 2.6.
 
-Our deprecated parsing infrastructure (Martel and Bio.Mindy) which had been
+Our deprecated parsing infrastructure (Martel and Bio.Mindy) has been
 removed.  This means Biopython no longer has any dependence on mxTextTools.
 
 A few cosmetic issues in GenomeDiagram with arrow sigils and labels on
@@ -22,10 +24,31 @@ Bio.SeqIO will now write GenBank files with the feature table (previously
 omitted), and a couple of obscure errors parsing ambiguous locations have
 been fixed.
 
+Bio.SeqIO can now read and write Illumina 1.3+ style FASTQ files (which use
+PHRED quality scores with an ASCII offset of 64) under the format name
+"fastq-illumina". Biopython 1.50 supported just "fastq" (the original Sanger
+style FASTQ files using PHRED scores with an ASCII offset of 33), and
+"fastq-solexa" (the original Solexa/Illumina FASTQ format variant holding
+Solexa scores with an ASCII offset of 64) .
+
+For parsing the "swiss" format, Bio.SeqIO now uses the new Bio.SwissProt
+parser, making it about twice as fast as in Biopython 1.50, where the older
+now deprecated Bio.SwissProt.SProt was used. There should be no functional
+differences as a result of this change.
+
 Our command line wrapper objects have been updated to support accessing
 parameters via python properties, and setting of parameters at initiation
 with keyword arguments.  Additionally Cymon Cox has contributed several new
 multiple alignment wrappers under Bio.Align.Applications.
+
+A few more issues with Biopython's BioSQL support have been fixed (mostly by
+Cymon Cox). In particular, the default PostgreSQL schema includes some rules
+intended for BioPerl support only, which were causing problems in Biopython
+(see BioSQL bug 2839).
+
+There have also been additions to the tutorial, such as the new alignment
+wrappers, with a a whole chapter for the SeqRecord object. We have also
+added to the unit test coverage.
 
 ===================================================================
 
@@ -82,6 +105,10 @@ The set of NCBI DTD files included with Bio.Entrez has been updated with the
 revised files the NCBI introduced on 1 Jan 2009.
 
 Minor fix to BioSQL for retrieving references and comments.
+
+Bio.SwissProt has a new faster parser which will be replacing the older
+slower code in Bio.SwissProt.SProt (which we expect to deprecate in the next
+release).
 
 We've also made some changes to our test framework, which is now given a
 whole chapter in the tutorial.  This intended to help new developers or

@@ -23,7 +23,7 @@
     For dealing with biological information, the package expects BioPython
     objects:
 
-scale_fontsize    http://www.biopython.org
+    http://www.biopython.org
 
 """
 

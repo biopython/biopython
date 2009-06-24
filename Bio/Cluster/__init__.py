@@ -292,7 +292,7 @@ expclusters=None:  For hierarchical clustering results, expclusters
            given experimental condition belongs. This vector can be
            calculated by kcluster.
 """
-        (ngenes,nexps) = shape(self.data)
+        (ngenes,nexps) = numpy.shape(self.data)
         if self.gorder == None:
             gorder = numpy.arange(ngenes)
         else:

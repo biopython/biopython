@@ -95,12 +95,13 @@ python and what it can do if you are interested in Biopython, but if not
 the python website contains tons of documentation and reasons to learn
 to program in python.
 
-Biopython is designed to work with Python 2.3 or later. With python, the
+Biopython is designed to work with Python 2.4 or later (but not Python 3 yet).
+With python, the
 general rule of thumb is to keep yourself using the latest version, as
 the development process is very clean and new releases are quite stable.
-Upgrading bug-fix releases (for example. 2.5.1 to 2.5.2) 
+Upgrading bug-fix releases (for example. 2.6.1 to 2.6.2) 
 is incredibly easy and won't require any re-installation of libraries.
-Upgrading between versions (e.g. 2.3 to 2.4) is more time consuming since you
+Upgrading between versions (e.g. 2.5 to 2.6) is more time consuming since you
 need to re-install all libraries you have added to python.
 
 Let's get started with installation on various platforms.
@@ -109,23 +110,23 @@ Let's get started with installation on various platforms.
 
 First, you should go the main python web site and head over to the information
 page for the latest python release. At the time of this writing the
-latest stable python release is 2.5.2, which is available from
-\ahrefurl{\url{http://www.python.org/2.5.2/}}. This page contains links
+latest stable python release is 2.6.2, which is available from
+\ahrefurl{\url{http://www.python.org/download/releases/2.6.2/}}. This page contains links
 to all released files for the given release. For UNIX, we'll want to use
-the tarred and gzipped file, which is called \verb|Python-2.5.2.tgz| at
+the tarred and gzipped file, which is called \verb|Python-2.6.2.tgz| at
 the time of this writing.
 
 Download this file and then unpack it with the following commands:
 
 \begin{verbatim}
-$ gunzip Python-2.5.2.tgz 
-$ tar -xvpf Python-2.5.2.tar 
+$ gunzip Python-2.6.2.tgz 
+$ tar -xvpf Python-2.6.2.tar 
 \end{verbatim}
 
 Then enter into the created directory:
 
 \begin{verbatim}
-$ cd Python-2.5
+$ cd Python-2.6
 \end{verbatim}
 
 Now, start the build process by configuring everything to your system:
@@ -153,7 +154,7 @@ python interpreter:
 
 \begin{verbatim}
 $ python
-Python 2.4 (#1, Dec  5 2004, 20:47:03)
+Python 2.6.2 (...)
 [GCC 3.3.3] on cygwin
 Type "help", "copyright", "credits" or "license" for more information.
 >>>
@@ -189,8 +190,8 @@ Installation on Windows is most easily done using handy windows
 installers. As described above in the UNIX section, you should go to the
 webpage for the current stable version of Python to download this
 installer. At the current time, you'd go to
-\ahrefurl{\url{http://www.python.org/2.5.2/}} and download
-\verb|Python-2.5.2.msi|. 
+\ahrefurl{\url{http://www.python.org/download/releases/2.6.2/}} and download
+\verb|Python-2.6.2.msi|. 
 
 The installer is an executable program, so you only need to double click
 it to run it. Then just follow the friendly instructions. On all newer Windows
@@ -254,7 +255,7 @@ and make sure to install this as well as the basic package.
 
 We recommend using the NumPy provided windows installers for your installed
 version of python. For python 2.5, at the current time this would be
-\verb|numpy-1.1.1-win32-superpack-python2.5.exe|. You should follow the 
+\verb|numpy-1.3.0-win32-superpack-python2.5.exe|. You should follow the 
 now-standard procedure of downloading the installer, double
 clicking it and then following the installation instructions. As before,
 you will need to have administrator permissions to do this.
@@ -365,72 +366,12 @@ these modules.
 
 Historically this was an important Biopython dependency, used extensively
 in a number of parsers.  However, we have gradually phased out its use,
-and as of Biopython 1.49, mxTextTools is only used in a few deprecated
-modules.  You can skip installing this unless you hit an import error
-about mxTextTools when actually using Biopython.
+and as of Biopython 1.50, mxTextTools is no longer used at all.
 
 mxTextTools is available along with the entire mx-base system (which
 contains a number of other useful utilities as well) and the latest
 version is available for download at:
 \ahrefurl{\url{http://www.egenix.com/products/python/mxBase/mxTextTools/}}.
-
-However, we currently recommend you install mxTextTools 2.0, as some of
-the API changes made in 3.0 version were not compatible with Biopython.  Goto
-\ahrefurl{\url{http://www.egenix.com/www2002/python/eGenix-mx-Extensions-v2.x.html/}}
-to download this.
-
-\subsubsection{UNIX and Mac OS X systems}
-
-For UNIX and UNIX-like systems you should download the \verb|tar.gz|
-file from the page listed above. At the current time, this is
-\verb|egenix-mx-base-2.0.6.tar.gz|.
-
-Once you download this, unpack it and change into the created directory:
-
-\begin{verbatim}
-$ gunzip egenix-mx-base-2.0.6.tar.gz 
-$ tar -xvpf egenix-mx-base-2.0.6.tar
-$ cd egenix-mx-base-2.0.6
-\end{verbatim}
-
-To build it, use the standard python build procedure:
-
-\begin{verbatim}
-$ python setup.py build
-$ python setup.py test
-\end{verbatim}
-
-Then become root, and install it, again using the standard python
-mechanism:
-
-\begin{verbatim}
-$ python setup.py install
-\end{verbatim}
-
-\subsubsection{Windows systems}
-
-For Windows operating systems, you should download the Windows installer
-for the version of python you are running. At the current time, this
-would be: \verb|egenix-mx-base-2.0.6.win32-py2.5.exe|.
-
-This is a standard graphical installer, so after download double click
-it and follow the instructions and it should install with no problem.
-You'll have to have Administrator privileges to do this install, as with
-python itself.
-
-\subsubsection{Making sure it installed correctly}
-
-If you've installed mxTextTools correctly, you should be able to fire up
-your python interpreter and import it with no errors:
-
-\begin{verbatim}
-$ python
-Python 2.4 (#1, Dec  5 2004, 20:47:03)
-[GCC 3.3.3] on cygwin
-Type "help", "copyright", "credits" or "license" for more information.
->>> from mx import TextTools
->>>
-\end{verbatim}
 
 \subsection{flex (fast lexical analyzer generator) (optional)}
 
@@ -602,22 +543,20 @@ Now that you've got everything installed, carry on ahead to section~\ref{sec:is_
 \section{Making sure everything worked}
 \label{sec:is_working}
 
-First, we'll just do a quick test to make sure Biopython is installed correctly. The most important thing is that python can find the biopython installation. Biopython installs into top level \verb|Bio|, \verb|Martel| and \verb|BioSQL| directories, so you'll want to make sure these directories are located in a directory specified 
+First, we'll just do a quick test to make sure Biopython is installed correctly. The most important thing is that python can find the biopython installation. Biopython installs into top level \verb|Bio| and \verb|BioSQL| directories, so you'll want to make sure these directories are located in a directory specified 
 in your\verb| $PYTHONPATH| environmental variable. If you used the default install, this shouldn't be a problem, but if not, you'll need to set the \verb|PYTHONPATH| with something like \verb|export PYTHONPATH = $PYTHONPATH':/directory/where/you/put/Biopython'| (on UNIX). Now that we think we are ready, fire up your python interpreter and follow along with the following code:
 
 \begin{verbatim}
 $ python
-Python 2.4 (#1, Dec  5 2004, 20:47:03)
-[GCC 3.3.3] on cygwin
+Python 2.5 (r25:51908, Nov 23 2006, 18:40:28) 
+[GCC 4.1.1 20061011 (Red Hat 4.1.1-30)] on linux2
 Type "help", "copyright", "credits" or "license" for more information.
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet.IUPAC import unambiguous_dna
 >>> new_seq = Seq('GATCAGAAG', unambiguous_dna)
 >>> new_seq[0:2]
 Seq('GA', IUPACUnambiguousDNA())
->>> from Bio import Translate
->>> translator = Translate.unambiguous_dna_by_name["Standard"]
->>> translator.translate(new_seq)
+>>> new_seq.translate()
 Seq('DQK', HasStopCodon(IUPACProtein(), '*'))
 >>>
 \end{verbatim}
@@ -631,6 +570,7 @@ python setup.py test
 \end{verbatim}
 
 You can also run them by typing \verb|python run_tests.py| in the Tests sub directory.
+See the main Tutorial for further details (there is a whole chapter on the test framework).
 
 If you've made it this far, you've gotten Biopython installed and running.
 Congratulations!

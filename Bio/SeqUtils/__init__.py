@@ -11,7 +11,6 @@
 
 import re, time
 from Bio import SeqIO
-from Bio import Translate
 from Bio.Seq import Seq
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
@@ -305,6 +304,7 @@ def translate(seq, frame = 1, genetic_code = 1, translator = None):
                   +" to remove it in a future release of Biopython.  Please use"\
                   +" the method or function in Bio.Seq instead, as described in"\
                   +" the Tutorial.", DeprecationWarning)
+    from Bio import Translate #This will also trigger a DeprecationWarning
 
     if frame not in [1,2,3,-1,-2,-3]:
         raise ValueError('invalid frame')

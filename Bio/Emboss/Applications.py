@@ -34,7 +34,8 @@ class _EmbossCommandLine(AbstractCommandline) :
      - fatal              Report fatal errors
      - die                Report dying program messages
     """
-    def __init__(self, cmd="eprimer3", **kwargs):
+    def __init__(self, cmd=None, **kwargs):
+        assert cmd is not None
         extra_parameters = [\
            _Option(["-outfile","outfile"], ["output", "file"], None, 0,
                    "Output filename"),

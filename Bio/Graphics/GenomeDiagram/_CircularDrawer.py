@@ -417,15 +417,15 @@ class CircularDrawer(AbstractDrawer):
             border = colors.black
         else:
             border = feature.color
-        if feature.strand == 0:
-            sigil = method(btm, top, startangle, endangle, feature.color,
-                           border, **kwargs)
         if feature.strand == 1:
             sigil = method(ctr, top, startangle, endangle, feature.color,
                            border, orientation='right', **kwargs)
-        if feature.strand == -1:
+        elif feature.strand == -1:
             sigil = method(btm, ctr, startangle, endangle, feature.color,
                            border, orientation='left', **kwargs)
+        else :
+            sigil = method(btm, top, startangle, endangle, feature.color,
+                           border, **kwargs)
         if feature.label:   # Feature needs a label
             label = String(0, 0, feature.name.strip(),
                            fontName=feature.label_font,
@@ -869,11 +869,11 @@ class CircularDrawer(AbstractDrawer):
             #Make a partial circle, a large arc box
             #This method assumes the correct center for us.
             bg = self._draw_arc(btm, top, 0, 2*pi*self.sweep,
-                                colors.Color(0.98, 0.98, 0.98))
+                                colors.Color(0.96, 0.96, 0.96))
         else :
             #Make a full circle (using a VERY thick linewidth)
             bg = Circle(self.xcenter, self.ycenter, ctr, 
-                        strokeColor = colors.Color(0.98, 0.98, 0.98),
+                        strokeColor = colors.Color(0.96, 0.96, 0.96),
                         fillColor=None, strokeWidth=top-btm)
         greytrack_bgs.append(bg)
 

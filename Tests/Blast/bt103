@@ -1,0 +1,503 @@
+BLASTP 2.2.2 [Jan-08-2002]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|29294651|ref|NP_803187.1| dicer1 [Homo sapiens]
+         (1922 letters)
+
+Database: NC_000964 
+           4105 sequences; 1,221,421 total letters
+
+Searching.........done
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+gi|16078656|ref|NP_389475.1| ribonuclease III [Bacillus subtilis...    69  3e-12
+gi|16080962|ref|NP_391790.1| ATP-dependent RNA helicase [Bacillu...    48  6e-06
+gi|16078650|ref|NP_389469.1| ATP-dependent DNA helicase [Bacillu...    42  3e-04
+gi|16077525|ref|NP_388339.1| hypothetical protein BSU04580 [Baci...    42  3e-04
+gi|16079569|ref|NP_390393.1| hypothetical protein BSU25140 [Baci...    39  0.002
+gi|16077123|ref|NP_387936.1| transcription-repair coupling facto...    38  0.007
+gi|16080570|ref|NP_391397.1| excinuclease ABC subunit B [Bacillu...    37  0.009
+gi|16080600|ref|NP_391427.1| late competence protein [Bacillus s...    36  0.025
+gi|16077810|ref|NP_388624.1| hypothetical protein BSU07430 [Baci...    35  0.042
+gi|16078982|ref|NP_389803.1| hypothetical protein BSU19220 [Baci...    33  0.12
+gi|16079514|ref|NP_390338.1| hypothetical protein BSU24580 [Baci...    31  0.80
+gi|16079359|ref|NP_390183.1| ATP-dependent DNA helicase [Bacillu...    30  1.0
+gi|16079280|ref|NP_390104.1| hypothetical protein BSU22220 [Baci...    29  2.3
+gi|16081087|ref|NP_391915.1| transcriptional regulator (NtrC/Nif...    28  5.2
+gi|16080045|ref|NP_390871.1| pullulanase [Bacillus subtilis subs...    27  8.8
+
+>gi|16078656|ref|NP_389475.1| ribonuclease III [Bacillus subtilis
+            subsp. subtilis str. 168]
+          Length = 249
+
+ Score = 68.9 bits (167), Expect = 3e-12
+ Identities = 53/176 (30%), Positives = 83/176 (47%), Gaps = 36/176 (20%)
+
+Query: 1663 ISGFENFEKKINYRFKNKAYLLQAFTHASY---HYNTITDCYQRLEFLGDAILDYLITKH 1719
+            +  F+ F+++I+  F+N+  L QAFTH+SY   H     +  +RLEFLGDA+L+  I++ 
+Sbjct: 17   VEQFKEFQERISVHFQNEKLLYQAFTHSSYVNEHRKKPYEDNERLEFLGDAVLELTISRF 76
+
+Query: 1720 LYEDPRQHSPGVLTDLRSALVNNTIFASLAVKYDYHKYFKAVSPELFHVIDDFVQFQLEK 1779
+            L+      S G LT LR+A+V      SLA +  +                D V    + 
+Sbjct: 77   LFAKYPAMSEGDLTKLRAAIVCEPSLVSLAHELSF---------------GDLVLLG-KG 120
+
+Query: 1780 NEMQGMXXXXXXXXXXXXXXXXXXVPKAMGDIFESLAGAIYMDSGMS-LETVWQVY 1834
+             EM G                    P  + D+FE+  GA+Y+D G+  +E+  +VY
+Sbjct: 121  EEMTG----------------GRKRPALLADVFEAFIGALYLDQGLEPVESFLKVY 160
+
+
+
+ Score = 37.7 bits (86), Expect = 0.007
+ Identities = 20/47 (42%), Positives = 28/47 (59%)
+
+Query: 1313 ERLEMLGDSFLKHAITTYLFCTYPDAHEGRLSYMRSKKVSNCNLYRL 1359
+            ERLE LGD+ L+  I+ +LF  YP   EG L+ +R+  V   +L  L
+Sbjct: 59   ERLEFLGDAVLELTISRFLFAKYPAMSEGDLTKLRAAIVCEPSLVSL 105
+
+
+>gi|16080962|ref|NP_391790.1| ATP-dependent RNA helicase [Bacillus
+           subtilis subsp. subtilis str. 168]
+          Length = 479
+
+ Score = 47.8 bits (112), Expect = 6e-06
+ Identities = 28/82 (34%), Positives = 41/82 (49%), Gaps = 1/82 (1%)
+
+Query: 503 EVLRKFRAHETNLLIATSIVEEGVDIPKCNLVVRFDLPTEYRSYVQSKGR-ARAPISNYI 561
+           +V+ +F+  E   L+AT +   G+DI   +LV+ +DLP E  SYV   GR  RA      
+Sbjct: 281 DVMNEFKRGEYRYLVATDVAARGIDIENISLVINYDLPLEKESYVHRTGRTGRAGNKGKA 340
+
+Query: 562 MLADTDKIKSFEEDLKTYKAIE 583
+           +   T   K F  D++ Y   E
+Sbjct: 341 ISFVTAFEKRFLADIEEYIGFE 362
+
+
+>gi|16078650|ref|NP_389469.1| ATP-dependent DNA helicase [Bacillus
+           subtilis subsp. subtilis str. 168]
+          Length = 682
+
+ Score = 42.4 bits (98), Expect = 3e-04
+ Identities = 26/98 (26%), Positives = 53/98 (53%), Gaps = 4/98 (4%)
+
+Query: 445 IIFVERRYT----AVVLNRLIKEAGKQDPELAYISSNFITGHGIGKNQPRNKQMEAEFRK 500
+           + FVE+       A ++  LI+E+ K D + A    N ++    GK        +    +
+Sbjct: 456 LAFVEKELKQGRQAYIICPLIEESDKLDVQNAIDVYNMLSDIFRGKWNVGLMHGKLHSDE 515
+
+Query: 501 QEEVLRKFRAHETNLLIATSIVEEGVDIPKCNLVVRFD 538
+           +++V+R+F A+   +L++T++VE GV++P   ++V +D
+Sbjct: 516 KDQVMREFSANHCQILVSTTVVEVGVNVPNATIMVIYD 553
+
+
+>gi|16077525|ref|NP_388339.1| hypothetical protein BSU04580
+           [Bacillus subtilis subsp. subtilis str. 168]
+          Length = 511
+
+ Score = 42.0 bits (97), Expect = 3e-04
+ Identities = 30/94 (31%), Positives = 44/94 (45%), Gaps = 7/94 (7%)
+
+Query: 500 KQEEVLRKFRAHETNLLIATSIVEEGVDIPKCNLVVRFDLPTEYRSYVQSKGR-ARAPIS 558
+           K+   LRKF+     +L+AT +   G+DI     V  FD+P +  SYV   GR  RA  +
+Sbjct: 296 KRMVALRKFKEGAIEVLVATDVAARGLDISGVTHVYNFDVPQDPESYVHRIGRTGRAGKT 355
+
+Query: 559 NYIMLADTDKIKSFEEDLKTYKAIEKILRNKCSK 592
+              M   T + KS        +AIE+  + K  +
+Sbjct: 356 GMAMTFITPREKSM------LRAIEQTTKRKMDR 383
+
+
+>gi|16079569|ref|NP_390393.1| hypothetical protein BSU25140
+           [Bacillus subtilis subsp. subtilis str. 168]
+          Length = 438
+
+ Score = 39.3 bits (90), Expect = 0.002
+ Identities = 25/81 (30%), Positives = 42/81 (50%), Gaps = 5/81 (6%)
+
+Query: 499 RKQEEVLRKFRAHETNLLIATSIVEEGVDIPKCNLVVRFDLPTEYRSYVQSKGR-ARAPI 557
+           R++++V+++    E   +IAT +   G+DI   + V+ ++LP +   YV   GR ARA  
+Sbjct: 282 RERKKVMKQINDLEFTYIIATDLAARGIDIKGVSHVINYELPDDLDFYVHRVGRTARAGS 341
+
+Query: 558 SNYIM----LADTDKIKSFEE 574
+           S   M    L D D +   E+
+Sbjct: 342 SGQAMTIYELTDEDALVRLEK 362
+
+
+>gi|16077123|ref|NP_387936.1| transcription-repair coupling factor
+           [Bacillus subtilis subsp. subtilis str. 168]
+          Length = 1177
+
+ Score = 37.7 bits (86), Expect = 0.007
+ Identities = 16/37 (43%), Positives = 26/37 (70%)
+
+Query: 502 EEVLRKFRAHETNLLIATSIVEEGVDIPKCNLVVRFD 538
+           E V+  F   E+++L++T+I+E GVDIP  N ++ FD
+Sbjct: 874 ETVMLSFLEGESDVLVSTTIIETGVDIPNVNTLIVFD 910
+
+
+>gi|16080570|ref|NP_391397.1| excinuclease ABC subunit B [Bacillus
+           subtilis subsp. subtilis str. 168]
+          Length = 661
+
+ Score = 37.4 bits (85), Expect = 0.009
+ Identities = 24/69 (34%), Positives = 38/69 (54%), Gaps = 6/69 (8%)
+
+Query: 503 EVLRKFRAHETNLLIATSIVEEGVDIPKCNLVVRFDLPTE-----YRSYVQSKGR-ARAP 556
+           E++R  R  + ++L+  +++ EG+DIP+ +LV   D   E      RS +Q+ GR AR  
+Sbjct: 486 EIIRDLRLGKYDVLVGINLLREGLDIPEVSLVAILDADKEGFLRSERSLIQTIGRAARNA 545
+
+Query: 557 ISNYIMLAD 565
+               IM AD
+Sbjct: 546 EGRVIMYAD 554
+
+
+>gi|16080600|ref|NP_391427.1| late competence protein [Bacillus
+           subtilis subsp. subtilis str. 168]
+          Length = 463
+
+ Score = 35.8 bits (81), Expect = 0.025
+ Identities = 16/41 (39%), Positives = 28/41 (68%)
+
+Query: 490 RNKQMEAEFRKQEEVLRKFRAHETNLLIATSIVEEGVDIPK 530
+           R   + AE + ++E +++FR  + +LLI T+I+E GV +PK
+Sbjct: 355 RTASVHAEDKHRKEKVQQFRDGQLDLLITTTILERGVTVPK 395
+
+
+>gi|16077810|ref|NP_388624.1| hypothetical protein BSU07430
+           [Bacillus subtilis subsp. subtilis str. 168]
+          Length = 376
+
+ Score = 35.0 bits (79), Expect = 0.042
+ Identities = 20/58 (34%), Positives = 30/58 (51%), Gaps = 1/58 (1%)
+
+Query: 495 EAEFRKQEEVLRKFRAHETNLLIATSIVEEGVDIPKCNLVVRFDLPTEYRSYVQSKGR 552
+           EA+  ++ +++  F   E  LL+AT I   G+DI     V+  D+P E   YV   GR
+Sbjct: 274 EAKKMERAKIIATFEDGEFPLLLATDIAARGLDIENLPYVIHADIPDE-DGYVHRSGR 330
+
+
+>gi|16078982|ref|NP_389803.1| hypothetical protein BSU19220
+           [Bacillus subtilis subsp. subtilis str. 168]
+          Length = 591
+
+ Score = 33.5 bits (75), Expect = 0.12
+ Identities = 17/57 (29%), Positives = 29/57 (50%), Gaps = 2/57 (3%)
+
+Query: 497 EFRKQEEVLRKFRAHETNLLIATSIVEEGVDIPKCNLVVRFDLPTEYRSYVQSKGRA 553
+           + RK+++   +F   E  +++ATS    G+D      V+   +P +  SY Q  GRA
+Sbjct: 267 DVRKEQQ--ERFLNDELQVMVATSAFGMGIDKSNIRFVLHAQIPKDMESYYQEAGRA 321
+
+
+>gi|16079514|ref|NP_390338.1| hypothetical protein BSU24580
+           [Bacillus subtilis subsp. subtilis str. 168]
+          Length = 557
+
+ Score = 30.8 bits (68), Expect = 0.80
+ Identities = 31/108 (28%), Positives = 46/108 (41%), Gaps = 22/108 (20%)
+
+Query: 445 IIFVERRYTAVVLNRLIKEAGKQDPELAYISSNFITGHGIGKNQPRNKQMEAEFRKQEEV 504
+           IIF E R T + L   +++ G        ISS    G   G  + +   M+  FR + +V
+Sbjct: 376 IIFTEYRATQIYLQWFLQQNG--------ISSVPFRG---GFKRGKKDWMKDLFRGKIQV 424
+
+Query: 505 LRKFRAHETNLLIATSIVEEGVDIPKCNLVVRFDLPTEYRSYVQSKGR 552
+           L           IAT    EG+++  CN ++ +DLP       Q  GR
+Sbjct: 425 L-----------IATEAGGEGINLQFCNHMINYDLPWNPMRLEQRIGR 461
+
+
+>gi|16079359|ref|NP_390183.1| ATP-dependent DNA helicase [Bacillus
+           subtilis subsp. subtilis str. 168]
+          Length = 496
+
+ Score = 30.4 bits (67), Expect = 1.0
+ Identities = 14/50 (28%), Positives = 27/50 (54%)
+
+Query: 504 VLRKFRAHETNLLIATSIVEEGVDIPKCNLVVRFDLPTEYRSYVQSKGRA 553
+           + ++F  ++ +++  T+    GVD P    V+ F LP    +++Q  GRA
+Sbjct: 271 IQQQFIHNQLDVICCTNAFGMGVDKPDIRYVIHFHLPQTAEAFMQEIGRA 320
+
+
+>gi|16079280|ref|NP_390104.1| hypothetical protein BSU22220
+           [Bacillus subtilis subsp. subtilis str. 168]
+          Length = 749
+
+ Score = 29.3 bits (64), Expect = 2.3
+ Identities = 22/76 (28%), Positives = 38/76 (49%), Gaps = 2/76 (2%)
+
+Query: 499 RKQEEVLRKFRAHETNLLIATSIVEEGVDIPKCNLVVRFDLPTEYRSYVQSKGRA--RAP 556
+           +++ E+ R  R  +   +++T+ +E GVDI +  + V    P    S  Q  GRA  R  
+Sbjct: 331 KERREIERGLREGDILGVVSTNALELGVDIGQLQVCVMTGYPGSVASAWQQAGRAGRRHG 390
+
+Query: 557 ISNYIMLADTDKIKSF 572
+            S  IM+A++  I  +
+Sbjct: 391 ESLIIMVANSTPIDQY 406
+
+
+>gi|16081087|ref|NP_391915.1| transcriptional regulator (NtrC/NifA
+           family) [Bacillus subtilis subsp. subtilis str. 168]
+          Length = 461
+
+ Score = 28.1 bits (61), Expect = 5.2
+ Identities = 26/116 (22%), Positives = 47/116 (40%), Gaps = 20/116 (17%)
+
+Query: 491 NKQMEAEFRKQEEVLRK-------FRAHETNLLIATSIVEEGVDIPKCNLVVRFDLPTEY 543
+           NK M+ E  ++ +VL K       F   + + L+    ++EG  I               
+Sbjct: 37  NKMMQIEDMEKHDVLNKNLMDVFMFSKQQDSTLVQA--LQEGKTIKNVK----------- 83
+
+Query: 544 RSYVQSKGRARAPISNYIMLADTDKIKSFEEDLKTYKAIEKILRNKCSKSVDTGET 599
+           +SY  +KG+    I++   +    KI+   E  K    +E+++R   +K   T  T
+Sbjct: 84  QSYFNNKGQEITTINHTYPIVQDGKIRGAVEIAKDVTKLERLIRENMNKKGSTTYT 139
+
+
+>gi|16080045|ref|NP_390871.1| pullulanase [Bacillus subtilis subsp.
+            subtilis str. 168]
+          Length = 718
+
+ Score = 27.3 bits (59), Expect = 8.8
+ Identities = 11/31 (35%), Positives = 19/31 (60%)
+
+Query: 1533 ENCGVDTGKQSISYDLHTEQCIADKSIADCV 1563
+            + CG+ +    +  D+ +E+ +A K IADCV
+Sbjct: 361  DECGMPSNGTGVGNDIASERRMARKFIADCV 391
+
+
+  Database: NC_000964
+    Posted date:  Jun 21, 2009 11:38 AM
+  Number of letters in database: 1,221,421
+  Number of sequences in database:  4105
+  
+Lambda     K      H
+   0.319    0.136    0.407 
+
+Gapped
+Lambda     K      H
+   0.267   0.0410    0.140 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 4,155,855
+Number of Sequences: 4105
+Number of extensions: 166484
+Number of successful extensions: 406
+Number of sequences better than 10.0: 15
+Number of HSP's better than 10.0 without gapping: 14
+Number of HSP's successfully gapped in prelim test: 1
+Number of HSP's that attempted gapping in prelim test: 383
+Number of HSP's gapped (non-prelim): 23
+length of query: 1922
+length of database: 1,221,421
+effective HSP length: 98
+effective length of query: 1824
+effective length of database: 819,131
+effective search space: 1494094944
+effective search space used: 1494094944
+T: 11
+A: 40
+X1: 16 ( 7.4 bits)
+X2: 38 (14.6 bits)
+X3: 64 (24.7 bits)
+S1: 41 (21.7 bits)
+S2: 59 (27.3 bits)
+BLASTP 2.2.2 [Jan-08-2002]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|155030234|ref|NP_037367.3| ribonuclease III, nuclear isoform
+1 [Homo sapiens]
+         (1374 letters)
+
+Database: NC_000964 
+           4105 sequences; 1,221,421 total letters
+
+Searching.........done
+
+                                                                   Score     E
+Sequences producing significant alignments:                        (bits)  Value
+
+gi|16078656|ref|NP_389475.1| ribonuclease III [Bacillus subtilis...   119  9e-28
+gi|50812236|ref|NP_389601.2| polyketide synthase [Bacillus subti...    29  1.7
+gi|16077075|ref|NP_387888.1| DNA gyrase subunit A [Bacillus subt...    28  2.8
+gi|16080582|ref|NP_391409.1| peptide chain release factor 2 [Bac...    28  3.7
+gi|16079863|ref|NP_390689.1| required for assembly of the spore ...    27  6.3
+gi|16077459|ref|NP_388273.1| succinate-semialdehyde dehydrogenas...    27  6.3
+gi|16080133|ref|NP_390959.1| hypothetical protein BSU30810 [Baci...    27  8.2
+gi|16078464|ref|NP_389283.1| hypothetical protein BSU14000 [Baci...    27  8.2
+
+>gi|16078656|ref|NP_389475.1| ribonuclease III [Bacillus subtilis
+            subsp. subtilis str. 168]
+          Length = 249
+
+ Score =  119 bits (299), Expect = 9e-28
+ Identities = 80/231 (34%), Positives = 126/231 (53%), Gaps = 9/231 (3%)
+
+Query: 1104 LQKLTEFEEAIGVIFTHVRLLARAFTLRTVGFNHLTLGH--NQRMEFLGDSIMQLVATEY 1161
+            +++  EF+E I V F + +LL +AFT  +    H    +  N+R+EFLGD++++L  + +
+Sbjct: 17   VEQFKEFQERISVHFQNEKLLYQAFTHSSYVNEHRKKPYEDNERLEFLGDAVLELTISRF 76
+
+Query: 1162 LFIHFPDHHEGHLTLLRSSLVNNRTQAKVAEELGMQEYAITNDKTKRPVA-LRTKTLADL 1220
+            LF  +P   EG LT LR+++V   +   +A EL   +  +     +      R   LAD+
+Sbjct: 77   LFAKYPAMSEGDLTKLRAAIVCEPSLVSLAHELSFGDLVLLGKGEEMTGGRKRPALLADV 136
+
+Query: 1221 LESFIAALYIDKDLEYVHTFMNVCFFPRLKEFILNQDWNDPKSQLQQCCLTLRTEGKEPD 1280
+             E+FI ALY+D+ LE V +F+ V  FP++ +   +    D KSQLQ+    ++ +GK   
+Sbjct: 137  FEAFIGALYLDQGLEPVESFLKVYVFPKINDGAFSHVM-DFKSQLQE---YVQRDGK--G 190
+
+Query: 1281 IPLYKTLQTVGPSHARTYTVAVYFKGERIGCGKGPSIQQAEMGAAMDALEK 1331
+               YK     GP+H R +   V  KGE +G G G S ++AE  AA +AL K
+Sbjct: 191  SLEYKISNEKGPAHNREFEAIVSLKGEPLGVGNGRSKKEAEQHAAQEALAK 241
+
+
+
+ Score = 68.6 bits (166), Expect = 2e-12
+ Identities = 40/105 (38%), Positives = 55/105 (52%)
+
+Query: 965  NERLEFLGDAVVEFLTSVHLYYLFPSLEEGGLATYRTAIVQNQHLAMLAKKLELDRFMLY 1024
+            NERLEFLGDAV+E   S  L+  +P++ EG L   R AIV    L  LA +L     +L 
+Sbjct: 58   NERLEFLGDAVLELTISRFLFAKYPAMSEGDLTKLRAAIVCEPSLVSLAHELSFGDLVLL 117
+
+Query: 1025 AHGPDLCRESDLRHAMANCFEALIGAVYLEGSLEEAKQLFGRLLF 1069
+              G ++         +A+ FEA IGA+YL+  LE  +      +F
+Sbjct: 118  GKGEEMTGGRKRPALLADVFEAFIGALYLDQGLEPVESFLKVYVF 162
+
+
+>gi|50812236|ref|NP_389601.2| polyketide synthase [Bacillus subtilis
+            subsp. subtilis str. 168]
+          Length = 4262
+
+ Score = 29.3 bits (64), Expect = 1.7
+ Identities = 21/74 (28%), Positives = 37/74 (49%), Gaps = 8/74 (10%)
+
+Query: 1188 AKVAEELGMQEYAITNDKTKRPVALRTKTLADLLESFIAALYIDKDL-EYVHTFMNVCFF 1246
+            ++V+  LGM E AI    T+ P+A   K   D +++      ++ DL E++HT + +   
+Sbjct: 3375 SRVSRFLGMTEPAIPEPATQAPLAQENK---DEVKTLSIEKRLEHDLKEHIHTLLKI--- 3428
+
+Query: 1247 PRLKEFILNQDWND 1260
+                   LN++W D
+Sbjct: 3429 -SKDRLNLNKNWAD 3441
+
+
+>gi|16077075|ref|NP_387888.1| DNA gyrase subunit A [Bacillus
+           subtilis subsp. subtilis str. 168]
+          Length = 821
+
+ Score = 28.5 bits (62), Expect = 2.8
+ Identities = 20/77 (25%), Positives = 38/77 (48%), Gaps = 14/77 (18%)
+
+Query: 787 DPQYQKLWKSYVKLRHLLANSPKVKQTDKQKLAQREE-------------ALQKIRQKNT 833
+           + +YQ L K   +L+ +LAN  KV +  +++L + +E              L+ I  ++ 
+Sbjct: 441 EEEYQSLVKLIAELKDILANEYKVLEIIREELTEIKERFNDERRTEIVTSGLETIEDEDL 500
+
+Query: 834 MRRE-VTVELSSQGFWK 849
+           + RE + V L+  G+ K
+Sbjct: 501 IERENIVVTLTHNGYVK 517
+
+
+>gi|16080582|ref|NP_391409.1| peptide chain release factor 2
+           [Bacillus subtilis subsp. subtilis str. 168]
+          Length = 366
+
+ Score = 28.1 bits (61), Expect = 3.7
+ Identities = 14/48 (29%), Positives = 25/48 (51%)
+
+Query: 789 QYQKLWKSYVKLRHLLANSPKVKQTDKQKLAQREEALQKIRQKNTMRR 836
+           Q+     S V++ HL  N     QT++ ++  RE A++ ++ K   RR
+Sbjct: 251 QHVNTTDSAVRITHLPTNVVVTCQTERSQIKNRERAMKMLKAKLYQRR 298
+
+
+>gi|16079863|ref|NP_390689.1| required for assembly of the spore coat
+            (stage VI sporulation) [Bacillus subtilis subsp. subtilis
+            str. 168]
+          Length = 575
+
+ Score = 27.3 bits (59), Expect = 6.3
+ Identities = 25/105 (23%), Positives = 46/105 (43%), Gaps = 18/105 (17%)
+
+Query: 1274 TEGKEPDIPLYKTLQTVGPSHARTYTVAVYFKGERIGCGKGPS-IQQAEMGAAMDALEKY 1332
+            T+ KEP+IPLY+                  F+ E +      S +++    +A +A+ ++
+Sbjct: 140  TQDKEPEIPLYE--------------APAAFREEELSEPPAHSVVEEPGASSAEEAVLQH 185
+
+Query: 1333 NFPQMAHQKRFIERKYRQELKEMRWEREHQE---REPDETEDIKK 1374
+              P    +    +   R+EL+  + E E  E    EP+  ED+K+
+Sbjct: 186  EPPAEPPELFISKAGLREELETEKAESEPPESVASEPEAREDVKE 230
+
+
+>gi|16077459|ref|NP_388273.1| succinate-semialdehyde dehydrogenase
+            [Bacillus subtilis subsp. subtilis str. 168]
+          Length = 462
+
+ Score = 27.3 bits (59), Expect = 6.3
+ Identities = 12/22 (54%), Positives = 16/22 (72%)
+
+Query: 1045 EALIGAVYLEGSLEEAKQLFGR 1066
+            E L GA Y+E   EEAK+++GR
+Sbjct: 85   EVLYGAGYIEWFAEEAKRVYGR 106
+
+
+>gi|16080133|ref|NP_390959.1| hypothetical protein BSU30810
+           [Bacillus subtilis subsp. subtilis str. 168]
+          Length = 274
+
+ Score = 26.9 bits (58), Expect = 8.2
+ Identities = 12/29 (41%), Positives = 16/29 (54%)
+
+Query: 872 YHQCLMHLDKLIGYTFQDRCLLQLAMTHP 900
+           + Q  +H  KLIGY+   R     AMT+P
+Sbjct: 85  FDQLKLHKVKLIGYSMGGRLAYSFAMTYP 113
+
+
+>gi|16078464|ref|NP_389283.1| hypothetical protein BSU14000
+           [Bacillus subtilis subsp. subtilis str. 168]
+          Length = 392
+
+ Score = 26.9 bits (58), Expect = 8.2
+ Identities = 14/51 (27%), Positives = 27/51 (52%), Gaps = 4/51 (7%)
+
+Query: 953 GQDDPTPSRINHNERLEFLGDAVVEFLTSV----HLYYLFPSLEEGGLATY 999
+           G DD    R  + +RL+++ D +V     V      +Y+FPS++  G+ ++
+Sbjct: 278 GFDDALIMREQYKKRLDYVYDRLVSMGLDVVKPSGAFYIFPSIKSFGMTSF 328
+
+
+  Database: NC_000964
+    Posted date:  Jun 21, 2009 11:38 AM
+  Number of letters in database: 1,221,421
+  Number of sequences in database:  4105
+  
+Lambda     K      H
+   0.321    0.137    0.424 
+
+Gapped
+Lambda     K      H
+   0.267   0.0410    0.140 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Hits to DB: 2,679,991
+Number of Sequences: 4105
+Number of extensions: 104631
+Number of successful extensions: 218
+Number of sequences better than 10.0: 8
+Number of HSP's better than 10.0 without gapping: 4
+Number of HSP's successfully gapped in prelim test: 4
+Number of HSP's that attempted gapping in prelim test: 208
+Number of HSP's gapped (non-prelim): 11
+length of query: 1374
+length of database: 1,221,421
+effective HSP length: 95
+effective length of query: 1279
+effective length of database: 831,446
+effective search space: 1063419434
+effective search space used: 1063419434
+T: 11
+A: 40
+X1: 16 ( 7.4 bits)
+X2: 38 (14.6 bits)
+X3: 64 (24.7 bits)
+S1: 41 (21.9 bits)
+S2: 58 (26.9 bits)

@@ -374,7 +374,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                  gapopen=10,
                                  gapextend=0.5,
                                  auto=True, filter=True)
-        self.assertEqual(str(cline).rstrip(),
+        self.assertEqual(str(cline),
                          exes["water"] + " -auto -filter" \
                          + " -asequence=asis:ACCCGGGCGCGGT" \
                          + " -bsequence=asis:ACCCGAGCGCGGT" \
@@ -434,7 +434,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                  gapopen=10,
                                  gapextend=0.5,
                                  auto=True, filter=True)
-        self.assertEqual(str(cline).rstrip(),
+        self.assertEqual(str(cline),
                          exes["needle"] + " -auto -filter" \
                          + " -asequence=asis:ACCCGGGCGCGGT" \
                          + " -bsequence=asis:ACCCGAGCGCGGT" \

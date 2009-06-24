@@ -75,6 +75,10 @@ def compare_feature(old, new, ignore_sub_features=False) :
                          % (old.location, new.location, str(old), str(new)))
     if old.strand != new.strand :
         raise ValueError("Different strand:\n%s\nvs:\n%s" % (str(old), str(new)))
+    if old.ref != new.ref :
+        raise ValueError("Different ref:\n%s\nvs:\n%s" % (str(old), str(new)))
+    if old.ref_db != new.ref_db :
+        raise ValueError("Different ref:\n%s\nvs:\n%s" % (str(old), str(new)))
     if old.location.start != new.location.start \
     or str(old.location.start) != str(new.location.start) :
         raise ValueError("Start %s versus %s:\n%s\nvs:\n%s" \
@@ -111,17 +115,6 @@ def compare_features(old_list, new_list, ignore_sub_features=False) :
             return False
     return True
 
-from Bio.Data import CodonTable
-def methionine_translate(nuc, table) :
-    """Hack until we fix Bug 2783."""
-    translation = nuc.translate(table)
-    start_codons = CodonTable.ambiguous_dna_by_id[table].start_codons
-    #There may not be a start codon, for example:
-    #Consider NC_006980, protein ID XP_627884.1, <58180..59604, RVSSSSLLF...
-    if str(nuc)[:3] in start_codons and translation[0] != "M" :
-        translation = Seq("M", translation.alphabet) + translation[1:]
-    return translation
-
 #TODO - Add this functionality to Biopython itself...
 def get_feature_nuc(f, parent_seq) :
     if f.sub_features :
@@ -139,6 +132,44 @@ def get_feature_nuc(f, parent_seq) :
         f_seq = parent_seq[f.location.nofuzzy_start:f.location.nofuzzy_end]
     if f.strand == -1 : f_seq = f_seq.reverse_complement()
     return f_seq
+
+class SeqRecordCreation(unittest.TestCase):
+    """Test basic creation of SeqRecords.
+    """
+    def test_annotations(self):
+        """Pass in annotations to SeqRecords.
+        """
+        rec = SeqRecord(Seq("ACGT", generic_dna),
+                        id="Test", name="Test", description="Test")
+        assert rec.annotations == {}
+        rec = SeqRecord(Seq("ACGT", generic_dna),
+                        id="Test", name="Test", description="Test",
+                        annotations={"test" : ["a test"]})
+        assert rec.annotations.get("test", "") == ["a test"]
+
+    def test_letter_annotations(self):
+        """Pass in letter annotations to SeqRecords.
+        """
+        rec = SeqRecord(Seq("ACGT", generic_dna),
+                        id="Test", name="Test", description="Test")
+        assert rec.letter_annotations == {}
+        rec = SeqRecord(Seq("ACGT", generic_dna),
+                        id="Test", name="Test", description="Test",
+                        letter_annotations={"test" : [1, 2, 3, 4]})
+        assert rec.letter_annotations.get("test", []) == [1, 2, 3, 4]
+        # XXX should raise an error with incorrect number of letter annotations
+        rec = SeqRecord(Seq("ACGT", generic_dna),
+                        id="Test", name="Test", description="Test",
+                        letter_annotations={"test" : [1, 2, 3]})
+
+    def test_qualifiers(self):
+        """Pass in qualifiers to SeqFeatures.
+        """
+        f = SeqFeature(FeatureLocation(10,20), strand=+1, type="CDS")
+        assert f.qualifiers == {}
+        f = SeqFeature(FeatureLocation(10,20), strand=+1, type="CDS",
+                qualifiers={"test": ["a test"]})
+        assert f.qualifiers.get("test", "") == ["a test"]
 
 class FeatureWriting(unittest.TestCase) :
     def setUp(self) :
@@ -438,7 +469,7 @@ class NC_000932(unittest.TestCase):
                 continue
             #Get the nucleotides and translate them
             nuc = get_feature_nuc(f, gb_record.seq)
-            pro = methionine_translate(nuc, self.table)
+            pro = nuc.translate(table=self.table, cds=True)
             if pro[-1] == "*" :
                 self.assertEqual(str(pro)[:-1], str(r.seq))
             else :
@@ -464,7 +495,7 @@ class NC_005816(NC_000932):
         ffn_records = list(SeqIO.parse(open(self.ffn_filename),"fasta"))
         self.assertEqual(len(faa_records),len(ffn_records))
         for faa, fna in zip(faa_records, ffn_records) :
-            translation = methionine_translate(fna.seq, self.table)
+            translation = fna.seq.translate(self.table, cds=True)
             if faa.id in self.skip_trans_test :
                 continue
             if (str(translation) != str(faa.seq)) \

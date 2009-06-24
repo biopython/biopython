@@ -86,7 +86,8 @@ class SeqRecord(object):
     """
     def __init__(self, seq, id = "<unknown id>", name = "<unknown name>",
                  description = "<unknown description>", dbxrefs = None,
-                 features = None):
+                 features = None, annotations = None,
+                 letter_annotations = None):
         """Create a SeqRecord.
 
         Arguments:
@@ -109,9 +110,7 @@ class SeqRecord(object):
         then using the UnknownSeq object from Bio.Seq is appropriate.
 
         You can create a 'blank' SeqRecord object, and then populate the
-        attributes later.  Note that currently the annotations and the
-        letter_annotations dictionaries cannot be specified when creating
-        the SeqRecord.
+        attributes later.  
         """
         if id is not None and not isinstance(id, basestring) :
             #Lots of existing code uses id=None... this may be a bad idea.
@@ -132,17 +131,23 @@ class SeqRecord(object):
             dbxrefs = []
         self.dbxrefs = dbxrefs
         # annotations about the whole sequence
-        self.annotations = {}
+        if annotations is None:
+            annotations = {}
+        self.annotations = annotations
 
         # annotations about each letter in the sequence
-        if seq is None :
-            #Should we allow this and use a normal unrestricted dict?
-            self._per_letter_annotations = _RestrictedDict(length=0)
-        else :
-            try :
-                self._per_letter_annotations = _RestrictedDict(length=len(seq))
-            except :
-                raise TypeError("seq argument should be a Seq or MutableSeq")
+        if letter_annotations is None:
+            if seq is None :
+                #Should we allow this and use a normal unrestricted dict?
+                self._per_letter_annotations = _RestrictedDict(length=0)
+            else :
+                try :
+                    self._per_letter_annotations = _RestrictedDict(
+                            length=len(seq))
+                except :
+                    raise TypeError("seq argument should be Seq or MutableSeq")
+        else:
+            self._set_per_letter_annotations(letter_annotations)
         
         # annotations about parts of the sequence
         if features is None:
@@ -380,6 +385,13 @@ class SeqRecord(object):
                     stop  = parent_length - stop + 1
                 #assert str(self.seq)[index] == str(self.seq)[start:stop]
                 for f in self.features :
+                    if f.ref or f.ref_db :
+                        #TODO - Implement this (with lots of tests)?
+                        import warnings
+                        warnings.warn("When slicing SeqRecord objects, any "
+                              "SeqFeature referencing other sequences (e.g. "
+                              "from segmented GenBank records) is ignored.")
+                        continue
                     if start <= f.location.start.position \
                     and f.location.end.position < stop :
                         answer.features.append(f._shift(-start))
