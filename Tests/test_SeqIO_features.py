@@ -141,35 +141,53 @@ class SeqRecordCreation(unittest.TestCase):
         """
         rec = SeqRecord(Seq("ACGT", generic_dna),
                         id="Test", name="Test", description="Test")
-        assert rec.annotations == {}
+        self.assertEqual(rec.annotations, {})
         rec = SeqRecord(Seq("ACGT", generic_dna),
                         id="Test", name="Test", description="Test",
                         annotations={"test" : ["a test"]})
-        assert rec.annotations.get("test", "") == ["a test"]
+        self.assertEqual(rec.annotations["test"], ["a test"])
 
     def test_letter_annotations(self):
         """Pass in letter annotations to SeqRecords.
         """
         rec = SeqRecord(Seq("ACGT", generic_dna),
                         id="Test", name="Test", description="Test")
-        assert rec.letter_annotations == {}
+        self.assertEqual(rec.annotations, {})
         rec = SeqRecord(Seq("ACGT", generic_dna),
                         id="Test", name="Test", description="Test",
                         letter_annotations={"test" : [1, 2, 3, 4]})
-        assert rec.letter_annotations.get("test", []) == [1, 2, 3, 4]
-        # XXX should raise an error with incorrect number of letter annotations
+        self.assertEqual(rec.letter_annotations["test"], [1, 2, 3, 4])
+        #Now try modifying it to a bad value...
+        try :
+            rec.letter_annotations["bad"] = "abc"
+            self.assert_(False, "Adding a bad letter_annotation should fail!")
+        except (TypeError, ValueError), e:
+            pass
+        #Now try setting it afterwards to a bad value...
         rec = SeqRecord(Seq("ACGT", generic_dna),
-                        id="Test", name="Test", description="Test",
-                        letter_annotations={"test" : [1, 2, 3]})
+                        id="Test", name="Test", description="Test")
+        try :
+            rec.letter_annotations={"test" : [1, 2, 3]}
+            self.assert_(False, "Changing to bad letter_annotations should fail!")
+        except (TypeError, ValueError), e:
+            pass
+        #Now try setting it at creation time to a bad value...
+        try :
+            rec = SeqRecord(Seq("ACGT", generic_dna),
+                            id="Test", name="Test", description="Test",
+                            letter_annotations={"test" : [1, 2, 3]})
+            self.assert_(False, "Wrong length letter_annotations should fail!")
+        except (TypeError, ValueError), e:
+            pass
 
     def test_qualifiers(self):
         """Pass in qualifiers to SeqFeatures.
         """
         f = SeqFeature(FeatureLocation(10,20), strand=+1, type="CDS")
-        assert f.qualifiers == {}
+        self.assertEqual(f.qualifiers, {})
         f = SeqFeature(FeatureLocation(10,20), strand=+1, type="CDS",
                 qualifiers={"test": ["a test"]})
-        assert f.qualifiers.get("test", "") == ["a test"]
+        self.assertEqual(f.qualifiers["test"], ["a test"])
 
 class FeatureWriting(unittest.TestCase) :
     def setUp(self) :
