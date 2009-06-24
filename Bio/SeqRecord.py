@@ -34,6 +34,10 @@ class _RestrictedDict(dict):
             raise TypeError("We only allow python sequences (lists, tuples or "
                             "strings) of length %i." % self._length)
         dict.__setitem__(self, key, value)
+    def update(self, new_dict) :
+        #Force this to go via our strict __setitem__ method
+        for (key, value) in new_dict.iteritems() :
+            self[key] = value
 
 class SeqRecord(object):
     """A SeqRecord object holds a sequence and information about it.
@@ -135,19 +139,22 @@ class SeqRecord(object):
             annotations = {}
         self.annotations = annotations
 
-        # annotations about each letter in the sequence
         if letter_annotations is None:
+            # annotations about each letter in the sequence
             if seq is None :
                 #Should we allow this and use a normal unrestricted dict?
                 self._per_letter_annotations = _RestrictedDict(length=0)
             else :
                 try :
-                    self._per_letter_annotations = _RestrictedDict(
-                            length=len(seq))
+                    self._per_letter_annotations = \
+                                              _RestrictedDict(length=len(seq))
                 except :
                     raise TypeError("seq argument should be Seq or MutableSeq")
-        else:
-            self._set_per_letter_annotations(letter_annotations)
+        else :
+            #This will be handled via the property set function, which will
+            #turn this into a _RestrictedDict and thus ensure all the values
+            #in the dict are the right length
+            self.letter_annotations = letter_annotations
         
         # annotations about parts of the sequence
         if features is None:
@@ -186,7 +193,7 @@ class SeqRecord(object):
         >>> print record.letter_annotations["solexa_quality"]
         [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -6, -1, -1, -4, -1, -4, -19, -10, -27, -18]
 
-        The per-letter-annotaions get sliced automatically if you slice the
+        The letter_annotations get sliced automatically if you slice the
         parent SeqRecord, for example taking the last ten bases:
 
         >>> sub_record = record[-10:]
