@@ -238,11 +238,13 @@ class Parser(object):
         """
         phylogeny = Tree.Phylogeny(**dict_str2bool(parent.attrib,
                                                    ['rooted', 'rerootable']))
-        complex_types = ['date', 'id', 'clade_relation', 'sequence_relation']
+        complex_types = ['date', 'id']
         list_types = {
                 # XML tag, plural attribute
                 'confidence':   'confidences',
                 'property':     'properties',
+                'clade_relation': 'clade_relations',
+                'sequence_relation': 'sequence_relations',
                 }
         for event, elem in context:
             tag = local(elem.tag)
@@ -393,14 +395,15 @@ class Parser(object):
     def to_domain(cls, elem):
         return Tree.ProteinDomain(elem.text.strip(),
                 int(elem.get('from')), int(elem.get('to')),
-                confidence=(('confidence' in elem) and elem.get('confidence')
+                confidence=(('confidence' in elem)
+                            and float(elem.get('confidence'))
                             or None),
                 id=elem.get('id'))
 
     @classmethod
     def to_domain_architecture(cls, elem):
         return Tree.DomainArchitecture(
-                length=elem.get('length'),
+                length=int(elem.get('length')),
                 domains=[cls.to_domain(e) for e in elem.findall('domain')])
 
     @classmethod

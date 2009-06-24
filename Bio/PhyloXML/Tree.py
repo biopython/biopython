@@ -361,8 +361,8 @@ class Date(PhyloElement):
         range (decimal) -- ???
     """
     def __init__(self, value=None, desc=None, unit=None, range=None):
-        PhyloElement.__init__(self, {'unit': unit, 'range': range},
-                value=value, desc=desc)
+        PhyloElement.__init__(self, value=value, desc=desc, unit=unit,
+                range=range)
 
 
 class Distribution(PhyloElement):
@@ -417,7 +417,7 @@ class Point(PhyloElement):
     (also called 'map datum'). For example, Google's KML uses 'WGS84'.
     """
     def __init__(self, geodetic_datum, lat, long, alt=None):
-        PhyloElement.__init__(self, dict(geodetic_datum=geodetic_datum),
+        PhyloElement.__init__(self, geodetic_datum=geodetic_datum,
                 lat=lat, long=long, alt=alt)
 
 

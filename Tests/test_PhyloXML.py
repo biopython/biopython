@@ -272,13 +272,12 @@ class TreeTests(unittest.TestCase):
         self.assertEquals(trees[6].name,
                 'network, node B is connected to TWO nodes: AB and C')
         self.assertEquals(trees[6].rooted, False)
-        self.assert_(isinstance(trees[6].clade_relation, Tree.CladeRelation))
 
     def test_Clade(self):
         """Test instantiation of Clade objects."""
         # ENH: check node_id, width (float) -- need an example
-        trees = list(PhyloXML.parse(EX_PHYLO))
-        clade_ab, clade_c = trees[6].clade.clades
+        tree = list(PhyloXML.parse(EX_PHYLO))[6]
+        clade_ab, clade_c = tree.clade.clades
         clade_a, clade_b = clade_ab.clades
         for clade, id_source, name, blen in izip(
                 (clade_ab, clade_a, clade_b, clade_c),
@@ -286,17 +285,9 @@ class TreeTests(unittest.TestCase):
                 ('AB', 'A', 'B', 'C'),
                 (0.06, 0.102, 0.23, 0.4)):
             self.assert_(isinstance(clade, Tree.Clade))
-            self.assertEquals(clade.id_source, id_source)
-            self.assertEquals(clade.name, name)
+            self.assertEqual(clade.id_source, id_source)
+            self.assertEqual(clade.name, name)
             self.assertAlmostEqual(clade.branch_length, blen)
-
-    def test_Accession(self):
-        """Test instantiation of Accession objects."""
-        pass
-
-    def test_Annotation(self):
-        """Test instantiation of Annotation objects."""
-        pass
 
     # BinaryCharacterList -- not implemented
     # BinaryCharacters -- not implemented
@@ -304,23 +295,96 @@ class TreeTests(unittest.TestCase):
 
     def test_CladeRelation(self):
         """Test instantiation of CladeRelation objects."""
-        pass
+        tree = list(PhyloXML.parse(EX_PHYLO))[6]
+        crel = tree.clade_relations[0]
+        self.assert_(isinstance(crel, Tree.CladeRelation))
+        self.assertEqual(crel.id_ref_0, 'b')
+        self.assertEqual(crel.id_ref_1, 'c')
+        self.assertEqual(crel.type, 'network_connection')
 
     def test_Confidence(self):
         """Test instantiation of Confidence objects."""
-        pass
+        tree = PhyloXML.parse(EX_BCL2).next()
+        conf = tree.clade.clades[0].confidences[0]
+        self.assert_(isinstance(conf, Tree.Confidence))
+        self.assertEqual(conf.type, 'bootstrap')
+        self.assertAlmostEqual(conf.value, 33.0)
 
     def test_Date(self):
         """Test instantiation of Date objects."""
-        pass
+        tree = list(PhyloXML.parse(EX_PHYLO))[11]
+        silurian = tree.clade.clades[0].clades[0].date
+        devonian = tree.clade.clades[0].clades[1].date
+        ediacaran = tree.clade.clades[1].date
+        for date, rang, desc, val in izip(
+                (silurian, devonian, ediacaran),
+                (10, 20, 30),
+                ('Silurian', 'Devionian', 'Ediacaran'),
+                (425, 320, 600)):
+            self.assert_(isinstance(date, Tree.Date))
+            self.assertEqual(date.unit, 'mya')
+            self.assertAlmostEqual(date.range, rang)
+            self.assertEqual(date.desc, desc)
+            self.assertAlmostEqual(date.value, val)
 
     def test_Distribution(self):
-        """Test instantiation of Distribution objects."""
-        pass
+        """Test instantiation of Distribution objects.
+
+        Also checks Point type and safe Unicode handling (?).
+        """
+        tree = list(PhyloXML.parse(EX_PHYLO))[10]
+        hirschweg = tree.clade.clades[0].clades[0].distributions[0]
+        nagoya = tree.clade.clades[0].clades[1].distributions[0]
+        eth_zurich = tree.clade.clades[0].clades[2].distributions[0]
+        san_diego = tree.clade.clades[1].distributions[0]
+        for dist, desc, lat, long, alt in izip(
+                (hirschweg, nagoya, eth_zurich, san_diego),
+                ('Hirschweg, Winterthur, Switzerland',
+                    'Nagoya, Aichi, Japan',
+                    'ETH Z\xc3rich',
+                    'San Diego'),
+                (47.481277, 35.155904, 47.376334, 32.880933),
+                (8.769303, 136.915863, 8.548108, -117.217543),
+                (472, 10, 452, 104)):
+            self.assert_(isinstance(dist, Tree.Distribution))
+            self.assertEqual(dist.desc, desc)
+            point = dist.points[0]
+            self.assert_(isinstance(point, Tree.Point))
+            self.assertEqual(point.geodetic_datum, 'WGS84')
+            self.assertEqual(point.lat, lat)
+            self.assertEqual(point.long, long)
+            self.assertEqual(point.alt, alt)
 
     def test_DomainArchitecture(self):
-        """Test instantiation of DomainArchitecture objects."""
-        pass
+        """Test instantiation of DomainArchitecture objects.
+
+        Also checks ProteinDomain type.
+        """
+        tree = PhyloXML.parse(EX_APAF).next()
+        clade = tree.clade.clades[0].clades[0] \
+                .clades[0].clades[0].clades[0].clades[0] \
+                .clades[0].clades[0].clades[0].clades[0]
+        darch = clade.sequences[0].domain_architecture
+        self.assert_(isinstance(darch, Tree.DomainArchitecture))
+        self.assertEqual(darch.length, 1249)
+        for domain, data in izip(darch.domains, (
+            dict(start=6,   end=90,  confidence="7.0E-26", value='CARD'),
+            dict(start=109, end=414, confidence="7.2E-117", value='NB-ARC'),
+            dict(start=605, end=643, confidence="2.4E-6", value='WD40'),
+            dict(start=647, end=685, confidence="1.1E-12", value='WD40'),
+            dict(start=689, end=729, confidence="2.4E-7", value='WD40'),
+            dict(start=733, end=771, confidence="4.7E-14", value='WD40'),
+            dict(start=872, end=910, confidence="2.5E-8", value='WD40'),
+            dict(start=993, end=1031, confidence="4.6E-6", value='WD40'),
+            dict(start=1075, end=1113, confidence="6.3E-7", value='WD40'),
+            dict(start=1117, end=1155, confidence="1.4E-7", value='WD40'),
+            dict(start=1168, end=1204, confidence="0.3", value='WD40'),
+            )):
+            self.assert_(isinstance(domain, Tree.ProteinDomain))
+            self.assertEqual(domain.start, data['start'])
+            self.assertEqual(domain.end, data['end'])
+            self.assertAlmostEqual(domain.confidence, data['confidence'])
+            self.assertEqual(domain.value, data['value'])
 
     def test_Events(self):
         """Test instantiation of Events objects."""
@@ -356,7 +420,12 @@ class TreeTests(unittest.TestCase):
 
     def test_Uri(self):
         """Test instantiation of Uri objects."""
-        pass
+        tree = list(PhyloXML.parse(EX_PHYLO))[9]
+        uri = tree.clade.taxonomies[0].uri
+        self.assert_(isinstance(uri, Tree.Uri))
+        self.assertEqual(uri.desc, 'EMBL REPTILE DATABASE')
+        self.assertEqual(uri.value,
+                'http://www.embl-heidelberg.de/~uetz/families/Varanidae.html')
 
 
 # ---------------------------------------------------------
