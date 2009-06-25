@@ -15,17 +15,9 @@ from Bio.SeqRecord import SeqRecord
 
 class PhyloElement(object):
     """Base class for all PhyloXML objects."""
-    def __init__(self, attrib=None, **kwargs):
+    def __init__(self, **kwargs):
         """Set all keyword arguments as instance attributes.
-
-        Also sets each key-value pair in 'attrib' as an attribute if the value
-        of the pair is not None. This drops optional attributes that don't
-        deserve a placeholder in the object instance.
         """
-        if attrib is not None:
-            self.__dict__.update((key, val)
-                    for key, val in attrib.iteritems()
-                    if val is not None)
         self.__dict__.update(kwargs)
 
 
@@ -107,16 +99,16 @@ class Phylogeny(PhyloElement):
             properties=None, other=None,
             ):
         assert isinstance(rooted, bool)
-        PhyloElement.__init__(self, {'rerootable': rerootable,
-            'branch_length_unit': branch_length_unit, 'type': type},
-            rooted=rooted, name=name, id=id, description=description,
-            date=date, clade=clade,
-            confidences=confidences or [],
-            clade_relations=clade_relations or [],
-            sequence_relations=sequence_relations or [],
-            properties=properties or [],
-            other=other or [],
-            )
+        PhyloElement.__init__(self, rerootable=rerootable,
+                branch_length_unit=branch_length_unit, type=type,
+                rooted=rooted, name=name, id=id, description=description,
+                date=date, clade=clade,
+                confidences=confidences or [],
+                clade_relations=clade_relations or [],
+                sequence_relations=sequence_relations or [],
+                properties=properties or [],
+                other=other or [],
+                )
 
     # def __iter__(self):
     #     """Iterate through the clades (branches) within this phylogeny."""
@@ -205,19 +197,19 @@ class Clade(PhyloElement):
             distributions=None, references=None, properties=None, clades=None,
             other=None,
             ):
-        PhyloElement.__init__(self, {'id_source': id_source},
-            name=name, branch_length=branch_length, width=width, color=color,
-            node_id=node_id, events=events, binary_characters=binary_characters,
-            date=date,
-            confidences=confidences or [],
-            taxonomies=taxonomies or [],
-            sequences=sequences or [],
-            distributions=distributions or [],
-            references=references or [],
-            properties=properties or [],
-            clades=clades or [],
-            other=other or [],
-            )
+        PhyloElement.__init__(self, id_source=id_source, name=name,
+                branch_length=branch_length, width=width, color=color,
+                node_id=node_id, events=events,
+                binary_characters=binary_characters, date=date,
+                confidences=confidences or [],
+                taxonomies=taxonomies or [],
+                sequences=sequences or [],
+                distributions=distributions or [],
+                references=references or [],
+                properties=properties or [],
+                clades=clades or [],
+                other=other or [],
+                )
 
     def __iter__(self):
         """Iterate through the clades (sub-nodes) within this clade."""
@@ -270,11 +262,9 @@ class Annotation(PhyloElement):
             desc=None, confidence=None, uri=None,
             # Collection
             properties=None):
-        PhyloElement.__init__(self, {'ref': ref, 'source': source, 'evidence':
-            evidence, 'type': type},
-            desc=desc, confidence=confidence, uri=uri,
-            # Collection
-            properties=properties or [])
+        PhyloElement.__init__(self, ref=ref, source=source, evidence=evidence,
+                type=type, desc=desc, confidence=confidence, uri=uri,
+                properties=properties or [])
 
 
 class BinaryCharacterList(PhyloElement):
@@ -333,9 +323,8 @@ class CladeRelation(PhyloElement):
     """
     def __init__(self, type, id_ref_0, id_ref_1,
             distance=None, confidence=None):
-        PhyloElement.__init__(self, {'distance': distance},
-                type=type, id_ref_0=id_ref_0, id_ref_1=id_ref_1,
-                confidence=confidence)
+        PhyloElement.__init__(self, distance=distance, type=type,
+                id_ref_0=id_ref_0, id_ref_1=id_ref_1, confidence=confidence)
 
 
 class Confidence(PhyloElement):
@@ -405,7 +394,7 @@ class Id(PhyloElement):
     Allows to indicate the type (or source) of an identifier. 
     """
     def __init__(self, value, type=None):
-        PhyloElement.__init__(self, {'type': type}, value=value)
+        PhyloElement.__init__(self, type=type, value=value)
 
 
 class Point(PhyloElement):
@@ -453,8 +442,8 @@ class Property(PhyloElement):
     """
     def __init__(self, value, ref, applies_to, datatype,
             unit=None, id_ref=None):
-        PhyloElement.__init__(self, {'unit': unit, 'id_ref': id_ref},
-                value=value, ref=ref, applies_to=applies_to, datatype=datatype)
+        PhyloElement.__init__(self, unit=unit, id_ref=id_ref, value=value,
+                ref=ref, applies_to=applies_to, datatype=datatype)
 
 
 class ProteinDomain(PhyloElement):
@@ -525,13 +514,13 @@ class Sequence(PhyloElement):
             # Collections
             annotations=None, other=None,
             ):
-        PhyloElement.__init__(self, {'type': type, 'id_ref': id_ref,
-            'id_source': id_source},
-            symbol=symbol, accession=accession, name=name, location=location,
-            mol_seq=mol_seq, uri=uri, domain_architecture=domain_architecture,
-            annotations=annotations or [],
-            other=other or [],
-            )
+        PhyloElement.__init__(self, type=type, id_ref=id_ref,
+                id_source=id_source, symbol=symbol, accession=accession,
+                name=name, location=location, mol_seq=mol_seq, uri=uri,
+                domain_architecture=domain_architecture,
+                annotations=annotations or [],
+                other=other or [],
+                )
 
     @classmethod
     def from_seqrecord(cls, record):
@@ -620,9 +609,8 @@ class SequenceRelation(PhyloElement):
     """
     def __init__(self, type, id_ref_0, id_ref_1,
             distance=None, confidence=None):
-        PhyloElement.__init__(self, {'distance': distance},
-                type=type, id_ref_0=id_ref_0, id_ref_1=id_ref_1,
-                confidence=confidence)
+        PhyloElement.__init__(self, distance=distance, type=type,
+                id_ref_0=id_ref_0, id_ref_1=id_ref_1, confidence=confidence)
 
 
 class Taxonomy(PhyloElement):
@@ -654,9 +642,8 @@ class Taxonomy(PhyloElement):
             # Collections
             common_names=None, other=None,
             ):
-        PhyloElement.__init__(self, {'type': type, 'id_source': id_source},
-                id=id, code=code, scientific_name=scientific_name, rank=rank,
-                uri=uri,
+        PhyloElement.__init__(self, id_source=id_source, id=id, code=code,
+                scientific_name=scientific_name, rank=rank, uri=uri,
                 common_names=common_names or [],
                 other=other or [],
                 )
@@ -670,7 +657,7 @@ class Uri(PhyloElement):
     might be 'image of a California sea hare').
     """
     def __init__(self, value, desc=None, type=None):
-        PhyloElement.__init__(self, {'desc': desc, 'type': type}, value=value)
+        PhyloElement.__init__(self, value=value, desc=desc, type=type)
 
 
 # Simple types
