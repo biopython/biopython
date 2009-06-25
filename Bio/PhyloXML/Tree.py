@@ -468,11 +468,11 @@ class ProteinDomain(PhyloElement):
     """
     # TODO: confirm that 'start' counts from 1, not 0
     def __init__(self, value, start, end, confidence=None, id=None):
-        PhyloElement.__init__(self, {'confidence': confidence, 'id': id},
-                value=value, start=start, end=end)
+        PhyloElement.__init__(self, value=value, start=start, end=end,
+                confidence=confidence, id=id)
 
     @classmethod
-    def from_seqfeature(cls):
+    def from_seqfeature(cls, feat):
         return ProteinDomain(feat.id,
                 feat.location.nofuzzy_start + 1,
                 feat.location.nofuzzy_end,
@@ -480,7 +480,7 @@ class ProteinDomain(PhyloElement):
 
     def to_seqfeature(self):
         feat = SeqFeature(location=FeatureLocation(self.start, self.end),
-                          id=self.id)
+                          id=self.value)
         if hasattr(self, 'confidence'):
             feat.qualifiers['confidence'] = self.confidence
         return feat

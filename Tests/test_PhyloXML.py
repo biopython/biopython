@@ -63,10 +63,8 @@ class UtilTests(unittest.TestCase):
                 (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA),
                     # unzip(EX_METAZOA), unzip(EX_NCBI),
                     ),
-                # (60, 65, 114, 113, 116, 119),
-                (620, 1047, 241, 24311, 322367, 972830),
-                # (98, 106, 184, 185, 190, 195),
-                (1239, 2093, 477, 48621, 644733, 1945659),
+                (387, 748, 136, 16208, 214912, 648554),
+                (773, 1495, 267, 32415, 429823, 1297107),
                 ):
             handle = PhyloXML.read(source)
             output = StringIO()
@@ -228,9 +226,6 @@ class ParseTests(unittest.TestCase):
             )
 
 
-# ---------------------------------------------------------
-# Tree tests
-
 class TreeTests(unittest.TestCase):
     """Tests for instantiation and attributes of each complex type."""
     # NB: also test check_str() regexps wherever they're used
@@ -319,7 +314,7 @@ class TreeTests(unittest.TestCase):
         for date, rang, desc, val in izip(
                 (silurian, devonian, ediacaran),
                 (10, 20, 30),
-                ('Silurian', 'Devionian', 'Ediacaran'),
+                ('Silurian', 'Devonian', 'Ediacaran'),
                 (425, 320, 600)):
             self.assert_(isinstance(date, Tree.Date))
             self.assertEqual(date.unit, 'mya')
@@ -341,7 +336,7 @@ class TreeTests(unittest.TestCase):
                 (hirschweg, nagoya, eth_zurich, san_diego),
                 ('Hirschweg, Winterthur, Switzerland',
                     'Nagoya, Aichi, Japan',
-                    'ETH Z\xc3rich',
+                    u'ETH Z\xfcrich',
                     'San Diego'),
                 (47.481277, 35.155904, 47.376334, 32.880933),
                 (8.769303, 136.915863, 8.548108, -117.217543),
@@ -367,24 +362,18 @@ class TreeTests(unittest.TestCase):
         darch = clade.sequences[0].domain_architecture
         self.assert_(isinstance(darch, Tree.DomainArchitecture))
         self.assertEqual(darch.length, 1249)
-        for domain, data in izip(darch.domains, (
-            dict(start=6,   end=90,  confidence="7.0E-26", value='CARD'),
-            dict(start=109, end=414, confidence="7.2E-117", value='NB-ARC'),
-            dict(start=605, end=643, confidence="2.4E-6", value='WD40'),
-            dict(start=647, end=685, confidence="1.1E-12", value='WD40'),
-            dict(start=689, end=729, confidence="2.4E-7", value='WD40'),
-            dict(start=733, end=771, confidence="4.7E-14", value='WD40'),
-            dict(start=872, end=910, confidence="2.5E-8", value='WD40'),
-            dict(start=993, end=1031, confidence="4.6E-6", value='WD40'),
-            dict(start=1075, end=1113, confidence="6.3E-7", value='WD40'),
-            dict(start=1117, end=1155, confidence="1.4E-7", value='WD40'),
-            dict(start=1168, end=1204, confidence="0.3", value='WD40'),
-            )):
+        for domain, start, end, conf, value in izip(darch.domains,
+                (6, 109, 605, 647, 689, 733, 872, 993, 1075, 1117, 1168),
+                (90, 414, 643, 685, 729, 771, 910, 1031, 1113, 1155, 1204),
+                (7.0e-26, 7.2e-117, 2.4e-6, 1.1e-12, 2.4e-7, 4.7e-14, 2.5e-8,
+                    4.6e-6, 6.3e-7, 1.4e-7, 0.3),
+                ('CARD', 'NB-ARC', 'WD40', 'WD40', 'WD40', 'WD40', 'WD40',
+                    'WD40', 'WD40', 'WD40', 'WD40')):
             self.assert_(isinstance(domain, Tree.ProteinDomain))
-            self.assertEqual(domain.start, data['start'])
-            self.assertEqual(domain.end, data['end'])
-            self.assertAlmostEqual(domain.confidence, data['confidence'])
-            self.assertEqual(domain.value, data['value'])
+            self.assertEqual(domain.start, start)
+            self.assertEqual(domain.end, end)
+            self.assertAlmostEqual(domain.confidence, conf)
+            self.assertEqual(domain.value, value)
 
     def test_Events(self):
         """Test instantiation of Events objects."""

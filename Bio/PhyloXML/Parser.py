@@ -63,14 +63,23 @@ def split_namespace(tag):
     return (parts[0][1:], parts[1])
 
 def get_child_as(parent, tag, construct):
-    child = parent.find(tag)
+    child = parent.find("{%s}%s" % (NAMESPACES['phy'], tag))
     if child is not None:
         return construct(child)
 
-def get_child_text(elem, tag, construct=str):
-    child = elem.find(tag)
+def get_child_text(parent, tag, construct=unicode):
+    child = parent.find("{%s}%s" % (NAMESPACES['phy'], tag))
     if child is not None:
         return child.text and construct(child.text.strip()) or None
+
+def get_children_as(parent, tag, construct):
+    return [construct(child) for child in 
+            parent.findall("{%s}%s" % (NAMESPACES['phy'], tag))]
+
+def get_children_text(parent, tag, construct=unicode):
+    return [construct(child.text.strip()) for child in 
+            parent.findall("{%s}%s" % (NAMESPACES['phy'], tag))
+            if child.text]
 
 # ---------------------------------------------------------
 # Utilities
@@ -247,7 +256,7 @@ class Parser(object):
                 'sequence_relation': 'sequence_relations',
                 }
         for event, elem in context:
-            tag = local(elem.tag)
+            namespace, tag = split_namespace(elem.tag)
             if event == 'start' and tag == 'clade':
                 assert phylogeny.clade is None, \
                         "Phylogeny object should only have 1 clade"
@@ -269,9 +278,12 @@ class Parser(object):
                 elif tag == 'description':
                     phylogeny.description = elem.text and elem.text.strip()
                 # Unknown tags
-                else:
+                elif namespace != NAMESPACES['phy']:
                     phylogeny.other.append(cls.to_other(elem))
-                elem.clear()
+                    parent.clear()
+                else:
+                    # NB: This shouldn't happen in valid files
+                    raise PhyloXMLError('Misidentified tag: ' + tag)
         return phylogeny
 
     @classmethod
@@ -279,6 +291,7 @@ class Parser(object):
         if 'branch_length' in parent.keys():
             parent.set('branch_length', float(parent.get('branch_length')))
         clade = Tree.Clade(**parent.attrib)
+        simple_types = ['branch_length', 'name', 'node_id', 'width']
         complex_types = ['color', 'events', 'binary_characters', 'date']
         list_types = {
                 # XML tag, plural attribute
@@ -289,16 +302,24 @@ class Parser(object):
                 'reference':    'references',
                 'property':     'properties',
                 }
+        # NB: Only evaluate nodes at the current level
+        tracked_tags = set(simple_types + complex_types + list_types.keys())
+        last_tag = None
         for event, elem in context:
-            tag = local(elem.tag)
-            if event == 'start' and tag == 'clade':
-                subclade = Parser._parse_clade(elem, context)
-                clade.clades.append(subclade)
-                continue
+            namespace, tag = split_namespace(elem.tag)
+            if event == 'start':
+                if tag == 'clade':
+                    subclade = Parser._parse_clade(elem, context)
+                    clade.clades.append(subclade)
+                    continue
+                if tag in tracked_tags:
+                    last_tag = tag
             if event == 'end':
                 if tag == 'clade':
-                    parent.clear()
+                    elem.clear()
                     break
+                if tag != last_tag or tag not in tracked_tags:
+                    continue
                 # Handle the other non-recursive children
                 if tag in complex_types:
                     setattr(clade, tag, getattr(cls, 'to_'+tag)(elem))
@@ -306,25 +327,27 @@ class Parser(object):
                     getattr(clade, list_types[tag]).append(
                             getattr(cls, 'to_'+tag)(elem))
                 # Simple types
-                elif tag == 'branch_length':
-                    # NB: possible collision with the attribute
-                    if hasattr(clade, 'branch_length') \
-                            and clade.branch_length is not None:
-                        warnings.warn(
-                                'Attribute branch_length was already set for '
-                                'this Clade; overwriting the previous value.',
-                                PhyloXMLWarning)
-                    clade.branch_length = float(elem.text.strip())
-                elif tag == 'name':
-                    clade.name = elem.text and elem.text.strip()
-                elif tag == 'node_id':
-                    clade.node_id = elem.text and elem.text.strip()
-                elif tag == 'width':
-                    clade.width = float(elem.text)
+                elif tag in simple_types:
+                    if tag == 'branch_length':
+                        # NB: possible collision with the attribute
+                        if hasattr(clade, 'branch_length') \
+                                and clade.branch_length is not None:
+                            warnings.warn(
+                                    'Attribute branch_length was already set for '
+                                    'this Clade; overwriting the previous value.',
+                                    PhyloXMLWarning)
+                        clade.branch_length = float(elem.text.strip())
+                    elif tag == 'width':
+                        clade.width = float(elem.text)
+                    else: # name or node_id
+                        setattr(clade, tag, elem.text and elem.text.strip())
                 # Unknown tags
-                else:
+                elif namespace != NAMESPACES['phy']:
                     clade.other.append(cls.to_other(elem))
-                elem.clear()
+                    elem.clear()
+                else:
+                    # NB: This shouldn't happen in valid files
+                    raise PhyloXMLError('Misidentified tag: ' + tag)
         return clade
 
     @classmethod
@@ -345,8 +368,7 @@ class Parser(object):
         return Tree.Annotation(
                 desc=get_child_text(elem, 'desc'),
                 confidence=get_child_as(elem, 'confidence', cls.to_confidence),
-                properties=[cls.to_property(e)
-                            for e in elem.findall('property')],
+                properties=get_children_as(elem, 'property', cls.to_property),
                 uri=get_child_as(elem, 'uri', cls.to_uri),
                 **elem.attrib)
 
@@ -380,31 +402,29 @@ class Parser(object):
                 value=get_child_text(elem, 'value', float),
                 desc=get_child_text(elem, 'desc'),
                 unit=elem.get('unit'),
-                range=('range' in elem) and float(elem.get('range')) or None)
+                range=(('range' in elem.keys())
+                       and float(elem.get('range')) or None))
 
     @classmethod
     def to_distribution(cls, elem):
         return Tree.Distribution(
                 desc=get_child_text(elem, 'desc'),
-                points=[cls.to_point(e)
-                        for e in elem.findall('point')],
-                polygons=[cls.to_polygon(e)
-                          for e in elem.findall('polygon')])
+                points=get_children_as(elem, 'point', cls.to_point),
+                polygons=get_children_as(elem, 'polygon', cls.to_polygon))
 
     @classmethod
     def to_domain(cls, elem):
         return Tree.ProteinDomain(elem.text.strip(),
                 int(elem.get('from')), int(elem.get('to')),
-                confidence=(('confidence' in elem)
-                            and float(elem.get('confidence'))
-                            or None),
+                confidence=(('confidence' in elem.keys())
+                            and float(elem.get('confidence')) or None),
                 id=elem.get('id'))
 
     @classmethod
     def to_domain_architecture(cls, elem):
         return Tree.DomainArchitecture(
                 length=int(elem.get('length')),
-                domains=[cls.to_domain(e) for e in elem.findall('domain')])
+                domains=get_children_as(elem, 'domain', cls.to_domain))
 
     @classmethod
     def to_events(cls, elem):
@@ -466,8 +486,8 @@ class Parser(object):
                 uri=get_child_as(elem, 'uri', cls.to_uri),
                 domain_architecture=get_child_as(elem, 'domain_architecture',
                                                  cls.to_domain_architecture),
-                annotations=[cls.to_annotation(e)
-                             for e in elem.findall('annotation')],
+                annotations=get_children_as(elem, 'annotation',
+                    cls.to_annotation),
                 # TODO: handle "other"
                 other=[],
                 **elem.attrib)
@@ -486,7 +506,7 @@ class Parser(object):
                 code=check_str(get_child_text(elem, 'code'),
                                r'[a-zA-Z0-9_]{2,10}'),
                 scientific_name=get_child_text(elem, 'scientific_name'),
-                common_names=[e.text for e in elem.findall('common_name')],
+                common_names=get_children_text(elem, 'common_name'),
                 rank=check_str(get_child_text(elem, 'rank'),
                                r'(%s)' % '|'.join((
                                    'domain', 'kingdom', 'subkingdom', 'branch',
