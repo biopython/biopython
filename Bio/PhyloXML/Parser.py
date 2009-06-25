@@ -110,7 +110,7 @@ def dict_str2bool(dct, keys):
 
 # ---------------------------------------------------------
 
-def read(handle):
+def read(file):
     """Parse a phyloXML file or stream and build a tree of Biopython objects.
 
     The children of the root node are phylogenies and possibly other arbitrary
@@ -124,7 +124,7 @@ def read(handle):
     bounded size.
     """
     # get an iterable context for XML parsing events
-    context = iter(ElementTree.iterparse(handle, events=('start', 'end')))
+    context = iter(ElementTree.iterparse(file, events=('start', 'end')))
     event, root = context.next()
     phyloxml = Tree.Phyloxml(dict((local(key), val)
                              for key, val in root.items()))
@@ -150,13 +150,13 @@ def read(handle):
     return phyloxml
 
 
-def parse(handle):
+def parse(file):
     """Iterate over the phylogenetic trees in a phyloXML file.
 
     This ignores any additional data stored at the top level, but may be more
     memory-efficient than the read() function.
     """
-    context = iter(ElementTree.iterparse(handle, events=('start', 'end')))
+    context = iter(ElementTree.iterparse(file, events=('start', 'end')))
     event, root = context.next()
     for event, elem in context:
         if event == 'start' and local(elem.tag) == 'phylogeny':

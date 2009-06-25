@@ -66,14 +66,14 @@ class UtilTests(unittest.TestCase):
                 (387, 748, 136, 16208, 214912, 648554),
                 (773, 1495, 267, 32415, 429823, 1297107),
                 ):
-            handle = PhyloXML.read(source)
+            phx = PhyloXML.read(source)
             output = StringIO()
-            PhyloXML.pretty_print(handle, output=output)
+            PhyloXML.pretty_print(phx, output)
             output.reset()
             self.assertEquals(len(output.readlines()), count)
             # print "Obj:", source, len(output.readlines()), 'eq?', count
             output = StringIO()
-            PhyloXML.pretty_print(handle, show_all=True, output=output)
+            PhyloXML.pretty_print(phx, output, show_all=True)
             output.reset()
             self.assertEquals(len(output.readlines()), count_all)
             # print "All:", source, len(output.readlines()), 'eq?', count_all

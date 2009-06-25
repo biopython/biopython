@@ -13,28 +13,28 @@ import Tree
 from Parser import ElementTree, read
 
 
-def dump_tags(handle, output=sys.stdout):
+def dump_tags(handle, file=sys.stdout):
     """Extract tags from an XML document, writing them to stdout by default.
 
     This utility is meant for testing and debugging.
     """
     for event, elem in ElementTree.iterparse(handle, events=('start', 'end')):
         if event == 'start':
-            output.write(elem.tag + '\n')
+            file.write(elem.tag + '\n')
         else:
             elem.clear()
 
 
-def pretty_print(source, indent=0, show_all=False, output=sys.stdout):
+def pretty_print(source, file=sys.stdout, show_all=False, indent=0):
     """Print a summary of the structure of a PhyloXML file.
 
     With the show_all option, also prints the primitive (native Python instead
     of PhyloXML) objects in the object tree.
     """
-    # Closing over output
+    # Closing over file
     def print_indented(text, indent):
-        """Write an indented string of text to output."""
-        output.write("%s%s\n" %('\t'*indent, text))
+        """Write an indented string of text to file."""
+        file.write("%s%s\n" %('\t'*indent, text))
 
     # Closing over show_all
     def print_phylo(obj, indent):
