@@ -6,6 +6,7 @@
 """Classes corresponding to phyloXML elements.
 
 """
+import re
 
 from Bio import Alphabet
 from Bio.Seq import Seq
@@ -382,6 +383,10 @@ class DomainArchitecture(PhyloElement):
 
 class Events(PhyloElement):
     """Events at the root node of a clade (e.g. one gene duplication)."""
+    re_type = re.compile(r'(%s)' % '|'.join(
+                ('transfer', 'fusion', 'speciation_or_duplication', 'other',
+                    'mixed', 'unassigned')))
+
     def __init__(self, type=None, duplications=None, speciations=None,
             losses=None, confidence=None):
         PhyloElement.__init__(self, type=type, duplications=duplications,
@@ -505,6 +510,9 @@ class Sequence(PhyloElement):
         domain_architecture
         other []
     """
+    re_symbol = re.compile(r'\S{1,10}')
+    re_mol_seq = re.compile(r'[a-zA-Z\.\-\?\*_]+')
+
     def __init__(self, 
             # Attributes
             type=None, id_ref=None, id_source=None,
@@ -634,6 +642,25 @@ class Taxonomy(PhyloElement):
         uri
         other []
     """
+    re_code = re.compile(r'[a-zA-Z0-9_]{2,10}')
+    re_rank = re.compile(r'(%s)' % '|'.join((
+                                   'domain', 'kingdom', 'subkingdom', 'branch',
+                                   'infrakingdom', 'superphylum', 'phylum',
+                                   'subphylum', 'infraphylum', 'microphylum',
+                                   'superdivision', 'division', 'subdivision',
+                                   'infradivision', 'superclass', 'class',
+                                   'subclass', 'infraclass', 'superlegion',
+                                   'legion', 'sublegion', 'infralegion',
+                                   'supercohort', 'cohort', 'subcohort',
+                                   'infracohort', 'superorder', 'order',
+                                   'suborder', 'superfamily', 'family',
+                                   'subfamily', 'supertribe', 'tribe',
+                                   'subtribe', 'infratribe', 'genus',
+                                   'subgenus', 'superspecies', 'species',
+                                   'subspecies', 'variety', 'subvariety',
+                                   'form', 'subform', 'cultivar', 'unknown',
+                                   'other')))
+
     def __init__(self, 
             # Attributes
             id_source=None,

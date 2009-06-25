@@ -88,9 +88,9 @@ import re
 
 def check_str(text, regexp):
     """Compare a string to a regexp, and warn if there's no match."""
-    if text is not None and re.match(regexp, text) is None:
-        warnings.warn("String %s doesn't match regexp %s"
-                        % (text, regexp), PhyloXMLWarning)
+    if text is not None and regexp.match(text) is None:
+        warnings.warn("String %s doesn't match the given regexp" % text,
+                      PhyloXMLWarning)
     return text
 
 def str2bool(text):
@@ -431,11 +431,7 @@ class Parser(object):
     def to_events(cls, elem):
         return Tree.Events(
                 type=check_str(get_child_text(elem, 'type'),
-                               r'(%s)' % '|'.join((
-                                   'transfer', 'fusion',
-                                   'speciation_or_duplication', 'other',
-                                   'mixed', 'unassigned',
-                                   ))),
+                               Tree.Events.re_type),
                 duplications=get_child_text(elem, 'duplications', int),
                 speciations=get_child_text(elem, 'speciations', int),
                 losses=get_child_text(elem, 'losses', int),
@@ -478,12 +474,13 @@ class Parser(object):
     @classmethod
     def to_sequence(cls, elem):
         return Tree.Sequence(
-                symbol=check_str(get_child_text(elem, 'symbol'), r'\S{1,10}'),
+                symbol=check_str(get_child_text(elem, 'symbol'),
+                                 Tree.Sequence.re_symbol),
                 accession=get_child_as(elem, 'accession', cls.to_accession),
                 name=get_child_text(elem, 'name'),
                 location=get_child_text(elem, 'location'),
                 mol_seq=check_str(get_child_text(elem, 'mol_seq'),
-                                  r'[a-zA-Z\.\-\?\*_]+'),
+                                  Tree.Sequence.re_mol_seq),
                 uri=get_child_as(elem, 'uri', cls.to_uri),
                 domain_architecture=get_child_as(elem, 'domain_architecture',
                                                  cls.to_domain_architecture),
@@ -505,27 +502,11 @@ class Parser(object):
         return Tree.Taxonomy(
                 id=get_child_as(elem, 'id', cls.to_id),
                 code=check_str(get_child_text(elem, 'code'),
-                               r'[a-zA-Z0-9_]{2,10}'),
+                               Tree.Taxonomy.re_code),
                 scientific_name=get_child_text(elem, 'scientific_name'),
                 common_names=get_children_text(elem, 'common_name'),
                 rank=check_str(get_child_text(elem, 'rank'),
-                               r'(%s)' % '|'.join((
-                                   'domain', 'kingdom', 'subkingdom', 'branch',
-                                   'infrakingdom', 'superphylum', 'phylum',
-                                   'subphylum', 'infraphylum', 'microphylum',
-                                   'superdivision', 'division', 'subdivision',
-                                   'infradivision', 'superclass', 'class',
-                                   'subclass', 'infraclass', 'superlegion',
-                                   'legion', 'sublegion', 'infralegion',
-                                   'supercohort', 'cohort', 'subcohort',
-                                   'infracohort', 'superorder', 'order',
-                                   'suborder', 'superfamily', 'family',
-                                   'subfamily', 'supertribe', 'tribe',
-                                   'subtribe', 'infratribe', 'genus',
-                                   'subgenus', 'superspecies', 'species',
-                                   'subspecies', 'variety', 'subvariety',
-                                   'form', 'subform', 'cultivar', 'unknown',
-                                   'other'))),
+                               Tree.Taxonomy.re_rank),
                 uri=get_child_as(elem, 'uri', cls.to_uri),
                 **elem.attrib)
 
