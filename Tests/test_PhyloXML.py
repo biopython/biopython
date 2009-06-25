@@ -501,6 +501,13 @@ class TreeTests(unittest.TestCase):
 
 
 # ---------------------------------------------------------
+# Serialization tests
+
+class WriterTests(unittest.TestCase):
+    """Tests for serialization of objects to phyloXML format."""
+
+
+# ---------------------------------------------------------
 
 if __name__ == '__main__':
     warnings.simplefilter('ignore')
