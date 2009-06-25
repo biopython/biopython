@@ -28,8 +28,8 @@ except ImportError:
                 except ImportError:
                     from Bio import MissingExternalDependencyError
                     raise MissingExternalDependencyError(
-                            "No ElementTree module was found. " \
-                            "Use Python 2.5+, lxml or elementtree if you " \
+                            "No ElementTree module was found. "
+                            "Use Python 2.5+, lxml or elementtree if you "
                             "want to use Bio.PhyloXML.")
 
 import Tree
@@ -304,7 +304,7 @@ class Parser(object):
                 }
         # NB: Only evaluate nodes at the current level
         tracked_tags = set(simple_types + complex_types + list_types.keys())
-        last_tag = None
+        tag_stack = []
         for event, elem in context:
             namespace, tag = split_namespace(elem.tag)
             if event == 'start':
@@ -313,13 +313,14 @@ class Parser(object):
                     clade.clades.append(subclade)
                     continue
                 if tag in tracked_tags:
-                    last_tag = tag
+                    tag_stack.append(tag)
             if event == 'end':
                 if tag == 'clade':
                     elem.clear()
                     break
-                if tag != last_tag or tag not in tracked_tags:
+                if tag != tag_stack[-1]:
                     continue
+                tag_stack.pop()
                 # Handle the other non-recursive children
                 if tag in complex_types:
                     setattr(clade, tag, getattr(cls, 'to_'+tag)(elem))
@@ -333,9 +334,9 @@ class Parser(object):
                         if hasattr(clade, 'branch_length') \
                                 and clade.branch_length is not None:
                             warnings.warn(
-                                    'Attribute branch_length was already set for '
-                                    'this Clade; overwriting the previous value.',
-                                    PhyloXMLWarning)
+                                    'Attribute branch_length was already set '
+                                    'for this Clade; overwriting the previous '
+                                    'value.', PhyloXMLWarning)
                         clade.branch_length = float(elem.text.strip())
                     elif tag == 'width':
                         clade.width = float(elem.text)
@@ -487,7 +488,7 @@ class Parser(object):
                 domain_architecture=get_child_as(elem, 'domain_architecture',
                                                  cls.to_domain_architecture),
                 annotations=get_children_as(elem, 'annotation',
-                    cls.to_annotation),
+                                            cls.to_annotation),
                 # TODO: handle "other"
                 other=[],
                 **elem.attrib)

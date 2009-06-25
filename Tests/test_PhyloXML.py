@@ -284,6 +284,15 @@ class TreeTests(unittest.TestCase):
             self.assertEqual(clade.name, name)
             self.assertAlmostEqual(clade.branch_length, blen)
 
+    def test_Annotation(self):
+        """Test instantiation of Annotation objects."""
+        tree = list(PhyloXML.parse(EX_PHYLO))[3]
+        ann = tree.clade.clades[1].sequences[0].annotations[0]
+        self.assert_(isinstance(ann, Tree.Annotation))
+        self.assertEqual(ann.desc, 'alcohol dehydrogenase')
+        self.assertAlmostEqual(ann.confidence.value, 0.67)
+        self.assertEqual(ann.confidence.type, 'probability')
+
     # BinaryCharacterList -- not implemented
     # BinaryCharacters -- not implemented
     # BranchColor -- no example
@@ -377,35 +386,109 @@ class TreeTests(unittest.TestCase):
 
     def test_Events(self):
         """Test instantiation of Events objects."""
-        pass
-
-    def test_Point(self):
-        """Test instantiation of Point objects."""
-        pass
+        tree = list(PhyloXML.parse(EX_PHYLO))[4]
+        event_s = tree.clade.events
+        self.assert_(isinstance(event_s, Tree.Events))
+        self.assertEqual(event_s.speciations, 1)
+        event_d = tree.clade.clades[0].events
+        self.assert_(isinstance(event_d, Tree.Events))
+        self.assertEqual(event_d.duplications, 1)
 
     # Polygon -- not implemented
 
     def test_Property(self):
         """Test instantiation of Property objects."""
-        pass
-
-    def test_ProteinDomain(self):
-        """Test instantiation of ProteinDomain objects."""
-        pass
+        tree = list(PhyloXML.parse(EX_PHYLO))[8]
+        for prop, id_ref, value in izip(
+                tree.properties,
+                ('id_a', 'id_b', 'id_c'),
+                ('1200', '2300', '200')):
+            self.assert_(isinstance(prop, Tree.Property))
+            self.assertEqual(prop.id_ref, id_ref)
+            self.assertEqual(prop.datatype, "xsd:integer")
+            self.assertEqual(prop.ref, "NOAA:depth")
+            self.assertEqual(prop.applies_to, "node")
+            self.assertEqual(prop.unit, "METRIC:m" )
+            self.assertEqual(prop.value, value)
 
     # Reference -- not implemented
 
     def test_Sequence(self):
-        """Test instantiation of Sequence objects."""
-        pass
+        """Test instantiation of Sequence objects.
+
+        Also checks Accession and Annotation types.
+        """
+        trees = list(PhyloXML.parse(EX_PHYLO))
+        # Simple element with id_source
+        seq0 = trees[4].clade.clades[1].sequences[0]
+        self.assert_(isinstance(seq0, Tree.Sequence))
+        self.assertEqual(seq0.id_source, 'z')
+        self.assertEqual(seq0.symbol, 'ADHX')
+        self.assertEqual(seq0.accession.source, 'ncbi')
+        self.assertEqual(seq0.accession.value, 'Q17335')
+        self.assertEqual(seq0.name, 'alcohol dehydrogenase')
+        self.assertEqual(seq0.annotations[0].ref, 'InterPro:IPR002085')
+        # More complete elements
+        seq1 = trees[5].clade.clades[0].clades[0].sequences[0]
+        seq2 = trees[5].clade.clades[0].clades[1].sequences[0]
+        seq3 = trees[5].clade.clades[1].sequences[0]
+        for seq, sym, acc, name, mol_seq, ann_refs in izip(
+                (seq1, seq2, seq3),
+                ('ADHX', 'RT4I1', 'ADHB'),
+                ('P81431', 'Q54II4', 'Q04945'),
+                ('Alcohol dehydrogenase class-3',
+                 'Reticulon-4-interacting protein 1 homolog, ' \
+                         'mitochondrial precursor',
+                 'NADH-dependent butanol dehydrogenase B'),
+                ('TDATGKPIKCMAAIAWEAKKPLSIEEVEVAPPKSGEVRIKILHSGVCHTD',
+                 'MKGILLNGYGESLDLLEYKTDLPVPKPIKSQVLIKIHSTSINPLDNVMRK',
+                 'MVDFEYSIPTRIFFGKDKINVLGRELKKYGSKVLIVYGGGSIKRNGIYDK'),
+                (("EC:1.1.1.1", "GO:0004022"),
+                 ("GO:0008270", "GO:0016491"),
+                 ("GO:0046872", "KEGG:Tetrachloroethene degradation")),
+                ):
+            self.assert_(isinstance(seq, Tree.Sequence))
+            self.assertEqual(seq.symbol, sym)
+            self.assertEqual(seq.accession.source, 'UniProtKB')
+            self.assertEqual(seq.accession.value, acc)
+            self.assertEqual(seq.name, name)
+            self.assertEqual(seq.mol_seq, mol_seq)
+            self.assertEqual(seq.annotations[0].ref, ann_refs[0])
+            self.assertEqual(seq.annotations[1].ref, ann_refs[1])
 
     def test_SequenceRelation(self):
         """Test instantiation of SequenceRelation objects."""
-        pass
+        tree = list(PhyloXML.parse(EX_PHYLO))[4]
+        for seqrel, id_ref_0, id_ref_1, type in izip(
+                tree.sequence_relations,
+                ('x', 'x', 'y'), ('y', 'z', 'z'),
+                ('paralogy', 'orthology', 'orthology')):
+            self.assert_(isinstance(seqrel, Tree.SequenceRelation))
+            self.assertEqual(seqrel.id_ref_0, id_ref_0)
+            self.assertEqual(seqrel.id_ref_1, id_ref_1)
+            self.assertEqual(seqrel.type, type)
 
     def test_Taxonomy(self):
-        """Test instantiation of Taxonomy objects."""
-        pass
+        """Test instantiation of Taxonomy objects.,
+
+        Also checks Id type.
+        """
+        trees = list(PhyloXML.parse(EX_PHYLO))
+        # Octopus
+        tax5 = trees[5].clade.clades[0].clades[0].taxonomies[0]
+        self.assert_(isinstance(tax5, Tree.Taxonomy))
+        self.assertEqual(tax5.id.value, '6645')
+        self.assertEqual(tax5.id.type, 'NCBI')
+        self.assertEqual(tax5.code, 'OCTVU')
+        self.assertEqual(tax5.scientific_name, 'Octopus vulgaris')
+        # Nile monitor
+        tax9 = trees[9].clade.clades[0].taxonomies[0]
+        self.assert_(isinstance(tax9, Tree.Taxonomy))
+        self.assertEqual(tax9.id.value, '62046')
+        self.assertEqual(tax9.id.type, 'NCBI')
+        self.assertEqual(tax9.scientific_name, 'Varanus niloticus')
+        self.assertEqual(tax9.common_names[0], 'Nile monitor')
+        self.assertEqual(tax9.rank, 'species')
 
     def test_Uri(self):
         """Test instantiation of Uri objects."""
