@@ -21,6 +21,27 @@ class PhyloElement(object):
         """
         self.__dict__.update(kwargs)
 
+    def __str__(self):
+        """Show the class name and an identifying attribute."""
+        s = self.__class__.__name__
+        if hasattr(self, 'id') and self.id:
+            return '%s %s' % (s, self.id)
+        if hasattr(self, 'value') and self.value:
+            return '%s %s' % (s, self.value)
+        if hasattr(self, 'code') and self.code:
+            return '%s %s' % (s, self.code)
+        if hasattr(self, 'name') and self.name:
+            return '%s %s' % (s, self.name)
+        return s
+
+    def __repr__(self):
+        """Show this object's constructor with its primitive arguments."""
+        s = '%s(%s)' % (self.__class__.__name__,
+                           ', '.join('%s=%s' % (key, val)
+                               for key, val in self.__dict__.iteritems()
+                               if val not in (None, '')
+                               and type(val) in (str, int, float, unicode)))
+        return s.encode('utf-8')
 
 # Core elements
 
@@ -65,9 +86,6 @@ class Other(PhyloElement):
     def __iter__(self):
         """Iterate through the children of this object (if any)."""
         return iter(self.children)
-
-    def __repr__(self):
-        return '<Other %s at %s>' % (self.tag, hex(id(self)))
 
 
 class Phylogeny(PhyloElement):
@@ -232,9 +250,6 @@ class Accession(PhyloElement):
     def __init__(self, value, source):
         self.value = value
         self.source = source
-
-    def __str__(self):
-        return str(self.value)
 
 
 class Annotation(PhyloElement):

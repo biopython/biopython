@@ -50,7 +50,7 @@ class UtilTests(unittest.TestCase):
                 ):
             output = StringIO()
             PhyloXML.dump_tags(source, output)
-            output.reset()
+            output.seek(0)
             self.assertEquals(len(output.readlines()), count)
 
     def test_pretty_print(self):
@@ -59,24 +59,20 @@ class UtilTests(unittest.TestCase):
         The line counts are liable to change whenever the object constructors
         change.
         """
-        for source, count, count_all in izip(
+        for source, count in izip(
                 (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA),
                     # unzip(EX_METAZOA), unzip(EX_NCBI),
                     ),
-                (387, 748, 136, 16208, 214912, 648554),
-                (773, 1495, 267, 32415, 429823, 1297107),
-                ):
+                (387, 748, 165, 16208, 214912, 648554)):
             phx = PhyloXML.read(source)
             output = StringIO()
             PhyloXML.pretty_print(phx, output)
-            output.reset()
+            output.seek(0)
             self.assertEquals(len(output.readlines()), count)
-            # print "Obj:", source, len(output.readlines()), 'eq?', count
             output = StringIO()
             PhyloXML.pretty_print(phx, output, show_all=True)
-            output.reset()
-            self.assertEquals(len(output.readlines()), count_all)
-            # print "All:", source, len(output.readlines()), 'eq?', count_all
+            output.seek(0)
+            self.assertEquals(len(output.readlines()), count)
 
 
 # ---------------------------------------------------------

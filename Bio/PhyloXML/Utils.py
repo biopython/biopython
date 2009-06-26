@@ -31,18 +31,17 @@ def pretty_print(source, file=sys.stdout, show_all=False, indent=0):
     With the show_all option, also prints the primitive (native Python instead
     of PhyloXML) objects in the object tree.
     """
+    show = show_all and repr or str
+
     # Closing over file
     def print_indented(text, indent):
         """Write an indented string of text to file."""
-        file.write("%s%s\n" %('\t'*indent, text))
+        file.write('%s%s\n' % ('\t'*indent, text))
 
-    # Closing over show_all
     def print_phylo(obj, indent):
         """Recursively print a PhyloElement object tree."""
-        print_indented(obj.__class__.__name__, indent)
+        print_indented(show(obj), indent)
         indent += 1
-        if show_all:
-            simple_objs = []
         for attr in obj.__dict__:
             child = getattr(obj, attr)
             if isinstance(child, Tree.Other):
@@ -53,19 +52,10 @@ def pretty_print(source, file=sys.stdout, show_all=False, indent=0):
                 for elem in child:
                     if isinstance(elem, Tree.PhyloElement):
                         print_phylo(elem, indent)
-                    elif show_all:
-                        simple_objs.append(attr)
-            elif show_all:
-                simple_objs.append(attr)
-        if show_all and simple_objs:
-            print_indented(', '.join(simple_objs), indent)
 
     def print_other(obj, indent):
         """Recursively print a tree of Other objects."""
-        if show_all:
-            print_indented("%s -- %s" % (obj, obj.attributes.keys()), indent)
-        else:
-            print_indented(obj, indent)
+        print_indented(show(obj), indent)
         indent += 1
         for child in obj.children:
             if isinstance(child, Tree.Other):
@@ -81,7 +71,7 @@ def pretty_print(source, file=sys.stdout, show_all=False, indent=0):
         phyloxml = source
     else:
         phyloxml = read(source)
-    print_indented(phyloxml.__class__.__name__, indent)
+    print_indented(show(phyloxml), indent)
     indent += 1
     for tree in phyloxml.phylogenies:
         print_phylo(tree, indent)
