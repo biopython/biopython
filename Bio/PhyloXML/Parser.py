@@ -58,9 +58,10 @@ def namespace(tag):
 
 def split_namespace(tag):
     parts = tag.split('}')
-    if len(parts) == 1:
+    try:
+        return (parts[0][1:], parts[1])
+    except:
         return ('', parts[0])
-    return (parts[0][1:], parts[1])
 
 def get_child_as(parent, tag, construct):
     child = parent.find("{%s}%s" % (NAMESPACES['phy'], tag))
