@@ -7,7 +7,7 @@
 
 """
 
-import os.path
+import os
 import unittest
 import warnings
 import zipfile
@@ -240,7 +240,7 @@ class TreeTests(unittest.TestCase):
             self.assert_(isinstance(otr, Tree.Other))
 
     def test_Other(self):
-        """Test instantiation of Other objects."""
+        """Instantiation of Other objects."""
         phx = PhyloXML.read(EX_PHYLO)
         otr = phx.other[0]
         self.assert_(isinstance(otr, Tree.Other))
@@ -255,7 +255,7 @@ class TreeTests(unittest.TestCase):
             self.assertEquals(child.value, value)
 
     def test_Phylogeny(self):
-        """Test instantiation of Phylogeny objects."""
+        """Instantiation of Phylogeny objects."""
         trees = list(PhyloXML.parse(EX_PHYLO))
         # Monitor lizards
         self.assertEquals(trees[9].name, 'monitor lizards')
@@ -269,7 +269,7 @@ class TreeTests(unittest.TestCase):
         self.assertEquals(trees[6].rooted, False)
 
     def test_Clade(self):
-        """Test instantiation of Clade objects."""
+        """Instantiation of Clade objects."""
         # ENH: check node_id, width (float) -- need an example
         tree = list(PhyloXML.parse(EX_PHYLO))[6]
         clade_ab, clade_c = tree.clade.clades
@@ -285,7 +285,7 @@ class TreeTests(unittest.TestCase):
             self.assertAlmostEqual(clade.branch_length, blen)
 
     def test_Annotation(self):
-        """Test instantiation of Annotation objects."""
+        """Instantiation of Annotation objects."""
         tree = list(PhyloXML.parse(EX_PHYLO))[3]
         ann = tree.clade.clades[1].sequences[0].annotations[0]
         self.assert_(isinstance(ann, Tree.Annotation))
@@ -298,7 +298,7 @@ class TreeTests(unittest.TestCase):
     # BranchColor -- no example
 
     def test_CladeRelation(self):
-        """Test instantiation of CladeRelation objects."""
+        """Instantiation of CladeRelation objects."""
         tree = list(PhyloXML.parse(EX_PHYLO))[6]
         crel = tree.clade_relations[0]
         self.assert_(isinstance(crel, Tree.CladeRelation))
@@ -307,7 +307,7 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(crel.type, 'network_connection')
 
     def test_Confidence(self):
-        """Test instantiation of Confidence objects."""
+        """Instantiation of Confidence objects."""
         tree = PhyloXML.parse(EX_BCL2).next()
         conf = tree.clade.clades[0].confidences[0]
         self.assert_(isinstance(conf, Tree.Confidence))
@@ -315,7 +315,7 @@ class TreeTests(unittest.TestCase):
         self.assertAlmostEqual(conf.value, 33.0)
 
     def test_Date(self):
-        """Test instantiation of Date objects."""
+        """Instantiation of Date objects."""
         tree = list(PhyloXML.parse(EX_PHYLO))[11]
         silurian = tree.clade.clades[0].clades[0].date
         devonian = tree.clade.clades[0].clades[1].date
@@ -332,7 +332,7 @@ class TreeTests(unittest.TestCase):
             self.assertAlmostEqual(date.value, val)
 
     def test_Distribution(self):
-        """Test instantiation of Distribution objects.
+        """Instantiation of Distribution objects.
 
         Also checks Point type and safe Unicode handling (?).
         """
@@ -360,7 +360,7 @@ class TreeTests(unittest.TestCase):
             self.assertEqual(point.alt, alt)
 
     def test_DomainArchitecture(self):
-        """Test instantiation of DomainArchitecture objects.
+        """Instantiation of DomainArchitecture objects.
 
         Also checks ProteinDomain type.
         """
@@ -385,7 +385,7 @@ class TreeTests(unittest.TestCase):
             self.assertEqual(domain.value, value)
 
     def test_Events(self):
-        """Test instantiation of Events objects."""
+        """Instantiation of Events objects."""
         tree = list(PhyloXML.parse(EX_PHYLO))[4]
         event_s = tree.clade.events
         self.assert_(isinstance(event_s, Tree.Events))
@@ -397,7 +397,7 @@ class TreeTests(unittest.TestCase):
     # Polygon -- not implemented
 
     def test_Property(self):
-        """Test instantiation of Property objects."""
+        """Instantiation of Property objects."""
         tree = list(PhyloXML.parse(EX_PHYLO))[8]
         for prop, id_ref, value in izip(
                 tree.properties,
@@ -414,7 +414,7 @@ class TreeTests(unittest.TestCase):
     # Reference -- not implemented
 
     def test_Sequence(self):
-        """Test instantiation of Sequence objects.
+        """Instantiation of Sequence objects.
 
         Also checks Accession and Annotation types.
         """
@@ -457,7 +457,7 @@ class TreeTests(unittest.TestCase):
             self.assertEqual(seq.annotations[1].ref, ann_refs[1])
 
     def test_SequenceRelation(self):
-        """Test instantiation of SequenceRelation objects."""
+        """Instantiation of SequenceRelation objects."""
         tree = list(PhyloXML.parse(EX_PHYLO))[4]
         for seqrel, id_ref_0, id_ref_1, type in izip(
                 tree.sequence_relations,
@@ -469,7 +469,7 @@ class TreeTests(unittest.TestCase):
             self.assertEqual(seqrel.type, type)
 
     def test_Taxonomy(self):
-        """Test instantiation of Taxonomy objects.,
+        """Instantiation of Taxonomy objects.,
 
         Also checks Id type.
         """
@@ -491,7 +491,7 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(tax9.rank, 'species')
 
     def test_Uri(self):
-        """Test instantiation of Uri objects."""
+        """Instantiation of Uri objects."""
         tree = list(PhyloXML.parse(EX_PHYLO))[9]
         uri = tree.clade.taxonomies[0].uri
         self.assert_(isinstance(uri, Tree.Uri))
@@ -505,7 +505,59 @@ class TreeTests(unittest.TestCase):
 
 class WriterTests(unittest.TestCase):
     """Tests for serialization of objects to phyloXML format."""
+    def _stash_rewrite_and_call(self, fname, test_cases):
+        """Safely run a series of tests on a parsed and rewritten file.
 
+        Specifically: Parse a file, rename the source file to a backup, rewrite
+        the file from the parsed object, check the rewritten file with the
+        given series of test functions, then restore the original by renaming
+        the backup copy.
+
+        Python 2.4 support: This would make more sense as a context manager
+        that simply handles renaming and finally restoring the original.
+        """
+        phx = PhyloXML.read(fname)
+        os.rename(fname, fname + '~')
+        try:
+            PhyloXML.write(phx, fname)
+            for cls, tests in test_cases:
+                inst = cls('setUp')
+                for test in tests:
+                    getattr(inst, test)()
+        finally:
+            os.rename(fname + '~', fname)
+
+    def test_apaf(self):
+        """Round-trip parsing and serialization of apaf.xml."""
+        self._stash_rewrite_and_call(EX_APAF, (
+            (ParseTests, [
+                'test_read_apaf', 'test_parse_apaf', 'test_shape_apaf']),
+            (TreeTests, ['test_DomainArchitecture']),
+            ))
+
+    def test_bcl2(self):
+        """Round-trip parsing and serialization of bcl_2.xml."""
+        self._stash_rewrite_and_call(EX_BCL2, (
+            (ParseTests, [
+                'test_read_bcl2', 'test_parse_bcl2', 'test_shape_bcl2']),
+            (TreeTests, ['test_Confidence']),
+            ))
+
+    def test_phylo(self):
+        """Round-trip parsing and serialization of phyloxml_examples.xml."""
+        self._stash_rewrite_and_call(EX_PHYLO, (
+            (ParseTests, [
+                'test_read_phylo', 'test_parse_phylo', 'test_shape_phylo']),
+            (TreeTests, [
+                'test_Phyloxml',   'test_Other',
+                'test_Phylogeny',  'test_Clade',
+                'test_Annotation', 'test_CladeRelation',
+                'test_Date',       'test_Distribution',
+                'test_Events',     'test_Property',
+                'test_Sequence',   'test_SequenceRelation',
+                'test_Taxonomy',   'test_Uri',
+                ]),
+            ))
 
 # ---------------------------------------------------------
 
