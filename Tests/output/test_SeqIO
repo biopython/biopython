@@ -1805,15 +1805,12 @@ Testing reading phd format file Phd/phd1
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'fastq' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=425_7_(71-A03-19).b.ab1).
  Checking can write/read as 'fastq-illumina' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=425_7_(71-A03-19).b.ab1).
  Checking can write/read as 'fastq-solexa' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=425_7_(71-A03-19).b.ab1).
+ Failed: PHRED quality zero maps onto a Solexa quality of minus infinity!
  Checking can write/read as 'genbank' format
  Failed: Locus identifier '425_7_(71-A03-19).b.ab1' is too long
  Checking can write/read as 'qual' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=425_7_(71-A03-19).b.ab1).
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
@@ -1825,14 +1822,10 @@ Testing reading phd format file Phd/phd2
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fastq' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=ML4924R).
  Checking can write/read as 'fastq-illumina' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=ML4924R).
  Checking can write/read as 'fastq-solexa' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=ML4924R).
  Checking can write/read as 'genbank' format
  Checking can write/read as 'qual' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=ML4924R).
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
 Testing reading ace format file Ace/contig1.ace
