@@ -54,7 +54,12 @@ Timeline
     - Utilities: dump_tags, pretty_print [*Utils.py*]
     - Methods to convert PhyloXML objects to core Biopython types:
 
-        - PhyloXML.Sequence to SeqRecord (*in progress*)
+        - PhyloXML.Sequence to/from SeqRecord (*in progress*)
+        - PhyloXML.BranchColor to HTML/CSS-friendly hex string [*to_rgb*]
+
+    - Sugar:
+        - \*.__str__(): pretty representation for displaying nodes
+        - \*.__repr__(): simplified object instantiation code
 
     Unit tests:
 
@@ -64,24 +69,23 @@ Timeline
     - build a complete phyloXML object from each example file
     - parse individual phylogenies as needed
     - create trees of at least 3 clades deep
-    - instantiate of Tier 0 elements
+    - instantiate Tier 0, 1, 2 elements
+    - round-trip parsing and serialization of three example files
 
     Documentation (Biopython wiki):
 
     - Explain xml.etree, list 3rd-party equivalents for Py2.4
 
-:6/22:
-
-    Unit tests:
-
-    - Instantiation of Tier 1 & 2 elements
-    - Serialization to an output stream
-
+:6/29:
     Code:
 
     - Write serialization methods for each class
     - Write a top-level function for triggering serialization of the whole
-      hierarchy
+      hierarchy [*Writer.write()*]
+
+    Verification:
+
+    - Test and benchmark serialization of object hierarchy
 
     Documentation (on Biopython wiki):
 
@@ -89,12 +93,7 @@ Timeline
     - Basic usage of the parser
     - Provide guidance on parser performance (parse() is ~4x faster; compare to
       Bioperl and Archaopterix)
-
-:6/29:
-    Verification and documentation:
-
-    - Test and benchmark serialization of object hierarchy
-    - Document results of serialization testing and benchmarking
+    - Same for serialization
 
 :7/6:
     Make it pretty:
@@ -103,15 +102,20 @@ Timeline
       __contains__)
 
         - PhyloXML.__getitem__(): get the phylogeny with matching name or id
-        - \*.__str__(): pretty representation for printing nodes
+        - Clade.__getitem?__() with a tuple of indexes
 
-    - Add the corresponding magic methods to the base class
+            - numpy-like deep indexing in 1 pair of brackets -- how do I do that?
+            - e.g. tree.clade[0,0,1] == tree.clade.clades[0].clades[0].clades[1]
+
+    - Add the corresponding magic methods to the Tree classes
 
     Integration:
 
-    - Play nicely with Nexus, Newick
     - Identify more Biopython objects to reuse or export to
 
+        - Improve the SeqRecord conversion
+
+    - Play nicely with Nexus, Newick
 
 :7/13:
     Extend the core to the rest of the spec:
@@ -171,14 +175,13 @@ Tier 3 (not found in example files):
         width
 
     - done:
-        blue,
         color,
+        red,
+        blue,
         green,
         location,
         losses,
-        node_id,
-        red,
-        type,
+        node_id
 
 Namespaces:
 
