@@ -138,6 +138,10 @@ class Phylogeny(PhyloElement):
         # XXX should only have 1 clade
         # ENH: count all branches within this tree?
 
+    def to_phyloxml(self, **kwargs):
+        """Create a new PhyloXML object containing just this phylogeny."""
+        return Phyloxml(kwargs, phylogenies=[self])
+
     # From Bioperl's Bio::Tree::TreeI
 
     def get_leaf_nodes(self):
@@ -237,6 +241,11 @@ class Clade(PhyloElement):
     def __len__(self):
         """Number of clades directy under this element."""
         return len(self.clades)
+
+    def to_phylogeny(self, **kwargs):
+        """Create a new phylogeny containing just this clade."""
+        # ENH: preserve some attributes of the parent phylogeny
+        return Phylogeny(clade=self, **kwargs)
 
 
 # Complex types
