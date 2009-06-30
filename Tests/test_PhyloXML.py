@@ -283,7 +283,7 @@ class TreeTests(unittest.TestCase):
     def test_Annotation(self):
         """Instantiation of Annotation objects."""
         tree = list(PhyloXML.parse(EX_PHYLO))[3]
-        ann = tree.clade.clades[1].sequences[0].annotations[0]
+        ann = tree.clade[1].sequences[0].annotations[0]
         self.assert_(isinstance(ann, Tree.Annotation))
         self.assertEqual(ann.desc, 'alcohol dehydrogenase')
         self.assertAlmostEqual(ann.confidence.value, 0.67)
@@ -305,7 +305,7 @@ class TreeTests(unittest.TestCase):
     def test_Confidence(self):
         """Instantiation of Confidence objects."""
         tree = PhyloXML.parse(EX_BCL2).next()
-        conf = tree.clade.clades[0].confidences[0]
+        conf = tree.clade[0].confidences[0]
         self.assert_(isinstance(conf, Tree.Confidence))
         self.assertEqual(conf.type, 'bootstrap')
         self.assertAlmostEqual(conf.value, 33.0)
@@ -313,9 +313,9 @@ class TreeTests(unittest.TestCase):
     def test_Date(self):
         """Instantiation of Date objects."""
         tree = list(PhyloXML.parse(EX_PHYLO))[11]
-        silurian = tree.clade.clades[0].clades[0].date
-        devonian = tree.clade.clades[0].clades[1].date
-        ediacaran = tree.clade.clades[1].date
+        silurian = tree.clade[0,0].date
+        devonian = tree.clade[0,1].date
+        ediacaran = tree.clade[1].date
         for date, rang, desc, val in izip(
                 (silurian, devonian, ediacaran),
                 (10, 20, 30),
@@ -333,10 +333,10 @@ class TreeTests(unittest.TestCase):
         Also checks Point type and safe Unicode handling (?).
         """
         tree = list(PhyloXML.parse(EX_PHYLO))[10]
-        hirschweg = tree.clade.clades[0].clades[0].distributions[0]
-        nagoya = tree.clade.clades[0].clades[1].distributions[0]
-        eth_zurich = tree.clade.clades[0].clades[2].distributions[0]
-        san_diego = tree.clade.clades[1].distributions[0]
+        hirschweg = tree.clade[0,0].distributions[0]
+        nagoya = tree.clade[0,1].distributions[0]
+        eth_zurich = tree.clade[0,2].distributions[0]
+        san_diego = tree.clade[1].distributions[0]
         for dist, desc, lat, long, alt in izip(
                 (hirschweg, nagoya, eth_zurich, san_diego),
                 ('Hirschweg, Winterthur, Switzerland',
@@ -361,9 +361,7 @@ class TreeTests(unittest.TestCase):
         Also checks ProteinDomain type.
         """
         tree = PhyloXML.parse(EX_APAF).next()
-        clade = tree.clade.clades[0].clades[0] \
-                .clades[0].clades[0].clades[0].clades[0] \
-                .clades[0].clades[0].clades[0].clades[0]
+        clade = tree.clade[0,0,0,0,0,0,0,0,0,0]
         darch = clade.sequences[0].domain_architecture
         self.assert_(isinstance(darch, Tree.DomainArchitecture))
         self.assertEqual(darch.length, 1249)
@@ -386,7 +384,7 @@ class TreeTests(unittest.TestCase):
         event_s = tree.clade.events
         self.assert_(isinstance(event_s, Tree.Events))
         self.assertEqual(event_s.speciations, 1)
-        event_d = tree.clade.clades[0].events
+        event_d = tree.clade[0].events
         self.assert_(isinstance(event_d, Tree.Events))
         self.assertEqual(event_d.duplications, 1)
 
@@ -416,7 +414,7 @@ class TreeTests(unittest.TestCase):
         """
         trees = list(PhyloXML.parse(EX_PHYLO))
         # Simple element with id_source
-        seq0 = trees[4].clade.clades[1].sequences[0]
+        seq0 = trees[4].clade[1].sequences[0]
         self.assert_(isinstance(seq0, Tree.Sequence))
         self.assertEqual(seq0.id_source, 'z')
         self.assertEqual(seq0.symbol, 'ADHX')
@@ -425,9 +423,9 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(seq0.name, 'alcohol dehydrogenase')
         self.assertEqual(seq0.annotations[0].ref, 'InterPro:IPR002085')
         # More complete elements
-        seq1 = trees[5].clade.clades[0].clades[0].sequences[0]
-        seq2 = trees[5].clade.clades[0].clades[1].sequences[0]
-        seq3 = trees[5].clade.clades[1].sequences[0]
+        seq1 = trees[5].clade[0,0].sequences[0]
+        seq2 = trees[5].clade[0,1].sequences[0]
+        seq3 = trees[5].clade[1].sequences[0]
         for seq, sym, acc, name, mol_seq, ann_refs in izip(
                 (seq1, seq2, seq3),
                 ('ADHX', 'RT4I1', 'ADHB'),
@@ -465,20 +463,20 @@ class TreeTests(unittest.TestCase):
             self.assertEqual(seqrel.type, type)
 
     def test_Taxonomy(self):
-        """Instantiation of Taxonomy objects.,
+        """Instantiation of Taxonomy objects.
 
         Also checks Id type.
         """
         trees = list(PhyloXML.parse(EX_PHYLO))
         # Octopus
-        tax5 = trees[5].clade.clades[0].clades[0].taxonomies[0]
+        tax5 = trees[5].clade[0,0].taxonomies[0]
         self.assert_(isinstance(tax5, Tree.Taxonomy))
         self.assertEqual(tax5.id.value, '6645')
         self.assertEqual(tax5.id.type, 'NCBI')
         self.assertEqual(tax5.code, 'OCTVU')
         self.assertEqual(tax5.scientific_name, 'Octopus vulgaris')
         # Nile monitor
-        tax9 = trees[9].clade.clades[0].taxonomies[0]
+        tax9 = trees[9].clade[0].taxonomies[0]
         self.assert_(isinstance(tax9, Tree.Taxonomy))
         self.assertEqual(tax9.id.value, '62046')
         self.assertEqual(tax9.id.type, 'NCBI')
@@ -565,7 +563,7 @@ class MethodTests(unittest.TestCase):
         self.phyloxml = PhyloXML.read(EX_PHYLO)
 
     def test_clade_to_phylogeny(self):
-        clade = self.phyloxml.phylogenies[0].clade.clades[0]
+        clade = self.phyloxml.phylogenies[0].clade[0]
         tree = clade.to_phylogeny(rooted=True)
         self.assert_(isinstance(tree, Tree.Phylogeny))
 

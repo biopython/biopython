@@ -234,6 +234,16 @@ class Clade(PhyloElement):
                 other=other or [],
                 )
 
+    def __getitem__(self, index):
+        """Get a sub-clade by index."""
+        # ENH: handle slicing
+        if isinstance(index, int):
+            return self.clades[index]
+        ref = self
+        for idx in index:
+            ref = ref.clades[idx]
+        return ref
+
     def __iter__(self):
         """Iterate through the clades (sub-nodes) within this clade."""
         return iter(self.clades)
