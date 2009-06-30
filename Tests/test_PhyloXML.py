@@ -555,6 +555,43 @@ class WriterTests(unittest.TestCase):
                 ]),
             ))
 
+
+# ---------------------------------------------------------
+# Method tests
+
+class MethodTests(unittest.TestCase):
+    """Tests for methods on specific classes/objects."""
+    def setUp(self):
+        self.phyloxml = PhyloXML.read(EX_PHYLO)
+
+    def test_clade_to_phylogeny(self):
+        clade = self.phyloxml.phylogenies[0].clade.clades[0]
+        tree = clade.to_phylogeny(rooted=True)
+        self.assert_(isinstance(tree, Tree.Phylogeny))
+
+    def test_phylogeny_to_phyloxml(self):
+        tree = self.phyloxml.phylogenies[0]
+        doc = tree.to_phyloxml()
+        self.assert_(isinstance(doc, Tree.Phyloxml))
+
+    def test_color_rgb(self):
+        black = Tree.BranchColor(0, 0, 0)
+        self.assertEqual(black.to_rgb(), '000000')
+        white = Tree.BranchColor(255, 255, 255)
+        self.assertEqual(white.to_rgb(), 'ffffff')
+        green = Tree.BranchColor(14, 192, 113)
+        self.assertEqual(green.to_rgb(), '0ec071')
+
+    def test_sequence_conversion(self):
+        pass
+
+    def test_clade_getitem(self):
+        tree = self.phyloxml.phylogenies[3]
+        self.assertEqual(tree.clade[0,0], tree.clade.clades[0].clades[0])
+        self.assertEqual(tree.clade[0,1], tree.clade.clades[0].clades[1])
+        self.assertEqual(tree.clade[1], tree.clade.clades[1])
+
+
 # ---------------------------------------------------------
 
 if __name__ == '__main__':
