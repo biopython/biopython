@@ -26,35 +26,39 @@ def write(phyloxml, file, encoding='utf-8'):
 # Helpers
 
 def _ns(tag, namespace=NAMESPACES['phy']):
+    """Format an XML tag with the given namespace."""
     return '{%s}%s' % (namespace, tag)
 
 
-def clean_attrib(obj, attrs):
+def serialize(value):
+    if isinstance(value, float):
+        return unicode(value).upper()
+    elif isinstance(value, bool):
+        return unicode(value).lower()
+    return unicode(value)
+
+
+def _clean_attrib(obj, attrs):
+    """Create a dictionary from an object's specified, non-None attributes."""
     out = {}
     for key in attrs:
         val = getattr(obj, key)
-        if val is None:
-            continue
-        if isinstance(val, str):
-            out[key] = val
-        elif isinstance(val, bool):
-            out[key] = str(val).lower()
-        elif isinstance(val, float):
-            out[key] = str(val).upper()
-        else:
-            out[key] = str(val)
+        if val is not None:
+            out[key] = serialize(val)
     return out
 
 
-def _handle_complex(tag, attribs, complex_types, list_types):
+def _handle_complex(tag, attribs, complex_types, list_types, has_text=False):
     def wrapped(self, obj):
-        elem = ElementTree.Element(tag, clean_attrib(obj, attribs))
+        elem = ElementTree.Element(tag, _clean_attrib(obj, attribs))
         for ct in complex_types:
             if getattr(obj, ct) is not None:
                 elem.append(getattr(self, ct)(getattr(obj, ct)))
         for lt, plural in list_types:
             for item in getattr(obj, plural):
                 elem.append(getattr(self, lt)(item))
+        if has_text:
+            elem.text = serialize(obj.value)
         return elem
     return wrapped
 
@@ -62,10 +66,7 @@ def _handle_complex(tag, attribs, complex_types, list_types):
 def _handle_simple(tag):
     def wrapped(self, obj):
         elem = ElementTree.Element(tag)
-        if isinstance(obj, float):
-            elem.text = str(obj).upper()
-        else:
-            elem.text = str(obj)
+        elem.text = serialize(obj)
         return elem
     return wrapped
 
@@ -90,10 +91,8 @@ class Writer(object):
                     obj.attributes['schemaLocation'],
                     })
         for tree in obj.phylogenies:
-            # serialize phylogeny
             elem.append(self.phylogeny(tree))
         for otr in obj.other:
-            # serialize other
             elem.append(self.other(otr))
         return elem
 
@@ -130,7 +129,8 @@ class Writer(object):
 
     # absent = _handle_complex(_ns('absent')) # BinaryCharacterList
 
-    accession = _handle_complex(_ns('accession'), ('source',), ('value',), ())
+    accession = _handle_complex(_ns('accession'),
+            ('source',), (), (), has_text=True)
 
     annotation = _handle_complex(_ns('annotation'),
             ('ref', 'source', 'evidence', 'type'),
@@ -139,17 +139,33 @@ class Writer(object):
               ))
 
     # binary_characters = _handle_complex(_ns('binary_characters'))
-    # clade_relation = _handle_complex(_ns('clade_relation'))
+
+    clade_relation = _handle_complex(_ns('clade_relation'),
+            ('id_ref_0', 'id_ref_1', 'distance', 'type'),
+            ('confidence',), ())
+
     # color = _handle_complex(_ns('color'))   # BranchColor,
 
-    confidence = _handle_complex(_ns('confidence'), ('type',), ('value',), ())
+    confidence = _handle_complex(_ns('confidence'),
+            ('type',), (), (), has_text=True)
 
-    # date = _handle_complex(_ns('date'))
-    # distribution = _handle_complex(_ns('distribution'))
+    date = _handle_complex(_ns('date'),
+            ('unit', 'range'), ('desc', 'value'), (), has_text=True)
 
-    domain = _handle_complex(_ns('domain'),
-            ('start', 'end', 'confidence', 'id'),
-            ('value',), ())
+    distribution = _handle_complex(_ns('distribution'), (), ('desc',),
+            ( ('point',     'points'),
+              ('polygon',   'polygons'),
+              ))
+
+    def domain(self, obj):
+        elem = ElementTree.Element(_ns('domain'),
+                {'from': str(obj.start + 1), 'to': str(obj.end)})
+        if obj.confidence is not None:
+            elem.set('confidence', serialize(obj.confidence))
+        if obj.id is not None:
+            elem.set('id', obj.id)
+        elem.text = serialize(obj.value)
+        return elem
 
     domain_architecture = _handle_complex(_ns('domain_architecture'),
             ('length',), (),
@@ -162,16 +178,23 @@ class Writer(object):
 
     # gained = _handle_complex(_ns('gained')) # BinaryCharacterList,
 
-    id = _handle_complex(_ns('id'), ('type',), ('value',), ())
+    id = _handle_complex(_ns('id'), ('type',), (), (), has_text=True)
 
-    node_id = _handle_complex(_ns('node_id'), ('type',), ('value',), ())
+    node_id = _handle_complex(_ns('node_id'), ('type',), (), (), has_text=True)
 
     # lost = _handle_complex(_ns('lost')) # BinaryCharacterList,
-    # point = _handle_complex(_ns('point'))
+
+    point = _handle_complex(_ns('point'), ('geodetic_datum',),
+            ('lat', 'long', 'alt'), ())
+
     # polygon = _handle_complex(_ns('polygon'))
+
     # present = _handle_complex(_ns('present')) # BinaryCharacterList,
-    # property = _handle_complex(_ns('property'))
-    # rank = _handle_complex(_ns('rank')) # Rank,
+
+    property = _handle_complex(_ns('property'),
+            ('ref', 'unit', 'datatype', 'applies_to', 'id_ref'),
+            (), (), has_text=True)
+
     # reference = _handle_complex(_ns('reference'))
 
     sequence = _handle_complex(_ns('sequence'),
@@ -193,7 +216,7 @@ class Writer(object):
               ('other',         'other'),
               ))
 
-    # uri = _handle_complex(_ns('uri'))
+    uri = _handle_complex(_ns('uri'), ('desc', 'type'), (), (), has_text=True)
 
     # Primitive types
 
@@ -222,6 +245,7 @@ class Writer(object):
     location = _handle_simple(_ns('location'))
     mol_seq = _handle_simple(_ns('mol_seq'))
     name = _handle_simple(_ns('name'))
+    rank = _handle_simple(_ns('rank')) # Rank
     scientific_name = _handle_simple(_ns('scientific_name'))
     symbol = _handle_simple(_ns('symbol'))
     type = _handle_simple(_ns('type')) # EventType

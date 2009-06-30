@@ -396,7 +396,9 @@ class Parser(object):
 
     @classmethod
     def to_confidence(cls, elem):
-        return Tree.Confidence(float(elem.text), elem.get('type'))
+        return Tree.Confidence(
+                elem.text and float(elem.text) or None,
+                elem.get('type'))
 
     @classmethod
     def to_date(cls, elem):
@@ -417,7 +419,8 @@ class Parser(object):
     @classmethod
     def to_domain(cls, elem):
         return Tree.ProteinDomain(elem.text.strip(),
-                int(elem.get('from')), int(elem.get('to')),
+                int(elem.get('from')) - 1,
+                int(elem.get('to')),
                 confidence=(('confidence' in elem.keys())
                             and float(elem.get('confidence')) or None),
                 id=elem.get('id'))

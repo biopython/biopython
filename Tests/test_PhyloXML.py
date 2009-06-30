@@ -375,7 +375,7 @@ class TreeTests(unittest.TestCase):
                 ('CARD', 'NB-ARC', 'WD40', 'WD40', 'WD40', 'WD40', 'WD40',
                     'WD40', 'WD40', 'WD40', 'WD40')):
             self.assert_(isinstance(domain, Tree.ProteinDomain))
-            self.assertEqual(domain.start, start)
+            self.assertEqual(domain.start + 1, start)
             self.assertEqual(domain.end, end)
             self.assertAlmostEqual(domain.confidence, conf)
             self.assertEqual(domain.value, value)

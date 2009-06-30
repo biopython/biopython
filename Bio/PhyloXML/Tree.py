@@ -483,7 +483,7 @@ class ProteinDomain(PhyloElement):
     @classmethod
     def from_seqfeature(cls, feat):
         return ProteinDomain(feat.id,
-                feat.location.nofuzzy_start + 1,
+                feat.location.nofuzzy_start,
                 feat.location.nofuzzy_end,
                 confidence=feat.qualifiers.get('confidence'))
 
