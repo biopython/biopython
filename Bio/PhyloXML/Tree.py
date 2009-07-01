@@ -6,13 +6,26 @@
 """Classes corresponding to phyloXML elements.
 
 """
+
 import re
+import warnings
 
 from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
 
+from Exceptions import PhyloXMLWarning
+
+
+def check_str(text, testfunc):
+    """Check a string using testfunc, and warn if there's no match."""
+    if text is not None and not testfunc(text):
+        warnings.warn("String %s doesn't match the given regexp" % text,
+                      PhyloXMLWarning)
+
+
+# Tree elements
 
 class PhyloElement(object):
     """Base class for all PhyloXML objects."""
@@ -39,11 +52,10 @@ class PhyloElement(object):
         s = '%s(%s)' % (self.__class__.__name__,
                            ', '.join('%s=%s' % (key, val)
                                for key, val in self.__dict__.iteritems()
-                               if val not in (None, '')
+                               if val is not None
                                and type(val) in (str, int, float, unicode)))
         return s.encode('utf-8')
 
-# Core elements
 
 class Phyloxml(PhyloElement):
     """Root node of the PhyloXML document.
@@ -417,12 +429,12 @@ class DomainArchitecture(PhyloElement):
 
 class Events(PhyloElement):
     """Events at the root node of a clade (e.g. one gene duplication)."""
-    re_type = re.compile(r'(%s)' % '|'.join(
-                ('transfer', 'fusion', 'speciation_or_duplication', 'other',
-                    'mixed', 'unassigned')))
+    ok_type = set(('transfer', 'fusion', 'speciation_or_duplication', 'other',
+                    'mixed', 'unassigned'))
 
     def __init__(self, type=None, duplications=None, speciations=None,
             losses=None, confidence=None):
+        check_str(type, self.ok_type.__contains__)
         PhyloElement.__init__(self, type=type, duplications=duplications,
                 speciations=speciations, losses=losses, confidence=confidence)
 
@@ -556,6 +568,8 @@ class Sequence(PhyloElement):
             # Collections
             annotations=None, other=None,
             ):
+        check_str(symbol, self.re_symbol.match)
+        check_str(mol_seq, self.re_mol_seq.match)
         PhyloElement.__init__(self, type=type, id_ref=id_ref,
                 id_source=id_source, symbol=symbol, accession=accession,
                 name=name, location=location, mol_seq=mol_seq, uri=uri,
@@ -677,23 +691,16 @@ class Taxonomy(PhyloElement):
         other []
     """
     re_code = re.compile(r'[a-zA-Z0-9_]{2,10}')
-    re_rank = re.compile(r'(%s)' % '|'.join((
-                                   'domain', 'kingdom', 'subkingdom', 'branch',
-                                   'infrakingdom', 'superphylum', 'phylum',
-                                   'subphylum', 'infraphylum', 'microphylum',
-                                   'superdivision', 'division', 'subdivision',
-                                   'infradivision', 'superclass', 'class',
-                                   'subclass', 'infraclass', 'superlegion',
-                                   'legion', 'sublegion', 'infralegion',
-                                   'supercohort', 'cohort', 'subcohort',
-                                   'infracohort', 'superorder', 'order',
-                                   'suborder', 'superfamily', 'family',
-                                   'subfamily', 'supertribe', 'tribe',
-                                   'subtribe', 'infratribe', 'genus',
-                                   'subgenus', 'superspecies', 'species',
-                                   'subspecies', 'variety', 'subvariety',
-                                   'form', 'subform', 'cultivar', 'unknown',
-                                   'other')))
+    ok_rank = set(('domain', 'kingdom', 'subkingdom', 'branch', 'infrakingdom',
+        'superphylum', 'phylum', 'subphylum', 'infraphylum', 'microphylum',
+        'superdivision', 'division', 'subdivision', 'infradivision',
+        'superclass', 'class', 'subclass', 'infraclass', 'superlegion',
+        'legion', 'sublegion', 'infralegion', 'supercohort', 'cohort',
+        'subcohort', 'infracohort', 'superorder', 'order', 'suborder',
+        'superfamily', 'family', 'subfamily', 'supertribe', 'tribe', 'subtribe',
+        'infratribe', 'genus', 'subgenus', 'superspecies', 'species',
+        'subspecies', 'variety', 'subvariety', 'form', 'subform', 'cultivar',
+        'unknown', 'other'))
 
     def __init__(self, 
             # Attributes
@@ -703,6 +710,8 @@ class Taxonomy(PhyloElement):
             # Collections
             common_names=None, other=None,
             ):
+        check_str(code, self.re_code.match)
+        check_str(rank, self.ok_rank.__contains__)
         PhyloElement.__init__(self, id_source=id_source, id=id, code=code,
                 scientific_name=scientific_name, rank=rank, uri=uri,
                 common_names=common_names or [],

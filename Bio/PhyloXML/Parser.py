@@ -85,15 +85,6 @@ def get_children_text(parent, tag, construct=unicode):
 # ---------------------------------------------------------
 # Utilities
 
-import re
-
-def check_str(text, regexp):
-    """Compare a string to a regexp, and warn if there's no match."""
-    if text is not None and regexp.match(text) is None:
-        warnings.warn("String %s doesn't match the given regexp" % text,
-                      PhyloXMLWarning)
-    return text
-
 def str2bool(text):
     if text == 'true':
         return True
@@ -434,8 +425,7 @@ class Parser(object):
     @classmethod
     def to_events(cls, elem):
         return Tree.Events(
-                type=check_str(get_child_text(elem, 'type'),
-                               Tree.Events.re_type),
+                type=get_child_text(elem, 'type'),
                 duplications=get_child_text(elem, 'duplications', int),
                 speciations=get_child_text(elem, 'speciations', int),
                 losses=get_child_text(elem, 'losses', int),
@@ -478,13 +468,11 @@ class Parser(object):
     @classmethod
     def to_sequence(cls, elem):
         return Tree.Sequence(
-                symbol=check_str(get_child_text(elem, 'symbol'),
-                                 Tree.Sequence.re_symbol),
+                symbol=get_child_text(elem, 'symbol'),
                 accession=get_child_as(elem, 'accession', cls.to_accession),
                 name=get_child_text(elem, 'name'),
                 location=get_child_text(elem, 'location'),
-                mol_seq=check_str(get_child_text(elem, 'mol_seq'),
-                                  Tree.Sequence.re_mol_seq),
+                mol_seq=get_child_text(elem, 'mol_seq'),
                 uri=get_child_as(elem, 'uri', cls.to_uri),
                 domain_architecture=get_child_as(elem, 'domain_architecture',
                                                  cls.to_domain_architecture),
@@ -505,12 +493,10 @@ class Parser(object):
     def to_taxonomy(cls, elem):
         return Tree.Taxonomy(
                 id=get_child_as(elem, 'id', cls.to_id),
-                code=check_str(get_child_text(elem, 'code'),
-                               Tree.Taxonomy.re_code),
+                code=get_child_text(elem, 'code'),
                 scientific_name=get_child_text(elem, 'scientific_name'),
                 common_names=get_children_text(elem, 'common_name'),
-                rank=check_str(get_child_text(elem, 'rank'),
-                               Tree.Taxonomy.re_rank),
+                rank=get_child_text(elem, 'rank'),
                 uri=get_child_as(elem, 'uri', cls.to_uri),
                 **elem.attrib)
 
