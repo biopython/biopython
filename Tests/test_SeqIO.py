@@ -142,7 +142,9 @@ test_files = [ \
 #Following PHD (PHRAP) sequencing files are also used in test_Phd.py
     ("phd", False, 'Phd/phd1', 3),
     ("phd", False, 'Phd/phd2', 1),
-#Following ACE assembly files are also used in test_Phd.py
+    ("phd", False, 'Phd/phd_solexa', 2),
+    ("phd", False, 'Phd/phd_454', 1),
+#Following ACE assembly files are also used in test_Ace.py
     ("ace", False, 'Ace/contig1.ace', 2),
     ("ace", False, 'Ace/consed_sample.ace', 1),
     ("ace", False, 'Ace/seq.cap.ace', 1),
