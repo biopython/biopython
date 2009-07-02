@@ -1,7 +1,11 @@
+# Revisions copyright 2009 by Peter Cock.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 import unittest
 
+from Bio import SeqIO
 from Bio.Sequencing import Phd
-
 
 class PhdTestOne(unittest.TestCase):
     def setUp(self):
@@ -10,9 +14,34 @@ class PhdTestOne(unittest.TestCase):
     def tearDown(self):
         self.handle.close()
 
+    def test_check_SeqIO(self) :
+        """Test phd1 using parser via SeqIO."""
+        records = SeqIO.parse(self.handle, "phd")
+        #Contig 1
+        record = records.next()
+        self.assertEqual(record.id, "34_222_(80-A03-19).b.ab1")
+        self.assertEqual(record.name, "34_222_(80-A03-19).b.ab1")
+        self.assert_(record.seq.startswith("ctccgtcggaacatcatcggatcctatcaca"))
+        self.assert_(record.seq.endswith("ctctcctctccctccctccgactccaaagcgtg"))
+        self.assertEqual(record.letter_annotations["phred_quality"][:10],
+                         [9, 9, 10, 19, 22, 37, 28, 28, 24, 22])
+        #Contig 2
+        record = records.next()
+        self.assertEqual(record.id, "425_103_(81-A03-19).g.ab1")
+        self.assertEqual(record.name, "425_103_(81-A03-19).g.ab1")
+        self.assertEqual(record.letter_annotations["phred_quality"][:10],
+                         [14, 17, 22, 10, 10, 10, 15, 8, 8, 9])
+        #Contig 3
+        record = records.next()
+        self.assertEqual(record.id, '425_7_(71-A03-19).b.ab1')
+        self.assertEqual(record.name, '425_7_(71-A03-19).b.ab1')
+        self.assertEqual(record.letter_annotations["phred_quality"][:10],
+                         [10, 10, 10, 10, 8, 8, 6, 6, 6, 6])
+        # Make sure that no further records are found
+        self.assertRaises(StopIteration, records.next)
+
     def test_check_record_parser(self):
-        """Test to check that record parser parses all records of a contig.
-        """
+        """Test phd1 file in detail."""
         records = Phd.parse(self.handle)
         # Record 1
         record = records.next()
@@ -168,6 +197,27 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(record.sites[-1], ('n', '0', '9511'))
         self.assertEqual(record.seq.tostring()[:10], 'acataaatca')
         self.assertEqual(record.seq.tostring()[-10:], 'atctgctttn')
+        # Make sure that no further records are found
+        self.assertRaises(StopIteration, records.next)
+
+class PhdTestTwo(unittest.TestCase):
+    def setUp(self):
+        self.handle = open("Phd/phd2")
+
+    def tearDown(self):
+        self.handle.close()
+
+    def test_check_SeqIO(self) :
+        """Test phd2 using parser via SeqIO."""
+        records = SeqIO.parse(self.handle, "phd")
+        #Contig 1
+        record = records.next()
+        self.assertEqual(record.id, "ML4924R")
+        self.assertEqual(record.name, "ML4924R")
+        self.assert_(record.seq.startswith("actttggtcgcctgcaggtaccggtccgnga"))
+        self.assert_(record.seq.endswith("agaagctcgttctcaacatctccgttggtgaga"))
+        self.assertEqual(record.letter_annotations["phred_quality"][:10],
+                         [6, 6, 6, 8, 8, 12, 18, 16, 14, 11])
         # Make sure that no further records are found
         self.assertRaises(StopIteration, records.next)
         
