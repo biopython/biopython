@@ -62,10 +62,14 @@ def PhdIterator(handle) :
     phd_records = Phd.parse(handle)
     for phd_record in phd_records:
         #Convert the PHY record into a SeqRecord...
+        #The "filename" can contain spaces, e.g. 'HWI-EAS94_4_1_1_602_99 1'
+        #from unit test example file phd_solexa.
+        #This will cause problems if used as the record identifier
+        #(e.g. output for FASTQ format).
+        name = phd_record.file_name.split(None,1)[0]
         seq_record = SeqRecord(phd_record.seq,
-                               id = phd_record.file_name,
-                               name = phd_record.file_name,
-                               description="")
+                               id = name, name = name,
+                               description= phd_record.file_name)
         #Just re-use the comments dictionary as the SeqRecord's annotations
         seq_record.annotations = phd_record.comments
         #And store the qualities and peak locations as per-letter-annotation
