@@ -74,7 +74,7 @@ def PhdIterator(handle) :
         try :
             seq_record.letter_annotations["peak_location"] = \
                     [int(site[2]) for site in phd_record.sites]
-        except KeyError :
+        except IndexError :
             # peak locations are not always there according to
             # David Gordon (the Consed author)
             pass
