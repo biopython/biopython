@@ -8,10 +8,7 @@
 Constructs an XML file from a Tree.PhyloXML object.
 """
 
-import warnings
-
 import Tree
-from Exceptions import PhyloXMLError, PhyloXMLWarning
 from Parser import ElementTree, NAMESPACES
 
 
@@ -22,6 +19,7 @@ def write(phyloxml, file, encoding='utf-8'):
     """
     etree = Writer(phyloxml).get_etree()
     etree.write(file, encoding)
+
 
 # Helpers
 

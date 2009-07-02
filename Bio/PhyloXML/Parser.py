@@ -49,19 +49,18 @@ def local(tag):
         return tag[tag.index('}')+1:]
     return tag
 
-def namespace(tag):
-    try:
-        if tag[0] is '{':
-            return tag[1:tag.index('}')]
-    finally:
-        return ''
+# def namespace(tag):
+#     try:
+#         if tag[0] is '{':
+#             return tag[1:tag.index('}')]
+#     finally:
+#         return ''
 
 def split_namespace(tag):
-    parts = tag.split('}')
     try:
-        return (parts[0][1:], parts[1])
+        return tag[1:].split('}', 1)
     except:
-        return ('', parts[0])
+        return ('', tag)
 
 def get_child_as(parent, tag, construct):
     child = parent.find("{%s}%s" % (NAMESPACES['phy'], tag))

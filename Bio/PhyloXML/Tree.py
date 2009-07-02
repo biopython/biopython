@@ -381,8 +381,8 @@ class Confidence(PhyloElement):
     clade (in which case the 'type' attribute is 'bootstrap').
     """
     def __init__(self, value, type):
-        self.value=value
-        self.type=type
+        self.value = value
+        self.type = type
 
 
 class Date(PhyloElement):

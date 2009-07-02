@@ -18,7 +18,7 @@ Links
 Project page on NESCent:
     https://www.nescent.org/wg_phyloinformatics/PhyloSoC:Biopython_support_for_parsing_and_writing_phyloXML
 
-Biopython wiki doc:
+Biopython wiki documentation:
     http://biopython.org/wiki/PhyloXML
 
 PhyloXML homepage:
@@ -44,22 +44,22 @@ Timeline
 
     Code:
 
-    - Wrapper function for loading local files by name [*__init__.read()*]
-    - Specific exception and warning to raise for noncompliant phyloXML files
-      [*Exceptions.py*]
     - Simple base class for all phyloXML elements [*Tree.PhyloElement*]
     - Class definitions Tier 0, 1, and 2 phyloXML types [*Tree.py*]
+    - Specific exception and warning to raise for noncompliant phyloXML files
+      [*Exceptions.py*]
     - Parse individual phylogenies or read a complete PhyloXML object from an
-      XML stream [*parse(), read()*]
+      XML stream [*Parser.py*]
+    - Write a complete PhyloXML object to a file or stream [*Writer.py*]
     - Utilities: dump_tags, pretty_print [*Utils.py*]
     - Methods to convert PhyloXML objects to core Biopython types:
-
         - PhyloXML.Sequence to/from SeqRecord (*in progress*)
         - PhyloXML.BranchColor to HTML/CSS-friendly hex string [*to_rgb*]
 
     - Sugar:
         - \*.__str__(): pretty representation for displaying nodes
         - \*.__repr__(): simplified object instantiation code
+        - Clade.__getitem__(): extended index access to sub-clades
 
     Unit tests:
 
@@ -75,44 +75,29 @@ Timeline
     Documentation (Biopython wiki):
 
     - Explain xml.etree, list 3rd-party equivalents for Py2.4
+    - Usage: parsing, writing, object navigation, Bio integration, utilities
+    - Performance: read, parse, write
 
 :6/29:
-    Code:
-
-    - Write serialization methods for each class
-    - Write a top-level function for triggering serialization of the whole
-      hierarchy [*Writer.write()*]
-
-    Verification:
-
-    - Test and benchmark serialization of object hierarchy
-
     Documentation (on Biopython wiki):
 
-    - Explain use cases
-    - Basic usage of the parser
-    - Provide guidance on parser performance (parse() is ~4x faster; compare to
-      Bioperl and Archaopterix)
-    - Same for serialization
+    - Parser performance: compare to Archaeopterix, Bioperl?
 
 :7/6:
     Make it pretty:
 
-    - Write unit tests for Pythonic syntax sugar (e.g. __getattr__, __getitem__,
-      __contains__)
+    - Pythonic syntax sugar (e.g. __getitem__, __contains__)
 
-        - PhyloXML.__getitem__(): get the phylogeny with matching name or id
-        - Clade.__getitem?__() with a tuple of indexes
+        - PhyloXML.__getitem__: get the phylogeny with matching name or id
+        - Clade.__getitem__: support slicing, too
+        - Events.__contains__:
+            - e.g. if 'speciations' in foo.events: ...
 
-            - numpy-like deep indexing in 1 pair of brackets -- how do I do that?
-            - e.g. tree.clade[0,0,1] == tree.clade.clades[0].clades[0].clades[1]
-
-    - Add the corresponding magic methods to the Tree classes
+        - Unit tests for all of this
 
     Integration:
 
     - Identify more Biopython objects to reuse or export to
-
         - Improve the SeqRecord conversion
 
     - Play nicely with Nexus, Newick
@@ -120,12 +105,25 @@ Timeline
 :7/13:
     Extend the core to the rest of the spec:
 
-    - Begin adding unit tests and classes to support additional (non-core)
+    - Adding unit tests and classes to support the remaining (non-core)
       phyloXML elements
+    - Clean up and reorganize any code that needs it
+    - Hopefully, the entire phyloXML spec is covered by the end of this week
+
+
+
 
 :7/20:
-    - Continue adding support for the rest of the phyloXML spec and testing
-    - Hopefully, the entire phyloXML spec is covered by the end of this week
+    Enhancements (time permitting):
+      - Collapse whitespace in node text when parsing
+      - Search for external nodes from a Phylogeny or Clade instance
+      - Add singular property names for plural attributes that almost always
+        contain just one element 
+
+          - e.g. taxonomy -> taxonomies[0])
+          - if more than 1 element is available, raise an exception
+
+      - Export Phylogeny to a networkx digraph; Phyloxml -> multidigraph
 
 :7/27:
     Document all completed functionality.
