@@ -25,6 +25,21 @@ class PhdTestOne(unittest.TestCase):
         self.assert_(record.seq.endswith("ctctcctctccctccctccgactccaaagcgtg"))
         self.assertEqual(record.letter_annotations["phred_quality"][:10],
                          [9, 9, 10, 19, 22, 37, 28, 28, 24, 22])
+        self.assertEqual(record[:10].format("fasta"),
+                         ">34_222_(80-A03-19).b.ab1\nctccgtcgga\n")
+        self.assertEqual(record[:10].format("qual"),
+                         ">34_222_(80-A03-19).b.ab1\n"
+                         "9 9 10 19 22 37 28 28 24 22\n")
+        self.assertEqual(record[:10].format("fastq"),
+                         "@34_222_(80-A03-19).b.ab1\n"
+                         "ctccgtcgga\n"
+                         "+\n"
+                         "**+47F==97\n")
+        self.assertEqual(record[:10].format("fastq-illumina"),
+                         "@34_222_(80-A03-19).b.ab1\n"
+                         "ctccgtcgga\n"
+                         "+\n"
+                         "IIJSVe\\\\XV\n")
         #Contig 2
         record = records.next()
         self.assertEqual(record.id, "425_103_(81-A03-19).g.ab1")
@@ -218,6 +233,14 @@ class PhdTestTwo(unittest.TestCase):
         self.assert_(record.seq.endswith("agaagctcgttctcaacatctccgttggtgaga"))
         self.assertEqual(record.letter_annotations["phred_quality"][:10],
                          [6, 6, 6, 8, 8, 12, 18, 16, 14, 11])
+        self.assertEqual(record[:10].format("fasta"),
+                         ">ML4924R\nactttggtcg\n")
+        self.assertEqual(record[:10].format("qual"),
+                         ">ML4924R\n6 6 6 8 8 12 18 16 14 11\n")
+        self.assertEqual(record[:10].format("fastq"),
+                         "@ML4924R\nactttggtcg\n+\n'''))-31/,\n")
+        self.assertEqual(record[:10].format("fastq-illumina"),
+                         "@ML4924R\nactttggtcg\n+\nFFFHHLRPNK\n")
         # Make sure that no further records are found
         self.assertRaises(StopIteration, records.next)
         
