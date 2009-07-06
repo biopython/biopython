@@ -398,11 +398,20 @@ class Date(PhyloElement):
 
     Attributes:
         unit -- type of numerical value (e.g. 'mya' for 'million years ago')
-        range (decimal) -- ???
+        range (decimal) -- Margin on the numerical value? (maybe deprecated)
     """
     def __init__(self, value=None, desc=None, unit=None, range=None):
         PhyloElement.__init__(self, value=value, desc=desc, unit=unit,
                 range=range)
+
+    def __str__(self):
+        """Show the class name and the human-readable date."""
+        s = self.__class__.__name__
+        if self.unit and self.value is not None:
+            return '%s %s %s' % (s, self.value, self.unit)
+        if self.desc is not None:
+            return '%s %s' % (s, self.desc)
+        return s
 
 
 class Distribution(PhyloElement):
