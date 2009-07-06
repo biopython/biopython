@@ -63,7 +63,7 @@ class UtilTests(unittest.TestCase):
                 (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA),
                     # unzip(EX_METAZOA), unzip(EX_NCBI),
                     ),
-                (387, 748, 165, 16208, 214912, 648554)):
+                (387, 748, 164, 16208, 214912, 648554)):
             phx = PhyloXML.read(source)
             output = StringIO()
             PhyloXML.pretty_print(phx, output)

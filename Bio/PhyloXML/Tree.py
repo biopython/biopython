@@ -24,6 +24,11 @@ def check_str(text, testfunc):
         warnings.warn("String %s doesn't match the given regexp" % text,
                       PhyloXMLWarning)
 
+def trim_str(text, maxlen=40):
+    if isinstance(text, basestring) and len(text) > maxlen:
+        return text[:maxlen-3] + '...'
+    return text
+
 
 # Tree elements
 
@@ -37,20 +42,19 @@ class PhyloElement(object):
     def __str__(self):
         """Show the class name and an identifying attribute."""
         s = self.__class__.__name__
+        if hasattr(self, 'name') and self.name:
+            return '%s %s' % (s, trim_str(self.name))
+        if hasattr(self, 'value') and self.value:
+            return '%s %s' % (s, trim_str(self.value))
         if hasattr(self, 'id') and self.id:
             return '%s %s' % (s, self.id)
-        if hasattr(self, 'value') and self.value:
-            return '%s %s' % (s, self.value)
-        if hasattr(self, 'code') and self.code:
-            return '%s %s' % (s, self.code)
-        if hasattr(self, 'name') and self.name:
-            return '%s %s' % (s, self.name)
         return s
 
     def __repr__(self):
         """Show this object's constructor with its primitive arguments."""
         s = '%s(%s)' % (self.__class__.__name__,
-                           ', '.join('%s=%s' % (key, val)
+                           ', '.join('%s=%s'
+                                    % (key, repr(trim_str(val, maxlen=60)))
                                for key, val in self.__dict__.iteritems()
                                if val is not None
                                and type(val) in (str, int, float, unicode)))
