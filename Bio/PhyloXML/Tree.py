@@ -731,6 +731,19 @@ class Taxonomy(PhyloElement):
                 other=other or [],
                 )
 
+    def __str__(self):
+        """Show the class name and an identifying attribute."""
+        s = self.__class__.__name__
+        if self.code is not None:
+            return '%s %s' % (s, self.code)
+        if self.scientific_name is not None:
+            return '%s %s' % (s, self.scientific_name)
+        if self.rank is not None:
+            return '%s %s' % (s, self.rank)
+        if self.id is not None:
+            return '%s %s' % (s, self.id)
+        return s
+
 
 class Uri(PhyloElement):
     """A uniform resource identifier.
