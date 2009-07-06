@@ -15,14 +15,14 @@ project aims to build a similar module for the popular Biopython package.
 Links
 =====
 
-Project page on NESCent:
-    https://www.nescent.org/wg_phyloinformatics/PhyloSoC:Biopython_support_for_parsing_and_writing_phyloXML
+PhyloXML homepage:
+    http://www.phyloxml.org/
 
 Biopython wiki documentation:
     http://biopython.org/wiki/PhyloXML
 
-PhyloXML homepage:
-    http://www.phyloxml.org/
+Project page on NESCent:
+    https://www.nescent.org/wg_phyloinformatics/PhyloSoC:Biopython_support_for_parsing_and_writing_phyloXML
 
 GSoC project proposal:
     http://socghop.appspot.com/student_project/show/google/gsoc2009/nescent/t124022798969
@@ -78,29 +78,28 @@ Timeline
     - Usage: parsing, writing, object navigation, Bio integration, utilities
     - Performance: read, parse, write
 
-:6/29:
-    Documentation (on Biopython wiki):
-
-    - Parser performance: compare to Archaeopterix, Bioperl?
-
 :7/6:
-    Make it pretty:
+    Address comments from last week's code/doc review
 
-    - Pythonic syntax sugar (e.g. __getitem__, __contains__)
+    Enable Pythonic syntax sugar:
 
-        - PhyloXML.__getitem__: get the phylogeny with matching name or id
-        - Clade.__getitem__: support slicing, too
-        - Events.__contains__:
-            - e.g. if 'speciations' in foo.events: ...
-
-        - Unit tests for all of this
+    - PhyloXML.__getitem__: get the phylogeny with matching name or id
+    - Clade.__getitem__: support slicing, maybe string identifiers
+    - Override __str__ and __repr__ methods for some classes
+        - e.g. str(Tree.Date) combines value and unit: "65 mya"
+    - Events.__contains__: e.g. if 'speciations' in foo.events: ...
+    - For plural attributes that are usually single (taxonomies, confidences),
+      create a property that returns the single item
+    - For wrapped helper functions in Parser and Writer, copy function info to
+      make tracebacks friendlier
+    - Write unit tests for all of this
 
     Integration:
 
     - Identify more Biopython objects to reuse or export to
         - Improve the SeqRecord conversion
 
-    - Play nicely with Nexus, Newick
+    - Convert to/from Nexus/Newick tree objects
 
 :7/13:
     Extend the core to the rest of the spec:
@@ -110,23 +109,31 @@ Timeline
     - Clean up and reorganize any code that needs it
     - Hopefully, the entire phyloXML spec is covered by the end of this week
 
-
-
+    Additional spec compliance:
+    
+    - Implement collapse_whitespace -- see the spec glossary
+    - Use the schema document to validate the input file
 
 :7/20:
     Enhancements (time permitting):
-      - Collapse whitespace in node text when parsing
-      - Search for external nodes from a Phylogeny or Clade instance
-      - Add singular property names for plural attributes that almost always
-        contain just one element 
 
-          - e.g. taxonomy -> taxonomies[0])
-          - if more than 1 element is available, raise an exception
+    - Collapse whitespace in node text when parsing
+    - Search for external nodes from a Phylogeny or Clade instance
+    - Add singular property names for plural attributes that almost always
+      contain just one element 
 
-      - Export Phylogeny to a networkx digraph; Phyloxml -> multidigraph
+        - e.g. taxonomy -> taxonomies[0])
+        - if more than 1 element is available, raise an exception
+
+    Export to other tree representations:
+
+    - networkx: Phylogeny -> digraph; Phyloxml -> multidigraph
+    - What does BioSQL need?
 
 :7/27:
     Document all completed functionality.
+        - Re-run performance benchmarks; mention that the ATV parser is about
+          10x as fast
 
 :8/3:
     - Run tests and benchmarks on alternate platforms and document results
