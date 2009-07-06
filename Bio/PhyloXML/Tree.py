@@ -470,7 +470,7 @@ class Events(PhyloElement):
         return list(self.itervalues())
 
     def __len__(self):
-        return len(self.iterkeys())
+        return len(self.values())
 
     def __getitem__(self, key):
         if not hasattr(self, key):

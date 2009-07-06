@@ -589,6 +589,28 @@ class MethodTests(unittest.TestCase):
         self.assertEqual(tree.clade[0,1], tree.clade.clades[0].clades[1])
         self.assertEqual(tree.clade[1], tree.clade.clades[1])
 
+    def test_events(self):
+        """Mapping-type behavior of an Events object."""
+        evts = self.phyloxml.phylogenies[4].clade.events
+        # Container behavior: __len__, __contains__
+        self.assertEquals(len(evts), 1)
+        self.assertEqual('speciations' in evts, True)
+        self.assertEqual('duplications' in evts, False)
+        # Attribute access: __get/set/delitem__
+        self.assertEqual(evts['speciations'], 1)
+        self.assertRaises(KeyError, lambda k: evts[k], 'duplications')
+        evts['duplications'] = 3
+        self.assertEqual(evts.duplications, 3)
+        self.assertEqual(len(evts), 2)
+        del evts['speciations']
+        self.assertEqual(evts.speciations, None)
+        self.assertEquals(len(evts), 1)
+        # Iteration: __iter__, keys, values, items
+        self.assertEqual(list(iter(evts)), ['duplications'])
+        self.assertEqual(evts.keys(), ['duplications'])
+        self.assertEqual(evts.values(), [3])
+        self.assertEqual(evts.items(), [('duplications', 3)])
+
 
 # ---------------------------------------------------------
 
