@@ -451,6 +451,47 @@ class Events(PhyloElement):
         PhyloElement.__init__(self, type=type, duplications=duplications,
                 speciations=speciations, losses=losses, confidence=confidence)
 
+    def iteritems(self):
+        return ((k, v) for k, v in self.__dict__.iteritems() if v is not None)
+
+    def iterkeys(self):
+        return (k for k, v in self.__dict__.iteritems() if v is not None)
+
+    def itervalues(self):
+        return (v for v in self.__dict__.itervalues() if v is not None)
+
+    def items(self):
+        return list(self.iteritems())
+
+    def keys(self):
+        return list(self.iterkeys())
+
+    def values(self):
+        return list(self.itervalues())
+
+    def __len__(self):
+        return len(self.iterkeys())
+
+    def __getitem__(self, key):
+        if not hasattr(self, key):
+            raise KeyError(key)
+        val = getattr(self, key)
+        if val is None:
+            raise KeyError("%s has not been set in this object" % repr(key))
+        return val
+
+    def __setitem__(self, key, val):
+        setattr(self, key, val)
+
+    def __delitem__(self, key):
+        setattr(self, key, None)
+
+    def __iter__(self):
+        return iter(self.iterkeys())
+
+    def __contains__(self, key):
+        return (hasattr(self, key) and getattr(self, key) is not None)
+
 
 class Id(PhyloElement):
     """A general purpose identifier element.
