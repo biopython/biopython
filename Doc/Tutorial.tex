@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 23 June 2009 (Biopython 1.51 \textit{beta})}
+\date{Last Update -- 6 July 2009 (Biopython 1.51 \textit{beta})}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -2197,7 +2197,7 @@ Length 394
 
 \section{Sequence files as Dictionaries}
 
-The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database using the Python \verb|dictionary| data type (like a hash in Perl). This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
+The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database using the Python \verb|dictionary| data type (like a hash in Perl). This is very useful for moderately large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
 
 You can use the function \verb|Bio.SeqIO.to_dict()| to make a SeqRecord dictionary (in memory).  By default this will use each record's identifier (i.e. the \verb|.id| attribute) as the key.  Let's try this using our GenBank file:
 
@@ -5489,7 +5489,7 @@ authors: Liew C.F., Lim S.H., Loh C.S., Goh C.J.;
 title: "Molecular cloning and sequence analysis of chalcone synthase cDNAs of
 Bromheadia finlaysoniana.";
 >>> print record.organism_classification
-['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'Liliopsida', 'Asparagales', 'Orchidaceae', 'Epidendroideae', 'higher Epidendroideae', 'Cymbidieae', 'Bromheadiinae', 'Bromheadia']
+['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', ..., 'Bromheadia']
 \end{verbatim}
 
 To parse a file that contains more than one Swiss-Prot record, we use the \verb|parse| function instead. This function allows us to iterate over the records in the file.
@@ -6037,7 +6037,7 @@ This corresponds to:
 \item The Residue with id (\char`\"{} \char`\"{}, 10, \char`\"{}A\char`\"{}).
 \end{itemize}
 The Residue id indicates that the residue is not a hetero-residue (nor a water)
-because it has a blanc hetero field, that its sequence identifier is 10 and
+because it has a blank hetero field, that its sequence identifier is 10 and
 that its insertion code is \char`\"{}A\char`\"{}.
 
 Some other useful methods:
@@ -6448,7 +6448,7 @@ making a wrong interpretation. These cases are listed below.
 
 \subsubsection{A blank altloc for a disordered atom}
 
-Normally each disordered atom should have a non-blanc altloc identifier. However,
+Normally each disordered atom should have a non-blank altloc identifier. However,
 there are many structures that do not follow this convention, and have a blank
 and a non-blank identifier for two disordered positions of the same atom. This
 is automatically interpreted in the right way.
@@ -8150,6 +8150,20 @@ the regions of interest.
 
 \chapter{Cookbook -- Cool things to do with it}
 \label{chapter:cookbook}
+
+Biopython now has two collections of ``cookbook'' examples -- this chapter
+(which has been included in this tutorial for many years and has gradually
+grown), and \url{http://biopython.org/wiki/Category:Cookbook} which is a
+user contributed collection on our wiki.
+
+We're trying to encourage Biopython users to contribute their own examples
+to the wiki. In addition to helping the community, one direct benefit of
+sharing an example like this is that you could also get some feedback on
+the code from other Biopython users and developers - which could help you
+improve all your Python code.
+
+In the long term, we may end up moving all of the examples in this chapter
+to the wiki, or elsewhere within the tutorial.
 
 \section{Working with sequence files}
 \label{seq:cookbook-sequences}
@@ -10190,6 +10204,12 @@ help answer questions from beginners.  After all, you were a beginner once.
 We're happy to take feedback or contributions - either via a bug-report or on the Mailing List.
 While reading this tutorial, perhaps you noticed some topics you were interested in which were missing, or not clearly explained.  There is also Biopython's built in documentation (the docstrings, these are also 
 \href{http://biopython.org/DIST/docs/api}{online}), where again, you may be able to help fill in any blanks.
+
+\section{Contributing cookbook examples}
+As explained in Chapter~\ref{chapter:cookbook}, Biopython now has a wiki
+collection of user contributed ``cookbook'' examples,
+\url{http://biopython.org/wiki/Category:Cookbook} -- maybe you can add
+to this?
 
 \section{Maintaining a distribution for a platform}
 \label{sec:maintain_dist}
