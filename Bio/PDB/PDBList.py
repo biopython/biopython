@@ -36,7 +36,7 @@
 __doc__="Access the PDB over the internet (for example to download structures)."
 
 import urllib, re, os
-from warnings import warn
+import warnings
 
 class PDBList:
     """
