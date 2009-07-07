@@ -145,15 +145,6 @@ class Phylogeny(PhyloElement):
                 other=other or [],
                 )
 
-    # def __iter__(self):
-    #     """Iterate through the clades (branches) within this phylogeny."""
-    #     return iter(self.clade)
-
-    # def __len__(self):
-    #     """Number of clades directly under this element."""
-        # XXX should only have 1 clade
-        # ENH: count all branches within this tree?
-
     def to_phyloxml(self, **kwargs):
         """Create a new PhyloXML object containing just this phylogeny."""
         return Phyloxml(kwargs, phylogenies=[self])
@@ -181,6 +172,17 @@ class Phylogeny(PhyloElement):
     # is_monophyletic
     # is_paraphyletic
     # reroot
+
+    # Shortcut -- usually only 1 confidence value is given
+    # XXX see Clade.confidence/taxonomy
+    @property
+    def confidence(self):
+        if len(self.confidences) == 0:
+            raise RuntimeError("Phylogeny().confidences is empty")
+        if len(self.confidences) > 1:
+            raise RuntimeError("more than 1 confidence value available; "
+                               "use Phylogeny().confidences")
+        return self.confidences[0]
 
 
 class Clade(PhyloElement):
@@ -250,6 +252,33 @@ class Clade(PhyloElement):
                 other=other or [],
                 )
 
+    def to_phylogeny(self, **kwargs):
+        """Create a new phylogeny containing just this clade."""
+        # ENH: preserve some attributes of the parent phylogeny
+        return Phylogeny(clade=self, **kwargs)
+
+    # Shortcuts for list attributes that are usually only 1 item
+    # XXX should these raise RuntimeError, AttributeError or IndexError?
+    @property
+    def confidence(self):
+        if len(self.confidences) == 0:
+            raise RuntimeError("Clade().confidences is empty")
+        if len(self.confidences) > 1:
+            raise RuntimeError("more than 1 confidence value available; "
+                               "use Clade().confidences")
+        return self.confidences[0]
+
+    @property
+    def taxonomy(self):
+        if len(self.taxonomies) == 0:
+            raise RuntimeError("Clade().taxonomies is empty")
+        if len(self.taxonomies) > 1:
+            raise RuntimeError("more than 1 taxonomy value available; "
+                               "use Clade().taxonomies")
+        return self.taxonomies[0]
+
+    # Sequence-type behavior methods
+
     def __getitem__(self, index):
         """Get a sub-clade by index."""
         # ENH: handle slicing
@@ -267,11 +296,6 @@ class Clade(PhyloElement):
     def __len__(self):
         """Number of clades directy under this element."""
         return len(self.clades)
-
-    def to_phylogeny(self, **kwargs):
-        """Create a new phylogeny containing just this clade."""
-        # ENH: preserve some attributes of the parent phylogeny
-        return Phylogeny(clade=self, **kwargs)
 
 
 # Complex types
