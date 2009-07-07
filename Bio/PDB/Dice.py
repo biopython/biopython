@@ -42,7 +42,7 @@ class ChainSelector:
             return 0
         if icode!=" ":
             warnings.warn("WARNING: Icode at %s" % residue.get_id(),
-                          RuntimeError)
+                          RuntimeWarning)
         if self.start<=resseq<=self.end:
             return 1
         return 0
