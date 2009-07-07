@@ -611,6 +611,32 @@ class MethodTests(unittest.TestCase):
         self.assertEqual(evts.values(), [3])
         self.assertEqual(evts.items(), [('duplications', 3)])
 
+    def test_singlular(self):
+        """Singular properties representing plural attributes."""
+        conf = Tree.Confidence(0.9, 'bootstrap')
+        taxo = Tree.Taxonomy(rank='genus')
+        # Clade.taxonomy, Clade.confidence
+        clade = Tree.Clade(confidences=[conf], taxonomies=[taxo])
+        self.assertEqual(clade.confidence.type, 'bootstrap')
+        self.assertEqual(clade.taxonomy.rank, 'genus')
+        # raise if len > 1
+        clade.confidences.append(conf)
+        self.assertRaises(RuntimeError, getattr, clade, 'confidence')
+        clade.taxonomies.append(taxo)
+        self.assertRaises(RuntimeError, getattr, clade, 'taxonomy')
+        # raise if []
+        clade.confidences = []
+        self.assertRaises(RuntimeError, getattr, clade, 'confidence')
+        clade.taxonomies = []
+        self.assertRaises(RuntimeError, getattr, clade, 'taxonomy')
+        # Phylogeny.confidence
+        tree = Tree.Phylogeny(True, confidences=[conf])
+        self.assertEqual(tree.confidence.type, 'bootstrap')
+        tree.confidences.append(conf)
+        self.assertRaises(RuntimeError, getattr, tree, 'confidence')
+        tree.confidences = []
+        self.assertRaises(RuntimeError, getattr, tree, 'confidence')
+
 
 # ---------------------------------------------------------
 
