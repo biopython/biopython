@@ -3239,8 +3239,8 @@ includes the return code, an integer value which by convention is zero when
 successful (check the documentation for particular tools about what return
 codes they might use). Then, two handles which contain the ``standard out''
 (stdout) and ``standard error'' (stderr) text from the tool. These terms
-originate in Unix, and are general the results from the program and any
-progress or error messages.
+originate in Unix, and are the general results from the program (stdout)
+and any progress or error messages (stderr).
 
 \begin{verbatim}
 >>> from Bio.Application import generic_run
@@ -3311,7 +3311,7 @@ None
 \end{verbatim}
 
 \noindent The spacing has been adjusted here for display purposes.
-The tree object is actuall pretty powerful! Have a look at the list of
+The tree object is actually pretty powerful! Have a look at the list of
 methods with \texttt{dir(tree)} to get a hint of this...
 
 \subsection{MUSCLE}
@@ -3345,13 +3345,15 @@ Note that MUSCLE uses ``-in'' and ``-out'' but in Biopython we have to use
 because ``in'' is a reserved word in Python.
 
 By default MUSCLE will output the alignment as a FASTA file (using gapped
-sequences). You can also ask for ClustalW-like output:
+sequences). The \verb|Bio.AlignIO| module should be able to read this
+alignment using \texttt{format="fasta"}.
+You can also ask for ClustalW-like output:
 
 \begin{verbatim}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clw=True)
 >>> print cline
-muscle -in opuntia.fasta -out opuntia.txt -clw
+muscle -in opuntia.fasta -out opuntia.aln -clw
 \end{verbatim}
 
 Or, strict ClustalW output where the original ClustalW header line is
@@ -3361,8 +3363,11 @@ used for maximum compatibility:
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clwstrict=True)
 >>> print cline
-muscle -in opuntia.fasta -out opuntia.txt -clwstrict
+muscle -in opuntia.fasta -out opuntia.aln -clwstrict
 \end{verbatim}
+
+\noindent The \verb|Bio.AlignIO| module should be able to read these alignments
+using \texttt{format="clustal"}.
 
 MUSCLE can also output in GCG MSF format (using the \texttt{msf} argument), but
 Biopython can't currently parse that, or using HTML which would give a human
@@ -3371,13 +3376,9 @@ readable web page (not suitable for parsing).
 You can also set the other optional parameters, for example the maximum number
 of iterations. See the built in help for details:
 
-\begin{verbatim}
->>> from Bio.Align.Applications import MuscleCommandline
->>> help(MuscleCommandline)
-\end{verbatim}
-
-You might run simple MUSCLE command line string as described above for
-ClustalW, or opt to use the \verb|subprocess| module.
+You would then run MUSCLE command line string as described above for
+ClustalW, and parse the output using \verb|Bio.AlignIO| to get an
+alignment object.
 
 \subsection{MUSCLE using stdout}
 
@@ -3394,7 +3395,7 @@ advantage of this to avoid having a temporary output file! For example:
 muscle -in opuntia.fasta
 \end{verbatim}
 
-\noindent Now, let's run this can capture the output as handles:
+\noindent Now, let's run this and capture the output as handles:
 
 \begin{verbatim}
 >>> from Bio.Application import generic_run
@@ -3403,7 +3404,7 @@ muscle -in opuntia.fasta
 0
 \end{verbatim}
 
-\noindent Remember, a return code of zero is good -- by convention this means
+\noindent A return code of zero is good -- by convention this means
 no errors. Finally, the output handle should contain our alignment in the
 default FASTA format:
 
@@ -3489,8 +3490,9 @@ TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF19
 
 Wow! There we are with a new alignment of just the six records, without having created
 a temporary FASTA input file, or a temporary alignment output file. However, a word of
-caution: Dealing with errors this style of programming is much more complicated. It
-also becomes far harder to diagnose problems, because you can't try running MUSCLE
+caution: Dealing with errors with this style of calling external programs is much more
+complicated.
+It also becomes far harder to diagnose problems, because you can't try running MUSCLE
 manually outside of Biopython (because you don't have the input file to supply).
 There can also be subtle cross platform issues (e.g. Windows versus Linux), and how
 you run your script can have in impact (e.g. at the command line, from IDLE or an
