@@ -90,7 +90,6 @@ class Phyloxml(PhyloElement):
 
 class Other(PhyloElement):
     """Container for non-phyloXML elements in the tree."""
-    # ENH: assert that the tag namespace is not phyloxml's
     def __init__(self, tag, namespace=None, attributes=None, value=None,
             children=None):
         self.tag = tag
@@ -145,6 +144,13 @@ class Phylogeny(PhyloElement):
                 other=other or [],
                 )
 
+    def find(self, cls=None, **kwargs):
+        """Find all sub-nodes matching the given attributes.
+
+        See Clade.find() for details.
+        """
+        return self.clade.find(cls, **kwargs)
+
     def to_phyloxml(self, **kwargs):
         """Create a new PhyloXML object containing just this phylogeny."""
         return Phyloxml(kwargs, phylogenies=[self])
@@ -165,7 +171,6 @@ class Phylogeny(PhyloElement):
 
     # From Bioperl's Bio::Tree::TreeFunctionsI
 
-    # find_node -- by name or other standard field
     # remove_node
     # get_lca (lowest common ancestor)
     # distance (between 2 nodes, specified however)
@@ -173,10 +178,12 @@ class Phylogeny(PhyloElement):
     # is_paraphyletic
     # reroot
 
-    # Shortcut -- usually only 1 confidence value is given
-    # XXX see Clade.confidence/taxonomy
     @property
     def confidence(self):
+        """Equivalent to self.confidences[0] if there is only 1 value.
+
+        See also: Clade.confidence, Clade.taxonomy
+        """
         if len(self.confidences) == 0:
             raise RuntimeError("Phylogeny().confidences is empty")
         if len(self.confidences) > 1:
@@ -251,6 +258,76 @@ class Clade(PhyloElement):
                 clades=clades or [],
                 other=other or [],
                 )
+
+    def find(self, cls=None, **kwargs):
+        """Find all sub-nodes matching the given attributes.
+
+        The 'cls' argument specifies the class of the sub-node. Nodes that
+        inherit from this type will also match. (The default, Tree.PhyloElement,
+        matches any standard phyloXML type.)
+
+        The arbitrary keyword arguments indicate the attribute name of the
+        sub-node and the value to match: string, integer or boolean. Strings are
+        evaluated as regular expression matches; integers are compared directly
+        for equality; and booleans evaluate the attribute's truth value (True or
+        False) before comparing. To handle nonzero floats, search with a boolean
+        argument, then filter the result manually.
+
+        If no keyword arguments are given, any objects matching the 
+
+        The result is an iterable through all matching objects, by depth-first
+        search. (Not necessarily the same order as the elements appear in the
+        source file!)
+
+        Example:
+
+        >>> tree = PhyloXML.read('phyloxml_examples.xml').phylogenies[5]
+        >>> matches = tree.clade.find(PhyloXML.Tree.Taxonomy, code='OCTVU')
+        >>> matches.next()
+        Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
+        """ 
+        base_class = PhyloElement
+        if cls is None:
+            cls = base_class
+
+        def is_matching_node(node):
+            if isinstance(node, cls):
+                if len(kwargs) == 0:
+                    # Without further constraints, accept any matching class
+                    return True
+                for key, pattern in kwargs.iteritems():
+                    if not hasattr(node, key):
+                        continue
+                    target = getattr(node, key)
+                    if (isinstance(pattern, basestring)
+                            and isinstance(target, basestring)):
+                        if re.match(pattern, target):
+                            return True
+                    elif isinstance(pattern, bool):
+                        if pattern == bool(target):
+                            return True
+                    elif isinstance(pattern, int):
+                        if pattern == target:
+                            return True
+                    else:
+                        raise RuntimeError('invalid argument: ' + str(pattern))
+            return False
+
+        def local_find(node):
+            if node is None:
+                return
+            if isinstance(node, list):
+                for item in node:
+                    for result in local_find(item):
+                        yield result
+            if isinstance(node, base_class):
+                if is_matching_node(node):
+                    yield node
+                for name, subnode in sorted(node.__dict__.iteritems()):
+                    for result in local_find(subnode):
+                        yield result
+
+        return local_find(self)
 
     def to_phylogeny(self, **kwargs):
         """Create a new phylogeny containing just this clade."""

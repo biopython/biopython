@@ -226,7 +226,7 @@ class TreeTests(unittest.TestCase):
     """Tests for instantiation and attributes of each complex type."""
     # NB: also test check_str() regexps wherever they're used
     def test_Phyloxml(self):
-        """Test instantiation of Phyloxml objects."""
+        """Instantiation of Phyloxml objects."""
         phx = PhyloXML.read(EX_PHYLO)
         self.assert_(isinstance(phx, Tree.Phyloxml))
         self.assert_('schemaLocation' in phx.attributes)
@@ -636,6 +636,40 @@ class MethodTests(unittest.TestCase):
         self.assertRaises(RuntimeError, getattr, tree, 'confidence')
         tree.confidences = []
         self.assertRaises(RuntimeError, getattr, tree, 'confidence')
+
+    def test_find(self):
+        """Method find() on Clade and Phylogeny objects."""
+        # From the docstring example
+        tree = self.phyloxml.phylogenies[5]
+        matches = list(tree.find(Tree.Taxonomy, code='OCTVU'))
+        self.assertEqual(len(matches), 1)
+        self.assert_(isinstance(matches[0], Tree.Taxonomy))
+        self.assertEqual(matches[0].code, 'OCTVU')
+        self.assertEqual(matches[0].scientific_name, 'Octopus vulgaris')
+        # Iteration and regexps
+        tree = self.phyloxml.phylogenies[10]
+        for point, alt in izip(tree.find(geodetic_datum=r'WGS\d{2}'),
+                              (472, 10, 452)):
+            self.assert_(isinstance(point, Tree.Point))
+            self.assertEqual(point.geodetic_datum, 'WGS84')
+            self.assertAlmostEqual(point.alt, alt)
+        # boolean filter
+        for clade, name in izip(tree.find(name=True), list('ABCD')):
+            self.assert_(isinstance(clade, Tree.Clade))
+            self.assertEqual(clade.name, name)
+        # class filter
+        tree = self.phyloxml.phylogenies[4]
+        events = list(tree.find(Tree.Events))
+        self.assertEqual(len(events), 2)
+        self.assertEqual(events[0].duplications, 1)
+        self.assertEqual(events[1].speciations, 1)
+        # integer filter
+        tree = PhyloXML.parse(EX_APAF).next()
+        domains = list(tree.find(start=5))
+        self.assertEqual(len(domains), 8)
+        for dom in domains:
+            self.assertEqual(dom.start, 5)
+            self.assertEqual(dom.value, 'CARD')
 
 
 # ---------------------------------------------------------
