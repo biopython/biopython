@@ -111,6 +111,7 @@ test_files = [ \
     ("genbank",False, 'GenBank/dbsource_wrap.gb', 1),
     ("genbank",False, 'GenBank/NC_005816.gb', 1), #See also AE017046.embl
     ("genbank",False, 'GenBank/NC_000932.gb', 1),
+    ("genbank",False, 'GenBank/pBAD30.gb', 1), #Odd LOCUS line from Vector NTI
 # The next example is a truncated copy of gbvrl1.seq from
 # ftp://ftp.ncbi.nih.gov/genbank/gbvrl1.seq.gz
 # This includes an NCBI header, and the first three records:
