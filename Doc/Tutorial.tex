@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 6 July 2009 (Biopython 1.51 \textit{beta})}
+\date{Last Update -- 8 July 2009 (Biopython 1.51 \textit{beta})}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -3172,9 +3172,9 @@ sample, but the same principles apply.
 \subsection{ClustalW}
 \label{sec:align_clustal}
 ClustalW is a popular command line tool for multiple sequence alignment
-(there is also a graphical interface called ClustlX). Biopython's
-\verb|Bio.Align.Applications| module has a wrapper for this (and several
-other alignment tools).
+(there is also a graphical interface called ClustalX). Biopython's
+\verb|Bio.Align.Applications| module has a wrapper for this alignment tool
+(and several others).
 
 Before trying to use ClustalW from within Python, you should first try running
 the ClustalW tool yourself by hand at the command line, to familiarise
@@ -3191,7 +3191,7 @@ For the most basic usage, all you need is to have a FASTA input file, such as
 \href{http://biopython.org/DIST/docs/tutorial/examples/opuntia.fasta}{opuntia.fasta}
 (available online or in the Doc/examples subdirectory of the Biopython source
 code). This is a small FASTA file containing seven prickly-pear DNA sequences
-(from the cactus family \textit{opuntia}).
+(from the cactus family \textit{Opuntia}).
 
 By default ClustalW will generate an alignment and guide tree file with names
 based on the input FASTA file, in this case \texttt{opuntia.aln} and
@@ -3227,10 +3227,10 @@ path to the tool, for example:
 >>> cline = ClustalwCommandline(clustalw_exe, infile="opuntia.fasta")
 \end{verbatim}
 
-\noindent Remember in Python that for a default string \verb|\n| or \verb|\t|
-means a new line or a tab -- which is why we're put a letter ``r'' at the
-start for a raw string. This is generally good practice when specifying a
-Windows style file name.
+\noindent Remember, in Python a default string \verb|\n| and/or \verb|\t|
+translates as a new line and/or a tab -- which is why we're put a letter
+``r'' at the start for a raw string that isn't translated in this way.
+This is generally good practice when specifying a Windows style file name.
 
 You can now run this command line, perhaps using the Python \verb|subprocess|
 module, or maybe just with our \verb|generic_run| function.
@@ -3374,7 +3374,7 @@ Biopython can't currently parse that, or using HTML which would give a human
 readable web page (not suitable for parsing).
 
 You can also set the other optional parameters, for example the maximum number
-of iterations. See the built in help for details:
+of iterations. See the built in help for details.
 
 You would then run MUSCLE command line string as described above for
 ClustalW, and parse the output using \verb|Bio.AlignIO| to get an
