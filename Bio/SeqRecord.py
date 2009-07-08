@@ -34,6 +34,10 @@ class _RestrictedDict(dict):
             raise TypeError("We only allow python sequences (lists, tuples or "
                             "strings) of length %i." % self._length)
         dict.__setitem__(self, key, value)
+    def update(self, new_dict) :
+        #Force this to go via our strict __setitem__ method
+        for (key, value) in new_dict.iteritems() :
+            self[key] = value
 
 class SeqRecord(object):
     """A SeqRecord object holds a sequence and information about it.
@@ -91,12 +95,16 @@ class SeqRecord(object):
         """Create a SeqRecord.
 
         Arguments:
-         - seq         - Sequence, required (Seq or Mutable object)
+         - seq         - Sequence, required (Seq, MutableSeq or UnknownSeq)
          - id          - Sequence identifier, recommended (string)
          - name        - Sequence name, optional (string)
          - description - Sequence description, optional (string)
          - dbxrefs     - Database cross references, optional (list of strings)
          - features    - Any (sub)features, optional (list of SeqFeature objects)
+         - annotations - Dictionary of annotations for the whole sequence
+         - letter_annotations - Dictionary of per-letter-annotations, values
+                                should be strings, list or tuples of the same
+                                length as the full sequence.
 
         You will typically use Bio.SeqIO to read in sequences from files as
         SeqRecord objects.  However, you may want to create your own SeqRecord
@@ -135,19 +143,22 @@ class SeqRecord(object):
             annotations = {}
         self.annotations = annotations
 
-        # annotations about each letter in the sequence
         if letter_annotations is None:
+            # annotations about each letter in the sequence
             if seq is None :
                 #Should we allow this and use a normal unrestricted dict?
                 self._per_letter_annotations = _RestrictedDict(length=0)
             else :
                 try :
-                    self._per_letter_annotations = _RestrictedDict(
-                            length=len(seq))
+                    self._per_letter_annotations = \
+                                              _RestrictedDict(length=len(seq))
                 except :
                     raise TypeError("seq argument should be Seq or MutableSeq")
-        else:
-            self._set_per_letter_annotations(letter_annotations)
+        else :
+            #This will be handled via the property set function, which will
+            #turn this into a _RestrictedDict and thus ensure all the values
+            #in the dict are the right length
+            self.letter_annotations = letter_annotations
         
         # annotations about parts of the sequence
         if features is None:
@@ -186,7 +197,7 @@ class SeqRecord(object):
         >>> print record.letter_annotations["solexa_quality"]
         [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -6, -1, -1, -4, -1, -4, -19, -10, -27, -18]
 
-        The per-letter-annotaions get sliced automatically if you slice the
+        The letter_annotations get sliced automatically if you slice the
         parent SeqRecord, for example taking the last ten bases:
 
         >>> sub_record = record[-10:]
@@ -531,7 +542,9 @@ class SeqRecord(object):
         >>> rec
         SeqRecord(seq=Seq('MASRGVNKVILVGNLGQDPEVRYMPNGGAVANITLATSESWRDKATGEMKEQTE...IPF', ProteinAlphabet()), id='NP_418483.1', name='b4059', description='ssDNA-binding protein', dbxrefs=['ASAP:13298', 'GI:16131885', 'GeneID:948570'])
 
-        Note that long sequences are shown truncated.
+        Note that long sequences are shown truncated. Also note that any
+        annotations, letter_annotations and features are not shown (as they
+        would lead to a very long string).
         """
         return self.__class__.__name__ \
          + "(seq=%s, id=%s, name=%s, description=%s, dbxrefs=%s)" \
@@ -576,9 +589,9 @@ class SeqRecord(object):
         """Returns the record as a string in the specified file format.
 
         This method supports the python format() function added in
-        Python 2.6/3.0.  The format_spec should be a lower case
-        string supported by Bio.SeqIO as an output file format.
-        See also the SeqRecord's format() method.
+        Python 2.6/3.0.  The format_spec should be a lower case string
+        supported by Bio.SeqIO as an output file format. See also the
+        SeqRecord's format() method.
         """
         if format_spec:
             from StringIO import StringIO

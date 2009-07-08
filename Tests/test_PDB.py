@@ -10,11 +10,15 @@ except ImportError :
     raise MissingExternalDependencyError(\
         "Install NumPy if you want to use Bio.PDB.")
 
+from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
+
 import warnings
-def send_warnings_to_stdout(message, category, filename, lineno,
-                            file=None, line=None):
-    print message
-warnings.showwarning = send_warnings_to_stdout
+def send_pdb_warnings_to_stdout(message, category, filename, lineno,
+                                file=None, line=None):
+    if category in [PDBConstructionException, PDBConstructionWarning] :
+        print message
+warnings.resetwarnings()
+warnings.showwarning = send_pdb_warnings_to_stdout
 
 def quick_neighbor_search_test() :
     #Based on the self test in Bio.PDB.NeighborSearch
@@ -93,3 +97,5 @@ def run_test():
     quick_neighbor_search_test()
 
 run_test()
+
+warnings.resetwarnings() #clean up in case this affects other unit tests

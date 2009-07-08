@@ -1,0 +1,99 @@
+# solexa file ../solexa_dir/solexa_reads.fastq (beginning)
+
+BEGIN_SEQUENCE HWI-EAS94_4_1_1_537_446 1
+BEGIN_COMMENT
+TIME: Wed Dec 24 11:21:50 2008
+CHEM: solexa
+END_COMMENT
+BEGIN_DNA
+g 30
+c 30
+c 30
+a 30
+a 30
+t 30
+c 30
+a 30
+g 30
+g 30
+t 30
+t 30
+t 30
+c 30
+t 30
+c 30
+t 30
+g 30
+c 30
+a 30
+a 28
+g 23
+c 30
+c 30
+c 30
+c 30
+t 30
+t 30
+t 28
+a 22
+g 8
+c 22
+a 7
+g 15
+c 15
+t 15
+g 10
+a 10
+g 11
+c 15
+END_DNA
+END_SEQUENCE
+
+BEGIN_SEQUENCE HWI-EAS94_4_1_1_602_99 1
+BEGIN_COMMENT
+TIME: Wed Dec 24 11:21:50 2008
+CHEM: solexa
+END_COMMENT
+BEGIN_DNA
+g 30
+c 30
+c 30
+a 30
+t 30
+g 30
+g 30
+c 30
+a 30
+c 30
+a 30
+t 30
+a 30
+t 30
+a 30
+t 30
+g 30
+a 30
+a 30
+g 30
+g 30
+t 30
+c 30
+a 30
+g 30
+a 30
+g 16
+g 30
+a 28
+c 22
+a 22
+a 22
+c 14
+t 15
+t 15
+g 5
+c 10
+t 15
+g 10
+t 5
+END_DNA
+END_SEQUENCE
