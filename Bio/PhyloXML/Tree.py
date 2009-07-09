@@ -269,11 +269,12 @@ class Clade(PhyloElement):
         The arbitrary keyword arguments indicate the attribute name of the
         sub-node and the value to match: string, integer or boolean. Strings are
         evaluated as regular expression matches; integers are compared directly
-        for equality; and booleans evaluate the attribute's truth value (True or
+        for equality, and booleans evaluate the attribute's truth value (True or
         False) before comparing. To handle nonzero floats, search with a boolean
         argument, then filter the result manually.
 
-        If no keyword arguments are given, any objects matching the 
+        If no keyword arguments are given, then just the class type is used for
+        matching.
 
         The result is an iterable through all matching objects, by depth-first
         search. (Not necessarily the same order as the elements appear in the
@@ -282,7 +283,7 @@ class Clade(PhyloElement):
         Example:
 
         >>> tree = PhyloXML.read('phyloxml_examples.xml').phylogenies[5]
-        >>> matches = tree.clade.find(PhyloXML.Tree.Taxonomy, code='OCTVU')
+        >>> matches = tree.clade.find(code='OCTVU')
         >>> matches.next()
         Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
         """ 
@@ -314,17 +315,20 @@ class Clade(PhyloElement):
             return False
 
         def local_find(node):
-            if node is None:
-                return
-            if isinstance(node, list):
-                for item in node:
+            singles = []
+            lists = []
+            for name, subnode in sorted(node.__dict__.iteritems()):
+                if subnode is None:
+                    continue
+                if isinstance(subnode, list):
+                    lists.extend(subnode)
+                else:
+                    singles.append(subnode)
+            for item in singles + lists:
+                if isinstance(item, base_class):
+                    if is_matching_node(item):
+                        yield item
                     for result in local_find(item):
-                        yield result
-            if isinstance(node, base_class):
-                if is_matching_node(node):
-                    yield node
-                for name, subnode in sorted(node.__dict__.iteritems()):
-                    for result in local_find(subnode):
                         yield result
 
         return local_find(self)

@@ -661,8 +661,8 @@ class MethodTests(unittest.TestCase):
         tree = self.phyloxml.phylogenies[4]
         events = list(tree.find(Tree.Events))
         self.assertEqual(len(events), 2)
-        self.assertEqual(events[0].duplications, 1)
-        self.assertEqual(events[1].speciations, 1)
+        self.assertEqual(events[0].speciations, 1)
+        self.assertEqual(events[1].duplications, 1)
         # integer filter
         tree = PhyloXML.parse(EX_APAF).next()
         domains = list(tree.find(start=5))
