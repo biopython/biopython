@@ -32,7 +32,7 @@ def unzip(fname):
     """Extract a single file from a Zip archive and return a handle to it."""
     assert zipfile.is_zipfile(fname)
     z = zipfile.ZipFile(fname)
-    return z.open(z.filelist[0].filename)
+    return StringIO(z.read(z.filelist[0].filename))
 
 
 # ---------------------------------------------------------
