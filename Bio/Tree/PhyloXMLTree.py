@@ -14,8 +14,7 @@ from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
-
-from Exceptions import PhyloXMLWarning
+from Bio.PhyloXML.Exceptions import PhyloXMLWarning
 
 
 def check_str(text, testfunc):

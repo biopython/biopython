@@ -15,7 +15,7 @@ from itertools import izip
 from cStringIO import StringIO
 
 from Bio import PhyloXML
-from Bio.PhyloXML import Tree
+from Bio.Tree import PhyloXMLTree as Tree
 
 
 # Example PhyloXML files

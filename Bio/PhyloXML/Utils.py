@@ -9,7 +9,8 @@
 
 import sys
 
-import Tree
+from Bio.Tree import PhyloXMLTree as  Tree
+
 from Parser import ElementTree, read
 
 
