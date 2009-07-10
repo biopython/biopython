@@ -137,11 +137,16 @@ class EmbossIterator(AlignmentIterator) :
                     id, start = id_start
                     seq, end = seq_end
                     if start==end :
-                        #Special case,
-                        assert len(seq.replace("-",""))==0
-                        start = int(start)
-                        end = int(end)
+                        #Special case, either a single letter is present,
+                        #or no letters at all.
+                        if seq.replace("-","") == "" :
+                            start = int(start)
+                            end = int(end)
+                        else :
+                            start = int(start) - 1
+                            end = int(end)
                     else :
+                        assert seq.replace("-","") != ""
                         start = int(start)-1 #python counting
                         end = int(end)
 
@@ -156,17 +161,21 @@ class EmbossIterator(AlignmentIterator) :
                         seq_starts.append(start)
 
                     #Check the start...
-                    assert start - seq_starts[index] == len(seqs[index].replace("-","")), \
-                    "Found %i chars so far for sequence %i (%s, %s), line says start %i:\n%s" \
-                        % (len(seqs[index].replace("-","")), index, id, seqs[index],
-                           start, line)
+                    if start == end :
+                        assert seq.replace("-","") == "", line
+                    else :
+                        assert start - seq_starts[index] == len(seqs[index].replace("-","")), \
+                        "Found %i chars so far for sequence %i (%s, %s), line says start %i:\n%s" \
+                            % (len(seqs[index].replace("-","")), index, id, repr(seqs[index]),
+                               start, line)
                     
                     seqs[index] += seq
 
                     #Check the end ...
                     assert end == seq_starts[index] + len(seqs[index].replace("-","")), \
-                        "Found %i chars so far for %s, file says end %i:\n%s" \
-                            % (len(seqs[index]), id, end, repr(seqs[index]))
+                        "Found %i chars so far for sequence %i (%s, %s, start=%i), file says end %i:\n%s" \
+                            % (len(seqs[index].replace("-","")), index, id, repr(seqs[index]),
+                               seq_starts[index], end, line)
 
                     index += 1
                     if index >= number_of_seqs :
