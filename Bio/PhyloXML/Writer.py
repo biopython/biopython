@@ -12,13 +12,16 @@ import Tree
 from Parser import ElementTree, NAMESPACES
 
 
-def write(phyloxml, file, encoding='utf-8'):
+def write(phyloxml, file, encoding=None):
     """Write a phyloXML file.
 
     The file argument can be either an open handle or a file name.
     """
     etree = Writer(phyloxml).get_etree()
-    etree.write(file, encoding)
+    if encoding is not None:
+        etree.write(file, encoding)
+    else:
+        etree.write(file)
 
 
 # Helpers
