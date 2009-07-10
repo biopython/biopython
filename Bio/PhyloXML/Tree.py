@@ -79,6 +79,18 @@ class Phyloxml(PhyloElement):
         self.phylogenies = phylogenies or []
         self.other = other or []
 
+    def __getitem__(self, index):
+        """Get a phylogeny by index or name."""
+        if isinstance(index, int) or isinstance(index, slice):
+            return self.phylogenies[index]
+        if not isinstance(index, basestring):
+            raise KeyError, "can't use %s as an index" % type(index)
+        for tree in self.phylogenies:
+            if tree.name == index:
+                return tree
+        else:
+            raise KeyError, "no phylogeny found with name " + repr(index)
+
     def __iter__(self):
         """Iterate through the phylogenetic trees in this object."""
         return iter(self.phylogenies)
@@ -361,9 +373,8 @@ class Clade(PhyloElement):
     # Sequence-type behavior methods
 
     def __getitem__(self, index):
-        """Get a sub-clade by index."""
-        # ENH: handle slicing
-        if isinstance(index, int):
+        """Get a sub-clade by index (integer or slice)."""
+        if isinstance(index, int) or isinstance(index, slice):
             return self.clades[index]
         ref = self
         for idx in index:
