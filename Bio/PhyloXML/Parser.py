@@ -32,7 +32,8 @@ except ImportError:
                             "Use Python 2.5+, lxml or elementtree if you "
                             "want to use Bio.PhyloXML.")
 
-import Tree
+from Bio.Tree import PhyloXMLTree as Tree
+
 from Exceptions import PhyloXMLError, PhyloXMLWarning
 
 NAMESPACES = {

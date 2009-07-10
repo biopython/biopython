@@ -275,6 +275,8 @@ PACKAGES = [
     'Bio.SubsMat',
     'Bio.SVDSuperimposer',
     'Bio.SwissProt',
+    'Bio.Tree',
+    'Bio.TreeIO',
     'Bio.UniGene',
     'Bio.Wise',
     'Bio.WWW',

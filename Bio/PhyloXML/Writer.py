@@ -8,7 +8,8 @@
 Constructs an XML file from a Tree.PhyloXML object.
 """
 
-import Tree
+from Bio.Tree import PhyloXMLTree as Tree
+
 from Parser import ElementTree, NAMESPACES
 
 
