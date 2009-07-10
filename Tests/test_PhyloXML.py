@@ -562,6 +562,8 @@ class MethodTests(unittest.TestCase):
     def setUp(self):
         self.phyloxml = PhyloXML.read(EX_PHYLO)
 
+    # Type conversions
+
     def test_clade_to_phylogeny(self):
         clade = self.phyloxml.phylogenies[0].clade[0]
         tree = clade.to_phylogeny(rooted=True)
@@ -572,25 +574,29 @@ class MethodTests(unittest.TestCase):
         doc = tree.to_phyloxml()
         self.assert_(isinstance(doc, Tree.Phyloxml))
 
-    def test_color_rgb(self):
-        black = Tree.BranchColor(0, 0, 0)
-        self.assertEqual(black.to_rgb(), '000000')
-        white = Tree.BranchColor(255, 255, 255)
-        self.assertEqual(white.to_rgb(), 'ffffff')
-        green = Tree.BranchColor(14, 192, 113)
-        self.assertEqual(green.to_rgb(), '0ec071')
-
     def test_sequence_conversion(self):
         pass
 
+    # Syntax sugar
+
     def test_clade_getitem(self):
+        """Clade.__getitem__: get sub-clades by extended indexing."""
         tree = self.phyloxml.phylogenies[3]
         self.assertEqual(tree.clade[0,0], tree.clade.clades[0].clades[0])
         self.assertEqual(tree.clade[0,1], tree.clade.clades[0].clades[1])
         self.assertEqual(tree.clade[1], tree.clade.clades[1])
+        self.assertEqual(len(tree.clade[:]), len(tree.clade.clades))
+        self.assertEqual(len(tree.clade[0,:]),
+                         len(tree.clade.clades[0].clades))
+
+    def test_phyloxml_getitem(self):
+        """Phyloxml.__getitem__: get phylogenies by name or index."""
+        self.assert_(self.phyloxml.phylogenies[9] is self.phyloxml[9])
+        self.assert_(self.phyloxml['monitor lizards'] is self.phyloxml[9])
+        self.assertEqual(len(self.phyloxml[:]), len(self.phyloxml))
 
     def test_events(self):
-        """Mapping-type behavior of an Events object."""
+        """Events: Mapping-type behavior."""
         evts = self.phyloxml.phylogenies[4].clade.events
         # Container behavior: __len__, __contains__
         self.assertEquals(len(evts), 1)
@@ -612,7 +618,7 @@ class MethodTests(unittest.TestCase):
         self.assertEqual(evts.items(), [('duplications', 3)])
 
     def test_singlular(self):
-        """Singular properties representing plural attributes."""
+        """Clade, Phylogeny: Singular properties for plural attributes."""
         conf = Tree.Confidence(0.9, 'bootstrap')
         taxo = Tree.Taxonomy(rank='genus')
         # Clade.taxonomy, Clade.confidence
@@ -637,8 +643,10 @@ class MethodTests(unittest.TestCase):
         tree.confidences = []
         self.assertRaises(RuntimeError, getattr, tree, 'confidence')
 
+    # Other methods
+
     def test_find(self):
-        """Method find() on Clade and Phylogeny objects."""
+        """Clade, Phylogeny: find() method."""
         # From the docstring example
         tree = self.phyloxml.phylogenies[5]
         matches = list(tree.find(Tree.Taxonomy, code='OCTVU'))
@@ -671,10 +679,17 @@ class MethodTests(unittest.TestCase):
             self.assertEqual(dom.start, 5)
             self.assertEqual(dom.value, 'CARD')
 
+    def test_color_rgb(self):
+        """BranchColor: to_rgb() method."""
+        black = Tree.BranchColor(0, 0, 0)
+        self.assertEqual(black.to_rgb(), '000000')
+        white = Tree.BranchColor(255, 255, 255)
+        self.assertEqual(white.to_rgb(), 'ffffff')
+        green = Tree.BranchColor(14, 192, 113)
+        self.assertEqual(green.to_rgb(), '0ec071')
 
 # ---------------------------------------------------------
 
 if __name__ == '__main__':
-    warnings.simplefilter('ignore')
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
