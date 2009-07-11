@@ -1,5 +1,8 @@
 # Copyright 2004 by Cymon J. Cox and Frank Kauff.  All rights reserved.
 # Copyright 2008 by Michiel de Hoon.  All rights reserved.
+# Revisions copyright 2009 by Cymon J. Cox.  All rights reserved.
+# Revisions copyright 2009 by Peter Cock.  All rights reserved.
+# 
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -24,9 +27,9 @@ class Record:
     """Hold information from a PHD file."""
     def __init__(self):
         self.file_name = ''
-        self.comments={}
+        self.comments = {}
         for kw in CKEYWORDS:
-            self.comments[kw.lower()]=None
+            self.comments[kw.lower()] = None
         self.sites = []
         self.seq = ''
         self.seq_trimmed = ''
@@ -93,8 +96,15 @@ def read(handle):
         if line.startswith('END_DNA'):
             break
         else:
-            base, quality, location = line.split()
-            record.sites.append((base, quality, location))
+            # Line is: "site quality peak_location"
+            # Peak location is optional according to
+            # David Gordon (the Consed author)
+            parts = line.split()
+            if len(parts) in [2,3] :
+                record.sites.append(tuple(parts))
+            else:
+                raise ValueError("DNA line must contain a base and quality "
+                                 "score, and optionally a peak location.")
 
     for line in handle:
         if line.startswith("END_SEQUENCE"):

@@ -240,10 +240,12 @@ class StockholmWriter(SequentialAlignmentWriter) :
         #GS = other per sequence annotation
         for key, value in record.annotations.iteritems() :
             if key in self.pfam_gs_mapping :
-                self.handle.write("#=GS %s %s %s\n" \
-                                  % (seq_name,
-                                     self.clean(self.pfam_gs_mapping[key]),
-                                     self.clean(str(value))))
+                data = self.clean(str(value))
+                if data :
+                    self.handle.write("#=GS %s %s %s\n" \
+                                      % (seq_name,
+                                         self.clean(self.pfam_gs_mapping[key]),
+                                         data))
             else :
                 #It doesn't follow the PFAM standards, but should we record
                 #this data anyway?
@@ -252,10 +254,12 @@ class StockholmWriter(SequentialAlignmentWriter) :
         #GR = per row per column sequence annotation
         for key, value in record.letter_annotations.iteritems() :
             if key in self.pfam_gr_mapping and len(str(value))==len(record.seq) :
-                self.handle.write("#=GR %s %s %s\n" \
-                                  % (seq_name,
-                                     self.clean(self.pfam_gr_mapping[key]),
-                                     self.clean(str(value))))
+                data = self.clean(str(value))
+                if data :
+                    self.handle.write("#=GR %s %s %s\n" \
+                                      % (seq_name,
+                                         self.clean(self.pfam_gr_mapping[key]),
+                                         data))
             else :
                 #It doesn't follow the PFAM standards, but should we record
                 #this data anyway?

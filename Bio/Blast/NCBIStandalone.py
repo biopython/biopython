@@ -326,6 +326,14 @@ class _Scanner:
                               start='Sequences used in model')
         read_and_call_while(uhandle, consumer.noevent, blank=1)
 
+        # In BLAT, rather than a "No hits found" line, we just
+        # get no descriptions (and no alignments). This can be
+        # spotted because the next line is the database block:
+        if safe_peekline(uhandle).startswith("  Database:") :
+            consumer.end_descriptions()
+            # Stop processing.
+            return
+
         # Read the descriptions and the following blank lines, making
         # sure that there are descriptions.
         if not uhandle.peekline().startswith('Sequences not found'):
@@ -530,7 +538,8 @@ class _Scanner:
             # BLAT output ends abruptly here, without any of the other
             # information.  Check to see if this is the case.  If so,
             # then end the database report here gracefully.
-            if not uhandle.peekline():
+            if not uhandle.peekline().strip() \
+            or uhandle.peekline().startswith("BLAST"):
                 consumer.end_database_report()
                 return
             
@@ -626,9 +635,10 @@ class _Scanner:
 
 
         # Blast 2.2.4 can sometimes skip the whole parameter section.
+        # BLAT also skips the whole parameter section.
         # Thus, check to make sure that the parameter section really
         # exists.
-        if not uhandle.peekline():
+        if not uhandle.peekline().strip():
             return
 
         # BLASTN 2.2.9 looks like it reverses the "Number of Hits" and

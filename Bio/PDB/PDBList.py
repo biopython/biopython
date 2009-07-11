@@ -36,7 +36,7 @@
 __doc__="Access the PDB over the internet (for example to download structures)."
 
 import urllib, re, os
-from warnings import warn
+import warnings
 
 class PDBList:
     """
@@ -234,7 +234,7 @@ OBSLTE     26-SEP-03 1DYV      1UN2
         if not self.overwrite:
             if os.path.exists(final_file):
                 warnings.warn("file exists, not retrieved %s" % final_file,
-                              RuntimeError)
+                              RuntimeWarning)
                 return final_file
 
         # Retrieve the file
@@ -265,7 +265,7 @@ OBSLTE     26-SEP-03 1DYV      1UN2
                 warnings.warn('retrieving %s' % pdb_code)
                 self.retrieve_pdb_file(pdb_code)
             except:
-                warnings.warn('error %s' % pdb_code, RuntimeError)
+                warnings.warn('error %s' % pdb_code, RuntimeWarning)
                 # you can insert here some more log notes that
                 # something has gone wrong.            
 

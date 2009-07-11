@@ -17,6 +17,7 @@ from Bio import MissingExternalDependencyError
 from Bio.Alphabet import generic_protein, generic_dna, generic_nucleotide
 from Bio.Seq import Seq, translate
 from Bio.SeqRecord import SeqRecord
+#from Bio.Data.IUPACData import ambiguous_dna_letters
 
 #################################################################
 
@@ -678,17 +679,21 @@ def emboss_translate(sequence, table=None, frame=None) :
 #Top level function as this makes it easier to use for debugging:
 def check_translation(sequence, translation, table=None) :
     if table is None :
-        #Seq method:
-        if translation != str(sequence.translate()) \
-        or translation != str(translate(sequence)) \
-        or translation != translate(str(sequence)) :
-            raise ValueError("%s -> %s" % (sequence, translation))
-    else:
-        if translation != str(sequence.translate(table)) \
-        or translation != str(translate(sequence,table)) \
-        or translation != translate(str(sequence),table) :
-            raise ValueError("%s -> %s (table %s)" \
-                             % (sequence, translation, table))
+        t = 1
+    else :
+        t = table
+    if translation != str(sequence.translate(t)) \
+    or translation != str(translate(sequence,t)) \
+    or translation != translate(str(sequence),t) :
+        #More details...
+        for i, amino in enumerate(translation) :
+            codon = sequence[i*3:i*3+3]
+            if amino != str(codon.translate(t)) :
+                raise ValueError("%s -> %s not %s (table %s)" \
+                         % (codon, amino, codon.translate(t), t))
+        #Shouldn't reach this line:
+        raise ValueError("%s -> %s (table %s)" \
+                         % (sequence, translation, t))
     return True
 
 class TranslationTests(unittest.TestCase):
@@ -752,6 +757,10 @@ class TranslationTests(unittest.TestCase):
                        generic_nucleotide)
         self.check(sequence)
         
+    #def test_all_ambig_dna_codons(self) :
+    #    """transeq vs Bio.Seq on ambiguous DNA codons (inc. alt tables)."""
+    #    self.translate_all_codons(ambiguous_dna_letters)
+
     def test_all_unambig_dna_codons(self) :
         """transeq vs Bio.Seq on unambiguous DNA codons (inc. alt tables)."""
         self.translate_all_codons("ATCGatcg")

@@ -1238,6 +1238,24 @@ Testing reading genbank format file GenBank/NC_000932.gb
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NC_000932.1).
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
+Testing reading genbank format file GenBank/pBAD30.gb
+ ID and Name='pBAD30',
+ Seq='GCTAGCGGAGTGTATACTGGCTTACTATGTTGGCACTGAT...GCCCATG', length=4923
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fastq' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=pBAD30).
+ Checking can write/read as 'fastq-illumina' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=pBAD30).
+ Checking can write/read as 'fastq-solexa' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=pBAD30).
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'qual' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=pBAD30).
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/gbvrl1_start.seq
  ID = 'AB000048.1', Name='AB000048',
  Seq='ATGTCTGGCAACCAGTATACTGAGGAAGTTATGGAGGGAG...GGATTAA', length=2007
@@ -1825,6 +1843,39 @@ Testing reading phd format file Phd/phd2
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'qual' format
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+Testing reading phd format file Phd/phd_solexa
+ ID and Name='HWI-EAS94_4_1_1_537_446',
+ Seq='gccaatcaggtttctctgcaagcccctttagcagctgagc', length=40
+ ID and Name='HWI-EAS94_4_1_1_602_99',
+ Seq='gccatggcacatatatgaaggtcagaggacaacttgctgt', length=40
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Failed: Repeated identifier, possibly due to truncation
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fastq' format
+ Checking can write/read as 'fastq-illumina' format
+ Checking can write/read as 'fastq-solexa' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'HWI-EAS94_4_1_1_602_99' is too long
+ Checking can write/read as 'qual' format
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+Testing reading phd format file Phd/phd_454
+ ID and Name='EBE03TV04IHLTF.77-243',
+ Seq='ggggatgaaagggatctcggtggtaggtga', length=30
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fastq' format
+ Checking can write/read as 'fastq-illumina' format
+ Checking can write/read as 'fastq-solexa' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'EBE03TV04IHLTF.77-243' is too long
  Checking can write/read as 'qual' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format

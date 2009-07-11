@@ -95,12 +95,16 @@ class SeqRecord(object):
         """Create a SeqRecord.
 
         Arguments:
-         - seq         - Sequence, required (Seq or Mutable object)
+         - seq         - Sequence, required (Seq, MutableSeq or UnknownSeq)
          - id          - Sequence identifier, recommended (string)
          - name        - Sequence name, optional (string)
          - description - Sequence description, optional (string)
          - dbxrefs     - Database cross references, optional (list of strings)
          - features    - Any (sub)features, optional (list of SeqFeature objects)
+         - annotations - Dictionary of annotations for the whole sequence
+         - letter_annotations - Dictionary of per-letter-annotations, values
+                                should be strings, list or tuples of the same
+                                length as the full sequence.
 
         You will typically use Bio.SeqIO to read in sequences from files as
         SeqRecord objects.  However, you may want to create your own SeqRecord
@@ -538,7 +542,9 @@ class SeqRecord(object):
         >>> rec
         SeqRecord(seq=Seq('MASRGVNKVILVGNLGQDPEVRYMPNGGAVANITLATSESWRDKATGEMKEQTE...IPF', ProteinAlphabet()), id='NP_418483.1', name='b4059', description='ssDNA-binding protein', dbxrefs=['ASAP:13298', 'GI:16131885', 'GeneID:948570'])
 
-        Note that long sequences are shown truncated.
+        Note that long sequences are shown truncated. Also note that any
+        annotations, letter_annotations and features are not shown (as they
+        would lead to a very long string).
         """
         return self.__class__.__name__ \
          + "(seq=%s, id=%s, name=%s, description=%s, dbxrefs=%s)" \
@@ -583,9 +589,9 @@ class SeqRecord(object):
         """Returns the record as a string in the specified file format.
 
         This method supports the python format() function added in
-        Python 2.6/3.0.  The format_spec should be a lower case
-        string supported by Bio.SeqIO as an output file format.
-        See also the SeqRecord's format() method.
+        Python 2.6/3.0.  The format_spec should be a lower case string
+        supported by Bio.SeqIO as an output file format. See also the
+        SeqRecord's format() method.
         """
         if format_spec:
             from StringIO import StringIO

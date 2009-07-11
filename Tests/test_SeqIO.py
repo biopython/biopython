@@ -111,6 +111,7 @@ test_files = [ \
     ("genbank",False, 'GenBank/dbsource_wrap.gb', 1),
     ("genbank",False, 'GenBank/NC_005816.gb', 1), #See also AE017046.embl
     ("genbank",False, 'GenBank/NC_000932.gb', 1),
+    ("genbank",False, 'GenBank/pBAD30.gb', 1), #Odd LOCUS line from Vector NTI
 # The next example is a truncated copy of gbvrl1.seq from
 # ftp://ftp.ncbi.nih.gov/genbank/gbvrl1.seq.gz
 # This includes an NCBI header, and the first three records:
@@ -142,7 +143,9 @@ test_files = [ \
 #Following PHD (PHRAP) sequencing files are also used in test_Phd.py
     ("phd", False, 'Phd/phd1', 3),
     ("phd", False, 'Phd/phd2', 1),
-#Following ACE assembly files are also used in test_Phd.py
+    ("phd", False, 'Phd/phd_solexa', 2),
+    ("phd", False, 'Phd/phd_454', 1),
+#Following ACE assembly files are also used in test_Ace.py
     ("ace", False, 'Ace/contig1.ace', 2),
     ("ace", False, 'Ace/consed_sample.ace', 1),
     ("ace", False, 'Ace/seq.cap.ace', 1),

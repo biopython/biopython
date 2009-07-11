@@ -1089,8 +1089,10 @@ class FastqPhredWriter(SequentialSequenceWriter):
         if description and description.split(None,1)[0]==id :
             #The description includes the id at the start
             title = description
+        elif description :
+            title = "%s %s" % (id, description)
         else :
-            title = "%s %s" % (id, description)        
+            title = id
 
         self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities_str))
 
@@ -1160,8 +1162,10 @@ class QualPhredWriter(SequentialSequenceWriter):
             if description and description.split(None,1)[0]==id :
                 #The description includes the id at the start
                 title = description
-            else :
+            elif description :
                 title = "%s %s" % (id, description)
+            else :
+                title = id
 
         assert "\n" not in title
         assert "\r" not in title
@@ -1256,8 +1260,10 @@ class FastqSolexaWriter(SequentialSequenceWriter):
         if description and description.split(None,1)[0]==id :
             #The description includes the id at the start
             title = description
+        elif description :
+            title = "%s %s" % (id, description)
         else :
-            title = "%s %s" % (id, description)        
+            title = id
 
         self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities_str))
 
@@ -1304,8 +1310,10 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
         if description and description.split(None,1)[0]==id :
             #The description includes the id at the start
             title = description
+        elif description :
+            title = "%s %s" % (id, description)
         else :
-            title = "%s %s" % (id, description)        
+            title = id
 
         self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities_str))
         

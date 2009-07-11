@@ -9,6 +9,14 @@ The latest news is at the top.
 
 ===================================================================
 
+Bio.Sequencing.Phd has been updated, for example to cope with missing peak
+positions. The "phd" support in Bio.SeqIO has also been updated to record
+the PHRED qualities (and peak positions) in the SeqRecord's per-letter
+annotation. This allows conversion of PHD files into FASTQ or QUAL which may
+be useful for meta-assembly.
+
+===================================================================
+
 June 23, 2009: Biopython 1.51 beta released.
 
 Biopython no longer supports Python 2.3.  Currently we support Python 2.4,
