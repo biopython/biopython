@@ -14,7 +14,11 @@ from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
-from Bio.PhyloXML.Exceptions import PhyloXMLWarning
+
+
+class PhyloXMLWarning(Warning):
+    """Warning for non-compliance with the phyloXML specification."""
+    pass
 
 
 def check_str(text, testfunc):

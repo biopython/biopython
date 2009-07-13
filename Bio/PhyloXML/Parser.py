@@ -8,8 +8,6 @@
 Instantiates Tree elements from a parsed PhyloXML file.
 """
 
-import warnings
-
 try:
     from xml.etree import cElementTree as ElementTree
 except ImportError:
@@ -34,13 +32,18 @@ except ImportError:
 
 from Bio.Tree import PhyloXMLTree as Tree
 
-from Exceptions import PhyloXMLError, PhyloXMLWarning
 
 NAMESPACES = {
         'phy':  'http://www.phyloxml.org',
         'xml':  'http://www.w3.org/XML/1998/namespace',
         'xs':   'http://www.w3.org/2001/XMLSchema',
         }
+
+
+class PhyloXMLError(Exception):
+    """Exception raised when PhyloXML object construction cannot continue."""
+    pass
+
 
 # ---------------------------------------------------------
 # Functions I wish ElementTree had
@@ -325,10 +328,10 @@ class Parser(object):
                         # NB: possible collision with the attribute
                         if hasattr(clade, 'branch_length') \
                                 and clade.branch_length is not None:
-                            warnings.warn(
+                            raise PhyloXMLError(
                                     'Attribute branch_length was already set '
                                     'for this Clade; overwriting the previous '
-                                    'value.', PhyloXMLWarning)
+                                    'value.')
                         clade.branch_length = float(elem.text.strip())
                     elif tag == 'width':
                         clade.width = float(elem.text)
