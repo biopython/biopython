@@ -15,6 +15,8 @@ from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
 
+import BaseTree
+
 
 class PhyloXMLWarning(Warning):
     """Warning for non-compliance with the phyloXML specification."""
@@ -35,7 +37,7 @@ def trim_str(text, maxlen=40):
 
 # Tree elements
 
-class PhyloElement(object):
+class PhyloElement(BaseTree.TreeElement):
     """Base class for all PhyloXML objects."""
     def __init__(self, **kwargs):
         """Set all keyword arguments as instance attributes.
@@ -118,7 +120,7 @@ class Other(PhyloElement):
         return iter(self.children)
 
 
-class Phylogeny(PhyloElement):
+class Phylogeny(PhyloElement, BaseTree.Tree):
     """A phylogenetic tree.
 
     Attributes:
@@ -170,29 +172,6 @@ class Phylogeny(PhyloElement):
         """Create a new PhyloXML object containing just this phylogeny."""
         return Phyloxml(kwargs, phylogenies=[self])
 
-    # From Bioperl's Bio::Tree::TreeI
-
-    def get_leaf_nodes(self):
-        """Request the taxa (leaves of the tree)."""
-        raise NotImplementedError
-
-    def get_root_node(self):
-        """Get the root node of this tree."""
-        return self
-
-    def total_branch_length(self):
-        """Get the total length of this tree (sum of all branch lengths)."""
-        raise NotImplementedError
-
-    # From Bioperl's Bio::Tree::TreeFunctionsI
-
-    # remove_node
-    # get_lca (lowest common ancestor)
-    # distance (between 2 nodes, specified however)
-    # is_monophyletic
-    # is_paraphyletic
-    # reroot
-
     @property
     def confidence(self):
         """Equivalent to self.confidences[0] if there is only 1 value.
@@ -207,7 +186,7 @@ class Phylogeny(PhyloElement):
         return self.confidences[0]
 
 
-class Clade(PhyloElement):
+class Clade(PhyloElement, BaseTree.Node):
     """Describes a branch of the current phylogenetic tree.
 
     Used recursively, describes the topology of a phylogenetic tree.
