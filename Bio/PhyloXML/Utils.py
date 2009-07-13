@@ -11,20 +11,6 @@ import sys
 
 from Bio.Tree import BaseTree
 
-from Parser import ElementTree
-
-
-def dump_tags(handle, file=sys.stdout):
-    """Extract tags from an XML document, writing them to stdout by default.
-
-    This utility is meant for testing and debugging.
-    """
-    for event, elem in ElementTree.iterparse(handle, events=('start', 'end')):
-        if event == 'start':
-            file.write(elem.tag + '\n')
-        else:
-            elem.clear()
-
 
 def pretty_print(treeobj, file=sys.stdout, show_all=False, indent=0):
     """Print a summary of the structure of a PhyloXML file.

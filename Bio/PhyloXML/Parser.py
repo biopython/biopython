@@ -8,6 +8,8 @@
 Instantiates Tree elements from a parsed PhyloXML file.
 """
 
+import sys
+
 try:
     from xml.etree import cElementTree as ElementTree
 except ImportError:
@@ -66,6 +68,7 @@ def split_namespace(tag):
     except:
         return ('', tag)
 
+
 def get_child_as(parent, tag, construct):
     child = parent.find("{%s}%s" % (NAMESPACES['phy'], tag))
     if child is not None:
@@ -84,6 +87,19 @@ def get_children_text(parent, tag, construct=unicode):
     return [construct(child.text.strip()) for child in 
             parent.findall("{%s}%s" % (NAMESPACES['phy'], tag))
             if child.text]
+
+
+def dump_tags(handle, file=sys.stdout):
+    """Extract tags from an XML document, writing them to stdout by default.
+
+    This utility is meant for testing and debugging.
+    """
+    for event, elem in ElementTree.iterparse(handle, events=('start', 'end')):
+        if event == 'start':
+            file.write(elem.tag + '\n')
+        else:
+            elem.clear()
+
 
 # ---------------------------------------------------------
 # Utilities
