@@ -16,6 +16,7 @@ from cStringIO import StringIO
 
 from Bio import PhyloXML
 from Bio.Tree import PhyloXMLTree as Tree
+from Bio.Tree import Utils
 
 
 # Example PhyloXML files
@@ -66,11 +67,11 @@ class UtilTests(unittest.TestCase):
                 (387, 748, 164, 16208, 214912, 648554)):
             phx = PhyloXML.read(source)
             output = StringIO()
-            PhyloXML.pretty_print(phx, output)
+            Utils.pretty_print(phx, output)
             output.seek(0)
             self.assertEquals(len(output.readlines()), count)
             output = StringIO()
-            PhyloXML.pretty_print(phx, output, show_all=True)
+            Utils.pretty_print(phx, output, show_all=True)
             output.seek(0)
             self.assertEquals(len(output.readlines()), count)
 
