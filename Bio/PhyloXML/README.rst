@@ -55,11 +55,21 @@ Timeline
     - Methods to convert PhyloXML objects to core Biopython types:
         - PhyloXML.Sequence to/from SeqRecord (*in progress*)
         - PhyloXML.BranchColor to HTML/CSS-friendly hex string [*to_rgb*]
+    - Methods for navigating and using PhyloXML objects:
+        - Extract sub-trees as new trees [*Phylogeny.to_phyloxml,
+          Clade.to_phylogeny*]
+        - Search all sub-nodes for matching attributes
+          [*Phylogeny/Clade.find()*]
 
     - Sugar:
         - \*.__str__(): pretty representation for displaying nodes
+            - Customized for Taxonomy and Date
         - \*.__repr__(): simplified object instantiation code
+        - Phyloxml.__getitem__(): access trees by index or name
         - Clade.__getitem__(): extended index access to sub-clades
+        - Tree.Events acts like a mapping type (dictionary)
+        - For plural attributes that are usually single (taxonomies,
+          confidences), a singular property retrieves a single item
 
     Unit tests:
 
@@ -78,66 +88,67 @@ Timeline
     - Usage: parsing, writing, object navigation, Bio integration, utilities
     - Performance: read, parse, write
 
-:7/6:
-    Address comments from last week's code/doc review
-
-    Enable Pythonic syntax sugar:
-
-    - PhyloXML.__getitem__: get the phylogeny with matching name or id
-    - Clade.__getitem__: support slicing, maybe string identifiers
-    - Override __str__ and __repr__ methods for some classes
-        - e.g. str(Tree.Date) combines value and unit: "65 mya"
-    - Events.__contains__: e.g. if 'speciations' in foo.events: ...
-    - For plural attributes that are usually single (taxonomies, confidences),
-      create a property that returns the single item
-    - For wrapped helper functions in Parser and Writer, copy function info to
-      make tracebacks friendlier
-    - Write unit tests for all of this
-
-    Integration:
-
-    - Identify more Biopython objects to reuse or export to
-        - Improve the SeqRecord conversion
-
-    - Convert to/from Nexus/Newick tree objects
-
 :7/13:
     Extend the core to the rest of the spec:
 
     - Adding unit tests and classes to support the remaining (non-core)
       phyloXML elements
+    - Implement collapse_whitespace -- see the spec glossary
+    - Make Writer use the correct namespace prefixes
+    - "other" objects: assert the namespace is not phyloxml
+    - Use the schema document to validate the input file -- or at least, make
+      Writer use the correct sub-node ordering
+
+    Integration:
+
+    - Refactor into Bio.Tree, Bio.TreeIO modules -- See Bio.Nexus, PyCogent;
+      keep BaseTree trivial for now
+    - Improve the SeqRecord conversion
+
+    Documentation:
+
+    - Address remaining comments from code/doc review
+    - Revisit docstrings for all classes, functions, methods; consider enabling
+      epydoc formatting
+
+:7/20--27:
+    Finish implementing the phyloXML spec:
+
     - Clean up and reorganize any code that needs it
     - Hopefully, the entire phyloXML spec is covered by the end of this week
 
-    Additional spec compliance:
-    
-    - Implement collapse_whitespace -- see the spec glossary
-    - Use the schema document to validate the input file
-
-:7/20:
     Enhancements (time permitting):
 
-    - Collapse whitespace in node text when parsing
-    - Search for external nodes from a Phylogeny or Clade instance
-    - Add singular property names for plural attributes that almost always
-      contain just one element 
+    - For wrapped helper functions in Parser and Writer, copy function metadata
+      to make tracebacks friendlier
+    - Work on Bio.Tree.BaseTree compatibility with BioSQL's PhyloDB extension
+    - Port common methods to Bio.Tree.BaseTree -- see Bio.Nexus.Tree, Bioperl
+      node objects
+    - Export to networkx (http://networkx.lanl.gov/) -- also get graphviz export
+      for free, via networkx.to_agraph()
 
-        - e.g. taxonomy -> taxonomies[0])
-        - if more than 1 element is available, raise an exception
+    Wiki documentation:
 
-    Export to other tree representations:
-
-    - networkx: Phylogeny -> digraph; Phyloxml -> multidigraph
-    - What does BioSQL need?
-
-:7/27:
-    Document all completed functionality.
-        - Re-run performance benchmarks; mention that the ATV parser is about
-          10x as fast
+    - Split off TreeIO page from PhyloXML page (mainly parser/writer sections)
+    - Check module names and imports in examples -- they've changed
+    - PhyloXML enhancements: find(), singular properties, improved str()
 
 :8/3:
-    - Run tests and benchmarks on alternate platforms and document results
-    - Discuss merging back upstream
+    Documentation:
+
+    - Ensure all completed functionality is covered
+    - Re-run performance benchmarks; mention that the ATV parser is about 10x as
+      fast, and Py2.4 performance depends on the ETree implementation used
+    - Run tests and benchmarks on alternate platforms
+
+    Discuss merging back upstream.
+
+:8/10:
+    Soft "pencils down":
+
+    - Scrub documentation
+    - Check unit tests for complete coverage
+    - NB: Deadline is Aug. 17
 
 
 Notes
