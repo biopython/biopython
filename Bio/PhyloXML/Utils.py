@@ -9,9 +9,9 @@
 
 import sys
 
-from Bio.Tree import PhyloXMLTree as  Tree
+from Bio.Tree import BaseTree
 
-from Parser import ElementTree, read
+from Parser import ElementTree
 
 
 def dump_tags(handle, file=sys.stdout):
@@ -26,18 +26,19 @@ def dump_tags(handle, file=sys.stdout):
             elem.clear()
 
 
-def pretty_print(source, file=sys.stdout, show_all=False, indent=0):
+def pretty_print(treeobj, file=sys.stdout, show_all=False, indent=0):
     """Print a summary of the structure of a PhyloXML file.
 
     With the show_all option, also prints the primitive (native Python instead
     of PhyloXML) objects in the object tree.
     """
+    assert isinstance(treeobj, BaseTree.TreeElement)
     show = show_all and repr or str
 
     # Closing over file
     def print_indented(text, indent):
         """Write an indented string of text to file."""
-        file.write('%s%s\n' % ('\t'*indent, text))
+        file.write('\t'*indent + text + '\n')
 
     def print_phylo(obj, indent):
         """Recursively print a PhyloElement object tree."""
@@ -45,37 +46,12 @@ def pretty_print(source, file=sys.stdout, show_all=False, indent=0):
         indent += 1
         for attr in obj.__dict__:
             child = getattr(obj, attr)
-            if isinstance(child, Tree.Other):
-                print_other(child, indent)
-            elif isinstance(child, Tree.PhyloElement):
+            if isinstance(child, BaseTree.TreeElement):
                 print_phylo(child, indent)
             elif isinstance(child, list):
                 for elem in child:
-                    if isinstance(elem, Tree.PhyloElement):
+                    if isinstance(elem, BaseTree.TreeElement):
                         print_phylo(elem, indent)
 
-    def print_other(obj, indent):
-        """Recursively print a tree of Other objects."""
-        print_indented(show(obj), indent)
-        indent += 1
-        for child in obj.children:
-            if isinstance(child, Tree.Other):
-                print_other(child, indent)
-            else:
-                print_indented(child, indent)
-
-    if isinstance(source, Tree.Phylogeny):
-        print_phylo(source)
-        return
-
-    if isinstance(source, Tree.Phyloxml):
-        phyloxml = source
-    else:
-        phyloxml = read(source)
-    print_indented(show(phyloxml), indent)
-    indent += 1
-    for tree in phyloxml.phylogenies:
-        print_phylo(tree, indent)
-    for otr in phyloxml.other:
-        print_other(otr, indent)
+    print_phylo(treeobj, indent)
 
