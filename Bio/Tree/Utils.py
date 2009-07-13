@@ -9,7 +9,7 @@
 
 import sys
 
-from Bio.Tree import BaseTree
+import BaseTree
 
 
 def pretty_print(treeobj, file=sys.stdout, show_all=False, indent=0):
