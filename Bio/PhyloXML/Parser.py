@@ -142,15 +142,15 @@ def read(file):
     other_depth = 0
     for event, elem in context:
         # print elem.tag, event
-        xmlns, localtag = split_namespace(elem.tag)
+        namespace, localtag = split_namespace(elem.tag)
         if event == 'start':
-            if localtag == 'phylogeny' and xmlns == NAMESPACES['phy']:
+            if namespace != NAMESPACES['phy']:
+                other_depth += 1
+                continue
+            if localtag == 'phylogeny':
                 phylogeny = Parser._parse_phylogeny(elem, context)
                 phyloxml.phylogenies.append(phylogeny)
-                continue
-            elif xmlns != NAMESPACES['phy']:
-                other_depth += 1
-        if event == 'end' and xmlns != NAMESPACES['phy']:
+        if event == 'end' and namespace != NAMESPACES['phy']:
             # Deal with items not specified by phyloXML
             other_depth -= 1
             if other_depth == 0:
