@@ -118,6 +118,32 @@ def dict_str2bool(dct, keys):
             out[key] = str2bool(out[key])
     return out
 
+def maybe_float(text):
+    try:
+        return float(text)
+    except Exception:
+        return None
+
+def collapse_wspace(text):
+    """Replace all spans of whitespace with a single space character.
+
+    Also remove leading and trailing whitespace. See "Collapse Whitespace
+    Policy" in the phyloXML spec glossary.
+    http://phyloxml.org/documentation/version_100/phyloxml.xsd.html#Glossary
+    """
+    if text is not None:
+        return ' '.join(text.split())
+
+def replace_wspace(text):
+    """Replace tab, LF and CR characters with spaces, but don't collapse.
+
+    See "Replace Whitespace Policy" in the phyloXML spec glossary:
+    http://phyloxml.org/documentation/version_100/phyloxml.xsd.html#Glossary
+    """
+    for char in ('\t', '\n', '\r'):
+        if char in text:
+            text = text.replace(char, ' ')
+    return text
 
 # ---------------------------------------------------------
 
@@ -285,9 +311,9 @@ class Parser(object):
                             getattr(cls, 'to_'+tag)(elem))
                 # Simple types
                 elif tag == 'name': 
-                    phylogeny.name = elem.text and elem.text.strip()
+                    phylogeny.name = collapse_wspace(elem.text)
                 elif tag == 'description':
-                    phylogeny.description = elem.text and elem.text.strip()
+                    phylogeny.description = collapse_wspace(elem.text)
                 # Unknown tags
                 elif namespace != NAMESPACES['phy']:
                     phylogeny.other.append(cls.to_other(elem))
@@ -339,20 +365,21 @@ class Parser(object):
                     getattr(clade, list_types[tag]).append(
                             getattr(cls, 'to_'+tag)(elem))
                 # Simple types
-                elif tag in simple_types:
-                    if tag == 'branch_length':
-                        # NB: possible collision with the attribute
-                        if hasattr(clade, 'branch_length') \
-                                and clade.branch_length is not None:
-                            raise PhyloXMLError(
-                                    'Attribute branch_length was already set '
-                                    'for this Clade; overwriting the previous '
-                                    'value.')
-                        clade.branch_length = float(elem.text.strip())
-                    elif tag == 'width':
-                        clade.width = float(elem.text)
-                    else: # name or node_id
-                        setattr(clade, tag, elem.text and elem.text.strip())
+                elif tag == 'branch_length':
+                    # NB: possible collision with the attribute
+                    if hasattr(clade, 'branch_length') \
+                            and clade.branch_length is not None:
+                        raise PhyloXMLError(
+                                'Attribute branch_length was already set '
+                                'for this Clade; overwriting the previous '
+                                'value.')
+                    clade.branch_length = maybe_float(elem.text)
+                elif tag == 'width':
+                    clade.width = maybe_float(elem.text)
+                elif tag == 'name':
+                    clade.name = collapse_wspace(elem.text)
+                elif tag == 'node_id':
+                    clade.node_id = elem.text and elem.text.strip() or None
                 # Unknown tags
                 elif namespace != NAMESPACES['phy']:
                     clade.other.append(cls.to_other(elem))
@@ -366,7 +393,7 @@ class Parser(object):
     def to_other(cls, elem):
         namespace, localtag = split_namespace(elem.tag)
         return Tree.Other(localtag, namespace, elem.attrib,
-                  value=(elem.text and elem.text.strip() or None),
+                  value=elem.text,
                   children=[cls.to_other(child) for child in elem])
 
     # Complex types
@@ -407,7 +434,7 @@ class Parser(object):
     @classmethod
     def to_confidence(cls, elem):
         return Tree.Confidence(
-                elem.text and float(elem.text) or None,
+                maybe_float(elem.text),
                 elem.get('type'))
 
     @classmethod
@@ -416,8 +443,7 @@ class Parser(object):
                 value=get_child_text(elem, 'value', float),
                 desc=get_child_text(elem, 'desc'),
                 unit=elem.get('unit'),
-                range=(('range' in elem.keys())
-                       and float(elem.get('range')) or None))
+                range=maybe_float(elem.get('range')))
 
     @classmethod
     def to_distribution(cls, elem):
@@ -431,8 +457,7 @@ class Parser(object):
         return Tree.ProteinDomain(elem.text.strip(),
                 int(elem.get('from')) - 1,
                 int(elem.get('to')),
-                confidence=(('confidence' in elem.keys())
-                            and float(elem.get('confidence')) or None),
+                confidence=maybe_float(elem.get('confidence')),
                 id=elem.get('id'))
 
     @classmethod
