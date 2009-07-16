@@ -12,6 +12,20 @@ from Bio.Tree import PhyloXMLTree as Tree
 
 from Parser import ElementTree, NAMESPACES
 
+# Keep the standard namespace prefixes when writing
+# See http://effbot.org/zone/element-namespaces.htm
+try:
+    register_namespace = ElementTree.register_namespace
+except AttributeError:
+    if not hasattr(ElementTree, '_namespace_map'):
+        # cElementTree needs the pure-Python xml.etree.ElementTree
+        from xml.etree import ElementTree as ET_py
+        ElementTree._namespace_map = ET_py._namespace_map
+    def register_namespace(prefix, uri):
+        ElementTree._namespace_map[uri] = prefix
+for prefix, uri in NAMESPACES.iteritems():
+    register_namespace(prefix, uri)
+
 
 def write(phyloxml, file, encoding=None):
     """Write a phyloXML file.
