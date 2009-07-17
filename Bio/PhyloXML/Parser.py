@@ -37,7 +37,6 @@ from Bio.Tree import PhyloXMLTree as Tree
 
 NAMESPACES = {
         'phy':  'http://www.phyloxml.org',
-        'xml':  'http://www.w3.org/XML/1998/namespace',
         'xs':   'http://www.w3.org/2001/XMLSchema',
         }
 
@@ -323,24 +322,26 @@ class Parser(object):
                     raise PhyloXMLError('Misidentified tag: ' + tag)
         return phylogeny
 
+    _clade_complex_types = ['color', 'events', 'binary_characters', 'date']
+    _clade_list_types = {
+            # XML tag, plural attribute
+            'confidence':   'confidences',
+            'taxonomy':     'taxonomies',
+            'sequence':     'sequences',
+            'distribution': 'distributions',
+            'reference':    'references',
+            'property':     'properties',
+            }
+    _clade_tracked_tags = set(_clade_complex_types + _clade_list_types.keys() +
+            # Simple types
+            ['branch_length', 'name', 'node_id', 'width'])
+
     @classmethod
     def _parse_clade(cls, parent, context):
         if 'branch_length' in parent.keys():
             parent.set('branch_length', float(parent.get('branch_length')))
         clade = Tree.Clade(**parent.attrib)
-        simple_types = ['branch_length', 'name', 'node_id', 'width']
-        complex_types = ['color', 'events', 'binary_characters', 'date']
-        list_types = {
-                # XML tag, plural attribute
-                'confidence':   'confidences',
-                'taxonomy':     'taxonomies',
-                'sequence':     'sequences',
-                'distribution': 'distributions',
-                'reference':    'references',
-                'property':     'properties',
-                }
         # NB: Only evaluate nodes at the current level
-        tracked_tags = set(simple_types + complex_types + list_types.keys())
         tag_stack = []
         for event, elem in context:
             namespace, tag = split_namespace(elem.tag)
@@ -349,7 +350,7 @@ class Parser(object):
                     subclade = Parser._parse_clade(elem, context)
                     clade.clades.append(subclade)
                     continue
-                if tag in tracked_tags:
+                if tag in cls._clade_tracked_tags:
                     tag_stack.append(tag)
             if event == 'end':
                 if tag == 'clade':
@@ -359,10 +360,10 @@ class Parser(object):
                     continue
                 tag_stack.pop()
                 # Handle the other non-recursive children
-                if tag in complex_types:
+                if tag in cls._clade_complex_types:
                     setattr(clade, tag, getattr(cls, 'to_'+tag)(elem))
-                elif tag in list_types:
-                    getattr(clade, list_types[tag]).append(
+                elif tag in cls._clade_list_types:
+                    getattr(clade, cls._clade_list_types[tag]).append(
                             getattr(cls, 'to_'+tag)(elem))
                 # Simple types
                 elif tag == 'branch_length':
