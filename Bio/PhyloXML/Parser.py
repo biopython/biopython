@@ -77,14 +77,14 @@ def get_child_as(parent, tag, construct):
 def get_child_text(parent, tag, construct=unicode):
     child = parent.find("{%s}%s" % (NAMESPACES['phy'], tag))
     if child is not None:
-        return child.text and construct(child.text.strip()) or None
+        return child.text and construct(child.text) or None
 
 def get_children_as(parent, tag, construct):
     return [construct(child) for child in 
             parent.findall("{%s}%s" % (NAMESPACES['phy'], tag))]
 
 def get_children_text(parent, tag, construct=unicode):
-    return [construct(child.text.strip()) for child in 
+    return [construct(child.text) for child in 
             parent.findall("{%s}%s" % (NAMESPACES['phy'], tag))
             if child.text]
 
@@ -393,7 +393,7 @@ class Parser(object):
     def to_other(cls, elem):
         namespace, localtag = split_namespace(elem.tag)
         return Tree.Other(localtag, namespace, elem.attrib,
-                  value=elem.text,
+                  value=elem.text and elem.text.strip() or None,
                   children=[cls.to_other(child) for child in elem])
 
     # Complex types
@@ -405,7 +405,7 @@ class Parser(object):
     @classmethod
     def to_annotation(cls, elem):
         return Tree.Annotation(
-                desc=get_child_text(elem, 'desc'),
+                desc=collapse_wspace(get_child_text(elem, 'desc')),
                 confidence=get_child_as(elem, 'confidence', cls.to_confidence),
                 properties=get_children_as(elem, 'property', cls.to_property),
                 uri=get_child_as(elem, 'uri', cls.to_uri),
@@ -441,14 +441,14 @@ class Parser(object):
     def to_date(cls, elem):
         return Tree.Date(
                 value=get_child_text(elem, 'value', float),
-                desc=get_child_text(elem, 'desc'),
+                desc=collapse_wspace(get_child_text(elem, 'desc')),
                 unit=elem.get('unit'),
                 range=maybe_float(elem.get('range')))
 
     @classmethod
     def to_distribution(cls, elem):
         return Tree.Distribution(
-                desc=get_child_text(elem, 'desc'),
+                desc=collapse_wspace(get_child_text(elem, 'desc')),
                 points=get_children_as(elem, 'point', cls.to_point),
                 polygons=get_children_as(elem, 'polygon', cls.to_polygon))
 
@@ -514,7 +514,7 @@ class Parser(object):
         return Tree.Sequence(
                 symbol=get_child_text(elem, 'symbol'),
                 accession=get_child_as(elem, 'accession', cls.to_accession),
-                name=get_child_text(elem, 'name'),
+                name=collapse_wspace(get_child_text(elem, 'name')),
                 location=get_child_text(elem, 'location'),
                 mol_seq=get_child_text(elem, 'mol_seq'),
                 uri=get_child_as(elem, 'uri', cls.to_uri),
@@ -547,5 +547,6 @@ class Parser(object):
     @classmethod
     def to_uri(cls, elem):
         return Tree.Uri(elem.text.strip(),
-                desc=elem.get('desc'), type=elem.get('type'))
+                desc=collapse_wspace(elem.get('desc')),
+                type=elem.get('type'))
 
