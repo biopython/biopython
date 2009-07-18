@@ -18,8 +18,9 @@ if sys.platform=="win32":
         "Testing TCOFFEE on Windows not supported yet")
 else :
     import commands
-    output = commands.getoutput("t_coffee")
-    if "not found" not in output and "t_coffee" in output.lower():
+    output = commands.getoutput("t_coffee -version")
+    if "not found" not in output \
+    and ("t_coffee" in output.lower() or "t-coffee" in output.lower()):
         t_coffee_exe = "t_coffee"
 
 if not t_coffee_exe:
