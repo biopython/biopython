@@ -77,11 +77,11 @@ class PrankApplication(unittest.TestCase):
         cmdline.set_parameter("d", self.infile1)
         self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        stdin, stdout, stderr = Application.generic_run(cmdline)
-        self.assertEqual(stdin.return_code, 0)
+        result, stdout, stderr = Application.generic_run(cmdline)
+        self.assertEqual(result.return_code, 0)
         self.assert_("Total time" in stdout.read())
         self.assertEqual(stderr.read(), "")
-        self.assertEqual(str(stdin._cl), str(cmdline))
+        self.assertEqual(str(result._cl), str(cmdline))
 
     def test_Prank_simple_with_NEXUS_output(self):
         """Simple round-trip through app with infile, output in NEXUS
@@ -97,11 +97,11 @@ class PrankApplication(unittest.TestCase):
         self.assertEqual(str(cmdline), prank_exe + \
                          " -d=Fasta/fa01 -f=17 -noxml -notree")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        stdin, stdout, stderr = Application.generic_run(cmdline)
-        self.assertEqual(stdin.return_code, 0)
+        result, stdout, stderr = Application.generic_run(cmdline)
+        self.assertEqual(result.return_code, 0)
         self.assert_("Total time" in stdout.read())
         self.assertEqual(stderr.read(), "")
-        self.assertEqual(str(stdin._cl), str(cmdline))
+        self.assertEqual(str(result._cl), str(cmdline))
         out_handle = open("output.2.nex", "r")
         align = AlignIO.read(out_handle, "nexus")
         out_handle.close()
@@ -130,11 +130,11 @@ class PrankApplication(unittest.TestCase):
                          " -notree -dots -gaprate=0.321 -gapext=0.6 -kappa=3" + \
                          " -once -skipins -realbranches")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        stdin, stdout, stderr = Application.generic_run(cmdline)
-        self.assertEqual(stdin.return_code, 0)
+        result, stdout, stderr = Application.generic_run(cmdline)
+        self.assertEqual(result.return_code, 0)
         self.assert_("Total time" in stdout.read())
         self.assertEqual(stderr.read(), "")
-        self.assertEqual(str(stdin._cl), str(cmdline))
+        self.assertEqual(str(result._cl), str(cmdline))
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

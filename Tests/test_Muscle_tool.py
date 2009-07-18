@@ -80,11 +80,11 @@ class MuscleApplication(unittest.TestCase):
         self.assertEqual(str(cmdline), muscle_exe \
                          + " -in Fasta/f002 -out Fasta/temp_align_out1.fa")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        stdin, stdout, stderr = generic_run(cmdline)
-        self.assertEqual(stdin.return_code, 0)
+        result, stdout, stderr = generic_run(cmdline)
+        self.assertEqual(result.return_code, 0)
         self.assertEqual(stdout.read(), "")
         self.assert_("ERROR" not in stderr.read())
-        self.assertEqual(str(stdin._cl), str(cmdline))
+        self.assertEqual(str(result._cl), str(cmdline))
 
     def test_Muscle_with_options(self):
         """Round-trip through app with a switch and valued option."""
@@ -99,11 +99,11 @@ class MuscleApplication(unittest.TestCase):
                          " -out Fasta/temp_align_out2.fa" + \
                          " -objscore sp -noanchors")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        stdin, stdout, stderr = generic_run(cmdline)
-        self.assertEqual(stdin.return_code, 0)
+        result, stdout, stderr = generic_run(cmdline)
+        self.assertEqual(result.return_code, 0)
         self.assertEqual(stdout.read(), "")
         self.assert_("ERROR" not in stderr.read())
-        self.assertEqual(str(stdin._cl), str(cmdline))
+        self.assertEqual(str(result._cl), str(cmdline))
 
     def test_Muscle_profile_simple(self):
         """Simple round-trip through app doing a profile alignment."""
@@ -116,11 +116,11 @@ class MuscleApplication(unittest.TestCase):
                          " -out Fasta/temp_align_out3.fa" + \
                          " -profile -in1 Fasta/fa01 -in2 Fasta/f001")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        stdin, stdout, stderr = generic_run(cmdline)
-        self.assertEqual(stdin.return_code, 0)
+        result, stdout, stderr = generic_run(cmdline)
+        self.assertEqual(result.return_code, 0)
         self.assertEqual(stdout.read(), "")
         self.assert_("ERROR" not in stderr.read())
-        self.assertEqual(str(stdin._cl), str(cmdline))
+        self.assertEqual(str(result._cl), str(cmdline))
 
     def test_Muscle_profile_with_options(self):
         """Profile alignment, and switch and valued options. """
@@ -137,11 +137,11 @@ class MuscleApplication(unittest.TestCase):
         """
         #TODO - Why doesn't this work with MUSCLE 3.6 on the Mac?
         #It may be another bug fixed in MUSCLE 3.7 ...
-        stdin, stdout, stderr = generic_run(cmdline)
-        self.assertEqual(stdin.return_code, 0)
+        result, stdout, stderr = generic_run(cmdline)
+        self.assertEqual(result.return_code, 0)
         self.assertEqual(stdout.read(), "")
         self.assert_("ERROR" not in stderr.read())
-        self.assertEqual(str(stdin._cl), str(cmdline))
+        self.assertEqual(str(result._cl), str(cmdline))
         """
 
 class SimpleAlignTest(unittest.TestCase) :
