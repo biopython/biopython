@@ -11,6 +11,7 @@ import subprocess
 
 from Bio.Application import generic_run
 from Bio.Emboss.Applications import WaterCommandline, NeedleCommandline
+from Bio.Emboss.Applications import SeqretCommandline
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio import MissingExternalDependencyError
@@ -54,16 +55,14 @@ if len(exes) < len(exes_wanted) :
 #Top level function as this makes it easier to use for debugging:
 def emboss_convert(filename, old_format, new_format):
     """Run seqret, returns handle."""
-    #TODO - Support seqret in Bio.Emboss.Applications
-    #(ideally with the -auto and -filter arguments)
     #Setup, this assumes for all the format names used
     #Biopython and EMBOSS names are consistent!
-    cline = exes["seqret"]
-    cline += " -sequence " + filename
-    cline += " -sformat " + old_format
-    cline += " -osformat " + new_format
-    cline += " -auto" #no prompting
-    cline += " -filter" #use stdout
+    cline = SeqretCommandline(exes["seqret"],
+                              sequence = filename,
+                              sformat = old_format,
+                              osformat = new_format,
+                              auto = True, #no prompting
+                              stdout = True)
     #Run the tool,
     child = subprocess.Popen(str(cline),
                              stdin=subprocess.PIPE,
@@ -174,6 +173,10 @@ class SeqRetSeqIOTests(unittest.TestCase):
     def test_genbank(self) :
         """SeqIO & EMBOSS reading each other's conversions of a GenBank file."""
         self.check_SeqIO_with_EMBOSS("GenBank/cor6_6.gb", "genbank")
+
+    def test_genbank2(self) :
+        """SeqIO & EMBOSS reading each other's conversions of another GenBank file."""
+        self.check_SeqIO_with_EMBOSS("GenBank/NC_000932.gb", "genbank")
 
     def test_embl(self) :
         """SeqIO & EMBOSS reading each other's conversions of an EMBL file."""
