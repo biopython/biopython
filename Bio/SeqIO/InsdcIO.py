@@ -244,9 +244,9 @@ class GenBankWriter(SequentialSequenceWriter) :
         if not isinstance(a, Alphabet.Alphabet) :
             raise TypeError("Invalid alphabet")
         elif isinstance(a, Alphabet.ProteinAlphabet) :
-            units = "bp"
-        elif isinstance(a, Alphabet.NucleotideAlphabet) :
             units = "aa"
+        elif isinstance(a, Alphabet.NucleotideAlphabet) :
+            units = "bp"
         else :
             #Must be something like NucleotideAlphabet or
             #just the generic Alphabet (default for fasta files)
