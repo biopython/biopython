@@ -638,7 +638,7 @@ class SeqretCommandline(_EmbossMinimalCommandLine):
     """
     def __init__(self, cmd="seqret", **kwargs):
         self.parameters = [
-         _Option(["-sequence","sequence"], ["input", "file"], None, 1,
+         _Option(["-sequence","sequence"], ["input", "file"], None, 0,
                  "Input sequence(s) filename"),
          _Option(["-outseq","outseq"], ["output", "file"], None, 0,
                  "Output sequence file."),
@@ -656,4 +656,7 @@ class SeqretCommandline(_EmbossMinimalCommandLine):
         if not (self.outseq or self.filter or self.stdout) :
             raise ValueError("You must either set outfile (output filename), "
                              "or enable filter or stdout (output to stdout).")
+        if not (self.sequence or self.filter or self.stdint) :
+            raise ValueError("You must either set sequence (input filename), "
+                             "or enable filter or stdin (input from stdin).")
         return _EmbossMinimalCommandLine.__str__(self)
