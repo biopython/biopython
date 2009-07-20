@@ -1,4 +1,4 @@
-# Copyright 2007 by Peter Cock.  All rights reserved.
+# Copyright 2007-2009 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -816,10 +816,11 @@ class GenBankScanner(InsdcScanner) :
                    'LOCUS line does not contain space at position 52:\n' + line
             assert line[55:62] == '       ', \
                    'LOCUS line does not contain spaces from position 56 to 62:\n' + line
-            assert line[64:65] == '-', \
-                   'LOCUS line does not contain - at position 65 in date:\n' + line
-            assert line[68:69] == '-', \
-                   'LOCUS line does not contain - at position 69 in date:\n' + line
+            if line[62:73].strip() :
+                assert line[64:65] == '-', \
+                       'LOCUS line does not contain - at position 65 in date:\n' + line
+                assert line[68:69] == '-', \
+                       'LOCUS line does not contain - at position 69 in date:\n' + line
 
             name_and_length_str = line[GENBANK_INDENT:29]
             while name_and_length_str.find('  ')!=-1 :
@@ -846,7 +847,8 @@ class GenBankScanner(InsdcScanner) :
                 consumer.residue_type(line[33:51].strip())
 
             consumer.data_file_division(line[52:55])
-            consumer.date(line[62:73])
+            if line[62:73].strip() :
+                consumer.date(line[62:73])
         elif line[40:44] in [' bp ', ' aa ',' rc '] :
             #New...
             #
@@ -883,10 +885,11 @@ class GenBankScanner(InsdcScanner) :
                    'LOCUS line does not contain space at position 64:\n' + line
             assert line[67:68] == ' ', \
                    'LOCUS line does not contain space at position 68:\n' + line
-            assert line[70:71] == '-', \
-                   'LOCUS line does not contain - at position 71 in date:\n' + line
-            assert line[74:75] == '-', \
-                   'LOCUS line does not contain - at position 75 in date:\n' + line
+            if line[68:79].strip() :
+                assert line[70:71] == '-', \
+                       'LOCUS line does not contain - at position 71 in date:\n' + line
+                assert line[74:75] == '-', \
+                       'LOCUS line does not contain - at position 75 in date:\n' + line
 
             name_and_length_str = line[GENBANK_INDENT:40]
             while name_and_length_str.find('  ')!=-1 :
@@ -912,7 +915,8 @@ class GenBankScanner(InsdcScanner) :
                 consumer.residue_type(line[44:63].strip())
 
             consumer.data_file_division(line[64:67])
-            consumer.date(line[68:79])
+            if line[68:79].strip() :
+                consumer.date(line[68:79])
         elif line[GENBANK_INDENT:].strip().count(" ")==0 : 
             #Truncated LOCUS line, as produced by some EMBOSS tools - see bug 1762
             #
