@@ -88,22 +88,14 @@ Timeline
     - Usage: parsing, writing, object navigation, Bio integration, utilities
     - Performance: read, parse, write
 
-:7/13:
+:7/20:
     Extend the core to the rest of the spec:
 
     - Adding unit tests and classes to support the remaining (non-core)
       phyloXML elements
-    - Implement collapse_whitespace -- see the spec glossary
-    - Make Writer use the correct namespace prefixes
-    - "other" objects: assert the namespace is not phyloxml
     - Use the schema document to validate the input file -- or at least, make
       Writer use the correct sub-node ordering
-
-    Integration:
-
-    - Refactor into Bio.Tree, Bio.TreeIO modules -- See Bio.Nexus, PyCogent;
-      keep BaseTree trivial for now
-    - Improve the SeqRecord conversion
+    - Take a stab at phyloXML 1.10 support
 
     Documentation:
 
@@ -111,7 +103,12 @@ Timeline
     - Revisit docstrings for all classes, functions, methods; consider enabling
       epydoc formatting
 
-:7/20--27:
+    Enhancements:
+
+    - Improve the SeqRecord conversion
+    - Warnings: show the offending line at the previous level in the stack
+
+:7/27:
     Finish implementing the phyloXML spec:
 
     - Clean up and reorganize any code that needs it
@@ -119,26 +116,25 @@ Timeline
 
     Enhancements (time permitting):
 
-    - For wrapped helper functions in Parser and Writer, copy function metadata
-      to make tracebacks friendlier
     - Work on Bio.Tree.BaseTree compatibility with BioSQL's PhyloDB extension
     - Port common methods to Bio.Tree.BaseTree -- see Bio.Nexus.Tree, Bioperl
-      node objects
+      node objects, PyCogent
     - Export to networkx (http://networkx.lanl.gov/) -- also get graphviz export
       for free, via networkx.to_agraph()
 
     Wiki documentation:
 
-    - Split off TreeIO page from PhyloXML page (mainly parser/writer sections)
+    - Split off PhyloXML page into TreeIO (mainly parser/writer sections) and
+      Tree (how the base tree objects work -- will be brief until Nexus
+      integration)
     - Check module names and imports in examples -- they've changed
-    - PhyloXML enhancements: find(), singular properties, improved str()
+    - New since the last push: find(), singular properties, improved str()
 
 :8/3:
     Documentation:
 
     - Ensure all completed functionality is covered
-    - Re-run performance benchmarks; mention that the ATV parser is about 10x as
-      fast, and Py2.4 performance depends on the ETree implementation used
+    - Re-run performance benchmarks
     - Run tests and benchmarks on alternate platforms
 
     Discuss merging back upstream.
