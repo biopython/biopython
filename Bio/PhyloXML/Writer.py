@@ -8,6 +8,8 @@
 Constructs an XML file from a Tree.PhyloXML object.
 """
 
+import warnings
+
 from Bio.Tree import PhyloXMLTree as Tree
 
 from Parser import ElementTree, NAMESPACES
@@ -19,10 +21,19 @@ try:
 except AttributeError:
     if not hasattr(ElementTree, '_namespace_map'):
         # cElementTree needs the pure-Python xml.etree.ElementTree
-        from xml.etree import ElementTree as ET_py
-        ElementTree._namespace_map = ET_py._namespace_map
+        # Py2.4 support: the exception handler can go away when Py2.4 does
+        try:
+            from xml.etree import ElementTree as ET_py
+            ElementTree._namespace_map = ET_py._namespace_map
+        except ImportError:
+            warnings.warn("Couldn't import xml.etree.ElementTree; "
+                    "phyloXML namespaces may have unexpected abbreviations "
+                    "in the output.", RuntimeWarning)
+            ElementTree._namespace_map = {}
+
     def register_namespace(prefix, uri):
         ElementTree._namespace_map[uri] = prefix
+
 for prefix, uri in NAMESPACES.iteritems():
     register_namespace(prefix, uri)
 
