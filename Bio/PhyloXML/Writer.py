@@ -75,18 +75,23 @@ def _clean_attrib(obj, attrs):
     return out
 
 
-def _handle_complex(tag, attribs, complex_types, list_types, has_text=False):
+def _handle_complex(tag, attribs, subnodes, has_text=False):
     def wrapped(self, obj):
         elem = ElementTree.Element(tag, _clean_attrib(obj, attribs))
-        for ct in complex_types:
-            if getattr(obj, ct) is not None:
-                elem.append(getattr(self, ct)(getattr(obj, ct)))
-        for lt, plural in list_types:
-            for item in getattr(obj, plural):
-                elem.append(getattr(self, lt)(item))
+        for subn in subnodes:
+            if isinstance(subn, basestring):
+                # singular object: method and attribute names are the same
+                if getattr(obj, subn) is not None:
+                    elem.append(getattr(self, subn)(getattr(obj, subn)))
+            else:
+                # list: singular method, pluralized attribute name
+                method, plural = subn
+                for item in getattr(obj, plural):
+                    elem.append(getattr(self, method)(item))
         if has_text:
             elem.text = serialize(obj.value)
         return elem
+    wrapped.__doc__ = "Serialize a %s and its subnodes, in order." % tag
     return wrapped
 
 
@@ -95,6 +100,7 @@ def _handle_simple(tag):
         elem = ElementTree.Element(tag)
         elem.text = serialize(obj)
         return elem
+    wrapped.__doc__ = "Serialize a simple %s node." % tag
     return wrapped
 
 
@@ -114,9 +120,10 @@ class Writer(object):
     def phyloxml(self, obj):
         elem = ElementTree.Element(_ns('phyloxml'),
                 # XXX not sure about this
-                {_ns('schemaLocation', NAMESPACES['xs']):
-                    obj.attributes['schemaLocation'],
-                    })
+                # {_ns('schemaLocation', NAMESPACES['xs']):
+                #     obj.attributes['schemaLocation'],
+                #     }
+                )
         for tree in obj.phylogenies:
             elem.append(self.phylogeny(tree))
         for otr in obj.other:
@@ -129,25 +136,34 @@ class Writer(object):
         for child in obj.children:
             elem.append(self.other(child))
         return elem
-    
+
     phylogeny = _handle_complex(_ns('phylogeny'),
             ('rooted', 'rerootable', 'branch_length_unit', 'type'),
-            ('name', 'id', 'description', 'date', 'clade'),
-            ( ('confidence',        'confidences'),
+            ( 'name',
+              'id',
+              'description',
+              'date',
+              ('confidence',        'confidences'),
+              'clade',
               ('clade_relation',    'clade_relations'),
               ('sequence_relation', 'sequence_relations'),
               ('property',          'properties'),
               ('other',             'other'),
               ))
 
-    clade = _handle_complex(_ns('clade'),
-            ('id_source',),
-            ('name', 'branch_length', 'width', 'color', 'node_id', 'events',
-                'binary_characters', 'date'),
-            ( ('confidence',    'confidences'),
+    clade = _handle_complex(_ns('clade'), ('id_source',),
+            ( 'name',
+              'branch_length',
+              ('confidence',    'confidences'),
+              'width',
+              'color',
+              'node_id',
               ('taxonomy',      'taxonomies'),
               ('sequence',      'sequences'),
+              'events',
+              'binary_characters',
               ('distribution',  'distributions'),
+              'date',
               ('reference',     'references'),
               ('property',      'properties'),
               ('clade',         'clades'),
@@ -156,31 +172,34 @@ class Writer(object):
 
     # absent = _handle_complex(_ns('absent')) # BinaryCharacterList
 
-    accession = _handle_complex(_ns('accession'),
-            ('source',), (), (), has_text=True)
+    accession = _handle_complex(_ns('accession'), ('source',),
+            (), has_text=True)
 
     annotation = _handle_complex(_ns('annotation'),
             ('ref', 'source', 'evidence', 'type'),
-            ('desc', 'confidence', 'uri'),
-            ( ('property',   'properties'),
+            ( 'desc',
+              'confidence',
+              ('property',   'properties'),
+              'uri',
               ))
 
     # binary_characters = _handle_complex(_ns('binary_characters'))
 
     clade_relation = _handle_complex(_ns('clade_relation'),
             ('id_ref_0', 'id_ref_1', 'distance', 'type'),
-            ('confidence',), ())
+            ('confidence',))
 
     # color = _handle_complex(_ns('color'))   # BranchColor,
 
-    confidence = _handle_complex(_ns('confidence'),
-            ('type',), (), (), has_text=True)
+    confidence = _handle_complex(_ns('confidence'), ('type',),
+            (), has_text=True)
 
-    date = _handle_complex(_ns('date'),
-            ('unit', 'range'), ('desc', 'value'), (), has_text=True)
+    date = _handle_complex(_ns('date'), ('unit', 'range'),
+            ('desc', 'value'))
 
-    distribution = _handle_complex(_ns('distribution'), (), ('desc',),
-            ( ('point',     'points'),
+    distribution = _handle_complex(_ns('distribution'), (),
+            ( 'desc',
+              ('point',     'points'),
               ('polygon',   'polygons'),
               ))
 
@@ -195,24 +214,27 @@ class Writer(object):
         return elem
 
     domain_architecture = _handle_complex(_ns('domain_architecture'),
-            ('length',), (),
-            ( ('domain', 'domains'),
-              ))
+            ('length',),
+            (('domain', 'domains'),))
 
     events = _handle_complex(_ns('events'), (),
-            ('type', 'duplications', 'speciations', 'losses', 'confidence'),
-            ())
+            ( 'type',
+              'duplications',
+              'speciations',
+              'losses',
+              'confidence',
+              ))
 
     # gained = _handle_complex(_ns('gained')) # BinaryCharacterList,
 
-    id = _handle_complex(_ns('id'), ('type',), (), (), has_text=True)
+    id = _handle_complex(_ns('id'), ('type',), (), has_text=True)
 
-    node_id = _handle_complex(_ns('node_id'), ('type',), (), (), has_text=True)
+    node_id = _handle_complex(_ns('node_id'), ('type',), (), has_text=True)
 
     # lost = _handle_complex(_ns('lost')) # BinaryCharacterList,
 
     point = _handle_complex(_ns('point'), ('geodetic_datum',),
-            ('lat', 'long', 'alt'), ())
+            ('lat', 'long', 'alt'))
 
     # polygon = _handle_complex(_ns('polygon'))
 
@@ -220,30 +242,39 @@ class Writer(object):
 
     property = _handle_complex(_ns('property'),
             ('ref', 'unit', 'datatype', 'applies_to', 'id_ref'),
-            (), (), has_text=True)
+            (), has_text=True)
 
     # reference = _handle_complex(_ns('reference'))
 
     sequence = _handle_complex(_ns('sequence'),
             ('type', 'id_ref', 'id_source'),
-            ('symbol', 'accession', 'name', 'location', 'mol_seq', 'uri',
-                'domain_architecture'),
-            ( ('annotation', 'annotations'),
+            ( 'symbol',
+              'accession',
+              'name',
+              'location',
+              'mol_seq',
+              'uri',
+              ('annotation', 'annotations'),
+              'domain_architecture',
               ('other', 'other'),
               ))
 
     sequence_relation = _handle_complex(_ns('sequence_relation'),
             ('id_ref_0', 'id_ref_1', 'distance', 'type'),
-            ('confidence',), ())
+            ('confidence',))
 
     taxonomy = _handle_complex(_ns('taxonomy'),
             ('id_source',),
-            ('id', 'code', 'scientific_name', 'rank', 'uri'),
-            ( ('common_name',   'common_names'),
+            ( 'id',
+              'code',
+              'scientific_name',
+              ('common_name',   'common_names'),
+              'rank',
+              'uri',
               ('other',         'other'),
               ))
 
-    uri = _handle_complex(_ns('uri'), ('desc', 'type'), (), (), has_text=True)
+    uri = _handle_complex(_ns('uri'), ('desc', 'type'), (), has_text=True)
 
     # Primitive types
 
