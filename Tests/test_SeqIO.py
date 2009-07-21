@@ -167,7 +167,7 @@ test_files = [ \
     ("qual",  False, 'Quality/example.qual',  3),
     ("fastq", True, 'Quality/example.fastq', 3),
     ("fastq", True, 'Quality/tricky.fastq', 4),
-    ("fastq-solexa", True, 'Quality/solexa.fastq', 1),
+    ("fastq-solexa", False, 'Quality/solexa_faked.fastq', 1),
     ("fastq-solexa", True, 'Quality/solexa_example.fastq', 5),
     ]
 
