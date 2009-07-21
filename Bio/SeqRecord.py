@@ -187,24 +187,24 @@ class SeqRecord(object):
         variant FASTQ file as a SeqRecord:
 
         >>> from Bio import SeqIO
-        >>> handle = open("Quality/solexa.fastq", "rU")
+        >>> handle = open("Quality/solexa_faked.fastq", "rU")
         >>> record = SeqIO.read(handle, "fastq-solexa")
         >>> handle.close()
         >>> print record.id, record.seq
-        slxa_0013_1_0001_24 ACAAAAATCACAAGCATTCTTATACACC
+        slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
         >>> print record.letter_annotations.keys()
         ['solexa_quality']
         >>> print record.letter_annotations["solexa_quality"]
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -6, -1, -1, -4, -1, -4, -19, -10, -27, -18]
+        [40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
 
         The letter_annotations get sliced automatically if you slice the
         parent SeqRecord, for example taking the last ten bases:
 
         >>> sub_record = record[-10:]
         >>> print sub_record.id, sub_record.seq
-        slxa_0013_1_0001_24 CTTATACACC
+        slxa_0001_1_0001_01 ACGTNNNNNN
         >>> print sub_record.letter_annotations["solexa_quality"]
-        [-6, -1, -1, -4, -1, -4, -19, -10, -27, -18]
+        [4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
 
         Any python sequence (i.e. list, tuple or string) can be recorded in
         the SeqRecord's letter_annotations dictionary as long as the length
@@ -450,18 +450,20 @@ class SeqRecord(object):
         per-letter-annotation:
         
         >>> from Bio import SeqIO
-        >>> rec = SeqIO.read(open("Quality/solexa.fastq", "rU"),
+        >>> rec = SeqIO.read(open("Quality/solexa_faked.fastq", "rU"),
         ...                  "fastq-solexa")
         >>> print rec.id, rec.seq
-        slxa_0013_1_0001_24 ACAAAAATCACAAGCATTCTTATACACC
+        slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
         >>> print rec.letter_annotations.keys()
         ['solexa_quality']
         >>> for nuc, qual in zip(rec,rec.letter_annotations["solexa_quality"]) :
-        ...     if qual < -10 :
+        ...     if qual > 35 :
         ...         print nuc, qual
-        C -19
-        C -27
-        C -18
+        A 40
+        C 39
+        G 38
+        T 37
+        A 36
 
         You may agree that using zip(rec.seq, ...) is more explicit than using
         zip(rec, ...) as shown above.
