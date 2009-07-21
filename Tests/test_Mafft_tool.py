@@ -75,7 +75,10 @@ class MafftApplication(unittest.TestCase):
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         result, stdout, stderr = Application.generic_run(cmdline)
         self.assertEqual(result.return_code, 0)
-        self.assert_(stdout.read().startswith("CLUSTAL format alignment by MAFFT"))
+        output = stdout.read()
+        #e.g. "CLUSTAL format alignment by MAFFT ..."
+        #or "CLUSTAL (-like) formatted alignment by MAFFT FFT-NS-2 (v6.240)"
+        self.assert_(output.startswith("CLUSTAL"), output)
         self.assert_("$#=0" not in stderr.read())
         self.assertEqual(str(result._cl), mafft_exe \
                          + " --clustalout Fasta/f002")
