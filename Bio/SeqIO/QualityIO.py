@@ -718,7 +718,7 @@ def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = No
 
 #This is a generator function!
 def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = None) :
-    """Parsing old Solexa/Illumina FASTQ like files (which differ in the quality mapping).
+    r"""Parsing old Solexa/Illumina FASTQ like files (which differ in the quality mapping).
 
     The optional arguments are the same as those for the FastqPhredIterator.
 
@@ -791,13 +791,13 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
     >>> print "%0.2f" % phred_quality_from_solexa(25)
     25.01
 
-    Let's look at another example read which is even worse, where there are
+    Let's look at faked example read which is even worse, where there are
     more noticeable differences between the Solexa and PHRED scores::
 
-         @slxa_0013_1_0001_24
-         ACAAAAATCACAAGCATTCTTATACACC
-         +slxa_0013_1_0001_24
-         ??????????????????:??<?<-6%.
+         @slxa_0001_1_0001_01
+         ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
+         +slxa_0001_1_0001_01
+         hgfedcba`_^]\[ZYXWVUTSRQPONMLKJIHGFEDCBA@?>=<;
 
     Again, you would typically use Bio.SeqIO to read this file in (rather than
     calling the Bio.SeqIO.QualtityIO module directly).  Most FASTQ files will
@@ -806,46 +806,53 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
     use the Bio.SeqIO.read() function:
 
     >>> from Bio import SeqIO
-    >>> handle = open("Quality/solexa.fastq", "rU")
+    >>> handle = open("Quality/solexa_faked.fastq", "rU")
     >>> record = SeqIO.read(handle, "fastq-solexa")
     >>> handle.close()
     >>> print record.id, record.seq
-    slxa_0013_1_0001_24 ACAAAAATCACAAGCATTCTTATACACC
+    slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
     >>> print record.letter_annotations["solexa_quality"]
-    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -6, -1, -1, -4, -1, -4, -19, -10, -27, -18]
+    [40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
 
     These quality scores are so low that when converted from the Solexa scheme
     into PHRED scores they look quite different:
 
     >>> print "%0.2f" % phred_quality_from_solexa(-1)
     2.54
+    >>> print "%0.2f" % phred_quality_from_solexa(-5)
+    1.19
 
     Note you can use the Bio.SeqIO.write() function or the SeqRecord's format
     method to output the record(s):
 
     >>> print record.format("fastq-solexa")
-    @slxa_0013_1_0001_24
-    ACAAAAATCACAAGCATTCTTATACACC
+    @slxa_0001_1_0001_01
+    ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
     +
-    ??????????????????:??<?<-6%.
+    hgfedcba`_^]\[ZYXWVUTSRQPONMLKJIHGFEDCBA@?>=<;
     <BLANKLINE>
-
+    
     Note this output is slightly different from the input file as Biopython
     has left out the optional repetition of the sequence identifier on the "+"
     line.  If you want the to use PHRED scores, use "fastq" or "qual" as the
     output format instead, and Biopython will do the conversion for you:
 
     >>> print record.format("fastq")
-    @slxa_0013_1_0001_24
-    ACAAAAATCACAAGCATTCTTATACACC
+    @slxa_0001_1_0001_01
+    ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
     +
-    $$$$$$$$$$$$$$$$$$"$$"$"!!!!
+    IHGFEDCBA@?>=<;:9876543210/.-,++*)('&&%%$$##""
+    <BLANKLINE>
+    
+    >>> print record.format("qual")
+    >slxa_0001_1_0001_01
+    40 39 38 37 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22 21
+    20 19 18 17 16 15 14 13 12 11 10 10 9 8 7 6 5 5 4 4 3 3 2 2
+    1 1
     <BLANKLINE>
 
-    >>> print record.format("qual")
-    >slxa_0013_1_0001_24
-    3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 1 3 3 1 3 1 0 0 0 0
-    <BLANKLINE>
+    As shown above, the poor quality Solexa reads have been mapped to the
+    equivalent PHRED score (e.g. -5 to 1 as shown earlier).
     """
     for title_line, seq_string, quality_string in FastqGeneralIterator(handle) :
         if title2ids :
@@ -876,12 +883,12 @@ def FastqIlluminaIterator(handle, alphabet = single_letter_alphabet, title2ids =
     Solexa scores, and try and read this as an Illumina 1.3+ file it will fail:
 
     >>> from Bio import SeqIO
-    >>> record = SeqIO.read(open("Quality/solexa.fastq"), "fastq-solexa")
+    >>> record = SeqIO.read(open("Quality/solexa_faked.fastq"), "fastq-solexa")
     >>> print record.id, record.seq
-    slxa_0013_1_0001_24 ACAAAAATCACAAGCATTCTTATACACC
+    slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
     >>> print record.letter_annotations["solexa_quality"]
-    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -6, -1, -1, -4, -1, -4, -19, -10, -27, -18]
-    >>> record2 = SeqIO.read(open("Quality/solexa.fastq"), "fastq-illumina")
+    [40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
+    >>> record2 = SeqIO.read(open("Quality/solexa_faked.fastq"), "fastq-illumina")
     Traceback (most recent call last):
        ...
     ValueError: PHRED quality score outside 0 to 93 found - your file is probably not in the Illumina 1.3+ FASTQ format. Check if it is a standard Sanger FASTQ file or from an older Solexa/Illumina pipeline.
@@ -1041,10 +1048,10 @@ class FastqPhredWriter(SequentialSequenceWriter):
     PHRED qualities:
 
     >>> from Bio import SeqIO
-    >>> record_iterator = SeqIO.parse(open("Quality/solexa.fastq"), "fastq-solexa")
+    >>> record_iterator = SeqIO.parse(open("Quality/solexa_example.fastq"), "fastq-solexa")
     >>> out_handle = open("Quality/temp.fastq", "w")
     >>> SeqIO.write(record_iterator, out_handle, "fastq")
-    1
+    5
     >>> out_handle.close()
 
     This code is also called if you use the .format("fastq") method of a
@@ -1210,10 +1217,10 @@ class FastqSolexaWriter(SequentialSequenceWriter):
     reads in a FASTQ file and re-saves it as another FASTQ file:
 
     >>> from Bio import SeqIO
-    >>> record_iterator = SeqIO.parse(open("Quality/solexa.fastq"), "fastq-solexa")
+    >>> record_iterator = SeqIO.parse(open("Quality/solexa_example.fastq"), "fastq-solexa")
     >>> out_handle = open("Quality/temp.fastq", "w")
     >>> SeqIO.write(record_iterator, out_handle, "fastq-solexa")
-    1
+    5
     >>> out_handle.close()
 
     You might want to do this if the original file included extra line breaks,
@@ -1432,7 +1439,7 @@ def _test():
         assert os.path.isfile("Quality/example.fasta")
         assert os.path.isfile("Quality/example.qual")
         assert os.path.isfile("Quality/tricky.fastq")
-        assert os.path.isfile("Quality/solexa.fastq")
+        assert os.path.isfile("Quality/solexa_faked.fastq")
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir
