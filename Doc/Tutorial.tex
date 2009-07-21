@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 8 July 2009 (Biopython 1.51 \textit{beta})}
+\date{Last Update -- 15 July 2009 (Biopython 1.51 \textit{beta})}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -4432,11 +4432,11 @@ To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For exampl
 >>> record["IdList"]
 ['19304878', '18606172', '16403221', '16377612', '14871861', '14630660', '12230038']
 \end{verbatim}
-In this output, you see seven PubMed IDs (including 19304878 which is the PMID for the Biopython application notes), which can be retrieved by EFetch (see section \ref{sec:efetch}).
+In this output, you see seven PubMed IDs (including 19304878 which is the PMID for the Biopython application note), which can be retrieved by EFetch (see section \ref{sec:efetch}).
 
 You can also use ESearch to search GenBank. Here we'll do a quick
 search for the \emph{matK} gene in \emph{Cypripedioideae} orchids
-(see the Section~\ref{sec:entrez-einfo} about EInfo for one way to
+(see Section~\ref{sec:entrez-einfo} about EInfo for one way to
 find out which fields you can search in each Entrez database):
 
 \begin{verbatim}
@@ -4616,7 +4616,8 @@ ORIGIN
 The argument \verb+rettype="gb"+ lets us download this record in the GenBank format.
 Note that until Easter 2009, the Entrez EFetch API let you use ``genbank'' as the
 return type, however the NCBI now insist on using the official return types of
-``gb'' (or ``gp'' for proteins) as described on online.
+``gb'' or ``gbwithparts'' (or ``gp'' for proteins) as described on online.
+
 Alternatively, you could for example use \verb+rettype="fasta"+ to get the Fasta-format; see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq\_help.html}{EFetch Sequences Help page} for other options. The available formats depend on which database you are downloading from - see the main \href{http://eutils.ncbi.nlm.nih.gov/entrez/query/static/efetch\_help.html}{EFetch Help page}.
 
 If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see Chapter~\ref{chapter:Bio.SeqIO}), you could directly parse it into a \verb+SeqRecord+:
@@ -4891,7 +4892,7 @@ PDB file parser and structure class implemented in Python.
 The Bio* toolkits--a brief overview.
 \end{verbatim}
 
-Note that in post of these examples, for simplicity we have naively combined ESearch and EFetch.
+Note that in both of these examples, for simplicity we have naively combined ESearch and EFetch.
 In this situation, the NCBI would expect you to use their history feature,
 as illustrated in Section~\ref{sec:entrez-webenv}.
 
@@ -9871,7 +9872,7 @@ necessary in the current application.
 
 This is a very flexible framework, which is advantageous if you want to
 be able to parse a file format into more than one representation.  For
-example, the \verb|Bio.GenBank| modules uses this construct either
+example, the \verb|Bio.GenBank| module uses this construct either
 \verb|SeqRecord| objects or file-format-specific record objects.
 
 More recently, many of the parsers added for \verb|Bio.SeqIO| and

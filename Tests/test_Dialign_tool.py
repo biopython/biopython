@@ -56,14 +56,14 @@ class DialignApplication(unittest.TestCase):
         #Test using keyword arguments:
         cmdline = DialignCommandline(dialign_exe, input=self.infile1)
         self.assertEqual(str(cmdline), dialign_exe + " Fasta/f002")
-        stdin, stdout, stderr = Application.generic_run(cmdline)
+        result, stdout, stderr = Application.generic_run(cmdline)
         #If there is a problem, the output can be very helpful to see,
         #so check this before looking at the return code:
         self.assertEqual(stderr.read(), "")
         self.assertEqual(stdout.read(), "")
-        self.assertEqual(stdin.return_code, 0)
+        self.assertEqual(result.return_code, 0)
         self.assert_(os.path.exists(self.outfile1))
-        self.assertEqual(str(stdin._cl), str(cmdline))
+        self.assertEqual(str(result._cl), str(cmdline))
 
     def test_Dialign_simple_with_options(self):
         """Simple round-trip through app with infile and options
@@ -74,12 +74,12 @@ class DialignApplication(unittest.TestCase):
         cmdline.set_parameter("stars", 4)
         self.assertEqual(str(cmdline), dialign_exe + \
                          " -max_link -stars 4 Fasta/f002")
-        stdin, stdout, stderr = Application.generic_run(cmdline)
+        result, stdout, stderr = Application.generic_run(cmdline)
         self.assertEqual(stderr.read(), "")
         self.assertEqual(stdout.read(), "")
-        self.assertEqual(stdin.return_code, 0)
+        self.assertEqual(result.return_code, 0)
         self.assert_(os.path.exists(self.outfile1))
-        self.assertEqual(str(stdin._cl), str(cmdline))
+        self.assertEqual(str(result._cl), str(cmdline))
 
     def test_Dialign_simple_with_MSF_output(self):
         """Simple round-trip through app with infile, output MSF
@@ -89,13 +89,13 @@ class DialignApplication(unittest.TestCase):
         cmdline.input = self.infile1
         cmdline.msf = True
         self.assertEqual(str(cmdline), dialign_exe + " -msf Fasta/f002")
-        stdin, stdout, stderr = Application.generic_run(cmdline)
+        result, stdout, stderr = Application.generic_run(cmdline)
         self.assertEqual(stdout.read(), "")
         self.assertEqual(stderr.read(), "")
-        self.assertEqual(stdin.return_code, 0)
+        self.assertEqual(result.return_code, 0)
         self.assert_(os.path.exists(self.outfile1))
         self.assert_(os.path.exists(self.outfile2))
-        self.assertEqual(str(stdin._cl), str(cmdline))
+        self.assertEqual(str(result._cl), str(cmdline))
 
     def test_Dialign_complex_command_line(self):
         """Round-trip through app with complex command line."""
@@ -109,12 +109,12 @@ class DialignApplication(unittest.TestCase):
         cmdline.set_parameter("-cs", True)
         self.assertEqual(str(cmdline), dialign_exe + \
                          " -cs -mask -nt -ow -stars 9 -thr 4 Fasta/f002")
-        stdin, stdout, stderr = Application.generic_run(cmdline)
+        result, stdout, stderr = Application.generic_run(cmdline)
         self.assertEqual(stderr.read(), "")
-        self.assertEqual(stdin.return_code, 0)
+        self.assertEqual(result.return_code, 0)
         self.assert_(os.path.exists(self.outfile1))
         self.assert_(stdout.read().startswith(" e_len = 633"))
-        self.assertEqual(str(stdin._cl), str(cmdline))
+        self.assertEqual(str(result._cl), str(cmdline))
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

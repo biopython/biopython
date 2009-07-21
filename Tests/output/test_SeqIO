@@ -2292,17 +2292,9 @@ Testing reading fastq format file Quality/tricky.fastq as an alignment
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
-Testing reading fastq-solexa format file Quality/solexa.fastq
- ID and Name='slxa_0013_1_0001_24',
- Seq='ACAAAAATCACAAGCATTCTTATACACC', length=28
-Testing reading fastq-solexa format file Quality/solexa.fastq as an alignment
- A alignment column 0
- C alignment column 1
- A alignment column 2
- A alignment column 3
- A alignment column 4
- | ...
- C alignment column 27
+Testing reading fastq-solexa format file Quality/solexa_faked.fastq
+ ID and Name='slxa_0001_1_0001_01',
+ Seq='ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN', length=46
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
@@ -2311,7 +2303,7 @@ Testing reading fastq-solexa format file Quality/solexa.fastq as an alignment
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
- Failed: Locus identifier 'slxa_0013_1_0001_24' is too long
+ Failed: Locus identifier 'slxa_0001_1_0001_01' is too long
  Checking can write/read as 'qual' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format

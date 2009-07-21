@@ -27,3 +27,9 @@ output002.m10 - fasta34 protein-protein, 3 query sequences,
                 with offsets and word size, max 2 hits per query
 output003.m10 - fasta34 protein-protein, 5 query sequences,
                 very strict threshold so not all have hits.
+output004.m10 - fasta35 nucleotide-nucleotide, 3 queries where
+                only the middle one has a single hit.
+output005.m10 - ssearch35 protein-protein, 3 queries where
+                only the middle one has a single hit.
+output006.m10 - fasta35 nucleotide-nucleotide, 1 query, in the
+                alignment the query has been reversed.

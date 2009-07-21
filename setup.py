@@ -156,6 +156,11 @@ class build_ext_biopython(build_ext):
                            "Bio/KDTree/KDTreemodule.c"],
                           include_dirs=[numpy_include_dir],
                           ))
+            self.extensions.append(
+                Extension('Bio.Motif._pwm',
+                          ["Bio/Motif/_pwm.c"],
+                          include_dirs=[numpy_include_dir],
+                          ))
         build_ext.run(self)
 
 

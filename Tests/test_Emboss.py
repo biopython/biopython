@@ -11,6 +11,7 @@ import subprocess
 
 from Bio.Application import generic_run
 from Bio.Emboss.Applications import WaterCommandline, NeedleCommandline
+from Bio.Emboss.Applications import SeqretCommandline
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio import MissingExternalDependencyError
@@ -54,16 +55,14 @@ if len(exes) < len(exes_wanted) :
 #Top level function as this makes it easier to use for debugging:
 def emboss_convert(filename, old_format, new_format):
     """Run seqret, returns handle."""
-    #TODO - Support seqret in Bio.Emboss.Applications
-    #(ideally with the -auto and -filter arguments)
     #Setup, this assumes for all the format names used
     #Biopython and EMBOSS names are consistent!
-    cline = exes["seqret"]
-    cline += " -sequence " + filename
-    cline += " -sformat " + old_format
-    cline += " -osformat " + new_format
-    cline += " -auto" #no prompting
-    cline += " -filter" #use stdout
+    cline = SeqretCommandline(exes["seqret"],
+                              sequence = filename,
+                              sformat = old_format,
+                              osformat = new_format,
+                              auto = True, #no prompting
+                              stdout = True)
     #Run the tool,
     child = subprocess.Popen(str(cline),
                              stdin=subprocess.PIPE,
@@ -72,6 +71,47 @@ def emboss_convert(filename, old_format, new_format):
                              shell=(sys.platform!="win32"))
     child.stdin.close()
     return child.stdout
+
+#Top level function as this makes it easier to use for debugging:
+def emboss_piped_SeqIO_convert(records, old_format, new_format):
+    """Run seqret, returns records (as a generator)."""
+    #Setup, this assumes for all the format names used
+    #Biopython and EMBOSS names are consistent!
+    cline = SeqretCommandline(exes["seqret"],
+                              sformat = old_format,
+                              osformat = new_format,
+                              auto = True, #no prompting
+                              filter = True)
+    #Run the tool,
+    child = subprocess.Popen(str(cline),
+                             stdin=subprocess.PIPE,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             shell=(sys.platform!="win32"))
+    SeqIO.write(records, child.stdin, old_format)
+    child.stdin.close()
+    return SeqIO.parse(child.stdout, new_format)
+
+#Top level function as this makes it easier to use for debugging:
+def emboss_piped_AlignIO_convert(alignments, old_format, new_format):
+    """Run seqret, returns alignments (as a generator)."""
+    #Setup, this assumes for all the format names used
+    #Biopython and EMBOSS names are consistent!
+    cline = SeqretCommandline(exes["seqret"],
+                              sformat = old_format,
+                              osformat = new_format,
+                              auto = True, #no prompting
+                              filter = True)
+    #Run the tool,
+    child = subprocess.Popen(str(cline),
+                             stdin=subprocess.PIPE,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             shell=(sys.platform!="win32"))
+    AlignIO.write(alignments, child.stdin, old_format)
+    child.stdin.close()
+    return AlignIO.parse(child.stdout, new_format)
+
 
 #Top level function as this makes it easier to use for debugging:
 def compare_records(old_list, new_list) :
@@ -128,23 +168,12 @@ class SeqRetSeqIOTests(unittest.TestCase):
         for temp_format in ["genbank","fasta"] :
             if temp_format in skip_formats :
                 continue
-            #TODO - Handle this with a pipe?
-            #i.e. can Bio.SeqIO write to the stdin of seqret?
-            filename = "Emboss/temp_%s.txt" % temp_format
-            temp_handle = open(filename,"w")
-            SeqIO.write(records, temp_handle, temp_format)
-            temp_handle.flush()
-            temp_handle.close()
-            
-            handle = emboss_convert(filename, temp_format, "fasta")
-            new_records = list(SeqIO.parse(handle, "fasta"))
-
+            new_records = list(emboss_piped_SeqIO_convert(records, temp_format, "fasta"))
             try :
                 self.assert_(compare_records(records, new_records))
             except ValueError, err :
                 raise ValueError("Disagree on file %s %s in %s format: %s" \
                                  % (in_format, in_filename, temp_format, err))
-            os.remove(filename)
             
     def check_EMBOSS_to_SeqIO(self, filename, old_format,
                               skip_formats=[]) :
@@ -174,6 +203,10 @@ class SeqRetSeqIOTests(unittest.TestCase):
     def test_genbank(self) :
         """SeqIO & EMBOSS reading each other's conversions of a GenBank file."""
         self.check_SeqIO_with_EMBOSS("GenBank/cor6_6.gb", "genbank")
+
+    def test_genbank2(self) :
+        """SeqIO & EMBOSS reading each other's conversions of another GenBank file."""
+        self.check_SeqIO_with_EMBOSS("GenBank/NC_000932.gb", "genbank")
 
     def test_embl(self) :
         """SeqIO & EMBOSS reading each other's conversions of an EMBL file."""
@@ -242,38 +275,27 @@ class SeqRetAlignIOTests(unittest.TestCase):
         else :
             old_aligns = list(AlignIO.parse(open(in_filename), in_format))
 
-        formats = ["clustal", "phylip", "ig"]
+        formats = ["clustal", "phylip"]
         if len(old_aligns) == 1 :
             formats.extend(["fasta","nexus"])
         for temp_format in formats :
             if temp_format in skip_formats :
                 continue
-            #TODO - Handle this with a pipe?
-            #i.e. can Bio.SeqIO write to the stdin of seqret?
-            filename = "Emboss/temp_%s.txt" % temp_format
-            temp_handle = open(filename,"w")
-            try :
-                AlignIO.write(old_aligns, temp_handle, temp_format)
-            except ValueError :
-                #e.g. NEXUS file without knowing alphabet
-                #This should be tested by test_AlignIO
-                temp_handle.close()
-                os.remove(filename)
-                continue
-            temp_handle.flush()
-            temp_handle.close()
-
             #PHYLIP is a simple format which explicitly supports
             #multiple alignments (unlike FASTA).
-            handle = emboss_convert(filename, temp_format, "phylip")
-            new_aligns = list(AlignIO.parse(handle, "phylip"))
-
+            try :
+                new_aligns = list(emboss_piped_AlignIO_convert(old_aligns,
+                                                               temp_format,
+                                                               "phylip"))
+            except ValueError, e :
+                #e.g. ValueError: Need a DNA, RNA or Protein alphabet
+                #from writing Nexus files...
+                continue
             try :
                 self.assert_(compare_alignments(old_aligns, new_aligns))
             except ValueError, err :
                 raise ValueError("Disagree on file %s %s in %s format: %s" \
                                  % (in_format, in_filename, temp_format, err))
-            os.remove(filename)
 
     def check_AlignIO_with_EMBOSS(self, filename, old_format, skip_formats=[],
                                   alphabet=None):
