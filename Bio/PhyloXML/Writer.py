@@ -170,8 +170,6 @@ class Writer(object):
               ('other',         'other'),
               ))
 
-    # absent = _handle_complex(_ns('absent')) # BinaryCharacterList
-
     accession = _handle_complex(_ns('accession'), ('source',),
             (), has_text=True)
 
@@ -183,11 +181,18 @@ class Writer(object):
               'uri',
               ))
 
-    binary_characters = _handle_complex(_ns('binary_characters'),
-            ('type', 'gained_count', 'lost_count', 'present_count',
-            'absent_count'),
-            # TODO: serialize bc sub-nodes properly
-            ('gained', 'lost', 'present', 'absent'))
+    def binary_characters(self, obj):
+        """Serialize a binary_characters node and its subnodes."""
+        elem = ElementTree.Element(_ns('binary_characters'),
+                _clean_attrib(obj,
+                    ('type', 'gained_count', 'lost_count',
+                        'present_count', 'absent_count')))
+        for subn in ('gained', 'lost', 'present', 'absent'):
+            subelem = ElementTree.Element(_ns(subn))
+            for token in getattr(obj, subn):
+                subelem.append(self.bc(token))
+            elem.append(subelem)
+        return elem
 
     clade_relation = _handle_complex(_ns('clade_relation'),
             ('id_ref_0', 'id_ref_1', 'distance', 'type'),
@@ -208,6 +213,7 @@ class Writer(object):
               ))
 
     def domain(self, obj):
+        """Serialize a domain node."""
         elem = ElementTree.Element(_ns('domain'),
                 {'from': str(obj.start + 1), 'to': str(obj.end)})
         if obj.confidence is not None:
@@ -229,20 +235,14 @@ class Writer(object):
               'confidence',
               ))
 
-    # gained = _handle_complex(_ns('gained')) # BinaryCharacterList,
-
     id = _handle_complex(_ns('id'), ('type',), (), has_text=True)
 
     node_id = _handle_complex(_ns('node_id'), ('type',), (), has_text=True)
-
-    # lost = _handle_complex(_ns('lost')) # BinaryCharacterList,
 
     point = _handle_complex(_ns('point'), ('geodetic_datum',),
             ('lat', 'long', 'alt'))
 
     # polygon = _handle_complex(_ns('polygon'))
-
-    # present = _handle_complex(_ns('present')) # BinaryCharacterList,
 
     property = _handle_complex(_ns('property'),
             ('ref', 'unit', 'datatype', 'applies_to', 'id_ref'),

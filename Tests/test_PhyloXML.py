@@ -23,8 +23,10 @@ from Bio.Tree import Utils
 EX_APAF = 'PhyloXML/apaf.xml'
 EX_BCL2 = 'PhyloXML/bcl_2.xml'
 EX_PHYLO = 'PhyloXML/phyloxml_examples.xml'
+EX_DOLLO = 'PhyloXML/o_tol_332_d_dollo.xml'
 EX_MOLLUSCA = 'PhyloXML/ncbi_taxonomy_mollusca.xml.zip'
 # Big files - not checked into git yet
+EX_TOL = 'PhyloXML/tol_life_on_earth_1.xml.zip'
 EX_METAZOA = 'PhyloXML/ncbi_taxonomy_metazoa.xml.zip'
 EX_NCBI = 'PhyloXML/ncbi_taxonomy.xml.zip'
 
@@ -142,6 +144,7 @@ class ParseTests(unittest.TestCase):
     test_read_apaf = _test_read_factory(EX_APAF, (1, 0))
     test_read_bcl2 = _test_read_factory(EX_BCL2, (1, 0))
     test_read_phylo = _test_read_factory(EX_PHYLO, (13, 1))
+    test_read_dollo = _test_read_factory(EX_DOLLO, (1, 0))
     test_read_mollusca = _test_read_factory(EX_MOLLUSCA, (1, 0))
     # test_read_metazoa = _test_read_factory(EX_METAZOA, (1, 0))
     # test_read_ncbi = _test_read_factory(EX_NCBI, (1, 0))
@@ -149,6 +152,7 @@ class ParseTests(unittest.TestCase):
     test_parse_apaf = _test_parse_factory(EX_APAF, 1)
     test_parse_bcl2 = _test_parse_factory(EX_BCL2, 1)
     test_parse_phylo = _test_parse_factory(EX_PHYLO, 13)
+    test_parse_dollo = _test_parse_factory(EX_DOLLO, 1)
     test_parse_mollusca = _test_parse_factory(EX_MOLLUSCA, 1)
     # test_parse_metazoa = _test_parse_factory(EX_METAZOA, 1)
     # test_parse_ncbi = _test_parse_factory(EX_NCBI, 1)
@@ -290,8 +294,21 @@ class TreeTests(unittest.TestCase):
         self.assertAlmostEqual(ann.confidence.value, 0.67)
         self.assertEqual(ann.confidence.type, 'probability')
 
-    # BinaryCharacterList -- not implemented
-    # BinaryCharacters -- not implemented
+    def test_BinaryCharacters(self):
+        """Instantiation of BinaryCharacters objects."""
+        tree = PhyloXML.parse(EX_DOLLO).next()
+        bchars = tree.clade[0,0].binary_characters
+        self.assert_(isinstance(bchars, Tree.BinaryCharacters))
+        self.assertEqual(bchars.type, 'parsimony inferred')
+        for name, count, value in (
+                ('gained',  2, ['Cofilin_ADF', 'Gelsolin']),
+                ('lost',    0, []),
+                ('present', 2, ['Cofilin_ADF', 'Gelsolin']),
+                ('absent',  None, []),
+                ):
+            self.assertEqual(getattr(bchars, name+'_count'), count)
+            self.assertEqual(getattr(bchars, name), value)
+
     # BranchColor -- no example
 
     def test_CladeRelation(self):
@@ -552,6 +569,13 @@ class WriterTests(unittest.TestCase):
                 'test_Sequence',   'test_SequenceRelation',
                 'test_Taxonomy',   'test_Uri',
                 ]),
+            ))
+
+    def test_dollo(self):
+        """Round-trip parsing and serialization of o_tol_332_d_dollo.xml."""
+        self._stash_rewrite_and_call(EX_DOLLO, (
+            (ParseTests, ['test_read_dollo', 'test_parse_dollo']),
+            (TreeTests, ['test_BinaryCharacters']),
             ))
 
 
