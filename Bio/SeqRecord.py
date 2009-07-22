@@ -127,20 +127,23 @@ class SeqRecord(object):
             raise TypeError("name argument should be a string")
         if not isinstance(description, basestring) :
             raise TypeError("description argument should be a string")
-        if dbxrefs is not None and not isinstance(dbxrefs, list) :
-            raise TypeError("dbxrefs argument should be a list (of strings)")
-        if features is not None and not isinstance(features, list) :
-            raise TypeError("features argument should be a list (of SeqFeature objects)")
         self._seq = seq
         self.id = id
         self.name = name
         self.description = description
+
+        # database cross references (for the whole sequence)
         if dbxrefs is None:
             dbxrefs = []
+        elif not isinstance(dbxrefs, list) :
+            raise TypeError("dbxrefs argument should be a list (of strings)")
         self.dbxrefs = dbxrefs
+        
         # annotations about the whole sequence
         if annotations is None:
             annotations = {}
+        elif not isinstance(annotations, dict) :
+            raise TypeError("annotations argument should be a dict")
         self.annotations = annotations
 
         if letter_annotations is None:
@@ -163,6 +166,8 @@ class SeqRecord(object):
         # annotations about parts of the sequence
         if features is None:
             features = []
+        elif not isinstance(features, list) :
+            raise TypeError("features argument should be a list (of SeqFeature objects)")
         self.features = features
 
     #TODO - Just make this a read only property?
