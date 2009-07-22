@@ -2291,6 +2291,54 @@ Testing reading fastq format file Quality/tricky.fastq as an alignment
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
+Testing reading fastq format file Quality/sanger_faked.fastq
+ ID and Name='Test',
+ Seq='ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN', length=41
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fastq' format
+ Checking can write/read as 'fastq-illumina' format
+ Checking can write/read as 'fastq-solexa' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'qual' format
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
+Testing reading fastq format file Quality/sanger_93.fastq
+ ID and Name='Test',
+ Seq='ACTGACTGACTGACTGACTGACTGACTGACTGACTGACTG...GACTGAN', length=94
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fastq' format
+ Checking can write/read as 'fastq-illumina' format
+ Checking can write/read as 'fastq-solexa' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'qual' format
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
+Testing reading fastq-illumina format file Quality/illumina_faked.fastq
+ ID and Name='Test',
+ Seq='ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN', length=41
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fastq' format
+ Checking can write/read as 'fastq-illumina' format
+ Checking can write/read as 'fastq-solexa' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'qual' format
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fastq-solexa format file Quality/solexa_faked.fastq
  ID and Name='slxa_0001_1_0001_01',
  Seq='ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN', length=46
