@@ -1825,7 +1825,6 @@ Testing reading phd format file Phd/phd1
  Checking can write/read as 'fastq' format
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
- Failed: PHRED quality zero maps onto a Solexa quality of minus infinity!
  Checking can write/read as 'genbank' format
  Failed: Locus identifier '425_7_(71-A03-19).b.ab1' is too long
  Checking can write/read as 'qual' format
@@ -1896,7 +1895,7 @@ Testing reading ace format file Ace/contig1.ace
  Checking can write/read as 'fastq-illumina' format
  Failed: A quality value of None was found
  Checking can write/read as 'fastq-solexa' format
- Failed: PHRED quality zero maps onto a Solexa quality of minus infinity!
+ Failed: A quality value of None was found
  Checking can write/read as 'genbank' format
  Checking can write/read as 'qual' format
  Failed: A quality value of None was found
@@ -1915,7 +1914,7 @@ Testing reading ace format file Ace/consed_sample.ace
  Checking can write/read as 'fastq-illumina' format
  Failed: A quality value of None was found
  Checking can write/read as 'fastq-solexa' format
- Failed: PHRED quality zero maps onto a Solexa quality of minus infinity!
+ Failed: A quality value of None was found
  Checking can write/read as 'genbank' format
  Checking can write/read as 'qual' format
  Failed: A quality value of None was found
@@ -1933,7 +1932,7 @@ Testing reading ace format file Ace/seq.cap.ace
  Checking can write/read as 'fastq-illumina' format
  Failed: A quality value of None was found
  Checking can write/read as 'fastq-solexa' format
- Failed: PHRED quality of None can't be transformed to a Solexa quality
+ Failed: A quality value of None was found
  Checking can write/read as 'genbank' format
  Checking can write/read as 'qual' format
  Failed: A quality value of None was found

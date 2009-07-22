@@ -48,8 +48,10 @@ FASTA file using the -s or -seq argument instead.
 The bad news is that Solexa/Illumina did things differently - they have their
 own scoring system AND their own incompatible versions of the FASTQ format.
 Solexa/Illumina quality scores use Q = - 10 log10 ( Pe / (1-Pe) ), which can
-be negative or easily exceed 90.  PHRED scores and Solexa scores are NOT
-interchangeable (but a reasonable mapping can be achieved between them).
+be negative.  PHRED scores and Solexa scores are NOT interchangeable (but a
+reasonable mapping can be achieved between them, and they are approximately
+equal for high quality reads).
+
 Confusingly early Solexa pipelines produced a FASTQ like file but using their
 own score mapping and an ASCII offset of 64. To make things worse, for the
 Solexa/Illumina pipeline 1.3 onwards, they introduced a third variant of the
@@ -247,11 +249,11 @@ To illustrate this problem, let's consider an artifical example:
     >>> from Bio.Seq import Seq
     >>> from Bio.Alphabet import generic_dna
     >>> from Bio.SeqRecord import SeqRecord
-    >>> test = SeqRecord(Seq("ACGTACGTA", generic_dna), id="Test",
+    >>> test = SeqRecord(Seq("NACGTACGTA", generic_dna), id="Test",
     ... description="Made up!")
     >>> print test.format("fasta")
     >Test Made up!
-    ACGTACGTA
+    NACGTACGTA
     <BLANKLINE>
     >>> print test.format("fastq")
     Traceback (most recent call last):
@@ -262,58 +264,60 @@ We created a sample SeqRecord, and can show it in FASTA format - but for QUAL
 or FASTQ format we need to provide some quality scores. These are held as a
 list of integers (one for each base) in the letter_annotations dictionary:
 
-    >>> test.letter_annotations["phred_quality"] = [1,2,3,4,5,10,20,30,40]
+    >>> test.letter_annotations["phred_quality"] = [0,1,2,3,4,5,10,20,30,40]
     >>> print test.format("qual")
     >Test Made up!
-    1 2 3 4 5 10 20 30 40
+    0 1 2 3 4 5 10 20 30 40
     <BLANKLINE>
     >>> print test.format("fastq")
     @Test Made up!
-    ACGTACGTA
+    NACGTACGTA
     +
-    "#$%&+5?I
+    !"#$%&+5?I
     <BLANKLINE>
 
-We can check this FASTQ encoding - the first PHRED quality was one, and this
-mapped to a double quote, while the final score was 40 and this mapped to "I":
+We can check this FASTQ encoding - the first PHRED quality was zero, and this
+mapped to a exclamation mark, while the final score was 40 and this mapped to
+the letter "I":
 
-    >>> ord('"') - 33
-    1
+    >>> ord('!') - 33
+    0
     >>> ord('I') - 33
     40
-    >>> [ord(letter)-33 for letter in '"#$%&+5?I']
-    [1, 2, 3, 4, 5, 10, 20, 30, 40]
+    >>> [ord(letter)-33 for letter in '!"#$%&+5?I']
+    [0, 1, 2, 3, 4, 5, 10, 20, 30, 40]
 
 Similarly, we could produce an Illumina 1.3+ style FASTQ file using PHRED
 scores with an offset of 64:
 
     >>> print test.format("fastq-illumina")
     @Test Made up!
-    ACGTACGTA
+    NACGTACGTA
     +
-    ABCDEJT^h
+    @ABCDEJT^h
     <BLANKLINE>
 
-And we can check this too - the first PHRED score was one, and this mapped to
-"A", while the final score was 40 and this mapped to "h":
+And we can check this too - the first PHRED score was zero, and this mapped to
+"@", while the final score was 40 and this mapped to "h":
 
-    >>> ord("A") - 64
-    1
+    >>> ord("@") - 64
+    0
     >>> ord("h") - 64
     40
-    >>> [ord(letter)-64 for letter in "ABCDEJT^h"]
-    [1, 2, 3, 4, 5, 10, 20, 30, 40]
+    >>> [ord(letter)-64 for letter in "@ABCDEJT^h"]
+    [0, 1, 2, 3, 4, 5, 10, 20, 30, 40]
 
 Notice how different the standard Sanger FASTQ and the Illumina 1.3+ style
 FASTQ files look for the same data! Then we have the older Solexa/Illumina
 format to consider which encodes Solexa scores instead of PHRED scores.
 
-First let's see what Biopython says if we convert the PHRED scores in Solexa
+First let's see what Biopython says if we convert the PHRED scores into Solexa
 scores (rounding to one decimal place):
 
-    >>> for q in [1,2,3,4,5,10,20,30,40] :
+    >>> for q in [0,1,2,3,4,5,10,20,30,40] :
     ...     print "PHRED %i maps to Solexa %0.1f" % (q, solexa_quality_from_phred(q))
-    PHRED 1 maps to Solexa -5.9
+    PHRED 0 maps to Solexa -5.0
+    PHRED 1 maps to Solexa -5.0
     PHRED 2 maps to Solexa -2.3
     PHRED 3 maps to Solexa -0.0
     PHRED 4 maps to Solexa 1.8
@@ -327,15 +331,15 @@ Now here is the record using the old Solexa style FASTQ file:
 
     >>> print test.format("fastq-solexa")
     @Test Made up!
-    ACGTACGTA
+    NACGTACGTA
     +
-    :>@BCJT^h
+    ;;>@BCJT^h
     <BLANKLINE>
 
 Again, this is using an ASCII offset of 64, so we can check the Solexa scores:
 
-    >>> [ord(letter)-64 for letter in ":>@BCJT^h"]
-    [-6, -2, 0, 2, 3, 10, 20, 30, 40]
+    >>> [ord(letter)-64 for letter in ";;>@BCJT^h"]
+    [-5, -5, -2, 0, 2, 3, 10, 20, 30, 40]
 
 This explains why the last few letters of this FASTQ output matched that using
 the Illumina 1.3+ format - high quality PHRED scores and Solexa scores are
@@ -383,8 +387,25 @@ def solexa_quality_from_phred(phred_quality) :
 
       solexa_quality = 10*log(10**(phred_quality/10.0) - 1, 10)
 
-    This is what this function does. It will return a floating point number,
-    it is up to you to round this to the nearest integer if appropriate.  e.g.
+    However, real Solexa files use a minimum quality of -5. This does have a
+    good reason - a random a random base call would be correct 25% of the time,
+    and thus have a probability of error of 0.75, which gives 1.25 as the PHRED
+    quality, or -4.77 as the Solexa quality. Thus (after rounding), a random
+    nucleotide read would have a PHRED quality of 1, or a Solexa quality of -5.
+
+    Taken literally, this logarithic formula would map a PHRED quality of zero
+    to a Solexa quality of minus infinity. Of course, taken literally, a PHRED
+    score of zero means a probability of error of one (i.e. the base call is
+    definitely wrong), which is worse than random! In practice, a PHRED quality
+    of zero usually means a default value, or perhaps random - and therefore
+    mapping it to the minimum Solexa score of -5 is reasonable.
+
+    In conclusion, we follow EMBOSS, and take this logarithmic formula but also
+    apply a minimum value of -5.0 for the Solexa quality, and also map a PHRED
+    quality of zero to -5.0 as well.
+
+    Note this function will return a floating point number, it is up to you to
+    round this to the nearest integer if appropriate.  e.g.
 
     >>> print "%0.2f" % round(solexa_quality_from_phred(80),2)
     80.00
@@ -394,26 +415,40 @@ def solexa_quality_from_phred(phred_quality) :
     19.96
     >>> print "%0.2f" % round(solexa_quality_from_phred(10),2)
     9.54
+    >>> print "%0.2f" % round(solexa_quality_from_phred(5),2)
+    3.35
+    >>> print "%0.2f" % round(solexa_quality_from_phred(4),2)
+    1.80
+    >>> print "%0.2f" % round(solexa_quality_from_phred(3),2)
+    -0.02
+    >>> print "%0.2f" % round(solexa_quality_from_phred(2),2)
+    -2.33
     >>> print "%0.2f" % round(solexa_quality_from_phred(1),2)
-    -5.87
+    -5.00
     >>> print "%0.2f" % round(solexa_quality_from_phred(0),2)
-    Traceback (most recent call last):
-        ...
-    ValueError: PHRED quality zero maps onto a Solexa quality of minus infinity!
+    -5.00
 
     Notice that for high quality reads PHRED and Solexa scores are numerically
     equal. The differences are important for poor quality reads, where PHRED
     has a minimum of zero but Solexa scores can be negative.
+
+    Finally, as a special case where None is used for a "missing value", None
+    is returned:
+
+    >>> print solexa_quality_from_phred(None)
+    None
     """
     if phred_quality > 0 :
-        return 10*log(10**(phred_quality/10.0) - 1, 10)
+        #Solexa uses a minimum value of -5, which after rounding matches a
+        #random nucleotide base call.
+        return max(-5.0, 10*log(10**(phred_quality/10.0) - 1, 10))
     elif phred_quality == 0 :
-        raise ValueError("PHRED quality zero maps onto a "
-                         "Solexa quality of minus infinity!")
+        #Special case, map to -5 as discussed in the docstring
+        return -5.0
     elif phred_quality is None :
-        #TODO - Would returning None be nicer?
-        raise TypeError("PHRED quality of None can't be "
-                        "transformed to a Solexa quality")
+        #Assume None is used as some kind of NULL or NA value; return None
+        #e.g. Bio.SeqIO gives Ace contig gaps a quality of None.
+        return None
     else :
         raise ValueError("PHRED qualities must be positive (or zero)")
 
@@ -442,10 +477,30 @@ def phred_quality_from_solexa(solexa_quality) :
     10.41
     >>> print "%0.2f" % round(phred_quality_from_solexa(0),2)
     3.01
-    >>> print "%0.2f" % round(phred_quality_from_solexa(-10),2)
-    0.41
+    >>> print "%0.2f" % round(phred_quality_from_solexa(-5),2)
+    1.19
+
+    Note that a solexa_quality less then -5 is not expected, will trigger a
+    warning, but will still be converted as per the logarithmic mapping
+    (giving a number between 0 and 1.19 back).
+
+    As a special case where None is used for a "missing value", None is
+    returned:
+
+    >>> print phred_quality_from_solexa(None)
+    None
+
     """
-    return 10*log(10**(solexa_quality/10.0) + 1, 10)
+    if solexa_quality < -5 :
+        import warnings
+        warnings.warn("Solexa quality less than -5 passed")
+    try :
+        return 10*log(10**(solexa_quality/10.0) + 1, 10)
+    except TypeError, err :
+        if solexa_quality is None :
+            #Assume None is used as some kind of NULL or NA value; return None
+            return None
+        raise err
 
 def _get_phred_quality(record) :
     """Extract PHRED qualities from a SeqRecord's letter_annotations (PRIVATE).
@@ -865,6 +920,11 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
                            id=id, name=name, description=descr)
         qualities = [ord(letter)-SOLEXA_SCORE_OFFSET for letter in quality_string]
         #DO NOT convert these into PHRED qualities automatically!
+        if qualities and min(qualities) < -5 :
+            raise ValueError("Solexa quality score of %i found, less than -5. "
+                             "Your file is probably not in the original Solexa "
+                             "(or early Illumina) format. Check if it is a "
+                             "standard Sanger FASTQ file." % min(qualities))
         record.letter_annotations["solexa_quality"] = qualities
         yield record
 
