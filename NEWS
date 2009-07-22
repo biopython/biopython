@@ -15,6 +15,14 @@ the PHRED qualities (and peak positions) in the SeqRecord's per-letter
 annotation. This allows conversion of PHD files into FASTQ or QUAL which may
 be useful for meta-assembly.
 
+Bio.SeqIO now observes -5 as the minimum Solexa quality score for reading
+and writing Solexa FASTQ files. This is consistent with EMBOSS.
+
+See the notes below for the Biopython 1.50 beta release for changes since
+Biopython 1.49 was released. This includes dropping support for Python 2.3,
+removing our deprecated parsing infrastructure (Martel and Bio.Mindy), and
+hence removing any dependence on mxTextTools
+
 ===================================================================
 
 June 23, 2009: Biopython 1.51 beta released.
