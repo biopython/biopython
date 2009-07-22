@@ -416,13 +416,24 @@ class Annotation(PhyloElement):
                 properties=properties or [])
 
 
-class BinaryCharacterList(PhyloElement):
-    """
-    """
-
 class BinaryCharacters(PhyloElement):
+    """The names and/or counts of binary characters present, gained, and lost
+    at the root of a clade. 
     """
-    """
+    def __init__(self,
+            # Attributes
+            type=None, gained_count=None, lost_count=None, present_count=None,
+            absent_count=None,
+            # Child nodes (flattened into collections)
+            gained=None, lost=None, present=None, absent=None):
+        PhyloElement.__init__(self,
+                type=type, gained_count=gained_count, lost_count=lost_count,
+                present_count=present_count, absent_count=absent_count,
+                gained=gained or [],
+                lost=lost or [],
+                present=present or [],
+                absent=absent or [])
+
 
 class BranchColor(PhyloElement):
     """Indicates the color of a clade when rendered graphically.

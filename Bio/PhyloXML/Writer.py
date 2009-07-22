@@ -183,7 +183,11 @@ class Writer(object):
               'uri',
               ))
 
-    # binary_characters = _handle_complex(_ns('binary_characters'))
+    binary_characters = _handle_complex(_ns('binary_characters'),
+            ('type', 'gained_count', 'lost_count', 'present_count',
+            'absent_count'),
+            # TODO: serialize bc sub-nodes properly
+            ('gained', 'lost', 'present', 'absent'))
 
     clade_relation = _handle_complex(_ns('clade_relation'),
             ('id_ref_0', 'id_ref_1', 'distance', 'type'),

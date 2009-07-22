@@ -117,11 +117,19 @@ def dict_str2bool(dct, keys):
             out[key] = str2bool(out[key])
     return out
 
-def maybe_float(text):
-    try:
-        return float(text)
-    except Exception:
-        return None
+def _int(text):
+    if text is not None:
+        try:
+            return int(text)
+        except Exception:
+            return None
+
+def _float(text):
+    if text is not None:
+        try:
+            return float(text)
+        except Exception:
+            return None
 
 def collapse_wspace(text):
     """Replace all spans of whitespace with a single space character.
@@ -374,9 +382,9 @@ class Parser(object):
                                 'Attribute branch_length was already set '
                                 'for this Clade; overwriting the previous '
                                 'value.')
-                    clade.branch_length = maybe_float(elem.text)
+                    clade.branch_length = _float(elem.text)
                 elif tag == 'width':
-                    clade.width = maybe_float(elem.text)
+                    clade.width = _float(elem.text)
                 elif tag == 'name':
                     clade.name = collapse_wspace(elem.text)
                 elif tag == 'node_id':
@@ -414,10 +422,19 @@ class Parser(object):
 
     @classmethod
     def to_binary_characters(cls, elem):
-        raise NotImplementedError
+        def bc_getter(elem):
+            return get_children_text(elem, 'bc')
         return Tree.BinaryCharacters(
-                # TODO
-                )
+                type=elem.get('type'),
+                gained_count=_int(elem.get('gained_count')),
+                lost_count=_int(elem.get('lost_count')),
+                present_count=_int(elem.get('present_count')),
+                absent_count=_int(elem.get('absent_count')),
+                # Flatten BinaryCharacterList sub-nodes into lists of strings
+                gained=get_child_as(elem, 'gained', bc_getter),
+                lost=get_child_as(elem, 'lost', bc_getter),
+                present=get_child_as(elem, 'present', bc_getter),
+                absent=get_child_as(elem, 'absent', bc_getter))
 
     @classmethod
     def to_clade_relation(cls, elem):
@@ -435,7 +452,7 @@ class Parser(object):
     @classmethod
     def to_confidence(cls, elem):
         return Tree.Confidence(
-                maybe_float(elem.text),
+                _float(elem.text),
                 elem.get('type'))
 
     @classmethod
@@ -444,7 +461,7 @@ class Parser(object):
                 value=get_child_text(elem, 'value', float),
                 desc=collapse_wspace(get_child_text(elem, 'desc')),
                 unit=elem.get('unit'),
-                range=maybe_float(elem.get('range')))
+                range=_float(elem.get('range')))
 
     @classmethod
     def to_distribution(cls, elem):
@@ -458,7 +475,7 @@ class Parser(object):
         return Tree.ProteinDomain(elem.text.strip(),
                 int(elem.get('from')) - 1,
                 int(elem.get('to')),
-                confidence=maybe_float(elem.get('confidence')),
+                confidence=_float(elem.get('confidence')),
                 id=elem.get('id'))
 
     @classmethod
