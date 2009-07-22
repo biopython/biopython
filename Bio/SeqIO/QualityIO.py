@@ -491,16 +491,13 @@ def phred_quality_from_solexa(solexa_quality) :
     None
 
     """
+    if solexa_quality is None :
+        #Assume None is used as some kind of NULL or NA value; return None
+        return None
     if solexa_quality < -5 :
         import warnings
         warnings.warn("Solexa quality less than -5 passed")
-    try :
-        return 10*log(10**(solexa_quality/10.0) + 1, 10)
-    except TypeError, err :
-        if solexa_quality is None :
-            #Assume None is used as some kind of NULL or NA value; return None
-            return None
-        raise err
+    return 10*log(10**(solexa_quality/10.0) + 1, 10)
 
 def _get_phred_quality(record) :
     """Extract PHRED qualities from a SeqRecord's letter_annotations (PRIVATE).
