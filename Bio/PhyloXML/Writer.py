@@ -248,7 +248,7 @@ class Writer(object):
             ('ref', 'unit', 'datatype', 'applies_to', 'id_ref'),
             (), has_text=True)
 
-    # reference = _handle_complex(_ns('reference'))
+    reference = _handle_complex(_ns('reference'), ('doi',), ('desc',))
 
     sequence = _handle_complex(_ns('sequence'),
             ('type', 'id_ref', 'id_source'),

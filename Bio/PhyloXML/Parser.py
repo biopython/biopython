@@ -522,10 +522,9 @@ class Parser(object):
 
     @classmethod
     def to_reference(cls, elem):
-        raise NotImplementedError
         return Tree.Reference(
-                # TODO
-                )
+                doi=elem.get('doi'),
+                desc=get_child_text(elem, 'desc'))
 
     @classmethod
     def to_sequence(cls, elem):

@@ -372,7 +372,7 @@ class Clade(PhyloElement, BaseTree.Node):
         return len(self.clades)
 
 
-# Complex types
+# PhyloXML-specific complex types
 
 class Accession(PhyloElement):
     """Captures the local part in a sequence identifier.
@@ -690,8 +690,15 @@ class ProteinDomain(PhyloElement):
 
 
 class Reference(PhyloElement):
+    """Literature reference for a clade.
+
+    It is recommended to use the 'doi' attribute instead of the free text
+    'desc' element whenever possible.
     """
-    """
+    def __init__(self, doi=None, desc=None):
+        self.doi = doi
+        self.desc = desc
+
 
 class Sequence(PhyloElement):
     """A molecular sequence (Protein, DNA, RNA) associated with a node.

@@ -424,6 +424,13 @@ class TreeTests(unittest.TestCase):
             self.assertEqual(prop.value, value)
 
     # Reference -- not implemented
+    def test_Reference(self):
+        """Instantiation of Reference objects."""
+        tree = PhyloXML.parse(EX_DOLLO).next()
+        reference = tree.clade[0,0,0,0,0,0].references[0]
+        self.assert_(isinstance(reference, Tree.Reference))
+        self.assertEqual(reference.doi, '10.1038/nature06614')
+        self.assertEqual(reference.desc, None)
 
     def test_Sequence(self):
         """Instantiation of Sequence objects.
