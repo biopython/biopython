@@ -765,7 +765,13 @@ def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = No
                              "your file is probably not in the standard "
                              "Sanger FASTQ format. Check if it is one of the"
                              "Solexa/Illumina variants instead.")
-        record.letter_annotations["phred_quality"] = qualities
+        #For speed, will now use a dirty trick to speed up assigning the
+        #qualities. We do this to bypass the length check imposed by the
+        #per-letter-annotations restricted dict (as this has already been
+        #checked by FastqGeneralIterator). This is equivalent to:
+        #record.letter_annotations["phred_quality"] = qualities
+        dict.__setitem__(record._per_letter_annotations,
+                         "phred_quality", qualities)
         yield record
 
 #This is a generator function!
@@ -922,7 +928,10 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
                              "Your file is probably not in the original Solexa "
                              "(or early Illumina) format. Check if it is a "
                              "standard Sanger FASTQ file." % min(qualities))
-        record.letter_annotations["solexa_quality"] = qualities
+        #Dirty trick to speed up this line:
+        #record.letter_annotations["solexa_quality"] = qualities
+        dict.__setitem__(record._per_letter_annotations,
+                         "solexa_quality", qualities)
         yield record
 
 #This is a generator function!
@@ -968,7 +977,10 @@ def FastqIlluminaIterator(handle, alphabet = single_letter_alphabet, title2ids =
                              "FASTQ format. Check if it is a standard Sanger "
                              "FASTQ file or from an older Solexa/Illumina "
                              "pipeline.")
-        record.letter_annotations["phred_quality"] = qualities
+        #Dirty trick to speed up this line:
+        #record.letter_annotations["phred_quality"] = qualities
+        dict.__setitem__(record._per_letter_annotations,
+                         "phred_quality", qualities)
         yield record
     
 def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = None) :
@@ -1073,7 +1085,10 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
         #Return the record and then continue...
         record = SeqRecord(UnknownSeq(len(qualities), alphabet),
                            id = id, name = name, description = descr)
-        record.letter_annotations["phred_quality"] = qualities
+        #Dirty trick to speed up this line:
+        #record.letter_annotations["phred_quality"] = qualities
+        dict.__setitem__(record._per_letter_annotations,
+                         "phred_quality", qualities)
         yield record
 
         if not line : return #StopIteration
