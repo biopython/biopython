@@ -756,6 +756,14 @@ def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = No
     [26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 24, 26, 22, 26, 26, 13, 22, 26, 18, 24, 18, 18, 18, 18]
     """
     assert SANGER_SCORE_OFFSET == ord("!")
+    #Originally, I used a list expression for each record:
+    #
+    # qualities = [ord(letter)-SANGER_SCORE_OFFSET for letter in quality_string]
+    #
+    #Precomputing is faster, perhaps partly by avoiding the subtractions.
+    q_mapping = dict()
+    for letter in range(0,255) :
+        q_mapping[chr(letter)] = letter-SANGER_SCORE_OFFSET
     for title_line, seq_string, quality_string in FastqGeneralIterator(handle) :
         if title2ids :
             id, name, descr = title2ids(title_line)
@@ -765,7 +773,7 @@ def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = No
             name = id
         record = SeqRecord(Seq(seq_string, alphabet),
                            id=id, name=name, description=descr)
-        qualities = [ord(letter)-SANGER_SCORE_OFFSET for letter in quality_string]
+        qualities = [q_mapping[letter] for letter in quality_string]
         if qualities and (min(qualities) < 0 or max(qualities) > 93) :
             raise ValueError("PHRED quality score outside 0 to 93 found - "
                              "your file is probably not in the standard "
@@ -918,6 +926,9 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
     As shown above, the poor quality Solexa reads have been mapped to the
     equivalent PHRED score (e.g. -5 to 1 as shown earlier).
     """
+    q_mapping = dict()
+    for letter in range(0,255) :
+        q_mapping[chr(letter)] = letter-SOLEXA_SCORE_OFFSET
     for title_line, seq_string, quality_string in FastqGeneralIterator(handle) :
         if title2ids :
             id, name, descr = title_line
@@ -927,7 +938,7 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
             name = id
         record = SeqRecord(Seq(seq_string, alphabet),
                            id=id, name=name, description=descr)
-        qualities = [ord(letter)-SOLEXA_SCORE_OFFSET for letter in quality_string]
+        qualities = [q_mapping[letter] for letter in quality_string]
         #DO NOT convert these into PHRED qualities automatically!
         if qualities and min(qualities) < -5 :
             raise ValueError("Solexa quality score of %i found, less than -5. "
@@ -967,6 +978,9 @@ def FastqIlluminaIterator(handle, alphabet = single_letter_alphabet, title2ids =
 
     NOTE - True Sanger style FASTQ files use PHRED scores with an offset of 33.
     """
+    q_mapping = dict()
+    for letter in range(0,255) :
+        q_mapping[chr(letter)] = letter-SOLEXA_SCORE_OFFSET
     for title_line, seq_string, quality_string in FastqGeneralIterator(handle) :
         if title2ids :
             id, name, descr = title2ids(title_line)
@@ -976,7 +990,7 @@ def FastqIlluminaIterator(handle, alphabet = single_letter_alphabet, title2ids =
             name = id
         record = SeqRecord(Seq(seq_string, alphabet),
                            id=id, name=name, description=descr)
-        qualities = [ord(letter)-SOLEXA_SCORE_OFFSET for letter in quality_string]
+        qualities = [q_mapping[letter] for letter in quality_string]
         if qualities and (min(qualities) < 0 or max(qualities) > 93) :
             raise ValueError("PHRED quality score outside 0 to 93 found - "
                              "your file is probably not in the Illumina 1.3+ "
