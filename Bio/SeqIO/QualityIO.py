@@ -628,9 +628,13 @@ def FastqGeneralIterator(handle) :
     is that (provided there are no line breaks in the quality sequence) it
     would prevent the above problem with the "@" character.
     """
+    #We need to call handle.readline() at least four times per record,
+    #so we'll save a property look up each time:
+    handle_readline = handle.readline
+    
     #Skip any text before the first record (e.g. blank lines, comments?)
     while True :
-        line = handle.readline()
+        line = handle_readline()
         if line == "" : return #Premature end of file, or just empty?
         if line[0] == "@" :
             break
@@ -642,10 +646,10 @@ def FastqGeneralIterator(handle) :
         #Will now be at least one line of quality data - in most FASTQ files
         #just one line! We therefore use string concatenation (if needed)
         #rather using than the "".join(...) trick just in case it is multiline:
-        seq_string = handle.readline().rstrip()
+        seq_string = handle_readline().rstrip()
         #There may now be more sequence lines, or the "+" quality marker line:
         while True:
-            line = handle.readline()
+            line = handle_readline()
             if not line :
                 raise ValueError("End of file without quality information.")
             if line[0] == "+":
@@ -658,10 +662,10 @@ def FastqGeneralIterator(handle) :
         seq_len = len(seq_string)
 
         #Will now be at least one line of quality data...
-        quality_string = handle.readline().strip()
+        quality_string = handle_readline().rstrip()
         #There may now be more quality data, or another sequence, or EOF
         while True:
-            line = handle.readline()
+            line = handle_readline()
             if not line : break #end of file
             if line[0] == "@":
                 #This COULD be the start of a new sequence. However, it MAY just
