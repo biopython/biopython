@@ -508,10 +508,8 @@ class Parser(object):
 
     @classmethod
     def to_polygon(cls, elem):
-        raise NotImplementedError
         return Tree.Polygon(
-                # TODO
-                )
+                points=get_children_as(elem, 'point', cls.to_point))
 
     @classmethod
     def to_property(cls, elem):
@@ -559,6 +557,8 @@ class Parser(object):
                 common_names=get_children_text(elem, 'common_name'),
                 rank=get_child_text(elem, 'rank'),
                 uri=get_child_as(elem, 'uri', cls.to_uri),
+                # TODO: handle "other"
+                other=[],
                 **elem.attrib)
 
     @classmethod

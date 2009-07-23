@@ -198,7 +198,7 @@ class Writer(object):
             ('id_ref_0', 'id_ref_1', 'distance', 'type'),
             ('confidence',))
 
-    # color = _handle_complex(_ns('color'))   # BranchColor,
+    color = _handle_complex(_ns('color'), (), ('red', 'green', 'blue'))
 
     confidence = _handle_complex(_ns('confidence'), ('type',),
             (), has_text=True)
@@ -242,7 +242,7 @@ class Writer(object):
     point = _handle_complex(_ns('point'), ('geodetic_datum',),
             ('lat', 'long', 'alt'))
 
-    # polygon = _handle_complex(_ns('polygon'))
+    polygon = _handle_complex(_ns('polygon'), (), (('point', 'points'),))
 
     property = _handle_complex(_ns('property'),
             ('ref', 'unit', 'datatype', 'applies_to', 'id_ref'),

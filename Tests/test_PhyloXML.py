@@ -406,7 +406,7 @@ class TreeTests(unittest.TestCase):
         self.assert_(isinstance(event_d, Tree.Events))
         self.assertEqual(event_d.duplications, 1)
 
-    # Polygon -- not implemented
+    # Polygon -- no example
 
     def test_Property(self):
         """Instantiation of Property objects."""
@@ -423,7 +423,6 @@ class TreeTests(unittest.TestCase):
             self.assertEqual(prop.unit, "METRIC:m" )
             self.assertEqual(prop.value, value)
 
-    # Reference -- not implemented
     def test_Reference(self):
         """Instantiation of Reference objects."""
         tree = PhyloXML.parse(EX_DOLLO).next()
