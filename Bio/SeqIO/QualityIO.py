@@ -639,10 +639,13 @@ def FastqGeneralIterator(handle) :
         if line[0]!="@" :
             raise ValueError("Records in Fastq files should start with '@' character")
         title_line = line[1:].rstrip()
-
-        seq_lines = []
-        line = handle.readline()
+        #Will now be at least one line of quality data - in most FASTQ files
+        #just one line! We therefore use string concatenation (if needed)
+        #rather using than the "".join(...) trick just in case it is multiline:
+        seq_string = handle.readline().rstrip()
+        #There may now be more sequence lines, or the "+" quality marker line:
         while True:
+            line = handle.readline()
             if not line :
                 raise ValueError("End of file without quality information.")
             if line[0] == "+":
@@ -651,28 +654,26 @@ def FastqGeneralIterator(handle) :
                 if second_title and second_title != title_line :
                     raise ValueError("Sequence and quality captions differ.")
                 break
-            seq_lines.extend(line.split()) #removes any whitespace
-            line = handle.readline()
-        seq_string = "".join(seq_lines)
+            seq_string += line.rstrip() #removes trailing newlines
         seq_len = len(seq_string)
 
-        quality_lines = []
-        line = handle.readline()
+        #Will now be at least one line of quality data...
+        quality_string = handle.readline().strip()
+        #There may now be more quality data, or another sequence, or EOF
         while True:
-            if not line : break
+            line = handle.readline()
+            if not line : break #end of file
             if line[0] == "@":
                 #This COULD be the start of a new sequence. However, it MAY just
                 #be a line of quality data which starts with a "@" character.  We
                 #should be able to check this by looking at the sequence length
                 #and the amount of quality data found so far.
-                if len("".join(quality_lines)) >= seq_len :
+                if len(quality_string) >= seq_len :
                     #We expect it to be equal if this is the start of a new record.
                     #If the quality data is longer, we'll raise an error below.
                     break
-                #Continue - its just some (more) sequence data.
-            quality_lines.extend(line.split()) #removes any whitespace
-            line = handle.readline()
-        quality_string = "".join(quality_lines)
+                #Continue - its just some (more) quality data.
+            quality_string += line.rstrip()
         
         if seq_len != len(quality_string) :
             raise ValueError("Lengths of sequence and quality values differs "
