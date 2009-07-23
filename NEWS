@@ -16,7 +16,8 @@ annotation. This allows conversion of PHD files into FASTQ or QUAL which may
 be useful for meta-assembly.
 
 Bio.SeqIO now observes -5 as the minimum Solexa quality score for reading
-and writing Solexa FASTQ files. This is consistent with EMBOSS.
+and writing Solexa FASTQ files. This is consistent with EMBOSS. Additionally,
+FASTQ parsing is now somewhat faster.
 
 See the notes below for the Biopython 1.50 beta release for changes since
 Biopython 1.49 was released. This includes dropping support for Python 2.3,
