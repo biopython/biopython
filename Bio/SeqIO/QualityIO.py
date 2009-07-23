@@ -653,6 +653,7 @@ def FastqGeneralIterator(handle) :
             seq_lines.extend(line.split()) #removes any whitespace
             line = handle.readline()
         seq_string = "".join(seq_lines)
+        seq_len = len(seq_string)
 
         quality_lines = []
         line = handle.readline()
@@ -663,7 +664,7 @@ def FastqGeneralIterator(handle) :
                 #be a line of quality data which starts with a "@" character.  We
                 #should be able to check this by looking at the sequence length
                 #and the amount of quality data found so far.
-                if len("".join(quality_lines)) >= len(seq_string) :
+                if len("".join(quality_lines)) >= seq_len :
                     #We expect it to be equal if this is the start of a new record.
                     #If the quality data is longer, we'll raise an error below.
                     break
@@ -673,10 +674,10 @@ def FastqGeneralIterator(handle) :
             line = handle.readline()
         quality_string = "".join(quality_lines)
         
-        if len(seq_string) != len(quality_string) :
+        if seq_len != len(quality_string) :
             raise ValueError("Lengths of sequence and quality values differs "
                              " for %s (%i and %i)." \
-                             % (title_line, len(seq_string), len(quality_string)))
+                             % (title_line, seq_len, len(quality_string)))
 
         #Return the record and then continue...
         yield (title_line, seq_string, quality_string)
