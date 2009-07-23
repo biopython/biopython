@@ -647,7 +647,8 @@ def FastqGeneralIterator(handle) :
                 raise ValueError("End of file without quality information.")
             if line[0] == "+":
                 #The title here is optional, but if present must match!
-                if line[1:].rstrip() and line[1:].rstrip() != title_line :
+                second_title = line[1:].rstrip()
+                if second_title and second_title != title_line :
                     raise ValueError("Sequence and quality captions differ.")
                 break
             seq_lines.extend(line.split()) #removes any whitespace
@@ -669,7 +670,6 @@ def FastqGeneralIterator(handle) :
                     #If the quality data is longer, we'll raise an error below.
                     break
                 #Continue - its just some (more) sequence data.
-                
             quality_lines.extend(line.split()) #removes any whitespace
             line = handle.readline()
         quality_string = "".join(quality_lines)
