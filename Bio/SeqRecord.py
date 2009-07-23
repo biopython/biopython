@@ -16,7 +16,7 @@ __docformat__ = "epytext en" #Simple markup to show doctests nicely
 class _RestrictedDict(dict):
     """Dict which only allows sequences of given length as values (PRIVATE).
 
-    This simple subclass of the python dictionary is used in the SeqRecord
+    This simple subclass of the Python dictionary is used in the SeqRecord
     object for holding per-letter-annotations.  This class is intended to
     prevent simple errors by only allowing python sequences (e.g. lists,
     strings and tuples) to be stored, and only if their length matches that
@@ -44,7 +44,7 @@ class SeqRecord(object):
 
     Main attributes:
      - id          - Identifier such as a locus tag (string)
-     - seq         - The sequence itself (Seq object)
+     - seq         - The sequence itself (Seq object or similar)
 
     Additional attributes:
      - name        - Sequence name, e.g. gene name (string)
@@ -52,9 +52,9 @@ class SeqRecord(object):
      - dbxrefs     - List of database cross references (list of strings)
      - features    - Any (sub)features defined (list of SeqFeature objects)
      - annotations - Further information about the whole sequence (dictionary)
-                     Most entries are lists of strings.
+                     Most entries are strings, or lists of strings.
      - letter_annotations - Per letter/symbol annotation (restricted
-                     dictionary). This holds python sequences (lists, strings
+                     dictionary). This holds Python sequences (lists, strings
                      or tuples) whose length matches that of the sequence.
                      A typical use would be to hold a list of integers
                      representing sequencing quality scores, or a string
@@ -156,7 +156,7 @@ class SeqRecord(object):
                     self._per_letter_annotations = \
                                               _RestrictedDict(length=len(seq))
                 except :
-                    raise TypeError("seq argument should be Seq or MutableSeq")
+                    raise TypeError("seq argument should be a Seq object or similar")
         else :
             #This will be handled via the property set function, which will
             #turn this into a _RestrictedDict and thus ensure all the values
@@ -253,7 +253,7 @@ class SeqRecord(object):
     def __getitem__(self, index) :
         """Returns a sub-sequence or an individual letter.
 
-        Splicing, e.g. my_record[5:10], returns a new SeqRecord for
+        Slicing, e.g. my_record[5:10], returns a new SeqRecord for
         that sub-sequence with approriate annotation preserved.  The
         name, id and description are kept.
 
