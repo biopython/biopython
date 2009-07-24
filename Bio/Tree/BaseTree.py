@@ -24,7 +24,7 @@ class TreeElement(object):
 
 
 class Tree(TreeElement):
-    """The tree.
+    """A phylogenetic tree.
 
     From PhyloDB:
         A tree basically is a namespace for nodes, and thereby implicitly for
@@ -100,9 +100,10 @@ class Node(TreeElement):
 
 
     """
-    def __init__(self, label=None):
+    def __init__(self, label=None, left_idx=None, right_idx=None):
         self.label = label
-        # label, left_idx, right_idx -- indexes are precomputed optimizations
+        self.left_idx = left_idx
+        self.right_idx = right_idx
         # relations: self, tree
         # (id/identifier/label, parent/ancestor)
         # may belong to a sequence
@@ -153,7 +154,6 @@ class TreeQualifierValue(TreeElement):
     # value, rank
     # relations: tree, term
     pass
-
 
 
 class TreeDbxref(TreeElement):
@@ -354,8 +354,6 @@ class NodePath(TreeElement):
         edge. If there is a path of length l between two nodes A and Z and an
         edge between Z and B, there is a path of length l+1 between nodes A and
         B.
-
-
     """
     # path, distance
     # relations: child_node, parent_node
@@ -383,8 +381,6 @@ class EdgeQualifierValue(TreeElement):
         The index of the metadata value if there is more than one value for the
         same metadata element. If there is only one value, this may be left at
         the default of zero.
-
-
     """
     # value, rank
     # relations: edge, term

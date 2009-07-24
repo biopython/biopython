@@ -35,7 +35,7 @@ def trim_str(text, maxlen=40):
     return text
 
 
-# Tree elements
+# Core elements
 
 class PhyloElement(BaseTree.TreeElement):
     """Base class for all PhyloXML objects."""
@@ -186,7 +186,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
         return self.confidences[0]
 
 
-class Clade(PhyloElement, BaseTree.Node):
+class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
     """Describes a branch of the current phylogenetic tree.
 
     Used recursively, describes the topology of a phylogenetic tree.
@@ -228,7 +228,7 @@ class Clade(PhyloElement, BaseTree.Node):
         clades [] -- recursive
         other []
     """
-    def __init__(self,
+    def __init__(self, parent=None,
             # Attributes
             branch_length=None, id_source=None,
             # Child nodes
@@ -238,11 +238,14 @@ class Clade(PhyloElement, BaseTree.Node):
             confidences=None, taxonomies=None, sequences=None,
             distributions=None, references=None, properties=None, clades=None,
             other=None,
+            # BaseTree.Node
+            left_idx=None, right_idx=None,
             ):
-        PhyloElement.__init__(self, id_source=id_source, name=name,
-                branch_length=branch_length, width=width, color=color,
-                node_id=node_id, events=events,
+        PhyloElement.__init__(self, parent=parent, id_source=id_source,
+                name=name, branch_length=branch_length, width=width,
+                color=color, node_id=node_id, events=events,
                 binary_characters=binary_characters, date=date,
+                left_idx=left_idx, right_idx=right_idx,
                 confidences=confidences or [],
                 taxonomies=taxonomies or [],
                 sequences=sequences or [],
@@ -331,6 +334,17 @@ class Clade(PhyloElement, BaseTree.Node):
         """Create a new phylogeny containing just this clade."""
         # ENH: preserve some attributes of the parent phylogeny
         return Phylogeny(clade=self, **kwargs)
+
+    # Mimic BaseTree.Node
+    @property
+    def label(self):
+        return str(self)
+
+    # Mimic BaseTree.Tree
+    @property
+    def rooted(self):
+        if self.parent is not None:
+            return self.parent.rooted
 
     # Shortcuts for list attributes that are usually only 1 item
     # XXX should these raise RuntimeError, AttributeError or IndexError?
