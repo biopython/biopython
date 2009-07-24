@@ -16,6 +16,7 @@ from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
 
 import BaseTree
+from BaseTree import trim_str
 
 
 class PhyloXMLWarning(Warning):
@@ -28,11 +29,6 @@ def check_str(text, testfunc):
     if text is not None and not testfunc(text):
         warnings.warn("String %s doesn't match the given regexp" % text,
                       PhyloXMLWarning, stacklevel=2)
-
-def trim_str(text, maxlen=40):
-    if isinstance(text, basestring) and len(text) > maxlen:
-        return text[:maxlen-3] + '...'
-    return text
 
 
 # Core elements
@@ -54,16 +50,6 @@ class PhyloElement(BaseTree.TreeElement):
         if hasattr(self, 'id') and self.id:
             return '%s %s' % (s, self.id)
         return s
-
-    def __repr__(self):
-        """Show this object's constructor with its primitive arguments."""
-        s = '%s(%s)' % (self.__class__.__name__,
-                           ', '.join('%s=%s'
-                                    % (key, repr(trim_str(val, maxlen=60)))
-                               for key, val in self.__dict__.iteritems()
-                               if val is not None
-                               and type(val) in (str, int, float, unicode)))
-        return s.encode('utf-8')
 
 
 class Phyloxml(PhyloElement):
