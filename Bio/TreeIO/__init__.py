@@ -6,12 +6,19 @@
 """I/O function wrappers for phylogenetic tree formats.
 """
 
+import NexusIO
 import PhyloXMLIO
 
-def read(file, format):
-    if format == 'phyloxml':
-        return PhyloXMLIO.read(file)
+supported_formats = {
+        'phyloxml': PhyloXMLIO,
+        'nexus':    NexusIO,
+        }
 
-def write(obj, file, format, encoding=None):
-    if format == 'phyloxml':
-        return PhyloXMLIO.write(obj, file, encoding)
+def read(file, format):
+    return getattr(supported_formats[format], 'read')(file)
+
+def parse(file, format):
+    return getattr(supported_formats[format], 'parse')(file)
+
+def write(obj, file, format, **kwargs):
+    return getattr(supported_formats[format], 'write')(file, **kwargs)
