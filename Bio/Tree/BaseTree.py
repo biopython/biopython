@@ -17,6 +17,7 @@ See:
 
 """
 
+import re
 
 class TreeElement(object):
     """Base class for all Bio.Tree classes."""
@@ -66,6 +67,80 @@ class Tree(TreeElement):
         self.id = id            # identifier
         # relations: self, node (root_node), biodatabase
         # may belong to a sequence
+
+    def find(self, cls=None, **kwargs):
+        """Find all sub-nodes matching the given attributes.
+
+        The 'cls' argument specifies the class of the sub-node. Nodes that
+        inherit from this type will also match. (The default, TreeElement,
+        matches any standard Bio.Tree type.)
+
+        The arbitrary keyword arguments indicate the attribute name of the
+        sub-node and the value to match: string, integer or boolean. Strings are
+        evaluated as regular expression matches; integers are compared directly
+        for equality, and booleans evaluate the attribute's truth value (True or
+        False) before comparing. To handle nonzero floats, search with a boolean
+        argument, then filter the result manually.
+
+        If no keyword arguments are given, then just the class type is used for
+        matching.
+
+        The result is an iterable through all matching objects, by depth-first
+        search. (Not necessarily the same order as the elements appear in the
+        source file!)
+
+        Example:
+
+        >>> phx = TreeIO.read('phyloxml_examples.xml', 'phyloxml')
+        >>> matches = phx.phylogenies[5].find(code='OCTVU')
+        >>> matches.next()
+        Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
+        """ 
+        if cls is None:
+            cls = TreeElement
+
+        def is_matching_node(node):
+            if isinstance(node, cls):
+                if len(kwargs) == 0:
+                    # Without further constraints, accept any matching class
+                    return True
+                for key, pattern in kwargs.iteritems():
+                    if not hasattr(node, key):
+                        continue
+                    target = getattr(node, key)
+                    if (isinstance(pattern, basestring)
+                            and isinstance(target, basestring)):
+                        if re.match(pattern, target):
+                            return True
+                    elif isinstance(pattern, bool):
+                        if pattern == bool(target):
+                            return True
+                    elif isinstance(pattern, int):
+                        if pattern == target:
+                            return True
+                    else:
+                        raise RuntimeError('invalid argument: ' + str(pattern))
+            return False
+
+        def local_find(node):
+            singles = []
+            lists = []
+            # Sort attributes for consistent results
+            for name, subnode in sorted(node.__dict__.iteritems()):
+                if subnode is None:
+                    continue
+                if isinstance(subnode, list):
+                    lists.extend(subnode)
+                else:
+                    singles.append(subnode)
+            for item in singles + lists:
+                if isinstance(item, TreeElement):
+                    if is_matching_node(item):
+                        yield item
+                    for result in local_find(item):
+                        yield result
+
+        return local_find(self)
 
     def total_branch_length(self):
         """Get the total length of this tree (sum of all branch lengths)."""
