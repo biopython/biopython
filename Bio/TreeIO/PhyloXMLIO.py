@@ -32,7 +32,7 @@ except ImportError:
                             "Use Python 2.5+, lxml or elementtree if you "
                             "want to use Bio.PhyloXML.")
 
-from Bio.Tree import PhyloXMLTree as Tree
+from Bio.Tree import PhyloXML as Tree
 
 
 NAMESPACES = {
@@ -42,7 +42,12 @@ NAMESPACES = {
 
 
 class PhyloXMLError(Exception):
-    """Exception raised when PhyloXML object construction cannot continue."""
+    """Exception raised when PhyloXML object construction cannot continue.
+
+    XML syntax errors will be found and raised by the underlying ElementTree
+    module; this exception is for valid XML that breaks the phyloXML
+    specification.
+    """
     pass
 
 

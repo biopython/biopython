@@ -10,9 +10,9 @@ Constructs an XML file from a Tree.PhyloXML object.
 
 import warnings
 
-from Bio.Tree import PhyloXMLTree as Tree
+from Bio.Tree import PhyloXML as Tree
 
-from Parser import ElementTree, NAMESPACES
+from PhyloXMLIO import ElementTree, NAMESPACES
 
 # Keep the standard namespace prefixes when writing
 # See http://effbot.org/zone/element-namespaces.htm

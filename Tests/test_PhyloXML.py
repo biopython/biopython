@@ -14,8 +14,8 @@ import zipfile
 from itertools import izip
 from cStringIO import StringIO
 
-from Bio import PhyloXML
-from Bio.Tree import PhyloXMLTree as Tree
+from Bio.TreeIO import PhyloXMLIO, Writer
+from Bio.Tree import PhyloXML as Tree
 from Bio.Tree import Utils
 
 
@@ -25,7 +25,7 @@ EX_BCL2 = 'PhyloXML/bcl_2.xml'
 EX_PHYLO = 'PhyloXML/phyloxml_examples.xml'
 EX_DOLLO = 'PhyloXML/o_tol_332_d_dollo.xml'
 EX_MOLLUSCA = 'PhyloXML/ncbi_taxonomy_mollusca.xml.zip'
-# Big files - not checked into git yet
+# Big files - not checked into git
 EX_TOL = 'PhyloXML/tol_life_on_earth_1.xml.zip'
 EX_METAZOA = 'PhyloXML/ncbi_taxonomy_metazoa.xml.zip'
 EX_NCBI = 'PhyloXML/ncbi_taxonomy.xml.zip'
@@ -52,7 +52,7 @@ class UtilTests(unittest.TestCase):
                 (509, 1496, 287, 24311, 322367, 972830),
                 ):
             output = StringIO()
-            PhyloXML.dump_tags(source, output)
+            PhyloXMLIO.dump_tags(source, output)
             output.seek(0)
             self.assertEquals(len(output.readlines()), count)
 
@@ -67,7 +67,7 @@ class UtilTests(unittest.TestCase):
                     # unzip(EX_METAZOA), unzip(EX_NCBI),
                     ),
                 (387, 748, 164, 16208, 214912, 648554)):
-            phx = PhyloXML.read(source)
+            phx = PhyloXMLIO.read(source)
             output = StringIO()
             Utils.pretty_print(phx, output)
             output.seek(0)
@@ -92,7 +92,7 @@ def _test_read_factory(source, count):
     if zipfile.is_zipfile(source):
         source = unzip(source)
     def test_read(self):
-        phx = PhyloXML.read(source)
+        phx = PhyloXMLIO.read(source)
         self.assert_(phx)
         self.assertEquals(len(phx), count[0])
         self.assertEquals(len(phx.other), count[1])
@@ -107,7 +107,7 @@ def _test_parse_factory(source, count):
     if zipfile.is_zipfile(source):
         source = unzip(source)
     def test_parse(self):
-        trees = PhyloXML.parse(source)
+        trees = PhyloXMLIO.parse(source)
         self.assertEquals(len(list(trees)), count)
     test_parse.__doc__ = "Parse the phylogenies in %s." % fname
     return test_parse
@@ -124,8 +124,7 @@ def _test_shape_factory(source, shapes):
     if zipfile.is_zipfile(source):
         source = unzip(source)
     def test_shape(self):
-        trees = PhyloXML.parse(source)
-        # self.assertEquals(len(list(trees)), len(shapes))
+        trees = PhyloXMLIO.parse(source)
         for tree, shape_expect in izip(trees, shapes):
             # print "%s :: %s" % (source, shape_expect))
             self.assertEquals(len(tree.clade), len(shape_expect))
@@ -146,16 +145,12 @@ class ParseTests(unittest.TestCase):
     test_read_phylo = _test_read_factory(EX_PHYLO, (13, 1))
     test_read_dollo = _test_read_factory(EX_DOLLO, (1, 0))
     test_read_mollusca = _test_read_factory(EX_MOLLUSCA, (1, 0))
-    # test_read_metazoa = _test_read_factory(EX_METAZOA, (1, 0))
-    # test_read_ncbi = _test_read_factory(EX_NCBI, (1, 0))
 
     test_parse_apaf = _test_parse_factory(EX_APAF, 1)
     test_parse_bcl2 = _test_parse_factory(EX_BCL2, 1)
     test_parse_phylo = _test_parse_factory(EX_PHYLO, 13)
     test_parse_dollo = _test_parse_factory(EX_DOLLO, 1)
     test_parse_mollusca = _test_parse_factory(EX_MOLLUSCA, 1)
-    # test_parse_metazoa = _test_parse_factory(EX_METAZOA, 1)
-    # test_parse_ncbi = _test_parse_factory(EX_NCBI, 1)
 
     test_shape_apaf = _test_shape_factory(EX_APAF,
             # lvl-2 clades, sub-clade counts, lvl-3 clades
@@ -232,7 +227,7 @@ class TreeTests(unittest.TestCase):
     # NB: also test check_str() regexps wherever they're used
     def test_Phyloxml(self):
         """Instantiation of Phyloxml objects."""
-        phx = PhyloXML.read(EX_PHYLO)
+        phx = PhyloXMLIO.read(EX_PHYLO)
         self.assert_(isinstance(phx, Tree.Phyloxml))
         self.assert_('schemaLocation' in phx.attributes)
         for tree in phx:
@@ -242,7 +237,7 @@ class TreeTests(unittest.TestCase):
 
     def test_Other(self):
         """Instantiation of Other objects."""
-        phx = PhyloXML.read(EX_PHYLO)
+        phx = PhyloXMLIO.read(EX_PHYLO)
         otr = phx.other[0]
         self.assert_(isinstance(otr, Tree.Other))
         self.assertEquals(otr.tag, 'alignment')
@@ -257,7 +252,7 @@ class TreeTests(unittest.TestCase):
 
     def test_Phylogeny(self):
         """Instantiation of Phylogeny objects."""
-        trees = list(PhyloXML.parse(EX_PHYLO))
+        trees = list(PhyloXMLIO.parse(EX_PHYLO))
         # Monitor lizards
         self.assertEquals(trees[9].name, 'monitor lizards')
         self.assertEquals(trees[9].description,
@@ -272,7 +267,7 @@ class TreeTests(unittest.TestCase):
     def test_Clade(self):
         """Instantiation of Clade objects."""
         # ENH: check node_id, width (float) -- need an example
-        tree = list(PhyloXML.parse(EX_PHYLO))[6]
+        tree = list(PhyloXMLIO.parse(EX_PHYLO))[6]
         clade_ab, clade_c = tree.clade.clades
         clade_a, clade_b = clade_ab.clades
         for clade, id_source, name, blen in izip(
@@ -287,7 +282,7 @@ class TreeTests(unittest.TestCase):
 
     def test_Annotation(self):
         """Instantiation of Annotation objects."""
-        tree = list(PhyloXML.parse(EX_PHYLO))[3]
+        tree = list(PhyloXMLIO.parse(EX_PHYLO))[3]
         ann = tree.clade[1].sequences[0].annotations[0]
         self.assert_(isinstance(ann, Tree.Annotation))
         self.assertEqual(ann.desc, 'alcohol dehydrogenase')
@@ -296,7 +291,7 @@ class TreeTests(unittest.TestCase):
 
     def test_BinaryCharacters(self):
         """Instantiation of BinaryCharacters objects."""
-        tree = PhyloXML.parse(EX_DOLLO).next()
+        tree = PhyloXMLIO.parse(EX_DOLLO).next()
         bchars = tree.clade[0,0].binary_characters
         self.assert_(isinstance(bchars, Tree.BinaryCharacters))
         self.assertEqual(bchars.type, 'parsimony inferred')
@@ -313,7 +308,7 @@ class TreeTests(unittest.TestCase):
 
     def test_CladeRelation(self):
         """Instantiation of CladeRelation objects."""
-        tree = list(PhyloXML.parse(EX_PHYLO))[6]
+        tree = list(PhyloXMLIO.parse(EX_PHYLO))[6]
         crel = tree.clade_relations[0]
         self.assert_(isinstance(crel, Tree.CladeRelation))
         self.assertEqual(crel.id_ref_0, 'b')
@@ -322,7 +317,7 @@ class TreeTests(unittest.TestCase):
 
     def test_Confidence(self):
         """Instantiation of Confidence objects."""
-        tree = PhyloXML.parse(EX_BCL2).next()
+        tree = PhyloXMLIO.parse(EX_BCL2).next()
         conf = tree.clade[0].confidences[0]
         self.assert_(isinstance(conf, Tree.Confidence))
         self.assertEqual(conf.type, 'bootstrap')
@@ -330,7 +325,7 @@ class TreeTests(unittest.TestCase):
 
     def test_Date(self):
         """Instantiation of Date objects."""
-        tree = list(PhyloXML.parse(EX_PHYLO))[11]
+        tree = list(PhyloXMLIO.parse(EX_PHYLO))[11]
         silurian = tree.clade[0,0].date
         devonian = tree.clade[0,1].date
         ediacaran = tree.clade[1].date
@@ -350,7 +345,7 @@ class TreeTests(unittest.TestCase):
 
         Also checks Point type and safe Unicode handling (?).
         """
-        tree = list(PhyloXML.parse(EX_PHYLO))[10]
+        tree = list(PhyloXMLIO.parse(EX_PHYLO))[10]
         hirschweg = tree.clade[0,0].distributions[0]
         nagoya = tree.clade[0,1].distributions[0]
         eth_zurich = tree.clade[0,2].distributions[0]
@@ -378,7 +373,7 @@ class TreeTests(unittest.TestCase):
 
         Also checks ProteinDomain type.
         """
-        tree = PhyloXML.parse(EX_APAF).next()
+        tree = PhyloXMLIO.parse(EX_APAF).next()
         clade = tree.clade[0,0,0,0,0,0,0,0,0,0]
         darch = clade.sequences[0].domain_architecture
         self.assert_(isinstance(darch, Tree.DomainArchitecture))
@@ -398,7 +393,7 @@ class TreeTests(unittest.TestCase):
 
     def test_Events(self):
         """Instantiation of Events objects."""
-        tree = list(PhyloXML.parse(EX_PHYLO))[4]
+        tree = list(PhyloXMLIO.parse(EX_PHYLO))[4]
         event_s = tree.clade.events
         self.assert_(isinstance(event_s, Tree.Events))
         self.assertEqual(event_s.speciations, 1)
@@ -410,7 +405,7 @@ class TreeTests(unittest.TestCase):
 
     def test_Property(self):
         """Instantiation of Property objects."""
-        tree = list(PhyloXML.parse(EX_PHYLO))[8]
+        tree = list(PhyloXMLIO.parse(EX_PHYLO))[8]
         for prop, id_ref, value in izip(
                 tree.properties,
                 ('id_a', 'id_b', 'id_c'),
@@ -425,7 +420,7 @@ class TreeTests(unittest.TestCase):
 
     def test_Reference(self):
         """Instantiation of Reference objects."""
-        tree = PhyloXML.parse(EX_DOLLO).next()
+        tree = PhyloXMLIO.parse(EX_DOLLO).next()
         reference = tree.clade[0,0,0,0,0,0].references[0]
         self.assert_(isinstance(reference, Tree.Reference))
         self.assertEqual(reference.doi, '10.1038/nature06614')
@@ -436,7 +431,7 @@ class TreeTests(unittest.TestCase):
 
         Also checks Accession and Annotation types.
         """
-        trees = list(PhyloXML.parse(EX_PHYLO))
+        trees = list(PhyloXMLIO.parse(EX_PHYLO))
         # Simple element with id_source
         seq0 = trees[4].clade[1].sequences[0]
         self.assert_(isinstance(seq0, Tree.Sequence))
@@ -476,7 +471,7 @@ class TreeTests(unittest.TestCase):
 
     def test_SequenceRelation(self):
         """Instantiation of SequenceRelation objects."""
-        tree = list(PhyloXML.parse(EX_PHYLO))[4]
+        tree = list(PhyloXMLIO.parse(EX_PHYLO))[4]
         for seqrel, id_ref_0, id_ref_1, type in izip(
                 tree.sequence_relations,
                 ('x', 'x', 'y'), ('y', 'z', 'z'),
@@ -491,7 +486,7 @@ class TreeTests(unittest.TestCase):
 
         Also checks Id type.
         """
-        trees = list(PhyloXML.parse(EX_PHYLO))
+        trees = list(PhyloXMLIO.parse(EX_PHYLO))
         # Octopus
         tax5 = trees[5].clade[0,0].taxonomies[0]
         self.assert_(isinstance(tax5, Tree.Taxonomy))
@@ -510,7 +505,7 @@ class TreeTests(unittest.TestCase):
 
     def test_Uri(self):
         """Instantiation of Uri objects."""
-        tree = list(PhyloXML.parse(EX_PHYLO))[9]
+        tree = list(PhyloXMLIO.parse(EX_PHYLO))[9]
         uri = tree.clade.taxonomies[0].uri
         self.assert_(isinstance(uri, Tree.Uri))
         self.assertEqual(uri.desc, 'EMBL REPTILE DATABASE')
@@ -534,10 +529,10 @@ class WriterTests(unittest.TestCase):
         Python 2.4 support: This would make more sense as a context manager
         that simply handles renaming and finally restoring the original.
         """
-        phx = PhyloXML.read(fname)
+        phx = PhyloXMLIO.read(fname)
         os.rename(fname, fname + '~')
         try:
-            PhyloXML.write(phx, fname)
+            Writer.write(phx, fname)
             for cls, tests in test_cases:
                 inst = cls('setUp')
                 for test in tests:
@@ -591,7 +586,7 @@ class WriterTests(unittest.TestCase):
 class MethodTests(unittest.TestCase):
     """Tests for methods on specific classes/objects."""
     def setUp(self):
-        self.phyloxml = PhyloXML.read(EX_PHYLO)
+        self.phyloxml = PhyloXMLIO.read(EX_PHYLO)
 
     # Type conversions
 
@@ -703,7 +698,7 @@ class MethodTests(unittest.TestCase):
         self.assertEqual(events[0].speciations, 1)
         self.assertEqual(events[1].duplications, 1)
         # integer filter
-        tree = PhyloXML.parse(EX_APAF).next()
+        tree = PhyloXMLIO.parse(EX_APAF).next()
         domains = list(tree.find(start=5))
         self.assertEqual(len(domains), 8)
         for dom in domains:

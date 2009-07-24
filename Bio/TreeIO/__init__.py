@@ -6,12 +6,13 @@
 """I/O function wrappers for phylogenetic tree formats.
 """
 
-from Bio import PhyloXML
+import PhyloXMLIO
+import Writer
 
 def read(file, format):
     if format == 'phyloxml':
-        return PhyloXML.read(file)
+        return PhyloXMLIO.read(file)
 
 def write(obj, file, format, encoding=None):
     if format == 'phyloxml':
-        return PhyloXML.write(obj, file, encoding)
+        return Writer.write(obj, file, encoding)
