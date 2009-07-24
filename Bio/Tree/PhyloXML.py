@@ -27,7 +27,7 @@ def check_str(text, testfunc):
     """Check a string using testfunc, and warn if there's no match."""
     if text is not None and not testfunc(text):
         warnings.warn("String %s doesn't match the given regexp" % text,
-                      PhyloXMLWarning)
+                      PhyloXMLWarning, stacklevel=2)
 
 def trim_str(text, maxlen=40):
     if isinstance(text, basestring) and len(text) > maxlen:

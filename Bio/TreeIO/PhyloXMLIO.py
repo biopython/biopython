@@ -55,7 +55,7 @@ except AttributeError:
         except ImportError:
             warnings.warn("Couldn't import xml.etree.ElementTree; "
                     "phyloXML namespaces may have unexpected abbreviations "
-                    "in the output.", RuntimeWarning)
+                    "in the output.", RuntimeWarning, stacklevel=2)
             ElementTree._namespace_map = {}
 
     def register_namespace(prefix, uri):
