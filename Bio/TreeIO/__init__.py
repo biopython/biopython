@@ -7,7 +7,6 @@
 """
 
 import PhyloXMLIO
-import Writer
 
 def read(file, format):
     if format == 'phyloxml':
@@ -15,4 +14,4 @@ def read(file, format):
 
 def write(obj, file, format, encoding=None):
     if format == 'phyloxml':
-        return Writer.write(obj, file, encoding)
+        return PhyloXMLIO.write(obj, file, encoding)
