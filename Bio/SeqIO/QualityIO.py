@@ -67,6 +67,7 @@ following format names:
  - "qual" means simple quality files using PHRED scores (e.g. from Roche 454)
  - "fastq" means Sanger style FASTQ files using PHRED scores and an ASCII
     offset of 33 (e.g. from the NCBI Short Read Archive).
+ - "fastq-sanger" is an alias for "fastq".
  - "fastq-solexa" means old Solexa (and also very early Illumina) style FASTQ
     files, using Solexa scores with an ASCII offset 64.
  - "fastq-illumina" means new Illumina 1.3+ style FASTQ files, using PHRED
@@ -123,7 +124,7 @@ You can use the SeqRecord format method to show this in the QUAL format:
     24 18 18 18 18
     <BLANKLINE>
 
-Or go back to the FASTQ format,
+Or go back to the FASTQ format, use "fastq" (or "fastq-sanger"):
 
     >>> print record.format("fastq")
     @EAS54_6_R1_2_1_443_348
@@ -240,9 +241,10 @@ quality scores.
     <BLANKLINE>
 
 It is important that you explicitly tell Bio.SeqIO which FASTQ variant you are
-using ("fastq" for the Sanger standard using PHRED values, "fastq-solexa" for
-the original Solexa/Illumina variant, or "fastq-illumina" for the more recent
-variant), as this cannot be detected reliably automatically.
+using ("fastq" or "fastq-sanger" for the Sanger standard using PHRED values,
+"fastq-solexa" for the original Solexa/Illumina variant, or "fastq-illumina"
+for the more recent variant), as this cannot be detected reliably
+automatically.
 
 To illustrate this problem, let's consider an artifical example:
 
@@ -737,8 +739,8 @@ def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = No
     EAS54_6_R1_2_1_443_348 GTTGCTTCTGGCGTGGGTGGGGGGG
     >>> handle.close()
 
-    Typically however, you would call this via Bio.SeqIO instead with "fastq" as
-    the format:
+    Typically however, you would call this via Bio.SeqIO instead with "fastq"
+    (or "fastq-sanger") as the format:
 
     >>> from Bio import SeqIO
     >>> handle = open("Quality/example.fastq", "rU")
@@ -1118,9 +1120,10 @@ class FastqPhredWriter(SequentialSequenceWriter):
     """Class to write standard FASTQ format files (using PHRED quality scores).
 
     Although you can use this class directly, you are strongly encouraged
-    to use the Bio.SeqIO.write() function instead.  For example, this code
-    reads in a standard Sanger style FASTQ file (using PHRED scores) and
-    re-saves it as another FASTQ (PHRED) file:
+    to use the Bio.SeqIO.write() function instead via the format name "fastq"
+    or the alias "fastq-sanger".  For example, this code reads in a standard
+    Sanger style FASTQ file (using PHRED scores) and re-saves it as another
+    Sanger style FASTQ file:
 
     >>> from Bio import SeqIO
     >>> record_iterator = SeqIO.parse(open("Quality/example.fastq"), "fastq")
@@ -1147,7 +1150,7 @@ class FastqPhredWriter(SequentialSequenceWriter):
     >>> out_handle.close()
 
     This code is also called if you use the .format("fastq") method of a
-    SeqRecord.
+    SeqRecord, or .format("fastq-sanger") if you prefer that alias.
 
     P.S. To avoid cluttering up your working directory, you can delete this
     temporary file now:
