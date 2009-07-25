@@ -1229,7 +1229,15 @@ The \verb|SeqRecord| class itself is quite simple, and offers the following info
 
 \section{Creating a SeqRecord}
 
-Using a \verb|SeqRecord| object is not very complicated, since all of the information is stored as attributes of the class. Usually you won't create a \verb|SeqRecord| ``by hand'', but instead use \verb|Bio.SeqIO| to read in a sequence file for you (see Chapter~\ref{chapter:Bio.SeqIO} and the examples below).  However, creating \verb|SeqRecord| can be quite simple - at a minimum you just need a \verb|Seq| object:
+Using a \verb|SeqRecord| object is not very complicated, since all of the
+information is presented as attributes of the class. Usually you won't create
+a \verb|SeqRecord| ``by hand'', but instead use \verb|Bio.SeqIO| to read in a
+sequence file for you (see Chapter~\ref{chapter:Bio.SeqIO} and the examples
+below).  However, creating \verb|SeqRecord| can be quite simple.
+
+\subsection{SeqRecord objects from scratch}
+
+To create a \verb|SeqRecord| at a minimum you just need a \verb|Seq| object:
 
 \begin{verbatim}
 >>> from Bio.Seq import Seq
@@ -1271,6 +1279,25 @@ Adding annotations is easy, and just involves dealing directly with the annotati
 >>> print simple_seq_r.annotations["evidence"]
 None. I just made it up.
 \end{verbatim}
+
+Working with per-letter-annotations is similar, \verb|letter_annotations| is a
+dictionary like attribute which will let you assign any Python sequence (i.e.
+a string, list or tuple) which has the same length as the sequence:
+
+\begin{verbatim}
+>>> simple_seq_r.letter_annotations["phred_quality"] = [40,40,38,30]
+>>> print simple_seq_r. letter_annotations
+{'phred_quality': [40, 40, 38, 30]}
+>>> print simple_seq_r.letter_annotations["phred_quality"]
+[40, 40, 38, 30]
+\end{verbatim}
+
+The \verb|dbxrefs| and \verb|features| attributes are just Python lists, and
+should be used to store strings and \verb|SeqFeature| objects (discussed later
+in this chapter) respectively.
+
+%TODO - Update this to show passing in the annotations etc to __init__ with a warning that
+%this requires Biopython 1.51 or later?
 
 \subsection{SeqRecord objects from FASTA files}
 

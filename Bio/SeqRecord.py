@@ -16,7 +16,7 @@ __docformat__ = "epytext en" #Simple markup to show doctests nicely
 class _RestrictedDict(dict):
     """Dict which only allows sequences of given length as values (PRIVATE).
 
-    This simple subclass of the python dictionary is used in the SeqRecord
+    This simple subclass of the Python dictionary is used in the SeqRecord
     object for holding per-letter-annotations.  This class is intended to
     prevent simple errors by only allowing python sequences (e.g. lists,
     strings and tuples) to be stored, and only if their length matches that
@@ -44,7 +44,7 @@ class SeqRecord(object):
 
     Main attributes:
      - id          - Identifier such as a locus tag (string)
-     - seq         - The sequence itself (Seq object)
+     - seq         - The sequence itself (Seq object or similar)
 
     Additional attributes:
      - name        - Sequence name, e.g. gene name (string)
@@ -52,9 +52,9 @@ class SeqRecord(object):
      - dbxrefs     - List of database cross references (list of strings)
      - features    - Any (sub)features defined (list of SeqFeature objects)
      - annotations - Further information about the whole sequence (dictionary)
-                     Most entries are lists of strings.
+                     Most entries are strings, or lists of strings.
      - letter_annotations - Per letter/symbol annotation (restricted
-                     dictionary). This holds python sequences (lists, strings
+                     dictionary). This holds Python sequences (lists, strings
                      or tuples) whose length matches that of the sequence.
                      A typical use would be to hold a list of integers
                      representing sequencing quality scores, or a string
@@ -127,20 +127,23 @@ class SeqRecord(object):
             raise TypeError("name argument should be a string")
         if not isinstance(description, basestring) :
             raise TypeError("description argument should be a string")
-        if dbxrefs is not None and not isinstance(dbxrefs, list) :
-            raise TypeError("dbxrefs argument should be a list (of strings)")
-        if features is not None and not isinstance(features, list) :
-            raise TypeError("features argument should be a list (of SeqFeature objects)")
         self._seq = seq
         self.id = id
         self.name = name
         self.description = description
+
+        # database cross references (for the whole sequence)
         if dbxrefs is None:
             dbxrefs = []
+        elif not isinstance(dbxrefs, list) :
+            raise TypeError("dbxrefs argument should be a list (of strings)")
         self.dbxrefs = dbxrefs
+        
         # annotations about the whole sequence
         if annotations is None:
             annotations = {}
+        elif not isinstance(annotations, dict) :
+            raise TypeError("annotations argument should be a dict")
         self.annotations = annotations
 
         if letter_annotations is None:
@@ -153,7 +156,7 @@ class SeqRecord(object):
                     self._per_letter_annotations = \
                                               _RestrictedDict(length=len(seq))
                 except :
-                    raise TypeError("seq argument should be Seq or MutableSeq")
+                    raise TypeError("seq argument should be a Seq object or similar")
         else :
             #This will be handled via the property set function, which will
             #turn this into a _RestrictedDict and thus ensure all the values
@@ -163,6 +166,8 @@ class SeqRecord(object):
         # annotations about parts of the sequence
         if features is None:
             features = []
+        elif not isinstance(features, list) :
+            raise TypeError("features argument should be a list (of SeqFeature objects)")
         self.features = features
 
     #TODO - Just make this a read only property?
@@ -187,24 +192,24 @@ class SeqRecord(object):
         variant FASTQ file as a SeqRecord:
 
         >>> from Bio import SeqIO
-        >>> handle = open("Quality/solexa.fastq", "rU")
+        >>> handle = open("Quality/solexa_faked.fastq", "rU")
         >>> record = SeqIO.read(handle, "fastq-solexa")
         >>> handle.close()
         >>> print record.id, record.seq
-        slxa_0013_1_0001_24 ACAAAAATCACAAGCATTCTTATACACC
+        slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
         >>> print record.letter_annotations.keys()
         ['solexa_quality']
         >>> print record.letter_annotations["solexa_quality"]
-        [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -6, -1, -1, -4, -1, -4, -19, -10, -27, -18]
+        [40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
 
         The letter_annotations get sliced automatically if you slice the
         parent SeqRecord, for example taking the last ten bases:
 
         >>> sub_record = record[-10:]
         >>> print sub_record.id, sub_record.seq
-        slxa_0013_1_0001_24 CTTATACACC
+        slxa_0001_1_0001_01 ACGTNNNNNN
         >>> print sub_record.letter_annotations["solexa_quality"]
-        [-6, -1, -1, -4, -1, -4, -19, -10, -27, -18]
+        [4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
 
         Any python sequence (i.e. list, tuple or string) can be recorded in
         the SeqRecord's letter_annotations dictionary as long as the length
@@ -248,7 +253,7 @@ class SeqRecord(object):
     def __getitem__(self, index) :
         """Returns a sub-sequence or an individual letter.
 
-        Splicing, e.g. my_record[5:10], returns a new SeqRecord for
+        Slicing, e.g. my_record[5:10], returns a new SeqRecord for
         that sub-sequence with approriate annotation preserved.  The
         name, id and description are kept.
 
@@ -450,18 +455,20 @@ class SeqRecord(object):
         per-letter-annotation:
         
         >>> from Bio import SeqIO
-        >>> rec = SeqIO.read(open("Quality/solexa.fastq", "rU"),
+        >>> rec = SeqIO.read(open("Quality/solexa_faked.fastq", "rU"),
         ...                  "fastq-solexa")
         >>> print rec.id, rec.seq
-        slxa_0013_1_0001_24 ACAAAAATCACAAGCATTCTTATACACC
+        slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
         >>> print rec.letter_annotations.keys()
         ['solexa_quality']
         >>> for nuc, qual in zip(rec,rec.letter_annotations["solexa_quality"]) :
-        ...     if qual < -10 :
+        ...     if qual > 35 :
         ...         print nuc, qual
-        C -19
-        C -27
-        C -18
+        A 40
+        C 39
+        G 38
+        T 37
+        A 36
 
         You may agree that using zip(rec.seq, ...) is more explicit than using
         zip(rec, ...) as shown above.

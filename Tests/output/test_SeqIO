@@ -1825,7 +1825,6 @@ Testing reading phd format file Phd/phd1
  Checking can write/read as 'fastq' format
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
- Failed: PHRED quality zero maps onto a Solexa quality of minus infinity!
  Checking can write/read as 'genbank' format
  Failed: Locus identifier '425_7_(71-A03-19).b.ab1' is too long
  Checking can write/read as 'qual' format
@@ -1896,7 +1895,7 @@ Testing reading ace format file Ace/contig1.ace
  Checking can write/read as 'fastq-illumina' format
  Failed: A quality value of None was found
  Checking can write/read as 'fastq-solexa' format
- Failed: PHRED quality zero maps onto a Solexa quality of minus infinity!
+ Failed: A quality value of None was found
  Checking can write/read as 'genbank' format
  Checking can write/read as 'qual' format
  Failed: A quality value of None was found
@@ -1915,7 +1914,7 @@ Testing reading ace format file Ace/consed_sample.ace
  Checking can write/read as 'fastq-illumina' format
  Failed: A quality value of None was found
  Checking can write/read as 'fastq-solexa' format
- Failed: PHRED quality zero maps onto a Solexa quality of minus infinity!
+ Failed: A quality value of None was found
  Checking can write/read as 'genbank' format
  Checking can write/read as 'qual' format
  Failed: A quality value of None was found
@@ -1933,7 +1932,7 @@ Testing reading ace format file Ace/seq.cap.ace
  Checking can write/read as 'fastq-illumina' format
  Failed: A quality value of None was found
  Checking can write/read as 'fastq-solexa' format
- Failed: PHRED quality of None can't be transformed to a Solexa quality
+ Failed: A quality value of None was found
  Checking can write/read as 'genbank' format
  Checking can write/read as 'qual' format
  Failed: A quality value of None was found
@@ -2288,6 +2287,54 @@ Testing reading fastq format file Quality/tricky.fastq as an alignment
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
  Failed: Locus identifier '071113_EAS56_0053:1:3:990:501' is too long
+ Checking can write/read as 'qual' format
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
+Testing reading fastq format file Quality/sanger_faked.fastq
+ ID and Name='Test',
+ Seq='ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN', length=41
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fastq' format
+ Checking can write/read as 'fastq-illumina' format
+ Checking can write/read as 'fastq-solexa' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'qual' format
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
+Testing reading fastq format file Quality/sanger_93.fastq
+ ID and Name='Test',
+ Seq='ACTGACTGACTGACTGACTGACTGACTGACTGACTGACTG...GACTGAN', length=94
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fastq' format
+ Checking can write/read as 'fastq-illumina' format
+ Checking can write/read as 'fastq-solexa' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'qual' format
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
+Testing reading fastq-illumina format file Quality/illumina_faked.fastq
+ ID and Name='Test',
+ Seq='ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN', length=41
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fastq' format
+ Checking can write/read as 'fastq-illumina' format
+ Checking can write/read as 'fastq-solexa' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
  Checking can write/read as 'qual' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format

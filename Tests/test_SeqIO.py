@@ -18,7 +18,7 @@ rna_alphas = [Alphabet.generic_rna]
 nucleotide_alphas = [Alphabet.generic_nucleotide,
                      Alphabet.Gapped(Alphabet.generic_nucleotide)]
 no_alpha_formats = ["fasta","clustal","phylip","tab","ig","stockholm","emboss",
-                    "fastq","fastq-solexa","qual"]
+                    "fastq","fastq-solexa","fastq-illumina","qual"]
 possible_unknown_seq_formats = ["qual", "genbank", "gb", "embl"]
 
 #List of formats including alignment only file formats we can read AND write.
@@ -32,6 +32,7 @@ for format in sorted(AlignIO._FormatToWriter) :
     if format not in test_write_read_alignment_formats :
         test_write_read_alignment_formats.append(format)
 test_write_read_alignment_formats.remove("gb") #an alias for genbank
+test_write_read_alignment_formats.remove("fastq-sanger") #an alias for fastq
 
 # test_files is a list of tuples containing:
 # - string:  file format
@@ -164,9 +165,12 @@ test_files = [ \
     ("pir", True,  'NBRF/clustalw.pir', 2),
 #Following quality files are also used in the Bio.SeqIO.QualityIO doctests:
     ("fasta", True, 'Quality/example.fasta', 3),
-    ("qual",  False, 'Quality/example.qual',  3),
+    ("qual",  False,'Quality/example.qual',  3),
     ("fastq", True, 'Quality/example.fastq', 3),
     ("fastq", True, 'Quality/tricky.fastq', 4),
+    ("fastq", False,'Quality/sanger_faked.fastq', 1),
+    ("fastq", False,'Quality/sanger_93.fastq', 1),
+    ("fastq-illumina", False,'Quality/illumina_faked.fastq', 1),
     ("fastq-solexa", False, 'Quality/solexa_faked.fastq', 1),
     ("fastq-solexa", True, 'Quality/solexa_example.fastq', 5),
     ]
