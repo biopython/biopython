@@ -1165,8 +1165,8 @@ class FastqPhredWriter(SequentialSequenceWriter):
         assert self._header_written
         assert not self._footer_written
         self._record_written = True
-
         #TODO - Is an empty sequence allowed in FASTQ format?
+        seq_str = str(record.seq)
         qualities = _get_phred_quality(record)
         try :
             #This rounds to the nearest integer:
@@ -1180,9 +1180,9 @@ class FastqPhredWriter(SequentialSequenceWriter):
         
         if record.seq is None:
             raise ValueError("No sequence for record %s" % record.id)
-        if len(qualities_str) != len(record) :
+        if len(qualities_str) != len(seq_str) :
             raise ValueError("Record %s has sequence length %i but %i quality scores" \
-                             % (record.id, len(record), len(qualities_str)))
+                             % (record.id, len(seq_str), len(qualities_str)))
 
         #FASTQ files can include a description, just like FASTA files
         #(at least, this is what the NCBI Short Read Archive does)
@@ -1196,7 +1196,7 @@ class FastqPhredWriter(SequentialSequenceWriter):
         else :
             title = id
 
-        self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities_str))
+        self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str))
 
 class QualPhredWriter(SequentialSequenceWriter):
     """Class to write QUAL format files (using PHRED quality scores).
@@ -1339,6 +1339,7 @@ class FastqSolexaWriter(SequentialSequenceWriter):
         self._record_written = True
 
         #TODO - Is an empty sequence allowed in FASTQ format?
+        seq_str = str(record.seq)
         qualities = _get_solexa_quality(record)
         try :
             qualities_str = "".join([chr(int(round(q+SOLEXA_SCORE_OFFSET,0))) for q \
@@ -1351,9 +1352,9 @@ class FastqSolexaWriter(SequentialSequenceWriter):
 
         if record.seq is None:
             raise ValueError("No sequence for record %s" % record.id)
-        if len(qualities) != len(record) :
+        if len(qualities_str) != len(seq_str) :
             raise ValueError("Record %s has sequence length %i but %i quality scores" \
-                             % (record.id, len(record), len(qualities)))
+                             % (record.id, len(seq_str), len(qualities_str)))
 
         #FASTQ files can include a description, just like FASTA files
         #(at least, this is what the NCBI Short Read Archive does)
@@ -1367,7 +1368,7 @@ class FastqSolexaWriter(SequentialSequenceWriter):
         else :
             title = id
 
-        self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities_str))
+        self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str))
 
 class FastqIlluminaWriter(SequentialSequenceWriter):
     """Write Illumina 1.3+ FASTQ format files (with PHRED quality scores).
@@ -1389,6 +1390,7 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
         self._record_written = True
 
         #TODO - Is an empty sequence allowed in FASTQ format?
+        seq_str = str(record.seq)
         qualities = _get_phred_quality(record)
         try :
             qualities_str = "".join([chr(int(round(q+SOLEXA_SCORE_OFFSET,0))) for q \
@@ -1401,9 +1403,9 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
 
         if record.seq is None:
             raise ValueError("No sequence for record %s" % record.id)
-        if len(qualities) != len(record) :
+        if len(qualities_str) != len(seq_str) :
             raise ValueError("Record %s has sequence length %i but %i quality scores" \
-                             % (record.id, len(record), len(qualities)))
+                             % (record.id, len(seq_str), len(qualities_str)))
 
         #FASTQ files can include a description, just like FASTA files
         #(at least, this is what the NCBI Short Read Archive does)
@@ -1417,7 +1419,7 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
         else :
             title = id
 
-        self.handle.write("@%s\n%s\n+\n%s\n" % (title, record.seq, qualities_str))
+        self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str))
         
 def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet = single_letter_alphabet, title2ids = None) :
     """Iterate over matched FASTA and QUAL files as SeqRecord objects.
