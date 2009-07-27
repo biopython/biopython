@@ -452,7 +452,8 @@ def solexa_quality_from_phred(phred_quality) :
         #e.g. Bio.SeqIO gives Ace contig gaps a quality of None.
         return None
     else :
-        raise ValueError("PHRED qualities must be positive (or zero)")
+        raise ValueError("PHRED qualities must be positive (or zero), not %s" \
+                         % repr(phred_quality))
 
 def phred_quality_from_solexa(solexa_quality) :
     """Convert a Solexa quality (which can be negative) to a PHRED quality.
@@ -498,7 +499,8 @@ def phred_quality_from_solexa(solexa_quality) :
         return None
     if solexa_quality < -5 :
         import warnings
-        warnings.warn("Solexa quality less than -5 passed")
+        warnings.warn("Solexa quality less than -5 passed, %s" \
+                      % repr(solexa_quality))
     return 10*log(10**(solexa_quality/10.0) + 1, 10)
 
 def _get_phred_quality(record) :
@@ -519,56 +521,208 @@ def _get_phred_quality(record) :
                          "letter_annotations of SeqRecord (id=%s)." \
                          % record.id)
 
-def _get_solexa_quality(record) :
-    """Extract Solexa qualities from a SeqRecord's letter_annotations (PRIVATE).
+_phred_to_sanger_quality_str = dict((qp, chr(qp+SANGER_SCORE_OFFSET)) \
+                                    for qp in range(0, 93+1))
+_solexa_to_sanger_quality_str = dict( \
+    (qs, chr(int(round(phred_quality_from_solexa(qs)))+SANGER_SCORE_OFFSET)) \
+    for qs in range(-5, 93+1))
+def _get_sanger_quality_str(record) :
+    """Returns a Sanger FASTQ encoded quality string (PRIVATE).
 
-    If there are no Solexa qualities, but there are PHRED qualities, those are
-    used instead after conversion.
+    >>> from Bio.Seq import Seq
+    >>> from Bio.SeqRecord import SeqRecord
+    >>> r = SeqRecord(Seq("ACGTAN"), id="Test",
+    ...               letter_annotations = {"phred_quality":[50,40,30,20,10,0]})
+    >>> _get_sanger_quality_str(r)
+    'SI?5+!'
+
+    If as in the above example (or indeed a SeqRecord parser with Bio.SeqIO),
+    the PHRED qualities are integers, this function is able to use a very fast
+    pre-cached mapping. However, if they are floats which differ slightly, then
+    it has to do the appropriate rounding - which is slower:
+
+    >>> r2 = SeqRecord(Seq("ACGTAN"), id="Test2",
+    ...      letter_annotations = {"phred_quality":[50.0,40.05,29.99,20,9.55,0.01]})
+    >>> _get_sanger_quality_str(r2)
+    'SI?5+!'
+
+    If your scores include a None value, this raises an exception:
+
+    >>> r3 = SeqRecord(Seq("ACGTAN"), id="Test3",
+    ...               letter_annotations = {"phred_quality":[50,40,30,20,10,None]})
+    >>> _get_sanger_quality_str(r3)
+    Traceback (most recent call last):
+       ...
+    TypeError: A quality value of None was found
+
+    If (strangely) your record has both PHRED and Solexa scores, then the PHRED
+    scores are used in preference:
+
+    >>> r4 = SeqRecord(Seq("ACGTAN"), id="Test4",
+    ...               letter_annotations = {"phred_quality":[50,40,30,20,10,0],
+    ...                                     "solexa_quality":[-5,-4,0,None,0,40]})
+    >>> _get_sanger_quality_str(r4)
+    'SI?5+!'
+
+    If there are no PHRED scores, but there are Solexa scores, these are used
+    instead (after the approriate conversion):
+
+    >>> r5 = SeqRecord(Seq("ACGTAN"), id="Test5",
+    ...      letter_annotations = {"solexa_quality":[40,30,20,10,0,-5]})
+    >>> _get_sanger_quality_str(r5)
+    'I?5+$"'
+
+    Again, integer Solexa scores can be looked up in a pre-cached mapping making
+    this very fast. You can still use approximate floating point scores:
+
+    >>> r6 = SeqRecord(Seq("ACGTAN"), id="Test6",
+    ...      letter_annotations = {"solexa_quality":[40.1,29.7,20.01,10,0.0,-4.9]})
+    >>> _get_sanger_quality_str(r6)
+    'I?5+$"'
     """
-    try :
-        return record.letter_annotations["solexa_quality"]
-    except KeyError :
-        pass
-    try :
-        return [solexa_quality_from_phred(q) for \
-                q in record.letter_annotations["phred_quality"]]
-    except KeyError :
+    if "phred_quality" in record.letter_annotations :
+        #These take priority (in case both Solexa and PHRED scores found)
+        qualities = record.letter_annotations["phred_quality"]
+        #Try and use the precomputed mapping:
+        try :
+            return "".join([_phred_to_sanger_quality_str[qp] \
+                            for qp in qualities])
+        except KeyError :
+            #Could be a float, or a None in the list. Do it the slow way...
+            pass
+        try :
+            return "".join([chr(int(round(qp))+SANGER_SCORE_OFFSET) \
+                            for qp in qualities])
+        except TypeError, e :
+            if None in qualities :
+                raise TypeError("A quality value of None was found")
+            else :
+                raise e
+    elif "solexa_quality" in record.letter_annotations :
+        #Fall back on the Solexa scores...
+        qualities = record.letter_annotations["solexa_quality"]
+        #Try and use the precomputed mapping:
+        try :
+            return "".join([_solexa_to_sanger_quality_str[qs] \
+                            for qs in qualities])
+        except KeyError :
+            #Either no PHRED scores, or something odd like a float or None
+            pass
+        #Must do this the slow way, first converting the PHRED scores into
+        #Solexa scores:
+        try :
+            return "".join([chr(int(round(phred_quality_from_solexa(qs))) + \
+                                SANGER_SCORE_OFFSET) \
+                            for qs in qualities])
+        except TypeError, e :
+            if None in qualities :
+                raise TypeError("A quality value of None was found")
+            else :
+                raise e
+    else :
         raise ValueError("No suitable quality scores found in "
                          "letter_annotations of SeqRecord (id=%s)." \
                          % record.id)
 
-def _get_sanger_quality_str(record) :
-    qualities = _get_phred_quality(record)
-    try :
-        return "".join([chr(int(round(q))+SANGER_SCORE_OFFSET) \
-                        for q in qualities])
-    except TypeError, e :
-        if None in qualities :
-            raise TypeError("A quality value of None was found")
-        else :
-            raise e
-
+_phred_to_illumina_quality_str = dict((qp, chr(qp+SOLEXA_SCORE_OFFSET)) \
+                                      for qp in range(0, 93+1))
+_solexa_to_illumina_quality_str = dict( \
+    (qs, chr(int(round(phred_quality_from_solexa(qs)))+SOLEXA_SCORE_OFFSET)) \
+    for qs in range(-5, 93+1))
 def _get_illumina_quality_str(record) :
-    qualities = _get_phred_quality(record)
-    try :
-        return "".join([chr(int(round(q))+SOLEXA_SCORE_OFFSET) \
-                        for q in qualities])
-    except TypeError, e :
-        if None in qualities :
-            raise TypeError("A quality value of None was found")
-        else :
-            raise e
+    if "phred_quality" in record.letter_annotations :
+        #These take priority (in case both Solexa and PHRED scores found)
+        qualities = record.letter_annotations["phred_quality"]
+        #Try and use the precomputed mapping:
+        try :
+            return "".join([_phred_to_illumina_quality_str[qp] \
+                            for qp in qualities])
+        except KeyError :
+            #Could be a float, or a None in the list. Do it the slow way...
+            pass
+        try :
+            return "".join([chr(int(round(qp))+SOLEXA_SCORE_OFFSET) \
+                            for qp in qualities])
+        except TypeError, e :
+            if None in qualities :
+                raise TypeError("A quality value of None was found")
+            else :
+                raise e
+    elif "solexa_quality" in record.letter_annotations :
+        #Fall back on the Solexa scores...
+        qualities = record.letter_annotations["solexa_quality"]
+        #Try and use the precomputed mapping:
+        try :
+            return "".join([_solexa_to_illumina_quality_str[qs] \
+                            for qs in qualities])
+        except KeyError :
+            #Either no PHRED scores, or something odd like a float or None
+            pass
+        #Must do this the slow way, first converting the PHRED scores into
+        #Solexa scores:
+        try :
+            return "".join([chr(int(round(phred_quality_from_solexa(qs))) + \
+                                SOLEXA_SCORE_OFFSET) \
+                            for qs in qualities])
+        except TypeError, e :
+            if None in qualities :
+                raise TypeError("A quality value of None was found")
+            else :
+                raise e
+    else :
+        raise ValueError("No suitable quality scores found in "
+                         "letter_annotations of SeqRecord (id=%s)." \
+                         % record.id)
 
+_solexa_to_solexa_quality_str = dict((qs, chr(qs+SOLEXA_SCORE_OFFSET)) \
+                                     for qs in range(-5, 93+1))
+_phred_to_solexa_quality_str = dict(\
+    (qp, chr(int(round(solexa_quality_from_phred(qp)))+SOLEXA_SCORE_OFFSET)) \
+    for qp in range(0, 93+1))
 def _get_solexa_quality_str(record) :
-    qualities = _get_solexa_quality(record)
-    try :
-        return "".join([chr(int(round(q))+SOLEXA_SCORE_OFFSET) \
-                        for q in qualities])
-    except TypeError, e :
-        if None in qualities :
-            raise TypeError("A quality value of None was found")
-        else :
-            raise e
+    if "solexa_quality" in record.letter_annotations :
+        #These take priority (in case both Solexa and PHRED scores found)
+        qualities = record.letter_annotations["solexa_quality"]
+        #Try and use the precomputed mapping:
+        try :
+            return "".join([_solexa_to_solexa_quality_str[qs] \
+                            for qs in qualities])
+        except KeyError :
+            #Could be a float, or a None in the list. Do it the slow way...
+            pass
+        try :
+            return "".join([chr(int(round(qs))+SOLEXA_SCORE_OFFSET) \
+                            for qs in qualities])
+        except TypeError, e :
+            if None in qualities :
+                raise TypeError("A quality value of None was found")
+            else :
+                raise e
+    elif "phred_quality" in record.letter_annotations :
+        #Fall back on the PHRED scores...
+        qualities = record.letter_annotations["phred_quality"]
+        #Try and use the precomputed mapping:
+        try :
+            return "".join([_phred_to_solexa_quality_str[qp] \
+                            for qp in qualities])
+        except KeyError :
+            #Either no PHRED scores, or something odd like a float or None
+            pass
+        #Must do this the slow way, first converting the PHRED scores into
+        #Solexa scores:
+        try :
+            return "".join([chr(int(round(solexa_quality_from_phred(qp))) + \
+                                SOLEXA_SCORE_OFFSET) \
+                            for qp in qualities])
+        except TypeError, e :
+            if None in qualities :
+                raise TypeError("A quality value of None was found")
+            else :
+                raise e
+    else :
+        raise ValueError("No suitable quality scores found in "
+                         "letter_annotations of SeqRecord (id=%s)." \
+                         % record.id)
 
 #TODO - Default to nucleotide or even DNA?
 def FastqGeneralIterator(handle) :
