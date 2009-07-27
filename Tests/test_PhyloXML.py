@@ -209,6 +209,12 @@ class ParseTests(unittest.TestCase):
                   ),
                 ),
             )
+    test_shape_dollo = _test_shape_factory(EX_DOLLO,
+                ( ( (2, (2, 2)),
+                    (2, (2, 2)),
+                  ),
+                ),
+            )
     test_shape_zip = _test_shape_factory(EX_MOLLUSCA,
                 ( ( (3, (5, 1, 4)),
                     (5, (6, 2, 2, 2, 1)),
