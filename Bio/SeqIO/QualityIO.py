@@ -537,6 +537,38 @@ def _get_solexa_quality(record) :
                          "letter_annotations of SeqRecord (id=%s)." \
                          % record.id)
 
+def _get_sanger_quality_str(record) :
+    qualities = _get_phred_quality(record)
+    try :
+        return "".join([chr(int(round(q))+SANGER_SCORE_OFFSET) \
+                        for q in qualities])
+    except TypeError, e :
+        if None in qualities :
+            raise TypeError("A quality value of None was found")
+        else :
+            raise e
+
+def _get_illumina_quality_str(record) :
+    qualities = _get_phred_quality(record)
+    try :
+        return "".join([chr(int(round(q))+SOLEXA_SCORE_OFFSET) \
+                        for q in qualities])
+    except TypeError, e :
+        if None in qualities :
+            raise TypeError("A quality value of None was found")
+        else :
+            raise e
+
+def _get_solexa_quality_str(record) :
+    qualities = _get_solexa_quality(record)
+    try :
+        return "".join([chr(int(round(q))+SOLEXA_SCORE_OFFSET) \
+                        for q in qualities])
+    except TypeError, e :
+        if None in qualities :
+            raise TypeError("A quality value of None was found")
+        else :
+            raise e
 
 #TODO - Default to nucleotide or even DNA?
 def FastqGeneralIterator(handle) :
@@ -1166,20 +1198,10 @@ class FastqPhredWriter(SequentialSequenceWriter):
         assert not self._footer_written
         self._record_written = True
         #TODO - Is an empty sequence allowed in FASTQ format?
-        seq_str = str(record.seq)
-        qualities = _get_phred_quality(record)
-        try :
-            #This rounds to the nearest integer:
-            qualities_str = "".join([chr(int(round(q+SANGER_SCORE_OFFSET,0))) for q \
-                                 in qualities])
-        except TypeError, e :
-            if None in qualities :
-                raise TypeError("A quality value of None was found")
-            else :
-                raise e
-        
         if record.seq is None:
             raise ValueError("No sequence for record %s" % record.id)
+        seq_str = str(record.seq)
+        qualities_str = _get_sanger_quality_str(record)
         if len(qualities_str) != len(seq_str) :
             raise ValueError("Record %s has sequence length %i but %i quality scores" \
                              % (record.id, len(seq_str), len(qualities_str)))
@@ -1195,7 +1217,7 @@ class FastqPhredWriter(SequentialSequenceWriter):
             title = "%s %s" % (id, description)
         else :
             title = id
-
+        
         self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str))
 
 class QualPhredWriter(SequentialSequenceWriter):
@@ -1259,8 +1281,6 @@ class QualPhredWriter(SequentialSequenceWriter):
         else :
             id = self.clean(record.id)
             description = self.clean(record.description)
-
-            #if description[:len(id)]==id :
             if description and description.split(None,1)[0]==id :
                 #The description includes the id at the start
                 title = description
@@ -1268,9 +1288,6 @@ class QualPhredWriter(SequentialSequenceWriter):
                 title = "%s %s" % (id, description)
             else :
                 title = id
-
-        assert "\n" not in title
-        assert "\r" not in title
         self.handle.write(">%s\n" % title)
 
         qualities = _get_phred_quality(record)
@@ -1339,19 +1356,10 @@ class FastqSolexaWriter(SequentialSequenceWriter):
         self._record_written = True
 
         #TODO - Is an empty sequence allowed in FASTQ format?
-        seq_str = str(record.seq)
-        qualities = _get_solexa_quality(record)
-        try :
-            qualities_str = "".join([chr(int(round(q+SOLEXA_SCORE_OFFSET,0))) for q \
-                                    in qualities])
-        except TypeError, e :
-            if None in qualities :
-                raise TypeError("A quality value of None was found")
-            else :
-                raise e
-
         if record.seq is None:
             raise ValueError("No sequence for record %s" % record.id)
+        seq_str = str(record.seq)
+        qualities_str = _get_solexa_quality_str(record)
         if len(qualities_str) != len(seq_str) :
             raise ValueError("Record %s has sequence length %i but %i quality scores" \
                              % (record.id, len(seq_str), len(qualities_str)))
@@ -1367,7 +1375,7 @@ class FastqSolexaWriter(SequentialSequenceWriter):
             title = "%s %s" % (id, description)
         else :
             title = id
-
+        
         self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str))
 
 class FastqIlluminaWriter(SequentialSequenceWriter):
@@ -1390,19 +1398,10 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
         self._record_written = True
 
         #TODO - Is an empty sequence allowed in FASTQ format?
-        seq_str = str(record.seq)
-        qualities = _get_phred_quality(record)
-        try :
-            qualities_str = "".join([chr(int(round(q+SOLEXA_SCORE_OFFSET,0))) for q \
-                                     in qualities])
-        except TypeError, e :
-            if None in qualities :
-                raise TypeError("A quality value of None was found")
-            else :
-                raise e
-
         if record.seq is None:
             raise ValueError("No sequence for record %s" % record.id)
+        seq_str = str(record.seq)
+        qualities_str = _get_illumina_quality_str(record)
         if len(qualities_str) != len(seq_str) :
             raise ValueError("Record %s has sequence length %i but %i quality scores" \
                              % (record.id, len(seq_str), len(qualities_str)))
@@ -1418,7 +1417,7 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
             title = "%s %s" % (id, description)
         else :
             title = id
-
+        
         self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str))
         
 def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet = single_letter_alphabet, title2ids = None) :
