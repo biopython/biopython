@@ -39,19 +39,19 @@ Timeline
     - Add a list of "core" elements to this file
     - Review existing modules for ideas and conventions [*ongoing*]
     - Choose an XML parser [*xml.etree, or lxml/elementtree for Py2.4*]
-    - Choose a warning system [*will match Bio.PDB, using warnings module*]
+    - Choose a warning system [*warnings module, module-specific warning types*]
     - Decide repository layout [*code in Bio/PhyloXML/, tests in Tests/*]
 
     Code:
 
     - Simple base class for all phyloXML elements [*Tree.PhyloElement*]
-    - Class definitions Tier 0, 1, and 2 phyloXML types [*Tree.py*]
+    - Class definitions for all phyloXML types [*PhyloXML.py*]
     - Specific exception and warning to raise for noncompliant phyloXML files
-      [*Exceptions.py*]
     - Parse individual phylogenies or read a complete PhyloXML object from an
-      XML stream [*Parser.py*]
-    - Write a complete PhyloXML object to a file or stream [*Writer.py*]
-    - Utilities: dump_tags, pretty_print [*Utils.py*]
+      XML stream [*PhyloXMLIO.py*]
+    - Write a complete PhyloXML object to a file or stream, passing XSD
+      validation [*PhyloXMLIO.py*]
+    - Utilities: dump_tags [*Parser.py*], pretty_print [*Utils.py*]
     - Methods to convert PhyloXML objects to core Biopython types:
         - PhyloXML.Sequence to/from SeqRecord (*in progress*)
         - PhyloXML.BranchColor to HTML/CSS-friendly hex string [*to_rgb*]
@@ -79,70 +79,62 @@ Timeline
     - build a complete phyloXML object from each example file
     - parse individual phylogenies as needed
     - create trees of at least 3 clades deep
-    - instantiate Tier 0, 1, 2 elements
+    - instantiate all phyloXML element types
     - round-trip parsing and serialization of three example files
 
     Documentation (Biopython wiki):
 
-    - Explain xml.etree, list 3rd-party equivalents for Py2.4
-    - Usage: parsing, writing, object navigation, Bio integration, utilities
-    - Performance: read, parse, write
+    - PhyloXML:
+        - Explain xml.etree, list 3rd-party equivalents for Py2.4
+        - Usage: parsing, writing, object navigation, Bio integration, utilities
+        - Performance: read, parse, write
 
-:7/20:
-    Extend the core to the rest of the spec:
+    - TreeIO:
+        - stub
 
-    - Adding unit tests and classes to support the remaining (non-core)
-      phyloXML elements
-    - Use the schema document to validate the input file -- or at least, make
-      Writer use the correct sub-node ordering
-    - Take a stab at phyloXML 1.10 support
-
-    Documentation:
-
-    - Address remaining comments from code/doc review
-    - Revisit docstrings for all classes, functions, methods; consider enabling
-      epydoc formatting
-
-    Enhancements:
-
-    - Improve the SeqRecord conversion
-    - Warnings: show the offending line at the previous level in the stack
+    - Tree:
+        - stub
 
 :7/27:
     Finish implementing the phyloXML spec:
 
-    - Clean up and reorganize any code that needs it
-    - Hopefully, the entire phyloXML spec is covered by the end of this week
+    - Scan "simple types" for restricted tokens; check strings in constructors
+    - Take a stab at phyloXML 1.10 support (need a 'version' arg to Writer?)
+    - Clean up and reorganize any code that needs it (e.g. Parser is weird)
 
     Enhancements (time permitting):
 
+    - Improve the SeqRecord conversion
     - Work on Bio.Tree.BaseTree compatibility with BioSQL's PhyloDB extension
     - Port common methods to Bio.Tree.BaseTree -- see Bio.Nexus.Tree, Bioperl
-      node objects, PyCogent
+      node objects, PyCogent, p4-phylogenetics
+    - Tree method: build_index (set left_idx, right_idx on all nodes):
+        - calculate left/right indexes for nested-set representation
+        - see http://www.oreillynet.com/pub/a/network/2002/11/27/bioconf.html
+
     - Export to networkx (http://networkx.lanl.gov/) -- also get graphviz export
       for free, via networkx.to_agraph()
 
-    Wiki documentation:
-
-    - Split off PhyloXML page into TreeIO (mainly parser/writer sections) and
-      Tree (how the base tree objects work -- will be brief until Nexus
-      integration)
-    - Check module names and imports in examples -- they've changed
-    - New since the last push: find(), singular properties, improved str()
-
 :8/3:
-    Documentation:
+    Automated testing:
 
-    - Ensure all completed functionality is covered
     - Re-run performance benchmarks
     - Run tests and benchmarks on alternate platforms
+    - Check epydoc's generated API documentation
+
+    Update wiki documentation with new features:
+
+    - Tree: find(), base classes
+    - TreeIO: 'phyloxml' and 'nexus' wrappers; PhyloXMLIO extras; warn that
+      Nexus wrappers don't return Bio.Tree objects yet
+    - PhyloXML: singular properties, improved str()
 
     Discuss merging back upstream.
 
 :8/10:
     Soft "pencils down":
 
-    - Scrub documentation
+    - Scrub wiki documentation -- PhyloXML, Tree, TreeIO
     - Check unit tests for complete coverage
     - NB: Deadline is Aug. 17
 
@@ -159,41 +151,23 @@ See:
 
 Tier 0 (essential tree structure):
 
-    - done: phyloxml, phylogeny, clade
+    phyloxml, phylogeny, clade
 
 Tier 1 (used in all example files):
 
-    - done: branch_length, confidence, name, taxonomy, code
+    branch_length, confidence, name, taxonomy, code
 
 Tier 2 (used in at least one example file, but not all):
 
-    - done:
-        accession, alt, annotation, clade_relation, common_name, date, desc,
-        description, distribution, domain, domain_architecture, duplications,
-        events, id, lat, long, mol_seq, point, property, rank, scientific_name,
-        sequence, sequence_relation, speciations, symbol, uri, value
+    accession, alt, annotation, bc, binary_characters, clade_relation,
+    common_name, date, desc, description, distribution, domain,
+    domain_architecture, duplications, events, gained, id, lat, long, lost,
+    mol_seq, point, present, property, rank, reference, scientific_name,
+    sequence, sequence_relation, speciations, symbol, uri, value
 
 Tier 3 (not found in example files):
 
-    - to do:
-        absent, 
-        bc, 
-        binary_characters,
-        gained,
-        lost,
-        polygon,
-        present,
-        reference,
-        width
-
-    - done:
-        color,
-        red,
-        blue,
-        green,
-        location,
-        losses,
-        node_id
+    absent, color, red, blue, green, location, losses, polygon, node_id, width
 
 Namespaces:
 
