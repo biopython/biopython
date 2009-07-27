@@ -5,6 +5,7 @@
 
 """I/O function wrappers for Bio.Nexus trees.
 """
+__docformat__ = "epytext en"
 
 from Bio.Nexus import Nexus
 

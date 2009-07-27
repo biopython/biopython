@@ -597,11 +597,13 @@ class MethodTests(unittest.TestCase):
     # Type conversions
 
     def test_clade_to_phylogeny(self):
+        """Convert a Clade object to a new Phylogeny."""
         clade = self.phyloxml.phylogenies[0].clade[0]
         tree = clade.to_phylogeny(rooted=True)
         self.assert_(isinstance(tree, Tree.Phylogeny))
 
     def test_phylogeny_to_phyloxml(self):
+        """Convert a Phylogeny object to a new Phyloxml."""
         tree = self.phyloxml.phylogenies[0]
         doc = tree.to_phyloxml()
         self.assert_(isinstance(doc, Tree.Phyloxml))

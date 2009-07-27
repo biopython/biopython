@@ -8,6 +8,7 @@
 Instantiates Tree elements from a parsed PhyloXML file, and constructs an XML
 file from a Tree.PhyloXML object.
 """
+__docformat__ = "epytext en"
 
 import sys
 import warnings
@@ -79,11 +80,13 @@ class PhyloXMLError(Exception):
 # Functions I wish ElementTree had
 
 def local(tag):
+    """Extract the local tag from a namespaced tag name."""
     if tag[0] is '{':
         return tag[tag.index('}')+1:]
     return tag
 
 def split_namespace(tag):
+    """Split a tag into namespace and local tag strings."""
     try:
         return tag[1:].split('}', 1)
     except:
@@ -95,20 +98,36 @@ def _ns(tag, namespace=NAMESPACES['phy']):
     return '{%s}%s' % (namespace, tag)
 
 def get_child_as(parent, tag, construct):
+    """Find a child node by tag, and pass it through a constructor.
+
+    Returns None if no matching child is found.
+    """
     child = parent.find(_ns(tag))
     if child is not None:
         return construct(child)
 
 def get_child_text(parent, tag, construct=unicode):
+    """Find a child node by tag; pass its text through a constructor.
+
+    Returns None if no matching child is found.
+    """
     child = parent.find(_ns(tag))
     if child is not None:
         return child.text and construct(child.text) or None
 
 def get_children_as(parent, tag, construct):
+    """Find child nodes by tag; pass each through a constructor.
+
+    Returns None if no matching child is found.
+    """
     return [construct(child) for child in 
             parent.findall(_ns(tag))]
 
 def get_children_text(parent, tag, construct=unicode):
+    """Find child nodes by tag; pass each node's text through a constructor.
+
+    Returns None if no matching child is found.
+    """
     return [construct(child.text) for child in 
             parent.findall(_ns(tag))
             if child.text]
@@ -161,8 +180,9 @@ def collapse_wspace(text):
     """Replace all spans of whitespace with a single space character.
 
     Also remove leading and trailing whitespace. See "Collapse Whitespace
-    Policy" in the phyloXML spec glossary.
-    http://phyloxml.org/documentation/version_100/phyloxml.xsd.html#Glossary
+    Policy" in the U{ phyloXML spec glossary
+    <http://phyloxml.org/documentation/version_100/phyloxml.xsd.html#Glossary>
+    }.
     """
     if text is not None:
         return ' '.join(text.split())
@@ -170,8 +190,9 @@ def collapse_wspace(text):
 def replace_wspace(text):
     """Replace tab, LF and CR characters with spaces, but don't collapse.
 
-    See "Replace Whitespace Policy" in the phyloXML spec glossary:
-    http://phyloxml.org/documentation/version_100/phyloxml.xsd.html#Glossary
+    See "Replace Whitespace Policy" in the U{ phyloXML spec glossary
+    <http://phyloxml.org/documentation/version_100/phyloxml.xsd.html#Glossary>
+    }.
     """
     for char in ('\t', '\n', '\r'):
         if char in text:
@@ -195,6 +216,8 @@ def read(file):
     current clade is finished -- this shouldn't be a problem because clade is
     the main recursive element, and non-clade nodes below this level are of
     bounded size.
+
+    @rtype: Bio.Tree.PhyloXML.Phyloxml
     """
     # get an iterable context for XML parsing events
     context = iter(ElementTree.iterparse(file, events=('start', 'end')))
@@ -228,6 +251,8 @@ def parse(file):
 
     This ignores any additional data stored at the top level, but may be more
     memory-efficient than the read() function.
+
+    @return: a generator of Bio.Tree.PhyloXML.Phylogeny objects.
     """
     context = iter(ElementTree.iterparse(file, events=('start', 'end')))
     event, root = context.next()
@@ -237,6 +262,8 @@ def parse(file):
 
 
 class Parser(object):
+    """Methods for parsing all phyloXML nodes from an XML stream.
+    """
 
     ## Index of phyloxml tags and corresponding classes
 
@@ -375,6 +402,7 @@ class Parser(object):
 
     @classmethod
     def _parse_clade(cls, parent, context):
+        """Parse a Clade node and its children, recursively."""
         if 'branch_length' in parent.keys():
             parent.set('branch_length', float(parent.get('branch_length')))
         clade = Tree.Clade(**parent.attrib)
@@ -574,7 +602,7 @@ class Parser(object):
     def to_sequence_relation(cls, elem):
         return Tree.SequenceRelation(
                 elem.get('type'), elem.get('id_ref_0'), elem.get('id_ref_1'),
-                distance=elem.get('distance'),
+                distance=_float(elem.get('distance')),
                 confidence=get_child_as(elem, 'confidence', cls.to_confidence))
 
     @classmethod
@@ -618,6 +646,7 @@ def write(phyloxml, file, encoding=None):
 # Helpers
 
 def serialize(value):
+    """Convert a Python primitive to a phyloXML-compatible Unicode string."""
     if isinstance(value, float):
         return unicode(value).upper()
     elif isinstance(value, bool):
@@ -665,7 +694,7 @@ def _handle_simple(tag):
 
 
 class Writer(object):
-    """
+    """Methods for serializing a phyloXML object to XML.
     """
     def __init__(self, phyloxml):
         """Build an ElementTree from a phyloXML object."""
@@ -673,6 +702,7 @@ class Writer(object):
         self._tree = ElementTree.ElementTree(self.phyloxml(phyloxml))
 
     def get_etree(self):
+        """Retrieve an ElementTree object representing the phyloXML file."""
         return self._tree
 
     # Convert classes to ETree elements

@@ -4,8 +4,8 @@
 # as part of this package.
 
 """Utilities for handling and checking PhyloXML object trees.
-
 """
+__docformat__ = "epytext en"
 
 import sys
 

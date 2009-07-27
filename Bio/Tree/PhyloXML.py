@@ -4,8 +4,8 @@
 # as part of this package.
 
 """Classes corresponding to phyloXML elements.
-
 """
+__docformat__ = "epytext en"
 
 import re
 import warnings
@@ -58,12 +58,9 @@ class Phyloxml(PhyloElement):
     Contains an arbitrary number of Phylogeny elements, possibly followed by
     elements from other namespaces.
 
-    Attributes:
-        (namespace definitions)
-
-    Children:
-        phylogenies []
-        other []
+    @param attributes: (XML namespace definitions)
+    @param phylogenies: list of phylogenetic trees
+    @param other: list of arbitrary non-phyloXML elements, if any
     """
     def __init__(self, attributes, phylogenies=None, other=None):
         self.attributes = attributes
@@ -92,7 +89,18 @@ class Phyloxml(PhyloElement):
 
 
 class Other(PhyloElement):
-    """Container for non-phyloXML elements in the tree."""
+    """Container for non-phyloXML elements in the tree.
+
+    Usually, an Other object will have either a 'value' or a non-empty list
+    of 'children', but not both. This is not enforced here, though.
+
+    @param tag: local tag for the XML node
+    @param namespace: XML namespace for the node -- should not be the default
+        phyloXML namespace.
+    @param attributes: string attributes on the XML node
+    @param value: text contained directly within this XML node
+    @param children: list of child nodes, if any (also Other instances)
+    """
     def __init__(self, tag, namespace=None, attributes=None, value=None,
             children=None):
         self.tag = tag
@@ -109,23 +117,21 @@ class Other(PhyloElement):
 class Phylogeny(PhyloElement, BaseTree.Tree):
     """A phylogenetic tree.
 
-    Attributes:
-        rooted
-        rerootable
-        branch_length_unit
-        type
+    @param rooted: True if this tree is rooted
+    @param rerootable: True if this tree is rerootable
+    @param branch_length_unit: unit for branch_length values on clades
+    @type type: str
 
-    Children:
-        name
-        id
-        description
-        date
-        confidences []
-        clade
-        clade_relations []
-        sequence_relations []
-        properties []
-        other []
+    @param name: string identifier for this tree, not required to be unique
+    @param id: unique identifier for this tree (type Id)
+    @param description: plain-text description
+    @param date: date for the root node of this tree (type Date)
+    @param confidences: list of Confidence objects for this tree
+    @param clade: the root node/clade of this tree
+    @param clade_relations: list of CladeRelation objects
+    @param sequence_relations: list of SequenceRelation objects
+    @param properties: list of Property objects
+    @param other: list of non-phyloXML elements (type Other)
     """
     def __init__(self, rooted,
             rerootable=None, branch_length_unit=None, type=None,
@@ -170,42 +176,32 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
 
     Used recursively, describes the topology of a phylogenetic tree.
 
-    The parent branch length of a clade can be described either with the
-    'branch_length' element or the 'branch_length' attribute (it is not
-    recommended to use both at the same time, though). Usage of the
-    'branch_length' attribute allows for a less verbose description.
-
-    Element 'confidence' is used to indicate the support for a clade/parent
-    branch.
-
-    Element 'events' is used to describe such events as gene-duplications at the
-    root node/parent branch of a clade.
-
-    Element 'width' is the branch width for this clade (including parent
-    branch). Both 'color' and 'width' elements apply for the whole clade unless
+    Both 'color' and 'width' elements apply for the whole clade unless
     overwritten in-sub clades.
 
-    Attributes:
-        branch_length
-        id_source -- link other elements to a clade (on the xml-level)
+    @param branch_length: parent branch length of this clade
+    @param id_source: link other elements to a clade (on the xml-level)
 
-    Children:
-        name
-        branch_length -- equivalent to the attribute
-        confidences []
-        width
-        color
-        node_id
-        taxonomies []
-        sequences []
-        events
-        binary_characters
-        distributions []
-        date
-        references []
-        properties []
-        clades [] -- recursive
-        other []
+    @param name: short string label for this clade
+    @param confidences: list of Confidence objects, used to indicate the
+        support for a clade/parent branch.
+    @param width: branch width for this clade (including parent branch)
+    @param color: color used for graphical display of this clade
+    @param node_id: unique identifier for the root node of this clade
+    @param taxonomies: list of Taxonomy objects
+    @param sequences: list of Sequence objects
+    @param events: describe such events as gene-duplications at the root
+        node/parent branch of this clade
+    @param binary_characters: a BinaryCharacters object
+    @param distributions: list of Distribution objects
+    @param date: a date for the root node of this clade (type Date)
+    @param references: list of Reference objects
+    @param properties: list of Property objects
+    @param clades: list of sub-clades (type Clade)
+    @param other: list of non-phyloXML objects
+
+    @param left_idx: precomputed values for certain tree operations
+    @param right_idx: precomputed values for certain tree operations
     """
     def __init__(self, parent=None,
             # Attributes
@@ -311,17 +307,16 @@ class Annotation(PhyloElement):
     examples of acceptable values for the ref attribute: 'GO:0008270',
     'KEGG:Tetrachloroethene degradation', 'EC:1.1.1.1').
 
-    Attributes:
-        ref
-        source
-        evidence -- describe evidence as free text (e.g. 'experimental')
-        type
+    @type ref: str
+    @param source: plain-text source for this annotation
+    @param evidence: describe evidence as free text (e.g. 'experimental')
+    @type type: str
 
-    Children:
-        desc -- free text description
-        confidence -- state the type and value of support
-        properties [] -- typed and referenced annotations from external resources
-        uri
+    @param desc: free text description
+    @param confidence: state the type and value of support (type Confidence)
+    @param properties: list of typed and referenced annotations from external
+        resources
+    @type uri: Uri
     """
     def __init__(self, 
             # Attributes
@@ -377,9 +372,9 @@ class BranchColor(PhyloElement):
 
         Example:
 
-        >>> bc = BranchColor(12, 200, 100)
-        >>> bc.to_rgb()
-        '0cc864'
+            >>> bc = BranchColor(12, 200, 100)
+            >>> bc.to_rgb()
+            '0cc864'
         """
         return hex(self.red * (16**4)
                 + self.green * (16**2)
@@ -391,14 +386,12 @@ class CladeRelation(PhyloElement):
 
     For example, this could be used to describe multiple parents of a clade.
 
-    Attributes:
-        id_ref_0
-        id_ref_1
-        distance
-        type
+    @type id_ref_0: str
+    @type id_ref_1: str
+    @type distance: str
+    @type type: str
 
-    Child:
-        confidence
+    @type confidence: Confidence
     """
     def __init__(self, type, id_ref_0, id_ref_1,
             distance=None, confidence=None):
@@ -411,6 +404,9 @@ class Confidence(PhyloElement):
 
     For example, this can be used to express the bootstrap support value of a
     clade (in which case the 'type' attribute is 'bootstrap').
+
+    @type value: float
+    @type type: str
     """
     def __init__(self, value, type):
         self.value = value
@@ -424,13 +420,20 @@ class Date(PhyloElement):
     with the 'desc' element' (e.g. 'Silurian'). If a numerical value is used, it
     is recommended to employ the 'unit' attribute.
 
-    Attributes:
-        unit -- type of numerical value (e.g. 'mya' for 'million years ago')
-        range (decimal) -- Margin on the numerical value? (maybe deprecated)
+    @param unit: type of numerical value (e.g. 'mya' for 'million years ago')
+    @param range: margin on the numerical value (DEPRECATED)
+
+    @param desc: plain-text description of the date
+    @type value: float
+
+    New in phyloXML 1.10:
+    @param minimum:
+    @param maximum:
     """
-    def __init__(self, value=None, desc=None, unit=None, range=None):
+    def __init__(self, value=None, desc=None, unit=None, range=None,
+            minimum=None, maximum=None):
         PhyloElement.__init__(self, value=value, desc=desc, unit=unit,
-                range=range)
+                range=range, minimum=minimum, maximum=maximum)
 
     def __str__(self):
         """Show the class name and the human-readable date."""
@@ -460,8 +463,8 @@ class Distribution(PhyloElement):
 class DomainArchitecture(PhyloElement):
     """Domain architecture of a protein.
 
-    Attribute 'length' is the total length of the protein.
-    'domains' is a list of ProteinDomain objects.
+    @param length: total length of the protein sequence (type int)
+    @param domains: list of ProteinDomain objects
     """
     def __init__(self, length=None, domains=None):
         # assert len(domains)
@@ -469,7 +472,12 @@ class DomainArchitecture(PhyloElement):
 
 
 class Events(PhyloElement):
-    """Events at the root node of a clade (e.g. one gene duplication)."""
+    """Events at the root node of a clade (e.g. one gene duplication).
+
+    All attributes are set to None by default, but this object can also be
+    treated as a dictionary, in which case None values are treated as missing
+    keys and deleting a key resets that attribute's value back to None.
+    """
     ok_type = set(('transfer', 'fusion', 'speciation_or_duplication', 'other',
                     'mixed', 'unassigned'))
 
@@ -524,7 +532,8 @@ class Events(PhyloElement):
 class Id(PhyloElement):
     """A general purpose identifier element.
 
-    Allows to indicate the type (or source) of an identifier. 
+    Allows to indicate the type (or source) of an identifier, e.g. NCBI, along
+    with the value itself.
     """
     def __init__(self, value, type=None):
         PhyloElement.__init__(self, type=type, value=value)
@@ -544,34 +553,35 @@ class Point(PhyloElement):
 
 
 class Polygon(PhyloElement):
+    """A polygon defined by a list of 'Points' (used by element 'Distribution').
+
+    @param points: list of 3 or more points representing vertices.
     """
-    """
+    def __init__(self, points=None):
+        self.points = points or []
+
 
 class Property(PhyloElement):
     """A typed and referenced property from an external resources.
 
-    The value of a property is its mixed (free text) content. Properties can be
-    attached to 'Phylogeny', 'Clade', and 'Annotation'.
+    Can be attached to 'Phylogeny', 'Clade', and 'Annotation' objects.
 
-    Attributes:
-        ref -- reference to an external resource
+    @param ref: reference to an external resource, e.g. "NOAA:depth"
 
-        unit -- the unit of the property. (optional)
+    @param unit: the unit of the property, e.g. "METRIC:m" (optional)
 
-        datatype -- indicates the type of a property and is limited to
-            xsd-datatypes (e.g. 'xsd:string', 'xsd:boolean', 'xsd:integer',
-            'xsd:decimal', 'xsd:float', 'xsd:double', 'xsd:date', 'xsd:anyURI').
+    @param datatype: indicates the type of a property and is limited to
+        xsd-datatypes (e.g. 'xsd:string', 'xsd:boolean', 'xsd:integer',
+        'xsd:decimal', 'xsd:float', 'xsd:double', 'xsd:date', 'xsd:anyURI').
 
-        applies_to -- indicates the item to which a property applies to (e.g.
-            'node' for the parent node of a clade, 'parent_branch' for the
-            parent branch of a clade).
+    @param applies_to: indicates the item to which a property applies to (e.g.
+        'node' for the parent node of a clade, 'parent_branch' for the parent
+        branch of a clade, or just 'clade').
 
-        id_ref -- allows to attached a property specifically to one element (on
-            the xml-level). (optional)
+    @param id_ref: allows to attached a property specifically to one element
+        (on the xml-level). (optional)
 
-    Example:
-        <property datatype="xsd:integer" ref="NOAA:depth" applies_to="clade"
-        unit="METRIC:m"> 200 </property> 
+    @type value: str
     """
     def __init__(self, value, ref, applies_to, datatype,
             unit=None, id_ref=None):
@@ -582,11 +592,17 @@ class Property(PhyloElement):
 class ProteinDomain(PhyloElement):
     """Represents an individual domain in a domain architecture.
 
-    Attributes:
-        start (non-negative integer)
-        end (non-negative integer)
-        confidence (float) -- can be used to store (i.e.) E-values.
-        id -- name/unique identifier 
+    The locations use 0-based indexing, as most Python objects including
+    SeqFeature do, rather than the usual biological convention starting at 1.
+    This means the start and end attributes can be used directly as slice
+    indexes on Seq objects.
+
+    @param start: start of the domain on the sequence, using 0-based indexing
+    @type start: non-negative integer
+    @param end: end of the domain on the sequence
+    @type end: non-negative integer
+    @param confidence: can be used to store e.g. E-values. (type float)
+    @param id: unique identifier/name
     """
     # TODO: confirm that 'start' counts from 1, not 0
     def __init__(self, value, start, end, confidence=None, id=None):
@@ -622,28 +638,28 @@ class Reference(PhyloElement):
 class Sequence(PhyloElement):
     """A molecular sequence (Protein, DNA, RNA) associated with a node.
 
-    'symbol' is a short (maximal ten characters) symbol of the sequence (e.g.
-    'ACTM') whereas 'name' is used for the full name (e.g. 'muscle Actin').
+    'symbol' is a 'ACTM')
+    
+    'name' is 
 
     One intended use for 'id_ref' is to link a sequence to a taxonomy (via the
     taxonomy's 'id_source') in case of multiple sequences and taxonomies per
     node. 
 
-    Attributes:
-        type -- type of sequence ('dna', 'rna', or 'aa').
-        id_ref
-        id_source
+    @param type: type of sequence ('dna', 'rna', or 'aa').
+    @type id_ref: str
+    @type id_source: str
 
-    Children:
-        symbol
-        accession
-        name
-        location -- location of a sequence on a genome/chromosome.
-        mol_seq -- the actual sequence
-        uri
-        annotations []
-        domain_architecture
-        other []
+    @param symbol: short  symbol of the sequence, e.g. 'ACTM' (max. 10 chars)
+    @type accession: Accession
+    @param name: full name of the sequence, e.g. 'muscle Actin'
+    @param location: location of a sequence on a genome/chromosome.
+    @param mol_seq: the actual sequence, as a string
+    @type uri: Uri
+    @param annotations: list of Annotation objects
+    @param domain_architecture: protein domains on this sequence (type
+        DomainArchitecture)
+    @param other: list of non-phyloXML elements (type Other)
     """
     re_symbol = re.compile(r'\S{1,10}')
     re_mol_seq = re.compile(r'[a-zA-Z\.\-\?\*_]+')
@@ -743,17 +759,20 @@ class SequenceRelation(PhyloElement):
     For example, this could be used to describe an orthology (in which case
     attribute 'type' is 'orthology'). 
 
-    Attributes:
-        id_ref_0
-        id_ref_1
-        distance
-        type
+    @param id_ref_0: first sequence reference identifier
+    @param id_ref_1: second sequence reference identifier
+    @param distance: distance between the two sequences (type float)
+    @param type: describe the type of relationship
 
-    Child:
-        confidence
+    @type confidence: Confidence
     """
+    ok_type = set(('orthology', 'one_to_one_orthology', 'super_orthology',
+        'paralogy', 'ultra_paralogy', 'xenology', 'unknown', 'other'))
+
+
     def __init__(self, type, id_ref_0, id_ref_1,
             distance=None, confidence=None):
+        check_str(type, self.ok_type.__contains__)
         PhyloElement.__init__(self, distance=distance, type=type,
                 id_ref_0=id_ref_0, id_ref_1=id_ref_1, confidence=confidence)
 
@@ -761,23 +780,20 @@ class SequenceRelation(PhyloElement):
 class Taxonomy(PhyloElement):
     """Describe taxonomic information for a clade.
 
-    Element 'code' is intended to store UniProt/Swiss-Prot style organism codes
-    (e.g. 'APLCA' for the California sea hare 'Aplysia californica').
 
-    Element 'id' is used for a unique identifier of a taxon (for example '6500'
-    with 'ncbi_taxonomy' as 'type' for the California sea hare).
 
-    Attributes:
-        id_source -- link other elements to a taxonomy (on the XML level)
+    @param id_source: link other elements to a taxonomy (on the XML level)
 
-    Children:
-        id
-        code
-        scientific_name
-        common_names []
-        rank
-        uri
-        other []
+    @param id: unique identifier of a taxon, e.g. Id('6500',
+        type='ncbi_taxonomy') for the California sea hare
+    @param code: store UniProt/Swiss-Prot style organism codes, e.g. 'APLCA'
+        for the California sea hare 'Aplysia californica' (restricted string)
+    @param scientific_name: the standard scientific name for this organism,
+        e.g. 'Aplysia californica' for the California sea hare
+    @param common_names: list of common names for this organism
+    @param rank: taxonomic rank (restricted string)
+    @type uri: Uri
+    @param other: list of non-phyloXML elements (type Other)
     """
     re_code = re.compile(r'[a-zA-Z0-9_]{2,10}')
     ok_rank = set(('domain', 'kingdom', 'subkingdom', 'branch', 'infrakingdom',
@@ -830,43 +846,4 @@ class Uri(PhyloElement):
     """
     def __init__(self, value, desc=None, type=None):
         PhyloElement.__init__(self, value=value, desc=desc, type=type)
-
-
-# Simple types
-
-class AppliesTo(PhyloElement):
-    pass
-
-class Doi(PhyloElement):
-    pass
-
-# class EventType(PhyloElement):
-#     pass
-
-# class MolSeq(PhyloElement):
-#     pass
-
-class PropertyDataType(PhyloElement):
-    pass
-
-# class Rank(PhyloElement):
-#     pass
-
-class SequenceRelationType(PhyloElement):
-    pass
-
-# class SequenceSymbol(PhyloElement):
-#     pass
-
-class SequenceType(PhyloElement):
-    pass
-
-# class id_ref(PhyloElement):
-#     pass
-
-# class id_source(PhyloElement):
-#     pass
-
-# class ref(PhyloElement):
-#     pass
 
