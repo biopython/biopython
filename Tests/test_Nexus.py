@@ -4,12 +4,14 @@ import tempfile
 import cStringIO
 import sys
 
-from Bio.Nexus import Nexus
+from Bio.Nexus import Nexus, Trees
 
 
 class NexusTest1(unittest.TestCase):
     def setUp(self):
-        self.handle = open("Nexus/test_Nexus_input.nex")
+        self.testfile_dir = "Nexus"
+        self.handle = open(os.path.join(self.testfile_dir, 
+            "test_Nexus_input.nex"))
 
     def tearDown(self):
         self.handle.close()
@@ -334,7 +336,48 @@ usertype matrix_test stepmatrix=5
 Root:  16
 """)
         self.assertEqual(t3.is_compatible(t2,threshold=0.3), [])
-        
+
+    def test_internal_node_labels(self):
+        """Handle text labels on internal nodes.
+        """
+        ts1b = "(Cephalotaxus:125.000000,(Taxus:100.000000,Torreya:100.000000)"\
+               "TT1:25.000000)Taxaceae:90.000000;"
+        tree = Trees.Tree(ts1b)
+        assert self._get_flat_nodes(tree) == [('Taxaceae', 90.0, None, None),
+                ('Cephalotaxus', 125.0, None, None), ('TT1', 25.0, None, None),
+                ('Taxus', 100.0, None, None), ('Torreya', 100.0, None, None)]
+
+        ts1c = "(Cephalotaxus:125.000000,(Taxus:100.000000,Torreya:100.000000)"\
+                "25.000000)90.000000;"
+        tree = Trees.Tree(ts1c)
+        assert self._get_flat_nodes(tree) == [(None, 90.0, None, None),
+                ('Cephalotaxus', 125.0, None, None), (None, 25.0, None, None),
+                ('Taxus', 100.0, None, None), ('Torreya', 100.0, None, None)]
+
+        ts2 = "(((t9:0.385832, (t8:0.445135,t4:0.41401)C:0.024032)B:0.041436,"\
+          "t6:0.392496)A:0.0291131, t2:0.497673, ((t0:0.301171,"\
+          "t7:0.482152)E:0.0268148, ((t5:0.0984167,t3:0.488578)G:0.0349662,"\
+          "t1:0.130208)F:0.0318288)D:0.0273876);"
+        tree = Trees.Tree(ts2)
+
+        large_ex_handle = open(os.path.join(self.testfile_dir,
+            "int_node_labels.nex"))
+        tree = Trees.Tree(large_ex_handle.read())
+        large_ex_handle.close()
+
+    def _get_flat_nodes(self, tree):
+        cur_nodes = [tree.node(tree.root)]
+        nodedata = []
+        while len(cur_nodes) > 0:
+            new_nodes = []
+            for cur_node in cur_nodes:
+                nodedata.append((cur_node.data.taxon,
+                    cur_node.data.branchlength, cur_node.data.support,
+                    cur_node.data.comment))
+                new_nodes.extend([tree.node(nid) for nid in
+                    cur_node.get_succ()])
+            cur_nodes = new_nodes
+        return nodedata
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
