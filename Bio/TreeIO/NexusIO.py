@@ -14,9 +14,11 @@ def read(file):
     if not hasattr(file, 'read'):
         file = open(file, 'r')
         do_close = True
-    obj = Nexus.Nexus(file)
-    if do_close:
-        file.close()
+    try:
+        obj = Nexus.Nexus(file)
+    finally:
+        if do_close:
+            file.close()
     return obj
 
 
@@ -30,7 +32,9 @@ def write(obj, file, **kwargs):
     if not hasattr(file, 'write'):
         file = open(file, 'w+')
         do_close = True
-    ohandle = Nexus.Nexus.write_nexus_data(obj, file, **kwargs)
-    if do_close:
-        file.close()
+    try:
+        ohandle = Nexus.Nexus.write_nexus_data(obj, file, **kwargs)
+    finally:
+        if do_close:
+            file.close()
     return ohandle
