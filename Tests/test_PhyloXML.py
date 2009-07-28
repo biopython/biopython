@@ -3,8 +3,7 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Unit tests for the Bio.PhyloXML module.
-
+"""Unit tests for the PhyloXML and PhyloXMLIO modules.
 """
 
 import os
@@ -66,7 +65,7 @@ class UtilTests(unittest.TestCase):
                 (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA),
                     # unzip(EX_METAZOA), unzip(EX_NCBI),
                     ),
-                (387, 748, 164, 16208, 214912, 648554)):
+                (387, 748, 167, 16208, 214912, 648554)):
             phx = PhyloXMLIO.read(source)
             output = StringIO()
             Utils.pretty_print(phx, output)
@@ -335,14 +334,14 @@ class TreeTests(unittest.TestCase):
         silurian = tree.clade[0,0].date
         devonian = tree.clade[0,1].date
         ediacaran = tree.clade[1].date
-        for date, rang, desc, val in izip(
+        for date, desc, val in izip(
                 (silurian, devonian, ediacaran),
-                (10, 20, 30),
+                # (10, 20, 30), # range is deprecated
                 ('Silurian', 'Devonian', 'Ediacaran'),
                 (425, 320, 600)):
             self.assert_(isinstance(date, Tree.Date))
             self.assertEqual(date.unit, 'mya')
-            self.assertAlmostEqual(date.range, rang)
+            # self.assertAlmostEqual(date.range, rang)
             self.assertEqual(date.desc, desc)
             self.assertAlmostEqual(date.value, val)
 
@@ -471,7 +470,7 @@ class TreeTests(unittest.TestCase):
             self.assertEqual(seq.accession.source, 'UniProtKB')
             self.assertEqual(seq.accession.value, acc)
             self.assertEqual(seq.name, name)
-            self.assertEqual(seq.mol_seq, mol_seq)
+            self.assertEqual(seq.mol_seq.value, mol_seq)
             self.assertEqual(seq.annotations[0].ref, ann_refs[0])
             self.assertEqual(seq.annotations[1].ref, ann_refs[1])
 
@@ -497,14 +496,14 @@ class TreeTests(unittest.TestCase):
         tax5 = trees[5].clade[0,0].taxonomies[0]
         self.assert_(isinstance(tax5, Tree.Taxonomy))
         self.assertEqual(tax5.id.value, '6645')
-        self.assertEqual(tax5.id.type, 'NCBI')
+        self.assertEqual(tax5.id.provider, 'NCBI')
         self.assertEqual(tax5.code, 'OCTVU')
         self.assertEqual(tax5.scientific_name, 'Octopus vulgaris')
         # Nile monitor
         tax9 = trees[9].clade[0].taxonomies[0]
         self.assert_(isinstance(tax9, Tree.Taxonomy))
         self.assertEqual(tax9.id.value, '62046')
-        self.assertEqual(tax9.id.type, 'NCBI')
+        self.assertEqual(tax9.id.provider, 'NCBI')
         self.assertEqual(tax9.scientific_name, 'Varanus niloticus')
         self.assertEqual(tax9.common_names[0], 'Nile monitor')
         self.assertEqual(tax9.rank, 'species')

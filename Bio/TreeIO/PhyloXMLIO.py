@@ -515,10 +515,12 @@ class Parser(object):
     @classmethod
     def to_date(cls, elem):
         return Tree.Date(
-                value=get_child_text(elem, 'value', float),
-                desc=collapse_wspace(get_child_text(elem, 'desc')),
                 unit=elem.get('unit'),
-                range=_float(elem.get('range')))
+                desc=collapse_wspace(get_child_text(elem, 'desc')),
+                value=get_child_text(elem, 'value', float),
+                minimum=get_child_text(elem, 'minimum', float),
+                maximum=get_child_text(elem, 'maximum', float),
+                )
 
     @classmethod
     def to_distribution(cls, elem):
@@ -552,7 +554,15 @@ class Parser(object):
 
     @classmethod
     def to_id(cls, elem):
-        return Tree.Id(elem.text.strip(), elem.get('type'))
+        provider = elem.get('provider') or elem.get('type')
+        return Tree.Id(elem.text.strip(), provider)
+
+    @classmethod
+    def to_mol_seq(cls, elem):
+        is_aligned = elem.get('is_aligned')
+        if is_aligned is not None:
+            is_aligned = str2bool(is_aligned)
+        return Tree.MolSeq(elem.text.strip(), is_aligned=is_aligned)
 
     @classmethod
     def to_point(cls, elem):
@@ -561,7 +571,7 @@ class Parser(object):
                 get_child_text(elem, 'lat', float),
                 get_child_text(elem, 'long', float),
                 alt=get_child_text(elem, 'alt', float),
-                )
+                alt_unit=elem.get('alt_unit'))
 
     @classmethod
     def to_polygon(cls, elem):
@@ -588,7 +598,7 @@ class Parser(object):
                 accession=get_child_as(elem, 'accession', cls.to_accession),
                 name=collapse_wspace(get_child_text(elem, 'name')),
                 location=get_child_text(elem, 'location'),
-                mol_seq=get_child_text(elem, 'mol_seq'),
+                mol_seq=get_child_as(elem, 'mol_seq', cls.to_mol_seq),
                 uri=get_child_as(elem, 'uri', cls.to_uri),
                 domain_architecture=get_child_as(elem, 'domain_architecture',
                                                  cls.to_domain_architecture),
@@ -611,7 +621,9 @@ class Parser(object):
                 id=get_child_as(elem, 'id', cls.to_id),
                 code=get_child_text(elem, 'code'),
                 scientific_name=get_child_text(elem, 'scientific_name'),
+                authority=get_child_text(elem, 'authority'),
                 common_names=get_children_text(elem, 'common_name'),
+                synonyms=get_children_text(elem, 'synonym'),
                 rank=get_child_text(elem, 'rank'),
                 uri=get_child_as(elem, 'uri', cls.to_uri),
                 # TODO: handle "other"
@@ -793,8 +805,8 @@ class Writer(object):
     confidence = _handle_complex(_ns('confidence'), ('type',),
             (), has_text=True)
 
-    date = _handle_complex(_ns('date'), ('unit', 'range'),
-            ('desc', 'value'))
+    date = _handle_complex(_ns('date'), ('unit',),
+            ('desc', 'value', 'minimum', 'maximum'))
 
     distribution = _handle_complex(_ns('distribution'), (),
             ( 'desc',
@@ -825,11 +837,14 @@ class Writer(object):
               'confidence',
               ))
 
-    id = _handle_complex(_ns('id'), ('type',), (), has_text=True)
+    id = _handle_complex(_ns('id'), ('provider',), (), has_text=True)
 
-    node_id = _handle_complex(_ns('node_id'), ('type',), (), has_text=True)
+    mol_seq = _handle_complex(_ns('mol_seq'), ('is_aligned',),
+            (), has_text=True)
 
-    point = _handle_complex(_ns('point'), ('geodetic_datum',),
+    node_id = _handle_complex(_ns('node_id'), ('provider',), (), has_text=True)
+
+    point = _handle_complex(_ns('point'), ('geodetic_datum', 'alt_unit'),
             ('lat', 'long', 'alt'))
 
     polygon = _handle_complex(_ns('polygon'), (), (('point', 'points'),))
@@ -862,7 +877,9 @@ class Writer(object):
             ( 'id',
               'code',
               'scientific_name',
+              'authority',
               ('common_name',   'common_names'),
+              ('synonym',   'synonyms'),
               'rank',
               'uri',
               ('other',         'other'),

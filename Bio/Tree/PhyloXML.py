@@ -424,19 +424,16 @@ class Date(PhyloElement):
     is recommended to employ the 'unit' attribute.
 
     @param unit: type of numerical value (e.g. 'mya' for 'million years ago')
-    @param range: margin on the numerical value (DEPRECATED)
 
-    @param desc: plain-text description of the date
     @type value: float
-
-    New in phyloXML 1.10:
-    @param minimum:
-    @param maximum:
+    @param desc: plain-text description of the date
+    @param minimum: lower bound on the date value
+    @param maximum: upper bound on the date value
     """
-    def __init__(self, value=None, desc=None, unit=None, range=None,
+    def __init__(self, value=None, unit=None, desc=None, 
             minimum=None, maximum=None):
-        PhyloElement.__init__(self, value=value, desc=desc, unit=unit,
-                range=range, minimum=minimum, maximum=maximum)
+        PhyloElement.__init__(self, value=value, unit=unit, desc=desc, 
+                minimum=minimum, maximum=maximum)
 
     def __str__(self):
         """Show the class name and the human-readable date."""
@@ -535,24 +532,46 @@ class Events(PhyloElement):
 class Id(PhyloElement):
     """A general purpose identifier element.
 
-    Allows to indicate the type (or source) of an identifier, e.g. NCBI, along
-    with the value itself.
+    Allows to indicate the provider (or authority) of an identifier, e.g. NCBI,
+    along with the value itself.
     """
-    def __init__(self, value, type=None):
-        PhyloElement.__init__(self, type=type, value=value)
+    def __init__(self, value, provider=None):
+        PhyloElement.__init__(self, provider=provider, value=value)
+
+
+class MolSeq(PhyloElement):
+    """Store a molecular sequence.
+
+    @param value: the sequence, as a string
+    @param is_aligned: True is mol_seq is aligned (usu. meaning gaps are
+        introduced and all aligned seqs are the same length)
+    """
+    re_value = re.compile(r'[a-zA-Z\.\-\?\*_]+')
+
+    def __init__(self, value, is_aligned=None):
+        check_str(value, self.re_value.match)
+        self.value = value
+        self.is_aligned = is_aligned
+
+    def __str__(self):
+        return self.value
 
 
 class Point(PhyloElement):
-    """Coordinates of a point, with an optional altitude.
+    """Geographic coordinates of a point, with an optional altitude.
 
     Used by element 'Distribution'.
 
-    Required attribute 'geodetic_datum' is used to indicate the geodetic datum
-    (also called 'map datum'). For example, Google's KML uses 'WGS84'.
+    @param geodetic_datum: indicate the geodetic datum (also called 'map
+        datum'). For example, Google's KML uses 'WGS84'. (required)
+    @param lat: latitude
+    @param long: longitude
+    @param alt: altitude
+    @param alt_unit: unit for the altitude (e.g. 'meter')
     """
-    def __init__(self, geodetic_datum, lat, long, alt=None):
+    def __init__(self, geodetic_datum, lat, long, alt=None, alt_unit=None):
         PhyloElement.__init__(self, geodetic_datum=geodetic_datum,
-                lat=lat, long=long, alt=alt)
+                lat=lat, long=long, alt=alt, alt_unit=alt_unit)
 
 
 class Polygon(PhyloElement):
@@ -665,7 +684,7 @@ class Sequence(PhyloElement):
     taxonomy's 'id_source') in case of multiple sequences and taxonomies per
     node. 
 
-    @param type: type of sequence ('dna', 'rna', or 'aa').
+    @param type: type of sequence ('dna', 'rna', or 'protein').
     @type id_ref: str
     @type id_source: str
 
@@ -681,21 +700,19 @@ class Sequence(PhyloElement):
     @param other: list of non-phyloXML elements (type Other)
     """
     re_symbol = re.compile(r'\S{1,10}')
-    re_mol_seq = re.compile(r'[a-zA-Z\.\-\?\*_]+')
-    ok_type = set(('rna', 'dna', 'aa'))
+    ok_type = set(('rna', 'dna', 'protein'))
 
     def __init__(self, 
             # Attributes
             type=None, id_ref=None, id_source=None,
             # Child nodes
-            symbol=None, accession=None, name=None, location=None, mol_seq=None,
-            uri=None, domain_architecture=None,
+            symbol=None, accession=None, name=None, location=None,
+            mol_seq=None, uri=None, domain_architecture=None,
             # Collections
             annotations=None, other=None,
             ):
         check_str(type, self.ok_type.__contains__)
         check_str(symbol, self.re_symbol.match)
-        check_str(mol_seq, self.re_mol_seq.match)
         PhyloElement.__init__(self, type=type, id_ref=id_ref,
                 id_source=id_source, symbol=symbol, accession=accession,
                 name=name, location=location, mol_seq=mol_seq, uri=uri,
@@ -717,7 +734,7 @@ class Sequence(PhyloElement):
         elif isinstance(record.seq.alphabet, Alphabet.RNAAlphabet):
             kwargs['type'] = 'rna'
         elif isinstance(record.seq.alphabet, Alphabet.ProteinAlphabet):
-            kwargs['type'] = 'aa'
+            kwargs['type'] = 'protein'
 
         # Unpack record.annotations
         annot_attrib = {}
@@ -760,7 +777,7 @@ class Sequence(PhyloElement):
     def to_seqrecord(self):
         alphabets = {'dna': Alphabet.generic_dna,
                      'rna': Alphabet.generic_rna,
-                     'aa': Alphabet.generic_protein}
+                     'protein': Alphabet.generic_protein}
         seqrec = SeqRecord(
                 Seq(self.mol_seq,
                     alphabets.get(self.type, Alphabet.generic_alphabet)),
@@ -803,12 +820,15 @@ class Taxonomy(PhyloElement):
     @param id_source: link other elements to a taxonomy (on the XML level)
 
     @param id: unique identifier of a taxon, e.g. Id('6500',
-        type='ncbi_taxonomy') for the California sea hare
+        provider='ncbi_taxonomy') for the California sea hare
     @param code: store UniProt/Swiss-Prot style organism codes, e.g. 'APLCA'
         for the California sea hare 'Aplysia californica' (restricted string)
     @param scientific_name: the standard scientific name for this organism,
         e.g. 'Aplysia californica' for the California sea hare
+    @param authority: keep the authority, such as 'J. G. Cooper, 1863',
+        associated with the 'scientific_name'
     @param common_names: list of common names for this organism
+    @param synonyms: ???
     @param rank: taxonomic rank (restricted string)
     @type uri: Uri
     @param other: list of non-phyloXML elements (type Other)
@@ -829,15 +849,18 @@ class Taxonomy(PhyloElement):
             # Attributes
             id_source=None,
             # Child nodes
-            id=None, code=None, scientific_name=None, rank=None, uri=None,
+            id=None, code=None, scientific_name=None, authority=None,
+            rank=None, uri=None,
             # Collections
-            common_names=None, other=None,
+            common_names=None, synonyms=None, other=None,
             ):
         check_str(code, self.re_code.match)
         check_str(rank, self.ok_rank.__contains__)
         PhyloElement.__init__(self, id_source=id_source, id=id, code=code,
-                scientific_name=scientific_name, rank=rank, uri=uri,
+                scientific_name=scientific_name, authority=authority,
+                rank=rank, uri=uri,
                 common_names=common_names or [],
+                synonyms=synonyms or [],
                 other=other or [],
                 )
 
