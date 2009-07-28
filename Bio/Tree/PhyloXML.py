@@ -318,6 +318,8 @@ class Annotation(PhyloElement):
         resources
     @type uri: Uri
     """
+    re_ref = re.compile(r'[a-zA-Z0-9_]+:[a-zA-Z0-9_\.\-\s]+')
+
     def __init__(self, 
             # Attributes
             ref=None, source=None, evidence=None, type=None,
@@ -325,6 +327,7 @@ class Annotation(PhyloElement):
             desc=None, confidence=None, uri=None,
             # Collection
             properties=None):
+        check_str(ref, self.re_ref.match)
         PhyloElement.__init__(self, ref=ref, source=source, evidence=evidence,
                 type=type, desc=desc, confidence=confidence, uri=uri,
                 properties=properties or [])
@@ -583,8 +586,25 @@ class Property(PhyloElement):
 
     @type value: str
     """
+    re_ref = re.compile(r'[a-zA-Z0-9_]+:[a-zA-Z0-9_\.\-\s]+')
+    ok_applies_to = set(('phylogeny', 'clade', 'node', 'annotation',
+                         'parent_branch', 'other'))
+    ok_datatype = set(('xsd:string', 'xsd:boolean', 'xsd:decimal', 'xsd:float',
+        'xsd:double', 'xsd:duration', 'xsd:dateTime', 'xsd:time', 'xsd:date',
+        'xsd:gYearMonth', 'xsd:gYear', 'xsd:gMonthDay', 'xsd:gDay',
+        'xsd:gMonth', 'xsd:hexBinary', 'xsd:base64Binary', 'xsd:anyURI',
+        'xsd:normalizedString', 'xsd:token', 'xsd:integer',
+        'xsd:nonPositiveInteger', 'xsd:negativeInteger', 'xsd:long', 'xsd:int',
+        'xsd:short', 'xsd:byte', 'xsd:nonNegativeInteger', 'xsd:unsignedLong',
+        'xsd:unsignedInt', 'xsd:unsignedShort', 'xsd:unsignedByte',
+        'xsd:positiveInteger'))
+
     def __init__(self, value, ref, applies_to, datatype,
             unit=None, id_ref=None):
+        check_str(ref, self.re_ref.match)
+        check_str(applies_to, self.ok_applies_to.__contains__)
+        check_str(datatype, self.ok_datatype.__contains__)
+        check_str(unit, self.re_ref.match)
         PhyloElement.__init__(self, unit=unit, id_ref=id_ref, value=value,
                 ref=ref, applies_to=applies_to, datatype=datatype)
 
@@ -630,17 +650,16 @@ class Reference(PhyloElement):
     It is recommended to use the 'doi' attribute instead of the free text
     'desc' element whenever possible.
     """
+    re_doi = re.compile(r'[a-zA-Z0-9_\.]+/[a-zA-Z0-9_\.]+')
+
     def __init__(self, doi=None, desc=None):
+        check_str(doi, self.re_doi.match)
         self.doi = doi
         self.desc = desc
 
 
 class Sequence(PhyloElement):
     """A molecular sequence (Protein, DNA, RNA) associated with a node.
-
-    'symbol' is a 'ACTM')
-    
-    'name' is 
 
     One intended use for 'id_ref' is to link a sequence to a taxonomy (via the
     taxonomy's 'id_source') in case of multiple sequences and taxonomies per
@@ -663,6 +682,7 @@ class Sequence(PhyloElement):
     """
     re_symbol = re.compile(r'\S{1,10}')
     re_mol_seq = re.compile(r'[a-zA-Z\.\-\?\*_]+')
+    ok_type = set(('rna', 'dna', 'aa'))
 
     def __init__(self, 
             # Attributes
@@ -673,6 +693,7 @@ class Sequence(PhyloElement):
             # Collections
             annotations=None, other=None,
             ):
+        check_str(type, self.ok_type.__contains__)
         check_str(symbol, self.re_symbol.match)
         check_str(mol_seq, self.re_mol_seq.match)
         PhyloElement.__init__(self, type=type, id_ref=id_ref,
@@ -769,7 +790,6 @@ class SequenceRelation(PhyloElement):
     ok_type = set(('orthology', 'one_to_one_orthology', 'super_orthology',
         'paralogy', 'ultra_paralogy', 'xenology', 'unknown', 'other'))
 
-
     def __init__(self, type, id_ref_0, id_ref_1,
             distance=None, confidence=None):
         check_str(type, self.ok_type.__contains__)
@@ -779,8 +799,6 @@ class SequenceRelation(PhyloElement):
 
 class Taxonomy(PhyloElement):
     """Describe taxonomic information for a clade.
-
-
 
     @param id_source: link other elements to a taxonomy (on the XML level)
 
