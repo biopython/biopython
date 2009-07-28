@@ -580,9 +580,13 @@ def _get_sanger_quality_str(record) :
     >>> _get_sanger_quality_str(r6)
     'I?5+$"'
     """
-    if "phred_quality" in record.letter_annotations :
+    try :
         #These take priority (in case both Solexa and PHRED scores found)
         qualities = record.letter_annotations["phred_quality"]
+    except KeyError :
+        #No PHRED scores... fall back on Solexa below...
+        pass
+    else :
         #Try and use the precomputed mapping:
         try :
             return "".join([_phred_to_sanger_quality_str[qp] \
@@ -598,31 +602,31 @@ def _get_sanger_quality_str(record) :
                 raise TypeError("A quality value of None was found")
             else :
                 raise e
-    elif "solexa_quality" in record.letter_annotations :
-        #Fall back on the Solexa scores...
+    #Fall back on the Solexa scores...
+    try :
         qualities = record.letter_annotations["solexa_quality"]
-        #Try and use the precomputed mapping:
-        try :
-            return "".join([_solexa_to_sanger_quality_str[qs] \
-                            for qs in qualities])
-        except KeyError :
-            #Either no PHRED scores, or something odd like a float or None
-            pass
-        #Must do this the slow way, first converting the PHRED scores into
-        #Solexa scores:
-        try :
-            return "".join([chr(int(round(phred_quality_from_solexa(qs))) + \
-                                SANGER_SCORE_OFFSET) \
-                            for qs in qualities])
-        except TypeError, e :
-            if None in qualities :
-                raise TypeError("A quality value of None was found")
-            else :
-                raise e
-    else :
+    except KeyError :
         raise ValueError("No suitable quality scores found in "
                          "letter_annotations of SeqRecord (id=%s)." \
                          % record.id)
+    #Try and use the precomputed mapping:
+    try :
+        return "".join([_solexa_to_sanger_quality_str[qs] \
+                        for qs in qualities])
+    except KeyError :
+        #Either no PHRED scores, or something odd like a float or None
+        pass
+    #Must do this the slow way, first converting the PHRED scores into
+    #Solexa scores:
+    try :
+        return "".join([chr(int(round(phred_quality_from_solexa(qs))) + \
+                            SANGER_SCORE_OFFSET) \
+                        for qs in qualities])
+    except TypeError, e :
+        if None in qualities :
+            raise TypeError("A quality value of None was found")
+        else :
+            raise e
 
 _phred_to_illumina_quality_str = dict((qp, chr(qp+SOLEXA_SCORE_OFFSET)) \
                                       for qp in range(0, 93+1))
@@ -630,9 +634,13 @@ _solexa_to_illumina_quality_str = dict( \
     (qs, chr(int(round(phred_quality_from_solexa(qs)))+SOLEXA_SCORE_OFFSET)) \
     for qs in range(-5, 93+1))
 def _get_illumina_quality_str(record) :
-    if "phred_quality" in record.letter_annotations :
+    try :
         #These take priority (in case both Solexa and PHRED scores found)
         qualities = record.letter_annotations["phred_quality"]
+    except KeyError :
+        #Fall back on solexa scores...
+        pass
+    else :
         #Try and use the precomputed mapping:
         try :
             return "".join([_phred_to_illumina_quality_str[qp] \
@@ -648,31 +656,31 @@ def _get_illumina_quality_str(record) :
                 raise TypeError("A quality value of None was found")
             else :
                 raise e
-    elif "solexa_quality" in record.letter_annotations :
-        #Fall back on the Solexa scores...
+    #Fall back on the Solexa scores...
+    try :
         qualities = record.letter_annotations["solexa_quality"]
-        #Try and use the precomputed mapping:
-        try :
-            return "".join([_solexa_to_illumina_quality_str[qs] \
-                            for qs in qualities])
-        except KeyError :
-            #Either no PHRED scores, or something odd like a float or None
-            pass
-        #Must do this the slow way, first converting the PHRED scores into
-        #Solexa scores:
-        try :
-            return "".join([chr(int(round(phred_quality_from_solexa(qs))) + \
-                                SOLEXA_SCORE_OFFSET) \
-                            for qs in qualities])
-        except TypeError, e :
-            if None in qualities :
-                raise TypeError("A quality value of None was found")
-            else :
-                raise e
-    else :
+    except KeyError :
         raise ValueError("No suitable quality scores found in "
                          "letter_annotations of SeqRecord (id=%s)." \
                          % record.id)
+    #Try and use the precomputed mapping:
+    try :
+        return "".join([_solexa_to_illumina_quality_str[qs] \
+                        for qs in qualities])
+    except KeyError :
+        #Either no PHRED scores, or something odd like a float or None
+        pass
+    #Must do this the slow way, first converting the PHRED scores into
+    #Solexa scores:
+    try :
+        return "".join([chr(int(round(phred_quality_from_solexa(qs))) + \
+                            SOLEXA_SCORE_OFFSET) \
+                        for qs in qualities])
+    except TypeError, e :
+        if None in qualities :
+            raise TypeError("A quality value of None was found")
+        else :
+            raise e
 
 _solexa_to_solexa_quality_str = dict((qs, chr(qs+SOLEXA_SCORE_OFFSET)) \
                                      for qs in range(-5, 93+1))
@@ -680,9 +688,13 @@ _phred_to_solexa_quality_str = dict(\
     (qp, chr(int(round(solexa_quality_from_phred(qp)))+SOLEXA_SCORE_OFFSET)) \
     for qp in range(0, 93+1))
 def _get_solexa_quality_str(record) :
-    if "solexa_quality" in record.letter_annotations :
+    try :
         #These take priority (in case both Solexa and PHRED scores found)
         qualities = record.letter_annotations["solexa_quality"]
+    except KeyError :
+        #Fall back on PHRED scores...
+        pass
+    else :
         #Try and use the precomputed mapping:
         try :
             return "".join([_solexa_to_solexa_quality_str[qs] \
@@ -698,31 +710,31 @@ def _get_solexa_quality_str(record) :
                 raise TypeError("A quality value of None was found")
             else :
                 raise e
-    elif "phred_quality" in record.letter_annotations :
-        #Fall back on the PHRED scores...
+    #Fall back on the PHRED scores...
+    try :
         qualities = record.letter_annotations["phred_quality"]
-        #Try and use the precomputed mapping:
-        try :
-            return "".join([_phred_to_solexa_quality_str[qp] \
-                            for qp in qualities])
-        except KeyError :
-            #Either no PHRED scores, or something odd like a float or None
-            pass
-        #Must do this the slow way, first converting the PHRED scores into
-        #Solexa scores:
-        try :
-            return "".join([chr(int(round(solexa_quality_from_phred(qp))) + \
-                                SOLEXA_SCORE_OFFSET) \
-                            for qp in qualities])
-        except TypeError, e :
-            if None in qualities :
-                raise TypeError("A quality value of None was found")
-            else :
-                raise e
-    else :
+    except KeyError :
         raise ValueError("No suitable quality scores found in "
                          "letter_annotations of SeqRecord (id=%s)." \
                          % record.id)
+    #Try and use the precomputed mapping:
+    try :
+        return "".join([_phred_to_solexa_quality_str[qp] \
+                        for qp in qualities])
+    except KeyError :
+        #Either no PHRED scores, or something odd like a float or None
+        pass
+    #Must do this the slow way, first converting the PHRED scores into
+    #Solexa scores:
+    try :
+        return "".join([chr(int(round(solexa_quality_from_phred(qp))) + \
+                            SOLEXA_SCORE_OFFSET) \
+                        for qp in qualities])
+    except TypeError, e :
+        if None in qualities :
+            raise TypeError("A quality value of None was found")
+        else :
+            raise e
 
 #TODO - Default to nucleotide or even DNA?
 def FastqGeneralIterator(handle) :
