@@ -219,31 +219,7 @@ def read(file):
 
     @rtype: Bio.Tree.PhyloXML.Phyloxml
     """
-    # get an iterable context for XML parsing events
-    context = iter(ElementTree.iterparse(file, events=('start', 'end')))
-    event, root = context.next()
-    phyloxml = Tree.Phyloxml(dict((local(key), val)
-                             for key, val in root.items()))
-    other_depth = 0
-    for event, elem in context:
-        # print elem.tag, event
-        namespace, localtag = split_namespace(elem.tag)
-        if event == 'start':
-            if namespace != NAMESPACES['phy']:
-                other_depth += 1
-                continue
-            if localtag == 'phylogeny':
-                phylogeny = Parser._parse_phylogeny(elem, context)
-                phyloxml.phylogenies.append(phylogeny)
-        if event == 'end' and namespace != NAMESPACES['phy']:
-            # Deal with items not specified by phyloXML
-            other_depth -= 1
-            if other_depth == 0:
-                # We're directly under the root node -- evaluate
-                otr = Parser.to_other(elem)
-                phyloxml.other.append(otr)
-                root.clear()
-    return phyloxml
+    return Parser(file).read()
 
 
 def parse(file):
@@ -254,91 +230,54 @@ def parse(file):
 
     @return: a generator of Bio.Tree.PhyloXML.Phylogeny objects.
     """
-    context = iter(ElementTree.iterparse(file, events=('start', 'end')))
-    event, root = context.next()
-    for event, elem in context:
-        if event == 'start' and local(elem.tag) == 'phylogeny':
-            yield Parser._parse_phylogeny(elem, context)
+    return Parser(file).parse()
 
 
 class Parser(object):
     """Methods for parsing all phyloXML nodes from an XML stream.
     """
 
-    ## Index of phyloxml tags and corresponding classes
+    def __init__(self, file):
+        # Get an iterable context for XML parsing events
+        context = iter(ElementTree.iterparse(file, events=('start', 'end')))
+        event, root = context.next()
+        self.root = root
+        self.context = context
 
-    ## special cases for parsing
-    # tags_to_special = {
-    #         'phylogeny':    Phylogeny,
-    #         'phyloxml':     Phyloxml,
-    #         'clade':        Clade,
-    #         }
+    def read(self):
+        """Parse the phyloXML file and create a single Phyloxml object."""
+        phyloxml = Tree.Phyloxml(dict((local(key), val)
+                                for key, val in self.root.items()))
+        other_depth = 0
+        for event, elem in self.context:
+            namespace, localtag = split_namespace(elem.tag)
+            if event == 'start':
+                if namespace != NAMESPACES['phy']:
+                    other_depth += 1
+                    continue
+                if localtag == 'phylogeny':
+                    phylogeny = self._parse_phylogeny(elem)
+                    phyloxml.phylogenies.append(phylogeny)
+            if event == 'end' and namespace != NAMESPACES['phy']:
+                # Deal with items not specified by phyloXML
+                other_depth -= 1
+                if other_depth == 0:
+                    # We're directly under the root node -- evaluate
+                    otr = self.to_other(elem)
+                    phyloxml.other.append(otr)
+                    self.root.clear()
+        return phyloxml
 
-    ## no special handling
-    # tags_to_classes = {
-    #         'absent':       BinaryCharacterList,
-    #         'accession':    Accession,
-    #         'annotation':   Annotation,
-    #         'binary_characters': BinaryCharacters,
-    #         'clade_relation': CladeRelation,
-    #         'code':         TaxonomyCode,
-    #         'color':        BranchColor,
-    #         'confidence':   Confidence,
-    #         'date':         Date,
-    #         'distribution': Distribution,
-    #         'domain':       ProteinDomain,
-    #         'domain_architecture': DomainArchitecture,
-    #         'events':       Events,
-    #         'gained':       BinaryCharacterList,
-    #         'id':           Id,
-    #         'lost':         BinaryCharacterList,
-    #         'mol_seq':      MolSeq,
-    #         'node_id':      Id,
-    #         'point':        Point,
-    #         'polygon':      Polygon,
-    #         'present':      BinaryCharacterList,
-    #         'property':     Property,
-    #         'rank':         Rank,
-    #         'reference':    Reference,
-    #         'sequence':     Sequence,
-    #         'sequence_relation': SequenceRelation,
-    #         'symbol':       SequenceSymbol,
-    #         'taxonomy':     Taxonomy,
-    #         'type':         EventType,
-    #         'uri':          Uri,
-    #         }
+    def parse(self):
+        """Parse the phyloXML file incrementally and return each phylogeny."""
+        phytag = _ns('phylogeny')
+        for event, elem in self.context:
+            if event == 'start' and elem.tag == phytag:
+                yield self._parse_phylogeny(elem)
 
-    ## primitive types
-    # tags_to_float = {
-    #         'alt':          float,  # decimal
-    #         'branch_length': float, # double
-    #         'lat':          float,  # decimal
-    #         'long':         float,  # decimal
-    #         'value':        float,  # decimal
-    #         'width':        float,  # double
-    #         }
+    # Special parsing cases
 
-    # tags_to_int = {
-    #         'blue':         int, # unsignedByte
-    #         'duplications': int, # nonNegativeInteger
-    #         'green':        int, # unsignedByte
-    #         'losses':       int, # nonNegativeInteger
-    #         'red':          int, # unsignedByte
-    #         'speciations':  int, # nonNegativeInteger
-    #         }
-
-    # tags_to_str = {
-    #         'bc':           str,
-    #         'common_name':  str,
-    #         'desc':         str,
-    #         'description':  str,
-    #         'location':     str,
-    #         'name':         str,
-    #         'scientific_name': str,
-    #         }
-
-    @classmethod
-    def _parse_phylogeny(cls, parent, context):
+    def _parse_phylogeny(self, parent):
         """Parse a single phylogeny within the phyloXML tree.
 
         Recursively builds a phylogenetic tree with help from parse_clade, then
@@ -355,12 +294,12 @@ class Parser(object):
                 'clade_relation': 'clade_relations',
                 'sequence_relation': 'sequence_relations',
                 }
-        for event, elem in context:
+        for event, elem in self.context:
             namespace, tag = split_namespace(elem.tag)
             if event == 'start' and tag == 'clade':
                 assert phylogeny.clade is None, \
                         "Phylogeny object should only have 1 clade"
-                phylogeny.clade = Parser._parse_clade(elem, context)
+                phylogeny.clade = self._parse_clade(elem)
                 continue
             if event == 'end':
                 if tag == 'phylogeny':
@@ -368,10 +307,10 @@ class Parser(object):
                     break
                 # Handle the other non-recursive children
                 if tag in complex_types:
-                    setattr(phylogeny, tag, getattr(cls, 'to_'+tag)(elem))
+                    setattr(phylogeny, tag, getattr(self, 'to_'+tag)(elem))
                 elif tag in list_types:
                     getattr(phylogeny, list_types[tag]).append(
-                            getattr(cls, 'to_'+tag)(elem))
+                            getattr(self, 'to_'+tag)(elem))
                 # Simple types
                 elif tag == 'name': 
                     phylogeny.name = collapse_wspace(elem.text)
@@ -379,7 +318,7 @@ class Parser(object):
                     phylogeny.description = collapse_wspace(elem.text)
                 # Unknown tags
                 elif namespace != NAMESPACES['phy']:
-                    phylogeny.other.append(cls.to_other(elem))
+                    phylogeny.other.append(self.to_other(elem))
                     parent.clear()
                 else:
                     # NB: This shouldn't happen in valid files
@@ -400,22 +339,21 @@ class Parser(object):
             # Simple types
             ['branch_length', 'name', 'node_id', 'width'])
 
-    @classmethod
-    def _parse_clade(cls, parent, context):
+    def _parse_clade(self, parent):
         """Parse a Clade node and its children, recursively."""
         if 'branch_length' in parent.keys():
             parent.set('branch_length', float(parent.get('branch_length')))
         clade = Tree.Clade(**parent.attrib)
         # NB: Only evaluate nodes at the current level
         tag_stack = []
-        for event, elem in context:
+        for event, elem in self.context:
             namespace, tag = split_namespace(elem.tag)
             if event == 'start':
                 if tag == 'clade':
-                    subclade = Parser._parse_clade(elem, context)
+                    subclade = self._parse_clade(elem)
                     clade.clades.append(subclade)
                     continue
-                if tag in cls._clade_tracked_tags:
+                if tag in self._clade_tracked_tags:
                     tag_stack.append(tag)
             if event == 'end':
                 if tag == 'clade':
@@ -425,11 +363,11 @@ class Parser(object):
                     continue
                 tag_stack.pop()
                 # Handle the other non-recursive children
-                if tag in cls._clade_complex_types:
-                    setattr(clade, tag, getattr(cls, 'to_'+tag)(elem))
-                elif tag in cls._clade_list_types:
-                    getattr(clade, cls._clade_list_types[tag]).append(
-                            getattr(cls, 'to_'+tag)(elem))
+                if tag in self._clade_complex_types:
+                    setattr(clade, tag, getattr(self, 'to_'+tag)(elem))
+                elif tag in self._clade_list_types:
+                    getattr(clade, self._clade_list_types[tag]).append(
+                            getattr(self, 'to_'+tag)(elem))
                 # Simple types
                 elif tag == 'branch_length':
                     # NB: possible collision with the attribute
@@ -448,7 +386,7 @@ class Parser(object):
                     clade.node_id = elem.text and elem.text.strip() or None
                 # Unknown tags
                 elif namespace != NAMESPACES['phy']:
-                    clade.other.append(cls.to_other(elem))
+                    clade.other.append(self.to_other(elem))
                     elem.clear()
                 else:
                     # NB: This shouldn't happen in valid files
@@ -648,11 +586,7 @@ def write(phyloxml, file, encoding=None):
 
     The file argument can be either an open handle or a file name.
     """
-    etree = Writer(phyloxml).get_etree()
-    if encoding is not None:
-        etree.write(file, encoding)
-    else:
-        etree.write(file)
+    Writer(phyloxml, encoding).write(file)
 
 
 # Helpers
@@ -708,14 +642,17 @@ def _handle_simple(tag):
 class Writer(object):
     """Methods for serializing a phyloXML object to XML.
     """
-    def __init__(self, phyloxml):
+    def __init__(self, phyloxml, encoding):
         """Build an ElementTree from a phyloXML object."""
         assert isinstance(phyloxml, Tree.Phyloxml)
         self._tree = ElementTree.ElementTree(self.phyloxml(phyloxml))
+        self.encoding = encoding
 
-    def get_etree(self):
-        """Retrieve an ElementTree object representing the phyloXML file."""
-        return self._tree
+    def write(self, file):
+        if self.encoding is not None:
+            self._tree.write(file, encoding)
+        else:
+            self._tree.write(file)
 
     # Convert classes to ETree elements
 
