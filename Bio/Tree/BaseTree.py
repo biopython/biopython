@@ -86,6 +86,32 @@ class Tree(TreeElement):
         # relations: self, node (root_node), biodatabase
         # may belong to a sequence
 
+    # Plumbing
+
+    def depth_first_search(self, node, filterfunc):
+        """Perform a depth-first search through all nodes in this tree.
+        
+        @return: generator of all nodes for which 'filterfunc' is True.
+        """
+        singles = []
+        lists = []
+        # Sort attributes for consistent results
+        for subnode in sorted(node.__dict__.itervalues()):
+            if subnode is None:
+                continue
+            if isinstance(subnode, list):
+                lists.extend(subnode)
+            else:
+                singles.append(subnode)
+        for item in singles + lists:
+            if isinstance(item, TreeElement):
+                if filterfunc(item):
+                    yield item
+                for result in self.depth_first_search(item, filterfunc):
+                    yield result
+
+    # Porcelain
+
     def find(self, cls=None, **kwargs):
         """Find all sub-nodes matching the given attributes.
 
@@ -140,25 +166,7 @@ class Tree(TreeElement):
                         raise RuntimeError('invalid argument: ' + str(pattern))
             return False
 
-        def local_find(node):
-            singles = []
-            lists = []
-            # Sort attributes for consistent results
-            for name, subnode in sorted(node.__dict__.iteritems()):
-                if subnode is None:
-                    continue
-                if isinstance(subnode, list):
-                    lists.extend(subnode)
-                else:
-                    singles.append(subnode)
-            for item in singles + lists:
-                if isinstance(item, TreeElement):
-                    if is_matching_node(item):
-                        yield item
-                    for result in local_find(item):
-                        yield result
-
-        return local_find(self)
+        return self.depth_first_search(self, is_matching_node)
 
     def total_branch_length(self):
         """Get the total length of this tree (sum of all branch lengths)."""
