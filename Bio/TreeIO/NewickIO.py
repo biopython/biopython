@@ -31,16 +31,16 @@ def parse(file):
     if not hasattr(file, 'read'):
         file = open(file, 'r')
         do_close = True
-    try:
-        buf = None
-        for line in file:
-            buf = (buf and (buf + line) or line).strip()
-            if buf.endswith(';'):
-                yield Trees.Tree(tree=buf)
-                buf = None
-    finally:
-        if do_close:
-            file.close()
+    # Python 2.4 support: This should be in a try block, but yield is not OK
+    buf = None
+    for line in file:
+        buf = (buf and (buf + line) or line).strip()
+        if buf.endswith(';'):
+            yield Trees.Tree(tree=buf)
+            buf = None
+    # /py2.4
+    if do_close:
+        file.close()
 
 
 def write(trees, file, plain=False, **kwargs):
