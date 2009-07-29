@@ -7,12 +7,14 @@
 """
 __docformat__ = "epytext en"
 
+import NewickIO
 import NexusIO
 import PhyloXMLIO
 
 supported_formats = {
-        'phyloxml': PhyloXMLIO,
+        'newick':   NewickIO,
         'nexus':    NexusIO,
+        'phyloxml': PhyloXMLIO,
         }
 
 def read(file, format):
@@ -29,4 +31,4 @@ def parse(file, format):
 
 def write(obj, file, format, **kwargs):
     """Serialize a Tree object into the given format and write to file."""
-    return getattr(supported_formats[format], 'write')(file, **kwargs)
+    return getattr(supported_formats[format], 'write')(obj, file, **kwargs)

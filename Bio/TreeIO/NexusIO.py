@@ -10,21 +10,12 @@ __docformat__ = "epytext en"
 from Bio.Nexus import Nexus
 
 def read(file):
-    do_close = False
-    if not hasattr(file, 'read'):
-        file = open(file, 'r')
-        do_close = True
-    try:
-        obj = Nexus.Nexus(file)
-    finally:
-        if do_close:
-            file.close()
-    return obj
+    return Nexus.Nexus(file)
 
 
 def parse(file):
-    raise NotImplementedError(
-            "Incremental parsing isn't supported for Nexus yet.")
+    nex = read(file)
+    return iter(nex.trees)
 
 
 def write(obj, file, **kwargs):
@@ -37,4 +28,3 @@ def write(obj, file, **kwargs):
     finally:
         if do_close:
             file.close()
-    return ohandle

@@ -650,7 +650,7 @@ class Writer(object):
 
     def write(self, file):
         if self.encoding is not None:
-            self._tree.write(file, encoding)
+            self._tree.write(file, self.encoding)
         else:
             self._tree.write(file)
 
