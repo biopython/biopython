@@ -94,10 +94,7 @@ class AlignmentWriter :
 
     def clean(self, text) :
         """Use this to avoid getting newlines in the output."""
-        answer = text
-        for x in ["\n", "\r"] :
-            answer = answer.replace(x, " ")
-        return answer.replace("  ", " ")
+        return text.replace("\n", " ").replace("\r", " ").replace("  ", " ")
     
 class SequentialAlignmentWriter(AlignmentWriter) :
     """Base class for building Alignment writers.

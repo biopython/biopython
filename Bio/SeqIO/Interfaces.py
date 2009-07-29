@@ -165,10 +165,7 @@ class SequenceWriter:
 
     def clean(self, text) :
         """Use this to avoid getting newlines in the output."""
-        answer = text
-        for x in ["\n", "\r"] :
-            answer = answer.replace(x, " ")
-        return answer.replace("  ", " ")
+        return text.replace("\n", " ").replace("\r", " ").replace("  ", " ")
     
     def write_file(self, records) :
         """Use this to write an entire file containing the given records.
