@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 15 July 2009 (Biopython 1.51 \textit{beta})}
+\date{Last Update -- 29 July 2009 (Biopython 1.51 \textit{beta})}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -987,7 +987,7 @@ alphabets.
 
 For example, you might argue that the two DNA \verb|Seq| objects
 \texttt{Seq("ACGT", IUPAC.unambiguous\_dna)} and
-\texttt{Seq("ACGT", IUPAC.unambiguous\_dna)} should be equal, even though
+\texttt{Seq("ACGT", IUPAC.ambiguous\_dna)} should be equal, even though
 they do have different alphabets. Depending on the context this could be
 important.
 
@@ -2113,7 +2113,7 @@ a file for reuse.
 \label{sec:SeqIO_GenBank_Online}
 Section~\ref{sec:efetch} talks about the Entrez EFetch interface in more detail,
 but for now let's just connect to the NCBI and get a few \textit{Opuntia} (prickly-pear)
-proteins from GenBank using their GI numbers.
+sequences from GenBank using their GI numbers.
 
 First of all, let's fetch just one record.  If you don't care about the
 annotations and features downloading a FASTA file is a good choice as these
@@ -2123,7 +2123,7 @@ only one record, use the \verb|Bio.SeqIO.read()| function:
 \begin{verbatim}
 from Bio import Entrez
 from Bio import SeqIO
-handle = Entrez.efetch(db="protein", rettype="fasta", id="6273291")
+handle = Entrez.efetch(db="nucleotide", rettype="fasta", id="6273291")
 seq_record = SeqIO.read(handle, "fasta")
 handle.close()
 print "%s with %i features" % (seq_record.id, len(seq_record.features))
@@ -2132,11 +2132,17 @@ print "%s with %i features" % (seq_record.id, len(seq_record.features))
 \noindent Expected output:
 
 \begin{verbatim}
-gi|6273291|gb|AF191665.1|AF191665 with 3 features
+gi|6273291|gb|AF191665.1|AF191665 with 0 features
 \end{verbatim}
 
 The NCBI will also let you ask for the file in other formats, in particular as
-a GenBank file:
+a GenBank file. Until Easter 2009, the Entrez EFetch API let you use ``genbank''
+as the return type, however the NCBI now insist on using the official
+return types of ``gb'' (or ``gp'' for proteins) as described on
+\href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq_help.html}
+{EFetch for Sequence and other Molecular Biology Databases}.
+As a result, in Biopython 1.50 onwards, we support ``gb'' as an
+alias for ``genbank'' in \verb|Bio.SeqIO|.
 
 \begin{verbatim}
 from Bio import Entrez
@@ -2147,19 +2153,13 @@ handle.close()
 print "%s with %i features" % (seq_record.id, len(seq_record.features))
 \end{verbatim}
 
-Until Easter 2009, the Entrez EFetch API let you use ``genbank''
-as the return type, however the NCBI now insist on using the official
-return types of ``gb'' (or ``gp'' for proteins) as described on
-\href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq_help.html}
-{EFetch for Sequence and other Molecular Biology Databases}.
-As a result, in Biopython 1.50 onwards, we support ``gb'' as an
-alias for ``genbank'' in \verb|Bio.SeqIO|.
-
-The expected output of this example is:
+\noindent The expected output of this example is:
 
 \begin{verbatim}
 AF191665.1 with 3 features
 \end{verbatim}
+
+\noindent Notice this time we have three features.
 
 Now let's fetch several records.  This time the handle contains multiple records,
 so we must use the \verb|Bio.SeqIO.parse()| function:
