@@ -17,10 +17,6 @@ supported_formats = {
         'phyloxml': PhyloXMLIO,
         }
 
-def read(file, format):
-    """Parse a file in the given format and return a single object."""
-    return getattr(supported_formats[format], 'read')(file)
-
 def parse(file, format):
     """Iteratively parse a file and return each of the trees it contains.
 
@@ -29,6 +25,27 @@ def parse(file, format):
     """
     return getattr(supported_formats[format], 'parse')(file)
 
+def read(file, format):
+    """Parse a file in the given format and return a single tree.
+
+    Raises a ValueError if there are zero or multiple trees -- if this occurs,
+    use parse() instead to get the complete sequence of trees.
+    """
+    try:
+        tree_gen = parse(file, format)
+        tree = tree_gen.next()
+    except StopIteration:
+        raise ValueError("There are no trees in this file.")
+    try:
+        tree_gen.next()
+    except StopIteration:
+        return tree
+    else:
+        raise ValueError(
+                "There are multiple trees in this file; use parse() instead.")
+
+    return getattr(supported_formats[format], 'read')(file)
+
 def write(obj, file, format, **kwargs):
-    """Serialize a Tree object into the given format and write to file."""
+    """Write a sequence of trees to file in the given format."""
     return getattr(supported_formats[format], 'write')(obj, file, **kwargs)

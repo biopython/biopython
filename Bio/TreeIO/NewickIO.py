@@ -11,20 +11,6 @@ __docformat__ = "epytext en"
 
 from Bio.Nexus import Trees
 
-def read(file):
-    try:
-        tree_gen = parse(file)
-        tree = tree_gen.next()
-    except StopIteration:
-        raise RuntimeError("There are no trees in this file.")
-    try:
-        tree_gen.next()
-    except StopIteration:
-        return tree
-    else:
-        raise RuntimeError(
-                "There are multiple trees in this file; use parse() instead.")
-
 
 def parse(file):
     do_close = False

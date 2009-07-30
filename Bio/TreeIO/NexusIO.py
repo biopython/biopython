@@ -9,12 +9,9 @@ __docformat__ = "epytext en"
 
 from Bio.Nexus import Nexus
 
-def read(file):
-    return Nexus.Nexus(file)
-
 
 def parse(file):
-    nex = read(file)
+    nex = Nexus.Nexus(file)
     return iter(nex.trees)
 
 
