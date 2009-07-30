@@ -18,12 +18,15 @@ def parse(file):
         file = open(file, 'r')
         do_close = True
     # Python 2.4 support: This should be in a try block, but yield is not OK
-    buf = None
+    buf = ''
     for line in file:
-        buf = (buf and (buf + line) or line).strip()
+        buf += line.rstrip()
         if buf.endswith(';'):
             yield Trees.Tree(tree=buf)
-            buf = None
+            buf = ''
+    if buf:
+        # Last tree is missing a terminal ';' character
+        yield Trees.Tree(tree=buf)
     # /py2.4
     if do_close:
         file.close()
@@ -35,9 +38,9 @@ def write(trees, file, plain=False, **kwargs):
         file = open(file, 'w+')
         do_close = True
     try:
-        lines = (t.to_string(plain_newick=True, plain=plain, **kwargs)
-                 for t in trees)
-        file.write(';\n'.join(lines))
+        for tree in trees:
+            file.write(tree.to_string(plain_newick=True, plain=plain, **kwargs)
+                        + ';\n')
     finally:
         if do_close:
             file.close()
