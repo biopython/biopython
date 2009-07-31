@@ -11,6 +11,7 @@ import re
 import warnings
 
 from Bio import Alphabet
+from Bio.Align.Generic import Alignment
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
@@ -151,6 +152,24 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
                 properties=properties or [],
                 other=other or [],
                 )
+
+    def get_alignment(self):
+        """Construct an alignment from the aligned sequences in this tree."""
+        def seq_is_aligned(node):
+            if isinstance(node, Sequence) and node.mol_seq.is_aligned:
+                return True
+            return False
+        seqs = self.depth_first_search(self, seq_is_aligned)
+        try:
+            first_seq = seqs.next()
+        except StopIteration:
+            warnings.warn("No aligned sequences were found in this tree.",
+                    Warning, stacklevel=2)
+        aln = Alignment(first_seq.get_alphabet())
+        aln.add_sequence(str(first_seq), first_seq.mol_seq.value)
+        for seq in seqs:
+            aln.add_sequence(str(seq), seq.mol_seq.value)
+        return aln
 
     def to_phyloxml(self, **kwargs):
         """Create a new PhyloXML object containing just this phylogeny."""
