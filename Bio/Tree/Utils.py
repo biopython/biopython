@@ -19,7 +19,11 @@ def pretty_print(treeobj, file=sys.stdout, show_all=False, indent=0):
     of PhyloXML) objects in the object tree.
     """
     assert isinstance(treeobj, BaseTree.TreeElement)
-    show = show_all and repr or str
+    if show_all:
+        show = repr
+    else:
+        def show(obj):
+            return '%s: %s' % (obj.__class__.__name__, obj)
 
     # Closing over file
     def print_indented(text, indent):

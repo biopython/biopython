@@ -20,8 +20,10 @@ __docformat__ = "epytext en"
 import re
 
 
-def trim_str(text, maxlen=40):
-    if isinstance(text, basestring) and len(text) > maxlen:
+def trim_str(text, maxlen=60):
+    assert isinstance(text, basestring), \
+            "%s should be a string, not a %s" % (text, type(text))
+    if len(text) > maxlen:
         return text[:maxlen-3] + '...'
     return text
 
@@ -32,12 +34,15 @@ class TreeElement(object):
     def __repr__(self):
         """Show this object's constructor with its primitive arguments."""
         s = '%s(%s)' % (self.__class__.__name__,
-                           ', '.join('%s=%s'
-                                    % (key, repr(trim_str(val, maxlen=60)))
-                               for key, val in self.__dict__.iteritems()
-                               if val is not None
-                               and type(val) in (str, int, float, unicode)))
+                        ', '.join("%s='%s'"
+                                  % (key, trim_str(unicode(val)))
+                            for key, val in self.__dict__.iteritems()
+                            if val is not None
+                            and type(val) in (str, int, float, bool, unicode)))
         return s.encode('utf-8')
+
+    def __str__(self):
+        return self.__class__.__name__
 
 
 class Tree(TreeElement):

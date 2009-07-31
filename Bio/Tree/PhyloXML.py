@@ -42,14 +42,13 @@ class PhyloElement(BaseTree.TreeElement):
 
     def __str__(self):
         """Show the class name and an identifying attribute."""
-        s = self.__class__.__name__
         if hasattr(self, 'name') and self.name:
-            return '%s %s' % (s, trim_str(self.name))
+            return trim_str(self.name, maxlen=40)
         if hasattr(self, 'value') and self.value:
-            return '%s %s' % (s, trim_str(self.value))
+            return trim_str(unicode(self.value), maxlen=40)
         if hasattr(self, 'id') and self.id:
-            return '%s %s' % (s, self.id)
-        return s
+            return str(self.id)
+        return self.__class__.__name__
 
 
 class Phyloxml(PhyloElement):
@@ -436,12 +435,11 @@ class Date(PhyloElement):
 
     def __str__(self):
         """Show the class name and the human-readable date."""
-        s = self.__class__.__name__
         if self.unit and self.value is not None:
-            return '%s %s %s' % (s, self.value, self.unit)
+            return '%s %s' % (self.value, self.unit)
         if self.desc is not None:
-            return '%s %s' % (s, self.desc)
-        return s
+            return self.desc
+        return self.__class__.__name__
 
 
 class Distribution(PhyloElement):
@@ -865,16 +863,15 @@ class Taxonomy(PhyloElement):
 
     def __str__(self):
         """Show the class name and an identifying attribute."""
-        s = self.__class__.__name__
         if self.code is not None:
-            return '%s %s' % (s, self.code)
+            return self.code
         if self.scientific_name is not None:
-            return '%s %s' % (s, self.scientific_name)
+            return self.scientific_name
         if self.rank is not None:
-            return '%s %s' % (s, self.rank)
+            return self.rank
         if self.id is not None:
-            return '%s %s' % (s, self.id)
-        return s
+            return str(self.id)
+        return self.__class__.__name__
 
 
 class Uri(PhyloElement):
