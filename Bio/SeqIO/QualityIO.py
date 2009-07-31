@@ -360,7 +360,7 @@ from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqRecord import SeqRecord
 from Interfaces import SequentialSequenceWriter
 from math import log
-
+import warnings
 # define score offsets. See discussion for differences between Sanger and
 # Solexa offsets.
 SANGER_SCORE_OFFSET = 33
@@ -523,8 +523,10 @@ def _get_phred_quality(record) :
                          "letter_annotations of SeqRecord (id=%s)." \
                          % record.id)
 
+#Only map 0 to 93, we need to give a warning on truncating at 93
 _phred_to_sanger_quality_str = dict((qp, chr(min(126,qp+SANGER_SCORE_OFFSET))) \
                                     for qp in range(0, 93+1))
+#Only map -5 to 93, we need to give a warning on truncating at 93
 _solexa_to_sanger_quality_str = dict( \
     (qs, chr(min(126,int(round(phred_quality_from_solexa(qs)))+SANGER_SCORE_OFFSET))) \
     for qs in range(-5, 93+1))
@@ -595,11 +597,14 @@ def _get_sanger_quality_str(record) :
     >>> _get_sanger_quality_str(r2)
     '|}~~~~'
     """
+    #TODO - This functions works and is fast, but it is also ugly
+    #and there is considerable repetition of code for the other
+    #two FASTQ variants.
     try :
         #These take priority (in case both Solexa and PHRED scores found)
         qualities = record.letter_annotations["phred_quality"]
     except KeyError :
-        #No PHRED scores... fall back on Solexa below...
+        #Fall back on solexa scores...
         pass
     else :
         #Try and use the precomputed mapping:
@@ -607,16 +612,15 @@ def _get_sanger_quality_str(record) :
             return "".join([_phred_to_sanger_quality_str[qp] \
                             for qp in qualities])
         except KeyError :
-            #Could be a float, or a None in the list. Do it the slow way...
+            #Could be a float, or a None in the list, or a high value.
             pass
-        try :
-            return "".join([chr(min(126,int(round(qp))+SANGER_SCORE_OFFSET)) \
-                            for qp in qualities])
-        except TypeError, e :
-            if None in qualities :
-                raise TypeError("A quality value of None was found")
-            else :
-                raise e
+        if None in qualities :
+            raise TypeError("A quality value of None was found")
+        if max(qualities) >= 93.5 :
+            warnings.warn("Data loss - max PHRED quality 93 in Sanger FASTQ")
+        #This will apply the truncation at 93, giving max ASCII 126
+        return "".join([chr(min(126,int(round(qp))+SANGER_SCORE_OFFSET)) \
+                        for qp in qualities])
     #Fall back on the Solexa scores...
     try :
         qualities = record.letter_annotations["solexa_quality"]
@@ -631,24 +635,24 @@ def _get_sanger_quality_str(record) :
     except KeyError :
         #Either no PHRED scores, or something odd like a float or None
         pass
+    if None in qualities :
+        raise TypeError("A quality value of None was found")
     #Must do this the slow way, first converting the PHRED scores into
     #Solexa scores:
-    try :
-        return "".join([chr(min(126,
-                                int(round(phred_quality_from_solexa(qs))) + \
-                                SANGER_SCORE_OFFSET)) \
-                        for qs in qualities])
-    except TypeError, e :
-        if None in qualities :
-            raise TypeError("A quality value of None was found")
-        else :
-            raise e
+    if max(qualities) >= 93.5 :
+        warnings.warn("Data loss - max PHRED quality 93 in Sanger FASTQ")
+    #This will apply the truncation at 93, giving max ASCII 126
+    return "".join([chr(min(126,int(round(phred_quality_from_solexa(qs)))+SANGER_SCORE_OFFSET)) \
+                    for qs in qualities])
 
-_phred_to_illumina_quality_str = dict((qp, chr(min(126,qp+SOLEXA_SCORE_OFFSET))) \
-                                      for qp in range(0, 93+1))
+#Only map 0 to 62, we need to give a warning on truncating at 62
+assert 62+SOLEXA_SCORE_OFFSET==126
+_phred_to_illumina_quality_str = dict((qp, chr(qp+SOLEXA_SCORE_OFFSET)) \
+                                      for qp in range(0, 62+1))
+#Only map -5 to 62, we need to give a warning on truncating at 62
 _solexa_to_illumina_quality_str = dict( \
-    (qs, chr(min(126,int(round(phred_quality_from_solexa(qs)))+SOLEXA_SCORE_OFFSET))) \
-    for qs in range(-5, 93+1))
+    (qs, chr(int(round(phred_quality_from_solexa(qs)))+SOLEXA_SCORE_OFFSET)) \
+    for qs in range(-5, 62+1))
 def _get_illumina_quality_str(record) :
     """Returns an Illumina 1.3+ FASTQ encoded quality string (PRIVATE).
 
@@ -664,7 +668,11 @@ def _get_illumina_quality_str(record) :
     ...      letter_annotations = {"phred_quality":[60,61,62,63,64,65]})
     >>> _get_illumina_quality_str(r2)
     '|}~~~~'
+
     """
+    #TODO - This functions works and is fast, but it is also ugly
+    #and there is considerable repetition of code for the other
+    #two FASTQ variants.
     try :
         #These take priority (in case both Solexa and PHRED scores found)
         qualities = record.letter_annotations["phred_quality"]
@@ -677,16 +685,15 @@ def _get_illumina_quality_str(record) :
             return "".join([_phred_to_illumina_quality_str[qp] \
                             for qp in qualities])
         except KeyError :
-            #Could be a float, or a None in the list. Do it the slow way...
+            #Could be a float, or a None in the list, or a high value.
             pass
-        try :
-            return "".join([chr(min(126,int(round(qp))+SOLEXA_SCORE_OFFSET)) \
-                            for qp in qualities])
-        except TypeError, e :
-            if None in qualities :
-                raise TypeError("A quality value of None was found")
-            else :
-                raise e
+        if None in qualities :
+            raise TypeError("A quality value of None was found")
+        if max(qualities) >= 62.5 :
+            warnings.warn("Data loss - max PHRED quality 62 in Illumina FASTQ")
+        #This will apply the truncation at 62, giving max ASCII 126
+        return "".join([chr(min(126,int(round(qp))+SOLEXA_SCORE_OFFSET)) \
+                        for qp in qualities])
     #Fall back on the Solexa scores...
     try :
         qualities = record.letter_annotations["solexa_quality"]
@@ -701,24 +708,24 @@ def _get_illumina_quality_str(record) :
     except KeyError :
         #Either no PHRED scores, or something odd like a float or None
         pass
+    if None in qualities :
+        raise TypeError("A quality value of None was found")
     #Must do this the slow way, first converting the PHRED scores into
     #Solexa scores:
-    try :
-        return "".join([chr(min(126,\
-                                int(round(phred_quality_from_solexa(qs))) + \
-                                SOLEXA_SCORE_OFFSET)) \
-                        for qs in qualities])
-    except TypeError, e :
-        if None in qualities :
-            raise TypeError("A quality value of None was found")
-        else :
-            raise e
+    if max(qualities) >= 62.5 :
+        warnings.warn("Data loss - max PHRED quality 62 in Illumina FASTQ")
+    #This will apply the truncation at 62, giving max ASCII 126
+    return "".join([chr(min(126,int(round(phred_quality_from_solexa(qs)))+SOLEXA_SCORE_OFFSET)) \
+                    for qs in qualities])
 
+#Only map 0 to 62, we need to give a warning on truncating at 62
+assert 62+SOLEXA_SCORE_OFFSET==126
 _solexa_to_solexa_quality_str = dict((qs, chr(min(126,qs+SOLEXA_SCORE_OFFSET))) \
-                                     for qs in range(-5, 93+1))
+                                     for qs in range(-5, 62+1))
+#Only map -5 to 62, we need to give a warning on truncating at 62
 _phred_to_solexa_quality_str = dict(\
     (qp, chr(min(126,int(round(solexa_quality_from_phred(qp)))+SOLEXA_SCORE_OFFSET))) \
-    for qp in range(0, 93+1))
+    for qp in range(0, 62+1))
 def _get_solexa_quality_str(record) :
     """Returns a Solexa FASTQ encoded quality string (PRIVATE).
 
@@ -735,6 +742,9 @@ def _get_solexa_quality_str(record) :
     >>> _get_solexa_quality_str(r2)
     '|}~~~~'
     """
+    #TODO - This functions works and is fast, but it is also ugly
+    #and there is considerable repetition of code for the other
+    #two FASTQ variants.
     try :
         #These take priority (in case both Solexa and PHRED scores found)
         qualities = record.letter_annotations["solexa_quality"]
@@ -747,17 +757,15 @@ def _get_solexa_quality_str(record) :
             return "".join([_solexa_to_solexa_quality_str[qs] \
                             for qs in qualities])
         except KeyError :
-            #Could be a float, or a None in the list. Do it the slow way...
-            print "Odd", qualities
+            #Could be a float, or a None in the list, or a high value.
             pass
-        try :
-            return "".join([chr(min(126,int(round(qs))+SOLEXA_SCORE_OFFSET)) \
-                            for qs in qualities])
-        except TypeError, e :
-            if None in qualities :
-                raise TypeError("A quality value of None was found")
-            else :
-                raise e
+        if None in qualities :
+            raise TypeError("A quality value of None was found")
+        if max(qualities) >= 62.5 :
+            warnings.warn("Data loss - max Solexa quality 62 in Solexa FASTQ")
+        #This will apply the truncation at 62, giving max ASCII 126
+        return "".join([chr(min(126,int(round(qs))+SOLEXA_SCORE_OFFSET)) \
+                        for qs in qualities])
     #Fall back on the PHRED scores...
     try :
         qualities = record.letter_annotations["phred_quality"]
@@ -773,18 +781,16 @@ def _get_solexa_quality_str(record) :
         #Either no PHRED scores, or something odd like a float or None
         #or too big to be in the cache
         pass
+    if None in qualities :
+        raise TypeError("A quality value of None was found")
     #Must do this the slow way, first converting the PHRED scores into
     #Solexa scores:
-    try :
-        return "".join([chr(min(126,
-                                int(round(solexa_quality_from_phred(qp))) + \
-                                SOLEXA_SCORE_OFFSET)) \
-                        for qp in qualities])
-    except TypeError, e :
-        if None in qualities :
-            raise TypeError("A quality value of None was found")
-        else :
-            raise e
+    if max(qualities) >= 62.5 :
+        warnings.warn("Data loss - max Solexa quality 62 in Solexa FASTQ")
+    return "".join([chr(min(126,
+                            int(round(solexa_quality_from_phred(qp))) + \
+                            SOLEXA_SCORE_OFFSET)) \
+                    for qp in qualities])
 
 #TODO - Default to nucleotide or even DNA?
 def FastqGeneralIterator(handle) :

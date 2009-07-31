@@ -6,12 +6,22 @@
 """Additional unit tests for Bio.SeqIO.QualityIO (covering FASTQ and QUAL)."""
 import os
 import unittest
+import warnings
 from Bio.Alphabet import generic_dna
 from Bio.SeqIO import QualityIO
 from Bio import SeqIO
 from Bio.Seq import Seq, UnknownSeq, MutableSeq
 from Bio.SeqRecord import SeqRecord
 from StringIO import StringIO
+
+def truncation_expected(format) :
+    if format in ["fastq-solexa", "fastq-illumina"] :
+        return 62
+    elif format in ["fastq", "fastq-sanger"] :
+        return 93
+    else :
+        assert format in ["fasta", "qual"]
+        return None
 
 #Top level function as this makes it easier to use for debugging:
 def write_read(filename, in_format, out_format) :
@@ -22,9 +32,9 @@ def write_read(filename, in_format, out_format) :
     handle.seek(0)
     #Now load it back and check it agrees,
     records2 = list(SeqIO.parse(handle,out_format))
-    compare_records(records, records2)
+    compare_records(records, records2, truncation_expected(out_format))
 
-def compare_record(old, new) :
+def compare_record(old, new, truncate=None) :
     """Quality aware SeqRecord comparision.
 
     This will check the mapping between Solexa and PHRED scores.
@@ -47,18 +57,32 @@ def compare_record(old, new) :
     if "phred_quality" in old.letter_annotations \
     and "phred_quality" in new.letter_annotations \
     and old.letter_annotations["phred_quality"] != new.letter_annotations["phred_quality"] :
-        raise ValuerError("Mismatch in phred_quality")
+        if truncate and [min(q,truncate) for q in old.letter_annotations["phred_quality"]] == \
+                        [min(q,truncate) for q in new.letter_annotations["phred_quality"]] :
+            pass
+        else :
+            raise ValuerError("Mismatch in phred_quality")
     if "solexa_quality" in old.letter_annotations \
     and "solexa_quality" in new.letter_annotations \
     and old.letter_annotations["solexa_quality"] != new.letter_annotations["solexa_quality"] :
-            raise ValuerError("Mismatch in phred_quality")
+        if truncate and [min(q,truncate) for q in old.letter_annotations["solexa_quality"]] == \
+                        [min(q,truncate) for q in new.letter_annotations["solexa_quality"]] :
+            pass
+        else :
+            raise ValueError("Mismatch in phred_quality")
     if "phred_quality" in old.letter_annotations \
     and "solexa_quality" in new.letter_annotations :
         #Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
         #Assume "old" is the original, and "new" has been converted.
         converted = [round(QualityIO.solexa_quality_from_phred(q)) \
                      for q in old.letter_annotations["phred_quality"]]
+        if truncate :
+            converted = [min(q,truncate) for q in converted]
         if converted != new.letter_annotations["solexa_quality"] :
+            print
+            print old.letter_annotations["phred_quality"]
+            print converted
+            print new.letter_annotations["solexa_quality"]
             raise ValueError("Mismatch in phred_quality vs solexa_quality")
     if "solexa_quality" in old.letter_annotations \
     and "phred_quality" in new.letter_annotations :
@@ -66,21 +90,28 @@ def compare_record(old, new) :
         #Assume "old" is the original, and "new" has been converted.
         converted = [round(QualityIO.phred_quality_from_solexa(q)) \
                      for q in old.letter_annotations["solexa_quality"]]
+        if truncate :
+            converted = [min(q,truncate) for q in converted]
         if converted != new.letter_annotations["phred_quality"] :
+            print old.letter_annotations["solexa_quality"]
+            print converted
+            print new.letter_annotations["phred_quality"]
             raise ValueError("Mismatch in solexa_quality vs phred_quality")
     return True
 
-def compare_records(old_list, new_list) :
+def compare_records(old_list, new_list, truncate_qual=None) :
     """Check two lists of SeqRecords agree, raises a ValueError if mismatch."""
     if len(old_list) != len(new_list) :
         raise ValueError("%i vs %i records" % (len(old_list), len(new_list)))
     for old, new in zip(old_list, new_list) :
-        if not compare_record(old,new) :
+        if not compare_record(old,new,truncate_qual) :
             return False
     return True
 
 class TestWriteRead(unittest.TestCase) :
     """Test can write and read back files."""
+    def setUp(self):
+        warnings.resetwarnings()
 
     def test_generated(self) :
         """Write and read back odd SeqRecord objects"""
@@ -98,13 +129,19 @@ class TestWriteRead(unittest.TestCase) :
                            letter_annotations={"solexa_quality":[]})
         record7 = SeqRecord(Seq("ACNN"*500),  id="Test_Sol", description="Long "*500,
                            letter_annotations={"solexa_quality":[40,30,0,-5]*500})
+        record8 = SeqRecord(Seq("ACGT"),  id="HighQual", description="With very large qualities that even Sanger FASTQ can't hold!",
+                           letter_annotations={"solexa_quality":[0,10,100,1000]})
         #TODO - Record with no identifier?
-        records = [record1, record2, record3, record4, record5, record6, record7]
+        records = [record1, record2, record3, record4, record5, record6, record7, record8]
+        #TODO - Have a Biopython defined "DataLossWarning?"
+        warnings.simplefilter('ignore', UserWarning)
         for format in ["fasta", "fastq", "fastq-solexa", "fastq-illumina", "qual"] :
             handle = StringIO()
             SeqIO.write(records, handle, format)
             handle.seek(0)
-            compare_records(records, list(SeqIO.parse(handle, format)))
+            compare_records(records,
+                            list(SeqIO.parse(handle, format)),
+                            truncation_expected(format))
             
     def test_tricky(self) :
         """Write and read back tricky.fastq"""
@@ -119,7 +156,11 @@ class TestWriteRead(unittest.TestCase) :
         write_read(os.path.join("Quality", "sanger_93.fastq"), "fastq-sanger", "fasta")
         write_read(os.path.join("Quality", "sanger_93.fastq"), "fastq-sanger", "fastq-sanger")
         write_read(os.path.join("Quality", "sanger_93.fastq"), "fastq-sanger", "qual")
-        #TODO - tests with truncation of the high PHRED values...
+        #TODO - Have a Biopython defined "DataLossWarning?"
+        #TODO - On Python 2.6+ we can check this warning is really triggered
+        warnings.simplefilter('ignore', UserWarning)
+        write_read(os.path.join("Quality", "sanger_93.fastq"), "fastq-sanger", "fastq-solexa")
+        write_read(os.path.join("Quality", "sanger_93.fastq"), "fastq-sanger", "fastq-illumina")
 
     def test_sanger_faked(self) :
         """Write and read back sanger_faked.fastq"""
