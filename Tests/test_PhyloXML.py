@@ -608,6 +608,37 @@ class MethodTests(unittest.TestCase):
         self.assert_(isinstance(doc, Tree.Phyloxml))
 
     def test_sequence_conversion(self):
+        pseq = Tree.Sequence(
+            type='protein',
+            # id_ref=None,
+            # id_source=None,
+            symbol='ADHX',
+            accession=Tree.Accession('P81431', source='UniProtKB'),
+            name='Alcohol dehydrogenase class-3',
+            # location=None,
+            mol_seq=Tree.MolSeq(
+                'TDATGKPIKCMAAIAWEAKKPLSIEEVEVAPPKSGEVRIKILHSGVCHTD'),
+            uri=None,
+            annotations=[Tree.Annotation(ref='EC:1.1.1.1'),
+                         Tree.Annotation(ref='GO:0004022')],
+            domain_architecture=Tree.DomainArchitecture(
+                length=50,
+                domains=[Tree.ProteinDomain(*args) for args in (
+                    # value,   start,   end,    confidence
+                    ('FOO',     0,      5,      7.0e-26),
+                    ('BAR',     8,      13,     7.2e-117),
+                    ('A-OK',    21,     34,     2.4e-06),
+                    ('WD40',    40,     50,     0.3))],
+                ))
+        srec = pseq.to_seqrecord()
+        # TODO: check seqrec-specific traits (see args)
+        #   Seq(letters, alphabet), id, name, description, features
+        pseq2 = Tree.Sequence.from_seqrecord(srec)
+        # TODO: check the round-tripped attributes again
+
+
+    def test_get_alignment(self):
+        # TODO: load a Phylogeny w/ aligned Sequences, call, check attrs
         pass
 
     # Syntax sugar

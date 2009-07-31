@@ -696,8 +696,10 @@ class Sequence(PhyloElement):
         DomainArchitecture)
     @param other: list of non-phyloXML elements (type Other)
     """
+    alphabets = {'dna':     Alphabet.generic_dna,
+                 'rna':     Alphabet.generic_rna,
+                 'protein': Alphabet.generic_protein}
     re_symbol = re.compile(r'\S{1,10}')
-    ok_type = set(('rna', 'dna', 'protein'))
 
     def __init__(self, 
             # Attributes
@@ -708,7 +710,7 @@ class Sequence(PhyloElement):
             # Collections
             annotations=None, other=None,
             ):
-        check_str(type, self.ok_type.__contains__)
+        check_str(type, self.alphabets.__contains__)
         check_str(symbol, self.re_symbol.match)
         PhyloElement.__init__(self, type=type, id_ref=id_ref,
                 id_source=id_source, symbol=symbol, accession=accession,
@@ -719,73 +721,135 @@ class Sequence(PhyloElement):
                 )
 
     @classmethod
-    def from_seqrecord(cls, record):
-        kwargs = {
+    def from_seqrecord(cls, record, is_aligned=None):
+        """Create a new PhyloXML Sequence from a SeqRecord object."""
+        if is_aligned == None:
+            is_aligned = isinstance(record.seq.alphabet, Alphabet.Gapped)
+        params = {
                 'accession': Accession('', record.id),
                 'symbol': record.name,
                 'name': record.description,
-                'mol_seq': str(record.seq),
+                'mol_seq': MolSeq(str(record.seq), is_aligned),
                 }
         if isinstance(record.seq.alphabet, Alphabet.DNAAlphabet):
-            kwargs['type'] = 'dna'
+            params['type'] = 'dna'
         elif isinstance(record.seq.alphabet, Alphabet.RNAAlphabet):
-            kwargs['type'] = 'rna'
+            params['type'] = 'rna'
         elif isinstance(record.seq.alphabet, Alphabet.ProteinAlphabet):
-            kwargs['type'] = 'protein'
+            params['type'] = 'protein'
 
         # Unpack record.annotations
-        annot_attrib = {}
-        annot_conf = None
-        annot_prop = None
-        annot_uri = None
-        for key in ('ref', 'source', 'evidence', 'type'):
+        for key in ('id_ref', 'id_source', 'location'):
             if key in record.annotations:
-                annot_attrib[key] = record.annotations[key]
-        if 'confidence' in record.annotations:
-            # NB: record.annotations['confidence'] = [value, type]
-            annot_conf = Confidence(*record.annotations['confidence'])
-        if 'properties' in record.annotations:
-            # NB: record.annotations['properties'] = {...}
-            annot_props = [Property(**prop)
-                           for prop in record.annotations['properties']]
-        if 'uri' in record.annotations:
-            # NB: record.annotations['uri'] = {...}
-            annot_uri = Uri(**record.annotations['uri'])
-        kwargs['annotations'] = [Annotation(annot_attrib, {
-            'desc': record.annotations.get('desc', None),
-            'confidence': annot_conf,
-            'properties': [annot_prop],
-            'uri': annot_uri,
-            })]
+                params[key] = record.annotations[key]
+        if isinstance(record.annotations.get('uri'), dict):
+            params['uri'] = Uri(**record.annotations['uri'])
+        # Build a Sequence.annotation object
+        if record.annotations.get('annotations'):
+            params['annotations'] = []
+            for annot in record.annotations['annotations']:
+                ann_args = {}
+                for key in ('ref', 'source', 'evidence', 'type', 'desc'):
+                    if key in annot:
+                        ann_args[key] = annot[key]
+                if isinstance(annot.get('confidence'), list):
+                    ann_args['confidence'] = Confidence(
+                                        *annot['confidence'])
+                if isinstance(annot.get('properties'), list):
+                    ann_args['properties'] = [Property(**prop)
+                                        for prop in annot['properties']
+                                        if isinstance(prop, dict)]
+                params['annotations'].append(Annotation(**ann_args))
 
         # Unpack record.features
         if record.features:
-            kwargs['domain_architecture'] = DomainArchitecture(
+            params['domain_architecture'] = DomainArchitecture(
                     length=len(record.seq),
                     domains=[ProteinDomain.from_seqfeature(feat)
                              for feat in record.features])
 
-        # Not handled:
-        # attributes: id_ref, id_source
-        # kwargs['location'] = None
-        # kwargs['uri'] = None -- redundant here?
-        return Sequence(**kwargs)
+        return Sequence(**params)
 
     def to_seqrecord(self):
-        alphabets = {'dna': Alphabet.generic_dna,
-                     'rna': Alphabet.generic_rna,
-                     'protein': Alphabet.generic_protein}
-        seqrec = SeqRecord(
-                Seq(self.mol_seq,
-                    alphabets.get(self.type, Alphabet.generic_alphabet)),
-                id=str(self.accession),
-                name=self.symbol,
-                description=self.name,
-                # dbxrefs=None,
-                # features=None,
-                )
-        # TODO: repack seqrec.annotations
+        """Create a SeqRecord object from this Sequence instance.
+        
+        The seqrecord.annotations dictionary is packed like so::
+
+            { # Sequence attributes with no SeqRecord equivalent:
+              'id_ref':     self.id_ref,
+              'id_source':  self.id_source,
+              'location':   self.location,
+              'uri':        { 'value': self.uri.value,
+                              'desc': self.uri.desc,
+                              'type': self.uri.type },
+              # Sequence.annotations attribute (list of Annotations)
+              'annotations': [{ 'ref':      ann.ref,
+                                'source':   ann.source,
+                                'evidence': ann.evidence,
+                                'type':     ann.type,
+                                'confidence': [ ann.confidence.value,
+                                                ann.confidence.type ],
+                                'properties': [{ 'value': prop.value,
+                                                 'ref': prop.ref,
+                                                 'applies_to': prop.applies_to,
+                                                 'datatype':   prop.datatype,
+                                                 'unit':       prop.unit,
+                                                 'id_ref':     prop.id_ref }
+                                               for prop in ann.properties],
+                              } for ann in self.annotations],
+            }
+        """
+        def clean_dict(dct):
+            """Remove None-valued items from a dictionary."""
+            return dict((key, val) for key, val in dct.iteritems()
+                        if val is not None)
+
+        seqrec = SeqRecord(Seq(self.mol_seq.value, self.get_alphabet()),
+                           **clean_dict({
+                               'id':    str(self.accession),
+                               'name':  self.symbol,
+                               'description': self.name,
+                               # 'dbxrefs': None,
+                               }))
+        if self.domain_architecture:
+            seqrec.features = [dom.to_seqfeature()
+                               for dom in self.domain_architecture.domains]
+        # Sequence attributes with no SeqRecord equivalent
+        seqrec.annotations = clean_dict({
+                'id_ref':       self.id_ref,
+                'id_source':    self.id_source,
+                'location':     self.location,
+                'uri':          self.uri and clean_dict({
+                                    'value': self.uri.value,
+                                    'desc': self.uri.desc,
+                                    'type': self.uri.type,
+                                    }),
+                'annotations':  self.annotations and [
+                    clean_dict({
+                        'ref':          ann.ref,
+                        'source':       ann.source,
+                        'evidence':     ann.evidence,
+                        'type':         ann.type,
+                        'confidence':   ann.confidence and [
+                                            ann.confidence.value,
+                                            ann.confidence.type],
+                        'properties':   [clean_dict({
+                                            'value':      prop.value,
+                                            'ref':        prop.ref,
+                                            'applies_to': prop.applies_to,
+                                            'datatype':   prop.datatype,
+                                            'unit':       prop.unit,
+                                            'id_ref':     prop.id_ref })
+                                         for prop in ann.properties],
+                        }) for ann in self.annotations],
+                })
         return seqrec
+
+    def get_alphabet(self):
+        alph = self.alphabets.get(self.type, Alphabet.generic_alphabet)
+        if self.mol_seq and self.mol_seq.is_aligned:
+            return Alphabet.Gapped(alph)
+        return alph
 
 
 class SequenceRelation(PhyloElement):
