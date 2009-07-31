@@ -272,7 +272,11 @@ NUMPY_PACKAGES = [
     'Bio.KDTree',
 ]
 
-EXTENSIONS = [
+if os.name == 'java' :
+    # Jython doesn't support C extensions
+    EXTENSIONS = []
+else :
+    EXTENSIONS = [
     Extension('Bio.clistfns',
               ['Bio/clistfnsmodule.c']
               ),
@@ -313,6 +317,7 @@ EXTENSIONS = [
               ['Bio/Restriction/DNAUtils.c']
               ),
     ]
+
 
 #We now define the Biopython version number in Bio/__init__.py
 #Here we can't use "import Bio" then "Bio.__version__" as that would
