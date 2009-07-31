@@ -84,12 +84,23 @@ class Tree(TreeElement):
         as "biosql"), or create one named the same as the tree.
 
     """
-    def __init__(self, rooted=True, name=None, id=None):
+    def __init__(self, root=None, nodes=None, rooted=True, name=None, id=None):
         self.rooted = rooted    # is_rooted=True
         self.name = name
         self.id = id            #: identifier
+        # For Biopython
+        self.root = root            # type Node
+        self.nodes = nodes or []    # each type Node, "under" root
         # relations: self, node (root_node), biodatabase
         # may belong to a sequence
+
+    @classmethod
+    def from_node(cls, node, **kwargs):
+        """Create a new Tree object given a root node.
+
+        Keyword arguments are the usual Tree constructor parameters.
+        """
+        return Tree(node, **kwargs)
 
     # Plumbing
 
@@ -173,9 +184,24 @@ class Tree(TreeElement):
 
         return self.depth_first_search(self, is_matching_node)
 
+    # From Bioperl's Bio::Tree::TreeI
+
     def total_branch_length(self):
         """Get the total length of this tree (sum of all branch lengths)."""
         raise NotImplementedError
+
+    def get_leaf_nodes(self):
+        """Request the taxa (leaves of the tree)."""
+        raise NotImplementedError
+
+    # From Bioperl's Bio::Tree::TreeFunctionsI
+
+    # remove_node
+    # get_lca (lowest common ancestor)
+    # distance (between 2 nodes, specified however)
+    # is_monophyletic
+    # is_paraphyletic
+    # reroot
 
 
 class Node(TreeElement):
@@ -206,32 +232,23 @@ class Node(TreeElement):
          hierarchical queries. Needs to be precomputed by a program, see J.
          Celko, SQL for Smarties.
     """
-    def __init__(self, label=None, left_idx=None, right_idx=None):
-        self.label = label
-        self.left_idx = left_idx
-        self.right_idx = right_idx
+    def __init__(self, name=None, parent=None, tree=None,
+            branch_length=None, left_idx=None, right_idx=None):
         # relations: self, tree
         # (id/identifier/label, parent/ancestor)
         # may belong to a sequence
+        self.tree = None            # tree_id, type Tree
+        self.left_idx = left_idx
+        self.right_idx = right_idx
+        # For Biopython
+        self.name = name
+        self.branch_length = branch_length  # XXX or move this to Edge?
+        self.parent = parent        # type Node
 
-    # From Bioperl's Bio::Tree::TreeI
-
-    def get_leaf_nodes(self):
-        """Request the taxa (leaves of the tree)."""
-        raise NotImplementedError
-
-    def get_root_node(self):
-        """Get the root node of this tree."""
-        raise NotImplementedError
-
-    # From Bioperl's Bio::Tree::TreeFunctionsI
-
-    # remove_node
-    # get_lca (lowest common ancestor)
-    # distance (between 2 nodes, specified however)
-    # is_monophyletic
-    # is_paraphyletic
-    # reroot
+    @property
+    def label(self):
+        """For compatibility with BioSQL."""
+        return self.name
 
 
 # Additional PhyloDB tables

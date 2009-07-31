@@ -231,14 +231,11 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
             confidences=None, taxonomies=None, sequences=None,
             distributions=None, references=None, properties=None, clades=None,
             other=None,
-            # BaseTree.Node
-            left_idx=None, right_idx=None,
             ):
-        PhyloElement.__init__(self, parent=parent, id_source=id_source,
-                name=name, branch_length=branch_length, width=width,
-                color=color, node_id=node_id, events=events,
+        PhyloElement.__init__(self, id_source=id_source, name=name,
+                branch_length=branch_length, width=width, color=color,
+                node_id=node_id, events=events,
                 binary_characters=binary_characters, date=date,
-                left_idx=left_idx, right_idx=right_idx,
                 confidences=confidences or [],
                 taxonomies=taxonomies or [],
                 sequences=sequences or [],
@@ -247,6 +244,10 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
                 properties=properties or [],
                 clades=clades or [],
                 other=other or [],
+                # BaseTree attributes
+                left_idx=None,
+                right_idx=None,
+                parent=parent,
                 )
 
     def to_phylogeny(self, **kwargs):
@@ -259,11 +260,22 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
     def label(self):
         return str(self)
 
+    @property
+    def root(self):
+        return self
+
+    @property
+    def tree(self):
+        return self
+
     # Mimic BaseTree.Tree
     @property
+    def nodes(self):
+        return self.clades
+
+    @property
     def rooted(self):
-        if self.parent is not None:
-            return self.parent.rooted
+        return (self.parent is not None)
 
     # Shortcuts for list attributes that are usually only 1 item
     @property
