@@ -77,6 +77,41 @@ class PhyloXMLError(Exception):
 
 
 # ---------------------------------------------------------
+# Public API
+
+def read(file):
+    """Parse a phyloXML file or stream and build a tree of Biopython objects.
+
+    The children of the root node are phylogenies and possibly other arbitrary
+    (non-phyloXML) objects.
+
+    @rtype: Bio.Tree.PhyloXML.Phyloxml
+    """
+    return Parser(file).read()
+
+
+def parse(file):
+    """Iterate over the phylogenetic trees in a phyloXML file.
+
+    This ignores any additional data stored at the top level, but may be more
+    memory-efficient than the read() function.
+
+    @return: a generator of Bio.Tree.PhyloXML.Phylogeny objects.
+    """
+    return Parser(file).parse()
+
+
+def write(phylo, file, encoding=None):
+    """Write a phyloXML file.
+
+    The file argument can be either an open handle or a file name.
+    """
+    if isinstance(phylo, Tree.Phylogeny):
+        phylo = phylo.to_phyloxml()
+    Writer(phylo, encoding).write(file)
+
+
+# ---------------------------------------------------------
 # Functions I wish ElementTree had
 
 def local(tag):
@@ -146,7 +181,8 @@ def dump_tags(handle, file=sys.stdout):
 
 
 # ---------------------------------------------------------
-# Utilities
+# INPUT
+# ---------------------------------------------------------
 
 def str2bool(text):
     if text == 'true':
@@ -200,41 +236,15 @@ def replace_wspace(text):
     return text
 
 
-# ---------------------------------------------------------
-# INPUT
-# ---------------------------------------------------------
-
-def read(file):
-    """Parse a phyloXML file or stream and build a tree of Biopython objects.
-
-    The children of the root node are phylogenies and possibly other arbitrary
-    (non-phyloXML) objects.
+class Parser(object):
+    """Methods for parsing all phyloXML nodes from an XML stream.
 
     To minimize memory use, the tree of ElementTree parsing events is cleared
     after completing each phylogeny, clade, and top-level 'other' element.
     Elements below the clade level are kept in memory until parsing of the
     current clade is finished -- this shouldn't be a problem because clade is
-    the main recursive element, and non-clade nodes below this level are of
+    the only recursive element, and non-clade nodes below this level are of
     bounded size.
-
-    @rtype: Bio.Tree.PhyloXML.Phyloxml
-    """
-    return Parser(file).read()
-
-
-def parse(file):
-    """Iterate over the phylogenetic trees in a phyloXML file.
-
-    This ignores any additional data stored at the top level, but may be more
-    memory-efficient than the read() function.
-
-    @return: a generator of Bio.Tree.PhyloXML.Phylogeny objects.
-    """
-    return Parser(file).parse()
-
-
-class Parser(object):
-    """Methods for parsing all phyloXML nodes from an XML stream.
     """
 
     def __init__(self, file):
@@ -579,17 +589,6 @@ class Parser(object):
 # ---------------------------------------------------------
 # OUTPUT
 # ---------------------------------------------------------
-
-
-def write(phyloxml, file, encoding=None):
-    """Write a phyloXML file.
-
-    The file argument can be either an open handle or a file name.
-    """
-    Writer(phyloxml, encoding).write(file)
-
-
-# Helpers
 
 def serialize(value):
     """Convert a Python primitive to a phyloXML-compatible Unicode string."""

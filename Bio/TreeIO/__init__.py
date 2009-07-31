@@ -46,6 +46,9 @@ def read(file, format):
 
     return getattr(supported_formats[format], 'read')(file)
 
-def write(obj, file, format, **kwargs):
+def write(trees, file, format, **kwargs):
     """Write a sequence of trees to file in the given format."""
-    return getattr(supported_formats[format], 'write')(obj, file, **kwargs)
+    if not hasattr(trees, '__iter__'):
+        # Probably passed a single tree instead of a sequence -- that's OK
+        trees = [trees]
+    return getattr(supported_formats[format], 'write')(trees, file, **kwargs)
