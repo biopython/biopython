@@ -56,7 +56,7 @@ except AttributeError:
         except ImportError:
             warnings.warn("Couldn't import xml.etree.ElementTree; "
                     "phyloXML namespaces may have unexpected abbreviations "
-                    "in the output.", RuntimeWarning, stacklevel=2)
+                    "in the output.", ImportWarning, stacklevel=2)
             ElementTree._namespace_map = {}
 
     def register_namespace(prefix, uri):
@@ -385,8 +385,7 @@ class Parser(object):
                             and clade.branch_length is not None:
                         raise PhyloXMLError(
                                 'Attribute branch_length was already set '
-                                'for this Clade; overwriting the previous '
-                                'value.')
+                                'for this Clade.')
                     clade.branch_length = _float(elem.text)
                 elif tag == 'width':
                     clade.width = _float(elem.text)

@@ -164,9 +164,9 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
         See also: Clade.confidence, Clade.taxonomy
         """
         if len(self.confidences) == 0:
-            raise RuntimeError("Phylogeny().confidences is empty")
+            raise AttributeError("Phylogeny().confidences is empty")
         if len(self.confidences) > 1:
-            raise RuntimeError("more than 1 confidence value available; "
+            raise ValueError("more than 1 confidence value available; "
                                "use Phylogeny().confidences")
         return self.confidences[0]
 
@@ -248,22 +248,21 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
             return self.parent.rooted
 
     # Shortcuts for list attributes that are usually only 1 item
-    # XXX should these raise RuntimeError, AttributeError or IndexError?
     @property
     def confidence(self):
         if len(self.confidences) == 0:
-            raise RuntimeError("Clade().confidences is empty")
+            raise AttributeError("Clade().confidences is empty")
         if len(self.confidences) > 1:
-            raise RuntimeError("more than 1 confidence value available; "
+            raise ValueError("more than 1 confidence value available; "
                                "use Clade().confidences")
         return self.confidences[0]
 
     @property
     def taxonomy(self):
         if len(self.taxonomies) == 0:
-            raise RuntimeError("Clade().taxonomies is empty")
+            raise AttributeError("Clade().taxonomies is empty")
         if len(self.taxonomies) > 1:
-            raise RuntimeError("more than 1 taxonomy value available; "
+            raise ValueError("more than 1 taxonomy value available; "
                                "use Clade().taxonomies")
         return self.taxonomies[0]
 

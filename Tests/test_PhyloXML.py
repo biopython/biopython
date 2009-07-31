@@ -660,21 +660,21 @@ class MethodTests(unittest.TestCase):
         self.assertEqual(clade.taxonomy.rank, 'genus')
         # raise if len > 1
         clade.confidences.append(conf)
-        self.assertRaises(RuntimeError, getattr, clade, 'confidence')
+        self.assertRaises(ValueError, getattr, clade, 'confidence')
         clade.taxonomies.append(taxo)
-        self.assertRaises(RuntimeError, getattr, clade, 'taxonomy')
+        self.assertRaises(ValueError, getattr, clade, 'taxonomy')
         # raise if []
         clade.confidences = []
-        self.assertRaises(RuntimeError, getattr, clade, 'confidence')
+        self.assertRaises(AttributeError, getattr, clade, 'confidence')
         clade.taxonomies = []
-        self.assertRaises(RuntimeError, getattr, clade, 'taxonomy')
+        self.assertRaises(AttributeError, getattr, clade, 'taxonomy')
         # Phylogeny.confidence
         tree = Tree.Phylogeny(True, confidences=[conf])
         self.assertEqual(tree.confidence.type, 'bootstrap')
         tree.confidences.append(conf)
-        self.assertRaises(RuntimeError, getattr, tree, 'confidence')
+        self.assertRaises(ValueError, getattr, tree, 'confidence')
         tree.confidences = []
-        self.assertRaises(RuntimeError, getattr, tree, 'confidence')
+        self.assertRaises(AttributeError, getattr, tree, 'confidence')
 
     # Other methods
 
