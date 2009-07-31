@@ -586,16 +586,8 @@ def _get_sanger_quality_str(record) :
 
     Notice that due to the limited range of printable ASCII characters, a
     PHRED quality of 93 is the maximum that can be held in an Illumina FASTQ
-    file (using ASCII 126, the tilde):
-    
-    >>> r1 = SeqRecord(Seq("ACGTCT"), id="Test1",
-    ...      letter_annotations = {"solexa_quality":[91,92,93,94,95,96]})
-    >>> _get_sanger_quality_str(r1)
-    '|}~~~~'
-    >>> r2 = SeqRecord(Seq("ACGTCT"), id="Test2",
-    ...      letter_annotations = {"phred_quality":[91,92,93,94,95,96]})
-    >>> _get_sanger_quality_str(r2)
-    '|}~~~~'
+    file (using ASCII 126, the tilde). This function will issue a warning
+    in this situation.
     """
     #TODO - This functions works and is fast, but it is also ugly
     #and there is considerable repetition of code for the other
@@ -658,17 +650,8 @@ def _get_illumina_quality_str(record) :
 
     Notice that due to the limited range of printable ASCII characters, a
     PHRED quality of 62 is the maximum that can be held in an Illumina FASTQ
-    file (using ASCII 126, the tilde):
-    
-    >>> r1 = SeqRecord(Seq("ACGTCT"), id="Test1",
-    ...      letter_annotations = {"solexa_quality":[60,61,62,63,64,65]})
-    >>> _get_illumina_quality_str(r1)
-    '|}~~~~'
-    >>> r2 = SeqRecord(Seq("ACGTCT"), id="Test2",
-    ...      letter_annotations = {"phred_quality":[60,61,62,63,64,65]})
-    >>> _get_illumina_quality_str(r2)
-    '|}~~~~'
-
+    file (using ASCII 126, the tilde). This function will issue a warning
+    in this situation.
     """
     #TODO - This functions works and is fast, but it is also ugly
     #and there is considerable repetition of code for the other
@@ -731,16 +714,8 @@ def _get_solexa_quality_str(record) :
 
     Notice that due to the limited range of printable ASCII characters, a
     Solexa quality of 62 is the maximum that can be held in a Solexa FASTQ
-    file (using ASCII 126, the tilde):
-    
-    >>> r1 = SeqRecord(Seq("ACGTCT"), id="Test1",
-    ...      letter_annotations = {"solexa_quality":[60,61,62,63,64,65]})
-    >>> _get_solexa_quality_str(r1)
-    '|}~~~~'
-    >>> r2 = SeqRecord(Seq("ACGTCT"), id="Test2",
-    ...      letter_annotations = {"phred_quality":[60,61,62,63,64,65]})
-    >>> _get_solexa_quality_str(r2)
-    '|}~~~~'
+    file (using ASCII 126, the tilde). This function will issue a warning
+    in this situation.
     """
     #TODO - This functions works and is fast, but it is also ugly
     #and there is considerable repetition of code for the other
@@ -1400,6 +1375,10 @@ class FastqPhredWriter(SequentialSequenceWriter):
     This code is also called if you use the .format("fastq") method of a
     SeqRecord, or .format("fastq-sanger") if you prefer that alias.
 
+    Note that Sanger FASTQ files have an upper limit of PHRED quality 93, which is
+    encoded as ASCII 126, the tilde. If your quality scores are truncated to fit, a
+    warning is issued.
+
     P.S. To avoid cluttering up your working directory, you can delete this
     temporary file now:
 
@@ -1560,29 +1539,17 @@ class FastqSolexaWriter(SequentialSequenceWriter):
     This code is also called if you use the .format("fastq-solexa") method of
     a SeqRecord. For example,
 
-    >>> record = SeqIO.read(open("Quality/sanger_93.fastq"), "fastq-sanger")
-    >>> sub_record = record[25:35]
-    >>> print sub_record.letter_annotations["phred_quality"]
-    [68, 67, 66, 65, 64, 63, 62, 61, 60, 59]
-    >>> print sub_record.format("fastq-sanger")
-    @Test PHRED qualities from 93 to 0 inclusive
-    CTGACTGACT
+    >>> record = SeqIO.read(open("Quality/sanger_faked.fastq"), "fastq-sanger")
+    >>> print record.format("fastq-solexa")
+    @Test PHRED qualities from 40 to 0 inclusive
+    ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN
     +
-    edcba`_^]\
+    hgfedcba`_^]\[ZYXWVUTSRQPONMLKJHGFECB@>;;
     <BLANKLINE>
-    >>> print sub_record.format("fastq-solexa")
-    @Test PHRED qualities from 93 to 0 inclusive
-    CTGACTGACT
-    +
-    ~~~~~~~}|{
-    <BLANKLINE>
-    >>> print chr(64+62)
-    ~
-
-    The point of this example was to demonstrate that Solexa FASTQ files have
-    an upper limit of Solexa quality 62, which is encoded as ASCII 126, the
-    tilde. Remember that for high qualities like this, PHRED and Solexa scores
-    equal once rounded to integers.
+    
+    Note that Solexa FASTQ files have an upper limit of Solexa quality 62, which is
+    encoded as ASCII 126, the tilde.  If your quality scores must be truncated to fit,
+    a warning is issued.
     
     P.S. Don't forget to delete the temp file if you don't need it anymore:
 
@@ -1632,30 +1599,17 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
     method of a SeqRecord. For example,
 
     >>> from Bio import SeqIO
-    >>> record = SeqIO.read(open("Quality/sanger_93.fastq"), "fastq-sanger")
-    >>> print max(record.letter_annotations["phred_quality"])
-    93
-    >>> sub_record = record[25:35]
-    >>> print sub_record.letter_annotations["phred_quality"]
-    [68, 67, 66, 65, 64, 63, 62, 61, 60, 59]
-    >>> print sub_record.format("fastq-sanger")
-    @Test PHRED qualities from 93 to 0 inclusive
-    CTGACTGACT
+    >>> record = SeqIO.read(open("Quality/sanger_faked.fastq"), "fastq-sanger")
+    >>> print record.format("fastq-illumina")
+    @Test PHRED qualities from 40 to 0 inclusive
+    ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN
     +
-    edcba`_^]\
+    hgfedcba`_^]\[ZYXWVUTSRQPONMLKJIHGFEDCBA@
     <BLANKLINE>
-    >>> print sub_record.format("fastq-illumina")
-    @Test PHRED qualities from 93 to 0 inclusive
-    CTGACTGACT
-    +
-    ~~~~~~~}|{
-    <BLANKLINE>
-    >>> print chr(64+62)
-    ~
 
-    The point of this example was to demonstrate that Illumina FASTQ files have
-    an upper limit of PHRED quality 62, which is encoded as ASCII 126, the
-    tilde. Remember that Sanger FASTQ files allow PHRED values from 0 to 93.
+    Note that Illumina FASTQ files have an upper limit of PHRED quality 62, which is
+    encoded as ASCII 126, the tilde. If your quality scores are truncated to fit, a
+    warning is issued.
     """
     def write_record(self, record):
         """Write a single FASTQ record to the file."""
@@ -1802,7 +1756,7 @@ def _test():
         assert os.path.isfile("Quality/example.qual")
         assert os.path.isfile("Quality/tricky.fastq")
         assert os.path.isfile("Quality/solexa_faked.fastq")
-        doctest.testmod()
+        doctest.testmod(verbose=0)
         os.chdir(cur_dir)
         del cur_dir
         print "Done"
