@@ -1824,7 +1824,9 @@ Testing reading phd format file Phd/phd1
  Failed: Sequences must all be the same length
  Checking can write/read as 'fastq' format
  Checking can write/read as 'fastq-illumina' format
+<type 'exceptions.UserWarning'> - Data loss - max PHRED quality 62 in Illumina FASTQ
  Checking can write/read as 'fastq-solexa' format
+<type 'exceptions.UserWarning'> - Data loss - max Solexa quality 62 in Solexa FASTQ
  Checking can write/read as 'genbank' format
  Failed: Locus identifier '425_7_(71-A03-19).b.ab1' is too long
  Checking can write/read as 'qual' format

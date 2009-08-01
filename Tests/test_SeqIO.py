@@ -12,6 +12,16 @@ from Bio.Seq import Seq, UnknownSeq
 from StringIO import StringIO
 from Bio import Alphabet
 
+import warnings
+def send_warnings_to_stdout(message, category, filename, lineno,
+                                file=None, line=None):
+    #TODO - Have Biopython DataLossWarning?
+    if category in [UserWarning] :
+        print "%s - %s" % (category.__name__, message)
+warnings.resetwarnings()
+warnings.showwarning = send_warnings_to_stdout
+
+
 protein_alphas = [Alphabet.generic_protein]
 dna_alphas = [Alphabet.generic_dna]
 rna_alphas = [Alphabet.generic_rna]
