@@ -175,6 +175,18 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
         """Create a new PhyloXML object containing just this phylogeny."""
         return Phyloxml(kwargs, phylogenies=[self])
 
+    # Mimic BaseTree.Tree
+
+    @property
+    def nodes(self):
+        return self.clade.nodes
+
+    @property
+    def root(self):
+        return self.clade
+
+    # Singular property for plural attribute
+
     @property
     def confidence(self):
         """Equivalent to self.confidences[0] if there is only 1 value.
@@ -261,10 +273,6 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
         return str(self)
 
     @property
-    def root(self):
-        return self
-
-    @property
     def tree(self):
         return self
 
@@ -272,6 +280,10 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
     @property
     def nodes(self):
         return self.clades
+
+    @property
+    def root(self):
+        return self
 
     @property
     def rooted(self):

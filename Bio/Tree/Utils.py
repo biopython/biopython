@@ -4,6 +4,8 @@
 # as part of this package.
 
 """Utilities for handling and checking PhyloXML object trees.
+
+Third-party libraries are loaded when the corresponding function is called.
 """
 __docformat__ = "epytext en"
 
@@ -44,4 +46,50 @@ def pretty_print(treeobj, file=sys.stdout, show_all=False, indent=0):
                         print_phylo(elem, indent)
 
     print_phylo(treeobj, indent)
+
+
+def to_networkx(tree):
+    """Convert a Tree object to a networkx graph.
+
+    The result is useful for plotting with pylab, matplotlib or pygraphviz,
+    though the result is not quite a proper dendrogram for representing a
+    phylogeny.
+
+    Example:
+
+        >>> import networkx, pylab
+        >>> tree = TreeIO.read('example.xml', 'phyloxml')
+        >>> G = to_networkx(tree)
+        >>> networkx.draw_graphviz(G)
+    """
+    try:
+        import networkx
+    except ImportError:
+        from Bio import MissingExternalDependencyError
+        raise MissingExternalDependencyError(
+                "The networkx library is not installed.")
+
+    if tree.rooted:
+        G = networkx.DiGraph()
+    else:
+        G = networkx.Graph()
+
+    def get_label(node):
+        label = str(node)
+        if label == node.__class__.__name__:
+            return '%s <%d>' % (label, id(node))
+        return label
+
+    # Walk down the Tree, building graphs, edges and nodes.
+    def build_subgraph(top):
+        rlabel = get_label(top)
+        G.add_node(rlabel)
+        for node in top.nodes:
+            nlabel = get_label(node)
+            G.add_node(nlabel)
+            G.add_edge(rlabel, nlabel)
+            build_subgraph(node)
+
+    build_subgraph(tree.root)
+    return G
 
