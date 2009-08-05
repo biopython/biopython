@@ -58,6 +58,7 @@ def to_networkx(tree, graphviz=False):
     Requires the networkx package.
     """
     # TODO: solve the graphviz labeling issue
+    # ENH: color non-terminal nodes white/transparent
     try:
         import networkx
     except ImportError:
@@ -108,8 +109,10 @@ def to_networkx(tree, graphviz=False):
     return G
 
 
-def draw_graphviz(tree):
+def draw_graphviz(tree, path=None, format='pdf', prog='twopi', args=''):
     """Display a Tree object as a networkx graph, using the graphviz engine.
+
+    Requires networkx, matplotlib and pygraphviz.
 
     Example:
 
@@ -119,7 +122,25 @@ def draw_graphviz(tree):
         >>> Tree.draw_graphviz(tree)
         >>> pylab.show()
 
-    Requires networkx, matplotlib and pygraphviz.
+    Parameters are similar to the AGraph.draw() function in PyGraphViz. See the
+    GraphViz documentation for detailed explanations.
+
+    @param path: File name to write to, if any. If no path is given, matplotlib
+        is used to draw the graph on the screen.
+
+    @param format: Image format to use, if path is given. Defaults to PDF; other
+        formats usually supported are 'ps', 'svg', 'png', 'gif', 'fig' and
+        'dia'.
+
+    @param prog: The graphviz program to use when rendering the graph (to file
+        or screen). 'twopi' behaves the best for large graphs, reliably avoiding
+        crossing edges, but for smaller graphs 'neato' can also look nice. 
+        For small directed graphs, 'dot' may produce the most normal-looking
+        phylogram, but is liable to cross edges in larger graphs. ('circo' and
+        'fdp' are valid, but not recommended.)
+
+    @param args: String of options passed to the external graphviz program.
+        Normally not needed, but offered here for completeness.
     """
     try:
         import networkx
@@ -129,5 +150,9 @@ def draw_graphviz(tree):
                 "The networkx library is not installed.")
 
     G = to_networkx(tree, graphviz=True)
-    networkx.draw_graphviz(G, prog='twopi')
+    if path is None:
+        networkx.draw_graphviz(G, prog)
+    else:
+        A = networkx.to_agraph(G)
+        A.draw(path, format, prog, args)
 
