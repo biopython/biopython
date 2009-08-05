@@ -76,6 +76,13 @@ class _XMLparser(ContentHandler):
                     print "NCBIXML: Ignored: " + method
                 self._debug_ignore_list.append(method)
 
+        #We don't care about white space in parent tags like Hsp,
+        #but that white space doesn't belong to child tags like Hsp_midline
+        if self._value.strip() :
+            raise ValueError("What should we do with %s before the %s tag?" \
+                             % (repr(self._value), name))
+        self._value = ""
+
     def characters(self, ch):
         """Found some text
 
@@ -88,8 +95,7 @@ class _XMLparser(ContentHandler):
 
         name -- tag name
         """
-        # Strip character buffer
-        self._value = self._value.strip()
+        # DON'T strip any white space, we may need it e.g. the hsp-midline
         
         # Try to call a method (defined in subclasses)
         method = self._secure_name('_end_' + name)
@@ -510,7 +516,9 @@ class BlastParser(_XMLparser):
     def _end_Hsp_midline(self):
         """Formatting middle line as normally seen in BLAST report
         """
-        self._hsp.match = self._value
+        self._hsp.match = self._value # do NOT strip spaces!
+        assert len(self._hsp.match)==len(self._hsp.query)
+        assert len(self._hsp.match)==len(self._hsp.sbjct)
 
     # Statistics
     def _end_Statistics_db_num(self):
