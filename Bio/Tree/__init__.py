@@ -9,3 +9,4 @@ See the TreeIO module for the usual way to produce these objects.
 """
 __docformat__ = "epytext en"
 
+from Utils import pretty_print, to_networkx, draw_graphviz

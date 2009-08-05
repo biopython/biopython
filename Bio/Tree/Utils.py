@@ -48,19 +48,78 @@ def pretty_print(treeobj, file=sys.stdout, show_all=False, indent=0):
     print_phylo(treeobj, indent)
 
 
-def to_networkx(tree):
+def to_networkx(tree, graphviz=False):
     """Convert a Tree object to a networkx graph.
 
     The result is useful for plotting with pylab, matplotlib or pygraphviz,
     though the result is not quite a proper dendrogram for representing a
     phylogeny.
 
+    Requires the networkx package.
+    """
+    # TODO: solve the graphviz labeling issue
+    try:
+        import networkx
+    except ImportError:
+        from Bio import MissingExternalDependencyError
+        raise MissingExternalDependencyError(
+                "The networkx library is not installed.")
+
+    def get_label(node):
+        """Get a unique hashable node value.
+
+        Quirk: draw_graphviz doesn't honor the labels set in LabeledGraph, so
+        str(node) must be unique for that engine. The regular nx.draw() doesn't
+        have that problem.
+        """
+        if not graphviz:
+            return node
+        label = str(node)
+        if label == node.__class__.__name__:
+            return '<%d>' % id(node)
+        return label
+
+    def add_node(graph, node):
+        if graphviz:
+            graph.add_node(get_label(node))
+        else:
+            graph.add_node(node, get_label(node))
+
+    def add_edge(graph, node1, node2):
+        n1, n2 = map(get_label, [node1, node2])
+        if node2.branch_length is not None:
+            graph.add_edge(n1, n2, node2.branch_length)
+        else:
+            graph.add_edge(n1, n2)
+
+    def build_subgraph(graph, top):
+        """Walk down the Tree, building graphs, edges and nodes."""
+        for node in top.nodes:
+            add_node(graph, node)
+            add_edge(graph, top, node)
+            build_subgraph(graph, node)
+
+    if tree.rooted:
+        G = networkx.LabeledDiGraph()
+    else:
+        G = networkx.LabeledGraph()
+    add_node(G, tree.root)
+    build_subgraph(G, tree.root)
+    return G
+
+
+def draw_graphviz(tree):
+    """Display a Tree object as a networkx graph, using the graphviz engine.
+
     Example:
 
-        >>> import networkx, pylab
+        >>> import pylab
+        >>> from Bio import Tree, TreeIO
         >>> tree = TreeIO.read('example.xml', 'phyloxml')
-        >>> G = to_networkx(tree)
-        >>> networkx.draw_graphviz(G)
+        >>> Tree.draw_graphviz(tree)
+        >>> pylab.show()
+
+    Requires networkx, matplotlib and pygraphviz.
     """
     try:
         import networkx
@@ -69,27 +128,6 @@ def to_networkx(tree):
         raise MissingExternalDependencyError(
                 "The networkx library is not installed.")
 
-    if tree.rooted:
-        G = networkx.DiGraph()
-    else:
-        G = networkx.Graph()
-
-    def get_label(node):
-        label = str(node)
-        if label == node.__class__.__name__:
-            return '%s <%d>' % (label, id(node))
-        return label
-
-    # Walk down the Tree, building graphs, edges and nodes.
-    def build_subgraph(top):
-        rlabel = get_label(top)
-        G.add_node(rlabel)
-        for node in top.nodes:
-            nlabel = get_label(node)
-            G.add_node(nlabel)
-            G.add_edge(rlabel, nlabel)
-            build_subgraph(node)
-
-    build_subgraph(tree.root)
-    return G
+    G = to_networkx(tree, graphviz=True)
+    networkx.draw_graphviz(G, prog='twopi')
 
