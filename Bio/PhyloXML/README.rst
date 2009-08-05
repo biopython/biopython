@@ -40,7 +40,9 @@ Timeline
     - Review existing modules for ideas and conventions [*ongoing*]
     - Choose an XML parser [*xml.etree, or lxml/elementtree for Py2.4*]
     - Choose a warning system [*warnings module, module-specific warning types*]
-    - Decide repository layout [*code in Bio/PhyloXML/, tests in Tests/*]
+    - Decide repository layout [*code in Bio/Tree/ and Bio/TreeIO/, tests in
+      Tests/*]
+    - Test XSD validation for phyloXML v1.10 [*it passes*]
 
     Code:
 
@@ -49,9 +51,9 @@ Timeline
     - Specific exception and warning to raise for noncompliant phyloXML files
     - Parse individual phylogenies or read a complete PhyloXML object from an
       XML stream [*PhyloXMLIO.py*]
-    - Write a complete PhyloXML object to a file or stream, passing XSD
-      validation [*PhyloXMLIO.py*]
-    - Utilities: dump_tags [*Parser.py*], pretty_print [*Utils.py*]
+    - Write a complete PhyloXML object to a file or stream [*PhyloXMLIO.py*]
+    - XML utility: dump_tags [*Parser.py*]
+    - Tree utilies: pretty_print, to_networkx, draw_graphviz [*Utils.py*]
     - Methods to convert PhyloXML objects to core Biopython types:
         - PhyloXML.Sequence to/from SeqRecord (*in progress*)
         - PhyloXML.BranchColor to HTML/CSS-friendly hex string [*to_rgb*]
@@ -95,27 +97,25 @@ Timeline
     - Tree:
         - stub
 
-:7/27:
-    Finish implementing the phyloXML spec:
-
-    - Scan "simple types" for restricted tokens; check strings in constructors
-    - Take a stab at phyloXML 1.10 support (need a 'version' arg to Writer?)
-    - Clean up and reorganize any code that needs it (e.g. Parser is weird)
-
+:8/3:
     Enhancements (time permitting):
 
-    - Improve the SeqRecord conversion
-    - Work on Bio.Tree.BaseTree compatibility with BioSQL's PhyloDB extension
+    - Parser class ENH:
+        - parse sequence and taxonomy incrementally, too? (handle 'other')
+        - drop classmethod decorators
+        - drop "to" and "parse" from method names
+
     - Port common methods to Bio.Tree.BaseTree -- see Bio.Nexus.Tree, Bioperl
-      node objects, PyCogent, p4-phylogenetics
-    - Tree method: build_index (set left_idx, right_idx on all nodes):
-        - calculate left/right indexes for nested-set representation
-        - see http://www.oreillynet.com/pub/a/network/2002/11/27/bioconf.html
+      node objects, PyCogent, p4-phylogenetics, lagrange, newick
 
-    - Export to networkx (http://networkx.lanl.gov/) -- also get graphviz export
-      for free, via networkx.to_agraph()
+        - Tree method: update_nested_set_index
+            - calculate left_idx, right_idx for nested-set representation
+            - see http://www.oreillynet.com/pub/a/network/2002/11/27/bioconf.html
 
-:8/3:
+        - 'external' boolean kwarg to Tree.find(): None=all nodes (default),
+          True=external nodes only, False=internal nodes only
+        - Also: get_terminals, is_identical, distance
+
     Automated testing:
 
     - Re-run performance benchmarks
