@@ -1,4 +1,4 @@
-"""Utilities for working with FASTA-formatted sequences (OBSOLETE).
+"""Utilities for working with FASTA-formatted sequences (DEPRECATED).
 
 Classes:
 Record             Holds FASTA sequence data.
@@ -8,11 +8,9 @@ SequenceParser     Parses FASTA sequence data into a SeqRecord object.
 
 For a long time this module was the most commonly used and best documented
 FASTA parser in Biopython.  However, we now recommend using Bio.SeqIO instead.
-
-In view of this, while you can continue to use Bio.Fasta for the moment, it is
-considered to be a legacy module and should not be used if you are writing new
-code.  At some point Bio.Fasta may be officially deprecated (with warning
-messages when used) before finally being removed.
+After being declared obsolete, Bio.Fasta has now been officially deprecated
+(with a warning message when imported) and will be removed in a future
+release.
 
 If you are already using Bio.Fasta with the SequenceParser to get SeqRecord
 objects, then you should be able to switch to the more recent Bio.SeqIO module
@@ -51,16 +49,23 @@ from Bio import SeqIO
 handle = open("example.fas")
 for seq_record in SeqIO.parse(handle, "fasta") :
     print seq_record.description #The full title line as a string
-    print seq_record.seq.tostring() #The sequence as a string
+    print str(seq_record.seq) #The sequence as a string
 handle.close()
 
-
-
+Very old code may have used Bio.Fasta.index_file and Dictionary, which were
+deprecated in Biopython 1.44 and removed in Biopython 1.46. These allowed
+indexing of a FASTA file and access to the records with a dictionary like
+interface. Currently using Bio.SeqIO.to_dict to create an in memory dictionary
+of SeqRecord objects is the best replacement, but for very large files
+additional indexing support for Bio.SeqIO is being considered.
 """
 from Bio import Seq
 from Bio import SeqRecord
 from Bio import Alphabet
 
+import warnings
+warnings.warn('Bio.Fasta is deprecated. Please use the "fasta" support in '
+              'Bio.SeqIO (or Bio.AlignIO) instead.', DeprecationWarning)
 
 class Record:
     """Holds information from a FASTA record.
