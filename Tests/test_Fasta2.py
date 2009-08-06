@@ -4,7 +4,7 @@
 # as part of this package.
 
 import os
-from Bio import Fasta
+from Bio.SeqIO.FastaIO import FastaIterator
 from Bio import Alphabet
 
 def title_to_ids(title):
@@ -28,42 +28,24 @@ def title_to_ids(title):
 
     return id, name, descr
 
-tests = [ 'lupine.nu', 'elderberry.nu', 'phlox.nu', 'centaurea.nu', \
-    'wisteria.nu', 'sweetpea.nu', 'lavender.nu' ]
-record_parser = Fasta.RecordParser()
-sequence_parser = Fasta.SequenceParser(Alphabet.generic_dna, title_to_ids)
+tests = ['lupine.nu', 'elderberry.nu', 'phlox.nu', 'centaurea.nu',
+          'wisteria.nu', 'sweetpea.nu', 'lavender.nu']
 
 for test in tests:
     print "testing %s" % test
     datafile = os.path.join( 'Nucleic', test )
-    src_handle = open( datafile )
-    data = record_parser.parse( src_handle )
-    print data
-
-for test in tests:
-    print "testing %s" % test
-    datafile = os.path.join( 'Nucleic', test )
-    src_handle = open( datafile )
-    data = sequence_parser.parse( src_handle )
+    data = FastaIterator(open(datafile), Alphabet.generic_dna, title_to_ids).next()
     print data.id
     print data.name
     print data.description
     print repr(data.seq)
 
 tests = [ 'aster.pro', 'rosemary.pro', 'rose.pro', 'loveliesbleeding.pro' ]
-sequence_parser = Fasta.SequenceParser(Alphabet.generic_protein, title_to_ids)
-for test in tests:
-    print "testing %s" % test
-    datafile = os.path.join( 'Amino', test )
-    src_handle = open( datafile )
-    data = record_parser.parse( src_handle )
-    print data
 
 for test in tests:
     print "testing %s" % test
     datafile = os.path.join( 'Amino', test )
-    src_handle = open( datafile )
-    data = sequence_parser.parse( src_handle )
+    data = FastaIterator(open(datafile), Alphabet.generic_protein, title_to_ids).next()
     print data.id
     print data.name
     print data.description
