@@ -16,7 +16,6 @@ from Bio import Alphabet
 from Bio import Seq
 from Bio.Alphabet import IUPAC
 from Bio import Clustalw
-from Bio.Align.FormatConvert import FormatConverter
 from Bio.Align import AlignInfo
 from Bio.Fasta import FastaAlign
 from Bio.SubsMat import FreqTable
@@ -159,13 +158,10 @@ print "Test format conversion..."
 alignment = Clustalw.parse_file(os.path.join(os.curdir, 'Clustalw',
                                              'opuntia.aln'))
 
-converter = FormatConverter(alignment)
-
-fasta_align = converter.to_fasta()
-clustal_align = converter.to_clustal()
-
-print fasta_align
-print clustal_align
+print "As FASTA:"
+print alignment.format("fasta")
+print "As Clustal:"
+print alignment.format("clustal")
 
 """
 # test to find a position in an original sequence given a
