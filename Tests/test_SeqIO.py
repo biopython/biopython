@@ -56,7 +56,7 @@ test_files = [ \
     ("clustal",True,  'Clustalw/opuntia.aln', 7),
     ("clustal",True,  'Clustalw/hedgehog.aln', 5),
     ("clustal",True,  'Clustalw/odd_consensus.aln', 2),
-#Following nucleic examples are also used in test_Fasta2.py
+#Following nucleic examples are also used in test_SeqIO_FastaIO.py
     ("fasta",  False, 'Nucleic/lupine.nu', 1),
     ("fasta",  False, 'Nucleic/elderberry.nu', 1),
     ("fasta",  False, 'Nucleic/phlox.nu', 1),
@@ -64,7 +64,7 @@ test_files = [ \
     ("fasta",  False, 'Nucleic/wisteria.nu', 1),
     ("fasta",  False, 'Nucleic/sweetpea.nu', 1),
     ("fasta",  False, 'Nucleic/lavender.nu', 1),
-#Following protein examples are also used in test_Fasta2.py
+#Following protein examples are also used in test_SeqIO_FastaIO.py
     ("fasta",  False, 'Amino/aster.pro', 1),
     ("fasta",  False, 'Amino/loveliesbleeding.pro', 1),
     ("fasta",  False, 'Amino/rose.pro', 1),
