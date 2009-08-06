@@ -102,14 +102,14 @@ class _EmbossCommandLine(_EmbossMinimalCommandLine) :
             self.parameters = extra_parameters
         _EmbossMinimalCommandLine.__init__(self, cmd, **kwargs)
 
-    def __str__(self) :
+    def _validate(self) :
         #Check the outfile, filter, or stdout option has been set.
         #We can't simply do this via the required flag for the outfile
         #output - this seems the simplest solution.
         if not (self.outfile or self.filter or self.stdout) :
             raise ValueError("You must either set outfile (output filename), "
                              "or enable filter or stdout (output to stdout).")
-        return _EmbossMinimalCommandLine.__str__(self)
+        return _EmbossMinimalCommandLine._validate(self)
 
         
 class Primer3Commandline(_EmbossCommandLine):
@@ -649,7 +649,7 @@ class SeqretCommandline(_EmbossMinimalCommandLine):
          ]
         _EmbossMinimalCommandLine.__init__(self, cmd, **kwargs)
 
-    def __str__(self) :
+    def _validate(self) :
         #Check the outfile, filter, or stdout option has been set.
         #We can't simply do this via the required flag for the outfile
         #output - this seems the simplest solution.
@@ -659,4 +659,4 @@ class SeqretCommandline(_EmbossMinimalCommandLine):
         if not (self.sequence or self.filter or self.stdint) :
             raise ValueError("You must either set sequence (input filename), "
                              "or enable filter or stdin (input from stdin).")
-        return _EmbossMinimalCommandLine.__str__(self)
+        return _EmbossMinimalCommandLine._validate(self)
