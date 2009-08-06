@@ -58,7 +58,7 @@ class MuscleApplication(unittest.TestCase):
         self.infile1  = "Fasta/f002"
         self.infile2  = "Fasta/fa01"
         self.infile3  = "Fasta/f001"
-        self.outfile1 = "Fasta/temp_align_out1.fa"
+        self.outfile1 = "Fasta/temp align out1.fa" #with spaces!
         self.outfile2 = "Fasta/temp_align_out2.fa"
         self.outfile3 = "Fasta/temp_align_out3.fa"
         self.outfile4 = "Fasta/temp_align_out4.fa"
@@ -79,7 +79,7 @@ class MuscleApplication(unittest.TestCase):
                                     input=self.infile1,
                                     out=self.outfile1)
         self.assertEqual(str(cmdline), muscle_exe \
-                         + " -in Fasta/f002 -out Fasta/temp_align_out1.fa")
+                         + ' -in Fasta/f002 -out "Fasta/temp align out1.fa"')
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         result, stdout, stderr = generic_run(cmdline)
         self.assertEqual(result.return_code, 0)
