@@ -368,7 +368,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         cline.set_parameter("asequence", "asis:ACCCGGGCGCGGT")
         cline.set_parameter("-bsequence", "asis:ACCCGAGCGCGGT")
         #Try using a property set here:
-        cline.outfile = "Emboss/temp_test.water"
+        cline.outfile = "Emboss/temp with space.water"
         self.assertEqual(str(eval(repr(cline))), str(cline))
         #Run the tool,
         result, out, err = generic_run(cline)
@@ -379,7 +379,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         if result.return_code != 0 : print >> sys.stderr, "\n%s"%cline
         self.assertEqual(result.return_code, 0)
         filename = result.get_result("outfile")
-        self.assertEqual(filename, "Emboss/temp_test.water")
+        self.assertEqual(filename, "Emboss/temp with space.water")
         assert os.path.isfile(filename)
         #Check we can parse the output...
         align = AlignIO.read(open(filename),"emboss")
@@ -428,7 +428,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         cline.set_parameter("-gapextend", "0.5")
         #EMBOSS would guess this, but let's be explicit:
         cline.set_parameter("-snucleotide", "True")
-        cline.set_parameter("-outfile", "Emboss/temp_test.needle")
+        cline.set_parameter("-outfile", "Emboss/temp with space.needle")
         self.assertEqual(str(eval(repr(cline))), str(cline))
         #Run the tool,
         result, out, err = generic_run(cline)
@@ -439,7 +439,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         if result.return_code != 0 : print >> sys.stderr, "\n%s"%cline
         self.assertEqual(result.return_code, 0)
         filename = result.get_result("outfile")
-        self.assertEqual(filename, "Emboss/temp_test.needle")
+        self.assertEqual(filename, "Emboss/temp with space.needle")
         assert os.path.isfile(filename)
         #Check we can parse the output...
         align = AlignIO.read(open(filename),"emboss")
