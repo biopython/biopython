@@ -17,7 +17,7 @@ from Bio import Seq
 from Bio.Alphabet import IUPAC
 from Bio import Clustalw
 from Bio.Align import AlignInfo
-from Bio.Fasta import FastaAlign
+from Bio import AlignIO
 from Bio.SubsMat import FreqTable
 from Bio.Align.Generic import Alignment
 
@@ -134,7 +134,8 @@ print "testing reading and writing fasta format..."
 
 to_parse = os.path.join(os.curdir, 'Quality', 'example.fasta')
 
-alignment = FastaAlign.parse_file(to_parse, 'DNA')
+alignment = AlignIO.read(open(to_parse), "fasta",
+                         alphabet = Alphabet.Gapped(IUPAC.ambiguous_dna))
 
 # test the base alignment stuff
 print 'all_seqs...'
