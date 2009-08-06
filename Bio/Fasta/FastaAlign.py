@@ -1,8 +1,9 @@
 """
-Code to deal with alignments written in Fasta format (OBSOLETE).
+Code to deal with alignments written in Fasta format (DEPRECATED).
 
-This module is considered obsolete and likely to be deprecated.  Please use
-Bio.AlignIO instead for reading and writing alignments in FASTA format.
+This module is considered obsolete and has been deprecated. It will be
+removed in a future release of Biopython. Please use Bio.AlignIO instead
+for reading and writing alignments in FASTA format.
 
 This mostly just uses the regular Fasta parsing stuff written by Jeff
 to deal with all of the input and output formats.
