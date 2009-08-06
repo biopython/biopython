@@ -145,7 +145,7 @@ for seq_record in all_seqs:
 
 print 'length:', alignment.get_alignment_length()
 align_info = AlignInfo.SummaryInfo(alignment)
-consensus = align_info.dumb_consensus(ambiguous = "X")
+consensus = align_info.dumb_consensus(ambiguous="N", threshold=0.6)
 assert isinstance(consensus, Seq.Seq)
 print 'consensus:', repr(consensus)
 
