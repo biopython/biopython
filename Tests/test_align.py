@@ -132,9 +132,9 @@ print 'test print_info_content'
 AlignInfo.print_info_content(align_info)
 print "testing reading and writing fasta format..."
 
-to_parse = os.path.join(os.curdir, 'Fasta', 'fa01')
+to_parse = os.path.join(os.curdir, 'Quality', 'example.fasta')
 
-alignment = FastaAlign.parse_file(to_parse, 'PROTEIN')
+alignment = FastaAlign.parse_file(to_parse, 'DNA')
 
 # test the base alignment stuff
 print 'all_seqs...'
