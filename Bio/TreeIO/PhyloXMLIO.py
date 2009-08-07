@@ -116,7 +116,7 @@ def write(phylo, file, encoding=None):
 
 def local(tag):
     """Extract the local tag from a namespaced tag name."""
-    if tag[0] is '{':
+    if tag[0] == '{':
         return tag[tag.index('}')+1:]
     return tag
 
@@ -153,7 +153,7 @@ def get_child_text(parent, tag, construct=unicode):
 def get_children_as(parent, tag, construct):
     """Find child nodes by tag; pass each through a constructor.
 
-    Returns None if no matching child is found.
+    Returns an empty list if no matching child is found.
     """
     return [construct(child) for child in 
             parent.findall(_ns(tag))]
@@ -161,7 +161,7 @@ def get_children_as(parent, tag, construct):
 def get_children_text(parent, tag, construct=unicode):
     """Find child nodes by tag; pass each node's text through a constructor.
 
-    Returns None if no matching child is found.
+    Returns an empty list if no matching child is found.
     """
     return [construct(child.text) for child in 
             parent.findall(_ns(tag))
@@ -273,7 +273,7 @@ class Parser(object):
                 other_depth -= 1
                 if other_depth == 0:
                     # We're directly under the root node -- evaluate
-                    otr = self.to_other(elem)
+                    otr = self.other(elem, namespace, localtag)
                     phyloxml.other.append(otr)
                     self.root.clear()
         return phyloxml
@@ -285,7 +285,7 @@ class Parser(object):
             if event == 'start' and elem.tag == phytag:
                 yield self._parse_phylogeny(elem)
 
-    # Special parsing cases
+    # Special parsing cases -- incremental, using self.context
 
     def _parse_phylogeny(self, parent):
         """Parse a single phylogeny within the phyloXML tree.
@@ -296,7 +296,6 @@ class Parser(object):
         """
         phylogeny = Tree.Phylogeny(**dict_str2bool(parent.attrib,
                                                    ['rooted', 'rerootable']))
-        complex_types = ['date', 'id']
         list_types = {
                 # XML tag, plural attribute
                 'confidence':   'confidences',
@@ -316,19 +315,18 @@ class Parser(object):
                     parent.clear()
                     break
                 # Handle the other non-recursive children
-                if tag in complex_types:
-                    setattr(phylogeny, tag, getattr(self, 'to_'+tag)(elem))
-                elif tag in list_types:
+                if tag in list_types:
                     getattr(phylogeny, list_types[tag]).append(
-                            getattr(self, 'to_'+tag)(elem))
+                            getattr(self, tag)(elem))
+                # Complex types
+                elif tag in ('date', 'id'):
+                    setattr(phylogeny, tag, getattr(self, tag)(elem))
                 # Simple types
-                elif tag == 'name': 
-                    phylogeny.name = collapse_wspace(elem.text)
-                elif tag == 'description':
-                    phylogeny.description = collapse_wspace(elem.text)
+                elif tag in ('name', 'description'):
+                    setattr(phylogeny, tag, collapse_wspace(elem.text))
                 # Unknown tags
                 elif namespace != NAMESPACES['phy']:
-                    phylogeny.other.append(self.to_other(elem))
+                    phylogeny.other.append(self.other(elem, namespace, tag))
                     parent.clear()
                 else:
                     # NB: This shouldn't happen in valid files
@@ -337,31 +335,32 @@ class Parser(object):
 
     _clade_complex_types = ['color', 'events', 'binary_characters', 'date']
     _clade_list_types = {
-            # XML tag, plural attribute
             'confidence':   'confidences',
-            'taxonomy':     'taxonomies',
-            'sequence':     'sequences',
             'distribution': 'distributions',
             'reference':    'references',
             'property':     'properties',
             }
-    _clade_tracked_tags = set(_clade_complex_types + _clade_list_types.keys() +
-            # Simple types
-            ['branch_length', 'name', 'node_id', 'width'])
+    _clade_tracked_tags = set(_clade_complex_types + _clade_list_types.keys()
+                              + ['branch_length', 'name', 'node_id', 'width'])
 
     def _parse_clade(self, parent):
         """Parse a Clade node and its children, recursively."""
-        if 'branch_length' in parent.keys():
-            parent.set('branch_length', float(parent.get('branch_length')))
         clade = Tree.Clade(**parent.attrib)
+        if clade.branch_length is not None:
+            clade.branch_length = float(clade.branch_length)
         # NB: Only evaluate nodes at the current level
         tag_stack = []
         for event, elem in self.context:
             namespace, tag = split_namespace(elem.tag)
             if event == 'start':
                 if tag == 'clade':
-                    subclade = self._parse_clade(elem)
-                    clade.clades.append(subclade)
+                    clade.clades.append(self._parse_clade(elem))
+                    continue
+                if tag == 'taxonomy':
+                    clade.taxonomies.append(self._parse_taxonomy(elem))
+                    continue
+                if tag == 'sequence':
+                    clade.sequences.append(self._parse_sequence(elem))
                     continue
                 if tag in self._clade_tracked_tags:
                     tag_stack.append(tag)
@@ -373,16 +372,14 @@ class Parser(object):
                     continue
                 tag_stack.pop()
                 # Handle the other non-recursive children
-                if tag in self._clade_complex_types:
-                    setattr(clade, tag, getattr(self, 'to_'+tag)(elem))
-                elif tag in self._clade_list_types:
+                if tag in self._clade_list_types:
                     getattr(clade, self._clade_list_types[tag]).append(
-                            getattr(self, 'to_'+tag)(elem))
-                # Simple types
+                            getattr(self, tag)(elem))
+                elif tag in self._clade_complex_types:
+                    setattr(clade, tag, getattr(self, tag)(elem))
                 elif tag == 'branch_length':
                     # NB: possible collision with the attribute
-                    if hasattr(clade, 'branch_length') \
-                            and clade.branch_length is not None:
+                    if clade.branch_length is not None:
                         raise PhyloXMLError(
                                 'Attribute branch_length was already set '
                                 'for this Clade.')
@@ -393,39 +390,77 @@ class Parser(object):
                     clade.name = collapse_wspace(elem.text)
                 elif tag == 'node_id':
                     clade.node_id = elem.text and elem.text.strip() or None
-                # Unknown tags
                 elif namespace != NAMESPACES['phy']:
-                    clade.other.append(self.to_other(elem))
+                    clade.other.append(self.other(elem, namespace, tag))
                     elem.clear()
                 else:
-                    # NB: This shouldn't happen in valid files
                     raise PhyloXMLError('Misidentified tag: ' + tag)
         return clade
 
-    @classmethod
-    def to_other(cls, elem):
-        namespace, localtag = split_namespace(elem.tag)
+    def _parse_sequence(self, parent):
+        sequence = Tree.Sequence(**parent.attrib)
+        for event, elem in self.context:
+            namespace, tag = split_namespace(elem.tag)
+            if event == 'end':
+                if tag == 'sequence':
+                    parent.clear()
+                    break
+                if tag in ('accession', 'mol_seq', 'uri',
+                        'domain_architecture'):
+                    setattr(sequence, tag, getattr(self, tag)(elem))
+                elif tag == 'annotation':
+                    sequence.annotations.append(self.annotation(elem))
+                elif tag == 'name': 
+                    sequence.name = collapse_wspace(elem.text)
+                elif tag in ('symbol', 'location'):
+                    setattr(sequence, tag, elem.text)
+                elif namespace != NAMESPACES['phy']:
+                    sequence.other.append(self.other(elem, namespace, tag))
+                    parent.clear()
+        return sequence
+
+    def _parse_taxonomy(self, parent):
+        taxonomy = Tree.Taxonomy(**parent.attrib)
+        for event, elem in self.context:
+            namespace, tag = split_namespace(elem.tag)
+            if event == 'end':
+                if tag == 'taxonomy':
+                    parent.clear()
+                    break
+                if tag in ('id', 'uri'):
+                    setattr(taxonomy, tag, getattr(self, tag)(elem))
+                elif tag == 'common_name':
+                    taxonomy.common_names.append(collapse_wspace(elem.text))
+                elif tag == 'synonym':
+                    taxonomy.synonyms.append(elem.text)
+                elif tag in ('code', 'scientific_name', 'authority', 'rank'):
+                    # ENH: check_str on rank
+                    setattr(taxonomy, tag, elem.text)
+                elif namespace != NAMESPACES['phy']:
+                    taxonomy.other.append(self.other(elem, namespace, tag))
+                    parent.clear()
+        return taxonomy
+
+    def other(self, elem, namespace, localtag):
         return Tree.Other(localtag, namespace, elem.attrib,
                   value=elem.text and elem.text.strip() or None,
-                  children=[cls.to_other(child) for child in elem])
+                  children=[self.other(child, *split_namespace(child.tag))
+                            for child in elem])
 
     # Complex types
 
-    @classmethod
-    def to_accession(cls, elem):
+    def accession(self, elem):
         return Tree.Accession(elem.text.strip(), elem.get('source'))
 
-    @classmethod
-    def to_annotation(cls, elem):
+    def annotation(self, elem):
         return Tree.Annotation(
                 desc=collapse_wspace(get_child_text(elem, 'desc')),
-                confidence=get_child_as(elem, 'confidence', cls.to_confidence),
-                properties=get_children_as(elem, 'property', cls.to_property),
-                uri=get_child_as(elem, 'uri', cls.to_uri),
+                confidence=get_child_as(elem, 'confidence', self.confidence),
+                properties=get_children_as(elem, 'property', self.property),
+                uri=get_child_as(elem, 'uri', self.uri),
                 **elem.attrib)
 
-    @classmethod
-    def to_binary_characters(cls, elem):
+    def binary_characters(self, elem):
         def bc_getter(elem):
             return get_children_text(elem, 'bc')
         return Tree.BinaryCharacters(
@@ -440,27 +475,23 @@ class Parser(object):
                 present=get_child_as(elem, 'present', bc_getter),
                 absent=get_child_as(elem, 'absent', bc_getter))
 
-    @classmethod
-    def to_clade_relation(cls, elem):
+    def clade_relation(self, elem):
         return Tree.CladeRelation(
                 elem.get('type'), elem.get('id_ref_0'), elem.get('id_ref_1'),
                 distance=elem.get('distance'),
-                confidence=get_child_as(elem, 'confidence', cls.to_confidence))
+                confidence=get_child_as(elem, 'confidence', self.confidence))
 
-    @classmethod
-    def to_color(cls, elem):
+    def color(self, elem):
         red, green, blue = (get_child_text(elem, color, int) for color in
                             ('red', 'green', 'blue'))
         return Tree.BranchColor(red, green, blue)
 
-    @classmethod
-    def to_confidence(cls, elem):
+    def confidence(self, elem):
         return Tree.Confidence(
                 _float(elem.text),
                 elem.get('type'))
 
-    @classmethod
-    def to_date(cls, elem):
+    def date(self, elem):
         return Tree.Date(
                 unit=elem.get('unit'),
                 desc=collapse_wspace(get_child_text(elem, 'desc')),
@@ -469,50 +500,43 @@ class Parser(object):
                 maximum=get_child_text(elem, 'maximum', float),
                 )
 
-    @classmethod
-    def to_distribution(cls, elem):
+    def distribution(self, elem):
         return Tree.Distribution(
                 desc=collapse_wspace(get_child_text(elem, 'desc')),
-                points=get_children_as(elem, 'point', cls.to_point),
-                polygons=get_children_as(elem, 'polygon', cls.to_polygon))
+                points=get_children_as(elem, 'point', self.point),
+                polygons=get_children_as(elem, 'polygon', self.polygon))
 
-    @classmethod
-    def to_domain(cls, elem):
+    def domain(self, elem):
         return Tree.ProteinDomain(elem.text.strip(),
                 int(elem.get('from')) - 1,
                 int(elem.get('to')),
                 confidence=_float(elem.get('confidence')),
                 id=elem.get('id'))
 
-    @classmethod
-    def to_domain_architecture(cls, elem):
+    def domain_architecture(self, elem):
         return Tree.DomainArchitecture(
                 length=int(elem.get('length')),
-                domains=get_children_as(elem, 'domain', cls.to_domain))
+                domains=get_children_as(elem, 'domain', self.domain))
 
-    @classmethod
-    def to_events(cls, elem):
+    def events(self, elem):
         return Tree.Events(
                 type=get_child_text(elem, 'type'),
                 duplications=get_child_text(elem, 'duplications', int),
                 speciations=get_child_text(elem, 'speciations', int),
                 losses=get_child_text(elem, 'losses', int),
-                confidence=get_child_as(elem, 'confidence', cls.to_confidence))
+                confidence=get_child_as(elem, 'confidence', self.confidence))
 
-    @classmethod
-    def to_id(cls, elem):
+    def id(self, elem):
         provider = elem.get('provider') or elem.get('type')
         return Tree.Id(elem.text.strip(), provider)
 
-    @classmethod
-    def to_mol_seq(cls, elem):
+    def mol_seq(self, elem):
         is_aligned = elem.get('is_aligned')
         if is_aligned is not None:
             is_aligned = str2bool(is_aligned)
         return Tree.MolSeq(elem.text.strip(), is_aligned=is_aligned)
 
-    @classmethod
-    def to_point(cls, elem):
+    def point(self, elem):
         return Tree.Point(
                 elem.get('geodetic_datum'),
                 get_child_text(elem, 'lat', float),
@@ -520,65 +544,28 @@ class Parser(object):
                 alt=get_child_text(elem, 'alt', float),
                 alt_unit=elem.get('alt_unit'))
 
-    @classmethod
-    def to_polygon(cls, elem):
+    def polygon(self, elem):
         return Tree.Polygon(
-                points=get_children_as(elem, 'point', cls.to_point))
+                points=get_children_as(elem, 'point', self.point))
 
-    @classmethod
-    def to_property(cls, elem):
+    def property(self, elem):
         return Tree.Property(elem.text.strip(),
                 elem.get('ref'), elem.get('applies_to'), elem.get('datatype'),
                 unit=elem.get('unit'),
                 id_ref=elem.get('id_ref'))
 
-    @classmethod
-    def to_reference(cls, elem):
+    def reference(self, elem):
         return Tree.Reference(
                 doi=elem.get('doi'),
                 desc=get_child_text(elem, 'desc'))
 
-    @classmethod
-    def to_sequence(cls, elem):
-        return Tree.Sequence(
-                symbol=get_child_text(elem, 'symbol'),
-                accession=get_child_as(elem, 'accession', cls.to_accession),
-                name=collapse_wspace(get_child_text(elem, 'name')),
-                location=get_child_text(elem, 'location'),
-                mol_seq=get_child_as(elem, 'mol_seq', cls.to_mol_seq),
-                uri=get_child_as(elem, 'uri', cls.to_uri),
-                domain_architecture=get_child_as(elem, 'domain_architecture',
-                                                 cls.to_domain_architecture),
-                annotations=get_children_as(elem, 'annotation',
-                                            cls.to_annotation),
-                # TODO: handle "other"
-                other=[],
-                **elem.attrib)
-
-    @classmethod
-    def to_sequence_relation(cls, elem):
+    def sequence_relation(self, elem):
         return Tree.SequenceRelation(
                 elem.get('type'), elem.get('id_ref_0'), elem.get('id_ref_1'),
                 distance=_float(elem.get('distance')),
-                confidence=get_child_as(elem, 'confidence', cls.to_confidence))
+                confidence=get_child_as(elem, 'confidence', self.confidence))
 
-    @classmethod
-    def to_taxonomy(cls, elem):
-        return Tree.Taxonomy(
-                id=get_child_as(elem, 'id', cls.to_id),
-                code=get_child_text(elem, 'code'),
-                scientific_name=get_child_text(elem, 'scientific_name'),
-                authority=get_child_text(elem, 'authority'),
-                common_names=get_children_text(elem, 'common_name'),
-                synonyms=get_children_text(elem, 'synonym'),
-                rank=get_child_text(elem, 'rank'),
-                uri=get_child_as(elem, 'uri', cls.to_uri),
-                # TODO: handle "other"
-                other=[],
-                **elem.attrib)
-
-    @classmethod
-    def to_uri(cls, elem):
+    def uri(self, elem):
         return Tree.Uri(elem.text.strip(),
                 desc=collapse_wspace(elem.get('desc')),
                 type=elem.get('type'))
