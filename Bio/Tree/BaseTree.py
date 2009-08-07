@@ -99,7 +99,7 @@ class Tree(TreeElement):
 
         Keyword arguments are the usual Tree constructor parameters.
         """
-        return Tree(node, **kwargs)
+        return cls(node, **kwargs)
 
     # Plumbing
     def depth_first_search(self, node, filterfunc):

@@ -153,6 +153,14 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
                 other=other or [],
                 )
 
+    @classmethod
+    def from_tree(self, tree):
+        return Clade.from_tree(tree).to_phylogeny()
+
+    def to_phyloxml(self, **kwargs):
+        """Create a new PhyloXML object containing just this phylogeny."""
+        return Phyloxml(kwargs, phylogenies=[self])
+
     def get_alignment(self):
         """Construct an alignment from the aligned sequences in this tree."""
         def seq_is_aligned(node):
@@ -171,22 +179,16 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
             aln.add_sequence(str(seq), seq.mol_seq.value)
         return aln
 
-    def to_phyloxml(self, **kwargs):
-        """Create a new PhyloXML object containing just this phylogeny."""
-        return Phyloxml(kwargs, phylogenies=[self])
-
     # Mimic BaseTree.Tree
-
     @property
     def nodes(self):
-        return self.clade.nodes
+        return [self.clade]
 
     @property
     def root(self):
         return self.clade
 
     # Singular property for plural attribute
-
     @property
     def confidence(self):
         """Equivalent to self.confidences[0] if there is only 1 value.
@@ -233,7 +235,7 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
     @param left_idx: precomputed values for certain tree operations
     @param right_idx: precomputed values for certain tree operations
     """
-    def __init__(self, parent=None,
+    def __init__(self,
             # Attributes
             branch_length=None, id_source=None,
             # Child nodes
@@ -243,6 +245,8 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
             confidences=None, taxonomies=None, sequences=None,
             distributions=None, references=None, properties=None, clades=None,
             other=None,
+            # BaseTree attributes
+            left_idx=None, right_idx=None,
             ):
         PhyloElement.__init__(self, id_source=id_source, name=name,
                 branch_length=branch_length, width=width, color=color,
@@ -257,15 +261,38 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
                 clades=clades or [],
                 other=other or [],
                 # BaseTree attributes
-                left_idx=None,
-                right_idx=None,
-                parent=parent,
-                )
+                left_idx=left_idx, right_idx=right_idx)
+
+    @classmethod
+    def from_node(cls, node, **kwargs):
+        """Create a new Clade from a BaseTree.Node object."""
+        clade = cls(
+                branch_length=node.branch_length,
+                name=node.label,
+                node_id=Id(str(node.tree.id)),
+                left_idx=node.left_idx,
+                right_idx=node.right_idx)
+        clade.__dict__.update(kwargs)
+        return clade
+
+    @classmethod
+    def from_tree(cls, tree, **kwargs):
+        """Create a new Clade from a BaseTree.Tree object."""
+        clade = cls(
+                branch_length=tree.root.branch_length,
+                name=tree.name,
+                node_id=Id(str(tree.root.id)),
+                left_idx=tree.root.left_idx,
+                right_idx=tree.root.right_idx,
+                clades=[cls.from_tree(subtree) for subtree in tree])
+        clade.__dict__.update(kwargs)
+        return clade
 
     def to_phylogeny(self, **kwargs):
         """Create a new phylogeny containing just this clade."""
-        # ENH: preserve some attributes of the parent phylogeny
-        return Phylogeny(clade=self, **kwargs)
+        phy = Phylogeny(rooted=self.rooted, clade=self, date=self.date)
+        phy.__dict__.update(kwargs)
+        return phy
 
     # Mimic BaseTree.Node
     @property
@@ -287,7 +314,7 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
 
     @property
     def rooted(self):
-        return (self.parent is not None)
+        return True
 
     # Shortcuts for list attributes that are usually only 1 item
     @property
