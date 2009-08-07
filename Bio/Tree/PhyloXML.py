@@ -335,25 +335,6 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
                                "use Clade().taxonomies")
         return self.taxonomies[0]
 
-    # Sequence-type behavior methods
-
-    def __getitem__(self, index):
-        """Get a sub-clade by index (integer or slice)."""
-        if isinstance(index, int) or isinstance(index, slice):
-            return self.clades[index]
-        ref = self
-        for idx in index:
-            ref = ref.clades[idx]
-        return ref
-
-    def __iter__(self):
-        """Iterate through the clades (sub-nodes) within this clade."""
-        return iter(self.clades)
-
-    def __len__(self):
-        """Number of clades directy under this element."""
-        return len(self.clades)
-
 
 # PhyloXML-specific complex types
 

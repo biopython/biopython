@@ -232,6 +232,27 @@ class Tree(TreeElement):
     # is_paraphyletic
     # reroot
 
+    # Sequence-type behavior methods
+    def __getitem__(self, index):
+        """Get sub-trees by index (integer or slice)."""
+        if isinstance(index, int):
+            return self.nodes[index].tree
+        if isinstance(index, slice):
+            return [n.tree for n in self.nodes]
+        ref = self
+        for idx in index:
+            ref = ref[idx]
+        return ref
+
+    def __iter__(self):
+        """Iterate through this tree's direct sub-trees."""
+        for node in self.nodes:
+            yield node.tree
+
+    def __len__(self):
+        """Number of nodes/sub-trees directy under this tree's root."""
+        return len(self.nodes)
+
 
 class Node(TreeElement):
     """A node in a tree.
