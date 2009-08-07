@@ -84,13 +84,12 @@ class Tree(TreeElement):
         as "biosql"), or create one named the same as the tree.
 
     """
-    def __init__(self, root=None, nodes=None, rooted=True, name=None, id=None):
-        self.rooted = rooted    # is_rooted=True
-        self.name = name
-        self.id = id            #: identifier
-        # For Biopython
-        self.root = root            # type Node
+    def __init__(self, root=None, nodes=None, rooted=True, id=None, name=None):
+        self.root = root or Node(tree=self)
         self.nodes = nodes or []    # each type Node, "under" root
+        self.rooted = rooted        # is_rooted=True
+        self.id = id                #: identifier
+        self.name = name or self.root.label
         # relations: self, node (root_node), biodatabase
         # may belong to a sequence
 
@@ -103,7 +102,6 @@ class Tree(TreeElement):
         return Tree(node, **kwargs)
 
     # Plumbing
-
     def depth_first_search(self, node, filterfunc):
         """Perform a depth-first search through all nodes in this tree.
         
@@ -126,9 +124,21 @@ class Tree(TreeElement):
                 for result in self.depth_first_search(item, filterfunc):
                     yield result
 
-    # Porcelain
+    def is_terminal(self):
+        return (not self.nodes)
 
-    def find(self, cls=None, **kwargs):
+    def update_nested_set_index(self):
+        """Calculate the left and right indexes for each node in the tree.
+
+        See: Nested set representation.
+        U{ http://www.oreillynet.com/pub/a/network/2002/11/27/bioconf.html }
+        """
+        # NB: resembles depth-first-search, but not quite
+        # look at BioSQL's load_ncbi_taxonomy.pl
+        pass
+
+    # Porcelain
+    def find(self, cls=None, terminal=None, **kwargs):
         """Find all sub-nodes matching the given attributes.
 
         The 'cls' argument specifies the class of the sub-node. Nodes that
@@ -159,28 +169,47 @@ class Tree(TreeElement):
         if cls is None:
             cls = TreeElement
 
-        def is_matching_node(node):
-            if isinstance(node, cls):
-                if len(kwargs) == 0:
-                    # Without further constraints, accept any matching class
-                    return True
-                for key, pattern in kwargs.iteritems():
-                    if not hasattr(node, key):
-                        continue
-                    target = getattr(node, key)
-                    if (isinstance(pattern, basestring)
-                            and isinstance(target, basestring)):
-                        if re.match(pattern, target):
-                            return True
-                    elif isinstance(pattern, bool):
-                        if pattern == bool(target):
-                            return True
-                    elif isinstance(pattern, int):
-                        if pattern == target:
-                            return True
-                    else:
-                        raise RuntimeError('invalid argument: ' + str(pattern))
-            return False
+        def match_class(node):
+            return isinstance(node, cls)
+
+        def match_terminal(node):
+            if hasattr(node, 'is_terminal') and not node.is_terminal():
+                return (not terminal)
+            return terminal
+
+        def match_kwargs(node):
+            for key, pattern in kwargs.iteritems():
+                if not hasattr(node, key):
+                    return False
+                target = getattr(node, key)
+                if (isinstance(pattern, basestring)
+                        and isinstance(target, basestring)):
+                    if not re.match(pattern, target):
+                        return False
+                elif isinstance(pattern, bool):
+                    if pattern != bool(target):
+                        return False
+                elif isinstance(pattern, int):
+                    if pattern != target:
+                        return False
+                else:
+                    raise RuntimeError('invalid argument: ' + str(pattern))
+            return True
+
+        if terminal is None:
+            if not kwargs :
+                is_matching_node = match_class
+            else:
+                def is_matching_node(node):
+                    return (match_class(node) and match_kwargs(node))
+        elif not kwargs:
+            def is_matching_node(node):
+                return (match_class(node) and match_terminal(node))
+        else:
+            def is_matching_node(node):
+                return (match_class(node)
+                        and match_terminal(node)
+                        and match_kwargs(node))
 
         return self.depth_first_search(self, is_matching_node)
 
@@ -232,24 +261,20 @@ class Node(TreeElement):
          hierarchical queries. Needs to be precomputed by a program, see J.
          Celko, SQL for Smarties.
     """
-    def __init__(self, name=None, parent=None, tree=None,
+    def __init__(self,
+            tree=None, label=None,
             branch_length=None, left_idx=None, right_idx=None):
+        self.tree = tree or Tree(root=self)     # tree_id, type Tree
+        self.label = name
+        self.branch_length = branch_length  # XXX or move this to Edge?
+        self.left_idx = left_idx
+        self.right_idx = right_idx
         # relations: self, tree
         # (id/identifier/label, parent/ancestor)
         # may belong to a sequence
-        self.tree = None            # tree_id, type Tree
-        self.left_idx = left_idx
-        self.right_idx = right_idx
-        # For Biopython
-        self.name = name
-        self.branch_length = branch_length  # XXX or move this to Edge?
-        self.parent = parent        # type Node
 
-    @property
-    def label(self):
-        """For compatibility with BioSQL."""
-        return self.name
-
+    def is_terminal(self):
+        return (not self.tree.nodes)
 
 # Additional PhyloDB tables
 
