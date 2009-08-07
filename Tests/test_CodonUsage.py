@@ -1,4 +1,3 @@
-from Bio import Fasta
 from Bio.SeqUtils import CodonUsage
 import os
 import sys

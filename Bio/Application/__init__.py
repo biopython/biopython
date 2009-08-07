@@ -195,6 +195,21 @@ class AbstractCommandline(object):
         for key, value in kwargs.iteritems() :
             self.set_parameter(key, value)
     
+    def _validate(self):
+        """Make sure the required parameters have been set (PRIVATE).
+
+        No return value - it either works or raises a ValueError.
+
+        This is a separate method (called from __str__) so that subclasses may
+        override it.
+        """
+        for p in self.parameters:
+            #Check for missing required parameters:
+            if p.is_required and not(p.is_set):
+                raise ValueError("Parameter %s is not set." \
+                                 % p.names[-1])
+            #Also repeat the parameter validation here, just in case?
+
     def __str__(self):
         """Make the commandline string with the currently set options.
 
@@ -209,10 +224,9 @@ class AbstractCommandline(object):
         >>> str(cline)
         'water -outfile=temp_water.txt -asequence=asis:ACCCGGGCGCGGT -bsequence=asis:ACCCGAGCGCGGT -gapopen=10 -gapextend=0.5'
         """
+        self._validate()
         commandline = "%s " % self.program_name
         for parameter in self.parameters:
-            if parameter.is_required and not(parameter.is_set):
-                raise ValueError("Parameter %s is not set." % parameter.names[-1])
             if parameter.is_set:
                 #This will include a trailing space:
                 commandline += str(parameter)
@@ -290,19 +304,19 @@ class AbstractCommandline(object):
     def _check_value(self, value, name, check_function):
         """Check whether the given value is valid.
 
+        No return value - it either works or raises a ValueError.
+
         This uses the passed function 'check_function', which can either
         return a [0, 1] (bad, good) value or raise an error. Either way
         this function will raise an error if the value is not valid, or
         finish silently otherwise.
         """
-        #TODO - Allow check_function to return True/False?
         if check_function is not None:
-            is_good = check_function(value)
-            if is_good in [0, 1]: # if we are dealing with a good/bad check
-                if not(is_good):
-                    raise ValueError(
-                            "Invalid parameter value %r for parameter %s" %
-                            (value, name))
+            is_good = check_function(value) #May raise an exception
+            assert is_good in [0,1,True,False]
+            if not is_good :
+                raise ValueError("Invalid parameter value %r for parameter %s" \
+                                 % (value, name))
                     
 class _AbstractParameter:
     """A class to hold information about a parameter for a commandline.

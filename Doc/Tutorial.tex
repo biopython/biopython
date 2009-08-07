@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 29 July 2009 (Biopython 1.51 \textit{beta})}
+\date{Last Update -- 6 August 2009 (Biopython 1.51 \textit{beta})}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -3259,34 +3259,59 @@ translates as a new line and/or a tab -- which is why we're put a letter
 ``r'' at the start for a raw string that isn't translated in this way.
 This is generally good practice when specifying a Windows style file name.
 
-You can now run this command line, perhaps using the Python \verb|subprocess|
-module, or maybe just with our \verb|generic_run| function.
-This returns three things. First, a result object
-includes the return code, an integer value which by convention is zero when
-successful (check the documentation for particular tools about what return
-codes they might use). Then, two handles which contain the ``standard out''
-(stdout) and ``standard error'' (stderr) text from the tool. These terms
-originate in Unix, and are the general results from the program (stdout)
-and any progress or error messages (stderr).
+You can now run this command line, and in Python the recommended way to
+run another program is to use the \verb|subprocess| module. This replaces
+older options like the \verb|os.system()| and the \verb|os.popen*| functions.
+
+Now, at this point it helps to know about how command line tools ``work''.
+When you run a tool at the command line, it will often print text output
+and/or directly to screen. This text can be captured or redirected, via
+two ``pipes'', called standard output (the normal results) and standard
+error (for error messages and debug messages). There is also standard
+input, which is any text fed into the tool. These names get shortened
+to stdin, stdout and stderr. When the tool finished, it has a return
+code (an integer), which by convention is zero for success.
+
+Now let's try an example. Unfortunately there are some subtle differences
+depending on your Operating System (e.g. Windows versus Unix) and how you
+are running Python (e.g. at the command line, or in IDLE). You may see a
+second terminal window appear while ClustalW works. You may see the
+ClustalW output appear at your Python prompt.
 
 \begin{verbatim}
->>> from Bio.Application import generic_run
->>> result, out_handle, err_handle = generic_run(cline)
->>> print result.return_code
-0
->>> print err_handle.read()
-
->>> print out_handle.read()
+>>> import sys
+>>> import subprocess
+>>> return_code = subprocess.call(str(cline), shell=(sys.platform!="win32"))
 ...
+>>> print return_code
+0
 \end{verbatim}
 
-If you do print out the handles, you'll see all the voluminous text that
-ClustalW likes to print as it is working -- pages of stuff! There isn't
-much of interest here (unless it fails in which case any error messages
-could be informative!).
+In the case of ClustlW, when run at the command line all the important
+output is written directly to the output files. Everything printed to
+screen while you wait (via stdout or stderr) is boring and can be
+ignored (assuming it worked).  You can explicitly tell ClustalW to send
+this output to ``dev null'', a kind of black hole for command line tool output:
 
+\begin{verbatim}
+>>> import os
+>>> import sys
+>>> import subprocess
+>>> return_code = subprocess.call(str(cline),
+...                               stdout = open(os.devnull),
+...                               stderr = open(os.devnull),
+...                               shell=(sys.platform!="win32"))
+>>> print return_code
+0
+\end{verbatim}
+
+This time ClustalW should be ``quiet'', because all its terminal output
+has been discarded.
 What we care about are the two output files, the alignment and the guide
-tree. You should be able to work out how to read in the alignment using
+tree. We didn't tell ClustalW what filenames to use, but it defaults to
+picking names based on the input file. In this case the output should be
+in the file \verb|opuntia.aln|.
+You should be able to work out how to read in the alignment using
 \verb|Bio.AlignIO| by now:
 
 \begin{verbatim}
@@ -3422,22 +3447,17 @@ advantage of this to avoid having a temporary output file! For example:
 muscle -in opuntia.fasta
 \end{verbatim}
 
-\noindent Now, let's run this and capture the output as handles:
+\noindent Now, let's run this and capture the output as handles.
+Remember that MUSCLE defaults to using FASTA as the output format:
 
 \begin{verbatim}
->>> from Bio.Application import generic_run
->>> result, out_handle, err_handle = generic_run(cline)
->>> print result.return_code
-0
-\end{verbatim}
-
-\noindent A return code of zero is good -- by convention this means
-no errors. Finally, the output handle should contain our alignment in the
-default FASTA format:
-
-\begin{verbatim}
+>>> import subprocess
+>>> child = subprocess.Popen(str(cline),
+...                          stdout=subprocess.PIPE,
+...                          stderr=subprocess.PIPE,
+...                          shell=(sys.platform!="win32"))
 >>> from Bio import AlignIO
->>> align = AlignIO.read(out_handle, "fasta")
+>>> align = AlignIO.read(child.stdout, "fasta")
 >>> print align
 SingleLetterAlphabet() alignment with 7 rows and 906 columns
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF191663
@@ -3453,8 +3473,6 @@ TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF19
 
 We don't actually \emph{need} to have our FASTA input sequences prepared in a file,
 because by default MUSCLE will read in the input sequence from standard input!
-At this point the limitations of the helper function \verb|generic_run| become
-apparent, so we'll switch to the Python \verb|subprocess| module for full control.
 
 First, we'll need some unaligned sequences in memory as \verb|SeqRecord| objects.
 For this demonstration I'm going to use a filtered version of the original FASTA
@@ -3476,7 +3494,7 @@ as for the output.
 muscle -clwstrict
 \end{verbatim}
 
-Now comes the clever bit using the \verb|subprocess| module:
+Now comes the clever bit using the \verb|subprocess| module, stdin and stdout:
 
 \begin{verbatim}
 >>> import subprocess
@@ -3614,19 +3632,19 @@ module. However, for simple usage Biopython includes a wrapper function that
 usually suffices:
 
 \begin{verbatim}
->>> from Bio.Application import generic_run
->>> result, out_handle, err_handle = generic_run(cline)
->>> print err_handle.read()
+>>> import subprocess
+>>> return_code = subprocess.call(str(cline), shell=(sys.platform!="win32"))
 Needleman-Wunsch global alignment of two sequences
-
->>> print out_handle.read()
-
->>> print result.return_code
+>>> print return_code
 0
 \end{verbatim}
 
 In the above, all we really care about is that the return code is zero
-(success). Then we can load the output file with \verb|Bio.AlignIO| as
+(success). If you want to hide the message EMBOSS prints out, then (as
+in the ClustalW example above) send the stdout and stderr to dev null,
+or just set the EMBOSS \texttt{auto} argument to True.
+
+Next we can load the output file with \verb|Bio.AlignIO| as
 discussed earlier in this chapter, as the \texttt{emboss} format:
 
 \begin{verbatim}
