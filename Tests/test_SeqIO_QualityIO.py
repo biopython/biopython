@@ -245,11 +245,25 @@ class TestQual(unittest.TestCase):
         #Will ignore the unknown sequences :)
         self.assert_(compare_records(records1, records2))
 
+    def test_qual_out(self):
+        """Check FASTQ to QUAL output"""
+        records = SeqIO.parse(open("Quality/example.fastq"),"fastq")
+        h = StringIO("")
+        SeqIO.write(records, h, "qual")
+        self.assertEqual(h.getvalue(),open("Quality/example.qual").read())
+
     def test_fasta(self):
         """Check FASTQ parsing matches FASTA parsing"""
         records1 = list(SeqIO.parse(open("Quality/example.fasta"),"fasta"))
         records2 = list(SeqIO.parse(open("Quality/example.fastq"),"fastq"))
         self.assert_(compare_records(records1, records2))
+
+    def test_fasta_out(self):
+        """Check FASTQ to FASTA output"""
+        records = SeqIO.parse(open("Quality/example.fastq"),"fastq")
+        h = StringIO("")
+        SeqIO.write(records, h, "fasta")
+        self.assertEqual(h.getvalue(),open("Quality/example.fasta").read())
 
 class TestWriteRead(unittest.TestCase) :
     """Test can write and read back files."""
