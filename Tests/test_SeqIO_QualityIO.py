@@ -108,6 +108,68 @@ def compare_records(old_list, new_list, truncate_qual=None) :
             return False
     return True
 
+class TestFastqErrors(unittest.TestCase) :
+    """Test reject invalid FASTQ files."""
+    def setUp(self):
+        warnings.resetwarnings()
+
+    def check_fails(self, filename, good_count, formats=None):
+        if not formats :
+            formats = ["fastq-sanger", "fastq-solexa", "fastq-illumina"]
+        for format in formats :
+            handle = open(filename, "rU")
+            records = SeqIO.parse(handle, format)
+            for i in range(good_count) :
+                record = records.next() #No errors!
+                self.assert_(isinstance(record, SeqRecord))
+            self.assertRaises(ValueError, records.next)
+            handle.close()
+        return True
+
+    def test_space(self):
+        """Should reject a FASTQ file with spaces in seq/qual"""
+        self.check_fails("Quality/error_spaces.fastq", 0)
+
+    def test_tabs(self):
+        """Should reject a FASTQ file with tabs in seq/qual"""
+        self.check_fails("Quality/error_tabs.fastq", 0)
+
+    def test_no_qual(self):
+        """Should reject a FASTQ file with missing qualities"""
+        self.check_fails("Quality/error_no_qual.fastq", 0)
+
+    def test_long_qual(self):
+        """Should reject a FASTQ file with longer qual than seq"""
+        self.check_fails("Quality/error_long_qual.fastq", 3)
+
+    def test_short_qual(self):
+        """Should reject a FASTQ file with shorted qual than seq"""
+        self.check_fails("Quality/error_short_qual.fastq", 2)
+
+    def test_diff_ids(self):
+        """Should reject a FASTQ file where + and @ identifers disagree"""
+        self.check_fails("Quality/error_diff_ids.fastq", 2)
+
+    def test_trunc_at_seq(self):
+        """Should reject a FASTQ file truncated at the sequence"""
+        self.check_fails("Quality/error_trunc_at_seq.fastq", 4)
+
+    def test_trunc_at_seq(self):
+        """Should reject a FASTQ file truncated at the plus line"""
+        self.check_fails("Quality/error_trunc_at_plus.fastq", 4)
+
+    def test_trunc_at_seq(self):
+        """Should reject a FASTQ file truncated at the quality"""
+        self.check_fails("Quality/error_trunc_at_qual.fastq", 4)
+
+    def test_qual_space(self):
+        """Should reject a FASTQ file with a space in the quality"""
+        self.check_fails("Quality/error_qual_space.fastq", 3)
+
+    def test_qual_tab(self):
+        """Should reject a FASTQ file with a tab in the quality"""
+        self.check_fails("Quality/error_qual_tab.fastq", 4)
+
 class TestWriteRead(unittest.TestCase) :
     """Test can write and read back files."""
     def setUp(self):
