@@ -164,7 +164,7 @@ class TestFastqErrors(unittest.TestCase) :
 
     def test_qual_null(self):
         """Reject FASTQ with null (ASCII 0) in the quality"""
-        self.check_fails("Quality/error_qual_null.fastq", 1)
+        self.check_fails("Quality/error_qual_null.fastq", 0)
 
     def test_qual_tab(self):
         """Reject FASTQ with tab (ASCII 9) in the quality"""
