@@ -225,6 +225,32 @@ class TestFastqErrors(unittest.TestCase) :
         self.check_fails("Quality/error_qual_del.fastq", 3)
         self.check_general_passes("Quality/error_qual_del.fastq", 5)
 
+class TestQual(unittest.TestCase):
+    """Tests with QUAL files."""
+    def setUp(self):
+        warnings.resetwarnings()
+
+    def test_paired(self):
+        """Check FASTQ parsing matches FASTA+QUAL parsing"""
+        records1 = list(\
+            QualityIO.PairedFastaQualIterator(open("Quality/example.fasta"),
+                                              open("Quality/example.qual")))
+        records2 = list(SeqIO.parse(open("Quality/example.fastq"),"fastq"))
+        self.assert_(compare_records(records1, records2))
+
+    def test_qual(self):
+        """Check FASTQ parsing matches QUAL parsing"""
+        records1 = list(SeqIO.parse(open("Quality/example.qual"),"qual"))
+        records2 = list(SeqIO.parse(open("Quality/example.fastq"),"fastq"))
+        #Will ignore the unknown sequences :)
+        self.assert_(compare_records(records1, records2))
+
+    def test_fasta(self):
+        """Check FASTQ parsing matches FASTA parsing"""
+        records1 = list(SeqIO.parse(open("Quality/example.fasta"),"fasta"))
+        records2 = list(SeqIO.parse(open("Quality/example.fastq"),"fastq"))
+        self.assert_(compare_records(records1, records2))
+
 class TestWriteRead(unittest.TestCase) :
     """Test can write and read back files."""
     def setUp(self):
