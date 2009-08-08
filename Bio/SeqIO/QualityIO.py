@@ -890,6 +890,10 @@ def FastqGeneralIterator(handle) :
                     raise ValueError("Sequence and quality captions differ.")
                 break
             seq_string += line.rstrip() #removes trailing newlines
+        #This is going to slow things down a little, but assuming
+        #this isn't allowed we should try and catch it here:
+        if " " in seq_string or "\t" in seq_string :
+            raise ValueError("Whitespace is not allowed in the sequence.")
         seq_len = len(seq_string)
 
         #Will now be at least one line of quality data...

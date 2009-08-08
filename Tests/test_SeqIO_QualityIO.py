@@ -148,12 +148,12 @@ class TestFastqErrors(unittest.TestCase) :
     def test_space(self):
         """Reject FASTQ with spaces in seq/qual"""
         self.check_fails("Quality/error_spaces.fastq", 0)
-        #self.check_general_fails("Quality/error_spaces.fastq", 0)
+        self.check_general_fails("Quality/error_spaces.fastq", 0)
 
     def test_tabs(self):
         """Reject FASTQ with tabs in seq/qual"""
         self.check_fails("Quality/error_tabs.fastq", 0)
-        #self.check_general_fails("Quality/error_tabs.fastq", 0)
+        self.check_general_fails("Quality/error_tabs.fastq", 0)
 
     def test_no_qual(self):
         """Reject FASTQ with missing qualities"""
