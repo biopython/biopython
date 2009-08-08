@@ -150,6 +150,25 @@ class TestFastqErrors(unittest.TestCase) :
         """Should reject a FASTQ file where + and @ identifers disagree"""
         self.check_fails("Quality/error_diff_ids.fastq", 2)
 
+    def test_trunc_at_seq(self):
+        """Should reject a FASTQ file truncated at the sequence"""
+        self.check_fails("Quality/error_trunc_at_seq.fastq", 4)
+
+    def test_trunc_at_seq(self):
+        """Should reject a FASTQ file truncated at the plus line"""
+        self.check_fails("Quality/error_trunc_at_plus.fastq", 4)
+
+    def test_trunc_at_seq(self):
+        """Should reject a FASTQ file truncated at the quality"""
+        self.check_fails("Quality/error_trunc_at_qual.fastq", 4)
+
+    def test_qual_space(self):
+        """Should reject a FASTQ file with a space in the quality"""
+        self.check_fails("Quality/error_qual_space.fastq", 3)
+
+    def test_qual_tab(self):
+        """Should reject a FASTQ file with a tab in the quality"""
+        self.check_fails("Quality/error_qual_tab.fastq", 4)
 
 class TestWriteRead(unittest.TestCase) :
     """Test can write and read back files."""
