@@ -218,7 +218,7 @@ class TestFastqErrors(unittest.TestCase) :
     def test_qual_space(self):
         """Reject FASTQ with space (ASCII 32) in the quality"""
         self.check_fails("Quality/error_qual_space.fastq", 3)
-        #self.check_general_passes("Quality/error_qual_space.fastq", 5)
+        self.check_general_passes("Quality/error_qual_space.fastq", 5)
 
     def test_qual_del(self):
         """Reject FASTQ with delete (ASCI 127) in quality"""
@@ -372,6 +372,68 @@ class TestWriteRead(unittest.TestCase) :
         write_read(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina", "fastq-solexa")
         write_read(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina", "fastq-illumina")
         write_read(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina", "qual")
+
+class MappingTests(unittest.TestCase) :
+    def setUp(self):
+        warnings.resetwarnings()
+
+    def test_solexa_quality_from_phred(self):
+        """Mapping check for function solexa_quality_from_phred"""
+        self.assertEqual(-5, round(QualityIO.solexa_quality_from_phred(0)))
+        self.assertEqual(-5, round(QualityIO.solexa_quality_from_phred(1)))
+        self.assertEqual(-2, round(QualityIO.solexa_quality_from_phred(2)))
+        self.assertEqual(0, round(QualityIO.solexa_quality_from_phred(3)))
+        self.assertEqual(2, round(QualityIO.solexa_quality_from_phred(4)))
+        self.assertEqual(3, round(QualityIO.solexa_quality_from_phred(5)))
+        self.assertEqual(5, round(QualityIO.solexa_quality_from_phred(6)))
+        self.assertEqual(6, round(QualityIO.solexa_quality_from_phred(7)))
+        self.assertEqual(7, round(QualityIO.solexa_quality_from_phred(8)))
+        self.assertEqual(8, round(QualityIO.solexa_quality_from_phred(9)))
+        for i in range(10,100) :
+            self.assertEqual(i, round(QualityIO.solexa_quality_from_phred(i)))
+        
+    def test_phred_quality_from_solexa(self):
+        """Mapping check for function phred_quality_from_solexa"""
+        self.assertEqual(1, round(QualityIO.phred_quality_from_solexa(-5)))
+        self.assertEqual(1, round(QualityIO.phred_quality_from_solexa(-4)))
+        self.assertEqual(2, round(QualityIO.phred_quality_from_solexa(-3)))
+        self.assertEqual(2, round(QualityIO.phred_quality_from_solexa(-2)))
+        self.assertEqual(3, round(QualityIO.phred_quality_from_solexa(-1)))
+        self.assertEqual(3, round(QualityIO.phred_quality_from_solexa(0)))
+        self.assertEqual(4, round(QualityIO.phred_quality_from_solexa(1)))
+        self.assertEqual(4, round(QualityIO.phred_quality_from_solexa(2)))
+        self.assertEqual(5, round(QualityIO.phred_quality_from_solexa(3)))
+        self.assertEqual(5, round(QualityIO.phred_quality_from_solexa(4)))
+        self.assertEqual(6, round(QualityIO.phred_quality_from_solexa(5)))
+        self.assertEqual(7, round(QualityIO.phred_quality_from_solexa(6)))
+        self.assertEqual(8, round(QualityIO.phred_quality_from_solexa(7)))
+        self.assertEqual(9, round(QualityIO.phred_quality_from_solexa(8)))
+        self.assertEqual(10, round(QualityIO.phred_quality_from_solexa(9)))
+        for i in range(10,100) :
+            self.assertEqual(i, round(QualityIO.phred_quality_from_solexa(i)))
+
+    def test_sanger_to_solexa(self):
+        """Mapping check for FASTQ Sanger (0 to 93) to Solexa (-5 to 62)"""
+        #The point of this test is the writing code doesn't actuall use the
+        #solexa_quality_from_phred function directly. For speed it uses a
+        #cached dictionary of the mappings.
+        seq = "N"*94
+        qual = "".join(chr(33+q) for q in range(0,94))
+        expected_sol = [min(62,int(round(QualityIO.solexa_quality_from_phred(q)))) \
+                        for q in range(0,94)]
+        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq,qual))
+        out_handle = StringIO("")
+        #Want to ignore the data loss warning
+        #(on Python 2.6 we could check for it!)
+        warnings.simplefilter('ignore', UserWarning)
+        SeqIO.write(SeqIO.parse(in_handle, "fastq-sanger"),
+                    out_handle, "fastq-solexa")
+        warnings.resetwarnings()
+        out_handle.seek(0)
+        record = SeqIO.read(out_handle, "fastq-solexa")
+        self.assertEqual(str(record.seq), seq)
+        self.assertEqual(record.letter_annotations["solexa_quality"],
+                         expected_sol)
 
 
 if __name__ == "__main__":
