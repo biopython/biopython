@@ -414,7 +414,7 @@ class MappingTests(unittest.TestCase) :
 
     def test_sanger_to_solexa(self):
         """Mapping check for FASTQ Sanger (0 to 93) to Solexa (-5 to 62)"""
-        #The point of this test is the writing code doesn't actuall use the
+        #The point of this test is the writing code doesn't actually use the
         #solexa_quality_from_phred function directly. For speed it uses a
         #cached dictionary of the mappings.
         seq = "N"*94
@@ -434,6 +434,63 @@ class MappingTests(unittest.TestCase) :
         self.assertEqual(str(record.seq), seq)
         self.assertEqual(record.letter_annotations["solexa_quality"],
                          expected_sol)
+
+    def test_solexa_to_sanger(self):
+        """Mapping check for FASTQ Solexa (-5 to 62) to Sanger (0 to 62)"""
+        #The point of this test is the writing code doesn't actually use the
+        #solexa_quality_from_phred function directly. For speed it uses a
+        #cached dictionary of the mappings.
+        seq = "N"*68
+        qual = "".join(chr(64+q) for q in range(-5,63))
+        expected_phred = [round(QualityIO.phred_quality_from_solexa(q)) \
+                          for q in range(-5,63)]
+        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq,qual))
+        out_handle = StringIO("")
+        #Want to ignore the data loss warning
+        #(on Python 2.6 we could check for it!)
+        warnings.simplefilter('ignore', UserWarning)
+        SeqIO.write(SeqIO.parse(in_handle, "fastq-solexa"),
+                    out_handle, "fastq-sanger")
+        warnings.resetwarnings()
+        out_handle.seek(0)
+        record = SeqIO.read(out_handle, "fastq-sanger")
+        self.assertEqual(str(record.seq), seq)
+        self.assertEqual(record.letter_annotations["phred_quality"],
+                         expected_phred)
+
+    def test_sanger_to_illumina(self):
+        """Mapping check for FASTQ Sanger (0 to 93) to Illumina (0 to 62)"""
+        seq = "N"*94
+        qual = "".join(chr(33+q) for q in range(0,94))
+        expected_phred = [min(62,q) for q in range(0,94)]
+        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq,qual))
+        out_handle = StringIO("")
+        #Want to ignore the data loss warning
+        #(on Python 2.6 we could check for it!)
+        warnings.simplefilter('ignore', UserWarning)
+        SeqIO.write(SeqIO.parse(in_handle, "fastq-sanger"),
+                    out_handle, "fastq-illumina")
+        warnings.resetwarnings()
+        out_handle.seek(0)
+        record = SeqIO.read(out_handle, "fastq-illumina")
+        self.assertEqual(str(record.seq), seq)
+        self.assertEqual(record.letter_annotations["phred_quality"],
+                         expected_phred)
+
+    def test_illumina_to_sanger(self):
+        """Mapping check for FASTQ Illumina (0 to 62) to Sanger (0 to 62)"""
+        seq = "N"*63
+        qual = "".join(chr(64+q) for q in range(0,63))
+        expected_phred = range(63)
+        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq,qual))
+        out_handle = StringIO("")
+        SeqIO.write(SeqIO.parse(in_handle, "fastq-illumina"),
+                    out_handle, "fastq-sanger")
+        out_handle.seek(0)
+        record = SeqIO.read(out_handle, "fastq-sanger")
+        self.assertEqual(str(record.seq), seq)
+        self.assertEqual(record.letter_annotations["phred_quality"],
+                         expected_phred)
 
 
 if __name__ == "__main__":
