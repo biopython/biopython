@@ -113,82 +113,157 @@ class TestFastqErrors(unittest.TestCase) :
     def setUp(self):
         warnings.resetwarnings()
 
-    def check_fails(self, filename, good_count, formats=None):
+    def check_fails(self, filename, good_count, formats=None, raw=True):
         if not formats :
             formats = ["fastq-sanger", "fastq-solexa", "fastq-illumina"]
         for format in formats :
             handle = open(filename, "rU")
             records = SeqIO.parse(handle, format)
             for i in range(good_count) :
-                record = records.next() #No errors!
+                record = records.next() #Make sure no errors!
                 self.assert_(isinstance(record, SeqRecord))
             self.assertRaises(ValueError, records.next)
             handle.close()
-        return True
+
+    def check_general_fails(self, filename, good_count) :
+        handle = open(filename, "rU")
+        tuples = QualityIO.FastqGeneralIterator(handle)
+        for i in range(good_count) :
+            title, seq, qual = tuples.next() #Make sure no errors!
+        self.assertRaises(ValueError, tuples.next)
+        handle.close()
+
+    def check_general_passes(self, filename, record_count) :
+        handle = open(filename, "rU")
+        tuples = QualityIO.FastqGeneralIterator(handle)
+        #This "raw" parser doesn't check the ASCII characters which means
+        #certain invalid FASTQ files will get parsed without errors.
+        count = 0
+        for title, seq, qual in tuples :
+            self.assertEqual(len(seq), len(qual))
+            count += 1
+        self.assertEqual(count, record_count)
+        handle.close()
 
     def test_space(self):
         """Reject FASTQ with spaces in seq/qual"""
         self.check_fails("Quality/error_spaces.fastq", 0)
+        self.check_general_fails("Quality/error_spaces.fastq", 0)
 
     def test_tabs(self):
         """Reject FASTQ with tabs in seq/qual"""
         self.check_fails("Quality/error_tabs.fastq", 0)
+        self.check_general_fails("Quality/error_tabs.fastq", 0)
 
     def test_no_qual(self):
         """Reject FASTQ with missing qualities"""
         self.check_fails("Quality/error_no_qual.fastq", 0)
+        self.check_general_fails("Quality/error_no_qual.fastq", 0)
 
     def test_long_qual(self):
         """Reject FASTQ with longer qual than seq"""
         self.check_fails("Quality/error_long_qual.fastq", 3)
+        self.check_general_fails("Quality/error_long_qual.fastq", 3)
 
     def test_short_qual(self):
         """Reject FASTQ with shorted qual than seq"""
         self.check_fails("Quality/error_short_qual.fastq", 2)
+        self.check_general_fails("Quality/error_short_qual.fastq", 2)
 
     def test_diff_ids(self):
         """Reject FASTQ where + and @ identifers disagree"""
         self.check_fails("Quality/error_diff_ids.fastq", 2)
+        self.check_general_fails("Quality/error_diff_ids.fastq", 2)
 
     def test_trunc_at_seq(self):
         """Reject FASTQ truncated at the sequence"""
         self.check_fails("Quality/error_trunc_at_seq.fastq", 4)
+        self.check_general_fails("Quality/error_trunc_at_seq.fastq", 4)
 
     def test_trunc_at_seq(self):
         """Reject FASTQ truncated at the plus line"""
         self.check_fails("Quality/error_trunc_at_plus.fastq", 4)
+        self.check_general_fails("Quality/error_trunc_at_plus.fastq", 4)
 
     def test_trunc_at_seq(self):
         """Reject FASTQ truncated at the quality"""
         self.check_fails("Quality/error_trunc_at_qual.fastq", 4)
+        self.check_general_fails("Quality/error_trunc_at_qual.fastq", 4)
 
     def test_qual_null(self):
         """Reject FASTQ with null (ASCII 0) in the quality"""
         self.check_fails("Quality/error_qual_null.fastq", 0)
+        self.check_general_passes("Quality/error_qual_null.fastq", 5)
 
     def test_qual_tab(self):
         """Reject FASTQ with tab (ASCII 9) in the quality"""
         self.check_fails("Quality/error_qual_tab.fastq", 4)
+        self.check_general_passes("Quality/error_qual_tab.fastq", 5)
 
     def test_qual_vtab(self):
         """Reject FASTQ with vertical tab (ASCII 11) in quality"""
         self.check_fails("Quality/error_qual_vtab.fastq", 0)
+        self.check_general_passes("Quality/error_qual_vtab.fastq", 5)
 
-    def test_qual_unit_sep(self):
+    def test_qual_escape(self):
         """Reject FASTQ with escape (ASCII 27) in quality"""
         self.check_fails("Quality/error_qual_escape.fastq", 4)
+        self.check_general_passes("Quality/error_qual_escape.fastq", 5)
 
     def test_qual_unit_sep(self):
         """Reject FASTQ with unit sep (ASCII 31) in quality"""
         self.check_fails("Quality/error_qual_unit_sep.fastq", 2)
+        self.check_general_passes("Quality/error_qual_unit_sep.fastq", 5)
 
     def test_qual_space(self):
         """Reject FASTQ with space (ASCII 32) in the quality"""
         self.check_fails("Quality/error_qual_space.fastq", 3)
+        self.check_general_passes("Quality/error_qual_space.fastq", 5)
 
     def test_qual_del(self):
         """Reject FASTQ with delete (ASCI 127) in quality"""
         self.check_fails("Quality/error_qual_del.fastq", 3)
+        self.check_general_passes("Quality/error_qual_del.fastq", 5)
+
+class TestQual(unittest.TestCase):
+    """Tests with QUAL files."""
+    def setUp(self):
+        warnings.resetwarnings()
+
+    def test_paired(self):
+        """Check FASTQ parsing matches FASTA+QUAL parsing"""
+        records1 = list(\
+            QualityIO.PairedFastaQualIterator(open("Quality/example.fasta"),
+                                              open("Quality/example.qual")))
+        records2 = list(SeqIO.parse(open("Quality/example.fastq"),"fastq"))
+        self.assert_(compare_records(records1, records2))
+
+    def test_qual(self):
+        """Check FASTQ parsing matches QUAL parsing"""
+        records1 = list(SeqIO.parse(open("Quality/example.qual"),"qual"))
+        records2 = list(SeqIO.parse(open("Quality/example.fastq"),"fastq"))
+        #Will ignore the unknown sequences :)
+        self.assert_(compare_records(records1, records2))
+
+    def test_qual_out(self):
+        """Check FASTQ to QUAL output"""
+        records = SeqIO.parse(open("Quality/example.fastq"),"fastq")
+        h = StringIO("")
+        SeqIO.write(records, h, "qual")
+        self.assertEqual(h.getvalue(),open("Quality/example.qual").read())
+
+    def test_fasta(self):
+        """Check FASTQ parsing matches FASTA parsing"""
+        records1 = list(SeqIO.parse(open("Quality/example.fasta"),"fasta"))
+        records2 = list(SeqIO.parse(open("Quality/example.fastq"),"fastq"))
+        self.assert_(compare_records(records1, records2))
+
+    def test_fasta_out(self):
+        """Check FASTQ to FASTA output"""
+        records = SeqIO.parse(open("Quality/example.fastq"),"fastq")
+        h = StringIO("")
+        SeqIO.write(records, h, "fasta")
+        self.assertEqual(h.getvalue(),open("Quality/example.fasta").read())
 
 class TestWriteRead(unittest.TestCase) :
     """Test can write and read back files."""
@@ -297,6 +372,125 @@ class TestWriteRead(unittest.TestCase) :
         write_read(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina", "fastq-solexa")
         write_read(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina", "fastq-illumina")
         write_read(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina", "qual")
+
+class MappingTests(unittest.TestCase) :
+    def setUp(self):
+        warnings.resetwarnings()
+
+    def test_solexa_quality_from_phred(self):
+        """Mapping check for function solexa_quality_from_phred"""
+        self.assertEqual(-5, round(QualityIO.solexa_quality_from_phred(0)))
+        self.assertEqual(-5, round(QualityIO.solexa_quality_from_phred(1)))
+        self.assertEqual(-2, round(QualityIO.solexa_quality_from_phred(2)))
+        self.assertEqual(0, round(QualityIO.solexa_quality_from_phred(3)))
+        self.assertEqual(2, round(QualityIO.solexa_quality_from_phred(4)))
+        self.assertEqual(3, round(QualityIO.solexa_quality_from_phred(5)))
+        self.assertEqual(5, round(QualityIO.solexa_quality_from_phred(6)))
+        self.assertEqual(6, round(QualityIO.solexa_quality_from_phred(7)))
+        self.assertEqual(7, round(QualityIO.solexa_quality_from_phred(8)))
+        self.assertEqual(8, round(QualityIO.solexa_quality_from_phred(9)))
+        for i in range(10,100) :
+            self.assertEqual(i, round(QualityIO.solexa_quality_from_phred(i)))
+        
+    def test_phred_quality_from_solexa(self):
+        """Mapping check for function phred_quality_from_solexa"""
+        self.assertEqual(1, round(QualityIO.phred_quality_from_solexa(-5)))
+        self.assertEqual(1, round(QualityIO.phred_quality_from_solexa(-4)))
+        self.assertEqual(2, round(QualityIO.phred_quality_from_solexa(-3)))
+        self.assertEqual(2, round(QualityIO.phred_quality_from_solexa(-2)))
+        self.assertEqual(3, round(QualityIO.phred_quality_from_solexa(-1)))
+        self.assertEqual(3, round(QualityIO.phred_quality_from_solexa(0)))
+        self.assertEqual(4, round(QualityIO.phred_quality_from_solexa(1)))
+        self.assertEqual(4, round(QualityIO.phred_quality_from_solexa(2)))
+        self.assertEqual(5, round(QualityIO.phred_quality_from_solexa(3)))
+        self.assertEqual(5, round(QualityIO.phred_quality_from_solexa(4)))
+        self.assertEqual(6, round(QualityIO.phred_quality_from_solexa(5)))
+        self.assertEqual(7, round(QualityIO.phred_quality_from_solexa(6)))
+        self.assertEqual(8, round(QualityIO.phred_quality_from_solexa(7)))
+        self.assertEqual(9, round(QualityIO.phred_quality_from_solexa(8)))
+        self.assertEqual(10, round(QualityIO.phred_quality_from_solexa(9)))
+        for i in range(10,100) :
+            self.assertEqual(i, round(QualityIO.phred_quality_from_solexa(i)))
+
+    def test_sanger_to_solexa(self):
+        """Mapping check for FASTQ Sanger (0 to 93) to Solexa (-5 to 62)"""
+        #The point of this test is the writing code doesn't actually use the
+        #solexa_quality_from_phred function directly. For speed it uses a
+        #cached dictionary of the mappings.
+        seq = "N"*94
+        qual = "".join(chr(33+q) for q in range(0,94))
+        expected_sol = [min(62,int(round(QualityIO.solexa_quality_from_phred(q)))) \
+                        for q in range(0,94)]
+        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq,qual))
+        out_handle = StringIO("")
+        #Want to ignore the data loss warning
+        #(on Python 2.6 we could check for it!)
+        warnings.simplefilter('ignore', UserWarning)
+        SeqIO.write(SeqIO.parse(in_handle, "fastq-sanger"),
+                    out_handle, "fastq-solexa")
+        warnings.resetwarnings()
+        out_handle.seek(0)
+        record = SeqIO.read(out_handle, "fastq-solexa")
+        self.assertEqual(str(record.seq), seq)
+        self.assertEqual(record.letter_annotations["solexa_quality"],
+                         expected_sol)
+
+    def test_solexa_to_sanger(self):
+        """Mapping check for FASTQ Solexa (-5 to 62) to Sanger (0 to 62)"""
+        #The point of this test is the writing code doesn't actually use the
+        #solexa_quality_from_phred function directly. For speed it uses a
+        #cached dictionary of the mappings.
+        seq = "N"*68
+        qual = "".join(chr(64+q) for q in range(-5,63))
+        expected_phred = [round(QualityIO.phred_quality_from_solexa(q)) \
+                          for q in range(-5,63)]
+        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq,qual))
+        out_handle = StringIO("")
+        #Want to ignore the data loss warning
+        #(on Python 2.6 we could check for it!)
+        warnings.simplefilter('ignore', UserWarning)
+        SeqIO.write(SeqIO.parse(in_handle, "fastq-solexa"),
+                    out_handle, "fastq-sanger")
+        warnings.resetwarnings()
+        out_handle.seek(0)
+        record = SeqIO.read(out_handle, "fastq-sanger")
+        self.assertEqual(str(record.seq), seq)
+        self.assertEqual(record.letter_annotations["phred_quality"],
+                         expected_phred)
+
+    def test_sanger_to_illumina(self):
+        """Mapping check for FASTQ Sanger (0 to 93) to Illumina (0 to 62)"""
+        seq = "N"*94
+        qual = "".join(chr(33+q) for q in range(0,94))
+        expected_phred = [min(62,q) for q in range(0,94)]
+        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq,qual))
+        out_handle = StringIO("")
+        #Want to ignore the data loss warning
+        #(on Python 2.6 we could check for it!)
+        warnings.simplefilter('ignore', UserWarning)
+        SeqIO.write(SeqIO.parse(in_handle, "fastq-sanger"),
+                    out_handle, "fastq-illumina")
+        warnings.resetwarnings()
+        out_handle.seek(0)
+        record = SeqIO.read(out_handle, "fastq-illumina")
+        self.assertEqual(str(record.seq), seq)
+        self.assertEqual(record.letter_annotations["phred_quality"],
+                         expected_phred)
+
+    def test_illumina_to_sanger(self):
+        """Mapping check for FASTQ Illumina (0 to 62) to Sanger (0 to 62)"""
+        seq = "N"*63
+        qual = "".join(chr(64+q) for q in range(0,63))
+        expected_phred = range(63)
+        in_handle = StringIO("@Test\n%s\n+\n%s" % (seq,qual))
+        out_handle = StringIO("")
+        SeqIO.write(SeqIO.parse(in_handle, "fastq-illumina"),
+                    out_handle, "fastq-sanger")
+        out_handle.seek(0)
+        record = SeqIO.read(out_handle, "fastq-sanger")
+        self.assertEqual(str(record.seq), seq)
+        self.assertEqual(record.letter_annotations["phred_quality"],
+                         expected_phred)
 
 
 if __name__ == "__main__":
