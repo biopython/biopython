@@ -8,9 +8,8 @@
 
 import os
 import unittest
-import warnings
 import zipfile
-from itertools import izip
+from itertools import izip, chain
 from cStringIO import StringIO
 
 from Bio.TreeIO import PhyloXMLIO
@@ -21,6 +20,7 @@ from Bio.Tree import Utils
 # Example PhyloXML files
 EX_APAF = 'PhyloXML/apaf.xml'
 EX_BCL2 = 'PhyloXML/bcl_2.xml'
+EX_MADE = 'PhyloXML/made_up.xml'
 EX_PHYLO = 'PhyloXML/phyloxml_examples.xml'
 EX_DOLLO = 'PhyloXML/o_tol_332_d_dollo.xml'
 EX_MOLLUSCA = 'PhyloXML/ncbi_taxonomy_mollusca.xml.zip'
@@ -48,8 +48,7 @@ class UtilTests(unittest.TestCase):
                 (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA),
                     # unzip(EX_METAZOA), unzip(EX_NCBI),
                     ),
-                (509, 1496, 287, 24311, 322367, 972830),
-                ):
+                (509, 1496, 287, 24311, 322367, 972830)):
             output = StringIO()
             PhyloXMLIO.dump_tags(source, output)
             output.seek(0)
@@ -65,7 +64,7 @@ class UtilTests(unittest.TestCase):
                 (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA),
                     # unzip(EX_METAZOA), unzip(EX_NCBI),
                     ),
-                (387, 748, 167, 16208, 214912, 648554)):
+                (387, 748, 164, 16208, 214912, 648554)):
             phx = PhyloXMLIO.read(source)
             output = StringIO()
             Utils.pretty_print(phx, output)
@@ -81,12 +80,12 @@ class UtilTests(unittest.TestCase):
 # Parser tests
 
 def _test_read_factory(source, count):
-    """Generate a test method for read()ing the given source."""
-    old_doc = """Read each example file to produce a phyloXML object.
+    """Generate a test method for read()ing the given source.
 
-        Test for existence of the root node, and count the number of phylogenies
-        within each file.
-        """
+    The generated function reads an example file to produce a phyloXML object,
+    then tests for existence of the root node, and counts the number of
+    phylogenies under the root.
+    """
     fname = os.path.basename(source)
     if zipfile.is_zipfile(source):
         source = unzip(source)
@@ -100,8 +99,11 @@ def _test_read_factory(source, count):
 
 
 def _test_parse_factory(source, count):
-    """Generate a test method for parse()ing the given source."""
-    old_doc = "Extract each phylogenetic tree using the parse() function."
+    """Generate a test method for parse()ing the given source.
+
+    The generated function extracts each phylogenetic tree using the parse()
+    function and counts the total number of trees extracted.
+    """
     fname = os.path.basename(source)
     if zipfile.is_zipfile(source):
         source = unzip(source)
@@ -118,19 +120,16 @@ def _test_shape_factory(source, shapes):
     Counts the branches at each level of branching in a phylogenetic tree, 3
     clades deep.
     """
-    old_doc = "Check simple tree topologies, three clades deep."
     fname = os.path.basename(source)
     if zipfile.is_zipfile(source):
         source = unzip(source)
     def test_shape(self):
         trees = PhyloXMLIO.parse(source)
         for tree, shape_expect in izip(trees, shapes):
-            # print "%s :: %s" % (source, shape_expect))
             self.assertEquals(len(tree.clade), len(shape_expect))
             for clade, sub_expect in izip(tree.clade, shape_expect):
                 self.assertEquals(len(clade), sub_expect[0])
                 for subclade, len_expect in izip(clade, sub_expect[1]):
-                    # print "\tcompare %d == %d" % (len(subclade), len_expect)
                     self.assertEquals(len(subclade), len_expect)
     test_shape.__doc__ = "Check the branching structure of %s." % fname
     return test_shape
@@ -141,12 +140,14 @@ class ParseTests(unittest.TestCase):
 
     test_read_apaf = _test_read_factory(EX_APAF, (1, 0))
     test_read_bcl2 = _test_read_factory(EX_BCL2, (1, 0))
+    test_read_made = _test_read_factory(EX_MADE, (6, 0))
     test_read_phylo = _test_read_factory(EX_PHYLO, (13, 1))
     test_read_dollo = _test_read_factory(EX_DOLLO, (1, 0))
     test_read_mollusca = _test_read_factory(EX_MOLLUSCA, (1, 0))
 
     test_parse_apaf = _test_parse_factory(EX_APAF, 1)
     test_parse_bcl2 = _test_parse_factory(EX_BCL2, 1)
+    test_parse_made = _test_parse_factory(EX_MADE, 6)
     test_parse_phylo = _test_parse_factory(EX_PHYLO, 13)
     test_parse_dollo = _test_parse_factory(EX_DOLLO, 1)
     test_parse_mollusca = _test_parse_factory(EX_MOLLUSCA, 1)
@@ -168,15 +169,13 @@ class ParseTests(unittest.TestCase):
                 ( ( (2, (0, 0)),
                     (0, ()),
                   ),
-                  (
-                    (2, (0, 0)),
+                  ( (2, (0, 0)),
                     (0, ()),
                   ),
                   ( (2, (0, 0)),
                     (0, ()),
                   ),
-                  (
-                    (2, (0, 0)),
+                  ( (2, (0, 0)),
                     (0, ()),
                   ),
                   ( (2, (0, 0)),
@@ -229,7 +228,7 @@ class ParseTests(unittest.TestCase):
 
 class TreeTests(unittest.TestCase):
     """Tests for instantiation and attributes of each complex type."""
-    # NB: also test check_str() regexps wherever they're used
+    # ENH: also test check_str() regexps wherever they're used
     def test_Phyloxml(self):
         """Instantiation of Phyloxml objects."""
         phx = PhyloXMLIO.read(EX_PHYLO)
@@ -271,7 +270,6 @@ class TreeTests(unittest.TestCase):
 
     def test_Clade(self):
         """Instantiation of Clade objects."""
-        # ENH: check node_id, width (float) -- need an example
         tree = list(PhyloXMLIO.parse(EX_PHYLO))[6]
         clade_ab, clade_c = tree.clade.clades
         clade_a, clade_b = clade_ab.clades
@@ -322,11 +320,21 @@ class TreeTests(unittest.TestCase):
 
     def test_Confidence(self):
         """Instantiation of Confidence objects."""
-        tree = PhyloXMLIO.parse(EX_BCL2).next()
-        conf = tree.clade[0].confidences[0]
-        self.assert_(isinstance(conf, Tree.Confidence))
-        self.assertEqual(conf.type, 'bootstrap')
-        self.assertAlmostEqual(conf.value, 33.0)
+        tree = PhyloXMLIO.parse(EX_MADE).next()
+        self.assertEqual(tree.name, 'testing confidence')
+        for conf, type, val in izip(tree.confidences,
+                ('bootstrap', 'probability'),
+                (89.0, 0.71)):
+            self.assert_(isinstance(conf, Tree.Confidence))
+            self.assertEqual(conf.type, type)
+            self.assertAlmostEqual(conf.value, val)
+        self.assertEqual(tree.clade.name, 'b')
+        self.assertAlmostEqual(tree.clade.width, 0.2)
+        for conf, val in izip(tree.clade[0].confidences,
+                (0.9, 0.71)):
+            self.assert_(isinstance(conf, Tree.Confidence))
+            self.assertEqual(conf.type, 'probability')
+            self.assertAlmostEqual(conf.value, val)
 
     def test_Date(self):
         """Instantiation of Date objects."""
@@ -406,7 +414,28 @@ class TreeTests(unittest.TestCase):
         self.assert_(isinstance(event_d, Tree.Events))
         self.assertEqual(event_d.duplications, 1)
 
-    # Polygon -- no example
+    def test_Polygon(self):
+        """Instantiation of Polygon objects."""
+        tree = PhyloXMLIO.read(EX_MADE).phylogenies[1]
+        self.assertEqual(tree.name, 'testing polygon')
+        dist = tree.clade[0].distributions[0]
+        for poly in dist.polygons:
+            self.assert_(isinstance(poly, Tree.Polygon))
+            self.assertEqual(len(poly.points), 3)
+        self.assertEqual(dist.polygons[0].points[0].alt_unit, 'm')
+        for point, lat, long, alt in izip(
+                chain(dist.polygons[0].points, dist.polygons[1].points),
+                (47.481277, 35.155904, 47.376334, 40.481277, 25.155904,
+                    47.376334),
+                (8.769303, 136.915863, 8.548108, 8.769303, 136.915863,
+                    7.548108),
+                (472, 10, 452, 42, 10, 452),
+                ):
+            self.assert_(isinstance(point, Tree.Point))
+            self.assertEqual(point.geodetic_datum, 'WGS84')
+            self.assertEqual(point.lat, lat)
+            self.assertEqual(point.long, long)
+            self.assertEqual(point.alt, alt)
 
     def test_Property(self):
         """Instantiation of Property objects."""
@@ -559,6 +588,13 @@ class WriterTests(unittest.TestCase):
             (ParseTests, [
                 'test_read_bcl2', 'test_parse_bcl2', 'test_shape_bcl2']),
             (TreeTests, ['test_Confidence']),
+            ))
+
+    def test_made(self):
+        """Round-trip parsing and serialization of made_up.xml."""
+        self._stash_rewrite_and_call(EX_MADE, (
+            (ParseTests, ['test_read_made', 'test_parse_made']),
+            (TreeTests, ['test_Confidence', 'test_Polygon']),
             ))
 
     def test_phylo(self):
@@ -721,7 +757,7 @@ class MethodTests(unittest.TestCase):
         # Iteration and regexps
         tree = self.phyloxml.phylogenies[10]
         for point, alt in izip(tree.find(geodetic_datum=r'WGS\d{2}'),
-                              (472, 10, 452)):
+                               (472, 10, 452)):
             self.assert_(isinstance(point, Tree.Point))
             self.assertEqual(point.geodetic_datum, 'WGS84')
             self.assertAlmostEqual(point.alt, alt)

@@ -839,5 +839,6 @@ class Writer(object):
     rank = _handle_simple(_ns('rank')) # Rank
     scientific_name = _handle_simple(_ns('scientific_name'))
     symbol = _handle_simple(_ns('symbol'))
+    synonym = _handle_simple(_ns('synonym'))
     type = _handle_simple(_ns('type')) # EventType
 
