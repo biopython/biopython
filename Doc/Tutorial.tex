@@ -1804,7 +1804,8 @@ the \texttt{format} method described above in Section~\ref{sec:SeqRecord-format}
 ...
 \end{verbatim}
 
-See Section~\ref{sec:FASTQ-slicing-off-primer} for a FASTQ example where the
+See Sections~\ref{sec:FASTQ-slicing-off-primer}
+and~\ref{sec:FASTQ-slicing-off-adaptor} for some FASTQ example where the
 per-letter annotations (the read quality scores) are also sliced.
 
 \chapter{Sequence Input/Output}
@@ -8416,7 +8417,7 @@ The same approach would work with any other supported file format (e.g. FASTA fi
 
 This code uses \verb|Bio.SeqIO| with a generator expression (to avoid loading
 all the sequences into memory at once), and the \verb|Seq| object's
-\verb|startswith| method to spot the primer sequence:
+\verb|startswith| method to see if the read starts with the primer sequence:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -8472,8 +8473,8 @@ print "Saved %i reads" % count
 \end{verbatim}
 
 This takes longer, as this time the output file contains all $94696$ reads.
-Again, we're used a generator expression to avoid any memory problems.  You might
-prefer to use a for loop:
+Again, we're used a generator expression to avoid any memory problems.
+Although it is slower, you might prefer to use a for loop:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -8488,12 +8489,34 @@ out_handle.close()
 
 In this case the for loop looks simpler, but putting the trim logic into a
 function is more tidy, and makes it easier to adjust the trimming later on.
-For example, you might decide to look for a 5' primer as well.
+For example, you might decide to look for a 5' primer as well. Or, as in
+the following example, look for the primer anywhere in the reads - not
+just at the beginning.
 
-Similar code could be used to look for and trim off adaptor sequences.
-Obvious enhancements include searching the whole sequence (not just the
-start), and looking for a fuzzy match instead of an exact match (maybe
-using a pairwise alignment).
+\subsection{Trimming off adaptor sequences}
+\label{sec:FASTQ-slicing-off-adaptor}
+
+This is essentially a trivial extension to the previous example. We are going
+to going to pretend \texttt{GTTGGAACCG} is an adaptor sequence in some FASTQ
+formatted read data, again the \texttt{SRR014849.fastq} file from the NCBI
+(\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}).
+
+This time however, we will look for the sequence \emph{anywhere} in the reads,
+not just at the very beginning:
+
+\begin{verbatim}
+from Bio import SeqIOdef trim_adaptor(record, adaptor) :    """Removes adaptor sequences, looks for perfect matches only."""    """    index = record.seq.find(adaptor)    if index == -1 :        return record #not found, no trimming    else :        return record[index+len(adaptor):]trimmed_reads = (trim_adaptor(record, "GTTGGAACCG") for record in \                 SeqIO.parse(open("SRR014849.fastq"), "fastq")) out_handle = open("trimmed.fastq", "w") count = SeqIO.write(trimmed_reads, out_handle, "fastq") out_handle.close() print "Saved %i reads" % count
+\end{verbatim}
+
+Because we are using a FASTQ input file in this example, the \verb|SeqRecord|
+objects have per-letter-annotation for the quality scores. By slicing the
+\verb|SeqRecord| object the appropriate scores are used on the trimmed
+records, so we can output them as a FASTQ file too.
+
+By changing the format names, you could apply this to FASTA files instead.
+This code also could be extended to do a fuzzy match instead of an exact
+match (maybe using a pairwise alignment, or taking into account the read
+quality scores), but that will be much slower.
 
 \subsection{Converting FASTQ files}
 \label{sec:SeqIO-fastq-conversion}
