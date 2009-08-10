@@ -97,27 +97,13 @@ Timeline
     - Tree:
         - stub
 
-:8/3:
-    Enhancements (time permitting):
+:8/10:
 
-    - Parser class ENH:
-        - parse sequence and taxonomy incrementally, too? (handle 'other')
-        - drop classmethod decorators
-        - drop "to" and "parse" from method names
-
-    - Port common methods to Bio.Tree.BaseTree -- see Bio.Nexus.Tree, Bioperl
-      node objects, PyCogent, p4-phylogenetics, lagrange, newick
-
-        - Tree method: update_nested_set_index
-            - calculate left_idx, right_idx for nested-set representation
-            - see http://www.oreillynet.com/pub/a/network/2002/11/27/bioconf.html
-
-        - 'external' boolean kwarg to Tree.find(): None=all nodes (default),
-          True=external nodes only, False=internal nodes only
-        - Also: get_terminals, is_identical, distance
+    Soft "pencils down" (hard deadline is Aug. 17)
 
     Automated testing:
 
+    - Check unit tests for complete coverage
     - Re-run performance benchmarks
     - Run tests and benchmarks on alternate platforms
     - Check epydoc's generated API documentation
@@ -131,12 +117,27 @@ Timeline
 
     Discuss merging back upstream.
 
-:8/10:
-    Soft "pencils down":
+Future
+======
 
-    - Scrub wiki documentation -- PhyloXML, Tree, TreeIO
-    - Check unit tests for complete coverage
-    - NB: Deadline is Aug. 17
+Write PhyloDB adapters
+
+Generalize the BaseTree object representation:
+
+    - A phylogenetic tree is really a DAG
+    - How should edges be represented?
+    - Export as a matrix (numpy array)
+
+Port common methods to Bio.Tree.BaseTree classes:
+
+    - see Bio.Nexus.Tree, Bioperl node objects, PyCogent, p4-phylogenetics,
+      lagrange, newick
+
+    - Tree method: update_nested_set_index
+        - calculate left_idx, right_idx for nested-set representation
+        - see http://www.oreillynet.com/pub/a/network/2002/11/27/bioconf.html
+
+    - Also: is_identical, distance
 
 
 Notes
@@ -163,11 +164,11 @@ Tier 2 (used in at least one example file, but not all):
     common_name, date, desc, description, distribution, domain,
     domain_architecture, duplications, events, gained, id, lat, long, lost,
     mol_seq, point, present, property, rank, reference, scientific_name,
-    sequence, sequence_relation, speciations, symbol, uri, value
+    sequence, sequence_relation, speciations, symbol, uri, value, width
 
 Tier 3 (not found in example files):
 
-    absent, color, red, blue, green, location, losses, polygon, node_id, width
+    absent, color, red, blue, green, location, losses, polygon, node_id
 
 Namespaces:
 
