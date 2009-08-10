@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 6 August 2009 (Biopython 1.51 \textit{beta})}
+\date{Last Update -- 10 August 2009 (Biopython 1.51 \textit{beta})}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -8490,6 +8490,11 @@ In this case the for loop looks simpler, but putting the trim logic into a
 function is more tidy, and makes it easier to adjust the trimming later on.
 For example, you might decide to look for a 5' primer as well.
 
+Similar code could be used to look for and trim off adaptor sequences.
+Obvious enhancements include searching the whole sequence (not just the
+start), and looking for a fuzzy match instead of an exact match (maybe
+using a pairwise alignment).
+
 \subsection{Converting FASTQ files}
 \label{sec:SeqIO-fastq-conversion}
 
@@ -8522,8 +8527,9 @@ distinguish...
 
 \begin{enumerate}
 \item The original Sanger FASTQ format uses PHRED qualities encoded with an
-ASCII offset of 33. The NCBI seems to be using this format in their Short
-Read Archive. We call this the \texttt{fastq} format in \verb|Bio.SeqIO|.
+ASCII offset of 33. The NCBI are using this format in their Short Read
+Archive. We call this the \texttt{fastq} (or \texttt{fastq-sanger}) format
+in \verb|Bio.SeqIO|.
 \item Solexa (later bought by Illumina) introduced their own version using
 Solexa qualities encoded with an ASCII offset of 64. We call this the
 \texttt{fastq-solexa} format.
