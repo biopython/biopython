@@ -17,6 +17,7 @@ supported_formats = {
         'phyloxml': PhyloXMLIO,
         }
 
+
 def parse(file, format):
     """Iteratively parse a file and return each of the trees it contains.
 
@@ -24,6 +25,7 @@ def parse(file, format):
     trees in a single file.
     """
     return getattr(supported_formats[format], 'parse')(file)
+
 
 def read(file, format):
     """Parse a file in the given format and return a single tree.
@@ -46,9 +48,16 @@ def read(file, format):
 
     return getattr(supported_formats[format], 'read')(file)
 
+
 def write(trees, file, format, **kwargs):
     """Write a sequence of trees to file in the given format."""
     if not hasattr(trees, '__iter__'):
         # Probably passed a single tree instead of a sequence -- that's OK
         trees = [trees]
     return getattr(supported_formats[format], 'write')(trees, file, **kwargs)
+
+
+def convert(in_file, in_format, out_file, out_format, **kwargs):
+    """Convert between two tree file formats."""
+    trees = parse(in_file, in_format)
+    write(trees, out_file, out_format, **kwargs)

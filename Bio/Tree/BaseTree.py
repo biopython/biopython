@@ -286,7 +286,7 @@ class Node(TreeElement):
             tree=None, label=None,
             branch_length=None, left_idx=None, right_idx=None):
         self.tree = tree or Tree(root=self)     # tree_id, type Tree
-        self.label = name
+        self.label = label
         self.branch_length = branch_length  # XXX or move this to Edge?
         self.left_idx = left_idx
         self.right_idx = right_idx

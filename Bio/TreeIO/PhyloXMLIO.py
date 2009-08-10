@@ -101,14 +101,27 @@ def parse(file):
     return Parser(file).parse()
 
 
-def write(phylo, file, encoding=None):
+def write(obj, file, encoding=None):
     """Write a phyloXML file.
+
+    The first argument is an instance of Phyloxml, Phylogeny or BaseTree.Tree,
+    or an iterable of either of the latter two. The object will be converted to
+    a Phyloxml object before serialization.
 
     The file argument can be either an open handle or a file name.
     """
-    if isinstance(phylo, Tree.Phylogeny):
-        phylo = phylo.to_phyloxml()
-    Writer(phylo, encoding).write(file)
+    if isinstance(obj, Tree.Phyloxml):
+        pass
+    elif isinstance(obj, Tree.Phylogeny):
+        obj = obj.to_phyloxml()
+    elif isinstance(obj, Tree.BaseTree.Tree):
+        obj = Tree.Phylogeny.from_tree(obj).to_phyloxml()
+    elif hasattr(obj, '__iter__'):
+        obj = Tree.Phyloxml({}, phylogenies=obj)
+    else:
+        raise ValueError("First argument must be a Phyloxml, Phylogeny, "
+                "Tree, or iterable of Trees or Phylogenies.")
+    Writer(obj, encoding).write(file)
 
 
 # ---------------------------------------------------------
@@ -629,7 +642,7 @@ class Writer(object):
     """
     def __init__(self, phyloxml, encoding):
         """Build an ElementTree from a phyloXML object."""
-        assert isinstance(phyloxml, Tree.Phyloxml)
+        assert isinstance(phyloxml, Tree.Phyloxml), "Not a Phyloxml object"
         self._tree = ElementTree.ElementTree(self.phyloxml(phyloxml))
         self.encoding = encoding
 
