@@ -1,3 +1,40 @@
+====================================================================
+
+Note added August 2009:
+
+Martel is a parsing framework, which was for a long time included
+with Biopython. If anyone is interested in using Martel (outside of
+Biopython), it is available under our MIT-style licence.
+
+Andrew Dalke wrote Martel (see the HISTORY file) and for a number of
+years it was used in Biopython for many (but not all) of the parsers.
+The basic idea was to describe each file format using a regular
+expression based pattern system to mark each important element of
+data. This worked, and also allowed indexing of sequential file
+formats.
+
+However, as file formats (like GenBank) evolve, from time to time the
+regular expression based file format descriptions would need updating,
+and for many folks they were quite difficult to amend. Andrew was the
+only Biopython author who really understood the system. This was an
+issue when scaling issues began to become a problem (e.g. very large
+GenBank files), and when the mxTextTools library made some subtle
+unicode related API changes with version 3.0.
+
+Starting with Bio.GenBank (in Biopython 1.42, July 2006), Biopython
+gradually moved away from using Martel - switching to simpler Python
+parsers. The mxTextTools issue gave the impetus to rewrite or
+deprecate the remaining Martel based parsers. Martel was declared
+obsolete obsolete in Biopython 1.48 (September 2008), deprecated in
+Release 1.49 (November 2008), and removed in Release 1.51 (2009).
+
+While Martel was distributed with Biopython, its version number was
+routinely incremented, and then kept in sync with that of Biopython.
+In fact, very few changes at all to the code have been made in the
+last few years.
+
+==================================================================
+
                      Martel --  version 0.8
 
                    XML parsing of flat-files
