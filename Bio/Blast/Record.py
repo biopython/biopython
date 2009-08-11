@@ -102,9 +102,15 @@ class HSP:
     bits            Number of bits for that score.  (float)
     expect          Expect value.  (float)
     num_alignments  Number of alignments for same subject.  (int)
-    identities      Number of identities/total aligned.  tuple of (int, int)
-    positives       Number of positives/total aligned.  tuple of (int, int)
-    gaps            Numer of gaps/total aligned.  tuple of (int, int)
+    identities      Number of identities (int) if using the XML parser.
+                    Tuple of numer of identities/total aligned (int, int)
+                    if using the (obsolete) plain text parser.
+    positives       Number of positives (int) if using the XML parser.
+                    Tuple of numer of positives/total aligned (int, int)
+                    if using the (obsolete) plain text parser.
+    gaps            Number of gaps (int) if using the XML parser.
+                    Tuple of numer of gaps/total aligned (int, int) if
+                    using the (obsolete) plain text parser.
     align_length    Length of the alignment. (int)
     strand          Tuple of (query, target) strand.
     frame           Tuple of 1 or 2 frame shifts, depending on the flavor.
