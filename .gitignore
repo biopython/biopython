@@ -1,5 +1,8 @@
 #Ignore the build directory (and its sub-directories):
 build
+
+#Ignore the distribution directory
+dist
  
 #Ignore backup files from some Unix editors,
 *~
@@ -11,6 +14,9 @@ build
 #Ignore all compiled python files (e.g. from running the unit tests):
 *.pyc
 *.pyo
+
+#Ignore all Jython class files (present if using Jython)
+*.class
  
 #The graphics unit tests produce output files for human inspection
 #(at the time of writing, only PDF files are created but I expect
