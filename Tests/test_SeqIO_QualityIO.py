@@ -13,6 +13,7 @@ from Bio import SeqIO
 from Bio.Seq import Seq, UnknownSeq, MutableSeq
 from Bio.SeqRecord import SeqRecord
 from StringIO import StringIO
+from Bio.Data.IUPACData import ambiguous_dna_letters, ambiguous_rna_letters
 
 def truncation_expected(format) :
     if format in ["fastq-solexa", "fastq-illumina"] :
@@ -107,6 +108,7 @@ def compare_records(old_list, new_list, truncate_qual=None) :
         if not compare_record(old,new,truncate_qual) :
             return False
     return True
+
 
 class TestFastqErrors(unittest.TestCase) :
     """Test reject invalid FASTQ files."""
@@ -264,6 +266,67 @@ class TestQual(unittest.TestCase):
         h = StringIO("")
         SeqIO.write(records, h, "fasta")
         self.assertEqual(h.getvalue(),open("Quality/example.fasta").read())
+
+
+class TestReadWrite(unittest.TestCase) :
+    """Test can read and write back files."""
+    def setUp(self):
+        warnings.resetwarnings()
+
+    def test_fastq_2000(self) :
+        """Read and write back simple example with upper case 2000bp read"""
+        data = "@%s\n%s\n+\n%s\n" \
+               % ("id descr goes here", "ACGT"*500, "!@a~"*500)
+        handle = StringIO("")
+        self.assertEqual(1, SeqIO.write(SeqIO.parse(StringIO(data), "fastq"), handle, "fastq"))
+        self.assertEqual(data, handle.getvalue())
+
+    def test_fastq_1000(self) :
+        """Read and write back simple example with mixed case 1000bp read"""
+        data = "@%s\n%s\n+\n%s\n" \
+               % ("id descr goes here", "ACGTNncgta"*100, "abcd!!efgh"*100)
+        handle = StringIO("")
+        self.assertEqual(1, SeqIO.write(SeqIO.parse(StringIO(data), "fastq"), handle, "fastq"))
+        self.assertEqual(data, handle.getvalue())
+
+    def test_fastq_dna(self) :
+        """Read and write back simple example with ambiguous DNA"""
+        #First in upper case...        
+        data = "@%s\n%s\n+\n%s\n" \
+               % ("id descr goes here",
+                  ambiguous_dna_letters.upper(),
+                  "".join(chr(33+q) for q in range(len(ambiguous_dna_letters))))
+        handle = StringIO("")
+        self.assertEqual(1, SeqIO.write(SeqIO.parse(StringIO(data), "fastq"), handle, "fastq"))
+        self.assertEqual(data, handle.getvalue())
+        #Now in lower case...
+        data = "@%s\n%s\n+\n%s\n" \
+               % ("id descr goes here",
+                  ambiguous_dna_letters.lower(),
+                  "".join(chr(33+q) for q in range(len(ambiguous_dna_letters))))
+        handle = StringIO("")
+        self.assertEqual(1, SeqIO.write(SeqIO.parse(StringIO(data), "fastq"), handle, "fastq"))
+        self.assertEqual(data, handle.getvalue())
+
+    def test_fastq_rna(self) :
+        """Read and write back simple example with ambiguous RNA"""
+        #First in upper case...        
+        data = "@%s\n%s\n+\n%s\n" \
+               % ("id descr goes here",
+                  ambiguous_rna_letters.upper(),
+                  "".join(chr(33+q) for q in range(len(ambiguous_rna_letters))))
+        handle = StringIO("")
+        self.assertEqual(1, SeqIO.write(SeqIO.parse(StringIO(data), "fastq"), handle, "fastq"))
+        self.assertEqual(data, handle.getvalue())
+        #Now in lower case...
+        data = "@%s\n%s\n+\n%s\n" \
+               % ("id descr goes here",
+                  ambiguous_rna_letters.lower(),
+                  "".join(chr(33+q) for q in range(len(ambiguous_rna_letters))))
+        handle = StringIO("")
+        self.assertEqual(1, SeqIO.write(SeqIO.parse(StringIO(data), "fastq"), handle, "fastq"))
+        self.assertEqual(data, handle.getvalue())
+
 
 class TestWriteRead(unittest.TestCase) :
     """Test can write and read back files."""

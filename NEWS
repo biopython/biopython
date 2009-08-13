@@ -28,7 +28,10 @@ be useful for meta-assembly.
 See the notes below for the Biopython 1.50 beta release for changes since
 Biopython 1.49 was released. This includes dropping support for Python 2.3,
 removing our deprecated parsing infrastructure (Martel and Bio.Mindy), and
-hence removing any dependence on mxTextTools
+hence removing any dependence on mxTextTools.
+
+Additionally, since the beta, a number of small bugs have been fixed, and
+there have been further additions to the test suite and documentation.
 
 ===================================================================
 
@@ -70,8 +73,8 @@ intended for BioPerl support only, which were causing problems in Biopython
 (see BioSQL bug 2839).
 
 There have also been additions to the tutorial, such as the new alignment
-wrappers, with a a whole chapter for the SeqRecord object. We have also
-added to the unit test coverage.
+wrappers, with a whole chapter for the SeqRecord object. We have also added
+to the unit test coverage.
 
 ===================================================================
 

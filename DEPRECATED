@@ -12,6 +12,10 @@ BioSQL and psycopg
 Support for psycopg (version one) in Biopython's BioSQL code was deprecated
 in Release 1.51, please use psycopg2 instead.
 
+Bio.Application.generic_run and ApplicationResult
+=================================================
+Declared obsolete in Release 1.51, please use Python subprocess module instead.
+
 Bio.Entrez.efetch and rettype="genbank"
 =======================================
 As of Easter 2009, the NCBI have stopped supporting the unofficial return type
