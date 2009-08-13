@@ -656,8 +656,8 @@ class Writer(object):
 
     def phyloxml(self, obj):
         elem = ElementTree.Element(_ns('phyloxml'),
-                # XXX not sure about this
-                # {_ns('schemaLocation', NAMESPACES['xs']):
+                # NB: This is for XSD validation, which we don't do
+                # {_ns('schemaLocation', NAMESPACES['xsi']):
                 #     obj.attributes['schemaLocation'],
                 #     }
                 )

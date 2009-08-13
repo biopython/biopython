@@ -233,7 +233,6 @@ class TreeTests(unittest.TestCase):
         """Instantiation of Phyloxml objects."""
         phx = PhyloXMLIO.read(EX_PHYLO)
         self.assert_(isinstance(phx, Tree.Phyloxml))
-        # self.assert_('schemaLocation' in phx.attributes)  # XXX
         for tree in phx:
             self.assert_(isinstance(tree, Tree.Phylogeny))
         for otr in phx.other:
