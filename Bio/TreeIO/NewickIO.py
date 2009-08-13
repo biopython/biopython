@@ -14,7 +14,7 @@ from Bio.Nexus import Trees
 
 def parse(file):
     do_close = False
-    if not hasattr(file, 'read'):
+    if isinstance(file, basestring):
         file = open(file, 'r')
         do_close = True
     # Python 2.4 support: This should be in a try block, but yield is not OK
@@ -34,7 +34,7 @@ def parse(file):
 
 def write(trees, file, plain=False, **kwargs):
     do_close = False
-    if not hasattr(file, 'write'):
+    if isinstance(file, basestring):
         file = open(file, 'w+')
         do_close = True
     try:

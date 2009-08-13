@@ -17,7 +17,7 @@ def parse(file):
 
 def write(obj, file, **kwargs):
     do_close = False
-    if not hasattr(file, 'write'):
+    if isinstance(file, basestring):
         file = open(file, 'w+')
         do_close = True
     try:
