@@ -90,8 +90,6 @@ class Tree(TreeElement):
         self.rooted = rooted        # is_rooted=True
         self.id = id                #: identifier
         self.name = name or self.root.label
-        # relations: self, node (root_node), biodatabase
-        # may belong to a sequence
 
     @classmethod
     def from_node(cls, node, **kwargs):
@@ -102,6 +100,7 @@ class Tree(TreeElement):
         return cls(node, **kwargs)
 
     # Plumbing
+
     def depth_first_search(self, node, filterfunc):
         """Perform a depth-first search through all nodes in this tree.
         
@@ -138,12 +137,21 @@ class Tree(TreeElement):
         pass
 
     # Porcelain
-    def find(self, cls=None, terminal=None, **kwargs):
-        """Find all sub-nodes matching the given attributes.
 
-        The 'cls' argument specifies the class of the sub-node. Nodes that
-        inherit from this type will also match. (The default, TreeElement,
-        matches any standard Bio.Tree type.)
+    def find(self, cls=TreeElement, terminal=None, **kwargs):
+        """Find all tree objects matching the given attributes.
+
+        @param cls: 
+            Specifies the class of the object to search for. Objects that
+            inherit from this type will also match. (The default, TreeElement,
+            matches any standard Bio.Tree type.)
+
+        @param terminal:
+            A boolean value to select for or against terminal nodes (a.k.a. leaf
+            nodes). True searches for only terminal nodes, False excludes
+            terminal nodes, and the default, None, searches both terminal and
+            non-terminal nodes, as well as any tree elements lacking the
+            'is_terminal' method.
 
         The arbitrary keyword arguments indicate the attribute name of the
         sub-node and the value to match: string, integer or boolean. Strings are
@@ -165,17 +173,15 @@ class Tree(TreeElement):
             >>> matches = phx.phylogenies[5].find(code='OCTVU')
             >>> matches.next()
             Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
-        """ 
-        if cls is None:
-            cls = TreeElement
 
+        """ 
         def match_class(node):
             return isinstance(node, cls)
 
         def match_terminal(node):
-            if hasattr(node, 'is_terminal') and not node.is_terminal():
-                return (not terminal)
-            return terminal
+            if hasattr(node, 'is_terminal'):
+                return (node.is_terminal() == terminal)
+            return False
 
         def match_kwargs(node):
             for key, pattern in kwargs.iteritems():
@@ -193,11 +199,11 @@ class Tree(TreeElement):
                     if pattern != target:
                         return False
                 else:
-                    raise RuntimeError('invalid argument: ' + str(pattern))
+                    raise TypeError('invalid argument: ' + str(pattern))
             return True
 
         if terminal is None:
-            if not kwargs :
+            if not kwargs:
                 is_matching_node = match_class
             else:
                 def is_matching_node(node):
@@ -213,26 +219,17 @@ class Tree(TreeElement):
 
         return self.depth_first_search(self, is_matching_node)
 
-    # From Bioperl's Bio::Tree::TreeI
+    def get_leaf_nodes(self):
+        """Iterate through all of this tree's terminal (leaf) nodes."""
+        return self.find(Node, terminal=True)
 
     def total_branch_length(self):
-        """Get the total length of this tree (sum of all branch lengths)."""
-        raise NotImplementedError
-
-    def get_leaf_nodes(self):
-        """Request the taxa (leaves of the tree)."""
-        raise NotImplementedError
-
-    # From Bioperl's Bio::Tree::TreeFunctionsI
-
-    # remove_node
-    # get_lca (lowest common ancestor)
-    # distance (between 2 nodes, specified however)
-    # is_monophyletic
-    # is_paraphyletic
-    # reroot
+        """Calculate the sum of all the branch lengths in this tree."""
+        return sum(node.branch_length
+                   for node in self.find(branch_length=True))
 
     # Sequence-type behavior methods
+
     def __getitem__(self, index):
         """Get sub-trees by index (integer or slice)."""
         if isinstance(index, int):
@@ -282,20 +279,17 @@ class Node(TreeElement):
          hierarchical queries. Needs to be precomputed by a program, see J.
          Celko, SQL for Smarties.
     """
-    def __init__(self,
-            tree=None, label=None,
-            branch_length=None, left_idx=None, right_idx=None):
+    def __init__(self, tree=None, label=None, branch_length=None,
+            left_idx=None, right_idx=None):
         self.tree = tree or Tree(root=self)     # tree_id, type Tree
         self.label = label
         self.branch_length = branch_length  # XXX or move this to Edge?
         self.left_idx = left_idx
         self.right_idx = right_idx
-        # relations: self, tree
-        # (id/identifier/label, parent/ancestor)
-        # may belong to a sequence
 
     def is_terminal(self):
         return (not self.tree.nodes)
+
 
 # Additional PhyloDB tables
 

@@ -786,7 +786,7 @@ class MethodTests(unittest.TestCase):
         for tree, total, extern, intern in izip(
                 self.phyloxml.phylogenies,
                 (5, 5, 6, 17, 20, 26, 6, 8, 8, 18, 14, 8, 5),
-                (3, 3, 4, 15, 18, 24, 4, 6, 6, 16, 12, 6, 3),
+                (3, 3, 3, 3,  3,  3,  3, 3, 3, 3,  4,  3, 3),
                 (2, 2, 2, 2,  2,  2,  2, 2, 2, 2,  2,  2, 2),
                 ):
             self.assertEqual(iter_len(tree.find()), total)
