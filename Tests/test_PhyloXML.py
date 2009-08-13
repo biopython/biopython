@@ -778,6 +778,21 @@ class MethodTests(unittest.TestCase):
             self.assertEqual(dom.start, 5)
             self.assertEqual(dom.value, 'CARD')
 
+    def test_find_terminal(self):
+        """Clade, Phylogeny: find() with terminal argument."""
+        def iter_len(it, count=0):
+            for elem in it: count += 1
+            return count
+        for tree, total, extern, intern in izip(
+                self.phyloxml.phylogenies,
+                (5, 5, 6, 17, 20, 26, 6, 8, 8, 18, 14, 8, 5),
+                (3, 3, 4, 15, 18, 24, 4, 6, 6, 16, 12, 6, 3),
+                (2, 2, 2, 2,  2,  2,  2, 2, 2, 2,  2,  2, 2),
+                ):
+            self.assertEqual(iter_len(tree.find()), total)
+            self.assertEqual(iter_len(tree.find(terminal=True)), extern)
+            self.assertEqual(iter_len(tree.find(terminal=False)), intern)
+
     def test_color_rgb(self):
         """BranchColor: to_rgb() method."""
         black = Tree.BranchColor(0, 0, 0)
