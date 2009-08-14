@@ -117,8 +117,8 @@ Please use Bio.AlignIO or the Alignment object's format method instead.
 
 Bio.Emboss.Primer
 =================
-Deprecated in Release 1.48, this parser was replaced by Bio.Emboss.Primer3
-and Bio.Emboss.PrimerSearch instead.
+Deprecated in Release 1.48, and removed in Release 1.51, this parser was
+replaced by Bio.Emboss.Primer3 and Bio.Emboss.PrimerSearch instead.
 
 Bio.MetaTool
 ============
