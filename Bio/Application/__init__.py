@@ -4,7 +4,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""General mechanisms to access applications in biopython.
+"""General mechanisms to access applications in Biopython.
 """
 import os, sys
 import StringIO
@@ -13,7 +13,7 @@ import subprocess
 from Bio import File
 
 def generic_run(commandline):
-    """Run an application with the given commandline.
+    """Run an application with the given commandline (OBSOLETE).
 
     This expects a pre-built commandline that derives from 
     AbstractCommandline, and returns a ApplicationResult object
@@ -23,6 +23,12 @@ def generic_run(commandline):
     WARNING - This will read in the full program output into memory!
     This may be in issue when the program writes a large amount of
     data to standard output.
+
+    NOTE - This function is considered to be obsolete, and we intend to
+    deprecate it and then remove it in future releases of Biopython.
+    We now recommend you invoke subprocess directly, using str(commandline)
+    to turn an AbstractCommandline wrapper into a command line string. This
+    will give you full control of the tool's input and output as well.
     """
     #We don't need to supply any piped input, but we setup the
     #standard input pipe anyway as a work around for a python
@@ -42,10 +48,13 @@ def generic_run(commandline):
            File.UndoHandle(StringIO.StringIO(e_out))
 
 class ApplicationResult:
-    """Make results of a program available through a standard interface.
+    """Make results of a program available through a standard interface (OBSOLETE).
     
     This tries to pick up output information available from the program
     and make it available programmatically.
+
+    NOTE - This obsolete is considered to be obsolete, and we intend to
+    deprecate it and then remove it in future releases of Biopython.
     """
     def __init__(self, application_cl, return_code):
         """Intialize with the commandline from the program.
@@ -127,7 +136,7 @@ class AbstractCommandline(object):
     ValueError: You must either set outfile (output filename), or enable filter or stdout (output to stdout).
 
     In this case the wrapper knows certain arguments are required to construct
-    a valid command line for the tool.  For complete example,
+    a valid command line for the tool.  For a complete example,
 
     >>> from Bio.Emboss.Applications import WaterCommandline
     >>> cline = WaterCommandline(gapopen=10, gapextend=0.5)
@@ -139,9 +148,8 @@ class AbstractCommandline(object):
     >>> cline
     WaterCommandline(cmd='water', outfile='temp_water.txt', asequence='asis:ACCCGGGCGCGGT', bsequence='asis:ACCCGAGCGCGGT', gapopen=10, gapextend=0.5)
 
-    You would typically run the command line via a standard python operating
-    system call (e.g. using the subprocess module).  Bio.Application includes
-    a simple wrapper function generic_run which may be suitable.
+    You would typically run the command line via a standard Python operating
+    system call (e.g. using the subprocess module).
     """
     def __init__(self, cmd, **kwargs):
         """Create a new instance of a command line wrapper object."""
@@ -156,7 +164,7 @@ class AbstractCommandline(object):
         # i.e. There should have an optional argument "cmd" to set the location
         # of the executable (with a sensible default which should work if the
         # command is on the path on Unix), and keyword arguments.  It should
-        # then define a list of parameters, all objects derevied from the base
+        # then define a list of parameters, all objects derived from the base
         # class _AbstractParameter.
         # 
         # The keyword arguments should be any valid parameter name, and will
