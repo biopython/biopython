@@ -800,7 +800,7 @@ class Writer(object):
               'uri',
               ('annotation', 'annotations'),
               'domain_architecture',
-              ('other', 'other'),
+              ('other',      'other'),
               ))
 
     sequence_relation = _handle_complex(_ns('sequence_relation'),
@@ -814,7 +814,7 @@ class Writer(object):
               'scientific_name',
               'authority',
               ('common_name',   'common_names'),
-              ('synonym',   'synonyms'),
+              ('synonym',       'synonyms'),
               'rank',
               'uri',
               ('other',         'other'),
@@ -829,6 +829,8 @@ class Writer(object):
     branch_length = _handle_simple(_ns('branch_length'))
     lat = _handle_simple(_ns('lat'))
     long = _handle_simple(_ns('long'))
+    maximum = _handle_simple(_ns('maximum'))
+    minimum = _handle_simple(_ns('minimum'))
     value = _handle_simple(_ns('value'))
     width = _handle_simple(_ns('width'))
 
@@ -842,16 +844,16 @@ class Writer(object):
 
     # Strings
     bc = _handle_simple(_ns('bc'))
-    code = _handle_simple(_ns('code'))      # TaxonomyCode
+    code = _handle_simple(_ns('code'))
     common_name = _handle_simple(_ns('common_name'))
     desc = _handle_simple(_ns('desc'))
     description = _handle_simple(_ns('description'))
     location = _handle_simple(_ns('location'))
     mol_seq = _handle_simple(_ns('mol_seq'))
     name = _handle_simple(_ns('name'))
-    rank = _handle_simple(_ns('rank')) # Rank
+    rank = _handle_simple(_ns('rank'))
     scientific_name = _handle_simple(_ns('scientific_name'))
     symbol = _handle_simple(_ns('symbol'))
     synonym = _handle_simple(_ns('synonym'))
-    type = _handle_simple(_ns('type')) # EventType
+    type = _handle_simple(_ns('type'))
 

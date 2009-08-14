@@ -48,7 +48,7 @@ class UtilTests(unittest.TestCase):
                 (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA),
                     # unzip(EX_METAZOA), unzip(EX_NCBI),
                     ),
-                (509, 1496, 287, 24311, 322367, 972830)):
+                (509, 1496, 289, 24311, 322367, 972830)):
             output = StringIO()
             PhyloXMLIO.dump_tags(source, output)
             output.seek(0)

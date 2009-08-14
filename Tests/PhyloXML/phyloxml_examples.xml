@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phyloxml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.phyloxml.org http://www.phyloxml.org/1.00/phyloxml.xsd"
+   xsi:schemaLocation="http://www.phyloxml.org http://www.phyloxml.org/1.10/phyloxml.xsd"
    xmlns="http://www.phyloxml.org">
    <phylogeny rooted="true">
       <name>example from Prof. Joe Felsenstein's book "Inferring Phylogenies"</name>
@@ -155,7 +155,7 @@
          <clade>
             <clade>
                <taxonomy>
-                  <id type="NCBI">6645</id>
+                  <id provider="NCBI">6645</id>
                   <code>OCTVU</code>
                   <scientific_name>Octopus vulgaris</scientific_name>
                </taxonomy>
@@ -170,7 +170,7 @@
             </clade>
             <clade>
                <taxonomy>
-                  <id type="NCBI">44689</id>
+                  <id provider="NCBI">44689</id>
                   <code>DICDI</code>
                   <scientific_name>Dictyostelium discoideum</scientific_name>
                </taxonomy>
@@ -186,7 +186,7 @@
          </clade>
          <clade>
             <taxonomy>
-               <id type="NCBI">1488</id>
+               <id provider="NCBI">1488</id>
                <code>CLOAB</code>
                <scientific_name>Clostridium acetobutylicum</scientific_name>
             </taxonomy>
@@ -265,14 +265,14 @@
       <description>a pylogeny of some monitor lizards</description>
       <clade>
          <taxonomy>
-            <id type="NCBI">8556</id>
+            <id provider="NCBI">8556</id>
             <scientific_name>Varanus</scientific_name>
             <rank>genus</rank>
             <uri desc="EMBL REPTILE DATABASE">http://www.embl-heidelberg.de/~uetz/families/Varanidae.html</uri>
          </taxonomy>
          <clade>
             <taxonomy>
-               <id type="NCBI">62046</id>
+               <id provider="NCBI">62046</id>
                <scientific_name>Varanus niloticus</scientific_name>
                <common_name>Nile monitor</common_name>
                <rank>species</rank>
@@ -288,7 +288,7 @@
             </taxonomy>
             <clade>
                <taxonomy>
-                  <id type="NCBI">169855</id>
+                  <id provider="NCBI">169855</id>
                   <scientific_name>Varanus storri</scientific_name>
                   <common_name>Storr's monitor</common_name>
                   <rank>species</rank>
@@ -299,7 +299,7 @@
             </clade>
             <clade>
                <taxonomy>
-                  <id type="NCBI">62053</id>
+                  <id provider="NCBI">62053</id>
                   <scientific_name>Varanus timorensis</scientific_name>
                   <common_name>Timor monitor</common_name>
                   <rank>species</rank>
@@ -368,14 +368,16 @@
          <clade>
             <clade>
                <name>A</name>
-               <date unit="mya" range="10">
+               <date unit="mya">
                   <desc>Silurian</desc>
                   <value>425</value>
+                  <minimum>416.0</minimum>
+                  <maximum>443.7</maximum>
                </date>
             </clade>
             <clade>
                <name>B</name>
-               <date unit="mya" range="20">
+               <date unit="mya">
                   <desc>Devonian</desc>
                   <value>320</value>
                </date>
@@ -383,7 +385,7 @@
          </clade>
          <clade>
             <name>C</name>
-            <date unit="mya" range="30">
+            <date unit="mya">
                <desc>Ediacaran</desc>
                <value>600</value>
             </date>
