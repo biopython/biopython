@@ -77,11 +77,11 @@ class PrankApplication(unittest.TestCase):
         cmdline.set_parameter("d", self.infile1)
         self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        stdin, stdout, stderr = Application.generic_run(cmdline)
-        self.assertEqual(stdin.return_code, 0)
+        result, stdout, stderr = Application.generic_run(cmdline)
+        self.assertEqual(result.return_code, 0)
         self.assert_("Total time" in stdout.read())
         self.assertEqual(stderr.read(), "")
-        self.assertEqual(str(stdin._cl), str(cmdline))
+        self.assertEqual(str(result._cl), str(cmdline))
 
     def test_Prank_simple_with_NEXUS_output(self):
         """Simple round-trip through app with infile, output in NEXUS
@@ -97,11 +97,11 @@ class PrankApplication(unittest.TestCase):
         self.assertEqual(str(cmdline), prank_exe + \
                          " -d=Fasta/fa01 -f=17 -noxml -notree")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        stdin, stdout, stderr = Application.generic_run(cmdline)
-        self.assertEqual(stdin.return_code, 0)
+        result, stdout, stderr = Application.generic_run(cmdline)
+        self.assertEqual(result.return_code, 0)
         self.assert_("Total time" in stdout.read())
         self.assertEqual(stderr.read(), "")
-        self.assertEqual(str(stdin._cl), str(cmdline))
+        self.assertEqual(str(result._cl), str(cmdline))
         out_handle = open("output.2.nex", "r")
         align = AlignIO.read(out_handle, "nexus")
         out_handle.close()
@@ -130,11 +130,93 @@ class PrankApplication(unittest.TestCase):
                          " -notree -dots -gaprate=0.321 -gapext=0.6 -kappa=3" + \
                          " -once -skipins -realbranches")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        stdin, stdout, stderr = Application.generic_run(cmdline)
-        self.assertEqual(stdin.return_code, 0)
+        result, stdout, stderr = Application.generic_run(cmdline)
+        self.assertEqual(result.return_code, 0)
         self.assert_("Total time" in stdout.read())
         self.assertEqual(stderr.read(), "")
-        self.assertEqual(str(stdin._cl), str(cmdline))
+        self.assertEqual(str(result._cl), str(cmdline))
+
+
+class PrankConversion(unittest.TestCase):
+    def setUp(self):
+        #As these reads are all 36, it can be seen as pre-aligned:
+        self.input = "Quality/example.fasta"
+        self.output = 'temp with space' #prefix, PRANK will pick extensions
+
+    def conversion(self, prank_number, prank_ext, format) :
+        """Get PRANK to do a conversion, and check it with SeqIO."""
+        filename = "%s.%s" % (self.output, prank_ext)
+        if os.path.isfile(filename) :
+            os.remove(filename)
+        cmdline = PrankCommandline(prank_exe, d=self.input,
+                                   convert=True, f=prank_number,
+                                   o='"%s"' % self.output)
+        self.assertEqual(str(cmdline), prank_exe \
+                         + ' -d=%s' % self.input \
+                         + ' -o="%s"' % self.output \
+                         + ' -f=%i' % prank_number \
+                         + ' -convert')
+        self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
+        result, stdout, stderr = Application.generic_run(cmdline)
+        self.assertEqual(result.return_code, 0)
+        message = stdout.read().strip()
+        self.assert_(("PRANK: converting '%s' to '%s'" % (self.input, filename)) \
+                     in message, message)
+        self.assertEqual(stderr.read(), "")
+        self.assertEqual(str(result._cl), str(cmdline))
+        self.assert_(os.path.isfile(filename))
+        old = AlignIO.read(open(self.input), "fasta")
+        #Hack...
+        if format=="phylip" :
+            for record in old :
+                record.id = record.id[:10]
+        new = AlignIO.read(open(filename), format)
+        assert len(old) == len(new)
+        for old_r, new_r in zip(old, new) :
+            self.assertEqual(old_r.id, new_r.id)
+            self.assertEqual(str(old_r.seq), str(new_r.seq))
+        os.remove(filename)
+        
+    def test_convert_to_ig(self):
+        """Convert FASTA to Inteligenetics format."""
+        self.conversion(1, "igs", "ig")
+
+    #Works, but parsing gives a user warning due to malformed LOCUS line
+    #def test_convert_to_genbank(self):
+    #    """Convert FASTA to GenBank."""
+    #    self.conversion(2, "gen", "genbank")
+
+    def test_convert_to_nbrf(self):
+        """Convert FASTA to NBRF/PIR format."""
+        self.conversion(3, "nbr", "pir")
+
+    #Our EMBL parser doesn't (yet) support the minimal ID line format used
+    #def test_convert_to_genbank(self):
+    #    """Convert FASTA to EMBL."""
+    #    self.conversion(4, "emb", "embl")
+
+    def test_convert_to_fasta(self):
+        """Convert FASTA to FASTA format."""
+        self.conversion(8, "fas", "fasta")
+
+    def test_convert_to_phylip32(self):
+        """Convert FASTA to PHYLIP 3.2 format."""
+        self.conversion(11, "phy", "phylip")
+
+    def test_convert_to_phylip(self):
+        """Convert FASTA to PHYLIP format."""
+        self.conversion(12, "phy", "phylip")
+
+    #This isn't the NBRF/PIR format, what ever it is, we don't support it yet:
+    #def test_convert_to_pir_codata(self):
+    #    """Convert FASTA to PIR/CODATA."""
+    #    self.conversion(14, "pir", "???")
+
+    #PRANK truncated the record names in the matrix block. An error?
+    #def test_convert_to_paup_nexus(self):
+    #    """Convert FASTA to PAUP/NEXUS."""
+    #    self.conversion(17, "nex", "nexus")
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

@@ -7,7 +7,11 @@ import os
 import sys
 import unittest
 from types import *
+
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from Bio import Fasta
+warnings.resetwarnings()
 
 from Bio import SeqRecord
 from Bio import Seq

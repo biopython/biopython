@@ -1824,8 +1824,9 @@ Testing reading phd format file Phd/phd1
  Failed: Sequences must all be the same length
  Checking can write/read as 'fastq' format
  Checking can write/read as 'fastq-illumina' format
+UserWarning - Data loss - max PHRED quality 62 in Illumina FASTQ
  Checking can write/read as 'fastq-solexa' format
- Failed: PHRED quality zero maps onto a Solexa quality of minus infinity!
+UserWarning - Data loss - max Solexa quality 62 in Solexa FASTQ
  Checking can write/read as 'genbank' format
  Failed: Locus identifier '425_7_(71-A03-19).b.ab1' is too long
  Checking can write/read as 'qual' format
@@ -1896,7 +1897,7 @@ Testing reading ace format file Ace/contig1.ace
  Checking can write/read as 'fastq-illumina' format
  Failed: A quality value of None was found
  Checking can write/read as 'fastq-solexa' format
- Failed: PHRED quality zero maps onto a Solexa quality of minus infinity!
+ Failed: A quality value of None was found
  Checking can write/read as 'genbank' format
  Checking can write/read as 'qual' format
  Failed: A quality value of None was found
@@ -1915,7 +1916,7 @@ Testing reading ace format file Ace/consed_sample.ace
  Checking can write/read as 'fastq-illumina' format
  Failed: A quality value of None was found
  Checking can write/read as 'fastq-solexa' format
- Failed: PHRED quality zero maps onto a Solexa quality of minus infinity!
+ Failed: A quality value of None was found
  Checking can write/read as 'genbank' format
  Checking can write/read as 'qual' format
  Failed: A quality value of None was found
@@ -1933,7 +1934,7 @@ Testing reading ace format file Ace/seq.cap.ace
  Checking can write/read as 'fastq-illumina' format
  Failed: A quality value of None was found
  Checking can write/read as 'fastq-solexa' format
- Failed: PHRED quality of None can't be transformed to a Solexa quality
+ Failed: A quality value of None was found
  Checking can write/read as 'genbank' format
  Checking can write/read as 'qual' format
  Failed: A quality value of None was found
@@ -2292,17 +2293,9 @@ Testing reading fastq format file Quality/tricky.fastq as an alignment
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
-Testing reading fastq-solexa format file Quality/solexa.fastq
- ID and Name='slxa_0013_1_0001_24',
- Seq='ACAAAAATCACAAGCATTCTTATACACC', length=28
-Testing reading fastq-solexa format file Quality/solexa.fastq as an alignment
- A alignment column 0
- C alignment column 1
- A alignment column 2
- A alignment column 3
- A alignment column 4
- | ...
- C alignment column 27
+Testing reading fastq format file Quality/sanger_faked.fastq
+ ID and Name='Test',
+ Seq='ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN', length=41
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
@@ -2311,7 +2304,55 @@ Testing reading fastq-solexa format file Quality/solexa.fastq as an alignment
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
- Failed: Locus identifier 'slxa_0013_1_0001_24' is too long
+ Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'qual' format
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
+Testing reading fastq format file Quality/sanger_93.fastq
+ ID and Name='Test',
+ Seq='ACTGACTGACTGACTGACTGACTGACTGACTGACTGACTG...GACTGAN', length=94
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fastq' format
+ Checking can write/read as 'fastq-illumina' format
+ Checking can write/read as 'fastq-solexa' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'qual' format
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
+Testing reading fastq-illumina format file Quality/illumina_faked.fastq
+ ID and Name='Test',
+ Seq='ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN', length=41
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fastq' format
+ Checking can write/read as 'fastq-illumina' format
+ Checking can write/read as 'fastq-solexa' format
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'qual' format
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
+Testing reading fastq-solexa format file Quality/solexa_faked.fastq
+ ID and Name='slxa_0001_1_0001_01',
+ Seq='ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN', length=46
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fastq' format
+ Checking can write/read as 'fastq-illumina' format
+ Checking can write/read as 'fastq-solexa' format
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'slxa_0001_1_0001_01' is too long
  Checking can write/read as 'qual' format
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format

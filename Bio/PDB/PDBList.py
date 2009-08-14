@@ -35,8 +35,10 @@
 
 __doc__="Access the PDB over the internet (for example to download structures)."
 
+#TODO - Use os.path.join(...) instead of adding strings with os.sep
 import urllib, re, os
 import warnings
+import shutil
 
 class PDBList:
     """
@@ -245,7 +247,6 @@ OBSLTE     26-SEP-03 1DYV      1UN2
         os.system("%s %s" % (uncompress, filename))
 
         return final_file
-
             
 
     def update_pdb(self):
@@ -277,7 +278,7 @@ OBSLTE     26-SEP-03 1DYV      1UN2
             else:
                 old_file = self.local_pdb + os.sep + pdb_code[1:3] + os.sep + 'pdb%s.ent'%(pdb_code)
                 new_file = self.obsolete_pdb + os.sep + pdb_code[1:3] + os.sep + 'pdb%s.ent'%(pdb_code)
-        os.cmd('mv %s %s'%(old_file,new_file))
+        shutil.move(old_file, new_file)
 
 
     def download_entire_pdb(self,listfile=None):

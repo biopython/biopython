@@ -12,6 +12,10 @@ BioSQL and psycopg
 Support for psycopg (version one) in Biopython's BioSQL code was deprecated
 in Release 1.51, please use psycopg2 instead.
 
+Bio.Application.generic_run and ApplicationResult
+=================================================
+Declared obsolete in Release 1.51, please use Python subprocess module instead.
+
 Bio.Entrez.efetch and rettype="genbank"
 =======================================
 As of Easter 2009, the NCBI have stopped supporting the unofficial return type
@@ -95,10 +99,26 @@ Declared obsolete in Release 1.48, deprecated in Release 1.49, removed in
 Release 1.51.  This includes the Bio.Writer, Bio.writers, Bio.builders,
 Bio.Std, Bio.StdHandler, Bio.Decode and Bio.DBXRef modules
 
+Bio.Fasta index_file and Dictionary
+===================================
+Deprecated in Release 1.44, removed in Biopython 1.46. For small to medium
+sized files, use Bio.SeqIO.to_dict() to make an in memory dictionary of
+SeqRecord objects instead.
+
+Bio.Fasta (including Bio.Fasta.FastaAlign)
+==========================================
+Declared obsolete in Release 1.48, and deprecated in Release 1.51.
+Please use the "fasta" support in Bio.SeqIO or Bio.AlignIO instead.
+
+Bio.Align.FormatConvert
+=======================
+Declared obsolete in Release 1.48, and deprecated in Release 1.51.
+Please use Bio.AlignIO or the Alignment object's format method instead.
+
 Bio.Emboss.Primer
 =================
-Deprecated in Release 1.48, this parser was replaced by Bio.Emboss.Primer3
-and Bio.Emboss.PrimerSearch instead.
+Deprecated in Release 1.48, and removed in Release 1.51, this parser was
+replaced by Bio.Emboss.Primer3 and Bio.Emboss.PrimerSearch instead.
 
 Bio.MetaTool
 ============

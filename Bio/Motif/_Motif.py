@@ -757,3 +757,25 @@ class Motif(object):
             return formatters[format]()
         except KeyError:
             raise ValueError("Wrong format type")
+
+    def scanPWM(self,seq):
+        """
+        scans (using a fast C extension) a nucleotide sequence and returns the matrix of log-odds scores for all positions
+
+        - the result is a one-dimensional numpy array
+        - the sequence can only be a DNA sequence
+        - the search is performed only on one strand
+        """
+        if self.alphabet!=IUPAC.unambiguous_dna:
+            raise ValueError("Wrong alphabet! Use only with DNA motifs")
+        if seq.alphabet!=IUPAC.unambiguous_dna:
+            raise ValueError("Wrong alphabet! Use only with DNA sequences")
+
+        
+        import numpy
+        # get the log-odds matrix into a proper shape (each column contains sorted (ACGT) log-odds values)
+        logodds=numpy.array([map(lambda x: x[1],sorted(x.items())) for x in self.log_odds()]).transpose()
+        
+        import _pwm
+        
+        return _pwm.calculate(seq.tostring(),logodds)

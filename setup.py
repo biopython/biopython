@@ -73,46 +73,25 @@ def check_dependencies():
     # --force option that gets saved in self.user_options.  It
     # means overwrite previous installations.  If the user has
     # forced an installation, should we also ignore dependencies?
-    
-    #This is a list of tuples, containing:
-    # - package name, string
-    # - is packaged installed, boolean
-    # - is packaged required, boolean
-    # - package website, string
-    dependencies = [
-        ("Numerical Python (NumPy)", is_Numpy_installed, 0,
-         "http://numpy.scipy.org/"),
-        ]
 
-    for name, is_installed_fn, is_required, url in dependencies:
-        if is_installed_fn():
-            continue
+    # We only check for NumPy, as this is a compile time dependency
+    if is_Numpy_installed() : return True
+    print """
+Numerical Python (NumPy) is not installed.
 
-        print "*** %s *** is either not installed or out of date." % name
-        if is_required:
-
-            print """
 This package is required for many Biopython features.  Please install
-it before you install Biopython."""
-            default = 0
-        else:
-            print """
-This package is optional, which means it is only used in a few
-specialized modules in Biopython.  You probably don't need this if you
-are unsure.  You can ignore this requirement, and install it later if
-you see ImportErrors."""
-            default = 1
-        print "You can find %s at %s." % (name, url)
-        print
-        # exit automatically if required packages not installed
-        if not(default):
-            sys.exit(-1)
+it before you install Biopython. You can install Biopython anyway, but
+anything dependent on NumPy will not work. If you do this, and later
+install NumPy, you should then re-install Biopython.
 
-        if not get_yes_or_no(
-            "Do you want to continue this installation?", default):
-            return 0
-        
-    return 1
+You can find NumPy at http://numpy.scipy.org
+"""
+    # exit automatically if running as part of some script
+    # (e.g. PyPM, ActiveState's Python Package Manager)
+    if not sys.stdout.isatty() :
+        sys.exit(-1)
+    # We can ask the user
+    return get_yes_or_no("Do you want to continue this installation?", False)
 
 class install_biopython(install):
     """Override the standard install to check for dependencies.
@@ -154,6 +133,11 @@ class build_ext_biopython(build_ext):
                 Extension('Bio.KDTree._CKDTree',
                           ["Bio/KDTree/KDTree.c",
                            "Bio/KDTree/KDTreemodule.c"],
+                          include_dirs=[numpy_include_dir],
+                          ))
+            self.extensions.append(
+                Extension('Bio.Motif._pwm',
+                          ["Bio/Motif/_pwm.c"],
                           include_dirs=[numpy_include_dir],
                           ))
         build_ext.run(self)
@@ -199,7 +183,7 @@ def can_import(module_name):
         return None
 
 def is_Numpy_installed():
-    return can_import("numpy")
+    return bool(can_import("numpy"))
 
 # --- set up the packages we are going to install
 # standard biopython packages
@@ -288,7 +272,11 @@ NUMPY_PACKAGES = [
     'Bio.KDTree',
 ]
 
-EXTENSIONS = [
+if os.name == 'java' :
+    # Jython doesn't support C extensions
+    EXTENSIONS = []
+else :
+    EXTENSIONS = [
     Extension('Bio.clistfns',
               ['Bio/clistfnsmodule.c']
               ),
@@ -329,6 +317,7 @@ EXTENSIONS = [
               ['Bio/Restriction/DNAUtils.c']
               ),
     ]
+
 
 #We now define the Biopython version number in Bio/__init__.py
 #Here we can't use "import Bio" then "Bio.__version__" as that would

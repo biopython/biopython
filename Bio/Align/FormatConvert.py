@@ -1,7 +1,7 @@
 """
-For conversion between different formats for representing alignments (OBSOLETE).
+For conversion between different formats for representing alignments (DEPRECATED).
 
-This module is considered obsolete and likely to be deprecated.  Please use
+This module is considered obsolete and has been deprecated.  Please use
 Bio.AlignIO instead for reading and writing alignments in different file
 formats.
 
@@ -13,6 +13,10 @@ FormatConverter
 from Bio.Fasta.FastaAlign import FastaAlignment
 from Bio.Clustalw import ClustalAlignment
 
+import warnings
+warnings.warn("Bio.Align.FormatConvert is deprecated. Please use Bio.AlignIO "
+              "or the Alignment object's format method instead.",
+              DeprecationWarning)
 
 class FormatConverter:
     """Convert between different alignment representation formats.

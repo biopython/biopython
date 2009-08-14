@@ -13,14 +13,14 @@ a FASTA alignment file.
 
 class StructureAlignment:
     """
-    This class aligns two structures based on a FASTA alignment of their
+    This class aligns two structures based on an alignment of their
     sequences.
     """
     def __init__(self, fasta_align, m1, m2, si=0, sj=1):
         """
-        fasta_align --- A Bio.Fasta.FastaAlign object 
+        fasta_align --- Alignment object 
         m1, m2 --- two models
-        si, sj --- the sequences in the Bio.Fasta.FastaAlign object that
+        si, sj --- the sequences in the Alignment object that
                 correspond to the structures
         """
         l=fasta_align.get_alignment_length()
@@ -98,11 +98,19 @@ class StructureAlignment:
 
 if __name__=="__main__":
     import sys
-    import Bio.Fasta.FastaAlign
+    from Bio.Alphabet import generic_protein
+    from Bio import AlignIO
     from Bio.PDB import *
 
+    if len(sys.argv) != 4 :
+        print "Expects three arguments,"
+        print " - FASTA alignment filename (expect two sequences)"
+        print " - PDB file one"
+        print " - PDB file two"
+        sys.exit()
+
     # The alignment
-    fa=Bio.Fasta.FastaAlign.parse_file(sys.argv[1], 'PROTEIN')
+    fa=AlignIO.read(open(sys.argv[1]), "fasta", generic_protein)
 
     pdb_file1=sys.argv[2]
     pdb_file2=sys.argv[3]

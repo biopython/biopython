@@ -1,0 +1,30 @@
+BLASTN 2.2.2 [Jan-08-2002]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= test
+         (7 letters)
+
+Database: NC_000964 
+           1 sequences; 4,214,630 total letters
+
+Searchingdone
+
+ ***** No hits found ******
+
+  Database: NC_000964
+    Posted date:  Jul 20, 2009  9:54 PM
+  Number of letters in database: 4,214,630
+  Number of sequences in database:  1
+  
+Lambda     K      H
+    1.37    0.711     1.31 
+
+Gapped
+Lambda     K      H
+    1.37    0.711     1.31 
+
