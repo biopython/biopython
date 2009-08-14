@@ -26,6 +26,7 @@ By default, all tests are run.
 DOCTEST_MODULES = ["Bio.Seq",
                    "Bio.SeqRecord",
                    "Bio.SeqIO",
+                   "Bio.SeqIO.PhdIO",
                    "Bio.SeqIO.QualityIO",
                    "Bio.SeqIO.AceIO",
                    "Bio.SeqUtils",
