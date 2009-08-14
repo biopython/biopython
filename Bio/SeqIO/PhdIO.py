@@ -34,6 +34,7 @@ Since PHRED files contain quality scores, you can save them as FASTQ or as
 QUAL files, for example using Bio.SeqIO.write(...), or simply with the format
 method of the SeqRecord object:
 
+    >>> print record[:50].format("fastq")
     @425_7_(71-A03-19).b.ab1
     acataaatcaaattactnaccaacacacaaaccngtctcgcgtagtggag
     +
@@ -42,6 +43,7 @@ method of the SeqRecord object:
 
 Or,
 
+    >>> print record[:50].format("qual")
     >425_7_(71-A03-19).b.ab1
     10 10 10 10 8 8 6 6 6 6 8 7 6 6 6 8 3 0 3 6 6 6 8 6 6 6 6 7
     10 13 6 6 3 0 3 8 8 8 8 10 8 8 8 6 6 6 6 6 6 6
