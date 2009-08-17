@@ -12,14 +12,12 @@ programs.
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
-class _EmbossCommandLine(AbstractCommandline) :
+class _EmbossMinimalCommandLine(AbstractCommandline) :
     """Base Commandline object for EMBOSS wrappers (PRIVATE).
 
     This is provided for subclassing, it deals with shared options
     common to all the EMBOSS tools:
-     - outfile            Output filename
 
-    General qualifiers:
      - auto               Turn off prompts
      - stdout             Write standard output
      - filter             Read standard input, write standard output
@@ -37,8 +35,6 @@ class _EmbossCommandLine(AbstractCommandline) :
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
         extra_parameters = [\
-           _Option(["-outfile","outfile"], ["output", "file"], None, 0,
-                   "Output filename"),
            _Switch(["-auto","auto"], [],
                    """Turn off prompts.
            
@@ -82,16 +78,40 @@ class _EmbossCommandLine(AbstractCommandline) :
             self.parameters = extra_parameters
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
-    def __str__(self) :
+class _EmbossCommandLine(_EmbossMinimalCommandLine) :
+    """Base Commandline object for EMBOSS wrappers (PRIVATE).
+
+    This is provided for subclassing, it deals with shared options
+    common to all the EMBOSS tools plus:
+    
+     - outfile            Output filename
+
+    """
+    def __init__(self, cmd=None, **kwargs):
+        assert cmd is not None
+        extra_parameters = [\
+           _Option(["-outfile","outfile"], ["output", "file"], None, 0,
+                   "Output filename"),
+            ]
+        try :
+            #Insert extra parameters - at the start just in case there
+            #are any arguments which must come last:
+            self.parameters = extra_parameters + self.parameters
+        except AttributeError:
+            #Should we raise an error?  The subclass should have set this up!
+            self.parameters = extra_parameters
+        _EmbossMinimalCommandLine.__init__(self, cmd, **kwargs)
+
+    def _validate(self) :
         #Check the outfile, filter, or stdout option has been set.
         #We can't simply do this via the required flag for the outfile
         #output - this seems the simplest solution.
         if not (self.outfile or self.filter or self.stdout) :
             raise ValueError("You must either set outfile (output filename), "
                              "or enable filter or stdout (output to stdout).")
-        return AbstractCommandline.__str__(self)
+        return _EmbossMinimalCommandLine._validate(self)
 
-
+        
 class Primer3Commandline(_EmbossCommandLine):
     """Commandline object for the Primer3 interface from EMBOSS.
     """
@@ -149,7 +169,7 @@ class Primer3Commandline(_EmbossCommandLine):
            ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
-        
+
 class PrimerSearchCommandline(_EmbossCommandLine):
     """Commandline object for the primersearch program from EMBOSS.
     """
@@ -180,6 +200,7 @@ class PrimerSearchCommandline(_EmbossCommandLine):
                           DeprecationWarning)
             name = "outfile"
         _EmbossCommandLine.set_parameter(self, name, value)
+
 
 class EProtDistCommandline(_EmbossCommandLine):
     """Commandline object for the eprotdist program from EMBOSS.
@@ -257,6 +278,7 @@ class ENeighborCommandline(_EmbossCommandLine):
           _Option(["-progress","progress"], ["input"], None, 0,
                   "Print indications of progress of run")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
 
 class EProtParsCommandline(_EmbossCommandLine):
     """Commandline object for the eprotpars program from EMBOSS.
@@ -340,6 +362,7 @@ class EConsenseCommandline(_EmbossCommandLine):
           _Option(["-printsets","printsets"], ["input"], None, 0,
                   "Print out the sets of species")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
 
 class ESeqBootCommandline(_EmbossCommandLine):
     """Commandline object for the eseqboot program from EMBOSS.
@@ -600,3 +623,40 @@ class IepCommandline(_EmbossCommandLine):
          _Option(["-notermini","notermini"], ["input"], None, 0),
          ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
+#seqret uses -outseq, not -outfile, so use the base class:
+class SeqretCommandline(_EmbossMinimalCommandLine):
+    """Commandline object for the seqret program from EMBOSS.
+
+    This tool allows you to interconvert between different sequence file
+    formats (e.g. GenBank to FASTA). Combining Biopython's Bio.SeqIO module
+    with seqret using a suitable intermediate file format can allow you to
+    read/write to an even wider range of file formats.
+
+    This wrapper currently only supports the core functionality, things like
+    feature tables (in EMBOSS 6.1.0 onwards) are not yet included.
+    """
+    def __init__(self, cmd="seqret", **kwargs):
+        self.parameters = [
+         _Option(["-sequence","sequence"], ["input", "file"], None, 0,
+                 "Input sequence(s) filename"),
+         _Option(["-outseq","outseq"], ["output", "file"], None, 0,
+                 "Output sequence file."),
+         _Option(["-sformat","sformat"], ["input"], None, 0,
+                 "Input sequence(s) format (e.g. fasta, genbank)"),
+         _Option(["-osformat","osformat"], ["input"], None, 0,
+                 "Output sequence(s) format (e.g. fasta, genbank)"),
+         ]
+        _EmbossMinimalCommandLine.__init__(self, cmd, **kwargs)
+
+    def _validate(self) :
+        #Check the outfile, filter, or stdout option has been set.
+        #We can't simply do this via the required flag for the outfile
+        #output - this seems the simplest solution.
+        if not (self.outseq or self.filter or self.stdout) :
+            raise ValueError("You must either set outfile (output filename), "
+                             "or enable filter or stdout (output to stdout).")
+        if not (self.sequence or self.filter or self.stdint) :
+            raise ValueError("You must either set sequence (input filename), "
+                             "or enable filter or stdin (input from stdin).")
+        return _EmbossMinimalCommandLine._validate(self)

@@ -12,13 +12,23 @@ from Bio.Seq import Seq, UnknownSeq
 from StringIO import StringIO
 from Bio import Alphabet
 
+import warnings
+def send_warnings_to_stdout(message, category, filename, lineno,
+                                file=None, line=None):
+    #TODO - Have Biopython DataLossWarning?
+    if category in [UserWarning] :
+        print "%s - %s" % (category.__name__, message)
+warnings.resetwarnings()
+warnings.showwarning = send_warnings_to_stdout
+
+
 protein_alphas = [Alphabet.generic_protein]
 dna_alphas = [Alphabet.generic_dna]
 rna_alphas = [Alphabet.generic_rna]
 nucleotide_alphas = [Alphabet.generic_nucleotide,
                      Alphabet.Gapped(Alphabet.generic_nucleotide)]
 no_alpha_formats = ["fasta","clustal","phylip","tab","ig","stockholm","emboss",
-                    "fastq","fastq-solexa","qual"]
+                    "fastq","fastq-solexa","fastq-illumina","qual"]
 possible_unknown_seq_formats = ["qual", "genbank", "gb", "embl"]
 
 #List of formats including alignment only file formats we can read AND write.
@@ -32,6 +42,7 @@ for format in sorted(AlignIO._FormatToWriter) :
     if format not in test_write_read_alignment_formats :
         test_write_read_alignment_formats.append(format)
 test_write_read_alignment_formats.remove("gb") #an alias for genbank
+test_write_read_alignment_formats.remove("fastq-sanger") #an alias for fastq
 
 # test_files is a list of tuples containing:
 # - string:  file format
@@ -45,7 +56,7 @@ test_files = [ \
     ("clustal",True,  'Clustalw/opuntia.aln', 7),
     ("clustal",True,  'Clustalw/hedgehog.aln', 5),
     ("clustal",True,  'Clustalw/odd_consensus.aln', 2),
-#Following nucleic examples are also used in test_Fasta2.py
+#Following nucleic examples are also used in test_SeqIO_FastaIO.py
     ("fasta",  False, 'Nucleic/lupine.nu', 1),
     ("fasta",  False, 'Nucleic/elderberry.nu', 1),
     ("fasta",  False, 'Nucleic/phlox.nu', 1),
@@ -53,7 +64,7 @@ test_files = [ \
     ("fasta",  False, 'Nucleic/wisteria.nu', 1),
     ("fasta",  False, 'Nucleic/sweetpea.nu', 1),
     ("fasta",  False, 'Nucleic/lavender.nu', 1),
-#Following protein examples are also used in test_Fasta2.py
+#Following protein examples are also used in test_SeqIO_FastaIO.py
     ("fasta",  False, 'Amino/aster.pro', 1),
     ("fasta",  False, 'Amino/loveliesbleeding.pro', 1),
     ("fasta",  False, 'Amino/rose.pro', 1),
@@ -111,6 +122,7 @@ test_files = [ \
     ("genbank",False, 'GenBank/dbsource_wrap.gb', 1),
     ("genbank",False, 'GenBank/NC_005816.gb', 1), #See also AE017046.embl
     ("genbank",False, 'GenBank/NC_000932.gb', 1),
+    ("genbank",False, 'GenBank/pBAD30.gb', 1), #Odd LOCUS line from Vector NTI
 # The next example is a truncated copy of gbvrl1.seq from
 # ftp://ftp.ncbi.nih.gov/genbank/gbvrl1.seq.gz
 # This includes an NCBI header, and the first three records:
@@ -142,7 +154,9 @@ test_files = [ \
 #Following PHD (PHRAP) sequencing files are also used in test_Phd.py
     ("phd", False, 'Phd/phd1', 3),
     ("phd", False, 'Phd/phd2', 1),
-#Following ACE assembly files are also used in test_Phd.py
+    ("phd", False, 'Phd/phd_solexa', 2),
+    ("phd", False, 'Phd/phd_454', 1),
+#Following ACE assembly files are also used in test_Ace.py
     ("ace", False, 'Ace/contig1.ace', 2),
     ("ace", False, 'Ace/consed_sample.ace', 1),
     ("ace", False, 'Ace/seq.cap.ace', 1),
@@ -161,10 +175,13 @@ test_files = [ \
     ("pir", True,  'NBRF/clustalw.pir', 2),
 #Following quality files are also used in the Bio.SeqIO.QualityIO doctests:
     ("fasta", True, 'Quality/example.fasta', 3),
-    ("qual",  False, 'Quality/example.qual',  3),
+    ("qual",  False,'Quality/example.qual',  3),
     ("fastq", True, 'Quality/example.fastq', 3),
     ("fastq", True, 'Quality/tricky.fastq', 4),
-    ("fastq-solexa", True, 'Quality/solexa.fastq', 1),
+    ("fastq", False,'Quality/sanger_faked.fastq', 1),
+    ("fastq", False,'Quality/sanger_93.fastq', 1),
+    ("fastq-illumina", False,'Quality/illumina_faked.fastq', 1),
+    ("fastq-solexa", False, 'Quality/solexa_faked.fastq', 1),
     ("fastq-solexa", True, 'Quality/solexa_example.fastq', 5),
     ]
 

@@ -237,7 +237,7 @@ def _read(handle):
             record.sequence = "".join(_sequence_lines)
             return record
         else:
-            raise ValueError("Unknown keyword %s found" % keyword)
+            raise ValueError("Unknown keyword '%s' found" % key)
     if record:
         raise ValueError("Unexpected end of stream.")
 

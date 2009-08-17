@@ -590,10 +590,14 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
     c3_list = [letter for (letter, meanings) \
                in ambiguous_nucleotide_values.iteritems() \
                if set([codon[2] for codon in codons]).issuperset(set(meanings))]
-    set2 = set([codon[1] for codon in codons])
-    set3 = set([codon[2] for codon in codons])
-    candidates = set([c1+c2+c3 for c1 in c1_list for c2 in c2_list for c3 in c3_list])
-    candidates.difference_update(codons)
+    #candidates is a list (not a set) to preserve the iteration order
+    candidates = []
+    for c1 in c1_list :
+        for c2 in c2_list :
+            for c3 in c3_list :
+                codon = c1+c2+c3
+                if codon not in candidates and codon not in codons :
+                    candidates.append(codon)
     answer = codons[:] #copy
     #print "Have %i new candidates" % len(candidates)
     for ambig_codon in candidates :
@@ -611,6 +615,7 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
         if wanted :
             answer.append(ambig_codon)
     return answer
+
 assert list_ambiguous_codons(['TGA', 'TAA'],IUPACData.ambiguous_dna_values) == ['TGA', 'TAA', 'TRA']
 assert list_ambiguous_codons(['TAG', 'TGA'],IUPACData.ambiguous_dna_values) == ['TAG', 'TGA']
 assert list_ambiguous_codons(['TAG', 'TAA'],IUPACData.ambiguous_dna_values) == ['TAG', 'TAA', 'TAR']

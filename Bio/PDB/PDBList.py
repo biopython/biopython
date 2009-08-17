@@ -35,8 +35,10 @@
 
 __doc__="Access the PDB over the internet (for example to download structures)."
 
+#TODO - Use os.path.join(...) instead of adding strings with os.sep
 import urllib, re, os
-from warnings import warn
+import warnings
+import shutil
 
 class PDBList:
     """
@@ -234,7 +236,7 @@ OBSLTE     26-SEP-03 1DYV      1UN2
         if not self.overwrite:
             if os.path.exists(final_file):
                 warnings.warn("file exists, not retrieved %s" % final_file,
-                              RuntimeError)
+                              RuntimeWarning)
                 return final_file
 
         # Retrieve the file
@@ -245,7 +247,6 @@ OBSLTE     26-SEP-03 1DYV      1UN2
         os.system("%s %s" % (uncompress, filename))
 
         return final_file
-
             
 
     def update_pdb(self):
@@ -265,7 +266,7 @@ OBSLTE     26-SEP-03 1DYV      1UN2
                 warnings.warn('retrieving %s' % pdb_code)
                 self.retrieve_pdb_file(pdb_code)
             except:
-                warnings.warn('error %s' % pdb_code, RuntimeError)
+                warnings.warn('error %s' % pdb_code, RuntimeWarning)
                 # you can insert here some more log notes that
                 # something has gone wrong.            
 
@@ -277,7 +278,7 @@ OBSLTE     26-SEP-03 1DYV      1UN2
             else:
                 old_file = self.local_pdb + os.sep + pdb_code[1:3] + os.sep + 'pdb%s.ent'%(pdb_code)
                 new_file = self.obsolete_pdb + os.sep + pdb_code[1:3] + os.sep + 'pdb%s.ent'%(pdb_code)
-        os.cmd('mv %s %s'%(old_file,new_file))
+        shutil.move(old_file, new_file)
 
 
     def download_entire_pdb(self,listfile=None):

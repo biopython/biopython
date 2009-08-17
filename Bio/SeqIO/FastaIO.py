@@ -124,8 +124,10 @@ class FastaWriter(SequentialSequenceWriter):
             if description and description.split(None,1)[0]==id :
                 #The description includes the id at the start
                 title = description
-            else :
+            elif description :
                 title = "%s %s" % (id, description)
+            else :
+                title = id
 
         assert "\n" not in title
         assert "\r" not in title

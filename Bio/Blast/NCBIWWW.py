@@ -845,8 +845,14 @@ def _parse_qblast_ref_page(handle):
         #Can we reliably extract the error message from the HTML page?
         #e.g.  "Message ID#24 Error: Failed to read the Blast query:
         #       Nucleotide FASTA provided for protein sequence"
-        #This occurs inside a <div class="error msInf"> entry so it might
-        #be possible to grab this...
+        #This occurs inside a <div class="error msInf"> entry so try this:
+        i = s.find('<div class="error msInf">')
+        if i != -1 :
+            msg = s[i+len('<div class="error msInf">'):].strip()
+            msg = msg.split("</div>",1)[0].split("\n",1)[0].strip()
+            if msg :
+                raise ValueError("Error message from NCBI: %s" % msg)
+        #We didn't recognise the error layout :(
         raise ValueError("No RID and no RTOE found in the 'please wait' page."
                          " (there was probably a problem with your request)")
     elif not rid :

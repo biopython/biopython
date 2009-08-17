@@ -31,12 +31,8 @@ ApplicationResult object
 
 import os
 
-from Bio import File
-from Bio.ParserSupport import *
 from Applications import AlignAceCommandline
 
-import Scanner
-import Parser
 
 
 def AlignAce(infile, cmd="AlignACE", **keywds):

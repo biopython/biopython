@@ -9,6 +9,32 @@ The latest news is at the top.
 
 ===================================================================
 
+FASTQ support in Bio.SeqIO has been improved, extended and sped up since
+Biopython 1.50. Support for Illumina 1.3+ style FASTQ files was added in the
+1.51 beta release. Furthermore, we now follow the interpretation agreed on
+the OBF mailing lists with EMBOSS and BioPerl for inter-conversion and the
+valid score range for each FASTQ variant. This means Solexa FASTQ scores can
+be from -5 to 62 (format name "fastq-solexa" in Bio.SeqIO), Illumina 1.3+
+FASTQ files have PHRED scores from 0 to 62 (format name "fastq-illumina"),
+and Sanger FASTQ files have PHRED scores from 0 to 93 (format name "fastq"
+or "fastq-sanger").
+
+Bio.Sequencing.Phd has been updated, for example to cope with missing peak
+positions. The "phd" support in Bio.SeqIO has also been updated to record
+the PHRED qualities (and peak positions) in the SeqRecord's per-letter
+annotation. This allows conversion of PHD files into FASTQ or QUAL which may
+be useful for meta-assembly.
+
+See the notes below for the Biopython 1.50 beta release for changes since
+Biopython 1.49 was released. This includes dropping support for Python 2.3,
+removing our deprecated parsing infrastructure (Martel and Bio.Mindy), and
+hence removing any dependence on mxTextTools.
+
+Additionally, since the beta, a number of small bugs have been fixed, and
+there have been further additions to the test suite and documentation.
+
+===================================================================
+
 June 23, 2009: Biopython 1.51 beta released.
 
 Biopython no longer supports Python 2.3.  Currently we support Python 2.4,
@@ -47,8 +73,8 @@ intended for BioPerl support only, which were causing problems in Biopython
 (see BioSQL bug 2839).
 
 There have also been additions to the tutorial, such as the new alignment
-wrappers, with a a whole chapter for the SeqRecord object. We have also
-added to the unit test coverage.
+wrappers, with a whole chapter for the SeqRecord object. We have also added
+to the unit test coverage.
 
 ===================================================================
 

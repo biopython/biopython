@@ -19,7 +19,7 @@ based on documentation for Lincoln Stein's Perl Bio::DB::GFF
 
 """
 
-__version__ = "$Revision: 1.9 $"
+__version__ = "$Revision: 1.10 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/__init__.py,v $
 
 import exceptions
@@ -39,7 +39,6 @@ from Bio.Alphabet import IUPAC
 from Bio import DocSQL
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import Translate
 
 import binning
 import easy
@@ -47,7 +46,6 @@ import GenericTools
 
 
 DEFAULT_ALPHABET = IUPAC.unambiguous_dna
-standard_translator = Translate.unambiguous_dna_by_id[1]
 
 class Segment(object):
     """
@@ -216,13 +214,13 @@ class Feature(object):
         except TypeError:
             seq.alphabet = self.alphabet
         try:
-            return standard_translator.translate(seq)
+            return seq.translate() #default table
         except AssertionError:
             # if the feature was pickled then we have problems
             import cPickle
             if cPickle.dumps(seq.alphabet) == cPickle.dumps(DEFAULT_ALPHABET):
                 seq.alphabet = DEFAULT_ALPHABET
-                return standard_translator.translate(seq)
+                return seq.translate()
             else:
                 raise
 

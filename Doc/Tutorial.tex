@@ -81,7 +81,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 23 June 2009 (Biopython 1.51 \textit{beta})}
+\date{Last Update -- 16 August 2009 (Biopython 1.51)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -987,7 +987,7 @@ alphabets.
 
 For example, you might argue that the two DNA \verb|Seq| objects
 \texttt{Seq("ACGT", IUPAC.unambiguous\_dna)} and
-\texttt{Seq("ACGT", IUPAC.unambiguous\_dna)} should be equal, even though
+\texttt{Seq("ACGT", IUPAC.ambiguous\_dna)} should be equal, even though
 they do have different alphabets. Depending on the context this could be
 important.
 
@@ -1229,7 +1229,15 @@ The \verb|SeqRecord| class itself is quite simple, and offers the following info
 
 \section{Creating a SeqRecord}
 
-Using a \verb|SeqRecord| object is not very complicated, since all of the information is stored as attributes of the class. Usually you won't create a \verb|SeqRecord| ``by hand'', but instead use \verb|Bio.SeqIO| to read in a sequence file for you (see Chapter~\ref{chapter:Bio.SeqIO} and the examples below).  However, creating \verb|SeqRecord| can be quite simple - at a minimum you just need a \verb|Seq| object:
+Using a \verb|SeqRecord| object is not very complicated, since all of the
+information is presented as attributes of the class. Usually you won't create
+a \verb|SeqRecord| ``by hand'', but instead use \verb|Bio.SeqIO| to read in a
+sequence file for you (see Chapter~\ref{chapter:Bio.SeqIO} and the examples
+below).  However, creating \verb|SeqRecord| can be quite simple.
+
+\subsection{SeqRecord objects from scratch}
+
+To create a \verb|SeqRecord| at a minimum you just need a \verb|Seq| object:
 
 \begin{verbatim}
 >>> from Bio.Seq import Seq
@@ -1271,6 +1279,25 @@ Adding annotations is easy, and just involves dealing directly with the annotati
 >>> print simple_seq_r.annotations["evidence"]
 None. I just made it up.
 \end{verbatim}
+
+Working with per-letter-annotations is similar, \verb|letter_annotations| is a
+dictionary like attribute which will let you assign any Python sequence (i.e.
+a string, list or tuple) which has the same length as the sequence:
+
+\begin{verbatim}
+>>> simple_seq_r.letter_annotations["phred_quality"] = [40,40,38,30]
+>>> print simple_seq_r. letter_annotations
+{'phred_quality': [40, 40, 38, 30]}
+>>> print simple_seq_r.letter_annotations["phred_quality"]
+[40, 40, 38, 30]
+\end{verbatim}
+
+The \verb|dbxrefs| and \verb|features| attributes are just Python lists, and
+should be used to store strings and \verb|SeqFeature| objects (discussed later
+in this chapter) respectively.
+
+%TODO - Update this to show passing in the annotations etc to __init__ with a warning that
+%this requires Biopython 1.51 or later?
 
 \subsection{SeqRecord objects from FASTA files}
 
@@ -1777,7 +1804,8 @@ the \texttt{format} method described above in Section~\ref{sec:SeqRecord-format}
 ...
 \end{verbatim}
 
-See Section~\ref{sec:FASTQ-slicing-off-primer} for a FASTQ example where the
+See Sections~\ref{sec:FASTQ-slicing-off-primer}
+and~\ref{sec:FASTQ-slicing-off-adaptor} for some FASTQ example where the
 per-letter annotations (the read quality scores) are also sliced.
 
 \chapter{Sequence Input/Output}
@@ -2086,7 +2114,7 @@ a file for reuse.
 \label{sec:SeqIO_GenBank_Online}
 Section~\ref{sec:efetch} talks about the Entrez EFetch interface in more detail,
 but for now let's just connect to the NCBI and get a few \textit{Opuntia} (prickly-pear)
-proteins from GenBank using their GI numbers.
+sequences from GenBank using their GI numbers.
 
 First of all, let's fetch just one record.  If you don't care about the
 annotations and features downloading a FASTA file is a good choice as these
@@ -2096,7 +2124,7 @@ only one record, use the \verb|Bio.SeqIO.read()| function:
 \begin{verbatim}
 from Bio import Entrez
 from Bio import SeqIO
-handle = Entrez.efetch(db="protein", rettype="fasta", id="6273291")
+handle = Entrez.efetch(db="nucleotide", rettype="fasta", id="6273291")
 seq_record = SeqIO.read(handle, "fasta")
 handle.close()
 print "%s with %i features" % (seq_record.id, len(seq_record.features))
@@ -2105,11 +2133,17 @@ print "%s with %i features" % (seq_record.id, len(seq_record.features))
 \noindent Expected output:
 
 \begin{verbatim}
-gi|6273291|gb|AF191665.1|AF191665 with 3 features
+gi|6273291|gb|AF191665.1|AF191665 with 0 features
 \end{verbatim}
 
 The NCBI will also let you ask for the file in other formats, in particular as
-a GenBank file:
+a GenBank file. Until Easter 2009, the Entrez EFetch API let you use ``genbank''
+as the return type, however the NCBI now insist on using the official
+return types of ``gb'' (or ``gp'' for proteins) as described on
+\href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq_help.html}
+{EFetch for Sequence and other Molecular Biology Databases}.
+As a result, in Biopython 1.50 onwards, we support ``gb'' as an
+alias for ``genbank'' in \verb|Bio.SeqIO|.
 
 \begin{verbatim}
 from Bio import Entrez
@@ -2120,19 +2154,13 @@ handle.close()
 print "%s with %i features" % (seq_record.id, len(seq_record.features))
 \end{verbatim}
 
-Until Easter 2009, the Entrez EFetch API let you use ``genbank''
-as the return type, however the NCBI now insist on using the official
-return types of ``gb'' (or ``gp'' for proteins) as described on
-\href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq_help.html}
-{EFetch for Sequence and other Molecular Biology Databases}.
-As a result, in Biopython 1.50 onwards, we support ``gb'' as an
-alias for ``genbank'' in \verb|Bio.SeqIO|.
-
-The expected output of this example is:
+\noindent The expected output of this example is:
 
 \begin{verbatim}
 AF191665.1 with 3 features
 \end{verbatim}
+
+\noindent Notice this time we have three features.
 
 Now let's fetch several records.  This time the handle contains multiple records,
 so we must use the \verb|Bio.SeqIO.parse()| function:
@@ -2197,7 +2225,7 @@ Length 394
 
 \section{Sequence files as Dictionaries}
 
-The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database using the Python \verb|dictionary| data type (like a hash in Perl). This is very useful for large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
+The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database using the Python \verb|dictionary| data type (like a hash in Perl). This is very useful for moderately large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
 
 You can use the function \verb|Bio.SeqIO.to_dict()| to make a SeqRecord dictionary (in memory).  By default this will use each record's identifier (i.e. the \verb|.id| attribute) as the key.  Let's try this using our GenBank file:
 
@@ -3172,9 +3200,9 @@ sample, but the same principles apply.
 \subsection{ClustalW}
 \label{sec:align_clustal}
 ClustalW is a popular command line tool for multiple sequence alignment
-(there is also a graphical interface called ClustlX). Biopython's
-\verb|Bio.Align.Applications| module has a wrapper for this (and several
-other alignment tools).
+(there is also a graphical interface called ClustalX). Biopython's
+\verb|Bio.Align.Applications| module has a wrapper for this alignment tool
+(and several others).
 
 Before trying to use ClustalW from within Python, you should first try running
 the ClustalW tool yourself by hand at the command line, to familiarise
@@ -3191,7 +3219,7 @@ For the most basic usage, all you need is to have a FASTA input file, such as
 \href{http://biopython.org/DIST/docs/tutorial/examples/opuntia.fasta}{opuntia.fasta}
 (available online or in the Doc/examples subdirectory of the Biopython source
 code). This is a small FASTA file containing seven prickly-pear DNA sequences
-(from the cactus family \textit{opuntia}).
+(from the cactus family \textit{Opuntia}).
 
 By default ClustalW will generate an alignment and guide tree file with names
 based on the input FASTA file, in this case \texttt{opuntia.aln} and
@@ -3227,39 +3255,64 @@ path to the tool, for example:
 >>> cline = ClustalwCommandline(clustalw_exe, infile="opuntia.fasta")
 \end{verbatim}
 
-\noindent Remember in Python that for a default string \verb|\n| or \verb|\t|
-means a new line or a tab -- which is why we're put a letter ``r'' at the
-start for a raw string. This is generally good practice when specifying a
-Windows style file name.
+\noindent Remember, in Python a default string \verb|\n| and/or \verb|\t|
+translates as a new line and/or a tab -- which is why we're put a letter
+``r'' at the start for a raw string that isn't translated in this way.
+This is generally good practice when specifying a Windows style file name.
 
-You can now run this command line, perhaps using the Python \verb|subprocess|
-module, or maybe just with our \verb|generic_run| function.
-This returns three things. First, a result object
-includes the return code, an integer value which by convention is zero when
-successful (check the documentation for particular tools about what return
-codes they might use). Then, two handles which contain the ``standard out''
-(stdout) and ``standard error'' (stderr) text from the tool. These terms
-originate in Unix, and are general the results from the program and any
-progress or error messages.
+You can now run this command line, and in Python the recommended way to
+run another program is to use the \verb|subprocess| module. This replaces
+older options like the \verb|os.system()| and the \verb|os.popen*| functions.
+
+Now, at this point it helps to know about how command line tools ``work''.
+When you run a tool at the command line, it will often print text output
+and/or directly to screen. This text can be captured or redirected, via
+two ``pipes'', called standard output (the normal results) and standard
+error (for error messages and debug messages). There is also standard
+input, which is any text fed into the tool. These names get shortened
+to stdin, stdout and stderr. When the tool finished, it has a return
+code (an integer), which by convention is zero for success.
+
+Now let's try an example. Unfortunately there are some subtle differences
+depending on your Operating System (e.g. Windows versus Unix) and how you
+are running Python (e.g. at the command line, or in IDLE). You may see a
+second terminal window appear while ClustalW works. You may see the
+ClustalW output appear at your Python prompt.
 
 \begin{verbatim}
->>> from Bio.Application import generic_run
->>> result, out_handle, err_handle = generic_run(cline)
->>> print result.return_code
-0
->>> print err_handle.read()
-
->>> print out_handle.read()
+>>> import sys
+>>> import subprocess
+>>> return_code = subprocess.call(str(cline), shell=(sys.platform!="win32"))
 ...
+>>> print return_code
+0
 \end{verbatim}
 
-If you do print out the handles, you'll see all the voluminous text that
-ClustalW likes to print as it is working -- pages of stuff! There isn't
-much of interest here (unless it fails in which case any error messages
-could be informative!).
+In the case of ClustlW, when run at the command line all the important
+output is written directly to the output files. Everything printed to
+screen while you wait (via stdout or stderr) is boring and can be
+ignored (assuming it worked).  You can explicitly tell ClustalW to send
+this output to ``dev null'', a kind of black hole for command line tool output:
 
+\begin{verbatim}
+>>> import os
+>>> import sys
+>>> import subprocess
+>>> return_code = subprocess.call(str(cline),
+...                               stdout = open(os.devnull),
+...                               stderr = open(os.devnull),
+...                               shell=(sys.platform!="win32"))
+>>> print return_code
+0
+\end{verbatim}
+
+This time ClustalW should be ``quiet'', because all its terminal output
+has been discarded.
 What we care about are the two output files, the alignment and the guide
-tree. You should be able to work out how to read in the alignment using
+tree. We didn't tell ClustalW what filenames to use, but it defaults to
+picking names based on the input file. In this case the output should be
+in the file \verb|opuntia.aln|.
+You should be able to work out how to read in the alignment using
 \verb|Bio.AlignIO| by now:
 
 \begin{verbatim}
@@ -3311,7 +3364,7 @@ None
 \end{verbatim}
 
 \noindent The spacing has been adjusted here for display purposes.
-The tree object is actuall pretty powerful! Have a look at the list of
+The tree object is actually pretty powerful! Have a look at the list of
 methods with \texttt{dir(tree)} to get a hint of this...
 
 \subsection{MUSCLE}
@@ -3345,13 +3398,15 @@ Note that MUSCLE uses ``-in'' and ``-out'' but in Biopython we have to use
 because ``in'' is a reserved word in Python.
 
 By default MUSCLE will output the alignment as a FASTA file (using gapped
-sequences). You can also ask for ClustalW-like output:
+sequences). The \verb|Bio.AlignIO| module should be able to read this
+alignment using \texttt{format="fasta"}.
+You can also ask for ClustalW-like output:
 
 \begin{verbatim}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clw=True)
 >>> print cline
-muscle -in opuntia.fasta -out opuntia.txt -clw
+muscle -in opuntia.fasta -out opuntia.aln -clw
 \end{verbatim}
 
 Or, strict ClustalW output where the original ClustalW header line is
@@ -3361,23 +3416,22 @@ used for maximum compatibility:
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clwstrict=True)
 >>> print cline
-muscle -in opuntia.fasta -out opuntia.txt -clwstrict
+muscle -in opuntia.fasta -out opuntia.aln -clwstrict
 \end{verbatim}
+
+\noindent The \verb|Bio.AlignIO| module should be able to read these alignments
+using \texttt{format="clustal"}.
 
 MUSCLE can also output in GCG MSF format (using the \texttt{msf} argument), but
 Biopython can't currently parse that, or using HTML which would give a human
 readable web page (not suitable for parsing).
 
 You can also set the other optional parameters, for example the maximum number
-of iterations. See the built in help for details:
+of iterations. See the built in help for details.
 
-\begin{verbatim}
->>> from Bio.Align.Applications import MuscleCommandline
->>> help(MuscleCommandline)
-\end{verbatim}
-
-You might run simple MUSCLE command line string as described above for
-ClustalW, or opt to use the \verb|subprocess| module.
+You would then run MUSCLE command line string as described above for
+ClustalW, and parse the output using \verb|Bio.AlignIO| to get an
+alignment object.
 
 \subsection{MUSCLE using stdout}
 
@@ -3394,22 +3448,17 @@ advantage of this to avoid having a temporary output file! For example:
 muscle -in opuntia.fasta
 \end{verbatim}
 
-\noindent Now, let's run this can capture the output as handles:
+\noindent Now, let's run this and capture the output as handles.
+Remember that MUSCLE defaults to using FASTA as the output format:
 
 \begin{verbatim}
->>> from Bio.Application import generic_run
->>> result, out_handle, err_handle = generic_run(cline)
->>> print result.return_code
-0
-\end{verbatim}
-
-\noindent Remember, a return code of zero is good -- by convention this means
-no errors. Finally, the output handle should contain our alignment in the
-default FASTA format:
-
-\begin{verbatim}
+>>> import subprocess
+>>> child = subprocess.Popen(str(cline),
+...                          stdout=subprocess.PIPE,
+...                          stderr=subprocess.PIPE,
+...                          shell=(sys.platform!="win32"))
 >>> from Bio import AlignIO
->>> align = AlignIO.read(out_handle, "fasta")
+>>> align = AlignIO.read(child.stdout, "fasta")
 >>> print align
 SingleLetterAlphabet() alignment with 7 rows and 906 columns
 TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF191663
@@ -3425,8 +3474,6 @@ TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF19
 
 We don't actually \emph{need} to have our FASTA input sequences prepared in a file,
 because by default MUSCLE will read in the input sequence from standard input!
-At this point the limitations of the helper function \verb|generic_run| become
-apparent, so we'll switch to the Python \verb|subprocess| module for full control.
 
 First, we'll need some unaligned sequences in memory as \verb|SeqRecord| objects.
 For this demonstration I'm going to use a filtered version of the original FASTA
@@ -3448,7 +3495,7 @@ as for the output.
 muscle -clwstrict
 \end{verbatim}
 
-Now comes the clever bit using the \verb|subprocess| module:
+Now comes the clever bit using the \verb|subprocess| module, stdin and stdout:
 
 \begin{verbatim}
 >>> import subprocess
@@ -3489,8 +3536,9 @@ TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF19
 
 Wow! There we are with a new alignment of just the six records, without having created
 a temporary FASTA input file, or a temporary alignment output file. However, a word of
-caution: Dealing with errors this style of programming is much more complicated. It
-also becomes far harder to diagnose problems, because you can't try running MUSCLE
+caution: Dealing with errors with this style of calling external programs is much more
+complicated.
+It also becomes far harder to diagnose problems, because you can't try running MUSCLE
 manually outside of Biopython (because you don't have the input file to supply).
 There can also be subtle cross platform issues (e.g. Windows versus Linux), and how
 you run your script can have in impact (e.g. at the command line, from IDLE or an
@@ -3585,19 +3633,19 @@ module. However, for simple usage Biopython includes a wrapper function that
 usually suffices:
 
 \begin{verbatim}
->>> from Bio.Application import generic_run
->>> result, out_handle, err_handle = generic_run(cline)
->>> print err_handle.read()
+>>> import subprocess
+>>> return_code = subprocess.call(str(cline), shell=(sys.platform!="win32"))
 Needleman-Wunsch global alignment of two sequences
-
->>> print out_handle.read()
-
->>> print result.return_code
+>>> print return_code
 0
 \end{verbatim}
 
 In the above, all we really care about is that the return code is zero
-(success). Then we can load the output file with \verb|Bio.AlignIO| as
+(success). If you want to hide the message EMBOSS prints out, then (as
+in the ClustalW example above) send the stdout and stderr to dev null,
+or just set the EMBOSS \texttt{auto} argument to True.
+
+Next we can load the output file with \verb|Bio.AlignIO| as
 discussed earlier in this chapter, as the \texttt{emboss} format:
 
 \begin{verbatim}
@@ -4430,11 +4478,11 @@ To search any of these databases, we use \verb+Bio.Entrez.esearch()+. For exampl
 >>> record["IdList"]
 ['19304878', '18606172', '16403221', '16377612', '14871861', '14630660', '12230038']
 \end{verbatim}
-In this output, you see seven PubMed IDs (including 19304878 which is the PMID for the Biopython application notes), which can be retrieved by EFetch (see section \ref{sec:efetch}).
+In this output, you see seven PubMed IDs (including 19304878 which is the PMID for the Biopython application note), which can be retrieved by EFetch (see section \ref{sec:efetch}).
 
 You can also use ESearch to search GenBank. Here we'll do a quick
 search for the \emph{matK} gene in \emph{Cypripedioideae} orchids
-(see the Section~\ref{sec:entrez-einfo} about EInfo for one way to
+(see Section~\ref{sec:entrez-einfo} about EInfo for one way to
 find out which fields you can search in each Entrez database):
 
 \begin{verbatim}
@@ -4614,7 +4662,8 @@ ORIGIN
 The argument \verb+rettype="gb"+ lets us download this record in the GenBank format.
 Note that until Easter 2009, the Entrez EFetch API let you use ``genbank'' as the
 return type, however the NCBI now insist on using the official return types of
-``gb'' (or ``gp'' for proteins) as described on online.
+``gb'' or ``gbwithparts'' (or ``gp'' for proteins) as described on online.
+
 Alternatively, you could for example use \verb+rettype="fasta"+ to get the Fasta-format; see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq\_help.html}{EFetch Sequences Help page} for other options. The available formats depend on which database you are downloading from - see the main \href{http://eutils.ncbi.nlm.nih.gov/entrez/query/static/efetch\_help.html}{EFetch Help page}.
 
 If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see Chapter~\ref{chapter:Bio.SeqIO}), you could directly parse it into a \verb+SeqRecord+:
@@ -4889,7 +4938,7 @@ PDB file parser and structure class implemented in Python.
 The Bio* toolkits--a brief overview.
 \end{verbatim}
 
-Note that in post of these examples, for simplicity we have naively combined ESearch and EFetch.
+Note that in both of these examples, for simplicity we have naively combined ESearch and EFetch.
 In this situation, the NCBI would expect you to use their history feature,
 as illustrated in Section~\ref{sec:entrez-webenv}.
 
@@ -5489,7 +5538,7 @@ authors: Liew C.F., Lim S.H., Loh C.S., Goh C.J.;
 title: "Molecular cloning and sequence analysis of chalcone synthase cDNAs of
 Bromheadia finlaysoniana.";
 >>> print record.organism_classification
-['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'Liliopsida', 'Asparagales', 'Orchidaceae', 'Epidendroideae', 'higher Epidendroideae', 'Cymbidieae', 'Bromheadiinae', 'Bromheadia']
+['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', ..., 'Bromheadia']
 \end{verbatim}
 
 To parse a file that contains more than one Swiss-Prot record, we use the \verb|parse| function instead. This function allows us to iterate over the records in the file.
@@ -6037,7 +6086,7 @@ This corresponds to:
 \item The Residue with id (\char`\"{} \char`\"{}, 10, \char`\"{}A\char`\"{}).
 \end{itemize}
 The Residue id indicates that the residue is not a hetero-residue (nor a water)
-because it has a blanc hetero field, that its sequence identifier is 10 and
+because it has a blank hetero field, that its sequence identifier is 10 and
 that its insertion code is \char`\"{}A\char`\"{}.
 
 Some other useful methods:
@@ -6448,7 +6497,7 @@ making a wrong interpretation. These cases are listed below.
 
 \subsubsection{A blank altloc for a disordered atom}
 
-Normally each disordered atom should have a non-blanc altloc identifier. However,
+Normally each disordered atom should have a non-blank altloc identifier. However,
 there are many structures that do not follow this convention, and have a blank
 and a non-blank identifier for two disordered positions of the same atom. This
 is automatically interpreted in the right way.
@@ -8151,6 +8200,20 @@ the regions of interest.
 \chapter{Cookbook -- Cool things to do with it}
 \label{chapter:cookbook}
 
+Biopython now has two collections of ``cookbook'' examples -- this chapter
+(which has been included in this tutorial for many years and has gradually
+grown), and \url{http://biopython.org/wiki/Category:Cookbook} which is a
+user contributed collection on our wiki.
+
+We're trying to encourage Biopython users to contribute their own examples
+to the wiki. In addition to helping the community, one direct benefit of
+sharing an example like this is that you could also get some feedback on
+the code from other Biopython users and developers - which could help you
+improve all your Python code.
+
+In the long term, we may end up moving all of the examples in this chapter
+to the wiki, or elsewhere within the tutorial.
+
 \section{Working with sequence files}
 \label{seq:cookbook-sequences}
 
@@ -8354,7 +8417,7 @@ The same approach would work with any other supported file format (e.g. FASTA fi
 
 This code uses \verb|Bio.SeqIO| with a generator expression (to avoid loading
 all the sequences into memory at once), and the \verb|Seq| object's
-\verb|startswith| method to spot the primer sequence:
+\verb|startswith| method to see if the read starts with the primer sequence:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -8410,8 +8473,8 @@ print "Saved %i reads" % count
 \end{verbatim}
 
 This takes longer, as this time the output file contains all $94696$ reads.
-Again, we're used a generator expression to avoid any memory problems.  You might
-prefer to use a for loop:
+Again, we're used a generator expression to avoid any memory problems.
+Although it is slower, you might prefer to use a for loop:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -8426,7 +8489,34 @@ out_handle.close()
 
 In this case the for loop looks simpler, but putting the trim logic into a
 function is more tidy, and makes it easier to adjust the trimming later on.
-For example, you might decide to look for a 5' primer as well.
+For example, you might decide to look for a 5' primer as well. Or, as in
+the following example, look for the primer anywhere in the reads - not
+just at the beginning.
+
+\subsection{Trimming off adaptor sequences}
+\label{sec:FASTQ-slicing-off-adaptor}
+
+This is essentially a trivial extension to the previous example. We are going
+to going to pretend \texttt{GTTGGAACCG} is an adaptor sequence in some FASTQ
+formatted read data, again the \texttt{SRR014849.fastq} file from the NCBI
+(\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}).
+
+This time however, we will look for the sequence \emph{anywhere} in the reads,
+not just at the very beginning:
+
+\begin{verbatim}
+from Bio import SeqIOdef trim_adaptor(record, adaptor) :    """Removes adaptor sequences, looks for perfect matches only."""    """    index = record.seq.find(adaptor)    if index == -1 :        return record #not found, no trimming    else :        return record[index+len(adaptor):]trimmed_reads = (trim_adaptor(record, "GTTGGAACCG") for record in \                 SeqIO.parse(open("SRR014849.fastq"), "fastq")) out_handle = open("trimmed.fastq", "w") count = SeqIO.write(trimmed_reads, out_handle, "fastq") out_handle.close() print "Saved %i reads" % count
+\end{verbatim}
+
+Because we are using a FASTQ input file in this example, the \verb|SeqRecord|
+objects have per-letter-annotation for the quality scores. By slicing the
+\verb|SeqRecord| object the appropriate scores are used on the trimmed
+records, so we can output them as a FASTQ file too.
+
+By changing the format names, you could apply this to FASTA files instead.
+This code also could be extended to do a fuzzy match instead of an exact
+match (maybe using a pairwise alignment, or taking into account the read
+quality scores), but that will be much slower.
 
 \subsection{Converting FASTQ files}
 \label{sec:SeqIO-fastq-conversion}
@@ -8460,8 +8550,9 @@ distinguish...
 
 \begin{enumerate}
 \item The original Sanger FASTQ format uses PHRED qualities encoded with an
-ASCII offset of 33. The NCBI seems to be using this format in their Short
-Read Archive. We call this the \texttt{fastq} format in \verb|Bio.SeqIO|.
+ASCII offset of 33. The NCBI are using this format in their Short Read
+Archive. We call this the \texttt{fastq} (or \texttt{fastq-sanger}) format
+in \verb|Bio.SeqIO|.
 \item Solexa (later bought by Illumina) introduced their own version using
 Solexa qualities encoded with an ASCII offset of 64. We call this the
 \texttt{fastq-solexa} format.
@@ -9855,7 +9946,7 @@ necessary in the current application.
 
 This is a very flexible framework, which is advantageous if you want to
 be able to parse a file format into more than one representation.  For
-example, the \verb|Bio.GenBank| modules uses this construct either
+example, the \verb|Bio.GenBank| module uses this construct either
 \verb|SeqRecord| objects or file-format-specific record objects.
 
 More recently, many of the parsers added for \verb|Bio.SeqIO| and
@@ -10190,6 +10281,12 @@ help answer questions from beginners.  After all, you were a beginner once.
 We're happy to take feedback or contributions - either via a bug-report or on the Mailing List.
 While reading this tutorial, perhaps you noticed some topics you were interested in which were missing, or not clearly explained.  There is also Biopython's built in documentation (the docstrings, these are also 
 \href{http://biopython.org/DIST/docs/api}{online}), where again, you may be able to help fill in any blanks.
+
+\section{Contributing cookbook examples}
+As explained in Chapter~\ref{chapter:cookbook}, Biopython now has a wiki
+collection of user contributed ``cookbook'' examples,
+\url{http://biopython.org/wiki/Category:Cookbook} -- maybe you can add
+to this?
 
 \section{Maintaining a distribution for a platform}
 \label{sec:maintain_dist}

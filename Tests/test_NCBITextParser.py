@@ -13991,6 +13991,70 @@ class TestNCBITextParser(unittest.TestCase):
         record = records.next()
         self.assertEqual(record, None)
 
+    def test_bt104(self):
+        "Test parsing BLASTN 2.2.2 output with error messages (bt104)"
+
+        path = os.path.join('Blast', 'bt104')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTN")
+        self.assertEqual(record.version, '2.2.2')
+        self.assertEqual(record.date, "Jan-08-2002")
+        self.assertEqual(record.reference, TestNCBITextParser.reference)
+        self.assertEqual(record.query, "test")
+        self.assertEqual(record.query_letters, 7)
+        self.assertEqual(record.database, "NC_000964")
+        self.assertEqual(record.database_sequences, 1)
+        self.assertEqual(record.database_letters, 4214630)
+        self.assertEqual(len(record.descriptions), 0)
+        self.assertEqual(len(record.alignments), 0)
+        self.assertEqual(record.database_name, ['NC_000964'])
+        self.assertEqual(record.num_letters_in_database, [4214630])
+        self.assertEqual(record.num_sequences_in_database, [1])
+        self.assertEqual(record.posted_date, [('Jul 20, 2009  9:54 PM',)])
+        self.assertEqual(len(record.ka_params), 3)
+        self.assertAlmostEqual(record.ka_params[0], 1.370)
+        self.assertAlmostEqual(record.ka_params[1], 0.711)
+        self.assertAlmostEqual(record.ka_params[2], 1.310)
+        self.assertEqual(len(record.ka_params_gap), 3)
+        self.assertAlmostEqual(record.ka_params_gap[0], 1.370)
+        self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
+        self.assertAlmostEqual(record.ka_params_gap[2], 1.310)
+
+    def test_bt105(self):
+        "Test parsing BLASTN 2.2.2 output with missing error messages (bt105)"
+
+        path = os.path.join('Blast', 'bt105')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTN")
+        self.assertEqual(record.version, '2.2.2')
+        self.assertEqual(record.date, "Jan-08-2002")
+        self.assertEqual(record.reference, TestNCBITextParser.reference)
+        self.assertEqual(record.query, "test")
+        self.assertEqual(record.query_letters, 7)
+        self.assertEqual(record.database, "NC_000964")
+        self.assertEqual(record.database_sequences, 1)
+        self.assertEqual(record.database_letters, 4214630)
+        self.assertEqual(len(record.descriptions), 0)
+        self.assertEqual(len(record.alignments), 0)
+        self.assertEqual(record.database_name, ['NC_000964'])
+        self.assertEqual(record.num_letters_in_database, [4214630])
+        self.assertEqual(record.num_sequences_in_database, [1])
+        self.assertEqual(record.posted_date, [('Jul 20, 2009  9:54 PM',)])
+        self.assertEqual(len(record.ka_params), 3)
+        self.assertAlmostEqual(record.ka_params[0], 1.370)
+        self.assertAlmostEqual(record.ka_params[1], 0.711)
+        self.assertAlmostEqual(record.ka_params[2], 1.310)
+        self.assertEqual(len(record.ka_params_gap), 3)
+        self.assertAlmostEqual(record.ka_params_gap[0], 1.370)
+        self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
+        self.assertAlmostEqual(record.ka_params_gap[2], 1.310)
+
 
 if __name__ == "__main__" :
     runner = unittest.TextTestRunner(verbosity = 2)
