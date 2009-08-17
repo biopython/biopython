@@ -9,6 +9,8 @@ The latest news is at the top.
 
 ===================================================================
 
+August 17, 2009: Biopython 1.51 released.
+
 FASTQ support in Bio.SeqIO has been improved, extended and sped up since
 Biopython 1.50. Support for Illumina 1.3+ style FASTQ files was added in the
 1.51 beta release. Furthermore, we now follow the interpretation agreed on
