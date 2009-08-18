@@ -317,6 +317,8 @@ def parse(handle, format, seq_count=None, alphabet=None) :
     if alphabet is not None and not (isinstance(alphabet, Alphabet) or \
                                      isinstance(alphabet, AlphabetEncoder)) :
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
+    if seq_count is not None and not isinstance(seq_count, int) :
+        raise TypeError("Need integer for seq_count (sequences per alignment)")
 
     #Map the file format to a sequence iterator:
     if format in _FormatToIterator :
