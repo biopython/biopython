@@ -423,7 +423,7 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None) :
         in_handle = in_file
         in_close = False
     #This will check the arguments and issue error messages,
-    alignments = parse(in_handle, in_format, alphabet)
+    alignments = parse(in_handle, in_format, None, alphabet)
     #Don't open the output file until we've checked the input is OK:
     if isinstance(out_file, basestring) :
         out_handle = open(out_file, "w")
