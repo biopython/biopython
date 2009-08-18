@@ -9,6 +9,13 @@ The latest news is at the top.
 
 ===================================================================
 
+New helper functions Bio.SeqIO.convert() and Bio.AlignIO.convert() allow an
+easier way to use Biopython for simple file format conversions. Additionally,
+these new functions allow Biopython to offer important file format specific
+optimisations (e.g. FASTQ to FASTA, and interconverting FASTQ variants).
+
+===================================================================
+
 August 17, 2009: Biopython 1.51 released.
 
 FASTQ support in Bio.SeqIO has been improved, extended and sped up since
