@@ -317,6 +317,8 @@ def parse(handle, format, seq_count=None, alphabet=None) :
     if alphabet is not None and not (isinstance(alphabet, Alphabet) or \
                                      isinstance(alphabet, AlphabetEncoder)) :
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
+    if seq_count is not None and not isinstance(seq_count, int) :
+        raise TypeError("Need integer for seq_count (sequences per alignment)")
 
     #Map the file format to a sequence iterator:
     if format in _FormatToIterator :
@@ -423,7 +425,7 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None) :
         in_handle = in_file
         in_close = False
     #This will check the arguments and issue error messages,
-    alignments = parse(in_handle, in_format, alphabet)
+    alignments = parse(in_handle, in_format, None, alphabet)
     #Don't open the output file until we've checked the input is OK:
     if isinstance(out_file, basestring) :
         out_handle = open(out_file, "w")
