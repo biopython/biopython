@@ -70,6 +70,17 @@ like PHYLIP where multiple alignments are stored sequentially (with no file
 header and footer), then multiple calls to the write function should work as
 expected.
 
+Conversion
+==========
+The Bio.AlignIO.convert(...) function allows an easy interface for simple
+alignnment file format conversions. Additionally, it may use file format
+specific optimisations so this should be the fastest way too.
+
+In general however, you can combine the Bio.AlignIO.parse(...) function with
+the Bio.AlignIO.write(...) function for sequence file conversion. Using
+generator expressions provides a memory efficient way to perform filtering or
+other extra operations as part of the process.
+
 File Formats
 ============
 When specifying the file format, use lowercase strings.  The same format
@@ -389,6 +400,44 @@ def read(handle, format, seq_count=None, alphabet=None) :
     if seq_count :
         assert len(first.get_all_seqs())==seq_count
     return first
+
+def convert(in_file, in_format, out_file, out_format, alphabet=None) :
+    """Convert between two alignment files, returns number of alignments.
+
+     - in_file - an input handle or filename
+     - in_format - input file format, lower case string
+     - output - an output handle or filename
+     - out_file - output file format, lower case string
+     - alphabet - optional alphabet to assume
+
+    NOTE - If you provide an output filename, it will be opened which will
+    overwrite any existing file without warning. This may happen if even the
+    conversion is aborted (e.g. an invalid out_format name is given).
+    """
+    #TODO - Add optimised versions of important conversions
+    #For now just off load the work to SeqIO parse/write    
+    if isinstance(in_file, basestring) :
+        in_handle = open(in_file, "rU")
+        in_close = True
+    else :
+        in_handle = in_file
+        in_close = False
+    #This will check the arguments and issue error messages,
+    alignments = parse(in_handle, in_format, alphabet)
+    #Don't open the output file until we've checked the input is OK:
+    if isinstance(out_file, basestring) :
+        out_handle = open(out_file, "w")
+        out_close = True
+    else :
+        out_handle = out_file
+        out_close = False
+    #This will check the arguments and issue error messages,
+    #after we have opened the file which is a shame.
+    count = write(alignments, out_handle, out_format)
+    #Must now close any handles we opened
+    if in_close : in_handle.close()
+    if out_close : out_handle.close()
+    return count
 
 def _test():
     """Run the Bio.AlignIO module's doctests.

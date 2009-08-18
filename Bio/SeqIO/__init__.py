@@ -133,6 +133,17 @@ For sequential files formats (e.g. fasta, genbank) each "record block" holds
 a single sequence.  For these files it would probably be safe to call
 write() multiple times.
 
+Conversion
+==========
+The Bio.SeqIO.convert(...) function allows an easy interface for simple
+file format conversions. Additionally, it may use file format specific
+optimisations so this should be the fastest way too.
+
+In general however, you can combine the Bio.SeqIO.parse(...) function with the
+Bio.SeqIO.write(...) function for sequence file conversion. Using generator
+expressions provides a memory efficient way to perform filtering or other
+extra operations as part of the process.
+
 File Formats
 ============
 When specifying the file format, use lowercase strings.  The same format
@@ -635,6 +646,61 @@ def to_alignment(sequences, alphabet=None, strict=True) :
         #but which takes SeqRecord objects.  See also Bug 1944
         alignment._records.append(record)
     return alignment
+
+def convert(in_file, in_format, out_file, out_format, alphabet=None) :
+    """Convert between two sequence file formats, return number of records.
+
+     - in_file - an input handle or filename
+     - in_format - input file format, lower case string
+     - out_file - an output handle or filename
+     - out_format - output file format, lower case string
+     - alphabet - optional alphabet to assume
+
+    NOTE - If you provide an output filename, it will be opened which will
+    overwrite any existing file without warning. This may happen if even the
+    conversion is aborted (e.g. an invalid out_format name is given).
+
+    For example, going from a filename to a handle:
+
+    >>> from Bio import SeqIO
+    >>> from StringIO import StringIO
+    >>> handle = StringIO("")
+    >>> SeqIO.convert("Quality/example.fastq", "fastq", handle, "fasta")
+    3
+    >>> print handle.getvalue()
+    >EAS54_6_R1_2_1_413_324
+    CCCTTCTTGTCTTCAGCGTTTCTCC
+    >EAS54_6_R1_2_1_540_792
+    TTGGCAGGCCAAGGCCGATGGATCA
+    >EAS54_6_R1_2_1_443_348
+    GTTGCTTCTGGCGTGGGTGGGGGGG
+    <BLANKLINE>
+    """
+    #TODO - Add optimised versions of important conversions
+    #For now just off load the work to SeqIO parse/write    
+    if isinstance(in_file, basestring) :
+        in_handle = open(in_file, "rU")
+        in_close = True
+    else :
+        in_handle = in_file
+        in_close = False
+    #Don't open the output file until we've checked the input is OK?
+    if isinstance(out_file, basestring) :
+        out_handle = open(out_file, "w")
+        out_close = True
+    else :
+        out_handle = out_file
+        out_close = False
+    #This will check the arguments and issue error messages,
+    #after we have opened the file which is a shame.
+    from _convert import _handle_convert #Lazy import
+    count = _handle_convert(in_handle, in_format,
+                            out_handle, out_format,
+                            alphabet)
+    #Must now close any handles we opened
+    if in_close : in_handle.close()
+    if out_close : out_handle.close()
+    return count
            
 def _test():
     """Run the Bio.SeqIO module's doctests.
