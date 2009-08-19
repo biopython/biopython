@@ -45,7 +45,7 @@ o "ReportLab":http://www.reportlab.org/downloads.html (optional)
   functionality, you will not need to install this package.  You can install
   it later if needed.
 
-o "psycopg":http://initd.org/software/psycopg/ (optional) or
+o "psycopg2":http://initd.org/software/psycopg/ (optional) or
   "pgdb":http://www.druid.net/pygresql/ (optional)
   These packages are used by BioSQL to access a PostgreSQL database.
 
@@ -53,7 +53,7 @@ o "MySQLdb":http://sourceforge.net/projects/mysql-python (optional)
   This package is used by BioSQL or Bio.GFF to access a MySQL database.
 
 In addition there are a number of useful third party tools you may wish to
-install such as standalone NCBI BLAST or ClustalW.
+install such as standalone NCBI BLAST, EMBOSS or ClustalW.
 
 
 **Installation**
@@ -103,14 +103,15 @@ GenBank formats seem to be particularly fragile.)  Thus, the parsing
 code in Biopython is sometimes updated faster than we can build Biopython
 releases.  You can get the most recent parser by pulling the relevant
 files (e.g. the ones in Bio.SeqIO or Bio.Blast) out of 
-"anonymous cvs":http://cvs.biopython.org/ .
-However, be careful when doing this, because the code in CVS is not as
-well-tested as released code, and may contain new dependencies.
+"anonymous cvs":http://cvs.biopython.org/ or our git mirror on
+"github":http://github.com/biopython/biopython/ .
+However, be careful when doing this, because the code in CVS/github is
+not as well-tested as released code, and may contain new dependencies.
 
 Finally, you can send a bug report to the bug database or
 biopython@biopython.org.  In the bug report, please let us know 1)
 which operating system and hardware you are using, 2) Python version,
-3) Biopython version (or CVS version/date), 4) traceback that occurs,
+3) Biopython version (or CVS/git version/date), 4) traceback that occurs,
 5) offending code, and 6) data file that causes the problem.
 
 
@@ -160,3 +161,4 @@ Doc/         -- Documentation.
 Scripts/     -- Miscellaneous, possibly useful, standalone scripts
 
 Tests/       -- Regression testing code
+
