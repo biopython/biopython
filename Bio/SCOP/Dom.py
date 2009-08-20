@@ -89,6 +89,8 @@ class Iterator:
                   of the file will be returned.
                   
         """
+        import warnings
+        warnings.warn("Bio.SCOP.Dom.Iterator is deprecated. Please use Bio.SCOP.Dom.parse() instead.", DeprecationWarning)
         from types import FileType, InstanceType
         if type(handle) is not FileType and type(handle) is not InstanceType:
             raise ValueError("I expected a file handle or file-like object")
@@ -116,5 +118,5 @@ class Parser:
         please use
 
         record = Dom.Record(entry)
-        """)
+        """, DeprecationWarning)
         return Record(entry)
