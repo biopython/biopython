@@ -2366,6 +2366,7 @@ print record.description
 \noindent That should have retrieved the record {\tt Z78532.1}, the second entry in the file.
 
 \subsection{Indexing really large files}
+\label{sec:seqio-indexed-dict}
 
 As the previous couple of examples tried to illustrate, using
 \verb|Bio.SeqIO.to_dict()| is very flexible. However, because it holds
@@ -2406,8 +2407,10 @@ Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguo
 
 \noindent Note that \verb|Bio.SeqIO.indexed_dict()| doesn't take a handle,
 but rather a filename. There are good reasons for this, but it is a little
-techinical. The second argument is the file format. You can use many other
-simple file formats, including FASTA and FASTQ files. However, alignment
+technical. The second argument is the file format (a lower case string as
+used in the other \verb|Bio.SeqIO| functions). You can use many other
+simple file formats, including FASTA and FASTQ files (see the example in
+Section~\ref{sec:fastq-indexing}). However, alignment
 formats like PHYLIP or Clustal are not supported. Finally as an optional
 argument you can supply an alphabet.
 
@@ -8740,6 +8743,38 @@ For more details, see the built in help (also \href{http://www.biopython.org/DIS
 ...
 \end{verbatim}
 
+\subsection{Indexing a FASTQ file}
+\label{sec:fastq-indexing}
+
+FASTQ files are often very large, with millions of reads in them. Due to the
+sheer amount of data, you can't load all the records into memory at once.
+This is why the examples above (filtering and trimming) iterate over the file
+looking at just one \verb|SeqRecord| at a time.
+
+However, sometimes you can't use a big loop or an iterator - you may need
+random access to the reads. Here the \verb|Bio.SeqIO.indexed_dict()| function
+may prove very helpful, as it allows you to access any read in the FASTQ file
+by its name -- without running out of memory (see
+Section~\ref{sec:seqio-indexed-dict}).
+
+Again we'll use the \texttt{SRR014849.fastq} file from the NCBI
+(\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}),
+although this is actually quite a small FASTQ file with less than $100,000$ reads:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> fq_dict = SeqIO.indexed_dict("SRR014849.fastq", "fastq")
+>>> len(fq_dict)
+94696
+fq_dict.keys()[:4]
+['SRR014849.80961', 'SRR014849.80960', 'SRR014849.80963', 'SRR014849.288943']
+>>> fq_dict["SRR014849.171880"].seq
+Seq('AAAATCATCTCTGGCGCCCCGTTGGAACCGAAAGGGTTTGAATTCAAACCCTTT...CAG', SingleLetterAlphabet())
+\end{verbatim}
+
+The same approach has been tested on FASTQ files with seven million reads,
+indexing took about a minute, but record access is almost instant.
+
 \subsection{Identifying open reading frames}
 
 A very simplistic first step at identifying possible genes is to look for
@@ -8876,10 +8911,11 @@ If however all you want to find are the locations of the open reading frames,
 then it is a waste of time to translate every possible codon, including doing
 the reverse complement to search the reverse strand too.  All you need to do
 is search for the possible stop codons (and their reverse complements).  Using
-regular expressions is an obvious approach here -- these are an extremely
-powerful (but rather complex) way of describing search strings, which are
-supported in lots of programming languages and also command line tools like
-\texttt{grep} as well).  You can find whole books about this topic!
+regular expressions is an obvious approach here (see the Python module
+\verb|re|). These are an extremely powerful (but rather complex) way of
+describing search strings, which are supported in lots of programming
+languages and also command line tools like \texttt{grep} as well). You can
+find whole books about this topic!
 
 
 \section{Sequence parsing plus simple plots}
