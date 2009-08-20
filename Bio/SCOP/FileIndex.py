@@ -7,7 +7,7 @@
 # be moved out of the SCOP package.
 
 import warnings
-warnings.warn("Bio.SCOP.FileIndex was deprecated, as it does not seem to have any users. If you do use this module, please contact the Biopython developers at biopython-dev@biopython.org to avoid permanent removal of this module")
+warnings.warn("Bio.SCOP.FileIndex was deprecated, as it does not seem to have any users. If you do use this module, please contact the Biopython developers at biopython-dev@biopython.org to avoid permanent removal of this module", DeprecationWarning)
 
 
 

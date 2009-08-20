@@ -3,5 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """
-Parser for dealing with text output from the MEME motif search program 
+Parser for dealing with text output from the MEME motif search program (DEPRECATED).
+
+Now superseded by Bio.Motif
 """
+
+import warnings
+warnings.warn('Bio.MEME is deprecated. Please use Bio.Motif instead.',
+              DeprecationWarning)

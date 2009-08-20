@@ -3,11 +3,14 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """
-Parser and code for dealing with the standalone version of AlignAce, a
-motif search program.
+Parser and code for dealing with the standalone version of AlignAce, a motif search program (DEPRECATED).
 
 It also includes a very simple interface to CompareACE tool.
-
 http://atlas.med.harvard.edu/
+
+Now superseded by Bio.Motif
 """
 
+import warnings
+warnings.warn('Bio.AlignAce is deprecated. Please use Bio.Motif instead.',
+              DeprecationWarning)

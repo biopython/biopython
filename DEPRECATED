@@ -51,8 +51,8 @@ remove support for colour and centre in later releases of Biopython.
 
 Bio.AlignAce and Bio.MEME
 =========================
-As of Biopython 1.50, these modules are considered to be obsolete with the
-introduction of Bio.Motif, and they will be deprecated in a future release.
+Declared obsolete in Release 1.50, and deprecated in Release 1.52. Please
+use Bio.Motif instead.
 
 Numeric support
 ===============
