@@ -5,7 +5,14 @@
 
 import os
 import string
+
+#Bio.MEME is deprecated now, but I want to keep testing it until
+#it is removed (without showing the deprecation warning)
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from Bio.MEME import Parser
+warnings.resetwarnings()
+
 from Bio import ParserSupport
 from Bio.File import UndoHandle
 

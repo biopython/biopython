@@ -14,6 +14,13 @@ easier way to use Biopython for simple file format conversions. Additionally,
 these new functions allow Biopython to offer important file format specific
 optimisations (e.g. FASTQ to FASTA, and interconverting FASTQ variants).
 
+New function Bio.SeqIO.indexed_dict() allows indexing of most sequence file
+formats (but not alignment file formats), allowing dictionary like random
+access to all the entries in the file as SeqRecord objects, keyed on the
+record id. This is epecially useful for very large sequencing files, where
+all the records cannot be held in memory at once. This supplements the more
+flexible but memory demaning Bio.SeqIO.to_dict() function.
+
 ===================================================================
 
 August 17, 2009: Biopython 1.51 released.

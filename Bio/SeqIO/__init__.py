@@ -1,4 +1,4 @@
-# Copyright 2006-2008 by Peter Cock.  All rights reserved.
+# Copyright 2006-2009 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -31,30 +31,8 @@ Note that the parse() function will all invoke the relevant parser for the
 format with its default settings.  You may want more control, in which case
 you need to create a format specific sequence iterator directly.
 
-For non-interlaced files (e.g. Fasta, GenBank, EMBL) with multiple records
-using a sequence iterator can save you a lot of memory (RAM).  There is
-less benefit for interlaced file formats (e.g. most multiple alignment file
-formats).  However, an iterator only lets you access the records one by one.
-
-If you want random access to the records by number, turn this into a list:
-
-    >>> from Bio import SeqIO
-    >>> handle = open("Fasta/f002", "rU")
-    >>> records = list(SeqIO.parse(handle, "fasta"))
-    >>> handle.close()
-    >>> print records[1].id
-    gi|1348917|gb|G26685|G26685
-
-If you want random access to the records by a key such as the record id,
-turn the iterator into a dictionary:
-
-    >>> from Bio import SeqIO
-    >>> handle = open("Fasta/f002", "rU")
-    >>> record_dict = SeqIO.to_dict(SeqIO.parse(handle, "fasta"))
-    >>> handle.close()
-    >>> print len(record_dict["gi|1348917|gb|G26685|G26685"])
-    413
-
+Input - Single Records
+======================
 If you expect your file to contain one-and-only-one record, then we provide
 the following 'helper' function which will return a single SeqRecord, or
 raise an exception if there are no records or more than one record:
@@ -85,6 +63,52 @@ record, use the iterator's next() method:
 The above code will work as long as the file contains at least one record.
 Note that if there is more than one record, the remaining records will be
 silently ignored.
+
+
+Input - Multiple Records
+========================
+For non-interlaced files (e.g. Fasta, GenBank, EMBL) with multiple records
+using a sequence iterator can save you a lot of memory (RAM).  There is
+less benefit for interlaced file formats (e.g. most multiple alignment file
+formats).  However, an iterator only lets you access the records one by one.
+
+If you want random access to the records by number, turn this into a list:
+
+    >>> from Bio import SeqIO
+    >>> handle = open("Fasta/f002", "rU")
+    >>> records = list(SeqIO.parse(handle, "fasta"))
+    >>> handle.close()
+    >>> print records[1].id
+    gi|1348917|gb|G26685|G26685
+
+If you want random access to the records by a key such as the record id,
+turn the iterator into a dictionary:
+
+    >>> from Bio import SeqIO
+    >>> handle = open("Fasta/f002", "rU")
+    >>> record_dict = SeqIO.to_dict(SeqIO.parse(handle, "fasta"))
+    >>> handle.close()
+    >>> len(record_dict)
+    3
+    >>> print len(record_dict["gi|1348917|gb|G26685|G26685"])
+    413
+
+However, using list() or the to_dict() function will load all the records
+into memory at once, and therefore is not possible on very large files.
+Instead, for *some* file formats Bio.SeqIO provides an indexing approach
+providing dictionary like access to any record. For example,
+
+    >>> from Bio import SeqIO
+    >>> record_dict = SeqIO.indexed_dict("Fasta/f002", "fasta")
+    >>> len(record_dict)
+    3
+    >>> print len(record_dict["gi|1348917|gb|G26685|G26685"])
+    413
+
+Many but not all of the supported input file formats can be indexed like
+this. For example "ace", "embl", "fasta", "fastq", "genbank", "ig", "phd",
+"pir", "tab" and "qual" work, but alignment formats like "phylip", "clustalw"
+and "nexus" will not.
 
 Input - Alignments
 ==================
@@ -180,7 +204,7 @@ names are also used in Bio.AlignIO and include the following:
              in separate FASTA files).
 
 Note that while Bio.SeqIO can read all the above file formats, it cannot
-write to all of them.
+write to all of them. Nor can it index all of the above files.
 
 You can also use any file format supported by Bio.AlignIO, such as "nexus",
 "phlip" and "stockholm", which gives you access to the individual sequences
@@ -547,6 +571,11 @@ def to_dict(sequences, key_function=None) :
     TtWsXo45S3ZclIBy4X/WJc39+CY M81224.1
     uVEYeAQSV5EDQOnFoeMmVea+Oow AF297471.1
     BUg6YxXSKWEcFFH0L08JzaLGhQs L31939.1
+
+    This approach is not suitable for very large sets of sequences, as all
+    the SeqRecord objects are held in memory. Instead, consider using the
+    Bio.SeqIO.indexed_dict() function (if it supports your particular file
+    format).
     """    
     if key_function is None :
         key_function = lambda rec : rec.id
@@ -559,6 +588,88 @@ def to_dict(sequences, key_function=None) :
         d[key] = record
     return d
 
+def indexed_dict(filename, format, alphabet=None) :
+    """Indexes a sequence file and returns a dictionary like object.
+
+     - filename - string giving name of file to be indexed
+     - format   - lower case string describing the file format
+     - alphabet - optional Alphabet object, useful when the sequence type
+                  cannot be automatically inferred from the file itself
+                  (e.g. format="fasta" or "tab")
+
+    This indexing function will return a dictionary like object, giving the
+    SeqRecord objects as values:
+
+    >>> from Bio import SeqIO
+    >>> records = SeqIO.indexed_dict("Quality/example.fastq", "fastq")
+    >>> len(records)
+    3
+    >>> sorted(records.keys())
+    ['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_443_348', 'EAS54_6_R1_2_1_540_792']
+    >>> print records["EAS54_6_R1_2_1_540_792"].format("fasta")
+    >EAS54_6_R1_2_1_540_792
+    TTGGCAGGCCAAGGCCGATGGATCA
+    <BLANKLINE>
+    >>> "EAS54_6_R1_2_1_540_792" in records
+    True
+    >>> print records.get("Missing", None)
+    None
+
+    Note that this psuedo dictionary will not support all the methods of a
+    true Python dictionary, for example values() is not defined since this
+    would require loading all of the records into memory at once.
+
+    When you call the index function, it will scan through the file, noting
+    the location of each record. When you access a particular record via the
+    dictionary methods, the code will jump to the appropriate part of the
+    file and then parse that section into a SeqRecord.
+
+    Note that not all the input formats supported by Bio.SeqIO can be used
+    with this index function. It is designed to work only with sequential
+    file formats (e.g. "fasta", "gb", "fastq") and is not suitable for any
+    interlaced file format (e.g. alignment formats such as "clustal").
+
+    For small files, it may be more efficient to use an in memory Python
+    dictionary, e.g.
+
+    >>> from Bio import SeqIO
+    >>> records = SeqIO.to_dict(SeqIO.parse(open("Quality/example.fastq"), "fastq"))
+    >>> len(records)
+    3
+    >>> sorted(records.keys())
+    ['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_443_348', 'EAS54_6_R1_2_1_540_792']
+    >>> print records["EAS54_6_R1_2_1_540_792"].format("fasta")
+    >EAS54_6_R1_2_1_540_792
+    TTGGCAGGCCAAGGCCGATGGATCA
+    <BLANKLINE>
+
+    As with the to_dict() function defaults, the id string of each record is
+    used as the key. It would be possible to extend the indexing code so that
+    you could provide your own function to map from a SeqRecord to a key (as
+    done for the to_dict() function), but doing so would impose a severe
+    performance penalty as it require the file to be completely parsed while
+    building the index. Right now this is usually avoided.
+    """
+    #Try and give helpful error messages:
+    if not isinstance(filename, basestring) :
+        raise TypeError("Need a filename (not a handle)")
+    if not isinstance(format, basestring) :
+        raise TypeError("Need a string for the file format (lower case)")
+    if not format :
+        raise ValueError("Format required (lower case string)")
+    if format != format.lower() :
+        raise ValueError("Format string '%s' should be lower case" % format)
+    if alphabet is not None and not (isinstance(alphabet, Alphabet) or \
+                                     isinstance(alphabet, AlphabetEncoder)) :
+        raise ValueError("Invalid alphabet, %s" % repr(alphabet))
+
+    #Map the file format to a sequence iterator:    
+    import _index #Lazy import
+    try :
+        indexer = _index._FormatToIndexedDict[format]
+    except KeyError :
+        raise ValueError("Unsupported format '%s'" % format)
+    return indexer(filename, alphabet)
 
 def to_alignment(sequences, alphabet=None, strict=True) :
     """Returns a multiple sequence alignment (OBSOLETE).
@@ -714,6 +825,14 @@ def _test():
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("..","..","Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
+    elif os.path.isdir(os.path.join("Tests", "Fasta")) :
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("Tests"))
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir
