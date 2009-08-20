@@ -46,7 +46,6 @@ RecordParser       Parses a Prodoc record into a Record object.
 
 _Scanner           Scans Prodoc-formatted data.
 _RecordConsumer    Consumes Prodoc data to a Record object.
-Iterator           Iterates over entries in a Prodoc file; DEPRECATED.
 """
 
 from types import *
@@ -110,56 +109,6 @@ class Reference:
         self.number = ''
         self.authors = ''
         self.citation = ''
-
-class Iterator:
-    """Returns one record at a time from a Prodoc file.
-
-    Methods:
-    next   Return the next record from the stream, or None.
-
-    """
-    def __init__(self, handle, parser=None):
-        """__init__(self, handle, parser=None)
-
-        Create a new iterator.  handle is a file-like object.  parser
-        is an optional Parser object to change the results into another form.
-        If set to None, then the raw contents of the file will be returned.
-
-        """
-        import warnings
-        warnings.warn("Bio.Prosite.Prodoc.Iterator is deprecated; we recommend using the function Bio.Prosite.Prodoc.parse instead. Please contact the Biopython developers at biopython-dev@biopython.org you cannot use Bio.Prosite.Prodoc.parse instead of Bio.Prosite.Prodoc.Iterator.",
-              DeprecationWarning)
-        if type(handle) is not FileType and type(handle) is not InstanceType:
-            raise ValueError("I expected a file handle or file-like object")
-        self._uhandle = File.UndoHandle(handle)
-        self._parser = parser
-
-    def next(self):
-        """next(self) -> object
-
-        Return the next Prodoc record from the file.  If no more records,
-        return None.
-
-        """
-        lines = []
-        while 1:
-            line = self._uhandle.readline()
-            if not line:
-                break
-            lines.append(line)
-            if line[:5] == '{END}':
-                break
-            
-        if not lines:
-            return None
-            
-        data = "".join(lines)
-        if self._parser is not None:
-            return self._parser.parse(File.StringHandle(data))
-        return data
-
-    def __iter__(self):
-        return iter(self.next, None)
 
 class Dictionary:
     """Accesses a Prodoc file using a dictionary interface.

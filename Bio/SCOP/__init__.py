@@ -676,7 +676,7 @@ class Astral:
     as well as clusterings by percent id or evalue.
     """
 
-    def __init__( self, dir_path=None, version=None, scop=None, ind_file=None,
+    def __init__( self, dir_path=None, version=None, scop=None,
                   astral_file=None, db_handle=None):
         """
         Initialise the astral database.
@@ -696,11 +696,7 @@ class Astral:
         db_handle - a database handle for a MYSQL database containing a table
                     'astral' with the astral data in it.  This can be created
                     using writeToSQL.
-                    
-        Note that the ind_file argument is deprecated.
         """
-        if ind_file :
-            raise RuntimeError("The ind_file (index file) argument is deprecated")
 
         if astral_file==dir_path==db_handle==None:
             raise RuntimeError("Need either file handle, or (dir_path + "\
