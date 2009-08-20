@@ -136,8 +136,8 @@ tests = [
     ("Quality/sanger_faked.fastq", "fastq-sanger", generic_dna),
     ("Quality/solexa_faked.fastq", "fastq-solexa", generic_dna),
     ("Quality/illumina_faked.fastq", "fastq-illumina", generic_dna),
-    ("Embl/U87107.embl", "embl", None),
-    ("Embl/TRBG361.embl", "embl", None),
+    ("EMBL/U87107.embl", "embl", None),
+    ("EMBL/TRBG361.embl", "embl", None),
     ("GenBank/NC_005816.gb", "gb", None),
     ("GenBank/cor6_6.gb", "genbank", None),
     ]
