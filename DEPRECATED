@@ -103,7 +103,8 @@ Bio.Fasta index_file and Dictionary
 ===================================
 Deprecated in Release 1.44, removed in Biopython 1.46. For small to medium
 sized files, use Bio.SeqIO.to_dict() to make an in memory dictionary of
-SeqRecord objects instead.
+SeqRecord objects. Biopython 1.52 onwards provides Bio.SeqIO.indexed_dict()
+which is suitable even for very large files.
 
 Bio.Fasta (including Bio.Fasta.FastaAlign)
 ==========================================
