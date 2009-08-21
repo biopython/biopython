@@ -21,6 +21,9 @@ record id. This is epecially useful for very large sequencing files, where
 all the records cannot be held in memory at once. This supplements the more
 flexible but memory demaning Bio.SeqIO.to_dict() function.
 
+Bio.SeqIO can now write "phd" format files (used by PHRED, PHRAD and CONSED),
+allowing interconverion with FASTQ files, or FASTA+QUAL files.
+
 ===================================================================
 
 August 17, 2009: Biopython 1.51 released.
