@@ -475,6 +475,39 @@ class SeqRecord(object):
         """
         return iter(self.seq)
 
+    def __contains__(self, char) :
+        """Implements the 'in' keyword, searches the sequence.
+
+        e.g.
+
+        >>> from Bio import SeqIO
+        >>> record = SeqIO.read(open("Nucleic/sweetpea.nu"), "fasta")
+        >>> "GAATTC" in record
+        False
+        >>> "AAA" in record
+        True
+
+        This essentially acts as a proxy for using "in" on the sequence:
+
+        >>> "GAATTC" in record.seq
+        False
+        >>> "AAA" in record.seq
+        True
+
+        Note that you can also use Seq objects as the query,
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_dna
+        >>> Seq("AAA") in record
+        True
+        >>> Seq("AAA", generic_dna) in record
+        True
+
+        See also the Seq object's __contains__ method.
+        """        
+        return char in self.seq
+
+
     def __str__(self) :
         """A human readable summary of the record and its annotation (string).
 
