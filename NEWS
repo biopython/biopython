@@ -21,6 +21,9 @@ record id. This is epecially useful for very large sequencing files, where
 all the records cannot be held in memory at once. This supplements the more
 flexible but memory demaning Bio.SeqIO.to_dict() function.
 
+Bio.SeqIO can now write "phd" format files (used by PHRED, PHRAD and CONSED),
+allowing interconverion with FASTQ files, or FASTA+QUAL files.
+
 ===================================================================
 
 August 17, 2009: Biopython 1.51 released.
@@ -94,7 +97,7 @@ to the unit test coverage.
 
 ===================================================================
 
-April 20, 2008: Biopython 1.50 released.
+April 20, 2009: Biopython 1.50 released.
 
 See the notes below for the Biopython 1.50 beta release for more details,
 but the highlights are:
@@ -117,7 +120,7 @@ Since the 1.50 beta release:
 
 ===================================================================
 
-April 3, 2008: Biopython 1.50 beta released.
+April 3, 2009: Biopython 1.50 beta released.
 
 The SeqRecord object has a new dictionary attribute, letter_annotations,
 which is for holding per-letter-annotation information like sequence
