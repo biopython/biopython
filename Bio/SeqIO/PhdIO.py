@@ -54,6 +54,8 @@ Note these examples only show the first 50 bases to keep the output short.
 
 from Bio.SeqRecord import SeqRecord
 from Bio.Sequencing import Phd
+from Bio.SeqIO.Interfaces import SequentialSequenceWriter
+from Bio.SeqIO import QualityIO
     
 #This is a generator function!
 def PhdIterator(handle) :
@@ -86,6 +88,57 @@ def PhdIterator(handle) :
             pass
         yield seq_record 
     #All done
+
+class PhdWriter(SequentialSequenceWriter):
+    """Class to write Phd format files"""
+
+    def __init__(self, handle):
+        SequentialSequenceWriter.__init__(self, handle)
+
+    def write_record(self, record):
+        """Write a single Phd record to the file."""
+        assert record.seq, "No sequence present in SeqRecord"
+        # This method returns the 'phred_quality' scores or converted
+        # 'solexa_quality' scores if present, else raises a value error
+        phred_qualities = QualityIO._get_phred_quality(record)
+        peak_locations = record.letter_annotations.get("peak_location", None)
+        assert len(record.seq) == len(phred_qualities), "Number of " + \
+                "phd quality scores does not match length of sequence"
+        if peak_locations:
+            assert len(record.seq) == len(peak_locations), "Number " + \
+                    "of peak location scores does not match length of sequence"
+        if None in phred_qualities :
+            raise ValueError("A quality value of None was found")
+        self.handle.write("BEGIN_SEQUENCE %s\nBEGIN_COMMENT\n" \
+                          % record.description)
+        for annot in [k.lower() for k in Phd.CKEYWORDS]:
+            value = None
+            if annot == "trim":
+                if record.annotations.get("trim", None):
+                    value = "%s %s %.4f" % record.annotations["trim"]
+            elif annot == "trace_peak_area_ratio":
+                if record.annotations.get("trace_peak_area_ratio", None):
+                    value = "%.4f" % record.annotations["trace_peak_area_ratio"]
+            else:
+                value = record.annotations.get(annot, None)
+            if value or value == 0:
+                self.handle.write("%s: %s\n" % (annot.upper(), value))
+
+        self.handle.write("END_COMMENT\nBEGIN_DNA\n")
+        for i, site in enumerate(record.seq):
+            if peak_locations:
+                self.handle.write("%s %i %i\n" % (
+                        site,
+                        round(phred_qualities[i]),
+                        peak_locations[i])
+                        )
+            else:
+                self.handle.write("%s %i\n" % (
+                        site,
+                        round(phred_qualities[i]))
+                        )
+
+        self.handle.write("END_DNA\nEND_SEQUENCE\n")
 
 def _test():
     """Run the Bio.SeqIO.PhdIO module's doctests.
