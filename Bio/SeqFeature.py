@@ -187,8 +187,11 @@ class Reference(object):
         out += "medline id: %s\n" % self.medline_id
         out += "pubmed id: %s\n" % self.pubmed_id
         out += "comment: %s\n" % self.comment
-
         return out
+
+    def __repr__(self):
+        #TODO - Update this is __init__ later accpets values
+        return "Reference(title=%s, ...)" % repr(self.title)
 
 # --- Handling feature locations
 
