@@ -1,23 +1,17 @@
-#!/usr/bin/env python
 # Copyright 2001 by Brad Chapman.  All rights reserved.
+# Copyright 2009 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Test for graphics things that don't really deserve there own test module.
 
-XXX Right now this test occasionally fails with a trace like:
+"""Test for bitmap output via ReportLab (requires an extra dependency).
 
-File "/usr/local/lib/python2.1/site-packages/reportlab/graphics/
-charts/lineplots.py", line 182, in calcPositions
-    datum = self.data[rowNo][colNo] # x,y value
-IndexError: list index out of range
+The primary purpose of this is to flag if renderPM is missing, but also
+to check Bio.Graphics can make a bitmap (e.g. PNG).
 
-This appears to be a problem with reportlab, so I'm not worrying about
-it right now, unless it starts to happen with real data! If anyone
-can figure out the data that causes it so I can avoid it, that'd be much
-appreciated.
+The example itself is essentially a repeat from test_GraphicsGeneral.py.
 """
-# standard library
+
 import os
 import random
 import unittest
@@ -29,7 +23,14 @@ try:
     del r
 except:
     raise MissingExternalDependencyError(\
-        "Install reportlab if you want to use Bio.Graphics.")
+        "Install ReportLab if you want to use Bio.Graphics.")
+try:
+    # Skip the test if reportlab is not installed
+    from reportlab.graphics import renderPM
+except:
+    raise MissingExternalDependencyError(\
+        "Install ReportLab's renderPM module if you want to create "
+        "bitmaps with Bio.Graphics.")
 
 # the stuff we're testing
 from Bio.Graphics.Comparative import ComparativeScatterPlot
@@ -73,10 +74,10 @@ class ComparativeTest(unittest.TestCase):
     def test_simple_scatter_plot(self):
         """Test creation of a simple ScatterPlot.
         """
-        compare_plot = ComparativeScatterPlot()
+        compare_plot = ComparativeScatterPlot("png")
         compare_plot.display_info = self._make_random_points()
 
-        output_file = os.path.join(os.getcwd(), "Graphics", "scatter_test.pdf")
+        output_file = os.path.join(os.getcwd(), "Graphics", "scatter_test.png")
         try:
             compare_plot.draw_to_file(output_file, "Testing Scatter Plots")
         # there is a bug in reportlab which occasionally generates an

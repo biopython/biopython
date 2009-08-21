@@ -15,7 +15,7 @@ from Parsers.MEME import MEMEParser,MASTParser
 from Thresholds import ScoreDistribution
 
 _parsers={"AlignAce":AlignAceParser,
-          "MEME":MEMEParser,
+          "MEME":MEMEParser
           }
 
 def _from_pfm(handle):

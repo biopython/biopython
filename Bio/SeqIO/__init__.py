@@ -312,6 +312,7 @@ _FormatToWriter ={"fasta" : FastaIO.FastaWriter,
                   "fastq-sanger" : QualityIO.FastqPhredWriter,
                   "fastq-solexa" : QualityIO.FastqSolexaWriter,
                   "fastq-illumina" : QualityIO.FastqIlluminaWriter,
+                  "phd" : PhdIO.PhdWriter,
                   "qual" : QualityIO.QualPhredWriter,
                   }
 

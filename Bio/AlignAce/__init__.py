@@ -9,6 +9,16 @@ It also includes a very simple interface to CompareACE tool.
 http://atlas.med.harvard.edu/
 
 Now superseded by Bio.Motif
+
+Class mapping:
+Bio.AlignAce.AlignAceStandalone -> Bio.Motif.Applications.AlignAceCommandline
+Bio.AlignAce.CompareAceStandalone -> Bio.Motif.Applications.CompareAceCommandline
+Bio.Alignace.Motif -> Bio.Motif.Motif
+Bio.AlignAce.Parser.CompareAceParser -> Bio.Motif.CompareAceParser
+
+Instead of using Bio.AlignAce.Parser.AlignAceParser class, you can use
+Bio.Motif.parse(handle,format="AlignAce")
+
 """
 
 import warnings

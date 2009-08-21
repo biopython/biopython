@@ -91,7 +91,7 @@ class SeqFeature(object):
 
     def __repr__(self):
         """A string representation of the record for debugging."""
-        answer = "%s(%s" % (self.__class__, repr(self.location))
+        answer = "%s(%s" % (self.__class__.__name__, repr(self.location))
         if self.type :
             answer += ", type=%s" % repr(self.type)
         if self.location_operator :
@@ -187,8 +187,12 @@ class Reference(object):
         out += "medline id: %s\n" % self.medline_id
         out += "pubmed id: %s\n" % self.pubmed_id
         out += "comment: %s\n" % self.comment
-
         return out
+
+    def __repr__(self):
+        #TODO - Update this is __init__ later accpets values
+        return "%s(title=%s, ...)" % (self.__class__.__name__,
+                                      repr(self.title))
 
 # --- Handling feature locations
 
@@ -240,7 +244,7 @@ class FeatureLocation(object):
     def __repr__(self):
         """A string representation of the location for debugging."""
         return "%s(%s,%s)" \
-               % (self.__class__, repr(self.start), repr(self.end))
+               % (self.__class__.__name__, repr(self.start), repr(self.end))
 
     def _shift(self, offset) :
         """Returns a copy of the location shifted by the offset (PRIVATE)."""
@@ -296,8 +300,8 @@ class AbstractPosition(object):
 
     def __repr__(self) :
         """String representation of the location for debugging."""
-        return "%s(%s,%s)" \
-               % (self.__class__, repr(self.position), repr(self.extension))
+        return "%s(%s,%s)" % (self.__class__.__name__, \
+                              repr(self.position), repr(self.extension))
 
     def __cmp__(self, other):
         """A simple comparison function for positions.
@@ -334,7 +338,7 @@ class ExactPosition(AbstractPosition):
     def __repr__(self) :
         """String representation of the ExactPosition location for debugging."""
         assert self.extension == 0
-        return "%s(%s)" % (self.__class__, repr(self.position))
+        return "%s(%s)" % (self.__class__.__name__, repr(self.position))
 
     def __str__(self):
         return str(self.position)
@@ -396,7 +400,7 @@ class BeforePosition(AbstractPosition):
     def __repr__(self) :
         """A string representation of the location for debugging."""
         assert self.extension == 0
-        return "%s(%s)" % (self.__class__, repr(self.position))
+        return "%s(%s)" % (self.__class__.__name__, repr(self.position))
 
     def __str__(self):
         return "<%s" % self.position
@@ -422,7 +426,7 @@ class AfterPosition(AbstractPosition):
     def __repr__(self) :
         """A string representation of the location for debugging."""
         assert self.extension == 0
-        return "%s(%s)" % (self.__class__, repr(self.position))
+        return "%s(%s)" % (self.__class__.__name__, repr(self.position))
 
     def __str__(self):
         return ">%s" % self.position
@@ -461,7 +465,8 @@ class OneOfPosition(AbstractPosition):
 
     def __repr__(self) :
         """String representation of the OneOfPosition location for debugging."""
-        return "%s(%s)" % (self.__class__, repr(self.position_choices))
+        return "%s(%s)" % (self.__class__.__name__, \
+                           repr(self.position_choices))
 
     def __str__(self):
         out = "one-of("
@@ -481,7 +486,7 @@ class PositionGap(object):
 
     def __repr__(self) :
         """A string representation of the position gap for debugging."""
-        return "%s(%s)" % (self.__class__, repr(self.gap_size))
+        return "%s(%s)" % (self.__class__.__name__, repr(self.gap_size))
     
     def __str__(self):
         out = "gap(%s)" % self.gap_size

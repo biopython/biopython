@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+# Copyright 2001 by Brad Chapman.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """Test the creation of Chromosome Graphics.
 
 Provide tests for creating and manipulating pdf pictures of chromosomes.

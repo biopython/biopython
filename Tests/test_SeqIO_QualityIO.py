@@ -21,7 +21,7 @@ def truncation_expected(format) :
     elif format in ["fastq", "fastq-sanger"] :
         return 93
     else :
-        assert format in ["fasta", "qual"]
+        assert format in ["fasta", "qual", "phd"]
         return None
 
 #Top level function as this makes it easier to use for debugging:
@@ -355,6 +355,7 @@ class TestWriteRead(unittest.TestCase) :
         records = [record1, record2, record3, record4, record5, record6, record7, record8]
         #TODO - Have a Biopython defined "DataLossWarning?"
         warnings.simplefilter('ignore', UserWarning)
+        #TODO - Include phd output?
         for format in ["fasta", "fastq", "fastq-solexa", "fastq-illumina", "qual"] :
             handle = StringIO()
             SeqIO.write(records, handle, format)
@@ -370,12 +371,14 @@ class TestWriteRead(unittest.TestCase) :
         write_read(os.path.join("Quality", "tricky.fastq"), "fastq-sanger", "fastq")
         write_read(os.path.join("Quality", "tricky.fastq"), "fastq-sanger", "fastq-sanger")
         write_read(os.path.join("Quality", "tricky.fastq"), "fastq", "qual")
+        write_read(os.path.join("Quality", "tricky.fastq"), "fastq", "phd")
 
     def test_sanger_93(self) :
         """Write and read back sanger_93.fastq"""
         write_read(os.path.join("Quality", "sanger_93.fastq"), "fastq-sanger", "fasta")
         write_read(os.path.join("Quality", "sanger_93.fastq"), "fastq-sanger", "fastq-sanger")
         write_read(os.path.join("Quality", "sanger_93.fastq"), "fastq-sanger", "qual")
+        write_read(os.path.join("Quality", "sanger_93.fastq"), "fastq-sanger", "phd")
         #TODO - Have a Biopython defined "DataLossWarning?"
         #TODO - On Python 2.6+ we can check this warning is really triggered
         warnings.simplefilter('ignore', UserWarning)
@@ -389,6 +392,7 @@ class TestWriteRead(unittest.TestCase) :
         write_read(os.path.join("Quality", "sanger_faked.fastq"), "fastq-sanger", "fastq-solexa")
         write_read(os.path.join("Quality", "sanger_faked.fastq"), "fastq-sanger", "fastq-illumina")
         write_read(os.path.join("Quality", "sanger_faked.fastq"), "fastq-sanger", "qual")
+        write_read(os.path.join("Quality", "sanger_faked.fastq"), "fastq-sanger", "phd")
 
     def test_example_fasta(self) :
         """Write and read back example.fasta"""
@@ -402,11 +406,13 @@ class TestWriteRead(unittest.TestCase) :
         write_read(os.path.join("Quality", "example.fastq"), "fastq-sanger", "fastq-solexa")
         write_read(os.path.join("Quality", "example.fastq"), "fastq-sanger", "fastq-illumina")
         write_read(os.path.join("Quality", "example.fastq"), "fastq-sanger", "qual")
+        write_read(os.path.join("Quality", "example.fastq"), "fastq-sanger", "phd")
 
     def test_example_qual(self) :
         """Write and read back example.qual"""
         write_read(os.path.join("Quality", "example.qual"), "qual", "fasta")
         write_read(os.path.join("Quality", "example.qual"), "qual", "qual")
+        write_read(os.path.join("Quality", "example.qual"), "qual", "phd")
         write_read(os.path.join("Quality", "example.qual"), "qual", "fastq")
         write_read(os.path.join("Quality", "example.qual"), "qual", "fastq-sanger")
         write_read(os.path.join("Quality", "example.qual"), "qual", "fastq-solexa")
@@ -419,6 +425,7 @@ class TestWriteRead(unittest.TestCase) :
         write_read(os.path.join("Quality", "solexa_faked.fastq"), "fastq-solexa", "fastq-solexa")
         write_read(os.path.join("Quality", "solexa_faked.fastq"), "fastq-solexa", "fastq-illumina")
         write_read(os.path.join("Quality", "solexa_faked.fastq"), "fastq-solexa", "qual")
+        write_read(os.path.join("Quality", "solexa_faked.fastq"), "fastq-solexa", "phd")
 
     def test_solexa_example(self) :
         """Write and read back solexa_example.fastq"""
@@ -427,6 +434,7 @@ class TestWriteRead(unittest.TestCase) :
         write_read(os.path.join("Quality", "solexa_example.fastq"), "fastq-solexa", "fastq-solexa")
         write_read(os.path.join("Quality", "solexa_example.fastq"), "fastq-solexa", "fastq-illumina")
         write_read(os.path.join("Quality", "solexa_example.fastq"), "fastq-solexa", "qual")
+        write_read(os.path.join("Quality", "solexa_example.fastq"), "fastq-solexa", "phd")
 
     def test_illumina_faked(self) :
         """Write and read back illumina_faked.fastq"""
@@ -435,6 +443,7 @@ class TestWriteRead(unittest.TestCase) :
         write_read(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina", "fastq-solexa")
         write_read(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina", "fastq-illumina")
         write_read(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina", "qual")
+        write_read(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina", "phd")
 
 class MappingTests(unittest.TestCase) :
     def setUp(self):
