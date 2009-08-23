@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 20 August 2009 (Biopython 1.51+)}
+\date{Last Update -- 23 August 2009 (Biopython 1.51+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -197,6 +197,16 @@ and HTML formats
   \item \emph{How should I capitalize ``Biopython''?  Is ``BioPython'' OK?} \\
   The correct capitalization is ``Biopython'', not ``BioPython'' (even though
   that would have matched BioPerl, BioJava and BioRuby).
+
+  \item \emph{How do I find out what version of Biopython I have installed?} \\
+  Use this:
+  \begin{verbatim}
+  >>> import Bio
+  >>> print Bio.__version__
+  ...
+  \end{verbatim}
+  If the ``\verb|import Bio|'' line fails, Biopython is not installed.
+  If the second line fails, your version is very out of date.
 
   \item \emph{Where is the latest version of this document?}\\
   If you download a Biopython source code archive, it will include the
