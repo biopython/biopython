@@ -30,12 +30,12 @@ for i in ks:
 
 s = 0.
 f.write("Calculating sum of letters for an observed frequency matrix\n")
-obs_freq_mat.all_letters_sum()
-ks = obs_freq_mat.sum_letters.keys()
-ks.sort()
-for i in ks:
-    f.write("%s\t%.2f\n" % (i, obs_freq_mat.sum_letters[i]))
-    s += obs_freq_mat.sum_letters[i]
+counts = obs_freq_mat.sum()
+keys = counts.keys()
+keys.sort()
+for key in keys:
+    f.write("%s\t%.2f\n" % (key, counts[key]))
+    s += counts[key]
 f.write("Total sum %.2f should be 1.0\n" % (s))
 lo_mat_prot = \
 SubsMat.make_log_odds_matrix(acc_rep_mat=acc_rep_mat,round_digit=1) #,ftab_prot

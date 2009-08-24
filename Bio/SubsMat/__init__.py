@@ -160,7 +160,7 @@ class SeqMat(dict):
 
       # "data" may be:
       # 1) None --> then self.data is an empty dictionary
-      # 2) type({}) --> then self.data takes the items in data
+      # 2) type({}) --> then self takes the items in data
       # 3) An instance of SeqMat
       # This whole creation-during-execution is done to avoid changing
       # default values, the way Python does because default values are
@@ -250,7 +250,10 @@ class SeqMat(dict):
          if self[i] > EPSILON:
             self.entropy += self[i]*log(self[i])/log(2)
       self.entropy = -self.entropy
+
    def letter_sum(self,letter):
+      import warnings
+      warnings.warn("SeqMat.letter_sum is deprecated; please use SeqMat.sum instead", DeprecationWarning)
       assert letter in self.alphabet.letters
       sum = 0.
       for i in self.keys():
@@ -262,8 +265,24 @@ class SeqMat(dict):
       return sum
 
    def all_letters_sum(self):
+      import warnings
+      warnings.warn("SeqMat.all_letters_sum is deprecated; please use SeqMat.sum instead", DeprecationWarning)
       for letter in self.alphabet.letters:
          self.sum_letters[letter] = self.letter_sum(letter)
+
+   def sum(self):
+      result = {}
+      for letter in self.alphabet.letters:
+          result[letter] = 0.0
+      for pair, value in self.iteritems():
+          i1, i2 = pair
+          if i1==i2:
+              result[i1] += value
+          else:
+              result[i1] += value / 2
+              result[i2] += value / 2
+      return result
+
    def print_full_mat(self,f=None,format="%4d",topformat="%4s",
               alphabet=None,factor=1,non_sym=None):
       f = f or sys.stdout 
@@ -330,12 +349,36 @@ class SeqMat(dict):
          outline = outline+'\n'
          f.write(outline)
       f.write(bottomline)
+
+   def __str__(self):
+      """Print a nice half-matrix."""
+      output = ""
+      alphabet = self.ab_list
+      n = len(alphabet)
+      for i in range(n):
+         c1 = alphabet[i]
+         output += c1
+         for j in range(i+1):
+            c2 = alphabet[j]
+            try:
+               val = self[c2,c1]
+            except KeyError:
+               val = self[c1,c2]
+            if val == -999:
+               output += '  ND' 
+            else:
+               output += "%4d" % val
+         output += '\n'
+      output += '%4s' * n % tuple(alphabet) + "\n"
+      return output
+
    def __sub__(self,other):
       """ returns a number which is the subtraction product of the two matrices"""
       mat_diff = 0
       for i in self.keys():
          mat_diff += (self[i] - other[i])
       return mat_diff
+
    def __mul__(self,other):
       """ returns a matrix for which each entry is the multiplication product of the
       two matrices passed"""
@@ -343,11 +386,13 @@ class SeqMat(dict):
       for i in self.keys():
          new_mat[i] *= other[i]
       return new_mat
-   def __sum__(self, other):
+
+   def __add__(self, other):
       new_mat = copy.copy(self)
       for i in self.keys():
          new_mat[i] += other[i]
       return new_mat
+
 
 def _build_obs_freq_mat(acc_rep_mat):
    """
