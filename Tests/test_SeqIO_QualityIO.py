@@ -445,6 +445,17 @@ class TestWriteRead(unittest.TestCase) :
         write_read(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina", "qual")
         write_read(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina", "phd")
 
+    def test_evil_wrapped(self) :
+        """Write and read back evil_wrapped.fastq"""
+        filename = os.path.join("Quality", "evil_wrapping.fastq")
+        self.assertEqual(3, len(list(SeqIO.parse(open(filename),"fastq"))))
+        write_read(filename, "fastq-sanger", "fasta")
+        write_read(filename, "fastq-sanger", "fastq-sanger")
+        write_read(filename, "fastq-sanger", "fastq-solexa")
+        write_read(filename, "fastq-sanger", "fastq-illumina")
+        write_read(filename, "fastq-sanger", "qual")
+        write_read(filename, "fastq-sanger", "phd")
+
 class MappingTests(unittest.TestCase) :
     def setUp(self):
         warnings.resetwarnings()
