@@ -2062,7 +2062,7 @@ Testing reading ace format file Ace/contig1.ace
  Failed: A quality value of None was found
  Checking can write/read as 'genbank' format
  Checking can write/read as 'phd' format
- Failed: a float is required
+ Failed: A quality value of None was found
  Checking can write/read as 'qual' format
  Failed: A quality value of None was found
  Checking can write/read as 'tab' format
@@ -2083,7 +2083,7 @@ Testing reading ace format file Ace/consed_sample.ace
  Failed: A quality value of None was found
  Checking can write/read as 'genbank' format
  Checking can write/read as 'phd' format
- Failed: a float is required
+ Failed: A quality value of None was found
  Checking can write/read as 'qual' format
  Failed: A quality value of None was found
  Checking can write/read as 'tab' format
@@ -2103,7 +2103,7 @@ Testing reading ace format file Ace/seq.cap.ace
  Failed: A quality value of None was found
  Checking can write/read as 'genbank' format
  Checking can write/read as 'phd' format
- Failed: a float is required
+ Failed: A quality value of None was found
  Checking can write/read as 'qual' format
  Failed: A quality value of None was found
  Checking can write/read as 'tab' format
