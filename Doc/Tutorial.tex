@@ -10134,30 +10134,18 @@ into \verb|SeqRecord| objects.
 
 \subsection{SubsMat}
 
-This module provides a class and a few routines for generating substitution matrices, similar to BLOSUM or PAM matrices, but based on user-provided data.
-
-Additionally, you may select a matrix from MatrixInfo.py, a collection of established substitution matrices.
-
+This module provides a class and a few routines for generating substitution matrices, similar to BLOSUM or PAM matrices, but based on user-provided data. Additionally, you may select a matrix from MatrixInfo.py, a collection of established substitution matrices. The \verb+SeqMat+ class derives from a dictionary:
 \begin{verbatim}
-class SeqMat(UserDict.UserDict)
+class SeqMat(dict)
 \end{verbatim}
+The dictionary is of the form \verb|{(i1,j1):n1, (i1,j2):n2,...,(ik,jk):nk}| where i, j are alphabet letters, and n is a value.
 
 \begin{enumerate}
   \item Attributes
-
   \begin{enumerate}
-    \item \verb|self.data|: a dictionary in the form of \verb|{(i1,j1):n1, (i1,j2):n2,...,(ik,jk):nk}| where i, j are alphabet letters, and n is a value.
-
     \item \verb|self.alphabet|: a class as defined in Bio.Alphabet
 
     \item \verb|self.ab_list|: a list of the alphabet's letters, sorted. Needed mainly for internal purposes
-
-    \item \verb|self.sum_letters|: a dictionary. \verb|{i1: s1, i2: s2,...,in:sn}| where:
-    \begin{enumerate}
-      \item i: an alphabet letter;
-      \item s: sum of all values in a half-matrix for that letter;
-      \item n: number of letters in alphabet.
-    \end{enumerate}
   \end{enumerate}
 
   \item Methods
@@ -10205,17 +10193,14 @@ entropy(self,obs_freq_mat)
 
     \item
 \begin{verbatim}
-letter_sum(self,letter)
+sum(self)
 \end{verbatim}
-
-    Returns the sum of all values in the matrix, for the provided \verb|letter|
-
-    \item
-\begin{verbatim}
-all_letters_sum(self)
-\end{verbatim}
-   
-    Fills the  dictionary attribute \verb|self.sum_letters| with the sum of values for each letter in the matrix's alphabet.
+    Calculates the sum of values for each letter in the matrix's alphabet, and returns it as a dictionary of the form \verb|{i1: s1, i2: s2,...,in:sn}|, where:
+    \begin{itemize}
+      \item i: an alphabet letter;
+      \item s: sum of all values in a half-matrix for that letter;
+      \item n: number of letters in alphabet.
+    \end{itemize}
 
     \item
 \begin{verbatim}
