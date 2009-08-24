@@ -7,6 +7,13 @@ Python 2.3
 No longer supported as of Release 1.51, having triggered a warning with
 Release 1.50, with a mention in the release notes for Release 1.49.
 
+Bio.Clustalw
+============
+Declared obsolete in Release 1.52, having been replaced with Bio.AlignIO for
+parsing and writing clustal format alignments (since Release 1.46), and
+Bio.Align.Applications for calling the ClustalW command line tool (Release
+1.51). See the Tutorial for examples.
+
 BioSQL and psycopg
 ==================
 Support for psycopg (version one) in Biopython's BioSQL code was deprecated
