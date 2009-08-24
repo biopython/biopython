@@ -366,33 +366,28 @@ class TestWriteRead(unittest.TestCase) :
             
     def test_tricky(self) :
         """Write and read back tricky.fastq"""
-        write_read(os.path.join("Quality", "tricky.fastq"), "fastq", "fastq")
-        write_read(os.path.join("Quality", "tricky.fastq"), "fastq", "fastq-sanger")
-        write_read(os.path.join("Quality", "tricky.fastq"), "fastq-sanger", "fastq")
-        write_read(os.path.join("Quality", "tricky.fastq"), "fastq-sanger", "fastq-sanger")
-        write_read(os.path.join("Quality", "tricky.fastq"), "fastq", "qual")
-        write_read(os.path.join("Quality", "tricky.fastq"), "fastq", "phd")
+        filename = os.path.join("Quality", "tricky.fastq")
+        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                  "fasta", "qual", "phd"] :
+            write_read(filename, "fastq", f)
 
     def test_sanger_93(self) :
         """Write and read back sanger_93.fastq"""
-        write_read(os.path.join("Quality", "sanger_93.fastq"), "fastq-sanger", "fasta")
-        write_read(os.path.join("Quality", "sanger_93.fastq"), "fastq-sanger", "fastq-sanger")
-        write_read(os.path.join("Quality", "sanger_93.fastq"), "fastq-sanger", "qual")
-        write_read(os.path.join("Quality", "sanger_93.fastq"), "fastq-sanger", "phd")
+        filename = os.path.join("Quality", "sanger_93.fastq")
+        for f in ["fastq", "fastq-sanger", "fasta", "qual", "phd"] :
+            write_read(filename, "fastq", f)
         #TODO - Have a Biopython defined "DataLossWarning?"
         #TODO - On Python 2.6+ we can check this warning is really triggered
         warnings.simplefilter('ignore', UserWarning)
-        write_read(os.path.join("Quality", "sanger_93.fastq"), "fastq-sanger", "fastq-solexa")
-        write_read(os.path.join("Quality", "sanger_93.fastq"), "fastq-sanger", "fastq-illumina")
+        write_read(filename, "fastq-sanger", "fastq-solexa")
+        write_read(filename, "fastq-sanger", "fastq-illumina")
 
     def test_sanger_faked(self) :
         """Write and read back sanger_faked.fastq"""
-        write_read(os.path.join("Quality", "sanger_faked.fastq"), "fastq-sanger", "fasta")
-        write_read(os.path.join("Quality", "sanger_faked.fastq"), "fastq-sanger", "fastq-sanger")
-        write_read(os.path.join("Quality", "sanger_faked.fastq"), "fastq-sanger", "fastq-solexa")
-        write_read(os.path.join("Quality", "sanger_faked.fastq"), "fastq-sanger", "fastq-illumina")
-        write_read(os.path.join("Quality", "sanger_faked.fastq"), "fastq-sanger", "qual")
-        write_read(os.path.join("Quality", "sanger_faked.fastq"), "fastq-sanger", "phd")
+        filename = os.path.join("Quality", "sanger_faked.fastq")
+        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                  "fasta", "qual", "phd"] :
+            write_read(filename, "fastq", f)
 
     def test_example_fasta(self) :
         """Write and read back example.fasta"""
@@ -401,60 +396,46 @@ class TestWriteRead(unittest.TestCase) :
 
     def test_example_fastq(self) :
         """Write and read back example.fastq"""
-        write_read(os.path.join("Quality", "example.fastq"), "fastq-sanger", "fasta")
-        write_read(os.path.join("Quality", "example.fastq"), "fastq-sanger", "fastq-sanger")
-        write_read(os.path.join("Quality", "example.fastq"), "fastq-sanger", "fastq-solexa")
-        write_read(os.path.join("Quality", "example.fastq"), "fastq-sanger", "fastq-illumina")
-        write_read(os.path.join("Quality", "example.fastq"), "fastq-sanger", "qual")
-        write_read(os.path.join("Quality", "example.fastq"), "fastq-sanger", "phd")
+        filename = os.path.join("Quality", "example.fastq")
+        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                  "fasta", "qual", "phd"] :
+            write_read(filename, "fastq", f)
 
     def test_example_qual(self) :
         """Write and read back example.qual"""
-        write_read(os.path.join("Quality", "example.qual"), "qual", "fasta")
-        write_read(os.path.join("Quality", "example.qual"), "qual", "qual")
-        write_read(os.path.join("Quality", "example.qual"), "qual", "phd")
-        write_read(os.path.join("Quality", "example.qual"), "qual", "fastq")
-        write_read(os.path.join("Quality", "example.qual"), "qual", "fastq-sanger")
-        write_read(os.path.join("Quality", "example.qual"), "qual", "fastq-solexa")
-        write_read(os.path.join("Quality", "example.qual"), "qual", "fastq-illumina")
+        filename = os.path.join("Quality", "example.qual")
+        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                  "fasta", "qual", "phd"] :
+            write_read(filename, "qual", f)
 
     def test_solexa_faked(self) :
         """Write and read back solexa_faked.fastq"""
-        write_read(os.path.join("Quality", "solexa_faked.fastq"), "fastq-solexa", "fasta")
-        write_read(os.path.join("Quality", "solexa_faked.fastq"), "fastq-solexa", "fastq-sanger")
-        write_read(os.path.join("Quality", "solexa_faked.fastq"), "fastq-solexa", "fastq-solexa")
-        write_read(os.path.join("Quality", "solexa_faked.fastq"), "fastq-solexa", "fastq-illumina")
-        write_read(os.path.join("Quality", "solexa_faked.fastq"), "fastq-solexa", "qual")
-        write_read(os.path.join("Quality", "solexa_faked.fastq"), "fastq-solexa", "phd")
+        filename = os.path.join("Quality", "solexa_faked.fastq")
+        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                  "fasta", "qual", "phd"] :
+            write_read(filename, "fastq-solexa", f)
 
     def test_solexa_example(self) :
         """Write and read back solexa_example.fastq"""
-        write_read(os.path.join("Quality", "solexa_example.fastq"), "fastq-solexa", "fasta")
-        write_read(os.path.join("Quality", "solexa_example.fastq"), "fastq-solexa", "fastq-sanger")
-        write_read(os.path.join("Quality", "solexa_example.fastq"), "fastq-solexa", "fastq-solexa")
-        write_read(os.path.join("Quality", "solexa_example.fastq"), "fastq-solexa", "fastq-illumina")
-        write_read(os.path.join("Quality", "solexa_example.fastq"), "fastq-solexa", "qual")
-        write_read(os.path.join("Quality", "solexa_example.fastq"), "fastq-solexa", "phd")
+        filename = os.path.join("Quality", "solexa_example.fastq")
+        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                  "fasta", "qual", "phd"] :
+            write_read(filename, "fastq-solexa", f)
 
     def test_illumina_faked(self) :
         """Write and read back illumina_faked.fastq"""
-        write_read(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina", "fasta")
-        write_read(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina", "fastq-sanger")
-        write_read(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina", "fastq-solexa")
-        write_read(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina", "fastq-illumina")
-        write_read(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina", "qual")
-        write_read(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina", "phd")
+        filename = os.path.join("Quality", "illumina_faked.fastq")
+        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                  "fasta", "qual", "phd"] :
+            write_read(filename, "fastq-illumina", f)
 
     def test_evil_wrapped(self) :
         """Write and read back evil_wrapped.fastq"""
         filename = os.path.join("Quality", "evil_wrapping.fastq")
         self.assertEqual(3, len(list(SeqIO.parse(open(filename),"fastq"))))
-        write_read(filename, "fastq-sanger", "fasta")
-        write_read(filename, "fastq-sanger", "fastq-sanger")
-        write_read(filename, "fastq-sanger", "fastq-solexa")
-        write_read(filename, "fastq-sanger", "fastq-illumina")
-        write_read(filename, "fastq-sanger", "qual")
-        write_read(filename, "fastq-sanger", "phd")
+        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                  "fasta", "qual", "phd"] :
+            write_read(filename, "fastq-sanger", f)
 
 class MappingTests(unittest.TestCase) :
     def setUp(self):
