@@ -32,8 +32,7 @@ def _genbank_convert_fasta(in_handle, out_handle, alphabet=None) :
     #We don't need to parse the features...
     from Bio.GenBank.Scanner import GenBankScanner
     records = GenBankScanner().parse_records(in_handle, do_features=False)
-    if alphabet :
-        records = SeqIO._force_alphabet(records)
+    #For FASTA output we can ignore the alphabet too
     return SeqIO.write(records, out_handle, "fasta")
 
 def _embl_convert_fasta(in_handle, out_handle, alphabet=None) :
@@ -41,10 +40,8 @@ def _embl_convert_fasta(in_handle, out_handle, alphabet=None) :
     #We don't need to parse the features...
     from Bio.GenBank.Scanner import EmblScanner
     records = EmblScanner().parse_records(in_handle, do_features=False)
-    if alphabet :
-        records = SeqIO._force_alphabet(records)
+    #For FASTA output we can ignore the alphabet too
     return SeqIO.write(records, out_handle, "fasta")
-
 
 def _fastq_generic(in_handle, out_handle, mapping) :
     """FASTQ helper function where can't have data loss by truncation (PRIVATE)."""
