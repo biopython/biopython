@@ -47,6 +47,34 @@ def check_convert(in_filename, in_format, out_format, alphabet=None) :
     #We could re-parse this, but it is simpler and stricter:
     assert handle.getvalue() == handle2.getvalue()
 
+def check_convert_fails(in_filename, in_format, out_format, alphabet=None) :
+    qual_truncate = truncation_expected(out_format)
+    #We want the SAME error message from parse/write as convert!
+    try :
+        records = list(SeqIO.parse(open(in_filename),in_format, alphabet))
+        handle = StringIO()
+        if qual_truncate :
+            warnings.simplefilter('ignore', UserWarning)
+        SeqIO.write(records, handle, out_format)
+        warnings.resetwarnings()
+        handle.seek(0)
+        assert False, "Parse or write should have failed!"
+    except ValueError, err :
+        pass
+    #Now do the conversion...
+    try :
+        handle2 = StringIO()
+        if qual_truncate :
+            warnings.simplefilter('ignore', UserWarning)
+        SeqIO.convert(in_filename, in_format, handle2, out_format, alphabet)
+        warnings.resetwarnings()
+        assert False, "Convert should have failed!"
+    except ValueError, err2 :
+        assert str(err) == str(err2), \
+               "Different failures, parse/write:\n%s\nconvert:\n%s" % (err, err2)
+    #print err
+    warnings.resetwarnings()
+    
 #TODO - move this to a shared test module...
 def compare_record(old, new, truncate=None) :
     """Quality aware SeqRecord comparision.
@@ -127,6 +155,8 @@ class ConvertTests(unittest.TestCase) :
     """Cunning unit test where methods are added at run time."""
     def simple_check(self, filename, in_format, out_format, alphabet) :
         check_convert(filename, in_format, out_format, alphabet)
+    def failure_check(self, filename, in_format, out_format, alphabet) :
+        check_convert_fails(filename, in_format, out_format, alphabet)
 
 tests = [
     ("Quality/example.fastq", "fastq", None),
@@ -152,6 +182,43 @@ for filename, format, alphabet in tests :
                 % (filename.replace("/","_").replace(".","_"), in_format, out_format),
                 funct(filename, in_format, out_format, alphabet))
     del funct
+
+#Fail tests:
+tests = [
+    ("Quality/error_diff_ids.fastq", "fastq", None),
+    ("Quality/error_long_qual.fastq", "fastq", None),
+    ("Quality/error_no_qual.fastq", "fastq", None),
+    ("Quality/error_qual_del.fastq", "fastq", None),
+    ("Quality/error_qual_escape.fastq", "fastq", None),
+    ("Quality/error_qual_null.fastq", "fastq", None),
+    ("Quality/error_qual_space.fastq", "fastq", None),
+    ("Quality/error_qual_tab.fastq", "fastq", None),
+    ("Quality/error_qual_unit_sep.fastq", "fastq", None),
+    ("Quality/error_qual_vtab.fastq", "fastq", None),
+    ("Quality/error_short_qual.fastq", "fastq", None),
+    ("Quality/error_spaces.fastq", "fastq", None),
+    ("Quality/error_tabs.fastq", "fastq", None),
+    ("Quality/error_trunc_at_plus.fastq", "fastq", None),
+    ("Quality/error_trunc_at_qual.fastq", "fastq", None),
+    ("Quality/error_trunc_at_seq.fastq", "fastq", None),
+    ]
+for filename, format, alphabet in tests :
+    for (in_format, out_format) in converter_dict :
+        if in_format != format : continue
+        if in_format in ["fastq", "fastq-sanger", "fastq-solexa", "fastq-illumina"] \
+        and out_format in ["fasta", "tab"] and filename.startswith("Quality/error_qual_") :
+            #TODO? These conversions don't check for bad characters in the quality,
+            #and in order to pass this strict test they should.
+            continue
+        def funct(fn,fmt1, fmt2, alpha) :
+            f = lambda x : x.failure_check(fn, fmt1, fmt2, alpha)
+            f.__doc__ = "Convert %s from %s to %s" % (fn, fmt1, fmt2)
+            return f
+        setattr(ConvertTests, "test_%s_%s_to_%s" \
+                % (filename.replace("/","_").replace(".","_"), in_format, out_format),
+                funct(filename, in_format, out_format, alphabet))
+    del funct
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
