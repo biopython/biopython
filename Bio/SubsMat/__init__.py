@@ -165,12 +165,11 @@ class SeqMat(dict):
       # This whole creation-during-execution is done to avoid changing
       # default values, the way Python does because default values are
       # created when the function is defined, not when it is created.
-      assert (type(data) == type({}) or isinstance(data,dict) or
-              data == None)
-      if data == None:
-         data = {}
-      else:
-         self.update(data)
+      if data:
+          try:
+              self.update(data)
+          except ValueError:
+              raise ValueError, "Failed to store data in a dictionary"
       if alphabet == None:
          alphabet = Alphabet.Alphabet()
       assert Alphabet.generic_alphabet.contains(alphabet)
