@@ -247,6 +247,16 @@ class TestFastqErrors(unittest.TestCase) :
         self.check_fails("Quality/error_qual_del.fastq", 3)
         self.check_general_passes("Quality/error_qual_del.fastq", 5)
 
+    def test_double_qual(self):
+        """Reject FASTQ with double quality block"""
+        self.check_fails("Quality/error_double_qual.fastq", 2)
+        self.check_general_fails("Quality/error_double_qual.fastq", 2)
+
+    def test_double_seq(self):
+        """Reject FASTQ with double sequence block"""
+        self.check_fails("Quality/error_double_seq.fastq", 3)
+        self.check_general_fails("Quality/error_double_seq.fastq", 3)
+
 class TestQual(unittest.TestCase):
     """Tests with QUAL files."""
     def setUp(self):
