@@ -182,15 +182,35 @@ class TestFastqErrors(unittest.TestCase) :
         self.check_fails("Quality/error_trunc_at_seq.fastq", 4)
         self.check_general_fails("Quality/error_trunc_at_seq.fastq", 4)
 
-    def test_trunc_at_seq(self):
+    def test_trunc_at_plus(self):
         """Reject FASTQ truncated at the plus line"""
         self.check_fails("Quality/error_trunc_at_plus.fastq", 4)
         self.check_general_fails("Quality/error_trunc_at_plus.fastq", 4)
 
-    def test_trunc_at_seq(self):
+    def test_trunc_at_qual(self):
         """Reject FASTQ truncated at the quality"""
         self.check_fails("Quality/error_trunc_at_qual.fastq", 4)
         self.check_general_fails("Quality/error_trunc_at_qual.fastq", 4)
+
+    def test_trunc_in_title(self):
+        """Reject FASTQ truncated during the title line"""
+        self.check_fails("Quality/error_trunc_in_title.fastq", 4)
+        self.check_general_fails("Quality/error_trunc_in_title.fastq", 4)
+
+    def test_trunc_in_seq(self):
+        """Reject FASTQ truncated during the sequence"""
+        self.check_fails("Quality/error_trunc_in_seq.fastq", 4)
+        self.check_general_fails("Quality/error_trunc_in_seq.fastq", 4)
+
+    def test_trunc_in_plus(self):
+        """Reject FASTQ truncated during the plus line"""
+        self.check_fails("Quality/error_trunc_in_seq.fastq", 4)
+        self.check_general_fails("Quality/error_trunc_in_seq.fastq", 4)
+
+    def test_trunc_in_qual(self):
+        """Reject FASTQ truncated during the quality"""
+        self.check_fails("Quality/error_trunc_in_qual.fastq", 4)
+        self.check_general_fails("Quality/error_trunc_in_qual.fastq", 4)
 
     def test_qual_null(self):
         """Reject FASTQ with null (ASCII 0) in the quality"""
@@ -226,6 +246,16 @@ class TestFastqErrors(unittest.TestCase) :
         """Reject FASTQ with delete (ASCI 127) in quality"""
         self.check_fails("Quality/error_qual_del.fastq", 3)
         self.check_general_passes("Quality/error_qual_del.fastq", 5)
+
+    def test_double_qual(self):
+        """Reject FASTQ with double quality block"""
+        self.check_fails("Quality/error_double_qual.fastq", 2)
+        self.check_general_fails("Quality/error_double_qual.fastq", 2)
+
+    def test_double_seq(self):
+        """Reject FASTQ with double sequence block"""
+        self.check_fails("Quality/error_double_seq.fastq", 3)
+        self.check_general_fails("Quality/error_double_seq.fastq", 3)
 
 class TestQual(unittest.TestCase):
     """Tests with QUAL files."""

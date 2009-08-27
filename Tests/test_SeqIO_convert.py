@@ -201,6 +201,12 @@ tests = [
     ("Quality/error_trunc_at_plus.fastq", "fastq", None),
     ("Quality/error_trunc_at_qual.fastq", "fastq", None),
     ("Quality/error_trunc_at_seq.fastq", "fastq", None),
+    ("Quality/error_trunc_in_title.fastq", "fastq", generic_dna),
+    ("Quality/error_trunc_in_seq.fastq", "fastq", generic_nucleotide),
+    ("Quality/error_trunc_in_plus.fastq", "fastq", None),
+    ("Quality/error_trunc_in_qual.fastq", "fastq", generic_dna),
+    ("Quality/error_double_seq.fastq", "fastq", generic_dna),
+    ("Quality/error_double_qual.fastq", "fastq", generic_dna),
     ]
 for filename, format, alphabet in tests :
     for (in_format, out_format) in converter_dict :
