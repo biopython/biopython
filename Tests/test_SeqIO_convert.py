@@ -200,6 +200,7 @@ tests = [
     ("Quality/error_tabs.fastq", "fastq", None),
     ("Quality/error_trunc_at_plus.fastq", "fastq", None),
     ("Quality/error_trunc_at_qual.fastq", "fastq", None),
+    ("Quality/error_trunc_in_qual.fastq", "fastq", generic_dna),
     ("Quality/error_trunc_at_seq.fastq", "fastq", None),
     ]
 for filename, format, alphabet in tests :

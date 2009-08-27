@@ -187,10 +187,15 @@ class TestFastqErrors(unittest.TestCase) :
         self.check_fails("Quality/error_trunc_at_plus.fastq", 4)
         self.check_general_fails("Quality/error_trunc_at_plus.fastq", 4)
 
-    def test_trunc_at_seq(self):
+    def test_trunc_at_qual(self):
         """Reject FASTQ truncated at the quality"""
         self.check_fails("Quality/error_trunc_at_qual.fastq", 4)
         self.check_general_fails("Quality/error_trunc_at_qual.fastq", 4)
+
+    def test_trunc_in_qual(self):
+        """Reject FASTQ truncated during the quality"""
+        self.check_fails("Quality/error_trunc_in_qual.fastq", 4)
+        self.check_general_fails("Quality/error_trunc_in_qual.fastq", 4)
 
     def test_qual_null(self):
         """Reject FASTQ with null (ASCII 0) in the quality"""
