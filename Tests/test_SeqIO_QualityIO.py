@@ -182,7 +182,7 @@ class TestFastqErrors(unittest.TestCase) :
         self.check_fails("Quality/error_trunc_at_seq.fastq", 4)
         self.check_general_fails("Quality/error_trunc_at_seq.fastq", 4)
 
-    def test_trunc_at_seq(self):
+    def test_trunc_at_plus(self):
         """Reject FASTQ truncated at the plus line"""
         self.check_fails("Quality/error_trunc_at_plus.fastq", 4)
         self.check_general_fails("Quality/error_trunc_at_plus.fastq", 4)
@@ -191,6 +191,21 @@ class TestFastqErrors(unittest.TestCase) :
         """Reject FASTQ truncated at the quality"""
         self.check_fails("Quality/error_trunc_at_qual.fastq", 4)
         self.check_general_fails("Quality/error_trunc_at_qual.fastq", 4)
+
+    def test_trunc_in_title(self):
+        """Reject FASTQ truncated during the title line"""
+        self.check_fails("Quality/error_trunc_in_title.fastq", 4)
+        self.check_general_fails("Quality/error_trunc_in_title.fastq", 4)
+
+    def test_trunc_in_seq(self):
+        """Reject FASTQ truncated during the sequence"""
+        self.check_fails("Quality/error_trunc_in_seq.fastq", 4)
+        self.check_general_fails("Quality/error_trunc_in_seq.fastq", 4)
+
+    def test_trunc_in_plus(self):
+        """Reject FASTQ truncated during the plus line"""
+        self.check_fails("Quality/error_trunc_in_seq.fastq", 4)
+        self.check_general_fails("Quality/error_trunc_in_seq.fastq", 4)
 
     def test_trunc_in_qual(self):
         """Reject FASTQ truncated during the quality"""
