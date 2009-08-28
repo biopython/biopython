@@ -1,4 +1,4 @@
-# Copyright 2003 by Bartek Wilczynski.  All rights reserved.
+# Copyright 2003-2009 by Bartek Wilczynski.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -50,13 +50,13 @@ def parse(handle,format):
     TCTACGATTGAG
     CTGCACCTAGCTACGAGTGAG
     GTGCCCTAAGCATACTAGGCG
-    GCCACTAGCATAGCAGGGGGC
+    GCCACTAGCAGAGCAGGGGGC
     CGACTCAGAGGTT
     CCACGCTAAGAGAAGTGCCGGAG
-    GCACGTCCCTGATCA
-    GTCCATCGCAAAGCTTGGGGC
+    GCACGTCCCTGAGCA
+    GTCCATCGCAAAGCGTGGGGC
     GAGATCAGAGGGCCG
-    TGTACGCGGGG
+    TGGACGCGGGG
     GACCAGAGCCTCGCATGGGGG
     AGCGCGCGTG
     GCCGGTTGCTGTTCATTAGG
