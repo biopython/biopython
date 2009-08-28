@@ -1,15 +1,8 @@
-# Copyright 2003 by Bartek Wilczynski.  All rights reserved.
+# Copyright 2003-2009 by Bartek Wilczynski.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-Implementation of sequence motifs.
-
-Changes:
-10.2007 - BW added matrix (vertical, horizontal) input, jaspar, transfac-like output
-26.08.2007 - added a background attribute  (Bartek Wilczynski)
-26.08.2007 - added a DPQ measure   (Bartek Wilczynski)
-9.2007 (BW) : added the .to_fasta() and .weblogo() methods allowing to use the Berkeley weblogo server at http://weblogo.berkeley.edu/
+"""Implementation of sequence motifs (PRIVATE).
 """
 from Bio.Seq import Seq
 from Bio.SubsMat import FreqTable
@@ -581,7 +574,7 @@ class Motif(object):
         for i in range(self.length):
             max_f=0
             max_n="X"
-            for n in self[i].keys():
+            for n in sorted(self[i]):
                 if self[i][n]>max_f:
                     max_f=self[i][n]
                     max_n=n
@@ -595,7 +588,7 @@ class Motif(object):
         for i in range(self.length):
             min_f=10.0
             min_n="X"
-            for n in self[i].keys():
+            for n in sorted(self[i]):
                 if self[i][n]<min_f:
                     min_f=self[i][n]
                     min_n=n

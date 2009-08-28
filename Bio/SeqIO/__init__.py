@@ -550,8 +550,8 @@ def to_dict(sequences, key_function=None) :
     >>> handle = open("GenBank/cor6_6.gb", "rU")
     >>> format = "genbank"
     >>> id_dict = SeqIO.to_dict(SeqIO.parse(handle, format))
-    >>> print id_dict.keys()
-    ['L31939.1', 'AJ237582.1', 'X62281.1', 'AF297471.1', 'X55053.1', 'M81224.1']
+    >>> print sorted(id_dict.keys())
+    ['AF297471.1', 'AJ237582.1', 'L31939.1', 'M81224.1', 'X55053.1', 'X62281.1']
     >>> print id_dict["L31939.1"].description
     Brassica rapa (clone bif72) kin mRNA, complete cds.
 
@@ -564,14 +564,14 @@ def to_dict(sequences, key_function=None) :
     >>> format = "genbank"
     >>> seguid_dict = SeqIO.to_dict(SeqIO.parse(handle, format),
     ...               key_function = lambda rec : seguid(rec.seq))
-    >>> for key, record in seguid_dict.iteritems() :
+    >>> for key, record in sorted(seguid_dict.iteritems()) :
     ...     print key, record.id
-    SabZaA4V2eLE9/2Fm5FnyYy07J4 X55053.1
-    l7gjJFE6W/S1jJn5+1ASrUKW/FA X62281.1
     /wQvmrl87QWcm9llO4/efg23Vgg AJ237582.1
-    TtWsXo45S3ZclIBy4X/WJc39+CY M81224.1
-    uVEYeAQSV5EDQOnFoeMmVea+Oow AF297471.1
     BUg6YxXSKWEcFFH0L08JzaLGhQs L31939.1
+    SabZaA4V2eLE9/2Fm5FnyYy07J4 X55053.1
+    TtWsXo45S3ZclIBy4X/WJc39+CY M81224.1
+    l7gjJFE6W/S1jJn5+1ASrUKW/FA X62281.1
+    uVEYeAQSV5EDQOnFoeMmVea+Oow AF297471.1
 
     This approach is not suitable for very large sets of sequences, as all
     the SeqRecord objects are held in memory. Instead, consider using the
