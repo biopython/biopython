@@ -503,13 +503,6 @@ class TestWriteRead(unittest.TestCase) :
                   "fasta", "qual", "phd"] :
             write_read(filename, "fastq-illumina", f)
 
-    def test_evil_wrapped(self) :
-        """Write and read back evil_wrapped.fastq"""
-        filename = os.path.join("Quality", "evil_wrapping.fastq")
-        self.assertEqual(3, len(list(SeqIO.parse(open(filename),"fastq"))))
-        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
-                  "fasta", "qual", "phd"] :
-            write_read(filename, "fastq-sanger", f)
 
 class MappingTests(unittest.TestCase) :
     def setUp(self):

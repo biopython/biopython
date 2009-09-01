@@ -54,7 +54,7 @@ tests = [
     ("Ace/contig1.ace", "ace", generic_dna),
     ("Ace/consed_sample.ace", "ace", None),
     ("Ace/seq.cap.ace", "ace", generic_dna),
-    ("Quality/evil_wrapping.fastq", "fastq", None),
+    ("Quality/wrapping_original_sanger.fastq", "fastq", None),
     ("Quality/example.fastq", "fastq", None),
     ("Quality/example.fastq", "fastq-sanger", generic_dna),
     ("Quality/tricky.fastq", "fastq", generic_nucleotide),
