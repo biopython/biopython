@@ -147,115 +147,58 @@ class TestFastqErrors(unittest.TestCase) :
         self.assertEqual(count, record_count)
         handle.close()
 
-    def test_space(self):
-        """Reject FASTQ with spaces in seq/qual"""
-        self.check_fails("Quality/error_spaces.fastq", 0)
-        self.check_general_fails("Quality/error_spaces.fastq", 0)
+    def check_all_fail(self, filename, count) :
+        self.check_fails(filename, count)
+        self.check_general_fails(filename, count)
 
-    def test_tabs(self):
-        """Reject FASTQ with tabs in seq/qual"""
-        self.check_fails("Quality/error_tabs.fastq", 0)
-        self.check_general_fails("Quality/error_tabs.fastq", 0)
+    def check_qual_char(self, filename, good_count, count) :
+        self.check_fails(filename, good_count)
+        self.check_general_passes(filename, count)
 
-    def test_no_qual(self):
-        """Reject FASTQ with missing qualities"""
-        self.check_fails("Quality/error_no_qual.fastq", 0)
-        self.check_general_fails("Quality/error_no_qual.fastq", 0)
+#Now add methods at run time... these FASTQ files will be rejected
+#by both the low level parser AND the high level SeqRecord parser:
+tests = [("diff_ids", 2),
+         ("no_qual", 0),
+         ("long_qual", 3),
+         ("short_qual", 2),
+         ("double_seq", 3),
+         ("double_qual", 2),
+         ("tabs", 0),
+         ("spaces", 0),
+         ("trunc_in_title", 4),
+         ("trunc_in_seq", 4),
+         ("trunc_in_plus", 4),
+         ("trunc_in_qual", 4),
+         ("trunc_at_seq", 4),
+         ("trunc_at_plus", 4),
+         ("trunc_at_qual", 4)]
+for base_name, good_count in tests :
+    def funct(name,c) :
+        f = lambda x : x.check_all_fail("Quality/error_%s.fastq" % name,c)
+        f.__doc__ = "Reject FASTQ with %s" % name.replace("_"," ")
+        return f
+    setattr(TestFastqErrors, "test_%s" % (base_name),
+            funct(base_name, good_count))
+    del funct        
 
-    def test_long_qual(self):
-        """Reject FASTQ with longer qual than seq"""
-        self.check_fails("Quality/error_long_qual.fastq", 3)
-        self.check_general_fails("Quality/error_long_qual.fastq", 3)
+#Now add methods for FASTQ files which will be rejected by the high
+#level SeqRecord parser, but will be accepted by the low level parser:
+tests = [("del", 3, 5),
+         ("space", 3, 5),
+         ("vtab", 0, 5),
+         ("escape", 4, 5),
+         ("unit_sep", 2, 5),
+         ("tab", 4, 5),
+         ("null", 0, 5)]
+for base_name, good_count, full_count in tests :
+    def funct(name,c1,c2) :
+        f = lambda x : x.check_qual_char("Quality/error_qual_%s.fastq"%name,c1,c2)
+        f.__doc__ = "Reject FASTQ with %s in quality" % name.replace("_"," ")
+        return f
+    setattr(TestFastqErrors, "test_qual_%s" % (base_name),
+            funct(base_name, good_count, full_count))
+    del funct        
 
-    def test_short_qual(self):
-        """Reject FASTQ with shorted qual than seq"""
-        self.check_fails("Quality/error_short_qual.fastq", 2)
-        self.check_general_fails("Quality/error_short_qual.fastq", 2)
-
-    def test_diff_ids(self):
-        """Reject FASTQ where + and @ identifers disagree"""
-        self.check_fails("Quality/error_diff_ids.fastq", 2)
-        self.check_general_fails("Quality/error_diff_ids.fastq", 2)
-
-    def test_trunc_at_seq(self):
-        """Reject FASTQ truncated at the sequence"""
-        self.check_fails("Quality/error_trunc_at_seq.fastq", 4)
-        self.check_general_fails("Quality/error_trunc_at_seq.fastq", 4)
-
-    def test_trunc_at_plus(self):
-        """Reject FASTQ truncated at the plus line"""
-        self.check_fails("Quality/error_trunc_at_plus.fastq", 4)
-        self.check_general_fails("Quality/error_trunc_at_plus.fastq", 4)
-
-    def test_trunc_at_qual(self):
-        """Reject FASTQ truncated at the quality"""
-        self.check_fails("Quality/error_trunc_at_qual.fastq", 4)
-        self.check_general_fails("Quality/error_trunc_at_qual.fastq", 4)
-
-    def test_trunc_in_title(self):
-        """Reject FASTQ truncated during the title line"""
-        self.check_fails("Quality/error_trunc_in_title.fastq", 4)
-        self.check_general_fails("Quality/error_trunc_in_title.fastq", 4)
-
-    def test_trunc_in_seq(self):
-        """Reject FASTQ truncated during the sequence"""
-        self.check_fails("Quality/error_trunc_in_seq.fastq", 4)
-        self.check_general_fails("Quality/error_trunc_in_seq.fastq", 4)
-
-    def test_trunc_in_plus(self):
-        """Reject FASTQ truncated during the plus line"""
-        self.check_fails("Quality/error_trunc_in_seq.fastq", 4)
-        self.check_general_fails("Quality/error_trunc_in_seq.fastq", 4)
-
-    def test_trunc_in_qual(self):
-        """Reject FASTQ truncated during the quality"""
-        self.check_fails("Quality/error_trunc_in_qual.fastq", 4)
-        self.check_general_fails("Quality/error_trunc_in_qual.fastq", 4)
-
-    def test_qual_null(self):
-        """Reject FASTQ with null (ASCII 0) in the quality"""
-        self.check_fails("Quality/error_qual_null.fastq", 0)
-        self.check_general_passes("Quality/error_qual_null.fastq", 5)
-
-    def test_qual_tab(self):
-        """Reject FASTQ with tab (ASCII 9) in the quality"""
-        self.check_fails("Quality/error_qual_tab.fastq", 4)
-        self.check_general_passes("Quality/error_qual_tab.fastq", 5)
-
-    def test_qual_vtab(self):
-        """Reject FASTQ with vertical tab (ASCII 11) in quality"""
-        self.check_fails("Quality/error_qual_vtab.fastq", 0)
-        self.check_general_passes("Quality/error_qual_vtab.fastq", 5)
-
-    def test_qual_escape(self):
-        """Reject FASTQ with escape (ASCII 27) in quality"""
-        self.check_fails("Quality/error_qual_escape.fastq", 4)
-        self.check_general_passes("Quality/error_qual_escape.fastq", 5)
-
-    def test_qual_unit_sep(self):
-        """Reject FASTQ with unit sep (ASCII 31) in quality"""
-        self.check_fails("Quality/error_qual_unit_sep.fastq", 2)
-        self.check_general_passes("Quality/error_qual_unit_sep.fastq", 5)
-
-    def test_qual_space(self):
-        """Reject FASTQ with space (ASCII 32) in the quality"""
-        self.check_fails("Quality/error_qual_space.fastq", 3)
-        self.check_general_passes("Quality/error_qual_space.fastq", 5)
-
-    def test_qual_del(self):
-        """Reject FASTQ with delete (ASCI 127) in quality"""
-        self.check_fails("Quality/error_qual_del.fastq", 3)
-        self.check_general_passes("Quality/error_qual_del.fastq", 5)
-
-    def test_double_qual(self):
-        """Reject FASTQ with double quality block"""
-        self.check_fails("Quality/error_double_qual.fastq", 2)
-        self.check_general_fails("Quality/error_double_qual.fastq", 2)
-
-    def test_double_seq(self):
-        """Reject FASTQ with double sequence block"""
-        self.check_fails("Quality/error_double_seq.fastq", 3)
-        self.check_general_fails("Quality/error_double_seq.fastq", 3)
 
 class TestReferenceConversions(unittest.TestCase):
     """Tests where we have reference output."""
