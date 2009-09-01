@@ -37,8 +37,7 @@ from Bio.Graphics.Comparative import ComparativeScatterPlot
 
 
 class ComparativeTest(unittest.TestCase):
-    """Do tests for modules involved with comparing data.
-    """
+    """Do tests for modules involved with comparing data."""
     def setUp(self):
         self.min_two_d_lists = 1
         self.max_two_d_lists = 7
@@ -50,8 +49,7 @@ class ComparativeTest(unittest.TestCase):
         self.max_point_num = 200
 
     def _make_random_points(self):
-        """Make a bunch of random points for testing plots.
-        """
+        """Make a bunch of random points for testing plots."""
         plot_info = []
         num_two_d_lists = random.randrange(self.min_two_d_lists,
                                            self.max_two_d_lists)
@@ -72,8 +70,7 @@ class ComparativeTest(unittest.TestCase):
         return plot_info
                 
     def test_simple_scatter_plot(self):
-        """Test creation of a simple ScatterPlot.
-        """
+        """Test creation of a simple PNG scatter plot."""
         compare_plot = ComparativeScatterPlot("png")
         compare_plot.display_info = self._make_random_points()
 
