@@ -257,6 +257,50 @@ class TestFastqErrors(unittest.TestCase) :
         self.check_fails("Quality/error_double_seq.fastq", 3)
         self.check_general_fails("Quality/error_double_seq.fastq", 3)
 
+class TestReferenceConversions(unittest.TestCase):
+    """Tests where we have reference output."""
+    def simple_check(self, base_name, in_variant) :
+        for out_variant in ["sanger", "solexa", "illumina"] :
+            if out_variant == "sanger":
+                warnings.resetwarnings()
+            else :
+                #Ignore data loss warnings from max qualities
+                warnings.simplefilter('ignore', UserWarning)
+            in_filename = "Quality/%s_original_%s.fastq" \
+                          % (base_name, in_variant)
+            self.assert_(os.path.isfile(in_filename))
+            #Load the reference output...  
+            expected = open("Quality/%s_as_%s.fastq" \
+                            % (base_name, out_variant),
+                            "rU").read()
+            #Check matches using convert...
+            handle = StringIO()
+            SeqIO.convert(in_filename, "fastq-"+in_variant,
+                          handle, "fastq-"+out_variant)
+            self.assertEqual(expected, handle.getvalue())
+            #Check matches using parse/write
+            handle = StringIO()
+            SeqIO.write(SeqIO.parse(open(in_filename), "fastq-"+in_variant),
+                        handle, "fastq-"+out_variant)
+            self.assertEqual(expected, handle.getvalue())
+#Now add methods at run time...
+tests = [("illumina_full_range", "illumina"),
+         ("sanger_full_range", "sanger"),
+         ("longreads", "sanger"),
+         ("solexa_full_range", "solexa"),
+         ("misc_dna", "sanger"),
+         ("wrapping", "sanger"),
+         ("misc_rna", "sanger")]
+for base_name, variant in tests :
+    assert variant in ["sanger", "solexa", "illumina"]
+    def funct(bn,var) :
+        f = lambda x : x.simple_check(bn,var)
+        f.__doc__ = "Reference conversions of %s file %s" % (var, bn)
+        return f
+    setattr(TestReferenceConversions, "test_%s_%s" % (base_name, variant),
+            funct(base_name, variant))
+    del funct        
+
 class TestQual(unittest.TestCase):
     """Tests with QUAL files."""
     def setUp(self):

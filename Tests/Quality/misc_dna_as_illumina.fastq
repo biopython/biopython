@@ -1,0 +1,16 @@
+@FAKE0007 Original version has lower case unambiguous DNA with PHRED scores from 0 to 40 inclusive (in that order)
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTA
++
+@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefgh
+@FAKE0008 Original version has mixed case unambiguous DNA with PHRED scores from 0 to 40 inclusive (in that order)
+gTcatAGcgTcatAGcgTcatAGcgTcatAGcgTcatAGcg
++
+@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefgh
+@FAKE0009 Original version has lower case unambiguous DNA with PHRED scores from 0 to 40 inclusive (in that order)
+tcagtcagtcagtcagtcagtcagtcagtcagtcagtcagt
++
+@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefgh
+@FAKE0010 Original version has mixed case ambiguous DNA and PHRED scores of 40, 30, 20, 10 (cycled)
+gatcrywsmkhbvdnGATCRYWSMKHBVDN
++
+h^TJh^TJh^TJh^TJh^TJh^TJh^TJh^
