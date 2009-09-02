@@ -360,8 +360,9 @@ def write(sequences, handle, format) :
     else :
         raise ValueError("Unknown format '%s'" % format)
 
-    assert isinstance(count, int), "Internal error - the underlying writer " \
-           + " should have returned the record count, not %s" % repr(count)
+    assert isinstance(count, int), "Internal error - the underlying %s " \
+           "writer should have returned the record count, not %s" \
+           % (format, repr(count))
     return count
     
 def parse(handle, format, alphabet=None) :

@@ -82,7 +82,7 @@ class NexusWriter(AlignmentWriter) :
             first_alignment = None
         if first_alignment is None :
             #Nothing to write!
-            return
+            return 0
         
         #Check there is only one alignment...
         try :
