@@ -611,5 +611,11 @@ for (records, descr) in test_records :
 
         #Close now, after checking, so that it can be used at the console for debugging
         handle.close()
-        
+
+#Check writers can cope with no alignments
+for format in SeqIO._FormatToWriter :
+     handle = StringIO()
+     assert 0 == SeqIO.write([], handle, format), \
+            "Writing no records to %s format should work!" \
+            % t_format        
 print "Finished tested writing files"
