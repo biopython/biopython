@@ -427,12 +427,12 @@ class ClustalwCommandline(AbstractCommandline):
                     lambda x: x in ["NODE", "BRANCH", "node", "branch"],
                     False,
                     "Node OR branch position of bootstrap values in tree display",
-                    False),
+                    True),
             _Option(["-clustering", "-CLUSTERING", "CLUSTERING", "clustering"],
                     ["input"],
                     lambda x: x in ["NJ", "UPGMA", "nj", "upgma"],
                     False,
                     "NJ or UPGMA",
-                    False)
+                    True)
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
