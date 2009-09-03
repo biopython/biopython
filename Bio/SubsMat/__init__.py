@@ -128,11 +128,7 @@ SUBS = 3
 EXPFREQ = 4
 LO = 5
 EPSILON = 0.00000000000001
-class BadMatrix(Exception):
-   """Exception raised when verifying a matrix"""
-   def __str__(self):
-      return "Bad Matrix"
-BadMatrixError = BadMatrix()
+
 
 class SeqMat(dict):
    """A Generic sequence matrix class
