@@ -109,8 +109,12 @@ class PhdWriter(SequentialSequenceWriter):
                     "of peak location scores does not match length of sequence"
         if None in phred_qualities :
             raise ValueError("A quality value of None was found")
+        if record.description.startswith("%s " % record.id) :
+            title = record.description
+        else :
+            title = "%s %s" % (record.id, record.description)
         self.handle.write("BEGIN_SEQUENCE %s\nBEGIN_COMMENT\n" \
-                          % record.description)
+                          % self.clean(title))
         for annot in [k.lower() for k in Phd.CKEYWORDS]:
             value = None
             if annot == "trim":
