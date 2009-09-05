@@ -4949,6 +4949,53 @@ ESpell retrieves spelling suggestions. In this example, we use \verb+Bio.Entrez.
 \end{verbatim}
 See the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/espell\_help.html}{ESpell help page} for more information.
 
+\section{Parsing huge Entrez XML files}
+
+The \verb+Entrez.read+ function reads the entire XML file returns by Entrez into a single Python object, which is kept in memory. Some Entrez XML files are so large that they do not fit in memory. To parse such files, you can use the functio n\verb+Entrez.parse+, which is a generator function that reads records in the XML file one by one. This function is only useful if the XML file reflects a Python list object (in other words, if \verb+Entrez.read+ on a computer with infinite memory resources would return a Python list).
+
+For example, you can download the entire Entrez Gene database for a given organism as a file from NCBI's ftp site. These files can be very large. As an example, on September 4, 2009, the file \verb+Homo_sapiens.ags.gz+, containing the Entrez Gene database for human, had a size of 116576 kB. This file, which is in the \verb+ASN+ format, can be converted into an XML file using NCBI's \verb+gene2xml+ progam (see NCBI's ftp site for more information):
+
+\begin{verbatim}
+gene2xml -b T -i Homo_sapiens.ags.gz Homo_sapiens.xml
+\end{verbatim}
+
+The resulting XML file has a size of 6.1 GB. Attempting \verb+Entrez.read+ on this file will result in a \verb+MemoryError+ on many computers.
+
+The XML file \verb+Homo_sapiens.xml+ consists of a list of Entrez gene records, each corresponding to one Entrez gene in human. \verb+Entrez.parse+ retrieves these gene records one by one. You can then print out or store the relevant information in each record by iterating over the records. For example, this script iterates over the Entrez gene records and prints out the gene numbers and names for all current genes:
+
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> handle = open("Homo_sapiens.xml")
+>>> records = Entrez.parse(handle)
+
+>>> for record in records:
+...     status = record['Entrezgene_track-info']['Gene-track']['Gene-track_status']
+...     if status.attributes['value']=='discontinued':
+...         continue
+...     geneid = record['Entrezgene_track-info']['Gene-track']['Gene-track_geneid']
+...     genename = record['Entrezgene_gene']['Gene-ref']['Gene-ref_locus']
+...     print geneid, genename
+\end{verbatim}
+
+This will print:
+\begin{verbatim}
+1 A1BG
+2 A2M
+3 A2MP
+8 AA
+9 NAT1
+10 NAT2
+11 AACP
+12 SERPINA3
+13 AADAC
+14 AAMP
+15 AANAT
+16 AARS
+17 AAVS1
+...
+\end{verbatim}
+
+
 \section{Specialized parsers}
 \label{sec:entrez-specialized-parsers}
 
