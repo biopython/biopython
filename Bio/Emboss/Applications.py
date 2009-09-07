@@ -204,9 +204,11 @@ class PrimerSearchCommandline(_EmbossCommandLine):
 
 
 class EProtDistCommandline(_EmbossCommandLine):
-    """Commandline object for the eprotdist program from EMBOSS.
+    """Commandline object for the eprotdist program from EMBOSS (OBSOLETE).
 
     This is an EMBOSS wrapper around protdist from PHYLIP.
+
+    It has been replaced by "fprotdist", see FProtDistCommandline.
     """
     def __init__(self, cmd="eprotdist", **kwargs):
         self.parameters = \
@@ -240,9 +242,11 @@ class EProtDistCommandline(_EmbossCommandLine):
 
 
 class ENeighborCommandline(_EmbossCommandLine):
-    """Commandline object for the eneighbor program from EMBOSS.
+    """Commandline object for the eneighbor program from EMBOSS (OBSOLETE).
 
     This is an EMBOSS wrapper around neighbor from PHYLIP.
+
+    It has been replaced by "fneighbor", see FNeighborCommandline.
     """
     def __init__(self, cmd="eneighbor", **kwargs):
         self.parameters = \
@@ -282,9 +286,11 @@ class ENeighborCommandline(_EmbossCommandLine):
 
 
 class EProtParsCommandline(_EmbossCommandLine):
-    """Commandline object for the eprotpars program from EMBOSS.
+    """Commandline object for the eprotpars program from EMBOSS (OBSOLETE).
 
     This is an EMBOSS wrapper around protpars from PHYLIP.
+
+    It has been replaced by "fprotpars", see FProtParsCommandline.
     """
     def __init__(self, cmd="eprotpars", **kwargs):
         self.parameters = \
@@ -330,9 +336,11 @@ class EProtParsCommandline(_EmbossCommandLine):
 
 
 class EConsenseCommandline(_EmbossCommandLine):
-    """Commandline object for the econsense program from EMBOSS.
+    """Commandline object for the econsense program from EMBOSS (OBSOLETE).
 
     This is an EMBOSS wrapper around consense from PHYLIP.
+
+    It has been replaced by "fconsense", see FConsenseCommandline.
     """
     def __init__(self, cmd="econsense", **kwargs):
         self.parameters = \
@@ -366,9 +374,11 @@ class EConsenseCommandline(_EmbossCommandLine):
 
 
 class ESeqBootCommandline(_EmbossCommandLine):
-    """Commandline object for the eseqboot program from EMBOSS.
+    """Commandline object for the eseqboot program from EMBOSS (OBSOLETE).
 
     This is an EMBOSS wrapper around seqboot from PHYLIP.
+
+    It has been replaced by "fseqboot", see FSeqBootCommandline.
     """
     def __init__(self, cmd="eseqboot", **kwargs):
         self.parameters = \
@@ -398,7 +408,7 @@ class ESeqBootCommandline(_EmbossCommandLine):
 class FDNADistCommandline(_EmbossCommandLine):
     """Commandline object for the fdnadist program from EMBOSS.
 
-    fdnadist is and EMBOSS wrapper for the PHYLIP program dnadist for
+    fdnadist is an EMBOSS wrapper for the PHYLIP program dnadist for
     calulating distance matrices from DNA sequence files
     """
     def __init__(self, cmd = "fdnadist", **kwargs):
