@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 23 August 2009 (Biopython 1.51+)}
+\date{Last Update -- 8 September 2009 (Biopython 1.51+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -2287,6 +2287,7 @@ So, it is very easy to create an in memory ``database'' of our GenBank records. 
 Note that those of you with prior Python experience should all be able to construct a dictionary like this ``by hand''.  However, typical dictionary construction methods will not deal with the case of repeated keys very nicely.  Using the \verb|Bio.SeqIO.to_dict()| will explicitly check for duplicate keys, and raise an exception if any are found.
 
 \subsection{Specifying the dictionary keys}
+\label{seq:seqio-todict-functionkey}
 
 Using the same code as above, but for the FASTA file instead:
 
@@ -2386,16 +2387,17 @@ computer's RAM. In general, this will only work on small to medium files.
 For very large files, Biopython 1.52 introduced an alternative,
 \verb|Bio.SeqIO.indexed_dict()|, which works a little differently. Although
 it still returns a dictionary like object, this does \emph{not} keep
-everything in memory. Instead, it just records where each record is within
-the file -- when you ask for a particular record, it then parses it on
-demand.
+\emph{everything} in memory. Instead, it just records where each record
+is within the file -- when you ask for a particular record, it then parses
+it on demand. The record keys and the offsets are still in memory, but this
+works fine even for millions of sequences.
 
 The main benefits are far lower memory requirements, and also building
 the index is much faster (as it only scans the file quickly looking for
 the start of each record).
 
-The main drawback is less flexibility. You cannot specify the keys as you can
-with \verb|Bio.SeqIO.to_dict()|, the record id is always used. Also, these
+The main drawback is less flexibility. You cannot specify the keys with quite
+the same freedom as you can with \verb|Bio.SeqIO.to_dict()|. Also, these
 indexed dictionaries are \emph{read only}, so you cannot add or remove
 entries as you could with a real Python dictionary.
 
@@ -2411,7 +2413,7 @@ As an example, let's use the same GenBank file as before:
 >>> seq_record = orchid_dict["Z78475.1"]
 >>> print seq_record.description
 P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
->>> print repr(seq_record.seq)
+>>> seq_record.seq
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
 \end{verbatim}
 
@@ -2422,7 +2424,49 @@ used in the other \verb|Bio.SeqIO| functions). You can use many other
 simple file formats, including FASTA and FASTQ files (see the example in
 Section~\ref{sec:fastq-indexing}). However, alignment
 formats like PHYLIP or Clustal are not supported. Finally as an optional
-argument you can supply an alphabet.
+argument you can supply an alphabet, or a key function.
+
+Here is the same example using the FASTA file - all we change is the
+filename and the format name:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> orchid_dict = SeqIO.indexed_dict("ls_orchid.fasta", "fasta")
+>>> len(orchid_dict)
+94
+>>> orchid_dict.keys()
+['gi|2765596|emb|Z78471.1|PDZ78471', 'gi|2765646|emb|Z78521.1|CCZ78521', ...
+ ..., 'gi|2765613|emb|Z78488.1|PTZ78488', 'gi|2765583|emb|Z78458.1|PHZ78458']
+\end{verbatim}
+
+Suppose you want to use the same keys as before? Much like with the
+\verb|Bio.SeqIO.to_dict()| example in Section~\ref{seq:seqio-todict-functionkey},
+you'll need to write a tiny function to map from the FASTA identifier to the key
+you want:
+
+\begin{verbatim}
+def get_acc(identifier) :
+    """"Given a SeqRecord identifer string, return the accession number as a string.
+  
+    e.g. "gi|2765613|emb|Z78488.1|PTZ78488" -> "Z78488.1"
+    """
+    parts = identifier.split("|")
+    assert len(parts) == 5 and parts[0] == "gi" and parts[2] == "emb"
+    return parts[3]
+\end{verbatim}
+
+\noindent Then we can give this function to the \verb|SeqIO.indexed_dict()|
+function to use in building the dictionary:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> orchid_dict = SeqIO.indexed_dict("ls_orchid.fasta", "fasta", key_function=get_acc)
+>>> print orchid_dict.keys()
+['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
+\end{verbatim}
+
+\noindent Easy when you know how?
+
 
 \section{Writing Sequence Files}
 
@@ -4948,6 +4992,53 @@ ESpell retrieves spelling suggestions. In this example, we use \verb+Bio.Entrez.
 'biopython'
 \end{verbatim}
 See the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/espell\_help.html}{ESpell help page} for more information.
+
+\section{Parsing huge Entrez XML files}
+
+The \verb+Entrez.read+ function reads the entire XML file returns by Entrez into a single Python object, which is kept in memory. Some Entrez XML files are so large that they do not fit in memory. To parse such files, you can use the functio n\verb+Entrez.parse+, which is a generator function that reads records in the XML file one by one. This function is only useful if the XML file reflects a Python list object (in other words, if \verb+Entrez.read+ on a computer with infinite memory resources would return a Python list).
+
+For example, you can download the entire Entrez Gene database for a given organism as a file from NCBI's ftp site. These files can be very large. As an example, on September 4, 2009, the file \verb+Homo_sapiens.ags.gz+, containing the Entrez Gene database for human, had a size of 116576 kB. This file, which is in the \verb+ASN+ format, can be converted into an XML file using NCBI's \verb+gene2xml+ progam (see NCBI's ftp site for more information):
+
+\begin{verbatim}
+gene2xml -b T -i Homo_sapiens.ags.gz Homo_sapiens.xml
+\end{verbatim}
+
+The resulting XML file has a size of 6.1 GB. Attempting \verb+Entrez.read+ on this file will result in a \verb+MemoryError+ on many computers.
+
+The XML file \verb+Homo_sapiens.xml+ consists of a list of Entrez gene records, each corresponding to one Entrez gene in human. \verb+Entrez.parse+ retrieves these gene records one by one. You can then print out or store the relevant information in each record by iterating over the records. For example, this script iterates over the Entrez gene records and prints out the gene numbers and names for all current genes:
+
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> handle = open("Homo_sapiens.xml")
+>>> records = Entrez.parse(handle)
+
+>>> for record in records:
+...     status = record['Entrezgene_track-info']['Gene-track']['Gene-track_status']
+...     if status.attributes['value']=='discontinued':
+...         continue
+...     geneid = record['Entrezgene_track-info']['Gene-track']['Gene-track_geneid']
+...     genename = record['Entrezgene_gene']['Gene-ref']['Gene-ref_locus']
+...     print geneid, genename
+\end{verbatim}
+
+This will print:
+\begin{verbatim}
+1 A1BG
+2 A2M
+3 A2MP
+8 AA
+9 NAT1
+10 NAT2
+11 AACP
+12 SERPINA3
+13 AADAC
+14 AAMP
+15 AANAT
+16 AARS
+17 AAVS1
+...
+\end{verbatim}
+
 
 \section{Specialized parsers}
 \label{sec:entrez-specialized-parsers}

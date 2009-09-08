@@ -272,6 +272,13 @@ def read(handle):
     record = handler.run(handle)
     return record
 
+def parse(handle):
+    from Parser import DataHandler
+    DTDs = os.path.join(__path__[0], "DTDs")
+    handler = DataHandler(DTDs)
+    records = handler.parse(handle)
+    return records
+
 def _open(cgi, params={}, post=False):
     """Helper function to build the URL and open a handle to it (PRIVATE).
 

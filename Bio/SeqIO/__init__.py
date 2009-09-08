@@ -533,8 +533,8 @@ def to_dict(sequences, key_function=None) :
 
      - sequences  - An iterator that returns SeqRecord objects,
                     or simply a list of SeqRecord objects.
-     - key_function - Optional function which when given a SeqRecord
-                      returns a unique string for the dictionary key.
+     - key_function - Optional callback function which when given a
+                    SeqRecord should return a unique key for the dictionary.
 
     e.g. key_function = lambda rec : rec.name
     or,  key_function = lambda rec : rec.description.split()[0]
@@ -590,7 +590,7 @@ def to_dict(sequences, key_function=None) :
         d[key] = record
     return d
 
-def indexed_dict(filename, format, alphabet=None) :
+def indexed_dict(filename, format, alphabet=None, key_function=None) :
     """Indexes a sequence file and returns a dictionary like object.
 
      - filename - string giving name of file to be indexed
@@ -598,7 +598,10 @@ def indexed_dict(filename, format, alphabet=None) :
      - alphabet - optional Alphabet object, useful when the sequence type
                   cannot be automatically inferred from the file itself
                   (e.g. format="fasta" or "tab")
-
+     - key_function - Optional callback function which when given a
+                  SeqRecord identifier string should return a unique
+                  key for the dictionary.
+    
     This indexing function will return a dictionary like object, giving the
     SeqRecord objects as values:
 
@@ -645,12 +648,40 @@ def indexed_dict(filename, format, alphabet=None) :
     TTGGCAGGCCAAGGCCGATGGATCA
     <BLANKLINE>
 
-    As with the to_dict() function defaults, the id string of each record is
-    used as the key. It would be possible to extend the indexing code so that
-    you could provide your own function to map from a SeqRecord to a key (as
-    done for the to_dict() function), but doing so would impose a severe
-    performance penalty as it require the file to be completely parsed while
-    building the index. Right now this is usually avoided.
+    As with the to_dict() function, by default the id string of each record is
+    used as the key. You can specify a callback function to transform this
+    (the record identifier string) into your prefered key. For example:
+
+    >>> from Bio import SeqIO
+    >>> def make_tuple(identifier) :
+    ...     parts = identifier.split("_")
+    ...     return int(parts[-2]), int(parts[-1])
+    >>> records = SeqIO.indexed_dict("Quality/example.fastq", "fastq",
+    ...                              key_function=make_tuple)
+    >>> len(records)
+    3
+    >>> sorted(records.keys())
+    [(413, 324), (443, 348), (540, 792)]
+    >>> print records[(540, 792)].format("fasta")
+    >EAS54_6_R1_2_1_540_792
+    TTGGCAGGCCAAGGCCGATGGATCA
+    <BLANKLINE>
+    >>> (540, 792) in records
+    True
+    >>> "EAS54_6_R1_2_1_540_792" in records
+    False
+    >>> print records.get("Missing", None)
+    None
+
+    Another common use case would be indexing an NCBI style FASTA file, where
+    you might want to extract the GI number from the FASTA identifer to use
+    as the dictionary key.
+
+    Notice that unlike the to_dict() function, here the key_function does not
+    get given the full SeqRecord to use to generate they key. Doing so would
+    impose a severe performance penalty as it would require the file to be
+    completely parsed while building the index. Right now this is usually
+    avoided.
     """
     #Try and give helpful error messages:
     if not isinstance(filename, basestring) :
@@ -671,7 +702,7 @@ def indexed_dict(filename, format, alphabet=None) :
         indexer = _index._FormatToIndexedDict[format]
     except KeyError :
         raise ValueError("Unsupported format '%s'" % format)
-    return indexer(filename, alphabet)
+    return indexer(filename, alphabet, key_function)
 
 def to_alignment(sequences, alphabet=None, strict=True) :
     """Returns a multiple sequence alignment (OBSOLETE).

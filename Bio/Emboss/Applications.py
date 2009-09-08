@@ -1,5 +1,6 @@
 # Copyright 2001-2009 Brad Chapman.
 # Revisions copyright 2009 by Peter Cock.
+# Revisions copyright 2009 by David Winter.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -203,9 +204,11 @@ class PrimerSearchCommandline(_EmbossCommandLine):
 
 
 class EProtDistCommandline(_EmbossCommandLine):
-    """Commandline object for the eprotdist program from EMBOSS.
+    """Commandline object for the eprotdist program from EMBOSS (OBSOLETE).
 
     This is an EMBOSS wrapper around protdist from PHYLIP.
+
+    It has been replaced by "fprotdist", see FProtDistCommandline.
     """
     def __init__(self, cmd="eprotdist", **kwargs):
         self.parameters = \
@@ -214,7 +217,7 @@ class EProtDistCommandline(_EmbossCommandLine):
           _Option(["-method","method"], ["input"], None, 1,
                   "Choose the method to use"),
           _Option(["-categ","categ"], ["input"], None, 0,
-                  "Choose the categorie to use"),
+                  "Choose the category to use"),
           _Option(["-gencode","gencode"], ["input"], None, 0,
                   "Which genetic code"),
           _Option(["-prob","prob"], ["input"], None, 0,
@@ -239,9 +242,11 @@ class EProtDistCommandline(_EmbossCommandLine):
 
 
 class ENeighborCommandline(_EmbossCommandLine):
-    """Commandline object for the eneighbor program from EMBOSS.
+    """Commandline object for the eneighbor program from EMBOSS (OBSOLETE).
 
     This is an EMBOSS wrapper around neighbor from PHYLIP.
+
+    It has been replaced by "fneighbor", see FNeighborCommandline.
     """
     def __init__(self, cmd="eneighbor", **kwargs):
         self.parameters = \
@@ -281,9 +286,11 @@ class ENeighborCommandline(_EmbossCommandLine):
 
 
 class EProtParsCommandline(_EmbossCommandLine):
-    """Commandline object for the eprotpars program from EMBOSS.
+    """Commandline object for the eprotpars program from EMBOSS (OBSOLETE).
 
     This is an EMBOSS wrapper around protpars from PHYLIP.
+
+    It has been replaced by "fprotpars", see FProtParsCommandline.
     """
     def __init__(self, cmd="eprotpars", **kwargs):
         self.parameters = \
@@ -329,9 +336,11 @@ class EProtParsCommandline(_EmbossCommandLine):
 
 
 class EConsenseCommandline(_EmbossCommandLine):
-    """Commandline object for the econsense program from EMBOSS.
+    """Commandline object for the econsense program from EMBOSS (OBSOLETE).
 
     This is an EMBOSS wrapper around consense from PHYLIP.
+
+    It has been replaced by "fconsense", see FConsenseCommandline.
     """
     def __init__(self, cmd="econsense", **kwargs):
         self.parameters = \
@@ -365,9 +374,11 @@ class EConsenseCommandline(_EmbossCommandLine):
 
 
 class ESeqBootCommandline(_EmbossCommandLine):
-    """Commandline object for the eseqboot program from EMBOSS.
+    """Commandline object for the eseqboot program from EMBOSS (OBSOLETE).
 
     This is an EMBOSS wrapper around seqboot from PHYLIP.
+
+    It has been replaced by "fseqboot", see FSeqBootCommandline.
     """
     def __init__(self, cmd="eseqboot", **kwargs):
         self.parameters = \
@@ -392,6 +403,281 @@ class ESeqBootCommandline(_EmbossCommandLine):
           _Option(["-progress","progress"], ["input"], None, 0,
                   "Print indications of progress of run")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
+
+class FDNADistCommandline(_EmbossCommandLine):
+    """Commandline object for the fdnadist program from EMBOSS.
+
+    fdnadist is an EMBOSS wrapper for the PHYLIP program dnadist for
+    calulating distance matrices from DNA sequence files
+    """
+    def __init__(self, cmd = "fdnadist", **kwargs):
+        self.parameters = \
+        [_Option(["-sequence", "sequence"], ["input"], None, 1,
+                  "seq file to use (phylip)"),
+        _Option(["-method", "method"], ["input"], None, 1,
+                 "sub. model [f,k,j,l,s]"),
+        _Option(["-gamma", "gamma"], ["input"], None, 0,
+                 "gamma [g, i,n]"),
+        _Option(["-ncategories", "ncategories"], ["input"], None, 0,
+                 "number of rate catergories (1-9)"),
+        _Option(["-rate", "rate"], ["input"], None, 0,
+                 "rate for each category"),
+        _Option(["-categories","categories"], ["input"], None, 0,
+                 "File of substitution rate categories"),
+        _Option(["-weights", "weights"], ["input"], None, 0,
+                 "weights file"),
+        _Option(["-gammacoefficient", "gammacoefficient"], ["input"], None, 0,
+                 "value for gamma (> 0.001)"),
+        _Option(["-invarfrac", "invarfrac"], ["input"], None, 0,
+                 "proportoin of invariant sites"),
+        _Option(["-ttratio", "ttratio"], ["input"], None, 0,
+                 "ts/tv ratio"),
+        _Option(["-freqsfrom", "freqsfrom"], ["input"], None, 0,
+                 "use emprical base freqs"),
+        _Option(["-basefreq", "basefreq"], ["input"], None, 0,
+                 "specify basefreqs"),
+        _Option(["-lower", "lower"], ["input"], None, 0,
+                 "lower triangle matrix (y/N)")]
+        _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
+
+class FTreeDistCommandline(_EmbossCommandLine):
+    """Commandline object for the ftreedist program from EMBOSS.
+
+    ftreedist is an EMBOSS wrapper for the PHYLIP program treedist used for
+    calulating distance measures between phylogentic trees
+    """
+    def __init__(self, cmd = "ftreedist", **kwargs):
+        self.parameters = \
+        [_Option(["-intreefile", "intreefile"], ["input"], None, 1,
+                  "tree file to score (phylip)"),
+        _Option(["-dtype", "dtype"], ["input"], None, 0,
+                 "distance type ([S]ymetric, [b]ranch score)"),
+        _Option(["-pairing", "pairing"], ["input"], None, 0,
+                 "tree pairing method ([A]djacent pairs, all [p]ossible pairs)"),
+        _Option(["-style", "style"], ["input"], None, 0,
+                 "output style - [V]erbose, [f]ill, [s]parse"),
+        _Option(["-noroot", "noroot"], ["input"], None, 0,
+                 "treat trees as rooted [N/y]"),
+        _Option(["-outgrno", "outgrno"], ["input"], None, 0,
+                 "which taxon to root the trees with (starts from 0)")]
+        _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
+
+class FNeighborCommandline(_EmbossCommandLine):
+    """Commandline object for the fneighbor program from EMBOSS.
+
+    fneighbor is an EMBOSS wrapper for the PHYLIP program neighbor used for
+    calulating neighbor-joining or UPGMA trees from distance matrices 
+    """
+    def __init__(self, cmd = "fneighbor", **kwargs):
+        self.parameters = \
+        [_Option(["-datafile", "datafile"], ["input"], None, 1,
+                  "dist file to use (phylip)"),
+        _Option(["-matrixtype", "matrixtype"], ["input"], None, 0,
+                 "is martrix [S]quare pr [u]pper or [l]ower"),
+        _Option(["-treetype", "treetype"], ["input"], None, 0,
+                 "nj or UPGMA tree (n/u)"),
+        _Option(["-outgrno","outgrno" ], ["input"], None, 0,
+                 "taxon to use as OG"),
+        _Option(["-jumble", "jumble"], ["input"], None, 0,
+                 "randommise input order (Y/n)"),
+        _Option(["-seed", "seed"], ["input"], None, 0,
+                 "provide a random seed"),
+        _Option(["-trout", "trout"], ["input"], None, 0,
+                 "write tree (Y/n)"),
+        _Option(["-outtreefile", "outtreefile"], ["input"], None, 0,
+                 "filename for output tree"),
+        _Option(["-progress", "progress"], ["input"], None, 0,
+                 "print progress (Y/n)"),
+        _Option(["-treeprint", "treeprint"], ["input"], None, 0,
+                 "print tree (Y/n)")]
+        _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
+
+class FSeqBootCommandline(_EmbossCommandLine):
+    """Commandline object for the fseqboot program from EMBOSS.
+
+    fseqboot is an EMBOSS wrapper for the PHYLIP program seqboot used to
+    pseudo-sample alignment files
+    """
+    def __init__(self, cmd = "fseqboot", **kwargs):
+        self.parameters = \
+        [_Option(["-sequence", "sequence"], ["input"], None, 1,
+                  "seq file to sample (phylip)"),
+        _Option(["-categories", "catergories"], ["input"], None, 0,
+                 "file of input categories"),
+        _Option(["-weights", "weights"], ["input"], None, 0,
+                 " weights file"),
+        _Option(["-test", "test"], ["input"], None, 0,
+                 "specify operation, default is bootstrap"),
+        _Option(["-regular", "regular"], ["input"], None, 0,
+                 "absolute number to resample"),
+        _Option(["-fracsample", "fracsample"], ["input"], None, 0,
+                 "fraction to resample"),
+        _Option(["-rewriteformat", "rewriteformat"], ["input"], None, 0,
+                 "output format ([P]hyilp, [n]exus, [x]ml"),
+        _Option(["-seqtype", "seqtype"], ["input"], None, 0,
+                 "output format ([D]na, [p]rotein, [r]na"),
+        _Option(["-blocksize", "blocksize"], ["input"], None, 0,
+                 "print progress (Y/n)"),
+        _Option(["-reps", "reps"], ["input"], None, 0,
+                 "how many replicates, defaults to 100)"),
+        _Option(["-justweights", "jusweights"], ["input"], None, 0,
+                 "what to write out [D]atasets of just [w]eights"),
+        _Option(["-seed", "seed"], ["input"], None, 0,
+                 "specify random seed"),
+        _Option(["-dotdiff", "dotdiff"], ["input"], None, 0,
+                 "Use dot-differencing? [Y/n]"),]
+        _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
+
+class FDNAParsCommandline(_EmbossCommandLine):
+    """Commandline object for the fdnapars program from EMBOSS.
+
+    fdnapars is an EMBOSS version of the PHYLIP program dnapars, for
+    estimating trees from DNA sequences using parsiomny. Calling this command
+    without providing a value for the option "-intreefile" will invoke
+    "interactive mode" (and as a result fail if called with subprocess) if
+    "-auto" is not set to true
+    """
+    def __init__(self, cmd = "fdnapars", **kwargs):
+        self.parameters = \
+        [_Option(["-sequence", "sequence"], ["input"], None, 1,
+                  "seq file to use (phylip)"),
+        _Option(["-intreefile", "intreefile"], ["input"], None, 0,
+                 "Phylip tree file"),
+        _Option(["-weights", "weights"], ["input"], None, 0,
+                 "weights file"),
+        _Option(["-maxtrees", "maxtrees"], ["input"], None, 0,
+                 "max trees to save during run"),
+        _Option(["-thorough", "thorough"], ["input"], None, 0,
+                 "more thorough search (Y/n)"),
+        _Option(["-rearrange", "rearrange"], ["input"], None, 0,
+                 "Rearrange on jsut 1 best tree (Y/n)"),
+        _Option(["-transversion", "transversion"], ["input"], None, 0,
+                 "Use tranversion parsimony (y/N)"),
+        _Option(["-njumble", "njumble"], ["input"], None, 0,
+                 "number of times to randomise input order (default is 0)"),
+        _Option(["-seed", "seed"], ["input"], None, 0,
+                 "provde random seed"),
+        _Option(["-outgrno", "outgrno"], ["input"], None, 0,
+                 "Specify outgroup"),
+        _Option(["-thresh", "thresh"], ["input"], None, 0,
+                 "Use threshold parsimony (y/N)"),
+        _Option(["-threshold", "threshold"], ["input"], None, 0,
+                 "Threshold value"),
+        _Option(["-trout", "trout"], ["input"], None, 0,
+                 "Write trees to file (Y/n)"),
+        _Option(["-outtreefile", "outtreefile"], ["input"], None, 0,
+                 "filename for output tree"),
+        _Option(["-dotdiff", "dotdiff"], ["input"], None, 0,
+                 "Use dot-differencing? [Y/n]")]
+        _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
+
+class FProtParsCommandline(_EmbossCommandLine):
+    """Commandline object for the fdnapars program from EMBOSS.
+
+    fprotpars is an EMBOSS version of the PHYLIP program protpars, for
+    estimating trees from protein  sequences using parsiomny. Calling this
+    command without providing a value for the option "-intreefile" will invoke
+    "interactive mode" (and as a result fail if called with subprocess) if
+    "-auto" is not set to true
+    """
+    def __init__(self, cmd = "fprotpars", **kwargs):
+        self.parameters = \
+        [_Option(["-sequence", "sequence"], ["input"], None, 1,
+                  "seq file to use (phylip)"),
+        _Option(["-intreefile", "intreefile"], ["input"], None, 1,
+                 "Phylip tree file to score"),
+        _Option(["-outtreefile", "outtreefile"], ["input"], None, 1,
+                 "phylip tree output file"),
+        _Option(["-weights", "weights"], ["input"], None, 0,
+                 "weights file"),
+        _Option(["-whichcode", "whichcode"], ["input"], None, 0,
+                 "which genetic code, [U,M,V,F,Y]]"),
+        _Option(["-njumble", "njumble"], ["input"], None, 0,
+                 "number of times to randomise input order (default is 0)"),
+        _Option(["-seed", "seed"], ["input"], None, 0,
+                 "provde random seed"),
+        _Option(["-outgrno", "outgrno"], ["input"], None, 0,
+                 "Specify outgroup"),
+        _Option(["-thresh", "thresh"], ["input"], None, 0,
+                 "Use threshold parsimony (y/N)"),
+        _Option(["-threshold", "threshold"], ["input"], None, 0,
+                 "Threshold value"),
+        _Option(["-trout", "trout"], ["input"], None, 0,
+                 "Write trees to file (Y/n)"),
+        _Option(["-dotdiff", "dotdiff"], ["input"], None, 0,
+                 "Use dot-differencing? [Y/n]")]
+        _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
+
+class FProtDistCommandline(_EmbossCommandLine):
+    """Commandline object for the fprotdist program from EMBOSS.
+
+    fprotdist is an EMBOSS wrapper for the PHYLIP program protdist used to
+    estimate trees from protein sequences using parsimony
+    """
+    def __init__(self, cmd = "fprotdist", **kwargs):
+        self.parameters = \
+        [_Option(["-sequence", "sequence"], ["input"], None, 1,
+                  "seq file to use (phylip)"),
+        _Option(["-ncategories", "ncategories"], ["input"], None, 0,
+                 "number of rate catergories (1-9)"),
+        _Option(["-rate", "rate"], ["input"], None, 0,
+                 "rate for each category"),
+        _Option(["-catergories","catergories"], ["input"], None, 0,
+                 "file of rates"),
+        _Option(["-weights", "weights"], ["input"], None, 0,
+                 "weights file"),
+        _Option(["-method", "method"], ["input"], None, 0,
+                 "sub. model [j,h,d,k,s,c]"),
+        _Option(["-gamma", "gamma"], ["input"], None, 0,
+                 "gamma [g, i,c]"),
+        _Option(["-gammacoefficient", "gammacoefficient"], ["input"], None, 0,
+                 "value for gamma (> 0.001)"),
+        _Option(["-invarcoefficient", "invarcoefficient"], ["input"], None, 0,
+                 "float for variation of substitution rate among sites"),
+        _Option(["-aacateg", "aacateg"], ["input"], None, 0,
+                 "Choose the category to use [G,C,H]"),
+        _Option(["-whichcode", "whichcode"], ["input"], None, 0,
+                 "genetic code [c,m,v,f,y]"),
+        _Option(["-ease", "ease"], ["input"], None, 0,
+                 "Pob change catergory (float between -0 and 1)"),
+        _Option(["-ttratio", "ttratio"], ["input"], None, 0,
+                 "Transition/transversion ratio (0-1)"),
+        _Option(["-basefreq", "basefreq"], ["input"], None, 0,
+                 "DNA base frequencies (space seperated list)")]
+        _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
+
+class FConsenseCommandline(_EmbossCommandLine):
+    """Commandline object for the fconsense program from EMBOSS.
+
+    fconsense is an EMBOSS wrapper for the PHYLIP program consense used to
+    calculate consensus trees.
+    """
+    def __init__(self, cmd = "fconsense", **kwargs):
+        self.parameters = \
+        [_Option(["-intreefile", "intreefile"], ["input"], None, 1,
+                  "file with phylip trees to make consensus from"),
+        _Option(["-method", "method"], ["input"], None, 0,
+                 "consensus method [s, mr, MRE, ml]"),
+        _Option(["-mlfrac", "mlfrac"], ["input"], None, 0,
+                 "cut-off freq for a branch to appear in consensus (0.5-1.0)"),
+        _Option(["-root", "root"], ["input"], None, 0,
+                 "treat trees as rooted (YES, no)"),
+        _Option(["-outgrno", "outgrno"], ["input"], None, 0,
+                 "OTU to use as outgroup (starts from 0)"),
+        _Option(["-trout", "trout"], ["input"], None, 0,
+                 "treat trees as rooted (YES, no)"),
+        _Option(["-outtreefile", "outtreefile"], ["input"], None, 0,
+                 "Phylip tree output file (optional)")]
+        _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
 
 class WaterCommandline(_EmbossCommandLine):
     """Commandline object for the water program from EMBOSS.
@@ -623,6 +909,7 @@ class IepCommandline(_EmbossCommandLine):
          _Option(["-notermini","notermini"], ["input"], None, 0),
          ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
 
 #seqret uses -outseq, not -outfile, so use the base class:
 class SeqretCommandline(_EmbossMinimalCommandLine):
