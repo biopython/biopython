@@ -455,8 +455,7 @@ class FTreeDistCommandline(_EmbossCommandLine):
         _Option(["-dtype", "dtype"], ["input"], None, 0,
                  "distance type ([S]ymetric, [b]ranch score)"),
         _Option(["-pairing", "pairing"], ["input"], None, 0,
-                 "tree pairing method ([A]djacent pairs, all [p]ossible
-                  pairs)"),
+                 "tree pairing method ([A]djacent pairs, all [p]ossible pairs)"),
         _Option(["-style", "style"], ["input"], None, 0,
                  "output style - [V]erbose, [f]ill, [s]parse"),
         _Option(["-noroot", "noroot"], ["input"], None, 0,
