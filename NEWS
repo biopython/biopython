@@ -19,10 +19,17 @@ formats (but not alignment file formats), allowing dictionary like random
 access to all the entries in the file as SeqRecord objects, keyed on the
 record id. This is epecially useful for very large sequencing files, where
 all the records cannot be held in memory at once. This supplements the more
-flexible but memory demaning Bio.SeqIO.to_dict() function.
+flexible but memory demanding Bio.SeqIO.to_dict() function.
 
 Bio.SeqIO can now write "phd" format files (used by PHRED, PHRAD and CONSED),
-allowing interconverion with FASTQ files, or FASTA+QUAL files.
+allowing interconversion with FASTQ files, or FASTA+QUAL files.
+
+Bio.Emboss.Applications now includes wrappers for the "new" PHYLIP EMBASSY
+package (e.g. fneighbor) which replace the "old" PHYLIP EMBASSY package (e.g.
+efneighbor) whose Biopython wrappers are now obsolete.
+
+See also the DEPRECATED file, as several old deprecated modules have finally
+been removed (e.g. Bio.EUtils which had been replaced by Bio.Entrez).
 
 ===================================================================
 
@@ -317,7 +324,7 @@ tostring() method is preserved for backwards compatibility.
 
 BioSQL has had some bugs fixed, and has an additional unit test which loads
 records into a database using Bio.SeqIO and then checks the records can be
-retieved correctly.  The DBSeq and DBSeqRecord classes now subclass the
+retrieved correctly.  The DBSeq and DBSeqRecord classes now subclass the
 Seq and SeqRecord classes, which provides more functionality.
 
 The modules under Bio.WWW are being deprecated.

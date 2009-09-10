@@ -2,7 +2,7 @@
 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
 +
 ;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
-@FAKE0004 Original version has Solexa scores from 0-5 to 62 inclusive (in that order)
+@FAKE0004 Original version has Solexa scores from -5 to 62 inclusive (in that order)
 TGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCA
 +
 ~}|{zyxwvutsrqponmlkjihgfedcba`_^]\[ZYXWVUTSRQPONMLKJIHGFEDCBA@?>=<;

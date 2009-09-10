@@ -3,7 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Code for more fancy file handles (OBSOLETE).
+"""Code for more fancy file handles (DEPRECATED).
+
+This module is now deprecated, and will be removed in a future release of
+Biopython.
 
 Classes:
 Filtered is a decorator for File that allows the user to filter the output
@@ -20,11 +23,14 @@ filtered_reasder.read()
 
 All filters in the chain must provide the same interface with a line of text as the single
 input parameter and altered text as the return value.
-
-This module is now considered to be obsolete, and is likely to be deprecated
-in a future release of Biopython, and later removed.
 """
 
+import warnings
+warnings.warn("Bio.FilteredReader is deprecated, and will be removed in a"\
+              " future release of Biopython.  If you want to continue to use"\
+              " this code, please get in contact with the developers"\
+              " via the mailing lists to avoid its permanent removal from"\
+              " Biopython.", DeprecationWarning)
 
 def dump_saved( name, text, j ):
     """Used for debugging."""

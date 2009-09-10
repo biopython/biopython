@@ -27,8 +27,12 @@ Bio.Entrez.efetch and rettype="genbank"
 =======================================
 As of Easter 2009, the NCBI have stopped supporting the unofficial return type
 of "genbank" in EFetch.  Instead we should be using "gb" (GenBank) or "gp"
-(GenPept).  Bio.Entrez.efetch will correct this automatically, but issues a
-deprecation warning.
+(GenPept).  As of Biopython 1.50, Bio.Entrez.efetch will correct this
+automatically, but issues a deprecation warning.
+
+Bio.Entrez.query function
+=========================
+Deprecated in Release 1.47, removed in 1.52.
 
 Bio.SwissProt.SProt
 ===================
@@ -45,7 +49,7 @@ Bio.ExPASy.Enzyme, respectively.
 
 Bio.EZRetrieve, Bio.NetCatch, Bio.File.SGMLHandle, Bio.FilteredReader
 =====================================================================
-Declared obsolete in Release 1.50, will be deprecated in a subsequent release.
+Declared obsolete in Release 1.50, deprecated in Release 1.52.
 
 Bio.Graphics.GenomeDiagram and colour/color, centre/center
 ==========================================================
@@ -146,19 +150,22 @@ Please use Bio.Entrez instead.
 
 Bio.EUtils
 ==========
-Deprecated in favor of Bio.Entrez in Release 1.48.
+Deprecated in favor of Bio.Entrez in Release 1.48, removed in Release 1.52.
 
-Bio.Sequencing
-==============
-A revised API was added and the old one deprecated in Biopython 1.48:
+Bio.Sequencing & Bio.Medline
+============================
+A revised API was added and the old one deprecated in Release 1.48,
+and removed in Biopython 1.52:
 Bio.Sequencing.Ace.RecordParser --> Bio.Sequencing.Ace.read(handle)
 Bio.Sequencing.Ace.Iterator --> Bio.Sequencing.Ace.parse(handle)
 Bio.Sequencing.Phd.RecordParser --> Bio.Sequencing.Phd.read(handle)
 Bio.Sequencing.Phd.Iterator --> Bio.Sequencing.Phd.parse(handle)
+Bio.Medline.RecordParser --> Bio.Medline.read(handle)
+Bio.Medline.Iterator --> Bio.Medline.parse(handle)
 
 Bio.Blast.NCBIWWW
 =================
-The HTML BLAST parser was deprecated as of Release 1.48.
+The HTML BLAST parser was deprecated in Release 1.48, and removed in 1.52.
 The deprecated functions blast and blasturl were removed in Release 1.44.
 
 Bio.Saf
