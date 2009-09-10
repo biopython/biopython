@@ -51,19 +51,6 @@ from Bio import File
 
 email = None
 
-def query(cmd, db, cgi='http://www.ncbi.nlm.nih.gov/sites/entrez',
-          **keywds):
-    """Query Entrez and return a handle to the HTML results (DEPRECATED).
-
-    See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/books/bv.fcgi?rid=helplinks.chapter.linkshelp
-
-    Return a handle to the results.
-
-    Raises an IOError exception if there's a network error.
-    """
-    import warnings
-    warnings.warn("Bio.Entrez.query is deprecated, since it breaks NCBI's rule to only use the E-Utilities URL.", DeprecationWarning)
 
 # XXX retmode?
 def epost(db, **keywds):
@@ -106,7 +93,7 @@ def efetch(db, **keywds):
     for key in keywds :
         if key.lower()=="rettype" and keywds[key].lower()=="genbank" :
             import warnings
-            warnings.warn('As of Easter 2009, Entrez EFtech no longer '
+            warnings.warn('As of Easter 2009, Entrez EFetch no longer '
                           'supports the unofficial return type "genbank", '
                           'use "gb" or "gp" instead.', DeprecationWarning)
             if db.lower()=="protein" :
