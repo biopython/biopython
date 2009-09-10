@@ -204,7 +204,7 @@ names are also used in Bio.AlignIO and include the following:
              in separate FASTA files).
 
 Note that while Bio.SeqIO can read all the above file formats, it cannot
-write to all of them. Nor can it index all of the above files.
+write to all of them.
 
 You can also use any file format supported by Bio.AlignIO, such as "nexus",
 "phlip" and "stockholm", which gives you access to the individual sequences
@@ -277,7 +277,7 @@ import QualityIO #FastQ and qual files
 
 
 #Convention for format names is "mainname-subtype" in lower case.
-#Please use the same names as BioPerl where possible.
+#Please use the same names as BioPerl or EMBOSS where possible.
 #
 #Note that this simple system copes with defining
 #multiple possible iterators for a given format/extension
@@ -416,7 +416,7 @@ def parse(handle, format, alphabet=None) :
     """
     #NOTE - The above docstring has some raw \n characters needed
     #for the StringIO example, hense the whole docstring is in raw
-    #string more (see the leading r before the opening quote).
+    #string mode (see the leading r before the opening quote).
     from Bio import AlignIO
 
     #Try and give helpful error messages:
@@ -443,8 +443,8 @@ def parse(handle, format, alphabet=None) :
             return _force_alphabet(iterator_generator(handle), alphabet)
     elif format in AlignIO._FormatToIterator :
         #Use Bio.AlignIO to read in the alignments
-        #TODO - Once we drop support for Python 2.3, this helper function can be
-        #replaced with a generator expression.
+        #TODO - Can this helper function can be replaced with a generator expression,
+        #or something from itertools?
         return _iterate_via_AlignIO(handle, format, alphabet)
     else :
         raise ValueError("Unknown format '%s'" % format)
@@ -539,10 +539,9 @@ def to_dict(sequences, key_function=None) :
     e.g. key_function = lambda rec : rec.name
     or,  key_function = lambda rec : rec.description.split()[0]
 
-    If key_function is ommitted then record.id is used, on the
-    assumption that the records objects returned are SeqRecords
-    with a unique id field.
-
+    If key_function is ommitted then record.id is used, on the assumption
+    that the records objects returned are SeqRecords with a unique id.
+    
     If there are duplicate keys, an error is raised.
 
     Example usage, defaulting to using the record.id as key:
@@ -556,8 +555,8 @@ def to_dict(sequences, key_function=None) :
     >>> print id_dict["L31939.1"].description
     Brassica rapa (clone bif72) kin mRNA, complete cds.
 
-    A more complex example, using the key_function argument in order to use
-    a sequence checksum as the dictionary key:
+    A more complex example, using the key_function argument in order to
+    use a sequence checksum as the dictionary key:
 
     >>> from Bio import SeqIO
     >>> from Bio.SeqUtils.CheckSum import seguid
@@ -648,9 +647,9 @@ def indexed_dict(filename, format, alphabet=None, key_function=None) :
     TTGGCAGGCCAAGGCCGATGGATCA
     <BLANKLINE>
 
-    As with the to_dict() function, by default the id string of each record is
-    used as the key. You can specify a callback function to transform this
-    (the record identifier string) into your prefered key. For example:
+    As with the to_dict() function, by default the id string of each record
+    is used as the key. You can specify a callback function to transform
+    this (the record identifier string) into your prefered key. For example:
 
     >>> from Bio import SeqIO
     >>> def make_tuple(identifier) :
@@ -673,15 +672,15 @@ def indexed_dict(filename, format, alphabet=None, key_function=None) :
     >>> print records.get("Missing", None)
     None
 
-    Another common use case would be indexing an NCBI style FASTA file, where
-    you might want to extract the GI number from the FASTA identifer to use
-    as the dictionary key.
+    Another common use case would be indexing an NCBI style FASTA file,
+    where you might want to extract the GI number from the FASTA identifer
+    to use as the dictionary key.
 
-    Notice that unlike the to_dict() function, here the key_function does not
-    get given the full SeqRecord to use to generate they key. Doing so would
-    impose a severe performance penalty as it would require the file to be
-    completely parsed while building the index. Right now this is usually
-    avoided.
+    Notice that unlike the to_dict() function, here the key_function does
+    not get given the full SeqRecord to use to generate the key. Doing so
+    would impose a severe performance penalty as it would require the file
+    to be completely parsed while building the index. Right now this is
+    usually avoided.
     """
     #Try and give helpful error messages:
     if not isinstance(filename, basestring) :
@@ -801,8 +800,8 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None) :
      - alphabet - optional alphabet to assume
 
     NOTE - If you provide an output filename, it will be opened which will
-    overwrite any existing file without warning. This may happen if even the
-    conversion is aborted (e.g. an invalid out_format name is given).
+    overwrite any existing file without warning. This may happen if even
+    the conversion is aborted (e.g. an invalid out_format name is given).
 
     For example, going from a filename to a handle:
 
