@@ -49,7 +49,7 @@ Bio.ExPASy.Enzyme, respectively.
 
 Bio.EZRetrieve, Bio.NetCatch, Bio.File.SGMLHandle, Bio.FilteredReader
 =====================================================================
-Declared obsolete in Release 1.50, will be deprecated in a subsequent release.
+Declared obsolete in Release 1.50, deprecated in Release 1.52.
 
 Bio.Graphics.GenomeDiagram and colour/color, centre/center
 ==========================================================
