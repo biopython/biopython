@@ -2115,7 +2115,7 @@ kmeans(int nclusters, int nrows, int ncolumns, double** data, int** mask,
       { if (total < *error)
         { ifound = 1;
           *error = total;
-          for (i = 0; i < nelements; i++) clusterid[i] = tclusterid[i];
+          for (j = 0; j < nelements; j++) clusterid[j] = tclusterid[j];
         }
         break;
       }
@@ -2220,7 +2220,7 @@ kmedians(int nclusters, int nrows, int ncolumns, double** data, int** mask,
       { if (total < *error)
         { ifound = 1;
           *error = total;
-          for (i = 0; i < nelements; i++) clusterid[i] = tclusterid[i];
+          for (j = 0; j < nelements; j++) clusterid[j] = tclusterid[j];
         }
         break;
       }
