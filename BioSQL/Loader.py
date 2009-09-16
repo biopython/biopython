@@ -655,7 +655,7 @@ class DatabaseLoader:
                 #Handled separately
                 continue
             term_id = self._get_term_id(key, ontology_id=tag_ontology_id)
-            if isinstance(value, list) :
+            if isinstance(value, list) or isinstance(value, tuple):
                 rank = 0
                 for entry in value :
                     if isinstance(entry, str) or isinstance(entry, int):
