@@ -5,8 +5,8 @@
 """Dictionary like indexing of sequence files (PRIVATE).
 
 You are not expected to access this module, or any of its code, directly. This
-is all handled internally by the Bio.SeqIO.indexed_dict(...) function which is
-the public interface for this functionality.
+is all handled internally by the Bio.SeqIO.index(...) function which is the
+public interface for this functionality.
 
 The basic idea is that we scan over a sequence file, looking for new record
 markers. We then try and extract the string that Bio.SeqIO.parse/read would
@@ -57,7 +57,7 @@ class _IndexedSeqFileDict(dict) :
         #Now scan it in a subclassed method, and set the format!
 
     def __repr__(self) :
-        return "SeqIO.indexed_dict(%s, %s, mode=%s, key_function=%s)" \
+        return "SeqIO.index(%s, %s, mode=%s, key_function=%s)" \
                % (self._handle.name, self._format,
                   self._alphabet, self._key_function)
 
