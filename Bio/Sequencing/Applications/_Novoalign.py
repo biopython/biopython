@@ -1,15 +1,8 @@
-__author__ = "Osvaldo Zagordi"
-__version__ = "$Revision: 1.1 $"
-__date__ = "$Date: 2009-09-16 21:56:33 $"
-__copyright__ = ""
-__license__ = ""
-# Copyright 2009 by Osvaldo Zagordi
-# Modification of MuscleCommandline: class implemented in Biopython
-# by Cymon J. Cox. 2009
-
+# Copyright 2009 by Osvaldo Zagordi.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """Command line wrapper for the short read aligner Novoalign by Novocraft (www.novocraft.com)
-
-Citations:
 
 Last checked against version: 2.05.04
 """
@@ -17,7 +10,7 @@ import types
 from Bio.Application import _Option, AbstractCommandline
 
 class NovoalignCommandline(AbstractCommandline):
-    """Command line wrapper for the short read alignment program novoalign by novocraft."""
+    """Command line wrapper for the short read alignment program novoalign by Novocraft."""
     def __init__(self, cmd="novoalign", **kwargs):
         
         READ_FORMAT = ['FA', 'SLXFQ', 'STDFQ', 'ILMFQ', 'PRB', 'PRBnSEQ']
@@ -34,7 +27,7 @@ class NovoalignCommandline(AbstractCommandline):
                     0),
             _Option(["-F", "format"], ["input", "option"],
                     lambda x: x in READ_FORMAT,
-                    0, "Format of read files (checked anyway)",
+                    0, "Format of read files.\n\nAllowed values: %s" % ", ".join(READ_FORMAT),
                     0),
             
             # Alignment scoring options
@@ -52,7 +45,8 @@ class NovoalignCommandline(AbstractCommandline):
                     0),
             _Option(["-u", "unconverted"], ["input"],
                     lambda x: isinstance(x, types.IntType), 0,
-                    "Experimental: unconverted cytosines penalty in bisulfite mode [default: no penalty]",
+                    "Experimental: unconverted cytosines penalty in bisulfite mode\n\n"
+                    "Default: no penalty",
                     0),
             
             # Quality control and read filtering
@@ -66,9 +60,10 @@ class NovoalignCommandline(AbstractCommandline):
                     0),
             
             # Read preprocessing options
-            _Option(["-a", "adapter"], ["input"],
+            _Option(["-a", "adapter3"], ["input"],
                     lambda x: isinstance(x, types.StringType),
-                    0, "Strips a 3' adapter sequence prior to alignment. With paired ends two adapters can be specified",
+                    0, "Strips a 3' adapter sequence prior to alignment.\n\n"
+                    "With paired ends two adapters can be specified",
                     0),
             _Option(["-n", "truncate"], ["input"],
                     lambda x: isinstance(x, types.IntType),
@@ -76,16 +71,19 @@ class NovoalignCommandline(AbstractCommandline):
                     0),
             _Option(["-s", "trimming"], ["input"],
                     lambda x: isinstance(x, types.IntType),
-                    0, "If fail to align, trim by s bases until they map or become shorter than l [default: 2]",
+                    0, "If fail to align, trim by s bases until they map or become shorter than l.\n\n"
+                    "Ddefault: 2",
                     0),
-            _Option(["-5", "adapter_5"], ["input"],
+            _Option(["-5", "adapter5"], ["input"],
                     lambda x: isinstance(x, types.StringType),
-                    0, "Strips a 5' adapter sequence. Similar to -a, but on the 5'",
+                    0, "Strips a 5' adapter sequence.\n\n"
+                    "Similar to -a (adaptor_3), but on the 5' end.",
                     0),
             # Reporting options
             _Option(["-o", "report"], ["input"],
                     lambda x: x in REPORT_FORMAT,
-                    0, "Specifies the report format [default: Native]",
+                    0, "Specifies the report format.\n\nAllowed values: %s\nDefault: Native" \
+                    % ", ".join(REPORT_FORMAT),
                     0),
             _Option(["-Q", "quality"], ["input"],
                     lambda x: isinstance(x, types.IntType),
@@ -93,17 +91,22 @@ class NovoalignCommandline(AbstractCommandline):
                     0),
             _Option(["-R", "repeats"], ["input"],
                     lambda x: isinstance(x, types.IntType),
-                    0, "If score difference is higher, report repeats, o.w. '-r method' applies [default: 5]",
+                    0, "If score difference is higher, report repeats.\n\n"
+                    "Otherwise -r read method applies [default: 5]",
                     0),
-            _Option(["-r", "r_method"], ["input"],
+            _Option(["-r", "read_method"], ["input"],
                     lambda x: x.split()[0] in REPEAT_METHOD,
-                    0, "Methods to report reads with multiple matches. 'All' and 'Exhaustive' accept limits",
+                    0, "Methods to report reads with multiple matches.\n\n"
+                    "Allowed values: %s\n"
+                    "'All' and 'Exhaustive' accept limits." \
+                    % ", ".join(REPEAT_METHOD),
                     0),
             _Option(["-e", "recorded"], ["input"],
                     lambda x: isinstance(x, types.IntType),
-                    0, "Alignments recorded with score equal to the best [default: 1000 in default r_method, o.w. no limit]",
+                    0, "Alignments recorded with score equal to the best.\n\n"
+                    "Default: 1000 in default read method, otherwise no limit.",
                     0),
-            _Option(["-q", "qual_decimal"], ["input"],
+            _Option(["-q", "qual_digits"], ["input"],
                     lambda x: isinstance(x, types.IntType),
                     0, "Decimal digits for quality scores [default: 0]",
                     0),
