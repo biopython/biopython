@@ -30,7 +30,12 @@ class AppTest(unittest.TestCase):
     """
 
     def setUp(self):
-        self.ctrl = EasyController("PopGen" + os.sep + "big.gen")
+        #Genepop likes to be on the directory where the file is.
+        os.chdir("PopGen")
+        self.ctrl = EasyController("big.gen")
+
+    def tearDown(self):
+        os.chdir("..")
 
     def test_basic_info(self):
         """Test basic info.
