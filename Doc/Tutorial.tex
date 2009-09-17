@@ -4885,15 +4885,16 @@ If you want to perform a search with \verb|Bio.Entrez.esearch()|, and then downl
 
 \section{ELink: Searching for related items in NCBI Entrez}
 
-ELink, available from Biopython as \verb+Bio.Entrez.elink()+, can be used to find related items in the NCBI Entrez databases. For example, let's try to find articles related to the Biopython application note published in \textit{Bioinformatics} in 2009. The PubMed ID of this article is 19304878. Now we use \verb+Bio.Entrez.elink+ to find all related items to this article:
+ELink, available from Biopython as \verb+Bio.Entrez.elink()+, can be used to find related items in the NCBI Entrez databases. For example, you can us this to find nucleotide entries for an entry in the gene database,
+and other cool stuff.
+
+Let's use ELink to find articles related to the Biopython application note published in \textit{Bioinformatics} in 2009. The PubMed ID of this article is 19304878:
 
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"
 >>> pmid = "19304878"
->>> handle = Entrez.elink(dbfrom="pubmed", id=pmid)
->>> record = Entrez.read(handle)
->>> handle.close()
+>>> record = Entrez.read(Entrez.elink(dbfrom="pubmed", id=pmid))
 \end{verbatim}
 
 The \verb+record+ variable consists of a Python list, one for each database in which we searched. Since we specified only one PubMed ID to search for, \verb+record+ contains only one item. This item is a dictionary containing information about our search term, as well as all the related items that were found:
@@ -4935,7 +4936,7 @@ Let's now at the first search result:
 {u'Id': '14630660'}
 \end{verbatim}
 
-\noindent This paper, with PubMed ID 17316423, is about the Biopython PDB parser.
+\noindent This paper, with PubMed ID 14630660, is about the Biopython PDB parser.
 
 We can use a loop to print out all PubMed IDs:
 \begin{verbatim}
@@ -4951,7 +4952,45 @@ We can use a loop to print out all PubMed IDs:
 ......
 \end{verbatim}
 
+Now that was nice, but personally I am often more interested to find out if a paper has been cited.
+Well, ELink can do that too -- at least for journals in Pubmed Central.
+%
+%TODO - revisit this example later, and find out why LinkName="pubmed_pubmed_refs" give no hits.
+%
+%Let's try this for the Biopython PDB parser paper, PubMed ID 14630660:
+%
+%Aim to generate this URL:
+%http://www.ncbi.nlm.nih.gov/sites/entrez?db=pubmed&cmd=link&LinkName=pubmed_pmc_refs&from_uid=14630660
+%\begin{verbatim}
+%>>> from Bio import Entrez
+%>>> Entrez.email = "A.N.Other@example.com"
+%>>> pmid = "14630660"
+%>>> record = Entrez.read(Entrez.elink(db="pubmed", LinkName="pubmed_pmc_refs", from_uid=pmid))
+%>>> for line in record[0]["LinkSetDb"][0]['Link'] :
+%...     print link
+%... 
+%{u'Id': '2744707'}
+%{u'Id': '2705363'}
+%{u'Id': '2682512'}
+%{u'Id': '2483496'}
+%{u'Id': '2447749'}
+%{u'Id': '2098836'}
+%{u'Id': '2072961'}
+%{u'Id': '1933154'}
+%{u'Id': '1848001'}
+%{u'Id': '1192790'}
+%{u'Id': '1190160'}
+%\end{verbatim}
+%
+%Great - eleven articles. But why hasn't the Biopython application note been found (PubMed ID 19304878)?
+%Well, actually these are not PubMed IDs, but PubMed Central IDs. The Biopython application note is the
+%third citing paper in that list, PMCID 2682512. Which is a bit of a pain if you like to work with PubMed IDs,
+%but can't be helped since the NCBI don't provide this citation service for the whole of PubMed.
+%
+%TODO - Two step example with history? i.e. use LinkName="pmc_pubmed" to get back PubMed IDs?
+%
 For help on ELink, see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/elink\_help.html}{ELink help page}.
+There is an entire sub-page just for the \href{http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/entrezlinks.html}{link names}, describing how different databases can be cross referenced.
 
 \section{EGQuery: Obtaining counts for search terms}
 EGQuery provides counts for a search term in each of the Entrez databases. This is particularly useful to find out how many items your search terms would find in each database without actually performing lots of separate searches with ESearch (see the example in \ref{subsec:entrez_example_genbank} below).
