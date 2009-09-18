@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 17 September 2009 (Biopython 1.51+)}
+\date{Last Update -- 18 September 2009 (Biopython 1.51+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -4884,6 +4884,7 @@ To get the output in XML format, which you can parse using the \verb+Bio.Entrez.
 If you want to perform a search with \verb|Bio.Entrez.esearch()|, and then download the records with \verb|Bio.Entrez.efetch()|, you should use the WebEnv history feature -- see Section~\ref{sec:entrez-webenv}.
 
 \section{ELink: Searching for related items in NCBI Entrez}
+\label{sec:elink}
 
 ELink, available from Biopython as \verb+Bio.Entrez.elink()+, can be used to find related items in the NCBI Entrez databases. For example, you can us this to find nucleotide entries for an entry in the gene database,
 and other cool stuff.
@@ -4911,7 +4912,7 @@ The \verb+"LinkSetDb"+ key contains the search results, stored as a list consist
 \begin{verbatim}
 >>> len(record[0]["LinkSetDb"])
 5
->>> for linksetdb in record[0]['LinkSetDb'] :
+>>> for linksetdb in record[0]["LinkSetDb"] :
 ...     print linksetdb["DbTo"], linksetdb["LinkName"], len(linksetdb["Link"])
 ... 
 pubmed pubmed_pubmed 110
@@ -4925,14 +4926,14 @@ The actual search results are stored as under the \verb+"Link"+ key. In total, 1
 standard search.
 Let's now at the first search result:
 \begin{verbatim}
->>> record[0]['LinkSetDb'][0]['Link'][0]
+>>> record[0]["LinkSetDb"][0]["Link"][0]
 {u'Id': '19304878'}
 \end{verbatim}
 
 \noindent This is the article we searched for, which doesn't help us much, so let's look at the second search result:
 
 \begin{verbatim}
->>> record[0]['LinkSetDb'][0]['Link'][1]
+>>> record[0]["LinkSetDb"][0]["Link"][1]
 {u'Id': '14630660'}
 \end{verbatim}
 
@@ -4940,55 +4941,19 @@ Let's now at the first search result:
 
 We can use a loop to print out all PubMed IDs:
 \begin{verbatim}
->>> for link in record[0]["LinkSetDb"][0]['Link'] :
-...     print link
-...
-{u'Id': '19304878'}
-{u'Id': '14630660'}
-{u'Id': '18689808'}
-{u'Id': '17121776'}
-{u'Id': '16377612'}
-{u'Id': '12368254'}
+>>> for link in record[0]["LinkSetDb"][0]["Link"] : print link["Id"]
+19304878
+14630660
+18689808
+17121776
+16377612
+12368254
 ......
 \end{verbatim}
 
 Now that was nice, but personally I am often more interested to find out if a paper has been cited.
-Well, ELink can do that too -- at least for journals in Pubmed Central.
-%
-%TODO - revisit this example later, and find out why LinkName="pubmed_pubmed_refs" give no hits.
-%
-%Let's try this for the Biopython PDB parser paper, PubMed ID 14630660:
-%
-%Aim to generate this URL:
-%http://www.ncbi.nlm.nih.gov/sites/entrez?db=pubmed&cmd=link&LinkName=pubmed_pmc_refs&from_uid=14630660
-%\begin{verbatim}
-%>>> from Bio import Entrez
-%>>> Entrez.email = "A.N.Other@example.com"
-%>>> pmid = "14630660"
-%>>> record = Entrez.read(Entrez.elink(db="pubmed", LinkName="pubmed_pmc_refs", from_uid=pmid))
-%>>> for line in record[0]["LinkSetDb"][0]['Link'] :
-%...     print link
-%... 
-%{u'Id': '2744707'}
-%{u'Id': '2705363'}
-%{u'Id': '2682512'}
-%{u'Id': '2483496'}
-%{u'Id': '2447749'}
-%{u'Id': '2098836'}
-%{u'Id': '2072961'}
-%{u'Id': '1933154'}
-%{u'Id': '1848001'}
-%{u'Id': '1192790'}
-%{u'Id': '1190160'}
-%\end{verbatim}
-%
-%Great - eleven articles. But why hasn't the Biopython application note been found (PubMed ID 19304878)?
-%Well, actually these are not PubMed IDs, but PubMed Central IDs. The Biopython application note is the
-%third citing paper in that list, PMCID 2682512. Which is a bit of a pain if you like to work with PubMed IDs,
-%but can't be helped since the NCBI don't provide this citation service for the whole of PubMed.
-%
-%TODO - Two step example with history? i.e. use LinkName="pmc_pubmed" to get back PubMed IDs?
-%
+Well, ELink can do that too -- at least for journals in Pubmed Central (see Section~\ref{sec:elink-citations}).
+
 For help on ELink, see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/elink\_help.html}{ELink help page}.
 There is an entire sub-page just for the \href{http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/entrezlinks.html}{link names}, describing how different databases can be cross referenced.
 
@@ -5628,6 +5593,50 @@ We can get the lineage directly from this record:
 \end{verbatim}
 
 The record data contains much more than just the information shown here - for example look under \texttt{"LineageEx"} instead of \texttt{"Lineage"} and you'll get the NCBI taxon identifiers of the lineage entries too.
+
+\subsection{Searching for citations}
+\label{sec:elink-citations}
+
+Back in Section~\ref{sec:elink} we mentioned ELink can be used to search for citations of a given paper.
+Unfortunately this only covers journals indexed for PubMed Central
+(doing it for all the journals in PubMed would mean a lot more work for the NIH).
+Let's try this for the Biopython PDB parser paper, PubMed ID 14630660:
+
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com"
+>>> pmid = "14630660"
+>>> results = Entrez.read(Entrez.elink(dbfrom="pubmed", db="pmc",
+...                                    LinkName="pubmed_pmc_refs", from_uid=pmid))
+>>> pmc_ids = [link["Id"] for link in results[0]["LinkSetDb"][0]["Link"]]
+>>> pmc_ids
+['2744707', '2705363', '2682512', ..., '1190160']
+\end{verbatim}
+
+Great - eleven articles. But why hasn't the Biopython application note been
+found (PubMed ID 19304878)? Well, as you might have guessed from the variable
+names, there are not actually PubMed IDs, but PubMed Central IDs. Our
+application note is the third citing paper in that list, PMCID 2682512.
+
+So, what if (like me) you'd rather get back a list of PubMed IDs? Well we
+can call ELink again to translate them. This becomes a two step process,
+and you might expect to use the history feature to accomplish it
+(Section~\ref{sec:entrez-webenv}). Unfortunately at the time of writing,
+it seems that Entrez is returning invalid XML files when using ELink
+with the history (which Biopython can't parse).
+
+So, instead, here we take the more straightforward approach:
+
+\begin{verbatim}
+>>> results2 = Entrez.read(Entrez.elink(dbfrom="pmc", db="pubmed", LinkName="pmc_pubmed",
+...                                     from_uid=",".join(pmc_ids)))
+>>> pubmed_ids = [link["Id"] for link in results2[0]["LinkSetDb"][0]["Link"]]
+>>> pubmed_ids
+['19698094', '19450287', '19304878', ..., '15985178']
+\end{verbatim}
+
+\noindent This time you can immediately spot the Biopython application note
+as the third hit (PubMed ID 19304878).
 
 \section{Using the history and WebEnv}
 \label{sec:entrez-webenv}
