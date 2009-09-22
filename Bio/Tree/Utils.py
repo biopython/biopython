@@ -48,17 +48,15 @@ def pretty_print(treeobj, file=sys.stdout, show_all=False, indent=0):
     print_phylo(treeobj, indent)
 
 
-def to_networkx(tree, graphviz=False):
+def to_networkx(tree):
     """Convert a Tree object to a networkx graph.
 
-    The result is useful for plotting with pylab, matplotlib or pygraphviz,
-    though the result is not quite a proper dendrogram for representing a
-    phylogeny.
+    The result is useful for graph-oriented analysis, and also interactive
+    plotting with pylab, matplotlib or pygraphviz, though the result is not
+    quite a proper dendrogram for representing a phylogeny.
 
-    Requires the networkx package.
+    Requires the networkx-1.0 package.
     """
-    # TODO: solve the graphviz labeling issue
-    # ENH: color non-terminal nodes white/transparent
     try:
         import networkx
     except ImportError:
@@ -66,53 +64,32 @@ def to_networkx(tree, graphviz=False):
         raise MissingExternalDependencyError(
                 "The networkx library is not installed.")
 
-    def get_label(node):
-        """Get a unique hashable node value.
-
-        Quirk: draw_graphviz doesn't honor the labels set in LabeledGraph, so
-        str(node) must be unique for that engine. The regular nx.draw() doesn't
-        have that problem.
-        """
-        if not graphviz:
-            return node
-        label = str(node)
-        if label == node.__class__.__name__:
-            return '<%d>' % id(node)
-        return label
-
-    def add_node(graph, node):
-        if graphviz:
-            graph.add_node(get_label(node))
-        else:
-            graph.add_node(node, get_label(node))
-
-    def add_edge(graph, node1, node2):
-        n1, n2 = map(get_label, [node1, node2])
-        if node2.branch_length is not None:
-            graph.add_edge(n1, n2, node2.branch_length)
-        else:
-            graph.add_edge(n1, n2)
+    def add_edge(graph, n1, n2):
+        graph.add_edge(n1, n2, (n2.branch_length or 1.0))
+        # ENH: add branch colors
+        # if hasattr(n2, 'color') and n2.color is not None:
+        #     graph[n1][n2]['color'] = n2.color
 
     def build_subgraph(graph, top):
         """Walk down the Tree, building graphs, edges and nodes."""
         for node in top.nodes:
-            add_node(graph, node)
+            graph.add_node(node)
             add_edge(graph, top, node)
             build_subgraph(graph, node)
 
     if tree.rooted:
-        G = networkx.LabeledDiGraph()
+        G = networkx.DiGraph()
     else:
-        G = networkx.LabeledGraph()
-    add_node(G, tree.root)
+        G = networkx.Graph()
+    G.add_node(tree.root)
     build_subgraph(G, tree.root)
     return G
 
 
-def draw_graphviz(tree, path=None, format='pdf', prog='twopi', args=''):
+def draw_graphviz(tree, prog='twopi', args='', node_color='#c0deff', **kwargs):
     """Display a Tree object as a networkx graph, using the graphviz engine.
 
-    Requires networkx, matplotlib and pygraphviz.
+    Requires NetworkX, matplotlib, Graphviz and either PyGraphviz or pydot.
 
     Example:
 
@@ -121,16 +98,14 @@ def draw_graphviz(tree, path=None, format='pdf', prog='twopi', args=''):
         >>> tree = TreeIO.read('example.xml', 'phyloxml')
         >>> Tree.draw_graphviz(tree)
         >>> pylab.show()
+        >>> pylab.savefig('example.png')
 
-    Parameters are similar to the AGraph.draw() function in PyGraphViz. See the
-    GraphViz documentation for detailed explanations.
+    The second and third parameters apply to Graphviz, and the remaining
+    arbitrary keyword arguments are passed directly to networkx.draw().  which
+    in turn mostly wraps matplotlib/pylab.  See the documentation for Graphviz
+    and networkx for detailed explanations.
 
-    @param path: File name to write to, if any. If no path is given, matplotlib
-        is used to draw the graph on the screen.
-
-    @param format: Image format to use, if path is given. Defaults to PDF; other
-        formats usually supported are 'ps', 'svg', 'png', 'gif', 'fig' and
-        'dia'.
+    Graphviz parameters:
 
     @param prog: The graphviz program to use when rendering the graph (to file
         or screen). 'twopi' behaves the best for large graphs, reliably avoiding
@@ -141,6 +116,12 @@ def draw_graphviz(tree, path=None, format='pdf', prog='twopi', args=''):
 
     @param args: String of options passed to the external graphviz program.
         Normally not needed, but offered here for completeness.
+
+    The NetworkX/matplotlib parameters are described in the docstrings for
+    networkx.draw() and pylab.scatter(), but the most reasonable options to try
+    are: 
+        alpha, node_color, node_size, node_shape, edge_color, style,
+        font_size, font_color, font_weight, font_family
     """
     try:
         import networkx
@@ -149,10 +130,21 @@ def draw_graphviz(tree, path=None, format='pdf', prog='twopi', args=''):
         raise MissingExternalDependencyError(
                 "The networkx library is not installed.")
 
-    G = to_networkx(tree, graphviz=True)
-    if path is None:
-        networkx.draw_graphviz(G, prog)
-    else:
-        A = networkx.to_agraph(G)
-        A.draw(path, format, prog, args)
+    G = to_networkx(tree)
+    Gi = networkx.convert_node_labels_to_integers(G, discard_old_labels=False)
+
+    try:
+        posi = networkx.pygraphviz_layout(Gi, prog, args=args)
+    except ImportError:
+        try:
+            posi = networkx.pydot_layout(Gi, prog)
+        except ImportError:
+            raise MissingExternalDependencyError(
+                    "Neither PyGraphviz nor Pydot is installed.")
+
+    posn = dict((node, posi[Gi.node_labels[node]]) for node in G)
+    labels = dict((n, str(n)) for n in G.nodes()
+                  if str(n) != n.__class__.__name__)
+    networkx.draw(G, posn, nodelist=labels.keys(), labels=labels,
+                  node_color=node_color, **kwargs)
 
