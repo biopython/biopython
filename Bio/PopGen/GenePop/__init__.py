@@ -35,9 +35,14 @@ class Record:
     comment_line       Comment line.
 
     loci_list          List of loci names.
+
+    pop_list           List of population names.
     
     populations        List of population data.
     
+    In most genepop files, the population name is not trustable.
+    It is strongly recommended that populations are referred by index.
+
     populations has one element per population. Each element is itself
     a list of individuals, each individual is a pair composed by individual
     name and a list of alleles (2 per marker): Example
@@ -57,9 +62,12 @@ class Record:
         self.marker_len      = 0
         self.comment_line    = ""
         self.loci_list       = []
+        self.pop_list        = []
         self.populations     = []
 
     def __str__(self):
+        """Returns (reconstructs) a GenePop textual representation.
+        """
         rep  = [self.comment_line + '\n']
         rep.append('\n'.join(self.loci_list) + '\n')
         for pop in self.populations:
@@ -254,6 +262,7 @@ class _RecordConsumer(AbstractConsumer):
         pops = self.data.populations
         loci = self.data.loci_list
         for pop_i in range(len(pops)):
+            self.data.pop_list.append(pops[pop_i][-1][0])
             for indiv_i in range(len(pops[pop_i])):
                 for mk_i in range(len(loci)):
                     mk_orig = pops[pop_i][indiv_i][1][mk_i]

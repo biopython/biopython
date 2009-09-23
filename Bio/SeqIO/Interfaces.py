@@ -1,4 +1,4 @@
-# Copyright 2006-2008 by Peter Cock.  All rights reserved.
+# Copyright 2006-2009 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -175,7 +175,8 @@ class SequenceWriter:
         Should return the number of records (as an integer).
 
         This method can only be called once."""
-        #Note when implementing this, you should close the file at the end.
+        #Note when implementing this, your writer class should NOT close the
+        #file at the end, but the calling code should.
         raise NotImplementedError("This object should be subclassed")
         #####################################################
         # You SHOULD subclass this                          #

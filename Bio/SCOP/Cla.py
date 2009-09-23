@@ -74,61 +74,6 @@ class Record:
        
         return "\t".join(map(str,s)) + "\n"
 
-class Iterator:
-    """Iterates over a CLA file.
-    """
-    def __init__(self, handle, parser=None):
-        """Create an object that iterates over a CLA file.
-
-        handle -- file-like object.
-
-        parser -- an optional Parser object to chang the results into
-                  another form.  If set to None, then the raw contents
-                  of the file will be returned.
-
-        """
-        import warnings
-        warnings.warn("Bio.SCOP.Cla.Iterator is deprecated. Please use Bio.SCOP.Cla.parse() instead.", DeprecationWarning)
-        from types import FileType, InstanceType
-        if type(handle) is not FileType and type(handle) is not InstanceType:
-            raise TypeError("I expected a file handle or file-like object")
-        self._handle = handle
-        self._parser = parser
-
-    def next(self):
-        """Retrieve the next CLA record."""    
-        while 1:
-            line = self._handle.readline()
-            if not line: return None
-            if line[0] !='#':  break  # Not a comment line
-        if self._parser is not None :
-            return self._parser.parse(line)
-        return line
-    
-    def __iter__(self):
-        return iter(self.next, None)
-
-
-class Parser:
-    """Parses tab-deliminated CLA records.
-    """
-    def __init__(self):
-        import warnings
-        warnings.warn("""Bio.SCOP.Cla.Parser is deprecated.
-        Instead of
-
-        parser = Cla.Parser()
-        record = parser.parse(entry)
-
-        please use
-
-        record = Cla.Record(entry)
-        """, DeprecationWarning)
-
-    def parse(self, entry):
-        """Returns a Cla Record """        
-        return Record(entry)
-
 
 def parse(handle):
     """Iterates over a CLA file, returning a Cla record for each line

@@ -165,52 +165,6 @@ class Reference:
         self.title = ''
         self.location = ''
 
-class Iterator:
-    """Returns one record at a time from a SwissProt file.
-
-    Methods:
-    next   Return the next record from the stream, or None.
-
-    """
-    def __init__(self, handle, parser=None):
-        """__init__(self, handle, parser=None)
-
-        Create a new iterator.  handle is a file-like object.  parser
-        is an optional Parser object to change the results into another form.
-        If set to None, then the raw contents of the file will be returned.
-
-        """
-        if type(handle) is not FileType and type(handle) is not InstanceType:
-            raise ValueError("I expected a file handle or file-like object")
-        self._uhandle = File.UndoHandle(handle)
-        self._parser = parser
-
-    def next(self):
-        """next(self) -> object
-
-        Return the next swissprot record from the file.  If no more records,
-        return None.
-
-        """
-        lines = []
-        while 1:
-            line = self._uhandle.readline()
-            if not line:
-                break
-            lines.append(line)
-            if line[:2] == '//':
-                break
-            
-        if not lines:
-            return None
-            
-        data = ''.join(lines)
-        if self._parser is not None:
-            return self._parser.parse(File.StringHandle(data))
-        return data
-
-    def __iter__(self):
-        return iter(self.next, None)
 
 class Dictionary:
     """Accesses a SwissProt file using a dictionary interface.

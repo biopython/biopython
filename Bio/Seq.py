@@ -1553,7 +1553,7 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
                 "Sequence length %i is not a multiple of three" % len(sequence))
         if str(sequence[-3:]).upper() not in stop_codons :
             raise CodonTable.TranslationError(\
-                "Final codon '%s' is not a stop codon (%s)" % sequence[-3:])
+                "Final codon '%s' is not a stop codon" % sequence[-3:])
         #Don't translate the stop symbol, and manually translate the M
         sequence = sequence[3:-3]
         amino_acids = ["M"]

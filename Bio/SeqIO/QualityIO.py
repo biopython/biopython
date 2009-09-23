@@ -1010,8 +1010,7 @@ def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = No
                            id=id, name=name, description=descr)
         qualities = [q_mapping[letter] for letter in quality_string]
         if qualities and (min(qualities) < 0 or max(qualities) > 93) :
-            raise ValueError("PHRED quality score outside 0 to 93 found. Your "
-                             "file is not in the standard Sanger FASTQ format.")
+            raise ValueError("Invalid character in quality string")
         #For speed, will now use a dirty trick to speed up assigning the
         #qualities. We do this to bypass the length check imposed by the
         #per-letter-annotations restricted dict (as this has already been
@@ -1174,10 +1173,7 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
         qualities = [q_mapping[letter] for letter in quality_string]
         #DO NOT convert these into PHRED qualities automatically!
         if qualities and (min(qualities) < -5 or max(qualities)>62):
-            raise ValueError("Solexa quality score outside -5 to 62 found. "
-                             "Your file is not in the original Solexa (or "
-                             "early Illumina) FASTQ format. Check if it is a "
-                             "standard Sanger FASTQ file.")
+            raise ValueError("Invalid character in quality string")
         #Dirty trick to speed up this line:
         #record.letter_annotations["solexa_quality"] = qualities
         dict.__setitem__(record._per_letter_annotations,
@@ -1207,7 +1203,7 @@ def FastqIlluminaIterator(handle, alphabet = single_letter_alphabet, title2ids =
     >>> record2 = SeqIO.read(open("Quality/solexa_faked.fastq"), "fastq-illumina")
     Traceback (most recent call last):
        ...
-    ValueError: PHRED quality score outside 0 to 62 found. Your file is not in the Illumina 1.3+ FASTQ format. Check if it is a standard Sanger FASTQ file or from an older Solexa/Illumina pipeline.
+    ValueError: Invalid character in quality string
 
     NOTE - True Sanger style FASTQ files use PHRED scores with an offset of 33.
     """
@@ -1225,10 +1221,7 @@ def FastqIlluminaIterator(handle, alphabet = single_letter_alphabet, title2ids =
                            id=id, name=name, description=descr)
         qualities = [q_mapping[letter] for letter in quality_string]
         if qualities and (min(qualities) < 0 or max(qualities) > 62) :
-            raise ValueError("PHRED quality score outside 0 to 62 found. "
-                             "Your file is not in the Illumina 1.3+ FASTQ "
-                             "format. Check if it is a standard Sanger FASTQ "
-                             "file or from an older Solexa/Illumina pipeline.")
+            raise ValueError("Invalid character in quality string")
         #Dirty trick to speed up this line:
         #record.letter_annotations["phred_quality"] = qualities
         dict.__setitem__(record._per_letter_annotations,

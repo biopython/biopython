@@ -478,9 +478,12 @@ class GenBankWriter(SequentialSequenceWriter) :
         self.handle.write(line)
         #Now the qualifiers...
         for key, values in feature.qualifiers.iteritems() :
-            if values :
+            if isinstance(values, list) or isinstance(values, tuple) :
                 for value in values :
                     self._write_feature_qualifier(key, value)
+            elif values :
+                #String, int, etc
+                self._write_feature_qualifier(key, values)
             else :
                 #e.g. a /psuedo entry
                 self._write_feature_qualifier(key)

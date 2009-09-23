@@ -1,4 +1,7 @@
-"""This module contains code to access EZRetrieve (OBSOLETE).
+"""This module contains code to access EZRetrieve (DEPRECATED).
+
+This module is now deprecated, and will be removed in a future release of
+Biopython.
 
 This is a very simple interface to the EZRetrieve website described in:
 
@@ -11,10 +14,14 @@ http://dx.doi.org/10.1093/nar/gnf120
 Functions:
 retrieve_single  Retrieve a single sequence from EZRetrieve.
 parse_single     Parse the results from EZRetrieve into FASTA format.
-
-This module is now considered to be obsolete, and is likely to be deprecated
-in a future release of Biopython, and later removed.
 """
+
+import warnings
+warnings.warn("Bio.EZRetrieve is deprecated, and will be removed in a future"\
+              " release of Biopython.  If you want to continue to use this"\
+              " code, please get in contact with the Biopython developers"\
+              " via the mailing lists to avoid its permanent removal from"\
+              " Biopython.", DeprecationWarning)
 
 def retrieve_single(id, from_, to, retrieve_by=None, organism=None,
                     parse_results=1):

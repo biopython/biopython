@@ -5,3 +5,4 @@
 # as part of this package.
 """Motif command line tool wrappers."""
 from _AlignAce import AlignAceCommandline
+from _AlignAce import CompareAceCommandline
