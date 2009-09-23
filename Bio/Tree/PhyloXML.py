@@ -417,18 +417,20 @@ class BranchColor(PhyloElement):
         self.green = green
         self.blue = blue
 
-    def to_rgb(self):
+    def to_hex(self):
         """Return a 24-bit hexadecimal RGB representation of this color.
 
-        The returned string is suitable for use in HTML/CSS.
+        The returned string is suitable for use in HTML/CSS, as a color
+        parameter in matplotlib, and perhaps other situations.
 
         Example:
 
             >>> bc = BranchColor(12, 200, 100)
-            >>> bc.to_rgb()
-            '0cc864'
+            >>> bc.to_hex()
+            '#0cc864'
         """
-        return hex(self.red * (16**4)
+        return '#' + hex(
+                self.red * (16**4)
                 + self.green * (16**2)
                 + self.blue)[2:].zfill(6)
 
@@ -740,7 +742,7 @@ class Sequence(PhyloElement):
     @type accession: Accession
     @param name: full name of the sequence, e.g. 'muscle Actin'
     @param location: location of a sequence on a genome/chromosome.
-    @param mol_seq: the actual sequence, as a string
+    @type mol_seq: MolSeq
     @type uri: Uri
     @param annotations: list of Annotation objects
     @param domain_architecture: protein domains on this sequence (type

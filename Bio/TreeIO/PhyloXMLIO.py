@@ -121,7 +121,7 @@ def write(obj, file, encoding=None):
     else:
         raise ValueError("First argument must be a Phyloxml, Phylogeny, "
                 "Tree, or iterable of Trees or Phylogenies.")
-    Writer(obj, encoding).write(file)
+    return Writer(obj, encoding).write(file)
 
 
 # ---------------------------------------------------------
@@ -651,6 +651,7 @@ class Writer(object):
             self._tree.write(file, self.encoding)
         else:
             self._tree.write(file)
+        return len(self._tree.getroot())
 
     # Convert classes to ETree elements
 

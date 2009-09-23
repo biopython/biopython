@@ -38,9 +38,12 @@ def write(trees, file, plain=False, **kwargs):
         file = open(file, 'w+')
         do_close = True
     try:
+        count = 0
         for tree in trees:
             file.write(tree.to_string(plain_newick=True, plain=plain, **kwargs)
                         + ';\n')
+            count += 1
     finally:
         if do_close:
             file.close()
+    return count

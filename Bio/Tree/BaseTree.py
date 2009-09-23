@@ -85,11 +85,23 @@ class Tree(TreeElement):
 
     """
     def __init__(self, root=None, nodes=None, rooted=True, id=None, name=None):
-        self.root = root or Node(tree=self)
-        self.nodes = nodes or []    # each type Node, "under" root
+        self._root = root or Node(tree=self)
+        self._nodes = nodes or []   # each type Node, "under" root
         self.rooted = rooted        # is_rooted=True
         self.id = id                #: identifier
         self.name = name or self.root.label
+
+    # Properties may be overridden by subclasses
+
+    def _get_nodes(self): return self._nodes
+    def _set_nodes(self, x): self._nodes = x
+    def _del_nodes(self, x): self._nodes = []
+    nodes = property(_get_nodes, _set_nodes, _del_nodes)
+
+    def _get_root(self): return self._root
+    def _set_root(self, x): self._root = x
+    def _del_root(self, x): self._root = Node(tree=self)
+    root = property(_get_root, _set_root, _del_root)
 
     @classmethod
     def from_node(cls, node, **kwargs):
@@ -281,11 +293,23 @@ class Node(TreeElement):
     """
     def __init__(self, tree=None, label=None, branch_length=None,
             left_idx=None, right_idx=None):
-        self.tree = tree or Tree(root=self)     # tree_id, type Tree
-        self.label = label
+        self._tree = tree or Tree(root=self)     # tree_id, type Tree
+        self._label = label
         self.branch_length = branch_length  # XXX or move this to Edge?
         self.left_idx = left_idx
         self.right_idx = right_idx
+
+    # Properties may be overridden by subclasses
+
+    def _get_label(self): return self._label
+    def _set_label(self, x): self._label = x
+    def _del_label(self, x): del self._label
+    label = property(_get_label, _set_label, _del_label)
+
+    def _get_tree(self): return self._tree
+    def _set_tree(self, x): self._tree = x
+    def _del_tree(self, x): self._tree = Tree(root=self)
+    tree = property(_get_tree, _set_tree, _del_tree)
 
     def is_terminal(self):
         return (not self.tree.nodes)

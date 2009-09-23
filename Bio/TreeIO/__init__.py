@@ -60,4 +60,4 @@ def write(trees, file, format, **kwargs):
 def convert(in_file, in_format, out_file, out_format, **kwargs):
     """Convert between two tree file formats."""
     trees = parse(in_file, in_format)
-    write(trees, out_file, out_format, **kwargs)
+    return write(trees, out_file, out_format, **kwargs)
