@@ -1,0 +1,16 @@
+@FAKE0011 Original version has lower case unambiguous RNA with PHRED scores from 0 to 40 inclusive (in that order)
+ACGUACGUACGUACGUACGUACGUACGUACGUACGUACGUA
++
+@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefgh
+@FAKE0012 Original version has mixed case unambiguous RNA with PHRED scores from 0 to 40 inclusive (in that order)
+gUcauAGcgUcauAGcgUcauAGcgUcauAGcgUcauAGcg
++
+@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefgh
+@FAKE0013 Original version has lower case unambiguous RNA with PHRED scores from 0 to 40 inclusive (in that order)
+ucagucagucagucagucagucagucagucagucagucagu
++
+@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefgh
+@FAKE0014 Original version has mixed case ambiguous RNA with PHRED scores from 35 to 40 inclusive (cycled)
+gaucrywsmkhbvdnGAUCRYWSMKHBVDN
++
+cdefghcdefghcdefghcdefghcdefgh

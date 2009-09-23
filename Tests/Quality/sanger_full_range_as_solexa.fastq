@@ -1,0 +1,8 @@
+@FAKE0001 Original version has PHRED scores from 93 to 0 inclusive (in that order)
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTAC
++
+;;>@BCEFGHJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+@FAKE0002 Original version has PHRED scores from 0 to 93 inclusive (in that order)
+CATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCATGCA
++
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~}|{zyxwvutsrqponmlkjihgfedcba`_^]\[ZYXWVUTSRQPONMLKJHGFECB@>;;

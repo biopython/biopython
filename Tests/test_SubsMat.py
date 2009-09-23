@@ -16,7 +16,7 @@ for i in ftab_prot.alphabet.letters:
 
 pickle_file = os.path.join('SubsMat', 'acc_rep_mat.pik')
 acc_rep_mat = cPickle.load(open(pickle_file))
-acc_rep_mat = SubsMat.SeqMat(acc_rep_mat)
+acc_rep_mat = SubsMat.AcceptedReplacementsMatrix(acc_rep_mat)
 obs_freq_mat = SubsMat._build_obs_freq_mat(acc_rep_mat)
 ftab_prot2 = SubsMat._exp_freq_table_from_obs_freq(obs_freq_mat)
 obs_freq_mat.print_mat(f=f,format=" %4.3f")
@@ -30,12 +30,12 @@ for i in ks:
 
 s = 0.
 f.write("Calculating sum of letters for an observed frequency matrix\n")
-obs_freq_mat.all_letters_sum()
-ks = obs_freq_mat.sum_letters.keys()
-ks.sort()
-for i in ks:
-    f.write("%s\t%.2f\n" % (i, obs_freq_mat.sum_letters[i]))
-    s += obs_freq_mat.sum_letters[i]
+counts = obs_freq_mat.sum()
+keys = counts.keys()
+keys.sort()
+for key in keys:
+    f.write("%s\t%.2f\n" % (key, counts[key]))
+    s += counts[key]
 f.write("Total sum %.2f should be 1.0\n" % (s))
 lo_mat_prot = \
 SubsMat.make_log_odds_matrix(acc_rep_mat=acc_rep_mat,round_digit=1) #,ftab_prot
@@ -53,13 +53,12 @@ for i in MatrixInfo.available_matrices:
     f.write("\n%s\n------------\n" % i)
     mat.print_mat(f=f)
 f.write("\nTesting Entropy\n")
-lo_mat_prot.make_relative_entropy(obs_freq_mat)
-f.write("relative entropy %.3f\n" % lo_mat_prot.relative_entropy)
+relative_entropy = lo_mat_prot.calculate_relative_entropy(obs_freq_mat)
+f.write("relative entropy %.3f\n" % relative_entropy)
 
 # Will uncomment the following once the Bio.Tools.Statistics is in place
-# f.write("\nmatrix correlations\n")
-#blosum90 = SubsMat.SeqMat(MatrixInfo.blosum90)
-#blosum30 = SubsMat.SeqMat(MatrixInfo.blosum30)
-#f.write("BLOSUM30 & BLOSUM90 %s\n" % SubsMat.two_mat_correlation(blosum30, blosum90))
-#f.write("BLOSUM90 & BLOSUM30 %s\n" % SubsMat.two_mat_correlation(blosum90, blosum30))
-
+f.write("\nmatrix correlations\n")
+blosum90 = SubsMat.SeqMat(MatrixInfo.blosum90)
+blosum30 = SubsMat.SeqMat(MatrixInfo.blosum30)
+f.write("BLOSUM30 & BLOSUM90 %.2f\n" % SubsMat.two_mat_correlation(blosum30, blosum90))
+f.write("BLOSUM90 & BLOSUM30 %.2f\n" % SubsMat.two_mat_correlation(blosum90, blosum30))

@@ -3,7 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Code for dealing with lists of URLs (OBSOLETE).
+"""Code for dealing with lists of URLs (DEPRECATED).
+
+This module is now deprecated, and will be removed in a future release of
+Biopython.
 
 NetCatch enables the user to scan a list of labelled urls and select 
 a subset to read into a file.
@@ -13,10 +16,14 @@ get_urls_by_label
 get_urls_by_index
 get_urls_by_range
 select_output_file
-
-This module is now considered to be obsolete, and is likely to be deprecated
-in a future release of Biopython, and later removed.
 """
+
+import warnings
+warnings.warn("Bio.NetCatch is deprecated, and will be removed in a future"\
+              " release of Biopython.  If you want to continue to use this"\
+              " code, please get in contact with the Biopython developers"\
+              " via the mailing lists to avoid its permanent removal from"\
+              " Biopython.", DeprecationWarning)
 import os
 import urllib
 import sgmllib

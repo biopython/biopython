@@ -15,7 +15,7 @@ import time
 import warnings
 warnings.warn("Bio.WWW was deprecated.  Most of its functionality is now "\
               +"available from Bio.ExPASy, Bio.InterPro, Bio.Entrez and "\
-              +"Bio.SCOP.")
+              +"Bio.SCOP.", DeprecationWarning)
 
 class RequestLimiter:
     # This class implements a simple countdown timer for delaying WWW

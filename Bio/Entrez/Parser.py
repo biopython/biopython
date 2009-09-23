@@ -91,6 +91,42 @@ class DataHandler:
         self.parser = None
         return self.object
 
+    def parse(self, handle):
+        BLOCK = 1024
+        self.parser = expat.ParserCreate()
+        self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
+        self.parser.StartElementHandler = self.startElement
+        self.parser.EndElementHandler = self.endElement
+        self.parser.CharacterDataHandler = self.characters
+        self.parser.ExternalEntityRefHandler = self.external_entity_ref_handler
+
+        while True :
+
+            #Read in another block of the file...
+            text = handle.read(BLOCK)
+            if not text:
+                # We have reached the end of the XML file
+                for record in self.object:
+                    yield record
+                self.parser.Parse("", True)
+                self.parser = None
+                return
+
+            self.parser.Parse(text, False)        
+
+            if not self.stack:
+                # Haven't read enough from the XML file yet
+                continue
+
+            records = self.stack[0]
+            while len(records) > 1: # Then the top record is finished
+                try:
+                    record = records[0]
+                except TypeError:
+                    raise ValueError, "The XML file does not represent a list. Please use Entrez.read instead of Entrez.parse"
+                records[:] = records[1:]
+                yield record
+
     def startElement(self, name, attrs):
         self.content = ""
         if name in self.lists:
@@ -297,3 +333,9 @@ can include it with the next release of Biopython.
         parser.ElementDeclHandler = self.elementDecl
         parser.ParseFile(handle)
         return 1
+
+
+
+
+
+

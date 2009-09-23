@@ -7,9 +7,13 @@
 
 
 Classes:
+
 UndoHandle     File object decorator with support for undo-like operations.
+
 StringHandle   Wraps a file object around a string.
-SGMLHandle     File object that automatically strips SGML tags from data.
+
+SGMLHandle     File object that automatically strips SGML tags from data
+               (DEPRECATED).
 
 SGMLStripper   Object that strips SGML.  This is now considered OBSOLETE, and
                is likely to be deprecated in a future release of Biopython,
@@ -107,10 +111,8 @@ class UndoHandle:
 # readlines method.
 StringHandle = StringIO.StringIO
 
-
-
 class SGMLHandle:
-    """A Python handle that automatically strips SGML tags from data (OBSOLETE).
+    """A Python handle that automatically strips SGML tags from data (DEPRECATED).
 
     This module is now considered to be obsolete, and is likely to be
     deprecated in a future release of Biopython, and later removed.
@@ -121,6 +123,12 @@ class SGMLHandle:
         handle is a file handle to SGML-formatted data.
         
         """
+        import warnings
+        warnings.warn("Bio.File.SGMLHandle is deprecated, and will be removed"\
+                      " in a future release of Biopython.  If you want to"\
+                      " continue to use this code, please get in contact via"\
+                      " the mailing lists to avoid its permanent removal from"\
+                      " Biopython.", DeprecationWarning)
         self._handle = handle
         self._stripper = SGMLStripper()
 

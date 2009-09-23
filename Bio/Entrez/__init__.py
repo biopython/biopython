@@ -51,22 +51,9 @@ from Bio import File
 
 email = None
 
-def query(cmd, db, cgi='http://www.ncbi.nlm.nih.gov/sites/entrez',
-          **keywds):
-    """Query Entrez and return a handle to the HTML results (DEPRECATED).
-
-    See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/books/bv.fcgi?rid=helplinks.chapter.linkshelp
-
-    Return a handle to the results.
-
-    Raises an IOError exception if there's a network error.
-    """
-    import warnings
-    warnings.warn("Bio.Entrez.query is deprecated, since it breaks NCBI's rule to only use the E-Utilities URL.", DeprecationWarning)
 
 # XXX retmode?
-def epost(db, cgi=None, **keywds):
+def epost(db, **keywds):
     """Post a file of identifiers for future use.
 
     Posts a file containing a list of UIs for future use in the user's
@@ -79,15 +66,12 @@ def epost(db, cgi=None, **keywds):
 
     Raises an IOError exception if there's a network error.
     """
-    if cgi:
-        import warnings
-        warnings.warn("Using a URL other than NCBI's main url for the E-Utilities is deprecated.", DeprecationWarning)
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi'
     variables = {'db' : db}
     variables.update(keywds)
     return _open(cgi, variables, post=True)
 
-def efetch(db, cgi=None, **keywds):
+def efetch(db, **keywds):
     """Fetches Entrez results which are returned as a handle.
 
     EFetch retrieves records in the requested format from a list of one or
@@ -109,23 +93,19 @@ def efetch(db, cgi=None, **keywds):
     for key in keywds :
         if key.lower()=="rettype" and keywds[key].lower()=="genbank" :
             import warnings
-            warnings.warn('As of Easter 2009, Entrez EFtech no longer '
+            warnings.warn('As of Easter 2009, Entrez EFetch no longer '
                           'supports the unofficial return type "genbank", '
                           'use "gb" or "gp" instead.', DeprecationWarning)
             if db.lower()=="protein" :
                 keywds[key] = "gp" #GenPept
             else :
                 keywds[key] = "gb" #GenBank
-    if cgi:
-        import warnings
-        warnings.warn("Using a URL other than NCBI's main url for the "
-                      "E-Utilities is deprecated.", DeprecationWarning)
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
     variables = {'db' : db}
     variables.update(keywds)
     return _open(cgi, variables)
 
-def esearch(db, term, cgi=None, **keywds):
+def esearch(db, term, **keywds):
     """ESearch runs an Entrez search and returns a handle to the results.
 
     ESearch searches and retrieves primary IDs (for use in EFetch, ELink
@@ -147,16 +127,13 @@ def esearch(db, term, cgi=None, **keywds):
     print record["Count"]
     print record["IdList"]
     """
-    if cgi:
-        import warnings
-        warnings.warn("Using a URL other than NCBI's main url for the E-Utilities is deprecated.", DeprecationWarning)
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
     variables = {'db' : db,
                  'term' : term}
     variables.update(keywds)
     return _open(cgi, variables)
 
-def elink(cgi=None, **keywds):
+def elink(**keywds):
     """ELink checks for linked external articles and returns a handle.
 
     ELink checks for the existence of an external or Related Articles link
@@ -172,15 +149,12 @@ def elink(cgi=None, **keywds):
 
     Raises an IOError exception if there's a network error.
     """
-    if cgi:
-        import warnings
-        warnings.warn("Using a URL other than NCBI's main url for the E-Utilities is deprecated.", DeprecationWarning)
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
 
-def einfo(cgi=None, **keywds):
+def einfo(**keywds):
     """EInfo returns a summary of the Entez databases as a results handle.
 
     EInfo provides field names, index term counts, last update, and
@@ -199,15 +173,12 @@ def einfo(cgi=None, **keywds):
     record = Entrez.read(Entrez.einfo())
     print record['DbList']
     """
-    if cgi:
-        import warnings
-        warnings.warn("Using a URL other than NCBI's main url for the E-Utilities is deprecated.", DeprecationWarning)
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi'
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
 
-def esummary(cgi=None, **keywds):
+def esummary(**keywds):
     """ESummary retrieves document summaries as a results handle.
 
     ESummary retrieves document summaries from a list of primary IDs or
@@ -220,15 +191,12 @@ def esummary(cgi=None, **keywds):
 
     Raises an IOError exception if there's a network error.
     """
-    if cgi:
-        import warnings
-        warnings.warn("Using a URL other than NCBI's main url for the E-Utilities is deprecated.", DeprecationWarning)
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi'
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
 
-def egquery(cgi=None, **keywds):
+def egquery(**keywds):
     """EGQuery provides Entrez database counts for a global search.
 
     EGQuery provides Entrez database counts in XML for a single search
@@ -241,15 +209,12 @@ def egquery(cgi=None, **keywds):
 
     Raises an IOError exception if there's a network error.
     """
-    if cgi:
-        import warnings
-        warnings.warn("Using a URL other than NCBI's main url for the E-Utilities is deprecated.", DeprecationWarning)
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi'
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
 
-def espell(cgi=None, **keywds):
+def espell(**keywds):
     """ESpell retrieves spelling suggestions, returned in a results handle.
 
     ESpell retrieves spelling suggestions, if available.
@@ -268,9 +233,6 @@ def espell(cgi=None, **keywds):
     print record["Query"] 
     print record["CorrectedQuery"] 
     """
-    if cgi:
-        import warnings
-        warnings.warn("Using a URL other than NCBI's main url for the E-Utilities is deprecated.", DeprecationWarning)
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi'
     variables = {}
     variables.update(keywds)
@@ -296,6 +258,13 @@ def read(handle):
     handler = DataHandler(DTDs)
     record = handler.run(handle)
     return record
+
+def parse(handle):
+    from Parser import DataHandler
+    DTDs = os.path.join(__path__[0], "DTDs")
+    handler = DataHandler(DTDs)
+    records = handler.parse(handle)
+    return records
 
 def _open(cgi, params={}, post=False):
     """Helper function to build the URL and open a handle to it (PRIVATE).

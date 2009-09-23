@@ -41,7 +41,6 @@ recursive-exclude * *.pyc # e.g. from running the unit tests
 
 recursive-exclude Martel *     # We don't distribute Martel now
 
-# Make sure the proper files in EUtils are included.
-include Bio/EUtils/DTDs/*.dtd  # Include DTD files for EUtils
+# Make sure the required data files are included.
 include Bio/Entrez/DTDs/*.dtd  # Include DTD files for Entrez
 include Bio/PopGen/SimCoal/data/*.par    # Include SimCoal data files

@@ -9,6 +9,44 @@ The latest news is at the top.
 
 ===================================================================
 
+September 22, 2009: Biopython 1.52 released.
+
+The Population Genetics module now allows the calculation of several tests,
+and statistical estimators via a wrapper to GenePop. Supported are tests for
+Hardy-Weinberg equilibrium, linkage disequilibrium and estimates for various
+F statistics (Cockerham and Wier Fst and Fis, Robertson and Hill Fis, etc),
+null allele frequencies and number of migrants among many others. Isolation
+By Distance (IBD) functionality is also supported.
+
+New helper functions Bio.SeqIO.convert() and Bio.AlignIO.convert() allow an
+easier way to use Biopython for simple file format conversions. Additionally,
+these new functions allow Biopython to offer important file format specific
+optimisations (e.g. FASTQ to FASTA, and interconverting FASTQ variants).
+
+New function Bio.SeqIO.indexed_dict() allows indexing of most sequence file
+formats (but not alignment file formats), allowing dictionary like random
+access to all the entries in the file as SeqRecord objects, keyed on the
+record id. This is epecially useful for very large sequencing files, where
+all the records cannot be held in memory at once. This supplements the more
+flexible but memory demanding Bio.SeqIO.to_dict() function.
+
+Bio.SeqIO can now write "phd" format files (used by PHRED, PHRAD and CONSED),
+allowing interconversion with FASTQ files, or FASTA+QUAL files.
+
+Bio.Emboss.Applications now includes wrappers for the "new" PHYLIP EMBASSY
+package (e.g. fneighbor) which replace the "old" PHYLIP EMBASSY package (e.g.
+efneighbor) whose Biopython wrappers are now obsolete.
+
+See also the DEPRECATED file, as several old deprecated modules have finally
+been removed (e.g. Bio.EUtils which had been replaced by Bio.Entrez).
+
+On a technical note, this will be the last release using CVS for source code
+control. Biopython is moving from CVS to git.
+
+===================================================================
+
+August 17, 2009: Biopython 1.51 released.
+
 FASTQ support in Bio.SeqIO has been improved, extended and sped up since
 Biopython 1.50. Support for Illumina 1.3+ style FASTQ files was added in the
 1.51 beta release. Furthermore, we now follow the interpretation agreed on
@@ -78,7 +116,7 @@ to the unit test coverage.
 
 ===================================================================
 
-April 20, 2008: Biopython 1.50 released.
+April 20, 2009: Biopython 1.50 released.
 
 See the notes below for the Biopython 1.50 beta release for more details,
 but the highlights are:
@@ -101,7 +139,7 @@ Since the 1.50 beta release:
 
 ===================================================================
 
-April 3, 2008: Biopython 1.50 beta released.
+April 3, 2009: Biopython 1.50 beta released.
 
 The SeqRecord object has a new dictionary attribute, letter_annotations,
 which is for holding per-letter-annotation information like sequence
@@ -298,7 +336,7 @@ tostring() method is preserved for backwards compatibility.
 
 BioSQL has had some bugs fixed, and has an additional unit test which loads
 records into a database using Bio.SeqIO and then checks the records can be
-retieved correctly.  The DBSeq and DBSeqRecord classes now subclass the
+retrieved correctly.  The DBSeq and DBSeqRecord classes now subclass the
 Seq and SeqRecord classes, which provides more functionality.
 
 The modules under Bio.WWW are being deprecated.
