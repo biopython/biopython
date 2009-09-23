@@ -9,6 +9,12 @@ The latest news is at the top.
 
 ===================================================================
 
+Biopython is now using git for source code control, currently on github. Our
+old CVS repository will remain on the OBF servers in the short/medium term
+as a backup, but will not be updated in future.
+
+===================================================================
+
 September 22, 2009: Biopython 1.52 released.
 
 The Population Genetics module now allows the calculation of several tests,
