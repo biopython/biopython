@@ -99,7 +99,7 @@ Instead, for *some* file formats Bio.SeqIO provides an indexing approach
 providing dictionary like access to any record. For example,
 
     >>> from Bio import SeqIO
-    >>> record_dict = SeqIO.indexed_dict("Fasta/f002", "fasta")
+    >>> record_dict = SeqIO.index("Fasta/f002", "fasta")
     >>> len(record_dict)
     3
     >>> print len(record_dict["gi|1348917|gb|G26685|G26685"])
@@ -575,8 +575,7 @@ def to_dict(sequences, key_function=None) :
 
     This approach is not suitable for very large sets of sequences, as all
     the SeqRecord objects are held in memory. Instead, consider using the
-    Bio.SeqIO.indexed_dict() function (if it supports your particular file
-    format).
+    Bio.SeqIO.index() function (if it supports your particular file format).
     """    
     if key_function is None :
         key_function = lambda rec : rec.id
@@ -589,7 +588,7 @@ def to_dict(sequences, key_function=None) :
         d[key] = record
     return d
 
-def indexed_dict(filename, format, alphabet=None, key_function=None) :
+def index(filename, format, alphabet=None, key_function=None) :
     """Indexes a sequence file and returns a dictionary like object.
 
      - filename - string giving name of file to be indexed
@@ -605,7 +604,7 @@ def indexed_dict(filename, format, alphabet=None, key_function=None) :
     SeqRecord objects as values:
 
     >>> from Bio import SeqIO
-    >>> records = SeqIO.indexed_dict("Quality/example.fastq", "fastq")
+    >>> records = SeqIO.index("Quality/example.fastq", "fastq")
     >>> len(records)
     3
     >>> sorted(records.keys())
@@ -655,8 +654,8 @@ def indexed_dict(filename, format, alphabet=None, key_function=None) :
     >>> def make_tuple(identifier) :
     ...     parts = identifier.split("_")
     ...     return int(parts[-2]), int(parts[-1])
-    >>> records = SeqIO.indexed_dict("Quality/example.fastq", "fastq",
-    ...                              key_function=make_tuple)
+    >>> records = SeqIO.index("Quality/example.fastq", "fastq",
+    ...                       key_function=make_tuple)
     >>> len(records)
     3
     >>> sorted(records.keys())

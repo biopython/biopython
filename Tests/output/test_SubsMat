@@ -1168,5 +1168,5 @@ Testing Entropy
 relative entropy 0.162
 
 matrix correlations
-BLOSUM30 & BLOSUM90 0.878
-BLOSUM90 & BLOSUM30 0.878
+BLOSUM30 & BLOSUM90 0.88
+BLOSUM90 & BLOSUM30 0.88

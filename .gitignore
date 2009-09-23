@@ -10,6 +10,9 @@ dist
 
 #Ignore these hidden files from Mac OS X
 .DS_Store
+
+#Ignore hidden files from Dolphin window manager
+.directory
  
 #Ignore all compiled python files (e.g. from running the unit tests):
 *.pyc

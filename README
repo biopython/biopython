@@ -1,3 +1,13 @@
+**NOTE ABOUT CVS**
+
+Until late September 2009, Biopython source code was hosted in CVS running
+on the Open Bioinformatics Foundation (OBF) servers. We are now using git,
+a distributed version control system. The CVS repositories at the OBF will
+remain for a while as "read only" static backups of everything up to and
+including Biopython 1.52 but will not be updated in future. See our website
+for further details, http://www.biopython.org/
+
+
 **Biopython README file**
  
 	"The Biopython Project":http://www.biopython.org/ is an international
@@ -102,16 +112,15 @@ data format has changed and broken the parsing code.  (The BLAST and
 GenBank formats seem to be particularly fragile.)  Thus, the parsing
 code in Biopython is sometimes updated faster than we can build Biopython
 releases.  You can get the most recent parser by pulling the relevant
-files (e.g. the ones in Bio.SeqIO or Bio.Blast) out of 
-"anonymous cvs":http://cvs.biopython.org/ or our git mirror on
+files (e.g. the ones in Bio.SeqIO or Bio.Blast) out git mirror on
 "github":http://github.com/biopython/biopython/ .
-However, be careful when doing this, because the code in CVS/github is
+However, be careful when doing this, because the code in github is
 not as well-tested as released code, and may contain new dependencies.
 
 Finally, you can send a bug report to the bug database or
 biopython@biopython.org.  In the bug report, please let us know 1)
 which operating system and hardware you are using, 2) Python version,
-3) Biopython version (or CVS/git version/date), 4) traceback that occurs,
+3) Biopython version (or git version/date), 4) traceback that occurs,
 5) offending code, and 6) data file that causes the problem.
 
 

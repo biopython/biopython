@@ -590,7 +590,7 @@ class FProtParsCommandline(_EmbossCommandLine):
         self.parameters = \
         [_Option(["-sequence", "sequence"], ["input"], None, 1,
                   "seq file to use (phylip)"),
-        _Option(["-intreefile", "intreefile"], ["input"], None, 1,
+        _Option(["-intreefile", "intreefile"], ["input"], None, 0,
                  "Phylip tree file to score"),
         _Option(["-outtreefile", "outtreefile"], ["input"], None, 1,
                  "phylip tree output file"),

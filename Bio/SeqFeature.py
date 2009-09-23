@@ -55,7 +55,7 @@ class SeqFeature(object):
     o ref - A reference to another sequence. This could be an accession
     number for some different sequence.
     o ref_db - A different database for the reference accession number.
-    o qualifier - A dictionary of qualifiers on the feature. These are
+    o qualifiers - A dictionary of qualifiers on the feature. These are
     analagous to the qualifiers from a GenBank feature table. The keys of
     the dictionary are qualifier names, the values are the qualifier
     values.

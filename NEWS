@@ -9,6 +9,15 @@ The latest news is at the top.
 
 ===================================================================
 
+September 22, 2009: Biopython 1.52 released.
+
+The Population Genetics module now allows the calculation of several tests,
+and statistical estimators via a wrapper to GenePop. Supported are tests for
+Hardy-Weinberg equilibrium, linkage disequilibrium and estimates for various
+F statistics (Cockerham and Wier Fst and Fis, Robertson and Hill Fis, etc),
+null allele frequencies and number of migrants among many others. Isolation
+By Distance (IBD) functionality is also supported.
+
 New helper functions Bio.SeqIO.convert() and Bio.AlignIO.convert() allow an
 easier way to use Biopython for simple file format conversions. Additionally,
 these new functions allow Biopython to offer important file format specific
@@ -30,6 +39,9 @@ efneighbor) whose Biopython wrappers are now obsolete.
 
 See also the DEPRECATED file, as several old deprecated modules have finally
 been removed (e.g. Bio.EUtils which had been replaced by Bio.Entrez).
+
+On a technical note, this will be the last release using CVS for source code
+control. Biopython is moving from CVS to git.
 
 ===================================================================
 

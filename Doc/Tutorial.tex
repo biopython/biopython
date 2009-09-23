@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 8 September 2009 (Biopython 1.51+)}
+\date{Last Update -- 23 September 2009 (Biopython 1.52+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -253,6 +253,9 @@ and HTML formats
   \item \emph{Why doesn't} \verb|Bio.Entrez.read()| \emph{work? The module imports fine but there is no read function!} \\
   You need Biopython 1.46 or later.
 
+  \item \emph{Why doesn't} \verb|Bio.Entrez.parse()| \emph{work? The module imports fine but there is no parse function!} \\
+  You need Biopython 1.52 or later.
+
   \item \emph{Why doesn't} \verb|Bio.PDB.MMCIFParser| \emph{work? I see an import error about} \verb|MMCIFlex| \\
   Since Biopython 1.42, the underlying \verb|Bio.PDB.mmCIF.MMCIFlex| module has
   not been installed by default.  It requires a third party tool called flex
@@ -272,7 +275,7 @@ and HTML formats
   You need Biopython 1.52 or later. Alternatively, combine the \verb|parse| and \verb|write|
   functions as described in this tutorial.
 
- \item \emph{Why doesn't} \verb|Bio.SeqIO.indexed_dict()| \emph{work? The module imports fine but there is no indexed dict function!} \\
+ \item \emph{Why doesn't} \verb|Bio.SeqIO.index()| \emph{work? The module imports fine but there is no index function!} \\
   You need Biopython 1.52 or later.
   
   \item \emph{I looked in a directory for code, but I couldn't find the code that does something. Where's it hidden?} \\
@@ -2377,7 +2380,7 @@ print record.description
 \noindent That should have retrieved the record {\tt Z78532.1}, the second entry in the file.
 
 \subsection{Indexing really large files}
-\label{sec:seqio-indexed-dict}
+\label{sec:seqio-index}
 
 As the previous couple of examples tried to illustrate, using
 \verb|Bio.SeqIO.to_dict()| is very flexible. However, because it holds
@@ -2385,7 +2388,7 @@ everything in memory, the size of file you can work with is limited by your
 computer's RAM. In general, this will only work on small to medium files.
 
 For very large files, Biopython 1.52 introduced an alternative,
-\verb|Bio.SeqIO.indexed_dict()|, which works a little differently. Although
+\verb|Bio.SeqIO.index()|, which works a little differently. Although
 it still returns a dictionary like object, this does \emph{not} keep
 \emph{everything} in memory. Instead, it just records where each record
 is within the file -- when you ask for a particular record, it then parses
@@ -2405,7 +2408,7 @@ As an example, let's use the same GenBank file as before:
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> orchid_dict = SeqIO.indexed_dict("ls_orchid.gbk", "genbank")
+>>> orchid_dict = SeqIO.index("ls_orchid.gbk", "genbank")
 >>> len(orchid_dict)
 94
 >>> orchid_dict.keys()
@@ -2417,7 +2420,7 @@ P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
 \end{verbatim}
 
-\noindent Note that \verb|Bio.SeqIO.indexed_dict()| doesn't take a handle,
+\noindent Note that \verb|Bio.SeqIO.index()| doesn't take a handle,
 but rather a filename. There are good reasons for this, but it is a little
 technical. The second argument is the file format (a lower case string as
 used in the other \verb|Bio.SeqIO| functions). You can use many other
@@ -2431,7 +2434,7 @@ filename and the format name:
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> orchid_dict = SeqIO.indexed_dict("ls_orchid.fasta", "fasta")
+>>> orchid_dict = SeqIO.index("ls_orchid.fasta", "fasta")
 >>> len(orchid_dict)
 94
 >>> orchid_dict.keys()
@@ -2455,12 +2458,12 @@ def get_acc(identifier) :
     return parts[3]
 \end{verbatim}
 
-\noindent Then we can give this function to the \verb|SeqIO.indexed_dict()|
+\noindent Then we can give this function to the \verb|SeqIO.index()|
 function to use in building the dictionary:
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> orchid_dict = SeqIO.indexed_dict("ls_orchid.fasta", "fasta", key_function=get_acc)
+>>> orchid_dict = SeqIO.index("ls_orchid.fasta", "fasta", key_function=get_acc)
 >>> print orchid_dict.keys()
 ['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
 \end{verbatim}
@@ -3364,7 +3367,10 @@ special meaning in Python.)
 The module \verb|Bio.Emboss.Applications| has wrappers for some of the
 \href{http://emboss.sourceforge.net/}{EMBOSS suite}, including
 \texttt{needle} and \texttt{water}, which are described below in
-Section~\ref{seq:emboss-needle-water}.
+Section~\ref{seq:emboss-needle-water}, and wrappers for the EMBOSS
+packaged versions of the PHYLIP tools (which EMBOSS refer to as one
+of their EMBASSY packages - third party tools with an EMBOSS style
+interface).
 We won't explore all these alignment tools here in the section, just a
 sample, but the same principles apply.
 
@@ -4884,16 +4890,18 @@ To get the output in XML format, which you can parse using the \verb+Bio.Entrez.
 If you want to perform a search with \verb|Bio.Entrez.esearch()|, and then download the records with \verb|Bio.Entrez.efetch()|, you should use the WebEnv history feature -- see Section~\ref{sec:entrez-webenv}.
 
 \section{ELink: Searching for related items in NCBI Entrez}
+\label{sec:elink}
 
-ELink, available from Biopython as \verb+Bio.Entrez.elink()+, can be used to find related items in the NCBI Entrez databases. For example, let's try to find articles related to the Biopython application note published in \textit{Bioinformatics} in 2009. The PubMed ID of this article is 12230038. Now we use \verb+Bio.Entrez.elink+ to find all related items to this article:
+ELink, available from Biopython as \verb+Bio.Entrez.elink()+, can be used to find related items in the NCBI Entrez databases. For example, you can us this to find nucleotide entries for an entry in the gene database,
+and other cool stuff.
+
+Let's use ELink to find articles related to the Biopython application note published in \textit{Bioinformatics} in 2009. The PubMed ID of this article is 19304878:
 
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"
 >>> pmid = "19304878"
->>> handle = Entrez.elink(dbfrom="pubmed", id=pmid)
->>> record = Entrez.read(handle)
->>> handle.close()
+>>> record = Entrez.read(Entrez.elink(dbfrom="pubmed", id=pmid))
 \end{verbatim}
 
 The \verb+record+ variable consists of a Python list, one for each database in which we searched. Since we specified only one PubMed ID to search for, \verb+record+ contains only one item. This item is a dictionary containing information about our search term, as well as all the related items that were found:
@@ -4910,7 +4918,7 @@ The \verb+"LinkSetDb"+ key contains the search results, stored as a list consist
 \begin{verbatim}
 >>> len(record[0]["LinkSetDb"])
 5
->>> for linksetdb in record[0]['LinkSetDb'] :
+>>> for linksetdb in record[0]["LinkSetDb"] :
 ...     print linksetdb["DbTo"], linksetdb["LinkName"], len(linksetdb["Link"])
 ... 
 pubmed pubmed_pubmed 110
@@ -4924,34 +4932,36 @@ The actual search results are stored as under the \verb+"Link"+ key. In total, 1
 standard search.
 Let's now at the first search result:
 \begin{verbatim}
->>> record[0]['LinkSetDb'][0]['Link'][0]
+>>> record[0]["LinkSetDb"][0]["Link"][0]
 {u'Id': '19304878'}
 \end{verbatim}
 
 \noindent This is the article we searched for, which doesn't help us much, so let's look at the second search result:
 
 \begin{verbatim}
->>> record[0]['LinkSetDb'][0]['Link'][1]
+>>> record[0]["LinkSetDb"][0]["Link"][1]
 {u'Id': '14630660'}
 \end{verbatim}
 
-\noindent This paper, with PubMed ID 17316423, is about the Biopython PDB parser.
+\noindent This paper, with PubMed ID 14630660, is about the Biopython PDB parser.
 
 We can use a loop to print out all PubMed IDs:
 \begin{verbatim}
->>> for link in record[0]["LinkSetDb"][0]['Link'] :
-...     print link
-...
-{u'Id': '19304878'}
-{u'Id': '14630660'}
-{u'Id': '18689808'}
-{u'Id': '17121776'}
-{u'Id': '16377612'}
-{u'Id': '12368254'}
+>>> for link in record[0]["LinkSetDb"][0]["Link"] : print link["Id"]
+19304878
+14630660
+18689808
+17121776
+16377612
+12368254
 ......
 \end{verbatim}
 
+Now that was nice, but personally I am often more interested to find out if a paper has been cited.
+Well, ELink can do that too -- at least for journals in Pubmed Central (see Section~\ref{sec:elink-citations}).
+
 For help on ELink, see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/elink\_help.html}{ELink help page}.
+There is an entire sub-page just for the \href{http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/entrezlinks.html}{link names}, describing how different databases can be cross referenced.
 
 \section{EGQuery: Obtaining counts for search terms}
 EGQuery provides counts for a search term in each of the Entrez databases. This is particularly useful to find out how many items your search terms would find in each database without actually performing lots of separate searches with ESearch (see the example in \ref{subsec:entrez_example_genbank} below).
@@ -5589,6 +5599,50 @@ We can get the lineage directly from this record:
 \end{verbatim}
 
 The record data contains much more than just the information shown here - for example look under \texttt{"LineageEx"} instead of \texttt{"Lineage"} and you'll get the NCBI taxon identifiers of the lineage entries too.
+
+\subsection{Searching for citations}
+\label{sec:elink-citations}
+
+Back in Section~\ref{sec:elink} we mentioned ELink can be used to search for citations of a given paper.
+Unfortunately this only covers journals indexed for PubMed Central
+(doing it for all the journals in PubMed would mean a lot more work for the NIH).
+Let's try this for the Biopython PDB parser paper, PubMed ID 14630660:
+
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com"
+>>> pmid = "14630660"
+>>> results = Entrez.read(Entrez.elink(dbfrom="pubmed", db="pmc",
+...                                    LinkName="pubmed_pmc_refs", from_uid=pmid))
+>>> pmc_ids = [link["Id"] for link in results[0]["LinkSetDb"][0]["Link"]]
+>>> pmc_ids
+['2744707', '2705363', '2682512', ..., '1190160']
+\end{verbatim}
+
+Great - eleven articles. But why hasn't the Biopython application note been
+found (PubMed ID 19304878)? Well, as you might have guessed from the variable
+names, there are not actually PubMed IDs, but PubMed Central IDs. Our
+application note is the third citing paper in that list, PMCID 2682512.
+
+So, what if (like me) you'd rather get back a list of PubMed IDs? Well we
+can call ELink again to translate them. This becomes a two step process,
+and you might expect to use the history feature to accomplish it
+(Section~\ref{sec:entrez-webenv}). Unfortunately at the time of writing,
+it seems that Entrez is returning invalid XML files when using ELink
+with the history (which Biopython can't parse).
+
+So, instead, here we take the more straightforward approach:
+
+\begin{verbatim}
+>>> results2 = Entrez.read(Entrez.elink(dbfrom="pmc", db="pubmed", LinkName="pmc_pubmed",
+...                                     from_uid=",".join(pmc_ids)))
+>>> pubmed_ids = [link["Id"] for link in results2[0]["LinkSetDb"][0]["Link"]]
+>>> pubmed_ids
+['19698094', '19450287', '19304878', ..., '15985178']
+\end{verbatim}
+
+\noindent This time you can immediately spot the Biopython application note
+as the third hit (PubMed ID 19304878).
 
 \section{Using the history and WebEnv}
 \label{sec:entrez-webenv}
@@ -8847,10 +8901,10 @@ This is why the examples above (filtering and trimming) iterate over the file
 looking at just one \verb|SeqRecord| at a time.
 
 However, sometimes you can't use a big loop or an iterator - you may need
-random access to the reads. Here the \verb|Bio.SeqIO.indexed_dict()| function
+random access to the reads. Here the \verb|Bio.SeqIO.index()| function
 may prove very helpful, as it allows you to access any read in the FASTQ file
 by its name -- without running out of memory (see
-Section~\ref{sec:seqio-indexed-dict}).
+Section~\ref{sec:seqio-index}).
 
 Again we'll use the \texttt{SRR014849.fastq} file from the NCBI
 (\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}),
@@ -8858,7 +8912,7 @@ although this is actually quite a small FASTQ file with less than $100,000$ read
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> fq_dict = SeqIO.indexed_dict("SRR014849.fastq", "fastq")
+>>> fq_dict = SeqIO.index("SRR014849.fastq", "fastq")
 >>> len(fq_dict)
 94696
 fq_dict.keys()[:4]
