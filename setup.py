@@ -30,14 +30,6 @@ if sys.version_info[:2] < (2, 4):
           sys.version_info[:2]
     sys.exit(-1)
 
-# One of the first git checkins will be the removal of this warning:
-import warnings
-warnings.warn("If you downloaded this copy of Biopython via CVS, please note "
-              "that we have now switched our repository to git instead. The "
-              "CVS servers will remain for a while as a read only backup of "
-              "everything up to and including Biopython 1.52 (released on 22 "
-              "September 2009). See our website for details.")
-
 from distutils.core import setup
 from distutils.core import Command
 from distutils.command.install import install
