@@ -17,7 +17,7 @@
 % You will also need the pictures included in the document, some of
 % which are UMLish diagrams created by Dia
 % (http://www.lysator.liu.se/~alla/dia/dia.html).
-% These diagrams are available from Biopython CVS in the original dia
+% These diagrams are available from Biopython git in the original dia
 % format, which you can easily save as .png format using Dia itself.
 % They are also checked in as the png files, so if you make
 % modifications to the original dia files, the png files should also be
@@ -207,6 +207,8 @@ and HTML formats
   \end{verbatim}
   If the ``\verb|import Bio|'' line fails, Biopython is not installed.
   If the second line fails, your version is very out of date.
+  If the version string ends with a plus, you don't have an official
+  release, but a snapshot of the in development code. 
 
   \item \emph{Where is the latest version of this document?}\\
   If you download a Biopython source code archive, it will include the
@@ -281,6 +283,8 @@ and HTML formats
   \item \emph{I looked in a directory for code, but I couldn't find the code that does something. Where's it hidden?} \\
   One thing to know is that we put code in \verb|__init__.py| files. If you are not used to looking for code in this file this can be confusing. The reason we do this is to make the imports easier for users. For instance, instead of having to do a ``repetitive'' import like \verb|from Bio.GenBank import GenBank|, you can just use \verb|from Bio import GenBank|.
 
+ \item \emph{Why does the code from CVS seem out of date?} \\
+  In late September 2009, just after the release of Biopython 1.52, we switched from using CVS to git, a distributed version control system. The old CVS server will remain available as a static and read only backup, but if you want to grab the latest code, you'll need to use git instead. See our website for more details.
 \end{enumerate}
 
 \chapter{Quick Start -- What can you do with Biopython?}
@@ -6840,8 +6844,8 @@ The medium term objective for the module is to support widely used data
 formats, applications and databases. This module is currently under intense
 development and support for new features should appear at a rather fast pace.
 Unfortunately this might also entail some instability on the API, especially
-if you are using a CVS version. APIs that are made available on public
-versions should be much stabler.
+if you are using a development version. APIs that are made available on
+our official public releases should be much more stable.
 
 \section{GenePop}
 

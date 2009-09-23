@@ -40,6 +40,9 @@ efneighbor) whose Biopython wrappers are now obsolete.
 See also the DEPRECATED file, as several old deprecated modules have finally
 been removed (e.g. Bio.EUtils which had been replaced by Bio.Entrez).
 
+On a technical note, this will be the last release using CVS for source code
+control. Biopython is moving from CVS to git.
+
 ===================================================================
 
 August 17, 2009: Biopython 1.51 released.
