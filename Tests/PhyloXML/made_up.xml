@@ -9,6 +9,11 @@
           <width>0.2</width>
           <clade>
               <name>c</name>
+              <color>
+                <red>128</red>
+                <green>220</green>
+                <blue>28</blue>
+              </color>
               <confidence type="probability">0.9</confidence>
               <confidence type="probability">0.71</confidence>
           </clade>

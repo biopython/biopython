@@ -793,14 +793,14 @@ class MethodTests(unittest.TestCase):
             self.assertEqual(iter_len(tree.find(terminal=True)), extern)
             self.assertEqual(iter_len(tree.find(terminal=False)), intern)
 
-    def test_color_rgb(self):
-        """BranchColor: to_rgb() method."""
+    def test_color_hex(self):
+        """BranchColor: to_hex() method."""
         black = Tree.BranchColor(0, 0, 0)
-        self.assertEqual(black.to_rgb(), '000000')
+        self.assertEqual(black.to_hex(), '#000000')
         white = Tree.BranchColor(255, 255, 255)
-        self.assertEqual(white.to_rgb(), 'ffffff')
+        self.assertEqual(white.to_hex(), '#ffffff')
         green = Tree.BranchColor(14, 192, 113)
-        self.assertEqual(green.to_rgb(), '0ec071')
+        self.assertEqual(green.to_hex(), '#0ec071')
 
 # ---------------------------------------------------------
 
