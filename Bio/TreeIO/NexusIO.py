@@ -16,12 +16,11 @@ def parse(file):
 
 
 def write(obj, file, **kwargs):
-    do_close = False
-    if isinstance(file, basestring):
-        file = open(file, 'w+')
-        do_close = True
-    try:
-        ohandle = Nexus.Nexus.write_nexus_data(obj, file, **kwargs)
-    finally:
-        if do_close:
-            file.close()
+    raise NotImplementedError("This function doesn't work yet.")
+    nex = Nexus.Nexus()
+    if isinstance(obj, list):
+        nex.trees = obj 
+    else:
+        nex.trees = list(obj)
+    Nexus.Nexus.write_nexus_data(nex, file, **kwargs)
+    return len(nex.trees)
