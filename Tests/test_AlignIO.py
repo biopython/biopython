@@ -10,7 +10,7 @@ from Bio import AlignIO
 from Bio.Align.Generic import Alignment
 from Bio.Align import AlignInfo
 
-test_write_read_alignment_formats = AlignIO._FormatToWriter.keys()
+test_write_read_alignment_formats = sorted(AlignIO._FormatToWriter.keys())
 test_write_read_align_with_seq_count = test_write_read_alignment_formats \
                                      + ["fasta", "tab"]
 
