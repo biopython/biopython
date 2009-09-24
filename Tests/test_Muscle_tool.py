@@ -42,7 +42,7 @@ if sys.platform=="win32" :
         if muscle_exe : break
 else :
     import commands
-    output = commands.getoutput("muscle")
+    output = commands.getoutput("muscle -version")
     if "not found" not in output and "MUSCLE" in output.upper() :
         muscle_exe = "muscle"
 
