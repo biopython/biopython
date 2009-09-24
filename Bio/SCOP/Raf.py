@@ -66,6 +66,7 @@ to_one_letter_code= {
     'TPO':'T', 'TPQ':'A', 'TRG':'K', 'TRO':'W', 'TYB':'Y',
     'TYQ':'Y', 'TYS':'Y', 'TYY':'Y', 'AGM':'R', 'GL3':'G',
     'SMC':'C', 'ASX':'B', 'CGU':'E', 'CSX':'C', 'GLX':'Z',
+    'PYX':'C',
     'UNK':'X'
     }
 

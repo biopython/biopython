@@ -250,9 +250,17 @@ class _PPBuilder:
     def _accept(self, residue):
         "Check if the residue is an amino acid."
         if is_aa(residue):
-            # not a standard AA so skip
             return 1
         else:
+            if "CA" in residue.child_dict :
+                #It has an alpha carbon...
+                #We probably need to update the hard coded list of
+                #non-standard residues, see function is_aa for details.
+                import warnings
+                warnings.warn("Assuming residue %s is an unknown modified "
+                              "amino acid" % residue.get_resname())
+                return 1
+            # not a standard AA so skip
             return 0
     
     def build_peptides(self, entity, aa_only=1):
