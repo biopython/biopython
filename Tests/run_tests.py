@@ -283,7 +283,7 @@ class TestRunner(unittest.TextTestRunner):
                 # Invalid method Code length ...
                 sys.stderr.write("ERROR\n")
                 result.stream.write(result.separator1+"\n")
-                result.stream.write("ERROR (not a standard exception):\n")
+                result.stream.write("ERROR: %s\n" % name)
                 result.stream.write(result.separator2+"\n")
                 result.stream.write(traceback.format_exc())
                 return False

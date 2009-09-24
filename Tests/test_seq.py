@@ -277,19 +277,24 @@ def complement(sequence) :
     #There is already a complement method on the Seq and MutableSeq objects.
     return Seq.reverse_complement(sequence)[::-1]
 
+def sorted_dict(d) :
+    """A sorted repr of a dictionary."""
+    return "{%s}" % ", ".join("%s: %s" % (repr(k),repr(v)) \
+                              for k,v in sorted(d.iteritems()))
+
 print
-print "DNA Ambiguity mapping:", ambiguous_dna_values
-print "DNA Complement mapping:", ambiguous_dna_complement
-for ambig_char, values in ambiguous_dna_values.iteritems() :
+print "DNA Ambiguity mapping:", sorted_dict(ambiguous_dna_values)
+print "DNA Complement mapping:", sorted_dict(ambiguous_dna_complement)
+for ambig_char, values in sorted(ambiguous_dna_values.iteritems()) :
     compl_values = complement(values)
     print "%s={%s} --> {%s}=%s" % \
         (ambig_char, values, compl_values, ambiguous_dna_complement[ambig_char])
     assert set(compl_values) == set(ambiguous_dna_values[ambiguous_dna_complement[ambig_char]])
     
 print
-print "RNA Ambiguity mapping:", ambiguous_rna_values
-print "RNA Complement mapping:", ambiguous_rna_complement
-for ambig_char, values in ambiguous_rna_values.iteritems() :
+print "RNA Ambiguity mapping:", sorted_dict(ambiguous_rna_values)
+print "RNA Complement mapping:", sorted_dict(ambiguous_rna_complement)
+for ambig_char, values in sorted(ambiguous_rna_values.iteritems()) :
     compl_values = complement(values).replace("T","U") #need to help as no alphabet
     print "%s={%s} --> {%s}=%s" % \
         (ambig_char, values, compl_values, ambiguous_rna_complement[ambig_char])
@@ -297,12 +302,12 @@ for ambig_char, values in ambiguous_rna_values.iteritems() :
 
 print
 print "Reverse complements:"
-for sequence in [Seq.Seq("".join(ambiguous_rna_values)),
-            Seq.Seq("".join(ambiguous_dna_values)),
-            Seq.Seq("".join(ambiguous_rna_values), Alphabet.generic_rna),
-            Seq.Seq("".join(ambiguous_dna_values), Alphabet.generic_dna),
-            Seq.Seq("".join(ambiguous_rna_values).replace("X",""), IUPAC.IUPACAmbiguousRNA()),
-            Seq.Seq("".join(ambiguous_dna_values).replace("X",""), IUPAC.IUPACAmbiguousDNA()),
+for sequence in [Seq.Seq("".join(sorted(ambiguous_rna_values))),
+            Seq.Seq("".join(sorted(ambiguous_dna_values))),
+            Seq.Seq("".join(sorted(ambiguous_rna_values)), Alphabet.generic_rna),
+            Seq.Seq("".join(sorted(ambiguous_dna_values)), Alphabet.generic_dna),
+            Seq.Seq("".join(sorted(ambiguous_rna_values)).replace("X",""), IUPAC.IUPACAmbiguousRNA()),
+            Seq.Seq("".join(sorted(ambiguous_dna_values)).replace("X",""), IUPAC.IUPACAmbiguousDNA()),
             Seq.Seq("AWGAARCKG")]:  # Note no U or T
         print "%s -> %s" \
               % (repr(sequence), repr(Seq.reverse_complement(sequence)))

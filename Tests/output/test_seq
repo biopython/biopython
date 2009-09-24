@@ -120,51 +120,51 @@ Testing Seq string methods
 Checking ambiguous complements
 ==============================
 
-DNA Ambiguity mapping: {'A': 'A', 'C': 'C', 'B': 'CGT', 'D': 'AGT', 'G': 'G', 'H': 'ACT', 'K': 'GT', 'M': 'AC', 'N': 'GATC', 'S': 'CG', 'R': 'AG', 'T': 'T', 'W': 'AT', 'V': 'ACG', 'Y': 'CT', 'X': 'GATC'}
-DNA Complement mapping: {'A': 'T', 'C': 'G', 'B': 'V', 'D': 'H', 'G': 'C', 'H': 'D', 'K': 'M', 'M': 'K', 'N': 'N', 'S': 'S', 'R': 'Y', 'T': 'A', 'W': 'W', 'V': 'B', 'Y': 'R', 'X': 'X'}
+DNA Ambiguity mapping: {'A': 'A', 'B': 'CGT', 'C': 'C', 'D': 'AGT', 'G': 'G', 'H': 'ACT', 'K': 'GT', 'M': 'AC', 'N': 'GATC', 'R': 'AG', 'S': 'CG', 'T': 'T', 'V': 'ACG', 'W': 'AT', 'X': 'GATC', 'Y': 'CT'}
+DNA Complement mapping: {'A': 'T', 'B': 'V', 'C': 'G', 'D': 'H', 'G': 'C', 'H': 'D', 'K': 'M', 'M': 'K', 'N': 'N', 'R': 'Y', 'S': 'S', 'T': 'A', 'V': 'B', 'W': 'W', 'X': 'X', 'Y': 'R'}
 A={A} --> {T}=T
-C={C} --> {G}=G
 B={CGT} --> {GCA}=V
+C={C} --> {G}=G
 D={AGT} --> {TCA}=H
 G={G} --> {C}=C
 H={ACT} --> {TGA}=D
 K={GT} --> {CA}=M
 M={AC} --> {TG}=K
 N={GATC} --> {CTAG}=N
-S={CG} --> {GC}=S
 R={AG} --> {TC}=Y
+S={CG} --> {GC}=S
 T={T} --> {A}=A
-W={AT} --> {TA}=W
 V={ACG} --> {TGC}=B
-Y={CT} --> {GA}=R
+W={AT} --> {TA}=W
 X={GATC} --> {CTAG}=X
+Y={CT} --> {GA}=R
 
-RNA Ambiguity mapping: {'A': 'A', 'C': 'C', 'B': 'CGU', 'D': 'AGU', 'G': 'G', 'H': 'ACU', 'K': 'GU', 'M': 'AC', 'N': 'GAUC', 'S': 'CG', 'R': 'AG', 'U': 'U', 'W': 'AU', 'V': 'ACG', 'Y': 'CU', 'X': 'GAUC'}
-RNA Complement mapping: {'A': 'U', 'C': 'G', 'B': 'V', 'D': 'H', 'G': 'C', 'H': 'D', 'K': 'M', 'M': 'K', 'N': 'N', 'S': 'S', 'R': 'Y', 'U': 'A', 'W': 'W', 'V': 'B', 'Y': 'R', 'X': 'X'}
+RNA Ambiguity mapping: {'A': 'A', 'B': 'CGU', 'C': 'C', 'D': 'AGU', 'G': 'G', 'H': 'ACU', 'K': 'GU', 'M': 'AC', 'N': 'GAUC', 'R': 'AG', 'S': 'CG', 'U': 'U', 'V': 'ACG', 'W': 'AU', 'X': 'GAUC', 'Y': 'CU'}
+RNA Complement mapping: {'A': 'U', 'B': 'V', 'C': 'G', 'D': 'H', 'G': 'C', 'H': 'D', 'K': 'M', 'M': 'K', 'N': 'N', 'R': 'Y', 'S': 'S', 'U': 'A', 'V': 'B', 'W': 'W', 'X': 'X', 'Y': 'R'}
 A={A} --> {U}=U
-C={C} --> {G}=G
 B={CGU} --> {GCA}=V
+C={C} --> {G}=G
 D={AGU} --> {UCA}=H
 G={G} --> {C}=C
 H={ACU} --> {UGA}=D
 K={GU} --> {CA}=M
 M={AC} --> {UG}=K
 N={GAUC} --> {CUAG}=N
-S={CG} --> {GC}=S
 R={AG} --> {UC}=Y
+S={CG} --> {GC}=S
 U={U} --> {A}=A
-W={AU} --> {UA}=W
 V={ACG} --> {UGC}=B
-Y={CU} --> {GA}=R
+W={AU} --> {UA}=W
 X={GAUC} --> {CUAG}=X
+Y={CU} --> {GA}=R
 
 Reverse complements:
-Seq('ACBDGHKMNSRUWVYX', Alphabet()) -> Seq('XRBWAYSNKMDCHVGU', Alphabet())
-Seq('ACBDGHKMNSRTWVYX', Alphabet()) -> Seq('XRBWAYSNKMDCHVGT', Alphabet())
-Seq('ACBDGHKMNSRUWVYX', RNAAlphabet()) -> Seq('XRBWAYSNKMDCHVGU', RNAAlphabet())
-Seq('ACBDGHKMNSRTWVYX', DNAAlphabet()) -> Seq('XRBWAYSNKMDCHVGT', DNAAlphabet())
-Seq('ACBDGHKMNSRUWVY', IUPACAmbiguousRNA()) -> Seq('RBWAYSNKMDCHVGU', IUPACAmbiguousRNA())
-Seq('ACBDGHKMNSRTWVY', IUPACAmbiguousDNA()) -> Seq('RBWAYSNKMDCHVGT', IUPACAmbiguousDNA())
+Seq('ABCDGHKMNRSUVWXY', Alphabet()) -> Seq('RXWBASYNKMDCHGVU', Alphabet())
+Seq('ABCDGHKMNRSTVWXY', Alphabet()) -> Seq('RXWBASYNKMDCHGVT', Alphabet())
+Seq('ABCDGHKMNRSUVWXY', RNAAlphabet()) -> Seq('RXWBASYNKMDCHGVU', RNAAlphabet())
+Seq('ABCDGHKMNRSTVWXY', DNAAlphabet()) -> Seq('RXWBASYNKMDCHGVT', DNAAlphabet())
+Seq('ABCDGHKMNRSUVWY', IUPACAmbiguousRNA()) -> Seq('RWBASYNKMDCHGVU', IUPACAmbiguousRNA())
+Seq('ABCDGHKMNRSTVWY', IUPACAmbiguousDNA()) -> Seq('RWBASYNKMDCHGVT', IUPACAmbiguousDNA())
 Seq('AWGAARCKG', Alphabet()) -> Seq('CMGYTTCWT', Alphabet())
 
 
