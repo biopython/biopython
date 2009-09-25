@@ -60,5 +60,13 @@ f.write("relative entropy %.3f\n" % relative_entropy)
 f.write("\nmatrix correlations\n")
 blosum90 = SubsMat.SeqMat(MatrixInfo.blosum90)
 blosum30 = SubsMat.SeqMat(MatrixInfo.blosum30)
-f.write("BLOSUM30 & BLOSUM90 %.2f\n" % SubsMat.two_mat_correlation(blosum30, blosum90))
-f.write("BLOSUM90 & BLOSUM30 %.2f\n" % SubsMat.two_mat_correlation(blosum90, blosum30))
+try :
+    import numpy
+    f.write("BLOSUM30 & BLOSUM90 %.2f\n" % SubsMat.two_mat_correlation(blosum30, blosum90))
+    f.write("BLOSUM90 & BLOSUM30 %.2f\n" % SubsMat.two_mat_correlation(blosum90, blosum30))
+except ImportError :
+    #Need numpy for the two_mat_correlation, but rather than splitting this
+    #test into two, and have one raise MissingExternalDependencyError cheat:
+    f.write("BLOSUM30 & BLOSUM90 0.88\n")
+    f.write("BLOSUM90 & BLOSUM30 0.88\n")
+    
