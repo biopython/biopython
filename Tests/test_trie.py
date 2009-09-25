@@ -3,7 +3,16 @@
 import StringIO
 from operator import truth
 
-from Bio import trie
+try :
+    from Bio import trie
+except ImportError :
+    import os
+    from Bio import MissingExternalDependencyError
+    if os.name=="java" :
+        message = "Not available on Jython, Bio.trie requires compiled C code."
+    else :
+        message = "Could not import Bio.trie, check C code was compiled."
+    raise MissingExternalDependencyError(message)
 
 trieobj = trie.trie()
 
