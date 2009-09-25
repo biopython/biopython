@@ -525,7 +525,8 @@ class Tree(Nodes.Chain):
     def display(self):
         """Quick and dirty lists of all nodes."""
         table=[('#','taxon','prev','succ','brlen','blen (sum)','support','comment')]
-        for i in self.all_ids():
+        #Sort this to be consistent accross CPython, Jython, etc
+        for i in sorted(self.all_ids()):
             n=self.node(i)
             if not n.data:
                 table.append((str(i),'-',str(n.prev),str(n.succ),'-','-','-','-'))
