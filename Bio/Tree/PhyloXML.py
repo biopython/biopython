@@ -231,9 +231,6 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
     @param properties: list of Property objects
     @param clades: list of sub-clades (type Clade)
     @param other: list of non-phyloXML objects
-
-    @param left_idx: precomputed values for certain tree operations
-    @param right_idx: precomputed values for certain tree operations
     """
     def __init__(self,
             # Attributes
@@ -245,8 +242,6 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
             confidences=None, taxonomies=None, sequences=None,
             distributions=None, references=None, properties=None, clades=None,
             other=None,
-            # BaseTree attributes
-            left_idx=None, right_idx=None,
             ):
         PhyloElement.__init__(self, id_source=id_source, name=name,
                 branch_length=branch_length, width=width, color=color,
@@ -260,8 +255,8 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
                 properties=properties or [],
                 clades=clades or [],
                 other=other or [],
-                # BaseTree attributes
-                left_idx=left_idx, right_idx=right_idx)
+                )
+                
 
     @classmethod
     def from_node(cls, node, **kwargs):
@@ -269,9 +264,7 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
         clade = cls(
                 branch_length=node.branch_length,
                 name=node.label,
-                node_id=Id(str(node.tree.id)),
-                left_idx=node.left_idx,
-                right_idx=node.right_idx)
+                node_id=Id(str(node.tree.id)))
         clade.__dict__.update(kwargs)
         return clade
 
@@ -282,8 +275,6 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
                 branch_length=tree.root.branch_length,
                 name=tree.name,
                 node_id=Id(str(tree.root.id)),
-                left_idx=tree.root.left_idx,
-                right_idx=tree.root.right_idx,
                 clades=[cls.from_tree(subtree) for subtree in tree])
         clade.__dict__.update(kwargs)
         return clade

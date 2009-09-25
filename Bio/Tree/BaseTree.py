@@ -138,16 +138,6 @@ class Tree(TreeElement):
     def is_terminal(self):
         return (not self.nodes)
 
-    def update_nested_set_index(self):
-        """Calculate the left and right indexes for each node in the tree.
-
-        See: Nested set representation.
-        U{ http://www.oreillynet.com/pub/a/network/2002/11/27/bioconf.html }
-        """
-        # NB: resembles depth-first-search, but not quite
-        # look at BioSQL's load_ncbi_taxonomy.pl
-        pass
-
     # Porcelain
 
     def find(self, cls=TreeElement, terminal=None, **kwargs):
@@ -280,16 +270,6 @@ class Node(TreeElement):
 
     @param tree_id:
          The tree of which this node is a part of.
-
-    @param left_idx:
-         The left value of the nested set optimization structure for efficient
-         hierarchical queries. Needs to be precomputed by a program, see J.
-         Celko, SQL for Smarties.
-
-    @param right_idx:
-         The right value of the nested set optimization structure for efficient
-         hierarchical queries. Needs to be precomputed by a program, see J.
-         Celko, SQL for Smarties.
     """
     def __init__(self, tree=None, label=None, branch_length=None,
             left_idx=None, right_idx=None):
