@@ -970,25 +970,23 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._cur_qualifier_value.append(qual_value)
 
     def contig_location(self, content):
-        """Deal with CONTIG information.
-
-        Most CONTIG descriptions use a join of other externally referenced
-        sequences.  Currently this code tries to use the location parser,
-        and represent this as a SeqFeature with sub-features.
-        """
-        # add a last feature if is hasn't been added,
-        # so that we don't overwrite it
-        self._add_feature()
-        # make a feature to add the information to
-        self._cur_feature = SeqFeature.SeqFeature()
-        self._cur_feature.type = "contig"
-        # now set the location on the feature using the standard
-        # location handler
-        self.location(content)
-        # add the contig information to the annotations and get rid
-        # of the feature to prevent it from being added to the feature table
-        self.data.annotations["contig"] = self._cur_feature
-        self._cur_feature = None
+        """Deal with CONTIG information."""
+        #Historically this was stored as a SeqFeature object, but it was
+        #stored under record.annotations["contig"] and not under
+        #record.features with the other SeqFeature objects.
+        #
+        #The CONTIG location line can include additional tokens like
+        #Gap(), Gap(100) or Gap(unk100) which are not used in the feature
+        #location lines, so storing it using SeqFeature based location
+        #objects is difficult.
+        #
+        #We now store this a string, which means for BioSQL we are now in
+        #much better agreement with how BioPerl records the CONTIG line
+        #in the database.
+        #
+        #NOTE - This code assumes the scanner will return all the CONTIG
+        #lines already combined into one long string!
+        self.data.annotations["contig"] = content
 
     def origin_name(self, content):
         pass
