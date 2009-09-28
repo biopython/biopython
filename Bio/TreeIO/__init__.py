@@ -21,8 +21,15 @@ supported_formats = {
 def parse(file, format):
     """Iteratively parse a file and return each of the trees it contains.
 
-    This is only supported for formats that can represent multiple phylogenetic
-    trees in a single file.
+    If a file only contains one tree, this still returns an iterable object that
+    contains one element.
+
+    Example::
+
+        >>> trees = parse('../../Tests/PhyloXML/apaf.xml', 'phyloxml')
+        >>> for tree in trees:
+        ...     print tree.rooted
+        True
     """
     return getattr(supported_formats[format], 'parse')(file)
 

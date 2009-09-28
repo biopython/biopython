@@ -64,14 +64,16 @@ class Tree(TreeElement):
     @param identifier:
         The identifier of the tree, if there is one.
 
-    @param is_rooted:
+    @param rooted:
         Whether or not the tree is rooted. By default, a tree is assumed to be
         rooted.
+    @type rooted: bool
 
-    @param node_id:
+    @param nodes:
         The starting node of the tree. If the tree is rooted, this will usually
         be the root node. Note that the root node(s) of a rooted tree must be
         stored in tree_root, too.
+    @type nodes: list
 
     @param biodatabase_id:
         The namespace of the tree itself. Though trees are in a sense named
@@ -140,7 +142,7 @@ class Tree(TreeElement):
 
     # Porcelain
 
-    def find(self, cls=TreeElement, terminal=None, **kwargs):
+    def findall(self, cls=TreeElement, terminal=None, **kwargs):
         """Find all tree objects matching the given attributes.
 
         @param cls: 
@@ -172,7 +174,7 @@ class Tree(TreeElement):
         Example:
 
             >>> phx = TreeIO.read('phyloxml_examples.xml', 'phyloxml')
-            >>> matches = phx.phylogenies[5].find(code='OCTVU')
+            >>> matches = phx.phylogenies[5].findall(code='OCTVU')
             >>> matches.next()
             Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
 
@@ -221,7 +223,7 @@ class Tree(TreeElement):
 
         return self.depth_first_search(self, is_matching_node)
 
-    def get_leaf_nodes(self):
+    def get_leaves(self):
         """Iterate through all of this tree's terminal (leaf) nodes."""
         return self.find(Node, terminal=True)
 
@@ -268,7 +270,7 @@ class Node(TreeElement):
          accession number of a sequences, or any other construct that uniquely
          identifies the node within one tree.
 
-    @param tree_id:
+    @param tree:
          The tree of which this node is a part of.
     """
     def __init__(self, tree=None, label=None, branch_length=None,
