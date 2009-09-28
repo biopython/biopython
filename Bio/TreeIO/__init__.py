@@ -31,7 +31,18 @@ def parse(file, format):
         ...     print tree.rooted
         True
     """
-    return getattr(supported_formats[format], 'parse')(file)
+    do_close = False
+    if isinstance(file, basestring):
+        file = open(file, 'r')
+        do_close = True
+    try:
+        trees = getattr(supported_formats[format], 'parse')(file)
+    except:
+        raise
+    finally:
+        if do_close:
+            file.close()
+    return trees
 
 
 def read(file, format):
@@ -61,7 +72,18 @@ def write(trees, file, format, **kwargs):
     if not hasattr(trees, '__iter__'):
         # Probably passed a single tree instead of a sequence -- that's OK
         trees = [trees]
-    return getattr(supported_formats[format], 'write')(trees, file, **kwargs)
+    do_close = False
+    if isinstance(file, basestring):
+        file = open(file, 'r')
+        do_close = True
+    try:
+        count = getattr(supported_formats[format], 'write')(trees, file, **kwargs)
+    except:
+        raise
+    finally:
+        if do_close:
+            file.close()
+    return count
 
 
 def convert(in_file, in_format, out_file, out_format, **kwargs):

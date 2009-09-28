@@ -13,11 +13,6 @@ from Bio.Nexus import Trees
 
 
 def parse(file):
-    do_close = False
-    if isinstance(file, basestring):
-        file = open(file, 'r')
-        do_close = True
-    # Python 2.4 support: This should be in a try block, but yield is not OK
     buf = ''
     for line in file:
         buf += line.rstrip()
@@ -27,23 +22,12 @@ def parse(file):
     if buf:
         # Last tree is missing a terminal ';' character
         yield Trees.Tree(tree=buf)
-    # /py2.4
-    if do_close:
-        file.close()
 
 
 def write(trees, file, plain=False, **kwargs):
-    do_close = False
-    if isinstance(file, basestring):
-        file = open(file, 'w+')
-        do_close = True
-    try:
-        count = 0
-        for tree in trees:
-            file.write(tree.to_string(plain_newick=True, plain=plain, **kwargs)
-                        + ';\n')
-            count += 1
-    finally:
-        if do_close:
-            file.close()
+    count = 0
+    for tree in trees:
+        file.write(tree.to_string(plain_newick=True, plain=plain, **kwargs)
+                    + ';\n')
+        count += 1
     return count
