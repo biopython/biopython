@@ -18,6 +18,7 @@ See: U{ http://biosql.org/wiki/Extensions }
 __docformat__ = "epytext en"
 
 import re
+from collections import deque
 
 
 def trim_str(text, maxlen=60):
@@ -115,34 +116,40 @@ class Tree(TreeElement):
 
     # Plumbing
 
-    def depth_first_search(self, node, filterfunc):
-        """Perform a depth-first search through all nodes in this tree.
-        
+    def filter_search(self, filterfunc, depth_first=True):
+        """Perform a BFS or DFS through all nodes in this tree.
+
         @return: generator of all nodes for which 'filterfunc' is True.
         """
-        singles = []
-        lists = []
-        # Sort attributes for consistent results
-        for subnode in sorted(node.__dict__.itervalues()):
-            if subnode is None:
-                continue
-            if isinstance(subnode, list):
-                lists.extend(subnode)
-            else:
-                singles.append(subnode)
-        for item in singles + lists:
-            if isinstance(item, TreeElement):
-                if filterfunc(item):
-                    yield item
-                for result in self.depth_first_search(item, filterfunc):
-                    yield result
+        def get_subnodes(node):
+            singles = []
+            lists = []
+            # Sort attributes for consistent results
+            for subnode in sorted(node.__dict__.itervalues()):
+                if subnode is None:
+                    continue
+                if isinstance(subnode, list):
+                    lists.extend(subnode)
+                else:
+                    singles.append(subnode)
+            return (x for x in singles + lists
+                    if isinstance(x, TreeElement))
 
-    def is_terminal(self):
-        return (not self.nodes)
+        Q = deque(get_subnodes(self))
+        if depth_first:
+            pop = deque.pop
+            extend = lambda q, s: deque.extend(q, reversed(tuple(s)))
+        else:
+            pop = deque.popleft
+            extend = deque.extend
+        while Q:
+            v = pop(Q)
+            if filterfunc(v):
+                yield v
+            extend(Q, get_subnodes(v))
 
-    # Porcelain
-
-    def findall(self, cls=TreeElement, terminal=None, **kwargs):
+    def findall(self, cls=TreeElement, terminal=None, depth_first=True,
+            **kwargs):
         """Find all tree objects matching the given attributes.
 
         @param cls: 
@@ -221,11 +228,16 @@ class Tree(TreeElement):
                         and match_terminal(node)
                         and match_kwargs(node))
 
-        return self.depth_first_search(self, is_matching_node)
+        return self.filter_search(is_matching_node, depth_first)
 
-    def get_leaves(self):
+    # Porcelain
+
+    def is_terminal(self):
+        return (not self.nodes)
+
+    def get_leaves(self, depth_first=True):
         """Iterate through all of this tree's terminal (leaf) nodes."""
-        return self.find(Node, terminal=True)
+        return self.find(Node, terminal=True, depth_first=depth_first)
 
     def total_branch_length(self):
         """Calculate the sum of all the branch lengths in this tree."""
