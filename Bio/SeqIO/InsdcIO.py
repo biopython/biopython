@@ -332,6 +332,24 @@ class GenBankWriter(SequentialSequenceWriter) :
         else :
             return str(answer)
 
+    def _write_comment(self, record):
+        #This is a bit complicated due to the range of possible
+        #ways people might have done their annotation...
+        #Currently the parser uses a single string with newlines.
+        #A list of lines is also reasonable.
+        #A single (long) string is perhaps the most natural of all.
+        #This means we may need to deal with line wrapping.
+        comment = record.annotations["comment"]
+        if isinstance(comment, basestring) :
+            lines = comment.split("\n")
+        elif isinstance(contig, list) or isinstance(contig, tuple) :
+            lines = comment
+        else :
+            raise ValueError("Could not understand comment annotation")
+        self._write_multi_line("COMMENT",lines[0])
+        for line in lines[1:] :
+            self._write_multi_line("",line)
+
     def _write_contig(self, record):
         #TODO - Merge this with _write_multi_line method?
         #It would need the addition of the comma splitting logic...
@@ -445,6 +463,8 @@ class GenBankWriter(SequentialSequenceWriter) :
         self._write_multi_line("", taxonomy)
 
         #TODO - References...
+        if "comment" in record.annotations :
+            self._write_comment(record)
         handle.write("FEATURES             Location/Qualifiers\n")
         for feature in record.features :
             self._write_feature(feature) 
