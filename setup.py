@@ -229,7 +229,6 @@ PACKAGES = [
     'Bio.Motif',
     'Bio.Motif.Parsers',
     'Bio.Motif.Applications',
-    'Bio.Ndb',
     'Bio.NeuralNetwork',
     'Bio.NeuralNetwork.BackPropagation',
     'Bio.NeuralNetwork.Gene',

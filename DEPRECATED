@@ -95,6 +95,7 @@ API).
 Bio.Ndb
 =======
 Deprecated in Release 1.49, as the website this parsed has been redesigned.
+Removed in Release 1.53.
 
 Martel
 ======
