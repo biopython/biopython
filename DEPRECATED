@@ -90,7 +90,7 @@ Bio.distance (and Bio.cdistance)
 ================================
 Bio.distance was deprecated in Release 1.49, at which point its C code
 implementation Bio.cdistance was removed (this was not intended as a public
-API).
+API). Removed in Release 1.53.
 
 Bio.Ndb
 =======
