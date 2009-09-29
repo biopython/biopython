@@ -7,7 +7,12 @@ import os
 import unittest
 
 from Bio.ExPASy import Prosite
+
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from Bio.Prosite import Pattern
+warnings.resetwarnings()
+
 from Bio import Seq
 
 
