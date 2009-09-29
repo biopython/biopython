@@ -342,7 +342,7 @@ class GenBankWriter(SequentialSequenceWriter) :
         comment = record.annotations["comment"]
         if isinstance(comment, basestring) :
             lines = comment.split("\n")
-        elif isinstance(contig, list) or isinstance(contig, tuple) :
+        elif isinstance(comment, list) or isinstance(comment, tuple) :
             lines = comment
         else :
             raise ValueError("Could not understand comment annotation")
