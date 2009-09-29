@@ -36,14 +36,12 @@ Deprecated in Release 1.47, removed in 1.52.
 
 Bio.SwissProt.SProt
 ===================
-Declared obsolete in Release 1.50, and deprecated for Release 1.51. Most of the
-functionality in Bio.SwissProt.SProt is available from Bio.SwissProt. Bio.SeqIO
-currently uses Bio.SwissProt instead of Bio.SwissProt.SProt to parse SwissProt
-files.
+Declared obsolete in Release 1.50, and deprecated in Release 1.51. Most of the
+functionality in Bio.SwissProt.SProt is available from Bio.SwissProt.
 
 Bio.Prosite and Bio.Enzyme
 ==========================
-Declared obsolete in Release 1.50, will be deprecated in a subsequent release.
+Declared obsolete in Release 1.50, and deprecated in Release 1.53.
 Most of the functionality has moved to Bio.ExPASy.Prosite and
 Bio.ExPASy.Enzyme, respectively.
 

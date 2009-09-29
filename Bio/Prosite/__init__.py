@@ -4,7 +4,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Module for working with Prosite files from ExPASy (OBSOLETE).
+"""Module for working with Prosite files from ExPASy (DEPRECATED).
 
 Most of the functionality in this module has moved to Bio.ExPASy.Prosite;
 please see
@@ -55,13 +55,21 @@ _Scanner              Scans Prosite-formatted data.
 _RecordConsumer       Consumes Prosite data to a Record object.
 
 """
+
+import warnings
+warnings.warn("Bio.Prosite is deprecated, and will be removed in a"\
+              " future release of Biopython. Most of the functionality "
+              " is now provided by Bio.ExPASy.Prosite.  If you want to "
+              " continue to use Bio.Prosite, please get in contact "
+              " via the mailing lists to avoid its permanent removal from"\
+              " Biopython.", DeprecationWarning)
+
 from types import *
 import re
 import sgmllib
 from Bio import File
 from Bio import Index
 from Bio.ParserSupport import *
-
 
 # There is probably a cleaner way to write the read/parse functions
 # if we don't use the "parser = RecordParser(); parser.parse(handle)"
