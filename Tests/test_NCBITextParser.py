@@ -5684,6 +5684,14 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database_letters, 29652561)
         self.assertEqual(len(record.rounds), 2)
         self.assertEqual(len(record.rounds[0].new_seqs), 30)
+        #Rest of test broken up to avoid Jython JVM limitations
+        self._check_bt047_round0(record)
+        self._check_bt047_round1(record)
+        self._check_bt047_hsps(record)
+        self._check_bt047_hsps_details(record)
+        self._check_bt047_footer(record)
+
+    def _check_bt047_round0(self, record):
         self.assertEqual(record.rounds[0].new_seqs[0].title, "gi|399896|sp|Q02134|HIS7_LACLA IMIDAZOLEGLYCEROL-PHOSPHATE DEHY...")
         self.assertEqual(record.rounds[0].new_seqs[0].score, 409)
         self.assertAlmostEqual(record.rounds[0].new_seqs[0].e, 1e-114)
@@ -5835,6 +5843,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[0].alignments[28].length, 1380)
         self.assertEqual(record.rounds[0].alignments[29].title, ">gi|3287848|sp|Q16099|GLK4_HUMAN GLUTAMATE RECEPTOR, IONOTROPIC KAINATE 4 PRECURSOR (GLUTAMATE RECEPTOR KA-1) (KA1) (EXCITATORY AMINO ACID RECEPTOR 1) (EAA1)")
         self.assertEqual(record.rounds[0].alignments[29].length, 956)
+
+    def _check_bt047_round1(self, record):
         self.assertEqual(len(record.rounds[1].new_seqs), 2)
         self.assertEqual(record.rounds[1].new_seqs[0].title, "gi|2833252|sp|Q14571|IP3S_HUMAN INOSITOL 1,4,5-TRISPHOSPHATE-BI...")
         self.assertEqual(record.rounds[1].new_seqs[0].score, 30)
@@ -5895,6 +5905,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[1].alignments[24].length, 2701)
         self.assertEqual(record.rounds[1].alignments[25].title, ">gi|266389|sp|P29995|IP3S_RAT INOSITOL 1,4,5-TRISPHOSPHATE-BINDING PROTEIN TYPE 2 RECEPTOR (TYPE 2 INSP3 RECEPTOR) (TYPE 2 INOSITOL 1,4,5-TRISPHOSPHATE RECEPTOR)")
         self.assertEqual(record.rounds[1].alignments[25].length, 2701)
+
+    def _check_bt047_hsps(self, record):
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].score, 1040)
         self.assertAlmostEqual(record.rounds[0].alignments[0].hsps[0].bits, 409)
         self.assertAlmostEqual(record.rounds[0].alignments[0].hsps[0].expect, 1e-114)
@@ -6118,6 +6130,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.rounds[1].alignments[25].hsps[0].bits, 28.8)
         self.assertAlmostEqual(record.rounds[1].alignments[25].hsps[0].expect, 8.2)
         self.assertEqual(len(record.rounds[1].alignments[25].hsps), 1)
+        
+    def _check_bt047_hsps_details(self, record):
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].identities, (200, 200))
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].positives, (200, 200))
         self.assertEqual(record.rounds[0].alignments[1].hsps[0].identities, (99, 198))
@@ -6676,6 +6690,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[1].alignments[25].hsps[0].query_end, 141)
         self.assertEqual(record.rounds[1].alignments[25].hsps[0].sbjct_start, 1540)
         self.assertEqual(record.rounds[1].alignments[25].hsps[0].sbjct_end, 1659)
+
+    def _check_bt047_footer(self, record):
         self.assertEqual(record.database_name, ['data/swissprot'])
         self.assertEqual(record.num_letters_in_database, [29652561])
         self.assertEqual(record.num_sequences_in_database, [82258])
@@ -9991,6 +10007,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.blast_cutoff[0], 63)
         self.assertAlmostEqual(record.blast_cutoff[1], 29.0)
 
+
     def test_bt060(self):
         "Test parsing BLASTP 2.0.12 output (bt060)"
 
@@ -10013,6 +10030,7 @@ class TestNCBITextParser(unittest.TestCase):
         self._check_bt060_round2(record)
         self._check_bt060_round4(record)
         self._check_bt060_hsps(record)
+        self._check_bt060_hsps_counts(record)
         self._check_bt060_hsps_details(record)
         self._check_bt060_footer(record)
 
@@ -10942,6 +10960,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.rounds[4].alignments[23].hsps[0].bits, 32.9)
         self.assertAlmostEqual(record.rounds[4].alignments[23].hsps[0].expect, 2.9)
         self.assertEqual(len(record.rounds[4].alignments[23].hsps), 1)
+
+    def _check_bt060_hsps_counts(self, record):
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].identities, (765, 889))
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].positives, (765, 889))
         self.assertEqual(record.rounds[0].alignments[1].hsps[0].identities, (281, 634))
@@ -12723,6 +12743,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.blast_cutoff), 2)
         self.assertEqual(record.blast_cutoff[0], 15)
         self.assertAlmostEqual(record.blast_cutoff[1], 30.2)
+
 
     def test_bt063(self):
         "Test parsing BLASTP 2.0.14 output (bt063)"
