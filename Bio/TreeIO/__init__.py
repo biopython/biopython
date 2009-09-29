@@ -38,10 +38,9 @@ def parse(file, format):
     try:
         trees = getattr(supported_formats[format], 'parse')(file)
     except:
-        raise
-    finally:
         if do_close:
             file.close()
+        raise
     return trees
 
 
@@ -79,10 +78,9 @@ def write(trees, file, format, **kwargs):
     try:
         count = getattr(supported_formats[format], 'write')(trees, file, **kwargs)
     except:
-        raise
-    finally:
         if do_close:
             file.close()
+        raise
     return count
 
 
