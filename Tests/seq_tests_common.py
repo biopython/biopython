@@ -284,19 +284,23 @@ def compare_record(old, new) :
             for old_r, new_r in zip(old.annotations[key], new.annotations[key]) :
                 compare_reference(old_r, new_r)
         elif key == "comment":
+            #Turn them both into containing strings for comparison - due to
+            #line wrapping in GenBank etc we don't really expect the white
+            #space to be 100% the same.
             if isinstance(old.annotations[key], list):
-                old_comment = [comm.replace("\n", " ") for comm in \
-                    old.annotations[key]]
+                old_comment = " ".join(old.annotations[key])
             else:
-                old_comment = [old.annotations[key].replace("\n", " ")]
-            assert len(old_comment) == len(new.annotations[key]), \
-                "Number of annotation 'comment's changed by load/retrieve\n" \
+                old_comment = old.annotations[key]
+            if isinstance(new.annotations[key], list):
+                new_comment = " ".join(new.annotations[key])
+            else:
+                new_comment = new.annotations[key]
+            old_comment = old_comment.replace("\n"," ").replace("  ", " ")
+            new_comment = new_comment.replace("\n"," ").replace("  ", " ")
+            assert old_comment == new_comment, \
+                "Comment annotation changed by load/retrieve\n" \
                 "Was:%s\nNow:%s" \
-                % (len(old_comment), len(new.annotations[key]))
-            for old_com, new_com in zip(old_comment, new.annotations[key]):
-                assert old_com == new_com, \
-                    "Annotation 'comment' changed by load/retrieve\n" \
-                    "Was:%s\nNow:%s" % (old_com, new_com)
+                % (repr(old_comment), repr(new_comment))
         elif key in ["taxonomy", "organism", "source"]:
             #If there is a taxon id recorded, these fields get overwritten
             #by data from the taxon/taxon_name tables.  There is no
