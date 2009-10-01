@@ -400,13 +400,47 @@ class BranchColor(PhyloElement):
 
     Color values should be unsigned bytes, or integers from 0 to 255.
     """
+    color_names = {
+            'red':      (255,   0,   0),
+            'r':        (255,   0,   0),
+            'yellow':   (255, 255,   0),
+            'y':        (255, 255,   0),
+            'green':    (  0, 255,   0),
+            'g':        (  0, 255,   0),
+            'cyan':     (  0, 255, 255),
+            'c':        (  0, 255, 255),
+            'blue':     (  0,   0, 255),
+            'b':        (  0,   0, 255),
+            'magenta':  (255,   0, 255),
+            'm':        (255,   0, 255),
+            'purple':   (160,  32, 240),
+            'pink':     (255, 192, 203),
+            'salmon':   (250, 128, 114),
+            'orange':   (255, 165,   0),
+            'gold':     (255, 215,   0),
+            'tan':      (210, 180, 140),
+            'brown':    (165,  42,  42),
+            'black':    (  0,   0,   0),
+            'k':        (  0,   0,   0),
+            'gray':     (190, 190, 190),
+            'grey':     (190, 190, 190),
+            'white':    (255, 255, 255),
+            'w':        (255, 255, 255),
+            }
+
     def __init__(self, red, green, blue):
-        assert isinstance(red, int)
-        assert isinstance(green, int)
-        assert isinstance(blue, int)
+        assert (isinstance(red, int)
+                and isinstance(green, int)
+                and isinstance(blue, int)
+                ), "Color values must be integers between 0 and 255."
         self.red = red
         self.green = green
         self.blue = blue
+
+    @classmethod
+    def from_name(cls, colorname):
+        """Construct a BranchColor object by the color's name."""
+        return cls(*cls.color_names[colorname])
 
     def to_hex(self):
         """Return a 24-bit hexadecimal RGB representation of this color.
@@ -424,6 +458,17 @@ class BranchColor(PhyloElement):
                 self.red * (16**4)
                 + self.green * (16**2)
                 + self.blue)[2:].zfill(6)
+
+    def to_rgb(self):
+        """Return a tuple of RGB values (0.0 to 1.0) representing this color.
+
+        Example:
+
+            >>> bc = BranchColor(255, 165, 0)
+            >>> bc.to_rgb()
+            (1.0, 0.6470588235294118, 0.0)
+        """
+        return (self.red/255.0, self.green/255.0, self.blue/255.0)
 
 
 class CladeRelation(PhyloElement):
