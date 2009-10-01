@@ -20,7 +20,8 @@ def pretty_print(treeobj, file=sys.stdout, show_all=False, indent=0):
     With the show_all option, also prints the primitive (native Python instead
     of PhyloXML) objects in the object tree.
     """
-    assert isinstance(treeobj, BaseTree.TreeElement)
+    assert isinstance(treeobj, BaseTree.TreeElement), \
+            "%s is not a valid TreeElement" % repr(treeobj)
     if show_all:
         show = repr
     else:
@@ -55,7 +56,7 @@ def to_networkx(tree):
     plotting with pylab, matplotlib or pygraphviz, though the result is not
     quite a proper dendrogram for representing a phylogeny.
 
-    Requires the networkx-1.0 package.
+    Requires NetworkX version 0.99 or 1.0.
     """
     try:
         import networkx
@@ -65,10 +66,16 @@ def to_networkx(tree):
                 "The networkx library is not installed.")
 
     def add_edge(graph, n1, n2):
-        graph.add_edge(n1, n2, (n2.branch_length or 1.0))
-        # ENH: add branch colors
-        # if hasattr(n2, 'color') and n2.color is not None:
-        #     graph[n1][n2]['color'] = n2.color
+        # NB (9/2009): the networkx API is hella unstable
+        # Ubuntu Karmic uses 0.99, newest is 1.0rc1, let's support both
+        if networkx.__version__ >= '1.0':
+            graph.add_edge(n1, n2, weight=str(n2.branch_length or 1.0))
+            if hasattr(n2, 'color') and n2.color is not None:
+                graph[n1][n2]['color'] = n2.color.to_hex()
+        elif networkx.__version__ >= '0.99':
+            graph.add_edge(n1, n2, (n2.branch_length or 1.0))
+        else:
+            graph.add_edge(n1, n2)
 
     def build_subgraph(graph, top):
         """Walk down the Tree, building graphs, edges and nodes."""
@@ -86,8 +93,9 @@ def to_networkx(tree):
     return G
 
 
-def draw_graphviz(tree, prog='twopi', args='', node_color='#c0deff', **kwargs):
-    """Display a Tree object as a networkx graph, using the graphviz engine.
+def draw_graphviz(tree, label_func=str, prog='neato', args='',
+        node_color='#c0deff', **kwargs):
+    """Display a Tree object as a dendrogram, using the graphviz engine.
 
     Requires NetworkX, matplotlib, Graphviz and either PyGraphviz or pydot.
 
@@ -100,19 +108,33 @@ def draw_graphviz(tree, prog='twopi', args='', node_color='#c0deff', **kwargs):
         >>> pylab.show()
         >>> pylab.savefig('example.png')
 
-    The second and third parameters apply to Graphviz, and the remaining
-    arbitrary keyword arguments are passed directly to networkx.draw().  which
+    @param label_func: A function to extract a label from a node. By default
+        this is str(), but you can use a different function to select another
+        string associated with each node. If this function returns None for a
+        node, no label will be shown for that node.
+        
+        The label will also be silently skipped if the throws an exception
+        related to ordinary attribute access (LookupError, AttributeError,
+        ValueError); all other exception types will still be raised. This
+        means you can use a lambda expression that simply attempts to look up
+        the desired value without checking if the intermediate attributes are
+        available:
+
+        >>> Tree.draw_graphviz(tree, lambda n: n.taxonomies[0].code)
+
+    The third and fourth parameters apply to Graphviz, and the remaining
+    arbitrary keyword arguments are passed directly to networkx.draw(), which
     in turn mostly wraps matplotlib/pylab.  See the documentation for Graphviz
     and networkx for detailed explanations.
 
     Graphviz parameters:
 
-    @param prog: The graphviz program to use when rendering the graph (to file
-        or screen). 'twopi' behaves the best for large graphs, reliably avoiding
-        crossing edges, but for smaller graphs 'neato' can also look nice. 
-        For small directed graphs, 'dot' may produce the most normal-looking
-        phylogram, but is liable to cross edges in larger graphs. ('circo' and
-        'fdp' are valid, but not recommended.)
+    @param prog: The Graphviz program to use when rendering the graph. 'twopi'
+        behaves the best for large graphs, reliably avoiding crossing edges, but
+        for moderate graphs 'neato' looks a bit nicer.  For small directed
+        graphs, 'dot' may produce the most normal-looking phylogram, but will
+        cross and distort edges in larger graphs. (The programs 'circo' and
+        'fdp' are not recommended.)
 
     @param args: String of options passed to the external graphviz program.
         Normally not needed, but offered here for completeness.
@@ -132,7 +154,6 @@ def draw_graphviz(tree, prog='twopi', args='', node_color='#c0deff', **kwargs):
 
     G = to_networkx(tree)
     Gi = networkx.convert_node_labels_to_integers(G, discard_old_labels=False)
-
     try:
         posi = networkx.pygraphviz_layout(Gi, prog, args=args)
     except ImportError:
@@ -141,10 +162,25 @@ def draw_graphviz(tree, prog='twopi', args='', node_color='#c0deff', **kwargs):
         except ImportError:
             raise MissingExternalDependencyError(
                     "Neither PyGraphviz nor Pydot is installed.")
+    posn = dict((n, posi[Gi.node_labels[n]]) for n in G)
 
-    posn = dict((node, posi[Gi.node_labels[node]]) for node in G)
-    labels = dict((n, str(n)) for n in G.nodes()
-                  if str(n) != n.__class__.__name__)
-    networkx.draw(G, posn, nodelist=labels.keys(), labels=labels,
-                  node_color=node_color, **kwargs)
+    def get_label_mapping(G, selection):
+        for node in G.nodes():
+            if (selection is None) or (node in selection):
+                try:
+                    label = label_func(node)
+                    if label not in (None, node.__class__.__name__):
+                        yield (node, label)
+                except (LookupError, AttributeError, ValueError):
+                    pass
 
+    if 'nodelist' in kwargs:
+        labels = dict(get_label_mapping(G, set(kwargs['nodelist'])))
+    else:
+        labels = dict(get_label_mapping(G, None))
+    kwargs['nodelist'] = labels.keys()
+    if 'edge_color' not in kwargs:
+        kwargs['edge_color'] = [isinstance(e[2], dict)
+                                and e[2].get('color', 'k') or 'k'
+                                for e in G.edges(data=True)]
+    networkx.draw(G, posn, labels=labels, node_color=node_color, **kwargs)
