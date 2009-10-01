@@ -35,13 +35,13 @@ def parse(file, format):
     if isinstance(file, basestring):
         file = open(file, 'r')
         do_close = True
-    try:
-        trees = getattr(supported_formats[format], 'parse')(file)
-    except:
-        if do_close:
-            file.close()
-        raise
-    return trees
+    # Py2.4 compatibility: this should be in a try/finally block
+    # try:
+    for tree in getattr(supported_formats[format], 'parse')(file):
+        yield tree
+    # finally:
+    if do_close:
+        file.close()
 
 
 def read(file, format):
@@ -76,12 +76,11 @@ def write(trees, file, format, **kwargs):
         file = open(file, 'r')
         do_close = True
     try:
-        count = getattr(supported_formats[format], 'write')(trees, file, **kwargs)
-    except:
+        n = getattr(supported_formats[format], 'write')(trees, file, **kwargs)
+    finally:
         if do_close:
             file.close()
-        raise
-    return count
+    return n
 
 
 def convert(in_file, in_format, out_file, out_format, **kwargs):
