@@ -199,18 +199,16 @@ class Tree(TreeElement):
                 if not hasattr(node, key):
                     return False
                 target = getattr(node, key)
-                if (isinstance(pattern, basestring)
-                        and isinstance(target, basestring)):
-                    if not re.match(pattern, target):
-                        return False
-                elif isinstance(pattern, bool):
-                    if pattern != bool(target):
-                        return False
-                elif isinstance(pattern, int):
-                    if pattern != target:
-                        return False
-                else:
-                    raise TypeError('invalid argument: ' + str(pattern))
+                if isinstance(pattern, basestring):
+                    return (isinstance(target, basestring)
+                            and re.match(pattern+'$', target))
+                if isinstance(pattern, bool):
+                    return (pattern == bool(target))
+                if isinstance(pattern, int):
+                    return (pattern == target)
+                if pattern is None:
+                    return (target is None)
+                raise TypeError('invalid query type: %s' % type(pattern))
             return True
 
         if terminal is None:
