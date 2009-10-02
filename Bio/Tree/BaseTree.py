@@ -228,19 +228,51 @@ class Tree(TreeElement):
 
         return self.filter_search(is_matching_node, breadth_first)
 
+    def shortest_path(self, target):
+        """Finds shortest path from the root to the given node.
+
+        Returns an iterable of all nodes along this path, ending with the given
+        node.
+        """
+        # Dijkstra's algorithm seems like overkill here; it's a tree, not a DAG
+        path = [self]
+
+        def check_in_path(v):
+            if v is target or v.root is target:
+                path.append(v)
+                return True
+            elif v.is_terminal():
+                return False
+            else:
+                for child in v:
+                    if check_in_path(child):
+                        path.append(v)
+                        return True
+                    return False
+
+        if not check_in_path(self):
+            return None
+        return reversed(path)
+
     # Porcelain
 
     def is_terminal(self):
+        """Returns True if the root of this tree is terminal."""
         return (not self.nodes)
 
     def get_leaves(self, breadth_first=False):
         """Iterate through all of this tree's terminal (leaf) nodes."""
         return self.findall(Node, terminal=True, breadth_first=breadth_first)
 
+    def branch_length_to(self, node):
+        """Calculate the sum of all the branch lengths in this tree."""
+        return sum(n.branch_length for n in self.shortest_path(node)
+                   if n.branch_length is not None)
+
     def total_branch_length(self):
         """Calculate the sum of all the branch lengths in this tree."""
         return sum(node.branch_length
-                   for node in self.find(branch_length=True))
+                   for node in self.findall(branch_length=True))
 
     # Sequence-type behavior methods
 
@@ -301,6 +333,7 @@ class Node(TreeElement):
     tree = property(_get_tree, _set_tree, _del_tree)
 
     def is_terminal(self):
+        """Returns True if this is a terminal (leaf) node."""
         return (not self.tree.nodes)
 
 
