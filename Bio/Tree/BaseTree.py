@@ -241,8 +241,8 @@ class Tree(TreeElement):
         Returns an iterable of all nodes along this path, ending with the given
         node.
         """
-        # Dijkstra's algorithm seems like overkill here; it's a tree, not a DAG
-        path = [self]
+        # Only one path will work -- ignore weights and visits
+        path = deque([self])
 
         def check_in_path(v):
             if v is target or v.root is target:
