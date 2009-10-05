@@ -256,7 +256,6 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
                 clades=clades or [],
                 other=other or [],
                 )
-                
 
     @classmethod
     def from_node(cls, node, **kwargs):
@@ -296,8 +295,8 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
 
     # Mimic BaseTree.Tree
     @property
-    def nodes(self):
-        return self.clades
+    def id(self):
+        return self.node_id.value
 
     @property
     def root(self):

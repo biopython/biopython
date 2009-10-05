@@ -59,22 +59,29 @@ class Tree(TreeElement):
         storing phylogenetic trees, sequence trees (a.k.a. gene trees) as much
         as species trees.
 
+    @param clades: Sub-trees rooted directly under this tree's root.
+    @type clades: list
+
     @param name:
         The name of the tree, in essence a label.
+    @type name: str
 
-    @param identifier:
+    @param id:
         The identifier of the tree, if there is one.
+    @type id: str
 
     @param rooted:
         Whether or not the tree is rooted. By default, a tree is assumed to be
         rooted.
     @type rooted: bool
 
-    @param nodes:
+    @param root:
         The starting node of the tree. If the tree is rooted, this will usually
         be the root node. Note that the root node(s) of a rooted tree must be
         stored in tree_root, too.
-    @type nodes: list
+    @type root: list
+
+    Not implemented:
 
     @param biodatabase_id:
         The namespace of the tree itself. Though trees are in a sense named
@@ -87,18 +94,18 @@ class Tree(TreeElement):
         as "biosql"), or create one named the same as the tree.
 
     """
-    def __init__(self, root=None, nodes=None, rooted=True, id=None, name=None):
+    def __init__(self, root=None, clades=None, rooted=True, id=None, name=None):
         self._root = root or Node(tree=self)
-        self._nodes = nodes or []   # each type Node, "under" root
+        self.clades = clades or []  # each type Tree, "under" root
         self.rooted = rooted        # is_rooted=True
         self.id = id                #: identifier
         self.name = name or self.root.label
 
     # Properties may be overridden by subclasses
 
-    def _get_nodes(self): return self._nodes
-    def _set_nodes(self, x): self._nodes = x
-    def _del_nodes(self, x): self._nodes = []
+    def _get_nodes(self): return [c.root for c in self.clades]
+    def _set_nodes(self, nodes): self.clades = [Tree(n) for n in nodes]
+    def _del_nodes(self, x): self.clades = []
     nodes = property(_get_nodes, _set_nodes, _del_nodes)
 
     def _get_root(self): return self._root
@@ -258,7 +265,7 @@ class Tree(TreeElement):
 
     def is_terminal(self):
         """Returns True if the root of this tree is terminal."""
-        return (not self.nodes)
+        return (not self.clades)
 
     def get_leaves(self, breadth_first=False):
         """Iterate through all of this tree's terminal (leaf) nodes."""
@@ -278,10 +285,8 @@ class Tree(TreeElement):
 
     def __getitem__(self, index):
         """Get sub-trees by index (integer or slice)."""
-        if isinstance(index, int):
-            return self.nodes[index].tree
-        if isinstance(index, slice):
-            return [n.tree for n in self.nodes]
+        if isinstance(index, int) or isinstance(index, slice):
+            return self.clades[index]
         ref = self
         for idx in index:
             ref = ref[idx]
@@ -289,12 +294,11 @@ class Tree(TreeElement):
 
     def __iter__(self):
         """Iterate through this tree's direct sub-trees."""
-        for node in self.nodes:
-            yield node.tree
+        return iter(self.clades)
 
     def __len__(self):
         """Number of nodes/sub-trees directy under this tree's root."""
-        return len(self.nodes)
+        return len(self.clades)
 
 
 class Node(TreeElement):
@@ -334,7 +338,7 @@ class Node(TreeElement):
 
     def is_terminal(self):
         """Returns True if this is a terminal (leaf) node."""
-        return (not self.tree.nodes)
+        return (not self.tree.clades)
 
 
 # Additional PhyloDB tables
