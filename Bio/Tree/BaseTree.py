@@ -283,13 +283,10 @@ class Node(TreeElement):
     @param tree:
          The tree of which this node is a part of.
     """
-    def __init__(self, tree=None, label=None, branch_length=None,
-            left_idx=None, right_idx=None):
+    def __init__(self, tree=None, label=None, branch_length=None):
         self._tree = tree or Tree(root=self)     # tree_id, type Tree
         self._label = label
         self.branch_length = branch_length  # XXX or move this to Edge?
-        self.left_idx = left_idx
-        self.right_idx = right_idx
 
     # Properties may be overridden by subclasses
 
