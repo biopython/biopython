@@ -228,8 +228,8 @@ class Tree(TreeElement):
 
         return self.filter_search(is_matching_node, breadth_first)
 
-    def shortest_path(self, target):
-        """Finds shortest path from the root to the given node.
+    def get_path(self, target):
+        """Find the direct path from the root to the given target node.
 
         Returns an iterable of all nodes along this path, ending with the given
         node.
@@ -266,7 +266,7 @@ class Tree(TreeElement):
 
     def branch_length_to(self, node):
         """Calculate the sum of all the branch lengths in this tree."""
-        return sum(n.branch_length for n in self.shortest_path(node)
+        return sum(n.branch_length for n in self.get_path(node)
                    if n.branch_length is not None)
 
     def total_branch_length(self):
