@@ -116,7 +116,7 @@ class Tree(TreeElement):
 
     # Plumbing
 
-    def filter_search(self, filterfunc, depth_first=True):
+    def filter_search(self, filterfunc, breadth_first=False):
         """Perform a BFS or DFS through all nodes in this tree.
 
         @return: generator of all nodes for which 'filterfunc' is True.
@@ -136,19 +136,19 @@ class Tree(TreeElement):
                     if isinstance(x, TreeElement))
 
         Q = deque(get_subnodes(self))
-        if depth_first:
-            pop = deque.pop
-            extend = lambda q, s: deque.extend(q, reversed(tuple(s)))
-        else:
+        if breadth_first:
             pop = deque.popleft
             extend = deque.extend
+        else:
+            pop = deque.pop
+            extend = lambda q, s: deque.extend(q, reversed(tuple(s)))
         while Q:
             v = pop(Q)
             if filterfunc(v):
                 yield v
             extend(Q, get_subnodes(v))
 
-    def findall(self, cls=TreeElement, terminal=None, depth_first=True,
+    def findall(self, cls=TreeElement, terminal=None, breadth_first=False,
             **kwargs):
         """Find all tree objects matching the given attributes.
 
@@ -226,16 +226,16 @@ class Tree(TreeElement):
                         and match_terminal(node)
                         and match_kwargs(node))
 
-        return self.filter_search(is_matching_node, depth_first)
+        return self.filter_search(is_matching_node, breadth_first)
 
     # Porcelain
 
     def is_terminal(self):
         return (not self.nodes)
 
-    def get_leaves(self, depth_first=True):
+    def get_leaves(self, breadth_first=False):
         """Iterate through all of this tree's terminal (leaf) nodes."""
-        return self.find(Node, terminal=True, depth_first=depth_first)
+        return self.findall(Node, terminal=True, breadth_first=breadth_first)
 
     def total_branch_length(self):
         """Calculate the sum of all the branch lengths in this tree."""
