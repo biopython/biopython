@@ -188,7 +188,10 @@ class DataHandler:
             if self.object.itemtype in ("List", "Structure"):
                 return
             elif self.object.itemtype=="Integer":
-                value = IntegerElement(value)
+                if value:
+                    value = IntegerElement(value)
+                else:
+                    value = -1
             else:
                 # Convert Unicode strings to plain strings if possible
                 try:
