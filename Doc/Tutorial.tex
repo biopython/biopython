@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 28 September 2009 (Biopython 1.52+)}
+\date{Last Update -- 7 October 2009 (Biopython 1.52+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -5003,12 +5003,12 @@ See the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/espell\_help.html}
 
 \section{Parsing huge Entrez XML files}
 
-The \verb+Entrez.read+ function reads the entire XML file returns by Entrez into a single Python object, which is kept in memory. Some Entrez XML files are so large that they do not fit in memory. To parse such files, you can use the functio n\verb+Entrez.parse+, which is a generator function that reads records in the XML file one by one. This function is only useful if the XML file reflects a Python list object (in other words, if \verb+Entrez.read+ on a computer with infinite memory resources would return a Python list).
+The \verb+Entrez.read+ function reads the entire XML file returned by Entrez into a single Python object, which is kept in memory. To parse Entrez XML files too large to fit in memory, you can use the function \verb+Entrez.parse+. This is a generator function that reads records in the XML file one by one. This function is only useful if the XML file reflects a Python list object (in other words, if \verb+Entrez.read+ on a computer with infinite memory resources would return a Python list).
 
 For example, you can download the entire Entrez Gene database for a given organism as a file from NCBI's ftp site. These files can be very large. As an example, on September 4, 2009, the file \verb+Homo_sapiens.ags.gz+, containing the Entrez Gene database for human, had a size of 116576 kB. This file, which is in the \verb+ASN+ format, can be converted into an XML file using NCBI's \verb+gene2xml+ progam (see NCBI's ftp site for more information):
 
 \begin{verbatim}
-gene2xml -b T -i Homo_sapiens.ags.gz Homo_sapiens.xml
+gene2xml -b T -i Homo_sapiens.ags -o Homo_sapiens.xml
 \end{verbatim}
 
 The resulting XML file has a size of 6.1 GB. Attempting \verb+Entrez.read+ on this file will result in a \verb+MemoryError+ on many computers.
