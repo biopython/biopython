@@ -2608,8 +2608,8 @@ could be used to convert between any file formats available in Biopython.
 However, writing some formats requires information (e.g. quality scores) which
 other files formats don't contain. For example, while you can turn a FASTQ
 file into a FASTA file, you can't do the reverse. See also
-Section~\ref{sec:SeqIO-fastq-conversion} in the cookbook chapter which looks
-at inter-converting between different FASTQ formats.
+Sections~\ref{sec:SeqIO-fastq-conversion} and~\ref{sec:SeqIO-fasta-qual-conversion}
+in the cookbook chapter which looks at inter-converting between different FASTQ formats.
 
 Finally, as an added incentive for using the \verb|Bio.SeqIO.convert()| function
 (on top of the fact your code will be shorter), doing it this way may also be
@@ -8894,6 +8894,58 @@ For more details, see the built in help (also \href{http://www.biopython.org/DIS
 >>> from Bio.SeqIO import QualityIO
 >>> help(QualityIO)
 ...
+\end{verbatim}
+
+\subsection{Converting FASTA and QUAL files into FASTQ files}
+\label{sec:SeqIO-fasta-qual-conversion}
+
+FASTQ files hold \emph{both} sequences and their quality strings.
+FASTA files hold \emph{just} sequences, while QUAL files hold \emph{just}
+the qualities. Therefore a single FASTQ file can be converted to or from
+\emph{paired} FASTA and QUAL files.
+
+Going from FASTQ to FASTA is easy:
+
+\begin{verbatim}
+from Bio import SeqIO
+SeqIO.convert("example.fastq", "fastq", "example.fasta", "fasta")
+\end{verbatim}
+
+Going from FASTQ to QUAL is also easy:
+
+\begin{verbatim}
+from Bio import SeqIO
+SeqIO.convert("example.fastq", "fastq", "example.qual", "qual")
+\end{verbatim}
+
+However, the reverse is a little more tricky. You can use \verb|Bio.SeqIO.parse()|
+to iterate over the records in a \emph{single} file, but in this case we have
+two input files. There are several strategies possible, but assuming that the
+two files are really paired the most memory efficient way is to loop over both
+together. The code is a little fiddly, so we provide a function called
+\verb|PairedFastaQualIterator| in the \verb|Bio.SeqIO.QualityIO| module to do
+this. This takes two handles (the FASTA file and the QUAL file) and returns
+a \verb|SeqRecord| iterator:
+
+\begin{verbatim}
+from Bio.SeqIO.QualityIO import PairedFastaQualIterator
+for record in PairedFastaQualIterator(open("example.fasta"), open("example.qual")) :
+   print record
+\end{verbatim}
+
+This function will check that the FASTA and QUAL files are consistent (e.g.
+the records are in the same order, and have the same sequence length).
+You can combine this with the \verb|Bio.SeqIO.write()| function to convert a
+pair of FASTA and QUAL files into a single FASTQ files:
+
+\begin{verbatim}
+from Bio import SeqIO
+from Bio.SeqIO.QualityIO import PairedFastaQualIterator
+handle = open("temp.fastq", "w") #w=write
+records = PairedFastaQualIterator(open("example.fasta"), open("example.qual"))
+count = SeqIO.write(records, handle, "fastq")
+handle.close()
+print "Converted %i records" % count
 \end{verbatim}
 
 \subsection{Indexing a FASTQ file}
