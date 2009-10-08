@@ -29,6 +29,80 @@ def trim_str(text, maxlen=60):
     return text
 
 
+# Factory functions to generalize searching for clades/nodes
+
+def _identity_matcher(target):
+    def match(node):
+        return (node is target or node is target.root)
+    return match
+
+def _class_matcher(target_cls):
+    def match(node):
+        return isinstance(node, target_cls)
+    return match
+
+def _attr_matcher(**kwargs):
+    """Match a node by specified attribute values.
+
+    'terminal' is a special case: True restricts the search to external (leaf)
+    nodes, False restricts to internal nodes, and None allows all tree elements
+    to be searched, including phyloXML annotations.
+
+    Otherwise, for a tree element to match the specification (i.e. for the
+    function produced by _attr_matcher to return True when given a tree
+    element), it must have each of the attributes specified by the keys and
+    match each of the corresponding values -- think 'and', not 'or', for
+    multiple keys.
+    """
+    def match(node):
+        for key, pattern in kwargs.iteritems():
+            # Special case: restrict to internal/external/any nodes
+            if key == 'terminal':
+                if (pattern is None
+                    or (hasattr(node, 'is_terminal')
+                        and node.is_terminal() == pattern)):
+                    continue
+                return False
+            # Nodes must match all other specified attributes
+            if not hasattr(node, key):
+                return False
+            target = getattr(node, key)
+            if isinstance(pattern, basestring):
+                return (isinstance(target, basestring)
+                        and re.match(pattern+'$', target))
+            if isinstance(pattern, bool):
+                return (pattern == bool(target))
+            if isinstance(pattern, int):
+                return (pattern == target)
+            if pattern is None:
+                return (target is None)
+            raise TypeError('invalid query type: %s' % type(pattern))
+        return True
+    return match
+
+def _object_matcher(obj):
+    """Retrieve a matcher function by passing an arbitrary object.
+
+    i.e. passing a TreeElement such as a Node or Tree instance returns an
+    identity matcher, passing a type such as the PhyloXML.Taxonomy class returns
+    a class matcher, and passing a dictionary returns an attribute matcher.
+    
+    The resulting 'match' function returns True when given an object matching
+    the specification (identity, type or attribute values), otherwise False.
+    This is useful for writing functions that search the tree, and probably
+    shouldn't be used directly by the end user.
+    """
+    if isinstance(obj, TreeElement):
+        return _identity_matcher(obj)
+    if isinstance(obj, type):
+        return _class_matcher(obj)
+    if isinstance(obj, dict):
+        return _attr_matcher(**obj)
+    raise ValueError("%s (type %s) is not a valid type for comparison.")
+
+
+# Class definitions
+
 class TreeElement(object):
     """Base class for all Bio.Tree classes."""
 
@@ -123,7 +197,7 @@ class Tree(TreeElement):
 
     # Plumbing
 
-    def filter_search(self, filterfunc, breadth_first=False):
+    def filter_search(self, filterfunc, breadth_first):
         """Perform a BFS or DFS through all nodes in this tree.
 
         @return: generator of all nodes for which 'filterfunc' is True.
@@ -154,6 +228,35 @@ class Tree(TreeElement):
             if filterfunc(v):
                 yield v
             extend(Q, get_subnodes(v))
+
+    # TODO: write a unit test
+    def get_path(self, target):
+        """Find the direct path from the root to the given target node.
+
+        Returns an iterable of all nodes along this path, ending with the given
+        node.
+        """
+        # Only one path will work -- ignore weights and visits
+        path = deque([self])
+        match = _object_matcher(target)
+
+        def check_in_path(v):
+            if match(v):
+                path.append(v)
+                return True
+            elif v.is_terminal():
+                return False
+            for child in v:
+                if check_in_path(child):
+                    path.append(v)
+                    return True
+                return False
+
+        if not check_in_path(self):
+            return None
+        return reversed(path)
+
+    # Porcelain
 
     def findall(self, cls=TreeElement, terminal=None, breadth_first=False,
             **kwargs):
@@ -193,83 +296,25 @@ class Tree(TreeElement):
             Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
 
         """ 
-        def match_class(node):
-            return isinstance(node, cls)
-
-        def match_terminal(node):
-            if hasattr(node, 'is_terminal'):
-                return (node.is_terminal() == terminal)
-            return False
-
-        def match_kwargs(node):
-            for key, pattern in kwargs.iteritems():
-                if not hasattr(node, key):
-                    return False
-                target = getattr(node, key)
-                if isinstance(pattern, basestring):
-                    return (isinstance(target, basestring)
-                            and re.match(pattern+'$', target))
-                if isinstance(pattern, bool):
-                    return (pattern == bool(target))
-                if isinstance(pattern, int):
-                    return (pattern == target)
-                if pattern is None:
-                    return (target is None)
-                raise TypeError('invalid query type: %s' % type(pattern))
-            return True
-
-        if terminal is None:
-            if not kwargs:
-                is_matching_node = match_class
-            else:
-                def is_matching_node(node):
-                    return (match_class(node) and match_kwargs(node))
-        elif not kwargs:
+        match_class = _class_matcher(cls)
+        if terminal is not None:
+            kwargs['terminal'] = terminal
+        if kwargs:
+            match_attr = _attr_matcher(**kwargs)
             def is_matching_node(node):
-                return (match_class(node) and match_terminal(node))
+                return (match_class(node) and match_attr(node))
         else:
-            def is_matching_node(node):
-                return (match_class(node)
-                        and match_terminal(node)
-                        and match_kwargs(node))
+            is_matching_node = match_class
 
         return self.filter_search(is_matching_node, breadth_first)
-
-    def get_path(self, target):
-        """Find the direct path from the root to the given target node.
-
-        Returns an iterable of all nodes along this path, ending with the given
-        node.
-        """
-        # Only one path will work -- ignore weights and visits
-        path = deque([self])
-
-        def check_in_path(v):
-            if v is target or v.root is target:
-                path.append(v)
-                return True
-            elif v.is_terminal():
-                return False
-            else:
-                for child in v:
-                    if check_in_path(child):
-                        path.append(v)
-                        return True
-                    return False
-
-        if not check_in_path(self):
-            return None
-        return reversed(path)
-
-    # Porcelain
-
-    def is_terminal(self):
-        """Returns True if the root of this tree is terminal."""
-        return (not self.clades)
 
     def get_leaves(self, breadth_first=False):
         """Iterate through all of this tree's terminal (leaf) nodes."""
         return self.findall(Node, terminal=True, breadth_first=breadth_first)
+
+    def is_terminal(self):
+        """Returns True if the root of this tree is terminal."""
+        return (not self.clades)
 
     def branch_length_to(self, node):
         """Calculate the sum of all the branch lengths in this tree."""
