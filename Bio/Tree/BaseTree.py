@@ -19,6 +19,7 @@ __docformat__ = "epytext en"
 
 import re
 from collections import deque
+from itertools import izip
 
 
 def trim_str(text, maxlen=60):
@@ -255,6 +256,31 @@ class Tree(TreeElement):
         if not check_in_path(self):
             return None
         return reversed(path)
+
+    # TODO: write a unit test
+    def mrca(self, target1, target2):
+        mrca = self
+        for clade1, clade2 in izip(
+                self.get_path(target1), 
+                self.get_path(target2)): 
+            if clade1 is clade2:
+                mrca = clade1
+            else:
+                break
+        return mrca
+        # ENH: take arbitrary number of *targets
+        # paths = [self.get_path(t) for t in targets]
+        # mrca = self
+        # for level in izip(paths):
+        #     ref = level[0]
+        #     for other in level[1:]:
+        #         if ref is not other:
+        #             break
+        #     else:
+        #         mrca = ref
+        #     if ref is not mrca:
+        #         break
+        # return mrca
 
     # Porcelain
 
