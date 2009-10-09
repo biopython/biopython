@@ -202,6 +202,13 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
                                "use Phylogeny().confidences")
         return self.confidences[0]
 
+    # Fix sequence-type behavior inherited from BaseTree
+    def __iter__(self):
+        return iter(self.clade)
+
+    def __len__(self):
+        return len(self.clade)
+
 
 class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
     """Describes a branch of the current phylogenetic tree.
