@@ -41,7 +41,7 @@ def unzip(fname):
 # Utility tests
 
 class UtilTests(unittest.TestCase):
-    """Tests for various PhyloXML utility functions."""
+    """Tests for PhyloXML utility functions."""
     def test_dump_tags(self):
         """Count and confirm the number of tags in each example XML file."""
         for source, count in izip(
@@ -51,27 +51,6 @@ class UtilTests(unittest.TestCase):
                 (509, 1496, 289, 24311, 322367, 972830)):
             output = StringIO()
             PhyloXMLIO.dump_tags(source, output)
-            output.seek(0)
-            self.assertEquals(len(output.readlines()), count)
-
-    def test_pretty_print(self):
-        """Check pretty_print by counting lines of output for each example.
-
-        The line counts are liable to change whenever the object constructors
-        change.
-        """
-        for source, count in izip(
-                (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA),
-                    # unzip(EX_METAZOA), unzip(EX_NCBI),
-                    ),
-                (387, 748, 164, 16208, 214912, 648554)):
-            phx = PhyloXMLIO.read(source)
-            output = StringIO()
-            Utils.pretty_print(phx, output)
-            output.seek(0)
-            self.assertEquals(len(output.readlines()), count)
-            output = StringIO()
-            Utils.pretty_print(phx, output, show_all=True)
             output.seek(0)
             self.assertEquals(len(output.readlines()), count)
 
@@ -743,55 +722,6 @@ class MethodTests(unittest.TestCase):
         self.assertRaises(AttributeError, getattr, tree, 'confidence')
 
     # Other methods
-
-    def test_findall(self):
-        """Clade, Phylogeny: findall() method."""
-        # From the docstring example
-        tree = self.phyloxml.phylogenies[5]
-        matches = list(tree.findall(Tree.Taxonomy, code='OCTVU'))
-        self.assertEqual(len(matches), 1)
-        self.assert_(isinstance(matches[0], Tree.Taxonomy))
-        self.assertEqual(matches[0].code, 'OCTVU')
-        self.assertEqual(matches[0].scientific_name, 'Octopus vulgaris')
-        # Iteration and regexps
-        tree = self.phyloxml.phylogenies[10]
-        for point, alt in izip(tree.findall(geodetic_datum=r'WGS\d{2}'),
-                               (472, 10, 452)):
-            self.assert_(isinstance(point, Tree.Point))
-            self.assertEqual(point.geodetic_datum, 'WGS84')
-            self.assertAlmostEqual(point.alt, alt)
-        # boolean filter
-        for clade, name in izip(tree.findall(name=True), list('ABCD')):
-            self.assert_(isinstance(clade, Tree.Clade))
-            self.assertEqual(clade.name, name)
-        # class filter
-        tree = self.phyloxml.phylogenies[4]
-        events = list(tree.findall(Tree.Events))
-        self.assertEqual(len(events), 2)
-        self.assertEqual(events[0].speciations, 1)
-        self.assertEqual(events[1].duplications, 1)
-        # integer filter
-        tree = PhyloXMLIO.parse(EX_APAF).next()
-        domains = list(tree.findall(start=5))
-        self.assertEqual(len(domains), 8)
-        for dom in domains:
-            self.assertEqual(dom.start, 5)
-            self.assertEqual(dom.value, 'CARD')
-
-    def test_findall_terminal(self):
-        """Clade, Phylogeny: findall() with terminal argument."""
-        def iter_len(it, count=0):
-            for elem in it: count += 1
-            return count
-        for tree, total, extern, intern in izip(
-                self.phyloxml.phylogenies,
-                (5, 5, 6, 17, 20, 26, 6, 8, 8, 18, 14, 8, 5),
-                (3, 3, 3, 3,  3,  3,  3, 3, 3, 3,  4,  3, 3),
-                (2, 2, 2, 2,  2,  2,  2, 2, 2, 2,  2,  2, 2),
-                ):
-            self.assertEqual(iter_len(tree.findall()), total)
-            self.assertEqual(iter_len(tree.findall(terminal=True)), extern)
-            self.assertEqual(iter_len(tree.findall(terminal=False)), intern)
 
     def test_color_hex(self):
         """BranchColor: to_hex() method."""
