@@ -79,17 +79,17 @@ def to_networkx(tree):
 
     def build_subgraph(graph, top):
         """Walk down the Tree, building graphs, edges and nodes."""
-        for node in top.nodes:
-            graph.add_node(node)
-            add_edge(graph, top, node)
-            build_subgraph(graph, node)
+        for clade in top:
+            graph.add_node(clade.root)
+            add_edge(graph, top.root, clade.root)
+            build_subgraph(graph, clade)
 
     if tree.rooted:
         G = networkx.DiGraph()
     else:
         G = networkx.Graph()
     G.add_node(tree.root)
-    build_subgraph(G, tree.root)
+    build_subgraph(G, tree)
     return G
 
 
@@ -112,7 +112,7 @@ def draw_graphviz(tree, label_func=str, prog='neato', args='',
         this is str(), but you can use a different function to select another
         string associated with each node. If this function returns None for a
         node, no label will be shown for that node.
-        
+
         The label will also be silently skipped if the throws an exception
         related to ordinary attribute access (LookupError, AttributeError,
         ValueError); all other exception types will still be raised. This
