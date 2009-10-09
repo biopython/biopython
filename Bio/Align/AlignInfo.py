@@ -253,8 +253,8 @@ class SummaryInfo:
                 rep_dict = self._pair_replacement(
                     self.alignment._records[rec_num1].seq,
                     self.alignment._records[rec_num2].seq,
-                    self.alignment._records[rec_num1].annotations.get('weight',1),
-                    self.alignment._records[rec_num2].annotations.get('weight',1),
+                    self.alignment._records[rec_num1].annotations.get('weight',1.0),
+                    self.alignment._records[rec_num2].annotations.get('weight',1.0),
                     rep_dict, skip_items)
 
         return rep_dict
@@ -405,7 +405,7 @@ class SummaryInfo:
                     this_residue = None
                     
                 if this_residue and this_residue not in chars_to_ignore:
-                    weight = record.annotations.get('weight', 1)
+                    weight = record.annotations.get('weight', 1.0)
                     try:
                         score_dict[this_residue] += weight
                     # if we get a KeyError then we have an alphabet problem
@@ -532,7 +532,7 @@ class SummaryInfo:
         for record in all_records:
             try:
                 if record.seq[residue_num] not in to_ignore:
-                    weight = record.annotations.get('weight',1)
+                    weight = record.annotations.get('weight',1.0)
                     freq_info[record.seq[residue_num]] += weight
                     total_count += weight
             # getting a key error means we've got a problem with the alphabet 
