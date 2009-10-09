@@ -82,8 +82,7 @@ class SummaryInfo:
                         if record.seq[n] not in atom_dict.keys():
                             atom_dict[record.seq[n]] = 1
                         else:
-                            atom_dict[record.seq[n]] = \
-                              atom_dict[record.seq[n]] + 1
+                            atom_dict[record.seq[n]] += 1
 
                         num_atoms = num_atoms + 1
 
@@ -98,12 +97,12 @@ class SummaryInfo:
                     max_atoms.append(atom)
 
             if require_multiple and num_atoms == 1:
-                consensus = consensus + ambiguous
+                consensus += ambiguous
             elif (len(max_atoms) == 1) and ((float(max_size)/float(num_atoms))
                                          >= threshold):
-                consensus = consensus + max_atoms[0]
+                consensus += max_atoms[0]
             else:
-                consensus = consensus + ambiguous
+                consensus += ambiguous
 
         # we need to guess a consensus alphabet if one isn't specified
         if consensus_alpha is None:
@@ -138,10 +137,9 @@ class SummaryInfo:
                     if record.seq[n] not in atom_dict.keys():
                         atom_dict[record.seq[n]] = 1
                     else:
-                        atom_dict[record.seq[n]] = \
-                          atom_dict[record.seq[n]] + 1
+                        atom_dict[record.seq[n]] += 1
 
-                    num_atoms = num_atoms + 1
+                    num_atoms += 1
 
             max_atoms = []
             max_size = 0
@@ -154,12 +152,12 @@ class SummaryInfo:
                     max_atoms.append(atom)
 
             if require_multiple and num_atoms == 1:
-                consensus = consensus + ambiguous
+                consensus += ambiguous
             elif (len(max_atoms) == 1) and ((float(max_size)/float(num_atoms))
                                          >= threshold):
-                consensus = consensus + max_atoms[0]
+                consensus += max_atoms[0]
             else:
-                consensus = consensus + ambiguous
+                consensus += ambiguous
 
         # we need to guess a consensus alphabet if one isn't specified
         if consensus_alpha is None:
@@ -292,9 +290,7 @@ class SummaryInfo:
                 try:
                     # add info about the replacement to the dictionary,
                     # modified by the sequence weights
-                    start_dict[(residue1, residue2)] = \
-                                         start_dict[(residue1, residue2)] + \
-                                         weight1 * weight2
+                    start_dict[(residue1, residue2)] += weight1 * weight2
                                          
                 # if we get a key error, then we've got a problem with alphabets
                 except KeyError:
@@ -507,7 +503,7 @@ class SummaryInfo:
         # sum up the score
         total_info = 0
         for column_info in info_content.values():
-            total_info = total_info + column_info
+            total_info += column_info
         # fill in the ic_vector member: holds IC for each column
         for i in info_content.keys():
             self.ic_vector[i] = info_content[i]
@@ -603,7 +599,7 @@ class SummaryInfo:
             if inner_log > 0:
                 letter_info = (obs_freq[letter] * 
                                math.log(inner_log) / math.log(log_base))
-                total_info = total_info + letter_info
+                total_info += letter_info
         return total_info 
 
     def get_column(self,col):
@@ -659,16 +655,16 @@ class PSSM:
         
         # first print out the top header
         for res in all_residues:
-            out = out + "   %s" % res
-        out = out + "\n"
+            out += "   %s" % res
+        out += "\n"
 
         # for each item, write out the substitutions
         for item in self.pssm:
-            out = out + "%s " % item[0]
+            out += "%s " % item[0]
             for res in all_residues:
-                out = out + " %.1f" % item[1][res]
+                out += " %.1f" % item[1][res]
 
-            out = out + "\n"
+            out += "\n"
         return out
 
     def get_residue(self, pos):
