@@ -29,7 +29,9 @@ def deprecated(hint):
 # XXX from Bio.Nexus.Trees
 # move to Utils?
 def consensus(trees, threshold=0.5,outgroup=None):
-    """Compute a majority rule consensus tree of all clades with relative frequency>=threshold from a list of trees."""
+    """Compute a majority rule consensus tree of all clades with relative
+    frequency>=threshold from a list of trees.
+    """
 
 
 class NHTree(BaseTree.Tree):
@@ -51,65 +53,66 @@ class NHTree(BaseTree.Tree):
 
     # Ported from Bio.Nexus.Trees.Tree
 
-    def is_preterminal(self,node):
+    # Methods with deprecated arguments -- duplicated in Bio.Tree.BaseTree
+
+    def is_terminal(self, node=None):
         """Returns True if all direct descendents are terminal."""
-        # Py2.5+:
-        # return (not self.is_terminal()) and all(t.is_terminal() for t in self)
+        # Deprecated Newick behavior
+        if node is not None:
+            warnings.warn("use node.is_terminal() method instead",
+                          DeprecationWarning, stacklevel=2)
+            return node.is_terminal()
+        return (not self.clades)
+
+    def is_preterminal(self, node=None):
+        """Returns True if all direct descendents are terminal."""
+        # Deprecated Newick behavior
+        if node is not None:
+            warnings.warn("use node.tree.is_preterminal() method instead",
+                          DeprecationWarning, stacklevel=2)
+            return node.tree.is_preterminal()
         if self.is_terminal():
             return False
-        for node in self.nodes:
-            if not node.is_terminal():
+        for clade in self.clades:
+            if not clade.is_terminal():
                 return False
         return True
-
-    def count_terminals(self,node=None):
-        """Counts the number of terminal nodes below this tree."""
-        counter = 0
-        for i, leaf in enumerate(self.get_leaves()):
-            counter = i
-        return counter + 1
-
-    def collapse_genera(self,space_equals_underscore=True):
-        """Collapses all subtrees which belong to the same genus.
-
-        (i.e share the same first word in their taxon name.
-        """
+        # Py2.5+ one-liner:
+        # return (not self.is_terminal()) and all(t.is_terminal() for t in self)
 
     # Deprecated methods from Bio.Nexus.Trees.Tree
 
-    # XXX is_terminal in Nexus takes the node as an arg
-    #   -- will have to monkeypatch there
+    @deprecated("count_leaves")
+    def count_terminals(self, node=None):
+        if node is not None:
+            warnings.warn("use node.tree.count_leaves() directly",
+                          DeprecationWarning, stacklevel=2)
+            return node.tree.count_leaves()
+        return self.count_leaves()
 
     @deprecated("get_leaves")
     def get_terminals(self):
         """Return an iterable of all terminal nodes."""
         return self.get_leaves()
 
-    @deprecated("\"not is_terminal\"")
-    def is_internal(self,node):
+    @deprecated("\"not node.is_terminal()\"")
+    def is_internal(self, node):
         """Returns True if node is an internal node."""
-        return not self.is_terminal()
+        return not node.is_terminal()
 
-    def sum_branchlength(self,root=None,node=None):
-        """Adds up the branchlengths from root (default self.root) to node.
-        
-        sum = sum_branchlength(self,root=None,node=None)
-        """
+    @deprecated("root.tree.branch_length_to(node)")
+    def sum_branchlength(self, root, node):
+        """Adds up the branchlengths from root (default self.root) to node."""
+        return root.tree.branch_length_to(node)
 
-    # TODO - port the rest of these methods to NHTree or BaseTree
-    # See unit tests
+    @deprecated("node.tree.findall(Node)")
+    def get_taxa(self, node_id=None):
+        """Return a list of all OTUs downwards from a node (self, node_id)."""
+        if node_id is None:
+            node_id = self
+        return list(node_id.tree.findall(BaseTree.Node))
 
-    # XXX from Nexus.Trees.Tree
-    # """Get information about trees (monphyly of taxon sets, congruence between
-    # trees, common ancestors,...) and to manipulate trees (reroot trees, split
-    # terminal nodes)."""
-
-    def split(self, parent_id=None, n=2, branchlength=1.0):
-        """Speciation: generates n (default two) descendants of a node.
-
-        [new ids] = split(self,parent_id=None,n=2,branchlength=1.0):
-        """ 
-
+    @deprecated("node.tree.findall(name=taxon).next()")
     def search_taxon(self, taxon):
         """Returns the first matching taxon in self.data.taxon.
 
@@ -117,122 +120,110 @@ class NHTree(BaseTree.Tree):
 
         node_id = search_taxon(self,taxon)
         """
+        return self.findall(name=taxon).next()
 
-    def prune(self,taxon):
+    # TODO - port the rest of these methods to NHTree or BaseTree
+    # See unit tests
+
+    # XXX from Nexus.Nodes.Chain
+
+    def is_parent_of(self, parent, grandchild):
+        """Check if grandchild is a subnode of parent."""
+        # XXX direct descendent? or "parent.get_path(grandchild) is not None"?
+
+    # XXX from Nexus.Trees.Tree
+    # """Get information about trees (monphyly of taxon sets, congruence between
+    # trees, common ancestors,...) and to manipulate trees (reroot trees, split
+    # terminal nodes)."""
+
+    def collapse_genera(self,space_equals_underscore=True):
+        """Collapses all subtrees which belong to the same genus.
+
+        (i.e share the same first word in their taxon name.
+        """
+        # XXX whoa! this sounds error-prone
+
+
+    def split(self, parent_id=None, n=2, branchlength=1.0):
+        """Speciation: generates n (default two) descendants of a node.
+
+        [new ids] = split(self,parent_id=None,n=2,branchlength=1.0):
+        """ 
+
+    def prune(self, taxon):
         """Prunes a terminal taxon from the tree.
 
-        id_of_previous_node = prune(self,taxon)
         If taxon is from a bifurcation, the connectiong node will be collapsed
         and its branchlength added to remaining terminal node. This might be no
         longer a meaningful value'
+
+        @return previous node
         """
 
-    def get_taxa(self,node_id=None):
-        """Return a list of all OTUs downwards from a node (self, node_id).
-
-        nodes = get_taxa(self,node_id=None)
-        """
-
-
-    def set_subtree(self,node):
-        """Return subtree as a set of nested sets.
-
-        sets = set_subtree(self,node)
-        """
+    def set_subtree(self, node):
+        """Return subtree as a set of nested sets."""
 
     def is_identical(self,tree2):
-        """Compare tree and tree2 for identity.
-
-        result = is_identical(self,tree2)
-        """
+        """Compare tree and tree2 for identity."""
         return self.set_subtree(self.root)==tree2.set_subtree(tree2.root)
 
-    def is_compatible(self,tree2,threshold,strict=True):
-        """Compares branches with support>threshold for compatibility.
-        
-        result = is_compatible(self,tree2,threshold)
-        """
+    def is_compatible(self, tree2, threshold, strict=True):
+        """Compares branches with support>threshold for compatibility."""
 
-    def common_ancestor(self,node1,node2):
-        """Return the common ancestor that connects two nodes.
-        
-        node_id = common_ancestor(self,node1,node2)
-        """
+    def is_monophyletic(self, taxon_list):
+        """Return node_id of common ancestor if taxon_list is monophyletic, -1 otherwise."""
 
-    def distance(self,node1,node2):
-        """Add and return the sum of the branchlengths between two nodes.
-        dist = distance(self,node1,node2)
-        """
-
-    def is_monophyletic(self,taxon_list):
-        """Return node_id of common ancestor if taxon_list is monophyletic, -1 otherwise.
-        
-        result = is_monophyletic(self,taxon_list)
-        """
-
-    def is_bifurcating(self,node=None):
+    def is_bifurcating(self, node=None):
         """Return True if tree downstream of node is strictly bifurcating."""
 
     def branchlength2support(self):
-        """Move values stored in data.branchlength to data.support, and set branchlength to 0.0
+        """Move values stored in data.branchlength to data.support, and set
+        branchlength to 0.0
 
-        This is necessary when support has been stored as branchlength (e.g. paup), and has thus
-        been read in as branchlength. 
+        This is necessary when support has been stored as branchlength (e.g.
+        paup), and has thus been read in as branchlength. 
         """
 
-    def convert_absolute_support(self,nrep):
+    def convert_absolute_support(self, nrep):
         """Convert absolute support (clade-count) to rel. frequencies.
-        
-        Some software (e.g. PHYLIP consense) just calculate how often clades appear, instead of
-        calculating relative frequencies."""
 
-    def has_support(self,node=None):
+        Some software (e.g. PHYLIP consense) just calculate how often clades
+        appear, instead of calculating relative frequencies.
+        """
+
+    def has_support(self, node=None):
         """Returns True if any of the nodes has data.support != None."""
 
-    def randomize(self,ntax=None,taxon_list=None,branchlength=1.0,branchlength_sd=None,bifurcate=True):
+    def randomize(self, ntax=None, taxon_list=None, branchlength=1.0, branchlength_sd=None, bifurcate=True):
         """Generates a random tree with ntax taxa and/or taxa from taxlabels.
-    
-        new_tree = randomize(self,ntax=None,taxon_list=None,branchlength=1.0,branchlength_sd=None,bifurcate=True)
+
         Trees are bifurcating by default. (Polytomies not yet supported).
+
+        @return new tree
         """
 
     def display(self):
         """Quick and dirty lists of all nodes."""
 
-    def to_string(self,support_as_branchlengths=False,branchlengths_only=False,plain=True,plain_newick=False,ladderize=None):
-        """Return a paup compatible tree line.
-       
-        to_string(self,support_as_branchlengths=False,branchlengths_only=False,plain=True)
-        """
-
     def unroot(self):
-        """Defines a unrooted Tree structure, using data of a rooted Tree."""
+        """Define a unrooted Tree structure, using data of a rooted Tree."""
 
-    def root_with_outgroup(self,outgroup=None):
+    def root_with_outgroup(self, outgroup=None):
         """???
 
         Hint:
             Hook subtree starting with node child to parent.
         """
 
-    def merge_with_support(self,bstrees=None,constree=None,threshold=0.5,outgroup=None):
-        """Merges clade support (from consensus or list of bootstrap-trees) with phylogeny.
+    def merge_with_support(self, bstrees=None, constree=None, threshold=0.5, outgroup=None):
+        """Merge clade support with phylogeny.
+
+        From consensus or list of bootstrap-trees.
 
         tree=merge_bootstrap(phylo,bs_tree=<list_of_trees>)
         or
         tree=merge_bootstrap(phylo,consree=consensus_tree with clade support)
         """
-
-    # XXX from Nexus.Nodes.Chain
-
-    def collapse(self,id):
-        """Deletes node from chain and relinks successors to predecessor: collapse(self, id)."""
-
-    def is_parent_of(self,parent,grandchild):
-        """Check if grandchild is a subnode of parent: is_parent_of(self,parent,grandchild)."""
-
-    def trace(self,start,finish):
-        """Returns a list of all node_ids between two nodes (excluding start, including end): trace(start,end)."""
 
 
 class NHNode(BaseTree.Node):

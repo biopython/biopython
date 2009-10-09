@@ -238,7 +238,7 @@ class Tree(TreeElement):
         node.
         """
         # Only one path will work -- ignore weights and visits
-        path = deque([self])
+        path = deque()
         match = _object_matcher(target)
 
         def check_in_path(v):
@@ -257,8 +257,27 @@ class Tree(TreeElement):
             return None
         return reversed(path)
 
+    def collapse(self, node):
+        """Deletes node from chain and relinks successors to predecessor.
+
+        Returns the predecessor clade.
+        """
+        path = list(self.get_path(node))
+        if not path:
+            raise ValueError("couldn't collapse node %s in this tree" % node)
+        if len(path) == 1:
+            parent = self
+        else:
+            parent = path[-2]
+        parent.clades.extend(
+                parent.clades.pop(
+                    parent.clades.find(node)
+                    ).clades)
+        return parent
+
+
     # TODO: write a unit test
-    def mrca(self, target1, target2):
+    def common_ancestor(self, target1, target2):
         mrca = self
         for clade1, clade2 in izip(
                 self.get_path(target1), 
@@ -334,6 +353,14 @@ class Tree(TreeElement):
 
         return self.filter_search(is_matching_node, breadth_first)
 
+    def find(self, *args, **kwargs):
+        """Return the first object found by findall(), or None."""
+        hits = self.findall(*args, **kwargs)
+        try:
+            return hits.next()
+        except StopIteration:
+            return None
+
     def get_leaves(self, breadth_first=False):
         """Iterate through all of this tree's terminal (leaf) nodes."""
         return self.findall(Node, terminal=True, breadth_first=breadth_first)
@@ -342,15 +369,47 @@ class Tree(TreeElement):
         """Returns True if the root of this tree is terminal."""
         return (not self.clades)
 
-    def branch_length_to(self, node):
-        """Calculate the sum of all the branch lengths in this tree."""
-        return sum(n.branch_length for n in self.get_path(node)
-                   if n.branch_length is not None)
+    def is_preterminal(self):
+        """Returns True if all direct descendents are terminal."""
+        if self.is_terminal():
+            return False
+        for clade in self.clades:
+            if not clade.is_terminal():
+                return False
+        return True
+
+    def count_leaves(self):
+        """Counts the number of terminal nodes below this tree."""
+        counter = 0
+        for i, leaf in enumerate(self.get_leaves()):
+            counter = i
+        return counter + 1
+
+    def distance(self, node1, node2=None):
+        """Calculate the sum of the branch lengths between two nodes.
+        
+        If only one node is specified, the other is the root of this tree.
+        """
+        if node2 is None:
+            return sum(n.branch_length for n in self.get_path(node1)
+                       if n.branch_length is not None)
+        root = self.common_ancestor(node1, node2)
+        return root.branch_length_to(node1) + root.branch_length_to(node2)
 
     def total_branch_length(self):
         """Calculate the sum of all the branch lengths in this tree."""
         return sum(node.branch_length
                    for node in self.findall(branch_length=True))
+
+    def trace(self, start, finish):
+        """Returns a list of all node_ids between two nodes.
+
+        Excluding start, including end.
+        """
+        mrca = self.common_ancestor(start, finish)
+        fromstart = list(mrca.get_path(start))[-2::-1]
+        to = list(mrca.get_path(finish))
+        return fromstart + [mrca] + to
 
     # Sequence-type behavior methods
 
