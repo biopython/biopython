@@ -199,25 +199,25 @@ class Tree(TreeElement):
     # Plumbing
 
     def filter_search(self, filterfunc, breadth_first):
-        """Perform a BFS or DFS through all nodes in this tree.
+        """Perform a BFS or DFS through all elements in this tree.
 
-        @return: generator of all nodes for which 'filterfunc' is True.
+        @return: generator of all elements for which 'filterfunc' is True.
         """
-        def get_subnodes(node):
+        def get_children(elem):
             singles = []
             lists = []
             # Sort attributes for consistent results
-            for subnode in sorted(node.__dict__.itervalues()):
-                if subnode is None:
+            for child in sorted(elem.__dict__.itervalues()):
+                if child is None:
                     continue
-                if isinstance(subnode, list):
-                    lists.extend(subnode)
+                if isinstance(child, list):
+                    lists.extend(child)
                 else:
-                    singles.append(subnode)
+                    singles.append(child)
             return (x for x in singles + lists
                     if isinstance(x, TreeElement))
 
-        Q = deque(get_subnodes(self))
+        Q = deque(get_children(self))
         if breadth_first:
             pop = deque.popleft
             extend = deque.extend
@@ -228,14 +228,14 @@ class Tree(TreeElement):
             v = pop(Q)
             if filterfunc(v):
                 yield v
-            extend(Q, get_subnodes(v))
+            extend(Q, get_children(v))
 
     # TODO: write a unit test
     def get_path(self, target):
-        """Find the direct path from the root to the given target node.
+        """Find the direct path from the root to the given target.
 
-        Returns an iterable of all nodes along this path, ending with the given
-        node.
+        Returns an iterable of all clade origins along this path, ending with
+        the given target.
         """
         # Only one path will work -- ignore weights and visits
         path = deque()
@@ -257,26 +257,24 @@ class Tree(TreeElement):
             return None
         return reversed(path)
 
-    def collapse(self, node):
-        """Deletes node from chain and relinks successors to predecessor.
+    def collapse(self, target):
+        """Deletes target from chain and relinks successors to predecessor.
 
         Returns the predecessor clade.
         """
-        path = list(self.get_path(node))
+        path = list(self.get_path(target))
         if not path:
-            raise ValueError("couldn't collapse node %s in this tree" % node)
+            raise ValueError("couldn't collapse %s in this tree" % target)
         if len(path) == 1:
             parent = self
         else:
             parent = path[-2]
         parent.clades.extend(
                 parent.clades.pop(
-                    parent.clades.find(node)
+                    parent.clades.index(target)
                     ).clades)
         return parent
 
-
-    # TODO: write a unit test
     def common_ancestor(self, target1, target2):
         mrca = self
         for clade1, clade2 in izip(
@@ -320,11 +318,11 @@ class Tree(TreeElement):
             'is_terminal' method.
 
         The arbitrary keyword arguments indicate the attribute name of the
-        sub-node and the value to match: string, integer or boolean. Strings are
-        evaluated as regular expression matches; integers are compared directly
-        for equality, and booleans evaluate the attribute's truth value (True or
-        False) before comparing. To handle nonzero floats, search with a boolean
-        argument, then filter the result manually.
+        sub-element and the value to match: string, integer or boolean. Strings
+        are evaluated as regular expression matches; integers are compared
+        directly for equality, and booleans evaluate the attribute's truth value
+        (True or False) before comparing. To handle nonzero floats, search with
+        a boolean argument, then filter the result manually.
 
         If no keyword arguments are given, then just the class type is used for
         matching.
@@ -346,12 +344,12 @@ class Tree(TreeElement):
             kwargs['terminal'] = terminal
         if kwargs:
             match_attr = _attr_matcher(**kwargs)
-            def is_matching_node(node):
-                return (match_class(node) and match_attr(node))
+            def is_matching_elem(elem):
+                return (match_class(elem) and match_attr(elem))
         else:
-            is_matching_node = match_class
+            is_matching_elem = match_class
 
-        return self.filter_search(is_matching_node, breadth_first)
+        return self.filter_search(is_matching_elem, breadth_first)
 
     def find(self, *args, **kwargs):
         """Return the first object found by findall(), or None."""
@@ -361,8 +359,8 @@ class Tree(TreeElement):
         except StopIteration:
             return None
 
-    def get_leaves(self, breadth_first=False):
-        """Iterate through all of this tree's terminal (leaf) nodes."""
+    def get_terminals(self, breadth_first=False):
+        """Iterate through all of this tree's terminal (leaf) elements."""
         return self.findall(Node, terminal=True, breadth_first=breadth_first)
 
     def is_terminal(self):
@@ -378,23 +376,23 @@ class Tree(TreeElement):
                 return False
         return True
 
-    def count_leaves(self):
-        """Counts the number of terminal nodes below this tree."""
+    def count_terminals(self):
+        """Counts the number of terminal (leaf) nodes within this tree."""
         counter = 0
-        for i, leaf in enumerate(self.get_leaves()):
+        for i, leaf in enumerate(self.get_terminals()):
             counter = i
         return counter + 1
 
-    def distance(self, node1, node2=None):
-        """Calculate the sum of the branch lengths between two nodes.
-        
-        If only one node is specified, the other is the root of this tree.
+    def distance(self, target1, target2=None):
+        """Calculate the sum of the branch lengths between two targets.
+
+        If only one targets is specified, the other is the root of this tree.
         """
-        if node2 is None:
-            return sum(n.branch_length for n in self.get_path(node1)
+        if target2 is None:
+            return sum(n.branch_length for n in self.get_path(target1)
                        if n.branch_length is not None)
-        root = self.common_ancestor(node1, node2)
-        return root.branch_length_to(node1) + root.branch_length_to(node2)
+        root = self.common_ancestor(target1, target2)
+        return root.branch_length_to(target1) + root.branch_length_to(target2)
 
     def total_branch_length(self):
         """Calculate the sum of all the branch lengths in this tree."""
@@ -402,7 +400,7 @@ class Tree(TreeElement):
                    for node in self.findall(branch_length=True))
 
     def trace(self, start, finish):
-        """Returns a list of all node_ids between two nodes.
+        """Returns a list of all tree elements between two targets.
 
         Excluding start, including end.
         """
@@ -423,7 +421,7 @@ class Tree(TreeElement):
         return ref
 
     def __iter__(self):
-        """Iterate through this tree's direct sub-trees."""
+        """Iterate through this tree's direct sub-trees (clades)."""
         return iter(self.clades)
 
     def __len__(self):

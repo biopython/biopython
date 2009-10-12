@@ -69,7 +69,7 @@ class TreeTests(unittest.TestCase):
     # TODO: magic: iter, len, getitem
     #       get_path
     #       common_ancestor
-    #       get_leaves
+    #       get_terminals
     #       collapse
 
     def setUp(self):

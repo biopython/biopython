@@ -77,30 +77,25 @@ class NHTree(BaseTree.Tree):
             if not clade.is_terminal():
                 return False
         return True
-        # Py2.5+ one-liner:
-        # return (not self.is_terminal()) and all(t.is_terminal() for t in self)
 
-    # Deprecated methods from Bio.Nexus.Trees.Tree
-
-    @deprecated("count_leaves")
     def count_terminals(self, node=None):
         if node is not None:
-            warnings.warn("use node.tree.count_leaves() directly",
+            warnings.warn("use node.tree.count_terminals() directly",
                           DeprecationWarning, stacklevel=2)
-            return node.tree.count_leaves()
-        return self.count_leaves()
+            return node.tree.count_terminals()
+        counter = 0
+        for i, leaf in enumerate(self.get_terminals()):
+            counter = i
+        return counter + 1
 
-    @deprecated("get_leaves")
-    def get_terminals(self):
-        """Return an iterable of all terminal nodes."""
-        return self.get_leaves()
+    # Deprecated methods from Bio.Nexus.Trees.Tree
 
     @deprecated("\"not node.is_terminal()\"")
     def is_internal(self, node):
         """Returns True if node is an internal node."""
         return not node.is_terminal()
 
-    @deprecated("root.tree.branch_length_to(node)")
+    @deprecated("root.tree.distance(node)")
     def sum_branchlength(self, root, node):
         """Adds up the branchlengths from root (default self.root) to node."""
         return root.tree.branch_length_to(node)
