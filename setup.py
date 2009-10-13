@@ -258,7 +258,6 @@ PACKAGES = [
     'Bio.SwissProt',
     'Bio.UniGene',
     'Bio.Wise',
-    'Bio.WWW',
     #Other top level packages,
     'BioSQL',
     ]
