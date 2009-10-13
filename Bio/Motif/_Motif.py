@@ -409,10 +409,10 @@ class Motif(object):
                 res.add_instance(i.reverse_complement())
         else: # has counts
             res.has_counts=True
-            res.counts["A"]=self.counts["T"]
-            res.counts["T"]=self.counts["A"]
-            res.counts["G"]=self.counts["C"]
-            res.counts["C"]=self.counts["G"]
+            res.counts["A"]=self.counts["T"][:]
+            res.counts["T"]=self.counts["A"][:]
+            res.counts["G"]=self.counts["C"][:]
+            res.counts["C"]=self.counts["G"][:]
             res.counts["A"].reverse()
             res.counts["C"].reverse()
             res.counts["G"].reverse()
