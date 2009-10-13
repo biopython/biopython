@@ -7,7 +7,24 @@
 """
 __docformat__ = "epytext en"
 
+from itertools import chain
+
 from Bio.Nexus import Nexus
+
+# Structure of a Nexus tree-only file
+NEX_TEMPLATE = """\
+#NEXUS
+Begin Taxa;
+ Dimensions NTax=%(count)d;
+ TaxLabels %(labels)s;
+End;
+Begin Trees;
+ %(trees)s
+End;
+"""
+
+# 'index' starts from 1; 'tree' is the Newick tree string
+TREE_TEMPLATE = "Tree tree%(index)d=[&U]%(tree)s;"
 
 
 def parse(file):
@@ -15,12 +32,18 @@ def parse(file):
     return iter(nex.trees)
 
 
+# XXX Nexus/Newick-specific tree attributes: to_string, get_taxa
 def write(obj, file, **kwargs):
-    raise NotImplementedError("This function doesn't work yet.")
-    nex = Nexus.Nexus()
-    if isinstance(obj, list):
-        nex.trees = obj 
-    else:
-        nex.trees = list(obj)
-    Nexus.Nexus.write_nexus_data(nex, file, **kwargs)
-    return len(nex.trees)
+    trees = list(obj)
+    nexus_trees = [TREE_TEMPLATE % {
+            'index': idx+1,
+            'tree': tree.to_string(plain_newick=True, plain=False, **kwargs)
+            } for idx, tree in enumerate(trees)]
+    tax_labels = list(chain(*(t.get_taxa() for t in trees)))
+    text = NEX_TEMPLATE % {
+            'count':    len(tax_labels),
+            'labels':   ' '.join(tax_labels),
+            'trees':    '\n'.join(nexus_trees),
+            }
+    file.write(text)
+    return len(nexus_trees)

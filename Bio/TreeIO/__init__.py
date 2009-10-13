@@ -73,7 +73,7 @@ def write(trees, file, format, **kwargs):
         trees = [trees]
     do_close = False
     if isinstance(file, basestring):
-        file = open(file, 'r')
+        file = open(file, 'w+')
         do_close = True
     try:
         n = getattr(supported_formats[format], 'write')(trees, file, **kwargs)
