@@ -56,12 +56,12 @@ August 17, 2009: Biopython 1.51 released.
 FASTQ support in Bio.SeqIO has been improved, extended and sped up since
 Biopython 1.50. Support for Illumina 1.3+ style FASTQ files was added in the
 1.51 beta release. Furthermore, we now follow the interpretation agreed on
-the OBF mailing lists with EMBOSS and BioPerl for inter-conversion and the
-valid score range for each FASTQ variant. This means Solexa FASTQ scores can
-be from -5 to 62 (format name "fastq-solexa" in Bio.SeqIO), Illumina 1.3+
-FASTQ files have PHRED scores from 0 to 62 (format name "fastq-illumina"),
-and Sanger FASTQ files have PHRED scores from 0 to 93 (format name "fastq"
-or "fastq-sanger").
+the OBF mailing lists with EMBOSS, BioPerl, BioJava and BioRuby for inter-
+conversion and the valid score range for each FASTQ variant. This means
+Solexa FASTQ scores can be from -5 to 62 (format name "fastq-solexa" in
+Bio.SeqIO), Illumina 1.3+ FASTQ files have PHRED scores from 0 to 62 (format
+name "fastq-illumina"), and Sanger FASTQ files have PHRED scores from 0 to
+93 (format name "fastq" or "fastq-sanger").
 
 Bio.Sequencing.Phd has been updated, for example to cope with missing peak
 positions. The "phd" support in Bio.SeqIO has also been updated to record
