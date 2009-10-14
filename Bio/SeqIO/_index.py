@@ -57,9 +57,9 @@ class _IndexedSeqFileDict(dict) :
         #Now scan it in a subclassed method, and set the format!
 
     def __repr__(self) :
-        return "SeqIO.index(%s, %s, mode=%s, key_function=%s)" \
+        return "SeqIO.index('%s', '%s', alphabet=%s, key_function=%s)" \
                % (self._handle.name, self._format,
-                  self._alphabet, self._key_function)
+                  repr(self._alphabet), self._key_function)
 
     def __str__(self) :
         if self :
