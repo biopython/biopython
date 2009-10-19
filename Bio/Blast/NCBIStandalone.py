@@ -7,7 +7,7 @@
 
 """
 This module provides code to work with the standalone version of
-BLAST, either blastall or blastpgp, provided by the NCBI.
+BLAST, either blastall, rpsblast or blastpgp, provided by the NCBI.
 http://www.ncbi.nlm.nih.gov/BLAST/
 
 Classes:
@@ -28,10 +28,14 @@ _DatabaseReportConsumer  Consumes database report information.
 _ParametersConsumer      Consumes parameters information.
 
 Functions:
-blastall        Execute blastall.
-blastpgp        Execute blastpgp.
-rpsblast        Execute rpsblast.
+blastall        Execute blastall (OBSOLETE).
+blastpgp        Execute blastpgp (OBSOLETE).
+rpsblast        Execute rpsblast (OBSOLETE).
 
+For calling the BLAST command line tools, we encourage you to use the
+command line wrappers in Bio.Blast.Applications - the three functions
+blastall, blastpgp and rpsblast are considered to be obsolete now, and
+are likely to be deprecated and then removed in future releases.
 """
 
 import os
@@ -1576,8 +1580,11 @@ class Iterator:
         return iter(self.next, None)
 
 def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
-    """Execute and retrieve data from standalone BLASTPALL as handles.
+    """Execute and retrieve data from standalone BLASTPALL as handles (OBSOLETE).
     
+    NOTE - This function is obsolete, you are encouraged to the command
+    line wrapper Bio.Blast.Applications.BlastallCommandline instead.
+
     Execute and retrieve data from blastall.  blastcmd is the command
     used to launch the 'blastall' executable.  program is the blast program
     to use, e.g. 'blastp', 'blastn', etc.  database is the path to the database
@@ -1683,7 +1690,10 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
 
 
 def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
-    """Execute and retrieve data from standalone BLASTPGP as handles.
+    """Execute and retrieve data from standalone BLASTPGP as handles (OBSOLETE).
+
+    NOTE - This function is obsolete, you are encouraged to the command
+    line wrapper Bio.Blast.Applications.BlastpgpCommandline instead.
     
     Execute and retrieve data from blastpgp.  blastcmd is the command
     used to launch the 'blastpgp' executable.  database is the path to the
@@ -1809,8 +1819,11 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
 
 
 def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
-    """Execute and retrieve data from standalone RPS-BLAST as handles.
+    """Execute and retrieve data from standalone RPS-BLAST as handles (OBSOLETE).
     
+    NOTE - This function is obsolete, you are encouraged to the command
+    line wrapper Bio.Blast.Applications.RpsBlastCommandline instead.
+
     Execute and retrieve data from standalone RPS-BLAST.  blastcmd is the
     command used to launch the 'rpsblast' executable.  database is the path
     to the database to search against.  infile is the path to the file
@@ -2086,4 +2099,3 @@ class BlastErrorParser(AbstractParser):
                 raise LowQualityBlastError("Blast failure occured on query: ",
                                            data_record.query)
             line = handle.readline()
-

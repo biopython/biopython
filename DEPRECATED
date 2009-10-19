@@ -7,6 +7,11 @@ Python 2.3
 No longer supported as of Release 1.51, having triggered a warning with
 Release 1.50, with a mention in the release notes for Release 1.49.
 
+Bio.Blast.NCBIStandalone.blastall, blastpgp and rpsblast
+========================================================
+These command line tools were declared obsolete in Release 1.53, please use
+the wrappers in Bio.Blast.Applications and the subprocess module instead.
+
 Bio.Clustalw
 ============
 Declared obsolete in Release 1.52, having been replaced with Bio.AlignIO for
