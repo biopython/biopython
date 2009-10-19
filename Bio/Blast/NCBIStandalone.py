@@ -813,7 +813,11 @@ class _HeaderConsumer:
         if line.startswith('Database: '):
             self._header.database = line[10:]
         elif not line.endswith('total letters'):
-            self._header.database = self._header.database + line.strip()
+            if self._header.database :
+                #Need to include a space when merging multi line datase descr
+                self._header.database = self._header.database + " " + line.strip()
+            else :
+                self._header.database = line.strip()                
         else:
             sequences, letters =_re_search(
                 r"([0-9,]+) sequences; ([0-9,-]+) total letters", line,

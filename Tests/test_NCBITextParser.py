@@ -10020,7 +10020,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.reference, TestNCBITextParser.reference)
         self.assertEqual(record.query, "aaaa")
         self.assertEqual(record.query_letters, 889)
-        self.assertEqual(record.database, "/dbase/swissprot/main/release/sp;/dbase/swissprot/main/update/spu")
+        self.assertEqual(record.database, "/dbase/swissprot/main/release/sp; /dbase/swissprot/main/update/spu")
         self.assertEqual(record.database_sequences, 88201)
         self.assertEqual(record.database_letters, 31957340)
         self.assertEqual(len(record.rounds), 5)
@@ -13264,7 +13264,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.date, "Feb-08-2009")
         self.assertEqual(record.query, "RLBV_smaller_RNA")
         self.assertEqual(record.query_letters, 1363)
-        self.assertEqual(record.database, "All non-redundant GenBank CDStranslations+PDB+SwissProt+PIR+PRF excluding environmental samplesfrom WGS projects")
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
         self.assertEqual(record.database_sequences, 8994603)
         self.assertEqual(record.database_letters, 3078807967)
         self.assertEqual(len(record.descriptions), 6)
@@ -13285,7 +13285,7 @@ class TestNCBITextParser(unittest.TestCase):
                 self.assert_(a.title.startswith(">"+b[0][:-3]))
             else :
                 self.assertEqual(a.title, ">" + b[0])
-
+                
     def test_bt102(self):
         "Test parsing TBLASTN 2.2.16 output (bt102)"
 
