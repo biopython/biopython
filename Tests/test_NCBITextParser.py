@@ -21,7 +21,7 @@ class TestBlastRecord(unittest.TestCase):
 
         from Bio.Alphabet import IUPAC
 
-        path = os.path.join("Blast", 'bt005')
+        path = os.path.join("Blast", 'bt005.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         generic_align = record.multiple_alignment.to_generic(IUPAC.protein)
@@ -41,7 +41,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt001(self):
         "Test parsing BLASTP 2.0.10 output (bt001)"
 
-        path = os.path.join('Blast', 'bt001')
+        path = os.path.join('Blast', 'bt001.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -160,7 +160,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt002(self):
         "Test parsing BLASTP 2.0.10 output without hits (bt002)"
 
-        path = os.path.join('Blast', 'bt002')
+        path = os.path.join('Blast', 'bt002.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -224,7 +224,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt003(self):
         "Test parsing BLASTP 2.0.10 output without descriptions (bt003)"
 
-        path = os.path.join('Blast', 'bt003')
+        path = os.path.join('Blast', 'bt003.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -383,7 +383,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt004(self):
         "Test parsing BLASTP 2.0.10 output without alignments (bt004)"
 
-        path = os.path.join('Blast', 'bt004')
+        path = os.path.join('Blast', 'bt004.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -465,7 +465,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt005(self):
         "Test parsing BLASTP 2.0.10 output (bt005)"
 
-        path = os.path.join('Blast', 'bt005')
+        path = os.path.join('Blast', 'bt005'.txt)
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -574,7 +574,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt006(self):
         "Test parsing PHI-BLAST, BLASTP 2.0.10 output, one round (bt006)"
 
-        path = os.path.join('Blast', 'bt006')
+        path = os.path.join('Blast', 'bt006.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -713,7 +713,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt007(self):
         "Test parsing PHI-BLAST, BLASTP 2.0.10 output, three rounds (bt007)"
 
-        path = os.path.join('Blast', 'bt007')
+        path = os.path.join('Blast', 'bt007.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -1910,7 +1910,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt009(self):
         "Test parsing PHI-BLAST, BLASTP 2.0.10 output, two rounds (bt009)"
 
-        path = os.path.join('Blast', 'bt009')
+        path = os.path.join('Blast', 'bt009.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -2944,7 +2944,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt010(self):
         "Test parsing BLASTN 2.0.10 output (bt010)"
 
-        path = os.path.join('Blast', 'bt010')
+        path = os.path.join('Blast', 'bt010.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTN")
@@ -3074,7 +3074,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt011(self):
         "Test parsing BLASTN 2.0.10 output without alignments (bt011)"
 
-        path = os.path.join('Blast', 'bt011')
+        path = os.path.join('Blast', 'bt011.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTN")
@@ -3189,7 +3189,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt012(self):
         "Test parsing BLASTN 2.0.10 output without descriptions (bt012)"
 
-        path = os.path.join('Blast', 'bt012')
+        path = os.path.join('Blast', 'bt012.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTN")
@@ -3382,7 +3382,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt013(self):
         "Test parsing BLASTN 2.0.10 output (bt013)"
 
-        path = os.path.join('Blast', 'bt013')
+        path = os.path.join('Blast', 'bt013.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTN")
@@ -3458,7 +3458,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt014(self):
         "Test parsing BLASTX 2.0.10 output (bt014)"
 
-        path = os.path.join('Blast', 'bt014')
+        path = os.path.join('Blast', 'bt014.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTX")
@@ -3612,7 +3612,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt015(self):
         "Test parsing BLASTX 2.0.10 output without hits (bt015)"
 
-        path = os.path.join('Blast', 'bt015')
+        path = os.path.join('Blast', 'bt015.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTX")
@@ -3677,7 +3677,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt016(self):
         "Test parsing TBLASTN 2.0.10 output (bt016)"
 
-        path = os.path.join('Blast', 'bt016')
+        path = os.path.join('Blast', 'bt016.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "TBLASTN")
@@ -3878,7 +3878,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt017(self):
         "Test parsing TBLASTN 2.0.10 output without hits (bt017)"
 
-        path = os.path.join('Blast', 'bt017')
+        path = os.path.join('Blast', 'bt017.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "TBLASTN")
@@ -3943,7 +3943,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt018(self):
         "Test parsing TBLASTX 2.0.10 output (bt018)"
 
-        path = os.path.join('Blast', 'bt018')
+        path = os.path.join('Blast', 'bt018.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "TBLASTX")
@@ -4527,7 +4527,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt039(self):
         "Test parsing BLASTP 2.0.10 output (bt039)"
 
-        path = os.path.join('Blast', 'bt039')
+        path = os.path.join('Blast', 'bt039.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -4881,7 +4881,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt040(self):
         "Test parsing BLASTP 2.0.10 output (bt040)"
 
-        path = os.path.join('Blast', 'bt040')
+        path = os.path.join('Blast', 'bt040.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -4945,7 +4945,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt041(self):
         "Test parsing BLASTP 2.0.11 output (bt041)"
 
-        path = os.path.join('Blast', 'bt041')
+        path = os.path.join('Blast', 'bt041.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -5045,7 +5045,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt042(self):
         "Test parsing BLASTP 2.0.11 output without hits (bt042)"
 
-        path = os.path.join('Blast', 'bt042')
+        path = os.path.join('Blast', 'bt042.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -5109,7 +5109,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt043(self):
         "Test parsing BLASTP 2.0.11 output without descriptions (bt043)"
 
-        path = os.path.join('Blast', 'bt043')
+        path = os.path.join('Blast', 'bt043.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -5268,7 +5268,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt044(self):
         "Test parsing BLASTP 2.0.11 output without alignments (bt044)"
 
-        path = os.path.join('Blast', 'bt044')
+        path = os.path.join('Blast', 'bt044.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -5350,7 +5350,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt045(self):
         "Test parsing BLASTP 2.0.11 output (bt045)"
 
-        path = os.path.join('Blast', 'bt045')
+        path = os.path.join('Blast', 'bt045.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -5459,7 +5459,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt046(self):
         "Test parsing PHI-BLAST, BLASTP 2.0.11 output, two rounds (bt046)"
 
-        path = os.path.join('Blast', 'bt046')
+        path = os.path.join('Blast', 'bt046.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -5670,7 +5670,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt047(self):
         "Test parsing PHI-BLAST, BLASTP 2.0.11 output, two rounds (bt047)"
 
-        path = os.path.join('Blast', 'bt047')
+        path = os.path.join('Blast', 'bt047.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -6742,7 +6742,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt048(self):
         "Test parsing BLASTN 2.0.11 output (bt048)"
 
-        path = os.path.join('Blast', 'bt048')
+        path = os.path.join('Blast', 'bt048.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTN")
@@ -7214,7 +7214,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt049(self):
         "Test parsing BLASTN 2.0.11 output without alignments (bt049)"
 
-        path = os.path.join('Blast', 'bt049')
+        path = os.path.join('Blast', 'bt049.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTN")
@@ -7329,7 +7329,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt050(self):
         "Test parsing BLASTN 2.0.11 output without descriptions (bt050)"
 
-        path = os.path.join('Blast', 'bt050')
+        path = os.path.join('Blast', 'bt050.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTN")
@@ -8062,7 +8062,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt051(self):
         "Test parsing BLASTN 2.0.11 output (bt051)"
 
-        path = os.path.join('Blast', 'bt051')
+        path = os.path.join('Blast', 'bt051.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTN")
@@ -8138,7 +8138,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt052(self):
         "Test parsing BLASTX 2.0.11 output (bt052)"
 
-        path = os.path.join('Blast', 'bt052')
+        path = os.path.join('Blast', 'bt052.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTX")
@@ -8292,7 +8292,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt053(self):
         "Test parsing BLASTX 2.0.11 output without hits (bt053)"
 
-        path = os.path.join('Blast', 'bt053')
+        path = os.path.join('Blast', 'bt053.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTX")
@@ -8357,7 +8357,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt054(self):
         "Test parsing TBLASTN 2.0.11 output (bt054)"
 
-        path = os.path.join('Blast', 'bt054')
+        path = os.path.join('Blast', 'bt054.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "TBLASTN")
@@ -8558,7 +8558,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt055(self):
         "Test parsing TBLASTN 2.0.11 output without hits (bt055)"
 
-        path = os.path.join('Blast', 'bt055')
+        path = os.path.join('Blast', 'bt055.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "TBLASTN")
@@ -8623,7 +8623,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt056(self):
         "Test parsing TBLASTX 2.0.11 output (bt056)"
 
-        path = os.path.join('Blast', 'bt056')
+        path = os.path.join('Blast', 'bt056.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "TBLASTX")
@@ -9207,7 +9207,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt057(self):
         "Test parsing BLASTP 2.0.11 output (bt057)"
 
-        path = os.path.join('Blast', 'bt057')
+        path = os.path.join('Blast', 'bt057.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -9561,7 +9561,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt058(self):
         "Test parsing BLASTP 2.0.11 output (bt058)"
 
-        path = os.path.join('Blast', 'bt058')
+        path = os.path.join('Blast', 'bt058.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -9625,7 +9625,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt059(self):
         "Test parsing BLASTP 2.0.11 output (bt059)"
 
-        path = os.path.join('Blast', 'bt059')
+        path = os.path.join('Blast', 'bt059.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -10011,7 +10011,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt060(self):
         "Test parsing BLASTP 2.0.12 output (bt060)"
 
-        path = os.path.join('Blast', 'bt060')
+        path = os.path.join('Blast', 'bt060.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -12275,7 +12275,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt062(self):
         "Test parsing BLASTN 2.0.14 output (bt062)"
 
-        path = os.path.join('Blast', 'bt062')
+        path = os.path.join('Blast', 'bt062.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTN")
@@ -12748,7 +12748,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt063(self):
         "Test parsing BLASTP 2.0.14 output (bt063)"
 
-        path = os.path.join('Blast', 'bt063')
+        path = os.path.join('Blast', 'bt063.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -13059,7 +13059,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt067(self):
         "Test parsing BLASTX 2.2.1 output (bt067)"
 
-        path = os.path.join('Blast', 'bt067')
+        path = os.path.join('Blast', 'bt067.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTX")
@@ -13156,7 +13156,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt071(self):
         "Test parsing BLASTP 2.2.8 output (bt071)"
 
-        path = os.path.join('Blast', 'bt071')
+        path = os.path.join('Blast', 'bt071.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -13235,7 +13235,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt072(self):
         "Test parsing BLASTX 2.2.15 output with no hits (bt072)"
 
-        path = os.path.join('Blast', 'bt072')
+        path = os.path.join('Blast', 'bt072.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -13254,7 +13254,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt073(self):
         "Test parsing BLASTX 2.2.20 output (bt073)"
 
-        path = os.path.join('Blast', 'bt073')
+        path = os.path.join('Blast', 'bt073.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -13289,7 +13289,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt102(self):
         "Test parsing TBLASTN 2.2.16 output (bt102)"
 
-        path = os.path.join('Blast', 'bt102')
+        path = os.path.join('Blast', 'bt102.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "TBLASTN")
@@ -13534,7 +13534,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt103(self):
         "Test parsing BLASTP 2.2.2 output with multiple records (bt103)"
 
-        path = os.path.join('Blast', 'bt103')
+        path = os.path.join('Blast', 'bt103.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14128,7 +14128,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt104(self):
         "Test parsing BLASTN 2.2.2 output with error messages (bt104)"
 
-        path = os.path.join('Blast', 'bt104')
+        path = os.path.join('Blast', 'bt104.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14160,7 +14160,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt105(self):
         "Test parsing BLASTN 2.2.2 output with missing error messages (bt105)"
 
-        path = os.path.join('Blast', 'bt105')
+        path = os.path.join('Blast', 'bt105.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
