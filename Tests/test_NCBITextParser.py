@@ -13232,6 +13232,60 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.blast_cutoff[0], 64)
         self.assertAlmostEqual(record.blast_cutoff[1], 29.2)
 
+    def test_bt072(self):
+        "Test parsing BLASTX 2.2.15 output with no hits (bt072)"
+
+        path = os.path.join('Blast', 'bt072')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.15')
+        self.assertEqual(record.date, "Oct-15-2006")
+        self.assertEqual(record.query, "66118") #Odd name for a query sequence, but valid!
+        self.assertEqual(record.query_letters, 662)
+        self.assertEqual(record.database, "Leigo")
+        self.assertEqual(record.database_sequences, 4535438)
+        self.assertEqual(record.database_letters, 1573298872)
+        self.assertEqual(len(record.descriptions), 0)
+        self.assertEqual(len(record.alignments), 0)
+
+    def test_bt073(self):
+        "Test parsing BLASTX 2.2.20 output (bt073)"
+
+        path = os.path.join('Blast', 'bt073')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.20')
+        self.assertEqual(record.date, "Feb-08-2009")
+        self.assertEqual(record.query, "RLBV_smaller_RNA")
+        self.assertEqual(record.query_letters, 1363)
+        self.assertEqual(record.database, "All non-redundant GenBank CDStranslations+PDB+SwissProt+PIR+PRF excluding environmental samplesfrom WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 6)
+        self.assertEqual(len(record.alignments), 5)
+        descrs = [
+        ("sp|P85309.2|CASPD_HPVKA RecName: Full=Capsid protein; AltName: F...", 152, 8e-35),
+        ("sp|P83664.2|CAPSD_HPVCO RecName: Full=Capsid protein; AltName: F...", 146, 6e-33),
+        ("gb|AAB03575.1| nucleoprotein",                                        146, 6e-33),
+        ("gb|ABH05070.1| putative nucleocapsid protein [European mountain ...",  83, 8e-14),
+        ("gb|AAW12704.1| nucleoprotein [High Plains virus]",                     73, 8e-11),
+        ("gb|AAW12703.1| nucleoprotein [High Plains virus]",                     73, 8e-11),
+        ]
+        for (a,b) in zip(record.descriptions, descrs) :
+            self.assertEqual((a.title, a.score, a.e),b)
+        for (a,b) in zip(record.alignments, descrs) :
+            self.assertEqual(a.title[0], ">")
+            if b[0].endswith("...") :
+                self.assert_(a.title.startswith(">"+b[0][:-3]))
+            else :
+                self.assertEqual(a.title, ">" + b[0])
+
     def test_bt102(self):
         "Test parsing TBLASTN 2.2.16 output (bt102)"
 
