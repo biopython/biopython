@@ -12,13 +12,14 @@ Classes:
 BlastParser         Parses XML output from BLAST (direct use discouraged).
                     This (now) returns a list of Blast records.
                     Historically it returned a single Blast record.
-                    You are expected to use this via the parse function.
+                    You are expected to use this via the parse or read functions.
 
 _XMLParser          Generic SAX parser (private).
 
 Functions:
 parse               Incremental parser, this is an iterator that returns
                     Blast records.  It uses the BlastParser internally.
+read                Returns a single Blast record. Uses the BlastParser internally.
 """
 from Bio.Blast import Record
 import xml.sax
