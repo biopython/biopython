@@ -1,0 +1,420 @@
+BLASTX 2.2.22 [Sep-27-2009]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S
+ribosomal RNA gene, partial sequence
+         (1002 letters)
+
+Database: All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+from WGS projects 
+           8,994,603 sequences; 3,078,807,967 total letters
+
+Searching..................................................done
+
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+
+gb|ABR25402.1| unknown [Oryza sativa (indica cultivar-group)]          54   2e-05
+
+>gb|ABR25402.1| unknown [Oryza sativa (indica cultivar-group)]
+          Length = 26
+
+ Score = 54.3 bits (129), Expect = 2e-05
+ Identities = 24/26 (92%), Positives = 25/26 (96%)
+ Frame = +2
+
+Query: 911 HMLVSKIKPCMCKYEQIQTVKLRMAH 988
+           HMLVSKIKPCMCKYE I+TVKLRMAH
+Sbjct: 1   HMLVSKIKPCMCKYELIRTVKLRMAH 26
+
+
+BLASTX 2.2.22 [Sep-27-2009]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like
+protein HLPf gene, partial cds
+         (2050 letters)
+
+Database: All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+from WGS projects 
+           8,994,603 sequences; 3,078,807,967 total letters
+
+Searching..................................................done
+
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+
+gb|AAD12237.1| hevein-like protein HLPf [Sambucus nigra]              410   e-112
+gb|AAD11408.1| hevein-like protein [Sambucus nigra]                   406   e-111
+gb|AAD11406.1| hevein-like protein [Sambucus nigra]                   406   e-111
+gb|AAD11407.1| hevein-like protein [Sambucus nigra]                   395   e-108
+gb|AAL30421.1|AF434174_1 hevein-like protein [Sambucus nigra]         384   e-104
+gb|AAL30422.1|AF434175_1 hevein-like protein [Sambucus nigra]         279   9e-73
+gb|AAO17294.1| chitinase [Ficus carica]                               189   7e-46
+gb|ACM45713.1| class I chitinase [Pyrus pyrifolia]                    185   2e-44
+dbj|BAB40817.2| endochitinase MCHT-2 [Cucumis melo]                   181   2e-43
+gb|ABB86300.1| chitinase [Ficus awkeotsang]                           181   3e-43
+
+>gb|AAD12237.1| hevein-like protein HLPf [Sambucus nigra]
+          Length = 333
+
+ Score =  410 bits (1053), Expect = e-112
+ Identities = 198/238 (83%), Positives = 199/238 (83%)
+ Frame = +1
+
+Query: 1   MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCE 180
+           MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCE
+Sbjct: 1   MKLSTLLILSFPFLLGTIVFADDADNGPWQCGRDAGGALCHDNLCCSFWGFCGSTYQYCE 60
+
+Query: 181 DGCQSQCRDTSRLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHMKDCPSRGFYSYEAF 360
+           DGCQSQCRDTSRLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHMKDCPSRGFYSYEAF
+Sbjct: 61  DGCQSQCRDTSRLTDLPRALLRPTNNRNAISKMISKSLFNEMFKHMKDCPSRGFYSYEAF 120
+
+Query: 361 ITAARSFPGFCTSGDVATRKREPAAFLXXXXXXXXXXXXNLNIYLC*EIISTIYICFEIN 540
+           ITAARSFPGFCTSGDVATRKREPAAFL                                 
+Sbjct: 121 ITAARSFPGFCTSGDVATRKREPAAFLS-------------------------------- 148
+
+Query: 541 LRTWMLGVGGRLDSAVVDPHAWGYCYVNGTTDEQYCTSSNWPCASGKQYNRRGPIQLT 714
+            +T     GGRLDSAVVDPHAWGYCYVNGTTDEQYCTSSNWPCASGKQYNRRGPIQLT
+Sbjct: 149 -QTSQATTGGRLDSAVVDPHAWGYCYVNGTTDEQYCTSSNWPCASGKQYNRRGPIQLT 205
+
+
+
+ Score =  267 bits (683), Expect = 3e-69
+ Identities = 127/127 (100%), Positives = 127/127 (100%)
+ Frame = +1
+
+Query: 1669 NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD 1848
+            NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD
+Sbjct: 207  NYNYGLAGEALGIDLVNHPDLVATDPIVSFKTAIWFWMTQHDNNPSLHDILINANSEASD 266
+
+Query: 1849 QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVA 2028
+            QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVA
+Sbjct: 267  QVPSYGVISKIINSNFGHQSGLDTITTSIGYYKRYCDMLEVSYGDNLENWFDETPFTKVA 326
+
+Query: 2029 HIKMSVV 2049
+            HIKMSVV
+Sbjct: 327  HIKMSVV 333
+
+
+BLASTX 2.2.22 [Sep-27-2009]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|5690369|gb|AF158246.1|AF158246 Cricetulus griseus glucose
+phosphate isomerase (GPI) gene, partial intron sequence
+         (550 letters)
+
+Database: All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+from WGS projects 
+           8,994,603 sequences; 3,078,807,967 total letters
+
+Searching..................................................done
+
+ ***** No hits found ******
+
+
+BLASTX 2.2.22 [Sep-27-2009]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton
+fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN
+gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636
+(X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence
+         (655 letters)
+
+Database: All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+from WGS projects 
+           8,994,603 sequences; 3,078,807,967 total letters
+
+Searching..................................................done
+
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+
+gb|ABY86655.1| beta-tubulin 4 [Gossypium hirsutum]                    408   e-112
+gb|EEF51386.1| tubulin beta chain, putative [Ricinus communis]        406   e-112
+ref|NP_568437.1| TUB8 (tubulin beta-8) [Arabidopsis thaliana] >g...   405   e-111
+ref|XP_002271992.1| PREDICTED: hypothetical protein [Vitis vinif...   402   e-110
+gb|AAK96884.1| beta tubulin [Arabidopsis thaliana] >gi|20148289|...   402   e-110
+ref|XP_002267380.1| PREDICTED: hypothetical protein [Vitis vinif...   402   e-110
+sp|P37392.1|TBB1_LUPAL RecName: Full=Tubulin beta-1 chain; AltNa...   402   e-110
+ref|XP_002313404.1| tubulin, beta chain [Populus trichocarpa] >g...   401   e-110
+gb|EEF51167.1| tubulin beta chain, putative [Ricinus communis]        400   e-110
+ref|XP_002299541.1| tubulin, beta chain [Populus trichocarpa] >g...   400   e-110
+
+>gb|ABY86655.1| beta-tubulin 4 [Gossypium hirsutum]
+          Length = 448
+
+ Score =  408 bits (1048), Expect = e-112
+ Identities = 196/201 (97%), Positives = 197/201 (98%)
+ Frame = +2
+
+Query: 50  MREILHIQAGQCGNQIGANFWEVVCAEHGINSTGRYQGDNDLQLERVNVYYNEASCGRFV 229
+           MREILHIQAGQCGNQIGA FWEVVCAEHGI+STGRYQGDNDLQLERVNVYYNEASCGRFV
+Sbjct: 1   MREILHIQAGQCGNQIGAKFWEVVCAEHGIDSTGRYQGDNDLQLERVNVYYNEASCGRFV 60
+
+Query: 230 PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSXLDVV 409
+           PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDS LDVV
+Sbjct: 61  PRAVLMDLEPGTMDSVRSGPYGQIFRPDNFVFGQSGAGNNWAKGHYTEGAELIDSVLDVV 120
+
+Query: 410 RKEAENCDCLQGFQVCHSLGRGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV 589
+           RKEAENCDCLQGFQVCHSLG GTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV
+Sbjct: 121 RKEAENCDCLQGFQVCHSLGGGTGSGMGTLLISKIREEYPDRMMLTFSVFPSPKVSDTVV 180
+
+Query: 590 EPYNATLSVHXLVENADECMV 652
+           EPYNATLSVH LVENADECMV
+Sbjct: 181 EPYNATLSVHQLVENADECMV 201
+
+
+BLASTX 2.2.22 [Sep-27-2009]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal
+transcribed spacer 1, 5.8S ribosomal RNA gene, and internal
+transcribed spacer 2, complete sequence
+         (623 letters)
+
+Database: All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+from WGS projects 
+           8,994,603 sequences; 3,078,807,967 total letters
+
+Searching..................................................done
+
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+
+dbj|BAE98425.1| hypothetical protein [Arabidopsis thaliana]            94   6e-19
+gb|EEH50844.1| predicted protein [Micromonas pusilla CCMP1545]         96   2e-18
+ref|XP_001786502.1| predicted protein [Physcomitrella patens sub...    75   4e-12
+ref|XP_001786120.1| predicted protein [Physcomitrella patens sub...    73   2e-11
+ref|XP_001786259.1| predicted protein [Physcomitrella patens sub...    73   2e-11
+ref|XP_001786759.1| predicted protein [Physcomitrella patens sub...    73   2e-11
+ref|XP_001786133.1| predicted protein [Physcomitrella patens sub...    71   8e-11
+sp|Q8TGM5|ART3_YEAST Uncharacterized protein ART3 (Antisense to ...    59   3e-07
+ref|XP_001786634.1| predicted protein [Physcomitrella patens sub...    57   9e-07
+ref|XP_453851.1| unnamed protein product [Kluyveromyces lactis]        56   2e-06
+
+>dbj|BAE98425.1| hypothetical protein [Arabidopsis thaliana]
+          Length = 80
+
+ Score = 93.6 bits (231), Expect(2) = 6e-19
+ Identities = 42/48 (87%), Positives = 45/48 (93%)
+ Frame = +1
+
+Query: 283 MKNVAKCDTWCELQNPVNHRVFERKLRPKPLGRGHVCLGVSHRVAPNP 426
+           MKNVAKCDTWCELQNPVNHRVFERKLRPKP GRGHVCLGV++R  P+P
+Sbjct: 1   MKNVAKCDTWCELQNPVNHRVFERKLRPKPSGRGHVCLGVTNR-RPSP 47
+
+
+
+ Score = 25.0 bits (53), Expect(2) = 6e-19
+ Identities = 13/17 (76%), Positives = 13/17 (76%)
+ Frame = +2
+
+Query: 455 RKLVSRALRCAVGLNKS 505
+           RKLVSR L  AVGLN S
+Sbjct: 54  RKLVSRVLPHAVGLNPS 70
+
+
+BLASTX 2.2.22 [Sep-27-2009]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A
+(PHYA) gene, partial cds
+         (309 letters)
+
+Database: All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+from WGS projects 
+           8,994,603 sequences; 3,078,807,967 total letters
+
+Searching..................................................done
+
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+
+gb|AAC18749.1| phytochrome A [Lathyrus odoratus]                      213   4e-54
+sp|P15001.1|PHYA_PEA RecName: Full=Phytochrome A >gi|169132|gb|A...   208   1e-52
+sp|P93673.1|PHYA_LATSA RecName: Full=Phytochrome type A >gi|1848...   208   1e-52
+gb|AAC18745.1| phytochrome A [Lennea melanocarpa] >gi|3176597|gb...   207   2e-52
+gb|AAC18675.1| phytochrome A [Sophora affinis]                        207   2e-52
+gb|AAC18670.1| phytochrome A [Myrospermum sousanum]                   206   5e-52
+gb|AAC18750.1| phytochrome A [Hybosema robustum]                      206   6e-52
+gb|AAC18668.1| phytochrome A [Cyclolobium nutans]                     206   8e-52
+gb|AAC18709.1| phytochrome A [Millettia richardiana]                  205   1e-51
+gb|AAC18693.1| phytochrome A [Callerya atropurpurea]                  204   2e-51
+
+>gb|AAC18749.1| phytochrome A [Lathyrus odoratus]
+          Length = 103
+
+ Score =  213 bits (543), Expect = 4e-54
+ Identities = 103/103 (100%), Positives = 103/103 (100%)
+ Frame = +1
+
+Query: 1   QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA 180
+           QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA
+Sbjct: 1   QAARFLFMKNKVRMIVDCHAKHVKVLQDEKLPFDLTLCGSTLRAPHSCHLQYMANMDSIA 60
+
+Query: 181 SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 309
+           SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV
+Sbjct: 61  SLVMAVVVNDSDEDGDSRDAVLPQKKKRLWGLVVCHNTTPRFV 103
+
+
+BLASTX 2.2.22 [Sep-27-2009]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens
+maturase-like protein (matK) gene, complete cds; chloroplast gene for
+chloroplast product
+         (2551 letters)
+
+Database: All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+from WGS projects 
+           8,994,603 sequences; 3,078,807,967 total letters
+
+Searching..................................................done
+
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+
+sp|Q9TKP6.1|MATK_WISFR RecName: Full=Maturase K; AltName: Full=I...   948   0.0  
+gb|ACB58148.1| maturase K [Wisteria frutescens]                       946   0.0  
+gb|ACB58149.1| maturase K [Wisteria frutescens] >gi|171909148|gb...   945   0.0  
+gb|ACB58142.1| maturase K [Callerya megasperma]                       944   0.0  
+gb|AAD52903.1|AF142732_1 maturase-like protein [Wisteria sinensi...   936   0.0  
+gb|ACB58143.1| maturase K [Wisteria brachybotrys]                     928   0.0  
+gb|AAD52904.1|AF142733_1 maturase-like protein [Callerya reticul...   925   0.0  
+gb|AAD52905.1|AF142734_1 maturase-like protein [Callerya atropur...   890   0.0  
+gb|ABS20107.1| maturase-like protein [Astragalus uliginosus]          887   0.0  
+dbj|BAF57483.1| maturase [Glycyrrhiza uralensis] >gi|146197444|d...   887   0.0  
+
+>sp|Q9TKP6.1|MATK_WISFR RecName: Full=Maturase K; AltName: Full=Intron maturase
+ gb|AAD52902.1|AF142731_1 maturase-like protein [Wisteria frutescens]
+          Length = 506
+
+ Score =  948 bits (2451), Expect = 0.0
+ Identities = 474/506 (93%), Positives = 474/506 (93%)
+ Frame = +1
+
+Query: 727  MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL 906
+            MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL
+Sbjct: 1    MKEYQVYLERDRSRQQDFLYPLIFREYIYGLAYSHDFNRSIFVENVGYDNKSSLLIVKRL 60
+
+Query: 907  ITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV 1086
+            ITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV
+Sbjct: 61   ITRMYQQNHLIISANDSNKNPFLGYNKNFYSQIISDGFAVVVEIPFFLQLSSSLEEAEIV 120
+
+Query: 1087 KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASXXXXXXXX 1266
+            KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDAS        
+Sbjct: 121  KSYHNLRSIHSIFPFLEDKFTYLNYVSDIRIPYPIHLEILVQILRYWVKDASFFHLLRFF 180
+
+Query: 1267 XXXXSNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV 1446
+                SNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV
+Sbjct: 181  LYHFSNRNSLITPKKSISTFSKSNPRLFLFLYNFYVCEYESIFRFLRNQSSHLRLKSFSV 240
+
+Query: 1447 FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY 1626
+            FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY
+Sbjct: 241  FFERIFFYAKREHLVKVFPKDFSSTLTFFKDPFIHYVRYQGKSILASKNAPLLMNKWKHY 300
+
+Query: 1627 FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK 1806
+            FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK
+Sbjct: 301  FIHLWQCFFDVWSQPGTIHINQLSEHSFHFLGYFSNVRLNRSVVRSQMLQNTFLIEIVIK 360
+
+Query: 1807 KLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSS 1986
+            KLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSS
+Sbjct: 361  KLDIIVPIIPLIRSLAKAKFCNVLGHPLSKSVWADSSDFDIIDRFLRICRNLSHYYNGSS 420
+
+Query: 1987 KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGXXXXXXXXXXXXXXXXXXXXPRTS 2166
+            KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSG                    PRTS
+Sbjct: 421  KKKNLYRIKYILRLSCIKTLACKHKSTVRAFLKKSGSEELLEEFFTEEEEILSLIFPRTS 480
+
+Query: 2167 STLQRLHRNRIWYLDILFSNDLVNHE 2244
+            STLQRLHRNRIWYLDILFSNDLVNHE
+Sbjct: 481  STLQRLHRNRIWYLDILFSNDLVNHE 506
+
+
+  Database: All non-redundant GenBank CDS
+  translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+  from WGS projects
+    Posted date:  Jun 4, 2009  5:40 PM
+  Number of letters in database: 3,078,807,967
+  Number of sequences in database:  8,994,603
+  
+Lambda     K      H
+   0.318    0.134    0.401 
+
+Gapped
+Lambda     K      H
+   0.267   0.0410    0.140 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Sequences: 8994603
+Number of Hits to DB: 41,405,514,078
+Number of extensions: 917198245
+Number of successful extensions: 2155728
+Number of sequences better than 1.0e-04: 27270
+Number of HSP's gapped: 2094143
+Number of HSP's successfully gapped: 28318
+Length of database: 3,078,807,967
+Neighboring words threshold: 12
+Window for multiple hits: 40
+X1: 16 ( 7.3 bits)
+X2: 38 (14.6 bits)
+X3: 64 (24.7 bits)
+S1: 41 (21.7 bits)
+S2: 33 (17.3 bits)

@@ -84,6 +84,7 @@ bt076 blastall 2.2.15 ad-hoc              -p blastx       no hits, single query
 bt077 blastall 2.2.20 ad-hoc     nr       -p blastx       single query
 bt078 blastall 2.2.20 opuntia    nr       -p blastx       multiple queries, most with no hits
 bt079 blastall 2.2.21 ad-hoc     nr       -p blastp       multiple queries
+bt080 blastall 2.2.22 ad-hoc     nr       -p blastx       multiple queries
 
 * bt008 is not included because the file is too big (>15Mb).
 
