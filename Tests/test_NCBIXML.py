@@ -1671,6 +1671,44 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertRaises(StopIteration, records.next)
 
+    def test_xbt010(self):
+        "Parsing BLASTP 2.2.22+, multiple queries against NR (xbt010)"
+        #This is from blastp NOT blastall
+
+        filename = 'xbt010.xml'
+        datafile = os.path.join("Blast", filename)
+        records = NCBIXML.parse(open(datafile))
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTP")
+        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.query, "gi|3298468|dbj|BAA31520.1| SAMIPF")
+        self.assertEqual(record.query_letters, 107)
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.num_sequences_in_database, 8994603)
+        self.assertEqual(record.database_sequences, 8994603)
+        #self.assertEqual(record.database_length, 3078807967)
+        self.assertEqual(record.database_length, -1216159329) #NCBI bug!
+        self.assertEqual(len(record.descriptions), 10)
+        self.assertEqual(len(record.alignments), 10)
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
+        record = records.next()
+        self.assertEqual(record.query, "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin")
+        self.assertEqual(record.query_letters, 304)
+
+        record = records.next()
+        self.assertEqual(record.query, "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein")
+        self.assertEqual(record.query_letters, 600)
+
+        record = records.next()
+        self.assertEqual(record.query, "gi|671626|emb|CAA85685.1| rubisco large subunit")
+        self.assertEqual(record.query_letters, 473)
+
+        self.assertRaises(StopIteration, records.next)
+
+
 if __name__ == "__main__" :
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
