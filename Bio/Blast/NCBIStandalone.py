@@ -816,7 +816,10 @@ class _HeaderConsumer:
         c = line.split()
         self._header.application = c[0]
         self._header.version = c[1]
-        self._header.date = c[2][1:-1]
+        if len(c) > 2 :
+            #The date is missing in the new C++ output from blastx 2.2.22+
+            #Just get "BLASTX 2.2.22+\n" and that's all.
+            self._header.date = c[2][1:-1]
 
     def reference(self, line):
         if line.startswith('Reference: '):
