@@ -1565,7 +1565,8 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.query, "gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S ribosomal RNA gene, partial sequence")
         self.assertEqual(record.query_letters, 1002)
         self.assertEqual(record.database, "nr")
-        #self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.num_sequences_in_database, 8994603)
+        self.assertEqual(record.database_sequences, 8994603)
         #self.assertEqual(record.database_length, 3078807967)
         self.assertEqual(record.database_length, -1216159329) #NCBI bug!
         self.assertEqual(len(record.descriptions), 1)
@@ -1579,7 +1580,8 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.query, "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds")
         self.assertEqual(record.query_letters, 2050)
         self.assertEqual(record.database, "nr")
-        #self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.num_sequences_in_database, 8994603)
+        self.assertEqual(record.database_sequences, 8994603)
         #self.assertEqual(record.database_length, 3078807967)
         self.assertEqual(record.database_length, -1216159329) #NCBI bug!
         # I used -num_descriptions 10 and -num_alignments 1
@@ -1596,7 +1598,8 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.query, "gi|5690369|gb|AF158246.1|AF158246 Cricetulus griseus glucose phosphate isomerase (GPI) gene, partial intron sequence")
         self.assertEqual(record.query_letters, 550)
         self.assertEqual(record.database, "nr")
-        #self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.num_sequences_in_database, 8994603)
+        self.assertEqual(record.database_sequences, 8994603)
         #self.assertEqual(record.database_length, 3078807967)
         self.assertEqual(record.database_length, -1216159329) #NCBI bug!
         self.assertEqual(len(record.descriptions), 0)
@@ -1609,7 +1612,8 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.query, "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence")
         self.assertEqual(record.query_letters, 655)
         self.assertEqual(record.database, "nr")
-        #self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.num_sequences_in_database, 8994603)
+        self.assertEqual(record.database_sequences, 8994603)
         #self.assertEqual(record.database_length, 3078807967)
         self.assertEqual(record.database_length, -1216159329) #NCBI bug!
         self.assertEqual(len(record.descriptions), 10)
@@ -1624,7 +1628,8 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.query, "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence")
         self.assertEqual(record.query_letters, 623)
         self.assertEqual(record.database, "nr")
-        #self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.num_sequences_in_database, 8994603)
+        self.assertEqual(record.database_sequences, 8994603)
         #self.assertEqual(record.database_length, 3078807967)
         self.assertEqual(record.database_length, -1216159329) #NCBI bug!
         self.assertEqual(len(record.descriptions), 10)
@@ -1639,7 +1644,8 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.query, "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds")
         self.assertEqual(record.query_letters, 309)
         self.assertEqual(record.database, "nr")
-        #self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.num_sequences_in_database, 8994603)
+        self.assertEqual(record.database_sequences, 8994603)
         #self.assertEqual(record.database_length, 3078807967)
         self.assertEqual(record.database_length, -1216159329) #NCBI bug!
         self.assertEqual(len(record.descriptions), 10)
@@ -1654,7 +1660,8 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.query, "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product")
         self.assertEqual(record.query_letters, 2551)
         self.assertEqual(record.database, "nr")
-        #self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.num_sequences_in_database, 8994603)
+        self.assertEqual(record.database_sequences, 8994603)
         #self.assertEqual(record.database_length, 3078807967)
         self.assertEqual(record.database_length, -1216159329) #NCBI bug!
         self.assertEqual(len(record.descriptions), 10)

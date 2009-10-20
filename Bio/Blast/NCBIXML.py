@@ -191,6 +191,9 @@ class BlastParser(_XMLparser):
         self._blast.database_length = self._blast.num_letters_in_database
         # TODO? Deprecate database_letters next?
 
+        # Hack to record the claimed database sequence count as database_sequences
+        self._blast.database_sequences = self._blast.num_sequences_in_database
+
         # Apply the "top level" parameter information
         self._blast.matrix = self._parameters.matrix
         self._blast.num_seqs_better_e = self._parameters.num_seqs_better_e
