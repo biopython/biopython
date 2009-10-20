@@ -4,12 +4,24 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Definitions for interacting with Blast related applications.
+"""Definitions for interacting with BLAST related applications.
+
+Obsolete wrappers for the old/classic NCBI BLAST tools (written in C):
+
+- FastacmdCommandline
+- BlastallCommandline
+- BlastpgpCommandline
+- RpsBlastCommandline
+
+Wrappers for the new NCBI BLAST+ tools (written in C++):
+
+- Pending
+
 """
 from Bio.Application import _Option, AbstractCommandline
 
 class FastacmdCommandline(AbstractCommandline):
-    """Create a commandline for the fasta program from NCBI.
+    """Create a commandline for the fasta program from NCBI (OBSOLETE).
 
     """
     def __init__(self, cmd="fastacmd", **kwargs):
@@ -24,7 +36,7 @@ class FastacmdCommandline(AbstractCommandline):
 
 
 class _BlastCommandLine(AbstractCommandline) :
-    """Base Commandline object for NCBI BLAST wrappers (PRIVATE).
+    """Base Commandline object for (classic) NCBI BLAST wrappers (PRIVATE).
 
     This is provided for subclassing, it deals with shared options
     common to all the BLAST tools (blastall, rpsblast, pgpblast).
@@ -122,7 +134,15 @@ class _BlastAllOrPgpCommandLine(_BlastCommandLine) :
 
 
 class BlastallCommandline(_BlastAllOrPgpCommandLine):
-    """Create a commandline for the blastall program from NCBI."""
+    """Create a commandline for the blastall program from NCBI (OBSOLETE).
+
+    With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
+    are replacing blastall with separate tools blastn, blastp, blastx, tblastn
+    and tblastx.
+
+    Like blastall, this wrapper is now obsolete, and will be deprecated and
+    removed in a future release of Biopython.
+    """
     #TODO - This could use more checking for valid parameters to the program.
     def __init__(self, cmd="blastall",**kwargs):
         self.parameters = [ \
@@ -189,7 +209,14 @@ class BlastallCommandline(_BlastAllOrPgpCommandLine):
 
 
 class BlastpgpCommandline(_BlastAllOrPgpCommandLine):
-    """Create a commandline for the blastpgp program from NCBI."""
+    """Create a commandline for the blastpgp program from NCBI (OBSOLETE).
+
+    With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
+    are replacing blastpgp with a renamed tool psiblast.
+    
+    Like blastpgp (and blastall), this wrapper is now obsolete, and will be
+    deprecated and removed in a future release of Biopython.
+    """
     def __init__(self, cmd="blastpgp",**kwargs):
         self.parameters = [ \
            _Option(["-C", "checkpoint_outfile"], ["output", "file"], None, 0,
@@ -226,7 +253,14 @@ class BlastpgpCommandline(_BlastAllOrPgpCommandLine):
 
 
 class RpsBlastCommandline(_BlastCommandLine):
-    """Create a commandline for the rpsblast program from NCBI."""
+    """Create a commandline for the classic rpsblast program from NCBI (OBSOLETE).
+
+    With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
+    are replacing the old rpsblast with a new version of the same name, taking
+    different command line arguments.
+    
+    Like the old rpsblast (and blastall), this wrapper is now obsolete, and will be
+    deprecated and removed in a future release of Biopython."""
     def __init__(self, cmd="rpsblast",**kwargs):
         self.parameters = [ \
            #Note -N is also in blastpgp, but not blastall
