@@ -388,7 +388,7 @@ class _Scanner:
         if not line :
             #EOF
             return
-        elif line.startswith('  Database'):
+        elif line.startswith('  Database') or line.startswith("Lambda"):
             return
         elif line[0] == '>':
             # XXX make a better check here between pairwise and masterslave
@@ -1595,6 +1595,7 @@ class Iterator:
                 % type(handle))
         self._uhandle = File.UndoHandle(handle)
         self._parser = parser
+        self._header = []
 
     def next(self):
         """next(self) -> object
@@ -1604,6 +1605,7 @@ class Iterator:
 
         """
         lines = []
+        query = False
         while 1:
             line = self._uhandle.readline()
             if not line:
@@ -1614,7 +1616,26 @@ class Iterator:
                           or line.startswith('<?xml ')):
                 self._uhandle.saveline(line)
                 break
+            # New style files ommit the BLAST line to mark a new query:
+            if line.startswith("Query=") :
+                if not query :
+                    if not self._header :
+                        self._header = lines[:]
+                    query = True
+                else :
+                    #Start of another record
+                    self._uhandle.saveline(line)
+                    break
             lines.append(line)
+
+        if query and "BLAST" not in lines[0] :
+            #Cheat and re-insert the header
+            #print "-"*50
+            #print "".join(self._header)
+            #print "-"*50
+            #print "".join(lines)
+            #print "-"*50
+            lines = self._header + lines
             
         if not lines:
             return None

@@ -14454,6 +14454,107 @@ class TestNCBITextParser(unittest.TestCase):
 
         self.assertEqual(None, records.next())
 
+    def test_bt081(self):
+        "Test parsing BLASTX 2.2.22+ output with multiple queries (bt081)"
+
+        path = os.path.join('Blast', 'bt081.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.query, "gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S\nribosomal RNA gene, partial sequence")
+        self.assertEqual(record.query_letters, 1002)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 1) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.query, "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like\nprotein HLPf gene, partial cds")
+        self.assertEqual(record.query_letters, 2050)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        #Two short HSPs with 2.2.22 (bt080.txt), but one with 2.2.22+
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+        
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.query, "gi|5690369|gb|AF158246.1|AF158246 Cricetulus griseus glucose\nphosphate isomerase (GPI) gene, partial intron sequence")
+        self.assertEqual(record.query_letters, 550)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 0)
+        self.assertEqual(len(record.alignments), 0)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.query, "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber\nGossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN\ngi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636\n(X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence")
+        self.assertEqual(record.query_letters, 655)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.query, "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal\ntranscribed spacer 1, 5.8S ribosomal RNA gene, and internal\ntranscribed spacer 2, complete sequence")
+        self.assertEqual(record.query_letters, 623)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        #Two short HSPs with 2.2.22 (bt080.txt), but one with 2.2.22+
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.query, "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A\n(PHYA) gene, partial cds")
+        self.assertEqual(record.query_letters, 309)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.query, "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like\nprotein (matK) gene, complete cds; chloroplast gene for chloroplast\nproduct")
+        self.assertEqual(record.query_letters, 2551)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
+        self.assertEqual(None, records.next())
+
 if __name__ == "__main__" :
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
