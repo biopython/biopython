@@ -226,14 +226,13 @@ class _Scanner:
         # If there is no 'Searching.....' line then you'll first see a 
         # 'Results from round' line
 
-        while 1:
+        while not self._eof(uhandle) :
             line = safe_peekline(uhandle)
             if (not line.startswith('Searching') and
                 not line.startswith('Results from round') and
                 re.search(r"Score +E", line) is None and
                 line.find('No hits found') == -1):
                 break
-
             self._scan_descriptions(uhandle, consumer)
             self._scan_alignments(uhandle, consumer)
 
@@ -315,7 +314,10 @@ class _Scanner:
             # Either case 2 or 3.  Look for "No hits found".
             attempt_read_and_call(uhandle, consumer.no_hits,
                                   contains='No hits found')
-            read_and_call_while(uhandle, consumer.noevent, blank=1)
+            try :
+                read_and_call_while(uhandle, consumer.noevent, blank=1)
+            except ValueError, err :
+                if str(err) != "Unexpected end of stream." : raise err
 
             consumer.end_descriptions()
             # Stop processing.
@@ -368,12 +370,17 @@ class _Scanner:
         consumer.end_descriptions()
 
     def _scan_alignments(self, uhandle, consumer):
+        if self._eof(uhandle) : return
+        
         # qblast inserts a helpful line here.
         attempt_read_and_call(uhandle, consumer.noevent, start="ALIGNMENTS")
 
         # First, check to see if I'm at the database report.
         line = safe_peekline(uhandle)
-        if line.startswith('  Database'):
+        if not line :
+            #EOF
+            return
+        elif line.startswith('  Database'):
             return
         elif line[0] == '>':
             # XXX make a better check here between pairwise and masterslave
@@ -383,19 +390,23 @@ class _Scanner:
             self._scan_masterslave_alignment(uhandle, consumer)
 
     def _scan_pairwise_alignments(self, uhandle, consumer):
-        while 1:
+        while not self._eof(uhandle):
             line = safe_peekline(uhandle)
             if line[0] != '>':
                 break
             self._scan_one_pairwise_alignment(uhandle, consumer)
 
     def _scan_one_pairwise_alignment(self, uhandle, consumer):
+        if self._eof(uhandle) : return
         consumer.start_alignment()
 
         self._scan_alignment_header(uhandle, consumer)
 
         # Scan a bunch of score/alignment pairs.
         while 1:
+            if self._eof(uhandle) :
+                #Shouldn't have issued that _scan_alignment_header event...
+                break
             line = safe_peekline(uhandle)
             if not line.startswith(' Score'):
                 break
@@ -468,7 +479,14 @@ class _Scanner:
             read_and_call(uhandle, consumer.query, start='Query')
             read_and_call(uhandle, consumer.align, start='     ')
             read_and_call(uhandle, consumer.sbjct, start='Sbjct')
-            read_and_call_while(uhandle, consumer.noevent, blank=1)
+            try:
+                read_and_call_while(uhandle, consumer.noevent, blank=1)
+            except ValueError, err:
+                if str(err) != "Unexpected end of stream." : raise err
+                # End of File (well, it looks like it with recent versions
+                # of BLAST for multiple queries after the Iterator class
+                # has broken up the whole file into chunks).
+                break
             line = safe_peekline(uhandle)
             # Alignment continues if I see a 'Query' or the spaces for Blastn.
             if not (line.startswith('Query') or line.startswith('     ')):
@@ -497,6 +515,14 @@ class _Scanner:
         read_and_call_while(uhandle, consumer.noevent, blank=1)
         consumer.end_alignment()
 
+    def _eof(self, uhandle) :
+        try :
+            line = safe_peekline(uhandle)
+        except ValueError, err :
+            if str(err) != "Unexpected end of stream." : raise err
+            line = ""
+        return not line
+
     def _scan_database_report(self, uhandle, consumer):
         #   Database: sdqib40-1.35.seg.fa
         #     Posted date:  Nov 1, 1999  4:25 PM
@@ -522,8 +548,9 @@ class _Scanner:
         #    0.319    0.136    0.395 
         # Gapped
         # Lambda     K      H
-        #    0.267   0.0410    0.140 
+        #    0.267   0.0410    0.140
 
+        if self._eof(uhandle) : return
 
         consumer.start_database_report()
         
