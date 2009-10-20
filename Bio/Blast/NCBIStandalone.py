@@ -210,8 +210,16 @@ class _Scanner:
             read_and_call_while(uhandle, consumer.noevent, blank=1)
 
             # Read the Query lines and the following blank line.
+            # Or, on BLAST 2.2.22+ there is no blank link - need to spot
+            # the "... Score     E" line instead.
             read_and_call(uhandle, consumer.query_info, start='Query=')
-            read_and_call_until(uhandle, consumer.query_info, blank=1)
+            #read_and_call_until(uhandle, consumer.query_info, blank=1)
+            while True :
+                line = uhandle.peekline()
+                if not line.strip() : break
+                if "Score     E" in line : break
+                #It is more of the query (and its length)
+                read_and_call(uhandle, consumer.query_info)
             read_and_call_while(uhandle, consumer.noevent, blank=1)
         else :
             raise ValueError("Invalid header?")
@@ -830,9 +838,13 @@ class _HeaderConsumer:
     def query_info(self, line):
         if line.startswith('Query= '):
             self._header.query = line[7:]
+        elif line.startswith('Length='):
+            #New style way to give the query length in BLAST 2.2.22+ (the C++ code)
+            self._header.query_letters = _safe_int(line[7:].strip())
         elif not line.startswith('       '):  # continuation of query_info
             self._header.query = "%s%s" % (self._header.query, line)
         else:
+            #Hope it is the old style way to give the query length:
             letters, = _re_search(
                 r"([0-9,]+) letters", line,
                 "I could not find the number of letters in line\n%s" % line)
