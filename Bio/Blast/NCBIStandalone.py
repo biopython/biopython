@@ -691,16 +691,16 @@ class _Scanner:
 
         attempt_read_and_call(uhandle, consumer.num_sequences,
                               start='Number of Sequences')
-        read_and_call(uhandle, consumer.num_hits,
+        attempt_read_and_call(uhandle, consumer.num_hits,
                       start='Number of Hits')
         attempt_read_and_call(uhandle, consumer.num_sequences,
                               start='Number of Sequences')
-        read_and_call(uhandle, consumer.num_extends,
+        attempt_read_and_call(uhandle, consumer.num_extends,
                       start='Number of extensions')
-        read_and_call(uhandle, consumer.num_good_extends,
+        attempt_read_and_call(uhandle, consumer.num_good_extends,
                       start='Number of successful')
 
-        read_and_call(uhandle, consumer.num_seqs_better_e,
+        attempt_read_and_call(uhandle, consumer.num_seqs_better_e,
                       start='Number of sequences')
 
         # not BLASTN, TBLASTX
@@ -730,8 +730,9 @@ class _Scanner:
         # not in blastx 2.2.1
         attempt_read_and_call(uhandle, consumer.query_length,
                               has_re=re.compile(r"[Ll]ength of query"))
-        read_and_call(uhandle, consumer.database_length,
-                      has_re=re.compile(r"[Ll]ength of \s*[Dd]atabase"))
+        # Not in BLASTX 2.2.22+
+        attempt_read_and_call(uhandle, consumer.database_length,
+                          has_re=re.compile(r"[Ll]ength of \s*[Dd]atabase"))
 
         # BLASTN 2.2.9
         attempt_read_and_call(uhandle, consumer.noevent,
@@ -769,8 +770,9 @@ class _Scanner:
         attempt_read_and_call(uhandle, consumer.window_size, start='A')
         # get this instead: "Window for multiple hits: 40"
         attempt_read_and_call(uhandle, consumer.window_size, start='Window for multiple hits')
-        
-        read_and_call(uhandle, consumer.dropoff_1st_pass, start='X1')
+
+        # not in BLASTX 2.2.22+        
+        attempt_read_and_call(uhandle, consumer.dropoff_1st_pass, start='X1')
         # not TBLASTN
         attempt_read_and_call(uhandle, consumer.gap_x_dropoff, start='X2')
 
@@ -837,7 +839,7 @@ class _HeaderConsumer:
             
     def query_info(self, line):
         if line.startswith('Query= '):
-            self._header.query = line[7:]
+            self._header.query = line[7:].lstrip()
         elif line.startswith('Length='):
             #New style way to give the query length in BLAST 2.2.22+ (the C++ code)
             self._header.query_letters = _safe_int(line[7:].strip())
