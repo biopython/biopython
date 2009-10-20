@@ -250,7 +250,7 @@ and HTML formats
   You need Biopython 1.45 or later.  Alternatively, rather than \verb|str(my_seq)|, use \verb|my_seq.tostring()| (which will also work on recent versions of Biopython).
   
   \item \emph{Why doesn't} \verb|Bio.Blast| \emph{work with the latest plain text NCBI blast output?} \\
-  The NCBI keep tweaking the plain text output from the BLAST tools, and keeping our parser up to date was an ongoing struggle.  We recommend you use the XML output instead, which is designed to be read by a computer program.
+  The NCBI keep tweaking the plain text output from the BLAST tools, and keeping our parser up to date is/was an ongoing struggle.  We recommend you use the XML output instead, which is designed to be read by a computer program.
 
   \item \emph{Why doesn't} \verb|Bio.Entrez.read()| \emph{work? The module imports fine but there is no read function!} \\
   You need Biopython 1.46 or later.
@@ -3876,9 +3876,14 @@ Section~\ref{sec:running-www-blast}) has two advantages:
 \end{itemize}
 Dealing with proprietary or unpublished sequence data can be another reason to run BLAST locally.  You may not be allowed to redistribute the sequences, so submitting them to the NCBI as a BLAST query would not be an option.
 
-Biopython provides lots of nice code to enable you to call local BLAST executables from your scripts, and have full access to the many command line options that these executables provide. You can obtain local BLAST precompiled for a number of platforms at \url{ftp://ftp.ncbi.nlm.nih.gov/blast/executables/}, or can compile it yourself in the NCBI toolbox (\url{ftp://ftp.ncbi.nlm.nih.gov/toolbox/}).
+Biopython provides some nice code to enable you to call local BLAST executables from your scripts, and have full access to the many command line options that these executables provide. You can obtain local BLAST precompiled for a number of platforms at \url{ftp://ftp.ncbi.nlm.nih.gov/blast/executables/}, or can compile it yourself in the NCBI toolbox (\url{ftp://ftp.ncbi.nlm.nih.gov/toolbox/}).
 
-The code for calling local ``standalone'' BLAST is found in \verb|Bio.Blast.NCBIStandalone|, specifically the functions \verb|blastall|, \verb|blastpgp| and \verb|rpsblast|, which correspond with the BLAST executables that their names imply.
+At the time of writing (October 2009), the NCBI have just released BLAST+ which is written in C++ and will be replacing the old BLAST tools written in C.
+This means that the old tools \verb|blastall|, \verb|blastpgp| and \verb|rpsblast| are now obsolete, being replaced by new command line tools \verb|blastn|, \verb|blastp|, \verb|blastx|, \verb|tblastn|, \verb|tblastx| (which all used to be handled by \verb|blastall|), \verb|psiblast| (replacing \verb|blastpgp|) and finally \verb|rpsblast| and \verb|rpstblastn| (which replace the old \verb|rpsblast|). These new command line tools have different more friendly command line switches, but provide the same functionality.
+
+The upshot of this is all that Biopython will have two sets of wrappers for calling ``classic'' BLAST tools, or the new BLAST ``plus'' tools.
+
+This document is being updated, and still describes the obsolete \verb|Bio.Blast.NCBIStandalone| functions for calling the ``classic'' BLAST tools.
 
 Let's use these functions to run \verb|blastall| against a local database and return the results. First, we want to set up the paths to everything that we'll need to do the BLAST. What we need to know is the path to the database (which should have been prepared using \verb|formatdb|, see \url{ftp://ftp.ncbi.nlm.nih.gov/blast/documents/formatdb.html}) to search against, the path to the file we want to search, and the path to the \verb|blastall| executable.
 
