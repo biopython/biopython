@@ -85,6 +85,7 @@ bt071 blastpgp 2.2.8  ad-hoc from Jer-Yee John Chuang, no Searching... lines
 bt072 blastall 2.2.15 ad-hoc              -p blastx       no hits, single query
 bt073 blastall 2.2.20 ad-hoc     nr       -p blastx       single query
 bt073 blastall 2.2.20 opuntia    nr       -p blastx       multiple queries, most with no hits
+bt074 blastall 2.2.21 ad-hoc     nr       -p blastp       multiple queries
 
 * bt008 is not included because the file is too big (>15Mb).
 

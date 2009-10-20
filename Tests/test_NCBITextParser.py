@@ -13397,6 +13397,52 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
                 
+    def test_bt075(self):
+        "Test parsing BLASTP 2.2.21 output with multiple queries (bt075)"
+
+        path = os.path.join('Blast', 'bt075.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTP")
+        self.assertEqual(record.version, '2.2.21')
+        self.assertEqual(record.date, "Jun-14-2009")
+        self.assertEqual(record.query, "gi|3298468|dbj|BAA31520.1| SAMIPF")
+        self.assertEqual(record.query_letters, 472)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTP")
+        self.assertEqual(record.version, '2.2.21')
+        self.assertEqual(record.date, "Jun-14-2009")
+        self.assertEqual(record.query, "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING\nfinger protein")
+        self.assertEqual(record.query_letters, 600)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 2)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTP")
+        self.assertEqual(record.version, '2.2.21')
+        self.assertEqual(record.date, "Jun-14-2009")
+        self.assertEqual(record.query, "gi|671626|emb|CAA85685.1| rubisco large subunit")
+        self.assertEqual(record.query_letters, 473)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
     def test_bt102(self):
         "Test parsing TBLASTN 2.2.16 output (bt102)"
 
