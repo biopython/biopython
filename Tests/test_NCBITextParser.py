@@ -13443,10 +13443,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 1)
 
-    def test_bt102(self):
-        "Test parsing TBLASTN 2.2.16 output (bt102)"
+    def test_bt068(self):
+        "Test parsing TBLASTN 2.2.16 output (bt068)"
 
-        path = os.path.join('Blast', 'bt102.txt')
+        path = os.path.join('Blast', 'bt068.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "TBLASTN")
@@ -13688,10 +13688,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.blast_cutoff[0], 52)
         self.assertAlmostEqual(record.blast_cutoff[1], 26.7)
 
-    def test_bt103(self):
-        "Test parsing BLASTP 2.2.2 output with multiple records (bt103)"
+    def test_bt069(self):
+        "Test parsing BLASTP 2.2.2 output with multiple records (bt069)"
 
-        path = os.path.join('Blast', 'bt103.txt')
+        path = os.path.join('Blast', 'bt069.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14282,10 +14282,10 @@ class TestNCBITextParser(unittest.TestCase):
         record = records.next()
         self.assertEqual(record, None)
 
-    def test_bt104(self):
-        "Test parsing BLASTN 2.2.2 output with error messages (bt104)"
+    def test_bt070(self):
+        "Test parsing BLASTN 2.2.2 output with error messages (bt070)"
 
-        path = os.path.join('Blast', 'bt104.txt')
+        path = os.path.join('Blast', 'bt070.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14314,10 +14314,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
         self.assertAlmostEqual(record.ka_params_gap[2], 1.310)
 
-    def test_bt105(self):
-        "Test parsing BLASTN 2.2.2 output with missing error messages (bt105)"
+    def test_bt071(self):
+        "Test parsing BLASTN 2.2.2 output with missing error messages (bt071)"
 
-        path = os.path.join('Blast', 'bt105.txt')
+        path = os.path.join('Blast', 'bt071.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
