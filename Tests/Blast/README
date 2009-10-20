@@ -4,11 +4,8 @@ BLAST TEST DATA FILES
 This directory contains various data files for testing the
 BLAST-related code in Biopython.
 
-News: release 1.40 depreaces all those. The only test files used are bt100, and bt101.
-Scroll to teh bottom for information
-
-BLAST OUTPUT FILES
-------------------
+BLAST OUTPUT FILES (plain text)
+-------------------------------
 
 ID    PROGRAM  VER.   QUERY      DATABASE  PARAMETERS     DESCRIPTION
 bt001 blastall 2.0.10 sp:P21297  swissprot -p blastp
@@ -89,5 +86,15 @@ bt074 blastall 2.2.21 ad-hoc     nr       -p blastp       multiple queries
 
 * bt008 is not included because the file is too big (>15Mb).
 
-bt100 NCBIWWW  2.2.20 blastq
-bt101 NCBIWWW  2.2.20 blastp
+BLAST OUTPUT FILES (XML)
+------------------------
+
+xbt001.xml - BLASTP 2.2.12
+xbt002.xml - BLASTN 2.2.12
+xbt003.xml - BLASTX 2.2.12
+xbt004.xml - TBLASTN 2.2.12
+xbt005.xml - TBLASTX 2.2.12
+xbt006.xml - BLASTP 2.2.18+
+xbt007.xml - BLASTP 2.2.18+
+blastp_no_hits.xml - blastp 2.2.18
+
