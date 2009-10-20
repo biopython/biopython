@@ -75,14 +75,15 @@ bt064 NCBIWWW  2.1.12 ad-hoc                              from Brad Chapman
 bt065 blastn   2.1.2  ad-hoc                              no hits found
 bt066 NCBIWWW  2.1.3  ad-hoc                              6/3/01 new format
 bt067 blastall 2.2.1  ad-hoc              -p blastx       No 'length of query'
-bt068 NCBIWWW  2.2.4  ad-hoc
-bt069 NCBIWWW  2.2.4  ad-hoc   Confusing sequences line in the database
-bt070 NCBIWWW  2.2.4  ad-hoc              -p blastp       nov 2002 new format
-bt071 blastpgp 2.2.8  ad-hoc from Jer-Yee John Chuang, no Searching... lines 
-bt072 blastall 2.2.15 ad-hoc              -p blastx       no hits, single query
-bt073 blastall 2.2.20 ad-hoc     nr       -p blastx       single query
-bt073 blastall 2.2.20 opuntia    nr       -p blastx       multiple queries, most with no hits
-bt074 blastall 2.2.21 ad-hoc     nr       -p blastp       multiple queries
+...
+bt072 NCBIWWW  2.2.4  ad-hoc
+bt073 NCBIWWW  2.2.4  ad-hoc   Confusing sequences line in the database
+bt074 NCBIWWW  2.2.4  ad-hoc              -p blastp       nov 2002 new format
+bt075 blastpgp 2.2.8  ad-hoc from Jer-Yee John Chuang, no Searching... lines 
+bt076 blastall 2.2.15 ad-hoc              -p blastx       no hits, single query
+bt077 blastall 2.2.20 ad-hoc     nr       -p blastx       single query
+bt078 blastall 2.2.20 opuntia    nr       -p blastx       multiple queries, most with no hits
+bt079 blastall 2.2.21 ad-hoc     nr       -p blastp       multiple queries
 
 * bt008 is not included because the file is too big (>15Mb).
 

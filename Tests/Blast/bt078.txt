@@ -1,0 +1,237 @@
+BLASTX 2.2.20 [Feb-08-2009]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|6273291|gb|AF191665.1|AF191665 Opuntia marenae rpl16 gene;
+chloroplast gene for chloroplast product, partial intron sequence
+         (902 letters)
+
+Database: All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+from WGS projects 
+           8,994,603 sequences; 3,078,807,967 total letters
+
+Searching..................................................done
+
+ ***** No hits found ******
+
+
+BLASTX 2.2.20 [Feb-08-2009]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|6273290|gb|AF191664.1|AF191664 Opuntia clavata rpl16 gene;
+chloroplast gene for chloroplast product, partial intron sequence
+         (899 letters)
+
+Database: All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+from WGS projects 
+           8,994,603 sequences; 3,078,807,967 total letters
+
+Searching..................................................done
+
+ ***** No hits found ******
+
+
+BLASTX 2.2.20 [Feb-08-2009]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|6273289|gb|AF191663.1|AF191663 Opuntia bradtiana rpl16 gene;
+chloroplast gene for chloroplast product, partial intron sequence
+         (899 letters)
+
+Database: All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+from WGS projects 
+           8,994,603 sequences; 3,078,807,967 total letters
+
+Searching..................................................done
+
+ ***** No hits found ******
+
+
+BLASTX 2.2.20 [Feb-08-2009]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|6273287|gb|AF191661.1|AF191661 Opuntia kuehnrichiana rpl16
+gene; chloroplast gene for chloroplast product, partial intron
+sequence
+         (895 letters)
+
+Database: All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+from WGS projects 
+           8,994,603 sequences; 3,078,807,967 total letters
+
+Searching..................................................done
+
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+
+dbj|BAE48041.1| hypothetical protein [Nicotiana tomentosiformis]       51   8e-07
+emb|CAJ32483.1| hypothetical protein [Nicotiana tabacum] >gi|777...    51   8e-07
+
+>dbj|BAE48041.1| hypothetical protein [Nicotiana tomentosiformis]
+          Length = 79
+
+ Score = 51.2 bits (121), Expect(2) = 8e-07
+ Identities = 25/40 (62%), Positives = 29/40 (72%), Gaps = 1/40 (2%)
+ Frame = +2
+
+Query: 290 MGTM*SMNTEDSIEKDP-MIHWEGWRNEPETNSSILKSDK 406
+           MGT   +N +DSIEK   MIHW GWRNEPE NS I +S+K
+Sbjct: 1   MGTTELVNAKDSIEKGILMIHWSGWRNEPEINSCIRRSEK 40
+
+
+
+ Score = 27.3 bits (59), Expect(2) = 8e-07
+ Identities = 12/23 (52%), Positives = 14/23 (60%)
+ Frame = +3
+
+Query: 423 KIDIERVNIRPRKFLFFLNCSYF 491
+           +I IERVNIRPRK     N   +
+Sbjct: 48  EIGIERVNIRPRKLFLLQNLGQY 70
+
+
+>emb|CAJ32483.1| hypothetical protein [Nicotiana tabacum]
+ dbj|BAE46692.1| hypothetical protein [Nicotiana sylvestris]
+          Length = 79
+
+ Score = 51.2 bits (121), Expect(2) = 8e-07
+ Identities = 25/40 (62%), Positives = 29/40 (72%), Gaps = 1/40 (2%)
+ Frame = +2
+
+Query: 290 MGTM*SMNTEDSIEKDP-MIHWEGWRNEPETNSSILKSDK 406
+           MGT   +N +DSIEK   MIHW GWRNEPE NS I +S+K
+Sbjct: 1   MGTTELVNAKDSIEKGILMIHWSGWRNEPEINSCIRRSEK 40
+
+
+
+ Score = 27.3 bits (59), Expect(2) = 8e-07
+ Identities = 12/23 (52%), Positives = 14/23 (60%)
+ Frame = +3
+
+Query: 423 KIDIERVNIRPRKFLFFLNCSYF 491
+           +I IERVNIRPRK     N   +
+Sbjct: 48  EIGIERVNIRPRKLFLLQNLGQY 70
+
+
+BLASTX 2.2.20 [Feb-08-2009]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|6273286|gb|AF191660.1|AF191660 Opuntia echinacea rpl16 gene;
+chloroplast gene for chloroplast product, partial intron sequence
+         (893 letters)
+
+Database: All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+from WGS projects 
+           8,994,603 sequences; 3,078,807,967 total letters
+
+Searching..................................................done
+
+ ***** No hits found ******
+
+
+BLASTX 2.2.20 [Feb-08-2009]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|6273285|gb|AF191659.1|AF191659 Opuntia pachypus rpl16 gene;
+chloroplast gene for chloroplast product, partial intron sequence
+         (894 letters)
+
+Database: All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+from WGS projects 
+           8,994,603 sequences; 3,078,807,967 total letters
+
+Searching..................................................done
+
+ ***** No hits found ******
+
+
+BLASTX 2.2.20 [Feb-08-2009]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= gi|6273284|gb|AF191658.1|AF191658 Opuntia subulata rpl16 gene;
+chloroplast gene for chloroplast product, partial intron sequence
+         (896 letters)
+
+Database: All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+from WGS projects 
+           8,994,603 sequences; 3,078,807,967 total letters
+
+Searching..................................................done
+
+ ***** No hits found ******
+
+
+  Database: All non-redundant GenBank CDS
+  translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+  from WGS projects
+    Posted date:  Jun 4, 2009  5:40 PM
+  Number of letters in database: 3,078,807,967
+  Number of sequences in database:  8,994,603
+  
+Lambda     K      H
+   0.318    0.134    0.401 
+
+Gapped
+Lambda     K      H
+   0.267   0.0410    0.140 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Sequences: 8994603
+Number of Hits to DB: 25,131,630,959
+Number of extensions: 479411075
+Number of successful extensions: 804218
+Number of sequences better than 1.0e-04: 2
+Number of HSP's gapped: 803721
+Number of HSP's successfully gapped: 4
+Length of database: 3,078,807,967
+Neighboring words threshold: 12
+Window for multiple hits: 40
+X1: 16 ( 7.3 bits)
+X2: 38 (14.6 bits)
+X3: 64 (24.7 bits)
+S1: 41 (21.7 bits)
+S2: 32 (16.9 bits)

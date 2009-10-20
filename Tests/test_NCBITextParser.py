@@ -13153,10 +13153,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.gap_trigger[0], 33)
         self.assertAlmostEqual(record.gap_trigger[1], 18.0)
 
-    def test_bt071(self):
-        "Test parsing BLASTP 2.2.8 output (bt071)"
+    def test_bt075(self):
+        "Test parsing BLASTP 2.2.8 output (bt075)"
 
-        path = os.path.join('Blast', 'bt071.txt')
+        path = os.path.join('Blast', 'bt075.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -13232,10 +13232,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.blast_cutoff[0], 64)
         self.assertAlmostEqual(record.blast_cutoff[1], 29.2)
 
-    def test_bt072(self):
-        "Test parsing BLASTX 2.2.15 output with no hits (bt072)"
+    def test_bt076(self):
+        "Test parsing BLASTX 2.2.15 output with no hits (bt076)"
 
-        path = os.path.join('Blast', 'bt072.txt')
+        path = os.path.join('Blast', 'bt076.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -13251,10 +13251,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-    def test_bt073(self):
-        "Test parsing BLASTX 2.2.20 output (bt073)"
+    def test_bt077(self):
+        "Test parsing BLASTX 2.2.20 output (bt077)"
 
-        path = os.path.join('Blast', 'bt073.txt')
+        path = os.path.join('Blast', 'bt077.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -13286,10 +13286,10 @@ class TestNCBITextParser(unittest.TestCase):
             else :
                 self.assertEqual(a.title, ">" + b[0])
 
-    def test_bt074(self):
-        "Test parsing BLASTX 2.2.20 output with multiple queries (bt074)"
+    def test_bt078(self):
+        "Test parsing BLASTX 2.2.20 output with multiple queries (bt078)"
 
-        path = os.path.join('Blast', 'bt074.txt')
+        path = os.path.join('Blast', 'bt078.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -13397,10 +13397,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
                 
-    def test_bt075(self):
-        "Test parsing BLASTP 2.2.21 output with multiple queries (bt075)"
+    def test_bt079(self):
+        "Test parsing BLASTP 2.2.21 output with multiple queries (bt079)"
 
-        path = os.path.join('Blast', 'bt075.txt')
+        path = os.path.join('Blast', 'bt079.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
