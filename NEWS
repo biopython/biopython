@@ -13,6 +13,10 @@ Biopython is now using git for source code control, currently on github. Our
 old CVS repository will remain on the OBF servers in the short/medium term
 as a backup, but will not be updated in future.
 
+The plain text BLAST parser has been updated, and should cope with recent
+versions of NCBI BLAST, including the new C++ based version. Nevertheless,
+we (and the NCBI) still recommend using the XML output for parsing.
+
 ===================================================================
 
 September 22, 2009: Biopython 1.52 released.
