@@ -15,10 +15,11 @@ Obsolete wrappers for the old/classic NCBI BLAST tools (written in C):
 
 Wrappers for the new NCBI BLAST+ tools (written in C++):
 
-- Pending
+- NcbiBlastxCommandline
+- Others pending
 
 """
-from Bio.Application import _Option, AbstractCommandline
+from Bio.Application import _Option, AbstractCommandline, _Switch
 
 class FastacmdCommandline(AbstractCommandline):
     """Create a commandline for the fasta program from NCBI (OBSOLETE).
@@ -142,6 +143,17 @@ class BlastallCommandline(_BlastAllOrPgpCommandLine):
 
     Like blastall, this wrapper is now obsolete, and will be deprecated and
     removed in a future release of Biopython.
+
+    >>> from Bio.Blast.Applications import BlastallCommandline
+    >>> cline = BlastallCommandline(program="blastx", infile="m_cold.fasta",
+    ...                             database="nr", expectation=0.001)
+    >>> cline
+    BlastallCommandline(cmd='blastall', database='nr', infile='m_cold.fasta', expectation=0.001, program='blastx')
+    >>> print cline
+    blastall -d nr -i m_cold.fasta -e 0.001 -p blastx
+
+    You would typically run the command line with the Python subprocess module,
+    as described in the Biopython tutorial.
     """
     #TODO - This could use more checking for valid parameters to the program.
     def __init__(self, cmd="blastall",**kwargs):
@@ -279,3 +291,58 @@ class RpsBlastCommandline(_BlastCommandLine):
                    False),
         ] 
         _BlastCommandLine.__init__(self, cmd, **kwargs)
+
+#NOTE - I will be breaking this up into a common base class to
+#share with the other new blast wrappers...
+class NcbiBlastxCommandline(AbstractCommandline) :
+    """Create a commandline for the NCBI BLAST+ program blastx.
+
+    With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
+    replaced the old blastall tool with separate tools for each of the searches.
+
+    This wrapper therefore replaces BlastallCommandline with option -p blastx
+
+    >>> from Bio.Blast.Applications import NcbiBlastxCommandline
+    >>> cline = NcbiBlastxCommandline(help=True)
+    >>> cline
+    NcbiBlastxCommandline(cmd='blastx', help=True)
+    >>> print cline
+    blastx -help
+
+    >>> from Bio.Blast.Applications import NcbiBlastxCommandline
+    >>> cline = NcbiBlastxCommandline(query="m_cold.fasta", db="nr", evalue=0.001)
+    >>> cline
+    NcbiBlastxCommandline(cmd='blastx', query='m_cold.fasta', db='nr', evalue=0.001)
+    >>> print cline
+    blastx -query m_cold.fasta -db nr -evalue 0.001
+
+    You would typically run the command line with the Python subprocess module,
+    as described in the Biopython tutorial.
+    """
+    def __init__(self, cmd="blastx", **kwargs):
+        #Argument names are:
+        # - real string
+        # - any aliases for backwards compatibility with blastall
+        # - alias for use as property/keyword
+        self.parameters = [ \
+            #Core:
+            _Switch(["-h", "h"], ["input"],
+                    "Print USAGE and DESCRIPTION;  ignore other arguments."),
+            _Switch(["-help", "help"], ["input"],
+                    "Print USAGE, DESCRIPTION and ARGUMENTS description;  ignore other arguments."),
+            _Switch(["-version", "version"], ["input"],
+                    "Print version number;  ignore other arguments."),
+            #Common:
+            _Option(["-query", "-i", "infile", "query"], ["input", "file"], None, 0,
+                    "The sequence to search with.", False), #Should this be required?
+            _Option(["-db", "-d", "database", "db"], ["input"], None, 0,
+                    "The database to BLAST against.", False), #Should this be required?
+            _Option(["-evalue", "-e", "expectation", "evalue"], ["input"], None, 0, 
+                    "Expectation value cutoff.", False),
+            _Option(["-outfmt", "outfmt"], ["input"], None, 0, 
+                    "Alignment view.  Integer 0-10.  Use 5 for XML output (differs from classic BLAST which used 7 for XML).",
+                    False), #Did not include old aliases as meaning has changed!
+            _Option(["-out", "-o", "align_outfile", "outfile", "out"], ["output", "file"], None, 0,
+                    "Output file for alignment.", False),
+            ]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
