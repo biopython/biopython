@@ -340,6 +340,24 @@ class _NcbiblastCommandline(AbstractCommandline) :
             _Option(["-outfmt", "outfmt"], ["input"], None, 0, 
                     "Alignment view.  Integer 0-10.  Use 5 for XML output (differs from classic BLAST which used 7 for XML).",
                     False), #Did not include old aliases as meaning has changed!
+            _Switch(["-show_gis","show_gis"], ["input"],
+                    "Show NCBI GIs in deflines?"),
+            _Option(["-num_descriptions","num_descriptions"], ["input"], None, 0,
+                    """Number of database sequences to show one-line descriptions for.
+
+                    Integer argument (at least zero). Default is 500.
+                    See also num_alignments.""", False),
+            _Option(["-num_alignments","num_alignments"], ["input"], None, 0,
+                    """Number of database sequences to show num_alignments for.
+
+                    Integer argument (at least zero). Default is 200.
+                    See also num_alignments.""", False),
+            _Switch(["-html", "html"], ["input"],
+                    "Produce HTML output? See also the outfmt option."),
+            #Query filtering options
+            # TODO -soft_masking <Boolean>, is this a switch or an option?
+            _Switch(["-lcase_masking", "lcase_masking"], ["input"],
+                    "Use lower case filtering in query and subject sequence(s)?"),
             #Restrict search or results
             _Option(["-gilist", "gilist"], ["input", "file"], None, 0,
                     """Restrict search of database to list of GI's.
@@ -350,6 +368,22 @@ class _NcbiblastCommandline(AbstractCommandline) :
                     """Restrict search of database to everything except the listed GIs.
  
                     Incompatible with:  gilist, remote, subject, subject_loc""",
+                    False),
+            #Statistical options
+            _Option(["-dbsize", "dbsize"], ["input"], None, 0,
+                    "Effective length of the database (integer)", False),
+            #Extension options
+            _Option(["-xdrop_ungap", "xdrop_ungap"], ["input"], None, 0,
+                    "X-dropoff value (in bits) for ungapped extensions. Float.",
+                    False),
+            _Option(["-xdrop_gap", "xdrop_gap"], ["input"], None, 0,
+                    "X-dropoff value (in bits) for preliminary gapped extensions. Float.",
+                    False),
+            _Option(["-xdrop_gap_final", "xdrop_gap_final"], ["input"], None, 0,
+                    "X-dropoff value (in bits) for final gapped alignment. Float.",
+                    False),
+            _Option(["-window_size", "window_size"], ["input"], None, 0,
+                    "Multiple hits window size, use 0 to specify 1-hit algorithm. Integer.",
                     False),
             #Miscellaneous options
             _Option(["-num_threads", "num_threads"], ["input"], None, 0,
@@ -392,17 +426,19 @@ class NcbiblastpCommandline(_NcbiblastCommandline) :
 
     >>> from Bio.Blast.Applications import NcbiblastpCommandline
     >>> cline = NcbiblastpCommandline(query="rosemary.pro", db="nr",
-    ...                               evalue=0.001, remote=True)
+    ...                               evalue=0.001, remote=True, ungapped=True)
     >>> cline
-    NcbiblastpCommandline(cmd='blastp', query='rosemary.pro', db='nr', evalue=0.001, remote=True)
+    NcbiblastpCommandline(cmd='blastp', query='rosemary.pro', db='nr', evalue=0.001, remote=True, ungapped=True)
     >>> print cline
-    blastp -query rosemary.pro -db nr -evalue 0.001 -remote
+    blastp -query rosemary.pro -db nr -evalue 0.001 -remote -ungapped
 
     You would typically run the command line with the Python subprocess module,
     as described in the Biopython tutorial.
     """
     def __init__(self, cmd="blastp", **kwargs):
         self.parameters = [ \
+            _Switch(["-ungapped", "ungapped"], ["input"],
+                    "Perform ungapped alignment only?"),
             ]
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
 
@@ -430,6 +466,8 @@ class NcbiblastnCommandline(_NcbiblastCommandline) :
     """
     def __init__(self, cmd="blastn", **kwargs):
         self.parameters = [ \
+            _Switch(["-ungapped", "ungapped"], ["input"],
+                    "Perform ungapped alignment only?"),
             ]
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
 
@@ -453,6 +491,8 @@ class NcbiblastxCommandline(_NcbiblastCommandline) :
     """
     def __init__(self, cmd="blastx", **kwargs):
         self.parameters = [ \
+            _Switch(["-ungapped", "ungapped"], ["input"],
+                    "Perform ungapped alignment only?"),
             ]
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
 
@@ -476,6 +516,8 @@ class NcbitblastnCommandline(_NcbiblastCommandline) :
     """
     def __init__(self, cmd="tblastn", **kwargs):
         self.parameters = [ \
+            _Switch(["-ungapped", "ungapped"], ["input"],
+                    "Perform ungapped alignment only?"),
             ]
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
 
