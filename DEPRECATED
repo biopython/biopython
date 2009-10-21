@@ -26,7 +26,8 @@ in Release 1.51, please use psycopg2 instead.
 
 Bio.Application.generic_run and ApplicationResult
 =================================================
-Declared obsolete in Release 1.51, please use Python subprocess module instead.
+Declared obsolete in Release 1.51, and deprecated in Release 1.53.
+Please use the Python subprocess module instead.
 
 Bio.Entrez.efetch and rettype="genbank"
 =======================================
@@ -230,7 +231,8 @@ Deprecated as of Release 1.45, removed in Release 1.48
 Bio.WWW
 =======
 The modules under Bio.WWW were deprecated in Release 1.45, and removed in
-Release 1.48.  The remaining stub Bio.WWW was deprecated in Release 1.48.
+Release 1.48.  The remaining stub Bio.WWW was deprecated in Release 1.48,
+and removed in Release 1.53.
 
 The functionality in Bio.WWW.SCOP, Bio.WWW.InterPro and Bio.WWW.ExPASy
 is now available from Bio.SCOP, Bio.InterPro and Bio.ExPASy instead.
