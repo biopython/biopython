@@ -556,3 +556,13 @@ class NcbitblastxCommandline(_NcbiblastCommandline) :
         if self.query and self.in_pssm :
             raise ValueError("The query option cannot be used with in_pssm")
         _NcbiblastCommandline._validate(self)
+
+
+def _test():
+    """Run the Bio.Blast.Applications module's doctests."""
+    import doctest
+    doctest.testmod(verbose=1)
+
+if __name__ == "__main__":
+    #Run the doctests
+    _test()
