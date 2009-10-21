@@ -14,7 +14,8 @@ Command line options:
 -g;--generate -- write the output file for a test instead of comparing it.
                  The name of the test to write the output for must be
                  specified.
--v;--verbose  -- run tests with higher verbosity
+-v;--verbose  -- run tests with higher verbosity (does not affect our
+                 print-and-compare style unit tests).
 <test_name>   -- supply the name of one (or more) tests to be run.
                  The .py file extension is optional.
 doctest       -- run the docstring tests.
