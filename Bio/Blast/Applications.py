@@ -15,7 +15,11 @@ Obsolete wrappers for the old/classic NCBI BLAST tools (written in C):
 
 Wrappers for the new NCBI BLAST+ tools (written in C++):
 
-- NcbiBlastxCommandline
+- NcbiblastpCommandline
+- NcbiblastnCommandline
+- NcbiblastxCommandline
+- NcbitblastnCommandline
+- NcbitblastxCommandline
 - Others pending
 
 """
@@ -292,39 +296,20 @@ class RpsBlastCommandline(_BlastCommandLine):
         ] 
         _BlastCommandLine.__init__(self, cmd, **kwargs)
 
-#NOTE - I will be breaking this up into a common base class to
-#share with the other new blast wrappers...
-class NcbiBlastxCommandline(AbstractCommandline) :
-    """Create a commandline for the NCBI BLAST+ program blastx.
+#Further classes in the heirachy will probably be needed...
+class _NcbiblastCommandline(AbstractCommandline) :
+    """Base Commandline object for (classic) NCBI BLAST wrappers (PRIVATE).
 
-    With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
-    replaced the old blastall tool with separate tools for each of the searches.
-
-    This wrapper therefore replaces BlastallCommandline with option -p blastx
-
-    >>> from Bio.Blast.Applications import NcbiBlastxCommandline
-    >>> cline = NcbiBlastxCommandline(help=True)
-    >>> cline
-    NcbiBlastxCommandline(cmd='blastx', help=True)
-    >>> print cline
-    blastx -help
-
-    >>> from Bio.Blast.Applications import NcbiBlastxCommandline
-    >>> cline = NcbiBlastxCommandline(query="m_cold.fasta", db="nr", evalue=0.001)
-    >>> cline
-    NcbiBlastxCommandline(cmd='blastx', query='m_cold.fasta', db='nr', evalue=0.001)
-    >>> print cline
-    blastx -query m_cold.fasta -db nr -evalue 0.001
-
-    You would typically run the command line with the Python subprocess module,
-    as described in the Biopython tutorial.
+    This is provided for subclassing, it deals with shared options
+    common to all the BLAST tools (blastall, rpsblast, pgpblast).
     """
-    def __init__(self, cmd="blastx", **kwargs):
+    def __init__(self, cmd=None, **kwargs):
         #Argument names are:
         # - real string
         # - any aliases for backwards compatibility with blastall
         # - alias for use as property/keyword
-        self.parameters = [ \
+        assert cmd is not None
+        extra_parameters = [ \
             #Core:
             _Switch(["-h", "h"], ["input"],
                     "Print USAGE and DESCRIPTION;  ignore other arguments."),
@@ -345,4 +330,152 @@ class NcbiBlastxCommandline(AbstractCommandline) :
             _Option(["-out", "-o", "align_outfile", "outfile", "out"], ["output", "file"], None, 0,
                     "Output file for alignment.", False),
             ]
+        try :
+            #Insert extra parameters - at the start just in case there
+            #are any arguments which must come last:
+            self.parameters = extra_parameters + self.parameters
+        except AttributeError:
+            #Should we raise an error?  The subclass should have set this up!
+            self.parameters = extra_parameters
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
+
+class NcbiblastpCommandline(_NcbiblastCommandline) :
+    """Create a commandline for the NCBI BLAST+ program blastp (for proteins).
+
+    With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
+    replaced the old blastall tool with separate tools for each of the searches.
+
+    This wrapper therefore replaces BlastallCommandline with option -p blastp
+
+    >>> from Bio.Blast.Applications import NcbiblastpCommandline
+    >>> cline = NcbiblastpCommandline(help=True)
+    >>> cline
+    NcbiblastpCommandline(cmd='blastp', help=True)
+    >>> print cline
+    blastp -help
+
+    >>> from Bio.Blast.Applications import NcbiblastpCommandline
+    >>> cline = NcbiblastpCommandline(query="rosemary.pro", db="nr", evalue=0.001)
+    >>> cline
+    NcbiblastpCommandline(cmd='blastp', query='rosemary.pro', db='nr', evalue=0.001)
+    >>> print cline
+    blastp -query rosemary.pro -db nr -evalue 0.001
+
+    You would typically run the command line with the Python subprocess module,
+    as described in the Biopython tutorial.
+    """
+    def __init__(self, cmd="blastp", **kwargs):
+        self.parameters = [ \
+            ]
+        _NcbiblastCommandline.__init__(self, cmd, **kwargs)
+
+class NcbiblastnCommandline(_NcbiblastCommandline) :
+    """Wrapper for the NCBI BLAST+ program blastn (for nucleotides).
+
+    With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
+    replaced the old blastall tool with separate tools for each of the searches.
+
+    This wrapper therefore replaces BlastallCommandline with option -p blastn
+
+    >>> from Bio.Blast.Applications import NcbiblastnCommandline
+    >>> cline = NcbiblastnCommandline(help=True)
+    >>> cline
+    NcbiblastnCommandline(cmd='blastn', help=True)
+    >>> print cline
+    blastn -help
+
+    >>> from Bio.Blast.Applications import NcbiblastnCommandline
+    >>> cline = NcbiblastnCommandline(query="m_cold.fasta", db="nt", evalue=0.001)
+    >>> cline
+    NcbiblastnCommandline(cmd='blastn', query='m_cold.fasta', db='nt', evalue=0.001)
+    >>> print cline
+    blastn -query m_cold.fasta -db nt -evalue 0.001
+
+    You would typically run the command line with the Python subprocess module,
+    as described in the Biopython tutorial.
+    """
+    def __init__(self, cmd="blastn", **kwargs):
+        self.parameters = [ \
+            ]
+        _NcbiblastCommandline.__init__(self, cmd, **kwargs)
+
+
+class NcbiblastxCommandline(_NcbiblastCommandline) :
+    """Wrapper for the NCBI BLAST+ program blastx (nucleotide query, protein database).
+
+    With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
+    replaced the old blastall tool with separate tools for each of the searches.
+
+    This wrapper therefore replaces BlastallCommandline with option -p blastx
+
+    >>> from Bio.Blast.Applications import NcbiblastxCommandline
+    >>> cline = NcbiblastxCommandline(help=True)
+    >>> cline
+    NcbiblastxCommandline(cmd='blastx', help=True)
+    >>> print cline
+    blastx -help
+
+    >>> from Bio.Blast.Applications import NcbiblastxCommandline
+    >>> cline = NcbiblastxCommandline(query="m_cold.fasta", db="nr", evalue=0.001)
+    >>> cline
+    NcbiblastxCommandline(cmd='blastx', query='m_cold.fasta', db='nr', evalue=0.001)
+    >>> print cline
+    blastx -query m_cold.fasta -db nr -evalue 0.001
+
+    You would typically run the command line with the Python subprocess module,
+    as described in the Biopython tutorial.
+    """
+    def __init__(self, cmd="blastx", **kwargs):
+        self.parameters = [ \
+            ]
+        _NcbiblastCommandline.__init__(self, cmd, **kwargs)
+
+
+class NcbitblastnCommandline(_NcbiblastCommandline) :
+    """Wrapper for the NCBI BLAST+ program tblastn.
+
+    With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
+    replaced the old blastall tool with separate tools for each of the searches.
+
+    This wrapper therefore replaces BlastallCommandline with option -p tblastn
+
+    >>> from Bio.Blast.Applications import NcbitblastnCommandline
+    >>> cline = NcbitblastnCommandline(help=True)
+    >>> cline
+    NcbitblastnCommandline(cmd='tblastn', help=True)
+    >>> print cline
+    tblastn -help
+
+    You would typically run the command line with the Python subprocess module,
+    as described in the Biopython tutorial.
+    """
+    def __init__(self, cmd="tblastn", **kwargs):
+        self.parameters = [ \
+            ]
+        _NcbiblastCommandline.__init__(self, cmd, **kwargs)
+
+
+class NcbitblastxCommandline(_NcbiblastCommandline) :
+    """Wrapper for the NCBI BLAST+ program tblastx.
+
+    With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
+    replaced the old blastall tool with separate tools for each of the searches.
+
+    This wrapper therefore replaces BlastallCommandline with option -p tblastx
+
+    >>> from Bio.Blast.Applications import NcbitblastxCommandline
+    >>> cline = NcbitblastxCommandline(help=True)
+    >>> cline
+    NcbitblastxCommandline(cmd='tblastx', help=True)
+    >>> print cline
+    tblastx -help
+
+    You would typically run the command line with the Python subprocess module,
+    as described in the Biopython tutorial.
+    """
+    def __init__(self, cmd="tblastx", **kwargs):
+        self.parameters = [ \
+            ]
+        _NcbiblastCommandline.__init__(self, cmd, **kwargs)
+
