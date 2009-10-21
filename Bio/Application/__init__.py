@@ -5,6 +5,15 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """General mechanisms to access applications in Biopython.
+
+This module is not intended for direct use (any more). It provides
+the basic objects for our command line wrappers such as:
+
+ - Bio.Align.Applications
+ - Bio.Blast.Applications
+ - Bio.Emboss.Applications
+ - Bio.Sequencing.Applications
+
 """
 import os, sys
 import StringIO
@@ -13,7 +22,7 @@ import subprocess
 from Bio import File
 
 def generic_run(commandline):
-    """Run an application with the given commandline (OBSOLETE).
+    """Run an application with the given commandline (DEPRECATED).
 
     This expects a pre-built commandline that derives from 
     AbstractCommandline, and returns a ApplicationResult object
@@ -30,6 +39,12 @@ def generic_run(commandline):
     to turn an AbstractCommandline wrapper into a command line string. This
     will give you full control of the tool's input and output as well.
     """
+    import warnings
+    warnings.warn("Bio.Application.generic_run and the associated "
+                  "Bio.Application.ApplicationResult are deprecated. "
+                  "Please use the built in Python module subprocess "
+                  "instead, as described in the Biopython Tutorial.",
+                  DeprecationWarning)
     #We don't need to supply any piped input, but we setup the
     #standard input pipe anyway as a work around for a python
     #bug if this is called from a Windows GUI program.  For
@@ -48,7 +63,7 @@ def generic_run(commandline):
            File.UndoHandle(StringIO.StringIO(e_out))
 
 class ApplicationResult:
-    """Make results of a program available through a standard interface (OBSOLETE).
+    """Make results of a program available through a standard interface (DEPRECATED).
     
     This tries to pick up output information available from the program
     and make it available programmatically.
@@ -59,6 +74,12 @@ class ApplicationResult:
     def __init__(self, application_cl, return_code):
         """Intialize with the commandline from the program.
         """
+        import warnings
+        warnings.warn("Bio.Application.ApplicationResult and the "
+                      "associated function Bio.Application.generic_run "
+                      "are deprecated. Please use the built in Python "
+                      "module subprocess instead, as described in the "
+                      "Biopython Tutorial", DeprecationWarning)
         self._cl = application_cl
 
         # provide the return code of the application
@@ -505,11 +526,7 @@ def _escape_filename(filename) :
         return '"%s"' % filename
 
 def _test():
-    """Run the Bio.Application module's doctests.
-
-    This will try and locate the unit tests directory, and run the doctests
-    from there in order that the relative paths used in the examples work.
-    """
+    """Run the Bio.Application module's doctests."""
     import doctest
     doctest.testmod(verbose=1)
 
