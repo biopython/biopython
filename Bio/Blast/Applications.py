@@ -304,10 +304,6 @@ class _NcbiblastCommandline(AbstractCommandline) :
     common to all the BLAST tools (blastall, rpsblast, pgpblast).
     """
     def __init__(self, cmd=None, **kwargs):
-        #Argument names are:
-        # - real string
-        # - any aliases for backwards compatibility with blastall
-        # - alias for use as property/keyword
         assert cmd is not None
         extra_parameters = [ \
             #Core:
@@ -317,18 +313,54 @@ class _NcbiblastCommandline(AbstractCommandline) :
                     "Print USAGE, DESCRIPTION and ARGUMENTS description;  ignore other arguments."),
             _Switch(["-version", "version"], ["input"],
                     "Print version number;  ignore other arguments."),
-            #Common:
-            _Option(["-query", "-i", "infile", "query"], ["input", "file"], None, 0,
+            #Input query options:
+            _Option(["-query", "query"], ["input", "file"], None, 0,
                     "The sequence to search with.", False), #Should this be required?
-            _Option(["-db", "-d", "database", "db"], ["input"], None, 0,
+            _Option(["-query_loc", "query_loc"], ["input"], None, 0,
+                    "Location on the query sequence (Format: start-stop)", False),
+            #General search options:
+            _Option(["-db", "db"], ["input"], None, 0,
                     "The database to BLAST against.", False), #Should this be required?
-            _Option(["-evalue", "-e", "expectation", "evalue"], ["input"], None, 0, 
+            _Option(["-out", "out"], ["output", "file"], None, 0,
+                    "Output file for alignment.", False),
+            _Option(["-evalue", "evalue"], ["input"], None, 0, 
                     "Expectation value cutoff.", False),
+            #BLAST-2-Sequences options:
+            _Option(["-subject", "subject"], ["input", "file"], None, 0,
+                    """Subject sequence(s) to search.
+
+                    Incompatible with:  db, gilist, negative_gilist.
+                    See also subject_loc.""", False),
+            _Option(["-subject_loc", "subject_loc"], ["input"], None, 0,
+                    """Location on the subject sequence (Format: start-stop)
+
+                    Incompatible with:  db, gilist, negative_gilist, remote.
+                    See also subject.""", False),
+            #Formatting options:
             _Option(["-outfmt", "outfmt"], ["input"], None, 0, 
                     "Alignment view.  Integer 0-10.  Use 5 for XML output (differs from classic BLAST which used 7 for XML).",
                     False), #Did not include old aliases as meaning has changed!
-            _Option(["-out", "-o", "align_outfile", "outfile", "out"], ["output", "file"], None, 0,
-                    "Output file for alignment.", False),
+            #Restrict search or results
+            _Option(["-gilist", "gilist"], ["input", "file"], None, 0,
+                    """Restrict search of database to list of GI's.
+ 
+                    Incompatible with:  negative_gilist, remote, subject, subject_loc""",
+                    False),
+            _Option(["-negative_gilist", "negative_gilist"], ["input", "file"], None, 0,
+                    """Restrict search of database to everything except the listed GIs.
+ 
+                    Incompatible with:  gilist, remote, subject, subject_loc""",
+                    False),
+            #Miscellaneous options
+            _Option(["-num_threads", "num_threads"], ["input"], None, 0,
+                    """Number of threads to use in the BLAST search.
+
+                    Integer of at least one. Default is one.
+                    Incompatible with:  remote""", False),
+            _Switch(["-remote", "remote"], ["input"],
+                    """Execute search remotely?
+
+                    Incompatible with:  gilist, negative_gilist, subject_loc, num_threads, ..."""),
             ]
         try :
             #Insert extra parameters - at the start just in case there
@@ -339,28 +371,32 @@ class _NcbiblastCommandline(AbstractCommandline) :
             self.parameters = extra_parameters
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
+    def _validate(self) :
+        incompatibles = {"remote":["gilist", "negative_gilist", "subject_loc", "num_threads"],
+                         "subject":["db", "gilist", "negative_gilist"],
+                         "gilist":["negative_gilist"]}
+        for a in incompatibles :
+            if self._get_parameter(a) :
+                for b in incompatibles[a] :
+                    if self._get_parameter(b) :
+                        raise ValueError("Options %s and %s are incompatible." \
+                                         % (a,b))
+        AbstractCommandline._validate(self)
 
 class NcbiblastpCommandline(_NcbiblastCommandline) :
     """Create a commandline for the NCBI BLAST+ program blastp (for proteins).
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
     replaced the old blastall tool with separate tools for each of the searches.
-
-    This wrapper therefore replaces BlastallCommandline with option -p blastp
-
-    >>> from Bio.Blast.Applications import NcbiblastpCommandline
-    >>> cline = NcbiblastpCommandline(help=True)
-    >>> cline
-    NcbiblastpCommandline(cmd='blastp', help=True)
-    >>> print cline
-    blastp -help
+    This wrapper therefore replaces BlastallCommandline with option -p blastp.
 
     >>> from Bio.Blast.Applications import NcbiblastpCommandline
-    >>> cline = NcbiblastpCommandline(query="rosemary.pro", db="nr", evalue=0.001)
+    >>> cline = NcbiblastpCommandline(query="rosemary.pro", db="nr",
+    ...                               evalue=0.001, remote=True)
     >>> cline
-    NcbiblastpCommandline(cmd='blastp', query='rosemary.pro', db='nr', evalue=0.001)
+    NcbiblastpCommandline(cmd='blastp', query='rosemary.pro', db='nr', evalue=0.001, remote=True)
     >>> print cline
-    blastp -query rosemary.pro -db nr -evalue 0.001
+    blastp -query rosemary.pro -db nr -evalue 0.001 -remote
 
     You would typically run the command line with the Python subprocess module,
     as described in the Biopython tutorial.
@@ -375,22 +411,19 @@ class NcbiblastnCommandline(_NcbiblastCommandline) :
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
     replaced the old blastall tool with separate tools for each of the searches.
+    This wrapper therefore replaces BlastallCommandline with option -p blastn.
 
-    This wrapper therefore replaces BlastallCommandline with option -p blastn
-
-    >>> from Bio.Blast.Applications import NcbiblastnCommandline
-    >>> cline = NcbiblastnCommandline(help=True)
-    >>> cline
-    NcbiblastnCommandline(cmd='blastn', help=True)
-    >>> print cline
-    blastn -help
+    For example, to run a search against the "nt" nucleotide database using the
+    FASTA nucleotide file "m_code.fasta" as the query, with an expectation value
+    cut off of 0.001, saving the output to a file in XML format:
 
     >>> from Bio.Blast.Applications import NcbiblastnCommandline
-    >>> cline = NcbiblastnCommandline(query="m_cold.fasta", db="nt", evalue=0.001)
+    >>> cline = NcbiblastnCommandline(query="m_cold.fasta", db="nt",
+    ...                               evalue=0.001, out="m_cold.xml", outfmt=5)
     >>> cline
-    NcbiblastnCommandline(cmd='blastn', query='m_cold.fasta', db='nt', evalue=0.001)
+    NcbiblastnCommandline(cmd='blastn', query='m_cold.fasta', db='nt', out='m_cold.xml', evalue=0.001, outfmt=5)
     >>> print cline
-    blastn -query m_cold.fasta -db nt -evalue 0.001
+    blastn -query m_cold.fasta -db nt -out m_cold.xml -evalue 0.001 -outfmt 5
 
     You would typically run the command line with the Python subprocess module,
     as described in the Biopython tutorial.
@@ -406,15 +439,7 @@ class NcbiblastxCommandline(_NcbiblastCommandline) :
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
     replaced the old blastall tool with separate tools for each of the searches.
-
-    This wrapper therefore replaces BlastallCommandline with option -p blastx
-
-    >>> from Bio.Blast.Applications import NcbiblastxCommandline
-    >>> cline = NcbiblastxCommandline(help=True)
-    >>> cline
-    NcbiblastxCommandline(cmd='blastx', help=True)
-    >>> print cline
-    blastx -help
+    This wrapper therefore replaces BlastallCommandline with option -p blastx.
 
     >>> from Bio.Blast.Applications import NcbiblastxCommandline
     >>> cline = NcbiblastxCommandline(query="m_cold.fasta", db="nr", evalue=0.001)
@@ -437,8 +462,7 @@ class NcbitblastnCommandline(_NcbiblastCommandline) :
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
     replaced the old blastall tool with separate tools for each of the searches.
-
-    This wrapper therefore replaces BlastallCommandline with option -p tblastn
+    This wrapper therefore replaces BlastallCommandline with option -p tblastn.
 
     >>> from Bio.Blast.Applications import NcbitblastnCommandline
     >>> cline = NcbitblastnCommandline(help=True)
@@ -461,8 +485,7 @@ class NcbitblastxCommandline(_NcbiblastCommandline) :
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
     replaced the old blastall tool with separate tools for each of the searches.
-
-    This wrapper therefore replaces BlastallCommandline with option -p tblastx
+    This wrapper therefore replaces BlastallCommandline with option -p tblastx.
 
     >>> from Bio.Blast.Applications import NcbitblastxCommandline
     >>> cline = NcbitblastxCommandline(help=True)
@@ -476,6 +499,18 @@ class NcbitblastxCommandline(_NcbiblastCommandline) :
     """
     def __init__(self, cmd="tblastx", **kwargs):
         self.parameters = [ \
+            #PSI-TBLASTN options:
+            _Option(["-in_pssm", "in_pssm"], ["input", "file"], None, 0,
+                    """PSI-TBLASTN checkpoint file
+
+                    Incompatible with:  remote, query."""),
             ]
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
 
+
+    def _validate(self) :
+        if self.remote and self.in_pssm :
+            raise ValueError("The remote option cannot be used with in_pssm")
+        if self.query and self.in_pssm :
+            raise ValueError("The query option cannot be used with in_pssm")
+        _NcbiblastCommandline._validate(self)
