@@ -9,12 +9,13 @@ from Bio import MissingExternalDependencyError
 
 import sys
 import os
-from Bio import Clustalw #old!
-from Bio.Clustalw import MultipleAlignCL #old!
+from Bio import Clustalw #old and obsolete
+from Bio.Clustalw import MultipleAlignCL #old and obsolete
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.Align.Applications import ClustalwCommandline #new!
-from Bio.Application import generic_run
+from Bio.Application import generic_run #deprecated
+import warnings #to silence deprecation warnings
 
 #################################################################
 
@@ -223,7 +224,12 @@ for input_file, output_file, newtree_file in [
         cline.align = True
         assert str(eval(repr(cline)))==str(cline)
     #print cline
+
+    warnings.filterwarnings("ignore", category=DeprecationWarning)
     return_code, out_handle, err_handle = generic_run(cline)
+    warnings.resetwarnings()
+
+
     assert out_handle.read().strip().startswith("CLUSTAL")
     assert err_handle.read().strip() == ""
     align = AlignIO.read(open(output_file), "clustal")
