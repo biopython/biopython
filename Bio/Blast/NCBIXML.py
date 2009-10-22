@@ -650,9 +650,7 @@ def parse(handle, debug=0):
                 # Good - still dealing with the same XML file
                 expat_parser.Parse(text, False)        
                 while blast_parser._records:
-                    record = blast_parser._records[0]
-                    blast_parser._records = blast_parser._records[1:]
-                    yield record
+                    yield blast_parser._records.pop(0)
             else :
                 # This is output from pre 2.2.14 BLAST,
                 # one XML file for each query!
@@ -663,15 +661,18 @@ def parse(handle, debug=0):
 
                 expat_parser.Parse(text, True) # End of XML record
                 while blast_parser._records:
-                    record = blast_parser._records[0]
-                    blast_parser._records = blast_parser._records[1:]
-                    yield record
+                    yield blast_parser._records.pop(0)
                
                 #Now we are going to re-loop, reset the
                 #parsers and start reading the next XML file
                 text, pending = pending, ""
                 break
 
+        #this was added because it seems that the Jython expat parser
+        #was adding records later then the Python one
+        while blast_parser._records:
+            yield blast_parser._records.pop(0)
+            
         #At this point we have finished the first XML record.
         #If the file is from an old version of blast, it may
         #contain more XML records (check if text=="").
