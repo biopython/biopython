@@ -94,19 +94,17 @@ class PDBList:
         """Retrieves a list of pdb codes in the weekly pdb status file
         from the given URL. Used by get_recent_files.
         
-        Typical contents of the list files parsed by this method;
--rw-r--r--   1 rcsb     rcsb      330156 Oct 14  2003 pdb1cyq.ent
--rw-r--r--   1 rcsb     rcsb      333639 Oct 14  2003 pdb1cz0.ent
+        Typical contents of the list files parsed by this method is now
+        very simply one PDB name per line.
         """
-        url = urllib.urlopen(url)
-        file = url.readlines()
-        list = []
-
-        # added by S. Lee
-        list = map(lambda x: x[3:7], \
-                   filter(lambda x: x[-4:] == '.ent', \
-                          map(lambda x: x.split()[-1], file)))
-        return list
+        handle = urllib.urlopen(url)
+        answer = []
+        for line in handle :
+            pdb = line.strip()
+            assert len(pdb)==4
+            answer.append(pdb)
+        handle.close()
+        return answer
 
 
     def get_recent_changes(self):
@@ -119,9 +117,9 @@ class PDBList:
         Returns None if something goes wrong.
         
         Contents of the data/status dir (20031013 would be used);
-drwxrwxr-x   2 1002     sysadmin     512 Oct  6 18:28 20031006
-drwxrwxr-x   2 1002     sysadmin     512 Oct 14 02:14 20031013
--rw-r--r--   1 1002     sysadmin    1327 Mar 12  2001 README
+        drwxrwxr-x   2 1002     sysadmin     512 Oct  6 18:28 20031006
+        drwxrwxr-x   2 1002     sysadmin     512 Oct 14 02:14 20031013
+        -rw-r--r--   1 1002     sysadmin    1327 Mar 12  2001 README
 
 
         """     
@@ -140,6 +138,7 @@ drwxrwxr-x   2 1002     sysadmin     512 Oct 14 02:14 20031013
             obsolete = self.get_status_list(path+'obsolete.pdb')
             return [added,modified,obsolete]
         except:
+            raise
             return None
 
 
