@@ -253,6 +253,9 @@ class FastaM10Iterator(AlignmentIterator) :
         record.id = self._query_descr.split(None,1)[0].strip(",")
         record.name = "query"
         record.annotations["original_length"] = int(query_annotation["sq_len"])
+        #TODO - handle start/end coordinates properly. Short term hack for now:
+        record._al_start = int(query_annotation["al_start"])
+        record._al_stop = int(query_annotation["al_stop"])
 
         #TODO - What if a specific alphabet has been requested?
         #TODO - Use an IUPAC alphabet?
@@ -273,6 +276,9 @@ class FastaM10Iterator(AlignmentIterator) :
         record.id = match_descr.split(None,1)[0].strip(",")
         record.name = "match"
         record.annotations["original_length"] = int(match_annotation["sq_len"])
+        #TODO - handle start/end coordinates properly. Short term hack for now:
+        record._al_start = int(query_annotation["al_start"])
+        record._al_stop = int(query_annotation["al_stop"])
 
         #This is still a very crude way of dealing with the alphabet:
         if alphabet == single_letter_alphabet and "sq_type" in match_annotation :
