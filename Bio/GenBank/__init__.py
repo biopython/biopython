@@ -578,7 +578,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             self._cur_reference.consrtm = content
 
     def title(self, content):
-        if self._cur_reference.title :
+        if self._cur_reference is None :
+            import warnings
+            warnings.warn("GenBank TITLE line without REFERENCE line.")
+        elif self._cur_reference.title :
             self._cur_reference.title += ' ' + content
         else :
             self._cur_reference.title = content
@@ -1172,6 +1175,10 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_reference.consrtm = content
 
     def title(self, content):
+        if self._cur_reference is None :
+            import warnings
+            warnings.warn("GenBank TITLE line without REFERENCE line.")
+            return
         self._cur_reference.title = content
 
     def journal(self, content):
