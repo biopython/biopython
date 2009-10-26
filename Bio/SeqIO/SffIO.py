@@ -27,6 +27,21 @@ def _sff_file_header(handle) :
     Assumes the handle is at the start of the file, will read forwards
     though the header and leave the handle pointing at the first record.
     Returns a tuple of values from the header.
+
+    >>> handle = open("Roche/greek.sff", "rb")
+    >>> header_length, index_offset, index_length, number_of_reads, \
+        flows_per_read, flow_chars, key_sequence = _sff_file_header(handle)
+    >>> header_length
+    840
+    >>> index_offset, index_length
+    65040, 256
+    >>> number_of_reads
+    24
+    >>> flows_per_read
+    800
+    >>> key_sequence
+    'TCAG'
+    
     """
     if hasattr(handle,"mode") and "U" in handle.mode.upper() :
         raise ValueError("SFF files must NOT be opened in universal new "
@@ -47,13 +62,22 @@ def _sff_file_header(handle) :
     #number_of_flows_per_read   H
     #flowgram_format_code       B
     #[rest of file header depends on the number of flows and how many keys]
-    fmt = '>I4BQIIHHHB'
+    fmt = '>4s4BQIIHHHB'
     assert 31 == struct.calcsize(fmt)
+    data = handle.read(31)
+    if not data :
+        raise ValueError("Empty file.")
+    elif len(data) < 13 :
+        raise ValueError("File too small to hold a valid SFF header.")
     magic_number, ver0, ver1, ver2, ver3, index_offset, index_length, \
     number_of_reads, header_length, key_length, number_of_flows_per_read, \
-    flowgram_format = struct.unpack(fmt, handle.read(31))
-    if magic_number != 779314790 :
-        raise ValueError("Wrong SFF magic number in header")
+    flowgram_format = struct.unpack(fmt, data)
+    if magic_number in [".hsh",".srt",".mft"] :
+        #Probably user error, calling Bio.SeqIO.parse() twice!
+        raise ValueError("Handle seems to be at SFF index block, not start")
+    if magic_number != ".sff" : # 779314790
+        raise ValueError("SFF file did not start '.sff', but '%s'" \
+                         % magic_number)
     if (ver0, ver1, ver2, ver3) != (0,0,0,1) :
         raise ValueError("Unsupported SFF version in header, %i.%i.%i.%i" \
                          % (ver0, ver1, ver2, ver3))
