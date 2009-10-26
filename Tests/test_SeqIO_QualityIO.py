@@ -15,6 +15,8 @@ from Bio.SeqRecord import SeqRecord
 from StringIO import StringIO
 from Bio.Data.IUPACData import ambiguous_dna_letters, ambiguous_rna_letters
 
+BINARY_FORMATS = ["sff", "sff-trim"]
+
 def truncation_expected(format) :
     if format in ["fastq-solexa", "fastq-illumina"] :
         return 62
@@ -26,7 +28,11 @@ def truncation_expected(format) :
 
 #Top level function as this makes it easier to use for debugging:
 def write_read(filename, in_format, out_format) :
-    records = list(SeqIO.parse(open(filename),in_format))
+    if in_format in BINARY_FORMATS :
+        mode = "rb"
+    else :
+        mode = "r"
+    records = list(SeqIO.parse(open(filename, mode),in_format))
     #Write it out...
     handle = StringIO()
     SeqIO.write(records, handle, out_format)
@@ -446,6 +452,45 @@ class TestWriteRead(unittest.TestCase) :
                   "fasta", "qual", "phd"] :
             write_read(filename, "fastq-illumina", f)
 
+    def test_greek_sff(self) :
+        """Write and read back greek.sff"""
+        write_read(os.path.join("Roche", "greek.sff"), "sff", "fasta")
+        write_read(os.path.join("Roche", "greek.sff"), "sff", "fastq")
+        write_read(os.path.join("Roche", "greek.sff"), "sff", "fastq-sanger")
+        write_read(os.path.join("Roche", "greek.sff"), "sff", "fastq-solexa")
+        write_read(os.path.join("Roche", "greek.sff"), "sff", "fastq-illumina")
+        write_read(os.path.join("Roche", "greek.sff"), "sff", "qual")
+        write_read(os.path.join("Roche", "greek.sff"), "sff", "phd")
+
+    def test_paired_sff(self) :
+        """Write and read back paired.sff"""
+        write_read(os.path.join("Roche", "paired.sff"), "sff", "fasta")
+        write_read(os.path.join("Roche", "paired.sff"), "sff", "fastq")
+        write_read(os.path.join("Roche", "paired.sff"), "sff", "fastq-sanger")
+        write_read(os.path.join("Roche", "paired.sff"), "sff", "fastq-solexa")
+        write_read(os.path.join("Roche", "paired.sff"), "sff", "fastq-illumina")
+        write_read(os.path.join("Roche", "paired.sff"), "sff", "qual")
+        write_read(os.path.join("Roche", "paired.sff"), "sff", "phd")
+
+    def test_E3MFGYR02(self) :
+        """Write and read back E3MFGYR02_random_10_reads.sff"""
+        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "fasta")
+        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "fastq")
+        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "fastq-sanger")
+        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "fastq-solexa")
+        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "fastq-illumina")
+        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "qual")
+        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "phd")
+
+    def test_E3MFGYR02_trimmed(self) :
+        """Write and read back E3MFGYR02_random_10_reads.sff (trimmed)"""
+        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff-trim", "fasta")
+        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff-trim", "fastq")
+        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff-trim", "fastq-sanger")
+        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff-trim", "fastq-solexa")
+        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff-trim", "fastq-illumina")
+        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff-trim", "qual")
+        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff-trim", "phd")
 
 class MappingTests(unittest.TestCase) :
     def setUp(self):

@@ -181,6 +181,53 @@ class _IndexedSeqFileDict(dict) :
 # a file header - e.g. SFF files where we would need to know the
 # number of flows.
 
+class SffDict(_IndexedSeqFileDict) :
+    """Indexed dictionary like access to a Standard Flowgram Format (SFF) file."""
+    def __init__(self, filename, alphabet, key_function) :
+        #On Unix, using mode="r" or "rb" works, "rU" does not.
+        #On Windows, only using mode="rb" works, "r" and "rU" fail.
+        _IndexedSeqFileDict.__init__(self, filename, alphabet, key_function, "rb")
+        handle = self._handle
+        header_length, index_offset, index_length, number_of_reads, \
+        self._flows_per_read, self._flow_chars, self._key_sequence \
+            = SeqIO.SffIO._sff_file_header(handle)
+        if index_offset and index_length:
+            #There is an index provided, try this the fast way:
+            try :
+                for name, offset in SeqIO.SffIO._sff_read_roche_index(handle) :
+                    self._record_key(name, offset)
+                assert len(self) == number_of_reads, \
+                       "Indexed %i records, expected %i" \
+                       % (len(self), number_of_reads)
+                return
+            except ValueError, err :
+                import warnings
+                warnings.warn("Could not parse the SFF index: %s" % err)
+                dict.clear(self) #reset in case partially populated
+                handle.seek(0)
+        else :
+            #TODO - Remove this debug warning?
+            import warnings
+            warnings.warn("No SFF index, doing it the slow way")
+        #Fall back on the slow way!
+        for name, offset in SeqIO.SffIO._sff_do_slow_index(handle) :
+            #print "%s -> %i" % (name, offset)
+            self._record_key(name, offset)
+        assert len(self) == number_of_reads, \
+               "Indexed %i records, expected %i" % (len(self), number_of_reads)
+
+    def __getitem__(self, key) :
+        handle = self._handle
+        handle.seek(dict.__getitem__(self, key))
+        record = SeqIO.SffIO._sff_read_seq_record(handle,
+                                                  self._flows_per_read,
+                                                  self._flow_chars,
+                                                  self._key_sequence,
+                                                  self._alphabet)
+        assert record.id == key
+        return record
+
+
 ###################
 # Simple indexers #
 ###################
@@ -454,6 +501,7 @@ _FormatToIndexedDict = {"ace" : AceDict,
                         "ig" : IntelliGeneticsDict,
                         "phd" : PhdDict,
                         "pir" : PirDict,
+                        "sff" : SffDict,
                         "swiss" : SwissDict,
                         "tab" : TabDict,
                         "qual" : QualDict

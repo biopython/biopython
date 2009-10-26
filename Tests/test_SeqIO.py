@@ -51,6 +51,7 @@ test_write_read_alignment_formats.remove("fastq-sanger") #an alias for fastq
 # - integer: number of sequences
 
 test_files = [ \
+    ("sff",    False, 'Roche/E3MFGYR02_random_10_reads.sff', 10),
 #Following examples are also used in test_Clustalw.py
     ("clustal",True,  'Clustalw/cw02.aln', 2),
     ("clustal",True,  'Clustalw/opuntia.aln', 7),
@@ -369,6 +370,9 @@ def check_simple_write_read(records, indent=" ") :
 
 #Check parsers can cope with an empty file
 for t_format in SeqIO._FormatToIterator :
+    if t_format in ["sff", "sff-trim"] :
+        #Not allowed empty SFF files.
+        continue
     handle = StringIO()
     records = list(SeqIO.parse(handle, t_format))
     assert len(records) == 0
@@ -614,8 +618,12 @@ for (records, descr) in test_records :
 
 #Check writers can cope with no alignments
 for format in SeqIO._FormatToWriter :
-     handle = StringIO()
-     assert 0 == SeqIO.write([], handle, format), \
-            "Writing no records to %s format should work!" \
-            % t_format        
+    handle = StringIO()
+    try :
+        assert 0 == SeqIO.write([], handle, format), \
+               "Writing no records to %s format should work!" \
+               % t_format
+    except ValueError, err:
+        print "Writing no records to %s format failed: %s" % (format, err)
+
 print "Finished tested writing files"

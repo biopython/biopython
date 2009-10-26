@@ -106,9 +106,8 @@ providing dictionary like access to any record. For example,
     413
 
 Many but not all of the supported input file formats can be indexed like
-this. For example "ace", "embl", "fasta", "fastq", "genbank", "ig", "phd",
-"pir", "tab" and "qual" work, but alignment formats like "phylip", "clustalw"
-and "nexus" will not.
+this. For example "fasta", "fastq", "qual" and even the binary format "sff"
+work, but alignment formats like "phylip", "clustalw" and "nexus" will not.
 
 Input - Alignments
 ==================
@@ -194,6 +193,8 @@ names are also used in Bio.AlignIO and include the following:
  - pir     - A "FASTA like" format introduced by the National Biomedical
              Research Foundation (NBRF) for the Protein Information Resource
              (PIR) database, now part of UniProt.
+ - sff     - Standard Flowgram Format (SFF), typical output from Roche 454.
+ - sff-trim - Standard Flowgram Format (SFF) with given trimming applied.
  - swiss   - Plain text Swiss-Prot aka UniProt format.
  - tab     - Simple two column tab separated sequence files, where each
              line holds a record's identifier and sequence. For example,
@@ -271,6 +272,7 @@ import IgIO #IntelliGenetics or MASE format
 import InsdcIO #EMBL and GenBank
 import PhdIO
 import PirIO
+import SffIO
 import SwissIO
 import TabIO
 import QualityIO #FastQ and qual files
@@ -302,6 +304,9 @@ _FormatToIterator ={"fasta" : FastaIO.FastaIterator,
                     "fastq-solexa" : QualityIO.FastqSolexaIterator,
                     "fastq-illumina" : QualityIO.FastqIlluminaIterator,
                     "qual" : QualityIO.QualPhredIterator,
+                    "sff": SffIO.SffIterator,
+                    #Not sure about this in the long run:
+                    "sff-trim": SffIO._SffTrimIterator,
                     }
 
 _FormatToWriter ={"fasta" : FastaIO.FastaWriter,
@@ -314,6 +319,7 @@ _FormatToWriter ={"fasta" : FastaIO.FastaWriter,
                   "fastq-illumina" : QualityIO.FastqIlluminaWriter,
                   "phd" : PhdIO.PhdWriter,
                   "qual" : QualityIO.QualPhredWriter,
+                  "sff" : SffIO.SffWriter,
                   }
 
 def write(sequences, handle, format) :
@@ -821,14 +827,21 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None) :
     #TODO - Add optimised versions of important conversions
     #For now just off load the work to SeqIO parse/write    
     if isinstance(in_file, basestring) :
-        in_handle = open(in_file, "rU")
+        #Hack for SFF, will need to make this more general in future
+        if in_format in ["sff", "sff-trim"] :
+            in_handle = open(in_file, "rb")
+        else :
+            in_handle = open(in_file, "rU")
         in_close = True
     else :
         in_handle = in_file
         in_close = False
     #Don't open the output file until we've checked the input is OK?
     if isinstance(out_file, basestring) :
-        out_handle = open(out_file, "w")
+        if out_format in ["sff", "sff_trim"] :
+            out_handle = open(out_file, "wb")
+        else :
+            out_handle = open(out_file, "w")
         out_close = True
     else :
         out_handle = out_file
