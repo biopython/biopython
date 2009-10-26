@@ -748,7 +748,7 @@ class GenBankScanner(InsdcScanner) :
             self.line = self.handle.readline()
             if not self.line :
                 raise ValueError("Premature end of file")
-            self.line = self.line.rstrip()
+            self.line = self.line
 
         assert self.line[:self.HEADER_WIDTH].rstrip() not in self.SEQUENCE_HEADERS, \
                "Eh? '%s'" % self.line
@@ -762,7 +762,10 @@ class GenBankScanner(InsdcScanner) :
                 raise ValueError("Premature end of file in sequence data")
             line = line.rstrip()
             if not line :
-                raise ValueError("Blank line in sequence data")
+                import warnings
+                warnings.warn("Blank line in sequence data")
+                line = self.handle.readline()
+                continue
             if line=='//' :
                 break
             if line.find('CONTIG')==0 :
