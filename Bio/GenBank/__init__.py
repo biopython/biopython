@@ -305,7 +305,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         self._seq_type = ''
         self._seq_data = []
-        self._current_ref = None
+        self._cur_reference = None
         self._cur_feature = None
         self._cur_qualifier_key = None
         self._cur_qualifier_value = None
@@ -494,12 +494,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         """
         # if we have a current reference that hasn't been added to
         # the list of references, add it.
-        if self._current_ref is not None:
-            self.data.annotations['references'].append(self._current_ref)
+        if self._cur_reference is not None:
+            self.data.annotations['references'].append(self._cur_reference)
         else:
             self.data.annotations['references'] = []
 
-        self._current_ref = SeqFeature.Reference()
+        self._cur_reference = SeqFeature.Reference()
 
     def reference_bases(self, content):
         """Attempt to determine the sequence region the reference entails.
@@ -540,7 +540,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             raise ValueError("Could not parse base info %s in record %s" %
                              (ref_base_info, self.data.id))
 
-        self._current_ref.location = all_locations
+        self._cur_reference.location = all_locations
 
     def _split_reference_locations(self, location_string):
         """Get reference locations out of a string of reference information
@@ -566,41 +566,41 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         return new_locations
 
     def authors(self, content):
-        if self._current_ref.authors :
-            self._current_ref.authors += ' ' + content
+        if self._cur_reference.authors :
+            self._cur_reference.authors += ' ' + content
         else :
-            self._current_ref.authors = content
+            self._cur_reference.authors = content
 
     def consrtm(self, content):
-        if self._current_ref.consrtm :
-            self._current_ref.consrtm += ' ' + content
+        if self._cur_reference.consrtm :
+            self._cur_reference.consrtm += ' ' + content
         else :
-            self._current_ref.consrtm = content
+            self._cur_reference.consrtm = content
 
     def title(self, content):
-        if self._current_ref.title :
-            self._current_ref.title += ' ' + content
+        if self._cur_reference.title :
+            self._cur_reference.title += ' ' + content
         else :
-            self._current_ref.title = content
+            self._cur_reference.title = content
 
     def journal(self, content):
-        if self._current_ref.journal :
-            self._current_ref.journal += ' ' + content
+        if self._cur_reference.journal :
+            self._cur_reference.journal += ' ' + content
         else :
-            self._current_ref.journal = content
+            self._cur_reference.journal = content
 
     def medline_id(self, content):
-        self._current_ref.medline_id = content
+        self._cur_reference.medline_id = content
 
     def pubmed_id(self, content):
-        self._current_ref.pubmed_id = content
+        self._cur_reference.pubmed_id = content
 
     def remark(self, content):
         """Deal with a reference comment."""
-        if self._current_ref.comment :
-            self._current_ref.comment += ' ' + content
+        if self._cur_reference.comment :
+            self._cur_reference.comment += ' ' + content
         else :
-            self._current_ref.comment = content
+            self._cur_reference.comment = content
 
     def comment(self, content):
         try :
@@ -617,9 +617,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         """Indicate we've got to the start of the feature table.
         """
         # make sure we've added on our last reference object
-        if self._current_ref is not None:
-            self.data.annotations['references'].append(self._current_ref)
-            self._current_ref = None
+        if self._cur_reference is not None:
+            self.data.annotations['references'].append(self._cur_reference)
+            self._cur_reference = None
 
     def _add_feature(self):
         """Utility function to add a feature to the SeqRecord.
@@ -1453,4 +1453,3 @@ def download_many(ids, database = 'nucleotide'):
                                   retmode = "text",
                                   rettype = format)
     return cStringIO.StringIO(result_handle.read())
-
