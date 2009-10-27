@@ -10,7 +10,121 @@ SFF was designed by 454 Life Sciences (Roche), the Whitehead Institute for
 Biomedical Research and the Wellcome Trust Sanger Institute. You are expected
 to use this module via the Bio.SeqIO functions under the format name "sff".
 
-For a description of the file format, please see:
+For example, to iterate over the records in an SFF file,
+
+    >>> from Bio import SeqIO
+    >>> handle = open("Roche/E3MFGYR02_random_10_reads.sff", "rb")
+    >>> for record in SeqIO.parse(handle, "sff") :
+    ...     print record.id, len(record)
+    E3MFGYR02JWQ7T 265
+    E3MFGYR02JA6IL 271
+    E3MFGYR02JHD4H 310
+    E3MFGYR02GFKUC 299
+    E3MFGYR02FTGED 281
+    E3MFGYR02FR9G7 261
+    E3MFGYR02GAZMS 278
+    E3MFGYR02HHZ8O 221
+    E3MFGYR02GPGB1 269
+    E3MFGYR02F7Z7G 219
+    >>> handle.close()
+
+Each SeqRecord object will contain all the annotation from the SFF file,
+including the PHRED quality scores.
+
+    >>> print record.id, len(record)
+    E3MFGYR02F7Z7G 219
+    >>> print record.seq[:10], "..."
+    tcagAATCAT ...
+    >>> print record.letter_annotations["phred_quality"][:10], "..."
+    [22, 21, 23, 28, 26, 15, 12, 21, 28, 21] ...
+
+Notice that the sequence is given in mixed case, there the central upper
+case region corresponds to the trimmed sequence. This matches the output
+of the Roche tools (and the 3rd party tool sff_extract) for SFF to FASTA.
+
+    >>> print record.annotations["clip_qual_left"]
+    4
+    >>> print record.annotations["clip_qual_right"]
+    134
+    >>> print record.seq[:4]
+    tcag
+    >>> print record.seq[4:20], "...", record.seq[120:134]
+    AATCATCCACTTTTTA ... CAAAACACAAACAG
+    >>> print record.seq[134:]
+    atcttatcaacaaaactcaaagttcctaactgagacacgcaacaggggataagacaaggcacacaggggataggnnnnnnnnnnn
+
+The annotations dictionary also contains any adapter clip positions
+(usually zero), and information about the flows. e.g.
+
+    >>> print record.annotations["flow_key"]
+    TCAG
+
+As a convience method, you can read the file with SeqIO format name "sff-trim"
+instead of "sff" to get just the trimmed sequences (without any annotation
+except for the PHRED quality scores):
+
+    >>> from Bio import SeqIO
+    >>> handle = open("Roche/E3MFGYR02_random_10_reads.sff", "rb")
+    >>> for record in SeqIO.parse(handle, "sff-trim") :
+    ...     print record.id, len(record)
+    E3MFGYR02JWQ7T 260
+    E3MFGYR02JA6IL 265
+    E3MFGYR02JHD4H 292
+    E3MFGYR02GFKUC 295
+    E3MFGYR02FTGED 277
+    E3MFGYR02FR9G7 256
+    E3MFGYR02GAZMS 271
+    E3MFGYR02HHZ8O 150
+    E3MFGYR02GPGB1 221
+    E3MFGYR02F7Z7G 130
+    >>> handle.close()
+
+Looking at the final record in more detail, note how this differs to the
+example above:
+
+    >>> print record.id, len(record)
+    E3MFGYR02F7Z7G 130
+    >>> print record.seq[:10], "..."
+    AATCATCCAC ...
+    >>> print record.letter_annotations["phred_quality"][:10], "..."
+    [26, 15, 12, 21, 28, 21, 36, 28, 27, 27] ...
+    >>> print record.annotations
+    {}
+
+You might use the Bio.SeqIO.convert() function to convert the (trimmed) SFF
+reads into a FASTQ file (or a FASTA file and a QUAL file), e.g.
+
+    >>> from Bio import SeqIO
+    >>> from StringIO import StringIO
+    >>> out_handle = StringIO()
+    >>> count = SeqIO.convert("Roche/E3MFGYR02_random_10_reads.sff", "sff",
+    ...                       out_handle, "fastq")
+    >>> print "Converted %i records" % count
+    Converted 10 records
+
+The output FASTQ file would start like this:
+
+    >>> print "%s..." % out_handle.getvalue()[:50]
+    @E3MFGYR02JWQ7T
+    tcagGGTCTACATGTTGGTTAACCCGTACTGATT...
+
+Bio.SeqIO.index() provides memory efficient random access to the reads in an
+SFF file by name. SFF files can include an index within the file, which can
+be read in making this very fast. If the index is missing (or in a format not
+yet supported in Biopython) the file is indexed by scanning all the reads -
+which is a little slower. For example,
+
+    >>> from Bio import SeqIO
+    >>> reads = SeqIO.index("Roche/E3MFGYR02_random_10_reads.sff", "sff")
+    >>> record = reads["E3MFGYR02JHD4H"]
+    >>> print record.id, len(record), record.seq[:20]+"..."
+    E3MFGYR02JHD4H 310 tcagAAAGACAAGTGGTATC...
+
+You can also use the Bio.SeqIO.write() function with the "sff" format. Note
+that this requires all the flow information etc, and thus is probably only
+useful for SeqRecord objects originally from reading another SFF file.
+
+For a description of the file format, please see the Roche manuals and:
 http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=formats
 
 """
@@ -33,8 +147,8 @@ def _sff_file_header(handle) :
         flows_per_read, flow_chars, key_sequence = _sff_file_header(handle)
     >>> header_length
     840
-    >>> index_offset, index_length
-    65040, 256
+    >>> print index_offset, index_length
+    65040 256
     >>> number_of_reads
     24
     >>> flows_per_read
@@ -366,6 +480,59 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False) :
     FASTA and QUAL file converted from the SFF file using the Roche
     454 tool ssfinfo. i.e. The sequence will be mixed case, with the
     trim regions shown in lower case.
+
+    This function is used internally via the Bio.SeqIO functions:
+
+    >>> from Bio import SeqIO
+    >>> handle = open("Roche/E3MFGYR02_random_10_reads.sff", "rb")
+    >>> for record in SeqIO.parse(handle, "sff") :
+    ...     print record.id, len(record)
+    E3MFGYR02JWQ7T 265
+    E3MFGYR02JA6IL 271
+    E3MFGYR02JHD4H 310
+    E3MFGYR02GFKUC 299
+    E3MFGYR02FTGED 281
+    E3MFGYR02FR9G7 261
+    E3MFGYR02GAZMS 278
+    E3MFGYR02HHZ8O 221
+    E3MFGYR02GPGB1 269
+    E3MFGYR02F7Z7G 219
+    >>> handle.close()
+
+    You can also call it directly:
+
+    >>> handle = open("Roche/E3MFGYR02_random_10_reads.sff", "rb")
+    >>> for record in SffIterator(handle) :
+    ...     print record.id, len(record)
+    E3MFGYR02JWQ7T 265
+    E3MFGYR02JA6IL 271
+    E3MFGYR02JHD4H 310
+    E3MFGYR02GFKUC 299
+    E3MFGYR02FTGED 281
+    E3MFGYR02FR9G7 261
+    E3MFGYR02GAZMS 278
+    E3MFGYR02HHZ8O 221
+    E3MFGYR02GPGB1 269
+    E3MFGYR02F7Z7G 219
+    >>> handle.close()
+
+    Or, with the trim option:
+        
+    >>> handle = open("Roche/E3MFGYR02_random_10_reads.sff", "rb")
+    >>> for record in SffIterator(handle, trim=True) :
+    ...     print record.id, len(record)
+    E3MFGYR02JWQ7T 260
+    E3MFGYR02JA6IL 265
+    E3MFGYR02JHD4H 292
+    E3MFGYR02GFKUC 295
+    E3MFGYR02FTGED 277
+    E3MFGYR02FR9G7 256
+    E3MFGYR02GAZMS 271
+    E3MFGYR02HHZ8O 150
+    E3MFGYR02GPGB1 221
+    E3MFGYR02F7Z7G 130
+    >>> handle.close()
+
     """
     if isinstance(Alphabet._get_base_alphabet(alphabet),
                   Alphabet.ProteinAlphabet) :
@@ -414,6 +581,17 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False) :
                                    key_sequence,
                                    alphabet,
                                    trim)
+    #The following is not essential, but avoids confusing error messages
+    #for the user if they try and re-parse the same handle.
+    if index_offset and handle.tell() == index_offset :
+        offset = index_offset + index_length
+        if offset % 8 :
+            offset += 8 - (offset % 8)
+        handle.seek(offset)
+    #Should now be at the end of the file...
+    if handle.read(1) :
+        raise ValueError("Additional data at end of SFF file")
+
 
 #This is a generator function!
 def _SffTrimIterator(handle, alphabet=Alphabet.generic_dna) :
@@ -790,5 +968,15 @@ if __name__ == "__main__" :
     except ValueError :
         pass
 
+
+    handle = open(filename, "rb")
+    for record in SffIterator(handle) :
+        pass
+    try :
+        for record in SffIterator(handle) : print record.id
+        assert False, "Should have failed"
+    except ValueError, err:
+        print "Checking what happens on re-reading a handle:"
+        print err
 
     print "Done"
