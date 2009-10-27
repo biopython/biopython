@@ -251,14 +251,23 @@ def _sff_do_slow_index(handle) :
     assert read_header_size % 8 == 0 #Important for padding calc later!
     for read in range(number_of_reads) :
         record_offset = handle.tell()
+        if record_offset == index_offset :
+            #Found index block within reads, ignore it:
+            offset = index_offset + index_length
+            if offset % 8 :
+                offset += 8 - (offset % 8)
+            assert offset % 8 == 0
+            handle.seek(offset)
+            record_offset = offset
         #assert record_offset%8 == 0 #Worth checking, but slow
         #First the fixed header
+        data = handle.read(read_header_size)
         read_header_length, name_length, seq_len, clip_qual_left, \
         clip_qual_right, clip_adapter_left, clip_adapter_right \
-            = struct.unpack(read_header_fmt, handle.read(read_header_size))
+            = struct.unpack(read_header_fmt, data)
         if read_header_length < 10 or read_header_length%8 != 0 :
-            raise ValueError("Malformed read header, says length is %i" \
-                             % read_header_length)
+            raise ValueError("Malformed read header, says length is %i:\n%s" \
+                             % (read_header_length, repr(data)))
         #now the name and any padding (remainder of header)
         name = handle.read(name_length)
         padding = read_header_length - read_header_size - name_length
@@ -288,7 +297,10 @@ def _sff_find_roche_index(handle) :
     files from Roche 454 machines.
 
     Returns a tuple of read count, SFF "index" offset and size, XML offset and
-    size, and the actual read index offset and size."""    
+    size, and the actual read index offset and size.
+
+    Raises a ValueError for unsupported or non-Roche index blocks.
+    """    
     handle.seek(0)
     header_length, index_offset, index_length, number_of_reads, \
     number_of_flows_per_read, flow_chars, key_sequence \
@@ -301,6 +313,12 @@ def _sff_find_roche_index(handle) :
     fmt = ">4s4B"
     fmt_size = struct.calcsize(fmt)
     data = handle.read(fmt_size)
+    if not data :
+        raise ValueError("Premature end of file? Expected index of size %i at offest %i, found nothing" \
+                         % (index_length, index_offset))
+    if len(data) < fmt_size :
+        raise ValueError("Premature end of file? Expected index of size %i at offest %i, found %s" \
+                         % (index_length, index_offset, repr(data)))
     magic_number, ver0, ver1, ver2, ver3 = struct.unpack(fmt, data)
     if magic_number == ".mft" : # 778921588
         #Roche 454 manifest index
@@ -580,6 +598,7 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False) :
             offset = index_offset + index_length
             if offset % 8 :
                 offset += 8 - (offset % 8)
+            assert offset % 8 == 0
             handle.seek(offset)
             #Now that we've done this, we don't need to do it again. Clear
             #the index_offset so we can skip extra handle.tell() calls:
@@ -596,6 +615,7 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False) :
         offset = index_offset + index_length
         if offset % 8 :
             offset += 8 - (offset % 8)
+        assert offset % 8 == 0
         handle.seek(offset)
     #Should now be at the end of the file...
     if handle.read(1) :
@@ -906,15 +926,35 @@ if __name__ == "__main__" :
                     
     sff = list(SffIterator(open(filename, "rb")))
 
+    sff2 = list(SffIterator(open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
+    assert len(sff) == len(sff2)
+    for old,new in zip(sff,sff2) :
+        assert old.id == new.id
+        assert str(old.seq) == str(new.seq)
+
+    sff2 = list(SffIterator(open("../../Tests/Roche/E3MFGYR02_alt_index_at_start.sff", "rb")))
+    assert len(sff) == len(sff2)
+    for old,new in zip(sff,sff2) :
+        assert old.id == new.id
+        assert str(old.seq) == str(new.seq)
+
+    sff2 = list(SffIterator(open("../../Tests/Roche/E3MFGYR02_alt_index_in_middle.sff", "rb")))
+    assert len(sff) == len(sff2)
+    for old,new in zip(sff,sff2) :
+        assert old.id == new.id
+        assert str(old.seq) == str(new.seq)
+
     sff2 = list(SffIterator(open("../../Tests/Roche/E3MFGYR02_index_at_start.sff", "rb")))
     assert len(sff) == len(sff2)
     for old,new in zip(sff,sff2) :
         assert old.id == new.id
+        assert str(old.seq) == str(new.seq)
 
     sff2 = list(SffIterator(open("../../Tests/Roche/E3MFGYR02_index_in_middle.sff", "rb")))
     assert len(sff) == len(sff2)
     for old,new in zip(sff,sff2) :
         assert old.id == new.id
+        assert str(old.seq) == str(new.seq)
     
     sff_trim = list(SffIterator(open(filename, "rb"), trim=True))
 
@@ -987,5 +1027,108 @@ if __name__ == "__main__" :
     except ValueError, err:
         print "Checking what happens on re-reading a handle:"
         print err
+
+
+    """
+    #Ugly code to make test files...
+    index = ".diy1.00This is a fake index block (DIY = Do It Yourself), which is allowed under the SFF standard.\0"
+    padding = len(index)%8
+    if padding :
+        padding = 8 - padding
+    index += chr(0)*padding
+    assert len(index)%8 == 0
+
+    #Ugly bit of code to make a fake index at start
+    records = list(SffIterator(open("../../Tests/Roche/E3MFGYR02_random_10_reads.sff", "rb")))
+    out_handle = open("../../Tests/Roche/E3MFGYR02_alt_index_at_start.sff", "w")
+    index = ".diy1.00This is a fake index block (DIY = Do It Yourself), which is allowed under the SFF standard.\0"
+    padding = len(index)%8
+    if padding :
+        padding = 8 - padding
+    index += chr(0)*padding
+    w = SffWriter(out_handle, index=False, xml=None)
+    #Fake the header...
+    w._number_of_reads = len(records)
+    w._index_start = 0
+    w._index_length = 0
+    w._key_sequence = records[0].annotations["flow_key"]
+    w._flow_chars = records[0].annotations["flow_chars"]
+    w._number_of_flows_per_read = len(w._flow_chars)
+    w.write_header()
+    w._index_start = out_handle.tell()
+    w._index_length = len(index)
+    out_handle.seek(0)
+    w.write_header() #this time with index info
+    w.handle.write(index)
+    for record in records :
+        w.write_record(record)
+    out_handle.close()
+    records2 = list(SffIterator(open("../../Tests/Roche/E3MFGYR02_alt_index_at_start.sff", "rb")))
+    for old, new in zip(records, records2) :
+        assert str(old.seq)==str(new.seq)
+    i = list(_sff_do_slow_index(open("../../Tests/Roche/E3MFGYR02_alt_index_at_start.sff", "rb")))
+
+    #Ugly bit of code to make a fake index in middle
+    records = list(SffIterator(open("../../Tests/Roche/E3MFGYR02_random_10_reads.sff", "rb")))
+    out_handle = open("../../Tests/Roche/E3MFGYR02_alt_index_in_middle.sff", "w")
+    index = ".diy1.00This is a fake index block (DIY = Do It Yourself), which is allowed under the SFF standard.\0"
+    padding = len(index)%8
+    if padding :
+        padding = 8 - padding
+    index += chr(0)*padding
+    w = SffWriter(out_handle, index=False, xml=None)
+    #Fake the header...
+    w._number_of_reads = len(records)
+    w._index_start = 0
+    w._index_length = 0
+    w._key_sequence = records[0].annotations["flow_key"]
+    w._flow_chars = records[0].annotations["flow_chars"]
+    w._number_of_flows_per_read = len(w._flow_chars)
+    w.write_header()
+    for record in records[:5] :
+        w.write_record(record)
+    w._index_start = out_handle.tell()
+    w._index_length = len(index)
+    w.handle.write(index)
+    for record in records[5:] :
+        w.write_record(record)
+    out_handle.seek(0)
+    w.write_header() #this time with index info
+    out_handle.close()
+    records2 = list(SffIterator(open("../../Tests/Roche/E3MFGYR02_alt_index_in_middle.sff", "rb")))
+    for old, new in zip(records, records2) :
+        assert str(old.seq)==str(new.seq)
+    j = list(_sff_do_slow_index(open("../../Tests/Roche/E3MFGYR02_alt_index_in_middle.sff", "rb")))
+
+    #Ugly bit of code to make a fake index at end
+    records = list(SffIterator(open("../../Tests/Roche/E3MFGYR02_random_10_reads.sff", "rb")))
+    out_handle = open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "w")
+    w = SffWriter(out_handle, index=False, xml=None)
+    #Fake the header...
+    w._number_of_reads = len(records)
+    w._index_start = 0
+    w._index_length = 0
+    w._key_sequence = records[0].annotations["flow_key"]
+    w._flow_chars = records[0].annotations["flow_chars"]
+    w._number_of_flows_per_read = len(w._flow_chars)
+    w.write_header()
+    for record in records :
+        w.write_record(record)
+    w._index_start = out_handle.tell()
+    w._index_length = len(index)
+    out_handle.write(index)
+    out_handle.seek(0)
+    w.write_header() #this time with index info
+    out_handle.close()
+    records2 = list(SffIterator(open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
+    for old, new in zip(records, records2) :
+        assert str(old.seq)==str(new.seq)
+    try :
+        print _sff_read_roche_index_xml(open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb"))
+        assert False, "Should fail!"
+    except ValueError :
+        pass
+    k = list(_sff_do_slow_index(open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb")))
+    """
 
     print "Done"
