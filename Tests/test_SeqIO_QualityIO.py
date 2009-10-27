@@ -439,30 +439,31 @@ class TestWriteRead(unittest.TestCase) :
                             list(SeqIO.parse(handle, format)),
                             truncation_expected(format))
             
+    def check(self, filename, format, out_formats) :
+        for f in out_formats :
+            write_read(filename, format, f)
+
     def test_tricky(self) :
         """Write and read back tricky.fastq"""
-        filename = os.path.join("Quality", "tricky.fastq")
-        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
-                  "fasta", "qual", "phd"] :
-            write_read(filename, "fastq", f)
+        self.check(os.path.join("Quality", "tricky.fastq"), "fastq",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd"])
 
     def test_sanger_93(self) :
         """Write and read back sanger_93.fastq"""
-        filename = os.path.join("Quality", "sanger_93.fastq")
-        for f in ["fastq", "fastq-sanger", "fasta", "qual", "phd"] :
-            write_read(filename, "fastq", f)
+        self.check(os.path.join("Quality", "sanger_93.fastq"), "fastq",
+                   ["fastq", "fastq-sanger", "fasta", "qual", "phd"])
         #TODO - Have a Biopython defined "DataLossWarning?"
         #TODO - On Python 2.6+ we can check this warning is really triggered
         warnings.simplefilter('ignore', UserWarning)
-        write_read(filename, "fastq-sanger", "fastq-solexa")
-        write_read(filename, "fastq-sanger", "fastq-illumina")
+        self.check(os.path.join("Quality", "sanger_93.fastq"), "fastq",
+                   ["fastq-solexa","fastq-illumina"])
 
     def test_sanger_faked(self) :
         """Write and read back sanger_faked.fastq"""
-        filename = os.path.join("Quality", "sanger_faked.fastq")
-        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
-                  "fasta", "qual", "phd"] :
-            write_read(filename, "fastq", f)
+        self.check(os.path.join("Quality", "sanger_faked.fastq"), "fastq",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd"])
 
     def test_example_fasta(self) :
         """Write and read back example.fasta"""
@@ -471,145 +472,93 @@ class TestWriteRead(unittest.TestCase) :
 
     def test_example_fastq(self) :
         """Write and read back example.fastq"""
-        filename = os.path.join("Quality", "example.fastq")
-        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
-                  "fasta", "qual", "phd"] :
-            write_read(filename, "fastq", f)
+        self.check(os.path.join("Quality", "example.fastq"), "fastq",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd"])
 
     def test_example_qual(self) :
         """Write and read back example.qual"""
-        filename = os.path.join("Quality", "example.qual")
-        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
-                  "fasta", "qual", "phd"] :
-            write_read(filename, "qual", f)
+        self.check(os.path.join("Quality", "example.qual"), "qual",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd"])
 
     def test_solexa_faked(self) :
         """Write and read back solexa_faked.fastq"""
-        filename = os.path.join("Quality", "solexa_faked.fastq")
-        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
-                  "fasta", "qual", "phd"] :
-            write_read(filename, "fastq-solexa", f)
+        self.check(os.path.join("Quality", "solexa_faked.fastq"), "fastq-solexa",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd"])
 
     def test_solexa_example(self) :
         """Write and read back solexa_example.fastq"""
-        filename = os.path.join("Quality", "solexa_example.fastq")
-        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
-                  "fasta", "qual", "phd"] :
-            write_read(filename, "fastq-solexa", f)
+        self.check(os.path.join("Quality", "solexa_example.fastq"), "fastq-solexa",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd"])
 
     def test_illumina_faked(self) :
         """Write and read back illumina_faked.fastq"""
-        filename = os.path.join("Quality", "illumina_faked.fastq")
-        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
-                  "fasta", "qual", "phd"] :
-            write_read(filename, "fastq-illumina", f)
+        self.check(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd"])
 
     def test_greek_sff(self) :
         """Write and read back greek.sff"""
-        write_read(os.path.join("Roche", "greek.sff"), "sff", "fasta")
-        write_read(os.path.join("Roche", "greek.sff"), "sff", "fastq")
-        write_read(os.path.join("Roche", "greek.sff"), "sff", "fastq-sanger")
-        write_read(os.path.join("Roche", "greek.sff"), "sff", "fastq-solexa")
-        write_read(os.path.join("Roche", "greek.sff"), "sff", "fastq-illumina")
-        write_read(os.path.join("Roche", "greek.sff"), "sff", "qual")
-        write_read(os.path.join("Roche", "greek.sff"), "sff", "phd")
+        self.check(os.path.join("Roche", "greek.sff"), "sff",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd", "sff"])
 
     def test_paired_sff(self) :
         """Write and read back paired.sff"""
-        write_read(os.path.join("Roche", "paired.sff"), "sff", "fasta")
-        write_read(os.path.join("Roche", "paired.sff"), "sff", "fastq")
-        write_read(os.path.join("Roche", "paired.sff"), "sff", "fastq-sanger")
-        write_read(os.path.join("Roche", "paired.sff"), "sff", "fastq-solexa")
-        write_read(os.path.join("Roche", "paired.sff"), "sff", "fastq-illumina")
-        write_read(os.path.join("Roche", "paired.sff"), "sff", "qual")
-        write_read(os.path.join("Roche", "paired.sff"), "sff", "phd")
+        self.check(os.path.join("Roche", "paired.sff"), "sff",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd", "sff"])
 
     def test_E3MFGYR02(self) :
         """Write and read back E3MFGYR02_random_10_reads.sff"""
-        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "fasta")
-        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "fastq")
-        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "fastq-sanger")
-        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "fastq-solexa")
-        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "fastq-illumina")
-        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "qual")
-        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "phd")
-        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "sff")
+        self.check(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd", "sff"])
 
     def test_E3MFGYR02_no_manifest(self) :
         """Write and read back E3MFGYR02_no_manifest.sff"""
-        write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "fasta")
-        write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "fastq")
-        write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "fastq-sanger")
-        write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "fastq-solexa")
-        write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "fastq-illumina")
-        write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "qual")
-        write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "phd")
-        write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "sff")
+        self.check(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd", "sff"])
 
     def test_E3MFGYR02_index_at_start(self) :
         """Write and read back E3MFGYR02_index_at_start.sff"""
-        write_read(os.path.join("Roche", "E3MFGYR02_index_at_start.sff"), "sff", "fasta")
-        write_read(os.path.join("Roche", "E3MFGYR02_index_at_start.sff"), "sff", "fastq")
-        write_read(os.path.join("Roche", "E3MFGYR02_index_at_start.sff"), "sff", "fastq-sanger")
-        write_read(os.path.join("Roche", "E3MFGYR02_index_at_start.sff"), "sff", "fastq-solexa")
-        write_read(os.path.join("Roche", "E3MFGYR02_index_at_start.sff"), "sff", "fastq-illumina")
-        write_read(os.path.join("Roche", "E3MFGYR02_index_at_start.sff"), "sff", "qual")
-        write_read(os.path.join("Roche", "E3MFGYR02_index_at_start.sff"), "sff", "phd")
-        write_read(os.path.join("Roche", "E3MFGYR02_index_at_start.sff"), "sff", "sff")
+        self.check(os.path.join("Roche", "E3MFGYR02_index_at_start.sff"), "sff",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd", "sff"])
 
     def test_E3MFGYR02_index_in_middle(self) :
         """Write and read back E3MFGYR02_index_in_middle.sff"""
-        write_read(os.path.join("Roche", "E3MFGYR02_index_in_middle.sff"), "sff", "fasta")
-        write_read(os.path.join("Roche", "E3MFGYR02_index_in_middle.sff"), "sff", "fastq")
-        write_read(os.path.join("Roche", "E3MFGYR02_index_in_middle.sff"), "sff", "fastq-sanger")
-        write_read(os.path.join("Roche", "E3MFGYR02_index_in_middle.sff"), "sff", "fastq-solexa")
-        write_read(os.path.join("Roche", "E3MFGYR02_index_in_middle.sff"), "sff", "fastq-illumina")
-        write_read(os.path.join("Roche", "E3MFGYR02_index_in_middle.sff"), "sff", "qual")
-        write_read(os.path.join("Roche", "E3MFGYR02_index_in_middle.sff"), "sff", "phd")
-        write_read(os.path.join("Roche", "E3MFGYR02_index_in_middle.sff"), "sff", "sff")
+        self.check(os.path.join("Roche", "E3MFGYR02_index_in_middle.sff"), "sff",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd", "sff"])
 
     def test_E3MFGYR02_alt_index_at_start(self) :
         """Write and read back E3MFGYR02_alt_index_at_start.sff"""
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_start.sff"), "sff", "fasta")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_start.sff"), "sff", "fastq")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_start.sff"), "sff", "fastq-sanger")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_start.sff"), "sff", "fastq-solexa")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_start.sff"), "sff", "fastq-illumina")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_start.sff"), "sff", "qual")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_start.sff"), "sff", "phd")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_start.sff"), "sff", "sff")
+        self.check(os.path.join("Roche", "E3MFGYR02_alt_index_at_start.sff"), "sff",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd", "sff"])
 
     def test_E3MFGYR02_alt_index_in_middle(self) :
         """Write and read back E3MFGYR02_alt_index_in_middle.sff"""
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_in_middle.sff"), "sff", "fasta")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_in_middle.sff"), "sff", "fastq")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_in_middle.sff"), "sff", "fastq-sanger")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_in_middle.sff"), "sff", "fastq-solexa")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_in_middle.sff"), "sff", "fastq-illumina")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_in_middle.sff"), "sff", "qual")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_in_middle.sff"), "sff", "phd")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_in_middle.sff"), "sff", "sff")
+        self.check(os.path.join("Roche", "E3MFGYR02_alt_index_in_middle.sff"), "sff",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd", "sff"])
 
     def test_E3MFGYR02_alt_index_at_end(self) :
         """Write and read back E3MFGYR02_alt_index_at_end.sff"""
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_end.sff"), "sff", "fasta")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_end.sff"), "sff", "fastq")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_end.sff"), "sff", "fastq-sanger")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_end.sff"), "sff", "fastq-solexa")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_end.sff"), "sff", "fastq-illumina")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_end.sff"), "sff", "qual")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_end.sff"), "sff", "phd")
-        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_end.sff"), "sff", "sff")
+        self.check(os.path.join("Roche", "E3MFGYR02_alt_index_at_end.sff"), "sff",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd", "sff"])
 
     def test_E3MFGYR02_trimmed(self) :
         """Write and read back E3MFGYR02_random_10_reads.sff (trimmed)"""
-        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff-trim", "fasta")
-        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff-trim", "fastq")
-        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff-trim", "fastq-sanger")
-        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff-trim", "fastq-solexa")
-        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff-trim", "fastq-illumina")
-        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff-trim", "qual")
-        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff-trim", "phd")
+        self.check(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff-trim",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd"]) #not sff as output
 
 class MappingTests(unittest.TestCase) :
     def setUp(self):
