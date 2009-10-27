@@ -206,7 +206,59 @@ for base_name, good_count, full_count in tests :
     del funct        
 
 
-class TestReferenceConversions(unittest.TestCase):
+class TestReferenceSffConversions(unittest.TestCase):
+    def check(self, sff_name, sff_format, out_name, format) :
+        wanted = list(SeqIO.parse(open(out_name), format))
+        data = StringIO()
+        count = SeqIO.convert(sff_name, sff_format, data, format)
+        self.assertEqual(count, len(wanted))
+        data.seek(0)
+        converted = list(SeqIO.parse(data, format))
+        self.assertEqual(len(wanted), len(converted))
+        for old, new in zip(wanted, converted) :
+            self.assertEqual(old.id, new.id)
+            self.assertEqual(old.name, new.name)
+            if format!="qual" :
+                self.assertEqual(str(old.seq), str(new.seq))
+            elif format!="fasta" :
+                self.assertEqual(old.letter_annotations["phred_quality"],
+                                 new.letter_annotations["phred_quality"])
+
+    def check_sff(self, sff_name):
+        self.check(sff_name, "sff", "Roche/E3MFGYR02_random_10_reads_no_trim.fasta", "fasta")
+        self.check(sff_name, "sff", "Roche/E3MFGYR02_random_10_reads_no_trim.qual", "qual")
+        self.check(sff_name, "sff-trim", "Roche/E3MFGYR02_random_10_reads.fasta", "fasta")
+        self.check(sff_name, "sff-trim", "Roche/E3MFGYR02_random_10_reads.qual", "qual")
+
+    def test_original(self) :
+        """Test converting E3MFGYR02_random_10_reads.sff into FASTA+QUAL"""
+        self.check_sff("Roche/E3MFGYR02_random_10_reads.sff")
+        
+    def test_no_manifest(self) :
+        """Test converting E3MFGYR02_no_manifest.sff into FASTA+QUAL"""
+        self.check_sff("Roche/E3MFGYR02_no_manifest.sff")
+        
+    def test_alt_index_at_start(self) :
+        """Test converting E3MFGYR02_alt_index_at_start into FASTA+QUAL"""
+        self.check_sff("Roche/E3MFGYR02_alt_index_at_start.sff")
+
+    def test_alt_index_in_middle(self) :
+        """Test converting E3MFGYR02_alt_index_in_middle into FASTA+QUAL"""
+        self.check_sff("Roche/E3MFGYR02_alt_index_in_middle.sff")
+
+    def test_alt_index_at_end(self) :
+        """Test converting E3MFGYR02_alt_index_at_end into FASTA+QUAL"""
+        self.check_sff("Roche/E3MFGYR02_alt_index_at_end.sff")
+
+    def test_index_at_start(self) :
+        """Test converting E3MFGYR02_index_at_start into FASTA+QUAL"""
+        self.check_sff("Roche/E3MFGYR02_index_at_start.sff")
+
+    def test_index_at_end(self) :
+        """Test converting E3MFGYR02_index_in_middle into FASTA+QUAL"""
+        self.check_sff("Roche/E3MFGYR02_index_in_middle.sff")
+
+class TestReferenceFastqConversions(unittest.TestCase):
     """Tests where we have reference output."""
     def simple_check(self, base_name, in_variant) :
         for out_variant in ["sanger", "solexa", "illumina"] :
@@ -246,7 +298,7 @@ for base_name, variant in tests :
         f = lambda x : x.simple_check(bn,var)
         f.__doc__ = "Reference conversions of %s file %s" % (var, bn)
         return f
-    setattr(TestReferenceConversions, "test_%s_%s" % (base_name, variant),
+    setattr(TestReferenceFastqConversions, "test_%s_%s" % (base_name, variant),
             funct(base_name, variant))
     del funct        
 
