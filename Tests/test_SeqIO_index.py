@@ -95,6 +95,7 @@ tests = [
     ("Roche/E3MFGYR02_alt_index_at_start.sff", "sff", generic_dna),
     ("Roche/E3MFGYR02_alt_index_in_middle.sff", "sff", generic_dna),
     ("Roche/E3MFGYR02_alt_index_at_end.sff", "sff", generic_dna),
+    ("Roche/E3MFGYR02_no_manifest.sff", "sff", generic_dna),
     ("Roche/greek.sff", "sff", generic_nucleotide),
     ("Roche/greek.sff", "sff-trim", generic_nucleotide),
     ("Roche/paired.sff", "sff", None),

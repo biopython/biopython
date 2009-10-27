@@ -482,6 +482,16 @@ class TestWriteRead(unittest.TestCase) :
         write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "qual")
         write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "phd")
 
+    def test_E3MFGYR02_no_manifest(self) :
+        """Write and read back E3MFGYR02_no_manifest.sff"""
+        write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "fasta")
+        write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "fastq")
+        write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "fastq-sanger")
+        write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "fastq-solexa")
+        write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "fastq-illumina")
+        write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "qual")
+        write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "phd")
+
     def test_E3MFGYR02_trimmed(self) :
         """Write and read back E3MFGYR02_random_10_reads.sff (trimmed)"""
         write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff-trim", "fasta")
