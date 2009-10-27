@@ -23,7 +23,7 @@ def truncation_expected(format) :
     elif format in ["fastq", "fastq-sanger"] :
         return 93
     else :
-        assert format in ["fasta", "qual", "phd"]
+        assert format in ["fasta", "qual", "phd", "sff"]
         return None
 
 #Top level function as this makes it easier to use for debugging:
@@ -533,6 +533,7 @@ class TestWriteRead(unittest.TestCase) :
         write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "fastq-illumina")
         write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "qual")
         write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "phd")
+        write_read(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff", "sff")
 
     def test_E3MFGYR02_no_manifest(self) :
         """Write and read back E3MFGYR02_no_manifest.sff"""
@@ -543,6 +544,62 @@ class TestWriteRead(unittest.TestCase) :
         write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "fastq-illumina")
         write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "qual")
         write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "phd")
+        write_read(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff", "sff")
+
+    def test_E3MFGYR02_index_at_start(self) :
+        """Write and read back E3MFGYR02_index_at_start.sff"""
+        write_read(os.path.join("Roche", "E3MFGYR02_index_at_start.sff"), "sff", "fasta")
+        write_read(os.path.join("Roche", "E3MFGYR02_index_at_start.sff"), "sff", "fastq")
+        write_read(os.path.join("Roche", "E3MFGYR02_index_at_start.sff"), "sff", "fastq-sanger")
+        write_read(os.path.join("Roche", "E3MFGYR02_index_at_start.sff"), "sff", "fastq-solexa")
+        write_read(os.path.join("Roche", "E3MFGYR02_index_at_start.sff"), "sff", "fastq-illumina")
+        write_read(os.path.join("Roche", "E3MFGYR02_index_at_start.sff"), "sff", "qual")
+        write_read(os.path.join("Roche", "E3MFGYR02_index_at_start.sff"), "sff", "phd")
+        write_read(os.path.join("Roche", "E3MFGYR02_index_at_start.sff"), "sff", "sff")
+
+    def test_E3MFGYR02_index_in_middle(self) :
+        """Write and read back E3MFGYR02_index_in_middle.sff"""
+        write_read(os.path.join("Roche", "E3MFGYR02_index_in_middle.sff"), "sff", "fasta")
+        write_read(os.path.join("Roche", "E3MFGYR02_index_in_middle.sff"), "sff", "fastq")
+        write_read(os.path.join("Roche", "E3MFGYR02_index_in_middle.sff"), "sff", "fastq-sanger")
+        write_read(os.path.join("Roche", "E3MFGYR02_index_in_middle.sff"), "sff", "fastq-solexa")
+        write_read(os.path.join("Roche", "E3MFGYR02_index_in_middle.sff"), "sff", "fastq-illumina")
+        write_read(os.path.join("Roche", "E3MFGYR02_index_in_middle.sff"), "sff", "qual")
+        write_read(os.path.join("Roche", "E3MFGYR02_index_in_middle.sff"), "sff", "phd")
+        write_read(os.path.join("Roche", "E3MFGYR02_index_in_middle.sff"), "sff", "sff")
+
+    def test_E3MFGYR02_alt_index_at_start(self) :
+        """Write and read back E3MFGYR02_alt_index_at_start.sff"""
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_start.sff"), "sff", "fasta")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_start.sff"), "sff", "fastq")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_start.sff"), "sff", "fastq-sanger")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_start.sff"), "sff", "fastq-solexa")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_start.sff"), "sff", "fastq-illumina")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_start.sff"), "sff", "qual")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_start.sff"), "sff", "phd")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_start.sff"), "sff", "sff")
+
+    def test_E3MFGYR02_alt_index_in_middle(self) :
+        """Write and read back E3MFGYR02_alt_index_in_middle.sff"""
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_in_middle.sff"), "sff", "fasta")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_in_middle.sff"), "sff", "fastq")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_in_middle.sff"), "sff", "fastq-sanger")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_in_middle.sff"), "sff", "fastq-solexa")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_in_middle.sff"), "sff", "fastq-illumina")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_in_middle.sff"), "sff", "qual")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_in_middle.sff"), "sff", "phd")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_in_middle.sff"), "sff", "sff")
+
+    def test_E3MFGYR02_alt_index_at_end(self) :
+        """Write and read back E3MFGYR02_alt_index_at_end.sff"""
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_end.sff"), "sff", "fasta")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_end.sff"), "sff", "fastq")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_end.sff"), "sff", "fastq-sanger")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_end.sff"), "sff", "fastq-solexa")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_end.sff"), "sff", "fastq-illumina")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_end.sff"), "sff", "qual")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_end.sff"), "sff", "phd")
+        write_read(os.path.join("Roche", "E3MFGYR02_alt_index_at_end.sff"), "sff", "sff")
 
     def test_E3MFGYR02_trimmed(self) :
         """Write and read back E3MFGYR02_random_10_reads.sff (trimmed)"""
