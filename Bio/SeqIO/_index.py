@@ -227,6 +227,18 @@ class SffDict(_IndexedSeqFileDict) :
         assert record.id == key
         return record
 
+class SffTrimmedDict(SffDict) :
+    def __getitem__(self, key) :
+        handle = self._handle
+        handle.seek(dict.__getitem__(self, key))
+        record = SeqIO.SffIO._sff_read_seq_record(handle,
+                                                  self._flows_per_read,
+                                                  self._flow_chars,
+                                                  self._key_sequence,
+                                                  self._alphabet,
+                                                  trim=True)
+        assert record.id == key
+        return record
 
 ###################
 # Simple indexers #
@@ -502,6 +514,7 @@ _FormatToIndexedDict = {"ace" : AceDict,
                         "phd" : PhdDict,
                         "pir" : PirDict,
                         "sff" : SffDict,
+                        "sff-trim" : SffTrimmedDict,
                         "swiss" : SwissDict,
                         "tab" : TabDict,
                         "qual" : QualDict

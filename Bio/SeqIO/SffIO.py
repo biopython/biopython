@@ -120,9 +120,18 @@ which is a little slower. For example,
     >>> print record.id, len(record), record.seq[:20]+"..."
     E3MFGYR02JHD4H 310 tcagAAAGACAAGTGGTATC...
 
+Or, using the trimmed reads:
+
+    >>> from Bio import SeqIO
+    >>> reads = SeqIO.index("Roche/E3MFGYR02_random_10_reads.sff", "sff-trim")
+    >>> record = reads["E3MFGYR02JHD4H"]
+    >>> print record.id, len(record), record.seq[:20]+"..."
+    E3MFGYR02JHD4H 292 AAAGACAAGTGGTATCAACG...
+
 You can also use the Bio.SeqIO.write() function with the "sff" format. Note
 that this requires all the flow information etc, and thus is probably only
-useful for SeqRecord objects originally from reading another SFF file.
+useful for SeqRecord objects originally from reading another SFF file (and
+not the trimmed SeqRecord objects from parsing an SFF file as "sff-trim").
 
 For a description of the file format, please see the Roche manuals and:
 http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=formats
