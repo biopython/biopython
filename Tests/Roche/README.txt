@@ -5,7 +5,7 @@ Created with Roche tools from E3MFGYR02.sff, just 10 random reads:
 * E3MFGYR02_random_10_reads.qual
 * E3MFGYR02_random_10_reads_no_trim.fasta
 * E3MFGYR02_random_10_reads_no_trim.qual
-* E3MFGYR02_no_manifest.sff - has an .srt.00 style index and no manifest
+* E3MFGYR02_no_manifest.sff - has an .srt1.00 style index and no manifest
 
 Modified with a dummy index block in various positions:
 
