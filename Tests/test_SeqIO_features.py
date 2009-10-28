@@ -10,7 +10,7 @@ and confirms they are consistent using our different parsers.
 """
 import os
 import unittest
-from Bio.Alphabet import generic_dna, generic_protein
+from Bio.Alphabet import generic_dna, generic_rna, generic_protein
 from Bio import SeqIO
 from Bio.Seq import Seq, UnknownSeq, MutableSeq, reverse_complement
 from Bio.SeqRecord import SeqRecord
@@ -169,39 +169,45 @@ class SeqFeatureExtraction(unittest.TestCase):
         new = get_feature_nuc(feature, str(parent_seq))
         self.assert_(isinstance(new, str))
         self.assertEqual(new, answer_str)
-        
+
+    def test_simple_rna(self) :
+        """Extract feature from RNA (simple, default strand)"""
+        s = Seq("GAUCRYWSMKHBVDN", generic_rna)
+        f = SeqFeature(FeatureLocation(5,10))
+        self.check(s, f, "YWSMK")
+
     def test_simple_dna(self) :
-        """Extract simple feature from dna"""
+        """Extract feature from DNA (simple, default strand)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10))
         self.check(s, f, "YWSMK")
 
     def test_simple_dna_strand0(self) :
-        """Extract simple feature from dna (strand 0)"""
+        """Extract feature from DNA (simple, strand 0)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10), strand=0)
         self.check(s, f, "YWSMK")
 
     def test_simple_dna_strand_none(self) :
-        """Extract simple feature from dna (strand None)"""
+        """Extract feature from DNA (simple, strand None)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10), strand=None)
         self.check(s, f, "YWSMK")
 
     def test_simple_dna_strand1(self) :
-        """Extract simple feature from dna (strand +1)"""
+        """Extract feature from DNA (simple, strand +1)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10), strand=1)
         self.check(s, f, "YWSMK")
         
     def test_simple_dna_rev_strand(self) :
-        """Extract simple feature from dna (strand -1)"""
+        """Extract feature from DNA (simple, strand -1)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10), strand=-1)
         self.check(s, f, "MKSWR")
 
     def test_simple_dna_join(self) :
-        """Extract simple join feature from dna (strand +1)"""
+        """Extract feature from DNA (join, strand +1)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f1 = SeqFeature(FeatureLocation(5,10), strand=1)
         f2 = SeqFeature(FeatureLocation(12,15), strand=1)
@@ -209,7 +215,7 @@ class SeqFeatureExtraction(unittest.TestCase):
         self.check(s, f, "YWSMKVDN")
 
     def test_simple_dna_join(self) :
-        """Extract simple join feature from dna (strand -1)"""
+        """Extract feature from DNA (join, strand -1)"""
         s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
         f1 = SeqFeature(FeatureLocation(5,10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12,15), strand=-1)
@@ -217,7 +223,7 @@ class SeqFeatureExtraction(unittest.TestCase):
         self.check(s, f, reverse_complement("CCCCC"+"TTT"))
 
     def test_mixed_strand_dna_join(self) :
-        """Extract mixed strand join feature from dna"""
+        """Extract feature from DNA (join, mixed strand)"""
         s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
         f1 = SeqFeature(FeatureLocation(5,10), strand=+1)
         f2 = SeqFeature(FeatureLocation(12,15), strand=-1)
@@ -225,13 +231,13 @@ class SeqFeatureExtraction(unittest.TestCase):
         self.check(s, f, "CCCCC"+reverse_complement("TTT"))
 
     def test_simple_protein(self) :
-        """Extract simple feature from protein"""
+        """Extract feature from protein (simple)"""
         s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
         f = SeqFeature(FeatureLocation(5,10))
         self.check(s, f, "FGHIJ")
 
     def test_simple_protein_join(self) :
-        """Extract simple join feature from protein"""
+        """Extract feature from protein (join)"""
         s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
         f1 = SeqFeature(FeatureLocation(5,10))
         f2 = SeqFeature(FeatureLocation(15,20))
