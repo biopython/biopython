@@ -174,36 +174,43 @@ class SeqFeatureExtraction(unittest.TestCase):
         """Extract feature from RNA (simple, default strand)"""
         s = Seq("GAUCRYWSMKHBVDN", generic_rna)
         f = SeqFeature(FeatureLocation(5,10))
+        self.assertEqual(_insdc_feature_location_string(f), "6..10")
         self.check(s, f, "YWSMK")
 
     def test_simple_dna(self) :
         """Extract feature from DNA (simple, default strand)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10))
+        self.assertEqual(_insdc_feature_location_string(f), "6..10")
         self.check(s, f, "YWSMK")
 
     def test_simple_dna_strand0(self) :
         """Extract feature from DNA (simple, strand 0)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10), strand=0)
+        self.assertEqual(_insdc_feature_location_string(f), "6..10")
         self.check(s, f, "YWSMK")
 
     def test_simple_dna_strand_none(self) :
         """Extract feature from DNA (simple, strand None)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10), strand=None)
+        self.assertEqual(_insdc_feature_location_string(f), "6..10")
         self.check(s, f, "YWSMK")
 
     def test_simple_dna_strand1(self) :
         """Extract feature from DNA (simple, strand +1)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10), strand=1)
+        self.assertEqual(_insdc_feature_location_string(f), "6..10")
         self.check(s, f, "YWSMK")
         
-    def test_simple_dna_rev_strand(self) :
+    def test_simple_dna_strand_minus(self) :
         """Extract feature from DNA (simple, strand -1)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10), strand=-1)
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(6..10)")
         self.check(s, f, "MKSWR")
 
     def test_simple_dna_join(self) :
@@ -212,6 +219,8 @@ class SeqFeatureExtraction(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(5,10), strand=1)
         f2 = SeqFeature(FeatureLocation(12,15), strand=1)
         f = make_join_feature([f1,f2])
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "join(6..10,13..15)")
         self.check(s, f, "YWSMKVDN")
 
     def test_simple_dna_join(self) :
@@ -220,6 +229,28 @@ class SeqFeatureExtraction(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(5,10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12,15), strand=-1)
         f = make_join_feature([f1,f2])
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(join(6..10,13..15))")
+        self.check(s, f, reverse_complement("CCCCC"+"TTT"))
+
+    def test_simple_dna_join(self) :
+        """Extract feature from DNA (join, strand -1, before position)"""
+        s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
+        f1 = SeqFeature(FeatureLocation(BeforePosition(5),10), strand=-1)
+        f2 = SeqFeature(FeatureLocation(12,15), strand=-1)
+        f = make_join_feature([f1,f2])
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(join(<6..10,13..15))")
+        self.check(s, f, reverse_complement("CCCCC"+"TTT"))
+
+    def test_simple_dna_join_after(self) :
+        """Extract feature from DNA (join, strand -1, after position)"""
+        s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
+        f1 = SeqFeature(FeatureLocation(5,10), strand=-1)
+        f2 = SeqFeature(FeatureLocation(12,AfterPosition(15)), strand=-1)
+        f = make_join_feature([f1,f2])
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "complement(join(6..10,13..>15))")
         self.check(s, f, reverse_complement("CCCCC"+"TTT"))
 
     def test_mixed_strand_dna_join(self) :
@@ -228,12 +259,26 @@ class SeqFeatureExtraction(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(5,10), strand=+1)
         f2 = SeqFeature(FeatureLocation(12,15), strand=-1)
         f = make_join_feature([f1,f2])
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "join(6..10,complement(13..15))")
         self.check(s, f, "CCCCC"+reverse_complement("TTT"))
+
+    def test_mixed_strand_dna_multi_join(self) :
+        """Extract feature from DNA (multi-join, mixed strand)"""
+        s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
+        f1 = SeqFeature(FeatureLocation(5,10), strand=+1)
+        f2 = SeqFeature(FeatureLocation(12,15), strand=-1)
+        f3 = SeqFeature(FeatureLocation(BeforePosition(0),5), strand=+1)
+        f = make_join_feature([f1,f2,f3])
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "join(6..10,complement(13..15),<1..5)")
+        self.check(s, f, "CCCCC"+reverse_complement("TTT")+"AAAAA")
 
     def test_simple_protein(self) :
         """Extract feature from protein (simple)"""
         s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
         f = SeqFeature(FeatureLocation(5,10))
+        self.assertEqual(_insdc_feature_location_string(f),"6..10")
         self.check(s, f, "FGHIJ")
 
     def test_simple_protein_join(self) :
@@ -242,8 +287,23 @@ class SeqFeatureExtraction(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(5,10))
         f2 = SeqFeature(FeatureLocation(15,20))
         f = make_join_feature([f1,f2])
+        self.assertEqual(_insdc_feature_location_string(f),
+                         "join(6..10,16..20)")
         self.check(s, f, "FGHIJ"+"PQRST")
 
+    def test_simple_protein_multi_join(self) :
+        """Extract feature from protein (multi-join)"""
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        f1 = SeqFeature(FeatureLocation(1,2))
+        f2 = SeqFeature(FeatureLocation(8,9))
+        f3 = SeqFeature(FeatureLocation(14,16))
+        f4 = SeqFeature(FeatureLocation(24,25))
+        f5 = SeqFeature(FeatureLocation(19,20))
+        f6 = SeqFeature(FeatureLocation(7,8))
+        f7 = SeqFeature(FeatureLocation(14,15))
+        f8 = SeqFeature(FeatureLocation(13,14))
+        f = make_join_feature([f1,f2,f3,f4,f5,f6,f7,f8])
+        self.check(s, f, "BIOPYTHON")
 
 class SeqRecordCreation(unittest.TestCase):
     """Test basic creation of SeqRecords.
