@@ -10,9 +10,9 @@ and confirms they are consistent using our different parsers.
 """
 import os
 import unittest
-from Bio.Alphabet import generic_dna
+from Bio.Alphabet import generic_dna, generic_protein
 from Bio import SeqIO
-from Bio.Seq import Seq, UnknownSeq, MutableSeq
+from Bio.Seq import Seq, UnknownSeq, MutableSeq, reverse_complement
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition, \
                            BeforePosition, AfterPosition, OneOfPosition, \
@@ -117,21 +117,112 @@ def compare_features(old_list, new_list, ignore_sub_features=False) :
 
 #TODO - Add this functionality to Biopython itself...
 def get_feature_nuc(f, parent_seq) :
+    """Extract SeqFeature sequence from parent sequence (as Seq or string)."""
     if f.sub_features :
         if f.location_operator!="join":
             raise ValueError(f.location_operator)
-        #TODO - This should recurse to cope with join(complement(...),...) properly
-        #for mixed-strand features, BUT that is impossible with the current GenBank
-        #parser due to how the strand is recorded on both the parent and subfeatures.
-        f_subs = [parent_seq[f_sub.location.nofuzzy_start:f_sub.location.nofuzzy_end] \
-                  for f_sub in f.sub_features]
-        #f_subs = [get_feature_nuc(f_sub, parent_seq) for f_sub in f.sub_features]
         #TODO - Join support in Seq object?  But how to deal with alphabets...
-        f_seq = Seq("".join(map(str,f_subs)),f_subs[0].alphabet)
+        #Or, don't use a join here at all, but simple Seq addition.
+        #This would work better for other Seq like objects (like UnknownSeq)
+        parent_str = str(parent_seq)
+        f_seq = Seq("".join(parent_str[f_sub.location.nofuzzy_start:f_sub.location.nofuzzy_end] \
+                            for f_sub in f.sub_features), parent_seq.alphabet)
+        #TODO - Support mixed strand features
     else :
         f_seq = parent_seq[f.location.nofuzzy_start:f.location.nofuzzy_end]
-    if f.strand == -1 : f_seq = f_seq.reverse_complement()
+    if f.strand == -1 :
+        #TODO - MutableSeq?
+        try :
+            f_seq = f_seq.reverse_complement()
+        except AttributeError :
+            assert isinstance(f_seq, str)
+            f_seq = reverse_complement(f_seq)
     return f_seq
+
+class SeqFeatureExtraction(unittest.TestCase):
+    """Tests for get_feature_nuc function."""
+    def test_simple_dna(self) :
+        """Extract simple feature from dna"""
+        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        f = SeqFeature(FeatureLocation(5,10))
+
+        new = get_feature_nuc(f, s)
+        self.assert_(isinstance(new, Seq))
+        self.assertEqual(str(new), "YWSMK")
+
+        new = get_feature_nuc(f, str(s))
+        self.assert_(isinstance(new, str))
+        self.assertEqual(new, "YWSMK")
+
+    def test_simple_dna_strand0(self) :
+        """Extract simple feature from dna (strand 0)"""
+        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        f = SeqFeature(FeatureLocation(5,10), strand=0)
+
+        new = get_feature_nuc(f, s)
+        self.assert_(isinstance(new, Seq))
+        self.assertEqual(str(new), "YWSMK")
+
+        new = get_feature_nuc(f, str(s))
+        self.assert_(isinstance(new, str))
+        self.assertEqual(new, "YWSMK")
+
+    def test_simple_dna_strand_none(self) :
+        """Extract simple feature from dna (strand None)"""
+        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        f = SeqFeature(FeatureLocation(5,10), strand=None)
+
+        new = get_feature_nuc(f, s)
+        self.assert_(isinstance(new, Seq))
+        self.assertEqual(str(new), "YWSMK")
+
+        new = get_feature_nuc(f, str(s))
+        self.assert_(isinstance(new, str))
+        self.assertEqual(new, "YWSMK")
+
+    def test_simple_dna_strand1(self) :
+        """Extract simple feature from dna (strand +1)"""
+        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        f = SeqFeature(FeatureLocation(5,10), strand=1)
+
+        new = get_feature_nuc(f, s)
+        self.assert_(isinstance(new, Seq))
+        self.assertEqual(str(new), "YWSMK")
+
+        new = get_feature_nuc(f, str(s))
+        self.assert_(isinstance(new, str))
+        self.assertEqual(new, "YWSMK")
+
+    def test_simple_dna_rev_strand(self) :
+        """Extract simple feature from dna (strand -1)"""
+        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        f = SeqFeature(FeatureLocation(5,10), strand=-1)
+
+        new = get_feature_nuc(f, s)
+        self.assert_(isinstance(new, Seq))
+        self.assertEqual(str(new), "MKSWR")
+
+        new = get_feature_nuc(f, str(s))
+        self.assert_(isinstance(new, str))
+        self.assertEqual(new, "MKSWR")
+
+    def test_simple_protein(self) :
+        """Extract simple feature from protein"""
+        s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
+        f = SeqFeature(FeatureLocation(5,10))
+
+        new = get_feature_nuc(f, s)
+        self.assert_(isinstance(new, Seq))
+        self.assertEqual(str(new), "FGHIJ")
+
+        new = get_feature_nuc(f, str(s))
+        self.assert_(isinstance(new, str))
+        self.assertEqual(new, "FGHIJ")
+
+        #Don't yet support this for joins etc
+        #new = get_feature_nuc(f, SeqRecord(s))
+        #self.assert_(isinstance(new, SeqRecord))
+        #self.assertEqual(str(new.seq), "FGHIJ")
 
 class SeqRecordCreation(unittest.TestCase):
     """Test basic creation of SeqRecords.
