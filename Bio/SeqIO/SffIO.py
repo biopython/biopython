@@ -15,17 +15,17 @@ For example, to iterate over the records in an SFF file,
     >>> from Bio import SeqIO
     >>> handle = open("Roche/E3MFGYR02_random_10_reads.sff", "rb")
     >>> for record in SeqIO.parse(handle, "sff") :
-    ...     print record.id, len(record)
-    E3MFGYR02JWQ7T 265
-    E3MFGYR02JA6IL 271
-    E3MFGYR02JHD4H 310
-    E3MFGYR02GFKUC 299
-    E3MFGYR02FTGED 281
-    E3MFGYR02FR9G7 261
-    E3MFGYR02GAZMS 278
-    E3MFGYR02HHZ8O 221
-    E3MFGYR02GPGB1 269
-    E3MFGYR02F7Z7G 219
+    ...     print record.id, len(record), record.seq[:20]+"..."
+    E3MFGYR02JWQ7T 265 tcagGGTCTACATGTTGGTT...
+    E3MFGYR02JA6IL 271 tcagTTTTTTTTGGAAAGGA...
+    E3MFGYR02JHD4H 310 tcagAAAGACAAGTGGTATC...
+    E3MFGYR02GFKUC 299 tcagCGGCCGGGCCTCTCAT...
+    E3MFGYR02FTGED 281 tcagTGGTAATGGGGGGAAA...
+    E3MFGYR02FR9G7 261 tcagCTCCGTAAGAAGGTGC...
+    E3MFGYR02GAZMS 278 tcagAAAGAAGTAAGGTAAA...
+    E3MFGYR02HHZ8O 221 tcagACTTTCTTCTTTACCG...
+    E3MFGYR02GPGB1 269 tcagAAGCAGTGGTATCAAC...
+    E3MFGYR02F7Z7G 219 tcagAATCATCCACTTTTTA...
     >>> handle.close()
 
 Each SeqRecord object will contain all the annotation from the SFF file,
@@ -38,9 +38,9 @@ including the PHRED quality scores.
     >>> print record.letter_annotations["phred_quality"][:10], "..."
     [22, 21, 23, 28, 26, 15, 12, 21, 28, 21] ...
 
-Notice that the sequence is given in mixed case, there the central upper
-case region corresponds to the trimmed sequence. This matches the output
-of the Roche tools (and the 3rd party tool sff_extract) for SFF to FASTA.
+Notice that the sequence is given in mixed case, the central upper case region
+corresponds to the trimmed sequence. This matches the output of the Roche
+tools (and the 3rd party tool sff_extract) for SFF to FASTA.
 
     >>> print record.annotations["clip_qual_left"]
     4
@@ -66,17 +66,17 @@ except for the PHRED quality scores):
     >>> from Bio import SeqIO
     >>> handle = open("Roche/E3MFGYR02_random_10_reads.sff", "rb")
     >>> for record in SeqIO.parse(handle, "sff-trim") :
-    ...     print record.id, len(record)
-    E3MFGYR02JWQ7T 260
-    E3MFGYR02JA6IL 265
-    E3MFGYR02JHD4H 292
-    E3MFGYR02GFKUC 295
-    E3MFGYR02FTGED 277
-    E3MFGYR02FR9G7 256
-    E3MFGYR02GAZMS 271
-    E3MFGYR02HHZ8O 150
-    E3MFGYR02GPGB1 221
-    E3MFGYR02F7Z7G 130
+    ...     print record.id, len(record), record.seq[:20]+"..."
+    E3MFGYR02JWQ7T 260 GGTCTACATGTTGGTTAACC...
+    E3MFGYR02JA6IL 265 TTTTTTTTGGAAAGGAAAAC...
+    E3MFGYR02JHD4H 292 AAAGACAAGTGGTATCAACG...
+    E3MFGYR02GFKUC 295 CGGCCGGGCCTCTCATCGGT...
+    E3MFGYR02FTGED 277 TGGTAATGGGGGGAAATTTA...
+    E3MFGYR02FR9G7 256 CTCCGTAAGAAGGTGCTGCC...
+    E3MFGYR02GAZMS 271 AAAGAAGTAAGGTAAATAAC...
+    E3MFGYR02HHZ8O 150 ACTTTCTTCTTTACCGTAAC...
+    E3MFGYR02GPGB1 221 AAGCAGTGGTATCAACGCAG...
+    E3MFGYR02F7Z7G 130 AATCATCCACTTTTTAACGT...
     >>> handle.close()
 
 Looking at the final record in more detail, note how this differs to the
@@ -132,6 +132,56 @@ You can also use the Bio.SeqIO.write() function with the "sff" format. Note
 that this requires all the flow information etc, and thus is probably only
 useful for SeqRecord objects originally from reading another SFF file (and
 not the trimmed SeqRecord objects from parsing an SFF file as "sff-trim").
+
+As an example, let's pretend this example SFF file represents some DNA which
+was pre-amplified with a PCR primers AAAGANNNNN. The following script would
+produce a sub-file containing all those reads whose post-quality clipping
+region (i.e. the sequence are trimming) starts with AAAGA exactly (the non-
+degenerate bit of this pretend primer):
+
+    >>> from Bio import SeqIO
+    >>> from StringIO import StringIO
+    >>> out_handle = open("temp_filtered.sff", "wb")
+    >>> records = (record for record in \
+                   SeqIO.parse(open("Roche/E3MFGYR02_random_10_reads.sff", "rb"),"sff") \
+                   if record.seq[record.annotations["clip_qual_left"]:].startswith("AAAGA"))
+    >>> count = SeqIO.write(records, out_handle, "sff")
+    >>> out_handle.close()
+    >>> print "Selected %i records" % count
+    Selected 2 records
+
+Of course, for an assembly you would probably want to remove these primers.
+If you want FASTA or FASTQ output, you could just slice the SeqRecord. However,
+if you want SFF output we have to preserve all the flow information - the trick
+is just to adjust the left clip position!
+
+    >>> from Bio import SeqIO
+    >>> from StringIO import StringIO
+    >>> out_handle = open("temp_filtered.sff", "wb")
+    >>> def filter_and_trim(records, primer) :
+    ...     for record in records :
+    ...         if record.seq[record.annotations["clip_qual_left"]:].startswith(primer) :
+    ...             record.annotations["clip_qual_left"] += len(primer)
+    ...             yield record
+    >>> records = SeqIO.parse(open("Roche/E3MFGYR02_random_10_reads.sff","rb"), "sff")
+    >>> count = SeqIO.write(filter_and_trim(records,"AAAGA"), out_handle, "sff")
+    >>> out_handle.close()
+    >>> print "Selected %i records" % count
+    Selected 2 records
+
+We can check the results, note the lower case clipped region now includes the "AAAGA"
+sequence:
+
+    >>> for record in SeqIO.parse(open("temp_filtered.sff","rb"), "sff") :
+    ...     print record.id, len(record), record.seq[:20]+"..."
+    E3MFGYR02JHD4H 310 tcagaaagaCAAGTGGTATC...
+    E3MFGYR02GAZMS 278 tcagaaagaAGTAAGGTAAA...
+    >>> for record in SeqIO.parse(open("temp_filtered.sff","rb"), "sff-trim") :
+    ...     print record.id, len(record), record.seq[:20]+"..."
+    E3MFGYR02JHD4H 287 CAAGTGGTATCAACGCAGAG...
+    E3MFGYR02GAZMS 266 AGTAAGGTAAATAACAAACG...
+    >>> import os
+    >>> os.remove("temp_filtered.sff")
 
 For a description of the file format, please see the Roche manuals and:
 http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=formats&m=doc&s=formats
