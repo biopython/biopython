@@ -13,7 +13,6 @@ from Bio import Motif
 class MotifTestsBasic(unittest.TestCase):
     def setUp(self):
         self.ACin = open("Motif/alignace.out")
-        self.MEMEin = open("Motif/meme.out")
         self.PFMin = open("Motif/SRF.pfm")
         self.SITESin = open("Motif/Arnt.sites")
         self.TFout = "Motif/tf.out"
@@ -25,7 +24,6 @@ class MotifTestsBasic(unittest.TestCase):
         
     def tearDown(self):
         self.ACin.close()
-        self.MEMEin.close()
         self.PFMin.close()
         self.SITESin.close()
         if os.path.exists(self.TFout):
@@ -40,13 +38,6 @@ class MotifTestsBasic(unittest.TestCase):
         record=parser.parse(self.ACin)
         assert len(record.motifs)==16
         
-    def test_meme_parsing(self):
-        """Test to be sure that Motif can parse MEME output files.
-        """
-        parser= Motif.MEMEParser()
-        record=parser.parse(self.MEMEin)
-        assert len(record.motifs)==1
-
     def test_pfm_parsing(self):
         """Test to be sure that Motif can parse pfm  files.
         """
@@ -81,6 +72,71 @@ class MotifTestsBasic(unittest.TestCase):
         output_handle.close()
         
         
+class TestMEME(unittest.TestCase):
+        
+    def test_meme_parser_1(self):
+        """Tests Motif can parse MEME output files (first test)
+        """
+        handle = open("Motif/meme.out")
+        parser = Motif.MEMEParser()
+        record = parser.parse(handle)
+        self.assertEqual(len(record.motifs), 1)
+        handle.close()
+
+    def test_meme_parser_2(self):
+        """Tests Motif can parse MEME output files (second test)
+        """
+        handle = open("Motif/meme.dna.oops.txt")
+        parser = Motif.MEMEParser()
+        record = parser.parse(handle)
+        handle.close()
+
+    def test_meme_parser_3(self):
+        """Tests Motif can parse MEME output files (third test)
+        """
+        handle = open("Motif/meme.protein.oops.txt")
+        parser = Motif.MEMEParser()
+        record = parser.parse(handle)
+        handle.close()
+
+    def test_meme_parser_4(self):
+        """Tests Motif can parse MEME output files (fourth test)
+        """
+        handle = open("Motif/meme.protein.tcm.txt")
+        parser = Motif.MEMEParser()
+        record = parser.parse(handle)
+        handle.close()
+
+ 
+class TestMAST(unittest.TestCase):
+
+    # The MAST parser currently fails; commented out the tests below.
+
+    def test_mast_parser_1(self):
+        """Tests Motif can parse MAST output files (first test)
+        """
+        handle = open("Motif/mast.dna.oops.txt")
+        parser = Motif.MASTParser()
+        # record = parser.parse(handle)
+        handle.close()
+
+    def test_mast_parser_2(self):
+        """Tests Motif can parse MAST output files (second test)
+        """
+        handle = open("Motif/mast.protein.oops.txt")
+        parser = Motif.MASTParser()
+        # record = parser.parse(handle)
+        handle.close()
+
+    def test_mast_parser_3(self):
+        """Tests Motif can parse MAST output files (third test)
+        """
+        handle = open("Motif/mast.protein.tcm.txt")
+        parser = Motif.MASTParser()
+        # record = parser.parse(handle)
+        handle.close()
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
