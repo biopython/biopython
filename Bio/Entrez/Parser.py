@@ -93,13 +93,14 @@ class DataHandler:
         self.dtd_dir = dtd_dir
         self.valid = True
         # Set to False once EUtils always returns XML files starting with <!xml
-        self.parser = expat.ParserCreate()
+        self.parser = expat.ParserCreate(namespace_separator=" ")
         self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
-        self.parser.XmlDeclHandler = self.xmlDecl
-        self.parser.StartElementHandler = self.startElement
-        self.parser.EndElementHandler = self.endElement
-        self.parser.CharacterDataHandler = self.characters
-        self.parser.ExternalEntityRefHandler = self.external_entity_ref_handler
+        self.parser.XmlDeclHandler = self.xmlDeclHandler
+        self.parser.StartElementHandler = self.startElementHandler
+        self.parser.EndElementHandler = self.endElementHandler
+        self.parser.CharacterDataHandler = self.characterDataHandler
+        self.parser.ExternalEntityRefHandler = self.externalEntityRefHandler
+        self.parser.StartNamespaceDeclHandler = self.startNamespaceDeclHandler
 
     def read(self, handle):
         """Set up the parser and let it parse the XML results"""
@@ -156,11 +157,14 @@ class DataHandler:
                 record = records.pop(0)
                 yield record
 
-    def xmlDecl(self, version, encoding, standalone):
+    def xmlDeclHandler(self, version, encoding, standalone):
         # The purpose of this method is to make sure that we are parsing XML.
         self.valid = True
 
-    def startElement(self, name, attrs):
+    def startNamespaceDeclHandler(self, prefix, un):
+        raise NotImplementedError("The Bio.Entrez parser cannot handle XML data that make use of XML namespaces")
+
+    def startElementHandler(self, name, attrs):
         if not self.valid:
             raise NotXMLError
         self.content = ""
@@ -203,7 +207,7 @@ class DataHandler:
                     current[name] = object
         self.stack.append(object)
 
-    def endElement(self, name):
+    def endElementHandler(self, name):
         if not self.valid:
             raise NotXMLError
         value = self.content
@@ -246,7 +250,7 @@ class DataHandler:
         except AttributeError:
             current[name] = value
 
-    def characters(self, content):
+    def characterDataHandler(self, content):
         if not self.valid:
             raise NotXMLError
         self.content += content
@@ -331,7 +335,7 @@ class DataHandler:
         else:
             self.structures.update({name: multiple})
 
-    def external_entity_ref_handler(self, context, base, systemId, publicId):
+    def externalEntityRefHandler(self, context, base, systemId, publicId):
         """The purpose of this function is to load the DTD locally, instead
         of downloading it from the URL specified in the XML. Using the local
         DTD results in much faster parsing. If the DTD is not found locally,
