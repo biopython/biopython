@@ -377,7 +377,7 @@ def parse(handle, format, alphabet=None) :
     Typical usage, opening a file to read in, and looping over the record(s):
 
     >>> from Bio import SeqIO
-    >>> filename = "Nucleic/sweetpea.nu"
+    >>> filename = "Fasta/sweetpea.nu"
     >>> for record in SeqIO.parse(open(filename,"rU"), "fasta") :
     ...    print "ID", record.id
     ...    print "Sequence length", len(record)
@@ -391,7 +391,7 @@ def parse(handle, format, alphabet=None) :
 
     >>> from Bio import SeqIO
     >>> from Bio.Alphabet import generic_dna
-    >>> filename = "Nucleic/sweetpea.nu"
+    >>> filename = "Fasta/sweetpea.nu"
     >>> for record in SeqIO.parse(open(filename,"rU"), "fasta", generic_dna) :
     ...    print "ID", record.id
     ...    print "Sequence length", len(record)
