@@ -4128,15 +4128,31 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(record[0]["GBSeq_sequence"], "mrtpmllallalatlclagradakpgdaesgkgaafvskqegsevvkrlrryldhwlgapapypdplepkrevcelnpdcdeladhigfqeayrrfygpv")
 
     def test_genbank(self):
-        '''Test raising the appropriate error when presented with non-XML data
+        '''Test error handling when presented with GenBank non-XML data
         '''
         # Access the nucleotide database using efetch, but return the data
         # in GenBank format.
         # To create the GenBank file, use
-        # >>> Bio.Entrez.efetch(db='nucleotide', id=5, rettype='gb')
+        # >>> Bio.Entrez.efetch(db='nucleotide', id='NT_019265', rettype='gb')
         from Bio.Entrez import Parser
-        handle = open('Entrez/genbank.gb')
+        handle = open('GenBank/NT_019265.gb')
         self.assertRaises(Parser.CorruptedXMLError, Entrez.read, handle)
+        handle.close()
+        handle = open('GenBank/NT_019265.gb')
+        iterator = Entrez.parse(handle)
+        self.assertRaises(Parser.CorruptedXMLError, iterator.next)
+        handle.close()
+
+    def test_fasta(self):
+        '''Test error handling when presented with Fasta non-XML data
+        '''
+        from Bio.Entrez import Parser
+        handle = open('Fasta/wisteria.nu')
+        self.assertRaises(Parser.CorruptedXMLError, Entrez.read, handle)
+        handle.close()
+        handle = open('Fasta/wisteria.nu')
+        iterator = Entrez.parse(handle)
+        self.assertRaises(Parser.CorruptedXMLError, iterator.next)
         handle.close()
 
 
