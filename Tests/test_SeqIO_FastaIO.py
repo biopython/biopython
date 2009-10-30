@@ -105,8 +105,8 @@ single_nucleic_files = ['Fasta/lupine.nu', 'Fasta/elderberry.nu',
 
 multi_dna_files = ['Quality/example.fasta']
 
-single_amino_files = ['Amino/aster.pro', 'Amino/rosemary.pro',
-                      'Amino/rose.pro', 'Amino/loveliesbleeding.pro']
+single_amino_files = ['Fasta/aster.pro', 'Fasta/rosemary.pro',
+                      'Fasta/rose.pro', 'Fasta/loveliesbleeding.pro']
 
 multi_amino_files = ['Fasta/f002', 'Fasta/fa01']
 

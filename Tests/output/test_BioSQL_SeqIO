@@ -23,16 +23,16 @@ Testing loading from fasta format file Nucleic/sweetpea.nu
 Testing loading from fasta format file Nucleic/lavender.nu
  - GGCTCTTAAGTCATGTCTA...GTG [DmX8RD5xSC9EQ4JWVTGXfZGGBOs] len 550, gi|5690369|gb|AF158246.1|AF158246
  - Retrieving by name/display_id 'gi|5690369|gb|AF158246.1|AF158246', OK
-Testing loading from fasta format file Amino/aster.pro
+Testing loading from fasta format file Fasta/aster.pro
  - GGHVNPAVTFGAFVGGNIT...ANI [WpoEuoNHihSLr/+PA+QufKYpKeg] len 107, gi|3298468|dbj|BAA31520.1|
  - Retrieving by name/display_id 'gi|3298468|dbj|BAA31520.1|', OK
-Testing loading from fasta format file Amino/loveliesbleeding.pro
+Testing loading from fasta format file Fasta/loveliesbleeding.pro
  - XAGLPVIMCLKSNNHQKYL...QNN [y11wq8yF5uIqrbGtom8ewOB3N4k] len 304, gi|2781234|pdb|1JLY|B
  - Retrieving by name/display_id 'gi|2781234|pdb|1JLY|B', OK
-Testing loading from fasta format file Amino/rose.pro
+Testing loading from fasta format file Fasta/rose.pro
  - MENSDSNDKGSDQSAAQRR...SVV [4TM+FYSrarRxWPV/dp0LkxEOnSY] len 600, gi|4959044|gb|AAD34209.1|AF069992_1
  - Retrieving by name/display_id 'gi|4959044|gb|AAD34209.1|AF069992_1', OK
-Testing loading from fasta format file Amino/rosemary.pro
+Testing loading from fasta format file Fasta/rosemary.pro
  - MSPQTETKASVGFKAGVKE...AMD [gh9uVVLTTrZWSyiacV8RlD4+fBs] len 473, gi|671626|emb|CAA85685.1|
  - Retrieving by name/display_id 'gi|671626|emb|CAA85685.1|', OK
 Testing loading from fasta format file Fasta/f001

@@ -292,7 +292,7 @@ Testing reading fasta format file Fasta/lavender.nu
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
-Testing reading fasta format file Amino/aster.pro
+Testing reading fasta format file Fasta/aster.pro
  ID and Name='gi|3298468|dbj|BAA31520.1|',
  Seq='GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLL...FIVGANI', length=107
  Checking can write/read as 'fasta' format
@@ -314,7 +314,7 @@ Testing reading fasta format file Amino/aster.pro
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
-Testing reading fasta format file Amino/loveliesbleeding.pro
+Testing reading fasta format file Fasta/loveliesbleeding.pro
  ID and Name='gi|2781234|pdb|1JLY|B',
  Seq='XAGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKIL...IELGQNN', length=304
  Checking can write/read as 'fasta' format
@@ -336,7 +336,7 @@ Testing reading fasta format file Amino/loveliesbleeding.pro
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
-Testing reading fasta format file Amino/rose.pro
+Testing reading fasta format file Fasta/rose.pro
  ID and Name='gi|4959044|gb|AAD34209.1|AF069992_1',
  Seq='MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSE...GNRESVV', length=600
  Checking can write/read as 'fasta' format
@@ -358,7 +358,7 @@ Testing reading fasta format file Amino/rose.pro
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
-Testing reading fasta format file Amino/rosemary.pro
+Testing reading fasta format file Fasta/rosemary.pro
  ID and Name='gi|671626|emb|CAA85685.1|',
  Seq='MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAF...FEFPAMD', length=473
  Checking can write/read as 'fasta' format
