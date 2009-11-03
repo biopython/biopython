@@ -26,6 +26,40 @@ class Alphabet:
         with the AlphabetEncoder classes."""
         return isinstance(other, self.__class__)
 
+    def _case_less(self) :
+        """Return an case-less variant of the current alphabet (PRIVATE)."""
+        #TODO - remove this method by dealing with things in subclasses?
+        if isinstance(self, ProteinAlphabet) :
+            return generic_protein
+        elif isinstance(self, DNAAlphabet) :
+            return generic_dna
+        elif isinstance(self, NucleotideAlphabet) :
+            return generic_rna
+        elif isinstance(self, NucleotideAlphabet) :
+            return generic_nucleotide
+        elif isinstance(self, SingleLetterAlphabet) :
+            return single_letter_alphabet
+        else :
+            return generic_alphabet
+
+    def _upper(self) :
+        """Return an upper case variant of the current alphabet (PRIVATE)."""
+        if not self.letters or self.letters==self.letters.upper():
+            #Easy case, no letters or already upper case!
+            return self
+        else :
+            #TODO - Raise NotImplementedError and handle via subclass?
+            return self._case_less()
+
+    def _lower(self) :
+        """Return a lower case variant of the current alphabet (PRIVATE)."""
+        if not self.letters or self.letters==self.letters.lower():
+            #Easy case, no letters or already lower case!
+            return self
+        else :
+            #TODO - Raise NotImplementedError and handle via subclass?
+            return self._case_less()
+
 generic_alphabet = Alphabet()
 
 class SingleLetterAlphabet(Alphabet):
@@ -102,6 +136,15 @@ class AlphabetEncoder:
         This is isn't implemented for the base AlphabetEncoder,
         which will always return 0 (False)."""
         return 0
+
+    def _upper(self) :
+        """Return an upper case variant of the current alphabet (PRIVATE)."""
+        return AlphabetEncoder(self.alphabet._upper(), self.new_letters.upper())
+
+    def _lower(self) :
+        """Return a lower case variant of the current alphabet (PRIVATE)."""
+        return AlphabetEncoder(self.alphabet._lower(), self.new_letters.lower())
+
     
 class Gapped(AlphabetEncoder):
     def __init__(self, alphabet, gap_char = "-"):
@@ -117,7 +160,16 @@ class Gapped(AlphabetEncoder):
         """
         return other.gap_char == self.gap_char and \
                self.alphabet.contains(other.alphabet)
-               
+
+    def _upper(self) :
+        """Return an upper case variant of the current alphabet (PRIVATE)."""
+        return Gapped(self.alphabet._upper(), self.gap_char.upper())
+
+    def _lower(self) :
+        """Return a lower case variant of the current alphabet (PRIVATE)."""
+        return Gapped(self.alphabet._lower(), self.gap_char.lower())
+
+            
 class HasStopCodon(AlphabetEncoder):
     def __init__(self, alphabet, stop_symbol = "*"):
         AlphabetEncoder.__init__(self, alphabet, stop_symbol)
@@ -138,6 +190,15 @@ class HasStopCodon(AlphabetEncoder):
         """
         return other.stop_symbol == self.stop_symbol and \
                self.alphabet.contains(other.alphabet)
+
+    def _upper(self) :
+        """Return an upper case variant of the current alphabet (PRIVATE)."""
+        return HasStopCodon(self.alphabet._upper(), self.stop_symbol.upper())
+
+    def _lower(self) :
+        """Return a lower case variant of the current alphabet (PRIVATE)."""
+        return HasStopCodon(self.alphabet._lower(), self.stop_symbol.lower())
+
 
 def _get_base_alphabet(alphabet) :
     """Returns the non-gapped non-stop-codon Alphabet object (PRIVATE)."""
