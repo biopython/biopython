@@ -1708,6 +1708,116 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertRaises(StopIteration, records.next)
 
+    def test_xbt011(self):
+        "Parsing PSI-BLASTP 2.2.18, single query which converges in 3 iterations (xbt011)"
+        #This is from old pgpblast command line tool, NOT new psiblast
+        #NOTE - The parser currently returns three BLAST record objects.
+        #The old text parser would return a single PSI BLAST record object with three rounds.
+        #This may change... although it may require a PSI BLAST specific XML parser.
+
+        filename = 'xbt011.xml'
+        datafile = os.path.join("Blast", filename)
+        records = NCBIXML.parse(open(datafile))
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTP")
+        self.assertEqual(record.version, '2.2.18')
+        self.assertEqual(record.date, "Mar-02-2008")
+        self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
+        self.assertEqual(record.query_letters, 131)
+        self.assertEqual(record.database, "/opt/BlastDBs/nr")
+        self.assertEqual(record.num_sequences_in_database, 2563094)
+        self.assertEqual(record.database_sequences, 2563094)
+        self.assertEqual(record.database_length, 864488805)
+        self.assertEqual(len(record.descriptions), 11)
+        self.assertEqual(len(record.alignments), 11)
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+        hsp = record.alignments[0].hsps[0]
+        self.assertEqual(hsp.align_length, 131)
+        self.assertEqual(hsp.identities, 131)
+        self.assertEqual(hsp.positives, 131)
+        self.assertEqual(hsp.query, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
+        self.assertEqual(hsp.sbjct, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
+        self.assertEqual(hsp.match, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
+        self.assertEqual(hsp.score, 680)
+        self.assertEqual(hsp.expect, 4.72196e-70)
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 131)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 131)
+        self.assertEqual(len(record.alignments[1].hsps), 1)
+        hsp = record.alignments[1].hsps[0]
+        self.assertEqual(hsp.align_length, 77)
+        self.assertEqual(hsp.identities, 36)
+        self.assertEqual(hsp.positives, 49)
+        self.assertEqual(hsp.query, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQ")
+        self.assertEqual(hsp.sbjct, "MAREEPYKGDYVGGVAKILQGYFANYYGFPNVSLRLAGEEANLSKTGHANAKAIVHEMIKVIKEASKPLR-RGKGFK")
+        self.assertEqual(hsp.match, "MA+ EP KGDY GG  KIL  +     G+P V+L+LAGEEAN  + G    K  +H ++K+I +A KP R +G GF+")
+        self.assertEqual(hsp.score, 181)
+        self.assertEqual(hsp.expect, 3.03476e-12)
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 77)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 76)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTP")
+        self.assertEqual(record.version, '2.2.18')
+        self.assertEqual(record.date, "Mar-02-2008")
+        self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
+        self.assertEqual(record.query_letters, 131)
+        self.assertEqual(record.database, "/opt/BlastDBs/nr")
+        self.assertEqual(record.num_sequences_in_database, 2563094)
+        self.assertEqual(record.database_sequences, 2563094)
+        self.assertEqual(record.database_length, 864488805)
+        self.assertEqual(len(record.descriptions), 19)
+        self.assertEqual(len(record.alignments), 19)
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+        hsp = record.alignments[0].hsps[0]
+        self.assertEqual(hsp.align_length, 131)
+        self.assertEqual(hsp.identities, 131)
+        self.assertEqual(hsp.positives, 131)
+        self.assertEqual(hsp.query, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
+        self.assertEqual(hsp.sbjct, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
+        self.assertEqual(hsp.match, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
+        self.assertEqual(hsp.score, 590)
+        self.assertEqual(hsp.expect, 1.28615e-59)
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 131)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 131)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTP")
+        self.assertEqual(record.version, '2.2.18')
+        self.assertEqual(record.date, "Mar-02-2008")
+        self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
+        self.assertEqual(record.query_letters, 131)
+        self.assertEqual(record.database, "/opt/BlastDBs/nr")
+        self.assertEqual(record.num_sequences_in_database, 2563094)
+        self.assertEqual(record.database_sequences, 2563094)
+        self.assertEqual(record.database_length, 864488805)
+        self.assertEqual(len(record.descriptions), 9)
+        self.assertEqual(len(record.alignments), 9)
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+        hsp = record.alignments[0].hsps[0]
+        self.assertEqual(hsp.align_length, 131)
+        self.assertEqual(hsp.identities, 131)
+        self.assertEqual(hsp.positives, 131)
+        self.assertEqual(hsp.query, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
+        self.assertEqual(hsp.sbjct, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
+        self.assertEqual(hsp.match, "MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQSQPIPGEVIAQVTSNPEYQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS")
+        self.assertEqual(hsp.score, 535)
+        self.assertEqual(hsp.expect, 3.43623e-53)
+        self.assertEqual(hsp.query_start, 1)
+        self.assertEqual(hsp.query_end, 131)
+        self.assertEqual(hsp.sbjct_start, 1)
+        self.assertEqual(hsp.sbjct_end, 131)
+
+        #TODO - Can we detect the convergence status:
+        #<Iteration_message>CONVERGED</Iteration_message>
+        self.assertRaises(StopIteration, records.next)
+
 
 if __name__ == "__main__" :
     runner = unittest.TextTestRunner(verbosity = 2)
