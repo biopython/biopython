@@ -20,6 +20,7 @@ Wrappers for the new NCBI BLAST+ tools (written in C++):
 - NcbiblastxCommandline
 - NcbitblastnCommandline
 - NcbitblastxCommandline
+- NcbipsiblastCommandline
 - Others pending
 
 """
@@ -236,7 +237,8 @@ class BlastpgpCommandline(_BlastAllOrPgpCommandLine):
     """Create a commandline for the blastpgp program from NCBI (OBSOLETE).
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
-    are replacing blastpgp with a renamed tool psiblast.
+    are replacing blastpgp with a renamed tool psiblast. This module provides
+    NcbipsiblastCommandline as a wrapper for the new tool psiblast.
     
     Like blastpgp (and blastall), this wrapper is now obsolete, and will be
     deprecated and removed in a future release of Biopython.
@@ -584,6 +586,73 @@ class NcbitblastxCommandline(_NcbiblastCommandline) :
             raise ValueError("The remote option cannot be used with in_pssm")
         if self.query and self.in_pssm :
             raise ValueError("The query option cannot be used with in_pssm")
+        _NcbiblastCommandline._validate(self)
+
+
+class NcbipsiblastCommandline(_NcbiblastCommandline) :
+    """Wrapper for the NCBI BLAST+ program psiblast.
+
+    With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
+    replaced the old blastpgp tool with a similar tool psiblast. This wrapper
+    therefore replaces BlastpgpCommandline, the wrapper for blastpgp.
+
+    >>> from Bio.Blast.Applications import NcbipsiblastCommandline
+    >>> cline = NcbipsiblastCommandline(help=True)
+    >>> cline
+    NcbipsiblastCommandline(cmd='psiblast', help=True)
+    >>> print cline
+    psiblast -help
+
+    You would typically run the command line with the Python subprocess module,
+    as described in the Biopython tutorial.
+    """
+    def __init__(self, cmd="psiblast", **kwargs):
+        self.parameters = [ \
+            #PSI-BLAST options:
+            _Option(["-num_iterations", "num_iterations"], ["input"], None, 0,
+                    """Number of iterations to perform, integer
+
+                    Integer of at least one. Default is one.
+                    Incompatible with:  remote""", False),
+            _Option(["-out_pssm", "out_pssm"], ["output", "file"], None, 0,
+                    "File name to store checkpoint file", False),
+            _Option(["-out_ascii_pssm", "out_ascii_pssm"], ["output", "file"], None, 0,
+                    "File name to store ASCII version of PSSM", False),
+            _Option(["-in_msa", "in_msa"], ["input", "file"], None, 0,
+                    """File name of multiple sequence alignment to restart PSI-BLAST
+
+                    Incompatible with:  in_pssm, query""", False),
+            _Option(["-in_pssm", "in_pssm"], ["input", "file"], None, 0,
+                    """PSI-BLAST checkpoint file
+
+                    Incompatible with:  in_msa, query, phi_pattern""", False),
+            #PSSM engine options:
+            _Option(["-pseudocount", "pseudocount"], ["input"], None, 0,
+                    """Pseudo-count value used when constructing PSSM
+
+                    Integer. Default is zero.""", False),
+            _Option(["-inclusion_ethresh", "inclusion_ethresh"], ["input"], None, 0,
+                    """E-value inclusion threshold for pairwise alignments
+
+                    Float. Default is 0.002.""", False),
+            #PHI-BLAST options:
+            _Option(["-phi_pattern", "phi_pattern"], ["input", "file"], None, 0,
+                    """File name containing pattern to search
+
+                    Incompatible with:  in_pssm""", False),
+            ]
+        _NcbiblastCommandline.__init__(self, cmd, **kwargs)
+
+    def _validate(self) :
+        incompatibles = {"num_iterations":["remote"],
+                         "in_msa":["in_pssm", "query"],
+                         "in_pssm":["in_msa","query","phi_pattern"]}
+        for a in incompatibles :
+            if self._get_parameter(a) :
+                for b in incompatibles[a] :
+                    if self._get_parameter(b) :
+                        raise ValueError("Options %s and %s are incompatible." \
+                                         % (a,b))
         _NcbiblastCommandline._validate(self)
 
 
