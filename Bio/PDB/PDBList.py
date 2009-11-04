@@ -293,7 +293,7 @@ class PDBList:
             else:
                 old_file = self.local_pdb + os.sep + pdb_code[1:3] + os.sep + 'pdb%s.ent'%(pdb_code)
                 new_file = self.obsolete_pdb + os.sep + pdb_code[1:3] + os.sep + 'pdb%s.ent'%(pdb_code)
-        shutil.move(old_file, new_file)
+            shutil.move(old_file, new_file)
 
 
     def download_entire_pdb(self,listfile=None):
