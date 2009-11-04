@@ -44,11 +44,13 @@ class _BlastCommandLine(AbstractCommandline) :
     """Base Commandline object for (classic) NCBI BLAST wrappers (PRIVATE).
 
     This is provided for subclassing, it deals with shared options
-    common to all the BLAST tools (blastall, rpsblast, pgpblast).
+    common to all the BLAST tools (blastall, rpsblast, blastpgp).
     """
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
         extra_parameters = [\
+           _Switch(["--help", "help"], ["input"],
+                    "Print USAGE, DESCRIPTION and ARGUMENTS description;  ignore other arguments."),
            _Option(["-d", "database"], ["input"], None, 1,
                    "The database to BLAST against.", False),
            _Option(["-i", "infile"], ["input", "file"], None, 1,
@@ -102,12 +104,18 @@ class _BlastCommandLine(AbstractCommandline) :
             self.parameters = extra_parameters
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
+    def _validate(self) :
+        if self.help :
+            #Don't want to check the normally mandatory arguments like db
+            return
+        AbstractCommandline._validate(self)
+
 
 class _BlastAllOrPgpCommandLine(_BlastCommandLine) :
     """Base Commandline object for NCBI BLAST wrappers (PRIVATE).
 
     This is provided for subclassing, it deals with shared options
-    common to all the blastall and pgpblast tools (but not rpsblast).
+    common to all the blastall and blastpgp tools (but not rpsblast).
     """
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
@@ -232,6 +240,16 @@ class BlastpgpCommandline(_BlastAllOrPgpCommandLine):
     
     Like blastpgp (and blastall), this wrapper is now obsolete, and will be
     deprecated and removed in a future release of Biopython.
+
+    >>> from Bio.Blast.Applications import BlastpgpCommandline
+    >>> cline = BlastpgpCommandline(help=True)
+    >>> cline
+    BlastpgpCommandline(cmd='blastpgp', help=True)
+    >>> print cline
+    blastpgp --help
+
+    You would typically run the command line with the Python subprocess module,
+    as described in the Biopython tutorial.
     """
     def __init__(self, cmd="blastpgp",**kwargs):
         self.parameters = [ \
@@ -275,8 +293,19 @@ class RpsBlastCommandline(_BlastCommandLine):
     are replacing the old rpsblast with a new version of the same name, taking
     different command line arguments.
     
-    Like the old rpsblast (and blastall), this wrapper is now obsolete, and will be
-    deprecated and removed in a future release of Biopython."""
+    Like the old rpsblast (and blastall), this wrapper is now obsolete, and will
+    be deprecated and removed in a future release of Biopython.
+
+    >>> from Bio.Blast.Applications import RpsBlastCommandline
+    >>> cline = RpsBlastCommandline(help=True)
+    >>> cline
+    RpsBlastCommandline(cmd='rpsblast', help=True)
+    >>> print cline
+    rpsblast --help
+
+    You would typically run the command line with the Python subprocess module,
+    as described in the Biopython tutorial.
+    """
     def __init__(self, cmd="rpsblast",**kwargs):
         self.parameters = [ \
            #Note -N is also in blastpgp, but not blastall
@@ -301,7 +330,7 @@ class _NcbiblastCommandline(AbstractCommandline) :
     """Base Commandline object for (classic) NCBI BLAST wrappers (PRIVATE).
 
     This is provided for subclassing, it deals with shared options
-    common to all the BLAST tools (blastall, rpsblast, pgpblast).
+    common to all the BLAST tools (blastall, rpsblast, blastpgp).
     """
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
