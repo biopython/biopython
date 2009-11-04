@@ -98,15 +98,15 @@ class TitleFunctions(unittest.TestCase) :
         #Uncomment this for testing the methods are calling the right files:
         #print "{%s done}" % filename,
 
-single_nucleic_files = ['Nucleic/lupine.nu', 'Nucleic/elderberry.nu',
-                        'Nucleic/phlox.nu', 'Nucleic/centaurea.nu',
-                        'Nucleic/wisteria.nu', 'Nucleic/sweetpea.nu',
-                        'Nucleic/lavender.nu', 'Fasta/f001']
+single_nucleic_files = ['Fasta/lupine.nu', 'Fasta/elderberry.nu',
+                        'Fasta/phlox.nu', 'Fasta/centaurea.nu',
+                        'Fasta/wisteria.nu', 'Fasta/sweetpea.nu',
+                        'Fasta/lavender.nu', 'Fasta/f001']
 
 multi_dna_files = ['Quality/example.fasta']
 
-single_amino_files = ['Amino/aster.pro', 'Amino/rosemary.pro',
-                      'Amino/rose.pro', 'Amino/loveliesbleeding.pro']
+single_amino_files = ['Fasta/aster.pro', 'Fasta/rosemary.pro',
+                      'Fasta/rose.pro', 'Fasta/loveliesbleeding.pro']
 
 multi_amino_files = ['Fasta/f002', 'Fasta/fa01']
 

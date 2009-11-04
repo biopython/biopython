@@ -256,7 +256,7 @@ def read(handle):
     from Parser import DataHandler
     DTDs = os.path.join(__path__[0], "DTDs")
     handler = DataHandler(DTDs)
-    record = handler.run(handle)
+    record = handler.read(handle)
     return record
 
 def parse(handle):

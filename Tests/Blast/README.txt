@@ -102,3 +102,4 @@ xbt007.xml - BLASTP 2.2.18+
 xbt008.xml - blastp 2.2.18
 xbt009.xml - blastx 2.2.22+ (the new C++ tool blastx, not blastall - compare with bt081.txt file)
 xbt010.xml - blastp 2.2.22+ (the new C++ tool blastp, not blastall)
+xbt011.xml - RPSBLAST 2.2.18 (the old C tool blastpgp)

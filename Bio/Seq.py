@@ -538,6 +538,42 @@ class Seq(object):
         strip_str = self._get_seq_str_and_check_alphabet(chars)
         return Seq(str(self).rstrip(strip_str), self.alphabet)
 
+    def upper(self):
+        """Returns an upper case copy of the sequence.
+
+        >>> from Bio.Alphabet import HasStopCodon, generic_protein
+        >>> from Bio.Seq import Seq
+        >>> my_seq = Seq("VHLTPeeK*", HasStopCodon(generic_protein))
+        >>> my_seq
+        Seq('VHLTPeeK*', HasStopCodon(ProteinAlphabet(), '*'))
+        >>> my_seq.lower()
+        Seq('vhltpeek*', HasStopCodon(ProteinAlphabet(), '*'))
+        >>> my_seq.upper()
+        Seq('VHLTPEEK*', HasStopCodon(ProteinAlphabet(), '*'))
+
+        This will adjust the alphabet if required. See also the lower method.
+        """
+        return Seq(str(self).upper(), self.alphabet._upper())
+
+    def lower(self):
+        """Returns a lower case copy of the sequence.
+
+        This will adjust the alphabet if required. Note that the IUPAC alphabets
+        are upper case only, and thus a generic alphabet must be substituted.
+
+        >>> from Bio.Alphabet import Gapped, generic_dna
+        >>> from Bio.Alphabet import IUPAC
+        >>> from Bio.Seq import Seq
+        >>> my_seq = Seq("CGGTACGCTTATGTCACGTAG*AAAAAA", Gapped(IUPAC.unambiguous_dna, "*"))
+        >>> my_seq
+        Seq('CGGTACGCTTATGTCACGTAG*AAAAAA', Gapped(IUPACUnambiguousDNA(), '*'))
+        >>> my_seq.lower()
+        Seq('cggtacgcttatgtcacgtag*aaaaaa', Gapped(DNAAlphabet(), '*'))
+
+        See also the upper method.
+        """
+        return Seq(str(self).lower(), self.alphabet._lower())
+
     def complement(self):
         """Returns the complement sequence. New Seq object.
 
@@ -1064,6 +1100,46 @@ class UnknownSeq(Seq):
         #Offload the alphabet stuff
         s = Seq(self._character, self.alphabet).back_transcribe()
         return UnknownSeq(self._length, s.alphabet, self._character)
+
+    def upper(self):
+        """Returns an upper case copy of the sequence.
+
+        >>> from Bio.Alphabet import generic_dna
+        >>> from Bio.Seq import UnknownSeq
+        >>> my_seq = UnknownSeq(20, generic_dna, character="n")
+        >>> my_seq
+        UnknownSeq(20, alphabet = DNAAlphabet(), character = 'n')
+        >>> print my_seq
+        nnnnnnnnnnnnnnnnnnnn
+        >>> my_seq.upper()
+        UnknownSeq(20, alphabet = DNAAlphabet(), character = 'N')
+        >>> print my_seq.upper()
+        NNNNNNNNNNNNNNNNNNNN
+
+        This will adjust the alphabet if required. See also the lower method:
+        """
+        return UnknownSeq(self._length, self.alphabet._upper(), self._character.upper())
+
+    def lower(self):
+        """Returns a lower case copy of the sequence.
+
+        This will adjust the alphabet if required:
+
+        >>> from Bio.Alphabet import IUPAC
+        >>> from Bio.Seq import UnknownSeq
+        >>> my_seq = UnknownSeq(20, IUPAC.extended_protein)
+        >>> my_seq
+        UnknownSeq(20, alphabet = ExtendedIUPACProtein(), character = 'X')
+        >>> print my_seq
+        XXXXXXXXXXXXXXXXXXXX
+        >>> my_seq.lower()
+        UnknownSeq(20, alphabet = ProteinAlphabet(), character = 'x')
+        >>> print my_seq.lower()
+        xxxxxxxxxxxxxxxxxxxx
+
+        See also the upper method.
+        """
+        return UnknownSeq(self._length, self.alphabet._lower(), self._character.lower())
 
     def translate(self, **kwargs) :
         """Translate an unknown nucleotide sequence into an unknown protein.

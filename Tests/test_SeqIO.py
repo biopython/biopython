@@ -58,18 +58,18 @@ test_files = [ \
     ("clustal",True,  'Clustalw/hedgehog.aln', 5),
     ("clustal",True,  'Clustalw/odd_consensus.aln', 2),
 #Following nucleic examples are also used in test_SeqIO_FastaIO.py
-    ("fasta",  False, 'Nucleic/lupine.nu', 1),
-    ("fasta",  False, 'Nucleic/elderberry.nu', 1),
-    ("fasta",  False, 'Nucleic/phlox.nu', 1),
-    ("fasta",  False, 'Nucleic/centaurea.nu', 1),
-    ("fasta",  False, 'Nucleic/wisteria.nu', 1),
-    ("fasta",  False, 'Nucleic/sweetpea.nu', 1),
-    ("fasta",  False, 'Nucleic/lavender.nu', 1),
+    ("fasta",  False, 'Fasta/lupine.nu', 1),
+    ("fasta",  False, 'Fasta/elderberry.nu', 1),
+    ("fasta",  False, 'Fasta/phlox.nu', 1),
+    ("fasta",  False, 'Fasta/centaurea.nu', 1),
+    ("fasta",  False, 'Fasta/wisteria.nu', 1),
+    ("fasta",  False, 'Fasta/sweetpea.nu', 1),
+    ("fasta",  False, 'Fasta/lavender.nu', 1),
 #Following protein examples are also used in test_SeqIO_FastaIO.py
-    ("fasta",  False, 'Amino/aster.pro', 1),
-    ("fasta",  False, 'Amino/loveliesbleeding.pro', 1),
-    ("fasta",  False, 'Amino/rose.pro', 1),
-    ("fasta",  False, 'Amino/rosemary.pro', 1),
+    ("fasta",  False, 'Fasta/aster.pro', 1),
+    ("fasta",  False, 'Fasta/loveliesbleeding.pro', 1),
+    ("fasta",  False, 'Fasta/rose.pro', 1),
+    ("fasta",  False, 'Fasta/rosemary.pro', 1),
 #Following examples are also used in test_Fasta.py
     ("fasta",  False, 'Fasta/f001', 1), #Protein
     ("fasta",  False, 'Fasta/f002', 3), #DNA

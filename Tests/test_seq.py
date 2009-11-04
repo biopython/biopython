@@ -131,18 +131,19 @@ print
 print "Testing Seq addition"
 print "===================="
 dna = [Seq.Seq("ATCG", IUPAC.ambiguous_dna),
-       Seq.Seq("GTCA", Alphabet.generic_dna),
+       Seq.Seq("gtca", Alphabet.generic_dna),
        Seq.MutableSeq("GGTCA", Alphabet.generic_dna),
        Seq.Seq("CTG-CA", Alphabet.Gapped(IUPAC.unambiguous_dna, "-")),
        "TGGTCA"]
 rna = [Seq.Seq("AUUUCG", IUPAC.ambiguous_rna),
        Seq.MutableSeq("AUUCG", IUPAC.ambiguous_rna),
-       Seq.Seq("UCAG", Alphabet.generic_rna),
+       Seq.Seq("uCAg", Alphabet.generic_rna),
        Seq.MutableSeq("UC-AG", Alphabet.Gapped(Alphabet.generic_rna, "-")),
        Seq.Seq("U.CAG", Alphabet.Gapped(Alphabet.generic_rna, ".")),
        "UGCAU"]
 nuc = [Seq.Seq("ATCG", Alphabet.generic_nucleotide),"UUUTTTACG"]
 protein = [Seq.Seq("ATCGPK", IUPAC.protein),
+           Seq.Seq("atcGPK", Alphabet.generic_protein),
            Seq.Seq("T.CGPK", Alphabet.Gapped(IUPAC.protein, ".")),
            Seq.Seq("T-CGPK", Alphabet.Gapped(IUPAC.protein, "-")),
            Seq.Seq("MEDG-KRXR*", Alphabet.Gapped(Alphabet.HasStopCodon(IUPAC.extended_protein, "*"), "-")),
@@ -218,6 +219,8 @@ for a in dna + rna + nuc + protein :
     assert a.strip().tostring() == a.tostring().strip()
     assert a.lstrip().tostring() == a.tostring().lstrip()
     assert a.rstrip().tostring() == a.tostring().rstrip()
+    assert a.lower().tostring() == a.tostring().lower()
+    assert a.upper().tostring() == a.tostring().upper()
     test_chars = ["-", Seq.Seq("-"), Seq.Seq("*"), "-X@"]
     alpha = Alphabet._get_base_alphabet(a.alphabet)
     if isinstance(alpha, Alphabet.DNAAlphabet) :
