@@ -159,8 +159,17 @@ class SeqFeature(object):
         The parent_sequence can be a Seq like object or a string, and will
         generally return an object of the same type. The exception to this is
         a MutableSeq as the parent sequence will return a Seq object.
+
+        This should cope with complex locations including complements, joins
+        and fuzzy positions. Even mixed strand features should work! This
+        also covers features on protein sequences (e.g. domains), although
+        here reverse strand features are not permitted.
+
+        Note - currently only sub-features of type "join" are supported.
         """
         if isinstance(parent_sequence, MutableSeq) :
+            #This avoids complications with reverse complements
+            #(the MutableSeq reverse complement acts in situ)
             parent_sequence = parent_sequence.toseq()
         if self.sub_features :
             if self.location_operator!="join":
@@ -177,6 +186,7 @@ class SeqFeature(object):
                 #This copes with mixed strand features:
                 parts = [f_sub.extract(parent_sequence) \
                          for f_sub in self.sub_features]
+            #We use addition rather than a join to avoid alphabet issues:
             f_seq = parts[0]
             for part in parts[1:] : f_seq += part
         else :
