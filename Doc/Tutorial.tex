@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 30 October 2009 (Biopython 1.52+)}
+\date{Last Update -- 4 November 2009 (Biopython 1.52+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -228,6 +228,10 @@ and HTML formats
   \item \emph{Why is the} \verb|Seq| \emph{object missing the (back) transcription \& translation methods described in this Tutorial?} \\
   You need Biopython 1.49 or later.  Alternatively, use the \verb|Bio.Seq| module functions described in Section~\ref{sec:seq-module-functions}.
 
+  \item \emph{Why is the} \verb|Seq| \emph{object missing the upper \& lower methods described in this Tutorial?} \\
+  You need Biopython 1.53 or later.  Alternatively, use \verb|str(my_seq).upper()| to get an upper case string.
+  If you need a Seq object, try \verb|Seq(str(my_seq).upper())| but be careful about blindly re-using the same alphabet.
+ 
   \item \emph{Why does't the} \verb|Seq| \emph{object translation method support the} \verb|cds| \emph{option described in this Tutorial?} \\
   You need Biopython 1.51 or later.
 
@@ -695,6 +699,46 @@ Seq('ACGT', IUPACUnambiguousDNA())
 >>> nuc_seq + dna_seq
 Seq('GATCGATGCACGT', NucleotideAlphabet())
 \end{verbatim}
+
+\section{Changing case}
+
+Python strings have very useful \verb|upper| and \verb|lower| methods for changing the case.
+As of Biopython 1.53, the \verb|Seq| object gained similar methods which are alphabet aware.
+For example,
+
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import generic_dna
+>>> dna_seq = Seq("acgtACGT", generic_dna)
+>>> dna_seq
+Seq('acgtACGT', DNAAlphabet())
+>>> dna_seq.upper()
+Seq('ACGTACGT', DNAAlphabet())
+>>> dna_seq.lower()
+Seq('acgtacgt', DNAAlphabet())
+\end{verbatim}
+
+These are useful for doing case insensitive matching:
+
+\begin{verbatim}
+>>> "GTAC" in dna_seq
+False
+>>> "GTAC" in dna_seq.upper()
+True
+\end{verbatim}
+
+Note that strictly speaking the IUPAC alphabets are for upper case sequences only, thus:
+
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import IUPAC
+>>> dna_seq = Seq("ACGT", IUPAC.unambiguous_dna)
+>>> dna_seq
+Seq('ACGT', IUPACUnambiguousDNA())
+>>> dna_seq.lower()
+Seq('acgt', DNAAlphabet())
+\end{verbatim}
+
 
 \section{Nucleotide sequences and (reverse) complements}
 \label{sec:seq-reverse-complement}
