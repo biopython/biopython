@@ -282,18 +282,21 @@ class PDBList:
             if self.flat_tree:
                 old_file = os.path.join(self.local_pdb,
                                         'pdb%s.ent' % pdb_code)
-                new_file = os.path.join(self.obsolete_pdb,
-                                        'pdb%s.ent' % pdb_code)
+                new_dir = self.obsolete_pdb             
             else:
                 old_file = os.path.join(self.local_pdb, pdb_code[1:3],
                                         'pdb%s.ent' % pdb_code)
-                new_file = os.path.join(self.obsolete_pdb, pdb_code[1:3],
-                                        'pdb%s.ent' % pdb_code)
+                new_dir = os.path.join(self.obsolete_pdb, pdb_code[1:3])
+            new_file = os.path.join(new_dir, 'pdb%s.ent' % pdb_code)
             if os.path.isfile(old_file) :
+                if not os.path.isdir(new_dir) :
+                    os.mkdir(new_dir)
                 try :
                     shutil.move(old_file, new_file)
                 except Exception :
                     print "Could not move %s to obsolete folder" % old_file
+            elif os.path.isfile(new_file) :
+                print "Obsolete file %s already moved" % old_file
             else :
                 print "Obsolete file %s is missing" % old_file
 
