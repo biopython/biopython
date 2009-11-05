@@ -123,22 +123,17 @@ class PDBList:
 
         """     
         url = urllib.urlopen(self.pdb_server+'/pub/pdb/data/status/')
-        file = url.readlines()
 
-        try:
-            # added by S.Lee
-            recent = filter(lambda x: x.isdigit(), \
-                            map(lambda x: x.split()[-1], file))[-1]
-            
-            path = self.pdb_server+'/pub/pdb/data/status/%s/'%(recent)
-            # retrieve the lists
-            added = self.get_status_list(path+'added.pdb')
-            modified = self.get_status_list(path+'modified.pdb')
-            obsolete = self.get_status_list(path+'obsolete.pdb')
-            return [added,modified,obsolete]
-        except:
-            raise
-            return None
+        # added by S.Lee
+        recent = filter(lambda x: x.isdigit(), \
+                        map(lambda x: x.split()[-1], url.readlines()))[-1]
+        
+        path = self.pdb_server+'/pub/pdb/data/status/%s/'%(recent)
+        # retrieve the lists
+        added = self.get_status_list(path+'added.pdb')
+        modified = self.get_status_list(path+'modified.pdb')
+        obsolete = self.get_status_list(path+'obsolete.pdb')
+        return [added,modified,obsolete]
 
 
 
@@ -279,7 +274,7 @@ class PDBList:
             try:
                 warnings.warn('retrieving %s' % pdb_code)
                 self.retrieve_pdb_file(pdb_code)
-            except:
+            except Exception :
                 warnings.warn('error %s' % pdb_code, RuntimeWarning)
                 # you can insert here some more log notes that
                 # something has gone wrong.            
@@ -301,7 +296,7 @@ class PDBList:
             if os.path.isfile(old_file) :
                 try :
                     shutil.move(old_file, new_file)
-                except :
+                except Exception :
                     warnings.warn("Could not move %s to obsolete folder" \
                                   % pdb_code, RuntimeWarning)
 
