@@ -263,11 +263,11 @@ class PDBList:
         automatically downloads the according PDB files.
         You can call this module as a weekly cronjob.
         """
-        changes  = self.get_recent_changes()
-        new      = changes[0]
-        modified = changes[1]
-        obsolete = changes[2]
-
+        assert os.path.isdir(self.local_pdb)
+        assert os.path.isdir(self.obsolete_pdb)
+        
+        new, modified, obsolete = self.get_recent_changes()
+        
         for pdb_code in new+modified:
             try:
                 #print 'retrieving %s' % pdb_code
@@ -289,13 +289,13 @@ class PDBList:
                                         'pdb%s.ent' % pdb_code)
                 new_file = os.path.join(self.obsolete_pdb, pdb_code[1:3],
                                         'pdb%s.ent' % pdb_code)
-            #If the old file doesn't exist, maybe someone else moved it
-            #or deleted it already. Should we issue a warning?
             if os.path.isfile(old_file) :
                 try :
                     shutil.move(old_file, new_file)
                 except Exception :
-                    print "Could not move %s to obsolete folder" % pdb_code
+                    print "Could not move %s to obsolete folder" % old_file
+            else :
+                print "Obsolete file %s is missing" % old_file
 
 
     def download_entire_pdb(self,listfile=None):
