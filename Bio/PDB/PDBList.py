@@ -36,7 +36,6 @@
 __doc__="Access the PDB over the internet (for example to download structures)."
 
 import urllib, re, os
-import warnings
 import shutil
 
 class PDBList:
@@ -143,7 +142,7 @@ class PDBList:
         Returns a list of PDB codes in the index file.
         """
         entries = []
-        warnings.warn("retrieving index file. Takes about 5 MB.")
+        print "retrieving index file. Takes about 5 MB."
         url = urllib.urlopen(self.pdb_server+'/pub/pdb/derived_data/index/entries.idx')
         # extract four-letter-codes
         entries = map(lambda x: x[:4], \
@@ -244,12 +243,11 @@ class PDBList:
         # check whether the file exists
         if not self.overwrite:
             if os.path.exists(final_file):
-                warnings.warn("file exists, not retrieved %s" % final_file,
-                              RuntimeWarning)
+                print "file exists, not retrieved %s" % final_file
                 return final_file
 
         # Retrieve the file
-        warnings.warn('retrieving %s' % url)
+        print 'retrieving %s' % url
         lines=urllib.urlopen(url).read()
         open(filename,'wb').write(lines)
         # uncompress the file
@@ -272,10 +270,10 @@ class PDBList:
 
         for pdb_code in new+modified:
             try:
-                warnings.warn('retrieving %s' % pdb_code)
+                #print 'retrieving %s' % pdb_code
                 self.retrieve_pdb_file(pdb_code)
             except Exception :
-                warnings.warn('error %s' % pdb_code, RuntimeWarning)
+                print 'error %s\n' % pdb_code
                 # you can insert here some more log notes that
                 # something has gone wrong.            
 
@@ -297,8 +295,7 @@ class PDBList:
                 try :
                     shutil.move(old_file, new_file)
                 except Exception :
-                    warnings.warn("Could not move %s to obsolete folder" \
-                                  % pdb_code, RuntimeWarning)
+                    print "Could not move %s to obsolete folder" % pdb_code
 
 
     def download_entire_pdb(self,listfile=None):
@@ -334,7 +331,7 @@ class PDBList:
     def get_seqres_file(self,savefile='pdb_seqres.txt'):
         """Retrieves a (big) file containing all the sequences 
         of PDB entries and writes it to a file."""
-        warnings.warn("retrieving sequence file. Takes about 15 MB.")
+        print "retrieving sequence file. Takes about 15 MB."
         url = urllib.urlopen(self.pdb_server+'/pub/pdb/derived_data/pdb_seqres.txt')        
         file = url.readlines()
         open(savefile,'w').writelines(file)
