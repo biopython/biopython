@@ -35,7 +35,6 @@
 
 __doc__="Access the PDB over the internet (for example to download structures)."
 
-#TODO - Use os.path.join(...) instead of adding strings with os.sep
 import urllib, re, os
 import warnings
 import shutil
@@ -81,7 +80,7 @@ class PDBList:
         if obsolete_pdb:
             self.obsolete_pdb = obsolete_pdb
         else:
-            self.obsolete_pdb = self.local_pdb + os.sep + 'obsolete'
+            self.obsolete_pdb = os.path.join(self.local_pdb, 'obsolete')
             if not os.access(self.obsolete_pdb,os.F_OK):
                 os.makedirs(self.obsolete_pdb)
 
@@ -233,9 +232,9 @@ class PDBList:
             else:
                 # Put in PDB style directory tree
                 if not obsolete:
-                    path=self.local_pdb+os.sep+code[1:3]
+                    path=os.path.join(self.local_pdb, code[1:3])
                 else:
-                    path=self.obsolete_pdb+os.sep+code[1:3]
+                    path=os.path.join(self.obsolete_pdb,code[1:3])
         else:
             # Put in specified directory
             path=pdir
@@ -243,9 +242,9 @@ class PDBList:
         if not os.access(path,os.F_OK):
             os.makedirs(path)
             
-        filename=path+os.sep+filename
+        filename=os.path.join(path, filename)
         # the final uncompressed file
-        final_file=path+os.sep+"pdb%s.ent" % code
+        final_file=os.path.join(path, "pdb%s.ent" % code)
 
         # check whether the file exists
         if not self.overwrite:
@@ -288,11 +287,15 @@ class PDBList:
         # move the obsolete files to a special folder
         for pdb_code in obsolete:
             if self.flat_tree:
-                old_file = self.local_pdb + os.sep + 'pdb%s.ent'%(pdb_code)
-                new_file = self.obsolete_pdb + os.sep + 'pdb%s.ent'%(pdb_code)
+                old_file = os.path.join(self.local_pdb,
+                                        'pdb%s.ent' % pdb_code)
+                new_file = os.path.join(self.obsolete_pdb,
+                                        'pdb%s.ent' % pdb_code)
             else:
-                old_file = self.local_pdb + os.sep + pdb_code[1:3] + os.sep + 'pdb%s.ent'%(pdb_code)
-                new_file = self.obsolete_pdb + os.sep + pdb_code[1:3] + os.sep + 'pdb%s.ent'%(pdb_code)
+                old_file = os.path.join(self.local_pdb, pdb_code[1:3],
+                                        'pdb%s.ent' % pdb_code)
+                new_file = os.path.join(self.obsolete_pdb, pdb_code[1:3],
+                                        'pdb%s.ent' % pdb_code)
             #If the old file doesn't exist, maybe someone else moved it
             #or deleted it already. Should we issue a warning?
             if os.path.isfile(old_file) :
