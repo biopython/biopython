@@ -277,8 +277,8 @@ class FastaM10Iterator(AlignmentIterator) :
         record.name = "match"
         record.annotations["original_length"] = int(match_annotation["sq_len"])
         #TODO - handle start/end coordinates properly. Short term hack for now:
-        record._al_start = int(query_annotation["al_start"])
-        record._al_stop = int(query_annotation["al_stop"])
+        record._al_start = int(match_annotation["al_start"])
+        record._al_stop = int(match_annotation["al_stop"])
 
         #This is still a very crude way of dealing with the alphabet:
         if alphabet == single_letter_alphabet and "sq_type" in match_annotation :
