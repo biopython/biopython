@@ -115,33 +115,6 @@ def compare_features(old_list, new_list, ignore_sub_features=False) :
             return False
     return True
 
-#TODO - Add this functionality to Biopython itself...
-def get_feature_nuc(f, parent_seq) :
-    """Extract SeqFeature sequence from parent sequence (as Seq)."""
-    if f.sub_features :
-        if f.location_operator!="join":
-            raise ValueError(f.location_operator)
-        if f.strand == -1 and set(f_sub.strand for f_sub in f.sub_features)==set([-1]) :
-            #This is nasty... maybe we can tweak how the GenBank parser works?
-            #It is important we do not double reverse-complement!
-            parts = [parent_seq[f_sub.location.nofuzzy_start:f_sub.location.nofuzzy_end] \
-                     for f_sub in f.sub_features]
-        else :
-            #This copes with mixed strand features:
-            parts = [get_feature_nuc(f_sub, parent_seq) for f_sub in f.sub_features]
-        f_seq = parts[0]
-        for part in parts[1:] : f_seq += part
-    else :
-        f_seq = parent_seq[f.location.nofuzzy_start:f.location.nofuzzy_end]
-    if f.strand == -1 :
-        #TODO - MutableSeq?
-        try :
-            f_seq = f_seq.reverse_complement()
-        except AttributeError :
-            assert isinstance(f_seq, str)
-            f_seq = reverse_complement(f_seq)
-    return f_seq
-
 def make_join_feature(f_list, ftype="misc_feature"):
     #NOTE - Does NOT reorder the sub-features (which you may
     #want to do for reverse strand features...)
@@ -159,16 +132,24 @@ def make_join_feature(f_list, ftype="misc_feature"):
     return jf
 
 class SeqFeatureExtraction(unittest.TestCase):
-    """Tests for get_feature_nuc function."""
+    """Tests for SeqFeature sequence extract method."""
 
     def check(self, parent_seq, feature, answer_str) :
-        new = get_feature_nuc(feature, parent_seq)
+        new = feature.extract(parent_seq)
         self.assert_(isinstance(new, Seq))
         self.assertEqual(str(new), answer_str)
 
-        new = get_feature_nuc(feature, str(parent_seq))
+        new = feature.extract(str(parent_seq))
         self.assert_(isinstance(new, str))
         self.assertEqual(new, answer_str)
+
+        new = feature.extract(parent_seq.tomutable())
+        self.assert_(isinstance(new, Seq)) #Not MutableSeq!
+        self.assertEqual(str(new), answer_str)
+
+        new = feature.extract(UnknownSeq(len(parent_seq), parent_seq.alphabet))
+        self.assert_(isinstance(new, UnknownSeq))
+        self.assertEqual(len(new), len(answer_str))
 
     def test_simple_rna(self) :
         """Extract feature from RNA (simple, default strand)"""
@@ -642,7 +623,7 @@ class NC_000932(unittest.TestCase):
             if r.id in self.skip_trans_test :
                 continue
             #Get the nucleotides and translate them
-            nuc = get_feature_nuc(f, gb_record.seq)
+            nuc = f.extract(gb_record.seq)
             pro = nuc.translate(table=self.table, cds=True)
             #print r.id, nuc, pro, r.seq
             #print f
@@ -702,7 +683,7 @@ class NC_005816(NC_000932):
         #This assumes they are in the same order...
         for fa_record, f in zip(fa_records, features) :
             #TODO - check the FASTA ID line against the co-ordinates?
-            f_seq = get_feature_nuc(f, gb_record.seq)
+            f_seq = f.extract(gb_record.seq)
             self.assertEqual(len(fa_record.seq),
                              len(f_seq))
             self.assertEqual(str(fa_record.seq),

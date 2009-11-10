@@ -38,6 +38,8 @@ o BeforePosition - Specify the position as being found before some base.
 o AfterPosition - Specify the position as being found after some base.
 """
 
+from Bio.Seq import MutableSeq, reverse_complement
+
 class SeqFeature(object):
     """Represent a Sequence Feature on an object.
 
@@ -67,6 +69,12 @@ class SeqFeature(object):
     The the top level feature would be a CDS from 1 to 60, and the sub
     features would be of 'CDS_join' type and would be from 1 to 10, 30 to
     40 and 50 to 60, respectively.
+
+    To get the nucleotide sequence for this CDS, you would need to take the
+    parent sequence and do seq[0:10]+seq[29:40]+seq[49:60] (Python counting).
+    Things are more complicated with strands and fuzzy positions. To save you
+    dealing with all these special cases, the SeqFeature provides an extract
+    method to do this for you.
     """
     def __init__(self, location = None, type = '', location_operator = '',
                  strand = None, id = "<unknown id>", 
@@ -144,6 +152,55 @@ class SeqFeature(object):
         answer.sub_features = [f._shift(offset) for f in self.sub_features]
         answer.qualifiers = dict(self.qualifiers.iteritems())
         return answer
+
+    def extract(self, parent_sequence) :
+        """Extract feature sequence from the supplied parent sequence.
+
+        The parent_sequence can be a Seq like object or a string, and will
+        generally return an object of the same type. The exception to this is
+        a MutableSeq as the parent sequence will return a Seq object.
+
+        This should cope with complex locations including complements, joins
+        and fuzzy positions. Even mixed strand features should work! This
+        also covers features on protein sequences (e.g. domains), although
+        here reverse strand features are not permitted.
+
+        Note - currently only sub-features of type "join" are supported.
+        """
+        if isinstance(parent_sequence, MutableSeq) :
+            #This avoids complications with reverse complements
+            #(the MutableSeq reverse complement acts in situ)
+            parent_sequence = parent_sequence.toseq()
+        if self.sub_features :
+            if self.location_operator!="join":
+                raise ValueError(f.location_operator)
+            if self.strand == -1 :
+                #This is a special case given how the GenBank parser works.
+                #Must avoid doing the reverse complement twice.
+                parts = []
+                for f_sub in self.sub_features:
+                    assert f_sub.strand==-1
+                    parts.append(parent_sequence[f_sub.location.nofuzzy_start:\
+                                                 f_sub.location.nofuzzy_end])
+            else :
+                #This copes with mixed strand features:
+                parts = [f_sub.extract(parent_sequence) \
+                         for f_sub in self.sub_features]
+            #We use addition rather than a join to avoid alphabet issues:
+            f_seq = parts[0]
+            for part in parts[1:] : f_seq += part
+        else :
+            f_seq = parent_sequence[self.location.nofuzzy_start:\
+                                    self.location.nofuzzy_end]
+        if self.strand == -1 :
+            #TODO - MutableSeq?
+            try :
+                f_seq = f_seq.reverse_complement()
+            except AttributeError :
+                assert isinstance(f_seq, str)
+                f_seq = reverse_complement(f_seq)
+        return f_seq
+        
 
 # --- References
 
