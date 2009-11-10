@@ -26,6 +26,11 @@ we (and the NCBI) still recommend using the XML output for parsing.
 The Seq (and related UnknownSeq) objects gained upper and lower methods,
 like the string methods of the same name but alphabet aware.
 
+The SeqFeature object now has an extract method, used with the parent
+sequence (as a string or Seq object) to get the region of that sequence
+described by the feature's location information (including the strand and
+any sub-features for a join).
+
 ===================================================================
 
 September 22, 2009: Biopython 1.52 released.
