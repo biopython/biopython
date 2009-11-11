@@ -117,8 +117,63 @@ class SeqRecordMethods(unittest.TestCase):
         self.assertEqual(rec.annotations, {"k":"v"})
         self.assertEqual(rec.letter_annotations, {"fake":"X"*52})
         self.assertEqual(len(rec.features), 6)
-        
 
+    def test_add_seq(self):
+        """Simple addition of Seq or string"""
+        for other in [Seq("BIO"), "BIO"] :
+            rec = self.record + other
+            self.assertEqual(len(rec), 26+3)
+            self.assertEqual(str(rec.seq), str(self.record.seq)+"BIO")
+            self.assertEqual(rec.id, "TestID")
+            self.assertEqual(rec.name, "TestName")
+            self.assertEqual(rec.description, "TestDescr")
+            self.assertEqual(rec.dbxrefs, ["TestXRef"])
+            self.assertEqual(rec.annotations, {"k":"v"})
+            self.assertEqual(rec.letter_annotations, {})
+            self.assertEqual(len(rec.features), 3)
+
+    def test_add_seq_left(self):
+        """Simple left addition of Seq or string"""
+        for other in [Seq("BIO"), "BIO"] :
+            rec = other + self.record
+            self.assertEqual(len(rec), 26+3)
+            self.assertEqual(str(rec.seq), "BIO"+str(self.record.seq))
+            self.assertEqual(rec.id, "TestID")
+            self.assertEqual(rec.name, "TestName")
+            self.assertEqual(rec.description, "TestDescr")
+            self.assertEqual(rec.dbxrefs, ["TestXRef"])
+            self.assertEqual(rec.annotations, {"k":"v"})
+            self.assertEqual(rec.letter_annotations, {})
+            self.assertEqual(len(rec.features), 3)
+
+    def test_slice_add_simple(self):
+        """Simple slice and add"""
+        for cut in range(27) :
+            rec = self.record[:cut] + self.record[cut:]
+            self.assertEqual(str(rec.seq), str(self.record.seq))
+            self.assertEqual(len(rec), 26)
+            self.assertEqual(rec.id, "TestID")
+            self.assertEqual(rec.name, "TestName")
+            self.assertEqual(rec.description, "TestDescr")
+            self.assertEqual(rec.dbxrefs, []) # May change this...
+            self.assertEqual(rec.annotations, {}) # May change this...
+            self.assertEqual(rec.letter_annotations, {"fake":"X"*26})
+            self.assert_(len(rec.features) <= 3)
+
+    def test_slice_add_shift(self):
+        """Simple slice and add to shift"""
+        for cut in range(27) :
+            rec = self.record[cut:] + self.record[:cut]
+            self.assertEqual(str(rec.seq), str(self.record.seq[cut:] + self.record.seq[:cut]))
+            self.assertEqual(len(rec), 26)
+            self.assertEqual(rec.id, "TestID")
+            self.assertEqual(rec.name, "TestName")
+            self.assertEqual(rec.description, "TestDescr")
+            self.assertEqual(rec.dbxrefs, []) # May change this...
+            self.assertEqual(rec.annotations, {}) # May change this...
+            self.assertEqual(rec.letter_annotations, {"fake":"X"*26})
+            self.assert_(len(rec.features) <= 3)
+            
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)

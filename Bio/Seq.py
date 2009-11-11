@@ -19,6 +19,7 @@ import sys
 
 import Alphabet
 from Alphabet import IUPAC
+from Bio.SeqRecord import SeqRecord
 from Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 from Bio.Data import CodonTable
 
