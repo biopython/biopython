@@ -1,7 +1,11 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 #TODO - Don't use "from XXX import *"
-try :
+try:
     from numpy import *
-except ImportError :
+except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(\
         "Install NumPy if you want to use Bio.SVDSuperimposer.")
@@ -41,7 +45,7 @@ y_on_x1=dot(y, rot)+tran
 # same thing
 y_on_x2=sup.get_transformed()
 
-def simple_matrix_print(matrix) :
+def simple_matrix_print(matrix):
     """Simple string to display a floating point matrix
 
     This should give the same output on multiple systems.  This is

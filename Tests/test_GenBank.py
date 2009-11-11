@@ -49,7 +49,7 @@ all_parsers = [feature_parser, record_parser]
 print "Testing parsers..."
 for parser in all_parsers:
     for filename in files_to_parse:
-        if not os.path.isfile(filename) :
+        if not os.path.isfile(filename):
             print "Missing test input file: %s" % filename
             continue
         

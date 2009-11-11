@@ -23,21 +23,21 @@ from BioSQL import BioSeq
 # This testing suite should try to detect whether a valid database
 # installation exists on this computer.  Only run the tests if it
 # does.
-try :
+try:
     from setup_BioSQL import DBDRIVER, DBTYPE
     from setup_BioSQL import DBHOST, DBUSER, DBPASSWD, TESTDB
     from setup_BioSQL import DBSCHEMA, SQL_FILE
-except (NameError, ImportError) :
+except (NameError, ImportError):
     message = "Check settings in Tests/setup_BioSQL.py "\
               "if you plan to use BioSQL."
     raise MissingExternalDependencyError(message)
 
-try :
+try:
     server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                           user = DBUSER, passwd = DBPASSWD,
                                           host = DBHOST)
     del server
-except Exception, e :
+except Exception, e:
     message = "Connection failed, check settings in Tests/setup_BioSQL.py "\
               "if you plan to use BioSQL: %s" % str(e)
     raise MissingExternalDependencyError(message)
@@ -78,7 +78,7 @@ def create_database():
         pass
     except (server.module.IntegrityError,
             server.module.ProgrammingError), e: # ditto--perhaps
-        if str(e).find('database "%s" does not exist' % TESTDB) == -1 :
+        if str(e).find('database "%s" does not exist' % TESTDB) == -1:
             raise
     # create a new database
     sql = r"CREATE DATABASE " + TESTDB
@@ -241,7 +241,7 @@ class SeqInterfaceTest(unittest.TestCase):
         for other in [Seq("ACGT",test_seq.alphabet),
                       MutableSeq("ACGT",test_seq.alphabet),
                       "ACGT",
-                      test_seq] :
+                      test_seq]:
             test = test_seq + other
             self.assertEqual(str(test), str(test_seq) + str(other))
             self.assert_(isinstance(test, Seq))
@@ -277,11 +277,11 @@ class SeqInterfaceTest(unittest.TestCase):
             self.assertEqual(sub_feature.type, "CDS")
             self.assertEqual(sub_feature.location_operator, "join")
 
-        try :
+        try:
             self.assertEqual(cds_feature.qualifiers["gene"], ["kin2"])
             self.assertEqual(cds_feature.qualifiers["protein_id"], ["CAA44171.1"])
             self.assertEqual(cds_feature.qualifiers["codon_start"], ["1"])
-        except KeyError :
+        except KeyError:
             raise KeyError("Missing expected entries, have %s" \
                            % repr(cds_feature.qualifiers))
         
@@ -344,7 +344,7 @@ class LoaderTest(unittest.TestCase):
         self.assertEqual(item_ids, ['AF297471.1', 'AJ237582.1', 'L31939.1',
                                     'M81224.1', 'X55053.1', 'X62281.1'])
 
-class DupLoadTest(unittest.TestCase) :
+class DupLoadTest(unittest.TestCase):
     """Check a few duplicate conditions fail."""
     def setUp(self):
         #drop any old database and create a new one:
@@ -365,9 +365,9 @@ class DupLoadTest(unittest.TestCase) :
     def test_duplicate_load(self):
         """Make sure can't import a single record twice (in one go)."""
         record = SeqRecord(Seq("ATGCTATGACTAT", Alphabet.generic_dna),id="Test1")
-        try :
+        try:
             count = self.db.load([record,record])
-        except Exception, err :
+        except Exception, err:
             #Good!
             self.assertEqual("IntegrityError", err.__class__.__name__)
             return
@@ -378,9 +378,9 @@ class DupLoadTest(unittest.TestCase) :
         record = SeqRecord(Seq("ATGCTATGACTAT", Alphabet.generic_dna),id="Test2")
         count = self.db.load([record])
         self.assertEqual(count,1)
-        try :
+        try:
             count = self.db.load([record])
-        except Exception, err :
+        except Exception, err:
             #Good!
             self.assertEqual("IntegrityError", err.__class__.__name__)
             return
@@ -390,9 +390,9 @@ class DupLoadTest(unittest.TestCase) :
         """Make sure can't import records with same ID (in one go)."""
         record1 = SeqRecord(Seq("ATGCTATGACTAT", Alphabet.generic_dna),id="TestA")
         record2 = SeqRecord(Seq("GGGATGCGACTAT", Alphabet.generic_dna),id="TestA")
-        try :
+        try:
             count = self.db.load([record1,record2])
-        except Exception, err :
+        except Exception, err:
             #Good!
             self.assertEqual("IntegrityError", err.__class__.__name__)
             return
@@ -403,35 +403,35 @@ class ClosedLoopTest(unittest.TestCase):
     #NOTE - For speed I don't bother to create a new database each time,
     #simple a new unique namespace is used for each test.
     
-    def test_NC_005816(self) :
+    def test_NC_005816(self):
         """GenBank file to BioSQL and back to a GenBank file, NC_005816."""
         self.loop(os.path.join(os.getcwd(), "GenBank", "NC_005816.gb"), "gb")
 
-    def test_NC_000932(self) :
+    def test_NC_000932(self):
         """GenBank file to BioSQL and back to a GenBank file, NC_000932."""
         self.loop(os.path.join(os.getcwd(), "GenBank", "NC_000932.gb"), "gb")
 
-    def test_NT_019265(self) :
+    def test_NT_019265(self):
         """GenBank file to BioSQL and back to a GenBank file, NT_019265."""
         self.loop(os.path.join(os.getcwd(), "GenBank", "NT_019265.gb"), "gb")
 
-    def test_protein_refseq2(self) :
+    def test_protein_refseq2(self):
         """GenBank file to BioSQL and back to a GenBank file, protein_refseq2."""
         self.loop(os.path.join(os.getcwd(), "GenBank", "protein_refseq2.gb"), "gb")
 
-    def test_no_ref(self) :
+    def test_no_ref(self):
         """GenBank file to BioSQL and back to a GenBank file, noref."""
         self.loop(os.path.join(os.getcwd(), "GenBank", "noref.gb"), "gb")
 
-    def test_one_of(self) :
+    def test_one_of(self):
         """GenBank file to BioSQL and back to a GenBank file, one_of."""
         self.loop(os.path.join(os.getcwd(), "GenBank", "one_of.gb"), "gb")
 
-    def test_cor6_6(self) :
+    def test_cor6_6(self):
         """GenBank file to BioSQL and back to a GenBank file, cor6_6."""
         self.loop(os.path.join(os.getcwd(), "GenBank", "cor6_6.gb"), "gb")
 
-    def test_arab1(self) :
+    def test_arab1(self):
         """GenBank file to BioSQL and back to a GenBank file, arab1."""
         self.loop(os.path.join(os.getcwd(), "GenBank", "arab1.gb"), "gb")
 
@@ -459,9 +459,9 @@ class ClosedLoopTest(unittest.TestCase):
         new_records = list(SeqIO.parse(handle, "gb"))
         #And check they still agree
         self.assertEqual(len(new_records), len(original_records))
-        for old, new in zip(original_records, new_records) :
+        for old, new in zip(original_records, new_records):
             #TODO - remove this hack because we don't yet write these (yet):
-            for key in ["comment", "references", "db_source"] :
+            for key in ["comment", "references", "db_source"]:
                 if key in old.annotations and key not in new.annotations:
                     del old.annotations[key]
             #TODO - remove this hack one we write the date properly:
@@ -476,35 +476,35 @@ class TransferTest(unittest.TestCase):
     #NOTE - For speed I don't bother to create a new database each time,
     #simple a new unique namespace is used for each test.
     
-    def test_NC_005816(self) :
+    def test_NC_005816(self):
         """GenBank file to BioSQL, then again to a new namespace, NC_005816."""
         self.trans(os.path.join(os.getcwd(), "GenBank", "NC_005816.gb"), "gb")
 
-    def test_NC_000932(self) :
+    def test_NC_000932(self):
         """GenBank file to BioSQL, then again to a new namespace, NC_000932."""
         self.trans(os.path.join(os.getcwd(), "GenBank", "NC_000932.gb"), "gb")
 
-    def test_NT_019265(self) :
+    def test_NT_019265(self):
         """GenBank file to BioSQL, then again to a new namespace, NT_019265."""
         self.trans(os.path.join(os.getcwd(), "GenBank", "NT_019265.gb"), "gb")
 
-    def test_protein_refseq2(self) :
+    def test_protein_refseq2(self):
         """GenBank file to BioSQL, then again to a new namespace, protein_refseq2."""
         self.trans(os.path.join(os.getcwd(), "GenBank", "protein_refseq2.gb"), "gb")
 
-    def test_no_ref(self) :
+    def test_no_ref(self):
         """GenBank file to BioSQL, then again to a new namespace, noref."""
         self.trans(os.path.join(os.getcwd(), "GenBank", "noref.gb"), "gb")
 
-    def test_one_of(self) :
+    def test_one_of(self):
         """GenBank file to BioSQL, then again to a new namespace, one_of."""
         self.trans(os.path.join(os.getcwd(), "GenBank", "one_of.gb"), "gb")
 
-    def test_cor6_6(self) :
+    def test_cor6_6(self):
         """GenBank file to BioSQL, then again to a new namespace, cor6_6."""
         self.trans(os.path.join(os.getcwd(), "GenBank", "cor6_6.gb"), "gb")
 
-    def test_arab1(self) :
+    def test_arab1(self):
         """GenBank file to BioSQL, then again to a new namespace, arab1."""
         self.trans(os.path.join(os.getcwd(), "GenBank", "arab1.gb"), "gb")
 
@@ -580,9 +580,9 @@ class InDepthLoadTest(unittest.TestCase):
         self.assertEqual(db_record.description, record.description)
         self.assertEqual(str(db_record.seq), str(record.seq))
         #Good... now try reloading it!
-        try :
+        try:
             count = self.db.load([record])
-        except Exception, err :
+        except Exception, err:
             #Good!
             self.assertEqual("IntegrityError", err.__class__.__name__)
             return

@@ -1,16 +1,20 @@
 #!/usr/bin/env python
 
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 import StringIO
 from operator import truth
 
-try :
+try:
     from Bio import trie
-except ImportError :
+except ImportError:
     import os
     from Bio import MissingExternalDependencyError
-    if os.name=="java" :
+    if os.name=="java":
         message = "Not available on Jython, Bio.trie requires compiled C code."
-    else :
+    else:
         message = "Could not import Bio.trie, check C code was compiled."
     raise MissingExternalDependencyError(message)
 

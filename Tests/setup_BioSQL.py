@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 """Preparation for BioSQL tests, setting passwords etc
 """
 import os
@@ -44,9 +48,9 @@ SQL_FILE = os.path.join(os.getcwd(), "BioSQL", DBSCHEMA)
 assert os.path.isfile(SQL_FILE), "Missing %s" % SQL_FILE
 
 #Check the database driver is installed:
-try :
+try:
     __import__(DBDRIVER)
-except ImportError :
+except ImportError:
     message = "Install %s or correct Tests/setup_BioSQL.py "\
               "(not important if you do not plan to use BioSQL)." % DBDRIVER
     raise MissingExternalDependencyError(message)

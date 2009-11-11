@@ -1,6 +1,10 @@
-try :
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
+try:
     from numpy import asarray
-except ImportError :
+except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(\
         "Install NumPy if you want to use Bio.MarkovModel.")
@@ -43,7 +47,7 @@ print "Classifying"
 #precision on different platforms.  This returns a list
 #containing a tuple containing a list (fine), and a float.
 states = MarkovModel.find_states(mm, "AACGTT")
-for state_list, state_float in states :
+for state_list, state_float in states:
     print "State %s, %0.10f" % (repr(state_list), state_float)
 print_mm(mm)
 

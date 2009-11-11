@@ -254,7 +254,7 @@ class TestRunner(unittest.TextTestRunner):
         # Have to do a nested try because try/except/except/finally requires
         # python 2.5+
         try:
-            try :
+            try:
                 stdout = sys.stdout
                 sys.stdout = output
                 if name.startswith("test_"):
@@ -266,7 +266,7 @@ class TestRunner(unittest.TextTestRunner):
                         # unittest-type test.
                         test = ComparisonTestCase(name, output)
                         suite = unittest.TestSuite([test])
-                else :
+                else:
                     #It's a doc test
                     sys.stderr.write("%s docstring test ... " % name)
                     #Can't use fromlist=name.split(".") until python 2.5+
@@ -292,11 +292,11 @@ class TestRunner(unittest.TextTestRunner):
                 result.stream.write(result.separator2+"\n")
                 result.stream.write(traceback.format_exc())
                 return False
-            except KeyboardInterrupt, err :
+            except KeyboardInterrupt, err:
                 # Want to allow this, and abort the test
                 # (see below for special case)
                 raise err
-            except :
+            except:
                 # This happens in Jython with java.lang.ClassFormatError:
                 # Invalid method Code length ...
                 sys.stderr.write("ERROR\n")

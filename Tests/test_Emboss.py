@@ -24,29 +24,29 @@ from Bio.SeqRecord import SeqRecord
 
 exes_wanted = ["water", "needle", "seqret", "transeq"]
 exes = dict() #Dictionary mapping from names to exe locations
-if sys.platform=="win32" :
+if sys.platform=="win32":
     #The default installation path is C:\mEMBOSS which contains the exes.
     #EMBOSS also sets an environment variable which we will check for.
-    try :
+    try:
         path = os.environ["EMBOSS_ROOT"]
-    except KeyError :
+    except KeyError:
         #print >> sys.stderr, "Missing EMBOSS_ROOT environment variable!"
         raise MissingExternalDependencyError(\
             "Install EMBOSS if you want to use Bio.EMBOSS.")
-    if os.path.isdir(path) :
-        for name in exes_wanted :
-            if os.path.isfile(os.path.join(path, name+".exe")) :
+    if os.path.isdir(path):
+        for name in exes_wanted:
+            if os.path.isfile(os.path.join(path, name+".exe")):
                 exes[name] = os.path.join(path, name+".exe")
     del path, name
-else :
+else:
     import commands
-    for name in exes_wanted :
+    for name in exes_wanted:
         #This will "just work" if installed on the path as normal on Unix
-        if "not found" not in commands.getoutput("%s -help" % name) :
+        if "not found" not in commands.getoutput("%s -help" % name):
             exes[name] = name
     del name
 
-if len(exes) < len(exes_wanted) :
+if len(exes) < len(exes_wanted):
     raise MissingExternalDependencyError(\
         "Install EMBOSS if you want to use Bio.EMBOSS.")
 
@@ -114,39 +114,39 @@ def emboss_piped_AlignIO_convert(alignments, old_format, new_format):
 
 
 #Top level function as this makes it easier to use for debugging:
-def compare_records(old_list, new_list) :
+def compare_records(old_list, new_list):
     """Check two lists of SeqRecords agree, raises a ValueError if mismatch."""
-    if len(old_list) != len(new_list) :
+    if len(old_list) != len(new_list):
         raise ValueError("%i vs %i records" % (len(old_list), len(new_list)))
-    for old, new in zip(old_list, new_list) :
+    for old, new in zip(old_list, new_list):
         #Note the name matching is a bit fuzzy, e.g. truncation and
         #no spaces in PHYLIP files.
         if old.id != new.id and old.name != new.name \
         and (old.id not in new.id) and (new.id not in old.id) \
-        and (old.id.replace(" ","_") != new.id.replace(" ","_")) :
+        and (old.id.replace(" ","_") != new.id.replace(" ","_")):
             raise ValueError("'%s' or '%s' vs '%s' or '%s' records" \
                              % (old.id, old.name, new.id, new.name))
-        if len(old.seq) != len(new.seq) :
+        if len(old.seq) != len(new.seq):
             raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
-        if str(old.seq).upper() != str(new.seq).upper() :
-            if len(old.seq) < 200 :
+        if str(old.seq).upper() != str(new.seq).upper():
+            if len(old.seq) < 200:
                 raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
-            else :
+            else:
                 raise ValueError("'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100]))
         if old.features and new.features \
-        and len(old.features) != len(new.features) :
+        and len(old.features) != len(new.features):
             raise ValueError("%i vs %i features" \
                              % (len(old.features, len(new.features))))
         #TODO - check annotation
     return True
 
 #Top level function as this makes it easier to use for debugging:
-def compare_alignments(old_list, new_list) :
+def compare_alignments(old_list, new_list):
     """Check two lists of Alignments agree, raises a ValueError if mismatch."""
-    if len(old_list) != len(new_list) :
+    if len(old_list) != len(new_list):
         raise ValueError("%i vs %i alignments" % (len(old_list), len(new_list)))
-    for old, new in zip(old_list, new_list) :
-        if len(old) != len(new) :
+    for old, new in zip(old_list, new_list):
+        if len(old) != len(new):
             raise ValueError("Alignment with %i vs %i records" \
                              % (len(old), len(new)))
         compare_records(old,new)
@@ -155,38 +155,38 @@ def compare_alignments(old_list, new_list) :
 class SeqRetSeqIOTests(unittest.TestCase):
     """Check EMBOSS seqret against Bio.SeqIO for converting files."""
 
-    def tearDown(self) :
+    def tearDown(self):
         clean_up()
 
     def check_SeqIO_to_EMBOSS(self, in_filename, in_format, skip_formats=[],
-                              alphabet=None) :
+                              alphabet=None):
         """Can Bio.SeqIO write files seqret can read back?"""
-        if alphabet :
+        if alphabet:
             records = list(SeqIO.parse(open(in_filename), in_format, alphabet))
-        else :
+        else:
             records = list(SeqIO.parse(open(in_filename), in_format))
-        for temp_format in ["genbank","fasta"] :
-            if temp_format in skip_formats :
+        for temp_format in ["genbank","fasta"]:
+            if temp_format in skip_formats:
                 continue
             new_records = list(emboss_piped_SeqIO_convert(records, temp_format, "fasta"))
-            try :
+            try:
                 self.assert_(compare_records(records, new_records))
-            except ValueError, err :
+            except ValueError, err:
                 raise ValueError("Disagree on file %s %s in %s format: %s" \
                                  % (in_format, in_filename, temp_format, err))
             
     def check_EMBOSS_to_SeqIO(self, filename, old_format,
-                              skip_formats=[]) :
+                              skip_formats=[]):
         """Can Bio.SeqIO read seqret's conversion of the file?"""
         #TODO: Why can't we read EMBOSS's swiss output?
         self.assert_(os.path.isfile(filename))
         old_records = list(SeqIO.parse(open(filename), old_format))
-        for new_format in ["genbank","fasta","pir","embl", "ig"] :
-            if new_format in skip_formats :
+        for new_format in ["genbank","fasta","pir","embl", "ig"]:
+            if new_format in skip_formats:
                 continue
             handle = emboss_convert(filename, old_format, new_format)
             new_records = list(SeqIO.parse(handle, new_format))
-            try :
+            try:
                 self.assert_(compare_records(old_records, new_records))
             except ValueError, err:
                 raise ValueError("Disagree on %s file %s in %s format: %s" \
@@ -200,19 +200,19 @@ class SeqRetSeqIOTests(unittest.TestCase):
         #Check Bio.SeqIO can read EMBOSS seqret output...
         self.check_EMBOSS_to_SeqIO(filename, old_format, skip_formats)
 
-    def test_genbank(self) :
+    def test_genbank(self):
         """SeqIO & EMBOSS reading each other's conversions of a GenBank file."""
         self.check_SeqIO_with_EMBOSS("GenBank/cor6_6.gb", "genbank")
 
-    def test_genbank2(self) :
+    def test_genbank2(self):
         """SeqIO & EMBOSS reading each other's conversions of another GenBank file."""
         self.check_SeqIO_with_EMBOSS("GenBank/NC_000932.gb", "genbank")
 
-    def test_embl(self) :
+    def test_embl(self):
         """SeqIO & EMBOSS reading each other's conversions of an EMBL file."""
         self.check_SeqIO_with_EMBOSS("EMBL/U87107.embl", "embl")
 
-    def test_ig(self) :
+    def test_ig(self):
         """SeqIO & EMBOSS reading each other's conversions of an ig file."""
         self.check_SeqIO_to_EMBOSS("IntelliGenetics/VIF_mase-pro.txt", "ig",
                                    alphabet=generic_protein)
@@ -221,7 +221,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
         #and  "IntelliGenetics/TAT_mase_nuc.txt"
         #EMBOSS seems to ignore them.
 
-    def test_pir(self) :
+    def test_pir(self):
         """SeqIO & EMBOSS reading each other's conversions of a PIR file."""
         #Skip genbank here, EMBOSS mangles the LOCUS line:
         self.check_SeqIO_with_EMBOSS("NBRF/clustalw.pir", "pir",
@@ -230,7 +230,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
         #Skip GenBank, EMBOSS 6.0.1 on Windows won't output proteins as GenBank
         self.check_SeqIO_with_EMBOSS("NBRF/DMB_prot.pir", "pir",
                                skip_formats=["embl","genbank"])
-    def test_clustalw(self) :
+    def test_clustalw(self):
         """SeqIO & EMBOSS reading each other's conversions of a Clustalw file."""
         self.check_SeqIO_with_EMBOSS("Clustalw/hedgehog.aln", "clustal",
                                    skip_formats=["embl","genbank"])
@@ -240,60 +240,60 @@ class SeqRetSeqIOTests(unittest.TestCase):
 class SeqRetAlignIOTests(unittest.TestCase):
     """Check EMBOSS seqret against Bio.SeqIO for converting files."""
 
-    def tearDown(self) :
+    def tearDown(self):
         clean_up()
 
     def check_EMBOSS_to_AlignIO(self, filename, old_format,
-                              skip_formats=[]) :
+                              skip_formats=[]):
         """Can AlignIO read seqret's conversion of the file?"""
         self.assert_(os.path.isfile(filename), filename)
         old_aligns = list(AlignIO.parse(open(filename), old_format))
         formats = ["clustal", "phylip", "ig"]
-        if len(old_aligns) == 1 :
+        if len(old_aligns) == 1:
             formats.extend(["fasta","nexus"])
-        for new_format in formats :
-            if new_format in skip_formats :
+        for new_format in formats:
+            if new_format in skip_formats:
                 continue
             handle = emboss_convert(filename, old_format, new_format)
-            try :
+            try:
                 new_aligns = list(AlignIO.parse(handle, new_format))
-            except :
+            except:
                 raise ValueError("Can't parse %s file %s in %s format." \
                                  % (old_format, filename, new_format))
-            try :
+            try:
                 self.assert_(compare_alignments(old_aligns, new_aligns))
-            except ValueError, err :
+            except ValueError, err:
                 raise ValueError("Disagree on %s file %s in %s format: %s" \
                                  % (old_format, filename, new_format, err))
 
     def check_AlignIO_to_EMBOSS(self, in_filename, in_format, skip_formats=[],
-                                alphabet=None) :
+                                alphabet=None):
         """Can Bio.AlignIO write files seqret can read back?"""
-        if alphabet :
+        if alphabet:
             old_aligns = list(AlignIO.parse(open(in_filename), in_format,
                                             alphabet))
-        else :
+        else:
             old_aligns = list(AlignIO.parse(open(in_filename), in_format))
 
         formats = ["clustal", "phylip"]
-        if len(old_aligns) == 1 :
+        if len(old_aligns) == 1:
             formats.extend(["fasta","nexus"])
-        for temp_format in formats :
-            if temp_format in skip_formats :
+        for temp_format in formats:
+            if temp_format in skip_formats:
                 continue
             #PHYLIP is a simple format which explicitly supports
             #multiple alignments (unlike FASTA).
-            try :
+            try:
                 new_aligns = list(emboss_piped_AlignIO_convert(old_aligns,
                                                                temp_format,
                                                                "phylip"))
-            except ValueError, e :
+            except ValueError, e:
                 #e.g. ValueError: Need a DNA, RNA or Protein alphabet
                 #from writing Nexus files...
                 continue
-            try :
+            try:
                 self.assert_(compare_alignments(old_aligns, new_aligns))
-            except ValueError, err :
+            except ValueError, err:
                 raise ValueError("Disagree on file %s %s in %s format: %s" \
                                  % (in_format, in_filename, temp_format, err))
 
@@ -305,7 +305,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
         #Check Bio.AlignIO can read EMBOSS seqret output...
         self.check_EMBOSS_to_AlignIO(filename, old_format, skip_formats)
         
-    def test_align_clustalw(self) :
+    def test_align_clustalw(self):
         """AlignIO & EMBOSS reading each other's conversions of a ClustalW file."""
         self.check_AlignIO_with_EMBOSS("Clustalw/hedgehog.aln", "clustal")
         self.check_AlignIO_with_EMBOSS("Clustalw/opuntia.aln", "clustal")
@@ -314,7 +314,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
         self.check_AlignIO_with_EMBOSS("Clustalw/protein.aln", "clustal")
         self.check_AlignIO_with_EMBOSS("Clustalw/promals3d.aln", "clustal")
 
-    def test_clustalw(self) :
+    def test_clustalw(self):
         """AlignIO & EMBOSS reading each other's conversions of a PHYLIP file."""
         self.check_AlignIO_with_EMBOSS("Phylip/horses.phy", "phylip")
         self.check_AlignIO_with_EMBOSS("Phylip/hennigian.phy", "phylip")
@@ -328,31 +328,31 @@ class SeqRetAlignIOTests(unittest.TestCase):
 class PairwiseAlignmentTests(unittest.TestCase):
     """Run pairwise alignments with water and needle, and parse them."""
 
-    def tearDown(self) :
+    def tearDown(self):
         clean_up()
         
     def pairwise_alignment_check(self, query_seq,
                                  targets, alignments,
-                                 local=True) :
+                                 local=True):
         """Check pairwise alignment data is sane."""
         #The datasets should be small, so making iterators into lists is OK
         targets = list(targets)
         alignments = list(alignments)
         self.assertEqual(len(targets), len(alignments))
-        for target, alignment in zip(targets, alignments) :
+        for target, alignment in zip(targets, alignments):
             self.assertEqual(len(alignment), 2)
             #self.assertEqual(target.id, alignment[1].id) #too strict
             if alignment[1].id not in target.id \
-            and alignment[1].id not in target.name :
+            and alignment[1].id not in target.name:
                 raise AssertionError("%s vs %s or %s" \
                                      % (alignment[1].id , target.id, target.name))
-            if local :
+            if local:
                 #Local alignment
                 self.assert_(str(alignment[0].seq).replace("-","") \
                              in query_seq)
                 self.assert_(str(alignment[1].seq).replace("-","").upper() \
                              in str(target.seq).upper())
-            else :
+            else:
                 #Global alignment
                 self.assertEqual(str(query_seq), str(alignment[0].seq).replace("-",""))
                 self.assertEqual(str(target.seq).upper(), \
@@ -485,7 +485,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         out_file = "Emboss/temp_test2.water"
         in_file = "Fasta/f002"
         self.assert_(os.path.isfile(in_file))
-        if os.path.isfile(out_file) :
+        if os.path.isfile(out_file):
             os.remove(out_file)
         cline = WaterCommandline(cmd=exes["water"])
         cline.set_parameter("-asequence", "asis:%s" % query)
@@ -519,7 +519,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         out_file = "Emboss/temp_test3.water"
         in_file = "GenBank/cor6_6.gb"
         self.assert_(os.path.isfile(in_file))
-        if os.path.isfile(out_file) :
+        if os.path.isfile(out_file):
             os.remove(out_file)
         cline = WaterCommandline(cmd=exes["water"])
         cline.set_parameter("asequence", "asis:%s" % query)
@@ -554,7 +554,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         out_file = "Emboss/temp_test4.water"
         in_file = "SwissProt/sp004"
         self.assert_(os.path.isfile(in_file))
-        if os.path.isfile(out_file) :
+        if os.path.isfile(out_file):
             os.remove(out_file)
         cline = WaterCommandline(cmd=exes["water"])
         cline.set_parameter("-asequence", "asis:%s" % query)
@@ -641,21 +641,21 @@ class PairwiseAlignmentTests(unittest.TestCase):
         self.assertRaises(ValueError, str, cline)
 
 #Top level function as this makes it easier to use for debugging:
-def emboss_translate(sequence, table=None, frame=None) :
+def emboss_translate(sequence, table=None, frame=None):
     """Call transeq, returns protein sequence as string."""
     #TODO - Support transeq in Bio.Emboss.Applications?
     #(doesn't seem worthwhile as Biopython can do translations)
 
-    if not sequence :
+    if not sequence:
         raise ValueError(sequence)
 
     #Setup,
     cline = exes["transeq"]
 
-    if len(sequence) < 100 :
+    if len(sequence) < 100:
         filename = None
         cline += " -sequence asis:%s" % sequence
-    else :
+    else:
         #There are limits on command line string lengths...
         #use a temp file instead.
         filename = "Emboss/temp_transeq.txt"
@@ -680,37 +680,37 @@ def emboss_translate(sequence, table=None, frame=None) :
     child.stdin.close()
     #Check no error output:
     err = child.stderr.read()
-    if err != "" :
+    if err != "":
         raise ValueError(str(cline) + "\n" + err)
 
     #Check we could read it's output
     record = SeqIO.read(child.stdout, "fasta")
 
-    if 0 != child.wait() :
+    if 0 != child.wait():
         raise ValueError(str(cline))
     
-    if filename :
+    if filename:
         os.remove(filename)
-        if not record.id.startswith("Test") :
+        if not record.id.startswith("Test"):
             raise ValueError(str(cline))
-    else :
-        if not record.id.startswith("asis") :
+    else:
+        if not record.id.startswith("asis"):
             raise ValueError(str(cline))
     return str(record.seq)
 
 #Top level function as this makes it easier to use for debugging:
-def check_translation(sequence, translation, table=None) :
-    if table is None :
+def check_translation(sequence, translation, table=None):
+    if table is None:
         t = 1
-    else :
+    else:
         t = table
     if translation != str(sequence.translate(t)) \
     or translation != str(translate(sequence,t)) \
-    or translation != translate(str(sequence),t) :
+    or translation != translate(str(sequence),t):
         #More details...
-        for i, amino in enumerate(translation) :
+        for i, amino in enumerate(translation):
             codon = sequence[i*3:i*3+3]
-            if amino != str(codon.translate(t)) :
+            if amino != str(codon.translate(t)):
                 raise ValueError("%s -> %s not %s (table %s)" \
                          % (codon, amino, codon.translate(t), t))
         #Shouldn't reach this line:
@@ -721,10 +721,10 @@ def check_translation(sequence, translation, table=None) :
 class TranslationTests(unittest.TestCase):
     """Run pairwise alignments with water and needle, and parse them."""
 
-    def tearDown(self) :
+    def tearDown(self):
         clean_up()
 
-    def test_simple(self) :
+    def test_simple(self):
         """transeq vs Bio.Seq for simple translations (including alt tables)."""
 
         examples = [Seq("ACGTGACTGACGTAGCATGCCACTAGG"),
@@ -751,27 +751,27 @@ class TranslationTests(unittest.TestCase):
                     Seq("ACGGGGGGGGTAAGTGGTGTGTGTGTAGT", generic_dna),
                     ]
         
-        for sequence in examples :
+        for sequence in examples:
             #EMBOSS treats spare residues differently... avoid this issue
-            if len(sequence) % 3 != 0 :
+            if len(sequence) % 3 != 0:
                 sequence = sequence[:-(len(sequence)%3)]
             self.assertEqual(len(sequence) % 3, 0)
             self.assert_(len(sequence) > 0)
             self.check(sequence)
 
-    def check(self, sequence) :
+    def check(self, sequence):
         """Compare our translation to EMBOSS's using all tables.
 
         Takes a Seq object (and a filename containing it)."""
         translation = emboss_translate(sequence)
         self.assert_(check_translation(sequence, translation))
 
-        for table in [1,2,3,4,5,6,9,10,11,12,13,14,15] :
+        for table in [1,2,3,4,5,6,9,10,11,12,13,14,15]:
             translation = emboss_translate(sequence, table)
             self.assert_(check_translation(sequence, translation, table))
         return True
 
-    def translate_all_codons(self, letters) :
+    def translate_all_codons(self, letters):
         sequence = Seq("".join([c1+c3+c3 \
                        for c1 in letters \
                        for c2 in letters \
@@ -779,29 +779,29 @@ class TranslationTests(unittest.TestCase):
                        generic_nucleotide)
         self.check(sequence)
         
-    #def test_all_ambig_dna_codons(self) :
+    #def test_all_ambig_dna_codons(self):
     #    """transeq vs Bio.Seq on ambiguous DNA codons (inc. alt tables)."""
     #    self.translate_all_codons(ambiguous_dna_letters)
 
-    def test_all_unambig_dna_codons(self) :
+    def test_all_unambig_dna_codons(self):
         """transeq vs Bio.Seq on unambiguous DNA codons (inc. alt tables)."""
         self.translate_all_codons("ATCGatcg")
 
-    def test_all_unambig_rna_codons(self) :
+    def test_all_unambig_rna_codons(self):
         """transeq vs Bio.Seq on unambiguous RNA codons (inc. alt tables)."""
         self.translate_all_codons("AUCGaucg")
 
-    def test_mixed_unambig_rna_codons(self) :
+    def test_mixed_unambig_rna_codons(self):
         """transeq vs Bio.Seq on unambiguous DNA/RNA codons (inc. alt tables)."""
         self.translate_all_codons("ATUCGatucg")
         
-def clean_up() :
+def clean_up():
     """Fallback clean up method to remove temp files."""
-    for filename in os.listdir("Emboss") :
-        if filename.startswith("temp_") :
-            try :
+    for filename in os.listdir("Emboss"):
+        if filename.startswith("temp_"):
+            try:
                 os.remove(filename)
-            except :
+            except:
                 pass
 
 if __name__ == "__main__":

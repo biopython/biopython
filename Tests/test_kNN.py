@@ -8,9 +8,9 @@
 
 import unittest
 
-try :
+try:
     import numpy
-except ImportError :
+except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(\
         "Install NumPy if you want to use Bio.kNN.")

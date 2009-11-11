@@ -6,9 +6,9 @@
 # See the Biopython Tutorial for an explanation of the biological
 # background of these tests.
 
-try :
+try:
     import numpy
-except ImportError :
+except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(\
         "Install NumPy if you want to use Bio.LogisticRegression.")

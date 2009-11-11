@@ -12,9 +12,9 @@
 import unittest
 import warnings
 
-try :
+try:
     from numpy.random import random
-except ImportError :
+except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(\
         "Install NumPy if you want to use Bio.PDB.")
@@ -297,7 +297,7 @@ class PDBParseTest(unittest.TestCase):
 
 class Exposure(unittest.TestCase):
     "Testing Bio.PDB.HSExposure."
-    def setUp(self) :
+    def setUp(self):
         warnings.resetwarnings()
         warnings.simplefilter('ignore', PDBConstructionWarning)
         pdb_filename = "PDB/a_structure.pdb"
@@ -317,7 +317,7 @@ class Exposure(unittest.TestCase):
         self.a_residues = a_residues
         self.radius = 13.0
 
-    def test_HSExposureCA(self) :
+    def test_HSExposureCA(self):
         """HSExposureCA."""
         hse = HSExposureCA(self.model, self.radius)
         residues = self.a_residues
@@ -338,7 +338,7 @@ class Exposure(unittest.TestCase):
         self.assertEqual(24, residues[-2].xtra["EXP_HSE_A_U"])
         self.assertEqual(0, len(residues[-1].xtra))
 
-    def test_HSExposureCB(self) :
+    def test_HSExposureCB(self):
         """HSExposureCB."""
         hse = HSExposureCB(self.model, self.radius)
         residues = self.a_residues
@@ -360,7 +360,7 @@ class Exposure(unittest.TestCase):
         self.assertEqual(23, residues[-1].xtra["EXP_HSE_B_D"])
         self.assertEqual(15, residues[-1].xtra["EXP_HSE_B_U"])
 
-    def test_ExposureCN(self) :
+    def test_ExposureCN(self):
         """HSExposureCN."""
         hse = ExposureCN(self.model, self.radius)
         residues = self.a_residues

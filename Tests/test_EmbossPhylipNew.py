@@ -22,30 +22,30 @@ exes_wanted = ['fdnadist', 'fneighbor', 'fprotdist','fprotpars','fconsense',
 exes = dict() #Dictionary mapping from names to exe locations
 
 # Windows bit not tested (but copied from test_Emboss so should work) 
-if sys.platform=="win32" :
+if sys.platform=="win32":
     #The default installation path is C:\mEMBOSS which contains the exes.
     #EMBOSS also sets an environment variable which we will check for.
-    try :
+    try:
         path = os.environ["EMBOSS_ROOT"]
-    except KeyError :
+    except KeyError:
         #print >> sys.stderr, "Missing EMBOSS_ROOT environment variable!"
         raise MissingExternalDependencyError(\
         "Install the Emboss package 'Phylip New' if you want to use the "+\
         "Emboss.Applications wrappers for phylogenetic tools")
-    if os.path.isdir(path) :
-        for name in exes_wanted :
-            if os.path.isfile(os.path.join(path, name+".exe")) :
+    if os.path.isdir(path):
+        for name in exes_wanted:
+            if os.path.isfile(os.path.join(path, name+".exe")):
                 exes[name] = os.path.join(path, name+".exe")
     del path, name
-else :
+else:
     import commands
-    for name in exes_wanted :
+    for name in exes_wanted:
         #This will "just work" if installed on the path as normal on Unix
-        if "not found" not in commands.getoutput("%s -help" % name) :
+        if "not found" not in commands.getoutput("%s -help" % name):
             exes[name] = name
     del name
 
-if len(exes) < len(exes_wanted) :
+if len(exes) < len(exes_wanted):
     raise MissingExternalDependencyError(\
           "Install the Emboss package 'PhylipNew' if you want to use the "+\
           "Emboss.Applications wrappers for phylogenetic tools")
@@ -77,11 +77,11 @@ def clean_up():
         if os.path.isfile(filename):
             os.remove(filename)
 
-def parse_trees(filename) :
+def parse_trees(filename):
     """Helper function until we have Bio.TreeIO on trunk."""
     data = open("test_file", "r").read()
-    for tree_str in data.split(";\n") :
-        if tree_str :
+    for tree_str in data.split(";\n"):
+        if tree_str:
             yield Trees.Tree(tree_str+";")
 
 class DistanceTests(unittest.TestCase):
@@ -110,7 +110,7 @@ class DistanceTests(unittest.TestCase):
                                          outfile = "test_file",
                                          auto = True)
         return_code = run_command(cline)
-        if return_code != 0 :
+        if return_code != 0:
             raise ValueError("Return code %s from:\n%s" \
                              % (return_code, str(cline)))
         #biopython can't grok distance matrices, so we'll just check it exists
@@ -124,9 +124,9 @@ class DistanceTests(unittest.TestCase):
                                      outtreefile = "test_file",
                                      auto= True, filter = True)
         return_code = run_command(cline)
-        if return_code != 0 :
+        if return_code != 0:
             raise ValueError("Return code %s from:\n%s" % (return_code, str(cline)))
-        for tree in parse_trees("test_file") :
+        for tree in parse_trees("test_file"):
             tree_taxa = [t.replace(" ", "_") for t in tree.get_taxa()]
             self.assertEqual(self.test_taxa, sorted(tree_taxa))
 
@@ -187,7 +187,7 @@ class ParsimonyTests(unittest.TestCase):
                                          outtreefile = "test_file",
                                          auto= True, stdout=True)
         return_code = run_command(cline)
-        if return_code != 0 :
+        if return_code != 0:
             raise ValueError("Return code %s from:\n%s" \
                              % (return_code, str(cline)))
         a_taxa = [s.name.replace(" ", "_") for s in
@@ -244,7 +244,7 @@ class BootstrapTests(unittest.TestCase):
                                     reps = 2,
                                     auto = True, filter = True)
         return_code = run_command(cline)
-        if return_code != 0 :
+        if return_code != 0:
             raise ValueError("Return code %s from:\n%s" \
                              % (return_code, str(cline)))
         # the resultant file should have 2 alignments...
@@ -288,7 +288,7 @@ class TreeComparisonTests(unittest.TestCase):
                                      outtreefile = "test_file",
                                      auto = True, filter = True)
         return_code = run_command(str(cline))
-        if return_code != 0 :
+        if return_code != 0:
             raise ValueError("Return code %s from:\n%s" \
                              % (return_code, str(cline)))
         taxa1 = parse_trees("test_file").next().get_taxa()
@@ -303,7 +303,7 @@ class TreeComparisonTests(unittest.TestCase):
                                      outfile = "test_file",
                                      auto = True, filter = True)
         return_code = run_command(str(cline))
-        if return_code != 0 :
+        if return_code != 0:
             raise ValueError("Return code %s from:\n%s" \
                              % (return_code, str(cline)))
         self.assert_(os.path.isfile("test_file"))

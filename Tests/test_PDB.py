@@ -3,9 +3,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.  
 
-try :
+try:
     import numpy
-except ImportError :
+except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(\
         "Install NumPy if you want to use Bio.PDB.")
@@ -15,12 +15,12 @@ from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarni
 import warnings
 def send_pdb_warnings_to_stdout(message, category, filename, lineno,
                                 file=None, line=None):
-    if category in [PDBConstructionException, PDBConstructionWarning] :
+    if category in [PDBConstructionException, PDBConstructionWarning]:
         print message
 warnings.resetwarnings()
 warnings.showwarning = send_pdb_warnings_to_stdout
 
-def quick_neighbor_search_test() :
+def quick_neighbor_search_test():
     #Based on the self test in Bio.PDB.NeighborSearch
     from numpy.random import random
     from Bio.PDB.NeighborSearch import NeighborSearch

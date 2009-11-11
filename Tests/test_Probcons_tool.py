@@ -15,7 +15,7 @@ from Bio.Align.Applications import ProbconsCommandline
 probcons_exe = None
 if sys.platform=="win32":
     raise MissingExternalDependencyError("PROBCONS not available on Windows")
-else :
+else:
     import commands
     output = commands.getoutput("probcons")
     if "not found" not in output and "probcons" in output.lower():
@@ -48,7 +48,7 @@ class ProbconsApplication(unittest.TestCase):
         align = AlignIO.read(StringIO(stdout.read()), "fasta")
         records = list(SeqIO.parse(open(self.infile1),"fasta"))
         self.assertEqual(len(records),len(align))
-        for old, new in zip(records, align) :
+        for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-",""), str(old.seq).replace("-",""))
 
@@ -68,7 +68,7 @@ class ProbconsApplication(unittest.TestCase):
         align = AlignIO.read(StringIO(stdout.read()), "clustal")
         records = list(SeqIO.parse(open(self.infile1),"fasta"))
         self.assertEqual(len(records),len(align))
-        for old, new in zip(records, align) :
+        for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-",""), str(old.seq).replace("-",""))
 

@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 """Test the different representations of Genes.
 
 This exercises the Motif, Schema and Signature methods of representing
@@ -31,13 +36,13 @@ class PatternIOTest(unittest.TestCase):
         self.alphabet = IUPAC.ambiguous_dna
         self.test_file = os.path.join("NeuralNetwork", "patternio.txt")
         #Remove any existing copy of the output file,
-        if os.path.isfile(self.test_file) :
+        if os.path.isfile(self.test_file):
             os.remove(self.test_file)
         self.pattern_io = Pattern.PatternIO(self.alphabet)
 
     def tearDown(self):
         #Clean up by removing our output file,
-        if os.path.isfile(self.test_file) :
+        if os.path.isfile(self.test_file):
             os.remove(self.test_file)
 
     def test_motif(self):
@@ -233,9 +238,9 @@ class MotifFinderTest(unittest.TestCase):
             iterator = SeqIO.parse(handle, "fasta",
                                    alphabet=IUPAC.unambiguous_dna)
             while 1:
-                try :
+                try:
                     seq_record = iterator.next()
-                except StopIteration :
+                except StopIteration:
                     break
                 if seq_record is None:
                     break
@@ -568,7 +573,7 @@ class SchemaFactoryTest(unittest.TestCase):
         # get the sequences one at a time, and encode them
         fasta_handle = open(self.test_file, 'r')
         for seq_record in SeqIO.parse(fasta_handle, "fasta",
-                                      alphabet=IUPAC.unambiguous_dna) :
+                                      alphabet=IUPAC.unambiguous_dna):
             schema_values = schema_coder.representation(seq_record.seq)
             if VERBOSE:
                 print "Schema values:", schema_values
