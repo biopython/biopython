@@ -1,4 +1,4 @@
-# Copyright 2008 by Peter Cock.  All rights reserved.
+# Copyright 2008-2009 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -37,7 +37,7 @@ from Bio.SeqRecord import SeqRecord
 from Interfaces import SequentialSequenceWriter
 
 #This is a generator function!
-def TabIterator(handle, alphabet = single_letter_alphabet) :
+def TabIterator(handle, alphabet = single_letter_alphabet):
     """Iterates over tab separated lines (as SeqRecord objects).
 
     Each line of the file should contain one tab only, dividing the line
@@ -51,11 +51,11 @@ def TabIterator(handle, alphabet = single_letter_alphabet) :
 
     Any blank lines are ignored.
     """
-    for line in handle :
-        try :
+    for line in handle:
+        try:
             title, seq = line.split("\t") #will fail if more than one tab!
-        except :
-            if line.strip() == "" :
+        except:
+            if line.strip() == "":
                 #It's a blank line, ignore it
                 continue
             raise ValueError("Each line should have one tab separating the" + \
@@ -89,7 +89,7 @@ class TabWriter(SequentialSequenceWriter):
         self.handle.write("%s\t%s\n" % (title, seq))
 
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     print "Running quick self test"
     from StringIO import StringIO
 
@@ -99,10 +99,10 @@ if __name__ == "__main__" :
     assert len(records) == 2
 
     handle = StringIO("Alpha\tAAAAAAA\tExtra\nBeta\tCCCCCCC\n")
-    try :
+    try:
         records = list(TabIterator(handle))
         assert False, "Should have reject this invalid example!"
-    except ValueError :
+    except ValueError:
         #Good!
         pass
 
