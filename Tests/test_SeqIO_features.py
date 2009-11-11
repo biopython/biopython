@@ -286,52 +286,9 @@ class SeqFeatureExtraction(unittest.TestCase):
         f = make_join_feature([f1,f2,f3,f4,f5,f6,f7,f8])
         self.check(s, f, "BIOPYTHON")
 
-class SeqRecordCreation(unittest.TestCase):
-    """Test basic creation of SeqRecords.
+class SeqFeatureCreation(unittest.TestCase):
+    """Test basic creation of SeqFeatures.
     """
-    def test_annotations(self):
-        """Pass in annotations to SeqRecords.
-        """
-        rec = SeqRecord(Seq("ACGT", generic_dna),
-                        id="Test", name="Test", description="Test")
-        self.assertEqual(rec.annotations, {})
-        rec = SeqRecord(Seq("ACGT", generic_dna),
-                        id="Test", name="Test", description="Test",
-                        annotations={"test" : ["a test"]})
-        self.assertEqual(rec.annotations["test"], ["a test"])
-
-    def test_letter_annotations(self):
-        """Pass in letter annotations to SeqRecords.
-        """
-        rec = SeqRecord(Seq("ACGT", generic_dna),
-                        id="Test", name="Test", description="Test")
-        self.assertEqual(rec.annotations, {})
-        rec = SeqRecord(Seq("ACGT", generic_dna),
-                        id="Test", name="Test", description="Test",
-                        letter_annotations={"test" : [1, 2, 3, 4]})
-        self.assertEqual(rec.letter_annotations["test"], [1, 2, 3, 4])
-        #Now try modifying it to a bad value...
-        try:
-            rec.letter_annotations["bad"] = "abc"
-            self.assert_(False, "Adding a bad letter_annotation should fail!")
-        except (TypeError, ValueError), e:
-            pass
-        #Now try setting it afterwards to a bad value...
-        rec = SeqRecord(Seq("ACGT", generic_dna),
-                        id="Test", name="Test", description="Test")
-        try:
-            rec.letter_annotations={"test" : [1, 2, 3]}
-            self.assert_(False, "Changing to bad letter_annotations should fail!")
-        except (TypeError, ValueError), e:
-            pass
-        #Now try setting it at creation time to a bad value...
-        try:
-            rec = SeqRecord(Seq("ACGT", generic_dna),
-                            id="Test", name="Test", description="Test",
-                            letter_annotations={"test" : [1, 2, 3]})
-            self.assert_(False, "Wrong length letter_annotations should fail!")
-        except (TypeError, ValueError), e:
-            pass
 
     def test_qualifiers(self):
         """Pass in qualifiers to SeqFeatures.
