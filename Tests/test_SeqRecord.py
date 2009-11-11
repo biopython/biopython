@@ -12,6 +12,7 @@ import unittest
 from Bio.Alphabet import generic_dna, generic_rna, generic_protein
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio.SeqFeature import SeqFeature, FeatureLocation
 
 class SeqRecordCreation(unittest.TestCase):
     """Test basic creation of SeqRecords."""
@@ -57,15 +58,33 @@ class SeqRecordCreation(unittest.TestCase):
         except (TypeError, ValueError), e:
             pass
 
-class SeqRecordSlicing(unittest.TestCase):
-    """Test SeqRecord slicing."""
+class SeqRecordMethods(unittest.TestCase):
+    """Test SeqRecord methods."""
 
-    def test_simple(self):
+    def setUp(self) :
+        f1 = SeqFeature(FeatureLocation(4,8), strand=+1, type="CDS")
+        f2 = SeqFeature(FeatureLocation(12,22), strand=-1, type="CDS")
+        f3 = SeqFeature(FeatureLocation(20,26), strand=None, type="CDS")
+        self.record = SeqRecord(Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),
+                                id="TestID", name="TestName", description="TestDescr",
+                                dbxrefs=["TestXRef"], annotations={"k":"v"},
+                                letter_annotations = {"fake":"X"*26},
+                                features = [f1,f2,f3])
+
+    def test_slice_variantes(self):
+        """Simple slices using different start/end values"""
+        for start in range(-30,30)+[None] :
+            for end in range(-30,30)+[None] :
+                if start is None and end is None : continue
+                rec = self.record[start:end]
+                seq = self.record.seq[start:end]
+                seq_str = str(self.record.seq)[start:end]
+                self.assertEqual(seq_str, str(seq))
+                self.assertEqual(seq_str, str(rec.seq))
+
+    def test_slice_simple(self):
         """Simple slice"""
-        rec = SeqRecord(Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),
-                        id="TestID", name="TestName", description="TestDescr",
-                        dbxrefs=["TestXRef"], annotations={"k":"v"},
-                        letter_annotations = {"fake":"X"*26})
+        rec = self.record
         self.assertEqual(len(rec), 26)
         left = rec[:10]
         self.assertEqual(str(left.seq), str(rec.seq[:10]))
@@ -81,24 +100,19 @@ class SeqRecordSlicing(unittest.TestCase):
             self.assertEqual(sub.letter_annotations, {"fake":"X"*10})
             self.assertEqual(sub.dbxrefs, []) # May change this...
             self.assertEqual(sub.annotations, {}) # May change this...
+            #self.assertEqual(len(sub.features), 1)
 
-class SeqRecordAddition(unittest.TestCase):
-    """Test SeqRecord addition."""
-
-    def test_simple(self):
+    def test_add_simple(self):
         """Simple addition"""
-        rec1 = SeqRecord(Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),
-                         id="TestID", name="TestName", description="TestDescr",
-                         dbxrefs=["TestXRef"], annotations={"k":"v"},
-                         letter_annotations = {"fake":[0,1]*13})
-        rec = rec1 + rec1
+        rec = self.record + self.record
         self.assertEqual(len(rec), 52)
         self.assertEqual(rec.id, "TestID")
         self.assertEqual(rec.name, "TestName")
         self.assertEqual(rec.description, "TestDescr")
         self.assertEqual(rec.dbxrefs, ["TestXRef"])
         self.assertEqual(rec.annotations, {"k":"v"})
-        self.assertEqual(rec.letter_annotations, {"fake":[0,1]*26})
+        self.assertEqual(rec.letter_annotations, {"fake":"X"*52})
+        self.assertEqual(len(rec.features), 6)
         
 
 if __name__ == "__main__":
