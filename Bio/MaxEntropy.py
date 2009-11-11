@@ -266,7 +266,7 @@ def train(training_set, results, feature_fns, update_fn=None):
     return me
 
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     #Car data from example Naive Bayes Classifier example by Eric Meisner November 22, 2003
     #http://www.inf.u-szeged.hu/~ormandi/teaching/mi2/02-naiveBayes-example.pdf
 
