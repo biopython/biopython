@@ -102,7 +102,7 @@ def draw_box((x1, y1), (x2, y2),
         color = colour
         del colour
 
-    if not isinstance(color, colors.Color) :
+    if not isinstance(color, colors.Color):
         raise ValueError("Invalid color %s" % repr(color))
     
     if color == colors.white and border is None:   # Force black border on 
@@ -110,7 +110,7 @@ def draw_box((x1, y1), (x2, y2),
     elif border is None:                           # undefined border, else
         strokecolor = color                        # use fill color
     elif border is not None:
-        if not isinstance(border, colors.Color) :
+        if not isinstance(border, colors.Color):
             raise ValueError("Invalid border color %s" % repr(border))
         strokecolor = border
 
@@ -134,7 +134,7 @@ def draw_polygon(list_of_points,
         the four points in order, and filling with the passed colour.          
     """
     #Let the UK spelling (colour) override the USA spelling (color)
-    if colour is not None :
+    if colour is not None:
         color = colour
         del colour
 
@@ -146,7 +146,7 @@ def draw_polygon(list_of_points,
         strokecolor = border
 
     xy_list = []
-    for (x,y) in list_of_points :
+    for (x,y) in list_of_points:
         xy_list.append(x)
         xy_list.append(y)
 
@@ -165,13 +165,13 @@ def draw_arrow((x1, y1), (x2, y2), color=colors.lightgreen, border=None,
         given by head_length_ratio (also relative to box height), and
         an orientation that may be 'left' or 'right'.
     """
-    if shaft_height_ratio < 0 or 1 < shaft_height_ratio :
+    if shaft_height_ratio < 0 or 1 < shaft_height_ratio:
         raise ValueError("Arrow shaft height ratio should be in range 0 to 1")
-    if head_length_ratio < 0 :
+    if head_length_ratio < 0:
         raise ValueError("Arrow head length ratio should be positive")
 
     #Let the UK spelling (colour) override the USA spelling (color)
-    if colour is not None :
+    if colour is not None:
         color = colour
         del colour
 
@@ -191,7 +191,7 @@ def draw_arrow((x1, y1), (x2, y2), color=colors.lightgreen, border=None,
         x1, x2, y1, y2 = xmin, xmax, ymin, ymax
     elif orientation == 'left':
         x1, x2, y1, y2 = xmax, xmin, ymin, ymax
-    else :
+    else:
         raise ValueError("Invalid orientation %s, should be 'left' or 'right'" \
                          % repr(orientation))
 
@@ -202,7 +202,7 @@ def draw_arrow((x1, y1), (x2, y2), color=colors.lightgreen, border=None,
     boxwidth = x2-x1
     shaftheight = boxheight*shaft_height_ratio
     headlength = min(abs(boxheight)*head_length_ratio, abs(boxwidth))
-    if boxwidth < 0 :
+    if boxwidth < 0:
         headlength *= -1 #reverse it
 
 
@@ -379,13 +379,13 @@ class AbstractDrawer:
         self.set_bounds(start, end) # Set limits on what will be drawn
         self.tracklines = tracklines    # Set flags
         
-    def _set_xcentre(self, value) :
+    def _set_xcentre(self, value):
         self.xcenter = value
     xcentre = property(fget = lambda self : self.xcenter,
                        fset = _set_xcentre,
                        doc="Backwards compatible alias for xcenter (OBSOLETE)")
 
-    def _set_ycentre(self, value) :
+    def _set_ycentre(self, value):
         self.ycenter = value
     ycentre = property(fget = lambda self : self.ycenter,
                        fset = _set_ycentre,

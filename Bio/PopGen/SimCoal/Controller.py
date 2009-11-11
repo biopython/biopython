@@ -50,10 +50,10 @@ class SimCoalController:
         os.chdir(par_dir)
         cmd = self.simcoal_dir + os.sep + self.bin_name + ' ' + \
               par_file + ' ' + str(num_sims) + ' ' + ploydi
-        if sys.platform=="win32" :
+        if sys.platform=="win32":
             #There is no /dev/nul on Windows
             cmd += ' > nul 2>nul'
-        else :
+        else:
             cmd += ' >/dev/null 2>&1'
         os.system(cmd)
         os.chdir(curr_dir)
