@@ -13,7 +13,7 @@ programs.
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
-class _EmbossMinimalCommandLine(AbstractCommandline) :
+class _EmbossMinimalCommandLine(AbstractCommandline):
     """Base Commandline object for EMBOSS wrappers (PRIVATE).
 
     This is provided for subclassing, it deals with shared options
@@ -70,7 +70,7 @@ class _EmbossMinimalCommandLine(AbstractCommandline) :
            _Switch(["-die","die"], [],
                    "Report dying program messages."),
             ]
-        try :
+        try:
             #Insert extra parameters - at the start just in case there
             #are any arguments which must come last:
             self.parameters = extra_parameters + self.parameters
@@ -79,7 +79,7 @@ class _EmbossMinimalCommandLine(AbstractCommandline) :
             self.parameters = extra_parameters
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
-class _EmbossCommandLine(_EmbossMinimalCommandLine) :
+class _EmbossCommandLine(_EmbossMinimalCommandLine):
     """Base Commandline object for EMBOSS wrappers (PRIVATE).
 
     This is provided for subclassing, it deals with shared options
@@ -94,7 +94,7 @@ class _EmbossCommandLine(_EmbossMinimalCommandLine) :
            _Option(["-outfile","outfile"], ["output", "file"], None, 0,
                    "Output filename"),
             ]
-        try :
+        try:
             #Insert extra parameters - at the start just in case there
             #are any arguments which must come last:
             self.parameters = extra_parameters + self.parameters
@@ -103,11 +103,11 @@ class _EmbossCommandLine(_EmbossMinimalCommandLine) :
             self.parameters = extra_parameters
         _EmbossMinimalCommandLine.__init__(self, cmd, **kwargs)
 
-    def _validate(self) :
+    def _validate(self):
         #Check the outfile, filter, or stdout option has been set.
         #We can't simply do this via the required flag for the outfile
         #output - this seems the simplest solution.
-        if not (self.outfile or self.filter or self.stdout) :
+        if not (self.outfile or self.filter or self.stdout):
             raise ValueError("You must either set outfile (output filename), "
                              "or enable filter or stdout (output to stdout).")
         return _EmbossMinimalCommandLine._validate(self)
@@ -187,13 +187,13 @@ class PrimerSearchCommandline(_EmbossCommandLine):
                   "Allowed percentage mismatch.")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
-    def set_parameter(self, name, value=None) :
+    def set_parameter(self, name, value=None):
         #Due to a historical inconsistency, the PrimerSearchCommandline
         #wrapper used -out and out, rather than -output and output like all
         #the other EMBOSS wrappers.  I want to implement this paramter via
         #the common _EmbossCommandLine base class, hence this hack for
         #backwards compatibility:
-        if name in ["out", "-out"] :
+        if name in ["out", "-out"]:
             import warnings
             warnings.warn('Aliases "-out" and "out" are deprecated, please use '
                           'either "-outfile" or "outfile" with set_parameter '
@@ -936,14 +936,14 @@ class SeqretCommandline(_EmbossMinimalCommandLine):
          ]
         _EmbossMinimalCommandLine.__init__(self, cmd, **kwargs)
 
-    def _validate(self) :
+    def _validate(self):
         #Check the outfile, filter, or stdout option has been set.
         #We can't simply do this via the required flag for the outfile
         #output - this seems the simplest solution.
-        if not (self.outseq or self.filter or self.stdout) :
+        if not (self.outseq or self.filter or self.stdout):
             raise ValueError("You must either set outfile (output filename), "
                              "or enable filter or stdout (output to stdout).")
-        if not (self.sequence or self.filter or self.stdint) :
+        if not (self.sequence or self.filter or self.stdint):
             raise ValueError("You must either set sequence (input filename), "
                              "or enable filter or stdin (input from stdin).")
         return _EmbossMinimalCommandLine._validate(self)

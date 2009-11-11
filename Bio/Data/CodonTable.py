@@ -46,7 +46,7 @@ class CodonTable:
         self.start_codons = start_codons
         self.stop_codons = stop_codons
 
-    def __str__(self) :
+    def __str__(self):
         """Returns a simple text representation of the codon table
 
         e.g.
@@ -54,20 +54,20 @@ class CodonTable:
         >>> print Bio.Data.CodonTable.standard_dna_table
         >>> print Bio.Data.CodonTable.generic_by_id[1]"""
 
-        if self.id :
+        if self.id:
             answer = "Table %i" % self.id
-        else :
+        else:
             answer = "Table ID unknown"
-        if self.names :
+        if self.names:
             answer += " " + ", ".join(filter(None, self.names))
 
         #Use the main four letters (and the conventional ordering)
         #even for ambiguous tables
         letters = self.nucleotide_alphabet.letters
         if isinstance(self.nucleotide_alphabet, Alphabet.DNAAlphabet) \
-        or (letters is not None and "T" in letters) :
+        or (letters is not None and "T" in letters):
             letters = "TCAG"
-        else :
+        else:
             #Should be either RNA or generic nucleotides,
             #e.g. Bio.Data.CodonTable.generic_by_id[1]
             letters = "UCAG"
@@ -78,24 +78,24 @@ class CodonTable:
             ) + "|"
         answer=answer + "\n--+" \
                + "+".join(["---------" for c2 in letters]) + "+--"
-        for c1 in letters :
-            for c3 in letters :
+        for c1 in letters:
+            for c3 in letters:
                 line = c1 + " |"
-                for c2 in letters :
+                for c2 in letters:
                     codon = c1+c2+c3
                     line = line + " %s" % codon
-                    if codon in self.stop_codons :
+                    if codon in self.stop_codons:
                         line = line + " Stop|"
-                    else :
-                        try :
+                    else:
+                        try:
                             amino = self.forward_table[codon]
-                        except KeyError :
+                        except KeyError:
                             amino = "?"
-                        except TranslationError :
+                        except TranslationError:
                             amino = "?"
-                        if codon in self.start_codons :
+                        if codon in self.start_codons:
                             line = line + " %s(s)|" % amino
-                        else :
+                        else:
                             line = line + " %s   |" % amino
                 line = line + " " + c3
                 answer = answer + "\n"+ line 
@@ -592,27 +592,27 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
                if set([codon[2] for codon in codons]).issuperset(set(meanings)))
     #candidates is a list (not a set) to preserve the iteration order
     candidates = []
-    for c1 in c1_list :
-        for c2 in c2_list :
-            for c3 in c3_list :
+    for c1 in c1_list:
+        for c2 in c2_list:
+            for c3 in c3_list:
                 codon = c1+c2+c3
-                if codon not in candidates and codon not in codons :
+                if codon not in candidates and codon not in codons:
                     candidates.append(codon)
     answer = codons[:] #copy
     #print "Have %i new candidates" % len(candidates)
-    for ambig_codon in candidates :
+    for ambig_codon in candidates:
         wanted = True
         #e.g. 'TRR' -> 'TAA', 'TAG', 'TGA', 'TGG'
         for codon in [c1+c2+c3 \
                       for c1 in ambiguous_nucleotide_values[ambig_codon[0]] \
                       for c2 in ambiguous_nucleotide_values[ambig_codon[1]] \
                       for c3 in ambiguous_nucleotide_values[ambig_codon[2]]]:
-            if codon not in codons :
+            if codon not in codons:
                 #This ambiguous codon can code for a non-stop, exclude it!
                 wanted=False
                 #print "Rejecting %s" % ambig_codon
                 continue
-        if wanted :
+        if wanted:
             answer.append(ambig_codon)
     return answer
 
@@ -783,17 +783,17 @@ del _merged_values
 del key, val
 
 #Basic sanity test,
-for n in ambiguous_generic_by_id.keys() :
+for n in ambiguous_generic_by_id.keys():
     assert ambiguous_rna_by_id[n].forward_table["GUU"] == "V"
     assert ambiguous_rna_by_id[n].forward_table["GUN"] == "V"
     assert ambiguous_rna_by_id[n].forward_table["UUN"] == "X" #F or L
     #R = A or G, so URR = UAA or UGA / TRA = TAA or TGA = stop codons
     if "UAA" in unambiguous_rna_by_id[n].stop_codons \
-    and "UGA" in unambiguous_rna_by_id[n].stop_codons :
-        try :
+    and "UGA" in unambiguous_rna_by_id[n].stop_codons:
+        try:
             print ambiguous_dna_by_id[n].forward_table["TRA"]
             assert False, "Should be a stop only"
-        except KeyError :
+        except KeyError:
             pass
         assert "URA" in ambiguous_generic_by_id[n].stop_codons
         assert "URA" in ambiguous_rna_by_id[n].stop_codons

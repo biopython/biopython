@@ -71,7 +71,7 @@ class Record:
             for col in row:
                 output = output + '%s\t' % col
             output = output + '\n'
-        if len(self.table_rows) > MAX_ROWS :
+        if len(self.table_rows) > MAX_ROWS:
             output = output + '...\n'
             row = self.table_rows[-1]
             output = output + '%s: ' % self.table_rows.index( row )

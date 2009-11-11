@@ -1283,7 +1283,7 @@ class Nexus(object):
                 raise NexusError('Could not open %s for writing.' % filename)
         elif hasattr(file, "write"):
             fh=filename
-        else :
+        else:
             raise ValueError("Neither a filename nor a handle was supplied")
         if not omit_NEXUS:
             fh.write('#NEXUS\n')
@@ -1357,10 +1357,10 @@ class Nexus(object):
             else:
                 fh.write(self.append_sets(exclude=exclude,delete=delete,mrbayes=mrbayes))
 
-        if fh == filename :
+        if fh == filename:
             #We were given the handle, don't close it.
             return filename
-        else :
+        else:
             #We opened the handle, so we should close it.
             fh.close()
             return filename
@@ -1642,10 +1642,10 @@ class Nexus(object):
             raise NexusError('Illegal gap position: %d' % pos)
         if n==0:
             return
-        if self.taxlabels :
+        if self.taxlabels:
             #python 2.3 does not support zip(*[])
             sitesm=zip(*[self.matrix[t].tostring() for t in self.taxlabels])
-        else :
+        else:
             sitesm=[]
         sitesm[pos:pos]=[['-']*len(self.taxlabels)]*n
         # #self.matrix=dict([(taxon,Seq(map(''.join,zip(*sitesm))[i],self.alphabet)) for\

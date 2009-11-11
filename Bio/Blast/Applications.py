@@ -42,7 +42,7 @@ class FastacmdCommandline(AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
-class _BlastCommandLine(AbstractCommandline) :
+class _BlastCommandLine(AbstractCommandline):
     """Base Commandline object for (classic) NCBI BLAST wrappers (PRIVATE).
 
     This is provided for subclassing, it deals with shared options
@@ -97,7 +97,7 @@ class _BlastCommandLine(AbstractCommandline) :
            _Option(["-g", "gapped"], ["input"], None, 0, 
                    "Whether to do a gapped alignment.  T/F", False),
         ]
-        try :
+        try:
             #Insert extra parameters - at the start just in case there
             #are any arguments which must come last:
             self.parameters = extra_parameters + self.parameters
@@ -106,14 +106,14 @@ class _BlastCommandLine(AbstractCommandline) :
             self.parameters = extra_parameters
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
-    def _validate(self) :
-        if self.help :
+    def _validate(self):
+        if self.help:
             #Don't want to check the normally mandatory arguments like db
             return
         AbstractCommandline._validate(self)
 
 
-class _BlastAllOrPgpCommandLine(_BlastCommandLine) :
+class _BlastAllOrPgpCommandLine(_BlastCommandLine):
     """Base Commandline object for NCBI BLAST wrappers (PRIVATE).
 
     This is provided for subclassing, it deals with shared options
@@ -138,7 +138,7 @@ class _BlastAllOrPgpCommandLine(_BlastCommandLine) :
                    "Hits/passes.  Integer 0-2. 0 for multiple hit, "
                    "1 for single hit (does not apply to blastn)", False),
         ]
-        try :
+        try:
             #Insert extra parameters - at the start just in case there
             #are any arguments which must come last:
             self.parameters = extra_parameters + self.parameters
@@ -331,7 +331,7 @@ class RpsBlastCommandline(_BlastCommandLine):
         _BlastCommandLine.__init__(self, cmd, **kwargs)
 
    
-class _NcbiblastCommandline(AbstractCommandline) :
+class _NcbiblastCommandline(AbstractCommandline):
     """Base Commandline object for (classic) NCBI BLAST wrappers (PRIVATE).
 
     This is provided for subclassing, it deals with shared options
@@ -425,7 +425,7 @@ class _NcbiblastCommandline(AbstractCommandline) :
 
                     Incompatible with:  gilist, negative_gilist, subject_loc, num_threads, ..."""),
             ]
-        try :
+        try:
             #Insert extra parameters - at the start just in case there
             #are any arguments which must come last:
             self.parameters = extra_parameters + self.parameters
@@ -434,13 +434,13 @@ class _NcbiblastCommandline(AbstractCommandline) :
             self.parameters = extra_parameters
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
-    def _validate(self) :
+    def _validate(self):
         incompatibles = {"remote":["gilist", "negative_gilist", "num_threads"],
                          "gilist":["negative_gilist"]}
-        for a in incompatibles :
-            if self._get_parameter(a) :
-                for b in incompatibles[a] :
-                    if self._get_parameter(b) :
+        for a in incompatibles:
+            if self._get_parameter(a):
+                for b in incompatibles[a]:
+                    if self._get_parameter(b):
                         raise ValueError("Options %s and %s are incompatible." \
                                          % (a,b))
         AbstractCommandline._validate(self)
@@ -467,7 +467,7 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
                     Incompatible with:  db, gilist, negative_gilist, remote.
                     See also subject.""", False),
             ]
-        try :
+        try:
             #Insert extra parameters - at the start just in case there
             #are any arguments which must come last:
             self.parameters = extra_parameters + self.parameters
@@ -477,18 +477,18 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
 
 
-    def _validate(self) :
+    def _validate(self):
         incompatibles = {"subject_loc":["db, gilist, negative_gilist, remote"],
                          "subject":["db", "gilist", "negative_gilist"]}
-        for a in incompatibles :
-            if self._get_parameter(a) :
-                for b in incompatibles[a] :
-                    if self._get_parameter(b) :
+        for a in incompatibles:
+            if self._get_parameter(a):
+                for b in incompatibles[a]:
+                    if self._get_parameter(b):
                         raise ValueError("Options %s and %s are incompatible." \
                                          % (a,b))
         _NcbiblastCommandline._validate(self)
 
-class NcbiblastpCommandline(_Ncbiblast2SeqCommandline) :
+class NcbiblastpCommandline(_Ncbiblast2SeqCommandline):
     """Create a commandline for the NCBI BLAST+ program blastp (for proteins).
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
@@ -513,7 +513,7 @@ class NcbiblastpCommandline(_Ncbiblast2SeqCommandline) :
             ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
-class NcbiblastnCommandline(_Ncbiblast2SeqCommandline) :
+class NcbiblastnCommandline(_Ncbiblast2SeqCommandline):
     """Wrapper for the NCBI BLAST+ program blastn (for nucleotides).
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
@@ -543,7 +543,7 @@ class NcbiblastnCommandline(_Ncbiblast2SeqCommandline) :
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
 
-class NcbiblastxCommandline(_Ncbiblast2SeqCommandline) :
+class NcbiblastxCommandline(_Ncbiblast2SeqCommandline):
     """Wrapper for the NCBI BLAST+ program blastx (nucleotide query, protein database).
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
@@ -568,7 +568,7 @@ class NcbiblastxCommandline(_Ncbiblast2SeqCommandline) :
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
 
-class NcbitblastnCommandline(_Ncbiblast2SeqCommandline) :
+class NcbitblastnCommandline(_Ncbiblast2SeqCommandline):
     """Wrapper for the NCBI BLAST+ program tblastn.
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
@@ -593,7 +593,7 @@ class NcbitblastnCommandline(_Ncbiblast2SeqCommandline) :
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
 
-class NcbitblastxCommandline(_Ncbiblast2SeqCommandline) :
+class NcbitblastxCommandline(_Ncbiblast2SeqCommandline):
     """Wrapper for the NCBI BLAST+ program tblastx.
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
@@ -621,15 +621,15 @@ class NcbitblastxCommandline(_Ncbiblast2SeqCommandline) :
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
 
-    def _validate(self) :
-        if self.remote and self.in_pssm :
+    def _validate(self):
+        if self.remote and self.in_pssm:
             raise ValueError("The remote option cannot be used with in_pssm")
-        if self.query and self.in_pssm :
+        if self.query and self.in_pssm:
             raise ValueError("The query option cannot be used with in_pssm")
         _Ncbiblast2SeqCommandline._validate(self)
 
 
-class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline) :
+class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
     """Wrapper for the NCBI BLAST+ program psiblast.
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
@@ -683,20 +683,20 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline) :
             ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
-    def _validate(self) :
+    def _validate(self):
         incompatibles = {"num_iterations":["remote"],
                          "in_msa":["in_pssm", "query"],
                          "in_pssm":["in_msa","query","phi_pattern"]}
-        for a in incompatibles :
-            if self._get_parameter(a) :
-                for b in incompatibles[a] :
-                    if self._get_parameter(b) :
+        for a in incompatibles:
+            if self._get_parameter(a):
+                for b in incompatibles[a]:
+                    if self._get_parameter(b):
                         raise ValueError("Options %s and %s are incompatible." \
                                          % (a,b))
         _Ncbiblast2SeqCommandline._validate(self)
 
 
-class NcbirpsblastCommandline(_NcbiblastCommandline) :
+class NcbirpsblastCommandline(_NcbiblastCommandline):
     """Wrapper for the NCBI BLAST+ program rpsblast.
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
@@ -719,7 +719,7 @@ class NcbirpsblastCommandline(_NcbiblastCommandline) :
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
 
 
-class NcbirpstblastnCommandline(_NcbiblastCommandline) :
+class NcbirpstblastnCommandline(_NcbiblastCommandline):
     """Wrapper for the NCBI BLAST+ program rpstblastn.
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
