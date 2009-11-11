@@ -391,6 +391,7 @@ class SeqRecord(object):
             #they may not apply to a subsequence.
             #answer.annotations = dict(self.annotations.iteritems())
             #answer.dbxrefs = self.dbxrefs[:]
+            #TODO - Review this in light of adding SeqRecord objects?
             
             #TODO - Cope with strides by generating ambiguous locations?
             if index.step is None or index.step == 1:
@@ -751,11 +752,6 @@ class SeqRecord(object):
 
         However, we should point out that when we sliced the SeqRecord,
         any annotations dictionary or dbxrefs list entries were lost.
-        TODO - Change this?
-
-        >>> plasmid.annotations = {} #HACK, see above TODO
-        >>> plasmid.format("gb") == (left+right).format("gb")
-        True
         """
         if not isinstance(other, SeqRecord):
             #Assume it is a string or a Seq.

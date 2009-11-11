@@ -279,6 +279,9 @@ and HTML formats
  \item \emph{Why can't I slice my} \verb|SeqRecord| \emph{to get a sub-record?} \\
   You need Biopython 1.50 or later.
 
+ \item \emph{Why can't I add} \verb|SeqRecord| \emph{objects together?} \\
+  You need Biopython 1.53 or later.
+
   \item \emph{Why doesn't} \verb|Bio.SeqIO.convert()| \emph{or} \verb|Bio.AlignIO.convert()| \emph{work? The modules import fine but there is no convert function!} \\
   You need Biopython 1.52 or later. Alternatively, combine the \verb|parse| and \verb|write|
   functions as described in this tutorial (see Sections~\ref{sec:SeqIO-conversion} and~\ref{sec:converting-alignments}).
@@ -1876,6 +1879,54 @@ the \texttt{format} method described above in Section~\ref{sec:SeqRecord-format}
 See Sections~\ref{sec:FASTQ-slicing-off-primer}
 and~\ref{sec:FASTQ-slicing-off-adaptor} for some FASTQ example where the
 per-letter annotations (the read quality scores) are also sliced.
+
+\section{Adding SeqRecord objects}
+\label{sec:SeqRecord-addition}
+
+One of the new features in Biopython 1.53 was the ability to add \verb|SeqRecord| objects
+together, giving a new \verb|SeqRecord|. What is important here is that any common
+per-letter annotations are also added, all the features are preserved (with their
+locations adjusted), and any other common annotation is also kept (like the id, name
+and description).
+
+For example, suppose you have a circular genome:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> record = SeqIO.read(open("NC_005816.gb"), "genbank")
+>>> record
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
+IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
+description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
+dbxrefs=['Project:10638'])
+>>> len(record)
+9609
+>>> len(record.features)
+29
+\end{verbatim}
+
+You can shift the origin like this:
+
+\begin{verbatim}
+>>> shifted = record[2000:] + record[:2000]
+>>> shifted
+SeqRecord(seq=Seq('GATACGCAGTCATATTTTTTACACAATTCTCTAATCCCGACAAGGTCGTAGGTC...GGA',
+IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
+description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
+dbxrefs=[])
+>>> len(shifted)
+9609
+>>> len(shifted.features)
+28
+\end{verbatim}
+
+Note that this isn't perfect in that some annotation like the database cross references
+and one of the features (the source feature) have been lost. This is because the
+\verb|SeqRecord| slicing step is perhaps too cautious in the annotation it preserves.
+
+Also note that in an example like this, you should probably change the record
+identifiers since the NCBI references refer to the \emph{original} unmodified
+sequence.
 
 \chapter{Sequence Input/Output}
 \label{chapter:Bio.SeqIO}
