@@ -23,13 +23,13 @@ class defaultdict(dict):
         except KeyError:
             return self.default
 
-class FileIndex(dict) :
+class FileIndex(dict):
     """ An in memory index that allows rapid random access into a file.
 
     The class can be used to turn a file into a read-only
     database.
     """
-    def __init__(self, filename, iterator_gen, key_gen ) :
+    def __init__(self, filename, iterator_gen, key_gen ):
         """
         Arguments:
         
@@ -51,17 +51,17 @@ class FileIndex(dict) :
         try:
             loc = 0
             i = self.iterator_gen(f)
-            while 1 :
+            while 1:
                 next_thing = i.next()
                 if next_thing is None : break
                 key = key_gen(next_thing)
-                if key != None :
+                if key != None:
                     self[key]=loc
                 loc = f.tell()
-        finally :
+        finally:
             f.close()
 
-    def __getitem__(self, key) :
+    def __getitem__(self, key):
         """ Return an item from the indexed file. """
         loc = dict.__getitem__(self,key)
 

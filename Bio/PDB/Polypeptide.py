@@ -252,7 +252,7 @@ class _PPBuilder:
         if is_aa(residue):
             return 1
         else:
-            if "CA" in residue.child_dict :
+            if "CA" in residue.child_dict:
                 #It has an alpha carbon...
                 #We probably need to update the hard coded list of
                 #non-standard residues, see function is_aa for details.

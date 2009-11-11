@@ -71,14 +71,14 @@ to_one_letter_code= {
     }
 
 
-def normalize_letters(one_letter_code) :
+def normalize_letters(one_letter_code):
     """Convert RAF one-letter amino acid codes into IUPAC standard codes.
     
     Letters are uppercased, and "." ("Unknown") is converted to "X".
     """
-    if one_letter_code == '.' :
+    if one_letter_code == '.':
         return 'X'
-    else :
+    else:
         return one_letter_code.upper()
 
 class SeqMapIndex(dict):
@@ -92,7 +92,7 @@ class SeqMapIndex(dict):
     chain IDs.    
     """
 
-    def __init__(self, filename) :
+    def __init__(self, filename):
         """
         Arguments:
         
@@ -108,13 +108,13 @@ class SeqMapIndex(dict):
                 line = f.readline()
                 if not line: break
                 key = line[0:5]
-                if key != None :
+                if key != None:
                     self[key]=position
                 position = f.tell()
-        finally :
+        finally:
             f.close()
 
-    def __getitem__(self, key) :
+    def __getitem__(self, key):
         """ Return an item from the indexed file. """
         position = dict.__getitem__(self,key)
 
@@ -128,13 +128,13 @@ class SeqMapIndex(dict):
         return record
 
 
-    def getSeqMap(self, residues) :
+    def getSeqMap(self, residues):
         """Get the sequence map for a collection of residues.
 
         residues -- A Residues instance, or a string that can be converted into
                     a Residues instance.
         """
-        if type(residues) == StringType :
+        if type(residues) == StringType:
             residues = Residues(residues)
 
         pdbid  = residues.pdbid
@@ -142,7 +142,7 @@ class SeqMapIndex(dict):
         if not frags: frags =(('_','',''),) # All residues of unnamed chain
 
         seqMap = None
-        for frag in frags :
+        for frag in frags:
             chainid = frag[0]
             if chainid=='' or chainid=='-' or chainid==' ' or chainid=='_':
                 chainid = '_'
@@ -159,16 +159,16 @@ class SeqMapIndex(dict):
             
             sm = sm[start:end]
 
-            if seqMap == None :
+            if seqMap == None:
                 seqMap = sm
-            else :
+            else:
                 seqMap += sm
                             
         return seqMap
 
 
 
-class SeqMap :
+class SeqMap:
     """An ASTRAL RAF (Rapid Access Format) Sequence Map.
     
     This is a list like object; You can find the location of particular residues
@@ -212,13 +212,13 @@ class SeqMap :
         self.version = line[6:10]
 
         #Raf format versions 0.01 and 0.02 are identical for practical purposes
-        if(self.version != "0.01" and  self.version !="0.02") :
+        if(self.version != "0.01" and  self.version !="0.02"):
             raise ValueError("Incompatible RAF version: "+self.version)
 
         self.pdb_datestamp = line[14:20]
         self.flags = line[21:27]
 
-        for i in range(header_len, len(line), 7) :
+        for i in range(header_len, len(line), 7):
             f = line[i : i+7]
             if len(f)!=7:
                 raise ValueError("Corrupt Field: ("+f+")")
@@ -231,22 +231,22 @@ class SeqMap :
             self.res.append(r)
 
 
-    def index(self, resid, chainid="_") :
-        for i in range(0, len(self.res)) :
-            if self.res[i].resid == resid and self.res[i].chainid == chainid :
+    def index(self, resid, chainid="_"):
+        for i in range(0, len(self.res)):
+            if self.res[i].resid == resid and self.res[i].chainid == chainid:
                 return i
         raise KeyError("No such residue "+chainid+resid)
 
-    def __getslice__(self, i, j) :
+    def __getslice__(self, i, j):
         s = copy(self)
         s.res = s.res[i:j]
         return s
 
-    def append(self, res) :
+    def append(self, res):
         """Append another Res object onto the list of residue mappings."""
         self.res.append(res)
 
-    def extend(self, other) :
+    def extend(self, other):
         """Append another SeqMap onto the end of self.
 
         Both SeqMaps must have the same PDB ID, PDB datestamp and
@@ -255,26 +255,26 @@ class SeqMap :
         """
         if not isinstance(other, SeqMap):
             raise TypeError("Can only extend a SeqMap with a SeqMap.")
-        if self.pdbid != other.pdbid :
+        if self.pdbid != other.pdbid:
             raise TypeError("Cannot add fragments from different proteins")
-        if self.version != other.version :
+        if self.version != other.version:
             raise TypeError("Incompatible rafs")
-        if self.pdb_datestamp != other.pdb_datestamp :
+        if self.pdb_datestamp != other.pdb_datestamp:
             raise TypeError("Different pdb dates!")
-        if self.flags != other.flags :
+        if self.flags != other.flags:
             self.flags = ''
         self.res += other.res
 
-    def __iadd__(self, other) :
+    def __iadd__(self, other):
         self.extend(other)
         return self
 
-    def __add__(self, other) :
+    def __add__(self, other):
         s = copy(self)
         s.extend(other)
         return s
 
-    def getAtoms(self, pdb_handle, out_handle) :
+    def getAtoms(self, pdb_handle, out_handle):
         """Extract all relevant ATOM and HETATOM records from a PDB file.
 
         The PDB file is scanned for ATOM and HETATOM records. If the
@@ -293,7 +293,7 @@ class SeqMap :
 
         #The set of residues that I have to find records for. 
         resSet = {}
-        for r in self.res :
+        for r in self.res:
             if r.atom=='X' : #Unknown residue type
                 continue
             chainid = r.chainid
@@ -303,8 +303,8 @@ class SeqMap :
             resSet[(chainid,resid)] = r
 
         resFound = {}
-        for line in pdb_handle.xreadlines() :
-            if line.startswith("ATOM  ") or line.startswith("HETATM") :
+        for line in pdb_handle.xreadlines():
+            if line.startswith("ATOM  ") or line.startswith("HETATM"):
                 chainid = line[21:22]
                 resid = line[22:27].strip()
                 key = (chainid, resid)
@@ -312,12 +312,12 @@ class SeqMap :
                     res = resSet[key]
                     atom_aa = res.atom
                     resName = line[17:20]
-                    if resName in to_one_letter_code :
-                        if to_one_letter_code[resName] == atom_aa :
+                    if resName in to_one_letter_code:
+                        if to_one_letter_code[resName] == atom_aa:
                             out_handle.write(line)
                             resFound[key] = res
 
-        if len(resSet) != len(resFound) :
+        if len(resSet) != len(resFound):
             #for k in resFound.keys():
             #    del resSet[k]
             #print resSet
@@ -327,7 +327,7 @@ class SeqMap :
         
         
         
-class Res :
+class Res:
     """ A single residue mapping from a RAF record.
 
     chainid -- A single character chain ID.
@@ -338,7 +338,7 @@ class Res :
 
     seqres  -- amino acid one-letter code from SEQRES records.
     """
-    def __init__(self) :
+    def __init__(self):
         self.chainid = ''
         self.resid = ''
         self.atom = ''

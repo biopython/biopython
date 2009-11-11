@@ -80,7 +80,7 @@ class Record:
                 s.append('-')
                 
 
-        if self.children :
+        if self.children:
             child_str = map(str, self.children)
             s.append(",".join(child_str))
         else:

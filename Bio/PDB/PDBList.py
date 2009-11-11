@@ -97,7 +97,7 @@ class PDBList:
         """
         handle = urllib.urlopen(url)
         answer = []
-        for line in handle :
+        for line in handle:
             pdb = line.strip()
             assert len(pdb)==4
             answer.append(pdb)
@@ -179,7 +179,7 @@ class PDBList:
         # extract pdb codes. Could use a list comprehension, but I want
         # to include an assert to check for mis-reading the data.
         obsolete = []
-        for line in handle :
+        for line in handle:
             if not line.startswith("OBSLTE ") : continue
             pdb = line.split()[2]
             assert len(pdb)==4
@@ -272,7 +272,7 @@ class PDBList:
             try:
                 #print 'retrieving %s' % pdb_code
                 self.retrieve_pdb_file(pdb_code)
-            except Exception :
+            except Exception:
                 print 'error %s\n' % pdb_code
                 # you can insert here some more log notes that
                 # something has gone wrong.            
@@ -288,16 +288,16 @@ class PDBList:
                                         'pdb%s.ent' % pdb_code)
                 new_dir = os.path.join(self.obsolete_pdb, pdb_code[1:3])
             new_file = os.path.join(new_dir, 'pdb%s.ent' % pdb_code)
-            if os.path.isfile(old_file) :
-                if not os.path.isdir(new_dir) :
+            if os.path.isfile(old_file):
+                if not os.path.isdir(new_dir):
                     os.mkdir(new_dir)
-                try :
+                try:
                     shutil.move(old_file, new_file)
-                except Exception :
+                except Exception:
                     print "Could not move %s to obsolete folder" % old_file
-            elif os.path.isfile(new_file) :
+            elif os.path.isfile(new_file):
                 print "Obsolete file %s already moved" % old_file
-            else :
+            else:
                 print "Obsolete file %s is missing" % old_file
 
 
