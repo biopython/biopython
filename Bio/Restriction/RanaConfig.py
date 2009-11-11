@@ -18,7 +18,7 @@ import os
 #                   should never be less than 60.
 #   NameWidth    : space attributed to the name in PrintList method.
 #   Indent       : Indent of the second line.
-#   MaxSize      : Maximal size of the sequence (default=6 :
+#   MaxSize      : Maximal size of the sequence (default=6:
 #                                                -> 99 999 bp + 1 trailing ','
 #                  people are unlikely to ask for restriction map of sequences
 #                  bigger than 100.000 bp. This is needed to determine the
@@ -27,7 +27,7 @@ import os
 #                  MaxSize = 5  =>   9.999 bp
 #                  MaxSize = 6  =>  99.999 bp
 #                  MaxSize = 7  => 999.999 bp
-#   example :
+#   example:
 #               
 #   <------------ ConsoleWidth --------------->
 #   <- NameWidth ->

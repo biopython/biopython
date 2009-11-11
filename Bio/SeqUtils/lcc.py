@@ -20,10 +20,10 @@ def lcc_mult(seq,wsize):
     value of previous window as a base to compute the next one."""
     l2=math.log(2)
     tamseq=len(seq)
-    try :
+    try:
         #Assume its a string
         upper = seq.upper()
-    except AttributeError :
+    except AttributeError:
         #Should be a Seq object then
         upper = seq.tostring().upper()
     compone=[0]
@@ -130,10 +130,10 @@ def lcc_simp(seq):
     DOI: 10.1038/npg.els.0005260
     """
     wsize=len(seq)
-    try :
+    try:
         #Assume its a string
         upper = seq.upper()
-    except AttributeError :
+    except AttributeError:
         #Should be a Seq object then
         upper = seq.tostring().upper()
     l2=math.log(2)
