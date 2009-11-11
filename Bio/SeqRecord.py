@@ -781,13 +781,13 @@ class SeqRecord(object):
             answer.name = self.name
         if self.description == other.description:
             answer.description = self.description
-        for k,v in self.annotations:
+        for k,v in self.annotations.iteritems():
             if k in other.annotations and other.annotations[k] == v:
                 answer.annotations[k] = v
         #Can append matching per-letter-annotation
-        for k,v in self.letter_annotations:
+        for k,v in self.letter_annotations.iteritems():
             if k in other.letter_annotations:
-                answer.annotations[k] = v + other.annotations[k]
+                answer.letter_annotations[k] = v + other.letter_annotations[k]
         return answer
         
     def __radd__(self, other):

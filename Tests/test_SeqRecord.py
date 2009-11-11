@@ -14,11 +14,9 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 class SeqRecordCreation(unittest.TestCase):
-    """Test basic creation of SeqRecords.
-    """
+    """Test basic creation of SeqRecords."""
     def test_annotations(self):
-        """Pass in annotations to SeqRecords.
-        """
+        """Pass in annotations to SeqRecords"""
         rec = SeqRecord(Seq("ACGT", generic_dna),
                         id="Test", name="Test", description="Test")
         self.assertEqual(rec.annotations, {})
@@ -28,8 +26,7 @@ class SeqRecordCreation(unittest.TestCase):
         self.assertEqual(rec.annotations["test"], ["a test"])
 
     def test_letter_annotations(self):
-        """Pass in letter annotations to SeqRecords.
-        """
+        """Pass in letter annotations to SeqRecords"""
         rec = SeqRecord(Seq("ACGT", generic_dna),
                         id="Test", name="Test", description="Test")
         self.assertEqual(rec.annotations, {})
@@ -60,6 +57,49 @@ class SeqRecordCreation(unittest.TestCase):
         except (TypeError, ValueError), e:
             pass
 
+class SeqRecordSlicing(unittest.TestCase):
+    """Test SeqRecord slicing."""
+
+    def test_simple(self):
+        """Simple slice"""
+        rec = SeqRecord(Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),
+                        id="TestID", name="TestName", description="TestDescr",
+                        dbxrefs=["TestXRef"], annotations={"k":"v"},
+                        letter_annotations = {"fake":"X"*26})
+        self.assertEqual(len(rec), 26)
+        left = rec[:10]
+        self.assertEqual(str(left.seq), str(rec.seq[:10]))
+        right = rec[-10:]
+        self.assertEqual(str(right.seq), str(rec.seq[-10:]))
+        mid = rec[12:22]
+        self.assertEqual(str(mid.seq), str(rec.seq[12:22]))
+        for sub in [left, right, mid] :
+            self.assertEqual(len(sub), 10)
+            self.assertEqual(sub.id, "TestID")
+            self.assertEqual(sub.name, "TestName")
+            self.assertEqual(sub.description, "TestDescr")
+            self.assertEqual(sub.letter_annotations, {"fake":"X"*10})
+            self.assertEqual(sub.dbxrefs, []) # May change this...
+            self.assertEqual(sub.annotations, {}) # May change this...
+
+class SeqRecordAddition(unittest.TestCase):
+    """Test SeqRecord addition."""
+
+    def test_simple(self):
+        """Simple addition"""
+        rec1 = SeqRecord(Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),
+                         id="TestID", name="TestName", description="TestDescr",
+                         dbxrefs=["TestXRef"], annotations={"k":"v"},
+                         letter_annotations = {"fake":[0,1]*13})
+        rec = rec1 + rec1
+        self.assertEqual(len(rec), 52)
+        self.assertEqual(rec.id, "TestID")
+        self.assertEqual(rec.name, "TestName")
+        self.assertEqual(rec.description, "TestDescr")
+        self.assertEqual(rec.dbxrefs, ["TestXRef"])
+        self.assertEqual(rec.annotations, {"k":"v"})
+        self.assertEqual(rec.letter_annotations, {"fake":[0,1]*26})
+        
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
