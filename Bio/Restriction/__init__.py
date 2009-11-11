@@ -8,7 +8,7 @@
 # as part of this package.
 #
 """
-Usage :
+Usage:
 =====
 
     >>> from Rana.fts import fts    # 
@@ -69,13 +69,13 @@ from Bio.Restriction.Restriction import *
 #   the enzymes in the locals() dictionary when evaluating string to see if
 #   it is an enzyme.
 #
-#   This call for some explanations I guess :
+#   This call for some explanations I guess:
 #       When testing for the presence of a Restriction enzyme in a
-#       RestrictionBatch, the user can use :
+#       RestrictionBatch, the user can use:
 #
 #           1) a class of type 'RestrictionType'
 #           2) a string of the name of the enzyme (it's repr)
-#               i.e :
+#               i.e:
 #                   >>> from Bio.Restriction import RestrictionBatch, EcoRI
 #                   >>> MyBatch = RestrictionBatch(EcoRI)
 #                   >>> #!/usr/bin/env python
@@ -87,7 +87,7 @@ from Bio.Restriction.Restriction import *
 #
 #   OK, that's how it is suppose to work. And I find it quite useful.
 #
-#   Now if I leave the code here I got :
+#   Now if I leave the code here I got:
 #                   >>> from Bio.Restriction import RestrictionBatch, EcoRI
 #                   >>> MyBatch = RestrictionBatch(EcoRI)
 #                   >>> EcoRI in MyBatch # the class EcoRI.
@@ -95,7 +95,7 @@ from Bio.Restriction.Restriction import *
 #                   >>> 'EcoRI' in MyBatch   # a string.
 #                   False
 
-#   There is 5 ways to change that :
+#   There is 5 ways to change that:
 #       1) abandon the evaluation of string representation.
 #       2) leave the code like that and hack something in RestrictionBatch.
 #       3) Move back the code in Bio.Restriction.Restriction
@@ -136,7 +136,7 @@ from Bio.Restriction.Restriction import *
 ###
 ##CommOnly    = RestrictionBatch()    # commercial enzymes
 ##NonComm     = RestrictionBatch()    # not available commercially
-##for TYPE, (bases, enzymes) in typedict.iteritems() :
+##for TYPE, (bases, enzymes) in typedict.iteritems():
 ##    #
 ##    #   The keys are the pseudo-types TYPE (stored as type1, type2...)
 ##    #   The names are not important and are only present to differentiate
@@ -160,7 +160,7 @@ from Bio.Restriction.Restriction import *
 ##    #   in enzymes.
 ##    #
 ##    T = type.__new__(RestrictionType, 'RestrictionType', bases, {})
-##    for k in enzymes :
+##    for k in enzymes:
 ##        #
 ##        #   Now, we go through all the enzymes and assign them their type.
 ##        #   enzymedict[k] contains the values of the attributes for this

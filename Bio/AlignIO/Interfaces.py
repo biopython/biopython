@@ -1,4 +1,4 @@
-# Copyright 2008 by Peter Cock.  All rights reserved.
+# Copyright 2008-2009 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -11,7 +11,7 @@ use this module.  It provides base classes to try and simplify things.
 
 from Bio.Alphabet import single_letter_alphabet, Gapped
    
-class AlignmentIterator :
+class AlignmentIterator:
     """Base class for building Alignment iterators.
 
     You should write a next() method to return Aligment
@@ -20,7 +20,7 @@ class AlignmentIterator :
     """
     #TODO - Should the default be Gapped(single_letter_alphabet) instead?
     def __init__(self, handle, seq_count=None,
-                 alphabet = single_letter_alphabet) :
+                 alphabet = single_letter_alphabet):
         """Create an AlignmentIterator object.
 
         handle   - input file
@@ -42,7 +42,7 @@ class AlignmentIterator :
         # or if additional arguments are required.          #
         #####################################################
 
-    def next(self) :
+    def next(self):
         """Return the next alignment in the file.
         
         This method should be replaced by any derived class to do something
@@ -60,24 +60,24 @@ class AlignmentIterator :
         Example usage for (concatenated) PHYLIP files:
 
         myFile = open("many.phy","r")
-        for alignment in PhylipIterator(myFile) :
+        for alignment in PhylipIterator(myFile):
             print "New alignment:"
-            for record in alignment :
+            for record in alignment:
                 print record.id
                 print record.seq
         myFile.close()"""
         return iter(self.next, None)
 
-class AlignmentWriter :
+class AlignmentWriter:
     """Base class for building Alignment writers.
     
     You should write a write_alignment() method.
     You may wish to redefine the __init__ method as well"""
 
-    def __init__(self, handle) :
+    def __init__(self, handle):
         self.handle = handle
        
-    def write_file(self, alignments) :
+    def write_file(self, alignments):
         """Use this to write an entire file containing the given alignments.
 
         alignments - A list or iterator returning Alignment objects
@@ -92,21 +92,21 @@ class AlignmentWriter :
         # objecta to the file handle                        #
         #####################################################
 
-    def clean(self, text) :
+    def clean(self, text):
         """Use this to avoid getting newlines in the output."""
         return text.replace("\n", " ").replace("\r", " ").replace("  ", " ")
     
-class SequentialAlignmentWriter(AlignmentWriter) :
+class SequentialAlignmentWriter(AlignmentWriter):
     """Base class for building Alignment writers.
     
     This assumes each alignment can be simply appended to the file.
     You should write a write_alignment() method.
     You may wish to redefine the __init__ method as well"""
 
-    def __init__(self, handle) :
+    def __init__(self, handle):
         self.handle = handle
        
-    def write_file(self, alignments) :
+    def write_file(self, alignments):
         """Use this to write an entire file containing the given alignments.
 
         alignments - A list or iterator returning Alignment objects
@@ -114,27 +114,27 @@ class SequentialAlignmentWriter(AlignmentWriter) :
         In general, this method can only be called once per file."""
         self.write_header()
         count = 0
-        for alignment in alignments :
+        for alignment in alignments:
             self.write_alignment(alignment)
             count += 1
         self.write_footer()
         return count
         
-    def write_header(self) :
+    def write_header(self):
         """Use this to write any header.
         
         This method should be replaced by any derived class to do something
         useful."""
         pass
     
-    def write_footer(self) :
+    def write_footer(self):
         """Use this to write any footer.
         
         This method should be replaced by any derived class to do something
         useful."""
         pass
 
-    def write_alignment(self, alignment) :
+    def write_alignment(self, alignment):
         """Use this to write a single alignment.
         
         This method should be replaced by any derived class to do something

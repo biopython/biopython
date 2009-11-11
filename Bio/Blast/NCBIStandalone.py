@@ -156,17 +156,17 @@ class _Scanner:
 
         # Read the reference(s)
         while attempt_read_and_call(uhandle,
-                                consumer.reference, start='Reference') :
+                                consumer.reference, start='Reference'):
             # References are normally multiline terminated by a blank line
             # (or, based on the old code, the RID line)
             while 1:
                 line = uhandle.readline()
-                if is_blank_line(line) :
+                if is_blank_line(line):
                     consumer.noevent(line)
                     break
                 elif line.startswith("RID"):
                     break
-                else :
+                else:
                     #More of the reference
                     consumer.reference(line)
 
@@ -191,7 +191,7 @@ class _Scanner:
         line = uhandle.peekline()
         assert line.strip() != ""
         assert not line.startswith("RID:")
-        if line.startswith("Query=") :
+        if line.startswith("Query="):
             #This is an old style query then database...
 
             # Read the Query lines and the following blank line.
@@ -203,7 +203,7 @@ class _Scanner:
             read_and_call_until(uhandle, consumer.database_info, end='total letters')
             read_and_call(uhandle, consumer.database_info, contains='sequences')
             read_and_call_while(uhandle, consumer.noevent, blank=1)
-        elif line.startswith("Database:") :
+        elif line.startswith("Database:"):
             #This is a new style database then query...
             read_and_call_until(uhandle, consumer.database_info, end='total letters')
             read_and_call(uhandle, consumer.database_info, contains='sequences')
@@ -214,14 +214,14 @@ class _Scanner:
             # the "... Score     E" line instead.
             read_and_call(uhandle, consumer.query_info, start='Query=')
             #read_and_call_until(uhandle, consumer.query_info, blank=1)
-            while True :
+            while True:
                 line = uhandle.peekline()
                 if not line.strip() : break
                 if "Score     E" in line : break
                 #It is more of the query (and its length)
                 read_and_call(uhandle, consumer.query_info)
             read_and_call_while(uhandle, consumer.noevent, blank=1)
-        else :
+        else:
             raise ValueError("Invalid header?")
 
         consumer.end_header()
@@ -234,7 +234,7 @@ class _Scanner:
         # If there is no 'Searching.....' line then you'll first see a 
         # 'Results from round' line
 
-        while not self._eof(uhandle) :
+        while not self._eof(uhandle):
             line = safe_peekline(uhandle)
             if (not line.startswith('Searching') and
                 not line.startswith('Results from round') and
@@ -322,9 +322,9 @@ class _Scanner:
             # Either case 2 or 3.  Look for "No hits found".
             attempt_read_and_call(uhandle, consumer.no_hits,
                                   contains='No hits found')
-            try :
+            try:
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
-            except ValueError, err :
+            except ValueError, err:
                 if str(err) != "Unexpected end of stream." : raise err
 
             consumer.end_descriptions()
@@ -343,7 +343,7 @@ class _Scanner:
         # In BLAT, rather than a "No hits found" line, we just
         # get no descriptions (and no alignments). This can be
         # spotted because the next line is the database block:
-        if safe_peekline(uhandle).startswith("  Database:") :
+        if safe_peekline(uhandle).startswith("  Database:"):
             consumer.end_descriptions()
             # Stop processing.
             return
@@ -385,7 +385,7 @@ class _Scanner:
 
         # First, check to see if I'm at the database report.
         line = safe_peekline(uhandle)
-        if not line :
+        if not line:
             #EOF
             return
         elif line.startswith('  Database') or line.startswith("Lambda"):
@@ -412,7 +412,7 @@ class _Scanner:
 
         # Scan a bunch of score/alignment pairs.
         while 1:
-            if self._eof(uhandle) :
+            if self._eof(uhandle):
                 #Shouldn't have issued that _scan_alignment_header event...
                 break
             line = safe_peekline(uhandle)
@@ -523,10 +523,10 @@ class _Scanner:
         read_and_call_while(uhandle, consumer.noevent, blank=1)
         consumer.end_alignment()
 
-    def _eof(self, uhandle) :
-        try :
+    def _eof(self, uhandle):
+        try:
             line = safe_peekline(uhandle)
-        except ValueError, err :
+        except ValueError, err:
             if str(err) != "Unexpected end of stream." : raise err
             line = ""
         return not line
@@ -826,7 +826,7 @@ class _HeaderConsumer:
         c = line.split()
         self._header.application = c[0]
         self._header.version = c[1]
-        if len(c) > 2 :
+        if len(c) > 2:
             #The date is missing in the new C++ output from blastx 2.2.22+
             #Just get "BLASTX 2.2.22+\n" and that's all.
             self._header.date = c[2][1:-1]
@@ -857,10 +857,10 @@ class _HeaderConsumer:
         if line.startswith('Database: '):
             self._header.database = line[10:]
         elif not line.endswith('total letters'):
-            if self._header.database :
+            if self._header.database:
                 #Need to include a space when merging multi line datase descr
                 self._header.database = self._header.database + " " + line.strip()
-            else :
+            else:
                 self._header.database = line.strip()                
         else:
             sequences, letters =_re_search(
@@ -1403,25 +1403,25 @@ class _ParametersConsumer:
            line, (4, 5), ncols=6, expected={0:"frameshift", 2:"decay"})
 
     def threshold(self, line):
-        if line[:2] == "T:" :
+        if line[:2] == "T:":
             #Assume its an old stlye line like "T: 123"
             self._params.threshold, = _get_cols(
                 line, (1,), ncols=2, expected={0:"T:"})
-        elif line[:28] == "Neighboring words threshold:" :
+        elif line[:28] == "Neighboring words threshold:":
             self._params.threshold, = _get_cols(
                 line, (3,), ncols=4, expected={0:"Neighboring", 1:"words", 2:"threshold:"})
-        else :
+        else:
             raise ValueError("Unrecognised threshold line:\n%s" % line)
         self._params.threshold = _safe_int(self._params.threshold)
         
     def window_size(self, line):
-        if line[:2] == "A:" :
+        if line[:2] == "A:":
             self._params.window_size, = _get_cols(
                 line, (1,), ncols=2, expected={0:"A:"})
-        elif line[:25] == "Window for multiple hits:" :
+        elif line[:25] == "Window for multiple hits:":
             self._params.window_size, = _get_cols(
                 line, (4,), ncols=5, expected={0:"Window", 2:"multiple", 3:"hits:"})
-        else :
+        else:
             raise ValueError("Unrecognised window size line:\n%s" % line)
         self._params.window_size = _safe_int(self._params.window_size)
         
@@ -1617,18 +1617,18 @@ class Iterator:
                 self._uhandle.saveline(line)
                 break
             # New style files ommit the BLAST line to mark a new query:
-            if line.startswith("Query=") :
-                if not query :
-                    if not self._header :
+            if line.startswith("Query="):
+                if not query:
+                    if not self._header:
                         self._header = lines[:]
                     query = True
-                else :
+                else:
                     #Start of another record
                     self._uhandle.saveline(line)
                     break
             lines.append(line)
 
-        if query and "BLAST" not in lines[0] :
+        if query and "BLAST" not in lines[0]:
             #Cheat and re-insert the header
             #print "-"*50
             #print "".join(self._header)
@@ -1753,7 +1753,7 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
     cline.set_parameter(att2param['database'], database)
     cline.set_parameter(att2param['infile'], infile)
     cline.set_parameter(att2param['align_view'], str(align_view))
-    for key, value in keywds.iteritems() :
+    for key, value in keywds.iteritems():
         cline.set_parameter(att2param[key], str(value))
     return _invoke_blast(cline)
 
@@ -1882,7 +1882,7 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
     cline.set_parameter(att2param['database'], database)
     cline.set_parameter(att2param['infile'], infile)
     cline.set_parameter(att2param['align_view'], str(align_view))
-    for key, value in keywds.iteritems() :
+    for key, value in keywds.iteritems():
         cline.set_parameter(att2param[key], str(value))
     return _invoke_blast(cline)
 
@@ -1985,7 +1985,7 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
     cline.set_parameter(att2param['database'], database)
     cline.set_parameter(att2param['infile'], infile)
     cline.set_parameter(att2param['align_view'], str(align_view))
-    for key, value in keywds.iteritems() :
+    for key, value in keywds.iteritems():
         cline.set_parameter(att2param[key], str(value))
     return _invoke_blast(cline)
 
@@ -2049,7 +2049,7 @@ def _safe_float(str):
     return float(str)
 
 
-def _invoke_blast(cline) :
+def _invoke_blast(cline):
     """Start BLAST and returns handles for stdout and stderr (PRIVATE).
 
     Expects a command line wrapper object from Bio.Blast.Applications
@@ -2071,7 +2071,7 @@ def _invoke_blast(cline) :
     return blast_process.stdout, blast_process.stderr
 
 
-def _security_check_parameters(param_dict) :
+def _security_check_parameters(param_dict):
     """Look for any attempt to insert a command into a parameter.
 
     e.g. blastall(..., matrix='IDENTITY -F 0; rm -rf /etc/passwd')
@@ -2080,10 +2080,10 @@ def _security_check_parameters(param_dict) :
     for appending a command line), or ">", "<" or "|" (redirection)
     and if any are found raises an exception.
     """
-    for key, value in param_dict.iteritems() :
+    for key, value in param_dict.iteritems():
         str_value = str(value) # Could easily be an int or a float
-        for bad_str in [";", "&&", ">", "<", "|"] :
-            if bad_str in str_value :
+        for bad_str in [";", "&&", ">", "<", "|"]:
+            if bad_str in str_value:
                 raise ValueError("Rejecting suspicious argument for %s" % key)
 
 class _BlastErrorConsumer(_BlastConsumer):

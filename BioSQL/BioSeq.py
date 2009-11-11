@@ -41,7 +41,7 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
         #Note since Python 2.0, __getslice__ is deprecated
         #and __getitem__ is used instead.
         #See http://docs.python.org/ref/sequence-methods.html
-        if isinstance(index, int) :
+        if isinstance(index, int):
             #Return a single letter as a string
             i = index
             if i < 0:
@@ -53,16 +53,16 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
             return self.adaptor.get_subseq_as_string(self.primary_id,
                                                      self.start + i,
                                                      self.start + i + 1)
-        if not isinstance(index, slice) :
+        if not isinstance(index, slice):
             raise ValueError("Unexpected index type")
 
         #Return the (sub)sequence as another DBSeq or Seq object
         #(see the Seq obect's __getitem__ method)
-        if index.start is None :
+        if index.start is None:
             i=0
-        else :
+        else:
             i = index.start
-        if i < 0 :
+        if i < 0:
             #Map to equavilent positive index
             if -i > self._length:
                 raise IndexError(i)
@@ -71,11 +71,11 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
             #Trivial case, should return empty string!
             i = self._length
 
-        if index.stop is None :
+        if index.stop is None:
             j = self._length
-        else :
+        else:
             j = index.stop
-        if j < 0 :
+        if j < 0:
             #Map to equavilent positive index
             if -j > self._length:
                 raise IndexError(j)
@@ -86,11 +86,11 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
         if i >= j:
             #Trivial case, empty string.
             return Seq("", self.alphabet)
-        elif index.step is None or index.step == 1 :
+        elif index.step is None or index.step == 1:
             #Easy case - can return a DBSeq with the start and end adjusted
             return self.__class__(self.primary_id, self.adaptor, self.alphabet,
                                   self.start + i, j - i)
-        else :
+        else:
             #Tricky.  Will have to create a Seq object because of the stride
             full = self.adaptor.get_subseq_as_string(self.primary_id,
                                                      self.start + i,
@@ -118,11 +118,11 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
         #Note - the method name copies that of the MutableSeq object
         return Seq(str(self), self.alphabet)
 
-    def __add__(self, other) :
+    def __add__(self, other):
         #Let the Seq object deal with the alphabet issues etc
         return self.toseq() + other
 
-    def __radd__(self, other) :
+    def __radd__(self, other):
         #Let the Seq object deal with the alphabet issues etc
         return other + self.toseq()
 
@@ -141,12 +141,12 @@ def _retrieve_seq(adaptor, primary_id):
     assert len(seqs) == 1        
     moltype, given_length, length = seqs[0]
 
-    try :
+    try:
         length = int(length)
         given_length = int(length)
         assert length == given_length
         have_seq = True
-    except TypeError :
+    except TypeError:
         assert length is None
         seqs = adaptor.execute_and_fetchall(
             "SELECT alphabet, length, seq FROM biosequence" \
@@ -175,9 +175,9 @@ def _retrieve_seq(adaptor, primary_id):
     else:
         raise AssertionError("Unknown moltype: %s" % moltype)
 
-    if have_seq :
+    if have_seq:
         return DBSeq(primary_id, adaptor, alphabet, 0, int(length))
-    else :
+    else:
         return UnknownSeq(length, alphabet)
 
 def _retrieve_dbxrefs(adaptor, primary_id):
@@ -240,10 +240,10 @@ def _retrieve_features(adaptor, primary_id):
                 start -= 1
             if strand == 0:
                 strand = None
-            if strand not in (+1, -1, None) :
+            if strand not in (+1, -1, None):
                 raise ValueError("Invalid strand %s found in database for " \
                                  "seqfeature_id %s" % (strand, seqfeature_id))
-            if end < start :
+            if end < start:
                 import warnings
                 warnings.warn("Inverted location start/end (%i and %i) for " \
                               "seqfeature_id %s" % (start, end, seqfeature_id))
@@ -293,7 +293,7 @@ def _retrieve_features(adaptor, primary_id):
                 #TODO - See Bug 2677 - we don't yet record location_operator,
                 #so for consistency with older versions of Biopython default
                 #to assuming its a join.
-                if not subfeature.location_operator :
+                if not subfeature.location_operator:
                     subfeature.location_operator="join"
                 subfeature.location = SeqFeature.FeatureLocation(start, end)
                 subfeature.strand = strand
@@ -313,9 +313,9 @@ def _retrieve_features(adaptor, primary_id):
             # need to consider evil mixed strand examples like this,
             # join(complement(69611..69724),139856..140087,140625..140650)
             strands = set(sf.strand for sf in feature.sub_features)
-            if len(strands)==1 :
+            if len(strands)==1:
                 feature.strand = feature.sub_features[0].strand
-            else :
+            else:
                 feature.strand = None # i.e. mixed strands
 
         seq_feature_list.append(feature)
@@ -369,7 +369,7 @@ def _retrieve_reference(adaptor, primary_id):
     for start, end, location, title, authors, dbname, accession in refs:
         reference = SeqFeature.Reference()
         #If the start/end are missing, reference.location is an empty list
-        if (start is not None) or (end is not None) :
+        if (start is not None) or (end is not None):
             if start is not None: start -= 1 #python counting
             reference.location = [SeqFeature.FeatureLocation(start, end)]
         #Don't replace the default "" with None.
@@ -381,9 +381,9 @@ def _retrieve_reference(adaptor, primary_id):
         elif dbname == 'MEDLINE':
             reference.medline_id = accession
         references.append(reference)
-    if references :
+    if references:
         return {'references': references}
-    else :
+    else:
         return {}
 
 def _retrieve_taxon(adaptor, primary_id, taxon_id):
@@ -413,19 +413,19 @@ def _retrieve_taxon(adaptor, primary_id, taxon_id):
     #separate SQL query for each entry in the lineage, but it does still
     #appear to be *much* faster.  See Bug 2494. 
     taxonomy = []
-    while taxon_id :
+    while taxon_id:
         name, rank, parent_taxon_id = adaptor.execute_one(
         "SELECT taxon_name.name, taxon.node_rank, taxon.parent_taxon_id" \
         " FROM taxon, taxon_name" \
         " WHERE taxon.taxon_id=taxon_name.taxon_id" \
         " AND taxon_name.name_class='scientific name'" \
         " AND taxon.taxon_id = %s", (taxon_id,))
-        if taxon_id == parent_taxon_id :
+        if taxon_id == parent_taxon_id:
             # If the taxon table has been populated by the BioSQL script
             # load_ncbi_taxonomy.pl this is how top parent nodes are stored.
             # Personally, I would have used a NULL parent_taxon_id here.
             break
-        if rank != "no rank" :
+        if rank != "no rank":
             #For consistency with older versions of Biopython, we are only
             #interested in taxonomy entries with a stated rank.
             #Add this to the start of the lineage list.
@@ -443,9 +443,9 @@ def _retrieve_comment(adaptor, primary_id):
         " ORDER BY rank", (primary_id,))
     comments = [comm[0] for comm in qvs]
     #Don't want to add an empty list...
-    if comments :
+    if comments:
         return {"comment": comments}
-    else :
+    else:
         return {}
 
 class DBSeqRecord(SeqRecord):
@@ -470,9 +470,9 @@ class DBSeqRecord(SeqRecord):
         #We don't yet record any per-letter-annotations in the
         #BioSQL database, but we should set this property up
         #for completeness (and the __str__ method).
-        try :
+        try:
             length = len(self.seq)
-        except :
+        except:
             #Could be no sequence in the database!
             length = 0
         self._per_letter_annotations = _RestrictedDict(length=length)

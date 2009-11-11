@@ -21,9 +21,9 @@ from urllib import FancyURLopener
 from Bio.Restriction.RanaConfig import *
 
 
-class RebaseUpdate(FancyURLopener) :
+class RebaseUpdate(FancyURLopener):
     
-    def __init__(self, e_mail='', ftpproxy='') :
+    def __init__(self, e_mail='', ftpproxy=''):
         """RebaseUpdate([e_mail[, ftpproxy]]) -> new RebaseUpdate instance.
 
         if e_mail and ftpproxy are not given RebaseUpdate uses the corresponding
@@ -34,26 +34,26 @@ class RebaseUpdate(FancyURLopener) :
         proxy = {'ftp' : ftpproxy or ftp_proxy}
         global Rebase_password
         Rebase_password = e_mail or Rebase_password
-        if not Rebase_password :
+        if not Rebase_password:
             raise FtpPasswordError('Rebase')
-        if not Rebase_name :
+        if not Rebase_name:
             raise FtpNameError('Rebase')
         FancyURLopener.__init__(self, proxy)
 
-    def prompt_user_passwd(self, host, realm) :
+    def prompt_user_passwd(self, host, realm):
         return (Rebase_name, Rebase_password)
 
-    def openRebase(self, name = ftp_Rebase) :
+    def openRebase(self, name = ftp_Rebase):
         print '\n Please wait, trying to connect to Rebase\n'
-        try :
+        try:
             self.open(name)
-        except :
+        except:
             raise ConnectionError('Rebase')
         return
 
-    def getfiles(self, *files) :
+    def getfiles(self, *files):
         print '\n',
-        for file in self.update(*files) :
+        for file in self.update(*files):
             print 'copying', file
             fn = os.path.basename(file)
             #filename = os.path.join(Rebase, fn)
@@ -63,7 +63,7 @@ class RebaseUpdate(FancyURLopener) :
         self.close()
         return
 
-    def localtime(self) :
+    def localtime(self):
         t = time.gmtime()
         year = str(t.tm_year)[-1]
         month = str(t.tm_mon)
@@ -71,11 +71,11 @@ class RebaseUpdate(FancyURLopener) :
         return year+month
 
     def update(self, *files):
-        if not files :
+        if not files:
             files = [ftp_emb_e, ftp_emb_s, ftp_emb_r]
         return [x.replace('###', self.localtime()) for x in files]
 
-    def __del__(self) :
+    def __del__(self):
         if hasattr(self, 'tmpcache') : self.close()
         #
         #   self.tmpcache is created by URLopener.__init__ method.
@@ -83,16 +83,16 @@ class RebaseUpdate(FancyURLopener) :
         return
 
 
-class FtpNameError(ValueError) :
+class FtpNameError(ValueError):
 
-    def __init__(self, which_server) :
+    def __init__(self, which_server):
         print " In order to connect to %s ftp server, you must provide a name.\
         \n Please edit Bio.Restriction.RanaConfig\n" % which_server
         sys.exit()
 
-class FtpPasswordError(ValueError) :
+class FtpPasswordError(ValueError):
 
-    def __init__(self, which_server) :
+    def __init__(self, which_server):
         print "\n\
         \n In order to connect to %s ftp server, you must provide a password.\
         \n Use the --e-mail switch to enter your e-mail address.\
@@ -100,9 +100,9 @@ class FtpPasswordError(ValueError) :
         sys.exit()
 
 
-class ConnectionError(IOError) :
+class ConnectionError(IOError):
 
-    def __init__(self, which_server) :
+    def __init__(self, which_server):
         print '\
         \n Unable to connect to the %s ftp server, make sure your computer\
         \n is connected to the internet and that you have correctly configured\

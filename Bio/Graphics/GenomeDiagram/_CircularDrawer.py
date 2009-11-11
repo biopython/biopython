@@ -423,7 +423,7 @@ class CircularDrawer(AbstractDrawer):
         elif feature.strand == -1:
             sigil = method(btm, ctr, startangle, endangle, feature.color,
                            border, orientation='left', **kwargs)
-        else :
+        else:
             sigil = method(btm, top, startangle, endangle, feature.color,
                            border, **kwargs)
         if feature.label:   # Feature needs a label
@@ -445,12 +445,12 @@ class CircularDrawer(AbstractDrawer):
                 sinlabel = sin(label_angle)    
                 labelgroup.transform = (coslabel,-sinlabel,sinlabel,coslabel,
                                         pos, self.ycenter+top*cosval)
-            else :
+            else:
                 # Feature on bottom strand
                 if startangle < pi: # Turn text round and anchor end to inner radius
                     sinval, cosval = endsin, endcos
                     label_angle = endangle - 0.5 * pi
-                else :
+                else:
                     labelgroup.contents[0].textAnchor = 'end'
                 pos = self.xcenter+btm*sinval
                 coslabel = cos(label_angle)
@@ -664,7 +664,7 @@ class CircularDrawer(AbstractDrawer):
         trackheight = (top-ctr)
         
         # X-axis
-        if self.sweep < 1 :
+        if self.sweep < 1:
             #Draw an arc, leaving out the wedge
             p = ArcPath(strokeColor=track.scale_color, fillColor=None)
             #Note reportlab counts angles anti-clockwise from the horizontal
@@ -675,7 +675,7 @@ class CircularDrawer(AbstractDrawer):
                      endangledegrees=90)
             scale_elements.append(p)
             del p
-        else :
+        else:
             #Draw a full circle
             scale_elements.append(Circle(self.xcenter, self.ycenter, ctr,
                                          strokeColor=track.scale_color,
@@ -865,12 +865,12 @@ class CircularDrawer(AbstractDrawer):
         btm, ctr, top = self.track_radii[self.current_track_level]
 
         # Make background
-        if self.sweep < 1 :
+        if self.sweep < 1:
             #Make a partial circle, a large arc box
             #This method assumes the correct center for us.
             bg = self._draw_arc(btm, top, 0, 2*pi*self.sweep,
                                 colors.Color(0.96, 0.96, 0.96))
-        else :
+        else:
             #Make a full circle (using a VERY thick linewidth)
             bg = Circle(self.xcenter, self.ycenter, ctr, 
                         strokeColor = colors.Color(0.96, 0.96, 0.96),
@@ -962,7 +962,7 @@ class CircularDrawer(AbstractDrawer):
                      reverse=True)
             p.closePath()
             return p
-        else :
+        else:
             #Cheat and just use a four sided polygon.
             # Calculate trig values for angle and coordinates
             startcos, startsin = cos(startangle), sin(startangle)
@@ -999,9 +999,9 @@ class CircularDrawer(AbstractDrawer):
         #    startangle, endangle = min(startangle, endangle), max(startangle, endangle)
         #elif orientation == 'left':
         #    startangle, endangle = max(startangle, endangle), min(startangle, endangle)
-        #else :
+        #else:
         startangle, endangle = min(startangle, endangle), max(startangle, endangle)
-        if orientation <> "left" and orientation <> "right" :
+        if orientation <> "left" and orientation <> "right":
             raise ValueError("Invalid orientation %s, should be 'left' or 'right'" \
                              % repr(orientation))
 
@@ -1012,15 +1012,15 @@ class CircularDrawer(AbstractDrawer):
         shaft_inner_radius = middle_radius - 0.5*shaft_height
         shaft_outer_radius = middle_radius + 0.5*shaft_height
         headangle_delta = max(0.0,min(abs(boxheight)*head_length_ratio/middle_radius, abs(angle)))
-        if angle < 0 :
+        if angle < 0:
             headangle_delta *= -1 #reverse it
-        if orientation=="right" :
+        if orientation=="right":
             headangle = endangle-headangle_delta
-        else :
+        else:
             headangle = startangle+headangle_delta
-        if startangle <= endangle :
+        if startangle <= endangle:
             headangle = max(min(headangle, endangle), startangle)
-        else :
+        else:
             headangle = max(min(headangle, startangle), endangle)
         assert startangle <= headangle <= endangle \
             or endangle <= headangle <= startangle, \
@@ -1032,14 +1032,14 @@ class CircularDrawer(AbstractDrawer):
         headcos, headsin = cos(headangle), sin(headangle)
         endcos, endsin = cos(endangle), sin(endangle)
         x0,y0 = self.xcenter, self.ycenter      # origin of the circle
-        if 0.5 >= abs(angle) and abs(headangle_delta) >= abs(angle) :
+        if 0.5 >= abs(angle) and abs(headangle_delta) >= abs(angle):
             #If the angle is small, and the arrow is all head,
             #cheat and just use a triangle.
-            if orientation=="right" :
+            if orientation=="right":
                 x1,y1 = (x0+inner_radius*startsin, y0+inner_radius*startcos)
                 x2,y2 = (x0+outer_radius*startsin, y0+outer_radius*startcos)
                 x3,y3 = (x0+middle_radius*endsin, y0+middle_radius*endcos)
-            else :
+            else:
                 x1,y1 = (x0+inner_radius*endsin, y0+inner_radius*endcos)
                 x2,y2 = (x0+outer_radius*endsin, y0+outer_radius*endcos)
                 x3,y3 = (x0+middle_radius*startsin, y0+middle_radius*startcos)
@@ -1051,7 +1051,7 @@ class CircularDrawer(AbstractDrawer):
                            fillColor=color,
                            strokeLineJoin=1, #1=round, not mitre!
                            strokewidth=0)
-        elif orientation=="right" :
+        elif orientation=="right":
             p = ArcPath(strokeColor=strokecolor,
                         fillColor=color,
                         #default is mitre/miter which can stick out too much:
@@ -1068,20 +1068,20 @@ class CircularDrawer(AbstractDrawer):
                      90 - (headangle * 180 / pi), 90 - (startangle * 180 / pi),
                      reverse=True)
             p.lineTo(x0+outer_radius*headsin, y0+outer_radius*headcos)
-            if abs(angle) < 0.5 :
+            if abs(angle) < 0.5:
                 p.lineTo(x0+middle_radius*endsin, y0+middle_radius*endcos)
                 p.lineTo(x0+inner_radius*headsin, y0+inner_radius*headcos)
-            else :
+            else:
                 dx = min(0.1, abs(angle)/50.0) #auto-scale number of steps
                 x = dx
-                while x < 1 :
+                while x < 1:
                     r = outer_radius - x*(outer_radius-middle_radius)
                     a = headangle + x*(endangle-headangle)
                     p.lineTo(x0+r*sin(a), y0+r*cos(a))
                     x += dx
                 p.lineTo(x0+middle_radius*endsin, y0+middle_radius*endcos)
                 x = dx
-                while x < 1 :
+                while x < 1:
                     r = middle_radius - x*(middle_radius-inner_radius)
                     a = headangle + (1-x)*(endangle-headangle)
                     p.lineTo(x0+r*sin(a), y0+r*cos(a))
@@ -1089,7 +1089,7 @@ class CircularDrawer(AbstractDrawer):
                 p.lineTo(x0+inner_radius*headsin, y0+inner_radius*headcos)
             p.closePath()
             return p
-        else :
+        else:
             p = ArcPath(strokeColor=strokecolor,
                         fillColor=color,
                         #default is mitre/miter which can stick out too much:
@@ -1108,20 +1108,20 @@ class CircularDrawer(AbstractDrawer):
             p.lineTo(x0+outer_radius*headsin, y0+outer_radius*headcos)
             #TODO - two staight lines is only a good approximation for small
             #head angle, in general will need to curved lines here:
-            if abs(angle) < 0.5 :
+            if abs(angle) < 0.5:
                 p.lineTo(x0+middle_radius*startsin, y0+middle_radius*startcos)
                 p.lineTo(x0+inner_radius*headsin, y0+inner_radius*headcos)
-            else :
+            else:
                 dx = min(0.1, abs(angle)/50.0) #auto-scale number of steps
                 x = dx
-                while x < 1 :
+                while x < 1:
                     r = outer_radius - x*(outer_radius-middle_radius)
                     a = headangle + x*(startangle-headangle)
                     p.lineTo(x0+r*sin(a), y0+r*cos(a))
                     x += dx
                 p.lineTo(x0+middle_radius*startsin, y0+middle_radius*startcos)
                 x = dx
-                while x < 1 :
+                while x < 1:
                     r = middle_radius - x*(middle_radius-inner_radius)
                     a = headangle + (1-x)*(startangle-headangle)
                     p.lineTo(x0+r*sin(a), y0+r*cos(a))

@@ -987,7 +987,7 @@ class AceTestOne(unittest.TestCase):
         self.assertRaises(StopIteration, contigs.next)
 
 
-class AceTestTwo(unittest.TestCase) :
+class AceTestTwo(unittest.TestCase):
     """Test parsing example output from CAP3.
 
     The sample input file seq.cap.ace was downloaded from:
@@ -1333,7 +1333,7 @@ class AceTestTwo(unittest.TestCase) :
         self.assertRaises(StopIteration, contigs.next)
 
 
-class AceTestThree(unittest.TestCase) :
+class AceTestThree(unittest.TestCase):
     """Test parsing example ACE input file for CONSED.
 
     The sample input file was downloaded from:

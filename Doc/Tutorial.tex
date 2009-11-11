@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 30 October 2009 (Biopython 1.52+)}
+\date{Last Update -- 11 November 2009 (Biopython 1.52+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -228,6 +228,10 @@ and HTML formats
   \item \emph{Why is the} \verb|Seq| \emph{object missing the (back) transcription \& translation methods described in this Tutorial?} \\
   You need Biopython 1.49 or later.  Alternatively, use the \verb|Bio.Seq| module functions described in Section~\ref{sec:seq-module-functions}.
 
+  \item \emph{Why is the} \verb|Seq| \emph{object missing the upper \& lower methods described in this Tutorial?} \\
+  You need Biopython 1.53 or later.  Alternatively, use \verb|str(my_seq).upper()| to get an upper case string.
+  If you need a Seq object, try \verb|Seq(str(my_seq).upper())| but be careful about blindly re-using the same alphabet.
+ 
   \item \emph{Why does't the} \verb|Seq| \emph{object translation method support the} \verb|cds| \emph{option described in this Tutorial?} \\
   You need Biopython 1.51 or later.
 
@@ -274,6 +278,9 @@ and HTML formats
   
  \item \emph{Why can't I slice my} \verb|SeqRecord| \emph{to get a sub-record?} \\
   You need Biopython 1.50 or later.
+
+ \item \emph{Why can't I add} \verb|SeqRecord| \emph{objects together?} \\
+  You need Biopython 1.53 or later.
 
   \item \emph{Why doesn't} \verb|Bio.SeqIO.convert()| \emph{or} \verb|Bio.AlignIO.convert()| \emph{work? The modules import fine but there is no convert function!} \\
   You need Biopython 1.52 or later. Alternatively, combine the \verb|parse| and \verb|write|
@@ -388,7 +395,7 @@ It contains 94 records, each has a line starting with ``$>$'' (greater-than symb
 \begin{verbatim}
 from Bio import SeqIO
 handle = open("ls_orchid.fasta")
-for seq_record in SeqIO.parse(handle, "fasta") :
+for seq_record in SeqIO.parse(handle, "fasta"):
     print seq_record.id
     print repr(seq_record.seq)
     print len(seq_record)
@@ -416,7 +423,7 @@ Now let's load the GenBank file \href{http://biopython.org/DIST/docs/tutorial/ex
 \begin{verbatim}
 from Bio import SeqIO
 handle = open("ls_orchid.gbk")
-for seq_record in SeqIO.parse(handle, "genbank") :
+for seq_record in SeqIO.parse(handle, "genbank"):
     print seq_record.id
     print repr(seq_record.seq)
     print len(seq_record)
@@ -534,7 +541,7 @@ In many ways, we can deal with Seq objects as if they were normal Python strings
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", IUPAC.unambiguous_dna)
-for index, letter in enumerate(my_seq) :
+for index, letter in enumerate(my_seq):
     print index, letter
 print len(letter)
 \end{verbatim}
@@ -695,6 +702,46 @@ Seq('ACGT', IUPACUnambiguousDNA())
 >>> nuc_seq + dna_seq
 Seq('GATCGATGCACGT', NucleotideAlphabet())
 \end{verbatim}
+
+\section{Changing case}
+
+Python strings have very useful \verb|upper| and \verb|lower| methods for changing the case.
+As of Biopython 1.53, the \verb|Seq| object gained similar methods which are alphabet aware.
+For example,
+
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import generic_dna
+>>> dna_seq = Seq("acgtACGT", generic_dna)
+>>> dna_seq
+Seq('acgtACGT', DNAAlphabet())
+>>> dna_seq.upper()
+Seq('ACGTACGT', DNAAlphabet())
+>>> dna_seq.lower()
+Seq('acgtacgt', DNAAlphabet())
+\end{verbatim}
+
+These are useful for doing case insensitive matching:
+
+\begin{verbatim}
+>>> "GTAC" in dna_seq
+False
+>>> "GTAC" in dna_seq.upper()
+True
+\end{verbatim}
+
+Note that strictly speaking the IUPAC alphabets are for upper case sequences only, thus:
+
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import IUPAC
+>>> dna_seq = Seq("ACGT", IUPAC.unambiguous_dna)
+>>> dna_seq
+Seq('ACGT', IUPACUnambiguousDNA())
+>>> dna_seq.lower()
+Seq('acgt', DNAAlphabet())
+\end{verbatim}
+
 
 \section{Nucleotide sequences and (reverse) complements}
 \label{sec:seq-reverse-complement}
@@ -1833,6 +1880,54 @@ See Sections~\ref{sec:FASTQ-slicing-off-primer}
 and~\ref{sec:FASTQ-slicing-off-adaptor} for some FASTQ example where the
 per-letter annotations (the read quality scores) are also sliced.
 
+\section{Adding SeqRecord objects}
+\label{sec:SeqRecord-addition}
+
+One of the new features in Biopython 1.53 was the ability to add \verb|SeqRecord| objects
+together, giving a new \verb|SeqRecord|. What is important here is that any common
+per-letter annotations are also added, all the features are preserved (with their
+locations adjusted), and any other common annotation is also kept (like the id, name
+and description).
+
+For example, suppose you have a circular genome:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> record = SeqIO.read(open("NC_005816.gb"), "genbank")
+>>> record
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
+IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
+description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
+dbxrefs=['Project:10638'])
+>>> len(record)
+9609
+>>> len(record.features)
+29
+\end{verbatim}
+
+You can shift the origin like this:
+
+\begin{verbatim}
+>>> shifted = record[2000:] + record[:2000]
+>>> shifted
+SeqRecord(seq=Seq('GATACGCAGTCATATTTTTTACACAATTCTCTAATCCCGACAAGGTCGTAGGTC...GGA',
+IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
+description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
+dbxrefs=[])
+>>> len(shifted)
+9609
+>>> len(shifted.features)
+28
+\end{verbatim}
+
+Note that this isn't perfect in that some annotation like the database cross references
+and one of the features (the source feature) have been lost. This is because the
+\verb|SeqRecord| slicing step is perhaps too cautious in the annotation it preserves.
+
+Also note that in an example like this, you should probably change the record
+identifiers since the NCBI references refer to the \emph{original} unmodified
+sequence.
+
 \chapter{Sequence Input/Output}
 \label{chapter:Bio.SeqIO}
 
@@ -1870,7 +1965,7 @@ In general \verb|Bio.SeqIO.parse()| is used to read in sequence files as \verb|S
 \begin{verbatim}
 from Bio import SeqIO
 handle = open("ls_orchid.fasta")
-for seq_record in SeqIO.parse(handle, "fasta") :
+for seq_record in SeqIO.parse(handle, "fasta"):
     print seq_record.id
     print repr(seq_record.seq)
     print len(seq_record)
@@ -1882,7 +1977,7 @@ The above example is repeated from the introduction in Section~\ref{sec:sequence
 \begin{verbatim}
 from Bio import SeqIO
 handle = open("ls_orchid.gbk")
-for seq_record in SeqIO.parse(handle, "genbank") :
+for seq_record in SeqIO.parse(handle, "genbank"):
     print seq_record.id
     print seq_record.seq
     print len(seq_record)
@@ -2060,7 +2155,7 @@ Now let's go through all the records, building up a list of the species each orc
 from Bio import SeqIO
 handle = open("ls_orchid.gbk")
 all_species = []
-for seq_record in SeqIO.parse(handle, "genbank") :
+for seq_record in SeqIO.parse(handle, "genbank"):
     all_species.append(seq_record.annotations["organism"])
 handle.close()
 print all_species
@@ -2099,7 +2194,7 @@ You can check by hand, but for every record the species name is in the descripti
 from Bio import SeqIO
 handle = open("ls_orchid.fasta")
 all_species = []
-for seq_record in SeqIO.parse(handle, "fasta") :
+for seq_record in SeqIO.parse(handle, "fasta"):
     all_species.append(seq_record.description.split()[1])
 handle.close()
 print all_species
@@ -2195,7 +2290,7 @@ from Bio import Entrez
 from Bio import SeqIO
 handle = Entrez.efetch(db="nucleotide", rettype="gb", \
                        id="6273291,6273290,6273289")
-for seq_record in SeqIO.parse(handle, "gb") :
+for seq_record in SeqIO.parse(handle, "gb"):
     print seq_record.id, seq_record.description[:50] + "..."
     print "Sequence length %i," % len(seq_record),
     print "%i features," % len(seq_record.features),
@@ -2320,7 +2415,7 @@ You should recognise these strings from when we parsed the FASTA file earlier in
 First you must write your own function to return the key you want (as a string) when given a \verb|SeqRecord| object.  In general, the details of function will depend on the sort of input records you are dealing with.  But for our orchids, we can just split up the record's identifier using the ``pipe'' character (the vertical line) and return the fourth entry (field three):
 
 \begin{verbatim}
-def get_accession(record) :
+def get_accession(record):
     """"Given a SeqRecord, return the accession number as a string.
   
     e.g. "gi|2765613|emb|Z78488.1|PTZ78488" -> "Z78488.1"
@@ -2358,7 +2453,7 @@ Once again, working with the orchids GenBank file:
 \begin{verbatim}
 from Bio import SeqIO
 from Bio.SeqUtils.CheckSum import seguid
-for record in SeqIO.parse(open("ls_orchid.gbk"), "genbank") :
+for record in SeqIO.parse(open("ls_orchid.gbk"), "genbank"):
     print record.id, seguid(record.seq)
 \end{verbatim}
 
@@ -2454,7 +2549,7 @@ you'll need to write a tiny function to map from the FASTA identifier to the key
 you want:
 
 \begin{verbatim}
-def get_acc(identifier) :
+def get_acc(identifier):
     """"Given a SeqRecord identifer string, return the accession number as a string.
   
     e.g. "gi|2765613|emb|Z78488.1|PTZ78488" -> "Z78488.1"
@@ -2576,8 +2671,8 @@ also be enabled on Python 2.5):
 from __future__ import with_statement #Needed on Python 2.5
 from Bio import SeqIO
 
-with in_handle = open("ls_orchid.gbk") :
-    with out_handle = open("my_example.fasta", "w") :
+with in_handle = open("ls_orchid.gbk"):
+    with out_handle = open("my_example.fasta", "w"):
         count = SeqIO.write(SeqIO.parse(in_handle, "genbank"), out_handle, "fasta")
 print "Converted %i records" % count
 \end{verbatim}
@@ -2629,7 +2724,7 @@ the \verb|Seq| object's built in \verb|.reverse_complement()| method (see Sectio
 \begin{verbatim}
 from Bio import SeqIO
 in_handle = open("ls_orchid.gbk")
-for record in SeqIO.parse(in_handle, "genbank") :
+for record in SeqIO.parse(in_handle, "genbank"):
     print record.id
     print record.seq.reverse_complement()
 in_handle.close()
@@ -2642,7 +2737,7 @@ new records:
 \begin{verbatim}
 from Bio.SeqRecord import SeqRecord
 
-def make_rc_record(record) :
+def make_rc_record(record):
     """Returns a new SeqRecord with the reverse complement sequence."""
     return SeqRecord(seq = record.seq.reverse_complement(), \
                      id = "rc_" + record.id, \
@@ -2724,7 +2819,7 @@ Note that although we don't encourage it, you \emph{can} use the \verb|format()|
 from Bio import SeqIO
 record_iterator = SeqIO.parse(open("ls_orchid.gbk"), "genbank")
 out_handle = open("ls_orchid.tab", "w")
-for record in record_iterator :
+for record in record_iterator:
     out_handle.write(record.format("tab"))
 out_handle.close()
 \end{verbatim}
@@ -2826,7 +2921,7 @@ You'll notice in the above output the sequences have been truncated.  We could i
 from Bio import AlignIO
 alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
 print "Alignment length %i" % alignment.get_alignment_length()
-for record in alignment :
+for record in alignment:
     print "%s - %s" % (record.seq, record.id)
 \end{verbatim}
 
@@ -2848,8 +2943,8 @@ You could also use the alignment object's \verb|format| method to show it in a p
 Did you notice in the raw file above that several of the sequences include database cross-references to the PDB and the associated known secondary structure?  Try this:
 
 \begin{verbatim}
-for record in alignment :
-    if record.dbxrefs :
+for record in alignment:
+    if record.dbxrefs:
         print record.id, record.dbxrefs
 \end{verbatim}
 
@@ -2865,7 +2960,7 @@ COATB_BPIF1/22-73 ['PDB; 1ifk ; 1-50;']
 \noindent To have a look at all the sequence annotation, try this:
 
 \begin{verbatim}
-for record in alignment :
+for record in alignment:
     print record
 \end{verbatim}
 
@@ -2959,7 +3054,7 @@ If you wanted to read this in using \verb|Bio.AlignIO| you could use:
 \begin{verbatim}
 from Bio import AlignIO
 alignments = AlignIO.parse(open("resampled.phy"), "phylip")
-for alignment in alignments :
+for alignment in alignments:
     print alignment
     print
 \end{verbatim}
@@ -3074,9 +3169,9 @@ To interpret these FASTA examples as several separate alignments, we can use \ve
 For example, using the third example as the input data:
 
 \begin{verbatim}
-for alignment in AlignIO.parse(handle, "fasta", seq_count=2) :
+for alignment in AlignIO.parse(handle, "fasta", seq_count=2):
     print "Alignment length %i" % alignment.get_alignment_length()
-    for record in alignment :
+    for record in alignment:
         print "%s - %s" % (record.seq, record.id)
     print
 \end{verbatim}
@@ -3270,7 +3365,7 @@ One of the big handicaps of the PHYLIP alignment file format is that the sequenc
 from Bio import AlignIO
 alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
 name_mapping = {}
-for i, record in enumerate(alignment) :
+for i, record in enumerate(alignment):
     name_mapping[i] = record.id
     record.id = "seq%i" % i
 print name_mapping
@@ -4382,7 +4477,7 @@ Now that we've got an iterator, we start retrieving blast records (generated by 
 Each call to next will return a new record that we can deal with. Now we can iterate through this records and generate our old favorite, a nice little blast report:
 
 \begin{verbatim}
->>> for blast_record in blast_iterator :
+>>> for blast_record in blast_iterator:
 ...     E_VALUE_THRESH = 0.04
 ...     for alignment in blast_record.alignments:
 ...         for hsp in alignment.hsps:
@@ -4628,7 +4723,7 @@ Try \verb+record["DbInfo"].keys()+ for other information stored in this record.
 One of the most useful is a list of possible search fields for use with ESearch:
 
 \begin{verbatim}
->>> for field in record["DbInfo"]["FieldList"] :
+>>> for field in record["DbInfo"]["FieldList"]:
 ...     print "%(Name)s, %(FullName)s, %(Description)s" % field
 ALL, All Fields, All terms from all searchable fields
 UID, UID, Unique number assigned to publication
@@ -4871,7 +4966,7 @@ from Bio import SeqIO
 from Bio import Entrez
 Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
 filename = "gi_186972394.gbk"
-if not os.path.isfile(filename) :
+if not os.path.isfile(filename):
     print "Downloading..."
     net_handle = Entrez.efetch(db="nucleotide",id="186972394",rettype="gb")
     out_handle = open(filename, "w")
@@ -4931,7 +5026,7 @@ The \verb+"LinkSetDb"+ key contains the search results, stored as a list consist
 \begin{verbatim}
 >>> len(record[0]["LinkSetDb"])
 5
->>> for linksetdb in record[0]["LinkSetDb"] :
+>>> for linksetdb in record[0]["LinkSetDb"]:
 ...     print linksetdb["DbTo"], linksetdb["LinkName"], len(linksetdb["Link"])
 ... 
 pubmed pubmed_pubmed 110
@@ -5716,7 +5811,7 @@ While for small searches you might be OK downloading everything at once, its bet
 \begin{verbatim}
 batch_size = 3
 out_handle = open("orchid_rpl16.fasta", "w")
-for start in range(0,count,batch_size) :
+for start in range(0,count,batch_size):
     end = min(count, start+batch_size)
     print "Going to download record %i to %i" % (start+1, end)
     fetch_handle = Entrez.efetch(db="nucleotide", rettype="fasta",
@@ -5745,7 +5840,7 @@ print "Found %i results" % count
 
 batch_size = 10
 out_handle = open("recent_orchid_papers.txt", "w")
-for start in range(0,count,batch_size) :
+for start in range(0,count,batch_size):
     end = min(count, start+batch_size)
     print "Going to download record %i to %i" % (start+1, end)
     fetch_handle = Entrez.efetch(db="pubmed", rettype="medline",
@@ -5859,7 +5954,7 @@ Or, using a for loop over the record iterator:
 >>> from Bio import SwissProt
 >>> descriptions = []
 >>> handle = open("uniprot_sprot.dat")
->>> for record in SwissProt.parse(handle) :
+>>> for record in SwissProt.parse(handle):
 ...     descriptions.append(record.description)
 ...
 >>> len(descriptions)
@@ -7928,12 +8023,12 @@ Now the fun part - we take each gene \verb|SeqFeature| object in our
 going to color them blue, alternating between a dark blue and a light blue.
 \begin{verbatim}
 for feature in record.features:
-    if feature.type != "gene" :
+    if feature.type != "gene":
         #Exclude this feature
         continue
-    if len(gd_feature_set) % 2 == 0 :
+    if len(gd_feature_set) % 2 == 0:
         color = colors.blue
-    else :
+    else:
         color = colors.lightblue
     gd_feature_set.add_feature(feature, color=color, label=True)
 \end{verbatim}
@@ -8015,12 +8110,12 @@ record = SeqIO.read(open("NC_005816.gb"), "genbank")
 #Create the feature set and its feature objects,
 gd_feature_set = GenomeDiagram.FeatureSet()
 for feature in record.features:
-    if feature.type != "gene" :
+    if feature.type != "gene":
         #Exclude this feature
         continue
-    if len(gd_feature_set) % 2 == 0 :
+    if len(gd_feature_set) % 2 == 0:
         color = colors.blue
-    else :
+    else:
         color = colors.lightblue
     gd_feature_set.add_feature(feature, color=color, label=True)
 #(this for loop is the same as in the previous example)
@@ -8277,12 +8372,12 @@ gd_track_for_features = gd_diagram.new_track(1, name="Annotated Features")
 gd_feature_set = gd_track_for_features.new_set()
 
 for feature in record.features:
-    if feature.type != "gene" :
+    if feature.type != "gene":
         #Exclude this feature
         continue
-    if len(gd_feature_set) % 2 == 0 :
+    if len(gd_feature_set) % 2 == 0:
         color = colors.blue
-    else :
+    else:
         color = colors.lightblue
     gd_feature_set.add_feature(feature, sigil="ARROW",
                                color=color, label=True,
@@ -8293,9 +8388,9 @@ for feature in record.features:
 for site, name, color in [("GAATTC","EcoRI",colors.green),
                           ("CCCGGG","SmaI",colors.orange),
                           ("AAGCTT","HindIII",colors.red),
-                          ("GGATCC","BamHI",colors.purple)] :
+                          ("GGATCC","BamHI",colors.purple)]:
     index = 0
-    while True :
+    while True:
         index  = record.seq.find(site, start=index)
         if index == -1 : break
         feature = SeqFeature(FeatureLocation(index, index+len(site)))
@@ -8406,7 +8501,7 @@ entries = [("Chr I","CHR_I/NC_003070.fna"),
           ("Chr III","CHR_III/NC_003074.fna"),
           ("Chr IV","CHR_IV/NC_003075.fna"),
           ("Chr V","CHR_V/NC_003076.fna")]
-for (name, filename) in entries :
+for (name, filename) in entries:
    record = SeqIO.read(open(filename),"fasta")
    print name, len(record)
 \end{verbatim}
@@ -8426,7 +8521,7 @@ entries = [("Chr I", 30432563),
 max_length = max([length for name, length in entries])
           
 chr_diagram = BasicChromosome.Organism()
-for name, length in entries :
+for name, length in entries:
    cur_chromosome = BasicChromosome.Chromosome(name)
    #Set the length, adding and extra 20 percent for the tolomeres:
    cur_chromosome.scale_num = max_length * 1.2
@@ -8562,7 +8657,7 @@ from Bio import SeqIO
 original_rec = SeqIO.read(open("NC_005816.gb"),"genbank")
 
 handle = open("shuffled.fasta", "w")
-for i in range(30) :
+for i in range(30):
     nuc_list = list(original_rec.seq)
     random.shuffle(nuc_list)
     shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet), \
@@ -8581,7 +8676,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 
-def make_shuffle_record(record, new_id) :
+def make_shuffle_record(record, new_id):
     nuc_list = list(record.seq)
     random.shuffle(nuc_list)
     return SeqRecord(Seq("".join(nuc_list), record.seq.alphabet), \
@@ -8615,7 +8710,7 @@ use the default table and add a prefix to the identifier:
 
 \begin{verbatim}
 from Bio.SeqRecord import SeqRecord
-def make_protein_record(nuc_record) :
+def make_protein_record(nuc_record):
     """Returns a new SeqRecord with the translated sequence (default table)."""
     return SeqRecord(seq = nuc_record.seq.translate(cds=True), \
                      id = "trans_" + nuc_record.id, \
@@ -8737,10 +8832,10 @@ their primer removed, but all the other reads are kept as they were?
 
 \begin{verbatim}
 from Bio import SeqIO
-def trim_primer(record, primer) :
-    if record.seq.startswith(primer) :
+def trim_primer(record, primer):
+    if record.seq.startswith(primer):
         return record[len(primer):]
-    else :
+    else:
         return record
 
 trimmed_reads = (trim_primer(record, "GTTGGAACCG") for record in \
@@ -8758,10 +8853,10 @@ Although it is slower, you might prefer to use a for loop:
 \begin{verbatim}
 from Bio import SeqIO
 out_handle = open("trimmed.fastq", "w")
-for record in SeqIO.parse(open("SRR014849.fastq"),"fastq") :
-    if record.seq.startswith("GTTGGAACCG") :
+for record in SeqIO.parse(open("SRR014849.fastq"),"fastq"):
+    if record.seq.startswith("GTTGGAACCG"):
         out_handle.write(record[10:].format("fastq"))
-    else :
+    else:
         out_handle.write(record.format("fastq"))
 out_handle.close()
 \end{verbatim}
@@ -8785,13 +8880,13 @@ not just at the very beginning:
 
 \begin{verbatim}
 from Bio import SeqIO
-def trim_adaptor(record, adaptor) :
+def trim_adaptor(record, adaptor):
     """Removes adaptor sequences, looks for perfect matches only."""
     """
     index = record.seq.find(adaptor)
-    if index == -1 :
+    if index == -1:
         return record #not found, no trimming
-    else :
+    else:
         return record[index+len(adaptor):]
 
 trimmed_reads = (trim_adaptor(record, "GTTGGAACCG") for record in \
@@ -8938,7 +9033,7 @@ a \verb|SeqRecord| iterator:
 
 \begin{verbatim}
 from Bio.SeqIO.QualityIO import PairedFastaQualIterator
-for record in PairedFastaQualIterator(open("example.fasta"), open("example.qual")) :
+for record in PairedFastaQualIterator(open("example.fasta"), open("example.qual")):
    print record
 \end{verbatim}
 
@@ -9018,10 +9113,10 @@ Here is a neat trick using the \verb|Seq| object's \verb|split| method to
 get a list of all the possible ORF translations in the six reading frames:
 
 \begin{verbatim}
-for strand, nuc in [(+1, record.seq), (-1, record.seq.reverse_complement())] :
-    for frame in range(3) :
-        for pro in nuc[frame:].translate(table).split("*") :
-            if len(pro) >= min_pro_len :
+for strand, nuc in [(+1, record.seq), (-1, record.seq.reverse_complement())]:
+    for frame in range(3):
+        for pro in nuc[frame:].translate(table).split("*"):
+            if len(pro) >= min_pro_len:
                 print "%s...%s - length %i, strand %i, frame %i" \
                       % (pro[:30], pro[-3:], len(pro), strand, frame)
 \end{verbatim}
@@ -9064,24 +9159,24 @@ record = SeqIO.read(open("NC_005816.gb"),"genbank")
 table = 11
 min_pro_len = 100
 
-def find_orfs_with_trans(seq, trans_table, min_protein_length) :
+def find_orfs_with_trans(seq, trans_table, min_protein_length):
     answer = []
     seq_len = len(seq)
-    for strand, nuc in [(+1, seq), (-1, seq.reverse_complement())] :
-        for frame in range(3) :
+    for strand, nuc in [(+1, seq), (-1, seq.reverse_complement())]:
+        for frame in range(3):
             trans = str(nuc[frame:].translate(trans_table))
             trans_len = len(trans)
             aa_start = 0
             aa_end = 0
-            while aa_start < trans_len :
+            while aa_start < trans_len:
                 aa_end = trans.find("*", aa_start)
-                if aa_end == -1 :
+                if aa_end == -1:
                     aa_end = trans_len
-                if aa_end-aa_start >= min_protein_length :
-                    if strand == 1 :
+                if aa_end-aa_start >= min_protein_length:
+                    if strand == 1:
                         start = frame+aa_start*3
                         end = min(seq_len,frame+aa_end*3+3)
-                    else :
+                    else:
                         start = seq_len-frame-aa_end*3-3
                         end = seq_len-frame-aa_start*3                        
                     answer.append((start, end, strand,
@@ -9091,7 +9186,7 @@ def find_orfs_with_trans(seq, trans_table, min_protein_length) :
     return answer
 
 orf_list = find_orfs_with_trans(record.seq, table, min_pro_len)
-for start, end, strand, pro in orf_list :
+for start, end, strand, pro in orf_list:
     print "%s...%s - length %i, strand %i, %i:%i" \
           % (pro[:30], pro[-3:], len(pro), strand, start, end)
 \end{verbatim}
@@ -9375,12 +9470,12 @@ window = 7
 dict_one = {}
 dict_two = {}
 for (seq, section_dict) in [(str(rec_one.seq).upper(), dict_one),
-                            (str(rec_two.seq).upper(), dict_two)] :
-    for i in range(len(seq)-window) :
+                            (str(rec_two.seq).upper(), dict_two)]:
+    for i in range(len(seq)-window):
         section = seq[i:i+window]
-        try :
+        try:
             section_dict[section].append(i)
-        except KeyError :
+        except KeyError:
             section_dict[section] = [i]
 #Now find any sub-sequences found in both sequences
 #(Python 2.3 would require slightly different code here)
@@ -9392,9 +9487,9 @@ print "%i unique matches" % len(matches)
 #Create lists of x and y co-ordinates for scatter plot
 x = []
 y = []
-for section in matches :
-    for i in dict_one[section] :
-        for j in dict_two[section] :
+for section in matches:
+    for i in dict_one[section]:
+        for j in dict_two[section]:
             x.append(i)
             y.append(j)
 \end{verbatim}
@@ -9452,10 +9547,10 @@ bit of code to only plot the first fifty reads.
 \begin{verbatim}
 import pylab
 from Bio import SeqIO
-for subfigure in [1,2] :
+for subfigure in [1,2]:
     filename = "SRR001666_%i.fastq" % subfigure
     pylab.subplot(1, 2, subfigure)
-    for i,record in enumerate(SeqIO.parse(open(filename), "fastq")) :
+    for i,record in enumerate(SeqIO.parse(open(filename), "fastq")):
         if i >= 50 : break #trick!
         pylab.plot(record.letter_annotations["phred_quality"])
     pylab.ylim(0,45)
@@ -10127,7 +10222,7 @@ class BiospamTestDivision(unittest.TestCase):
         self.assertAlmostEqual(result, -5.0)
 
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
 \end{verbatim}
@@ -10152,7 +10247,7 @@ These are the key points of \verb|unittest|-based tests:
 
   \item At the end of the test script, you can use
 \begin{verbatim}
-if __name__ == "__main__" :
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
 \end{verbatim}
@@ -10206,7 +10301,7 @@ class BiospamTestDivision(unittest.TestCase):
         self.assertAlmostEqual(result, -5.0)
 
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
 \end{verbatim}

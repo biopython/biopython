@@ -62,7 +62,7 @@ class QueryRow(list):
         _check_is_public(name)
         try:
             return self[self._names_hash[name]]
-        except (KeyError, AttributeError) :
+        except (KeyError, AttributeError):
             raise AttributeError("'%s' object has no attribute '%s'" \
                                  % (self.__class__.__name__, name))
 

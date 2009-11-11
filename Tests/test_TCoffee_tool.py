@@ -16,7 +16,7 @@ t_coffee_exe = None
 if sys.platform=="win32":
     raise MissingExternalDependencyError(\
         "Testing TCOFFEE on Windows not supported yet")
-else :
+else:
     import commands
     output = commands.getoutput("t_coffee -version")
     if "not found" not in output \
@@ -58,7 +58,7 @@ class ProbconsApplication(unittest.TestCase):
         align = AlignIO.read(open(self.outfile1), "clustal")
         records = list(SeqIO.parse(open(self.infile1),"fasta"))
         self.assertEqual(len(records),len(align))
-        for old, new in zip(records, align) :
+        for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-",""), str(old.seq).replace("-",""))
 
@@ -77,7 +77,7 @@ class ProbconsApplication(unittest.TestCase):
         align = AlignIO.read(open(self.outfile3), "pir")
         records = list(SeqIO.parse(open(self.infile1),"fasta"))
         self.assertEqual(len(records),len(align))
-        for old, new in zip(records, align) :
+        for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-",""), str(old.seq).replace("-",""))
 
@@ -100,7 +100,7 @@ class ProbconsApplication(unittest.TestCase):
         align = AlignIO.read(open(self.outfile4), "clustal")
         records = list(SeqIO.parse(open(self.infile1),"fasta"))
         self.assertEqual(len(records),len(align))
-        for old, new in zip(records, align) :
+        for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-",""), str(old.seq).replace("-",""))
 

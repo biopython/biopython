@@ -1,8 +1,10 @@
-#TODO - What if numpy was installed after Biopython,
-#meaning KDTree's C code hasn't been compiled?
-try :
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
+try:
     import numpy
-except ImportError :
+except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(\
         "Install NumPy if you want to use Bio.KDTree.")
@@ -15,5 +17,5 @@ bucket_size=5
 radius=0.01
 
 for i in range(0, 10):
-	_neighbor_test(nr_points, dim, bucket_size, radius)
-	_test(nr_points, dim, bucket_size, radius)
+    _neighbor_test(nr_points, dim, bucket_size, radius)
+    _test(nr_points, dim, bucket_size, radius)

@@ -17,11 +17,11 @@ from Bio import AlignIO
 #################################################################
 
 muscle_exe = None
-if sys.platform=="win32" :
-    try :
+if sys.platform=="win32":
+    try:
         #This can vary depending on the Windows language.
         prog_files = os.environ["PROGRAMFILES"]
-    except KeyError :
+    except KeyError:
         prog_files = r"C:\Program Files"
     #For Windows, MUSCLE just comes as a zip file which contains the
     #a Muscle directory with the muscle.exe file plus a readme etc,
@@ -34,19 +34,19 @@ if sys.platform=="win32" :
                    os.path.join(prog_files,"Muscle3.8"),
                    os.path.join(prog_files,"Muscle3.9"),
                    os.path.join(prog_files,"Muscle")] + sys.path
-    for folder in likely_dirs :
-        if os.path.isdir(folder) :
-            if os.path.isfile(os.path.join(folder, "muscle.exe")) :
+    for folder in likely_dirs:
+        if os.path.isdir(folder):
+            if os.path.isfile(os.path.join(folder, "muscle.exe")):
                 muscle_exe = os.path.join(folder, "muscle.exe")
                 break
         if muscle_exe : break
-else :
+else:
     import commands
     output = commands.getoutput("muscle -version")
-    if "not found" not in output and "MUSCLE" in output.upper() :
+    if "not found" not in output and "MUSCLE" in output.upper():
         muscle_exe = "muscle"
 
-if not muscle_exe :
+if not muscle_exe:
     raise MissingExternalDependencyError(\
         "Install MUSCLE if you want to use the Bio.Align.Applications wrapper.")
 
@@ -145,12 +145,12 @@ class MuscleApplication(unittest.TestCase):
         self.assertEqual(str(result._cl), str(cmdline))
         """
 
-class SimpleAlignTest(unittest.TestCase) :
+class SimpleAlignTest(unittest.TestCase):
     """Simple MUSCLE tests."""
 
     """
     #FASTA output seems broken on Muscle 3.6 (on the Mac).
-    def test_simple_fasta(self) :
+    def test_simple_fasta(self):
         input_file = "Fasta/f002"
         self.assert_(os.path.isfile(input_file))
         records = list(SeqIO.parse(open(input_file),"fasta"))
@@ -167,12 +167,12 @@ class SimpleAlignTest(unittest.TestCase) :
         print out_handle.read()
         align = AlignIO.read(out_handle, "fasta")
         self.assertEqual(len(records),len(align))
-        for old, new in zip(records, align) :
+        for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-",""), str(old.seq))
     """
 
-    def test_simple_clustal(self) :
+    def test_simple_clustal(self):
         """Simple muscle call using Clustal output with a MUSCLE header."""
         input_file = "Fasta/f002"
         self.assert_(os.path.isfile(input_file))
@@ -186,13 +186,13 @@ class SimpleAlignTest(unittest.TestCase) :
         result, out_handle, err_handle = generic_run(cmdline)
         align = AlignIO.read(out_handle, "clustal")
         self.assertEqual(len(records),len(align))
-        for old, new in zip(records, align) :
+        for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-",""), str(old.seq))
         #Didn't use -quiet so there should be progress reports on stderr,
         self.assert_(err_handle.read().strip().startswith("MUSCLE"))
 
-    def test_simple_clustal_strict(self) :
+    def test_simple_clustal_strict(self):
         """Simple muscle call using strict Clustal output."""
         input_file = "Fasta/f002"
         self.assert_(os.path.isfile(input_file))
@@ -210,13 +210,13 @@ class SimpleAlignTest(unittest.TestCase) :
         result, out_handle, err_handle = generic_run(cmdline)
         align = AlignIO.read(out_handle, "clustal")
         self.assertEqual(len(records),len(align))
-        for old, new in zip(records, align) :
+        for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-",""), str(old.seq))
         #Didn't use -quiet so there should be progress reports on stderr,
         self.assert_(err_handle.read().strip().startswith("MUSCLE"))
 
-    def test_long(self) :
+    def test_long(self):
         """Simple muscle call using long file."""
         #Create a large input file by converting some of another example file
         temp_large_fasta_file = "temp_cw_prot.fasta"
@@ -245,7 +245,7 @@ class SimpleAlignTest(unittest.TestCase) :
         result, out_handle, err_handle = generic_run(cmdline)
         align = AlignIO.read(out_handle, "clustal")
         self.assertEqual(len(records), len(align))
-        for old, new in zip(records, align) :
+        for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-",""), str(old.seq))
         os.remove(temp_large_fasta_file)
@@ -271,7 +271,7 @@ class SimpleAlignTest(unittest.TestCase) :
         #Alignment will now run...
         align = AlignIO.read(child.stdout, "clustal")
         self.assertEqual(len(records),len(align))
-        for old, new in zip(records, align) :
+        for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-",""), str(old.seq))
         self.assertEqual(0, child.wait())

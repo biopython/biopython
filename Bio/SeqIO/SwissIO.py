@@ -18,7 +18,7 @@ from Bio import SeqFeature
 from Bio import SwissProt
     
 #This is a generator function!
-def SwissIterator(handle) :
+def SwissIterator(handle):
     """Breaks up a Swiss-Prot/UniProt file into SeqRecord objects.
 
     Every section from the ID line to the terminating // becomes
@@ -90,7 +90,7 @@ def SwissIterator(handle) :
             record.annotations['keywords'] = swiss_record.keywords
         yield record
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     print "Quick self test..."
 
     example_filename = "../../Tests/SwissProt/sp008"
@@ -98,7 +98,7 @@ if __name__ == "__main__" :
     import os
     if not os.path.isfile(example_filename):
         print "Missing test file %s" % example_filename
-    else :
+    else:
         #Try parsing it!
         handle = open(example_filename)
         records = SwissIterator(handle)

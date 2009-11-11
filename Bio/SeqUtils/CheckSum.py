@@ -11,12 +11,12 @@
 
 from binascii import crc32 as _crc32
 
-def crc32(seq) :
+def crc32(seq):
     """Returns the crc32 checksum for a sequence (string or Seq object)"""
-    try :
+    try:
         #Assume its a Seq object
         return _crc32(seq.tostring())
-    except AttributeError :
+    except AttributeError:
         #Assume its a string
         return _crc32(seq)
 
@@ -104,7 +104,7 @@ def seguid(seq):
         #contains "\n" but not "\r\n"
         return base64.encodestring(m.digest()).replace("\n","").rstrip("=")
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     print "Quick self test"
 
     str_light_chain_one = "QSALTQPASVSGSPGQSITISCTGTSSDVGSYNLVSWYQQHPGK" \

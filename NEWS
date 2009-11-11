@@ -13,9 +13,26 @@ Biopython is now using git for source code control, currently on github. Our
 old CVS repository will remain on the OBF servers in the short/medium term
 as a backup, but will not be updated in future.
 
+The Bio.Blast.Applications wrappers now covers the new NCBI BLAST C++ tools
+(where blastall is replaced by blastp, blastn, etc, and the command line
+switches have all been renamed). These will be replacing the old wrappers in
+Bio.Blast.NCBIStandalone which are now obsolete, and will be deprecated in
+our next release.
+
 The plain text BLAST parser has been updated, and should cope with recent
 versions of NCBI BLAST, including the new C++ based version. Nevertheless,
 we (and the NCBI) still recommend using the XML output for parsing.
+
+The Seq (and related UnknownSeq) objects gained upper and lower methods,
+like the string methods of the same name but alphabet aware.
+
+The SeqFeature object now has an extract method, used with the parent
+sequence (as a string or Seq object) to get the region of that sequence
+described by the feature's location information (including the strand and
+any sub-features for a join).
+
+SeqRecord objects now support addition, giving a new SeqRecord with the
+combined sequence, all the SeqFeatures,  and any common annotation.
 
 ===================================================================
 

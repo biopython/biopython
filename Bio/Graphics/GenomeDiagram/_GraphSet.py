@@ -116,7 +116,7 @@ class GraphSet:
             color = colour
         if altcolour is not None:
             altcolor = altcolour
-        if centre is not None :
+        if centre is not None:
             center = centre
 
         id = self._next_id                              # get id number

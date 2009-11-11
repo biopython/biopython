@@ -16,7 +16,7 @@ For example, using Bio.SeqIO we can read in one of the example PHRED files
 from the Biopython unit tests:
 
     >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse(open("Phd/phd1"), "phd") :
+    >>> for record in SeqIO.parse(open("Phd/phd1"), "phd"):
     ...     print record.id
     ...     print record.seq[:10], "..."
     ...     print record.letter_annotations["phred_quality"][:10], "..."
@@ -58,7 +58,7 @@ from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 from Bio.SeqIO import QualityIO
     
 #This is a generator function!
-def PhdIterator(handle) :
+def PhdIterator(handle):
     """Returns SeqRecord objects from a PHD file.
 
     This uses the Bio.Sequencing.Phd module to do the hard work.
@@ -79,10 +79,10 @@ def PhdIterator(handle) :
         #And store the qualities and peak locations as per-letter-annotation
         seq_record.letter_annotations["phred_quality"] = \
                 [int(site[1]) for site in phd_record.sites]
-        try :
+        try:
             seq_record.letter_annotations["peak_location"] = \
                     [int(site[2]) for site in phd_record.sites]
-        except IndexError :
+        except IndexError:
             # peak locations are not always there according to
             # David Gordon (the Consed author)
             pass
@@ -107,11 +107,11 @@ class PhdWriter(SequentialSequenceWriter):
         if peak_locations:
             assert len(record.seq) == len(peak_locations), "Number " + \
                     "of peak location scores does not match length of sequence"
-        if None in phred_qualities :
+        if None in phred_qualities:
             raise ValueError("A quality value of None was found")
-        if record.description.startswith("%s " % record.id) :
+        if record.description.startswith("%s " % record.id):
             title = record.description
-        else :
+        else:
             title = "%s %s" % (record.id, record.description)
         self.handle.write("BEGIN_SEQUENCE %s\nBEGIN_COMMENT\n" \
                           % self.clean(title))
@@ -152,7 +152,7 @@ def _test():
     """
     import doctest
     import os
-    if os.path.isdir(os.path.join("..","..","Tests")) :
+    if os.path.isdir(os.path.join("..","..","Tests")):
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("..","..","Tests"))
@@ -162,7 +162,7 @@ def _test():
         del cur_dir
         print "Done"
         
-if __name__ == "__main__" :
+if __name__ == "__main__":
     _test()
 
         

@@ -94,17 +94,17 @@ class Iterator:
 
         Will return None if we ran out of records.
         """
-        if self._parser is None :
+        if self._parser is None:
             lines = []
-            while True :
+            while True:
                 line = self.handle.readline()
                 if not line : return None #Premature end of file?
                 lines.append(line)
                 if line.rstrip() == "//" : break
             return "".join(lines)
-        try :
+        try:
             return self._parser.parse(self.handle)
-        except StopIteration :
+        except StopIteration:
             return None
 
     def __iter__(self):
@@ -191,7 +191,7 @@ class _BaseGenBankConsumer(AbstractConsumer):
         """Split a string of keywords into a nice clean list.
         """
         # process the keywords into a python list
-        if keyword_string == "" or keyword_string == "." :
+        if keyword_string == "" or keyword_string == ".":
             keywords = ""
         elif keyword_string[-1] == '.':
             keywords = keyword_string[:-1]
@@ -213,7 +213,7 @@ class _BaseGenBankConsumer(AbstractConsumer):
     def _split_taxonomy(self, taxonomy_string):
         """Split a string with taxonomy info into a list.
         """
-        if not taxonomy_string or taxonomy_string=="." :
+        if not taxonomy_string or taxonomy_string==".":
             #Missing data, no taxonomy
             return []
         
@@ -334,11 +334,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def definition(self, definition):
         """Set the definition as the description of the sequence.
         """
-        if self.data.description :
+        if self.data.description:
             #Append to any existing description
             #e.g. EMBL files with two DE lines.
             self.data.description += " " + definition
-        else :
+        else:
             self.data.description = definition
 
     def accession(self, acc_num):
@@ -350,13 +350,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         new_acc_nums = self._split_accessions(acc_num)
 
         #Also record them ALL in the annotations
-        try :
+        try:
             #On the off chance there was more than one accession line:
-            for acc in new_acc_nums :
+            for acc in new_acc_nums:
                 #Prevent repeat entries
-                if acc not in self.data.annotations['accessions'] :
+                if acc not in self.data.annotations['accessions']:
                     self.data.annotations['accessions'].append(acc)
-        except KeyError :
+        except KeyError:
             self.data.annotations['accessions'] = new_acc_nums
 
         # if we haven't set the id information yet, add the first acc num
@@ -384,10 +384,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         #obsolete SV line in EMBL.  For the new EMBL files we need
         #both the version suffix from the ID line and the accession
         #from the AC line.
-        if version_id.count(".")==1 and version_id.split(".")[1].isdigit() :
+        if version_id.count(".")==1 and version_id.split(".")[1].isdigit():
             self.accession(version_id.split(".")[0])
             self.version_suffix(version_id.split(".")[1])
-        else :
+        else:
             #For backwards compatibility...
             self.data.id = version_id
 
@@ -431,7 +431,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         """
         #During the transition period with both PROJECT and DBLINK lines,
         #we don't want to add the same cross reference twice.
-        if content.strip() not in self.data.dbxrefs :
+        if content.strip() not in self.data.dbxrefs:
             self.data.dbxrefs.append(content.strip())
 
     def version_suffix(self, version):
@@ -469,7 +469,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def source(self, content):
         #Note that some software (e.g. VectorNTI) may produce an empty
         #source (rather than using a dot/period as might be expected).
-        if content == "" :
+        if content == "":
             source_info = ""
         elif content[-1] == '.':
             source_info = content[:-1]
@@ -484,9 +484,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         """Records (another line of) the taxonomy lineage.
         """
         lineage = self._split_taxonomy(content)
-        try :
+        try:
             self.data.annotations['taxonomy'].extend(lineage)
-        except KeyError :
+        except KeyError:
             self.data.annotations['taxonomy'] = lineage
         
     def reference_num(self, content):
@@ -566,30 +566,30 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         return new_locations
 
     def authors(self, content):
-        if self._cur_reference.authors :
+        if self._cur_reference.authors:
             self._cur_reference.authors += ' ' + content
-        else :
+        else:
             self._cur_reference.authors = content
 
     def consrtm(self, content):
-        if self._cur_reference.consrtm :
+        if self._cur_reference.consrtm:
             self._cur_reference.consrtm += ' ' + content
-        else :
+        else:
             self._cur_reference.consrtm = content
 
     def title(self, content):
-        if self._cur_reference is None :
+        if self._cur_reference is None:
             import warnings
             warnings.warn("GenBank TITLE line without REFERENCE line.")
-        elif self._cur_reference.title :
+        elif self._cur_reference.title:
             self._cur_reference.title += ' ' + content
-        else :
+        else:
             self._cur_reference.title = content
 
     def journal(self, content):
-        if self._cur_reference.journal :
+        if self._cur_reference.journal:
             self._cur_reference.journal += ' ' + content
-        else :
+        else:
             self._cur_reference.journal = content
 
     def medline_id(self, content):
@@ -600,15 +600,15 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
     def remark(self, content):
         """Deal with a reference comment."""
-        if self._cur_reference.comment :
+        if self._cur_reference.comment:
             self._cur_reference.comment += ' ' + content
-        else :
+        else:
             self._cur_reference.comment = content
 
     def comment(self, content):
-        try :
+        try:
             self.data.annotations['comment'] += "\n" + "\n".join(content)
-        except KeyError :
+        except KeyError:
             self.data.annotations['comment'] = "\n".join(content)
 
     def features_line(self, content):
@@ -775,9 +775,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # However, we must also consider evil mixed strand examples like
         # this, join(complement(69611..69724),139856..140087,140625..140650)
         strands = set(sf.strand for sf in cur_feature.sub_features)
-        if len(strands)==1 :
+        if len(strands)==1:
             cur_feature.strand = cur_feature.sub_features[0].strand
-        else :
+        else:
             cur_feature.strand = None # i.e. mixed strands
 
     def _set_location_info(self, parse_info, cur_feature):
@@ -859,8 +859,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                                               end_pos.position)
             #If the start location is a one-of position, we also need to
             #adjust their positions to use python counting.
-            if isinstance(start_pos, SeqFeature.OneOfPosition) :
-                for p in start_pos.position_choices :
+            if isinstance(start_pos, SeqFeature.OneOfPosition):
+                for p in start_pos.position_choices:
                     p.position -= 1
                 
             return SeqFeature.FeatureLocation(start_pos, end_pos)
@@ -1020,14 +1020,14 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         from Bio.Seq import Seq, UnknownSeq
 
         #Try and append the version number to the accession for the full id
-        if self.data.id is None :
+        if self.data.id is None:
             assert 'accessions' not in self.data.annotations, \
                    self.data.annotations['accessions']
             self.data.id = self.data.name #Good fall back?
-        elif self.data.id.count('.') == 0 :
-            try :
+        elif self.data.id.count('.') == 0:
+            try:
                 self.data.id+='.%i' % self.data.annotations['sequence_version']
-            except KeyError :
+            except KeyError:
                 pass
         
         # add the last feature in the table which hasn't been added yet
@@ -1044,7 +1044,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         if self._expected_size is not None \
         and len(sequence) != 0 \
-        and self._expected_size != len(sequence) :
+        and self._expected_size != len(sequence):
             raise ValueError("Expected sequence length %i, found %i." \
                              % (self._expected_size, len(sequence)))
 
@@ -1059,9 +1059,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 #is usually given as DNA (T not U).  Bug 2408
                 if "T" in sequence and "U" not in sequence:
                     seq_alphabet = IUPAC.ambiguous_dna
-                else :
+                else:
                     seq_alphabet = IUPAC.ambiguous_rna
-            elif self._seq_type.find('PROTEIN') != -1 :
+            elif self._seq_type.find('PROTEIN') != -1:
                 seq_alphabet = IUPAC.protein  # or extended protein?
             # work around ugly GenBank records which have circular or
             # linear but no indication of sequence type
@@ -1072,9 +1072,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 raise ValueError("Could not determine alphabet for seq_type %s"
                                  % self._seq_type)
 
-        if not sequence and self.__expected_size :
+        if not sequence and self.__expected_size:
             self.data.seq = UnknownSeq(self._expected_size, seq_alphabet)
-        else :
+        else:
             self.data.seq = Seq(sequence, seq_alphabet)
 
 class _RecordConsumer(_BaseGenBankConsumer):
@@ -1115,8 +1115,8 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self.data.definition = content
 
     def accession(self, content):
-        for acc in self._split_accessions(content) :
-            if acc not in self.data.accession :
+        for acc in self._split_accessions(content):
+            if acc not in self.data.accession:
                 self.data.accession.append(acc)
 
     def nid(self, content):
@@ -1175,7 +1175,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_reference.consrtm = content
 
     def title(self, content):
-        if self._cur_reference is None :
+        if self._cur_reference is None:
             import warnings
             warnings.warn("GenBank TITLE line without REFERENCE line.")
             return

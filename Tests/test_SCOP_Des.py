@@ -15,7 +15,7 @@ from Bio.SCOP.Residues import Residues
 
 class DesTests(unittest.TestCase):
 
-    def setUp(self) :
+    def setUp(self):
         self.filename = './SCOP/dir.des.scop.txt_test'
 
     def testParse(self):
@@ -39,15 +39,15 @@ class DesTests(unittest.TestCase):
        finally:
            f.close()        
 
-    def testError(self) :
+    def testError(self):
         corruptRec = "49268\tsp\tb.1.2.1\t-\n"
         try:
             record = Des.Record(corruptRec)
             assert False, "Should never get here"
-        except ValueError, e :
+        except ValueError, e:
             pass
 
-    def testRecord(self) :
+    def testRecord(self):
         recLine = '49268\tsp\tb.1.2.1\t-\tHuman (Homo sapiens)    \n'
         recFields = (49268,'sp','b.1.2.1','','Human (Homo sapiens)')
 

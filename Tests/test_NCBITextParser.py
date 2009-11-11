@@ -735,7 +735,7 @@ class TestNCBITextParser(unittest.TestCase):
         self._check_bt007_hsps_details(record)
         self._check_bt007_footer(record)
 
-    def _check_bt007_round0(self, record) :
+    def _check_bt007_round0(self, record):
         self.assertEqual(record.rounds[0].new_seqs[0].title, "gi|126343|sp|P17216|LIVK_SALTY LEUCINE-SPECIFIC BINDING PROTEIN...")
         self.assertEqual(record.rounds[0].new_seqs[0].score, 743)
         self.assertAlmostEqual(record.rounds[0].new_seqs[0].e, 0.0)
@@ -808,7 +808,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[0].alignments[13].title, ">gi|1351310|sp|P43496|TRXB_PENCH THIOREDOXIN REDUCTASE")
         self.assertEqual(record.rounds[0].alignments[13].length, 334)
 
-    def _check_bt007_round1(self, record) :
+    def _check_bt007_round1(self, record):
         self.assertEqual(len(record.rounds[1].new_seqs), 18)
         self.assertEqual(record.rounds[1].new_seqs[0].title, "gi|113709|sp|P27017|AMIC_PSEAE ALIPHATIC AMIDASE EXPRESSION-REG...")
         self.assertEqual(record.rounds[1].new_seqs[0].score, 49)
@@ -913,7 +913,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[1].alignments[22].length, 106)
         self.assertEqual(record.rounds[1].alignments[23].title, ">gi|3025270|sp|P77269|YPHF_ECOLI ABC TRANSPORTER PERIPLASMIC BINDING PROTEIN YPHF PRECURSOR")
 
-    def _check_bt007_round2(self, record) :
+    def _check_bt007_round2(self, record):
         self.assertEqual(record.rounds[1].alignments[23].length, 327)
         self.assertEqual(len(record.rounds[2].new_seqs), 16)
         self.assertEqual(record.rounds[2].new_seqs[0].title, "gi|3024134|sp|O15303|MGR6_HUMAN METABOTROPIC GLUTAMATE RECEPTOR...")
@@ -1012,7 +1012,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[2].alignments[22].title, ">gi|127971|sp||NCPR_SALTR_1 [Segment 1 of 3] NADPH-CYTOCHROME P450 REDUCTASE (CPR)")
         self.assertEqual(record.rounds[2].alignments[22].length, 426)
 
-    def _check_bt007_hsps(self, record) :
+    def _check_bt007_hsps(self, record):
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].score, 1897)
         self.assertAlmostEqual(record.rounds[0].alignments[0].hsps[0].bits, 743)
         self.assertAlmostEqual(record.rounds[0].alignments[0].hsps[0].expect, 0.0)
@@ -1430,7 +1430,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[2].alignments[22].hsps[0].positives, (53, 146))
         self.assertEqual(record.rounds[2].alignments[22].hsps[0].gaps, (8, 146))
 
-    def _check_bt007_hsps_details(self, record) :
+    def _check_bt007_hsps_details(self, record):
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].query, "MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIKDINAKGGIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVRQARANGLKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKDPSGPYVWITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEFGVFQWHADGSSTVAK")
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].match, "MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIKDINAKGGIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVRQARANGLKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKDPSGPYVWITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEFGVFQWHADGSSTVAK")
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].sbjct, "MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIKDINAKGGIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVRQARANGLKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKDPSGPYVWITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEFGVFQWHADGSSTVAK")
@@ -1859,7 +1859,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[2].alignments[22].hsps[0].sbjct_start, 15)
         self.assertEqual(record.rounds[2].alignments[22].hsps[0].sbjct_end, 157)
 
-    def _check_bt007_footer(self, record) :
+    def _check_bt007_footer(self, record):
         self.assertEqual(record.database_name, ['data/swissprot'])
         self.assertEqual(record.num_letters_in_database, [29652561])
         self.assertEqual(record.num_sequences_in_database, [82258])
@@ -1931,7 +1931,7 @@ class TestNCBITextParser(unittest.TestCase):
         self._check_bt009_hsps_details(record)
         self._check_bt009_footer(record)
 
-    def _check_bt009_round0(self, record) :
+    def _check_bt009_round0(self, record):
         self.assertEqual(record.rounds[0].new_seqs[0].title, "gi|399896|sp|Q02134|HIS7_LACLA IMIDAZOLEGLYCEROL-PHOSPHATE DEHY...")
         self.assertEqual(record.rounds[0].new_seqs[0].score, 409)
         self.assertAlmostEqual(record.rounds[0].new_seqs[0].e, 1.e-114)
@@ -2084,7 +2084,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[0].alignments[29].title, ">gi|1174406|sp|P36126|SP14_YEAST PHOSPHOLIPASE D1 (PLD 1) (CHOLINE PHOSPHATASE 1) (PHOSPHATIDYLCHOLINE-HYDROLYZING PHOSPHOLIPASE D1) (MEIOSIS-SPECIFIC SPORULATION PROTEIN SPO14)")
         self.assertEqual(record.rounds[0].alignments[29].length, 1380)
 
-    def _check_bt009_round1(self, record) :
+    def _check_bt009_round1(self, record):
         self.assertEqual(len(record.rounds[1].new_seqs), 0)
         self.assertEqual(len(record.rounds[1].alignments), 24)
         self.assertEqual(record.rounds[1].alignments[0].title, ">gi|2495230|sp|Q43072|HIS7_PEA IMIDAZOLEGLYCEROL-PHOSPHATE DEHYDRATASE (IGPD)")
@@ -2137,7 +2137,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[1].alignments[23].length, 193)
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].score, 1040)
 
-    def _check_bt009_hsps(self, record) :
+    def _check_bt009_hsps(self, record):
         self.assertAlmostEqual(record.rounds[0].alignments[0].hsps[0].bits, 409)
         self.assertAlmostEqual(record.rounds[0].alignments[0].hsps[0].expect, 1e-114)
         self.assertEqual(len(record.rounds[0].alignments[0].hsps), 1)
@@ -2513,7 +2513,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[1].alignments[23].hsps[0].positives, (124, 200))
         self.assertEqual(record.rounds[1].alignments[23].hsps[0].gaps, (7, 200))
 
-    def _check_bt009_hsps_details(self, record) :
+    def _check_bt009_hsps_details(self, record):
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].query, "MTRISHITRNTKETQIELSINLDGTGQADISTGIGFLDHMLTLLTFHSDFDLKIIGHGDHETVGMDPHHLIEDVAIALGKCISEDLGNKLGIRRYGSFTIPMDEALVTCDLDISGRPYLVFHADLSGNQKLGGYDTEMTEEFFRALAFNAGITLHLNEHYGQNTHHIIEGMFKSTARALKQAVSIDESKVGEIPSSKGVL")
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].match, "MTRISHITRNTKETQIELSINLDGTGQADISTGIGFLDHMLTLLTFHSDFDLKIIGHGDHETVGMDPHHLIEDVAIALGKCISEDLGNKLGIRRYGSFTIPMDEALVTCDLDISGRPYLVFHADLSGNQKLGGYDTEMTEEFFRALAFNAGITLHLNEHYGQNTHHIIEGMFKSTARALKQAVSIDESKVGEIPSSKGVL")
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].sbjct, "MTRISHITRNTKETQIELSINLDGTGQADISTGIGFLDHMLTLLTFHSDFDLKIIGHGDHETVGMDPHHLIEDVAIALGKCISEDLGNKLGIRRYGSFTIPMDEALVTCDLDISGRPYLVFHADLSGNQKLGGYDTEMTEEFFRALAFNAGITLHLNEHYGQNTHHIIEGMFKSTARALKQAVSIDESKVGEIPSSKGVL")
@@ -2893,7 +2893,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[1].alignments[23].hsps[0].sbjct_start, 1)
         self.assertEqual(record.rounds[1].alignments[23].hsps[0].sbjct_end, 193)
 
-    def _check_bt009_footer(self, record) :
+    def _check_bt009_footer(self, record):
         self.assertEqual(record.database_name, ['data/swissprot'])
         self.assertEqual(record.num_letters_in_database, [29652561])
         self.assertEqual(record.num_sequences_in_database, [82258])
@@ -14183,13 +14183,13 @@ class TestNCBITextParser(unittest.TestCase):
         ("gb|AAW12704.1| nucleoprotein [High Plains virus]",                     73, 8e-11),
         ("gb|AAW12703.1| nucleoprotein [High Plains virus]",                     73, 8e-11),
         ]
-        for (a,b) in zip(record.descriptions, descrs) :
+        for (a,b) in zip(record.descriptions, descrs):
             self.assertEqual((a.title, a.score, a.e),b)
-        for (a,b) in zip(record.alignments, descrs) :
+        for (a,b) in zip(record.alignments, descrs):
             self.assertEqual(a.title[0], ">")
-            if b[0].endswith("...") :
+            if b[0].endswith("..."):
                 self.assert_(a.title.startswith(">"+b[0][:-3]))
-            else :
+            else:
                 self.assertEqual(a.title, ">" + b[0])
 
         self.assertEqual(None, records.next())
@@ -14555,6 +14555,6 @@ class TestNCBITextParser(unittest.TestCase):
 
         self.assertEqual(None, records.next())
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)

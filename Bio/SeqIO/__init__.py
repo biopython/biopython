@@ -20,7 +20,7 @@ and format string.  This returns an iterator giving SeqRecord objects:
 
     >>> from Bio import SeqIO
     >>> handle = open("Fasta/f002", "rU")
-    >>> for record in SeqIO.parse(handle, "fasta") :
+    >>> for record in SeqIO.parse(handle, "fasta"):
     ...     print record.id, len(record)
     gi|1348912|gb|G26680|G26680 633
     gi|1348917|gb|G26685|G26685 413
@@ -117,7 +117,7 @@ you a SeqRecord for each row of each alignment:
 
     >>> from Bio import SeqIO
     >>> handle = open("Clustalw/hedgehog.aln", "rU")
-    >>> for record in SeqIO.parse(handle, "clustal") :
+    >>> for record in SeqIO.parse(handle, "clustal"):
     ...     print record.id, len(record)
     gi|167877390|gb|EDS40773.1| 447
     gi|167234445|ref|NP_001107837. 447
@@ -322,7 +322,7 @@ _FormatToWriter ={"fasta" : FastaIO.FastaWriter,
                   "sff" : SffIO.SffWriter,
                   }
 
-def write(sequences, handle, format) :
+def write(sequences, handle, format):
     """Write complete set of sequences to a file.
 
      - sequences - A list (or iterator) of SeqRecord objects.
@@ -336,22 +336,22 @@ def write(sequences, handle, format) :
     from Bio import AlignIO
 
     #Try and give helpful error messages:
-    if isinstance(handle, basestring) :
+    if isinstance(handle, basestring):
         raise TypeError("Need a file handle, not a string (i.e. not a filename)")
-    if not isinstance(format, basestring) :
+    if not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
-    if not format :
+    if not format:
         raise ValueError("Format required (lower case string)")
-    if format != format.lower() :
+    if format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
     if isinstance(sequences,SeqRecord):
         raise ValueError("Use a SeqRecord list/iterator, not just a single SeqRecord")
 
     #Map the file format to a writer class
-    if format in _FormatToWriter :
+    if format in _FormatToWriter:
         writer_class = _FormatToWriter[format]
         count = writer_class(handle).write_file(sequences)
-    elif format in AlignIO._FormatToWriter :
+    elif format in AlignIO._FormatToWriter:
         #Try and turn all the records into a single alignment,
         #and write that using Bio.AlignIO
         alignment = to_alignment(sequences)
@@ -360,10 +360,10 @@ def write(sequences, handle, format) :
            + " should have returned 1, not %s" % repr(alignment_count)
         count = len(alignment.get_all_seqs())
         del alignment_count, alignment
-    elif format in _FormatToIterator or format in AlignIO._FormatToIterator :
+    elif format in _FormatToIterator or format in AlignIO._FormatToIterator:
         raise ValueError("Reading format '%s' is supported, but not writing" \
                          % format)
-    else :
+    else:
         raise ValueError("Unknown format '%s'" % format)
 
     assert isinstance(count, int), "Internal error - the underlying %s " \
@@ -371,7 +371,7 @@ def write(sequences, handle, format) :
            % (format, repr(count))
     return count
     
-def parse(handle, format, alphabet=None) :
+def parse(handle, format, alphabet=None):
     r"""Turns a sequence file into an iterator returning SeqRecords.
 
      - handle   - handle to the file.
@@ -384,7 +384,7 @@ def parse(handle, format, alphabet=None) :
 
     >>> from Bio import SeqIO
     >>> filename = "Fasta/sweetpea.nu"
-    >>> for record in SeqIO.parse(open(filename,"rU"), "fasta") :
+    >>> for record in SeqIO.parse(open(filename,"rU"), "fasta"):
     ...    print "ID", record.id
     ...    print "Sequence length", len(record)
     ...    print "Sequence alphabet", record.seq.alphabet
@@ -398,7 +398,7 @@ def parse(handle, format, alphabet=None) :
     >>> from Bio import SeqIO
     >>> from Bio.Alphabet import generic_dna
     >>> filename = "Fasta/sweetpea.nu"
-    >>> for record in SeqIO.parse(open(filename,"rU"), "fasta", generic_dna) :
+    >>> for record in SeqIO.parse(open(filename,"rU"), "fasta", generic_dna):
     ...    print "ID", record.id
     ...    print "Sequence length", len(record)
     ...    print "Sequence alphabet", record.seq.alphabet
@@ -412,7 +412,7 @@ def parse(handle, format, alphabet=None) :
     >>> data = ">Alpha\nACCGGATGTA\n>Beta\nAGGCTCGGTTA\n"
     >>> from Bio import SeqIO
     >>> from StringIO import StringIO
-    >>> for record in SeqIO.parse(StringIO(data), "fasta") :
+    >>> for record in SeqIO.parse(StringIO(data), "fasta"):
     ...     print record.id, record.seq
     Alpha ACCGGATGTA
     Beta AGGCTCGGTTA
@@ -426,58 +426,58 @@ def parse(handle, format, alphabet=None) :
     from Bio import AlignIO
 
     #Try and give helpful error messages:
-    if isinstance(handle, basestring) :
+    if isinstance(handle, basestring):
         raise TypeError("Need a file handle, not a string (i.e. not a filename)")
-    if not isinstance(format, basestring) :
+    if not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
-    if not format :
+    if not format:
         raise ValueError("Format required (lower case string)")
-    if format != format.lower() :
+    if format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
     if alphabet is not None and not (isinstance(alphabet, Alphabet) or \
-                                     isinstance(alphabet, AlphabetEncoder)) :
+                                     isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:    
-    if format in _FormatToIterator :
+    if format in _FormatToIterator:
         iterator_generator = _FormatToIterator[format]
-        if alphabet is None :
+        if alphabet is None:
             return iterator_generator(handle)
-        try :
+        try:
             return iterator_generator(handle, alphabet=alphabet)
-        except :
+        except:
             return _force_alphabet(iterator_generator(handle), alphabet)
-    elif format in AlignIO._FormatToIterator :
+    elif format in AlignIO._FormatToIterator:
         #Use Bio.AlignIO to read in the alignments
         #TODO - Can this helper function can be replaced with a generator expression,
         #or something from itertools?
         return _iterate_via_AlignIO(handle, format, alphabet)
-    else :
+    else:
         raise ValueError("Unknown format '%s'" % format)
 
 #This is a generator function
-def _iterate_via_AlignIO(handle, format, alphabet) :
+def _iterate_via_AlignIO(handle, format, alphabet):
     """Iterate over all records in several alignments (PRIVATE)."""
     from Bio import AlignIO
-    for align in AlignIO.parse(handle, format, alphabet=alphabet) :
-        for record in align :
+    for align in AlignIO.parse(handle, format, alphabet=alphabet):
+        for record in align:
             yield record
 
-def _force_alphabet(record_iterator, alphabet) :
+def _force_alphabet(record_iterator, alphabet):
      """Iterate over records, over-riding the alphabet (PRIVATE)."""
      #Assume the alphabet argument has been pre-validated
      given_base_class = _get_base_alphabet(alphabet).__class__
-     for record in record_iterator :
+     for record in record_iterator:
          if isinstance(_get_base_alphabet(record.seq.alphabet),
-                       given_base_class) :
+                       given_base_class):
              record.seq.alphabet = alphabet
              yield record
-         else :
+         else:
              raise ValueError("Specified alphabet %s clashes with "\
                               "that determined from the file, %s" \
                               % (repr(alphabet), repr(record.seq.alphabet)))
 
-def read(handle, format, alphabet=None) :
+def read(handle, format, alphabet=None):
     """Turns a sequence file into a single SeqRecord.
 
      - handle   - handle to the file.
@@ -520,21 +520,21 @@ def read(handle, format, alphabet=None) :
     to read multiple records from the handle.
     """
     iterator = parse(handle, format, alphabet)
-    try :
+    try:
         first = iterator.next()
-    except StopIteration :
+    except StopIteration:
         first = None
-    if first is None :
+    if first is None:
         raise ValueError("No records found in handle")
-    try :
+    try:
         second = iterator.next()
-    except StopIteration :
+    except StopIteration:
         second = None
-    if second is not None :
+    if second is not None:
         raise ValueError("More than one record found in handle")
     return first
 
-def to_dict(sequences, key_function=None) :
+def to_dict(sequences, key_function=None):
     """Turns a sequence iterator or list into a dictionary.
 
      - sequences  - An iterator that returns SeqRecord objects,
@@ -570,7 +570,7 @@ def to_dict(sequences, key_function=None) :
     >>> format = "genbank"
     >>> seguid_dict = SeqIO.to_dict(SeqIO.parse(handle, format),
     ...               key_function = lambda rec : seguid(rec.seq))
-    >>> for key, record in sorted(seguid_dict.iteritems()) :
+    >>> for key, record in sorted(seguid_dict.iteritems()):
     ...     print key, record.id
     /wQvmrl87QWcm9llO4/efg23Vgg AJ237582.1
     BUg6YxXSKWEcFFH0L08JzaLGhQs L31939.1
@@ -583,18 +583,18 @@ def to_dict(sequences, key_function=None) :
     the SeqRecord objects are held in memory. Instead, consider using the
     Bio.SeqIO.index() function (if it supports your particular file format).
     """    
-    if key_function is None :
+    if key_function is None:
         key_function = lambda rec : rec.id
 
     d = dict()
-    for record in sequences :
+    for record in sequences:
         key = key_function(record)
-        if key in d :
+        if key in d:
             raise ValueError("Duplicate key '%s'" % key)
         d[key] = record
     return d
 
-def index(filename, format, alphabet=None, key_function=None) :
+def index(filename, format, alphabet=None, key_function=None):
     """Indexes a sequence file and returns a dictionary like object.
 
      - filename - string giving name of file to be indexed
@@ -657,7 +657,7 @@ def index(filename, format, alphabet=None, key_function=None) :
     this (the record identifier string) into your prefered key. For example:
 
     >>> from Bio import SeqIO
-    >>> def make_tuple(identifier) :
+    >>> def make_tuple(identifier):
     ...     parts = identifier.split("_")
     ...     return int(parts[-2]), int(parts[-1])
     >>> records = SeqIO.index("Quality/example.fastq", "fastq",
@@ -688,27 +688,27 @@ def index(filename, format, alphabet=None, key_function=None) :
     usually avoided.
     """
     #Try and give helpful error messages:
-    if not isinstance(filename, basestring) :
+    if not isinstance(filename, basestring):
         raise TypeError("Need a filename (not a handle)")
-    if not isinstance(format, basestring) :
+    if not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
-    if not format :
+    if not format:
         raise ValueError("Format required (lower case string)")
-    if format != format.lower() :
+    if format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
     if alphabet is not None and not (isinstance(alphabet, Alphabet) or \
-                                     isinstance(alphabet, AlphabetEncoder)) :
+                                     isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:    
     import _index #Lazy import
-    try :
+    try:
         indexer = _index._FormatToIndexedDict[format]
-    except KeyError :
+    except KeyError:
         raise ValueError("Unsupported format '%s'" % format)
     return indexer(filename, alphabet, key_function)
 
-def to_alignment(sequences, alphabet=None, strict=True) :
+def to_alignment(sequences, alphabet=None, strict=True):
     """Returns a multiple sequence alignment (OBSOLETE).
 
      - sequences -An iterator that returns SeqRecord objects,
@@ -735,21 +735,21 @@ def to_alignment(sequences, alphabet=None, strict=True) :
     #TODO - Move this functionality into the Alignment class instead?
     from Bio.Alphabet import generic_alphabet
     from Bio.Alphabet import _consensus_alphabet
-    if alphabet is None :
+    if alphabet is None:
         sequences = list(sequences)
         alphabet = _consensus_alphabet([rec.seq.alphabet for rec in sequences \
                                         if rec.seq is not None])
 
-    if not (isinstance(alphabet, Alphabet) or isinstance(alphabet, AlphabetEncoder)) :
+    if not (isinstance(alphabet, Alphabet) or isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet")
 
     alignment_length = None
     alignment = Alignment(alphabet)
-    for record in sequences :
-        if strict :
-            if alignment_length is None :
+    for record in sequences:
+        if strict:
+            if alignment_length is None:
                 alignment_length = len(record.seq)
-            elif alignment_length != len(record.seq) :
+            elif alignment_length != len(record.seq):
                 raise ValueError("Sequences must all be the same length")
 
             assert isinstance(record.seq.alphabet, Alphabet) \
@@ -760,33 +760,33 @@ def to_alignment(sequences, alphabet=None, strict=True) :
             #TODO - Is a normal alphabet "ungapped" by default, or does it just mean
             #undecided?
             if isinstance(record.seq.alphabet, Alphabet) \
-            and isinstance(alphabet, Alphabet) :
+            and isinstance(alphabet, Alphabet):
                 #Comparing two non-gapped alphabets            
-                if not isinstance(record.seq.alphabet, alphabet.__class__) :
+                if not isinstance(record.seq.alphabet, alphabet.__class__):
                     raise ValueError("Incompatible sequence alphabet " \
                                      + "%s for %s alignment" \
                                      % (record.seq.alphabet, alphabet))
             elif isinstance(record.seq.alphabet, AlphabetEncoder) \
-            and isinstance(alphabet, Alphabet) :
+            and isinstance(alphabet, Alphabet):
                 raise ValueError("Sequence has a gapped alphabet, alignment does not")
             elif isinstance(record.seq.alphabet, Alphabet) \
-            and isinstance(alphabet, Gapped) :
+            and isinstance(alphabet, Gapped):
                 #Sequence isn't gapped, alignment is.
-                if not isinstance(record.seq.alphabet, alphabet.alphabet.__class__) :
+                if not isinstance(record.seq.alphabet, alphabet.alphabet.__class__):
                     raise ValueError("Incompatible sequence alphabet " \
                                      + "%s for %s alignment" \
                                      % (record.seq.alphabet, alphabet))
-            else :
+            else:
                 #Comparing two gapped alphabets
-                if not isinstance(record.seq.alphabet, alphabet.__class__) :
+                if not isinstance(record.seq.alphabet, alphabet.__class__):
                     raise ValueError("Incompatible sequence alphabet " \
                                      + "%s for %s alignment" \
                                      % (record.seq.alphabet, alphabet))
-                if record.seq.alphabet.gap_char != alphabet.gap_char :
+                if record.seq.alphabet.gap_char != alphabet.gap_char:
                     raise ValueError("Sequence gap characters != alignment gap char")
             #ToDo, additional checks on the specified alignment...
             #Should we look at the alphabet.contains() method?
-        if record.seq is None :
+        if record.seq is None:
             raise TypeError("SeqRecord (id=%s) has None for its sequence." % record.id)
             
         #This is abusing the "private" records list,
@@ -795,7 +795,7 @@ def to_alignment(sequences, alphabet=None, strict=True) :
         alignment._records.append(record)
     return alignment
 
-def convert(in_file, in_format, out_file, out_format, alphabet=None) :
+def convert(in_file, in_format, out_file, out_format, alphabet=None):
     """Convert between two sequence file formats, return number of records.
 
      - in_file - an input handle or filename
@@ -826,24 +826,24 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None) :
     """
     #TODO - Add optimised versions of important conversions
     #For now just off load the work to SeqIO parse/write    
-    if isinstance(in_file, basestring) :
+    if isinstance(in_file, basestring):
         #Hack for SFF, will need to make this more general in future
         if in_format in ["sff", "sff-trim"] :
             in_handle = open(in_file, "rb")
         else :
             in_handle = open(in_file, "rU")
         in_close = True
-    else :
+    else:
         in_handle = in_file
         in_close = False
     #Don't open the output file until we've checked the input is OK?
-    if isinstance(out_file, basestring) :
+    if isinstance(out_file, basestring):
         if out_format in ["sff", "sff_trim"] :
             out_handle = open(out_file, "wb")
         else :
             out_handle = open(out_file, "w")
         out_close = True
-    else :
+    else:
         out_handle = out_file
         out_close = False
     #This will check the arguments and issue error messages,
@@ -865,7 +865,7 @@ def _test():
     """
     import doctest
     import os
-    if os.path.isdir(os.path.join("..","..","Tests")) :
+    if os.path.isdir(os.path.join("..","..","Tests")):
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("..","..","Tests"))
@@ -873,7 +873,7 @@ def _test():
         os.chdir(cur_dir)
         del cur_dir
         print "Done"
-    elif os.path.isdir(os.path.join("Tests", "Fasta")) :
+    elif os.path.isdir(os.path.join("Tests", "Fasta")):
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("Tests"))

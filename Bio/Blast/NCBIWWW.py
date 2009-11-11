@@ -154,7 +154,7 @@ def qblast(program, database, sequence,
         results = handle.read()
         # Can see an "\n\n" page while results are in progress,
         # if so just wait a bit longer...
-        if results=="\n\n" :
+        if results=="\n\n":
             continue
         # XML results don't have the Status tag when finished
         if results.find("Status=") < 0:
@@ -175,44 +175,44 @@ def _parse_qblast_ref_page(handle):
     """
     s = handle.read()
     i = s.find("RID =")
-    if i == -1 :
+    if i == -1:
         rid = None
-    else :
+    else:
         j = s.find("\n", i)
         rid = s[i+len("RID ="):j].strip()
 
     i = s.find("RTOE =")
-    if i == -1 :
+    if i == -1:
         rtoe = None
-    else :
+    else:
         j = s.find("\n", i)
         rtoe = s[i+len("RTOE ="):j].strip()
 
-    if not rid and not rtoe :
+    if not rid and not rtoe:
         #Can we reliably extract the error message from the HTML page?
         #e.g.  "Message ID#24 Error: Failed to read the Blast query:
         #       Nucleotide FASTA provided for protein sequence"
         #This occurs inside a <div class="error msInf"> entry so try this:
         i = s.find('<div class="error msInf">')
-        if i != -1 :
+        if i != -1:
             msg = s[i+len('<div class="error msInf">'):].strip()
             msg = msg.split("</div>",1)[0].split("\n",1)[0].strip()
-            if msg :
+            if msg:
                 raise ValueError("Error message from NCBI: %s" % msg)
         #We didn't recognise the error layout :(
         raise ValueError("No RID and no RTOE found in the 'please wait' page."
                          " (there was probably a problem with your request)")
-    elif not rid :
+    elif not rid:
         #Can this happen?
         raise ValueError("No RID found in the 'please wait' page."
                          " (although RTOE = %s)" % repr(rtoe))
-    elif not rtoe :
+    elif not rtoe:
         #Can this happen?
         raise ValueError("No RTOE found in the 'please wait' page."
                          " (although RID = %s)" % repr(rid))
 
-    try :
+    try:
         return rid, int(rtoe)
-    except ValueError :
+    except ValueError:
         raise ValueError("A non-integer RTOE found in " \
                          +"the 'please wait' page, %s" % repr(rtoe))

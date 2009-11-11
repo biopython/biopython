@@ -41,7 +41,7 @@ assert alignment.get_seq_by_num(2).tostring() == letters.upper()
 assert alignment.get_all_seqs()[0].description == "mixed"
 assert alignment.get_all_seqs()[1].description == "lower"
 assert alignment.get_all_seqs()[2].description == "upper"
-for (col, letter) in enumerate(letters) :
+for (col, letter) in enumerate(letters):
     assert alignment.get_column(col) == letter \
                                       + letter.lower() \
                                       + letter.upper()

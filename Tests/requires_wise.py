@@ -7,7 +7,7 @@
 
 from Bio import MissingExternalDependencyError
 import sys
-if sys.platform=="win32" :
+if sys.platform=="win32":
     #Someone needs to find out if dnal works nicely on windows,
     #and if so where it is typically installed.
     raise MissingExternalDependencyError(\

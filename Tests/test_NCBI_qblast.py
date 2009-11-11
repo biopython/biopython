@@ -57,26 +57,26 @@ ACATTAGTATCATATGGCTATTTGCTCAATTGCAGATTTCTTTCTTTTGTGAATG""",
 ]
 
 print "Checking Bio.Blast.NCBIWWW.qblast() with various queries"
-for program,database,query,e_value,entrez_filter,expected_hits in tests :
+for program,database,query,e_value,entrez_filter,expected_hits in tests:
     print "qblast('%s', '%s', %s, ...)" % (program, database, repr(query))
-    try :
+    try:
         handle = NCBIWWW.qblast(program, database, query, \
                                 alignments=10, descriptions=10, \
                                 hitlist_size=10, \
                                 entrez_query=entrez_filter,
                                 expect=e_value)
-    except HTTPError :
+    except HTTPError:
         #e.g. a proxy error
         raise MissingExternalDependencyError("internet connection failed")
     record = NCBIXML.read(handle)
 
-    if record.query == "No definition line" :
+    if record.query == "No definition line":
         #We used a sequence as the query
         assert len(query) == record.query_letters
-    elif query.startswith(">") :
+    elif query.startswith(">"):
         #We used a FASTA record as the query
         assert query[1:].split("\n",1)[0] == (record.query)
-    else :
+    else:
         #We used an identifier as the query
         assert query in record.query_id.split("|")
 
@@ -87,28 +87,28 @@ for program,database,query,e_value,entrez_filter,expected_hits in tests :
     assert len(record.descriptions) <= 10
 
     #Check the expected result(s) are found in the alignments
-    if expected_hits is None :
+    if expected_hits is None:
         assert len(record.alignments)==0, "Expected no alignments!"
-    else :
+    else:
         assert len(record.alignments) > 0, "Expected some alignments!"
-        for expected_hit in expected_hits :
+        for expected_hit in expected_hits:
             found_result = False
-            for alignment in record.alignments :
-                if expected_hit in alignment.hit_id.split("|") :
+            for alignment in record.alignments:
+                if expected_hit in alignment.hit_id.split("|"):
                     found_result = True
                     break
             assert found_result, "Missing %s in alignments" % expected_hit
 
     #Check the expected result(s) are found in the descriptions
-    if expected_hits is None :
+    if expected_hits is None:
         assert len(record.descriptions)==0, "Expected no descriptions!"
-    else :
+    else:
         assert len(record.descriptions) > 0, "Expected some descriptions!"
-        for expected_hit in expected_hits :
+        for expected_hit in expected_hits:
             found_result = False
-            for descr in record.descriptions :
+            for descr in record.descriptions:
                 if expected_hit == descr.accession \
-                or expected_hit in descr.title.split(None,1)[0].split("|") :
+                or expected_hit in descr.title.split(None,1)[0].split("|"):
                     found_result = True
                     break
             assert found_result, "Missing %s in descriptions" % expected_hit

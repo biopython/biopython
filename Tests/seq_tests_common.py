@@ -6,18 +6,18 @@ from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqFeature import ExactPosition, FeatureLocation, SeqFeature
 from Bio.SeqRecord import SeqRecord
 
-def checksum_summary(record) :
-    if isinstance(record.seq, UnknownSeq) :
+def checksum_summary(record):
+    if isinstance(record.seq, UnknownSeq):
         return repr(record.seq)
-    if len(record.seq) < 25 :
+    if len(record.seq) < 25:
         short = record.seq.tostring()
-    else :
+    else:
         short = record.seq.tostring()[:19] \
               + "..." + record.seq.tostring()[-3:]
     return "%s [%s] len %i" \
            % (short, seguid(record.seq), len(record.seq))
 
-def compare_reference(old_r, new_r) :
+def compare_reference(old_r, new_r):
     """Compare two Reference objects
 
     Note new_r is assumed to be a BioSQL DBSeqRecord, due to limitations
@@ -32,7 +32,7 @@ def compare_reference(old_r, new_r) :
     assert old_r.medline_id == new_r.medline_id, \
            "%s vs %s" % (old_r.medline_id, new_r.medline_id)
 
-    if old_r.pubmed_id and new_r.pubmed_id :
+    if old_r.pubmed_id and new_r.pubmed_id:
         assert old_r.pubmed_id == new_r.pubmed_id
         #Looking at BioSQL/BioSeq.py function _retrieve_reference
         #it seems that it will get either the MEDLINE or PUBMED,
@@ -49,9 +49,9 @@ def compare_reference(old_r, new_r) :
     #allow us to store a consortium.
     assert new_r.consrtm == ""
     
-    if len(old_r.location) == 0 :
+    if len(old_r.location) == 0:
         assert len(new_r.location) == 0
-    else :
+    else:
         #BioSQL can only store ONE location!
         #TODO - Check BioPerl with a GenBank file with multiple ref locations
         assert isinstance(old_r.location[0], FeatureLocation)
@@ -61,7 +61,7 @@ def compare_reference(old_r, new_r) :
 
     return True
 
-def compare_feature(old_f, new_f) :
+def compare_feature(old_f, new_f):
     """Compare two SeqFeature objects"""
     assert isinstance(old_f, SeqFeature)
     assert isinstance(new_f, SeqFeature)
@@ -110,7 +110,7 @@ def compare_feature(old_f, new_f) :
         "number of sub_features: %s -> %s" % \
         (len(old_f.sub_features), len(new_f.sub_features))
     
-    for old_sub, new_sub in zip(old_f.sub_features, new_f.sub_features) :
+    for old_sub, new_sub in zip(old_f.sub_features, new_f.sub_features):
         
         assert old_sub.type == new_sub.type, \
             "%s -> %s" % (old_sub.type, new_sub.type)
@@ -157,32 +157,32 @@ def compare_feature(old_f, new_f) :
 
     assert len(old_f.qualifiers) == len(new_f.qualifiers)    
     assert set(old_f.qualifiers.keys()) == set(new_f.qualifiers.keys())
-    for key in old_f.qualifiers.keys() :
-        if isinstance(old_f.qualifiers[key], str) :
-            if isinstance(new_f.qualifiers[key], str) :
+    for key in old_f.qualifiers.keys():
+        if isinstance(old_f.qualifiers[key], str):
+            if isinstance(new_f.qualifiers[key], str):
                 assert old_f.qualifiers[key] == new_f.qualifiers[key]
-            elif isinstance(new_f.qualifiers[key], list) :
+            elif isinstance(new_f.qualifiers[key], list):
                 #Maybe a string turning into a list of strings?
                 assert [old_f.qualifiers[key]] == new_f.qualifiers[key], \
                         "%s -> %s" \
                         % (repr(old_f.qualifiers[key]),
                            repr(new_f.qualifiers[key]))
-            else :
+            else:
                 assert False, "Problem with feature's '%s' qualifier" & key
-        else :
+        else:
             #Should both be lists of strings...
             assert old_f.qualifiers[key] == new_f.qualifiers[key], \
                 "%s -> %s" % (old_f.qualifiers[key], new_f.qualifiers[key])
     return True
 
-def compare_sequence(old, new) :
+def compare_sequence(old, new):
     """Compare two Seq or DBSeq objects"""
     assert len(old) == len(new)
     assert old.tostring() == new.tostring()
 
-    if isinstance(old, UnknownSeq) :
+    if isinstance(old, UnknownSeq):
         assert isinstance(new, UnknownSeq)
-    else :
+    else:
         assert not isinstance(new, UnknownSeq)
 
     l = len(old)
@@ -192,14 +192,14 @@ def compare_sequence(old, new) :
     #Don't check every single element; for long sequences
     #this takes far far far too long to run!
     #Test both positive and negative indices
-    if l < 50 :
+    if l < 50:
         indices = range(-l,l)
-    else :
+    else:
         #A selection of end cases, and the mid point
         indices = [-l,-1+1,-int(l/2),-1,0,1,int(l/2),l-2,l-1]
 
     #Test element access,    
-    for i in indices :
+    for i in indices:
         expected = s[i]
         assert expected == old[i]
         assert expected == new[i]
@@ -207,8 +207,8 @@ def compare_sequence(old, new) :
     #Test slices
     indices.append(l) #check copes with overflows
     indices.append(l+1000) #check copes with overflows
-    for i in indices :
-        for j in indices :
+    for i in indices:
+        for j in indices:
             expected = s[i:j]
             assert expected == old[i:j].tostring(), \
                    "Slice %s vs %s" % (repr(expected), repr(old[i:j]))
@@ -216,7 +216,7 @@ def compare_sequence(old, new) :
                    "Slice %s vs %s" % (repr(expected), repr(new[i:j]))
             #Slicing with step of 1 should make no difference.
             #Slicing with step 3 might be useful for codons.
-            for step in [1,3] :
+            for step in [1,3]:
                 expected = s[i:j:step]
                 assert expected == old[i:j:step].tostring()
                 assert expected == new[i:j:step].tostring()
@@ -235,16 +235,16 @@ def compare_sequence(old, new) :
     assert s == new[:].tostring()
     return True
 
-def compare_features(old_list, new_list) :
+def compare_features(old_list, new_list):
     assert isinstance(old_list, list)
     assert isinstance(new_list, list)
     assert len(old_list) == len(new_list)
-    for old_f, new_f in zip(old_list, new_list) :
-        if not compare_feature(old_f, new_f) :
+    for old_f, new_f in zip(old_list, new_list):
+        if not compare_feature(old_f, new_f):
             return False
     return True
         
-def compare_record(old, new) :
+def compare_record(old, new):
     """Compare two SeqRecord or DBSeqRecord objects"""
     assert isinstance(old, SeqRecord)
     assert isinstance(new, SeqRecord)
@@ -258,7 +258,7 @@ def compare_record(old, new) :
            "dbxrefs mismatch\nOld: %s\nNew: %s" \
            % (old.dbxrefs, new.dbxrefs)
     #Features:
-    if not compare_features(old.features, new.features) :
+    if not compare_features(old.features, new.features):
         return False
 
     #Annotation:
@@ -278,10 +278,10 @@ def compare_record(old, new) :
            % ", ".join(missing_keys)
     
     #In the short term, just compare any shared keys:
-    for key in set(old.annotations.keys()).intersection(new.annotations.keys()) :
-        if key == "references" :
+    for key in set(old.annotations.keys()).intersection(new.annotations.keys()):
+        if key == "references":
             assert len(old.annotations[key]) == len(new.annotations[key])
-            for old_r, new_r in zip(old.annotations[key], new.annotations[key]) :
+            for old_r, new_r in zip(old.annotations[key], new.annotations[key]):
                 compare_reference(old_r, new_r)
         elif key == "comment":
             #Turn them both into containing strings for comparison - due to
@@ -307,29 +307,29 @@ def compare_record(old, new) :
             #guarantee that they will be identical after a load/retrieve.
             assert isinstance(new.annotations[key], str) \
                 or isinstance(new.annotations[key], list)
-        elif type(old.annotations[key]) == type(new.annotations[key]) :
+        elif type(old.annotations[key]) == type(new.annotations[key]):
             assert old.annotations[key] == new.annotations[key], \
                 "Annotation '%s' changed by load/retrieve\nWas:%s\nNow:%s" \
                 % (key, old.annotations[key], new.annotations[key])
         elif isinstance(old.annotations[key], str) \
-        and isinstance(new.annotations[key], list) :
+        and isinstance(new.annotations[key], list):
             #Any annotation which is a single string gets turned into
             #a list containing one string by BioSQL at the moment.
             assert [old.annotations[key]] == new.annotations[key], \
                 "Annotation '%s' changed by load/retrieve\nWas:%s\nNow:%s" \
                 % (key, old.annotations[key], new.annotations[key])
         elif isinstance(old.annotations[key], list) \
-        and isinstance(new.annotations[key], str) :
+        and isinstance(new.annotations[key], str):
             assert old.annotations[key] == [new.annotations[key]], \
                 "Annotation '%s' changed by load/retrieve\nWas:%s\nNow:%s" \
                 % (key, old.annotations[key], new.annotations[key])
     return True
 
-def compare_records(old_list, new_list) :
+def compare_records(old_list, new_list):
     assert isinstance(old_list, list)
     assert isinstance(new_list, list)
     assert len(old_list) == len(new_list)
-    for old_r, new_r in zip(old_list, new_list) :
-        if not compare_record(old_r, new_r) :
+    for old_r, new_r in zip(old_list, new_list):
+        if not compare_record(old_r, new_r):
             return False
     return True

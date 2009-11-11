@@ -1,3 +1,6 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """
 Unittests for Bio.Align.Applications interface for MAFFT
 
@@ -16,7 +19,7 @@ from Bio.Align.Applications import MafftCommandline
 mafft_exe = None
 if sys.platform=="win32":
     raise MissingExternalDependencyError("Testing with MAFFT not implemented on Windows yet")
-else :
+else:
     import commands
     output = commands.getoutput("mafft -help")
     if "not found" not in output and "MAFFT" in output:

@@ -177,34 +177,34 @@ class SummaryInfo:
         a = Alphabet._get_base_alphabet(self.alignment._alphabet)
 
         #Now check its compatible with all the rest of the sequences
-        for record in self.alignment :
+        for record in self.alignment:
             #Get the (un-gapped version of) the sequence's alphabet
             alt =  Alphabet._get_base_alphabet(record.seq.alphabet)
-            if not isinstance(alt, a.__class__) :
+            if not isinstance(alt, a.__class__):
                 raise ValueError \
                 ("Alignment contains a sequence with an incompatible alphabet.")
 
         #Check the ambiguous character we are going to use in the consensus
         #is in the alphabet's list of valid letters (if defined).
         if hasattr(a, "letters") and a.letters is not None \
-        and ambiguous not in a.letters :
+        and ambiguous not in a.letters:
             #We'll need to pick a more generic alphabet...
-            if isinstance(a, IUPAC.IUPACUnambiguousDNA) :
-                if ambiguous in IUPAC.IUPACUnambiguousDNA().letters :
+            if isinstance(a, IUPAC.IUPACUnambiguousDNA):
+                if ambiguous in IUPAC.IUPACUnambiguousDNA().letters:
                     a = IUPAC.IUPACUnambiguousDNA()
-                else :
+                else:
                     a = Alphabet.generic_dna
-            elif isinstance(a, IUPAC.IUPACUnambiguousRNA) :
-                if ambiguous in IUPAC.IUPACUnambiguousRNA().letters :
+            elif isinstance(a, IUPAC.IUPACUnambiguousRNA):
+                if ambiguous in IUPAC.IUPACUnambiguousRNA().letters:
                     a = IUPAC.IUPACUnambiguousRNA()
-                else :
+                else:
                     a = Alphabet.generic_rna
-            elif isinstance(a, IUPAC.IUPACProtein) :
-                if ambiguous in IUPAC.ExtendedIUPACProtein().letters :
+            elif isinstance(a, IUPAC.IUPACProtein):
+                if ambiguous in IUPAC.ExtendedIUPACProtein().letters:
                     a = IUPAC.ExtendedIUPACProtein()
-                else :
+                else:
                     a = Alphabet.generic_protein
-            else :
+            else:
                 a = Alphabet.single_letter_alphabet
         return a
 
@@ -311,7 +311,7 @@ class SummaryInfo:
             #letters are not defined!  We must build a list of the
             #letters used...
             set_letters = set()
-            for record in self.alignment :
+            for record in self.alignment:
                 #Note the built in set does not have a union_update
                 #which was provided by the sets module's Set
                 set_letters = set_letters.union(record.seq)
@@ -376,7 +376,7 @@ class SummaryInfo:
         all_letters = self._get_all_letters()
         assert all_letters
 
-        if not isinstance(chars_to_ignore, list) :
+        if not isinstance(chars_to_ignore, list):
             raise TypeError("chars_to_ignore should be a list.")
 
         # if we have a gap char, add it to stuff to ignore
@@ -470,16 +470,16 @@ class SummaryInfo:
         if not e_freq_table:
             #TODO - What about ambiguous alphabets?
             base_alpha = Alphabet._get_base_alphabet(self.alignment._alphabet)
-            if isinstance(base_alpha, Alphabet.ProteinAlphabet) :
+            if isinstance(base_alpha, Alphabet.ProteinAlphabet):
                 random_expected = Protein20Random
-            elif isinstance(base_alpha, Alphabet.NucleotideAlphabet) :
+            elif isinstance(base_alpha, Alphabet.NucleotideAlphabet):
                 random_expected = Nucleotide4Random
-            else :
+            else:
                 errstr = "Error in alphabet: not Nucleotide or Protein, "
                 errstr += "supply expected frequencies"
                 raise ValueError(errstr)
             del base_alpha
-        elif not isinstance(e_freq_table, FreqTable.FreqTable) :
+        elif not isinstance(e_freq_table, FreqTable.FreqTable):
             raise ValueError("e_freq_table should be a FreqTable object")
             
 
@@ -541,12 +541,12 @@ class SummaryInfo:
                                  % (record.seq[residue_num],
                                     self.alignment._alphabet))
 
-        if total_count == 0 :
+        if total_count == 0:
             # This column must be entirely ignored characters
             for letter in freq_info.keys():
                 assert freq_info[letter] == 0
                 #TODO - Map this to NA or NaN?
-        else :
+        else:
             # now convert the counts into frequencies
             for letter in freq_info.keys():
                 freq_info[letter] = freq_info[letter] / total_count
@@ -564,15 +564,15 @@ class SummaryInfo:
         o log_base - The base of the logathrim to use in calculating the
         info content.
         """
-        try :
+        try:
             gap_char = self.alignment._alphabet.gap_char
-        except AttributeError :
+        except AttributeError:
             #The alphabet doesn't declare a gap - there could be none
             #in the sequence... or just a vague alphabet.
             gap_char = "-" #Safe?
             
         if e_freq_table:
-            if not isinstance(e_freq_table, FreqTable.FreqTable) :
+            if not isinstance(e_freq_table, FreqTable.FreqTable):
                 raise ValueError("e_freq_table should be a FreqTable object")
             # check the expected freq information to make sure it is good
             for key in obs_freq.keys():
@@ -686,7 +686,7 @@ def print_info_content(summary_info,fout=None,rep_record=0):
         fout.write("%d %s %.3f\n" % (pos, rep_sequence[pos],
                    summary_info.ic_vector[pos]))
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     print "Quick test"
     from Bio import AlignIO
     from Bio.Align.Generic import Alignment
@@ -698,7 +698,7 @@ if __name__ == "__main__" :
                                    IUPAC.unambiguous_dna)
 
     alignment = AlignIO.read(open(filename), format)
-    for record in alignment :
+    for record in alignment:
         print record.seq.tostring()
     print "="*alignment.get_alignment_length()
     

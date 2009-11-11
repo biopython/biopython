@@ -120,7 +120,7 @@ class DataHandler:
 
     def parse(self, handle):
         BLOCK = 1024
-        while True :
+        while True:
             #Read in another block of the file...
             text = handle.read(BLOCK)
             if not text:

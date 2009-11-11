@@ -48,7 +48,7 @@ class AppTest(unittest.TestCase):
     def tearDown(self):
         #Not sure how exactly, but its possible the temp directory
         #may not (still) exist.
-        if os.path.isdir(self.dirname) :
+        if os.path.isdir(self.dirname):
             for file in os.listdir(self.dirname):
                 os.remove(self.dirname + os.sep + file)
             os.rmdir(self.dirname)

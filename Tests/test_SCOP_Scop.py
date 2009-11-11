@@ -60,7 +60,7 @@ class ScopTests(unittest.TestCase):
                 
 
 
-    def testSccsOrder(self) :
+    def testSccsOrder(self):
         assert cmp_sccs("a.1.1.1", "a.1.1.1") == 0
         assert cmp_sccs("a.1.1.2", "a.1.1.1") == 1
         assert cmp_sccs("a.1.1.2", "a.1.1.11") == -1
@@ -69,7 +69,7 @@ class ScopTests(unittest.TestCase):
         assert cmp_sccs("b.1.2.2", "a.5.1.11") == 1
         assert cmp_sccs("b.1.2.2", "b.1.2") == 1        
 
-    def testParseDomain(self) :
+    def testParseDomain(self):
         s=">d1tpt_1 a.46.2.1 (1-70) Thymidine phosphorylase {Escherichia coli}"
         dom = parse_domain(s)
 
@@ -97,7 +97,7 @@ class ScopTests(unittest.TestCase):
         try:
             dom = parse_domain("Totally wrong")
             assert False, "Should never get here"
-        except ValueError, e :
+        except ValueError, e:
             pass
 
     def testConstructFromDirectory(self):

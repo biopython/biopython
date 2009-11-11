@@ -82,24 +82,24 @@ def parse_file(file_name, alphabet = IUPAC.unambiguous_dna, debug_level = 0):
     handle.close()
 
     #Force this generic alignment into a ClustalAlignment... nasty hack
-    if isinstance(alphabet, Alphabet.Gapped) :
+    if isinstance(alphabet, Alphabet.Gapped):
         alpha = alphabet
-    else :
+    else:
         alpha = Alphabet.Gapped(alphabet)
     clustal_alignment = ClustalAlignment(alpha)
     clustal_alignment._records = generic_alignment._records
-    for record in clustal_alignment._records :
+    for record in clustal_alignment._records:
         record.seq.alphabet = alpha
 
-    try :
+    try:
         clustal_alignment._version = generic_alignment._version
-    except AttributeError :
+    except AttributeError:
         #Missing the version, could be a 3rd party tool's output
         pass
 
     try :       
         clustal_alignment._star_info = generic_alignment._star_info
-    except AttributeError :
+    except AttributeError:
         #Missing the consensus, again, this is not always present
         pass
 
@@ -502,7 +502,7 @@ def _test():
     """
     import doctest
     import os
-    if os.path.isdir(os.path.join("..","..","Tests")) :
+    if os.path.isdir(os.path.join("..","..","Tests")):
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("..","..","Tests"))

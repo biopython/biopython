@@ -66,20 +66,20 @@ class _XMLparser(ContentHandler):
 
         #Note could use try / except AttributeError
         #BUT I found often triggered by nested errors...
-        if hasattr(self, method) :
+        if hasattr(self, method):
             eval("self.%s()" % method)
-            if self._debug > 4 :
+            if self._debug > 4:
                 print "NCBIXML: Parsed:  " + method
-        else :
+        else:
             # Doesn't exist (yet)
-            if method not in self._debug_ignore_list :
-                if self._debug > 3 :
+            if method not in self._debug_ignore_list:
+                if self._debug > 3:
                     print "NCBIXML: Ignored: " + method
                 self._debug_ignore_list.append(method)
 
         #We don't care about white space in parent tags like Hsp,
         #but that white space doesn't belong to child tags like Hsp_midline
-        if self._value.strip() :
+        if self._value.strip():
             raise ValueError("What should we do with %s before the %s tag?" \
                              % (repr(self._value), name))
         self._value = ""
@@ -102,14 +102,14 @@ class _XMLparser(ContentHandler):
         method = self._secure_name('_end_' + name)
         #Note could use try / except AttributeError
         #BUT I found often triggered by nested errors...
-        if hasattr(self, method) :
+        if hasattr(self, method):
             eval("self.%s()" % method)
-            if self._debug > 2 :
+            if self._debug > 2:
                 print "NCBIXML: Parsed:  " + method, self._value
-        else :
+        else:
             # Doesn't exist (yet)
-            if method not in self._debug_ignore_list :
-                if self._debug > 1 :
+            if method not in self._debug_ignore_list:
+                if self._debug > 1:
                     print "NCBIXML: Ignored: " + method, self._value
                 self._debug_ignore_list.append(method)
         
@@ -143,7 +143,7 @@ class BlastParser(_XMLparser):
 
         self.reset()
 
-    def reset(self) :
+    def reset(self):
         """Reset all the data allowing reuse of the BlastParser() object"""
         self._records = []
         self._header = Record.Header()
@@ -169,13 +169,13 @@ class BlastParser(_XMLparser):
         # are suplemented/replaced by <Iteration_query-ID>,
         # <Iteration_query-def> and <Iteration_query-len>
         if not hasattr(self._blast, "query") \
-        or not self._blast.query :
+        or not self._blast.query:
             self._blast.query = self._header.query
         if not hasattr(self._blast, "query_id") \
-        or not self._blast.query_id :
+        or not self._blast.query_id:
             self._blast.query_id = self._header.query_id
         if not hasattr(self._blast, "query_letters") \
-        or not self._blast.query_letters :
+        or not self._blast.query_letters:
             self._blast.query_letters = self._header.query_letters
 
         # Hack to record the query length as both the query_letters and
@@ -233,10 +233,10 @@ class BlastParser(_XMLparser):
         self._header.version = parts[1]
         
         #Check there is a third word (the date)
-        if len(parts) >= 3 :
-            if parts[2][0] == "[" and parts[2][-1] == "]" :
+        if len(parts) >= 3:
+            if parts[2][0] == "[" and parts[2][-1] == "]":
                 self._header.date = parts[2][1:-1]
-            else :
+            else:
                 #Assume this is still a date, but without the
                 #square brackets
                 self._header.date = parts[2]
@@ -572,17 +572,17 @@ def read(handle, debug=0):
 
    """
    iterator = parse(handle, debug)
-   try :
+   try:
        first = iterator.next()
-   except StopIteration :
+   except StopIteration:
        first = None
-   if first is None :
+   if first is None:
        raise ValueError("No records found in handle")
-   try :
+   try:
        second = iterator.next()
-   except StopIteration :
+   except StopIteration:
        second = None
-   if second is not None :
+   if second is not None:
        raise ValueError("More than one record found in handle")
    return first
 
@@ -612,13 +612,13 @@ def parse(handle, debug=0):
     text = handle.read(BLOCK)
     pending = ""
 
-    if not text :
+    if not text:
         #NO DATA FOUND!
         raise ValueError("Your XML file was empty")
     
-    while text :
+    while text:
         #We are now starting a new XML file
-        if not text.startswith(XML_START) :
+        if not text.startswith(XML_START):
             raise ValueError("Your XML file did not start with %s..." \
                              % XML_START)
 
@@ -634,7 +634,7 @@ def parse(handle, debug=0):
             blast_parser._records = blast_parser._records[1:]
             yield record
 
-        while True :
+        while True:
             #Read in another block of the file...
             text, pending = pending + handle.read(BLOCK), ""
             if not text:
@@ -646,12 +646,12 @@ def parse(handle, debug=0):
             #start of another XML file...
             pending = handle.read(MARGIN)
 
-            if (text+pending).find("\n" + XML_START) == -1 :
+            if (text+pending).find("\n" + XML_START) == -1:
                 # Good - still dealing with the same XML file
                 expat_parser.Parse(text, False)        
                 while blast_parser._records:
                     yield blast_parser._records.pop(0)
-            else :
+            else:
                 # This is output from pre 2.2.14 BLAST,
                 # one XML file for each query!
                 
@@ -690,7 +690,7 @@ if __name__ == '__main__':
     handle = open(sys.argv[1])
     r_list = parse(handle)
 
-    for r in r_list :
+    for r in r_list:
         # Small test
         print 'Blast of', r.query
         print 'Found %s alignments with a total of %s HSPs' % (len(r.alignments),

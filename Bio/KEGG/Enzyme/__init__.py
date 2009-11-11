@@ -187,7 +187,7 @@ def parse(handle):
     test suite,
 
     >>> handle = open("KEGG/enzyme.sample")
-    >>> for record in parse(handle) :
+    >>> for record in parse(handle):
     ...     print record.entry, record.name[0]
     ...
     1.1.1.1 Alcohol dehydrogenase
@@ -301,7 +301,7 @@ def _test():
     """
     import doctest
     import os
-    if os.path.isdir(os.path.join("..","..","..","Tests")) :
+    if os.path.isdir(os.path.join("..","..","..","Tests")):
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("..","..","..","Tests"))

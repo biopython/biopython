@@ -17,7 +17,7 @@ from Bio.Alphabet import generic_nucleotide, generic_dna, generic_rna, Gapped
 from Bio.Sequencing import Ace
     
 #This is a generator function!
-def AceIterator(handle) :
+def AceIterator(handle):
     """Returns SeqRecord objects from an ACE file.
 
     This uses the Bio.Sequencing.Ace module to do the hard work.  Note that
@@ -31,7 +31,7 @@ def AceIterator(handle) :
 
     >>> from Bio import SeqIO
     >>> handle = open("Ace/consed_sample.ace", "rU")
-    >>> for record in SeqIO.parse(handle, "ace") :
+    >>> for record in SeqIO.parse(handle, "ace"):
     ...     print record.id, record.seq[:10]+"...", len(record)
     ...     print max(record.letter_annotations["phred_quality"])
     Contig1 agccccgggc... 1475
@@ -44,7 +44,7 @@ def AceIterator(handle) :
 
     >>> from Bio import SeqIO
     >>> handle = open("Ace/contig1.ace", "rU")
-    >>> for record in SeqIO.parse(handle, "ace") :
+    >>> for record in SeqIO.parse(handle, "ace"):
     ...     print record.id, "..." + record.seq[85:95]+"..."
     ...     print record.letter_annotations["phred_quality"][85:95]
     ...     print max(record.letter_annotations["phred_quality"])
@@ -56,26 +56,26 @@ def AceIterator(handle) :
     90
 
     """
-    for ace_contig in Ace.parse(handle) :
+    for ace_contig in Ace.parse(handle):
         #Convert the ACE contig record into a SeqRecord...
         consensus_seq_str = ace_contig.sequence
         #Assume its DNA unless there is a U in it,
-        if "U" in consensus_seq_str :
-            if "T" in consensus_seq_str :
+        if "U" in consensus_seq_str:
+            if "T" in consensus_seq_str:
                 #Very odd! Error?
                 alpha = generic_ncleotide
-            else :
+            else:
                 alpha = generic_rna
-        else :
+        else:
             alpha = generic_dna
             
-        if "*" in consensus_seq_str :
+        if "*" in consensus_seq_str:
             #For consistency with most other file formats, map
             #any * gaps into - gaps.
             assert "-" not in consensus_seq_str
             consensus_seq = Seq(consensus_seq_str.replace("*","-"),
                                 Gapped(alpha, gap_char="-"))
-        else :
+        else:
             consensus_seq = Seq(consensus_seq_str, alpha)
 
         #TODO? - Base segments (BS lines) which indicates which read
@@ -95,10 +95,10 @@ def AceIterator(handle) :
         #be excelent support for having a gap here).
         quals = []
         i=0
-        for base in consensus_seq :
-            if base == "-" :
+        for base in consensus_seq:
+            if base == "-":
                 quals.append(None)
-            else :
+            else:
                 quals.append(ace_contig.quality[i])
                 i+=1
         assert i == len(ace_contig.quality)
@@ -115,7 +115,7 @@ def _test():
     """
     import doctest
     import os
-    if os.path.isdir(os.path.join("..","..","Tests")) :
+    if os.path.isdir(os.path.join("..","..","Tests")):
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("..","..","Tests"))
@@ -125,5 +125,5 @@ def _test():
         del cur_dir
         print "Done"
         
-if __name__ == "__main__" :
+if __name__ == "__main__":
     _test()
