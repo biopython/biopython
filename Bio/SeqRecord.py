@@ -87,6 +87,17 @@ class SeqRecord(object):
     >YP_025292.1 toxic membrane protein
     MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
     <BLANKLINE>
+
+    You can also do things like slicing a SeqRecord, checking its length, etc
+
+    >>> len(record)
+    44
+    >>> edited = record[:10] + record[11:]
+    >>> print edited.seq
+    MKQHKAMIVAIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
+    >>> print record.seq
+    MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
+    
     """
     def __init__(self, seq, id = "<unknown id>", name = "<unknown name>",
                  description = "<unknown description>", dbxrefs = None,
@@ -671,6 +682,151 @@ class SeqRecord(object):
         object behaviour)!
         """
         return True
+
+    def __add__(self, other):
+        """Add another sequence or string to this sequence.
+
+        The other sequence can be a SeqRecord object, a Seq object (or
+        similar, e.g. a MutableSeq) or a plain Python string. If you add
+        a plain string or a Seq (like) object, the new SeqRecord will simply
+        have this appended to the existing data. However, any per letter
+        annotation will be lost:
+
+        >>> from Bio import SeqIO
+        >>> handle = open("Quality/solexa_faked.fastq", "rU")
+        >>> record = SeqIO.read(handle, "fastq-solexa")
+        >>> handle.close()
+        >>> print record.id, record.seq
+        slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
+        >>> print record.letter_annotations.keys()
+        ['solexa_quality']
+
+        >>> new = record + "ACT"
+        >>> print new.id, new.seq
+        slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNNACT
+        >>> print new.letter_annotations.keys()
+        []
+        
+        The new record will attempt to combine the annotation, but for any
+        ambiguities (e.g. different names) it defaults to omitting that
+        annotation.
+
+        >>> from Bio import SeqIO
+        >>> handle = open("GenBank/pBAD30.gb")
+        >>> plasmid = SeqIO.read(handle, "gb")
+        >>> handle.close()
+        >>> print plasmid.id, len(plasmid)
+        pBAD30 4923
+
+        Now let's cut the plasmid into two pieces, and join them back up the
+        other way round (i.e. shift the starting point on this plasmid, have
+        a look at the annotated features in the original file to see why this
+        particular split point might make sense):
+
+        >>> left = plasmid[:3765]
+        >>> right = plasmid[3765:]
+        >>> new = right + left
+        >>> print new.id, len(new)
+        pBAD30 4923
+        >>> str(new.seq) == str(right.seq + left.seq)
+        True
+        >>> len(new.features) == len(left.features) + len(right.features)
+        True
+
+        When we add the left and right SeqRecord objects, their annotation
+        is all consistent, so it is all conserved in the new SeqRecord:
+        
+        >>> new.id == left.id == right.id == plasmid.id
+        True
+        >>> new.name == left.name == right.name == plasmid.name
+        True
+        >>> new.description == plasmid.description
+        True
+        >>> new.annotations == left.annotations == right.annotations
+        True
+        >>> new.letter_annotations == plasmid.letter_annotations
+        True
+        >>> new.dbxrefs == left.dbxrefs == right.dbxrefs
+        True
+
+        However, we should point out that when we sliced the SeqRecord,
+        any annotations dictionary or dbxrefs list entries were lost.
+        TODO - Change this?
+
+        >>> plasmid.annotations = {} #HACK, see above TODO
+        >>> plasmid.format("gb") == (left+right).format("gb")
+        True
+        """
+        if not isinstance(other, SeqRecord):
+            #Assume it is a string or a Seq.
+            #Note can't transfer any per-letter-annotations
+            return SeqRecord(self.seq + other,
+                             id = self.id, name = self.name,
+                             description = self.description,
+                             features = self.features[:],
+                             annotations = self.annotations.copy(),
+                             dbxrefs = self.dbxrefs[:])
+        #Adding two SeqRecord objects... must merge annotation.
+        answer = SeqRecord(self.seq + other.seq,
+                           features = self.features[:],
+                           dbxrefs = self.dbxrefs[:])
+        #Will take all the features and all the db cross refs,
+        l = len(self)
+        for f in other.features:
+            answer.features.append(f._shift(l))
+        del l
+        for ref in other.dbxrefs:
+            if ref not in answer.dbxrefs:
+                answer.append(ref)
+        #Take common id/name/description/annotation
+        if self.id == other.id:
+            answer.id = self.id
+        if self.name == other.name:
+            answer.name = self.name
+        if self.description == other.description:
+            answer.description = self.description
+        for k,v in self.annotations:
+            if k in other.annotations and other.annotations[k] == v:
+                answer.annotations[k] = v
+        #Can append matching per-letter-annotation
+        for k,v in self.letter_annotations:
+            if k in other.letter_annotations:
+                answer.annotations[k] = v + other.annotations[k]
+        return answer
+        
+    def __radd__(self, other):
+        """Add another sequence or string to this sequence (from the left).
+
+        This method handles adding a Seq object (or similar, e.g. MutableSeq)
+        or a plain Python string (on the left) to a SeqRecord (on the right).
+        See the __add__ method for more details, but for example:
+
+        >>> from Bio import SeqIO
+        >>> handle = open("Quality/solexa_faked.fastq", "rU")
+        >>> record = SeqIO.read(handle, "fastq-solexa")
+        >>> handle.close()
+        >>> print record.id, record.seq
+        slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
+        >>> print record.letter_annotations.keys()
+        ['solexa_quality']
+
+        >>> new = "ACT" + record
+        >>> print new.id, new.seq
+        slxa_0001_1_0001_01 ACTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
+        >>> print new.letter_annotations.keys()
+        []
+        """
+        if isinstance(other, SeqRecord):
+            raise RuntimeError("This should have happened via the __add__ of "
+                               "the other SeqRecord being added!")
+        #Assume it is a string or a Seq.
+        #Note can't transfer any per-letter-annotations
+        return SeqRecord(other + self.seq,
+                         id = self.id, name = self.name,
+                         description = self.description,
+                         features = self.features[:],
+                         annotations = self.annotations.copy(),
+                         dbxrefs = self.dbxrefs[:])
 
 def _test():
     """Run the Bio.SeqRecord module's doctests (PRIVATE).
