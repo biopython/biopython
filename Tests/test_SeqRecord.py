@@ -62,9 +62,9 @@ class SeqRecordMethods(unittest.TestCase):
     """Test SeqRecord methods."""
 
     def setUp(self) :
-        f1 = SeqFeature(FeatureLocation(4,8), strand=+1, type="CDS")
-        f2 = SeqFeature(FeatureLocation(12,22), strand=-1, type="CDS")
-        f3 = SeqFeature(FeatureLocation(20,26), strand=None, type="CDS")
+        f1 = SeqFeature(FeatureLocation(0,10))
+        f2 = SeqFeature(FeatureLocation(12,22))
+        f3 = SeqFeature(FeatureLocation(16,26))
         self.record = SeqRecord(Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),
                                 id="TestID", name="TestName", description="TestDescr",
                                 dbxrefs=["TestXRef"], annotations={"k":"v"},
@@ -81,6 +81,7 @@ class SeqRecordMethods(unittest.TestCase):
                 seq_str = str(self.record.seq)[start:end]
                 self.assertEqual(seq_str, str(seq))
                 self.assertEqual(seq_str, str(rec.seq))
+                self.assertEqual("X"*len(seq_str), rec.letter_annotations["fake"])
 
     def test_slice_simple(self):
         """Simple slice"""
@@ -100,7 +101,10 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(sub.letter_annotations, {"fake":"X"*10})
             self.assertEqual(sub.dbxrefs, []) # May change this...
             self.assertEqual(sub.annotations, {}) # May change this...
-            #self.assertEqual(len(sub.features), 1)
+            self.assertEqual(len(sub.features), 1)
+            #By construction, each feature matches the full sliced region:
+            self.assertEqual(str(sub.features[0].extract(sub.seq)), str(sub.seq))
+            self.assertEqual(sub.features[0].extract(str(sub.seq)), str(sub.seq))
 
     def test_add_simple(self):
         """Simple addition"""

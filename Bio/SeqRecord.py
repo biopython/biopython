@@ -408,9 +408,9 @@ class SeqRecord(object):
                     raise ValueError, \
                           "Cannot support negative indices without the sequence length"
                 if start < 0:
-                    start = parent_length - start
+                    start = parent_length + start
                 if stop < 0:
-                    stop  = parent_length - stop + 1
+                    stop  = parent_length + stop + 1
                 #assert str(self.seq)[index] == str(self.seq)[start:stop]
                 for f in self.features:
                     if f.ref or f.ref_db:
@@ -421,7 +421,7 @@ class SeqRecord(object):
                               "from segmented GenBank records) is ignored.")
                         continue
                     if start <= f.location.start.position \
-                    and f.location.end.position < stop:
+                    and f.location.end.position <= stop:
                         answer.features.append(f._shift(-start))
 
             #Slice all the values to match the sliced sequence
