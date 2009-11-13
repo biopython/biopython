@@ -29,7 +29,7 @@ Tests/Graphics/*.eps
 Tests/Graphics/*.svg
 Tests/Graphics/*.png
 
-#Ignore LaTeX temp files,
+#Ignore LaTeX temp files, and compiled output
 Doc/*.aux
 Doc/*.log
 Doc/*.out
@@ -38,7 +38,18 @@ Doc/*/*.aux
 Doc/*/*.log
 Doc/*/*.out
 Doc/*/*.toc
+Doc/*/*/*.aux
+Doc/*/*/*.log
+Doc/*/*/*.out
+Doc/*/*/*.toc
+Doc/Tutorial.pdf
+Doc/Tutorial.html
+Doc/install/Installation.pdf
+Doc/install/Installation.html
+Doc/cookbook/motif/motif.pdf
+Doc/cookbook/motif/motif.html
 
 Ignore the hevea.sty file if present (used for HTML docs)
 Doc/hevea.sty
 Doc/*/hevea.sty
+Doc/*/*/hevea.sty
