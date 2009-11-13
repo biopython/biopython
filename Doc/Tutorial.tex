@@ -1889,7 +1889,60 @@ per-letter annotations are also added, all the features are preserved (with thei
 locations adjusted), and any other common annotation is also kept (like the id, name
 and description).
 
-For example, suppose you have a circular genome:
+For an example with per-letter annotation, we'll use the first record in a
+FASTQ file. Chapter~\ref{chapter:Bio.SeqIO} will explain the \verb|SeqIO| functions:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> record = SeqIO.parse(open("example.fastq"), "fastq").next()
+>>> len(record)
+25
+>>> print record.seq
+CCCTTCTTGTCTTCAGCGTTTCTCC
+>>> print record.letter_annotations["phred_quality"]
+[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26,
+26, 26, 26, 23, 23]
+\end{verbatim}
+
+\noindent Let's suppose this was Roche 454 data, and that from other information
+you think the \texttt{TTT} should be only \texttt{TT}. We can make a new edited
+record by first slicing the \verb|SeqRecord| before and after the ``extra''
+third \texttt{T}:
+
+\begin{verbatim}
+>>> left = record[:20]
+>>> print left.seq
+CCCTTCTTGTCTTCAGCGTT
+>>> print left.letter_annotations["phred_quality"]
+[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26]
+>>> right = record[21:]
+>>> print right.seq
+CTCC
+>>> print right.letter_annotations["phred_quality"]
+[26, 26, 23, 23]
+\end{verbatim}
+
+\noindent Now add the two parts together:
+
+\begin{verbatim}
+>>> edited = left + right
+>>> len(edited)
+24
+>>> print edited.seq
+CCCTTCTTGTCTTCAGCGTTCTCC
+>>> print edited.letter_annotations["phred_quality"]
+[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26,
+26, 26, 23, 23]
+\end{verbatim}
+
+\noindent Easy and intuitive? We hope so! You can make this shorter with just:
+
+\begin{verbatim}
+>>> edited = record[:20] + record[21:]
+\end{verbatim}
+
+Now, for an example with features, we'll use a GenBank file.
+Suppose you have a circular genome:
 
 \begin{verbatim}
 >>> from Bio import SeqIO
@@ -1903,6 +1956,11 @@ dbxrefs=['Project:10638'])
 9609
 >>> len(record.features)
 29
+>>> record.dbxrefs
+['Project:10638']
+>>> record.annotations.keys()
+['comment', 'sequence_version', 'source', 'taxonomy', 'keywords', 'references',
+'accessions', 'data_file_division', 'date', 'organism', 'gi']
 \end{verbatim}
 
 You can shift the origin like this:
@@ -1916,13 +1974,34 @@ description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete 
 dbxrefs=[])
 >>> len(shifted)
 9609
->>> len(shifted.features)
-28
 \end{verbatim}
 
 Note that this isn't perfect in that some annotation like the database cross references
-and one of the features (the source feature) have been lost. This is because the
-\verb|SeqRecord| slicing step is perhaps too cautious in the annotation it preserves.
+and one of the features (the source feature) have been lost:
+
+\begin{verbatim}
+>>> len(shifted.features)
+28
+>>> shifted.dbxrefs
+[]
+>>> record.annotations.keys()
+[]
+\end{verbatim}
+
+This is because the \verb|SeqRecord| slicing step is cautious in what annotation
+it preserves (erroneously propagating annotation can cause major problems). If
+you want to keep the database cross references or the annotations dictionary,
+this must be done explicitly:
+
+\begin{verbatim}
+>>> shifted.dbxrefs = record.dbxrefs[:]
+>>> shifted.annotations = record.annotations.copy()
+>>> shifted.dbxrefs
+['Project:10638']
+>>> shifted.annotations.keys()
+['comment', 'sequence_version', 'source', 'taxonomy', 'keywords', 'references',
+'accessions', 'data_file_division', 'date', 'organism', 'gi']
+\end{verbatim}
 
 Also note that in an example like this, you should probably change the record
 identifiers since the NCBI references refer to the \emph{original} unmodified
