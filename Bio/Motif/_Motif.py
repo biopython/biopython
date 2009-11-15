@@ -34,7 +34,7 @@ class Motif(object):
         if self.length==None:
             self.length = len
         elif self.length != len:
-            print "len",self.length,self.instances
+            print "len",self.length,self.instances, len
             raise ValueError("You can't change the length of the motif")
 
     def _check_alphabet(self,alphabet):

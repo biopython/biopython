@@ -340,10 +340,10 @@ class _MASTConsumer:
         ls = line.split()
         m = MEMEMotif()
         m.alphabet=self.data.alphabet
-        m.length=ls[1]
+        m.length=int(ls[1])
         name = ls[0]
         m.name=name
-        m.add_instance(ls[2])
+        # m.add_instance(ls[2])
         self.data._add_motif(m)
     
     def _add_match_diagram (self, line):
@@ -404,6 +404,8 @@ class _MASTConsumer:
         ds = ls[1].split('_')
         i = 0
         start = 0
+        return
+        # code below doesn't work yet
         for i in range(0,len(ds)):
             if ds[i].find('[') != -1 or ds[i].find('<') != -1:
                 inst = MEMEInstance()

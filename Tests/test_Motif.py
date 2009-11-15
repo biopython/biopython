@@ -998,14 +998,38 @@ class TestMEME(unittest.TestCase):
  
 class TestMAST(unittest.TestCase):
 
-    # The MAST parser currently fails; commented out the tests below.
-
     def test_mast_parser_1(self):
         """Test if Motif can parse MAST output files (first test)
         """
+        from Bio.Alphabet import IUPAC
         handle = open("Motif/mast.dna.oops.txt")
         parser = Motif.MASTParser()
-        # record = parser.parse(handle)
+        record = parser.parse(handle)
+        self.assertEqual(record.version, "3.0")
+        self.assertEqual(record.database, "INO_up800.s")
+        self.assertEqual(record.alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(len(record.motifs), 2)
+        self.assertEqual(record.motifs[0].alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(record.motifs[0].length, 12)
+        self.assertEqual(record.motifs[0].name, "1")
+        self.assertEqual(record.motifs[1].alphabet, IUPAC.unambiguous_dna)
+        self.assertEqual(record.motifs[1].length, 10)
+        self.assertEqual(record.motifs[1].name, "2")
+        self.assertEqual(len(record.sequences), 7)
+        self.assertEqual(record.sequences[0], "ACC1")
+        self.assertEqual(record.sequences[1], "CHO1")
+        self.assertEqual(record.sequences[2], "INO1")
+        self.assertEqual(record.sequences[3], "FAS1")
+        self.assertEqual(record.sequences[4], "OPI3")
+        self.assertEqual(record.sequences[5], "CHO2")
+        self.assertEqual(record.sequences[6], "FAS2")
+        self.assertEqual(record.diagrams["ACC1"], "82_[+1]_137_[+2]_559")
+        self.assertEqual(record.diagrams["CHO1"], "152_[+2]_396_[-2]_42_[+1]_17_[+1]_149")
+        self.assertEqual(record.diagrams["INO1"], "282_[-2]_327_[-1]_55_[+1]_102")
+        self.assertEqual(record.diagrams["FAS1"], "43_[+2]_41_[+1]_694")
+        self.assertEqual(record.diagrams["OPI3"], "185_[-2]_144_[+1]_449")
+        self.assertEqual(record.diagrams["CHO2"], "353_[+1]_47_[-2]_378")
+        self.assertEqual(record.diagrams["FAS2"], "184_[-2]_372_[+1]_222")
         handle.close()
 
     def test_mast_parser_2(self):
@@ -1013,7 +1037,7 @@ class TestMAST(unittest.TestCase):
         """
         handle = open("Motif/mast.protein.oops.txt")
         parser = Motif.MASTParser()
-        # record = parser.parse(handle)
+        record = parser.parse(handle)
         handle.close()
 
     def test_mast_parser_3(self):
@@ -1021,7 +1045,7 @@ class TestMAST(unittest.TestCase):
         """
         handle = open("Motif/mast.protein.tcm.txt")
         parser = Motif.MASTParser()
-        # record = parser.parse(handle)
+        record = parser.parse(handle)
         handle.close()
 
 
