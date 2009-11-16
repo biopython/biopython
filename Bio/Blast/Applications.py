@@ -560,6 +560,9 @@ class NcbiblastpCommandline(_Ncbiblast2SeqCommandline):
     def __init__(self, cmd="blastp", **kwargs):
         self.parameters = [ \
             #General search options:
+            _Option(["-task", "task"], ["input"],
+                    lambda value : value in ["blastp", "blastp-short"], 0,
+                    "Task to execute (string, blastp (default) or blastp-short).", False),
             _Option(["-matrix", "matrix"], ["input"], None, 0,
                     "Scoring matrix name (default BLOSUM62).", False),
             _Option(["-threshold", "threshold"], ["input"], None, 0,
@@ -589,6 +592,9 @@ class NcbiblastpCommandline(_Ncbiblast2SeqCommandline):
             #Extension options:
             _Switch(["-ungapped", "ungapped"], ["input"],
                     "Perform ungapped alignment only?"),
+            #Miscellaneous options:
+            _Switch(["-use_sw_tback", "use_sw_tback"], ["input"],
+                    "Compute locally optimal Smith-Waterman alignments?"),
             ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
@@ -627,6 +633,14 @@ class NcbiblastnCommandline(_Ncbiblast2SeqCommandline):
     """
     def __init__(self, cmd="blastn", **kwargs):
         self.parameters = [ \
+            #General search options:
+            _Option(["-task", "task"], ["input"],
+                    lambda value : value in ['blastn', 'blastn-short', 'dc-megablast',
+                                             'megablast', 'vecscreen'], 0,
+                    """Task to execute (string, default 'megablast')
+
+                    Allowed values 'blastn', 'blastn-short', 'dc-megablast', 'megablast'
+                    (the default), or 'vecscreen'.""", False),
             #Input query options:
             _Option(["-strand", "strand"], ["input"],
                     lambda value : value in ["both", "minus", "plus"],0,
@@ -787,6 +801,9 @@ class NcbitblastnCommandline(_Ncbiblast2SeqCommandline):
             #Extension options:
             _Switch(["-ungapped", "ungapped"], ["input"],
                     "Perform ungapped alignment only?"),
+            #Miscellaneous options:
+            _Switch(["-use_sw_tback", "use_sw_tback"], ["input"],
+                    "Compute locally optimal Smith-Waterman alignments?"),
             #PSI-TBLASTN options:
             _Option(["-in_pssm", "in_pssm"], ["input", "file"], None, 0,
                     """PSI-BLAST checkpoint file
@@ -908,6 +925,12 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
 
                     Format: "yes", "window locut hicut", or "no" to disable.
                     Default is "12 2.2 2.5""", False),
+            #Extension options:
+            _Option(["-gap_trigger", "gap_trigger"], ["input"], None, 0,
+                    "Number of bits to trigger gapping (float, default 22)", False),
+            #Miscellaneous options:
+            _Switch(["-use_sw_tback", "use_sw_tback"], ["input"],
+                    "Compute locally optimal Smith-Waterman alignments?"),
             #PSI-BLAST options:
             _Option(["-num_iterations", "num_iterations"], ["input"], None, 0,
                     """Number of iterations to perform, integer
