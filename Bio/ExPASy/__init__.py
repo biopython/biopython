@@ -81,7 +81,8 @@ def get_sprot_raw(id, cgi=None):
     """
     if cgi :
         import warnings
-        warnings.warn("The cgi argument is get_sprot_raw is not supported")
+        warnings.warn("The cgi argument in get_sprot_raw is not "
+                      "supported anymore", DeprecationWarning)
     return urllib.urlopen("http://www.uniprot.org/uniprot/%s.txt" % id)
 
 def sprot_search_ful(text, make_wild=None, swissprot=1, trembl=None,
