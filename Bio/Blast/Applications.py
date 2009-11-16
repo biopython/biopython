@@ -481,6 +481,11 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
         extra_parameters = [ \
+            #General search options:
+            _Option(["-gapopen", "gapopen"], ["input"], None, 0,
+                    "Cost to open a gap (integer).", False),
+            _Option(["-gapextend", "gapextend"], ["input"], None, 0,
+                    "Cost to extend a gap (integer).", False),
             #BLAST-2-Sequences options:
             _Option(["-subject", "subject"], ["input", "file"], None, 0,
                     """Subject sequence(s) to search.
@@ -554,8 +559,18 @@ class NcbiblastpCommandline(_Ncbiblast2SeqCommandline):
     """
     def __init__(self, cmd="blastp", **kwargs):
         self.parameters = [ \
+            #General search options:
+            _Option(["-matrix", "matrix"], ["input"], None, 0,
+                    "Scoring matrix name (default BLOSUM62).", False),
             _Option(["-threshold", "threshold"], ["input"], None, 0,
                     "Minimum word score such that the word is added to the BLAST lookup table (float)", False),
+            #Query filtering options:
+            _Option(["-seg", "seg"], ["input"], None, 0,
+                    """Filter query sequence with SEG (string).
+
+                    Format: "yes", "window locut hicut", or "no" to disable.
+                    Default is "12 2.2 2.5""", False),
+            #Extension options:
             _Switch(["-ungapped", "ungapped"], ["input"],
                     "Perform ungapped alignment only?"),
             ]
@@ -629,8 +644,22 @@ class NcbiblastxCommandline(_Ncbiblast2SeqCommandline):
 
                     Integer. Default is one.""", False),
             #General search options:
+            _Option(["-max_intron_length", "max_intron_length"], ["input"], None, 0,
+                    """Maximum intron length (integer).
+
+                    Length of the largest intron allowed in a translated nucleotide
+                    sequence when linking multiple distinct alignments (a negative
+                    value disables linking). Default zero.""", False),
+            _Option(["-matrix", "matrix"], ["input"], None, 0,
+                    "Scoring matrix name (default BLOSUM62).", False),
             _Option(["-threshold", "threshold"], ["input"], None, 0,
                     "Minimum word score such that the word is added to the BLAST lookup table (float)", False),
+            #Query filtering options:
+            _Option(["-seg", "seg"], ["input"], None, 0,
+                    """Filter query sequence with SEG (string).
+
+                    Format: "yes", "window locut hicut", or "no" to disable.
+                    Default is "12 2.2 2.5""", False),
             #Extension options:
             _Switch(["-ungapped", "ungapped"], ["input"],
                     "Perform ungapped alignment only?"),
@@ -657,8 +686,28 @@ class NcbitblastnCommandline(_Ncbiblast2SeqCommandline):
     """
     def __init__(self, cmd="tblastn", **kwargs):
         self.parameters = [ \
+            #General search options:
+            _Option(["-db_gencode", "db_gencode"], ["input"], None, 0,
+                    """Genetic code to use to translate query
+
+                    Integer. Default is one.""", False),
+            _Option(["-max_intron_length", "max_intron_length"], ["input"], None, 0,
+                    """Maximum intron length (integer).
+
+                    Length of the largest intron allowed in a translated nucleotide
+                    sequence when linking multiple distinct alignments (a negative
+                    value disables linking). Default zero.""", False),
+            _Option(["-matrix", "matrix"], ["input"], None, 0,
+                    "Scoring matrix name (default BLOSUM62).", False),
             _Option(["-threshold", "threshold"], ["input"], None, 0,
                     "Minimum word score such that the word is added to the BLAST lookup table (float)", False),
+            #Query filtering options:
+            _Option(["-seg", "seg"], ["input"], None, 0,
+                    """Filter query sequence with SEG (string).
+
+                    Format: "yes", "window locut hicut", or "no" to disable.
+                    Default is "12 2.2 2.5""", False),
+            #Extension options:
             _Switch(["-ungapped", "ungapped"], ["input"],
                     "Perform ungapped alignment only?"),
             ]
@@ -696,8 +745,26 @@ class NcbitblastxCommandline(_Ncbiblast2SeqCommandline):
 
                     Integer. Default is one.""", False),
             #General search options:
+            _Option(["-db_gencode", "db_gencode"], ["input"], None, 0,
+                    """Genetic code to use to translate query
+
+                    Integer. Default is one.""", False),
+            _Option(["-max_intron_length", "max_intron_length"], ["input"], None, 0,
+                    """Maximum intron length (integer).
+
+                    Length of the largest intron allowed in a translated nucleotide
+                    sequence when linking multiple distinct alignments (a negative
+                    value disables linking). Default zero.""", False),
+            _Option(["-matrix", "matrix"], ["input"], None, 0,
+                    "Scoring matrix name (default BLOSUM62).", False),
             _Option(["-threshold", "threshold"], ["input"], None, 0,
                     "Minimum word score such that the word is added to the BLAST lookup table (float)", False),
+            #Query filtering options:
+            _Option(["-seg", "seg"], ["input"], None, 0,
+                    """Filter query sequence with SEG (string).
+
+                    Format: "yes", "window locut hicut", or "no" to disable.
+                    Default is "12 2.2 2.5""", False),
            ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
@@ -729,8 +796,17 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
     """
     def __init__(self, cmd="psiblast", **kwargs):
         self.parameters = [ \
+            #General search options:
+            _Option(["-matrix", "matrix"], ["input"], None, 0,
+                    "Scoring matrix name (default BLOSUM62).", False),
             _Option(["-threshold", "threshold"], ["input"], None, 0,
                     "Minimum word score such that the word is added to the BLAST lookup table (float)", False),
+            #Query filtering options:
+            _Option(["-seg", "seg"], ["input"], None, 0,
+                    """Filter query sequence with SEG (string).
+
+                    Format: "yes", "window locut hicut", or "no" to disable.
+                    Default is "12 2.2 2.5""", False),
             #PSI-BLAST options:
             _Option(["-num_iterations", "num_iterations"], ["input"], None, 0,
                     """Number of iterations to perform, integer
@@ -797,8 +873,14 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
     as described in the Biopython tutorial.
     """
     def __init__(self, cmd="rpsblast", **kwargs):
-        #TODO - Does this have any RPS-BLAST specific options?
-        self.parameters = []
+        self.parameters = [ \
+            #Query filtering options:
+            _Option(["-seg", "seg"], ["input"], None, 0,
+                    """Filter query sequence with SEG (string).
+
+                    Format: "yes", "window locut hicut", or "no" to disable.
+                    Default is "12 2.2 2.5""", False),
+            ]
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
 
 
@@ -832,6 +914,12 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
                     """Genetic code to use to translate query
 
                     Integer. Default is one.""", False),
+            #Query filtering options:
+            _Option(["-seg", "seg"], ["input"], None, 0,
+                    """Filter query sequence with SEG (string).
+
+                    Format: "yes", "window locut hicut", or "no" to disable.
+                    Default is "12 2.2 2.5""", False),
             #Extension options:
             _Switch(["-ungapped", "ungapped"], ["input"],
                     "Perform ungapped alignment only?"),
