@@ -534,6 +534,8 @@ class NcbiblastpCommandline(_Ncbiblast2SeqCommandline):
     """
     def __init__(self, cmd="blastp", **kwargs):
         self.parameters = [ \
+            _Option(["-threshold", "threshold"], ["input"], None, 0,
+                    "Minimum word score such that the word is added to the BLAST lookup table (float)", False),
             _Switch(["-ungapped", "ungapped"], ["input"],
                     "Perform ungapped alignment only?"),
             ]
@@ -551,18 +553,25 @@ class NcbiblastnCommandline(_Ncbiblast2SeqCommandline):
     cut off of 0.001, saving the output to a file in XML format:
 
     >>> from Bio.Blast.Applications import NcbiblastnCommandline
-    >>> cline = NcbiblastnCommandline(query="m_cold.fasta", db="nt",
+    >>> cline = NcbiblastnCommandline(query="m_cold.fasta", db="nt", strand="plus",
     ...                               evalue=0.001, out="m_cold.xml", outfmt=5)
     >>> cline
-    NcbiblastnCommandline(cmd='blastn', query='m_cold.fasta', db='nt', out='m_cold.xml', evalue=0.001, outfmt=5)
+    NcbiblastnCommandline(cmd='blastn', query='m_cold.fasta', db='nt', out='m_cold.xml', evalue=0.001, outfmt=5, strand='plus')
     >>> print cline
-    blastn -query m_cold.fasta -db nt -out m_cold.xml -evalue 0.001 -outfmt 5
+    blastn -query m_cold.fasta -db nt -out m_cold.xml -evalue 0.001 -outfmt 5 -strand plus
 
     You would typically run the command line with the Python subprocess module,
     as described in the Biopython tutorial.
     """
     def __init__(self, cmd="blastn", **kwargs):
         self.parameters = [ \
+            #Input query options:
+            _Option(["-strand", "strand"], ["input"],
+                    lambda value : value in ["both", "minus", "plus"],0,
+                    """Query strand(s) to search against database/subject.
+
+                    Values allowed are "both" (default), "minus", "plus".""", False),
+            #Extension options:
             _Switch(["-ungapped", "ungapped"], ["input"],
                     "Perform ungapped alignment only?"),
             ]
@@ -588,6 +597,21 @@ class NcbiblastxCommandline(_Ncbiblast2SeqCommandline):
     """
     def __init__(self, cmd="blastx", **kwargs):
         self.parameters = [ \
+            #Input query options:
+            _Option(["-strand", "strand"], ["input"],
+                    lambda value : value in ["both", "minus", "plus"],0,
+                    """Query strand(s) to search against database/subject.
+
+                    Values allowed are "both" (default), "minus", "plus".""", False),
+            #Input query options:
+            _Option(["-query_gencode", "query_gencode"], ["input"], None, 0,
+                    """Genetic code to use to translate query
+
+                    Integer. Default is one.""", False),
+            #General search options:
+            _Option(["-threshold", "threshold"], ["input"], None, 0,
+                    "Minimum word score such that the word is added to the BLAST lookup table (float)", False),
+            #Extension options:
             _Switch(["-ungapped", "ungapped"], ["input"],
                     "Perform ungapped alignment only?"),
             ]
@@ -613,6 +637,8 @@ class NcbitblastnCommandline(_Ncbiblast2SeqCommandline):
     """
     def __init__(self, cmd="tblastn", **kwargs):
         self.parameters = [ \
+            _Option(["-threshold", "threshold"], ["input"], None, 0,
+                    "Minimum word score such that the word is added to the BLAST lookup table (float)", False),
             _Switch(["-ungapped", "ungapped"], ["input"],
                     "Perform ungapped alignment only?"),
             ]
@@ -638,7 +664,21 @@ class NcbitblastxCommandline(_Ncbiblast2SeqCommandline):
     """
     def __init__(self, cmd="tblastx", **kwargs):
         self.parameters = [ \
-            ]
+            #Input query options:
+            _Option(["-strand", "strand"], ["input"],
+                    lambda value : value in ["both", "minus", "plus"],0,
+                    """Query strand(s) to search against database/subject.
+
+                    Values allowed are "both" (default), "minus", "plus".""", False),
+            #Input query options:
+            _Option(["-query_gencode", "query_gencode"], ["input"], None, 0,
+                    """Genetic code to use to translate query
+
+                    Integer. Default is one.""", False),
+            #General search options:
+            _Option(["-threshold", "threshold"], ["input"], None, 0,
+                    "Minimum word score such that the word is added to the BLAST lookup table (float)", False),
+           ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
 
@@ -669,6 +709,8 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
     """
     def __init__(self, cmd="psiblast", **kwargs):
         self.parameters = [ \
+            _Option(["-threshold", "threshold"], ["input"], None, 0,
+                    "Minimum word score such that the word is added to the BLAST lookup table (float)", False),
             #PSI-BLAST options:
             _Option(["-num_iterations", "num_iterations"], ["input"], None, 0,
                     """Number of iterations to perform, integer
@@ -760,10 +802,19 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
     def __init__(self, cmd="rpstblastn", **kwargs):
         self.parameters = [ \
             #Input query options:
+            _Option(["-strand", "strand"], ["input"],
+                    lambda value : value in ["both", "minus", "plus"],0,
+                    """Query strand(s) to search against database/subject.
+
+                    Values allowed are "both" (default), "minus", "plus".""", False),
+            #Input query options:
             _Option(["-query_gencode", "query_gencode"], ["input"], None, 0,
                     """Genetic code to use to translate query
 
                     Integer. Default is one.""", False),
+            #Extension options:
+            _Switch(["-ungapped", "ungapped"], ["input"],
+                    "Perform ungapped alignment only?"),
             ]
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
 
