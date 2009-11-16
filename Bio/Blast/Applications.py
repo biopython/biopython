@@ -492,7 +492,26 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
 
                     Incompatible with:  db, gilist, negative_gilist, remote.
                     See also subject.""", False),
-            ]
+            #Restrict search or results:
+            _Option(["-culling_limit", "culling_limit"], ["input"], None, 0,
+                    """Hit culling limit (integer).
+
+                    If the query range of a hit is enveloped by that of at least this many
+                    higher-scoring hits, delete the hit.
+
+                    Incompatible with: best_hit_overhang, best_hit_score_edge.""", False),
+            _Option(["-best_hit_overhang", "best_hit_overhang"], ["input"], None, 0,
+                    """Best Hit algorithm overhang value (recommended value: 0.1)
+
+                    Float between 0.0 and 0.5 inclusive.
+
+                    Incompatible with: culling_limit.""", False),
+            _Option(["-best_hit_score_edge", "best_hit_score_edge"], ["input"], None, 0,
+                    """Best Hit algorithm score edge value (recommended value: 0.1)
+
+                    Float between 0.0 and 0.5 inclusive.
+
+                    Incompatible with: culling_limit.""", False),            ]
         try:
             #Insert extra parameters - at the start just in case there
             #are any arguments which must come last:
@@ -505,6 +524,7 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
 
     def _validate(self):
         incompatibles = {"subject_loc":["db, gilist, negative_gilist, remote"],
+                         "culling_limit":["best_hit_overhang","best_hit_score_edge"],
                          "subject":["db", "gilist", "negative_gilist"]}
         for a in incompatibles:
             if self._get_parameter(a):
