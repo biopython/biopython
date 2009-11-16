@@ -393,12 +393,12 @@ class _NcbiblastCommandline(AbstractCommandline):
             _Option(["-gilist", "gilist"], ["input", "file"], None, 0,
                     """Restrict search of database to list of GI's.
  
-                    Incompatible with:  negative_gilist, remote, subject, subject_loc""",
+                    Incompatible with: negative_gilist, remote, subject, subject_loc""",
                     False),
             _Option(["-negative_gilist", "negative_gilist"], ["input", "file"], None, 0,
                     """Restrict search of database to everything except the listed GIs.
  
-                    Incompatible with:  gilist, remote, subject, subject_loc""",
+                    Incompatible with: gilist, remote, subject, subject_loc""",
                     False),
             _Option(["-entrez_query", "entrez_query"], ["input"], None, 0,
                     "Restrict search with the given Entrez query (requires remote).", False),
@@ -429,12 +429,12 @@ class _NcbiblastCommandline(AbstractCommandline):
                     ["input", "file"], None, 0,
                     """Search strategy to use.
 
-                    Incompatible with:  export_search_strategy""", False),
+                    Incompatible with: export_search_strategy""", False),
             _Option(["-export_search_strategy", "export_search_strategy"],
                     ["output", "file"], None, 0,
                     """File name to record the search strategy used.
 
-                    Incompatible with:  import_search_strategy""", False),
+                    Incompatible with: import_search_strategy""", False),
             #Miscellaneous options
             _Switch(["-parse_deflines", "parse_deflines"], ["input"],
                     "Should the query and subject defline(s) be parsed?"),
@@ -442,11 +442,11 @@ class _NcbiblastCommandline(AbstractCommandline):
                     """Number of threads to use in the BLAST search.
 
                     Integer of at least one. Default is one.
-                    Incompatible with:  remote""", False),
+                    Incompatible with: remote""", False),
             _Switch(["-remote", "remote"], ["input"],
                     """Execute search remotely?
 
-                    Incompatible with:  gilist, negative_gilist, subject_loc, num_threads, ..."""),
+                    Incompatible with: gilist, negative_gilist, subject_loc, num_threads, ..."""),
             ]
         try:
             #Insert extra parameters - at the start just in case there
@@ -490,12 +490,12 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
             _Option(["-subject", "subject"], ["input", "file"], None, 0,
                     """Subject sequence(s) to search.
 
-                    Incompatible with:  db, gilist, negative_gilist.
+                    Incompatible with: db, gilist, negative_gilist.
                     See also subject_loc.""", False),
             _Option(["-subject_loc", "subject_loc"], ["input"], None, 0,
                     """Location on the subject sequence (Format: start-stop)
 
-                    Incompatible with:  db, gilist, negative_gilist, remote.
+                    Incompatible with: db, gilist, negative_gilist, remote.
                     See also subject.""", False),
             #Restrict search or results:
             _Option(["-culling_limit", "culling_limit"], ["input"], None, 0,
@@ -564,17 +564,44 @@ class NcbiblastpCommandline(_Ncbiblast2SeqCommandline):
                     "Scoring matrix name (default BLOSUM62).", False),
             _Option(["-threshold", "threshold"], ["input"], None, 0,
                     "Minimum word score such that the word is added to the BLAST lookup table (float)", False),
+            _Option(["-comp_based_stats", "comp_based_stats"], ["input"],
+                    lambda value : value in "0Ft2TtDd", 0,
+                    """Use composition-based statistics (string, default 2, i.e. True).
+
+                    0, F or f: no composition-based statistics
+                    2, T or t, D or d : Composition-based score adjustment as in
+                    Bioinformatics 21:902-911, 2005, conditioned on sequence properties
+
+                    Note that tblastn also supports values of 1 and 3.""", False),
             #Query filtering options:
             _Option(["-seg", "seg"], ["input"], None, 0,
                     """Filter query sequence with SEG (string).
 
                     Format: "yes", "window locut hicut", or "no" to disable.
                     Default is "12 2.2 2.5""", False),
+            #Restrict search or results:
+            _Option(["-db_soft_mask", "db_soft_mask"], ["input"], None, 0,
+                    """Filtering algorithm for soft masking (integer).
+
+                    Filtering algorithm ID to apply to the BLAST database as soft masking.
+
+                    Incompatible with: subject, subject_loc""", False),
             #Extension options:
             _Switch(["-ungapped", "ungapped"], ["input"],
                     "Perform ungapped alignment only?"),
             ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
+
+    def _validate(self):
+        incompatibles = {"db_soft_mask":["subject", "subject_loc"]}
+        for a in incompatibles:
+            if self._get_parameter(a):
+                for b in incompatibles[a]:
+                    if self._get_parameter(b):
+                        raise ValueError("Options %s and %s are incompatible." \
+                                         % (a,b))
+        _Ncbiblast2SeqCommandline._validate(self)
+
 
 class NcbiblastnCommandline(_Ncbiblast2SeqCommandline):
     """Wrapper for the NCBI BLAST+ program blastn (for nucleotides).
@@ -606,11 +633,28 @@ class NcbiblastnCommandline(_Ncbiblast2SeqCommandline):
                     """Query strand(s) to search against database/subject.
 
                     Values allowed are "both" (default), "minus", "plus".""", False),
+            #Restrict search or results:
+            _Option(["-db_soft_mask", "db_soft_mask"], ["input"], None, 0,
+                    """Filtering algorithm for soft masking (integer).
+
+                    Filtering algorithm ID to apply to the BLAST database as soft masking.
+
+                    Incompatible with: subject, subject_loc""", False),
             #Extension options:
             _Switch(["-ungapped", "ungapped"], ["input"],
                     "Perform ungapped alignment only?"),
             ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
+
+    def _validate(self):
+        incompatibles = {"db_soft_mask":["subject", "subject_loc"]}
+        for a in incompatibles:
+            if self._get_parameter(a):
+                for b in incompatibles[a]:
+                    if self._get_parameter(b):
+                        raise ValueError("Options %s and %s are incompatible." \
+                                         % (a,b))
+        _Ncbiblast2SeqCommandline._validate(self)
 
 
 class NcbiblastxCommandline(_Ncbiblast2SeqCommandline):
@@ -644,6 +688,8 @@ class NcbiblastxCommandline(_Ncbiblast2SeqCommandline):
 
                     Integer. Default is one.""", False),
             #General search options:
+            _Option(["-frame_shift_penalty", "frame_shift_penalty"], ["input"], None, 0,
+                    "Frame shift penalty (integer, at least 1, default ignored).", False),
             _Option(["-max_intron_length", "max_intron_length"], ["input"], None, 0,
                     """Maximum intron length (integer).
 
@@ -660,11 +706,28 @@ class NcbiblastxCommandline(_Ncbiblast2SeqCommandline):
 
                     Format: "yes", "window locut hicut", or "no" to disable.
                     Default is "12 2.2 2.5""", False),
+            #Restrict search or results:
+            _Option(["-db_soft_mask", "db_soft_mask"], ["input"], None, 0,
+                    """Filtering algorithm for soft masking (integer).
+
+                    Filtering algorithm ID to apply to the BLAST database as soft masking.
+
+                    Incompatible with: subject, subject_loc""", False),
             #Extension options:
             _Switch(["-ungapped", "ungapped"], ["input"],
                     "Perform ungapped alignment only?"),
             ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
+
+    def _validate(self):
+        incompatibles = {"db_soft_mask":["subject", "subject_loc"]}
+        for a in incompatibles:
+            if self._get_parameter(a):
+                for b in incompatibles[a]:
+                    if self._get_parameter(b):
+                        raise ValueError("Options %s and %s are incompatible." \
+                                         % (a,b))
+        _Ncbiblast2SeqCommandline._validate(self)
 
 
 class NcbitblastnCommandline(_Ncbiblast2SeqCommandline):
@@ -691,6 +754,8 @@ class NcbitblastnCommandline(_Ncbiblast2SeqCommandline):
                     """Genetic code to use to translate query
 
                     Integer. Default is one.""", False),
+            _Option(["-frame_shift_penalty", "frame_shift_penalty"], ["input"], None, 0,
+                    "Frame shift penalty (integer, at least 1, default ignored).", False),
             _Option(["-max_intron_length", "max_intron_length"], ["input"], None, 0,
                     """Maximum intron length (integer).
 
@@ -701,6 +766,18 @@ class NcbitblastnCommandline(_Ncbiblast2SeqCommandline):
                     "Scoring matrix name (default BLOSUM62).", False),
             _Option(["-threshold", "threshold"], ["input"], None, 0,
                     "Minimum word score such that the word is added to the BLAST lookup table (float)", False),
+            _Option(["-comp_based_stats", "comp_based_stats"], ["input"],
+                    lambda value : value in "0Ft12TtDd3", 0,
+                    """Use composition-based statistics (string, default 2, i.e. True).
+
+                    0, F or f: no composition-based statistics
+                    1: Composition-based statistics as in NAR 29:2994-3005, 2001
+                    2, T or t, D or d : Composition-based score adjustment as in
+                       Bioinformatics 21:902-911, 2005, conditioned on sequence properties
+                    3: Composition-based score adjustment as in Bioinformatics 21:902-911,
+                       2005, unconditionally
+
+                    Note that only tblastn supports values of 1 and 3.""", False),
             #Query filtering options:
             _Option(["-seg", "seg"], ["input"], None, 0,
                     """Filter query sequence with SEG (string).
@@ -710,8 +787,23 @@ class NcbitblastnCommandline(_Ncbiblast2SeqCommandline):
             #Extension options:
             _Switch(["-ungapped", "ungapped"], ["input"],
                     "Perform ungapped alignment only?"),
+            #PSI-TBLASTN options:
+            _Option(["-in_pssm", "in_pssm"], ["input", "file"], None, 0,
+                    """PSI-BLAST checkpoint file
+
+                    Incompatible with: remote, query""", False),
             ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
+
+    def _validate(self):
+        incompatibles = {"in_pssm":["remote", "query"]}
+        for a in incompatibles:
+            if self._get_parameter(a):
+                for b in incompatibles[a]:
+                    if self._get_parameter(b):
+                        raise ValueError("Options %s and %s are incompatible." \
+                                         % (a,b))
+        _Ncbiblast2SeqCommandline._validate(self)
 
 
 class NcbitblastxCommandline(_Ncbiblast2SeqCommandline):
@@ -801,6 +893,15 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
                     "Scoring matrix name (default BLOSUM62).", False),
             _Option(["-threshold", "threshold"], ["input"], None, 0,
                     "Minimum word score such that the word is added to the BLAST lookup table (float)", False),
+            _Option(["-comp_based_stats", "comp_based_stats"], ["input"],
+                    lambda value : value in "0Ft2TtDd", 0,
+                    """Use composition-based statistics (string, default 2, i.e. True).
+
+                    0, F or f: no composition-based statistics
+                    2, T or t, D or d : Composition-based score adjustment as in
+                    Bioinformatics 21:902-911, 2005, conditioned on sequence properties
+
+                    Note that tblastn also supports values of 1 and 3.""", False),
             #Query filtering options:
             _Option(["-seg", "seg"], ["input"], None, 0,
                     """Filter query sequence with SEG (string).
@@ -812,7 +913,7 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
                     """Number of iterations to perform, integer
 
                     Integer of at least one. Default is one.
-                    Incompatible with:  remote""", False),
+                    Incompatible with: remote""", False),
             _Option(["-out_pssm", "out_pssm"], ["output", "file"], None, 0,
                     "File name to store checkpoint file", False),
             _Option(["-out_ascii_pssm", "out_ascii_pssm"], ["output", "file"], None, 0,
@@ -820,11 +921,11 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
             _Option(["-in_msa", "in_msa"], ["input", "file"], None, 0,
                     """File name of multiple sequence alignment to restart PSI-BLAST
 
-                    Incompatible with:  in_pssm, query""", False),
+                    Incompatible with: in_pssm, query""", False),
             _Option(["-in_pssm", "in_pssm"], ["input", "file"], None, 0,
                     """PSI-BLAST checkpoint file
 
-                    Incompatible with:  in_msa, query, phi_pattern""", False),
+                    Incompatible with: in_msa, query, phi_pattern""", False),
             #PSSM engine options:
             _Option(["-pseudocount", "pseudocount"], ["input"], None, 0,
                     """Pseudo-count value used when constructing PSSM
@@ -838,7 +939,7 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
             _Option(["-phi_pattern", "phi_pattern"], ["input", "file"], None, 0,
                     """File name containing pattern to search
 
-                    Incompatible with:  in_pssm""", False),
+                    Incompatible with: in_pssm""", False),
             ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
