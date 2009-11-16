@@ -633,6 +633,12 @@ class NcbiblastnCommandline(_Ncbiblast2SeqCommandline):
     """
     def __init__(self, cmd="blastn", **kwargs):
         self.parameters = [ \
+            #Input query options:
+            _Option(["-strand", "strand"], ["input"],
+                    lambda value : value in ["both", "minus", "plus"],0,
+                    """Query strand(s) to search against database/subject.
+
+                    Values allowed are "both" (default), "minus", "plus".""", False),
             #General search options:
             _Option(["-task", "task"], ["input"],
                     lambda value : value in ['blastn', 'blastn-short', 'dc-megablast',
@@ -641,12 +647,28 @@ class NcbiblastnCommandline(_Ncbiblast2SeqCommandline):
 
                     Allowed values 'blastn', 'blastn-short', 'dc-megablast', 'megablast'
                     (the default), or 'vecscreen'.""", False),
-            #Input query options:
-            _Option(["-strand", "strand"], ["input"],
-                    lambda value : value in ["both", "minus", "plus"],0,
-                    """Query strand(s) to search against database/subject.
+            _Option(["-penalty", "penalty"], ["input"], None, 0,
+                    "Penalty for a nucleotide mismatch (integer, at most zero).", False),
+            _Option(["-reward", "reward"], ["input"], None, 0,
+                    "Reward for a nucleotide match (integer, at least zero).", False),
+            #TODO - Does this need an argument or is it a switch?
+            #_Option(["-use_index", "use_index"], ["input"], None, 0,
+            #        "Use MegaBLAST database index (boolean).", False),
+            _Option(["-index_name", "index_name"], ["input"], None, 0,
+                    "MegaBLAST database index name.", False),
+            #Query filtering options:
+            _Option(["-dust", "dust"], ["input"], None, 0,
+                    """Filter query sequence with DUST (string).
 
-                    Values allowed are "both" (default), "minus", "plus".""", False),
+                    Format: 'yes', 'level window linker', or 'no' to disable.
+                    Default = '20 64 1'.
+                    """, False),
+            _Option(["-filtering_db", "filtering_db"], ["input"], None, 0,
+                    "BLAST database containing filtering elements (i.e. repeats).", False),
+            _Option(["-window_masker_taxid", "window_masker_taxid"], ["input"], None, 0,
+                    "Enable WindowMasker filtering using a Taxonomic ID (integer).", False),
+            _Option(["-window_masker_db", "window_masker_db"], ["input"], None, 0,
+                    "Enable WindowMasker filtering using this repeats database (string).", False),
             #Restrict search or results:
             _Option(["-db_soft_mask", "db_soft_mask"], ["input"], None, 0,
                     """Filtering algorithm for soft masking (integer).
@@ -654,7 +676,27 @@ class NcbiblastnCommandline(_Ncbiblast2SeqCommandline):
                     Filtering algorithm ID to apply to the BLAST database as soft masking.
 
                     Incompatible with: subject, subject_loc""", False),
+            _Option(["-perc_identity", "perc_identity"], ["input"], None, 0,
+                    "Percent identity (real, 0 to 100 inclusive).", False),
+            #Discontiguous MegaBLAST options
+            _Option(["-template_type", "template_type"], ["input"],
+                    lambda value : value in ['coding', 'coding_and_optimal','optimal'], 0,
+                    """Discontiguous MegaBLAST template type (string).
+
+                    Allowed values: 'coding', 'coding_and_optimal' or 'optimal'
+                    Requires: template_length.""", False),
+            _Option(["-template_length", "template_length"], ["input"],
+                    lambda value : value in [16,18,21,'16','18','21'], 0,
+                    """Discontiguous MegaBLAST template length (integer).
+
+                    Allowed values: 16, 18, 21
+                    
+                    Requires: template_type.""", False),
             #Extension options:
+            _Switch(["-no_greedy", "no_greedy"], ["input"],
+                    "Use non-greedy dynamic programming extension"),
+            _Option(["-min_raw_gapped_score", "min_raw_gapped_score"], ["input"], None, 0,
+                    "Minimum raw gapped score to keep an alignment in the preliminary gapped and traceback stages (integer).", False),
             _Switch(["-ungapped", "ungapped"], ["input"],
                     "Perform ungapped alignment only?"),
             ]
@@ -668,6 +710,9 @@ class NcbiblastnCommandline(_Ncbiblast2SeqCommandline):
                     if self._get_parameter(b):
                         raise ValueError("Options %s and %s are incompatible." \
                                          % (a,b))
+        if (self.template_type and not self.template_length) \
+        or (self.template_length and not self.template_type) :
+            raise ValueError("Options template_type and template_type require each other.")
         _Ncbiblast2SeqCommandline._validate(self)
 
 
