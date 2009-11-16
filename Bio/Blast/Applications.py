@@ -385,6 +385,8 @@ class _NcbiblastCommandline(AbstractCommandline):
                     "Produce HTML output? See also the outfmt option."),
             #Query filtering options
             # TODO -soft_masking <Boolean>, is this a switch or an option?
+            #_Switch(["-soft_masking", "soft_masking"], ["input"],
+            #        "Apply filtering locations as soft masks?"),
             _Switch(["-lcase_masking", "lcase_masking"], ["input"],
                     "Use lower case filtering in query and subject sequence(s)?"),
             #Restrict search or results
@@ -398,9 +400,17 @@ class _NcbiblastCommandline(AbstractCommandline):
  
                     Incompatible with:  gilist, remote, subject, subject_loc""",
                     False),
+            _Option(["-entrez_query", "entrez_query"], ["input"], None, 0,
+                    "Restrict search with the given Entrez query (requires remote).", False),
+            _Option(["-max_target_seqs", "max_target_seqs"], ["input"], None, 0,
+                    """Maximum number of aligned sequences to keep.
+
+                    Integer argument (at least one).""", False),
             #Statistical options
             _Option(["-dbsize", "dbsize"], ["input"], None, 0,
                     "Effective length of the database (integer)", False),
+            _Option(["-searchsp", "searchsp"], ["input"], None, 0,
+                    "Effective length of the search space (integer)", False),
             #Extension options
             _Option(["-xdrop_ungap", "xdrop_ungap"], ["input"], None, 0,
                     "X-dropoff value (in bits) for ungapped extensions. Float.",
@@ -414,7 +424,20 @@ class _NcbiblastCommandline(AbstractCommandline):
             _Option(["-window_size", "window_size"], ["input"], None, 0,
                     "Multiple hits window size, use 0 to specify 1-hit algorithm. Integer.",
                     False),
+            # Search strategy options
+            _Option(["-import_search_strategy", "import_search_strategy"],
+                    ["input", "file"], None, 0,
+                    """Search strategy to use.
+
+                    Incompatible with:  export_search_strategy""", False),
+            _Option(["-export_search_strategy", "export_search_strategy"],
+                    ["output", "file"], None, 0,
+                    """File name to record the search strategy used.
+
+                    Incompatible with:  import_search_strategy""", False),
             #Miscellaneous options
+            _Switch(["-parse_deflines", "parse_deflines"], ["input"],
+                    "Should the query and subject defline(s) be parsed?"),
             _Option(["-num_threads", "num_threads"], ["input"], None, 0,
                     """Number of threads to use in the BLAST search.
 
@@ -436,6 +459,7 @@ class _NcbiblastCommandline(AbstractCommandline):
 
     def _validate(self):
         incompatibles = {"remote":["gilist", "negative_gilist", "num_threads"],
+                         "import_search_strategy" : ["export_search_strategy"],
                          "gilist":["negative_gilist"]}
         for a in incompatibles:
             if self._get_parameter(a):
@@ -443,6 +467,8 @@ class _NcbiblastCommandline(AbstractCommandline):
                     if self._get_parameter(b):
                         raise ValueError("Options %s and %s are incompatible." \
                                          % (a,b))
+        if self.entrez_query and not self.remote :
+            raise ValueError("Option entrez_query requires remote option.")
         AbstractCommandline._validate(self)
 
 class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
@@ -612,11 +638,6 @@ class NcbitblastxCommandline(_Ncbiblast2SeqCommandline):
     """
     def __init__(self, cmd="tblastx", **kwargs):
         self.parameters = [ \
-            #PSI-TBLASTN options:
-            _Option(["-in_pssm", "in_pssm"], ["input", "file"], None, 0,
-                    """PSI-TBLASTN checkpoint file
-
-                    Incompatible with:  remote, query."""),
             ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
