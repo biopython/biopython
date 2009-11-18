@@ -56,6 +56,7 @@ class PDBExceptionTest(unittest.TestCase):
     #TODO - check get expected warnings, may require Python 2.6+
     #See Bug 2820
 
+
 class PDBParseTest(unittest.TestCase):
     def setUp(self):
         warnings.resetwarnings()
@@ -376,6 +377,78 @@ class Exposure(unittest.TestCase):
         self.assertEqual(48, residues[-2].xtra["EXP_CN"])
         self.assertEqual(1, len(residues[-1].xtra))
         self.assertEqual(38, residues[-1].xtra["EXP_CN"])
+
+class AssortedMisc(unittest.TestCase):
+    "Testing with real PDB files."
+
+    def test_strict(self):
+        """Parse 1A8O.pdb file in strict mode."""
+        warnings.resetwarnings()
+        parser = PDBParser(PERMISSIVE=False)
+        structure = parser.get_structure("example", "PDB/1A8O.pdb")
+        self.assertEqual(len(structure), 1)
+        model = structure[0]
+        self.assertEqual(model.id, 0)
+        self.assertEqual(model.level, "M")
+        self.assertEqual(len(model), 1)
+        chain = model["A"]
+        self.assertEqual(chain.id, "A")
+        self.assertEqual(chain.level, "C")
+        self.assertEqual(len(chain), 158)
+        self.assertEqual(" ".join(residue.resname for residue in chain),
+                         "MSE ASP ILE ARG GLN GLY PRO LYS GLU PRO PHE ARG "
+                         "ASP TYR VAL ASP ARG PHE TYR LYS THR LEU ARG ALA "
+                         "GLU GLN ALA SER GLN GLU VAL LYS ASN TRP MSE THR "
+                         "GLU THR LEU LEU VAL GLN ASN ALA ASN PRO ASP CYS "
+                         "LYS THR ILE LEU LYS ALA LEU GLY PRO GLY ALA THR "
+                         "LEU GLU GLU MSE MSE THR ALA CYS GLN GLY HOH HOH "
+                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+                         "HOH HOH")
+        self.assertEqual(" ".join(atom.name for atom in chain.get_atoms()),
+                         "N CA C O CB CG SE CE N CA C O CB CG OD1 OD2 N CA "
+                         "C O CB CG1 CG2 CD1 N CA C O CB CG CD NE CZ NH1 "
+                         "NH2 N CA C O CB CG CD OE1 NE2 N CA C O N CA C O "
+                         "CB CG CD N CA C O CB CG CD CE NZ N CA C O CB CG "
+                         "CD OE1 OE2 N CA C O CB CG CD N CA C O CB CG CD1 "
+                         "CD2 CE1 CE2 CZ N CA C O CB CG CD NE CZ NH1 NH2 N "
+                         "CA C O CB CG OD1 OD2 N CA C O CB CG CD1 CD2 CE1 "
+                         "CE2 CZ OH N CA C O CB CG1 CG2 N CA C O CB CG OD1 "
+                         "OD2 N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB "
+                         "CG CD1 CD2 CE1 CE2 CZ N CA C O CB CG CD1 CD2 CE1 "
+                         "CE2 CZ OH N CA C O CB CG CD CE NZ N CA C O CB "
+                         "OG1 CG2 N CA C O CB CG CD1 CD2 N CA C O CB CG CD "
+                         "NE CZ NH1 NH2 N CA C O CB N CA C O CB CG CD OE1 "
+                         "OE2 N CA C O CB CG CD OE1 NE2 N CA C O CB N CA C "
+                         "O CB OG N CA C O CB CG CD OE1 NE2 N CA C O CB CG "
+                         "CD OE1 OE2 N CA C O CB CG1 CG2 N CA C O CB CG CD "
+                         "CE NZ N CA C O CB CG OD1 ND2 N CA C O CB CG CD1 "
+                         "CD2 NE1 CE2 CE3 CZ2 CZ3 CH2 N CA C O CB CG SE CE "
+                         "N CA C O CB OG1 CG2 N CA C O CB CG CD OE1 OE2 N "
+                         "CA C O CB OG1 CG2 N CA C O CB CG CD1 CD2 N CA C "
+                         "O CB CG CD1 CD2 N CA C O CB CG1 CG2 N CA C O CB "
+                         "CG CD OE1 NE2 N CA C O CB CG OD1 ND2 N CA C O CB "
+                         "N CA C O CB CG OD1 ND2 N CA C O CB CG CD N CA C "
+                         "O CB CG OD1 OD2 N CA C O CB SG N CA C O CB CG CD "
+                         "CE NZ N CA C O CB OG1 CG2 N CA C O CB CG1 CG2 "
+                         "CD1 N CA C O CB CG CD1 CD2 N CA C O CB CG CD CE "
+                         "NZ N CA C O CB N CA C O CB CG CD1 CD2 N CA C O N "
+                         "CA C O CB CG CD N CA C O N CA C O CB N CA C O CB "
+                         "OG1 CG2 N CA C O CB CG CD1 CD2 N CA C O CB CG CD "
+                         "OE1 OE2 N CA C O CB CG CD OE1 OE2 N CA C O CB CG "
+                         "SE CE N CA C O CB CG SE CE N CA C O CB OG1 CG2 N "
+                         "CA C O CB N CA C O CB SG N CA C O CB CG CD OE1 "
+                         "NE2 N CA C O OXT O O O O O O O O O O O O O O O O "
+                         "O O O O O O O O O O O O O O O O O O O O O O O O "
+                         "O O O O O O O O O O O O O O O O O O O O O O O O "
+                         "O O O O O O O O O O O O O O O O O O O O O O O O")
+
+
 
 # -------------------------------------------------------------
 
