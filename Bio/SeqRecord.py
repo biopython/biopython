@@ -821,10 +821,11 @@ class SeqRecord(object):
                                "the other SeqRecord being added!")
         #Assume it is a string or a Seq.
         #Note can't transfer any per-letter-annotations
+        offset = len(other)
         return SeqRecord(other + self.seq,
                          id = self.id, name = self.name,
                          description = self.description,
-                         features = self.features[:],
+                         features = [f._shift(offset) for f in self.features],
                          annotations = self.annotations.copy(),
                          dbxrefs = self.dbxrefs[:])
 

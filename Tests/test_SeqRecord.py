@@ -125,7 +125,7 @@ class SeqRecordMethods(unittest.TestCase):
     def test_add_seq(self):
         """Simple addition of Seq or string"""
         for other in [Seq("BIO"), "BIO"] :
-            rec = self.record + other
+            rec = self.record + other # will use SeqRecord's __add__ method
             self.assertEqual(len(rec), 26+3)
             self.assertEqual(str(rec.seq), str(self.record.seq)+"BIO")
             self.assertEqual(rec.id, "TestID")
@@ -135,11 +135,14 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(rec.annotations, {"k":"v"})
             self.assertEqual(rec.letter_annotations, {})
             self.assertEqual(len(rec.features), len(self.record.features))
+            self.assertEqual(rec.features[0].type, "source")
+            self.assertEqual(rec.features[0].location.nofuzzy_start, 0)
+            self.assertEqual(rec.features[0].location.nofuzzy_end, 26) #not +3
 
     def test_add_seq_left(self):
         """Simple left addition of Seq or string"""
         for other in [Seq("BIO"), "BIO"] :
-            rec = other + self.record
+            rec = other + self.record # will use SeqRecord's __radd__ method
             self.assertEqual(len(rec), 26+3)
             self.assertEqual(str(rec.seq), "BIO"+str(self.record.seq))
             self.assertEqual(rec.id, "TestID")
@@ -149,7 +152,10 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(rec.annotations, {"k":"v"})
             self.assertEqual(rec.letter_annotations, {})
             self.assertEqual(len(rec.features), len(self.record.features))
-
+            self.assertEqual(rec.features[0].type, "source")
+            self.assertEqual(rec.features[0].location.nofuzzy_start, 3)
+            self.assertEqual(rec.features[0].location.nofuzzy_end, 26+3)
+            
     def test_slice_add_simple(self):
         """Simple slice and add"""
         for cut in range(27) :
