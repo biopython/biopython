@@ -12,7 +12,8 @@ import unittest
 from Bio.Alphabet import generic_dna, generic_rna, generic_protein
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import SeqFeature, FeatureLocation
+from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
+from Bio.SeqFeature import WithinPosition, BeforePosition, AfterPosition, OneOfPosition
 
 class SeqRecordCreation(unittest.TestCase):
     """Test basic creation of SeqRecords."""
@@ -62,9 +63,10 @@ class SeqRecordMethods(unittest.TestCase):
     """Test SeqRecord methods."""
 
     def setUp(self) :
-        f1 = SeqFeature(FeatureLocation(0,10))
-        f2 = SeqFeature(FeatureLocation(12,22))
-        f3 = SeqFeature(FeatureLocation(16,26))
+        f1 = SeqFeature(FeatureLocation(0,ExactPosition(10)))
+        f2 = SeqFeature(FeatureLocation(WithinPosition(12,3),BeforePosition(22)))
+        f3 = SeqFeature(FeatureLocation(AfterPosition(16),
+                                        OneOfPosition([ExactPosition(25),AfterPosition(26)])))
         self.record = SeqRecord(Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),
                                 id="TestID", name="TestName", description="TestDescr",
                                 dbxrefs=["TestXRef"], annotations={"k":"v"},

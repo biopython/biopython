@@ -33,9 +33,10 @@ o FeatureLocation - Specify the start and end location of a feature.
 
 o ExactPosition - Specify the position as being exact.
 o WithinPosition - Specify a position occuring within some range.
-o BetweenPosition - Specify a position occuring between a range.
+o BetweenPosition - Specify a position occuring between a range (OBSOLETE?).
 o BeforePosition - Specify the position as being found before some base.
 o AfterPosition - Specify the position as being found after some base.
+o OneOfPosition - Specify a position where the location can be multiple positions.
 """
 
 from Bio.Seq import MutableSeq, reverse_complement
@@ -419,7 +420,7 @@ class WithinPosition(AbstractPosition):
         return "(%s.%s)" % (self.position, self.position + self.extension)
 
 class BetweenPosition(AbstractPosition):
-    """Specify the position of a boundary between two coordinates.
+    """Specify the position of a boundary between two coordinates (OBSOLETE?).
 
     Arguments:
     o position - The start position of the boundary.
@@ -532,6 +533,10 @@ class OneOfPosition(AbstractPosition):
         # replace the last comma with the closing parenthesis
         out = out[:-1] + ")"
         return out
+
+    def _shift(self, offset):
+        return self.__class__([position_choice._shift(offset) \
+                               for position_choice in self.position_choices])
 
 class PositionGap(object):
     """Simple class to hold information about a gap between positions.
