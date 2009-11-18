@@ -296,6 +296,104 @@ class PDBParseTest(unittest.TestCase):
                     # Point mutation -- check residue names
                     self.assertEquals(residue.disordered_get_id_list(), res[2])
 
+    def test_details(self):
+        """Verify details of the parsed example PDB file."""
+        structure = self.structure
+        self.assertEqual(len(structure), 2)
+
+        #First model
+        model = structure[0]
+        self.assertEqual(model.id, 0)
+        self.assertEqual(model.level, "M")
+        self.assertEqual(len(model), 1)
+        chain = model["A"]
+        self.assertEqual(chain.id, "A")
+        self.assertEqual(chain.level, "C")
+        self.assertEqual(len(chain), 1)
+        self.assertEqual(" ".join(residue.resname for residue in chain), "PCA")
+        self.assertEqual(" ".join(atom.name for atom in chain.get_atoms()),
+                         "N CA CB CG CD OE C O")
+        self.assertEqual(" ".join(atom.element for atom in chain.get_atoms()),
+                         "N C C C C O C O")
+        #Second model
+        model = structure[1]
+        self.assertEqual(model.id, 1)
+        self.assertEqual(model.level, "M")
+        self.assertEqual(len(model), 3)
+        chain = model["A"]
+        self.assertEqual(chain.id, "A")
+        self.assertEqual(chain.level, "C")
+        self.assertEqual(len(chain), 86)
+        self.assertEqual(" ".join(residue.resname for residue in chain),
+                         "CYS ARG CYS GLY SER GLN GLY GLY GLY SER THR CYS "
+                         "PRO GLY LEU ARG CYS CYS SER ILE TRP GLY TRP CYS "
+                         "GLY ASP SER GLU PRO TYR CYS GLY ARG THR CYS GLU "
+                         "ASN LYS CYS TRP SER GLY GLU ARG SER ASP HIS ARG "
+                         "CYS GLY ALA ALA VAL GLY ASN PRO PRO CYS GLY GLN "
+                         "ASP ARG CYS CYS SER VAL HIS GLY TRP CYS GLY GLY "
+                         "GLY ASN ASP TYR CYS SER GLY GLY ASN CYS GLN TYR "
+                         "ARG CYS")
+        self.assertEqual(" ".join(atom.name for atom in chain.get_atoms()),
+                         "C N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB SG "
+                         "N CA C O N CA C O CB OG N CA C O CB CG CD OE1 NE2 "
+                         "N CA C O N CA C O N CA C O N CA C O CB OG N CA C "
+                         "O CB OG1 CG2 N CA C O CB SG N CA C O CB CG CD N "
+                         "CA C O N CA C O CB CG CD1 CD2 N CA C O CB CG CD NE "
+                         "CZ NH1 NH2 N CA C O CB SG N CA C O CB SG N CA C O "
+                         "CB OG N CA C O CB CG1 CG2 CD1 N CA C O CB CG CD1 "
+                         "CD2 NE1 CE2 CE3 CZ2 CZ3 CH2 N CA C O N CA C O CB "
+                         "CG CD1 CD2 NE1 CE2 CE3 CZ2 CZ3 CH2 N CA C O CB SG "
+                         "N CA C O N CA C O CB CG OD1 OD2 N CA C O CB OG N "
+                         "CA C O CB CG CD OE1 OE2 N CA C O CB CG CD N CA C O "
+                         "CB CG CD1 CD2 CE1 CE2 CZ OH N CA C O CB SG N CA C "
+                         "O N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB OG1 "
+                         "CG2 N CA C O CB SG N CA C O CB CG CD OE1 OE2 N CA "
+                         "C O CB CG OD1 ND2 N CA C O CB CG CD CE NZ N CA C O "
+                         "CB SG N CA C O CB CG CD1 CD2 NE1 CE2 CE3 CZ2 CZ3 "
+                         "CH2 N CA C O CB OG N CA C O N CA C O CB CG CD OE1 "
+                         "OE2 N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB OG "
+                         "N CA C O CB CG OD1 OD2 N CA C O CB CG ND1 CD2 CE1 "
+                         "NE2 N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB SG "
+                         "N CA C O N CA C O CB N CA C O CB N CA C O CB CG1 "
+                         "CG2 N CA C O N CA C O CB CG OD1 ND2 N CA C O CB CG "
+                         "CD N CA C O CB CG CD N CA C O CB SG N CA C O N CA "
+                         "C O CB CG CD OE1 NE2 N CA C O CB CG OD1 OD2 N CA C "
+                         "O CB CG CD NE CZ NH1 NH2 N CA C O CB SG N CA C O "
+                         "CB SG N CA C O CB OG N CA C O CB CG1 CG2 N CA C O "
+                         "CB CG ND1 CD2 CE1 NE2 N CA C O N CA C O CB CG CD1 "
+                         "CD2 NE1 CE2 CE3 CZ2 CZ3 CH2 N CA C O CB SG N CA C "
+                         "O N CA C O N CA C O N CA C O CB CG OD1 ND2 N CA C O "
+                         "CB CG OD1 OD2 N CA C O CB CG CD1 CD2 CE1 CE2 CZ OH "
+                         "N CA C O CB SG N CA C O CB OG N CA C O N CA C O N "
+                         "CA C O CB CG OD1 ND2 N CA C O CB SG N CA C O CB CG "
+                         "CD OE1 NE2 N CA C O CB CG CD1 CD2 CE1 CE2 CZ OH N "
+                         "CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB SG")
+        self.assertEqual(" ".join(atom.element for atom in chain.get_atoms()),
+                         "C N C C O C C C N C N N N C C O C S N C C O N C C O "
+                         "C O N C C O C C C O N N C C O N C C O N C C O N C C "
+                         "O C O N C C O C O C N C C O C S N C C O C C C N C C "
+                         "O N C C O C C C C N C C O C C C N C N N N C C O C S "
+                         "N C C O C S N C C O C O N C C O C C C C N C C O C C "
+                         "C C N C C C C C N C C O N C C O C C C C N C C C C C "
+                         "N C C O C S N C C O N C C O C C O O N C C O C O N C "
+                         "C O C C C O O N C C O C C C N C C O C C C C C C C O "
+                         "N C C O C S N C C O N C C O C C C N C N N N C C O C "
+                         "O C N C C O C S N C C O C C C O O N C C O C C O N N "
+                         "C C O C C C C N N C C O C S N C C O C C C C N C C C "
+                         "C C N C C O C O N C C O N C C O C C C O O N C C O C "
+                         "C C N C N N N C C O C O N C C O C C O O N C C O C C "
+                         "N C C N N C C O C C C N C N N N C C O C S N C C O N "
+                         "C C O C N C C O C N C C O C C C N C C O N C C O C C "
+                         "O N N C C O C C C N C C O C C C N C C O C S N C C O "
+                         "N C C O C C C O N N C C O C C O O N C C O C C C N C "
+                         "N N N C C O C S N C C O C S N C C O C O N C C O C C "
+                         "C N C C O C C N C C N N C C O N C C O C C C C N C C "
+                         "C C C N C C O C S N C C O N C C O N C C O N C C O C "
+                         "C O N N C C O C C O O N C C O C C C C C C C O N C C "
+                         "O C S N C C O C O N C C O N C C O N C C O C C O N N "
+                         "C C O C S N C C O C C C O N N C C O C C C C C C C O "
+                         "N C C O C C C N C N N N C C O C S")
+
 class Exposure(unittest.TestCase):
     "Testing Bio.PDB.HSExposure."
     def setUp(self):
@@ -447,7 +545,34 @@ class AssortedMisc(unittest.TestCase):
                          "O O O O O O O O O O O O O O O O O O O O O O O O "
                          "O O O O O O O O O O O O O O O O O O O O O O O O "
                          "O O O O O O O O O O O O O O O O O O O O O O O O")
-
+        self.assertEqual(" ".join(atom.element for atom in chain.get_atoms()),
+                         "N C C O C C SE C N C C O C C O O N C C O C C C C "
+                         "N C C O C C C N C N N N C C O C C C O N N C C O "
+                         "N C C O C C C N C C O C C C C N N C C O C C C O "
+                         "O N C C O C C C N C C O C C C C C C C N C C O C "
+                         "C C N C N N N C C O C C O O N C C O C C C C C C "
+                         "C O N C C O C C C N C C O C C O O N C C O C C C "
+                         "N C N N N C C O C C C C C C C N C C O C C C C C "
+                         "C C O N C C O C C C C N N C C O C O C N C C O C "
+                         "C C C N C C O C C C N C N N N C C O C N C C O C "
+                         "C C O O N C C O C C C O N N C C O C N C C O C O "
+                         "N C C O C C C O N N C C O C C C O O N C C O C C "
+                         "C N C C O C C C C N N C C O C C O N N C C O C C "
+                         "C C N C C C C C N C C O C C SE C N C C O C O C N "
+                         "C C O C C C O O N C C O C O C N C C O C C C C N "
+                         "C C O C C C C N C C O C C C N C C O C C C O N N "
+                         "C C O C C O N N C C O C N C C O C C O N N C C O "
+                         "C C C N C C O C C O O N C C O C S N C C O C C C "
+                         "C N N C C O C O C N C C O C C C C N C C O C C C "
+                         "C N C C O C C C C N N C C O C N C C O C C C C N "
+                         "C C O N C C O C C C N C C O N C C O C N C C O C "
+                         "O C N C C O C C C C N C C O C C C O O N C C O C "
+                         "C C O O N C C O C C SE C N C C O C C SE C N C C "
+                         "O C O C N C C O C N C C O C S N C C O C C C O N "
+                         "N C C O O O O O O O O O O O O O O O O O O O O O "
+                         "O O O O O O O O O O O O O O O O O O O O O O O O "
+                         "O O O O O O O O O O O O O O O O O O O O O O O O "
+                         "O O O O O O O O O O O O O O O O O O O O O")
 
 
 # -------------------------------------------------------------
