@@ -1,0 +1,900 @@
+<!--
+# $Id: pmc-1.dtd,v 1.136 2004/12/08 23:38:35 merker Exp $
+-->
+<!-- PMC DTD Version History:
+
+   2000-08-09
+           Initial Draft. This is derived from the Keton Full Text DTD, which itself is based on the CJS 2.1 DTD.
+
+All changes since August 2000 are documented in pmc-1-dtdnotes.txt in this directory.
+
+-->
+<!--    Public document type definition. Typical invocation:
+<!DOCTYPE art PUBLIC "-//PMC//DTD FULL LENGTH ARTICLE//EN" []>
+-->
+
+<!-- Character Entities  -->
+<!ENTITY % PMCEntities SYSTEM	"pmc.ent">
+<!ENTITY % ISO8879ent SYSTEM	"iso-8879-1986.ent">
+<!ENTITY % ISO9573ent SYSTEM	"iso-9573-13-1991.ent">
+
+%PMCEntities; %ISO8879ent; %ISO9573ent;
+
+<!-- Internal Entities  -->
+<!ENTITY % data "#PCDATA|entitygrp|b|it|sc|ul|sup|sub|email|fnr|exlnk|break|mml:math">
+
+<!ENTITY % id-att
+	"id	     ID         #IMPLIED">
+
+<!ENTITY % id-att-required
+	"id	     ID         #IMPLIED">
+
+<!ENTITY % figr-atts
+	"fid 		IDREF 		#REQUIRED
+	 to  		IDREF 		#IMPLIED">
+
+<!ENTITY % tblr-atts
+	"tid 		IDREF 		#REQUIRED
+	 to  		IDREF 		#IMPLIED">
+
+<!ENTITY % abbr-atts
+	"bid 		IDREF 		#REQUIRED
+	 to  		IDREF 		#IMPLIED">
+
+<!ENTITY % rid-atts
+	"rid     IDREF       #REQUIRED">
+
+<!ENTITY % fnr-atts
+	"rid     IDREF       #REQUIRED
+	 to      IDREF       #IMPLIED">
+	 
+<!ENTITY % insr-atts
+	"iid     IDREF       #IMPLIED">
+
+<!ENTITY %	supplr-atts
+	"sid     CDATA       #REQUIRED
+	 to      CDATA       #IMPLIED">
+
+<!ENTITY %	secr-atts
+	"sid     IDREF       #REQUIRED">
+
+
+<!-- Associated DTD for Supplemental Data files: Supplemental data information can
+be included in the xml file (see the element "suppl"). Files created to this DTD are 
+used for the display of supplemental data on the PMC site -->
+<!ENTITY % supp_data_dtd SYSTEM "sdata.dtd">
+%supp_data_dtd;
+
+
+
+
+<!-- **************** Article level elements **************** -->
+<!ELEMENT art (ui*, ji, fm, bdy?, bm?, response*, sdata?)>
+<!ATTLIST art
+	type (commentary | correction | editorial | letter | obituary | 
+	      product_review | retraction | reply | review_art | 
+			series | admin | advert | cover | toc | index | filler |
+			poster) #IMPLIED
+	language (eng|spa|fre|ger|rus|jpn|ita) #IMPLIED>
+	
+<!-- type attribute not needed for regular articles -->
+
+<!-- language attribute	
+	language attribute not needed for articles in English
+	eng	English
+	spa	Spanish
+	fre	French
+	ger	German
+	rus	Russian
+	jpn	Japanese
+	ita	Italian -->
+	
+	
+	
+
+<!-- Unique Identifier: Optional element, used by rendering code for generating links -->
+<!ELEMENT ui (#PCDATA)>
+<!ATTLIST ui
+	type (aid | artnum | doi | pmid | pmc | pii | other) #IMPLIED >
+<!-- ui types
+	aid	    - article id (publisher's id)
+	artnum   - article number (publisher's number)
+	doi	   - digital object identifier (see www.doi.org)
+	pmid   - pubmed id (see www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=PubMed)
+	pmc - pubmed central id
+	-->
+
+<!-- Journal Identifier: Required element, used for identification of journal domain. 
+This is generally a short abbreviation of the journal title -->
+<!ELEMENT ji (#PCDATA)>
+
+<!-- Front matter -->
+<!ELEMENT fm (doctopic*, dochead?, docsubj*, supptitle?, sertitle*, sertext?, addart?, bibl, 
+product*, suppmat?, history?, com?, con?, cor*, cpyrt?, relart*, shortabs?, abs?, kwdg?)>
+
+<!-- Body -->
+<!ELEMENT bdy (p*, (sec|fig|tbl)*)>
+
+<!-- Back matter -->
+<!ELEMENT bm ( (ack?, glossary?, notes*, (appm |refgrp)*, fn*) | sec) > 
+
+<!-- Response to the Article -->
+<!ELEMENT response (fm?, bdy?, bm?)>
+<!ATTLIST response
+	%id-att; >
+
+
+
+
+<!-- **************** Front Matter elements **************** -->
+<!-- Document topic -->
+<!ELEMENT doctopic (%data;)*>
+
+<!-- Document heading or type -->
+<!ELEMENT dochead (%data;)*>
+
+<!-- Document subject -->
+<!ELEMENT docsubj (%data;)*>
+
+<!-- Supplement title -->
+<!ELEMENT supptitle (%data;)*>
+
+<!-- Series title -->
+<!ELEMENT sertitle (%data;)*>
+
+<!-- Series text - descriptitve text for a series of articles -->
+<!ELEMENT sertext (p*) >
+
+<!-- Addendum and/or correction information: This element is used in Erratum articles
+to identify the article that is being corrected -->
+<!ELEMENT addart EMPTY>
+<!ATTLIST addart
+	vol CDATA #IMPLIED
+	pg CDATA #REQUIRED
+	date CDATA #IMPLIED
+	ui CDATA #IMPLIED
+	pmid CDATA #IMPLIED>
+	
+	
+<!-- *************Bibliographic Information *******************-->
+<!--(the "bibl" element is shared between front matter and 
+references). Attributes to "bibl" are only used in the bibliography
+(B1, B2, etc.). They are not needed in the article (frontmatter) 
+information -->
+<!ELEMENT bibl (title?, edg?, (aug | insg)*, firstauaff?, ang?, source?, issn?, publisher?, 
+pubdate?, volume?, edition?, issue?, fpage?, lpage?, range?, stringrange?, exlnk?, inpress?, p*, xrefbib?)>
+<!ATTLIST bibl
+	%id-att;
+	no CDATA #IMPLIED >
+
+<!-- Title -->
+<!ELEMENT title (p, subtitle?)>
+<!ELEMENT subtitle (p)>
+
+<!-- ****** Author and Editor Group ******* -->
+<!-- Editor Group -->
+<!ELEMENT edg ((collab | au | etal)*, ins?)>
+<!ATTLIST edg
+	type CDATA #IMPLIED>
+	
+<!-- ******Author Group****** -->
+<!ELEMENT aug (collab | au | etal)*>
+
+<!-- Author Elements -->
+<!ELEMENT au (snm, (mi |mnm)?, fnm?, suf?, degree*, roles*, (insr | anr)*, email*, aucomment?)>
+<!ATTLIST au
+	%id-att;
+	ca (no | yes) #IMPLIED
+	ce (no | yes) #IMPLIED
+	da (no | yes) #IMPLIED
+>
+<!-- ca=Corresponding Author (set to 'yes' if they are)
+	  ce=Contributed equally (set to 'yes' if they did)
+	  da=deceased author
+ -->
+
+
+<!-- Collaborative author: used for groups of authors credited under one name -->
+<!ELEMENT collab (#PCDATA | insr | anr | email | entitygrp | it | sc | sup | sub | b | break | exlnk)*>
+<!ATTLIST collab
+	type	(on_behalf) #IMPLIED
+>
+<!-- use type=on_behalf when a group is not the author, but individual authors
+      are writing "on behalf" of an organization-->
+<!-- Surname -->	
+<!ELEMENT snm (%data;)*>
+
+<!-- Middle Initial(s) -->
+<!ELEMENT mi (%data;)*>
+
+<!-- Middle Name -->
+<!ELEMENT mnm (%data;)*>
+
+<!-- First Name -->
+<!ELEMENT fnm (%data;)*>
+
+<!-- Suffix (ie, Jr. III, 3rd) -->
+<!ELEMENT suf (#PCDATA | sup)*>
+
+<!-- Degree(s) -->
+<!ELEMENT degree (%data;)*>
+
+<!-- Roles (author's role/title) -->
+<!ELEMENT roles (%data;)*>
+
+<!-- Email address -->
+<!ELEMENT email (%data;)*>
+
+<!-- ET AL -->
+<!ELEMENT etal EMPTY>
+
+<!-- Author Comment: used for extra text associated with an author -->
+<!ELEMENT aucomment (#PCDATA | insr | anr | it | b | sc | sup | sub)* >
+
+
+<!-- ******* Institutions *************-->
+<!-- Institution Group -->
+<!ELEMENT insg (ins+)>
+
+<!-- Institution -->
+<!ELEMENT ins (p)>
+<!ATTLIST ins
+	%id-att;>
+
+<!-- First Author's Affiliation (used for PubMed affiliation) -->
+<!ELEMENT firstauaff (%data;)*>
+
+<!-- Author Notes: Footnotes to authors are collected in the Author note group -->
+<!ELEMENT ang (fn+)>
+
+<!-- Source: Journal or Book title -->
+<!ELEMENT source (#PCDATA | b | it | sc | sup | sub | ms | entitygrp | exlnk)*>
+
+<!-- ISSN -->
+<!ELEMENT issn (%data;)*>
+
+<!-- Publisher -->
+<!ELEMENT publisher (name?, location?)>
+<!ELEMENT name (%data;)*>
+<!ELEMENT location (%data;)*>
+
+<!-- Publication date (year): this is the publication date of the issue. Can be any string
+ (ie "January, 2001" "Fall 2001" "March 11, 2001"  -->
+<!ELEMENT pubdate (#PCDATA)>
+
+<!-- Volume -->
+<!ELEMENT volume (%data;)*>
+
+<!-- Edition -->
+<!ELEMENT edition (%data;)*>
+
+<!-- Issue -->
+<!ELEMENT issue (#PCDATA)>
+
+<!-- First page -->
+<!ELEMENT fpage (#PCDATA)>
+<!ATTLIST fpage
+		seq CDATA #IMPLIED >
+<!-- seq attribute used for sequence number or letter for continuous makeup journals with
+more than one article starting on the same page -->
+
+<!-- Last page -->
+<!ELEMENT lpage (#PCDATA)>
+
+<!-- Page range: Specifies non-continuous page ranges -->
+<!-- PAGE RANGE -->
+<!ELEMENT range        (subrange+) >
+<!ELEMENT subrange     EMPTY       >
+<!ATTLIST subrange
+	begin		CDATA		#IMPLIED
+	end		CDATA		#IMPLIED
+	single	CDATA		#IMPLIED
+	>
+
+<!-- String range: Page range as a string -->
+<!ELEMENT stringrange	(#PCDATA)>
+
+<!-- In press: used only in the refgrp, not in the fm -->
+<!ELEMENT inpress EMPTY>
+
+<!-- Bibliographic Links -->
+<!ELEMENT xrefbib ((pubidlist | pubid), pubid*)>
+<!-- PubId group. You can use an identifier, or a list of alternate ids 
+for the same article. This is taken from the NCBI publisher.dtd -->
+<!ELEMENT pubidlist (pubid+)>
+<!ELEMENT pubid (#PCDATA)>
+<!ATTLIST pubid
+	idtype (pubmed | medline | doi | pii | pmcid | pmcpid | pmpid) #REQUIRED>
+
+
+<!-- product is used to supply information about products (books, software, hardware, 
+    etc. being reviewed--> 
+<!ELEMENT product (%data;|bibl)*>
+<!ATTLIST product
+	product-type CDATA	#IMPLIED>
+<!-- product-types can be: book, software, hardware, website -->
+
+<!-- suppmat is the publisher-supplied toc link for supplemental material to an article--> 
+<!ELEMENT suppmat (%data;)*>
+
+
+<!-- Document History -->
+<!ELEMENT history (rec | revreq | revrec | acc | pub | epub)*>
+
+<!-- Date received -->
+<!ELEMENT rec (date)>
+
+<!-- Date revisions requested -->
+<!ELEMENT revreq (date)>
+
+<!-- Date revisions received -->
+<!ELEMENT revrec (date)>
+
+<!-- Date accepted -->
+<!ELEMENT acc (date)>
+
+<!-- Date published: This is the article/issue publication date -->
+<!ELEMENT pub (date)>
+
+<!-- Date electronic version of the article was published -->
+<!ELEMENT epub (date)>
+
+
+<!-- Date (day / month / year) -->
+<!-- These should ALWAYS be numeric values!!!! -->
+<!ELEMENT date (day?, month?, year)>
+<!ELEMENT day (#PCDATA)>
+<!ELEMENT month (#PCDATA)>
+<!ELEMENT year (#PCDATA)>
+
+
+<!-- Communicated by and Contributed by Information -->
+<!-- Communicated by -->
+<!ELEMENT com (%data;)*>
+
+<!-- Contributed by -->
+<!ELEMENT con (%data;)*>
+
+<!-- Correspondence information -->
+<!ELEMENT cor (%data;)*>
+
+
+<!-- Copyright Information -->
+<!ELEMENT cpyrt (#PCDATA | date | cpyrtnme | cpyrtclr | exlnk | it)*>
+
+<!-- Copyright holder's name -->
+<!ELEMENT cpyrtnme (collab | au)+>
+
+<!-- Copyright clearance organization -->
+<!ELEMENT cpyrtclr (collab | au)+>
+
+
+<!-- frontmatter text links to related articles -->
+<!ELEMENT relart (p | (linktype, ui?, title?, aug*, volume, issue?, fpage, lpage?, pub?))>
+<!ATTLIST relart
+	type CDATA #IMPLIED>
+
+<!ELEMENT linktype (#PCDATA)>
+	
+	
+<!-- Short abstract -->
+<!ELEMENT shortabs (sec+)>
+
+
+<!-- Keywords -->
+<!ELEMENT kwdg (kwd+)>
+<!ELEMENT kwd (#PCDATA | b | it | sc | sup | sub | entitygrp)*>
+
+
+<!-- Abstract -->
+<!ELEMENT abs (sec+)>
+
+
+<!-- ************** Section Elements ********************-->
+<!-- Section -->
+<!-- Note: Tables and figures do NOT occur inside paragraph tags!! -->
+<!ELEMENT sec (st?, (p | sec | tbl | fig | suppl | fn | graphic | refgrp)*)>
+<!ATTLIST sec
+		type      CDATA      #IMPLIED
+	   displevel CDATA      #IMPLIED
+	   %id-att;>
+<!-- Note: Level 1 heads may be assigned a type attribute if they are 
+of a certain content type (for indexing purposes). A section that contains 
+content of more than one type will have the type IDs combined. 
+(ie, "Materials and Methods" would be type="3|4") -->
+<!-- 
+             type ID	        content type
+     
+		1		Introduction/Synopsis
+		3		Materials
+		4		Methods/Procedures
+		5		Patients/Participants/Subjects
+		6		Cases/Case Reports
+		7		Results/Statement of Findings
+		8		Discussion/Interpretation
+		9		Conclusions/Comment
+		10		Appendix
+		11		Acknowledgments
+		12		Footnotes/Author Footnotes
+		13		References
+-->
+<!-- Content in Appendix [<bm><appm><app>], Abstract [<fm>(<abs>|<shortabs>)], 
+Acknowledgments [<bm><ack>], Footnotes [<bm><fn>] or Author Footnotes 
+[<fm><bibl><ang><an>], and References [<bm><refgrp>] can be recognized by its 
+identifying element if it is to be indexed. It does not need to be tagged with 
+a type attribute. -->
+
+<!-- Section Title -->
+<!ELEMENT st (p)>
+
+<!-- Paragraph -->
+<!ELEMENT p (#PCDATA | it | b | aff | abbr | fnr | ms | tblr | arrayr | hr | tblfnr | 
+figr | appr | supplr | fdr | sc | ul | sub | sup | boxtext | qd | l | f | fd | 
+deflist | math | exlnk | email | graphic | entitygrp | font | secr | bibl | 
+break | array | refgrp)*>
+
+<!-- Superscript -->
+<!ELEMENT sup (#PCDATA | b | it | sc | ul | sup | sub | tblfnr | figr | tblr | arrayr | 
+entitygrp | math | ms | exlnk | graphic | f | font)*>
+
+<!-- Subscript -->
+<!ELEMENT sub (#PCDATA | b | it | sc | ul | sup | sub | tblfnr | figr | tblr | arrayr | 
+entitygrp | math | ms | exlnk | graphic | f | font)*>
+
+<!-- Boldface -->
+<!ELEMENT b (#PCDATA | sup | sub | it | ul | sc | abbr | tblfnr | figr | tblr | arrayr | fnr |
+entitygrp | exlnk | fdr | ms| break | graphic | font | email | hr | math)*>
+
+<!-- Italic -->
+<!ELEMENT it (#PCDATA | sup | sub | b | ul | sc | abbr | tblfnr | figr | tblr | arrayr | fnr |
+entitygrp | appr | exlnk | fdr | ms | math| break | graphic | font | email)*>
+
+<!-- Small Cap -->
+<!ELEMENT sc (#PCDATA | sup | sub | b | it | ul | tblfnr | figr | tblr | arrayr | 
+entitygrp | exlnk | fdr | ms| break | graphic | font)*>
+
+<!-- Monospace text (typewriter text) -->
+<!ELEMENT ms (#PCDATA | sup | sub | b | it | ul | sc | tblfnr | figr | 
+tblr | arrayr | entitygrp | exlnk | fdr | font | break | math | graphic)*>
+
+<!-- Underline -->
+<!ELEMENT ul (#PCDATA | ul | sup | sub | b | it | sc | tblfnr | figr | 
+tblr | arrayr | entitygrp | exlnk | fdr | math | ms| break | graphic | font)*>
+<!ATTLIST ul 
+		style CDATA #IMPLIED>
+
+
+<!-- Affiliation -->
+<!ELEMENT aff (%data;)*>
+<!ATTLIST aff
+	%id-att;>
+
+
+<!-- Grouped (combined) entities: used for indicating that two entities should
+be combined for one character -->
+<!ELEMENT entitygrp (#PCDATA)>
+
+<!-- Boxtext -->
+<!ELEMENT boxtext (st?, p*, sec*)>
+<!ATTLIST boxtext
+	style CDATA #IMPLIED
+	color CDATA #IMPLIED>
+
+<!-- Font - font should be use only to modify text for purposes of distinguishing 
+data and not for stylistic or display purposes -->
+<!ELEMENT font (%data;)* >
+<!ATTLIST font
+		color CDATA #IMPLIED
+		style CDATA #IMPLIED
+		face  CDATA #IMPLIED>
+
+<!-- Displayed Quotes -->
+<!ELEMENT qd (p+)>
+
+<!-- List -->
+<!ELEMENT l (li+)>
+<!ATTLIST l
+	type CDATA #IMPLIED>
+<!-- LIST TYPES 
+	1 - ordered (numbered) list
+	2 - unordered (bulleted) list
+	3 - ordered (alpha - lowercase) list
+	4 - ordered (alpha - uppercase) list
+	5 - ordered (roman - lowercase) list
+	6 - ordered (roman - uppercase) list
+	7 - unlabeled (neither numbers nor bullets)
+-->
+
+<!-- list item -->
+<!ELEMENT li (p | tbl | fig)*>
+<!ATTLIST li
+	id CDATA #IMPLIED>
+	
+<!-- *********** Math Elements ************  -->
+	
+<!-- Inline Formula -->
+<!ELEMENT f (#PCDATA | graphic | math | entitygrp)*>
+
+<!-- Displayed Formula -->
+<!ELEMENT fd (#PCDATA | graphic | math | entitygrp)*>
+<!ATTLIST fd
+	id	 CDATA  #IMPLIED
+	sid CDATA #IMPLIED
+	align CDATA #IMPLIED>
+	
+<!-- Math Equation 
+Moved NOTATION for Tex to sdata.dtd
+
+<!NOTATION tex PUBLIC
+              "+//ISBN 0-201-13448-9::Knuth//NOTATION The TeXbook//EN">
+<!NOTATION TEX PUBLIC
+              "+//ISBN 0-201-13448-9::Knuth//NOTATION The TeXbook//EN">-->
+<!ELEMENT math (%data;)*>
+<!ATTLIST math
+	mathtype NOTATION (tex|mathml) #IMPLIED
+	id CDATA #IMPLIED>
+
+<!NOTATION mathml PUBLIC
+              "-//W3C//DTD MathML 2.0//EN">
+
+
+
+<!-- ****************** Backmatter Elements ******************** -->
+<!-- Acknowledgements -->
+<!ELEMENT ack (sec+)>
+
+<!-- Glossary  Elements -->
+<!-- Glossary -->
+<!ELEMENT glossary (st?, deflist)>
+
+<!-- Definition list -->
+<!ELEMENT deflist ((term, dd)+)>
+
+<!-- Term -->
+<!ELEMENT term (p)>
+<!ATTLIST term
+	%id-att;>
+	
+<!-- Definition -->
+<!ELEMENT dd (p+)>
+<!ATTLIST dd
+	id CDATA #IMPLIED>
+	
+<!-- Notes at End of Article: Could be "Note in Proof" -->
+<!ELEMENT notes (p*, sec*)>
+
+<!-- ***************** Appendix Elements ***************** -->
+<!-- Appendix Matter -->
+<!ELEMENT appm (st?, p*, app+)>
+
+<!-- Appendix -->
+<!ELEMENT app (st?, p*, sec*)>
+<!ATTLIST app
+	%id-att;>
+	
+<!-- Reference Group -->
+<!ELEMENT refgrp (st?, p?, bibl+)>
+
+
+<!-- Footnote -->
+<!ELEMENT fn (p+)>
+<!ATTLIST fn
+	%id-att;>
+
+
+<!-- ************ Figure and Table Elements ***************** -->
+
+<!-- Table -->
+<!ELEMENT tbl (title?, caption?, (tblbdy | graphic)*, tblfn*)>
+<!ATTLIST tbl
+	%id-att-required;>
+<!-- id of table should begin with "T" (T1, TIV, T43) -->
+
+<!-- Array - an array is tabular material displayed inline -->
+<!ELEMENT array (title?, caption?, (tblbdy | graphic)*, tblfn*) >
+<!ATTLIST array
+	%id-att;>
+
+
+
+
+
+<!-- Table Body -->
+<!ELEMENT tblbdy (r+)>
+<!ATTLIST tblbdy
+	ra CDATA #IMPLIED
+	ca (left | center | middle |  right) #IMPLIED
+	cols CDATA #REQUIRED>
+<!-- attributes: ra, row alignment; ca, cell/column alignment; cols, no of columns -->
+	
+<!-- Table rows -->
+<!ELEMENT r (c*)>
+<!ATTLIST r
+	ra (top | center | middle | bottom) #IMPLIED >
+	
+<!-- Table cells -->
+<!--
+     hr - outputs a line!!
+     cspan - number of columns to span
+     rspan - number of rows to span
+     indent - specifies an indent level (currently only supports '1')
+     ca - column alignment
+-->
+<!ELEMENT c (hr | p*)>
+<!ATTLIST c
+	cspan CDATA #IMPLIED
+	rspan CDATA #IMPLIED
+	indent CDATA #IMPLIED
+	ca (left | center | right | decimal) #IMPLIED >
+	
+<!ELEMENT hr EMPTY>
+
+<!-- line break -->
+<!ELEMENT break EMPTY> 
+
+<!-- Table Footnote -->
+<!ELEMENT tblfn (p+)>
+<!ATTLIST tblfn
+	%id-att; >
+	
+	
+<!-- Caption (figure / table) -->
+<!--
+     Descriptive title for figure / table
+     - for figures, this should be the first sentence of the caption / text.
+     (this is used when rendering thumbnails ;-)
+-->
+<!ELEMENT caption (p+)>
+
+	
+<!-- Figure -->
+<!ELEMENT fig (title?, caption?, text?, (graphic | media)*)>
+<!ATTLIST fig
+	%id-att-required; >
+<!-- id of figure should begin with "F" (F1, F2, FIII) -->
+	
+<!-- Main text / caption for the figure: this includes the first sentence
+that was pulled out for the "caption" element -->
+<!ELEMENT text (p+)>
+
+<!ELEMENT graphic EMPTY>
+<!-- NOTE: Inside a fig tag, do NOT include the extension, outside a fig 
+tag (inline image) include the extension -->
+<!ATTLIST graphic
+	file CDATA #REQUIRED
+	%id-att; 
+	hint.layout (single | double | landscape) #IMPLIED
+	hint.detail CDATA #IMPLIED >
+	
+<!ELEMENT media (graphic?)>
+<!ATTLIST media
+	file CDATA #REQUIRED
+	mime-subtype CDATA #IMPLIED >
+	
+	
+<!-- Supplementary Material -->
+<!ELEMENT suppl (anchor*, ((title?, caption?, text?, file*) | exlnk))>
+<!ATTLIST suppl
+	%id-att; >
+	
+<!ELEMENT anchor (%data;)*>
+<!ATTLIST anchor
+	type (fig | tab | toc) #REQUIRED
+	id CDATA #IMPLIED
+	part CDATA #IMPLIED >	
+<!-- ID for the supplementary material, ie. SD1, SD2, SD3 -->
+
+<!ELEMENT file (sec | p)*>
+<!ATTLIST file
+	name CDATA #IMPLIED
+	filetype CDATA #IMPLIED
+ >
+
+<!--
+	filetype NOTATION (asf | au | avi | csv | cyto | exe | fas | gz | hqz | hlp | idl | bmp | dat | doc | gif | html | 
+	jar | jpeg | jpg | map | mdb | midi | mm | mov | mp3 | mpeg | p01 | pdf | pl | pop | ppt | ps | qtx | raw | ra | rm | rtf | 
+	rv | sgml | swf | tar | tex | tiff | txt | wav | wpd | xls | zip |
+	
+ASF | AU | AVI | CSV | CYTO | EXE | FAS | GZ | HQZ | HLP | IDL | BMP | DAT | DOC | GIF | HTML | 
+	JAR | JPEG | JPG | MAP | MDB | MIDI | MM | MOV | MP3 | MPEG | P01 | PDF | PL | POP | PPT | PS | QTX | RAW | RA | RM | RTF | 
+	RV | SGML | SWF | TAR | TEX | TIFF | TXT | WAV | WPD | XLS | ZIP 	
+	
+	) #IMPLIED
+-->
+	
+<!-- External links -->
+<!ELEMENT exlnk (%data;)*>
+<!-- ext. link (Medline, Genbank) -->
+<!ATTLIST exlnk
+	access CDATA #IMPLIED
+	type (article | company | doi | ec |emblalign| ftp | gen | genpept | geo | highwire | 
+	medline | pdb | pgr | pir | pmc | url | pirdb | sprot) #REQUIRED 
+	linktype CDATA #IMPLIED 
+	vol CDATA #IMPLIED
+	pg CDATA #IMPLIED 
+	valid_as_of  CDATA  #IMPLIED	>
+	
+<!-- linktype attributes 
+	correction		used in an article to link to its associated correction
+	retraction		used in an article to link to its associated retraction
+	commentary		used in an article to link to its associated commentary	
+	companion		used in an article to link to a companion (sibling) article
+	corrected.art	used in a correction to link to the article being corrected
+	retracted.art	used in a retraction to link to the article being retracted
+	comp2comment	used in a commentary to link to the article being commented upon
+	articleref		used to link to an article mentioned in text. no back link
+	-->
+	
+	
+<!-- EXLNK TYPES
+	article       link to a related article
+	company   supplier link
+	ec             enzyme nomenclature - see http://www.chem.qmw.ac.uk/iubmb/enzyme/
+	ftp            file transfer protocol
+	gen           GenBank
+	genpept
+	geo			Gene Expression Omnibus
+	highwire   highwire press intrajournal link
+	medline	    medline or pubmed id
+	pdb          protein data bank - see http://www.rcsb.org/pdb/
+	pgr		plant gene register  - see http://www.tarweed.com/pgr/
+	pir		Protein Information Resource - see http://pir.georgetown.edu
+	pirdb		Protein Information Resource - see http://pir.georgetown.edu
+	pmc		used to link between articles in PubMedCentral access is PMID
+	sprot		Swiss-Prot - see http://www.ebi.ac.uk/swissprot/
+	url	            website
+	
+-->
+
+
+
+<!-- ***************** Intra-article References ************************-->
+
+<!-- Figure Reference -->
+<!-- Text contained between open and close tags is linked -->
+<!-- Specify the number of the figure
+     ie. Fig <figr fid="F1">1</figr>
+     NOT Fig <figr fid="F1"> -->
+<!ELEMENT figr (#PCDATA | it | b | sup| sub)*>
+<!ATTLIST figr
+		%figr-atts;>
+
+<!-- Table reference -->
+<!-- Text contained between open and close tags is linked -->
+<!-- Specify the number of the table
+     ie. Table <tblr tid="T1">1</tblr>
+     NOT Table <tblr tid="T1"> -->
+<!ELEMENT tblr (#PCDATA | it )*>
+<!ATTLIST tblr
+		%tblr-atts;>
+
+<!-- Array reference -->
+<!-- Text contained between open and close tags is linked -->
+<!-- Specify the number of the table
+     ie. Table <tblr tid="T1">1</tblr>
+     NOT Table <tblr tid="T1"> -->
+<!ELEMENT arrayr (#PCDATA | it )*>
+<!ATTLIST arrayr
+		%tblr-atts;>
+
+<!-- Bibliographic reference -->
+<!-- Text contained between open and close tags is linked -->
+<!-- Always explicitly put links for each reference, do NOT use ranges
+     ie. [<abbr bid="B1">1</abbr>,<abbr bid="B2">2</abbr>,<abbr bid="B3">3</abbr>]
+     NOT [<abbr bid="B1">1</abbr>-<abbr bid="B3">3</abbr>] -->
+<!ELEMENT abbr (#PCDATA | sup | sub | it | sc | b | entitygrp | ul)*>
+<!ATTLIST abbr
+		%abbr-atts;>
+
+<!-- Author Note Reference -->
+<!-- Text contained between open and close tags is linked -->
+<!ELEMENT anr (#PCDATA)>
+<!ATTLIST anr
+		%rid-atts; >
+	
+<!-- For rid, use "FN" followed by a value
+from the FOOTNOTE/AFFILIATION SYMBOLS table below -->
+
+<!-- Instition Reference (author affiliation) -->
+<!ELEMENT insr (#PCDATA)>
+<!ATTLIST insr
+		%insr-atts; >
+
+<!-- iid is used to identify author/institution affiliations
+For institution references, use "O" (cap oh) followed by a value
+from the FOOTNOTE/AFFILIATION SYMBOLS table below -->
+
+<!-- Footnote Reference -->
+<!-- Text contained between open and close tags is linked -->
+<!ELEMENT fnr (#PCDATA)>
+<!ATTLIST fnr
+		%fnr-atts; >
+
+<!-- For rid, use "FN" followed by a value
+from the FOOTNOTE/AFFILIATION SYMBOLS table below -->
+
+<!-- Displayed Formula Reference -->
+<!-- Text contained between open and close tags is linked -->
+<!ELEMENT fdr (#PCDATA)>
+<!ATTLIST fdr
+	 rid     CDATA       #REQUIRED
+	 to      CDATA       #IMPLIED>
+
+
+<!-- Supplementary Material Reference -->
+<!-- Text contained between open and close tags is linked -->
+<!ELEMENT supplr (#PCDATA | it)*>
+<!ATTLIST supplr
+		%supplr-atts; >
+
+<!-- Table Footnote Reference -->
+<!ELEMENT tblfnr (#PCDATA)>
+<!ATTLIST tblfnr
+		%rid-atts; >
+	
+<!-- Section Reference -->
+<!ELEMENT secr (#PCDATA)>
+<!ATTLIST secr
+		%secr-atts;>
+	
+<!-- Appendix Reference -->
+<!ELEMENT appr (%data;)*>
+<!ATTLIST appr
+		%rid-atts; >
+
+
+
+
+<!-- VALUES OF FOOTNOTE/AFFILIATION SYMBOLS
+
+a-z (ie FNa)  - superior letter
+1-9 (ie FN1)  - superior number
+
+Following is a list of symbols. The ID should be the prefix
+followed by "x" and a two-digit number (FNx01).
+x01 - asterisk
+x02 - single dagger
+x03 - double dagger
+x04 - section mark
+x05 - pgraph mark
+x06 - double vertical (parallel)
+x07 - superior #
+x08 - two asterisks
+x09 - two single daggers
+x10 - two section marks
+x11 - two pgraph marks
+x12 - two double daggers
+x14 - two double vertical (parallel)
+x15 - superior @
+x16 - double pound sign
+x17 - double @ sign
+x18 - three asterisks
+x19 - three plus signs
+x20 - three double daggers
+x21 - three section marks
+x22 - three double vertical
+x23 - three pgraph marks
+x24 - three pound signs
+x25 - three @ signs
+x26 - three single daggers
+-->
+
+
+
+<!-- ============================================================= -->
+<!--                    MATH: MATHML MODULES                       -->
+<!-- ============================================================= -->
+
+
+<!--                    MATHML SETUP MODULE                        -->
+<!--                    Called from the DTD to include the MathML
+                        elements in the tag set.                   -->
+<!ENTITY % mathmlsetup.ent 
+                        PUBLIC
+"-//NLM//DTD Archiving and Interchange DTD Suite MathML Setup Module v1.1 20031101//EN"
+"pmc1-mathml/mathmlsetup.ent"                                             >
+
+<!--                    MATHML SETUP MODULE                        -->
+<!--                    Invoke the MathML modules                  -->
+%mathmlsetup.ent;                                            
+
