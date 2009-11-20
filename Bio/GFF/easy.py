@@ -449,11 +449,11 @@ def fasta_single(filename=None, string=None):
     if string:
         import cStringIO
         handle = cStringIO.StringIO(string)
-    else :
+    else:
         handle = open_file(filename)
-    try :
+    try:
         record = SeqIO.parse(handle, format="fasta").next()
-    except StopIteration :
+    except StopIteration:
         record = None
     return record
 

@@ -45,7 +45,7 @@ def parse(handle,format):
     For example:
 
     >>> from Bio import Motif
-    >>> for motif in Motif.parse(open("Motif/alignace.out"),"AlignAce") :
+    >>> for motif in Motif.parse(open("Motif/alignace.out"),"AlignAce"):
     ...     print motif.consensus()
     TCTACGATTGAG
     CTGCACCTAGCTACGAGTGAG
@@ -119,17 +119,17 @@ def read(handle,format):
     to read multiple records from the handle.
     """
     iterator = parse(handle, format)
-    try :
+    try:
         first = iterator.next()
-    except StopIteration :
+    except StopIteration:
         first = None
-    if first is None :
+    if first is None:
         raise ValueError("No motifs found in handle")
-    try :
+    try:
         second = iterator.next()
-    except StopIteration :
+    except StopIteration:
         second = None
-    if second is not None :
+    if second is not None:
         raise ValueError("More than one motif found in handle")
     return first
 
@@ -142,7 +142,7 @@ def _test():
     """
     import doctest
     import os
-    if os.path.isdir(os.path.join("..","..","Tests")) :
+    if os.path.isdir(os.path.join("..","..","Tests")):
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("..","..","Tests"))

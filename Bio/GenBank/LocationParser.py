@@ -1,6 +1,9 @@
 # First pass at a parser for the location fields of a feature table.
 # Everything likely to change.
-
+#
+# This does NOT cope with the Gap(), Gap(X), or Gap(unkXXX) tokens used
+# in CONTIG lines, which are otherwise similar to feature locations.
+#
 # Based on the DDBJ/EMBL/GenBank Feature Table Definition Version 2.2
 # Dec 15 1999 available from EBI, but the documentation is not
 # completely internally consistent much less agree with real-life

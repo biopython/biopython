@@ -1,3 +1,7 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 """Testing BioSQL with BioSQL
 
 Uses Bio.SeqIO to parse files, and then loads them into a BioSQL database,
@@ -19,11 +23,11 @@ from BioSQL import BioSeq
 # This testing suite should try to detect whether a valid database
 # installation exists on this computer.  Only run the tests if it
 # does.
-try :
+try:
     from setup_BioSQL import DBDRIVER, DBTYPE
     from setup_BioSQL import DBHOST, DBUSER, DBPASSWD, TESTDB
     from setup_BioSQL import DBSCHEMA, SQL_FILE
-except (NameError, ImportError) :
+except (NameError, ImportError):
     message = "Check settings in Tests/setup_BioSQL.py "\
               "if you plan to use BioSQL."
     raise MissingExternalDependencyError(message)
@@ -44,10 +48,10 @@ test_files = [ \
     ("fasta",  False, 'Nucleic/sweetpea.nu', 1),
     ("fasta",  False, 'Nucleic/lavender.nu', 1),
 #Following protein examples are also used in test_SeqIO_FastaIO.py
-    ("fasta",  False, 'Amino/aster.pro', 1),
-    ("fasta",  False, 'Amino/loveliesbleeding.pro', 1),
-    ("fasta",  False, 'Amino/rose.pro', 1),
-    ("fasta",  False, 'Amino/rosemary.pro', 1),
+    ("fasta",  False, 'Fasta/aster.pro', 1),
+    ("fasta",  False, 'Fasta/loveliesbleeding.pro', 1),
+    ("fasta",  False, 'Fasta/rose.pro', 1),
+    ("fasta",  False, 'Fasta/rosemary.pro', 1),
 #Following examples are also used in test_Fasta.py
     ("fasta",  False, 'Fasta/f001', 1), #Protein
     ("fasta",  False, 'Fasta/f002', 3), #DNA
@@ -117,17 +121,17 @@ test_files = [ \
 #create_database()
 
 print "Connecting to database"
-try :
+try:
     server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                       user = DBUSER, passwd = DBPASSWD,
                                       host = DBHOST, db = TESTDB)
-except Exception, e :
+except Exception, e:
     message = "Connection failed, check settings in Tests/setup_BioSQL.py "\
               "if you plan to use BioSQL: %s" % str(e)
     raise MissingExternalDependencyError(message)
 
 print "Removing existing sub-database '%s' (if exists)" % db_name
-if db_name in server.keys() :
+if db_name in server.keys():
     #Might exist from a failed test run...
     #db = server[db_name]
     server.remove_database(db_name)
@@ -136,7 +140,7 @@ if db_name in server.keys() :
 print "(Re)creating empty sub-database '%s'" % db_name
 db = server.new_database(db_name)
      
-for (t_format, t_alignment, t_filename, t_count) in test_files :
+for (t_format, t_alignment, t_filename, t_count) in test_files:
     print "Testing loading from %s format file %s" % (t_format, t_filename)
     assert os.path.isfile(t_filename)
 
@@ -148,7 +152,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
     server.commit()
     
     iterator = SeqIO.parse(handle=open(t_filename,"r"), format=t_format)
-    for record in iterator :
+    for record in iterator:
         print " - %s, %s" % (checksum_summary(record), record.id)
 
         key = record.name
@@ -160,28 +164,28 @@ for (t_format, t_alignment, t_filename, t_count) in test_files :
         print "OK"
 
         key = record.id
-        if key.count(".")==1 and key.split(".")[1].isdigit() :
+        if key.count(".")==1 and key.split(".")[1].isdigit():
             print " - Retrieving by version '%s'," % key,
             db_rec = db.lookup(version=key)
             compare_record(record, db_rec)
             print "OK"
         
-        if "accessions" in record.annotations :
+        if "accessions" in record.annotations:
             accs = set(record.annotations["accessions"])
-            for key in accs :
+            for key in accs:
                 assert key, "Blank accession in annotation %s" % repr(accs)
-                try :
+                try:
                     print " - Retrieving by accession '%s'," % key,
                     db_rec = db.lookup(accession=key)
                     compare_record(record, db_rec)
                     print "OK"
-                except IndexError :
+                except IndexError:
                     print "Failed"
                     pass
 
-        if "gi" in record.annotations :
+        if "gi" in record.annotations:
             key = record.annotations['gi']
-            if key != record.id :
+            if key != record.id:
                 print " - Retrieving by GI '%s'," % key,
                 db_rec = db.lookup(primary_id=key)
                 compare_record(record, db_rec)

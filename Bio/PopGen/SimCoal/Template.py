@@ -14,8 +14,8 @@ from Bio.PopGen.SimCoal import builtin_tpl_dir
 def exec_template(template):
     executed_template = template
     match = re.search('!!!(.*?)!!!', executed_template, re.MULTILINE)
-    #while len(match.groups())>0 :
-    while match :
+    #while len(match.groups())>0:
+    while match:
         exec_result = str(eval(match.groups()[0]))
         executed_template = executed_template.replace(
                '!!!' + match.groups()[0] + '!!!',

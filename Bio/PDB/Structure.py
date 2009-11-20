@@ -46,7 +46,7 @@ class Structure(Entity):
 
     def get_residues(self):
         for c in self.get_chains():
-            for r in c :
+            for r in c:
                 yield r
 
     def get_atoms(self):

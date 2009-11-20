@@ -16,7 +16,7 @@ from Bio.SCOP.Residues import Residues
 
 class ClaTests(unittest.TestCase):
 
-    def setUp(self) :
+    def setUp(self):
         self.filename = './SCOP/dir.cla.scop.txt_test'
 
     def testParse(self):
@@ -41,16 +41,16 @@ class ClaTests(unittest.TestCase):
         finally:
             f.close()        
 
-    def testError(self) :
+    def testError(self):
         corruptRec = "49268\tsp\tb.1.2.1\t-\n"
 
         try:
             record = Cla.Record(corruptRec)
             assert False, "Should never get here"
-        except ValueError, e :
+        except ValueError, e:
             pass
 
-    def testRecord(self) :
+    def testRecord(self):
         recLine = 'd1dan.1\t1dan\tT:,U:91-106\tb.1.2.1\t21953\tcl=48724,cf=48725,sf=49265,fa=49266,dm=49267,sp=49268,px=21953'
 
         record = Cla.Record(recLine)
@@ -63,7 +63,7 @@ class ClaTests(unittest.TestCase):
              ['fa',49266],['dm',49267],['sp',49268],
              ['px',21953]], record.hierarchy
 
-    def testIndex(self) :
+    def testIndex(self):
         index = Cla.Index(self.filename)
         
         assert len(index)==14

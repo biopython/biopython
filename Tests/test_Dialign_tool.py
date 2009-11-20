@@ -15,18 +15,18 @@ from Bio.Align.Applications import DialignCommandline
 dialign_exe = None
 if sys.platform=="win32":
     raise MissingExternalDependencyError("DIALIGN2-2 not available on Windows")
-else :
+else:
     import commands
     output = commands.getoutput("dialign2-2")
     if "not found" not in output and "dialign2-2" in output.lower():
         dialign_exe = "dialign2-2"
-        if "DIALIGN2_DIR" not in os.environ :
+        if "DIALIGN2_DIR" not in os.environ:
             raise MissingExternalDependencyError(\
                 "Environment variable DIALIGN2_DIR for DIALIGN2-2 missing.")
-        if not os.path.isdir(os.environ["DIALIGN2_DIR"]) :
+        if not os.path.isdir(os.environ["DIALIGN2_DIR"]):
             raise MissingExternalDependencyError(\
                 "Environment variable DIALIGN2_DIR for DIALIGN2-2 is not a valid directory.")
-        if not os.path.isfile(os.path.join(os.environ["DIALIGN2_DIR"], "BLOSUM")) :
+        if not os.path.isfile(os.path.join(os.environ["DIALIGN2_DIR"], "BLOSUM")):
             raise MissingExternalDependencyError(\
                 "Environment variable DIALIGN2_DIR directory missing BLOSUM file.")
         #TODO - check for tp400_dna, tp400_prot and tp400_trans too?

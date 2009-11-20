@@ -13,7 +13,8 @@ from Vector import Vector
 __doc__="Atom class, used in Structure objects."
 
 class Atom:
-    def __init__(self, name, coord, bfactor, occupancy, altloc, fullname, serial_number):
+    def __init__(self, name, coord, bfactor, occupancy, altloc, fullname, serial_number,
+                 element=None):
         """
         Atom object.
 
@@ -40,6 +41,9 @@ class Atom:
         @param fullname: full atom name, including spaces, e.g. " CA ". Normally
         these spaces are stripped from the atom name. 
         @type fullname: string
+
+        @param element: atom element, e.g. "C" for Carbon, "HG" for mercury,
+        @type fullname: uppercase string (or None if unknown)
         """
         self.level="A"
         # Reference to the residue 
@@ -60,7 +64,17 @@ class Atom:
         self.serial_number=serial_number
         # Dictionary that keeps addictional properties
         self.xtra={}
-
+        if element is None :
+            import warnings
+            from PDBExceptions import PDBConstructionWarning
+            warnings.warn("Atom object (name=%s) without element" % name,
+                          PDBConstructionWarning)
+            element = "?"
+            print name, "--> ?"
+        elif len(element)>2 or element != element.upper() or element != element.strip():
+            raise ValueError(element)
+        self.element=element
+        
     # Special methods   
 
     def __repr__(self):

@@ -30,7 +30,7 @@ class Translator:
         self.table = table
         self._encoded = {}
 
-    def __str__(self) :
+    def __str__(self):
         return "Translator object\n" + str(self.table)
 
     def translate(self, seq, stop_symbol = "*"):

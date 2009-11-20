@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 """Tests for Genetic Algorithm classes that provide selection capabilities.
 """
 # standard library
@@ -124,7 +128,7 @@ class TournamentSelectionTest(unittest.TestCase):
             if org_2.fitness != org_1.fitness:
                 break
         #Sort them so org_1 is most fit
-        if org_2.fitness > org_1.fitness :
+        if org_2.fitness > org_1.fitness:
             org_1, org_2 = org_2, org_1
         assert org_1.fitness > org_2.fitness
         
@@ -137,7 +141,7 @@ class TournamentSelectionTest(unittest.TestCase):
         #silly with the order, try this with the input reserved:
         pop = [org_2, org_1]
         new_pop = self.selector.select(pop)
-        for org in new_pop :
+        for org in new_pop:
             assert org == org_1, "Got a worse organism selected."
 
     def test_selection(self):

@@ -397,13 +397,12 @@ The releases are also available both as source and as installers
 (windows installers right now), so you have some choices to pick from 
 on releases if you prefer not to deal with source code directly.
 
-\item CVS -- The current working copy of the Biopython sources is always
-available via CVS (Concurrent Versions Systems --
-\ahrefurl{\url{http://www.cvshome.org/}}). Concise instructions for
-accessing this copy are available at
-\ahrefurl{\url{http://cvs.biopython.org}}. CVS is normally quite stable
-but there is always the caveat that the code there is under
-development.
+\item git -- The current working copy of the Biopython sources is available
+via git hosted on github  -- \ahrefurl{\url{http://github.com/biopython/biopython}}).
+Concise instructions for accessing this copy are available at
+\ahrefurl{\url{http://biopython.org/wiki/SourceCode}}. Our code in git
+is normally quite stable but there is always the caveat that the code
+there is under development.
 
 \end{enumerate}
 
@@ -423,9 +422,9 @@ Now that we've got what we need, let's get into the installation:
 
 \begin{enumerate}
 
-\item First you need to unpack the distribution. If you got the CVS version, you are all set to go and can skip on ahead. Otherwise, you'll need to unpack it. On UN*X machines, a tar.gz package is provided, which you can unpack with \verb|tar -xzvpf biopython-X.X.tar.gz|. A zip file is also provided for other platforms.
+\item First you need to unpack the distribution. If you got the git version, you are all set to go and can skip on ahead. Otherwise, you'll need to unpack it. On UN*X machines, a tar.gz package is provided, which you can unpack with \verb|tar -xzvpf biopython-X.X.tar.gz|. A zip file is also provided for other platforms.
 
-\item Now that everything is unpacked, move into the \verb| biopython*| directory (this will just be \verb|biopython| for CVS users, and will be \verb|biopython-X.X| for those using a packaged download). 
+\item Now that everything is unpacked, move into the \verb| biopython*| directory (this will just be \verb|biopython| for git users, and will be \verb|biopython-X.X| for those using a packaged download). 
 
 \item Now you are ready for your one step install -- \verb|python setup.py install|. This performs the default install, and will put Biopython into the \verb|site-packages| directory of your python library tree (on my machine this is \verb|/usr/local/lib/python2.4/site-packages|). You will have to have permissions to write to this directory, so you'll need to have root access on the machine.
 
@@ -517,7 +516,7 @@ This does not install the documentation, tests, example code or source code, so 
 \subsection{Installing from source on Windows}
 \label{sec:windows_install}
 
-This section deals with installing the source (i.~e.~from CVS or from a source zip file) on a Windows machine. Much of the information from the UNIX install applies here, so it would be good to read section~\ref{sec:unix_install} before starting.  You will need a suitable C compiler.
+This section deals with installing the source (i.~e.~from git or from a source zip file) on a Windows machine. Much of the information from the UNIX install applies here, so it would be good to read section~\ref{sec:unix_install} before starting.  You will need a suitable C compiler.
 What you choose may depend on your version of Python.
 
 For Python 2.6 we currently use Microsoft's free VC++ 2008 Express Edition from \ahrefurl{\url{http://www.microsoft.com/express/download/}}, installation of this is pretty simple.  Then go to the Biopython source directory and run:
@@ -581,7 +580,7 @@ Note that Biopython includes support for interfacing with or parsing the output 
 
 \begin{itemize}
 \item NCBI Standalone BLAST, which can used with the \verb|Bio.Blast| module.
-\item EMBOSS tools, which can be invoked using the \verb|Bio.EMBOSS| module.  The \verb|Bio.AlignIO| module can also parse some alignment formats output by the EMBOSS suite.
+\item EMBOSS tools, which can be invoked using the \verb|Bio.Emboss| module.  The \verb|Bio.AlignIO| module can also parse some alignment formats output by the EMBOSS suite.
 \item ClustalW, which can be invoked using the \verb|Bio.Clustalw| module.
 \item SIMCOAL2 and FDist tools for population genetics can be used via the \verb|Bio.PopGen| module.
 \item Bill Pearson's FASTA tools output can be parsed using the \verb|Bio.AlignIO| module.

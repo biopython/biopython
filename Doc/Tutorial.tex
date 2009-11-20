@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 23 September 2009 (Biopython 1.52+)}
+\date{Last Update -- 16 November 2009 (Biopython 1.52+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -228,6 +228,10 @@ and HTML formats
   \item \emph{Why is the} \verb|Seq| \emph{object missing the (back) transcription \& translation methods described in this Tutorial?} \\
   You need Biopython 1.49 or later.  Alternatively, use the \verb|Bio.Seq| module functions described in Section~\ref{sec:seq-module-functions}.
 
+  \item \emph{Why is the} \verb|Seq| \emph{object missing the upper \& lower methods described in this Tutorial?} \\
+  You need Biopython 1.53 or later.  Alternatively, use \verb|str(my_seq).upper()| to get an upper case string.
+  If you need a Seq object, try \verb|Seq(str(my_seq).upper())| but be careful about blindly re-using the same alphabet.
+ 
   \item \emph{Why does't the} \verb|Seq| \emph{object translation method support the} \verb|cds| \emph{option described in this Tutorial?} \\
   You need Biopython 1.51 or later.
 
@@ -250,7 +254,9 @@ and HTML formats
   You need Biopython 1.45 or later.  Alternatively, rather than \verb|str(my_seq)|, use \verb|my_seq.tostring()| (which will also work on recent versions of Biopython).
   
   \item \emph{Why doesn't} \verb|Bio.Blast| \emph{work with the latest plain text NCBI blast output?} \\
-  The NCBI keep tweaking the plain text output from the BLAST tools, and keeping our parser up to date was an ongoing struggle.  We recommend you use the XML output instead, which is designed to be read by a computer program.
+  The NCBI keep tweaking the plain text output from the BLAST tools, and keeping our parser up to date is/was an ongoing struggle.
+  If you aren't using the latest version of Biopython, you could try upgrading.
+  However, we (and the NCBI) recommend you use the XML output instead, which is designed to be read by a computer program.
 
   \item \emph{Why doesn't} \verb|Bio.Entrez.read()| \emph{work? The module imports fine but there is no read function!} \\
   You need Biopython 1.46 or later.
@@ -273,9 +279,12 @@ and HTML formats
  \item \emph{Why can't I slice my} \verb|SeqRecord| \emph{to get a sub-record?} \\
   You need Biopython 1.50 or later.
 
+ \item \emph{Why can't I add} \verb|SeqRecord| \emph{objects together?} \\
+  You need Biopython 1.53 or later.
+
   \item \emph{Why doesn't} \verb|Bio.SeqIO.convert()| \emph{or} \verb|Bio.AlignIO.convert()| \emph{work? The modules import fine but there is no convert function!} \\
   You need Biopython 1.52 or later. Alternatively, combine the \verb|parse| and \verb|write|
-  functions as described in this tutorial.
+  functions as described in this tutorial (see Sections~\ref{sec:SeqIO-conversion} and~\ref{sec:converting-alignments}).
 
  \item \emph{Why doesn't} \verb|Bio.SeqIO.index()| \emph{work? The module imports fine but there is no index function!} \\
   You need Biopython 1.52 or later.
@@ -386,7 +395,7 @@ It contains 94 records, each has a line starting with ``$>$'' (greater-than symb
 \begin{verbatim}
 from Bio import SeqIO
 handle = open("ls_orchid.fasta")
-for seq_record in SeqIO.parse(handle, "fasta") :
+for seq_record in SeqIO.parse(handle, "fasta"):
     print seq_record.id
     print repr(seq_record.seq)
     print len(seq_record)
@@ -414,7 +423,7 @@ Now let's load the GenBank file \href{http://biopython.org/DIST/docs/tutorial/ex
 \begin{verbatim}
 from Bio import SeqIO
 handle = open("ls_orchid.gbk")
-for seq_record in SeqIO.parse(handle, "genbank") :
+for seq_record in SeqIO.parse(handle, "genbank"):
     print seq_record.id
     print repr(seq_record.seq)
     print len(seq_record)
@@ -532,7 +541,7 @@ In many ways, we can deal with Seq objects as if they were normal Python strings
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", IUPAC.unambiguous_dna)
-for index, letter in enumerate(my_seq) :
+for index, letter in enumerate(my_seq):
     print index, letter
 print len(letter)
 \end{verbatim}
@@ -693,6 +702,46 @@ Seq('ACGT', IUPACUnambiguousDNA())
 >>> nuc_seq + dna_seq
 Seq('GATCGATGCACGT', NucleotideAlphabet())
 \end{verbatim}
+
+\section{Changing case}
+
+Python strings have very useful \verb|upper| and \verb|lower| methods for changing the case.
+As of Biopython 1.53, the \verb|Seq| object gained similar methods which are alphabet aware.
+For example,
+
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import generic_dna
+>>> dna_seq = Seq("acgtACGT", generic_dna)
+>>> dna_seq
+Seq('acgtACGT', DNAAlphabet())
+>>> dna_seq.upper()
+Seq('ACGTACGT', DNAAlphabet())
+>>> dna_seq.lower()
+Seq('acgtacgt', DNAAlphabet())
+\end{verbatim}
+
+These are useful for doing case insensitive matching:
+
+\begin{verbatim}
+>>> "GTAC" in dna_seq
+False
+>>> "GTAC" in dna_seq.upper()
+True
+\end{verbatim}
+
+Note that strictly speaking the IUPAC alphabets are for upper case sequences only, thus:
+
+\begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import IUPAC
+>>> dna_seq = Seq("ACGT", IUPAC.unambiguous_dna)
+>>> dna_seq
+Seq('ACGT', IUPACUnambiguousDNA())
+>>> dna_seq.lower()
+Seq('acgt', DNAAlphabet())
+\end{verbatim}
+
 
 \section{Nucleotide sequences and (reverse) complements}
 \label{sec:seq-reverse-complement}
@@ -1831,6 +1880,133 @@ See Sections~\ref{sec:FASTQ-slicing-off-primer}
 and~\ref{sec:FASTQ-slicing-off-adaptor} for some FASTQ example where the
 per-letter annotations (the read quality scores) are also sliced.
 
+\section{Adding SeqRecord objects}
+\label{sec:SeqRecord-addition}
+
+One of the new features in Biopython 1.53 was the ability to add \verb|SeqRecord| objects
+together, giving a new \verb|SeqRecord|. What is important here is that any common
+per-letter annotations are also added, all the features are preserved (with their
+locations adjusted), and any other common annotation is also kept (like the id, name
+and description).
+
+For an example with per-letter annotation, we'll use the first record in a
+FASTQ file. Chapter~\ref{chapter:Bio.SeqIO} will explain the \verb|SeqIO| functions:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> record = SeqIO.parse(open("example.fastq"), "fastq").next()
+>>> len(record)
+25
+>>> print record.seq
+CCCTTCTTGTCTTCAGCGTTTCTCC
+>>> print record.letter_annotations["phred_quality"]
+[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26,
+26, 26, 26, 23, 23]
+\end{verbatim}
+
+\noindent Let's suppose this was Roche 454 data, and that from other information
+you think the \texttt{TTT} should be only \texttt{TT}. We can make a new edited
+record by first slicing the \verb|SeqRecord| before and after the ``extra''
+third \texttt{T}:
+
+\begin{verbatim}
+>>> left = record[:20]
+>>> print left.seq
+CCCTTCTTGTCTTCAGCGTT
+>>> print left.letter_annotations["phred_quality"]
+[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26]
+>>> right = record[21:]
+>>> print right.seq
+CTCC
+>>> print right.letter_annotations["phred_quality"]
+[26, 26, 23, 23]
+\end{verbatim}
+
+\noindent Now add the two parts together:
+
+\begin{verbatim}
+>>> edited = left + right
+>>> len(edited)
+24
+>>> print edited.seq
+CCCTTCTTGTCTTCAGCGTTCTCC
+>>> print edited.letter_annotations["phred_quality"]
+[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26,
+26, 26, 23, 23]
+\end{verbatim}
+
+\noindent Easy and intuitive? We hope so! You can make this shorter with just:
+
+\begin{verbatim}
+>>> edited = record[:20] + record[21:]
+\end{verbatim}
+
+Now, for an example with features, we'll use a GenBank file.
+Suppose you have a circular genome:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> record = SeqIO.read(open("NC_005816.gb"), "genbank")
+>>> record
+SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
+IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
+description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
+dbxrefs=['Project:10638'])
+>>> len(record)
+9609
+>>> len(record.features)
+29
+>>> record.dbxrefs
+['Project:10638']
+>>> record.annotations.keys()
+['comment', 'sequence_version', 'source', 'taxonomy', 'keywords', 'references',
+'accessions', 'data_file_division', 'date', 'organism', 'gi']
+\end{verbatim}
+
+You can shift the origin like this:
+
+\begin{verbatim}
+>>> shifted = record[2000:] + record[:2000]
+>>> shifted
+SeqRecord(seq=Seq('GATACGCAGTCATATTTTTTACACAATTCTCTAATCCCGACAAGGTCGTAGGTC...GGA',
+IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
+description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
+dbxrefs=[])
+>>> len(shifted)
+9609
+\end{verbatim}
+
+Note that this isn't perfect in that some annotation like the database cross references
+and one of the features (the source feature) have been lost:
+
+\begin{verbatim}
+>>> len(shifted.features)
+28
+>>> shifted.dbxrefs
+[]
+>>> record.annotations.keys()
+[]
+\end{verbatim}
+
+This is because the \verb|SeqRecord| slicing step is cautious in what annotation
+it preserves (erroneously propagating annotation can cause major problems). If
+you want to keep the database cross references or the annotations dictionary,
+this must be done explicitly:
+
+\begin{verbatim}
+>>> shifted.dbxrefs = record.dbxrefs[:]
+>>> shifted.annotations = record.annotations.copy()
+>>> shifted.dbxrefs
+['Project:10638']
+>>> shifted.annotations.keys()
+['comment', 'sequence_version', 'source', 'taxonomy', 'keywords', 'references',
+'accessions', 'data_file_division', 'date', 'organism', 'gi']
+\end{verbatim}
+
+Also note that in an example like this, you should probably change the record
+identifiers since the NCBI references refer to the \emph{original} unmodified
+sequence.
+
 \chapter{Sequence Input/Output}
 \label{chapter:Bio.SeqIO}
 
@@ -1868,7 +2044,7 @@ In general \verb|Bio.SeqIO.parse()| is used to read in sequence files as \verb|S
 \begin{verbatim}
 from Bio import SeqIO
 handle = open("ls_orchid.fasta")
-for seq_record in SeqIO.parse(handle, "fasta") :
+for seq_record in SeqIO.parse(handle, "fasta"):
     print seq_record.id
     print repr(seq_record.seq)
     print len(seq_record)
@@ -1880,7 +2056,7 @@ The above example is repeated from the introduction in Section~\ref{sec:sequence
 \begin{verbatim}
 from Bio import SeqIO
 handle = open("ls_orchid.gbk")
-for seq_record in SeqIO.parse(handle, "genbank") :
+for seq_record in SeqIO.parse(handle, "genbank"):
     print seq_record.id
     print seq_record.seq
     print len(seq_record)
@@ -2058,7 +2234,7 @@ Now let's go through all the records, building up a list of the species each orc
 from Bio import SeqIO
 handle = open("ls_orchid.gbk")
 all_species = []
-for seq_record in SeqIO.parse(handle, "genbank") :
+for seq_record in SeqIO.parse(handle, "genbank"):
     all_species.append(seq_record.annotations["organism"])
 handle.close()
 print all_species
@@ -2097,7 +2273,7 @@ You can check by hand, but for every record the species name is in the descripti
 from Bio import SeqIO
 handle = open("ls_orchid.fasta")
 all_species = []
-for seq_record in SeqIO.parse(handle, "fasta") :
+for seq_record in SeqIO.parse(handle, "fasta"):
     all_species.append(seq_record.description.split()[1])
 handle.close()
 print all_species
@@ -2193,7 +2369,7 @@ from Bio import Entrez
 from Bio import SeqIO
 handle = Entrez.efetch(db="nucleotide", rettype="gb", \
                        id="6273291,6273290,6273289")
-for seq_record in SeqIO.parse(handle, "gb") :
+for seq_record in SeqIO.parse(handle, "gb"):
     print seq_record.id, seq_record.description[:50] + "..."
     print "Sequence length %i," % len(seq_record),
     print "%i features," % len(seq_record.features),
@@ -2318,7 +2494,7 @@ You should recognise these strings from when we parsed the FASTA file earlier in
 First you must write your own function to return the key you want (as a string) when given a \verb|SeqRecord| object.  In general, the details of function will depend on the sort of input records you are dealing with.  But for our orchids, we can just split up the record's identifier using the ``pipe'' character (the vertical line) and return the fourth entry (field three):
 
 \begin{verbatim}
-def get_accession(record) :
+def get_accession(record):
     """"Given a SeqRecord, return the accession number as a string.
   
     e.g. "gi|2765613|emb|Z78488.1|PTZ78488" -> "Z78488.1"
@@ -2356,7 +2532,7 @@ Once again, working with the orchids GenBank file:
 \begin{verbatim}
 from Bio import SeqIO
 from Bio.SeqUtils.CheckSum import seguid
-for record in SeqIO.parse(open("ls_orchid.gbk"), "genbank") :
+for record in SeqIO.parse(open("ls_orchid.gbk"), "genbank"):
     print record.id, seguid(record.seq)
 \end{verbatim}
 
@@ -2452,7 +2628,7 @@ you'll need to write a tiny function to map from the FASTA identifier to the key
 you want:
 
 \begin{verbatim}
-def get_acc(identifier) :
+def get_acc(identifier):
     """"Given a SeqRecord identifer string, return the accession number as a string.
   
     e.g. "gi|2765613|emb|Z78488.1|PTZ78488" -> "Z78488.1"
@@ -2574,8 +2750,8 @@ also be enabled on Python 2.5):
 from __future__ import with_statement #Needed on Python 2.5
 from Bio import SeqIO
 
-with in_handle = open("ls_orchid.gbk") :
-    with out_handle = open("my_example.fasta", "w") :
+with in_handle = open("ls_orchid.gbk"):
+    with out_handle = open("my_example.fasta", "w"):
         count = SeqIO.write(SeqIO.parse(in_handle, "genbank"), out_handle, "fasta")
 print "Converted %i records" % count
 \end{verbatim}
@@ -2608,8 +2784,8 @@ could be used to convert between any file formats available in Biopython.
 However, writing some formats requires information (e.g. quality scores) which
 other files formats don't contain. For example, while you can turn a FASTQ
 file into a FASTA file, you can't do the reverse. See also
-Section~\ref{sec:SeqIO-fastq-conversion} in the cookbook chapter which looks
-at inter-converting between different FASTQ formats.
+Sections~\ref{sec:SeqIO-fastq-conversion} and~\ref{sec:SeqIO-fasta-qual-conversion}
+in the cookbook chapter which looks at inter-converting between different FASTQ formats.
 
 Finally, as an added incentive for using the \verb|Bio.SeqIO.convert()| function
 (on top of the fact your code will be shorter), doing it this way may also be
@@ -2627,7 +2803,7 @@ the \verb|Seq| object's built in \verb|.reverse_complement()| method (see Sectio
 \begin{verbatim}
 from Bio import SeqIO
 in_handle = open("ls_orchid.gbk")
-for record in SeqIO.parse(in_handle, "genbank") :
+for record in SeqIO.parse(in_handle, "genbank"):
     print record.id
     print record.seq.reverse_complement()
 in_handle.close()
@@ -2640,7 +2816,7 @@ new records:
 \begin{verbatim}
 from Bio.SeqRecord import SeqRecord
 
-def make_rc_record(record) :
+def make_rc_record(record):
     """Returns a new SeqRecord with the reverse complement sequence."""
     return SeqRecord(seq = record.seq.reverse_complement(), \
                      id = "rc_" + record.id, \
@@ -2722,7 +2898,7 @@ Note that although we don't encourage it, you \emph{can} use the \verb|format()|
 from Bio import SeqIO
 record_iterator = SeqIO.parse(open("ls_orchid.gbk"), "genbank")
 out_handle = open("ls_orchid.tab", "w")
-for record in record_iterator :
+for record in record_iterator:
     out_handle.write(record.format("tab"))
 out_handle.close()
 \end{verbatim}
@@ -2824,7 +3000,7 @@ You'll notice in the above output the sequences have been truncated.  We could i
 from Bio import AlignIO
 alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
 print "Alignment length %i" % alignment.get_alignment_length()
-for record in alignment :
+for record in alignment:
     print "%s - %s" % (record.seq, record.id)
 \end{verbatim}
 
@@ -2846,8 +3022,8 @@ You could also use the alignment object's \verb|format| method to show it in a p
 Did you notice in the raw file above that several of the sequences include database cross-references to the PDB and the associated known secondary structure?  Try this:
 
 \begin{verbatim}
-for record in alignment :
-    if record.dbxrefs :
+for record in alignment:
+    if record.dbxrefs:
         print record.id, record.dbxrefs
 \end{verbatim}
 
@@ -2863,7 +3039,7 @@ COATB_BPIF1/22-73 ['PDB; 1ifk ; 1-50;']
 \noindent To have a look at all the sequence annotation, try this:
 
 \begin{verbatim}
-for record in alignment :
+for record in alignment:
     print record
 \end{verbatim}
 
@@ -2957,7 +3133,7 @@ If you wanted to read this in using \verb|Bio.AlignIO| you could use:
 \begin{verbatim}
 from Bio import AlignIO
 alignments = AlignIO.parse(open("resampled.phy"), "phylip")
-for alignment in alignments :
+for alignment in alignments:
     print alignment
     print
 \end{verbatim}
@@ -3072,9 +3248,9 @@ To interpret these FASTA examples as several separate alignments, we can use \ve
 For example, using the third example as the input data:
 
 \begin{verbatim}
-for alignment in AlignIO.parse(handle, "fasta", seq_count=2) :
+for alignment in AlignIO.parse(handle, "fasta", seq_count=2):
     print "Alignment length %i" % alignment.get_alignment_length()
-    for record in alignment :
+    for record in alignment:
         print "%s - %s" % (record.seq, record.id)
     print
 \end{verbatim}
@@ -3268,7 +3444,7 @@ One of the big handicaps of the PHYLIP alignment file format is that the sequenc
 from Bio import AlignIO
 alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
 name_mapping = {}
-for i, record in enumerate(alignment) :
+for i, record in enumerate(alignment):
     name_mapping[i] = record.id
     record.id = "seq%i" % i
 print name_mapping
@@ -3863,76 +4039,13 @@ Fortunately, the Biopython folks know this only too well, so they've developed l
 Dealing with BLAST can be split up into two steps, both of which can be done from within Biopython.
 Firstly, running BLAST for your query sequence(s), and getting some output.
 Secondly, parsing the BLAST output in Python for further analysis.
-We'll start by talking about running the BLAST command line tools locally, and then discuss running BLAST via the web.
 
-\section{Running BLAST locally}
-\label{sec:running-local-blast}
-
-Running BLAST locally (as opposed to over the internet, see
-Section~\ref{sec:running-www-blast}) has two advantages:
-\begin{itemize}
-\item Local BLAST may be faster than BLAST over the internet;
-\item Local BLAST allows you to make your own database to search for sequences against.
-\end{itemize}
-Dealing with proprietary or unpublished sequence data can be another reason to run BLAST locally.  You may not be allowed to redistribute the sequences, so submitting them to the NCBI as a BLAST query would not be an option.
-
-Biopython provides lots of nice code to enable you to call local BLAST executables from your scripts, and have full access to the many command line options that these executables provide. You can obtain local BLAST precompiled for a number of platforms at \url{ftp://ftp.ncbi.nlm.nih.gov/blast/executables/}, or can compile it yourself in the NCBI toolbox (\url{ftp://ftp.ncbi.nlm.nih.gov/toolbox/}).
-
-The code for calling local ``standalone'' BLAST is found in \verb|Bio.Blast.NCBIStandalone|, specifically the functions \verb|blastall|, \verb|blastpgp| and \verb|rpsblast|, which correspond with the BLAST executables that their names imply.
-
-Let's use these functions to run \verb|blastall| against a local database and return the results. First, we want to set up the paths to everything that we'll need to do the BLAST. What we need to know is the path to the database (which should have been prepared using \verb|formatdb|, see \url{ftp://ftp.ncbi.nlm.nih.gov/blast/documents/formatdb.html}) to search against, the path to the file we want to search, and the path to the \verb|blastall| executable.
-
-On Linux or Mac OS X your paths might look like this:
-
-\begin{verbatim}
->>> my_blast_db = "/home/mdehoon/Data/Genomes/Databases/bsubtilis"
-# I used formatdb to create a BLAST database named bsubtilis
-# (for Bacillus subtilis) consisting of the following three files:
-# /home/mdehoon/Data/Genomes/Databases/bsubtilis.nhr
-# /home/mdehoon/Data/Genomes/Databases/bsubtilis.nin
-# /home/mdehoon/Data/Genomes/Databases/bsubtilis.nsq
-
->>> my_blast_file = "m_cold.fasta"
-# A FASTA file with the sequence I want to BLAST
-
->>> my_blast_exe = "/usr/local/blast/bin/blastall"
-# The name of my BLAST executable
-\end{verbatim}
-
-\noindent while on Windows you might have something like this:
-
-\begin{verbatim}
->>> my_blast_db = r"C:\Blast\Data\bsubtilis"
-# Assuming you used formatdb to create a BLAST database named bsubtilis
-# (for Bacillus subtilis) consisting of the following three files:
-# C:\Blast\Data\bsubtilis\bsubtilis.nhr
-# C:\Blast\Data\bsubtilis\bsubtilis.nin
-# C:\Blast\Data\bsubtilis\bsubtilis.nsq
->>> my_blast_file = "m_cold.fasta"
->>> my_blast_exe =r"C:\Blast\bin\blastall.exe"
-\end{verbatim}
-
-The FASTA file used in this example is available
-\href{examples/m\_cold.fasta}{here} as well as
-\href{http://biopython.org/DIST/docs/tutorial/examples/m\_cold.fasta}{online}.
-
-Now that we've got that all set, we are ready to run the BLAST and collect the results. We can do this with two lines:
-
-\begin{verbatim}
->>> from Bio.Blast import NCBIStandalone
->>> result_handle, error_handle = NCBIStandalone.blastall(my_blast_exe, "blastn",
-                                                    my_blast_db, my_blast_file)
-\end{verbatim}
-
-Note that the Biopython interfaces to local blast programs returns two values. The first is a handle to the blast output, which is ready to either be saved or passed to a parser. The second is the possible error output generated by the blast command. See Section~\ref{sec:appendix-handles} for more about handles.
-
-The error info can be hard to deal with, because if you try to do a \verb|error_handle.read()| and there was no error info returned, then the \verb|read()| call will block and not return, locking your script. In my opinion, the best way to deal with the error is only to print it out if you are not getting \verb|result_handle| results to be parsed, but otherwise to leave it alone.
-
-This command will generate BLAST output in XML format, as that is the format expected by the XML parser, described in Section~\ref{sec:parsing-blast}. For plain text output, use the \verb|align_view="0"| keyword. To parse text output instead of XML output, see Section~\ref{sec:parsing-blast-deprecated} below. However, parsing text output is not recommended, as the BLAST plain text output changes frequently, breaking our parsers.
-
-If you are interested in saving your results to a file before parsing them,
-see Section~\ref{sec:saving-blast-output}. To find out how to parse the BLAST
-results, go to Section~\ref{sec:parsing-blast}
+Your first introduction to running BLAST was probably via the NCBI web-service.
+In fact, there are lots of ways you can run BLAST, which can be categorised several ways.
+The most important distinction is running BLAST locally (on your own machine),
+and running BLAST remotely (on another machine, typically the NCBI servers).
+We're going to start this chapter by invoking the NCBI online BLAST service
+from within a Python script.
 
 \section{Running BLAST over the Internet}
 \label{sec:running-www-blast}
@@ -4024,57 +4137,90 @@ get back your results in a handle object (by default in XML format).
 The next step would be to parse the XML output into Python objects
 representing the search results (Section~\ref{sec:parsing-blast}),
 but you might want to save a local copy of the output file first.
+I find this especially useful when debugging my code that extracts
+info from the BLAST results (because re-running the online search
+is slow and wastes the NCBI computer time).
 
-\section{Saving BLAST output}
 \label{sec:saving-blast-output}
-
-Before parsing the results, it is often useful to save them into a
-file so that you can use them later without having to go back and
-re-blasting everything. I find this especially useful when debugging my
-code that extracts info from the BLAST files, but it could also be
-useful just for making backups of things you've done.
-
-If you don't want to save the BLAST output, you can skip to
-section~\ref{sec:parsing-blast}. If you do, read on.
 
 We need to be a bit careful since we can use \verb|result_handle.read()| to
 read the BLAST output only once -- calling \verb|result_handle.read()| again
-returns an empty string. First, we use \verb|read()| and store all of
-the information from the handle into a string:
-
-\begin{verbatim}
->>> blast_results = result_handle.read()
-\end{verbatim}
-
-Next, we save this string in a file:
+returns an empty string.
 
 \begin{verbatim}
 >>> save_file = open("my_blast.xml", "w")
->>> save_file.write(blast_results)
+>>> save_file.write(result_handle.read())
 >>> save_file.close()
+>>> result_handle.close()
 \end{verbatim}
 
 After doing this, the results are in the file \verb|my_blast.xml| and the
-variable \verb|blast_results| contains the BLAST results in a string
-form. However, the \verb|parse| function of the BLAST parser (described
-in~\ref{sec:parsing-blast}) takes a file-handle-like object, not a
-plain string. To get a handle, there are two things you can do:
-\begin{itemize}
-\item Use the Python standard library module \verb|cStringIO|. The
-following code will turn the plain string into a handle, which we can
-feed directly into the BLAST parser:
-\begin{verbatim}
->>> import cStringIO
->>> result_handle = cStringIO.StringIO(blast_results)
-\end{verbatim}
-\item Open the saved file for reading. Duh.
+original handle has had all its data extracted (so we closed it). However,
+the \verb|parse| function of the BLAST parser (described
+in~\ref{sec:parsing-blast}) takes a file-handle-like object, so
+we can just open the saved file for input:
+
 \begin{verbatim}
 >>> result_handle = open("my_blast.xml")
 \end{verbatim}
-\end{itemize}
 
 Now that we've got the BLAST results back into a handle again, we are ready
-to do something with them, so this leads us right into the parsing section.
+to do something with them, so this leads us right into the parsing section
+(see Section~\ref{sec:parsing-blast} below). You may want to jump ahead to
+that now \ldots.
+
+\section{Running BLAST locally}
+\label{sec:running-local-blast}
+
+\subsection{Introduction}
+
+Running BLAST locally (as opposed to over the internet, see
+Section~\ref{sec:running-www-blast}) has two advantages:
+\begin{itemize}
+\item Local BLAST may be faster than BLAST over the internet;
+\item Local BLAST allows you to make your own database to search for sequences against.
+\end{itemize}
+Dealing with proprietary or unpublished sequence data can be another reason to run BLAST locally.  You may not be allowed to redistribute the sequences, so submitting them to the NCBI as a BLAST query would not be an option.
+
+Unfortunately, there are some major drawbacks too -- installing all the bits and getting it setup right takes some effort:
+\begin{itemize}
+\item Local BLAST requires command line tools to be installed.
+\item Local BLAST requires (large) BLAST databases to be setup (and potentially kept up to date).
+\end{itemize}
+
+\noindent
+To further confuse matters there are at least four different standalone BLAST packages.
+\begin{itemize}
+\item \href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}{NCBI ``legacy'' BLAST}, including command line tools \verb|blastall|, \verb|blastpgp| and \verb|rpsblast|. This is probably the most widely used standalone BLAST tool at the moment. Still supported in Biopython, but now obsolete.
+\item \href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}{NCBI ``new'' BLAST+}, including separate command line tools \verb|blastn|, \verb|blastp|, \ldots instead of \verb|blastall|. Released in 2009, supported in Biopython 1.53 onwards.
+\item \href{http://blast.wustl.edu/}{Washington University BLAST} (WU-BLAST), including the command line tool \verb|wu-blastall| (since replaced by AB-BLAST).
+\item \href{http://blast.advbiocomp.com}{Advanced Biocomputing BLAST} (AB-BLAST), including the command line tool \verb|ab-blastall| (not free/open source). Released in 2009.
+\end{itemize}
+
+\subsection{Standalone NCBI ``legacy'' BLAST}
+
+The \verb|Bio.Blast.Applications| module has wrappers for the ``legacy'' NCBI BLAST tools
+like \verb|blastall|, \verb|blastpgp| and \verb|rpsblast|, and there are helper functions
+in \verb|Bio.Blast.NCBIStandalone|. These are now considered obsolete, and will be
+deprecated and eventually removed from Biopython as the NCBI move over to the replacement
+BLAST+ suite.
+
+To try and avoid confusion, we will not cover calling these old tools from Biopython.
+Have a look at the older edition of this tutorial included with Biopython 1.52 if you
+are curious.
+
+\subsection{Standalone NCBI BLAST+}
+
+The \verb|Bio.Blast.Applications| module has wrappers for the ``new'' NCBI BLAST+ tools
+like \verb|blastn|, \verb|blastp|, \verb|blastx|, \verb|tblastn|, \verb|tblastx|
+(which all used to be handled by \verb|blastall|), \verb|psiblast|
+(replacing \verb|blastpgp|) and \verb|rpsblast| and \verb|rpstblastn|
+(which replace the old \verb|rpsblast|). This section will show how to use them \ldots
+
+\subsection{WU-BLAST and AB-BLAST}
+
+Biopython does not currently provide wrappers for calling these tools, but should be able
+to parse any NCBI compatible output from them.
 
 \section{Parsing BLAST output}
 \label{sec:parsing-blast}
@@ -4375,7 +4521,7 @@ Now that we've got an iterator, we start retrieving blast records (generated by 
 Each call to next will return a new record that we can deal with. Now we can iterate through this records and generate our old favorite, a nice little blast report:
 
 \begin{verbatim}
->>> for blast_record in blast_iterator :
+>>> for blast_record in blast_iterator:
 ...     E_VALUE_THRESH = 0.04
 ...     for alignment in blast_record.alignments:
 ...         for hsp in alignment.hsps:
@@ -4621,7 +4767,7 @@ Try \verb+record["DbInfo"].keys()+ for other information stored in this record.
 One of the most useful is a list of possible search fields for use with ESearch:
 
 \begin{verbatim}
->>> for field in record["DbInfo"]["FieldList"] :
+>>> for field in record["DbInfo"]["FieldList"]:
 ...     print "%(Name)s, %(FullName)s, %(Description)s" % field
 ALL, All Fields, All terms from all searchable fields
 UID, UID, Unique number assigned to publication
@@ -4751,11 +4897,11 @@ ESummary retrieves document summaries from a list of primary IDs (see the  \href
 \label{sec:efetch}
 
 EFetch is what you use when you want to retrieve a full record from Entrez.
-This covers several possible databases, as described on the main \href{http://eutils.ncbi.nlm.nih.gov/entrez/query/static/efetch\_help.html}{EFetch Help page}.
+This covers several possible databases, as described on the main \href{http://eutils.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html}{EFetch Help page}.
 
-From the \emph{Cypripedioideae} example above, we can download GenBank record 186972394 using \verb+Bio.Entrez.efetch+ (see the documentation on
-\href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq_help.html}
-{EFetch for Sequence and other Molecular Biology Databases}):
+For most of their databases, the NCBI support several different file formats. Requesting a specific file format from Entrez using \verb|Bio.Entrez.efetch()| requires specifying the \verb|rettype| and/or \verb|retmode| optional arguments.  The different combinations are described for each database type on the pages linked to on \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetch_help.html}{NCBI efetch webpage} (e.g. \href{http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/efetchlit_help.html}{literature}, \href{http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/efetchseq_help.html}{sequences} and \href{http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/efetchtax_help.html}{taxonomy}).
+
+One common usage is downloading sequences in the FASTA or GenBank/GenPept plain text formats (which can then be parsed with \verb|Bio.SeqIO|, see Sections~\ref{sec:SeqIO_GenBank_Online} and~\ref{sec:efetch}). From the \emph{Cypripedioideae} example above, we can download GenBank record 186972394 using \verb+Bio.Entrez.efetch+:
 
 \begin{verbatim}
 >>> from Bio import Entrez
@@ -4839,7 +4985,7 @@ Note that until Easter 2009, the Entrez EFetch API let you use ``genbank'' as th
 return type, however the NCBI now insist on using the official return types of
 ``gb'' or ``gbwithparts'' (or ``gp'' for proteins) as described on online.
 
-Alternatively, you could for example use \verb+rettype="fasta"+ to get the Fasta-format; see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq\_help.html}{EFetch Sequences Help page} for other options. The available formats depend on which database you are downloading from - see the main \href{http://eutils.ncbi.nlm.nih.gov/entrez/query/static/efetch\_help.html}{EFetch Help page}.
+Alternatively, you could for example use \verb+rettype="fasta"+ to get the Fasta-format; see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq\_help.html}{EFetch Sequences Help page} for other options. Remember -- the available formats depend on which database you are downloading from - see the main \href{http://eutils.ncbi.nlm.nih.gov/entrez/query/static/efetch\_help.html}{EFetch Help page}.
 
 If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see Chapter~\ref{chapter:Bio.SeqIO}), you could directly parse it into a \verb+SeqRecord+:
 
@@ -4856,7 +5002,7 @@ Number of features: 3
 ...
 Seq('ATTTTTTACGAACCTGTGGAAATTTTTGGTTATGACAATAAATCTAGTTTAGTA...GAA', IUPACAmbiguousDNA())\end{verbatim}
 
-Note that a more typical use would be to save the sequence data to a local file, and \emph{then} parse it with \verb|Bio.SeqIO|.  This can save you having to re-download the same file repeatedly while working on your script, and in particular places less load on the NCBI's servers.  For example:
+Note that a more typical use would be to save the sequence data to a local file, and \emph{then} parse it with \verb|Bio.SeqIO|.  This can save you having to re-download the same file repeatedly while working on your script, and places less load on the NCBI's servers.  For example:
 
 \begin{verbatim}
 import os
@@ -4864,7 +5010,7 @@ from Bio import SeqIO
 from Bio import Entrez
 Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
 filename = "gi_186972394.gbk"
-if not os.path.isfile(filename) :
+if not os.path.isfile(filename):
     print "Downloading..."
     net_handle = Entrez.efetch(db="nucleotide",id="186972394",rettype="gb")
     out_handle = open(filename, "w")
@@ -4890,6 +5036,8 @@ To get the output in XML format, which you can parse using the \verb+Bio.Entrez.
 >>> record[0]["GBSeq_source"] 
 'chloroplast Selenipedium aequinoctiale'
 \end{verbatim}
+
+So, that dealt with sequences. For examples of parsing file formats specific to the other databases (e.g. the \verb+MEDLINE+ format used in PubMed), see Section~\ref{sec:entrez-specialized-parsers}.
 
 If you want to perform a search with \verb|Bio.Entrez.esearch()|, and then download the records with \verb|Bio.Entrez.efetch()|, you should use the WebEnv history feature -- see Section~\ref{sec:entrez-webenv}.
 
@@ -4922,7 +5070,7 @@ The \verb+"LinkSetDb"+ key contains the search results, stored as a list consist
 \begin{verbatim}
 >>> len(record[0]["LinkSetDb"])
 5
->>> for linksetdb in record[0]["LinkSetDb"] :
+>>> for linksetdb in record[0]["LinkSetDb"]:
 ...     print linksetdb["DbTo"], linksetdb["LinkName"], len(linksetdb["Link"])
 ... 
 pubmed pubmed_pubmed 110
@@ -5003,12 +5151,12 @@ See the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/espell\_help.html}
 
 \section{Parsing huge Entrez XML files}
 
-The \verb+Entrez.read+ function reads the entire XML file returns by Entrez into a single Python object, which is kept in memory. Some Entrez XML files are so large that they do not fit in memory. To parse such files, you can use the functio n\verb+Entrez.parse+, which is a generator function that reads records in the XML file one by one. This function is only useful if the XML file reflects a Python list object (in other words, if \verb+Entrez.read+ on a computer with infinite memory resources would return a Python list).
+The \verb+Entrez.read+ function reads the entire XML file returned by Entrez into a single Python object, which is kept in memory. To parse Entrez XML files too large to fit in memory, you can use the function \verb+Entrez.parse+. This is a generator function that reads records in the XML file one by one. This function is only useful if the XML file reflects a Python list object (in other words, if \verb+Entrez.read+ on a computer with infinite memory resources would return a Python list).
 
 For example, you can download the entire Entrez Gene database for a given organism as a file from NCBI's ftp site. These files can be very large. As an example, on September 4, 2009, the file \verb+Homo_sapiens.ags.gz+, containing the Entrez Gene database for human, had a size of 116576 kB. This file, which is in the \verb+ASN+ format, can be converted into an XML file using NCBI's \verb+gene2xml+ progam (see NCBI's ftp site for more information):
 
 \begin{verbatim}
-gene2xml -b T -i Homo_sapiens.ags.gz Homo_sapiens.xml
+gene2xml -b T -i Homo_sapiens.ags -o Homo_sapiens.xml
 \end{verbatim}
 
 The resulting XML file has a size of 6.1 GB. Attempting \verb+Entrez.read+ on this file will result in a \verb+MemoryError+ on many computers.
@@ -5707,7 +5855,7 @@ While for small searches you might be OK downloading everything at once, its bet
 \begin{verbatim}
 batch_size = 3
 out_handle = open("orchid_rpl16.fasta", "w")
-for start in range(0,count,batch_size) :
+for start in range(0,count,batch_size):
     end = min(count, start+batch_size)
     print "Going to download record %i to %i" % (start+1, end)
     fetch_handle = Entrez.efetch(db="nucleotide", rettype="fasta",
@@ -5736,7 +5884,7 @@ print "Found %i results" % count
 
 batch_size = 10
 out_handle = open("recent_orchid_papers.txt", "w")
-for start in range(0,count,batch_size) :
+for start in range(0,count,batch_size):
     end = min(count, start+batch_size)
     print "Going to download record %i to %i" % (start+1, end)
     fetch_handle = Entrez.efetch(db="pubmed", rettype="medline",
@@ -5850,7 +5998,7 @@ Or, using a for loop over the record iterator:
 >>> from Bio import SwissProt
 >>> descriptions = []
 >>> handle = open("uniprot_sprot.dat")
->>> for record in SwissProt.parse(handle) :
+>>> for record in SwissProt.parse(handle):
 ...     descriptions.append(record.description)
 ...
 >>> len(descriptions)
@@ -7919,12 +8067,12 @@ Now the fun part - we take each gene \verb|SeqFeature| object in our
 going to color them blue, alternating between a dark blue and a light blue.
 \begin{verbatim}
 for feature in record.features:
-    if feature.type != "gene" :
+    if feature.type != "gene":
         #Exclude this feature
         continue
-    if len(gd_feature_set) % 2 == 0 :
+    if len(gd_feature_set) % 2 == 0:
         color = colors.blue
-    else :
+    else:
         color = colors.lightblue
     gd_feature_set.add_feature(feature, color=color, label=True)
 \end{verbatim}
@@ -8006,12 +8154,12 @@ record = SeqIO.read(open("NC_005816.gb"), "genbank")
 #Create the feature set and its feature objects,
 gd_feature_set = GenomeDiagram.FeatureSet()
 for feature in record.features:
-    if feature.type != "gene" :
+    if feature.type != "gene":
         #Exclude this feature
         continue
-    if len(gd_feature_set) % 2 == 0 :
+    if len(gd_feature_set) % 2 == 0:
         color = colors.blue
-    else :
+    else:
         color = colors.lightblue
     gd_feature_set.add_feature(feature, color=color, label=True)
 #(this for loop is the same as in the previous example)
@@ -8172,7 +8320,7 @@ gd_feature_set.add_feature(feature, sigil="BOX")
 gd_feature_set.add_feature(feature, sigil="ARROW")
 \end{verbatim}
 
-The default arrows are show at the top of
+The default arrows are shown at the top of
 \begin{htmlonly}
 the next two images.
 \end{htmlonly}
@@ -8268,12 +8416,12 @@ gd_track_for_features = gd_diagram.new_track(1, name="Annotated Features")
 gd_feature_set = gd_track_for_features.new_set()
 
 for feature in record.features:
-    if feature.type != "gene" :
+    if feature.type != "gene":
         #Exclude this feature
         continue
-    if len(gd_feature_set) % 2 == 0 :
+    if len(gd_feature_set) % 2 == 0:
         color = colors.blue
-    else :
+    else:
         color = colors.lightblue
     gd_feature_set.add_feature(feature, sigil="ARROW",
                                color=color, label=True,
@@ -8284,9 +8432,9 @@ for feature in record.features:
 for site, name, color in [("GAATTC","EcoRI",colors.green),
                           ("CCCGGG","SmaI",colors.orange),
                           ("AAGCTT","HindIII",colors.red),
-                          ("GGATCC","BamHI",colors.purple)] :
+                          ("GGATCC","BamHI",colors.purple)]:
     index = 0
-    while True :
+    while True:
         index  = record.seq.find(site, start=index)
         if index == -1 : break
         feature = SeqFeature(FeatureLocation(index, index+len(site)))
@@ -8397,7 +8545,7 @@ entries = [("Chr I","CHR_I/NC_003070.fna"),
           ("Chr III","CHR_III/NC_003074.fna"),
           ("Chr IV","CHR_IV/NC_003075.fna"),
           ("Chr V","CHR_V/NC_003076.fna")]
-for (name, filename) in entries :
+for (name, filename) in entries:
    record = SeqIO.read(open(filename),"fasta")
    print name, len(record)
 \end{verbatim}
@@ -8417,7 +8565,7 @@ entries = [("Chr I", 30432563),
 max_length = max([length for name, length in entries])
           
 chr_diagram = BasicChromosome.Organism()
-for name, length in entries :
+for name, length in entries:
    cur_chromosome = BasicChromosome.Chromosome(name)
    #Set the length, adding and extra 20 percent for the tolomeres:
    cur_chromosome.scale_num = max_length * 1.2
@@ -8553,7 +8701,7 @@ from Bio import SeqIO
 original_rec = SeqIO.read(open("NC_005816.gb"),"genbank")
 
 handle = open("shuffled.fasta", "w")
-for i in range(30) :
+for i in range(30):
     nuc_list = list(original_rec.seq)
     random.shuffle(nuc_list)
     shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet), \
@@ -8572,7 +8720,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 
-def make_shuffle_record(record, new_id) :
+def make_shuffle_record(record, new_id):
     nuc_list = list(record.seq)
     random.shuffle(nuc_list)
     return SeqRecord(Seq("".join(nuc_list), record.seq.alphabet), \
@@ -8606,7 +8754,7 @@ use the default table and add a prefix to the identifier:
 
 \begin{verbatim}
 from Bio.SeqRecord import SeqRecord
-def make_protein_record(nuc_record) :
+def make_protein_record(nuc_record):
     """Returns a new SeqRecord with the translated sequence (default table)."""
     return SeqRecord(seq = nuc_record.seq.translate(cds=True), \
                      id = "trans_" + nuc_record.id, \
@@ -8728,10 +8876,10 @@ their primer removed, but all the other reads are kept as they were?
 
 \begin{verbatim}
 from Bio import SeqIO
-def trim_primer(record, primer) :
-    if record.seq.startswith(primer) :
+def trim_primer(record, primer):
+    if record.seq.startswith(primer):
         return record[len(primer):]
-    else :
+    else:
         return record
 
 trimmed_reads = (trim_primer(record, "GTTGGAACCG") for record in \
@@ -8749,10 +8897,10 @@ Although it is slower, you might prefer to use a for loop:
 \begin{verbatim}
 from Bio import SeqIO
 out_handle = open("trimmed.fastq", "w")
-for record in SeqIO.parse(open("SRR014849.fastq"),"fastq") :
-    if record.seq.startswith("GTTGGAACCG") :
+for record in SeqIO.parse(open("SRR014849.fastq"),"fastq"):
+    if record.seq.startswith("GTTGGAACCG"):
         out_handle.write(record[10:].format("fastq"))
-    else :
+    else:
         out_handle.write(record.format("fastq"))
 out_handle.close()
 \end{verbatim}
@@ -8776,13 +8924,13 @@ not just at the very beginning:
 
 \begin{verbatim}
 from Bio import SeqIO
-def trim_adaptor(record, adaptor) :
+def trim_adaptor(record, adaptor):
     """Removes adaptor sequences, looks for perfect matches only."""
     """
     index = record.seq.find(adaptor)
-    if index == -1 :
+    if index == -1:
         return record #not found, no trimming
-    else :
+    else:
         return record[index+len(adaptor):]
 
 trimmed_reads = (trim_adaptor(record, "GTTGGAACCG") for record in \
@@ -8896,6 +9044,58 @@ For more details, see the built in help (also \href{http://www.biopython.org/DIS
 ...
 \end{verbatim}
 
+\subsection{Converting FASTA and QUAL files into FASTQ files}
+\label{sec:SeqIO-fasta-qual-conversion}
+
+FASTQ files hold \emph{both} sequences and their quality strings.
+FASTA files hold \emph{just} sequences, while QUAL files hold \emph{just}
+the qualities. Therefore a single FASTQ file can be converted to or from
+\emph{paired} FASTA and QUAL files.
+
+Going from FASTQ to FASTA is easy:
+
+\begin{verbatim}
+from Bio import SeqIO
+SeqIO.convert("example.fastq", "fastq", "example.fasta", "fasta")
+\end{verbatim}
+
+Going from FASTQ to QUAL is also easy:
+
+\begin{verbatim}
+from Bio import SeqIO
+SeqIO.convert("example.fastq", "fastq", "example.qual", "qual")
+\end{verbatim}
+
+However, the reverse is a little more tricky. You can use \verb|Bio.SeqIO.parse()|
+to iterate over the records in a \emph{single} file, but in this case we have
+two input files. There are several strategies possible, but assuming that the
+two files are really paired the most memory efficient way is to loop over both
+together. The code is a little fiddly, so we provide a function called
+\verb|PairedFastaQualIterator| in the \verb|Bio.SeqIO.QualityIO| module to do
+this. This takes two handles (the FASTA file and the QUAL file) and returns
+a \verb|SeqRecord| iterator:
+
+\begin{verbatim}
+from Bio.SeqIO.QualityIO import PairedFastaQualIterator
+for record in PairedFastaQualIterator(open("example.fasta"), open("example.qual")):
+   print record
+\end{verbatim}
+
+This function will check that the FASTA and QUAL files are consistent (e.g.
+the records are in the same order, and have the same sequence length).
+You can combine this with the \verb|Bio.SeqIO.write()| function to convert a
+pair of FASTA and QUAL files into a single FASTQ files:
+
+\begin{verbatim}
+from Bio import SeqIO
+from Bio.SeqIO.QualityIO import PairedFastaQualIterator
+handle = open("temp.fastq", "w") #w=write
+records = PairedFastaQualIterator(open("example.fasta"), open("example.qual"))
+count = SeqIO.write(records, handle, "fastq")
+handle.close()
+print "Converted %i records" % count
+\end{verbatim}
+
 \subsection{Indexing a FASTQ file}
 \label{sec:fastq-indexing}
 
@@ -8957,10 +9157,10 @@ Here is a neat trick using the \verb|Seq| object's \verb|split| method to
 get a list of all the possible ORF translations in the six reading frames:
 
 \begin{verbatim}
-for strand, nuc in [(+1, record.seq), (-1, record.seq.reverse_complement())] :
-    for frame in range(3) :
-        for pro in nuc[frame:].translate(table).split("*") :
-            if len(pro) >= min_pro_len :
+for strand, nuc in [(+1, record.seq), (-1, record.seq.reverse_complement())]:
+    for frame in range(3):
+        for pro in nuc[frame:].translate(table).split("*"):
+            if len(pro) >= min_pro_len:
                 print "%s...%s - length %i, strand %i, frame %i" \
                       % (pro[:30], pro[-3:], len(pro), strand, frame)
 \end{verbatim}
@@ -9003,24 +9203,24 @@ record = SeqIO.read(open("NC_005816.gb"),"genbank")
 table = 11
 min_pro_len = 100
 
-def find_orfs_with_trans(seq, trans_table, min_protein_length) :
+def find_orfs_with_trans(seq, trans_table, min_protein_length):
     answer = []
     seq_len = len(seq)
-    for strand, nuc in [(+1, seq), (-1, seq.reverse_complement())] :
-        for frame in range(3) :
+    for strand, nuc in [(+1, seq), (-1, seq.reverse_complement())]:
+        for frame in range(3):
             trans = str(nuc[frame:].translate(trans_table))
             trans_len = len(trans)
             aa_start = 0
             aa_end = 0
-            while aa_start < trans_len :
+            while aa_start < trans_len:
                 aa_end = trans.find("*", aa_start)
-                if aa_end == -1 :
+                if aa_end == -1:
                     aa_end = trans_len
-                if aa_end-aa_start >= min_protein_length :
-                    if strand == 1 :
+                if aa_end-aa_start >= min_protein_length:
+                    if strand == 1:
                         start = frame+aa_start*3
                         end = min(seq_len,frame+aa_end*3+3)
-                    else :
+                    else:
                         start = seq_len-frame-aa_end*3-3
                         end = seq_len-frame-aa_start*3                        
                     answer.append((start, end, strand,
@@ -9030,7 +9230,7 @@ def find_orfs_with_trans(seq, trans_table, min_protein_length) :
     return answer
 
 orf_list = find_orfs_with_trans(record.seq, table, min_pro_len)
-for start, end, strand, pro in orf_list :
+for start, end, strand, pro in orf_list:
     print "%s...%s - length %i, strand %i, %i:%i" \
           % (pro[:30], pro[-3:], len(pro), strand, start, end)
 \end{verbatim}
@@ -9314,12 +9514,12 @@ window = 7
 dict_one = {}
 dict_two = {}
 for (seq, section_dict) in [(str(rec_one.seq).upper(), dict_one),
-                            (str(rec_two.seq).upper(), dict_two)] :
-    for i in range(len(seq)-window) :
+                            (str(rec_two.seq).upper(), dict_two)]:
+    for i in range(len(seq)-window):
         section = seq[i:i+window]
-        try :
+        try:
             section_dict[section].append(i)
-        except KeyError :
+        except KeyError:
             section_dict[section] = [i]
 #Now find any sub-sequences found in both sequences
 #(Python 2.3 would require slightly different code here)
@@ -9331,9 +9531,9 @@ print "%i unique matches" % len(matches)
 #Create lists of x and y co-ordinates for scatter plot
 x = []
 y = []
-for section in matches :
-    for i in dict_one[section] :
-        for j in dict_two[section] :
+for section in matches:
+    for i in dict_one[section]:
+        for j in dict_two[section]:
             x.append(i)
             y.append(j)
 \end{verbatim}
@@ -9391,10 +9591,10 @@ bit of code to only plot the first fifty reads.
 \begin{verbatim}
 import pylab
 from Bio import SeqIO
-for subfigure in [1,2] :
+for subfigure in [1,2]:
     filename = "SRR001666_%i.fastq" % subfigure
     pylab.subplot(1, 2, subfigure)
-    for i,record in enumerate(SeqIO.parse(open(filename), "fastq")) :
+    for i,record in enumerate(SeqIO.parse(open(filename), "fastq")):
         if i >= 50 : break #trick!
         pylab.plot(record.letter_annotations["phred_quality"])
     pylab.ylim(0,45)
@@ -10066,7 +10266,7 @@ class BiospamTestDivision(unittest.TestCase):
         self.assertAlmostEqual(result, -5.0)
 
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
 \end{verbatim}
@@ -10091,7 +10291,7 @@ These are the key points of \verb|unittest|-based tests:
 
   \item At the end of the test script, you can use
 \begin{verbatim}
-if __name__ == "__main__" :
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
 \end{verbatim}
@@ -10145,7 +10345,7 @@ class BiospamTestDivision(unittest.TestCase):
         self.assertAlmostEqual(result, -5.0)
 
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
 \end{verbatim}

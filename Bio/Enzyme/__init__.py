@@ -3,26 +3,30 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
+"""Module to work with enzyme.dat file (DEPRECATED).
+
 This module provides code to work with the enzyme.dat file from
 Enzyme (OBSOLETE as of Biopython version 1.50).
 http://www.expasy.ch/enzyme/
 
-The functionality of Bio.Enzyme has moved to Bio.ExPASy.Enzyme;
-please use that module instead of Bio.Enzyme. Most likely, Bio.Enzyme
-will be deprecated in a future release of Biopython.
-
-
-Classes:
-_Scanner     Scans Enzyme data.
-
+The functionality of Bio.Enzyme has moved to Bio.ExPASy.ExPASy;
+please use that module instead of Bio.Enzyme. Bio.Enzyme is now
+deprecated and will be removed in a future release of Biopython.
 """
+
+import warnings
+warnings.warn("Bio.Enzyme is deprecated, and will be removed in a"\
+              " future release of Biopython. Most of the functionality "
+              " is now provided by Bio.ExPASy.Enzyme.  If you want to "
+              " continue to use Bio.Enzyme, please get in contact "
+              " via the mailing lists to avoid its permanent removal from"\
+              " Biopython.", DeprecationWarning)
 
 from Bio import File
 from Bio.ParserSupport import *
 
 class _Scanner:
-    """Scans Enzyme data.
+    """Scans Enzyme data (PRIVATE).
 
     Tested with:
     Release 33

@@ -1,0 +1,275 @@
+BLASTP 2.2.21 [Jun-14-2009]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Reference for compositional score matrix adjustment: Altschul, Stephen F., 
+John C. Wootton, E. Michael Gertz, Richa Agarwala, Aleksandr Morgulis,
+Alejandro A. Schaffer, and Yi-Kuo Yu (2005) "Protein database searches
+using compositionally adjusted substitution matrices", FEBS J. 272:5101-5109.
+
+Query= gi|3298468|dbj|BAA31520.1| SAMIPF
+         (472 letters)
+
+Database: All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+from WGS projects 
+           8,994,603 sequences; 3,078,807,967 total letters
+
+Searching..................................................done
+
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+
+pdb|1JLX|A Chain A, Agglutinin In Complex With T-Disaccharide >g...   640   0.0  
+gb|AAQ03084.1|AF401479_1 agglutinin [Amaranthus caudatus]             630   e-179
+gb|AAL05954.1| agglutinin [Amaranthus caudatus]                       627   e-178
+gb|AAD33922.1|AF143954_1 agglutinin [Amaranthus hypochondriacus]...   625   e-177
+gb|AAM09540.1|AF491291_1 seed protein AmA1 [Amaranthus hypochond...   624   e-177
+ref|XP_002264858.1| PREDICTED: hypothetical protein [Vitis vinif...   245   6e-63
+ref|XP_002264911.1| PREDICTED: hypothetical protein [Vitis vinif...   244   1e-62
+emb|CAN71829.1| hypothetical protein [Vitis vinifera]                 239   5e-61
+ref|XP_002264098.1| PREDICTED: hypothetical protein [Vitis vinif...   237   2e-60
+ref|XP_002264775.1| PREDICTED: hypothetical protein [Vitis vinif...   231   9e-59
+
+>pdb|1JLX|A Chain A, Agglutinin In Complex With T-Disaccharide
+ pdb|1JLX|B Chain B, Agglutinin In Complex With T-Disaccharide
+ pdb|1JLY|A Chain A, Crystal Structure Of Amaranthus Caudatus Agglutinin
+ pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin
+          Length = 303
+
+ Score =  640 bits (1652), Expect = 0.0,   Method: Compositional matrix adjust.
+ Identities = 303/303 (100%), Positives = 303/303 (100%)
+
+Query: 170 AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK 229
+           AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK
+Sbjct: 1   AGLPVIMCLKSNNHQKYLRYQSDNIQQYGLLQFSADKILDPLAQFEVEPSKTYDGLVHIK 60
+
+Query: 230 SRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHY 289
+           SRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHY
+Sbjct: 61  SRYTNKYLVRWSPNHYWITASANEPDENKSNWACTLFKPLYVEEGNMKKVRLLHVQLGHY 120
+
+Query: 290 TQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKGYVTFKGNNGKYLGVITI 349
+           TQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKGYVTFKGNNGKYLGVITI
+Sbjct: 121 TQNYTVGGSFVSYLFAESSQIDTGSKDVFHVIDWKSIFQFPKGYVTFKGNNGKYLGVITI 180
+
+Query: 350 NQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDDWILVDGNDPRETN 409
+           NQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDDWILVDGNDPRETN
+Sbjct: 181 NQLPCLQFGYDNLNDPKVAHQMFVTSNGTICIKSNYMNKFWRLSTDDWILVDGNDPRETN 240
+
+Query: 410 EAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIELG 469
+           EAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIELG
+Sbjct: 241 EAAALFRSDVHDFNVISLLNMQKTWFIKRFTSGKPGFINCMNAATQNVDETAILEIIELG 300
+
+Query: 470 QNN 472
+           QNN
+Sbjct: 301 QNN 303
+
+
+BLASTP 2.2.21 [Jun-14-2009]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Reference for compositional score matrix adjustment: Altschul, Stephen F., 
+John C. Wootton, E. Michael Gertz, Richa Agarwala, Aleksandr Morgulis,
+Alejandro A. Schaffer, and Yi-Kuo Yu (2005) "Protein database searches
+using compositionally adjusted substitution matrices", FEBS J. 272:5101-5109.
+
+Query= gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING
+finger protein
+         (600 letters)
+
+Database: All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+from WGS projects 
+           8,994,603 sequences; 3,078,807,967 total letters
+
+Searching..................................................done
+
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+
+sp|Q9WTV7.1|RNF12_MOUSE RecName: Full=E3 ubiquitin-protein ligas...   684   0.0  
+ref|NP_035406.3| ring finger protein, LIM domain interacting [Mu...   676   0.0  
+dbj|BAB28712.1| unnamed protein product [Mus musculus]                674   0.0  
+dbj|BAC26379.1| unnamed protein product [Mus musculus]                672   0.0  
+ref|NP_001020063.1| ring finger protein, LIM domain interacting ...   620   e-175
+ref|NP_057204.2| ring finger protein, LIM domain interacting [Ho...   606   e-171
+ref|XP_001141975.1| PREDICTED: ring finger protein 12 isoform 1 ...   605   e-171
+ref|XP_001096367.1| PREDICTED: similar to ring finger protein 12...   605   e-171
+dbj|BAA91632.1| unnamed protein product [Homo sapiens]                604   e-170
+ref|XP_001505028.1| PREDICTED: similar to E3 ubiquitin-protein l...   602   e-170
+
+>sp|Q9WTV7.1|RNF12_MOUSE RecName: Full=E3 ubiquitin-protein ligase RNF12; AltName: Full=RING
+           finger protein 12; AltName: Full=LIM domain-interacting
+           RING finger protein; AltName: Full=RING finger LIM
+           domain-binding protein; Short=R-LIM
+ gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein [Mus musculus]
+          Length = 600
+
+ Score =  684 bits (1765), Expect = 0.0,   Method: Compositional matrix adjust.
+ Identities = 353/414 (85%), Positives = 353/414 (85%)
+
+Query: 1   MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE 60
+           MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE
+Sbjct: 1   MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNNLLGTPGESTE 60
+
+Query: 61  EELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSRQRGNQS 120
+           EELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSRQRGNQS
+Sbjct: 61  EELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDWLNSVRQTGNTTRSRQRGNQS 120
+
+Query: 121 WRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMXXXXX 180
+           WRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQM     
+Sbjct: 121 WRAVSRTNPNSGDFRFSLEINVNRNNGSQTSENESEPSTRRLSVENMESSSQRQMENSAS 180
+
+Query: 181 XXXXXXXXXXXXXXTEAVTEVXXXXXXXXXXXXXXXXXXXXXXXERSMSPLQPTSEIPRR 240
+                         TEAVTEV                       ERSMSPLQPTSEIPRR
+Sbjct: 181 ESASARPSRAERNSTEAVTEVPTTRAQRRARSRSPEHRRTRARAERSMSPLQPTSEIPRR 240
+
+Query: 241 APTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPXXXXXXXXXXXXX 300
+           APTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNP             
+Sbjct: 241 APTLEQSSENEPEGSSRTRHHVTLRQQISGPELLGRGLFAASGSRNPSQGTSSSDTGSNS 300
+
+Query: 301 XXXXXXQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTF 360
+                 QRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTF
+Sbjct: 301 ESSGSGQRPPTIVLDLQVRRVRPGEYRQRDSIASRTRSRSQAPNNTVTYESERGGFRRTF 360
+
+Query: 361 SRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMY 414
+           SRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMY
+Sbjct: 361 SRSERAGVRTYVSTIRIPIRRILNTGLSETTSVAIQTMLRQIMTGFGELSYFMY 414
+
+
+
+ Score =  258 bits (658), Expect = 2e-66,   Method: Compositional matrix adjust.
+ Identities = 115/115 (100%), Positives = 115/115 (100%)
+
+Query: 486 KDGRHRAPVTFDESGSLPFFSLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKT 545
+           KDGRHRAPVTFDESGSLPFFSLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKT
+Sbjct: 486 KDGRHRAPVTFDESGSLPFFSLAQFFLLNEDDEDQPRGLTKEQIDNLAMRSFGENDALKT 545
+
+Query: 546 CSVCITEYTEGDKLRKLPCSHEFHVHCIDRWLSENSTCPICRRAVLSSGNRESVV 600
+           CSVCITEYTEGDKLRKLPCSHEFHVHCIDRWLSENSTCPICRRAVLSSGNRESVV
+Sbjct: 546 CSVCITEYTEGDKLRKLPCSHEFHVHCIDRWLSENSTCPICRRAVLSSGNRESVV 600
+
+
+BLASTP 2.2.21 [Jun-14-2009]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Reference for compositional score matrix adjustment: Altschul, Stephen F., 
+John C. Wootton, E. Michael Gertz, Richa Agarwala, Aleksandr Morgulis,
+Alejandro A. Schaffer, and Yi-Kuo Yu (2005) "Protein database searches
+using compositionally adjusted substitution matrices", FEBS J. 272:5101-5109.
+
+Query= gi|671626|emb|CAA85685.1| rubisco large subunit
+         (473 letters)
+
+Database: All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+from WGS projects 
+           8,994,603 sequences; 3,078,807,967 total letters
+
+Searching..................................................done
+
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+
+emb|CAA85685.1| rubisco large subunit [Rosmarinus officinalis]        947   0.0  
+emb|CAA85698.1| rubisco large subunit [Salvia sclarea] >gi|14192...   942   0.0  
+emb|CAA85688.1| rubisco large subunit [Salvia bucharica] >gi|141...   942   0.0  
+emb|CAA85670.1| rubisco large subunit [Monarda menthaefolia]          941   0.0  
+emb|CAA85667.1| rubisco large subunit [Mentha suaveolens]             941   0.0  
+emb|CAA85676.1| rubisco large subunit [Origanum laevigatum] >gi|...   941   0.0  
+emb|CAA85684.1| rubisco large subunit [Rosmarinus officinalis]        940   0.0  
+emb|CAA85687.1| rubisco large subunit [Salvia argentea]               939   0.0  
+emb|CAA85686.1| rubisco large subunit [Salvia aethiopis]              939   0.0  
+emb|CAA85718.1| rubisco large subunit [Thymus alsinoides]             939   0.0  
+
+>emb|CAA85685.1| rubisco large subunit [Rosmarinus officinalis]
+          Length = 473
+
+ Score =  947 bits (2449), Expect = 0.0,   Method: Compositional matrix adjust.
+ Identities = 458/473 (96%), Positives = 458/473 (96%)
+
+Query: 1   MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQXXXXXXXXXXXXXXX 60
+           MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQ               
+Sbjct: 1   MSPQTETKASVGFKAGVKEYKLTYYTPEYETKDTDILAAFRVTPQPGVPPEEAGAAVAAE 60
+
+Query: 61  SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQCICYVAYPLDLFEEGSVTNMFTSI 120
+           SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQCICYVAYPLDLFEEGSVTNMFTSI
+Sbjct: 61  SSTGTWTTVWTDGLTSLDRYKGRCYHIEPVPGEKDQCICYVAYPLDLFEEGSVTNMFTSI 120
+
+Query: 121 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL 180
+           VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL
+Sbjct: 121 VGNVFGFKALRALRLEDLRIPVAYVKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGL 180
+
+Query: 181 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL 240
+           SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL
+Sbjct: 181 SAKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEAIYKAQAETGEIKGHYL 240
+
+Query: 241 NATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV 300
+           NATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV
+Sbjct: 241 NATAGTCEEMIKRAIFARELGVPIVMHDYLTGGFTANTSLAHYCRDNGLLLHIHRAMHAV 300
+
+Query: 301 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR 360
+           IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR
+Sbjct: 301 IDRQKNHGMHFRVLAKALRLSGGDHIHSGTVVGKLEGERDITLGFVDLLRDDFIEKDRSR 360
+
+Query: 361 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN 420
+           GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN
+Sbjct: 361 GIYFTQDWVSLPGVIPVASGGIHVWHMPALTEIFGDDSVLQFGGGTLGHPWGNAPGAVAN 420
+
+Query: 421 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+           RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD
+Sbjct: 421 RVAVEACVKARNEGRDLAAEGNAIIREACKWSPELAAACEVWKEIKFEFPAMD 473
+
+
+  Database: All non-redundant GenBank CDS
+  translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+  from WGS projects
+    Posted date:  Jun 4, 2009  5:40 PM
+  Number of letters in database: 3,078,807,967
+  Number of sequences in database:  8,994,603
+  
+Lambda     K      H
+   0.325    0.138    0.426 
+
+Gapped
+Lambda     K      H
+   0.267   0.0410    0.140 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Sequences: 8994603
+Number of Hits to DB: 8,456,431,703
+Number of extensions: 350268212
+Number of successful extensions: 843324
+Number of sequences better than 1.0e-05: 30452
+Number of HSP's gapped: 835403
+Number of HSP's successfully gapped: 30847
+Length of database: 3,078,807,967
+Neighboring words threshold: 11
+Window for multiple hits: 40
+X1: 15 ( 7.0 bits)
+X2: 38 (14.6 bits)
+X3: 64 (24.7 bits)
+S1: 40 (21.6 bits)
+S2: 133 (55.8 bits)

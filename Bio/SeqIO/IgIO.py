@@ -1,4 +1,4 @@
-# Copyright 2008 by Peter Cock.  All rights reserved.
+# Copyright 2008-2009 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -16,7 +16,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 #This is a generator function!
-def IgIterator(handle, alphabet = single_letter_alphabet) :
+def IgIterator(handle, alphabet = single_letter_alphabet):
     """Iterate over IntelliGenetics records (as SeqRecord objects).
 
     handle - input file
@@ -31,14 +31,14 @@ def IgIterator(handle, alphabet = single_letter_alphabet) :
     key 'comment'.
     """
     #Skip any file header text before the first record (;; lines)
-    while True :
+    while True:
         line = handle.readline()
         if not line : break #Premature end of file, or just empty?
         if not line.startswith(";;") : break
 
-    while line :
+    while line:
         #Now iterate over the records
-        if line[0]!=";" :
+        if line[0]!=";":
             raise ValueError( \
                   "Records should start with ';' and not:\n%s" % repr(line))
 
@@ -48,7 +48,7 @@ def IgIterator(handle, alphabet = single_letter_alphabet) :
 
         #Note some examples use "; ..." and others ";..."
         comment_lines = []
-        while line.startswith(";") :
+        while line.startswith(";"):
             #TODO - Extract identifier from lines like "LOCUS\tB_SF2"?
             comment_lines.append(line[1:].strip())
             line = handle.readline()
@@ -62,10 +62,10 @@ def IgIterator(handle, alphabet = single_letter_alphabet) :
             #Remove trailing whitespace, and any internal spaces
             seq_lines.append(line.rstrip().replace(" ",""))
         seq_str = "".join(seq_lines)
-        if seq_str.endswith("1") :
+        if seq_str.endswith("1"):
             #Remove the optional terminator (digit one)
             seq_str = seq_str[:-1]
-        if "1" in seq_str :
+        if "1" in seq_str:
             raise ValueError("Potential terminator digit one found within sequence.")
                 
         #Return the record and then continue...
@@ -77,21 +77,21 @@ def IgIterator(handle, alphabet = single_letter_alphabet) :
     #We should be at the end of the file now
     assert not line
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     print "Running quick self test"
     
     import os
     path = "../../Tests/IntelliGenetics/"
-    if os.path.isdir(path) :
-        for filename in os.listdir(path) :
-            if os.path.splitext(filename)[-1] == ".txt" :
+    if os.path.isdir(path):
+        for filename in os.listdir(path):
+            if os.path.splitext(filename)[-1] == ".txt":
                 print
                 print filename
                 print "-"*len(filename)
                 handle = open(os.path.join(path, filename))
-                for record in IgIterator(handle) :
+                for record in IgIterator(handle):
                     print record.id, len(record)
                 handle.close()
         print "Done"
-    else :
+    else:
         print "Could not find input files"

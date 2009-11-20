@@ -149,30 +149,31 @@ class PDBParser:
                     hetero_flag=" "
                 residue_id=(hetero_flag, resseq, icode)
                 # atomic coordinates
-                try :
+                try:
                     x=float(line[30:38]) 
                     y=float(line[38:46]) 
                     z=float(line[46:54])
-                except :
+                except:
                     #Should we allow parsing to continue in permissive mode?
                     #If so what coordindates should we default to?  Easier to abort!
                     raise PDBContructionError("Invalid or missing coordinate(s) at line %i." \
                                               % global_line_counter)
                 coord=numpy.array((x, y, z), 'f')
                 # occupancy & B factor
-                try :
+                try:
                     occupancy=float(line[54:60])
-                except :
+                except:
                     self._handle_PDB_exception("Invalid or missing occupancy",
                                                global_line_counter)
                     occupancy = 0.0 #Is one or zero a good default?
-                try :
+                try:
                     bfactor=float(line[60:66])
-                except :
+                except:
                     self._handle_PDB_exception("Invalid or missing B factor",
                                                global_line_counter)
                     bfactor = 0.0 #The PDB use a default of zero if the data is missing
                 segid=line[72:76]
+                element=line[76:78].strip()
                 if current_segid!=segid:
                     current_segid=segid
                     structure_builder.init_seg(current_segid)
@@ -194,7 +195,8 @@ class PDBParser:
                         self._handle_PDB_exception(message, global_line_counter) 
                 # init atom
                 try:
-                    structure_builder.init_atom(name, coord, bfactor, occupancy, altloc, fullname, serial_number)
+                    structure_builder.init_atom(name, coord, bfactor, occupancy, altloc,
+                                                fullname, serial_number, element)
                 except PDBConstructionException, message:
                     self._handle_PDB_exception(message, global_line_counter)
             elif(record_type=='ANISOU'):

@@ -1,4 +1,4 @@
-# Copyright 2007-2008 by Peter Cock.  All rights reserved.
+# Copyright 2007-2009 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -25,7 +25,7 @@ tuple_records = quick_FASTA_reader(dna_fasta_filename)
 assert len(tuple_records)==3
 seq_records = list(SeqIO.parse(open(dna_fasta_filename),"fasta"))
 assert len(seq_records)==3
-for tuple_record, seq_record in zip(tuple_records, seq_records) :
+for tuple_record, seq_record in zip(tuple_records, seq_records):
     assert tuple_record == (seq_record.description, seq_record.seq.tostring())
     print "%s has GC%% of %0.1f" % (seq_record.name, GC(seq_record.seq))
 
@@ -45,15 +45,15 @@ dna_fasta_filename = "fasta.tmp"
 dna_genbank_filename = "GenBank/NC_005816.gb"
 record = SeqIO.read(open(dna_genbank_filename), "genbank")
 records = []
-for feature in record.features :
+for feature in record.features:
     if feature.type == "CDS" \
-    and not feature.sub_features :
+    and not feature.sub_features:
         start = feature.location.start.position
         end = feature.location.end.position
         table = int(feature.qualifiers["transl_table"][0])
-        if feature.strand == -1 :
+        if feature.strand == -1:
             seq = record.seq[start:end].reverse_complement()
-        else :
+        else:
             seq = record.seq[start:end]
         #Double check we have the CDS sequence expected
         #TODO - Use any cds_start option if/when added to deal with the met
@@ -62,7 +62,7 @@ for feature in record.features :
         records.append(SeqRecord(seq, id=feature.qualifiers["protein_id"][0],
                                  description=feature.qualifiers["product"][0]))
 del start, end, table, seq
-if os.path.isfile(dna_fasta_filename) :
+if os.path.isfile(dna_fasta_filename):
     os.remove(dna_fasta_filename)
 handle = open(dna_fasta_filename, "w")
 SeqIO.write(records, handle, "fasta")
@@ -112,17 +112,17 @@ assert seguid(str_light_chain_one) != seguid(str_light_chain_two)
 examples = [str_light_chain_one, str_light_chain_two,
             "ATGCGTATCGATCGCGATACGATTAGGCGGAT"]
 
-for i, seq_str in enumerate(examples) :
+for i, seq_str in enumerate(examples):
     print "Example %i, length %i, %s..." % (i+1, len(seq_str), seq_str[:10])
 
     #Avoid cross platforms with printing floats by doing conversion explicitly
-    def simple_LCC(s) :
+    def simple_LCC(s):
         return "%0.2f" % lcc_simp(s)
 
-    def windowed_LCC(s) :
+    def windowed_LCC(s):
         return ", ".join(["%0.2f" % v for v in lcc_mult(s,20)])
 
-    for checksum in [crc32, crc64, gcg, seguid, simple_LCC, windowed_LCC] :
+    for checksum in [crc32, crc64, gcg, seguid, simple_LCC, windowed_LCC]:
         #First using a string:
         value = checksum(seq_str)
         print " %s = %s" % (checksum.__name__, value)

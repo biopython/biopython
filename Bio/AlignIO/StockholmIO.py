@@ -1,4 +1,4 @@
-# Copyright 2006-2008 by Peter Cock.  All rights reserved.
+# Copyright 2006-2009 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -35,7 +35,7 @@ using the Bio.AlignIO.read() function:
     SingleLetterAlphabet() alignment with 2 rows and 104 columns
     UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-G...UGU AP001509.1
     AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-C...GAU AE007476.1
-    >>> for record in align :
+    >>> for record in align:
     ...     print record.id, len(record)
     AP001509.1 104
     AE007476.1 104
@@ -59,7 +59,7 @@ In addition to the sequences themselves, this example alignment also includes
 some GR lines for the secondary structure of the sequences.  These are strings,
 with one character for each letter in the associated sequence:
 
-    >>> for record in align :
+    >>> for record in align:
     ...     print record.id
     ...     print record.seq
     ...     print record.letter_annotations['secondary_structure']
@@ -110,7 +110,7 @@ Again, if you want to you can specify this is RNA:
     >>> from Bio import SeqIO
     >>> from Bio.Alphabet import generic_rna
     >>> handle = open("Stockholm/simple.sth", "rU")
-    >>> for record in SeqIO.parse(handle, "stockholm", alphabet=generic_rna) :
+    >>> for record in SeqIO.parse(handle, "stockholm", alphabet=generic_rna):
     ...     print record.id
     ...     print record.seq
     ...     print record.letter_annotations['secondary_structure']
@@ -135,7 +135,7 @@ __docformat__ = "epytext en" #not just plaintext
 from Bio.Align.Generic import Alignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
-class StockholmWriter(SequentialAlignmentWriter) :
+class StockholmWriter(SequentialAlignmentWriter):
     """Stockholm/PFAM alignment writer."""
 
     #These dictionaries should be kept in sync with those
@@ -152,7 +152,7 @@ class StockholmWriter(SequentialAlignmentWriter) :
                        "organism_classification" : "OC",
                        "look" : "LO"}
 
-    def write_alignment(self, alignment) :
+    def write_alignment(self, alignment):
         """Use this to write (another) single alignment to an open file.
         
         Note that sequences and their annotation are recorded
@@ -168,42 +168,42 @@ class StockholmWriter(SequentialAlignmentWriter) :
         #NOTE - For now, the alignment object does not hold any per column
         #or per alignment annotation - only per sequence.
         
-        if count == 0 :
+        if count == 0:
             raise ValueError("Must have at least one sequence")
-        if self._length_of_sequences == 0 :
+        if self._length_of_sequences == 0:
             raise ValueError("Non-empty sequences are required")
 
         self.handle.write("# STOCKHOLM 1.0\n")
         self.handle.write("#=GF SQ %i\n" % count)
-        for record in records :
+        for record in records:
             self._write_record(record)
         self.handle.write("//\n")
 
     def _write_record(self, record):
         """Write a single SeqRecord to the file"""
-        if self._length_of_sequences != len(record.seq) :
+        if self._length_of_sequences != len(record.seq):
             raise ValueError("Sequences must all be the same length")
 
         #For the case for stockholm to stockholm, try and use record.name
         seq_name = record.id
-        if record.name is not None :
-            if "accession" in record.annotations :
-                if record.id == record.annotations["accession"] :
+        if record.name is not None:
+            if "accession" in record.annotations:
+                if record.id == record.annotations["accession"]:
                     seq_name = record.name
 
         #In the Stockholm file format, spaces are not allowed in the id
         seq_name = seq_name.replace(" ","_")
 
         if "start" in record.annotations \
-        and  "end" in record.annotations :
+        and  "end" in record.annotations:
             suffix = "/%s-%s" % (str(record.annotations["start"]),
                                  str(record.annotations["end"]))
-            if seq_name[-len(suffix):] != suffix :
+            if seq_name[-len(suffix):] != suffix:
                 seq_name = "%s/%s-%s" % (seq_name,
                                         str(record.annotations["start"]),
                                         str(record.annotations["end"]))
 
-        if seq_name in self._ids_written :
+        if seq_name in self._ids_written:
             raise ValueError("Duplicate record identifier: %s" % seq_name)
         self._ids_written.append(seq_name)
         self.handle.write("%s %s\n" % (seq_name, record.seq.tostring()))
@@ -220,52 +220,52 @@ class StockholmWriter(SequentialAlignmentWriter) :
         #us to write the file using a single pass through the records.
 
         #AC = Accession
-        if "accession" in record.annotations :
+        if "accession" in record.annotations:
             self.handle.write("#=GS %s AC %s\n" \
                 % (seq_name, self.clean(record.annotations["accession"])))
-        elif record.id :
+        elif record.id:
             self.handle.write("#=GS %s AC %s\n" \
                 % (seq_name, self.clean(record.id)))
         
         #DE = description
-        if record.description :
+        if record.description:
             self.handle.write("#=GS %s DE %s\n" \
                 % (seq_name, self.clean(record.description)))
 
         #DE = database links
-        for xref in record.dbxrefs :
+        for xref in record.dbxrefs:
             self.handle.write("#=GS %s DR %s\n" \
                 % (seq_name, self.clean(xref)))
 
         #GS = other per sequence annotation
-        for key, value in record.annotations.iteritems() :
-            if key in self.pfam_gs_mapping :
+        for key, value in record.annotations.iteritems():
+            if key in self.pfam_gs_mapping:
                 data = self.clean(str(value))
-                if data :
+                if data:
                     self.handle.write("#=GS %s %s %s\n" \
                                       % (seq_name,
                                          self.clean(self.pfam_gs_mapping[key]),
                                          data))
-            else :
+            else:
                 #It doesn't follow the PFAM standards, but should we record
                 #this data anyway?
                 pass
 
         #GR = per row per column sequence annotation
-        for key, value in record.letter_annotations.iteritems() :
-            if key in self.pfam_gr_mapping and len(str(value))==len(record.seq) :
+        for key, value in record.letter_annotations.iteritems():
+            if key in self.pfam_gr_mapping and len(str(value))==len(record.seq):
                 data = self.clean(str(value))
-                if data :
+                if data:
                     self.handle.write("#=GR %s %s %s\n" \
                                       % (seq_name,
                                          self.clean(self.pfam_gr_mapping[key]),
                                          data))
-            else :
+            else:
                 #It doesn't follow the PFAM standards, but should we record
                 #this data anyway?
                 pass
         
-class StockholmIterator(AlignmentIterator) :
+class StockholmIterator(AlignmentIterator):
     """Loads a Stockholm file from PFAM into Alignment objects.
 
     The file may contain multiple concatenated alignments, which are loaded
@@ -309,11 +309,11 @@ class StockholmIterator(AlignmentIterator) :
                        "OC" : "organism_classification",
                        "LO" : "look"}
 
-    def next(self) :
-        try :
+    def next(self):
+        try:
             line = self._header
             del self._header
-        except AttributeError :
+        except AttributeError:
             line = self.handle.readline()
         if not line:
             #Empty file - just give up.
@@ -341,38 +341,38 @@ class StockholmIterator(AlignmentIterator) :
             if line == '# STOCKHOLM 1.0':
                 self._header = line
                 break
-            elif line == "//" :
+            elif line == "//":
                 #The "//" line indicates the end of the alignment.
                 #There may still be more meta-data
                 passed_end_alignment = True
-            elif line == "" :
+            elif line == "":
                 #blank line, ignore
                 pass
-            elif line[0] != "#" :
+            elif line[0] != "#":
                 #Sequence
                 #Format: "<seqname> <sequence>"
                 assert not passed_end_alignment
                 parts = [x.strip() for x in line.split(" ",1)]
-                if len(parts) != 2 :
+                if len(parts) != 2:
                     #This might be someone attempting to store a zero length sequence?
                     raise ValueError("Could not split line into identifier " \
                                       + "and sequence:\n" + line)
                 id, seq = parts
-                if id not in ids :
+                if id not in ids:
                     ids.append(id)
                 seqs.setdefault(id, '')
                 seqs[id] += seq.replace(".","-")
-            elif len(line) >= 5 :
+            elif len(line) >= 5:
                 #Comment line or meta-data
-                if line[:5] == "#=GF " :
+                if line[:5] == "#=GF ":
                     #Generic per-File annotation, free text
                     #Format: #=GF <feature> <free text>
                     feature, text = line[5:].strip().split(None,1)
                     #Each feature key could be used more than once,
                     #so store the entries as a list of strings.
-                    if feature not in gf :
+                    if feature not in gf:
                         gf[feature] = [text]
-                    else :
+                    else:
                         gf[feature].append(text)
                 elif line[:5] == '#=GC ':
                     #Generic per-Column annotation, exactly 1 char per column
@@ -382,21 +382,21 @@ class StockholmIterator(AlignmentIterator) :
                     #Generic per-Sequence annotation, free text
                     #Format: "#=GS <seqname> <feature> <free text>"
                     id, feature, text = line[5:].strip().split(None,2)
-                    #if id not in ids :
+                    #if id not in ids:
                     #    ids.append(id)
-                    if id not in gs :
+                    if id not in gs:
                         gs[id] = {}
-                    if feature not in gs[id] :
+                    if feature not in gs[id]:
                         gs[id][feature] = [text]
-                    else :
+                    else:
                         gs[id][feature].append(text)
-                elif line[:5] == "#=GR " :
+                elif line[:5] == "#=GR ":
                     #Generic per-Sequence AND per-Column markup
                     #Format: "#=GR <seqname> <feature> <exactly 1 char per column>"
                     id, feature, text = line[5:].strip().split(None,2)
-                    #if id not in ids :
+                    #if id not in ids:
                     #    ids.append(id)
-                    if id not in gr :
+                    if id not in gr:
                         gr[id] = {}
                     if feature not in gr[id]:
                         gr[id][feature] = ""
@@ -416,10 +416,10 @@ class StockholmIterator(AlignmentIterator) :
         self.seq_annotation = gs
         self.seq_col_annotation = gr
 
-        if ids and seqs :
+        if ids and seqs:
 
             if self.records_per_alignment is not None \
-            and self.records_per_alignment != len(ids) :
+            and self.records_per_alignment != len(ids):
                 raise ValueError("Found %i records in this alignment, told to expect %i" \
                                  % (len(ids), self.records_per_alignment))
 
@@ -430,9 +430,9 @@ class StockholmIterator(AlignmentIterator) :
             alignment._annotations = gr
 
             alignment_length = len(seqs.values()[0])
-            for id in ids :
+            for id in ids:
                 seq = seqs[id]
-                if alignment_length != len(seq) :
+                if alignment_length != len(seq):
                     raise ValueError("Sequences have different lengths, or repeated identifier")
                 name, start, end = self._identifier_split(id)
                 alignment.add_sequence(id, seq, start=start, end=end)
@@ -451,21 +451,21 @@ class StockholmIterator(AlignmentIterator) :
 
                 self._populate_meta_data(id, record)
             return alignment
-        else :
+        else:
             return None
 
 
-    def _identifier_split(self, identifier) :
+    def _identifier_split(self, identifier):
         """Returns (name,start,end) string tuple from an identier."""
-        if identifier.find("/")!=-1 :
+        if identifier.find("/")!=-1:
             start_end = identifier.split("/",1)[1]
-            if start_end.count("-")==1 :
+            if start_end.count("-")==1:
                 start, end = map(int, start_end.split("-"))
                 name = identifier.split("/",1)[0]
                 return (name, start, end)
         return (identifier, None, None)
     
-    def _get_meta_data(self, identifier, meta_dict) :
+    def _get_meta_data(self, identifier, meta_dict):
         """Takes an itentifier and returns dict of all meta-data matching it.
 
         For example, given "Q9PN73_CAMJE/149-220" will return all matches to
@@ -485,26 +485,26 @@ class StockholmIterator(AlignmentIterator) :
 
         This function will return an empty dictionary if no data is found."""
         name, start, end = self._identifier_split(identifier)
-        if name==identifier :
+        if name==identifier:
             identifier_keys = [identifier]
-        else :
+        else:
             identifier_keys = [identifier, name]
         answer = {}
-        for identifier_key in identifier_keys :
-            try :
-                for feature_key in meta_dict[identifier_key] :
+        for identifier_key in identifier_keys:
+            try:
+                for feature_key in meta_dict[identifier_key]:
                     answer[feature_key] = meta_dict[identifier_key][feature_key]
-            except KeyError :
+            except KeyError:
                 pass
         return answer
 
-    def _populate_meta_data(self, identifier, record) :
+    def _populate_meta_data(self, identifier, record):
         """Adds meta-date to a SecRecord's annotations dictionary.
 
         This function applies the PFAM conventions."""
 
         seq_data = self._get_meta_data(identifier, self.seq_annotation)
-        for feature in seq_data :
+        for feature in seq_data:
             #Note this dictionary contains lists!
             if feature=="AC" : #ACcession number
                 assert len(seq_data[feature])==1
@@ -514,19 +514,19 @@ class StockholmIterator(AlignmentIterator) :
             elif feature=="DR" : #Database Reference
                 #Should we try and parse the strings?
                 record.dbxrefs = seq_data[feature]
-            elif feature in self.pfam_gs_mapping :
+            elif feature in self.pfam_gs_mapping:
                 record.annotations[self.pfam_gs_mapping[feature]] = ", ".join(seq_data[feature])
-            else :
+            else:
                 #Ignore it?
                 record.annotations["GS:" + feature] = ", ".join(seq_data[feature])
 
         #Now record the per-letter-annotations
         seq_col_data = self._get_meta_data(identifier, self.seq_col_annotation)
-        for feature in seq_col_data :
+        for feature in seq_col_data:
             #Note this dictionary contains strings!
-            if feature in self.pfam_gr_mapping :
+            if feature in self.pfam_gr_mapping:
                 record.letter_annotations[self.pfam_gr_mapping[feature]] = seq_col_data[feature]
-            else :
+            else:
                 #Ignore it?
                 record.letter_annotations["GR:" + feature] = seq_col_data[feature]
     
@@ -538,7 +538,7 @@ def _test():
     """
     import doctest
     import os
-    if os.path.isdir(os.path.join("..","..","Tests")) :
+    if os.path.isdir(os.path.join("..","..","Tests")):
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("..","..","Tests"))
@@ -548,5 +548,5 @@ def _test():
         del cur_dir
         print "Done"
         
-if __name__ == "__main__" :
+if __name__ == "__main__":
     _test()

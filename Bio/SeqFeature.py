@@ -33,16 +33,19 @@ o FeatureLocation - Specify the start and end location of a feature.
 
 o ExactPosition - Specify the position as being exact.
 o WithinPosition - Specify a position occuring within some range.
-o BetweenPosition - Specify a position occuring between a range.
+o BetweenPosition - Specify a position occuring between a range (OBSOLETE?).
 o BeforePosition - Specify the position as being found before some base.
 o AfterPosition - Specify the position as being found after some base.
+o OneOfPosition - Specify a position where the location can be multiple positions.
 """
+
+from Bio.Seq import MutableSeq, reverse_complement
 
 class SeqFeature(object):
     """Represent a Sequence Feature on an object.
 
     Attributes:
-    o location - the location of the feature on the sequence
+    o location - the location of the feature on the sequence (FeatureLocation)
     o type - the specified type of the feature (ie. CDS, exon, repeat...)
     o location_operator - a string specifying how this SeqFeature may
     be related to others. For example, in the example GenBank feature
@@ -67,13 +70,45 @@ class SeqFeature(object):
     The the top level feature would be a CDS from 1 to 60, and the sub
     features would be of 'CDS_join' type and would be from 1 to 10, 30 to
     40 and 50 to 60, respectively.
+
+    To get the nucleotide sequence for this CDS, you would need to take the
+    parent sequence and do seq[0:10]+seq[29:40]+seq[49:60] (Python counting).
+    Things are more complicated with strands and fuzzy positions. To save you
+    dealing with all these special cases, the SeqFeature provides an extract
+    method to do this for you.
     """
     def __init__(self, location = None, type = '', location_operator = '',
                  strand = None, id = "<unknown id>", 
                  qualifiers = None, sub_features = None,
                  ref = None, ref_db = None):
         """Initialize a SeqFeature on a Sequence.
+
+        location can either be a FeatureLocation (with strand argument also
+        given if required), or a Python slice (with strand given as the step).
+
+        e.g. With no strand, on the forward strand, and on the reverse strand:
+
+        >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
+        >>> f1 = SeqFeature(FeatureLocation(5,10), type="domain")
+        >>> f2 = SeqFeature(FeatureLocation(7,110), strand=1, type="CDS")
+        >>> f3 = SeqFeature(FeatureLocation(9,108), strand=-1, type="CDS")
+
+        An invalid strand will trigger an exception:
+
+        >>> f4 = SeqFeature(FeatureLocation(50,60), strand=2)
+        Traceback (most recent call last):
+           ...
+        ValueError: Strand should be +1, -1, 0 or None, not 2
+
+        For exact start/end positions, an integer can be used (as shown above)
+        as shorthand for the ExactPosition object. For non-exact locations, the
+        FeatureLocation must be specified via the appropriate position objects.
         """
+        if strand not in [-1, 0, 1, None] :
+            raise ValueError("Strand should be +1, -1, 0 or None, not %s" \
+                             % repr(strand))
+        if location and not isinstance(location, FeatureLocation):
+            raise TypeError("FeatureLocation (or None) required for the location")
         self.location = location
 
         self.type = type
@@ -92,17 +127,17 @@ class SeqFeature(object):
     def __repr__(self):
         """A string representation of the record for debugging."""
         answer = "%s(%s" % (self.__class__.__name__, repr(self.location))
-        if self.type :
+        if self.type:
             answer += ", type=%s" % repr(self.type)
-        if self.location_operator :
+        if self.location_operator:
             answer += ", location_operator=%s" % repr(self.location_operator)
-        if self.strand :
+        if self.strand:
             answer += ", strand=%s" % repr(self.strand)
-        if self.id and self.id != "<unknown id>" :
+        if self.id and self.id != "<unknown id>":
             answer += ", id=%s" % repr(self.id)
-        if self.ref :
+        if self.ref:
             answer += ", ref=%s" % repr(self.ref)
-        if self.ref_db :
+        if self.ref_db:
             answer += ", ref_db=%s" % repr(self.ref_db)
         answer += ")"
         return answer
@@ -127,7 +162,7 @@ class SeqFeature(object):
 
         return out
 
-    def _shift(self, offset) :
+    def _shift(self, offset):
         """Returns a copy of the feature with its location shifted (PRIVATE).
 
         The annotation qaulifiers are copied."""
@@ -144,6 +179,63 @@ class SeqFeature(object):
         answer.sub_features = [f._shift(offset) for f in self.sub_features]
         answer.qualifiers = dict(self.qualifiers.iteritems())
         return answer
+
+    def extract(self, parent_sequence):
+        """Extract feature sequence from the supplied parent sequence.
+
+        The parent_sequence can be a Seq like object or a string, and will
+        generally return an object of the same type. The exception to this is
+        a MutableSeq as the parent sequence will return a Seq object.
+
+        This should cope with complex locations including complements, joins
+        and fuzzy positions. Even mixed strand features should work! This
+        also covers features on protein sequences (e.g. domains), although
+        here reverse strand features are not permitted.
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_protein
+        >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
+        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
+        >>> f = SeqFeature(FeatureLocation(8,15), type="domain")
+        >>> f.extract(seq)
+        Seq('VALIVIC', ProteinAlphabet())
+
+        Note - currently only sub-features of type "join" are supported.
+        """
+        if isinstance(parent_sequence, MutableSeq):
+            #This avoids complications with reverse complements
+            #(the MutableSeq reverse complement acts in situ)
+            parent_sequence = parent_sequence.toseq()
+        if self.sub_features:
+            if self.location_operator!="join":
+                raise ValueError(f.location_operator)
+            if self.strand == -1:
+                #This is a special case given how the GenBank parser works.
+                #Must avoid doing the reverse complement twice.
+                parts = []
+                for f_sub in self.sub_features:
+                    assert f_sub.strand==-1
+                    parts.append(parent_sequence[f_sub.location.nofuzzy_start:\
+                                                 f_sub.location.nofuzzy_end])
+            else:
+                #This copes with mixed strand features:
+                parts = [f_sub.extract(parent_sequence) \
+                         for f_sub in self.sub_features]
+            #We use addition rather than a join to avoid alphabet issues:
+            f_seq = parts[0]
+            for part in parts[1:] : f_seq += part
+        else:
+            f_seq = parent_sequence[self.location.nofuzzy_start:\
+                                    self.location.nofuzzy_end]
+        if self.strand == -1:
+            #TODO - MutableSeq?
+            try:
+                f_seq = f_seq.reverse_complement()
+            except AttributeError:
+                assert isinstance(f_seq, str)
+                f_seq = reverse_complement(f_seq)
+        return f_seq
+        
 
 # --- References
 
@@ -221,6 +313,23 @@ class FeatureLocation(object):
         position. In the case of integers, the values are assumed to be
         exact and are converted in ExactPosition arguments. This is meant
         to make it easy to deal with non-fuzzy ends.
+
+        i.e. Short form:
+        
+        >>> from Bio.SeqFeature import FeatureLocation
+        >>> loc = FeatureLocation(5,10)
+        
+        Explicit form:
+
+        >>> from Bio.SeqFeature import FeatureLocation, ExactPosition
+        >>> loc = FeatureLocation(ExactPosition(5),ExactPosition(10))
+
+        Other fuzzy positions are used similarly,
+
+        >>> from Bio.SeqFeature import FeatureLocation
+        >>> from Bio.SeqFeature import BeforePosition, AfterPosition
+        >>> loc2 = FeatureLocation(BeforePosition(5),AfterPosition(10))
+
         """
         if isinstance(start, AbstractPosition):
             self._start = start
@@ -246,7 +355,7 @@ class FeatureLocation(object):
         return "%s(%s,%s)" \
                % (self.__class__.__name__, repr(self.start), repr(self.end))
 
-    def _shift(self, offset) :
+    def _shift(self, offset):
         """Returns a copy of the location shifted by the offset (PRIVATE)."""
         return FeatureLocation(start = self._start._shift(offset),
                                end = self._end._shift(offset))
@@ -257,7 +366,7 @@ class FeatureLocation(object):
     end = property(fget= lambda self : self._end,
                    doc="End location (possibly a fuzzy position, read only).")
 
-    def _get_nofuzzy_start(self) :
+    def _get_nofuzzy_start(self):
         #TODO - Do we still use the BetweenPosition class?
         if ((self._start == self._end) and isinstance(self._start,
              BetweenPosition)):
@@ -274,7 +383,7 @@ class FeatureLocation(object):
         (10.20)..(30.40) should return 10 for start, and 40 for end.
         """)
 
-    def _get_nofuzzy_end(self) :
+    def _get_nofuzzy_end(self):
         #TODO - Do we still use the BetweenPosition class?
         if ((self._start == self._end) and isinstance(self._start,
              BetweenPosition)):
@@ -298,7 +407,7 @@ class AbstractPosition(object):
         self.position = position
         self.extension = extension
 
-    def __repr__(self) :
+    def __repr__(self):
         """String representation of the location for debugging."""
         return "%s(%s,%s)" % (self.__class__.__name__, \
                               repr(self.position), repr(self.extension))
@@ -315,7 +424,7 @@ class AbstractPosition(object):
 
         return cmp(self.position, other.position)
 
-    def _shift(self, offset) :
+    def _shift(self, offset):
         #We want this to maintain the subclass when called from a subclass
         return self.__class__(self.position + offset, self.extension)
             
@@ -335,7 +444,7 @@ class ExactPosition(AbstractPosition):
                                  % extension)
         AbstractPosition.__init__(self, position, 0)
 
-    def __repr__(self) :
+    def __repr__(self):
         """String representation of the ExactPosition location for debugging."""
         assert self.extension == 0
         return "%s(%s)" % (self.__class__.__name__, repr(self.position))
@@ -362,7 +471,7 @@ class WithinPosition(AbstractPosition):
         return "(%s.%s)" % (self.position, self.position + self.extension)
 
 class BetweenPosition(AbstractPosition):
-    """Specify the position of a boundary between two coordinates.
+    """Specify the position of a boundary between two coordinates (OBSOLETE?).
 
     Arguments:
     o position - The start position of the boundary.
@@ -397,7 +506,7 @@ class BeforePosition(AbstractPosition):
                                  % extension)
         AbstractPosition.__init__(self, position, 0)
 
-    def __repr__(self) :
+    def __repr__(self):
         """A string representation of the location for debugging."""
         assert self.extension == 0
         return "%s(%s)" % (self.__class__.__name__, repr(self.position))
@@ -423,7 +532,7 @@ class AfterPosition(AbstractPosition):
                                  % extension)
         AbstractPosition.__init__(self, position, 0)
 
-    def __repr__(self) :
+    def __repr__(self):
         """A string representation of the location for debugging."""
         assert self.extension == 0
         return "%s(%s)" % (self.__class__.__name__, repr(self.position))
@@ -463,7 +572,7 @@ class OneOfPosition(AbstractPosition):
         # initialize with our definition of position and extension
         AbstractPosition.__init__(self, smallest, largest - smallest)
 
-    def __repr__(self) :
+    def __repr__(self):
         """String representation of the OneOfPosition location for debugging."""
         return "%s(%s)" % (self.__class__.__name__, \
                            repr(self.position_choices))
@@ -476,6 +585,10 @@ class OneOfPosition(AbstractPosition):
         out = out[:-1] + ")"
         return out
 
+    def _shift(self, offset):
+        return self.__class__([position_choice._shift(offset) \
+                               for position_choice in self.position_choices])
+
 class PositionGap(object):
     """Simple class to hold information about a gap between positions.
     """
@@ -484,10 +597,20 @@ class PositionGap(object):
         """
         self.gap_size = gap_size
 
-    def __repr__(self) :
+    def __repr__(self):
         """A string representation of the position gap for debugging."""
         return "%s(%s)" % (self.__class__.__name__, repr(self.gap_size))
     
     def __str__(self):
         out = "gap(%s)" % self.gap_size
         return out
+
+def _test():
+    """Run the Bio.SeqFeature module's doctests."""
+    print "Runing doctests..."
+    import doctest
+    doctest.testmod()
+    print "Done"
+
+if __name__ == "__main__":
+    _test()

@@ -47,10 +47,10 @@ def GC(seq):
 
     Note that this will return zero for an empty sequence.
     """
-    try :
+    try:
         gc = sum(map(seq.count,['G','C','g','c','S','s']))
         return gc*100.0/len(seq)
-    except ZeroDivisionError :
+    except ZeroDivisionError:
         return 0.0
         
     
@@ -286,13 +286,13 @@ def translate(seq, frame = 1, genetic_code = 1, translator = None):
     >>> from Bio.Seq import Seq
     >>> my_seq = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG")
     >>> my_seq = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUA")
-    >>> for frame in [0,1,2] :
+    >>> for frame in [0,1,2]:
     ...    print my_seq[frame:].translate()
     ... 
     MAIVMGR*KGAR*
     WPL*WAAERVPDS
     GHCNGPLKGCPIV
-    >>> for frame in [0,1,2] :
+    >>> for frame in [0,1,2]:
     ...     print my_seq.reverse_complement()[frame:].translate()
     ... 
     YYRAPFQRPITMA

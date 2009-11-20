@@ -16,7 +16,7 @@ from Bio.SCOP.Residues import Residues
 
 class HieTests(unittest.TestCase):
 
-    def setUp(self) :
+    def setUp(self):
         self.filename = './SCOP/dir.hie.scop.txt_test'
 
     def testParse(self):
@@ -39,13 +39,13 @@ class HieTests(unittest.TestCase):
        finally:
            f.close()        
 
-    def testError(self) :
+    def testError(self):
         corruptRec = "4926sdfhjhfgyjdfyg"
 
         try:
             rec = Hie.Record(corruptRec)
             assert False, "Should never get here"
-        except ValueError, e :
+        except ValueError, e:
             pass
 
 

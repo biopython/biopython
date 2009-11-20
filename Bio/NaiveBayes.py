@@ -194,7 +194,7 @@ def train(training_set, results, priors=None, typecode=None):
             nb.p_conditional[i][j] = _contents(values)
     return nb
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     # Car data from example 'Naive Bayes Classifier example' by Eric Meisner November 22, 2003
     # http://www.inf.u-szeged.hu/~ormandi/teaching/mi2/02-naiveBayes-example.pdf
     xcar=[

@@ -75,7 +75,7 @@ def open_database(driver = "MySQLdb", **kwargs):
 
     server = DBServer(conn, module)
 
-    if driver == "psycopg" :
+    if driver == "psycopg":
         import warnings
         warnings.warn("Using BioSQL with psycopg (version one) is deprecated. "
                       "It still works for now, but we recommend you update "
@@ -471,7 +471,7 @@ class BioSeqDatabase:
                                           fetch_NCBI_taxonomy)
         num_records = 0
         global _POSTGRES_RULES_PRESENT
-        for cur_record in record_iterator :
+        for cur_record in record_iterator:
             num_records += 1
             #Hack to work arround BioSQL Bug 2839 - If using PostgreSQL and
             #the RULES are present check for a duplicate record before loading
@@ -479,9 +479,9 @@ class BioSeqDatabase:
                 #Recreate what the Loader's _load_bioentry_table will do:
                 if cur_record.id.count(".") == 1:
                     accession, version = cur_record.id.split('.')
-                    try :
+                    try:
                         version = int(version)
-                    except ValueError :
+                    except ValueError:
                         accession = cur_record.id
                         version = 0
                 else:

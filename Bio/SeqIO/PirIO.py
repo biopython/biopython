@@ -1,4 +1,4 @@
-# Copyright 2008 by Peter Cock.  All rights reserved.
+# Copyright 2008-2009 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -102,7 +102,7 @@ _pir_alphabets = {"P1" : generic_protein,
                   }
 
 #This is a generator function!
-def PirIterator(handle) :
+def PirIterator(handle):
     """Generator function to iterate over Fasta records (as SeqRecord objects).
 
     handle - input file
@@ -118,17 +118,17 @@ def PirIterator(handle) :
     but the defaults are slightly different.
     """
     #Skip any text before the first record (e.g. blank lines, comments)
-    while True :
+    while True:
         line = handle.readline()
         if line == "" : return #Premature end of file, or just empty?
-        if line[0] == ">" :
+        if line[0] == ">":
             break
 
-    while True :
-        if line[0]!=">" :
+    while True:
+        if line[0]!=">":
             raise ValueError("Records in PIR files should start with '>' character")
         pir_type = line[1:3]
-        if pir_type not in _pir_alphabets or line[3] != ";" :
+        if pir_type not in _pir_alphabets or line[3] != ";":
             raise ValueError("Records should start with '>XX;' where XX is a valid sequence type")
         identifier = line[4:].strip()
         description = handle.readline().strip()
@@ -143,7 +143,7 @@ def PirIterator(handle) :
             lines.append(line.rstrip().replace(" ",""))
             line = handle.readline()
         seq = "".join(lines)
-        if seq[-1] != "*" :
+        if seq[-1] != "*":
             #Note the * terminator is present on nucleotide sequences too,
             #it is not a stop codon!
             raise ValueError("Sequences in PIR files should include a * terminator!")
@@ -158,25 +158,25 @@ def PirIterator(handle) :
         if not line : return #StopIteration
     assert False, "Should not reach this line"
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     print "Running quick self test"
 
     from StringIO import StringIO
     import os
     
-    for name in ["clustalw",  "DMA_nuc", "DMB_prot", "B_nuc", "Cw_prot"] :
+    for name in ["clustalw",  "DMA_nuc", "DMB_prot", "B_nuc", "Cw_prot"]:
         print name
         filename = "../../Tests/NBRF/%s.pir" % name
-        if not os.path.isfile(filename) :
+        if not os.path.isfile(filename):
             print "Missing %s" % filename
             continue
 
         records = list(PirIterator(open(filename)))
         count = 0
-        for record in records :
+        for record in records:
             count += 1
             parts = record.description.split()
-            if "bases," in parts :
+            if "bases," in parts:
                 assert len(record) == int(parts[parts.index("bases,")-1])
         print "Could read %s (%i records)" % (name, count)
 

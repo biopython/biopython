@@ -21,7 +21,7 @@ class TestBlastRecord(unittest.TestCase):
 
         from Bio.Alphabet import IUPAC
 
-        path = os.path.join("Blast", 'bt005')
+        path = os.path.join("Blast", 'bt005.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         generic_align = record.multiple_alignment.to_generic(IUPAC.protein)
@@ -41,7 +41,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt001(self):
         "Test parsing BLASTP 2.0.10 output (bt001)"
 
-        path = os.path.join('Blast', 'bt001')
+        path = os.path.join('Blast', 'bt001.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -160,7 +160,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt002(self):
         "Test parsing BLASTP 2.0.10 output without hits (bt002)"
 
-        path = os.path.join('Blast', 'bt002')
+        path = os.path.join('Blast', 'bt002.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -224,7 +224,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt003(self):
         "Test parsing BLASTP 2.0.10 output without descriptions (bt003)"
 
-        path = os.path.join('Blast', 'bt003')
+        path = os.path.join('Blast', 'bt003.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -383,7 +383,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt004(self):
         "Test parsing BLASTP 2.0.10 output without alignments (bt004)"
 
-        path = os.path.join('Blast', 'bt004')
+        path = os.path.join('Blast', 'bt004.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -465,7 +465,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt005(self):
         "Test parsing BLASTP 2.0.10 output (bt005)"
 
-        path = os.path.join('Blast', 'bt005')
+        path = os.path.join('Blast', 'bt005.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -574,7 +574,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt006(self):
         "Test parsing PHI-BLAST, BLASTP 2.0.10 output, one round (bt006)"
 
-        path = os.path.join('Blast', 'bt006')
+        path = os.path.join('Blast', 'bt006.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -713,7 +713,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt007(self):
         "Test parsing PHI-BLAST, BLASTP 2.0.10 output, three rounds (bt007)"
 
-        path = os.path.join('Blast', 'bt007')
+        path = os.path.join('Blast', 'bt007.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -735,7 +735,7 @@ class TestNCBITextParser(unittest.TestCase):
         self._check_bt007_hsps_details(record)
         self._check_bt007_footer(record)
 
-    def _check_bt007_round0(self, record) :
+    def _check_bt007_round0(self, record):
         self.assertEqual(record.rounds[0].new_seqs[0].title, "gi|126343|sp|P17216|LIVK_SALTY LEUCINE-SPECIFIC BINDING PROTEIN...")
         self.assertEqual(record.rounds[0].new_seqs[0].score, 743)
         self.assertAlmostEqual(record.rounds[0].new_seqs[0].e, 0.0)
@@ -808,7 +808,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[0].alignments[13].title, ">gi|1351310|sp|P43496|TRXB_PENCH THIOREDOXIN REDUCTASE")
         self.assertEqual(record.rounds[0].alignments[13].length, 334)
 
-    def _check_bt007_round1(self, record) :
+    def _check_bt007_round1(self, record):
         self.assertEqual(len(record.rounds[1].new_seqs), 18)
         self.assertEqual(record.rounds[1].new_seqs[0].title, "gi|113709|sp|P27017|AMIC_PSEAE ALIPHATIC AMIDASE EXPRESSION-REG...")
         self.assertEqual(record.rounds[1].new_seqs[0].score, 49)
@@ -913,7 +913,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[1].alignments[22].length, 106)
         self.assertEqual(record.rounds[1].alignments[23].title, ">gi|3025270|sp|P77269|YPHF_ECOLI ABC TRANSPORTER PERIPLASMIC BINDING PROTEIN YPHF PRECURSOR")
 
-    def _check_bt007_round2(self, record) :
+    def _check_bt007_round2(self, record):
         self.assertEqual(record.rounds[1].alignments[23].length, 327)
         self.assertEqual(len(record.rounds[2].new_seqs), 16)
         self.assertEqual(record.rounds[2].new_seqs[0].title, "gi|3024134|sp|O15303|MGR6_HUMAN METABOTROPIC GLUTAMATE RECEPTOR...")
@@ -1012,7 +1012,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[2].alignments[22].title, ">gi|127971|sp||NCPR_SALTR_1 [Segment 1 of 3] NADPH-CYTOCHROME P450 REDUCTASE (CPR)")
         self.assertEqual(record.rounds[2].alignments[22].length, 426)
 
-    def _check_bt007_hsps(self, record) :
+    def _check_bt007_hsps(self, record):
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].score, 1897)
         self.assertAlmostEqual(record.rounds[0].alignments[0].hsps[0].bits, 743)
         self.assertAlmostEqual(record.rounds[0].alignments[0].hsps[0].expect, 0.0)
@@ -1430,7 +1430,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[2].alignments[22].hsps[0].positives, (53, 146))
         self.assertEqual(record.rounds[2].alignments[22].hsps[0].gaps, (8, 146))
 
-    def _check_bt007_hsps_details(self, record) :
+    def _check_bt007_hsps_details(self, record):
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].query, "MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIKDINAKGGIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVRQARANGLKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKDPSGPYVWITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEFGVFQWHADGSSTVAK")
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].match, "MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIKDINAKGGIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVRQARANGLKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKDPSGPYVWITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEFGVFQWHADGSSTVAK")
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].sbjct, "MKRKAKTIIAGIVALAVSQGAMADDIKVAIVGAMSGPVAQWGDMEFNGARQAIKDINAKGGIKGDKLVGVEYDDACDPKQAVAVANKIVNDGIQYVIGHLCSSSTQPASDIYEDEGILMISPGATNPELTQRGYQYIMRTAGLDSSQGPTAAKYILETVKPQRIAIIHDKQQYGEGLARSVQDGLKQGNANIVFFDGITAGEKDFSALIARLQKENIDFVYYGGYYPEMGQIVRQARANGLKTQFMGPEGVGNASLSNIAGGAAEGMLVTMPKRYDQDPANKAIVEALKADKKDPSGPYVWITYAAVQSLATAMTRSASHRPLDLVKDLKANGADTVIGPLKWDEKGDLKGFEFGVFQWHADGSSTVAK")
@@ -1859,7 +1859,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[2].alignments[22].hsps[0].sbjct_start, 15)
         self.assertEqual(record.rounds[2].alignments[22].hsps[0].sbjct_end, 157)
 
-    def _check_bt007_footer(self, record) :
+    def _check_bt007_footer(self, record):
         self.assertEqual(record.database_name, ['data/swissprot'])
         self.assertEqual(record.num_letters_in_database, [29652561])
         self.assertEqual(record.num_sequences_in_database, [82258])
@@ -1910,7 +1910,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt009(self):
         "Test parsing PHI-BLAST, BLASTP 2.0.10 output, two rounds (bt009)"
 
-        path = os.path.join('Blast', 'bt009')
+        path = os.path.join('Blast', 'bt009.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -1931,7 +1931,7 @@ class TestNCBITextParser(unittest.TestCase):
         self._check_bt009_hsps_details(record)
         self._check_bt009_footer(record)
 
-    def _check_bt009_round0(self, record) :
+    def _check_bt009_round0(self, record):
         self.assertEqual(record.rounds[0].new_seqs[0].title, "gi|399896|sp|Q02134|HIS7_LACLA IMIDAZOLEGLYCEROL-PHOSPHATE DEHY...")
         self.assertEqual(record.rounds[0].new_seqs[0].score, 409)
         self.assertAlmostEqual(record.rounds[0].new_seqs[0].e, 1.e-114)
@@ -2084,7 +2084,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[0].alignments[29].title, ">gi|1174406|sp|P36126|SP14_YEAST PHOSPHOLIPASE D1 (PLD 1) (CHOLINE PHOSPHATASE 1) (PHOSPHATIDYLCHOLINE-HYDROLYZING PHOSPHOLIPASE D1) (MEIOSIS-SPECIFIC SPORULATION PROTEIN SPO14)")
         self.assertEqual(record.rounds[0].alignments[29].length, 1380)
 
-    def _check_bt009_round1(self, record) :
+    def _check_bt009_round1(self, record):
         self.assertEqual(len(record.rounds[1].new_seqs), 0)
         self.assertEqual(len(record.rounds[1].alignments), 24)
         self.assertEqual(record.rounds[1].alignments[0].title, ">gi|2495230|sp|Q43072|HIS7_PEA IMIDAZOLEGLYCEROL-PHOSPHATE DEHYDRATASE (IGPD)")
@@ -2137,7 +2137,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[1].alignments[23].length, 193)
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].score, 1040)
 
-    def _check_bt009_hsps(self, record) :
+    def _check_bt009_hsps(self, record):
         self.assertAlmostEqual(record.rounds[0].alignments[0].hsps[0].bits, 409)
         self.assertAlmostEqual(record.rounds[0].alignments[0].hsps[0].expect, 1e-114)
         self.assertEqual(len(record.rounds[0].alignments[0].hsps), 1)
@@ -2513,7 +2513,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[1].alignments[23].hsps[0].positives, (124, 200))
         self.assertEqual(record.rounds[1].alignments[23].hsps[0].gaps, (7, 200))
 
-    def _check_bt009_hsps_details(self, record) :
+    def _check_bt009_hsps_details(self, record):
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].query, "MTRISHITRNTKETQIELSINLDGTGQADISTGIGFLDHMLTLLTFHSDFDLKIIGHGDHETVGMDPHHLIEDVAIALGKCISEDLGNKLGIRRYGSFTIPMDEALVTCDLDISGRPYLVFHADLSGNQKLGGYDTEMTEEFFRALAFNAGITLHLNEHYGQNTHHIIEGMFKSTARALKQAVSIDESKVGEIPSSKGVL")
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].match, "MTRISHITRNTKETQIELSINLDGTGQADISTGIGFLDHMLTLLTFHSDFDLKIIGHGDHETVGMDPHHLIEDVAIALGKCISEDLGNKLGIRRYGSFTIPMDEALVTCDLDISGRPYLVFHADLSGNQKLGGYDTEMTEEFFRALAFNAGITLHLNEHYGQNTHHIIEGMFKSTARALKQAVSIDESKVGEIPSSKGVL")
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].sbjct, "MTRISHITRNTKETQIELSINLDGTGQADISTGIGFLDHMLTLLTFHSDFDLKIIGHGDHETVGMDPHHLIEDVAIALGKCISEDLGNKLGIRRYGSFTIPMDEALVTCDLDISGRPYLVFHADLSGNQKLGGYDTEMTEEFFRALAFNAGITLHLNEHYGQNTHHIIEGMFKSTARALKQAVSIDESKVGEIPSSKGVL")
@@ -2893,7 +2893,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[1].alignments[23].hsps[0].sbjct_start, 1)
         self.assertEqual(record.rounds[1].alignments[23].hsps[0].sbjct_end, 193)
 
-    def _check_bt009_footer(self, record) :
+    def _check_bt009_footer(self, record):
         self.assertEqual(record.database_name, ['data/swissprot'])
         self.assertEqual(record.num_letters_in_database, [29652561])
         self.assertEqual(record.num_sequences_in_database, [82258])
@@ -2944,7 +2944,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt010(self):
         "Test parsing BLASTN 2.0.10 output (bt010)"
 
-        path = os.path.join('Blast', 'bt010')
+        path = os.path.join('Blast', 'bt010.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTN")
@@ -3074,7 +3074,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt011(self):
         "Test parsing BLASTN 2.0.10 output without alignments (bt011)"
 
-        path = os.path.join('Blast', 'bt011')
+        path = os.path.join('Blast', 'bt011.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTN")
@@ -3189,7 +3189,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt012(self):
         "Test parsing BLASTN 2.0.10 output without descriptions (bt012)"
 
-        path = os.path.join('Blast', 'bt012')
+        path = os.path.join('Blast', 'bt012.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTN")
@@ -3382,7 +3382,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt013(self):
         "Test parsing BLASTN 2.0.10 output (bt013)"
 
-        path = os.path.join('Blast', 'bt013')
+        path = os.path.join('Blast', 'bt013.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTN")
@@ -3458,7 +3458,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt014(self):
         "Test parsing BLASTX 2.0.10 output (bt014)"
 
-        path = os.path.join('Blast', 'bt014')
+        path = os.path.join('Blast', 'bt014.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTX")
@@ -3612,7 +3612,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt015(self):
         "Test parsing BLASTX 2.0.10 output without hits (bt015)"
 
-        path = os.path.join('Blast', 'bt015')
+        path = os.path.join('Blast', 'bt015.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTX")
@@ -3677,7 +3677,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt016(self):
         "Test parsing TBLASTN 2.0.10 output (bt016)"
 
-        path = os.path.join('Blast', 'bt016')
+        path = os.path.join('Blast', 'bt016.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "TBLASTN")
@@ -3878,7 +3878,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt017(self):
         "Test parsing TBLASTN 2.0.10 output without hits (bt017)"
 
-        path = os.path.join('Blast', 'bt017')
+        path = os.path.join('Blast', 'bt017.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "TBLASTN")
@@ -3943,7 +3943,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt018(self):
         "Test parsing TBLASTX 2.0.10 output (bt018)"
 
-        path = os.path.join('Blast', 'bt018')
+        path = os.path.join('Blast', 'bt018.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "TBLASTX")
@@ -4527,7 +4527,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt039(self):
         "Test parsing BLASTP 2.0.10 output (bt039)"
 
-        path = os.path.join('Blast', 'bt039')
+        path = os.path.join('Blast', 'bt039.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -4881,7 +4881,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt040(self):
         "Test parsing BLASTP 2.0.10 output (bt040)"
 
-        path = os.path.join('Blast', 'bt040')
+        path = os.path.join('Blast', 'bt040.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -4945,7 +4945,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt041(self):
         "Test parsing BLASTP 2.0.11 output (bt041)"
 
-        path = os.path.join('Blast', 'bt041')
+        path = os.path.join('Blast', 'bt041.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -5045,7 +5045,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt042(self):
         "Test parsing BLASTP 2.0.11 output without hits (bt042)"
 
-        path = os.path.join('Blast', 'bt042')
+        path = os.path.join('Blast', 'bt042.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -5109,7 +5109,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt043(self):
         "Test parsing BLASTP 2.0.11 output without descriptions (bt043)"
 
-        path = os.path.join('Blast', 'bt043')
+        path = os.path.join('Blast', 'bt043.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -5268,7 +5268,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt044(self):
         "Test parsing BLASTP 2.0.11 output without alignments (bt044)"
 
-        path = os.path.join('Blast', 'bt044')
+        path = os.path.join('Blast', 'bt044.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -5350,7 +5350,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt045(self):
         "Test parsing BLASTP 2.0.11 output (bt045)"
 
-        path = os.path.join('Blast', 'bt045')
+        path = os.path.join('Blast', 'bt045.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -5459,7 +5459,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt046(self):
         "Test parsing PHI-BLAST, BLASTP 2.0.11 output, two rounds (bt046)"
 
-        path = os.path.join('Blast', 'bt046')
+        path = os.path.join('Blast', 'bt046.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -5670,7 +5670,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt047(self):
         "Test parsing PHI-BLAST, BLASTP 2.0.11 output, two rounds (bt047)"
 
-        path = os.path.join('Blast', 'bt047')
+        path = os.path.join('Blast', 'bt047.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -5684,6 +5684,14 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database_letters, 29652561)
         self.assertEqual(len(record.rounds), 2)
         self.assertEqual(len(record.rounds[0].new_seqs), 30)
+        #Rest of test broken up to avoid Jython JVM limitations
+        self._check_bt047_round0(record)
+        self._check_bt047_round1(record)
+        self._check_bt047_hsps(record)
+        self._check_bt047_hsps_details(record)
+        self._check_bt047_footer(record)
+
+    def _check_bt047_round0(self, record):
         self.assertEqual(record.rounds[0].new_seqs[0].title, "gi|399896|sp|Q02134|HIS7_LACLA IMIDAZOLEGLYCEROL-PHOSPHATE DEHY...")
         self.assertEqual(record.rounds[0].new_seqs[0].score, 409)
         self.assertAlmostEqual(record.rounds[0].new_seqs[0].e, 1e-114)
@@ -5835,6 +5843,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[0].alignments[28].length, 1380)
         self.assertEqual(record.rounds[0].alignments[29].title, ">gi|3287848|sp|Q16099|GLK4_HUMAN GLUTAMATE RECEPTOR, IONOTROPIC KAINATE 4 PRECURSOR (GLUTAMATE RECEPTOR KA-1) (KA1) (EXCITATORY AMINO ACID RECEPTOR 1) (EAA1)")
         self.assertEqual(record.rounds[0].alignments[29].length, 956)
+
+    def _check_bt047_round1(self, record):
         self.assertEqual(len(record.rounds[1].new_seqs), 2)
         self.assertEqual(record.rounds[1].new_seqs[0].title, "gi|2833252|sp|Q14571|IP3S_HUMAN INOSITOL 1,4,5-TRISPHOSPHATE-BI...")
         self.assertEqual(record.rounds[1].new_seqs[0].score, 30)
@@ -5895,6 +5905,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[1].alignments[24].length, 2701)
         self.assertEqual(record.rounds[1].alignments[25].title, ">gi|266389|sp|P29995|IP3S_RAT INOSITOL 1,4,5-TRISPHOSPHATE-BINDING PROTEIN TYPE 2 RECEPTOR (TYPE 2 INSP3 RECEPTOR) (TYPE 2 INOSITOL 1,4,5-TRISPHOSPHATE RECEPTOR)")
         self.assertEqual(record.rounds[1].alignments[25].length, 2701)
+
+    def _check_bt047_hsps(self, record):
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].score, 1040)
         self.assertAlmostEqual(record.rounds[0].alignments[0].hsps[0].bits, 409)
         self.assertAlmostEqual(record.rounds[0].alignments[0].hsps[0].expect, 1e-114)
@@ -6118,6 +6130,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.rounds[1].alignments[25].hsps[0].bits, 28.8)
         self.assertAlmostEqual(record.rounds[1].alignments[25].hsps[0].expect, 8.2)
         self.assertEqual(len(record.rounds[1].alignments[25].hsps), 1)
+        
+    def _check_bt047_hsps_details(self, record):
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].identities, (200, 200))
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].positives, (200, 200))
         self.assertEqual(record.rounds[0].alignments[1].hsps[0].identities, (99, 198))
@@ -6676,6 +6690,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.rounds[1].alignments[25].hsps[0].query_end, 141)
         self.assertEqual(record.rounds[1].alignments[25].hsps[0].sbjct_start, 1540)
         self.assertEqual(record.rounds[1].alignments[25].hsps[0].sbjct_end, 1659)
+
+    def _check_bt047_footer(self, record):
         self.assertEqual(record.database_name, ['data/swissprot'])
         self.assertEqual(record.num_letters_in_database, [29652561])
         self.assertEqual(record.num_sequences_in_database, [82258])
@@ -6726,7 +6742,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt048(self):
         "Test parsing BLASTN 2.0.11 output (bt048)"
 
-        path = os.path.join('Blast', 'bt048')
+        path = os.path.join('Blast', 'bt048.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTN")
@@ -7198,7 +7214,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt049(self):
         "Test parsing BLASTN 2.0.11 output without alignments (bt049)"
 
-        path = os.path.join('Blast', 'bt049')
+        path = os.path.join('Blast', 'bt049.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTN")
@@ -7313,7 +7329,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt050(self):
         "Test parsing BLASTN 2.0.11 output without descriptions (bt050)"
 
-        path = os.path.join('Blast', 'bt050')
+        path = os.path.join('Blast', 'bt050.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTN")
@@ -8046,7 +8062,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt051(self):
         "Test parsing BLASTN 2.0.11 output (bt051)"
 
-        path = os.path.join('Blast', 'bt051')
+        path = os.path.join('Blast', 'bt051.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTN")
@@ -8122,7 +8138,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt052(self):
         "Test parsing BLASTX 2.0.11 output (bt052)"
 
-        path = os.path.join('Blast', 'bt052')
+        path = os.path.join('Blast', 'bt052.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTX")
@@ -8276,7 +8292,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt053(self):
         "Test parsing BLASTX 2.0.11 output without hits (bt053)"
 
-        path = os.path.join('Blast', 'bt053')
+        path = os.path.join('Blast', 'bt053.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTX")
@@ -8341,7 +8357,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt054(self):
         "Test parsing TBLASTN 2.0.11 output (bt054)"
 
-        path = os.path.join('Blast', 'bt054')
+        path = os.path.join('Blast', 'bt054.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "TBLASTN")
@@ -8542,7 +8558,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt055(self):
         "Test parsing TBLASTN 2.0.11 output without hits (bt055)"
 
-        path = os.path.join('Blast', 'bt055')
+        path = os.path.join('Blast', 'bt055.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "TBLASTN")
@@ -8607,7 +8623,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt056(self):
         "Test parsing TBLASTX 2.0.11 output (bt056)"
 
-        path = os.path.join('Blast', 'bt056')
+        path = os.path.join('Blast', 'bt056.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "TBLASTX")
@@ -9191,7 +9207,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt057(self):
         "Test parsing BLASTP 2.0.11 output (bt057)"
 
-        path = os.path.join('Blast', 'bt057')
+        path = os.path.join('Blast', 'bt057.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -9545,7 +9561,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt058(self):
         "Test parsing BLASTP 2.0.11 output (bt058)"
 
-        path = os.path.join('Blast', 'bt058')
+        path = os.path.join('Blast', 'bt058.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -9609,7 +9625,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt059(self):
         "Test parsing BLASTP 2.0.11 output (bt059)"
 
-        path = os.path.join('Blast', 'bt059')
+        path = os.path.join('Blast', 'bt059.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -9991,10 +10007,11 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.blast_cutoff[0], 63)
         self.assertAlmostEqual(record.blast_cutoff[1], 29.0)
 
+
     def test_bt060(self):
         "Test parsing BLASTP 2.0.12 output (bt060)"
 
-        path = os.path.join('Blast', 'bt060')
+        path = os.path.join('Blast', 'bt060.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -10003,7 +10020,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.reference, TestNCBITextParser.reference)
         self.assertEqual(record.query, "aaaa")
         self.assertEqual(record.query_letters, 889)
-        self.assertEqual(record.database, "/dbase/swissprot/main/release/sp;/dbase/swissprot/main/update/spu")
+        self.assertEqual(record.database, "/dbase/swissprot/main/release/sp; /dbase/swissprot/main/update/spu")
         self.assertEqual(record.database_sequences, 88201)
         self.assertEqual(record.database_letters, 31957340)
         self.assertEqual(len(record.rounds), 5)
@@ -10013,6 +10030,7 @@ class TestNCBITextParser(unittest.TestCase):
         self._check_bt060_round2(record)
         self._check_bt060_round4(record)
         self._check_bt060_hsps(record)
+        self._check_bt060_hsps_counts(record)
         self._check_bt060_hsps_details(record)
         self._check_bt060_footer(record)
 
@@ -10942,6 +10960,8 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.rounds[4].alignments[23].hsps[0].bits, 32.9)
         self.assertAlmostEqual(record.rounds[4].alignments[23].hsps[0].expect, 2.9)
         self.assertEqual(len(record.rounds[4].alignments[23].hsps), 1)
+
+    def _check_bt060_hsps_counts(self, record):
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].identities, (765, 889))
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].positives, (765, 889))
         self.assertEqual(record.rounds[0].alignments[1].hsps[0].identities, (281, 634))
@@ -12255,7 +12275,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt062(self):
         "Test parsing BLASTN 2.0.14 output (bt062)"
 
-        path = os.path.join('Blast', 'bt062')
+        path = os.path.join('Blast', 'bt062.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTN")
@@ -12724,10 +12744,11 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.blast_cutoff[0], 15)
         self.assertAlmostEqual(record.blast_cutoff[1], 30.2)
 
+
     def test_bt063(self):
         "Test parsing BLASTP 2.0.14 output (bt063)"
 
-        path = os.path.join('Blast', 'bt063')
+        path = os.path.join('Blast', 'bt063.txt')
         handle = open(path)
         record = self.pb_parser.parse(handle)
         self.assertEqual(record.application, "BLASTP")
@@ -13038,7 +13059,7 @@ class TestNCBITextParser(unittest.TestCase):
     def test_bt067(self):
         "Test parsing BLASTX 2.2.1 output (bt067)"
 
-        path = os.path.join('Blast', 'bt067')
+        path = os.path.join('Blast', 'bt067.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "BLASTX")
@@ -13132,89 +13153,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.gap_trigger[0], 33)
         self.assertAlmostEqual(record.gap_trigger[1], 18.0)
 
-    def test_bt071(self):
-        "Test parsing BLASTP 2.2.8 output (bt071)"
+    def test_bt068(self):
+        "Test parsing TBLASTN 2.2.16 output (bt068)"
 
-        path = os.path.join('Blast', 'bt071')
-        handle = open(path)
-        record = self.pb_parser.parse(handle)
-        self.assertEqual(record.application, "BLASTP")
-        self.assertEqual(record.version, '2.2.8')
-        self.assertEqual(record.date, "Jan-05-2004")
-        self.assertEqual(record.reference, TestNCBITextParser.reference)
-        self.assertEqual(record.query, "gi|16130963|ref|NP_417539.1| RNA polymerase sigma(70)\n[Escherichia coli K12]")
-        self.assertEqual(record.query_letters, 613)
-        self.assertEqual(record.database, "NC_000913")
-        self.assertEqual(record.database_sequences, 4311)
-        self.assertEqual(record.database_letters, 1350842)
-        self.assertEqual(len(record.rounds), 2)
-        self.assertEqual(len(record.rounds[0].new_seqs), 4)
-        self.assertEqual(record.rounds[0].new_seqs[0].title, "gi|16130963|ref|NP_417539.1| RNA polymerase sigma(70) [Escherich...")
-        self.assertEqual(record.rounds[0].new_seqs[0].score, 1032)
-        self.assertAlmostEqual(record.rounds[0].new_seqs[0].e, 0.0)
-        self.assertEqual(record.rounds[0].new_seqs[1].title, "gi|16130648|ref|NP_417221.1| sigma S factor [Escherichia coli K12]")
-        self.assertEqual(record.rounds[0].new_seqs[1].score, 189)
-        self.assertAlmostEqual(record.rounds[0].new_seqs[1].e, 3e-49)
-        self.assertEqual(record.rounds[0].new_seqs[2].title, "gi|16131333|ref|NP_417918.1| sigma(32) factor [Escherichia coli ...")
-        self.assertEqual(record.rounds[0].new_seqs[2].score, 84)
-        self.assertAlmostEqual(record.rounds[0].new_seqs[2].e, 2e-17)
-        self.assertEqual(record.rounds[0].new_seqs[3].title, "gi|33347603|ref|NP_416432.2| sigma factor 28 [Escherichia coli K12]")
-        self.assertEqual(record.rounds[0].new_seqs[3].score, 63)
-        self.assertAlmostEqual(record.rounds[0].new_seqs[3].e, 5e-11)
-        self.assertEqual(len(record.rounds[0].alignments), 0)
-        self.assertEqual(len(record.rounds[1].new_seqs), 0)
-        self.assertEqual(len(record.rounds[1].alignments), 0)
-        self.assertEqual(record.database_name, ['NC_000913'])
-        self.assertEqual(record.num_letters_in_database, [1350842])
-        self.assertEqual(record.num_sequences_in_database, [4311])
-        self.assertEqual(record.posted_date, [('Apr 8, 2004 12:56 AM',)])
-        self.assertEqual(len(record.ka_params), 3)
-        self.assertAlmostEqual(record.ka_params[0], 0.313)
-        self.assertAlmostEqual(record.ka_params[1], 0.141)
-        self.assertAlmostEqual(record.ka_params[2], 0.379)
-        self.assertEqual(len(record.ka_params_gap), 3)
-        self.assertAlmostEqual(record.ka_params_gap[0], 0.267)
-        self.assertAlmostEqual(record.ka_params_gap[1], 0.0431)
-        self.assertAlmostEqual(record.ka_params_gap[2], 0.140)
-        self.assertEqual(record.matrix, 'BLOSUM62')
-        self.assertEqual(record.gap_penalties, [11,1])
-        self.assertEqual(record.num_hits, 2949500)
-        self.assertEqual(record.num_sequences, 4311)
-        self.assertEqual(record.num_extends, 123966)
-        self.assertEqual(record.num_good_extends, 504)
-        self.assertEqual(record.num_seqs_better_e, 6)
-        self.assertEqual(record.hsps_no_gap, 9)
-        self.assertEqual(record.hsps_prelim_gapped, 5)
-        self.assertEqual(record.hsps_gapped, 23)
-        self.assertEqual(record.query_length, 613)
-        self.assertEqual(record.database_length, 1350842)
-        self.assertEqual(record.effective_hsp_length, 90)
-        self.assertEqual(record.effective_query_length, 523)
-        self.assertEqual(record.effective_database_length, 962852)
-        self.assertEqual(record.effective_search_space, 503571596)
-        self.assertEqual(record.effective_search_space_used, 503571596)
-        self.assertEqual(record.threshold, 11)
-        self.assertEqual(record.window_size, 40)
-        self.assertEqual(len(record.dropoff_1st_pass), 2)
-        self.assertEqual(record.dropoff_1st_pass[0], 16)
-        self.assertAlmostEqual(record.dropoff_1st_pass[1], 7.2)
-        self.assertEqual(len(record.gap_x_dropoff), 2)
-        self.assertEqual(record.gap_x_dropoff[0], 38)
-        self.assertAlmostEqual(record.gap_x_dropoff[1], 14.6)
-        self.assertEqual(len(record.gap_x_dropoff_final), 2)
-        self.assertEqual(record.gap_x_dropoff_final[0], 64)
-        self.assertAlmostEqual(record.gap_x_dropoff_final[1], 24.7)
-        self.assertEqual(len(record.gap_trigger), 2)
-        self.assertEqual(record.gap_trigger[0], 41)
-        self.assertAlmostEqual(record.gap_trigger[1], 21.3)
-        self.assertEqual(len(record.blast_cutoff), 2)
-        self.assertEqual(record.blast_cutoff[0], 64)
-        self.assertAlmostEqual(record.blast_cutoff[1], 29.2)
-
-    def test_bt102(self):
-        "Test parsing TBLASTN 2.2.16 output (bt102)"
-
-        path = os.path.join('Blast', 'bt102')
+        path = os.path.join('Blast', 'bt068.txt')
         handle = open(path)
         record = self.parser.parse(handle)
         self.assertEqual(record.application, "TBLASTN")
@@ -13456,10 +13398,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.blast_cutoff[0], 52)
         self.assertAlmostEqual(record.blast_cutoff[1], 26.7)
 
-    def test_bt103(self):
-        "Test parsing BLASTP 2.2.2 output with multiple records (bt103)"
+    def test_bt069(self):
+        "Test parsing BLASTP 2.2.2 output with multiple records (bt069)"
 
-        path = os.path.join('Blast', 'bt103')
+        path = os.path.join('Blast', 'bt069.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14050,10 +13992,10 @@ class TestNCBITextParser(unittest.TestCase):
         record = records.next()
         self.assertEqual(record, None)
 
-    def test_bt104(self):
-        "Test parsing BLASTN 2.2.2 output with error messages (bt104)"
+    def test_bt070(self):
+        "Test parsing BLASTN 2.2.2 output with error messages (bt070)"
 
-        path = os.path.join('Blast', 'bt104')
+        path = os.path.join('Blast', 'bt070.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14081,11 +14023,12 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[0], 1.370)
         self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
         self.assertAlmostEqual(record.ka_params_gap[2], 1.310)
+        self.assertEqual(None, records.next())
 
-    def test_bt105(self):
-        "Test parsing BLASTN 2.2.2 output with missing error messages (bt105)"
+    def test_bt071(self):
+        "Test parsing BLASTN 2.2.2 output with missing error messages (bt071)"
 
-        path = os.path.join('Blast', 'bt105')
+        path = os.path.join('Blast', 'bt071.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14113,8 +14056,505 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.ka_params_gap[0], 1.370)
         self.assertAlmostEqual(record.ka_params_gap[1], 0.711)
         self.assertAlmostEqual(record.ka_params_gap[2], 1.310)
+        self.assertEqual(None, records.next())
 
+    def test_bt075(self):
+        "Test parsing BLASTP 2.2.8 output (bt075)"
 
-if __name__ == "__main__" :
+        path = os.path.join('Blast', 'bt075.txt')
+        handle = open(path)
+        record = self.pb_parser.parse(handle)
+        self.assertEqual(record.application, "BLASTP")
+        self.assertEqual(record.version, '2.2.8')
+        self.assertEqual(record.date, "Jan-05-2004")
+        self.assertEqual(record.reference, TestNCBITextParser.reference)
+        self.assertEqual(record.query, "gi|16130963|ref|NP_417539.1| RNA polymerase sigma(70)\n[Escherichia coli K12]")
+        self.assertEqual(record.query_letters, 613)
+        self.assertEqual(record.database, "NC_000913")
+        self.assertEqual(record.database_sequences, 4311)
+        self.assertEqual(record.database_letters, 1350842)
+        self.assertEqual(len(record.rounds), 2)
+        self.assertEqual(len(record.rounds[0].new_seqs), 4)
+        self.assertEqual(record.rounds[0].new_seqs[0].title, "gi|16130963|ref|NP_417539.1| RNA polymerase sigma(70) [Escherich...")
+        self.assertEqual(record.rounds[0].new_seqs[0].score, 1032)
+        self.assertAlmostEqual(record.rounds[0].new_seqs[0].e, 0.0)
+        self.assertEqual(record.rounds[0].new_seqs[1].title, "gi|16130648|ref|NP_417221.1| sigma S factor [Escherichia coli K12]")
+        self.assertEqual(record.rounds[0].new_seqs[1].score, 189)
+        self.assertAlmostEqual(record.rounds[0].new_seqs[1].e, 3e-49)
+        self.assertEqual(record.rounds[0].new_seqs[2].title, "gi|16131333|ref|NP_417918.1| sigma(32) factor [Escherichia coli ...")
+        self.assertEqual(record.rounds[0].new_seqs[2].score, 84)
+        self.assertAlmostEqual(record.rounds[0].new_seqs[2].e, 2e-17)
+        self.assertEqual(record.rounds[0].new_seqs[3].title, "gi|33347603|ref|NP_416432.2| sigma factor 28 [Escherichia coli K12]")
+        self.assertEqual(record.rounds[0].new_seqs[3].score, 63)
+        self.assertAlmostEqual(record.rounds[0].new_seqs[3].e, 5e-11)
+        self.assertEqual(len(record.rounds[0].alignments), 0)
+        self.assertEqual(len(record.rounds[1].new_seqs), 0)
+        self.assertEqual(len(record.rounds[1].alignments), 0)
+        self.assertEqual(record.database_name, ['NC_000913'])
+        self.assertEqual(record.num_letters_in_database, [1350842])
+        self.assertEqual(record.num_sequences_in_database, [4311])
+        self.assertEqual(record.posted_date, [('Apr 8, 2004 12:56 AM',)])
+        self.assertEqual(len(record.ka_params), 3)
+        self.assertAlmostEqual(record.ka_params[0], 0.313)
+        self.assertAlmostEqual(record.ka_params[1], 0.141)
+        self.assertAlmostEqual(record.ka_params[2], 0.379)
+        self.assertEqual(len(record.ka_params_gap), 3)
+        self.assertAlmostEqual(record.ka_params_gap[0], 0.267)
+        self.assertAlmostEqual(record.ka_params_gap[1], 0.0431)
+        self.assertAlmostEqual(record.ka_params_gap[2], 0.140)
+        self.assertEqual(record.matrix, 'BLOSUM62')
+        self.assertEqual(record.gap_penalties, [11,1])
+        self.assertEqual(record.num_hits, 2949500)
+        self.assertEqual(record.num_sequences, 4311)
+        self.assertEqual(record.num_extends, 123966)
+        self.assertEqual(record.num_good_extends, 504)
+        self.assertEqual(record.num_seqs_better_e, 6)
+        self.assertEqual(record.hsps_no_gap, 9)
+        self.assertEqual(record.hsps_prelim_gapped, 5)
+        self.assertEqual(record.hsps_gapped, 23)
+        self.assertEqual(record.query_length, 613)
+        self.assertEqual(record.database_length, 1350842)
+        self.assertEqual(record.effective_hsp_length, 90)
+        self.assertEqual(record.effective_query_length, 523)
+        self.assertEqual(record.effective_database_length, 962852)
+        self.assertEqual(record.effective_search_space, 503571596)
+        self.assertEqual(record.effective_search_space_used, 503571596)
+        self.assertEqual(record.threshold, 11)
+        self.assertEqual(record.window_size, 40)
+        self.assertEqual(len(record.dropoff_1st_pass), 2)
+        self.assertEqual(record.dropoff_1st_pass[0], 16)
+        self.assertAlmostEqual(record.dropoff_1st_pass[1], 7.2)
+        self.assertEqual(len(record.gap_x_dropoff), 2)
+        self.assertEqual(record.gap_x_dropoff[0], 38)
+        self.assertAlmostEqual(record.gap_x_dropoff[1], 14.6)
+        self.assertEqual(len(record.gap_x_dropoff_final), 2)
+        self.assertEqual(record.gap_x_dropoff_final[0], 64)
+        self.assertAlmostEqual(record.gap_x_dropoff_final[1], 24.7)
+        self.assertEqual(len(record.gap_trigger), 2)
+        self.assertEqual(record.gap_trigger[0], 41)
+        self.assertAlmostEqual(record.gap_trigger[1], 21.3)
+        self.assertEqual(len(record.blast_cutoff), 2)
+        self.assertEqual(record.blast_cutoff[0], 64)
+        self.assertAlmostEqual(record.blast_cutoff[1], 29.2)
+
+    def test_bt076(self):
+        "Test parsing BLASTX 2.2.15 output with no hits (bt076)"
+
+        path = os.path.join('Blast', 'bt076.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.15')
+        self.assertEqual(record.date, "Oct-15-2006")
+        self.assertEqual(record.query, "66118") #Odd name for a query sequence, but valid!
+        self.assertEqual(record.query_letters, 662)
+        self.assertEqual(record.database, "Leigo")
+        self.assertEqual(record.database_sequences, 4535438)
+        self.assertEqual(record.database_letters, 1573298872)
+        self.assertEqual(len(record.descriptions), 0)
+        self.assertEqual(len(record.alignments), 0)
+        self.assertEqual(None, records.next())
+
+    def test_bt077(self):
+        "Test parsing BLASTX 2.2.20 output (bt077)"
+
+        path = os.path.join('Blast', 'bt077.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.20')
+        self.assertEqual(record.date, "Feb-08-2009")
+        self.assertEqual(record.query, "RLBV_smaller_RNA")
+        self.assertEqual(record.query_letters, 1363)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 6)
+        self.assertEqual(len(record.alignments), 5)
+        descrs = [
+        ("sp|P85309.2|CASPD_HPVKA RecName: Full=Capsid protein; AltName: F...", 152, 8e-35),
+        ("sp|P83664.2|CAPSD_HPVCO RecName: Full=Capsid protein; AltName: F...", 146, 6e-33),
+        ("gb|AAB03575.1| nucleoprotein",                                        146, 6e-33),
+        ("gb|ABH05070.1| putative nucleocapsid protein [European mountain ...",  83, 8e-14),
+        ("gb|AAW12704.1| nucleoprotein [High Plains virus]",                     73, 8e-11),
+        ("gb|AAW12703.1| nucleoprotein [High Plains virus]",                     73, 8e-11),
+        ]
+        for (a,b) in zip(record.descriptions, descrs):
+            self.assertEqual((a.title, a.score, a.e),b)
+        for (a,b) in zip(record.alignments, descrs):
+            self.assertEqual(a.title[0], ">")
+            if b[0].endswith("..."):
+                self.assert_(a.title.startswith(">"+b[0][:-3]))
+            else:
+                self.assertEqual(a.title, ">" + b[0])
+
+        self.assertEqual(None, records.next())
+
+    def test_bt078(self):
+        "Test parsing BLASTX 2.2.20 output with multiple queries (bt078)"
+
+        path = os.path.join('Blast', 'bt078.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.20')
+        self.assertEqual(record.date, "Feb-08-2009")
+        self.assertEqual(record.query, "gi|6273291|gb|AF191665.1|AF191665 Opuntia marenae rpl16 gene;\nchloroplast gene for chloroplast product, partial intron sequence")
+        self.assertEqual(record.query_letters, 902)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 0)
+        self.assertEqual(len(record.alignments), 0)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.20')
+        self.assertEqual(record.date, "Feb-08-2009")
+        self.assertEqual(record.query, "gi|6273290|gb|AF191664.1|AF191664 Opuntia clavata rpl16 gene;\nchloroplast gene for chloroplast product, partial intron sequence")
+        self.assertEqual(record.query_letters, 899)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 0)
+        self.assertEqual(len(record.alignments), 0)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.20')
+        self.assertEqual(record.date, "Feb-08-2009")
+        self.assertEqual(record.query, "gi|6273289|gb|AF191663.1|AF191663 Opuntia bradtiana rpl16 gene;\nchloroplast gene for chloroplast product, partial intron sequence")
+        self.assertEqual(record.query_letters, 899)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 0)
+        self.assertEqual(len(record.alignments), 0)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.20')
+        self.assertEqual(record.date, "Feb-08-2009")
+        self.assertEqual(record.query, "gi|6273287|gb|AF191661.1|AF191661 Opuntia kuehnrichiana rpl16\ngene; chloroplast gene for chloroplast product, partial intron\nsequence")
+        self.assertEqual(record.query_letters, 895)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 2)
+        self.assertEqual(len(record.alignments), 2)
+        self.assertEqual(record.descriptions[0].title, "dbj|BAE48041.1| hypothetical protein [Nicotiana tomentosiformis]")
+        self.assertEqual(record.descriptions[0].score, 51)
+        self.assertEqual(record.descriptions[0].e, 8e-07)
+        self.assertEqual(record.descriptions[1].title, "emb|CAJ32483.1| hypothetical protein [Nicotiana tabacum] >gi|777...")
+        self.assertEqual(record.descriptions[1].score, 51)
+        self.assertEqual(record.descriptions[1].e, 8e-07)
+        self.assertEqual(len(record.alignments[0].hsps), 2)
+        self.assertEqual(record.alignments[0].hsps[0].expect, 8e-07)
+        self.assertEqual(record.alignments[0].hsps[0].align_length, 40)
+        self.assertEqual(record.alignments[0].hsps[0].identities, (25,40))
+        self.assertEqual(record.alignments[0].hsps[1].expect, 8e-07)
+        self.assertEqual(record.alignments[0].hsps[1].align_length, 23)
+        self.assertEqual(record.alignments[0].hsps[1].identities, (12,23))
+        self.assertEqual(len(record.alignments[1].hsps), 2)
+        self.assertEqual(record.alignments[1].hsps[0].expect, 8e-07)
+        self.assertEqual(record.alignments[1].hsps[0].align_length, 40)
+        self.assertEqual(record.alignments[1].hsps[0].identities, (25,40))
+        self.assertEqual(record.alignments[1].hsps[1].expect, 8e-07)
+        self.assertEqual(record.alignments[1].hsps[1].align_length, 23)
+        self.assertEqual(record.alignments[1].hsps[1].identities, (12,23))
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.20')
+        self.assertEqual(record.date, "Feb-08-2009")
+        self.assertEqual(record.query, "gi|6273286|gb|AF191660.1|AF191660 Opuntia echinacea rpl16 gene;\nchloroplast gene for chloroplast product, partial intron sequence")
+        self.assertEqual(record.query_letters, 893)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 0)
+        self.assertEqual(len(record.alignments), 0)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.20')
+        self.assertEqual(record.date, "Feb-08-2009")
+        self.assertEqual(record.query, "gi|6273285|gb|AF191659.1|AF191659 Opuntia pachypus rpl16 gene;\nchloroplast gene for chloroplast product, partial intron sequence")
+        self.assertEqual(record.query_letters, 894)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 0)
+        self.assertEqual(len(record.alignments), 0)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.20')
+        self.assertEqual(record.date, "Feb-08-2009")
+        self.assertEqual(record.query, "gi|6273284|gb|AF191658.1|AF191658 Opuntia subulata rpl16 gene;\nchloroplast gene for chloroplast product, partial intron sequence")
+        self.assertEqual(record.query_letters, 896)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 0)
+        self.assertEqual(len(record.alignments), 0)
+
+        self.assertEqual(None, records.next())
+                
+    def test_bt079(self):
+        "Test parsing BLASTP 2.2.21 output with multiple queries (bt079)"
+
+        path = os.path.join('Blast', 'bt079.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTP")
+        self.assertEqual(record.version, '2.2.21')
+        self.assertEqual(record.date, "Jun-14-2009")
+        self.assertEqual(record.query, "gi|3298468|dbj|BAA31520.1| SAMIPF")
+        self.assertEqual(record.query_letters, 472)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTP")
+        self.assertEqual(record.version, '2.2.21')
+        self.assertEqual(record.date, "Jun-14-2009")
+        self.assertEqual(record.query, "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING\nfinger protein")
+        self.assertEqual(record.query_letters, 600)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 2)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTP")
+        self.assertEqual(record.version, '2.2.21')
+        self.assertEqual(record.date, "Jun-14-2009")
+        self.assertEqual(record.query, "gi|671626|emb|CAA85685.1| rubisco large subunit")
+        self.assertEqual(record.query_letters, 473)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
+        self.assertEqual(None, records.next())
+
+    def test_bt080(self):
+        "Test parsing BLASTX 2.2.22 output with multiple queries (bt080)"
+
+        path = os.path.join('Blast', 'bt080.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22')
+        self.assertEqual(record.date, "Sep-27-2009")
+        self.assertEqual(record.query, "gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S\nribosomal RNA gene, partial sequence")
+        self.assertEqual(record.query_letters, 1002)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 1) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22')
+        self.assertEqual(record.date, "Sep-27-2009")
+        self.assertEqual(record.query, "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like\nprotein HLPf gene, partial cds")
+        self.assertEqual(record.query_letters, 2050)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 2)
+        
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22')
+        self.assertEqual(record.date, "Sep-27-2009")
+        self.assertEqual(record.query, "gi|5690369|gb|AF158246.1|AF158246 Cricetulus griseus glucose\nphosphate isomerase (GPI) gene, partial intron sequence")
+        self.assertEqual(record.query_letters, 550)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 0)
+        self.assertEqual(len(record.alignments), 0)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22')
+        self.assertEqual(record.date, "Sep-27-2009")
+        self.assertEqual(record.query, "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton\nfiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN\ngi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636\n(X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence")
+        self.assertEqual(record.query_letters, 655)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22')
+        self.assertEqual(record.date, "Sep-27-2009")
+        self.assertEqual(record.query, "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal\ntranscribed spacer 1, 5.8S ribosomal RNA gene, and internal\ntranscribed spacer 2, complete sequence")
+        self.assertEqual(record.query_letters, 623)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 2)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22')
+        self.assertEqual(record.date, "Sep-27-2009")
+        self.assertEqual(record.query, "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A\n(PHYA) gene, partial cds")
+        self.assertEqual(record.query_letters, 309)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22')
+        self.assertEqual(record.date, "Sep-27-2009")
+        self.assertEqual(record.query, "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens\nmaturase-like protein (matK) gene, complete cds; chloroplast gene for\nchloroplast product")
+        self.assertEqual(record.query_letters, 2551)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
+        self.assertEqual(None, records.next())
+
+    def test_bt081(self):
+        "Test parsing BLASTX 2.2.22+ output with multiple queries (bt081)"
+
+        path = os.path.join('Blast', 'bt081.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.query, "gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S\nribosomal RNA gene, partial sequence")
+        self.assertEqual(record.query_letters, 1002)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 1) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.query, "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like\nprotein HLPf gene, partial cds")
+        self.assertEqual(record.query_letters, 2050)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        #Two short HSPs with 2.2.22 (bt080.txt), but one with 2.2.22+
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+        
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.query, "gi|5690369|gb|AF158246.1|AF158246 Cricetulus griseus glucose\nphosphate isomerase (GPI) gene, partial intron sequence")
+        self.assertEqual(record.query_letters, 550)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 0)
+        self.assertEqual(len(record.alignments), 0)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.query, "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber\nGossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN\ngi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636\n(X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence")
+        self.assertEqual(record.query_letters, 655)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.query, "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal\ntranscribed spacer 1, 5.8S ribosomal RNA gene, and internal\ntranscribed spacer 2, complete sequence")
+        self.assertEqual(record.query_letters, 623)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        #Two short HSPs with 2.2.22 (bt080.txt), but one with 2.2.22+
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.query, "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A\n(PHYA) gene, partial cds")
+        self.assertEqual(record.query_letters, 309)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
+        record = records.next()
+        self.assertEqual(record.application, "BLASTX")
+        self.assertEqual(record.version, '2.2.22+')
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.query, "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like\nprotein (matK) gene, complete cds; chloroplast gene for chloroplast\nproduct")
+        self.assertEqual(record.query_letters, 2551)
+        self.assertEqual(record.database, "All non-redundant GenBank CDS translations+PDB+SwissProt+PIR+PRF excluding environmental samples from WGS projects")
+        self.assertEqual(record.database_sequences, 8994603)
+        self.assertEqual(record.database_letters, 3078807967)
+        self.assertEqual(len(record.descriptions), 10) # I used -v 10
+        self.assertEqual(len(record.alignments), 1) # I used -b 1
+        self.assertEqual(len(record.alignments[0].hsps), 1)
+
+        self.assertEqual(None, records.next())
+
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)

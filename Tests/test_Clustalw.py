@@ -28,26 +28,26 @@ test_files = [ \
     ]
 
 
-def compare(a1, a2) :
+def compare(a1, a2):
     assert a1.get_alignment_length() == a2.get_alignment_length()
     assert len(a1._records) == len(a2._records)
-    for r1, r2 in zip(a1,a2) :
+    for r1, r2 in zip(a1,a2):
         assert r1.id == r2.id
         assert str(r1.seq) == str(r2.seq)
 
     if hasattr(a1, "_version") and a1._version \
-    and hasattr(a2, "_version") and a2._version :
+    and hasattr(a2, "_version") and a2._version:
         assert a1._version == a2._version
 
     if hasattr(a1, "_star_info") and a1._star_info \
-    and hasattr(a2, "_star_info") and a2._star_info :
+    and hasattr(a2, "_star_info") and a2._star_info:
         assert a1._star_info == a2._star_info \
     
     return True
 
 
 print "Checking Bio.AlignIO and Bio.Clustalw can read example files..."
-for (t_per, t_count, t_filename) in test_files :
+for (t_per, t_count, t_filename) in test_files:
     print
     print "Testing reading %s format file %s with %i alignments" \
           % ("clustal", t_filename, t_count)
@@ -57,7 +57,7 @@ for (t_per, t_count, t_filename) in test_files :
     alignments  = list(AlignIO.parse(handle=open(t_filename,"r"), format="clustal"))
     assert len(alignments)  == t_count, \
          "Found %i alignments but expected %i" % (len(alignments), t_count)
-    for alignment in alignments :
+    for alignment in alignments:
         assert len(alignment.get_all_seqs()) == t_per, \
             "Expected %i records per alignment, got %i" \
             % (t_per, len(alignment.get_all_seqs()))

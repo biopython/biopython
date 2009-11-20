@@ -126,7 +126,7 @@ def parse(handle):
     test suite,
 
     >>> handle = open("KEGG/compound.sample")
-    >>> for record in parse(handle) :
+    >>> for record in parse(handle):
     ...     print record.entry, record.name[0]
     ...
     C00023 Iron
@@ -199,7 +199,7 @@ def _test():
     """
     import doctest
     import os
-    if os.path.isdir(os.path.join("..","..","..","Tests")) :
+    if os.path.isdir(os.path.join("..","..","..","Tests")):
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("..","..","..","Tests"))

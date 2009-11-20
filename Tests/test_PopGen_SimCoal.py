@@ -17,7 +17,7 @@ for path in os.environ['PATH'].split(os.pathsep):
     try:
         for filename in os.listdir(path):
             if filename.startswith('simcoal2') \
-            or (filename.lower() == "simcoal2.exe") :
+            or (filename.lower() == "simcoal2.exe"):
                 found = True
                 simcoal_dir = path
     except os.error:
@@ -31,7 +31,7 @@ class AppTest(unittest.TestCase):
     """Tests simcoal execution via biopython.
     """
     def tearDown(self):
-        if not os.path.isdir(os.path.join('PopGen', 'simple')) :
+        if not os.path.isdir(os.path.join('PopGen', 'simple')):
             #Unit test must have failed to invoke simcaol,
             #and this it never created the directory.
             return

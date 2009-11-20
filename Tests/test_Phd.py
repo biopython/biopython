@@ -14,7 +14,7 @@ class PhdTestOne(unittest.TestCase):
     def tearDown(self):
         self.handle.close()
 
-    def test_check_SeqIO(self) :
+    def test_check_SeqIO(self):
         """Test phd1 using parser via SeqIO."""
         records = SeqIO.parse(self.handle, "phd")
         #Contig 1
@@ -223,7 +223,7 @@ class PhdTestTwo(unittest.TestCase):
     def tearDown(self):
         self.handle.close()
 
-    def test_check_SeqIO(self) :
+    def test_check_SeqIO(self):
         """Test phd2 using parser via SeqIO."""
         records = SeqIO.parse(self.handle, "phd")
         #Contig 1
@@ -253,7 +253,7 @@ class PhdTest454(unittest.TestCase):
     def tearDown(self):
         self.handle.close()
 
-    def test_check_SeqIO(self) :
+    def test_check_SeqIO(self):
         """Test phd_454 using parser via SeqIO."""
         records = SeqIO.parse(self.handle, "phd")
         #Contig 1
@@ -292,7 +292,7 @@ class PhdTestSolexa(unittest.TestCase):
     def tearDown(self):
         self.handle.close()
 
-    def test_check_SeqIO(self) :
+    def test_check_SeqIO(self):
         """Test phd2 using parser via SeqIO."""
         records = SeqIO.parse(self.handle, "phd")
         #Contig 1

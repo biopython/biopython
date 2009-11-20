@@ -18,7 +18,7 @@ from Bio.SCOP.Residues import Residues
 
 
 class DomTests(unittest.TestCase):
-    def setUp(self) :
+    def setUp(self):
         self.filename = './SCOP/testDom.txt'
 
     def testParse(self):
@@ -41,12 +41,12 @@ class DomTests(unittest.TestCase):
        finally:
            f.close()
 
-    def testError(self) :
+    def testError(self):
         corruptDom = "49xxx268\tsp\tb.1.2.1\t-\n"
         self.assertRaises(ValueError, Dom.Record, corruptDom)
 
 
-    def testRecord(self) :
+    def testRecord(self):
         recLine = 'd7hbib_\t7hbi\tb:\t1.001.001.001.001.001'
 
         rec = Dom.Record(recLine)

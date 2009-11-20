@@ -118,7 +118,7 @@ class GraphData:
             color = colour
         if altcolour is not None:
             altcolor = altcolour
-        if centre is not None :
+        if centre is not None:
             center = centre
 
         self.id = id            # Unique identifier for the graph
@@ -134,7 +134,7 @@ class GraphData:
         self.linewidth = 2          # linewidth to use in line graphs
         self.center = center        # value at which x-axis crosses y-axis
 
-    def _set_centre(self, value) :
+    def _set_centre(self, value):
         self.center = value
     centre = property(fget = lambda self : self.center,
                        fset = _set_centre,

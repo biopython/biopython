@@ -1,0 +1,55 @@
+BLASTX 2.2.15 [Oct-15-2006]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= 66118 
+         (662 letters)
+
+Database: Leigo 
+           4,535,438 sequences; 1,573,298,872 total letters
+
+Searching..................................................done
+
+ ***** No hits found ******
+
+
+  Database: Leigo
+    Posted date:  Jan 22, 2007 11:26 AM
+  Number of letters in database: 1,573,298,872
+  Number of sequences in database:  4,535,438
+  
+Lambda     K      H
+   0.309    0.137    0.431 
+
+Gapped
+Lambda     K      H
+   0.267   0.0410    0.140 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Sequences: 4535438
+Number of Hits to DB: 1,035,811,558
+Number of extensions: 23376228
+Number of successful extensions: 68867
+Number of sequences better than  2.0: 0
+Number of HSP's gapped: 66138
+Number of HSP's successfully gapped: 0
+Length of query: 220
+Length of database: 1,573,298,872
+Length adjustment: 126
+Effective length of query: 94
+Effective length of database: 1,001,833,684
+Effective search space: 94172366296
+Effective search space used: 94172366296
+Neighboring words threshold: 12
+Window for multiple hits: 40
+X1: 16 ( 7.1 bits)
+X2: 38 (14.6 bits)
+X3: 64 (24.7 bits)
+S1: 41 (21.1 bits)
+S2: 31 (16.5 bits)

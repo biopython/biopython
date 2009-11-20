@@ -249,17 +249,17 @@ def _read_id(record, line):
     #
     #Newer files lack the MoleculeType:
     #ID   EntryName DataClass; SequenceLength AA.
-    if len(cols) == 5 :
+    if len(cols) == 5:
         record.entry_name = cols[0]
         record.data_class = cols[1].rstrip(";")
         record.molecule_type = cols[2].rstrip(";")
         record.sequence_length = int(cols[3])
-    elif len(cols) == 4 :
+    elif len(cols) == 4:
         record.entry_name = cols[0]
         record.data_class = cols[1].rstrip(";")
         record.molecule_type = None
         record.sequence_length = int(cols[2])
-    else :
+    else:
         raise ValueError("ID line has unrecognised format:\n"+line)
     # check if the data class is one of the allowed values
     allowed = ('STANDARD', 'PRELIMINARY', 'IPI', 'Reviewed', 'Unreviewed')
@@ -349,7 +349,7 @@ def _read_dt(record, line):
         # For the three DT lines above: 0, 3, 14
         try:
             version = int(cols[-1])
-        except ValueError :
+        except ValueError:
             version = 0
         date = cols[0].rstrip(",")
 
@@ -531,7 +531,7 @@ def _read_ft(record, line):
     record.features.append((name, from_res, to_res, description,ft_id))
 
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     print "Quick self test..."
 
     example_filename = "../../Tests/SwissProt/sp008"
@@ -539,7 +539,7 @@ if __name__ == "__main__" :
     import os
     if not os.path.isfile(example_filename):
         print "Missing test file %s" % example_filename
-    else :
+    else:
         #Try parsing it!
         
         handle = open(example_filename)

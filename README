@@ -112,8 +112,8 @@ data format has changed and broken the parsing code.  (The BLAST and
 GenBank formats seem to be particularly fragile.)  Thus, the parsing
 code in Biopython is sometimes updated faster than we can build Biopython
 releases.  You can get the most recent parser by pulling the relevant
-files (e.g. the ones in Bio.SeqIO or Bio.Blast) out git mirror on
-"github":http://github.com/biopython/biopython/ .
+files (e.g. the ones in Bio.SeqIO or Bio.Blast) from our git repository
+on "github":http://github.com/biopython/biopython/ .
 However, be careful when doing this, because the code in github is
 not as well-tested as released code, and may contain new dependencies.
 
@@ -158,10 +158,6 @@ MANIFEST.in  -- Tells distutils what files to distribute
 setup.py     -- Installation file.
 
 Bio/         -- The main code base code.
-
-Martel/      -- Code for the Martel parsing system, once used in many
-                Biopython parsers but since deprecated and no longer
-                installed.
 
 BioSQL/      -- Code for using Biopython with BioSQL databases.
 

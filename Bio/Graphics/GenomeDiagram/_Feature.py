@@ -182,11 +182,11 @@ class Feature:
                 self.locations.append((start, end))                
                 bounds += [start, end]
         self.type = str(self._feature.type)                     # Feature type
-        if self._feature.strand is None :
+        if self._feature.strand is None:
             #This is the SeqFeature default (None), but the drawing code
             #only expects 0, +1 or -1.
             self.strand = 0
-        else :
+        else:
             self.strand = int(self._feature.strand)                 # Feature strand
         if 'color' in self._feature.qualifiers:                # Artemis color (if present)
             # Artemis color used to be only a single integer, but as of

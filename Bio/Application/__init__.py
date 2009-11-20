@@ -5,6 +5,15 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """General mechanisms to access applications in Biopython.
+
+This module is not intended for direct use (any more). It provides
+the basic objects for our command line wrappers such as:
+
+ - Bio.Align.Applications
+ - Bio.Blast.Applications
+ - Bio.Emboss.Applications
+ - Bio.Sequencing.Applications
+
 """
 import os, sys
 import StringIO
@@ -13,7 +22,7 @@ import subprocess
 from Bio import File
 
 def generic_run(commandline):
-    """Run an application with the given commandline (OBSOLETE).
+    """Run an application with the given commandline (DEPRECATED).
 
     This expects a pre-built commandline that derives from 
     AbstractCommandline, and returns a ApplicationResult object
@@ -30,6 +39,12 @@ def generic_run(commandline):
     to turn an AbstractCommandline wrapper into a command line string. This
     will give you full control of the tool's input and output as well.
     """
+    import warnings
+    warnings.warn("Bio.Application.generic_run and the associated "
+                  "Bio.Application.ApplicationResult are deprecated. "
+                  "Please use the built in Python module subprocess "
+                  "instead, as described in the Biopython Tutorial.",
+                  DeprecationWarning)
     #We don't need to supply any piped input, but we setup the
     #standard input pipe anyway as a work around for a python
     #bug if this is called from a Windows GUI program.  For
@@ -48,7 +63,7 @@ def generic_run(commandline):
            File.UndoHandle(StringIO.StringIO(e_out))
 
 class ApplicationResult:
-    """Make results of a program available through a standard interface (OBSOLETE).
+    """Make results of a program available through a standard interface (DEPRECATED).
     
     This tries to pick up output information available from the program
     and make it available programmatically.
@@ -59,6 +74,12 @@ class ApplicationResult:
     def __init__(self, application_cl, return_code):
         """Intialize with the commandline from the program.
         """
+        import warnings
+        warnings.warn("Bio.Application.ApplicationResult and the "
+                      "associated function Bio.Application.generic_run "
+                      "are deprecated. Please use the built in Python "
+                      "module subprocess instead, as described in the "
+                      "Biopython Tutorial", DeprecationWarning)
         self._cl = application_cl
 
         # provide the return code of the application
@@ -80,12 +101,12 @@ class ApplicationResult:
         Supports any of the defined parameters aliases (assuming the
         parameter is defined as an output).
         """
-        try :
+        try:
             return self._results[output_name]
-        except KeyError, err :
+        except KeyError, err:
             #Try the aliases...
             for parameter in self._cl.parameters:
-                if output_name in parameter.names :
+                if output_name in parameter.names:
                     return self._results[parameter.names[-1]]
             #No, really was a key error:
             raise err
@@ -157,7 +178,7 @@ class AbstractCommandline(object):
         # 
         # The subclass methods should look like this:
         # 
-        # def __init__(self, cmd="muscle", **kwargs) :
+        # def __init__(self, cmd="muscle", **kwargs):
         #     self.parameters = [...]
         #     AbstractCommandline.__init__(self, cmd, **kwargs)
         # 
@@ -170,37 +191,37 @@ class AbstractCommandline(object):
         # The keyword arguments should be any valid parameter name, and will
         # be used to set the associated parameter.
         self.program_name = cmd
-        try :
+        try:
             parameters = self.parameters
-        except AttributeError :
+        except AttributeError:
             raise AttributeError("Subclass should have defined self.parameters")
         #Create properties for each parameter at run time
         aliases = set()
-        for p in parameters :
-            for name in p.names :
-                if name in aliases :
+        for p in parameters:
+            for name in p.names:
+                if name in aliases:
                     raise ValueError("Parameter alias %s multiply defined" \
                                      % name)
                 aliases.add(name)
             name = p.names[-1]
             #Beware of binding-versus-assignment confusion issues
-            def getter(name) :
+            def getter(name):
                 return lambda x : x._get_parameter(name)
-            def setter(name) :
+            def setter(name):
                 return lambda x, value : x.set_parameter(name, value)
-            def deleter(name) :
+            def deleter(name):
                 return lambda x : x._clear_parameter(name)
             doc = p.description
-            if isinstance(p, _Switch) :
+            if isinstance(p, _Switch):
                 doc += "\n\nThis property controls the addition of the %s " \
                        "switch, treat this property as a boolean." % p.names[0]
-            else :
+            else:
                 doc += "\n\nThis controls the addition of the %s parameter " \
                        "and its associated value.  Set this property to the " \
                        "argument value required." % p.names[0]
             prop = property(getter(name), setter(name), deleter(name), doc)
             setattr(self.__class__, name, prop) #magic!
-        for key, value in kwargs.iteritems() :
+        for key, value in kwargs.iteritems():
             self.set_parameter(key, value)
     
     def _validate(self):
@@ -259,23 +280,23 @@ class AbstractCommandline(object):
             if parameter.is_set:
                 if isinstance(parameter, _Switch):
                     answer += ", %s=True" % parameter.names[-1]
-                else :
+                else:
                     answer += ", %s=%s" \
                               % (parameter.names[-1], repr(parameter.value))
         answer += ")"
         return answer
 
-    def _get_parameter(self, name) :
+    def _get_parameter(self, name):
         """Get a commandline option value."""
         for parameter in self.parameters:
             if name in parameter.names:
-                if isinstance(parameter, _Switch) :
+                if isinstance(parameter, _Switch):
                     return parameter.is_set
-                else :
+                else:
                     return parameter.value
         raise ValueError("Option name %s was not found." % name)
 
-    def _clear_parameter(self, name) :
+    def _clear_parameter(self, name):
         """Reset or clear a commandline option value."""
         cleared_option = False
         for parameter in self.parameters:
@@ -283,7 +304,7 @@ class AbstractCommandline(object):
                 parameter.value = None
                 parameter.is_set = False
                 cleared_option = True
-        if not cleared_option :
+        if not cleared_option:
             raise ValueError("Option name %s was not found." % name)
         
     def set_parameter(self, name, value = None):
@@ -292,21 +313,21 @@ class AbstractCommandline(object):
         set_option = False
         for parameter in self.parameters:
             if name in parameter.names:
-                if isinstance(parameter, _Switch) :
-                    if value is None :
+                if isinstance(parameter, _Switch):
+                    if value is None:
                         import warnings
                         warnings.warn("For a switch type argument like %s, "
                                       "we expect a boolean.  None is treated "
                                       "as FALSE!" % parameter.names[-1])
                     parameter.is_set = bool(value)
                     set_option = True
-                else :
+                else:
                     if value is not None:
                         self._check_value(value, name, parameter.checker_function)
                         parameter.value = value
                     parameter.is_set = True
                     set_option = True
-        if not set_option :
+        if not set_option:
             raise ValueError("Option name %s was not found." % name)
 
     def _check_value(self, value, name, check_function):
@@ -322,7 +343,7 @@ class AbstractCommandline(object):
         if check_function is not None:
             is_good = check_function(value) #May raise an exception
             assert is_good in [0,1,True,False]
-            if not is_good :
+            if not is_good:
                 raise ValueError("Invalid parameter value %r for parameter %s" \
                                  % (value, name))
                     
@@ -331,10 +352,10 @@ class _AbstractParameter:
 
     Do not use this directly, instead use one of the subclasses.
     """
-    def __init__(self) :
+    def __init__(self):
         raise NotImplementedError
 
-    def __str__(self) :
+    def __str__(self):
         raise NotImplementedError
 
 class _Option(_AbstractParameter):
@@ -398,15 +419,15 @@ class _Option(_AbstractParameter):
         # code would do either "--name " or "--name=value ",
         # or " -name " or " -name value ".  This choice is now
         # now made explicitly when setting up the option.
-        if self.value is None :
+        if self.value is None:
             return "%s " % self.names[0]
-        if "file" in self.param_types :
+        if "file" in self.param_types:
             v = _escape_filename(self.value)
-        else :
+        else:
             v = str(self.value)
-        if self.equate :
+        if self.equate:
             return "%s=%s " % (self.names[0], v)
-        else :
+        else:
             return "%s %s " % (self.names[0], v)
 
 class _Switch(_AbstractParameter):
@@ -448,9 +469,9 @@ class _Switch(_AbstractParameter):
         Includes a trailing space.
         """
         assert not hasattr(self, "value")
-        if self.is_set :
+        if self.is_set:
             return "%s " % self.names[0]
-        else :
+        else:
             return ""
 
 class _Argument(_AbstractParameter):
@@ -469,10 +490,10 @@ class _Argument(_AbstractParameter):
     def __str__(self):
         if self.value is None:
             return " "
-        else :
+        else:
             return "%s " % self.value
 
-def _escape_filename(filename) :
+def _escape_filename(filename):
     """Escape filenames with spaces by adding quotes (PRIVATE).
 
     Note this will not add quotes if they are already included:
@@ -483,33 +504,29 @@ def _escape_filename(filename) :
     "example with spaces"
     """
     #Is adding the following helpful
-    #if os.path.isfile(filename) :
+    #if os.path.isfile(filename):
     #    #On Windows, if the file exists, we can ask for
     #    #its alternative short name (DOS style 8.3 format)
     #    #which has no spaces in it.  Note that this name
     #    #is not portable between machines, or even folder!
-    #    try :
+    #    try:
     #        import win32api
     #        short = win32api.GetShortPathName(filename)
     #        assert os.path.isfile(short)
     #        return short
-    #    except ImportError :
+    #    except ImportError:
     #        pass
-    if " " not in filename :
+    if " " not in filename:
         return filename
     #We'll just quote it - works on Windows, Mac OS X etc
-    if filename.startswith('"') and filename.endswith('"') :
+    if filename.startswith('"') and filename.endswith('"'):
         #Its already quoted
         return filename
-    else :
+    else:
         return '"%s"' % filename
 
 def _test():
-    """Run the Bio.Application module's doctests.
-
-    This will try and locate the unit tests directory, and run the doctests
-    from there in order that the relative paths used in the examples work.
-    """
+    """Run the Bio.Application module's doctests."""
     import doctest
     doctest.testmod(verbose=1)
 

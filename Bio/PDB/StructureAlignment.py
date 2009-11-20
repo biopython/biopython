@@ -102,7 +102,7 @@ if __name__=="__main__":
     from Bio import AlignIO
     from Bio.PDB import *
 
-    if len(sys.argv) != 4 :
+    if len(sys.argv) != 4:
         print "Expects three arguments,"
         print " - FASTA alignment filename (expect two sequences)"
         print " - PDB file one"

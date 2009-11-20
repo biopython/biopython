@@ -81,7 +81,7 @@ class ColorTranslator:
             raise ValueError, "Passed color (or colour) must be a valid color type"
         if type(color) == type(1):
             color = self.scheme_color(color)
-        elif isinstance(color, basestring) :
+        elif isinstance(color, basestring):
             #Assume its a named reportlab color like "red".
             color = colors.toColor(color)
         elif type(color) == type((1., 2., 3.)) and type(color[0]) == type(1.):

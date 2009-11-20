@@ -787,7 +787,7 @@ class LinearDrawer(AbstractDrawer):
         elif strand == -1:
             sigil = method((x1, btm), (x0, ctr), color=feature.color,
                            orientation='left', **kwargs)
-        else :
+        else:
             sigil = method((x0, btm), (x1, top), color=feature.color,
                            **kwargs)
         if feature.label:   # Feature requires a label
