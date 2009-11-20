@@ -188,6 +188,10 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
     def root(self):
         return self.clade
 
+    @property
+    def clades(self):
+        return [self.clade]
+
     # Singular property for plural attribute
     @property
     def confidence(self):
@@ -202,12 +206,6 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
                                "use Phylogeny().confidences")
         return self.confidences[0]
 
-    # Fix sequence-type behavior inherited from BaseTree
-    def __iter__(self):
-        return iter(self.clade)
-
-    def __len__(self):
-        return len(self.clade)
 
 
 class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
