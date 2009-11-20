@@ -141,7 +141,55 @@ class Seq(object):
             return Seq(self._data[index], self.alphabet)
 
     def __add__(self, other):
-        """Add another sequence or string to this sequence."""
+        """Add another sequence or string to this sequence.
+
+        If adding a string to a Seq, the alphabet is preserved:
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_protein
+        >>> Seq("MELKI", generic_protein) + "LV"
+        Seq('MELKILV', ProteinAlphabet())
+
+        When adding two Seq (like) objects, the alphabets are important.
+        Consider this example:
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet.IUPAC import unambiguous_dna, ambiguous_dna
+        >>> unamb_dna_seq = Seq("ACGT", unambiguous_dna)
+        >>> ambig_dna_seq = Seq("ACRGT", ambiguous_dna)
+        >>> unamb_dna_seq
+        Seq('ACGT', IUPACUnambiguousDNA())
+        >>> ambig_dna_seq
+        Seq('ACRGT', IUPACAmbiguousDNA())
+
+        If we add the ambiguous and unambiguous IUPAC DNA alphabets, we get
+        the more general ambiguous IUPAC DNA alphabet:
+        
+        >>> unamb_dna_seq + ambig_dna_seq
+        Seq('ACGTACRGT', IUPACAmbiguousDNA())
+
+        However, if the default generic alphabet is included, the result is
+        a generic alphabet:
+
+        >>> Seq("") + ambig_dna_seq
+        Seq('ACRGT', Alphabet())
+
+        You can't add RNA and DNA sequences:
+        
+        >>> from Bio.Alphabet import generic_dna, generic_rna
+        >>> Seq("ACGT", generic_dna) + Seq("ACGU", generic_rna)
+        Traceback (most recent call last):
+           ...
+        TypeError: Incompatable alphabets DNAAlphabet() and RNAAlphabet()
+
+        You can't add nucleotide and protein sequences:
+
+        >>> from Bio.Alphabet import generic_dna, generic_protein
+        >>> Seq("ACGT", generic_dna) + Seq("MELKI", generic_protein)
+        Traceback (most recent call last):
+           ...
+        TypeError: Incompatable alphabets DNAAlphabet() and ProteinAlphabet()
+        """
         if hasattr(other, "alphabet"):
             #other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
@@ -161,6 +209,17 @@ class Seq(object):
             raise TypeError
 
     def __radd__(self, other):
+        """Adding a sequence on the left.
+
+        If adding a string to a Seq, the alphabet is preserved:
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_protein
+        >>> "LV" + Seq("MELKI", generic_protein)
+        Seq('LVMELKI', ProteinAlphabet())
+
+        Adding two Seq (like) objects is handled via the __add__ method.
+        """
         if hasattr(other, "alphabet"):
             #other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
@@ -951,6 +1010,33 @@ class UnknownSeq(Seq):
                % (self._length, repr(self.alphabet), repr(self._character))
 
     def __add__(self, other):
+        """Add another sequence or string to this sequence.
+
+        Adding two UnknownSeq objects returns another UnknownSeq object
+        provided the character is the same and the alphabets are compatible.
+
+        >>> from Bio.Seq import UnknownSeq
+        >>> from Bio.Alphabet import generic_protein
+        >>> UnknownSeq(10, generic_protein) + UnknownSeq(5, generic_protein)
+        UnknownSeq(15, alphabet = ProteinAlphabet(), character = 'X')
+
+        If the characters differ, an UnknownSeq object cannot be used, so a
+        Seq object is returned:
+
+        >>> from Bio.Seq import UnknownSeq
+        >>> from Bio.Alphabet import generic_protein
+        >>> UnknownSeq(10, generic_protein) + UnknownSeq(5, generic_protein,
+        ...                                              character="x")
+        Seq('XXXXXXXXXXxxxxx', ProteinAlphabet())
+
+        If adding a string to an UnknownSeq, a new Seq is returned with the
+        same alphabet:
+        
+        >>> from Bio.Seq import UnknownSeq
+        >>> from Bio.Alphabet import generic_protein
+        >>> UnknownSeq(5, generic_protein) + "LV"
+        Seq('XXXXXLV', ProteinAlphabet())
+        """
         if isinstance(other, UnknownSeq) \
         and other._character == self._character:
             #TODO - Check the alphabets match
@@ -960,11 +1046,7 @@ class UnknownSeq(Seq):
         return Seq(str(self), self.alphabet) + other
 
     def __radd__(self, other):
-        if isinstance(other, UnknownSeq) \
-        and other._character == self._character:
-            #TODO - Check the alphabets match
-            return UnknownSeq(len(self)+len(other),
-                              self.alphabet, self._character)
+        #If other is an UnknownSeq, then __add__ would be called.
         #Offload to the base class...
         return other + Seq(str(self), self.alphabet)
 
