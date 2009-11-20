@@ -26,6 +26,7 @@ By default, all tests are run.
 # If you develop docstring tests for other modules, please add
 # those modules here.
 DOCTEST_MODULES = ["Bio.Seq",
+                   "Bio.SeqFeature",
                    "Bio.SeqRecord",
                    "Bio.SeqIO",
                    "Bio.SeqIO.PhdIO",
