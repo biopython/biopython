@@ -12,9 +12,9 @@
 import unittest
 import warnings
 
-try :
+try:
     from numpy.random import random
-except ImportError :
+except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(\
         "Install NumPy if you want to use Bio.PDB.")
@@ -55,6 +55,7 @@ class PDBExceptionTest(unittest.TestCase):
 
     #TODO - check get expected warnings, may require Python 2.6+
     #See Bug 2820
+
 
 class PDBParseTest(unittest.TestCase):
     def setUp(self):
@@ -295,9 +296,107 @@ class PDBParseTest(unittest.TestCase):
                     # Point mutation -- check residue names
                     self.assertEquals(residue.disordered_get_id_list(), res[2])
 
+    def test_details(self):
+        """Verify details of the parsed example PDB file."""
+        structure = self.structure
+        self.assertEqual(len(structure), 2)
+
+        #First model
+        model = structure[0]
+        self.assertEqual(model.id, 0)
+        self.assertEqual(model.level, "M")
+        self.assertEqual(len(model), 1)
+        chain = model["A"]
+        self.assertEqual(chain.id, "A")
+        self.assertEqual(chain.level, "C")
+        self.assertEqual(len(chain), 1)
+        self.assertEqual(" ".join(residue.resname for residue in chain), "PCA")
+        self.assertEqual(" ".join(atom.name for atom in chain.get_atoms()),
+                         "N CA CB CG CD OE C O")
+        self.assertEqual(" ".join(atom.element for atom in chain.get_atoms()),
+                         "N C C C C O C O")
+        #Second model
+        model = structure[1]
+        self.assertEqual(model.id, 1)
+        self.assertEqual(model.level, "M")
+        self.assertEqual(len(model), 3)
+        chain = model["A"]
+        self.assertEqual(chain.id, "A")
+        self.assertEqual(chain.level, "C")
+        self.assertEqual(len(chain), 86)
+        self.assertEqual(" ".join(residue.resname for residue in chain),
+                         "CYS ARG CYS GLY SER GLN GLY GLY GLY SER THR CYS "
+                         "PRO GLY LEU ARG CYS CYS SER ILE TRP GLY TRP CYS "
+                         "GLY ASP SER GLU PRO TYR CYS GLY ARG THR CYS GLU "
+                         "ASN LYS CYS TRP SER GLY GLU ARG SER ASP HIS ARG "
+                         "CYS GLY ALA ALA VAL GLY ASN PRO PRO CYS GLY GLN "
+                         "ASP ARG CYS CYS SER VAL HIS GLY TRP CYS GLY GLY "
+                         "GLY ASN ASP TYR CYS SER GLY GLY ASN CYS GLN TYR "
+                         "ARG CYS")
+        self.assertEqual(" ".join(atom.name for atom in chain.get_atoms()),
+                         "C N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB SG "
+                         "N CA C O N CA C O CB OG N CA C O CB CG CD OE1 NE2 "
+                         "N CA C O N CA C O N CA C O N CA C O CB OG N CA C "
+                         "O CB OG1 CG2 N CA C O CB SG N CA C O CB CG CD N "
+                         "CA C O N CA C O CB CG CD1 CD2 N CA C O CB CG CD NE "
+                         "CZ NH1 NH2 N CA C O CB SG N CA C O CB SG N CA C O "
+                         "CB OG N CA C O CB CG1 CG2 CD1 N CA C O CB CG CD1 "
+                         "CD2 NE1 CE2 CE3 CZ2 CZ3 CH2 N CA C O N CA C O CB "
+                         "CG CD1 CD2 NE1 CE2 CE3 CZ2 CZ3 CH2 N CA C O CB SG "
+                         "N CA C O N CA C O CB CG OD1 OD2 N CA C O CB OG N "
+                         "CA C O CB CG CD OE1 OE2 N CA C O CB CG CD N CA C O "
+                         "CB CG CD1 CD2 CE1 CE2 CZ OH N CA C O CB SG N CA C "
+                         "O N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB OG1 "
+                         "CG2 N CA C O CB SG N CA C O CB CG CD OE1 OE2 N CA "
+                         "C O CB CG OD1 ND2 N CA C O CB CG CD CE NZ N CA C O "
+                         "CB SG N CA C O CB CG CD1 CD2 NE1 CE2 CE3 CZ2 CZ3 "
+                         "CH2 N CA C O CB OG N CA C O N CA C O CB CG CD OE1 "
+                         "OE2 N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB OG "
+                         "N CA C O CB CG OD1 OD2 N CA C O CB CG ND1 CD2 CE1 "
+                         "NE2 N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB SG "
+                         "N CA C O N CA C O CB N CA C O CB N CA C O CB CG1 "
+                         "CG2 N CA C O N CA C O CB CG OD1 ND2 N CA C O CB CG "
+                         "CD N CA C O CB CG CD N CA C O CB SG N CA C O N CA "
+                         "C O CB CG CD OE1 NE2 N CA C O CB CG OD1 OD2 N CA C "
+                         "O CB CG CD NE CZ NH1 NH2 N CA C O CB SG N CA C O "
+                         "CB SG N CA C O CB OG N CA C O CB CG1 CG2 N CA C O "
+                         "CB CG ND1 CD2 CE1 NE2 N CA C O N CA C O CB CG CD1 "
+                         "CD2 NE1 CE2 CE3 CZ2 CZ3 CH2 N CA C O CB SG N CA C "
+                         "O N CA C O N CA C O N CA C O CB CG OD1 ND2 N CA C O "
+                         "CB CG OD1 OD2 N CA C O CB CG CD1 CD2 CE1 CE2 CZ OH "
+                         "N CA C O CB SG N CA C O CB OG N CA C O N CA C O N "
+                         "CA C O CB CG OD1 ND2 N CA C O CB SG N CA C O CB CG "
+                         "CD OE1 NE2 N CA C O CB CG CD1 CD2 CE1 CE2 CZ OH N "
+                         "CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB SG")
+        self.assertEqual(" ".join(atom.element for atom in chain.get_atoms()),
+                         "C N C C O C C C N C N N N C C O C S N C C O N C C O "
+                         "C O N C C O C C C O N N C C O N C C O N C C O N C C "
+                         "O C O N C C O C O C N C C O C S N C C O C C C N C C "
+                         "O N C C O C C C C N C C O C C C N C N N N C C O C S "
+                         "N C C O C S N C C O C O N C C O C C C C N C C O C C "
+                         "C C N C C C C C N C C O N C C O C C C C N C C C C C "
+                         "N C C O C S N C C O N C C O C C O O N C C O C O N C "
+                         "C O C C C O O N C C O C C C N C C O C C C C C C C O "
+                         "N C C O C S N C C O N C C O C C C N C N N N C C O C "
+                         "O C N C C O C S N C C O C C C O O N C C O C C O N N "
+                         "C C O C C C C N N C C O C S N C C O C C C C N C C C "
+                         "C C N C C O C O N C C O N C C O C C C O O N C C O C "
+                         "C C N C N N N C C O C O N C C O C C O O N C C O C C "
+                         "N C C N N C C O C C C N C N N N C C O C S N C C O N "
+                         "C C O C N C C O C N C C O C C C N C C O N C C O C C "
+                         "O N N C C O C C C N C C O C C C N C C O C S N C C O "
+                         "N C C O C C C O N N C C O C C O O N C C O C C C N C "
+                         "N N N C C O C S N C C O C S N C C O C O N C C O C C "
+                         "C N C C O C C N C C N N C C O N C C O C C C C N C C "
+                         "C C C N C C O C S N C C O N C C O N C C O N C C O C "
+                         "C O N N C C O C C O O N C C O C C C C C C C O N C C "
+                         "O C S N C C O C O N C C O N C C O N C C O C C O N N "
+                         "C C O C S N C C O C C C O N N C C O C C C C C C C O "
+                         "N C C O C C C N C N N N C C O C S")
+
 class Exposure(unittest.TestCase):
     "Testing Bio.PDB.HSExposure."
-    def setUp(self) :
+    def setUp(self):
         warnings.resetwarnings()
         warnings.simplefilter('ignore', PDBConstructionWarning)
         pdb_filename = "PDB/a_structure.pdb"
@@ -317,7 +416,7 @@ class Exposure(unittest.TestCase):
         self.a_residues = a_residues
         self.radius = 13.0
 
-    def test_HSExposureCA(self) :
+    def test_HSExposureCA(self):
         """HSExposureCA."""
         hse = HSExposureCA(self.model, self.radius)
         residues = self.a_residues
@@ -338,7 +437,7 @@ class Exposure(unittest.TestCase):
         self.assertEqual(24, residues[-2].xtra["EXP_HSE_A_U"])
         self.assertEqual(0, len(residues[-1].xtra))
 
-    def test_HSExposureCB(self) :
+    def test_HSExposureCB(self):
         """HSExposureCB."""
         hse = HSExposureCB(self.model, self.radius)
         residues = self.a_residues
@@ -360,7 +459,7 @@ class Exposure(unittest.TestCase):
         self.assertEqual(23, residues[-1].xtra["EXP_HSE_B_D"])
         self.assertEqual(15, residues[-1].xtra["EXP_HSE_B_U"])
 
-    def test_ExposureCN(self) :
+    def test_ExposureCN(self):
         """HSExposureCN."""
         hse = ExposureCN(self.model, self.radius)
         residues = self.a_residues
@@ -376,6 +475,105 @@ class Exposure(unittest.TestCase):
         self.assertEqual(48, residues[-2].xtra["EXP_CN"])
         self.assertEqual(1, len(residues[-1].xtra))
         self.assertEqual(38, residues[-1].xtra["EXP_CN"])
+
+class AssortedMisc(unittest.TestCase):
+    "Testing with real PDB files."
+
+    def test_strict(self):
+        """Parse 1A8O.pdb file in strict mode."""
+        warnings.resetwarnings()
+        parser = PDBParser(PERMISSIVE=False)
+        structure = parser.get_structure("example", "PDB/1A8O.pdb")
+        self.assertEqual(len(structure), 1)
+        model = structure[0]
+        self.assertEqual(model.id, 0)
+        self.assertEqual(model.level, "M")
+        self.assertEqual(len(model), 1)
+        chain = model["A"]
+        self.assertEqual(chain.id, "A")
+        self.assertEqual(chain.level, "C")
+        self.assertEqual(len(chain), 158)
+        self.assertEqual(" ".join(residue.resname for residue in chain),
+                         "MSE ASP ILE ARG GLN GLY PRO LYS GLU PRO PHE ARG "
+                         "ASP TYR VAL ASP ARG PHE TYR LYS THR LEU ARG ALA "
+                         "GLU GLN ALA SER GLN GLU VAL LYS ASN TRP MSE THR "
+                         "GLU THR LEU LEU VAL GLN ASN ALA ASN PRO ASP CYS "
+                         "LYS THR ILE LEU LYS ALA LEU GLY PRO GLY ALA THR "
+                         "LEU GLU GLU MSE MSE THR ALA CYS GLN GLY HOH HOH "
+                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+                         "HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH HOH "
+                         "HOH HOH")
+        self.assertEqual(" ".join(atom.name for atom in chain.get_atoms()),
+                         "N CA C O CB CG SE CE N CA C O CB CG OD1 OD2 N CA "
+                         "C O CB CG1 CG2 CD1 N CA C O CB CG CD NE CZ NH1 "
+                         "NH2 N CA C O CB CG CD OE1 NE2 N CA C O N CA C O "
+                         "CB CG CD N CA C O CB CG CD CE NZ N CA C O CB CG "
+                         "CD OE1 OE2 N CA C O CB CG CD N CA C O CB CG CD1 "
+                         "CD2 CE1 CE2 CZ N CA C O CB CG CD NE CZ NH1 NH2 N "
+                         "CA C O CB CG OD1 OD2 N CA C O CB CG CD1 CD2 CE1 "
+                         "CE2 CZ OH N CA C O CB CG1 CG2 N CA C O CB CG OD1 "
+                         "OD2 N CA C O CB CG CD NE CZ NH1 NH2 N CA C O CB "
+                         "CG CD1 CD2 CE1 CE2 CZ N CA C O CB CG CD1 CD2 CE1 "
+                         "CE2 CZ OH N CA C O CB CG CD CE NZ N CA C O CB "
+                         "OG1 CG2 N CA C O CB CG CD1 CD2 N CA C O CB CG CD "
+                         "NE CZ NH1 NH2 N CA C O CB N CA C O CB CG CD OE1 "
+                         "OE2 N CA C O CB CG CD OE1 NE2 N CA C O CB N CA C "
+                         "O CB OG N CA C O CB CG CD OE1 NE2 N CA C O CB CG "
+                         "CD OE1 OE2 N CA C O CB CG1 CG2 N CA C O CB CG CD "
+                         "CE NZ N CA C O CB CG OD1 ND2 N CA C O CB CG CD1 "
+                         "CD2 NE1 CE2 CE3 CZ2 CZ3 CH2 N CA C O CB CG SE CE "
+                         "N CA C O CB OG1 CG2 N CA C O CB CG CD OE1 OE2 N "
+                         "CA C O CB OG1 CG2 N CA C O CB CG CD1 CD2 N CA C "
+                         "O CB CG CD1 CD2 N CA C O CB CG1 CG2 N CA C O CB "
+                         "CG CD OE1 NE2 N CA C O CB CG OD1 ND2 N CA C O CB "
+                         "N CA C O CB CG OD1 ND2 N CA C O CB CG CD N CA C "
+                         "O CB CG OD1 OD2 N CA C O CB SG N CA C O CB CG CD "
+                         "CE NZ N CA C O CB OG1 CG2 N CA C O CB CG1 CG2 "
+                         "CD1 N CA C O CB CG CD1 CD2 N CA C O CB CG CD CE "
+                         "NZ N CA C O CB N CA C O CB CG CD1 CD2 N CA C O N "
+                         "CA C O CB CG CD N CA C O N CA C O CB N CA C O CB "
+                         "OG1 CG2 N CA C O CB CG CD1 CD2 N CA C O CB CG CD "
+                         "OE1 OE2 N CA C O CB CG CD OE1 OE2 N CA C O CB CG "
+                         "SE CE N CA C O CB CG SE CE N CA C O CB OG1 CG2 N "
+                         "CA C O CB N CA C O CB SG N CA C O CB CG CD OE1 "
+                         "NE2 N CA C O OXT O O O O O O O O O O O O O O O O "
+                         "O O O O O O O O O O O O O O O O O O O O O O O O "
+                         "O O O O O O O O O O O O O O O O O O O O O O O O "
+                         "O O O O O O O O O O O O O O O O O O O O O O O O")
+        self.assertEqual(" ".join(atom.element for atom in chain.get_atoms()),
+                         "N C C O C C SE C N C C O C C O O N C C O C C C C "
+                         "N C C O C C C N C N N N C C O C C C O N N C C O "
+                         "N C C O C C C N C C O C C C C N N C C O C C C O "
+                         "O N C C O C C C N C C O C C C C C C C N C C O C "
+                         "C C N C N N N C C O C C O O N C C O C C C C C C "
+                         "C O N C C O C C C N C C O C C O O N C C O C C C "
+                         "N C N N N C C O C C C C C C C N C C O C C C C C "
+                         "C C O N C C O C C C C N N C C O C O C N C C O C "
+                         "C C C N C C O C C C N C N N N C C O C N C C O C "
+                         "C C O O N C C O C C C O N N C C O C N C C O C O "
+                         "N C C O C C C O N N C C O C C C O O N C C O C C "
+                         "C N C C O C C C C N N C C O C C O N N C C O C C "
+                         "C C N C C C C C N C C O C C SE C N C C O C O C N "
+                         "C C O C C C O O N C C O C O C N C C O C C C C N "
+                         "C C O C C C C N C C O C C C N C C O C C C O N N "
+                         "C C O C C O N N C C O C N C C O C C O N N C C O "
+                         "C C C N C C O C C O O N C C O C S N C C O C C C "
+                         "C N N C C O C O C N C C O C C C C N C C O C C C "
+                         "C N C C O C C C C N N C C O C N C C O C C C C N "
+                         "C C O N C C O C C C N C C O N C C O C N C C O C "
+                         "O C N C C O C C C C N C C O C C C O O N C C O C "
+                         "C C O O N C C O C C SE C N C C O C C SE C N C C "
+                         "O C O C N C C O C N C C O C S N C C O C C C O N "
+                         "N C C O O O O O O O O O O O O O O O O O O O O O "
+                         "O O O O O O O O O O O O O O O O O O O O O O O O "
+                         "O O O O O O O O O O O O O O O O O O O O O O O O "
+                         "O O O O O O O O O O O O O O O O O O O O O")
+
 
 # -------------------------------------------------------------
 

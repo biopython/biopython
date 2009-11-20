@@ -82,7 +82,7 @@ astralEv_to_sql = { 10: 'e1', 5: 'e0_7', 1: 'e0', 0.5: 'e_0_3', 0.1: 'e_1',
                      1e-20: 'e_20', 1e-25: 'e_25', 1e-50: 'e_50' }
 
 
-def cmp_sccs(sccs1, sccs2) :
+def cmp_sccs(sccs1, sccs2):
     """Order SCOP concise classification strings (sccs).
 
     a.4.5.1 < a.4.5.11 < b.1.1.1 
@@ -106,7 +106,7 @@ def cmp_sccs(sccs1, sccs2) :
 
 _domain_re = re.compile(r">?([\w_\.]*)\s+([\w\.]*)\s+\(([^)]*)\) (.*)")
 
-def parse_domain(str) :
+def parse_domain(str):
     """Convert an ASTRAL header string into a Scop domain.
 
     An ASTRAL (http://astral.stanford.edu/) header contains a concise
@@ -127,13 +127,13 @@ def parse_domain(str) :
     dom.sid = m.group(1)
     dom.sccs = m.group(2)
     dom.residues = Residues(m.group(3))
-    if not dom.residues.pdbid :
+    if not dom.residues.pdbid:
         dom.residues.pdbid= dom.sid[1:5]
     dom.description = m.group(4).strip()
 
     return dom
 
-def _open_scop_file(scop_dir_path, version, filetype) :
+def _open_scop_file(scop_dir_path, version, filetype):
     filename = "dir.%s.scop.txt_%s" % (filetype,version)
     handle = open(os.path.join( scop_dir_path, filename))
     return handle
@@ -180,7 +180,7 @@ class Scop:
             else:
                 # open SCOP parseable files 
                 if dir_path:
-                    if not version :
+                    if not version:
                         raise RuntimeError("Need SCOP version to find parsable files in directory")
                     if cla_handle or des_handle or hie_handle:
                         raise RuntimeError("Cannot specify SCOP directory and specific files")
@@ -200,7 +200,7 @@ class Scop:
                 # Build the rest of the nodes using the DES file
                 records = Des.parse(des_handle)
                 for record in records:
-                    if record.nodetype =='px' :
+                    if record.nodetype =='px':
                         n = Domain()
                         n.sid = record.name
                         domains.append(n)
@@ -216,7 +216,7 @@ class Scop:
                 # Glue all of the Nodes together using the HIE file
                 records = Hie.parse(hie_handle)
                 for record in records:
-                    if record.sunid not in sunidDict :
+                    if record.sunid not in sunidDict:
                         print record.sunid
                         
                     n = sunidDict[record.sunid]
@@ -229,7 +229,7 @@ class Scop:
                         n.parent = sunidDict[record.parent]
                 
                     for c in record.children:
-                        if c not in sunidDict :
+                        if c not in sunidDict:
                             raise ValueError("Incomplete data?")
                         n.children.append(sunidDict[c])
 
@@ -250,7 +250,7 @@ class Scop:
                 self._domains = tuple(domains)
 
         finally:
-            if dir_path :
+            if dir_path:
                 # If we opened the files, we close the files
                 if cla_handle : cla_handle.close()
                 if des_handle : des_handle.close()
@@ -261,7 +261,7 @@ class Scop:
         return self.getNodeBySunid(0)
 
 
-    def getDomainBySid(self, sid) :
+    def getDomainBySid(self, sid):
         """Return a domain from its sid"""
         if sid in self._sidDict:
             return self._sidDict[sid]
@@ -273,7 +273,7 @@ class Scop:
             return None
 
 
-    def getNodeBySunid(self, sunid) :
+    def getNodeBySunid(self, sunid):
         """Return a node from its sunid"""
         if sunid in self._sunidDict:
             return self._sunidDict[sunid]
@@ -285,7 +285,7 @@ class Scop:
             return None
 
     
-    def getDomains(self) :
+    def getDomains(self):
         """Returns an ordered tuple of all SCOP Domains"""
         if self.db_handle:
             return self.getRoot().getDescendents('px')
@@ -294,34 +294,34 @@ class Scop:
 
 
 
-    def write_hie(self, handle) :
+    def write_hie(self, handle):
         """Build an HIE SCOP parsable file from this object"""
         nodes = self._sunidDict.values()
         # We order nodes to ease comparison with original file
         nodes.sort(lambda n1,n2: cmp(n1.sunid, n2.sunid))
 
-        for n in nodes :
+        for n in nodes:
             handle.write(str(n.toHieRecord()))
 
 
-    def write_des(self, handle) :
+    def write_des(self, handle):
         """Build a DES SCOP parsable file from this object""" 
         nodes = self._sunidDict.values()
         # Origional SCOP file is not ordered?
         nodes.sort(lambda n1,n2: cmp(n1.sunid, n2.sunid))
 
-        for n in nodes :
-            if n != self.root :
+        for n in nodes:
+            if n != self.root:
                 handle.write(str(n.toDesRecord()))
 
 
-    def write_cla(self, handle) :
+    def write_cla(self, handle):
         """Build a CLA SCOP parsable file from this object"""                
         nodes = self._sidDict.values()
         # We order nodes to ease comparison with original file
         nodes.sort(lambda n1,n2: cmp(n1.sunid, n2.sunid))
 
-        for n in nodes :
+        for n in nodes:
             handle.write(str(n.toClaRecord()))
 
 
@@ -506,7 +506,7 @@ class Scop:
         
 
   
-class Node :
+class Node:
     """ A node in the Scop hierarchy
 
     sunid  -- SCOP unique identifiers. e.g. '14986'
@@ -522,7 +522,7 @@ class Node :
     description -- 
         
     """
-    def __init__(self, scop=None) :
+    def __init__(self, scop=None):
         """Create a Node in the scop hierarchy.  If a Scop instance is provided to the
         constructor, this will be used to lookup related references using the SQL
         methods.  If no instance is provided, it is assumed the whole tree exists
@@ -535,7 +535,7 @@ class Node :
         self.description =''
         self.scop=scop
 
-    def __str__(self) :
+    def __str__(self):
         s = []
         s.append(str(self.sunid))
         s.append(self.sccs)
@@ -552,7 +552,7 @@ class Node :
             rec.parent = str(self.getParent().sunid)
         else:
             rec.parent = '-'
-        for c in self.getChildren() :
+        for c in self.getChildren():
             rec.children.append(str(c.sunid))
         return rec
     
@@ -579,7 +579,7 @@ class Node :
         else:
             return self.scop.getNodeBySunid( self.parent )
 
-    def getDescendents( self, node_type) :
+    def getDescendents( self, node_type):
         """ Return a list of all decendent nodes of the given type. Node type can a
         two letter code or longer description. e.g. 'fa' or 'family'
         """
@@ -600,7 +600,7 @@ class Node :
         return nodes
                     
 
-    def getAscendent( self, node_type) :
+    def getAscendent( self, node_type):
         """ Return the ancenstor node of the given type, or None.Node type can a
         two letter code or longer description. e.g. 'fa' or 'family'"""
         if node_type in _nodetype_to_code:
@@ -619,7 +619,7 @@ class Node :
                                                             
     
 
-class Domain(Node) :
+class Domain(Node):
     """ A SCOP domain. A leaf node in the Scop hierarchy.
 
     sid      -- The SCOP domain identifier. e.g. 'd5hbib_'
@@ -627,20 +627,20 @@ class Domain(Node) :
     residues -- A Residue object. It defines the collection
                   of PDB atoms that make up this domain.
     """
-    def __init__(self,scop=None) :
+    def __init__(self,scop=None):
         Node.__init__(self,scop=scop)
         self.sid = ''         
         self.residues = None
 
-    def __str__(self) :
+    def __str__(self):
         s = []
         s.append(self.sid)
         s.append(self.sccs)
         s.append("("+str(self.residues)+")")
 
-        if not self.getParent() :
+        if not self.getParent():
             s.append(self.description)
-        else :
+        else:
             sp = self.getParent()
             dm = sp.getParent()
             s.append(dm.description)
@@ -654,7 +654,7 @@ class Domain(Node) :
         rec.name = self.sid
         return rec
 
-    def toClaRecord(self) :
+    def toClaRecord(self):
         """Return a Cla.Record"""        
         rec = Cla.Record()
         rec.sid = self.sid

@@ -100,7 +100,7 @@ def read(handle):
             # Peak location is optional according to
             # David Gordon (the Consed author)
             parts = line.split()
-            if len(parts) in [2,3] :
+            if len(parts) in [2,3]:
                 record.sites.append(tuple(parts))
             else:
                 raise ValueError("DNA line must contain a base and quality "

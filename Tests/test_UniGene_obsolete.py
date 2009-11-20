@@ -1,3 +1,7 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 from Bio import UniGene
 
 #Start of the UniGene file for Monodelphis domestica downloaded from:
@@ -16,12 +20,12 @@ for record in ugparser:
     print "Title: '%s'" % record.title
     print "Expressed:", record.express
     print "Chromosome:", record.chromosome
-    if record.sequence :
+    if record.sequence:
         print "Sequences:"
-        for s in record.sequence :
+        for s in record.sequence:
             assert isinstance(s, UniGene.UnigeneSequenceRecord)
             print s
-    else :
+    else:
         print "No sequences"
             
     assert record.species == "Mdm"

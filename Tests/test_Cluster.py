@@ -1,15 +1,19 @@
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
 import unittest
 
-try :
+try:
     from Bio import Cluster
-except ImportError :
+except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(\
         "If you want to use Bio.Cluster, install NumPy first and then reinstall Biopython")
 
-try :
+try:
     import numpy
-except ImportError :
+except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(\
         "Install NumPy if you want to use Bio.Cluster")
@@ -667,7 +671,7 @@ class TestCluster(unittest.TestCase):
         self.assertEqual(clusterid[8], 2)
         self.assertAlmostEqual(error, 7.680, 3)
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     TestCluster.module = 'Bio.Cluster'
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)

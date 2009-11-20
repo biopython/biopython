@@ -18,7 +18,7 @@ very easily as that too uses SeqRecord objects.  For example,
 
 from Bio import Fasta
 handle = open("example.fas")
-for seq_record in Fasta.Iterator(handle, Fasta.SequenceParser()) :
+for seq_record in Fasta.Iterator(handle, Fasta.SequenceParser()):
     print seq_record.description
     print seq_record.seq
 handle.close()
@@ -27,7 +27,7 @@ Using Bio.SeqIO instead this becomes:
 
 from Bio import SeqIO
 handle = open("example.fas")
-for seq_record in SeqIO.parse(handle, "fasta") :
+for seq_record in SeqIO.parse(handle, "fasta"):
     print seq_record.description
     print seq_record.seq
 handle.close()
@@ -37,7 +37,7 @@ complicated as the Bio.Fasta.Record object differs from the SeqRecord.
 
 from Bio import Fasta
 handle = open("example.fas")
-for record in Fasta.Iterator(handle, Fasta.RecordParser()) :
+for record in Fasta.Iterator(handle, Fasta.RecordParser()):
     #record is a Bio.Fasta.Record object
     print record.title #The full title line as a string
     print record.sequence #The sequence as a string
@@ -47,7 +47,7 @@ Using Bio.SeqIO instead this becomes:
 
 from Bio import SeqIO
 handle = open("example.fas")
-for seq_record in SeqIO.parse(handle, "fasta") :
+for seq_record in SeqIO.parse(handle, "fasta"):
     print seq_record.description #The full title line as a string
     print str(seq_record.seq) #The sequence as a string
 handle.close()
@@ -108,9 +108,9 @@ class Iterator:
         self._debug = debug
 
         #Skip any text before the first record (e.g. blank lines)
-        while True :
+        while True:
             line = handle.readline()
-            if not line or line[0] == ">" :
+            if not line or line[0] == ">":
                 break
             if debug : print "Skipping: " + line
         self._lookahead = line
@@ -128,17 +128,17 @@ class Iterator:
         line = self.handle.readline()
         while line:
             if line[0] == ">": break
-            if line[0] == "#" :
+            if line[0] == "#":
                 if self._debug : print "Ignoring comment line"
                 pass
-            else :
+            else:
                 lines.append(line.rstrip())
             line = self.handle.readline()
         self._lookahead = line
         if self._debug : print "Debug: '%s' and '%s'" % (title, "".join(lines))
         if self._parser is None:
             return "\n".join(lines)
-        else :
+        else:
             return self._parser.parse_string("\n".join(lines))
 
 class RecordParser:
@@ -147,7 +147,7 @@ class RecordParser:
     def __init__(self, debug = 0):
         pass
 
-    def parse_string(self, text) :
+    def parse_string(self, text):
         text = text.replace("\r\n","\n") #Crude way of dealing with \r\n
         assert text[0] == ">", text
         text = text.split("\n>",1)[0] # Only do the first record if more than one
@@ -179,7 +179,7 @@ class SequenceParser:
         self.alphabet = alphabet
         self.title2ids = title2ids
     
-    def parse_string(self, text) :
+    def parse_string(self, text):
         text = text.replace("\r\n","\n") #Crude way of dealing with \r\n
         assert text[0] == ">", text
         text = text.split("\n>",1)[0] # Only do the first record if more than one

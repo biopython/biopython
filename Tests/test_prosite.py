@@ -7,7 +7,12 @@ import os
 import unittest
 
 from Bio.ExPASy import Prosite
+
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from Bio.Prosite import Pattern
+warnings.resetwarnings()
+
 from Bio import Seq
 
 
@@ -3698,43 +3703,43 @@ class TestPrositePattern(unittest.TestCase):
 
         pattern = '[LIV]-G-{P}-G-{P}-[FYWMGSTNH]-[SGA]-{PW}-[LIVCAT]-{PD}-x-[GSTACLIVMFY]-x(5,18)-[LIVMFYWCSTAR]-[AIVP]-[LIVMFAGCKR]-K.'
         regular_expression = Pattern.prosite_to_re( pattern )
-	self.assertEqual(regular_expression, '[LIV]G[^P]G[^P][FYWMGSTNH][SGA][^PW][LIVCAT][^PD].[GSTACLIVMFY].{5,18}[LIVMFYWCSTAR][AIVP][LIVMFAGCKR]K')
+        self.assertEqual(regular_expression, '[LIV]G[^P]G[^P][FYWMGSTNH][SGA][^PW][LIVCAT][^PD].[GSTACLIVMFY].{5,18}[LIVMFYWCSTAR][AIVP][LIVMFAGCKR]K')
 
         pattern = '[IV]-x-D-S-[GAS]-[GASC]-[GAST]-[GA]-T.'
         regular_expression = Pattern.prosite_to_re(pattern)
-	self.assertEqual(regular_expression, '[IV].DS[GAS][GASC][GAST][GA]T')
+        self.assertEqual(regular_expression, '[IV].DS[GAS][GASC][GAST][GA]T')
 
         pattern = 'G-[LIVM]-x(3)-E-[LIV]-T-[LF]-R.'
         regular_expression = Pattern.prosite_to_re(pattern)
-	self.assertEqual(regular_expression, 'G[LIVM].{3}E[LIV]T[LF]R')
+        self.assertEqual(regular_expression, 'G[LIVM].{3}E[LIV]T[LF]R')
 
         pattern = '[DESH]-x(4,5)-[STVG]-x-[AS]-[FYI]-K-[DLIFSA]-[RVMF]-[GA]-[LIVMGA].'
         regular_expression = Pattern.prosite_to_re(pattern)
-	self.assertEqual(regular_expression, '[DESH].{4,5}[STVG].[AS][FYI]K[DLIFSA][RVMF][GA][LIVMGA]')
+        self.assertEqual(regular_expression, '[DESH].{4,5}[STVG].[AS][FYI]K[DLIFSA][RVMF][GA][LIVMGA]')
 
         pattern = 'W-[IV]-[STA]-[RK]-x-[DE]-Y-[DNE]-[DE].'
         regular_expression = Pattern.prosite_to_re(pattern)
-	self.assertEqual(regular_expression, 'W[IV][STA][RK].[DE]Y[DNE][DE]')
+        self.assertEqual(regular_expression, 'W[IV][STA][RK].[DE]Y[DNE][DE]')
 
     def test_verify_pattern( self ):
         "Test verification of a pattern"
 
         # Good patterns
         pattern = 'W-[IV]-[STA]-[RK]-x-[DE]-Y-[DNE]-[DE].'
-	self.assert_(Pattern.verify_pattern(pattern))
+        self.assert_(Pattern.verify_pattern(pattern))
 
         pattern = '[LIV]-G-{P}-G-{P}-[FYWMGSTNH]-[SGA]-{PW}-[LIVCAT]-{PD}-x-[GSTACLIVMFY]-x(5,18)-[LIVMFYWCSTAR]-[AIVP]-[LIVMFAGCKR]-K.'
-	self.assert_(Pattern.verify_pattern(pattern))
+        self.assert_(Pattern.verify_pattern(pattern))
 
         # Bad patterns
         pattern = 'W-[IV]-[STA*]-[RK]-x-[DE]-Y-[DNE]-[DE].'
-	self.assert_(not Pattern.verify_pattern(pattern))
+        self.assert_(not Pattern.verify_pattern(pattern))
 
         pattern = 'W-[IV]-[STA-[RK]-x-[DE]-Y-[DNE]-[DE].'
-	self.assert_(not Pattern.verify_pattern(pattern))
+        self.assert_(not Pattern.verify_pattern(pattern))
 
         pattern = '[LIV]-G-P}-G-{P}-[FYWMGSTNH]-[SGA]-{PW}-[LIVCAT]-{PD}-x-[GSTACLIVMFY]-x(5,18)-[LIVMFYWCSTAR]-[AIVP]-[LIVMFAGCKR]-K.'
-	self.assert_(not Pattern.verify_pattern(pattern))
+        self.assert_(not Pattern.verify_pattern(pattern))
 
 
 class TestPrositeRead(unittest.TestCase):
@@ -6247,7 +6252,7 @@ class TestPrositeRead(unittest.TestCase):
         self.assertEqual(len(record.cc_site), 1)
         self.assertEqual(record.cc_site[0], (8, 'active_site'))
         self.assertEqual(len(record.dr_positive), 9)
-	self.assertEqual(record.dr_positive[0], ('P00885', 'ALKD_PSEPU'))
+        self.assertEqual(record.dr_positive[0], ('P00885', 'ALKD_PSEPU'))
         self.assertEqual(record.dr_positive[1], ('P0A957', 'ALKH_ECO57'))
         self.assertEqual(record.dr_positive[2], ('P0A956', 'ALKH_ECOL6'))
         self.assertEqual(record.dr_positive[3], ('P0A955', 'ALKH_ECOLI'))

@@ -116,7 +116,7 @@ class FeatureSet(object):
         id = self.next_id                                  # get id number
         self.features[id] = Feature(self, id, feature)   # add feature
         for key in kwargs:
-            if key == "colour" or key == "color" :
+            if key == "colour" or key == "color":
                 #Deal with "colour" as a special case by also mapping to color.
                 #If Feature.py used a python property we wouldn't need to call
                 #set_color explicitly.  However, this is important to make sure
@@ -157,7 +157,7 @@ class FeatureSet(object):
 
         #For backwards compatibility, we support both colour and color.
 	#As a quick hack, make "colour" set both "colour" and "color".
-	#if attr=="colour" :
+	#if attr=="colour":
         #    self.set_all_feature("color",value)
 	
 

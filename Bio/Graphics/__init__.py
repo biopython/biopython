@@ -20,7 +20,7 @@ except ImportError:
 # The following code is to allow all the Bio.Graphics
 # code to deal with the different ReportLab renderers
 # and the API quirks consistently.
-def _write(drawing, output_file, format, dpi=72) :
+def _write(drawing, output_file, format, dpi=72):
     """Helper function to standize output to files (PRIVATE).
 
     Writes the provided drawing out to a file in a prescribed format.
@@ -56,15 +56,15 @@ def _write(drawing, output_file, format, dpi=72) :
                   'TIFF': renderPM,
                   'TIF': renderPM
                  }
-    try :
+    try:
         #If output is not a string, then .upper() will trigger
         #an attribute error...
         drawmethod = formatdict[format.upper()] # select drawing method
-    except (KeyError,AttributeError) :
+    except (KeyError,AttributeError):
         raise ValueError("Output format should be one of %s" \
                          % ", ".join(formatdict))
 
-    if drawmethod is None :
+    if drawmethod is None:
         #i.e. We wanted renderPM but it isn't installed
         #See the import at the top of the function.
         from Bio import MissingExternalDependencyError

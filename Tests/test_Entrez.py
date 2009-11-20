@@ -3,6 +3,14 @@
 
 import unittest
 
+import os
+if os.name == 'java':
+    from Bio import MissingExternalDependencyError
+    #This is a slight miss-use of MissingExternalDependencyError,
+    #but it will do in the short term to skip this unit test on Jython
+    raise MissingExternalDependencyError("The Bio.Entrez XML parser fails "
+        "on Jython, see http://bugs.jython.org/issue1447")
+
 from Bio import Entrez
 
 
@@ -14,8 +22,8 @@ class EInfoTest(unittest.TestCase):
         '''
         # To create the XML file, use
         # >>> Bio.Entrez.einfo()
-        input = open('Entrez/einfo1.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/einfo1.xml')
+        record = Entrez.read(handle)
         self.assertEqual(record["DbList"], ['pubmed',
                                             'protein',
                                             'nucleotide',
@@ -60,8 +68,8 @@ class EInfoTest(unittest.TestCase):
         '''
         # To create the XML file, use
         # >>> Bio.Entrez.einfo(db="pubmed")
-        input = open('Entrez/einfo2.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/einfo2.xml')
+        record = Entrez.read(handle)
         self.assertEqual(record["DbInfo"]['DbName'], 'pubmed')
         self.assertEqual(record["DbInfo"]['MenuName'], 'PubMed')
         self.assertEqual(record["DbInfo"]['Description'], 'PubMed bibliographic record')
@@ -95,8 +103,8 @@ class ESearchTest(unittest.TestCase):
         '''
         # To create the XML file, use
         # >>> Bio.Entrez.esearch(db="pubmed", term="biopython")
-        input = open('Entrez/esearch1.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/esearch1.xml')
+        record = Entrez.read(handle)
         self.assertEqual(record['Count'], '5')
         self.assertEqual(record['RetMax'], '5')
         self.assertEqual(record['RetStart'], '0')
@@ -124,8 +132,8 @@ class ESearchTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.esearch(db="pubmed", term="cancer", reldate=60,
         #                        datetype="edat", retmax=100, usehistory="y")
-        input = open('Entrez/esearch2.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/esearch2.xml')
+        record = Entrez.read(handle)
         self.assertEqual(record['Count'], "10238")
         self.assertEqual(record['RetMax'], "100")
         self.assertEqual(record['RetStart'], "0")
@@ -277,8 +285,8 @@ class ESearchTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.esearch(db="pubmed", term="PNAS[ta] AND 97[vi]",
         #                        retstart=6, retmax=6)
-        input = open('Entrez/esearch3.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/esearch3.xml')
+        record = Entrez.read(handle)
         self.assertEqual(record['Count'], '2652')
         self.assertEqual(record['RetMax'], '6')
         self.assertEqual(record['RetStart'], '6')
@@ -310,8 +318,8 @@ class ESearchTest(unittest.TestCase):
         # Search in Journals for the term obstetrics.
         # To create the XML file, use
         # >>> Bio.Entrez.esearch(db="journals", term="obstetrics")
-        input = open('Entrez/esearch4.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/esearch4.xml')
+        record = Entrez.read(handle)
         self.assertEqual(record['Count'], '177')
         self.assertEqual(record['RetMax'], '20')
         self.assertEqual(record['RetStart'], '0')
@@ -354,8 +362,8 @@ class ESearchTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.esearch(db="pmc",
         #                        term="stem cells AND free fulltext[filter]")
-        input = open('Entrez/esearch5.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/esearch5.xml')
+        record = Entrez.read(handle)
         self.assertEqual(record['Count'], '23492')
         self.assertEqual(record['RetMax'], '20')
         self.assertEqual(record['RetStart'], '0')
@@ -432,8 +440,8 @@ class ESearchTest(unittest.TestCase):
         # Search in Nucleotide for a property of the sequence,
         # To create the XML file, use
         # >>> Bio.Entrez.esearch(db="nucleotide", term="biomol trna[prop]")
-        input = open('Entrez/esearch6.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/esearch6.xml')
+        record = Entrez.read(handle)
         self.assertEqual(record['Count'], "699")
         self.assertEqual(record['RetMax'], "20")
         self.assertEqual(record['RetStart'], "0")
@@ -467,8 +475,8 @@ class ESearchTest(unittest.TestCase):
         # Search in Protein for a molecular weight
         # To create the XML file, use
         # >>> Bio.Entrez.esearch(db="protein", term="200020[molecular weight]")
-        input = open('Entrez/esearch7.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/esearch7.xml')
+        record = Entrez.read(handle)
         self.assertEqual(record['Count'], '3')
         self.assertEqual(record['RetMax'], '3')
         self.assertEqual(record['RetStart'], '0')
@@ -490,8 +498,8 @@ class ESearchTest(unittest.TestCase):
         '''
         # To create the XML file, use
         # >>> Bio.Entrez.esearch(db="protein", term="abcXYZ")
-        input = open('Entrez/esearch8.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/esearch8.xml')
+        record = Entrez.read(handle)
         self.assertEqual(record['Count'], "0")
         self.assertEqual(record['RetMax'], "0")
         self.assertEqual(record['RetStart'], "0")
@@ -523,8 +531,8 @@ class EPostTest(unittest.TestCase):
         '''
         # To create the XML file, use
         # >>> Bio.Entrez.epost(db="pubmed", id="11237011")
-        input = open('Entrez/epost1.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/epost1.xml')
+        record = Entrez.read(handle)
         self.assertEqual(record["QueryKey"],  '1')
         self.assertEqual(record["WebEnv"], '0zYsuLk3zG_lRMkblPBEqnT8nIENUGw4HAy8xXChTnoVm7GEnWY71jv3nz@1FC077F3806DE010_0042SID')
 
@@ -533,16 +541,16 @@ class EPostTest(unittest.TestCase):
         '''
         # To create the XML file, use
         # >>> Bio.Entrez.epost(db="nothing")
-        input = open('Entrez/epost2.xml')
-        self.assertRaises(RuntimeError, Entrez.read, input)
+        handle = open('Entrez/epost2.xml')
+        self.assertRaises(RuntimeError, Entrez.read, handle)
 
     def test_invalid(self):
         '''Test parsing XML returned by EPost with an invalid id (overflow tag)
         '''
         # To create the XML file, use
         # >>> Bio.Entrez.epost(db="pubmed", id=99999999999999999999999999999999)
-        input = open('Entrez/epost3.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/epost3.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(record["InvalidIdList"], ["-1"])
         self.assertEqual(record["QueryKey"], "1")
@@ -564,8 +572,8 @@ class ESummaryTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.esummary(db="pubmed", id=["11850928","11482001"],
         #                         retmode="xml")
-        input = open('Entrez/esummary1.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/esummary1.xml')
+        record = Entrez.read(handle)
         self.assertEqual(record[0]["Id"], "11850928")
         self.assertEqual(record[0]["PubDate"], "1965 Aug")
         self.assertEqual(record[0]["EPubDate"], "")
@@ -641,8 +649,8 @@ class ESummaryTest(unittest.TestCase):
         # In Journals display records for journal IDs 27731,439,735,905 
         # To create the XML file, use
         # >>> Bio.Entrez.esummary(db="journals", id="27731,439,735,905")
-        input = open('Entrez/esummary2.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/esummary2.xml')
+        record = Entrez.read(handle)
         self.assertEqual(record[0]["Id"], "27731")
         self.assertEqual(record[0]["Title"], "The American journal of obstetrics and diseases of women and children")
         self.assertEqual(record[0]["MedAbbr"], "Am J Obstet Dis Women Child")
@@ -715,8 +723,8 @@ class ESummaryTest(unittest.TestCase):
         # In Protein display records for GIs 28800982 and 28628843 in xml retrieval mode
         # To create the XML file, use
         # >>> Bio.Entrez.esummary(db="protein", id="28800982,28628843", retmode="xml")
-        input = open('Entrez/esummary3.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/esummary3.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(record[0]["Id"], "28800982")
         self.assertEqual(record[0]["Caption"], "AAO47091")
@@ -754,8 +762,8 @@ class ESummaryTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.esummary(db="nucleotide", id="28864546,28800981",
         #                         retmode="xml")
-        input = open('Entrez/esummary4.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/esummary4.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(record[0]["Id"], "28864546")
         self.assertEqual(record[0]["Caption"], "AY207443")
@@ -793,8 +801,8 @@ class ESummaryTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.esummary(db="structure", id=["19923","12120"],
         #                         retmode="xml")
-        input = open('Entrez/esummary5.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/esummary5.xml')
+        record = Entrez.read(handle)
         self.assertEqual(record[0]["Id"], "19923")
         self.assertEqual(record[0]["PdbAcc"], "1L5J")
         self.assertEqual(record[0]["PdbDescr"], "Crystal Structure Of E. Coli Aconitase B")
@@ -843,8 +851,8 @@ class ESummaryTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.esummary(db="taxonomy", id=["9913","30521"],
         #                         retmode="xml")
-        input = open('Entrez/esummary6.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/esummary6.xml')
+        record = Entrez.read(handle)
         self.assertEqual(record[0]["Id"], "9913")
         self.assertEqual(record[0]["Rank"], "species")
         self.assertEqual(record[0]["Division"], "even-toed ungulates")
@@ -883,8 +891,8 @@ class ESummaryTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.esummary(db="unists", id=["254085","254086"],
         #                         retmode="xml")
-        input = open('Entrez/esummary7.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/esummary7.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(record[0]["Id"], "254085")
         self.assertEqual(record[0]["Marker_Name"], "SE234324")
@@ -909,8 +917,8 @@ class ESummaryTest(unittest.TestCase):
         '''
         # To create the XML file, use
         # >>> Bio.Entrez.esummary()
-        input = open('Entrez/esummary8.xml')
-        self.assertRaises(RuntimeError, Entrez.read, input)
+        handle = open('Entrez/esummary8.xml')
+        self.assertRaises(RuntimeError, Entrez.read, handle)
 
 
 class ELinkTest(unittest.TestCase):
@@ -922,8 +930,8 @@ class ELinkTest(unittest.TestCase):
         # Retrieve IDs from PubMed for PMID 9298984 to the PubMed database
         # To create the XML file, use
         # >>> Bio.Entrez.elink(dbfrom="pubmed", id="9298984", cmd="neighbor")
-        input = open('Entrez/elink1.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/elink1.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(len(record), 1)
         self.assertEqual(record[0]["DbFrom"], "pubmed")
@@ -1227,8 +1235,8 @@ class ELinkTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.elink(dbfrom="nucleotide", db="protein",
         #                      id="48819,7140345")
-        input = open('Entrez/elink2.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/elink2.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(record[0]["DbFrom"], "nucleotide")
         self.assertEqual(record[0]["IdList"], ["48819", "7140345"])
@@ -1241,8 +1249,8 @@ class ELinkTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.elink(dbfrom="pubmed", id="11812492,11774222",
         #                      db="pubmed", mindate="1995", datetype="pdat")
-        input = open('Entrez/elink3.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/elink3.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(len(record), 1)
         self.assertEqual(record[0]["DbFrom"], "pubmed")
@@ -1953,8 +1961,8 @@ class ELinkTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.elink(dbfrom="pubmed", id="12242737", db="pubmed",
         #                      term="medline[sb]")
-        input = open('Entrez/elink4.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/elink4.xml')
+        record = Entrez.read(handle)
         
         self.assertEqual(len(record), 1)
         self.assertEqual(record[0]["DbFrom"], "pubmed")
@@ -2392,8 +2400,8 @@ class ELinkTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.elink(dbfrom="pubmed", id="10611131", cmd="prlinks")
 
-        input = open('Entrez/elink5.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/elink5.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(record[0]["DbFrom"], "pubmed")
         self.assertEqual(len(record[0]["IdUrlList"]), 1)
@@ -2419,8 +2427,8 @@ class ELinkTest(unittest.TestCase):
         # PMIDs 12085856 and 12085853
         # To create the XML file, use
         # >>> Bio.Entrez.elink(dbfrom="pubmed", id="12085856,12085853", cmd="llinks")
-        input = open('Entrez/elink6.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/elink6.xml')
+        record = Entrez.read(handle)
         
         self.assertEqual(record[0]["DbFrom"], "pubmed")
         self.assertEqual(len(record[0]["IdUrlList"]), 2)
@@ -2487,8 +2495,8 @@ class ELinkTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.elink(dbfrom="pubmed", id="12169658,11748140",
         #                      cmd="acheck")
-        input = open('Entrez/elink7.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/elink7.xml')
+        record = Entrez.read(handle)
         
         self.assertEqual(len(record), 1)
         self.assertEqual(record[0]["DbFrom"], "pubmed")
@@ -2657,8 +2665,8 @@ class ELinkTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.elink(dbfrom="pubmed", id="10611131,111645",
         #                      id="12068369", cmd="ncheck")
-        input = open('Entrez/elink8.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/elink8.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(len(record), 1)
         self.assertEqual(record[0]["DbFrom"], "pubmed")
@@ -2678,8 +2686,8 @@ class ELinkTest(unittest.TestCase):
         #                       db="cancerchromosomes", id="2662",
         #                       cmd="neighbor",
         #                       linkname="cancerchromosomes_cancerchromosomes_cyto")
-        input = open('Entrez/elink9.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/elink9.xml')
+        record = Entrez.read(handle)
         
         self.assertEqual(record[0]["DbFrom"], "cancerchromosomes")
         self.assertEqual(record[0]["IdList"], ["2662"])
@@ -2694,8 +2702,8 @@ class EGQueryTest(unittest.TestCase):
         # Display counts in XML for stem cells in each Entrez database
         # To create the XML file, use
         # >>> Bio.Entrez.egquery(term="stem cells")
-        input = open('Entrez/egquery1.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/egquery1.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(record["Term"], "stem cells")
 
@@ -2846,8 +2854,8 @@ class EGQueryTest(unittest.TestCase):
         # Display counts in XML for brca1 or brca2 for each Entrez database
         # To create the XML file, use
         # >>> Bio.Entrez.egquery(term="brca1 OR brca2")
-        input = open('Entrez/egquery2.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/egquery2.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(record["Term"], "brca1 OR brca2")
 
@@ -3001,8 +3009,8 @@ class ESpellTest(unittest.TestCase):
         # Request suggestions for the PubMed search biopythooon
         # To create the XML file, use
         # >>> Bio.Entrez.espell(db="pubmed", term="biopythooon")
-        input = open('Entrez/espell.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/espell.xml')
+        record = Entrez.read(handle)
         self.assertEqual(record["Database"], "pubmed")
         self.assertEqual(record["Query"], "biopythooon")
         self.assertEqual(record["CorrectedQuery"], "biopython")
@@ -3022,8 +3030,8 @@ class EFetchTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.efetch(db='pubmed', id='12091962,9997',
         #                       retmode='xml', rettype='abstract')
-        input = open('Entrez/pubmed1.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/pubmed1.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(record[0]["MedlineCitation"].attributes["Owner"], "KIE")
         self.assertEqual(record[0]["MedlineCitation"].attributes["Status"], "MEDLINE")
@@ -3225,8 +3233,8 @@ class EFetchTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.efetch(db='pubmed', id="11748933,11700088",
         #                       retmode="xml")
-        input = open('Entrez/pubmed2.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/pubmed2.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(record[0]["MedlineCitation"].attributes["Owner"], "NLM")
         self.assertEqual(record[0]["MedlineCitation"].attributes["Status"], "MEDLINE")
@@ -3439,8 +3447,8 @@ class EFetchTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.efetch(db="journals", id=["22682","21698","1490"],
         #                       rettype="full", retmode='xml')
-        input = open('Entrez/serialset.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/serialset.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(record[0]["NlmUniqueID"], "100971611")
         self.assertEqual(record[0]["Title"], "21st century science & technology")
@@ -3595,8 +3603,8 @@ class EFetchTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.efetch(db="omim", id="601100", retmode='xml',
         #                       rettype='full')
-        input = open('Entrez/ncbi_mim.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/ncbi_mim.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(len(record), 1)
         self.assertEqual(record[0]["Mim-entry_mimNumber"], "601100")
@@ -3772,8 +3780,8 @@ class EFetchTest(unittest.TestCase):
         # Access the Taxonomy database using efetch.
         # To create the XML file, use
         # >>> Bio.Entrez.efetch(db="taxonomy", id="9685", retmode="xml")
-        input = open('Entrez/taxonomy.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/taxonomy.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(len(record), 1)
         self.assertEqual(record[0]["TaxId"], "9685")
@@ -3881,8 +3889,8 @@ class EFetchTest(unittest.TestCase):
         # Access the nucleotide database using efetch.
         # To create the XML file, use
         # >>> Bio.Entrez.efetch(db='nucleotide', id=5, retmode='xml')
-        input = open('Entrez/nucleotide1.xml')
-        record = Entrez.read(input)
+        handle = open('Entrez/nucleotide1.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(record[0]["GBSeq_locus"], "X60065")
         self.assertEqual(record[0]["GBSeq_length"], "1136")
@@ -4003,11 +4011,10 @@ class EFetchTest(unittest.TestCase):
         '''
         # Access the nucleotide database using efetch.
         # To create the XML file, use
-        # >>> Bio.handle = Entrez.efetch(db='nucleotide', id=5,
-        #                                rettype='fasta', complexity=0,
-        #                                retmode='xml')
-        input = open('Entrez/nucleotide2.xml')
-        record = Entrez.read(input)
+        # >>> Bio.Entrez.efetch(db='nucleotide', id=5,
+        #                       rettype='fasta', complexity=0, retmode='xml')
+        handle = open('Entrez/nucleotide2.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(record[0]["TSeq_seqtype"], "")
         self.assertEqual(record[0]["TSeq_seqtype"].attributes["value"], "nucleotide")
@@ -4033,10 +4040,9 @@ class EFetchTest(unittest.TestCase):
         '''
         # Access the protein database using efetch.
         # To create the XML file, use
-        # >>> Bio.handle = Entrez.efetch(db='protein', id=8,
-        #                                rettype='gp', retmode='xml')
-        input = open('Entrez/protein.xml')
-        record = Entrez.read(input)
+        # >>> Bio.Entrez.efetch(db='protein', id=8, rettype='gp', retmode='xml')
+        handle = open('Entrez/protein.xml')
+        record = Entrez.read(handle)
 
         self.assertEqual(record[0]["GBSeq_locus"], "CAA35997")
         self.assertEqual(record[0]["GBSeq_length"], "100")
@@ -4121,6 +4127,33 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][6]["GBQualifier_value"], "UniProtKB/Swiss-Prot:P02820")
         self.assertEqual(record[0]["GBSeq_sequence"], "mrtpmllallalatlclagradakpgdaesgkgaafvskqegsevvkrlrryldhwlgapapypdplepkrevcelnpdcdeladhigfqeayrrfygpv")
 
+    def test_genbank(self):
+        '''Test error handling when presented with GenBank non-XML data
+        '''
+        # Access the nucleotide database using efetch, but return the data
+        # in GenBank format.
+        # To create the GenBank file, use
+        # >>> Bio.Entrez.efetch(db='nucleotide', id='NT_019265', rettype='gb')
+        from Bio.Entrez import Parser
+        handle = open('GenBank/NT_019265.gb')
+        self.assertRaises(Parser.CorruptedXMLError, Entrez.read, handle)
+        handle.close()
+        handle = open('GenBank/NT_019265.gb')
+        iterator = Entrez.parse(handle)
+        self.assertRaises(Parser.CorruptedXMLError, iterator.next)
+        handle.close()
+
+    def test_fasta(self):
+        '''Test error handling when presented with Fasta non-XML data
+        '''
+        from Bio.Entrez import Parser
+        handle = open('Fasta/wisteria.nu')
+        self.assertRaises(Parser.CorruptedXMLError, Entrez.read, handle)
+        handle.close()
+        handle = open('Fasta/wisteria.nu')
+        iterator = Entrez.parse(handle)
+        self.assertRaises(Parser.CorruptedXMLError, iterator.next)
+        handle.close()
 
 
 if __name__ == '__main__':

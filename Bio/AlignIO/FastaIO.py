@@ -1,4 +1,4 @@
-# Copyright 2008 by Peter Cock.  All rights reserved.
+# Copyright 2008-2009 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -26,7 +26,7 @@ from Bio.Alphabet import single_letter_alphabet, generic_dna, generic_protein
 from Bio.Alphabet import Gapped
 
 
-class FastaM10Iterator(AlignmentIterator) :
+class FastaM10Iterator(AlignmentIterator):
     """Alignment iterator for the FASTA tool's pairwise alignment output.
 
     This is for reading the pairwise alignments output by Bill Pearson's
@@ -41,10 +41,10 @@ class FastaM10Iterator(AlignmentIterator) :
 
         from Bio import AlignIO
         handle = ...
-        for a in AlignIO.parse(handle, "fasta-m10") :
+        for a in AlignIO.parse(handle, "fasta-m10"):
             assert len(a.get_all_seqs()) == 2, "Should be pairwise!"
             print "Alignment length %i" % a.get_alignment_length()
-            for record in a :
+            for record in a:
                 print record.seq, record.name, record.id
 
     Note that this is not a full blown parser for all the information
@@ -58,14 +58,14 @@ class FastaM10Iterator(AlignmentIterator) :
     Alignment objects returned.
     """
     
-    def next(self) :
+    def next(self):
         """Reads from the handle to construct and return the next alignment.
 
         This returns the pairwise alignment of query and match/library
         sequences as an Alignment object containing two rows."""
         handle = self.handle
 
-        try :
+        try:
             #Header we saved from when we were parsing
             #the previous alignment.
             line = self._header
@@ -75,20 +75,20 @@ class FastaM10Iterator(AlignmentIterator) :
         if not line:
             return None
 
-        if line.startswith("#") :
+        if line.startswith("#"):
             #Skip the file header before the alignments.  e.g.
             line = self._skip_file_header(line)
-        while ">>>" in line and not line.startswith(">>>") :
+        while ">>>" in line and not line.startswith(">>>"):
             #Moved onto the next query sequence!
             self._query_descr = ""
             self._query_header_annotation = {}
             #Read in the query header
             line = self._parse_query_header(line)
             #Now should be some alignments, but if not we move onto the next query
-        if not line :
+        if not line:
             #End of file
             return None
-        if ">>><<<" in line :
+        if ">>><<<" in line:
             #Reached the end of the alignments, no need to read the footer...
             return None
 
@@ -117,7 +117,7 @@ class FastaM10Iterator(AlignmentIterator) :
         ; sw_sim: 0.651
         ; sw_overlap: 43
         """
-        if (not line[0:2] == ">>") or line[0:3] == ">>>" :
+        if (not line[0:2] == ">>") or line[0:3] == ">>>":
             raise ValueError("Expected target line starting '>>'")
         match_descr = line[2:].strip()
         #Handle the following "alignment hit" tagged data, e.g.
@@ -148,7 +148,7 @@ class FastaM10Iterator(AlignmentIterator) :
         assert not line[0:2] == "; "
 
         #Now should have the aligned query sequence (with leading flanking region)
-        while not line[0] == ">" :
+        while not line[0] == ">":
             query_seq_parts.append(line.strip())
             line = handle.readline()
         
@@ -184,7 +184,7 @@ class FastaM10Iterator(AlignmentIterator) :
         while not (line[0:2] == "; " or line[0] == ">" or ">>>" in line):
             match_seq_parts.append(line.strip())
             line = handle.readline()
-        if line[0:2] == "; " :
+        if line[0:2] == "; ":
             assert line.strip() == "; al_cons:"
             align_consensus_parts = []
             line = handle.readline()
@@ -195,7 +195,7 @@ class FastaM10Iterator(AlignmentIterator) :
             align_consensus = "".join(align_consensus_parts)
             del align_consensus_parts
             assert not line[0:2] == "; "
-        else :
+        else:
             align_consensus = None
         assert (line[0] == ">" or ">>>" in line)
         self._header = line
@@ -216,15 +216,15 @@ class FastaM10Iterator(AlignmentIterator) :
         #The "sq_offset" values can be specified with the -X command line option.
         #They appear to just shift the origin used in the calculation of the coordinates.
         
-        if len(query_align_seq) != len(match_align_seq) :
+        if len(query_align_seq) != len(match_align_seq):
             raise ValueError("Problem parsing the alignment sequence coordinates, " 
                              "following should be the same length but are not:\n"
                              "%s - len %i\n%s - len %i" % (query_align_seq,
                                                            len(query_align_seq),
                                                            match_align_seq,
                                                            len(match_align_seq)))
-        if "sw_overlap" in alignment_annotation :
-            if int(alignment_annotation["sw_overlap"]) != len(query_align_seq) :
+        if "sw_overlap" in alignment_annotation:
+            if int(alignment_annotation["sw_overlap"]) != len(query_align_seq):
                 raise ValueError("Specified sw_overlap = %s does not match expected value %i" \
                                  % (alignment_annotation["sw_overlap"],
                                     len(query_align_seq)))
@@ -238,9 +238,9 @@ class FastaM10Iterator(AlignmentIterator) :
         alignment._annotations = {}
         
         #Want to record both the query header tags, and the alignment tags.
-        for key, value in self._query_header_annotation.iteritems() :
+        for key, value in self._query_header_annotation.iteritems():
             alignment._annotations[key] = value
-        for key, value in alignment_annotation.iteritems() :
+        for key, value in alignment_annotation.iteritems():
             alignment._annotations[key] = value
             
 
@@ -253,17 +253,20 @@ class FastaM10Iterator(AlignmentIterator) :
         record.id = self._query_descr.split(None,1)[0].strip(",")
         record.name = "query"
         record.annotations["original_length"] = int(query_annotation["sq_len"])
+        #TODO - handle start/end coordinates properly. Short term hack for now:
+        record._al_start = int(query_annotation["al_start"])
+        record._al_stop = int(query_annotation["al_stop"])
 
         #TODO - What if a specific alphabet has been requested?
         #TODO - Use an IUPAC alphabet?
         #TODO - Can FASTA output RNA?
-        if alphabet == single_letter_alphabet and "sq_type" in query_annotation :
-            if query_annotation["sq_type"] == "D" :
+        if alphabet == single_letter_alphabet and "sq_type" in query_annotation:
+            if query_annotation["sq_type"] == "D":
                 record.seq.alphabet = generic_dna
-            elif query_annotation["sq_type"] == "p" :
+            elif query_annotation["sq_type"] == "p":
                 record.seq.alphabet = generic_protein
-        if "-" in query_align_seq :
-            if not hasattr(record.seq.alphabet,"gap_char") :
+        if "-" in query_align_seq:
+            if not hasattr(record.seq.alphabet,"gap_char"):
                 record.seq.alphabet = Gapped(record.seq.alphabet, "-")
         
         alignment.add_sequence(match_descr, match_align_seq)
@@ -273,20 +276,23 @@ class FastaM10Iterator(AlignmentIterator) :
         record.id = match_descr.split(None,1)[0].strip(",")
         record.name = "match"
         record.annotations["original_length"] = int(match_annotation["sq_len"])
+        #TODO - handle start/end coordinates properly. Short term hack for now:
+        record._al_start = int(match_annotation["al_start"])
+        record._al_stop = int(match_annotation["al_stop"])
 
         #This is still a very crude way of dealing with the alphabet:
-        if alphabet == single_letter_alphabet and "sq_type" in match_annotation :
-            if match_annotation["sq_type"] == "D" :
+        if alphabet == single_letter_alphabet and "sq_type" in match_annotation:
+            if match_annotation["sq_type"] == "D":
                 record.seq.alphabet = generic_dna
-            elif match_annotation["sq_type"] == "p" :
+            elif match_annotation["sq_type"] == "p":
                 record.seq.alphabet = generic_protein
-        if "-" in match_align_seq :
-            if not hasattr(record.seq.alphabet,"gap_char") :
+        if "-" in match_align_seq:
+            if not hasattr(record.seq.alphabet,"gap_char"):
                 record.seq.alphabet = Gapped(record.seq.alphabet, "-")
 
         return alignment
 
-    def _skip_file_header(self, line) :
+    def _skip_file_header(self, line):
         """Helper function for the main parsing code.
 
         Skips over the file header region.
@@ -304,11 +310,11 @@ class FastaM10Iterator(AlignmentIterator) :
         #Note that there is no point recording the command line here
         #from the # line, as it is included again in each alignment
         #under the "pg_argv" tag.  Likewise for the program version.
-        while ">>>" not in line :
+        while ">>>" not in line:
             line = self.handle.readline()
         return line
 
-    def _parse_query_header(self, line) :
+    def _parse_query_header(self, line):
         """Helper function for the main parsing code.
 
         Skips over the free format query header, extracting the tagged parameters.
@@ -355,12 +361,12 @@ class FastaM10Iterator(AlignmentIterator) :
         
         line = self.handle.readline()
         #We ignore the free form text...
-        while not line[0:3] == ">>>" :
+        while not line[0:3] == ">>>":
             #print "Ignoring %s" % line.strip()
             line = self.handle.readline()
-            if not line :
+            if not line:
                 raise ValueError("Premature end of file!")
-            if ">>><<<" in line :
+            if ">>><<<" in line:
                 #End of alignments, looks like the last query
                 #or queries had no hits.
                 return line
@@ -396,7 +402,7 @@ class FastaM10Iterator(AlignmentIterator) :
         return line
 
 
-    def _extract_alignment_region(self, alignment_seq_with_flanking, annotation) :
+    def _extract_alignment_region(self, alignment_seq_with_flanking, annotation):
         """Helper function for the main parsing code.
 
         To get the actual pairwise alignment sequences, we must first
@@ -411,13 +417,13 @@ class FastaM10Iterator(AlignmentIterator) :
         """
         align_stripped = alignment_seq_with_flanking.strip("-")
         display_start = int(annotation['al_display_start'])
-        if int(annotation['al_start']) <= int(annotation['al_stop']) :
+        if int(annotation['al_start']) <= int(annotation['al_stop']):
             start = int(annotation['al_start']) \
                   - display_start
             end   = int(annotation['al_stop']) \
                   - display_start \
                   + align_stripped.count("-") + 1
-        else :
+        else:
             #FASTA has flipped this sequence...
             start = display_start \
                   - int(annotation['al_start'])
@@ -430,7 +436,7 @@ class FastaM10Iterator(AlignmentIterator) :
         return align_stripped[start:end]
 
 
-    def _parse_tag_section(self, line, dictionary) :
+    def _parse_tag_section(self, line, dictionary):
         """Helper function for the main parsing code.
 
         line - supply line just read from the handle containing the start of
@@ -438,21 +444,21 @@ class FastaM10Iterator(AlignmentIterator) :
         dictionary - where to record the tagged values
 
         Returns a string, the first line following the tagged section."""
-        if not line[0:2] == "; " :
+        if not line[0:2] == "; ":
             raise ValueError("Expected line starting '; '")
-        while line[0:2] == "; " :
+        while line[0:2] == "; ":
             tag, value = line[2:].strip().split(": ",1)
             #fasta34 and early versions of fasta35 will reuse the pg_name and
             #pg_ver tags for the program executable and name, and the program
             #version and the algorithm version, respectively.  This is fixed
             #in FASTA 35.4.1, but we can't assume the tags are unique:
-            #if tag in dictionary :
+            #if tag in dictionary:
             #    raise ValueError("Repeated tag '%s' in section" % tag)
             dictionary[tag] = value
             line = self.handle.readline()
         return line
     
-if __name__ == "__main__" :
+if __name__ == "__main__":
     print "Running a quick self-test"
 
     #http://emboss.sourceforge.net/docs/themes/alnformats/align.simple
@@ -695,10 +701,10 @@ Function used was FASTA [version 34.26 January 12, 2007]
     alignments = list(FastaM10Iterator(StringIO(simple_example)))
     assert len(alignments) == 4, len(alignments)
     assert len(alignments[0].get_all_seqs()) == 2
-    for a in alignments :
+    for a in alignments:
         print "Alignment %i sequences of length %i" \
               % (len(a.get_all_seqs()), a.get_alignment_length())
-        for r in a :
+        for r in a:
             print "%s %s %i" % (r.seq, r.id, r.annotations["original_length"])
         #print a.annotations
     print "Done"
@@ -707,15 +713,15 @@ Function used was FASTA [version 34.26 January 12, 2007]
     path = "../../Tests/Fasta/"
     files = [f for f in os.listdir(path) if os.path.splitext(f)[-1] == ".m10"]
     files.sort()
-    for filename in files :
-        if os.path.splitext(filename)[-1] == ".m10" :
+    for filename in files:
+        if os.path.splitext(filename)[-1] == ".m10":
             print
             print filename
             print "="*len(filename)
             for i,a in enumerate(FastaM10Iterator(open(os.path.join(path,filename)))):
                 print "#%i, %s" % (i+1,a)
-                for r in a :
-                    if "-" in r.seq :
+                for r in a:
+                    if "-" in r.seq:
                         assert r.seq.alphabet.gap_char == "-"
-                    else :
+                    else:
                         assert not hasattr(r.seq.alphabet, "gap_char")

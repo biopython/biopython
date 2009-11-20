@@ -11,9 +11,9 @@ from Bio import SeqIO
 from Bio.SeqIO._index import _FormatToIndexedDict
 from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
-class IndexDictTests(unittest.TestCase) :
+class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
-    def simple_check(self, filename, format, alphabet) :
+    def simple_check(self, filename, format, alphabet):
         id_list = [rec.id for rec in \
                    SeqIO.parse(open(filename), format, alphabet)]
         rec_dict = SeqIO.index(filename, format, alphabet)
@@ -22,20 +22,20 @@ class IndexDictTests(unittest.TestCase) :
         self.assertEqual(len(id_list), len(rec_dict))
         #Make sure boolean evaluation works
         self.assertEqual(bool(id_list), bool(rec_dict))
-        for key in id_list :
+        for key in id_list:
             self.assert_(key in rec_dict)
             self.assertEqual(key, rec_dict[key].id)
             self.assertEqual(key, rec_dict.get(key).id)
         #Check non-existant keys,
-        try :
+        try:
             rec = rec_dict[chr(0)]
             raise ValueError("Accessing a non-existant key should fail")
-        except KeyError :
+        except KeyError:
             pass
         self.assertEqual(rec_dict.get(chr(0)), None)
         self.assertEqual(rec_dict.get(chr(0), chr(1)), chr(1))
         #Now check iteritems...
-        for key, rec in rec_dict.iteritems() :
+        for key, rec in rec_dict.iteritems():
             self.assert_(key in id_list)
             self.assert_(isinstance(rec, SeqRecord))
             self.assertEqual(rec.id, key)
@@ -83,9 +83,9 @@ tests = [
     ("SwissProt/sp010", "swiss", None),
     ("SwissProt/sp016", "swiss", None),
     ]
-for filename, format, alphabet in tests :
+for filename, format, alphabet in tests:
     assert format in _FormatToIndexedDict
-    def funct(fn,fmt,alpha) :
+    def funct(fn,fmt,alpha):
         f = lambda x : x.simple_check(fn, fmt, alpha)
         f.__doc__ = "Index %s file %s" % (fmt, fn)
         return f

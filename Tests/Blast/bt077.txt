@@ -1,0 +1,202 @@
+BLASTX 2.2.20 [Feb-08-2009]
+
+
+Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, 
+Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), 
+"Gapped BLAST and PSI-BLAST: a new generation of protein database search
+programs",  Nucleic Acids Res. 25:3389-3402.
+
+Query= RLBV_smaller_RNA
+         (1363 letters)
+
+Database: All non-redundant GenBank CDS
+translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+from WGS projects 
+           8,994,603 sequences; 3,078,807,967 total letters
+
+Searching..................................................done
+
+
+
+                                                                 Score    E
+Sequences producing significant alignments:                      (bits) Value
+
+sp|P85309.2|CASPD_HPVKA RecName: Full=Capsid protein; AltName: F...   152   8e-35
+sp|P83664.2|CAPSD_HPVCO RecName: Full=Capsid protein; AltName: F...   146   6e-33
+gb|AAB03575.1| nucleoprotein                                          146   6e-33
+gb|ABH05070.1| putative nucleocapsid protein [European mountain ...    83   8e-14
+gb|AAW12704.1| nucleoprotein [High Plains virus]                       73   8e-11
+gb|AAW12703.1| nucleoprotein [High Plains virus]                       73   8e-11
+
+>sp|P85309.2|CASPD_HPVKA RecName: Full=Capsid protein; AltName: Full=Coat protein
+ gb|ABC58222.1| nucleocapsid [Maize red stripe virus]
+          Length = 288
+
+ Score =  152 bits (384), Expect = 8e-35
+ Identities = 85/265 (32%), Positives = 140/265 (52%), Gaps = 17/265 (6%)
+ Frame = +3
+
+Query: 183 NNNGNLKA--VEPILVNFDQLTT-------------STDAFNIKECISTSNFQLQTCYKC 317
+           N++G++KA  ++  LVN + + T             S D F++K  +S+  + +   Y+C
+Sbjct: 7   NSSGSIKAKRIKDGLVNANDIETTVIDFSYEKPDLSSVDGFSLKSLLSSDGWHIVVAYQC 66
+
+Query: 318 ITNSLAMXXXXXXXXXXXXXLSDVTYYIVPKVKPGAIKNVISYNRFMAICIAGIRVNLTK 497
+           +TNS  +             L      ++P +KP   KNV+SYNRFMA+CI  I  +   
+Sbjct: 67  VTNSEQLNNNKKNNKTQKFRLFTFDIIVIPGLKPNKSKNVVSYNRFMALCIGMICYHKKW 126
+
+Query: 498 KIYDWNKHEYVAANTETLQVPDGVG--NKLALSCGMDEGHDLYWFYASGFEYTFDLYPVE 671
+           K+++W +  Y   NT T+   +     NKLA+S G  + H  +WFY++GFEYTFD++P E
+Sbjct: 127 KVFNWTRKSY-EDNTSTIDFNEDEDFMNKLAMSAGFSKEHKYHWFYSTGFEYTFDIFPAE 185
+
+Query: 672 VICCVMLRLANAEEFKLSKVDDLDLVKNLASQIGKKGQIDDVLNSIGIDTISEAYAKYNS 851
+           VI   + R ++  E K+    + DLV+ +  Q+ KKG I DV++ IG  TI++ Y +   
+Sbjct: 186 VIAMSLFRWSHRVELKIKYTHESDLVEPMVRQLTKKGTISDVMDIIGKSTIAKRYEEIVK 245
+
+Query: 852 TRTDLVSVKRIKDTLSSLQDILKNM 926
+            R+      +  D L   ++I+K +
+Sbjct: 246 DRSSTGIGTKYNDVLDEFKEIIKKI 270
+
+
+>sp|P83664.2|CAPSD_HPVCO RecName: Full=Capsid protein; AltName: Full=Coat protein
+ sp|P83549.2|CAPSD_HPVID RecName: Full=Capsid protein; AltName: Full=Coat protein
+ sp|P83550.2|CAPSD_HPVKS RecName: Full=Capsid protein; AltName: Full=Coat protein
+ sp|P83666.2|CAPSD_HPVTX RecName: Full=Capsid protein; AltName: Full=Coat protein
+ sp|P83665.2|CAPSD_HPVUT RecName: Full=Capsid protein; AltName: Full=Coat protein
+          Length = 289
+
+ Score =  146 bits (368), Expect = 6e-33
+ Identities = 79/248 (31%), Positives = 127/248 (51%), Gaps = 1/248 (0%)
+ Frame = +3
+
+Query: 243 TSTDAFNIKECISTSNFQLQTCYKCITNSLAMXXXXXXXXXXXXXLSDVTYYIVPKVKPG 422
+           +S D F++K  +S+  + +   Y+ +TNS  +             L      ++P +KP 
+Sbjct: 42  SSVDGFSLKSLLSSDGWHIVVAYQSVTNSERLNNNKKNNKTQRFKLFTFDIIVIPGLKPN 101
+
+Query: 423 AIKNVISYNRFMAICIAGIRVNLTKKIYDWNKHEYVA-ANTETLQVPDGVGNKLALSCGM 599
+             KNV+SYNRFMA+CI  I  +   K+++W+   Y    NT      D   NKLA+S G 
+Sbjct: 102 KSKNVVSYNRFMALCIGMICYHKKWKVFNWSNKRYEDNKNTINFNEDDDFMNKLAMSAGF 161
+
+Query: 600 DEGHDLYWFYASGFEYTFDLYPVEVICCVMLRLANAEEFKLSKVDDLDLVKNLASQIGKK 779
+            + H  +WFY++GFEYTFD++P EVI   + R ++  E K+    + DLV  +  Q+ K+
+Sbjct: 162 SKEHKYHWFYSTGFEYTFDIFPAEVIAMSLFRWSHRVELKIKYEHESDLVAPMVRQVTKR 221
+
+Query: 780 GQIDDVLNSIGIDTISEAYAKYNSTRTDLVSVKRIKDTLSSLQDILKNMK*VHIV**VQY 959
+           G I DV++ +G D I++ Y +    R+ +    +  D L   +DI   +    +      
+Sbjct: 222 GNISDVMDIVGKDIIAKKYEEIVKDRSSIGIGTKYNDILDEFKDIFNKIDSSSL---DST 278
+
+Query: 960 IMSCFNNI 983
+           I +CFN I
+Sbjct: 279 IKNCFNKI 286
+
+
+>gb|AAB03575.1| nucleoprotein
+          Length = 270
+
+ Score =  146 bits (368), Expect = 6e-33
+ Identities = 79/248 (31%), Positives = 127/248 (51%), Gaps = 1/248 (0%)
+ Frame = +3
+
+Query: 243 TSTDAFNIKECISTSNFQLQTCYKCITNSLAMXXXXXXXXXXXXXLSDVTYYIVPKVKPG 422
+           +S D F++K  +S+  + +   Y+ +TNS  +             L      ++P +KP 
+Sbjct: 23  SSVDGFSLKSLLSSDGWHIVVAYQSVTNSERLNNNKKNNKTQRFKLFTFDIIVIPGLKPN 82
+
+Query: 423 AIKNVISYNRFMAICIAGIRVNLTKKIYDWNKHEYVA-ANTETLQVPDGVGNKLALSCGM 599
+             KNV+SYNRFMA+CI  I  +   K+++W+   Y    NT      D   NKLA+S G 
+Sbjct: 83  KSKNVVSYNRFMALCIGMICYHKKWKVFNWSNKRYEDNKNTINFNEDDDFMNKLAMSAGF 142
+
+Query: 600 DEGHDLYWFYASGFEYTFDLYPVEVICCVMLRLANAEEFKLSKVDDLDLVKNLASQIGKK 779
+            + H  +WFY++GFEYTFD++P EVI   + R ++  E K+    + DLV  +  Q+ K+
+Sbjct: 143 SKEHKYHWFYSTGFEYTFDIFPAEVIAMSLFRWSHRVELKIKYEHESDLVAPMVRQVTKR 202
+
+Query: 780 GQIDDVLNSIGIDTISEAYAKYNSTRTDLVSVKRIKDTLSSLQDILKNMK*VHIV**VQY 959
+           G I DV++ +G D I++ Y +    R+ +    +  D L   +DI   +    +      
+Sbjct: 203 GNISDVMDIVGKDIIAKKYEEIVKDRSSIGIGTKYNDILDEFKDIFNKIDSSSL---DST 259
+
+Query: 960 IMSCFNNI 983
+           I +CFN I
+Sbjct: 260 IKNCFNKI 267
+
+
+>gb|ABH05070.1| putative nucleocapsid protein [European mountain ash
+           ringspot-associated virus]
+          Length = 314
+
+ Score = 82.8 bits (203), Expect = 8e-14
+ Identities = 61/247 (24%), Positives = 109/247 (44%), Gaps = 13/247 (5%)
+ Frame = +3
+
+Query: 135 KTYNINDVKDGITKDFNNNGNLK----AVEPILVNFDQLTTSTDAFNIKECISTSNFQLQ 302
+           KT    D++  I     N+ N+     AV P L      T + D FNI +     N  + 
+Sbjct: 40  KTIKFLDMRGNIATSARNSLNISPGVFAVNPFLGE----TLAEDTFNILDYAGLGN--VD 93
+
+Query: 303 TCYKCITNSLAMXXXXXXXXXXXXXLSD-VTYYIVPKVKPGAIKNVISYNRFMAICIAGI 479
+            C   ++ S  +             +SD     +V  ++   ++NV+S+N+  A+    I
+Sbjct: 94  ACASHLSRSQELREQVTEKTLREVPISDSYVLKVVSNLQATTVQNVVSFNKACAVMSFNI 153
+
+Query: 480 RVNLTKKIYDWNKHEYVA--ANTETLQVPDGVGNKLALSCGMDEGHDLYWFYASGFEYTF 653
+             + T ++YDW K+EYV+     +  +V   + N+LA    +      Y+    G+E+ +
+Sbjct: 154 LRHTTDEMYDWTKNEYVSLGLKEKAAKVNPNIINRLAGQINLSPQSPYYYLVTPGYEFLY 213
+
+Query: 654 DLYPVEVICCVMLRLANAEEFKL-SKVDDLDLVKNLASQIGKK-----GQIDDVLNSIGI 815
+           D YP E I   ++++A  +   L   + D D+  +L ++I K+       IDD++  IG 
+Sbjct: 214 DAYPAETIAMTLVKMAYRKTMNLPDSMKDSDICSSLNAKINKRHNLAVNNIDDIIKQIGK 273
+
+Query: 816 DTISEAY 836
+             I + Y
+Sbjct: 274 KHIEDMY 280
+
+
+>gb|AAW12704.1| nucleoprotein [High Plains virus]
+          Length = 100
+
+ Score = 72.8 bits (177), Expect = 8e-11
+ Identities = 34/92 (36%), Positives = 52/92 (56%), Gaps = 1/92 (1%)
+ Frame = +3
+
+Query: 498 KIYDWNKHEYVA-ANTETLQVPDGVGNKLALSCGMDEGHDLYWFYASGFEYTFDLYPVEV 674
+           K+++W+   Y    NT      D   NKLA+S G  + H  +WFY++GFEYTFD++P EV
+Sbjct: 9   KVFNWSNKRYEDNKNTINFNEDDDFMNKLAMSAGFSKEHKYHWFYSTGFEYTFDIFPAEV 68
+
+Query: 675 ICCVMLRLANAEEFKLSKVDDLDLVKNLASQI 770
+           I   + R ++  E K+    + DLV  +  Q+
+Sbjct: 69  IAMSLFRWSHRVELKIKYEHESDLVAPMVRQV 100
+
+
+  Database: All non-redundant GenBank CDS
+  translations+PDB+SwissProt+PIR+PRF excluding environmental samples
+  from WGS projects
+    Posted date:  Jun 4, 2009  5:40 PM
+  Number of letters in database: 3,078,807,967
+  Number of sequences in database:  8,994,603
+  
+Lambda     K      H
+   0.318    0.134    0.401 
+
+Gapped
+Lambda     K      H
+   0.267   0.0410    0.140 
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Number of Sequences: 8994603
+Number of Hits to DB: 5,492,690,251
+Number of extensions: 101053918
+Number of successful extensions: 250509
+Number of sequences better than 1.0e-04: 6
+Number of HSP's gapped: 250209
+Number of HSP's successfully gapped: 6
+Length of query: 454
+Length of database: 3,078,807,967
+Length adjustment: 139
+Effective length of query: 315
+Effective length of database: 1,828,558,150
+Effective search space: 575995817250
+Effective search space used: 575995817250
+Neighboring words threshold: 12
+Window for multiple hits: 40
+X1: 16 ( 7.3 bits)
+X2: 38 (14.6 bits)
+X3: 64 (24.7 bits)
+S1: 41 (21.7 bits)
+S2: 33 (17.3 bits)

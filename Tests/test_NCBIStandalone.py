@@ -14,7 +14,7 @@ class TestNCBIStandalone(unittest.TestCase):
         #Check the simple detection of command injection,
         for func in [NCBIStandalone.blastall,
                      NCBIStandalone.blastpgp,
-                     NCBIStandalone.rpsblast] :
+                     NCBIStandalone.rpsblast]:
             try:
                 handle = func("/somewhere/blast", "blastz", "nr",
                               "/tmp/example.fasta",
@@ -30,8 +30,8 @@ class TestNCBIStandalone(unittest.TestCase):
         #Now check something similar using pipe redirection
         for func in [NCBIStandalone.blastall,
                      NCBIStandalone.blastpgp,
-                     NCBIStandalone.rpsblast] :
-            try :
+                     NCBIStandalone.rpsblast]:
+            try:
                 handle = func("/somewhere/blast", "blastz", "nr",
                               "/tmp/example.fasta",
                               nprocessors=4,
@@ -44,6 +44,6 @@ class TestNCBIStandalone(unittest.TestCase):
                 self.fail("Attempted output redirection not caught!")
 
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)

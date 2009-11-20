@@ -38,16 +38,16 @@ class TestWise(unittest.TestCase):
         """Call dnal with optional arguments, and do a trivial check on the output."""
         temp_file = Wise.align(["dnal"], ("Wise/human_114_g01_exons.fna_01", "Wise/human_114_g02_exons.fna_01"), kbyte=100000, force_type="DNA", quiet=True)
         line = temp_file.readline().rstrip()
-        if line == "Score 114" :
+        if line == "Score 114":
             #Wise 2.4.1 includes a score line, even in quiet mode, ignore this
             line = temp_file.readline().rstrip()
-        if line == "ENSG00000172135   AGGGAAAGCCCCTAAGCTC--CTGATCTATGCTGCATCCAGTTTGCAAAGTGGGGTCCC" :
+        if line == "ENSG00000172135   AGGGAAAGCCCCTAAGCTC--CTGATCTATGCTGCATCCAGTTTGCAAAGTGGGGTCCC":
             #This is what we expect from wise 2.2.0 (and earlier)
             pass
-        elif line == "ENSG00000172135   AGGGAAAGCCCCTAAGCTC--CTGATCTATGCTGCATCCAGTTTGCAAAG-TGGGGTCC" :
+        elif line == "ENSG00000172135   AGGGAAAGCCCCTAAGCTC--CTGATCTATGCTGCATCCAGTTTGCAAAG-TGGGGTCC":
             #This is what we expect from wise 2.4.1
             pass
-        else :
+        else:
             #Bad!
             self.assert_(False, line)
 

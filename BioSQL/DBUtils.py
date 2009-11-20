@@ -1,5 +1,5 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
-# Revisions 2007-2008 by Peter Cock.
+# Revisions 2007-2009 copyright by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -40,7 +40,7 @@ class Generic_dbutils:
 
 class Mysql_dbutils(Generic_dbutils):
     def last_id(self, cursor, table):
-        try :
+        try:
             #This worked on older versions of MySQL
             return cursor.insert_id()
         except AttributeError:

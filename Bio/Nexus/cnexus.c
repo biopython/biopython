@@ -17,6 +17,7 @@
 
 static PyObject * cnexus_scanfile(PyObject *self, PyObject *args)
 {
+    PyObject *cleaninput;
     const char *input;
     char *scanned, *scanned_start;
     char t, quotelevel;
@@ -63,7 +64,7 @@ static PyObject * cnexus_scanfile(PyObject *self, PyObject *args)
                 commlevel--;
                 if (commlevel<0) /* error: unmatched ] */
                 {
-                    free(scanned);
+                    free(scanned_start);
                     return Py_BuildValue("s","]");
                 }
                 continue;
@@ -84,11 +85,20 @@ static PyObject * cnexus_scanfile(PyObject *self, PyObject *args)
          * t,commlevel,speciallevel,quotelevel,scanned);
          */
     }               
+    
     if (commlevel>0)
+    {
         /* error: unmatched [ */
+        free(scanned_start);
         return Py_BuildValue("s","[");
-    *scanned=0; /* end of string */
-    return Py_BuildValue("s",scanned_start);
+    }
+    else
+    {
+        *scanned=0; /* end of string */
+        cleaninput= Py_BuildValue("s",scanned_start);
+        free(scanned_start);
+        return cleaninput;
+    }
 }
 
 static PyMethodDef cNexusMethods[]=

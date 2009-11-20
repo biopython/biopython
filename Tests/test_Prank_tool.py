@@ -17,10 +17,10 @@ from Bio.Align.Applications import PrankCommandline
 
 prank_exe = None
 if sys.platform=="win32":
-    try :
+    try:
         #This can vary depending on the Windows language.
         prog_files = os.environ["PROGRAMFILES"]
-    except KeyError :
+    except KeyError:
         prog_files = r"C:\Program Files"
     #For Windows, PRANK just comes as a zip file which contains the
     #prank.exe file which the user could put anywhere.  We'll try a few
@@ -28,13 +28,13 @@ if sys.platform=="win32":
     likely_dirs = ["", #Current dir
                    prog_files,
                    os.path.join(prog_files,"Prank")] + sys.path
-    for folder in likely_dirs :
-        if os.path.isdir(folder) :
-            if os.path.isfile(os.path.join(folder, "prank.exe")) :
+    for folder in likely_dirs:
+        if os.path.isdir(folder):
+            if os.path.isfile(os.path.join(folder, "prank.exe")):
                 prank_exe = os.path.join(folder, "prank.exe")
                 break
         if prank_exe : break
-else :
+else:
     import commands
     output = commands.getoutput("prank")
     if "not found" not in output and "prank" in output.lower():
@@ -105,7 +105,7 @@ class PrankApplication(unittest.TestCase):
         out_handle = open("output.2.nex", "r")
         align = AlignIO.read(out_handle, "nexus")
         out_handle.close()
-        for old, new in zip(records, align) :
+        for old, new in zip(records, align):
             #Prank automatically reduces name to 9 chars
             self.assertEqual(old.id[:9], new.id)
             #infile1 has alignment gaps in it
@@ -143,10 +143,10 @@ class PrankConversion(unittest.TestCase):
         self.input = "Quality/example.fasta"
         self.output = 'temp with space' #prefix, PRANK will pick extensions
 
-    def conversion(self, prank_number, prank_ext, format) :
+    def conversion(self, prank_number, prank_ext, format):
         """Get PRANK to do a conversion, and check it with SeqIO."""
         filename = "%s.%s" % (self.output, prank_ext)
-        if os.path.isfile(filename) :
+        if os.path.isfile(filename):
             os.remove(filename)
         cmdline = PrankCommandline(prank_exe, d=self.input,
                                    convert=True, f=prank_number,
@@ -167,12 +167,12 @@ class PrankConversion(unittest.TestCase):
         self.assert_(os.path.isfile(filename))
         old = AlignIO.read(open(self.input), "fasta")
         #Hack...
-        if format=="phylip" :
-            for record in old :
+        if format=="phylip":
+            for record in old:
                 record.id = record.id[:10]
         new = AlignIO.read(open(filename), format)
         assert len(old) == len(new)
-        for old_r, new_r in zip(old, new) :
+        for old_r, new_r in zip(old, new):
             self.assertEqual(old_r.id, new_r.id)
             self.assertEqual(str(old_r.seq), str(new_r.seq))
         os.remove(filename)

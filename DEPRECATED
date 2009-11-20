@@ -7,6 +7,11 @@ Python 2.3
 No longer supported as of Release 1.51, having triggered a warning with
 Release 1.50, with a mention in the release notes for Release 1.49.
 
+Bio.Blast.NCBIStandalone.blastall, blastpgp and rpsblast
+========================================================
+These command line tools were declared obsolete in Release 1.53, please use
+the wrappers in Bio.Blast.Applications and the subprocess module instead.
+
 Bio.Clustalw
 ============
 Declared obsolete in Release 1.52, having been replaced with Bio.AlignIO for
@@ -21,7 +26,8 @@ in Release 1.51, please use psycopg2 instead.
 
 Bio.Application.generic_run and ApplicationResult
 =================================================
-Declared obsolete in Release 1.51, please use Python subprocess module instead.
+Declared obsolete in Release 1.51, and deprecated in Release 1.53.
+Please use the Python subprocess module instead.
 
 Bio.Entrez.efetch and rettype="genbank"
 =======================================
@@ -36,14 +42,12 @@ Deprecated in Release 1.47, removed in 1.52.
 
 Bio.SwissProt.SProt
 ===================
-Declared obsolete in Release 1.50, and deprecated for Release 1.51. Most of the
-functionality in Bio.SwissProt.SProt is available from Bio.SwissProt. Bio.SeqIO
-currently uses Bio.SwissProt instead of Bio.SwissProt.SProt to parse SwissProt
-files.
+Declared obsolete in Release 1.50, and deprecated in Release 1.51. Most of the
+functionality in Bio.SwissProt.SProt is available from Bio.SwissProt.
 
 Bio.Prosite and Bio.Enzyme
 ==========================
-Declared obsolete in Release 1.50, will be deprecated in a subsequent release.
+Declared obsolete in Release 1.50, and deprecated in Release 1.53.
 Most of the functionality has moved to Bio.ExPASy.Prosite and
 Bio.ExPASy.Enzyme, respectively.
 
@@ -92,11 +96,12 @@ Bio.distance (and Bio.cdistance)
 ================================
 Bio.distance was deprecated in Release 1.49, at which point its C code
 implementation Bio.cdistance was removed (this was not intended as a public
-API).
+API). Removed in Release 1.53.
 
 Bio.Ndb
 =======
 Deprecated in Release 1.49, as the website this parsed has been redesigned.
+Removed in Release 1.53.
 
 Martel
 ======
@@ -114,7 +119,7 @@ Bio.Fasta index_file and Dictionary
 ===================================
 Deprecated in Release 1.44, removed in Biopython 1.46. For small to medium
 sized files, use Bio.SeqIO.to_dict() to make an in memory dictionary of
-SeqRecord objects. Biopython 1.52 onwards provides Bio.SeqIO.indexed_dict()
+SeqRecord objects. Biopython 1.52 onwards provides Bio.SeqIO.index()
 which is suitable even for very large files.
 
 Bio.Fasta (including Bio.Fasta.FastaAlign)
@@ -226,7 +231,8 @@ Deprecated as of Release 1.45, removed in Release 1.48
 Bio.WWW
 =======
 The modules under Bio.WWW were deprecated in Release 1.45, and removed in
-Release 1.48.  The remaining stub Bio.WWW was deprecated in Release 1.48.
+Release 1.48.  The remaining stub Bio.WWW was deprecated in Release 1.48,
+and removed in Release 1.53.
 
 The functionality in Bio.WWW.SCOP, Bio.WWW.InterPro and Bio.WWW.ExPASy
 is now available from Bio.SCOP, Bio.InterPro and Bio.ExPASy instead.

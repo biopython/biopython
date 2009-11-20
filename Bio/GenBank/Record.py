@@ -32,6 +32,10 @@ def _wrapped_genbank(information, indent, wrap_space = 1, split_char = " "):
     """
     info_length = Record.GB_LINE_LENGTH - indent
 
+    if not information:
+        #GenBank files use "." for missing data
+        return ".\n"
+
     if wrap_space:
         info_parts = information.split(split_char)
     else:

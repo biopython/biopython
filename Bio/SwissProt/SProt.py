@@ -258,7 +258,7 @@ class _Scanner:
             uhandle = File.UndoHandle(handle)
         self._scan_record(uhandle, consumer)
         
-    def _skip_starstar(self, uhandle) :
+    def _skip_starstar(self, uhandle):
         """Ignores any lines starting **"""
         #See Bug 2353, some files from the EBI have extra lines
         #starting "**" (two asterisks/stars), usually between the
@@ -267,7 +267,7 @@ class _Scanner:
         #**
         #**   #################    INTERNAL SECTION    ##################
         #**HA SAM; Annotated by PicoHamap 1.88; MF_01138.1; 09-NOV-2003.
-        while "**" == uhandle.peekline()[:2] :
+        while "**" == uhandle.peekline()[:2]:
             skip = uhandle.readline()
             #print "Skipping line: %s" % skip.rstrip()
 
@@ -462,7 +462,7 @@ class _RecordConsumer(AbstractConsumer):
     def __init__(self):
         self.data = None
         
-    def __repr__(self) :
+    def __repr__(self):
         return "Bio.SwissProt.SProt._RecordConsumer()"
         
     def start_record(self):
@@ -483,17 +483,17 @@ class _RecordConsumer(AbstractConsumer):
         #
         #Note that cols is split on white space, so the length
         #should become two fields (number and units)
-        if len(cols) == 6 :
+        if len(cols) == 6:
             self.data.entry_name = cols[1]
             self.data.data_class = cols[2].rstrip(_CHOMP)    # don't want ';'
             self.data.molecule_type = cols[3].rstrip(_CHOMP) # don't want ';'
             self.data.sequence_length = int(cols[4])
-        elif len(cols) == 5 :
+        elif len(cols) == 5:
             self.data.entry_name = cols[1]
             self.data.data_class = cols[2].rstrip(_CHOMP)    # don't want ';'
             self.data.molecule_type = None
             self.data.sequence_length = int(cols[3])
-        else :
+        else:
             #Should we print a warning an continue?
             raise ValueError("ID line has unrecognised format:\n"+line)
         
@@ -514,7 +514,7 @@ class _RecordConsumer(AbstractConsumer):
     def accession(self, line):
         cols = line[5:].rstrip(_CHOMP).strip().split(';')
         for ac in cols:
-            if ac.strip() :
+            if ac.strip():
                 #remove any leading or trailing white space
                 self.data.accessions.append(ac.strip())
     
@@ -593,7 +593,7 @@ class _RecordConsumer(AbstractConsumer):
             # For the three DT lines above: 0, 3, 14
             try:
                 version = int(cols[-1])
-            except ValueError :
+            except ValueError:
                 version = 0
 
             # Re-use the historical property names, even though
@@ -932,9 +932,9 @@ class _SequenceConsumer(AbstractConsumer):
         ids = [x.strip() for x in ids if x.strip()]
         
         #Use the first as the ID, but record them ALL in the annotations
-        try :
+        try:
             self.data.annotations['accessions'].extend(ids)
-        except KeyError :
+        except KeyError:
             self.data.annotations['accessions'] = ids
             
         #Use the FIRST accession as the ID, not the first on this line!
@@ -950,9 +950,9 @@ class _SequenceConsumer(AbstractConsumer):
 
     def gene_name(self, line):
         #We already store the identification/accession as the records name/id
-        try :
+        try:
             self.data.annotations['gene_name'] += " " + line[5:].rstrip()
-        except KeyError :
+        except KeyError:
             self.data.annotations['gene_name'] =  line[5:].rstrip()
 
     def comment(self, line):
@@ -963,15 +963,15 @@ class _SequenceConsumer(AbstractConsumer):
         prefix = line[5:8]
         text = line[9:].rstrip()
         if prefix == '-!-':   # Make a new comment
-            try :
+            try:
                 self.data.annotations['comment'] += "\n" + text
-            except KeyError :
+            except KeyError:
                 self.data.annotations['comment'] =  text
         elif prefix == '   ':
-            try :
+            try:
                 # add to the previous comment
                 self.data.annotations['comment'] += " " + text
-            except KeyError :
+            except KeyError:
                 # TCMO_STRGA in Release 37 has comment with no topic
                 self.data.annotations['comment'] =  text
 
@@ -988,23 +988,23 @@ class _SequenceConsumer(AbstractConsumer):
         #the GenBank parser and with what BioSQL can cope with,
         #store only DATABASE_IDENTIFIER:PRIMARY_IDENTIFIER
         parts = [x.strip() for x in line[5:].strip(_CHOMP).split(";")]
-        if len(parts) > 1 :
+        if len(parts) > 1:
             value = "%s:%s" % (parts[0], parts[1])
             #Avoid duplicate entries
-            if value not in self.data.dbxrefs :
+            if value not in self.data.dbxrefs:
                 self.data.dbxrefs.append(value)
-        #else :
+        #else:
             #print "Bad DR line:\n%s" % line
             
                     
     def date(self, line):
         date_str = line.split()[1]
         uprline = line.upper()
-        if uprline.find('CREATED') >= 0 :
+        if uprline.find('CREATED') >= 0:
             #Try and agree with SeqRecord convention from the GenBank parser,
             #which stores the submitted date as 'date'
             self.data.annotations['date'] = date_str
-        elif uprline.find('LAST SEQUENCE UPDATE') >= 0 :
+        elif uprline.find('LAST SEQUENCE UPDATE') >= 0:
             #There is no existing convention from the GenBank SeqRecord parser
             self.data.annotations['date_last_sequence_update'] = date_str
         elif uprline.find('LAST ANNOTATION UPDATE') >= 0:
@@ -1023,10 +1023,10 @@ class _SequenceConsumer(AbstractConsumer):
         cols = line[5:].rstrip(_CHOMP).split(';')
         cols = [c.strip() for c in cols]
         cols = filter(None, cols)
-        try :
+        try:
             #Extend any existing list of keywords
             self.data.annotations['keywords'].extend(cols)
-        except KeyError :
+        except KeyError:
             #Create the list of keywords
             self.data.annotations['keywords'] = cols
 
@@ -1034,7 +1034,7 @@ class _SequenceConsumer(AbstractConsumer):
         #Try and agree with SeqRecord convention from the GenBank parser,
         #which stores the organism as a string with key 'organism'
         data = line[5:].rstrip()
-        try :
+        try:
             #Append to any existing data split over multiple lines
             self.data.annotations['organism'] += " " + data
         except KeyError:
@@ -1051,7 +1051,7 @@ class _SequenceConsumer(AbstractConsumer):
         else:
             ids = data.split(',')
 
-        try :
+        try:
             #Append to any existing data
             self.data.annotations['organism_host'].extend(ids)
         except KeyError:
@@ -1064,7 +1064,7 @@ class _SequenceConsumer(AbstractConsumer):
         #Note that 'ncbi_taxid' is used for the taxonomy ID (line OX)
         line = line[5:].rstrip(_CHOMP)
         cols = [col.strip() for col in line.split(';')]
-        try :
+        try:
             #Append to any existing data
             self.data.annotations['taxonomy'].extend(cols)
         except KeyError:
@@ -1085,7 +1085,7 @@ class _SequenceConsumer(AbstractConsumer):
         else:
             ids = line.split(',')
 
-        try :
+        try:
             #Append to any existing data
             self.data.annotations['ncbi_taxid'].extend(ids)
         except KeyError:
@@ -1128,11 +1128,11 @@ class _SequenceConsumer(AbstractConsumer):
                 x = col.split("=")
                 assert len(x) == 2, "I don't understand RX line %s" % line
                 key, value = x[0].rstrip(_CHOMP), x[1].rstrip(_CHOMP)
-                if key == "MEDLINE" :
+                if key == "MEDLINE":
                     self._current_ref.medline_id = value
-                elif key == "PubMed" :
+                elif key == "PubMed":
                     self._current_ref.pubmed_id = value
-                else :
+                else:
                     #Sadly the SeqFeature.Reference object doesn't
                     #support anything else (yet)
                     pass
@@ -1150,11 +1150,11 @@ class _SequenceConsumer(AbstractConsumer):
             assert len(cols) == 3, "I don't understand RX line %s" % line
             key = cols[1].rstrip(_CHOMP)
             value = cols[2].rstrip(_CHOMP)
-            if key == "MEDLINE" :
+            if key == "MEDLINE":
                 self._current_ref.medline_id = value
-            elif key == "PubMed" :
+            elif key == "PubMed":
                 self._current_ref.pubmed_id = value
-            else :
+            else:
                 #Sadly the SeqFeature.Reference object doesn't
                 #support anything else (yet)
                 pass

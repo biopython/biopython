@@ -175,7 +175,7 @@ def find_related(pmid):
     >>> pmid = "12230038"
     >>> handle = Entrez.elink(dbfrom='pubmed', id=pmid)
     >>> result = Entrez.read(handle)
-    >>> for link in result[0]["LinkSetDb"][0]['Link'] :
+    >>> for link in result[0]["LinkSetDb"][0]['Link']:
     ...     print link
 
     (Output ommitted)

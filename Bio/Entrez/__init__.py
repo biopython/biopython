@@ -90,15 +90,15 @@ def efetch(db, **keywds):
     handle = Entrez.efetch(db="nucleotide", id="57240072", rettype="gb")
     print handle.read()
     """
-    for key in keywds :
-        if key.lower()=="rettype" and keywds[key].lower()=="genbank" :
+    for key in keywds:
+        if key.lower()=="rettype" and keywds[key].lower()=="genbank":
             import warnings
             warnings.warn('As of Easter 2009, Entrez EFetch no longer '
                           'supports the unofficial return type "genbank", '
                           'use "gb" or "gp" instead.', DeprecationWarning)
-            if db.lower()=="protein" :
+            if db.lower()=="protein":
                 keywds[key] = "gp" #GenPept
-            else :
+            else:
                 keywds[key] = "gb" #GenBank
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
     variables = {'db' : db}
@@ -256,7 +256,7 @@ def read(handle):
     from Parser import DataHandler
     DTDs = os.path.join(__path__[0], "DTDs")
     handler = DataHandler(DTDs)
-    record = handler.run(handle)
+    record = handler.read(handle)
     return record
 
 def parse(handle):
@@ -299,10 +299,10 @@ def _open(cgi, params={}, post=False):
             params["email"] = email
     # Open a handle to Entrez.
     options = urllib.urlencode(params, doseq=True)
-    if post :
+    if post:
         #HTTP POST
         handle = urllib.urlopen(cgi, data=options)
-    else :
+    else:
         #HTTP GET
         cgi += "?" + options
         handle = urllib.urlopen(cgi)
@@ -326,25 +326,25 @@ def _open(cgi, params={}, post=False):
         raise IOError("502 Proxy Error (NCBI busy?)")
     elif "WWW Error 500 Diagnostic" in data:
         raise IOError("WWW Error 500 Diagnostic (NCBI busy?)")
-    elif "<title>Service unavailable!</title>" in data :
+    elif "<title>Service unavailable!</title>" in data:
         #Probably later in the file it will say "Error 503"
         raise IOError("Service unavailable!")
-    elif "<title>Bad Gateway!</title>" in data :
+    elif "<title>Bad Gateway!</title>" in data:
         #Probably later in the file it will say:
         #  "The proxy server received an invalid
         #   response from an upstream server."
         raise IOError("Bad Gateway!")
     elif "<title>414 Request-URI Too Large</title>" in data \
-    or "<h1>Request-URI Too Large</h1>" in data :
+    or "<h1>Request-URI Too Large</h1>" in data:
         raise IOError("Requested URL too long (try using EPost?)")
-    elif data.startswith("Error:") :
+    elif data.startswith("Error:"):
         #e.g. 'Error: Your session has expired. Please repeat your search.\n'
         raise IOError(data.strip())
-    elif data.startswith("The resource is temporarily unavailable") :
+    elif data.startswith("The resource is temporarily unavailable"):
         #This can occur with an invalid query_key
         #Perhaps this should be a ValueError?
         raise IOError("The resource is temporarily unavailable")
-    elif data.startswith("download dataset is empty") :
+    elif data.startswith("download dataset is empty"):
         #This can occur when omit the identifier, or the WebEnv and query_key
         #Perhaps this should be a ValueError?
         raise IOError("download dataset is empty")

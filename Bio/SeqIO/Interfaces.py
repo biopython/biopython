@@ -11,14 +11,14 @@ use this module.  It provides base classes to try and simplify things.
 
 from Bio.Alphabet import generic_alphabet
 
-class SequenceIterator :
+class SequenceIterator:
     """Base class for building SeqRecord iterators.
 
     You should write a next() method to return SeqRecord
     objects.  You may wish to redefine the __init__
     method as well.
     """
-    def __init__(self, handle, alphabet=generic_alphabet) :
+    def __init__(self, handle, alphabet=generic_alphabet):
         """Create a SequenceIterator object.
 
         handle - input file
@@ -37,7 +37,7 @@ class SequenceIterator :
         # or if additional arguments are required.          #
         #####################################################
 
-    def next(self) :
+    def next(self):
         """Return the next record in the file.
 
         This method should be replaced by any derived class to do something useful."""
@@ -55,13 +55,13 @@ class SequenceIterator :
 
         myFile = open("example.fasta","r")
         myFastaReader = FastaIterator(myFile)
-        for record in myFastaReader :
+        for record in myFastaReader:
             print record.id
             print record.seq
         myFile.close()"""
         return iter(self.next, None)
 
-class InterlacedSequenceIterator(SequenceIterator) :
+class InterlacedSequenceIterator(SequenceIterator):
     """Base class for any iterator of a non-sequential file type.
 
     This object is not intended for use directly.
@@ -84,7 +84,7 @@ class InterlacedSequenceIterator(SequenceIterator) :
     SeqRecords on request.
     """
 
-    def __init__(self) :
+    def __init__(self):
         """Create the object.
 
         This method should be replaced by any derived class to do something useful."""
@@ -95,7 +95,7 @@ class InterlacedSequenceIterator(SequenceIterator) :
         # You SHOULD subclass this                          #
         #####################################################
 
-    def __len__(self) :
+    def __len__(self):
         """Return the number of records.
 
         This method should be replaced by any derived class to do something useful."""
@@ -104,7 +104,7 @@ class InterlacedSequenceIterator(SequenceIterator) :
         # You SHOULD subclass this                          #
         #####################################################
 
-    def __getitem__(self, i) :
+    def __getitem__(self, i):
         """Return the requested record.
 
         This method should be replaced by any derived class to do something
@@ -116,15 +116,15 @@ class InterlacedSequenceIterator(SequenceIterator) :
         # You SHOULD subclass this                          #
         #####################################################
 
-    def move_start(self) :
+    def move_start(self):
         self._n = 0
 
-    def next(self) :
+    def next(self):
         next_record = self._n
-        if next_record < len(self) :
+        if next_record < len(self):
             self._n = next_record+1
             return self[next_record]
-        else :
+        else:
             #StopIteration
             return None
     
@@ -147,27 +147,27 @@ class SequenceWriter:
 
     def _get_seq_string(self, record):
         """Use this to catch errors like the sequence being None."""
-        try :
+        try:
             #The tostring() method is part of the Seq API, we could instead
             #use str(record.seq) but that would give a string "None" if the
             #sequence was None, and unpredicatable output if an unexpected
             #object was present.
             return record.seq.tostring()
-        except AttributeError :
-            if record.seq is None :
+        except AttributeError:
+            if record.seq is None:
                 #We could silently treat this as an empty sequence, Seq(""),
                 #but that would be an implict assumption we should avoid.
                 raise TypeError("SeqRecord (id=%s) has None for its sequence." \
                                 % record.id)
-            else :
+            else:
                 raise TypeError("SeqRecord (id=%s) has an invalid sequence." \
                                 % record.id)
 
-    def clean(self, text) :
+    def clean(self, text):
         """Use this to avoid getting newlines in the output."""
         return text.replace("\n", " ").replace("\r", " ").replace("  ", " ")
     
-    def write_file(self, records) :
+    def write_file(self, records):
         """Use this to write an entire file containing the given records.
 
         records - A list or iterator returning SeqRecord objects
@@ -209,13 +209,13 @@ class SequentialSequenceWriter(SequenceWriter):
         self._record_written = False
         self._footer_written = False
 
-    def write_header(self) :
+    def write_header(self):
         assert not self._header_written, "You have aleady called write_header()"
         assert not self._record_written, "You have aleady called write_record() or write_records()"
         assert not self._footer_written, "You have aleady called write_footer()"
         self._header_written = True
         
-    def write_footer(self) :
+    def write_footer(self):
         assert self._header_written, "You must call write_header() first"
         assert self._record_written, "You have not called write_record() or write_records() yet"
         assert not self._footer_written, "You have aleady called write_footer()"
@@ -252,14 +252,14 @@ class SequentialSequenceWriter(SequenceWriter):
         assert self._header_written, "You must call write_header() first"
         assert not self._footer_written, "You have already called write_footer()"
         count = 0
-        for record in records :
+        for record in records:
             self.write_record(record)
             count += 1
         #Mark as true, even if there where no records
         self._record_written = True
         return count
 
-    def write_file(self, records) :
+    def write_file(self, records):
         """Use this to write an entire file containing the given records.
 
         records - A list or iterator returning SeqRecord objects

@@ -229,7 +229,6 @@ PACKAGES = [
     'Bio.Motif',
     'Bio.Motif.Parsers',
     'Bio.Motif.Applications',
-    'Bio.Ndb',
     'Bio.NeuralNetwork',
     'Bio.NeuralNetwork.BackPropagation',
     'Bio.NeuralNetwork.Gene',
@@ -261,7 +260,6 @@ PACKAGES = [
     'Bio.TreeIO',
     'Bio.UniGene',
     'Bio.Wise',
-    'Bio.WWW',
     #Other top level packages,
     'BioSQL',
     ]

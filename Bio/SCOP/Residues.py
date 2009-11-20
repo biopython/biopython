@@ -13,7 +13,7 @@ import re
 _pdbid_re = re.compile(r"^(\w\w\w\w)(?:$|\s+|_)(.*)")
 _fragment_re = re.compile(r"\(?(\w:)?(-?\w*)-?(-?\w*)\)?(.*)")
 
-class Residues :
+class Residues:
     """A collection of residues from a PDB structure.
 
     This class provides code to work with SCOP domain definitions. These
@@ -34,7 +34,7 @@ class Residues :
     """
 
 
-    def __init__(self, str=None) :
+    def __init__(self, str=None):
         self.pdbid = ''
         self.fragments = ()
         if str is not None : self._parse(str)
@@ -45,7 +45,7 @@ class Residues :
 
         #Is there a pdbid at the front? e.g. 1bba A:1-100
         m = _pdbid_re.match(str)
-        if m is not None :
+        if m is not None:
             self.pdbid = m.group(1)
             str = m.group(2) # Everything else
 
@@ -53,20 +53,20 @@ class Residues :
             return
     
         fragments = []
-        for l in str.split(",") :
+        for l in str.split(","):
             m = _fragment_re.match(l)
             if m is None:
                 raise ValueError("I don't understand the format of %s" % l)
             chain, start, end, postfix = m.groups()
 
-            if postfix != "" :
+            if postfix != "":
                  raise ValueError("I don't understand the format of %s" % l)
 
             if chain:
                 if chain[-1] != ':':
                     raise ValueError("I don't understand the chain in %s" % l)
                 chain = chain[:-1]   # chop off the ':'
-            else :
+            else:
                 chain ="" 
             
             fragments.append((chain, start, end))
@@ -74,7 +74,7 @@ class Residues :
             
     def __str__(self):
         prefix =""
-        if self.pdbid :
+        if self.pdbid:
             prefix =self.pdbid +' '
             
         if not self.fragments: return prefix+'-'

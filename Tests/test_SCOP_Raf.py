@@ -36,7 +36,7 @@ class RafTests(unittest.TestCase):
         assert res.resid =="6A"
         assert res.atom=="E"
 
-    def testSeqMapAdd(self) :
+    def testSeqMapAdd(self):
         r2 = Raf.SeqMap(self.rafLine2)
         r3 = Raf.SeqMap(self.rafLine3)
 
@@ -55,15 +55,13 @@ class RafTests(unittest.TestCase):
         assert len(r4.res) == (l*4)+1
         
 
-    def testSeqMapSlice(self) :
+    def testSeqMapSlice(self):
         r = Raf.SeqMap(self.rafLine)
         r = r[ r.index("124"): r.index("135")+1]
         assert len(r.res) ==12
 
 
-
-
-    def testSeqMapIndex(self) :
+    def testSeqMapIndex(self):
         filename = ("./SCOP/raftest.txt")
         
         index = Raf.SeqMapIndex(filename)

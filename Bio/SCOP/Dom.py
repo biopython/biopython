@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-# Gavin E. Crooks 2001-11-07 :
+# Gavin E. Crooks 2001-11-07:
 #     Interface and comments modified to reflect changes to the SCOP
 #     module, and to SCOP itself.
 

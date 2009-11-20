@@ -29,26 +29,26 @@ class ResiduesTests(unittest.TestCase):
 
 
     def testParse(self):
-        for loc in self.res :
+        for loc in self.res:
             r = Residues(loc[0])
             assert r.fragments == loc[1], str(r.locations)
 
     def testStr(self):
-        for loc in self.res :
+        for loc in self.res:
             r = Residues(loc[0])
             assert str(r) == loc[0], str(r)+" is not "+loc[0]
 
-    def testAstralParse(self) :
+    def testAstralParse(self):
         """Astral encloses residue subsets in brackets. Lets make sure we
         can parse those too.
         """
-        for loc in self.res :
+        for loc in self.res:
             r = Residues("("+loc[0]+")")
             assert r.fragments == loc[1], str(r.locations)
 
     def testPdbId(self):
         pdbid ="1ddf"
-        for loc in self.res :
+        for loc in self.res:
             r = Residues("\t 1ddf \t"+loc[0]+"\t\n\n\n")
             assert r.pdbid == pdbid
             assert str(r) == pdbid+" "+loc[0]
@@ -63,17 +63,17 @@ class ResiduesTests(unittest.TestCase):
             assert r.fragments == (('A', '112', '113'),)
 
             
-    def testJustPdbId(self) :
+    def testJustPdbId(self):
         r = Residues("1sds")
         assert r.pdbid == "1sds"
         assert not r.fragments 
 
 
-    def testParseError(self) :
+    def testParseError(self):
         try:
             r = Residues("09324923423hh./;,.389")
             assert 0, "Should never get here: "+str(r)
-        except ValueError, e :
+        except ValueError, e:
             pass
 
 
