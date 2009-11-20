@@ -67,7 +67,10 @@ class UtilTests(unittest.TestCase):
 class TreeTests(unittest.TestCase):
     """Tests for methods on BaseTree.Tree objects."""
     # TODO: magic: iter, len, getitem
+    #   plumbing:
+    #       filter_search
     #       get_path
+    #   porcelain:
     #       common_ancestor
     #       get_terminals
     #       collapse
@@ -75,42 +78,42 @@ class TreeTests(unittest.TestCase):
     def setUp(self):
         self.phylogenies = list(TreeIO.parse(EX_PHYLO, 'phyloxml'))
 
-    def test_findall(self):
-        """Clade, Phylogeny: findall() method."""
+    def test_find_all(self):
+        """Clade, Phylogeny: find_all() method."""
         # From the docstring example
         tree = self.phylogenies[5]
-        matches = list(tree.findall(PhyloXML.Taxonomy, code='OCTVU'))
+        matches = list(tree.find_all(PhyloXML.Taxonomy, code='OCTVU'))
         self.assertEqual(len(matches), 1)
         self.assert_(isinstance(matches[0], PhyloXML.Taxonomy))
         self.assertEqual(matches[0].code, 'OCTVU')
         self.assertEqual(matches[0].scientific_name, 'Octopus vulgaris')
         # Iteration and regexps
         tree = self.phylogenies[10]
-        for point, alt in izip(tree.findall(geodetic_datum=r'WGS\d{2}'),
+        for point, alt in izip(tree.find_all(geodetic_datum=r'WGS\d{2}'),
                                (472, 10, 452)):
             self.assert_(isinstance(point, PhyloXML.Point))
             self.assertEqual(point.geodetic_datum, 'WGS84')
             self.assertAlmostEqual(point.alt, alt)
         # boolean filter
-        for clade, name in izip(tree.findall(name=True), list('ABCD')):
+        for clade, name in izip(tree.find_all(name=True), list('ABCD')):
             self.assert_(isinstance(clade, PhyloXML.Clade))
             self.assertEqual(clade.name, name)
         # class filter
         tree = self.phylogenies[4]
-        events = list(tree.findall(PhyloXML.Events))
+        events = list(tree.find_all(PhyloXML.Events))
         self.assertEqual(len(events), 2)
         self.assertEqual(events[0].speciations, 1)
         self.assertEqual(events[1].duplications, 1)
         # integer filter
         tree = TreeIO.read(EX_APAF, 'phyloxml')
-        domains = list(tree.findall(start=5))
+        domains = list(tree.find_all(start=5))
         self.assertEqual(len(domains), 8)
         for dom in domains:
             self.assertEqual(dom.start, 5)
             self.assertEqual(dom.value, 'CARD')
 
-    def test_findall_terminal(self):
-        """Clade, Phylogeny: findall() with terminal argument."""
+    def test_find_terminal(self):
+        """Clade, Phylogeny: find_all() with terminal argument."""
         def iter_len(it, count=0):
             for elem in it: count += 1
             return count
@@ -120,9 +123,9 @@ class TreeTests(unittest.TestCase):
                 (3, 3, 3, 3,  3,  3,  3, 3, 3, 3,  4,  3, 3),
                 (2, 2, 2, 2,  2,  2,  2, 2, 2, 2,  2,  2, 2),
                 ):
-            self.assertEqual(iter_len(tree.findall()), total)
-            self.assertEqual(iter_len(tree.findall(terminal=True)), extern)
-            self.assertEqual(iter_len(tree.findall(terminal=False)), intern)
+            self.assertEqual(iter_len(tree.find_all()), total)
+            self.assertEqual(iter_len(tree.find_all(terminal=True)), extern)
+            self.assertEqual(iter_len(tree.find_all(terminal=False)), intern)
 
 # ---------------------------------------------------------
 

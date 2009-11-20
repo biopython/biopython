@@ -107,7 +107,7 @@ class NHTree(BaseTree.Tree):
             node_id = self
         return list(node_id.tree.findall(BaseTree.Node))
 
-    @deprecated("node.tree.findall(name=taxon).next()")
+    @deprecated("node.tree.find(name=taxon)")
     def search_taxon(self, taxon):
         """Returns the first matching taxon in self.data.taxon.
 
@@ -115,7 +115,7 @@ class NHTree(BaseTree.Tree):
 
         node_id = search_taxon(self,taxon)
         """
-        return self.findall(name=taxon).next()
+        return self.find(name=taxon)
 
     # TODO - port the rest of these methods to NHTree or BaseTree
     # See unit tests

@@ -33,6 +33,7 @@ def trim_str(text, maxlen=60):
 # Factory functions to generalize searching for clades/nodes
 
 def _identity_matcher(target):
+    """Match each node (or its root) to the target object by identity."""
     def match(node):
         return (node is target or node is target.root)
     return match
@@ -42,7 +43,7 @@ def _class_matcher(target_cls):
         return isinstance(node, target_cls)
     return match
 
-def _attr_matcher(**kwargs):
+def _attribute_matcher(**kwargs):
     """Match a node by specified attribute values.
 
     'terminal' is a special case: True restricts the search to external (leaf)
@@ -50,7 +51,7 @@ def _attr_matcher(**kwargs):
     to be searched, including phyloXML annotations.
 
     Otherwise, for a tree element to match the specification (i.e. for the
-    function produced by _attr_matcher to return True when given a tree
+    function produced by _attribute_matcher to return True when given a tree
     element), it must have each of the attributes specified by the keys and
     match each of the corresponding values -- think 'and', not 'or', for
     multiple keys.
@@ -81,6 +82,15 @@ def _attr_matcher(**kwargs):
         return True
     return match
 
+def _function_matcher(matcher_func):
+    """Safer attribute lookup -- returns False instead of raising"""
+    def match(node):
+        try:
+            return matcher_func(node)
+        except (LookupError, AttributeError, ValueError):
+            return False
+    return match
+
 def _object_matcher(obj):
     """Retrieve a matcher function by passing an arbitrary object.
 
@@ -98,7 +108,9 @@ def _object_matcher(obj):
     if isinstance(obj, type):
         return _class_matcher(obj)
     if isinstance(obj, dict):
-        return _attr_matcher(**obj)
+        return _attribute_matcher(**obj)
+    if callable(obj):
+        return _function_matcher(obj)
     raise ValueError("%s (type %s) is not a valid type for comparison.")
 
 
@@ -301,9 +313,21 @@ class Tree(TreeElement):
 
     # Porcelain
 
-    def findall(self, cls=TreeElement, terminal=None, breadth_first=False,
+    def find(self, *args, **kwargs):
+        """Return the first element found by find_all(), or None.
+
+        This is also useful for checking whether any matching element exists in
+        the tree.
+        """
+        hits = self.find_all(*args, **kwargs)
+        try:
+            return hits.next()
+        except StopIteration:
+            return None
+
+    def find_all(self, cls=TreeElement, terminal=None, breadth_first=False,
             **kwargs):
-        """Find all tree objects matching the given attributes.
+        """Find all tree elements matching the given attributes.
 
         @param cls: 
             Specifies the class of the object to search for. Objects that
@@ -334,16 +358,17 @@ class Tree(TreeElement):
         Example:
 
             >>> phx = TreeIO.read('phyloxml_examples.xml', 'phyloxml')
-            >>> matches = phx.phylogenies[5].findall(code='OCTVU')
+            >>> matches = phx.phylogenies[5].find_all(code='OCTVU')
             >>> matches.next()
             Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
 
         """ 
+        assert isinstance(cls, type), "cls argument must be a class or type"
         match_class = _class_matcher(cls)
         if terminal is not None:
             kwargs['terminal'] = terminal
         if kwargs:
-            match_attr = _attr_matcher(**kwargs)
+            match_attr = _attribute_matcher(**kwargs)
             def is_matching_elem(elem):
                 return (match_class(elem) and match_attr(elem))
         else:
@@ -351,17 +376,25 @@ class Tree(TreeElement):
 
         return self.filter_search(is_matching_elem, breadth_first)
 
-    def find(self, *args, **kwargs):
-        """Return the first object found by findall(), or None."""
-        hits = self.findall(*args, **kwargs)
-        try:
-            return hits.next()
-        except StopIteration:
-            return None
+    def find_clades(self, cls=TreeElement, terminal=None, breadth_first=False,
+            **kwargs):
+        """Find each clade containing a matching element.
+
+        That is, find each element as with find_all(), but return the
+        corresponding clade object.
+        """
+        for clade in self.find_all(Tree,
+                terminal=terminal, breadth_first=breadth_first):
+            # Check whether any non-clade attributes/sub-elements match
+            orig_clades = clade.__dict__.pop('clades')
+            found = n.find(cls, **kwargs)
+            clade.clades = orig_clades
+            if found is not None:
+                yield clade
 
     def get_terminals(self, breadth_first=False):
-        """Iterate through all of this tree's terminal (leaf) elements."""
-        return self.findall(Node, terminal=True, breadth_first=breadth_first)
+        """Iterate through all of this tree's terminal (leaf) nodes."""
+        return self.find_all(Node, terminal=True, breadth_first=breadth_first)
 
     def is_terminal(self):
         """Returns True if the root of this tree is terminal."""
@@ -397,7 +430,7 @@ class Tree(TreeElement):
     def total_branch_length(self):
         """Calculate the sum of all the branch lengths in this tree."""
         return sum(node.branch_length
-                   for node in self.findall(branch_length=True))
+                   for node in self.find_all(branch_length=True))
 
     def trace(self, start, finish):
         """Returns a list of all tree elements between two targets.
