@@ -150,8 +150,8 @@ Please use Bio.Entrez instead.
 
 Bio.PubMed
 ==========
-Declared obsolete in Release 1.48, deprecated in Release 1.49.
-Please use Bio.Entrez instead.
+Declared obsolete in Release 1.48, deprecated in Release 1.49, and
+removed in Release 1.53. Please use Bio.Entrez instead.
 
 Bio.EUtils
 ==========
