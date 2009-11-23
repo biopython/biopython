@@ -10,7 +10,14 @@ Release 1.50, with a mention in the release notes for Release 1.49.
 Bio.Blast.NCBIStandalone.blastall, blastpgp and rpsblast
 ========================================================
 These command line tools were declared obsolete in Release 1.53, please use
-the wrappers in Bio.Blast.Applications and the subprocess module instead.
+the BLAST+ wrappers in Bio.Blast.Applications and the subprocess module instead.
+
+Bio.Blast.Applications
+======================
+NCBI "legacy" BLAST tool wrappers FastacmdCommandline, BlastallCommandline,
+BlastpgpCommandline and RpsBlastCommandline were declared obsolete in Release
+1.53, having been replace with wrappers for the new NCBI BLAST+ tools (e.g.
+NcbiblastpCommandline and NcbipsiblastCommandline).
 
 Bio.Clustalw
 ============
@@ -38,7 +45,7 @@ automatically, but issues a deprecation warning.
 
 Bio.Entrez.query function
 =========================
-Deprecated in Release 1.47, removed in 1.52.
+Deprecated in Release 1.47, removed in Release 1.52.
 
 Bio.SwissProt.SProt
 ===================
