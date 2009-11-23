@@ -208,6 +208,20 @@ def _get_base_alphabet(alphabet):
     assert isinstance(a, Alphabet), \
            "Invalid alphabet found, %s" % repr(a)
     return a
+
+def _ungap(alphabet):
+    """Returns the alphabet without any gap encoder (PRIVATE)."""
+    #TODO - Handle via method of the objects?
+    if not hasattr(alphabet, "gap_char"):
+        return alphabet
+    elif isinstance(alphabet, Gapped):
+        return alphabet.alphabet
+    elif isinstance(alphabet, HasStopCodon):
+        return HasStopCodon(_ungap(alphabet.alphabet), stop_symbol=alphabet.stop_symbol)
+    elif isinstance(alphabet, AlphabetEncoder):
+        return AlphabetEncoder(_ungap(alphabet.alphabet), letters=alphabet.letters)
+    else:
+        raise NotImplementedError
     
 def _consensus_base_alphabet(alphabets):
     """Returns a common but often generic base alphabet object (PRIVATE).

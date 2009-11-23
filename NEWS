@@ -24,15 +24,18 @@ versions of NCBI BLAST, including the new C++ based version. Nevertheless,
 we (and the NCBI) still recommend using the XML output for parsing.
 
 The Seq (and related UnknownSeq) objects gained upper and lower methods,
-like the string methods of the same name but alphabet aware.
+like the string methods of the same name but alphabet aware. The Seq object
+also gained a new ungap method for removing gap characters in an alphabet
+aware manner.
 
 The SeqFeature object now has an extract method, used with the parent
 sequence (as a string or Seq object) to get the region of that sequence
 described by the feature's location information (including the strand and
-any sub-features for a join).
+any sub-features for a join). As an example, this is useful to get the
+nucleotide sequence for features in GenBank or EMBL files.
 
 SeqRecord objects now support addition, giving a new SeqRecord with the
-combined sequence, all the SeqFeatures,  and any common annotation.
+combined sequence, all the SeqFeatures, and any common annotation.
 
 ===================================================================
 
