@@ -22,6 +22,14 @@ indexesof     Get a list of the indexes of some items in a list.
 take          Take some items from a list.
 
 """
+import warnings
+warnings.warn("Bio.listfns and its C code equivalent Bio.clistfns are" \
+              +" deprecated, and will be removed in a future release of"\
+              +" Biopython.  If you want to continue to use this code,"\
+              +" please get in contact with the Biopython developers via"\
+              +" the mailing lists to avoid its permanent removal from"\
+              +" Biopython. See also the Python built in set datatype.", \
+              DeprecationWarning)
 
 def asdict(l):
     """asdict(l) -> dictionary
