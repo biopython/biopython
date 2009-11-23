@@ -76,6 +76,10 @@ def check_dependencies():
 
     # We only check for NumPy, as this is a compile time dependency
     if is_Numpy_installed() : return True
+
+    if os.name=='java':
+        return True #NumPy is not avaliable for Jython (for now)
+
     print """
 Numerical Python (NumPy) is not installed.
 
