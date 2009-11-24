@@ -322,3 +322,8 @@ Bio.InterPro
 ============
 The function pairlist_to_dict was deprecated in Release 1.45, and removed in
 Release 1.53.
+
+Bio.SCOP
+========
+The module Bio.SCOP.FileIndex was deprecated in Release 1.46, and removed in
+Release 1.53.
