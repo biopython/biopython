@@ -329,3 +329,9 @@ Bio.SCOP
 ========
 The module Bio.SCOP.FileIndex was deprecated in Release 1.46, and removed in
 Release 1.53.
+
+Bio.utils
+=========
+The functions 'translate', 'translate_to_stop', 'back_translate', 'transcribe',
+and 'back_transcribe' were deprecated in Release 1.49, and removed in Release
+1.53.
