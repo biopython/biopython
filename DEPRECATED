@@ -286,6 +286,8 @@ Bio.SeqUtils
 The functions 'complement' and 'antiparallel' in Bio.SeqUtils have been
 deprecated as of Release 1.31, and removed in Release 1.43.
 Use the functions 'complement' and 'reverse_complement' in Bio.Seq instead.
+The function 'translate' was deprecated in Release 1.49, and removed in Release
+1.53.
 
 Bio.GFF
 =======
