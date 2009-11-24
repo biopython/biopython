@@ -317,3 +317,8 @@ Bio.kMeans and Bio.xkMeans
 Deprecated as of Release 1.30, removed in Release 1.42.  Instead, please use
 the function kcluster in Bio.Cluster which performs k-means or k-medians
 clustering.
+
+Bio.InterPro
+============
+The function pairlist_to_dict was deprecated in Release 1.45, and removed in
+Release 1.53.
