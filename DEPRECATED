@@ -9,8 +9,9 @@ Release 1.50, with a mention in the release notes for Release 1.49.
 
 Bio.Blast.NCBIStandalone.blastall, blastpgp and rpsblast
 ========================================================
-These command line tools were declared obsolete in Release 1.53, please use
-the BLAST+ wrappers in Bio.Blast.Applications and the subprocess module instead.
+These command line tools calling functions were declared obsolete in Release
+1.53, please use the BLAST+ wrappers in Bio.Blast.Applications and the Python
+subprocess module instead.
 
 Bio.Blast.Applications
 ======================
@@ -283,11 +284,10 @@ This was deprecated in Release 1.43 and removed in Release 1.44.
 
 Bio.SeqUtils
 ============
-The functions 'complement' and 'antiparallel' in Bio.SeqUtils have been
-deprecated as of Release 1.31, and removed in Release 1.43.
-Use the functions 'complement' and 'reverse_complement' in Bio.Seq instead.
-The function 'translate' was deprecated in Release 1.49, and removed in Release
-1.53.
+Functions 'complement' and 'antiparallel' in Bio.SeqUtils were deprecated
+in Release 1.31, and removed in Release 1.43.  Function 'translate' was
+deprecated in Release 1.49, and removed in Release 1.53. Use the functions
+and methods in Bio.Seq instead.
 
 Bio.GFF
 =======
@@ -332,6 +332,6 @@ Release 1.53.
 
 Bio.utils
 =========
-The functions 'translate', 'translate_to_stop', 'back_translate', 'transcribe',
+Functions 'translate', 'translate_to_stop', 'back_translate', 'transcribe',
 and 'back_transcribe' were deprecated in Release 1.49, and removed in Release
-1.53.
+1.53. Function 'ungap' was deprecated in Release 1.53.
