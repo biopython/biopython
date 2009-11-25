@@ -10,7 +10,11 @@ from string import maketrans
 from Bio.Alphabet import generic_protein, generic_nucleotide, \
                          generic_dna, generic_rna
 from Bio.Alphabet.IUPAC import protein, extended_protein
+from Bio.Alphabet.IUPAC import unambiguous_dna, ambiguous_dna, ambiguous_rna
+from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
 from Bio.Seq import Seq, UnknownSeq, MutableSeq
+from Bio.Data.CodonTable import TranslationError
+
 
 class StringMethodTests(unittest.TestCase):
     _examples = [ \
@@ -388,6 +392,82 @@ class StringMethodTests(unittest.TestCase):
                     print tran.alphabet
                     self.assert_(False)
                 #TODO - check the actual translation, and all the optional args
+
+    def test_the_translation_of_stops(self):
+        """Check obj.translate() method with stop codons."""
+        misc_stops = "TAATAGTGAAGAAGG"
+        for nuc in [Seq(misc_stops),
+                    Seq(misc_stops, generic_nucleotide),
+                    Seq(misc_stops, generic_dna),
+                    Seq(misc_stops, unambiguous_dna)]:
+            self.assertEqual("***RR", str(nuc.translate()))
+            self.assertEqual("***RR", str(nuc.translate(1)))
+            self.assertEqual("***RR", str(nuc.translate("SGC0")))
+            self.assertEqual("**W**", str(nuc.translate(table=2)))
+            self.assertEqual("**WRR", str(nuc.translate(table='Yeast Mitochondrial')))
+            self.assertEqual("**WSS", str(nuc.translate(table=5)))
+            self.assertEqual("**WSS", str(nuc.translate(table=9)))
+            self.assertEqual("**CRR", str(nuc.translate(table='Euplotid Nuclear')))
+            self.assertEqual("***RR", str(nuc.translate(table=11)))
+            self.assertEqual("***RR", str(nuc.translate(table='Bacterial')))
+            self.assertEqual("", str(nuc.translate(to_stop=True)))
+        self.assertEqual(str(Seq("TAT").translate()), "Y")
+        self.assertEqual(str(Seq("TAR").translate()), "*")
+        self.assertEqual(str(Seq("TAN").translate()), "X")
+        self.assertEqual(str(Seq("NNN").translate()), "X")
+        self.assertEqual(str(Seq("TAt").translate()), "Y")
+        self.assertEqual(str(Seq("TaR").translate()), "*")
+        self.assertEqual(str(Seq("TaN").translate()), "X")
+        self.assertEqual(str(Seq("nnN").translate()), "X")
+        self.assertEqual(str(Seq("tat").translate()), "Y")
+        self.assertEqual(str(Seq("tar").translate()), "*")
+        self.assertEqual(str(Seq("tan").translate()), "X")
+        self.assertEqual(str(Seq("nnn").translate()), "X")
+
+
+    def test_the_translation_of_invalid_codons(self):
+        """Check obj.translate() method with invalid codons."""
+        for codon in ["TA?", "N-N", "AC_", "Ac_"]:
+            for nuc in [Seq(codon),
+                        Seq(codon, generic_nucleotide),
+                        Seq(codon, generic_dna),
+                        Seq(codon, unambiguous_dna)]:
+                try :
+                    print nuc.translate()
+                    self.assert_(False, "Transating %s should fail" % codon)
+                except TranslationError :
+                    pass
+
+    def test_the_translation_of_ambig_codons(self):
+        """Check obj.translate() method with ambiguous codons."""
+        for letters, ambig_values in [(ambiguous_dna.letters, ambiguous_dna_values),
+                                      (ambiguous_rna.letters, ambiguous_rna_values)] :
+            ambig = set(letters)
+            for c1 in ambig:
+                for c2 in ambig:
+                    for c3 in ambig:
+                        values = set([str(Seq(a+b+c).translate()) \
+                                      for a in ambig_values[c1] \
+                                      for b in ambig_values[c2] \
+                                      for c in ambig_values[c3]])
+                        t = str(Seq(c1+c2+c3).translate())
+                        if t=="*":
+                            self.assertEqual(values, set("*"))
+                        elif t=="X":
+                            self.assert_(len(values) > 1, \
+                                "translate('%s') = '%s' not '%s'" \
+                                % (c1+c2+c3, t, ",".join(values)))
+                        elif t=="Z":
+                            self.assertEqual(values, set("EQ"))
+                        elif t=="B":
+                            self.assertEqual(values, set("DN"))
+                        elif t=="J":
+                            self.assertEqual(values, set("LI"))
+                        else:
+                            self.assertEqual(values, set(t))
+                        #TODO - Use the Bio.Data.IUPACData module for the
+                        #ambiguous protein mappings?
+
                     
     #TODO - Addition...
 
