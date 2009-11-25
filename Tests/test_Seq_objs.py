@@ -5,6 +5,7 @@
 
 """Unittests for the Seq objects."""
 import unittest
+from string import maketrans
 
 from Bio.Alphabet import generic_protein, generic_nucleotide, \
                          generic_dna, generic_rna
@@ -119,19 +120,19 @@ class StringMethodTests(unittest.TestCase):
                                                     i,
                                                     j))
 
-    def test_count(self):
+    def test_str_count(self):
         """Check matches the python string count method."""
         self._test_method("count", start_end=True)
 
-    def test_find(self):
+    def test_str_find(self):
         """Check matches the python string find method."""
         self._test_method("find", start_end=True)
 
-    def test_rfind(self):
+    def test_str_rfind(self):
         """Check matches the python string rfind method."""
         self._test_method("rfind", start_end=True)
 
-    def test_startswith(self):
+    def test_str_startswith(self):
         """Check matches the python string startswith method."""
         self._test_method("startswith", start_end=True)
 
@@ -159,7 +160,7 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual(str(example1).startswith(subs_str,2,6),
                              example1.startswith(subs,2,6))        
 
-    def test_endswith(self):
+    def test_str_endswith(self):
         """Check matches the python string endswith method."""
         self._test_method("endswith", start_end=True)
 
@@ -187,39 +188,53 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual(str(example1).endswith(subs_str,2,6),
                              example1.endswith(subs,2,6))
 
-    def test_strip(self):
+    def test_str_strip(self):
         """Check matches the python string strip method."""
         self._test_method("strip", pre_comp_function=str)
 
-    def test_rstrip(self):
+    def test_str_rstrip(self):
         """Check matches the python string rstrip method."""
         self._test_method("rstrip", pre_comp_function=str)
 
-    def test_split(self):
+    def test_str_split(self):
         """Check matches the python string rstrip method."""
         #Calling (r)split should return a list of Seq-like objects, we'll
         #just apply str() to each of them so it matches the string method
         self._test_method("rstrip", pre_comp_function=lambda x : map(str,x))
 
-    def test_rsplit(self):
+    def test_str_rsplit(self):
         """Check matches the python string rstrip method."""
         #Calling (r)split should return a list of Seq-like objects, we'll
         #just apply str() to each of them so it matches the string method
         self._test_method("rstrip", pre_comp_function=lambda x : map(str,x))
 
-    def test_lsplit(self):
+    def test_str_lsplit(self):
         """Check matches the python string rstrip method."""
         #Calling (r)split should return a list of Seq-like objects, we'll
         #just apply str() to each of them so it matches the string method
         self._test_method("rstrip", pre_comp_function=lambda x : map(str,x))
 
-    def test_length(self):
+    def test_str_length(self):
         """Check matches the python string __len__ method."""
         for example1 in self._examples:
             str1 = str(example1)
             self.assertEqual(len(example1), len(str1))
 
-    def test_getitem(self):
+    def test_str_upper(self):
+        """Check matches the python string upper method."""
+        for example1 in self._examples:
+            if isinstance(example1, MutableSeq) : continue
+            str1 = str(example1)
+            self.assertEqual(str(example1.upper()), str1.upper())
+
+    def test_str_upper(self):
+        """Check matches the python string lower method."""
+        for example1 in self._examples:
+            if isinstance(example1, MutableSeq) : continue
+            str1 = str(example1)
+            self.assertEqual(str(example1.lower()), str1.lower())
+
+    def test_str_getitem(self):
         """Check slicing and indexing works like a string."""
         for example1 in self._examples:
             str1 = str(example1)
@@ -250,6 +265,82 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual(example1.tostring(), str1)
             if not isinstance(example1, MutableSeq):
                 self.assertEqual(example1.data, str1)
+
+    def test_tomutable(self):
+        """Check obj.tomutable() method."""
+        for example1 in self._examples:
+            if isinstance(example1, MutableSeq) : continue
+            mut = example1.tomutable()
+            self.assert_(isinstance(mut, MutableSeq))
+            self.assertEqual(str(mut), str(example1))
+            self.assertEqual(mut.alphabet, example1.alphabet)
+
+    def test_toseq(self):
+        """Check obj.toseq() method."""
+        for example1 in self._examples:
+            try :
+                seq = example1.toseq()
+            except AttributeError :
+                self.assert_(isinstance(example1, Seq))
+                continue
+            self.assert_(isinstance(seq, Seq))
+            self.assertEqual(str(seq), str(example1))
+            self.assertEqual(seq.alphabet, example1.alphabet)
+
+    def test_the_complement(self):
+        """Check obj.complement() method."""
+        mapping = ""
+        for example1 in self._examples:
+            if isinstance(example1, MutableSeq) : continue
+            try :
+                comp = example1.complement()
+            except ValueError, e:
+                self.assertEqual(str(e), "Proteins do not have complements!")
+                continue
+            str1 = str(example1)
+            #This only does the unabmiguous cases
+            if "U" in str1 or "u" in str1 \
+            or example1.alphabet==generic_rna:
+                mapping = maketrans("ACGUacgu","UGCAugca")
+            elif "T" in str1 or "t" in str1 \
+            or example1.alphabet==generic_dna \
+            or example1.alphabet==generic_nucleotide:
+                mapping = maketrans("ACGTacgt","TGCAtgca")
+            elif "A" not in str1 and "a" not in str1:
+                mapping = maketrans("CGcg","GCgc")
+            else :
+                #TODO - look at alphabet?
+                assert False, example1
+                continue
+            self.assertEqual(str1.translate(mapping), str(comp))
+            self.assertEqual(comp.alphabet, example1.alphabet)
+                
+    def test_the_reverse_complement(self):
+        """Check obj.reverse_complement() method."""
+        mapping = ""
+        for example1 in self._examples:
+            if isinstance(example1, MutableSeq) : continue
+            try :
+                comp = example1.reverse_complement()
+            except ValueError, e:
+                self.assertEqual(str(e), "Proteins do not have complements!")
+                continue
+            str1 = str(example1)
+            #This only does the unabmiguous cases
+            if "U" in str1 or "u" in str1 \
+            or example1.alphabet==generic_rna:
+                mapping = maketrans("ACGUacgu","UGCAugca")
+            elif "T" in str1 or "t" in str1 \
+            or example1.alphabet==generic_dna \
+            or example1.alphabet==generic_nucleotide:
+                mapping = maketrans("ACGTacgt","TGCAtgca")
+            elif "A" not in str1 and "a" not in str1:
+                mapping = maketrans("CGcg","GCgc")
+            else :
+                #TODO - look at alphabet?
+                continue
+            self.assertEqual(str1.translate(mapping)[::-1], str(comp))
+            self.assertEqual(comp.alphabet, example1.alphabet)                
 
     #TODO - Addition...
 
