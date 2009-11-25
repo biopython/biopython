@@ -719,7 +719,7 @@ class Seq(object):
         Seq('YNCTATCGGGGG', IUPACAmbiguousDNA())
 
         Note in the above example, since R = G or A, its complement
-        is Y (which denotes  C or T).
+        is Y (which denotes C or T).
 
         You can of course used mixed case sequences,
 
@@ -906,22 +906,12 @@ class Seq(object):
                 codon_table = CodonTable.unambiguous_dna_by_name[table]
             else:
                 codon_table = CodonTable.unambiguous_dna_by_id[table_id]
-        #elif self.alphabet==IUPAC.ambiguous_dna:
-        #    if table_id is None:
-        #        codon_table = CodonTable.ambiguous_dna_by_name[table]
-        #    else:
-        #        codon_table = CodonTable.ambiguous_dna_by_id[table_id]
         elif self.alphabet==IUPAC.unambiguous_rna:
             #Will use standard IUPAC protein alphabet, no need for X
             if table_id is None:
                 codon_table = CodonTable.unambiguous_rna_by_name[table]
             else:
                 codon_table = CodonTable.unambiguous_rna_by_id[table_id]
-        #elif self.alphabet==IUPAC.ambiguous_rna:
-        #    if table_id is None:
-        #        codon_table = CodonTable.ambiguous_rna_by_name[table]
-        #    else:
-        #        codon_table = CodonTable.ambiguous_rna_by_id[table_id]
         else:
             #This will use the extend IUPAC protein alphabet with X etc.
             #The same table can be used for RNA or DNA (we use this for
@@ -1304,7 +1294,7 @@ class UnknownSeq(Seq):
         >>> print my_seq.upper()
         NNNNNNNNNNNNNNNNNNNN
 
-        This will adjust the alphabet if required. See also the lower method:
+        This will adjust the alphabet if required. See also the lower method.
         """
         return UnknownSeq(self._length, self.alphabet._upper(), self._character.upper())
 
