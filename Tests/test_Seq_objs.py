@@ -9,6 +9,7 @@ from string import maketrans
 
 from Bio.Alphabet import generic_protein, generic_nucleotide, \
                          generic_dna, generic_rna
+from Bio.Alphabet.IUPAC import protein, extended_protein
 from Bio.Seq import Seq, UnknownSeq, MutableSeq
 
 class StringMethodTests(unittest.TestCase):
@@ -298,7 +299,7 @@ class StringMethodTests(unittest.TestCase):
                 self.assertEqual(str(e), "Proteins do not have complements!")
                 continue
             str1 = str(example1)
-            #This only does the unabmiguous cases
+            #This only does the unambiguous cases
             if "U" in str1 or "u" in str1 \
             or example1.alphabet==generic_rna:
                 mapping = maketrans("ACGUacgu","UGCAugca")
@@ -326,7 +327,7 @@ class StringMethodTests(unittest.TestCase):
                 self.assertEqual(str(e), "Proteins do not have complements!")
                 continue
             str1 = str(example1)
-            #This only does the unabmiguous cases
+            #This only does the unambiguous cases
             if "U" in str1 or "u" in str1 \
             or example1.alphabet==generic_rna:
                 mapping = maketrans("ACGUacgu","UGCAugca")
@@ -340,8 +341,54 @@ class StringMethodTests(unittest.TestCase):
                 #TODO - look at alphabet?
                 continue
             self.assertEqual(str1.translate(mapping)[::-1], str(comp))
-            self.assertEqual(comp.alphabet, example1.alphabet)                
+            self.assertEqual(comp.alphabet, example1.alphabet)
 
+    def test_the_transcription(self):
+            """Check obj.transcribe() method."""
+            mapping = ""
+            for example1 in self._examples:
+                if isinstance(example1, MutableSeq) : continue
+                try :
+                    tran = example1.transcribe()
+                except ValueError, e:
+                    if str(e) == "Proteins cannot be transcribed!" : continue
+                    if str(e) == "RNA cannot be transcribed!" : continue
+                    raise e
+                str1 = str(example1)
+                self.assertEqual(str1.replace("T","U").replace("t","u"), str(tran))
+                self.assertEqual(tran.alphabet, generic_rna) #based on limited examples             
+
+    def test_the_back_transcription(self):
+            """Check obj.back_transcribe() method."""
+            mapping = ""
+            for example1 in self._examples:
+                if isinstance(example1, MutableSeq) : continue
+                try :
+                    tran = example1.back_transcribe()
+                except ValueError, e:
+                    if str(e) == "Proteins cannot be back transcribed!" : continue
+                    if str(e) == "DNA cannot be back transcribed!" : continue
+                    raise e
+                str1 = str(example1)
+                self.assertEqual(str1.replace("U","T").replace("u","t"), str(tran))
+                self.assertEqual(tran.alphabet, generic_dna) #based on limited examples             
+
+    def test_the_translate(self):
+            """Check obj.translate() method."""
+            mapping = ""
+            for example1 in self._examples:
+                if isinstance(example1, MutableSeq) : continue
+                try :
+                    tran = example1.translate()
+                except ValueError, e:
+                    if str(e) == "Proteins cannot be translated!" : continue
+                    raise e
+                #This is based on the limited example not having stop codons:
+                if tran.alphabet not in [extended_protein, protein, generic_protein]:
+                    print tran.alphabet
+                    self.assert_(False)
+                #TODO - check the actual translation, and all the optional args
+                    
     #TODO - Addition...
 
 if __name__ == "__main__":
