@@ -89,16 +89,32 @@ class Seq(object):
         self.alphabet = alphabet  # Seq API requirement
  
     # A data property is/was a Seq API requirement
-    def _set_data(self, value):
-        #TODO - In the next release, actually raise an exception?
-        #The Seq object is like a python string, it should be read only!
-        import warnings
-        warnings.warn("Writing to the Seq object's .data propery is deprecated.",
-                      DeprecationWarning)
-        self._data = value
-    data = property(fget= lambda self : str(self),
-                    fset=_set_data,
-                    doc="Sequence as a string (DEPRECATED)")
+    # Note this is read only since the Seq object is meant to be imutable
+    @property
+    def data(self) :
+        """Sequence as a string (OBSOLETE/DEPRECATED).
+
+        This is a read only property provided for backwards compatility with
+        older versions of Biopython (as is the tostring() method). We now
+        encourage you to use str(my_seq) instead of my_seq.data or the method
+        my_seq.tostring().
+
+        In recent releases of Biopython it was possible to change a Seq object
+        by updating its data property, but this triggered a deprecation warning.
+        Now the data property is read only, since Seq objects are meant to be
+        immutable:
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_dna
+        >>> my_seq = Seq("ACGT", generic_dna)
+        >>> str(my_seq) == my_seq.tostring() == my_seq.data == "ACGT"
+        True
+        >>> my_seq.data = "AAAA"
+        Traceback (most recent call last):
+           ...
+        AttributeError: can't set attribute
+        """
+        return str(self)
 
     def __repr__(self):
         """Returns a (truncated) representation of the sequence for debugging."""
@@ -114,7 +130,7 @@ class Seq(object):
                                   repr(self.data),
                                    repr(self.alphabet))
     def __str__(self):
-        """Returns the full sequence as a python string.
+        """Returns the full sequence as a python string, use str(my_seq).
 
         Note that Biopython 1.44 and earlier would give a truncated
         version of repr(my_seq) for str(my_seq).  If you are writing code
@@ -127,9 +143,12 @@ class Seq(object):
     # __hash__ and therefore use as dictionary keys. See also:
     # http://mail.python.org/pipermail/python-dev/2002-December/031455.html
 
-    def __len__(self): return len(self._data)       # Seq API requirement
+    def __len__(self):
+        """Returns the length of the sequence, use len(my_seq)."""
+        return len(self._data)       # Seq API requirement
 
     def __getitem__(self, index) :                 # Seq API requirement
+        """Returns a subsequence of single letter, use my_seq[index]."""
         #Note since Python 2.0, __getslice__ is deprecated
         #and __getitem__ is used instead.
         #See http://docs.python.org/ref/sequence-methods.html
@@ -236,7 +255,7 @@ class Seq(object):
             raise TypeError
 
     def tostring(self):                            # Seq API requirement
-        """Returns the full sequence as a python string.
+        """Returns the full sequence as a python string (OBSOLETE).
 
         Although not formally deprecated, you are now encouraged to use
         str(my_seq) instead of my_seq.tostring()."""
