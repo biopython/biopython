@@ -155,8 +155,6 @@ class SeqPanel( wxPanel ):
         print transform
         if( transform == 'Translate' ):
             self.translate( codon_table )
-        elif( transform == 'Back translate' ):
-            self.back_translate( codon_table )
         elif( transform == 'Transcribe' ):
             self.transcribe()
         elif( transform == 'Back transcribe' ):
@@ -176,17 +174,6 @@ class SeqPanel( wxPanel ):
         protein = trans.translate_to_stop( dna )
         self.dest_text.Clear()
         self.dest_text.SetValue( protein.tostring() )
-
-    def back_translate( self, codon_table ):
-        trans = Translate.unambiguous_dna_by_name[ codon_table ]
-        text = self.src_text.GetValue()
-        seq = text[:]
-        seq = string.join( string.split( seq ) )
-        protein = Seq.Seq( seq, IUPAC.unambiguous_dna )
-        print protein
-        dna = trans.back_translate( protein )
-        self.dest_text.Clear()
-        self.dest_text.SetValue( dna.tostring() )
 
     def transcribe( self ):
         trans = Transcribe.unambiguous_transcriber
