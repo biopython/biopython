@@ -10,7 +10,7 @@
 # Jan.O.Andersson@home.se
 # File: nextorf.py
 
-import string, re
+import re
 import os, sys, commands
 import getopt
 
@@ -84,8 +84,8 @@ class NextOrf:
 
     def Gc(self, seq):
        d = {}
-       for nt in ['A','T','G','C']:
-          d[nt] = string.count(seq, nt)
+       for nt in 'ATGC':
+          d[nt] = seq.count(nt)
        gc = d['G'] + d['C']
        if gc == 0: return 0
        return round(gc*100.0/(d['A'] +d['T'] + gc),1)
