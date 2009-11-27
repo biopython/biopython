@@ -1,10 +1,5 @@
-import string
-from Bio import Seq
-from Bio import Alphabet
-from Bio.Alphabet import IUPAC
+from Bio.Seq import translate, transcribe, back_transcribe
 from wxPython.wx import *
-from Bio import Translate
-from Bio import Transcribe
 
 ID_APPLY = 101
 ID_CLEAR  = 102
@@ -67,7 +62,6 @@ class ParamsPanel( wxPanel ):
 
         transform_lb.Append( 'Transcribe' )
         transform_lb.Append( 'Translate' )
-        transform_lb.Append( 'Back translate' )
         transform_lb.Append( 'Back transcribe' )
         transform_lb.SetSelection( 1 )
         self.transform_lb = transform_lb
@@ -105,7 +99,7 @@ class SeqPanel( wxPanel ):
         lc.width.PercentOf( self, wxWidth, 25 )
         close_button.SetConstraints( lc )
 
-        src_static = wxStaticText(self, -1, 'Original Sequence', style=wxALIGN_CENTRE) 
+        src_static = wxStaticText(self, -1, 'Original Sequence', style=wxALIGN_CENTRE)
         lc = wxLayoutConstraints()
         lc.top.SameAs( self, wxTop, 5 )
         lc.left.SameAs( self, wxLeft, 5 )
@@ -165,40 +159,22 @@ class SeqPanel( wxPanel ):
         self.dest_text.Clear()
 
     def translate( self, codon_table ):
-        trans = Translate.unambiguous_dna_by_name[ codon_table ]
-        text = self.src_text.GetValue()
-        seq = text[:]
-        seq = string.join( string.split( seq ) )
-        dna = Seq.Seq( seq, IUPAC.unambiguous_dna )
-        print dna
-        protein = trans.translate_to_stop( dna )
+        seq = "".join(self.src_text.GetValue().split()) #remove whitespace
+        print seq
         self.dest_text.Clear()
-        self.dest_text.SetValue( protein.tostring() )
-
+        self.dest_text.SetValue(translate(seq, table=codon_table, to_stop=True))
+        
     def transcribe( self ):
-        trans = Transcribe.unambiguous_transcriber
-        text = self.src_text.GetValue()
-        seq = text[:]
-        seq = string.join( string.split( seq ) )
-        dna = Seq.Seq( seq, IUPAC.unambiguous_dna )
-        print dna
-        rna = trans.transcribe( dna )
+        seq = "".join(self.src_text.GetValue().split()) #remove whitespace
+        print seq
         self.dest_text.Clear()
-        self.dest_text.SetValue( rna.tostring() )
-
+        self.dest_text.SetValue(transcribe(seq))
+                                
     def back_transcribe( self ):
-        trans = Transcribe.unambiguous_transcriber
-        text = self.src_text.GetValue()
-        seq = text[:]
-        seq = string.join( string.split( seq ) )
-        rna = Seq.Seq( seq, IUPAC.unambiguous_rna )
-        print rna
-        dna = trans.back_transcribe( rna )
+        seq = "".join(self.src_text.GetValue().split()) #remove whitespace
+        print seq
         self.dest_text.Clear()
-        self.dest_text.SetValue( dna.tostring() )
-
-
-
+        self.dest_text.SetValue(back_transcribe(seq))
 
 
 class SeqFrame(wxFrame):
