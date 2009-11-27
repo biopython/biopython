@@ -583,9 +583,30 @@ def record_coords(record, start, end, strand=0, upper=0):
     else:
         return subseq
 
-def _test(*args, **keywds):
-    import doctest, sys
-    doctest.testmod(sys.modules[__name__], *args, **keywds)
+def _test():
+    """Run the Bio.GFF.easy module's doctests (PRIVATE).
+
+    This will try and locate the unit tests directory, and run the doctests
+    from there in order that the relative paths used in the examples work.
+    """
+    import doctest
+    import os
+    if os.path.isdir(os.path.join("..","..","Tests")):
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("..","..","Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
+    elif os.path.isdir(os.path.join("Tests")) :
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
 
 if __name__ == "__main__":
     if __debug__:

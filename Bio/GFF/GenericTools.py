@@ -148,9 +148,16 @@ class ArgsParser(object):
 def all(iterator):
     return [item for item in iterator]
 
-def _test(*args, **keywds):
-    import doctest, sys
-    doctest.testmod(sys.modules[__name__], *args, **keywds)
+def _test():
+    """Run the Bio.GFF.GenericTools module's doctests (PRIVATE).
+
+    This will try and locate the unit tests directory, and run the doctests
+    from there in order that the relative paths used in the examples work.
+    """
+    import doctest
+    print "Runing doctests..."
+    doctest.testmod()
+    print "Done"
 
 if __name__ == "__main__":
     if __debug__:
