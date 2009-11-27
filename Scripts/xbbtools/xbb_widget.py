@@ -23,9 +23,8 @@ from xbb_translations import xbb_translations
 from xbb_blast import BlastIt
 from xbb_search import XDNAsearch
 from xbb_help import xbbtools_help
-from Bio import Translate
+from Bio.Data import CodonTable
 from Bio.SeqUtils import quick_FASTA_reader
-
 
 
 class xbb_widget:
@@ -64,8 +63,8 @@ class xbb_widget:
         self.seqwidth = 60
         self.seq_io = xbb_io.xbb_io()
         self.translation_tables = {}
-        for i in Translate.unambiguous_dna_by_id.keys():
-            self.translation_tables[Translate.unambiguous_dna_by_id[i].table.names[0]] = i
+        for i, table in CodonTable.unambiguous_dna_by_id.iteritems():
+            self.translation_tables[table.names[0]] = i
         self.translator = xbb_translations()
 
     def init_colors(self):
