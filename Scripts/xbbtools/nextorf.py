@@ -42,18 +42,6 @@ def makeTableX(table):
                                table.back_table, table.start_codons,
                                table.stop_codons)
 
-def complement(seq):
-    return string.join(map(lambda x:IUPACData.ambiguous_dna_complement[x], map(None,seq)),'')
-
-def reverse(seq):
-    r = map(None, seq)
-    r.reverse()
-    return string.join(r,'')
-
-def antiparallel(seq):
-    s = complement(seq)
-    s = reverse(s)
-    return s
 
 
 class NextOrf:
@@ -153,7 +141,7 @@ class NextOrf:
         CDS = []
         if plus: CDS.extend(self.GetCDS(self.seq))
         if minus:
-            self.rseq = Seq(antiparallel(s),IUPAC.ambiguous_dna)
+            self.rseq = self.seq.reverse_complement()
             CDS.extend(self.GetCDS(self.rseq, strand = -1))
         self.Output(CDS)
 
