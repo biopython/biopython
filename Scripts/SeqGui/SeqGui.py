@@ -18,8 +18,7 @@ ID_TRANSFORM = 107
 class ParamsPanel( wxPanel ):
     def __init__(self, parent, log):
         wxPanel.__init__(self, parent, -1)
-        codon_table_static = wxStaticText( self, -1, 'Codon Tables', \
-	    style = wxALIGN_CENTRE )
+        codon_table_static = wxStaticText(self, -1, 'Codon Tables', style=wxALIGN_CENTRE)
         lc = wxLayoutConstraints()
         lc.top.SameAs( self, wxTop, 5 )
         lc.left.SameAs( self, wxLeft, 5 )
@@ -50,8 +49,7 @@ class ParamsPanel( wxPanel ):
         codon_table_lb.Append( 'Blepharisma Macronuclear' )
         codon_table_lb.SetSelection( 0 )
 
-        transform_static = wxStaticText( self, -1, 'Transformation', \
-	    style = wxALIGN_CENTRE )
+        transform_static = wxStaticText(self, -1, 'Transformation', style=wxALIGN_CENTRE)
         lc = wxLayoutConstraints()
         lc.top.Below( codon_table_lb, 5 )
         lc.left.SameAs( self, wxLeft, 5 )
@@ -86,7 +84,7 @@ class SeqPanel( wxPanel ):
         EVT_BUTTON( self, ID_APPLY, self.OnApply )
         EVT_BUTTON( self, ID_CLEAR, self.OnClear )
 
-	lc = wxLayoutConstraints()
+        lc = wxLayoutConstraints()
         lc.bottom.SameAs( self, wxBottom, 10 )
         lc.left.SameAs( self, wxLeft, 10 )
         lc.height.AsIs( )
@@ -107,8 +105,7 @@ class SeqPanel( wxPanel ):
         lc.width.PercentOf( self, wxWidth, 25 )
         close_button.SetConstraints( lc )
 
-        src_static = wxStaticText( self, -1, 'Original Sequence', \
-	    style = wxALIGN_CENTRE )
+        src_static = wxStaticText(self, -1, 'Original Sequence', style=wxALIGN_CENTRE) 
         lc = wxLayoutConstraints()
         lc.top.SameAs( self, wxTop, 5 )
         lc.left.SameAs( self, wxLeft, 5 )
@@ -125,8 +122,7 @@ class SeqPanel( wxPanel ):
         src_text.SetConstraints( lc )
         self.src_text = src_text
 
-        dest_static = wxStaticText( self, -1, 'Transformed Sequence', \
-	    style = wxALIGN_CENTRE )
+        dest_static = wxStaticText(self, -1, 'Transformed Sequence', style=wxALIGN_CENTRE)
         lc = wxLayoutConstraints()
         lc.top.Below( src_text, 5 )
         lc.left.SameAs( self, wxLeft, 5 )
@@ -223,7 +219,7 @@ class SeqFrame(wxFrame):
         wxFrame.__init__(self, parent, ID, title,
                               wxDefaultPosition, wxSize(500, 400))
         self.SetAutoLayout( true )
-	self.CreateStatusBar()
+        self.CreateStatusBar()
         self.SetStatusText("This is the statusbar")
         menu = wxMenu()
         menu.Append(ID_ABOUT, "&About",
@@ -236,7 +232,7 @@ class SeqFrame(wxFrame):
         self.SetMenuBar(menuBar)
 
         params_panel = ParamsPanel(self, -1)
-	lc = wxLayoutConstraints()
+        lc = wxLayoutConstraints()
         lc.top.SameAs( self, wxTop, 10 )
         lc.left.SameAs( self, wxLeft, 5 )
         lc.bottom.SameAs( self, wxBottom, 5 )
@@ -244,7 +240,7 @@ class SeqFrame(wxFrame):
         params_panel.SetConstraints( lc )
 
         seq_panel = SeqPanel(self, -1)
-	lc = wxLayoutConstraints()
+        lc = wxLayoutConstraints()
         lc.top.SameAs( self, wxTop, 10 )
         lc.left.RightOf( params_panel, 5 )
         lc.bottom.SameAs( self, wxBottom, 5 )
