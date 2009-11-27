@@ -17,7 +17,6 @@ from Tkinter import *
 from tkFileDialog import askopenfilename, asksaveasfilename
 
 sys.path.insert(0, '.')
-import xbb_io
 from xbb_utils import *
 from xbb_translations import xbb_translations
 from xbb_blast import BlastIt
@@ -61,7 +60,6 @@ class xbb_widget:
         
     def init_variables(self):
         self.seqwidth = 60
-        self.seq_io = xbb_io.xbb_io()
         self.translation_tables = {}
         for i, table in CodonTable.unambiguous_dna_by_id.iteritems():
             self.translation_tables[table.names[0]] = i
@@ -341,7 +339,6 @@ class xbb_widget:
         if not file:
             file = askopenfilename()
         if not file: return
-        #genes = self.seq_io.read_fasta_file(file)
         genes = quick_FASTA_reader(file)
         self.insert_sequence(genes[0])
 
