@@ -14,7 +14,7 @@ import string, re
 import os, sys, commands
 import getopt
 
-from Bio import Fasta
+from Bio import SeqIO
 from Bio.Seq import Seq, translate
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
@@ -54,13 +54,29 @@ class NextOrf:
         self.ReadFile()
         
     def ReadFile(self):
-        self.parser = Fasta.RecordParser()
-        self.iter = Fasta.Iterator(handle = open(self.file), parser = self.parser)
-        while 1:
-            rec = self.iter.next()
-            if not rec: break
-            self.header = rec.title.split()[0].split(',')[0]
-            self.HandleRecord(rec)
+        handle = open(self.file)
+        for record in SeqIO.parse(handle, "fasta"):
+            self.header = record.id
+            frame_coordinates = ''
+            dir = self.options['strand']
+            plus = dir in ['both', 'plus']
+            minus = dir in ['both', 'minus']
+            start, stop = int(self.options['start']), int(self.options['stop'])
+            s = str(record.seq).upper()
+            if stop > 0:
+               s = s[start:stop]
+            else:
+               s = s[start:]
+            self.seq = Seq(s,IUPAC.ambiguous_dna)
+            self.length = len(self.seq)
+            self.rseq = None
+            CDS = []
+            if plus:
+                CDS.extend(self.GetCDS(self.seq))
+            if minus:
+                self.rseq = self.seq.reverse_complement()
+                CDS.extend(self.GetCDS(self.rseq, strand = -1))
+            self.Output(CDS)
 
     def ToFasta(self, header, seq):
        seq = re.sub('(............................................................)','\\1\n',seq)
@@ -123,27 +139,6 @@ class NextOrf:
                 elif codon in stop_codons: coordinates.append((i+1,0,codon))
             frame_coordinates.append(coordinates)
         return frame_coordinates
-
-    def HandleRecord(self, rec):
-        frame_coordinates = ''
-        dir = self.options['strand']
-        plus = dir in ['both', 'plus']
-        minus = dir in ['both', 'minus']
-        start, stop = int(self.options['start']), int(self.options['stop'])
-        if stop > 0:
-           s = string.upper(rec.sequence[start:stop])
-        else:
-           s = string.upper(rec.sequence[start:])
-
-        self.seq = Seq(s,IUPAC.ambiguous_dna)
-        self.length = len(self.seq)
-        self.rseq = None
-        CDS = []
-        if plus: CDS.extend(self.GetCDS(self.seq))
-        if minus:
-            self.rseq = self.seq.reverse_complement()
-            CDS.extend(self.GetCDS(self.rseq, strand = -1))
-        self.Output(CDS)
 
     def GetCDS(self, seq, strand = 1):
         frame_coordinates = self.GetOrfCoordinates(seq)
