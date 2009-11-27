@@ -15,7 +15,7 @@ import os, sys, commands
 import getopt
 
 from Bio import SeqIO
-from Bio.Seq import Seq, translate
+from Bio.Seq import Seq
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData, CodonTable
@@ -188,7 +188,7 @@ class NextOrf:
                 head = '%s:%s' % (head, self.Gc2(subs.data))
                 
             if out == 'aa':
-                orf = translate(subs, table=self.genetic_code)
+                orf = subs.translate(table=self.genetic_code)
                 print self.ToFasta(head, orf.data)
             elif out == 'nt':
                 print self.ToFasta(head, subs.data)
