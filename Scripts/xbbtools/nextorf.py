@@ -15,8 +15,7 @@ import os, sys, commands
 import getopt
 
 from Bio import Fasta
-from Bio import Translate
-from Bio.Seq import Seq
+from Bio.Seq import Seq, translate
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData, CodonTable
@@ -56,13 +55,13 @@ def antiparallel(seq):
     s = reverse(s)
     return s
 
+
 class NextOrf:
     def __init__(self, file, options):
         self.options = options
         self.file = file
         self.genetic_code = int(self.options['table'])
         self.table = makeTableX(CodonTable.ambiguous_dna_by_id[self.genetic_code])
-        self.translator = Translate.Translator(self.table)
         self.counter = 0
         self.ReadFile()
         
@@ -100,7 +99,6 @@ class NextOrf:
              for nt in ['A','T','G','C']:
                 if codon[pos] == nt: d[nt][pos] = d[nt][pos] +1
 
-
        gc = {}
        gcall = 0
        nall = 0
@@ -116,9 +114,7 @@ class NextOrf:
 
        gcall = 100.0*gcall/nall
        res = '%.1f%%, %.1f%%, %.1f%%, %.1f%%' % (gcall, gc[0], gc[1], gc[2])
-#       print 'GC:', res
        return res
-          
 
     def GetOrfCoordinates(self, seq):
         s = seq.data
@@ -139,7 +135,6 @@ class NextOrf:
                 elif codon in stop_codons: coordinates.append((i+1,0,codon))
             frame_coordinates.append(coordinates)
         return frame_coordinates
-     
 
     def HandleRecord(self, rec):
         frame_coordinates = ''
@@ -161,7 +156,6 @@ class NextOrf:
             self.rseq = Seq(antiparallel(s),IUPAC.ambiguous_dna)
             CDS.extend(self.GetCDS(self.rseq, strand = -1))
         self.Output(CDS)
-        
 
     def GetCDS(self, seq, strand = 1):
         frame_coordinates = self.GetOrfCoordinates(seq)
@@ -199,8 +193,6 @@ class NextOrf:
                     del stop   
         return CDS
 
-    
-
     def Output(self, CDS):
         out = self.options['output']
         seqs = (self.seq, self.rseq)
@@ -213,7 +205,7 @@ class NextOrf:
                 head = '%s:%s' % (head, self.Gc2(subs.data))
                 
             if out == 'aa':
-                orf = self.translator.translate(subs)
+                orf = translate(subs, table=self.genetic_code)
                 print self.ToFasta(head, orf.data)
             elif out == 'nt':
                 print self.ToFasta(head, subs.data)
