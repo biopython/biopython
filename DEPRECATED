@@ -20,6 +20,12 @@ BlastpgpCommandline and RpsBlastCommandline were declared obsolete in Release
 1.53, having been replace with wrappers for the new NCBI BLAST+ tools (e.g.
 NcbiblastpCommandline and NcbipsiblastCommandline).
 
+Bio.EMBOSS.Applications
+=======================
+The wrappers for the "old" EMBOSS PHYLIP tools (e.g. eneighbor) were declared
+obsolete in Biopython 1.52, please use the wrappers for the "new" EMBOSS
+PHYLIP tools (e.g. fneighbor) instead.
+
 Bio.Clustalw
 ============
 Declared obsolete in Release 1.52, having been replaced with Bio.AlignIO for

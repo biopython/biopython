@@ -65,7 +65,7 @@ allowing interconversion with FASTQ files, or FASTA+QUAL files.
 
 Bio.Emboss.Applications now includes wrappers for the "new" PHYLIP EMBASSY
 package (e.g. fneighbor) which replace the "old" PHYLIP EMBASSY package (e.g.
-efneighbor) whose Biopython wrappers are now obsolete.
+eneighbor) whose Biopython wrappers are now obsolete.
 
 See also the DEPRECATED file, as several old deprecated modules have finally
 been removed (e.g. Bio.EUtils which had been replaced by Bio.Entrez).
