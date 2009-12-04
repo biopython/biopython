@@ -353,6 +353,12 @@ class MuscleCommandline(AbstractCommandline):
             #                                   FASTA).
             _Switch(["-msf", "msf"], ["input"],
                     "Write output in MSF format"),
+            #Phylip interleaved - undocumented as of 3.7
+            _Switch(["-phyi", "phyi"], ["input"],
+                    "Write output in PHYLIP interleaved format"),
+            #Phylip sequential - undocumented as of 3.7
+            _Switch(["-phys", "phys"], ["input"],
+                    "Write output in PHYLIP sequential format"),
             ############## END FORMATS ###################################
             #anchors            yes             Use anchor optimization in tree dependent
             #                                   refinement iterations.
