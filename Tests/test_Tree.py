@@ -79,7 +79,7 @@ class TreeTests(unittest.TestCase):
         self.phylogenies = list(TreeIO.parse(EX_PHYLO, 'phyloxml'))
 
     def test_find_all(self):
-        """Clade, Phylogeny: find_all() method."""
+        """TreeMixin: find_all() method."""
         # From the docstring example
         tree = self.phylogenies[5]
         matches = list(tree.find_all(PhyloXML.Taxonomy, code='OCTVU'))
@@ -113,7 +113,7 @@ class TreeTests(unittest.TestCase):
             self.assertEqual(dom.value, 'CARD')
 
     def test_find_terminal(self):
-        """Clade, Phylogeny: find_all() with terminal argument."""
+        """TreeMixin: find_all() with terminal argument."""
         def iter_len(it, count=0):
             for elem in it: count += 1
             return count

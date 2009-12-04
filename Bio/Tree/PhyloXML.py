@@ -133,19 +133,19 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
     @param properties: list of Property objects
     @param other: list of non-phyloXML elements (type Other)
     """
-    def __init__(self, rooted,
+    def __init__(self, root=None, rooted=True,
             rerootable=None, branch_length_unit=None, type=None,
             # Child nodes
-            name=None, id=None, description=None, date=None, clade=None,
+            name=None, id=None, description=None, date=None,
             # Collections
             confidences=None, clade_relations=None, sequence_relations=None,
             properties=None, other=None,
             ):
         assert isinstance(rooted, bool)
-        PhyloElement.__init__(self, rerootable=rerootable,
+        PhyloElement.__init__(self, root=root,
+                rooted=rooted, rerootable=rerootable,
                 branch_length_unit=branch_length_unit, type=type,
-                rooted=rooted, name=name, id=id, description=description,
-                date=date, clade=clade,
+                name=name, id=id, description=description, date=date,
                 confidences=confidences or [],
                 clade_relations=clade_relations or [],
                 sequence_relations=sequence_relations or [],
@@ -154,8 +154,17 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
                 )
 
     @classmethod
-    def from_tree(self, tree):
-        return Clade.from_tree(tree).to_phylogeny()
+    def from_tree(self, tree, **kwargs):
+        phy = Phylogeny(
+                root=Clade.from_subtree(tree.root),
+                rooted=tree.rooted,
+                name=tree.name,
+                id=Id(tree.id))
+        phy.__dict__.update(kwargs)
+        return phy
+
+    def from_subtree(self, subtree, **kwargs):
+        return Clade.from_subtree(subtree).to_phylogeny(**kwargs)
 
     def to_phyloxml(self, **kwargs):
         """Create a new PhyloXML object containing just this phylogeny."""
@@ -179,19 +188,6 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
             aln.add_sequence(str(seq), seq.mol_seq.value)
         return aln
 
-    # Mimic BaseTree.Tree
-    @property
-    def nodes(self):
-        return [self.clade]
-
-    @property
-    def root(self):
-        return self.clade
-
-    @property
-    def clades(self):
-        return [self.clade]
-
     # Singular property for plural attribute
     @property
     def confidence(self):
@@ -208,7 +204,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
 
 
 
-class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
+class Clade(PhyloElement, BaseTree.Subtree):
     """Describes a branch of the current phylogenetic tree.
 
     Used recursively, describes the topology of a phylogenetic tree.
@@ -263,53 +259,30 @@ class Clade(PhyloElement, BaseTree.Node, BaseTree.Tree):
                 )
 
     @classmethod
-    def from_node(cls, node, **kwargs):
-        """Create a new Clade from a BaseTree.Node object."""
+    def from_subtree(cls, subtree, **kwargs):
+        """Create a new Clade from a BaseTree.Subtree object."""
         clade = cls(
-                branch_length=node.branch_length,
-                name=node.label,
-                node_id=Id(str(node.tree.id)))
-        clade.__dict__.update(kwargs)
-        return clade
-
-    @classmethod
-    def from_tree(cls, tree, **kwargs):
-        """Create a new Clade from a BaseTree.Tree object."""
-        clade = cls(
-                branch_length=tree.root.branch_length,
-                name=tree.name,
-                node_id=Id(str(tree.root.id)),
-                clades=[cls.from_tree(subtree) for subtree in tree])
+                branch_length=subtree.branch_length,
+                name=subtree.label,
+                node_id=Id(str(subtree.id)))
+        clade.clades = [cls.from_subtree(st) for st in subtree.clades]
         clade.__dict__.update(kwargs)
         return clade
 
     def to_phylogeny(self, **kwargs):
         """Create a new phylogeny containing just this clade."""
-        phy = Phylogeny(rooted=self.rooted, clade=self, date=self.date)
+        phy = Phylogeny(root=self, date=self.date)
         phy.__dict__.update(kwargs)
         return phy
 
-    # Mimic BaseTree.Node
+    # Mimic BaseTree.Subtree
     @property
     def label(self):
         return str(self)
 
     @property
-    def tree(self):
-        return self
-
-    # Mimic BaseTree.Tree
-    @property
     def id(self):
         return self.node_id.value
-
-    @property
-    def root(self):
-        return self
-
-    @property
-    def rooted(self):
-        return True
 
     # Shortcuts for list attributes that are usually only 1 item
     @property

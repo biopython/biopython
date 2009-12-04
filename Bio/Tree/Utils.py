@@ -89,7 +89,7 @@ def to_networkx(tree):
     else:
         G = networkx.Graph()
     G.add_node(tree.root)
-    build_subgraph(G, tree)
+    build_subgraph(G, tree.root)
     return G
 
 

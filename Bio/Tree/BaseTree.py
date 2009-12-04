@@ -35,7 +35,7 @@ def trim_str(text, maxlen=60):
 def _identity_matcher(target):
     """Match each node (or its root) to the target object by identity."""
     def match(node):
-        return (node is target or node is target.root)
+        return (node is target)
     return match
 
 def _class_matcher(target_cls):
@@ -133,81 +133,14 @@ class TreeElement(object):
         return self.__class__.__name__
 
 
-class Tree(TreeElement):
-    """A phylogenetic tree.
+class TreeMixin(object):
+    """Methods for Tree- and Subtree-based classes.
 
-    From PhyloDB:
-    =============
-
-        A tree basically is a namespace for nodes, and thereby implicitly for
-        their relationships (edges). In this model, tree is also bit of misnomer
-        because we try to support reticulating trees, i.e., networks, too, so
-        arguably it should be called graph. Typically, this will be used for
-        storing phylogenetic trees, sequence trees (a.k.a. gene trees) as much
-        as species trees.
-
-    @param clades: Sub-trees rooted directly under this tree's root.
-    @type clades: list
-
-    @param name:
-        The name of the tree, in essence a label.
-    @type name: str
-
-    @param id:
-        The identifier of the tree, if there is one.
-    @type id: str
-
-    @param rooted:
-        Whether or not the tree is rooted. By default, a tree is assumed to be
-        rooted.
-    @type rooted: bool
-
-    @param root:
-        The starting node of the tree. If the tree is rooted, this will usually
-        be the root node. Note that the root node(s) of a rooted tree must be
-        stored in tree_root, too.
-    @type root: list
-
-    Not implemented:
-
-    @param biodatabase_id:
-        The namespace of the tree itself. Though trees are in a sense named
-        containers themselves (namely for nodes), they also constitute (possibly
-        identifiable!) data objects in their own right. Some data sources may
-        only provide a single tree, so that assigning a namespace for the tree
-        may seem excessive, but others, such as TreeBASE, contain many trees,
-        just as sequence databanks contain many sequences. The choice of how to
-        name a tree is up to the user; one may assign a default namespace (such
-        as "biosql"), or create one named the same as the tree.
-
+    This lets Tree and Subtree support the same traversal and searching
+    operations without requiring Subtree to inherit from Tree, so Subtree isn't
+    required to have all of Tree's attributes -- just 'root', a Subtree
+    instance.
     """
-    def __init__(self, root=None, clades=None, rooted=True, id=None, name=None):
-        self._root = root or Node(tree=self)
-        self.clades = clades or []  # each type Tree, "under" root
-        self.rooted = rooted        # is_rooted=True
-        self.id = id                #: identifier
-        self.name = name or self.root.label
-
-    # Properties may be overridden by subclasses
-
-    def _get_nodes(self): return [c.root for c in self.clades]
-    def _set_nodes(self, nodes): self.clades = [Tree(n) for n in nodes]
-    def _del_nodes(self, x): self.clades = []
-    nodes = property(_get_nodes, _set_nodes, _del_nodes)
-
-    def _get_root(self): return self._root
-    def _set_root(self, x): self._root = x
-    def _del_root(self, x): self._root = Node(tree=self)
-    root = property(_get_root, _set_root, _del_root)
-
-    @classmethod
-    def from_node(cls, node, **kwargs):
-        """Create a new Tree object given a root node.
-
-        Keyword arguments are the usual Tree constructor parameters.
-        """
-        return cls(node, **kwargs)
-
     # Plumbing
 
     def filter_search(self, filterfunc, breadth_first):
@@ -383,7 +316,7 @@ class Tree(TreeElement):
         That is, find each element as with find_all(), but return the
         corresponding clade object.
         """
-        for clade in self.find_all(Tree,
+        for clade in self.root.find_all(Subtree,
                 terminal=terminal, breadth_first=breadth_first):
             # Check whether any non-clade attributes/sub-elements match
             orig_clades = clade.__dict__.pop('clades')
@@ -394,7 +327,7 @@ class Tree(TreeElement):
 
     def get_terminals(self, breadth_first=False):
         """Iterate through all of this tree's terminal (leaf) nodes."""
-        return self.find_all(Node, terminal=True, breadth_first=breadth_first)
+        return self.find_all(Subtree, terminal=True, breadth_first=breadth_first)
 
     def is_terminal(self):
         """Returns True if the root of this tree is terminal."""
@@ -442,6 +375,111 @@ class Tree(TreeElement):
         to = list(mrca.get_path(finish))
         return fromstart + [mrca] + to
 
+
+class Tree(TreeElement, TreeMixin):
+    """A phylogenetic tree.
+
+    From PhyloDB:
+    =============
+
+        A tree basically is a namespace for nodes, and thereby implicitly for
+        their relationships (edges). In this model, tree is also bit of misnomer
+        because we try to support reticulating trees, i.e., networks, too, so
+        arguably it should be called graph. Typically, this will be used for
+        storing phylogenetic trees, sequence trees (a.k.a. gene trees) as much
+        as species trees.
+
+    @param root:
+        The starting node of the tree. If the tree is rooted, this will usually
+        be the root node. Note that the root node(s) of a rooted tree must be
+        stored in tree_root, too.
+    @type root: list
+
+    @param rooted:
+        Whether or not the tree is rooted. By default, a tree is assumed to be
+        rooted.
+    @type rooted: bool
+
+    @param id:
+        The identifier of the tree, if there is one.
+    @type id: str
+
+    @param name:
+        The name of the tree, in essence a label.
+    @type name: str
+
+    Not implemented:
+
+    @param biodatabase_id:
+        The namespace of the tree itself. Though trees are in a sense named
+        containers themselves (namely for nodes), they also constitute (possibly
+        identifiable!) data objects in their own right. Some data sources may
+        only provide a single tree, so that assigning a namespace for the tree
+        may seem excessive, but others, such as TreeBASE, contain many trees,
+        just as sequence databanks contain many sequences. The choice of how to
+        name a tree is up to the user; one may assign a default namespace (such
+        as "biosql"), or create one named the same as the tree.
+
+    """
+    def __init__(self, root=None, rooted=True, id=None, name=None):
+        self.root = root or Subtree()
+        self.rooted = rooted        # is_rooted=True
+        self.id = id                #: identifier
+        self.name = name or self.root.label
+
+    @classmethod
+    def from_subtree(cls, node, **kwargs):
+        """Create a new Tree object given a subtree.
+
+        Keyword arguments are the usual Tree constructor parameters.
+        """
+        return cls(node, **kwargs)
+
+    @property
+    def clade(self):
+        """The first subtree in this tree (not itself)."""
+        return self.root
+
+
+class Subtree(TreeElement, TreeMixin):
+    """A node in a tree.
+
+    From PhyloDB:
+    =============
+
+        Typically, this will be a node in a phylogenetic tree, resembling either
+        a nucleotide or protein sequence, or a taxon, or more generally an
+        "operational taxonomic unit" (OTU).
+
+    @param label:
+         The label of a node. This may the latin binomial of the taxon, the
+         accession number of a sequences, or any other construct that uniquely
+         identifies the node within one tree.
+
+    @param clades: Sub-trees rooted directly under this tree's root.
+    @type clades: list
+    """
+    def __init__(self, branch_length=None, label=None, clades=None):
+        self.branch_length = branch_length  # XXX or move this to Edge?
+        self._label = label
+        self.clades = clades or []
+
+    def is_terminal(self):
+        """Returns True if this is a terminal (leaf) node."""
+        return (not self.clades)
+
+    # Properties may be overridden by subclasses
+
+    def _get_label(self): return self._label
+    def _set_label(self, x): self._label = x
+    def _del_label(self, x): del self._label
+    label = property(_get_label, _set_label, _del_label)
+
+    @property
+    def root(self):
+        """Allow TreeMixin methods to traverse subtrees properly."""
+        return self
+
     # Sequence-type behavior methods
 
     def __getitem__(self, index):
@@ -460,46 +498,6 @@ class Tree(TreeElement):
     def __len__(self):
         """Number of nodes/sub-trees directy under this tree's root."""
         return len(self.clades)
-
-
-class Node(TreeElement):
-    """A node in a tree.
-
-    From PhyloDB:
-    =============
-
-        Typically, this will be a node in a phylogenetic tree, resembling either
-        a nucleotide or protein sequence, or a taxon, or more generally an
-        "operational taxonomic unit" (OTU).
-
-    @param label:
-         The label of a node. This may the latin binomial of the taxon, the
-         accession number of a sequences, or any other construct that uniquely
-         identifies the node within one tree.
-
-    @param tree:
-         The tree of which this node is a part of.
-    """
-    def __init__(self, tree=None, label=None, branch_length=None):
-        self._tree = tree or Tree(root=self)     # tree_id, type Tree
-        self._label = label
-        self.branch_length = branch_length  # XXX or move this to Edge?
-
-    # Properties may be overridden by subclasses
-
-    def _get_label(self): return self._label
-    def _set_label(self, x): self._label = x
-    def _del_label(self, x): del self._label
-    label = property(_get_label, _set_label, _del_label)
-
-    def _get_tree(self): return self._tree
-    def _set_tree(self, x): self._tree = x
-    def _del_tree(self, x): self._tree = Tree(root=self)
-    tree = property(_get_tree, _set_tree, _del_tree)
-
-    def is_terminal(self):
-        """Returns True if this is a terminal (leaf) node."""
-        return (not self.tree.clades)
 
 
 # Additional PhyloDB tables
