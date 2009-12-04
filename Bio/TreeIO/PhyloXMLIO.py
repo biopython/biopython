@@ -13,7 +13,7 @@ __docformat__ = "epytext en"
 import sys
 import warnings
 
-from Bio.Tree import PhyloXML as Tree
+from Bio.Tree import PhyloXML as PX
 
 try:
     from xml.etree import cElementTree as ElementTree
@@ -110,14 +110,14 @@ def write(obj, file, encoding=None):
 
     The file argument can be either an open handle or a file name.
     """
-    if isinstance(obj, Tree.Phyloxml):
+    if isinstance(obj, PX.Phyloxml):
         pass
-    elif isinstance(obj, Tree.Phylogeny):
+    elif isinstance(obj, PX.Phylogeny):
         obj = obj.to_phyloxml()
-    elif isinstance(obj, Tree.BaseTree.Tree):
-        obj = Tree.Phylogeny.from_tree(obj).to_phyloxml()
+    elif isinstance(obj, PX.BaseTree.Tree):
+        obj = PX.Phylogeny.from_tree(obj).to_phyloxml()
     elif hasattr(obj, '__iter__'):
-        obj = Tree.Phyloxml({}, phylogenies=obj)
+        obj = PX.Phyloxml({}, phylogenies=obj)
     else:
         raise ValueError("First argument must be a Phyloxml, Phylogeny, "
                 "Tree, or iterable of Trees or Phylogenies.")
@@ -269,7 +269,7 @@ class Parser(object):
 
     def read(self):
         """Parse the phyloXML file and create a single Phyloxml object."""
-        phyloxml = Tree.Phyloxml(dict((local(key), val)
+        phyloxml = PX.Phyloxml(dict((local(key), val)
                                 for key, val in self.root.items()))
         other_depth = 0
         for event, elem in self.context:
@@ -307,7 +307,7 @@ class Parser(object):
         clears the XML event history for the phylogeny element and returns
         control to the top-level parsing function.
         """
-        phylogeny = Tree.Phylogeny(**dict_str2bool(parent.attrib,
+        phylogeny = PX.Phylogeny(**dict_str2bool(parent.attrib,
                                                    ['rooted', 'rerootable']))
         list_types = {
                 # XML tag, plural attribute
@@ -358,7 +358,7 @@ class Parser(object):
 
     def _parse_clade(self, parent):
         """Parse a Clade node and its children, recursively."""
-        clade = Tree.Clade(**parent.attrib)
+        clade = PX.Clade(**parent.attrib)
         if clade.branch_length is not None:
             clade.branch_length = float(clade.branch_length)
         # NB: Only evaluate nodes at the current level
@@ -411,7 +411,7 @@ class Parser(object):
         return clade
 
     def _parse_sequence(self, parent):
-        sequence = Tree.Sequence(**parent.attrib)
+        sequence = PX.Sequence(**parent.attrib)
         for event, elem in self.context:
             namespace, tag = split_namespace(elem.tag)
             if event == 'end':
@@ -433,7 +433,7 @@ class Parser(object):
         return sequence
 
     def _parse_taxonomy(self, parent):
-        taxonomy = Tree.Taxonomy(**parent.attrib)
+        taxonomy = PX.Taxonomy(**parent.attrib)
         for event, elem in self.context:
             namespace, tag = split_namespace(elem.tag)
             if event == 'end':
@@ -455,7 +455,7 @@ class Parser(object):
         return taxonomy
 
     def other(self, elem, namespace, localtag):
-        return Tree.Other(localtag, namespace, elem.attrib,
+        return PX.Other(localtag, namespace, elem.attrib,
                   value=elem.text and elem.text.strip() or None,
                   children=[self.other(child, *split_namespace(child.tag))
                             for child in elem])
@@ -463,10 +463,10 @@ class Parser(object):
     # Complex types
 
     def accession(self, elem):
-        return Tree.Accession(elem.text.strip(), elem.get('source'))
+        return PX.Accession(elem.text.strip(), elem.get('source'))
 
     def annotation(self, elem):
-        return Tree.Annotation(
+        return PX.Annotation(
                 desc=collapse_wspace(get_child_text(elem, 'desc')),
                 confidence=get_child_as(elem, 'confidence', self.confidence),
                 properties=get_children_as(elem, 'property', self.property),
@@ -476,7 +476,7 @@ class Parser(object):
     def binary_characters(self, elem):
         def bc_getter(elem):
             return get_children_text(elem, 'bc')
-        return Tree.BinaryCharacters(
+        return PX.BinaryCharacters(
                 type=elem.get('type'),
                 gained_count=_int(elem.get('gained_count')),
                 lost_count=_int(elem.get('lost_count')),
@@ -489,7 +489,7 @@ class Parser(object):
                 absent=get_child_as(elem, 'absent', bc_getter))
 
     def clade_relation(self, elem):
-        return Tree.CladeRelation(
+        return PX.CladeRelation(
                 elem.get('type'), elem.get('id_ref_0'), elem.get('id_ref_1'),
                 distance=elem.get('distance'),
                 confidence=get_child_as(elem, 'confidence', self.confidence))
@@ -497,15 +497,15 @@ class Parser(object):
     def color(self, elem):
         red, green, blue = (get_child_text(elem, color, int) for color in
                             ('red', 'green', 'blue'))
-        return Tree.BranchColor(red, green, blue)
+        return PX.BranchColor(red, green, blue)
 
     def confidence(self, elem):
-        return Tree.Confidence(
+        return PX.Confidence(
                 _float(elem.text),
                 elem.get('type'))
 
     def date(self, elem):
-        return Tree.Date(
+        return PX.Date(
                 unit=elem.get('unit'),
                 desc=collapse_wspace(get_child_text(elem, 'desc')),
                 value=get_child_text(elem, 'value', float),
@@ -514,25 +514,25 @@ class Parser(object):
                 )
 
     def distribution(self, elem):
-        return Tree.Distribution(
+        return PX.Distribution(
                 desc=collapse_wspace(get_child_text(elem, 'desc')),
                 points=get_children_as(elem, 'point', self.point),
                 polygons=get_children_as(elem, 'polygon', self.polygon))
 
     def domain(self, elem):
-        return Tree.ProteinDomain(elem.text.strip(),
+        return PX.ProteinDomain(elem.text.strip(),
                 int(elem.get('from')) - 1,
                 int(elem.get('to')),
                 confidence=_float(elem.get('confidence')),
                 id=elem.get('id'))
 
     def domain_architecture(self, elem):
-        return Tree.DomainArchitecture(
+        return PX.DomainArchitecture(
                 length=int(elem.get('length')),
                 domains=get_children_as(elem, 'domain', self.domain))
 
     def events(self, elem):
-        return Tree.Events(
+        return PX.Events(
                 type=get_child_text(elem, 'type'),
                 duplications=get_child_text(elem, 'duplications', int),
                 speciations=get_child_text(elem, 'speciations', int),
@@ -541,16 +541,16 @@ class Parser(object):
 
     def id(self, elem):
         provider = elem.get('provider') or elem.get('type')
-        return Tree.Id(elem.text.strip(), provider)
+        return PX.Id(elem.text.strip(), provider)
 
     def mol_seq(self, elem):
         is_aligned = elem.get('is_aligned')
         if is_aligned is not None:
             is_aligned = str2bool(is_aligned)
-        return Tree.MolSeq(elem.text.strip(), is_aligned=is_aligned)
+        return PX.MolSeq(elem.text.strip(), is_aligned=is_aligned)
 
     def point(self, elem):
-        return Tree.Point(
+        return PX.Point(
                 elem.get('geodetic_datum'),
                 get_child_text(elem, 'lat', float),
                 get_child_text(elem, 'long', float),
@@ -558,28 +558,28 @@ class Parser(object):
                 alt_unit=elem.get('alt_unit'))
 
     def polygon(self, elem):
-        return Tree.Polygon(
+        return PX.Polygon(
                 points=get_children_as(elem, 'point', self.point))
 
     def property(self, elem):
-        return Tree.Property(elem.text.strip(),
+        return PX.Property(elem.text.strip(),
                 elem.get('ref'), elem.get('applies_to'), elem.get('datatype'),
                 unit=elem.get('unit'),
                 id_ref=elem.get('id_ref'))
 
     def reference(self, elem):
-        return Tree.Reference(
+        return PX.Reference(
                 doi=elem.get('doi'),
                 desc=get_child_text(elem, 'desc'))
 
     def sequence_relation(self, elem):
-        return Tree.SequenceRelation(
+        return PX.SequenceRelation(
                 elem.get('type'), elem.get('id_ref_0'), elem.get('id_ref_1'),
                 distance=_float(elem.get('distance')),
                 confidence=get_child_as(elem, 'confidence', self.confidence))
 
     def uri(self, elem):
-        return Tree.Uri(elem.text.strip(),
+        return PX.Uri(elem.text.strip(),
                 desc=collapse_wspace(elem.get('desc')),
                 type=elem.get('type'))
 
@@ -642,7 +642,7 @@ class Writer(object):
     """
     def __init__(self, phyloxml, encoding):
         """Build an ElementTree from a phyloXML object."""
-        assert isinstance(phyloxml, Tree.Phyloxml), "Not a Phyloxml object"
+        assert isinstance(phyloxml, PX.Phyloxml), "Not a Phyloxml object"
         self._tree = ElementTree.ElementTree(self.phyloxml(phyloxml))
         self.encoding = encoding
 
