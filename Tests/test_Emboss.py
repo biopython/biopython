@@ -9,7 +9,6 @@ import sys
 import unittest
 import subprocess
 
-from Bio.Application import generic_run
 from Bio.Emboss.Applications import WaterCommandline, NeedleCommandline
 from Bio.Emboss.Applications import SeqretCommandline
 from Bio import SeqIO
@@ -359,6 +358,27 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                  str(alignment[1].seq).replace("-","").upper())
         return True
 
+    def run_water(self, cline):
+        #Run the tool,
+        child = subprocess.Popen(str(cline),
+                                 stdin=subprocess.PIPE,
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 shell=(sys.platform!="win32"))
+        #Check it worked,
+        return_code = child.wait()
+        if return_code != 0 : print >> sys.stderr, "\n%s"%cline
+        self.assertEqual(return_code, 0)
+        errors = child.stderr.read().strip()
+        self.assert_(errors.startswith("Smith-Waterman local alignment"),
+                     errors)
+        if cline.outfile:
+            self.assertEqual(child.stdout.read().strip(), "")
+            self.assert_(os.path.isfile(cline.outfile))
+        else :
+            #Don't use this yet... could return stdout handle instead?
+            return child.stdout.read()
+
     def test_water_file(self):
         """water with the asis trick, output to a file."""
         #Setup, try a mixture of keyword arguments and later additions:
@@ -371,23 +391,14 @@ class PairwiseAlignmentTests(unittest.TestCase):
         cline.outfile = "Emboss/temp with space.water"
         self.assertEqual(str(eval(repr(cline))), str(cline))
         #Run the tool,
-        result, out, err = generic_run(cline)
-        #Check it worked,
-        errors = err.read().strip()
-        self.assert_(errors.startswith("Smith-Waterman local alignment"), errors)
-        self.assertEqual(out.read().strip(), "")
-        if result.return_code != 0 : print >> sys.stderr, "\n%s"%cline
-        self.assertEqual(result.return_code, 0)
-        filename = result.get_result("outfile")
-        self.assertEqual(filename, "Emboss/temp with space.water")
-        assert os.path.isfile(filename)
+        self.run_water(cline)
         #Check we can parse the output...
-        align = AlignIO.read(open(filename),"emboss")
+        align = AlignIO.read(open(cline.outfile),"emboss")
         self.assertEqual(len(align), 2)
         self.assertEqual(str(align[0].seq), "ACCCGGGCGCGGT")
         self.assertEqual(str(align[1].seq), "ACCCGAGCGCGGT")
         #Clean up,
-        os.remove(filename)            
+        os.remove(cline.outfile)            
         
     def test_water_piped(self):
         """water with asis trick, output piped to stdout."""
@@ -431,16 +442,21 @@ class PairwiseAlignmentTests(unittest.TestCase):
         cline.set_parameter("-outfile", "Emboss/temp with space.needle")
         self.assertEqual(str(eval(repr(cline))), str(cline))
         #Run the tool,
-        result, out, err = generic_run(cline)
+        child = subprocess.Popen(str(cline),
+                                 stdin=subprocess.PIPE,
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 shell=(sys.platform!="win32"))
+        out, err = child.communicate()
+        return_code = child.returncode
         #Check it worked,
-        errors = err.read().strip()
-        self.assert_(errors.startswith("Needleman-Wunsch global alignment"), errors)
-        self.assertEqual(out.read().strip(), "")
-        if result.return_code != 0 : print >> sys.stderr, "\n%s"%cline
-        self.assertEqual(result.return_code, 0)
-        filename = result.get_result("outfile")
-        self.assertEqual(filename, "Emboss/temp with space.needle")
-        assert os.path.isfile(filename)
+        errors = err.strip()
+        self.assert_(err.strip().startswith("Needleman-Wunsch global alignment"), errors)
+        self.assertEqual(out.strip(), "")
+        if return_code != 0 : print >> sys.stderr, "\n%s"%cline
+        self.assertEqual(return_code, 0)
+        filename = cline.outfile
+        self.assert_(os.path.isfile(filename))
         #Check we can parse the output...
         align = AlignIO.read(open(filename),"emboss")
         self.assertEqual(len(align), 2)
@@ -495,15 +511,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         cline.set_parameter("-outfile", out_file)
         self.assertEqual(str(eval(repr(cline))), str(cline))
         #Run the tool,
-        result, out, err = generic_run(cline)
-        #Check it worked,
-        errors = err.read().strip()
-        self.assert_(errors.startswith("Smith-Waterman local alignment"), errors)
-        self.assertEqual(out.read().strip(), "")
-        if result.return_code != 0 : print >> sys.stderr, "\n%s"%cline
-        self.assertEqual(result.return_code, 0)
-        self.assertEqual(result.get_result("outfile"), out_file)
-        assert os.path.isfile(out_file)
+        self.run_water(cline)
         #Check we can parse the output and it is sensible...
         self.pairwise_alignment_check(query,
                                       SeqIO.parse(open(in_file),"fasta"),
@@ -530,15 +538,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         cline.set_parameter("outfile", out_file)
         self.assertEqual(str(eval(repr(cline))), str(cline))
         #Run the tool,
-        result, out, err = generic_run(cline)
-        #Check it worked,
-        errors = err.read().strip()
-        self.assert_(errors.startswith("Smith-Waterman local alignment"), errors)
-        self.assertEqual(out.read().strip(), "")
-        if result.return_code != 0 : print >> sys.stderr, "\n%s"%cline
-        self.assertEqual(result.return_code, 0)
-        self.assertEqual(result.get_result("outfile"), out_file)
-        assert os.path.isfile(out_file)
+        self.run_water(cline)
         #Check we can parse the output and it is sensible...
         self.pairwise_alignment_check(query,
                                       SeqIO.parse(open(in_file),"genbank"),
@@ -567,16 +567,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         cline.set_parameter("-outfile", out_file)
         self.assertEqual(str(eval(repr(cline))), str(cline))
         #Run the tool,
-        result, out, err = generic_run(cline)
-        #Check it worked,
-        errors = err.read().strip()
-        self.assert_(errors.startswith("Smith-Waterman local alignment"), errors)
-        self.assertEqual(out.read().strip(), "")
-        if result.return_code != 0 : print >> sys.stderr, "\n%s"%cline
-        self.assertEqual(result.return_code, 0)
-        #Should be able to access this via any alias:
-        self.assertEqual(result.get_result("-outfile"), out_file)
-        assert os.path.isfile(out_file)
+        self.run_water(cline)
         #Check we can parse the output and it is sensible...
         self.pairwise_alignment_check(query,
                                       SeqIO.parse(open(in_file),"swiss"),
