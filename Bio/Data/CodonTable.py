@@ -1,6 +1,13 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+"""Codon tables based on those from the NCBI.
+
+These tables are based on parsing the NCBI file:
+ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
+
+Last updated for Version 3.9
+"""
 
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
@@ -138,7 +145,9 @@ class NCBICodonTableRNA(NCBICodonTable):
 
 def register_ncbi_table(name, alt_name, id,
                         table, start_codons, stop_codons):
-    names = name.split("; ")
+    #In most cases names are divided by "; ", however there is also
+    #'Bacterial and Plant Plastid' (which used to be just 'Bacterial')
+    names = [x.strip() for x in name.replace(" and ","; ").split("; ")]
     
     dna = NCBICodonTableDNA(id, names + [alt_name], table, start_codons,
                             stop_codons)
@@ -188,7 +197,7 @@ def register_ncbi_table(name, alt_name, id,
         generic_by_name[name] = generic
 
 ### These tables created from the data file
-###  ftp://ncbi.nlm.nih.gov/entrez/misc/data/gc.prt
+###  ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
 ### using the following:
 ##import re
 ##for line in open("gc.prt").readlines():
@@ -218,7 +227,7 @@ def register_ncbi_table(name, alt_name, id,
 ##        if len(names) == 1:
 ##            names.append(None)
 ##        print "register_ncbi_table(name = %s," % repr(names[0])
-##        print "                    alt_name = %s, id = %d", % \
+##        print "                    alt_name = %s, id = %d," % \
 ##              (repr(names[1]), id)
 ##        print "                    table = {"
 ##        s = "    "
@@ -315,7 +324,7 @@ register_ncbi_table(name = 'Yeast Mitochondrial',
      'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
      'GGA': 'G', 'GGG': 'G', },
                     stop_codons = [ 'TAA', 'TAG', ],
-                    start_codons = [ 'ATG', ]
+                    start_codons = [ 'ATA', 'ATG', ]
                     )
 register_ncbi_table(name = 'Mold Mitochondrial; Protozoan Mitochondrial; Coelenterate Mitochondrial; Mycoplasma; Spiroplasma',
                     alt_name = 'SGC3', id = 4,
@@ -376,7 +385,7 @@ register_ncbi_table(name = 'Ciliate Nuclear; Dasycladacean Nuclear; Hexamita Nuc
                     stop_codons = [ 'TGA', ],
                     start_codons = [ 'ATG', ]
                     )
-register_ncbi_table(name = 'Echinoderm Mitochondrial',
+register_ncbi_table(name = 'Echinoderm Mitochondrial; Flatworm Mitochondrial',
                     alt_name = 'SGC8', id = 9,
                     table = {
      'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
@@ -393,7 +402,7 @@ register_ncbi_table(name = 'Echinoderm Mitochondrial',
      'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
      'GGA': 'G', 'GGG': 'G', },
                     stop_codons = [ 'TAA', 'TAG', ],
-                    start_codons = [ 'ATG', ]
+                    start_codons = [ 'ATG', 'GTG', ]
                     )
 register_ncbi_table(name = 'Euplotid Nuclear',
                     alt_name = 'SGC9', id = 10,
@@ -414,7 +423,7 @@ register_ncbi_table(name = 'Euplotid Nuclear',
                     stop_codons = [ 'TAA', 'TAG', ],
                     start_codons = [ 'ATG', ]
                     )
-register_ncbi_table(name = 'Bacterial',
+register_ncbi_table(name = 'Bacterial and Plant Plastid',
                     alt_name = None, id = 11,
                     table = {
      'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
@@ -470,9 +479,9 @@ register_ncbi_table(name = 'Ascidian Mitochondrial',
      'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
      'GGA': 'G', 'GGG': 'G', },
                     stop_codons = [ 'TAA', 'TAG', ],
-                    start_codons = [ 'ATG', ]
+                    start_codons = [ 'TTG', 'ATA', 'ATG', 'GTG', ]
                     )
-register_ncbi_table(name = 'Flatworm Mitochondrial',
+register_ncbi_table(name = 'Alternative Flatworm Mitochondrial',
                     alt_name = None, id = 14,
                     table = {
      'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
@@ -510,6 +519,82 @@ register_ncbi_table(name = 'Blepharisma Macronuclear',
                     stop_codons = [ 'TAA', 'TGA', ],
                     start_codons = [ 'ATG', ]
                     )
+register_ncbi_table(name = 'Chlorophycean Mitochondrial',
+                    alt_name = None, id = 16,
+                    table = {
+     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
+     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
+     'TAG': 'L', 'TGT': 'C', 'TGC': 'C', 'TGG': 'W', 'CTT': 'L',
+     'CTC': 'L', 'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P',
+     'CCA': 'P', 'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q',
+     'CAG': 'Q', 'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
+     'ATT': 'I', 'ATC': 'I', 'ATA': 'I', 'ATG': 'M', 'ACT': 'T',
+     'ACC': 'T', 'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N',
+     'AAA': 'K', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'R',
+     'AGG': 'R', 'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
+     'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D',
+     'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
+     'GGA': 'G', 'GGG': 'G', },
+                    stop_codons = [ 'TAA', 'TGA', ],
+                    start_codons = [ 'ATG', ]
+                    )
+register_ncbi_table(name = 'Trematode Mitochondrial',
+                    alt_name = None, id = 21,
+                    table = {
+     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
+     'TCC': 'S', 'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y',
+     'TGT': 'C', 'TGC': 'C', 'TGA': 'W', 'TGG': 'W', 'CTT': 'L',
+     'CTC': 'L', 'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P',
+     'CCA': 'P', 'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q',
+     'CAG': 'Q', 'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
+     'ATT': 'I', 'ATC': 'I', 'ATA': 'M', 'ATG': 'M', 'ACT': 'T',
+     'ACC': 'T', 'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N',
+     'AAA': 'N', 'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'S',
+     'AGG': 'S', 'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
+     'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D',
+     'GAC': 'D', 'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G',
+     'GGA': 'G', 'GGG': 'G', },
+                    stop_codons = [ 'TAA', 'TAG', ],
+                    start_codons = [ 'ATG', 'GTG', ]
+                    )
+register_ncbi_table(name = 'Scenedesmus obliquus Mitochondrial',
+                    alt_name = None, id = 22,
+                    table = {
+     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L', 'TCT': 'S',
+     'TCC': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y', 'TAG': 'L',
+     'TGT': 'C', 'TGC': 'C', 'TGG': 'W', 'CTT': 'L', 'CTC': 'L',
+     'CTA': 'L', 'CTG': 'L', 'CCT': 'P', 'CCC': 'P', 'CCA': 'P',
+     'CCG': 'P', 'CAT': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q',
+     'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R', 'ATT': 'I',
+     'ATC': 'I', 'ATA': 'I', 'ATG': 'M', 'ACT': 'T', 'ACC': 'T',
+     'ACA': 'T', 'ACG': 'T', 'AAT': 'N', 'AAC': 'N', 'AAA': 'K',
+     'AAG': 'K', 'AGT': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R',
+     'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V', 'GCT': 'A',
+     'GCC': 'A', 'GCA': 'A', 'GCG': 'A', 'GAT': 'D', 'GAC': 'D',
+     'GAA': 'E', 'GAG': 'E', 'GGT': 'G', 'GGC': 'G', 'GGA': 'G',
+     'GGG': 'G', },
+                    stop_codons = [ 'TCA', 'TAA', 'TGA', ],
+                    start_codons = [ 'ATG', ]
+                    )
+register_ncbi_table(name = 'Thraustochytrium Mitochondrial',
+                    alt_name = None, id = 23,
+                    table = {
+     'TTT': 'F', 'TTC': 'F', 'TTG': 'L', 'TCT': 'S', 'TCC': 'S',
+     'TCA': 'S', 'TCG': 'S', 'TAT': 'Y', 'TAC': 'Y', 'TGT': 'C',
+     'TGC': 'C', 'TGG': 'W', 'CTT': 'L', 'CTC': 'L', 'CTA': 'L',
+     'CTG': 'L', 'CCT': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
+     'CAT': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q', 'CGT': 'R',
+     'CGC': 'R', 'CGA': 'R', 'CGG': 'R', 'ATT': 'I', 'ATC': 'I',
+     'ATA': 'I', 'ATG': 'M', 'ACT': 'T', 'ACC': 'T', 'ACA': 'T',
+     'ACG': 'T', 'AAT': 'N', 'AAC': 'N', 'AAA': 'K', 'AAG': 'K',
+     'AGT': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R', 'GTT': 'V',
+     'GTC': 'V', 'GTA': 'V', 'GTG': 'V', 'GCT': 'A', 'GCC': 'A',
+     'GCA': 'A', 'GCG': 'A', 'GAT': 'D', 'GAC': 'D', 'GAA': 'E',
+     'GAG': 'E', 'GGT': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G', },
+                    stop_codons = [ 'TTA', 'TAA', 'TAG', 'TGA', ],
+                    start_codons = [ 'ATT', 'ATG', 'GTG', ]
+                    )
+
 
 #########  Deal with ambiguous forward translations
 
@@ -786,7 +871,9 @@ del key, val
 for n in ambiguous_generic_by_id.keys():
     assert ambiguous_rna_by_id[n].forward_table["GUU"] == "V"
     assert ambiguous_rna_by_id[n].forward_table["GUN"] == "V"
-    assert ambiguous_rna_by_id[n].forward_table["UUN"] == "X" #F or L
+    if n != 23 :
+        #For table 23, UUN = F, L or stop.
+        assert ambiguous_rna_by_id[n].forward_table["UUN"] == "X" #F or L
     #R = A or G, so URR = UAA or UGA / TRA = TAA or TGA = stop codons
     if "UAA" in unambiguous_rna_by_id[n].stop_codons \
     and "UGA" in unambiguous_rna_by_id[n].stop_codons:
@@ -802,4 +889,6 @@ for n in ambiguous_generic_by_id.keys():
 del n
 assert ambiguous_generic_by_id[1].stop_codons == ambiguous_generic_by_name["Standard"].stop_codons
 assert ambiguous_generic_by_id[4].stop_codons == ambiguous_generic_by_name["SGC3"].stop_codons
+assert ambiguous_generic_by_id[11].stop_codons == ambiguous_generic_by_name["Bacterial"].stop_codons
+assert ambiguous_generic_by_id[11].stop_codons == ambiguous_generic_by_name["Plant Plastid"].stop_codons
 assert ambiguous_generic_by_id[15].stop_codons == ambiguous_generic_by_name['Blepharisma Macronuclear'].stop_codons

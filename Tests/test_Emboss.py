@@ -766,7 +766,7 @@ class TranslationTests(unittest.TestCase):
         translation = emboss_translate(sequence)
         self.assert_(check_translation(sequence, translation))
 
-        for table in [1,2,3,4,5,6,9,10,11,12,13,14,15]:
+        for table in [1,2,3,4,5,6,9,10,11,12,13,14,15,16,21,22,23]:
             translation = emboss_translate(sequence, table)
             self.assert_(check_translation(sequence, translation, table))
         return True
