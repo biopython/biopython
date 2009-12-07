@@ -84,10 +84,10 @@ class MuscleApplication(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  shell=(sys.platform!="win32"))
-        return_code = child.wait()
-        self.assertEqual(return_code, 0)
-        self.assertEqual(child.stdout.read(), "")
-        self.assert_("ERROR" not in child.stderr.read())
+        output, error = child.communicate()
+        self.assertEqual(child.returncode, 0)
+        self.assertEqual(output, "")
+        self.assert_("ERROR" not in error)
         del child
 
     def test_Muscle_with_options(self):
@@ -107,10 +107,10 @@ class MuscleApplication(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  shell=(sys.platform!="win32"))
-        return_code = child.wait()
-        self.assertEqual(return_code, 0)
-        self.assertEqual(child.stdout.read(), "")
-        self.assert_("ERROR" not in child.stderr.read())
+        output, error = child.communicate()
+        self.assertEqual(child.returncode, 0)
+        self.assertEqual(output, "")
+        self.assert_("ERROR" not in error)
         del child
 
     def test_Muscle_profile_simple(self):
@@ -128,10 +128,10 @@ class MuscleApplication(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  shell=(sys.platform!="win32"))
-        return_code = child.wait()
-        self.assertEqual(return_code, 0)
-        self.assertEqual(child.stdout.read(), "")
-        self.assert_("ERROR" not in child.stderr.read())
+        output, error = child.communicate()
+        self.assertEqual(child.returncode, 0)
+        self.assertEqual(output, "")
+        self.assert_("ERROR" not in error)
         del child
 
     def test_Muscle_profile_with_options(self):
@@ -269,8 +269,6 @@ class SimpleAlignTest(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  shell=(sys.platform!="win32"))
-        return_code = child.wait()
-        self.assertEqual(return_code, 0)
         align = AlignIO.read(child.stdout, "clustal")
         self.assertEqual(len(records), len(align))
         for old, new in zip(records, align):
@@ -279,6 +277,8 @@ class SimpleAlignTest(unittest.TestCase):
         os.remove(temp_large_fasta_file)
         #See if quiet worked:
         self.assertEqual("", child.stderr.read().strip())
+        return_code = child.wait()
+        self.assertEqual(return_code, 0)
         del child
 
     def test_using_stdin(self):
