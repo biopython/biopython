@@ -128,10 +128,14 @@ def compare_records(old_list, new_list):
         if len(old.seq) != len(new.seq):
             raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
         if str(old.seq).upper() != str(new.seq).upper():
+            if str(old.seq).replace("X","N")==str(new.seq) :
+                raise ValueError("X -> N (protein forced into nucleotide?)")
             if len(old.seq) < 200:
                 raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
             else:
-                raise ValueError("'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100]))
+                raise ValueError("'%s...%s' vs '%s...%s'" \
+                                 % (old.seq[:60], old.seq[-10:],
+                                    new.seq[:60], new.seq[-10:]))
         if old.features and new.features \
         and len(old.features) != len(new.features):
             raise ValueError("%i vs %i features" \
@@ -213,8 +217,11 @@ class SeqRetSeqIOTests(unittest.TestCase):
 
     def test_ig(self):
         """SeqIO & EMBOSS reading each other's conversions of an ig file."""
+        #NOTE - EMBOSS considers "genbank" to be for nucleotides only,
+        #and will turn "X" into "N" for GenBank output.
         self.check_SeqIO_to_EMBOSS("IntelliGenetics/VIF_mase-pro.txt", "ig",
-                                   alphabet=generic_protein)
+                                   alphabet=generic_protein,
+                                   skip_formats=["genbank"])
         #TODO - What does a % in an ig sequence mean?
         #e.g. "IntelliGenetics/vpu_nucaligned.txt"
         #and  "IntelliGenetics/TAT_mase_nuc.txt"
