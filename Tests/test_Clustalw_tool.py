@@ -227,10 +227,11 @@ for input_file, output_file, newtree_file in [
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
                              shell=(sys.platform!="win32"))
-    return_code = child.wait()
+    output, error = child.communicate()
+    return_code = child.returncode
     assert return_code == 0
-    assert child.stdout.read().strip().startswith("CLUSTAL")
-    assert child.stderr.read().strip() == ""
+    assert output.strip().startswith("CLUSTAL")
+    assert error.strip() == ""
     align = AlignIO.read(open(output_file), "clustal")
     assert set(input_records.keys()) == set(output_records.keys())
     for record in align:
