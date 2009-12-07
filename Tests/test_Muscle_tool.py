@@ -198,11 +198,11 @@ class SimpleAlignTest(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  shell=(sys.platform!="win32"))
+        #Didn't use -quiet so there should be progress reports on stderr,
+        align = AlignIO.read(child.stdout, "clustal")
+        self.assert_(child.stderr.read().strip().startswith("MUSCLE"))
         return_code = child.wait()
         self.assertEqual(return_code, 0)
-        #Didn't use -quiet so there should be progress reports on stderr,
-        self.assert_(child.stderr.read().strip().startswith("MUSCLE"))
-        align = AlignIO.read(child.stdout, "clustal")
         del child
         self.assertEqual(len(records),len(align))
         for old, new in zip(records, align):
@@ -228,15 +228,15 @@ class SimpleAlignTest(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  shell=(sys.platform!="win32"))
-        return_code = child.wait()
-        self.assertEqual(return_code, 0)
         #Didn't use -quiet so there should be progress reports on stderr,
-        self.assert_(child.stderr.read().strip().startswith("MUSCLE"))
         align = AlignIO.read(child.stdout, "clustal")
+        self.assert_(child.stderr.read().strip().startswith("MUSCLE"))
         self.assertEqual(len(records),len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-",""), str(old.seq))
+        return_code = child.wait()
+        self.assertEqual(return_code, 0)
         del child
 
     def test_long(self):
@@ -309,44 +309,42 @@ class SimpleAlignTest(unittest.TestCase):
     def test_with_multiple_output_formats(self):
         """Simple muscle call with multiple output formats"""
         input_file = "Fasta/f002"
-        output_phyi = "temp_f002.phy"
+        output_html = "temp_f002.html"
         output_clwstrict = "temp_f002.clw"
         self.assert_(os.path.isfile(input_file))
         records = list(SeqIO.parse(open(input_file),"fasta"))
         #Prepare the command... use Clustal output (with a MUSCLE header)
         cmdline = MuscleCommandline(muscle_exe, input=input_file,
                                     stable=True, clw = True,
-                                    phyiout = output_phyi,
+                                    htmlout = output_html,
                                     clwstrictout = output_clwstrict)
         self.assertEqual(str(cmdline).rstrip(), muscle_exe + \
-                         " -in Fasta/f002 -clw -phyiout temp_f002.phy" +\
+                         " -in Fasta/f002 -clw -htmlout temp_f002.html" +\
                          " -clwstrictout temp_f002.clw -stable")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         child = subprocess.Popen(str(cmdline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  shell=(sys.platform!="win32"))
-        return_code = child.wait()
-        self.assertEqual(return_code, 0)
-        #Didn't use -quiet so there should be progress reports on stderr,
-        self.assert_(child.stderr.read().strip().startswith("MUSCLE"))
         #Clustalw on stdout:
         align = AlignIO.read(child.stdout, "clustal")
+        #Didn't use -quiet so there should be progress reports on stderr,
+        self.assert_(child.stderr.read().strip().startswith("MUSCLE"))
+        return_code = child.wait()
+        self.assertEqual(return_code, 0)
         self.assertEqual(len(records),len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
         del child
-        #Phylip interleaved:
-        align = AlignIO.read(open(output_phyi), "phylip")
-        self.assertEqual(len(records),len(align))
-        for old, new in zip(records, align):
-            self.assertEqual(old.id[:10], new.id)
+        html = open(output_html,"rU").read().strip().upper()
+        self.assert_(html.startswith("<HTML"))
+        self.assert_(html.endswith("</HTML>"))
         #ClustalW strict:
         align = AlignIO.read(open(output_clwstrict), "clustal")
         self.assertEqual(len(records),len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
-        os.remove(output_phyi)
+        os.remove(output_html)
         os.remove(output_clwstrict)
 
 if __name__ == "__main__":
