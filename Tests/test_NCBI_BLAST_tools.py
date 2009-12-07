@@ -37,7 +37,7 @@ if sys.platform=="win32":
             for name in wanted :
                 if os.path.isfile(os.path.join(folder, name+".exe")):
                     exe_names[name] = os.path.join(folder, name+".exe")
-        if muscle_exe : break
+        if len(exe_names) == len(wanted) : break
 else:
     import commands
     for name in wanted :
