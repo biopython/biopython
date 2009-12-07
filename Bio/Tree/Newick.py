@@ -13,17 +13,35 @@ import warnings
 
 import BaseTree
 
+# Py2.4 compatibility
+try:
+    from functools import wraps
+except ImportError:
+    # From Python 2.5+ functools module
+    def wraps(wrapped):
+        def update_wrapper(wrapper):
+            for attr in ('__module__', '__name__', '__doc__'):
+                setattr(wrapper, attr, getattr(wrapped, attr))
+            wrapper.__dict__.update(wrapped.__dict__)
+            return wrapper
+        return update_wrapper
+
 
 def deprecated(hint):
     """Decorator for deprecated Nexus functions.
 
     'hint' is the recommended replacement function or method.
+    The warning is triggered when the deprecated function (or property) is
+    called, *not* when it is defined.
     """
     message = "use %s instead" % hint
-    def wrapper(func):
-        warnings.warn(message, DeprecationWarning, stacklevel=3)
-        return func
-    return wrapper
+    def deprecate(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            warnings.warn(message, DeprecationWarning, stacklevel=3)
+            return func(*args, **kwargs)
+        return wrapper
+    return deprecate
 
 
 # XXX from Bio.Nexus.Trees
@@ -37,19 +55,10 @@ def consensus(trees, threshold=0.5,outgroup=None):
 class NHTree(BaseTree.Tree):
     """Newick Tree object.
     """
-    def __init__(self, root=None, clades=None, rooted=False, id=None, name='',
-            weight=1.0,
-            # values_are_support=False, max_support=1.0
-            ):
-        BaseTree.Tree.__init__(self,
-                root=root or NHNode(), # originally the NodeData class
-                clades=clades,            # list of NHNodes
-                rooted=rooted,
-                id=id,
-                name=name)
+    def __init__(self, root=None, rooted=False, id=None, name='', weight=1.0):
+        BaseTree.Tree.__init__(self, root=root or NHClade(),
+                rooted=rooted, id=id, name=name)
         self.weight = weight
-        # self.__values_are_support = values_are_support
-        # self.max_support = max_support
 
     # Ported from Bio.Nexus.Trees.Tree
 
@@ -224,31 +233,38 @@ class NHTree(BaseTree.Tree):
 class NHClade(BaseTree.Subtree):
     """Newick Clade (subtree) object.
     """
-    def __init__(self, tree=None, label=None, branch_length=1.0,
+    def __init__(self, clades=None, taxon=None, branch_length=1.0, 
             support=None, comment=None):
-        BaseTree.Node.__init__(self,
-                tree=tree or NHTree(), # a.k.a. taxon; self.tree.root == self
-                label=label,
-                branch_length=branch_length)
+        # BaseTree.Subtree.__init__(self,
+        #         clades=clades,
+        #         label=taxon,
+        #         branch_length=branch_length)
+        self.clades = clades or []
+        self.taxon = taxon
+        self.branch_length = branch_length
         self.support = support
         self.comment = comment
+
+    @property
+    def label(self):
+        return self.taxon
 
     # Deprecated attributes from Bio.Nexus.Trees
 
     @property
-    @deprecated('self.label')
+    @deprecated('NHClade.label')
     def id(self):
         return self.label
 
     @property
-    @deprecated('self.clades')
+    @deprecated('NHClade.clades')
     def nodes(self):
         return self.clades
 
     @property
     @deprecated("the NHClade object's attributes")
     def data(self):
-        return _NodeData(taxon=self.tree,
+        return _NodeData(taxon=self.label,
                         branchlength=self.branch_length,
                         support=self.support,
                         comment=self.comment)
