@@ -37,6 +37,9 @@ nucleotide sequence for features in GenBank or EMBL files.
 SeqRecord objects now support addition, giving a new SeqRecord with the
 combined sequence, all the SeqFeatures, and any common annotation.
 
+Bio.Entrez includes the new (Jan 2010) DTD files from the NCBI for parsing
+MedLine/PubMed data.
+
 The NCBI codon tables have been updated from version 3.4 to 3.9, which adds
 a few extra start codons, and a few new tables (Tables 16, 21, 22 and 23).
 Note that Table 14 which used to be called "Flatworm Mitochondrial" is now
