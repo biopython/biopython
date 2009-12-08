@@ -657,7 +657,7 @@ class DictionaryBuilder(object):
 
     def parseline(self, line):
         line = [line[0]]+[line[1].upper()]+[int(i) for i in line[2:9]]+line[9:]
-        name = line[0]
+        name = line[0].replace("-","_")
         site = line[1]          #   sequence of the recognition site
         dna = DNA(site)  
         size = line[2]          #   size of the recognition site
@@ -907,28 +907,32 @@ class DictionaryBuilder(object):
                         print 'Unfortunately, %s is commercially available.\n'%n
 
                     continue 
+                #Hyphens can't be used as a Python name, nor as a
+                #group name in a regular expression.
+                name = name.replace("-","_")
                 if name in enzymedict:
                     #
                     #   deal with TaqII and its two sites.
                     #
                     print '\nWARNING :',
                     print name, 'has two different sites.\n'
+                    other = line[0].replace("-","_")
                     dna = DNA(line[1])
                     sense1 = regex(dna.tostring())
                     antisense1 = regex(Antiparallel(dna))
-                    dna = DNA(enzymedict[line[0]][0])
+                    dna = DNA(enzymedict[other][0])
                     sense2 = regex(dna.tostring())
                     antisense2 = regex(Antiparallel(dna))
-                    sense = '(?P<'+line[0]+'>'+sense1+'|'+sense2+')'
-                    antisense = '(?P<'+line[0]+'_as>'+antisense1+'|'+antisense2 + ')'
+                    sense = '(?P<'+other+'>'+sense1+'|'+sense2+')'
+                    antisense = '(?P<'+other+'_as>'+antisense1+'|'+antisense2 + ')'
                     reg = sense + '|' + antisense 
-                    line[1] = line[1] + '|' + enzymedict[line[0]][0]
+                    line[1] = line[1] + '|' + enzymedict[other][0]
                     line[-1] = reg
                 #
                 #   the data to produce the enzyme class are then stored in
                 #   enzymedict.
                 #
-                enzymedict[name] = line[1:]
+                enzymedict[name] = line[1:] #element zero was the name
         except IndexError:
             pass
         for i in supplier:
