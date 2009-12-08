@@ -212,6 +212,9 @@ class RestrictionType(type):
         instantiated when importing the module.
         
         see below."""
+        if "-" in name :
+            raise ValueError("Problem with hyphen in %s as enzyme name" \
+                             % repr(name))
         super(RestrictionType, cls).__init__(cls, name, bases, dct)
         try :
             cls.compsite = re.compile(cls.compsite)
