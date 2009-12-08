@@ -277,10 +277,6 @@ class Clade(PhyloElement, BaseTree.Subtree):
 
     # Mimic BaseTree.Subtree
     @property
-    def label(self):
-        return str(self)
-
-    @property
     def id(self):
         return self.node_id.value
 

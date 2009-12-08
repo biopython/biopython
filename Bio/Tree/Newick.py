@@ -230,31 +230,27 @@ class NHTree(BaseTree.Tree):
         """
 
 
-class NHClade(BaseTree.Subtree):
+class NHClade(BaseTree.Subtree, NHShim):
     """Newick Clade (subtree) object.
     """
-    def __init__(self, clades=None, taxon=None, branch_length=1.0, 
+    def __init__(self, branch_length=1.0, name=None, clades=None,
             support=None, comment=None):
-        # BaseTree.Subtree.__init__(self,
-        #         clades=clades,
-        #         label=taxon,
-        #         branch_length=branch_length)
-        self.clades = clades or []
-        self.taxon = taxon
-        self.branch_length = branch_length
+        BaseTree.Subtree.__init__(self, branch_length=branch_length,
+                name=name, clades=clades)
         self.support = support
         self.comment = comment
-
-    @property
-    def label(self):
-        return self.taxon
 
     # Deprecated attributes from Bio.Nexus.Trees
 
     @property
-    @deprecated('NHClade.label')
+    @deprecated('NHClade.name')
+    def taxon(self):
+        return self.name
+
+    @property
+    @deprecated('NHClade.name')
     def id(self):
-        return self.label
+        return self.name
 
     @property
     @deprecated('NHClade.clades')
@@ -264,7 +260,7 @@ class NHClade(BaseTree.Subtree):
     @property
     @deprecated("the NHClade object's attributes")
     def data(self):
-        return _NodeData(taxon=self.label,
+        return _NodeData(taxon=self.name,
                         branchlength=self.branch_length,
                         support=self.support,
                         comment=self.comment)

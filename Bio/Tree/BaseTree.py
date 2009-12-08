@@ -127,7 +127,8 @@ class TreeElement(object):
         return s.encode('utf-8')
 
     def __str__(self):
-        return self.__class__.__name__
+        return self.name or self.__class__.__name__
+
 
 
 class TreeMixin(object):
@@ -432,10 +433,10 @@ class Subtree(TreeElement, TreeMixin):
     @param clades: Sub-trees rooted directly under this tree's root.
     @type clades: list
     """
-    def __init__(self, branch_length=None, label=None, clades=None):
-        self.branch_length = branch_length
-        self._label = label
+    def __init__(self, branch_length=None, name=None, clades=None):
         self.clades = clades or []
+        self.name = name
+        self.branch_length = branch_length
 
     def is_terminal(self):
         """Returns True if this is a terminal (leaf) node."""
@@ -443,10 +444,10 @@ class Subtree(TreeElement, TreeMixin):
 
     # Properties may be overridden by subclasses
 
-    def _get_label(self): return self._label
-    def _set_label(self, x): self._label = x
-    def _del_label(self, x): self._label = None
-    label = property(_get_label, _set_label, _del_label)
+    # XXX kind of superfluous
+    @property
+    def label(self):
+        return str(self)
 
     @property
     def root(self):

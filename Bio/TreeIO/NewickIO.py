@@ -130,16 +130,16 @@ class Parser(object):
         else:
             comment = None
         clade = Newick.NHClade(comment=comment)
-        # Extract taxon, and optionally support, branch length
-        # Float values are support and branch length, the string is taxon
+        # Extract name (taxon), and optionally support, branch length
+        # Float values are support and branch length, the string is name/taxon
         values = []
         for part in (t.strip() for t in text.split(':')):
             if part:
                 try:
                     values.append(float(part))
                 except ValueError:
-                    assert clade.taxon is None, "Two string taxonomies?"
-                    clade.taxon = part
+                    assert clade.name is None, "Two string taxonomies?"
+                    clade.name = part
         if len(values) == 1:
             # Real branch length, or support as branch length
             if self.values_are_support:
@@ -186,7 +186,7 @@ class Writer(object):
         def newickize(clade):
             """Convert a node tree to a Newick tree string, recursively."""
             if clade.is_terminal():    #terminal
-                return (clade.taxon + make_info_string(clade, terminal=True))
+                return (clade.name + make_info_string(clade, terminal=True))
             else:
                 subtrees = (newickize(sub) for sub in clade)
                 return '(%s)%s' % (','.join(subtrees),
