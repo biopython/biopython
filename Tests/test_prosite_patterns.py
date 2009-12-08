@@ -7,12 +7,16 @@ import os
 import unittest
 
 if os.name == 'java':
-    from Bio import MissingExternalDependencyError
-    #This is a slight miss-use of MissingExternalDependencyError,
-    #but it will do in the short term to skip this unit test on Jython
-    raise MissingExternalDependencyError("The (deprecated) Bio.Prosite.Pattern uses the Python "
-                                         "function buffer which is not supported on Jython, see "
-                                         "http://bugs.jython.org/issue1521")
+    try :
+        buffer
+    except NameError :
+        from Bio import MissingExternalDependencyError
+        #This is a slight miss-use of MissingExternalDependencyError,
+        #but it will do in the short term to skip this unit test on Jython
+        raise MissingExternalDependencyError(\
+            "The (deprecated) Bio.Prosite.Pattern uses the Python "
+            "function buffer which is not supported on Jython, see "
+            "http://bugs.jython.org/issue1521")
 
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
