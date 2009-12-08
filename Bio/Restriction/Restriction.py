@@ -213,7 +213,11 @@ class RestrictionType(type):
         
         see below."""
         super(RestrictionType, cls).__init__(cls, name, bases, dct)
-        cls.compsite = re.compile(cls.compsite)
+        try :
+            cls.compsite = re.compile(cls.compsite)
+        except Exception, err :
+            raise ValueError("Problem with regular expression, re.compiled(%s)" \
+                             % repr(cls.compsite))
         
     def __add__(cls, other):
         """RE.__add__(other) -> RestrictionBatch().
