@@ -170,6 +170,14 @@ class CompareAceParser(AbstractParser):
     """
     def __init__(self):
         """__init__(self)"""
+        import warnings
+        warnings.warn("CompareAceParser and ComparAceConsumer are" \
+              +" deprecated, and will be removed in a future release of"\
+              +" Biopython. If you want to continue to use this code,"\
+              +" please get in contact with the Biopython developers via"\
+              +" the mailing lists to avoid its permanent removal from"\
+              +" Biopython. See also the Python built in set datatype.", \
+              DeprecationWarning)
         self._scanner = CompareAceScanner()
         self._consumer = CompareAceConsumer()
 
