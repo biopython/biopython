@@ -7,6 +7,13 @@ Python 2.3
 No longer supported as of Release 1.51, having triggered a warning with
 Release 1.50, with a mention in the release notes for Release 1.49.
 
+Bio.Restriction.DNAUtils and check_bases
+========================================
+This module (originally in C) offered complement and antiparallel functions
+(duplicating functionality in Bio.Seq) and a rather odd function called
+check_bases (also available as Bio.Restriction.Restriction.check_bases).
+Deprecated in Release 1.53.
+
 Bio.Blast.NCBIStandalone.blastall, blastpgp and rpsblast
 ========================================================
 These command line tools calling functions were declared obsolete in Release
