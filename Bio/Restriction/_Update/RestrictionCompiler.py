@@ -473,7 +473,6 @@ class DictionaryBuilder(object):
                 results.write("        %s : %s,\n" % (repr(key), repr(value)))
             results.write("    }\n")
             results.write("rest_dict[%s] = _temp()\n" % repr(name))
-            #results.write("del _temp\n")
             results.write("\n")
         print 'OK.\n'
         print 'Writing the dictionary containing the suppliers datas.\t\t',
@@ -485,7 +484,6 @@ class DictionaryBuilder(object):
                 results.write("        %s,\n" % repr(value))
             results.write("    )\n")
             results.write("suppliers[%s] = _temp()\n" % repr(name))
-            #results.write("del _temp\n")
             results.write("\n")
         print 'OK.\n'
         print 'Writing the dictionary containing the Restriction types.\t',
@@ -497,10 +495,10 @@ class DictionaryBuilder(object):
                 results.write("        %s,\n" % repr(value))
             results.write("    )\n")
             results.write("typedict[%s] = _temp()\n" % repr(name))
-            #results.write("del _temp\n")
             results.write("\n")
-        #We include one the final "del _temp" (rather than doing it at every
-        #step) to reduce the code size for Jython and the JVM limitations.
+        #I had wanted to do "del _temp" at each stage (just for clarity), but
+        #that pushed the code size just over the Jython JVM limit. We include
+        #one the final "del _temp" to clean up the namespace.
         results.write("del _temp\n")
         results.write("\n")
         print 'OK.\n'
