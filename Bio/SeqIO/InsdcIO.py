@@ -231,7 +231,7 @@ class GenBankWriter(SequentialSequenceWriter):
             return default
         #Cope with a list of one string:
         if isinstance(date, list) and len(date)==1 :
-            date = data[0]
+            date = date[0]
         #TODO - allow a Python date object
         if not isinstance(date, str) or len(date) != 11 \
         or date[2] != "-" or date[6] != "-" \

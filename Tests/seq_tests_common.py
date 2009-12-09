@@ -305,7 +305,7 @@ def compare_record(old, new):
             #If there is a taxon id recorded, these fields get overwritten
             #by data from the taxon/taxon_name tables.  There is no
             #guarantee that they will be identical after a load/retrieve.
-            assert isinstance(new.annotations[key], str) \
+            assert isinstance(new.annotations[key], basestring) \
                 or isinstance(new.annotations[key], list)
         elif type(old.annotations[key]) == type(new.annotations[key]):
             assert old.annotations[key] == new.annotations[key], \

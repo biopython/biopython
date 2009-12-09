@@ -33,10 +33,26 @@ class Generic_dbutils:
         cursor.execute(sql)
         rv = cursor.fetchone()
         return rv[0]
+    
+    def execute(self, cursor, sql, args=None):
+        """Just execute an sql command.
+        """
+        cursor.execute(sql, args or ())
 
     def autocommit(self, conn, y = 1):
         # Let's hope it was not really needed
         pass
+
+class Sqlite_dbutils(Generic_dbutils):
+    """Custom database utilities for SQLite.
+    """
+    def execute(self, cursor, sql, args=None):
+        """Replace %s with ? for variable substitution in sqlite3.
+        """
+        sql = sql.replace("%s", "?")
+        cursor.execute(sql, args or ())
+
+_dbutils["sqlite3"] = Sqlite_dbutils
 
 class Mysql_dbutils(Generic_dbutils):
     def last_id(self, cursor, table):
