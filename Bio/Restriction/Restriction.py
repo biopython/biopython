@@ -90,30 +90,29 @@ from Bio.Restriction.Restriction_Dictionary import suppliers as suppliers_dict
 from Bio.Restriction.RanaConfig import *
 from Bio.Restriction.PrintFormat import PrintFormat
 
-try:
-    from Bio.Restriction.DNAUtils import check_bases as _check_bases
-except ImportError:
-    #DNAUtils is written in C, it will not be available on Jython
-    #Reimplemented here in pure python (could be faster I'm sure)
-    def _check_bases(seq_string):
-        """Check characters in a string (PRIVATE).
+#Used to use Bio.Restriction.DNAUtils.check_bases (and expose it under this
+#namespace), but have deprecated that module.
+def _check_bases(seq_string):
+    """Check characters in a string (PRIVATE).
 
-        Remove digits and white space present in string. Allows any letters
-        [although old DNAUtils documentation claimed to just allow IUPAC letters].
-        Other characters trigger a TypeError.
+    Remove digits and white space present in string. Allows any letters
+    [although the documentation for the old DNAUtils function written in C
+    claimed to just allow IUPAC letters].
 
-        Returns the string WITH A LEADING SPACE (!). This is for backwards
-        compatibility, and may in part be explained by the fact that
-        Bio.Restriction doesn't use zero based counting.
-        """
-        #Remove white space:
-        seq_string = "".join(seq_string.split())
-        #Remove digits
-        for c in "0123456789" : seq_string = seq_string.replace(c,"")
-        #Check only letters
-        if seq_string and not seq_string.isalpha() :
-            raise TypeError("Invalid character found in %s" % repr(seq_string))
-        return " " + seq_string
+    Other characters (e.g. symbols) trigger a TypeError.
+    
+    Returns the string WITH A LEADING SPACE (!). This is for backwards
+    compatibility, and may in part be explained by the fact that
+    Bio.Restriction doesn't use zero based counting.
+    """
+    #Remove white space:
+    seq_string = "".join(seq_string.split())
+    #Remove digits
+    for c in "0123456789" : seq_string = seq_string.replace(c,"")
+    #Check only letters
+    if seq_string and not seq_string.isalpha() :
+        raise TypeError("Invalid character found in %s" % repr(seq_string))
+    return " " + seq_string
 
 def check_bases(seq_string):
     """Check characters in a string (DEPRECATED)."""

@@ -314,9 +314,6 @@ else :
     Extension('Bio.Nexus.cnexus',
               ['Bio/Nexus/cnexus.c']
               ),
-    Extension('Bio.Restriction.DNAUtils',
-              ['Bio/Restriction/DNAUtils.c']
-              ),
     ]
 
 
