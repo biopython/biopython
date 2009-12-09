@@ -46,6 +46,17 @@ Note that Table 14 which used to be called "Flatworm Mitochondrial" is now
 called "Alternative Flatworm Mitochondrial", and "Flatworm Mitochondrial" is
 now an alias for Table 9 ("Echinoderm Mitochondrial").
 
+The restriction enzyme list in Bio.Restriction has been updated to the
+Nov 2009 release of REBASE.
+
+Support for running Biopython under Jython (using the Java Virtual Machine)
+has been much improved thanks to input from Kyle Ellrott. Note that Jython
+does not support C code - this means NumPy isn't available, and nor are a
+selection of Biopython modules (including Bio.Cluster, Bio.PDB and BioSQL).
+Also, currently Jython does not parse DTD files, which means the XML parser
+in Bio.Entrez won't work. However, most of the Biopython modules seem fine
+from testing Jython 2.5.0 and 2.5.1.
+
 ===================================================================
 
 September 22, 2009: Biopython 1.52 released.
