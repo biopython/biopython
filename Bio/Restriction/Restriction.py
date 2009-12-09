@@ -95,22 +95,21 @@ from Bio.Restriction.PrintFormat import PrintFormat
 def _check_bases(seq_string):
     """Check characters in a string (PRIVATE).
 
-    Remove digits and white space present in string. Allows any letters
-    [although the documentation for the old DNAUtils function written in C
-    claimed to just allow IUPAC letters].
-
+    Remove digits and white space present in string. Allows any valid ambiguous
+    IUPAC DNA single letters codes (ABCDGHKMNRSTVWY, lower case are converted).
+    
     Other characters (e.g. symbols) trigger a TypeError.
     
     Returns the string WITH A LEADING SPACE (!). This is for backwards
     compatibility, and may in part be explained by the fact that
     Bio.Restriction doesn't use zero based counting.
     """
-    #Remove white space:
-    seq_string = "".join(seq_string.split())
+    #Remove white space and make upper case:
+    seq_string = "".join(seq_string.split()).upper()
     #Remove digits
     for c in "0123456789" : seq_string = seq_string.replace(c,"")
-    #Check only letters
-    if seq_string and not seq_string.isalpha() :
+    #Check only allowed IUPAC letters
+    if not set(seq_string).issubset(set("ABCDGHKMNRSTVWY")) :
         raise TypeError("Invalid character found in %s" % repr(seq_string))
     return " " + seq_string
 
