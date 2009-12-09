@@ -1973,6 +1973,10 @@ class RestrictionBatch(set):
         #   here we replace the search method of the individual enzymes
         #   with one unique testing method.
         #
+        if not hasattr(self, "already_mapped") :
+            #TODO - Why does this happen!
+            #Try the "doctest" at the start of PrintFormat.py
+            self.already_mapped = None
         if isinstance(dna, DNA):
             # For the searching, we just care about the sequence as a string,
             # if that is the same we can use the cached search results.
