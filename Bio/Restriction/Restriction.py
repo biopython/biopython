@@ -84,13 +84,43 @@ import itertools
 from Bio.Seq import Seq, MutableSeq
 from Bio.Alphabet import IUPAC
 
-from Bio.Restriction.Restriction_Dictionary import rest_dict as enzymedict,\
-     typedict, suppliers as suppliers_dict
+from Bio.Restriction.Restriction_Dictionary import rest_dict as enzymedict
+from Bio.Restriction.Restriction_Dictionary import typedict
+from Bio.Restriction.Restriction_Dictionary import suppliers as suppliers_dict
 from Bio.Restriction.RanaConfig import *
 from Bio.Restriction.PrintFormat import PrintFormat
-from Bio.Restriction.DNAUtils import check_bases
 
+try:
+    from Bio.Restriction.DNAUtils import check_bases as _check_bases
+except ImportError:
+    #DNAUtils is written in C, it will not be available on Jython
+    #Reimplemented here in pure python (could be faster I'm sure)
+    def _check_bases(seq_string):
+        """Check characters in a string (PRIVATE).
 
+        Remove digits and white space present in string. Allows any letters
+        [although old DNAUtils documentation claimed to just allow IUPAC letters].
+        Other characters trigger a TypeError.
+
+        Returns the string WITH A LEADING SPACE (!). This is for backwards
+        compatibility, and may in part be explained by the fact that
+        Bio.Restriction doesn't use zero based counting.
+        """
+        #Remove white space:
+        seq_string = "".join(seq_string.split())
+        #Remove digits
+        for c in "0123456789" : seq_string = seq_string.replace(c,"")
+        #Check only letters
+        if seq_string and not seq_string.isalpha() :
+            raise TypeError("Invalid character found in %s" % repr(seq_string))
+        return " " + seq_string
+
+def check_bases(seq_string):
+    """Check characters in a string (DEPRECATED)."""
+    import warnings
+    warnings.warn("The check_bases function has been deprecated, and will be"
+                  "removed in a future release of Biopython.", DeprecationWarning)
+    return _check_bases(seq_string)
 
 matching = {'A' : 'ARWMHVDN', 'C' : 'CYSMHBVN', 'G' : 'GRSKBVDN',
             'T' : 'TYWKHBDN', 'R' : 'ABDGHKMNSRWV', 'Y' : 'CBDHKMNSTWVY',
@@ -123,8 +153,9 @@ class FormattedSeq(object):
         shape of the sequence."""
         if isinstance(seq, Seq) or isinstance(seq, MutableSeq):
             stringy       = seq.tostring()
-            self.lower    = stringy.islower() 
-            self.data     = check_bases(stringy)
+            self.lower    = stringy.islower()
+            #Note this adds a leading space to the sequence (!)
+            self.data     = _check_bases(stringy)
             self.linear   = linear
             self.klass    = seq.__class__
             self.alphabet = seq.alphabet
