@@ -11,7 +11,6 @@
 import re
 import itertools
 from Bio.Restriction import RanaConfig as RanaConf
-from Bio.Restriction.DNAUtils import complement
 
 """
 Usage:
@@ -322,7 +321,7 @@ class PrintFormat(object):
             cutloc[x] = l
         cutloc[x] = mapping
         sequence = self.sequence.tostring()
-        revsequence = complement(sequence)
+        revsequence = self.sequence.complement().tostring()
         a = '|'
         base, counter = 0, 0
         emptyline = ' ' * 60
