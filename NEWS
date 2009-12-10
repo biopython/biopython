@@ -49,6 +49,9 @@ now an alias for Table 9 ("Echinoderm Mitochondrial").
 The restriction enzyme list in Bio.Restriction has been updated to the
 Nov 2009 release of REBASE.
 
+The Bio.PDB parser and output code has been updated to understand the
+element column in ATOM and HETATM lines.
+
 Support for running Biopython under Jython (using the Java Virtual Machine)
 has been much improved thanks to input from Kyle Ellrott. Note that Jython
 does not support C code - this means NumPy isn't available, and nor are a
