@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 27 November 2009 (Biopython 1.52+)}
+\date{Last Update -- 10 December 2009 (Biopython 1.52+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -4175,12 +4175,14 @@ that now \ldots.
 \subsection{Introduction}
 
 Running BLAST locally (as opposed to over the internet, see
-Section~\ref{sec:running-www-blast}) has two advantages:
+Section~\ref{sec:running-www-blast}) has at least major two advantages:
 \begin{itemize}
 \item Local BLAST may be faster than BLAST over the internet;
 \item Local BLAST allows you to make your own database to search for sequences against.
 \end{itemize}
-Dealing with proprietary or unpublished sequence data can be another reason to run BLAST locally.  You may not be allowed to redistribute the sequences, so submitting them to the NCBI as a BLAST query would not be an option.
+Dealing with proprietary or unpublished sequence data can be another reason to run BLAST
+locally.  You may not be allowed to redistribute the sequences, so submitting them to the
+NCBI as a BLAST query would not be an option.
 
 Unfortunately, there are some major drawbacks too -- installing all the bits and getting it setup right takes some effort:
 \begin{itemize}
@@ -4189,37 +4191,43 @@ Unfortunately, there are some major drawbacks too -- installing all the bits and
 \end{itemize}
 
 \noindent
-To further confuse matters there are at least four different standalone BLAST packages.
-\begin{itemize}
-\item \href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}{NCBI ``legacy'' BLAST}, including command line tools \verb|blastall|, \verb|blastpgp| and \verb|rpsblast|. This is probably the most widely used standalone BLAST tool at the moment. Still supported in Biopython, but now obsolete.
-\item \href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}{NCBI ``new'' BLAST+}, including separate command line tools \verb|blastn|, \verb|blastp|, \ldots instead of \verb|blastall|. Released in 2009, supported in Biopython 1.53 onwards.
-\item \href{http://blast.wustl.edu/}{Washington University BLAST} (WU-BLAST), including the command line tool \verb|wu-blastall| (since replaced by AB-BLAST).
-\item \href{http://blast.advbiocomp.com}{Advanced Biocomputing BLAST} (AB-BLAST), including the command line tool \verb|ab-blastall| (not free/open source). Released in 2009.
-\end{itemize}
-
-There are also other tools which can produce imitation BLAST output files, such as BLAT.
+To further confuse matters there are at least four different standalone BLAST packages,
+and there are also other tools which can produce imitation BLAST output files, such as BLAT.
 
 \subsection{Standalone NCBI ``legacy'' BLAST}
 
+\href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}
+{NCBI ``legacy'' BLAST} included command line tools \verb|blastall|, \verb|blastpgp| and
+\verb|rpsblast|. This is probably the most widely used standalone BLAST tool at the moment.
+
 The \verb|Bio.Blast.Applications| module has wrappers for the ``legacy'' NCBI BLAST tools
-like \verb|blastall|, \verb|blastpgp| and \verb|rpsblast|, and there are helper functions
-in \verb|Bio.Blast.NCBIStandalone|. These are now considered obsolete, and will be
-deprecated and eventually removed from Biopython as the NCBI move over to the replacement
+like \verb|blastall|, \verb|blastpgp| and \verb|rpsblast|, and there are also helper
+functions in \verb|Bio.Blast.NCBIStandalone|. These are now considered obsolete, and will
+be deprecated and eventually removed from Biopython as the NCBI move over to the replacement
 BLAST+ suite.
 
-To try and avoid confusion, we will not cover calling these old tools from Biopython.
-Have a look at the older edition of this tutorial included with Biopython 1.52 if you
-are curious.
+To try and avoid confusion, we will not cover calling these old tools from Biopython
+in this tutorial. Have a look at the older edition of this tutorial included with
+Biopython 1.52 if you are curious.
 
 \subsection{Standalone NCBI BLAST+}
 
-The \verb|Bio.Blast.Applications| module has wrappers for the ``new'' NCBI BLAST+ tools
+\href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}
+{NCBI ``new'' BLAST+} was released in 2009. This replaces the old NCBI ``legacy'' BLAST
+package. The \verb|Bio.Blast.Applications| module has wrappers for these ``new'' tools
 like \verb|blastn|, \verb|blastp|, \verb|blastx|, \verb|tblastn|, \verb|tblastx|
 (which all used to be handled by \verb|blastall|), \verb|psiblast|
 (replacing \verb|blastpgp|) and \verb|rpsblast| and \verb|rpstblastn|
-(which replace the old \verb|rpsblast|). This section will show how to use them \ldots
+(which replace the old \verb|rpsblast|).
+
+This section will show how to use them \ldots \textit{(TODO!)}
 
 \subsection{WU-BLAST and AB-BLAST}
+
+You may also come across \href{http://blast.wustl.edu/}{Washington University BLAST}
+(WU-BLAST), and its successor, \href{http://blast.advbiocomp.com}{Advanced Biocomputing
+BLAST} (AB-BLAST, released in 2009, not free/open source). These packages include
+the command line tools \verb|wu-blastall| and \verb|ab-blastall|.
 
 Biopython does not currently provide wrappers for calling these tools, but should be able
 to parse any NCBI compatible output from them.
@@ -4246,10 +4254,10 @@ automatically, making Biopython a whole lot more stable.
 You can get BLAST output in XML format in various ways. For the parser, it
 doesn't matter how the output was generated, as long as it is in the XML format.
 \begin{itemize}
-\item You can use Biopython to run BLAST locally, as described in
-section~\ref{sec:running-local-blast}.
 \item You can use Biopython to run BLAST over the internet, as described in
 section~\ref{sec:running-www-blast}.
+\item You can use Biopython to run BLAST locally, as described in
+section~\ref{sec:running-local-blast}.
 \item You can do the BLAST search yourself on the NCBI site through your
 web browser, and then save the results. You need to choose XML as the format
 in which to receive the results, and save the final BLAST page you get
@@ -4260,12 +4268,11 @@ to receive the results.
 \end{itemize}
 The important point is that you do not have to use Biopython
 scripts to fetch the data in order to be able to parse it.
-
 Doing things in one of these ways, you then need to get a handle
 to the results. In Python, a handle is just a nice general way of
 describing input to any info source so that the info can be retrieved
-using \verb|read()| and \verb|readline()| functions. This is the type
-of input the BLAST parser (and most other Biopython parsers) take.
+using \verb|read()| and \verb|readline()| functions
+(see Section~{sec:appendix-handles}).
 
 If you followed the code above for interacting with BLAST through a
 script, then you already have \verb|result_handle|, the handle to the
