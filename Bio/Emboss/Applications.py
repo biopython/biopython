@@ -947,3 +947,35 @@ class SeqretCommandline(_EmbossMinimalCommandLine):
             raise ValueError("You must either set sequence (input filename), "
                              "or enable filter or stdin (input from stdin).")
         return _EmbossMinimalCommandLine._validate(self)
+
+class SeqmatchallCommandline(_EmbossCommandLine):
+    """ Commandline object for the seqmatchall program from EMBOSS
+
+    e.g.
+    >>> cline = SeqmatchallCommandline(sequence="opuntia.fasta", outfile="opuntia.txt")
+    >>> cline.auto = True
+    >>> cline.wordsize = 18
+    >>> cline.aformat = "pair"
+    >>> print cline
+    seqmatchall -auto -outfile=opuntia.txt -sequence=opuntia.fasta -wordsize=18 -aformat=pair
+
+    """
+    def __init__(self, cmd="seqmatchall", **kwargs):
+        self.parameters = [
+          _Option(["-sequence", "sequence"], ["input", "file"],
+                  None, 1, "Readable set of sequences"),
+          _Option(["-wordsize", "wordsize"], ["input"],
+                  None, 0, "Word size (Integer 2 or more, default 4)"),
+          _Option(["-aformat","aformat"], ["input"], None, 0,
+                  "Display output in a different specified output format"),
+        ]
+        _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
+def _test():
+    """Run the Bio.Emboss.Applications module doctests."""
+    import doctest
+    doctest.testmod(verbose=1)
+
+if __name__ == "__main__":
+    #Run the doctests
+    _test()
