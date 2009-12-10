@@ -71,7 +71,7 @@ class FeatureSet(object):
         o get_ids(self)     Returns a list of unique ids for features in the set
 
         o range(self)       Returns the range of bases covered by features in 
-	                    the set
+                            the set
 
         o to_string(self, verbose=0)    Returns a string describing the set
 
@@ -94,7 +94,7 @@ class FeatureSet(object):
 
             o name      String identifying the feature set
         """
-	self.parent = parent
+        self.parent = parent
         self.id = id            # Unique id for the set
         self.next_id = 0       # counter for unique feature ids
         self.features = {}     # Holds features, keyed by ID
@@ -148,18 +148,18 @@ class FeatureSet(object):
             Set the passed attribute of all features in the set to the
             passed value
         """
-	changed = 0
+        changed = 0
         for feature in self.features.values():
-	    # If the feature has the attribute, and the value should change
+            # If the feature has the attribute, and the value should change
             if hasattr(feature, attr):    
-	        if getattr(feature, attr) != value:
-		    setattr(feature, attr, value) # set it to the passed value
+                if getattr(feature, attr) != value:
+                    setattr(feature, attr, value) # set it to the passed value
 
         #For backwards compatibility, we support both colour and color.
-	#As a quick hack, make "colour" set both "colour" and "color".
-	#if attr=="colour":
+        #As a quick hack, make "colour" set both "colour" and "color".
+        #if attr=="colour":
         #    self.set_all_feature("color",value)
-	
+
 
     def get_features(self, attribute=None, value=None, comparator=None):
         """ get_features(self, attribute=None, value=None, comparator=None) ->
@@ -236,7 +236,7 @@ class FeatureSet(object):
         """ to_string(self, verbose=0) -> ""
 
             o verbose       Boolean indicating whether a short or complete 
-	                    account of the set is required
+                            account of the set is required
 
             Returns a formatted string with information about the set
         """
@@ -271,7 +271,7 @@ class FeatureSet(object):
             Returns a formatted string with information about the feature set
         """
         outstr = ["\n<%s: %s %d features>" % (self.__class__, self.name, 
-					      len(self.features))]
+                                              len(self.features))]
         return "\n".join(outstr)
 
 ################################################################################
