@@ -174,7 +174,7 @@ class DataHandler:
             object = DictionaryElement()
         elif name in self.structures:
             object = StructureElement(self.structures[name])
-        elif name in self.items:	# Only appears in ESummary
+        elif name in self.items: # Only appears in ESummary
             name = str(attrs["Name"]) # convert from Unicode
             del attrs["Name"]
             itemtype = str(attrs["Type"]) # convert from Unicode
