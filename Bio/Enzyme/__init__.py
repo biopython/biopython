@@ -173,41 +173,41 @@ class EnzymeRecord:
         return output
         
 class RecordParser(AbstractParser):
-	def __init__(self):
-		self._scanner = _Scanner()
-		self._consumer = _RecordConsumer()
+    def __init__(self):
+        self._scanner = _Scanner()
+        self._consumer = _RecordConsumer()
 
-	def parse(self, handle):
-		if isinstance(handle, File.UndoHandle):
-			uhandle = handle
-		else:
-			uhandle = File.UndoHandle(handle)
-			self._scanner.feed(uhandle, self._consumer)
-		return self._consumer.enzyme_record
+    def parse(self, handle):
+        if isinstance(handle, File.UndoHandle):
+            uhandle = handle
+        else:
+            uhandle = File.UndoHandle(handle)
+            self._scanner.feed(uhandle, self._consumer)
+        return self._consumer.enzyme_record
 
 class Iterator:
-	def __init__(self, handle, parser=None):
-		self._uhandle = File.UndoHandle(handle)
+    def __init__(self, handle, parser=None):
+        self._uhandle = File.UndoHandle(handle)
 
-	def next(self):
-		self._parser = RecordParser()
-		lines = []
-		while 1:
-			line = self._uhandle.readline()
-			if not line: break
-			if line[:2] == '//':
-				break
-			lines.append(line)
-		if not lines:
-			return None
-		lines.append('//')
-		data = string.join(lines,'')
-		if self._parser is not None:
-			return self._parser.parse(File.StringHandle(data))
-		return data
+    def next(self):
+        self._parser = RecordParser()
+        lines = []
+        while True:
+            line = self._uhandle.readline()
+            if not line: break
+            if line[:2] == '//':
+                break
+            lines.append(line)
+        if not lines:
+            return None
+        lines.append('//')
+        data = string.join(lines,'')
+        if self._parser is not None:
+            return self._parser.parse(File.StringHandle(data))
+        return data
 
-        def __iter__(self):
-                return iter(self.next, None)
+    def __iter__(self):
+        return iter(self.next, None)
 
 class _RecordConsumer(AbstractConsumer):
     def __init__(self):
@@ -251,5 +251,5 @@ class _RecordConsumer(AbstractConsumer):
                 t1.strip(), t2.strip()
             self.enzyme_record.DR.append(data_record)
 
-	def terminator(self,schwarzenegger):
-		pass # Hasta la Vista, baby!
+    def terminator(self,schwarzenegger):
+        pass # Hasta la Vista, baby!

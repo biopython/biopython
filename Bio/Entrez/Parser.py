@@ -83,10 +83,10 @@ class DataHandler:
 
     def __init__(self, dtd_dir):
         self.stack = []
-	self.errors = []
-	self.integers = []
-	self.strings = []
-	self.lists = []
+        self.errors = []
+        self.integers = []
+        self.strings = []
+        self.lists = []
         self.dictionaries = []
         self.structures = {}
         self.items = []

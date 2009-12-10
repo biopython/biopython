@@ -15,15 +15,18 @@ Examples of reduced alphabets are available in:
 
 http://viscose.ifg.uni-muenster.de/html/alphabets.html
 
+The Murphy tables are from here:
+
+Murphy L.R., Wallqvist A, Levy RM. (2000) Simplified amino acid
+alphabets for protein fold recognition and implications for folding.
+Protein Eng. 13(3):149-152
+
 Bio.utils.reduce_sequence is used to take a Protein alphabet, and reduce it using one of
 the tables here, or a user-defined table.
 """
 
 from Bio import Alphabet
 
-# The Murphy tables are from here:
-#  	Murphy L.R., Wallqvist A, Levy RM. (2000) Simplified amino acid alphabets for protein
-#  	fold recognition and implications for folding. Protein Eng. 13(3):149-152
 
 murphy_15_tab = {"L": "L",
              "V": "L",
