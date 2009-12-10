@@ -5,12 +5,16 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-Bio.GFF.easy: some functions to ease the use of Biopython
-"""
+"""Bio.GFF.easy: some functions to ease the use of Biopython (DEPRECATED)
 
-__version__ = "$Revision: 1.12 $"
-# $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/easy.py,v $
+This is part of the "old" Bio.GFF module by Michael Hoffman, which offered
+access to a MySQL database holding GFF data loaded by BioPerl. This code has
+now been deprecated, and will probably be removed in order to free the Bio.GFF
+namespace for a new GFF parser in Biopython (including GFF3 support).
+
+Some of the more useful ideas of Bio.GFF.easy may be reworked for Bio.GenBank,
+using the standard SeqFeature objects used elsewhere in Biopython.
+"""
 
 import copy
 import re

@@ -301,11 +301,14 @@ in Release 1.31, and removed in Release 1.43.  Function 'translate' was
 deprecated in Release 1.49, and removed in Release 1.53. Use the functions
 and methods in Bio.Seq instead.
 
-Bio.GFF
+Bio.GFF (for accessing a MySQL database created with BioPerl, etc)
 =======
 The functions 'forward_complement' and 'antiparallel' in Bio.GFF.easy have
 been deprecated as of Release 1.31, and removed in Release 1.43.
 Use the functions 'complement' and 'reverse_complement' in Bio.Seq instead.
+
+The whole of the old Bio.GFF module was deprecated in Release 1.53
+(with the intention of reusing this name space for a GFF parser).
 
 Bio.sequtils
 ============

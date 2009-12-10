@@ -5,12 +5,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-A set of generic bits of code under Bio.GFF (possibly obsolete).
-"""
+"""A set of generic bits of code under Bio.GFF (DEPRECATED).
 
-__version__ = "$Revision: 1.6 $"
-# $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/GenericTools.py,v $
+This is part of the "old" Bio.GFF module by Michael Hoffman, which offered
+access to a MySQL database holding GFF data loaded by BioPerl. This code has
+now been deprecated, and will probably be removed in order to free the Bio.GFF
+namespace for a new GFF parser in Biopython (including GFF3 support).
+"""
 
 import exceptions
 import os
