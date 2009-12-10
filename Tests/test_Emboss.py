@@ -10,7 +10,7 @@ import unittest
 import subprocess
 
 from Bio.Emboss.Applications import WaterCommandline, NeedleCommandline
-from Bio.Emboss.Applications import SeqretCommandline
+from Bio.Emboss.Applications import SeqretCommandline, SeqmatchallCommandline
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio import MissingExternalDependencyError
@@ -21,7 +21,7 @@ from Bio.SeqRecord import SeqRecord
 
 #################################################################
 
-exes_wanted = ["water", "needle", "seqret", "transeq"]
+exes_wanted = ["water", "needle", "seqret", "transeq", "seqmatchall"]
 exes = dict() #Dictionary mapping from names to exe locations
 if sys.platform=="win32":
     #The default installation path is C:\mEMBOSS which contains the exes.
@@ -637,7 +637,32 @@ class PairwiseAlignmentTests(unittest.TestCase):
         self.assert_(not cline.filter)
         self.assertEqual(cline.outfile, None)
         self.assertRaises(ValueError, str, cline)
-
+   
+    def test_seqtmatchall_piped(self):
+        """seqmatchall with pair output piped to stdout."""
+        cline = SeqmatchallCommandline(cmd=exes["seqmatchall"],
+                                       sequence="Fasta/f002",
+                                       aformat="pair", wordsize=9,
+                                       auto=True, stdout=True)
+        self.assertEqual(str(cline),
+                         exes["seqmatchall"] + " -auto -stdout" \
+                         + " -sequence=Fasta/f002"
+                         + " -wordsize=9 -aformat=pair")
+        #Run the tool,
+        child = subprocess.Popen(str(cline),
+                                 stdin=subprocess.PIPE,
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 shell=(sys.platform!="win32"))
+        child.stdin.close()
+        #Check we could read it's output
+        for align in AlignIO.parse(child.stdout, "emboss") :
+            self.assertEqual(len(align), 2)
+            self.assertEqual(align.get_alignment_length(), 9)
+        #Check no error output:
+        assert child.stderr.read() == ""
+        assert 0 == child.wait()
+        
 #Top level function as this makes it easier to use for debugging:
 def emboss_translate(sequence, table=None, frame=None):
     """Call transeq, returns protein sequence as string."""
