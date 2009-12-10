@@ -278,17 +278,6 @@ if os.name == 'java' :
     EXTENSIONS = []
 else :
     EXTENSIONS = [
-    Extension('Bio.clistfns',
-              ['Bio/clistfnsmodule.c']
-              ),
-    Extension('Bio.cmathfns',
-              ['Bio/cmathfnsmodule.c',
-               'Bio/csupport.c'],
-              include_dirs=["Bio"]
-              ),
-    Extension('Bio.cstringfns',
-              ['Bio/cstringfnsmodule.c']
-              ),
     Extension('Bio.cpairwise2',
               ['Bio/cpairwise2module.c',
                'Bio/csupport.c'],

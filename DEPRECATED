@@ -108,9 +108,9 @@ Please use the methods or functions in Bio.Seq instead.
 
 Bio.mathfns, Bio.stringfns and Bio.listfns (and their C code variants)
 ==========================================
-Declared obsolete in Release 1.49.
-Bio.mathfns and Bio.stringfns were deprecated in Release 1.50
-Bio.listfns was deprecated in Release 1.53
+Declared obsolete in Release 1.49. Bio.mathfns and Bio.stringfns were
+deprecated in Release 1.50, Bio.listfns was deprecated in Release 1.53.
+The three C implementations were all removed in Release 1.53.
 
 Bio.distance (and Bio.cdistance)
 ================================
