@@ -29,10 +29,10 @@ TESTDB = 'biosql_test'
 #DBDRIVER = 'psycopg'
 #DBTYPE = 'pg'
 # -- SQLite
-#DBDRIVER = 'sqlite3'
-#DBTYPE = 'sqlite'
-#TESTDB = os.path.join(os.getcwd(), "BioSQL", "sqlite_test.db")
-##TESTDB = ':memory:'
+DBDRIVER = 'sqlite3'
+DBTYPE = 'sqlite'
+TESTDB = os.path.join(os.getcwd(), "BioSQL", "sqlite_test.db")
+#TESTDB = ':memory:'
 
 ################################
 # End of user-editable section #
