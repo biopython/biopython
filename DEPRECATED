@@ -354,4 +354,6 @@ and 'back_transcribe' were deprecated in Release 1.49, and removed in Release
 Bio.Motif
 =========
 CompareAceParser and CompareAceConsumer from Bio.Motif.Parsers.AlignAce were
-deprecated in Release 1.53. 
+deprecated in Release 1.53. AlignAceConsumer, AlignAceParser, and
+AlignAceScanner were declared obsolete in Release 1.53; their functionality is
+now available through a read() function in Bio.Motif.Parsers.AlignAce.
