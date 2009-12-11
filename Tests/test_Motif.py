@@ -33,9 +33,9 @@ class MotifTestsBasic(unittest.TestCase):
         """Test if Motif can parse AlignAce output files.
         """
         from Bio.Alphabet import IUPAC
-        parser = Motif.AlignAceParser()
+        from Bio.Motif.Parsers import AlignAce
         handle = open("Motif/alignace.out")
-        record = parser.parse(handle)
+        record = AlignAce.read(handle)
         handle.close()
         self.assertEqual(record.ver, "AlignACE 4.0 05/13/04\n")
         self.assertEqual(record.cmd_line, "./AlignACE -i test.fa \n")
