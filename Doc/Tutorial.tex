@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 10 December 2009 (Biopython 1.52+)}
+\date{Last Update -- 11 December 2009 (Biopython 1.52+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -5526,10 +5526,9 @@ Keep in mind that \verb+records+ is an iterator, so you can iterate through the 
 Let's now iterate over the records to print out some information about each record:
 \begin{verbatim}
 >>> for record in records:
-...     print "title:", record["TI"]
-...     if "AU" in records:
-...         print "authors:", record["AU"]
-...     print "source:", record["CO"]
+...     print "title:", record.get("TI", "?")
+...     print "authors:", record.get("AU", "?")
+...     print "source:", record.get("CO", "?")
 ...     print
 \end{verbatim}
 
