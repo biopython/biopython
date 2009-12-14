@@ -1357,9 +1357,9 @@ class TestMAST(unittest.TestCase):
         """Test if Motif can parse MAST output files (first test)
         """
         from Bio.Alphabet import IUPAC
+        from Bio.Motif.Parsers import MAST
         handle = open("Motif/mast.dna.oops.txt")
-        parser = Motif.MASTParser()
-        record = parser.parse(handle)
+        record = MAST.read(handle)
         self.assertEqual(record.version, "3.0")
         self.assertEqual(record.database, "INO_up800.s")
         self.assertEqual(record.alphabet, IUPAC.unambiguous_dna)
@@ -1391,9 +1391,9 @@ class TestMAST(unittest.TestCase):
         """Test if Motif can parse MAST output files (second test)
         """
         from Bio.Alphabet import IUPAC
+        from Bio.Motif.Parsers import MAST
         handle = open("Motif/mast.protein.oops.txt")
-        parser = Motif.MASTParser()
-        record = parser.parse(handle)
+        record = MAST.read(handle)
         self.assertEqual(record.version, "3.0")
         self.assertEqual(record.database, "adh.s")
         self.assertEqual(record.alphabet, IUPAC.protein)
@@ -1477,9 +1477,9 @@ class TestMAST(unittest.TestCase):
         """Test if Motif can parse MAST output files (third test)
         """
         from Bio.Alphabet import IUPAC
+        from Bio.Motif.Parsers import MAST
         handle = open("Motif/mast.protein.tcm.txt")
-        parser = Motif.MASTParser()
-        record = parser.parse(handle)
+        record = MAST.read(handle)
         self.assertEqual(record.version, "3.0")
         self.assertEqual(record.database, "farntrans5.s")
         self.assertEqual(record.alphabet, IUPAC.protein)
