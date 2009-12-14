@@ -31,7 +31,7 @@ TESTDB = 'biosql_test'
 # -- SQLite
 DBDRIVER = 'sqlite3'
 DBTYPE = 'sqlite'
-TESTDB = os.path.join(os.getcwd(), "BioSQL", "sqlite_test.db")
+TESTDB = os.path.join(os.getcwd(), "BioSQL", "temp_sqlite.db")
 # In memory SQLite does not work with current test structure since the tests
 # expect databases to be retained between individual tests. 
 #TESTDB = ':memory:'
