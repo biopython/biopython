@@ -299,6 +299,8 @@ class _MEMEConsumer:
         pass
     
 
+# The MAST parser has moved to Bio.Motif.Parsers.MAST.
+# Everything below is obsolete.
 
 class _MASTConsumer:
     """
