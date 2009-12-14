@@ -9,6 +9,10 @@ The latest news is at the top.
 
 ===================================================================
 
+SQLite support was added for BioSQL databases, allowing access to BioSQL 
+through a lightweight embedded SQL engine. The schema will be merged with
+the main BioSQL release for use in other projects.
+
 Biopython is now using git for source code control, currently on github. Our
 old CVS repository will remain on the OBF servers in the short/medium term
 as a backup, but will not be updated in future.
