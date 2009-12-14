@@ -26,7 +26,7 @@ if sys.platform=="win32":
     #
     #On Windows the environment variable name isn't case senstive,
     #but must split on ";" not ":"
-    likely_dirs += os.environ.get("PATH", "").split(";")
+    likely_dirs = os.environ.get("PATH", "").split(";")
 else :
     likely_dirs = os.environ.get("PATH", "").split(":")
 
