@@ -433,9 +433,9 @@ class TestMEME(unittest.TestCase):
         """Test if Motif can parse MEME output files (first test)
         """
         from Bio.Alphabet import IUPAC
+        from Bio.Motif.Parsers import MEME
         handle = open("Motif/meme.out")
-        parser = Motif.MEMEParser()
-        record = parser.parse(handle)
+        record = MEME.read(handle)
         self.assertEqual(record.version, '3.5.7')
         self.assertEqual(record.datafile, 'test.fa')
         self.assertEqual(record.alphabet, IUPAC.unambiguous_dna)
@@ -544,9 +544,9 @@ class TestMEME(unittest.TestCase):
         """Test if Motif can parse MEME output files (second test)
         """
         from Bio.Alphabet import IUPAC
+        from Bio.Motif.Parsers import MEME
         handle = open("Motif/meme.dna.oops.txt")
-        parser = Motif.MEMEParser()
-        record = parser.parse(handle)
+        record = MEME.read(handle)
         self.assertEqual(record.version, '3.0')
         self.assertEqual(record.datafile, 'INO_up800.s')
         self.assertEqual(record.alphabet, IUPAC.unambiguous_dna)
@@ -662,9 +662,9 @@ class TestMEME(unittest.TestCase):
         """Test if Motif can parse MEME output files (third test)
         """
         from Bio.Alphabet import IUPAC
+        from Bio.Motif.Parsers import MEME
         handle = open("Motif/meme.protein.oops.txt")
-        parser = Motif.MEMEParser()
-        record = parser.parse(handle)
+        record = MEME.read(handle)
         self.assertEqual(record.version, '3.0')
         self.assertEqual(record.datafile, 'adh.s')
         self.assertEqual(record.alphabet, IUPAC.protein)
@@ -1052,9 +1052,9 @@ class TestMEME(unittest.TestCase):
         """Test if Motif can parse MEME output files (fourth test)
         """
         from Bio.Alphabet import IUPAC
+        from Bio.Motif.Parsers import MEME
         handle = open("Motif/meme.protein.tcm.txt")
-        parser = Motif.MEMEParser()
-        record = parser.parse(handle)
+        record = MEME.read(handle)
         self.assertEqual(record.version, '3.0')
         self.assertEqual(record.datafile, 'farntrans5.s')
         self.assertEqual(record.alphabet, IUPAC.protein)
