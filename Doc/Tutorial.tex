@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 11 December 2009 (Biopython 1.52+)}
+\date{Last Update -- 15 December 2009 (Biopython 1.53)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -220,7 +220,7 @@ and HTML formats
   \end{itemize}
   
   \item \emph{Which ``Numerical Python'' do I need?} \\
-  For Biopython 1.48 or earlier, you need the old Numeric module.
+  For Biopython 1.48 or earlier, you needed the old Numeric module.
   For Biopython 1.49 onwards, you need the newer NumPy instead.
   Both Numeric and NumPy can be installed on the same machine fine.
   See also: \url{http://numpy.scipy.org/}
@@ -2881,13 +2881,10 @@ For an example of how you might use this, let's load in a bunch of \verb|SeqReco
 \begin{verbatim}
 from Bio import SeqIO
 from StringIO import StringIO
-
 records = SeqIO.parse(open("ls_orchid.gbk"), "genbank")
-
 out_handle = StringIO()
 SeqIO.write(records, out_handle, "fasta")
 fasta_data = out_handle.getvalue()
-
 print fasta_data
 \end{verbatim}
 
@@ -2910,6 +2907,7 @@ out_handle = open("ls_orchid.tab", "w")
 SeqIO.write(record_iterator, out_handle, "tab")
 out_handle.close()
 \end{verbatim}
+\noindent Making a single call to \verb|SeqIO.write(...)| is also much quicker than multiple calls to the \verb|SeqRecord.format(...)| method.
 
 \chapter{Sequence Alignment Input/Output, and Alignment Tools}
 \label{chapter:Bio.AlignIO}
