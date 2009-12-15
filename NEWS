@@ -52,7 +52,8 @@ The restriction enzyme list in Bio.Restriction has been updated to the
 Nov 2009 release of REBASE.
 
 The Bio.PDB parser and output code has been updated to understand the
-element column in ATOM and HETATM lines.
+element column in ATOM and HETATM lines. Bio.PDB.PDBList has also been
+updated for recent changes to the PDB FTP site.
 
 SQLite support was added for BioSQL databases, allowing access to BioSQL 
 through a lightweight embedded SQL engine. Python 2.5+ includes support for
