@@ -4218,7 +4218,62 @@ like \verb|blastn|, \verb|blastp|, \verb|blastx|, \verb|tblastn|, \verb|tblastx|
 (replacing \verb|blastpgp|) and \verb|rpsblast| and \verb|rpstblastn|
 (which replace the old \verb|rpsblast|).
 
-This section will show how to use them \ldots \textit{(TODO!)}
+This section will show briefly how to use these tools from within Python. If you have
+already read or tried the alignment tool examples in Section~\ref{sec:alignment-tools}
+this should all seem quite straightforward. First, we construct a command line string
+(as you would type in at the command line prompt if running standalone BLAST by hand).
+Then we can execute this command from within Python, typically using the
+\verb|subprocess| module.
+
+For example, taking a FASTA file of gene nucleotide sequences, you might want to
+run a BLASTX (translation) search against the non-redundant (NR) protein database.
+Assuming you (or your systems administrator) has downloaded and installed the NR
+database, you might run:
+
+\begin{verbatim}
+blastx -query opuntia.fasta -db nr -out opuntia.xml -evalue 0.001 -outfmt 5
+\end{verbatim}
+
+This should run BLASTX against the NR database, using an expectation cut-off value
+of $0.001$ and produce XML output to the specified file (which we can then parse).
+On my computer this takes about six minutes - a good reason to save the output
+to a file so you and repeat any analysis as needed.
+
+From within Biopython we can use the NCBI BLASTX wrapper from the
+\verb|Bio.Blast.Applications| module to build the command line string:
+
+\begin{verbatim}
+>>> from Bio.Blast.Applications import NcbiblastxCommandline
+>>> help(NcbiblastxCommandline)
+...
+>>> cline = NcbiblastxCommandline(query="opuntia.fasta", db="nr", evalue=0.001, outfmt=5,
+... out="opuntia.xml")
+>>> cline
+NcbiblastxCommandline(cmd='blastx', query='opuntia.fasta', db='nr', out='opuntia.xml',
+evalue=0.001, outfmt=5)
+>>> print cline
+blastx -query opuntia.fasta -db nr -out opuntia.xml -evalue 0.001 -outfmt 5
+\end{verbatim}
+
+In this example there shouldn't be any output from BLASTX to the terminal
+(stdout or stderr), so we can call the tool like this:
+
+\begin{verbatim}
+>>> import sys
+>>> import subprocess
+>>> return_code = subprocess.call(str(cline), shell=(sys.platform!="win32"))
+...
+>>> print return_code
+0
+\end{verbatim}
+\noindent Here the \ldots means wait for the command to finish. We then check
+the return code, remember that zero usually means no errors. You could also
+check the output file \verb|opuntia.xml| has been created.
+
+As you may recall from earlier examples in the tutorial, the \verb|opuntia.fasta|
+contains seven sequences, so the BLAST XML output should contain multiple results.
+Therefore use \verb|Bio.Blast.NCBIXML.parse()| to parse it as described below in
+Section~\ref{sec:parsing-blast}.
 
 \subsection{WU-BLAST and AB-BLAST}
 
