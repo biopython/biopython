@@ -31,7 +31,7 @@ if sys.platform=="win32":
     except KeyError:
         #print >> sys.stderr, "Missing EMBOSS_ROOT environment variable!"
         raise MissingExternalDependencyError(\
-            "Install EMBOSS if you want to use Bio.EMBOSS.")
+            "Install EMBOSS if you want to use Bio.Emboss.")
     if os.path.isdir(path):
         for name in exes_wanted:
             if os.path.isfile(os.path.join(path, name+".exe")):
@@ -47,7 +47,7 @@ else:
 
 if len(exes) < len(exes_wanted):
     raise MissingExternalDependencyError(\
-        "Install EMBOSS if you want to use Bio.EMBOSS.")
+        "Install EMBOSS if you want to use Bio.Emboss.")
 
 #################################################################
 
