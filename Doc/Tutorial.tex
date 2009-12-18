@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 15 December 2009 (Biopython 1.53)}
+\date{Last Update -- 18 December 2009 (Biopython 1.53)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -9020,10 +9020,12 @@ quality scores), but that will be much slower.
 Back in Section~\ref{sec:SeqIO-conversion} we showed how to use
 \verb|Bio.SeqIO| to convert between two file formats. Here we'll go into a
 little more detail regarding FASTQ files which are used in second generation
-DNA sequencing. FASTQ files store both the DNA sequence (as a string) and
-the associated read qualities.
+DNA sequencing. Please refer to Cock \textit{et al.} (2009)
+\href{http://dx.doi.org/10.1093/nar/gkp1137}{doi:10.1093/nar/gkp1137} for
+a longer description. FASTQ files store both the DNA sequence (as a string)
+and the associated read qualities. 
 
-PHRED scores (used in some FASTQ files, and also in QUAL files and ACE
+PHRED scores (used in most FASTQ files, and also in QUAL files and ACE
 files) have become a \textit{de facto} standard for representing the
 probability of a sequencing error (here denoted by $P_e$) at a given
 base using a simple base ten log transformation:
@@ -9096,8 +9098,8 @@ formats use an ASCII offset of 64 the files are almost the same. This was a
 deliberate design choice by Illumina, meaning applications expecting the old
 \texttt{fasta-solexa} style files will probably be OK using the newer
 \texttt{fastq-illumina} files (on good data). Of course, both variants are
-very different from the original \texttt{fasta} standard as used by Sanger,
-the NCBI, and elsewhere.
+very different from the original FASTQ standard as used by Sanger,
+the NCBI, and elsewhere (format name \texttt{fastq} or \texttt{fastq-sanger}).
 
 For more details, see the built in help (also \href{http://www.biopython.org/DIST/docs/api/Bio.SeqIO.QualityIO-module.html}{online}):
 
