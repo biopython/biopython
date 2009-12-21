@@ -10,6 +10,9 @@ __docformat__ = "epytext en"
 from itertools import chain
 
 from Bio.Nexus import Nexus
+from Bio.Tree import Newick
+
+import NewickIO
 
 # Structure of a Nexus tree-only file
 NEX_TEMPLATE = """\
@@ -27,23 +30,50 @@ End;
 TREE_TEMPLATE = "Tree tree%(index)d=[&U]%(tree)s;"
 
 
-def parse(file):
-    nex = Nexus.Nexus(file)
-    return iter(nex.trees)
+def parse(handle):
+    """Parse the trees in a Nexus file.
 
+    Uses the old Nexus.Trees parser to extract the trees, converts them back to
+    plain Newick trees, and feeds those strings through the new Newick parser.
+    This way we don't have to modify the Nexus module yet. When we're satisfied
+    with TreeIO, we can change Nexus to use the new NewickIO parser directly.
+    """
+    nex = Nexus.Nexus(handle)
+    # NB: Once Nexus.Trees is modified to use Tree.Newick objects, do this:
+    # return iter(nex.trees)
+    # Until then, convert the Nexus.Trees.Tree object hierarchy:
+    def node2clade(nxtree, node):
+        subclades = [node2clade(nxtree, nxtree.node(n)) for n in node.succ]
+        return Newick.Clade(
+                branch_length=node.data.branchlength,
+                name=node.data.taxon,
+                clades=subclades,
+                support=node.data.support,
+                comment=node.data.comment)
 
-# XXX Nexus/Newick-specific tree attributes: to_string, get_taxa
-def write(obj, file, **kwargs):
+    for nxtree in nex.trees:
+        newroot = node2clade(nxtree, nxtree.node(nxtree.root))
+        yield Newick.Tree(root=newroot, rooted=nxtree.rooted, name=nxtree.name,
+                          weight=nxtree.weight)
+
+def write(obj, handle, **kwargs):
+    """Write a new Nexus file containing the given trees.
+
+    Uses a simple Nexus template and the NewickIO writer to serialize just the
+    trees and minimal supporting info needed for a valid Nexus file.
+    """
     trees = list(obj)
-    nexus_trees = [TREE_TEMPLATE % {
-            'index': idx+1,
-            'tree': tree.to_string(plain_newick=True, plain=False, **kwargs)
-            } for idx, tree in enumerate(trees)]
+    writer = NewickIO.Writer(trees)
+    nexus_trees = [TREE_TEMPLATE % {'index': idx+1, 'tree': nwk}
+                   for idx, nwk in enumerate(
+                        writer.to_strings(plain=False, plain_newick=True,
+                                          **kwargs))]
+    # XXX get_taxa is deprecated -- replace it
     tax_labels = list(chain(*(t.get_taxa() for t in trees)))
     text = NEX_TEMPLATE % {
             'count':    len(tax_labels),
             'labels':   ' '.join(tax_labels),
             'trees':    '\n'.join(nexus_trees),
             }
-    file.write(text)
+    handle.write(text)
     return len(nexus_trees)

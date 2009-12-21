@@ -23,8 +23,6 @@ NODECOMMENT_END = ']'
 class NewickError(Exception):
     """Exception raised when Newick object construction cannot continue."""
     pass
-# TODO - Nexus compatibility shim -- move to Bio.Nexus.Trees
-TreeError = NewickError
 
 
 # ---------------------------------------------------------
@@ -174,8 +172,8 @@ class Writer(object):
         return count
 
     def to_strings(self, support_as_branchlengths=False,
-            branchlengths_only=False, plain=True,
-            plain_newick=False, ladderize=None,
+            branchlengths_only=False, plain=False,
+            plain_newick=True, ladderize=None,
             max_support=1.0):
         """Return an iterable of PAUP-compatible tree lines."""
         # If there's a conflict in the arguments, we override plain=True
@@ -190,7 +188,7 @@ class Writer(object):
             else:
                 subtrees = (newickize(sub) for sub in clade)
                 return '(%s)%s' % (','.join(subtrees),
-                                   make_info_string(clade.data))
+                                   make_info_string(clade))
 
         # Convert each tree to a string
         for tree in self.trees:
