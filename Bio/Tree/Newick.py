@@ -265,6 +265,7 @@ class NHClade(BaseTree.Subtree, NHShim):
                         support=self.support,
                         comment=self.comment)
 
+
 class _NodeData:
     """Stores tree-relevant data associated with nodes (e.g. branches or OTUs).
 

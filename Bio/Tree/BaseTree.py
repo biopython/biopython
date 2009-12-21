@@ -127,8 +127,9 @@ class TreeElement(object):
         return s.encode('utf-8')
 
     def __str__(self):
-        return self.name or self.__class__.__name__
-
+        if hasattr(self, 'name') and self.name:
+            return self.name
+        return self.__class__.__name__
 
 
 class TreeMixin(object):
@@ -139,7 +140,31 @@ class TreeMixin(object):
     required to have all of Tree's attributes -- just 'root', a Subtree
     instance.
     """
-    # Plumbing
+    # Traversal methods
+
+    def common_ancestor(self, target1, target2):
+        mrca = self
+        for clade1, clade2 in izip(
+                self.get_path(target1), 
+                self.get_path(target2)): 
+            if clade1 is clade2:
+                mrca = clade1
+            else:
+                break
+        return mrca
+        # ENH: take arbitrary number of *targets
+        # paths = [self.get_path(t) for t in targets]
+        # mrca = self
+        # for level in izip(paths):
+        #     ref = level[0]
+        #     for other in level[1:]:
+        #         if ref is not other:
+        #             break
+        #     else:
+        #         mrca = ref
+        #     if ref is not mrca:
+        #         break
+        # return mrca
 
     # TODO: split traversal into multiple methods:
     #   preorder (aka depth_first)
@@ -176,77 +201,6 @@ class TreeMixin(object):
             if filterfunc(v):
                 yield v
             extend(Q, get_children(v))
-
-    # TODO: write a unit test
-    def get_path(self, target):
-        """Find the direct path from the root to the given target.
-
-        Returns an iterable of all clade origins along this path, ending with
-        the given target.
-        """
-        # Only one path will work -- ignore weights and visits
-        path = deque()
-        match = _object_matcher(target)
-
-        def check_in_path(v):
-            if match(v):
-                path.append(v)
-                return True
-            elif v.is_terminal():
-                return False
-            for child in v:
-                if check_in_path(child):
-                    path.append(v)
-                    return True
-                return False
-
-        if not check_in_path(self):
-            return None
-        return reversed(path)
-
-    def collapse(self, target):
-        """Deletes target from chain and relinks successors to predecessor.
-
-        Returns the predecessor clade.
-        """
-        path = list(self.get_path(target))
-        if not path:
-            raise ValueError("couldn't collapse %s in this tree" % target)
-        if len(path) == 1:
-            parent = self
-        else:
-            parent = path[-2]
-        parent.clades.extend(
-                parent.clades.pop(
-                    parent.clades.index(target)
-                    ).clades)
-        return parent
-
-    def common_ancestor(self, target1, target2):
-        mrca = self
-        for clade1, clade2 in izip(
-                self.get_path(target1), 
-                self.get_path(target2)): 
-            if clade1 is clade2:
-                mrca = clade1
-            else:
-                break
-        return mrca
-        # ENH: take arbitrary number of *targets
-        # paths = [self.get_path(t) for t in targets]
-        # mrca = self
-        # for level in izip(paths):
-        #     ref = level[0]
-        #     for other in level[1:]:
-        #         if ref is not other:
-        #             break
-        #     else:
-        #         mrca = ref
-        #     if ref is not mrca:
-        #         break
-        # return mrca
-
-    # Porcelain
 
     def find(self, *args, **kwargs):
         """Return the first element found by find_all(), or None.
@@ -322,7 +276,7 @@ class TreeMixin(object):
                 terminal=terminal, breadth_first=breadth_first):
             # Check whether any non-clade attributes/sub-elements match
             orig_clades = clade.__dict__.pop('clades')
-            found = n.find(cls, **kwargs)
+            found = clade.find(cls, **kwargs)
             clade.clades = orig_clades
             if found is not None:
                 yield clade
@@ -330,6 +284,45 @@ class TreeMixin(object):
     def get_terminals(self, breadth_first=False):
         """Iterate through all of this tree's terminal (leaf) nodes."""
         return self.find_all(Subtree, terminal=True, breadth_first=breadth_first)
+
+    # TODO: write a unit test
+    def get_path(self, target):
+        """Find the direct path from the root to the given target.
+
+        Returns an iterable of all clade origins along this path, ending with
+        the given target.
+        """
+        # Only one path will work -- ignore weights and visits
+        path = deque()
+        match = _object_matcher(target)
+
+        def check_in_path(v):
+            if match(v):
+                path.append(v)
+                return True
+            elif v.is_terminal():
+                return False
+            for child in v:
+                if check_in_path(child):
+                    path.append(v)
+                    return True
+                return False
+
+        if not check_in_path(self):
+            return None
+        return reversed(path)
+
+    def trace(self, start, finish):
+        """Returns a list of all tree elements between two targets.
+
+        Excluding start, including end.
+        """
+        mrca = self.common_ancestor(start, finish)
+        fromstart = list(mrca.get_path(start))[-2::-1]
+        to = list(mrca.get_path(finish))
+        return fromstart + [mrca] + to
+
+    # Information methods
 
     def is_terminal(self):
         """Returns True if the root of this tree is terminal."""
@@ -351,6 +344,15 @@ class TreeMixin(object):
             counter = i
         return counter + 1
 
+    def depths(self):
+        """Create a mapping of tree clades to depths (by branch length).
+
+        @returns: dict of {clade: depth}
+        """
+        depths = {}
+        # TODO: copy BFS, track branch lengths
+        return depths
+
     def distance(self, target1, target2=None):
         """Calculate the sum of the branch lengths between two targets.
 
@@ -367,15 +369,33 @@ class TreeMixin(object):
         return sum(node.branch_length
                    for node in self.find_all(branch_length=True))
 
-    def trace(self, start, finish):
-        """Returns a list of all tree elements between two targets.
+    # Tree manipulation methods
 
-        Excluding start, including end.
+    def collapse(self, target):
+        """Deletes target from chain and relinks successors to predecessor.
+
+        Returns the predecessor clade.
         """
-        mrca = self.common_ancestor(start, finish)
-        fromstart = list(mrca.get_path(start))[-2::-1]
-        to = list(mrca.get_path(finish))
-        return fromstart + [mrca] + to
+        path = list(self.get_path(target))
+        if not path:
+            raise ValueError("couldn't collapse %s in this tree" % target)
+        if len(path) == 1:
+            parent = self
+        else:
+            parent = path[-2]
+        parent.clades.extend(
+                parent.clades.pop(
+                    parent.clades.index(target)
+                    ).clades)
+        return parent
+
+    def ladderize(self, reverse=False):
+        """Sorts node numbers according to the number of terminal nodes."""
+        self.clades.sort(key=lambda c: c.count_terminals(),
+                        reverse=reverse)
+        for subclade in self.clades:
+            subclade.ladderize(reverse=reverse)
+        return
 
 
 class Tree(TreeElement, TreeMixin):
