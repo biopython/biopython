@@ -33,7 +33,7 @@ TreeError = NewickError
 def parse(handle):
     """Iterate over the trees in a Newick file handle.
 
-    @return: a generator of Bio.Tree.Newick.NHTree objects.
+    @return: a generator of Bio.Tree.Newick.Tree objects.
     """
     return Parser(handle).parse()
 
@@ -78,9 +78,9 @@ class Parser(object):
             yield self._parse_tree(buf)
 
     def _parse_tree(self, text):
-        """Parses the text representation into an NHTree object."""
+        """Parses the text representation into an Tree object."""
         # XXX what global info do we have here? Any? Use **kwargs?
-        return Newick.NHTree(root=self._parse_subtree(text))
+        return Newick.Tree(root=self._parse_subtree(text))
 
     def _parse_subtree(self, text):
         """Parse (a,b,c...)[[[xx]:]yy] into subcomponents, recursively."""
@@ -115,7 +115,7 @@ class Parser(object):
     def _parse_tag(self, text):
         """Extract the data for a node from text.
 
-        @return: NHClade instance containing any available data
+        @return: Clade instance containing any available data
         """
         # Extract the comment
         comment_start = text.find(NODECOMMENT_START)
@@ -129,7 +129,7 @@ class Parser(object):
             text = text[:comment_start] + text[comment_end+len(NODECOMMENT_END):]
         else:
             comment = None
-        clade = Newick.NHClade(comment=comment)
+        clade = Newick.Clade(comment=comment)
         # Extract name (taxon), and optionally support, branch length
         # Float values are support and branch length, the string is name/taxon
         values = []

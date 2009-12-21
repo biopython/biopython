@@ -51,17 +51,9 @@ def consensus(trees, threshold=0.5,outgroup=None):
     frequency>=threshold from a list of trees.
     """
 
-
-class NHTree(BaseTree.Tree):
-    """Newick Tree object.
+class _Shim(object):
+    """Shim for compatibility with Bio.Nexus.Trees.
     """
-    def __init__(self, root=None, rooted=False, id=None, name='', weight=1.0):
-        BaseTree.Tree.__init__(self, root=root or NHClade(),
-                rooted=rooted, id=id, name=name)
-        self.weight = weight
-
-    # Ported from Bio.Nexus.Trees.Tree
-
     # Methods with deprecated arguments -- duplicated in Bio.Tree.BaseTree
 
     def is_terminal(self, node=None):
@@ -107,14 +99,14 @@ class NHTree(BaseTree.Tree):
     @deprecated("root.tree.distance(node)")
     def sum_branchlength(self, root, node):
         """Adds up the branchlengths from root (default self.root) to node."""
-        return root.tree.branch_length_to(node)
+        return root.branch_length_to(node)
 
-    @deprecated("node.tree.findall(Node)")
+    @deprecated("node.tree.find_clades()")
     def get_taxa(self, node_id=None):
         """Return a list of all OTUs downwards from a node (self, node_id)."""
         if node_id is None:
             node_id = self
-        return list(node_id.tree.findall(BaseTree.Node))
+        return list(node_id.find_clades())
 
     @deprecated("node.tree.find(name=taxon)")
     def search_taxon(self, taxon):
@@ -126,7 +118,19 @@ class NHTree(BaseTree.Tree):
         """
         return self.find(name=taxon)
 
-    # TODO - port the rest of these methods to NHTree or BaseTree
+
+
+class Tree(BaseTree.Tree, _Shim):
+    """Newick Tree object.
+    """
+    def __init__(self, root=None, rooted=False, id=None, name='', weight=1.0):
+        BaseTree.Tree.__init__(self, root=root or Clade(),
+                rooted=rooted, id=id, name=name)
+        self.weight = weight
+
+    # Ported from Bio.Nexus.Trees.Tree
+
+    # TODO - port the rest of these methods to Tree or BaseTree.Tree
     # See unit tests
 
     # XXX from Nexus.Nodes.Chain
@@ -230,7 +234,7 @@ class NHTree(BaseTree.Tree):
         """
 
 
-class NHClade(BaseTree.Subtree, NHShim):
+class Clade(BaseTree.Subtree, _Shim):
     """Newick Clade (subtree) object.
     """
     def __init__(self, branch_length=1.0, name=None, clades=None,
@@ -243,28 +247,27 @@ class NHClade(BaseTree.Subtree, NHShim):
     # Deprecated attributes from Bio.Nexus.Trees
 
     @property
-    @deprecated('NHClade.name')
+    @deprecated('Clade.name')
     def taxon(self):
         return self.name
 
     @property
-    @deprecated('NHClade.name')
+    @deprecated('Clade.name')
     def id(self):
         return self.name
 
     @property
-    @deprecated('NHClade.clades')
+    @deprecated('Clade.clades')
     def nodes(self):
         return self.clades
 
     @property
-    @deprecated("the NHClade object's attributes")
+    @deprecated("the Clade object's attributes")
     def data(self):
         return _NodeData(taxon=self.name,
                         branchlength=self.branch_length,
                         support=self.support,
                         comment=self.comment)
-
 
 class _NodeData:
     """Stores tree-relevant data associated with nodes (e.g. branches or OTUs).
