@@ -52,14 +52,16 @@ The restriction enzyme list in Bio.Restriction has been updated to the
 Nov 2009 release of REBASE.
 
 The Bio.PDB parser and output code has been updated to understand the
-element column in ATOM and HETATM lines. Bio.PDB.PDBList has also been
-updated for recent changes to the PDB FTP site.
+element column in ATOM and HETATM lines (based on patches contributed by
+Hongbo Zhu and Frederik Gwinner). Bio.PDB.PDBList has also been updated
+for recent changes to the PDB FTP site (Paul T. Bathen).
 
-SQLite support was added for BioSQL databases, allowing access to BioSQL 
-through a lightweight embedded SQL engine. Python 2.5+ includes support for
-SQLite built in, but on Python 2.4 the optional sqlite3 library must be
-installed to use this. We currently use a draft BioSQL on SQLite schema,
-which will be merged with the main BioSQL release for use in other projects.
+SQLite support was added for BioSQL databases (Brad Chapman), allowing access
+to BioSQL through a lightweight embedded SQL engine. Python 2.5+ includes
+support for SQLite built in, but on Python 2.4 the optional sqlite3 library
+must be installed to use this. We currently use a draft BioSQL on SQLite
+schema, which will be merged with the main BioSQL release for use in other
+projects.
 
 Support for running Biopython under Jython (using the Java Virtual Machine)
 has been much improved thanks to input from Kyle Ellrott. Note that Jython
@@ -68,6 +70,21 @@ selection of Biopython modules (including Bio.Cluster, Bio.PDB and BioSQL).
 Also, currently Jython does not parse DTD files, which means the XML parser
 in Bio.Entrez won't work. However, most of the Biopython modules seem fine
 from testing Jython 2.5.0 and 2.5.1.
+
+(At least) 12 people contributed to this release, including 3 first timers:
+
+Bartek Wilczyns
+Brad Chapman
+Chris Lasher
+Cymon Cox
+Frank Kauff
+Frederik Gwinner (first contribution)
+Hongbo Zhu (first contribution)
+Kyle Ellrott
+Leighton Pritchard
+Michiel de Hoon
+Paul Bathen (first contribution)
+Peter Cock
 
 ===================================================================
 
