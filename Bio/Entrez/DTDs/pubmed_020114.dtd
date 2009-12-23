@@ -1,0 +1,61 @@
+<!--    
+	   This is the Current DTD which NLM has written for 
+        External  Use.  If you are a NCBI User, use the information
+        from the PubMedArticle Set.
+
+        Comments and suggestions are welcome.
+        (May 9, 2000)
+
+        
+
+
+       -->
+<!-- ================================================================= -->
+<!-- ================================================================= -->
+<!-- Reference to Where the MEDLINECITATION DTD is located  -->
+<!ENTITY % Medline PUBLIC "-//NLM//DTD Medline, 01 Nov 2001//EN"
+      "nlmmedline_011101.dtd">
+%Medline;
+<!-- ================================================================= -->
+<!ENTITY % ArticleTitle.Ref "ArticleTitle">
+<!ENTITY % ISSN.Ref "ISSN?">
+<!ENTITY % Pub.Date.Ref "PubDate?">
+<!ENTITY % iso.language.codes "(AF|AR|AZ|BG|CS|DA|DE|EN|EL|ES|FA|FI|FR|HE|
+                                   HU|HY|IN|IS|IT|IW|JA|KA|KO|LT|MK|ML|NL|NO|
+                                   PL|PT|PS|RO|RU|SL|SK|SQ|SR|SV|SW|TH|TR|UK|
+                                   VI|ZH)">
+<!ENTITY % pub.status.int "pmc | pmcr | pubmed | pubmedr | 
+                             premedline | medline | medliner">
+<!ENTITY % pub.status "(received | accepted | epublish | 
+                              ppublish | revised | aheadofprint | 
+                              retracted | %pub.status.int;)">
+<!ENTITY % art.id.type.int "pubmed | medline | pmcid">
+<!ENTITY % art.id.type "(doi | pii | pmcpid | pmpid | 
+                              sici | %art.id.type.int;)">
+<!-- ================================================================= -->
+<!ELEMENT PubmedArticleSet (PubMedArticle|PubmedArticle)+>
+<!-- ================================================================= -->
+<!-- This is the top level element for PubMedArticle -->
+<!ELEMENT PubMedArticle ((NCBIArticle | MedlineCitation), PubmedData?)>
+<!ELEMENT PubmedArticle ((NCBIArticle | MedlineCitation), PubmedData?)>
+<!-- ================================================================= -->
+<!ELEMENT PubMedData (History*, PublicationStatus, ProviderId?, ArticleIdList, URL*)>
+<!ELEMENT PubmedData (History*, PublicationStatus, ProviderId?, ArticleIdList, URL*)>
+<!ELEMENT History (PubMedPubDate+)>
+<!ELEMENT PubMedPubDate (%normal.date;)>
+<!ATTLIST PubMedPubDate
+	PubStatus %pub.status; #REQUIRED
+>
+<!ELEMENT PublicationStatus (#PCDATA)>
+<!ELEMENT ProviderId (#PCDATA)>
+<!ELEMENT ArticleIdList (ArticleId+)>
+<!ELEMENT ArticleId (#PCDATA)>
+<!ATTLIST ArticleId
+	IdType %art.id.type; "pubmed"
+>
+<!ELEMENT URL (#PCDATA)>
+<!ATTLIST URL
+	lang %iso.language.codes; #IMPLIED
+	Type ( FullText | Summary | fulltext | summary) #IMPLIED
+>
+<!-- ================================================================= -->

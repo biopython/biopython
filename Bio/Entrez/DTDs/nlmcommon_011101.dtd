@@ -1,0 +1,175 @@
+<!-- NLMCommon DTD
+      
+     This is the DTD for data elements that are shared 
+     among various applications at the NLM. 
+     Comments and suggestions are welcome.
+
+     November 1, 2001
+
+   
+
+    
+-->
+<!--    NLMCommon.dtd
+
+        Document Type Definition for the PubMed Article DTD
+        $Id: nlmcommon_011101.dtd 33908 2004-02-05 16:23:37Z yasmax $
+
+       
+-->
+<!-- ====================================================================== -->
+<!--   Revision Notes Section
+
+ The following changes were made in the nlmcommon_011101.dtd:
+
+       a.  Added DescriptorName to MeshHeading field.
+
+       b.  Added QualifierName to SubHeading field.
+
+       c.  Added attribute for DescriptorName.
+
+       d.  Added attribute for QualifierName.
+
+       e.  Added ForeName to personal name field.  
+        
+ The following changes were made in the nlmcommon_010319.dtd:
+
+       a.  Added Entity % Abstract to dtd.
+
+       b.  Element Abstract now links to % Abstract.
+
+       c.  Moved element definition of AbstractText & Copyright 
+           Information to nlmcommon_0010319.dtd. They were previously 
+           defined in nlmmedlinecitation.dtd.
+
+       d.  Made Country and MedlineCode optional elements.
+
+       e.  Element Grant now links to %GrantID.Ref, %Agency.Ref &
+           %Acronym.Ref.
+
+ The following change was made in the nlmcommon_001211.dtd:
+
+       a. addition of NLMUniqueID to the DTD.
+
+-->
+<!-- Personal and Author names -->
+<!ENTITY % personal.name "(LastName,(ForeName|(FirstName,MiddleName?))?,Initials?,Suffix?)">  
+<!ENTITY % author.name "(%personal.name; | CollectiveName)">
+<!ELEMENT FirstName (#PCDATA)>
+<!ELEMENT ForeName (#PCDATA)>
+<!ELEMENT MiddleName (#PCDATA)>
+<!ELEMENT LastName (#PCDATA)>
+<!ELEMENT Initials (#PCDATA)>
+<!ELEMENT Suffix (#PCDATA)>
+<!ELEMENT CollectiveName (#PCDATA)>
+<!-- Dates -->
+<!ENTITY % normal.date "(Year,Month,Day,(Hour,(Minute,Second?)?)?)">
+<!ENTITY % pub.date "((Year, ((Month, Day?) | Season)?) | MedlineDate)">
+<!ELEMENT Year (#PCDATA)>
+<!ELEMENT Month (#PCDATA)>
+<!ELEMENT Day (#PCDATA)>
+<!ELEMENT Season (#PCDATA)>
+<!ELEMENT MedlineDate (#PCDATA)>
+<!ELEMENT Hour (#PCDATA)>
+<!ELEMENT Minute (#PCDATA)>
+<!ELEMENT Second (#PCDATA)>
+<!ENTITY % data.template "#PCDATA">
+<!ENTITY % Abstract "(AbstractText,CopyrightInformation?)" >
+<!ELEMENT AbstractText (#PCDATA)>
+<!ELEMENT CopyrightInformation (#PCDATA)>
+
+<!-- ================================================================= -->
+<!-- ================================================================= -->
+<!-- This is the top level element for NCBIArticle -->
+<!ELEMENT NCBIArticle (PMID, Article, MedlineJournalInfo?)>
+<!-- ================================================================= -->
+<!-- This is the top level element for Article -->
+<!ELEMENT Article ((Journal | Book),
+                    %ArticleTitle.Ref;,
+                    Pagination, 
+                    Abstract?,
+                    Affiliation?,
+                    AuthorList?,
+                    Language+, 
+                    DataBankList?, 
+                    GrantList?,
+                    PublicationTypeList,
+                    VernacularTitle?,
+                    DateOfElectronicPublication?)>
+<!ELEMENT DataBankList (DataBank+)>
+<!ELEMENT DataBank (DataBankName, AccessionNumberList?)>
+<!ELEMENT DataBankName (#PCDATA)>
+<!ELEMENT AccessionNumberList (AccessionNumber+)>
+<!ELEMENT AccessionNumber (#PCDATA)>
+<!ATTLIST DataBankList
+	CompleteYN (Y | N) "Y">
+<!ELEMENT GrantList (Grant+)>
+<!ELEMENT Grant (%GrantID.Ref;, %Acronym.Ref;, %Agency.Ref;)>
+<!ELEMENT GrantID (#PCDATA)>
+<!ELEMENT Acronym (#PCDATA)>
+<!ELEMENT Agency (#PCDATA)>
+<!ELEMENT Abstract (%Abstract;)>
+<!ATTLIST GrantList
+	CompleteYN (Y | N) "Y">
+<!ELEMENT Journal (%ISSN.Ref;, 
+                   JournalIssue,
+                   Coden?,
+                   Title?,
+                   ISOAbbreviation?)>
+<!ELEMENT ISSN (#PCDATA)>
+<!ELEMENT JournalIssue (Volume?, Issue?, %PubDate.Ref;)>
+<!ELEMENT Volume (#PCDATA)>
+<!ELEMENT Issue (#PCDATA)>
+<!ELEMENT PubDate (%pub.date;)>
+<!ELEMENT Coden (#PCDATA)>
+<!ELEMENT Title (#PCDATA)>
+<!ELEMENT ISOAbbreviation (#PCDATA)>
+<!ELEMENT DateOfElectronicPublication (#PCDATA)>
+<!ELEMENT MedlineJournalInfo (Country?,
+                              MedlineTA,
+                              MedlineCode?,
+                              NlmUniqueID?)>
+<!ELEMENT Country (#PCDATA)>
+<!ELEMENT MedlineTA (#PCDATA)>
+<!ELEMENT MedlineCode (#PCDATA)>
+<!-- Sometime in the future, MedlineCode will change to
+     NLMUniqueID   -->
+<!ELEMENT Book (%PubDate.Ref;,
+                 Publisher,
+                 Title,
+                 AuthorList?,
+                 CollectionTitle?,
+                 Volume?)>
+<!ELEMENT Publisher (#PCDATA)>
+<!ELEMENT ArticleTitle (#PCDATA)>
+<!ELEMENT CollectionTitle (#PCDATA)>
+<!ELEMENT VernacularTitle (#PCDATA)>
+<!ELEMENT PublicationTypeList (PublicationType+)>
+<!ELEMENT PublicationType (#PCDATA)>
+<!ELEMENT Language (#PCDATA)>
+<!ELEMENT AuthorList (Author+)>
+<!ELEMENT Author ((%author.name;), Affiliation?)>
+<!ELEMENT Affiliation (#PCDATA)>
+<!ATTLIST AuthorList
+	CompleteYN (Y | N) "Y">
+<!ELEMENT Pagination ((StartPage, EndPage?, MedlinePgn?) | MedlinePgn)>
+<!ELEMENT StartPage (#PCDATA)>
+<!ELEMENT EndPage (#PCDATA)>
+<!ELEMENT MedlinePgn (#PCDATA)>
+<!ELEMENT MeshHeadingList (MeshHeading+)>
+<!ELEMENT MeshHeading ((DescriptorName | Descriptor),
+                        (QualifierName* | SubHeading*))>
+<!ELEMENT DescriptorName (#PCDATA)>
+<!ATTLIST DescriptorName
+	MajorTopicYN (Y | N) "N" >
+<!ELEMENT Descriptor (#PCDATA)>
+<!ATTLIST Descriptor
+	MajorTopicYN (Y | N) "N">
+<!ELEMENT QualifierName (#PCDATA)>
+<!ATTLIST QualifierName
+	MajorTopicYN (Y | N) "N">
+<!ELEMENT SubHeading (#PCDATA)>
+<!ATTLIST SubHeading
+	MajorTopicYN (Y | N) "N">
+<!ELEMENT PMID (#PCDATA)>
+<!ELEMENT NlmUniqueID (#PCDATA)>
