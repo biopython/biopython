@@ -145,6 +145,19 @@ class TreeTests(unittest.TestCase):
                                  [0, 0.060, 0.162, 0.290, 0.400]):
             self.assertAlmostEqual(found, expect)
 
+    # Tree manipulation methods
+
+    def test_ladderize(self):
+        """TreeMixin: ladderize() method."""
+        def ordered_names(tree):
+            return [n.name for n in tree.get_terminals()]
+        tree = self.phylogenies[10]
+        self.assertEqual(ordered_names(tree), list('ABCD'))
+        tree.ladderize()
+        self.assertEqual(ordered_names(tree), list('DABC'))
+        tree.ladderize(reverse=True)
+        self.assertEqual(ordered_names(tree), list('ABCD'))
+
 
 # ---------------------------------------------------------
 

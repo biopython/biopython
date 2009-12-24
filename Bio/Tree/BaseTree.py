@@ -319,7 +319,7 @@ class TreeMixin(object):
 
     def get_terminals(self, order='preorder'):
         """Iterate through all of this tree's terminal (leaf) nodes."""
-        return self.find_all(Subtree, terminal=True, order='preorder')
+        return self.find_clades(terminal=True, order=order)
 
     # TODO: write a unit test
     def get_path(self, target):
@@ -427,10 +427,14 @@ class TreeMixin(object):
         return parent
 
     def ladderize(self, reverse=False):
-        """Sorts node numbers according to the number of terminal nodes."""
-        self.clades.sort(key=lambda c: c.count_terminals(),
-                        reverse=reverse)
-        for subclade in self.clades:
+        """Sort clades in-place according to the number of terminal nodes.
+
+        Deepest clades are last by default. Use reverse=True to sort clades
+        deepest-to-shallowest.
+        """
+        self.root.clades.sort(key=lambda c: c.count_terminals(),
+                              reverse=reverse)
+        for subclade in self.root.clades:
             subclade.ladderize(reverse=reverse)
         return
 
