@@ -382,7 +382,12 @@ class TreeMixin(object):
         @returns: dict of {clade: depth}
         """
         depths = {}
-        # TODO: copy BFS, track branch lengths
+        def update_depths(node, curr_depth):
+            depths[node] = curr_depth
+            for child in node.clades:
+                new_depth = curr_depth + child.branch_length
+                update_depths(child, new_depth)
+        update_depths(self.root, 0)
         return depths
 
     def distance(self, target1, target2=None):

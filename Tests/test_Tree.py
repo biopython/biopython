@@ -67,16 +67,14 @@ class UtilTests(unittest.TestCase):
 class TreeTests(unittest.TestCase):
     """Tests for methods on BaseTree.Tree objects."""
     # TODO: magic: iter, len, getitem
-    #   plumbing:
-    #       filter_search
     #       get_path
-    #   porcelain:
     #       common_ancestor
-    #       get_terminals
     #       collapse
 
     def setUp(self):
         self.phylogenies = list(TreeIO.parse(EX_PHYLO, 'phyloxml'))
+
+    # Traversal methods
 
     def test_find_all(self):
         """TreeMixin: find_all() method."""
@@ -135,6 +133,18 @@ class TreeTests(unittest.TestCase):
             self.assertEqual(iter_len(tree.find_all()), total)
             self.assertEqual(iter_len(tree.find_all(terminal=True)), extern)
             self.assertEqual(iter_len(tree.find_all(terminal=False)), intern)
+
+    # Information methods
+
+    def test_depths(self):
+        """TreeMixin: depths() method."""
+        tree = self.phylogenies[1]
+        depths = tree.depths()
+        self.assertEqual(len(depths), 5)
+        for found, expect in zip(sorted(depths.itervalues()),
+                                 [0, 0.060, 0.162, 0.290, 0.400]):
+            self.assertAlmostEqual(found, expect)
+
 
 # ---------------------------------------------------------
 
