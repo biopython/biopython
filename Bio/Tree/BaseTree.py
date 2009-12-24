@@ -11,13 +11,10 @@ classes in order to use the common methods defined on them.
 """
 __docformat__ = "epytext en"
 
+import itertools
 import re
 from collections import deque
-from itertools import izip
 
-# TODO:
-#   - Traversal options: preorder = DFS, postorder, breadth_first
-#   - Fix the docstrings!
 
 def trim_str(text, maxlen=60):
     assert isinstance(text, basestring), \
@@ -26,6 +23,47 @@ def trim_str(text, maxlen=60):
         return text[:maxlen-3] + '...'
     return text
 
+# General tree-traversal algorithms
+
+def _breadth_first_search(root, get_children):
+    Q = deque([root])
+    while Q:
+        v = Q.popleft()
+        yield v
+        Q.extend(get_children(v))
+
+def _depth_first_search(root, get_children):
+    def dfs(elem):
+        yield elem
+        for v in get_children(elem):
+            for u in dfs(v):
+                yield u
+    for elem in dfs(root):
+        yield elem
+
+def _postorder_search(root, get_children):
+    def dfs(elem):
+        for v in get_children(elem):
+            for u in dfs(v):
+                yield u
+        yield elem
+    for elem in dfs(root):
+        yield elem
+
+def _sorted_attrs(elem):
+    """Get a flat list of elem's attributes, sorted for consistency."""
+    singles = []
+    lists = []
+    # Sort attributes for consistent results
+    for child in sorted(elem.__dict__.itervalues()):
+        if child is None:
+            continue
+        if isinstance(child, list):
+            lists.extend(child)
+        else:
+            singles.append(child)
+    return (x for x in singles + lists
+            if isinstance(x, TreeElement))
 
 # Factory functions to generalize searching for clades/nodes
 
@@ -137,14 +175,14 @@ class TreeMixin(object):
 
     This lets Tree and Subtree support the same traversal and searching
     operations without requiring Subtree to inherit from Tree, so Subtree isn't
-    required to have all of Tree's attributes -- just 'root', a Subtree
-    instance.
+    required to have all of Tree's attributes -- just 'root' (a Subtree
+    instance) and 'is_terminal()'.
     """
     # Traversal methods
 
     def common_ancestor(self, target1, target2):
         mrca = self
-        for clade1, clade2 in izip(
+        for clade1, clade2 in itertools.izip(
                 self.get_path(target1), 
                 self.get_path(target2)): 
             if clade1 is clade2:
@@ -166,41 +204,27 @@ class TreeMixin(object):
         #         break
         # return mrca
 
-    # TODO: split traversal into multiple methods:
-    #   preorder (aka depth_first)
-    #   postorder
-    #   breadth_first
-    def filter_search(self, filterfunc, breadth_first):
+
+    def _filter_search(self, filter_func, order, follow_attrs):
         """Perform a BFS or DFS through all elements in this tree.
 
-        @return: generator of all elements for which 'filterfunc' is True.
+        @return: generator of all elements for which 'filter_func' is True.
         """
-        def get_children(elem):
-            singles = []
-            lists = []
-            # Sort attributes for consistent results
-            for child in sorted(elem.__dict__.itervalues()):
-                if child is None:
-                    continue
-                if isinstance(child, list):
-                    lists.extend(child)
-                else:
-                    singles.append(child)
-            return (x for x in singles + lists
-                    if isinstance(x, TreeElement))
-
-        Q = deque(get_children(self))
-        if breadth_first:
-            pop = deque.popleft
-            extend = deque.extend
+        orderopts = {'preorder': _depth_first_search,
+                     'postorder': _postorder_search,
+                     'level': _breadth_first_search}
+        try:
+            orderfunc = orderopts[order]
+        except KeyError:
+            raise ValueError("Invalid order '%s'; must be one of: %s"
+                             % (order, tuple(orderopts.keys())))
+        if follow_attrs:
+            get_children = _sorted_attrs
+            root = self
         else:
-            pop = deque.pop
-            extend = lambda q, s: deque.extend(q, reversed(tuple(s)))
-        while Q:
-            v = pop(Q)
-            if filterfunc(v):
-                yield v
-            extend(Q, get_children(v))
+            get_children = lambda elem: elem.clades
+            root = self.root
+        return itertools.ifilter(filter_func, orderfunc(root, get_children))
 
     def find(self, *args, **kwargs):
         """Return the first element found by find_all(), or None.
@@ -214,7 +238,7 @@ class TreeMixin(object):
         except StopIteration:
             return None
 
-    def find_all(self, cls=TreeElement, terminal=None, breadth_first=False,
+    def find_all(self, cls=TreeElement, terminal=None, order='preorder',
             **kwargs):
         """Find all tree elements matching the given attributes.
 
@@ -222,6 +246,7 @@ class TreeMixin(object):
             Specifies the class of the object to search for. Objects that
             inherit from this type will also match. (The default, TreeElement,
             matches any standard Bio.Tree type.)
+        @type cls: type
 
         @param terminal:
             A boolean value to select for or against terminal nodes (a.k.a. leaf
@@ -229,6 +254,13 @@ class TreeMixin(object):
             terminal nodes, and the default, None, searches both terminal and
             non-terminal nodes, as well as any tree elements lacking the
             'is_terminal' method.
+        @type terminal: bool
+
+        @param order:
+            Tree traversal order: 'preorder' (default) is depth-first search,
+            'postorder' is DFS with child nodes preceding parents, and 'level'
+            is breadth-first search.
+        @type order: string ('preorder'|'postorder'|'level')
 
         The arbitrary keyword arguments indicate the attribute name of the
         sub-element and the value to match: string, integer or boolean. Strings
@@ -262,28 +294,32 @@ class TreeMixin(object):
                 return (match_class(elem) and match_attr(elem))
         else:
             is_matching_elem = match_class
+        return self._filter_search(is_matching_elem, order, follow_attrs=True)
 
-        return self.filter_search(is_matching_elem, breadth_first)
-
-    def find_clades(self, cls=TreeElement, terminal=None, breadth_first=False,
+    def find_clades(self, cls=TreeElement, terminal=None, order='preorder',
             **kwargs):
         """Find each clade containing a matching element.
 
         That is, find each element as with find_all(), but return the
         corresponding clade object.
         """
-        for clade in self.root.find_all(Subtree,
-                terminal=terminal, breadth_first=breadth_first):
-            # Check whether any non-clade attributes/sub-elements match
-            orig_clades = clade.__dict__.pop('clades')
-            found = clade.find(cls, **kwargs)
-            clade.clades = orig_clades
-            if found is not None:
-                yield clade
+        def match_attrs(elem):
+            orig_clades = elem.__dict__.pop('clades')
+            found = elem.find(cls=cls, **kwargs)
+            elem.clades = orig_clades
+            return (found is not None)
 
-    def get_terminals(self, breadth_first=False):
+        if terminal is None:
+            is_matching_elem = match_attrs
+        else:
+            def is_matching_elem(elem):
+                return ((elem.is_terminal() == terminal)
+                        and match_attrs(elem))
+        return self._filter_search(is_matching_elem, order, follow_attrs=False)
+
+    def get_terminals(self, order='preorder'):
         """Iterate through all of this tree's terminal (leaf) nodes."""
-        return self.find_all(Subtree, terminal=True, breadth_first=breadth_first)
+        return self.find_all(Subtree, terminal=True, order='preorder')
 
     # TODO: write a unit test
     def get_path(self, target):
@@ -323,10 +359,6 @@ class TreeMixin(object):
         return fromstart + [mrca] + to
 
     # Information methods
-
-    def is_terminal(self):
-        """Returns True if the root of this tree is terminal."""
-        return (not self.clades)
 
     def is_preterminal(self):
         """Returns True if all direct descendents are terminal."""
@@ -424,7 +456,7 @@ class Tree(TreeElement, TreeMixin):
         self.root = root or Subtree()
         self.rooted = rooted        # is_rooted=True
         self.id = id                #: identifier
-        self.name = name or self.root.label
+        self.name = name
 
     @classmethod
     def from_subtree(cls, node, **kwargs):
@@ -438,6 +470,10 @@ class Tree(TreeElement, TreeMixin):
     def clade(self):
         """The first subtree in this tree (not itself)."""
         return self.root
+
+    def is_terminal(self):
+        """Returns True if the root of this tree is terminal."""
+        return (not self.root.clades)
 
 
 class Subtree(TreeElement, TreeMixin):

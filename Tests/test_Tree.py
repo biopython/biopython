@@ -94,10 +94,6 @@ class TreeTests(unittest.TestCase):
             self.assert_(isinstance(point, PhyloXML.Point))
             self.assertEqual(point.geodetic_datum, 'WGS84')
             self.assertAlmostEqual(point.alt, alt)
-        # boolean filter
-        for clade, name in izip(tree.find_all(name=True), list('ABCD')):
-            self.assert_(isinstance(clade, PhyloXML.Clade))
-            self.assertEqual(clade.name, name)
         # class filter
         tree = self.phylogenies[4]
         events = list(tree.find_all(PhyloXML.Events))
@@ -112,6 +108,19 @@ class TreeTests(unittest.TestCase):
             self.assertEqual(dom.start, 5)
             self.assertEqual(dom.value, 'CARD')
 
+    def test_find_clades(self):
+        """TreeMixin: find_clades() method."""
+        # boolean filter
+        for clade, name in izip(self.phylogenies[10].find_clades(name=True),
+                                list('ABCD')):
+            self.assert_(isinstance(clade, PhyloXML.Clade))
+            self.assertEqual(clade.name, name)
+        # finding deeper attributes
+        octo = list(self.phylogenies[5].find_clades(code='OCTVU'))
+        self.assertEqual(len(octo), 1)
+        self.assert_(isinstance(octo[0], PhyloXML.Clade))
+        self.assertEqual(octo[0].taxonomies[0].code, 'OCTVU')
+
     def test_find_terminal(self):
         """TreeMixin: find_all() with terminal argument."""
         def iter_len(it, count=0):
@@ -119,9 +128,9 @@ class TreeTests(unittest.TestCase):
             return count
         for tree, total, extern, intern in izip(
                 self.phylogenies,
-                (5, 5, 6, 17, 20, 26, 6, 8, 8, 18, 14, 8, 5),
+                (6, 6, 7, 18, 21, 27, 7, 9, 9, 19, 15, 9, 6),
                 (3, 3, 3, 3,  3,  3,  3, 3, 3, 3,  4,  3, 3),
-                (2, 2, 2, 2,  2,  2,  2, 2, 2, 2,  2,  2, 2),
+                (3, 3, 3, 3,  3,  3,  3, 3, 3, 3,  3,  3, 3),
                 ):
             self.assertEqual(iter_len(tree.find_all()), total)
             self.assertEqual(iter_len(tree.find_all(terminal=True)), extern)
