@@ -25,14 +25,16 @@ def trim_str(text, maxlen=60):
 
 # General tree-traversal algorithms
 
-def _breadth_first_search(root, get_children):
+def _level_search(root, get_children):
+    """Traverse a tree in breadth-first (level) order."""
     Q = deque([root])
     while Q:
         v = Q.popleft()
         yield v
         Q.extend(get_children(v))
 
-def _depth_first_search(root, get_children):
+def _preorder_search(root, get_children):
+    """Traverse a tree in depth-first pre-order (parent before children)."""
     def dfs(elem):
         yield elem
         for v in get_children(elem):
@@ -42,6 +44,7 @@ def _depth_first_search(root, get_children):
         yield elem
 
 def _postorder_search(root, get_children):
+    """Traverse a tree in depth-first post-order (children before parent)."""
     def dfs(elem):
         for v in get_children(elem):
             for u in dfs(v):
@@ -210,21 +213,21 @@ class TreeMixin(object):
 
         @return: generator of all elements for which 'filter_func' is True.
         """
-        orderopts = {'preorder': _depth_first_search,
-                     'postorder': _postorder_search,
-                     'level': _breadth_first_search}
+        order_opts = {'preorder': _preorder_search,
+                      'postorder': _postorder_search,
+                      'level': _level_search}
         try:
-            orderfunc = orderopts[order]
+            order_func = order_opts[order]
         except KeyError:
             raise ValueError("Invalid order '%s'; must be one of: %s"
-                             % (order, tuple(orderopts.keys())))
+                             % (order, tuple(order_opts.keys())))
         if follow_attrs:
             get_children = _sorted_attrs
             root = self
         else:
             get_children = lambda elem: elem.clades
             root = self.root
-        return itertools.ifilter(filter_func, orderfunc(root, get_children))
+        return itertools.ifilter(filter_func, order_func(root, get_children))
 
     def find(self, *args, **kwargs):
         """Return the first element found by find_all(), or None.
@@ -308,7 +311,6 @@ class TreeMixin(object):
             found = elem.find(cls=cls, **kwargs)
             elem.clades = orig_clades
             return (found is not None)
-
         if terminal is None:
             is_matching_elem = match_attrs
         else:
@@ -331,7 +333,6 @@ class TreeMixin(object):
         # Only one path will work -- ignore weights and visits
         path = deque()
         match = _object_matcher(target)
-
         def check_in_path(v):
             if match(v):
                 path.append(v)
@@ -343,7 +344,6 @@ class TreeMixin(object):
                     path.append(v)
                     return True
                 return False
-
         if not check_in_path(self):
             return None
         return reversed(path)
@@ -379,7 +379,7 @@ class TreeMixin(object):
     def depths(self):
         """Create a mapping of tree clades to depths (by branch length).
 
-        @returns: dict of {clade: depth}
+        @return: dict of {clade: depth}
         """
         depths = {}
         def update_depths(node, curr_depth):
@@ -463,8 +463,8 @@ class Tree(TreeElement, TreeMixin):
     """
     def __init__(self, root=None, rooted=True, id=None, name=None):
         self.root = root or Subtree()
-        self.rooted = rooted        # is_rooted=True
-        self.id = id                #: identifier
+        self.rooted = rooted
+        self.id = id
         self.name = name
 
     @classmethod
