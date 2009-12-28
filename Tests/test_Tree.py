@@ -10,7 +10,7 @@
 import os
 import unittest
 import zipfile
-from itertools import izip, chain
+from itertools import izip
 from cStringIO import StringIO
 
 from Bio import Tree, TreeIO
@@ -134,7 +134,35 @@ class TreeTests(unittest.TestCase):
             self.assertEqual(iter_len(tree.find_all(terminal=True)), extern)
             self.assertEqual(iter_len(tree.find_all(terminal=False)), intern)
 
+    def test_get_path(self):
+        """TreeMixin: get_path() method."""
+        path = self.phylogenies[1].get_path({'name': 'B'})
+        self.assertEqual(len(path), 2)
+        self.assertAlmostEqual(path[0].branch_length, 0.06)
+        self.assertAlmostEqual(path[1].branch_length, 0.23)
+        self.assertEqual(path[1].name, 'B')
+
+    def test_trace(self):
+        """TreeMixin: trace() method."""
+        tree = self.phylogenies[1]
+        path = tree.trace({'name': 'A'}, {'name': 'C'})
+        self.assertEqual(len(path), 3)
+        self.assertAlmostEqual(path[0].branch_length, 0.06)
+        self.assertAlmostEqual(path[2].branch_length, 0.4)
+        self.assertEqual(path[2].name, 'C')
+
     # Information methods
+
+    def test_common_ancestor(self):
+        """TreeMixin: common_ancestor() method."""
+        tree = self.phylogenies[1]
+        lca = tree.common_ancestor({'name': 'A'}, {'name': 'B'})
+        self.assertEqual(lca, tree.clade[0])
+        lca = tree.common_ancestor({'name': 'A'}, {'name': 'C'})
+        self.assertEqual(lca, tree.clade)
+        tree = self.phylogenies[10]
+        lca = tree.common_ancestor({'name': 'A'}, {'name': 'B'}, {'name': 'C'})
+        self.assertEqual(lca, tree.clade[0])
 
     def test_depths(self):
         """TreeMixin: depths() method."""

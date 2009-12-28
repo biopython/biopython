@@ -183,31 +183,6 @@ class TreeMixin(object):
     """
     # Traversal methods
 
-    def common_ancestor(self, target1, target2):
-        mrca = self
-        for clade1, clade2 in itertools.izip(
-                self.get_path(target1), 
-                self.get_path(target2)): 
-            if clade1 is clade2:
-                mrca = clade1
-            else:
-                break
-        return mrca
-        # ENH: take arbitrary number of *targets
-        # paths = [self.get_path(t) for t in targets]
-        # mrca = self
-        # for level in izip(paths):
-        #     ref = level[0]
-        #     for other in level[1:]:
-        #         if ref is not other:
-        #             break
-        #     else:
-        #         mrca = ref
-        #     if ref is not mrca:
-        #         break
-        # return mrca
-
-
     def _filter_search(self, filter_func, order, follow_attrs):
         """Perform a BFS or DFS through all elements in this tree.
 
@@ -319,16 +294,11 @@ class TreeMixin(object):
                         and match_attrs(elem))
         return self._filter_search(is_matching_elem, order, follow_attrs=False)
 
-    def get_terminals(self, order='preorder'):
-        """Iterate through all of this tree's terminal (leaf) nodes."""
-        return self.find_clades(terminal=True, order=order)
-
-    # TODO: write a unit test
     def get_path(self, target):
-        """Find the direct path from the root to the given target.
+        """List the clades directly between the root and the given target.
 
-        Returns an iterable of all clade origins along this path, ending with
-        the given target.
+        Returns a list of all clade objects along this path, ending with
+        the given target, but excluding the root clade.
         """
         # Only one path will work -- ignore weights and visits
         path = deque()
@@ -343,22 +313,54 @@ class TreeMixin(object):
                 if check_in_path(child):
                     path.append(v)
                     return True
-                return False
-        if not check_in_path(self):
+            return False
+        if not check_in_path(self.root):
             return None
-        return reversed(path)
+        return list(reversed(path))[1:]
+
+    def get_terminals(self, order='preorder'):
+        """Get a list of all of this tree's terminal (leaf) nodes."""
+        return list(self.find_clades(terminal=True, order=order))
 
     def trace(self, start, finish):
-        """Returns a list of all tree elements between two targets.
+        """List of all clade object between two targets in this tree.
 
-        Excluding start, including end.
+        Excluding start, including finish.
         """
         mrca = self.common_ancestor(start, finish)
-        fromstart = list(mrca.get_path(start))[-2::-1]
-        to = list(mrca.get_path(finish))
+        fromstart = mrca.get_path(start)[-2::-1]
+        to = mrca.get_path(finish)
         return fromstart + [mrca] + to
 
     # Information methods
+
+    def common_ancestor(self, *targets):
+        """Most recent common ancestor (clade) of all the given targets.
+
+        Edge cases: 
+        """
+        paths = [self.get_path(t) for t in targets]
+        # Validation -- otherwise izip throws a spooky error
+        for p, t in zip(paths, targets):
+            assert p is not None, "target %s is not in this tree" % repr(t)
+        mrca = self.root
+        for level in itertools.izip(*paths):
+            ref = level[0]
+            for other in level[1:]:
+                if ref is not other:
+                    break
+            else:
+                mrca = ref
+            if ref is not mrca:
+                break
+        return mrca
+
+    def count_terminals(self):
+        """Counts the number of terminal (leaf) nodes within this tree."""
+        counter = 0
+        for i, leaf in enumerate(self.find_clades(terminal=True)):
+            counter = i
+        return counter + 1
 
     def is_preterminal(self):
         """Returns True if all direct descendents are terminal."""
@@ -369,12 +371,8 @@ class TreeMixin(object):
                 return False
         return True
 
-    def count_terminals(self):
-        """Counts the number of terminal (leaf) nodes within this tree."""
-        counter = 0
-        for i, leaf in enumerate(self.get_terminals()):
-            counter = i
-        return counter + 1
+    def is_parent_of(self, target):
+        return (self.get_path(target) is not None)
 
     def depths(self):
         """Create a mapping of tree clades to depths (by branch length).
@@ -385,7 +383,7 @@ class TreeMixin(object):
         def update_depths(node, curr_depth):
             depths[node] = curr_depth
             for child in node.clades:
-                new_depth = curr_depth + child.branch_length
+                new_depth = curr_depth + (child.branch_length or 0)
                 update_depths(child, new_depth)
         update_depths(self.root, 0)
         return depths
