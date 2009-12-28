@@ -184,7 +184,8 @@ class Writer(object):
         def newickize(clade):
             """Convert a node tree to a Newick tree string, recursively."""
             if clade.is_terminal():    #terminal
-                return (clade.name + make_info_string(clade, terminal=True))
+                return ((clade.name or '')
+                        + make_info_string(clade, terminal=True))
             else:
                 subtrees = (newickize(sub) for sub in clade)
                 return '(%s)%s' % (','.join(subtrees),
@@ -234,9 +235,10 @@ class Writer(object):
             # write support and branchlengths (e.g. .con tree of mrbayes)
             def make_info_string(clade, terminal=False):
                 if terminal:
-                    return ':%1.5f' % clade.branch_length
+                    return ':%1.5f' % (clade.branch_length or 1.0)
                 else:
                     if (clade.branch_length is not None
+                            and hasattr(clade, 'support')
                             and clade.support is not None):
                         # we have blen and suppport
                         return '%1.2f:%1.5f' % (clade.support,
@@ -244,7 +246,8 @@ class Writer(object):
                     elif clade.branch_length is not None:
                         # we have only blen
                         return '0.00000:%1.5f' % clade.branch_length
-                    elif clade.support is not None:
+                    elif (hasattr(clade, 'support')
+                            and clade.support is not None):
                         # we have only support
                         return '%1.2f:0.00000' % clade.support
                     else:
