@@ -391,13 +391,13 @@ class TreeMixin(object):
     def distance(self, target1, target2=None):
         """Calculate the sum of the branch lengths between two targets.
 
-        If only one targets is specified, the other is the root of this tree.
+        If only one target is specified, the other is the root of this tree.
         """
         if target2 is None:
             return sum(n.branch_length for n in self.get_path(target1)
                        if n.branch_length is not None)
-        root = self.common_ancestor(target1, target2)
-        return root.branch_length_to(target1) + root.branch_length_to(target2)
+        mrca = self.common_ancestor(target1, target2)
+        return mrca.distance(target1) + mrca.distance(target2)
 
     def total_branch_length(self):
         """Calculate the sum of all the branch lengths in this tree."""

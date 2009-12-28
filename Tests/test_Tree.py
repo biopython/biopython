@@ -67,9 +67,8 @@ class UtilTests(unittest.TestCase):
 class TreeTests(unittest.TestCase):
     """Tests for methods on BaseTree.Tree objects."""
     # TODO: magic: iter, len, getitem
-    #       get_path
-    #       common_ancestor
     #       collapse
+    #       total_branch_length
 
     def setUp(self):
         self.phylogenies = list(TreeIO.parse(EX_PHYLO, 'phyloxml'))
@@ -172,6 +171,16 @@ class TreeTests(unittest.TestCase):
         for found, expect in zip(sorted(depths.itervalues()),
                                  [0, 0.060, 0.162, 0.290, 0.400]):
             self.assertAlmostEqual(found, expect)
+
+    def test_distance(self):
+        """TreeMixin: distance() method."""
+        t = self.phylogenies[1]
+        self.assertAlmostEqual(t.distance({'name': 'A'}), 0.162)
+        self.assertAlmostEqual(t.distance({'name': 'B'}), 0.29)
+        self.assertAlmostEqual(t.distance({'name': 'C'}), 0.4)
+        self.assertAlmostEqual(t.distance({'name': 'A'}, {'name': 'B'}), 0.332)
+        self.assertAlmostEqual(t.distance({'name': 'A'}, {'name': 'C'}), 0.562)
+        self.assertAlmostEqual(t.distance({'name': 'B'}, {'name': 'C'}), 0.69)
 
     # Tree manipulation methods
 
