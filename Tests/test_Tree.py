@@ -182,6 +182,12 @@ class TreeTests(unittest.TestCase):
         self.assertAlmostEqual(t.distance({'name': 'A'}, {'name': 'C'}), 0.562)
         self.assertAlmostEqual(t.distance({'name': 'B'}, {'name': 'C'}), 0.69)
 
+    def test_total_branch_length(self):
+        """TreeMixin: total_branch_length() method."""
+        tree = self.phylogenies[1]
+        self.assertAlmostEqual(tree.total_branch_length(), 0.792)
+        self.assertAlmostEqual(tree.clade[0].total_branch_length(), 0.392)
+
     # Tree manipulation methods
 
     def test_ladderize(self):
