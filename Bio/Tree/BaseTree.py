@@ -407,21 +407,22 @@ class TreeMixin(object):
     # Tree manipulation methods
 
     def collapse(self, target):
-        """Deletes target from chain and relinks successors to predecessor.
+        """Deletes target from the tree, relinking its children to its parent.
 
-        Returns the predecessor clade.
+        @return: the parent clade.
         """
         path = list(self.get_path(target))
         if not path:
             raise ValueError("couldn't collapse %s in this tree" % target)
         if len(path) == 1:
-            parent = self
+            parent = self.root
         else:
             parent = path[-2]
-        parent.clades.extend(
-                parent.clades.pop(
-                    parent.clades.index(target)
-                    ).clades)
+        popped = parent.clades.pop(parent.clades.index(target))
+        extra_length = popped.branch_length or 0
+        for child in popped:
+            child.branch_length += extra_length
+        parent.clades.extend(popped.clades)
         return parent
 
     def ladderize(self, reverse=False):

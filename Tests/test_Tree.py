@@ -67,8 +67,6 @@ class UtilTests(unittest.TestCase):
 class TreeTests(unittest.TestCase):
     """Tests for methods on BaseTree.Tree objects."""
     # TODO: magic: iter, len, getitem
-    #       collapse
-    #       total_branch_length
 
     def setUp(self):
         self.phylogenies = list(TreeIO.parse(EX_PHYLO, 'phyloxml'))
@@ -189,6 +187,17 @@ class TreeTests(unittest.TestCase):
         self.assertAlmostEqual(tree.clade[0].total_branch_length(), 0.392)
 
     # Tree manipulation methods
+
+    def test_collapse(self):
+        """TreeMixin: collapse() method."""
+        tree = self.phylogenies[1]
+        parent = tree.collapse(tree.clade[0])
+        self.assertEqual(len(parent), 3)
+        for clade, name, blength in zip(parent,
+                ('C', 'A', 'B'),
+                (0.4, 0.162, 0.29)):
+            self.assertEqual(clade.name, name)
+            self.assertAlmostEqual(clade.branch_length, blength)
 
     def test_ladderize(self):
         """TreeMixin: ladderize() method."""
