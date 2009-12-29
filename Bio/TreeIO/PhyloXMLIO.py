@@ -110,14 +110,25 @@ def write(obj, file, encoding=None):
 
     The file argument can be either an open handle or a file name.
     """
+    def fix_single(tree):
+        if isinstance(tree, PX.Phylogeny):
+            return tree
+        if isinstance(tree, PX.Clade):
+            return tree.to_phylogeny()
+        if isinstance(tree, PX.BaseTree.Tree):
+            return PX.Phylogeny.from_tree(tree)
+        if isinstance(tree, PX.BaseTree.Subtree):
+            return PX.Phylogeny.from_tree(PX.BaseTree.Tree(root=tree))
+        else:
+            raise ValueError("iterable must contain Tree or Subtree types")
+
     if isinstance(obj, PX.Phyloxml):
         pass
-    elif isinstance(obj, PX.Phylogeny):
-        obj = obj.to_phyloxml()
-    elif isinstance(obj, PX.BaseTree.Tree):
-        obj = PX.Phylogeny.from_tree(obj).to_phyloxml()
+    elif (isinstance(obj, PX.BaseTree.Tree)
+            or isinstance(obj, PX.BaseTree.Subtree)):
+        obj = fix_single(obj).to_phyloxml()
     elif hasattr(obj, '__iter__'):
-        obj = PX.Phyloxml({}, phylogenies=obj)
+        obj = PX.Phyloxml({}, phylogenies=(fix_single(t) for t in obj))
     else:
         raise ValueError("First argument must be a Phyloxml, Phylogeny, "
                 "Tree, or iterable of Trees or Phylogenies.")

@@ -263,7 +263,7 @@ class Clade(PhyloElement, BaseTree.Subtree):
         """Create a new Clade from a BaseTree.Subtree object."""
         clade = cls(
                 branch_length=subtree.branch_length,
-                name=subtree.label,
+                name=subtree.name,
                 node_id=Id(str(subtree.id)))
         clade.clades = [cls.from_subtree(st) for st in subtree.clades]
         clade.__dict__.update(kwargs)
