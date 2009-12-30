@@ -362,17 +362,23 @@ class TreeMixin(object):
             counter = i
         return counter + 1
 
-    def is_preterminal(self):
-        """Returns True if all direct descendents are terminal."""
-        if self.is_terminal():
-            return False
-        for clade in self.clades:
-            if not clade.is_terminal():
-                return False
-        return True
-
-    def is_parent_of(self, target):
-        return (self.get_path(target) is not None)
+    def is_bifurcating(self, node=None):
+        """Return True if tree downstream of node is strictly bifurcating."""
+        if node is not None:
+            warnings.warn("use node.is_bifurcating() directly instead",
+                          DeprecationWarning, stacklevel=2)
+            return node.is_bifurcating()
+        # Root can be trifurcating, because it has no ancestor
+        if isinstance(self, BaseTree.Tree) and len(self.root) == 3:
+            return (self.clade[0].is_bifurcating()
+                    and self.clade[1].is_bifurcating()
+                    and self.clade[2].is_bifurcating())
+        if len(self.root) == 2:
+            return (self.clade[0].is_bifurcating()
+                    and self.clade[1].is_bifurcating())
+        if len(self.root) == 0:
+            return True
+        return False
 
     def depths(self):
         """Create a mapping of tree clades to depths (by branch length).
@@ -398,6 +404,52 @@ class TreeMixin(object):
                        if n.branch_length is not None)
         mrca = self.common_ancestor(target1, target2)
         return mrca.distance(target1) + mrca.distance(target2)
+
+    # TODO - unit test
+    def is_bifurcating(self):
+        """Return True if tree downstream of node is strictly bifurcating."""
+        # Root can be trifurcating, because it has no ancestor
+        if isinstance(self, BaseTree.Tree) and len(self.root) == 3:
+            return (self.clade[0].is_bifurcating()
+                    and self.clade[1].is_bifurcating()
+                    and self.clade[2].is_bifurcating())
+        if len(self.root) == 2:
+            return (self.clade[0].is_bifurcating()
+                    and self.clade[1].is_bifurcating())
+        if len(self.root) == 0:
+            return True
+        return False
+
+    # TODO - unit test
+    def is_monophyletic(self, terminals):
+        """Does taxon_list comprise a complete subclade of this clade?
+
+        @return common ancestor if subclades is monophyletic, otherwise False.
+        """
+        target_set = set(terminals)
+        current = self.root
+        while True:
+            if set(current.get_terminals()) == target_set:
+                return current
+            # Try a narrower subclade
+            for subclade in current.clades:
+                if set(subclade.get_terminals()).issuperset(target_set):
+                    current = subclade
+                    break
+                else:
+                    return False
+
+    def is_parent_of(self, target):
+        return (self.get_path(target) is not None)
+
+    def is_preterminal(self):
+        """Returns True if all direct descendents are terminal."""
+        if self.is_terminal():
+            return False
+        for clade in self.clades:
+            if not clade.is_terminal():
+                return False
+        return True
 
     def total_branch_length(self):
         """Calculate the sum of all the branch lengths in this tree."""
@@ -436,6 +488,19 @@ class TreeMixin(object):
         for subclade in self.root.clades:
             subclade.ladderize(reverse=reverse)
         return
+
+    # TODO - unit test
+    def split(self, n=2, branch_length=1.0):
+        """Speciation: generate n (default 2) new descendants.
+
+        New clades have the given branch_length and the same name as this
+        clade's root plus an integer suffix (counting from 0).
+        """
+        for i in range(n):
+            clade = Clade(name=self.root.name+str(i),
+                         branch_length=branch_length)
+            self.root.clades.append(clade)
+        return self.root.clades[-n:]
 
 
 class Tree(TreeElement, TreeMixin):
