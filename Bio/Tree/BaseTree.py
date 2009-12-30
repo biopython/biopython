@@ -12,6 +12,7 @@ classes in order to use the common methods defined on them.
 __docformat__ = "epytext en"
 
 import itertools
+import random
 import re
 from collections import deque
 
@@ -444,7 +445,7 @@ class TreeMixin(object):
 
     def is_preterminal(self):
         """Returns True if all direct descendents are terminal."""
-        if self.is_terminal():
+        if self.root.is_terminal():
             return False
         for clade in self.clades:
             if not clade.is_terminal():
@@ -536,9 +537,11 @@ class TreeMixin(object):
         New clades have the given branch_length and the same name as this
         clade's root plus an integer suffix (counting from 0).
         """
+        subtree_cls = type(self.root)
+        base_name = self.root.name or ''
         for i in range(n):
-            clade = Clade(name=self.root.name+str(i),
-                         branch_length=branch_length)
+            clade = subtree_cls(name=base_name+str(i),
+                                branch_length=branch_length)
             self.root.clades.append(clade)
         return self.root.clades[-n:]
 
@@ -572,12 +575,47 @@ class Tree(TreeElement, TreeMixin):
         self.name = name
 
     @classmethod
-    def from_subtree(cls, node, **kwargs):
+    def from_subtree(cls, subtree, **kwargs):
         """Create a new Tree object given a subtree.
 
         Keyword arguments are the usual Tree constructor parameters.
         """
-        return cls(node, **kwargs)
+        return cls(subtree, **kwargs)
+
+    @classmethod
+    def randomized(cls, taxa, branch_length=1.0, branch_stdev=None):
+        """Create a randomized bifurcating tree given a list of taxa.
+
+        @param taxa: Either an integer specifying the number of taxa to create
+            (automatically named taxon#), or an iterable of taxon names, as
+            strings.
+
+        @return: a tree of the same type as this class.
+        """
+        if isinstance(taxa, int):
+            taxa = ['taxon%s' % (i+1) for i in xrange(taxa)]
+        elif hasattr(taxa, '__iter__'):
+            taxa = list(taxa)
+        else:
+            raise TypeError("taxa argument must be integer (# taxa) or "
+                            "iterable of taxon names.")
+        rtree = cls()
+        terminals = [rtree.root]
+        while len(terminals) < len(taxa):
+            newsplit = random.choice(terminals)
+            newterms = newsplit.split(branch_length=branch_length)
+            if branch_stdev:
+                # Add some noise to the branch lengths
+                for nt in newterms:
+                    nt.branch_length = max(0,
+                            random.gauss(branch_length, branch_stdev))
+            terminals.remove(newsplit)
+            terminals.extend(newterms)
+        # Distribute taxon labels randomly
+        random.shuffle(taxa)
+        for node, name in zip(terminals, taxa):
+            node.name = name
+        return rtree
 
     @property
     def clade(self):
