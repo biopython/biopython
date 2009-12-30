@@ -490,6 +490,46 @@ class TreeMixin(object):
         return
 
     # TODO - unit test
+    def prune(self, target):
+        """Prunes a terminal clade from the tree.
+
+        If taxon is from a bifurcation, the connecting node will be collapsed
+        and its branch length added to remaining terminal node. This might be no
+        longer a meaningful value.
+
+        @return parent clade of the pruned target
+        """
+        path = self.get_path(target)
+        if not path:
+            raise ValueError("can't prune the root clade")
+        if not path[-1].is_terminal():
+            raise ValueError("target must be terminal")
+        if len(path) == 1:
+            parent = self.root
+        else:
+            parent = path[-2]
+        parent.clades.remove(path[-1])
+        if len(parent) == 1:
+            # We deleted one branch from a bifurcation
+            if parent == self.root:
+                # If we're at the root, move the root upwards
+                newroot = parent.clades[0]
+                newroot.branch_length = None
+                parent = self.root = newroot
+            else:
+                # If we're not at the root, collapse this parent
+                child = parent.clades[0]
+                child.branch_length += (parent.branch_length or 0.0)
+                if len(path) < 3:
+                    grandparent = self.root
+                else:
+                    grandparent = path[-3]
+                grandparent.clades.remove(parent)
+                grandparent.clades.append(child)
+                parent = grandparent
+        return parent
+
+    # TODO - unit test
     def split(self, n=2, branch_length=1.0):
         """Speciation: generate n (default 2) new descendants.
 
