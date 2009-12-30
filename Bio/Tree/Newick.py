@@ -3,7 +3,7 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Classes corresponding to Newick trees.
+"""Classes corresponding to Newick trees, also used for Nexus trees.
 
 See classes in Bio.Nexus: Trees.Tree, Trees.NodeData, and Nodes.Chain.
 """
@@ -44,30 +44,77 @@ def deprecated(hint):
     return deprecate
 
 
-# XXX from Bio.Nexus.Trees
-# move to Utils?
-def consensus(trees, threshold=0.5,outgroup=None):
-    """Compute a majority rule consensus tree of all clades with relative
-    frequency>=threshold from a list of trees.
-    """
+class _TreeShim(object):
+    """Shim for compatibility with the Bio.Nexus.Trees.Tree class.
 
-class _Shim(object):
-    """Shim for compatibility with Bio.Nexus.Trees.
+    This class and its use in Tree (below) can eventually be deleted.
     """
-    # Methods with deprecated arguments -- duplicated in Bio.Tree.BaseTree
+    # * Methods with deprecated arguments -- duplicated in Bio.Tree.BaseTree *
+    # Each of these method checks for usage of deprecated arguments, issues a
+    # warning if so, then performs the usual BaseTree procedure, adjusting
+    # arguments as needed.
 
-    def is_terminal(self, node=None):
-        """Returns True if all direct descendents are terminal."""
-        # Deprecated Newick behavior
-        if node is not None:
-            warnings.warn("use node.is_terminal() method instead",
+    # from Bio.Nexus.Nodes.Chain
+    def is_parent_of(self, target, child=None):
+        """Check if grandchild is a subnode of parent."""
+        if child is not None:
+            warnings.warn("use parent.is_parent_of(child) directly",
                           DeprecationWarning, stacklevel=2)
-            return node.is_terminal()
-        return (not self.clades)
+            return (target.get_path(child) is not None)
+        return (self.get_path(target) is not None)
+
+    # from Bio.Nexus.Trees.Tree
+    def count_terminals(self, node=None):
+        if node is not None:
+            warnings.warn("use node.count_terminals() directly",
+                          DeprecationWarning, stacklevel=2)
+            return node.tree.count_terminals()
+        counter = 0
+        for i, leaf in enumerate(self.get_terminals()):
+            counter = i
+        return counter + 1
+
+    def is_bifurcating(self, node=None):
+        """Return True if tree downstream of node is strictly bifurcating."""
+        if node is not None:
+            warnings.warn("use node.is_bifurcating() directly instead",
+                          DeprecationWarning, stacklevel=2)
+            return node.is_bifurcating()
+        # Root can be trifurcating, because it has no ancestor
+        if isinstance(self, BaseTree.Tree) and len(self.root) == 3:
+            return (self.clade[0].is_bifurcating()
+                    and self.clade[1].is_bifurcating()
+                    and self.clade[2].is_bifurcating())
+        if len(self.root) == 2:
+            return (self.clade[0].is_bifurcating()
+                    and self.clade[1].is_bifurcating())
+        if len(self.root) == 0:
+            return True
+        return False
+
+    def is_monophyletic(self, taxon_list):
+        """Return node_id of common ancestor if taxon_list is monophyletic, -1 otherwise."""
+        # Validation
+        if isinstance(taxon_list, basestring):
+            warnings.warn("argument should be a list, not a string",
+                          DeprecationWarning, stacklevel=2)
+            target_set = set([taxon_list])
+        else:
+            target_set = set(taxon_list)
+        # Try narrower subclades until a complete match or mismatch is found
+        current = self.root
+        while True:
+            if set(current.get_terminals()) == target_set:
+                return current
+            for subclade in current.clades:
+                if set(subclade.get_terminals()).issuperset(target_set):
+                    current = subclade
+                    break
+                else:
+                    return False
 
     def is_preterminal(self, node=None):
         """Returns True if all direct descendents are terminal."""
-        # Deprecated Newick behavior
         if node is not None:
             warnings.warn("use node.tree.is_preterminal() method instead",
                           DeprecationWarning, stacklevel=2)
@@ -79,67 +126,86 @@ class _Shim(object):
                 return False
         return True
 
-    def count_terminals(self, node=None):
+    def is_terminal(self, node=None):
+        """Returns True if all direct descendents are terminal."""
+        # Deprecated Newick behavior
         if node is not None:
-            warnings.warn("use node.tree.count_terminals() directly",
+            warnings.warn("use node.is_terminal() method instead",
                           DeprecationWarning, stacklevel=2)
-            return node.tree.count_terminals()
-        counter = 0
-        for i, leaf in enumerate(self.get_terminals()):
-            counter = i
-        return counter + 1
+            return node.is_terminal()
+        return (not self.clades)
 
-    # Deprecated methods from Bio.Nexus.Trees.Tree
+    def split(self,
+            parent_id=None, # deprecated
+            n=2,
+            branchlength=None, # deprecated
+            branch_length=1.0):
+        """Speciation: generates n (default two) descendants from parent."""
+        # Warn deprecated arguments
+        if branchlength is not None:
+            warnings.warn("use branch_length argument instead of branchlength",
+                          DeprecationWarning, stacklevel=2)
+            branch_length = branchlength
+        if parent_id is not None:
+            warnings.warn("use parent_id's split() method directly",
+                          DeprecationWarning, stacklevel=2)
+            parent = parent_id
+        else:
+            parent = self.root
+        for i in range(n):
+            node = Clade(name=parent.name+str(i),
+                         branch_length=branch_length)
+            parent.clades.append(node)
+        return parent.clades[-n:]
+
+    # * Deprecated methods from Bio.Nexus.Trees.Tree *
+    # It is not deemed necessary to implement these in BaseTree.
 
     @deprecated("\"not node.is_terminal()\"")
     def is_internal(self, node):
         """Returns True if node is an internal node."""
         return not node.is_terminal()
 
-    @deprecated("root.tree.distance(node)")
+    @deprecated("root.distance(node)")
     def sum_branchlength(self, root, node):
         """Adds up the branchlengths from root (default self.root) to node."""
-        return root.branch_length_to(node)
+        return root.distance(node)
 
-    @deprecated("node.tree.find_clades()")
+    @deprecated("node.find_clades()")
     def get_taxa(self, node_id=None):
         """Return a list of all OTUs downwards from a node (self, node_id)."""
         if node_id is None:
-            node_id = self
+            node_id = self.root
         return list(node_id.find_clades())
 
-    @deprecated("node.tree.find(name=taxon)")
+    @deprecated('self.randomized()')
+    def randomize(self, ntax=None, taxon_list=None, branchlength=1.0, branchlength_sd=None, bifurcate=True):
+        """Generates a random tree with ntax taxa and/or taxa from taxlabels.
+
+        Trees are bifurcating regardless of the value of the bifurcate argument
+        (polytomies not yet supported).
+        """
+        if not ntax and taxon_list:
+            ntax=len(taxon_list)
+        elif not taxon_list and ntax:
+            taxon_list=['taxon'+str(i+1) for i in range(ntax)]
+        elif not ntax and not taxon_list:
+            raise ValueError('Either numer of taxa or list of taxa must be specified.')
+        elif ntax != len(taxon_list):
+            raise ValueError('Length of taxon list must correspond to ntax.')
+        self = self.randomized(taxa=taxon_list, branch_length=branchlength,
+                               branch_stdev=branchlength_sd)
+        return
+
+    @deprecated("node.find(name=taxon)")
     def search_taxon(self, taxon):
-        """Returns the first matching taxon in self.data.taxon.
+        """Returns the first matching taxon in this tree.
 
         Not restricted to terminal nodes.
-
-        node_id = search_taxon(self,taxon)
         """
         return self.find(name=taxon)
 
-
-
-class Tree(BaseTree.Tree, _Shim):
-    """Newick Tree object.
-    """
-    def __init__(self, root=None, rooted=False, id=None, name='', weight=1.0):
-        BaseTree.Tree.__init__(self, root=root or Clade(),
-                rooted=rooted, id=id, name=name)
-        self.weight = weight
-
-    # Ported from Bio.Nexus.Trees.Tree
-
-    # TODO - port the rest of these methods to Tree or BaseTree.Tree
-    # See unit tests
-
-    # XXX from Nexus.Nodes.Chain
-
-    def is_parent_of(self, parent, grandchild):
-        """Check if grandchild is a subnode of parent."""
-        # XXX direct descendent? or "parent.get_path(grandchild) is not None"?
-
-    # XXX from Nexus.Trees.Tree
+    # --- TODO: port these --- 
     # """Get information about trees (monphyly of taxon sets, congruence between
     # trees, common ancestors,...) and to manipulate trees (reroot trees, split
     # terminal nodes)."""
@@ -151,23 +217,6 @@ class Tree(BaseTree.Tree, _Shim):
         """
         # XXX whoa! this sounds error-prone
 
-
-    def split(self, parent_id=None, n=2, branchlength=1.0):
-        """Speciation: generates n (default two) descendants of a node.
-
-        [new ids] = split(self,parent_id=None,n=2,branchlength=1.0):
-        """ 
-
-    def prune(self, taxon):
-        """Prunes a terminal taxon from the tree.
-
-        If taxon is from a bifurcation, the connectiong node will be collapsed
-        and its branchlength added to remaining terminal node. This might be no
-        longer a meaningful value'
-
-        @return previous node
-        """
-
     def set_subtree(self, node):
         """Return subtree as a set of nested sets."""
 
@@ -177,12 +226,6 @@ class Tree(BaseTree.Tree, _Shim):
 
     def is_compatible(self, tree2, threshold, strict=True):
         """Compares branches with support>threshold for compatibility."""
-
-    def is_monophyletic(self, taxon_list):
-        """Return node_id of common ancestor if taxon_list is monophyletic, -1 otherwise."""
-
-    def is_bifurcating(self, node=None):
-        """Return True if tree downstream of node is strictly bifurcating."""
 
     def branchlength2support(self):
         """Move values stored in data.branchlength to data.support, and set
@@ -201,14 +244,6 @@ class Tree(BaseTree.Tree, _Shim):
 
     def has_support(self, node=None):
         """Returns True if any of the nodes has data.support != None."""
-
-    def randomize(self, ntax=None, taxon_list=None, branchlength=1.0, branchlength_sd=None, bifurcate=True):
-        """Generates a random tree with ntax taxa and/or taxa from taxlabels.
-
-        Trees are bifurcating by default. (Polytomies not yet supported).
-
-        @return new tree
-        """
 
     def display(self):
         """Quick and dirty lists of all nodes."""
@@ -234,32 +269,15 @@ class Tree(BaseTree.Tree, _Shim):
         """
 
 
-class Clade(BaseTree.Subtree, _Shim):
-    """Newick Clade (subtree) object.
+
+class _NodeShim(object):
+    """Shim for compatibility with the Bio.Nexus.Nodes.Chain class.
     """
-    def __init__(self, branch_length=1.0, name=None, clades=None,
-            support=None, comment=None):
-        BaseTree.Subtree.__init__(self, branch_length=branch_length,
-                name=name, clades=clades)
-        self.support = support
-        self.comment = comment
-
-    # Deprecated attributes from Bio.Nexus.Trees
-
-    @property
-    @deprecated('Clade.name')
-    def taxon(self):
-        return self.name
 
     @property
     @deprecated('Clade.name')
     def id(self):
         return self.name
-
-    @property
-    @deprecated('Clade.clades')
-    def nodes(self):
-        return self.clades
 
     @property
     @deprecated("the Clade object's attributes")
@@ -269,7 +287,11 @@ class Clade(BaseTree.Subtree, _Shim):
                         support=self.support,
                         comment=self.comment)
 
-class _NodeData:
+    # TODO?
+    # prev
+    # succ
+
+class _NodeData(object):
     """Stores tree-relevant data associated with nodes (e.g. branches or OTUs).
 
     This exists only for backward compatibility with Bio.Nexus, and is
@@ -278,6 +300,28 @@ class _NodeData:
     def __init__(self, taxon, branchlength, support, comment):
         self.taxon = taxon
         self.branchlength = branchlength
+        self.support = support
+        self.comment = comment
+
+# /end of shims
+
+
+class Tree(BaseTree.Tree, _TreeShim):
+    """Newick Tree object.
+    """
+    def __init__(self, root=None, rooted=False, id=None, name='', weight=1.0):
+        BaseTree.Tree.__init__(self, root=root or Clade(),
+                rooted=rooted, id=id, name=name)
+        self.weight = weight
+
+
+class Clade(BaseTree.Subtree, _NodeShim):
+    """Newick Clade (subtree) object.
+    """
+    def __init__(self, branch_length=1.0, name=None, clades=None,
+            support=None, comment=None):
+        BaseTree.Subtree.__init__(self, branch_length=branch_length,
+                name=name, clades=clades)
         self.support = support
         self.comment = comment
 
