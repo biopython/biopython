@@ -159,7 +159,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
                 root=Clade.from_subtree(tree.root),
                 rooted=tree.rooted,
                 name=tree.name,
-                id=Id(tree.id))
+                id=(tree.id is not None) and Id(str(tree.id)) or None)
         phy.__dict__.update(kwargs)
         return phy
 
@@ -261,10 +261,8 @@ class Clade(PhyloElement, BaseTree.Subtree):
     @classmethod
     def from_subtree(cls, subtree, **kwargs):
         """Create a new Clade from a BaseTree.Subtree object."""
-        clade = cls(
-                branch_length=subtree.branch_length,
-                name=subtree.name,
-                node_id=Id(str(subtree.id)))
+        clade = cls(branch_length=subtree.branch_length,
+                    name=subtree.name)
         clade.clades = [cls.from_subtree(st) for st in subtree.clades]
         clade.__dict__.update(kwargs)
         return clade
@@ -275,10 +273,10 @@ class Clade(PhyloElement, BaseTree.Subtree):
         phy.__dict__.update(kwargs)
         return phy
 
-    # Mimic BaseTree.Subtree
-    @property
-    def id(self):
-        return self.node_id.value
+    # Potential addition to BaseTree.Subtree
+    # @property
+    # def id(self):
+    #     return self.node_id.value
 
     # Shortcuts for list attributes that are usually only 1 item
     @property
