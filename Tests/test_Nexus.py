@@ -361,7 +361,7 @@ Root:  16
         tree = Trees.Tree(ts2)
 
         large_ex_handle = open(os.path.join(self.testfile_dir,
-            "int_node_labels.nex"))
+            "int_node_labels.nwk"))
         tree = Trees.Tree(large_ex_handle.read())
         large_ex_handle.close()
 
