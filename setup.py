@@ -330,7 +330,7 @@ setup(
         },
     packages=PACKAGES,
     ext_modules=EXTENSIONS,
-    package_data = {'Bio.Entrez': ['DTDs/*.dtd'],
+    package_data = {'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod'],
                     'Bio.PopGen': ['SimCoal/data/*.par'],
                    },
     #install_requires = ['numpy>=1.0'],

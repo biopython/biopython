@@ -1,0 +1,2790 @@
+<!-- ============================================================= -->
+<!--  MODULE:    Common (Shared) Elements Module                   -->
+<!--  VERSION:   2.0                                               -->
+<!--  DATE:      August 2004                                       -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
+<!--                        TYPICAL INVOCATION                     -->
+<!--
+"-//NLM//DTD Archiving and Interchange DTD Suite Common (Shared) Elements Module v2.0 20040830//EN"
+Delivered as file "common.ent"                                     -->
+<!-- ============================================================= -->
+
+
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Archiving and Interchange DTD Suite               -->
+<!--                                                               -->
+<!-- PURPOSE:    Defines the common parameter entities, calls the  -->
+<!--             shared modules (such as special characters and    -->
+<!--             notations) and provides declarations for elements -->
+<!--             that do not properly fit into one class, since    -->
+<!--             they can be used at more than one structural level-->
+<!--                                                               -->
+<!-- CONTAINS:   1) Default classes for elements defined in this   -->
+<!--                module.  May be overridden by values in the    -->
+<!--                DTD's Customization Module                     -->
+<!--             2) Parameter Entities for attribute values        -->
+<!--             3) Parameter Entities for content models          -->
+<!--             4) Parameter Entities for attribute lists         -->
+<!--             5) Elements used in many modules/classes          -->
+<!--                  - Address elements                           -->
+<!--                  - Date elements                              -->
+<!--                  - Personal name elements                     -->
+<!--                  - Common metadata elements (shared by both   -->
+<!--                      article metadata and bibliographic       -->
+<!--                      reference metadata                       -->
+<!--                                                               -->
+<!-- MODULES REQUIRED:                                             -->
+<!--             1) Standard XML Special Characters Module         -->
+<!--                                       (%xmlspecchars.ent;)    -->
+<!--             2) Custom XML Special Characters (%chars.ent;)    -->
+<!--             3) Notation Declarations    (%notat.ent;)         -->
+<!--                                                               -->
+<!-- CREATED FOR:                                                  -->
+<!--             Digital archives and publishers who wish to       -->
+<!--             create a custom XML DTD for original markup of    -->
+<!--             journal literature, books, and related material,  -->
+<!--             or for archiving and transferring such material   -->
+<!--             between archives.                                 -->
+<!--                                                               -->
+<!--             This DTD is in the public domain. An organization -->
+<!--             that wishes to create its own DTD from the suite  -->
+<!--             may do so without permission from NLM.            -->
+<!--                                                               -->
+<!--             The suite has been set up to be extended using a  -->
+<!--             new DTD file and a new DTD-specific customization -->
+<!--             module to redefine the many Parameter Entities.   -->
+<!--             Do not modify the suite directly or redistribute  -->
+<!--             modified versions of the suite.                   -->
+<!--                                                               -->
+<!--             In the interest of maintaining consistency and    -->
+<!--             clarity for potential users, NLM requests:        -->
+<!--                                                               -->
+<!--             1. If you create a DTD from the Archiving and     -->
+<!--                Interchange DTD Suite and intend to stay       -->
+<!--                compatible with the suite, then please include -->
+<!--                the following statement as a comment in all of -->
+<!--                your DTD modules:                              -->
+<!--                   "Created from, and fully compatible with,   -->
+<!--                    the Archiving and Interchange DTD Suite."  -->
+<!--                                                               -->
+<!--             2. If you alter one or more modules of the suite, -->
+<!--                then please rename your version and all its    -->
+<!--                modules to avoid any confusion with the        -->
+<!--                original suite. Also, please include the       -->
+<!--                following statement as a comment in all your   -->
+<!--                DTD modules:                                   -->
+<!--                   "Based in part on, but not fully compatible -->
+<!--                    with, the Archiving and Interchange DTD    --> 
+<!--                    Suite."                                    -->
+<!--                                                               -->
+<!--             Suggestions for refinements and enhancements to   -->
+<!--             the DTD suite should be sent in email to:         -->
+<!--                 archive-dtd@ncbi.nlm.nih.gov                  -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             December 2002                                     -->
+<!--                                                               -->
+<!-- CREATED BY: Jeff Beck       (NCBI)                            -->
+<!--             Deborah Lapeyre (Mulberry Technologies, Inc.)     -->
+<!--             Bruce Rosenblum (Inera Inc.)                      -->
+<!--                                                               -->
+<!--             NLM thanks the Harvard University Libraries, both -->
+<!--             for proposing that a draft archiving NLM DTD for  --> 
+<!--             life sciences journals be extended to accommodate -->
+<!--             journals in all disciplines and for sponsoring    -->
+<!--             Bruce Rosenblum's collaboration with other DTD    -->
+<!--             authors in completing Version 1.0. The Andrew W.  --> 
+<!--             Mellon Foundation provided support for these      --> 
+<!--             important contributions.                          -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DTD VERSION/CHANGE HISTORY                 -->
+<!-- ============================================================= -->
+<!--
+
+     =============================================================
+
+Version  Reason/Occasion                   (who) vx.x (yyyy-mm-dd)
+
+     =============================================================
+     Version 2.0                       (DAL/BTU) v2.0 (2004-08-30)
+     
+     
+     Major requirement changes led to the new release, producing
+     DTD version "2.0":
+       a) The splitting of the Archival and Interchange Tag Set 
+          DTDs into three DTDs from two: an authoring DTD, an
+          archive regularization and interchange DTD (the
+          current Blue Publishing DTD), and a preservationist 
+          archive DTD (the current Green Archiving and Interchange 
+          DTD).
+       b) AIT Working Group suggestions from the June 04 meeting 
+          and June/July 2004 followup discussions
+       c) Suite remodularization to meet new (and newly articulated)
+          modularization requirements
+       d) New or renamed classes and mixes to make modifications
+          easier and more consistent
+
+     
+ 29. NEW ELEMENT <x> GENERATED TEXT AND PUNCTUATION
+     Added a container element to hold punctuation or other 
+     generated text, typically when 1) an archive decides not 
+     to have any text generated and thus to pre-generate such 
+     things as commas or semicolons between keywords or 2) 
+     when an archive receives text with <x> tags embedded and 
+     wishes to retain them.
+
+ 28. PUBLISHER - Moved element here from %journalmeta.ent;
+     module since Book DTD also needed it and was not including
+     that module.
+
+ 27. PAGE ELEMENT ATTRIBUTES
+     a. Made an Parameter Entity for:
+        - %fpage-atts;
+        - %elocation-id-atts;
+     b. Gave %elocation-id-atts" the attribute "seq"
+        
+ 26. PUB ID TYPES - Added the new attribute values to the
+     Parameter Entity %pub-id-types;, which is used on <article>
+     and other elements. New values: pmcid and art-access-id
+
+ 25. CUSTOM METADATA - Added the new <custom-meta> element, its
+     components, and its wrapper. This element is used to insert
+     name/value pairs for metadata elements that are in source
+     material but were never envisioned by this DTD. Allowed this
+     element at the end of <article-meta>.
+
+ 24. DATES 
+     a. Made a new Parameter Entity %string-date-elements; to
+        hold all the elements that may be mixed with #PCDATA
+        inside a <string-date>
+     b. Also used %date-parts.class; and %x.class; in 
+        the new PE %string-date-elements;
+
+ 23. COMPLETE MODELS WHEN OVER-RIDING A MODEL 
+     (for all Parameter Entities suffixed "-model")
+     ### Customization Alert ###
+     Made all the model over-rides consistent. Some included
+     the outer parentheses, some did not. They all do now,
+     as this is the most flexible system, allowing for
+     #PCDATA, mixed, or element content. (This is in direct
+     contrast to the "-element" suffixed models, which are
+     designed to prohibit element content and permit only
+     #PCDATA or mixed content.) Added parentheses to Parameter
+     Entity and removed them from the Element Declaration.
+     - %custom-meta-model;
+     - %custom-meta-wrap-model;
+     - %def-model;
+     - %sec-model;
+     - %sec-opt-title-model;
+     - Removed parentheses from <notes>, <ack>, <address>, <date>
+
+ 22. CITATION MODEL / COPYRIGHT STATEMENT MODEL
+     ### Customization Alert ###
+     a. Replaced the Parameter Entity %copyright-statement-model; 
+        with the OR list Parameter Entity 
+        %copyright-statement-elements; and used that
+        within the content model of <copyright-statement>
+     b. Citation - In the PE %citation-elements; also
+        changed the PE -%ext-links.class; ==> -%address-links.class;
+        (Changed the content model of citation to match.)
+     c. In -%copyright-statement-elements;, replaced the mix 
+        -%rendition-plus; with its  constituent classes
+     d. In -%citation-elements;, replaced the mix -%simple-text;
+        with its constituent classes (with exception of 
+        %address-link.class;).
+
+ 21. RELATED ARTICLE
+     ### Customization Alert ###
+      - Renamed 
+         -%related-article-model; ==> -%related-article-elements;
+          (To match the DTD naming convention that full content 
+          models are named with a "-model" suffix and groups of 
+          elements to be added to #PCDATA for a particular
+          content model are named "-elements".)
+      - Started "-related-article-elements" PE with an OR Bar
+      - Deleted "ext-links.class", because these elements are 
+        already in the %references.class; (no model change)
+
+ 20. INLINE MATH - <inline-formula> added to:
+     - %label-elements; 
+
+ 19. RELATED ARTICLE ATTRIBUTES - Added the following attributes
+     to the element <related-article>:
+     a.  "id" - to provide a unique identifier
+     b.  "alternate-form-of", which works (similarly to the same 
+         attribute when used on a <graphic> element) to point to 
+         another <related-article> element within the same document 
+         as an alternate form of the related article.
+
+ 18. ISSUE TITLE <issue-title> - Created new element for a theme or
+     special issue title
+        - Defined here in the common module
+        - Added to <article-meta>
+        - Added to %references.class; (therefore to <citation>,
+          <product>, and <related-article>
+        - Created new Parameter Entities %issue-title-elements; 
+          which hold the OR-group of elements that may be mixed with 
+          #PCDATA inside the content model 
+
+ 17. ATTRIBUTION
+      - Moved <attrib> and its Parameter Entities from the paragraph
+        module to here, as it is numerous elements, such as <array>, 
+        <boxed-text>, <fig>, <table-wrap>, etc., in the Archival DTD.
+
+ 16. CUSTOM METADATA - Added the new <custom-meta> element, its
+     components, and its wrapper. This element is used to insert
+     name/value pairs for metadata elements that are in source
+     material but were never envisioned by this DTD. Allowed this
+     element at the end of <article-meta> and <journal-meta>.
+
+ 15. EMAIL- Considered to be just another type of external link, as
+     <ext-link> is, so added to:
+     - %collab-elements;
+     - %copyright-statement-elements;
+
+ 14. DATES 
+     a. Added new class %date-parts.class; to hold all the
+        potential components of date, such as <year>, <day>,
+        etc.
+     b. Made a new Parameter Entity %string-date-elements; to
+        hold all the elements that may be mixed with #PCDATA
+        inside a <string-date>
+     c. Used %date-parts.class; in that model.
+
+ 13. ROLE ELEMENT - Was added to the model for <citation>, thus
+     moved to this module from the article metadata module.
+
+
+ 12. NEW IDENTIFICATION ELEMENTS - in view of the larger role that 
+     some publishers are giving to DOIs:
+
+     a. OBJECT ID  -  Added a new class Parameter Entity 
+        %id.class; to hold the new element <object-id> Object 
+        Identifier. The <object-id> element is used to capture any 
+        publisher's or archive's ID, such as a DOI. This was modeled 
+        as an element (rather than as an attribute) to allow for 
+        multiple  IDs. New PE used in:
+          - %references.class (therefore inside <citation>, 
+             <related-article>, and <product>)
+          - metadata objects such as <abstract>
+          - display objects such as <figure>.
+        Added PE %object-id-atts; to hold the element's attributes
+        
+     b. ISSUE ID <issue-id> - new element for an identifier such 
+        as a DOI associated with a journal issue (as opposed to the 
+        existing element <issue>, which is defined as the issue 
+        number) 
+        - Defined here in the common module
+        - Added to <article-meta>
+        - Added to %references.class; (therefore to <citation>,
+          <product>, and <related-article>
+        - Created PE %issue-id-atts; to hold the attributes.
+
+     c. VOLUME ID <volume-id> - new element for an identifier such 
+        as a DOI associated with a volume of a journal (as opposed 
+        to the  existing element <volume>, which is defined as the 
+        volume number) 
+        - Defined here in the common module
+        - Added to <article-meta>
+        - Added to %references.class; (therefore to <citation>,
+          <product>, and <related-article>
+        - Created new Parameter Entities %volume-id-elements; 
+          which hold the OR-group of elements that may be mixed with 
+          #PCDATA inside the content model 
+        - Added PE %volume-id-atts; to hold the attributes.
+
+     
+     Note: All ID attributes for these new identification
+     elements was set to use the "pub-id-type" attribute, 
+     which is for Archival (Green) set as a CDATA attribute.
+
+ 11. NAME CLASS / STRING NAME / PERSON NAME CLASS
+     a. Created a new element <string-name> for names that
+        do not follow the former, strict personal name model.
+        <string-name> holds any combination of #PCDATA and any of 
+        the known personal-name elements such as <surname>.
+        - Used a new Parameter Entity %string-name-elements;
+          in the content model
+     
+     b. Created a new class %name.class; to hold all the ways
+        to name people: <name>, <string-name>, and <collab>
+        who produce products or articles.
+
+     c. Allowed <string-name> to be used anywhere <name> is
+        used. Inside
+         - citation (by adding to %references.class;)
+         - product  (by adding to %references.class;)
+
+     d. Added new attribute "initials" to the personal name
+        components: <surname> and <given-names>. This provides
+        a way to preserve the initials, for matching services
+        that prefer initials to full names. Since there are
+        many cases in which the initials cannot be determined
+        programmatically, we merely provide a bucket to record
+        them.
+        
+     e. Added new Parameter Entities %given-name-atts; and
+        %surname-atts; to hold the new "initials" attribute.
+
+ 10. ATTRIBUTE VALUE LISTS - The Green (Archival) DTD needed to
+     change all explicit attribute value lists in the DTD to CDATA. 
+     In the future, explicit list types will be a feature of the
+     Blue (Publishing) and new Authoring DTDs. Therefore, added
+     Parameter entities to hold the following attributes:
+       - date-type
+
+  9. RELATED ARTICLE ATTRIBUTES - Added the following attributes
+     to the element <related-article>:
+      - "id ID #IMPLIED" attribute, so the related-article
+        can be referenced.
+      - "ext-link-type" - to indicate the type of link used to 
+        point to the related article. Attribute was used with 
+        exactly the same content (CDATA) and suggested values 
+        as when used with the element <ext-link>.
+      - "issue" - used (along with "vol", "page", and "journal-id")
+         to provide metadata concerning the related article
+      - "journal-id"- used (along with "vol", "page", and "issue")
+         to provide metadata concerning the related article.
+      - "journal-id-type" - Performs the same function that this
+        attribute performs for the element <journal-id>. The
+        "journal-id"  values are the same as those for existing 
+        journal identifiers plus "issn".
+      - "alternate-form-of", which works (similarly to the same 
+        attribute when used on a <graphic> element) to point to 
+        another <related-article> element within the same document 
+        as an alternate form of the related article.
+     
+  8. PARAMETER ENTITY CLEANUP AND REGULARIZATION
+
+     a. RENAME ELEMENT MIXES NOT TO END IN "-elements", since that
+        suffix is reserved for mixes that are added to #PCDATA in
+        a particular element
+        ### Customization Alert ###
+        Names ending in "-elements" saved for element-specific mixes
+        that will be added to #PCDATA for one element
+        -  %sec-back-matter-elements; ==> %sec-back-matter-mix;
+               (Used in -%sec-model; and -%sec-opt-title-model;)
+     
+     b. NEW CLASSES - Largely for classing and modification reasons,
+        the following new classes were added:
+        - %date.class;
+        - %def.class;
+        - %degree.class;
+        - %id.class; 
+        - Removed duplicate %person-name.class;
+
+     c. NEW MIXES - To correct potential classing problems, new 
+        Parameter Entities were created. The following content 
+        models were changed to use these new entities.
+        - <etal>           -%etal-elements;
+        - <ext-link>       -%ext-link-elements;
+        - <fax>            -%fax-elements;
+        - <given-names>    -%given-names-elements;
+        - <issn>           -%issn-elements;
+        - <issue>          -%issue-elements;
+        - <label>          -%label-elements;
+        - <long-desc>      -%long-desc-elements;
+        - <phone>          -%phone-elements;
+        - <prefix>         -%prefix-elements;
+        - <publisher-name> -%publisher-name-elements;
+        - <role>           -%role-elements;
+        - <suffix>         -%suffix-elements;
+        - <surname>        -%surname-elements;
+        - <uri>            -%uri-elements;
+        - <volume>         -%volume-elements;
+        - <volume-id>      -%volume-id-elements;
+
+        - <bio>      %bio-model; (which uses %just-para.class;)
+        - <def>      %def-model;
+        - <def>      %just-para.class;
+ 
+     d. RENAME CLASSES
+        ### Customization Alert ###
+        Not all classes ended in the ".class" suffix. Changed the 
+        following to add the class suffix:
+        - %address-elements; (renamed -%address.class;) used in 
+            - %aff-elements; 
+            - %publisher-loc-elements;
+            - %address-model;
+        - %inline-math.class; used in -%label-elements; 
+ 
+     e. PE %attrib-elements;
+        ### Customization Alert ###
+        Uses %emphasized-text; which now starts with an OR bar, so
+        removed the OR bar from this PE.
+
+     f. LINK CLASSES
+        - In %aff-elements;, replaced %link.class; with
+          the following classes (via use of %all-phrase;)
+          (no DTD change):
+            - %address-link.class;  (external used in addresses)
+            - %simple-link.class;   (the internal links, same)
+            - %article-link.class;  (for journal articles)
+       -  In -%collab-elements;
+            - Replaced -%ext-links.class; with the following class
+              (via use of %all-phrase;)
+              (no DTD change):
+              - address-link.class; (external used in addresses)
+            - Deleted -%inpara-address; 
+              (No model change, %address-link.class; covers it.)
+       -  In %copyright-statement-elements;, replaced 
+          -%inpara-address; with -%address-link.class;
+          (via use of %all-phrase;)
+
+  7. DEFAULT CLASSES - Were moved from this module to 
+     %default-classes.ent;
+
+  6. Updated public identifier to "v2.0 20040830" 
+     
+     =============================================================
+     Version 1.1                           (TRG) v1.1 (2003-11-01)
+
+  5. Made <copyright-statement> model into a parameter entity in 
+     order to add <ext-link> to the content model.
+     Rationale:  Permit linkage between copyright statement and 
+     copyright holder's site.
+
+  4. Added attribute "content-type" to element <ack>. 
+     Rationale: To identify and preserve the semantic intent of 
+     semantically rich source documents.
+               
+  3. Added ID attribute to the following elements:
+       - <ack> 
+       - <address> 
+       - <alt-text>
+       - <ext-link> (by modifying %ext-link-atts;)
+       - <institution>
+       - <long-desc> 
+       - <notes> (by modifying parameter entity %notes-atts;)
+     Rationale: Provide unique identifier so these elements can be 
+     linked to.  
+     
+  2. Added element <label> to content model of <aff> (by adding
+     -%label.class; to parameter -%aff-elements;)
+     Rationale: To provide <label>  when needed for format 
+     over-ride.
+     
+     =============================================================
+     Version 1.0 Changes Before Public Release
+                                       (Lapeyre) v1.0 (2002-12-25)
+
+  1. ETAL - Changed the content model of <etal> to replace the
+     entire content model with a Parameter Entity, not just name 
+     some elements that may mix with #PCDATA. Rationale: The 
+     Authoring DTD would like to make <etal> EMPTY.         
+                                                                   -->
+
+
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITY DEPENDENCIES             
+                        Requires the following parameter entities
+                        be defined before calling this module, 
+                        usually accomplished in the Customization
+                        Module for the specific DTD:
+                        - %address.class;
+                        - %break.class;
+                        - %emphasis.class;
+                        - %inline-display.class;
+                        - %just-rendition;
+                        - %label.class;
+                        - %para-level;
+                        - %references.class;
+                        - %rendition-plus;
+                        - %sec-back-matter-mix;
+                        - %sec-level;
+                        - %sec-opt-title-model;
+                        - %simple-link.class;
+                        - %simple-phrase;
+                        - %simple-text;
+                        - %subsup.class;
+                        - %might-link-atts;                        -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITIES FOR ATTRIBUTE VALUES    -->
+<!-- ============================================================= -->
+
+
+<!--                    HISTORY DATE TYPES                         -->
+<!--                    The <history> element contains one or more 
+                        <date> elements that record events in the 
+                        life of a publication.          
+          date-type     Attribute should only be used if the date
+                        is one of the known types; otherwise omit
+                        the attribute. 
+                        Values are:
+                          accepted    - Date manuscript was 
+                                        accepted         
+                          received    - Date manuscript received
+                          rev-request - Date revisions were 
+                                        requested or manuscript 
+                                        was returned
+                          rev-recd    - Date revised manuscript 
+                                        was received               -->
+<!ENTITY % date-types   "accepted | received | rev-request | 
+                         rev-recd"                                   >
+
+
+<!--                    ARTICLE/PUBLICATION IDENTIFIER TYPES       -->
+<!--                    The "pub-id-type" attribute names the
+                        type of identifier, or the organization or 
+                        system that defined this identifier for the 
+                        identifier of the journal article or a 
+                        cited publication.
+                           Used on the <article-id> element, which 
+                        holds an identifier for the entire article.  
+                           Also used on the <pub-id> element, which 
+                        is an identifier for a publication cited in 
+                        a bibliographic reference (citation).
+                        Valid Types include:
+                          art-access-id
+                                 - Generic article accession id for
+                                   interchange and retrieval between
+                                   archives
+                          coden  - Obsolete PDB/CCDC identifier (may
+                                   be present on older articles)
+                                   be present on older articles)
+                          doi    - Digital Object Identifier for
+                                   the article
+                          medline- NLM Medline identifier
+                          other  - None of the named identifiers
+                          pii    - Publisher Item Identifier, see
+                                    /epub/piius.htm
+                          pmcid  - PubMed Central identifier        
+                          pmid   - PubMed ID (see
+                                   www.ncbi.nlm.nih.gov/entrez/
+                                   query.fcgi?db=PubMed)         
+                          publisher-id - 
+                                   Publisher's identifying number 
+                                   such as an 'article-id', 'artnum',
+                                   'identifier', 'article- number', 
+                                   etc.
+                          sici   - Serial Item and Contribution 
+                                   Identifier (SICI). A journal 
+                                   article may have more than one 
+                                   SICI, one for a print version and
+                                   one for an electronic version.  -->
+<!ENTITY % pub-id-types  "art-access-id | coden | doi | medline | 
+                          other | pii | pmcid |  pmid | 
+                          publisher-id | sici"                       >
+
+
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITIES FOR COMMENT MODELS      -->
+<!-- ============================================================= -->
+
+
+<!--                    DATE ELEMENTS MODEL                        -->
+<!--                    The content models for elements that describe
+                        dates, such as Publication Date <pub-date>
+                        and History Dates <date>.  The <string-date>
+                        element holds dates for which months and 
+                        years are not given, for example "first 
+                        quarter", "spring", etc.                   -->
+<!ENTITY % date-model   "( ( (day?, month?) | season)?,
+                          year?, string-date?)"                      >
+
+
+<!--                    CONTENT MODEL FOR A STRUCTURAL SECTION     -->
+<!--                    The model for a section that requires that a
+                        section title be present, used for elements
+                        such as Section and Appendix.              -->
+<!ENTITY % sec-model    "(label?, title, (%para-level;)*, 
+                          (%sec-level;)*, 
+                          (%sec-back-matter-mix;)* )"                >
+
+
+<!--                    CONTENT MODEL FOR AN UNTITLED SECTION      -->
+<!--                    The model for a section-like structure that
+                        may or may not have an initial title       -->
+<!ENTITY % sec-opt-title-model
+                        "(label?, title?, (%para-level;)*,  
+                          (%sec-level;)*, 
+                          (%sec-back-matter-mix;)* )"                >
+
+
+<!--                    LINK ELEMENTS                              -->
+<!--                    Elements for use in the linking elements
+                        such as <xref>, <target>, and <ext-link>   -->
+<!ENTITY % link-elements 
+                        "| %emphasis.class; | %subsup.class;"        > 
+
+
+<!--                    TITLE ELEMENTS                             -->
+<!--                    Elements for use in all the title elements
+                        such as <title>, <subtitle>, <trans-title>,
+                        etc.                       
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar, but since %simple-phrase; is an 
+                        inline mix, the OR bar is already there.   -->
+<!ENTITY % title-elements   
+                        "%simple-phrase; | %break.class;"            > 
+
+
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITIES FOR LINKING ATTRIBUTES  -->
+<!-- ============================================================= -->
+              
+
+<!--                    XLINK LINK ATTRIBUTES                      -->
+<!--                    Used for elements that are a link by
+                        definition, such as the <xref> element.         
+             xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename
+             xlink:role Provides a URI reference pointing to some
+                        resource that describes the role or function 
+                        of this link           
+             xlink:title
+                        Describes the meaning of the link in a 
+                        human-readable and displayable fashion
+             xlink:show Describes the requested presentation when 
+                        the link is traversed.  
+                        Values are:
+                          embed    Load the new presentation in the
+                                   place of the link
+                          new      Load a new window, frame, pane, or 
+                                   other presentation
+                          none     No clue for the application
+                          other    Look to other markup for a clue
+                          replace  Load the new resource in the same
+                                   window, frame, pane, or other
+                                   presentation context as the link
+                                   started in
+            xlink:actuate
+                        When is the link traversed, and under whose
+                        control.  
+                        Values are:
+                          none     No clue for the application
+                          onLoad   Traverse the link immediately
+                                   upon loading the link
+                          onRequest
+                                   User or software requests that the
+                                   link be traversed
+                          other    Look to other markup for a clue
+                                                                   -->       
+<!ENTITY % link-atts
+            "xmlns:xlink CDATA                            #FIXED
+                                     'http://www.w3.org/1999/xlink'
+             xlink:type  (simple)                   #FIXED 'simple'
+             xlink:href  CDATA                            #REQUIRED 
+             xlink:role  CDATA                            #IMPLIED
+             xlink:title CDATA                            #IMPLIED
+             xlink:show  (embed | new | none | other | replace)
+                                                          #IMPLIED
+             xlink:actuate   
+                         (none | onLoad | onRequest | other)          
+                                                           #IMPLIED" >
+
+
+<!--                    MIGHT LINK XLINK ATTRIBUTES                -->
+<!--                    Used for elements which may need to link to
+                        external sources or other objects within
+                        the document, but may not necessarily act 
+                        as a link at all.  The attribute
+                        "xlink:href" identifies the object to which 
+                        the link points.                           -->
+<!ENTITY % might-link-atts
+            "xmlns:xlink CDATA                             #FIXED
+                                     'http://www.w3.org/1999/xlink'
+             xlink:type  (simple)                   #FIXED 'simple'
+             xlink:href  CDATA                             #IMPLIED 
+             xlink:role  CDATA                             #IMPLIED
+             xlink:title CDATA                             #IMPLIED
+             xlink:show  (embed | new | none | other | replace)
+                                                           #IMPLIED
+             xlink:actuate   
+                         (none | onLoad | onRequest | other)          
+                                                           #IMPLIED" >
+
+
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITIES FOR ATTRIBUTES LISTS    -->
+<!--                    (ALPHABETICAL ORDER)                       -->
+<!-- ============================================================= -->
+                                                                
+                                                                 
+<!--                    AFFILIATION ATTRIBUTES                     -->
+<!--                    Attributes for the Affiliation <aff> 
+                        element                                    -->
+<!ENTITY % aff-atts
+            "id         ID                                 #IMPLIED  
+             rid        IDREFS                             #IMPLIED" >
+
+                                                                
+<!--                    BIOGRAPHY ATTRIBUTES                       -->
+<!--                    Attributes for <bio> element    
+             id         Unique identifier so the element may be
+                        referenced 
+             rid        Points to the identifier of an author or
+                        authors                               
+             xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename.               -->
+<!ENTITY % bio-atts
+             "id        ID                                #IMPLIED
+              rid       IDREFS                            #IMPLIED
+              %might-link-atts;"                                     >
+
+                                                                
+<!--                    COLLABORATION ATTRIBUTES                   -->
+<!--                    Attributes for <collab>                    -->
+<!--          collab-type
+                        The type or role of the collaborators, 
+                        what function did they play in the 
+                        publication.
+                        Suggested values include:
+                          assignee 
+                                  - Group or company to whom a patent 
+                                    is awarded
+                          authors - Content creators
+                          editors - Content editors
+                          compilers
+                                  - Put together a composite work
+                                    from multiple sources
+                          guest-editors 
+                                  - A group of editors that have been
+                                    invited to edit all or part of a
+                                    work
+                          inventors 
+                                  - Idea, software, or machine 
+                                    creators
+                          translators
+                                  - Translated the cited work from 
+                                    one language into another
+             id         Unique identifier so that the collaboration
+                        can be referenced
+             xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename                -->
+<!ENTITY % collab-atts
+            "collab-type       
+                        CDATA                             #IMPLIED  
+             id         ID                                #IMPLIED
+             %might-link-atts;"                                      >
+
+
+<!--                    EXTERNAL LINK ATTRIBUTES                   -->
+<!--                    Attribute list for external links 
+             ext-link-type 
+                        Type of external link. Use this attribute
+                        if the type of external link is one of the
+                        ones below or another named type.
+                        Suggested values include:
+                            aoi         Astronomical Object Identifier 
+                            doi         Digital Object Identifier
+                            ec          Enzyme nomenclature - see
+                              http://www.chem.qmw.ac.uk/iubmb/enzyme/
+                            ftp         File transfer protocol
+                            email       An email address
+                            gen         GenBank identifier
+                            genpept     Translated Protein-encoding
+                                        sequence Database
+                            highwire    HighWire press intrajournal 
+                            pmid        PubMed identifier
+                            pdb         Protein data bank. See 
+                                        http://www.rcsb.org/pdb/
+                            pgr         Plant gene register. See
+                                        http://www.tarweed.com/pgr/
+                            pir         Protein Information Resource
+                                        see http://pir.georgetown.edu
+                            pirdb       Protein Information Resource 
+                                        see http://pir.georgetown.edu
+                            pmc         PubMedCentral identifier
+                            sprot       Swiss-Prot. See
+                                    http://www.ebi.ac.uk/swissprot/
+                            uri         Website or web service    
+             id         Unique identifier so the element may be
+                        referenced 
+             xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename                -->
+<!ENTITY %  ext-link-atts
+             "ext-link-type 
+                        CDATA                              #IMPLIED
+              id        ID                                 #IMPLIED
+              %might-link-atts;"                                     >
+
+                                                                
+<!--                    CITATION ATTRIBUTES                        -->
+<!--                    Attributes for <citation>
+             citation-type
+                        Defines the type of work being referenced.
+                        Suggested values include:
+                          book         Book 
+                          conf-proceedings
+                                       Conference proceedings
+                          discussion   Discussion among a group in
+                                       some forum - public, private,
+                                       or electronic, which may or
+                                       may not be moderated
+                          gov          Government publication
+                          journal      Journal article
+                          list         Listserv
+                          other        None of the listed types
+                          patent       Patent or patent application
+                          personal-communication
+                                       Informal or personal 
+                                       communication, such as a 
+                                       phone call or an email
+                                       message
+                          standard     Standards document issued by
+                                       a recognized standards body,
+                                       such as ISO, ANSI, IEEE, 
+                                       OASIS, etc.
+                          thesis       Work written as part of the
+                                       completion of an advanced 
+                                       degree
+                          web          Website
+             id         Unique identifier so the element may be
+                        referenced 
+             xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename                -->
+<!ENTITY % citation-atts
+             "citation-type   
+                        CDATA                              #IMPLIED  
+              id        ID                                 #IMPLIED
+              %might-link-atts;"                                     >
+
+
+<!--                    DATE (HISTORICAL) ATTRIBUTES               -->
+<!--         date-type  Attribute should only be used if the date
+                        is one of the known types, otherwise omit
+                        the attribute. Values are:
+                          accepted    - Date manuscript was 
+                                        accepted         
+                          received    - Date manuscript received
+                          rev-request - Date revisions were 
+                                        requested or manuscript 
+                                        was returned
+                          rev-recd    - Date revised manuscript 
+                                        was received               -->
+<!ENTITY % date-atts
+             "date-type (%date-types;)                     #IMPLIED" >
+
+
+<!--                    GIVEN NAMES ATTRIBUTES                     -->
+<!--         initials   The initial(s) for the given names of the
+                        person. Particularly useful in those cases
+                        that cannot be algorithmically determined. -->
+<!ENTITY % given-names-atts
+             "initials  CDATA                              #IMPLIED" >
+
+
+<!--                    ISSN ATTRIBUTES                            -->
+<!--                    Attribute list for <issn>                  -->
+<!--                    Used to record the type of publication, for
+                        example, a print-only publication versus
+                        an electronic-only publication, in any of
+                        several life stages.
+                        Suggested values include:
+                          epub        - Electronic publication
+                          ppub        - Print publication
+                          epub-ppub   - Published in both print and
+                                        electronic form
+                          epreprint   - Electronic preprint 
+                                        dissemination    
+                          ppreprint   - Print preprint dissemination     
+                          ecorrected  - Corrected in electronic    
+                          pcorrected  - Corrected in print     
+                          eretracted  - Retracted in electronic    
+                          pretracted  - Retracted in print         -->
+<!ENTITY %  issn-atts
+             "pub-type   CDATA                           #IMPLIED"   >
+                                                                
+                                                                 
+<!--                    ISSUE IDENTIFIER ATTRIBUTES                -->
+<!--                    Attributes for the <issue-id> element
+             pub-id-type
+                        Publication (article) Identifier Type
+                        Names the type of identifier, or the 
+                        organization or system that defined this 
+                        identifier for the identifier of the journal 
+                        article or a cited publication. This is an
+                        optional CDATA attribute that should be used
+                        whenever the type is known.
+                           Used on the <article-id> element, which 
+                        holds an identifier for the entire article.  
+                           Also used on the <pubid> element, which 
+                        is an identifier for a publication cited in 
+                        a bibliographic reference (citation).
+                        Suggested values include:
+                          coden  - Obsolete PDB/CCDC identifier (may
+                                   be present on older articles)
+                          doi    - Digital Object Identifier
+                          medline- NLM Medline identifier
+                          other  - None of the named identifiers
+                          pii    - Publisher Item Identifier, see
+                                    http://pubs.acs.org/epub/piius.htm
+                                   or 
+                                    http://www.aip.org/epub/piipr.html
+                          pmid   - PubMed Central identifier (see
+                                   www.ncbi.nlm.nih.gov/entrez/
+                                   query.fcgi?db=PubMed)         
+                          publisher-id 
+                                 - Publisher's identifier such 
+                                   as an 'article-id', 'artnum',
+                                   'identifier', 'article- number', 
+                                   'pub-id', etc.
+                          sici   - Serial Item and Contribution 
+                                   Identifier (SICI). A journal 
+                                   article may have more than one 
+                                   SICI, one for a print version and
+                                   one for an electronic version.  -->
+<!ENTITY % issue-id-atts
+            "pub-id-type
+                        CDATA                              #IMPLIED" >
+
+
+<!--                    NOTE ATTRIBUTES                            -->
+<!--                    Attribute list for <note>                  -->
+<!--         notes-type To identify the type of note, if the type
+                        can be/has been identified, for example,
+                        "note-in-proof"                            
+             id         Unique identifier so the element may be
+                        referenced                                 -->
+<!ENTITY % notes-atts
+            "id         ID                                #IMPLIED
+             notes-type CDATA                             #IMPLIED"  >
+                                                                
+                                                                 
+<!--                    OBJECT IDENTIFIER ATTRIBUTES               -->
+<!--                    Attributes for the <object-id> element
+             pub-id-type
+                        Publication (article) Identifier Type
+                        Names the type of identifier, or the 
+                        organization or system that defined this 
+                        identifier for the identifier of the journal 
+                        article or a cited publication. This is an
+                        optional CDATA attribute that should be used
+                        whenever the type is known.
+                           Used on the <article-id> element, which 
+                        holds an identifier for the entire article.  
+                           Also used on the <pubid> element, which 
+                        is an identifier for a publication cited in 
+                        a bibliographic reference (citation).
+                        Suggested values include:
+                          coden  - Obsolete PDB/CCDC identifier (may
+                                   be present on older articles)
+                          doi    - Digital Object Identifier
+                          medline- NLM Medline identifier
+                          other  - None of the named identifiers
+                          pii    - Publisher Item Identifier, see
+                                    http://pubs.acs.org/epub/piius.htm
+                                   or 
+                                    http://www.aip.org/epub/piipr.html
+                          pmid   - PubMed Central identifier (see
+                                   www.ncbi.nlm.nih.gov/entrez/
+                                   query.fcgi?db=PubMed)         
+                          publisher-id 
+                                 - Publisher's identifier such 
+                                   as an 'article-id', 'artnum',
+                                   'identifier', 'article- number', 
+                                   'pub-id', etc.
+                          sici   - Serial Item and Contribution 
+                                   Identifier (SICI). A journal 
+                                   article may have more than one 
+                                   SICI, one for a print version and
+                                   one for an electronic version.  -->
+<!ENTITY % object-id-atts
+            "pub-id-type
+                        CDATA                              #IMPLIED" >
+
+                                                                
+<!--                    RELATED ARTICLE ATTRIBUTES                 -->
+<!--                    Attributes for <related-article>         
+             id         Unique identifier so the element may be
+                        referenced
+             alt-form-of
+                        Exactly like the "alt-form-of" attribute
+                        used with <graphic>, this is an IDREF
+                        attribute which points to the ID of another
+                        <related-article> in the same document
+                         rather than to an external file.
+             related-article-type
+                          addendum      Additional material for an
+                                        article, generated too late
+                                        to be added to the main text
+                          commentary-article   
+                                        Used in an commentary or
+                                        editorial to link to the 
+                                        article on which it is
+                                        commenting
+                          companion     Used in an article to link 
+                                        to a companion (related
+                                        or sibling) article 
+                          corrected-article
+                                        Used in a correction to link 
+                                        to the article being 
+                                        corrected. Sometimes called
+                                        erratum.
+                          in-this-issue Related article in the same
+                                        journal issue
+                          letter        A letter to the publication
+                                        or a reply to such a
+                                        letter
+                          commentary    Used in an article to link 
+                                        to its associated commentary
+                                        or editorial 
+                          correction-forward
+                                        Used in an article to link
+                                        forward to its associated 
+                                        correction (rarely used)
+                          retracted-article
+                                        Used in a retraction to link 
+                                        to the article being retracted
+                          retraction-forward   
+                                        Used in an article to link
+                                        forward to its associated 
+                                        retraction (rare)
+             ext-link-type
+                        Type of external link used to point to the
+                        related article. Use this attribute
+                        if the type of external link is one of the
+                        ones below or another named type.
+                        Suggested values include:
+                            aoi         Astronomical Object Identifier 
+                            doi         Digital Object Identifier
+                            ec          Enzyme nomenclature - see
+                              http://www.chem.qmw.ac.uk/iubmb/enzyme/
+                            ftp         File transfer protocol
+                            email       An email address
+                            gen         GenBank identifier
+                            genpept     Translated Protein-encoding
+                                        sequence Database
+                            highwire    HighWire press intrajournal 
+                            pdb         Protein data bank. See 
+                                        http://www.rcsb.org/pdb/
+                            pgr         Plant gene register. See
+                                        http://www.tarweed.com/pgr/
+                            pir         Protein Information Resource
+                                        see http://pir.georgetown.edu
+                            pirdb       Protein Information Resource 
+                                        see http://pir.georgetown.edu
+                            pmc         PubMed Central identifier
+                            pmid        PubMed identifier
+                            sprot       Swiss-Prot. See
+                                    http://www.ebi.ac.uk/swissprot/
+                            uri         Website or web service    
+             The next five attributes are used to identify the
+             journal in which the related article was published. 
+             vol        Volume of the journal in which the related
+                        article exists.  It is best practice to
+                        limit the scope to the current journal, 
+                        the one in which the current article
+                        resides.
+             page       Page number of the related article. It is 
+                        best practice to limit the scope to the 
+                        current journal, the one in which the 
+                        current article resides. The values for this 
+                        attribute should be a first page or a page 
+                        range.
+             issue      Issue number of the related article. 
+             journal-id Identifier for the journal which contains the
+                        related article.
+             journal-id-type   
+                        Indicates whose identifier this is, for
+                        example, "pub-id" for a publisher's
+                        identifier or "pmc" for PubMed Central.
+                        Suggested values include:
+                          archive Identifier assigned by an archive
+                                  or other repository
+                          aggregator
+                                 Identifier assigned by a data
+                                 aggregator
+                          doi    Digital Object Identifier for the
+                                 entire journal, not just for the
+                                 article (rare)
+                          index  Identifier assigned by an
+                                 abstracting or indexing service
+                          issn   International Standard Serial Number
+                                 of the journal in which the related
+                                 article was published
+                          pmc    Identifier assigned by PubMed Central
+                                 for example, the pmc journal 
+                                 abbreviation such as "pnas", "mbc", 
+                                 "nar", "molcellb", which may be the 
+                                 same as the abbreviated journal 
+                                 title
+                          publisher-id 
+                                 Identifier assigned by the content
+                                 publisher, for example, "MOLEC", 
+                                 "MOLCEL"
+                          nlm-ta Identifier assigned by the 
+                                 PubMed/Medline, and is typically
+                                 the journal abbreviation, for 
+                                 example, "Mol Biol Cell", "Nucleic
+                                 Acids Res", which may be the
+                                 same as the abbreviated journal 
+                                 title.
+             xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename.               -->
+<!ENTITY % related-article-atts
+             "id        ID                                #IMPLIED
+              alternate-form-of
+                        IDREF                             #IMPLIED
+              related-article-type
+                        CDATA                             #REQUIRED
+              ext-link-type 
+                        CDATA                             #IMPLIED
+              vol       CDATA                             #IMPLIED
+              page      CDATA                             #IMPLIED  
+              issue     CDATA                             #IMPLIED
+              journal-id
+                        CDATA                             #IMPLIED  
+              journal-id-type  
+                        CDATA                             #IMPLIED 
+              %might-link-atts;"                                     >
+
+
+<!--                    SURNAME ATTRIBUTES                         -->
+<!--         initials   The initial(s) for the given names of the
+                        person. Particularly useful in those cases
+                        that cannot be algorithmically determined. -->
+<!ENTITY % surname-atts
+             "initials  CDATA                              #IMPLIED" >
+                                                                
+                                                                 
+<!--                    VOLUME IDENTIFIER ATTRIBUTES               -->
+<!--                    Attributes for the <issue-id> element
+             pub-id-type
+                        Publication (article) Identifier Type
+                        Names the type of identifier, or the 
+                        organization or system that defined this 
+                        identifier for the identifier of the journal 
+                        article or a cited publication. This is an
+                        optional CDATA attribute that should be used
+                        whenever the type is known.
+                           Used on the <article-id> element, which 
+                        holds an identifier for the entire article.  
+                           Also used on the <pubid> element, which 
+                        is an identifier for a publication cited in 
+                        a bibliographic reference (citation).
+                        Suggested values include:
+                          coden  - Obsolete PDB/CCDC identifier (may
+                                   be present on older articles)
+                          doi    - Digital Object Identifier
+                          medline- NLM Medline identifier
+                          other  - None of the named identifiers
+                          pii    - Publisher Item Identifier, see
+                                    http://pubs.acs.org/epub/piius.htm
+                                   or 
+                                    http://www.aip.org/epub/piipr.html
+                          pmid   - PubMed Central identifier (see
+                                   www.ncbi.nlm.nih.gov/entrez/
+                                   query.fcgi?db=PubMed)         
+                          publisher-id 
+                                 - Publisher's identifier such 
+                                   as an 'article-id', 'artnum',
+                                   'identifier', 'article- number', 
+                                   'pub-id', etc.
+                          sici   - Serial Item and Contribution 
+                                   Identifier (SICI). A journal 
+                                   article may have more than one 
+                                   SICI, one for a print version and
+                                   one for an electronic version.  -->
+<!ENTITY % volume-id-atts
+            "pub-id-type
+                        CDATA                              #IMPLIED" >
+
+
+<!-- ============================================================= -->
+<!--                    ELEMENT USED BY MORE THAN ONE CLASS        -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    COMMON METADATA/BIBLIOGRAPHIC ELEMENTS     -->
+<!-- ============================================================= -->
+
+
+<!--                    ARTICLE TITLE                              -->
+<!--                    The title of the article in the language
+                        in which the article was originally
+                        published          
+                        Remarks: The related element Translated Title
+                        <trans-title> should be used for a
+                        translation of the article into another
+                        language, for example, to hold the English
+                        version of a Japanese article title.       -->
+<!ELEMENT  article-title       
+                        (#PCDATA %title-elements;)*                  >
+<!--         xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).                   -->
+<!ATTLIST  article-title
+             xml:lang   NMTOKEN                            #IMPLIED  > 
+
+
+<!--                    AFFILIATION ELEMENTS                       -->
+<!--                    Elements for use in the <aff> element      -->
+<!ENTITY % aff-elements "| %address.class; | %address-link.class; |
+                         %article-link.class; | %break.class; | 
+                         %emphasis.class; | %label.class; | 
+                         %simple-link.class; | %subsup.class;"       > 
+
+
+<!--                    AFFILIATION                                -->
+<!--                    Name of a institution or organization such as
+                        a university or corporation. 
+                        Authoring and Conversion Note: In a typical 
+                        case, the "id" attribute will be pointed to 
+                        by one or more contributors.               
+                        Conversion Note: Any explicitly tagged numbers
+                        or symbols for author linkages should be 
+                        discarded, as the linkage will be recreated
+                        from the "id" connection.
+                        Authoring Note:  While this element 
+                        contains an optional Label element, the 
+                        Label element should be included only in 
+                        those circumstances where a formatting 
+                        override is needed; Label should NOT 
+                        be used in the ordinary course of 
+                        tagging.                                   -->                       
+<!ELEMENT  aff          (#PCDATA %aff-elements;)*                    >
+<!--         id         Unique identifier so that the affiliated
+                        institution may be referenced, for example 
+                        by a contributor
+             rid        May be used to point to affiliation-related
+                        information within the document            
+                                                                   -->
+<!ATTLIST  aff
+             %aff-atts;                                              >
+
+
+<!--                    COLLABORATIVE (GROUP) AUTHOR ELEMENTS      -->
+<!--                    Elements for use in the <collab> element
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar, but since %simple-text; is an inline
+                        mix, the OR bar is already there. 
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar, but since %simple-text; is an inline
+                        mix, the OR bar is already there.          -->
+<!ENTITY % collab-elements 
+                        "%simple-text; | %address-link.class; | 
+                         %simple-link.class;"                        > 
+
+
+<!--                    COLLABORATIVE (GROUP) AUTHOR               -->
+<!--                    Used for groups of authors credited under 
+                        one name, either as a collaboration in the
+                        strictest sense, or when an organization, 
+                        institution, or corporation is the group.  
+                        Remarks: When an author is an organization 
+                        rather than a person, use the <collab> 
+                        element rather than <surname>, for
+                        example: 
+                           <collab>Aardvark Institute</collab>  
+                                                                   -->
+<!ELEMENT  collab       (#PCDATA %collab-elements;)*                 >
+<!--         collab-type
+                        The type or role of the collaborators, 
+                        what function did they play in the 
+                        publication.
+                        Suggested values include:
+                          assignee 
+                                  - Group or company to whom a patent 
+                                    is awarded
+                          authors - Content creators
+                          editors - Content editors
+                          compilers
+                                  - Put together a composite work
+                                    from multiple sources
+                          guest-editors 
+                                  - A group of editors that have been
+                                    invited to edit all or part of a
+                                    work
+                          inventors 
+                                  - Idea, software, or machine 
+                                    creators
+                          translators
+                                  - Translated the cited work from 
+                                    one language into another
+                                    one language into another
+             id         unique identifier so that the collaboration
+                        can be referenced
+             xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename.               -->
+<!ATTLIST  collab
+             %collab-atts;                                           >
+
+
+<!--                    CONFERENCE DATE ELEMENTS                   -->
+<!--                    Elements for use in the <conf-date> element-->
+<!ENTITY % conf-date-elements 
+                        "  "                                         > 
+             
+
+<!--                    CONFERENCE DATE                            -->
+<!--                    The date(s) on which the conference was held.
+                          Conference dates in journal headers are
+                        traditionally stored in one of two forms:
+                        as a single date ("May 1906") or as the
+                        first day and last day of the conference.
+                        Both types should be stored in this element;
+                        the dates that come from separate first and 
+                        last elements should be combined:
+                          <conf-start>August 4, 2002</conf-start>
+                          <conf-end>August 9, 2002<conf-end>
+                        should become:
+                          <conf-date>August 4, 2002 - August 9,
+                          2002</conf-date>
+                                                                   -->
+<!ELEMENT  conf-date    (#PCDATA %conf-date-elements;)*              >
+
+
+<!--                    CONFERENCE LOCATION ELEMENTS               -->
+<!--                    Elements for use in the <conf-loc> element 
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar, but since %simple-text; is an inline
+                        mix, the OR bar is already there.          -->
+<!ENTITY % conf-loc-elements 
+                        "%simple-text;"                            > 
+ 
+
+<!--                    CONFERENCE LOCATION                        -->
+<!--                    The physical location(s) of the conference.
+                        This may include a city, a country, or a
+                        campus or organization location if that is
+                        the only location available.
+                        Authoring and Conversion Note: If the 
+                        conference is in the United States, the 
+                        state should also be provided. A specific 
+                        venue or address (e.g. conference hotel) 
+                        should not be provided unless there is no
+                        other location information.                -->
+<!ELEMENT  conf-loc     (#PCDATA %conf-loc-elements;)*               >
+
+
+<!--                    CONFERENCE NAME ELEMENTS                   -->
+<!--                    Elements for use in the <conf-name> element.
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar, but since %simple-text; is an inline
+                        mix, the OR bar is already there.          -->
+<!ENTITY % conf-name-elements 
+                        "%simple-text;"                            > 
+
+
+<!--                    CONFERENCE NAME                            -->
+<!--                    The full name of the conference, including any
+                        qualifiers such as "43rd Annual". When the
+                        name includes the year of the conference,
+                        (e.g. "Extreme 2002"), the year should appear
+                        in both the conference Name and the Conference
+                        Date elements.                             -->
+<!ELEMENT  conf-name    (#PCDATA %conf-name-elements;)*              >
+
+
+<!--                    COPYRIGHT STATEMENT MODEL                  -->
+<!--                    Content model for <copyright-statement>    -->
+<!ENTITY % copyright-statement-elements 
+                        "| %address-link.class;| %emphasis.class; | 
+                         %subsup.class;"                             > 
+
+
+<!--                    COPYRIGHT STATEMENT                        -->
+<!--                    Copyright notice or statement, suitable for
+                        printing or display. Within the statement the
+                        copyright year should be identified, if
+                        expected to be displayed.                  -->
+<!ELEMENT  copyright-statement
+                        (#PCDATA %copyright-statement-elements;)*    >
+
+
+<!--                    OBJECT IDENTIFIER                          -->
+<!--                    Used to record an identifier such as a DOI
+                        for an interior element such as an <abstract>
+                        or <figure>.
+                        Remarks: Such an identifier may be created
+                        by a publisher or archive, and there is no
+                        requirement that identifiers be unique.    -->
+<!ELEMENT  object-id    (#PCDATA)                                    >  
+<!--         id-type    Indicates what type of identifier this is or
+                        who assigned the identifier, for example,
+                        "pub-id" for a publisher's non-DOI
+                        identifier or "DOI" for a Digital Object
+                        Identifier.
+                          In Archival this is a CDATA attribute but
+                        suggested values include:
+                          archive Identifier assigned by an archive
+                                  or other repository
+                          aggregator
+                                 Assigned by a data aggregator
+                          doi    Digital Object Identifier
+                          index  Assigned by an abstracting or 
+                                 indexing service
+                          pmc    Assigned by PubMed Central
+                          publisher-id 
+                                 Non-DOI Identifier assigned by 
+                                 the content publisher             -->
+<!ATTLIST  object-id
+             %object-id-atts;                                        >
+
+
+<!--                    JOURNAL IDENTIFIER ATTRIBUTES              -->
+<!--                    Attribute list for journal identifier 
+                        <journal-id> element                       -->
+<!--                    Indicates whose identifier this is, for
+                        example, "pub-id" for a publisher's
+                        identifier or "pmc" for PubMed Central.
+                        Suggested values include:
+                          archive Identifier assigned by an archive
+                                  or other repository
+                          aggregator
+                                 Identifier assigned by a data
+                                 aggregator
+                          doi    Digital Object Identifier for the
+                                 entire journal, not just for the
+                                 article (rare)
+                          index  Identifier assigned by an
+                                 abstracting or indexing service
+                          pmc    Identifier assigned by PubMed Central
+                                 for example, the pmc journal 
+                                 abbreviation such as "pnas", "mbc", 
+                                 "nar", "molcellb", which may be the 
+                                 same as the abbreviated journal 
+                                 title
+                          publisher-id 
+                                 Identifier assigned by the content
+                                 publisher, for example, "MOLEC", 
+                                 "MOLCEL"
+                          nlm-ta Identifier assigned by the 
+                                 PubMed/Medline, and is typically
+                                 the journal abbreviation, for 
+                                 example, "Mol Biol Cell", "Nucleic
+                                 Acids Res", which may be the
+                                 same as the abbreviated journal 
+                                 title.                            -->
+<!ENTITY %  journal-id-atts
+             "journal-id-type  
+                        CDATA                            #IMPLIED  " > 
+
+
+<!--                    ISSUE TITLE ELEMENTS                       -->
+<!--                    Elements for use with data characters inside
+                        the model for the <issue> element          -->
+<!ENTITY % issn-elements 
+                        " "                                          > 
+
+
+<!--                    ISSN                                       -->
+<!--                    International Standard Serial Number       -->
+<!ELEMENT  issn         (#PCDATA %issn-elements;)                    >
+<!--                    Used to record the type of publication, for
+                        which this ISSN was issued, for example, 
+                        a print-only publication versus
+                        an electronic-only publication, in any of
+                        several life stages.
+                        Suggested values include:
+                          epub        - Electronic publication
+                          ppub        - Print publication
+                          epub-ppub   - Published in both print and
+                                        electronic form
+                          epreprint   - Electronic preprint 
+                                        dissemination    
+                          ppreprint   - Print preprint dissemination     
+                          ecorrected  - Corrected in electronic    
+                          pcorrected  - Corrected in print     
+                          eretracted  - Retracted in electronic    
+                          pretracted  - Retracted in print     
+                          -->
+<!ATTLIST  issn
+             %issn-atts;                                             >
+
+
+<!--                    ISSUE TITLE ELEMENTS                       -->
+<!--                    Elements for use with data characters inside
+                        the model for the <issue> element          -->
+<!ENTITY % issue-elements 
+                        "%just-rendition;"                           > 
+
+
+<!--                    ISSUE NUMBER                               -->
+<!--                    NEW DEFINITION FOR RELEASE 2.0:
+                        The issue number, issue name, or other 
+                        identifier of an issue of a journal that
+                        is displayed or printed with the issue. 
+                        This is not the machine-readable internal 
+                        identifier such as a DOI or SICI, that is
+                        the related element <issue-id>             -->
+<!ELEMENT  issue        (#PCDATA %issue-elements;)*                  >  
+
+
+<!--                    ISSUE IDENTIFIER                           -->
+<!--                    Used to record an identifier such as a DOI
+                        that describes an entire issue of a 
+                        journal                                    -->
+<!ELEMENT  issue-id     (#PCDATA)                                    >  
+<!--         pub-id-type    
+                        Indicates what type of identifier this is or
+                        who assigned the identifier, for example,
+                        "pub-id" for a publisher's non-DOI
+                        identifier or "DOI" for a Digital Object
+                        Identifier.
+                          In Archival this is a CDATA attribute but
+                        suggested values include:
+                          archive Identifier assigned by an archive
+                                  or other repository
+                          aggregator
+                                 Assigned by a data aggregator
+                          doi    Digital Object Identifier
+                          index  Assigned by an abstracting or 
+                                 indexing service
+                          pmc    Assigned by PubMed Central
+                          publisher-id 
+                                 Non-DOI Identifier assigned by 
+                                 the content publisher             -->
+<!ATTLIST  issue-id
+             %issue-id-atts;                                         >
+
+
+<!--                    ISSUE TITLE ELEMENTS                       -->
+<!--                    Elements for use in the <issue-title> element
+                                                                   -->
+<!ENTITY % issue-title-elements 
+                        ""                                           > 
+
+
+<!--                    ISSUE TITLE                                -->
+<!--                    Used to record the theme or special issue
+                        title for an issue of the journal          -->
+<!ELEMENT  issue-title  (#PCDATA %issue-title-elements;)*            >  
+
+
+<!--                    ROLE ELEMENTS                              -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a <role>                    
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar; since %rendition-plus; is an 
+                        inline mix, the OR bar is already there.   -->  
+<!ENTITY % role-elements
+                        "%rendition-plus;"                           >
+
+
+<!--                    ROLE OR FUNCTION TITLE OF CONTRIBUTOR      -->
+<!--                    A title or the role of a contributor
+                        (such as an author) in this work. For example,
+                        Editor-in-Chief, Contributor, Chief
+                        Scientist, Photographer, Research Associate,
+                        etc.              
+                        Remarks: Information on the role or type of
+                        contribution is collected in two places,
+                        in the "contrib-type" attribute on the
+                        Contributor element and in the Role element.  
+                        For example, the Contributor attribute might 
+                        have a value of "editor", while the content 
+                        of the role element could be "Associate 
+                        Editor". As another example, the contributor
+                        attribute might be "author" and the role
+                        element might be "Principle Author".
+                        The <role> element is also more likely to 
+                        appear on screen or in print than the 
+                        contributor attribute value.               -->
+<!ELEMENT  role         (#PCDATA %role-elements;)*                   >
+
+
+<!--                    VOLUME NUMBER ELEMENTS                     -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a <volume>                                 -->
+<!ENTITY % volume-elements
+                        "%just-rendition; "                          >
+
+
+<!--                    VOLUME NUMBER                                     -->
+<!--                    NEW DEFINITION FOR RELEASE 2.0:
+                        The volume number, volume name, or other 
+                        identifier of an volume of a journal that
+                        is displayed or printed with the volume. 
+                        This is not the machine-readable internal 
+                        identifier such as a DOI or SICI, that is
+                        the related element <volume-id>            -->
+<!ELEMENT  volume       (#PCDATA %volume-elements;)*                 >
+
+
+<!--                    TRANSLATED TITLE                           -->
+<!--                    An alternate version of the title that has
+                        been translated into a language other than
+                        that of the article title <article-title>  
+                        Remarks: The related element Article Title
+                        <article-title> should be used for the title
+                        of the article in the original language in 
+                        which it was published, this element used
+                        for a translation of that title, for example
+                        the English version of a Japanese article. -->
+<!ELEMENT  trans-title  (#PCDATA %title-elements;)*                  >
+<!--         xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German).  These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).
+                          Authoring and Conversion Note: For the
+                        Translated Title element, the xml:lang
+                        attribute should always be set if the
+                        value is known. The only reason the
+                        attribute was not made #REQUIRED was that
+                        there may be cases where the language is
+                        not known.                                 -->
+<!ATTLIST  trans-title
+             xml:lang   NMTOKEN                            #IMPLIED  >
+
+
+<!--                    VOLUME IDENTIFIER ELEMENTS                 -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a <volume-id>                              -->
+<!ENTITY % volume-id-elements
+                        "%just-rendition; "                          >
+
+
+<!--                    VOLUME IDENTIFIER                          -->
+<!--                    Used to record an identifier such as a DOI
+                        that describes an entire volume of a 
+                        journal.
+                           REMARKS: The related elements <volume>
+                        holds the volume number as published
+                        with the journal.                          -->
+<!ELEMENT  volume-id    (#PCDATA %volume-id-elements;)*              >
+<!--         pub-id-type    
+                        Indicates what type of identifier this is or
+                        who assigned the identifier, for example,
+                        "pub-id" for a publisher's non-DOI
+                        identifier or "DOI" for a Digital Object
+                        Identifier.
+                          In Archival this is a CDATA attribute but
+                        suggested values include:
+                          archive Identifier assigned by an archive
+                                  or other repository
+                          aggregator
+                                 Assigned by a data aggregator
+                          doi    Digital Object Identifier
+                          index  Assigned by an abstracting or 
+                                 indexing service
+                          pmc    Assigned by PubMed Central
+                          publisher-id 
+                                 Non-DOI Identifier assigned by 
+                                 the content publisher             -->
+<!ATTLIST  volume-id
+             %volume-id-atts;                                        >
+
+
+<!-- ============================================================= -->
+<!--                    COMMON METADATA ELEMENTS CONTINUED         -->
+<!--                    PUBLISHER IDENTIFICATION ELEMENTS          -->
+<!--                    (COMMON ARTICLE METADATA/BIBLIOGRAPHIC)    -->
+<!--                    Used in article metadata and also inside   -->
+<!--                    a bibliographic reference (citation)       -->
+<!-- ============================================================= -->
+
+
+<!--                    ET AL ELEMENTS                             -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        an <etal>                                  -->
+<!ENTITY % etal-elements
+                        "%just-rendition; "                          >
+
+
+<!--                    ET AL CONTENT MODEL                        -->
+<!--                    The content model for the <etal> element   -->
+<!ENTITY % etal-model   "(#PCDATA %etal-elements;)*"                 > 
+
+
+<!--                    ET AL                                      -->
+<!--                    Although most journals modeled this as an
+                        EMPTY element, typically used to generate
+                        the text "et al." in a stylesheet, some
+                        journal DTDs (Blackwell's, for example) expect
+                        content for this element, with such text as
+                        "Associates, coworkers, and colleagues".   -->
+<!ELEMENT  etal         %etal-model;                                 >  
+
+
+<!--                    PUBLISHER                                  -->
+<!--                    Who published the work                     -->
+<!ELEMENT  publisher    (publisher-name, publisher-loc?)             >
+
+
+<!--                    PUBLISHER'S NAME ELEMENTS                  -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a <publisher-name>
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar; since %just-rendition; is an 
+                        inline mix, the OR bar is already there    -->  
+<!ENTITY % publisher-name-elements
+                        "%just-rendition; "                          >
+
+
+<!--                    PUBLISHER'S NAME                           -->
+<!--                    Name of the publisher of the work          -->
+<!ELEMENT  publisher-name      
+                        (#PCDATA %publisher-name-elements;)*         >  
+
+
+<!--                    PUBLISHER'S LOCATION ELEMENTS              -->
+<!--                    Elements for use in the Publisher Location
+                        <publisher-loc> element                    -->
+<!ENTITY % publisher-loc-elements 
+                        "| %address.class; | %address-link.class; |
+                         %emphasis.class; | %subsup.class;"          > 
+
+
+<!--                    PUBLISHER'S LOCATION                       -->
+<!--                    Place of publication, usually a city such
+                        as New York or London                      -->
+<!ELEMENT  publisher-loc       
+                        (#PCDATA %publisher-loc-elements;)*          >
+
+
+<!-- ============================================================= -->
+<!--                    COMMON METADATA ELEMENTS CONTINUED         -->
+<!--                    PAGE NUMBERING ELEMENTS                    -->
+<!-- ============================================================= -->
+
+
+<!--                    FIRST PAGE ATTRIBUTES                      -->
+<!--         seq        Used for sequence number or letter for 
+                        journals (such as continuous makeup journals) 
+                        with more than one article starting on the 
+                        same page                                  -->
+<!ENTITY % fpage-atts
+             "seq        CDATA                             #IMPLIED" >
+
+<!--                    FIRST PAGE                                 -->
+<!--                    The page number on which the article starts,
+                        for print journals that have page numbers  -->
+<!ELEMENT  fpage        (#PCDATA)                                    >
+<!--         seq        Used for sequence number or letter for 
+                        journals (such as continuous makeup journals) 
+                        with more than one article starting on the 
+                        same page                                  -->
+<!ATTLIST  fpage
+             %fpage-atts;                                            >
+             
+
+<!--                    LAST PAGE                                  -->
+<!--                    The page number on which the article ends,
+                        for print journals that have page numbers  -->
+<!ELEMENT  lpage        (#PCDATA)                                    >
+             
+
+<!--                    PAGE RANGES                                -->
+<!--                    A container element for additional page 
+                        information (TO BE USED TO SUPPLEMENT AND
+                        NOT TO REPLACE <fpage> and <lpage>) to record
+                        discontinuous pages ranges such as 
+                            "8-11, 14-19, 40"
+                        meaning that the article begins on page
+                        8, runs 8 through 11, skips to pages 14 
+                        through 19, and concludes on page 40.      -->
+<!ELEMENT  page-range   (#PCDATA)                                    >
+
+
+<!--                    ELECTRONIC LOCATION IDENTIFIER ATTRIBUTES  -->
+<!--         seq        Used for sequence number or letter for 
+                        journals (such as continuous makeup journals) 
+                        so that the publisher's sequence of articles
+                        can be preserved, even for electronic
+                        publications.                              -->
+<!ENTITY % elocation-id-atts
+             "seq        CDATA                             #IMPLIED" >
+
+
+<!--                    ELECTRONIC LOCATION IDENTIFIER             -->
+<!--                    Used to identify an article that 
+                        does not have traditional page numbers. 
+                        For a printed article, when citations are 
+                        sent through the Medline matcher to be turned
+                        into live links or when the metadata about an
+                        article is collected for complete
+                        identification,  the first page number (and 
+                        sometimes  also the last page number) of the 
+                        article is recorded to help indicate which
+                        article is being referenced. Electronic only
+                        journals have no page numbers, so this
+                        element is used as the equivalent identifier,
+                        the "electronic page number" that helps to
+                        identify the article. The value could be an 
+                        article identifier, a doi, etc., for 
+                        example, "E70".                        
+                        Remarks: This element is more accurately an
+                        electronic identifier, and it was considered
+                        renaming this element to that. The purpose
+                        of the name is to be a parallel with the
+                        <fpage>...<lpage> model. When neither first
+                        page or last page is appropriate, because
+                        the electronic journal has no pages, the
+                        <elocation-id> element is used instead.    -->
+<!ELEMENT  elocation-id (#PCDATA)                                    >
+<!--         seq        Used for sequence number or letter for 
+                        journals (such as continuous makeup journals) 
+                        with more than one article starting on the 
+                        same page                                  -->
+<!ATTLIST  elocation-id 
+             %elocation-id-atts;                                     >
+
+
+<!-- ============================================================= -->
+<!--                    CITATION (BIBLIOGRAPHIC REFERENCE)         -->
+<!-- ============================================================= -->
+
+
+<!--                    CITATION ELEMENTS                          -->
+<!--                    Content model for the <citation> element. 
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar.                                    -->
+<!ENTITY % citation-elements   
+                        "| %emphasis.class; | %inline-display.class; |
+                         %inline-math.class; | %label.class; | 
+                         %phrase.class; | %references.class; |
+                         %subsup.class;"                             > 
+
+
+<!--                    CITATION                                   -->
+<!--                    A citation is a description of a work, such
+                        as a journal article, book, or personal
+                        communication, that is cited in the text of
+                        the article. Although the DTD does not
+                        enforce it, a citation to a journal article
+                        *should* be tagged with as many as possible 
+                        of the following, so that PubMed Central or
+                        other matching processing can make the 
+                        citation into a live link:
+                           source  The MEDLINE abbreviation of the
+                                   journal name
+                           article-title  
+                                   Title of the article
+                           volume  Volume of the journal
+                           issue   Issue of the journal
+                           fpage   Page number on which the article
+                                   starts
+                           name    Of an author or editor
+                           year    Year of publication
+                           month   Month of publication (if present)
+                           day     Date of publication (if present)
+                        The other elements may be tagged if
+                        desired.  The <title> element may be used
+                        for titles of books, conference proceedings,
+                        etc.
+                        Authoring and Conversion Note: In order to 
+                        make citations into live links, as much
+                        of the author and date information as is
+                        available should be preserved. The most
+                        important date tag is year, and it should
+                        always be tagged if possible:
+                            <year>2003</year> 
+                        The <day> and <month> tags will be used
+                        more rarely; they are provided because some
+                        of the citation matching services can use
+                        the month and the day if they are available.
+                                                                   -->
+<!ELEMENT  citation     (#PCDATA %citation-elements;)*               >
+<!--         citation-type
+                        Defines the type of work being referenced.
+                        Suggested values include:
+                          book         Book 
+                          personal-communication
+                                       Informal or personal 
+                                       communication, such as a 
+                                       phone call or an email
+                                       message
+                          conf-proceedings
+                                       Conference proceedings
+                          discussion   Discussion among a group in
+                                       some forum - public, private,
+                                       or electronic, which may or
+                                       may not be moderated
+                          gov          Government publication
+                          journal      Journal article
+                          list         Listserv
+                          other        None of the listed types
+                          patent       Patent or patent application
+                          thesis       Work written as part of the
+                                       completion of an advanced 
+                                       degree
+                          web          Website
+             id         Unique identifier so the element may be
+                        referenced 
+             xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename                -->
+<!ATTLIST  citation
+             %citation-atts;                                         >
+             
+
+<!-- ============================================================= -->
+<!--                    ADDRESS ELEMENTS (BIBLIOGRAPHIC)           -->
+<!-- ============================================================= -->
+
+
+<!--                    ADDRESS MODEL                              -->
+<!--                    Content model for the <address> element    -->
+<!ENTITY % address-model    
+                        "(%address.class; | %address-link.class;)*"  >
+
+
+<!--                    ADDRESS/CONTACT INFORMATION                -->
+<!--                    Wrapper element for contact information such 
+                        as address, phone, fax, email, url, country,
+                        etc.                                       -->
+<!ELEMENT  address      %address-model;                              >
+<!--         id         Unique identifier so the element may be
+                        referenced                                 -->
+<!ATTLIST  address
+             id         ID                                 #IMPLIED  >
+
+
+<!--                    ADDRESS LINE ELEMENTS                      -->
+<!--                    Elements for use in the <addr-line> element-->
+<!ENTITY % addr-line-elements 
+                        "%simple-text;"                              > 
+
+
+<!--                    ADDRESS LINE                               -->
+<!--                    One line in an address                     -->
+<!--                    Conversion Note: If the address is 
+                        undifferentiated data characters, the entire
+                        address may be inside one of these elements.
+                                                                   -->
+<!ELEMENT  addr-line    (#PCDATA %addr-line-elements;)*              >
+
+
+<!--                    COUNTRY:  IN AN ADDRESS                    -->
+<!ELEMENT  country      (#PCDATA)                                    >
+
+
+<!--                    EMAIL ADDRESS ELEMENTS                     -->
+<!--                    Elements to be mixed with #PCDATA inside the
+                        <email> element                            -->
+<!ENTITY % email-elements 
+                        " "                                          > 
+
+
+<!--                    EMAIL ADDRESS                              -->
+<!ELEMENT  email        (#PCDATA %email-elements;)*                  >
+<!--         xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename                -->
+<!ATTLIST  email
+             %might-link-atts;                                       >
+
+
+<!--                    FAX NUMBER ELEMENTS                        -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a <fax>                                    -->
+<!ENTITY % fax-elements
+                        "%just-rendition; "                          >
+
+
+<!--                    FAX NUMBER: IN AN ADDRESS                  -->
+<!ELEMENT  fax          (#PCDATA %fax-elements;)*                    >
+
+
+<!--                    INSTITUTION NAME ELEMENTS                  -->
+<!--                    Elements for use in the <institution> 
+                        element                                    -->
+<!ENTITY % institution-elements 
+                        "| %break.class; | %emphasis.class; |
+                         %subsup.class;"                             > 
+
+
+<!--                    INSTITUTION NAME: IN AN ADDRESS            -->
+<!--                    Name of a institution or organization such as
+                        a university or corporation                -->
+                        
+<!ELEMENT  institution  (#PCDATA %institution-elements;)*            >
+<!--         id         Unique identifier so the element may be
+                        referenced                                 
+             xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename                -->
+<!ATTLIST  institution
+             id         ID                                 #IMPLIED  
+             %might-link-atts;                                       > 
+
+
+<!--                    PHONE NUMBER ELEMENTS                      -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a <phone number> 
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar, but since %just-rendition; is an 
+                        inline mix, the OR bar is already there.   -->
+<!ENTITY % phone-elements
+                        "%just-rendition;"                           >
+
+
+<!--                    PHONE NUMBER: IN AN ADDRESS                -->
+<!--                    A callable phone number in some telephone or
+                        wireless system somewhere in the world.
+                        Typically includes area code; may include
+                        country extension, especially for non-US.  -->
+<!ELEMENT  phone        (#PCDATA %phone-elements;)*                  >
+
+
+<!--                    URI ELEMENTS                               -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a <uri>
+                        Design Note: This PE begins with an OR
+                        bar because %just-rendition; begins with an
+                        OR bar.                                    -->
+<!ENTITY % uri-elements
+                        "%just-rendition;"                           >
+
+
+<!--                    URI                                        -->
+<!--                    URI such as a URL that may be used as a 
+                        live link, typically naming a website, such 
+                        as:
+                           <url>http://www.mulberrytech.com</url>
+                        Alternatively the element content may name
+                        the URL, e.g., "Mulberry's Website" and the
+                        "xlink:href" attribute may hold the real
+                        URL.
+                           <url xlink:href="http://www.mulberrytech.
+                           com">Mulberry's Website</url>           
+                        Related Elements: A URI used outside the 
+                        context of an address of contributor should 
+                        be tagged as an External Link <ext-link>   -->
+<!ELEMENT  uri          (#PCDATA %uri-elements;)*                    >
+
+<!ATTLIST  uri
+             %might-link-atts;                                       >
+
+
+<!-- ============================================================= -->
+<!--                    DATE ELEMENTS (PUBLICATION HISTORY)        -->
+<!-- ============================================================= -->
+
+
+<!--                    DATE                                       -->
+<!--                    The elements <day>, <month>, and <year> should 
+                        ALWAYS be numeric values. The date may be 
+                        represented as a string in <string-date>, but
+                        the numeric values should be present whenever
+                        possible.                                  -->
+<!ELEMENT  date         %date-model;                                 >
+<!--         date-type  Attribute should only be used if the date
+                        is one of the known types, otherwise omit
+                        the attribute. Values are:
+                          accepted    - Date manuscript was 
+                                        accepted         
+                          received    - Date manuscript received
+                          rev-request - Date revisions were 
+                                        requested or manuscript 
+                                        was returned
+                          rev-recd    - Date revised manuscript 
+                                        was received               -->
+<!ATTLIST  date
+              date-type (%date-types;)                     #IMPLIED  >
+
+
+<!--                    DAY                                        -->
+<!--                    The numeric value of a day of the month, used
+                        in both article metadata and inside a citation,
+                        in two digits as it would be stated in the "DD" 
+                        in an international date format YYYY-MM-DD, for
+                        example "03", "25".                        -->
+<!ELEMENT  day          (#PCDATA)                                    >
+
+
+<!--                    MONTH                                      -->
+<!--                    Names one of the months of the year. Used in
+                        both article metadata and inside a citation,
+                        this element may contain a full month 
+                        "December", an abbreviation "Dec", or, 
+                        preferably, a numeric month such as "12".
+                        Authoring and Conversion Note: For ease in
+                        comparisons and searching, many archives
+                        prefer that months be converted to numeric
+                        Suggested values:
+                          1 = January
+                          2 = February
+                          3 = March, etc.                          -->
+<!ELEMENT  month        (#PCDATA)                                    >
+
+
+<!--                    SEASON                                     -->
+<!--                    Season of publication, such as "Spring". 
+                        Used in both article metadata and inside a 
+                        citation                                   -->
+<!ELEMENT  season       (#PCDATA)                                    >
+
+
+<!--                    YEAR                                       -->
+<!--                    Year of publication, which should be expressed
+                        as a 4-digit number: "1776" or "1924"      -->
+<!ELEMENT  year         (#PCDATA)                                    >
+
+
+<!--                    STRING DATE ELEMENTS                       -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        the <string-date> element                  -->
+<!ENTITY % string-date-elements 
+                        " | %date-parts.class;"                      >
+
+
+<!--                    DATE AS A STRING                           -->
+<!--                    This is a representation of the date as a 
+                        string. Usually used for dates for which 
+                        months and years are not given, but may be
+                        used for any date as a string (i.e., "January, 
+                        2001" "Fall 2001" "March 11, 2001".
+                        It is better practice to tag the year
+                        and month as numbers with a date such
+                        as "January, 2001" or "March 11, 2001".    -->
+<!ELEMENT  string-date  (#PCDATA %string-date-elements;)*            >
+
+
+<!-- ============================================================= -->
+<!--                    PERSON'S NAME ELEMENTS (BIBLIOGRAPHIC)     -->
+<!-- ============================================================= -->
+
+
+<!--                    STRING NAME ELEMENTS                       -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        the <string-name> element                  -->
+<!ENTITY % string-name-elements 
+                        " | %person-name.class;"                     >
+
+
+<!--                    NAME OF PERSON (UNSTRUCTURED)              -->
+<!--                    Wrapper element for personal names where the
+                        stricter format of the <name> element cannot
+                        be followed. This is a very loose element,
+                        allowing data characters, generated text,
+                        and any or all of the naming elements.
+                        Authoring or Conversion Note: Use this
+                        element if the name parts are unknown or 
+                        untagged.                                  -->
+<!ELEMENT  string-name  (#PCDATA %string-name-elements;)*            >
+
+
+<!--                    NAME OF PERSON (STRUCTURED)                -->
+<!--                    Wrapper element for personal names.
+                        Authoring or Conversion Note: If the name
+                        parts are unknown or untagged, names should
+                        be placed within the <string-name> element. 
+                                                                   -->
+<!ELEMENT  name         (surname, given-names?, prefix?, suffix?)    >
+<!--         name-style Used for choosing an inversion algorithm or
+                        for sorting or other processing functions.  The
+                        three values and approximate meanings are:
+                        Value     Display          Sort/Inversion
+                        western   given family     family given
+                        eastern   family given     family given
+                        islensk   given patronymic given, patronymic
+                                                                   -->
+<!ATTLIST  name
+             name-style (western | eastern | islensk)      "western" >
+
+
+<!--                    SURNAME ELEMENTS                           -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a <surname>                                
+                        Design Note: This PE begins with an OR
+                        bar because %just-rendition; begins with an
+                        OR bar.                                    -->
+<!ENTITY % surname-elements
+                        "%just-rendition; "                          >
+
+
+<!--                    SURNAME                                    -->  
+<!--                    The surname of an individual.  If there is
+                        only one name, for example, "Cher" or
+                        "Pele", that is considered to be a surname
+                        for consistency purposes.                  -->
+<!ELEMENT  surname      (#PCDATA %surname-elements;)*                >
+<!ATTLIST  surname
+             %surname-atts;                                          >
+
+
+<!--                    GIVEN (FIRST) NAMES ELEMENTS               -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a <given-names>                            -->
+<!ENTITY % given-names-elements
+                        "%just-rendition;"                           >
+
+
+<!--                    GIVEN (FIRST) NAMES                        -->
+<!--                    Includes all given names for a person, such 
+                        as the first name, middle names, maiden 
+                        name if used as part of the married name, 
+                        etc.)                                      -->
+<!ELEMENT  given-names  (#PCDATA %given-names-elements;)*            >
+<!ATTLIST  given-names
+             %given-names-atts;                                      >
+
+
+<!--                    PREFIX ELEMENTS                            -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a <prefix>  
+                        Design Note: This PE begins with an OR
+                        bar because %just-rendition; begins with an
+                        OR bar.                                    -->
+<!ENTITY % prefix-elements
+                        "%just-rendition;"                           >
+
+
+<!--                    PREFIX                                     -->
+<!--                    Honorifics or other qualifiers that usually 
+                        precede the surname, for example,  Professor, 
+                        Rev., President, Senator, Dr., Sir, The 
+                        Honorable, et al.                          -->
+<!ELEMENT  prefix       (#PCDATA %prefix-elements;)*                 >
+
+
+
+<!--                    SUFFIX ELEMENTS                            -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a <suffix>
+                        Design Note: This PE begins with an OR bar,
+                        it is inside %just-rendition;              -->
+<!ENTITY % suffix-elements
+                        "%just-rendition;"                           >
+
+
+<!--                    SUFFIX                                     -->
+<!--                    Text used as a suffix to a person's name, for
+                        example: Sr. Jr. III, 3rd                  -->
+<!ELEMENT  suffix       (#PCDATA %suffix-elements;)*                 >
+
+
+<!-- ============================================================= -->
+<!--                    EXTERNAL LINK ELEMENTS                     -->
+<!-- ============================================================= -->
+
+
+<!--                    EXTERNAL LINK ELEMENTS                     -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        an <ext-link>  
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar, but since %link-elements; is an inline
+                        mix, the OR bar is already there.          -->
+<!ENTITY % ext-link-elements
+                        "%link-elements;"                            >
+
+
+<!--                    EXTERNAL LINK                              -->
+<!--                    Link to an external file, such as Medline, 
+                        Genbank, etc.  Linking may be accomplished
+                        using the XLink linking attributes.        -->
+<!ELEMENT  ext-link     (#PCDATA %ext-link-elements;)*               >
+<!--         ext-link-type 
+                        Type of external link. Use this attribute
+                        if the type of external link is one of the
+                        ones below or another named type.
+                        Suggested values include:
+                            aoi         Astronomical Object Identifier 
+                            doi         Digital Object Identifier
+                            ec          Enzyme nomenclature - see
+                              http://www.chem.qmw.ac.uk/iubmb/enzyme/
+                            email       An email message
+                            ftp         File transfer protocol
+                            gen         GenBank identifier
+                            genpept     Translated Protein-encoding
+                                        sequence Database
+                            highwire    HighWire press intrajournal 
+                            medline     Medline or pubmed id
+                            pdb         Protein data bank. See 
+                                        http://www.rcsb.org/pdb/
+                            pgr         Plant gene register. See
+                                        http://www.tarweed.com/pgr/
+                            pir         Protein Information Resource
+                                        see http://pir.georgetown.edu
+                            pirdb       Protein Information Resource 
+                                        see http://pir.georgetown.edu
+                            pmc         Used to link between articles  
+                                        in PubMed Central access is 
+                                        PMID
+                            sprot       Swiss-Prot. See
+                                    http://www.ebi.ac.uk/swissprot/
+                            uri         Website or web service    
+             id         Unique identifier so the element may be
+                        referenced 
+             xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename                -->
+<!ATTLIST  ext-link
+             %ext-link-atts;                                         >
+
+
+<!-- ============================================================= -->
+<!--                    STRUCTURAL ELEMENTS                        -->
+<!-- ============================================================= -->
+
+
+<!--                    ATTRIBUTION ELEMENTS                       -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        an attribution                          
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar, but since %simple-phrase; is an 
+                        inline mix, the OR bar is already there.   -->
+<!ENTITY % attrib-elements
+                        "%emphasized-text;"                          >
+             
+
+<!--                    ATTRIBUTION                                -->
+<!--                    Source, author, formal thanks, or other 
+                        information (other than copyright material)
+                        concerning the origins of an extract, a poem
+                        <verse-group> or similar element.
+                        Formatting Note: Typically displayed on 
+                        a separate line (or lines, following the 
+                        material it concerns, inheriting that
+                        material's margins.                        --> 
+<!ELEMENT  attrib       (#PCDATA %attrib-elements;)*                 >
+
+
+<!--                    STRUCTURAL TITLE ELEMENTS                  -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        the <title> element  
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar, but since %simple-phrase; is an 
+                        inline mix, the OR bar is already there.   -->
+<!ENTITY % struct-title-elements 
+                        "%simple-phrase; | %break.class;"            > 
+
+
+<!--                    TITLE                                      -->
+<!--                    Heading or title for a structural element
+                        such as a Section, Figure, Boxed Text, etc.-->
+<!ELEMENT  title        (#PCDATA %struct-title-elements;)*           >
+
+
+<!--                    LABEL ELEMENTS                             -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        the <label> element                        -->
+<!ENTITY % label-elements 
+                        "| %emphasis.class; | %inline-display.class; | 
+                         %inline-math.class; | %subsup.class;"       >
+
+
+<!--                    LABEL OF A FIGURE, REFERENCE, ETC.         -->
+<!--                    The number and any prefix word that comes
+                        before, for example, the caption of a Figure,
+                        such as "Figure 3." or "Exhibit 2.".  This
+                        element can be used to preserve the prefix 
+                        number or label of an element, for example
+                        for a reference or citation "25." or
+                        "[Lapeyre 2002]". This can be useful when
+                        reconstructing untagged cross references.  -->                        
+<!ELEMENT  label        (#PCDATA %label-elements;)*                  >
+
+
+<!-- ============================================================= -->
+<!--                    RELATED ARTICLE ELEMENTS                   -->
+<!-- ============================================================= -->
+
+
+<!--                    RELATED ARTICLE ELEMENTS                   -->
+<!--                    Elements allowed inside <related-article>  -->
+<!ENTITY % related-article-elements 
+                        "| %emphasis.class; |%references.class; | 
+                         %subsup.class;"                             >
+
+
+<!--                    RELATED ARTICLE INFORMATION                -->
+<!--                    Wrapper element, used as a container for 
+                        text links to a related article, possibly 
+                        accompanied by a very brief description
+                        such as "errata (correction)".
+                        Remarks: This element is slightly overloaded
+                        in that it has 2 uses, one inside the article
+                        metadata to name one or more related articles
+                        and as part of the link class, which can
+                        occur many places in textual content.
+                        This allows all such references, to 
+                        companion articles within the same journal,
+                        to a previous part of a multi-part article,
+                        to a news item that summarizes the article,
+                        to the article for which this article is
+                        a correction or addendum, etc. wherever 
+                        these occur in the article.                -->
+<!ELEMENT  related-article
+                        (#PCDATA %related-article-elements;)*        >
+<!--         id         Unique identifier so the element may be
+                        referenced
+             alt-form-of
+                        Exactly like the "alt-form-of" attribute
+                        used with <graphic>, this is an IDREF
+                        attribute which points to the ID of another
+                        <related-article> in the same document
+                         rather than to an external file.
+             related-article-type
+                          addendum      Additional material for an
+                                        article, generated too late
+                                        to be added to the main text
+                          commentary-article   
+                                        Used in an commentary or
+                                        editorial to link to the 
+                                        article on which it is
+                                        commenting
+                          companion     Used in an article to link 
+                                        to a companion (related
+                                        or sibling article) 
+                          corrected-article
+                                        Used in a correction to link 
+                                        to the article being 
+                                        corrected. Sometimes called
+                                        erratum.
+                          in-this-issue Related article in the same
+                                        journal issue
+                          letter        A letter to the publication
+                                        or a reply to such a
+                                        letter
+                          commentary    Used in an article to link 
+                                        to its associated commentary
+                                        or editorial 
+                          correction-forward
+                                        Used in an article to link
+                                        forward to its associated 
+                                        correction (rarely used)
+                          retracted-article
+                                        Used in a retraction to link 
+                                        to the article being retracted
+                          retraction-forward   
+                                        Used in an article to link
+                                        forward to its associated 
+                                        retraction (rare)
+             vol        Volume of the journal in which the related
+                        article exists.  The scope is limited to
+                        the journal; in which the current article
+                        resides.
+             page       Page number of the related article. Scope
+                        is limited to the volume of the journal in 
+                        which the current article resides. The 
+                        values should be a first page or a page 
+                        range.
+             xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename.               -->
+<!ATTLIST  related-article
+             %related-article-atts;                                  >
+
+
+<!-- ============================================================= -->
+<!--                    FRONT MATTER/BACK MATTER ELEMENTS          -->
+<!-- ============================================================= -->
+
+
+<!--                    ACKNOWLEDGMENTS MODEL                      -->
+<!--                    Content model for the <ack> element        -->
+<!ENTITY % ack-model    "%sec-opt-title-model;"                      > 
+
+
+<!--                    ACKNOWLEDGMENTS                            -->
+<!ELEMENT  ack          %ack-model;                                  >
+<!--         id         Unique identifier so the element may be
+                        referenced                                
+             content-type   
+                        Identification of the subject, type of
+                        content, or reason that this word or phrase
+                        is considered semantically special, as a 
+                        means of preserving the semantic intent of 
+                        the original tagging.                      -->
+<!ATTLIST  ack                                
+             id         ID                                 #IMPLIED
+             content-type
+                        CDATA                              #IMPLIED  >
+
+
+<!--                    BIOGRAPHY MODEL                            -->
+<!--                    Content model for the <bio> element        -->
+<!ENTITY % bio-model    "(title?, (%just-para.class;)+ ) "           > 
+
+
+<!--                    BIOGRAPHY                                  -->
+<!--                    Sort biography of a person, usually the
+                        author                                     
+                        Authoring Note:  The "xlink:href" attribute
+                        may be used to point to a graphic of the
+                        author or to his/her website, etc.         -->
+<!ELEMENT  bio          %bio-model;                                  >      
+<!--         id         Unique identifier so the element may be
+                        referenced 
+             rid        Points to the identifier of an author or
+                        authors                               
+             xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename.               -->
+<!ATTLIST  bio
+             %bio-atts;                                              >
+
+
+<!--                    NOTES MODEL                                -->
+<!--                    Content model for the <notes> element      -->
+<!ENTITY % notes-model  "%sec-opt-title-model;"                      > 
+             
+
+<!--                    NOTES                                      -->
+<!--                    A container element for the notes that may
+                        appear at the end of an Article or at the 
+                        end of a Table.  For example, a typical
+                        end-of-article note is a "Note in Proof". 
+                        A Note in Proof contains late-breaking news 
+                        items or other material produced while the 
+                        article was  being typeset or was otherwise 
+                        in production, that therefore happened too 
+                        late to be included in the text of the 
+                        article. This is typically NOT peer-reviewed
+                        content and citations to other material is
+                        usually just integrated into the text, not
+                        listed separately in a References List.    -->
+<!ELEMENT  notes        %notes-model;                                >      
+<!--         id         Unique identifier so the element may be
+                        referenced                                 
+             notes-type To identify the type of note, if the type can
+                        be/has been identified, for example,
+                        "note-in-proof"                            -->                     
+<!ATTLIST  notes
+             %notes-atts;                                            >
+
+
+<!-- ============================================================= -->
+<!--                    ACCESSIBILITY ELEMENTS                     -->
+<!-- ============================================================= -->
+
+
+<!--                    ALTERNATE TITLE TEXT FOR A FIGURE, ETC.    -->
+<!--                    Short phrase used to display or pronounce 
+                        as an alternative to providing the full
+                        graphic for accessibility display or 
+                        graphic-limited websites or devices. For 
+                        example, <alt-text> may be used to display 
+                        "behind" a figure or graphic.   
+                        Authoring and Conversion Note: Not to be used
+                        as a replacement for <caption>.            -->
+<!ELEMENT  alt-text     (#PCDATA)                                    >
+<!--         id         Unique identifier so the element may be
+                        referenced                                 
+             xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).                   -->             
+<!ATTLIST  alt-text
+             id         ID                                 #IMPLIED  
+             xml:lang   NMTOKEN                            #IMPLIED  > 
+
+
+<!--                    LONG DESCRIPTION ELEMENTS                  -->
+<!--                    Elements to be mixed with data characters
+                        inside the <long-desc> element             -->
+<!ENTITY % long-desc-elements
+                        " "                                          >
+
+
+<!--                    LONG DESCRIPTION                           -->
+<!--                    Description or summary of the content of a 
+                        graphical object, table, or textual object
+                        such as a text box, used by some systems to
+                        make the object accessible, even to people
+                        or systems that cannot read/see/display the
+                        object.                                  
+                        Authoring and Conversion Note: Not to be used
+                        as a replacement for <caption>.            -->
+<!ELEMENT  long-desc    (#PCDATA %long-desc-elements;)               >
+<!--         id         Unique identifier so the element may be
+                        referenced                                 
+             xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).                   -->                 
+<!ATTLIST  long-desc
+             id         ID                                 #IMPLIED  
+             xml:lang   NMTOKEN                            #IMPLIED  > 
+
+
+<!--                    DEFINITION LIST: DEFINITION MODEL          -->
+<!--                    Content model for the <def> element        -->
+<!ENTITY % def-model    "((%just-para.class;)+ )"                    > 
+
+  
+<!--                    DEFINITION LIST: DEFINITION                -->
+<!--                    Used in two senses:
+                        1) The definition, description, or other
+                        explanation of the word, phrase, or picture
+                        of a 2-part or definition list
+                        2) The definition or expansion of an
+                        abbreviation or acronym <abbrev>           -->
+<!ELEMENT  def          %def-model;                                  >
+<!--         id         Unique identifier so the element may be
+                        referenced 
+             rid        Points to the identifier of a term,
+                        so that a term and definition may be linked
+                                                                   -->
+<!ATTLIST  def                                
+             rid        IDREFS                             #IMPLIED 
+             id         ID                                 #IMPLIED  >
+
+
+<!-- ============================================================= -->
+<!--                    CUSTOMIZED METADATA ELEMENTS               -->
+<!-- ============================================================= -->
+
+
+<!--                    CUSTOMIZED METADATA WRAPPER MODEL          -->
+<!--                    Content model for the <custom-meta-wrap> 
+                        element                                    -->
+<!ENTITY % custom-meta-wrap-model
+                        "(custom-meta+)"                             > 
+
+
+<!--                    METADATA DATA NAME FOR CUSTOM METADATA     -->
+<!--                    Some DTDs and schemas allow for metadata
+                        above and beyond that which can be specified
+                        by this DTD. This element is a wrapper 
+                        element used to contain all these additional
+                        metadata elements.                          -->
+<!ELEMENT  custom-meta-wrap
+                        %custom-meta-wrap-model;                      >
+
+
+<!--                    CUSTOMIZED METADATA MODEL                  -->
+<!--                    Content model for the <custom-meta> element-->
+<!ENTITY % custom-meta-model
+                        "(meta-name, meta-value)"                    > 
+
+
+<!--                    CUSTOM METADATA                            -->
+<!--                    Some DTDs and schemas allow for metadata
+                        above and beyond that which can be specified
+                        by this DTD. This element is used to capture
+                        metadata elements that have not been defined
+                        explicitly in the models for this DTD, so 
+                        that the intellectual content will not be lost.
+                        REMARKS:  The <custom-meta> element allows 
+                        for an infinite number of name/value pairs,
+                        with few constraints on the length or
+                        content of the value. This element will 
+                        probably be used for special cases, product-
+                        specific material, or other unusual
+                        metadata, for example the journal-history
+                        information preserved in at least one
+                        publisher's DTD.                           -->
+<!ELEMENT  custom-meta  %custom-meta-model;                          >
+
+
+<!--                    METADATA DATA NAME ELEMENTS                -->
+<!--                    Elements that may be used, along with data
+                        characters, inside the <meta-name> element 
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar, but since %simple-phrase; is an 
+                        inline mix, the OR bar is already there.   -->
+<!ENTITY % meta-name-elements
+                        "%simple-phrase;"                            > 
+
+
+<!--                    METADATA DATA NAME FOR CUSTOM METADATA     -->
+<!--                    Some DTDs and schemas allow for metadata
+                        above and beyond that which can be specified
+                        by this DTD. The <custom-meta> element
+                        allow for an infinite number of name/value
+                        pairs, with few constraints on the length or
+                        content of the value. This element contains
+                        the name of the metadata field.            -->
+<!ELEMENT  meta-name    (#PCDATA %meta-name-elements;)*              >
+
+
+<!--                    METADATA DATA VALUE ELEMENTS               -->
+<!--                    Elements that may be used, along with data
+                        characters, inside the <meta-value> element 
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar, but since %simple-phrase; is an 
+                        inline mix, the OR bar is already there.   -->
+<!ENTITY % meta-value-elements
+                        "%simple-phrase;"                            > 
+   
+
+<!--                    METADATA DATA NAME FOR CUSTOM METADATA     -->
+<!--                    Some DTDs and schemas allow for metadata
+                        above and beyond that which can be specified
+                        by this DTD. The <custom-meta> element
+                        allow for an infinite number of name/value
+                        pairs, with few constraints on the length or
+                        content of the value. This element contains
+                        the value of the metadata field that is named
+                        by the <meta-name> element.                -->
+<!ELEMENT  meta-value   (#PCDATA %meta-value-elements;)*             >
+
+
+
+<!-- ============================================================= -->
+<!--                    GENERATED TEXT OR PUNCTUATION              -->
+<!-- ============================================================= -->
+
+
+<!--                    X ELEMENTS                                 -->
+<!--                    Elements for use inside the <x> element    -->
+<!ENTITY % x-elements   " "                                          > 
+
+
+<!--                    X - GENERATED TEXT AND PUNCTUATION         -->
+<!--                    A container element to hold punctuation or
+                        other generated text, typically when 1) an
+                        archive decides not to have any text
+                        generated and thus to pre-generate such 
+                        things as commas or semicolons between 
+                        keywords or 2) when an archive receives text
+                        with <x> tags embedded and wishes to retain
+                        them.
+                          Remarks: This element is called "x" for
+                        historical reasons, since DTDs that use an
+                        element for generated punctuation have
+                        typically called it that.                  -->
+<!ELEMENT  x            (#PCDATA %x-elements;)*                      >
+
+
+<!-- ================== End Common (Shared) Elements Module ====== -->
+     

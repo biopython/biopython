@@ -1,0 +1,465 @@
+<!-- ============================================================= -->
+<!--  MODULE:    List Element Classes                              -->
+<!--  VERSION:   2.0                                               -->
+<!--  DATE:      August 2004                                       -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
+<!--                        TYPICAL INVOCATION                     -->
+<!--
+"-//NLM//DTD Archiving and Interchange DTD Suite List Class Elements v2.0 20040830//EN"
+     Delivered as file "list.ent"                                  -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Archiving and Interchange DTD Suite               -->
+<!--                                                               -->
+<!-- PURPOSE:    Names all elements in the list class. These are   -->
+<!--             all lists except the lists of bibliographic       -->
+<!--             references (citations). Lists are considered      -->
+<!--             to be composed of items.                          -->
+<!--                                                               -->
+<!-- CONTAINS:   1) Default definition of the list class           -->
+<!--             2) Definition List attributes                     -->
+<!--             3) Definition Lists <def-list>                    -->
+<!--             4) Ordinary lists (number, bullet, plain) <l>     -->
+<!--                                                               -->
+<!-- CREATED FOR:                                                  -->
+<!--             Digital archives and publishers who wish to       -->
+<!--             create a custom XML DTD for original markup of    -->
+<!--             journal literature, books, and related material,  -->
+<!--             or for archiving and transferring such material   -->
+<!--             between archives.                                 -->
+<!--                                                               -->
+<!--             This DTD is in the public domain. An organization -->
+<!--             that wishes to create its own DTD from the suite  -->
+<!--             may do so without permission from NLM.            -->
+<!--                                                               -->
+<!--             The suite has been set up to be extended using a  -->
+<!--             new DTD file and a new DTD-specific customization -->
+<!--             module to redefine the many Parameter Entities.   -->
+<!--             Do not modify the suite directly or redistribute  -->
+<!--             modified versions of the suite.                   -->
+<!--                                                               -->
+<!--             In the interest of maintaining consistency and    -->
+<!--             clarity for potential users, NLM requests:        -->
+<!--                                                               -->
+<!--             1. If you create a DTD from the Archiving and     -->
+<!--                Interchange DTD Suite and intend to stay       -->
+<!--                compatible with the suite, then please include -->
+<!--                the following statement as a comment in all of -->
+<!--                your DTD modules:                              -->
+<!--                   "Created from, and fully compatible with,   -->
+<!--                    the Archiving and Interchange DTD Suite."  -->
+<!--                                                               -->
+<!--             2. If you alter one or more modules of the suite, -->
+<!--                then please rename your version and all its    -->
+<!--                modules to avoid any confusion with the        -->
+<!--                original suite. Also, please include the       -->
+<!--                following statement as a comment in all your   -->
+<!--                DTD modules:                                   -->
+<!--                   "Based in part on, but not fully compatible -->
+<!--                    with, the Archiving and Interchange DTD    --> 
+<!--                    Suite."                                    -->
+<!--                                                               -->
+<!--             Suggestions for refinements and enhancements to   -->
+<!--             the DTD suite should be sent in email to:         -->
+<!--                 archive-dtd@ncbi.nlm.nih.gov                  -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             December 2002                                     -->
+<!--                                                               -->
+<!-- CREATED BY: Jeff Beck       (NCBI)                            -->
+<!--             Deborah Lapeyre (Mulberry Technologies, Inc.)     -->
+<!--             Bruce Rosenblum (Inera Inc.)                      -->
+<!--                                                               -->
+<!--             NLM thanks the Harvard University Libraries, both -->
+<!--             for proposing that a draft archiving NLM DTD for  --> 
+<!--             life sciences journals be extended to accommodate -->
+<!--             journals in all disciplines and for sponsoring    -->
+<!--             Bruce Rosenblum's collaboration with other DTD    -->
+<!--             authors in completing Version 1.0. The Andrew W.  --> 
+<!--             Mellon Foundation provided support for these      --> 
+<!--             important contributions.                          -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DTD VERSION/CHANGE HISTORY                 -->
+<!-- ============================================================= -->
+<!--
+     =============================================================
+
+Version  Reason/Occasion                   (who) vx.x (yyyy-mm-dd)
+
+     =============================================================
+     Version 2.0                       (DAL/BTU) v2.0 (2004-08-30)
+     
+     Major requirement changes led to the new release, producing
+     DTD version "2.0":
+       a) The splitting of the Archival and Interchange Tag Set 
+          DTDs into three DTDs from two: an authoring DTD, an
+          archive regularization and interchange DTD (the
+          current Blue Publishing DTD), and a preservationist 
+          archive DTD (the current Green Archiving and Interchange 
+          DTD).
+       b) AIT Working Group suggestions from the June 04 meeting 
+          and June/July 2004 followup discussions
+       c) Suite remodularization to meet new (and newly articulated)
+          modularization requirements
+       d) New or renamed classes and mixes to make modifications
+          easier and more consistent
+
+  8. COMPLETE MODELS WHEN OVER-RIDING A MODEL 
+     (for all Parameter Entities suffixed "-model")
+     ### Customization Alert ###
+     Made all the model over-rides consistent. Some included
+     the outer parentheses, some did not. They all do now,
+     as this is the most flexible system, allowing for
+     #PCDATA, mixed, or element content. (This is in direct
+     contrast to the "-element" suffixed models, which are
+     designed to prohibit element content and permit only
+     #PCDATA or mixed content.)
+     -  %def-item-model;
+     -  %def-list-model;
+     -  %list-model;
+     -  %list-item-model;
+
+  7. PARAMETER ENTITY RENAMING
+     a. ELEMENTS CHANGED TO MODELS
+        ### Customization Alert ###
+        There is a DTD naming convention that PEs which contain full
+        content models are named with a "-model" suffix, in contrast 
+        to OR-groups of elements which are added to #PCDATA 
+        within a specific content model that are suffixed "-elements". 
+        The few Parameter Entities that broke that pattern and were 
+        renamed:
+        - %def-item-elements;  ==> %def-item-model;       
+        - %list-item-elements; ==> %list-item-model;       
+      
+     b. RENAME EXISTING CLASSES
+        ### Customization Alert ###
+        Some classes did not have the ".class" suffix. Changed the 
+        names to add the class suffix:
+        - %block-math.class; (used in %term-elements;)
+
+  6. DEFAULT CLASSES - Were moved from this module to 
+     %default-classes.ent;
+  
+  5. Updated public identifier to "v2.0 20040830"
+
+     =============================================================
+     Version 1.1                           (TRG) v1.1 (2003-11-01)
+
+  4. Added ID attribute to element <def-item>. 
+     Rationale: Provide unique identifier so <def-item> element 
+     can be linked to. 
+
+  3. Added element <label> to parameter entities %def-item-elements;
+     and %list-item-elements; (now named %list-item-model;)
+     Rationale: To provide <label> when needed for format 
+     over-ride.
+
+  2. Added new parameter entity %list-item-elements (now named
+     %list-item-model;) to contain contents of <list-item>
+     Rationale: In order to distinguish between models used by
+     the Archiving DTD and the Publishing DTD, it was necessary 
+     to create a parameter entity that could be overridden.
+ 
+  1. Added new parameter entity %def-item-elements to contain 
+     contents of <def-item>
+     Rationale: In order to distinguish between models used by
+     the Archiving DTD and the Publishing DTD, it was necessary 
+     to create a parameter entity that could be overridden.
+                                                                   -->
+
+
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITY DEPENDENCIES             
+                        Requires the following parameter entities
+                        be defined before calling this module, 
+                        usually accomplished in the Customization
+                        Module for the specific DTD:
+                          - %block-math.class;
+                          - %simple-display.class;
+                          - %simple-phrase;                            
+                                                                   -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DEFAULT PE FOR ATTRIBUTE LISTS             -->
+<!-- ============================================================= -->
+
+
+<!--                    DEFAULT LIST CLASS ATTRIBUTES              -->
+<!--                    Default attribute lists to be used for most
+                        of the types of lists.                     -->
+<!ENTITY % list-atts
+             "id        CDATA                              #IMPLIED 
+              list-type CDATA                              #IMPLIED 
+              prefix-word
+                        CDATA                              #IMPLIED
+              list-content
+                        CDATA                              #IMPLIED" >
+
+
+<!--                    DEFAULT DEFINITION LIST ATTRIBUTES         -->
+<!--                    Default attribute lists to be used for 
+                        Definition (2-part) lists                  -->
+<!ENTITY % def-list-atts
+             ""                                                      >
+
+
+<!-- ============================================================= -->
+<!--                    DEFINITION LIST                            -->
+<!-- ============================================================= -->
+
+
+<!--                    DEFINITION LIST MODEL                      -->
+<!--                    Content model for the <def-list> element   -->
+<!ENTITY % def-list-model   
+                        "(label?, title?, term-head?, def-head?, 
+                          def-item*, def-list*)"                     > 
+
+
+<!--                    DEFINITION LIST                            -->
+<!ELEMENT  def-list     %def-list-model;                             >
+<!--         id         A unique identifier so that the list
+                        may be referenced by an <xref> element   
+             list-type  List prefix types.  Type describes the
+                        type of prefix character to be used before
+                        each list item:
+                          order - Ordered list. Prefix character is
+                            a number or a letter, depending on
+                            style
+                          bullet - Unordered list. Prefix character
+                            is a bullet, dash, or other symbol
+                          alpha-lower - Ordered list. Prefix 
+                             character is a lowercase alphabetical 
+                             character
+                          alpha-upper - Ordered list. Prefix 
+                             character is an uppercase alphabetical 
+                             character
+                          roman-lower  - Ordered list. Prefix 
+                             character is a lowercase roman 
+                             numeral
+                          roman-upper  - Ordered list. Prefix 
+                             character is an uppercase roman 
+                             numeral
+                          simple - Simple or plain list (no prefix
+                              character)
+             prefix-word
+                        Holds a word, such as "Step" or "Process"
+                        that is to be added to each item of a list.
+                        The word is in addition to any prefix
+                        characters such as numbers or bullets,
+                        and typically follows the prefix character.
+                        For example, A list type of "1" and a
+                        prefix word of "Step", would produce:
+                        "Step 1. aaaa", "Step 2. bbbb", etc.
+                        Note that the word is "Step" and not "Step ".
+                        The odd man out is the unordered list,
+                        type "2", which is the only case in which
+                        the prefix character would precede the 
+                        prefix word: - Step   - Step, but the
+                        combination is not usually sensible.       
+             list-content
+                        There are some list models in use in journal
+                        DTDs, where a specific named list has been
+                        created instead of using <list> or <def-list>.
+                        The "list content" attribute should be used 
+                        to preserve the semantic information 
+                        concerning such lists types.  Potential 
+                        values include: "procedure", "where-list" 
+                        (used in equations), "synonymy", 
+                        "compound-info", "algorithm", "notation",
+                        etc. For example, if a list were tagged as
+                              <procedure>
+                              <list-item>...</list-item>
+                              </procedure>
+                        that tagging could be preserved as:
+                              <list list-content="procedure">
+                              <list-item>...</list-item>
+                              </list>                              -->
+<!ATTLIST  def-list
+             %list-atts;                                             
+             %def-list-atts;                                         >
+
+
+<!--                    DEFINITION LIST HEAD ELEMENTS              -->
+<!--                    Elements for use in the <def-list> heading
+                        elements <term-head> and <def-head>. 
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar, but since %simple-phrase; is an 
+                        inline mix, the OR bar is already there.   -->
+<!ENTITY % def-list-head-elements
+                        "%simple-phrase;"                            >
+                         
+                         
+<!--                    DEFINITION LIST: TERM HEAD                 -->
+<!--                    Title over the first (term) column of a
+                        two-part list                              -->
+<!ELEMENT  term-head    (#PCDATA %def-list-head-elements;)*          >
+
+
+<!--                    DEFINITION LIST: DEFINITION HEAD           -->
+<!--                    Title over the second (definition) column 
+                        of a two-part list                         -->
+<!ELEMENT  def-head     (#PCDATA %def-list-head-elements;)*          >
+
+
+<!--                    DEFINITION LIST: DEFINITION ITEM MODEL     -->
+<!--                    The content model of a <def-item>          -->
+<!ENTITY % def-item-model 
+                        "(label?, term, def*)"                       >
+                         
+                         
+<!--                    DEFINITION LIST: DEFINITION ITEM           -->
+<!--                    A term and definition pair inside a
+                        definition or two-part list               
+                        of a two-part list 
+                        Authoring Note:  While this element 
+                        contains an optional Label element, the 
+                        Label element should be included only in 
+                        those circumstances where a formatting 
+                        override is needed; Label should NOT 
+                        be used in the ordinary course of 
+                        tagging.                                   -->
+<!ELEMENT  def-item     %def-item-model;                             >
+<!--         id         Unique identifier so the element may be
+                        referenced                                 -->
+<!ATTLIST  def-item                                
+             id         ID                                 #IMPLIED  >
+             
+
+<!--ELEM   def          Defined in %common.ent;                    -->
+
+
+<!--                    DEFINITION LIST: TERM ELEMENTS             -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a <term>. 
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar, but since %simple-phrase; is an 
+                        inline mix, the OR bar is already there.   -->
+<!ENTITY % term-elements
+                        "%simple-phrase; | %block-math.class; | 
+                         %simple-display.class;"                     >
+
+
+<!--                    DEFINITION LIST: TERM                      -->
+<!--                    The word, phrase, picture, or other noun
+                        being defined or description that occupies
+                        the first column of a definition or 2-part
+                        list and is the subject of the definition or
+                        description.                               -->
+<!ELEMENT  term         (#PCDATA %term-elements;)*                   >
+<!--         id         Unique identifier so the element may be
+                        referenced 
+             rid        Points to the identifier of a definition,
+                        so that a term and definition may be linked
+                                                                   -->
+<!ATTLIST  term
+             rid        IDREFS                             #IMPLIED 
+             id         ID                                 #IMPLIED  >
+
+
+<!-- ============================================================= -->
+<!--                    LIST ELEMENTS (PARAGRAPH-LEVEL ELEMENTS)   -->
+<!-- ============================================================= -->
+
+
+<!--                    LIST MODEL                                 -->
+<!--                    Content model for the <list> element       -->
+<!ENTITY % list-model   "(label?, title?, list-item+)"               >
+
+
+<!--                    LIST                                       -->
+<!ELEMENT  list         %list-model;                                 >
+<!--         id         A unique identifier so that the list
+                        may be referenced by an <xref> element   
+             list-type  List prefix types.  Type describes the
+                        type of prefix character to be used before
+                        each list item:
+                          order - Ordered list. Prefix character is
+                            a number or a letter, depending on
+                            style
+                          bullet - Unordered list. Prefix character
+                            is a bullet, dash, or other symbol
+                          alpha-lower - Ordered list. Prefix 
+                             character is a lowercase alphabetical 
+                             character
+                          alpha-upper - Ordered list. Prefix 
+                             character is an uppercase alphabetical 
+                             character
+                          roman-lower  - Ordered list. Prefix 
+                             character is a lowercase roman 
+                             numeral
+                          roman-upper  - Ordered list. Prefix 
+                             character is an uppercase roman 
+                             numeral
+                          simple - simple or plain list (no prefix
+                              character)
+             prefix-word
+                        Holds a word, such as "Step" or "Process"
+                        that is to be added to each item of a list.
+                        The word is in addition to any prefix
+                        characters such as numbers or bullets,
+                        and typically follows the prefix character.
+                        For example, a list type of "1" and a
+                        prefix word of "Step", would produce:
+                        "Step 1. aaaa", "Step 2. bbbb", etc.
+                        Note that the word is "Step" and not "Step ".
+                        The odd man out is the unordered list,
+                        type "2", which is the only case in which
+                        the prefix character would precede the 
+                        prefix word: - Step   - Step, but the
+                        combination is not usually sensible.       
+             list-content
+                        There are some list models in use in journal
+                        DTDs, where a specific named list has been
+                        created instead of using <list> or <def-list>.
+                        The "list content" attribute should be used 
+                        to preserve the semantic information 
+                        concerning such lists types.  Potential 
+                        values include: "procedure", "where-list" 
+                        (used in equations), "synonymy", 
+                        "compound-info", "algorithm", "notation",
+                        etc. For example, if a list were tagged as
+                              <procedure>
+                              <list-item>...</list-item>
+                              </procedure>
+                        that tagging could be preserved as:
+                             <list list-content="procedure">
+                              <list-item>...</list-item>
+                              </list>                              -->
+<!ATTLIST  list
+             %list-atts;                                             >
+
+
+<!--                    LIST ITEM ELEMENTS                         -->
+<!--                    The content model of a <list-item>.        -->
+<!ENTITY % list-item-model 
+                        "(label?, (p | %list.class;)+)"              >
+                         
+ 
+<!--                    LIST ITEM                                  -->
+<!--                    Authoring Note:  While this element 
+                        contains an optional Label element, the 
+                        Label element should be included only in 
+                        those circumstances where a formatting 
+                        override is needed; Label should NOT 
+                        be used in the ordinary course of 
+                        tagging.                                   -->
+<!ELEMENT  list-item    %list-item-model;                            >
+<!--         id         A unique identifier so that the list item
+                        may be referenced by an <xref> element     -->
+<!ATTLIST  list-item
+             id         CDATA                              #IMPLIED  >
+
+
+<!-- ================== End List Class Module ==================== -->

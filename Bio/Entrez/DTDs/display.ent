@@ -1,0 +1,1468 @@
+<!-- ============================================================= -->
+<!--  MODULE:    Display Class Elements                            -->
+<!--  VERSION:   2.0                                               -->
+<!--  DATE:      August 2004                                       -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
+<!--                        TYPICAL INVOCATION                     -->
+<!--
+"-//NLM//DTD Archiving and Interchange DTD Suite Display Class Elements  v2.0 20040830//EN"
+     Delivered as file "display.ent"                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Archiving and Interchange DTD Suite               -->
+<!--                                                               -->
+<!-- PURPOSE:    Describes display-related elements such as        -->
+<!--             Figures, Graphics, Math, Chemical Structures,     -->
+<!--             Graphics, etc.                                    -->
+<!--                                                               -->
+<!-- CONTAINS:   1) Parameter Entities for attribute lists         -->
+<!--             2) Parameter Entities for content models          -->
+<!--             3) The display class elements (alpha order)       -->
+<!--                a) Array                                       -->
+<!--                b) Boxed text                                  -->
+<!--                c) Chemical Structure                          -->
+<!--                d) Figure                                      -->
+<!--                e) Graphic                                     -->
+<!--                f) Inline Graphic                              -->
+<!--                g) Pre-formatted text                          -->
+<!--                e) Supplementary Information                   -->
+<!--                h) Table Group                                 -->
+<!--                i) Table Wrapper                               -->
+<!--                j) Table (invoked module)                      -->
+<!--                                                               -->
+<!-- CREATED FOR:                                                  -->
+<!--             Digital archives and publishers who wish to       -->
+<!--             create a custom XML DTD for original markup of    -->
+<!--             journal literature, books, and related material,  -->
+<!--             or for archiving and transferring such material   -->
+<!--             between archives.                                 -->
+<!--                                                               -->
+<!--             This DTD is in the public domain. An organization -->
+<!--             that wishes to create its own DTD from the suite  -->
+<!--             may do so without permission from NLM.            -->
+<!--                                                               -->
+<!--             The suite has been set up to be extended using a  -->
+<!--             new DTD file and a new DTD-specific customization -->
+<!--             module to redefine the many Parameter Entities.   -->
+<!--             Do not modify the suite directly or redistribute  -->
+<!--             modified versions of the suite.                   -->
+<!--                                                               -->
+<!--             In the interest of maintaining consistency and    -->
+<!--             clarity for potential users, NLM requests:        -->
+<!--                                                               -->
+<!--             1. If you create a DTD from the Archiving and     -->
+<!--                Interchange DTD Suite and intend to stay       -->
+<!--                compatible with the suite, then please include -->
+<!--                the following statement as a comment in all of -->
+<!--                your DTD modules:                              -->
+<!--                   "Created from, and fully compatible with,   -->
+<!--                    the Archiving and Interchange DTD Suite."  -->
+<!--                                                               -->
+<!--             2. If you alter one or more modules of the suite, -->
+<!--                then please rename your version and all its    -->
+<!--                modules to avoid any confusion with the        -->
+<!--                original suite. Also, please include the       -->
+<!--                following statement as a comment in all your   -->
+<!--                DTD modules:                                   -->
+<!--                   "Based in part on, but not fully compatible -->
+<!--                    with, the Archiving and Interchange DTD    --> 
+<!--                    Suite."                                    -->
+<!--                                                               -->
+<!--             Suggestions for refinements and enhancements to   -->
+<!--             the DTD suite should be sent in email to:         -->
+<!--                 archive-dtd@ncbi.nlm.nih.gov                  -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             December 2002                                     -->
+<!--                                                               -->
+<!-- CREATED BY: Jeff Beck       (NCBI)                            -->
+<!--             Deborah Lapeyre (Mulberry Technologies, Inc.)     -->
+<!--             Bruce Rosenblum (Inera Inc.)                      -->
+<!--                                                               -->
+<!--             NLM thanks the Harvard University Libraries, both -->
+<!--             for proposing that a draft archiving NLM DTD for  --> 
+<!--             life sciences journals be extended to accommodate -->
+<!--             journals in all disciplines and for sponsoring    -->
+<!--             Bruce Rosenblum's collaboration with other DTD    -->
+<!--             authors in completing Version 1.0. The Andrew W.  --> 
+<!--             Mellon Foundation provided support for these      --> 
+<!--             important contributions.                          -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DTD VERSION/CHANGE HISTORY                 -->
+<!-- ============================================================= -->
+<!--
+     =============================================================
+
+Version  Reason/Occasion                   (who) vx.x (yyyy-mm-dd)
+
+     =============================================================
+     Version 2.0                       (DAL/BTU) v2.0 (2004-08-30)
+     
+     
+     Major requirement changes led to the new release, producing
+     DTD version "2.0":
+       a) The splitting of the Archival and Interchange Tag Set 
+          DTDs into three DTDs from two: an authoring DTD, an
+          archive regularization and interchange DTD (the
+          current Blue Publishing DTD), and a preservationist 
+          archive DTD (the current Green Archiving and Interchange 
+          DTD).
+       b) AIT Working Group suggestions from the June 04 meeting 
+          and June/July 2004 followup discussions
+       c) Suite remodularization to meet new (and newly articulated)
+          modularization requirements
+       d) New or renamed classes and mixes to make modifications
+          easier and more consistent
+
+ 19. OTHER-TABLE-WRAP-ATTS - Moved this Parameter Entity from
+     the Archiving (Green) customization module to this module,
+     so that all variant DTDs could use it. Possible for both 
+     <table-wrapper> and <table-group>.
+
+ 18. COMPLETE MODELS WHEN OVER-RIDING A MODEL 
+     (for all Parameter Entities suffixed "-model")
+     ### Customization Alert ###
+     Made all the model over-rides consistent. Some included
+     the outer parentheses, some did not. They all do now,
+     as this is the most flexible system, allowing for
+     #PCDATA, mixed, or element content. (This is in direct
+     contrast to the "-element" suffixed models, which are
+     designed to prohibit element content and permit only
+     #PCDATA or mixed content.) Added parentheses to Parameter
+     Entity and removed them from the Element Declaration.
+     -  %array-model; 
+     -  %boxed-text-model; 
+     -  %chem-struct-wrapper-model; 
+     -  %fig-model; 
+     -  %fig-group-model; 
+     -  %preformat-model; 
+     -  %table-wrap-model; 
+     -  %table-wrap-group-model; 
+     -  %table-wrap-foot-model; 
+
+ 17. LOOSENING FIGURE - %label.class; and %caption.class; both 
+     allowed to repeat in <fig> model, to allow for alternate
+     placements.
+     
+ 16. OBJECT ID/DOI - added to elements by request of AIT WG. 
+     Elements with DOIs are those a publisher could expect to sell 
+     or handle separately. DOI is placed in an <object-id> element, 
+     part of the %id.class; and added to:
+      - <boxed-text>             (through %boxed-text-model;)
+      - <chem-struct-wrapper>    (through %chem-struct-wrapper-model;)
+      - <fig>                    (through %fig-model;)
+      - <graphic>                (through %graphic-model;)
+      - <media>                  (through %graphic-model;)
+      - <pre-format>             (through %preformat-elements;)
+      - <supplementary-material> (through %fig-model;)
+      - <table-wrap>             (through %table-wrap-model;) 
+
+     A "pub-id-type" attribute identifies the type of ID, DOI,
+     archive-issued ID, etc.
+
+      
+ 15. PARAMETER ENTITY CLEANUP AND REGULARIZATION
+
+     a. RENAME EXISTING CLASSES
+        ### Customization Alert ###
+        Some classes did not have the ".class" suffix. Changed the 
+        names to add the class suffix:
+        - %display-back-matter.class; used in 
+             -%array-model;      -%boxed-text-model;
+             -%fig-model;        -%chem-struct-wrapper-model;
+             -%graphic-model;    -%preformat-model;  
+             -%table-wrap-model; -%table-wrap-foot-model; 
+        - %block-math.class; (used in -%fig-model;)
+
+     b. INLINE MIXES USE OR BARs
+        ### Customization Alert ###
+        Changed the following PEs to start with an OR bar:
+        - %preformat-elements;
+
+     c. NEW CLASSES - To correct potential classing problems, new 
+        Parameter Entities were created:
+              New Content Models PEs
+        - %preformat-model;
+              New Classes PEs
+        - %caption.class; used in:
+            - %fig-model;        - %fig-group-model;
+            - %table-wrap-model; - %chem-struct-wrapper-model;
+            - %graphic-model;
+        - %fig-display.class; used in:
+            -%fig-group-model;
+        - %just-para.class; used in:
+            - <caption>
+            - %table-wrap-foot-model;
+        - %just-table.class; used in: 
+            - %table-wrap-group-model;
+            - %fig-model;
+        - %just-base-display.class; used in:
+            - %array-model;      - %fig-group-model;
+            - %chem-struct-wrapper-model;(where using it added
+              the <preformat> element to <chem-struct-wrapper>
+        - %tbody.class; used in
+            - %array-model;
+        - %chem-struct-elements; used in:
+            - %chem-struct-model;
+
+     d. ACCESS CLASS
+        ### Customization Alert ###
+        - Took <ext-link> out of -%access.class;. It did not belong.
+            It belongs in -%address-link.class;
+        - Added -%address-link.class; to anywhere regular
+            %access.class; was used.
+
+ 14. DEFAULT CLASSES - Were moved from this module to 
+     %default-classes.ent;
+
+ 13. Updated public identifier to "v2.0 20040830"
+
+     =============================================================
+     Version 1.1                       (TRG/BTU) v1.1 (2003-11-01)
+
+ 12. Added "mimetype" and "mime-subtype" attributes to all graphic 
+     and multi-media elements, including: 
+       - <graphic>
+       - <inline-graphic>
+       - <media>
+       - <supplementary-material>
+
+ 11. Created parameter entity %media-atts; to hold attribute list
+     for <media> (and replace %graphic-atts; as attribute list
+     holder)
+     Rationale: Needed to split attribute list for <media> from 
+     that for <graphic>, in order to have different values for 
+     new attribute "mimetype".
+
+ 10. Added attribute "alternate-form-of" to the following elements:
+       - <array>
+       - <chem-struct> (by modifying parameter entity 
+         %chem-structs-atts;)
+       - <graphic> (by modifying parameter entity %graphic-atts;)
+       - <media> (by modifying parameter entity %graphic-atts;)
+       - <supplementary-material> (by modifying parameter entity 
+             %supplementary-material-atts;)
+       - <inline-graphic> (by modifying parameter entity 
+             %inline-graphic-atts;)
+       - <preformat>
+     Rationale: Where multiple formats of an item (e.g., graphic 
+     file, media object, chemical structure) are available, this 
+     attribute indicates that a format is a secondary one and 
+     provides a link to the primary format, so that only one 
+     format of an item is displayed.
+
+  9. Modified parameter entity %array-model; so that the elements
+     <graphic> and <media> could be used multiple times.
+     Rationale: A series of <graphic> (or <media>) elements 
+     may occur in the same content, especially if they are
+     variants of one graphic (or media object) may be linked, 
+     with only one variation being displayed.
+
+  8. Added attribute "id" to the following: 
+       - <inline-graphic> (via parameter entity %inline-graphic-atts;) 
+       - <chem-struct> (via parameter entity %chem-struct-atts;)      
+     Rationale: Provide unique identifier so these elements can be 
+     linked to. Some will have alternate versions which will point
+     to them, others may be the target internal cross-references. 
+
+  7. Created parameter entity %inline-graphic-atts; to hold 
+     various attributes associated with <inline-graphic>
+     Rationale: In order to distinguish between attribute lists
+     used by the Archiving DTD and the Publishing DTD, it was 
+     necessary to create a parameter entity that could be overridden.
+
+  6. Added attribute "content-type" to the following:
+       - <array>  
+       - <boxed-text> by modifying parameter entity %boxed-text-atts;
+       - <fig-group> by modifying parameter entity %fig-group-atts;      
+       - <table-wrap> by modifying parameter entity %table-wrap-atts;
+       - <supplementary-material> by modifying parameter entity 
+             %supplementary-material-atts;
+       - <chem-struct> by modifying parameter entity %chem-struct-atts;
+       - <chem-struct-wrapper> by modifying parameter entity 
+             %chem-struct-wrapper-atts;
+     Rationale: To identify and preserve the semantic intent of 
+     semantically rich source documents.
+
+  5. Added ID attribute to element <array>.
+     Rationale: Provide unique identifier so <array> can be linked to. 
+
+  4. Added parameter entity %label.class; to parameter entity 
+     %chem-struct-model; 
+     Rationale: To allow label as a format override on <chem-struct>. 
+
+  3. Added element <label> to the parameter entity %array-model;
+     Rationale: To allow label as a format override
+     
+  2. Added element <media> to the following parameter entities:
+       - %block-display.class;
+       - %simple-display.class;
+       - %array-model; 
+       - %chem-struct-wrapper-model;
+       - %fig-group-model;                     
+     Rationale: Media object <media> to occur everywhere element 
+     <graphic> is allowed to occur.
+
+  1. Added element <media> for media objects; <media> will be used 
+     in the same way <graphic> is and will have the same content, 
+     but be used for animation or movies.
+     Rationale: To distinguish alternate media (such as movies or 
+     animation) from traditional print graphic forms.
+                                                                   -->
+
+
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITY DEPENDENCIES             
+                        Requires the following parameter entities
+                        be defined before calling this module, 
+                        usually accomplished in the Customization
+                        Module for the specific DTD:
+                            Element Classes and Groups
+                        %access.class;
+                        %block-math.class; 
+                        %break.class;
+                        %emphasis.class;
+                        %inside-table-wrapper;
+                        %intable-para.class;
+                        %label.class;
+                        %list.class;
+                        %math.class;
+                        %simple-display.class;
+                        %simple-link.class;
+                        %subsup.class;
+                            Content Models
+                        %sec-opt-title-model;
+                            Attribute Lists
+                        %link-atts;
+                        %might-link-atts;
+                        %other-table-wrap-atts;
+                                                                   -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DEFAULT PES FOR ATTRIBUTE LISTS            -->
+<!-- ============================================================= -->
+
+                                                                
+<!--                    DISPLAY ATTRIBUTES OPTIONAL ID             -->
+<!--         position   Must this display object (figure, boxed text,
+                        etc.) be anchored in its exact location
+                        within the text or may it float, for example
+                        to the top of the next page, next column, or
+                        within a separate window?  Values are:
+                          anchor      Object must remain in place
+                          float       Object is not anchored and
+                                      may be moved to a new column,
+                                      a new window, etc.
+                          margin      In print, item should be placed
+                                      in the margin or gutter. 
+                                      Online the item should 
+                                      remain closely associated 
+                                      with the text.               -->
+<!ENTITY % display-atts
+             "position  (anchor | float | margin)        'float'"    >
+
+                                                                
+<!--                    BOXED TEXT ATTRIBUTES                      -->
+<!--                    Attributes for the boxed text <boxed-text>
+                        element                                    -->
+<!ENTITY % boxed-text-atts
+             "id        ID                                #IMPLIED
+              %display-atts;
+              xml:lang  NMTOKEN                           #IMPLIED
+              content-type
+                        CDATA                             #IMPLIED"  >
+ 
+                                                                
+<!--                    CHEMICAL STRUCTURE WRAPPER ATTRIBUTES      -->
+<!--                    Attributes for the <chem-struct-wrapper> 
+                        element, the outer wrapper around one or more
+                        chemical structures                        -->
+<!ENTITY % chem-struct-wrapper-atts
+             "id        ID                                #IMPLIED
+              %display-atts;
+              content-type
+                        CDATA                             #IMPLIED"  >
+                                                                
+
+<!--                    CHEMICAL STRUCTURE ATTRIBUTES              -->
+<!--                    Attributes for <chem-struct>               -->
+<!ENTITY % chem-struct-atts
+             "%might-link-atts;
+              alternate-form-of
+                         IDREF                            #IMPLIED
+              content-type 
+                        CDATA                             #IMPLIED
+              id        ID                                #IMPLIED"  >
+
+                                                                
+<!--                    FIGURE GROUP ATTRIBUTES                    -->
+<!--                    Attributes for Figure Groups <fig-group>   -->
+<!ENTITY % fig-group-atts
+             "id        ID                                #IMPLIED
+              %display-atts;
+              content-type
+                        CDATA                             #IMPLIED"  >
+
+                                                                
+<!--                    FIGURE ATTRIBUTES                          -->
+<!--                    Attributes for Figures <fig>               -->
+<!ENTITY % fig-atts
+             "id        ID                               #IMPLIED
+              %display-atts;                                       
+              xml:lang  NMTOKEN                          #IMPLIED  
+              fig-type  CDATA                            #IMPLIED"   > 
+
+                                                                
+<!--                    GRAPHIC ATTRIBUTES                         -->
+<!--                    Attributes for Graphic <graphic>           -->
+<!ENTITY % graphic-atts
+             "alternate-form-of
+                        IDREF                            #IMPLIED
+              alt-version
+                        (yes|no)                             'no'
+              id        ID                               #IMPLIED
+              mime-subtype  
+                        (cgm | g3fax | gif | ief |  jpeg | naplps | 
+                         png | prs.btif | prs.pti | t38 | tiff |  
+                         tiff-fx)                         #IMPLIED 
+              mimetype  CDATA                       #FIXED 'image'
+              %display-atts;                                       
+              %link-atts;"                                           >
+
+
+<!--                    MEDIA ATTRIBUTES                           -->
+<!--                    Attributes for Media <media>               -->
+<!ENTITY % media-atts
+             "alternate-form-of
+                        IDREF                            #IMPLIED
+              id        ID                               #IMPLIED
+              mimetype  CDATA                            #IMPLIED
+              mime-subtype
+                        CDATA                            #IMPLIED 
+              %display-atts;                                       
+              %link-atts;"                                           >
+
+                                                                
+<!--                    INLINE GRAPHIC ATTRIBUTES                  -->
+<!--                    Attributes for Inline Graphic 
+                        <inline-graphic>                           -->
+<!ENTITY % inline-graphic-atts
+             "alternate-form-of
+                        IDREF                              #IMPLIED
+              id        ID                                 #IMPLIED
+              mimetype  CDATA                        #FIXED 'image'
+              mime-subtype
+                        CDATA                              #IMPLIED
+              %link-atts;"                                           >
+
+
+<!--                   PREFORMATTED TEXT ATTRIBUTES                -->
+<!--                   Attributes for Preformatted Text <preformat>-->
+<!ENTITY % preformat-atts
+             "alternate-form-of
+                       IDREF                             #IMPLIED
+              id        ID                               #IMPLIED
+              %display-atts;                                     
+              preformat-type
+                        CDATA                            #IMPLIED
+              xml:space (default | preserve)     #FIXED 'preserve'  
+              xml:lang  NMTOKEN                          #IMPLIED"   > 
+
+                                                                
+<!--                    SUPPLEMENTARY INFORMATION ATTRIBUTES       -->
+<!--                    Attributes for Supplementary Information
+                        <supplementary-material>                   -->
+<!ENTITY % supplementary-material-atts
+             "alternate-form-of
+                        IDREF                             #IMPLIED
+              content-type
+                        CDATA                             #IMPLIED
+              id        ID                                #IMPLIED
+              mimetype  CDATA                             #IMPLIED
+              mime-subtype
+                        CDATA                             #IMPLIED 
+              %display-atts;                                       
+              %might-link-atts;                                              
+              xml:lang  NMTOKEN                           #IMPLIED"  > 
+
+
+<!-- ============================================================= -->
+<!--                    TABLE ATTRIBUTE PARAMETER ENTITIES         -->
+<!-- ============================================================= -->
+                          
+
+<!--                    TABLE WRAPPER ATTRIBUTES                   -->
+<!--                    Attributes to be added to the regular NLM
+                        table attributes, for example, when the
+                        Elsevier or OASIS Exchange table models are
+                        used.                                      -->
+<!ENTITY % other-table-wrap-atts
+             ""                                                      > 
+
+                                                                
+<!--                    TABLE GROUP ATTRIBUTES                     -->
+<!--                    Attributes for Table Groups 
+                        <table-wrap-group>                         -->
+<!ENTITY % table-wrap-group-atts
+             "id        ID                                #IMPLIED
+              %other-table-wrap-atts;
+              %display-atts;"                                        >
+
+                                                                
+<!--                    TABLE WRAPPER ATTRIBUTES                   -->
+<!--                    Attributes for Table Wrapper <table-wrap>  -->
+<!ENTITY % table-wrap-atts
+             "id        ID                                #IMPLIED
+              %display-atts;                                       
+              content-type
+                        CDATA                             #IMPLIED 
+              %other-table-wrap-atts;
+              xml:lang  NMTOKEN                           #IMPLIED"  >
+
+
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITIES FOR CONTENT MODELS      -->
+<!-- ============================================================= -->
+
+
+<!--                    FIGURE-LIKE CONTENT MODEL                  -->
+<!--                    Content model for the Figure element and any
+                        similarly structured elements              -->
+<!ENTITY % fig-model    "((%id.class;)*, (%label.class;)*, 
+                          (%caption.class;)*, 
+                          (%access.class; | %address-link.class;)*,  
+                          (%block-math.class; | %intable-para.class; |
+                           %just-table.class; | %just-para.class; |
+                           %list.class; | %simple-display.class;)*,
+                          (%display-back-matter.class;)* )"          >
+
+
+<!-- ============================================================= -->
+<!--                    ARRAY ELEMENTS                             -->
+<!-- ============================================================= -->
+
+
+<!--                    ARRAY CONTENT MODEL                        -->
+<!--                    The element used to contain material in
+                        rows and columns that is just a block insert
+                        into the text flow, not numbered or called a
+                        table, and not titled or captioned         -->
+<!ENTITY % array-model  "(label?, 
+                          (%access.class; | %address-link.class;)*,  
+                          ( (%just-base-display.class;)* | 
+                            %tbody.class; ), 
+                          (%display-back-matter.class;)* )"          >
+
+
+<!--                    ARRAY (SIMPLE TABULAR ARRAY)               -->
+<!--                    Used to define in-text table-like (columnar) 
+                        material.  Uses the XHTML table body element
+                        or a graphic to express the rows and columns.
+                        These have neither labels nor captions,
+                        arrays with labels and captions are table
+                        wrappers.
+                        Remarks: Arrays are not allowed to float,
+                        they are tied to their position in the
+                        text.
+                        Authoring Note:  While this element 
+                        contains an optional Label element, the 
+                        Label element should be included only in 
+                        those circumstances where a formatting 
+                        override is needed; Label should NOT 
+                        be used in the ordinary course of 
+                        tagging.                                   -->
+<!ELEMENT  array        %array-model;                                >
+<!--         alternate-form-of
+                        Where multiple formats of an item (e.g., 
+                        graphic file, media object, chemical 
+                        structure) are available, this attribute 
+                        indicates that a format is a secondary 
+                        one and provides a link to the primary 
+                        format, so that only one format of an 
+                        item is displayed.
+             id         Unique identifier so the element may be
+                        referenced                                 
+             content-type   
+                        Identification of the subject, type of
+                        content, or reason that this word or phrase
+                        is considered semantically special, as a 
+                        means of preserving the semantic intent of 
+                        the original tagging.       
+             xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).                   
+                        Display Note: An Array element is assumed
+                        to be anchored at its position within the
+                        text.                                      -->                                 
+<!ATTLIST  array
+             alternate-form-of
+                        IDREF                              #IMPLIED
+             id         ID                                 #IMPLIED
+             content-type
+                        CDATA                              #IMPLIED 
+             xml:lang   NMTOKEN                            #IMPLIED  >
+             
+
+<!-- ============================================================= -->
+<!--                    BOXED TEXT ELEMENTS                        -->
+<!-- ============================================================= -->
+
+
+<!--                    BOXED TEXT MODEL                           -->
+<!--                    Complete content model for the boxed text
+                        element, made into a PE so that it could be
+                        redefined, for example, by an authoring DTD.
+                                                                   -->
+<!ENTITY % boxed-text-model
+                        "((%id.class;)*, %sec-opt-title-model;, 
+                          (%display-back-matter.class;)* )"          >
+                                                 
+
+<!--                    BOXED TEXT                                 -->
+<!--                    Textual material that is outside the flow
+                        of the narrative text, for example, a 
+                        sidebar, marginalia, text insert, caution or
+                        note box, etc.                             -->
+<!ELEMENT  boxed-text   %boxed-text-model;                           >
+<!--         id         Unique identifier so the element may be
+                        referenced                                
+             content-type   
+                        Identification of the subject, type of
+                        content, or reason that this word or phrase
+                        is considered semantically special, as a 
+                        means of preserving the semantic intent of 
+                        the original tagging.                      
+             position   Must this display object (figure, boxed text,
+                        etc.) be anchored in its exact location
+                        within the text or may it float, for example
+                        to the top of the next page, next column, or
+                        within a separate window?  Values are:
+                          anchor      Object must remain in place
+                          float       Object is not anchored and
+                                      may be moved to a new column,
+                                      a new window, etc.
+                          margin      In print, item should be placed
+                                      in the margin or gutter. 
+                                      Online the item should 
+                                      remain closely associated 
+                                      with the text.
+             xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).                   --> 
+<!ATTLIST  boxed-text
+             %boxed-text-atts;                                       > 
+
+
+<!-- ============================================================= -->
+<!--                    CHEMICAL STRUCTURE ELEMENTS                -->
+<!-- ============================================================= -->
+
+
+<!--                    CHEMICAL STRUCTURE WRAPPER MODEL           -->
+<!--                    Content model for the Chemical Structure
+                        Wrapper <chem-struct-wrapper> element      -->
+<!ENTITY % chem-struct-wrapper-model
+                        "((%id.class;)*, (%label.class;)?, 
+                          (%caption.class;)?, 
+                          (%access.class; | %address-link.class;)*,  
+                          (%simple-intable-display.class;)+,
+                          (%display-back-matter.class;)* )"          >
+
+
+<!--                    CHEMICAL STRUCTURE WRAPPER                 -->
+<!--                    A chemical expression, reaction, equation,
+                        etc. that is set apart within the text.
+                        These may be numbered.  They may be modeled
+                        as ASCII characters or as one or more 
+                        graphics.
+                        Implementer's Note: CML will go here, if
+                        added.                                     
+                        Display Note: A chemical structure is assumed
+                        to be anchored at its position within the
+                        text.                                      -->
+<!ELEMENT  chem-struct-wrapper         
+                        %chem-struct-wrapper-model;                  >
+<!--         id         A unique identifier for the chemical structure
+             content-type   
+                        Identification of the subject, type of
+                        content, or reason that this word or phrase
+                        is considered semantically special, as a 
+                        means of preserving the semantic intent of 
+                        the original tagging.                      
+             position   Must this display object (figure, boxed text,
+                        etc.) be anchored in its exact location
+                        within the text or may it float, for example
+                        to the top of the next page, next column, or
+                        within a separate window?  Values are:
+                          anchor      Object must remain in place
+                          float       Object is not anchored and
+                                      may be moved to a new column,
+                                      a new window, etc.
+                          margin      In print, item should be placed
+                                      in the margin or gutter. 
+                                      Online the item should 
+                                      remain closely associated 
+                                      with the text.               -->
+<!ATTLIST  chem-struct-wrapper
+             %chem-struct-wrapper-atts;                              >
+
+
+<!--                    CHEMICAL STRUCTURE ELEMENTS                -->
+<!--                    Those elements that may mix with the data
+                        characters inside a Chemical Structure
+                        <chem-struct>                              -->
+<!ENTITY % chem-struct-elements
+                        "| %access.class; | %address-link.class; | 
+                         %break.class; | 
+                         %emphasis.class; | %label.class; |
+                         %list.class; | %math.class; | 
+                         %simple-display.class; | 
+                         %simple-link.class; | %subsup.class; "      >
+
+
+<!--                    CHEMICAL STRUCTURE MODEL                   -->
+<!--                    A chemical expression, reaction, equation,
+                        etc. that is set apart within the text     
+                        DESIGN NOTE: The list class was added to 
+                        cover the Elsevier DTD <compound-info> 
+                        element.
+                        Authoring Note: This model allows for a
+                        <graphic> element inside of the <chem-struct>
+                        that holds the structure or for using the
+                        linking attributes to point directly to the
+                        URI of such as graphic.
+                        Authoring Note: Accessibility elements should
+                        not be used with this element if they can be
+                        used as part of the <chem-struct-wrapper> 
+                        wrapper element. They are allowed as part of
+                        this element only for those 
+                        <chem-struct-wrapper> elements that 
+                        contain more than one <chem-struct>.       -->
+<!ENTITY % chem-struct-model
+                        "(#PCDATA %chem-struct-elements;)* "         >
+
+
+<!--                    CHEMICAL STRUCTURE (DISPLAY)               -->
+<!--                    A chemical expression, reaction, equation,
+                        etc. that is set apart within the text.
+                        Authoring Note:  While this element 
+                        contains an optional Label element, the 
+                        Label element should be included only in 
+                        those circumstances where a formatting 
+                        override is needed; Label should NOT 
+                        be used in the ordinary course of 
+                        tagging.                                   -->
+<!ELEMENT  chem-struct  %chem-struct-model;                          >
+<!--         alternate-form-of
+                        Where multiple formats of an item (e.g., 
+                        graphic file, media object, chemical 
+                        structure) are available, this attribute 
+                        indicates that a format is a secondary 
+                        one and provides a link to the primary 
+                        format, so that only one format of an
+                        item is displayed.
+             content-type   
+                        Identification of the subject, type of
+                        content, or reason that this word or phrase
+                        is considered semantically special, as a 
+                        means of preserving the semantic intent of 
+                        the original tagging.                      
+             xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename                -->             
+<!ATTLIST  chem-struct 
+             %chem-struct-atts;                                      >
+
+
+<!-- ============================================================= -->
+<!--                    FIGURE ELEMENTS                            -->
+<!-- ============================================================= -->
+
+
+<!--                    FIGURE GROUP MODEL                         -->
+<!ENTITY % fig-group-model 
+                        "((%label.class;)?, (%caption.class;)?, 
+                          (%access.class; | %address-link.class;)*,  
+                          (%fig-display.class; | 
+                           %just-base-display.class;)* )"            >
+
+
+<!--                    FIGURE GROUP                               -->
+<!--                    Used for a group of figures that must be 
+                        displayed together                         -->
+<!ELEMENT  fig-group    %fig-group-model;                            >
+<!--         id         Unique identifier so the element may be
+                        referenced 
+                        Authoring Note: The value of the "id"
+                        attribute for a Figure Group should begin 
+                        with "FG" (FG1, FG2, FGIII). 
+             content-type   
+                        Identification of the subject, type of
+                        content, or reason that this word or phrase
+                        is considered semantically special, as a 
+                        means of preserving the semantic intent of 
+                        the original tagging.                      
+             position   Must this display object (figure, boxed text,
+                        etc.) be anchored in its exact location
+                        within the text or may it float, for example
+                        to the top of the next page, next column, or
+                        within a separate window?  Values are:
+                          anchor      Object must remain in place
+                          float       Object is not anchored and
+                                      may be moved to a new column,
+                                      a new window, etc.
+                          margin      In print, item should be placed
+                                      in the margin or gutter. 
+                                      Online the item should 
+                                      remain closely associated 
+                                      with the text.               -->
+<!ATTLIST  fig-group
+             %fig-group-atts;                                        >
+
+
+<!--                    FIGURE                                     -->
+<!--                    A block of graphic or textual material that
+                        is identified as a "Figure", usually with
+                        a caption and a label such as "Figure" or
+                        "Figure 3.". 
+                          The content of a Figure need not be 
+                        graphical in nature, for example a list or a
+                        table may be the content of a Figure.
+                        Authoring and Conversion Note: Unlabeled 
+                        graphical objects found in the content 
+                        should be tagged as <graphic>s. A common 
+                        test for Figure versus Graphic is to ask
+                        yourself whether, if you were to create a
+                        "List of Figures" for this article, the
+                        object would or would not appear in such a 
+                        list.                                       -->
+<!ELEMENT  fig          %fig-model;                                   >
+<!--         id         Unique identifier so the element may be
+                        referenced 
+                        Authoring Note: The value of the "id"
+                        attribute for a Figure should begin with "F" 
+                        (F1, F2, FIII). 
+                        Authoring Note: The value of the "id"
+                        attribute for a scheme should begin with "S"
+                        (S1, S2). The value of the "id" attribute 
+                        for a plate should begin with "P" (P1, P2).                      
+             position   Must this display object (figure, boxed text,
+                        etc.) be anchored in its exact location
+                        within the text or may it float, for example
+                        to the top of the next page, next column, or
+                        within a separate window?  Values are:
+                          anchor      Object must remain in place
+                          float       Object is not anchored and
+                                      may be moved to a new column,
+                                      a new window, etc.
+                          margin      In print, item should be placed
+                                      in the margin or gutter. 
+                                      Online the item should 
+                                      remain closely associated 
+                                      with the text.        
+             xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).                   
+             fig-type   Some DTDs make a distinction between 
+                        different types of graphical objects, some
+                        with attributes, some with elements.  This
+                        attribute is for use in preserving that
+                        intellectual content.  For example, this
+                        attribute could record the fact that the
+                        contents of this figure are: a cartoon,
+                        chart, diagram, drawing, exhibit, 
+                        illustration, map, plate, scheme, workflow, 
+                        etc.                                       -->
+<!ATTLIST  fig
+             %fig-atts;                                              >
+
+
+<!--                    CAPTION BODY PARTS                         -->
+<!--                    Elements that may be included in the body of
+                        the <caption> element                      -->
+<!ENTITY % caption-body-parts  
+                        "(%just-para.class;)*"                       > 
+
+
+<!--                    CAPTION OF A FIGURE, TABLE, ETC.           -->
+<!--                    Wrapper element for the textual description
+                        associated with a figure, table, etc. In
+                        some source document captions, the first 
+                        sentence is set off from the rest as a title.
+                        In some source document, figures may posses
+                        both a title and a caption, in which case 
+                        the title will be moved inside the caption
+                        during conversion.                         -->
+<!ELEMENT  caption      (title?, %caption-body-parts;)               >
+<!--         xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).                   -->
+<!ATTLIST  caption
+             xml:lang   NMTOKEN                            #IMPLIED  > 
+
+                        
+<!--ELEM  title        Defined in %common.ent;                     -->
+<!--ELEM  p            Defined in %common.ent;                     -->
+
+
+<!-- ============================================================= -->
+<!--                    THE GRAPHIC AND MEDIA OBJECT ELEMENTS      -->
+<!-- ============================================================= -->
+
+
+<!--                    GRAPHIC MODEL                              -->
+<!--                    Content model for the <graphic> element    -->
+<!ENTITY % graphic-model   
+                        "(%access.class; | %address-link.class; | 
+                          %id.class; | %label.class; | 
+                          %caption.class; | 
+                          %display-back-matter.class;)* "            > 
+
+
+<!--                    GRAPHIC                                    -->
+<!--                    An external file that holds a picture,
+                        illustration, etc., usually as some form of
+                        binary object. The "content" of the <graphic>
+                        element is not the object, but merely
+                        information about the object. 
+                        Authoring and Conversion Note: Internal
+                        elements such as <caption> should always be
+                        used at the highest possible level, in
+                        other words, if a Graphic is inside a
+                        Figure, the <caption>, <long-desc>, etc.
+                        should be part of the Figure, not part of
+                        the Graphic. Elements such as <caption>
+                        are used when a standalone graphic requires 
+                        them or when multiple graphics within a 
+                        container element such as a Figure need 
+                        them individually. Similarly, the "position"
+                        attribute should not be used on a <graphic>
+                        that is inside a larger display, container
+                        such as a Paragraph.                       -->
+<!ELEMENT  graphic      %graphic-model;                              >
+<!--         alternate-form-of
+                        Where multiple formats of an item (e.g., 
+                        graphic file, media object, chemical 
+                        structure) are available, this attribute 
+                        indicates that a format is a secondary 
+                        one and provides a link to the primary 
+                        format, so that only one format of an
+                        item is displayed.
+             alt-version
+                        Whether an alternative version of a graphic
+                        has also been provided, for example, a 
+                        thumbnail or a different resolution
+             mimetype   The mimetype of the object. For graphics
+                        the mimetype will always be "image".
+             mime-subtype
+                        The mime-subtype of the object. Taken from
+                        IANA (Internet Assigned Numbers Authority)
+                        allowable values of mime-subtype of mimetype
+                        image (all the non-vendor specific values) 
+                        are: 
+                           cgm
+                           g3fax
+                           gif
+                           ief
+                           jpeg
+                           naplps
+                           png
+                           prs.btif
+                           prs.pti
+                           t38
+                           tiff
+                           tiff-fx                      
+                        
+             id         Unique identifier so the element may be
+                        referenced. The "id" attribute such as 
+                        should be used at the highest level 
+                        possible, therefore a graphic only needs an
+                        "id" when it is standalone. 
+             position   Must this display object (figure, boxed text,
+                        etc.) be anchored in its exact location
+                        within the text or may it float, for example
+                        to the top of the next page, next column, or
+                        within a separate window?  Values are:
+                          anchor      Object must remain in place
+                          float       Object is not anchored and
+                                      may be moved to a new column,
+                                      a new window, etc.
+                          margin      In print, item should be placed
+                                      in the margin or gutter. 
+                                      Online the item should 
+                                      remain closely associated 
+                                      with the text.   
+             xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename            
+                        NOTE: A graphic will always have an 
+                        "xlink:href" attribute that points to the
+                        URI where the graphic may be found.
+                        Authoring and Conversion Note: Best practice
+                        for graphic file names is to limit the names
+                        and path names to the characters: letters,
+                        numbers, underscore, hyphen, and period. All
+                        such names are assumed to be case sensitive.
+                        DOS-style file extensions may be used.     -->
+<!ATTLIST  graphic
+             %graphic-atts;                                          >
+
+
+<!--                    MEDIA OBJECT                               -->
+<!--                    An external file that holds a media object,
+                        such as an animation or a movie. The 
+                        "content" of the <media> element is not the 
+                        object, but merely information about the 
+                        object. 
+                        Authoring and Conversion Note: Internal
+                        elements such as <caption> should always be
+                        used at the highest possible level, in
+                        other words, if a media object is inside a
+                        Figure, the <caption>, <long-desc>, etc.
+                        should be part of the Figure, not part of
+                        the media object. Elements such as <caption>
+                        are used when a standalone media object 
+                        requires them or when multiple media objects 
+                        within a container element such as a Figure 
+                        need them individually. Similarly, the 
+                        "position" attribute should not be used on 
+                        a <media> that is inside a larger display
+                        container such as a Paragraph.             -->
+<!ELEMENT  media        %graphic-model;                              >
+<!--         alternate-form-of
+                        Where multiple formats of an item (e.g., 
+                        graphic file, media object, chemical 
+                        structure) are available, this attribute 
+                        indicates that a format is a secondary 
+                        one and provides a link to the primary 
+                        format, so that only one format of an
+                        item is displayed.
+             mimetype   The mimetype of the object.
+             mime-subtype
+                        The mime-subtype of the object
+             id         Unique identifier so the element may be
+                        referenced. The "id" attribute such as 
+                        should be used at the highest level 
+                        possible, therefore a graphic only needs an
+                        "id" when it is standalone. 
+             position   Must this display object (figure, boxed text,
+                        etc.) be anchored in its exact location
+                        within the text or may it float, for example
+                        to the top of the next page, next column, or
+                        within a separate window?  Values are:
+                          anchor      Object must remain in place
+                          float       Object is not anchored and
+                                      may be moved to a new column,
+                                      a new window, etc.
+                          margin      In print, item should be placed
+                                      in the margin or gutter. 
+                                      Online the item should 
+                                      remain closely associated 
+                                      with the text.   
+             xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename            
+                        NOTE: A graphic will always have an 
+                        "xlink:href" attribute that points to the
+                        URI where the graphic may be found.
+                        Authoring and Conversion Note: Best practice
+                        for graphic file names is to limit the names
+                        and path names to the characters: letters,
+                        numbers, underscore, hyphen, and period. All
+                        such names are assumed to be case sensitive.
+                        DOS-style file extensions may be used.     -->
+<!ATTLIST  media
+             %media-atts;                                            >
+
+
+<!-- ============================================================= -->
+<!--                    INLINE GRAPHIC                             -->
+<!-- ============================================================= -->
+
+
+<!--                    INLINE GRAPHIC                             -->
+<!--                    A small graphic such as an icon or a small
+                        picture symbol that is displayed or set
+                        in the same line as the text.
+                        Authoring and Conversion Note: Although the
+                        DTD cannot enforce it, this element should
+                        NOT be used for custom-built or private
+                        characters, such as those in the Unicode
+                        private use areas. For such characters,
+                        use the <private-char> element, see
+                        %chars.ent;                                -->
+<!ELEMENT  inline-graphic
+                        (alt-text?)                                  >
+<!--         alternate-form-of
+                        Where multiple formats of an item (e.g., 
+                        graphic file, media object, chemical 
+                        structure) are available, this attribute 
+                        indicates that a format is a secondary 
+                        one and provides a link to the primary 
+                        format, so that only one format of an
+                        item is displayed.
+             id         Unique identifier so an inline-formula
+                        can be referenced                          
+             mimetype   fixed at "image"
+             mime-subtype
+                        The mime-subtype of the graphic
+             xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename            
+                        NOTE: An inline graphic will always have an 
+                        "xlink:href" attribute that points to the
+                        URI where the graphic may be found.        -->
+<!ATTLIST  inline-graphic
+             %inline-graphic-atts;                                   >
+
+
+<!-- ============================================================= -->
+<!--                    PRESERVE THE WHITESPACE TEXT               -->
+<!-- ============================================================= -->
+
+
+<!--                    PREFORMATTED TEXT ELEMENTS                 -->
+<!--                    Elements that may be used, along with data
+                        characters, inside the content model for the
+                        <preformat> element, in which white space,
+                        such as tabs, line feeds, and spaces will
+                        be preserved                               -->
+<!ENTITY % preformat-elements
+                        "| %access.class; | %address-link.class; |
+                         %emphasis.class; |
+                         %display-back-matter.class; | %id.class; |
+                         %subsup.class;"                             >
+
+
+<!--                    PREFORMAT MODEL                            -->
+<!--                    Content model for the <preformat> element  -->
+<!ENTITY % preformat-model   
+                        "(#PCDATA %preformat-elements;)*"            > 
+
+
+<!--                    PREFORMATTED TEXT                          -->
+<!--                    Used for preformatted text such as 
+                        computer code in which whitespace, such as
+                        tabs, line feeds, and spaces, should be
+                        preserved. Typically displayed or printed
+                        in a monofont to preserve character 
+                        alignment.
+                        Related Elements: Poetry may be tagged with
+                        <preformat> if spacing is critical, but 
+                        usually poetry should be tagged with the
+                        <verse-group> element, which may not preserve
+                        the exact indentation but is likely to be
+                        displayed in a proportional font.          -->
+<!ELEMENT  preformat    %preformat-model;                            >
+<!--         alternate-form-of
+                        Where multiple formats of an item (e.g., 
+                        graphic file, media object, chemical 
+                        structure) are available, this attribute 
+                        indicates that a format is a secondary 
+                        one and provides a link to the primary 
+                        format, so that only one format of an
+                        item is displayed.
+             id         Unique identifier so the element may be
+                        referenced. 
+             position   Must this display object (figure, boxed text,
+                        etc.) be anchored in its exact location
+                        within the text or may it float, for example
+                        to the top of the next page, next column, or
+                        within a separate window?  Values are:
+                          anchor      Object must remain in place
+                          float       Object is not anchored and
+                                      may be moved to a new column,
+                                      a new window, etc.
+                          margin      In print, item should be placed
+                                      in the margin or gutter. 
+                                      Online the item should 
+                                      remain closely associated 
+                                      with the text.
+             preformat-type
+                        What kind of content, for example:
+                          code   Computer code
+                          poetry Poems
+                          ascii  ASCII art
+                        This attribute is added to preserve the
+                        intellectual content of DTDs that provide
+                        this information.  Many documents will not
+                        be able to provide this data.
+             xml:space  Request that, when printing or displaying
+                        this element, all white space such as tabs
+                        and spaces and line breaks be preserved.  
+             xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).                   -->
+<!ATTLIST  preformat
+             %preformat-atts;                                        >
+
+
+<!-- ============================================================= -->
+<!--                    SUPPLEMENTARY MATERIAL                     -->
+<!-- ============================================================= -->
+
+
+<!--                    SUPPLEMENTARY MATERIAL MODEL               -->
+<!--                    Content model for the 
+                        <supplementary-material> element           -->
+<!ENTITY % supplementary-material-model 
+                        "%fig-model;"                                > 
+
+
+<!--                    SUPPLEMENTARY MATERIAL                     -->
+<!--                    Additional data files that contain
+                        information directly supportive of the item,
+                        for example, an audio clip, movie, database,
+                        spreadsheet, applet, or other external file.  
+                        Remarks: This is similar to the audio-visual
+                        element in some DTDs and the unprinted-item
+                        element (meaning that it is used only for
+                        electronic files) in other DTDs.
+                        Remarks: This element is used in two senses: 
+                        inside the article front matter as an alert
+                        to the existence of supplementary material
+                        and as part of the textual flow, where it is
+                        similar to a Figure, in that it can be 
+                        positioned as a floating or anchored object 
+                        and may take a caption.
+                          In addition, the supplementary material
+                        may identify its file type with the
+                        "mimetype" attribute.
+                        Authoring Note: Supplementary material may
+                        contain a preview image (e.g., the first
+                        frame of a movie, tagged as a <graphic> or 
+                        <media>), with the caption/preview placed 
+                        in a manner similar to a Figure and a 
+                        cross-reference made to the material from 
+                        the text.        
+                        Related Elements: See related element
+                        <inline-supplementary-material> for 
+                        a simpler form that can be used to mark up
+                        text references to supplementary material
+                        where the reference appears in the regular
+                        flow of the text and does not have a preview
+                        image or separate caption.                 -->
+<!ELEMENT  supplementary-material     
+                        %supplementary-material-model;               >
+<!--         alternate-form-of
+                        Where multiple formats of an item (e.g., 
+                        graphic file, media object, chemical 
+                        structure) are available, this attribute 
+                        indicates that a format is a secondary 
+                        one and provides a link to the primary 
+                        format, so that only one format of an
+                        item is displayed.
+             content-type   
+                        Identification of the subject, type of
+                        content, or reason that this word or phrase
+                        is considered semantically special, as a 
+                        means of preserving the semantic intent of 
+                        the original tagging.                      
+             id         Unique identifier so the element may be
+                        referenced                              
+             mimetype   The mimetype of the object.
+             mime-subtype
+                        The mime-subtype of the object
+             position   Must this display object (figure, boxed text,
+                        etc.) be anchored in its exact location
+                        within the text or may it float, for example
+                        to the top of the next page, next column, or
+                        within a separate window?  Values are:
+                          anchor      Object must remain in place
+                          float       Object is not anchored and
+                                      may be moved to a new column,
+                                      a new window, etc.
+                          margin      In print, item should be placed
+                                      in the margin or gutter. 
+                                      Online the item should 
+                                      remain closely associated 
+                                      with the text.
+             xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename                
+             xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).                   -->
+<!ATTLIST  supplementary-material
+             %supplementary-material-atts;                           >
+
+
+<!-- ============================================================= -->
+<!--                    TABLE ELEMENTS                             -->
+<!-- ============================================================= -->
+
+
+<!--                    TABLE WRAPPER GROUP MODEL                  -->
+<!--                    Content model for the <table-wrap-group> 
+                        element                                    -->
+<!ENTITY % table-wrap-group-model 
+                        "(label?, caption?, 
+                          (%access.class; | %address-link.class;)*,  
+                          (%just-table.class;)+ )"                   > 
+
+
+<!--                    TABLE WRAPPER GROUP                        -->
+<!--                    Used as a wrapper tag to contain a group of
+                        tables that must be displayed together     -->
+<!ELEMENT  table-wrap-group       
+                        %table-wrap-group-model;                     >
+<!--         id         Unique identifier so the element may be
+                        referenced 
+                        Authoring Note: id of table group should 
+                        begin with "TG" (TG1, TGIV, TG43) 
+             position   Must this display object (figure, boxed text,
+                        etc.) be anchored in its exact location
+                        within the text or may it float, for example
+                        to the top of the next page, next column, or
+                        within a separate window?  Values are:
+                          anchor      Object must remain in place
+                          float       Object is not anchored and
+                                      may be moved to a new column,
+                                      a new window, etc.
+                          margin      In print, item should be placed
+                                      in the margin or gutter. 
+                                      Online the item should 
+                                      remain closely associated 
+                                      with the text.               -->
+<!ATTLIST  table-wrap-group
+             %table-wrap-group-atts;                                 >
+
+
+<!--                    TABLE WRAPPER CONTENT MODEL                -->
+<!--                    Content model for the container element that
+                        surrounds the standard table models for row
+                        and columns.                               -->
+<!ENTITY % table-wrap-model    
+                        "((%id.class;)*, (%label.class;)?,
+                          (%caption.class;)?, 
+                          (%access.class; | %address-link.class;)*,  
+                          (%inside-table-wrapper;)*, 
+                          (%table-foot.class; |
+                           %display-back-matter.class;)* )"          >
+
+
+<!--                    TABLE WRAPPER                              -->
+<!--                    Used to hold a complete table, that is, not
+                        only the rows and columns that make up a
+                        table, but also the table captions, list
+                        of table footnotes, alternative descriptions
+                        for accessibility, etc.  Within the Table
+                        Wrapper element, the row and column tags that
+                        describe the table cells are defined by one
+                        of the popular "standard" table models, for
+                        example the XHTML table model, OASIS Exchange 
+                        (CALS) table model, of the Elsevier Science 
+                        Full Length Article table body <tblbody> 
+                        model, et al.)
+                        Remarks: This model has been designed to allow
+                        for a "table" that is just a graphic or a list 
+                        rather than the explicit rows and columns of a
+                        table element such as XHTML <table>.       
+                        Authoring and Conversion Note: Many journal
+                        DTDs use an element Called Table Footnote,
+                        with a tag such as <tblfn> for the footnotes
+                        inside a table.  This DTD uses <fn> inside 
+                        tables as well as everywhere. They are
+                        differentiated by context. Footnotes inside
+                        a Table Wrapper are assumed to be footnotes
+                        to the table and part of the table, 
+                        printed at the bottom of it, etc.          -->
+<!ELEMENT  table-wrap   %table-wrap-model;                           >
+<!--         id         Unique identifier so the element may be
+                        referenced 
+                        Authoring Note: The value of the "id"
+                        attribute of table should begin with 
+                        "T" (T1, TIV, T43)   
+             content-type   
+                        Identification of the subject, type of
+                        content, or reason that this word or phrase
+                        is considered semantically special, as a 
+                        means of preserving the semantic intent of 
+                        the original tagging.                     
+             xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).                   -->
+<!ATTLIST  table-wrap
+             %table-wrap-atts;                                       >
+
+
+<!--                    TABLE WRAP FOOTER MODEL                    -->
+<!--                    Content model for the <table-wrap-foot> 
+                        element                                    -->
+<!ENTITY % table-wrap-foot-model   
+                        "(title?, 
+                          (%just-para.class; |  %fn-link.class; | 
+                           %display-back-matter.class;)+ )"          > 
+
+
+<!--                    TABLE WRAP FOOTER                          -->
+<!--                    Wrapper element to hold a group of footnotes 
+                        or other notes or general paragraphs at the
+                        end of a table.  Not the same as the
+                        Table Foot <tfoot>, which contains rows
+                        and columns like the rest of the table.    -->
+<!ELEMENT  table-wrap-foot      
+                        %table-wrap-foot-model;                      >
+
+
+<!-- ================== End Display Class Module ================= -->
