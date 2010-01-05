@@ -9,6 +9,11 @@ The latest news is at the top.
 
 ===================================================================
 
+Bio.Entrez includes some more DTD files, in particular eLink_090910.dtd,
+needed for our NCBI Entrez Utilities XML parser.
+
+===================================================================
+
 December 15, 2009: Biopython 1.53 released.
 
 Biopython is now using git for source code control, currently on github. Our
