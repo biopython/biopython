@@ -19,6 +19,11 @@ unambiguous_rna_by_name = {}
 unambiguous_rna_by_id = {}
 generic_by_name = {} # unambiguous DNA or RNA
 generic_by_id = {} # unambiguous DNA or RNA
+
+ambiguous_dna_by_name = {}
+ambiguous_dna_by_id = {}
+ambiguous_rna_by_name = {}
+ambiguous_rna_by_id = {}
 ambiguous_generic_by_name = {} # ambiguous DNA or RNA
 ambiguous_generic_by_id = {} # ambiguous DNA or RNA 
 
@@ -372,6 +377,13 @@ def register_ncbi_table(name, alt_name, id,
     
     dna = NCBICodonTableDNA(id, names + [alt_name], table, start_codons,
                             stop_codons)
+
+    ambig_dna = AmbiguousCodonTable(dna,
+                                    IUPAC.ambiguous_dna,
+                                    IUPACData.ambiguous_dna_values,
+                                    IUPAC.extended_protein,
+                                    IUPACData.extended_protein_values)
+    
     # replace all T's with U's for the RNA tables
     rna_table = {}
     generic_table = {}
@@ -397,8 +409,24 @@ def register_ncbi_table(name, alt_name, id,
     
     generic = NCBICodonTable(id, names + [alt_name], generic_table,
                              generic_start_codons, generic_stop_codons)
+
+    #The following isn't very elegant, but seems to work nicely.
+    _merged_values = dict(IUPACData.ambiguous_rna_values.iteritems())
+    _merged_values["T"] = "U"
+    ambig_generic = AmbiguousCodonTable(generic,
+                                        Alphabet.NucleotideAlphabet(),
+                                        _merged_values,
+                                        IUPAC.extended_protein,
+                                        IUPACData.extended_protein_values)
+
     rna = NCBICodonTableRNA(id, names + [alt_name], rna_table,
                             rna_start_codons, rna_stop_codons)
+
+    ambig_rna = AmbiguousCodonTable(rna,
+                                    IUPAC.ambiguous_rna,
+                                    IUPACData.ambiguous_rna_values,
+                                    IUPAC.extended_protein,
+                                    IUPACData.extended_protein_values)
 
     if id == 1:
         global standard_dna_table, standard_rna_table
@@ -408,6 +436,9 @@ def register_ncbi_table(name, alt_name, id,
     unambiguous_dna_by_id[id] = dna
     unambiguous_rna_by_id[id] = rna
     generic_by_id[id] = generic
+    ambiguous_dna_by_id[id] = ambig_dna
+    ambiguous_rna_by_id[id] = ambig_rna
+    ambiguous_generic_by_id[id] = ambig_generic
 
     if alt_name is not None:
         names.append(alt_name)
@@ -416,6 +447,10 @@ def register_ncbi_table(name, alt_name, id,
         unambiguous_dna_by_name[name] = dna
         unambiguous_rna_by_name[name] = rna
         generic_by_name[name] = generic
+        ambiguous_dna_by_name[name] = ambig_dna
+        ambiguous_rna_by_name[name] = ambig_rna
+        ambiguous_generic_by_name[name] = ambig_generic
+
 
 ### These tables created from the data file
 ###  ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
@@ -817,60 +852,14 @@ register_ncbi_table(name = 'Thraustochytrium Mitochondrial',
                     )
 
 
-# TODO - Handle the ambiguous tables via register_ncbi_table
-
-#Prepare the ambiguous tables for DNA, RNA and Generic (DNA or RNA)
-ambiguous_dna_by_name = {}
-for key, val in unambiguous_dna_by_name.items():
-    ambiguous_dna_by_name[key] = AmbiguousCodonTable(val,
-                                     IUPAC.ambiguous_dna,
-                                     IUPACData.ambiguous_dna_values,
-                                     IUPAC.extended_protein,
-                                     IUPACData.extended_protein_values)
-ambiguous_dna_by_id = {}
-for key, val in unambiguous_dna_by_id.items():
-    ambiguous_dna_by_id[key] = AmbiguousCodonTable(val,
-                                     IUPAC.ambiguous_dna,
-                                     IUPACData.ambiguous_dna_values,
-                                     IUPAC.extended_protein,
-                                     IUPACData.extended_protein_values)
-
-ambiguous_rna_by_name = {}
-for key, val in unambiguous_rna_by_name.items():
-    ambiguous_rna_by_name[key] = AmbiguousCodonTable(val,
-                                     IUPAC.ambiguous_rna,
-                                     IUPACData.ambiguous_rna_values,
-                                     IUPAC.extended_protein,
-                                     IUPACData.extended_protein_values)
-ambiguous_rna_by_id = {}
-for key, val in unambiguous_rna_by_id.items():
-    ambiguous_rna_by_id[key] = AmbiguousCodonTable(val,
-                                     IUPAC.ambiguous_rna,
-                                     IUPACData.ambiguous_rna_values,
-                                     IUPAC.extended_protein,
-                                     IUPACData.extended_protein_values)
-
-#The following isn't very elegant, but seems to work nicely.
-_merged_values = dict(IUPACData.ambiguous_rna_values.iteritems())
-_merged_values["T"] = "U"
-
-for key, val in generic_by_name.items():
-    ambiguous_generic_by_name[key] = AmbiguousCodonTable(val,
-                                     Alphabet.NucleotideAlphabet(),
-                                     _merged_values,
-                                     IUPAC.extended_protein,
-                                     IUPACData.extended_protein_values)
-
-for key, val in generic_by_id.items():
-    ambiguous_generic_by_id[key] = AmbiguousCodonTable(val,
-                                     Alphabet.NucleotideAlphabet(),
-                                     _merged_values,
-                                     IUPAC.extended_protein,
-                                     IUPACData.extended_protein_values)
-del _merged_values
-del key, val
 
 #Basic sanity test,
+for key, val in generic_by_name.items():
+    assert key in ambiguous_generic_by_name[key].names
+for key, val in generic_by_id.items():
+    assert ambiguous_generic_by_id[key].id == key
+del key, val
+
 for n in ambiguous_generic_by_id.keys():
     assert ambiguous_rna_by_id[n].forward_table["GUU"] == "V"
     assert ambiguous_rna_by_id[n].forward_table["GUN"] == "V"
@@ -890,8 +879,13 @@ for n in ambiguous_generic_by_id.keys():
         assert "TRA" in ambiguous_generic_by_id[n].stop_codons
         assert "TRA" in ambiguous_dna_by_id[n].stop_codons
 del n
-assert ambiguous_generic_by_id[1].stop_codons == ambiguous_generic_by_name["Standard"].stop_codons
-assert ambiguous_generic_by_id[4].stop_codons == ambiguous_generic_by_name["SGC3"].stop_codons
-assert ambiguous_generic_by_id[11].stop_codons == ambiguous_generic_by_name["Bacterial"].stop_codons
-assert ambiguous_generic_by_id[11].stop_codons == ambiguous_generic_by_name["Plant Plastid"].stop_codons
-assert ambiguous_generic_by_id[15].stop_codons == ambiguous_generic_by_name['Blepharisma Macronuclear'].stop_codons
+assert ambiguous_generic_by_id[1] == ambiguous_generic_by_name["Standard"]
+assert ambiguous_generic_by_id[4] == ambiguous_generic_by_name["SGC3"]
+assert ambiguous_generic_by_id[11] == ambiguous_generic_by_name["Bacterial"]
+assert ambiguous_generic_by_id[11] == ambiguous_generic_by_name["Plant Plastid"]
+assert ambiguous_generic_by_id[15] == ambiguous_generic_by_name['Blepharisma Macronuclear']
+assert generic_by_id[1] == generic_by_name["Standard"]
+assert generic_by_id[4] == generic_by_name["SGC3"]
+assert generic_by_id[11] == generic_by_name["Bacterial"]
+assert generic_by_id[11] == generic_by_name["Plant Plastid"]
+assert generic_by_id[15] == generic_by_name['Blepharisma Macronuclear']
