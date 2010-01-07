@@ -192,6 +192,32 @@ class _InsdcWriter(SequentialSequenceWriter):
         else:
             return str(answer)
 
+    def _split_multi_line(self, text, max_len):
+        "Returns a list of strings."""
+        #TODO - Do the line spliting while preserving white space?
+        text = text.strip()
+        if len(text) < max_len:
+            return [text]
+
+        words = text.split()
+        assert max([len(w) for w in words]) < max_len, \
+               "Your description cannot be broken into nice lines!"
+        text = ""
+        while words and len(text) + 1 + len(words[0]) < max_len:
+            text += " " + words.pop(0)
+            text = text.strip()
+        assert len(text) < max_len
+        answer = [text]
+        while words:
+            text = ""
+            while words and len(text) + 1 + len(words[0]) < max_len:
+                text += " " + words.pop(0)
+                text = text.strip()
+            assert len(text) < max_len
+            answer.append(text)
+        assert not words
+        return answer
+
 class GenBankWriter(_InsdcWriter):
     HEADER_WIDTH = 12
     MAX_WIDTH = 80
@@ -209,29 +235,11 @@ class GenBankWriter(_InsdcWriter):
         "Used in the the 'header' of each GenBank record."""
         #TODO - Do the line spliting while preserving white space?
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
+        lines = self._split_multi_line(text, max_len)
         assert len(tag) < self.HEADER_WIDTH
-        text = text.strip()
-        if len(text) < max_len:
-            self._write_single_line(tag, text)
-            return
-
-        words = text.split()
-        assert max([len(w) for w in words]) < max_len, \
-               "Your description cannot be broken into nice lines!"
-        text = ""
-        while words and len(text) + 1 + len(words[0]) < max_len:
-            text += " " + words.pop(0)
-            text = text.strip()
-        assert len(text) < max_len
-        self._write_single_line(tag, text)
-        while words:
-            text = ""
-            while words and len(text) + 1 + len(words[0]) < max_len:
-                text += " " + words.pop(0)
-                text = text.strip()
-            assert len(text) < max_len
-            self._write_single_line("", text)
-        assert not words
+        self._write_single_line(tag, lines[0])
+        for line in lines[1:] :
+            self._write_single_line("", line)
 
     def _write_multi_entries(self, tag, text_list):
         #used for DBLINK and any similar later line types.
@@ -564,6 +572,7 @@ class GenBankWriter(_InsdcWriter):
 
 
 class EmblWriter(_InsdcWriter):
+    MAX_WIDTH = 80
 
     def _write_sequence(self, record):
         LETTERS_PER_BLOCK = 10
@@ -596,12 +605,15 @@ class EmblWriter(_InsdcWriter):
 
     def _write_single_line(self, tag, text):
         assert len(tag)==2
-        self.handle.write(tag+"   "+text+"\n")
+        line = tag+"   "+text
+        assert len(line) <= self.MAX_WIDTH, line
+        self.handle.write(line+"\n")
 
     def _write_multi_line(self, tag, text):
-        #TODO - Line wrapping
-        assert len(tag)==2
-        self.handle.write(tag+"   "+text+"\n")
+        max_len = self.MAX_WIDTH - 5
+        lines = self._split_multi_line(text, max_len)
+        for line in lines :
+            self._write_single_line(tag, line)
         
     def _write_the_first_lines(self, record):
         """Write the ID and AC lines."""
