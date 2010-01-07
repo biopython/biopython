@@ -2,25 +2,25 @@ test_BioSQL_SeqIO
 Connecting to database
 Removing existing sub-database 'biosql-seqio-test' (if exists)
 (Re)creating empty sub-database 'biosql-seqio-test'
-Testing loading from fasta format file Nucleic/lupine.nu
+Testing loading from fasta format file Fasta/lupine.nu
  - GAAAATTCATTTTCTTTGG...TTT [1iE+opvwGOlR9BBosrgiLMXvdeU] len 655, gi|5049839|gb|AI730987.1|AI730987
  - Retrieving by name/display_id 'gi|5049839|gb|AI730987.1|AI730987', OK
-Testing loading from fasta format file Nucleic/elderberry.nu
+Testing loading from fasta format file Fasta/elderberry.nu
  - ATGAAGTTAAGCACTCTTC...TTT [MOHmvqd+xjjhcd2egRP0bJwhk7k] len 2050, gi|4218935|gb|AF074388.1|AF074388
  - Retrieving by name/display_id 'gi|4218935|gb|AF074388.1|AF074388', OK
-Testing loading from fasta format file Nucleic/phlox.nu
+Testing loading from fasta format file Fasta/phlox.nu
  - TCGAAACCTGCCTAGCAGA...ACC [QxhYcKAIQnOWFoceezpKYYsnyWw] len 623, gi|5052071|gb|AF067555.1|AF067555
  - Retrieving by name/display_id 'gi|5052071|gb|AF067555.1|AF067555', OK
-Testing loading from fasta format file Nucleic/centaurea.nu
+Testing loading from fasta format file Fasta/centaurea.nu
  - CCTGTCACTTAACTTTTTG...GAG [JwtqysZwR77iHUOvgW4T5LiKXZQ] len 1002, gi|4104054|gb|AH007193.1|SEG_CVIGS
  - Retrieving by name/display_id 'gi|4104054|gb|AH007193.1|SEG_CVIGS', OK
-Testing loading from fasta format file Nucleic/wisteria.nu
+Testing loading from fasta format file Fasta/wisteria.nu
  - GCTCCATTTTTTACACATT...TGA [GG28GDPpXT7jd8J/8vfqLGiymPs] len 2551, gi|5817701|gb|AF142731.1|AF142731
  - Retrieving by name/display_id 'gi|5817701|gb|AF142731.1|AF142731', OK
-Testing loading from fasta format file Nucleic/sweetpea.nu
+Testing loading from fasta format file Fasta/sweetpea.nu
  - CAGGCTGCGCGGTTTCTAT...GTT [CvyM53A3A6DbluFI9u8lR5r6VB4] len 309, gi|3176602|gb|U78617.1|LOU78617
  - Retrieving by name/display_id 'gi|3176602|gb|U78617.1|LOU78617', OK
-Testing loading from fasta format file Nucleic/lavender.nu
+Testing loading from fasta format file Fasta/lavender.nu
  - GGCTCTTAAGTCATGTCTA...GTG [DmX8RD5xSC9EQ4JWVTGXfZGGBOs] len 550, gi|5690369|gb|AF158246.1|AF158246
  - Retrieving by name/display_id 'gi|5690369|gb|AF158246.1|AF158246', OK
 Testing loading from fasta format file Fasta/aster.pro

@@ -8,25 +8,20 @@
 import sys
 import getopt
 
-from Bio import PubMed
-
-DEFAULT_DELAY = 5
+from Bio import Entrez
 
 def print_usage():
     print """query_pubmed.py [-h] [-c] [-d delay] query
 
-This script sends a query to PubMed* and prints the MEDLARS-
-formatted results to the screen.
+This script sends a query to PubMed (via the NCBI Entrez webservice*)
+and prints the MEDLINE formatted results to the screen.
 
 Arguments:
     -h           Print out this help message.
     -c           Count the hits, and don't print them out.
-    -d delay     Set the delay between queries.  This script limits
-                 the query rate to prevent saturating NCBI's bandwidth.
-                 By default one query is sent every %g seconds.
 
-* http://www.ncbi.nlm.nih.gov/PubMed/
-""" % DEFAULT_DELAY
+* http://www.ncbi.nlm.nih.gov/Entrez/
+"""
 
 if __name__ == '__main__':
     try:
@@ -39,39 +34,44 @@ if __name__ == '__main__':
         sys.exit(0)
     query = args[0]
 
-    help = 0
-    delay = DEFAULT_DELAY
-    count_only = 0
+    show_help = False
+    count_only = False
     for opt, arg in optlist:
         if opt == '-h':
-            help = 1
+            show_help = True
         elif opt == '-c':
-            count_only = 1
+            count_only = True
         elif opt == '-d':
-            try:
-                delay = float(arg)
-            except ValueError:
-                print "Delay must be a floating point value"
-                sys.exit(0)
-            if delay < 0:
-                print "Delay cannot be negative"
-                sys.exit(0)
-    if help:
+            sys.stderr.write("The delay parameter is now ignored\n")
+    if show_help:
         print_usage()
         sys.exit(0)
 
     print "Doing a PubMed search for %s..." % repr(query)
-    
-    ids = PubMed.search_for(query)
-    print "Found %d citations" % len(ids)
+
+    if count_only:
+        handle = Entrez.esearch(db="pubmed", term=query)
+    else :
+        handle = Entrez.esearch(db="pubmed", term=query, usehistory="Y")
+    search_results = Entrez.read(handle)
+    ids = search_results["IdList"]
+    count = len(ids)
+    print "Found %d citations" % count
 
     if count_only:
         sys.exit(0)
 
-    pm = PubMed.Dictionary(delay=delay)
-    for id in ids:
-        try:
-            print pm[id]
-        except KeyError, x:
-            print "Couldn't download %s, %s" % (id, x)
+    webenv = search_results["WebEnv"]
+    query_key = search_results["QueryKey"]
+    batch_size = 3
+    for start in range(0,count,batch_size) :
+        end = min(count, start+batch_size)
+        #print "Going to download record %i to %i" % (start+1, end)
+        fetch_handle = Entrez.efetch(db="pubmed", rettype="medline",
+                                     retmode="text",
+                                     retstart=start, retmax=batch_size,
+                                     webenv=webenv, query_key=query_key)
+        data = fetch_handle.read()
+        fetch_handle.close()
+        sys.stdout.write(data)
         sys.stdout.flush()

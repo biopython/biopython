@@ -1,0 +1,704 @@
+<!-- ============================================================= -->
+<!--  MODULE:    Default Element Classes Module                    -->
+<!--  VERSION:   2.0                                               -->
+<!--  DATE:      August 2004                                       -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
+<!--                        TYPICAL INVOCATION                     -->
+<!--
+"-//NLM//DTD Default Element Classes Module v2.0 20040830//EN"
+Delivered as file "default-classes.ent"                            -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Journal Archiving and Interchange DTD of the      -->
+<!--             Archiving and Interchange DTD Suite               -->
+<!--                                                               -->
+<!-- PURPOSE:    To declare the Parameter Entities (PEs) used to   -->
+<!--             define the default element classes. Classes are   -->
+<!--             OR-groups of elements that are defined together   -->
+<!--             to be used in mixes and in Element Declarations.  -->
+<!--                                                               -->
+<!--             Note: Since PEs must be declared before they      -->
+<!--             are used, this module must be called before all   -->
+<!--             content modules that declare elements, and after  -->
+<!--             the class customization module (if any).          -->
+<!--                                                               -->
+<!-- CONTAINS:   PEs that define the element classes to be used    -->
+<!--             in the Journal Archive and Interchange DTD Suite  -->
+<!--             modules.                                          -->
+<!--                                                               -->
+<!-- CREATED FOR:                                                  -->
+<!--             Digital Archive of Journal Articles               -->
+<!--             National Center for Biotechnology Information     -->
+<!--                (NCBI)                                         -->
+<!--             National Library of Medicine (NLM)                -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             August 2004                                       -->
+<!--                                                               -->
+<!-- CREATED BY: Deborah Lapeyre (Mulberry Technologies, Inc.)     -->
+<!--             B. Tommie Usdin (Mulberry Technologies, Inc.)     -->
+<!--                                                               -->
+<!--             Suggestions for refinements and enhancements to   -->
+<!--             this DTD should be sent in email to:              -->
+<!--                 archive-dtd@ncbi.nlm.nih.gov                  -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DTD VERSION/CHANGE HISTORY                 -->
+<!-- ============================================================= -->
+<!--
+
+Version  Reason/Occasion                   (who) vx.x (yyyy-mm-dd)
+
+     =============================================================
+     Version 2.0                       (DAL/BTU) v2.0 (2004-08-30)
+     
+     
+     Major requirement changes led to the new release, producing
+     DTD version "2.0":
+       a) The splitting of the Archival and Interchange Tag Set 
+          DTDs into three DTDs from two: an authoring DTD, an
+          archive regularization and interchange DTD (the
+          current Blue Publishing DTD), and a preservationist 
+          archive DTD (the current Green Archiving and Interchange 
+          DTD).
+       b) AIT Working Group suggestions from the June 04 meeting 
+          and June/July 2004 followup discussions
+       c) Suite remodularization to meet new (and newly articulated)
+          modularization requirements
+       d) New or renamed classes and mixes to make modifications
+          easier and more consistent
+
+ 13. ACCESS CLASS
+     ### Customization Alert ###
+     a. Took <ext-link> out of -%access.class;. It did not belong.
+        It belongs in -%address-link.class;
+
+ 12. PARA CLASS
+     ### Customization Alert ###
+     a. Deleted -%para.class; 
+     b. Its place in the definition of the Paragraph <p> element 
+        will be taken by the -%p-elements; entity.
+     c. Its place in other mixes will be taken by the combination
+        of:
+        - %just-para.class; and 
+        - %rest-of-para.class;
+
+ 11. LINK CLASSES
+     ### Customization Alert ###
+     a. Deleted the following classes: 
+        - %link.class; 
+        - %inpara-address; 
+        - %ext-links.class;
+     b. Replaced above with four link classes: 
+           - %address-link.class; (the links used in addresses)
+           - %fn-link.class;      (just fn)
+           - %simple-link.class;  (the internal links, same)
+           - %article-link.class; (links for journal article)
+        as follows:
+           - All occurrences of -%ext-links.class; replaced with
+             the new class %address-links.class;     
+           - All occurrences of -%link.class; replaced with some
+             combination of the new link classes just named.
+        These were not usually DTD changes, just parameterization
+        changes.
+
+ 10. PERSON NAME/STRING-NAME - Allowed a looser name model 
+     <string-name> to be used anywhere <name> is used. This 
+     includes:
+      - Inside %references.class; 
+         (Therefore added to <citation>, <product>, 
+          <related-article>)
+      - New Parameter Entity %name.class; for types
+        of names: <name>, <string-name>, <collab>
+      - Inside %contrib-model; (which uses %name.class; thus
+        adding <string-name> to <contributor>)
+      - Inside <person-group> (in %name.class;)
+        
+  9. ROLE ELEMENT - Was added to the default references class 
+     %references.class;
+
+  8. DATES
+     a. Added new class -%date-parts.class; to hold all the
+        potential components of date, such as <year>, <day>,
+        etc.
+     b. Added <string-date> to default -%date.class;
+     
+  7. NEW IDENTIFICATION ELEMENTS
+     a. Added three new identification elements:
+      - ISSUE ID = new element for an identifier such as a DOI (as
+        opposed to an <issue> Issue Number) associated with a 
+        journal issue
+      - ISSUE TITLE = new element for a theme or special issue title
+      - VOLUME ID = new element for a theme or special issue title
+     b. These identification elements were:
+        - Added to <article-meta>
+        - Added to %references.class; (thus to <citation>,
+            <related-article>, and <product>)
+        - Defined in common module
+        - Added to several new Parameter Entities that are
+          named %nnn-elements; (Such Parameter Entities hold
+          the elements that may be mixed with #PCDATA inside
+          the element named "nnn".)
+
+  6. REFERENCES.CLASS - Added the following elements to the
+     - %references.class;:
+      - <issue-id>
+      - <issue-title>
+      - <page-range>
+      - <role>
+      - <string-name>
+      - <volume-id>
+      Thus adding them to:
+      - <citation>
+      - <related-article>
+      - <product>
+
+  5. DISPLAY BACK MATTER - Added <attrib> to %display-back-matter;
+     thus adding it to the following elements:
+      - <array>
+      - <boxed-text>
+      - <chem-struct-wrapper>
+      - <disp-quote>
+      - <fig>
+      - <graphic>
+      - <preformat>
+      - <table-wrap>
+      - <verse-group>
+        
+  4. ADDRESS ELEMENTS CLASS 
+     ### Customization Alert ###
+     - Redefined to remove <email> and <uri>       
+
+  3. MAKE CLASS NAMES EXPLICIT - Some classes did not have the
+     ".class" suffix. Renamed such classes to add the suffix.
+     ### Customization Alert ###
+     - %address-elements;    ==> to  -%address.class;
+     - %contrib-info;        ==> -%contrib-info.class;
+                                    (uri added to class)
+     - %display-back-matter; ==> -%display-back-matter.class;
+     - %block-math;          ==> -%block-math.class;
+     - %inline-math;         ==> -%inline-math.class;
+
+  2. NEW CLASSES - To correct potential classing problems, added 
+     the following new Parameter Entities and added a few new 
+     comments:
+     
+     New Classes:
+        - %app.class;
+        - %corresp.class;
+        - %def.class;
+        - %degree.class;
+        - %fn-link.class;
+        - %front-back.class; and %sec-back.class;
+             changed the following to use them
+               %doc-back-matter-mix;
+               %sec-back-matter-mix;
+        - %just-base-display.class;
+             and used it in 
+               %chem-struct-wrapper-model;
+               %array-model;
+               %fig-group-model; 
+        - %just-para.class;
+             used in <author-comment>, <bio>, <def>, 
+               <caption>, %fig-model;
+        - %just-table.class;
+        - %kwd.class;
+        - %back.class;
+        - %front-back.class;
+        - %ref-list.class;
+        - %sec-back.class;
+        - %table-foot.class;
+        - %tbody.class;
+                
+  1. Created this module as version "v2.0 20040830"                -->
+
+
+<!-- ============================================================= -->
+<!--                    CLASSES FOR COMMON ELEMENTS (%common.ent;) -->
+<!-- ============================================================= -->
+
+
+<!--                    ADDRESS CLASS ELEMENTS                     -->
+<!--                    Potential element components of an address;
+                        not a proper class                         -->
+<!ENTITY % address.class
+                        "addr-line | country | fax | 
+                         institution | phone "                       >
+
+
+<!--                    CITATION CLASS ELEMENTS                    -->
+<!--                    Reference to an external document, as used 
+                        within, for example, the text of a 
+                        paragraph                                  -->
+<!ENTITY % citation.class   
+                        "citation"                                   >
+
+
+<!--                    DEFINITION CLASS ELEMENTS                  -->
+<!--                    Definitions and other elements to match
+                        with terms and abbreviations               -->
+<!ENTITY % def.class    "def"                                        >
+
+
+<!--                    DEGREE CLASS                               -->
+<!--                    The academic or professional degrees that
+                        accompany a person's name                  -->
+<!ENTITY % degree.class "degrees"                                    >
+
+
+<!--                    IDENTIFIER CLASS ELEMENTS                  -->
+<!--                    DOIs and other identifiers are used by
+                        publishers at many levels, for example for
+                        an <abstract> or a <figure>.               -->
+<!ENTITY % id.class     "object-id"                                  >
+
+
+<!--                    LABEL CLASS                                -->
+<!--                    The label element, used to hold the number
+                        or character of a labeled object such as a
+                        table or footnote                          -->
+<!ENTITY % label.class  "label"                                      >
+
+
+<!--                    NAMES CLASS                                -->
+<!--                    The elements used to name the personal names
+                        for individuals and the collaboration names
+                        for groups                                 -->
+<!ENTITY % name.class   "collab | name | string-name"                >
+
+
+<!--                    PERSONAL NAMES CLASS                       -->
+<!--                    The element components of a person's name,
+                        for the name of a contributor              -->
+<!ENTITY % person-name.class
+                        "given-names | prefix | surname | suffix"    >
+
+
+<!-- ============================================================= -->
+<!--                    ARTICLE METADATA CLASSES %articlemeta.ent; -->
+<!-- ============================================================= -->
+
+
+<!--                    CONTRIBUTOR INFORMATION                    -->
+<!--                    Metadata about a contributor               -->
+<!ENTITY % contrib-info.class
+                        "address | aff | author-comment | bio |  
+                         email |  etal | ext-link | on-behalf-of |
+                         role | uri | xref"                          >
+
+
+<!--                    CONFERENCE CLASS                           -->
+<!--                    The element components of the description
+                        of a conference; not a proper class        -->
+<!ENTITY % conference.class   
+                        "conf-date | conf-name | conf-num | 
+                         conf-loc | conf-sponsor | conf-theme |
+                         conf-acronym"                               >
+
+
+<!--                    CORRESPONDING AUTHOR CLASS                 -->
+<!--                    Elements associated with the corresponding
+                        author                                     -->
+<!ENTITY % corresp.class
+                        "corresp"                                    >
+
+
+<!--                    DATE CLASS ELEMENTS                        -->
+<!--                    Dates and other matters of history         -->
+<!ENTITY % date.class   "date | string-date"                         >
+
+
+<!--                    DATE PARTS CLASS ELEMENTS                  -->
+<!--                    Components of date-style elements          -->
+<!ENTITY % date-parts.class   
+                        "day | month | season | year"                >
+
+
+<!--                    KEYWORD CLASS ELEMENTS                     -->
+<!--                    Keywords and any keyword-synonyms          -->
+<!ENTITY % kwd.class    "kwd"                                        >
+
+
+<!-- ============================================================= -->
+<!--                    BACK MATTER CLASSES (%backmatter.ent;)     -->
+<!-- ============================================================= -->
+
+
+<!--                    JUST APPENDIX CLASS                        -->
+<!--                    The appendix and only the appendix         -->
+<!ENTITY % app.class   
+                        "app"                                        >
+
+
+<!--                    BACK MATTER CLASS                          -->
+<!--                    Ancillary elements, typically used in the
+                        back matter of an article, section, etc.   -->
+<!ENTITY % back.class   "ack | app-group | bio | fn-group | 
+                         glossary |  ref-list"                       >
+
+
+<!--                    FRONT MATTER CLASS                         -->
+<!--                    Ancillary elements, typically used in the
+                        front matter of an article, book, etc.  .  -->
+<!ENTITY % front.class  "ack | bio | fn-group | glossary"            >   
+
+
+<!--                    FRONT AND BACK CLASS                       -->
+<!--                    Ancillary elements, typically used in the
+                        front or back matter of an article         -->
+<!ENTITY % front-back.class
+                        "notes"                                      >
+
+
+<!--                    SECTION BACK MATTER CLASS                  -->
+<!--                    Ancillary elements, typically used in the
+                        back matter of a section, etc.             -->
+<!ENTITY % sec-back.class   
+                        "fn-group | glossary |  ref-list"            >
+
+
+<!--                    JUST REF-LIST CLASS                        -->
+<!--                    The reference list and only the reference
+                        list (The element <ref-list> is defined in
+                        %references.ent;.)                         -->
+<!ENTITY % ref-list.class   
+                        "ref-list"                                   >
+
+
+<!-- ============================================================= -->
+<!--                    DISPLAY CLASSES                            -->
+<!-- ============================================================= -->
+
+
+<!--                    ACCESSIBILITY CLASS ELEMENTS               -->
+<!--                    Elements added to make it easier to process
+                        journal articles in ways that are more
+                        accessible to people and devices with special
+                        needs, for example the visually handicapped.
+                          <alt-text> is a short phrase description of
+                        an objects, <long-desc> is a more complete
+                        description of the content or intent of an
+                        object, and the <ext-link> in this grouping
+                        would point to an alternate form of the
+                        object.                                    -->
+<!ENTITY % access.class "alt-text | long-desc"                       >
+
+
+<!--                    DISPLAY CLASS ELEMENTS                     -->
+<!--                    Graphical or other image-related elements.
+                        The display elements may occur within 
+                        the text of a table cell or paragraph
+                        although they are typically at the same 
+                        hierarchical level as a paragraph.         -->
+<!ENTITY % block-display.class
+                        "array | boxed-text | chem-struct |
+                         chem-struct-wrapper | fig | fig-group | 
+                         graphic | media | preformat | 
+                         supplementary-material | table-wrap |
+                         table-wrap-group"                           >
+
+
+<!--                    CAPTION DISPLAY ELEMENTS                   -->
+<!--                    Basic figure display elements              -->
+<!ENTITY % caption.class
+                        "caption"                                    >
+
+
+<!--                    DISPLAY ELEMENT BACK MATTER ELEMENTS       -->
+<!--                    Miscellaneous stuff at the end of a display
+                        element such as a figure or a boxed text
+                        element such as a sidebar                  -->
+<!ENTITY % display-back-matter.class
+                        "attrib | copyright-statement"               >
+                            
+
+<!--                    FIGURE DISPLAY ELEMENTS                    -->
+<!--                    Basic figure display elements              -->
+<!ENTITY % fig-display.class
+                        "fig"                                        >
+
+
+<!--                    INLINE DISPLAY CLASS ELEMENTS              -->
+<!--                    Non-block display elements that set or
+                        display inline with the text               -->
+<!ENTITY % inline-display.class
+                        "inline-graphic | private-char"              >
+                            
+
+<!--                    MOST BASIC DISPLAY ELEMENTS                -->
+<!--                    Just the few display elements that are
+                        simple display objects: a picture, a movie,
+                        a sound file.                              -->
+<!ENTITY % just-base-display.class
+                        "graphic | media"                            >
+                            
+
+<!--                    SIMPLE DISPLAY ELEMENTS                    -->
+<!--                    The simplest and most basic of the Display
+                        Class elements, which may be allowed in many
+                        places, for example, inside other Display
+                        Class elements or inside the cell of a
+                        Table                                      -->
+<!ENTITY % simple-display.class
+                        "array | chem-struct | graphic | media | 
+                         preformat"                                  >
+
+
+<!--                    SIMPLE TABLE DISPLAY ELEMENTS              -->
+<!--                    Very similar to the simple-display.class, but
+                        Table Wrappers <table-wrap> should contain
+                        <table>s, <oasis:table>s, etc., not
+                        arrays.                                    -->
+<!ENTITY % simple-intable-display.class
+                        "chem-struct | graphic | media | preformat"  >
+
+
+<!-- ============================================================= -->
+<!--                    FORMAT CLASSES (%format.ent;)              -->
+<!-- ============================================================= -->
+
+
+<!--                    APPEARANCE CLASS ELEMENTS                  -->
+<!--                    Names those elements (inherited from the
+                        XHTML table DTD that are only concerned with
+                        appearance, not with structure or content.
+                        Use of these elements is to be discouraged.-->
+<!ENTITY % appearance.class   
+                        "font | hr"                                  >
+
+
+<!--                    FORCED BREAK FORMATTING CLASS ELEMENTS     -->
+<!--                    Element to force a formatting break such as
+                        a line break                               -->
+<!ENTITY % break.class  "break"                                      >
+
+
+<!--                    EMPHASIS/RENDITION ELEMENTS                -->
+<!--                    Elements concerning with marking the location
+                        of typographical emphasis (highlighting)
+                        DTD DESIGN NOTE: There are no emphasis
+                        elements for <fractur>, <openface> (black
+                        board), <script>, etc. because this DTD
+                        recommends the use of the STIX extensions
+                        to accomplish this, as soon as they are 
+                        available.                                  -->
+<!ENTITY % emphasis.class   
+                        "bold | italic | monospace | 
+                         overline | overline-start | overline-end | 
+                         sc | strike | underline | 
+                         underline-start | underline-end "           >
+
+
+<!--                    UP/DOWN RENDITION ELEMENTS                 -->
+<!ENTITY % subsup.class "sub | sup"                                  >
+
+
+<!-- ============================================================= -->
+<!--                    LINK CLASSES (%link.ent;)                  -->
+<!-- ============================================================= -->
+
+
+<!--                    ADDRESS LINK CLASS ELEMENTS                -->
+<!--                    Link elements that can be used inside 
+                        addresses. This is essentially the three
+                        generic external links.
+                        (Note: in earlier releases, this Parameter
+                        Entity was named %address-elements;,
+                        although it functioned as a class.)        -->
+<!ENTITY % address-link.class   
+                        "email | ext-link | uri"                     >
+
+
+<!--                    JOURNAL ARTICLE LINK CLASS ELEMENTS        -->
+<!--                    Links used inside journal articles, to point
+                        to related material                        -->
+<!ENTITY % article-link.class   
+                        "inline-supplementary-material | 
+                         related-article"                            >
+
+
+<!--                    FOOTNOTE LINKS CLASS                       -->
+<!--                    Only the most basic, internal links        -->
+<!ENTITY % fn-link.class   
+                        "fn"                                         >
+
+
+<!--                    RELATED ARTICLE LINKS CLASS                -->
+<!--                    For using <related-article> at the paragraph
+                        level                                      -->
+<!ENTITY % related-article.class   
+                        "related-article"                            >
+
+
+<!--                    SIMPLE LINKS/CROSS-REFERENCES CLASS        -->
+<!--                    The smaller and simpler linking elements
+                        that might be inside, for example, a
+                        Keyword <kwd>                              -->
+<!ENTITY % simple-link.class   
+                        "fn | target | xref"                         >
+
+
+<!-- ============================================================= -->
+<!--                    LIST CLASSES (%list.ent;)                  -->
+<!-- ============================================================= -->
+
+
+<!--                    LIST CLASS ELEMENTS                        -->
+<!--                    All the types of lists that may occur 
+                        as part of the text, therefore excluding
+                        Bibliographic Reference Lists <ref-list>   -->
+<!ENTITY % list.class   "def-list | list"                            >
+
+
+<!-- ============================================================= -->
+<!--                    MATH CLASSES (%math.ent;)                  -->
+<!-- ============================================================= -->
+
+
+<!--                    MATHEMATICAL EXPRESSIONS AND FORMULAE MIX  -->
+<!ENTITY % block-math.class
+                        "disp-formula"                               >
+
+
+<!--                    INLINE MATHEMATICAL EXPRESSIONS MIX        -->
+<!ENTITY % inline-math.class
+                        "inline-formula"                             >
+
+
+<!--                    MATHEMATICAL EXPRESSIONS                   -->
+<!ENTITY % math.class   "tex-math | mml:math"                        >
+
+
+<!-- ============================================================= -->
+<!--                    PARAGRAPH CLASSES (%para.ent;)             -->
+<!-- ============================================================= -->
+
+
+<!--                    REST OF PARAGRAPH CLASS                    -->
+<!--                    Information for the reader that is at the
+                        same structural level as a Paragraph.
+                        Contains all paragraph-level objects that are
+                        not also used inside tables and excepting
+                        also the paragraph element itself          -->
+<!ENTITY % rest-of-para.class   
+                        "ack | disp-quote | speech | statement | 
+                         verse-group"                                >
+
+
+<!--                    IN TABLE PARAGRAPH CLASS                   -->
+<!--                    The simpler of the paragraph-level elements
+                        that might be found inside a table cell    -->
+<!ENTITY % intable-para.class                                   
+                        "disp-quote | speech | statement | 
+                         verse-group"                                >
+
+
+<!--                    JUST PARAGRAPH CLASS                       -->
+<!--                    To hold the Paragraph element, alone.      -->
+<!ENTITY % just-para.class   
+                        "p"                                          >
+
+
+<!-- ============================================================= -->
+<!--                    PHRASE CLASSES (%phrase.ent;)              -->
+<!-- ============================================================= -->
+
+
+<!--                    PHRASE CLASS ELEMENTS                      -->
+<!--                    Small inline elements, that surround a word
+                        or phrase in the text because the subject
+                        (content) should be identified as something
+                        special or different                       -->
+<!ENTITY % phrase.class "abbrev | named-content"                     >
+
+
+<!-- ============================================================= -->
+<!--                    REFERENCES CLASSES (%references.ent;)      -->
+<!-- ============================================================= -->
+
+
+<!--                    BIBLIOGRAPHIC REFERENCE (CITATION) CLASS   -->
+<!--                    The elements that may be included inside a
+                        Citation (bibliographic reference)         -->
+<!ENTITY % references.class
+                        "access-date | annotation | article-title | 
+                         collab | comment | 
+                         conf-date | conf-loc | conf-name | 
+                         day | edition | email | elocation-id | 
+                         etal | ext-link | fpage |  gov | isbn | 
+                         issn | issue | issue-id | issue-title | 
+                         lpage | month | name | object-id |  
+                         page-count | page-range | 
+                         patent | person-group | pub-id | 
+                         publisher-loc | publisher-name | 
+                         role | season |
+                         series | source | std | string-name |
+                         supplement | time-stamp | trans-source | 
+                         trans-title | uri |
+                         volume | volume-id | year"                  >
+
+
+
+<!--                    JUST REF-LIST CLASS                        -->
+<!--                    The reference list and only the reference
+                        list                                       -->
+<!ENTITY % ref-list.class   
+                        "ref-list"                                   >
+
+
+<!-- ============================================================= -->
+<!--                    SECTION CLASS (%section.ent;)              -->
+<!-- ============================================================= -->
+
+<!--                    SECTION CLASS ELEMENTS                     -->
+<!--                    Information for the reader that is at the
+                        same structural level as a Section, which is
+                        a headed structure full of smaller elements
+                        such as paragraphs.                        -->
+<!ENTITY % sec.class    "sec"                                        >
+
+
+<!-- ============================================================= -->
+<!--                    TABLE MODEL CLASSES                        -->
+<!-- ============================================================= -->
+                            
+
+<!--                    JUST TABLE CLASS                           -->
+<!--                    To include just a table <tale-wrap> 
+                        element                                    -->
+<!ENTITY % just-table.class
+                        "table-wrap"                                 >
+
+
+<!--                    TABLE CLASS ELEMENTS                       -->
+<!--                    Elements that will be used to contain the
+                        rows and columns inside the Table Wrapper 
+                        element <table-wrap>.  The following elements 
+                        can be set up for inclusion:
+                          XHTML Table Model    table               -->
+<!ENTITY % table.class  "table"                                      >
+                            
+
+<!--                    TABLE FOOT CLASS                           -->
+<!--                    Elements to include at the end of a table
+                        in the table.                              -->
+<!ENTITY % table-foot.class
+                        "table-wrap-foot"                            >
+                            
+
+<!--                    TBODY CLASS                                -->
+<!--                    To include just a table <tale-wrap> 
+                        element                                    -->
+<!ENTITY % tbody.class  "tbody"                                      >
+
+              
+              
+<!-- ================== End Journal Suite Default Classes  ======= -->

@@ -329,17 +329,14 @@ class MuscleCommandline(AbstractCommandline):
             #clw                no              Write output in CLUSTALW format (default is
             #                                   FASTA).
             _Switch(["-clw", "clw"], ["input"],
-                    "Write output in CLUSTALW format (with a MUSCLE header). "
-                    "If you want to parse the output with Bio.AlignIO in "
-                    "Biopython, use the clwstrict output switch instead."),
+                    "Write output in CLUSTALW format (with a MUSCLE header)"),
             #clwstrict          no              Write output in CLUSTALW format with the
             #                                   "CLUSTAL W (1.81)" header rather than the
             #                                   MUSCLE version. This is useful when a post-
             #                                   processing step is picky about the file
             #                                   header.
             _Switch(["-clwstrict", "clwstrict"], ["input"],
-                    "Write output in CLUSTALW format with vers. 1.81 header, "
-                    "this is useful for parsing with Bio.AlignIO in Biopython."),
+                    "Write output in CLUSTALW format with version 1.81 header"),
             #fasta              yes             Write output in FASTA format. Alternatives
             #                                   include clw,
             #                                   clwstrict, msf and html.
@@ -353,6 +350,43 @@ class MuscleCommandline(AbstractCommandline):
             #                                   FASTA).
             _Switch(["-msf", "msf"], ["input"],
                     "Write output in MSF format"),
+            #Phylip interleaved - undocumented as of 3.7
+            _Switch(["-phyi", "phyi"], ["input"],
+                    "Write output in PHYLIP interleaved format"),
+            #Phylip sequential - undocumented as of 3.7
+            _Switch(["-phys", "phys"], ["input"],
+                    "Write output in PHYLIP sequential format"),
+            ################## Additional specified output files #########
+            _Option(["-phyiout", "phyiout"], ["output", "file"],
+                    None, 0,
+                    "Write PHYLIP interleaved output to specified filename",
+                    0), #No equate
+            _Option(["-physout", "physout"], ["output", "file"],
+                    None, 0,
+                    "Write PHYLIP sequential format to specified filename",
+                    0), #No equate
+            _Option(["-htmlout", "htmlout"], ["output", "file"],
+                    None, 0,
+                    "Write HTML output to specified filename",
+                    0), #No equate
+            _Option(["-clwout", "clwout"], ["output", "file"],
+                    None, 0,
+                    "Write CLUSTALW output (with MUSCLE header) to specified "
+                    "filename",
+                    0), #No equate
+            _Option(["-clwstrictout", "clwstrictout"], ["output", "file"],
+                    None, 0,
+                    "Write CLUSTALW output (with version 1.81 header) to "
+                    "specified filename",
+                    0), #No equate
+            _Option(["-msfout", "msfout"], ["output", "file"],
+                    None, 0,
+                    "Write MSF format output to specified filename",
+                    0), #No equate
+            _Option(["-fastaout", "fastaout"], ["output", "file"],
+                    None, 0,
+                    "Write FASTA format output to specified filename",
+                    0), #No equate
             ############## END FORMATS ###################################
             #anchors            yes             Use anchor optimization in tree dependent
             #                                   refinement iterations.

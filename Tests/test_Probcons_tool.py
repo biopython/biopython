@@ -7,8 +7,8 @@
 import sys
 import os
 import unittest
+import subprocess
 from cStringIO import StringIO
-from Bio import Application
 from Bio import AlignIO, SeqIO, MissingExternalDependencyError
 from Bio.Align.Applications import ProbconsCommandline
 
@@ -41,16 +41,20 @@ class ProbconsApplication(unittest.TestCase):
         cmdline = ProbconsCommandline(probcons_exe, input=self.infile1)
         self.assertEqual(str(cmdline), probcons_exe + " Fasta/fa01")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        result, stdout, stderr = Application.generic_run(cmdline)
-        self.assertEquals(result.return_code, 0)
-        self.assertEqual(str(cmdline), str(result._cl))
-        self.assert_(stderr.read().startswith("\nPROBCONS"))
-        align = AlignIO.read(StringIO(stdout.read()), "fasta")
+        child = subprocess.Popen(str(cmdline),
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 shell=(sys.platform!="win32"))
+        return_code = child.wait()
+        self.assertEqual(return_code, 0)
+        self.assert_(child.stderr.read().startswith("\nPROBCONS"))
+        align = AlignIO.read(StringIO(child.stdout.read()), "fasta")
         records = list(SeqIO.parse(open(self.infile1),"fasta"))
         self.assertEqual(len(records),len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-",""), str(old.seq).replace("-",""))
+        del child
 
     def test_Probcons_alignment_clustalw(self):
         """Round-trip through app and read clustalw alignment from stdout
@@ -60,17 +64,21 @@ class ProbconsApplication(unittest.TestCase):
         cmdline.clustalw = True
         self.assertEqual(str(cmdline), probcons_exe + " -clustalw Fasta/fa01")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        result, stdout, stderr = Application.generic_run(cmdline)
-        self.assertEquals(result.return_code, 0)
-        self.assertEqual(str(cmdline), str(result._cl))
-        self.assert_(stderr.read().strip().startswith("PROBCONS"))
+        child = subprocess.Popen(str(cmdline),
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 shell=(sys.platform!="win32"))
+        return_code = child.wait()
+        self.assertEqual(return_code, 0)
+        self.assert_(child.stderr.read().strip().startswith("PROBCONS"))
         #self.assert_(stdout.read().strip().startswith("PROBCONS"))
-        align = AlignIO.read(StringIO(stdout.read()), "clustal")
+        align = AlignIO.read(StringIO(child.stdout.read()), "clustal")
         records = list(SeqIO.parse(open(self.infile1),"fasta"))
         self.assertEqual(len(records),len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-",""), str(old.seq).replace("-",""))
+        del child
 
     def test_Probcons_complex_commandline(self):
         """Round-trip through app with complex command line and output file
@@ -81,14 +89,18 @@ class ProbconsApplication(unittest.TestCase):
         cmdline.set_parameter("--iterative-refinement", 222)
         cmdline.set_parameter("a", True)
         cmdline.annot = self.annotation_outfile
-        self.assertEqual(str(cmdline), probcons_exe + 
+        self.assertEqual(str(cmdline), probcons_exe +
                 " -c 4 -ir 222 -pre 1 -annot Fasta/probcons_annot.out "
                 "-a Fasta/fa01")
-        result, stdout, stderr = Application.generic_run(cmdline)
-        self.assertEqual(str(cmdline), str(result._cl))
-        self.assertEquals(result.return_code, 0)
-        self.assert_(stderr.read().startswith("\nPROBCONS"))
-        self.assert_(stdout.read().startswith(">AK1H_ECOLI/1-378"))
+        child = subprocess.Popen(str(cmdline),
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 shell=(sys.platform!="win32"))
+        return_code = child.wait()
+        self.assertEqual(return_code, 0)
+        self.assert_(child.stderr.read().startswith("\nPROBCONS"))
+        self.assert_(child.stdout.read().startswith(">AK1H_ECOLI/1-378"))
+        del child
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

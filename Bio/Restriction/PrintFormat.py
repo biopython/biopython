@@ -11,7 +11,6 @@
 import re
 import itertools
 from Bio.Restriction import RanaConfig as RanaConf
-from Bio.Restriction.DNAUtils import complement
 
 """
 Usage:
@@ -22,11 +21,14 @@ Usage:
 
     the easiest way to use it is:
     
-    >>> from Rana.PrintFormat import PrintFormat
-    >>> from Rana.Restriction import AllEnzymes
-    >>> from Rana.fts import fts
-    >>> seq = fts(pBR322)
-    >>> dct = AllEnzymes.search(seq)
+    >>> from Bio.Restriction.PrintFormat import PrintFormat
+    >>> from Bio.Restriction.Restriction import AllEnzymes
+    >>> from Bio import Entrez
+    >>> from Bio import SeqIO
+    >>> handle = Entrez.efetch(db="nucleotide", rettype="fasta", id="SYNPBR322")
+    >>> pBR322 = SeqIO.read(handle, "fasta")
+    >>> handle.close()
+    >>> dct = AllEnzymes.search(pBR322.seq)
     >>> new = PrintFormat()
     >>> new.print_that(dct, '\n my pBR322 analysis\n\n','\n no site :\n\n')
 
@@ -49,7 +51,10 @@ Usage:
     Vha464I   XapI      XbaI      XcmI      XhoI      XmaCI     XmaI      XmaJI     
     Zsp2I 
 
-    >>>
+    >>> new.sequence = pBR322.seq
+    >>> new.print_as("map")
+    >>> new.print_that(dct)
+    ...
     
     Some of the methods of PrintFormat are meant to be overriden by derived
     class.
@@ -316,7 +321,7 @@ class PrintFormat(object):
             cutloc[x] = l
         cutloc[x] = mapping
         sequence = self.sequence.tostring()
-        revsequence = complement(sequence)
+        revsequence = self.sequence.complement().tostring()
         a = '|'
         base, counter = 0, 0
         emptyline = ' ' * 60

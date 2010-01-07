@@ -44,13 +44,13 @@ def AlignAce(infile, cmd="AlignACE", **keywds):
     You may pass more parameters to **keywds to change the behavior of
     the search.  Otherwise, optional values will be chosen by blastall.
 
-    numcols    	number of columns to align (10)
-    expect     	number of sites expected in model (10)
-    gcback     	background fractional GC content of input sequence (0.38)
-    minpass    	minimum number of non-improved passes in phase 1 (200)
-    seed       	set seed for random number generator (time)
-    undersample	possible sites / (expect * numcols * seedings) (1)
-    oversample	        1/undersample (1)
+    numcols      number of columns to align (10)
+    expect       number of sites expected in model (10)
+    gcback       background fractional GC content of input sequence (0.38)
+    minpass      minimum number of non-improved passes in phase 1 (200)
+    seed         set seed for random number generator (time)
+    undersample  possible sites / (expect * numcols * seedings) (1)
+    oversample   1/undersample (1)
     """
 
     if not os.path.exists(cmd):

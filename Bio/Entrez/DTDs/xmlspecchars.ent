@@ -1,0 +1,290 @@
+<!-- ============================================================= -->
+<!--  MODULE:    XML Special Characters Module                     -->
+<!--  VERSION:   2.0                                               -->
+<!--  DATE:      August 2004                                       -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
+<!--                        TYPICAL INVOCATION                     -->
+<!--
+"-//NLM//DTD Archiving and Interchange DTD Suite XML Special Characters Module v2.0 20040830//EN"
+     Delivered as file "xmlspecchars.ent"                          -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Archiving and Interchange DTD Suite               -->
+<!--                                                               -->
+<!-- PURPOSE:    External Parameter Entities for calling in the    -->
+<!--             special character entities                        -->
+<!--                                                               -->
+<!-- CONTAINS:   1) Calls to external entity sets                  -->
+<!--                                                               -->
+<!-- MODULES REQUIRED:                                             -->
+<!--             The standard ISO special character entity sets    -->
+<!--             (see below)                                       -->
+<!--                                                               -->
+<!-- CREATED FOR:                                                  -->
+<!--             Digital archives and publishers who wish to       -->
+<!--             create a custom XML DTD for original markup of    -->
+<!--             journal literature, books, and related material,  -->
+<!--             or for archiving and transferring such material   -->
+<!--             between archives.                                 -->
+<!--                                                               -->
+<!--             This DTD is in the public domain. An organization -->
+<!--             that wishes to create its own DTD from the suite  -->
+<!--             may do so without permission from NLM.            -->
+<!--                                                               -->
+<!--             The suite has been set up to be extended using a  -->
+<!--             new DTD file and a new DTD-specific customization -->
+<!--             module to redefine the many Parameter Entities.   -->
+<!--             Do not modify the suite directly or redistribute  -->
+<!--             modified versions of the suite.                   -->
+<!--                                                               -->
+<!--             In the interest of maintaining consistency and    -->
+<!--             clarity for potential users, NLM requests:        -->
+<!--                                                               -->
+<!--             1. If you create a DTD from the Archiving and     -->
+<!--                Interchange DTD Suite and intend to stay       -->
+<!--                compatible with the suite, then please include -->
+<!--                the following statement as a comment in all of -->
+<!--                your DTD modules:                              -->
+<!--                   "Created from, and fully compatible with,   -->
+<!--                    the Archiving and Interchange DTD Suite."  -->
+<!--                                                               -->
+<!--             2. If you alter one or more modules of the suite, -->
+<!--                then please rename your version and all its    -->
+<!--                modules to avoid any confusion with the        -->
+<!--                original suite. Also, please include the       -->
+<!--                following statement as a comment in all your   -->
+<!--                DTD modules:                                   -->
+<!--                   "Based in part on, but not fully compatible -->
+<!--                    with, the Archiving and Interchange DTD    --> 
+<!--                    Suite."                                    -->
+<!--                                                               -->
+<!--             Suggestions for refinements and enhancements to   -->
+<!--             the DTD suite should be sent in email to:         -->
+<!--                 archive-dtd@ncbi.nlm.nih.gov                  -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             December 2002                                     -->
+<!--                                                               -->
+<!-- CREATED BY: Jeff Beck       (NCBI)                            -->
+<!--             Deborah Lapeyre (Mulberry Technologies, Inc.)     -->
+<!--             Bruce Rosenblum (Inera Inc.)                      -->
+<!--                                                               -->
+<!--             NLM thanks the Harvard University Libraries, both -->
+<!--             for proposing that a draft archiving NLM DTD for  --> 
+<!--             life sciences journals be extended to accommodate -->
+<!--             journals in all disciplines and for sponsoring    -->
+<!--             Bruce Rosenblum's collaboration with other DTD    -->
+<!--             authors in completing Version 1.0. The Andrew W.  --> 
+<!--             Mellon Foundation provided support for these      --> 
+<!--             important contributions.                          -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DTD VERSION/CHANGE HISTORY                 -->
+<!-- ============================================================= -->
+<!--
+     =============================================================
+
+Version  Reason/Occasion                   (who) vx.x (yyyy-mm-dd)
+     
+     Major requirement changes led to the new release, producing
+     DTD version "2.0":
+       a) The splitting of the Archival and Interchange Tag Set 
+          DTDs into three DTDs from two: an authoring DTD, an
+          archive regularization and interchange DTD (the
+          current Blue Publishing DTD), and a preservationist 
+          archive DTD (the current Green Archiving and Interchange 
+          DTD).
+       b) AIT Working Group suggestions from the June 04 meeting 
+          and June/July 2004 followup discussions
+       c) Suite remodularization to meet new (and newly articulated)
+          modularization requirements
+       d) New or renamed classes and mixes to make modifications
+          easier and more consistent
+
+  1. Updated public identifier to "v2.0 20040830"          
+                                                                   -->
+
+
+<!-- ============================================================= -->
+<!--                    ISO STANDARD SPECIAL CHARACTER SETS DEFINED-->
+<!-- ============================================================= -->
+
+
+<!--                    ISO STANDARD ADDED LATIN 1                 -->
+<!ENTITY % ISOlat1 PUBLIC
+"-//W3C//ENTITIES Added Latin 1 for MathML 2.0//EN" 
+"xmlchars/isolat1.ent"                                               >
+
+
+<!--                    ISO STANDARD ADDED LATIN 2                 -->
+<!ENTITY % ISOlat2 PUBLIC
+"-//W3C//ENTITIES Added Latin 2 for MathML 2.0//EN" 
+"xmlchars/isolat2.ent"                                               >
+
+
+<!--                    ISO BOX AND LINE DRAWING                   -->
+<!ENTITY % ISObox       PUBLIC 
+"-//W3C//ENTITIES Box and Line Drawing for MathML 2.0//EN"
+"xmlchars/isobox.ent"                                               >
+
+
+<!--                    ISO STANDARD DIACRITICAL MARKS             -->
+<!ENTITY % ISOdia PUBLIC
+"-//W3C//ENTITIES Diacritical Marks for MathML 2.0//EN" 
+"xmlchars/isodia.ent"                                                >
+
+
+<!--                    ISO STANDARD NUMERIC AND SPECIAL GRAPHIC   -->
+<!ENTITY % ISOnum PUBLIC
+"-//W3C//ENTITIES Numeric and Special Graphic for MathML 2.0//EN" 
+"xmlchars/isonum.ent"                                                >
+
+
+<!--                    ISO STANDARD PUBLISHING                    -->
+<!ENTITY % ISOpub PUBLIC
+"-//W3C//ENTITIES Publishing for MathML 2.0//EN" 
+"xmlchars/isopub.ent"                                                >
+
+
+<!--                    ISO STANDARD GENERAL TECHNICAL             -->
+<!ENTITY % ISOtech PUBLIC
+"-//W3C//ENTITIES General Technical for MathML 2.0//EN" 
+"xmlchars/isotech.ent"                                               >
+
+
+<!--                    ISO STANDARD GREEK LETTERS                 -->
+<!ENTITY % ISOgrk1 PUBLIC
+"-//W3C//ENTITIES Greek Letters//EN"
+"xmlchars/isogrk1.ent"                                               >
+
+
+<!--                    ISO STANDARD MONOTONIKO GREEK              -->
+<!ENTITY % ISOgrk2 PUBLIC
+"-//W3C//ENTITIES Monotoniko Greek//EN"
+"xmlchars/isogrk2.ent"                                               >
+
+
+<!--                    ISO STANDARD GREEK SYMBOLS                 -->
+<!ENTITY % ISOgrk3 PUBLIC
+"-//W3C//ENTITIES Greek Symbols for MathML 2.0//EN"
+"xmlchars/isogrk3.ent"                                               >
+
+
+<!--                    ISO STANDARD ALTERNATIVE GREEK SYMBOLS     -->
+<!ENTITY % ISOgrk4 PUBLIC
+"-//W3C//ENTITIES Alternative Greek Symbols//EN"
+"xmlchars/isogrk4.ent"                                               >
+
+
+<!--                    ISO STANDARD RUSSIAN CYRILLIC              -->
+<!ENTITY % ISOcyr1 PUBLIC 
+"-//W3C//ENTITIES Russian Cyrillic for MathML 2.0//EN" 
+"xmlchars/isocyr1.ent"                                               >
+
+
+<!--                    ISO STANDARD NON-RUSSIAN CYRILLIC          -->
+<!ENTITY % ISOcyr2 PUBLIC
+"-//W3C//ENTITIES Non-Russian Cyrillic for MathML 2.0//EN" 
+"xmlchars/isocyr2.ent"                                               >
+
+
+<!--                    ISO STANDARD MATH ALPHABETS (SCRIPT)       -->
+<!ENTITY % ISOmscr PUBLIC
+"-//W3C//ENTITIES Math Alphabets: Script for MathML 2.0//EN" 
+"xmlchars/isomscr.ent"                                               >
+
+
+<!--                    ISO STANDARD ADDED MATH SYMBOLS 
+                           (ARROW RELATIONS)                       -->
+<!ENTITY % ISOamsa PUBLIC
+"-//W3C//ENTITIES Added Math Symbols: Arrow Relations for MathML 2.0//EN" 
+"xmlchars/isoamsa.ent"                                               >
+
+
+<!--                    ISO STANDARD ADDED MATH SYMBOLS 
+                           (BINARY OPERATORS)                      -->
+<!ENTITY % ISOamsb PUBLIC 
+"-//W3C//ENTITIES Added Math Symbols: Binary Operators for MathML 2.0//EN" 
+"xmlchars/isoamsb.ent"                                               >
+
+
+<!--                    ISO STANDARD ADDED MATH SYMBOLS 
+                           (DELIMITERS)                            -->
+<!ENTITY % ISOamsc PUBLIC 
+"-//W3C//ENTITIES Added Math Symbols: Delimiters for MathML 2.0//EN" 
+"xmlchars/isoamsc.ent"                                               >
+
+
+<!--                    ISO STANDARD ADDED MATH SYMBOLS 
+                           (NEGATED RELATIONS)                     -->
+<!ENTITY % ISOamsn PUBLIC 
+"-//W3C//ENTITIES Added Math Symbols: Negated Relations for MathML 2.0//EN"
+"xmlchars/isoamsn.ent"                                               >
+
+
+<!--                    ISO STANDARD ADDED MATH SYMBOLS (ORDINARY) -->
+<!ENTITY % ISOamso PUBLIC 
+"-//W3C//ENTITIES Added Math Symbols: Ordinary for MathML 2.0//EN" 
+"xmlchars/isoamso.ent"                                               >
+
+
+<!--                    ISO STANDARD ADDED MATH SYMBOLS 
+                           (RELATIONS)                             -->
+<!ENTITY % ISOamsr PUBLIC 
+"-//W3C//ENTITIES Added Math Symbols: Relations for MathML 2.0//EN" 
+"xmlchars/isoamsr.ent"                                               >
+
+
+<!--                    ISO STANDARD MATH ALPHABETS (FRAKTUR)      -->
+<!ENTITY % ISOmfrk PUBLIC
+"-//W3C//ENTITIES Math Alphabets: Fraktur for MathML 2.0//EN" 
+"xmlchars/isomfrk.ent"                                               >
+
+
+<!--                    ISO STANDARD MATH ALPHABETS (OPEN FACE)    -->
+<!ENTITY % ISOmopf PUBLIC
+"-//W3C//ENTITIES Math Alphabets: Open Face for MathML 2.0//EN" 
+"xmlchars/isomopf.ent"                                               >
+
+
+<!-- ============================================================= -->
+<!--                    ISO SPECIAL CHARACTER SETS INVOKED         -->
+<!-- ============================================================= -->
+
+
+%ISOlat1;
+%ISOlat2;
+%ISObox;
+%ISOdia;
+%ISOnum;
+%ISOpub;
+%ISOtech;
+%ISOgrk1;
+%ISOgrk2;
+%ISOgrk3;
+%ISOgrk4;
+%ISOcyr1;
+%ISOcyr2;
+%ISOamsa;
+%ISOamsb;
+%ISOamsc;
+%ISOamsn;
+%ISOamso;
+%ISOamsr;
+%ISOmscr;
+%ISOmfrk; 
+%ISOmopf;
+
+
+<!--                    Custom special characters are declared 
+                        in a separate module %chars.ent;           -->
+
+
+<!-- ============ End of XML Special Characters Module =========== -->

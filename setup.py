@@ -76,6 +76,10 @@ def check_dependencies():
 
     # We only check for NumPy, as this is a compile time dependency
     if is_Numpy_installed() : return True
+
+    if os.name=='java':
+        return True #NumPy is not avaliable for Jython (for now)
+
     print """
 Numerical Python (NumPy) is not installed.
 
@@ -274,17 +278,6 @@ if os.name == 'java' :
     EXTENSIONS = []
 else :
     EXTENSIONS = [
-    Extension('Bio.clistfns',
-              ['Bio/clistfnsmodule.c']
-              ),
-    Extension('Bio.cmathfns',
-              ['Bio/cmathfnsmodule.c',
-               'Bio/csupport.c'],
-              include_dirs=["Bio"]
-              ),
-    Extension('Bio.cstringfns',
-              ['Bio/cstringfnsmodule.c']
-              ),
     Extension('Bio.cpairwise2',
               ['Bio/cpairwise2module.c',
                'Bio/csupport.c'],
@@ -309,9 +302,6 @@ else :
 #              ),
     Extension('Bio.Nexus.cnexus',
               ['Bio/Nexus/cnexus.c']
-              ),
-    Extension('Bio.Restriction.DNAUtils',
-              ['Bio/Restriction/DNAUtils.c']
               ),
     ]
 
@@ -340,7 +330,7 @@ setup(
         },
     packages=PACKAGES,
     ext_modules=EXTENSIONS,
-    package_data = {'Bio.Entrez': ['DTDs/*.dtd'],
+    package_data = {'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod'],
                     'Bio.PopGen': ['SimCoal/data/*.par'],
                    },
     #install_requires = ['numpy>=1.0'],

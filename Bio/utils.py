@@ -11,77 +11,16 @@ import Alphabet
 
 from PropertyManager import default_manager
 
-def translate(seq, id = None):
-    """Translate a sequence (DEPRECATED)."""
-    import warnings
-    warnings.warn("Bio.utils.translate() has been deprecated, and we" \
-                  +" intend to remove it in a future release of Biopython."\
-                  +" Please use the translate method or function in Bio.Seq"\
-                  +" instead, as described in the Tutorial.",
-                  DeprecationWarning)
-    if id is None:
-        s = "translator"
-    else:
-        s = "translator.id.%d" % id
-    translator = default_manager.resolve(seq.alphabet, s)
-    return translator.translate(seq)
-
-def translate_to_stop(seq, id = None):
-    """Translate a sequence up to the first in frame stop codon (DEPRECATED)."""
-    import warnings
-    warnings.warn("Bio.utils.translate_to_stop() has been deprecated, and we" \
-                  +" intend to remove it in a future release of Biopython."\
-                  +" Please use the translate method or function in Bio.Seq"\
-                  +" instead, as described in the Tutorial.",
-                  DeprecationWarning)
-    if id is None:
-        s = "translator"
-    else:
-        s = "translator.id.%d" % id
-    translator = default_manager.resolve(seq.alphabet, s)
-    return translator.translate_to_stop(seq)
-
-def back_translate(seq, id = None):
-    """Back-translate a sequence (DEPRECATED)."""
-    import warnings
-    warnings.warn("Bio.utils.back_translate() has been deprecated, and we" \
-                  +" intend to remove it in a future release of Biopython."\
-                  +" If you use it, please tell us on the mailing list.",
-                  DeprecationWarning)
-    if id is None:
-        s = "translator"
-    else:
-        s = "translator.id.%d" % id
-    translator = default_manager.resolve(seq.alphabet, s)
-    return translator.back_translate(seq)
-
-
-def transcribe(seq):
-    """Transcribe a sequence (DEPRECATED)."""
-    import warnings
-    warnings.warn("Bio.utils.transcribe() has been deprecated, and we" \
-                  +" intend to remove it in a future release of Biopython."\
-                  +" Please use the transcribe method or function in"\
-                  +" Bio.Seq instead, as described in the Tutorial.",
-                  DeprecationWarning)
-    transcriber = default_manager.resolve(seq.alphabet, "transcriber")
-    return transcriber.transcribe(seq)
-
-def back_transcribe(seq):
-    """Back-transcribe a sequence (DEPRECATED)."""
-    import warnings
-    warnings.warn("Bio.utils.back_transcribe() has been deprecated, and we" \
-                  +" intend to remove it in a future release of Biopython."\
-                  +" Please use the back_transcribe method or function in"\
-                  +" Bio.Seq instead, as described in the Tutorial.",
-                  DeprecationWarning)
-    transcriber = default_manager.resolve(seq.alphabet, "transcriber")
-    return transcriber.back_transcribe(seq)
-
 def ungap(seq):
     """given a sequence with gap encoding, return the ungapped sequence"""
     #TODO - Fix this?  It currently assumes the outmost AlphabetEncoder
     #is for the gap.  Consider HasStopCodon(Gapped(Protein())) as a test case.
+    import warnings
+    warnings.warn("Bio.utils.ungap() has been deprecated, and we"
+                  " intend to remove it in a future release of Biopython."
+                  " Instead, please use the ungap method of the Seq object "
+                  " (added in Biopython 1.53).",
+                  DeprecationWarning)
     gap = seq.gap_char
     letters = []
     for c in seq.data:

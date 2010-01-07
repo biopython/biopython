@@ -1,0 +1,220 @@
+<!-- ============================================================= -->
+<!--  MODULE:    Section Class Elements                            -->
+<!--  VERSION:   2.0                                               -->
+<!--  DATE:      August 2004                                       -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
+<!--                        TYPICAL INVOCATION                     -->
+<!--
+"-//NLM//DTD Archiving and Interchange DTD Suite Section Class Elements v2.0 20040830//EN"
+     Delivered as file "section.ent"                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Archiving and Interchange DTD Suite               -->
+<!--                                                               -->
+<!-- PURPOSE:    Defines the member of the sec.class, that is,     -->
+<!--             names all section-level elements in the           -->
+<!--             Archiving and Interchange DTD Suite               -->
+<!--                                                               -->
+<!--             At the time of the initial DTD creation           -->
+<!--             there is only one such element, Section itself    -->
+<!--             <sec>, but future expansion to named sections     -->
+<!--             (such as <methodology> or <materials> or any      -->
+<!--             new section-level structures would be added here. -->
+<!--                                                               -->
+<!-- CONTAINS:   1) Default definition of the section class        -->
+<!--             2) Defaults for attribute lists                   -->
+<!--             3) Section <sec>                                  -->
+<!--                                                               -->
+<!-- CREATED FOR:                                                  -->
+<!--             Digital archives and publishers who wish to       -->
+<!--             create a custom XML DTD for original markup of    -->
+<!--             journal literature, books, and related material,  -->
+<!--             or for archiving and transferring such material   -->
+<!--             between archives.                                 -->
+<!--                                                               -->
+<!--             This DTD is in the public domain. An organization -->
+<!--             that wishes to create its own DTD from the suite  -->
+<!--             may do so without permission from NLM.            -->
+<!--                                                               -->
+<!--             The suite has been set up to be extended using a  -->
+<!--             new DTD file and a new DTD-specific customization -->
+<!--             module to redefine the many Parameter Entities.   -->
+<!--             Do not modify the suite directly or redistribute  -->
+<!--             modified versions of the suite.                   -->
+<!--                                                               -->
+<!--             In the interest of maintaining consistency and    -->
+<!--             clarity for potential users, NLM requests:        -->
+<!--                                                               -->
+<!--             1. If you create a DTD from the Archiving and     -->
+<!--                Interchange DTD Suite and intend to stay       -->
+<!--                compatible with the suite, then please include -->
+<!--                the following statement as a comment in all of -->
+<!--                your DTD modules:                              -->
+<!--                   "Created from, and fully compatible with,   -->
+<!--                    the Archiving and Interchange DTD Suite."  -->
+<!--                                                               -->
+<!--             2. If you alter one or more modules of the suite, -->
+<!--                then please rename your version and all its    -->
+<!--                modules to avoid any confusion with the        -->
+<!--                original suite. Also, please include the       -->
+<!--                following statement as a comment in all your   -->
+<!--                DTD modules:                                   -->
+<!--                   "Based in part on, but not fully compatible -->
+<!--                    with, the Archiving and Interchange DTD    --> 
+<!--                    Suite."                                    -->
+<!--                                                               -->
+<!--             Suggestions for refinements and enhancements to   -->
+<!--             the DTD suite should be sent in email to:         -->
+<!--                 archive-dtd@ncbi.nlm.nih.gov                  -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             December 2002                                     -->
+<!--                                                               -->
+<!-- CREATED BY: Jeff Beck       (NCBI)                            -->
+<!--             Deborah Lapeyre (Mulberry Technologies, Inc.)     -->
+<!--             Bruce Rosenblum (Inera Inc.)                      -->
+<!--                                                               -->
+<!--             NLM thanks the Harvard University Libraries, both -->
+<!--             for proposing that a draft archiving NLM DTD for  --> 
+<!--             life sciences journals be extended to accommodate -->
+<!--             journals in all disciplines and for sponsoring    -->
+<!--             Bruce Rosenblum's collaboration with other DTD    -->
+<!--             authors in completing Version 1.0. The Andrew W.  --> 
+<!--             Mellon Foundation provided support for these      --> 
+<!--             important contributions.                          -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DTD VERSION/CHANGE HISTORY                 -->
+<!-- ============================================================= -->
+<!--
+     =============================================================
+
+Version  Reason/Occasion                   (who) vx.x (yyyy-mm-dd)
+
+     =============================================================
+     Version 2.0                       (DAL/BTU) v2.0 (2004-08-30)
+     
+     Major requirement changes led to the new release, producing
+     DTD version "2.0":
+       a) The splitting of the Archival and Interchange Tag Set 
+          DTDs into three DTDs from two: an authoring DTD, an
+          archive regularization and interchange DTD (the
+          current Blue Publishing DTD), and a preservationist 
+          archive DTD (the current Green Archiving and Interchange 
+          DTD).
+       b) AIT Working Group suggestions from the June 04 meeting 
+          and June/July 2004 followup discussions
+       c) Suite remodularization to meet new (and newly articulated)
+          modularization requirements
+       d) New or renamed classes and mixes to make modifications
+          easier and more consistent
+
+  3. COMPLETE MODELS WHEN OVER-RIDING A MODEL 
+     (for all Parameter Entities suffixed "-model")
+     ### Customization Alert ###
+     Added internal parentheses to Parameter Entity and removed 
+     them from Element Declaration for:
+     - %sec-model;
+
+  2. DEFAULT CLASSES - Were moved from this module to 
+     %default-classes.ent;
+  
+  1. Updated public identifier to "v2.0 20040830"          
+                                                                   -->
+
+
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITY DEPENDENCIES             
+                        Requires the following parameter entities
+                        be defined before calling this module. 
+                        The content-model Parameter Entities are
+                        defined in %common.ent; but may be
+                        redefined in the Customization Module for
+                        the specific DTD:
+                          %sec-model; - Content model for section-like 
+                                        elements  
+                                                                   -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DEFAULTS FOR ATTRIBUTE LISTS               -->
+<!-- ============================================================= -->
+
+
+<!--                    SECTION ATTRIBUTES                         -->
+<!--                    Attribute list for Section element         -->
+<!ENTITY % sec-atts   
+            "id         ID                                 #IMPLIED
+             xml:lang   NMTOKEN                            #IMPLIED
+             sec-type   CDATA                              #IMPLIED 
+             disp-level CDATA                              #IMPLIED" >
+
+
+<!-- ============================================================= -->
+<!--                    SECTION ELEMENTS                           -->
+<!-- ============================================================= -->
+
+
+<!--                    SECTION                                    -->
+<!--                    A headed group of material; the basic 
+                        structural unit of the article             -->
+<!ELEMENT  sec          %sec-model;                                  >
+<!--         id         Unique identifier, so the Section can be
+                        referenced                   
+             xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English). 
+             sec-type   Conversion Note: This attribute may be used
+                        to retain information on the semantic
+                        content of a section where that is known.
+                        Authoring Note: Top-level sections (those 
+                        that are not nested inside other sections)
+                        may be assigned a "type" attribute for 
+                        indexing purposes. This attribute should be
+                        used only if the section is one of the listed
+                        types and should otherwise be omitted. A
+                        section that contains content of more than 
+                        one type should have the type IDs combined.
+                        (e.g., "Materials and Methods" would be
+                        type="materials|methods").  
+                        Types values are:         
+                          intro     Introduction/Synopsis
+                          materials Materials
+                          methods   Methods/Methodology/Procedures
+                          subjects  Patients/Participants/Subjects
+                          cases     Cases/Case Reports
+                          results   Results/Statement of Findings
+                          discussion  Discussion/Interpretation
+                          conclusions Conclusions/Comment
+             disp-level Sometimes in print or on screen, the display
+                        or apparent hierarchical level of a section
+                        is not the same as its real position in the
+                        hierarchy.  For example, in some styles,
+                        the "Clinical Finding" Section or the 
+                        'Methodology" Section always looks like a 
+                        particular level heading (say a level 2 head),
+                        wherever it falls in the hierarchy (say a 
+                        level 1 head or a level 3 head). This
+                        attribute can be used to record the needed
+                        display level. (Rare)                      -->
+<!ATTLIST  sec
+             %sec-atts;                                              >
+
+
+<!-- ================== End Section Class Module ================= -->

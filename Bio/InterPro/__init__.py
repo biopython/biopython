@@ -247,11 +247,6 @@ class InterProParser(  sgmllib.SGMLParser ):
         self.text = ''
         return text[:]
 
-def pairlist_to_dict( pairs ):
-    import warnings
-    warnings.warn("pairlist_to_dict was deprecated. Please use dict() instead of pairlist_to_dict")
-    return dict(pairs)
-
 def get_interpro_entry( id ):
     """get specified interpro entry"""
     import urllib

@@ -10,110 +10,110 @@ Copyright Jonathan Taylor 2005
 """
 
 class DifferentialCutsite:
-  """A differential cutsite is a location in an alignment where an enzyme cuts
-  at least one sequence and also cannot cut at least one other sequence.
+    """A differential cutsite is a location in an alignment where an enzyme cuts
+    at least one sequence and also cannot cut at least one other sequence.
 
-  Members:
-  start       Where it lives in the alignment.
-  enzyme      The enzyme that causes this.
-  cuts_in     A list of sequences (as indexes into the alignment) the
-              enzyme cuts in.
-  blocked_in  A list of sequences (as indexes into the alignment) the
-              enzyme is blocked in.
+    Members:
+    start       Where it lives in the alignment.
+    enzyme      The enzyme that causes this.
+    cuts_in     A list of sequences (as indexes into the alignment) the
+                enzyme cuts in.
+    blocked_in  A list of sequences (as indexes into the alignment) the
+                enzyme is blocked in.
 
-  """
-
-  def __init__(self, **kwds):
-    """Initialize a DifferentialCutsite.
-
-    Each member (as listed in the class description) should be included as a
-    keyword.
     """
-    
-    self.start = int(kwds["start"])
-    self.enzyme = kwds["enzyme"]
-    self.cuts_in = kwds["cuts_in"]
-    self.blocked_in = kwds["blocked_in"]
+
+    def __init__(self, **kwds):
+        """Initialize a DifferentialCutsite.
+
+        Each member (as listed in the class description) should be included as a
+        keyword.
+        """
+        
+        self.start = int(kwds["start"])
+        self.enzyme = kwds["enzyme"]
+        self.cuts_in = kwds["cuts_in"]
+        self.blocked_in = kwds["blocked_in"]
 
 class AlignmentHasDifferentLengthsError(Exception):
-  pass
+    pass
 
 class CAPSMap:
-  """A map of an alignment showing all possible dcuts.
+    """A map of an alignment showing all possible dcuts.
 
-  Members:
-  alignment  The alignment that is mapped.
-  dcuts      A list of possible CAPS markers in the form of 
-             DifferentialCutsites.
-  """
-
-  def __init__(self, alignment, enzymes = []):
-    """Initialize the CAPSMap
-
-    Required:
-    alignment    The alignment to be mapped.
-
-    Optional:
-    enzymes      The enzymes to be used to create the map.
+    Members:
+    alignment  The alignment that is mapped.
+    dcuts      A list of possible CAPS markers in the form of 
+                         DifferentialCutsites.
     """
 
-    self.sequences = [rec.seq for rec in alignment.get_all_seqs()]
-    self.size = len(self.sequences)
-    self.length = len(self.sequences[0])
-    for seq in self.sequences:
-      if len(seq) != self.length:
-        raise AlignmentHasDifferentLengthsError
+    def __init__(self, alignment, enzymes = []):
+        """Initialize the CAPSMap
 
-    self.alignment = alignment
-    self.enzymes = enzymes
+        Required:
+        alignment    The alignment to be mapped.
 
-    # look for dcuts
-    self._digest()
-  
-  def _digest_with(self, enzyme):
-    cuts = {}
-    all = []
+        Optional:
+        enzymes      The enzymes to be used to create the map.
+        """
 
-    # go through each sequence
-    for seq in self.sequences:
+        self.sequences = [rec.seq for rec in alignment.get_all_seqs()]
+        self.size = len(self.sequences)
+        self.length = len(self.sequences[0])
+        for seq in self.sequences:
+            if len(seq) != self.length:
+                raise AlignmentHasDifferentLengthsError
 
-      # grab all the cuts in the sequence
-      cuts[seq] = [cut - enzyme.fst5 for cut in enzyme.search(seq)]
+        self.alignment = alignment
+        self.enzymes = enzymes
 
-      # maintain a list of all cuts in all sequences
-      all.extend(cuts[seq])
-
-    # we sort the all list and remove duplicates
-    all.sort()
+        # look for dcuts
+        self._digest()
     
-    last = -999
-    new = []
-    for cut in all:
-      if cut != last:
-        new.append(cut)
-      last = cut
+    def _digest_with(self, enzyme):
+        cuts = {}
+        all = []
 
-    all = new
-    # all now has indices for all sequences in the alignment
+        # go through each sequence
+        for seq in self.sequences:
 
-    for cut in all:
-      # test for dcuts
+            # grab all the cuts in the sequence
+            cuts[seq] = [cut - enzyme.fst5 for cut in enzyme.search(seq)]
 
-      cuts_in = []
-      blocked_in = []
+            # maintain a list of all cuts in all sequences
+            all.extend(cuts[seq])
 
-      for i in range(0, self.size):
-        seq = self.sequences[i]
-        if cut in cuts[seq]:
-          cuts_in.append(i)
-        else:
-          blocked_in.append(i)
+        # we sort the all list and remove duplicates
+        all.sort()
+        
+        last = -999
+        new = []
+        for cut in all:
+            if cut != last:
+                new.append(cut)
+            last = cut
 
-      if cuts_in != [] and blocked_in != []:
-        self.dcuts.append(DifferentialCutsite(start = cut, enzyme = enzyme, cuts_in = cuts_in, blocked_in = blocked_in))
+        all = new
+        # all now has indices for all sequences in the alignment
 
-  def _digest(self):
-    self.dcuts = []
+        for cut in all:
+            # test for dcuts
 
-    for enzyme in self.enzymes:
-      self._digest_with(enzyme)
+            cuts_in = []
+            blocked_in = []
+
+            for i in range(0, self.size):
+                seq = self.sequences[i]
+                if cut in cuts[seq]:
+                    cuts_in.append(i)
+                else:
+                    blocked_in.append(i)
+
+            if cuts_in != [] and blocked_in != []:
+                self.dcuts.append(DifferentialCutsite(start = cut, enzyme = enzyme, cuts_in = cuts_in, blocked_in = blocked_in))
+
+    def _digest(self):
+        self.dcuts = []
+
+        for enzyme in self.enzymes:
+            self._digest_with(enzyme)

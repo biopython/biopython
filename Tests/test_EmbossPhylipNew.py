@@ -31,7 +31,7 @@ if sys.platform=="win32":
         #print >> sys.stderr, "Missing EMBOSS_ROOT environment variable!"
         raise MissingExternalDependencyError(\
         "Install the Emboss package 'Phylip New' if you want to use the "+\
-        "Emboss.Applications wrappers for phylogenetic tools")
+        "Bio.Emboss.Applications wrappers for phylogenetic tools")
     if os.path.isdir(path):
         for name in exes_wanted:
             if os.path.isfile(os.path.join(path, name+".exe")):
@@ -48,7 +48,7 @@ else:
 if len(exes) < len(exes_wanted):
     raise MissingExternalDependencyError(\
           "Install the Emboss package 'PhylipNew' if you want to use the "+\
-          "Emboss.Applications wrappers for phylogenetic tools")
+          "Bio.Emboss.Applications wrappers for phylogenetic tools.")
 
  ###########################################################################
 

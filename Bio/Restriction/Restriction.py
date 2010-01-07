@@ -84,13 +84,41 @@ import itertools
 from Bio.Seq import Seq, MutableSeq
 from Bio.Alphabet import IUPAC
 
-from Bio.Restriction.Restriction_Dictionary import rest_dict as enzymedict,\
-     typedict, suppliers as suppliers_dict
+from Bio.Restriction.Restriction_Dictionary import rest_dict as enzymedict
+from Bio.Restriction.Restriction_Dictionary import typedict
+from Bio.Restriction.Restriction_Dictionary import suppliers as suppliers_dict
 from Bio.Restriction.RanaConfig import *
 from Bio.Restriction.PrintFormat import PrintFormat
-from Bio.Restriction.DNAUtils import check_bases
 
+#Used to use Bio.Restriction.DNAUtils.check_bases (and expose it under this
+#namespace), but have deprecated that module.
+def _check_bases(seq_string):
+    """Check characters in a string (PRIVATE).
 
+    Remove digits and white space present in string. Allows any valid ambiguous
+    IUPAC DNA single letters codes (ABCDGHKMNRSTVWY, lower case are converted).
+    
+    Other characters (e.g. symbols) trigger a TypeError.
+    
+    Returns the string WITH A LEADING SPACE (!). This is for backwards
+    compatibility, and may in part be explained by the fact that
+    Bio.Restriction doesn't use zero based counting.
+    """
+    #Remove white space and make upper case:
+    seq_string = "".join(seq_string.split()).upper()
+    #Remove digits
+    for c in "0123456789" : seq_string = seq_string.replace(c,"")
+    #Check only allowed IUPAC letters
+    if not set(seq_string).issubset(set("ABCDGHKMNRSTVWY")) :
+        raise TypeError("Invalid character found in %s" % repr(seq_string))
+    return " " + seq_string
+
+def check_bases(seq_string):
+    """Check characters in a string (DEPRECATED)."""
+    import warnings
+    warnings.warn("The check_bases function has been deprecated, and will be"
+                  "removed in a future release of Biopython.", DeprecationWarning)
+    return _check_bases(seq_string)
 
 matching = {'A' : 'ARWMHVDN', 'C' : 'CYSMHBVN', 'G' : 'GRSKBVDN',
             'T' : 'TYWKHBDN', 'R' : 'ABDGHKMNSRWV', 'Y' : 'CBDHKMNSTWVY',
@@ -123,8 +151,9 @@ class FormattedSeq(object):
         shape of the sequence."""
         if isinstance(seq, Seq) or isinstance(seq, MutableSeq):
             stringy       = seq.tostring()
-            self.lower    = stringy.islower() 
-            self.data     = check_bases(stringy)
+            self.lower    = stringy.islower()
+            #Note this adds a leading space to the sequence (!)
+            self.data     = _check_bases(stringy)
             self.linear   = linear
             self.klass    = seq.__class__
             self.alphabet = seq.alphabet
@@ -212,8 +241,15 @@ class RestrictionType(type):
         instantiated when importing the module.
         
         see below."""
+        if "-" in name :
+            raise ValueError("Problem with hyphen in %s as enzyme name" \
+                             % repr(name))
         super(RestrictionType, cls).__init__(cls, name, bases, dct)
-        cls.compsite = re.compile(cls.compsite)
+        try :
+            cls.compsite = re.compile(cls.compsite)
+        except Exception, err :
+            raise ValueError("Problem with regular expression, re.compiled(%s)" \
+                             % repr(cls.compsite))
         
     def __add__(cls, other):
         """RE.__add__(other) -> RestrictionBatch().
@@ -1966,6 +2002,10 @@ class RestrictionBatch(set):
         #   here we replace the search method of the individual enzymes
         #   with one unique testing method.
         #
+        if not hasattr(self, "already_mapped") :
+            #TODO - Why does this happen!
+            #Try the "doctest" at the start of PrintFormat.py
+            self.already_mapped = None
         if isinstance(dna, DNA):
             # For the searching, we just care about the sequence as a string,
             # if that is the same we can use the cached search results.

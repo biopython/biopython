@@ -1,0 +1,359 @@
+<!-- ============================================================= -->
+<!--  MODULE:    Custom Special Characters Module                  -->
+<!--  VERSION:   2.0                                               -->
+<!--  DATE:      August 2004                                       -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
+<!--                        TYPICAL INVOCATION                     -->
+<!--
+"-//NLM//DTD Archiving and Interchange DTD Suite Custom Special Characters Module v2.0 20040830//EN"
+     Delivered as file "chars.ent"                                 -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Archiving and Interchange DTD Suite               -->
+<!--                                                               -->
+<!-- PURPOSE:    XML special character entities                    -->
+<!--                                                               -->
+<!-- CONTAINS:   1) Definitions of DTD-specific and custom         -->
+<!--                special characters (as general entities        -->
+<!--                defined as hexadecimal or decimal character    -->
+<!--                entities - Unicode numbers)                    -->
+<!--                                                               -->
+<!-- REQUESTS FOR DTD CHANGES:                                     -->
+<!--             Send email to: pmc@ncbi.nlm.nih.gov               -->
+<!--                                                               -->
+<!-- CREATED FOR:                                                  -->
+<!--             Digital archives and publishers who wish to       -->
+<!--             create a custom XML DTD for original markup of    -->
+<!--             journal literature, books, and related material,  -->
+<!--             or for archiving and transferring such material   -->
+<!--             between archives.                                 -->
+<!--                                                               -->
+<!--             This DTD is in the public domain. An organization -->
+<!--             that wishes to create its own DTD from the suite  -->
+<!--             may do so without permission from NLM.            -->
+<!--                                                               -->
+<!--             The suite has been set up to be extended using a  -->
+<!--             new DTD file and a new DTD-specific customization -->
+<!--             module to redefine the many Parameter Entities.   -->
+<!--             Do not modify the suite directly or redistribute  -->
+<!--             modified versions of the suite.                   -->
+<!--                                                               -->
+<!--             In the interest of maintaining consistency and    -->
+<!--             clarity for potential users, NLM requests:        -->
+<!--                                                               -->
+<!--             1. If you create a DTD from the Archiving and     -->
+<!--                Interchange DTD Suite and intend to stay       -->
+<!--                compatible with the suite, then please include -->
+<!--                the following statement as a comment in all of -->
+<!--                your DTD modules:                              -->
+<!--                   "Created from, and fully compatible with,   -->
+<!--                    the Archiving and Interchange DTD Suite."  -->
+<!--                                                               -->
+<!--             2. If you alter one or more modules of the suite, -->
+<!--                then please rename your version and all its    -->
+<!--                modules to avoid any confusion with the        -->
+<!--                original suite. Also, please include the       -->
+<!--                following statement as a comment in all your   -->
+<!--                DTD modules:                                   -->
+<!--                   "Based in part on, but not fully compatible -->
+<!--                    with, the Archiving and Interchange DTD    --> 
+<!--                    Suite."                                    -->
+<!--                                                               -->
+<!--             Suggestions for refinements and enhancements to   -->
+<!--             the DTD suite should be sent in email to:         -->
+<!--                 archive-dtd@ncbi.nlm.nih.gov                  -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             December 2002                                     -->
+<!--                                                               -->
+<!-- CREATED BY: Jeff Beck       (NCBI)                            -->
+<!--             Deborah Lapeyre (Mulberry Technologies, Inc.)     -->
+<!--             Bruce Rosenblum (Inera Inc.)                      -->
+<!--                                                               -->
+<!--             NLM thanks the Harvard University Libraries, both -->
+<!--             for proposing that a draft archiving NLM DTD for  --> 
+<!--             life sciences journals be extended to accommodate -->
+<!--             journals in all disciplines and for sponsoring    -->
+<!--             Bruce Rosenblum's collaboration with other DTD    -->
+<!--             authors in completing Version 1.0. The Andrew W.  --> 
+<!--             Mellon Foundation provided support for these      --> 
+<!--             important contributions.                          -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DTD VERSION/CHANGE HISTORY                 -->
+<!-- ============================================================= -->
+<!--
+     =============================================================
+
+Version  Reason/Occasion                   (who) vx.x (yyyy-mm-dd)
+     =============================================================
+     Version 2.0                       (DAL/BTU) v2.0 (2004-08-30)
+     
+     Major requirement changes led to the new release, producing
+     DTD version "2.0":
+       a) The splitting of the Archival and Interchange Tag Set 
+          DTDs into three DTDs from two: an authoring DTD, an
+          archive regularization and interchange DTD (the
+          current Blue Publishing DTD), and a preservationist 
+          archive DTD (the current Green Archiving and Interchange 
+          DTD).
+       b) AIT Working Group suggestions from the June 04 meeting 
+          and June/July 2004 followup discussions
+       c) Suite remodularization to meet new (and newly articulated)
+          modularization requirements
+       d) New or renamed classes and mixes to make modifications
+          easier and more consistent
+
+  2. Updated public identifier to "v2.0 20040830"          
+
+     =============================================================
+     Version 1.1                            (TRG) v1.1 (2003-11-01)
+
+  1. Modified content model of element <private-char> so that 
+     the element <inline-graphic> could be used multiple times.
+     Rationale: A series of <inline-graphic> elements may occur in 
+     the same content, especially if they are variants of one graphic, 
+     and may be linked, with only one variation being displayed.
+                                                                   -->
+
+
+<!-- ============================================================= -->
+<!--                    DESIGN COMMENT                             -->
+<!-- ============================================================= -->
+<!--                    This DTD Suite has been designed with Unicode
+                        as the basic representation of all special
+                        characters. The use of combining characters 
+                        is supported and encouraged as is the use
+                        of entities defined by the STIX project
+                        (http://www.ams.org/STIX/). Unicode values
+                        in planes other than Plane 0 may be freely
+                        used.
+                        
+                        Use of private publisher entities and Unicode
+                        Private Use Area is discouraged, but supported
+                        with the <private-char> element, for which a
+                        corresponding bitmap must be submitted.
+                        
+                        In cases where an entity name has been generally
+                        accepted with a corresponding Unicode number
+                        and the entity has not been added to
+                        the ISO standard entity sets, a named entity
+                        may be defined below (e.g. &euro;).
+                        
+                        Because of the potential for conflicts in
+                        assignments by different publishers,
+                        the Archival and Interchange DTD Suite does 
+                        not support assignment of values in the
+                        Unicode Private Use Area.
+                        Publishers who have defined characters in the
+                        Private Use Area must remap those characters
+                        to existing Unicode values (using combining
+                        characters for special accented characters
+                        where appropriate), or must submit bitmaps of
+                        those characters using one of the two methods
+                        supported under the <private-char> element.
+                        
+                        Those custom publisher entities for which 
+                        corresponding Unicode values have not been 
+                        determined must be tagged with the 
+                        <private-char> element. Publishers must submit 
+                        bitmaps of those characters using one of the 
+                        two methods supported in the <private-char> 
+                        element.                                   -->
+
+<!-- ============================================================= -->
+<!--                    COMMONLY ACCEPTED ENTITIES FOR UNICODE 
+                        GLYPHS                                     -->
+<!-- ============================================================= -->
+
+<!--                    For each of the following entities a name
+                        and a Unicode numerical character reference
+                        is given. Where a unique Unicode character 
+                        could be determined, that character was used.
+                        For some of the symbols combining characters
+                        have been used. Do not use this space to
+                        redefine characters already found in standard
+                        ISO entity sets. Do not use this space to
+                        define any character that cannot be 
+                        represented with Unicode.                  -->
+
+<!--                    LATIN SMALL LETTER G WITH CARON            -->
+<!ENTITY  gcaron        "&#x01E7;"                                   >
+
+
+<!--                    LATIN CAPITAL LETTER H WITH MACRON         -->
+<!ENTITY  Hmacr         "&#x0048;&#x0304;"                           >
+
+
+<!--                    EURO CURRENCY                              -->
+<!ENTITY  euro          "&#x20AC;"                                   >
+
+
+<!--                    FRANC CURRENCY                             -->
+<!ENTITY  franc         "&#x20A3;"                                   >
+
+
+<!-- ============================================================= -->
+<!--                    PRIVATE USE AREA AND CUSTOM CHARACTERS     -->
+<!-- ============================================================= -->
+<!--
+                        Special characters defined by publishers as
+                        custom entities or in the Unicode Private Use
+                        Area may not be deposited as is. If they
+                        cannot be remapped to existing Unicode values,
+                        they must be submitted as a bitmap using
+                        the <private-char> element. The most 
+                        repository-friendly technique is <glyph-data> 
+                        although individual bitmap files may be 
+                        submitted with inline-graphic.
+
+                        We would like to thank Beacon Publishing and
+                        the APS (American Physical Society) for 
+                        providing us with this technique.          -->
+
+
+<!--                    PRIVATE CHARACTER (CUSTOM OR UNICODE)      -->
+<!--                    A custom character entity defined by a
+                        publisher or a custom character from the
+                        Unicode private-use area for which a bitmap
+                        is submitted for the glyph.
+
+                        Since there are no completely standard/public
+                        agreements on how such characters are to be
+                        named and displayed, this technique is to be
+                        used instead of a custom general entity 
+                        reference, to provide complete information 
+                        on the intended character.
+                        A document should contain a <private-char> 
+                        element at each location where a private 
+                        character is used within the document. The 
+                        corresponding image for the glyph may be 
+                        given in the <glyph-data> element or as an 
+                        external bitmap file referenced by an 
+                        <inline-graphic> element.
+
+                        Implementation Note: <inline-graphic> should
+                        only be used outside <private-char> when the
+                        graphic is something other than a special
+                        character.                                 -->
+<!ELEMENT  private-char ((glyph-data | glyph-ref) | inline-graphic*) >
+<!--         description
+                        A human-readable description of the
+                        character, for example, "Arrow, normal 
+                        weight, single line, two-headed, Northwest 
+                        to Southeast". 
+             name       Unique name for the character in all 
+                        uppercase ASCII, similar to names found 
+                        in Unicode standard (e.g., "NORTHWEST 
+                        SOUTHEAST ARROW"                           -->
+<!ATTLIST  private-char
+             description
+                        CDATA                              #IMPLIED
+             name       CDATA                              #IMPLIED  >
+
+
+<!--                    GLYPH DATA FOR A PRIVATE CHARACTER         -->
+<!--                    This element is used when there is known to
+                        be no font available to render the private
+                        character. The <glyph-data> element can be
+                        used to provide information on the actual
+                        glyph that is associated with the private-use
+                        character. The element includes an inline
+                        bitmap of the glyph encoded in plain
+                        PBM (Plain Bit Map) format so that it is
+                        human-readable.
+
+                        For example:
+                        <private-char name="NORTHWEST SOUTHEAST ARROW"
+                        description="Arrow, normal weight, single
+                        line, two-headed, Northwest to Southeast">
+                        <glyph-data format="PBM" resolution="300"
+                        x-size="34" y-size="34">
+                        0000000000000000000000000000000000
+                        0111111111111100000000000000000000
+                        0111111111111100000000000000000000
+                        0111110000000000000000000000000000
+                        0111110000000000000000000000000000
+                        0111111000000000000000000000000000
+                        0110111100000000000000000000000000
+                        0110011110000000000000000000000000
+                        0110001111000000000000000000000000
+                        0110000111100000000000000000000000
+                        0110000011110000000000000000000000
+                        0110000001111000000000000000000000
+                        0110000000111100000000000000000000
+                        0110000000011110000000000000000000
+                        0110000000001111000000000000000000
+                        0110000000000111100000000000000000
+                        0110000000000011110000000000000000
+                        0000000000000001111000000000000000
+                        0000000000000000111100000000000110
+                        0000000000000000011110000000000110
+                        0000000000000000001111000000000110
+                        0000000000000000000111100000000110
+                        0000000000000000000011110000000110
+                        0000000000000000000001111000000110
+                        0000000000000000000000111100000110
+                        0000000000000000000000011110000110
+                        0000000000000000000000001111000110
+                        0000000000000000000000000111100110
+                        0000000000000000000000000011110110
+                        0000000000000000000000000001111110
+                        0000000000000000000000000001111110
+                        0000000000000000011111111111111110
+                        0000000000000000011111111111111110
+                        0000000000000000000000000000000000
+                        </glyph-data></private-char>               -->
+<!ELEMENT  glyph-data   (#PCDATA)                                    >
+<!--         id         Identifier so that the full glyph data need
+                        not be repeated every time the character is
+                        used. The <glyph-ref> element can be used
+                        to point to this ID, to reuse a character
+                        in subsequent text. If a character is not
+                        reused, it need not be given an "id"
+                        attribute.
+             format     An optional attribute that names the image
+                        format of the bitmap. Should be "PBM" if the
+                        plain bitmap is included inline, so that the
+                        plain text bitmap will be a human-readable
+                        matrix of zeros and ones.
+             resolution Resolution of the bitmap in dots per inch,
+                        expressed as a decimal integer (e.g. 72, 300)
+             x-size     Number of pixels per row in the bit-mapped 
+                        glyph
+             y-size     Number of rows of the bit-mapped glyph     -->
+<!ATTLIST  glyph-data
+             id         ID                                 #IMPLIED
+             format     NMTOKEN                            #IMPLIED
+             resolution CDATA                              #IMPLIED
+             x-size     CDATA                              #IMPLIED
+             y-size     CDATA                              #IMPLIED  >
+
+
+<!--                    GLYPH REFERENCE FOR A PRIVATE CHARACTER    -->
+<!--                    Once a private character has been declared
+                        using a <glyph-data> element, the character
+                        can be reused by using this element to 
+                        point to the full <glyph-data> element.
+                        The pointing uses the ID/IDREF mechanism,
+                        using the "glyph-data" attribute of this
+                        element to point to the "id" attribute of 
+                        another <glyph-data> element.              -->
+<!ELEMENT  glyph-ref    EMPTY                                        >
+<!--         glyph-data An IDREF-type attribute that points to the
+                        "id" attribute of a <glyph-data> character.
+                        The idea is to use the full glyph data once,
+                        then point to an existing character instead 
+                        of repeating the entire glyph data again.  -->
+<!ATTLIST  glyph-ref
+             glyph-data IDREF                              #IMPLIED  >
+
+<!-- ================== End Custom XML Special Characters ======== -->

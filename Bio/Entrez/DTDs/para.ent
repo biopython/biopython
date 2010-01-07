@@ -1,0 +1,420 @@
+<!-- ============================================================= -->
+<!--  MODULE:    Paragraph-Like Elements                           -->
+<!--  VERSION:   2.0                                               -->
+<!--  DATE:      August 2004                                       -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
+<!--                        TYPICAL INVOCATION                     -->
+<!--
+"-//NLM//DTD Archiving and Interchange DTD Suite Paragraph-Like Elements v2.0 20040830//EN"
+     Delivered as file "para.ent"                                  -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Archiving and Interchange DTD Suite               -->
+<!--                                                               -->
+<!-- PURPOSE:    Names structural elements that will appear in     -->
+<!--             the same places as a paragraph                    -->
+<!--                                                               -->
+<!-- CONTAINS:   1) Default definition of the paragraph class      -->
+<!--             2) Paragraph <p>                                  -->
+<!--             3) Displayed Quote <disp-quote>                   -->
+<!--                                                               -->
+<!-- CREATED FOR:                                                  -->
+<!--             Digital archives and publishers who wish to       -->
+<!--             create a custom XML DTD for original markup of    -->
+<!--             journal literature, books, and related material,  -->
+<!--             or for archiving and transferring such material   -->
+<!--             between archives.                                 -->
+<!--                                                               -->
+<!--             This DTD is in the public domain. An organization -->
+<!--             that wishes to create its own DTD from the suite  -->
+<!--             may do so without permission from NLM.            -->
+<!--                                                               -->
+<!--             The suite has been set up to be extended using a  -->
+<!--             new DTD file and a new DTD-specific customization -->
+<!--             module to redefine the many Parameter Entities.   -->
+<!--             Do not modify the suite directly or redistribute  -->
+<!--             modified versions of the suite.                   -->
+<!--                                                               -->
+<!--             In the interest of maintaining consistency and    -->
+<!--             clarity for potential users, NLM requests:        -->
+<!--                                                               -->
+<!--             1. If you create a DTD from the Archiving and     -->
+<!--                Interchange DTD Suite and intend to stay       -->
+<!--                compatible with the suite, then please include -->
+<!--                the following statement as a comment in all of -->
+<!--                your DTD modules:                              -->
+<!--                   "Created from, and fully compatible with,   -->
+<!--                    the Archiving and Interchange DTD Suite."  -->
+<!--                                                               -->
+<!--             2. If you alter one or more modules of the suite, -->
+<!--                then please rename your version and all its    -->
+<!--                modules to avoid any confusion with the        -->
+<!--                original suite. Also, please include the       -->
+<!--                following statement as a comment in all your   -->
+<!--                DTD modules:                                   -->
+<!--                   "Based in part on, but not fully compatible -->
+<!--                    with, the Archiving and Interchange DTD    --> 
+<!--                    Suite."                                    -->
+<!--                                                               -->
+<!--             Suggestions for refinements and enhancements to   -->
+<!--             the DTD suite should be sent in email to:         -->
+<!--                 archive-dtd@ncbi.nlm.nih.gov                  -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             December 2002                                     -->
+<!--                                                               -->
+<!-- CREATED BY: Jeff Beck       (NCBI)                            -->
+<!--             Deborah Lapeyre (Mulberry Technologies, Inc.)     -->
+<!--             Bruce Rosenblum (Inera Inc.)                      -->
+<!--                                                               -->
+<!--             NLM thanks the Harvard University Libraries, both -->
+<!--             for proposing that a draft archiving NLM DTD for  --> 
+<!--             life sciences journals be extended to accommodate -->
+<!--             journals in all disciplines and for sponsoring    -->
+<!--             Bruce Rosenblum's collaboration with other DTD    -->
+<!--             authors in completing Version 1.0. The Andrew W.  --> 
+<!--             Mellon Foundation provided support for these      --> 
+<!--             important contributions.                          -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DTD VERSION/CHANGE HISTORY                 -->
+<!-- ============================================================= -->
+<!--
+     =============================================================
+
+Version  Reason/Occasion                   (who) vx.x (yyyy-mm-dd)
+
+     =============================================================
+     Version 2.0                       (DAL/BTU) v2.0 (2004-08-30)
+     
+     Major requirement changes led to the new release, producing
+     DTD version "2.0":
+       a) The splitting of the Archival and Interchange Tag Set 
+          DTDs into three DTDs from two: an authoring DTD, an
+          archive regularization and interchange DTD (the
+          current Blue Publishing DTD), and a preservationist 
+          archive DTD (the current Green Archiving and Interchange 
+          DTD).
+       b) AIT Working Group suggestions from the June 04 meeting 
+          and June/July 2004 followup discussions
+       c) Suite remodularization to meet new (and newly articulated)
+          modularization requirements
+       d) New or renamed classes and mixes to make modifications
+          easier and more consistent
+
+  9. PARAGRAPH ELEMENT MODELING
+     ### Customization Alert ###
+     a. Changed the model of paragraph to use #PCDATA and
+        %p-elements; like all other #PCDATA models
+     b. Changed the inline-mix to use the OR-bar-first
+        mechanism.
+         - %inside-para;  [Now renamed -%p-elements;]
+           (used only inside Paragraph <p>)
+
+  8. COMPLETE MODELS WHEN OVER-RIDING A MODEL 
+     (for all Parameter Entities suffixed "-model")
+     ### Customization Alert ###
+     Added internal parentheses to Parameter Entity and removed 
+     them from Element Declaration for:
+     - %disp-quote-model;
+     - %statement-model;
+ 
+  7. RENAMED CLASSES
+     ### Customization Alert ###
+     Not all classes ended in the ".class" suffix. Changed the 
+     following to add the suffix:
+     - %display-back-matter.class; used in: 
+        - <disp-quote>
+        - <verse-group>
+
+  6. DEFAULT CLASSES - Were moved from this module to 
+     %default-classes.ent;
+
+  5. NEW CLASSES - To correct potential classing problems, created
+     the following new Parameter Entities:
+        - %just-para.class; used in <speech>, <statement-model>
+        - %verse-group-model; for <verse-group>
+        - %verse-line-elements; for <verse-line>
+
+  4. Updated public identifier to "v2.0 20040830"         
+
+     =============================================================
+     Version 1.1                           (TRG) v1.1 (2003-11-01)
+      
+  3. Added attribute "content-type" to elements <p>, <speech> and 
+     <statement>.  
+     Rationale: To identify and preserve the semantic intent of 
+     semantically rich source documents.
+     
+  2. Added ID attribute to elements <p>, <speech>, <disp-quote>,
+     and <verse-group>. 
+     Rationale: Provide unique identifier so these elements can be 
+     linked to. 
+                                                                   
+     =============================================================
+     Version 1.0 Changes Before Public Release
+                                       (Lapeyre) V1.0 (2002-12-25)
+
+  1. DIALOG/SPEECH - Element <dialog> renamed <speech>  
+                                                                   -->
+
+
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITY DEPENDENCIES             
+                        Requires the following parameter entities
+                        be defined before calling this module, 
+                        usually accomplished in the Customization
+                        Module for the specific DTD:
+                          - %emphasized.text;
+                          - %p-elements;
+                          - %para-level;
+                          - %person-name.class;
+                          - %simple-link.class;
+                          - %simple-text;                          -->
+
+
+<!-- ============================================================= -->
+<!--                    PARAGRAPH-LEVEL ELEMENTS                   -->
+<!-- ============================================================= -->
+
+
+<!--                    PARAGRAPH ELEMENTS                         -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a paragraph <p>. 
+                        DESIGN NOTE: There is a major overlap between 
+                        this parameter entity and the mix for elements
+                        that are at the same level as a paragraph.
+                        Inline elements appear only inside a 
+                        paragraph, but block elements such as quotes 
+                        and lists may appear either within a 
+                        paragraph or at the same level as a 
+                        paragraph. This serves a requirement in a 
+                        repository DTD, since some incoming material 
+                        will have restricted such elements to only 
+                        inside a paragraph, some incoming material 
+                        will have restricted them to only outside a 
+                        paragraph and some may allow them in both
+                        places. Thus the DTD must allow for them to
+                        be in either or both.                      
+                        DESIGN NOTE: Inline mixes begin with an
+                        OR bar                                     -->
+<!ENTITY % p-elements   "| %address-link.class; | 
+                         %article-link.class; |
+                         %block-display.class; |%block-math.class; | 
+                         %citation.class; | %emphasis.class; |
+                         %inline-display.class; | 
+                         %inline-math.class; | %list.class; | 
+                         %math.class; | %phrase.class; |
+                         %rest-of-para.class; | %simple-link.class; | 
+                         %subsup.class;"                             >
+
+<!--                    PARAGRAPH                                  -->
+<!--                    The basic block-unit of textual information
+                                                                   -->
+<!ELEMENT  p            (#PCDATA %p-elements;)*                      >
+<!--         id         Unique identifier so the element may be
+                        referenced                                 
+             content-type   
+                        Identification of the subject, type of
+                        content, or reason that this word or phrase
+                        is considered semantically special, as a 
+                        means of preserving the semantic intent of 
+                        the original tagging.                      
+             xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).                   -->
+<!ATTLIST  p
+             id         ID                                 #IMPLIED  
+             content-type
+                        CDATA                              #IMPLIED  
+             xml:lang   NMTOKEN                            #IMPLIED  >
+                        
+
+<!--                    SPEECH                                     -->
+<!--                    One exchange in a real or imaginary 
+                        conversation between two or more entities, 
+                        for example, between a an interviewer and the 
+                        person being interviewed, between a nurse or 
+                        doctor and a patient, between a person and a 
+                        computer, etc.
+                        Authoring and Conversion Note: Speeches are
+                        modeled as a full paragraph, even if what is
+                        spoken is only a few words.                
+                        DESIGN NOTE: Speeches are not gathered into
+                        a larger structure, because there is no
+                        consistency in how this is done in existing
+                        journal DTDs, nor any real need for a
+                        full wrapper.                              -->
+<!ELEMENT  speech       (speaker, (%just-para.class;)+ )             >
+<!--         id         Unique identifier so the element may be
+                        referenced                                 
+             content-type   
+                        Identification of the subject, type of
+                        content, or reason that this word or phrase
+                        is considered semantically special, as a 
+                        means of preserving the semantic intent of 
+                        the original tagging.                      
+             xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).                   -->
+<!ATTLIST  speech
+             id         ID                                 #IMPLIED  
+             content-type
+                        CDATA                              #IMPLIED
+             xml:lang   NMTOKEN                            #IMPLIED  >
+
+
+<!--                    SPEAKER ELEMENTS                           -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a speaker.                                 -->
+<!ENTITY % speaker-elements
+                        "| %person-name.class; | %simple-link.class;">
+                        
+
+<!--                    SPEAKER                                    -->
+<!--                    One who utters a speech as part of a 
+                        speech, for example the computer "HAL" in
+                        the exchange 'Hal: "Hi Dave"'.             -->
+<!ELEMENT  speaker      (#PCDATA %speaker-elements;)*                >
+
+
+<!--                    QUOTE, DISPLAYED MODEL                     -->
+<!--                    Content model for the Display Quote element-->
+<!ENTITY % disp-quote-model     
+                        "(title?, (%para-level;)*, 
+                          (%display-back-matter.class;)* )"          > 
+            
+
+<!--                    QUOTE, DISPLAYED                           -->
+<!--                    Extract or extended quoted passage from 
+                        another work, usually made typographically 
+                        distinct from the surrounding text.
+                        Authoring and Conversion Note: Use this 
+                        element for epigraphs as well as block
+                        quotes and extracts within the text.       --> 
+<!ELEMENT  disp-quote   %disp-quote-model;                           >
+<!--         id         Unique identifier so the element may be
+                        referenced                                
+             xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).                   -->
+<!ATTLIST  disp-quote
+             id         ID                                 #IMPLIED  
+             xml:lang   NMTOKEN                            #IMPLIED  >
+ 
+
+<!--                    STATEMENT, FORMAL MODEL                    -->
+<!--                    Content model for the <statement> element  -->
+<!ENTITY % statement-model   
+                        "(label?, title?, (%just-para.class;)+ )"    > 
+            
+
+<!--                    STATEMENT, FORMAL                          -->
+<!--                    A Theorem, Lemma, Proof, Postulate,
+                        Hypothesis, Proposition, Corollary, or
+                        other formal statement, identified as such
+                        with a label, usually made typographically 
+                        distinct from the surrounding text         --> 
+<!ELEMENT  statement    %statement-model;                            >
+<!--         id         Unique identifier so that the statement can 
+                        be referenced by a <xref> element          
+             content-type   
+                        Identification of the subject, type of
+                        content, or reason that this word or phrase
+                        is considered semantically special, as a 
+                        means of preserving the semantic intent of 
+                        the original tagging.                      -->
+<!ATTLIST  statement
+             id         ID                                 #IMPLIED 
+             content-type
+                        CDATA                              #IMPLIED  >
+
+
+<!--                    VERSE GROUP MODEL                          -->
+<!--                    Content model for the <verse-group> element-->
+<!ENTITY % verse-group-model   
+                        "((verse-line | verse-group)+, 
+                         (%display-back-matter.class;)*) "           > 
+                        
+
+<!--                    VERSE FORM FOR POETRY                      -->
+<!--                    A song, poem, or verse.
+                        Implementer's Note: No attempt has been made
+                        to retain the look or visual form of the
+                        original.
+                        Remarks: Many physics journals include both
+                        initial epigraphs to articles and short
+                        articles that contain nothing but a topical,
+                        humorous, or elegiac poem.
+                        Related Elements: Poetry may also be tagged 
+                        with the <preformat> if spacing is critical, 
+                        but usually poetry should be tagged with the
+                        <verse-group> element, which may not preserve
+                        the exact indentation but is likely to be
+                        displayed in a proportional font.          -->
+<!ELEMENT  verse-group  %verse-group-model;                          > 
+<!--          id         Unique identifier so the element may be
+                        referenced
+             xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).                   -->                
+<!ATTLIST  verse-group
+             id         ID                                 #IMPLIED  
+             xml:lang   NMTOKEN                            #IMPLIED  >
+
+
+<!--                    VERSE-LINE ELEMENTS                        -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a speaker.                              
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar, but since %simple-text; is an inline
+                        mix, the OR bar is already there.          -->
+<!ENTITY % verse-line-elements
+                        "%simple-text;"                              >
+
+
+<!--                    LINE OF A VERSE                            -->
+<!--                    One line of a poem or verse                -->
+<!ELEMENT  verse-line   (#PCDATA %verse-line-elements;)*             >
+
+
+<!-- ================== End Paragraph Class Module =============== -->

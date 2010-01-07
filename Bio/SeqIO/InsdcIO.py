@@ -223,6 +223,26 @@ class GenBankWriter(SequentialSequenceWriter):
             else:
                 self._write_single_line("", text)
 
+    def _get_date(self, record) :
+        default = "01-JAN-1980"
+        try :
+            date = record.annotations["date"]
+        except KeyError :
+            return default
+        #Cope with a list of one string:
+        if isinstance(date, list) and len(date)==1 :
+            date = date[0]
+        #TODO - allow a Python date object
+        if not isinstance(date, str) or len(date) != 11 \
+        or date[2] != "-" or date[6] != "-" \
+        or not date[:2].isdigit() or not date[7:].isdigit() \
+        or int(date[:2]) > 31 \
+        or date[3:6] not in ["JAN","FEB","MAR","APR","MAY","JUN",
+                             "JUL","AUG","SEP","OCT","NOV","DEC"] :
+            #TODO - Check is a valid date (e.g. not 31 Feb)
+            return default
+        return date
+
     def _write_the_first_line(self, record):
         """Write the LOCUS line."""
         
@@ -278,12 +298,13 @@ class GenBankWriter(SequentialSequenceWriter):
         assert len(division) == 3
         #TODO - date
         #TODO - mol_type
-        line = "LOCUS       %s %s %s    %s           %s 01-JAN-1980\n" \
+        line = "LOCUS       %s %s %s    %s           %s %s\n" \
                      % (locus.ljust(16),
                         str(len(record)).rjust(11),
                         units,
                         mol_type.ljust(6),
-                        division)
+                        division,
+                        self._get_date(record))
         assert len(line) == 79+1, repr(line) #plus one for new line
 
         assert line[12:28].rstrip() == locus, \

@@ -5,10 +5,14 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-Access to General Feature Format databases created with Bio::DB:GFF
+"""Access to General Feature Format databases created with BioPerl (DEPRECATED).
 
-based on documentation for Lincoln Stein's Perl Bio::DB::GFF
+This is the "old" Bio.GFF module by Michael Hoffman, which offers access to
+a MySQL database holding GFF data loaded by BioPerl. This code has now been
+deprecated, and will be removed (or at best, relocated) in order to free the
+Bio.GFF namespace for a new GFF parser in Biopython (including GFF3 support).
+
+Based on documentation for Lincoln Stein's Perl Bio::DB::GFF
 
 >>> import os
 >>> import Bio.GFF
@@ -18,6 +22,15 @@ based on documentation for Lincoln Stein's Perl Bio::DB::GFF
 >>> gff = Bio.GFF.Connection(passwd=PASSWORD, db=DATABASE_GFF, fastadir=FASTADIR)
 
 """
+
+import warnings
+warnings.warn("The old Bio.GFF module for access to a MySQL GFF database "
+              "created with BioPerl is deprecated, and will be removed (or "
+              "possibly just moved) in a future release of Biopython.  If you "
+              "want to continue to use this code, please get in contact with "
+              "the developers via the mailing lists to avoid its permanent "
+              "removal from Biopython. The plan is to re-use the Bio.GFF "
+              "namespace for a new GFF parsing module.", DeprecationWarning)
 
 __version__ = "$Revision: 1.10 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/__init__.py,v $

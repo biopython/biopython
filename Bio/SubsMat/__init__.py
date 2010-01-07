@@ -200,7 +200,7 @@ class SeqMat(dict):
       if build_later:
          self._init_zero()
       else:
-			# Convert full to half if matrix is not already a log-odds matrix
+         # Convert full to half if matrix is not already a log-odds matrix
          if self.mat_type != LO:
             self._full_to_half()
          self._correct_matrix()

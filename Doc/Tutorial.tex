@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 16 November 2009 (Biopython 1.52+)}
+\date{Last Update -- 5 January 2009 (Biopython 1.53+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -220,7 +220,7 @@ and HTML formats
   \end{itemize}
   
   \item \emph{Which ``Numerical Python'' do I need?} \\
-  For Biopython 1.48 or earlier, you need the old Numeric module.
+  For Biopython 1.48 or earlier, you needed the old Numeric module.
   For Biopython 1.49 onwards, you need the newer NumPy instead.
   Both Numeric and NumPy can be installed on the same machine fine.
   See also: \url{http://numpy.scipy.org/}
@@ -839,7 +839,7 @@ Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
 \end{verbatim}
 
 \emph{Note:} The \verb|Seq| object's \verb|transcribe| and \verb|back_transcribe| methods
-are new in Biopython 1.49.  For older releases you would have to use the \verb|Bio.Seq|
+were added in Biopython 1.49.  For older releases you would have to use the \verb|Bio.Seq|
 module's functions instead, see Section~\ref{sec:seq-module-functions}.
 
 \section{Translation}
@@ -951,7 +951,7 @@ translate method with \verb|Bio.SeqIO| for sequence input/ouput.
 \emph{Note:} The \verb|Seq| object's \verb|translate| method is new in Biopython 1.49.
 For older releases you would have to use the \verb|Bio.Seq| module's \verb|translate|
 function instead, see Section~\ref{sec:seq-module-functions}. The \texttt{cds} option
-is new in Biopython 1.51, and there is no simple way to do this with older versions
+was added in Biopython 1.51, and there is no simple way to do this with older versions
 of Biopython.
 
 \section{Translation Tables}
@@ -1877,7 +1877,7 @@ the \texttt{format} method described above in Section~\ref{sec:SeqRecord-format}
 \end{verbatim}
 
 See Sections~\ref{sec:FASTQ-slicing-off-primer}
-and~\ref{sec:FASTQ-slicing-off-adaptor} for some FASTQ example where the
+and~\ref{sec:FASTQ-slicing-off-adaptor} for some FASTQ examples where the
 per-letter annotations (the read quality scores) are also sliced.
 
 \section{Adding SeqRecord objects}
@@ -2881,13 +2881,10 @@ For an example of how you might use this, let's load in a bunch of \verb|SeqReco
 \begin{verbatim}
 from Bio import SeqIO
 from StringIO import StringIO
-
 records = SeqIO.parse(open("ls_orchid.gbk"), "genbank")
-
 out_handle = StringIO()
 SeqIO.write(records, out_handle, "fasta")
 fasta_data = out_handle.getvalue()
-
 print fasta_data
 \end{verbatim}
 
@@ -2910,6 +2907,7 @@ out_handle = open("ls_orchid.tab", "w")
 SeqIO.write(record_iterator, out_handle, "tab")
 out_handle.close()
 \end{verbatim}
+\noindent Making a single call to \verb|SeqIO.write(...)| is also much quicker than multiple calls to the \verb|SeqRecord.format(...)| method.
 
 \chapter{Sequence Alignment Input/Output, and Alignment Tools}
 \label{chapter:Bio.AlignIO}
@@ -3898,7 +3896,7 @@ complicated.
 It also becomes far harder to diagnose problems, because you can't try running MUSCLE
 manually outside of Biopython (because you don't have the input file to supply).
 There can also be subtle cross platform issues (e.g. Windows versus Linux), and how
-you run your script can have in impact (e.g. at the command line, from IDLE or an
+you run your script can have an impact (e.g. at the command line, from IDLE or an
 IDE, or as a GUI script). These are all generic Python issues though, and not
 specific to Biopython.
 
@@ -4175,12 +4173,14 @@ that now \ldots.
 \subsection{Introduction}
 
 Running BLAST locally (as opposed to over the internet, see
-Section~\ref{sec:running-www-blast}) has two advantages:
+Section~\ref{sec:running-www-blast}) has at least major two advantages:
 \begin{itemize}
 \item Local BLAST may be faster than BLAST over the internet;
 \item Local BLAST allows you to make your own database to search for sequences against.
 \end{itemize}
-Dealing with proprietary or unpublished sequence data can be another reason to run BLAST locally.  You may not be allowed to redistribute the sequences, so submitting them to the NCBI as a BLAST query would not be an option.
+Dealing with proprietary or unpublished sequence data can be another reason to run BLAST
+locally.  You may not be allowed to redistribute the sequences, so submitting them to the
+NCBI as a BLAST query would not be an option.
 
 Unfortunately, there are some major drawbacks too -- installing all the bits and getting it setup right takes some effort:
 \begin{itemize}
@@ -4189,35 +4189,98 @@ Unfortunately, there are some major drawbacks too -- installing all the bits and
 \end{itemize}
 
 \noindent
-To further confuse matters there are at least four different standalone BLAST packages.
-\begin{itemize}
-\item \href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}{NCBI ``legacy'' BLAST}, including command line tools \verb|blastall|, \verb|blastpgp| and \verb|rpsblast|. This is probably the most widely used standalone BLAST tool at the moment. Still supported in Biopython, but now obsolete.
-\item \href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}{NCBI ``new'' BLAST+}, including separate command line tools \verb|blastn|, \verb|blastp|, \ldots instead of \verb|blastall|. Released in 2009, supported in Biopython 1.53 onwards.
-\item \href{http://blast.wustl.edu/}{Washington University BLAST} (WU-BLAST), including the command line tool \verb|wu-blastall| (since replaced by AB-BLAST).
-\item \href{http://blast.advbiocomp.com}{Advanced Biocomputing BLAST} (AB-BLAST), including the command line tool \verb|ab-blastall| (not free/open source). Released in 2009.
-\end{itemize}
+To further confuse matters there are at least four different standalone BLAST packages,
+and there are also other tools which can produce imitation BLAST output files, such as BLAT.
 
 \subsection{Standalone NCBI ``legacy'' BLAST}
 
+\href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}
+{NCBI ``legacy'' BLAST} included command line tools \verb|blastall|, \verb|blastpgp| and
+\verb|rpsblast|. This is probably the most widely used standalone BLAST tool at the moment.
+
 The \verb|Bio.Blast.Applications| module has wrappers for the ``legacy'' NCBI BLAST tools
-like \verb|blastall|, \verb|blastpgp| and \verb|rpsblast|, and there are helper functions
-in \verb|Bio.Blast.NCBIStandalone|. These are now considered obsolete, and will be
-deprecated and eventually removed from Biopython as the NCBI move over to the replacement
+like \verb|blastall|, \verb|blastpgp| and \verb|rpsblast|, and there are also helper
+functions in \verb|Bio.Blast.NCBIStandalone|. These are now considered obsolete, and will
+be deprecated and eventually removed from Biopython as the NCBI move over to the replacement
 BLAST+ suite.
 
-To try and avoid confusion, we will not cover calling these old tools from Biopython.
-Have a look at the older edition of this tutorial included with Biopython 1.52 if you
-are curious.
+To try and avoid confusion, we will not cover calling these old tools from Biopython
+in this tutorial. Have a look at the older edition of this tutorial included with
+Biopython 1.52 if you are curious.
 
 \subsection{Standalone NCBI BLAST+}
 
-The \verb|Bio.Blast.Applications| module has wrappers for the ``new'' NCBI BLAST+ tools
+\href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}
+{NCBI ``new'' BLAST+} was released in 2009. This replaces the old NCBI ``legacy'' BLAST
+package. The \verb|Bio.Blast.Applications| module has wrappers for these ``new'' tools
 like \verb|blastn|, \verb|blastp|, \verb|blastx|, \verb|tblastn|, \verb|tblastx|
 (which all used to be handled by \verb|blastall|), \verb|psiblast|
 (replacing \verb|blastpgp|) and \verb|rpsblast| and \verb|rpstblastn|
-(which replace the old \verb|rpsblast|). This section will show how to use them \ldots
+(which replace the old \verb|rpsblast|).
+
+This section will show briefly how to use these tools from within Python. If you have
+already read or tried the alignment tool examples in Section~\ref{sec:alignment-tools}
+this should all seem quite straightforward. First, we construct a command line string
+(as you would type in at the command line prompt if running standalone BLAST by hand).
+Then we can execute this command from within Python, typically using the
+\verb|subprocess| module.
+
+For example, taking a FASTA file of gene nucleotide sequences, you might want to
+run a BLASTX (translation) search against the non-redundant (NR) protein database.
+Assuming you (or your systems administrator) has downloaded and installed the NR
+database, you might run:
+
+\begin{verbatim}
+blastx -query opuntia.fasta -db nr -out opuntia.xml -evalue 0.001 -outfmt 5
+\end{verbatim}
+
+This should run BLASTX against the NR database, using an expectation cut-off value
+of $0.001$ and produce XML output to the specified file (which we can then parse).
+On my computer this takes about six minutes - a good reason to save the output
+to a file so you and repeat any analysis as needed.
+
+From within Biopython we can use the NCBI BLASTX wrapper from the
+\verb|Bio.Blast.Applications| module to build the command line string:
+
+\begin{verbatim}
+>>> from Bio.Blast.Applications import NcbiblastxCommandline
+>>> help(NcbiblastxCommandline)
+...
+>>> cline = NcbiblastxCommandline(query="opuntia.fasta", db="nr", evalue=0.001, outfmt=5,
+... out="opuntia.xml")
+>>> cline
+NcbiblastxCommandline(cmd='blastx', query='opuntia.fasta', db='nr', out='opuntia.xml',
+evalue=0.001, outfmt=5)
+>>> print cline
+blastx -query opuntia.fasta -db nr -out opuntia.xml -evalue 0.001 -outfmt 5
+\end{verbatim}
+
+In this example there shouldn't be any output from BLASTX to the terminal
+(stdout or stderr), so we can call the tool like this:
+
+\begin{verbatim}
+>>> import sys
+>>> import subprocess
+>>> return_code = subprocess.call(str(cline), shell=(sys.platform!="win32"))
+...
+>>> print return_code
+0
+\end{verbatim}
+\noindent Here the \ldots means wait for the command to finish. We then check
+the return code, remember that zero usually means no errors. You could also
+check the output file \verb|opuntia.xml| has been created.
+
+As you may recall from earlier examples in the tutorial, the \verb|opuntia.fasta|
+contains seven sequences, so the BLAST XML output should contain multiple results.
+Therefore use \verb|Bio.Blast.NCBIXML.parse()| to parse it as described below in
+Section~\ref{sec:parsing-blast}.
 
 \subsection{WU-BLAST and AB-BLAST}
+
+You may also come across \href{http://blast.wustl.edu/}{Washington University BLAST}
+(WU-BLAST), and its successor, \href{http://blast.advbiocomp.com}{Advanced Biocomputing
+BLAST} (AB-BLAST, released in 2009, not free/open source). These packages include
+the command line tools \verb|wu-blastall| and \verb|ab-blastall|.
 
 Biopython does not currently provide wrappers for calling these tools, but should be able
 to parse any NCBI compatible output from them.
@@ -4225,30 +4288,29 @@ to parse any NCBI compatible output from them.
 \section{Parsing BLAST output}
 \label{sec:parsing-blast}
 
-As mentioned above, BLAST can generate output in various formats,
-such as XML, HTML, and plain text. Originally, Biopython had a parser for
-BLAST plain text and HTML output, as these were the only output formats supported
-by BLAST. Unfortunately, the BLAST output in these formats kept changing,
-each time breaking the Biopython parsers. As keeping up with changes in BLAST
+As mentioned above, BLAST can generate output in various formats, such as
+XML, HTML, and plain text. Originally, Biopython had parsers for BLAST
+plain text and HTML output, as these were the only output formats offered
+at the time. Unfortunately, the BLAST output in these formats kept changing,
+each time breaking the Biopython parsers. Our HTML BLAST parser has been
+removed, but the plain text BLAST parser is still available (see
+Section~\ref{sec:parsing-blast-deprecated}). Use it at your orn risk,
+it may or may not work, depending on which BLAST version you're using.
+
+As keeping up with changes in BLAST
 became a hopeless endeavor, especially with users running different BLAST
 versions, we now recommend to parse the output in XML format, which can be
 generated by recent versions of BLAST. Not only is the XML output more stable
 than the plain text and HTML output, it is also much easier to parse
 automatically, making Biopython a whole lot more stable.
 
-Though deprecated, the parsers for BLAST output in plain text or HTML output
-are still available in Biopython
-(see Section~\ref{sec:parsing-blast-deprecated}).
-Use them at your own risk: they may or may not work, depending on which BLAST
-version you're using.
-
 You can get BLAST output in XML format in various ways. For the parser, it
 doesn't matter how the output was generated, as long as it is in the XML format.
 \begin{itemize}
-\item You can use Biopython to run BLAST locally, as described in
-section~\ref{sec:running-local-blast}.
 \item You can use Biopython to run BLAST over the internet, as described in
 section~\ref{sec:running-www-blast}.
+\item You can use Biopython to run BLAST locally, as described in
+section~\ref{sec:running-local-blast}.
 \item You can do the BLAST search yourself on the NCBI site through your
 web browser, and then save the results. You need to choose XML as the format
 in which to receive the results, and save the final BLAST page you get
@@ -4259,12 +4321,11 @@ to receive the results.
 \end{itemize}
 The important point is that you do not have to use Biopython
 scripts to fetch the data in order to be able to parse it.
-
 Doing things in one of these ways, you then need to get a handle
 to the results. In Python, a handle is just a nice general way of
 describing input to any info source so that the info can be retrieved
-using \verb|read()| and \verb|readline()| functions. This is the type
-of input the BLAST parser (and most other Biopython parsers) take.
+using \verb|read()| and \verb|readline()| functions
+(see Section~{sec:appendix-handles}).
 
 If you followed the code above for interacting with BLAST through a
 script, then you already have \verb|result_handle|, the handle to the
@@ -4602,9 +4663,10 @@ Hopefully the \verb|BlastErrorParser| will make it much easier to debug and deal
 
 \section{Dealing with PSI-BLAST}
 
-You can run the standalone verion of PSI-BLAST (the command line tool
-\verb|blastpgp|) using the \verb|blastpgp| function in the
-\verb|Bio.Blast.NCBIStandalone| module.
+You can run the standalone verion of PSI-BLAST (the legacy NCBI command line
+tool \verb|blastpgp|, or its replacement \verb|psiblast|) using the wrappers
+in \verb|Bio.Blast.Applications| module.
+
 At the time of writing, the NCBI do not appear to support tools running a
 PSI-BLAST search via the internet.
 
@@ -4616,9 +4678,10 @@ output and the \verb|PSIBlastParser| in \verb|Bio.Blast.NCBIStandalone|.
 
 \section{Dealing with RPS-BLAST}
 
-You can run the standalone verion of RPS-BLAST (the command line tool
-\verb|rpsblast|) using the \verb|rpsblast| function in the
-\verb|Bio.Blast.NCBIStandalone| module.
+You can run the standalone verion of RPS-BLAST (either the legacy NCBI
+command line tool \verb|rpsblast|, or its replacement with the same name)
+using the wrappers in \verb|Bio.Blast.Applications| module.
+
 At the time of writing, the NCBI do not appear to support tools running an
 RPS-BLAST search via the internet.
 
@@ -4660,12 +4723,12 @@ To paraphrase:
 \item For any series of more than 100 requests, do this at weekends or outside USA peak times.  This is up to you to obey.
 \item Use the \url{http://eutils.ncbi.nlm.nih.gov} address, not the standard NCBI Web address.  Biopython uses this web address.
 \item Make no more than three requests every seconds (relaxed from at most one request every three seconds in early 2009).  This is automatically enforced by Biopython.
-\item Use the optional email parameter so the NCBI can contact you if there is a problem.  You can either explicitly set the email address as a parameter with each call to Entrez (e.g., include {\tt email = "A.N.Other@example.com"} in the argument list), or as of Biopython 1.48, you can set a global email address:
+\item Use the optional email parameter so the NCBI can contact you if there is a problem.  You can either explicitly set the email address as a parameter with each call to Entrez (e.g., include {\tt email="A.N.Other@example.com"} in the argument list), or as of Biopython 1.48, you can set a global email address:
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"
 \end{verbatim}
-{\tt Bio.Entrez} will then use this email address with each call to Entrez.  The {\tt example.com} address is a reserved domain name specifically for documentation (RFC 2606).  Please DO NOT use a random email -- it's better not to give an email at all.
+{\tt Bio.Entrez} will then use this email address with each call to Entrez.  The {\tt example.com} address is a reserved domain name specifically for documentation (RFC 2606).  Please DO NOT use a random email -- it's better not to give an email at all. The email parameter will be mandatory from June 1, 2010. In case of excessive usage, NCBI will attempt to contact a user at the e-mail address provided prior to blocking access to the E-utilities.
 \item If you are using Biopython within some larger software suite, use the tool parameter to specify this.  The tool parameter will default to Biopython.
 \item For large queries, the NCBI also recommend using their session history feature (the WebEnv session cookie string, see Section~\ref{sec:entrez-webenv}).  This is only slightly more complicated.
 \end{itemize}
@@ -5115,8 +5178,8 @@ Well, ELink can do that too -- at least for journals in Pubmed Central (see Sect
 For help on ELink, see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/elink\_help.html}{ELink help page}.
 There is an entire sub-page just for the \href{http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/entrezlinks.html}{link names}, describing how different databases can be cross referenced.
 
-\section{EGQuery: Obtaining counts for search terms}
-EGQuery provides counts for a search term in each of the Entrez databases. This is particularly useful to find out how many items your search terms would find in each database without actually performing lots of separate searches with ESearch (see the example in \ref{subsec:entrez_example_genbank} below).
+\section{EGQuery: Global Query - counts for search terms}
+EGQuery provides counts for a search term in each of the Entrez databases (i.e. a global query). This is particularly useful to find out how many items your search terms would find in each database without actually performing lots of separate searches with ESearch (see the example in \ref{subsec:entrez_example_genbank} below).
 
 In this example, we use \verb+Bio.Entrez.egquery()+ to obtain the counts for ``Biopython'':
 
@@ -5148,6 +5211,7 @@ ESpell retrieves spelling suggestions. In this example, we use \verb+Bio.Entrez.
 'biopython'
 \end{verbatim}
 See the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/espell\_help.html}{ESpell help page} for more information.
+The main use of this is for GUI tools to provide automatic suggestions for search terms.
 
 \section{Parsing huge Entrez XML files}
 
@@ -5515,10 +5579,9 @@ Keep in mind that \verb+records+ is an iterator, so you can iterate through the 
 Let's now iterate over the records to print out some information about each record:
 \begin{verbatim}
 >>> for record in records:
-...     print "title:", record["TI"]
-...     if "AU" in records:
-...         print "authors:", record["AU"]
-...     print "source:", record["CO"]
+...     print "title:", record.get("TI", "?")
+...     print "authors:", record.get("AU", "?")
+...     print "source:", record.get("CO", "?")
 ...     print
 \end{verbatim}
 
@@ -5752,50 +5815,6 @@ We can get the lineage directly from this record:
 
 The record data contains much more than just the information shown here - for example look under \texttt{"LineageEx"} instead of \texttt{"Lineage"} and you'll get the NCBI taxon identifiers of the lineage entries too.
 
-\subsection{Searching for citations}
-\label{sec:elink-citations}
-
-Back in Section~\ref{sec:elink} we mentioned ELink can be used to search for citations of a given paper.
-Unfortunately this only covers journals indexed for PubMed Central
-(doing it for all the journals in PubMed would mean a lot more work for the NIH).
-Let's try this for the Biopython PDB parser paper, PubMed ID 14630660:
-
-\begin{verbatim}
->>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com"
->>> pmid = "14630660"
->>> results = Entrez.read(Entrez.elink(dbfrom="pubmed", db="pmc",
-...                                    LinkName="pubmed_pmc_refs", from_uid=pmid))
->>> pmc_ids = [link["Id"] for link in results[0]["LinkSetDb"][0]["Link"]]
->>> pmc_ids
-['2744707', '2705363', '2682512', ..., '1190160']
-\end{verbatim}
-
-Great - eleven articles. But why hasn't the Biopython application note been
-found (PubMed ID 19304878)? Well, as you might have guessed from the variable
-names, there are not actually PubMed IDs, but PubMed Central IDs. Our
-application note is the third citing paper in that list, PMCID 2682512.
-
-So, what if (like me) you'd rather get back a list of PubMed IDs? Well we
-can call ELink again to translate them. This becomes a two step process,
-and you might expect to use the history feature to accomplish it
-(Section~\ref{sec:entrez-webenv}). Unfortunately at the time of writing,
-it seems that Entrez is returning invalid XML files when using ELink
-with the history (which Biopython can't parse).
-
-So, instead, here we take the more straightforward approach:
-
-\begin{verbatim}
->>> results2 = Entrez.read(Entrez.elink(dbfrom="pmc", db="pubmed", LinkName="pmc_pubmed",
-...                                     from_uid=",".join(pmc_ids)))
->>> pubmed_ids = [link["Id"] for link in results2[0]["LinkSetDb"][0]["Link"]]
->>> pubmed_ids
-['19698094', '19450287', '19304878', ..., '15985178']
-\end{verbatim}
-
-\noindent This time you can immediately spot the Biopython application note
-as the third hit (PubMed ID 19304878).
-
 \section{Using the history and WebEnv}
 \label{sec:entrez-webenv}
 
@@ -5898,6 +5917,52 @@ out_handle.close()
 \end{verbatim}
 
 \noindent At the time of writing, this gave 28 matches - but because this is a date dependent search, this will of course vary.  As described in Section~\ref{subsec:entrez-and-medline} above, you can then use \verb|Bio.Medline| to parse the saved records.
+
+\subsection{Searching for citations}
+\label{sec:elink-citations}
+
+Back in Section~\ref{sec:elink} we mentioned ELink can be used to search for citations of a given paper.
+Unfortunately this only covers journals indexed for PubMed Central
+(doing it for all the journals in PubMed would mean a lot more work for the NIH).
+Let's try this for the Biopython PDB parser paper, PubMed ID 14630660:
+
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com"
+>>> pmid = "14630660"
+>>> results = Entrez.read(Entrez.elink(dbfrom="pubmed", db="pmc",
+...                                    LinkName="pubmed_pmc_refs", from_uid=pmid))
+>>> pmc_ids = [link["Id"] for link in results[0]["LinkSetDb"][0]["Link"]]
+>>> pmc_ids
+['2744707', '2705363', '2682512', ..., '1190160']
+\end{verbatim}
+
+Great - eleven articles. But why hasn't the Biopython application note been
+found (PubMed ID 19304878)? Well, as you might have guessed from the variable
+names, there are not actually PubMed IDs, but PubMed Central IDs. Our
+application note is the third citing paper in that list, PMCID 2682512.
+
+So, what if (like me) you'd rather get back a list of PubMed IDs? Well we
+can call ELink again to translate them. This becomes a two step process,
+so by now you should expect to use the history feature to accomplish it
+(Section~\ref{sec:entrez-webenv}).
+
+But first, taking the more straightforward approach of making a second
+(separate) call to ELink:
+
+\begin{verbatim}
+>>> results2 = Entrez.read(Entrez.elink(dbfrom="pmc", db="pubmed", LinkName="pmc_pubmed",
+...                                     from_uid=",".join(pmc_ids)))
+>>> pubmed_ids = [link["Id"] for link in results2[0]["LinkSetDb"][0]["Link"]]
+>>> pubmed_ids
+['19698094', '19450287', '19304878', ..., '15985178']
+\end{verbatim}
+
+\noindent This time you can immediately spot the Biopython application note
+as the third hit (PubMed ID 19304878).
+
+Now, let's do that all again but with the history \ldots
+\textit{TODO}.
 
 And finally, don't forget to include your \emph{own} email address in the Entrez calls.
 
@@ -8957,10 +9022,12 @@ quality scores), but that will be much slower.
 Back in Section~\ref{sec:SeqIO-conversion} we showed how to use
 \verb|Bio.SeqIO| to convert between two file formats. Here we'll go into a
 little more detail regarding FASTQ files which are used in second generation
-DNA sequencing. FASTQ files store both the DNA sequence (as a string) and
-the associated read qualities.
+DNA sequencing. Please refer to Cock \textit{et al.} (2009)
+\href{http://dx.doi.org/10.1093/nar/gkp1137}{doi:10.1093/nar/gkp1137} for
+a longer description. FASTQ files store both the DNA sequence (as a string)
+and the associated read qualities. 
 
-PHRED scores (used in some FASTQ files, and also in QUAL files and ACE
+PHRED scores (used in most FASTQ files, and also in QUAL files and ACE
 files) have become a \textit{de facto} standard for representing the
 probability of a sequencing error (here denoted by $P_e$) at a given
 base using a simple base ten log transformation:
@@ -9033,8 +9100,8 @@ formats use an ASCII offset of 64 the files are almost the same. This was a
 deliberate design choice by Illumina, meaning applications expecting the old
 \texttt{fasta-solexa} style files will probably be OK using the newer
 \texttt{fastq-illumina} files (on good data). Of course, both variants are
-very different from the original \texttt{fasta} standard as used by Sanger,
-the NCBI, and elsewhere.
+very different from the original FASTQ standard as used by Sanger,
+the NCBI, and elsewhere (format name \texttt{fastq} or \texttt{fastq-sanger}).
 
 For more details, see the built in help (also \href{http://www.biopython.org/DIST/docs/api/Bio.SeqIO.QualityIO-module.html}{online}):
 
