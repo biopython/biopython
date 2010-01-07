@@ -33,9 +33,12 @@ except (NameError, ImportError):
     raise MissingExternalDependencyError(message)
 
 try:
-    server = BioSeqDatabase.open_database(driver = DBDRIVER,
-                                          user = DBUSER, passwd = DBPASSWD,
-                                          host = DBHOST)
+    if DBDRIVER in ["sqlite3"]:
+        server = BioSeqDatabase.open_database(driver = DBDRIVER, db = TESTDB)
+    else:
+        server = BioSeqDatabase.open_database(driver = DBDRIVER,
+                                              user = DBUSER, passwd = DBPASSWD,
+                                              host = DBHOST)
     del server
 except Exception, e:
     message = "Connection failed, check settings in Tests/setup_BioSQL.py "\
@@ -44,8 +47,9 @@ except Exception, e:
 
 from seq_tests_common import compare_record, compare_records
 
-def create_database():
-    """Delete any existing BioSQL test database, then (re)create an empty BioSQL database."""
+def _do_db_create():
+    """Do the actual work of database creation. Relevant for MySQL and PostgreSQL
+    """
     # first open a connection to create the database
     server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                           user = DBUSER, passwd = DBPASSWD,
@@ -83,8 +87,15 @@ def create_database():
     # create a new database
     sql = r"CREATE DATABASE " + TESTDB
     server.adaptor.execute(sql, ())
-
     server.close()
+
+def create_database():
+    """Delete any existing BioSQL test database, then (re)create an empty BioSQL database."""
+    if DBDRIVER in ["sqlite3"]: 
+        if os.path.exists(TESTDB):
+            os.remove(TESTDB)
+    else:
+        _do_db_create()
 
     # now open a connection to load the database
     server = BioSeqDatabase.open_database(driver = DBDRIVER,

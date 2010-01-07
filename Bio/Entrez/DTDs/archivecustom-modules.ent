@@ -1,0 +1,116 @@
+<!-- ============================================================= -->
+<!--  MODULE:    Journal Archiving DTD-Specific Modules            -->
+<!--  VERSION:   2.0                                               -->
+<!--  DATE:      August 2004                                       -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
+<!--                        TYPICAL INVOCATION                     -->
+<!--
+"-//NLM//DTD Journal Archiving DTD-Specific Modules v2.0 20040830//EN"
+     Delivered as file "archivecustom-modules.ent"                 -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Archiving and Interchange DTD Suite               -->
+<!--                                                               -->
+<!-- PURPOSE:    To name any modules created explicitly for this   -->
+<!--             DTD, that is, not present in the Archiving and    -->
+<!--             Interchange DTD Suite                             -->
+<!--                                                               -->
+<!-- CONTAINS:   1)  Full external Parameter Entity declarations   -->
+<!--                 for all DTD-specific modules (Note: the       -->
+<!--                 modules are declared here but referenced in   -->
+<!--                 the DTD.)                                     -->
+<!--                                                               -->
+<!-- CREATED FOR:                                                  -->
+<!--             Digital Archive of Journal Articles               -->
+<!--             National Center for Biotechnology Information     -->
+<!--                (NCBI)                                         -->
+<!--             National Library of Medicine (NLM)                -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             August 2004                                       -->
+<!--                                                               -->
+<!-- CREATED BY: Deborah Lapeyre (Mulberry Technologies, Inc.)     -->
+<!--             B. Tommie Usdin (Mulberry Technologies, Inc.)     -->
+<!--                                                               -->
+<!--             Suggestions for refinements and enhancements to   -->
+<!--             this DTD should be sent in email to:              -->
+<!--                 archive-dtd@ncbi.nlm.nih.gov                  -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DTD VERSION/CHANGE HISTORY                 -->
+<!-- ============================================================= -->
+<!--
+
+Version  Reason/Occasion                   (who) vx.x (yyyy-mm-dd)
+
+     =============================================================
+     Version 2.0                       (DAL/BTU) v2.0 (2004-08-30)
+     
+     
+     Major requirement changes led to the new release, producing
+     DTD version "2.0":
+       a) The splitting of the Archival and Interchange Tag Set 
+          DTDs into three DTDs from two: an authoring DTD, an
+          archive regularization and interchange DTD (the
+          current Blue Publishing DTD), and a preservationist 
+          archive DTD (the current Green Archiving and Interchange 
+          DTD).
+       b) AIT Working Group suggestions from the June 04 meeting 
+          and June/July 2004 followup discussions
+       c) Suite remodularization to meet new (and newly articulated)
+          modularization requirements
+       d) New or renamed classes and mixes to make modifications
+          easier and more consistent
+                
+  1. Created this module as version "v2.0 20040830"                -->
+
+
+<!-- ============================================================= -->
+<!--                    CUSTOMIZATION MODULES DECLARED             -->
+<!-- ============================================================= -->
+
+
+<!--                    DTD-SPECIFIC CLASS CUSTOMIZATIONS MODULE   -->
+<!--                    Set up the Parameter Entities and element
+                        class definitions that will be used to
+                        over-ride some element classes in the
+                        DTD Suite.                                 -->
+<!ENTITY % archivecustom-classes.ent 
+                        PUBLIC  
+"-//NLM//DTD Journal Archiving DTD Customize Classes Module v2.0 20040830//EN"
+"archivecustom-classes.ent"                                          >
+
+
+<!--                    DTD-SPECIFIC MIX CUSTOMIZATIONS MODULE     -->
+<!--                    Set up the Parameter Entities and element
+                        mix definitions that will be used to
+                        over-ride some element mixes in the DTD
+                        Suite.                                     -->
+<!ENTITY % archivecustom-mixes.ent 
+                        PUBLIC  
+"-//NLM//DTD Journal Archiving DTD Customize Mixes Module v2.0 20040830//EN"
+"archivecustom-mixes.ent"                                            >
+
+
+<!--                    DTD-SPECIFIC MODELS/ATTRIBUTES CUSTOMIZATIONS 
+                        MODULE                                     -->
+<!--                    Set up the Parameter Entities for element-
+                        specific element groups, complete content 
+                        models, and attribute list and value over-
+                        rides. These PEs will over-ride selected
+                        content models and attribute lists for the 
+                        Journal Archiving and Interchange DTD Suite-->
+<!ENTITY % archivecustom-models.ent 
+                        PUBLIC  
+"-//NLM//DTD Journal Archiving DTD Customize Content and Attributes Module v2.0 20040830//EN"
+"archivecustom-models.ent"                                           >
+
+
+<!-- =================== End Archive DTD Module of Modules ======= -->

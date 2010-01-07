@@ -139,7 +139,7 @@ def lcc_simp(seq):
     l2=math.log(2)
     if 'A' not in seq:
         term_a=0
-	# Check to avoid calculating the log of 0.
+        # Check to avoid calculating the log of 0.
     else:
         term_a=((upper.count('A'))/float(wsize))*((math.log((upper.count('A'))
                                                           /float(wsize)))/l2)

@@ -60,15 +60,14 @@ class DB_Index:
             elif line[:2] =='//':
                 stop = fid.tell()
                 try:
-					value = '%d %d' % (start, stop)
-					db[id] = value
-					db[acc] = value
-					id, acc, start, stop = None, None, None, None
+                    value = '%d %d' % (start, stop)
+                    db[id] = value
+                    db[acc] = value
+                    id, acc, start, stop = None, None, None, None
                 except:
-					print 'AARRGGGG', start, stop, type(start), type(stop)
-					print id, acc
-					
-
+                    print 'AARRGGGG', start, stop, type(start), type(stop)
+                    print id, acc
+                    
         db.close()
         fid.close()
 

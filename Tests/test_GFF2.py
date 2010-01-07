@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 """Test the Bio.GFF dependencies
 """
+
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 import Bio.GFF
 import Bio.GFF.GenericTools
 import Bio.GFF.easy
+warnings.resetwarnings()
 
 print "Running Bio.GFF.GenericTools doctests..."
 Bio.GFF.GenericTools._test()

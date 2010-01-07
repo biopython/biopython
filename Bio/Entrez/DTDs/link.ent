@@ -1,0 +1,510 @@
+<!-- ============================================================= -->
+<!--  MODULE:    Link Element Classes                              -->
+<!--  VERSION:   2.0                                               -->
+<!--  DATE:      August 2004                                       -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
+<!--                        TYPICAL INVOCATION                     -->
+<!--
+"-//NLM//DTD Archiving and Interchange DTD Suite Link Class Elements v2.0 20040830//EN"
+     Delivered as file "link.ent"                                  -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Archiving and Interchange DTD Suite               -->
+<!--                                                               -->
+<!-- PURPOSE:    Names all elements in the link class. These are   --> 
+<!--             elements that are links (internal or external)    -->
+<!--             by definition, such as URLs <uri> and             -->
+<!--             Cross(X)-references <xref>.                       -->
+<!--                                                               -->
+<!-- CONTAINS:   1) Default definitions of the link classes        -->
+<!--             2) Default definitions for attribute values       -->
+<!--             3) Default definitions for attribute lists        -->
+<!--             4) Models for the link class elements, first      -->
+<!--             internal links then external links                -->
+<!--             (alphabetically)                                  -->
+<!--                                                               -->
+<!--             (Note: Links make their links using the XLink     -->
+<!--             global attributes. Many elements besides          -->
+<!--             explicit links may be made into links using       -->
+<!--             these attributes. Such elements are defined in    -->
+<!--             the module appropriate to their use and are not   -->
+<!--             listed here.)                                     -->
+<!--                                                               -->
+<!-- CREATED FOR:                                                  -->
+<!--             Digital archives and publishers who wish to       -->
+<!--             create a custom XML DTD for original markup of    -->
+<!--             journal literature, books, and related material,  -->
+<!--             or for archiving and transferring such material   -->
+<!--             between archives.                                 -->
+<!--                                                               -->
+<!--             This DTD is in the public domain. An organization -->
+<!--             that wishes to create its own DTD from the suite  -->
+<!--             may do so without permission from NLM.            -->
+<!--                                                               -->
+<!--             The suite has been set up to be extended using a  -->
+<!--             new DTD file and a new DTD-specific customization -->
+<!--             module to redefine the many Parameter Entities.   -->
+<!--             Do not modify the suite directly or redistribute  -->
+<!--             modified versions of the suite.                   -->
+<!--                                                               -->
+<!--             In the interest of maintaining consistency and    -->
+<!--             clarity for potential users, NLM requests:        -->
+<!--                                                               -->
+<!--             1. If you create a DTD from the Archiving and     -->
+<!--                Interchange DTD Suite and intend to stay       -->
+<!--                compatible with the suite, then please include -->
+<!--                the following statement as a comment in all of -->
+<!--                your DTD modules:                              -->
+<!--                   "Created from, and fully compatible with,   -->
+<!--                    the Archiving and Interchange DTD Suite."  -->
+<!--                                                               -->
+<!--             2. If you alter one or more modules of the suite, -->
+<!--                then please rename your version and all its    -->
+<!--                modules to avoid any confusion with the        -->
+<!--                original suite. Also, please include the       -->
+<!--                following statement as a comment in all your   -->
+<!--                DTD modules:                                   -->
+<!--                   "Based in part on, but not fully compatible -->
+<!--                    with, the Archiving and Interchange DTD    --> 
+<!--                    Suite."                                    -->
+<!--                                                               -->
+<!--             Suggestions for refinements and enhancements to   -->
+<!--             the DTD suite should be sent in email to:         -->
+<!--                 archive-dtd@ncbi.nlm.nih.gov                  -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             December 2002                                     -->
+<!--                                                               -->
+<!-- CREATED BY: Jeff Beck       (NCBI)                            -->
+<!--             Deborah Lapeyre (Mulberry Technologies, Inc.)     -->
+<!--             Bruce Rosenblum (Inera Inc.)                      -->
+<!--                                                               -->
+<!--             NLM thanks the Harvard University Libraries, both -->
+<!--             for proposing that a draft archiving NLM DTD for  --> 
+<!--             life sciences journals be extended to accommodate -->
+<!--             journals in all disciplines and for sponsoring    -->
+<!--             Bruce Rosenblum's collaboration with other DTD    -->
+<!--             authors in completing Version 1.0. The Andrew W.  --> 
+<!--             Mellon Foundation provided support for these      --> 
+<!--             important contributions.                          -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DTD VERSION/CHANGE HISTORY                 -->
+<!-- ============================================================= -->
+<!--
+     =============================================================
+
+Version  Reason/Occasion                   (who) vx.x (yyyy-mm-dd)
+
+     =============================================================
+     Version 2.0                       (DAL/BTU) v2.0 (2004-08-30)
+          
+     Major requirement changes led to the new release, producing
+     DTD version "2.0":
+       a) The splitting of the Archival and Interchange Tag Set 
+          DTDs into three DTDs from two: an authoring DTD, an
+          archive regularization and interchange DTD (the
+          current Blue Publishing DTD), and a preservationist 
+          archive DTD (the current Green Archiving and Interchange 
+          DTD).
+       b) AIT Working Group suggestions from the June 04 meeting 
+          and June/July 2004 followup discussions
+       c) Suite remodularization to meet new (and newly articulated)
+          modularization requirements
+       d) New or renamed classes and mixes to make modifications
+          easier and more consistent
+
+  9. COMPLETE MODELS WHEN OVER-RIDING A MODEL 
+     (for all Parameter Entities suffixed "-model")
+     ### Customization Alert ###
+     Made all the model over-rides consistent. Some included
+     the outer parentheses, some did not. They all do now,
+     -  %fn-model; 
+
+  8. DEFAULT CLASSES - Were moved from this module to 
+     %default-classes.ent;
+
+  7. FOOTNOTE
+        - Made model into a Parameter Entity
+        - Added optional <label> to the beginning of the model,
+          before the paragraphs
+
+  6. To correct potential classing problems, used the following
+     new Parameter Entities:
+        - %just-para.class; used in <fn> (%fn-model; uses 
+          %just-para.class;)
+
+  5. Updated public identifier to "v2.0 20040830"
+
+     =============================================================
+     Version 1.1                         (TRG/BTU) v1.1 (2003-11-01)
+
+  4. Added "alternate-form-of", "content-type", and ID attributes 
+     to <inline-supplementary-material> (by modifying 
+     %inline-supplementary-material-atts;)
+     Rationale: To provide parallelism between attributes for 
+     <supplementary-material> and <inline-supplementary-material>
+
+  3. Added "mimetype" and "mime-subtype" attributes to 
+     <inline-supplementary-material> (as part of adding these 
+     attributes to all graphic and multi-media elements)
+
+  2. Added ID attribute information to <xref> (by modifying
+     parameter entity %xref-atts;)
+     Rationale: Provide unique identifier so <xref>
+     element can be linked to (creating two-way link). 
+
+  1. Added an optional "target-type" attribute to element 
+     <target>.  Rationale: To identify the reason for this target.
+                                                                   -->
+
+
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITY DEPENDENCIES             
+                        Requires the following parameter entities
+                        be defined before calling this module, 
+                        usually accomplished in the Customization
+                        Module for the specific DTD:
+                          %access.class;
+                          %emphasis.class;
+                          %link-elements;
+                          %might-link-atts;
+                          %subsup.class;
+                                                                   -->
+                                                                   
+
+<!-- ============================================================= -->
+<!--                    DEFAULTS FOR ATTRIBUTE VALUES              -->
+<!-- ============================================================= -->
+
+
+<!--                    DEFAULT TYPE OF CROSS(X)-REFERENCE         -->
+<!--                    Used to say to what the reference is pointing.
+                        May be used for type-specific processing or
+                        validation. Values are, for example:
+                        Affiliation "aff", Figure "fig", and
+                        Bibliographic ref (to a Citation <citation> or
+                        to a Reference Item <ref>) "bibr"          -->
+<!ENTITY % ref-types    "aff | app | author-notes | bibr | 
+                         boxed-text | chem | contrib | corresp | 
+                         disp-formula | fig | fn | kwd | list | 
+                         plate | scheme | sec | statement | 
+                         supplementary-material | 
+                         table | table-fn | 
+                         other"                                      >
+
+
+<!-- ============================================================= -->
+<!--                    DEFAULTS FOR ATTRIBUTE LISTS               -->
+<!-- ============================================================= -->
+
+
+<!--                    FOOTNOTE ATTRIBUTES                        -->
+<!--                    Attribute list for Footnote element        -->
+<!ENTITY %  fn-atts
+             "id         ID                                #IMPLIED  
+              symbol     CDATA                             #IMPLIED 
+              fn-type    CDATA                             #IMPLIED  
+              xml:lang   NMTOKEN                           #IMPLIED" > 
+
+
+<!--                    X(CROSS) REFERENCE ATTRIBUTES              -->
+<!--                    Attribute list for cross references        -->
+<!ENTITY %  xref-atts
+             "id         ID                               #IMPLIED
+              ref-type   (%ref-types;)                    #IMPLIED 
+              rid        IDREFS                           #IMPLIED"  >
+
+
+<!--                    INLINE SUPPLEMENTARY MATERIAL              -->
+<!--                    Attribute list for inline supplementary 
+                        material                                   -->
+<!ENTITY %  inline-supplementary-material-atts
+             "alternate-form-of
+                        IDREF                             #IMPLIED
+              content-type
+                        CDATA                             #IMPLIED
+              id        ID                                #IMPLIED
+              %might-link-atts;                                    
+              mimetype  CDATA                             #IMPLIED 
+              mime-subtype
+                        CDATA                             #IMPLIED"  >
+
+
+<!-- ============================================================= -->
+<!--                    INTERNAL LINKS                             -->
+<!-- ============================================================= -->
+
+
+<!--                    FOOTNOTE MODEL                             -->
+<!--                    Content model for Footnote <fn>            -->
+<!ENTITY % fn-model     "((%label.class;)?, (%just-para.class;)+ )"  > 
+
+
+
+<!--                    FOOTNOTE                                   -->
+<!--                    Additional information concerning material in
+                        a particular location in the text. This
+                        material is not considered to be part of the 
+                        body of the text, but in addition to or a 
+                        commentary on the body. Such material may be 
+                        displayed at the bottom of a printed page, 
+                        onscreen in a separate pop-up window, or in a
+                        list at the end of an article.
+                        Remarks: A reference (pointer) to a
+                        Footnote <fn> is made with the X(Cross)
+                        Reference element.
+                        The language attribute may be used to note
+                        a footnote that is not in the same language
+                        as the original document, for example, a
+                        Latin or Greek footnote for a document in 
+                        English.                                   -->
+<!ELEMENT  fn           %fn-model;                                   >
+<!--         id         Unique identifier for the element. A cross-
+                        reference will point to this ID.
+             symbol     If the symbol that was used in the original
+                        display to identify the specific footnote
+                        is to be preserved, this is the attribute
+                        where it may be stored. One might store the
+                        symbol to disambiguate mistagged cases, for
+                        example, in which the author has stated
+                        "see footnote b" or "see footnote 14"  in
+                        the text but the mention of the footnote has 
+                        not been tagged as a cross references.
+             fn-type    Type of footnote, for those footnotes that
+                        point to a particular type of information 
+                        and that type is known, this attribute is
+                        intended as a way to preserve that
+                        knowledge.  For example, some footnotes
+                        point to or are used for the purpose of
+                        recording:
+                          abbr    Abbreviations
+                          com     Communicated-by information
+                          con     Contributed-by information
+                          conflict
+                                  Conflict of interest statements
+                          equal   Contributed to the creation of
+                                  the document equally
+                          corresp For use when the corresponding
+                                  author information is not 
+                                  identified separately, but is 
+                                  merely a footnote
+                          current-aff
+                                  Contributor's current affiliation
+                          deceased
+                                  Person has died since article was
+                                  written
+                          edited-by
+                                  Contributor has the role of an
+                                  editor
+                          financial-disclosure
+                                  Statement of funding or denial
+                                  of funds received in support of
+                                  the research on which this article
+                                  is based
+                          on-leave
+                                  Contributor is on sabbatical or
+                                  other leave of absence
+                          participating-researchers
+                                  Contributor was a researcher for
+                                  this article
+                          present-address
+                                  Contributor's current address
+                          presented-at
+                                  Conference, colloquium, or other
+                                  occasion at which this paper
+                                  was presented
+                          presented-by
+                                  Contributor who presented this
+                                  material
+                          previously-at
+                                  Contributor's previous location
+                                  or affiliation
+                          reprint Method or place to obtain reprints,
+                                  typically the name and address of
+                                  a person from whom reprints can be
+                                  requested
+                          study-group-members
+                                  Contributor was a member of the
+                                  study group for this research
+                          supplementary-material
+                                  Points to or describes
+                                  supplementary material for this
+                                  article
+                          supported-by
+                                  The research upon which this
+                                  article is based was supported by
+                          other    Not in the above list of
+                                   footnote types
+            xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).                   -->
+<!ATTLIST  fn
+             %fn-atts;                                               > 
+
+
+<!--                    TARGET ELEMENTS                            -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a <target>  
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar, but since %link-elements; is an inline
+                        mix, the OR bar is already there.          -->
+<!ENTITY % target-elements
+                        "%link-elements;"                            >
+
+
+<!--                    TARGET OF AN INTERNAL LINK                 -->
+<!--                    May be placed anywhere within textual 
+                        material such as a paragraph to provide a
+                        location (anchor) to which a cross reference
+                        can point                                  -->
+<!ELEMENT  target       (#PCDATA %target-elements;)*                 >
+<!--         id         Unique identifier so the element may be
+                        referenced
+             target-type
+                        Indicates the kind of <target> that has 
+                        been created, i.e., describes the reason 
+                        why some portion of text has been 
+                        designated for cross-references purposes   -->
+<!ATTLIST  target
+             id         ID                                #IMPLIED
+             target-type
+                        CDATA                             #REQUIRED  >
+
+
+<!--                    X(CROSS) REFERENCE ELEMENTS                -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a <xref>  
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar, but since %link-elements; is an inline
+                        mix, the OR bar is already there.          -->
+<!ENTITY % xref-elements
+                        "%link-elements;"                            >
+
+  
+<!--                    X(CROSS) REFERENCE                         -->
+<!--                    Used for any kind of internal article
+                        referencing. The content of the reference 
+                        (if present) will be displayed as the link.
+                        This element may be used to anything that
+                        has an "id".  The "ref-type" attribute says
+                        what the reference is pointing to.         -->
+<!ELEMENT  xref         (#PCDATA %xref-elements;)*                   >
+<!--         id         Unique identifier so the element may be
+                        referenced (creating two-way link)
+             ref-types  Used to say to what the reference is pointing.
+                        May be used for type-specific processing or
+                        validation.  
+                        Values are:
+                          aff       Affiliation
+                          app       Appendix
+                          author-note
+                                    Author Note
+                          bibr      Bibliographic ref (to 
+                                    a Citation <citation>
+                                    or to a Reference 
+                                    Item <ref>) 
+                          boxed-text
+                                    Textbox or sidebar  
+                          chem      Chemical Structure 
+                                    Wrapper or Chemical
+                                    Structure
+                          contrib   Contributor
+                          corresp   Corresponding Author
+                          disp-formula        
+                                    Display Formula 
+                          fig       Figure or fig-group
+                          kwd       Keyword
+                          fn        Footnote
+                          list      List 
+                          plate     Plate
+                          scheme    Scheme
+                          sec       Section
+                          statement Statement
+                          supplementary-material  
+                                    Supplementary Information
+                          table     Table Group or Table Wrapper              
+                          table-fn  Table foot Note
+                                    A <fn> that is found within a
+                                    <table-wrap> element and that
+                                    should be displayed with the 
+                                    table rather than, for example, 
+                                    at the bottom of the page or 
+                                    in a window that does not contain
+                                    the table.
+                          other     Not listed above               
+             rid        Points to the identifier of a bibliographic
+                        reference, boxed-text, figure, footnote, 
+                        table, etc. (creating a link)              -->
+<!ATTLIST  xref
+             %xref-atts;                                             >
+
+
+<!-- ============================================================= -->
+<!--                    EXTERNAL LINKS                             -->
+<!-- ============================================================= -->
+
+
+<!--                    INLINE SUPPLEMENTARY MATERIAL ELEMENTS     -->
+<!--                    Elements for use in the 
+                        <inline-supplementary-material> element    -->
+<!ENTITY % inline-supplementary-material-elements 
+                        "| %access.class; | %address-link.class; | 
+                         %emphasis.class; | %subsup.class;"          > 
+
+
+<!--                    INLINE SUPPLEMENTARY MATERIAL              -->
+<!--                    An in-text link to an external file that
+                        provides supplementary information for
+                        the document, for example, an audio clip   -->
+<!ELEMENT  inline-supplementary-material
+                        (#PCDATA 
+                         %inline-supplementary-material-elements;)*  >
+<!--         alternate-form-of
+                        Where multiple formats of an item (e.g., 
+                        graphic file, media object, chemical 
+                        structure) are available, this attribute 
+                        indicates that a format is a secondary 
+                        one and provides a link to the primary 
+                        format, so that only one format of an
+                        item is displayed.
+             content-type   
+                        Identification of the subject, type of
+                        content, or reason that this word or phrase
+                        is considered semantically special, as a 
+                        means of preserving the semantic intent of 
+                        the original tagging.                      
+             id         Unique identifier so the element may be
+                        referenced                              
+             mimetype   The mime type of the supplementary material
+                        Authoring Note: This attribute might be
+                        required when creating new articles.       
+             mime-subtype   
+                        The subtype of the supplementary material 
+             xlink:href Provides an address or identifier of the
+                        object to which the link points, for
+                        example a URI or a filename                -->
+<!ATTLIST  inline-supplementary-material
+             %inline-supplementary-material-atts;                    >
+
+
+<!-- ================== End Link Class Module ==================== -->

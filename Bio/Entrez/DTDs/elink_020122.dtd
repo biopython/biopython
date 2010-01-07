@@ -1,0 +1,20 @@
+<!--    
+                This is the Current DTD for elink program
+
+
+-->
+<!-- ================================================================= -->
+
+<!ELEMENT id        (#PCDATA)>
+<!ELEMENT Score     (#PCDATA)>
+<!ELEMENT DbTo      (#PCDATA)>
+<!ELEMENT DbFrom    (#PCDATA)>
+<!ELEMENT LinkName  (#PCDATA)>
+
+<!ELEMENT Link      (id, Score?)>
+
+<!ELEMENT LinkSetDb (DbTo, LinkName, Link*)>
+
+<!ELEMENT LinkSet (id+, LinkSetDb*)>
+
+<!ELEMENT ElinkResult (DbFrom, LinkSet*)>

@@ -43,4 +43,6 @@ recursive-exclude Martel *     # We don't distribute Martel now
 
 # Make sure the required data files are included.
 include Bio/Entrez/DTDs/*.dtd  # Include DTD files for Entrez
+include Bio/Entrez/DTDs/*.ent  # Include DTD files for Entrez
+include Bio/Entrez/DTDs/*.mod  # Include DTD files for Entrez
 include Bio/PopGen/SimCoal/data/*.par    # Include SimCoal data files

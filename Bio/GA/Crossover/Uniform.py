@@ -27,9 +27,9 @@ class UniformCrossover:
         """Initialize to do uniform crossover at the specified probability and frequency.
         """
         self._crossover_prob = crossover_prob
-	self._uniform_prob   = uniform_prob
-	return
-	
+        self._uniform_prob   = uniform_prob
+        return
+        
     def do_crossover(self, org_1, org_2):
         """Potentially do a crossover between the two organisms.
         """
@@ -39,21 +39,13 @@ class UniformCrossover:
         # determine if we have a crossover
         crossover_chance = random.random()
         if crossover_chance <= self._crossover_prob:
-	    
-	    minlen = min(len(new_org_1.genome),len(new_org_2.genome))
-	    for i in range( minlen ):
-		
-		uniform_chance = random.random()
-		if uniform_chance <= self._uniform_prob:
-		    # cycle element
-		    temp                  = new_org_1.genome[ i ]
-		    new_org_1.genome[ i ] = new_org_2.genome[ i ]
-		    new_org_2.genome[ i ] = temp
-	    
+            minlen = min(len(new_org_1.genome),len(new_org_2.genome))
+            for i in range( minlen ):
+                uniform_chance = random.random()
+                if uniform_chance <= self._uniform_prob:
+                    # cycle element
+                    temp = new_org_1.genome[i]
+                    new_org_1.genome[i] = new_org_2.genome[i]
+                    new_org_2.genome[i] = temp
+            
         return new_org_1, new_org_2
-
-
-        
-        
-
-         

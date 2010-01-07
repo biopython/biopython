@@ -65,14 +65,20 @@ class PDBIO:
     # private mathods
 
     def _get_atom_line(self, atom, hetfield, segid, atom_number, resname, 
-        resseq, icode, chain_id, element="  ", charge="  "):
-        """
-        Returns an ATOM PDB string.
-        """
+        resseq, icode, chain_id, charge="  "):
+        """Returns an ATOM PDB string (PRIVATE)."""
         if hetfield!=" ":
             record_type="HETATM"
         else:
             record_type="ATOM  "
+        if atom.element:
+            #TODO - Check against a list of allowed elements?
+            element = atom.element.strip().upper()
+            if len(atom.element) > 2 or not element.isalpha():
+                raise ValueError("Unrecognised element %s" % repr(atom.element))
+            element = element.rjust(2)
+        else:
+            element = "  "
         name=atom.get_fullname()
         altloc=atom.get_altloc()
         x, y, z=atom.get_coord()

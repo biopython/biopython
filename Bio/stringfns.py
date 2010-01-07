@@ -5,9 +5,9 @@
 
 """This provides useful general functions for working with strings (DEPRECATED).
 
-This module and its C code equivalent are considered to be deprecated, and
-are likely to be removed in a future release of Biopython.  Please get in
-touch via the mailing list if this will affect you.
+This module is considered to be deprecated, and is likely to be removed in a
+future release of Biopython.  Its C code implementation has already been
+removed. Please get in touch via the mailing list if this will affect you.
 
 Functions:
 splitany       Split a string using many delimiters.
@@ -81,10 +81,3 @@ def rfind_anychar(string, chars, index=None, negate=0):
         index -= 1
     # If not found, index will already be -1.
     return index
-
-# Try and load C implementations of functions.  If I can't,
-# then just ignore and use the pure python implementations.
-try:
-    from cstringfns import *
-except ImportError:
-    pass

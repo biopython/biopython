@@ -97,8 +97,6 @@ localds(sequenceA, sequenceB, match_dict, open, extend) -> alignments
 
 from types import *
 
-from Bio import listfns
-
 MAX_ALIGNMENTS = 1000   # maximum alignments recovered in traceback
 
 class align:
@@ -656,10 +654,13 @@ def _clean_alignments(alignments):
     # Take a list of alignments and return a cleaned version.  Remove
     # duplicates, make sure begin and end are set correctly, remove
     # empty alignments.
-    alignments = listfns.items(alignments)  # Get rid of duplicates
+    unique_alignments = []
+    for align in alignments :
+        if align not in unique_alignments :
+            unique_alignments.append(align)
     i = 0
-    while i < len(alignments):
-        seqA, seqB, score, begin, end = alignments[i]
+    while i < len(unique_alignments):
+        seqA, seqB, score, begin, end = unique_alignments[i]
         # Make sure end is set reasonably.
         if end is None:   # global alignment
             end = len(seqA)
@@ -667,11 +668,11 @@ def _clean_alignments(alignments):
             end = end + len(seqA)
         # If there's no alignment here, get rid of it.
         if begin >= end:
-            del alignments[i]
+            del unique_alignments[i]
             continue
-        alignments[i] = seqA, seqB, score, begin, end
+        unique_alignments[i] = seqA, seqB, score, begin, end
         i += 1
-    return alignments
+    return unique_alignments
 
 def _pad_until_equal(s1, s2, char):
     # Add char to the end of s1 or s2 until they are equal length.

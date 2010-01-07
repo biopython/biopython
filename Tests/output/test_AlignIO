@@ -318,6 +318,38 @@ Testing reading emboss format file Emboss/water2.txt with 1 alignments
  Failed: Duplicate record identifier: asis
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
+Testing reading emboss format file Emboss/matcher_simple.txt with 1 alignments
+ Alignment 0, with 2 sequences of length 16
+  GPPPQSPDENRAGESS AF069992_1
+  GVPPEEAGAAVAAESS CAA85685.1
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
+Testing reading emboss format file Emboss/matcher_pair.txt with 5 alignments
+ Alignment 0, with 2 sequences of length 145
+  LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFP...SKY HBA_HUMAN
+  LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYP...HKY HBB_HUMAN
+ Alignment 1, with 2 sequences of length 13
+  KKVADALTNAVAH HBA_HUMAN
+  QKVVAGVANALAH HBB_HUMAN
+ Alignment 2, with 2 sequences of length 18
+  KLRVDPVNFKLLSHCLLV HBA_HUMAN
+  KVNVDEVGGEALGRLLVV HBB_HUMAN
+ ...
+ Alignment 4, with 2 sequences of length 10
+  VKAAWGKVGA HBA_HUMAN
+  VQAAYQKVVA HBB_HUMAN
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'nexus' format
+ Failed: We can only write one Alignment to a Nexus file.
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading fasta-m10 format file Fasta/output001.m10 with 4 alignments
  Alignment 0, with 2 sequences of length 108
   SGSNT-RRRAISRPVRLTAEED---QEIRKRAAECG...LSR gi|10955263|ref|NP_052604.1|

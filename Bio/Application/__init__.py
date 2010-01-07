@@ -346,6 +346,37 @@ class AbstractCommandline(object):
             if not is_good:
                 raise ValueError("Invalid parameter value %r for parameter %s" \
                                  % (value, name))
+
+    def __setattr__(self, name, value):
+        """Set attribute name to value (PRIVATE).
+
+        This code implements a workaround for a user interface issue.
+        Without this __setattr__ attribute-based assignment of parameters
+        will silently accept invalid parameters, leading to known instances
+        of the user assuming that parameters for the application are set,
+        when they are not.
+        
+        >>> from Bio.Emboss.Applications import WaterCommandline
+        >>> cline = WaterCommandline(gapopen=10, gapextend=0.5, stdout=True)
+        >>> cline.asequence = "a.fasta"
+        >>> cline.bsequence = "b.fasta"
+        >>> cline.csequence = "c.fasta"
+        Traceback (most recent call last):
+        ...
+        ValueError: Option name csequence was not found.
+        >>> print cline
+        water -stdout -asequence=a.fasta -bsequence=b.fasta -gapopen=10 -gapextend=0.5
+
+        This workaround uses a whitelist of object attributes, and sets the
+        object attribute list as normal, for these.  Other attributes are
+        assumed to be parameters, and passed to the self.set_parameter method
+        for validation and assignment.
+        """
+        if name in ['parameters', 'program_name']: # Allowed attributes
+            self.__dict__[name] = value
+        else:
+            self.set_parameter(name, value)  # treat as a parameter
+
                     
 class _AbstractParameter:
     """A class to hold information about a parameter for a commandline.

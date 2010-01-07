@@ -967,7 +967,7 @@ class DatabaseLoader:
         """
         # Check for an existing record
         sql = r"SELECT seqfeature_id, dbxref_id FROM seqfeature_dbxref " \
-              r"WHERE seqfeature_id = '%s' AND dbxref_id = '%s'"
+              r"WHERE seqfeature_id = %s AND dbxref_id = %s"
         result = self.adaptor.execute_and_fetch_col0(sql, (seqfeature_id,
                                                            dbxref_id))
         # If there was a record, return without executing anything, else create
@@ -1018,7 +1018,7 @@ class DatabaseLoader:
         """
         # Check for an existing record
         sql = r"SELECT bioentry_id, dbxref_id FROM bioentry_dbxref " \
-              r"WHERE bioentry_id = '%s' AND dbxref_id = '%s'"
+              r"WHERE bioentry_id = %s AND dbxref_id = %s"
         result = self.adaptor.execute_and_fetch_col0(sql, (bioentry_id,
                                                            dbxref_id))
         # If there was a record, return without executing anything, else create

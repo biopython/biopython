@@ -92,7 +92,6 @@ def efetch(db, **keywds):
     """
     for key in keywds:
         if key.lower()=="rettype" and keywds[key].lower()=="genbank":
-            import warnings
             warnings.warn('As of Easter 2009, Entrez EFetch no longer '
                           'supports the unofficial return type "genbank", '
                           'use "gb" or "gp" instead.', DeprecationWarning)
@@ -297,6 +296,19 @@ def _open(cgi, params={}, post=False):
     if not "email" in params:
         if email!=None:
             params["email"] = email
+        else:
+            warnings.warn("""
+Email address is not specified.
+
+To make use of NCBI's E-utilities, NCBI strongly recommends you to specify
+your email address with each request. From June 1, 2010, this will be
+mandatory. As an example, if your email address is A.N.Other@example.com, you
+can specify it as follows:
+   from Bio import Entrez
+   Entrez.email = 'A.N.Other@example.com'
+In case of excessive usage of the E-utilities, NCBI will attempt to contact
+a user at the email address provided before blocking access to the
+E-utilities.""", UserWarning)
     # Open a handle to Entrez.
     options = urllib.urlencode(params, doseq=True)
     if post:

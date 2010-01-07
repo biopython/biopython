@@ -40,13 +40,13 @@ db_name = "biosql-seqio-test"
 #This list was based on a selection from test_SeqIO.py
 test_files = [ \
 #Following nucleic examples are also used in test_SeqIO_FastaIO.py
-    ("fasta",  False, 'Nucleic/lupine.nu', 1),
-    ("fasta",  False, 'Nucleic/elderberry.nu', 1),
-    ("fasta",  False, 'Nucleic/phlox.nu', 1),
-    ("fasta",  False, 'Nucleic/centaurea.nu', 1),
-    ("fasta",  False, 'Nucleic/wisteria.nu', 1),
-    ("fasta",  False, 'Nucleic/sweetpea.nu', 1),
-    ("fasta",  False, 'Nucleic/lavender.nu', 1),
+    ("fasta",  False, 'Fasta/lupine.nu', 1),
+    ("fasta",  False, 'Fasta/elderberry.nu', 1),
+    ("fasta",  False, 'Fasta/phlox.nu', 1),
+    ("fasta",  False, 'Fasta/centaurea.nu', 1),
+    ("fasta",  False, 'Fasta/wisteria.nu', 1),
+    ("fasta",  False, 'Fasta/sweetpea.nu', 1),
+    ("fasta",  False, 'Fasta/lavender.nu', 1),
 #Following protein examples are also used in test_SeqIO_FastaIO.py
     ("fasta",  False, 'Fasta/aster.pro', 1),
     ("fasta",  False, 'Fasta/loveliesbleeding.pro', 1),
@@ -142,7 +142,7 @@ db = server.new_database(db_name)
      
 for (t_format, t_alignment, t_filename, t_count) in test_files:
     print "Testing loading from %s format file %s" % (t_format, t_filename)
-    assert os.path.isfile(t_filename)
+    assert os.path.isfile(t_filename), t_filename
 
     iterator = SeqIO.parse(handle=open(t_filename,"r"), format=t_format)
     count = db.load(iterator)

@@ -18,7 +18,7 @@ class NotePad(Toplevel):
         self.filemenu.add_separator()
         self.filemenu.add_command(label = "Dismiss", command = self.destroy)
     
-	self.menubar.add_cascade(label="File", menu=self.filemenu)
+        self.menubar.add_cascade(label="File", menu=self.filemenu)
         self.configure(menu = self.menubar)
         self.yscroll = Scrollbar(self,orient=VERTICAL)
         self.tid = Text(self, yscrollcommand = self.yscroll.set)

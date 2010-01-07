@@ -5,12 +5,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-A set of generic bits of code under Bio.GFF (possibly obsolete).
-"""
+"""A set of generic bits of code under Bio.GFF (DEPRECATED).
 
-__version__ = "$Revision: 1.6 $"
-# $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/GenericTools.py,v $
+This is part of the "old" Bio.GFF module by Michael Hoffman, which offered
+access to a MySQL database holding GFF data loaded by BioPerl. This code has
+now been deprecated, and will probably be removed in order to free the Bio.GFF
+namespace for a new GFF parser in Biopython (including GFF3 support).
+"""
 
 import exceptions
 import os
@@ -148,9 +149,16 @@ class ArgsParser(object):
 def all(iterator):
     return [item for item in iterator]
 
-def _test(*args, **keywds):
-    import doctest, sys
-    doctest.testmod(sys.modules[__name__], *args, **keywds)
+def _test():
+    """Run the Bio.GFF.GenericTools module's doctests (PRIVATE).
+
+    This will try and locate the unit tests directory, and run the doctests
+    from there in order that the relative paths used in the examples work.
+    """
+    import doctest
+    print "Runing doctests..."
+    doctest.testmod()
+    print "Done"
 
 if __name__ == "__main__":
     if __debug__:

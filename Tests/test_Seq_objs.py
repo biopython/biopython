@@ -5,10 +5,16 @@
 
 """Unittests for the Seq objects."""
 import unittest
+from string import maketrans
 
 from Bio.Alphabet import generic_protein, generic_nucleotide, \
                          generic_dna, generic_rna
+from Bio.Alphabet.IUPAC import protein, extended_protein
+from Bio.Alphabet.IUPAC import unambiguous_dna, ambiguous_dna, ambiguous_rna
+from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
 from Bio.Seq import Seq, UnknownSeq, MutableSeq
+from Bio.Data.CodonTable import TranslationError
+
 
 class StringMethodTests(unittest.TestCase):
     _examples = [ \
@@ -119,19 +125,19 @@ class StringMethodTests(unittest.TestCase):
                                                     i,
                                                     j))
 
-    def test_count(self):
+    def test_str_count(self):
         """Check matches the python string count method."""
         self._test_method("count", start_end=True)
 
-    def test_find(self):
+    def test_str_find(self):
         """Check matches the python string find method."""
         self._test_method("find", start_end=True)
 
-    def test_rfind(self):
+    def test_str_rfind(self):
         """Check matches the python string rfind method."""
         self._test_method("rfind", start_end=True)
 
-    def test_startswith(self):
+    def test_str_startswith(self):
         """Check matches the python string startswith method."""
         self._test_method("startswith", start_end=True)
 
@@ -159,7 +165,7 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual(str(example1).startswith(subs_str,2,6),
                              example1.startswith(subs,2,6))        
 
-    def test_endswith(self):
+    def test_str_endswith(self):
         """Check matches the python string endswith method."""
         self._test_method("endswith", start_end=True)
 
@@ -187,39 +193,53 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual(str(example1).endswith(subs_str,2,6),
                              example1.endswith(subs,2,6))
 
-    def test_strip(self):
+    def test_str_strip(self):
         """Check matches the python string strip method."""
         self._test_method("strip", pre_comp_function=str)
 
-    def test_rstrip(self):
+    def test_str_rstrip(self):
         """Check matches the python string rstrip method."""
         self._test_method("rstrip", pre_comp_function=str)
 
-    def test_split(self):
+    def test_str_split(self):
         """Check matches the python string rstrip method."""
         #Calling (r)split should return a list of Seq-like objects, we'll
         #just apply str() to each of them so it matches the string method
         self._test_method("rstrip", pre_comp_function=lambda x : map(str,x))
 
-    def test_rsplit(self):
+    def test_str_rsplit(self):
         """Check matches the python string rstrip method."""
         #Calling (r)split should return a list of Seq-like objects, we'll
         #just apply str() to each of them so it matches the string method
         self._test_method("rstrip", pre_comp_function=lambda x : map(str,x))
 
-    def test_lsplit(self):
+    def test_str_lsplit(self):
         """Check matches the python string rstrip method."""
         #Calling (r)split should return a list of Seq-like objects, we'll
         #just apply str() to each of them so it matches the string method
         self._test_method("rstrip", pre_comp_function=lambda x : map(str,x))
 
-    def test_length(self):
+    def test_str_length(self):
         """Check matches the python string __len__ method."""
         for example1 in self._examples:
             str1 = str(example1)
             self.assertEqual(len(example1), len(str1))
 
-    def test_getitem(self):
+    def test_str_upper(self):
+        """Check matches the python string upper method."""
+        for example1 in self._examples:
+            if isinstance(example1, MutableSeq) : continue
+            str1 = str(example1)
+            self.assertEqual(str(example1.upper()), str1.upper())
+
+    def test_str_upper(self):
+        """Check matches the python string lower method."""
+        for example1 in self._examples:
+            if isinstance(example1, MutableSeq) : continue
+            str1 = str(example1)
+            self.assertEqual(str(example1.lower()), str1.lower())
+
+    def test_str_getitem(self):
         """Check slicing and indexing works like a string."""
         for example1 in self._examples:
             str1 = str(example1)
@@ -251,6 +271,204 @@ class StringMethodTests(unittest.TestCase):
             if not isinstance(example1, MutableSeq):
                 self.assertEqual(example1.data, str1)
 
+    def test_tomutable(self):
+        """Check obj.tomutable() method."""
+        for example1 in self._examples:
+            if isinstance(example1, MutableSeq) : continue
+            mut = example1.tomutable()
+            self.assert_(isinstance(mut, MutableSeq))
+            self.assertEqual(str(mut), str(example1))
+            self.assertEqual(mut.alphabet, example1.alphabet)
+
+    def test_toseq(self):
+        """Check obj.toseq() method."""
+        for example1 in self._examples:
+            try :
+                seq = example1.toseq()
+            except AttributeError :
+                self.assert_(isinstance(example1, Seq))
+                continue
+            self.assert_(isinstance(seq, Seq))
+            self.assertEqual(str(seq), str(example1))
+            self.assertEqual(seq.alphabet, example1.alphabet)
+
+    def test_the_complement(self):
+        """Check obj.complement() method."""
+        mapping = ""
+        for example1 in self._examples:
+            if isinstance(example1, MutableSeq) : continue
+            try :
+                comp = example1.complement()
+            except ValueError, e:
+                self.assertEqual(str(e), "Proteins do not have complements!")
+                continue
+            str1 = str(example1)
+            #This only does the unambiguous cases
+            if "U" in str1 or "u" in str1 \
+            or example1.alphabet==generic_rna:
+                mapping = maketrans("ACGUacgu","UGCAugca")
+            elif "T" in str1 or "t" in str1 \
+            or example1.alphabet==generic_dna \
+            or example1.alphabet==generic_nucleotide:
+                mapping = maketrans("ACGTacgt","TGCAtgca")
+            elif "A" not in str1 and "a" not in str1:
+                mapping = maketrans("CGcg","GCgc")
+            else :
+                #TODO - look at alphabet?
+                assert False, example1
+                continue
+            self.assertEqual(str1.translate(mapping), str(comp))
+            self.assertEqual(comp.alphabet, example1.alphabet)
+                
+    def test_the_reverse_complement(self):
+        """Check obj.reverse_complement() method."""
+        mapping = ""
+        for example1 in self._examples:
+            if isinstance(example1, MutableSeq) : continue
+            try :
+                comp = example1.reverse_complement()
+            except ValueError, e:
+                self.assertEqual(str(e), "Proteins do not have complements!")
+                continue
+            str1 = str(example1)
+            #This only does the unambiguous cases
+            if "U" in str1 or "u" in str1 \
+            or example1.alphabet==generic_rna:
+                mapping = maketrans("ACGUacgu","UGCAugca")
+            elif "T" in str1 or "t" in str1 \
+            or example1.alphabet==generic_dna \
+            or example1.alphabet==generic_nucleotide:
+                mapping = maketrans("ACGTacgt","TGCAtgca")
+            elif "A" not in str1 and "a" not in str1:
+                mapping = maketrans("CGcg","GCgc")
+            else :
+                #TODO - look at alphabet?
+                continue
+            self.assertEqual(str1.translate(mapping)[::-1], str(comp))
+            self.assertEqual(comp.alphabet, example1.alphabet)
+
+    def test_the_transcription(self):
+            """Check obj.transcribe() method."""
+            mapping = ""
+            for example1 in self._examples:
+                if isinstance(example1, MutableSeq) : continue
+                try :
+                    tran = example1.transcribe()
+                except ValueError, e:
+                    if str(e) == "Proteins cannot be transcribed!" : continue
+                    if str(e) == "RNA cannot be transcribed!" : continue
+                    raise e
+                str1 = str(example1)
+                self.assertEqual(str1.replace("T","U").replace("t","u"), str(tran))
+                self.assertEqual(tran.alphabet, generic_rna) #based on limited examples             
+
+    def test_the_back_transcription(self):
+            """Check obj.back_transcribe() method."""
+            mapping = ""
+            for example1 in self._examples:
+                if isinstance(example1, MutableSeq) : continue
+                try :
+                    tran = example1.back_transcribe()
+                except ValueError, e:
+                    if str(e) == "Proteins cannot be back transcribed!" : continue
+                    if str(e) == "DNA cannot be back transcribed!" : continue
+                    raise e
+                str1 = str(example1)
+                self.assertEqual(str1.replace("U","T").replace("u","t"), str(tran))
+                self.assertEqual(tran.alphabet, generic_dna) #based on limited examples             
+
+    def test_the_translate(self):
+            """Check obj.translate() method."""
+            mapping = ""
+            for example1 in self._examples:
+                if isinstance(example1, MutableSeq) : continue
+                try :
+                    tran = example1.translate()
+                except ValueError, e:
+                    if str(e) == "Proteins cannot be translated!" : continue
+                    raise e
+                #This is based on the limited example not having stop codons:
+                if tran.alphabet not in [extended_protein, protein, generic_protein]:
+                    print tran.alphabet
+                    self.assert_(False)
+                #TODO - check the actual translation, and all the optional args
+
+    def test_the_translation_of_stops(self):
+        """Check obj.translate() method with stop codons."""
+        misc_stops = "TAATAGTGAAGAAGG"
+        for nuc in [Seq(misc_stops),
+                    Seq(misc_stops, generic_nucleotide),
+                    Seq(misc_stops, generic_dna),
+                    Seq(misc_stops, unambiguous_dna)]:
+            self.assertEqual("***RR", str(nuc.translate()))
+            self.assertEqual("***RR", str(nuc.translate(1)))
+            self.assertEqual("***RR", str(nuc.translate("SGC0")))
+            self.assertEqual("**W**", str(nuc.translate(table=2)))
+            self.assertEqual("**WRR", str(nuc.translate(table='Yeast Mitochondrial')))
+            self.assertEqual("**WSS", str(nuc.translate(table=5)))
+            self.assertEqual("**WSS", str(nuc.translate(table=9)))
+            self.assertEqual("**CRR", str(nuc.translate(table='Euplotid Nuclear')))
+            self.assertEqual("***RR", str(nuc.translate(table=11)))
+            self.assertEqual("***RR", str(nuc.translate(table='Bacterial')))
+            self.assertEqual("", str(nuc.translate(to_stop=True)))
+        self.assertEqual(str(Seq("TAT").translate()), "Y")
+        self.assertEqual(str(Seq("TAR").translate()), "*")
+        self.assertEqual(str(Seq("TAN").translate()), "X")
+        self.assertEqual(str(Seq("NNN").translate()), "X")
+        self.assertEqual(str(Seq("TAt").translate()), "Y")
+        self.assertEqual(str(Seq("TaR").translate()), "*")
+        self.assertEqual(str(Seq("TaN").translate()), "X")
+        self.assertEqual(str(Seq("nnN").translate()), "X")
+        self.assertEqual(str(Seq("tat").translate()), "Y")
+        self.assertEqual(str(Seq("tar").translate()), "*")
+        self.assertEqual(str(Seq("tan").translate()), "X")
+        self.assertEqual(str(Seq("nnn").translate()), "X")
+
+
+    def test_the_translation_of_invalid_codons(self):
+        """Check obj.translate() method with invalid codons."""
+        for codon in ["TA?", "N-N", "AC_", "Ac_"]:
+            for nuc in [Seq(codon),
+                        Seq(codon, generic_nucleotide),
+                        Seq(codon, generic_dna),
+                        Seq(codon, unambiguous_dna)]:
+                try :
+                    print nuc.translate()
+                    self.assert_(False, "Transating %s should fail" % codon)
+                except TranslationError :
+                    pass
+
+    def test_the_translation_of_ambig_codons(self):
+        """Check obj.translate() method with ambiguous codons."""
+        for letters, ambig_values in [(ambiguous_dna.letters, ambiguous_dna_values),
+                                      (ambiguous_rna.letters, ambiguous_rna_values)] :
+            ambig = set(letters)
+            for c1 in ambig:
+                for c2 in ambig:
+                    for c3 in ambig:
+                        values = set([str(Seq(a+b+c).translate()) \
+                                      for a in ambig_values[c1] \
+                                      for b in ambig_values[c2] \
+                                      for c in ambig_values[c3]])
+                        t = str(Seq(c1+c2+c3).translate())
+                        if t=="*":
+                            self.assertEqual(values, set("*"))
+                        elif t=="X":
+                            self.assert_(len(values) > 1, \
+                                "translate('%s') = '%s' not '%s'" \
+                                % (c1+c2+c3, t, ",".join(values)))
+                        elif t=="Z":
+                            self.assertEqual(values, set("EQ"))
+                        elif t=="B":
+                            self.assertEqual(values, set("DN"))
+                        elif t=="J":
+                            self.assertEqual(values, set("LI"))
+                        else:
+                            self.assertEqual(values, set(t))
+                        #TODO - Use the Bio.Data.IUPACData module for the
+                        #ambiguous protein mappings?
+
+                    
     #TODO - Addition...
 
 if __name__ == "__main__":

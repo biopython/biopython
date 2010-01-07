@@ -1,5 +1,6 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
 # Revisions 2007-2009 copyright by Peter Cock.  All rights reserved.
+# Revisions 2009 copyright by Brad Chapman.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -10,6 +11,7 @@
 _dbutils = {}
 
 class Generic_dbutils:
+    """Default database utilities."""
     def __init__(self):
         pass
 
@@ -17,15 +19,6 @@ class Generic_dbutils:
         if table != 'biosequence': return table
         else: return 'bioentry'
 
-# Disabled: better safe than sorry
-##    def next_id(self, cursor, table):
-##        # XXX brain-dead! Hopefully, the database will enforce PK unicity..
-##        table = self.tname(table)
-##        sql = r"select 1+max(%s_id) from %s" % (table, table)
-##        cursor.execute(sql)
-##        rv = cursor.fetchone()
-##        return rv[0]
-        
     def last_id(self, cursor, table):
         # XXX: Unsafe without transactions isolation
         table = self.tname(table)
@@ -33,12 +26,29 @@ class Generic_dbutils:
         cursor.execute(sql)
         rv = cursor.fetchone()
         return rv[0]
+    
+    def execute(self, cursor, sql, args=None):
+        """Just execute an sql command.
+        """
+        cursor.execute(sql, args or ())
 
     def autocommit(self, conn, y = 1):
         # Let's hope it was not really needed
         pass
 
+
+class Sqlite_dbutils(Generic_dbutils):
+    """Custom database utilities for SQLite."""
+    def execute(self, cursor, sql, args=None):
+        """Execute SQL command, replacing %s with ? for variable substitution in sqlite3.
+        """
+        cursor.execute(sql.replace("%s", "?"), args or ())
+
+_dbutils["sqlite3"] = Sqlite_dbutils
+
+
 class Mysql_dbutils(Generic_dbutils):
+    """Custom database utilities for MySQL."""
     def last_id(self, cursor, table):
         try:
             #This worked on older versions of MySQL
@@ -51,7 +61,9 @@ class Mysql_dbutils(Generic_dbutils):
         
 _dbutils["MySQLdb"] = Mysql_dbutils
 
+
 class Psycopg_dbutils(Generic_dbutils):
+    """Custom database utilities for Psycopg (PostgreSQL)."""
     def next_id(self, cursor, table):
         table = self.tname(table)
         sql = r"select nextval('%s_pk_seq')" % table
@@ -71,7 +83,9 @@ class Psycopg_dbutils(Generic_dbutils):
 
 _dbutils["psycopg"] = Psycopg_dbutils
  
+
 class Psycopg2_dbutils(Psycopg_dbutils):
+    """Custom database utilities for Psycopg2 (PostgreSQL)."""
     def autocommit(self, conn, y = True):
         if y:
             conn.set_isolation_level(0)
@@ -80,9 +94,9 @@ class Psycopg2_dbutils(Psycopg_dbutils):
 
 _dbutils["psycopg2"] = Psycopg2_dbutils
 
+
 class Pgdb_dbutils(Generic_dbutils):
-    """Add support for pgdb in the PyGreSQL database connectivity package.
-    """
+    """Custom database utilities for Pgdb (aka PyGreSQL, for PostgreSQL)."""
     def next_id(self, cursor, table):
         table = self.tname(table)
         sql = r"select nextval('%s_pk_seq')" % table
@@ -101,6 +115,7 @@ class Pgdb_dbutils(Generic_dbutils):
         raise NotImplementedError("pgdb does not support this!")
 
 _dbutils["pgdb"] = Pgdb_dbutils
+
 
 def get_dbutils(module_name):
     try:

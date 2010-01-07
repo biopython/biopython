@@ -15,13 +15,6 @@ XXX ref
 
 import numpy
 
-#These are module level defaults, which in theory users might change
-#at run time to adjust the behaviour of the train function:
-MAX_IIS_ITERATIONS = 10000    # Maximum iterations for IIS.
-IIS_CONVERGE = 1E-5           # Convergence criteria for IIS.
-MAX_NEWTON_ITERATIONS = 100   # Maximum iterations on Newton's method.
-NEWTON_CONVERGE = 1E-10       # Convergence criteria for Newton's method.
-
 class MaxEntropy:
     """Holds information for a Maximum Entropy classifier.
 
@@ -46,7 +39,7 @@ def calculate(me, observation):
 
     """
     scores = []
-    for klass in range(len(me.classes)):
+    for klass in me.classes:
         lprob = 0.0
         for fn, alpha in map(None, me.feature_fns, me.alphas):
             lprob += fn(observation, klass) * alpha
@@ -172,12 +165,13 @@ def _calc_f_sharp(N, nclasses, features):
             f_sharp[i][j] += f
     return f_sharp
 
-def _iis_solve_delta(N, feature, f_sharp, empirical, prob_yx):
+def _iis_solve_delta(N, feature, f_sharp, empirical, prob_yx,
+                     max_newton_iterations, newton_converge):
     # Solve delta using Newton's method for:
     # SUM_x P(x) * SUM_c P(c|x) f_i(x, c) e^[delta_i * f#(x, c)] = 0
     delta = 0.0
     iters = 0
-    while iters < MAX_NEWTON_ITERATIONS: # iterate for Newton's method
+    while iters < max_newton_iterations: # iterate for Newton's method
         f_newton = df_newton = 0.0       # evaluate the function and derivative
         for (i, j), f in feature.items():
             prod = prob_yx[i][j] * f * numpy.exp(delta * f_sharp[i][j])
@@ -187,14 +181,15 @@ def _iis_solve_delta(N, feature, f_sharp, empirical, prob_yx):
 
         ratio = f_newton / df_newton
         delta -= ratio
-        if numpy.fabs(ratio) < NEWTON_CONVERGE:  # converged
+        if numpy.fabs(ratio) < newton_converge:  # converged
             break
         iters = iters + 1
     else:
         raise RuntimeError("Newton's method did not converge")
     return delta
 
-def _train_iis(xs, classes, features, f_sharp, alphas, e_empirical):
+def _train_iis(xs, classes, features, f_sharp, alphas, e_empirical,
+               max_newton_iterations, newton_converge):
     """Do one iteration of hill climbing to find better alphas (PRIVATE)."""
     # This is a good function to parallelize.
 
@@ -204,12 +199,15 @@ def _train_iis(xs, classes, features, f_sharp, alphas, e_empirical):
     N = len(xs)
     newalphas = alphas[:]
     for i in range(len(alphas)):
-        delta = _iis_solve_delta(N, features[i], f_sharp, e_empirical[i], p_yx)
+        delta = _iis_solve_delta(N, features[i], f_sharp, e_empirical[i], p_yx,
+                                 max_newton_iterations, newton_converge)
         newalphas[i] += delta
     return newalphas
 
 
-def train(training_set, results, feature_fns, update_fn=None):
+def train(training_set, results, feature_fns, update_fn=None,
+          max_iis_iterations=10000, iis_converge=1.0e-5,
+          max_newton_iterations=100, newton_converge=1.0e-10):
     """Train a maximum entropy classifier, returns MaxEntropy object.
 
     Train a maximum entropy classifier on a training set.
@@ -217,12 +215,16 @@ def train(training_set, results, feature_fns, update_fn=None):
     class assignments for each observation.  feature_fns is a list of
     the features.  These are callback functions that take an
     observation and class and return a 1 or 0.  update_fn is a
-    callback function that's called at each training iteration.  It is
+    callback function that is called at each training iteration.  It is
     passed a MaxEntropy object that encapsulates the current state of
     the training.
-    
+
+    The maximum number of iterations and the convergence criterion for IIS
+    are given by max_iis_iterations and iis_converge, respectively, while
+    max_newton_iterations and newton_converge are the maximum number
+    of iterations and the convergence criterion for Newton's method.
     """
-    if not len(training_set):
+    if not training_set:
         raise ValueError("No data in the training set.")
     if len(training_set) != len(results):
         raise ValueError("training_set and results should be parallel lists.")
@@ -246,9 +248,10 @@ def train(training_set, results, feature_fns, update_fn=None):
     # Now train the alpha parameters to weigh each feature.
     alphas = [0.0] * len(features)
     iters = 0
-    while iters < MAX_IIS_ITERATIONS:
+    while iters < max_iis_iterations:
         nalphas = _train_iis(xs, classes, features, f_sharp,
-                             alphas, e_empirical)
+                             alphas, e_empirical,
+                             max_newton_iterations, newton_converge)
         diff = map(lambda x, y: numpy.fabs(x-y), alphas, nalphas)
         diff = reduce(lambda x, y: x+y, diff, 0)
         alphas = nalphas
@@ -258,7 +261,7 @@ def train(training_set, results, feature_fns, update_fn=None):
         if update_fn is not None:
             update_fn(me)
     
-        if diff < IIS_CONVERGE:   # converged
+        if diff < iis_converge:   # converged
             break
     else:
         raise RuntimeError("IIS did not converge")

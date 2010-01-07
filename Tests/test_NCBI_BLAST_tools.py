@@ -20,36 +20,41 @@ wanted = ["blastx", "blastp", "blastn", "tblastn", "tblastx",
 exe_names = {}
 
 if sys.platform=="win32":
-    try:
-        #This can vary depending on the Windows language.
-        prog_files = os.environ["PROGRAMFILES"]
-    except KeyError:
-        prog_files = r"C:\Program Files"
-    likely_dirs = ["", #Current dir
-                   prog_files,
-                   #TODO - Check what the installer does...
-                   os.path.join(prog_files,"NCBI-BLAST"),
-                   os.path.join(prog_files,"NCBI-BLAST+"),
-                   os.path.join(prog_files,"BLAST+"),
-                   os.path.join(prog_files,"BLAST")] + sys.path
-    for folder in likely_dirs:
-        if os.path.isdir(folder):
-            for name in wanted :
-                if os.path.isfile(os.path.join(folder, name+".exe")):
-                    exe_names[name] = os.path.join(folder, name+".exe")
-        if muscle_exe : break
-else:
-    import commands
+    #The Windows 32 bit BLAST 2.2.22+ installer does add itself to the path,
+    #and by default installs to C:\Program Files\NCBI\BLAST-2.2.22+\bin
+    #To keep things simple, assume BLAST+ is on the path on Windows.
+    #
+    #On Windows the environment variable name isn't case senstive,
+    #but must split on ";" not ":"
+    likely_dirs = os.environ.get("PATH", "").split(";")
+else :
+    likely_dirs = os.environ.get("PATH", "").split(":")
+
+for folder in likely_dirs:
+    if not os.path.isdir(folder): continue
     for name in wanted :
-        output = commands.getoutput("%s -h" % name)
-        #NOTE - check for "ERROR: Invalid argument: -h" to tell the old
-        #and new rpsblast apart
-        if "not found" not in output and "BLAST" in output.upper() \
-        and "ERROR: Invalid argument: -h" not in output:
-            exe_names[name] = name
+        if sys.platform=="win32":
+            exe_name = os.path.join(folder, name+".exe")
+        else:
+            exe_name = os.path.join(folder, name)
+        if not os.path.isfile(exe_name):
+            continue
+        #To tell the old and new rpsblast apart (since I have both on
+        #my path and the old blast has priority), try -h as a parameter:
+        child = subprocess.Popen(exe_name + " -h",
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 shell=(sys.platform!="win32"))
+        output, error = child.communicate()
+        if child.returncode==0 and "ERROR: Invalid argument: -h" not in output:
+            exe_names[name] = exe_name
+        #else :
+        #    print "Rejecting", exe_name
+        del exe_name, name
+
 if len(exe_names) < len(wanted) :
-    raise MissingExternalDependencyError("Install the NCBI BLAST+ command line tools "
-                                         "if you want to use the "
+    raise MissingExternalDependencyError("Install the NCBI BLAST+ command line "
+                                         "tools if you want to use the "
                                          "Bio.Blast.Applications wrapper.")
         
 class CheckCompleteArgList(unittest.TestCase):

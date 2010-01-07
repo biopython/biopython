@@ -9,6 +9,13 @@ The latest news is at the top.
 
 ===================================================================
 
+Bio.Entrez includes some more DTD files, in particular eLink_090910.dtd,
+needed for our NCBI Entrez Utilities XML parser.
+
+===================================================================
+
+December 15, 2009: Biopython 1.53 released.
+
 Biopython is now using git for source code control, currently on github. Our
 old CVS repository will remain on the OBF servers in the short/medium term
 as a backup, but will not be updated in future.
@@ -24,15 +31,65 @@ versions of NCBI BLAST, including the new C++ based version. Nevertheless,
 we (and the NCBI) still recommend using the XML output for parsing.
 
 The Seq (and related UnknownSeq) objects gained upper and lower methods,
-like the string methods of the same name but alphabet aware.
+like the string methods of the same name but alphabet aware. The Seq object
+also gained a new ungap method for removing gap characters in an alphabet
+aware manner.
 
 The SeqFeature object now has an extract method, used with the parent
 sequence (as a string or Seq object) to get the region of that sequence
 described by the feature's location information (including the strand and
-any sub-features for a join).
+any sub-features for a join). As an example, this is useful to get the
+nucleotide sequence for features in GenBank or EMBL files.
 
 SeqRecord objects now support addition, giving a new SeqRecord with the
-combined sequence, all the SeqFeatures,  and any common annotation.
+combined sequence, all the SeqFeatures, and any common annotation.
+
+Bio.Entrez includes the new (Jan 2010) DTD files from the NCBI for parsing
+MedLine/PubMed data.
+
+The NCBI codon tables have been updated from version 3.4 to 3.9, which adds
+a few extra start codons, and a few new tables (Tables 16, 21, 22 and 23).
+Note that Table 14 which used to be called "Flatworm Mitochondrial" is now
+called "Alternative Flatworm Mitochondrial", and "Flatworm Mitochondrial" is
+now an alias for Table 9 ("Echinoderm Mitochondrial").
+
+The restriction enzyme list in Bio.Restriction has been updated to the
+Nov 2009 release of REBASE.
+
+The Bio.PDB parser and output code has been updated to understand the
+element column in ATOM and HETATM lines (based on patches contributed by
+Hongbo Zhu and Frederik Gwinner). Bio.PDB.PDBList has also been updated
+for recent changes to the PDB FTP site (Paul T. Bathen).
+
+SQLite support was added for BioSQL databases (Brad Chapman), allowing access
+to BioSQL through a lightweight embedded SQL engine. Python 2.5+ includes
+support for SQLite built in, but on Python 2.4 the optional sqlite3 library
+must be installed to use this. We currently use a draft BioSQL on SQLite
+schema, which will be merged with the main BioSQL release for use in other
+projects.
+
+Support for running Biopython under Jython (using the Java Virtual Machine)
+has been much improved thanks to input from Kyle Ellrott. Note that Jython
+does not support C code - this means NumPy isn't available, and nor are a
+selection of Biopython modules (including Bio.Cluster, Bio.PDB and BioSQL).
+Also, currently Jython does not parse DTD files, which means the XML parser
+in Bio.Entrez won't work. However, most of the Biopython modules seem fine
+from testing Jython 2.5.0 and 2.5.1.
+
+(At least) 12 people contributed to this release, including 3 first timers:
+
+Bartek Wilczynski
+Brad Chapman
+Chris Lasher
+Cymon Cox
+Frank Kauff
+Frederik Gwinner (first contribution)
+Hongbo Zhu (first contribution)
+Kyle Ellrott
+Leighton Pritchard
+Michiel de Hoon
+Paul Bathen (first contribution)
+Peter Cock
 
 ===================================================================
 
@@ -62,7 +119,7 @@ allowing interconversion with FASTQ files, or FASTA+QUAL files.
 
 Bio.Emboss.Applications now includes wrappers for the "new" PHYLIP EMBASSY
 package (e.g. fneighbor) which replace the "old" PHYLIP EMBASSY package (e.g.
-efneighbor) whose Biopython wrappers are now obsolete.
+eneighbor) whose Biopython wrappers are now obsolete.
 
 See also the DEPRECATED file, as several old deprecated modules have finally
 been removed (e.g. Bio.EUtils which had been replaced by Bio.Entrez).

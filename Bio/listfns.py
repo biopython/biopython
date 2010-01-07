@@ -3,11 +3,12 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""This provides useful general functions for working with lists (OBSOLETE).
+"""This provides useful general functions for working with lists (DEPRECATED).
 
-This module and its C code equivalent are considered to be obsolete, and
-are likely to be deprecated in a future release of Biopython, before being
-removed.  Please get in touch via the mailing list if this will affect you.
+This module is considered to be deprecated, and is likely to be removed in a
+future release of Biopython.  Its C code implementation has already been
+removed. Please get in touch via the mailing list if this will affect you.
+
 Many of these functions can be avoided using the python set object.
 
 Functions:
@@ -22,6 +23,14 @@ indexesof     Get a list of the indexes of some items in a list.
 take          Take some items from a list.
 
 """
+import warnings
+warnings.warn("Bio.listfns and its C code equivalent Bio.clistfns are" \
+              +" deprecated, and will be removed in a future release of"\
+              +" Biopython.  If you want to continue to use this code,"\
+              +" please get in contact with the Biopython developers via"\
+              +" the mailing lists to avoid its permanent removal from"\
+              +" Biopython. See also the Python built in set datatype.", \
+              DeprecationWarning)
 
 def asdict(l):
     """asdict(l) -> dictionary
@@ -149,10 +158,3 @@ def take(l, indexes):
 def take_byfn(l, fn, opposite=0):
     indexes = indexesof(l, fn, opposite=opposite)
     return take(l, indexes)
-
-# Try and load C implementations of functions.  If I can't,
-# then just ignore and use the pure python implementations.
-try:
-    from clistfns import *
-except ImportError:
-    pass

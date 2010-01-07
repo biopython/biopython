@@ -1,0 +1,412 @@
+<!-- ============================================================= -->
+<!--  MODULE:    Formatting Element Classes                        -->
+<!--  VERSION:   2.0                                               -->
+<!--  DATE:      August 2004                                       -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
+<!--                        TYPICAL INVOCATION                     -->
+<!--
+ "-//NLM//DTD Archiving and Interchange DTD Suite Formatting Element Classes v2.0 20040830//EN"
+  Delivered as file "format.ent"                                   -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Archiving and Interchange DTD Suite               -->
+<!--                                                               -->
+<!--                                                               -->
+<!-- PURPOSE:    Elements concerned with rendition of output, for  -->
+<!--             example printing on a page or display on a screen -->
+<!--                                                               -->
+<!-- CONTAINS:   1) Default definitions of format classes          -->
+<!--             2) Appearance class elements                      -->
+<!--             3) Break class elements                           -->
+<!--             4) Typographic emphasis elements                  -->
+<!--             5) Advanced overline and underline elements       -->
+<!--                                                               -->
+<!-- CREATED FOR:                                                  -->
+<!--             Digital archives and publishers who wish to       -->
+<!--             create a custom XML DTD for original markup of    -->
+<!--             journal literature, books, and related material,  -->
+<!--             or for archiving and transferring such material   -->
+<!--             between archives.                                 -->
+<!--                                                               -->
+<!--             This DTD is in the public domain. An organization -->
+<!--             that wishes to create its own DTD from the suite  -->
+<!--             may do so without permission from NLM.            -->
+<!--                                                               -->
+<!--             The suite has been set up to be extended using a  -->
+<!--             new DTD file and a new DTD-specific customization -->
+<!--             module to redefine the many Parameter Entities.   -->
+<!--             Do not modify the suite directly or redistribute  -->
+<!--             modified versions of the suite.                   -->
+<!--                                                               -->
+<!--             In the interest of maintaining consistency and    -->
+<!--             clarity for potential users, NLM requests:        -->
+<!--                                                               -->
+<!--             1. If you create a DTD from the Archiving and     -->
+<!--                Interchange DTD Suite and intend to stay       -->
+<!--                compatible with the suite, then please include -->
+<!--                the following statement as a comment in all of -->
+<!--                your DTD modules:                              -->
+<!--                   "Created from, and fully compatible with,   -->
+<!--                    the Archiving and Interchange DTD Suite."  -->
+<!--                                                               -->
+<!--             2. If you alter one or more modules of the suite, -->
+<!--                then please rename your version and all its    -->
+<!--                modules to avoid any confusion with the        -->
+<!--                original suite. Also, please include the       -->
+<!--                following statement as a comment in all your   -->
+<!--                DTD modules:                                   -->
+<!--                   "Based in part on, but not fully compatible -->
+<!--                    with, the Archiving and Interchange DTD    --> 
+<!--                    Suite."                                    -->
+<!--                                                               -->
+<!--             Suggestions for refinements and enhancements to   -->
+<!--             the DTD suite should be sent in email to:         -->
+<!--                 archive-dtd@ncbi.nlm.nih.gov                  -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             December 2002                                     -->
+<!--                                                               -->
+<!-- CREATED BY: Jeff Beck       (NCBI)                            -->
+<!--             Deborah Lapeyre (Mulberry Technologies, Inc.)     -->
+<!--             Bruce Rosenblum (Inera Inc.)                      -->
+<!--                                                               -->
+<!--             NLM thanks the Harvard University Libraries, both -->
+<!--             for proposing that a draft archiving NLM DTD for  --> 
+<!--             life sciences journals be extended to accommodate -->
+<!--             journals in all disciplines and for sponsoring    -->
+<!--             Bruce Rosenblum's collaboration with other DTD    -->
+<!--             authors in completing Version 1.0. The Andrew W.  --> 
+<!--             Mellon Foundation provided support for these      --> 
+<!--             important contributions.                          -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DTD VERSION/CHANGE HISTORY                 -->
+<!-- ============================================================= -->
+<!--
+     =============================================================
+
+Version  Reason/Occasion                   (who) vx.x (yyyy-mm-dd)
+
+     =============================================================
+     Version 2.0                       (DAL/BTU) v2.0 (2004-08-30)
+     
+     
+     Major requirement changes led to the new release, producing
+     DTD version "2.0":
+       a) The splitting of the Archival and Interchange Tag Set 
+          DTDs into three DTDs from two: an authoring DTD, an
+          archive regularization and interchange DTD (the
+          current Blue Publishing DTD), and a preservationist 
+          archive DTD (the current Green Archiving and Interchange 
+          DTD).
+       b) AIT Working Group suggestions from the June 04 meeting 
+          and June/July 2004 followup discussions
+       c) Suite remodularization to meet new (and newly articulated)
+          modularization requirements
+       d) New or renamed classes and mixes to make modifications
+          easier and more consistent
+
+  4. NEW MIXES - To correct potential classing problems, new 
+     Parameter Entities were created. The following content 
+     models were changed to use these new entities.
+       - <font>    %font-elements;
+
+  3. INLINE PARAMETER MIXES
+     ### Customization Alert ###
+     a. Changed the inline-mix Parameter Entities to use the 
+        OR-bar-first mechanism. This requires changing not
+        only the Parameter Entity, but all content models that
+        use the entity.
+        - %emphasized-text; (used in most of the elements below)
+
+  2. DEFAULT CLASSES - Were moved from this module to 
+     %default-classes.ent;
+  
+  1. Updated public identifier to "v2.0 20040830"       
+                                                                   -->
+
+
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITY DEPENDENCIES             
+                        Requires the following parameter entities
+                        be defined before calling this module, 
+                        usually accomplished in the Customization
+                        Module for the specific DTD:
+
+                        -%emphasized-text; - what elements can be 
+                                             inside an emphasis 
+                                             element
+                        -%rendition-plus;                          -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITIES FOR ATTRIBUTE LISTS     -->
+<!-- ============================================================= -->
+
+
+<!--                    UNDERLINE ATTRIBUTES                       -->
+<!--                    Attributes for the <underline> element     -->
+<!ENTITY % underline-atts 
+            "underline-style   
+                        CDATA                              #IMPLIED" >
+
+
+<!-- ============================================================= -->
+<!--                    APPEARANCE CLASS ELEMENTS                  -->
+<!-- ============================================================= -->
+
+
+<!--                    FONT ELEMENTS                              -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        the <font> element.
+                        Design Note: This inline mix begins with an
+                        OR bar, since -%rendition-plus begins with
+                        one.                                       -->
+<!ENTITY % font-elements 
+                        "%rendition-plus;"                           >
+
+
+<!--                    FONT                                       -->
+<!--                    Defined to allow the user to specify an
+                        explicit (non stylesheet-generated) font.
+                        This element was originally restricted to 
+                        use inside table cells <td> and <th> and was 
+                        inherited from the XHTML table DTD.
+                        Authoring Note: Usage is discouraged.      -->
+<!ELEMENT  font         (#PCDATA %font-elements;)*                   >
+<!ATTLIST  font
+             color      CDATA                             #IMPLIED   >
+
+
+<!--                    HORIZONTAL RULE                            -->
+<!--                    Defined to allow the user to specify an
+                        explicit (non machine-generated) rule.
+                        This element is restricted to use inside
+                        table cells <td> and <th> and was inherited
+                        from the XHTML table DTD.
+                        Authoring Note: Usage is discouraged.      -->
+<!ELEMENT  hr           EMPTY                                        >
+
+
+<!-- ============================================================= -->
+<!--                    BREAK CLASS ELEMENTS                       -->
+<!-- ============================================================= -->
+
+
+<!--                    LINE BREAK                                 -->
+<!--                    Defined to allow the user to specify an
+                        explicit (non machine-generated) linebreak.
+                        This element is restricted to a very few
+                        contexts, for example inside <title>s
+                        and inside table cells <td> and <th>.
+                        Authoring Note: Usage is discouraged.      -->
+<!ELEMENT  break        EMPTY                                        >
+
+
+<!-- ============================================================= -->
+<!--                    EMPHASIS/RENDITION CLASS ELEMENTS          -->
+<!-- ============================================================= -->
+
+
+<!--                    BOLD                                       -->
+<!--                    Used to mark text that should appear in bold 
+                        face type for print or display             -->
+<!ELEMENT  bold         (#PCDATA %emphasized-text;)*                 >
+
+
+<!--                    ITALIC                                     -->
+<!--                    Used to mark text that should appear in 
+                        italic type on output.                     -->
+<!ELEMENT  italic       (#PCDATA %emphasized-text;)*                 >
+
+
+<!--                    MONOSPACE TEXT (TYPEWRITER TEXT)           -->
+<!--                    Used to mark text that should appear in 
+                        a non-proportional font, such as courier
+                        for display or print.  This is common for
+                        computer code examples, man-machine
+                        dialogues, etc.                            -->
+<!ELEMENT  monospace    (#PCDATA %emphasized-text;)*                 >
+
+
+
+<!--                    SMALL CAPS                                 -->
+<!--                    Used to mark text that should appear in a 
+                        font which creates smaller capital letters
+                        on output.                                 -->
+<!ELEMENT  sc           (#PCDATA %emphasized-text;)*                 >
+
+
+<!--                    OVERLINE                                   -->
+<!--                    Used to mark text that should appear with a 
+                        horizontal line above each character in
+                        display or print                           -->
+<!ELEMENT  overline     (#PCDATA %emphasized-text;)*                 >
+
+
+<!--                    STRIKE THROUGH                             -->
+<!--                    Used to mark text that should appear with 
+                        a line through it so as to appear "struck out" 
+                        on display or print                        -->
+<!ELEMENT  strike       (#PCDATA %emphasized-text;)*                 >
+
+
+<!--                    SUBSCRIPT                                  -->
+<!--                    A number or expression that is set lower
+                        than the baseline and slightly smaller,
+                        to act as an inferior or subscript         -->
+<!ELEMENT  sub          (#PCDATA %emphasized-text;)*                 >
+
+<!--         arrange    Used to indicate whether multiple subscripts
+                        or superscripts that apply to the same
+                        character should stack, i.e., be placed
+                        one above the other, or stagger, i.e., be
+                        stretched out in a line.                   -->
+<!ATTLIST  sub 
+             arrange    (stack | stagger)                  #IMPLIED  >
+
+
+<!--                    SUPERSCRIPT                                -->
+<!--                    A number or expression that is set higher
+                        than the baseline and slightly smaller,
+                        to act as a superior or superscript        -->
+<!ELEMENT  sup          (#PCDATA %emphasized-text;)*                 >
+
+                        
+<!--         arrange    Used to indicate whether multiple subscripts
+                        or superscripts that apply to the same
+                        character should stack, i.e., be placed
+                        one above the other as compactly as
+                        possible, or stagger, i.e., be stretched
+                        out in a line.                             -->
+<!ATTLIST  sup 
+             arrange    (stack | stagger)                  #IMPLIED  >
+
+
+<!--                    UNDERLINE                                  -->
+<!--                    Used to mark text that should appear with 
+                        a horizontal line beneath it for display
+                        or print                                   -->
+<!ELEMENT  underline    (#PCDATA %emphasized-text;)*                 >
+<!ATTLIST  underline 
+             %underline-atts;                                        >
+
+
+<!-- ============================================================= -->
+<!--                    ADVANCED UNDERLINE AND OVERLINE ELEMENTS
+                        (From the Elsevier DTD, used mostly within    
+                        mathematics, when ordinary MathML underline   
+                        and overline functions are inadequate. The
+                        elements act as milestone tags marking the
+                        start and end of over or underlining that
+                        may extend across element boundaries.)     -->
+<!-- ============================================================= -->
+
+
+<!--                    OVERLINE START                             -->
+<!--                    The start of a milestone-created overline, the
+                        end of ornament will be marked by an
+                        Overline End element.
+                        Remarks:
+                        The <overline-start> and <overline-end> 
+                        elements enable creation of overlines in 
+                        content, most commonly in mathematical 
+                        content, where an normal overline tag 
+                        <overline> would break the XML 
+                        well-formedness rule that no two elements
+                        may overlap.  The overline created using
+                        these two elements can have arbitrary start 
+                        and end points because the start and end 
+                        elements are paired through the use of the
+                        unique IDs, not as the start and end of a 
+                        single element.
+                        For example, in the text "ABCD", if the text
+                        "ABC" is the be overlined and the text "CD" 
+                        is to be underlined, ordinary overlining with
+                        <overline> would create invalid tag overlap. 
+                        The text could be correctly tagged, using the 
+                        Overline Start and Overline End elements
+                        as:
+                          <overline-start id="ovl4"/>AB
+                          <underline-start id="ul1"/>C
+                          </overline-end rid="ov14"/>D
+                          <underline-end rid="ul1"/>
+                                                                   -->
+<!ELEMENT  overline-start     
+                        EMPTY                                        >
+<!--         id         Unique identifier so the element may be
+                        referenced                                 -->
+<!ATTLIST  overline-start
+             id         ID                                 #REQUIRED >
+
+
+<!--                    OVERLINE END                               -->
+<!--                    The end of a milestone-created overline, the
+                        start of ornament will be marked by an
+                        Overline Start element.                    -->
+<!ELEMENT  overline-end EMPTY                                        >
+<!--         rid        Points to the identifier of an Overline 
+                        Start, so that the two may be linked       -->
+<!ATTLIST  overline-end
+             rid        IDREF                              #REQUIRED >
+
+
+<!--                    UNDERLINE START                            -->
+<!--                    The start of a milestone-created underline,
+                        the end of ornament will be marked by an
+                        Underline End element. 
+                        Remarks: The <underline-start> and 
+                        <underline-end> elements enable creation of 
+                        underlines in content, most commonly in 
+                        mathematical content, where an normal 
+                        underline tag <underline> would break the
+                        XML well-formedness rule that no two elements
+                        may overlap.  The underline created using
+                        these two elements can have arbitrary start 
+                        and end points because the start and end 
+                        elements are paired through the use of the
+                        unique IDs, not as the start and end of a 
+                        single element.
+                        For example, in the text "ABCD", if the text
+                        "ABC" is the be overlined and the text "CD" 
+                        is to be underlined, ordinary overlining with
+                        <overline> would create invalid tag overlap. 
+                        The text could be correctly tagged, using the 
+                        Overline Start and Overline End elements
+                        as:
+                          <overline-start id="ovl"/>AB
+                          <underline-start id="ul1"/>C
+                          </overline-end rid="ov1"/>D
+                          <underline-end rid="ul1"/>
+                                                                   -->
+<!ELEMENT  underline-start      
+                        EMPTY                                        >
+<!--         id         Unique identifier so the element may be
+                        referenced                                 -->
+<!ATTLIST  underline-start
+             id         ID                                 #REQUIRED >
+
+
+<!--                    UNDERLINE END                              -->
+<!--                    The end of a milestone-created underline, the
+                        start of ornament will be marked by an
+                        Underline Start element.                    -->
+<!ELEMENT  underline-end        
+                        EMPTY                                         >
+<!--         rid        Points to the identifier of an Underline 
+                        Start, so that the two may be linked        -->
+<!ATTLIST  underline-end
+             rid        IDREF                               #REQUIRED >
+
+
+<!-- ================== End Format Class Module =================== -->
