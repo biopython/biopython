@@ -1,4 +1,4 @@
-# Copyright 2007-2009 by Peter Cock.  All rights reserved.
+# Copyright 2007-2010 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -173,7 +173,26 @@ def _insdc_feature_location_string(feature):
                                   for f in feature.sub_features]))
 
 
-class GenBankWriter(SequentialSequenceWriter):
+class _InsdcWriter(SequentialSequenceWriter):
+    """Base class for GenBank and EMBL writers (PRIVATE)."""
+
+    def _get_annotation_str(self, record, key, default=".", just_first=False):
+        """Get an annotation dictionary entry (as a string).
+
+        Some entries are lists, in which case if just_first=True the first entry
+        is returned.  If just_first=False (default) this verifies there is only
+        one entry before returning it."""
+        try:
+            answer = record.annotations[key]
+        except KeyError:
+            return default
+        if isinstance(answer, list):
+            if not just_first : assert len(answer) == 1
+            return str(answer[0])
+        else:
+            return str(answer)
+
+class GenBankWriter(_InsdcWriter):
     HEADER_WIDTH = 12
     MAX_WIDTH = 80
     QUALIFIER_INDENT = 21
@@ -336,22 +355,6 @@ class GenBankWriter(SequentialSequenceWriter):
                'LOCUS line does not contain - at position 75 in date:\n' + line
 
         self.handle.write(line)
-
-    def _get_annotation_str(self, record, key, default=".", just_first=False):
-        """Get an annotation dictionary entry (as a string).
-
-        Some entries are lists, in which case if just_first=True the first entry
-        is returned.  If just_first=False (default) this verifies there is only
-        one entry before returning it."""
-        try:
-            answer = record.annotations[key]
-        except KeyError:
-            return default
-        if isinstance(answer, list):
-            if not just_first : assert len(answer) == 1
-            return str(answer[0])
-        else:
-            return str(answer)
 
     def _write_comment(self, record):
         #This is a bit complicated due to the range of possible
@@ -560,6 +563,122 @@ class GenBankWriter(SequentialSequenceWriter):
                 self._write_feature_qualifier(key)
 
 
+class EmblWriter(_InsdcWriter):
+
+    def _write_sequence(self, record):
+        LETTERS_PER_BLOCK = 10
+        BLOCKS_PER_LINE = 6
+        LETTERS_PER_LINE = LETTERS_PER_BLOCK * BLOCKS_PER_LINE
+        POSITION_PADDING = 10
+        handle = self.handle
+        # TODO - Length and base composition? Also UnknownSeq object...
+
+        data = self._get_seq_string(record) #Catches sequence being None
+        seq_len = len(data)
+        handle.write("SQ   \n")
+        for line_number in range(0,seq_len // LETTERS_PER_LINE):
+            handle.write("    ") #Just four, not five
+            for block in range(BLOCKS_PER_LINE) :
+                index = LETTERS_PER_LINE*line_number + LETTERS_PER_BLOCK*block
+                self.handle.write((" %s" % data[index:index+LETTERS_PER_BLOCK]))
+            self.handle.write(str((line_number+1)
+                                  *LETTERS_PER_LINE).rjust(POSITION_PADDING))
+            self.handle.write("\n")
+        if seq_len % LETTERS_PER_LINE:
+            #Final (partial) line
+            line_number = (seq_len // LETTERS_PER_LINE)
+            handle.write("    ") #Just four, not five
+            for block in range(BLOCKS_PER_LINE) :
+                index = LETTERS_PER_LINE*line_number + LETTERS_PER_BLOCK*block
+                self.handle.write((" %s" % data[index:index+LETTERS_PER_BLOCK]).ljust(11))
+            self.handle.write(str(seq_len).rjust(POSITION_PADDING))
+            self.handle.write("\n")
+
+    def _write_single_line(self, tag, text):
+        assert len(tag)==2
+        self.handle.write(tag+"   "+text+"\n")
+
+    def _write_multi_line(self, tag, text):
+        #TODO - Line wrapping
+        assert len(tag)==2
+        self.handle.write(tag+"   "+text+"\n")
+        
+    def _write_the_first_lines(self, record):
+        """Write the ID and AC lines."""
+        if "." in record.id and record.id.rsplit(".",1)[1].isdigit():
+            version = "SV " + record.id.rsplit(".",1)[1]
+            accession = self._get_annotation_str(record, "accession",
+                                                 record.id.rsplit(".",1)[0],
+                                                 just_first=True)
+        else :
+            version = ""
+            accession = self._get_annotation_str(record, "accession",
+                                                 record.id,
+                                                 just_first=True)
+        
+        if ";" in accession :
+            raise ValueError("Cannot have semi-colon in EMBL accession, %s" \
+                             % repr(accession))
+        if " " in accession :
+            #This is out of practicallity... might it be allowed?
+            raise ValueError("Cannot have spaces in EMBL accession, %s" \
+                             % repr(accession))
+
+        #Get the molecule type
+        #TODO - record this explicitly in the parser?
+        #Get the base alphabet (underneath any Gapped or StopCodon encoding)
+        a = Alphabet._get_base_alphabet(record.seq.alphabet)
+        if not isinstance(a, Alphabet.Alphabet):
+            raise TypeError("Invalid alphabet")
+        elif not isinstance(a, Alphabet.NucleotideAlphabet):
+            raise ValueError("Need a Nucleotide alphabet")
+        elif isinstance(a, Alphabet.DNAAlphabet):
+            mol_type = "DNA"
+        elif isinstance(a, Alphabet.RNAAlphabet):
+            mol_type = "RNA"
+        else:
+            #Must be something like NucleotideAlphabet
+            raise ValueError("Need a DNA or RNA alphabet")
+
+        #TODO - Full ID line
+        handle = self.handle
+        self._write_single_line("ID", "%s; %s; ; %s; ; ; %i BP." \
+                                % (accession, version, mol_type, len(record)))
+        handle.write("XX\n")
+        self._write_single_line("AC", accession+";")
+        handle.write("XX\n")
+
+    def write_record(self, record):
+        """Write a single record to the output file."""
+
+        handle = self.handle
+        self._write_the_first_lines(record)
+
+        #TODO - DT lines (date)
+
+        descr = record.description
+        if descr == "<unknown description>" : descr = "."
+        self._write_multi_line("DE", descr)
+        handle.write("XX\n")
+
+        #Should this be "source" or "organism"?
+        self._write_multi_line("OS", self._get_annotation_str(record, "organism"))
+        try:
+            #List of strings
+            taxonomy = "; ".join(record.annotations["taxonomy"]) + "."
+        except KeyError:
+            taxonomy = "."
+        self._write_multi_line("OC", taxonomy)
+        handle.write("XX\n")
+
+        #TODO - References...
+
+        #TODO - Features (FT lines)
+
+        self._write_sequence(record)
+        handle.write("//\n")
+
+
 if __name__ == "__main__":
     print "Quick self test"
     import os
@@ -650,6 +769,18 @@ if __name__ == "__main__":
         records2 = list(GenBankIterator(handle))
         assert compare_records(records, records2)
 
+    def check_embl_writer(records):
+        handle = StringIO()
+        try:
+            EmblWriter(handle).write_file(records)
+        except ValueError, err:
+            print err
+            return
+        handle.seek(0)
+
+        records2 = list(EmblIterator(handle))
+        assert compare_records(records, records2)
+
     for filename in os.listdir("../../Tests/GenBank"):
         if not filename.endswith(".gbk") and not filename.endswith(".gb"):
             continue
@@ -660,6 +791,7 @@ if __name__ == "__main__":
         handle.close()
 
         check_genbank_writer(records)
+        check_embl_writer(records)
 
     for filename in os.listdir("../../Tests/EMBL"):
         if not filename.endswith(".embl"):
@@ -671,6 +803,7 @@ if __name__ == "__main__":
         handle.close()
 
         check_genbank_writer(records)
+        check_embl_writer(records)
 
     from Bio import SeqIO
     for filename in os.listdir("../../Tests/SwissProt"):

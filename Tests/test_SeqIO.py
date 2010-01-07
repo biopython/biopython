@@ -341,8 +341,8 @@ def check_simple_write_read(records, indent=" "):
             #many formats can't store more than that.
 
             #Check the sequence
-            if format in ["gb", "genbank"]:
-                #The GenBank parser will convert everything to upper case.
+            if format in ["gb", "genbank", "embl"]:
+                #The GenBank/EMBL parsers will convert to upper case.
                 assert r1.seq.tostring().upper() == r2.seq.tostring()
             elif format == "qual":
                 assert isinstance(r2.seq, UnknownSeq)

@@ -168,7 +168,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
             records = list(SeqIO.parse(open(in_filename), in_format, alphabet))
         else:
             records = list(SeqIO.parse(open(in_filename), in_format))
-        for temp_format in ["genbank","fasta"]:
+        for temp_format in ["genbank","embl","fasta"]:
             if temp_format in skip_formats:
                 continue
             new_records = list(emboss_piped_SeqIO_convert(records, temp_format, "fasta"))
@@ -221,7 +221,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
         #and will turn "X" into "N" for GenBank output.
         self.check_SeqIO_to_EMBOSS("IntelliGenetics/VIF_mase-pro.txt", "ig",
                                    alphabet=generic_protein,
-                                   skip_formats=["genbank"])
+                                   skip_formats=["genbank","embl"])
         #TODO - What does a % in an ig sequence mean?
         #e.g. "IntelliGenetics/vpu_nucaligned.txt"
         #and  "IntelliGenetics/TAT_mase_nuc.txt"
