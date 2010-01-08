@@ -1,4 +1,4 @@
-# Copyright 2007-2009 by Peter Cock.  All rights reserved.
+# Copyright 2007-2010 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -116,7 +116,7 @@ test_files = [ \
     ("genbank",False, 'GenBank/protein_refseq2.gb', 1), #Revised version
     ("genbank",False, 'GenBank/extra_keywords.gb', 1),
     ("genbank",False, 'GenBank/one_of.gb', 1),
-    ("genbank",False, 'GenBank/NT_019265.gb', 1),
+    ("genbank",False, 'GenBank/NT_019265.gb', 1), #contig, no sequence
     ("genbank",False, 'GenBank/origin_line.gb', 1),
     ("genbank",False, 'GenBank/blank_seq.gb', 1),
     ("genbank",False, 'GenBank/dbsource_wrap.gb', 1),
@@ -136,6 +136,7 @@ test_files = [ \
     ("embl",   False, 'EMBL/U87107.embl', 1), # Old ID line with SV line
     ("embl",   False, 'EMBL/AAA03323.embl', 1), # 2008, PA line but no AC
     ("embl",   False, 'EMBL/AE017046.embl', 1), #See also NC_005816.gb
+    ("embl",   False, 'EMBL/Human_contigs.embl', 2), #contigs, no sequences
     ("stockholm", True,  'Stockholm/simple.sth', 2),
     ("stockholm", True,  'Stockholm/funny.sth', 5),
 #Following PHYLIP files are currently only used here and in test_AlignIO.py,

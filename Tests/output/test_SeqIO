@@ -1658,6 +1658,15 @@ Testing reading embl format file EMBL/AE017046.embl
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AE017046.1).
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
+Testing reading embl format file EMBL/Human_contigs.embl
+ ID = 'AJ229040.1', Name='AJ229040',
+ Seq='NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN', length=958952
+ ID = 'AL954800.2', Name='AL954800',
+ Seq='NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN', length=87191216
+ Checking can write/read as 'embl' format
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'qual' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AL954800.2).
 Testing reading stockholm format file Stockholm/simple.sth
  ID and Name='AP001509.1',
  Seq='UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAU...UUAAUGU', length=104
