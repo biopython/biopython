@@ -218,6 +218,29 @@ class _InsdcWriter(SequentialSequenceWriter):
         assert not words
         return answer
 
+    def _split_contig(self, record, max_len):
+        "Returns a list of strings, splits on commas."""
+        #TODO - Merge this with _write_multi_line method?
+        #It would need the addition of the comma splitting logic...
+        #are there any other cases where that would be sensible?
+        contig = record.annotations.get("contig","")
+        if isinstance(contig, list) or isinstance(contig, tuple):
+            contig = "".join(contig)
+        contig = self.clean(contig)
+        i=0
+        answer = []
+        while contig:
+            if len(contig) > max_len:
+                #Split lines at the commas
+                pos = contig[:max_len-1].rfind(",")
+                if pos==-1:
+                    raise ValueError("Could not break up CONTIG")
+                text, contig = contig[:pos+1], contig[pos+1:]
+            else:
+                text, contig = contig, ""
+            answer.append(text)
+        return answer
+
 class GenBankWriter(_InsdcWriter):
     HEADER_WIDTH = 12
     MAX_WIDTH = 80
@@ -383,30 +406,11 @@ class GenBankWriter(_InsdcWriter):
             self._write_multi_line("",line)
 
     def _write_contig(self, record):
-        #TODO - Merge this with _write_multi_line method?
-        #It would need the addition of the comma splitting logic...
-        #are there any other cases where that would be sensible?
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
-        contig = record.annotations.get("contig","")
-        if isinstance(contig, list) or isinstance(contig, tuple):
-            contig = "".join(contig)
-        contig = self.clean(contig)
-        i=0
-        while contig:
-            if len(contig) > max_len:
-                #Split lines at the commas
-                pos = contig[:max_len-1].rfind(",")
-                if pos==-1:
-                    raise ValueError("Could not break up CONTIG")
-                text, contig = contig[:pos+1], contig[pos+1:]
-            else:
-                text, contig = contig, ""
-            if i==0:
-                self._write_single_line("CONTIG",text)
-            else:
-                self._write_single_line("",text)
-            i+=1
-            
+        lines = self._split_contig(record, max_len)
+        self._write_single_line("CONTIG",lines[0])
+        for text in lines[1:] :
+            self._write_single_line("",text)
 
     def _write_sequence(self, record):
         #Loosely based on code from Howard Salis
@@ -573,6 +577,13 @@ class GenBankWriter(_InsdcWriter):
 
 class EmblWriter(_InsdcWriter):
     MAX_WIDTH = 80
+    HEADER_WIDTH = 5
+
+    def _write_contig(self, record):
+        max_len = self.MAX_WIDTH - self.HEADER_WIDTH
+        lines = self._split_contig(record, max_len)
+        for text in lines:
+            self._write_single_line("CO",text)
 
     def _write_sequence(self, record):
         LETTERS_PER_BLOCK = 10
@@ -580,10 +591,20 @@ class EmblWriter(_InsdcWriter):
         LETTERS_PER_LINE = LETTERS_PER_BLOCK * BLOCKS_PER_LINE
         POSITION_PADDING = 10
         handle = self.handle
-        # TODO - Length and base composition? Also UnknownSeq object...
+        
+        if isinstance(record.seq, UnknownSeq):
+            #We have already recorded the length, and there is no need
+            #to record a long sequence of NNNNNNN...NNN or whatever.
+            if "contig" in record.annotations:
+                self._write_contig(record)
+            else:
+                #TODO - Can the sequence just be left out as in GenBank files?
+                self.handle.write("SQ   \n")
+            return
 
         data = self._get_seq_string(record) #Catches sequence being None
         seq_len = len(data)
+        # TODO - Length and base composition on SQ line?
         handle.write("SQ   \n")
         for line_number in range(0,seq_len // LETTERS_PER_LINE):
             handle.write("    ") #Just four, not five
@@ -610,7 +631,7 @@ class EmblWriter(_InsdcWriter):
         self.handle.write(line+"\n")
 
     def _write_multi_line(self, tag, text):
-        max_len = self.MAX_WIDTH - 5
+        max_len = self.MAX_WIDTH - self.HEADER_WIDTH
         lines = self._split_multi_line(text, max_len)
         for line in lines :
             self._write_single_line(tag, line)
@@ -826,7 +847,7 @@ if __name__ == "__main__":
         handle.close()
 
         check_genbank_writer(records)
-        #check_embl_writer(records)
+        check_embl_writer(records)
 
     for filename in os.listdir("../../Tests/EMBL"):
         if not filename.endswith(".embl"):
