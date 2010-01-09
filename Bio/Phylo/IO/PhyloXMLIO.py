@@ -13,7 +13,7 @@ __docformat__ = "epytext en"
 import sys
 import warnings
 
-from Bio.Tree import PhyloXML as PX
+from Bio.Phylo import PhyloXML as PX
 
 try:
     from xml.etree import cElementTree as ElementTree

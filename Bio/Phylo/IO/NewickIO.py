@@ -13,7 +13,7 @@ __docformat__ = "epytext en"
 
 from cStringIO import StringIO
 
-from Bio.Tree import Newick
+from Bio.Phylo import Newick
 
 # Definitions retrieved from Bio.Nexus.Trees
 NODECOMMENT_START = '[&'

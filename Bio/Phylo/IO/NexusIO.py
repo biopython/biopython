@@ -10,7 +10,7 @@ __docformat__ = "epytext en"
 from itertools import chain
 
 from Bio.Nexus import Nexus
-from Bio.Tree import Newick
+from Bio.Phylo import Newick
 
 import NewickIO
 

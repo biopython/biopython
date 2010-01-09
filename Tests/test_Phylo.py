@@ -3,7 +3,7 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Unit tests for the Bio.Tree module.
+"""Unit tests for the Bio.Phylo module.
 """
 
 
@@ -13,8 +13,8 @@ import zipfile
 from itertools import izip
 from cStringIO import StringIO
 
-from Bio import Tree
-from Bio.Tree import PhyloXML
+from Bio import Phylo
+from Bio.Phylo import PhyloXML
 
 
 # Example PhyloXML files
@@ -34,7 +34,7 @@ def unzip(fname):
 
 
 class UtilTests(unittest.TestCase):
-    """Tests for various Tree utility functions."""
+    """Tests for various utility functions."""
     def test_pretty_print(self):
         """Check pretty_print by counting lines of output for each example.
 
@@ -46,21 +46,21 @@ class UtilTests(unittest.TestCase):
                     # unzip(EX_METAZOA), unzip(EX_NCBI),
                     ),
                 (386, 747, 16207, 214911, 648553)):
-            tree = Tree.read(source, 'phyloxml')
+            tree = Phylo.read(source, 'phyloxml')
             output = StringIO()
-            Tree.pretty_print(tree, output)
+            Phylo.pretty_print(tree, output)
             output.seek(0)
             self.assertEquals(len(output.readlines()), count)
             output = StringIO()
-            Tree.pretty_print(tree, output, show_all=True)
+            Phylo.pretty_print(tree, output, show_all=True)
             output.seek(0)
             self.assertEquals(len(output.readlines()), count)
 
     # TODO: display "skipped" if networkx is unavailable
     def test_to_networkx(self):
         """Tree to Graph conversion, if networkx is available."""
-        tree = Tree.read(EX_DOLLO, 'phyloxml')
-        G = Tree.to_networkx(tree)
+        tree = Phylo.read(EX_DOLLO, 'phyloxml')
+        G = Phylo.to_networkx(tree)
         self.assertEqual(len(G.nodes()), 659)
 
 
@@ -69,7 +69,7 @@ class TreeTests(unittest.TestCase):
     # TODO: magic: iter, len, getitem
 
     def setUp(self):
-        self.phylogenies = list(Tree.parse(EX_PHYLO, 'phyloxml'))
+        self.phylogenies = list(Phylo.parse(EX_PHYLO, 'phyloxml'))
 
     # Traversal methods
 
@@ -96,7 +96,7 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(events[0].speciations, 1)
         self.assertEqual(events[1].duplications, 1)
         # integer filter
-        tree = Tree.read(EX_APAF, 'phyloxml')
+        tree = Phylo.read(EX_APAF, 'phyloxml')
         domains = list(tree.find_all(start=5))
         self.assertEqual(len(domains), 8)
         for dom in domains:
