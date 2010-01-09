@@ -9,4 +9,5 @@ See the TreeIO module for the usual way to produce these objects.
 """
 __docformat__ = "epytext en"
 
+from IO import *
 from Utils import *

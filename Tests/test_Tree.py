@@ -13,7 +13,7 @@ import zipfile
 from itertools import izip
 from cStringIO import StringIO
 
-from Bio import Tree, TreeIO
+from Bio import Tree
 from Bio.Tree import PhyloXML
 
 
@@ -46,7 +46,7 @@ class UtilTests(unittest.TestCase):
                     # unzip(EX_METAZOA), unzip(EX_NCBI),
                     ),
                 (386, 747, 16207, 214911, 648553)):
-            tree = TreeIO.read(source, 'phyloxml')
+            tree = Tree.read(source, 'phyloxml')
             output = StringIO()
             Tree.pretty_print(tree, output)
             output.seek(0)
@@ -59,7 +59,7 @@ class UtilTests(unittest.TestCase):
     # TODO: display "skipped" if networkx is unavailable
     def test_to_networkx(self):
         """Tree to Graph conversion, if networkx is available."""
-        tree = TreeIO.read(EX_DOLLO, 'phyloxml')
+        tree = Tree.read(EX_DOLLO, 'phyloxml')
         G = Tree.to_networkx(tree)
         self.assertEqual(len(G.nodes()), 659)
 
@@ -69,7 +69,7 @@ class TreeTests(unittest.TestCase):
     # TODO: magic: iter, len, getitem
 
     def setUp(self):
-        self.phylogenies = list(TreeIO.parse(EX_PHYLO, 'phyloxml'))
+        self.phylogenies = list(Tree.parse(EX_PHYLO, 'phyloxml'))
 
     # Traversal methods
 
@@ -96,7 +96,7 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(events[0].speciations, 1)
         self.assertEqual(events[1].duplications, 1)
         # integer filter
-        tree = TreeIO.read(EX_APAF, 'phyloxml')
+        tree = Tree.read(EX_APAF, 'phyloxml')
         domains = list(tree.find_all(start=5))
         self.assertEqual(len(domains), 8)
         for dom in domains:

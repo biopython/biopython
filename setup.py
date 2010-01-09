@@ -261,7 +261,7 @@ PACKAGES = [
     'Bio.SVDSuperimposer',
     'Bio.SwissProt',
     'Bio.Tree',
-    'Bio.TreeIO',
+    'Bio.Tree.IO',
     'Bio.UniGene',
     'Bio.Wise',
     #Other top level packages,
