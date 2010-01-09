@@ -5,6 +5,7 @@
 
 """I/O function wrappers for phylogenetic tree formats.
 """
+__all__ = ['parse', 'read', 'write', 'convert', 'supported_formats']
 __docformat__ = "epytext en"
 
 import NewickIO

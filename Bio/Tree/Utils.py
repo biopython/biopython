@@ -7,6 +7,8 @@
 
 Third-party libraries are loaded when the corresponding function is called.
 """
+__all__ = ['consensus', 'pretty_print', 'to_adjacency_matrix', 'to_networkx',
+        'draw_graphviz']
 __docformat__ = "epytext en"
 
 import sys
