@@ -5,8 +5,15 @@
 
 """PhyloXML reader/parser, writer, and associated functions.
 
-Instantiates Tree elements from a parsed PhyloXML file, and constructs an XML
-file from a Tree.PhyloXML object.
+Instantiates tree elements from a parsed PhyloXML file, and constructs an XML
+file from a Bio.Phylo.PhyloXML object.
+
+About capitalization:
+
+    - phyloXML means the file format specification
+    - PhyloXML means the Biopython module Bio.Phylo.PhyloXML and its classes
+    - Phyloxml means the top-level class used by PhyloXMLIO.read (but not
+      Bio.Phylo.read!), containing a list of Phylogenies (Tree-derived objects)
 """
 __docformat__ = "epytext en"
 
@@ -85,10 +92,9 @@ def read(file):
     The children of the root node are phylogenies and possibly other arbitrary
     (non-phyloXML) objects.
 
-    @rtype: Bio.Tree.PhyloXML.Phyloxml
+    @return: a single Bio.Phylo.PhyloXML.Phyloxml object.
     """
     return Parser(file).read()
-
 
 def parse(file):
     """Iterate over the phylogenetic trees in a phyloXML file.
@@ -96,10 +102,9 @@ def parse(file):
     This ignores any additional data stored at the top level, but may be more
     memory-efficient than the read() function.
 
-    @return: a generator of Bio.Tree.PhyloXML.Phylogeny objects.
+    @return: a generator of Bio.Phylo.PhyloXML.Phylogeny objects.
     """
     return Parser(file).parse()
-
 
 def write(obj, file, encoding=None):
     """Write a phyloXML file.
@@ -649,10 +654,10 @@ def _handle_simple(tag):
 
 
 class Writer(object):
-    """Methods for serializing a phyloXML object to XML.
-    """
+    """Methods for serializing a PhyloXML object to XML."""
+
     def __init__(self, phyloxml, encoding):
-        """Build an ElementTree from a phyloXML object."""
+        """Build an ElementTree from a PhyloXML object."""
         assert isinstance(phyloxml, PX.Phyloxml), "Not a Phyloxml object"
         self._tree = ElementTree.ElementTree(self.phyloxml(phyloxml))
         self.encoding = encoding

@@ -4,6 +4,8 @@
 # as part of this package.
 
 """Classes corresponding to phyloXML elements.
+
+See U{ http://phyloxml.org/ } for the official specification.
 """
 __docformat__ = "epytext en"
 
@@ -37,8 +39,7 @@ def check_str(text, testfunc):
 class PhyloElement(BaseTree.TreeElement):
     """Base class for all PhyloXML objects."""
     def __init__(self, **kwargs):
-        """Set all keyword arguments as instance attributes.
-        """
+        """Set all keyword arguments as instance attributes."""
         self.__dict__.update(kwargs)
 
     def __str__(self):
@@ -536,7 +537,6 @@ class DomainArchitecture(PhyloElement):
     @param domains: list of ProteinDomain objects
     """
     def __init__(self, length=None, domains=None):
-        # assert len(domains)
         PhyloElement.__init__(self, length=length, domains=domains)
 
 

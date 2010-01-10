@@ -3,11 +3,10 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Base classes for Bio.Tree objects.
+"""Base classes for Bio.Phylo objects.
 
 All object representations for phylogenetic trees should derive from these base
 classes in order to use the common methods defined on them.
-
 """
 __docformat__ = "epytext en"
 
@@ -136,7 +135,7 @@ def _object_matcher(obj):
     i.e. passing a TreeElement such as a Node or Tree instance returns an
     identity matcher, passing a type such as the PhyloXML.Taxonomy class returns
     a class matcher, and passing a dictionary returns an attribute matcher.
-    
+
     The resulting 'match' function returns True when given an object matching
     the specification (identity, type or attribute values), otherwise False.
     This is useful for writing functions that search the tree, and probably
@@ -156,7 +155,7 @@ def _object_matcher(obj):
 # Class definitions
 
 class TreeElement(object):
-    """Base class for all Bio.Tree classes."""
+    """Base class for all Bio.Phylo classes."""
 
     def __repr__(self):
         """Show this object's constructor with its primitive arguments."""
@@ -185,7 +184,7 @@ class TreeMixin(object):
     # Traversal methods
 
     def _filter_search(self, filter_func, order, follow_attrs):
-        """Perform a BFS or DFS through all elements in this tree.
+        """Perform a BFS or DFS traversal through all elements in this tree.
 
         @return: generator of all elements for which 'filter_func' is True.
         """
@@ -224,7 +223,7 @@ class TreeMixin(object):
         @param cls: 
             Specifies the class of the object to search for. Objects that
             inherit from this type will also match. (The default, TreeElement,
-            matches any standard Bio.Tree type.)
+            matches any standard Bio.Phylo type.)
         @type cls: type
 
         @param terminal:
@@ -257,11 +256,11 @@ class TreeMixin(object):
 
         Example:
 
-            >>> phx = TreeIO.read('phyloxml_examples.xml', 'phyloxml')
+            >>> from Bio.Phylo.IO import PhyloXMIO
+            >>> phx = PhyloXMLIO.read('phyloxml_examples.xml')
             >>> matches = phx.phylogenies[5].find_all(code='OCTVU')
             >>> matches.next()
             Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
-
         """ 
         assert isinstance(cls, type), "cls argument must be a class or type"
         match_class = _class_matcher(cls)
@@ -339,9 +338,13 @@ class TreeMixin(object):
         """Most recent common ancestor (clade) of all the given targets.
 
         Edge cases: 
+
+            - If no target is given, returns self.root
+            - If 1 target is given, returns the target
+            - If any target is not found in this tree, raises an AssertionError
         """
         paths = [self.get_path(t) for t in targets]
-        # Validation -- otherwise izip throws a spooky error
+        # Validation -- otherwise izip throws a spooky error below
         for p, t in zip(paths, targets):
             assert p is not None, "target %s is not in this tree" % repr(t)
         mrca = self.root
@@ -425,7 +428,7 @@ class TreeMixin(object):
     def is_monophyletic(self, terminals):
         """Does taxon_list comprise a complete subclade of this clade?
 
-        @return common ancestor if subclades is monophyletic, otherwise False.
+        @return: common ancestor if subclades is monophyletic, otherwise False.
         """
         target_set = set(terminals)
         current = self.root
@@ -441,10 +444,14 @@ class TreeMixin(object):
                     return False
 
     def is_parent_of(self, target):
+        """True if target is a descendent of this tree.
+
+        Not required to be a direct descendent.
+        """
         return (self.get_path(target) is not None)
 
     def is_preterminal(self):
-        """Returns True if all direct descendents are terminal."""
+        """True if all direct descendents are terminal."""
         if self.root.is_terminal():
             return False
         for clade in self.clades:
@@ -652,9 +659,9 @@ class Subtree(TreeElement, TreeMixin):
     # Properties may be overridden by subclasses
 
     # XXX kind of superfluous
-    @property
-    def label(self):
-        return str(self)
+    # @property
+    # def label(self):
+    #     return str(self)
 
     @property
     def root(self):

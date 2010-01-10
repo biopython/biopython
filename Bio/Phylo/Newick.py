@@ -49,7 +49,7 @@ class _TreeShim(object):
 
     This class and its use in Tree (below) can eventually be deleted.
     """
-    # * Methods with deprecated arguments -- duplicated in Bio.Tree.BaseTree *
+    # * Methods with deprecated arguments -- duplicated in Bio.Phylo.BaseTree *
     # Each of these method checks for usage of deprecated arguments, issues a
     # warning if so, then performs the usual BaseTree procedure, adjusting
     # arguments as needed.
@@ -75,7 +75,7 @@ class _TreeShim(object):
         return counter + 1
 
     def is_bifurcating(self, node=None):
-        """Return True if tree downstream of node is strictly bifurcating."""
+        """True if tree downstream of node is strictly bifurcating."""
         if node is not None:
             warnings.warn("use node.is_bifurcating() directly instead",
                           DeprecationWarning, stacklevel=2)
@@ -307,8 +307,8 @@ class _NodeData(object):
 
 
 class Tree(BaseTree.Tree, _TreeShim):
-    """Newick Tree object.
-    """
+    """Newick Tree object."""
+
     def __init__(self, root=None, rooted=False, id=None, name='', weight=1.0):
         BaseTree.Tree.__init__(self, root=root or Clade(),
                 rooted=rooted, id=id, name=name)
@@ -316,8 +316,8 @@ class Tree(BaseTree.Tree, _TreeShim):
 
 
 class Clade(BaseTree.Subtree, _NodeShim):
-    """Newick Clade (subtree) object.
-    """
+    """Newick Clade (subtree) object."""
+
     def __init__(self, branch_length=1.0, name=None, clades=None,
             support=None, comment=None):
         BaseTree.Subtree.__init__(self, branch_length=branch_length,

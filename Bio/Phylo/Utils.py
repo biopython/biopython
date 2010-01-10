@@ -3,7 +3,7 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Utilities for handling and checking PhyloXML object trees.
+"""Utilities for handling, displaying and exporting Phylo trees.
 
 Third-party libraries are loaded when the corresponding function is called.
 """
@@ -17,10 +17,10 @@ import BaseTree
 
 
 def pretty_print(treeobj, file=sys.stdout, show_all=False, indent=0):
-    """Print a summary of the structure of a PhyloXML file.
+    """Print a summary of the structure of a Phylo tree or subtree object.
 
     With the show_all option, also prints the primitive (native Python instead
-    of PhyloXML) objects in the object tree.
+    of just TreeElement) objects in the object tree.
     """
     assert isinstance(treeobj, BaseTree.TreeElement), \
             "%s is not a valid TreeElement" % repr(treeobj)
@@ -35,20 +35,20 @@ def pretty_print(treeobj, file=sys.stdout, show_all=False, indent=0):
         """Write an indented string of text to file."""
         file.write('\t'*indent + text + '\n')
 
-    def print_phylo(obj, indent):
-        """Recursively print a PhyloElement object tree."""
+    def print_tree(obj, indent):
+        """Recursively print a TreeElement object tree."""
         print_indented(show(obj), indent)
         indent += 1
         for attr in obj.__dict__:
             child = getattr(obj, attr)
             if isinstance(child, BaseTree.TreeElement):
-                print_phylo(child, indent)
+                print_tree(child, indent)
             elif isinstance(child, list):
                 for elem in child:
                     if isinstance(elem, BaseTree.TreeElement):
-                        print_phylo(elem, indent)
+                        print_tree(elem, indent)
 
-    print_phylo(treeobj, indent)
+    print_tree(treeobj, indent)
 
 
 def to_adjacency_matrix(tree):
@@ -89,7 +89,7 @@ def to_networkx(tree):
 
     The result is useful for graph-oriented analysis, and also interactive
     plotting with pylab, matplotlib or pygraphviz, though the result is not
-    quite a proper dendrogram for representing a phylogeny.
+    quite a proper dendrogram typically used to represent a phylogeny.
 
     Requires NetworkX version 0.99 or 1.0.
     """
@@ -101,8 +101,8 @@ def to_networkx(tree):
                 "The networkx library is not installed.")
 
     def add_edge(graph, n1, n2):
-        # NB (9/2009): the networkx API is hella unstable
-        # Ubuntu Karmic uses 0.99, newest is 1.0rc1, let's support both
+        # NB (1/2010): the networkx API congealed recently
+        # Ubuntu Karmic uses v0.99, newest is v1.0, let's support both
         if networkx.__version__ >= '1.0':
             graph.add_edge(n1, n2, weight=str(n2.branch_length or 1.0))
             if hasattr(n2, 'color') and n2.color is not None:
@@ -130,18 +130,18 @@ def to_networkx(tree):
 
 def draw_graphviz(tree, label_func=str, prog='neato', args='',
         node_color='#c0deff', **kwargs):
-    """Display a Tree object as a dendrogram, using the graphviz engine.
+    """Display a tree or subtree as a graph, using the graphviz engine.
 
     Requires NetworkX, matplotlib, Graphviz and either PyGraphviz or pydot.
 
     Example:
 
         >>> import pylab
-        >>> from Bio import Tree, TreeIO
-        >>> tree = TreeIO.read('example.xml', 'phyloxml')
-        >>> Tree.draw_graphviz(tree)
+        >>> from Bio import Phylo
+        >>> tree = Phylo.read('ex/apaf.xml', 'phyloxml')
+        >>> Phylo.draw_graphviz(tree)
         >>> pylab.show()
-        >>> pylab.savefig('example.png')
+        >>> pylab.savefig('apaf.png')
 
     @param label_func: A function to extract a label from a node. By default
         this is str(), but you can use a different function to select another
@@ -155,7 +155,7 @@ def draw_graphviz(tree, label_func=str, prog='neato', args='',
         the desired value without checking if the intermediate attributes are
         available:
 
-        >>> Tree.draw_graphviz(tree, lambda n: n.taxonomies[0].code)
+        >>> Phylo.draw_graphviz(tree, lambda n: n.taxonomies[0].code)
 
     The third and fourth parameters apply to Graphviz, and the remaining
     arbitrary keyword arguments are passed directly to networkx.draw(), which

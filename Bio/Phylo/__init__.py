@@ -3,9 +3,9 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Classes corresponding to phylogenetic tree objects.
+"""Package for working with phylogenetic trees.
 
-See the TreeIO module for the usual way to produce these objects.
+See also: U{ http://biopython.org/wiki/Phylo }
 """
 __docformat__ = "epytext en"
 

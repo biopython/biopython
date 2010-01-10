@@ -31,10 +31,9 @@ class NewickError(Exception):
 def parse(handle):
     """Iterate over the trees in a Newick file handle.
 
-    @return: a generator of Bio.Tree.Newick.Tree objects.
+    @return: a generator of Bio.Phylo.Newick.Tree objects.
     """
     return Parser(handle).parse()
-
 
 def write(trees, handle, plain=False, **kwargs):
     """Write a trees in Newick format to the given file handle.
@@ -156,9 +155,7 @@ class Parser(object):
 # Output
 
 class Writer(object):
-    """
-    Based on the writer in Bio.Nexus.Trees (str, to_string)
-    """
+    """Based on the writer in Bio.Nexus.Trees (str, to_string)."""
 
     def __init__(self, trees):
         self.trees = trees
