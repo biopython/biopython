@@ -180,6 +180,7 @@ class _InsdcWriter(SequentialSequenceWriter):
     """Base class for GenBank and EMBL writers (PRIVATE)."""
     QUALIFIER_INDENT = 21
     QUALIFIER_INDENT_STR = " "*QUALIFIER_INDENT
+    QUALIFIER_INDENT_TMP = "     %s                " # 21 if %s is empty
 
     def _write_feature_qualifier(self, key, value=None, quote=None):
         if not value:
@@ -231,9 +232,8 @@ class _InsdcWriter(SequentialSequenceWriter):
     def _write_feature(self, feature):
         """Write a single SeqFeature object to features table."""
         assert feature.type, feature
-        #TODO - Line wrapping for long locations!
         location = _insdc_feature_location_string(feature)
-        line = ("     %s                " % feature.type)[:self.QUALIFIER_INDENT] \
+        line = (self.QUALIFIER_INDENT_TMP  % feature.type)[:self.QUALIFIER_INDENT] \
                + self._wrap_location(location) + "\n"
         self.handle.write(line)
         #Now the qualifiers...
@@ -582,7 +582,10 @@ class GenBankWriter(_InsdcWriter):
 class EmblWriter(_InsdcWriter):
     MAX_WIDTH = 80
     HEADER_WIDTH = 5
-
+    QUALIFIER_INDENT = 21
+    QUALIFIER_INDENT_STR = "FT" + " "*(QUALIFIER_INDENT-2)
+    QUALIFIER_INDENT_TMP = "FT   %s                " # 21 if %s is empty
+    
     def _write_contig(self, record):
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
         lines = self._split_contig(record, max_len)
@@ -733,7 +736,9 @@ class EmblWriter(_InsdcWriter):
         if "comment" in record.annotations:
             self._write_comment(record)
 
-        #TODO - Features (FT lines)
+        handle.write("FH   Key             Location/Qualifiers\n")
+        for feature in record.features:
+            self._write_feature(feature) 
 
         self._write_sequence(record)
         handle.write("//\n")

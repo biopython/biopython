@@ -12,9 +12,7 @@ The latest news is at the top.
 Bio.Entrez includes some more DTD files, in particular eLink_090910.dtd,
 needed for our NCBI Entrez Utilities XML parser.
 
-Bio.SeqIO now has basic support for writing EMBL files as output (DNA
-and RNA sequences only, not proteins). Currently only the sequence and
-very minimal annotation is recorded - feature are NOT yet supported.
+Bio.SeqIO now supports writing EMBL files (DNA and RNA sequences only).
 
 ===================================================================
 
