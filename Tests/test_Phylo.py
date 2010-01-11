@@ -3,11 +3,8 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Unit tests for the Bio.Phylo module.
-"""
+"""Unit tests for the Bio.Phylo module."""
 
-
-import os
 import unittest
 import zipfile
 from itertools import izip
@@ -22,7 +19,6 @@ EX_APAF = 'PhyloXML/apaf.xml'
 EX_BCL2 = 'PhyloXML/bcl_2.xml'
 EX_MADE = 'PhyloXML/made_up.xml'
 EX_PHYLO = 'PhyloXML/phyloxml_examples.xml'
-EX_DOLLO = 'PhyloXML/o_tol_332_d_dollo.xml'
 EX_MOLLUSCA = 'PhyloXML/ncbi_taxonomy_mollusca.xml.zip'
 
 
@@ -46,7 +42,7 @@ class UtilTests(unittest.TestCase):
                     # unzip(EX_METAZOA), unzip(EX_NCBI),
                     ),
                 (386, 747, 16207, 214911, 648553)):
-            tree = Phylo.read(source, 'phyloxml')
+            tree = Phylo.IO.read(source, 'phyloxml')
             output = StringIO()
             Phylo.pretty_print(tree, output)
             output.seek(0)
@@ -56,20 +52,13 @@ class UtilTests(unittest.TestCase):
             output.seek(0)
             self.assertEquals(len(output.readlines()), count)
 
-    # TODO: display "skipped" if networkx is unavailable
-    def test_to_networkx(self):
-        """Tree to Graph conversion, if networkx is available."""
-        tree = Phylo.read(EX_DOLLO, 'phyloxml')
-        G = Phylo.to_networkx(tree)
-        self.assertEqual(len(G.nodes()), 659)
-
 
 class TreeTests(unittest.TestCase):
     """Tests for methods on BaseTree.Tree objects."""
     # TODO: magic: iter, len, getitem
 
     def setUp(self):
-        self.phylogenies = list(Phylo.parse(EX_PHYLO, 'phyloxml'))
+        self.phylogenies = list(Phylo.IO.parse(EX_PHYLO, 'phyloxml'))
 
     # Traversal methods
 
@@ -96,7 +85,7 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(events[0].speciations, 1)
         self.assertEqual(events[1].duplications, 1)
         # integer filter
-        tree = Phylo.read(EX_APAF, 'phyloxml')
+        tree = Phylo.IO.read(EX_APAF, 'phyloxml')
         domains = list(tree.find_all(start=5))
         self.assertEqual(len(domains), 8)
         for dom in domains:
