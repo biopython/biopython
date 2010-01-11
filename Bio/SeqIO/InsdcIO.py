@@ -128,23 +128,26 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(feature):
                _insdc_feature_position_string(feature.location.end)
 
 def _insdc_feature_location_string(feature):
-    """Build a GenBank/EMBL location string from a SeqFeature (PRIVATE)."""
-    # Have a choice of how to show joins on the reverse complement strand,
-    # complement(join(1,10),(20,100)) vs join(complement(20,100),complement(1,10))
-    # Notice that the order of the entries gets flipped!
-    #
-    # GenBank and EMBL would both use now complement(join(1,10),(20,100))
-    # which is shorter at least.
-    #
-    # In the above situations, we expect the parent feature and the two children
-    # to all be marked as strand==-1, and in the order 0:10 then 19:100.
-    #
-    # Also need to consider dual-strand examples like these from the Arabidopsis
-    # thaliana chloroplast NC_000932: join(complement(69611..69724),139856..140650)
-    # gene ArthCp047, GeneID:844801 or its CDS which is even better due to a splice:
-    # join(complement(69611..69724),139856..140087,140625..140650)
-    # protein NP_051038.1 GI:7525057
-    #
+    """Build a GenBank/EMBL location string from a SeqFeature (PRIVATE).
+
+    There is a choice of how to show joins on the reverse complement strand,
+    GenBank used "complement(join(1,10),(20,100))" while EMBL used to use
+    "join(complement(20,100),complement(1,10))" instead (but appears to have
+    now adopted the GenBank convention). Notice that the order of the entries
+    is reversed! This function therefore uses the first form. In this situation
+    we expect the parent feature and the two children to all be marked as
+    strand==-1, and in the order 0:10 then 19:100.
+
+    Also need to consider dual-strand examples like these from the Arabidopsis
+    thaliana chloroplast NC_000932: join(complement(69611..69724),139856..140650)
+    gene ArthCp047, GeneID:844801 or its CDS (protein NP_051038.1 GI:7525057)
+    which is further complicated by a splice:
+    join(complement(69611..69724),139856..140087,140625..140650)
+
+    For mixed this mixed strand feature, the parent SeqFeature should have
+    no strand (either 0 or None) while the child features should have either
+    strand +1 or -1 as appropriate, and be listed in the order given here.
+    """
 
     if not feature.sub_features:
         #Non-recursive.
@@ -175,6 +178,75 @@ def _insdc_feature_location_string(feature):
 
 class _InsdcWriter(SequentialSequenceWriter):
     """Base class for GenBank and EMBL writers (PRIVATE)."""
+    QUALIFIER_INDENT = 21
+    QUALIFIER_INDENT_STR = " "*QUALIFIER_INDENT
+
+    def _write_feature_qualifier(self, key, value=None, quote=None):
+        if not value:
+            self.handle.write("%s/%s\n" % (self.QUALIFIER_INDENT_STR, key))
+            return
+        #Quick hack with no line wrapping, may be useful for testing:
+        #self.handle.write('%s/%s="%s"\n' % (self.QUALIFIER_INDENT_STR, key, value))
+        if quote is None:
+            #Try to mimic unwritten rules about when quotes can be left out:
+            if isinstance(value, int) or isinstance(value, long):
+                quote = False
+            else:
+                quote = True
+        if quote:
+            line = '%s/%s="%s"' % (self.QUALIFIER_INDENT_STR, key, value)
+        else:
+            line = '%s/%s=%s' % (self.QUALIFIER_INDENT_STR, key, value)
+        if len(line) < self.MAX_WIDTH:
+            self.handle.write(line+"\n")
+            return
+        while line.lstrip():
+            if len(line) < self.MAX_WIDTH:
+                self.handle.write(line+"\n")
+                return
+            #Insert line break...
+            for index in range(min(len(line)-1,self.MAX_WIDTH),self.QUALIFIER_INDENT+1,-1):
+                if line[index]==" " : break
+            if line[index] != " ":
+                #No nice place to break...
+                index = self.MAX_WIDTH
+            self.handle.write(line[:index] + "\n")
+            line = self.QUALIFIER_INDENT_STR + line[index:].lstrip()
+
+    def _wrap_location(self, location):
+        """Split a feature location into lines (break at commas)."""
+        #TODO - Rewrite this not to recurse!
+        length = self.MAX_WIDTH - self.QUALIFIER_INDENT
+        if len(location) <= length:
+            return location
+        index = location[:length].rfind(",")
+        if index == -1:
+            #No good place to split (!)
+            import warnings
+            warnings.warn("Couldn't split location:\n%s" % location)
+            return location
+        return location[:index+1] + "\n" + \
+               self.QUALIFIER_INDENT_STR + self._wrap_location(location[index+1:])
+
+    def _write_feature(self, feature):
+        """Write a single SeqFeature object to features table."""
+        assert feature.type, feature
+        #TODO - Line wrapping for long locations!
+        location = _insdc_feature_location_string(feature)
+        line = ("     %s                " % feature.type)[:self.QUALIFIER_INDENT] \
+               + self._wrap_location(location) + "\n"
+        self.handle.write(line)
+        #Now the qualifiers...
+        for key, values in feature.qualifiers.iteritems():
+            if isinstance(values, list) or isinstance(values, tuple):
+                for value in values:
+                    self._write_feature_qualifier(key, value)
+            elif values:
+                #String, int, etc
+                self._write_feature_qualifier(key, values)
+            else:
+                #e.g. a /psuedo entry
+                self._write_feature_qualifier(key)
 
     def _get_annotation_str(self, record, key, default=".", just_first=False):
         """Get an annotation dictionary entry (as a string).
@@ -506,74 +578,6 @@ class GenBankWriter(_InsdcWriter):
             self._write_feature(feature) 
         self._write_sequence(record)
         handle.write("//\n")
-
-    def _write_feature_qualifier(self, key, value=None, quote=None):
-        if not value:
-            self.handle.write("%s/%s\n" % (" "*self.QUALIFIER_INDENT, key))
-            return
-        #Quick hack with no line wrapping, may be useful for testing:
-        #self.handle.write('%s/%s="%s"\n' % (" "*self.QUALIFIER_INDENT, key, value))
-        if quote is None:
-            #Try to mimic unwritten rules about when quotes can be left out:
-            if isinstance(value, int) or isinstance(value, long):
-                quote = False
-            else:
-                quote = True
-        if quote:
-            line = '%s/%s="%s"' % (" "*self.QUALIFIER_INDENT, key, value)
-        else:
-            line = '%s/%s=%s' % (" "*self.QUALIFIER_INDENT, key, value)
-        if len(line) < self.MAX_WIDTH:
-            self.handle.write(line+"\n")
-            return
-        while line.lstrip():
-            if len(line) < self.MAX_WIDTH:
-                self.handle.write(line+"\n")
-                return
-            #Insert line break...
-            for index in range(min(len(line)-1,self.MAX_WIDTH),self.QUALIFIER_INDENT+1,-1):
-                if line[index]==" " : break
-            if line[index] != " ":
-                #No nice place to break...
-                index = self.MAX_WIDTH
-            self.handle.write(line[:index] + "\n")
-            line = " "*self.QUALIFIER_INDENT + line[index:].lstrip()
-
-    def _wrap_location(self, location):
-        """Split a feature location into lines (break at commas)."""
-        #TODO - Rewrite this not to recurse!
-        length = self.MAX_WIDTH - self.QUALIFIER_INDENT
-        if len(location) <= length:
-            return location
-        index = location[:length].rfind(",")
-        if index == -1:
-            #No good place to split (!)
-            import warnings
-            warnings.warn("Couldn't split location:\n%s" % location)
-            return location
-        return location[:index+1] + "\n" + \
-               " "*self.QUALIFIER_INDENT + self._wrap_location(location[index+1:])
-
-    def _write_feature(self, feature):
-        """Write a single SeqFeature object to features table."""
-        assert feature.type, feature
-        #TODO - Line wrapping for long locations!
-        location = _insdc_feature_location_string(feature)
-        line = ("     %s                " % feature.type)[:self.QUALIFIER_INDENT] \
-               + self._wrap_location(location) + "\n"
-        self.handle.write(line)
-        #Now the qualifiers...
-        for key, values in feature.qualifiers.iteritems():
-            if isinstance(values, list) or isinstance(values, tuple):
-                for value in values:
-                    self._write_feature_qualifier(key, value)
-            elif values:
-                #String, int, etc
-                self._write_feature_qualifier(key, values)
-            else:
-                #e.g. a /psuedo entry
-                self._write_feature_qualifier(key)
-
 
 class EmblWriter(_InsdcWriter):
     MAX_WIDTH = 80
