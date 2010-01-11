@@ -3,11 +3,8 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Unit tests for the Bio.Phylo module.
-"""
+"""Unit tests for the Bio.Phylo module."""
 
-
-import os
 import unittest
 import zipfile
 from itertools import izip
@@ -22,7 +19,6 @@ EX_APAF = 'PhyloXML/apaf.xml'
 EX_BCL2 = 'PhyloXML/bcl_2.xml'
 EX_MADE = 'PhyloXML/made_up.xml'
 EX_PHYLO = 'PhyloXML/phyloxml_examples.xml'
-EX_DOLLO = 'PhyloXML/o_tol_332_d_dollo.xml'
 EX_MOLLUSCA = 'PhyloXML/ncbi_taxonomy_mollusca.xml.zip'
 
 
@@ -55,13 +51,6 @@ class UtilTests(unittest.TestCase):
             Phylo.pretty_print(tree, output, show_all=True)
             output.seek(0)
             self.assertEquals(len(output.readlines()), count)
-
-    # TODO: display "skipped" if networkx is unavailable
-    def test_to_networkx(self):
-        """Tree to Graph conversion, if networkx is available."""
-        tree = Phylo.IO.read(EX_DOLLO, 'phyloxml')
-        G = Phylo.to_networkx(tree)
-        self.assertEqual(len(G.nodes()), 659)
 
 
 class TreeTests(unittest.TestCase):
