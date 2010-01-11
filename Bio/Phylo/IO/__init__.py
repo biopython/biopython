@@ -7,7 +7,6 @@
 
 This API follows the same semantics as Biopython's SeqIO and AlignIO.
 """
-__all__ = ['parse', 'read', 'write', 'convert', 'supported_formats']
 __docformat__ = "epytext en"
 
 import NewickIO
