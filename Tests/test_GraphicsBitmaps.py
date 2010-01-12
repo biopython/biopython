@@ -32,6 +32,8 @@ except:
         "Install ReportLab's renderPM module if you want to create "
         "bitmaps with Bio.Graphics.")
 
+from reportlab.graphics.renderPM import RenderPMError
+
 # the stuff we're testing
 from Bio.Graphics.Comparative import ComparativeScatterPlot
 
@@ -81,6 +83,15 @@ class ComparativeTest(unittest.TestCase):
         # error here.
         except IndexError:
             pass
+        except RenderPMError, err :
+            if str(err).startswith("Can't setFont(") :
+                #TODO - can we raise the error BEFORE the unit test function
+                #is run? That way it can be skipped in run_tests.py
+                raise MissingExternalDependencyError(\
+                    "Check the fonts needed by ReportLab if you want "
+                    "bitmaps from Bio.Graphics\n" + str(err))
+            else :
+                raise err
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

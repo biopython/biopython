@@ -420,8 +420,8 @@ class SeqRecord(object):
                               "SeqFeature referencing other sequences (e.g. "
                               "from segmented GenBank records) is ignored.")
                         continue
-                    if start <= f.location.start.position \
-                    and f.location.end.position <= stop:
+                    if start <= f.location.nofuzzy_start \
+                    and f.location.nofuzzy_end <= stop:
                         answer.features.append(f._shift(-start))
 
             #Slice all the values to match the sliced sequence
@@ -752,6 +752,10 @@ class SeqRecord(object):
 
         However, we should point out that when we sliced the SeqRecord,
         any annotations dictionary or dbxrefs list entries were lost.
+        You can explicitly copy them like this:
+
+        >>> new.annotations = plasmid.annotations.copy()
+        >>> new.dbxrefs = plasmid.dbxrefs[:]
         """
         if not isinstance(other, SeqRecord):
             #Assume it is a string or a Seq.
@@ -817,10 +821,11 @@ class SeqRecord(object):
                                "the other SeqRecord being added!")
         #Assume it is a string or a Seq.
         #Note can't transfer any per-letter-annotations
+        offset = len(other)
         return SeqRecord(other + self.seq,
                          id = self.id, name = self.name,
                          description = self.description,
-                         features = self.features[:],
+                         features = [f._shift(offset) for f in self.features],
                          annotations = self.annotations.copy(),
                          dbxrefs = self.dbxrefs[:])
 
@@ -836,6 +841,14 @@ def _test():
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("..","Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
+    elif os.path.isdir(os.path.join("Tests")) :
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("Tests"))
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir

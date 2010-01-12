@@ -12,7 +12,8 @@ import unittest
 from Bio.Alphabet import generic_dna, generic_rna, generic_protein
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import SeqFeature, FeatureLocation
+from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
+from Bio.SeqFeature import WithinPosition, BeforePosition, AfterPosition, OneOfPosition
 
 class SeqRecordCreation(unittest.TestCase):
     """Test basic creation of SeqRecords."""
@@ -62,14 +63,17 @@ class SeqRecordMethods(unittest.TestCase):
     """Test SeqRecord methods."""
 
     def setUp(self) :
-        f1 = SeqFeature(FeatureLocation(0,10))
-        f2 = SeqFeature(FeatureLocation(12,22))
-        f3 = SeqFeature(FeatureLocation(16,26))
+        f0 = SeqFeature(FeatureLocation(0,26), type="source",
+                        qualifiers={"mol_type":["fake protein"]})
+        f1 = SeqFeature(FeatureLocation(0,ExactPosition(10)))
+        f2 = SeqFeature(FeatureLocation(WithinPosition(12,3),BeforePosition(22)))
+        f3 = SeqFeature(FeatureLocation(AfterPosition(16),
+                                        OneOfPosition([ExactPosition(25),AfterPosition(26)])))
         self.record = SeqRecord(Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),
                                 id="TestID", name="TestName", description="TestDescr",
                                 dbxrefs=["TestXRef"], annotations={"k":"v"},
                                 letter_annotations = {"fake":"X"*26},
-                                features = [f1,f2,f3])
+                                features = [f0,f1,f2,f3])
 
     def test_slice_variantes(self):
         """Simple slices using different start/end values"""
@@ -116,12 +120,12 @@ class SeqRecordMethods(unittest.TestCase):
         self.assertEqual(rec.dbxrefs, ["TestXRef"])
         self.assertEqual(rec.annotations, {"k":"v"})
         self.assertEqual(rec.letter_annotations, {"fake":"X"*52})
-        self.assertEqual(len(rec.features), 6)
+        self.assertEqual(len(rec.features), 2*len(self.record.features))
 
     def test_add_seq(self):
         """Simple addition of Seq or string"""
         for other in [Seq("BIO"), "BIO"] :
-            rec = self.record + other
+            rec = self.record + other # will use SeqRecord's __add__ method
             self.assertEqual(len(rec), 26+3)
             self.assertEqual(str(rec.seq), str(self.record.seq)+"BIO")
             self.assertEqual(rec.id, "TestID")
@@ -130,12 +134,15 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(rec.dbxrefs, ["TestXRef"])
             self.assertEqual(rec.annotations, {"k":"v"})
             self.assertEqual(rec.letter_annotations, {})
-            self.assertEqual(len(rec.features), 3)
+            self.assertEqual(len(rec.features), len(self.record.features))
+            self.assertEqual(rec.features[0].type, "source")
+            self.assertEqual(rec.features[0].location.nofuzzy_start, 0)
+            self.assertEqual(rec.features[0].location.nofuzzy_end, 26) #not +3
 
     def test_add_seq_left(self):
         """Simple left addition of Seq or string"""
         for other in [Seq("BIO"), "BIO"] :
-            rec = other + self.record
+            rec = other + self.record # will use SeqRecord's __radd__ method
             self.assertEqual(len(rec), 26+3)
             self.assertEqual(str(rec.seq), "BIO"+str(self.record.seq))
             self.assertEqual(rec.id, "TestID")
@@ -144,8 +151,11 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(rec.dbxrefs, ["TestXRef"])
             self.assertEqual(rec.annotations, {"k":"v"})
             self.assertEqual(rec.letter_annotations, {})
-            self.assertEqual(len(rec.features), 3)
-
+            self.assertEqual(len(rec.features), len(self.record.features))
+            self.assertEqual(rec.features[0].type, "source")
+            self.assertEqual(rec.features[0].location.nofuzzy_start, 3)
+            self.assertEqual(rec.features[0].location.nofuzzy_end, 26+3)
+            
     def test_slice_add_simple(self):
         """Simple slice and add"""
         for cut in range(27) :
@@ -158,7 +168,7 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(rec.dbxrefs, []) # May change this...
             self.assertEqual(rec.annotations, {}) # May change this...
             self.assertEqual(rec.letter_annotations, {"fake":"X"*26})
-            self.assert_(len(rec.features) <= 3)
+            self.assert_(len(rec.features) <= len(self.record.features))
 
     def test_slice_add_shift(self):
         """Simple slice and add to shift"""
@@ -172,7 +182,7 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(rec.dbxrefs, []) # May change this...
             self.assertEqual(rec.annotations, {}) # May change this...
             self.assertEqual(rec.letter_annotations, {"fake":"X"*26})
-            self.assert_(len(rec.features) <= 3)
+            self.assert_(len(rec.features) <= len(self.record.features))
             
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

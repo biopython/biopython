@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 11 November 2009 (Biopython 1.52+)}
+\date{Last Update -- 5 January 2009 (Biopython 1.53+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -220,7 +220,7 @@ and HTML formats
   \end{itemize}
   
   \item \emph{Which ``Numerical Python'' do I need?} \\
-  For Biopython 1.48 or earlier, you need the old Numeric module.
+  For Biopython 1.48 or earlier, you needed the old Numeric module.
   For Biopython 1.49 onwards, you need the newer NumPy instead.
   Both Numeric and NumPy can be installed on the same machine fine.
   See also: \url{http://numpy.scipy.org/}
@@ -839,7 +839,7 @@ Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
 \end{verbatim}
 
 \emph{Note:} The \verb|Seq| object's \verb|transcribe| and \verb|back_transcribe| methods
-are new in Biopython 1.49.  For older releases you would have to use the \verb|Bio.Seq|
+were added in Biopython 1.49.  For older releases you would have to use the \verb|Bio.Seq|
 module's functions instead, see Section~\ref{sec:seq-module-functions}.
 
 \section{Translation}
@@ -951,7 +951,7 @@ translate method with \verb|Bio.SeqIO| for sequence input/ouput.
 \emph{Note:} The \verb|Seq| object's \verb|translate| method is new in Biopython 1.49.
 For older releases you would have to use the \verb|Bio.Seq| module's \verb|translate|
 function instead, see Section~\ref{sec:seq-module-functions}. The \texttt{cds} option
-is new in Biopython 1.51, and there is no simple way to do this with older versions
+was added in Biopython 1.51, and there is no simple way to do this with older versions
 of Biopython.
 
 \section{Translation Tables}
@@ -1877,7 +1877,7 @@ the \texttt{format} method described above in Section~\ref{sec:SeqRecord-format}
 \end{verbatim}
 
 See Sections~\ref{sec:FASTQ-slicing-off-primer}
-and~\ref{sec:FASTQ-slicing-off-adaptor} for some FASTQ example where the
+and~\ref{sec:FASTQ-slicing-off-adaptor} for some FASTQ examples where the
 per-letter annotations (the read quality scores) are also sliced.
 
 \section{Adding SeqRecord objects}
@@ -1889,7 +1889,60 @@ per-letter annotations are also added, all the features are preserved (with thei
 locations adjusted), and any other common annotation is also kept (like the id, name
 and description).
 
-For example, suppose you have a circular genome:
+For an example with per-letter annotation, we'll use the first record in a
+FASTQ file. Chapter~\ref{chapter:Bio.SeqIO} will explain the \verb|SeqIO| functions:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> record = SeqIO.parse(open("example.fastq"), "fastq").next()
+>>> len(record)
+25
+>>> print record.seq
+CCCTTCTTGTCTTCAGCGTTTCTCC
+>>> print record.letter_annotations["phred_quality"]
+[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26,
+26, 26, 26, 23, 23]
+\end{verbatim}
+
+\noindent Let's suppose this was Roche 454 data, and that from other information
+you think the \texttt{TTT} should be only \texttt{TT}. We can make a new edited
+record by first slicing the \verb|SeqRecord| before and after the ``extra''
+third \texttt{T}:
+
+\begin{verbatim}
+>>> left = record[:20]
+>>> print left.seq
+CCCTTCTTGTCTTCAGCGTT
+>>> print left.letter_annotations["phred_quality"]
+[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26]
+>>> right = record[21:]
+>>> print right.seq
+CTCC
+>>> print right.letter_annotations["phred_quality"]
+[26, 26, 23, 23]
+\end{verbatim}
+
+\noindent Now add the two parts together:
+
+\begin{verbatim}
+>>> edited = left + right
+>>> len(edited)
+24
+>>> print edited.seq
+CCCTTCTTGTCTTCAGCGTTCTCC
+>>> print edited.letter_annotations["phred_quality"]
+[26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26,
+26, 26, 23, 23]
+\end{verbatim}
+
+\noindent Easy and intuitive? We hope so! You can make this shorter with just:
+
+\begin{verbatim}
+>>> edited = record[:20] + record[21:]
+\end{verbatim}
+
+Now, for an example with features, we'll use a GenBank file.
+Suppose you have a circular genome:
 
 \begin{verbatim}
 >>> from Bio import SeqIO
@@ -1903,6 +1956,11 @@ dbxrefs=['Project:10638'])
 9609
 >>> len(record.features)
 29
+>>> record.dbxrefs
+['Project:10638']
+>>> record.annotations.keys()
+['comment', 'sequence_version', 'source', 'taxonomy', 'keywords', 'references',
+'accessions', 'data_file_division', 'date', 'organism', 'gi']
 \end{verbatim}
 
 You can shift the origin like this:
@@ -1916,13 +1974,34 @@ description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete 
 dbxrefs=[])
 >>> len(shifted)
 9609
->>> len(shifted.features)
-28
 \end{verbatim}
 
 Note that this isn't perfect in that some annotation like the database cross references
-and one of the features (the source feature) have been lost. This is because the
-\verb|SeqRecord| slicing step is perhaps too cautious in the annotation it preserves.
+and one of the features (the source feature) have been lost:
+
+\begin{verbatim}
+>>> len(shifted.features)
+28
+>>> shifted.dbxrefs
+[]
+>>> record.annotations.keys()
+[]
+\end{verbatim}
+
+This is because the \verb|SeqRecord| slicing step is cautious in what annotation
+it preserves (erroneously propagating annotation can cause major problems). If
+you want to keep the database cross references or the annotations dictionary,
+this must be done explicitly:
+
+\begin{verbatim}
+>>> shifted.dbxrefs = record.dbxrefs[:]
+>>> shifted.annotations = record.annotations.copy()
+>>> shifted.dbxrefs
+['Project:10638']
+>>> shifted.annotations.keys()
+['comment', 'sequence_version', 'source', 'taxonomy', 'keywords', 'references',
+'accessions', 'data_file_division', 'date', 'organism', 'gi']
+\end{verbatim}
 
 Also note that in an example like this, you should probably change the record
 identifiers since the NCBI references refer to the \emph{original} unmodified
@@ -2802,13 +2881,10 @@ For an example of how you might use this, let's load in a bunch of \verb|SeqReco
 \begin{verbatim}
 from Bio import SeqIO
 from StringIO import StringIO
-
 records = SeqIO.parse(open("ls_orchid.gbk"), "genbank")
-
 out_handle = StringIO()
 SeqIO.write(records, out_handle, "fasta")
 fasta_data = out_handle.getvalue()
-
 print fasta_data
 \end{verbatim}
 
@@ -2831,6 +2907,7 @@ out_handle = open("ls_orchid.tab", "w")
 SeqIO.write(record_iterator, out_handle, "tab")
 out_handle.close()
 \end{verbatim}
+\noindent Making a single call to \verb|SeqIO.write(...)| is also much quicker than multiple calls to the \verb|SeqRecord.format(...)| method.
 
 \chapter{Sequence Alignment Input/Output, and Alignment Tools}
 \label{chapter:Bio.AlignIO}
@@ -3819,7 +3896,7 @@ complicated.
 It also becomes far harder to diagnose problems, because you can't try running MUSCLE
 manually outside of Biopython (because you don't have the input file to supply).
 There can also be subtle cross platform issues (e.g. Windows versus Linux), and how
-you run your script can have in impact (e.g. at the command line, from IDLE or an
+you run your script can have an impact (e.g. at the command line, from IDLE or an
 IDE, or as a GUI script). These are all generic Python issues though, and not
 specific to Biopython.
 
@@ -3960,81 +4037,13 @@ Fortunately, the Biopython folks know this only too well, so they've developed l
 Dealing with BLAST can be split up into two steps, both of which can be done from within Biopython.
 Firstly, running BLAST for your query sequence(s), and getting some output.
 Secondly, parsing the BLAST output in Python for further analysis.
-We'll start by talking about running the BLAST command line tools locally, and then discuss running BLAST via the web.
 
-\section{Running BLAST locally}
-\label{sec:running-local-blast}
-
-Running BLAST locally (as opposed to over the internet, see
-Section~\ref{sec:running-www-blast}) has two advantages:
-\begin{itemize}
-\item Local BLAST may be faster than BLAST over the internet;
-\item Local BLAST allows you to make your own database to search for sequences against.
-\end{itemize}
-Dealing with proprietary or unpublished sequence data can be another reason to run BLAST locally.  You may not be allowed to redistribute the sequences, so submitting them to the NCBI as a BLAST query would not be an option.
-
-Biopython provides some nice code to enable you to call local BLAST executables from your scripts, and have full access to the many command line options that these executables provide. You can obtain local BLAST precompiled for a number of platforms at \url{ftp://ftp.ncbi.nlm.nih.gov/blast/executables/}, or can compile it yourself in the NCBI toolbox (\url{ftp://ftp.ncbi.nlm.nih.gov/toolbox/}).
-
-At the time of writing (October 2009), the NCBI have just released BLAST+ which is written in C++ and will be replacing the old BLAST tools written in C.
-This means that the old tools \verb|blastall|, \verb|blastpgp| and \verb|rpsblast| are now obsolete, being replaced by new command line tools \verb|blastn|, \verb|blastp|, \verb|blastx|, \verb|tblastn|, \verb|tblastx| (which all used to be handled by \verb|blastall|), \verb|psiblast| (replacing \verb|blastpgp|) and finally \verb|rpsblast| and \verb|rpstblastn| (which replace the old \verb|rpsblast|). These new command line tools have different more friendly command line switches, but provide the same functionality.
-
-The upshot of this is all that Biopython will have two sets of wrappers for calling ``classic'' BLAST tools, or the new BLAST ``plus'' tools.
-
-This document is being updated, and still describes the obsolete \verb|Bio.Blast.NCBIStandalone| functions for calling the ``classic'' BLAST tools.
-
-Let's use these functions to run \verb|blastall| against a local database and return the results. First, we want to set up the paths to everything that we'll need to do the BLAST. What we need to know is the path to the database (which should have been prepared using \verb|formatdb|, see \url{ftp://ftp.ncbi.nlm.nih.gov/blast/documents/formatdb.html}) to search against, the path to the file we want to search, and the path to the \verb|blastall| executable.
-
-On Linux or Mac OS X your paths might look like this:
-
-\begin{verbatim}
->>> my_blast_db = "/home/mdehoon/Data/Genomes/Databases/bsubtilis"
-# I used formatdb to create a BLAST database named bsubtilis
-# (for Bacillus subtilis) consisting of the following three files:
-# /home/mdehoon/Data/Genomes/Databases/bsubtilis.nhr
-# /home/mdehoon/Data/Genomes/Databases/bsubtilis.nin
-# /home/mdehoon/Data/Genomes/Databases/bsubtilis.nsq
-
->>> my_blast_file = "m_cold.fasta"
-# A FASTA file with the sequence I want to BLAST
-
->>> my_blast_exe = "/usr/local/blast/bin/blastall"
-# The name of my BLAST executable
-\end{verbatim}
-
-\noindent while on Windows you might have something like this:
-
-\begin{verbatim}
->>> my_blast_db = r"C:\Blast\Data\bsubtilis"
-# Assuming you used formatdb to create a BLAST database named bsubtilis
-# (for Bacillus subtilis) consisting of the following three files:
-# C:\Blast\Data\bsubtilis\bsubtilis.nhr
-# C:\Blast\Data\bsubtilis\bsubtilis.nin
-# C:\Blast\Data\bsubtilis\bsubtilis.nsq
->>> my_blast_file = "m_cold.fasta"
->>> my_blast_exe =r"C:\Blast\bin\blastall.exe"
-\end{verbatim}
-
-The FASTA file used in this example is available
-\href{examples/m\_cold.fasta}{here} as well as
-\href{http://biopython.org/DIST/docs/tutorial/examples/m\_cold.fasta}{online}.
-
-Now that we've got that all set, we are ready to run the BLAST and collect the results. We can do this with two lines:
-
-\begin{verbatim}
->>> from Bio.Blast import NCBIStandalone
->>> result_handle, error_handle = NCBIStandalone.blastall(my_blast_exe, "blastn",
-                                                    my_blast_db, my_blast_file)
-\end{verbatim}
-
-Note that the Biopython interfaces to local blast programs returns two values. The first is a handle to the blast output, which is ready to either be saved or passed to a parser. The second is the possible error output generated by the blast command. See Section~\ref{sec:appendix-handles} for more about handles.
-
-The error info can be hard to deal with, because if you try to do a \verb|error_handle.read()| and there was no error info returned, then the \verb|read()| call will block and not return, locking your script. In my opinion, the best way to deal with the error is only to print it out if you are not getting \verb|result_handle| results to be parsed, but otherwise to leave it alone.
-
-This command will generate BLAST output in XML format, as that is the format expected by the XML parser, described in Section~\ref{sec:parsing-blast}. For plain text output, use the \verb|align_view="0"| keyword. To parse text output instead of XML output, see Section~\ref{sec:parsing-blast-deprecated} below. However, parsing text output is not recommended, as the BLAST plain text output changes frequently, breaking our parsers.
-
-If you are interested in saving your results to a file before parsing them,
-see Section~\ref{sec:saving-blast-output}. To find out how to parse the BLAST
-results, go to Section~\ref{sec:parsing-blast}
+Your first introduction to running BLAST was probably via the NCBI web-service.
+In fact, there are lots of ways you can run BLAST, which can be categorised several ways.
+The most important distinction is running BLAST locally (on your own machine),
+and running BLAST remotely (on another machine, typically the NCBI servers).
+We're going to start this chapter by invoking the NCBI online BLAST service
+from within a Python script.
 
 \section{Running BLAST over the Internet}
 \label{sec:running-www-blast}
@@ -4126,85 +4135,182 @@ get back your results in a handle object (by default in XML format).
 The next step would be to parse the XML output into Python objects
 representing the search results (Section~\ref{sec:parsing-blast}),
 but you might want to save a local copy of the output file first.
+I find this especially useful when debugging my code that extracts
+info from the BLAST results (because re-running the online search
+is slow and wastes the NCBI computer time).
 
-\section{Saving BLAST output}
 \label{sec:saving-blast-output}
-
-Before parsing the results, it is often useful to save them into a
-file so that you can use them later without having to go back and
-re-blasting everything. I find this especially useful when debugging my
-code that extracts info from the BLAST files, but it could also be
-useful just for making backups of things you've done.
-
-If you don't want to save the BLAST output, you can skip to
-section~\ref{sec:parsing-blast}. If you do, read on.
 
 We need to be a bit careful since we can use \verb|result_handle.read()| to
 read the BLAST output only once -- calling \verb|result_handle.read()| again
-returns an empty string. First, we use \verb|read()| and store all of
-the information from the handle into a string:
-
-\begin{verbatim}
->>> blast_results = result_handle.read()
-\end{verbatim}
-
-Next, we save this string in a file:
+returns an empty string.
 
 \begin{verbatim}
 >>> save_file = open("my_blast.xml", "w")
->>> save_file.write(blast_results)
+>>> save_file.write(result_handle.read())
 >>> save_file.close()
+>>> result_handle.close()
 \end{verbatim}
 
 After doing this, the results are in the file \verb|my_blast.xml| and the
-variable \verb|blast_results| contains the BLAST results in a string
-form. However, the \verb|parse| function of the BLAST parser (described
-in~\ref{sec:parsing-blast}) takes a file-handle-like object, not a
-plain string. To get a handle, there are two things you can do:
-\begin{itemize}
-\item Use the Python standard library module \verb|cStringIO|. The
-following code will turn the plain string into a handle, which we can
-feed directly into the BLAST parser:
-\begin{verbatim}
->>> import cStringIO
->>> result_handle = cStringIO.StringIO(blast_results)
-\end{verbatim}
-\item Open the saved file for reading. Duh.
+original handle has had all its data extracted (so we closed it). However,
+the \verb|parse| function of the BLAST parser (described
+in~\ref{sec:parsing-blast}) takes a file-handle-like object, so
+we can just open the saved file for input:
+
 \begin{verbatim}
 >>> result_handle = open("my_blast.xml")
 \end{verbatim}
-\end{itemize}
 
 Now that we've got the BLAST results back into a handle again, we are ready
-to do something with them, so this leads us right into the parsing section.
+to do something with them, so this leads us right into the parsing section
+(see Section~\ref{sec:parsing-blast} below). You may want to jump ahead to
+that now \ldots.
+
+\section{Running BLAST locally}
+\label{sec:running-local-blast}
+
+\subsection{Introduction}
+
+Running BLAST locally (as opposed to over the internet, see
+Section~\ref{sec:running-www-blast}) has at least major two advantages:
+\begin{itemize}
+\item Local BLAST may be faster than BLAST over the internet;
+\item Local BLAST allows you to make your own database to search for sequences against.
+\end{itemize}
+Dealing with proprietary or unpublished sequence data can be another reason to run BLAST
+locally.  You may not be allowed to redistribute the sequences, so submitting them to the
+NCBI as a BLAST query would not be an option.
+
+Unfortunately, there are some major drawbacks too -- installing all the bits and getting it setup right takes some effort:
+\begin{itemize}
+\item Local BLAST requires command line tools to be installed.
+\item Local BLAST requires (large) BLAST databases to be setup (and potentially kept up to date).
+\end{itemize}
+
+\noindent
+To further confuse matters there are at least four different standalone BLAST packages,
+and there are also other tools which can produce imitation BLAST output files, such as BLAT.
+
+\subsection{Standalone NCBI ``legacy'' BLAST}
+
+\href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}
+{NCBI ``legacy'' BLAST} included command line tools \verb|blastall|, \verb|blastpgp| and
+\verb|rpsblast|. This is probably the most widely used standalone BLAST tool at the moment.
+
+The \verb|Bio.Blast.Applications| module has wrappers for the ``legacy'' NCBI BLAST tools
+like \verb|blastall|, \verb|blastpgp| and \verb|rpsblast|, and there are also helper
+functions in \verb|Bio.Blast.NCBIStandalone|. These are now considered obsolete, and will
+be deprecated and eventually removed from Biopython as the NCBI move over to the replacement
+BLAST+ suite.
+
+To try and avoid confusion, we will not cover calling these old tools from Biopython
+in this tutorial. Have a look at the older edition of this tutorial included with
+Biopython 1.52 if you are curious.
+
+\subsection{Standalone NCBI BLAST+}
+
+\href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}
+{NCBI ``new'' BLAST+} was released in 2009. This replaces the old NCBI ``legacy'' BLAST
+package. The \verb|Bio.Blast.Applications| module has wrappers for these ``new'' tools
+like \verb|blastn|, \verb|blastp|, \verb|blastx|, \verb|tblastn|, \verb|tblastx|
+(which all used to be handled by \verb|blastall|), \verb|psiblast|
+(replacing \verb|blastpgp|) and \verb|rpsblast| and \verb|rpstblastn|
+(which replace the old \verb|rpsblast|).
+
+This section will show briefly how to use these tools from within Python. If you have
+already read or tried the alignment tool examples in Section~\ref{sec:alignment-tools}
+this should all seem quite straightforward. First, we construct a command line string
+(as you would type in at the command line prompt if running standalone BLAST by hand).
+Then we can execute this command from within Python, typically using the
+\verb|subprocess| module.
+
+For example, taking a FASTA file of gene nucleotide sequences, you might want to
+run a BLASTX (translation) search against the non-redundant (NR) protein database.
+Assuming you (or your systems administrator) has downloaded and installed the NR
+database, you might run:
+
+\begin{verbatim}
+blastx -query opuntia.fasta -db nr -out opuntia.xml -evalue 0.001 -outfmt 5
+\end{verbatim}
+
+This should run BLASTX against the NR database, using an expectation cut-off value
+of $0.001$ and produce XML output to the specified file (which we can then parse).
+On my computer this takes about six minutes - a good reason to save the output
+to a file so you and repeat any analysis as needed.
+
+From within Biopython we can use the NCBI BLASTX wrapper from the
+\verb|Bio.Blast.Applications| module to build the command line string:
+
+\begin{verbatim}
+>>> from Bio.Blast.Applications import NcbiblastxCommandline
+>>> help(NcbiblastxCommandline)
+...
+>>> cline = NcbiblastxCommandline(query="opuntia.fasta", db="nr", evalue=0.001, outfmt=5,
+... out="opuntia.xml")
+>>> cline
+NcbiblastxCommandline(cmd='blastx', query='opuntia.fasta', db='nr', out='opuntia.xml',
+evalue=0.001, outfmt=5)
+>>> print cline
+blastx -query opuntia.fasta -db nr -out opuntia.xml -evalue 0.001 -outfmt 5
+\end{verbatim}
+
+In this example there shouldn't be any output from BLASTX to the terminal
+(stdout or stderr), so we can call the tool like this:
+
+\begin{verbatim}
+>>> import sys
+>>> import subprocess
+>>> return_code = subprocess.call(str(cline), shell=(sys.platform!="win32"))
+...
+>>> print return_code
+0
+\end{verbatim}
+\noindent Here the \ldots means wait for the command to finish. We then check
+the return code, remember that zero usually means no errors. You could also
+check the output file \verb|opuntia.xml| has been created.
+
+As you may recall from earlier examples in the tutorial, the \verb|opuntia.fasta|
+contains seven sequences, so the BLAST XML output should contain multiple results.
+Therefore use \verb|Bio.Blast.NCBIXML.parse()| to parse it as described below in
+Section~\ref{sec:parsing-blast}.
+
+\subsection{WU-BLAST and AB-BLAST}
+
+You may also come across \href{http://blast.wustl.edu/}{Washington University BLAST}
+(WU-BLAST), and its successor, \href{http://blast.advbiocomp.com}{Advanced Biocomputing
+BLAST} (AB-BLAST, released in 2009, not free/open source). These packages include
+the command line tools \verb|wu-blastall| and \verb|ab-blastall|.
+
+Biopython does not currently provide wrappers for calling these tools, but should be able
+to parse any NCBI compatible output from them.
 
 \section{Parsing BLAST output}
 \label{sec:parsing-blast}
 
-As mentioned above, BLAST can generate output in various formats,
-such as XML, HTML, and plain text. Originally, Biopython had a parser for
-BLAST plain text and HTML output, as these were the only output formats supported
-by BLAST. Unfortunately, the BLAST output in these formats kept changing,
-each time breaking the Biopython parsers. As keeping up with changes in BLAST
+As mentioned above, BLAST can generate output in various formats, such as
+XML, HTML, and plain text. Originally, Biopython had parsers for BLAST
+plain text and HTML output, as these were the only output formats offered
+at the time. Unfortunately, the BLAST output in these formats kept changing,
+each time breaking the Biopython parsers. Our HTML BLAST parser has been
+removed, but the plain text BLAST parser is still available (see
+Section~\ref{sec:parsing-blast-deprecated}). Use it at your orn risk,
+it may or may not work, depending on which BLAST version you're using.
+
+As keeping up with changes in BLAST
 became a hopeless endeavor, especially with users running different BLAST
 versions, we now recommend to parse the output in XML format, which can be
 generated by recent versions of BLAST. Not only is the XML output more stable
 than the plain text and HTML output, it is also much easier to parse
 automatically, making Biopython a whole lot more stable.
 
-Though deprecated, the parsers for BLAST output in plain text or HTML output
-are still available in Biopython
-(see Section~\ref{sec:parsing-blast-deprecated}).
-Use them at your own risk: they may or may not work, depending on which BLAST
-version you're using.
-
 You can get BLAST output in XML format in various ways. For the parser, it
 doesn't matter how the output was generated, as long as it is in the XML format.
 \begin{itemize}
-\item You can use Biopython to run BLAST locally, as described in
-section~\ref{sec:running-local-blast}.
 \item You can use Biopython to run BLAST over the internet, as described in
 section~\ref{sec:running-www-blast}.
+\item You can use Biopython to run BLAST locally, as described in
+section~\ref{sec:running-local-blast}.
 \item You can do the BLAST search yourself on the NCBI site through your
 web browser, and then save the results. You need to choose XML as the format
 in which to receive the results, and save the final BLAST page you get
@@ -4215,12 +4321,11 @@ to receive the results.
 \end{itemize}
 The important point is that you do not have to use Biopython
 scripts to fetch the data in order to be able to parse it.
-
 Doing things in one of these ways, you then need to get a handle
 to the results. In Python, a handle is just a nice general way of
 describing input to any info source so that the info can be retrieved
-using \verb|read()| and \verb|readline()| functions. This is the type
-of input the BLAST parser (and most other Biopython parsers) take.
+using \verb|read()| and \verb|readline()| functions
+(see Section~{sec:appendix-handles}).
 
 If you followed the code above for interacting with BLAST through a
 script, then you already have \verb|result_handle|, the handle to the
@@ -4558,9 +4663,10 @@ Hopefully the \verb|BlastErrorParser| will make it much easier to debug and deal
 
 \section{Dealing with PSI-BLAST}
 
-You can run the standalone verion of PSI-BLAST (the command line tool
-\verb|blastpgp|) using the \verb|blastpgp| function in the
-\verb|Bio.Blast.NCBIStandalone| module.
+You can run the standalone verion of PSI-BLAST (the legacy NCBI command line
+tool \verb|blastpgp|, or its replacement \verb|psiblast|) using the wrappers
+in \verb|Bio.Blast.Applications| module.
+
 At the time of writing, the NCBI do not appear to support tools running a
 PSI-BLAST search via the internet.
 
@@ -4572,9 +4678,10 @@ output and the \verb|PSIBlastParser| in \verb|Bio.Blast.NCBIStandalone|.
 
 \section{Dealing with RPS-BLAST}
 
-You can run the standalone verion of RPS-BLAST (the command line tool
-\verb|rpsblast|) using the \verb|rpsblast| function in the
-\verb|Bio.Blast.NCBIStandalone| module.
+You can run the standalone verion of RPS-BLAST (either the legacy NCBI
+command line tool \verb|rpsblast|, or its replacement with the same name)
+using the wrappers in \verb|Bio.Blast.Applications| module.
+
 At the time of writing, the NCBI do not appear to support tools running an
 RPS-BLAST search via the internet.
 
@@ -4616,12 +4723,12 @@ To paraphrase:
 \item For any series of more than 100 requests, do this at weekends or outside USA peak times.  This is up to you to obey.
 \item Use the \url{http://eutils.ncbi.nlm.nih.gov} address, not the standard NCBI Web address.  Biopython uses this web address.
 \item Make no more than three requests every seconds (relaxed from at most one request every three seconds in early 2009).  This is automatically enforced by Biopython.
-\item Use the optional email parameter so the NCBI can contact you if there is a problem.  You can either explicitly set the email address as a parameter with each call to Entrez (e.g., include {\tt email = "A.N.Other@example.com"} in the argument list), or as of Biopython 1.48, you can set a global email address:
+\item Use the optional email parameter so the NCBI can contact you if there is a problem.  You can either explicitly set the email address as a parameter with each call to Entrez (e.g., include {\tt email="A.N.Other@example.com"} in the argument list), or as of Biopython 1.48, you can set a global email address:
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"
 \end{verbatim}
-{\tt Bio.Entrez} will then use this email address with each call to Entrez.  The {\tt example.com} address is a reserved domain name specifically for documentation (RFC 2606).  Please DO NOT use a random email -- it's better not to give an email at all.
+{\tt Bio.Entrez} will then use this email address with each call to Entrez.  The {\tt example.com} address is a reserved domain name specifically for documentation (RFC 2606).  Please DO NOT use a random email -- it's better not to give an email at all. The email parameter will be mandatory from June 1, 2010. In case of excessive usage, NCBI will attempt to contact a user at the e-mail address provided prior to blocking access to the E-utilities.
 \item If you are using Biopython within some larger software suite, use the tool parameter to specify this.  The tool parameter will default to Biopython.
 \item For large queries, the NCBI also recommend using their session history feature (the WebEnv session cookie string, see Section~\ref{sec:entrez-webenv}).  This is only slightly more complicated.
 \end{itemize}
@@ -5071,8 +5178,8 @@ Well, ELink can do that too -- at least for journals in Pubmed Central (see Sect
 For help on ELink, see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/elink\_help.html}{ELink help page}.
 There is an entire sub-page just for the \href{http://eutils.ncbi.nlm.nih.gov/corehtml/query/static/entrezlinks.html}{link names}, describing how different databases can be cross referenced.
 
-\section{EGQuery: Obtaining counts for search terms}
-EGQuery provides counts for a search term in each of the Entrez databases. This is particularly useful to find out how many items your search terms would find in each database without actually performing lots of separate searches with ESearch (see the example in \ref{subsec:entrez_example_genbank} below).
+\section{EGQuery: Global Query - counts for search terms}
+EGQuery provides counts for a search term in each of the Entrez databases (i.e. a global query). This is particularly useful to find out how many items your search terms would find in each database without actually performing lots of separate searches with ESearch (see the example in \ref{subsec:entrez_example_genbank} below).
 
 In this example, we use \verb+Bio.Entrez.egquery()+ to obtain the counts for ``Biopython'':
 
@@ -5104,6 +5211,7 @@ ESpell retrieves spelling suggestions. In this example, we use \verb+Bio.Entrez.
 'biopython'
 \end{verbatim}
 See the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/espell\_help.html}{ESpell help page} for more information.
+The main use of this is for GUI tools to provide automatic suggestions for search terms.
 
 \section{Parsing huge Entrez XML files}
 
@@ -5471,10 +5579,9 @@ Keep in mind that \verb+records+ is an iterator, so you can iterate through the 
 Let's now iterate over the records to print out some information about each record:
 \begin{verbatim}
 >>> for record in records:
-...     print "title:", record["TI"]
-...     if "AU" in records:
-...         print "authors:", record["AU"]
-...     print "source:", record["CO"]
+...     print "title:", record.get("TI", "?")
+...     print "authors:", record.get("AU", "?")
+...     print "source:", record.get("CO", "?")
 ...     print
 \end{verbatim}
 
@@ -5708,50 +5815,6 @@ We can get the lineage directly from this record:
 
 The record data contains much more than just the information shown here - for example look under \texttt{"LineageEx"} instead of \texttt{"Lineage"} and you'll get the NCBI taxon identifiers of the lineage entries too.
 
-\subsection{Searching for citations}
-\label{sec:elink-citations}
-
-Back in Section~\ref{sec:elink} we mentioned ELink can be used to search for citations of a given paper.
-Unfortunately this only covers journals indexed for PubMed Central
-(doing it for all the journals in PubMed would mean a lot more work for the NIH).
-Let's try this for the Biopython PDB parser paper, PubMed ID 14630660:
-
-\begin{verbatim}
->>> from Bio import Entrez
->>> Entrez.email = "A.N.Other@example.com"
->>> pmid = "14630660"
->>> results = Entrez.read(Entrez.elink(dbfrom="pubmed", db="pmc",
-...                                    LinkName="pubmed_pmc_refs", from_uid=pmid))
->>> pmc_ids = [link["Id"] for link in results[0]["LinkSetDb"][0]["Link"]]
->>> pmc_ids
-['2744707', '2705363', '2682512', ..., '1190160']
-\end{verbatim}
-
-Great - eleven articles. But why hasn't the Biopython application note been
-found (PubMed ID 19304878)? Well, as you might have guessed from the variable
-names, there are not actually PubMed IDs, but PubMed Central IDs. Our
-application note is the third citing paper in that list, PMCID 2682512.
-
-So, what if (like me) you'd rather get back a list of PubMed IDs? Well we
-can call ELink again to translate them. This becomes a two step process,
-and you might expect to use the history feature to accomplish it
-(Section~\ref{sec:entrez-webenv}). Unfortunately at the time of writing,
-it seems that Entrez is returning invalid XML files when using ELink
-with the history (which Biopython can't parse).
-
-So, instead, here we take the more straightforward approach:
-
-\begin{verbatim}
->>> results2 = Entrez.read(Entrez.elink(dbfrom="pmc", db="pubmed", LinkName="pmc_pubmed",
-...                                     from_uid=",".join(pmc_ids)))
->>> pubmed_ids = [link["Id"] for link in results2[0]["LinkSetDb"][0]["Link"]]
->>> pubmed_ids
-['19698094', '19450287', '19304878', ..., '15985178']
-\end{verbatim}
-
-\noindent This time you can immediately spot the Biopython application note
-as the third hit (PubMed ID 19304878).
-
 \section{Using the history and WebEnv}
 \label{sec:entrez-webenv}
 
@@ -5854,6 +5917,52 @@ out_handle.close()
 \end{verbatim}
 
 \noindent At the time of writing, this gave 28 matches - but because this is a date dependent search, this will of course vary.  As described in Section~\ref{subsec:entrez-and-medline} above, you can then use \verb|Bio.Medline| to parse the saved records.
+
+\subsection{Searching for citations}
+\label{sec:elink-citations}
+
+Back in Section~\ref{sec:elink} we mentioned ELink can be used to search for citations of a given paper.
+Unfortunately this only covers journals indexed for PubMed Central
+(doing it for all the journals in PubMed would mean a lot more work for the NIH).
+Let's try this for the Biopython PDB parser paper, PubMed ID 14630660:
+
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com"
+>>> pmid = "14630660"
+>>> results = Entrez.read(Entrez.elink(dbfrom="pubmed", db="pmc",
+...                                    LinkName="pubmed_pmc_refs", from_uid=pmid))
+>>> pmc_ids = [link["Id"] for link in results[0]["LinkSetDb"][0]["Link"]]
+>>> pmc_ids
+['2744707', '2705363', '2682512', ..., '1190160']
+\end{verbatim}
+
+Great - eleven articles. But why hasn't the Biopython application note been
+found (PubMed ID 19304878)? Well, as you might have guessed from the variable
+names, there are not actually PubMed IDs, but PubMed Central IDs. Our
+application note is the third citing paper in that list, PMCID 2682512.
+
+So, what if (like me) you'd rather get back a list of PubMed IDs? Well we
+can call ELink again to translate them. This becomes a two step process,
+so by now you should expect to use the history feature to accomplish it
+(Section~\ref{sec:entrez-webenv}).
+
+But first, taking the more straightforward approach of making a second
+(separate) call to ELink:
+
+\begin{verbatim}
+>>> results2 = Entrez.read(Entrez.elink(dbfrom="pmc", db="pubmed", LinkName="pmc_pubmed",
+...                                     from_uid=",".join(pmc_ids)))
+>>> pubmed_ids = [link["Id"] for link in results2[0]["LinkSetDb"][0]["Link"]]
+>>> pubmed_ids
+['19698094', '19450287', '19304878', ..., '15985178']
+\end{verbatim}
+
+\noindent This time you can immediately spot the Biopython application note
+as the third hit (PubMed ID 19304878).
+
+Now, let's do that all again but with the history \ldots
+\textit{TODO}.
 
 And finally, don't forget to include your \emph{own} email address in the Entrez calls.
 
@@ -8913,10 +9022,12 @@ quality scores), but that will be much slower.
 Back in Section~\ref{sec:SeqIO-conversion} we showed how to use
 \verb|Bio.SeqIO| to convert between two file formats. Here we'll go into a
 little more detail regarding FASTQ files which are used in second generation
-DNA sequencing. FASTQ files store both the DNA sequence (as a string) and
-the associated read qualities.
+DNA sequencing. Please refer to Cock \textit{et al.} (2009)
+\href{http://dx.doi.org/10.1093/nar/gkp1137}{doi:10.1093/nar/gkp1137} for
+a longer description. FASTQ files store both the DNA sequence (as a string)
+and the associated read qualities. 
 
-PHRED scores (used in some FASTQ files, and also in QUAL files and ACE
+PHRED scores (used in most FASTQ files, and also in QUAL files and ACE
 files) have become a \textit{de facto} standard for representing the
 probability of a sequencing error (here denoted by $P_e$) at a given
 base using a simple base ten log transformation:
@@ -8989,8 +9100,8 @@ formats use an ASCII offset of 64 the files are almost the same. This was a
 deliberate design choice by Illumina, meaning applications expecting the old
 \texttt{fasta-solexa} style files will probably be OK using the newer
 \texttt{fastq-illumina} files (on good data). Of course, both variants are
-very different from the original \texttt{fasta} standard as used by Sanger,
-the NCBI, and elsewhere.
+very different from the original FASTQ standard as used by Sanger,
+the NCBI, and elsewhere (format name \texttt{fastq} or \texttt{fastq-sanger}).
 
 For more details, see the built in help (also \href{http://www.biopython.org/DIST/docs/api/Bio.SeqIO.QualityIO-module.html}{online}):
 

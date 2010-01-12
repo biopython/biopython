@@ -277,45 +277,6 @@ def seq3(seq):
 ######################
 # {{{ 
 
-def translate(seq, frame = 1, genetic_code = 1, translator = None):
-    """Translation of DNA in one of the six different reading frames (DEPRECATED).
-
-    Use the Bio.Seq.Translate function, or the Seq object's translate method
-    instead:
-
-    >>> from Bio.Seq import Seq
-    >>> my_seq = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG")
-    >>> my_seq = Seq("AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAGUA")
-    >>> for frame in [0,1,2]:
-    ...    print my_seq[frame:].translate()
-    ... 
-    MAIVMGR*KGAR*
-    WPL*WAAERVPDS
-    GHCNGPLKGCPIV
-    >>> for frame in [0,1,2]:
-    ...     print my_seq.reverse_complement()[frame:].translate()
-    ... 
-    YYRAPFQRPITMA
-    TIGHPFSGPLQWP
-    LSGTLSAAHYNGH
-    """
-    import warnings
-    warnings.warn("Bio.SeqUtils.translate() has been deprecated, and we intend" \
-                  +" to remove it in a future release of Biopython.  Please use"\
-                  +" the method or function in Bio.Seq instead, as described in"\
-                  +" the Tutorial.", DeprecationWarning)
-    from Bio import Translate #This will also trigger a DeprecationWarning
-
-    if frame not in [1,2,3,-1,-2,-3]:
-        raise ValueError('invalid frame')
-
-    if not translator:
-        table = makeTableX(CodonTable.ambiguous_dna_by_id[genetic_code])
-        translator = Translate.Translator(table)
-
-    #Does this frame calculation do something sensible?  No RC taken!
-    return translator.translate(Seq(seq[frame-1:], IUPAC.ambiguous_dna)).data
-
 def GC_Frame(seq, genetic_code = 1):
     """Just an alias for six_frame_translations (OBSOLETE).
 

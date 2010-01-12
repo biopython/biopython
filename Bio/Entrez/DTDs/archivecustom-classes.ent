@@ -1,0 +1,157 @@
+<!-- ============================================================= -->
+<!--  MODULE:    Journal Archiving DTD Customize Classes Module    -->
+<!--  VERSION:   2.0                                               -->
+<!--  DATE:      August 2004                                       -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
+<!--                        TYPICAL INVOCATION                     -->
+<!--
+"-//NLM//DTD Journal Archiving DTD Customize Classes Module v2.0 20040830//EN"
+Delivered as file "archivecustom-classes.ent"                      -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Journal Archiving and Interchange DTD of the      -->
+<!--             Archiving and Interchange DTD Suite               -->
+<!--                                                               -->
+<!-- PURPOSE:    To declare the Parameter Entities (PEs) used to   -->
+<!--             over-ride the named element classes               -->
+<!--                                                               -->
+<!--             Note: Since PEs must be declared before they      -->
+<!--             are used, this module must be called before the   -->
+<!--             content modules that declare elements, and before -->
+<!--             the default classes module.                       -->
+<!--                                                               -->
+<!-- CONTAINS:   1) PEs for changing the contents of the default   -->
+<!--                element classes                                -->
+<!--                                                               -->
+<!-- CREATED FOR:                                                  -->
+<!--             Digital Archive of Journal Articles               -->
+<!--             National Center for Biotechnology Information     -->
+<!--                (NCBI)                                         -->
+<!--             National Library of Medicine (NLM)                -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             August 2004                                       -->
+<!--                                                               -->
+<!-- CREATED BY: Deborah Lapeyre (Mulberry Technologies, Inc.)     -->
+<!--             B. Tommie Usdin (Mulberry Technologies, Inc.)     -->
+<!--                                                               -->
+<!--             Suggestions for refinements and enhancements to   -->
+<!--             this DTD should be sent in email to:              -->
+<!--                 archive-dtd@ncbi.nlm.nih.gov                  -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DTD VERSION/CHANGE HISTORY                 -->
+<!-- ============================================================= -->
+<!--
+
+Version  Reason/Occasion                   (who) vx.x (yyyy-mm-dd)
+
+     =============================================================
+     Version 2.0                       (DAL/BTU) v2.0 (2004-08-30)
+          
+     Major requirement changes led to the new release, producing
+     DTD version "2.0":
+       a) The splitting of the Archival and Interchange Tag Set 
+          DTDs into three DTDs from two: an authoring DTD, an
+          archive regularization and interchange DTD (the
+          current Blue Publishing DTD), and a preservationist 
+          archive DTD (the current Green Archiving and Interchange 
+          DTD).
+       b) AIT Working Group suggestions from the June 04 meeting 
+          and June/July 2004 followup discussions
+       c) Suite remodularization to meet new (and newly articulated)
+          modularization requirements
+       d) New or renamed classes and mixes to make modifications
+          easier and more consistent
+
+  6. STRING-NAME
+     Added <string-name> everywhere <name> was allowed before
+
+  5. CONTRIBUTOR / CONTRIBUTOR GROUP
+     a. <etal> added to %contrib-info.class;, strict sequence after
+        the contributor name no longer enforced.
+        
+     b. <uri> and <fn> added to %contrib-info.class;
+        
+     c. Added <x> (generated punctuation) to:
+         - <contributor> (through %x.class;)
+         - <contributor-group>  (through %x.class;)
+     
+  4. <x> GENERATED TEXT AND PUNCTUATION ELEMENT ADDED TO
+     - <kwd-group> by way of %keyword-group-model;
+     - <def-list> by way of %def-list-model;
+     - <def-item> by way of %def-item-model;
+     - <article-meta> by way of %article-meta-model;
+     - <contributor> and <contributor-group> (via %contrib-model;
+       and %contrib-group-model;)
+     - <person-group> by way of %person-group-model;
+     - <x> was added to everywhere the %references.class; was used, 
+       though NOT by adding it to the class itself.
+      
+  3. DOI/ID - in view of the larger role that some publishers
+     are giving to DOIs, a new class Parameter Entity %id.class;
+     was established that holds the new element Object Identifier
+     <object-id>, which can be used to capture any publisher's or 
+     archive's ID. This was modeled as an element rather than as 
+     an attribute to allow for multiple IDs. Used in:
+      - %references.class (therefore inside <citation>, 
+           <related-article>, and <product>)
+        
+  2. RENAME EXISTING CLASSES
+     ### Customization Alert ###
+     Some classes did not have the ".class" suffix. Changed the names 
+     to add the class suffix:
+      - %contrib-info.class;
+                
+  1. Created this module as version "v2.0 20040830"                -->
+
+
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITIES FOR CLASS OVER-RIDES    -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    METADATA CLASSES (articlemeta.ent)         -->
+<!-- ============================================================= -->
+
+
+<!--                    CONTRIBUTOR INFORMATION                    -->
+<!--                    Metadata about a contributor               
+                        Added <fn>                                 -->
+<!ENTITY % contrib-info.class
+                        "address | aff | author-comment | bio | 
+                         email |  etal | ext-link | fn | 
+                         on-behalf-of | role | uri | xref"           >
+                         
+
+<!-- ============================================================= -->
+<!--                    PRESENTATION INFO CLASSES                  -->
+<!-- ============================================================= -->
+                        
+                        
+<!--                    X-GENERATED PUNCTUATION CLASS              -->
+<!--                    Class containing a single element that will
+                        hold generated punctuation or other 
+                        generatable text, for example, the commas or
+                        semicolons between keywords.
+                        This textual material element has been 
+                        created:
+                         - to match existing input DTDs
+                         - to identify such material, so that it
+                             can be processed (such as removed)
+                         - to try to remove look-and-feel material
+                             from semantic material such as keywords.
+                                                                   -->
+<!ENTITY % x.class      "x"                                          >
+              
+              
+<!-- ================== End Archiving Classes Customization ====== -->

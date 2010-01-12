@@ -8,12 +8,13 @@
 # note:
 # I used Lincoln Stein's perl Bio::DB::GFF::Util::Binning as a model for this
 
-"""
-Binning support for Bio.GFF
-"""
+"""Binning support for Bio.GFF (DEPRECATED)
 
-__version__ = "$Revision: 1.1 $"
-# $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/binning.py,v $
+This is part of the "old" Bio.GFF module by Michael Hoffman, which offered
+access to a MySQL database holding GFF data loaded by BioPerl. This code has
+now been deprecated, and will probably be removed in order to free the Bio.GFF
+namespace for a new GFF parser in Biopython (including GFF3 support).
+"""
 
 class Meta(object):
     MIN_BIN = 1000

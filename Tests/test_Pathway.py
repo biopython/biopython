@@ -25,28 +25,28 @@ class HashSetTestCase(unittest.TestCase):
         
     def testLen(self):
         a = HashSet()
-        self.failUnless(len(a) == 0, "incorrect default size")
+        self.assertEqual(len(a), 0, "incorrect default size")
         a.add('a')
         a.add('b')
-        self.failUnless(len(a) == 2, "incorrect size")
+        self.assertEqual(len(a), 2, "incorrect size")
         a.remove('b')
-        self.failUnless(len(a) == 1, "incorrect size after removal")
+        self.assertEqual(len(a), 1, "incorrect size after removal")
         a.add('a')
-        self.failUnless(len(a) == 1, "incorrect size after duplicate add")
+        self.assertEqual(len(a), 1, "incorrect size after duplicate add")
 
     def testContains(self):
         n = HashSet()
         self.assert_('a' not in n, "element in empty set")
         self.assert_(not n.contains('a'), "element in empty set (2)")
         a = HashSet(['a','b','c','d'])
-        self.failUnless('a' in a, "contained element not found")
-        self.failUnless('d' in a, "contained element not found")
-        self.failUnless('e' not in a, "not contained element found")
-        self.failUnless(68 not in a, "not contained element found")
-        self.failUnless(a.contains('a'), "contained element not found (2)")
-        self.failUnless(a.contains('d'), "contained element not found (2)")
-        self.failUnless(not a.contains('e'), "not contained element found (2)")
-        self.failUnless(not a.contains(68), "not contained element found (2)")
+        self.assert_('a' in a, "contained element not found")
+        self.assert_('d' in a, "contained element not found")
+        self.assert_('e' not in a, "not contained element found")
+        self.assert_(68 not in a, "not contained element found")
+        self.assert_(a.contains('a'), "contained element not found (2)")
+        self.assert_(a.contains('d'), "contained element not found (2)")
+        self.assert_(not a.contains('e'), "not contained element found (2)")
+        self.assert_(not a.contains(68), "not contained element found (2)")
         
     def testList(self):
         a = HashSet(['a', 'b', 'c', 'd', 'e'])
@@ -54,7 +54,7 @@ class HashSetTestCase(unittest.TestCase):
         l.sort()
         self.assertEqual(l, ['a', 'b', 'c', 'd', 'e'], "incorrect list")
         l = []
-        self.failUnless('e' in a, "set rep exposure")
+        self.assert_('e' in a, "set rep exposure")
 
     def testSetOps(self):
         n = HashSet()

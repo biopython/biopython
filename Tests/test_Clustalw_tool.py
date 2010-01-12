@@ -9,13 +9,12 @@ from Bio import MissingExternalDependencyError
 
 import sys
 import os
+import subprocess
 from Bio import Clustalw #old and obsolete
 from Bio.Clustalw import MultipleAlignCL #old and obsolete
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.Align.Applications import ClustalwCommandline #new!
-from Bio.Application import generic_run #deprecated
-import warnings #to silence deprecation warnings
 
 #################################################################
 
@@ -224,14 +223,15 @@ for input_file, output_file, newtree_file in [
         cline.align = True
         assert str(eval(repr(cline)))==str(cline)
     #print cline
-
-    warnings.filterwarnings("ignore", category=DeprecationWarning)
-    return_code, out_handle, err_handle = generic_run(cline)
-    warnings.resetwarnings()
-
-
-    assert out_handle.read().strip().startswith("CLUSTAL")
-    assert err_handle.read().strip() == ""
+    child = subprocess.Popen(str(cline),
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             shell=(sys.platform!="win32"))
+    output, error = child.communicate()
+    return_code = child.returncode
+    assert return_code == 0
+    assert output.strip().startswith("CLUSTAL")
+    assert error.strip() == ""
     align = AlignIO.read(open(output_file), "clustal")
     assert set(input_records.keys()) == set(output_records.keys())
     for record in align:
@@ -240,6 +240,7 @@ for input_file, output_file, newtree_file in [
                str(input_records[record.id].seq)
 
     #Clean up...
+    del child
     os.remove(output_file)
 
     #Check the DND file was created.

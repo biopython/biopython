@@ -18,8 +18,15 @@ available_matrices = ['benner6', 'benner22', 'benner74', 'blosum100',
                       'pam90', 'rao', 'risler', 'structure'
                      ]
 
+#NOTE - The only reason we define temp functions rather than assinging
+#the dictionaries directly to variables is too work arround a JVM
+#limitation on code size if runnning under Jython. The temp functions
+#have an underscore to indicate they are private, and are in any case
+#deleted after use (partly to ensure we don't use any of them twice).
+
 # http://www.embl-heidelberg.de/~vogt/matrices/benner6.cmp
-benner6 = {
+def _temp():
+    return {
 ('W', 'F') : -1.6, ('L', 'R') : -3.2, ('I', 'I') : 4.4, ('Q', 'Q') : 5.3, 
 ('W', 'N') : -4.4, ('V', 'I') : 3.9, ('H', 'T') : -1.7, ('H', 'P') : -0.4, 
 ('W', 'V') : -4.8, ('Q', 'E') : 2.1, ('W', 'R') : 2.0, ('Q', 'A') : -1.7, 
@@ -74,8 +81,11 @@ benner6 = {
 ('I', 'H') : -3.7, ('F', 'D') : -5.7, ('D', 'C') : -3.7, ('F', 'H') : 0.1, 
 ('D', 'G') : 0.8, ('F', 'L') : 2.4
 }
+benner6 = _temp()
+
 # http://www.embl-heidelberg.de/~vogt/matrices/benner22.cmp
-benner22 = {
+def _temp():
+    return {
 ('W', 'F') : 0.5, ('L', 'R') : -2.9, ('I', 'I') : 4.2, ('Q', 'Q') : 4.2, 
 ('W', 'N') : -5.2, ('V', 'I') : 3.6, ('H', 'T') : -1.1, ('H', 'P') : -0.4, 
 ('W', 'V') : -4.5, ('Q', 'E') : 1.7, ('W', 'R') : -1.1, ('Q', 'A') : -0.9, 
@@ -130,8 +140,13 @@ benner22 = {
 ('I', 'H') : -3.2, ('F', 'D') : -5.4, ('D', 'C') : -3.7, ('F', 'H') : 0.3, 
 ('D', 'G') : 0.7, ('F', 'L') : 2.2
 }
+benner22 = _temp()
+del _temp
+assert benner6 != benner22
+
 # http://www.embl-heidelberg.de/~vogt/matrices/benner74.cmp
-benner74 = {
+def _temp():
+    return {
 ('W', 'F') : 3.0, ('L', 'R') : -2.4, ('I', 'I') : 4.0, ('Q', 'Q') : 3.0, 
 ('W', 'N') : -4.0, ('V', 'I') : 3.2, ('H', 'T') : -0.5, ('H', 'P') : -1.0, 
 ('W', 'V') : -2.9, ('Q', 'E') : 1.7, ('W', 'R') : -1.6, ('Q', 'A') : -0.3, 
@@ -186,8 +201,13 @@ benner74 = {
 ('I', 'H') : -2.3, ('F', 'D') : -4.7, ('D', 'C') : -3.2, ('F', 'H') : 0.0, 
 ('D', 'G') : 0.2, ('F', 'L') : 2.1
 }
+benner74 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum100.cmp
-blosum100 = {
+def _temp():
+    return {
 ('W', 'F') : 0, ('L', 'R') : -4, ('S', 'P') : -2, ('V', 'T') : -1, 
 ('Q', 'Q') : 7, ('N', 'A') : -2, ('Z', 'Y') : -4, ('W', 'R') : -4, 
 ('Q', 'A') : -1, ('S', 'D') : -1, ('H', 'H') : 9, ('S', 'H') : -2, 
@@ -258,8 +278,13 @@ blosum100 = {
 ('F', 'D') : -5, ('X', 'Y') : -3, ('Z', 'R') : -1, ('F', 'H') : -2, 
 ('B', 'F') : -5, ('F', 'L') : 0, ('X', 'Q') : -2, ('B', 'B') : 4
 }
+blosum100 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum30.cmp
-blosum30 = {
+def _temp():
+    return {
 ('W', 'F') : 1, ('L', 'R') : -2, ('S', 'P') : -1, ('V', 'T') : 1, 
 ('Q', 'Q') : 8, ('N', 'A') : 0, ('Z', 'Y') : -2, ('W', 'R') : 0, 
 ('Q', 'A') : 1, ('S', 'D') : 0, ('H', 'H') : 14, ('S', 'H') : -1, 
@@ -330,8 +355,13 @@ blosum30 = {
 ('F', 'D') : -5, ('X', 'Y') : -1, ('Z', 'R') : 0, ('F', 'H') : -3, 
 ('B', 'F') : -3, ('F', 'L') : 2, ('X', 'Q') : 0, ('B', 'B') : 5
 }
+blosum30 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum35.cmp
-blosum35 = {
+def _temp():
+    return {
 ('W', 'F') : 1, ('L', 'R') : -2, ('S', 'P') : -2, ('V', 'T') : 1, 
 ('Q', 'Q') : 7, ('N', 'A') : -1, ('Z', 'Y') : -1, ('W', 'R') : 0, 
 ('Q', 'A') : 0, ('S', 'D') : -1, ('H', 'H') : 12, ('S', 'H') : -1, 
@@ -402,8 +432,13 @@ blosum35 = {
 ('F', 'D') : -3, ('X', 'Y') : -1, ('Z', 'R') : 0, ('F', 'H') : -3, 
 ('B', 'F') : -2, ('F', 'L') : 2, ('X', 'Q') : -1, ('B', 'B') : 5
 }
+blosum35 =_temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum40.cmp
-blosum40 = {
+def _temp():
+    return {
 ('W', 'F') : 1, ('L', 'R') : -2, ('S', 'P') : -1, ('V', 'T') : 1, 
 ('Q', 'Q') : 8, ('N', 'A') : -1, ('Z', 'Y') : -2, ('W', 'R') : -2, 
 ('Q', 'A') : 0, ('S', 'D') : 0, ('H', 'H') : 13, ('S', 'H') : -1, 
@@ -474,8 +509,13 @@ blosum40 = {
 ('F', 'D') : -4, ('X', 'Y') : -1, ('Z', 'R') : 0, ('F', 'H') : -2, 
 ('B', 'F') : -3, ('F', 'L') : 2, ('X', 'Q') : -1, ('B', 'B') : 5
 }
+blosum40 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum45.cmp
-blosum45 = {
+def _temp():
+    return {
 ('W', 'F') : 1, ('L', 'R') : -2, ('S', 'P') : -1, ('V', 'T') : 0, 
 ('Q', 'Q') : 6, ('N', 'A') : -1, ('Z', 'Y') : -2, ('W', 'R') : -2, 
 ('Q', 'A') : -1, ('S', 'D') : 0, ('H', 'H') : 10, ('S', 'H') : -1, 
@@ -546,8 +586,13 @@ blosum45 = {
 ('F', 'D') : -4, ('X', 'Y') : -1, ('Z', 'R') : 0, ('F', 'H') : -2, 
 ('B', 'F') : -3, ('F', 'L') : 1, ('X', 'Q') : -1, ('B', 'B') : 4
 }
+blosum45 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum50.cmp
-blosum50 = {
+def _temp():
+    return {
 ('W', 'F') : 1, ('L', 'R') : -3, ('S', 'P') : -1, ('V', 'T') : 0, 
 ('Q', 'Q') : 7, ('N', 'A') : -1, ('Z', 'Y') : -2, ('W', 'R') : -3, 
 ('Q', 'A') : -1, ('S', 'D') : 0, ('H', 'H') : 10, ('S', 'H') : -1, 
@@ -618,8 +663,13 @@ blosum50 = {
 ('F', 'D') : -5, ('X', 'Y') : -1, ('Z', 'R') : 0, ('F', 'H') : -1, 
 ('B', 'F') : -4, ('F', 'L') : 1, ('X', 'Q') : -1, ('B', 'B') : 5
 }
+blosum50 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum55.cmp
-blosum55 = {
+def _temp():
+    return {
 ('W', 'F') : 1, ('L', 'R') : -3, ('S', 'P') : -1, ('V', 'T') : 0, 
 ('Q', 'Q') : 7, ('N', 'A') : -1, ('Z', 'Y') : -2, ('W', 'R') : -3, 
 ('Q', 'A') : -1, ('S', 'D') : 0, ('H', 'H') : 10, ('S', 'H') : -1, 
@@ -690,8 +740,13 @@ blosum55 = {
 ('F', 'D') : -5, ('X', 'Y') : -1, ('Z', 'R') : 0, ('F', 'H') : -1, 
 ('B', 'F') : -4, ('F', 'L') : 1, ('X', 'Q') : -1, ('B', 'B') : 5
 }
+blosum55 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum60.cmp
-blosum60 = {
+def _temp():
+    return {
 ('W', 'F') : 1, ('L', 'R') : -2, ('S', 'P') : -1, ('V', 'T') : 0, 
 ('Q', 'Q') : 5, ('N', 'A') : -1, ('Z', 'Y') : -2, ('W', 'R') : -3, 
 ('Q', 'A') : -1, ('S', 'D') : 0, ('H', 'H') : 7, ('S', 'H') : -1, 
@@ -762,8 +817,13 @@ blosum60 = {
 ('F', 'D') : -3, ('X', 'Y') : -1, ('Z', 'R') : 0, ('F', 'H') : -1, 
 ('B', 'F') : -3, ('F', 'L') : 0, ('X', 'Q') : -1, ('B', 'B') : 4
 }
+blosum60 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum62.cmp
-blosum62 = {
+def _temp():
+    return {
 ('W', 'F') : 1, ('L', 'R') : -2, ('S', 'P') : -1, ('V', 'T') : 0, 
 ('Q', 'Q') : 5, ('N', 'A') : -2, ('Z', 'Y') : -2, ('W', 'R') : -3, 
 ('Q', 'A') : -1, ('S', 'D') : 0, ('H', 'H') : 8, ('S', 'H') : -1, 
@@ -834,8 +894,13 @@ blosum62 = {
 ('F', 'D') : -3, ('X', 'Y') : -1, ('Z', 'R') : 0, ('F', 'H') : -1, 
 ('B', 'F') : -3, ('F', 'L') : 0, ('X', 'Q') : -1, ('B', 'B') : 4
 }
+blosum62 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum65.cmp
-blosum65 = {
+def _temp():
+    return {
 ('W', 'F') : 1, ('L', 'R') : -2, ('S', 'P') : -1, ('V', 'T') : 0, 
 ('Q', 'Q') : 6, ('N', 'A') : -2, ('Z', 'Y') : -2, ('W', 'R') : -3, 
 ('Q', 'A') : -1, ('S', 'D') : 0, ('H', 'H') : 8, ('S', 'H') : -1, 
@@ -906,8 +971,13 @@ blosum65 = {
 ('F', 'D') : -4, ('X', 'Y') : -1, ('Z', 'R') : 0, ('F', 'H') : -1, 
 ('B', 'F') : -3, ('F', 'L') : 0, ('X', 'Q') : -1, ('B', 'B') : 4
 }
+blosum65 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum70.cmp
-blosum70 = {
+def _temp():
+    return {
 ('W', 'F') : 1, ('L', 'R') : -3, ('S', 'P') : -1, ('V', 'T') : 0, 
 ('Q', 'Q') : 6, ('N', 'A') : -2, ('Z', 'Y') : -2, ('W', 'R') : -3, 
 ('Q', 'A') : -1, ('S', 'D') : 0, ('H', 'H') : 8, ('S', 'H') : -1, 
@@ -978,8 +1048,13 @@ blosum70 = {
 ('F', 'D') : -4, ('X', 'Y') : -2, ('Z', 'R') : 0, ('F', 'H') : -1, 
 ('B', 'F') : -4, ('F', 'L') : 0, ('X', 'Q') : -1, ('B', 'B') : 4
 }
+blosum70 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum75.cmp
-blosum75 = {
+def _temp():
+    return {
 ('W', 'F') : 1, ('L', 'R') : -3, ('S', 'P') : -1, ('V', 'T') : 0, 
 ('Q', 'Q') : 6, ('N', 'A') : -2, ('Z', 'Y') : -3, ('W', 'R') : -3, 
 ('Q', 'A') : -1, ('S', 'D') : -1, ('H', 'H') : 8, ('S', 'H') : -1, 
@@ -1050,8 +1125,13 @@ blosum75 = {
 ('F', 'D') : -4, ('X', 'Y') : -2, ('Z', 'R') : 0, ('F', 'H') : -2, 
 ('B', 'F') : -4, ('F', 'L') : 0, ('X', 'Q') : -1, ('B', 'B') : 4
 }
+blosum75 =  _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum80.cmp
-blosum80 = {
+def _temp():
+    return {
 ('W', 'F') : 0, ('L', 'R') : -3, ('S', 'P') : -1, ('V', 'T') : 0, 
 ('Q', 'Q') : 6, ('N', 'A') : -2, ('Z', 'Y') : -3, ('W', 'R') : -4, 
 ('Q', 'A') : -1, ('S', 'D') : -1, ('H', 'H') : 8, ('S', 'H') : -1, 
@@ -1122,8 +1202,13 @@ blosum80 = {
 ('F', 'D') : -4, ('X', 'Y') : -2, ('Z', 'R') : 0, ('F', 'H') : -2, 
 ('B', 'F') : -4, ('F', 'L') : 0, ('X', 'Q') : -1, ('B', 'B') : 4
 }
+blosum80 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum85.cmp
-blosum85 = {
+def _temp():
+    return {
 ('W', 'F') : 0, ('L', 'R') : -3, ('S', 'P') : -1, ('V', 'T') : 0, 
 ('Q', 'Q') : 6, ('N', 'A') : -2, ('Z', 'Y') : -3, ('W', 'R') : -4, 
 ('Q', 'A') : -1, ('S', 'D') : -1, ('H', 'H') : 8, ('S', 'H') : -1, 
@@ -1194,8 +1279,13 @@ blosum85 = {
 ('F', 'D') : -4, ('X', 'Y') : -2, ('Z', 'R') : 0, ('F', 'H') : -2, 
 ('B', 'F') : -4, ('F', 'L') : 0, ('X', 'Q') : -1, ('B', 'B') : 4
 }
+blosum85 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum90.cmp
-blosum90 = {
+def _temp():
+    return {
 ('W', 'F') : 0, ('L', 'R') : -3, ('S', 'P') : -2, ('V', 'T') : -1, 
 ('Q', 'Q') : 7, ('N', 'A') : -2, ('Z', 'Y') : -3, ('W', 'R') : -4, 
 ('Q', 'A') : -1, ('S', 'D') : -1, ('H', 'H') : 8, ('S', 'H') : -2, 
@@ -1266,8 +1356,13 @@ blosum90 = {
 ('F', 'D') : -5, ('X', 'Y') : -2, ('Z', 'R') : 0, ('F', 'H') : -2, 
 ('B', 'F') : -4, ('F', 'L') : 0, ('X', 'Q') : -1, ('B', 'B') : 4
 }
+blosum90 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/blosum95.cmp
-blosum95 = {
+def _temp():
+    return {
 ('W', 'F') : 0, ('L', 'R') : -3, ('S', 'P') : -2, ('V', 'T') : -1, 
 ('Q', 'Q') : 7, ('N', 'A') : -2, ('Z', 'Y') : -4, ('W', 'R') : -4, 
 ('Q', 'A') : -1, ('S', 'D') : -1, ('H', 'H') : 9, ('S', 'H') : -2, 
@@ -1338,8 +1433,13 @@ blosum95 = {
 ('F', 'D') : -5, ('X', 'Y') : -2, ('Z', 'R') : -1, ('F', 'H') : -2, 
 ('B', 'F') : -5, ('F', 'L') : 0, ('X', 'Q') : -1, ('B', 'B') : 4
 }
+blosum95 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/feng.cmp
-feng = {
+def _temp():
+    return {
 ('W', 'F') : 3, ('L', 'R') : 2, ('I', 'I') : 6, ('Q', 'Q') : 6, 
 ('W', 'N') : 0, ('V', 'I') : 5, ('H', 'T') : 2, ('H', 'P') : 3, 
 ('W', 'V') : 3, ('Q', 'E') : 4, ('W', 'R') : 2, ('Q', 'A') : 3, 
@@ -1394,8 +1494,13 @@ feng = {
 ('I', 'H') : 1, ('F', 'D') : 1, ('D', 'C') : 1, ('F', 'H') : 2, 
 ('D', 'G') : 4, ('F', 'L') : 4
 }
+feng = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/fitch.cmp
-fitch = {
+def _temp():
+    return {
 ('W', 'F') : 2, ('U', 'I') : 1, ('W', 'T') : 0, ('R', 'R') : 3, 
 ('N', 'M') : 1, ('U', 'M') : 2, ('U', 'O') : 1, ('N', 'A') : 2, 
 ('U', 'A') : 1, ('N', 'C') : 1, ('U', 'C') : 1, ('N', 'E') : 2, 
@@ -1440,8 +1545,13 @@ fitch = {
 ('Y', 'W') : 1, ('M', 'E') : 2, ('V', 'U') : 2, ('W', 'Q') : 0, 
 ('U', 'U') : 3, ('V', 'O') : 1, ('F', 'F') : 3
 }
+fitch = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/genetic.cmp
-genetic = {
+def _temp():
+    return {
 ('W', 'F') : 0.0, ('L', 'R') : -0.4, ('I', 'I') : 4.1, ('Q', 'Q') : 5.5, 
 ('W', 'N') : -3.0, ('V', 'I') : 1.0, ('H', 'T') : -1.8, ('H', 'P') : 0.7, 
 ('W', 'V') : -2.1, ('Q', 'E') : 2.0, ('W', 'R') : 1.8, ('Q', 'A') : -2.1, 
@@ -1496,8 +1606,13 @@ genetic = {
 ('I', 'H') : -1.8, ('F', 'D') : -1.7, ('D', 'C') : -1.6, ('F', 'H') : -1.1, 
 ('D', 'G') : 1.1, ('F', 'L') : 2.2
 }
+genetic = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/gonnet.cmp
-gonnet = {
+def _temp():
+    return {
 ('W', 'F') : 3.6, ('L', 'R') : -2.2, ('I', 'I') : 4.0, ('Q', 'Q') : 2.7, 
 ('W', 'N') : -3.6, ('V', 'I') : 3.1, ('H', 'T') : -0.3, ('H', 'P') : -1.1, 
 ('W', 'V') : -2.6, ('Q', 'E') : 1.7, ('W', 'R') : -1.6, ('Q', 'A') : -0.2, 
@@ -1552,8 +1667,13 @@ gonnet = {
 ('I', 'H') : -2.2, ('F', 'D') : -4.5, ('D', 'C') : -3.2, ('F', 'H') : -0.1, 
 ('D', 'G') : 0.1, ('F', 'L') : 2.0
 }
+gonnet = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/grant.cmp
-grant = {
+def _temp():
+    return {
 ('L', 'R') : 103, ('I', 'I') : 215, ('Q', 'Q') : 215, ('N', 'E') : 150, 
 ('Q', 'Y') : 128, ('H', 'P') : 138, ('W', 'V') : 186, ('Q', 'E') : 173, 
 ('H', 'L') : 129, ('W', 'R') : 118, ('H', 'H') : 215, ('N', 'Q') : 169, 
@@ -1608,8 +1728,13 @@ grant = {
 ('F', 'P') : 101, ('N', 'Y') : 135, ('T', 'E') : 87, ('V', 'U') : 183, 
 ('N', 'C') : 76, ('F', 'L') : 102
 }
+grant = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/ident.cmp
-ident = {
+def _temp():
+    return {
 ('W', 'F') : -1, ('L', 'R') : -1, ('I', 'I') : 6, ('Q', 'Q') : 6, 
 ('W', 'N') : -1, ('V', 'I') : -1, ('H', 'T') : -1, ('H', 'P') : -1, 
 ('W', 'V') : -1, ('Q', 'E') : -1, ('W', 'R') : -1, ('Q', 'A') : -1, 
@@ -1664,8 +1789,13 @@ ident = {
 ('I', 'H') : -1, ('F', 'D') : -1, ('D', 'C') : -1, ('F', 'H') : -1, 
 ('D', 'G') : -1, ('F', 'L') : -1
 }
+ident = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/johnson.cmp
-johnson = {
+def _temp():
+    return {
 ('W', 'F') : 3.4, ('S', 'P') : -1.0, ('N', 'M') : -3.7, ('Q', 'Q') : 9.0, 
 ('N', 'A') : -1.4, ('N', 'E') : -0.7, ('W', 'V') : -4.9, ('Q', 'E') : 2.4, 
 ('L', 'H') : -4.2, ('W', 'R') : -3.8, ('Q', 'A') : -0.6, ('S', 'D') : -0.2, 
@@ -1720,8 +1850,14 @@ johnson = {
 ('I', 'A') : -2.2, ('P', 'I') : -5.7, ('R', 'R') : 10.0, ('L', 'I') : 2.6, 
 ('F', 'D') : -7.0, ('D', 'C') : -9.7
 }
+johnson = _temp()
+del _temp
+
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/levin.cmp
-levin = {
+def _temp():
+    return {
 ('W', 'F') : 0, ('L', 'R') : -1, ('S', 'P') : 0, ('I', 'I') : 2, 
 ('Q', 'Q') : 2, ('N', 'A') : 0, ('H', 'T') : 0, ('N', 'E') : 0, 
 ('H', 'P') : 0, ('W', 'V') : 0, ('Q', 'E') : 1, ('W', 'R') : 0, 
@@ -1776,8 +1912,13 @@ levin = {
 ('K', 'K') : 2, ('I', 'H') : -1, ('F', 'D') : -1, ('F', 'H') : -1, 
 ('D', 'G') : 0, ('F', 'L') : 0
 }
+levin = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/mclach.cmp
-mclach = {
+def _temp():
+    return {
 ('N', 'I') : 1, ('K', 'V') : 2, ('S', 'P') : 3, ('N', 'M') : 2, 
 ('L', 'V') : 5, ('N', 'A') : 3, ('H', 'T') : 4, ('N', 'E') : 4, 
 ('Q', 'Y') : 1, ('H', 'P') : 3, ('W', 'V') : 2, ('H', 'L') : 2, 
@@ -1832,8 +1973,13 @@ mclach = {
 ('N', 'C') : 1, ('E', 'C') : 0, ('D', 'C') : 1, ('D', 'G') : 3, 
 ('F', 'L') : 5, ('W', 'F') : 6
 }
+mclach = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/miyata.cmp
-miyata = {
+def _temp():
+    return {
 ('W', 'F') : 0.14, ('L', 'R') : -1.37, ('S', 'P') : 0.69, ('I', 'I') : 1.25, 
 ('Q', 'Q') : 1.25, ('N', 'A') : -0.53, ('H', 'T') : -0.07, ('N', 'E') : 0.4, 
 ('H', 'P') : -0.9, ('W', 'V') : -1.26, ('W', 'R') : -1.47, ('Q', 'A') : -0.67, 
@@ -1888,8 +2034,12 @@ miyata = {
 ('I', 'H') : -1.2, ('F', 'D') : -3.02, ('D', 'C') : -2.23, ('F', 'H') : -1.38, 
 ('D', 'G') : -1.12, ('F', 'L') : 0.62
 }
+miyata = _temp()
+del _temp
+
 # http://www.embl-heidelberg.de/~vogt/matrices/nwsgappep.cmp
-nwsgappep = {
+def _temp():
+    return {
 ('W', 'F') : 1.3, ('S', 'P') : 0.4, ('W', 'B') : -0.7, ('N', 'N') : 1.5, 
 ('N', 'A') : 0.2, ('N', 'E') : 0.5, ('Z', 'Y') : -0.6, ('W', 'V') : -0.8, 
 ('L', 'B') : -0.5, ('W', 'R') : 1.4, ('Q', 'A') : 0.2, ('S', 'D') : 0.2, 
@@ -1955,8 +2105,13 @@ nwsgappep = {
 ('Z', 'V') : -0.2, ('F', 'D') : -1.0, ('Z', 'R') : 0.2, ('D', 'C') : -0.5, 
 ('B', 'B') : 1.1
 }
+nwsgappep = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/pam120.cmp
-pam120 = {
+def _temp():
+    return {
 ('W', 'F') : -1, ('L', 'R') : -4, ('S', 'P') : 1, ('V', 'T') : 0, 
 ('Q', 'Q') : 6, ('N', 'A') : -1, ('Z', 'Y') : -5, ('W', 'R') : 1, 
 ('Q', 'A') : -1, ('S', 'D') : 0, ('H', 'H') : 7, ('S', 'H') : -2, 
@@ -2027,8 +2182,13 @@ pam120 = {
 ('F', 'D') : -7, ('X', 'Y') : -3, ('Z', 'R') : -1, ('F', 'H') : -3, 
 ('B', 'F') : -5, ('F', 'L') : 0, ('X', 'Q') : -1, ('B', 'B') : 4
 }
+pam120 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/pam180.cmp
-pam180 = {
+def _temp():
+    return {
 ('W', 'F') : 0, ('L', 'R') : -4, ('S', 'P') : 1, ('V', 'T') : 0, 
 ('Q', 'Q') : 6, ('N', 'A') : 0, ('Z', 'Y') : -6, ('W', 'R') : 2, 
 ('Q', 'A') : -1, ('S', 'D') : 0, ('H', 'H') : 8, ('S', 'H') : -2, 
@@ -2099,8 +2259,13 @@ pam180 = {
 ('F', 'D') : -8, ('X', 'Y') : -3, ('Z', 'R') : 0, ('F', 'H') : -3, 
 ('B', 'F') : -6, ('F', 'L') : 1, ('X', 'Q') : -1, ('B', 'B') : 4
 }
+pam180 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/pam250.cmp
-pam250 = {
+def _temp():
+    return {
 ('W', 'F') : 0, ('L', 'R') : -3, ('S', 'P') : 1, ('V', 'T') : 0, 
 ('Q', 'Q') : 4, ('N', 'A') : 0, ('Z', 'Y') : -4, ('W', 'R') : 2, 
 ('Q', 'A') : 0, ('S', 'D') : 0, ('H', 'H') : 6, ('S', 'H') : -1, 
@@ -2171,8 +2336,13 @@ pam250 = {
 ('F', 'D') : -6, ('X', 'Y') : -2, ('Z', 'R') : 0, ('F', 'H') : -2, 
 ('B', 'F') : -4, ('F', 'L') : 2, ('X', 'Q') : -1, ('B', 'B') : 3
 }
+pam250 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/pam30.cmp
-pam30 = {
+def _temp():
+    return {
 ('W', 'F') : -4, ('L', 'R') : -8, ('S', 'P') : -2, ('V', 'T') : -3, 
 ('Q', 'Q') : 8, ('N', 'A') : -4, ('Z', 'Y') : -9, ('W', 'R') : -2, 
 ('Q', 'A') : -4, ('S', 'D') : -4, ('H', 'H') : 9, ('S', 'H') : -6, 
@@ -2243,8 +2413,13 @@ pam30 = {
 ('F', 'D') : -15, ('X', 'Y') : -7, ('Z', 'R') : -4, ('F', 'H') : -6, 
 ('B', 'F') : -10, ('F', 'L') : -3, ('X', 'Q') : -5, ('B', 'B') : 6
 }
+pam30 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/pam300.cmp
-pam300 = {
+def _temp():
+    return {
 ('W', 'F') : 1, ('L', 'R') : -3, ('S', 'P') : 1, ('V', 'T') : 0, 
 ('Q', 'Q') : 4, ('N', 'A') : 0, ('Z', 'Y') : -5, ('W', 'R') : 3, 
 ('Q', 'A') : 0, ('S', 'D') : 0, ('H', 'H') : 7, ('S', 'H') : -1, 
@@ -2315,8 +2490,13 @@ pam300 = {
 ('F', 'D') : -6, ('X', 'Y') : -2, ('Z', 'R') : 0, ('F', 'H') : -2, 
 ('B', 'F') : -5, ('F', 'L') : 3, ('X', 'Q') : 0, ('B', 'B') : 3
 }
+pam300 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/pam60.cmp
-pam60 = {
+def _temp():
+    return {
 ('W', 'F') : -3, ('L', 'R') : -6, ('S', 'P') : 0, ('V', 'T') : -1, 
 ('Q', 'Q') : 7, ('N', 'A') : -2, ('Z', 'Y') : -7, ('W', 'R') : 0, 
 ('Q', 'A') : -3, ('S', 'D') : -2, ('H', 'H') : 8, ('S', 'H') : -4, 
@@ -2387,8 +2567,13 @@ pam60 = {
 ('F', 'D') : -11, ('X', 'Y') : -5, ('Z', 'R') : -2, ('F', 'H') : -4, 
 ('B', 'F') : -8, ('F', 'L') : -1, ('X', 'Q') : -3, ('B', 'B') : 5
 }
+pam60 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/pam90.cmp
-pam90 = {
+def _temp():
+    return {
 ('W', 'F') : -2, ('L', 'R') : -5, ('S', 'P') : 0, ('V', 'T') : -1, 
 ('Q', 'Q') : 6, ('N', 'A') : -1, ('Z', 'Y') : -6, ('W', 'R') : 0, 
 ('Q', 'A') : -2, ('S', 'D') : -1, ('H', 'H') : 8, ('S', 'H') : -3, 
@@ -2454,8 +2639,13 @@ pam90 = {
 ('F', 'H') : -3, ('B', 'F') : -6, ('F', 'L') : 0, ('V', 'Y') : -4, 
 ('B', 'B') : 4
 }
+pam90 = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/rao.cmp
-rao = {
+def _temp():
+    return {
 ('W', 'F') : 11, ('S', 'P') : 10, ('N', 'M') : 6, ('Q', 'Q') : 16, 
 ('N', 'A') : 9, ('N', 'E') : 10, ('W', 'V') : 11, ('Q', 'E') : 11, 
 ('L', 'H') : 10, ('W', 'R') : 7, ('Q', 'A') : 11, ('S', 'D') : 10, 
@@ -2510,8 +2700,13 @@ rao = {
 ('I', 'A') : 9, ('P', 'I') : 3, ('R', 'R') : 16, ('L', 'I') : 10, 
 ('F', 'D') : 4, ('D', 'C') : 8
 }
+rao = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/risler.cmp
-risler = {
+def _temp() :
+    return {
 ('W', 'F') : -0.9, ('S', 'P') : -0.3, ('N', 'M') : 0.0, ('Q', 'Q') : 2.2, 
 ('N', 'A') : 1.3, ('N', 'E') : 1.4, ('W', 'V') : -0.7, ('Q', 'E') : 2.1, 
 ('L', 'H') : -0.9, ('W', 'R') : -0.8, ('Q', 'A') : 1.8, ('S', 'D') : 0.7, 
@@ -2566,8 +2761,13 @@ risler = {
 ('I', 'A') : 1.7, ('P', 'I') : -0.6, ('R', 'R') : 2.2, ('L', 'I') : 2.1, 
 ('F', 'D') : -0.3, ('D', 'C') : -1.7
 }
+risler = _temp()
+del _temp
+
+
 # http://www.embl-heidelberg.de/~vogt/matrices/str.cmp
-structure = {
+def _temp():
+    return {
 ('W', 'F') : 2, ('L', 'R') : -3, ('I', 'I') : 6, ('Q', 'Q') : 6, 
 ('W', 'N') : -5, ('V', 'I') : 2, ('H', 'T') : -2, ('H', 'P') : -3, 
 ('W', 'V') : -4, ('Q', 'E') : 2, ('W', 'R') : -2, ('Q', 'A') : 0, 
@@ -2622,3 +2822,5 @@ structure = {
 ('I', 'H') : -5, ('F', 'D') : -5, ('D', 'C') : -7, ('F', 'H') : -2, 
 ('D', 'G') : -1, ('F', 'L') : 2
 }
+structure = _temp()
+del _temp

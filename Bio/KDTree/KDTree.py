@@ -1,8 +1,8 @@
-# Copyright 2004 by Thomas Hamelryck. 	 
-# All rights reserved. 	 
-# This code is part of the Biopython distribution and governed by its 	 
-# license.  Please see the LICENSE file that should have been included 	 
-# as part of this package. 	 
+# Copyright 2004 by Thomas Hamelryck. 
+# All rights reserved. 
+# This code is part of the Biopython distribution and governed by its 
+# license.  Please see the LICENSE file that should have been included 
+# as part of this package. 
 """
 KD tree data structure for searching N-dimensional vectors.
 

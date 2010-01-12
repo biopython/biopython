@@ -75,19 +75,19 @@ class NexusTest1(unittest.TestCase):
                           't2 the name',
                           't5',
                           't6'],
-            "tbyname1":	 ["isn'that [a] strange name?",
+            "tbyname1": ["isn'that [a] strange name?",
                           'one should be punished, for (that)!',
                           't1',
                           't2 the name',
                           't5',
                           't6'],
-            "tbyname2":	 ["isn'that [a] strange name?",
+            "tbyname2": ["isn'that [a] strange name?",
                           'one should be punished, for (that)!',
                           't2 the name',
                           't5',
                           't6',
                           't7'],
-            "tbyname3":	 ['t1',
+            "tbyname3": ['t1',
                           't2 the name'],
                                     })
         self.assertEqual(len(n.charpartitions), 2)
@@ -140,7 +140,7 @@ class NexusTest1(unittest.TestCase):
                                         'byname':    [0, 2, 3],
                                         'c1':        [0, 1, 2, 3],
                                         'firsthalf': [0, 1, 2, 3],
-                                        'mix': 	     [0, 2],
+                                        'mix':       [0, 2],
                                         'mux':       [0, 2],
                                         'pos1':      [0, 3],
                                         'pos2':      [2],
@@ -162,12 +162,12 @@ class NexusTest1(unittest.TestCase):
                           't2 the name',
                           't5',
                           't6'],
-            'tbyname2':	 ["isn'that [a] strange name?",
+            'tbyname2':  ["isn'that [a] strange name?",
                           'one should be punished, for (that)!',
                           't2 the name',
                           't5',
                           't6'],
-            'tbyname3':	 ['t2 the name'],
+            'tbyname3': ['t2 the name'],
                                        })
         self.assertEqual(len(nf1.charpartitions), 2)
         self.assert_('codons' in nf1.charpartitions)
@@ -234,7 +234,7 @@ class NexusTest1(unittest.TestCase):
             })
 
         self.assertEqual(nf2.taxsets,
-            {"normal": 	  ["isn'that [a] strange name?",
+            {"normal":    ["isn'that [a] strange name?",
                            'one should be punished, for (that)!',
                            't1',
                            't5',
@@ -361,7 +361,7 @@ Root:  16
         tree = Trees.Tree(ts2)
 
         large_ex_handle = open(os.path.join(self.testfile_dir,
-            "int_node_labels.nex"))
+            "int_node_labels.nwk"))
         tree = Trees.Tree(large_ex_handle.read())
         large_ex_handle.close()
 

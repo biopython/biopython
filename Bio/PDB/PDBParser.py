@@ -173,6 +173,7 @@ class PDBParser:
                                                global_line_counter)
                     bfactor = 0.0 #The PDB use a default of zero if the data is missing
                 segid=line[72:76]
+                element=line[76:78].strip()
                 if current_segid!=segid:
                     current_segid=segid
                     structure_builder.init_seg(current_segid)
@@ -194,7 +195,8 @@ class PDBParser:
                         self._handle_PDB_exception(message, global_line_counter) 
                 # init atom
                 try:
-                    structure_builder.init_atom(name, coord, bfactor, occupancy, altloc, fullname, serial_number)
+                    structure_builder.init_atom(name, coord, bfactor, occupancy, altloc,
+                                                fullname, serial_number, element)
                 except PDBConstructionException, message:
                     self._handle_PDB_exception(message, global_line_counter)
             elif(record_type=='ANISOU'):

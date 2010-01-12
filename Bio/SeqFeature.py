@@ -33,9 +33,10 @@ o FeatureLocation - Specify the start and end location of a feature.
 
 o ExactPosition - Specify the position as being exact.
 o WithinPosition - Specify a position occuring within some range.
-o BetweenPosition - Specify a position occuring between a range.
+o BetweenPosition - Specify a position occuring between a range (OBSOLETE?).
 o BeforePosition - Specify the position as being found before some base.
 o AfterPosition - Specify the position as being found after some base.
+o OneOfPosition - Specify a position where the location can be multiple positions.
 """
 
 from Bio.Seq import MutableSeq, reverse_complement
@@ -44,7 +45,7 @@ class SeqFeature(object):
     """Represent a Sequence Feature on an object.
 
     Attributes:
-    o location - the location of the feature on the sequence
+    o location - the location of the feature on the sequence (FeatureLocation)
     o type - the specified type of the feature (ie. CDS, exon, repeat...)
     o location_operator - a string specifying how this SeqFeature may
     be related to others. For example, in the example GenBank feature
@@ -81,7 +82,33 @@ class SeqFeature(object):
                  qualifiers = None, sub_features = None,
                  ref = None, ref_db = None):
         """Initialize a SeqFeature on a Sequence.
+
+        location can either be a FeatureLocation (with strand argument also
+        given if required), or a Python slice (with strand given as the step).
+
+        e.g. With no strand, on the forward strand, and on the reverse strand:
+
+        >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
+        >>> f1 = SeqFeature(FeatureLocation(5,10), type="domain")
+        >>> f2 = SeqFeature(FeatureLocation(7,110), strand=1, type="CDS")
+        >>> f3 = SeqFeature(FeatureLocation(9,108), strand=-1, type="CDS")
+
+        An invalid strand will trigger an exception:
+
+        >>> f4 = SeqFeature(FeatureLocation(50,60), strand=2)
+        Traceback (most recent call last):
+           ...
+        ValueError: Strand should be +1, -1, 0 or None, not 2
+
+        For exact start/end positions, an integer can be used (as shown above)
+        as shorthand for the ExactPosition object. For non-exact locations, the
+        FeatureLocation must be specified via the appropriate position objects.
         """
+        if strand not in [-1, 0, 1, None] :
+            raise ValueError("Strand should be +1, -1, 0 or None, not %s" \
+                             % repr(strand))
+        if location and not isinstance(location, FeatureLocation):
+            raise TypeError("FeatureLocation (or None) required for the location")
         self.location = location
 
         self.type = type
@@ -164,6 +191,14 @@ class SeqFeature(object):
         and fuzzy positions. Even mixed strand features should work! This
         also covers features on protein sequences (e.g. domains), although
         here reverse strand features are not permitted.
+
+        >>> from Bio.Seq import Seq
+        >>> from Bio.Alphabet import generic_protein
+        >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
+        >>> seq = Seq("MKQHKAMIVALIVICITAVVAAL", generic_protein)
+        >>> f = SeqFeature(FeatureLocation(8,15), type="domain")
+        >>> f.extract(seq)
+        Seq('VALIVIC', ProteinAlphabet())
 
         Note - currently only sub-features of type "join" are supported.
         """
@@ -278,6 +313,23 @@ class FeatureLocation(object):
         position. In the case of integers, the values are assumed to be
         exact and are converted in ExactPosition arguments. This is meant
         to make it easy to deal with non-fuzzy ends.
+
+        i.e. Short form:
+        
+        >>> from Bio.SeqFeature import FeatureLocation
+        >>> loc = FeatureLocation(5,10)
+        
+        Explicit form:
+
+        >>> from Bio.SeqFeature import FeatureLocation, ExactPosition
+        >>> loc = FeatureLocation(ExactPosition(5),ExactPosition(10))
+
+        Other fuzzy positions are used similarly,
+
+        >>> from Bio.SeqFeature import FeatureLocation
+        >>> from Bio.SeqFeature import BeforePosition, AfterPosition
+        >>> loc2 = FeatureLocation(BeforePosition(5),AfterPosition(10))
+
         """
         if isinstance(start, AbstractPosition):
             self._start = start
@@ -419,7 +471,7 @@ class WithinPosition(AbstractPosition):
         return "(%s.%s)" % (self.position, self.position + self.extension)
 
 class BetweenPosition(AbstractPosition):
-    """Specify the position of a boundary between two coordinates.
+    """Specify the position of a boundary between two coordinates (OBSOLETE?).
 
     Arguments:
     o position - The start position of the boundary.
@@ -533,6 +585,10 @@ class OneOfPosition(AbstractPosition):
         out = out[:-1] + ")"
         return out
 
+    def _shift(self, offset):
+        return self.__class__([position_choice._shift(offset) \
+                               for position_choice in self.position_choices])
+
 class PositionGap(object):
     """Simple class to hold information about a gap between positions.
     """
@@ -548,3 +604,13 @@ class PositionGap(object):
     def __str__(self):
         out = "gap(%s)" % self.gap_size
         return out
+
+def _test():
+    """Run the Bio.SeqFeature module's doctests."""
+    print "Runing doctests..."
+    import doctest
+    doctest.testmod()
+    print "Done"
+
+if __name__ == "__main__":
+    _test()

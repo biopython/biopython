@@ -1,0 +1,341 @@
+<!-- ============================================================= -->
+<!--  MODULE:    Journal Metadata Elements                         -->
+<!--  VERSION:   2.0                                               -->
+<!--  DATE:      August 2004                                       -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
+<!--                        TYPICAL INVOCATION                     -->
+<!--
+"-//NLM//DTD Archiving and Interchange DTD Suite Journal Metadata Elements v2.0 20040830//EN"
+     Delivered as file "journalmeta.ent"                           -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Archiving and Interchange DTD Suite               -->
+<!--                                                               -->
+<!-- PURPOSE:    Names all elements used to describe the journal   -->
+<!--             in which the journal article is published.        -->
+<!--                                                               -->
+<!-- CONTAINS:   1. Default values for attribute lists             -->
+<!--             2. Journal metadata content model                 -->
+<!--             3. Journal metadata elements in the order used in -->
+<!--                the journal metadata element                   -->
+<!--                                                               -->
+<!-- CREATED FOR:                                                  -->
+<!--             Digital archives and publishers who wish to       -->
+<!--             create a custom XML DTD for original markup of    -->
+<!--             journal literature, books, and related material,  -->
+<!--             or for archiving and transferring such material   -->
+<!--             between archives.                                 -->
+<!--                                                               -->
+<!--             This DTD is in the public domain. An organization -->
+<!--             that wishes to create its own DTD from the suite  -->
+<!--             may do so without permission from NLM.            -->
+<!--                                                               -->
+<!--             The suite has been set up to be extended using a  -->
+<!--             new DTD file and a new DTD-specific customization -->
+<!--             module to redefine the many Parameter Entities.   -->
+<!--             Do not modify the suite directly or redistribute  -->
+<!--             modified versions of the suite.                   -->
+<!--                                                               -->
+<!--             In the interest of maintaining consistency and    -->
+<!--             clarity for potential users, NLM requests:        -->
+<!--                                                               -->
+<!--             1. If you create a DTD from the Archiving and     -->
+<!--                Interchange DTD Suite and intend to stay       -->
+<!--                compatible with the suite, then please include -->
+<!--                the following statement as a comment in all of -->
+<!--                your DTD modules:                              -->
+<!--                   "Created from, and fully compatible with,   -->
+<!--                    the Archiving and Interchange DTD Suite."  -->
+<!--                                                               -->
+<!--             2. If you alter one or more modules of the suite, -->
+<!--                then please rename your version and all its    -->
+<!--                modules to avoid any confusion with the        -->
+<!--                original suite. Also, please include the       -->
+<!--                following statement as a comment in all your   -->
+<!--                DTD modules:                                   -->
+<!--                   "Based in part on, but not fully compatible -->
+<!--                    with, the Archiving and Interchange DTD    --> 
+<!--                    Suite."                                    -->
+<!--                                                               -->
+<!--             Suggestions for refinements and enhancements to   -->
+<!--             the DTD suite should be sent in email to:         -->
+<!--                 archive-dtd@ncbi.nlm.nih.gov                  -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             December 2002                                     -->
+<!--                                                               -->
+<!-- CREATED BY: Jeff Beck       (NCBI)                            -->
+<!--             Deborah Lapeyre (Mulberry Technologies, Inc.)     -->
+<!--             Bruce Rosenblum (Inera Inc.)                      -->
+<!--                                                               -->
+<!--             NLM thanks the Harvard University Libraries, both -->
+<!--             for proposing that a draft archiving NLM DTD for  --> 
+<!--             life sciences journals be extended to accommodate -->
+<!--             journals in all disciplines and for sponsoring    -->
+<!--             Bruce Rosenblum's collaboration with other DTD    -->
+<!--             authors in completing Version 1.0. The Andrew W.  --> 
+<!--             Mellon Foundation provided support for these      --> 
+<!--             important contributions.                          -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DTD VERSION/CHANGE HISTORY                 -->
+<!-- ============================================================= -->
+<!--
+     =============================================================
+                        
+Version  Reason/Occasion                   (who) vx.x (yyyy-mm-dd)
+
+     =============================================================
+     Version 2.0                       (DAL/BTU) v2.0 (2004-08-30)     
+     
+     Major requirement changes led to the new release, producing
+     DTD version "2.0":
+       a) The splitting of the Archival and Interchange Tag Set 
+          DTDs into three DTDs from two: an authoring DTD, an
+          archive regularization and interchange DTD (the
+          current Blue Publishing DTD), and a preservationist 
+          archive DTD (the current Green Archiving and Interchange 
+          DTD).
+       b) AIT Working Group suggestions from the June 04 meeting 
+          and June/July 2004 followup discussions
+       c) Suite remodularization to meet new (and newly articulated)
+          modularization requirements
+       d) New or renamed classes and mixes to make modifications
+          easier and more consistent
+
+  5. PUBLISHER - Moved element here from this module to the
+     %common.ent; module since Book DTD also needed it and was 
+     not including this module. 
+     
+  4. COMPLETE MODELS WHEN OVER-RIDING A MODEL 
+     (for all Parameter Entities suffixed "-model")
+     ### Customization Alert ###
+     Made all the model over-rides consistent. Some included
+     the outer parentheses, some did not. They all do now,
+     -  %journal-meta-model; 
+
+  3. CUSTOM METADATA - Added the new <custom-meta> element, its
+     components, and its wrapper. This element is used to insert
+     name/value pairs for metadata elements that are in source
+     material but were never envisioned by this DTD. Allowed this
+     element at the end of <journal-meta>.
+
+  2. FPI - Updated public identifier to "v2.0 20040830" 
+
+     =============================================================
+     Version 1.1                           (TRG) v1.1 (2003-11-01)
+     
+  1. Created element <journal-title> and added it to parameter 
+     entity %journal-meta-model;  
+     Rationale: To include full name of journal as part of 
+     journal metadata.
+                                                                   -->
+
+
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITY DEPENDENCIES             
+                        Requires the following parameter entities
+                        be defined before calling this module, 
+                        usually accomplished in the Customization
+                        Module for the specific DTD:
+                           -%just-rendition;                       -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DEFAULTS FOR ATTRIBUTE LISTS               -->
+<!-- ============================================================= -->
+
+
+<!--                    JOURNAL IDENTIFIER ATTRIBUTES              -->
+<!--                    Attribute list for journal identifier 
+                        <journal-id> element                       -->
+<!--                    Indicates whose identifier this is, for
+                        example, "pub-id" for a publisher's
+                        identifier or "pmc" for PubMed Central.
+                        Suggested values include:
+                          archive Identifier assigned by an archive
+                                  or other repository
+                          aggregator
+                                 Identifier assigned by a data
+                                 aggregator
+                          doi    Digital Object Identifier for the
+                                 entire journal, not just for the
+                                 article (rare)
+                          index  Identifier assigned by an
+                                 abstracting or indexing service
+                          pmc    Identifier assigned by PubMed Central
+                                 for example, the pmc journal 
+                                 abbreviation such as "pnas", "mbc", 
+                                 "nar", "molcellb", which may be the 
+                                 same as the abbreviated journal 
+                                 title
+                          publisher-id 
+                                 Identifier assigned by the content
+                                 publisher, for example, "MOLEC", 
+                                 "MOLCEL"
+                          nlm-ta Identifier assigned by the 
+                                 PubMed/Medline, and is typically
+                                 the journal abbreviation, for 
+                                 example, "Mol Biol Cell", "Nucleic
+                                 Acids Res", which may be the
+                                 same as the abbreviated journal 
+                                 title.                            -->
+<!ENTITY %  journal-id-atts
+             "journal-id-type  
+                        CDATA                            #IMPLIED  " > 
+
+
+<!--         abbrev-type  
+                        The "type" attribute holds the name of the
+                        authority (if known) that defined the
+                        abbreviation.  For example, "medline" for
+                        the medline abbreviation, "publisher" for
+                        a publisher's abbreviation, etc.           -->
+
+
+<!--                    ABBREVIATED JOURNAL TITLE ATTRIBUTES       -->
+<!--                    Attribute list for Abbreviated Journal Title 
+                        <abbrev-journal-title> element             -->
+<!ENTITY %  abbrev-journal-title-atts
+             "abbrev-type  
+                        CDATA                              #IMPLIED" >
+
+
+<!-- ============================================================= -->
+<!--                    JOURNAL METADATA                           -->
+<!-- ============================================================= -->
+
+
+<!--                    JOURNAL METADATA MODEL                     -->
+<!--                    Content model for the journal metadata
+                        element <journal-meta>                     -->
+<!ENTITY % journal-meta-model  
+                        "(journal-id*, journal-title*, 
+                          abbrev-journal-title*, issn*, 
+                          publisher?, notes?, custom-meta-wrap?)"    >
+
+
+<!--                    JOURNAL METADATA                           -->
+<!--                    Metadata that identifies the journal in which
+                        the article was published                  -->
+<!ELEMENT  journal-meta %journal-meta-model;                         >
+  
+
+<!--ELEM   notes        Defined in %common.ent"                    -->
+<!--ELEM   issn         Defined in %common.ent"                    -->
+
+
+<!-- ============================================================= -->
+<!--                    JOURNAL METADATA ELEMENTS                  -->
+<!-- ============================================================= -->
+
+
+<!--                    JOURNAL IDENTIFIER                         -->
+<!--                    Short code that represents the journal; used
+                        as an alternative to or short form of the
+                        journal title; used for identification of 
+                        the journal domain.
+                        Authoring Note (PMC-only):
+                        The PMC identifiers come from an 
+                        authorized list, so that each journal 
+                        code is unique in the PMC system. The PMC 
+                        identifier is the PMC short abbreviation of 
+                        the journal title, used to identify the
+                        journal domain.                            -->
+<!ELEMENT  journal-id   (#PCDATA)                                    >
+<!--         journal-id-type   
+                        Indicates whose identifier this is, for
+                        example, "pub-id" for a publisher's
+                        identifier or "pmc" for PubMed Central.
+                        Suggested values include:
+                          archive Identifier assigned by an archive
+                                  or other repository
+                          aggregator
+                                 Identifier assigned by a data
+                                 aggregator
+                          doi    Digital Object Identifier for the
+                                 entire journal, not just for the
+                                 article (rare)
+                          index  Identifier assigned by an
+                                 abstracting or indexing service
+                          pmc    Identifier assigned by PubMed Central
+                                 for example, the pmc journal 
+                                 abbreviation such as "pnas", "mbc", 
+                                 "nar", "molcellb", which may be the 
+                                 same as the abbreviated journal 
+                                 title
+                          publisher-id 
+                                 Identifier assigned by the content
+                                 publisher, for example, "MOLEC", 
+                                 "MOLCEL"
+                          nlm-ta Identifier assigned by the 
+                                 PubMed/Medline, and is typically
+                                 the journal abbreviation, for 
+                                 example, "Mol Biol Cell", "Nucleic
+                                 Acids Res", which may be the
+                                 same as the abbreviated journal 
+                                 title.                            -->
+<!ATTLIST  journal-id
+             %journal-id-atts;                                       >
+
+
+<!--                    JOURNAL TITLE ELEMENTS                     -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a <journal-title>
+                        Design Note: This PE begins with an OR
+                        bar because %just-rendition; begins with an
+                        OR bar.                                    -->
+<!ENTITY % journal-title-elements
+                        "%just-rendition;"                           >
+
+
+<!--                    JOURNAL TITLE (FULL)                       -->
+<!--                    The title of the journal in which the
+                        article is published.                      -->
+<!ELEMENT  journal-title 
+                        (#PCDATA %journal-title-elements;)*          >
+
+
+<!--                    ABBREVIATED JOURNAL TITLE ELEMENTS         -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a <abbrev-journal-title> 
+                        Design Note: This PE begins with an OR
+                        bar because %just-rendition; begins with an
+                        OR bar.                                    -->
+<!ENTITY % abbrev-journal-title-elements
+                        "%just-rendition;"                           >
+
+
+<!--                    ABBREVIATED JOURNAL TITLE                  -->
+<!--                    A short form of the title of the journal
+                        in which the article is published.         -->
+<!ELEMENT  abbrev-journal-title 
+                        (#PCDATA %abbrev-journal-title-elements;)*   >
+<!--         abbrev-type  
+                        The "type" attribute holds the name of the
+                        authority (if known) that defined the
+                        abbreviation.  For example, "medline" for
+                        the medline abbreviation, "publisher" for
+                        a publisher's abbreviation, etc.           -->
+<!ATTLIST  abbrev-journal-title
+             %abbrev-journal-title-atts;                             >
+
+<!--ELEM   publisher    Defined in %common.ent"                    -->
+<!--ELEM   publisher-name      
+                        Defined in %common.ent"                    -->
+<!--ELEM   publisher-loc
+                        Defined in %common.ent"                    -->
+
+
+<!-- ================== End Journal Metadata Elements  =========== -->

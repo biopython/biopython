@@ -1,0 +1,139 @@
+########################################
+# Program: matcher
+# Rundate: Tue  8 Dec 2009 12:01:34
+# Commandline: matcher
+#    [-asequence] hba_human.fasta
+#    [-bsequence] hbb_human.fasta
+#    [-outfile] matcher_pair.txt
+#    -alternatives 5
+#    -aformat pair
+#    -sprotein
+# Align_format: pair
+# Report_file: matcher_pair.txt
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 145
+# Identity:      63/145 (43.4%)
+# Similarity:    88/145 (60.7%)
+# Gaps:           8/145 ( 5.5%)
+# Score: 264
+# 
+#
+#=======================================
+
+HBA_HUMAN          3 LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH     51
+                     |:|.:|:.|.|.||||  :..|.|.|||.|:.:.:|.|:.:|..| |||.
+HBB_HUMAN          4 LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLST     51
+
+HBA_HUMAN         52 -----GSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP     96
+                          |:.:||.|||||..|.::.:||:|::....:.||:||..||.|||
+HBB_HUMAN         52 PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDP    101
+
+HBA_HUMAN         97 VNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKY    141
+                     .||:||.:.|:..||.|...||||.|.|:..|.:|.|:..|..||
+HBB_HUMAN        102 ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY    146
+
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 13
+# Identity:       6/13 (46.2%)
+# Similarity:     9/13 (69.2%)
+# Gaps:           0/13 ( 0.0%)
+# Score: 32
+# 
+#
+#=======================================
+
+HBA_HUMAN         61 KKVADALTNAVAH     73
+                     :||...:.||:||
+HBB_HUMAN        132 QKVVAGVANALAH    144
+
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 18
+# Identity:       7/18 (38.9%)
+# Similarity:    10/18 (55.6%)
+# Gaps:           0/18 ( 0.0%)
+# Score: 28
+# 
+#
+#=======================================
+
+HBA_HUMAN         91 KLRVDPVNFKLLSHCLLV    108
+                     |:.||.|..:.|...|:|
+HBB_HUMAN         18 KVNVDEVGGEALGRLLVV     35
+
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 10
+# Identity:       6/10 (60.0%)
+# Similarity:     6/10 (60.0%)
+# Gaps:           0/10 ( 0.0%)
+# Score: 23
+# 
+#
+#=======================================
+
+HBA_HUMAN         81 LSALSDLHAH     90
+                     |.|.||..||
+HBB_HUMAN         69 LGAFSDGLAH     78
+
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 10
+# Identity:       6/10 (60.0%)
+# Similarity:     8/10 (80.0%)
+# Gaps:           0/10 ( 0.0%)
+# Score: 23
+# 
+#
+#=======================================
+
+HBA_HUMAN         11 VKAAWGKVGA     20
+                     |:||:.||.|
+HBB_HUMAN        127 VQAAYQKVVA    136
+
+
+#---------------------------------------
+#---------------------------------------

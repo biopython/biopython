@@ -1,0 +1,178 @@
+<!-- MedlineCitation DTD              
+
+     This is the DTD which NLM has written for External Use.      
+      
+        Comments and suggestions are welcome.
+        November 1, 2001 
+  
+-->
+<!-- ================================================================= -->
+<!--   Revision Notes Section  
+  
+ The following changes were made in the nlmmedlinecitation_011101.dtd:
+ 
+     a.  Added NOTNLM to Owner entity.
+
+     b.  Added Status Entity.
+    
+     c.  Added Status attribute for MedlineCitation.
+
+     d.  Added RegistryNumber to Chemical Element.
+
+     e.  Added PMID and MedlineID to CommentsCorrections. 
+   
+     f.  Added NRCBL value to SOURCE entity. 
+
+ The following changes were made in the nlmmedlinecitation_010319.dtd:
+
+     a.  Added the following values to the Owner entity: (NASA | PIP | KIE | HSR | HMD | SIS )
+     
+     b.  Removed AdditionalInformation element from MedlineCitation
+       (note, this element had been optional and was never used)
+ 
+     c.  Added the following elements to MedlineCitation:
+         OtherID
+         OtherAbstract 
+         KeywordList
+         SpaceFlightMission
+         InvestigatorList
+         GeneralNote 
+   
+     d.  Added Affiliation to Investigator
+
+     e.  Removed Procurement Source from DTD
+
+     f.  Removed AbstractAuthor from OtherAbstract
+
+     g.  Added Attribute List for OtherAbstract Type  
+   
+     h.  Added NLM default to MedlineCitationOwner attribute. 
+
+     i.  Added %PMID.Ref Entity
+
+     j.  Added Attribute for Keyword 
+
+     k.  Removed Element Owner and Element Type from DTD. 
+ 
+     l.  Added NLM default to KeywordList & GeneralNote Owner attribute. 
+
+     m.  Added attribute values for OtherID Source.
+
+     n.  Added ErratumFor to the CommentsCorrections element.
+   
+     o.  Changed Investigator element to reference personalname.
+
+     p.  Added SummaryForPatientsIn and OriginalReportIn to 
+         CommentCorrections
+
+     q.  Added %MedlineID.Ref Entity
+
+
+-->
+<!-- ================================================================= -->
+<!--   NLM Medline DTD   -->
+<!-- Typical usage:   
+
+  <!DOCTYPE MedlineCitationSet PUBLIC "-//NLM//DTD NLM//EN">
+
+-->
+<!-- ================================================================= -->
+<!-- Reference to Where the NLM Common DTD is located  -->
+<!-- "http://www.nlm.nih.gov/databases/dtd/nlmcommon_011101.dtd" -->
+<!ENTITY % NlmCommon PUBLIC "-//NLM//DTD Common, 
+1st November 2001//EN"  
+"http://www.nlm.nih.gov/databases/dtd/nlmcommon_011101.dtd" >
+%NlmCommon;
+<!-- ================================================================= -->
+<!-- ================================================================= -->
+<!-- internal DTD entities -->
+<!ENTITY % Ref.template "(RefSource,
+                          (PMID | MedlineID)?,
+                          Note?)">
+<!ELEMENT RefSource (#PCDATA)>
+<!ELEMENT Note (#PCDATA)>
+<!ENTITY % Owner "(NLM | NASA | PIP | KIE | HSR | HMD | SIS | NOTNLM)">
+<!ENTITY % Type "(AAMC | AIDS | KIE | PIP | NASA | Consumer) #REQUIRED">
+<!ENTITY % Source "(NASA | KIE | PIP | POP | ARPL | CPC | IND | CPFH | CLML | IM | SGC | NCT | NRCBL) #REQUIRED">
+<!ENTITY % Status "(In-Process | Completed | Out-of-scope | PubMed-not-MEDLINE) #IMPLIED">
+<!-- ================================================================= -->
+<!-- This is the top level element for MedlineCitation -->
+<!ELEMENT MedlineCitation (%MedlineID.Ref;,
+                           %PMID.Ref;,
+                           %DateCreated.Ref;, 
+                           DateCompleted?, 
+                           DateRevised?,
+                           Article,
+                           MedlineJournalInfo, 
+                           ChemicalList?,
+                           CitationSubset*,
+                           CommentsCorrections?,
+                           GeneSymbolList?,
+                           MeshHeadingList?, 
+                           NumberOfReferences?,
+                           PersonalNameSubjectList?,
+                           OtherID*,
+                           OtherAbstract*,
+                           KeywordList*,
+                           SpaceFlightMission*,
+                           InvestigatorList?,
+                           GeneralNote*)>
+<!ATTLIST MedlineCitation Owner %Owner; "NLM" >
+<!ATTLIST MedlineCitation Status %Status; >
+<!-- End of MedlineCitation group -->
+<!-- ================================================================= -->
+<!--             Further Definition of NLM Tags         -->
+<!ELEMENT DateCreated (%normal.date;)>
+<!ELEMENT DateCompleted (%normal.date;)>
+<!ELEMENT DateRevised (%normal.date;)>
+<!ELEMENT MedlineID (#PCDATA)>
+<!ELEMENT OtherAbstract (%Abstract;)>
+<!ATTLIST OtherAbstract Type %Type; >
+<!ELEMENT KeywordList (Keyword+)>
+<!ATTLIST KeywordList Owner %Owner; "NLM" >
+<!ELEMENT Keyword (#PCDATA)>
+<!ATTLIST Keyword
+         MajorTopicYN (Y | N) "N" >
+<!ELEMENT SpaceFlightMission (#PCDATA)>
+<!ELEMENT OtherID (#PCDATA)>
+<!ATTLIST OtherID Source %Source; >
+<!ELEMENT InvestigatorList (Investigator+)>
+<!ELEMENT Investigator (%personal.name;,Affiliation?)>
+<!ELEMENT GeneralNote (#PCDATA)>
+<!ATTLIST GeneralNote Owner %Owner; "NLM">
+<!ELEMENT CitationSubset (#PCDATA)>
+<!ELEMENT ChemicalList (Chemical+)>
+<!ELEMENT Chemical ((RegistryNumber|CASRegistryNumber), NameOfSubstance)>
+<!ELEMENT RegistryNumber (#PCDATA)>
+<!ELEMENT CASRegistryNumber (#PCDATA)>
+<!ELEMENT NameOfSubstance (#PCDATA)>
+<!ELEMENT GeneSymbolList (GeneSymbol+)>
+<!ELEMENT GeneSymbol (#PCDATA)>
+<!ELEMENT PersonalNameSubjectList (PersonalNameSubject+)>
+<!ELEMENT PersonalNameSubject (%personal.name;)>
+<!ELEMENT NumberOfReferences (#PCDATA)>
+<!ELEMENT CommentsCorrections (CommentOn*,
+                               CommentIn*,
+                               ErratumIn*, 
+                               ErratumFor*, 
+                               RepublishedFrom*,
+                               RepublishedIn*,
+                               RetractionOf*,
+                               RetractionIn*,
+                               UpdateIn*,
+                               UpdateOf*,
+                               SummaryForPatientsIn*,
+                               OriginalReportIn*)>
+<!ELEMENT CommentOn (%Ref.template;)>
+<!ELEMENT CommentIn (%Ref.template;)>
+<!ELEMENT ErratumIn (%Ref.template;)>
+<!ELEMENT ErratumFor (%Ref.template;)>
+<!ELEMENT RepublishedFrom (%Ref.template;)>
+<!ELEMENT RepublishedIn (%Ref.template;)>
+<!ELEMENT RetractionOf (%Ref.template;)>
+<!ELEMENT RetractionIn (%Ref.template;)>
+<!ELEMENT UpdateIn (%Ref.template;)>
+<!ELEMENT UpdateOf (%Ref.template;)>
+<!ELEMENT SummaryForPatientsIn (%Ref.template;)>
+<!ELEMENT OriginalReportIn (%Ref.template;)>
+<!-- ================================================================= -->

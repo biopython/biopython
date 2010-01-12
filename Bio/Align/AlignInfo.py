@@ -114,9 +114,9 @@ class SummaryInfo:
                        consensus_alpha = None, require_multiple = 0):
         """Same as dumb_consensus(), but allows gap on the output.
 
-	Things to do: Let the user define that with only one gap, the result
-	character in consensus is gap. Let the user select gap character, now
-	it takes the same is input.
+        Things to do: Let the user define that with only one gap, the result
+        character in consensus is gap. Let the user select gap character, now
+        it takes the same is input.
         """
         # Iddo Friedberg, 1-JUL-2004: changed ambiguous default to "X"
         consensus = ''

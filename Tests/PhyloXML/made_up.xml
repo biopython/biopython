@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phyloxml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.phyloxml.org http://www.phyloxml.org/1.00/phyloxml.xsd" xmlns="http://www.phyloxml.org">
+   <phylogeny rooted="true" rerootable="false" branch_length_unit="1">
+      <name>testing confidence</name>
+      <confidence type="bootstrap">89</confidence>
+      <confidence type="probability">0.71</confidence>
+      <clade>
+          <name>b</name>
+          <width>0.2</width>
+          <clade>
+              <name>c</name>
+              <color>
+                <red>128</red>
+                <green>220</green>
+                <blue>28</blue>
+              </color>
+              <confidence type="probability">0.9</confidence>
+              <confidence type="probability">0.71</confidence>
+          </clade>
+      </clade>
+   </phylogeny>
+   <phylogeny rooted="true">
+       <name>testing polygon</name>
+       <clade>           
+           <clade>
+            <name>A</name>
+            <distribution>
+                <desc>Polygon from random points</desc>
+                <polygon>                  
+                  <point geodetic_datum="WGS84" alt_unit="m">
+                     <lat>47.481277</lat>
+                     <long>8.769303</long>
+                     <alt>472</alt>
+                  </point>
+                  <point geodetic_datum="WGS84">
+                     <lat>35.155904</lat>
+                     <long>136.915863</long>
+                     <alt>10</alt>
+                  </point>
+                  <point geodetic_datum="WGS84">
+                     <lat>47.376334</lat>
+                     <long>8.548108</long>
+                     <alt>452</alt>
+                  </point>
+                </polygon>
+                <polygon>
+                  <point geodetic_datum="WGS84">
+                     <lat>40.481277</lat>
+                     <long>8.769303</long>
+                     <alt>42</alt>
+                  </point>
+                  <point geodetic_datum="WGS84">
+                     <lat>25.155904</lat>
+                     <long>136.915863</long>
+                     <alt>10</alt>
+                  </point>
+                  <point geodetic_datum="WGS84">
+                     <lat>47.376334</lat>
+                     <long>7.548108</long>
+                     <alt>452</alt>
+                  </point>
+                </polygon>
+            </distribution>
+           </clade>
+           <clade>
+               <name>B</name>
+           </clade>
+       </clade>
+   </phylogeny>
+   <phylogeny rooted="true">
+       <name>testing references</name>
+       <clade>
+           <clade>
+           <name>A</name>
+           <reference doi="10.1093/bioinformatics/btm619">
+               <desc>Phyutility: a phyloinformatics tool for trees, alignments and molecular data</desc>
+           </reference>
+           <reference doi="10.1186/1471-2105-9-S1-S23"></reference>
+           </clade>
+       </clade>
+   </phylogeny>
+   <phylogeny rooted="true">
+       <clade>
+           <name>A</name>
+       </clade>
+   </phylogeny>
+   <phylogeny rooted="true">
+      <name>Example of domain. Taken from apaf.mxl</name>
+      <clade>
+          <clade>
+            <name>22_MOUSE</name>
+            <branch_length>0.05998</branch_length>
+            <taxonomy>
+               <code>MOUSE</code>
+               <synonym>murine</synonym>
+               <synonym>vermin</synonym>
+            </taxonomy>
+            <sequence>
+               <annotation>
+                  <desc>alcohol dehydrogenase</desc>
+                  <confidence type="probability">0.99</confidence>
+                  <property datatype="xsd:integer" ref="NOAA:depth" applies_to="clade" unit="METRIC:m">1200</property>
+               </annotation>
+               <domain_architecture length="1249">
+                  <domain from="6" to="90" confidence="7.0E-26" id="x">CARD</domain>
+                  <domain from="109" to="414" confidence="7.2E-117">NB-ARC</domain>
+                  <domain from="605" to="643" confidence="2.4E-6">WD40</domain>
+                  <domain from="647" to="685" confidence="1.1E-12">WD40</domain>
+                  <domain from="689" to="729" confidence="2.4E-7">WD40</domain>
+                  <domain from="733" to="771" confidence="4.7E-14">WD40</domain>
+                  <domain from="872" to="910" confidence="2.5E-8">WD40</domain>
+                  <domain from="993" to="1031" confidence="4.6E-6">WD40</domain>
+                  <domain from="1075" to="1113" confidence="6.3E-7">WD40</domain>
+                  <domain from="1117" to="1155" confidence="1.4E-7">WD40</domain>
+                  <domain from="1168" to="1204" confidence="0.3">WD40</domain>
+               </domain_architecture>  
+            </sequence>
+         </clade>
+      </clade>
+   </phylogeny>
+   <phylogeny rooted="true" rerootable="false">
+   <name>dollo_on_domains__cofilin_e1/o_tol_332</name>
+   <description>[Method: Dollo parsimony on domain presence/absence] [Date: 2008/08/20 18:23:46] [Cost: 4] [Gains: 2] [Losses: 2] [Unchanged: 1314] [Parameters: E-value: 0.1, Cutoff-scores-file: not-set, Max-overlap: 0, Engulfing-overlaps: not-allowed, Ignore-dufs: false]</description>
+   <confidence type="parsimony">4.0</confidence>
+   <clade>
+      <name>cellular_organisms</name>
+      <binary_characters type="parsimony inferred" gained_count="0" lost_count="0" present_count="0">
+      </binary_characters>
+      <clade>
+         <name>Neomura</name>
+         <binary_characters type="parsimony inferred" gained_count="0" lost_count="0" present_count="0">
+         </binary_characters>
+         <clade>
+            <name>Eukaryota</name>
+            <binary_characters type="parsimony inferred" gained_count="2" lost_count="0" present_count="2">
+               <gained>
+                  <bc>Cofilin_ADF</bc>
+                  <bc>Gelsolin</bc>
+               </gained>
+               <present>
+                  <bc>Cofilin_ADF</bc>
+                  <bc>Gelsolin</bc>
+               </present>
+            </binary_characters>
+         </clade>
+      </clade>
+   </clade>
+   </phylogeny>
+</phyloxml>

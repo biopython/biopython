@@ -1,0 +1,39 @@
+########################################
+# Program: matcher
+# Rundate: Tue  8 Dec 2009 11:48:35
+# Commandline: matcher
+#    [-asequence] rose.pro
+#    [-bsequence] rosemary.pro
+#    [-outfile] matcher_simple.txt
+#    -auto
+#    -sprotein
+#    -aformat simple
+# Align_format: simple
+# Report_file: matcher_simple.txt
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: AF069992_1
+# 2: CAA85685.1
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 16
+# Identity:       7/16 (43.8%)
+# Similarity:     8/16 (50.0%)
+# Gaps:           0/16 ( 0.0%)
+# Score: 29
+# 
+#
+#=======================================
+
+AF069992_1        73 GPPPQSPDENRAGESS     88
+                     |.||:......|.|||
+CAA85685.1        47 GVPPEEAGAAVAAESS     62
+
+
+#---------------------------------------
+#---------------------------------------

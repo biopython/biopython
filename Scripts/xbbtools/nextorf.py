@@ -10,12 +10,11 @@
 # Jan.O.Andersson@home.se
 # File: nextorf.py
 
-import string, re
+import re
 import os, sys, commands
 import getopt
 
-from Bio import Fasta
-from Bio.Tools import Translate
+from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
@@ -43,18 +42,7 @@ def makeTableX(table):
                                table.back_table, table.start_codons,
                                table.stop_codons)
 
-def complement(seq):
-    return string.join(map(lambda x:IUPACData.ambiguous_dna_complement[x], map(None,seq)),'')
 
-def reverse(seq):
-    r = map(None, seq)
-    r.reverse()
-    return string.join(r,'')
-
-def antiparallel(seq):
-    s = complement(seq)
-    s = reverse(s)
-    return s
 
 class NextOrf:
     def __init__(self, file, options):
@@ -62,18 +50,33 @@ class NextOrf:
         self.file = file
         self.genetic_code = int(self.options['table'])
         self.table = makeTableX(CodonTable.ambiguous_dna_by_id[self.genetic_code])
-        self.translator = Translate.Translator(self.table)
         self.counter = 0
         self.ReadFile()
         
     def ReadFile(self):
-        self.parser = Fasta.RecordParser()
-        self.iter = Fasta.Iterator(handle = open(self.file), parser = self.parser)
-        while 1:
-            rec = self.iter.next()
-            if not rec: break
-            self.header = rec.title.split()[0].split(',')[0]
-            self.HandleRecord(rec)
+        handle = open(self.file)
+        for record in SeqIO.parse(handle, "fasta"):
+            self.header = record.id
+            frame_coordinates = ''
+            dir = self.options['strand']
+            plus = dir in ['both', 'plus']
+            minus = dir in ['both', 'minus']
+            start, stop = int(self.options['start']), int(self.options['stop'])
+            s = str(record.seq).upper()
+            if stop > 0:
+               s = s[start:stop]
+            else:
+               s = s[start:]
+            self.seq = Seq(s,IUPAC.ambiguous_dna)
+            self.length = len(self.seq)
+            self.rseq = None
+            CDS = []
+            if plus:
+                CDS.extend(self.GetCDS(self.seq))
+            if minus:
+                self.rseq = self.seq.reverse_complement()
+                CDS.extend(self.GetCDS(self.rseq, strand = -1))
+            self.Output(CDS)
 
     def ToFasta(self, header, seq):
        seq = re.sub('(............................................................)','\\1\n',seq)
@@ -81,8 +84,8 @@ class NextOrf:
 
     def Gc(self, seq):
        d = {}
-       for nt in ['A','T','G','C']:
-          d[nt] = string.count(seq, nt)
+       for nt in 'ATGC':
+          d[nt] = seq.count(nt)
        gc = d['G'] + d['C']
        if gc == 0: return 0
        return round(gc*100.0/(d['A'] +d['T'] + gc),1)
@@ -100,7 +103,6 @@ class NextOrf:
              for nt in ['A','T','G','C']:
                 if codon[pos] == nt: d[nt][pos] = d[nt][pos] +1
 
-
        gc = {}
        gcall = 0
        nall = 0
@@ -116,9 +118,7 @@ class NextOrf:
 
        gcall = 100.0*gcall/nall
        res = '%.1f%%, %.1f%%, %.1f%%, %.1f%%' % (gcall, gc[0], gc[1], gc[2])
-#       print 'GC:', res
        return res
-          
 
     def GetOrfCoordinates(self, seq):
         s = seq.data
@@ -139,29 +139,6 @@ class NextOrf:
                 elif codon in stop_codons: coordinates.append((i+1,0,codon))
             frame_coordinates.append(coordinates)
         return frame_coordinates
-     
-
-    def HandleRecord(self, rec):
-        frame_coordinates = ''
-        dir = self.options['strand']
-        plus = dir in ['both', 'plus']
-        minus = dir in ['both', 'minus']
-        start, stop = int(self.options['start']), int(self.options['stop'])
-        if stop > 0:
-           s = string.upper(rec.sequence[start:stop])
-        else:
-           s = string.upper(rec.sequence[start:])
-
-        self.seq = Seq(s,IUPAC.ambiguous_dna)
-        self.length = len(self.seq)
-        self.rseq = None
-        CDS = []
-        if plus: CDS.extend(self.GetCDS(self.seq))
-        if minus:
-            self.rseq = Seq(antiparallel(s),IUPAC.ambiguous_dna)
-            CDS.extend(self.GetCDS(self.rseq, strand = -1))
-        self.Output(CDS)
-        
 
     def GetCDS(self, seq, strand = 1):
         frame_coordinates = self.GetOrfCoordinates(seq)
@@ -199,8 +176,6 @@ class NextOrf:
                     del stop   
         return CDS
 
-    
-
     def Output(self, CDS):
         out = self.options['output']
         seqs = (self.seq, self.rseq)
@@ -213,7 +188,7 @@ class NextOrf:
                 head = '%s:%s' % (head, self.Gc2(subs.data))
                 
             if out == 'aa':
-                orf = self.translator.translate(subs)
+                orf = subs.translate(table=self.genetic_code)
                 print self.ToFasta(head, orf.data)
             elif out == 'nt':
                 print self.ToFasta(head, subs.data)

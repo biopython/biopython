@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phyloxml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.phyloxml.org http://www.phyloxml.org/1.10/phyloxml.xsd"
+   xmlns="http://www.phyloxml.org">
+   <phylogeny rooted="true">
+      <name>example from Prof. Joe Felsenstein's book "Inferring Phylogenies"</name>
+      <description>phyloXML allows to use either a "branch_length" attribute or element to indicate branch lengths.</description>
+      <clade>
+         <clade branch_length="0.06">
+            <clade branch_length="0.102">
+               <name>A</name>
+            </clade>
+            <clade branch_length="0.23">
+               <name>B</name>
+            </clade>
+         </clade>
+         <clade branch_length="0.4">
+            <name>C</name>
+         </clade>
+      </clade>
+   </phylogeny>
+   <phylogeny rooted="true">
+      <name>example from Prof. Joe Felsenstein's book "Inferring Phylogenies"</name>
+      <description>phyloXML allows to use either a "branch_length" attribute or element to indicate branch lengths.</description>
+      <clade>
+         <clade>
+            <branch_length>0.06</branch_length>
+            <clade>
+               <name>A</name>
+               <branch_length>0.102</branch_length>
+            </clade>
+            <clade>
+               <name>B</name>
+               <branch_length>0.23</branch_length>
+            </clade>
+         </clade>
+         <clade>
+            <name>C</name>
+            <branch_length>0.4</branch_length>
+         </clade>
+      </clade>
+   </phylogeny>
+   <phylogeny rooted="true">
+      <name>same example, with support of type "bootstrap"</name>
+      <clade>
+         <clade branch_length="0.06">
+            <name>AB</name>
+            <confidence type="bootstrap">89</confidence>
+            <clade branch_length="0.102">
+               <name>A</name>
+            </clade>
+            <clade branch_length="0.23">
+               <name>B</name>
+            </clade>
+         </clade>
+         <clade branch_length="0.4">
+            <name>C</name>
+         </clade>
+      </clade>
+   </phylogeny>
+   <phylogeny rooted="true">
+      <name>same example, with species and sequence</name>
+      <clade>
+         <clade>
+            <name>AB</name>
+            <clade>
+               <name>A</name>
+               <taxonomy>
+                  <scientific_name>E. coli</scientific_name>
+               </taxonomy>
+               <sequence>
+                  <annotation>
+                     <desc>alcohol dehydrogenase</desc>
+                     <confidence type="probability">0.99</confidence>
+                  </annotation>
+               </sequence>
+            </clade>
+            <clade>
+               <name>B</name>
+               <taxonomy>
+                  <scientific_name>B. subtilis</scientific_name>
+               </taxonomy>
+               <sequence>
+                  <annotation>
+                     <desc>alcohol dehydrogenase</desc>
+                     <confidence type="probability">0.91</confidence>
+                  </annotation>
+               </sequence>
+            </clade>
+         </clade>
+         <clade>
+            <name>C</name>
+            <taxonomy>
+               <scientific_name>C. elegans</scientific_name>
+            </taxonomy>
+            <sequence>
+               <annotation>
+                  <desc>alcohol dehydrogenase</desc>
+                  <confidence type="probability">0.67</confidence>
+               </annotation>
+            </sequence>
+         </clade>
+      </clade>
+   </phylogeny>
+   <phylogeny rooted="true">
+      <name>same example, with gene duplication information and sequence relationships</name>
+      <clade>
+         <events>
+            <speciations>1</speciations>
+         </events>
+         <clade>
+            <events>
+               <duplications>1</duplications>
+            </events>
+            <clade>
+               <taxonomy>
+                  <scientific_name>Bacillus subtilis</scientific_name>
+               </taxonomy>
+               <sequence id_source="x">
+                  <symbol>adhB</symbol>
+                  <accession source="ncbi">AAB80874</accession>
+                  <name>alcohol dehydrogenase</name>
+               </sequence>
+            </clade>
+            <clade>
+               <taxonomy>
+                  <scientific_name>Bacillus subtilis</scientific_name>
+               </taxonomy>
+               <sequence id_source="y">
+                  <symbol>gbsB</symbol>
+                  <accession source="ncbi">CAB15083</accession>
+                  <name>alcohol dehydrogenase</name>
+               </sequence>
+            </clade>
+         </clade>
+         <clade>
+            <taxonomy>
+               <scientific_name>Caenorhabditis elegans</scientific_name>
+            </taxonomy>
+            <sequence id_source="z">
+               <symbol>ADHX</symbol>
+               <accession source="ncbi">Q17335</accession>
+               <name>alcohol dehydrogenase</name>
+               <annotation ref="InterPro:IPR002085"/>
+            </sequence>
+         </clade>
+      </clade>
+      <sequence_relation id_ref_0="x" id_ref_1="y" type="paralogy"/>
+      <sequence_relation id_ref_0="x" id_ref_1="z" type="orthology"/>
+      <sequence_relation id_ref_0="y" id_ref_1="z" type="orthology"/>
+   </phylogeny>
+   <phylogeny rooted="true">
+      <name>similar example, with more detailed sequence data</name>
+      <clade>
+         <clade>
+            <clade>
+               <taxonomy>
+                  <id provider="NCBI">6645</id>
+                  <code>OCTVU</code>
+                  <scientific_name>Octopus vulgaris</scientific_name>
+               </taxonomy>
+               <sequence>
+                  <symbol>ADHX</symbol>
+                  <accession source="UniProtKB">P81431</accession>
+                  <name>Alcohol dehydrogenase class-3</name>
+                  <mol_seq>TDATGKPIKCMAAIAWEAKKPLSIEEVEVAPPKSGEVRIKILHSGVCHTD</mol_seq>
+                  <annotation ref="EC:1.1.1.1"/>
+                  <annotation ref="GO:0004022"/>
+               </sequence>
+            </clade>
+            <clade>
+               <taxonomy>
+                  <id provider="NCBI">44689</id>
+                  <code>DICDI</code>
+                  <scientific_name>Dictyostelium discoideum</scientific_name>
+               </taxonomy>
+               <sequence>
+                  <symbol>RT4I1</symbol>
+                  <accession source="UniProtKB">Q54II4</accession>
+                  <name>Reticulon-4-interacting protein 1 homolog, mitochondrial precursor</name>
+                  <mol_seq>MKGILLNGYGESLDLLEYKTDLPVPKPIKSQVLIKIHSTSINPLDNVMRK</mol_seq>
+                  <annotation ref="GO:0008270"/>
+                  <annotation ref="GO:0016491"/>
+               </sequence>
+            </clade>
+         </clade>
+         <clade>
+            <taxonomy>
+               <id provider="NCBI">1488</id>
+               <code>CLOAB</code>
+               <scientific_name>Clostridium acetobutylicum</scientific_name>
+            </taxonomy>
+            <sequence>
+               <symbol>ADHB</symbol>
+               <accession source="UniProtKB">Q04945</accession>
+               <name>NADH-dependent butanol dehydrogenase B</name>
+               <mol_seq>MVDFEYSIPTRIFFGKDKINVLGRELKKYGSKVLIVYGGGSIKRNGIYDK</mol_seq>
+               <annotation ref="GO:0046872"/>
+               <annotation ref="KEGG:Tetrachloroethene degradation"/>
+            </sequence>
+         </clade>
+      </clade>
+   </phylogeny>
+   <phylogeny rooted="false">
+      <name>network, node B is connected to TWO nodes: AB and C</name>
+      <clade>
+         <clade id_source="ab" branch_length="0.06">
+            <name>AB</name>
+            <clade id_source="a" branch_length="0.102">
+               <name>A</name>
+            </clade>
+            <clade id_source="b" branch_length="0.23">
+               <name>B</name>
+            </clade>
+         </clade>
+         <clade id_source="c" branch_length="0.4">
+            <name>C</name>
+         </clade>
+      </clade>
+      <clade_relation id_ref_0="b" id_ref_1="c" type="network_connection"/>
+   </phylogeny>
+   <phylogeny rooted="true">
+      <name>same example, using property elements to indicate a "depth" value for marine organisms</name>
+      <clade>
+         <clade>
+            <name>AB</name>
+            <clade>
+               <name>A</name>
+               <property datatype="xsd:integer" ref="NOAA:depth" applies_to="clade" unit="METRIC:m"> 1200 </property>
+            </clade>
+            <clade>
+               <name>B</name>
+               <property datatype="xsd:integer" ref="NOAA:depth" applies_to="clade" unit="METRIC:m"> 2300 </property>
+            </clade>
+         </clade>
+         <clade>
+            <name>C</name>
+            <property datatype="xsd:integer" ref="NOAA:depth" applies_to="clade" unit="METRIC:m"> 200 </property>
+         </clade>
+      </clade>
+   </phylogeny>
+   <phylogeny rooted="true">
+      <name>same example, using property elements to indicate a "depth" value for marine organisms by using id refs in
+         order to have property elements outside of the tree topology</name>
+      <clade>
+         <clade>
+            <name>AB</name>
+            <clade id_source="id_a">
+               <name>A</name>
+            </clade>
+            <clade id_source="id_b">
+               <name>B</name>
+            </clade>
+         </clade>
+         <clade id_source="id_c">
+            <name>C</name>
+         </clade>
+      </clade>
+      <property id_ref="id_a" datatype="xsd:integer" ref="NOAA:depth" applies_to="node" unit="METRIC:m"> 1200 </property>
+      <property id_ref="id_b" datatype="xsd:integer" ref="NOAA:depth" applies_to="node" unit="METRIC:m"> 2300 </property>
+      <property id_ref="id_c" datatype="xsd:integer" ref="NOAA:depth" applies_to="node" unit="METRIC:m"> 200 </property>
+   </phylogeny>
+   <phylogeny rooted="true">
+      <name>monitor lizards</name>
+      <description>a pylogeny of some monitor lizards</description>
+      <clade>
+         <taxonomy>
+            <id provider="NCBI">8556</id>
+            <scientific_name>Varanus</scientific_name>
+            <rank>genus</rank>
+            <uri desc="EMBL REPTILE DATABASE">http://www.embl-heidelberg.de/~uetz/families/Varanidae.html</uri>
+         </taxonomy>
+         <clade>
+            <taxonomy>
+               <id provider="NCBI">62046</id>
+               <scientific_name>Varanus niloticus</scientific_name>
+               <common_name>Nile monitor</common_name>
+               <rank>species</rank>
+            </taxonomy>
+            <distribution>
+               <desc>Africa</desc>
+            </distribution>
+         </clade>
+         <clade>
+            <taxonomy>
+               <scientific_name>Odatria</scientific_name>
+               <rank>subgenus</rank>
+            </taxonomy>
+            <clade>
+               <taxonomy>
+                  <id provider="NCBI">169855</id>
+                  <scientific_name>Varanus storri</scientific_name>
+                  <common_name>Storr's monitor</common_name>
+                  <rank>species</rank>
+               </taxonomy>
+               <distribution>
+                  <desc>Australia</desc>
+               </distribution>
+            </clade>
+            <clade>
+               <taxonomy>
+                  <id provider="NCBI">62053</id>
+                  <scientific_name>Varanus timorensis</scientific_name>
+                  <common_name>Timor monitor</common_name>
+                  <rank>species</rank>
+               </taxonomy>
+               <distribution>
+                  <desc>Asia</desc>
+               </distribution>
+            </clade>
+         </clade>
+      </clade>
+   </phylogeny>
+   <phylogeny rooted="true">
+      <name>A tree with phylogeographic information</name>
+      <clade>
+         <clade>
+            <clade>
+               <name>A</name>
+               <distribution>
+                  <desc>Hirschweg, Winterthur, Switzerland</desc>
+                  <point geodetic_datum="WGS84">
+                     <lat>47.481277</lat>
+                     <long>8.769303</long>
+                     <alt>472</alt>
+                  </point>
+               </distribution>
+            </clade>
+            <clade>
+               <name>B</name>
+               <distribution>
+                  <desc>Nagoya, Aichi, Japan</desc>
+                  <point geodetic_datum="WGS84">
+                     <lat>35.155904</lat>
+                     <long>136.915863</long>
+                     <alt>10</alt>
+                  </point>
+               </distribution>
+            </clade>
+            <clade>
+               <name>C</name>
+               <distribution>
+                  <desc>ETH Zürich</desc>
+                  <point geodetic_datum="WGS84">
+                     <lat>47.376334</lat>
+                     <long>8.548108</long>
+                     <alt>452</alt>
+                  </point>
+               </distribution>
+            </clade>
+         </clade>
+         <clade>
+            <name>D</name>
+            <distribution>
+               <desc>San Diego</desc>
+               <point geodetic_datum="WGS84">
+                  <lat>32.880933</lat>
+                  <long>-117.217543</long>
+                  <alt>104</alt>
+               </point>
+            </distribution>
+         </clade>
+      </clade>
+   </phylogeny>
+   <phylogeny rooted="true">
+      <name>A tree with date information</name>
+      <clade>
+         <clade>
+            <clade>
+               <name>A</name>
+               <date unit="mya">
+                  <desc>Silurian</desc>
+                  <value>425</value>
+                  <minimum>416.0</minimum>
+                  <maximum>443.7</maximum>
+               </date>
+            </clade>
+            <clade>
+               <name>B</name>
+               <date unit="mya">
+                  <desc>Devonian</desc>
+                  <value>320</value>
+               </date>
+            </clade>
+         </clade>
+         <clade>
+            <name>C</name>
+            <date unit="mya">
+               <desc>Ediacaran</desc>
+               <value>600</value>
+            </date>
+         </clade>
+      </clade>
+   </phylogeny>
+   <phylogeny rooted="true">
+      <name>Using another XML language to store an alignment</name>
+      <clade>
+         <clade>
+            <clade>
+               <name>A</name>
+            </clade>
+            <clade>
+               <name>B</name>
+            </clade>
+         </clade>
+         <clade>
+            <name>C</name>
+         </clade>
+      </clade>
+   </phylogeny>
+   <align:alignment xmlns:align="http://example.org/align">
+      <seq name="A">acgtcgcggcccgtggaagtcctctcct</seq>
+      <seq name="B">aggtcgcggcctgtggaagtcctctcct</seq>
+      <seq name="C">taaatcgc--cccgtgg-agtccc-cct</seq>
+   </align:alignment>
+</phyloxml>

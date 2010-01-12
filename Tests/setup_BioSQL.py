@@ -16,18 +16,25 @@ from BioSQL import BioSeqDatabase
 # You are expected to edit the following lines to match your system.
 # The BioSQL unit tests will call this code, and will only run if it works.
 
+# Constants for the database driver
+DBHOST = 'localhost'
+DBUSER = 'root'
+DBPASSWD = ''
+TESTDB = 'biosql_test'
+
 # -- MySQL
 #DBDRIVER = 'MySQLdb'
 #DBTYPE = 'mysql'
 # -- PostgreSQL
 #DBDRIVER = 'psycopg'
 #DBTYPE = 'pg'
-
-# Constants for the database driver
-DBHOST = 'localhost'
-DBUSER = 'root'
-DBPASSWD = ''
-TESTDB = 'biosql_test'
+# -- SQLite
+DBDRIVER = 'sqlite3'
+DBTYPE = 'sqlite'
+TESTDB = os.path.join(os.getcwd(), "BioSQL", "temp_sqlite.db")
+# In memory SQLite does not work with current test structure since the tests
+# expect databases to be retained between individual tests. 
+#TESTDB = ':memory:'
 
 ################################
 # End of user-editable section #

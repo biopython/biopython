@@ -1,0 +1,60 @@
+<!-- NLM Medline DTD              
+
+        This is the DTD which NLM has written for External Use. 
+        If you are a data Licensee, use the information
+        from the MedlineCitation Set.       
+ 
+        Comments and suggestions are welcome.
+        November 1, 2001
+       
+
+      
+-->
+<!-- ================================================================= -->
+<!--   NLM Medline DTD   -->
+<!-- Typical usage:   
+
+  <!DOCTYPE MedlineCitationSet PUBLIC "-//NLM//DTD NLM//EN">
+
+-->
+<!-- ================================================================= -->
+<!--   Revision Notes Section  
+ 
+  The following changes were made in the nlmmedline_011101.dtd:
+
+       a.  Made MedlineID optional
+ 
+  The following changes were made in the nlmmedline_010319.dtd:
+
+       a.  The entity reference changed to:
+          nlmmedlinecitation_010322.dtd.    
+       b.  Added PMID entity 
+
+       c.  The entity reference changed back to 
+          nlmmedlinecitation_010319.dtd.
+ 
+       d.  Added GrantID, Agency, Acronym entity references 
+
+       e.  Added MedlineID entity  
+
+ 
+-->
+<!-- ================================================================= -->
+<!ENTITY % ArticleTitle.Ref "ArticleTitle">
+<!ENTITY % ISSN.Ref        "ISSN?">
+<!ENTITY % DateCreated.Ref "DateCreated">
+<!ENTITY % PubDate.Ref     "PubDate">
+<!ENTITY % PMID.Ref        "PMID">
+<!ENTITY % MedlineID.Ref   "MedlineID?">
+<!ENTITY % GrantID.Ref     "GrantID?">
+<!ENTITY % Agency.Ref      "Agency">
+<!ENTITY % Acronym.Ref     "Acronym?">
+<!-- ================================================================= -->
+<!-- Reference to Where the NLM MedlineCitation DTD is located  -->
+<!ENTITY % MedlineCitation PUBLIC "-//NLM//DTD MedlineCitation, 1st November 2001//EN"
+"nlmmedlinecitation_011101.dtd" >
+%MedlineCitation;
+<!-- ================================================================= -->
+<!ELEMENT MedlineCitationSet (MedlineCitation*, DeleteCitation?)>
+<!ELEMENT DeleteCitation (MedlineID+ | PMID+)>
+<!-- ================================================================= -->

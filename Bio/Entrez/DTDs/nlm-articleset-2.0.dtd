@@ -1,0 +1,271 @@
+
+
+<!--
+This DTD was written to define a set of articles from NLM 
+Archive and Interchange DTD (http://dtd.nlm.nih.gov). 
+All of these articles should be 
+valid against the archivearticle.dtd 
+(http://dtd.nlm.nih.gov/2.0/archivearticle.dtd).
+
+
+
+-->
+
+<!--    Public document type definition. Typical invocation:
+<!DOCTYPE nlm-articleset PUBLIC "-//NLM//DTD ARTICLE SET 2.0//EN" []>
+-->
+<!--
+
+<!ENTITY % id-att
+	"id	   CDATA      #IMPLIED">
+
+<!ENTITY % id-att-required
+	"id	   CDATA      #REQUIRED">
+
+<!ENTITY % figr-atts
+	"fid 		CDATA 		#REQUIRED
+	 to  		CDATA 		#IMPLIED">
+
+<!ENTITY % tblr-atts
+	"tid 		CDATA 		#REQUIRED
+	 to  		CDATA 		#IMPLIED">
+
+<!ENTITY % abbr-atts
+	"bid 		CDATA 		#REQUIRED
+	 to  		CDATA 		#IMPLIED">
+
+<!ENTITY % rid-atts
+	"rid     CDATA       #REQUIRED">
+
+<!ENTITY % fnr-atts
+	"rid     CDATA       #REQUIRED
+	 to      CDATA       #IMPLIED">
+	 
+<!ENTITY % insr-atts
+	"iid     CDATA       #IMPLIED">
+
+<!ENTITY %	supplr-atts
+	"sid     CDATA       #REQUIRED
+	 to      CDATA       #IMPLIED">
+
+<!ENTITY %	secr-atts
+	"sid     CDATA       #REQUIRED"> -->
+
+<!-- Because articles were created to stand alone, ID/CDATA pairs may 
+     crash when articles are combined in one file. All attributes of
+	  ID and CDATA have been changed to CDATA in <pmc-articleset>
+	  -->
+
+<!ATTLIST	 abbrev
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 ack
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 address
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 aff
+			id	CDATA #IMPLIED
+			rid	CDATA	#IMPLIED>
+
+<!ATTLIST	 alt-text
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 app
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 array
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 author-notes
+			id	CDATA #IMPLIED
+			rid	CDATA	#IMPLIED>
+
+<!ATTLIST	 bio
+			id	CDATA #IMPLIED
+			rid	CDATA	#IMPLIED>
+
+<!ATTLIST	 boxed-text
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 caption
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 chem-struct
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 chem-struct-wrapper
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 citation
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 col
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 colgroup
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 collab
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 contract-num
+			id	CDATA #IMPLIED
+			rid	CDATA	#IMPLIED>
+
+<!ATTLIST	 contract-sponsor
+			id	CDATA #IMPLIED
+			rid	CDATA	#IMPLIED>
+
+<!ATTLIST	 contrib
+			id	CDATA #IMPLIED
+			rid	CDATA	#IMPLIED>
+
+<!ATTLIST	 corresp
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 def
+			id	CDATA #IMPLIED
+			rid	CDATA	#IMPLIED>
+
+
+<!ATTLIST	 def-item
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 disp-formula
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 disp-quote
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 ext-link
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 fig
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 fig-group
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 fn
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 glossary
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 glyph-data
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 graphic
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 inline-formula
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 inline-graphic
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 inline-supplementary-material
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 institution
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 kwd
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 kwd-group
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 long-desc
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 media
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 mml:math
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 named-content
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 note
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 notes
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 p
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 preformat
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 ref
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 related-article
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 sec
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 speech
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 statement
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 supplementary-material
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 table
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 table-wrap
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 table-wrap-group
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 target
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 tbody
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 td
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 term
+			id	CDATA #IMPLIED
+			rid	CDATA	#IMPLIED>		
+
+<!ATTLIST	 tfoot
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 th
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 thead
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 tr
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 verse-group
+			id	CDATA #IMPLIED>
+
+<!ATTLIST	 xref
+			id	CDATA #IMPLIED
+			rid	CDATA	#IMPLIED>
+
+
+<!ENTITY % archive-article  PUBLIC "-//NLM//DTD Journal Archiving and Interchange DTD v2.0 20040830//EN" "../2.0/archivearticle.dtd">
+
+
+<!ELEMENT pmc-articleset (article+) >
+
+%archive-article;
+

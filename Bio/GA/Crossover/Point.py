@@ -21,7 +21,6 @@ class SinglePointCrossover(TwoCrossover):
     point is the same for either genome.
     """
     def __init__(self, crossover_prob = .1):
-	"""Initialize to do crossovers at the specified probability.
-	"""
-	TwoCrossover.__init__(self, 1, crossover_prob)
-	
+        """Initialize to do crossovers at the specified probability.
+        """
+        TwoCrossover.__init__(self, 1, crossover_prob)

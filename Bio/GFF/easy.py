@@ -5,12 +5,16 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-Bio.GFF.easy: some functions to ease the use of Biopython
-"""
+"""Bio.GFF.easy: some functions to ease the use of Biopython (DEPRECATED)
 
-__version__ = "$Revision: 1.12 $"
-# $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/easy.py,v $
+This is part of the "old" Bio.GFF module by Michael Hoffman, which offered
+access to a MySQL database holding GFF data loaded by BioPerl. This code has
+now been deprecated, and will probably be removed in order to free the Bio.GFF
+namespace for a new GFF parser in Biopython (including GFF3 support).
+
+Some of the more useful ideas of Bio.GFF.easy may be reworked for Bio.GenBank,
+using the standard SeqFeature objects used elsewhere in Biopython.
+"""
 
 import copy
 import re
@@ -583,9 +587,30 @@ def record_coords(record, start, end, strand=0, upper=0):
     else:
         return subseq
 
-def _test(*args, **keywds):
-    import doctest, sys
-    doctest.testmod(sys.modules[__name__], *args, **keywds)
+def _test():
+    """Run the Bio.GFF.easy module's doctests (PRIVATE).
+
+    This will try and locate the unit tests directory, and run the doctests
+    from there in order that the relative paths used in the examples work.
+    """
+    import doctest
+    import os
+    if os.path.isdir(os.path.join("..","..","Tests")):
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("..","..","Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
+    elif os.path.isdir(os.path.join("Tests")) :
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
 
 if __name__ == "__main__":
     if __debug__:

@@ -1,0 +1,726 @@
+<!-- ============================================================= -->
+<!--  MODULE:    Bibliographic Reference (Citation) Class Elements -->
+<!--  VERSION:   2.0                                               -->
+<!--  DATE:      August 2004                                       -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
+<!--                        TYPICAL INVOCATION                     -->
+<!--
+"-//NLM//DTD Archiving and Interchange DTD Suite Bibliographic Reference (Citation) Class Elements v2.0 20040830//EN"
+Delivered as file "references.ent"                                 -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Archiving and Interchange DTD Suite               -->
+<!--                                                               -->
+<!-- PURPOSE:    Defines the bibliographic reference elements      -->
+<!--                                                               -->
+<!--                                                               -->
+<!-- CONTAINS:   1) Default definition of the references class     -->
+<!--             2) Parameter Entities for attribute lists         -->
+<!--             3) Models for the bibliographic reference         -->
+<!--                class elements in alphabetical order           -->
+<!--                                                               -->
+<!-- CREATED FOR:                                                  -->
+<!--             Digital archives and publishers who wish to       -->
+<!--             create a custom XML DTD for original markup of    -->
+<!--             journal literature, books, and related material,  -->
+<!--             or for archiving and transferring such material   -->
+<!--             between archives.                                 -->
+<!--                                                               -->
+<!--             This DTD is in the public domain. An organization -->
+<!--             that wishes to create its own DTD from the suite  -->
+<!--             may do so without permission from NLM.            -->
+<!--                                                               -->
+<!--             The suite has been set up to be extended using a  -->
+<!--             new DTD file and a new DTD-specific customization -->
+<!--             module to redefine the many Parameter Entities.   -->
+<!--             Do not modify the suite directly or redistribute  -->
+<!--             modified versions of the suite.                   -->
+<!--                                                               -->
+<!--             In the interest of maintaining consistency and    -->
+<!--             clarity for potential users, NLM requests:        -->
+<!--                                                               -->
+<!--             1. If you create a DTD from the Archiving and     -->
+<!--                Interchange DTD Suite and intend to stay       -->
+<!--                compatible with the suite, then please include -->
+<!--                the following statement as a comment in all of -->
+<!--                your DTD modules:                              -->
+<!--                   "Created from, and fully compatible with,   -->
+<!--                    the Archiving and Interchange DTD Suite."  -->
+<!--                                                               -->
+<!--             2. If you alter one or more modules of the suite, -->
+<!--                then please rename your version and all its    -->
+<!--                modules to avoid any confusion with the        -->
+<!--                original suite. Also, please include the       -->
+<!--                following statement as a comment in all your   -->
+<!--                DTD modules:                                   -->
+<!--                   "Based in part on, but not fully compatible -->
+<!--                    with, the Archiving and Interchange DTD    --> 
+<!--                    Suite."                                    -->
+<!--                                                               -->
+<!--             Suggestions for refinements and enhancements to   -->
+<!--             the DTD suite should be sent in email to:         -->
+<!--                 archive-dtd@ncbi.nlm.nih.gov                  -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             December 2002                                     -->
+<!--                                                               -->
+<!-- CREATED BY: Jeff Beck       (NCBI)                            -->
+<!--             Deborah Lapeyre (Mulberry Technologies, Inc.)     -->
+<!--             Bruce Rosenblum (Inera Inc.)                      -->
+<!--                                                               -->
+<!--             NLM thanks the Harvard University Libraries, both -->
+<!--             for proposing that a draft archiving NLM DTD for  --> 
+<!--             life sciences journals be extended to accommodate -->
+<!--             journals in all disciplines and for sponsoring    -->
+<!--             Bruce Rosenblum's collaboration with other DTD    -->
+<!--             authors in completing Version 1.0. The Andrew W.  --> 
+<!--             Mellon Foundation provided support for these      --> 
+<!--             important contributions.                          -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    DTD VERSION/CHANGE HISTORY                 -->
+<!-- ============================================================= -->
+<!--
+
+     =============================================================
+
+Version  Reason/Occasion                   (who) vx.x (yyyy-mm-dd)
+
+     =============================================================
+     Version 2.0                       (DAL/BTU) v2.0 (2004-08-30)
+     
+     Major requirement changes led to the new release, producing
+     DTD version "2.0":
+       a) The splitting of the Archival and Interchange Tag Set 
+          DTDs into three DTDs from two: an authoring DTD, an
+          archive regularization and interchange DTD (the
+          current Blue Publishing DTD), and a preservationist 
+          archive DTD (the current Green Archiving and Interchange 
+          DTD).
+       b) AIT Working Group suggestions from the June 04 meeting 
+          and June/July 2004 followup discussions
+       c) Suite remodularization to meet new (and newly articulated)
+          modularization requirements
+       d) New or renamed classes and mixes to make modifications
+          easier and more consistent
+
+ 12. COMPLETE MODELS WHEN OVER-RIDING A MODEL 
+     (for all Parameter Entities suffixed "-model")
+     ### Customization Alert ###
+     Added internal parentheses to Parameter Entity and removed 
+     them from Element Declaration for:
+     - %note-model;
+     - %ref-list-model;
+     - %ref-model;
+     - and removed the parentheses for <person-group>
+
+ 11. DEFAULT CLASSES - Were moved from this module to 
+     %default-classes.ent;
+
+ 10. REFERENCES.CLASS - Added the following elements to the
+     %references.class;:
+      - <issue-id>
+      - <issue-title>
+      - <page-range>
+      - <role>
+      - <string-name>
+      - <volume-id>
+
+  9. EMAIL AND URI
+     a. Added to %source-elements; by changing 
+         %ext-links.class; ==> %address-link.class;
+
+  8. LOOSENING ELEMENT USAGE in Archiving DTD and Suite
+     a. Rewrote content model for access-date as a new Parameter
+        Entity %access-date-elements;
+     b. Allowed all date components (%date-part.class;)
+        inside this PE in Archiving DTD (Green) customization
+     c. The default value is the empty string in this module,
+        therefore, access date, by default, contains nothing 
+        but #PCDATA.
+
+  7. ROLE ELEMENT - Was added to the default references class 
+     %references.class;
+
+  6. PERSON GROUP - To add <string-name> as well as correct various
+     classing problems:
+
+     a. Content model was made into a Parameter Entity
+        %person-group-model;
+
+     b. The content model was changed to incorporate the new
+         -%name.class;, which adds both <string-name> and <collab>
+
+  5. NAME CLASS / STRING NAME
+     a. Created a new element <string-name> for names that
+        do not follow the former, strict personal name model.
+
+     b. Created a new class %name.class; to hold all the ways
+        to name people: <name>, <string-name>, and <collab>
+        who produce products or articles. Used in:
+        - <person-group>
+     
+     c. To allow <string-name> to be used anywhere <name> is
+        used:
+        - Added to default %references.class;
+
+  4. NEW PARAMETER ENTITIES - To correct potential classing 
+     problems, created the following new Parameter Entities:
+     a. NEW CLASSES
+        - %just-para.class; used in <annotation>, -%note-model;
+        - %ref-list.class; used in <ref-list>
+     b. NEW MIXES 
+        - <edition>       -%edition-elements;
+        - <gov>           -%gov-elements;
+        - <patent>        -%patent-elements;
+        - <series-title>  -%series-title-elements;
+        - <std>           -%std-elements;
+        - <time-stamp>    -%time-stamp-elements;
+
+
+  3. Updated public identifier to "v2.0 20040830"         
+     
+     =============================================================
+     Version 1.1                           (TRG) v1.1 (2003-11-01)
+
+  2. Added element <page-count> to parameter entity 
+     %references.class;
+     Rationale:  Permit tagging of page count where included in
+     references.
+
+     =============================================================
+     Version 1.0 Post Publishing DTD Change (DAL) v 1.0 2003-02-10
+
+  1. Removed <other-ref>, since the Publishing (authoring) DTD did
+     not need it and that is what it had been made for. It was 
+     never to be used for conversion or interchange, so it's gone.
+     Removed %other-ref-elements; as well. It did not need to be 
+     removed from any context, as it was never used.
+                                                                   -->
+                                                                   
+                                                                   
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITY DEPENDENCIES             
+                        Requires the following parameter entities
+                        be defined before calling this module, 
+                        usually accomplished in the Customization
+                        Module for the specific DTD:
+                          - %emphasis.class;
+                          - %just-rendition;
+                          - %label.class;
+                          - %para-level;
+                          - %rendition-plus;
+                          - %simple-phrase;
+                          - %subsup.class;                         -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    PARAMETER ENTITIES FOR ATTRIBUTE LISTS     -->
+<!-- ============================================================= -->
+                                                                
+                                                                 
+<!--                    PERSON GROUP ATTRIBUTES                    -->
+<!--                    Attributes for the <person-group> element  -->
+<!ENTITY %  person-group-atts  
+             "person-group-type 
+                        CDATA                             #IMPLIED"  >
+                                                                
+                                                                 
+<!--                    PUBLICATION IDENTIFIER ATTRIBUTES          -->
+<!--                    Attributes for the <pub-id> element        -->
+<!ENTITY %  pub-id-atts  
+             "pub-id-type 
+                        (%pub-id-types;)                  #IMPLIED"  >
+
+
+<!--         xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).                   -->
+                                                                
+                                                                 
+<!--                    SOURCE ATTRIBUTES                          -->
+<!--                    Attributes for the <source> and 
+                        <trans-source> elements                    -->
+<!ENTITY %  source-atts
+             "xml:lang   NMTOKEN                           #IMPLIED" > 
+                                                                   
+<!-- ============================================================= -->
+<!--                    BIBLIOGRAPHIC REFERENCE LIST ELEMENTS      -->
+<!-- ============================================================= -->
+
+
+<!--ELEM   article-title       
+                        Defined in %common.ent;                    -->
+<!--ELEM   collab       Defined in %common.ent;                    -->
+<!--ELEM   conf-date    Defined in %common.ent;                    -->
+<!--ELEM   conf-loc     Defined in %common.ent;                    -->
+<!--ELEM   conf-name    Defined in %common.ent;                    -->
+<!--ELEM   day          Defined in %common.ent;                    -->
+<!--ELEM   elocation-id Defined in %common.ent;                    -->
+<!--ELEM   email        Defined in %common.ent;                    -->
+<!--ELEM   fpage        Defined in %common.ent;                    -->
+<!--ELEM   issn         Defined in %common.ent;                    -->
+<!--ELEM   issue        Defined in %common.ent;                    -->
+<!--ELEM   lpage        Defined in %common.ent;                    -->
+<!--ELEM   month        Defined in %common.ent;                    -->
+<!--ELEM   publisher-loc       
+                        Defined in %common.ent;                    -->
+<!--ELEM   publisher-name      
+                        Defined in %common.ent;                    -->
+<!--ELEM   season       Defined in %common.ent;                    -->
+<!--ELEM   title        Defined in %common.ent;                    -->
+<!--ELEM   trans-title  Defined in %common.ent;                    -->
+<!--ELEM   volume       Defined in %common.ent;                    -->
+<!--ELEM   year         Defined in %common.ent;                    -->
+
+
+<!--                    REFERENCE LIST MODEL                       -->
+<!--                    Content model for the <ref-list> element   -->
+<!ENTITY % ref-list-model
+                        "(title?, (%para-level;)*, ref*, 
+                         (%ref-list.class;)* )"                      > 
+
+
+<!--                    REFERENCE LIST (BIBLIOGRAPHIC REFERENCE LIST)
+                                                                   -->
+<!--                    List of references (citations) for the
+                        article.  Often called "References", 
+                        "Bibliography", or "Additional Reading". No
+                        distinction is made between lists of cited
+                        references and lists of suggested references.
+                        Authoring Note: The optional paragraph-level
+                        elements after the title allow for those rare
+                        cases where there is explanatory material
+                        inside the list, before the references. There
+                        may also be similar explanatory material 
+                        inside each reference group. Explanatory
+                        material preceding a citation will need to
+                        be placed inside the citation.             -->
+<!ELEMENT  ref-list     %ref-list-model;                             >
+
+
+<!--                    REFERENCE ITEM MODEL                       -->
+<!--                    Content model for the <ref> element        -->
+<!ENTITY % ref-model    "(label?, (citation | note)+ )"              > 
+
+
+<!--                    REFERENCE ITEM                             -->
+<!--                    One item in a bibliographic list, typically
+                        a citation describing a referenced work, but
+                        some journals may place notes in this list as
+                        well as citations.
+                        Conversion Note: There is usually a number or
+                        other label preceding each citation, which 
+                        the tagger may choose to preserve using the 
+                        label attribute.                           -->
+<!ELEMENT  ref          %ref-model;                                  >
+<!--         id         Unique identifier so that citation can be
+                        referenced                                 -->
+<!ATTLIST  ref
+             id         ID                                 #IMPLIED  >
+
+
+<!--ELEM   citation     Defined in %common.ent;                    -->
+
+
+<!--                    NOTE IN A REFERENCE LIST MODEL             -->
+<!ENTITY % note-model   "(label?, (%just-para.class;)+ )"            > 
+
+
+<!--                    NOTE IN A REFERENCE LIST                   -->
+<!--                    Used to tag non-citation material that 
+                        sometimes within a reference list, for 
+                        example, used to tag end note material when 
+                        such a note is placed within a reference 
+                        list.
+                        Authoring Note: For conversion use only. For
+                        creating new reference lists, notes should
+                        not be intermingled with citations.        -->
+<!ELEMENT  note         %note-model;                                 > 
+<!--         id         Unique identifier so that citation can be
+                        referenced                                 -->
+<!ATTLIST  note
+             id         ID                                 #IMPLIED  >
+
+
+<!-- ============================================================= -->
+<!--                    BIBLIOGRAPHIC REFERENCE CLASS              -->
+<!-- ============================================================= -->
+
+
+<!--                    ACCESS DATE ELEMENTS                       -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        the Access Date <access-date> element      -->
+<!ENTITY % access-date-elements 
+                        " "                                          >
+
+
+<!--                    ACCESS DATE FOR CITED WORK                 -->
+<!--                    The date on which the work which is cited
+                        was examined. Some online resources are 
+                        changing so quickly that a citation to the 
+                        resource is not complete without the date 
+                        on which the cited resource was examined, 
+                        since a day before or a day later the 
+                        relevant material might be different.
+                        Related Elements: The related element
+                        <time-stamp> is used to record not the time 
+                        when a cited resource was examined, but the
+                        time stamp that was found on the resource
+                        when it was examined, for time-stamped
+                        resources.                                 -->
+<!ELEMENT  access-date  (#PCDATA %access-date-elements;)*            >
+
+
+<!--                    ANNOTATION IN A CITATION                   -->
+<!--                    Most citations just provide the bibliographic
+                        information for a cited reference but a few
+                        describe or comment upon the nature or
+                        quality of the reference or summarize its
+                        findings.
+                        Display Note: All of the other reference
+                        elements are inline elements. In contrast,
+                        an Annotation may be considered a block
+                        element, with space before it and after it.-->
+<!ELEMENT  annotation   ((%just-para.class;)+)                       >
+
+
+<!--                    COMMENT ELEMENTS                           -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        the Comment in a Citation <comment> element.
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar, but since %simple-phrase; is an 
+                        inline mix, the OR bar is already there.   -->
+<!ENTITY % comment-elements 
+                        "%simple-phrase;"                            >
+
+
+<!--                    COMMENT IN A CITATION                      -->
+<!--                    Used to mark unstructured text within an
+                        otherwise element structured reference.
+                        In an unstructured reference, this text would
+                        merely be data characters.
+                        Typical comments could include:
+                          <comment>[Abstract]</comment>
+                          <comment> translated from Russian</comment>
+                        DESIGN NOTE: The <comment> element is defined
+                        here largely for the sake of conversion, to
+                        preserve the semantic markup when translating
+                        from other DTDs.
+                        Authoring and Conversion Note: The Comment
+                        element should be used to mark substantive
+                        text only; it should NOT be used to markup
+                        punctuation that occurs between elements.
+                        Display Note: Comments should appear inline
+                        with other reference elements.  This is a
+                        very different rendering from that given the
+                        similar element Annotation, which is
+                        typically a longer commentary concerning a
+                        citation that is rendered as a block
+                        element.
+                        DESIGN NOTE: All inline mixes begin with an
+                        OR bar, but since %simple-phrase; is an 
+                        inline mix, the OR bar is already there.   -->
+<!ELEMENT  comment      (#PCDATA %comment-elements;)*                >
+
+
+<!--                    EDITION ELEMENTS                           -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        <edition>                             
+                        Design Note: -%just-rendition; begins with
+                        an OR bar, so this inline mix begins with
+                        an OR bar.                                 -->
+<!ENTITY % edition-elements
+                        "%just-rendition;"                           >
+
+<!--                    EDITION, CITED                             -->
+<!--                    The edition number of a cited publication  -->
+<!ELEMENT  edition      (#PCDATA %edition-elements;)*                >
+
+
+<!--                    GOVERNMENT REPORT ELEMENTS                 -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        <gov>                             
+                        Design Note: -%rendition-plus; begins with
+                        an OR bar, so this inline mix begins with
+                        an OR bar.                                 -->
+<!ENTITY % gov-elements "%rendition-plus;"                           >
+
+
+<!--                    GOVERNMENT REPORT, CITED                   -->
+<!--                    The identification information (typically the
+                        title and/or an identification number) for 
+                        a cited governmental report or other 
+                        government publication                     -->
+<!ELEMENT  gov          (#PCDATA %gov-elements;)*                    >
+
+
+<!--                    ISBN                                       -->
+<!--                    International Standard Book Number         -->
+<!ELEMENT  isbn         (#PCDATA)                                    >
+
+
+<!--                    PATENT NUMBER ELEMENTS                     -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        <patent>                             
+                        Design Note: -%just-rendition; begins with
+                        an OR bar, so this inline mix begins with
+                        an OR bar.                                 -->
+<!ENTITY % patent-elements 
+                        "%just-rendition;"                           >
+
+
+<!--                    PATENT NUMBER, CITED                       -->
+<!--                    The identification information (typically the
+                        patent number or number and name) for a  
+                        cited patent                               -->
+<!ELEMENT  patent       (#PCDATA %patent-elements;)*                 >
+
+
+<!--                    PERSON GROUP MODEL                         -->
+<!--                    Content model for the Person Group element -->
+<!ENTITY % person-group-model
+                        "(%name.class; | aff | etal)*"               >
+
+
+<!--                    PERSON GROUP FOR A CITED PUBLICATION       -->
+<!--                    Wrapper element for one or more authors,
+                        editors, translators, etc. named in a cited
+                        reference.
+                        Remarks: Similar to the <contrib-group>
+                        element in the metadata, but could not use
+                        the same name (as this is a DTD not a schema)
+                        since the content is different.            -->
+<!ELEMENT  person-group %person-group-model;                         >
+<!--         person-group-type 
+                        Identifies the "role" of the persons being
+                        named, a group of authors, a group of 
+                        editors, members of the G&S chorus, etc.
+                        Valid Types include:
+                          author - Content creators
+                          editor - Content editors
+                          guest-editor 
+                                 - Content editor that has been 
+                                   invited to edit all or part of 
+                                   a work
+                          inventor 
+                                 - Idea, software, or machine creator
+                          assignee 
+                                 - Person to whom a patent is awarded
+                          translator
+                                 - Translated the cited work from 
+                                   one language into another
+                          trans-editor 
+                                 - Editor of a translated version of
+                                   a work
+                          all-authors
+                                 - Used to identify a complete list
+                                   of authors when a subset of the 
+                                   author group is used elsewhere 
+                                   in the citation. This may occur, 
+                                   for example, when a citation 
+                                   identifies both a book and a
+                                   chapter within the book.
+                          compiler
+                                 - Put together a composite work
+                                   from multiple sources
+                                                                   -->
+<!ATTLIST  person-group 
+             %person-group-atts;                                     >
+
+
+<!--                    PUBLICATION IDENTIFIER FOR A CITED PUBLICATION
+                                                                   -->
+<!--                    The identifier of a publication such as a
+                        related journal article that is listed 
+                        within a Citation <citation> inside the
+                        bibliographic reference list <ref-list> of 
+                        an article.                                -->
+<!ELEMENT  pub-id       (#PCDATA)                                    >
+<!--         pub-id-type 
+                        The "pub-id-type" attribute names the
+                        type of identifier, or the organization or 
+                        system that defined this identifier for the 
+                        identifier of the journal article or a 
+                        cited publication.
+                           Used on the <article-id> element, which 
+                        holds an identifier for the entire article.  
+                           Also used on the <pub-id> element, which 
+                        is an identifier for a publication cited in 
+                        a bibliographic reference (citation).
+                        Valid Types include:
+                          coden  - Obsolete PDB/CCDC identifier, may
+                                   be present on older articles
+                          doi    - Digital Object Identifier for
+                                   the publication being referenced
+                          medline- NLM Medline identifier
+                          other  - None of the named identifiers
+                          pii    - Publisher Item Identifier, see
+                                    /epub/piius.htm
+                          pmid   - PubMed ID (see
+                                   www.ncbi.nlm.nih.gov/entrez/
+                                   query.fcgi?db=PubMed)         
+                          publisher-id - 
+                                   Publisher's identifying number 
+                                   such as an 'article-id', 'artnum',
+                                   'identifier', 'article- number', 
+                                   etc.
+                          sici   - Serial Item and Contribution 
+                                   Identifier (SICI). A journal 
+                                   article may have more than one 
+                                   SICI, one for a print version and
+                                   one for an electronic version.  -->
+<!ATTLIST  pub-id  
+             %pub-id-atts;                                           >
+
+
+<!--                    SERIES ELEMENTS                            -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        <series>                             
+                        Design Note: -%rendition-plus; begins with
+                        an OR bar, so this inline mix begins with
+                        an OR bar.                                 -->
+<!ENTITY % series-elements "%rendition-plus;"                        >
+
+
+<!--                    SERIES                                     -->
+<!--                    Container element for any series information
+                        used in a citation. For example, within a
+                        citation to a non-journal item that spans
+                        multiple volumes, this element could contain
+                        the unique title of the entire series:
+                          <citation citation-type="book">
+                          <name>...</name> and <name>...</name>
+                          <year>1989</year>. <series>The Birds of
+                          South America</series>. <volume>1</volume>.
+                          <source>The Oscine Passerines</source>. 
+                          <publisher-name>University of Texas 
+                          Press</publisher-name>
+                          , <publisher-loc>Austin</publisher-loc>
+                          </citation>
+                                                                   -->
+<!ELEMENT  series       (#PCDATA %series-elements;)*                 >
+
+
+<!--                    STANDARD ELEMENTS                          -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        <std>                             
+                        Design Note: -%rendition-plus; begins with
+                        an OR bar, so this inline mix begins with
+                        an OR bar.                                 -->
+<!ENTITY % std-elements "%rendition-plus;"                           >
+
+
+<!--                    STANDARD, CITED                            -->
+<!--                    The identification information (typically the
+                        standard number, organization, and name) for 
+                        a cited standard, where "standard" is defined
+                        as a document produced by a recognized
+                        standards body such ISO, IEEE, OASIS, ANSI,
+                        etc.                                       -->
+<!ELEMENT  std          (#PCDATA %std-elements;)*                    >
+
+
+<!--                    SOURCE ELEMENTS                            -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a <source>.                                -->
+<!ENTITY % source-elements
+                        "| %emphasis.class; | %address-link.class; |
+                         %subsup.class;"                             >
+
+
+<!--                    SOURCE                                     -->
+<!--                    Within a citation, this is the title of a
+                        journal, book, conference proceedings, etc.
+                        that is the source of the cited material.  -->
+<!ELEMENT  source       (#PCDATA %source-elements;)*                 >
+<!--         xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiations such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).                   -->
+<!ATTLIST  source
+             %source-atts;                                           > 
+
+
+<!--                    TIME STAMP ELEMENTS                        -->
+<!--                    The elements that can be included along with
+                        data characters inside the content model of
+                        a <time-stamp>.                            -->
+<!ENTITY % time-stamp-elements
+                        " "                                          >
+
+
+<!--                    TIME STAMP FOR CITED WORK                 -->
+<!--                    Used to record any time stamp that was 
+                        found on the cited resource when it was 
+                        examined, for resources such as databases
+                        that may use a time signature to identify
+                        different versions. Note: This is not the 
+                        time when the cited resource was examined, 
+                        but rather the time it was produced,
+                        distributed, whatever milestone the resource
+                        creators chose to stamp time stamp.
+                        Related Element: <access-date> is the date 
+                        on which the cited work was examined. Some 
+                        online resources are changing so quickly 
+                        that a citation to the resource is not 
+                        complete without the date.                 -->
+<!ELEMENT  time-stamp   (#PCDATA %time-stamp-elements;)              >
+
+
+<!--                    TRANSLATED SOURCE                          -->
+<!--                    Within a citation, this is the title of a
+                        journal, book, conference proceedings, etc.
+                        that is the source of the cited material,
+                        but with the source name given in a different
+                        language from the source as given in the 
+                        <source> element. For example, if an article
+                        is originally in French, the <source> name
+                        would be the French name and the 
+                        <trans-source> might be in English.        -->
+<!ELEMENT  trans-source (#PCDATA %source-elements;)*                 >
+<!--         xml:lang   The language in which the value of the
+                        element is expressed.  Recommended best 
+                        practice is to use values as defined in
+                        RFC 1766, typically 2-letter language
+                        codes such as "FR" (French), "EN" (English),
+                        and "DE" (German). These values are NOT
+                        case sensitive, so "EN" = "en". The values
+                        may include hyphenated differentiates such 
+                        as "EN-AU" (Australian English) and "EN-US"
+                        (United States English).                   -->
+<!ATTLIST  trans-source
+             %source-atts;                                           > 
+
+
+<!-- ================== End Bibliographic Class Module =========== -->
