@@ -178,6 +178,7 @@ def _insdc_feature_location_string(feature):
 
 class _InsdcWriter(SequentialSequenceWriter):
     """Base class for GenBank and EMBL writers (PRIVATE)."""
+    MAX_WIDTH = 80
     QUALIFIER_INDENT = 21
     QUALIFIER_INDENT_STR = " "*QUALIFIER_INDENT
     QUALIFIER_INDENT_TMP = "     %s                " # 21 if %s is empty
@@ -315,7 +316,6 @@ class _InsdcWriter(SequentialSequenceWriter):
 
 class GenBankWriter(_InsdcWriter):
     HEADER_WIDTH = 12
-    MAX_WIDTH = 80
     QUALIFIER_INDENT = 21
     
     def _write_single_line(self, tag, text):
@@ -580,7 +580,6 @@ class GenBankWriter(_InsdcWriter):
         handle.write("//\n")
 
 class EmblWriter(_InsdcWriter):
-    MAX_WIDTH = 80
     HEADER_WIDTH = 5
     QUALIFIER_INDENT = 21
     QUALIFIER_INDENT_STR = "FT" + " "*(QUALIFIER_INDENT-2)
