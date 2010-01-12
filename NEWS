@@ -23,6 +23,7 @@ Bio.SeqIO now supports writing EMBL files (DNA and RNA sequences only).
 (At least) 4 people contributed to this release:
 
 Brad Chapman
+Christian Zmasek
 Eric Talevich
 Michiel de Hoon
 Peter Cock
