@@ -6,6 +6,8 @@
 """Classes corresponding to phyloXML elements.
 
 See U{ http://phyloxml.org/ } for the official specification.
+
+See also Han and Zmasek (2009) doi:10.1186/1471-2105-10-356
 """
 __docformat__ = "epytext en"
 
