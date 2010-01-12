@@ -10,7 +10,7 @@ The latest news is at the top.
 ===================================================================
 
 New module Bio.Phylo includes support for reading, writing and working with
-phylogenetic trees from Newick, Nexus and PhyloXML files. This was work by
+phylogenetic trees from Newick, Nexus and phyloXML files. This was work by
 Eric Talevich on a Google Summer of Code 2009 project, under The National
 Evolutionary Synthesis Center (NESCent), mentored by Brad Chapman and
 Christian Zmasek.
@@ -20,7 +20,7 @@ needed for our NCBI Entrez Utilities XML parser.
 
 Bio.SeqIO now supports writing EMBL files (DNA and RNA sequences only).
 
-(At least) 4 people contributed to this release:
+(At least) 5 people contributed to this release:
 
 Brad Chapman
 Christian Zmasek
