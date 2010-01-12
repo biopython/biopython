@@ -16,6 +16,7 @@ Testing reading sff format file Roche/E3MFGYR02_random_10_reads.sff
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
+ Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
