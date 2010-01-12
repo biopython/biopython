@@ -199,11 +199,11 @@ class _InsdcWriter(SequentialSequenceWriter):
             line = '%s/%s="%s"' % (self.QUALIFIER_INDENT_STR, key, value)
         else:
             line = '%s/%s=%s' % (self.QUALIFIER_INDENT_STR, key, value)
-        if len(line) < self.MAX_WIDTH:
+        if len(line) <= self.MAX_WIDTH:
             self.handle.write(line+"\n")
             return
         while line.lstrip():
-            if len(line) < self.MAX_WIDTH:
+            if len(line) <= self.MAX_WIDTH:
                 self.handle.write(line+"\n")
                 return
             #Insert line break...
@@ -212,6 +212,7 @@ class _InsdcWriter(SequentialSequenceWriter):
             if line[index] != " ":
                 #No nice place to break...
                 index = self.MAX_WIDTH
+            assert index <= self.MAX_WIDTH
             self.handle.write(line[:index] + "\n")
             line = self.QUALIFIER_INDENT_STR + line[index:].lstrip()
 
