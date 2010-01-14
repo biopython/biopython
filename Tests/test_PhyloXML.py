@@ -12,8 +12,7 @@ import zipfile
 from itertools import izip, chain
 from cStringIO import StringIO
 
-from Bio.Phylo import PhyloXML as PX
-from Bio.Phylo.IO import PhyloXMLIO
+from Bio.Phylo import PhyloXML as PX, PhyloXMLIO
 
 
 # Example PhyloXML files

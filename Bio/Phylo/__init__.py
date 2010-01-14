@@ -9,6 +9,6 @@ See also: U{ http://biopython.org/wiki/Phylo }
 """
 __docformat__ = "epytext en"
 
-import IO
-from Utils import (pretty_print, to_adjacency_matrix, to_networkx,
+from Bio.Phylo._io import parse, read, write, convert
+from Bio.Phylo._utils import (pretty_print, to_adjacency_matrix, to_networkx,
         draw_graphviz)

@@ -42,7 +42,7 @@ class UtilTests(unittest.TestCase):
                     # unzip(EX_METAZOA), unzip(EX_NCBI),
                     ),
                 (386, 747, 16207, 214911, 648553)):
-            tree = Phylo.IO.read(source, 'phyloxml')
+            tree = Phylo.read(source, 'phyloxml')
             output = StringIO()
             Phylo.pretty_print(tree, output)
             output.seek(0)
@@ -58,7 +58,7 @@ class TreeTests(unittest.TestCase):
     # TODO: magic: iter, len, getitem
 
     def setUp(self):
-        self.phylogenies = list(Phylo.IO.parse(EX_PHYLO, 'phyloxml'))
+        self.phylogenies = list(Phylo.parse(EX_PHYLO, 'phyloxml'))
 
     # Traversal methods
 
@@ -85,7 +85,7 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(events[0].speciations, 1)
         self.assertEqual(events[1].duplications, 1)
         # integer filter
-        tree = Phylo.IO.read(EX_APAF, 'phyloxml')
+        tree = Phylo.read(EX_APAF, 'phyloxml')
         domains = list(tree.find_all(start=5))
         self.assertEqual(len(domains), 8)
         for dom in domains:

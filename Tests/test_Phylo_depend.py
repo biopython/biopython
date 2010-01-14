@@ -37,7 +37,7 @@ class UtilTests(unittest.TestCase):
 
     def test_to_networkx(self):
         """Tree to Graph conversion, if networkx is available."""
-        tree = Phylo.IO.read(EX_DOLLO, 'phyloxml')
+        tree = Phylo.read(EX_DOLLO, 'phyloxml')
         G = Phylo.to_networkx(tree)
         self.assertEqual(len(G.nodes()), 659)
 
