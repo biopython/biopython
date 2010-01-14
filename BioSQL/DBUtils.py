@@ -1,5 +1,5 @@
 # Copyright 2002 by Andrew Dalke.  All rights reserved.
-# Revisions 2007-2009 copyright by Peter Cock.  All rights reserved.
+# Revisions 2007-2010 copyright by Peter Cock.  All rights reserved.
 # Revisions 2009 copyright by Brad Chapman.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -62,8 +62,8 @@ class Mysql_dbutils(Generic_dbutils):
 _dbutils["MySQLdb"] = Mysql_dbutils
 
 
-class Psycopg_dbutils(Generic_dbutils):
-    """Custom database utilities for Psycopg (PostgreSQL)."""
+class _PostgreSQL_dbutils(Generic_dbutils):
+    """Base class for any PostgreSQL adaptor."""
     def next_id(self, cursor, table):
         table = self.tname(table)
         sql = r"select nextval('%s_pk_seq')" % table
@@ -78,13 +78,15 @@ class Psycopg_dbutils(Generic_dbutils):
         rv = cursor.fetchone()
         return rv[0]
 
+class Psycopg_dbutils(_PostgreSQL_dbutils):
+    """Custom database utilities for Psycopg (PostgreSQL)."""
     def autocommit(self, conn, y = True):
         conn.autocommit(y)
 
 _dbutils["psycopg"] = Psycopg_dbutils
  
 
-class Psycopg2_dbutils(Psycopg_dbutils):
+class Psycopg2_dbutils(_PostgreSQL_dbutils):
     """Custom database utilities for Psycopg2 (PostgreSQL)."""
     def autocommit(self, conn, y = True):
         if y:
@@ -95,22 +97,8 @@ class Psycopg2_dbutils(Psycopg_dbutils):
 _dbutils["psycopg2"] = Psycopg2_dbutils
 
 
-class Pgdb_dbutils(Generic_dbutils):
+class Pgdb_dbutils(_PostgreSQL_dbutils):
     """Custom database utilities for Pgdb (aka PyGreSQL, for PostgreSQL)."""
-    def next_id(self, cursor, table):
-        table = self.tname(table)
-        sql = r"select nextval('%s_pk_seq')" % table
-        cursor.execute(sql)
-        rv = cursor.fetchone()
-        return rv[0]
-
-    def last_id(self, cursor, table):
-        table = self.tname(table)
-        sql = r"select currval('%s_pk_seq')" % table
-        cursor.execute(sql)
-        rv = cursor.fetchone()
-        return rv[0]
-
     def autocommit(self, conn, y = True):
         raise NotImplementedError("pgdb does not support this!")
 
@@ -120,5 +108,5 @@ _dbutils["pgdb"] = Pgdb_dbutils
 def get_dbutils(module_name):
     try:
         return _dbutils[module_name]()
-    except:
+    except KeyError:
         return Generic_dbutils()
