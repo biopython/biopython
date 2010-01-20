@@ -17,6 +17,7 @@ import re
 
 
 def trim_str(text, maxlen=60):
+    """Truncate a string to maxlen characters, including ellipsis."""
     assert isinstance(text, basestring), \
             "%s should be a string, not a %s" % (text, type(text))
     if len(text) > maxlen:
@@ -25,7 +26,7 @@ def trim_str(text, maxlen=60):
 
 # General tree-traversal algorithms
 
-def _level_search(root, get_children):
+def _level_traverse(root, get_children):
     """Traverse a tree in breadth-first (level) order."""
     Q = collections.deque([root])
     while Q:
@@ -33,7 +34,7 @@ def _level_search(root, get_children):
         yield v
         Q.extend(get_children(v))
 
-def _preorder_search(root, get_children):
+def _preorder_traverse(root, get_children):
     """Traverse a tree in depth-first pre-order (parent before children)."""
     def dfs(elem):
         yield elem
@@ -43,7 +44,7 @@ def _preorder_search(root, get_children):
     for elem in dfs(root):
         yield elem
 
-def _postorder_search(root, get_children):
+def _postorder_traverse(root, get_children):
     """Traverse a tree in depth-first post-order (children before parent)."""
     def dfs(elem):
         for v in get_children(elem):
@@ -188,9 +189,9 @@ class TreeMixin(object):
 
         @return: generator of all elements for which 'filter_func' is True.
         """
-        order_opts = {'preorder': _preorder_search,
-                      'postorder': _postorder_search,
-                      'level': _level_search}
+        order_opts = {'preorder': _preorder_traverse,
+                      'postorder': _postorder_traverse,
+                      'level': _level_traverse}
         try:
             order_func = order_opts[order]
         except KeyError:
