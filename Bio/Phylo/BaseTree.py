@@ -10,10 +10,10 @@ classes in order to use the common methods defined on them.
 """
 __docformat__ = "epytext en"
 
+import collections
 import itertools
 import random
 import re
-from collections import deque
 
 
 def trim_str(text, maxlen=60):
@@ -27,7 +27,7 @@ def trim_str(text, maxlen=60):
 
 def _level_search(root, get_children):
     """Traverse a tree in breadth-first (level) order."""
-    Q = deque([root])
+    Q = collections.deque([root])
     while Q:
         v = Q.popleft()
         yield v
@@ -301,7 +301,7 @@ class TreeMixin(object):
         the given target, but excluding the root clade.
         """
         # Only one path will work -- ignore weights and visits
-        path = deque()
+        path = []
         match = _object_matcher(target)
         def check_in_path(v):
             if match(v):
@@ -316,7 +316,7 @@ class TreeMixin(object):
             return False
         if not check_in_path(self.root):
             return None
-        return list(reversed(path))[1:]
+        return path[-2::-1]
 
     def get_terminals(self, order='preorder'):
         """Get a list of all of this tree's terminal (leaf) nodes."""
