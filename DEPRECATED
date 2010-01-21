@@ -7,6 +7,14 @@ Python 2.3
 No longer supported as of Release 1.51, having triggered a warning with
 Release 1.50, with a mention in the release notes for Release 1.49.
 
+Python 2.4
+==========
+As of Biopython 1.54, we consider support for Python 2.4 to be deprecated.
+This means we will continue to support Python 2.4 for at least two further
+releases, and at least one year (whichever takes longer), before dropping
+support for Python 2.4. This can be delayed given feedback from our users
+(e.g. if this proves to be a problem in combination with other libraries).
+
 Bio.Restriction.DNAUtils and check_bases
 ========================================
 This module (originally in C) offered complement and antiparallel functions
