@@ -98,4 +98,6 @@ def parse(handle):
         handle -- file-like object.
     """
     for line in handle:
+        if line.startswith('#'):
+            continue
         yield Record(line)
