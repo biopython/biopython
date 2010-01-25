@@ -9,7 +9,6 @@
 import unittest
 
 from Bio.SCOP import Des
-from Bio.SCOP.Residues import Residues
 
 
 
@@ -19,47 +18,47 @@ class DesTests(unittest.TestCase):
         self.filename = './SCOP/dir.des.scop.txt_test'
 
     def testParse(self):
-       f = open(self.filename)
-       try: 
-           count = 0
-           records = Des.parse(f)
-           for record in records:
-               count +=1
-           assert count == 20, "Wrong number of records?!"
-       finally:
-           f.close()
+        """Test if all records in a DES file are being read"""
+        f = open(self.filename)
+        try: 
+            count = 0
+            records = Des.parse(f)
+            for record in records:
+                count +=1
+            self.assertEqual(count, 20)
+        finally:
+            f.close()
     
     def testStr(self):
-       f = open(self.filename)
-       try: 
-           for line in f:
-               record = Des.Record(line)
-               #End of line is plateform dependant. Strip it off
-               assert str(record).rstrip() == line.rstrip()
-       finally:
-           f.close()        
+        """Test if we can convert each record to a string correctly"""
+        f = open(self.filename)
+        try: 
+            for line in f:
+                record = Des.Record(line)
+                #End of line is platform dependent. Strip it off
+                self.assertEqual(str(record).rstrip(), line.rstrip())
+        finally:
+            f.close()        
 
     def testError(self):
+        """Test if a corrupt record raises the appropriate exception"""
         corruptRec = "49268\tsp\tb.1.2.1\t-\n"
-        try:
-            record = Des.Record(corruptRec)
-            assert False, "Should never get here"
-        except ValueError, e:
-            pass
+        self.assertRaises(ValueError, Des.Record, corruptRec)
 
     def testRecord(self):
+        """Test one record in detail"""
         recLine = '49268\tsp\tb.1.2.1\t-\tHuman (Homo sapiens)    \n'
         recFields = (49268,'sp','b.1.2.1','','Human (Homo sapiens)')
 
         record = Des.Record(recLine)
-        assert record.sunid == recFields[0]
-        assert record.nodetype == recFields[1]
-        assert record.sccs == recFields[2]
-        assert record.name == recFields[3]                
-        assert record.description == recFields[4]
+        self.assertEqual(record.sunid, recFields[0])
+        self.assertEqual(record.nodetype, recFields[1])
+        self.assertEqual(record.sccs, recFields[2])
+        self.assertEqual(record.name, recFields[3])
+        self.assertEqual(record.description, recFields[4])
 
 
 
-if __name__ == '__main__':
+if __name__=='__main__':
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
