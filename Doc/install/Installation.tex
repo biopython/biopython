@@ -86,6 +86,27 @@ With all this said, hopefully these directions will make it
 straightforward to get Biopython installed on your machine so you can
 begin using it as quick as possible.
 
+\section{C Compiler}
+
+Although mostly written in Python, Biopython (and some of its dependencies)
+include C code, which must be compiled to run. If you are going to be
+installing from source you will therefore need a C compiler. However,
+in many cases this can be avoided by using pre-compiled packages (which
+is what we recommend on Windows).
+
+\subsection{Unix}
+We recommend GCC as the C compiler, this is usually available as part
+of the standard set of packages on any Unix or Linux system.
+
+\subsection{Mac OS X}
+Please install Apple's XCode suite - \emph{including} the optional
+Mac OS 10.4 SDK which includes important header files. 
+
+\subsection{Windows}
+We recommend you install Biopython and its dependencies using the
+provided pre-compiled Windows Installers. i.e. You don't \emph{need}
+a C compiler. See Section~\ref{sec:windows_install} for more details.
+
 \section{Installing Python}
 
 Python is a interpreting, interactive object-oriented programming
@@ -106,7 +127,7 @@ need to re-install all libraries you have added to python.
 
 Let's get started with installation on various platforms.
 
-\subsection{Installation on UNIX systems}
+\subsection{Python installation on UNIX systems}
 
 First, you should go the main python web site and head over to the information
 page for the latest python release. At the time of this writing the
@@ -184,7 +205,7 @@ Biopython and it's dependencies). You'll need to install these libraries
 and header files, which are often found in a separate package called
 \verb|python-devel| or something similar. 
 
-\subsection{Installation on Windows} 
+\subsection{Python installation on Windows} 
 
 Installation on Windows is most easily done using handy windows
 installers. As described above in the UNIX section, you should go to the
@@ -198,10 +219,10 @@ it to run it. Then just follow the friendly instructions. On all newer Windows
 machines you'll need to have Administrator privileges to do this
 installation.
 
-\subsection{Installation on Mac OS X}
+\subsection{Python installation on Mac OS X}
 
 Apple includes python on Mac OS X, and while you can use this many people have
-preferred to install the latest version of python as well in parallel.  We refer
+preferred to install the latest version of python as well in parallel. We refer
 you to the \ahrefurl{\url{http://www.python.org}} for more details, although
 otherwise the UNIX instructions apply.
 
@@ -230,7 +251,7 @@ The main web site for NumPy is:
 \subsubsection{UNIX and Mac OS X systems}
 
 You should download the \verb|tar.gz| file, and follow the standard python
-build process:
+build process. Note you will need a C compiler installed (see above):
 
 \begin{verbatim}
 > tar -xzvpf numpy-1.1.1.tar.gz
