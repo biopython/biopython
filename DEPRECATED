@@ -365,3 +365,9 @@ CompareAceParser and CompareAceConsumer from Bio.Motif.Parsers.AlignAce were
 deprecated in Release 1.53. AlignAceConsumer, AlignAceParser, and
 AlignAceScanner were declared obsolete in Release 1.53; their functionality is
 now available through a read() function in Bio.Motif.Parsers.AlignAce.
+
+Bio.Compass
+===========
+The RecordParser and Iterator classes were declared obsolete in Release 1.54.
+Their functionality is now available through a read() and a parse() function,
+respectively.
