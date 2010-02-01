@@ -460,6 +460,49 @@ class GenBankWriter(_InsdcWriter):
 
         self.handle.write(line)
 
+    def _write_references(self, record):
+        number = 0
+        for ref in record.annotations["references"]:
+            if not isinstance(ref, SeqFeature.Reference):
+                continue
+            number += 1
+            data = str(number)
+            #TODO - support more complex record reference locations?
+            if ref.location and len(ref.location)==1:
+                a = Alphabet._get_base_alphabet(record.seq.alphabet)
+                if isinstance(a, Alphabet.ProteinAlphabet):
+                    units = "residues"
+                else:
+                    units = "bases"
+                data += "  (%s %i to %i)" % (units,
+                                             ref.location[0].nofuzzy_start+1,
+                                             ref.location[0].nofuzzy_end)
+            self._write_single_line("REFERENCE",data)
+            if ref.authors:
+                #We store the AUTHORS data as a single string
+                self._write_multi_line("  AUTHORS", ref.authors)
+            if ref.consrtm:
+                #We store the consortium as a single string
+                self._write_multi_line("  CONSRTM", ref.consrtm)
+            if ref.title:
+                #We store the title as a single string
+                self._write_multi_line("  TITLE", ref.title)
+            if ref.journal:
+                #We store this as a single string - holds the journal name,
+                #volume, year, and page numbers of the citation
+                self._write_multi_line("  JOURNAL", ref.journal)
+            if ref.medline_id:
+                #This line type is obsolete and was removed from the GenBank
+                #flatfile format in April 2005. Should we write it?
+                #Note this has a two space indent:
+                self._write_multi_line("  MEDLINE", ref.medline_id)
+            if ref.pubmed_id:
+                #Note this has a THREE space indent:
+                self._write_multi_line("   PUBMED", ref.pubmed_id)
+            if ref.comment:
+                self._write_multi_line("  REMARK", ref.comment)
+            
+
     def _write_comment(self, record):
         #This is a bit complicated due to the range of possible
         #ways people might have done their annotation...
@@ -576,9 +619,12 @@ class GenBankWriter(_InsdcWriter):
             taxonomy = "."
         self._write_multi_line("", taxonomy)
 
-        #TODO - References...
+        if "references" in record.annotations:
+            self._write_references(record)
+
         if "comment" in record.annotations:
             self._write_comment(record)
+
         handle.write("FEATURES             Location/Qualifiers\n")
         for feature in record.features:
             self._write_feature(feature) 

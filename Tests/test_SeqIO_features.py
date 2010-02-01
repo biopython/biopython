@@ -31,9 +31,9 @@ def write_read(filename, in_format="gb", out_format="gb"):
     gb_records2 = list(SeqIO.parse(handle,out_format))
     compare_records(gb_records, gb_records2)
 
-def compare_record(old, new, ignore_name=False):
+def compare_record(old, new, expect_minor_diffs=False):
     #Note the name matching is a bit fuzzy
-    if not ignore_name \
+    if not expect_minor_diffs \
     and old.id != new.id and old.name != new.name \
     and (old.id not in new.id) and (new.id not in old.id) \
     and (old.id.replace(" ","_") != new.id.replace(" ","_")):
@@ -47,21 +47,51 @@ def compare_record(old, new, ignore_name=False):
         else:
             raise ValueError("'%s...' vs '%s...'" % (old.seq[:100], new.seq[:100]))
     if old.features and new.features:
-        return compare_features(old.features, new.features)
+        if not compare_features(old.features, new.features):
+            return False
     #Just insist on at least one word in common:
     if (old.description or new.description) \
     and not set(old.description.split()).intersection(new.description.split()):
         raise ValueError("%s versus %s" \
                          % (repr(old.description), repr(new.description)))
-    #TODO - check annotation
+    #This only checks common annotation
+    #Would a white list be easier?
+    for key in set(old.annotations.keys()).intersection(new.annotations.keys()):
+        if key in ["data_file_division", "accessions"]:
+            #TODO - These are not yet supported on output, or
+            #have other complications (e.g. different number of accessions
+            #allowed in various file formats)
+            continue
+        if key == "comment":
+            #Ignore whitespace
+            if old.annotations[key].split() != new.annotations[key].split():
+                raise ValueError("Annotation mis-match for comment:\n%s\n%s" \
+                                % (old.annotations[key], new.annotations[key]))
+            continue
+        if key == "references":
+            if expect_minor_diffs:
+                #TODO - Implement EMBL output of references
+                continue
+            assert len(old.annotations[key]) == len(new.annotations[key])
+            for r1, r2 in zip(old.annotations[key], new.annotations[key]):
+                assert r1.title == r2.title
+                assert r1.authors == r2.authors
+                assert r1.journal == r2.journal
+                assert r1.consrtm == r2.consrtm
+                assert r1.medline_id == r2.medline_id
+                assert r1.pubmed_id == r2.pubmed_id
+            continue
+        if repr(old.annotations[key]) != repr(new.annotations[key]):
+            raise ValueError("Annotation mis-match for %s:\n%s\n%s" \
+                             % (key, old.annotations[key], new.annotations[key]))
     return True
 
-def compare_records(old_list, new_list, ignore_name=False):
+def compare_records(old_list, new_list, expect_minor_diffs=False):
     """Check two lists of SeqRecords agree, raises a ValueError if mismatch."""
     if len(old_list) != len(new_list):
         raise ValueError("%i vs %i records" % (len(old_list), len(new_list)))
     for old, new in zip(old_list, new_list):
-        if not compare_record(old,new,ignore_name):
+        if not compare_record(old,new,expect_minor_diffs):
             return False
     return True
 
@@ -608,7 +638,7 @@ class NC_005816(NC_000932):
             return
         gb_record = SeqIO.read(open(self.gb_filename),"genbank")
         embl_record = SeqIO.read(open(self.embl_filename),"embl")
-        return compare_record(gb_record, embl_record, ignore_name=True)
+        return compare_record(gb_record, embl_record, expect_minor_diffs=True)
 
     def test_Translations(self):
         #"""Checking translation of FASTA features (faa vs ffn)."""
@@ -636,7 +666,7 @@ class NC_005816(NC_000932):
         if self.emblname is None:
             return
         embl_record = SeqIO.read(open(self.embl_filename),"embl")
-        compare_record(gb_record, embl_record, ignore_name=True)
+        compare_record(gb_record, embl_record, expect_minor_diffs=True)
 
     def test_Features(self):
         #"""Checking GenBank features sequences vs FASTA ffn file."""
