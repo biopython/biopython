@@ -77,8 +77,12 @@ def compare_record(old, new, expect_minor_diffs=False):
                 assert r1.title == r2.title
                 assert r1.authors == r2.authors
                 assert r1.journal == r2.journal
-                assert r1.consrtm == r2.consrtm
-                assert r1.medline_id == r2.medline_id
+                if r1.consrtm and r2.consrtm:
+                    #Not held in EMBL files
+                    assert r1.consrtm == r2.consrtm
+                if r1.medline_id and r2.medline_id:
+                    #Not held in EMBL files
+                    assert r1.medline_id == r2.medline_id
                 assert r1.pubmed_id == r2.pubmed_id
             continue
         if repr(old.annotations[key]) != repr(new.annotations[key]):

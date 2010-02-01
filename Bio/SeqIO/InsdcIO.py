@@ -743,6 +743,33 @@ class EmblWriter(_InsdcWriter):
         self._write_single_line("AC", accession+";")
         handle.write("XX\n")
 
+
+    def _write_references(self, record):
+        number = 0
+        for ref in record.annotations["references"]:
+            if not isinstance(ref, SeqFeature.Reference):
+                continue
+            number += 1
+            self._write_single_line("RN","[%i]" % number)
+            #TODO - support more complex record reference locations?
+            if ref.location and len(ref.location)==1:
+                self._write_single_line("RP","%i-%i" % (ref.location[0].nofuzzy_start+1,
+                                                        ref.location[0].nofuzzy_end))
+            #TODO - record any DOI or AGRICOLA identifier in the reference object?
+            if ref.pubmed_id:
+                self._write_single_line("RX", "PUBMED; %s." % ref.pubmed_id)
+            if ref.authors:
+                #We store the AUTHORS data as a single string
+                self._write_multi_line("RA", ref.authors)
+            if ref.title:
+                #We store the title as a single string
+                self._write_multi_line("RT", '"%s";' % ref.title)
+            if ref.journal:
+                #We store this as a single string - holds the journal name,
+                #volume, year, and page numbers of the citation
+                self._write_multi_line("RL", ref.journal)
+            self.handle.write("XX\n")
+
     def _write_comment(self, record):
         #This is a bit complicated due to the range of possible
         #ways people might have done their annotation...
@@ -786,7 +813,8 @@ class EmblWriter(_InsdcWriter):
         self._write_multi_line("OC", taxonomy)
         handle.write("XX\n")
 
-        #TODO - References...
+        if "references" in record.annotations:
+            self._write_references(record)
 
         if "comment" in record.annotations:
             self._write_comment(record)
