@@ -543,8 +543,13 @@ class GenBankWriter(_InsdcWriter):
 
         try:
             #List of strings
+            #Keywords should be given separated with semi colons,
             keywords = "; ".join(record.annotations["keywords"])
+            #with a trailing period:
+            if not keywords.endswith(".") :
+                keywords += "."
         except KeyError:
+            #If no keywords, there should be just a period:
             keywords = "."
         self._write_multi_line("KEYWORDS", keywords)
 
