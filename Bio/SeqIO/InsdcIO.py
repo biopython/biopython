@@ -614,7 +614,11 @@ class GenBankWriter(_InsdcWriter):
         self._write_single_line("  ORGANISM", org)
         try:
             #List of strings
+            #Taxonomy should be given separated with semi colons,
             taxonomy = "; ".join(record.annotations["taxonomy"])
+            #with a trailing period:
+            if not taxonomy.endswith(".") :
+                taxonomy += "."
         except KeyError:
             taxonomy = "."
         self._write_multi_line("", taxonomy)
