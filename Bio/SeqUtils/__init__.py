@@ -23,13 +23,18 @@ from Bio.Data import IUPACData, CodonTable
 # {{{ 
 
 def reverse(seq):
-    """Reverse the sequence. Works on string sequences.
+    """Reverse the sequence. Works on string sequences (DEPRECATED).
 
-    e.g.
-    >>> reverse("ACGGT")
+    This function is now deprecated, instead use the string's built in slice
+    method with a step of minus one:
+
+    >>> "ACGGT"[::-1]
     'TGGCA'
-    
     """
+    import warnings
+    warnings.warn("Bio.SeqUtils.reverse() is deprecated, use the string's "
+                  "slice method with a step of minus one instead.",
+                  DeprecationWarning)
     r = list(seq)
     r.reverse()
     return ''.join(r)
