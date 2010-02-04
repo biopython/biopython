@@ -8938,6 +8938,8 @@ FASTQ file, \texttt{with\_primer\_trimmed.fastq}.
 
 Finally, suppose you want to create a new FASTQ file where these $500$ reads have
 their primer removed, but all the other reads are kept as they were?
+If we want to still use a generator expression, it is probably clearest to
+define our own trim function:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -8957,29 +8959,20 @@ print "Saved %i reads" % count
 
 This takes longer, as this time the output file contains all $94696$ reads.
 Again, we're used a generator expression to avoid any memory problems.
-Although it is slower, you might prefer to use a for loop:
+You could alternatively use a generator function rather than a generator
+expression.
 
 \begin{verbatim}
-from Bio import SeqIO
-out_handle = open("trimmed.fastq", "w")
-for record in SeqIO.parse(open("SRR014849.fastq"),"fastq"):
-    if record.seq.startswith("GTTGGAACCG"):
-        out_handle.write(record[10:].format("fastq"))
-    else:
-        out_handle.write(record.format("fastq"))
-out_handle.close()
+from Bio import SeqIOdef trim_primers(records, primer):    """Removes perfect primer sequences at start of reads.        This is a generator function, the records argument should    be a list or iterator returning SeqRecord objects.    """    len_primer = len(primer) #cache this for later    for record in records:        if record.seq.startswith(primer):            yield record[len_primer:]        else:            yield recordoriginal_reads = SeqIO.parse(open("SRR014849.fastq"), "fastq")trimmed_reads = trim_primers(original_reads, "GTTGGAACCG")out_handle = open("trimmed.fastq", "w") count = SeqIO.write(trimmed_reads, out_handle, "fastq") out_handle.close() print "Saved %i reads" % count
 \end{verbatim}
 
-In this case the for loop looks simpler, but putting the trim logic into a
-function is more tidy, and makes it easier to adjust the trimming later on.
-For example, you might decide to look for a 5' primer as well. Or, as in
-the following example, look for the primer anywhere in the reads - not
-just at the beginning.
+This form is more flexible if you want to do something more complicated
+where only some of the records are retained -- as shown in the next example.
 
 \subsection{Trimming off adaptor sequences}
 \label{sec:FASTQ-slicing-off-adaptor}
 
-This is essentially a trivial extension to the previous example. We are going
+This is essentially a simple extension to the previous example. We are going
 to going to pretend \texttt{GTTGGAACCG} is an adaptor sequence in some FASTQ
 formatted read data, again the \texttt{SRR014849.fastq} file from the NCBI
 (\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}).
@@ -8989,17 +8982,22 @@ not just at the very beginning:
 
 \begin{verbatim}
 from Bio import SeqIO
-def trim_adaptor(record, adaptor):
-    """Removes adaptor sequences, looks for perfect matches only."""
-    """
-    index = record.seq.find(adaptor)
-    if index == -1:
-        return record #not found, no trimming
-    else:
-        return record[index+len(adaptor):]
 
-trimmed_reads = (trim_adaptor(record, "GTTGGAACCG") for record in \
-                 SeqIO.parse(open("SRR014849.fastq"), "fastq")) 
+def trim_adaptors(records, adaptor, min_len):
+    """Trims perfect adaptor sequences.
+    
+    This is a generator function, the records argument should    be a list or iterator returning SeqRecord objects.    """
+    len_adaptor = len(adaptor) #cache this for later    for record in records:
+        index = record.seq.find(adaptor)
+        if index == -1:
+            #adaptor not found, so won't trim
+            yield record
+        else:
+            #trim off the adaptor
+            yield record[index+len_adaptor:]
+
+original_reads = SeqIO.parse(open("SRR014849.fastq"), "fastq")
+trimmed_reads = trim_adaptors(original_reads, "GTTGGAACCG")
 out_handle = open("trimmed.fastq", "w") 
 count = SeqIO.write(trimmed_reads, out_handle, "fastq") 
 out_handle.close() 
@@ -9010,6 +9008,40 @@ Because we are using a FASTQ input file in this example, the \verb|SeqRecord|
 objects have per-letter-annotation for the quality scores. By slicing the
 \verb|SeqRecord| object the appropriate scores are used on the trimmed
 records, so we can output them as a FASTQ file too.
+
+Compared to the output of the previous example where we only looked for
+a primer/adaptor at the start of each read, you may find some of the
+trimmed reads are quite short after trimming (e.g. if the adaptor was
+found in the middle rather than near the start). So, let's add a minimum
+length requirement as well:
+
+\begin{verbatim}
+from Bio import SeqIO
+
+def trim_adaptors(records, adaptor, min_len):
+    """Trims perfect adaptor sequences, checks read length.
+    
+    This is a generator function, the records argument should    be a list or iterator returning SeqRecord objects.    """
+    len_adaptor = len(adaptor) #cache this for later    for record in records:
+        len_record = len(record) #cache this for later
+        if len(record) < min_len:
+           #Too short to keep
+           continue
+        index = record.seq.find(adaptor)
+        if index == -1:
+            #adaptor not found, so won't trim
+            yield record
+        elif len_record - index - len_adaptor >= min_len:
+            #after trimming this will still be long enough
+            yield record[index+len_adaptor:]
+
+original_reads = SeqIO.parse(open("SRR014849.fastq"), "fastq")
+trimmed_reads = trim_adaptors(original_reads, "GTTGGAACCG", 36)
+out_handle = open("trimmed.fastq", "w") 
+count = SeqIO.write(trimmed_reads, out_handle, "fastq") 
+out_handle.close() 
+print "Saved %i reads" % count
+\end{verbatim}
 
 By changing the format names, you could apply this to FASTA files instead.
 This code also could be extended to do a fuzzy match instead of an exact
