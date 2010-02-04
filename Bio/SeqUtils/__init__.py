@@ -221,13 +221,18 @@ def nt_search(seq, subseq):
 # should be moved to ???
 
 class ProteinX(Alphabet.ProteinAlphabet):
+    """Variant of the extended IUPAC extended protein alphabet (DEPRECATED)."""
     letters = IUPACData.extended_protein_letters + "X"
 
+#Can't add a deprecation warning to the class due to the following line:
 proteinX = ProteinX()
 
 class MissingTable:
     def __init__(self, table):
         self._table = table
+        import warnings
+        warnings.warn("Function Bio.SeqUtils.makeTableX() and related classes ProteinX "
+                      "and MissingTable are deprecated.", DeprecationWarning)
     def get(self, codon, stop_symbol):
         try:
             return self._table.get(codon, stop_symbol)
