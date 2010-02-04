@@ -1,5 +1,5 @@
 # Copyright 2009 by Eric Talevich.  All rights reserved.
-# Revisions copyright 2009 by Peter Cock.  All rights reserved.
+# Revisions copyright 2009-2010 by Peter Cock.  All rights reserved.
 #
 # Converted by Eric Talevich from an older unit test copyright 2002
 # by Thomas Hamelryck.
@@ -18,7 +18,9 @@ except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(\
         "Install NumPy if you want to use Bio.PDB.")
- 
+
+from Bio.Seq import Seq
+from Bio.Alphabet import generic_protein
 from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder
 from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.NeighborSearch import NeighborSearch
@@ -73,6 +75,13 @@ class PDBParseTest(unittest.TestCase):
         # Check the start and end positions
         self.assertEqual(pp[0].get_id()[1], 2)
         self.assertEqual(pp[-1].get_id()[1], 86)
+        # Check the sequence
+        s = pp.get_sequence()
+        self.assert_(isinstance(s, Seq))
+        self.assertEqual(s.alphabet, generic_protein)
+        self.assertEqual("RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
+                         "SDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
+                         str(s))
  
     def test_ca_ca(self):
         """Extract polypeptides using CA-CA."""
@@ -83,6 +92,13 @@ class PDBParseTest(unittest.TestCase):
         # Check the start and end positions
         self.assertEqual(pp[0].get_id()[1], 2)
         self.assertEqual(pp[-1].get_id()[1], 86)
+        # Check the sequence
+        s = pp.get_sequence()
+        self.assert_(isinstance(s, Seq))
+        self.assertEqual(s.alphabet, generic_protein)
+        self.assertEqual("RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
+                         "SDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
+                         str(s))
  
     def test_structure(self):
         """Verify the structure of the parsed example PDB file."""
