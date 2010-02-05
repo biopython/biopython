@@ -46,7 +46,7 @@ class ParserTest(unittest.TestCase):
         """
         for index in range(len(self.handles)):
             handle = self.handles[index]
-            rec = GenePop.parse(handle)
+            rec = GenePop.read(handle)
             assert isinstance(rec, GenePop.Record)
             assert len(rec.loci_list) == self.num_loci[index]
             assert rec.marker_len == self.marker_len[index]
@@ -61,7 +61,7 @@ class ParserTest(unittest.TestCase):
         """
         f = open(os.path.join("PopGen", "fdist1"))
         try:
-            rec = GenePop.parse(f)
+            rec = GenePop.read(f)
             raise Error("Should have raised exception")
         except ValueError:
             pass
@@ -85,7 +85,7 @@ class UtilsTest(unittest.TestCase):
         """
         for index in range(len(self.handles)):
             handle = self.handles[index]
-            rec = GenePop.parse(handle)
+            rec = GenePop.read(handle)
         initial_pops = len(rec.populations)
         initial_loci = len(rec.loci_list)
         first_loci = rec.loci_list[0]

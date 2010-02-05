@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 5 January 2009 (Biopython 1.53+)}
+\date{Last Update -- 5 February 2009 (Biopython 1.53+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -7080,7 +7080,7 @@ example GenePop data files in the Test/PopGen directory of Biopython):
 from Bio.PopGen import GenePop
 
 handle = open("example.gen")
-rec = GenePop.parse(handle)
+rec = GenePop.read(handle)
 handle.close()
 \end{verbatim}
 
@@ -7475,7 +7475,7 @@ from Bio.PopGen import FDist
 from Bio.PopGen.FDist import Controller
 from Bio.PopGen.FDist.Utils import convert_genepop_to_fdist
 
-gp_rec = GenePop.parse(open("example.gen"))
+gp_rec = GenePop.read(open("example.gen"))
 fd_rec = convert_genepop_to_fdist(gp_rec)
 in_file = open("infile", "w")
 in_file.write(str(fd_rec))

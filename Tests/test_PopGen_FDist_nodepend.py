@@ -52,10 +52,9 @@ class ParserTest(unittest.TestCase):
     def test_record_parser(self):
         """Basic operation of the Record Parser.
         """
-        parser = FDist.RecordParser()
         for index in range(len(self.handles)):
             handle = self.handles[index]
-            rec = parser.parse(handle)
+            rec = FDist.read(handle)
             assert isinstance(rec, FDist.Record)
             assert rec.data_org == 0 #We don't support any other
             assert rec.num_pops, rec.num_loci == self.pops_loci[index]
@@ -79,7 +78,7 @@ class ConversionTest(unittest.TestCase):
         """Basic conversion test.
         """
         for i in range(len(self.handles)):
-            gp_rec = GenePop.parse(self.handles[i])
+            gp_rec = GenePop.read(self.handles[i])
             fd_rec = convert_genepop_to_fdist(gp_rec)
             assert(fd_rec.num_loci == 3)
             assert(fd_rec.num_pops == 3)

@@ -11,6 +11,12 @@ here: http://wbiomed.curtin.edu.au/genepop/help_input.html .
 
 Classes:
 Record           Holds GenePop data.
+
+Functions:
+read             Parses a GenePop record (file) into a Record object.
+
+
+Obsolete classes:
 RecordParser     Parses a GenePop record (file) into a Record object.
 
 _Scanner         Scans a GenePop record.
@@ -20,10 +26,61 @@ Partially inspired on MedLine Code.
 
 """
 from copy import deepcopy
-from types import *
 
-from Bio import File
-from Bio.ParserSupport import *
+
+def read(handle):
+    """Parses a handle containing a GenePop file.
+
+       handle is a file-like object that contains a GenePop record.
+    """
+    record = Record()
+    record.comment_line = handle.next().rstrip()
+    #We can now have one loci per line or all loci in a single line
+    #separated by either space or comma+space...
+    #We will remove all commas on loci... that should not be a problem
+    sample_loci_line = handle.next().rstrip().replace(',', '')
+    all_loci = sample_loci_line.split(' ')
+    record.loci_list.extend(all_loci)
+    for line in handle:
+        line = line.rstrip()
+        if line.upper()=='POP':
+            break
+        record.loci_list.append(line)
+    else:
+        raise ValueError('No population data found, file probably not GenePop related')
+    record.populations.append([])
+    marker_len = None
+    for line in handle:
+        line = line.rstrip()
+        if line.upper()=='POP':
+            record.populations.append([])
+        else:
+            (indiv_name, marker_line) = line.split(',')
+            markers = marker_line.replace('\t', ' ').split(' ')
+            markers = [marker for marker in markers if marker!='']
+            if marker_len==None:
+                if len(markers[0]) == 4: #2 digits per allele
+                    marker_len = 2
+                else:
+                    marker_len = 3
+                record.marker_len = marker_len
+            allele_list = [(int(marker[0:marker_len]), int(marker[marker_len:]))
+                           for marker in markers]
+            record.populations[-1].append((indiv_name, allele_list))
+    loci = record.loci_list
+    for pop in record.populations:
+        record.pop_list.append(pop[-1][0])
+        for indiv in pop:
+            for mk_i in range(len(loci)):
+                mk_orig = indiv[1][mk_i]
+                mk_real = []
+                for al in mk_orig:
+                    if al == 0:
+                        mk_real.append(None)
+                    else:
+                        mk_real.append(al)
+                indiv[1][mk_i] = tuple(mk_real)
+    return record
 
 
 class Record:
@@ -155,6 +212,11 @@ class Record:
         #If here than locus not existent... Maybe raise exception?
         #   Although it should be Ok... Just a boolean return, maybe?
     
+
+# Everything below is obsolete
+
+from Bio import File
+from Bio.ParserSupport import *
 
 class RecordParser(AbstractParser):
     """Parses GenePop data into a Record object.
