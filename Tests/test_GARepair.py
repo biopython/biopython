@@ -8,6 +8,7 @@ mutation and crossover.
 import unittest
 
 # biopython
+from Bio.Alphabet import Alphabet
 from Bio.Seq import MutableSeq
 
 # local stuff
@@ -17,7 +18,7 @@ from Bio.GA.Repair.Stabilizing import AmbiguousRepair
 
 
 
-class TestAlphabet:
+class TestAlphabet(Alphabet):
     """Simple test alphabet.
     """
     alphabet_matches = {"1": "1",

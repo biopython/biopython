@@ -640,7 +640,7 @@ class EmblScanner(InsdcScanner):
             #'RP' : 'reference_bases',
             #'RX' : reference cross reference... DOI or Pubmed
             'RA' : 'authors',
-            'RT' : 'title',
+            #'RT' : 'title',
             'RL' : 'journal',
             'OS' : 'organism',
             'OC' : 'taxonomy',
@@ -674,6 +674,14 @@ class EmblScanner(InsdcScanner):
                     # e.g. '1-4639675' becomes '(bases 1 to 4639675)'
                     assert data.count("-")==1
                     consumer.reference_bases("(bases " + data.replace("-", " to ") + ")")
+                elif line_type == 'RT':
+                    #Remove the enclosing quotes and trailing semi colon.
+                    #Note the title can be split over multiple lines.
+                    if data.startswith('"'):
+                        data = data[1:]
+                    if data.endswith('";'):
+                        data = data[:-2]
+                    consumer.title(data)
                 elif line_type == 'RX':
                     # EMBL support three reference types at the moment:
                     # - PUBMED    PUBMED bibliographic database (NLM)

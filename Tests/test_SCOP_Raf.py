@@ -20,21 +20,21 @@ class RafTests(unittest.TestCase):
         """Can we parse a RAF record?"""
         r = Raf.SeqMap(self.rafLine)
 
-        assert r.pdbid == "101m"
-        assert r.pdb_datestamp =="010301"  
-        assert r.flags =="111011"          
+        self.assertEqual(r.pdbid, "101m")
+        self.assertEqual(r.pdb_datestamp, "010301")
+        self.assertEqual(r.flags, "111011")
       
         i = r.index("143")
         res = r.res[i]
-        assert res.chainid =="_"        
-        assert res.resid =="143"
-        assert res.seqres =="A"
-        assert res.atom =="A"
+        self.assertEqual(res.chainid, "_")
+        self.assertEqual(res.resid, "143")
+        self.assertEqual(res.seqres, "A")
+        self.assertEqual(res.atom, "A")
 
         r = Raf.SeqMap(self.rafLine2)   
         res = r.res[r.index("6A", chainid="A")]
-        assert res.resid =="6A"
-        assert res.atom=="E"
+        self.assertEqual(res.resid, "6A")
+        self.assertEqual(res.atom, "E")
 
     def testSeqMapAdd(self):
         r2 = Raf.SeqMap(self.rafLine2)
@@ -42,23 +42,23 @@ class RafTests(unittest.TestCase):
 
         l = len(r2.res) + len(r3.res)
         r2 += r3
-        assert len(r2.res) == l
+        self.assertEqual(len(r2.res), l)
 
 
         r2.extend(r2)
-        assert len(r2.res) == l*2
+        self.assertEqual(len(r2.res), l*2)
 
         r4 = r2 + r2
-        assert len(r4.res) == l*4
+        self.assertEqual(len(r4.res), l*4)
 
         r4.append(Raf.Res())
-        assert len(r4.res) == (l*4)+1
+        self.assertEqual(len(r4.res), (l*4)+1)
         
 
     def testSeqMapSlice(self):
         r = Raf.SeqMap(self.rafLine)
         r = r[ r.index("124"): r.index("135")+1]
-        assert len(r.res) ==12
+        self.assertEqual(len(r.res), 12)
 
 
     def testSeqMapIndex(self):
@@ -66,29 +66,29 @@ class RafTests(unittest.TestCase):
         
         index = Raf.SeqMapIndex(filename)
         r = index.getSeqMap("103m")
-        assert r.pdbid == "103m", r.pdbid
-        assert len(r.res) ==154, len(r.res)
-        assert r.pdb_datestamp =="010301"  
-        assert r.flags =="111011"
+        self.assertEqual(r.pdbid, "103m")
+        self.assertEqual(len(r.res), 154)
+        self.assertEqual(r.pdb_datestamp, "010301")
+        self.assertEqual(r.flags, "111011")
 
         r = index.getSeqMap("103m 1-10")
-        assert r.pdbid == "103m", r.pdbid
-        assert len(r.res) ==10, len(r.res)
-        assert r.pdb_datestamp =="010301"  
-        assert r.flags =="111011"        
+        self.assertEqual(r.pdbid, "103m",)
+        self.assertEqual(len(r.res), 10)
+        self.assertEqual(r.pdb_datestamp, "010301")
+        self.assertEqual(r.flags, "111011")
 
         r = index.getSeqMap("104l A:")
-        assert r.pdbid == "104l", r.pdbid
+        self.assertEqual(r.pdbid, "104l")
 
         r = index.getSeqMap("104l A:112-113")
-        assert r.pdbid == "104l", r.pdbid        
-        assert len(r.res)== 2
+        self.assertEqual(r.pdbid, "104l")
+        self.assertEqual(len(r.res), 2)
 
         r = index.getSeqMap("104l A:112-113,B:146-148")
-        assert r.pdbid == "104l", r.pdbid        
-        assert len(r.res)== 5        
+        self.assertEqual(r.pdbid, "104l")
+        self.assertEqual(len(r.res), 5)
 
         
-if __name__ == '__main__':
+if __name__=='__main__':
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)

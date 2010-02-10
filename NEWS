@@ -9,6 +9,12 @@ The latest news is at the top.
 
 ===================================================================
 
+We are phasing out support for Python 2.4. We will continue to support it
+for at least two further releases, and at least one year (whichever takes
+longer), before dropping support for Python 2.4. This can could be delayed
+given feedback from our users (e.g. if this proves to be a problem in
+combination with other libraries).
+
 New module Bio.Phylo includes support for reading, writing and working with
 phylogenetic trees from Newick, Nexus and phyloXML files. This was work by
 Eric Talevich on a Google Summer of Code 2009 project, under The National
@@ -20,13 +26,14 @@ needed for our NCBI Entrez Utilities XML parser.
 
 Bio.SeqIO now supports writing EMBL files (DNA and RNA sequences only).
 
-(At least) 5 people contributed to this release:
+(At least) 5 people contributed to this release, including 1 new person:
 
 Brad Chapman
 Christian Zmasek
 Eric Talevich
 Michiel de Hoon
 Peter Cock
+Thomas Holder (first contribution)
 
 ===================================================================
 

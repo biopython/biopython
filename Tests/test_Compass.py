@@ -15,11 +15,7 @@ class CompassTest(unittest.TestCase):
           os.path.join(file_dir, "comtest3")]
 
     def testCompassScanAndConsume(self):
-        cons = Compass._Consumer()
-        scan = Compass._Scanner()
-        scan.feed(open(self.test_files[0]), cons)
-
-        com_record = cons.data
+        com_record = Compass.read(open(self.test_files[0]))
 
         self.assertEquals("60456.blo.gz.aln", com_record.query)
         self.assertEquals("60456.blo.gz.aln", com_record.hit)
@@ -39,48 +35,45 @@ class CompassTest(unittest.TestCase):
         self.assertEquals(float("0.00e+00"), com_record.evalue)
 
     def testCompassParser(self):
-        parser = Compass.RecordParser()
-        com_record = parser.parse(open(self.test_files[0]))
+        com_record = Compass.read(open(self.test_files[0]))
 
         self.assertEquals("60456.blo.gz.aln", com_record.query)
 
     def testCompassIteratorEasy(self):
-        it = Compass.Iterator(open(self.test_files[0]))
+        records = Compass.parse(open(self.test_files[0]))
 
-        com_record = it.next()
+        com_record = records.next()
         self.assertEquals("60456.blo.gz.aln", com_record.query)
 
-        com_record = it.next()
-        self.assertEquals(None, com_record)
-        pass
+        self.assertRaises(StopIteration, records.next)
         
     def testCompassIteratorHard(self):
-        it = Compass.Iterator(open(self.test_files[1]))
+        records = Compass.parse(open(self.test_files[1]))
 
-        com_record = it.next()
+        com_record = records.next()
         self.assertEquals("allscop//14982.blo.gz.aln", com_record.hit)
         self.assertEquals(float('1.01e+03'), com_record.evalue)
         
-        com_record = it.next()
+        com_record = records.next()
         self.assertEquals("allscop//14983.blo.gz.aln", com_record.hit)
         self.assertEquals(float('1.01e+03'), com_record.evalue)
                                       
-        com_record = it.next()
+        com_record = records.next()
         self.assertEquals("allscop//14984.blo.gz.aln", com_record.hit)
         self.assertEquals(float('5.75e+02'), com_record.evalue)
                                                                                     
     def testAlignmentParsingOne(self):
-        it = Compass.Iterator(open(self.test_files[1]))
+        records = Compass.parse(open(self.test_files[1]))
 
-        com_record = it.next()
+        com_record = records.next()
         self.assertEquals(178, com_record.query_start)
         self.assertEquals("KKDLEEIAD", com_record.query_aln)
         self.assertEquals(9, com_record.hit_start)
         self.assertEquals("QAAVQAVTA", com_record.hit_aln)
         self.assertEquals("++ ++++++", com_record.positives)
         
-        com_record = it.next()
-        com_record = it.next()
+        com_record = records.next()
+        com_record = records.next()
         self.assertEquals(371, com_record.query_start)
         self.assertEquals("LEEAMDRMER~~~V", com_record.query_aln)
         self.assertEquals(76, com_record.hit_start)
@@ -88,9 +81,9 @@ class CompassTest(unittest.TestCase):
         self.assertEquals("+ ++++ + +   +", com_record.positives)
 
     def testAlignmentParsingTwo(self):
-        it = Compass.Iterator(open(self.test_files[0]))
+        records = Compass.parse(open(self.test_files[0]))
         
-        com_record = it.next()
+        com_record = records.next()
         self.assertEquals(2, com_record.query_start)
         self.assertEquals(2, com_record.hit_start)
         self.assertEquals("LKERKL", com_record.hit_aln[-6:])

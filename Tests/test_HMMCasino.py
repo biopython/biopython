@@ -79,8 +79,8 @@ def generate_rolls(num_rolls):
     """
     # start off in the fair state
     cur_state = 'F'
-    roll_seq = MutableSeq('', DiceRollAlphabet)
-    state_seq = MutableSeq('', DiceTypeAlphabet)
+    roll_seq = MutableSeq('', DiceRollAlphabet())
+    state_seq = MutableSeq('', DiceTypeAlphabet())
 
     # generate the sequence
     for roll in range(num_rolls):

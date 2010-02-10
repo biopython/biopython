@@ -7,6 +7,14 @@ Python 2.3
 No longer supported as of Release 1.51, having triggered a warning with
 Release 1.50, with a mention in the release notes for Release 1.49.
 
+Python 2.4
+==========
+As of Biopython 1.54, we consider support for Python 2.4 to be deprecated.
+This means we will continue to support Python 2.4 for at least two further
+releases, and at least one year (whichever takes longer), before dropping
+support for Python 2.4. This can be delayed given feedback from our users
+(e.g. if this proves to be a problem in combination with other libraries).
+
 Bio.Restriction.DNAUtils and check_bases
 ========================================
 This module (originally in C) offered complement and antiparallel functions
@@ -301,6 +309,13 @@ in Release 1.31, and removed in Release 1.43.  Function 'translate' was
 deprecated in Release 1.49, and removed in Release 1.53. Use the functions
 and methods in Bio.Seq instead.
 
+Function makeTableX and classes ProteinX and MissingTable were deprecated
+in Release 1.54. These were remnants of the removed translate function,
+and no longer served any useful purpose.
+
+Function 'reverse' in Bio.SeqUtils was deprecated in Release 1.54, instead
+just use the string's slice method with a step of minus one.
+
 Bio.GFF (for accessing a MySQL database created with BioPerl, etc)
 =======
 The functions 'forward_complement' and 'antiparallel' in Bio.GFF.easy have
@@ -357,3 +372,9 @@ CompareAceParser and CompareAceConsumer from Bio.Motif.Parsers.AlignAce were
 deprecated in Release 1.53. AlignAceConsumer, AlignAceParser, and
 AlignAceScanner were declared obsolete in Release 1.53; their functionality is
 now available through a read() function in Bio.Motif.Parsers.AlignAce.
+
+Bio.Compass
+===========
+The RecordParser and Iterator classes were declared obsolete in Release 1.54.
+Their functionality is now available through a read() and a parse() function,
+respectively.

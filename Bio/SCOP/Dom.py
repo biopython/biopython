@@ -73,6 +73,8 @@ def parse(handle):
         handle -- file-like object.
     """ 
     for line in handle:
+        if line.startswith('#'):
+            continue
         yield Record(line)
 
     
@@ -101,6 +103,8 @@ class Iterator:
         line = self._handle.readline()
         if not line:
             return None
+        if line.startswith('#'):
+            return self.next()
         if self._parser is not None:
             return self._parser.parse(line)
         return line

@@ -106,6 +106,8 @@ class Index(dict):
             while True:
                 line = f.readline()
                 if not line: break
+                if line.startswith('#'):
+                    continue
                 record = Record(line)
                 key = record.sid
                 if key != None:

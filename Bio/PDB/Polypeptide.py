@@ -5,7 +5,7 @@
 
 from types import StringType
 
-from Bio.Alphabet import ProteinAlphabet
+from Bio.Alphabet import generic_protein
 from Bio.Seq import Seq
 from Bio.SCOP.Raf import to_one_letter_code
 from Bio.PDB.PDBExceptions import PDBException
@@ -220,7 +220,7 @@ class Polypeptide(list):
             else:
                 resname='X'
             s=s+resname
-        seq=Seq(s, ProteinAlphabet)
+        seq=Seq(s, generic_protein)
         return seq
 
     def __repr__(self):
