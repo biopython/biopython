@@ -366,6 +366,69 @@ class GenBankWriter(_InsdcWriter):
             return default
         return date
 
+    def _get_data_division(self, record):
+        try:
+            division = record.annotations["data_file_division"]
+        except KeyError:
+            division = "UNK"
+        if division in ["PRI","ROD","MAM","VRT","INV","PLN","BCT",
+                        "VRL","PHG","SYN","UNA","EST","PAT","STS",
+                        "GSS","HTG","HTC","ENV","CON"]:
+            #Good, already GenBank style
+            #    PRI - primate sequences
+            #    ROD - rodent sequences
+            #    MAM - other mammalian sequences
+            #    VRT - other vertebrate sequences
+            #    INV - invertebrate sequences
+            #    PLN - plant, fungal, and algal sequences
+            #    BCT - bacterial sequences [plus archea]
+            #    VRL - viral sequences
+            #    PHG - bacteriophage sequences
+            #    SYN - synthetic sequences
+            #    UNA - unannotated sequences
+            #    EST - EST sequences (expressed sequence tags) 
+            #    PAT - patent sequences
+            #    STS - STS sequences (sequence tagged sites) 
+            #    GSS - GSS sequences (genome survey sequences) 
+            #    HTG - HTGS sequences (high throughput genomic sequences) 
+            #    HTC - HTC sequences (high throughput cDNA sequences) 
+            #    ENV - Environmental sampling sequences
+            #    CON - Constructed sequences
+            #
+            #(plus UNK for unknown)
+            pass
+        else:
+            #See if this is in EMBL style:
+            #    Division                 Code
+            #    -----------------        ----
+            #    Bacteriophage            PHG - common
+            #    Environmental Sample     ENV - common
+            #    Fungal                   FUN - map to PLN (plants + fungal)
+            #    Human                    HUM - map to MAM
+            #    Invertebrate             INV - common
+            #    Other Mammal             MAM - common
+            #    Other Vertebrate         VRT - common
+            #    Mus musculus             MUS - map to ROD (rodent)
+            #    Plant                    PLN - common
+            #    Prokaryote               PRO - map to BCT (poor name)
+            #    Other Rodent             ROD - common
+            #    Synthetic                SYN - common
+            #    Transgenic               TGN - ??? map to SYN ???
+            #    Unclassified             UNC - map to UNK
+            #    Viral                    VRL - common
+            embl_to_gbk = {"FUN":"PLN",
+                           "HUM":"MAM",
+                           "MUS":"ROD",
+                           "PRO":"BCT",
+                           "UNC":"UNK",
+                           }
+            try:
+                division = embl_to_gbk[division]
+            except KeyError:
+                division = "UNK"
+        assert len(division)==3
+        return division
+
     def _write_the_first_line(self, record):
         """Write the LOCUS line."""
         
@@ -408,14 +471,7 @@ class GenBankWriter(_InsdcWriter):
             #just the generic Alphabet (default for fasta files)
             raise ValueError("Need a DNA, RNA or Protein alphabet")
         
-        try:
-            division = record.annotations["data_file_division"]
-        except KeyError:
-            division = "UNK"
-        if division not in ["PRI","ROD","MAM","VRT","INV","PLN","BCT",
-                            "VRL","PHG","SYN","UNA","EST","PAT","STS",
-                            "GSS","HTG","HTC","ENV","CON"]:
-            division = "UNK"
+        division = self._get_data_division(record)
         
         assert len(units) == 2
         assert len(division) == 3
