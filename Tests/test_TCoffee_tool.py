@@ -102,7 +102,7 @@ class ProbconsApplication(unittest.TestCase):
         cmdline.type = "protein"
         self.assertEqual(str(cmdline), t_coffee_exe + " -output clustalw_aln "
                          "-infile Fasta/fa01 -outfile Fasta/tc_out.phy "
-                         "-outorder input -gapopen -2 -gapext -5")
+                         "-type protein -outorder input -gapopen -2 -gapext -5")
         child = subprocess.Popen(str(cmdline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
