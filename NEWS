@@ -26,7 +26,11 @@ needed for our NCBI Entrez Utilities XML parser.
 
 Bio.SeqIO now supports writing EMBL files (DNA and RNA sequences only).
 
-(At least) 5 people contributed to this release, including 1 new person:
+Bio.SeqIO now supports read, indexing and writing Standard Flowgram Format
+(SFF) files which are used by the 454 Life Sciences (Roche) sequencer. This
+means that you can use SeqIO to convert from SFF to FASTQ, FASTA and QUAL.
+
+(At least) 6 people contributed to this release, including 1 new person:
 
 Brad Chapman
 Christian Zmasek
