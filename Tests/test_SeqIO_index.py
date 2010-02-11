@@ -11,11 +11,17 @@ from Bio import SeqIO
 from Bio.SeqIO._index import _FormatToIndexedDict
 from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
+BINARY_FORMATS = ["sff", "sff-trim"]
+
 class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
     def simple_check(self, filename, format, alphabet):
+        if format in BINARY_FORMATS:
+            mode = "rb"
+        else :
+            mode = "r"
         id_list = [rec.id for rec in \
-                   SeqIO.parse(open(filename), format, alphabet)]
+                   SeqIO.parse(open(filename, mode), format, alphabet)]
         rec_dict = SeqIO.index(filename, format, alphabet)
         self.assertEqual(set(id_list), set(rec_dict.keys()))
         #This is redundant, I just want to make sure len works:
@@ -82,6 +88,18 @@ tests = [
     ("SwissProt/sp001", "swiss", None),
     ("SwissProt/sp010", "swiss", None),
     ("SwissProt/sp016", "swiss", None),
+    ("Roche/E3MFGYR02_random_10_reads.sff", "sff", generic_dna),
+    ("Roche/E3MFGYR02_random_10_reads.sff", "sff-trim", generic_dna),
+    ("Roche/E3MFGYR02_index_at_start.sff", "sff", generic_dna),
+    ("Roche/E3MFGYR02_index_in_middle.sff", "sff", generic_dna),
+    ("Roche/E3MFGYR02_alt_index_at_start.sff", "sff", generic_dna),
+    ("Roche/E3MFGYR02_alt_index_in_middle.sff", "sff", generic_dna),
+    ("Roche/E3MFGYR02_alt_index_at_end.sff", "sff", generic_dna),
+    ("Roche/E3MFGYR02_no_manifest.sff", "sff", generic_dna),
+    ("Roche/greek.sff", "sff", generic_nucleotide),
+    ("Roche/greek.sff", "sff-trim", generic_nucleotide),
+    ("Roche/paired.sff", "sff", None),
+    ("Roche/paired.sff", "sff-trim", None),
     ]
 for filename, format, alphabet in tests:
     assert format in _FormatToIndexedDict

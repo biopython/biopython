@@ -15,18 +15,24 @@ from Bio.SeqRecord import SeqRecord
 from StringIO import StringIO
 from Bio.Data.IUPACData import ambiguous_dna_letters, ambiguous_rna_letters
 
+BINARY_FORMATS = ["sff", "sff-trim"]
+
 def truncation_expected(format):
-    if format in ["fastq-solexa", "fastq-illumina"]:
+    if format in ["fastq-solexa", "fastq-illumina"] :
         return 62
     elif format in ["fastq", "fastq-sanger"]:
         return 93
     else:
-        assert format in ["fasta", "qual", "phd"]
+        assert format in ["fasta", "qual", "phd", "sff"]
         return None
 
 #Top level function as this makes it easier to use for debugging:
 def write_read(filename, in_format, out_format):
-    records = list(SeqIO.parse(open(filename),in_format))
+    if in_format in BINARY_FORMATS:
+        mode = "rb"
+    else :
+        mode = "r"
+    records = list(SeqIO.parse(open(filename, mode),in_format))
     #Write it out...
     handle = StringIO()
     SeqIO.write(records, handle, out_format)
@@ -200,7 +206,59 @@ for base_name, good_count, full_count in tests:
     del funct        
 
 
-class TestReferenceConversions(unittest.TestCase):
+class TestReferenceSffConversions(unittest.TestCase):
+    def check(self, sff_name, sff_format, out_name, format) :
+        wanted = list(SeqIO.parse(open(out_name), format))
+        data = StringIO()
+        count = SeqIO.convert(sff_name, sff_format, data, format)
+        self.assertEqual(count, len(wanted))
+        data.seek(0)
+        converted = list(SeqIO.parse(data, format))
+        self.assertEqual(len(wanted), len(converted))
+        for old, new in zip(wanted, converted) :
+            self.assertEqual(old.id, new.id)
+            self.assertEqual(old.name, new.name)
+            if format!="qual" :
+                self.assertEqual(str(old.seq), str(new.seq))
+            elif format!="fasta" :
+                self.assertEqual(old.letter_annotations["phred_quality"],
+                                 new.letter_annotations["phred_quality"])
+
+    def check_sff(self, sff_name):
+        self.check(sff_name, "sff", "Roche/E3MFGYR02_random_10_reads_no_trim.fasta", "fasta")
+        self.check(sff_name, "sff", "Roche/E3MFGYR02_random_10_reads_no_trim.qual", "qual")
+        self.check(sff_name, "sff-trim", "Roche/E3MFGYR02_random_10_reads.fasta", "fasta")
+        self.check(sff_name, "sff-trim", "Roche/E3MFGYR02_random_10_reads.qual", "qual")
+
+    def test_original(self) :
+        """Test converting E3MFGYR02_random_10_reads.sff into FASTA+QUAL"""
+        self.check_sff("Roche/E3MFGYR02_random_10_reads.sff")
+        
+    def test_no_manifest(self) :
+        """Test converting E3MFGYR02_no_manifest.sff into FASTA+QUAL"""
+        self.check_sff("Roche/E3MFGYR02_no_manifest.sff")
+        
+    def test_alt_index_at_start(self) :
+        """Test converting E3MFGYR02_alt_index_at_start into FASTA+QUAL"""
+        self.check_sff("Roche/E3MFGYR02_alt_index_at_start.sff")
+
+    def test_alt_index_in_middle(self) :
+        """Test converting E3MFGYR02_alt_index_in_middle into FASTA+QUAL"""
+        self.check_sff("Roche/E3MFGYR02_alt_index_in_middle.sff")
+
+    def test_alt_index_at_end(self) :
+        """Test converting E3MFGYR02_alt_index_at_end into FASTA+QUAL"""
+        self.check_sff("Roche/E3MFGYR02_alt_index_at_end.sff")
+
+    def test_index_at_start(self) :
+        """Test converting E3MFGYR02_index_at_start into FASTA+QUAL"""
+        self.check_sff("Roche/E3MFGYR02_index_at_start.sff")
+
+    def test_index_at_end(self) :
+        """Test converting E3MFGYR02_index_in_middle into FASTA+QUAL"""
+        self.check_sff("Roche/E3MFGYR02_index_in_middle.sff")
+
+class TestReferenceFastqConversions(unittest.TestCase):
     """Tests where we have reference output."""
     def simple_check(self, base_name, in_variant):
         for out_variant in ["sanger", "solexa", "illumina"]:
@@ -240,7 +298,7 @@ for base_name, variant in tests:
         f = lambda x : x.simple_check(bn,var)
         f.__doc__ = "Reference conversions of %s file %s" % (var, bn)
         return f
-    setattr(TestReferenceConversions, "test_%s_%s" % (base_name, variant),
+    setattr(TestReferenceFastqConversions, "test_%s_%s" % (base_name, variant),
             funct(base_name, variant))
     del funct        
 
@@ -381,30 +439,31 @@ class TestWriteRead(unittest.TestCase):
                             list(SeqIO.parse(handle, format)),
                             truncation_expected(format))
             
+    def check(self, filename, format, out_formats):
+        for f in out_formats:
+            write_read(filename, format, f)
+
     def test_tricky(self):
         """Write and read back tricky.fastq"""
-        filename = os.path.join("Quality", "tricky.fastq")
-        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
-                  "fasta", "qual", "phd"]:
-            write_read(filename, "fastq", f)
+        self.check(os.path.join("Quality", "tricky.fastq"), "fastq",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd"])
 
     def test_sanger_93(self):
         """Write and read back sanger_93.fastq"""
-        filename = os.path.join("Quality", "sanger_93.fastq")
-        for f in ["fastq", "fastq-sanger", "fasta", "qual", "phd"]:
-            write_read(filename, "fastq", f)
+        self.check(os.path.join("Quality", "sanger_93.fastq"), "fastq",
+                   ["fastq", "fastq-sanger", "fasta", "qual", "phd"])
         #TODO - Have a Biopython defined "DataLossWarning?"
         #TODO - On Python 2.6+ we can check this warning is really triggered
         warnings.simplefilter('ignore', UserWarning)
-        write_read(filename, "fastq-sanger", "fastq-solexa")
-        write_read(filename, "fastq-sanger", "fastq-illumina")
+        self.check(os.path.join("Quality", "sanger_93.fastq"), "fastq",
+                   ["fastq-solexa","fastq-illumina"])
 
     def test_sanger_faked(self):
         """Write and read back sanger_faked.fastq"""
-        filename = os.path.join("Quality", "sanger_faked.fastq")
-        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
-                  "fasta", "qual", "phd"]:
-            write_read(filename, "fastq", f)
+        self.check(os.path.join("Quality", "sanger_faked.fastq"), "fastq",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd"])
 
     def test_example_fasta(self):
         """Write and read back example.fasta"""
@@ -413,38 +472,93 @@ class TestWriteRead(unittest.TestCase):
 
     def test_example_fastq(self):
         """Write and read back example.fastq"""
-        filename = os.path.join("Quality", "example.fastq")
-        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
-                  "fasta", "qual", "phd"]:
-            write_read(filename, "fastq", f)
+        self.check(os.path.join("Quality", "example.fastq"), "fastq",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd"])
 
     def test_example_qual(self):
         """Write and read back example.qual"""
-        filename = os.path.join("Quality", "example.qual")
-        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
-                  "fasta", "qual", "phd"]:
-            write_read(filename, "qual", f)
+        self.check(os.path.join("Quality", "example.qual"), "qual",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd"])
 
     def test_solexa_faked(self):
         """Write and read back solexa_faked.fastq"""
-        filename = os.path.join("Quality", "solexa_faked.fastq")
-        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
-                  "fasta", "qual", "phd"]:
-            write_read(filename, "fastq-solexa", f)
+        self.check(os.path.join("Quality", "solexa_faked.fastq"), "fastq-solexa",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd"])
 
     def test_solexa_example(self):
         """Write and read back solexa_example.fastq"""
-        filename = os.path.join("Quality", "solexa_example.fastq")
-        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
-                  "fasta", "qual", "phd"]:
-            write_read(filename, "fastq-solexa", f)
+        self.check(os.path.join("Quality", "solexa_example.fastq"), "fastq-solexa",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd"])
 
     def test_illumina_faked(self):
         """Write and read back illumina_faked.fastq"""
-        filename = os.path.join("Quality", "illumina_faked.fastq")
-        for f in ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
-                  "fasta", "qual", "phd"]:
-            write_read(filename, "fastq-illumina", f)
+        self.check(os.path.join("Quality", "illumina_faked.fastq"), "fastq-illumina",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd"])
+
+    def test_greek_sff(self) :
+        """Write and read back greek.sff"""
+        self.check(os.path.join("Roche", "greek.sff"), "sff",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd", "sff"])
+
+    def test_paired_sff(self) :
+        """Write and read back paired.sff"""
+        self.check(os.path.join("Roche", "paired.sff"), "sff",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd", "sff"])
+
+    def test_E3MFGYR02(self) :
+        """Write and read back E3MFGYR02_random_10_reads.sff"""
+        self.check(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd", "sff"])
+
+    def test_E3MFGYR02_no_manifest(self) :
+        """Write and read back E3MFGYR02_no_manifest.sff"""
+        self.check(os.path.join("Roche", "E3MFGYR02_no_manifest.sff"), "sff",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd", "sff"])
+
+    def test_E3MFGYR02_index_at_start(self) :
+        """Write and read back E3MFGYR02_index_at_start.sff"""
+        self.check(os.path.join("Roche", "E3MFGYR02_index_at_start.sff"), "sff",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd", "sff"])
+
+    def test_E3MFGYR02_index_in_middle(self) :
+        """Write and read back E3MFGYR02_index_in_middle.sff"""
+        self.check(os.path.join("Roche", "E3MFGYR02_index_in_middle.sff"), "sff",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd", "sff"])
+
+    def test_E3MFGYR02_alt_index_at_start(self) :
+        """Write and read back E3MFGYR02_alt_index_at_start.sff"""
+        self.check(os.path.join("Roche", "E3MFGYR02_alt_index_at_start.sff"), "sff",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd", "sff"])
+
+    def test_E3MFGYR02_alt_index_in_middle(self) :
+        """Write and read back E3MFGYR02_alt_index_in_middle.sff"""
+        self.check(os.path.join("Roche", "E3MFGYR02_alt_index_in_middle.sff"), "sff",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd", "sff"])
+
+    def test_E3MFGYR02_alt_index_at_end(self) :
+        """Write and read back E3MFGYR02_alt_index_at_end.sff"""
+        self.check(os.path.join("Roche", "E3MFGYR02_alt_index_at_end.sff"), "sff",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd", "sff"])
+
+    def test_E3MFGYR02_trimmed(self) :
+        """Write and read back E3MFGYR02_random_10_reads.sff (trimmed)"""
+        self.check(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff-trim",
+                   ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
+                    "fasta", "qual", "phd"]) #not sff as output
 
 
 class MappingTests(unittest.TestCase):
