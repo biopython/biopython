@@ -486,6 +486,27 @@ class TreeMixin(object):
         parent.clades.extend(popped.clades)
         return parent
 
+    def collapse_all(self):
+        """Collapse all the descendents of this tree, leaving only terminals.
+
+        To collapse only certain elements, use the collapse method directly in a
+        loop with find_clades:
+
+        >>> for clade in tree.find_clades(branch_length=True, order='level'):
+        >>>     if (clade.branch_length < .5
+        >>>             and not clade.is_terminal()
+        >>>             and clade is not self.root):
+        >>>         tree.collapse(clade)
+
+        Note that level-order traversal helps avoid strange side-effects when
+        modifying the tree while iterating over its clades.
+        """
+        internals = self.find_clades(terminal=False, order='level')
+        # Skip the root node -- it can't be collapsed
+        internals.next()
+        for clade in internals:
+            self.collapse(clade)
+
     def ladderize(self, reverse=False):
         """Sort clades in-place according to the number of terminal nodes.
 
@@ -496,7 +517,6 @@ class TreeMixin(object):
                               reverse=reverse)
         for subclade in self.root.clades:
             subclade.ladderize(reverse=reverse)
-        return
 
     # TODO - unit test
     def prune(self, target):

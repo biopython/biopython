@@ -188,6 +188,19 @@ class TreeTests(unittest.TestCase):
             self.assertEqual(clade.name, name)
             self.assertAlmostEqual(clade.branch_length, blength)
 
+    def test_collapse_all(self):
+        """TreeMixin: collapse_all() method."""
+        tree = Phylo.read(EX_APAF, 'phyloxml')
+        d1 = tree.depths()
+        tree.collapse_all()
+        d2 = tree.depths()
+        # Total branch lengths should not change
+        for clade in d2:
+            self.assertAlmostEqual(d1[clade], d2[clade])
+        # No internal nodes should remain except the root
+        self.assertEqual(len(tree.get_terminals()), len(tree.clade))
+        self.assertEqual(len(list(tree.find_clades(terminal=False))), 1)
+
     def test_ladderize(self):
         """TreeMixin: ladderize() method."""
         def ordered_names(tree):
