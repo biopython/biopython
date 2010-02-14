@@ -55,8 +55,6 @@ class UtilTests(unittest.TestCase):
 
 class TreeTests(unittest.TestCase):
     """Tests for methods on BaseTree.Tree objects."""
-    # TODO: magic: iter, len, getitem
-
     def setUp(self):
         self.phylogenies = list(Phylo.parse(EX_PHYLO, 'phyloxml'))
 
@@ -169,6 +167,17 @@ class TreeTests(unittest.TestCase):
         self.assertAlmostEqual(t.distance({'name': 'A'}, {'name': 'C'}), 0.562)
         self.assertAlmostEqual(t.distance({'name': 'B'}, {'name': 'C'}), 0.69)
 
+    def test_is_bifurcating(self):
+        """TreeMixin: is_bifurcating() method."""
+        for tree, is_b in izip(self.phylogenies,
+                (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1)):
+            self.assertEqual(tree.is_bifurcating(), is_b)
+
+    # TODO:
+    def test_is_monophyletic(self):
+        """TreeMixin: is_monophyletic() method."""
+        pass
+
     def test_total_branch_length(self):
         """TreeMixin: total_branch_length() method."""
         tree = self.phylogenies[1]
@@ -211,6 +220,16 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(ordered_names(tree), list('DABC'))
         tree.ladderize(reverse=True)
         self.assertEqual(ordered_names(tree), list('ABCD'))
+
+    # TODO:
+    def test_prune(self):
+        """TreeMixin: prune() method."""
+        pass
+
+    # TODO:
+    def test_split(self):
+        """TreeMixin: split() method."""
+        pass
 
 
 # ---------------------------------------------------------

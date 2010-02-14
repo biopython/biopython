@@ -367,24 +367,6 @@ class TreeMixin(object):
             counter = i
         return counter + 1
 
-    def is_bifurcating(self, node=None):
-        """Return True if tree downstream of node is strictly bifurcating."""
-        if node is not None:
-            warnings.warn("use node.is_bifurcating() directly instead",
-                          DeprecationWarning, stacklevel=2)
-            return node.is_bifurcating()
-        # Root can be trifurcating, because it has no ancestor
-        if isinstance(self, BaseTree.Tree) and len(self.root) == 3:
-            return (self.clade[0].is_bifurcating()
-                    and self.clade[1].is_bifurcating()
-                    and self.clade[2].is_bifurcating())
-        if len(self.root) == 2:
-            return (self.clade[0].is_bifurcating()
-                    and self.clade[1].is_bifurcating())
-        if len(self.root) == 0:
-            return True
-        return False
-
     def depths(self):
         """Create a mapping of tree clades to depths (by branch length).
 
@@ -410,17 +392,16 @@ class TreeMixin(object):
         mrca = self.common_ancestor(target1, target2)
         return mrca.distance(target1) + mrca.distance(target2)
 
-    # TODO - unit test
     def is_bifurcating(self):
         """Return True if tree downstream of node is strictly bifurcating."""
         # Root can be trifurcating, because it has no ancestor
-        if isinstance(self, BaseTree.Tree) and len(self.root) == 3:
-            return (self.clade[0].is_bifurcating()
-                    and self.clade[1].is_bifurcating()
-                    and self.clade[2].is_bifurcating())
+        if isinstance(self, Tree) and len(self.root) == 3:
+            return (self.root.clades[0].is_bifurcating()
+                    and self.root.clades[1].is_bifurcating()
+                    and self.root.clades[2].is_bifurcating())
         if len(self.root) == 2:
-            return (self.clade[0].is_bifurcating()
-                    and self.clade[1].is_bifurcating())
+            return (self.root.clades[0].is_bifurcating()
+                    and self.root.clades[1].is_bifurcating())
         if len(self.root) == 0:
             return True
         return False
