@@ -110,8 +110,8 @@ class _TreeShim(object):
                 if set(subclade.get_terminals()).issuperset(target_set):
                     current = subclade
                     break
-                else:
-                    return False
+            else:
+                return False
 
     def is_preterminal(self, node=None):
         """Returns True if all direct descendents are terminal."""

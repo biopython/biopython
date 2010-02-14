@@ -406,11 +406,10 @@ class TreeMixin(object):
             return True
         return False
 
-    # TODO - unit test
     def is_monophyletic(self, terminals):
-        """Does taxon_list comprise a complete subclade of this clade?
+        """MRCA of terminals if they comprise a complete subclade, or False.
 
-        @return: common ancestor if subclades is monophyletic, otherwise False.
+        @return: common ancestor if terminals are monophyletic, otherwise False.
         """
         target_set = set(terminals)
         current = self.root
@@ -422,8 +421,8 @@ class TreeMixin(object):
                 if set(subclade.get_terminals()).issuperset(target_set):
                     current = subclade
                     break
-                else:
-                    return False
+            else:
+                return False
 
     def is_parent_of(self, target):
         """True if target is a descendent of this tree.

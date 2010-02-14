@@ -173,10 +173,17 @@ class TreeTests(unittest.TestCase):
                 (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1)):
             self.assertEqual(tree.is_bifurcating(), is_b)
 
-    # TODO:
     def test_is_monophyletic(self):
         """TreeMixin: is_monophyletic() method."""
-        pass
+        tree = self.phylogenies[10]
+        abcd = tree.get_terminals()
+        abc = tree.clade[0].get_terminals()
+        ab = abc[:2]
+        d = tree.clade[1].get_terminals()
+        self.assertEqual(tree.is_monophyletic(abcd), tree.root)
+        self.assertEqual(tree.is_monophyletic(abc), tree.clade[0])
+        self.assertEqual(tree.is_monophyletic(ab), False)
+        self.assertEqual(tree.is_monophyletic(d), tree.clade[1])
 
     def test_total_branch_length(self):
         """TreeMixin: total_branch_length() method."""
