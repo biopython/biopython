@@ -10,4 +10,5 @@ See also: U{ http://biopython.org/wiki/Phylo }
 __docformat__ = "epytext en"
 
 from Bio.Phylo._io import parse, read, write, convert
-from Bio.Phylo._utils import pretty_print, to_networkx, draw_graphviz
+from Bio.Phylo._utils import (draw_ascii, draw_graphviz, pretty_print,
+        to_networkx)

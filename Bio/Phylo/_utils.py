@@ -217,3 +217,94 @@ def draw_graphviz(tree, label_func=str, prog='neato', args='',
                                 and e[2].get('color', 'k') or 'k'
                                 for e in G.edges(data=True)]
     networkx.draw(G, posn, labels=labels, node_color=node_color, **kwargs)
+
+
+def draw_ascii(tree, label_func=str, column_width=80):
+    """Draw an ascii-art phylogram of the given tree.
+
+    The printed result looks like:
+
+                      ___A
+                  ___|    
+                 |   |___B
+              ___|        
+             |   |    ___C
+             |   |___|    
+             |       |___D
+          ___|            
+         |   |        ___E
+         |   |    ___|    
+         |   |   |   |___F
+         |   |___|        
+      ___|       |    ___G
+     |   |       |___|    
+     |   |           |___H
+     |   |                
+    _|   |            ___I
+     |   |___________|    
+     |               |___J
+     |                    
+     |___________________K
+
+    """
+    # TODO: handle trees with no branch lengths
+    #   -- see: depths(default_branch_length)
+    # TODO: change print to outfile.write where outfile=sys.stdout by default
+    taxa = tree.get_terminals()
+    # Some constants for the drawing calculations
+    max_label_width = max(len(label_func(taxon)) for taxon in taxa)
+    drawing_width = column_width - max_label_width
+    drawing_height = 2 * len(taxa) - 1
+
+    def get_col_positions(tree):
+        """Create a mapping of each clade to its column position."""
+        depths = tree.depths()
+        # Potential drawing overflow due to rounding -- 1 char per tree layer
+        fudge_margin = int(math.ceil(math.log(len(taxa), 2)))
+        cols_per_branch_unit = ((drawing_width - fudge_margin)
+                                / float(max(depths.itervalues())))
+        return dict((clade, int(round(blen*cols_per_branch_unit + 0.5)))
+                    for clade, blen in depths.iteritems())
+
+    def get_row_positions(tree):
+        positions = dict((taxon, 2*idx) for idx, taxon in enumerate(taxa))
+        def calc_row(clade):
+            for subclade in clade:
+                if subclade not in positions:
+                    calc_row(subclade)
+            positions[clade] = (positions[clade.clades[0]] +
+                                positions[clade.clades[-1]]) / 2
+        calc_row(tree.root)
+        return positions
+
+    col_positions = get_col_positions(tree)
+    row_positions = get_row_positions(tree)
+    char_matrix = [[' ' for x in range(drawing_width)]
+                    for y in range(drawing_height)]
+
+    def draw_clade(clade, startcol):
+        thiscol = col_positions[clade]
+        thisrow = row_positions[clade]
+        # Draw a horizontal line
+        for col in range(startcol, thiscol):
+            char_matrix[thisrow][col] = '_'
+        if clade.clades:
+            # Draw a vertical line
+            vline_start = row_positions[clade.clades[0]] + 1
+            vline_end = row_positions[clade.clades[-1]] + 1
+            for row in range(vline_start, vline_end):
+                char_matrix[row][thiscol] = '|'
+            # Draw descendents
+            for child in clade:
+                draw_clade(child, thiscol+1)
+
+    draw_clade(tree.root, 0)
+    # Print the complete drawing
+    for idx, row in enumerate(char_matrix):
+        line = ''.join(row).rstrip()
+        # Add labels for terminal taxa in the right margin
+        if idx % 2 == 0:
+            line += label_func(taxa[idx/2])
+        print line
+    print
+
