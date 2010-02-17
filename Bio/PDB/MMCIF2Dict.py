@@ -4,6 +4,7 @@
 # as part of this package.
 
 import os.path
+import warnings
 import Bio.PDB.mmCIF.MMCIFlex
 from UserDict import UserDict
 
