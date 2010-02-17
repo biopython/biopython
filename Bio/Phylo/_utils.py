@@ -219,46 +219,37 @@ def draw_graphviz(tree, label_func=str, prog='neato', args='',
     networkx.draw(G, posn, labels=labels, node_color=node_color, **kwargs)
 
 
-def draw_ascii(tree, label_func=str, column_width=80):
+def draw_ascii(tree, file=sys.stdout, column_width=80):
     """Draw an ascii-art phylogram of the given tree.
 
     The printed result looks like:
 
-                      ___A
-                  ___|    
-                 |   |___B
-              ___|        
-             |   |    ___C
-             |   |___|    
-             |       |___D
-          ___|            
-         |   |        ___E
-         |   |    ___|    
-         |   |   |   |___F
-         |   |___|        
-      ___|       |    ___G
-     |   |       |___|    
-     |   |           |___H
-     |   |                
-    _|   |            ___I
-     |   |___________|    
-     |               |___J
-     |                    
-     |___________________K
+                                        _________ Orange
+                         ______________|
+                        |              |______________ Tangerine
+          ______________|
+         |              |          _________________________ Grapefruit
+        _|              |_________|
+         |                        |______________ Pummelo
+         |
+         |__________________________________ Apple
 
+
+    @param file: File handle opened for writing the output drawing.
+    @param column_width: Total number of text columns used by the drawing.
     """
-    # TODO: handle trees with no branch lengths
-    #   -- see: depths(default_branch_length)
-    # TODO: change print to outfile.write where outfile=sys.stdout by default
     taxa = tree.get_terminals()
     # Some constants for the drawing calculations
-    max_label_width = max(len(label_func(taxon)) for taxon in taxa)
-    drawing_width = column_width - max_label_width
+    max_label_width = max(len(str(taxon)) for taxon in taxa)
+    drawing_width = column_width - max_label_width - 1
     drawing_height = 2 * len(taxa) - 1
 
     def get_col_positions(tree):
         """Create a mapping of each clade to its column position."""
         depths = tree.depths()
+        # If there are no branch lengths, assume unit branch lengths
+        if not max(depths.itervalues()):
+            depths = tree.depths(unit_branch_lengths=True)
         # Potential drawing overflow due to rounding -- 1 char per tree layer
         fudge_margin = int(math.ceil(math.log(len(taxa), 2)))
         cols_per_branch_unit = ((drawing_width - fudge_margin)
@@ -290,10 +281,13 @@ def draw_ascii(tree, label_func=str, column_width=80):
             char_matrix[thisrow][col] = '_'
         if clade.clades:
             # Draw a vertical line
-            vline_start = row_positions[clade.clades[0]] + 1
-            vline_end = row_positions[clade.clades[-1]] + 1
-            for row in range(vline_start, vline_end):
+            toprow = row_positions[clade.clades[0]]
+            botrow = row_positions[clade.clades[-1]]
+            for row in range(toprow+1, botrow+1):
                 char_matrix[row][thiscol] = '|'
+            # NB: Short terminal branches need something to stop rstrip()
+            if (col_positions[clade.clades[0]] - thiscol) < 2:
+                char_matrix[toprow][thiscol] = ','
             # Draw descendents
             for child in clade:
                 draw_clade(child, thiscol+1)
@@ -304,7 +298,7 @@ def draw_ascii(tree, label_func=str, column_width=80):
         line = ''.join(row).rstrip()
         # Add labels for terminal taxa in the right margin
         if idx % 2 == 0:
-            line += label_func(taxa[idx/2])
-        print line
-    print
+            line += ' ' + str(taxa[idx/2])
+        file.write(line + '\n')
+    file.write('\n')
 

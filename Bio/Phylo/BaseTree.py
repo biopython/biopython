@@ -367,16 +367,20 @@ class TreeMixin(object):
             counter = i
         return counter + 1
 
-    def depths(self):
+    def depths(self, unit_branch_lengths=False):
         """Create a mapping of tree clades to depths (by branch length).
 
         @return: dict of {clade: depth}
         """
+        if unit_branch_lengths:
+            depth_of = lambda c: 1
+        else:
+            depth_of = lambda c: c.branch_length or 0
         depths = {}
         def update_depths(node, curr_depth):
             depths[node] = curr_depth
             for child in node.clades:
-                new_depth = curr_depth + (child.branch_length or 0)
+                new_depth = curr_depth + depth_of(child)
                 update_depths(child, new_depth)
         update_depths(self.root, 0)
         return depths
