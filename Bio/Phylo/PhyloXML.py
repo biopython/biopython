@@ -179,7 +179,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
             if isinstance(node, Sequence) and node.mol_seq.is_aligned:
                 return True
             return False
-        seqs = self.depth_first_search(self, seq_is_aligned)
+        seqs = self._filter_search(seq_is_aligned, 'preorder')
         try:
             first_seq = seqs.next()
         except StopIteration:

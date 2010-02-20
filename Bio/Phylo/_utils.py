@@ -9,6 +9,7 @@ Third-party libraries are loaded when the corresponding function is called.
 """
 __docformat__ = "epytext en"
 
+import math
 import sys
 
 import BaseTree
