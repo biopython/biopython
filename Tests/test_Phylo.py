@@ -55,8 +55,6 @@ class UtilTests(unittest.TestCase):
 
 class TreeTests(unittest.TestCase):
     """Tests for methods on BaseTree.Tree objects."""
-    # TODO: magic: iter, len, getitem
-
     def setUp(self):
         self.phylogenies = list(Phylo.parse(EX_PHYLO, 'phyloxml'))
 
@@ -169,6 +167,24 @@ class TreeTests(unittest.TestCase):
         self.assertAlmostEqual(t.distance({'name': 'A'}, {'name': 'C'}), 0.562)
         self.assertAlmostEqual(t.distance({'name': 'B'}, {'name': 'C'}), 0.69)
 
+    def test_is_bifurcating(self):
+        """TreeMixin: is_bifurcating() method."""
+        for tree, is_b in izip(self.phylogenies,
+                (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1)):
+            self.assertEqual(tree.is_bifurcating(), is_b)
+
+    def test_is_monophyletic(self):
+        """TreeMixin: is_monophyletic() method."""
+        tree = self.phylogenies[10]
+        abcd = tree.get_terminals()
+        abc = tree.clade[0].get_terminals()
+        ab = abc[:2]
+        d = tree.clade[1].get_terminals()
+        self.assertEqual(tree.is_monophyletic(abcd), tree.root)
+        self.assertEqual(tree.is_monophyletic(abc), tree.clade[0])
+        self.assertEqual(tree.is_monophyletic(ab), False)
+        self.assertEqual(tree.is_monophyletic(d), tree.clade[1])
+
     def test_total_branch_length(self):
         """TreeMixin: total_branch_length() method."""
         tree = self.phylogenies[1]
@@ -188,6 +204,19 @@ class TreeTests(unittest.TestCase):
             self.assertEqual(clade.name, name)
             self.assertAlmostEqual(clade.branch_length, blength)
 
+    def test_collapse_all(self):
+        """TreeMixin: collapse_all() method."""
+        tree = Phylo.read(EX_APAF, 'phyloxml')
+        d1 = tree.depths()
+        tree.collapse_all()
+        d2 = tree.depths()
+        # Total branch lengths should not change
+        for clade in d2:
+            self.assertAlmostEqual(d1[clade], d2[clade])
+        # No internal nodes should remain except the root
+        self.assertEqual(len(tree.get_terminals()), len(tree.clade))
+        self.assertEqual(len(list(tree.find_clades(terminal=False))), 1)
+
     def test_ladderize(self):
         """TreeMixin: ladderize() method."""
         def ordered_names(tree):
@@ -198,6 +227,16 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(ordered_names(tree), list('DABC'))
         tree.ladderize(reverse=True)
         self.assertEqual(ordered_names(tree), list('ABCD'))
+
+    # TODO:
+    def test_prune(self):
+        """TreeMixin: prune() method."""
+        pass
+
+    # TODO:
+    def test_split(self):
+        """TreeMixin: split() method."""
+        pass
 
 
 # ---------------------------------------------------------

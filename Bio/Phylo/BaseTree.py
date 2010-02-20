@@ -10,13 +10,14 @@ classes in order to use the common methods defined on them.
 """
 __docformat__ = "epytext en"
 
+import collections
 import itertools
 import random
 import re
-from collections import deque
 
 
 def trim_str(text, maxlen=60):
+    """Truncate a string to maxlen characters, including ellipsis."""
     assert isinstance(text, basestring), \
             "%s should be a string, not a %s" % (text, type(text))
     if len(text) > maxlen:
@@ -25,15 +26,15 @@ def trim_str(text, maxlen=60):
 
 # General tree-traversal algorithms
 
-def _level_search(root, get_children):
+def _level_traverse(root, get_children):
     """Traverse a tree in breadth-first (level) order."""
-    Q = deque([root])
+    Q = collections.deque([root])
     while Q:
         v = Q.popleft()
         yield v
         Q.extend(get_children(v))
 
-def _preorder_search(root, get_children):
+def _preorder_traverse(root, get_children):
     """Traverse a tree in depth-first pre-order (parent before children)."""
     def dfs(elem):
         yield elem
@@ -43,7 +44,7 @@ def _preorder_search(root, get_children):
     for elem in dfs(root):
         yield elem
 
-def _postorder_search(root, get_children):
+def _postorder_traverse(root, get_children):
     """Traverse a tree in depth-first post-order (children before parent)."""
     def dfs(elem):
         for v in get_children(elem):
@@ -188,9 +189,9 @@ class TreeMixin(object):
 
         @return: generator of all elements for which 'filter_func' is True.
         """
-        order_opts = {'preorder': _preorder_search,
-                      'postorder': _postorder_search,
-                      'level': _level_search}
+        order_opts = {'preorder': _preorder_traverse,
+                      'postorder': _postorder_traverse,
+                      'level': _level_traverse}
         try:
             order_func = order_opts[order]
         except KeyError:
@@ -301,7 +302,7 @@ class TreeMixin(object):
         the given target, but excluding the root clade.
         """
         # Only one path will work -- ignore weights and visits
-        path = deque()
+        path = []
         match = _object_matcher(target)
         def check_in_path(v):
             if match(v):
@@ -316,7 +317,7 @@ class TreeMixin(object):
             return False
         if not check_in_path(self.root):
             return None
-        return list(reversed(path))[1:]
+        return path[-2::-1]
 
     def get_terminals(self, order='preorder'):
         """Get a list of all of this tree's terminal (leaf) nodes."""
@@ -366,34 +367,20 @@ class TreeMixin(object):
             counter = i
         return counter + 1
 
-    def is_bifurcating(self, node=None):
-        """Return True if tree downstream of node is strictly bifurcating."""
-        if node is not None:
-            warnings.warn("use node.is_bifurcating() directly instead",
-                          DeprecationWarning, stacklevel=2)
-            return node.is_bifurcating()
-        # Root can be trifurcating, because it has no ancestor
-        if isinstance(self, BaseTree.Tree) and len(self.root) == 3:
-            return (self.clade[0].is_bifurcating()
-                    and self.clade[1].is_bifurcating()
-                    and self.clade[2].is_bifurcating())
-        if len(self.root) == 2:
-            return (self.clade[0].is_bifurcating()
-                    and self.clade[1].is_bifurcating())
-        if len(self.root) == 0:
-            return True
-        return False
-
-    def depths(self):
+    def depths(self, unit_branch_lengths=False):
         """Create a mapping of tree clades to depths (by branch length).
 
         @return: dict of {clade: depth}
         """
+        if unit_branch_lengths:
+            depth_of = lambda c: 1
+        else:
+            depth_of = lambda c: c.branch_length or 0
         depths = {}
         def update_depths(node, curr_depth):
             depths[node] = curr_depth
             for child in node.clades:
-                new_depth = curr_depth + (child.branch_length or 0)
+                new_depth = curr_depth + depth_of(child)
                 update_depths(child, new_depth)
         update_depths(self.root, 0)
         return depths
@@ -409,26 +396,24 @@ class TreeMixin(object):
         mrca = self.common_ancestor(target1, target2)
         return mrca.distance(target1) + mrca.distance(target2)
 
-    # TODO - unit test
     def is_bifurcating(self):
         """Return True if tree downstream of node is strictly bifurcating."""
         # Root can be trifurcating, because it has no ancestor
-        if isinstance(self, BaseTree.Tree) and len(self.root) == 3:
-            return (self.clade[0].is_bifurcating()
-                    and self.clade[1].is_bifurcating()
-                    and self.clade[2].is_bifurcating())
+        if isinstance(self, Tree) and len(self.root) == 3:
+            return (self.root.clades[0].is_bifurcating()
+                    and self.root.clades[1].is_bifurcating()
+                    and self.root.clades[2].is_bifurcating())
         if len(self.root) == 2:
-            return (self.clade[0].is_bifurcating()
-                    and self.clade[1].is_bifurcating())
+            return (self.root.clades[0].is_bifurcating()
+                    and self.root.clades[1].is_bifurcating())
         if len(self.root) == 0:
             return True
         return False
 
-    # TODO - unit test
     def is_monophyletic(self, terminals):
-        """Does taxon_list comprise a complete subclade of this clade?
+        """MRCA of terminals if they comprise a complete subclade, or False.
 
-        @return: common ancestor if subclades is monophyletic, otherwise False.
+        @return: common ancestor if terminals are monophyletic, otherwise False.
         """
         target_set = set(terminals)
         current = self.root
@@ -440,8 +425,8 @@ class TreeMixin(object):
                 if set(subclade.get_terminals()).issuperset(target_set):
                     current = subclade
                     break
-                else:
-                    return False
+            else:
+                return False
 
     def is_parent_of(self, target):
         """True if target is a descendent of this tree.
@@ -485,6 +470,27 @@ class TreeMixin(object):
         parent.clades.extend(popped.clades)
         return parent
 
+    def collapse_all(self):
+        """Collapse all the descendents of this tree, leaving only terminals.
+
+        To collapse only certain elements, use the collapse method directly in a
+        loop with find_clades:
+
+        >>> for clade in tree.find_clades(branch_length=True, order='level'):
+        >>>     if (clade.branch_length < .5
+        >>>             and not clade.is_terminal()
+        >>>             and clade is not self.root):
+        >>>         tree.collapse(clade)
+
+        Note that level-order traversal helps avoid strange side-effects when
+        modifying the tree while iterating over its clades.
+        """
+        internals = self.find_clades(terminal=False, order='level')
+        # Skip the root node -- it can't be collapsed
+        internals.next()
+        for clade in internals:
+            self.collapse(clade)
+
     def ladderize(self, reverse=False):
         """Sort clades in-place according to the number of terminal nodes.
 
@@ -495,7 +501,6 @@ class TreeMixin(object):
                               reverse=reverse)
         for subclade in self.root.clades:
             subclade.ladderize(reverse=reverse)
-        return
 
     # TODO - unit test
     def prune(self, target):

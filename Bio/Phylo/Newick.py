@@ -82,12 +82,12 @@ class _TreeShim(object):
             return node.is_bifurcating()
         # Root can be trifurcating, because it has no ancestor
         if isinstance(self, BaseTree.Tree) and len(self.root) == 3:
-            return (self.clade[0].is_bifurcating()
-                    and self.clade[1].is_bifurcating()
-                    and self.clade[2].is_bifurcating())
+            return (self.root.clades[0].is_bifurcating()
+                    and self.root.clades[1].is_bifurcating()
+                    and self.root.clades[2].is_bifurcating())
         if len(self.root) == 2:
-            return (self.clade[0].is_bifurcating()
-                    and self.clade[1].is_bifurcating())
+            return (self.root.clades[0].is_bifurcating()
+                    and self.root.clades[1].is_bifurcating())
         if len(self.root) == 0:
             return True
         return False
@@ -110,8 +110,8 @@ class _TreeShim(object):
                 if set(subclade.get_terminals()).issuperset(target_set):
                     current = subclade
                     break
-                else:
-                    return False
+            else:
+                return False
 
     def is_preterminal(self, node=None):
         """Returns True if all direct descendents are terminal."""
