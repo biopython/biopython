@@ -114,7 +114,7 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(feature):
     else:
         ref = ""
     assert not feature.ref_db
-    if feature.location.start==feature.location.end \
+    if feature.location.start == feature.location.end \
     and isinstance(feature.location.end, SeqFeature.ExactPosition):
         #Special case, 12^13 gets mapped to location 12:12
         #(a zero length slice, meaning the point between two letters)
@@ -136,7 +136,7 @@ def _insdc_feature_location_string(feature):
     now adopted the GenBank convention). Notice that the order of the entries
     is reversed! This function therefore uses the first form. In this situation
     we expect the parent feature and the two children to all be marked as
-    strand==-1, and in the order 0:10 then 19:100.
+    strand == -1, and in the order 0:10 then 19:100.
 
     Also need to consider dual-strand examples like these from the Arabidopsis
     thaliana chloroplast NC_000932: join(complement(69611..69724),139856..140650)
@@ -207,8 +207,9 @@ class _InsdcWriter(SequentialSequenceWriter):
                 self.handle.write(line+"\n")
                 return
             #Insert line break...
-            for index in range(min(len(line)-1,self.MAX_WIDTH),self.QUALIFIER_INDENT+1,-1):
-                if line[index]==" " : break
+            for index in range(min(len(line)-1, self.MAX_WIDTH),
+                               self.QUALIFIER_INDENT+1,-1):
+                if line[index] == " " : break
             if line[index] != " ":
                 #No nice place to break...
                 index = self.MAX_WIDTH
@@ -297,17 +298,17 @@ class _InsdcWriter(SequentialSequenceWriter):
         #TODO - Merge this with _write_multi_line method?
         #It would need the addition of the comma splitting logic...
         #are there any other cases where that would be sensible?
-        contig = record.annotations.get("contig","")
+        contig = record.annotations.get("contig", "")
         if isinstance(contig, list) or isinstance(contig, tuple):
             contig = "".join(contig)
         contig = self.clean(contig)
-        i=0
+        i = 0
         answer = []
         while contig:
             if len(contig) > max_len:
                 #Split lines at the commas
                 pos = contig[:max_len-1].rfind(",")
-                if pos==-1:
+                if pos == -1:
                     raise ValueError("Could not break up CONTIG")
                 text, contig = contig[:pos+1], contig[pos+1:]
             else:
@@ -325,7 +326,7 @@ class GenBankWriter(_InsdcWriter):
         assert len(text) < self.MAX_WIDTH - self.HEADER_WIDTH, \
                "Annotation %s too long for %s line" % (repr(text), tag)
         self.handle.write("%s%s\n" % (tag.ljust(self.HEADER_WIDTH),
-                                      text.replace("\n"," ")))
+                                      text.replace("\n", " ")))
 
     def _write_multi_line(self, tag, text):
         "Used in the the 'header' of each GenBank record."""
@@ -341,7 +342,7 @@ class GenBankWriter(_InsdcWriter):
         #used for DBLINK and any similar later line types.
         #If the list of strings is empty, nothing is written.
         for i, text in enumerate(text_list):
-            if i==0:
+            if i == 0:
                 self._write_single_line(tag, text)
             else:
                 self._write_single_line("", text)
@@ -360,8 +361,8 @@ class GenBankWriter(_InsdcWriter):
         or date[2] != "-" or date[6] != "-" \
         or not date[:2].isdigit() or not date[7:].isdigit() \
         or int(date[:2]) > 31 \
-        or date[3:6] not in ["JAN","FEB","MAR","APR","MAY","JUN",
-                             "JUL","AUG","SEP","OCT","NOV","DEC"] :
+        or date[3:6] not in ["JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+                             "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"] :
             #TODO - Check is a valid date (e.g. not 31 Feb)
             return default
         return date
@@ -371,9 +372,9 @@ class GenBankWriter(_InsdcWriter):
             division = record.annotations["data_file_division"]
         except KeyError:
             division = "UNK"
-        if division in ["PRI","ROD","MAM","VRT","INV","PLN","BCT",
-                        "VRL","PHG","SYN","UNA","EST","PAT","STS",
-                        "GSS","HTG","HTC","ENV","CON"]:
+        if division in ["PRI", "ROD", "MAM", "VRT", "INV", "PLN", "BCT",
+                        "VRL", "PHG", "SYN", "UNA", "EST", "PAT", "STS",
+                        "GSS", "HTG", "HTC", "ENV", "CON"]:
             #Good, already GenBank style
             #    PRI - primate sequences
             #    ROD - rodent sequences
@@ -503,7 +504,7 @@ class GenBankWriter(_InsdcWriter):
                'LOCUS line does not contain valid sequence type (DNA, RNA, ...):\n' + line
         assert line[54:55] == ' ', \
                'LOCUS line does not contain space at position 55:\n' + line
-        assert line[55:63].strip() in ['','linear','circular'], \
+        assert line[55:63].strip() in ['', 'linear', 'circular'], \
                'LOCUS line does not contain valid entry (linear, circular, ...):\n' + line
         assert line[63:64] == ' ', \
                'LOCUS line does not contain space at position 64:\n' + line
@@ -533,7 +534,7 @@ class GenBankWriter(_InsdcWriter):
                 data += "  (%s %i to %i)" % (units,
                                              ref.location[0].nofuzzy_start+1,
                                              ref.location[0].nofuzzy_end)
-            self._write_single_line("REFERENCE",data)
+            self._write_single_line("REFERENCE", data)
             if ref.authors:
                 #We store the AUTHORS data as a single string
                 self._write_multi_line("  AUTHORS", ref.authors)
@@ -573,16 +574,16 @@ class GenBankWriter(_InsdcWriter):
             lines = comment
         else:
             raise ValueError("Could not understand comment annotation")
-        self._write_multi_line("COMMENT",lines[0])
+        self._write_multi_line("COMMENT", lines[0])
         for line in lines[1:]:
-            self._write_multi_line("",line)
+            self._write_multi_line("", line)
 
     def _write_contig(self, record):
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
         lines = self._split_contig(record, max_len)
-        self._write_single_line("CONTIG",lines[0])
+        self._write_single_line("CONTIG", lines[0])
         for text in lines[1:] :
-            self._write_single_line("",text)
+            self._write_single_line("", text)
 
     def _write_sequence(self, record):
         #Loosely based on code from Howard Salis
@@ -602,9 +603,10 @@ class GenBankWriter(_InsdcWriter):
         data = self._get_seq_string(record) #Catches sequence being None
         seq_len = len(data)
         self.handle.write("ORIGIN\n")
-        for line_number in range(0,seq_len,LETTERS_PER_LINE):
+        for line_number in range(0, seq_len, LETTERS_PER_LINE):
             self.handle.write(str(line_number+1).rjust(SEQUENCE_INDENT))
-            for words in range(line_number,min(line_number+LETTERS_PER_LINE,seq_len),10):
+            for words in range(line_number,
+                               min(line_number+LETTERS_PER_LINE, seq_len), 10):
                 self.handle.write(" %s" % data[words:words+10])
             self.handle.write("\n")
         
@@ -614,13 +616,14 @@ class GenBankWriter(_InsdcWriter):
         self._write_the_first_line(record)
 
         accession = self._get_annotation_str(record, "accession",
-                                             record.id.split(".",1)[0],
+                                             record.id.split(".", 1)[0],
                                              just_first=True)
         acc_with_version = accession
         if record.id.startswith(accession+"."):
             try:
                 acc_with_version = "%s.%i" \
-                                   % (accession, int(record.id.split(".",1)[1]))
+                                   % (accession,
+                                      int(record.id.split(".", 1)[1]))
             except ValueError:
                 pass
         gi = self._get_annotation_str(record, "gi", just_first=True)
@@ -631,7 +634,8 @@ class GenBankWriter(_InsdcWriter):
         
         self._write_single_line("ACCESSION", accession)
         if gi != ".":
-            self._write_single_line("VERSION", "%s  GI:%s" % (acc_with_version,gi))
+            self._write_single_line("VERSION", "%s  GI:%s" \
+                                    % (acc_with_version, gi))
         else:
             self._write_single_line("VERSION", "%s" % (acc_with_version))
 
@@ -701,7 +705,7 @@ class EmblWriter(_InsdcWriter):
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
         lines = self._split_contig(record, max_len)
         for text in lines:
-            self._write_single_line("CO",text)
+            self._write_single_line("CO", text)
 
     def _write_sequence(self, record):
         LETTERS_PER_BLOCK = 10
@@ -724,7 +728,7 @@ class EmblWriter(_InsdcWriter):
         seq_len = len(data)
         # TODO - Length and base composition on SQ line?
         handle.write("SQ   \n")
-        for line_number in range(0,seq_len // LETTERS_PER_LINE):
+        for line_number in range(0, seq_len // LETTERS_PER_LINE):
             handle.write("    ") #Just four, not five
             for block in range(BLOCKS_PER_LINE) :
                 index = LETTERS_PER_LINE*line_number + LETTERS_PER_BLOCK*block
@@ -756,10 +760,10 @@ class EmblWriter(_InsdcWriter):
         
     def _write_the_first_lines(self, record):
         """Write the ID and AC lines."""
-        if "." in record.id and record.id.rsplit(".",1)[1].isdigit():
-            version = "SV " + record.id.rsplit(".",1)[1]
+        if "." in record.id and record.id.rsplit(".", 1)[1].isdigit():
+            version = "SV " + record.id.rsplit(".", 1)[1]
             accession = self._get_annotation_str(record, "accession",
-                                                 record.id.rsplit(".",1)[0],
+                                                 record.id.rsplit(".", 1)[0],
                                                  just_first=True)
         else :
             version = ""
@@ -806,11 +810,11 @@ class EmblWriter(_InsdcWriter):
             if not isinstance(ref, SeqFeature.Reference):
                 continue
             number += 1
-            self._write_single_line("RN","[%i]" % number)
+            self._write_single_line("RN", "[%i]" % number)
             #TODO - support more complex record reference locations?
             if ref.location and len(ref.location)==1:
-                self._write_single_line("RP","%i-%i" % (ref.location[0].nofuzzy_start+1,
-                                                        ref.location[0].nofuzzy_end))
+                self._write_single_line("RP", "%i-%i" % (ref.location[0].nofuzzy_start+1,
+                                                         ref.location[0].nofuzzy_end))
             #TODO - record any DOI or AGRICOLA identifier in the reference object?
             if ref.pubmed_id:
                 self._write_single_line("RX", "PUBMED; %s." % ref.pubmed_id)
@@ -843,7 +847,7 @@ class EmblWriter(_InsdcWriter):
         #TODO - Merge this with the GenBank comment code?
         if not lines : return
         for line in lines:
-            self._write_multi_line("CC",line)
+            self._write_multi_line("CC", line)
         self.handle.write("XX\n")
 
     def write_record(self, record):
@@ -917,7 +921,7 @@ if __name__ == "__main__":
         if len(old_list) != len(new_list):
             raise ValueError("%i vs %i records" % (len(old_list), len(new_list)))
         for old, new in zip(old_list, new_list):
-            if not compare_record(old,new):
+            if not compare_record(old, new):
                 return False
         return True
 
@@ -940,14 +944,14 @@ if __name__ == "__main__":
         if not ignore_sub_features:
             if len(old.sub_features) != len(new.sub_features):
                 raise ValueError("Different sub features")
-            for a,b in zip(old.sub_features, new.sub_features):
-                if not compare_feature(a,b):
+            for a, b in zip(old.sub_features, new.sub_features):
+                if not compare_feature(a, b):
                     return False
         #This only checks key shared qualifiers
         #Would a white list be easier?
-        #for key in ["name","gene","translation","codon_table","codon_start","locus_tag"]:
+        #for key in ["name", "gene", "translation", "codon_table", "codon_start", "locus_tag"]:
         for key in set(old.qualifiers.keys()).intersection(new.qualifiers.keys()):
-            if key in ["db_xref","protein_id","product","note"]:
+            if key in ["db_xref", "protein_id", "product", "note"]:
                 #EMBL and GenBank files are use different references/notes/etc
                 continue
             if old.qualifiers[key] != new.qualifiers[key]:
@@ -961,7 +965,7 @@ if __name__ == "__main__":
             raise ValueError("%i vs %i features" % (len(old_list), len(new_list)))
         for old, new in zip(old_list, new_list):
             #This assumes they are in the same order
-            if not compare_feature(old,new,ignore_sub_features):
+            if not compare_feature(old, new, ignore_sub_features):
                 return False
         return True
 
@@ -1016,7 +1020,7 @@ if __name__ == "__main__":
         print filename
         
         handle = open("../../Tests/SwissProt/%s" % filename)
-        records = list(SeqIO.parse(handle,"swiss"))
+        records = list(SeqIO.parse(handle, "swiss"))
         handle.close()
 
         check_genbank_writer(records)
