@@ -473,7 +473,7 @@ def quicker_apply_on_multi_fasta(file, function, *args):
         result = f(*arguments)
         if result:
             results.append('>%s\n%s' % (name, result))
-    handle.close()
+    file.close()
     return results
 
 # }}}
