@@ -8,7 +8,7 @@
 #        provides methods for extracting data by the field name
 #        which is listed in the last line of the peaklist header.
 
-
+import sys
 
 # * * * * * INITIALIZATIONS * * * * *
 HEADERLEN=6
