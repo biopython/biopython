@@ -1,4 +1,4 @@
-# Copyright 2008-2009 by Peter Cock.  All rights reserved.
+# Copyright 2008-2010 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -38,7 +38,7 @@ def IgIterator(handle, alphabet = single_letter_alphabet):
 
     while line:
         #Now iterate over the records
-        if line[0]!=";":
+        if line[0] != ";":
             raise ValueError( \
                   "Records should start with ';' and not:\n%s" % repr(line))
 
@@ -57,8 +57,10 @@ def IgIterator(handle, alphabet = single_letter_alphabet):
         seq_lines = []
         while True:
             line = handle.readline()
-            if not line : break
-            if line[0] == ";": break
+            if not line:
+                break
+            if line[0] == ";":
+                break
             #Remove trailing whitespace, and any internal spaces
             seq_lines.append(line.rstrip().replace(" ",""))
         seq_str = "".join(seq_lines)
@@ -66,11 +68,12 @@ def IgIterator(handle, alphabet = single_letter_alphabet):
             #Remove the optional terminator (digit one)
             seq_str = seq_str[:-1]
         if "1" in seq_str:
-            raise ValueError("Potential terminator digit one found within sequence.")
+            raise ValueError(\
+                "Potential terminator digit one found within sequence.")
                 
         #Return the record and then continue...
-        record= SeqRecord(Seq(seq_str, alphabet),
-                          id = title, name = title)
+        record = SeqRecord(Seq(seq_str, alphabet),
+                           id = title, name = title)
         record.annotations['comment'] = "\n".join(comment_lines)
         yield record
     

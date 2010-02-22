@@ -1,4 +1,4 @@
-# Copyright 2006-2009 by Peter Cock and Michiel de Hoon.
+# Copyright 2006-2010 by Peter Cock and Michiel de Hoon.
 # All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
@@ -46,7 +46,8 @@ def SwissIterator(handle):
                                     )
         record.description = swiss_record.description
         for cross_reference in swiss_record.cross_references:
-            if len(cross_reference) < 2: continue
+            if len(cross_reference) < 2:
+                continue
             database, accession = cross_reference[:2]
             dbxref = "%s:%s" % (database, accession)
             if not dbxref in record.dbxrefs:
@@ -63,25 +64,30 @@ def SwissIterator(handle):
         annotations['taxonomy'] = swiss_record.organism_classification
         annotations['ncbi_taxid'] = swiss_record.taxonomy_id
         if swiss_record.host_organism:
-            annotations['organism_host'] = [word.rstrip(".") for word in swiss_record.host_organism]
+            annotations['organism_host'] = [word.rstrip(".") \
+                                            for word \
+                                            in swiss_record.host_organism]
         if swiss_record.comments:
             annotations['comment'] = "\n".join(swiss_record.comments)
         if swiss_record.references:
             annotations['references'] = []
             for reference in swiss_record.references:
                 feature = SeqFeature.Reference()
-                feature.comment = " ".join(["%s=%s;" % (key, value) for key, value in reference.comments])
+                feature.comment = " ".join(["%s=%s;" % (key, value) \
+                                            for key, value \
+                                            in reference.comments])
                 for key, value in reference.references:
-                    if key=='PubMed':
+                    if key == 'PubMed':
                         feature.pubmed_id = value
-                    elif key=='MEDLINE':
+                    elif key == 'MEDLINE':
                         feature.medline_id = value
-                    elif key=='DOI':
+                    elif key == 'DOI':
                         pass
-                    elif key=='AGRICOLA':
+                    elif key == 'AGRICOLA':
                         pass
                     else:
-                        raise ValueError, "Unknown key %s found in references" % key
+                        raise ValueError(\
+                            "Unknown key %s found in references" % key)
                 feature.authors = reference.authors
                 feature.title = reference.title
                 feature.journal = reference.location

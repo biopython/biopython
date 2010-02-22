@@ -1,4 +1,4 @@
-# Copyright 2008-2009 by Peter Cock.  All rights reserved.
+# Copyright 2008-2010 by Peter Cock.  All rights reserved.
 # Revisions copyright 2009 by Cymon J. Cox.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
@@ -70,7 +70,7 @@ def PhdIterator(handle):
         #from unit test example file phd_solexa.
         #This will cause problems if used as the record identifier
         #(e.g. output for FASTQ format).
-        name = phd_record.file_name.split(None,1)[0]
+        name = phd_record.file_name.split(None, 1)[0]
         seq_record = SeqRecord(phd_record.seq,
                                id = name, name = name,
                                description= phd_record.file_name)
@@ -152,10 +152,10 @@ def _test():
     """
     import doctest
     import os
-    if os.path.isdir(os.path.join("..","..","Tests")):
+    if os.path.isdir(os.path.join("..", "..", "Tests")):
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..","..","Tests"))
+        os.chdir(os.path.join("..", "..", "Tests"))
         assert os.path.isfile("Phd/phd1")
         doctest.testmod()
         os.chdir(cur_dir)

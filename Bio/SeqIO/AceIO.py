@@ -1,4 +1,4 @@
-# Copyright 2008-2009 by Peter Cock.  All rights reserved.
+# Copyright 2008-2010 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -63,7 +63,7 @@ def AceIterator(handle):
         if "U" in consensus_seq_str:
             if "T" in consensus_seq_str:
                 #Very odd! Error?
-                alpha = generic_ncleotide
+                alpha = generic_nucleotide
             else:
                 alpha = generic_rna
         else:
@@ -94,13 +94,13 @@ def AceIterator(handle):
         #we assign a quality of None (zero would be missleading as there may
         #be excelent support for having a gap here).
         quals = []
-        i=0
+        i = 0
         for base in consensus_seq:
             if base == "-":
                 quals.append(None)
             else:
                 quals.append(ace_contig.quality[i])
-                i+=1
+                i += 1
         assert i == len(ace_contig.quality)
         seq_record.letter_annotations["phred_quality"] = quals
 
@@ -115,10 +115,10 @@ def _test():
     """
     import doctest
     import os
-    if os.path.isdir(os.path.join("..","..","Tests")):
+    if os.path.isdir(os.path.join("..", "..", "Tests")):
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..","..","Tests"))
+        os.chdir(os.path.join("..", "..", "Tests"))
         assert os.path.isfile("Ace/consed_sample.ace")
         doctest.testmod()
         os.chdir(cur_dir)
