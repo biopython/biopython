@@ -208,7 +208,7 @@ class SeqFeature(object):
             parent_sequence = parent_sequence.toseq()
         if self.sub_features:
             if self.location_operator!="join":
-                raise ValueError(f.location_operator)
+                raise ValueError(self.location_operator)
             if self.strand == -1:
                 #This is a special case given how the GenBank parser works.
                 #Must avoid doing the reverse complement twice.
