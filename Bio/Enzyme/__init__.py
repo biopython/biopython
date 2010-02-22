@@ -201,7 +201,7 @@ class Iterator:
         if not lines:
             return None
         lines.append('//')
-        data = string.join(lines,'')
+        data = ''.join(lines)
         if self._parser is not None:
             return self._parser.parse(File.StringHandle(data))
         return data
@@ -219,7 +219,7 @@ class _RecordConsumer(AbstractConsumer):
     def alternate_name(self,an_info):
         self.enzyme_record.AN.append(an_info[2:].strip())
     def catalytic_activity(self, ca_info):
-        self.enzyme_record.CA = string.join([self.enzyme_record.CA,ca_info[2:].strip()],'')
+        self.enzyme_record.CA = ''.join([self.enzyme_record.CA, ca_info[2:].strip()])
     def cofactor(self, cf_info):
         self.enzyme_record.CF.append(cf_info[2:].strip())
     def comment(self, cc_info):
