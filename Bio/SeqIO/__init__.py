@@ -1,4 +1,4 @@
-# Copyright 2006-2009 by Peter Cock.  All rights reserved.
+# Copyright 2006-2010 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -260,7 +260,6 @@ See also http://biopython.org/wiki/SeqIO_dev
 --Peter
 """
 
-import os
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align.Generic import Alignment
@@ -287,41 +286,41 @@ import QualityIO #FastQ and qual files
 #
 #Most alignment file formats will be handled via Bio.AlignIO
 
-_FormatToIterator ={"fasta" : FastaIO.FastaIterator,
-                    "gb" : InsdcIO.GenBankIterator,
-                    "genbank" : InsdcIO.GenBankIterator,
-                    "genbank-cds" : InsdcIO.GenBankCdsFeatureIterator,
-                    "embl" : InsdcIO.EmblIterator,
-                    "embl-cds" : InsdcIO.EmblCdsFeatureIterator,
-                    "ig" : IgIO.IgIterator,
-                    "swiss" : SwissIO.SwissIterator,
-                    "phd" : PhdIO.PhdIterator,
-                    "ace" : AceIO.AceIterator,
-                    "tab" : TabIO.TabIterator,
-                    "pir" : PirIO.PirIterator,
-                    "fastq" : QualityIO.FastqPhredIterator,
-                    "fastq-sanger" : QualityIO.FastqPhredIterator,
-                    "fastq-solexa" : QualityIO.FastqSolexaIterator,
-                    "fastq-illumina" : QualityIO.FastqIlluminaIterator,
-                    "qual" : QualityIO.QualPhredIterator,
-                    "sff": SffIO.SffIterator,
-                    #Not sure about this in the long run:
-                    "sff-trim": SffIO._SffTrimIterator,
-                    }
+_FormatToIterator = {"fasta" : FastaIO.FastaIterator,
+                     "gb" : InsdcIO.GenBankIterator,
+                     "genbank" : InsdcIO.GenBankIterator,
+                     "genbank-cds" : InsdcIO.GenBankCdsFeatureIterator,
+                     "embl" : InsdcIO.EmblIterator,
+                     "embl-cds" : InsdcIO.EmblCdsFeatureIterator,
+                     "ig" : IgIO.IgIterator,
+                     "swiss" : SwissIO.SwissIterator,
+                     "phd" : PhdIO.PhdIterator,
+                     "ace" : AceIO.AceIterator,
+                     "tab" : TabIO.TabIterator,
+                     "pir" : PirIO.PirIterator,
+                     "fastq" : QualityIO.FastqPhredIterator,
+                     "fastq-sanger" : QualityIO.FastqPhredIterator,
+                     "fastq-solexa" : QualityIO.FastqSolexaIterator,
+                     "fastq-illumina" : QualityIO.FastqIlluminaIterator,
+                     "qual" : QualityIO.QualPhredIterator,
+                     "sff": SffIO.SffIterator,
+                     #Not sure about this in the long run:
+                     "sff-trim": SffIO._SffTrimIterator,
+                     }
 
-_FormatToWriter ={"fasta" : FastaIO.FastaWriter,
-                  "gb" : InsdcIO.GenBankWriter,
-                  "genbank" : InsdcIO.GenBankWriter,
-                  "embl" : InsdcIO.EmblWriter,
-                  "tab" : TabIO.TabWriter,
-                  "fastq" : QualityIO.FastqPhredWriter,
-                  "fastq-sanger" : QualityIO.FastqPhredWriter,
-                  "fastq-solexa" : QualityIO.FastqSolexaWriter,
-                  "fastq-illumina" : QualityIO.FastqIlluminaWriter,
-                  "phd" : PhdIO.PhdWriter,
-                  "qual" : QualityIO.QualPhredWriter,
-                  "sff" : SffIO.SffWriter,
-                  }
+_FormatToWriter = {"fasta" : FastaIO.FastaWriter,
+                   "gb" : InsdcIO.GenBankWriter,
+                   "genbank" : InsdcIO.GenBankWriter,
+                   "embl" : InsdcIO.EmblWriter,
+                   "tab" : TabIO.TabWriter,
+                   "fastq" : QualityIO.FastqPhredWriter,
+                   "fastq-sanger" : QualityIO.FastqPhredWriter,
+                   "fastq-solexa" : QualityIO.FastqSolexaWriter,
+                   "fastq-illumina" : QualityIO.FastqIlluminaWriter,
+                   "phd" : PhdIO.PhdWriter,
+                   "qual" : QualityIO.QualPhredWriter,
+                   "sff" : SffIO.SffWriter,
+                   }
 
 def write(sequences, handle, format):
     """Write complete set of sequences to a file.
@@ -338,15 +337,17 @@ def write(sequences, handle, format):
 
     #Try and give helpful error messages:
     if isinstance(handle, basestring):
-        raise TypeError("Need a file handle, not a string (i.e. not a filename)")
+        raise TypeError(\
+            "Need a file handle, not a string (i.e. not a filename)")
     if not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if isinstance(sequences,SeqRecord):
-        raise ValueError("Use a SeqRecord list/iterator, not just a single SeqRecord")
+    if isinstance(sequences, SeqRecord):
+        raise ValueError(\
+            "Use a SeqRecord list/iterator, not just a single SeqRecord")
 
     #Map the file format to a writer class
     if format in _FormatToWriter:
@@ -428,7 +429,8 @@ def parse(handle, format, alphabet=None):
 
     #Try and give helpful error messages:
     if isinstance(handle, basestring):
-        raise TypeError("Need a file handle, not a string (i.e. not a filename)")
+        raise TypeError(\
+            "Need a file handle, not a string (i.e. not a filename)")
     if not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
@@ -450,8 +452,8 @@ def parse(handle, format, alphabet=None):
             return _force_alphabet(iterator_generator(handle), alphabet)
     elif format in AlignIO._FormatToIterator:
         #Use Bio.AlignIO to read in the alignments
-        #TODO - Can this helper function can be replaced with a generator expression,
-        #or something from itertools?
+        #TODO - Can this helper function can be replaced with a generator
+        #expression, or something from itertools?
         return _iterate_via_AlignIO(handle, format, alphabet)
     else:
         raise ValueError("Unknown format '%s'" % format)
@@ -465,18 +467,18 @@ def _iterate_via_AlignIO(handle, format, alphabet):
             yield record
 
 def _force_alphabet(record_iterator, alphabet):
-     """Iterate over records, over-riding the alphabet (PRIVATE)."""
-     #Assume the alphabet argument has been pre-validated
-     given_base_class = _get_base_alphabet(alphabet).__class__
-     for record in record_iterator:
-         if isinstance(_get_base_alphabet(record.seq.alphabet),
-                       given_base_class):
-             record.seq.alphabet = alphabet
-             yield record
-         else:
-             raise ValueError("Specified alphabet %s clashes with "\
-                              "that determined from the file, %s" \
-                              % (repr(alphabet), repr(record.seq.alphabet)))
+    """Iterate over records, over-riding the alphabet (PRIVATE)."""
+    #Assume the alphabet argument has been pre-validated
+    given_base_class = _get_base_alphabet(alphabet).__class__
+    for record in record_iterator:
+        if isinstance(_get_base_alphabet(record.seq.alphabet),
+                      given_base_class):
+            record.seq.alphabet = alphabet
+            yield record
+        else:
+            raise ValueError("Specified alphabet %s clashes with "\
+                             "that determined from the file, %s" \
+                             % (repr(alphabet), repr(record.seq.alphabet)))
 
 def read(handle, format, alphabet=None):
     """Turns a sequence file into a single SeqRecord.
@@ -734,14 +736,16 @@ def to_alignment(sequences, alphabet=None, strict=True):
     >>> handle.close()
     """
     #TODO - Move this functionality into the Alignment class instead?
-    from Bio.Alphabet import generic_alphabet
+    from Bio.Alphabet import Gapped
     from Bio.Alphabet import _consensus_alphabet
     if alphabet is None:
         sequences = list(sequences)
-        alphabet = _consensus_alphabet([rec.seq.alphabet for rec in sequences \
+        alphabet = _consensus_alphabet([rec.seq.alphabet \
+                                        for rec in sequences \
                                         if rec.seq is not None])
 
-    if not (isinstance(alphabet, Alphabet) or isinstance(alphabet, AlphabetEncoder)):
+    if not (isinstance(alphabet, Alphabet) \
+    or isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet")
 
     alignment_length = None
@@ -757,9 +761,8 @@ def to_alignment(sequences, alphabet=None, strict=True):
             or isinstance(record.seq.alphabet, AlphabetEncoder), \
                 "Sequence does not have a valid alphabet"
 
-            #TODO - Move this alphabet comparison code into the Alphabet module/class?
-            #TODO - Is a normal alphabet "ungapped" by default, or does it just mean
-            #undecided?
+            #TODO - Move alphabet comparison code into Alphabet module/class?
+            #TODO - Is a normal alphabet "ungapped" by default, or undecided?
             if isinstance(record.seq.alphabet, Alphabet) \
             and isinstance(alphabet, Alphabet):
                 #Comparing two non-gapped alphabets            
@@ -769,11 +772,13 @@ def to_alignment(sequences, alphabet=None, strict=True):
                                      % (record.seq.alphabet, alphabet))
             elif isinstance(record.seq.alphabet, AlphabetEncoder) \
             and isinstance(alphabet, Alphabet):
-                raise ValueError("Sequence has a gapped alphabet, alignment does not")
+                raise ValueError(\
+                    "Sequence has a gapped alphabet, alignment does not")
             elif isinstance(record.seq.alphabet, Alphabet) \
             and isinstance(alphabet, Gapped):
                 #Sequence isn't gapped, alignment is.
-                if not isinstance(record.seq.alphabet, alphabet.alphabet.__class__):
+                if not isinstance(record.seq.alphabet,
+                                  alphabet.alphabet.__class__):
                     raise ValueError("Incompatible sequence alphabet " \
                                      + "%s for %s alignment" \
                                      % (record.seq.alphabet, alphabet))
@@ -784,11 +789,12 @@ def to_alignment(sequences, alphabet=None, strict=True):
                                      + "%s for %s alignment" \
                                      % (record.seq.alphabet, alphabet))
                 if record.seq.alphabet.gap_char != alphabet.gap_char:
-                    raise ValueError("Sequence gap characters != alignment gap char")
+                    raise ValueError("Sequence gap char != alignment gap char")
             #ToDo, additional checks on the specified alignment...
             #Should we look at the alphabet.contains() method?
         if record.seq is None:
-            raise TypeError("SeqRecord (id=%s) has None for its sequence." % record.id)
+            raise TypeError(\
+                "SeqRecord (id=%s) has None for its sequence." % record.id)
             
         #This is abusing the "private" records list,
         #we should really have a method like add_sequence
@@ -854,8 +860,10 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
                             out_handle, out_format,
                             alphabet)
     #Must now close any handles we opened
-    if in_close : in_handle.close()
-    if out_close : out_handle.close()
+    if in_close:
+        in_handle.close()
+    if out_close:
+        out_handle.close()
     return count
            
 def _test():
@@ -866,10 +874,10 @@ def _test():
     """
     import doctest
     import os
-    if os.path.isdir(os.path.join("..","..","Tests")):
+    if os.path.isdir(os.path.join("..", "..", "Tests")):
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..","..","Tests"))
+        os.chdir(os.path.join("..", "..", "Tests"))
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir
