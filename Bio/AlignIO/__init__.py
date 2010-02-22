@@ -1,4 +1,4 @@
-# Copyright 2008-2009 by Peter Cock.  All rights reserved.
+# Copyright 2008-2010 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -125,7 +125,6 @@ __docformat__ = "epytext en" #not just plaintext
 # - MSF multiple alignment format, aka GCG, aka PileUp format (*.msf)
 #   http://www.bioperl.org/wiki/MSF_multiple_alignment_format 
 
-import os
 #from cStringIO import StringIO
 from StringIO import StringIO
 from Bio.Seq import Seq
@@ -143,22 +142,22 @@ import FastaIO
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl and EMBOSS where possible.
 
-_FormatToIterator ={#"fasta" is done via Bio.SeqIO
-                    "clustal" : ClustalIO.ClustalIterator,
-                    "emboss" : EmbossIO.EmbossIterator,
-                    "fasta-m10" : FastaIO.FastaM10Iterator,
-                    "nexus" : NexusIO.NexusIterator,
-                    "phylip" : PhylipIO.PhylipIterator,
-                    "stockholm" : StockholmIO.StockholmIterator,
-                    }
+_FormatToIterator = {#"fasta" is done via Bio.SeqIO
+                     "clustal" : ClustalIO.ClustalIterator,
+                     "emboss" : EmbossIO.EmbossIterator,
+                     "fasta-m10" : FastaIO.FastaM10Iterator,
+                     "nexus" : NexusIO.NexusIterator,
+                     "phylip" : PhylipIO.PhylipIterator,
+                     "stockholm" : StockholmIO.StockholmIterator,
+                     }
 
-_FormatToWriter ={#"fasta" is done via Bio.SeqIO
-                  #"emboss" : EmbossIO.EmbossWriter, (unfinished)
-                  "nexus" : NexusIO.NexusWriter,
-                  "phylip" : PhylipIO.PhylipWriter,
-                  "stockholm" : StockholmIO.StockholmWriter,
-                  "clustal" : ClustalIO.ClustalWriter,
-                  }
+_FormatToWriter = {#"fasta" is done via Bio.SeqIO
+                   #"emboss" : EmbossIO.EmbossWriter, (unfinished)
+                   "nexus" : NexusIO.NexusWriter,
+                   "phylip" : PhylipIO.PhylipWriter,
+                   "stockholm" : StockholmIO.StockholmWriter,
+                   "clustal" : ClustalIO.ClustalWriter,
+                   }
 
 def write(alignments, handle, format):
     """Write complete set of alignments to a file.
@@ -176,7 +175,8 @@ def write(alignments, handle, format):
 
     #Try and give helpful error messages:
     if isinstance(handle, basestring):
-        raise TypeError("Need a file handle, not a string (i.e. not a filename)")
+        raise TypeError(\
+            "Need a file handle, not a string (i.e. not a filename)")
     if not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
@@ -184,7 +184,8 @@ def write(alignments, handle, format):
     if format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
     if isinstance(alignments, Alignment):
-        raise TypeError("Need an Alignment list/iterator, not just a single Alignment")
+        raise TypeError(\
+            "Need an Alignment list/iterator, not just a single Alignment")
 
     #Map the file format to a writer class
     if format in _FormatToIterator:
@@ -196,7 +197,8 @@ def write(alignments, handle, format):
         count = 0
         for alignment in alignments:
             if not isinstance(alignment, Alignment):
-                raise TypeError("Expect a list or iterator of Alignment objects.")
+                raise TypeError(\
+                    "Expect a list or iterator of Alignment objects.")
             SeqIO.write(alignment, handle, format)
             count += 1
     elif format in _FormatToIterator or format in SeqIO._FormatToIterator:
@@ -252,25 +254,25 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
             pass
 
 def _force_alphabet(alignment_iterator, alphabet):
-     """Iterate over alignments, over-riding the alphabet (PRIVATE)."""
-     #Assume the alphabet argument has been pre-validated
-     given_base_class = _get_base_alphabet(alphabet).__class__
-     for align in alignment_iterator:
-         if not isinstance(_get_base_alphabet(align._alphabet),
-                           given_base_class):
-             raise ValueError("Specified alphabet %s clashes with "\
-                              "that determined from the file, %s" \
-                              % (repr(alphabet), repr(align._alphabet)))
-         for record in align:
-             if not isinstance(_get_base_alphabet(record.seq.alphabet),
-                               given_base_class):
-                 raise ValueError("Specified alphabet %s clashes with "\
-                                  "that determined from the file, %s" \
-                            % (repr(alphabet), repr(record.seq.alphabet)))
-             record.seq.alphabet = alphabet
-         align._alphabet = alphabet
-         yield align
-    
+    """Iterate over alignments, over-riding the alphabet (PRIVATE)."""
+    #Assume the alphabet argument has been pre-validated
+    given_base_class = _get_base_alphabet(alphabet).__class__
+    for align in alignment_iterator:
+        if not isinstance(_get_base_alphabet(align._alphabet),
+                          given_base_class):
+            raise ValueError("Specified alphabet %s clashes with "\
+                             "that determined from the file, %s" \
+                             % (repr(alphabet), repr(align._alphabet)))
+        for record in align:
+            if not isinstance(_get_base_alphabet(record.seq.alphabet),
+                              given_base_class):
+                raise ValueError("Specified alphabet %s clashes with "\
+                                 "that determined from the file, %s" \
+                           % (repr(alphabet), repr(record.seq.alphabet)))
+            record.seq.alphabet = alphabet
+        align._alphabet = alphabet
+        yield align
+
 def parse(handle, format, seq_count=None, alphabet=None):
     """Turns a sequence file into an iterator returning Alignment objects.
 
@@ -308,7 +310,8 @@ def parse(handle, format, seq_count=None, alphabet=None):
 
     #Try and give helpful error messages:
     if isinstance(handle, basestring):
-        raise TypeError("Need a file handle, not a string (i.e. not a filename)")
+        raise TypeError(\
+            "Need a file handle, not a string (i.e. not a filename)")
     if not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
@@ -331,7 +334,8 @@ def parse(handle, format, seq_count=None, alphabet=None):
             return iterator_generator(handle, seq_count, alphabet=alphabet)
         except TypeError:
             #It isn't supported.
-            return _force_alphabet(iterator_generator(handle, seq_count), alphabet)
+            return _force_alphabet(iterator_generator(handle, seq_count),
+                                   alphabet)
 
     elif format in SeqIO._FormatToIterator:
         #Exploit the existing SeqIO parser to the dirty work!
@@ -438,8 +442,10 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     #after we have opened the file which is a shame.
     count = write(alignments, out_handle, out_format)
     #Must now close any handles we opened
-    if in_close : in_handle.close()
-    if out_close : out_handle.close()
+    if in_close:
+        in_handle.close()
+    if out_close:
+        out_handle.close()
     return count
 
 def _test():
@@ -450,10 +456,10 @@ def _test():
     """
     import doctest
     import os
-    if os.path.isdir(os.path.join("..","..","Tests")):
+    if os.path.isdir(os.path.join("..", "..", "Tests")):
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..","..","Tests"))
+        os.chdir(os.path.join("..", "..", "Tests"))
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir
