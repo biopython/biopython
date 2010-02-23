@@ -156,8 +156,9 @@ class PDBParser:
                 except:
                     #Should we allow parsing to continue in permissive mode?
                     #If so what coordindates should we default to?  Easier to abort!
-                    raise PDBContructionError("Invalid or missing coordinate(s) at line %i." \
-                                              % global_line_counter)
+                    raise PDBContructionException(\
+                        "Invalid or missing coordinate(s) at line %i." \
+                        % global_line_counter)
                 coord=numpy.array((x, y, z), 'f')
                 # occupancy & B factor
                 try:
