@@ -537,7 +537,7 @@ def _copy_and_check(matrix, desired_shape):
     matrix = numpy.array(matrix, copy=1)
     # Check the dimensions.
     if matrix.shape != desired_shape:
-        raise ValuError("Incorrect dimension")
+        raise ValueError("Incorrect dimension")
     # Make sure it's normalized.
     if len(matrix.shape) == 1:
         if numpy.fabs(sum(matrix)-1.0) > 0.01:
