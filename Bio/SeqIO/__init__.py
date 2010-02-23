@@ -109,15 +109,13 @@ Alternatively, reading in an alignment file format via Bio.SeqIO will give
 you a SeqRecord for each row of each alignment:
 
     >>> from Bio import SeqIO
-    >>> handle = open("Clustalw/hedgehog.aln", "rU")
-    >>> for record in SeqIO.parse(handle, "clustal"):
+    >>> for record in SeqIO.parse("Clustalw/hedgehog.aln", "clustal"):
     ...     print record.id, len(record)
     gi|167877390|gb|EDS40773.1| 447
     gi|167234445|ref|NP_001107837. 447
     gi|74100009|gb|AAZ99217.1| 447
     gi|13990994|dbj|BAA33523.2| 447
     gi|56122354|gb|AAV74328.1| 447
-    >>> handle.close()
 
 Output
 ======
@@ -341,15 +339,6 @@ def write(sequences, handle, format):
     """
     from Bio import AlignIO
 
-    if isinstance(handle, basestring):
-        if format in _BinaryFormats :
-            handle = open(handle, "wb")
-        else :
-            handle = open(handle, "w")
-        handle_close = True
-    else:
-        handle_close = False
-
     #Try and give helpful error messages:
     if not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
@@ -360,6 +349,15 @@ def write(sequences, handle, format):
     if isinstance(sequences, SeqRecord):
         raise ValueError(\
             "Use a SeqRecord list/iterator, not just a single SeqRecord")
+
+    if isinstance(handle, basestring):
+        if format in _BinaryFormats :
+            handle = open(handle, "wb")
+        else :
+            handle = open(handle, "w")
+        handle_close = True
+    else:
+        handle_close = False
 
     #Map the file format to a writer class
     if format in _FormatToWriter:
@@ -747,16 +745,14 @@ def to_alignment(sequences, alphabet=None, strict=True):
     Using this function is now discouraged.  Rather doing this:
 
     >>> from Bio import SeqIO
-    >>> handle = open("Clustalw/protein.aln")
-    >>> alignment = SeqIO.to_alignment(SeqIO.parse(handle, "clustal"))
-    >>> handle.close()
+    >>> filename = "Clustalw/protein.aln"
+    >>> alignment = SeqIO.to_alignment(SeqIO.parse(filename, "clustal"))
 
     You are now encouraged to use Bio.AlignIO instead, e.g.
 
     >>> from Bio import AlignIO
-    >>> handle = open("Clustalw/protein.aln")
-    >>> alignment = AlignIO.read(handle, "clustal")
-    >>> handle.close()
+    >>> filename = "Clustalw/protein.aln"
+    >>> alignment = AlignIO.read(filename, "clustal")
     """
     #TODO - Move this functionality into the Alignment class instead?
     from Bio.Alphabet import Gapped

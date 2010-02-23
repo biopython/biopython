@@ -219,9 +219,9 @@ for (t_format, t_per, t_count, t_filename) in test_files:
             "Expected %i records per alignment, got %i" \
             % (t_per, len(alignment.get_all_seqs()))
 
-    #Try using the iterator with a for loop
+    #Try using the iterator with a for loop and a filename not handle
     alignments2 = []
-    for record in AlignIO.parse(handle=open(t_filename,"r"), format=t_format):
+    for record in AlignIO.parse(t_filename, format=t_format):
         alignments2.append(record)
     assert len(alignments2) == t_count
 

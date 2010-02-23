@@ -20,14 +20,12 @@ Input
 =====
 For the typical special case when your file or handle contains one and only
 one alignment, use the function Bio.AlignIO.read().  This takes an input file
-handle, format string and optional number of sequences per alignment.  It will
-return a single Alignment object (or raise an exception if there isn't just
-one alignment):
+handle (or in recent versions of Biopython a filename as a string), format
+string and optional number of sequences per alignment.  It will return a single
+Alignment object (or raise an exception if there isn't just one alignment):
 
     >>> from Bio import AlignIO
-    >>> handle = open("Phylip/interlaced.phy", "rU")
-    >>> align = AlignIO.read(handle, "phylip")
-    >>> handle.close()
+    >>> align = AlignIO.read("Phylip/interlaced.phy", "phylip")
     >>> print align
     SingleLetterAlphabet() alignment with 3 rows and 384 columns
     -----MKVILLFVLAVFTVFVSS---------------RGIPPE...I-- CYS1_DICDI
@@ -40,8 +38,7 @@ returns an iterator giving Alignment objects (typically used in a for loop).
 If you want random access to the alignments by number, turn this into a list:
 
     >>> from Bio import AlignIO
-    >>> handle = open("Emboss/needle.txt", "rU")
-    >>> alignments = list(AlignIO.parse(handle, "emboss"))
+    >>> alignments = list(AlignIO.parse("Emboss/needle.txt", "emboss"))
     >>> print alignments[2]
     SingleLetterAlphabet() alignment with 2 rows and 120 columns
     -KILIVDDQYGIRILLNEVFNKEGYQTFQAANGLQALDIVTKER...--- ref_rec
@@ -56,19 +53,28 @@ Output
 ======
 Use the function Bio.AlignIO.write(...), which takes a complete set of
 Alignment objects (either as a list, or an iterator), an output file handle
-and of course the file format::
+(or filename in recent versions of Biopython) and of course the file format::
+
+    from Bio import AlignIO
+    alignments = ...
+    count = SeqIO.write(alignments, "example.faa", "fasta")
+
+If using a handle make sure to close it to flush the data to the disk::
 
     from Bio import AlignIO
     alignments = ...
     handle = open("example.faa", "w")
-    alignment = SeqIO.write(alignments, handle, "fasta")
+    count = SeqIO.write(alignments, handle, "fasta")
     handle.close()
 
 In general, you are expected to call this function once (with all your
 alignments) and then close the file handle.  However, for file formats
 like PHYLIP where multiple alignments are stored sequentially (with no file
 header and footer), then multiple calls to the write function should work as
-expected.
+expected when using handles.
+
+If you are using a filename, the repeated calls to the write functions will
+overwrite the existing file each time.
 
 Conversion
 ==========
@@ -164,7 +170,8 @@ def write(alignments, handle, format):
 
     Arguments:
      - sequences - A list (or iterator) of Alignment objects
-     - handle    - File handle object to write to
+     - handle    - File handle object to write to, or filename as string
+                   (note older versions of Biopython only took a handle).
      - format    - lower case string describing the file format to write.
 
     You should close the handle after calling this function.
@@ -174,9 +181,6 @@ def write(alignments, handle, format):
     from Bio import SeqIO
 
     #Try and give helpful error messages:
-    if isinstance(handle, basestring):
-        raise TypeError(\
-            "Need a file handle, not a string (i.e. not a filename)")
     if not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
@@ -186,6 +190,15 @@ def write(alignments, handle, format):
     if isinstance(alignments, Alignment):
         raise TypeError(\
             "Need an Alignment list/iterator, not just a single Alignment")
+
+    if isinstance(handle, basestring):
+        if format in _BinaryFormats :
+            handle = open(handle, "wb")
+        else :
+            handle = open(handle, "w")
+        handle_close = True
+    else:
+        handle_close = False
 
     #Map the file format to a writer class
     if format in _FormatToIterator:
@@ -210,6 +223,10 @@ def write(alignments, handle, format):
     assert isinstance(count, int), "Internal error - the underlying %s " \
            "writer should have returned the alignment count, not %s" \
            % (format, repr(count))
+
+    if handle_close:
+        handle.close()
+
     return count
 
 #This is a generator function!
@@ -277,7 +294,8 @@ def parse(handle, format, seq_count=None, alphabet=None):
     """Turns a sequence file into an iterator returning Alignment objects.
 
     Arguments:
-     - handle    - handle to the file.
+     - handle    - handle to the file, or the filename as a string
+                   (note older verions of Biopython only took a handle).
      - format    - string describing the file format.
      - alphabet  - optional Alphabet object, useful when the sequence type
                    cannot be automatically inferred from the file itself
@@ -290,7 +308,7 @@ def parse(handle, format, seq_count=None, alphabet=None):
     >>> from Bio import AlignIO
     >>> filename = "Emboss/needle.txt"
     >>> format = "emboss"
-    >>> for alignment in AlignIO.parse(open(filename,"rU"), format):
+    >>> for alignment in AlignIO.parse(filename, format):
     ...     print "Alignment of length", alignment.get_alignment_length()
     Alignment of length 124
     Alignment of length 119
@@ -308,10 +326,11 @@ def parse(handle, format, seq_count=None, alphabet=None):
     """
     from Bio import SeqIO
 
-    #Try and give helpful error messages:
     if isinstance(handle, basestring):
-        raise TypeError(\
-            "Need a file handle, not a string (i.e. not a filename)")
+        handle = open(handle, "rU")
+        #TODO - On Python 2.5+ use with statement to close handle
+
+    #Try and give helpful error messages:
     if not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
     if not format:
@@ -349,7 +368,8 @@ def read(handle, format, seq_count=None, alphabet=None):
     """Turns an alignment file into a single Alignment object.
 
     Arguments:
-     - handle    - handle to the file.
+     - handle    - handle to the file, or the filename as a string
+                   (note older verions of Biopython only took a handle).
      - format    - string describing the file format.
      - alphabet  - optional Alphabet object, useful when the sequence type
                    cannot be automatically inferred from the file itself
@@ -364,7 +384,7 @@ def read(handle, format, seq_count=None, alphabet=None):
     >>> from Bio import AlignIO
     >>> filename = "Clustalw/protein.aln"
     >>> format = "clustal"
-    >>> alignment = AlignIO.read(open(filename, "rU"), format)
+    >>> alignment = AlignIO.read(filename, format)
     >>> print "Alignment of length", alignment.get_alignment_length()
     Alignment of length 411
 
@@ -374,7 +394,7 @@ def read(handle, format, seq_count=None, alphabet=None):
     >>> from Bio import AlignIO
     >>> filename = "Emboss/needle.txt"
     >>> format = "emboss"
-    >>> alignment = AlignIO.read(open(filename, "rU"), format)
+    >>> alignment = AlignIO.read(filename, format)
     Traceback (most recent call last):
         ...
     ValueError: More than one record found in handle
@@ -384,7 +404,7 @@ def read(handle, format, seq_count=None, alphabet=None):
     >>> from Bio import AlignIO
     >>> filename = "Emboss/needle.txt"
     >>> format = "emboss"
-    >>> alignment = AlignIO.parse(open(filename, "rU"), format).next()
+    >>> alignment = AlignIO.parse(filename, format).next()
     >>> print "First alignment has length", alignment.get_alignment_length()
     First alignment has length 124
 
@@ -464,6 +484,14 @@ def _test():
         os.chdir(cur_dir)
         del cur_dir
         print "Done"
-        
+    elif os.path.isdir(os.path.join("Tests", "Fasta")):
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
+
 if __name__ == "__main__":
     _test()
