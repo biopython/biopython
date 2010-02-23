@@ -118,7 +118,9 @@ def draw_box((x1, y1), (x2, y2),
     return Polygon([x1, y1, x2, y1, x2, y2, x1, y2],
                    strokeColor=strokecolor,
                    fillColor=color,
-                   strokewidth=0)
+                   strokewidth=0,
+                   **kwargs)
+
 
 def draw_polygon(list_of_points,
                  color=colors.lightgreen, border=None, colour=None,
@@ -153,7 +155,8 @@ def draw_polygon(list_of_points,
     return Polygon(xy_list,
                    strokeColor=strokecolor,
                    fillColor=color,
-                   strokewidth=0)
+                   strokewidth=0,
+                   **kwargs)
 
 
 def draw_arrow((x1, y1), (x2, y2), color=colors.lightgreen, border=None,
@@ -222,7 +225,8 @@ def draw_arrow((x1, y1), (x2, y2), color=colors.lightgreen, border=None,
                    strokeWidth=1,
                    #default is mitre/miter which can stick out too much:
                    strokeLineJoin=1, #1=round
-                   fillColor=color)
+                   fillColor=color,
+                   **kwargs)
 
 def angle2trig(theta):
     """ angle2trig(angle)

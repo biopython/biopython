@@ -408,15 +408,23 @@ class CircularDrawer(AbstractDrawer):
         draw_methods = {'BOX': self._draw_arc,
                         'ARROW': self._draw_arc_arrow,
                         }
+
+        # Get sigil for the feature, location dependent on the feature strand        
+        method = draw_methods[feature.sigil]
         kwargs['head_length_ratio'] = feature.arrowhead_length
         kwargs['shaft_height_ratio'] = feature.arrowshaft_height
         
-        # Get sigil for the feature, location dependent on the feature strand        
-        method = draw_methods[feature.sigil]
+        #Support for clickable links... needs ReportLab 2.4 or later
+        #which added support for links in SVG output.
+        if hasattr(feature, "url") :
+            kwargs["hrefURL"] = feature.url
+            kwargs["hrefTitle"] = feature.name
+
         if feature.color == colors.white:
             border = colors.black
         else:
             border = feature.color
+
         if feature.strand == 1:
             sigil = method(ctr, top, startangle, endangle, feature.color,
                            border, orientation='right', **kwargs)
@@ -426,6 +434,7 @@ class CircularDrawer(AbstractDrawer):
         else:
             sigil = method(btm, top, startangle, endangle, feature.color,
                            border, **kwargs)
+
         if feature.label:   # Feature needs a label
             label = String(0, 0, feature.name.strip(),
                            fontName=feature.label_font,
@@ -1043,7 +1052,6 @@ class CircularDrawer(AbstractDrawer):
                 x1,y1 = (x0+inner_radius*endsin, y0+inner_radius*endcos)
                 x2,y2 = (x0+outer_radius*endsin, y0+outer_radius*endcos)
                 x3,y3 = (x0+middle_radius*startsin, y0+middle_radius*startcos)
-            
             #return draw_polygon([(x1,y1),(x2,y2),(x3,y3)], color, border,
             #                    stroke_line_join=1)
             return Polygon([x1,y1,x2,y2,x3,y3],
@@ -1056,7 +1064,8 @@ class CircularDrawer(AbstractDrawer):
                         fillColor=color,
                         #default is mitre/miter which can stick out too much:
                         strokeLineJoin=1, #1=round
-                        strokewidth=0)
+                        strokewidth=0,
+                        **kwargs)
             #Note reportlab counts angles anti-clockwise from the horizontal
             #(as in mathematics, e.g. complex numbers and polar coordinates)
             #but we use clockwise from the vertical.  Also reportlab uses
@@ -1094,7 +1103,8 @@ class CircularDrawer(AbstractDrawer):
                         fillColor=color,
                         #default is mitre/miter which can stick out too much:
                         strokeLineJoin=1, #1=round
-                        strokewidth=0)
+                        strokewidth=0,
+                        **kwargs)
             #Note reportlab counts angles anti-clockwise from the horizontal
             #(as in mathematics, e.g. complex numbers and polar coordinates)
             #but we use clockwise from the vertical.  Also reportlab uses
