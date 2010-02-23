@@ -264,7 +264,7 @@ class PrositeMatch:
     def __getitem__(self, i): return self.data[i]
     def __getslice__(self, i, j):
         i = max(i, 0); j = max(j, 0)
-        return Seq(self.data[i:j], self.alphabet)
+        return Seq.Seq(self.data[i:j], self.alphabet)
     
     def mapping(self):
         """return a list of numbers mapping to items of the original pattern
