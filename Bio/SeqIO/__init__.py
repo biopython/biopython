@@ -325,6 +325,8 @@ _FormatToWriter = {"fasta" : FastaIO.FastaWriter,
                    "sff" : SffIO.SffWriter,
                    }
 
+_BinaryFormats = ["sff", "sff-trim"]
+
 def write(sequences, handle, format):
     """Write complete set of sequences to a file.
 
@@ -340,7 +342,7 @@ def write(sequences, handle, format):
     from Bio import AlignIO
 
     if isinstance(handle, basestring):
-        if format in ["sff", "sff_trim"] :
+        if format in _BinaryFormats :
             handle = open(handle, "wb")
         else :
             handle = open(handle, "w")
@@ -444,7 +446,7 @@ def parse(handle, format, alphabet=None):
 
     if isinstance(handle, basestring):
         #Hack for SFF, will need to make this more general in future
-        if format in ["sff", "sff-trim"] :
+        if format in _BinaryFormats :
             handle = open(handle, "rb")
         else :
             handle = open(handle, "rU")
@@ -854,7 +856,7 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     """
     if isinstance(in_file, basestring):
         #Hack for SFF, will need to make this more general in future
-        if in_format in ["sff", "sff-trim"] :
+        if in_format in _BinaryFormats :
             in_handle = open(in_file, "rb")
         else :
             in_handle = open(in_file, "rU")
