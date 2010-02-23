@@ -364,7 +364,7 @@ Bio.utils
 =========
 Functions 'translate', 'translate_to_stop', 'back_translate', 'transcribe',
 and 'back_transcribe' were deprecated in Release 1.49, and removed in Release
-1.53. Function 'ungap' was deprecated in Release 1.53.
+1.53. Function 'ungap' was deprecated in Release 1.53. Use Bio.Seq instead.
 
 Bio.Motif
 =========
