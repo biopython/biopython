@@ -59,7 +59,8 @@ def random_population(genome_alphabet, genome_size, num_organisms,
     elif type(genome_alphabet.letters[0]) == type(1.0):
         alphabet_type = "d"
     else:
-        raise ValueError("Alphabet type is unsupported: %s" % alphabet.letters)
+        raise ValueError(\
+            "Alphabet type is unsupported: %s" % genome_alphabet.letters)
 
     for org_num in range(num_organisms):
         new_genome = MutableSeq(array.array(alphabet_type), genome_alphabet)
