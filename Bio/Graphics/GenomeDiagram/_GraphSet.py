@@ -1,5 +1,5 @@
 # Copyright 2003-2008 by Leighton Pritchard.  All rights reserved.
-# Revisions copyright 2008-2009 by Peter Cock.
+# Revisions copyright 2008-2010 by Peter Cock.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -225,7 +225,7 @@ class GraphSet:
         """
         outstr = ["\n<%s: %s>" % (self.__class__, self.name)]
         outstr.append("%d graphs" % len(self._graphs))
-        outstr = join(outstr, '\n')
+        outstr = "\n".join(outstr)
         return outstr
 
 
