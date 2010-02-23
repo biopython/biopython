@@ -148,7 +148,7 @@ def df_search(graph, root = None):
     if len(graph.nodes()) < 1:
         return search
     if root is None:
-        root = (g.nodes())[0]
+        root = (graph.nodes())[0]
     seen[root] = 1
     search.append(root)
     current = graph.children(root)
@@ -171,21 +171,19 @@ def bf_search(graph, root = None):
     """
     seen = {}
     search = []
-    if len(g.nodes()) < 1:
+    if len(graph.nodes()) < 1:
         return search
     if root is None:
-        root = (g.nodes())[0]
+        root = (graph.nodes())[0]
     seen[root] = 1
     search.append(root)
-    current = g.children(root)
+    current = graph.children(root)
     while len(current) > 0:
         node = current[0]
         current = current[1:]
         if node not in seen:
             search.append(node)
             seen[node] = 1
-            current.extend(g.children(node))
+            current.extend(graph.children(node))
     return search
-
-
 
