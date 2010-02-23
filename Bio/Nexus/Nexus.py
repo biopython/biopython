@@ -1069,10 +1069,10 @@ class Nexus(object):
             close=opts.next_nonwhitespace()
             if  qualifier.lower()=='vector':
                 raise NexusError('Unsupported VECTOR format in line %s' \
-                                 % (options))
+                                 % (opts))
             elif qualifier.lower()!='standard':
                 raise NexusError('Unknown qualifier %s in line %s' \
-                                 % (qualifier,options))
+                                 % (qualifier, opts))
         if opts.next_nonwhitespace()!=separator:
             raise NexusError('Formatting error in line: %s ' % rest)
         return name
