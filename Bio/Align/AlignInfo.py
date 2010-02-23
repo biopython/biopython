@@ -577,10 +577,10 @@ class SummaryInfo:
             # check the expected freq information to make sure it is good
             for key in obs_freq.keys():
                 if (key != gap_char and key not in e_freq_table):
-                    raise ValueError("Expected frequency letters %s" +
-                                     " do not match observed %s"
-                           % (e_freq_table.keys(), obs_freq.keys() -
-                              [gap_char]))
+                    raise ValueError("Expected frequency letters %s "
+                                     "do not match observed %s" \
+                                     % (e_freq_table.keys(),
+                                        obs_freq.keys() - [gap_char]))
         
         total_info = 0.0
 
