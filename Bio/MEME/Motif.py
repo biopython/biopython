@@ -193,7 +193,7 @@ class MEMEMotif (Motif):
                         myr = r
             return myr
         else:
-            sys.stderr.write(str(m2))
+            sys.stderr.write(str(motif))
             return None
     
 
