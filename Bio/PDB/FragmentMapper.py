@@ -8,6 +8,7 @@ import numpy
 
 from Bio.SVDSuperimposer import SVDSuperimposer
 from Bio.PDB import *
+from Bio.PDB.PDBExceptions import PDBException
 
 __doc__="""
 Classify protein backbone structure according to Kolodny et al's fragment
