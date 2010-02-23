@@ -192,10 +192,7 @@ def write(alignments, handle, format):
             "Need an Alignment list/iterator, not just a single Alignment")
 
     if isinstance(handle, basestring):
-        if format in _BinaryFormats :
-            handle = open(handle, "wb")
-        else :
-            handle = open(handle, "w")
+        handle = open(handle, "w")
         handle_close = True
     else:
         handle_close = False
