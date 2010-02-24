@@ -52,14 +52,21 @@ if len(exes) < len(exes_wanted):
 
 def get_emboss_version():
     """Returns a tuple of three ints, e.g. (6,1,0)"""
+    #Windows and Unix versions of EMBOSS seem to differ in
+    #which lines go to stdout and stderr - so merge them.
     child = subprocess.Popen(exes["embossversion"],
                              stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE,
+                             stderr=subprocess.STDOUT,
                              shell=(sys.platform!="win32"))
     stdout, stderr = child.communicate()
-    assert stderr.strip()=="Reports the current EMBOSS version number", stderr
-    assert stdout.count(".")==2, stdout
-    return tuple(int(v) for v in stdout.strip().split("."))
+    assert stderr is None #Send to stdout instead
+    for line in stdout.split("\n"):
+        if line.strip()=="Reports the current EMBOSS version number":
+            pass
+        elif line.count(".")==2:
+            return tuple(int(v) for v in line.strip().split("."))
+        else:
+            raise ValueError(stdout)
 
 #To avoid confusing known errors from old versions of EMBOSS ...
 if get_emboss_version() < (6,1,0):
