@@ -1,4 +1,4 @@
-# Copyright 2008-2009 by Peter Cock.  All rights reserved.
+# Copyright 2008-2010 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -27,8 +27,8 @@ When reading this file, "ID123456" or "ID123457" will be taken as the record's
 .id and .name property.  There is no other information to record.
 
 Similarly, when writing to this format, Biopython will ONLY record the record's
-.id and .seq (and not the description or any other information) as in the example
-above.
+.id and .seq (and not the description or any other information) as in the
+example above.
 """
 
 from Bio.Alphabet import single_letter_alphabet

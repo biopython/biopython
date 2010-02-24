@@ -137,7 +137,7 @@ class ClustalwCommandline(AbstractCommandline):
                     True),
             _Option(["-maxseqlen", "-MAXSEQLEN", "MAXSEQLEN", "maxseqlen"],
                     ["input"],
-                    lambda x: ininstance(x, types.IntType),
+                    lambda x: isinstance(x, types.IntType),
                     False,
                     "Maximum allowed input sequence length",
                     True),

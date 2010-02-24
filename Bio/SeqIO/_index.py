@@ -259,7 +259,8 @@ class _SequentialSeqFileDict(_IndexedSeqFileDict):
             if marker_re.match(line):
                 #Here we can assume the record.id is the first word after the
                 #marker. This is generally fine... but not for GenBank, EMBL, Swiss
-                self._record_key(line[marker_offset:].strip().split(None,1)[0], offset)
+                self._record_key(line[marker_offset:].strip().split(None, 1)[0], \
+                                 offset)
 
 class FastaDict(_SequentialSeqFileDict):
     """Indexed dictionary like access to a FASTA file."""
@@ -351,7 +352,8 @@ class EmblDict(_IndexedSeqFileDict):
                 parts = line[3:].rstrip().split(";")
                 if parts[1].strip().startswith("SV "):
                     #The SV bit gives the version
-                    key = "%s.%s" % (parts[0].strip(),parts[1].strip().split()[1])
+                    key = "%s.%s" \
+                          % (parts[0].strip(), parts[1].strip().split()[1])
                 else:
                     key = parts[0].strip()
                 while True:
@@ -420,7 +422,7 @@ class TabDict(_IndexedSeqFileDict):
             line = handle.readline()
             if not line : break #End of file
             try:
-                key, rest = line.split("\t")
+                key = line.split("\t")[0]
             except ValueError, err:
                 if not line.strip():
                     #Ignore blank lines
@@ -454,7 +456,7 @@ class _FastqSeqFileDict(_IndexedSeqFileDict):
         while line:
             #assert line[0]=="@"
             #This record seems OK (so far)
-            self._record_key(line[1:].rstrip().split(None,1)[0],pos)
+            self._record_key(line[1:].rstrip().split(None, 1)[0], pos)
             #Find the seq line(s)
             seq_len = 0
             while line:
@@ -471,7 +473,7 @@ class _FastqSeqFileDict(_IndexedSeqFileDict):
                     #Should be end of record...
                     pos = handle.tell()
                     line = handle.readline()
-                    if line and line[0]!="@":
+                    if line and line[0] != "@":
                         ValueError("Problem with line %s" % repr(line))
                     break
                 else:

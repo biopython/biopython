@@ -779,7 +779,14 @@ class LinearDrawer(AbstractDrawer):
         kwargs['head_length_ratio'] = feature.arrowhead_length
         kwargs['shaft_height_ratio'] = feature.arrowshaft_height
 
+        #Support for clickable links... needs ReportLab 2.4 or later
+        #which added support for links in SVG output.
+        if hasattr(feature, "url") :
+            kwargs["hrefURL"] = feature.url
+            kwargs["hrefTitle"] = feature.name
+
         strand = feature.strand
+        
         # Get sigil for the feature, location dependent on the feature strand
         if strand == 1:
             sigil = method((x0, ctr), (x1, top), color=feature.color,

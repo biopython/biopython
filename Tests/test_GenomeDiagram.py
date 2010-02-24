@@ -491,6 +491,14 @@ class DiagramTest(unittest.TestCase):
                 #Out of frame (too far right)
                 continue
 
+            #This URL should work in SVG output from recent versions
+            #of ReportLab.  You need ReportLab 2.4 or later
+            try :
+                url = "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi"+\
+                      "?db=protein&id=%s" % feature.qualifiers["protein_id"][0]
+            except KeyError :
+                url = None
+                
             #Note that I am using strings for color names, instead
             #of passing in color objects.  This should also work!
             if len(gds_features) % 2 == 0:
@@ -500,6 +508,7 @@ class DiagramTest(unittest.TestCase):
             #Checking it can cope with the old UK spelling colour.
             #Also show the labels perpendicular to the track.
             gds_features.add_feature(feature, colour=color,
+                                     url = url,
                                      sigil="ARROW",
                                      label_position = "start",
                                      label_size = 8,
@@ -568,13 +577,23 @@ class DiagramTest(unittest.TestCase):
                 index  = genbank_entry.seq.find(site, start=index)
                 if index == -1 : break
                 feature = SeqFeature(FeatureLocation(index, index+6), strand=None)
-                gds_features.add_feature(feature, color=color,
-                                            #label_position = "middle",
-                                            label_size = 10,
-                                            label_color=color,
-                                            #label_angle = 90,
-                                            name=name,
-                                            label=True)
+
+                #This URL should work in SVG output from recent versions
+                #of ReportLab.  You need ReportLab 2.4 or later
+                try :
+                    url = "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi"+\
+                          "?db=protein&id=%s" % feature.qualifiers["protein_id"][0]
+                except KeyError :
+                    url = None
+
+                gds_features.add_feature(feature, color = color,
+                                         url = url,
+                                         #label_position = "middle",
+                                         label_size = 10,
+                                         label_color = color,
+                                         #label_angle = 90,
+                                         name = name,
+                                         label = True)
                 index += len(site)
             del index
 

@@ -451,14 +451,14 @@ def _read_rx(reference, value):
         cols = [x for x in cols if x]
         for col in cols:
             x = col.split("=")
-            assert len(x) == 2, "I don't understand RX line %s" % line
+            assert len(x) == 2, "I don't understand RX line %s" % value
             key, value = x[0], x[1].rstrip(";")
             reference.references.append((key, value))
     # otherwise we assume we have the type 'RX   MEDLINE; 85132727.'
     else:
         cols = value.split("; ")
         # normally we split into the three parts
-        assert len(cols) == 2, "I don't understand RX line %s" % line
+        assert len(cols) == 2, "I don't understand RX line %s" % value
         reference.references.append((cols[0].rstrip(";"), cols[1].rstrip(".")))
 
 

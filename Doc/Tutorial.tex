@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 5 February 2009 (Biopython 1.53+)}
+\date{Last Update -- 23 February 2009 (Biopython 1.53+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -185,7 +185,7 @@ It is available in PDF
 and HTML formats
 (\url{http://biopython.org/DIST/docs/install/Installation.html}).
 
-\section{FAQ}
+\section{Frequently Asked Questions (FAQ)}
 
 \begin{enumerate}
 
@@ -250,6 +250,9 @@ and HTML formats
   \item \emph{Why don't the } \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{input functions let me provide a sequence alphabet?} \\
   You need Biopython 1.49 or later.
 
+  \item \emph{Why won't the } \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{functions} \verb|parse|\emph{,} \verb|read| \emph{and} \verb|write| \emph{take filenames? They insist on handles!} \\
+  You need Biopython 1.54 or later (or just use handles explicitly).
+
   \item \emph{Why doesn't} \verb|str(...)| \emph{give me the full sequence of a} \verb|Seq| \emph{object?} \\
   You need Biopython 1.45 or later.  Alternatively, rather than \verb|str(my_seq)|, use \verb|my_seq.tostring()| (which will also work on recent versions of Biopython).
   
@@ -295,6 +298,8 @@ and HTML formats
  \item \emph{Why does the code from CVS seem out of date?} \\
   In late September 2009, just after the release of Biopython 1.52, we switched from using CVS to git, a distributed version control system. The old CVS server will remain available as a static and read only backup, but if you want to grab the latest code, you'll need to use git instead. See our website for more details.
 \end{enumerate}
+
+\noindent For more general questions, the Python FAQ pages \url{http://www.python.org/doc/faq/} may be useful.
 
 \chapter{Quick Start -- What can you do with Biopython?}
 \label{chapter:quick-start}
@@ -8963,7 +8968,26 @@ You could alternatively use a generator function rather than a generator
 expression.
 
 \begin{verbatim}
-from Bio import SeqIOdef trim_primers(records, primer):    """Removes perfect primer sequences at start of reads.        This is a generator function, the records argument should    be a list or iterator returning SeqRecord objects.    """    len_primer = len(primer) #cache this for later    for record in records:        if record.seq.startswith(primer):            yield record[len_primer:]        else:            yield recordoriginal_reads = SeqIO.parse(open("SRR014849.fastq"), "fastq")trimmed_reads = trim_primers(original_reads, "GTTGGAACCG")out_handle = open("trimmed.fastq", "w") count = SeqIO.write(trimmed_reads, out_handle, "fastq") out_handle.close() print "Saved %i reads" % count
+from Bio import SeqIO
+def trim_primers(records, primer):
+    """Removes perfect primer sequences at start of reads.
+    
+    This is a generator function, the records argument should
+    be a list or iterator returning SeqRecord objects.
+    """
+    len_primer = len(primer) #cache this for later
+    for record in records:
+        if record.seq.startswith(primer):
+            yield record[len_primer:]
+        else:
+            yield record
+
+original_reads = SeqIO.parse(open("SRR014849.fastq"), "fastq")
+trimmed_reads = trim_primers(original_reads, "GTTGGAACCG")
+out_handle = open("trimmed.fastq", "w") 
+count = SeqIO.write(trimmed_reads, out_handle, "fastq") 
+out_handle.close() 
+print "Saved %i reads" % count
 \end{verbatim}
 
 This form is more flexible if you want to do something more complicated
@@ -8986,8 +9010,11 @@ from Bio import SeqIO
 def trim_adaptors(records, adaptor, min_len):
     """Trims perfect adaptor sequences.
     
-    This is a generator function, the records argument should    be a list or iterator returning SeqRecord objects.    """
-    len_adaptor = len(adaptor) #cache this for later    for record in records:
+    This is a generator function, the records argument should
+    be a list or iterator returning SeqRecord objects.
+    """
+    len_adaptor = len(adaptor) #cache this for later
+    for record in records:
         index = record.seq.find(adaptor)
         if index == -1:
             #adaptor not found, so won't trim
@@ -9021,8 +9048,11 @@ from Bio import SeqIO
 def trim_adaptors(records, adaptor, min_len):
     """Trims perfect adaptor sequences, checks read length.
     
-    This is a generator function, the records argument should    be a list or iterator returning SeqRecord objects.    """
-    len_adaptor = len(adaptor) #cache this for later    for record in records:
+    This is a generator function, the records argument should
+    be a list or iterator returning SeqRecord objects.
+    """
+    len_adaptor = len(adaptor) #cache this for later
+    for record in records:
         len_record = len(record) #cache this for later
         if len(record) < min_len:
            #Too short to keep

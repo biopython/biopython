@@ -1069,10 +1069,10 @@ class Nexus(object):
             close=opts.next_nonwhitespace()
             if  qualifier.lower()=='vector':
                 raise NexusError('Unsupported VECTOR format in line %s' \
-                                 % (options))
+                                 % (opts))
             elif qualifier.lower()!='standard':
                 raise NexusError('Unknown qualifier %s in line %s' \
-                                 % (qualifier,options))
+                                 % (qualifier, opts))
         if opts.next_nonwhitespace()!=separator:
             raise NexusError('Formatting error in line: %s ' % rest)
         return name
@@ -1491,7 +1491,7 @@ class Nexus(object):
                     # subset of an ambig or only missing in previous -> take subset
                     newconstant.append((site[0],self.ambiguous_values.get(seqsite,seqsite)))
                 elif seqsite in self.ambiguous_values:  # is it an ambig: check the intersection with prev. values
-                    intersect=sets.set(self.ambiguous_values[seqsite]).intersection(sets.set(site[1]))
+                    intersect = set(self.ambiguous_values[seqsite]).intersection(set(site[1]))
                     if intersect:
                         newconstant.append((site[0],''.join(intersect)))
                     #    print 'ok'
@@ -1548,7 +1548,7 @@ class Nexus(object):
             matrix=self.matrix
         if [t for t in delete if not self._check_taxlabels(t)]:
             raise NexusError('Unknown taxa: %s' \
-                             % ', '.join(sets.set(delete).difference(self.taxlabels)))
+                             % ', '.join(set(delete).difference(self.taxlabels)))
         if exclude!=[]:
             undelete=[t for t in self.taxlabels if t in matrix and t not in delete]
             if not undelete:

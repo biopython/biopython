@@ -765,7 +765,7 @@ class Astral:
 
     def getAstralDomainsFromFile(self,filename=None,file_handle=None):
         """Get the scop domains from a file containing a list of sids"""
-        if file_handle == filename == none:
+        if file_handle == filename == None:
             raise RuntimeError("You must provide a filename or handle")
         if not file_handle:
             file_handle = open(filename)

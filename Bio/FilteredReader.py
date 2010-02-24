@@ -102,7 +102,7 @@ class FilteredReader:
     def read_block( self, len_expected ):
 
         len_filtered = 0
-        len_adjusted -= len( self._start_line )
+        len_adjusted = len(self._start_line)
         filtered_text = ''
         while( len_filtered < len_expected ):
 
@@ -117,7 +117,7 @@ class FilteredReader:
                 self._start_line = lines[ -1 ]
                 filtered_text = filtered_text + self.filter( all_but_last_line )
             len_filtered_text = len( filtered_text )
-            len_adjusted = len_adjusted - len_filtered_text
+            len_adjusted -= len_filtered_text
         return filtered_text[ : ]
 
     def read_to_end( self ):

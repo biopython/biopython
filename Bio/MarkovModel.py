@@ -134,16 +134,16 @@ def train_bw(states, alphabet, training_data,
     if not training_data:
         raise ValueError("No training data given.")
     if pseudo_initial!=None:
-        pseudo_initial = asarray(pseudo_initial)
+        pseudo_initial = numpy.asarray(pseudo_initial)
         if pseudo_initial.shape != (N,):
             raise ValueError("pseudo_initial not shape len(states)")
     if pseudo_transition!=None:
-        pseudo_transition = asarray(pseudo_transition)
+        pseudo_transition = numpy.asarray(pseudo_transition)
         if pseudo_transition.shape != (N,N):
             raise ValueError("pseudo_transition not shape " + \
                              "len(states) X len(states)")
     if pseudo_emission!=None:
-        pseudo_emission = asarray(pseudo_emission)
+        pseudo_emission = numpy.asarray(pseudo_emission)
         if pseudo_emission.shape != (N,M):
             raise ValueError("pseudo_emission not shape " + \
                              "len(states) X len(alphabet)")
@@ -373,16 +373,16 @@ def train_visible(states, alphabet, training_data,
     """
     N, M = len(states), len(alphabet)
     if pseudo_initial!=None:
-        pseudo_initial = asarray(pseudo_initial)
+        pseudo_initial = numpy.asarray(pseudo_initial)
         if pseudo_initial.shape != (N,):
             raise ValueError("pseudo_initial not shape len(states)")
     if pseudo_transition!=None:
-        pseudo_transition = asarray(pseudo_transition)
+        pseudo_transition = numpy.asarray(pseudo_transition)
         if pseudo_transition.shape != (N,N):
             raise ValueError("pseudo_transition not shape " + \
                              "len(states) X len(states)")
     if pseudo_emission!=None:
-        pseudo_emission = asarray(pseudo_emission)
+        pseudo_emission = numpy.asarray(pseudo_emission)
         if pseudo_emission.shape != (N,M):
             raise ValueError("pseudo_emission not shape " + \
                              "len(states) X len(alphabet)")
@@ -537,7 +537,7 @@ def _copy_and_check(matrix, desired_shape):
     matrix = numpy.array(matrix, copy=1)
     # Check the dimensions.
     if matrix.shape != desired_shape:
-        raise ValuError("Incorrect dimension")
+        raise ValueError("Incorrect dimension")
     # Make sure it's normalized.
     if len(matrix.shape) == 1:
         if numpy.fabs(sum(matrix)-1.0) > 0.01:

@@ -129,13 +129,15 @@ class Iterator:
         while line:
             if line[0] == ">": break
             if line[0] == "#":
-                if self._debug : print "Ignoring comment line"
+                if self._debug:
+                    print "Ignoring comment line"
                 pass
             else:
                 lines.append(line.rstrip())
             line = self.handle.readline()
         self._lookahead = line
-        if self._debug : print "Debug: '%s' and '%s'" % (title, "".join(lines))
+        if self._debug:
+            print "Debug: '%s'" % "".join(lines)
         if self._parser is None:
             return "\n".join(lines)
         else:

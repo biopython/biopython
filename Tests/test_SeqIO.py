@@ -371,7 +371,7 @@ def check_simple_write_read(records, indent=" "):
 
 #Check parsers can cope with an empty file
 for t_format in SeqIO._FormatToIterator:
-    if t_format in ["sff", "sff-trim"]:
+    if t_format in SeqIO._BinaryFormats:
         #Not allowed empty SFF files.
         continue
     handle = StringIO()
@@ -387,9 +387,9 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     assert len(records)  == t_count, \
          "Found %i records but expected %i" % (len(records), t_count)
 
-    #Try using the iterator with a for loop
+    #Try using the iterator with a for loop, and a filename not handle
     records2 = []
-    for record in SeqIO.parse(handle=open(t_filename,"r"), format=t_format):
+    for record in SeqIO.parse(t_filename, format=t_format):
         records2.append(record)
     assert len(records2) == t_count
 

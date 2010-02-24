@@ -1162,6 +1162,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         if self._cur_reference is not None:
             self.data.references.append(self._cur_reference)
 
+        import Record
         self._cur_reference = Record.Reference()
         self._cur_reference.number = content
 
@@ -1221,6 +1222,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         # first add on feature information if we've got any
         self._add_feature()
 
+        import Record
         self._cur_feature = Record.Feature()
         self._cur_feature.key = content
 
@@ -1250,6 +1252,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         /pseudo which would be passed in with the next key (since no other
         tags separate them in the file)
         """
+        import Record
         for content in content_list:
             # the record parser keeps the /s -- add them if we don't have 'em
             if content.find("/") != 0:
