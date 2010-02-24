@@ -175,16 +175,17 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
 
     def get_alignment(self):
         """Construct an alignment from the aligned sequences in this tree."""
-        def seq_is_aligned(node):
+        def is_aligned_seq(node):
             if isinstance(node, Sequence) and node.mol_seq.is_aligned:
                 return True
             return False
-        seqs = self._filter_search(seq_is_aligned, 'preorder')
+        seqs = self._filter_search(is_aligned_seq, 'preorder', True)
         try:
             first_seq = seqs.next()
         except StopIteration:
-            warnings.warn("No aligned sequences were found in this tree.",
-                    Warning, stacklevel=2)
+            # No aligned sequences were found
+            # Can't construct an Alignment without an alphabet, so... nothin'
+            return
         aln = Alignment(first_seq.get_alphabet())
         aln.add_sequence(str(first_seq), first_seq.mol_seq.value)
         for seq in seqs:
@@ -204,7 +205,6 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
             raise ValueError("more than 1 confidence value available; "
                                "use Phylogeny().confidences")
         return self.confidences[0]
-
 
 
 class Clade(PhyloElement, BaseTree.Subtree):
@@ -800,7 +800,7 @@ class Sequence(PhyloElement):
         if is_aligned == None:
             is_aligned = isinstance(record.seq.alphabet, Alphabet.Gapped)
         params = {
-                'accession': Accession('', record.id),
+                'accession': Accession(record.id, ''),
                 'symbol': record.name,
                 'name': record.description,
                 'mol_seq': MolSeq(str(record.seq), is_aligned),

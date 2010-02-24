@@ -13,7 +13,10 @@ from itertools import izip, chain
 from cStringIO import StringIO
 
 from Bio.Phylo import PhyloXML as PX, PhyloXMLIO
-
+from Bio import Alphabet
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from Bio.Align.Generic import  Alignment
 
 # Example PhyloXML files
 EX_APAF = 'PhyloXML/apaf.xml'
@@ -648,10 +651,20 @@ class MethodTests(unittest.TestCase):
         pseq2 = PX.Sequence.from_seqrecord(srec)
         # TODO: check the round-tripped attributes again
 
-
     def test_get_alignment(self):
-        # TODO: load a Phylogeny w/ aligned Sequences, call, check attrs
-        pass
+        tree = self.phyloxml.phylogenies[0]
+        self.assertEqual(tree.get_alignment(), None)
+        # Add sequences to the terminals
+        alphabet = Alphabet.Gapped(Alphabet.generic_dna)
+        for tip, seqstr in izip(tree.get_terminals(),
+                ('AA--TTA', 'AA--TTG', 'AACCTTC')):
+            tip.sequences.append(PX.Sequence.from_seqrecord(
+                SeqRecord(Seq(seqstr, alphabet), id=str(tip))))
+        # Check the alignment
+        aln = tree.get_alignment()
+        self.assert_(isinstance(aln, Alignment))
+        self.assertEqual(len(aln), 3)
+        self.assertEqual(aln.get_alignment_length(), 7)
 
     # Syntax sugar
 

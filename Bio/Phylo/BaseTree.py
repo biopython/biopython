@@ -273,7 +273,7 @@ class TreeMixin(object):
                 return (match_class(elem) and match_attr(elem))
         else:
             is_matching_elem = match_class
-        return self._filter_search(is_matching_elem, order, follow_attrs=True)
+        return self._filter_search(is_matching_elem, order, True)
 
     def find_clades(self, cls=TreeElement, terminal=None, order='preorder',
             **kwargs):
@@ -293,7 +293,7 @@ class TreeMixin(object):
             def is_matching_elem(elem):
                 return ((elem.is_terminal() == terminal)
                         and match_attrs(elem))
-        return self._filter_search(is_matching_elem, order, follow_attrs=False)
+        return self._filter_search(is_matching_elem, order, False)
 
     def get_path(self, target):
         """List the clades directly between the root and the given target.
