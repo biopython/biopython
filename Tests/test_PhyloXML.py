@@ -39,24 +39,6 @@ def unzip(fname):
 
 
 # ---------------------------------------------------------
-# Utility tests
-
-class UtilTests(unittest.TestCase):
-    """Tests for PhyloXML utility functions."""
-    def test_dump_tags(self):
-        """Count and confirm the number of tags in each example XML file."""
-        for source, count in izip(
-                (EX_APAF, EX_BCL2, EX_PHYLO, unzip(EX_MOLLUSCA),
-                    # unzip(EX_METAZOA), unzip(EX_NCBI),
-                    ),
-                (509, 1496, 289, 24311, 322367, 972830)):
-            output = StringIO()
-            PhyloXMLIO.dump_tags(source, output)
-            output.seek(0)
-            self.assertEquals(len(output.readlines()), count)
-
-
-# ---------------------------------------------------------
 # Parser tests
 
 def _test_read_factory(source, count):
@@ -531,6 +513,7 @@ class TreeTests(unittest.TestCase):
 
 class WriterTests(unittest.TestCase):
     """Tests for serialization of objects to phyloXML format."""
+    # TODO: make round-tripping safer w/ StringIO or tempfile
     def _stash_rewrite_and_call(self, fname, test_cases):
         """Safely run a series of tests on a parsed and rewritten file.
 
@@ -551,6 +534,9 @@ class WriterTests(unittest.TestCase):
                 for test in tests:
                     getattr(inst, test)()
         finally:
+            # XXX not safe!
+            if os.path.exists(fname):
+                os.remove(fname)
             os.rename(fname + '~', fname)
 
     def test_apaf(self):
