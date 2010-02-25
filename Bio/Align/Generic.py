@@ -1,6 +1,6 @@
 # Copyright 2000-2004 Brad Chapman.
 # Copyright 2001 Iddo Friedberg.
-# Copyright 2007-2009 by Peter Cock.
+# Copyright 2007-2010 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -412,7 +412,7 @@ class Alignment:
             raise TypeError("Invalid index type.")
 
 def _test():
-    """Run the Bio.Seq module's doctests."""
+    """Run the Bio.Align.Generic module's doctests."""
     print "Running doctests..."
     import doctest
     doctest.testmod()
