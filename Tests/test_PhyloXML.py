@@ -526,6 +526,8 @@ class WriterTests(unittest.TestCase):
         that simply handles renaming and finally restoring the original.
         """
         phx = PhyloXMLIO.read(fname)
+        if os.path.exists(fname + '~'):
+            os.remove(fname + '~')
         os.rename(fname, fname + '~')
         try:
             PhyloXMLIO.write(phx, fname)
