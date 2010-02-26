@@ -1,4 +1,4 @@
-# Copyright 2008-2009 by Peter Cock.  All rights reserved.
+# Copyright 2008-2010 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -20,7 +20,7 @@ Bio.SeqIO both use the Bio.SeqIO.FastaIO module to deal with these files,
 which can also be used to store a multiple sequence alignments.
 """
 
-from Bio.Align.Generic import Alignment
+from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator
 from Bio.Alphabet import single_letter_alphabet, generic_dna, generic_protein
 from Bio.Alphabet import Gapped
@@ -55,14 +55,15 @@ class FastaM10Iterator(AlignmentIterator):
     Also note that there can be up to about 30 letters of flanking region
     included in the raw FASTA output as contextual information.  This is NOT
     part of the alignment itself, and is not included in the resulting
-    Alignment objects returned.
+    MultipleSeqAlignment objects returned.
     """
     
     def next(self):
         """Reads from the handle to construct and return the next alignment.
 
         This returns the pairwise alignment of query and match/library
-        sequences as an Alignment object containing two rows."""
+        sequences as an MultipleSeqAlignment object containing two rows.
+        """
         handle = self.handle
 
         try:
@@ -231,7 +232,7 @@ class FastaM10Iterator(AlignmentIterator):
 
         #TODO - Look at the "sq_type" to assign a sensible alphabet?
         alphabet = self.alphabet
-        alignment = Alignment(alphabet)
+        alignment = MultipleSeqAlignment(alphabet)
 
         #TODO - Introduce an annotated alignment class?
         #For now, store the annotation a new private property:

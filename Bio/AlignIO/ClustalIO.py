@@ -1,4 +1,4 @@
-# Copyright 2006-2008 by Peter Cock.  All rights reserved.
+# Copyright 2006-2010 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -10,7 +10,7 @@ You are expected to use this module via the Bio.AlignIO functions (or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
 """
 
-from Bio.Align.Generic import Alignment
+from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 class ClustalWriter(SequentialAlignmentWriter):
@@ -247,7 +247,7 @@ class ClustalIterator(AlignmentIterator):
             raise ValueError("Found %i records in this alignment, told to expect %i" \
                              % (len(ids), self.records_per_alignment))
 
-        alignment = Alignment(self.alphabet)
+        alignment = MultipleSeqAlignment(self.alphabet)
         alignment_length = len(seqs[0])
         for i in range(len(ids)):
             if len(seqs[i]) != alignment_length:

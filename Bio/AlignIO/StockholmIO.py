@@ -1,4 +1,4 @@
-# Copyright 2006-2009 by Peter Cock.  All rights reserved.
+# Copyright 2006-2010 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -40,7 +40,7 @@ using the Bio.AlignIO.read() function:
     AP001509.1 104
     AE007476.1 104
 
-This example file is clearly using RNA, so you might want the Alignment object
+This example file is clearly using RNA, so you might want the alignment object
 (and the SeqRecord objects it holds) to reflect this, rather than simple using
 the default single letter alphabet as shown above.  You can do this with an
 optional argument to the Bio.AlignIO.read() function:
@@ -72,7 +72,7 @@ with one character for each letter in the associated sequence:
 
 Any general annotation for each row is recorded in the SeqRecord's annotations
 dictionary.  You can output this alignment in many different file formats using
-Bio.AlignIO.write(), or the Alignment object's format method:
+Bio.AlignIO.write(), or the MultipleSeqAlignment object's format method:
 
     >>> print align.format("fasta")
     >AP001509.1
@@ -132,7 +132,7 @@ secondary structure string here, are also sliced:
     -------<<<
 """
 __docformat__ = "epytext en" #not just plaintext
-from Bio.Align.Generic import Alignment
+from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 class StockholmWriter(SequentialAlignmentWriter):
@@ -266,7 +266,7 @@ class StockholmWriter(SequentialAlignmentWriter):
                 pass
         
 class StockholmIterator(AlignmentIterator):
-    """Loads a Stockholm file from PFAM into Alignment objects.
+    """Loads a Stockholm file from PFAM into MultipleSeqAlignment objects.
 
     The file may contain multiple concatenated alignments, which are loaded
     and returned incrementally.
@@ -423,7 +423,7 @@ class StockholmIterator(AlignmentIterator):
                 raise ValueError("Found %i records in this alignment, told to expect %i" \
                                  % (len(ids), self.records_per_alignment))
 
-            alignment = Alignment(self.alphabet)
+            alignment = MultipleSeqAlignment(self.alphabet)
 
             #TODO - Introduce an annotated alignment class?
             #For now, store the annotation a new private property:

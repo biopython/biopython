@@ -1,6 +1,6 @@
 # Copyright 2000-2004 Brad Chapman.
 # Copyright 2001 Iddo Friedberg.
-# Copyright 2007-2009 by Peter Cock.
+# Copyright 2007-2010 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -19,10 +19,14 @@ from Bio.SeqRecord import SeqRecord
 from Bio import Alphabet
 
 class Alignment:
-    """Represent a set of alignments.
+    """Represent a set of alignments (OBSOLETE?).
 
     This is a base class to represent alignments, which can be subclassed
     to deal with an alignment in a specific format.
+
+    With the introduction of the MultipleSeqAlignment class in Bio.Align,
+    this base class is effectively obsolete and will likely be deprecated and
+    later removed in future releases of Biopython.
     """
     def __init__(self, alphabet):
         """Initialize a new Alignment object.
@@ -412,7 +416,7 @@ class Alignment:
             raise TypeError("Invalid index type.")
 
 def _test():
-    """Run the Bio.Seq module's doctests."""
+    """Run the Bio.Align.Generic module's doctests."""
     print "Running doctests..."
     import doctest
     doctest.testmod()

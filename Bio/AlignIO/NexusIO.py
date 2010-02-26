@@ -1,4 +1,4 @@
-# Copyright 2008-2009 by Peter Cock.  All rights reserved.
+# Copyright 2008-2010 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -15,7 +15,7 @@ sequences as SeqRecord objects.
 """
 
 from Bio.Nexus import Nexus
-from Bio.Align.Generic import Alignment
+from Bio.Align import MultipleSeqAlignment
 from Bio.SeqRecord import SeqRecord
 from Interfaces import AlignmentWriter
 from Bio import Alphabet
@@ -33,12 +33,13 @@ def NexusIterator(handle, seq_count=None):
     (and not use it directly).
 
     NOTE - We only expect ONE alignment matrix per Nexus file,
-    meaning this iterator will only yield one Alignment."""
+    meaning this iterator will only yield one MultipleSeqAlignment.
+    """
     n = Nexus.Nexus(handle)
     if not n.matrix:
         #No alignment found
         raise StopIteration
-    alignment = Alignment(n.alphabet)
+    alignment = MultipleSeqAlignment(n.alphabet)
 
     #Bio.Nexus deals with duplicated names by adding a '.copy' suffix.
     #The original names and the modified names are kept in these two lists:
@@ -72,8 +73,8 @@ class NexusWriter(AlignmentWriter):
     def write_file(self, alignments):
         """Use this to write an entire file containing the given alignments.
 
-        alignments - A list or iterator returning Alignment objects.
-                     This should hold ONE and only one Alignment.
+        alignments - A list or iterator returning MultipleSeqAlignment objects.
+                     This should hold ONE and only one alignment.
         """
         align_iter = iter(alignments) #Could have been a list
         try:

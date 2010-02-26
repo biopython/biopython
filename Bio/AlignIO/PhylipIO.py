@@ -1,4 +1,4 @@
-# Copyright 2006-2009 by Peter Cock.  All rights reserved.
+# Copyright 2006-2010 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -21,7 +21,7 @@ At the time of writing, we do nothing special with a dot/period.
 """
    
 from Bio.Alphabet import single_letter_alphabet
-from Bio.Align.Generic import Alignment
+from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 class PhylipWriter(SequentialAlignmentWriter):
@@ -109,7 +109,7 @@ class PhylipWriter(SequentialAlignmentWriter):
             handle.write("\n")
 
 class PhylipIterator(AlignmentIterator):
-    """Reads a Phylip alignment file returning an Alignment object iterator.
+    """Reads a Phylip alignment file returning a MultipleSeqAlignment iterator.
 
     Record identifiers are limited to at most 10 characters.
 
@@ -194,7 +194,7 @@ class PhylipIterator(AlignmentIterator):
                     raise ValueError("End of file mid-block")
             if not line : break #end of file
 
-        alignment = Alignment(self.alphabet)
+        alignment = MultipleSeqAlignment(self.alphabet)
         for i in range(0,number_of_seqs):
             seq = "".join(seqs[i])
             if len(seq)!=length_of_seqs:
