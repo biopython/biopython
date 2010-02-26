@@ -80,14 +80,15 @@ class MultipleSeqAlignment(_Alignment):
         You would normally load a MSA from a file using Bio.AlignIO, but you
         can do this from a list of SeqRecord objects too:
 
+        >>> from Bio.Alphabet import generic_dna
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
-        >>> a = SeqRecord(Seq("AAAACGT"), id="Alpha")
-        >>> b = SeqRecord(Seq("AAA-CGT"), id="Beta")
-        >>> c = SeqRecord(Seq("AAAAGGT"), id="Gamma")
+        >>> a = SeqRecord(Seq("AAAACGT", generic_dna), id="Alpha")
+        >>> b = SeqRecord(Seq("AAA-CGT", generic_dna), id="Beta")
+        >>> c = SeqRecord(Seq("AAAAGGT", generic_dna), id="Gamma")
         >>> align = MultipleSeqAlignment([a, b, c])
         >>> print align
-        SingleLetterAlphabet() alignment with 3 rows and 7 columns
+        DNAAlphabet() alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
         AAAAGGT Gamma
@@ -117,11 +118,11 @@ class MultipleSeqAlignment(_Alignment):
         self._records = []
         if records:
             self.extend(records)
-            assert len(records) == len(self)
             if alphabet is None :
                 #No alphabet was given, take a consensus alphabet
-                self.alphabet = Alphabet._consensus_alphabet(rec.seq.alphabet for \
-                                                             rec in self._records)
+                self._alphabet = Alphabet._consensus_alphabet(rec.seq.alphabet for \
+                                                              rec in self._records \
+                                                              if rec.seq is not None)
 
     def extend(self, records) :
         """Add more SeqRecord objects to the alignment as rows.
@@ -129,19 +130,20 @@ class MultipleSeqAlignment(_Alignment):
         They must all have the same length as the original alignment, and have
         alphabets compatible with the alignment's alphabet. For example,
 
+        >>> from Bio.Alphabet import generic_dna
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
-        >>> a = SeqRecord(Seq("AAAACGT"), id="Alpha")
-        >>> b = SeqRecord(Seq("AAA-CGT"), id="Beta")
-        >>> c = SeqRecord(Seq("AAAAGGT"), id="Gamma")
-        >>> d = SeqRecord(Seq("AAAACGT"), id="Delta")
-        >>> e = SeqRecord(Seq("AAA-GGT"), id="Epsilon")
+        >>> a = SeqRecord(Seq("AAAACGT", generic_dna), id="Alpha")
+        >>> b = SeqRecord(Seq("AAA-CGT", generic_dna), id="Beta")
+        >>> c = SeqRecord(Seq("AAAAGGT", generic_dna), id="Gamma")
+        >>> d = SeqRecord(Seq("AAAACGT", generic_dna), id="Delta")
+        >>> e = SeqRecord(Seq("AAA-GGT", generic_dna), id="Epsilon")
 
         First we create a small alignment (three rows):
 
         >>> align = MultipleSeqAlignment([a, b, c])
         >>> print align
-        SingleLetterAlphabet() alignment with 3 rows and 7 columns
+        DNAAlphabet() alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
         AAAAGGT Gamma
@@ -150,7 +152,7 @@ class MultipleSeqAlignment(_Alignment):
 
         >>> align.extend([d, e])
         >>> print align
-        SingleLetterAlphabet() alignment with 5 rows and 7 columns
+        DNAAlphabet() alignment with 5 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
         AAAAGGT Gamma
@@ -211,9 +213,11 @@ class MultipleSeqAlignment(_Alignment):
         if not isinstance(record, SeqRecord):
             raise TypeError("New sequence is not a SeqRecord object")
         if self._records and len(record) != self.get_alignment_length():
-            raise ValueError("New sequence is not of length %i" \
-                             % self.get_alignment_length())
-        #Using not self._alphabet.contains(record.seq.alphabet) needs fixing
+            #TODO - Use the following more helpful error, but update unit tests
+            #raise ValueError("New sequence is not of length %i" \
+            #                 % self.get_alignment_length())
+            raise ValueError("Sequences must all be the same length")
+        #Using not self.alphabet.contains(record.seq.alphabet) needs fixing
         #for AlphabetEncoders (e.g. gapped versus ungapped).
         if not Alphabet._check_type_compatible([self._alphabet, record.seq.alphabet]):
             raise ValueError("New sequence's alphabet is incompatible")

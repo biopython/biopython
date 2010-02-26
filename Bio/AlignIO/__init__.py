@@ -257,7 +257,7 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
         for record in seq_record_iterator:
             records.append(record)
             if len(records) == seq_count:
-                yield SeqIO.to_alignment(records)
+                yield MultipleSeqAlignment(records, alphabet)
                 records = []
         if len(records) > 0:
             raise ValueError("Check seq_count argument, not enough sequences?")
@@ -266,7 +266,7 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
         #the SeqRecord objects:
         records = list(SeqIO.parse(handle, format, alphabet))
         if records:
-            yield SeqIO.to_alignment(records)
+            yield MultipleSeqAlignment(records, alphabet)
         else:
             #No alignment found!
             pass
