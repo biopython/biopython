@@ -100,7 +100,7 @@ class MultipleSeqAlignment(_Alignment):
         """
         if isinstance(records, Alphabet.Alphabet) \
         or isinstance(records, Alphabet.AlphabetEncoder):
-            if alphabet is None :
+            if alphabet is None:
                 #TODO - Deprecate this backwards compatible mode!                
                 alphabet = records
                 records = []
@@ -118,13 +118,13 @@ class MultipleSeqAlignment(_Alignment):
         self._records = []
         if records:
             self.extend(records)
-            if alphabet is None :
+            if alphabet is None:
                 #No alphabet was given, take a consensus alphabet
                 self._alphabet = Alphabet._consensus_alphabet(rec.seq.alphabet for \
                                                               rec in self._records \
                                                               if rec.seq is not None)
 
-    def extend(self, records) :
+    def extend(self, records):
         """Add more SeqRecord objects to the alignment as rows.
 
         They must all have the same length as the original alignment, and have
@@ -133,6 +133,7 @@ class MultipleSeqAlignment(_Alignment):
         >>> from Bio.Alphabet import generic_dna
         >>> from Bio.Seq import Seq
         >>> from Bio.SeqRecord import SeqRecord
+        >>> from Bio.Align import MultipleSeqAlignment
         >>> a = SeqRecord(Seq("AAAACGT", generic_dna), id="Alpha")
         >>> b = SeqRecord(Seq("AAA-CGT", generic_dna), id="Beta")
         >>> c = SeqRecord(Seq("AAAAGGT", generic_dna), id="Gamma")
@@ -163,10 +164,10 @@ class MultipleSeqAlignment(_Alignment):
         SeqRecords, you can use the extend method with a second alignment
         (provided its sequences have the same length as the original alignment).
         """
-        for rec in records :
+        for rec in records:
             self.append(rec)
 
-    def append(self, record) :
+    def append(self, record):
         """Add one more SeqRecord object to the alignment as a new row.
 
         This must have the same length as the original alignment (unless this is
@@ -222,6 +223,70 @@ class MultipleSeqAlignment(_Alignment):
         if not Alphabet._check_type_compatible([self._alphabet, record.seq.alphabet]):
             raise ValueError("New sequence's alphabet is incompatible")
         self._records.append(record)
+
+    def __add__(self, other):
+        """Combines to alignments with the same number of rows by adding them.
+
+        If you have two multiple sequence alignments (MSAs), there are two ways to think
+        about adding them - by row or by column. Using the extend method adds by row.
+        Using the addition operator adds by column. For example,
+
+        >>> from Bio.Alphabet import generic_dna
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> from Bio.Align import MultipleSeqAlignment
+        >>> a1 = SeqRecord(Seq("AAAAC", generic_dna), id="Alpha")
+        >>> b1 = SeqRecord(Seq("AAA-C", generic_dna), id="Beta")
+        >>> c1 = SeqRecord(Seq("AAAAG", generic_dna), id="Gamma")
+        >>> a2 = SeqRecord(Seq("GT", generic_dna), id="Alpha")
+        >>> b2 = SeqRecord(Seq("GT", generic_dna), id="Beta")
+        >>> c2 = SeqRecord(Seq("GT", generic_dna), id="Gamma")
+        >>> left = MultipleSeqAlignment([a1, b1, c1])
+        >>> right = MultipleSeqAlignment([a2, b2, c2])
+
+        Now, let's look at these two alignments:
+
+        >>> print left
+        DNAAlphabet() alignment with 3 rows and 5 columns
+        AAAAC Alpha
+        AAA-C Beta
+        AAAAG Gamma
+        >>> print right
+        DNAAlphabet() alignment with 3 rows and 2 columns
+        GT Alpha
+        GT Beta
+        GT Gamma
+
+        And add them:
+
+        >>> print left + right
+        DNAAlphabet() alignment with 3 rows and 7 columns
+        AAAACGT Alpha
+        AAA-CGT Beta
+        AAAAGGT Gamma
+
+        For this to work, both alignments must have the same number of records (here
+        they both have 3 rows):
+
+        >>> len(left)
+        3
+        >>> len(right)
+        3
+
+        The individual rows are SeqRecord objects, and these can be added together. Refer
+        to the SeqRecord documentation for details of how the annotation is handled. This
+        example is a special case in that both original alignments shared the same names,
+        meaning when the rows are added they also get the same name.
+        """
+        if not isinstance(other, MultipleSeqAlignment):
+            raise NotImplementedError
+        if len(self) != len(other):
+            raise ValueError("When adding two alignments they must have the same length"
+                             " (i.e. same number or rows)")
+        alpha = Alphabet._consensus_alphabet([self._alphabet, other._alphabet])
+        merged = (left+right for left,right in zip(self, other))
+        return MultipleSeqAlignment(merged, alpha)
+
     
 def _test():
     """Run the Bio.Align module's doctests.
