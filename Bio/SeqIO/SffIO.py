@@ -208,9 +208,9 @@ def _sff_file_header(handle):
     840
     >>> print index_offset, index_length
     65040 256
-    >>> number_of_reads
+    >>> print number_of_reads
     24
-    >>> flows_per_read
+    >>> print flows_per_read
     800
     >>> key_sequence
     'TCAG'
