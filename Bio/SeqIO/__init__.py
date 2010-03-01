@@ -731,7 +731,7 @@ def index(filename, format, alphabet=None, key_function=None):
     return indexer(filename, alphabet, key_function)
 
 def to_alignment(sequences, alphabet=None, strict=True):
-    """Returns a multiple sequence alignment (OBSOLETE).
+    """Returns a multiple sequence alignment (DEPRECATED).
 
      - sequences -An iterator that returns SeqRecord objects,
                   or simply a list of SeqRecord objects.  All
@@ -753,6 +753,10 @@ def to_alignment(sequences, alphabet=None, strict=True):
     >>> filename = "Clustalw/protein.aln"
     >>> alignment = AlignIO.read(filename, "clustal")
     """
+    import warnings
+    warnings.warn("The Bio.SeqIO.to_alignment(...) function is deprecated. "
+                  "Please use the Bio.Align.MultipleSeqAlignment(...) object "
+                  "directly instead.", DeprecationWarning)
     return MultipleSeqAlignment(sequences, alphabet)
 
 def convert(in_file, in_format, out_file, out_format, alphabet=None):

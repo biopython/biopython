@@ -11,6 +11,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq, UnknownSeq
 from StringIO import StringIO
 from Bio import Alphabet
+from Bio.Align import MultipleSeqAlignment
 
 import warnings
 def send_warnings_to_stdout(message, category, filename, lineno,
@@ -166,7 +167,7 @@ test_files = [ \
     ("ig",  False, 'IntelliGenetics/TAT_mase_nuc.txt', 17),
     ("ig",  True,  'IntelliGenetics/VIF_mase-pro.txt', 16),
     #This next file is a MASE alignment but sequence O_ANT70 is shorter than
-    #the others (so the to_alignment() call will fail).  Perhaps MASE doesn't
+    #the others (so as an alignment will fail).  Perhaps MASE doesn't
     #write trailing gaps?
     ("ig",  False,  'IntelliGenetics/vpu_nucaligned.txt', 9),
 #Following NBRD-PIR files are used in test_nbrf.py
@@ -549,17 +550,16 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
         print "Testing reading %s format file %s as an alignment" \
               % (t_format, t_filename)
 
-        #Using SeqIO.to_alignment(SeqIO.parse(...))
-        alignment = SeqIO.to_alignment(SeqIO.parse( \
+        alignment = MultipleSeqAlignment(SeqIO.parse( \
                     handle=open(t_filename,mode), format=t_format))
-        assert len(alignment.get_all_seqs()) == t_count
+        assert len(alignment) == t_count
 
         alignment_len = alignment.get_alignment_length()
 
         #Check the record order agrees, and double check the
         #sequence lengths all agree too.
         for i in range(t_count):
-            assert compare_record(records[i], alignment.get_all_seqs()[i])
+            assert compare_record(records[i], alignment[i])
             assert len(records[i].seq) == alignment_len
 
         print alignment_summary(alignment)
