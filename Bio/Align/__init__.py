@@ -317,6 +317,23 @@ class MultipleSeqAlignment(_Alignment):
     def __getitem__(self, index):
         """Access part of the alignment.
 
+        Depending on the indices, you can get a SeqRecord object
+        (representing a single row), a Seq object (for a single columns),
+        a string (for a single characters) or another alignment
+        (representing some part or all of the alignment).
+
+        align[r,c] gives a single character as a string
+        align[r] gives a row as a SeqRecord
+        align[r,:] gives a row as a SeqRecord
+        align[:,c] gives a column as a Seq (using the alignment's alphabet)
+
+        align[:] and align[:,:] give a copy of the alignment
+
+        Anything else gives a sub alignment, e.g.
+        align[0:2] or align[0:2,:] uses only row 0 and 1
+        align[:,1:3] uses only columns 1 and 2
+        align[0:2,1:3] uses only rows 0 & 1 and only cols 1 & 2
+
         We'll use the following example alignment here for illustration:
 
         >>> from Bio.Alphabet import generic_dna
@@ -371,27 +388,34 @@ class MultipleSeqAlignment(_Alignment):
         AAA-CGT Beta
         AAAACGT Alpha
     
-        You can also use two indices to specify both rows and columns. e.g.
+        You can also use two indices to specify both rows and columns. Using simple
+        integers gives you the entry as a single character string. e.g.
 
-        >>> print align[3,4]
-        C
+        >>> align[3,4]
+        'C'
 
         This is equivalent to:
 
-        >>> print align[3][4]
-        C
+        >>> align[3][4]
+        'C'
 
         or:
 
-        >>> print align[3].seq[4]
-        C
+        >>> align[3].seq[4]
+        'C'
 
-        To get a single column, use this syntax:
+        To get a single column (as a Seq object taking the alignment's alphabet),
+        use this syntax:
 
-        >>> print align[:,4]
-        CCGCG
+        >>> align[:,4]
+        Seq('CCGCG', DNAAlphabet())
 
-        In general you get a sub-alignment,
+        Or, to get part of a column,
+
+        >>> align[1:3,4]
+        Seq('CG', DNAAlphabet())
+
+        However, in general you get a sub-alignment,
 
         >>> print align[1:5,3:6]
         DNAAlphabet() alignment with 4 rows and 3 columns
@@ -401,7 +425,7 @@ class MultipleSeqAlignment(_Alignment):
         -GG Epsilon
 
         This should all seem familiar to anyone who has used the NumPy
-        array or matrix operations.
+        array or matrix objects.
         """
         if isinstance(index, int):
             #e.g. result = align[x]
