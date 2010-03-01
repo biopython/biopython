@@ -20,6 +20,8 @@ Bio.SeqIO both use the Bio.SeqIO.FastaIO module to deal with these files,
 which can also be used to store a multiple sequence alignments.
 """
 
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator
 from Bio.Alphabet import single_letter_alphabet, generic_dna, generic_protein
@@ -243,20 +245,18 @@ class FastaM10Iterator(AlignmentIterator):
             alignment._annotations[key] = value
         for key, value in alignment_annotation.iteritems():
             alignment._annotations[key] = value
-            
-
-        #TODO - Once the alignment object gets an append method, use it.
-        #(i.e. an add SeqRecord method)
-        alignment.add_sequence(self._query_descr, query_align_seq)
-        record = alignment.get_all_seqs()[-1]
-        assert record.id == self._query_descr or record.description == self._query_descr
-        #assert record.seq.tostring() == query_align_seq
-        record.id = self._query_descr.split(None,1)[0].strip(",")
-        record.name = "query"
-        record.annotations["original_length"] = int(query_annotation["sq_len"])
+        
+        #Query
+        #=====
+        record = SeqRecord(Seq(query_align_seq, alphabet),
+                           id = self._query_descr.split(None,1)[0].strip(","),
+                           name = "query",
+                           description = self._query_descr,
+                           annotations = {"original_length" : int(query_annotation["sq_len"])})
         #TODO - handle start/end coordinates properly. Short term hack for now:
         record._al_start = int(query_annotation["al_start"])
         record._al_stop = int(query_annotation["al_stop"])
+        alignment.append(record)
 
         #TODO - What if a specific alphabet has been requested?
         #TODO - Use an IUPAC alphabet?
@@ -269,17 +269,18 @@ class FastaM10Iterator(AlignmentIterator):
         if "-" in query_align_seq:
             if not hasattr(record.seq.alphabet,"gap_char"):
                 record.seq.alphabet = Gapped(record.seq.alphabet, "-")
-        
-        alignment.add_sequence(match_descr, match_align_seq)
-        record = alignment.get_all_seqs()[-1]
-        assert record.id == match_descr or record.description == match_descr
-        #assert record.seq.tostring() == match_align_seq
-        record.id = match_descr.split(None,1)[0].strip(",")
-        record.name = "match"
-        record.annotations["original_length"] = int(match_annotation["sq_len"])
+
+        #Match
+        #=====
+        record = SeqRecord(Seq(match_align_seq, alphabet),
+                           id = match_descr.split(None,1)[0].strip(","),
+                           name = "match",
+                           description = match_descr,
+                           annotations = {"original_length" : int(match_annotation["sq_len"])})
         #TODO - handle start/end coordinates properly. Short term hack for now:
         record._al_start = int(match_annotation["al_start"])
         record._al_stop = int(match_annotation["al_stop"])
+        alignment.append(record)
 
         #This is still a very crude way of dealing with the alphabet:
         if alphabet == single_letter_alphabet and "sq_type" in match_annotation:
