@@ -53,11 +53,8 @@ def NexusIterator(handle, seq_count=None):
         assert new_name.startswith(old_name)
         seq = n.matrix[new_name] #already a Seq object with the alphabet set
         #ToDo - Can we extract any annotation too?
-        #ToDo - Avoid abusing the private _records list
-        alignment._records.append(SeqRecord(seq,
-                                            id=new_name,
-                                            name=old_name,
-                                            description=""))
+        alignment.append(SeqRecord(seq, id=new_name, name=old_name,
+                                   description=""))
     #All done
     yield alignment
 

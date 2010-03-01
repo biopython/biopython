@@ -18,7 +18,7 @@ class ClustalWriter(SequentialAlignmentWriter):
     def write_alignment(self, alignment):
         """Use this to write (another) single alignment to an open file."""
 
-        if len(alignment.get_all_seqs()) == 0:
+        if len(alignment) == 0:
             raise ValueError("Must have at least one sequence")
 
         #Old versions of the parser in Bio.Clustalw used a ._version property,
@@ -36,7 +36,7 @@ class ClustalWriter(SequentialAlignmentWriter):
             output = "CLUSTAL X (%s) multiple sequence alignment\n\n\n" % version
         
         cur_char = 0
-        max_length = len(alignment._records[0].seq)
+        max_length = len(alignment[0])
 
         if max_length <= 0:
             raise ValueError("Non-empty sequences are required")
@@ -53,7 +53,7 @@ class ClustalWriter(SequentialAlignmentWriter):
             # go through all of the records and print out the sequences
             # when we output, we do a nice 80 column output, although this
             # may result in truncation of the ids.
-            for record in alignment._records:
+            for record in alignment:
                 #Make sure we don't get any spaces in the record
                 #identifier when output in the file by replacing
                 #them with underscores:
@@ -383,7 +383,7 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
     handle.seek(0)
 
     print "Testing write/read when there is only one sequence..."
-    alignment._records = alignment._records[0:1]
+    alignment = alignment[0:1]
     handle = StringIO()
     ClustalWriter(handle).write_file([alignment])
     handle.seek(0)
