@@ -56,6 +56,14 @@ The annotations dictionary also contains any adapter clip positions
 
     >>> print record.annotations["flow_key"]
     TCAG
+    >>> print record.annotations["flow_values"][:10], "..."
+    (83, 1, 128, 7, 4, 84, 6, 106, 3, 172) ...
+    >>> print len(record.annotations["flow_values"])
+    400
+    >>> print record.annotations["flow_index"][:10], "..."
+    (1, 2, 3, 2, 2, 0, 3, 2, 3, 3) ...
+    >>> print len(record.annotations["flow_index"])
+    219
 
 As a convenience method, you can read the file with SeqIO format name "sff-trim"
 instead of "sff" to get just the trimmed sequences (without any annotation
@@ -496,9 +504,9 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
                          % padding)
     #now the flowgram values, flowgram index, bases and qualities
     #NOTE - assuming flowgram_format==1, which means struct type H
-    flow_values = struct.unpack(read_flow_fmt, handle.read(read_flow_size))
+    flow_values = handle.read(read_flow_size) #unpack later if needed
     temp_fmt = ">%iB" % seq_len # used for flow index and quals
-    flow_index = struct.unpack(temp_fmt, handle.read(seq_len))
+    flow_index = handle.read(seq_len) #unpack later if needed
     seq = handle.read(seq_len)
     quals = list(struct.unpack(temp_fmt, handle.read(seq_len)))
     #now any padding...
@@ -519,8 +527,8 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
         seq = seq[:clip_qual_left].lower() + \
               seq[clip_qual_left:clip_qual_right].upper() + \
               seq[clip_qual_right:].lower()
-        annotations = {"flow_values":flow_values,
-                       "flow_index":flow_index,
+        annotations = {"flow_values":struct.unpack(read_flow_fmt, flow_values),
+                       "flow_index":struct.unpack(temp_fmt, flow_index),
                        "flow_chars":flow_chars,
                        "flow_key":key_sequence,
                        "clip_qual_left":clip_qual_left,
