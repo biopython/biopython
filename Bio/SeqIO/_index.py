@@ -1,4 +1,4 @@
-# Copyright 2009 by Peter Cock.  All rights reserved.
+# Copyright 2009-2010 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -25,6 +25,7 @@ temp lookup file might be one idea (e.g. using SQLite or an OBDA style index).
 
 import re
 from Bio import SeqIO
+from Bio import Alphabet
 
 class _IndexedSeqFileDict(dict):
     """Read only dictionary interface to a sequential sequence file.
@@ -184,6 +185,8 @@ class _IndexedSeqFileDict(dict):
 class SffDict(_IndexedSeqFileDict) :
     """Indexed dictionary like access to a Standard Flowgram Format (SFF) file."""
     def __init__(self, filename, alphabet, key_function) :
+        if alphabet is None:
+            alphabet = Alphabet.generic_dna
         #On Unix, using mode="r" or "rb" works, "rU" does not.
         #On Windows, only using mode="rb" works, "r" and "rU" fail.
         _IndexedSeqFileDict.__init__(self, filename, alphabet, key_function, "rb")
