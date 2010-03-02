@@ -20,6 +20,9 @@ class ClustalWriter(SequentialAlignmentWriter):
 
         if len(alignment) == 0:
             raise ValueError("Must have at least one sequence")
+        if alignment.get_alignment_length() == 0:
+            #This doubles as a check for an alignment object    
+            raise ValueError("Non-empty sequences are required")
 
         #Old versions of the parser in Bio.Clustalw used a ._version property,
         try:
