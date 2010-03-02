@@ -426,7 +426,7 @@ def read(handle, format, seq_count=None, alphabet=None):
     if second is not None:
         raise ValueError("More than one record found in handle")
     if seq_count:
-        assert len(first.get_all_seqs())==seq_count
+        assert len(first)==seq_count
     return first
 
 def convert(in_file, in_format, out_file, out_format, alphabet=None):

@@ -97,7 +97,7 @@ class NexusWriter(AlignmentWriter):
     def write_alignment(self, alignment):
         #Creates an empty Nexus object, adds the sequences,
         #and then gets Nexus to prepare the output.
-        if len(alignment.get_all_seqs()) == 0:
+        if len(alignment) == 0:
             raise ValueError("Must have at least one sequence")
         if alignment.get_alignment_length() == 0:
             raise ValueError("Non-empty sequences are required")

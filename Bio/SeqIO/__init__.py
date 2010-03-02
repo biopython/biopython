@@ -368,7 +368,7 @@ def write(sequences, handle, format):
         alignment_count = AlignIO.write([alignment], handle, format)
         assert alignment_count == 1, "Internal error - the underlying writer " \
            + " should have returned 1, not %s" % repr(alignment_count)
-        count = len(alignment.get_all_seqs())
+        count = len(alignment)
         del alignment_count, alignment
     elif format in _FormatToIterator or format in AlignIO._FormatToIterator:
         raise ValueError("Reading format '%s' is supported, but not writing" \

@@ -342,11 +342,11 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
     alignments = list(ClustalIterator(StringIO(aln_example1)))
     assert 1 == len(alignments)
     assert alignments[0]._version == "1.81"
-    records = alignments[0].get_all_seqs()
-    assert 2 == len(records)
-    assert records[0].id == "gi|4959044|gb|AAD34209.1|AF069"
-    assert records[1].id == "gi|671626|emb|CAA85685.1|"
-    assert records[0].seq.tostring() == \
+    alignment = alignments[0]
+    assert 2 == len(alignment)
+    assert alignment[0].id == "gi|4959044|gb|AAD34209.1|AF069"
+    assert alignment[1].id == "gi|671626|emb|CAA85685.1|"
+    assert alignment[0].seq.tostring() == \
           "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNN" + \
           "LLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDW" + \
           "LNSVRQTGNTTRSRQRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQT" + \
@@ -356,17 +356,17 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
     alignments = list(ClustalIterator(StringIO(aln_example2)))
     assert 1 == len(alignments)
     assert alignments[0]._version == "1.83"
-    records = alignments[0].get_all_seqs()
-    assert 9 == len(records)
-    assert records[-1].id == "HISJ_E_COLI"
-    assert records[-1].seq.tostring() == \
+    alignment = alignments[0]
+    assert 9 == len(alignment)
+    assert alignment[-1].id == "HISJ_E_COLI"
+    assert alignment[-1].seq.tostring() == \
           "MKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIG" + \
           "TDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPS" + \
           "LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV"
 
     for alignment in ClustalIterator(StringIO(aln_example2 + aln_example1)):
         print "Alignment with %i records of length %i" \
-              % (len(alignment.get_all_seqs()),
+              % (len(alignment),
                  alignment.get_alignment_length())
 
     print "Checking empty file..."
@@ -389,7 +389,7 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
     handle.seek(0)
     for i,a in enumerate(ClustalIterator(handle)):
         assert a.get_alignment_length() == alignment.get_alignment_length()
-        assert len(a.get_all_seqs()) == 1
+        assert len(a) == 1
 
     aln_example3 = \
 """CLUSTAL 2.0.9 multiple sequence alignment

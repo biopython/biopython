@@ -41,14 +41,11 @@ class EmbossWriter(SequentialAlignmentWriter):
         
     def write_alignment(self, alignment):
         """Use this to write (another) single alignment to an open file."""
-
         handle = self.handle
-        records = alignment.get_all_seqs()
-        
         handle.write("#=======================================\n")
         handle.write("#\n")
-        handle.write("# Aligned_sequences: %i\n" % len(records))
-        for i, record in enumerate(records):
+        handle.write("# Aligned_sequences: %i\n" % len(alignment))
+        for i, record in enumerate(alignment):
             handle.write("# %i: %s\n" % (i+1, record.id))
         handle.write("#\n")
         handle.write("# Length: %i\n" % alignment.get_alignment_length())
@@ -581,38 +578,38 @@ asis             311 -----------------    311
 
     alignments = list(EmbossIterator(StringIO(pair_example)))
     assert len(alignments) == 1
-    assert len(alignments[0].get_all_seqs()) == 2
-    assert [r.id for r in alignments[0].get_all_seqs()] \
+    assert len(alignments[0]) == 2
+    assert [r.id for r in alignments[0]] \
            == ["IXI_234", "IXI_235"]
     
     alignments = list(EmbossIterator(StringIO(simple_example)))
     assert len(alignments) == 1    
-    assert len(alignments[0].get_all_seqs()) == 4
-    assert [r.id for r in alignments[0].get_all_seqs()] \
+    assert len(alignments[0]) == 4
+    assert [r.id for r in alignments[0]] \
            == ["IXI_234", "IXI_235", "IXI_236", "IXI_237"]
 
     alignments = list(EmbossIterator(StringIO(pair_example + simple_example)))
     assert len(alignments) == 2    
-    assert len(alignments[0].get_all_seqs()) == 2
-    assert len(alignments[1].get_all_seqs()) == 4
-    assert [r.id for r in alignments[0].get_all_seqs()] \
+    assert len(alignments[0]) == 2
+    assert len(alignments[1]) == 4
+    assert [r.id for r in alignments[0]] \
            == ["IXI_234", "IXI_235"]
-    assert [r.id for r in alignments[1].get_all_seqs()] \
+    assert [r.id for r in alignments[1]] \
            == ["IXI_234", "IXI_235", "IXI_236", "IXI_237"]
 
     alignments = list(EmbossIterator(StringIO(pair_example2)))
     assert len(alignments) == 5
-    assert len(alignments[0].get_all_seqs()) == 2
-    assert [r.id for r in alignments[0].get_all_seqs()] \
+    assert len(alignments[0]) == 2
+    assert [r.id for r in alignments[0]] \
            == ["ref_rec", "gi|94968718|receiver"]
-    assert [r.id for r in alignments[4].get_all_seqs()] \
+    assert [r.id for r in alignments[4]] \
            == ["ref_rec", "gi|94970041|receiver"]
 
 
     alignments = list(EmbossIterator(StringIO(pair_example3)))
     assert len(alignments) == 1
-    assert len(alignments[0].get_all_seqs()) == 2
-    assert [r.id for r in alignments[0].get_all_seqs()] \
+    assert len(alignments[0]) == 2
+    assert [r.id for r in alignments[0]] \
            == ["asis","asis"]
 
     print "Done"

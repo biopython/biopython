@@ -1,3 +1,8 @@
+# Copyright 2005 by Jonathan Taylor.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """This module deals with CAPS markers.
 
 A CAPS marker is a location a DifferentialCutsite as described below and a
@@ -57,7 +62,7 @@ class CAPSMap:
         enzymes      The enzymes to be used to create the map.
         """
 
-        self.sequences = [rec.seq for rec in alignment.get_all_seqs()]
+        self.sequences = [rec.seq for rec in alignment]
         self.size = len(self.sequences)
         self.length = len(self.sequences[0])
         for seq in self.sequences:

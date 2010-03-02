@@ -174,14 +174,20 @@ class Alignment:
             return str(self)    
 
     def get_all_seqs(self):
-        """Return all of the sequences involved in the alignment.
+        """Return all of the sequences involved in the alignment (DEPRECATED).
 
         The return value is a list of SeqRecord objects.
 
-        This method is semi-obsolete, as the Alignment object itself offers
+        This method is deprecated, as the Alignment object itself now offers
         much of the functionality of a list of SeqRecord objects (e.g.
-        iteration or slicing to create a sub-alignment).
+        iteration or slicing to create a sub-alignment). Instead use the
+        Python builtin function list, i.e. my_list = list(my_align)
         """
+        import warnings
+        warnings.warn("This method is deprecated, since the alignment object"
+                      "now acts more like a list. Instead of calling "
+                      "align.get_all_seqs() you can use list(align)",
+                      DeprecationWarning)
         return self._records
 
     def __iter__(self):

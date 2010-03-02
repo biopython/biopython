@@ -27,7 +27,7 @@ from Interfaces import AlignmentIterator
 from Bio.Alphabet import single_letter_alphabet, generic_dna, generic_protein
 from Bio.Alphabet import Gapped
 
-
+# TODO - Turn this into a doctest
 class FastaM10Iterator(AlignmentIterator):
     """Alignment iterator for the FASTA tool's pairwise alignment output.
 
@@ -44,7 +44,7 @@ class FastaM10Iterator(AlignmentIterator):
         from Bio import AlignIO
         handle = ...
         for a in AlignIO.parse(handle, "fasta-m10"):
-            assert len(a.get_all_seqs()) == 2, "Should be pairwise!"
+            assert len(a) == 2, "Should be pairwise!"
             print "Alignment length %i" % a.get_alignment_length()
             for record in a:
                 print record.seq, record.name, record.id
@@ -702,10 +702,10 @@ Function used was FASTA [version 34.26 January 12, 2007]
 
     alignments = list(FastaM10Iterator(StringIO(simple_example)))
     assert len(alignments) == 4, len(alignments)
-    assert len(alignments[0].get_all_seqs()) == 2
+    assert len(alignments[0]) == 2
     for a in alignments:
         print "Alignment %i sequences of length %i" \
-              % (len(a.get_all_seqs()), a.get_alignment_length())
+              % (len(a), a.get_alignment_length())
         for r in a:
             print "%s %s %i" % (r.seq, r.id, r.annotations["original_length"])
         #print a.annotations

@@ -159,8 +159,7 @@ class StockholmWriter(SequentialAlignmentWriter):
         together (rather than having a block of annotation followed
         by a block of aligned sequences).
         """
-        records = alignment.get_all_seqs()
-        count = len(records)
+        count = len(alignment)
         
         self._length_of_sequences = alignment.get_alignment_length()
         self._ids_written = []
@@ -175,7 +174,7 @@ class StockholmWriter(SequentialAlignmentWriter):
 
         self.handle.write("# STOCKHOLM 1.0\n")
         self.handle.write("#=GF SQ %i\n" % count)
-        for record in records:
+        for record in alignment:
             self._write_record(record)
         self.handle.write("//\n")
 
@@ -435,9 +434,10 @@ class StockholmIterator(AlignmentIterator):
                 if alignment_length != len(seq):
                     raise ValueError("Sequences have different lengths, or repeated identifier")
                 name, start, end = self._identifier_split(id)
+                #TODO - Use the append method not add_sequence
                 alignment.add_sequence(id, seq, start=start, end=end)
 
-                record = alignment.get_all_seqs()[-1]
+                record = alignment[-1]
 
                 assert record.id == id or record.description == id
                 
