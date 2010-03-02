@@ -451,7 +451,56 @@ class MultipleSeqAlignment(_Alignment):
             return MultipleSeqAlignment((rec[col_index] for rec in self._records[row_index]),
                                         self._alphabet)
 
-    
+    def sort(self):
+        """Sort the rows (SeqRecord objects) of the alignment in place.
+
+        This sorts the rows alphabetically using the SeqRecord object id.
+        Currently no advanced sort options are available, although this may
+        be added in a future release of Biopython.
+
+        This is useful if you want to add two alignments which use the same
+        record identifiers, but in a different order. For example,
+
+        >>> from Bio.Alphabet import generic_dna
+        >>> from Bio.Seq import Seq
+        >>> from Bio.SeqRecord import SeqRecord
+        >>> from Bio.Align import MultipleSeqAlignment
+        >>> align1 = MultipleSeqAlignment([
+        ...              SeqRecord(Seq("ACGT", generic_dna), id="Human"),
+        ...              SeqRecord(Seq("ACGG", generic_dna), id="Mouse"),
+        ...              SeqRecord(Seq("ACGC", generic_dna), id="Chicken"),
+        ...          ])
+        >>> align2 = MultipleSeqAlignment([
+        ...              SeqRecord(Seq("CGGT", generic_dna), id="Mouse"),
+        ...              SeqRecord(Seq("CGTT", generic_dna), id="Human"),
+        ...              SeqRecord(Seq("CGCT", generic_dna), id="Chicken"),
+        ...          ])
+
+        If you simple try and add these without sorting, you get this:
+
+        >>> print align1 + align2
+        DNAAlphabet() alignment with 3 rows and 8 columns
+        ACGTCGGT <unknown id>
+        ACGGCGTT <unknown id>
+        ACGCCGCT Chicken
+
+        Consult the SeqRecord documentation which explains why you get a
+        default value when annotation like the identifier doesn't match up.
+        However, if we sort the alignments first, then add them we get the
+        desired result:
+
+        >>> align1.sort()
+        >>> align2.sort()
+        >>> print align1 + align2
+        DNAAlphabet() alignment with 3 rows and 8 columns
+        ACGCCGCT Chicken
+        ACGTCGTT Human
+        ACGGCGGT Mouse
+
+        """
+        self._records.sort(cmp = lambda x, y : cmp(x.id, y.id))
+
+
 def _test():
     """Run the Bio.Align module's doctests.
 
