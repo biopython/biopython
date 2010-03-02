@@ -132,6 +132,8 @@ secondary structure string here, are also sliced:
     -------<<<
 """
 __docformat__ = "epytext en" #not just plaintext
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
@@ -434,22 +436,20 @@ class StockholmIterator(AlignmentIterator):
                 if alignment_length != len(seq):
                     raise ValueError("Sequences have different lengths, or repeated identifier")
                 name, start, end = self._identifier_split(id)
-                #TODO - Use the append method not add_sequence
-                alignment.add_sequence(id, seq, start=start, end=end)
-
-                record = alignment[-1]
-
-                assert record.id == id or record.description == id
-                
-                record.id = id
-                record.name = name
-                record.description = id
-                
-                #will be overridden by _populate_meta_data if an explicit
+                record = SeqRecord(Seq(seq, self.alphabet),
+                                   id = id, name = name, description = id,
+                                   annotations = {"accession":name})
+                #Accession will be overridden by _populate_meta_data if an explicit
                 #accession is provided:
                 record.annotations["accession"]=name
 
+                if start is not None:
+                    record.annotations["start"] = start
+                if end is not None:
+                    record.annotations["end"] = end
+
                 self._populate_meta_data(id, record)
+                alignment.append(record)
             return alignment
         else:
             return None
