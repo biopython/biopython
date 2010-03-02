@@ -136,7 +136,7 @@ not the trimmed SeqRecord objects from parsing an SFF file as "sff-trim").
 As an example, let's pretend this example SFF file represents some DNA which
 was pre-amplified with a PCR primers AAAGANNNNN. The following script would
 produce a sub-file containing all those reads whose post-quality clipping
-region (i.e. the sequence are trimming) starts with AAAGA exactly (the non-
+region (i.e. the sequence after trimming) starts with AAAGA exactly (the non-
 degenerate bit of this pretend primer):
 
     >>> from Bio import SeqIO
