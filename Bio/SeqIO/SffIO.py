@@ -59,7 +59,7 @@ The annotations dictionary also contains any adapter clip positions
     >>> print record.annotations["flow_key"]
     TCAG
 
-As a convience method, you can read the file with SeqIO format name "sff-trim"
+As a convenience method, you can read the file with SeqIO format name "sff-trim"
 instead of "sff" to get just the trimmed sequences (without any annotation
 except for the PHRED quality scores):
 
