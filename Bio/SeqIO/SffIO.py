@@ -269,7 +269,7 @@ def _sff_file_header(handle):
     assert header_length % 8 == 0
     padding = header_length - number_of_flows_per_read - key_length - 31
     assert 0 <= padding < 8, padding
-    if chr(0)*padding != handle.read(padding):
+    if handle.read(padding).count('\0') != padding:
         raise ValueError("Post header %i byte padding region contained data" \
                          % padding)
     return header_length, index_offset, index_length, \
@@ -321,7 +321,7 @@ def _sff_do_slow_index(handle):
         #now the name and any padding (remainder of header)
         name = handle.read(name_length)
         padding = read_header_length - read_header_size - name_length
-        if chr(0)*padding != handle.read(padding):
+        if handle.read(padding).count('\0') != padding:
             raise ValueError("Post name %i byte padding region contained data" \
                              % padding)
         assert record_offset + read_header_length == handle.tell()
@@ -332,7 +332,7 @@ def _sff_do_slow_index(handle):
         padding = size % 8
         if padding:
             padding = 8 - padding
-            if chr(0)*padding != handle.read(padding):
+            if handle.read(padding).count('\0') != padding:
                 raise ValueError("Post quality %i byte padding region contained data" \
                                  % padding)
         #print read, name, record_offset
@@ -397,7 +397,7 @@ def _sff_find_roche_index(handle):
             raise ValueError("Unsupported version in .srt index header, %i.%i.%i.%i" \
                              % (ver0, ver1, ver2, ver3))
         data = handle.read(4)
-        if data != chr(0)*4:
+        if data != "\0\0\0\0":
             raise ValueError("Did not find expected null four bytes in .srt index")
         return number_of_reads, header_length, \
                index_offset, index_length, \
@@ -498,7 +498,7 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     #now the name and any padding (remainder of header)
     name = handle.read(name_length)
     padding = read_header_length - read_header_size - name_length
-    if chr(0)*padding != handle.read(padding):
+    if handle.read(padding).count('\0') != padding:
         raise ValueError("Post name %i byte padding region contained data" \
                          % padding)
     #now the flowgram values, flowgram index, bases and qualities
@@ -512,7 +512,7 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     padding = (read_flow_size + seq_len*3)%8
     if padding:
         padding = 8 - padding
-        if chr(0)*padding != handle.read(padding):
+        if handle.read(padding).count('\0') != padding:
             raise ValueError("Post quality %i byte padding region contained data" \
                              % padding)
     #Now build a SeqRecord
@@ -781,7 +781,7 @@ class SffWriter(SequenceWriter):
         #Write to the file...
         fmt = ">I4BLL"
         fmt_size = struct.calcsize(fmt)
-        handle.write(chr(0)*fmt_size + xml) #will come back later to fill this
+        handle.write("\0"*fmt_size + xml) #will come back later to fill this
         fmt2 = ">6B"
         assert 6 == struct.calcsize(fmt2)
         self._index.sort()
@@ -813,7 +813,7 @@ class SffWriter(SequenceWriter):
         #suggesting this padding should be there):
         if self._index_length % 8:
             padding = 8 - (self._index_length%8)
-            handle.write(chr(0)*padding)
+            handle.write("\0"*padding)
         else:
             padding = 0
         offset = handle.tell()
@@ -864,7 +864,7 @@ class SffWriter(SequenceWriter):
                              self._number_of_flows_per_read,
                              1, #the only flowgram format code we support
                              self._flow_chars, self._key_sequence)
-        self.handle.write(header + chr(0)*padding)
+        self.handle.write(header + "\0"*padding)
         
     def write_record(self, record):
         """Write a single additional record to the output file.
@@ -947,7 +947,7 @@ class SffWriter(SequenceWriter):
                            name_len, seq_len,
                            clip_qual_left, clip_qual_right,
                            clip_adapter_left, clip_adapter_right,
-                           name) + chr(0)*padding
+                           name) + "\0"*padding
         assert len(data) == read_header_length
         #now the flowgram values, flowgram index, bases and qualities
         #NOTE - assuming flowgram_format==1, which means struct type H
@@ -962,7 +962,7 @@ class SffWriter(SequenceWriter):
         padding = (read_flow_size + seq_len*3)%8
         if padding:
             padding = 8 - padding
-        self.handle.write(data + chr(0)*padding)
+        self.handle.write(data + "\0"*padding)
 
 
 if __name__ == "__main__":
