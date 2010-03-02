@@ -58,9 +58,9 @@ for (t_per, t_count, t_filename) in test_files:
     assert len(alignments)  == t_count, \
          "Found %i alignments but expected %i" % (len(alignments), t_count)
     for alignment in alignments:
-        assert len(alignment.get_all_seqs()) == t_per, \
+        assert len(alignment) == t_per, \
             "Expected %i records per alignment, got %i" \
-            % (t_per, len(alignment.get_all_seqs()))
+            % (t_per, len(alignment))
         print
         print alignment
     

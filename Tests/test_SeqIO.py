@@ -274,7 +274,7 @@ def alignment_summary(alignment, index=" "):
     """Returns a concise summary of an Alignment object as a string"""
     answer = []
     alignment_len = alignment.get_alignment_length()
-    rec_count = len(alignment.get_all_seqs())
+    rec_count = len(alignment)
     for i in range(min(5,alignment_len)):
         answer.append(index + col_summary(alignment.get_column(i)) \
                             + " alignment column %i" % i)
