@@ -500,6 +500,34 @@ class MultipleSeqAlignment(_Alignment):
         """
         self._records.sort(cmp = lambda x, y : cmp(x.id, y.id))
 
+    def get_column(self, col):
+        """Returns a string containing a given column (OBSOLETE).
+
+        This is a method provided for backwards compatibility with the old
+        Bio.Align.Generic.Alignment object. You are encouraged to use the
+        slice notation instead.
+        """
+        return _Alignment.get_column(self, col)
+
+    def add_sequence(self, descriptor, sequence, start = None, end = None,
+                     weight = 1.0):
+        """Add a sequence to the alignment (OBSOLETE).
+
+        The start, end, and weight arguments are not supported! This method
+        only provides limited backwards compatibility with the old
+        Bio.Align.Generic.Alignment object. You are encouraged to use the
+        append method with a SeqRecord instead.
+        """
+        #Should we handle start/end/strand information somehow? What for?
+        #TODO - Should we handle weights somehow? See also AlignInfo code...
+        if start is not None or end is not None or weight != 1.0:
+            raise ValueError("The add_Sequence method is obsolete, and only "
+                             "provides limited backwards compatibily. The"
+                             "start, end and weight arguments are not "
+                             "supported.")
+        self.append(SeqRecord(Seq(sequence, self._alphabet),
+                              id = descriptor, description = descriptor))
+
 
 def _test():
     """Run the Bio.Align module's doctests.
