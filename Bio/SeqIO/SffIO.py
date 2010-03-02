@@ -13,8 +13,7 @@ to use this module via the Bio.SeqIO functions under the format name "sff".
 For example, to iterate over the records in an SFF file,
 
     >>> from Bio import SeqIO
-    >>> handle = open("Roche/E3MFGYR02_random_10_reads.sff", "rb")
-    >>> for record in SeqIO.parse(handle, "sff"):
+    >>> for record in SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff"):
     ...     print record.id, len(record), record.seq[:20]+"..."
     E3MFGYR02JWQ7T 265 tcagGGTCTACATGTTGGTT...
     E3MFGYR02JA6IL 271 tcagTTTTTTTTGGAAAGGA...
@@ -26,7 +25,6 @@ For example, to iterate over the records in an SFF file,
     E3MFGYR02HHZ8O 221 tcagACTTTCTTCTTTACCG...
     E3MFGYR02GPGB1 269 tcagAAGCAGTGGTATCAAC...
     E3MFGYR02F7Z7G 219 tcagAATCATCCACTTTTTA...
-    >>> handle.close()
 
 Each SeqRecord object will contain all the annotation from the SFF file,
 including the PHRED quality scores.
@@ -64,8 +62,7 @@ instead of "sff" to get just the trimmed sequences (without any annotation
 except for the PHRED quality scores):
 
     >>> from Bio import SeqIO
-    >>> handle = open("Roche/E3MFGYR02_random_10_reads.sff", "rb")
-    >>> for record in SeqIO.parse(handle, "sff-trim"):
+    >>> for record in SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff-trim"):
     ...     print record.id, len(record), record.seq[:20]+"..."
     E3MFGYR02JWQ7T 260 GGTCTACATGTTGGTTAACC...
     E3MFGYR02JA6IL 265 TTTTTTTTGGAAAGGAAAAC...
@@ -77,7 +74,6 @@ except for the PHRED quality scores):
     E3MFGYR02HHZ8O 150 ACTTTCTTCTTTACCGTAAC...
     E3MFGYR02GPGB1 221 AAGCAGTGGTATCAACGCAG...
     E3MFGYR02F7Z7G 130 AATCATCCACTTTTTAACGT...
-    >>> handle.close()
 
 Looking at the final record in more detail, note how this differs to the
 example above:
@@ -140,13 +136,10 @@ region (i.e. the sequence after trimming) starts with AAAGA exactly (the non-
 degenerate bit of this pretend primer):
 
     >>> from Bio import SeqIO
-    >>> from StringIO import StringIO
-    >>> out_handle = open("temp_filtered.sff", "wb")
     >>> records = (record for record in \
-                   SeqIO.parse(open("Roche/E3MFGYR02_random_10_reads.sff", "rb"),"sff") \
+                   SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff","sff") \
                    if record.seq[record.annotations["clip_qual_left"]:].startswith("AAAGA"))
-    >>> count = SeqIO.write(records, out_handle, "sff")
-    >>> out_handle.close()
+    >>> count = SeqIO.write(records, "temp_filtered.sff", "sff")
     >>> print "Selected %i records" % count
     Selected 2 records
 
@@ -156,27 +149,25 @@ if you want SFF output we have to preserve all the flow information - the trick
 is just to adjust the left clip position!
 
     >>> from Bio import SeqIO
-    >>> from StringIO import StringIO
-    >>> out_handle = open("temp_filtered.sff", "wb")
     >>> def filter_and_trim(records, primer):
     ...     for record in records:
     ...         if record.seq[record.annotations["clip_qual_left"]:].startswith(primer):
     ...             record.annotations["clip_qual_left"] += len(primer)
     ...             yield record
-    >>> records = SeqIO.parse(open("Roche/E3MFGYR02_random_10_reads.sff","rb"), "sff")
-    >>> count = SeqIO.write(filter_and_trim(records,"AAAGA"), out_handle, "sff")
-    >>> out_handle.close()
+    >>> records = SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff")
+    >>> count = SeqIO.write(filter_and_trim(records,"AAAGA"),
+    ...                     "temp_filtered.sff", "sff")
     >>> print "Selected %i records" % count
     Selected 2 records
 
 We can check the results, note the lower case clipped region now includes the "AAAGA"
 sequence:
 
-    >>> for record in SeqIO.parse(open("temp_filtered.sff","rb"), "sff"):
+    >>> for record in SeqIO.parse("temp_filtered.sff", "sff"):
     ...     print record.id, len(record), record.seq[:20]+"..."
     E3MFGYR02JHD4H 310 tcagaaagaCAAGTGGTATC...
     E3MFGYR02GAZMS 278 tcagaaagaAGTAAGGTAAA...
-    >>> for record in SeqIO.parse(open("temp_filtered.sff","rb"), "sff-trim"):
+    >>> for record in SeqIO.parse("temp_filtered.sff", "sff-trim"):
     ...     print record.id, len(record), record.seq[:20]+"..."
     E3MFGYR02JHD4H 287 CAAGTGGTATCAACGCAGAG...
     E3MFGYR02GAZMS 266 AGTAAGGTAAATAACAAACG...
@@ -433,11 +424,13 @@ def _sff_read_roche_index(handle):
 
     Roche SFF indices use base 255 not 256, meaning we see bytes in range the range
     0 to 254 only. This appears to be so that byte 0xFF (character 255) can be used
-    as a marker character to separate entries (required if the read name lengths vary).
+    as a marker character to separate entries (required if the read name lengths
+    vary).
 
     Note that since only four bytes are used for the read offset, this is limited to
-    255^4 bytes (nearly 4GB). If you try to use the Roche sfffile tool to combined SFF
-    files beyound this limit, they issue a warning and ommit the index (and manifest).
+    255^4 bytes (nearly 4GB). If you try to use the Roche sfffile tool to combined
+    SFF files beyound this limit, they issue a warning and ommit the index (and
+    manifest).
     """
     number_of_reads, header_length, index_offset, index_length, xml_offset, \
     xml_size, read_index_offset, read_index_size = _sff_find_roche_index(handle)
