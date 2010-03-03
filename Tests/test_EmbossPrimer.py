@@ -38,10 +38,7 @@ class Primer3ParseTest(unittest.TestCase):
 
         self.assertEqual(len(primer_info.primers), 5)
         self.assertEqual(primer_info.comments,
-                         "# PRIMER3 RESULTS FOR AC074298\n"
-                         "\n"
-                         "#                      Start  Len   Tm     GC%   Sequence\n"
-                         "\n")
+                         "# PRIMER3 RESULTS FOR AC074298\n")
         self.assertEqual(primer_info.primers[1].forward_seq,
                          "CCGGTTTCTCTGGTTGAAAA")
         self.assertEqual(primer_info.primers[2].reverse_seq,
@@ -66,10 +63,7 @@ class Primer3ParseTest(unittest.TestCase):
 
         self.assertEqual(len(primer_info.primers), 5)
         self.assertEqual(primer_info.comments,
-                         "# PRIMER3 RESULTS FOR 26964-28647#\n"
-                         "\n"
-                         "#                      Start  Len   Tm     GC%   Sequence\n"
-                         "\n")
+                         "# PRIMER3 RESULTS FOR 26964-28647#\n")
         self.assertEqual(primer_info.primers[1].reverse_seq, "")
         self.assertEqual(primer_info.primers[3].forward_seq, "TGTGATTGCTTGAGCTGGAC")
         self.assertEqual(primer_info.primers[3].forward_start, 253)
@@ -84,10 +78,7 @@ class Primer3ParseTest(unittest.TestCase):
 
         self.assertEqual(len(primer_info.primers), 5)
         self.assertEqual(primer_info.comments,
-                         "# EPRIMER3 RESULTS FOR YNL138W-A\n"
-                         "\n"
-                         "#                      Start  Len   Tm     GC%   Sequence\n"
-                         "\n")
+                         "# EPRIMER3 RESULTS FOR YNL138W-A\n")
         self.assertEqual(primer_info.primers[0].internal_length, 22)
         self.assertEqual(primer_info.primers[1].internal_seq,
                          'TTGCGCTTTAGTTTGAATTGAA')

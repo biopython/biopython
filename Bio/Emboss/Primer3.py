@@ -1,5 +1,10 @@
-"""Code to interact with the primer3 program.
-"""
+# Copyright 2008 Michiel de Hoon.
+# Revisions copyright 2010 Peter Cock.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+"""Code to parse output from the EMBOSS eprimer3 program."""
 
 # --- primer3
 
@@ -57,10 +62,11 @@ def read(handle):
             break
 
     # Read the comment lines
-    while True:
-        if line.strip() and not line[0]=='#':
-            break
-        record.comments += line
+    while line[0]=='#':
+        # Ignore this common line which isn't a useful comment
+        if line.strip() != "#                      Start  Len   Tm     GC%   Sequence":
+            assert line[0] == '#', line
+            record.comments += line
         try:
             line = handle.next()
         except StopIteration:
