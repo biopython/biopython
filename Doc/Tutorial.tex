@@ -251,7 +251,7 @@ and HTML formats
   You need Biopython 1.49 or later.
 
   \item \emph{Why won't the } \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{functions} \verb|parse|\emph{,} \verb|read| \emph{and} \verb|write| \emph{take filenames? They insist on handles!} \\
-  You need Biopython 1.54 or later (or just use handles explicitly).
+  You need Biopython 1.54 or later, or just use handles explicitly. It is especially important to remember to close output handles explicitly after writing your data.
 
   \item \emph{Why doesn't} \verb|str(...)| \emph{give me the full sequence of a} \verb|Seq| \emph{object?} \\
   You need Biopython 1.45 or later.  Alternatively, rather than \verb|str(my_seq)|, use \verb|my_seq.tostring()| (which will also work on recent versions of Biopython).
@@ -402,12 +402,10 @@ It contains 94 records, each has a line starting with ``$>$'' (greater-than symb
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open("ls_orchid.fasta")
-for seq_record in SeqIO.parse(handle, "fasta"):
+for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
     print seq_record.id
     print repr(seq_record.seq)
     print len(seq_record)
-handle.close()
 \end{verbatim}
 
 \noindent You should get something like this on your screen:
@@ -430,12 +428,10 @@ Now let's load the GenBank file \href{http://biopython.org/DIST/docs/tutorial/ex
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open("ls_orchid.gbk")
-for seq_record in SeqIO.parse(handle, "genbank"):
+for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
     print seq_record.id
     print repr(seq_record.seq)
     print len(seq_record)
-handle.close()
 \end{verbatim}
 
 \noindent This should give:
@@ -1397,7 +1393,7 @@ has a sister function for use on files which contain just one record which we'll
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> record = SeqIO.read(open("NC_005816.fna"), "fasta")
+>>> record = SeqIO.read("NC_005816.fna", "fasta")
 >>> record
 SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
 SingleLetterAlphabet()), id='gi|45478711|ref|NC_005816.1|', name='gi|45478711|ref|NC_005816.1|',
@@ -1479,7 +1475,7 @@ Again, we'll use \verb|Bio.SeqIO| to read this file in, and the code is almost i
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> record = SeqIO.read(open("NC_005816.gb"), "genbank")
+>>> record = SeqIO.read("NC_005816.gb", "genbank")
 >>> record
 SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
 IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
@@ -1753,7 +1749,7 @@ For example, taking the same GenBank file used earlier:
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> record = SeqIO.read(open("NC_005816.gb"), "genbank")
+>>> record = SeqIO.read("NC_005816.gb", "genbank")
 >>> record
 SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
 IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
@@ -1902,7 +1898,7 @@ FASTQ file. Chapter~\ref{chapter:Bio.SeqIO} will explain the \verb|SeqIO| functi
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> record = SeqIO.parse(open("example.fastq"), "fastq").next()
+>>> record = SeqIO.parse("example.fastq", "fastq").next()
 >>> len(record)
 25
 >>> print record.seq
@@ -1954,7 +1950,7 @@ Suppose you have a circular genome:
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> record = SeqIO.read(open("NC_005816.gb"), "genbank")
+>>> record = SeqIO.read("NC_005816.gb", "genbank")
 >>> record
 SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
 IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
@@ -2035,7 +2031,7 @@ The ``catch'' is that you have to work with \verb|SeqRecord| objects (see Chapte
 The workhorse function \verb|Bio.SeqIO.parse()| is used to read in sequence data as SeqRecord objects.  This function expects two arguments:
 
 \begin{enumerate}
-\item The first argument is a {\it handle} to read the data from. A handle is typically a file opened for reading, but could be the output from a command line program, or data downloaded from the internet (see Section~\ref{sec:SeqIO_Online}).  See Section~\ref{sec:appendix-handles} for more about handles.
+\item The first argument is a {\it handle} to read the data from, or a filename. A handle is typically a file opened for reading, but could be the output from a command line program, or data downloaded from the internet (see Section~\ref{sec:SeqIO_Online}).  See Section~\ref{sec:appendix-handles} for more about handles.
 \item The second argument is a lower case string specifying sequence format -- we don't try and guess the file format for you!  See \url{http://biopython.org/wiki/SeqIO} for a full listing of supported formats.
 \end{enumerate}
 
@@ -2051,24 +2047,20 @@ In general \verb|Bio.SeqIO.parse()| is used to read in sequence files as \verb|S
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open("ls_orchid.fasta")
-for seq_record in SeqIO.parse(handle, "fasta"):
+for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
     print seq_record.id
     print repr(seq_record.seq)
     print len(seq_record)
-handle.close()
 \end{verbatim}
 
 The above example is repeated from the introduction in Section~\ref{sec:sequence-parsing}, and will load the orchid DNA sequences in the FASTA format file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{ls\_orchid.fasta}.  If instead you wanted to load a GenBank format file like \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.gbk}{ls\_orchid.gbk} then all you need to do is change the filename and the format string:
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open("ls_orchid.gbk")
-for seq_record in SeqIO.parse(handle, "genbank"):
+for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
     print seq_record.id
     print seq_record.seq
     print len(seq_record)
-handle.close()
 \end{verbatim}
 
 Similarly, if you wanted to read in a file in another file format, then assuming \verb|Bio.SeqIO.parse()| supports it you would just need to change the format string as appropriate, for example ``swiss'' for SwissProt files or ``embl'' for EMBL text files. There is a full listing on the wiki page (\url{http://biopython.org/wiki/SeqIO}) and in the built in documentation (also \href{http://biopython.org/DIST/docs/api/Bio.SeqIO-module.html}{online}).
@@ -2079,9 +2071,7 @@ a list of the record identifiers we can easily do this with the following list c
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> handle = open("ls_orchid.gbk")
->>> identifiers = [seq_record.id for seq_record in SeqIO.parse(handle, "genbank")]
->>> handle.close()
+>>> identifiers = [seq_record.id for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank")]
 >>> identifiers
 ['Z78533.1', 'Z78532.1', 'Z78531.1', 'Z78530.1', 'Z78529.1', 'Z78527.1', ..., 'Z78439.1']
 \end{verbatim}
@@ -2100,8 +2090,7 @@ Instead of using a for loop, can also use the \verb|.next()| method of an iterat
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open("ls_orchid.fasta")
-record_iterator = SeqIO.parse(handle, "fasta")
+record_iterator = SeqIO.parse("ls_orchid.fasta", "fasta")
 
 first_record = record_iterator.next()
 print first_record.id
@@ -2110,8 +2099,6 @@ print first_record.description
 second_record = record_iterator.next()
 print second_record.id
 print second_record.description
-
-handle.close()
 \end{verbatim}
 
 Note that if you try and use \verb|.next()| and there are no more results, you'll either get back the special Python object \verb|None| or a \verb|StopIteration| exception.
@@ -2120,7 +2107,7 @@ One special case to consider is when your sequence files have multiple records, 
 
 \begin{verbatim}
 from Bio import SeqIO
-first_record  = SeqIO.parse(open("ls_orchid.gbk"), "genbank").next()
+first_record  = SeqIO.parse("ls_orchid.gbk", "genbank").next()
 \end{verbatim}
 
 A word of warning here -- using the \verb|.next()| method like this will silently ignore any additional records in the file.
@@ -2133,9 +2120,7 @@ In the previous section we talked about the fact that \verb|Bio.SeqIO.parse()| g
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open("ls_orchid.gbk")
-records = list(SeqIO.parse(handle, "genbank"))
-handle.close()
+records = list(SeqIO.parse("ls_orchid.gbk", "genbank"))
 
 print "Found %i records" % len(records)
 
@@ -2175,7 +2160,7 @@ Chapter~\ref{chapter:SeqRecord}.  As an example of how annotations are stored, w
 
 \begin{verbatim}
 from Bio import SeqIO
-record_iterator = SeqIO.parse(open("ls_orchid.gbk"), "genbank")
+record_iterator = SeqIO.parse("ls_orchid.gbk", "genbank")
 first_record = record_iterator.next()
 print first_record
 \end{verbatim}
@@ -2240,11 +2225,9 @@ Now let's go through all the records, building up a list of the species each orc
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open("ls_orchid.gbk")
 all_species = []
-for seq_record in SeqIO.parse(handle, "genbank"):
+for seq_record in SeqIO.parse("ls_orchid.gbk", "genbank"):
     all_species.append(seq_record.annotations["organism"])
-handle.close()
 print all_species
 \end{verbatim}
 
@@ -2253,7 +2236,7 @@ Another way of writing this code is to use a list comprehension:
 \begin{verbatim}
 from Bio import SeqIO
 all_species = [seq_record.annotations["organism"] for seq_record in \
-               SeqIO.parse(open("ls_orchid.gbk"), "genbank")]
+               SeqIO.parse("ls_orchid.gbk", "genbank")]
 print all_species
 \end{verbatim}
 
@@ -2279,11 +2262,9 @@ You can check by hand, but for every record the species name is in the descripti
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open("ls_orchid.fasta")
 all_species = []
-for seq_record in SeqIO.parse(handle, "fasta"):
+for seq_record in SeqIO.parse("ls_orchid.fasta", "fasta"):
     all_species.append(seq_record.description.split()[1])
-handle.close()
 print all_species
 \end{verbatim}
 
@@ -2298,7 +2279,7 @@ The concise alternative using list comprehensions would be:
 \begin{verbatim}
 from Bio import SeqIO
 all_species == [seq_record.description.split()[1] for seq_record in \
-                SeqIO.parse(open("ls_orchid.fasta"), "fasta")]
+                SeqIO.parse("ls_orchid.fasta", "fasta")]
 print all_species
 \end{verbatim}
 
@@ -2308,9 +2289,10 @@ then this sort of annotation information is much easier to deal with.
 
 \section{Parsing sequences from the net}
 \label{sec:SeqIO_Online}
-In the previous section, we looked at parsing sequence data from a file handle.
-We hinted that handles are not always from files, and in this section we'll use
-handles to internet connections to download sequences.
+In the previous section, we looked at parsing sequence data from a file.
+Instead of using a filename, you can give \verb|Bio.SeqIO| a handle
+(see Section~\ref{sec:appendix-handles}), and in this section
+we'll use handles to internet connections to download sequences.
 
 Note that just because you \emph{can} download sequence data and parse it into
 a \verb|SeqRecord| object in one go doesn't mean this is a good idea.
@@ -2438,9 +2420,7 @@ You can use the function \verb|Bio.SeqIO.to_dict()| to make a SeqRecord dictiona
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open("ls_orchid.gbk")
-orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, "genbank"))
-handle.close()
+orchid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.gbk", "genbank"))
 \end{verbatim}
 
 There is just one required argument for \verb|Bio.SeqIO.to_dict()|, a list or
@@ -2484,9 +2464,7 @@ Using the same code as above, but for the FASTA file instead:
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open("ls_orchid.fasta")
-orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, "fasta"))
-handle.close()
+orchid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.fasta", "fasta"))
 print orchid_dict.keys()
 \end{verbatim}
 
@@ -2516,9 +2494,7 @@ def get_accession(record):
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open("ls_orchid.fasta")
-orchid_dict = SeqIO.to_dict(SeqIO.parse(handle, "fasta"), key_function=get_accession)
-handle.close()
+orchid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.fasta", "fasta"), key_function=get_accession)
 print orchid_dict.keys()
 \end{verbatim}
 
@@ -2540,7 +2516,7 @@ Once again, working with the orchids GenBank file:
 \begin{verbatim}
 from Bio import SeqIO
 from Bio.SeqUtils.CheckSum import seguid
-for record in SeqIO.parse(open("ls_orchid.gbk"), "genbank"):
+for record in SeqIO.parse("ls_orchid.gbk", "genbank"):
     print record.id, seguid(record.seq)
 \end{verbatim}
 
@@ -2558,7 +2534,7 @@ Now, recall the \verb|Bio.SeqIO.to_dict()| function's \verb|key_function| argume
 \begin{verbatim}
 from Bio import SeqIO
 from Bio.SeqUtils.CheckSum import seguid
-seguid_dict = SeqIO.to_dict(SeqIO.parse(open("ls_orchid.gbk"), "genbank"),
+seguid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.gbk", "genbank"),
                             lambda rec : seguid(rec.seq))
 record = seguid_dict["MN/s0q9zDoCVEEc+k/IFwCNF2pY"]
 print record.id
@@ -2610,8 +2586,8 @@ P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
 \end{verbatim}
 
-\noindent Note that \verb|Bio.SeqIO.index()| doesn't take a handle,
-but rather a filename. There are good reasons for this, but it is a little
+\noindent Note that \verb|Bio.SeqIO.index()| won't take a handle,
+but only a filename. There are good reasons for this, but it is a little
 technical. The second argument is the file format (a lower case string as
 used in the other \verb|Bio.SeqIO| functions). You can use many other
 simple file formats, including FASTA and FASTQ files (see the example in
@@ -2663,7 +2639,7 @@ function to use in building the dictionary:
 
 \section{Writing Sequence Files}
 
-We've talked about using \verb|Bio.SeqIO.parse()| for sequence input (reading files), and now we'll look at \verb|Bio.SeqIO.write()| which is for sequence output (writing files).  This is a function taking three arguments: some \verb|SeqRecord| objects, a handle to write to, and a sequence format.
+We've talked about using \verb|Bio.SeqIO.parse()| for sequence input (reading files), and now we'll look at \verb|Bio.SeqIO.write()| which is for sequence output (writing files).  This is a function taking three arguments: some \verb|SeqRecord| objects, a handle or filename to write to, and a sequence format.
 
 Here is an example, where we start by creating a few \verb|SeqRecord| objects the hard way (by hand, rather than by loading them from a file):
 
@@ -2701,9 +2677,7 @@ my_records = [rec1, rec2, rec3]
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open("my_example.faa", "w")
-SeqIO.write(my_records, handle, "fasta")
-handle.close()
+SeqIO.write(my_records, "my_example.faa", "fasta")
 \end{verbatim}
 
 \noindent And if you open this file in your favourite text editor it should look like this:
@@ -2730,6 +2704,8 @@ TGEGLEWGVLFGFGPGLTVETVVLHSVAT
 Suppose you wanted to know how many records the \verb|Bio.SeqIO.write()| function wrote to the handle?
 If your records were in a list you could just use \verb|len(my_records)|, however you can't do that when your records come from a generator/iterator.  Therefore as of Biopython 1.49, the \verb|Bio.SeqIO.write()| function returns the number of \verb|SeqRecord| objects written to the file.   
 
+\emph{Note} - If you tell the \verb|Bio.SeqIO.write()| function to write to a file that already exists, the old file will be overwritten without any warning.
+
 \subsection{Converting between sequence file formats}
 \label{sec:SeqIO-conversion}
 
@@ -2739,39 +2715,14 @@ For this example we'll read in the GenBank format file \href{http://biopython.or
 
 \begin{verbatim}
 from Bio import SeqIO
-in_handle = open("ls_orchid.gbk", "r")
-out_handle = open("my_example.fasta", "w")
-records = SeqIO.parse(in_handle, "genbank")
-count = SeqIO.write(records, out_handle, "fasta")
-in_handle.close()
-out_handle.close()
+records = SeqIO.parse("ls_orchid.gbk", "genbank")
+count = SeqIO.write(records, "my_example.fasta", "fasta")
 print "Converted %i records" % count
 \end{verbatim}
 
-You can simplify this by being lazy about closing the input file handles. This
-is arguably bad style, but it is more concise. Note that you should always
-close your outfile file handles as if you don't, your file may not get flushed
-to disk immediately.
-
-Alternatively, Python 2.6 includes \verb|with| as a new keyword (which can
-also be enabled on Python 2.5):
-
-\begin{verbatim}
-from __future__ import with_statement #Needed on Python 2.5
-from Bio import SeqIO
-
-with in_handle = open("ls_orchid.gbk"):
-    with out_handle = open("my_example.fasta", "w"):
-        count = SeqIO.write(SeqIO.parse(in_handle, "genbank"), out_handle, "fasta")
-print "Converted %i records" % count
-\end{verbatim}
-
-\noindent Behind the scenes this will automatically close the handle handles
-(because the file objects are aware of the \verb|with| statement).
-
-Still, that is a bit complicated. So, because file conversion is such a
+Still, that is a little bit complicated. So, because file conversion is such a
 common task, Biopython 1.52 introduced a helper function letting you replace
-all that with just:
+that with just:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -2812,11 +2763,9 @@ the \verb|Seq| object's built in \verb|.reverse_complement()| method (see Sectio
 
 \begin{verbatim}
 from Bio import SeqIO
-in_handle = open("ls_orchid.gbk")
-for record in SeqIO.parse(in_handle, "genbank"):
+for record in SeqIO.parse("ls_orchid.gbk", "genbank"):
     print record.id
     print record.seq.reverse_complement()
-in_handle.close()
 \end{verbatim}
 
 Now, if we want to save these reverse complements to a file, we'll need to make \verb|SeqRecord| objects.
@@ -2837,46 +2786,34 @@ We can then use this to turn the input records into reverse complement records r
 
 \begin{verbatim}
 from Bio import SeqIO
-
-in_handle = open("ls_orchid.fasta")
-records = map(make_rc_record, SeqIO.parse(in_handle, "fasta"))
-in_handle.close()
-
-out_handle = open("rev_comp.fasta", "w")
-SeqIO.write(records, out_handle, "fasta")
-out_handle.close()
+records = map(make_rc_record, SeqIO.parse("ls_orchid.fasta", "fasta"))
+SeqIO.write(records, "rev_comp.fasta", "fasta")
 \end{verbatim}
 
 This is an excellent place to demonstrate the power of list comprehensions which in their simplest are a long-winded equivalent to using \verb|map()|, like this:
 
 \begin{verbatim}
-records = [make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta")]
+records = [make_rc_record(rec) for rec in SeqIO.parse("ls_orchid.fasta", "fasta")]
 \end{verbatim}
 
 \noindent Now list comprehensions have a nice trick up their sleeves, you can add a conditional statement:
 
 \begin{verbatim}
-records = [make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta") if len(rec)<700]
+records = [make_rc_record(rec) for rec in SeqIO.parse("ls_orchid.fasta", "fasta") if len(rec)<700]
 \end{verbatim}
 
 That would create an in memory list of reverse complement records where the sequence length was under 700 base pairs. However, we can do exactly the same with a generator expression - but with the advantage that this does not create a list of all the records in memory at once:
 
 \begin{verbatim}
-records = (make_rc_record(rec) for rec in SeqIO.parse(in_handle, "fasta") if len(rec)<700)
+records = (make_rc_record(rec) for rec in SeqIO.parse("ls_orchid.fasta", "fasta") if len(rec)<700)
 \end{verbatim}
 
-If you don't mind being lax about closing input file handles, we have:
+As a complete example:
 
 \begin{verbatim}
 from Bio import SeqIO
-
-records = (make_rc_record(rec) for rec in \
-           SeqIO.parse(open("ls_orchid.fasta"), "fasta") \
-           if len(rec) < 700)
-
-out_handle = open("rev_comp.fasta", "w")
-SeqIO.write(records, out_handle, "fasta")
-out_handle.close()
+records = (make_rc_record(rec) for rec in SeqIO.parse("ls_orchid.fasta", "fasta") if len(rec)<700)
+SeqIO.write(records, "rev_comp.fasta", "fasta")
 \end{verbatim}
 
 There is a related example in Section~\ref{sec:SeqIO-translate}, translating each
@@ -2891,7 +2828,7 @@ For an example of how you might use this, let's load in a bunch of \verb|SeqReco
 \begin{verbatim}
 from Bio import SeqIO
 from StringIO import StringIO
-records = SeqIO.parse(open("ls_orchid.gbk"), "genbank")
+records = SeqIO.parse("ls_orchid.gbk", "genbank")
 out_handle = StringIO()
 SeqIO.write(records, out_handle, "fasta")
 fasta_data = out_handle.getvalue()
@@ -2900,38 +2837,42 @@ print fasta_data
 
 This isn't entirely straightforward the first time you see it!  On the bright side, for the special case where you would like a string containing a \emph{single} record in a particular file format, Biopython 1.48 added a new \verb|format()| method to the \verb|SeqRecord| class (see Section~\ref{sec:SeqRecord-format}).
 
-Note that although we don't encourage it, you \emph{can} use the \verb|format()| method to write to a file, like this:
+Note that although we don't encourage it, you \emph{can} use the \verb|format()| method to write to a file, for example something like this:
 \begin{verbatim}
 from Bio import SeqIO
-record_iterator = SeqIO.parse(open("ls_orchid.gbk"), "genbank")
-out_handle = open("ls_orchid.tab", "w")
-for record in record_iterator:
-    out_handle.write(record.format("tab"))
+out_handle = open("ls_orchid_long.tab", "w")
+for record in SeqIO.parse("ls_orchid.gbk", "genbank"):
+    if len(record) > 100:
+        out_handle.write(record.format("tab"))
 out_handle.close()
 \end{verbatim}
-\noindent While this style of code will work for a simple sequential file format like FASTA or the simple tab separated format used in this example, it will \emph{not} work for more complex or interlaced file formats.  This is why we still recommend using \verb|Bio.SeqIO.write()|, as in the following example:
+\noindent While this style of code will work for a simple sequential file format like FASTA or the simple tab separated format used here, it will \emph{not} work for more complex or interlaced file formats.  This is why we still recommend using \verb|Bio.SeqIO.write()|, as in the following example:
 \begin{verbatim}
 from Bio import SeqIO
-record_iterator = SeqIO.parse(open("ls_orchid.gbk"), "genbank")
-out_handle = open("ls_orchid.tab", "w")
-SeqIO.write(record_iterator, out_handle, "tab")
-out_handle.close()
+records = (rec for rec in SeqIO.parse("ls_orchid.gbk", "genbank") if len(rec) > 100)
+SeqIO.write(records, "ls_orchid.tab", "tab")
 \end{verbatim}
-\noindent Making a single call to \verb|SeqIO.write(...)| is also much quicker than multiple calls to the \verb|SeqRecord.format(...)| method.
+\noindent Making a single call to \verb|SeqIO.write(...)| is also much quicker than
+multiple calls to the \verb|SeqRecord.format(...)| method.
 
-\chapter{Sequence Alignment Input/Output, and Alignment Tools}
+\chapter{Multiple Sequence Alignment objects}
 \label{chapter:Bio.AlignIO}
 
-In this chapter we'll discuss the \verb|Bio.AlignIO| module, which is very similar to the
-\verb|Bio.SeqIO| module from the previous chapter, but deals with \verb|MultipleSeqAlignment|
-objects rather than \verb|SeqRecord| objects. These alignment objects hold a collection of
-\verb|SeqRecord| objects which are all the same length. The \verb|Bio.AlignIO| module aims
-to provide a simple interface for working with assorted sequence alignment file formats in
-a uniform way.
+This chapter is about Multiple Sequence Alignments, by which we mean a collection of
+multiple sequences which have been aligned together -- usually with the insertion of gap
+characters, and addition of leading or trailing gaps -- such that all the sequence
+strings are the same length. Such an alignment can be regarded as a matrix of letters,
+where each row is held as a \verb|SeqRecord| object internally.
 
-Note that both \verb|Bio.SeqIO| and \verb|Bio.AlignIO| can read and write sequence alignment files.  The appropriate choice will depend largely on what you want to do with the data.
+We will introduce the \verb|MultipleSeqAlignment| object which holds this kind of data,
+and the \verb|Bio.AlignIO| module for reading and writing them as various file formats
+(following the design of the \verb|Bio.SeqIO| module from the previous chapter).
+Note that both \verb|Bio.SeqIO| and \verb|Bio.AlignIO| can read and write sequence
+alignment files.  The appropriate choice will depend largely on what you want to do
+with the data.
 
-The final part of this chapter is about our command line wrappers for common multiple sequence alignment tools like ClustalW and MUSCLE.
+The final part of this chapter is about our command line wrappers for common multiple
+sequence alignment tools like ClustalW and MUSCLE.
 
 \section{Parsing or Reading Sequence Alignments}
 
@@ -2944,7 +2885,7 @@ However, in many situations you will be dealing with files which contain only a 
 Both functions expect two mandatory arguments:
 
 \begin{enumerate}
-\item The first argument is a {\it handle} to read the data from, typically an open file (see Section~\ref{sec:appendix-handles}).
+\item The first argument is a {\it handle} to read the data from, typically an open file (see Section~\ref{sec:appendix-handles}), or a filename.
 \item The second argument is a lower case string specifying the alignment format.  As in \verb|Bio.SeqIO| we don't try and guess the file format for you!  See \url{http://biopython.org/wiki/AlignIO} for a full listing of supported formats.
 \end{enumerate}
 
@@ -2989,7 +2930,7 @@ This is the seed alignment for the Phage\_Coat\_Gp8 (PF05371) PFAM entry, downlo
 
 \begin{verbatim}
 from Bio import AlignIO
-alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
+alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 print alignment
 \end{verbatim}
 
@@ -3010,7 +2951,7 @@ You'll notice in the above output the sequences have been truncated.  We could i
 
 \begin{verbatim}
 from Bio import AlignIO
-alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
+alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 print "Alignment length %i" % alignment.get_alignment_length()
 for record in alignment:
     print "%s - %s" % (record.seq, record.id)
@@ -3078,7 +3019,7 @@ FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA
 
 \begin{verbatim}
 from Bio import AlignIO
-alignment = AlignIO.read(open("PF05371_seed.faa"), "fasta")
+alignment = AlignIO.read("PF05371_seed.faa", "fasta")
 print alignment
 \end{verbatim}
 
@@ -3144,7 +3085,7 @@ If you wanted to read this in using \verb|Bio.AlignIO| you could use:
 
 \begin{verbatim}
 from Bio import AlignIO
-alignments = AlignIO.parse(open("resampled.phy"), "phylip")
+alignments = AlignIO.parse("resampled.phy", "phylip")
 for alignment in alignments:
     print alignment
     print
@@ -3189,7 +3130,7 @@ If you want to keep all the alignments in memory at once, which will allow you t
 
 \begin{verbatim}
 from Bio import AlignIO
-alignments = list(AlignIO.parse(open("resampled.phy"), "phylip"))
+alignments = list(AlignIO.parse("resampled.phy", "phylip"))
 last_align = alignments[-1]
 first_align = alignments[0]
 \end{verbatim}
@@ -3351,6 +3292,8 @@ Its more common to want to load an existing alignment, and save that, perhaps af
 
 Suppose you wanted to know how many alignments the \verb|Bio.AlignIO.write()| function wrote to the handle? If your alignments were in a list like the example above, you could just use \verb|len(my_alignments)|, however you can't do that when your records come from a generator/iterator.  Therefore as of Biopython 1.49, the \verb|Bio.AlignIO.write()| function returns the number of alignments written to the file.   
 
+\emph{Note} - If you tell the \verb|Bio.AlignIO.write()| function to write to a file that already exists, the old file will be overwritten without any warning.
+
 
 \subsection{Converting between sequence alignment file formats}
 \label{sec:converting-alignments}
@@ -3373,10 +3316,8 @@ Or, using \verb|Bio.AlignIO.parse()| and \verb|Bio.AlignIO.write()|:
 
 \begin{verbatim}
 from Bio import AlignIO
-alignments = AlignIO.parse(open("PF05371_seed.sth"), "stockholm")
-handle = open("PF05371_seed.aln","w")
-count = AlignIO.write(alignments, handle, "clustal")
-handle.close()
+alignments = AlignIO.parse("PF05371_seed.sth", "stockholm")
+count = AlignIO.write(alignments, "PF05371_seed.aln", "clustal")
 print "Converted %i alignments" % count
 \end{verbatim}
 
@@ -3386,10 +3327,8 @@ In this case, we know there is only one alignment in the file so we could have u
 
 \begin{verbatim}
 from Bio import AlignIO
-alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
-handle = open("PF05371_seed.aln","w")
-AlignIO.write([alignment], handle, "clustal")
-handle.close()
+alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
+AlignIO.write([alignment], "PF05371_seed.aln", "clustal")
 \end{verbatim}
 
 Either way, you should end up with the same new Clustal W format file ``PF05371\_seed.aln'' with the following content:
@@ -3422,16 +3361,6 @@ from Bio import AlignIO
 AlignIO.convert("PF05371_seed.sth", "stockholm", "PF05371_seed.phy", "phylip")
 \end{verbatim}
 
-\noindent or,
-
-\begin{verbatim}
-from Bio import AlignIO
-alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
-handle = open("PF05371_seed.phy","w")
-AlignIO.write([alignment], handle, "phylip")
-handle.close()
-\end{verbatim}
-
 This time the output looks like this:
 
 \begin{verbatim}
@@ -3457,16 +3386,14 @@ One of the big handicaps of the PHYLIP alignment file format is that the sequenc
 
 \begin{verbatim}
 from Bio import AlignIO
-alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
+alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 name_mapping = {}
 for i, record in enumerate(alignment):
     name_mapping[i] = record.id
     record.id = "seq%i" % i
 print name_mapping
 
-handle = open("PF05371_seed.phy","w")
-AlignIO.write([alignment], handle, "phylip")
-handle.close()
+AlignIO.write([alignment], "PF05371_seed.phy", "phylip")
 \end{verbatim}
 
 \noindent This code used a Python dictionary to record a simple mapping from the new sequence system to the original identifier:
@@ -3503,7 +3430,7 @@ However, you will probably prefer to take advantage of the new \verb|format()| m
 
 \begin{verbatim}
 from Bio import AlignIO
-alignment = AlignIO.read(open("PF05371_seed.sth"), "stockholm")
+alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 print alignment.format("clustal")
 \end{verbatim}
 
@@ -3517,7 +3444,7 @@ older version of Biopython:
 from Bio import AlignIO
 from StringIO import StringIO
 
-alignments = AlignIO.parse(open("PF05371_seed.sth"), "stockholm")
+alignments = AlignIO.parse("PF05371_seed.sth", "stockholm")
 
 out_handle = StringIO()
 AlignIO.write(alignments, out_handle, "clustal")
@@ -3689,7 +3616,7 @@ You should be able to work out how to read in the alignment using
 
 \begin{verbatim}
 >>> from Bio import AlignIO
->>> align = AlignIO.read(open("opuntia.aln"), "clustal")
+>>> align = AlignIO.read("opuntia.aln", "clustal")
 >>> print align
 SingleLetterAlphabet() alignment with 7 rows and 906 columns
 TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF191
@@ -3853,7 +3780,7 @@ file (using a generator expression), taking just six of the seven sequences:
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> records = (r for r in SeqIO.parse(open("opuntia.fasta"), "fasta") if len(r) < 900)
+>>> records = (r for r in SeqIO.parse("opuntia.fasta", "fasta") if len(r) < 900)
 \end{verbatim}
 
 Then we create the MUSCLE command line, leaving the input and output to their
@@ -4022,7 +3949,7 @@ discussed earlier in this chapter, as the \texttt{emboss} format:
 
 \begin{verbatim}
 >>> from Bio import AlignIO
->>> align = AlignIO.read(open("needle.txt"), "emboss")
+>>> align = AlignIO.read("needle.txt", "emboss")
 >>> print align
 SingleLetterAlphabet() alignment with 2 rows and 149 columns
 MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTY...KYR HBA_HUMAN
@@ -5100,7 +5027,7 @@ if not os.path.isfile(filename):
     print "Saved"
 
 print "Parsing..."
-record = SeqIO.read(open(filename), "genbank")
+record = SeqIO.read(filename, "genbank")
 print record
 \end{verbatim}
 
@@ -8131,7 +8058,7 @@ from reportlab.lib import colors
 from reportlab.lib.units import cm
 from Bio.Graphics import GenomeDiagram
 from Bio import SeqIO
-record = SeqIO.read(open("NC_005816.gb"), "genbank")
+record = SeqIO.read("NC_005816.gb", "genbank")
 \end{verbatim}
 
 We're using a top down approach, so after loading in our sequence we next
@@ -8231,7 +8158,7 @@ from reportlab.lib import colors
 from reportlab.lib.units import cm
 from Bio.Graphics import GenomeDiagram
 from Bio import SeqIO
-record = SeqIO.read(open("NC_005816.gb"), "genbank")
+record = SeqIO.read("NC_005816.gb", "genbank")
 
 #Create the feature set and its feature objects,
 gd_feature_set = GenomeDiagram.FeatureSet()
@@ -8491,7 +8418,7 @@ from Bio.Graphics import GenomeDiagram
 from Bio import SeqIO
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 
-record = SeqIO.read(open("NC_005816.gb"), "genbank")
+record = SeqIO.read("NC_005816.gb", "genbank")
 
 gd_diagram = GenomeDiagram.Diagram(record.id)
 gd_track_for_features = gd_diagram.new_track(1, name="Annotated Features")
@@ -8628,7 +8555,7 @@ entries = [("Chr I","CHR_I/NC_003070.fna"),
           ("Chr IV","CHR_IV/NC_003075.fna"),
           ("Chr V","CHR_V/NC_003076.fna")]
 for (name, filename) in entries:
-   record = SeqIO.read(open(filename),"fasta")
+   record = SeqIO.read(filename,"fasta")
    print name, len(record)
 \end{verbatim}
 
@@ -8739,7 +8666,7 @@ This file contains one and only one record, so we can read it in as a
 
 \begin{verbatim}
 from Bio import SeqIO
-original_rec = SeqIO.read(open("NC_005816.gb"),"genbank")
+original_rec = SeqIO.read("NC_005816.gb","genbank")
 \end{verbatim}
 
 So, how can we generate a shuffled versions of the original sequence?  I would
@@ -8780,7 +8707,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 
-original_rec = SeqIO.read(open("NC_005816.gb"),"genbank")
+original_rec = SeqIO.read("NC_005816.gb","genbank")
 
 handle = open("shuffled.fasta", "w")
 for i in range(30):
@@ -8808,7 +8735,7 @@ def make_shuffle_record(record, new_id):
     return SeqRecord(Seq("".join(nuc_list), record.seq.alphabet), \
            id=new_id, description="Based on %s" % original_rec.id)
    
-original_rec = SeqIO.read(open("NC_005816.gb"),"genbank")
+original_rec = SeqIO.read("NC_005816.gb","genbank")
 shuffled_recs = (make_shuffle_record(original_rec, "Shuffled%i" % (i+1)) \
                  for i in range(30))
 handle = open("shuffled.fasta", "w")
@@ -8849,13 +8776,9 @@ is with a generator expression:
 
 \begin{verbatim}
 from Bio import SeqIO
-
 proteins = (make_protein_record(nuc_rec) for nuc_rec in \
-            SeqIO.parse(open("coding_sequences.fasta"), "fasta"))
-
-out_handle = open("translations.fasta", "w")
-SeqIO.write(proteins, out_handle, "fasta")
-out_handle.close()
+            SeqIO.parse("coding_sequences.fasta", "fasta"))
+SeqIO.write(proteins, "translations.fasta", "fasta")
 \end{verbatim}
 
 This should work on any FASTA file of complete coding sequences.
@@ -8887,14 +8810,10 @@ For this example we'll use some real data downloaded from the NCBI,
 
 \begin{verbatim}
 from Bio import SeqIO
-
-good_reads = (record for record in \
-              SeqIO.parse(open("SRR014849.fastq"), "fastq") \
-              if min(record.letter_annotations["phred_quality"]) >= 20)
-
-out_handle = open("good_quality.fastq", "w")
-count = SeqIO.write(good_reads, out_handle, "fastq")
-out_handle.close()
+good_reads = (rec for rec in \
+              SeqIO.parse("SRR014849.fastq", "fastq") \
+              if min(rec.letter_annotations["phred_quality"]) >= 20)
+count = SeqIO.write(good_reads, "good_quality.fastq", "fastq")
 print "Saved %i reads" % count
 \end{verbatim}
 
@@ -8921,12 +8840,10 @@ all the sequences into memory at once), and the \verb|Seq| object's
 
 \begin{verbatim}
 from Bio import SeqIO
-primer_reads = (record for record in \
-                SeqIO.parse(open("SRR014849.fastq"), "fastq") \
-                if record.seq.startswith("GTTGGAACCG"))
-out_handle = open("with_primer.fastq", "w")
-count = SeqIO.write(primer_reads, out_handle, "fastq")
-out_handle.close()
+primer_reads = (rec for rec in \
+                SeqIO.parse("SRR014849.fastq", "fastq") \
+                if rec.seq.startswith("GTTGGAACCG"))
+count = SeqIO.write(primer_reads, "with_primer.fastq", "fastq")
 print "Saved %i reads" % count
 \end{verbatim}
 
@@ -8940,12 +8857,10 @@ letters (the length of our primer):
 
 \begin{verbatim}
 from Bio import SeqIO
-trimmed_primer_reads = (record[10:] for record in \
-                        SeqIO.parse(open("SRR014849.fastq"), "fastq") \
-                        if record.seq.startswith("GTTGGAACCG"))
-out_handle = open("with_primer_trimmed.fastq", "w")
-count = SeqIO.write(trimmed_primer_reads, out_handle, "fastq")
-out_handle.close()
+trimmed_primer_reads = (rec[10:] for rec in \
+                        SeqIO.parse("SRR014849.fastq", "fastq") \
+                        if rec.seq.startswith("GTTGGAACCG"))
+count = SeqIO.write(trimmed_primer_reads, "with_primer_trimmed.fastq", "fastq")
 print "Saved %i reads" % count
 \end{verbatim}
 
@@ -8967,10 +8882,8 @@ def trim_primer(record, primer):
         return record
 
 trimmed_reads = (trim_primer(record, "GTTGGAACCG") for record in \
-                 SeqIO.parse(open("SRR014849.fastq"), "fastq"))
-out_handle = open("trimmed.fastq", "w")
-count = SeqIO.write(trimmed_reads, out_handle, "fastq")
-out_handle.close()
+                 SeqIO.parse("SRR014849.fastq", "fastq"))
+count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq")
 print "Saved %i reads" % count
 \end{verbatim}
 
@@ -8994,11 +8907,9 @@ def trim_primers(records, primer):
         else:
             yield record
 
-original_reads = SeqIO.parse(open("SRR014849.fastq"), "fastq")
+original_reads = SeqIO.parse("SRR014849.fastq", "fastq")
 trimmed_reads = trim_primers(original_reads, "GTTGGAACCG")
-out_handle = open("trimmed.fastq", "w") 
-count = SeqIO.write(trimmed_reads, out_handle, "fastq") 
-out_handle.close() 
+count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq") 
 print "Saved %i reads" % count
 \end{verbatim}
 
@@ -9035,11 +8946,9 @@ def trim_adaptors(records, adaptor, min_len):
             #trim off the adaptor
             yield record[index+len_adaptor:]
 
-original_reads = SeqIO.parse(open("SRR014849.fastq"), "fastq")
+original_reads = SeqIO.parse("SRR014849.fastq", "fastq")
 trimmed_reads = trim_adaptors(original_reads, "GTTGGAACCG")
-out_handle = open("trimmed.fastq", "w") 
-count = SeqIO.write(trimmed_reads, out_handle, "fastq") 
-out_handle.close() 
+count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq") 
 print "Saved %i reads" % count
 \end{verbatim}
 
@@ -9077,11 +8986,9 @@ def trim_adaptors(records, adaptor, min_len):
             #after trimming this will still be long enough
             yield record[index+len_adaptor:]
 
-original_reads = SeqIO.parse(open("SRR014849.fastq"), "fastq")
+original_reads = SeqIO.parse("SRR014849.fastq", "fastq")
 trimmed_reads = trim_adaptors(original_reads, "GTTGGAACCG", 36)
-out_handle = open("trimmed.fastq", "w") 
-count = SeqIO.write(trimmed_reads, out_handle, "fastq") 
-out_handle.close() 
+count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq") 
 print "Saved %i reads" % count
 \end{verbatim}
 
@@ -9349,7 +9256,7 @@ NCBI codon table 11 (see Section~\ref{sec:translation} about translation).
 
 \begin{verbatim}
 from Bio import SeqIO 
-record = SeqIO.read(open("NC_005816.fna"),"fasta")
+record = SeqIO.read("NC_005816.fna","fasta")
 table = 11
 min_pro_len = 100
 \end{verbatim}
@@ -9400,7 +9307,7 @@ strand:
 
 \begin{verbatim}
 from Bio import SeqIO 
-record = SeqIO.read(open("NC_005816.gb"),"genbank")
+record = SeqIO.read("NC_005816.gb","genbank")
 table = 11
 min_pro_len = 100
 
@@ -9795,7 +9702,7 @@ from Bio import SeqIO
 for subfigure in [1,2]:
     filename = "SRR001666_%i.fastq" % subfigure
     pylab.subplot(1, 2, subfigure)
-    for i,record in enumerate(SeqIO.parse(open(filename), "fastq")):
+    for i,record in enumerate(SeqIO.parse(filename, "fastq")):
         if i >= 50 : break #trick!
         pylab.plot(record.letter_annotations["phred_quality"])
     pylab.ylim(0,45)
