@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 23 February 2009 (Biopython 1.53+)}
+\date{Last Update -- 3 March 2009 (Biopython 1.53+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -2578,7 +2578,9 @@ it still returns a dictionary like object, this does \emph{not} keep
 \emph{everything} in memory. Instead, it just records where each record
 is within the file -- when you ask for a particular record, it then parses
 it on demand. The record keys and the offsets are still in memory, but this
-works fine even for millions of sequences.
+works fine even for millions of sequences. However, if you have tens of
+millions of sequences, then you probably more RAM (and a 64bit version
+of Python in order to use more than 4GB of RAM).
 
 The main benefits are far lower memory requirements, and also building
 the index is much faster (as it only scans the file quickly looking for
@@ -2634,7 +2636,7 @@ you want:
 
 \begin{verbatim}
 def get_acc(identifier):
-    """"Given a SeqRecord identifer string, return the accession number as a string.
+    """"Given a SeqRecord identifier string, return the accession number as a string.
   
     e.g. "gi|2765613|emb|Z78488.1|PTZ78488" -> "Z78488.1"
     """
@@ -9089,9 +9091,9 @@ DNA sequencing. Please refer to Cock \textit{et al.} (2009)
 a longer description. FASTQ files store both the DNA sequence (as a string)
 and the associated read qualities. 
 
-PHRED scores (used in most FASTQ files, and also in QUAL files and ACE
-files) have become a \textit{de facto} standard for representing the
-probability of a sequencing error (here denoted by $P_e$) at a given
+PHRED scores (used in most FASTQ files, and also in QUAL files, ACE files
+and SFF files) have become a \textit{de facto} standard for representing
+the probability of a sequencing error (here denoted by $P_e$) at a given
 base using a simple base ten log transformation:
 
 \begin{equation}
@@ -9236,8 +9238,7 @@ looking at just one \verb|SeqRecord| at a time.
 However, sometimes you can't use a big loop or an iterator - you may need
 random access to the reads. Here the \verb|Bio.SeqIO.index()| function
 may prove very helpful, as it allows you to access any read in the FASTQ file
-by its name -- without running out of memory (see
-Section~\ref{sec:seqio-index}).
+by its name (see Section~\ref{sec:seqio-index}).
 
 Again we'll use the \texttt{SRR014849.fastq} file from the NCBI
 (\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}),
@@ -9254,8 +9255,69 @@ fq_dict.keys()[:4]
 Seq('AAAATCATCTCTGGCGCCCCGTTGGAACCGAAAGGGTTTGAATTCAAACCCTTT...CAG', SingleLetterAlphabet())
 \end{verbatim}
 
-The same approach has been tested on FASTQ files with seven million reads,
-indexing took about a minute, but record access is almost instant.
+When testing this on a FASTQ file with seven million reads,
+indexing took about a minute, but record access was almost instant.
+
+\subsection{Converting SFF files}
+\label{sec:SeqIO-sff-conversion}
+
+If you work with 454 (Roche) sequence data, you will probably have access
+to the raw data as an Standard Flowgram Format (SFF) file. This contains
+the sequence reads (called bases) with quality scores and the original
+flow information.
+
+A common task is to convert from SFF to a pair of FASTA and QUAL files,
+or to a single FASTQ file. These operations are trivial using the
+\verb|Bio.SeqIO.convert()| function (see Section~\ref{sec:SeqIO-conversion}):
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> SeqIO.convert("E3MFGYR02_random_10_reads.sff", "sff", "reads.fasta", "fasta")
+10
+>>> SeqIO.convert("E3MFGYR02_random_10_reads.sff", "sff", "reads.qual", "qual")
+10
+>>> SeqIO.convert("E3MFGYR02_random_10_reads.sff", "sff", "reads.fastq", "fastq")
+10
+\end{verbatim}
+
+\noindent Remember the convert function returns the number of records, in
+this example just ten. This will give you the \emph{untrimmed} reads, where
+the leading and trailing poor quality sequence or adaptor will be in lower
+case. If you want the \emph{trimmed} reads (using the clipping information
+recorded within the SFF file) use this:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> SeqIO.convert("E3MFGYR02_random_10_reads.sff", "sff-trim", "trimmed.fasta", "fasta")
+10
+>>> SeqIO.convert("E3MFGYR02_random_10_reads.sff", "sff-trim", "trimmed.qual", "qual")
+10
+>>> SeqIO.convert("E3MFGYR02_random_10_reads.sff", "sff-trim", "trimmed.fastq", "fastq")
+10
+\end{verbatim}
+
+If you run Linux, you could ask Roche for a copy of their ``off instrument''
+tools (often referred to as the Newbler tools). This offers an alternative way to
+do SFF to FASTA or QUAL conversion at the command line (but currently FASTQ output
+is not supported), e.g.
+
+\begin{verbatim}
+$ sffinfo -seq -notrim E3MFGYR02_random_10_reads.sff > reads.fasta
+$ sffinfo -qual -notrim E3MFGYR02_random_10_reads.sff > reads.qual
+$ sffinfo -seq -trim E3MFGYR02_random_10_reads.sff > trimmed.fasta
+$ sffinfo -qual -trim E3MFGYR02_random_10_reads.sff > trimmed.qual
+\end{verbatim}
+
+\noindent The way Biopython uses mixed case sequence strings to represent
+the trimming points deliberately mimics what the Roche tools do.
+
+For more information on the Biopython SFF support, consult the built in help:
+
+\begin{verbatim}
+>>> from Bio.SeqIO import SffIO
+>>> help(SffIO)
+...
+\end{verbatim}
 
 \subsection{Identifying open reading frames}
 
