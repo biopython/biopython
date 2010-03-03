@@ -104,7 +104,7 @@ work, but alignment formats like "phylip", "clustalw" and "nexus" will not.
 
 Input - Alignments
 ==================
-You can read in alignment files as Alignment objects using Bio.AlignIO.
+You can read in alignment files as alignment objects using Bio.AlignIO.
 Alternatively, reading in an alignment file format via Bio.SeqIO will give
 you a SeqRecord for each row of each alignment:
 
@@ -218,9 +218,6 @@ __docformat__ = "epytext en" #not just plaintext
 # - define policy on reading aligned sequences with gaps in
 #   (e.g. - and . characters) including how the alphabet interacts
 #
-# - Can we build the to_alignment(...) functionality
-#   into the generic Alignment class instead?
-#
 # - How best to handle unique/non unique record.id when writing.
 #   For most file formats reading such files is fine; The stockholm
 #   parser would fail.
@@ -263,6 +260,7 @@ See also http://biopython.org/wiki/SeqIO_dev
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio.Align import MultipleSeqAlignment
 from Bio.Align.Generic import Alignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 
@@ -366,11 +364,11 @@ def write(sequences, handle, format):
     elif format in AlignIO._FormatToWriter:
         #Try and turn all the records into a single alignment,
         #and write that using Bio.AlignIO
-        alignment = to_alignment(sequences)
+        alignment = MultipleSeqAlignment(sequences)
         alignment_count = AlignIO.write([alignment], handle, format)
         assert alignment_count == 1, "Internal error - the underlying writer " \
            + " should have returned 1, not %s" % repr(alignment_count)
-        count = len(alignment.get_all_seqs())
+        count = len(alignment)
         del alignment_count, alignment
     elif format in _FormatToIterator or format in AlignIO._FormatToIterator:
         raise ValueError("Reading format '%s' is supported, but not writing" \
@@ -733,14 +731,15 @@ def index(filename, format, alphabet=None, key_function=None):
     return indexer(filename, alphabet, key_function)
 
 def to_alignment(sequences, alphabet=None, strict=True):
-    """Returns a multiple sequence alignment (OBSOLETE).
+    """Returns a multiple sequence alignment (DEPRECATED).
 
      - sequences -An iterator that returns SeqRecord objects,
                   or simply a list of SeqRecord objects.  All
                   the record sequences must be the same length.
      - alphabet - Optional alphabet.  Stongly recommended.
-     - strict   - Optional, defaults to True.  Should error checking
-                  be done?
+     - strict   - Dummy argument, used to enable strict error
+                  checking of sequence lengths and alphabets.
+                  This is now always done.
 
     Using this function is now discouraged.  Rather doing this:
 
@@ -754,72 +753,11 @@ def to_alignment(sequences, alphabet=None, strict=True):
     >>> filename = "Clustalw/protein.aln"
     >>> alignment = AlignIO.read(filename, "clustal")
     """
-    #TODO - Move this functionality into the Alignment class instead?
-    from Bio.Alphabet import Gapped
-    from Bio.Alphabet import _consensus_alphabet
-    if alphabet is None:
-        sequences = list(sequences)
-        alphabet = _consensus_alphabet([rec.seq.alphabet \
-                                        for rec in sequences \
-                                        if rec.seq is not None])
-
-    if not (isinstance(alphabet, Alphabet) \
-    or isinstance(alphabet, AlphabetEncoder)):
-        raise ValueError("Invalid alphabet")
-
-    alignment_length = None
-    alignment = Alignment(alphabet)
-    for record in sequences:
-        if strict:
-            if alignment_length is None:
-                alignment_length = len(record.seq)
-            elif alignment_length != len(record.seq):
-                raise ValueError("Sequences must all be the same length")
-
-            assert isinstance(record.seq.alphabet, Alphabet) \
-            or isinstance(record.seq.alphabet, AlphabetEncoder), \
-                "Sequence does not have a valid alphabet"
-
-            #TODO - Move alphabet comparison code into Alphabet module/class?
-            #TODO - Is a normal alphabet "ungapped" by default, or undecided?
-            if isinstance(record.seq.alphabet, Alphabet) \
-            and isinstance(alphabet, Alphabet):
-                #Comparing two non-gapped alphabets            
-                if not isinstance(record.seq.alphabet, alphabet.__class__):
-                    raise ValueError("Incompatible sequence alphabet " \
-                                     + "%s for %s alignment" \
-                                     % (record.seq.alphabet, alphabet))
-            elif isinstance(record.seq.alphabet, AlphabetEncoder) \
-            and isinstance(alphabet, Alphabet):
-                raise ValueError(\
-                    "Sequence has a gapped alphabet, alignment does not")
-            elif isinstance(record.seq.alphabet, Alphabet) \
-            and isinstance(alphabet, Gapped):
-                #Sequence isn't gapped, alignment is.
-                if not isinstance(record.seq.alphabet,
-                                  alphabet.alphabet.__class__):
-                    raise ValueError("Incompatible sequence alphabet " \
-                                     + "%s for %s alignment" \
-                                     % (record.seq.alphabet, alphabet))
-            else:
-                #Comparing two gapped alphabets
-                if not isinstance(record.seq.alphabet, alphabet.__class__):
-                    raise ValueError("Incompatible sequence alphabet " \
-                                     + "%s for %s alignment" \
-                                     % (record.seq.alphabet, alphabet))
-                if record.seq.alphabet.gap_char != alphabet.gap_char:
-                    raise ValueError("Sequence gap char != alignment gap char")
-            #ToDo, additional checks on the specified alignment...
-            #Should we look at the alphabet.contains() method?
-        if record.seq is None:
-            raise TypeError(\
-                "SeqRecord (id=%s) has None for its sequence." % record.id)
-            
-        #This is abusing the "private" records list,
-        #we should really have a method like add_sequence
-        #but which takes SeqRecord objects.  See also Bug 1944
-        alignment._records.append(record)
-    return alignment
+    import warnings
+    warnings.warn("The Bio.SeqIO.to_alignment(...) function is deprecated. "
+                  "Please use the Bio.Align.MultipleSeqAlignment(...) object "
+                  "directly instead.", DeprecationWarning)
+    return MultipleSeqAlignment(sequences, alphabet)
 
 def convert(in_file, in_format, out_file, out_format, alphabet=None):
     """Convert between two sequence file formats, return number of records.

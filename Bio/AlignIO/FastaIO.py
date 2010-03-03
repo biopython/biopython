@@ -1,4 +1,4 @@
-# Copyright 2008-2009 by Peter Cock.  All rights reserved.
+# Copyright 2008-2010 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -20,12 +20,14 @@ Bio.SeqIO both use the Bio.SeqIO.FastaIO module to deal with these files,
 which can also be used to store a multiple sequence alignments.
 """
 
-from Bio.Align.Generic import Alignment
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator
 from Bio.Alphabet import single_letter_alphabet, generic_dna, generic_protein
 from Bio.Alphabet import Gapped
 
-
+# TODO - Turn this into a doctest
 class FastaM10Iterator(AlignmentIterator):
     """Alignment iterator for the FASTA tool's pairwise alignment output.
 
@@ -42,7 +44,7 @@ class FastaM10Iterator(AlignmentIterator):
         from Bio import AlignIO
         handle = ...
         for a in AlignIO.parse(handle, "fasta-m10"):
-            assert len(a.get_all_seqs()) == 2, "Should be pairwise!"
+            assert len(a) == 2, "Should be pairwise!"
             print "Alignment length %i" % a.get_alignment_length()
             for record in a:
                 print record.seq, record.name, record.id
@@ -55,14 +57,15 @@ class FastaM10Iterator(AlignmentIterator):
     Also note that there can be up to about 30 letters of flanking region
     included in the raw FASTA output as contextual information.  This is NOT
     part of the alignment itself, and is not included in the resulting
-    Alignment objects returned.
+    MultipleSeqAlignment objects returned.
     """
     
     def next(self):
         """Reads from the handle to construct and return the next alignment.
 
         This returns the pairwise alignment of query and match/library
-        sequences as an Alignment object containing two rows."""
+        sequences as an MultipleSeqAlignment object containing two rows.
+        """
         handle = self.handle
 
         try:
@@ -231,7 +234,7 @@ class FastaM10Iterator(AlignmentIterator):
 
         #TODO - Look at the "sq_type" to assign a sensible alphabet?
         alphabet = self.alphabet
-        alignment = Alignment(alphabet)
+        alignment = MultipleSeqAlignment(alphabet)
 
         #TODO - Introduce an annotated alignment class?
         #For now, store the annotation a new private property:
@@ -242,20 +245,18 @@ class FastaM10Iterator(AlignmentIterator):
             alignment._annotations[key] = value
         for key, value in alignment_annotation.iteritems():
             alignment._annotations[key] = value
-            
-
-        #TODO - Once the alignment object gets an append method, use it.
-        #(i.e. an add SeqRecord method)
-        alignment.add_sequence(self._query_descr, query_align_seq)
-        record = alignment.get_all_seqs()[-1]
-        assert record.id == self._query_descr or record.description == self._query_descr
-        #assert record.seq.tostring() == query_align_seq
-        record.id = self._query_descr.split(None,1)[0].strip(",")
-        record.name = "query"
-        record.annotations["original_length"] = int(query_annotation["sq_len"])
+        
+        #Query
+        #=====
+        record = SeqRecord(Seq(query_align_seq, alphabet),
+                           id = self._query_descr.split(None,1)[0].strip(","),
+                           name = "query",
+                           description = self._query_descr,
+                           annotations = {"original_length" : int(query_annotation["sq_len"])})
         #TODO - handle start/end coordinates properly. Short term hack for now:
         record._al_start = int(query_annotation["al_start"])
         record._al_stop = int(query_annotation["al_stop"])
+        alignment.append(record)
 
         #TODO - What if a specific alphabet has been requested?
         #TODO - Use an IUPAC alphabet?
@@ -268,17 +269,18 @@ class FastaM10Iterator(AlignmentIterator):
         if "-" in query_align_seq:
             if not hasattr(record.seq.alphabet,"gap_char"):
                 record.seq.alphabet = Gapped(record.seq.alphabet, "-")
-        
-        alignment.add_sequence(match_descr, match_align_seq)
-        record = alignment.get_all_seqs()[-1]
-        assert record.id == match_descr or record.description == match_descr
-        #assert record.seq.tostring() == match_align_seq
-        record.id = match_descr.split(None,1)[0].strip(",")
-        record.name = "match"
-        record.annotations["original_length"] = int(match_annotation["sq_len"])
+
+        #Match
+        #=====
+        record = SeqRecord(Seq(match_align_seq, alphabet),
+                           id = match_descr.split(None,1)[0].strip(","),
+                           name = "match",
+                           description = match_descr,
+                           annotations = {"original_length" : int(match_annotation["sq_len"])})
         #TODO - handle start/end coordinates properly. Short term hack for now:
         record._al_start = int(match_annotation["al_start"])
         record._al_stop = int(match_annotation["al_stop"])
+        alignment.append(record)
 
         #This is still a very crude way of dealing with the alphabet:
         if alphabet == single_letter_alphabet and "sq_type" in match_annotation:
@@ -700,10 +702,10 @@ Function used was FASTA [version 34.26 January 12, 2007]
 
     alignments = list(FastaM10Iterator(StringIO(simple_example)))
     assert len(alignments) == 4, len(alignments)
-    assert len(alignments[0].get_all_seqs()) == 2
+    assert len(alignments[0]) == 2
     for a in alignments:
         print "Alignment %i sequences of length %i" \
-              % (len(a.get_all_seqs()), a.get_alignment_length())
+              % (len(a), a.get_alignment_length())
         for r in a:
             print "%s %s %i" % (r.seq, r.id, r.annotations["original_length"])
         #print a.annotations

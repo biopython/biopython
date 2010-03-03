@@ -70,7 +70,7 @@ def alignment_summary(alignment, index="  ", vertical_threshold=5):
     """Returns a concise summary of an Alignment object as a string."""
     answer = []
     alignment_len = alignment.get_alignment_length()
-    rec_count = len(alignment.get_all_seqs())
+    rec_count = len(alignment)
     if rec_count < vertical_threshold:
         #Show each sequence row horizontally
         for record in alignment:
@@ -93,9 +93,9 @@ def alignment_summary(alignment, index="  ", vertical_threshold=5):
 def check_simple_write_read(alignments, indent=" "):
     #print indent+"Checking we can write and then read back these alignments"
     for format in test_write_read_align_with_seq_count:
-        records_per_alignment = len(alignments[0].get_all_seqs())
+        records_per_alignment = len(alignments[0])
         for a in alignments:
-            if records_per_alignment != len(a.get_all_seqs()):
+            if records_per_alignment != len(a):
                 records_per_alignment = None
         #Can we expect this format to work?
         if not records_per_alignment \
@@ -152,7 +152,7 @@ def simple_alignment_comparison(alignments, alignments2, format):
     assert len(alignments) == len(alignments2)
     for a1, a2 in zip(alignments, alignments2):
         assert a1.get_alignment_length() == a2.get_alignment_length()
-        assert len(a1.get_all_seqs()) == len(a2.get_all_seqs())
+        assert len(a1) == len(a2)
         for r1, r2 in zip(a1,a2):
             #Check the bare minimum (ID and sequence) as
             #many formats can't store more than that.
@@ -197,7 +197,7 @@ for t_format in list(AlignIO._FormatToWriter)+list(SeqIO._FormatToWriter):
     handle = StringIO()
     try:
         AlignIO.write([list_of_records], handle, t_format)
-        assert False, "Writing non-alignment to %s format should fail!" \
+        print False, "Writing non-alignment to %s format should fail!" \
             % t_format
     except (TypeError, AttributeError, ValueError):
         pass
@@ -215,9 +215,9 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     assert len(alignments)  == t_count, \
          "Found %i alignments but expected %i" % (len(alignments), t_count)
     for alignment in alignments:
-        assert len(alignment.get_all_seqs()) == t_per, \
+        assert len(alignment) == t_per, \
             "Expected %i records per alignment, got %i" \
-            % (t_per, len(alignment.get_all_seqs()))
+            % (t_per, len(alignment))
 
     #Try using the iterator with a for loop and a filename not handle
     alignments2 = []
@@ -282,7 +282,7 @@ for (t_format, t_per, t_count, t_filename) in test_files:
         if i < 3 or i+1 == t_count:
             print " Alignment %i, with %i sequences of length %i" \
                   % (i,
-                     len(alignment.get_all_seqs()),
+                     len(alignment),
                      alignment.get_alignment_length())
             print alignment_summary(alignment)
         elif i==3:

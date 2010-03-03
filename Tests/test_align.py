@@ -24,7 +24,7 @@ from Bio.Align.Generic import Alignment
 #Very simple tests on an empty alignment
 alignment = Alignment(Alphabet.generic_alphabet)
 assert alignment.get_alignment_length() == 0
-assert alignment.get_all_seqs() == []
+assert len(alignment) == 0
 del alignment
 
 #Basic tests on simple three string alignment
@@ -34,13 +34,13 @@ alignment.add_sequence("mixed", letters)
 alignment.add_sequence("lower", letters.lower())
 alignment.add_sequence("upper", letters.upper())
 assert alignment.get_alignment_length() == 26
-assert len(alignment.get_all_seqs()) == 3
+assert len(alignment) == 3
 assert alignment.get_seq_by_num(0).tostring() == letters
 assert alignment.get_seq_by_num(1).tostring() == letters.lower()
 assert alignment.get_seq_by_num(2).tostring() == letters.upper()
-assert alignment.get_all_seqs()[0].description == "mixed"
-assert alignment.get_all_seqs()[1].description == "lower"
-assert alignment.get_all_seqs()[2].description == "upper"
+assert alignment[0].description == "mixed"
+assert alignment[1].description == "lower"
+assert alignment[2].description == "upper"
 for (col, letter) in enumerate(letters):
     assert alignment.get_column(col) == letter \
                                       + letter.lower() \
@@ -75,8 +75,7 @@ alignment = Clustalw.parse_file(os.path.join(test_dir, test_names[0]))
 
 # test the base alignment stuff
 print 'all_seqs...'
-all_seqs = alignment.get_all_seqs()
-for seq_record in all_seqs:
+for seq_record in alignment:
     print 'description:', seq_record.description
     print 'seq:', repr(seq_record.seq)
 print 'length:', alignment.get_alignment_length()
@@ -139,8 +138,7 @@ alignment = AlignIO.read(open(to_parse), "fasta",
 
 # test the base alignment stuff
 print 'all_seqs...'
-all_seqs = alignment.get_all_seqs()
-for seq_record in all_seqs:
+for seq_record in alignment:
     print 'description:', seq_record.description
     print 'seq:', repr(seq_record.seq)
 

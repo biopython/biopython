@@ -23,11 +23,10 @@ cline.set_output('test.aln')
 # actually perform the alignment and get back an alignment object
 alignment = Clustalw.do_alignment(cline)
 
-# get the records in the alignment
-all_records = alignment.get_all_seqs()
+print alignment
 
-print 'description:', all_records[0].description
-print 'sequence:', all_records[0].seq
+print 'first description:', alignment[0].description
+print 'first sequence:', alignment[0].seq
 
 # get the length of the alignment
 print 'length', alignment.get_alignment_length()

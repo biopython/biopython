@@ -184,7 +184,7 @@ for input_file, output_file, newtree_file in [
     align = Clustalw.do_alignment(cline)
 
     #Check the output...
-    print "Got an alignment, %i sequences" % (len(align.get_all_seqs()))
+    print "Got an alignment, %i sequences" % (len(align))
     #The length of the alignment will depend on the version of clustalw
     #(clustalw 2.0.10 and clustalw 1.83 are certainly different).
     output_records = SeqIO.to_dict(SeqIO.parse(open(output_file),"clustal"))

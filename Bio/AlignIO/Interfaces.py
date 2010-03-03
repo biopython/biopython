@@ -1,4 +1,4 @@
-# Copyright 2008-2009 by Peter Cock.  All rights reserved.
+# Copyright 2008-2010 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -12,7 +12,7 @@ use this module.  It provides base classes to try and simplify things.
 from Bio.Alphabet import single_letter_alphabet, Gapped
    
 class AlignmentIterator:
-    """Base class for building Alignment iterators.
+    """Base class for building MultipleSeqAlignment iterators.
 
     You should write a next() method to return Aligment
     objects.  You may wish to redefine the __init__
@@ -51,11 +51,11 @@ class AlignmentIterator:
         #####################################################
         # You SHOULD subclass this, to split the file up    #
         # into your individual alignments and convert these #
-        # into Alignment objects.                           #
+        # into MultipleSeqAlignment objects.                #
         #####################################################
 
     def __iter__(self):
-        """Iterate over the entries as Alignment objects.
+        """Iterate over the entries as MultipleSeqAlignment objects.
 
         Example usage for (concatenated) PHYLIP files:
 
@@ -69,7 +69,7 @@ class AlignmentIterator:
         return iter(self.next, None)
 
 class AlignmentWriter:
-    """Base class for building Alignment writers.
+    """Base class for building MultipleSeqAlignment writers.
     
     You should write a write_alignment() method.
     You may wish to redefine the __init__ method as well"""
@@ -80,7 +80,7 @@ class AlignmentWriter:
     def write_file(self, alignments):
         """Use this to write an entire file containing the given alignments.
 
-        alignments - A list or iterator returning Alignment objects
+        alignments - A list or iterator returning MultipleSeqAlignment objects
 
         In general, this method can only be called once per file.
         
@@ -97,7 +97,7 @@ class AlignmentWriter:
         return text.replace("\n", " ").replace("\r", " ").replace("  ", " ")
     
 class SequentialAlignmentWriter(AlignmentWriter):
-    """Base class for building Alignment writers.
+    """Base class for building MultipleSeqAlignment writers.
     
     This assumes each alignment can be simply appended to the file.
     You should write a write_alignment() method.
@@ -109,7 +109,7 @@ class SequentialAlignmentWriter(AlignmentWriter):
     def write_file(self, alignments):
         """Use this to write an entire file containing the given alignments.
 
-        alignments - A list or iterator returning Alignment objects
+        alignments - A list or iterator returning MultipleSeqAlignment objects
 
         In general, this method can only be called once per file."""
         self.write_header()

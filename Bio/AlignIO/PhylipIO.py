@@ -1,4 +1,4 @@
-# Copyright 2006-2009 by Peter Cock.  All rights reserved.
+# Copyright 2006-2010 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -21,7 +21,7 @@ At the time of writing, we do nothing special with a dot/period.
 """
    
 from Bio.Alphabet import single_letter_alphabet
-from Bio.Align.Generic import Alignment
+from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 class PhylipWriter(SequentialAlignmentWriter):
@@ -39,19 +39,18 @@ class PhylipWriter(SequentialAlignmentWriter):
         http://evolution.genetics.washington.edu/phylip/doc/main.html#inputfiles
         """
         truncate=10
-        records = alignment.get_all_seqs()
         handle = self.handle        
         
-        if len(records)==0:
+        if len(alignment)==0:
             raise ValueError("Must have at least one sequence")
         length_of_seqs = alignment.get_alignment_length()
-        for record in records:
+        for record in alignment:
             if length_of_seqs != len(record.seq):
                 raise ValueError("Sequences must all be the same length")
         if length_of_seqs <= 0:
             raise ValueError("Non-empty sequences are required")
         
-        if len(records) > len(set([r.id[:truncate] for r in records])):
+        if len(alignment) > len(set([r.id[:truncate] for r in alignment])):
             raise ValueError("Repeated identifier, possibly due to truncation")
 
 
@@ -60,10 +59,10 @@ class PhylipWriter(SequentialAlignmentWriter):
         # defined in the PHYLIP documentation, simply "These are in free
         # format, separated by blanks".  We'll use spaces to keep EMBOSS
         # happy.
-        handle.write(" %i %s\n" % (len(records), length_of_seqs))
+        handle.write(" %i %s\n" % (len(alignment), length_of_seqs))
         block=0
         while True:
-            for record in records:
+            for record in alignment:
                 if block==0:
                     #Write name (truncated/padded to 10 characters)
                     """
@@ -109,7 +108,7 @@ class PhylipWriter(SequentialAlignmentWriter):
             handle.write("\n")
 
 class PhylipIterator(AlignmentIterator):
-    """Reads a Phylip alignment file returning an Alignment object iterator.
+    """Reads a Phylip alignment file returning a MultipleSeqAlignment iterator.
 
     Record identifiers are limited to at most 10 characters.
 
@@ -194,7 +193,7 @@ class PhylipIterator(AlignmentIterator):
                     raise ValueError("End of file mid-block")
             if not line : break #end of file
 
-        alignment = Alignment(self.alphabet)
+        alignment = MultipleSeqAlignment(self.alphabet)
         for i in range(0,number_of_seqs):
             seq = "".join(seqs[i])
             if len(seq)!=length_of_seqs:
@@ -202,7 +201,7 @@ class PhylipIterator(AlignmentIterator):
                                   % (i+1, len(seq), length_of_seqs))
             alignment.add_sequence(ids[i], seq)
             
-            record = alignment.get_all_seqs()[-1]
+            record = alignment[-1]
             assert ids[i] == record.id or ids[i] == record.description
             record.id = ids[i]
             record.name = ids[i]
@@ -272,7 +271,7 @@ HISJ_E_COL MKKLVLSLSL VLAFSSATAA F--------- ---------- AAIPQNIRIG
     handle = StringIO(phylip_text)
     count=0
     for alignment in PhylipIterator(handle):
-        for record in alignment.get_all_seqs():
+        for record in alignment:
             count=count+1
             print record.id
             #print record.seq.tostring()
@@ -311,17 +310,17 @@ Tax5        CCATCTCACGGTCGGTAAGATACACCTGCTTTTGGCGGGAAATGGTCAATATTAAAAGGT"""
     list2 = list(PhylipIterator(handle))
     handle.close()
     assert len(list2)==1
-    assert len(list2[0].get_all_seqs())==5
+    assert len(list2[0])==5
 
     handle = StringIO(phylip_text3)
     list3 = list(PhylipIterator(handle))
     handle.close()
     assert len(list3)==1
-    assert len(list3[0].get_all_seqs())==5
+    assert len(list3[0])==5
 
     for i in range(0,5):
-        list2[0].get_all_seqs()[i].id == list3[0].get_all_seqs()[i].id
-        list2[0].get_all_seqs()[i].seq.tostring() == list3[0].get_all_seqs()[i].seq.tostring()
+        list2[0][i].id == list3[0][i].id
+        list2[0][i].seq.tostring() == list3[0][i].seq.tostring()
 
     #From here:
     #http://evolution.genetics.washington.edu/phylip/doc/sequence.html
@@ -364,13 +363,13 @@ Gorilla   AAACCCTTGC CGGTACGCTT AAACCATTGC CGGTACGCTT AA"""
     list4 = list(PhylipIterator(handle))
     handle.close()
     assert len(list4)==1
-    assert len(list4[0].get_all_seqs())==5
+    assert len(list4[0])==5
 
     handle = StringIO(phylip_text5)
     try:
         list5 = list(PhylipIterator(handle))
         assert len(list5)==1
-        assert len(list5[0].get_all_seqs())==5
+        assert len(list5[0])==5
         print "That should have failed..."
     except ValueError:
         print "Evil multiline non-interlaced example failed as expected"
@@ -380,7 +379,7 @@ Gorilla   AAACCCTTGC CGGTACGCTT AAACCATTGC CGGTACGCTT AA"""
     list5 = list(PhylipIterator(handle))
     handle.close()
     assert len(list5)==1
-    assert len(list4[0].get_all_seqs())==5
+    assert len(list4[0])==5
 
     print "Concatenation"
     handle = StringIO(phylip_text4 + "\n" + phylip_text4)
@@ -398,8 +397,8 @@ Gorilla   AAACCCTTGC CGGTACGCTT AAACCATTGC CGGTACGCTT AA"""
     list6 = list(PhylipIterator(handle))
     assert len(list5) == len(list6)
     for a1,a2 in zip(list5, list6):
-        assert len(a1.get_all_seqs()) == len(a2.get_all_seqs())
-        for r1, r2 in zip(a1.get_all_seqs(), a2.get_all_seqs()):
+        assert len(a1) == len(a2)
+        for r1, r2 in zip(a1, a2):
             assert r1.id == r2.id
             assert r1.seq.tostring() == r2.seq.tostring()
     print "Done"

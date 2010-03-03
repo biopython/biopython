@@ -1,4 +1,4 @@
-# Copyright 2006-2008 by Peter Cock.  All rights reserved.
+# Copyright 2006-2010 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -10,7 +10,7 @@ You are expected to use this module via the Bio.AlignIO functions (or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
 """
 
-from Bio.Align.Generic import Alignment
+from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 class ClustalWriter(SequentialAlignmentWriter):
@@ -18,8 +18,11 @@ class ClustalWriter(SequentialAlignmentWriter):
     def write_alignment(self, alignment):
         """Use this to write (another) single alignment to an open file."""
 
-        if len(alignment.get_all_seqs()) == 0:
+        if len(alignment) == 0:
             raise ValueError("Must have at least one sequence")
+        if alignment.get_alignment_length() == 0:
+            #This doubles as a check for an alignment object    
+            raise ValueError("Non-empty sequences are required")
 
         #Old versions of the parser in Bio.Clustalw used a ._version property,
         try:
@@ -36,7 +39,7 @@ class ClustalWriter(SequentialAlignmentWriter):
             output = "CLUSTAL X (%s) multiple sequence alignment\n\n\n" % version
         
         cur_char = 0
-        max_length = len(alignment._records[0].seq)
+        max_length = len(alignment[0])
 
         if max_length <= 0:
             raise ValueError("Non-empty sequences are required")
@@ -53,7 +56,7 @@ class ClustalWriter(SequentialAlignmentWriter):
             # go through all of the records and print out the sequences
             # when we output, we do a nice 80 column output, although this
             # may result in truncation of the ids.
-            for record in alignment._records:
+            for record in alignment:
                 #Make sure we don't get any spaces in the record
                 #identifier when output in the file by replacing
                 #them with underscores:
@@ -247,7 +250,7 @@ class ClustalIterator(AlignmentIterator):
             raise ValueError("Found %i records in this alignment, told to expect %i" \
                              % (len(ids), self.records_per_alignment))
 
-        alignment = Alignment(self.alphabet)
+        alignment = MultipleSeqAlignment(self.alphabet)
         alignment_length = len(seqs[0])
         for i in range(len(ids)):
             if len(seqs[i]) != alignment_length:
@@ -342,11 +345,11 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
     alignments = list(ClustalIterator(StringIO(aln_example1)))
     assert 1 == len(alignments)
     assert alignments[0]._version == "1.81"
-    records = alignments[0].get_all_seqs()
-    assert 2 == len(records)
-    assert records[0].id == "gi|4959044|gb|AAD34209.1|AF069"
-    assert records[1].id == "gi|671626|emb|CAA85685.1|"
-    assert records[0].seq.tostring() == \
+    alignment = alignments[0]
+    assert 2 == len(alignment)
+    assert alignment[0].id == "gi|4959044|gb|AAD34209.1|AF069"
+    assert alignment[1].id == "gi|671626|emb|CAA85685.1|"
+    assert alignment[0].seq.tostring() == \
           "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNN" + \
           "LLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDW" + \
           "LNSVRQTGNTTRSRQRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQT" + \
@@ -356,17 +359,17 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
     alignments = list(ClustalIterator(StringIO(aln_example2)))
     assert 1 == len(alignments)
     assert alignments[0]._version == "1.83"
-    records = alignments[0].get_all_seqs()
-    assert 9 == len(records)
-    assert records[-1].id == "HISJ_E_COLI"
-    assert records[-1].seq.tostring() == \
+    alignment = alignments[0]
+    assert 9 == len(alignment)
+    assert alignment[-1].id == "HISJ_E_COLI"
+    assert alignment[-1].seq.tostring() == \
           "MKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIG" + \
           "TDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPS" + \
           "LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV"
 
     for alignment in ClustalIterator(StringIO(aln_example2 + aln_example1)):
         print "Alignment with %i records of length %i" \
-              % (len(alignment.get_all_seqs()),
+              % (len(alignment),
                  alignment.get_alignment_length())
 
     print "Checking empty file..."
@@ -383,13 +386,13 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
     handle.seek(0)
 
     print "Testing write/read when there is only one sequence..."
-    alignment._records = alignment._records[0:1]
+    alignment = alignment[0:1]
     handle = StringIO()
     ClustalWriter(handle).write_file([alignment])
     handle.seek(0)
     for i,a in enumerate(ClustalIterator(handle)):
         assert a.get_alignment_length() == alignment.get_alignment_length()
-        assert len(a.get_all_seqs()) == 1
+        assert len(a) == 1
 
     aln_example3 = \
 """CLUSTAL 2.0.9 multiple sequence alignment

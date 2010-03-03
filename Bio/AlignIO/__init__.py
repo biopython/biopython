@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Multiple sequence alignment input/output as Alignment objects.
+"""Multiple sequence alignment input/output as alignment objects.
 
 The Bio.AlignIO interface is deliberately very similar to Bio.SeqIO, and in
 fact the two are connected internally.  Both modules use the same set of file
@@ -22,7 +22,8 @@ For the typical special case when your file or handle contains one and only
 one alignment, use the function Bio.AlignIO.read().  This takes an input file
 handle (or in recent versions of Biopython a filename as a string), format
 string and optional number of sequences per alignment.  It will return a single
-Alignment object (or raise an exception if there isn't just one alignment):
+MultipleSeqAlignment object (or raise an exception if there isn't just one
+alignment):
 
     >>> from Bio import AlignIO
     >>> align = AlignIO.read("Phylip/interlaced.phy", "phylip")
@@ -34,8 +35,9 @@ Alignment object (or raise an exception if there isn't just one alignment):
 
 For the general case, when the handle could contain any number of alignments,
 use the function Bio.AlignIO.parse(...) which takes the same arguments, but
-returns an iterator giving Alignment objects (typically used in a for loop).
-If you want random access to the alignments by number, turn this into a list:
+returns an iterator giving MultipleSeqAlignment objects (typically used in a
+for loop). If you want random access to the alignments by number, turn this
+into a list:
 
     >>> from Bio import AlignIO
     >>> alignments = list(AlignIO.parse("Emboss/needle.txt", "emboss"))
@@ -135,6 +137,7 @@ __docformat__ = "epytext en" #not just plaintext
 from StringIO import StringIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio.Align import MultipleSeqAlignment
 from Bio.Align.Generic import Alignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 
@@ -169,7 +172,8 @@ def write(alignments, handle, format):
     """Write complete set of alignments to a file.
 
     Arguments:
-     - sequences - A list (or iterator) of Alignment objects
+     - sequences - A list (or iterator) of Alignment objects (ideally the
+                   new MultipleSeqAlignment objects).
      - handle    - File handle object to write to, or filename as string
                    (note older versions of Biopython only took a handle).
      - format    - lower case string describing the file format to write.
@@ -228,7 +232,7 @@ def write(alignments, handle, format):
 
 #This is a generator function!
 def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
-    """Uses Bio.SeqIO to create an Alignment iterator (PRIVATE).
+    """Uses Bio.SeqIO to create an MultipleSeqAlignment iterator (PRIVATE).
 
     Arguments:
      - handle    - handle to the file.
@@ -239,8 +243,8 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
      - seq_count - Optional integer, number of sequences expected in each
                    alignment.  Recommended for fasta format files.
 
-    If count is omitted (default) then all the sequences in
-    the file are combined into a single Alignment.
+    If count is omitted (default) then all the sequences in the file are
+    combined into a single MultipleSeqAlignment.
     """
     from Bio import SeqIO
     assert format in SeqIO._FormatToIterator
@@ -253,7 +257,7 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
         for record in seq_record_iterator:
             records.append(record)
             if len(records) == seq_count:
-                yield SeqIO.to_alignment(records)
+                yield MultipleSeqAlignment(records, alphabet)
                 records = []
         if len(records) > 0:
             raise ValueError("Check seq_count argument, not enough sequences?")
@@ -262,7 +266,7 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
         #the SeqRecord objects:
         records = list(SeqIO.parse(handle, format, alphabet))
         if records:
-            yield SeqIO.to_alignment(records)
+            yield MultipleSeqAlignment(records, alphabet)
         else:
             #No alignment found!
             pass
@@ -288,7 +292,7 @@ def _force_alphabet(alignment_iterator, alphabet):
         yield align
 
 def parse(handle, format, seq_count=None, alphabet=None):
-    """Turns a sequence file into an iterator returning Alignment objects.
+    """Iterate over an alignment file as MultipleSeqAlignment objects.
 
     Arguments:
      - handle    - handle to the file, or the filename as a string
@@ -362,7 +366,7 @@ def parse(handle, format, seq_count=None, alphabet=None):
         raise ValueError("Unknown format '%s'" % format)
 
 def read(handle, format, seq_count=None, alphabet=None):
-    """Turns an alignment file into a single Alignment object.
+    """Turns an alignment file into a single MultipleSeqAlignment object.
 
     Arguments:
      - handle    - handle to the file, or the filename as a string
@@ -422,7 +426,7 @@ def read(handle, format, seq_count=None, alphabet=None):
     if second is not None:
         raise ValueError("More than one record found in handle")
     if seq_count:
-        assert len(first.get_all_seqs())==seq_count
+        assert len(first)==seq_count
     return first
 
 def convert(in_file, in_format, out_file, out_format, alphabet=None):
