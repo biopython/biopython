@@ -289,8 +289,11 @@ and HTML formats
   You need Biopython 1.52 or later. Alternatively, combine the \verb|parse| and \verb|write|
   functions as described in this tutorial (see Sections~\ref{sec:SeqIO-conversion} and~\ref{sec:converting-alignments}).
 
- \item \emph{Why doesn't} \verb|Bio.SeqIO.index()| \emph{work? The module imports fine but there is no index function!} \\
+  \item \emph{Why doesn't} \verb|Bio.SeqIO.index()| \emph{work? The module imports fine but there is no index function!} \\
   You need Biopython 1.52 or later.
+  
+  \item \emph{Where is the} \verb|MultipleSeqAlignment| \emph{object? The} \verb|Bio.Align| \emph{module imports fine but this class isn't there!} \\
+  You need Biopython 1.54 or later. Alternatively, the older \verb|Bio.Align.Generic.Alignment| class supports some of its functionality, but using this is now discouraged.
   
   \item \emph{I looked in a directory for code, but I couldn't find the code that does something. Where's it hidden?} \\
   One thing to know is that we put code in \verb|__init__.py| files. If you are not used to looking for code in this file this can be confusing. The reason we do this is to make the imports easier for users. For instance, instead of having to do a ``repetitive'' import like \verb|from Bio.GenBank import GenBank|, you can just use \verb|from Bio import GenBank|.
@@ -2919,8 +2922,12 @@ out_handle.close()
 \chapter{Sequence Alignment Input/Output, and Alignment Tools}
 \label{chapter:Bio.AlignIO}
 
-In this chapter we'll discuss the \verb|Bio.AlignIO| module, which is very similar to the \verb|Bio.SeqIO| module from the previous chapter, but deals with \verb|Alignment| objects rather than \verb|SeqRecord| objects. 
-This aims to provide a simple interface for working with assorted sequence alignment file formats in a uniform way.
+In this chapter we'll discuss the \verb|Bio.AlignIO| module, which is very similar to the
+\verb|Bio.SeqIO| module from the previous chapter, but deals with \verb|MultipleSeqAlignment|
+objects rather than \verb|SeqRecord| objects. These alignment objects hold a collection of
+\verb|SeqRecord| objects which are all the same length. The \verb|Bio.AlignIO| module aims
+to provide a simple interface for working with assorted sequence alignment file formats in
+a uniform way.
 
 Note that both \verb|Bio.SeqIO| and \verb|Bio.AlignIO| can read and write sequence alignment files.  The appropriate choice will depend largely on what you want to do with the data.
 
@@ -2930,9 +2937,9 @@ The final part of this chapter is about our command line wrappers for common mul
 
 We have two functions for reading in sequence alignments, \verb|Bio.AlignIO.read()| and \verb|Bio.AlignIO.parse()| which following the convention introduced in \verb|Bio.SeqIO| are for files containing one or multiple alignments respectively.
 
-Using \verb|Bio.AlignIO.parse()| will return an {\it iterator} which gives \verb|Alignment| objects.  Iterators are typically used in a for loop.  Examples of situations where you will have multiple different alignments include resampled alignments from the PHYLIP tool \verb|seqboot|, or multiple pairwise alignments from the EMBOSS tools \verb|water| or \verb|needle|, or Bill Pearson's FASTA tools.
+Using \verb|Bio.AlignIO.parse()| will return an {\it iterator} which gives \verb|MultipleSeqAlignment| objects.  Iterators are typically used in a for loop.  Examples of situations where you will have multiple different alignments include resampled alignments from the PHYLIP tool \verb|seqboot|, or multiple pairwise alignments from the EMBOSS tools \verb|water| or \verb|needle|, or Bill Pearson's FASTA tools.
 
-However, in many situations you will be dealing with files which contain only a single alignment.  In this case, you should use the \verb|Bio.AlignIO.read()| function which returns a single \verb|Alignment| object.
+However, in many situations you will be dealing with files which contain only a single alignment.  In this case, you should use the \verb|Bio.AlignIO.read()| function which returns a single \verb|MultipleSeqAlignment| object.
 
 Both functions expect two mandatory arguments:
 
@@ -3284,29 +3291,34 @@ Note that this optional \verb|seq_count| argument assumes each alignment in the 
 
 \section{Writing Alignments}
 
-We've talked about using \verb|Bio.AlignIO.read()| and \verb|Bio.AlignIO.parse()| for alignment input (reading files), and now we'll look at \verb|Bio.AlignIO.write()| which is for alignment output (writing files).  This is a function taking three arguments: some \verb|Alignment| objects, a handle to write to, and a sequence format.
+We've talked about using \verb|Bio.AlignIO.read()| and \verb|Bio.AlignIO.parse()| for alignment input (reading files), and now we'll look at \verb|Bio.AlignIO.write()| which is for alignment output (writing files).  This is a function taking three arguments: some \verb|MultipleSeqAlignment| objects (or for backwards compatibility the obsolete \verb|Alignment| objects), a handle or filename to write to, and a sequence format.
 
-Here is an example, where we start by creating a few \verb|Alignment| objects the hard way (by hand, rather than by loading them from a file):
+Here is an example, where we start by creating a few \verb|MultipleSeqAlignment| objects the hard way (by hand, rather than by loading them from a file).
+Note we create some \verb|SeqRecord| objects to construct the alignment from.
 
 \begin{verbatim}
-from Bio.Align.Generic import Alignment
-from Bio.Alphabet import IUPAC, Gapped
-alphabet = Gapped(IUPAC.unambiguous_dna)
+from Bio.Alphabet import generic_dna
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from Bio.Align import MultipleSeqAlignment
 
-align1 = Alignment(alphabet)
-align1.add_sequence("Alpha", "ACTGCTAGCTAG")
-align1.add_sequence("Beta",  "ACT-CTAGCTAG")
-align1.add_sequence("Gamma", "ACTGCTAGDTAG")
+align1 = MultipleSeqAlignment([
+             SeqRecord(Seq("ACTGCTAGCTAG", generic_dna), id="Alpha"),
+             SeqRecord(Seq("ACT-CTAGCTAG", generic_dna), id="Beta"),
+             SeqRecord(Seq("ACTGCTAGDTAG", generic_dna), id="Gamma"),
+         ])
 
-align2 = Alignment(alphabet)
-align2.add_sequence("Delta",  "GTCAGC-AG")
-align2.add_sequence("Epislon","GACAGCTAG")
-align2.add_sequence("Zeta",   "GTCAGCTAG")
+align2 = MultipleSeqAlignment([
+             SeqRecord(Seq("GTCAGC-AG", generic_dna), id="Delta"),
+             SeqRecord(Seq("GACAGCTAG", generic_dna), id="Epsilon"),
+             SeqRecord(Seq("GTCAGCTAG", generic_dna), id="Zeta"),
+         ])
 
-align3 = Alignment(alphabet)
-align3.add_sequence("Eta",   "ACTAGTACAGCTG")
-align3.add_sequence("Theta", "ACTAGTACAGCT-")
-align3.add_sequence("Iota",  "-CTACTACAGGTG")
+align3 = MultipleSeqAlignment([
+             SeqRecord(Seq("ACTAGTACAGCTG", generic_dna), id="Eta"),
+             SeqRecord(Seq("ACTAGTACAGCT-", generic_dna), id="Theta"),
+             SeqRecord(Seq("-CTACTACAGGTG", generic_dna), id="Iota"),
+         ])
 
 my_alignments = [align1, align2, align3]
 \end{verbatim}
@@ -3315,9 +3327,7 @@ my_alignments = [align1, align2, align3]
 
 \begin{verbatim}
 from Bio import AlignIO
-handle = open("my_example.phy", "w")
-SeqIO.write(my_alignments, handle, "phylip")
-handle.close()
+AlignIO.write(my_alignments, "my_example.phy", "phylip")
 \end{verbatim}
 
 \noindent And if you open this file in your favourite text editor it should look like this:
@@ -3486,10 +3496,10 @@ seq6       FAADDATSQA KAAFDSLTAQ ATEMSGYAWA LVVLVVGATV GIKLFKKFVS
 
 \noindent In general, because of the identifier limitation, working with PHYLIP file formats shouldn't be your first choice.  Using the PFAM/Stockholm format on the other hand allows you to record a lot of additional annotation too.
 
-\subsection{Getting your Alignment objects as formatted strings}
+\subsection{Getting your alignment objects as formatted strings}
 \label{sec:alignment-format-method}
 The \verb|Bio.AlignIO| interface is based on handles, which means if you want to get your alignment(s) into a string in a particular file format you need to do a little bit more work (see below).  
-However, you will probably prefer to take advantage of the new \verb|format()| method added to the \verb|Alignment| object in Biopython 1.48.  This takes a single mandatory argument, a lower case string which is supported by \verb|Bio.AlignIO| as an output format.  For example:
+However, you will probably prefer to take advantage of the new \verb|format()| method added to the alignment object in Biopython 1.48.  This takes a single mandatory argument, a lower case string which is supported by \verb|Bio.AlignIO| as an output format.  For example:
 
 \begin{verbatim}
 from Bio import AlignIO
@@ -4372,8 +4382,8 @@ Just like \verb|Bio.SeqIO| and \verb|Bio.AlignIO|
 we have a pair of input functions, \verb|read| and \verb|parse|, where
 \verb|read| is for when you have exactly one object, and \verb|parse|
 is an iterator for when you can have lots of objects -- but instead of
-getting \verb|SeqRecord| or \verb|Alignment| objects, we get BLAST
-record objects.
+getting \verb|SeqRecord| or \verb|MultipleSeqAlignment| objects, we
+get BLAST record objects.
 
 To be able to handle the situation where the BLAST file may be huge,
 containing thousands of results, \verb|NCBIXML.parse()| returns an
@@ -10658,8 +10668,9 @@ example, the \verb|Bio.GenBank| module uses this construct either
 
 More recently, many of the parsers added for \verb|Bio.SeqIO| and
 \verb|Bio.AlignIO| take a much simpler approach, but only generate a
-single object representation (\verb|SeqRecord| and \verb|Alignment| objects
-respectively). In some cases the \verb|Bio.SeqIO| parsers actually wrap
+single object representation (\verb|SeqRecord| and
+\verb|MultipleSeqAlignment| objects respectively). In some cases the
+\verb|Bio.SeqIO| parsers actually wrap
 another Biopython parser - for example, the \verb|Bio.SwissProt| parser
 produces SwissProt format specific record objects, which get converted
 into \verb|SeqRecord| objects.
