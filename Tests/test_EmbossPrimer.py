@@ -36,23 +36,25 @@ class Primer3ParseTest(unittest.TestCase):
         primer_info = Primer3.read(h)
         h.close()
 
-        assert len(primer_info.primers) == 5, \
-          "Wrong number of primers: %s" % len(primer_info.primers)
-
-        assert primer_info.primers[1].forward_seq \
-          == "CCGGTTTCTCTGGTTGAAAA"
-        assert primer_info.primers[2].reverse_seq == \
-          "TCACATTCCCAAATGTAGATCG"
-        assert primer_info.primers[0].size == 218
-        assert primer_info.primers[3].forward_start == 112
-        assert primer_info.primers[3].forward_length == 20
-        assert primer_info.primers[3].forward_tm == 59.57
-        assert primer_info.primers[3].forward_gc == 45.00
-
-        assert primer_info.primers[4].reverse_start == 304
-        assert primer_info.primers[4].reverse_length == 22
-        assert primer_info.primers[4].reverse_tm == 59.61
-        assert primer_info.primers[4].reverse_gc == 40.91
+        self.assertEqual(len(primer_info.primers), 5)
+        self.assertEqual(primer_info.comments,
+                         "# PRIMER3 RESULTS FOR AC074298\n"
+                         "\n"
+                         "#                      Start  Len   Tm     GC%   Sequence\n"
+                         "\n")
+        self.assertEqual(primer_info.primers[1].forward_seq,
+                         "CCGGTTTCTCTGGTTGAAAA")
+        self.assertEqual(primer_info.primers[2].reverse_seq,
+                         "TCACATTCCCAAATGTAGATCG")
+        self.assertEqual(primer_info.primers[0].size, 218)
+        self.assertEqual(primer_info.primers[3].forward_start, 112)
+        self.assertEqual(primer_info.primers[3].forward_length, 20)
+        self.assertEqual(primer_info.primers[3].forward_tm, 59.57)
+        self.assertEqual(primer_info.primers[3].forward_gc, 45.00)
+        self.assertEqual(primer_info.primers[4].reverse_start, 304)
+        self.assertEqual(primer_info.primers[4].reverse_length, 22)
+        self.assertEqual(primer_info.primers[4].reverse_tm, 59.61)
+        self.assertEqual(primer_info.primers[4].reverse_gc, 40.91)
 
     def test_in_depth_single_parse(self):
         """Make sure we get info right from a single primer find.
@@ -62,11 +64,15 @@ class Primer3ParseTest(unittest.TestCase):
         primer_info = Primer3.read(h)
         h.close()
 
-        assert len(primer_info.primers) == 5
-        assert primer_info.primers[1].reverse_seq == ""
-
-        assert primer_info.primers[3].forward_seq == "TGTGATTGCTTGAGCTGGAC"
-        assert primer_info.primers[3].forward_start == 253
+        self.assertEqual(len(primer_info.primers), 5)
+        self.assertEqual(primer_info.comments,
+                         "# PRIMER3 RESULTS FOR 26964-28647#\n"
+                         "\n"
+                         "#                      Start  Len   Tm     GC%   Sequence\n"
+                         "\n")
+        self.assertEqual(primer_info.primers[1].reverse_seq, "")
+        self.assertEqual(primer_info.primers[3].forward_seq, "TGTGATTGCTTGAGCTGGAC")
+        self.assertEqual(primer_info.primers[3].forward_start, 253)
 
     def test_internal_oligo_single_parse(self):
         ''' Make sure we can parse an internal oligo file correctly '''
@@ -76,12 +82,18 @@ class Primer3ParseTest(unittest.TestCase):
         primer_info = Primer3.read(h)
         h.close()
 
-        assert len(primer_info.primers) == 5
-        assert primer_info.primers[0].internal_length == 22 
-        assert primer_info.primers[1].internal_seq == 'TTGCGCTTTAGTTTGAATTGAA'
-        assert primer_info.primers[2].internal_tm == 58.62 
-        assert primer_info.primers[3].internal_start == 16 
-        assert primer_info.primers[4].internal_gc == 35.00 
+        self.assertEqual(len(primer_info.primers), 5)
+        self.assertEqual(primer_info.comments,
+                         "# EPRIMER3 RESULTS FOR YNL138W-A\n"
+                         "\n"
+                         "#                      Start  Len   Tm     GC%   Sequence\n"
+                         "\n")
+        self.assertEqual(primer_info.primers[0].internal_length, 22)
+        self.assertEqual(primer_info.primers[1].internal_seq,
+                         'TTGCGCTTTAGTTTGAATTGAA')
+        self.assertEqual(primer_info.primers[2].internal_tm, 58.62)
+        self.assertEqual(primer_info.primers[3].internal_start, 16)
+        self.assertEqual(primer_info.primers[4].internal_gc, 35.00)
 
 
 class PrimersearchParseTest(unittest.TestCase):
@@ -105,19 +117,19 @@ class PrimersearchParseTest(unittest.TestCase):
         amp_info = PrimerSearch.read(h)
         h.close()
 
-        assert len(amp_info.amplifiers.keys()) == 1
-        assert "Test" in amp_info.amplifiers.keys()
-        assert len(amp_info.amplifiers["Test"]) == 1
+        self.assertEqual(len(amp_info.amplifiers), 1)
+        self.assert_("Test" in amp_info.amplifiers)
+        self.assertEqual(len(amp_info.amplifiers["Test"]), 1)
 
-        assert amp_info.amplifiers["Test"][0].length == 218
-        assert amp_info.amplifiers["Test"][0].hit_info == \
-          "AC074298 AC074298 \n" + \
-          "\tTelomere associated sequence for Arabidopsis thaliana " + \
-          "TEL1N from chromosome I, complete sequence.\n" + \
-          "\tCCGGTTTCTCTGGTTGAAAA hits forward strand at 114 with " + \
-          "0 mismatches\n" + \
-          "\tTCACATTCCCAAATGTAGATCG hits reverse strand at [114] with " + \
-          "0 mismatches"
+        self.assertEqual(amp_info.amplifiers["Test"][0].length, 218)
+        self.assertEqual(amp_info.amplifiers["Test"][0].hit_info,
+          "AC074298 AC074298 \n"
+          "\tTelomere associated sequence for Arabidopsis thaliana "
+          "TEL1N from chromosome I, complete sequence.\n"
+          "\tCCGGTTTCTCTGGTTGAAAA hits forward strand at 114 with "
+          "0 mismatches\n"
+          "\tTCACATTCCCAAATGTAGATCG hits reverse strand at [114] with "
+          "0 mismatches")
 
 class PrimerSearchInputTest(unittest.TestCase):
     """Test creating input files for primersearch.
@@ -133,8 +145,9 @@ class PrimerSearchInputTest(unittest.TestCase):
         p_info.add_primer_set("Test2", "AATA", "TTAT")
 
         output = str(p_info)
-        assert output == "Test GATC CATG\n" + \
-                         "Test2 AATA TTAT\n"
+        self.assertEqual(output,
+                         "Test GATC CATG\n"
+                         "Test2 AATA TTAT\n")
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
