@@ -36,6 +36,10 @@ files which are used by 454 Life Sciences (Roche) sequencers. This means
 you can use SeqIO to convert from SFF to FASTQ, FASTA and QUAL (as
 trimmed or untrimmed reads).
 
+An improved multiple sequence alignment object has been introduced,
+and is used by Bio.AlignIO for input. This is a little stricter than the
+old class but should otherwise be backwards compatible.
+
 (At least) 9 people contributed to this release, including 3 new people:
 
 Brad Chapman
