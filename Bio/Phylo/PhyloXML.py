@@ -40,10 +40,6 @@ def check_str(text, testfunc):
 
 class PhyloElement(BaseTree.TreeElement):
     """Base class for all PhyloXML objects."""
-    def __init__(self, **kwargs):
-        """Set all keyword arguments as instance attributes."""
-        self.__dict__.update(kwargs)
-
     def __str__(self):
         """Show the class name and an identifying attribute."""
         if hasattr(self, 'name') and self.name:
@@ -145,16 +141,20 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
             properties=None, other=None,
             ):
         assert isinstance(rooted, bool)
-        PhyloElement.__init__(self, root=root,
-                rooted=rooted, rerootable=rerootable,
-                branch_length_unit=branch_length_unit, type=type,
-                name=name, id=id, description=description, date=date,
-                confidences=confidences or [],
-                clade_relations=clade_relations or [],
-                sequence_relations=sequence_relations or [],
-                properties=properties or [],
-                other=other or [],
-                )
+        self.root = root
+        self.rooted = rooted
+        self.rerootable = rerootable
+        self.branch_length_unit = branch_length_unit
+        self.type = type
+        self.name = name
+        self.id = id
+        self.description = description
+        self.date = date
+        self.confidences = confidences or []
+        self.clade_relations = clade_relations or []
+        self.sequence_relations = sequence_relations or []
+        self.properties = properties or []
+        self.other = other or []
 
     @classmethod
     def from_tree(self, tree, **kwargs):
@@ -247,19 +247,23 @@ class Clade(PhyloElement, BaseTree.Subtree):
             distributions=None, references=None, properties=None, clades=None,
             other=None,
             ):
-        PhyloElement.__init__(self, id_source=id_source, name=name,
-                branch_length=branch_length, width=width, color=color,
-                node_id=node_id, events=events,
-                binary_characters=binary_characters, date=date,
-                confidences=confidences or [],
-                taxonomies=taxonomies or [],
-                sequences=sequences or [],
-                distributions=distributions or [],
-                references=references or [],
-                properties=properties or [],
-                clades=clades or [],
-                other=other or [],
-                )
+        self.branch_length = branch_length
+        self.id_source = id_source
+        self.name = name
+        self.width = width
+        self.color = color
+        self.node_id = node_id
+        self.events = events
+        self.binary_characters = binary_characters
+        self.date = date
+        self.confidences = confidences or []
+        self.taxonomies = taxonomies or []
+        self.sequences = sequences or []
+        self.distributions = distributions or []
+        self.references = references or []
+        self.properties = properties or []
+        self.clades = clades or []
+        self.other = other or []
 
     @classmethod
     def from_subtree(cls, subtree, **kwargs):
@@ -342,9 +346,14 @@ class Annotation(PhyloElement):
             # Collection
             properties=None):
         check_str(ref, self.re_ref.match)
-        PhyloElement.__init__(self, ref=ref, source=source, evidence=evidence,
-                type=type, desc=desc, confidence=confidence, uri=uri,
-                properties=properties or [])
+        self.ref = ref
+        self.source = source
+        self.evidence = evidence
+        self.type = type
+        self.desc = desc
+        self.confidence = confidence
+        self.uri = uri
+        self.properties = properties or []
 
 
 class BinaryCharacters(PhyloElement):
@@ -357,13 +366,15 @@ class BinaryCharacters(PhyloElement):
             absent_count=None,
             # Child nodes (flattened into collections)
             gained=None, lost=None, present=None, absent=None):
-        PhyloElement.__init__(self,
-                type=type, gained_count=gained_count, lost_count=lost_count,
-                present_count=present_count, absent_count=absent_count,
-                gained=gained or [],
-                lost=lost or [],
-                present=present or [],
-                absent=absent or [])
+        self.type=type
+        self.gained_count=gained_count
+        self.lost_count=lost_count
+        self.present_count=present_count
+        self.absent_count=absent_count
+        self.gained=gained or []
+        self.lost=lost or []
+        self.present=present or []
+        self.absent=absent or []
 
 
 class BranchColor(PhyloElement):
@@ -471,8 +482,11 @@ class CladeRelation(PhyloElement):
     """
     def __init__(self, type, id_ref_0, id_ref_1,
             distance=None, confidence=None):
-        PhyloElement.__init__(self, distance=distance, type=type,
-                id_ref_0=id_ref_0, id_ref_1=id_ref_1, confidence=confidence)
+        self.distance = distance
+        self.type = type
+        self.id_ref_0 = id_ref_0
+        self.id_ref_1 = id_ref_1
+        self.confidence = confidence
 
 
 class Confidence(PhyloElement):
@@ -505,8 +519,11 @@ class Date(PhyloElement):
     """
     def __init__(self, value=None, unit=None, desc=None, 
             minimum=None, maximum=None):
-        PhyloElement.__init__(self, value=value, unit=unit, desc=desc, 
-                minimum=minimum, maximum=maximum)
+        self.value = value
+        self.unit = unit
+        self.desc = desc
+        self.minimum = minimum
+        self.maximum = maximum
 
     def __str__(self):
         """Show the class name and the human-readable date."""
@@ -527,9 +544,9 @@ class Distribution(PhyloElement):
     element in Google's KML format) or by 'Polygons'.
     """
     def __init__(self, desc=None, points=None, polygons=None):
-        PhyloElement.__init__(self, desc=desc,
-                points=points or [],
-                polygons=polygons or [])
+        self.desc = desc
+        self.points = points or []
+        self.polygons = polygons or []
 
 
 class DomainArchitecture(PhyloElement):
@@ -539,7 +556,8 @@ class DomainArchitecture(PhyloElement):
     @param domains: list of ProteinDomain objects
     """
     def __init__(self, length=None, domains=None):
-        PhyloElement.__init__(self, length=length, domains=domains)
+        self.length = length
+        self.domains = domains
 
 
 class Events(PhyloElement):
@@ -555,8 +573,11 @@ class Events(PhyloElement):
     def __init__(self, type=None, duplications=None, speciations=None,
             losses=None, confidence=None):
         check_str(type, self.ok_type.__contains__)
-        PhyloElement.__init__(self, type=type, duplications=duplications,
-                speciations=speciations, losses=losses, confidence=confidence)
+        self.type = type
+        self.duplications = duplications
+        self.speciations = speciations
+        self.losses = losses
+        self.confidence = confidence
 
     def iteritems(self):
         return ((k, v) for k, v in self.__dict__.iteritems() if v is not None)
@@ -601,13 +622,14 @@ class Events(PhyloElement):
 
 
 class Id(PhyloElement):
-    """A general purpose identifier element.
+    """A general-purpose identifier element.
 
     Allows to indicate the provider (or authority) of an identifier, e.g. NCBI,
     along with the value itself.
     """
     def __init__(self, value, provider=None):
-        PhyloElement.__init__(self, provider=provider, value=value)
+        self.value = value
+        self.provider = provider
 
 
 class MolSeq(PhyloElement):
@@ -641,8 +663,11 @@ class Point(PhyloElement):
     @param alt_unit: unit for the altitude (e.g. 'meter')
     """
     def __init__(self, geodetic_datum, lat, long, alt=None, alt_unit=None):
-        PhyloElement.__init__(self, geodetic_datum=geodetic_datum,
-                lat=lat, long=long, alt=alt, alt_unit=alt_unit)
+        self.geodetic_datum = geodetic_datum
+        self.lat = lat
+        self.long = long
+        self.alt = alt
+        self.alt_unit = alt_unit
 
 
 class Polygon(PhyloElement):
@@ -695,8 +720,12 @@ class Property(PhyloElement):
         check_str(applies_to, self.ok_applies_to.__contains__)
         check_str(datatype, self.ok_datatype.__contains__)
         check_str(unit, self.re_ref.match)
-        PhyloElement.__init__(self, unit=unit, id_ref=id_ref, value=value,
-                ref=ref, applies_to=applies_to, datatype=datatype)
+        self.unit = unit
+        self.id_ref = id_ref
+        self.value = value
+        self.ref = ref
+        self.applies_to = applies_to
+        self.datatype = datatype
 
 
 class ProteinDomain(PhyloElement):
@@ -716,8 +745,11 @@ class ProteinDomain(PhyloElement):
     """
     # TODO: confirm that 'start' counts from 1, not 0
     def __init__(self, value, start, end, confidence=None, id=None):
-        PhyloElement.__init__(self, value=value, start=start, end=end,
-                confidence=confidence, id=id)
+        self.value = value
+        self.start = start
+        self.end = end
+        self.confidence = confidence
+        self.id = id
 
     @classmethod
     def from_seqfeature(cls, feat):
@@ -786,13 +818,18 @@ class Sequence(PhyloElement):
             ):
         check_str(type, self.alphabets.__contains__)
         check_str(symbol, self.re_symbol.match)
-        PhyloElement.__init__(self, type=type, id_ref=id_ref,
-                id_source=id_source, symbol=symbol, accession=accession,
-                name=name, location=location, mol_seq=mol_seq, uri=uri,
-                domain_architecture=domain_architecture,
-                annotations=annotations or [],
-                other=other or [],
-                )
+        self.type = type
+        self.id_ref = id_ref
+        self.id_source = id_source
+        self.symbol = symbol
+        self.accession = accession
+        self.name = name
+        self.location = location
+        self.mol_seq = mol_seq
+        self.uri = uri
+        self.domain_architecture = domain_architecture
+        self.annotations = annotations or []
+        self.other = other or []
 
     @classmethod
     def from_seqrecord(cls, record, is_aligned=None):
@@ -945,8 +982,11 @@ class SequenceRelation(PhyloElement):
     def __init__(self, type, id_ref_0, id_ref_1,
             distance=None, confidence=None):
         check_str(type, self.ok_type.__contains__)
-        PhyloElement.__init__(self, distance=distance, type=type,
-                id_ref_0=id_ref_0, id_ref_1=id_ref_1, confidence=confidence)
+        self.distance = distance
+        self.type = type
+        self.id_ref_0 = id_ref_0
+        self.id_ref_1 = id_ref_1
+        self.confidence = confidence
 
 
 class Taxonomy(PhyloElement):
@@ -991,13 +1031,16 @@ class Taxonomy(PhyloElement):
             ):
         check_str(code, self.re_code.match)
         check_str(rank, self.ok_rank.__contains__)
-        PhyloElement.__init__(self, id_source=id_source, id=id, code=code,
-                scientific_name=scientific_name, authority=authority,
-                rank=rank, uri=uri,
-                common_names=common_names or [],
-                synonyms=synonyms or [],
-                other=other or [],
-                )
+        self.id_source = id_source
+        self.id = id
+        self.code = code
+        self.scientific_name = scientific_name
+        self.authority = authority
+        self.rank = rank
+        self.uri = uri
+        self.common_names = common_names or []
+        self.synonyms = synonyms or []
+        self.other = other or []
 
     def __str__(self):
         """Show the class name and an identifying attribute."""
@@ -1020,5 +1063,7 @@ class Uri(PhyloElement):
     might be 'image of a California sea hare').
     """
     def __init__(self, value, desc=None, type=None):
-        PhyloElement.__init__(self, value=value, desc=desc, type=type)
+        self.value = value
+        self.desc = desc
+        self.type = type
 
