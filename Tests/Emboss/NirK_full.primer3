@@ -1,0 +1,1350 @@
+
+# EPRIMER3 RESULTS FOR NirK00001
+
+# FORWARD PRIMER STATISTICS:
+# considered 87313
+# GC content failed 2766
+# low tm 4300
+# high tm 71893
+# high any compl 40
+# high end compl 740
+# long poly-x seq 22
+#high 3' stability 1345
+# ok 6207
+
+# REVERSE PRIMER STATISTICS:
+# considered 87569
+# GC content failed 2773
+# low tm 4326
+# high tm 72012
+# high any compl 42
+# high end compl 581
+# long poly-x seq 22
+#high 3' stability 1314
+# ok 6499
+
+# PRIMER PAIR STATISTICS:
+# considered 2001307
+# unacceptable product size 1993131
+# high any compl 16
+# high end compl 752
+# no internal oligo 13
+# ok 7395
+
+# INTERNAL OLIGO STATISTICS:
+# considered 99642
+# GC content failed 2773
+# low tm 4336
+# high tm 82802
+# long poly-x seq 22
+# ok 9709
+
+#                      Start  Len   Tm     GC%   Sequence
+
+   1 PRODUCT SIZE: 146
+     FORWARD PRIMER    6708   20  59.99  50.00  ATACCGGGACAAGCACTTTG
+
+     REVERSE PRIMER    6834   20  60.13  55.00  GTTCGCCGTCTTCTTCTCTG
+
+     INTERNAL OLIGO    6786   20  60.74  50.00  CCAGAAACGAGCAATCGATC
+
+
+   2 PRODUCT SIZE: 145
+     FORWARD PRIMER    7389   20  60.10  55.00  ACGCCATAGACTCCCTCCTT
+
+     REVERSE PRIMER    7514   20  60.01  55.00  GTGACACCATCACCTTCGTG
+
+     INTERNAL OLIGO    7427   20  60.26  50.00  CTGTTCGTTCATCTTGCCCT
+
+
+   3 PRODUCT SIZE: 143
+     FORWARD PRIMER    6911   20  59.99  55.00  CGACCTGTCCAGTTCGGTAT
+
+     REVERSE PRIMER    7034   20  60.11  50.00  TGGCTACCGCTATTTTACGG
+
+     INTERNAL OLIGO    6968   20  59.97  50.00  TAGCCGAACAGCATCTCATG
+
+
+   4 PRODUCT SIZE: 145
+     FORWARD PRIMER    7112   20  59.79  50.00  TAGGATAGAAGCGCCGGATA
+
+     REVERSE PRIMER    7237   20  59.97  50.00  AGTTCCCACGAATTGACAGG
+
+     INTERNAL OLIGO    7149   20  60.59  50.00  GCGCTATTGCCATTATCGTC
+
+
+   5 PRODUCT SIZE: 149
+     FORWARD PRIMER    8499   20  60.09  55.00  GAGGAACAGGGTCTGGTCAA
+
+     REVERSE PRIMER    8628   20  60.42  60.00  CTCGCTCGAGACCTGAAGAG
+
+     INTERNAL OLIGO    8585   20  59.87  60.00  GTCCAAGACCTAGCTGGTGC
+
+
+
+
+# EPRIMER3 RESULTS FOR NirK00002
+
+# FORWARD PRIMER STATISTICS:
+# considered 88668
+# GC content failed 3605
+# low tm 2712
+# high tm 75304
+# high any compl 61
+# high end compl 519
+# long poly-x seq 21
+#high 3' stability 1180
+# ok 5266
+
+# REVERSE PRIMER STATISTICS:
+# considered 88483
+# GC content failed 3502
+# low tm 2708
+# high tm 75226
+# high any compl 47
+# high end compl 519
+# long poly-x seq 22
+#high 3' stability 1197
+# ok 5262
+
+# PRIMER PAIR STATISTICS:
+# considered 1575212
+# unacceptable product size 1569195
+# high any compl 27
+# high end compl 556
+# no internal oligo 60
+# ok 5374
+
+# INTERNAL OLIGO STATISTICS:
+# considered 99648
+# GC content failed 3605
+# low tm 2715
+# high tm 85210
+# high any compl 6
+# long poly-x seq 22
+# ok 8090
+
+#                      Start  Len   Tm     GC%   Sequence
+
+   1 PRODUCT SIZE: 149
+     FORWARD PRIMER    4623   20  60.25  50.00  GCCGAAGGTCGTAAAGTTCA
+
+     REVERSE PRIMER    4752   20  60.02  55.00  GCGTCAGCTCCACATAGTCA
+
+     INTERNAL OLIGO    4646   20  60.19  55.00  TGACCATCCAGGAGAAGGAG
+
+
+   2 PRODUCT SIZE: 150
+     FORWARD PRIMER    2605   20  59.70  55.00  GCCTGCTTTACCCAGATCAC
+
+     REVERSE PRIMER    2735   20  59.97  55.00  GACCGACATGTCCCTTGTCT
+
+     INTERNAL OLIGO    2626   20  59.83  50.00  TCGTCGAACAGGAGTTCATG
+
+
+   3 PRODUCT SIZE: 147
+     FORWARD PRIMER    4646   20  60.19  55.00  TGACCATCCAGGAGAAGGAG
+
+     REVERSE PRIMER    4773   20  60.15  55.00  CGTTGGTCTCAGGGTTGACT
+
+     INTERNAL OLIGO    4752   20  60.02  55.00  TGACTATGTGGAGCTGACGC
+
+
+   4 PRODUCT SIZE: 145
+     FORWARD PRIMER    1217   20  59.93  50.00  CGTGTCCTTCATGGATTCCT
+
+     REVERSE PRIMER    1342   20  60.22  50.00  CAAGAACATCGCCCTCATCT
+
+     INTERNAL OLIGO    1260   19  59.90  57.90  GGGCCGAGATAGGTCACAT
+
+
+   5 PRODUCT SIZE: 150
+     FORWARD PRIMER     981   20  59.60  45.00  AGCGAGTTGCCCATATTGTT
+
+     REVERSE PRIMER    1111   20  59.85  50.00  CGTGCCGGTCTATAATGGTT
+
+     INTERNAL OLIGO    1069   20  59.84  55.00  GAAAGTCCGCCAGTATCTGC
+
+
+
+
+# EPRIMER3 RESULTS FOR NirK00003
+
+# FORWARD PRIMER STATISTICS:
+# considered 87331
+# GC content failed 3312
+# low tm 4606
+# high tm 70606
+# high any compl 100
+# high end compl 551
+# long poly-x seq 96
+#high 3' stability 1288
+# ok 6772
+
+# REVERSE PRIMER STATISTICS:
+# considered 87147
+# GC content failed 3324
+# low tm 4605
+# high tm 70441
+# high any compl 97
+# high end compl 482
+# long poly-x seq 95
+#high 3' stability 1316
+# ok 6787
+
+# PRIMER PAIR STATISTICS:
+# considered 1642899
+# unacceptable product size 1635653
+# high any compl 9
+# high end compl 676
+# no internal oligo 7
+# ok 6554
+
+# INTERNAL OLIGO STATISTICS:
+# considered 99153
+# GC content failed 3314
+# low tm 4609
+# high tm 81068
+# high any compl 42
+# long poly-x seq 98
+# ok 10022
+
+#                      Start  Len   Tm     GC%   Sequence
+
+   1 PRODUCT SIZE: 148
+     FORWARD PRIMER    8290   20  60.14  50.00  GACTATGTTGCGGCCAAGTT
+
+     REVERSE PRIMER    8418   20  60.01  50.00  GACGAAACACGAACCACCTT
+
+     INTERNAL OLIGO    8376   20  60.18  50.00  TCATGGCTTCAGCCCTTATC
+
+
+   2 PRODUCT SIZE: 148
+     FORWARD PRIMER    8016   20  59.84  40.00  TTAATTCGCAATGTGCTTCG
+
+     REVERSE PRIMER    8144   20  59.99  50.00  TATGTGCCGGGTGTTGAGTA
+
+     INTERNAL OLIGO    8122   20  59.87  60.00  GTAGGTCAGCCGGACTTCTG
+
+
+   3 PRODUCT SIZE: 150
+     FORWARD PRIMER    8122   20  59.87  60.00  GTAGGTCAGCCGGACTTCTG
+
+     REVERSE PRIMER    8252   20  60.16  55.00  GATGTATCCGTGGAGGATGG
+
+     INTERNAL OLIGO    8144   20  59.99  50.00  TACTCAACACCCGGCACATA
+
+
+   4 PRODUCT SIZE: 147
+     FORWARD PRIMER    8291   20  60.14  50.00  ACTATGTTGCGGCCAAGTTC
+
+     REVERSE PRIMER    8418   20  60.01  50.00  GACGAAACACGAACCACCTT
+
+     INTERNAL OLIGO    8376   20  60.18  50.00  TCATGGCTTCAGCCCTTATC
+
+
+   5 PRODUCT SIZE: 147
+     FORWARD PRIMER    8290   20  60.14  50.00  GACTATGTTGCGGCCAAGTT
+
+     REVERSE PRIMER    8417   20  60.01  50.00  ACGAAACACGAACCACCTTC
+
+     INTERNAL OLIGO    8376   20  60.18  50.00  TCATGGCTTCAGCCCTTATC
+
+
+
+
+# EPRIMER3 RESULTS FOR NirK00004
+
+# FORWARD PRIMER STATISTICS:
+# considered 90150
+# GC content failed 6237
+# low tm 2247
+# high tm 76114
+# high any compl 84
+# high end compl 398
+# long poly-x seq 46
+#high 3' stability 986
+# ok 4038
+
+# REVERSE PRIMER STATISTICS:
+# considered 90580
+# GC content failed 6342
+# low tm 2247
+# high tm 76409
+# high any compl 67
+# high end compl 368
+# long poly-x seq 45
+#high 3' stability 937
+# ok 4165
+
+# PRIMER PAIR STATISTICS:
+# considered 1045647
+# unacceptable product size 1042092
+# high any compl 16
+# high end compl 275
+# no internal oligo 32
+# ok 3232
+
+# INTERNAL OLIGO STATISTICS:
+# considered 99481
+# GC content failed 6418
+# low tm 2247
+# high tm 84429
+# high any compl 3
+# long poly-x seq 46
+# ok 6338
+
+#                      Start  Len   Tm     GC%   Sequence
+
+   1 PRODUCT SIZE: 143
+     FORWARD PRIMER    4901   20  60.18  55.00  GGCGTGTTCGTGTATCACTG
+
+     REVERSE PRIMER    5024   20  60.01  60.00  TAGACCCGGTCGTACCGTAG
+
+     INTERNAL OLIGO    4952   18  60.21  61.11  GTCGTCTCCGGCATGAAC
+
+
+   2 PRODUCT SIZE: 150
+     FORWARD PRIMER    5418   20  59.48  50.00  ACGCCTACCTCAACCACAAT
+
+     REVERSE PRIMER    5548   20  60.18  55.00  ACGTGGCGTCTTAGTTGGTC
+
+     INTERNAL OLIGO    5499   20  60.27  55.00  ACGACCTGATGAAGCAGGTC
+
+
+   3 PRODUCT SIZE: 149
+     FORWARD PRIMER    4629   20  59.50  45.00  TCGAATTCAAGATGGTGGTG
+
+     REVERSE PRIMER    4758   20  59.83  50.00  GGGATTGACCAACGTCAGTT
+
+     INTERNAL OLIGO    4654   20  60.11  50.00  AAAGGAAGTGGTGATCGACG
+
+
+   4 PRODUCT SIZE: 149
+     FORWARD PRIMER    5419   20  60.52  55.00  CGCCTACCTCAACCACAATC
+
+     REVERSE PRIMER    5548   20  60.18  55.00  ACGTGGCGTCTTAGTTGGTC
+
+     INTERNAL OLIGO    5499   20  60.27  55.00  ACGACCTGATGAAGCAGGTC
+
+
+   5 PRODUCT SIZE: 145
+     FORWARD PRIMER    3190   20  60.10  50.00  CTGACCGATATTCCGCTTGT
+
+     REVERSE PRIMER    3315   20  59.60  45.00  AGTTTCGCAACCATGGAAGT
+
+     INTERNAL OLIGO    3250   20  60.74  50.00  GACAATCGCGATTTAGCTGG
+
+
+
+
+# EPRIMER3 RESULTS FOR NirK00005
+
+# FORWARD PRIMER STATISTICS:
+# considered 87251
+# GC content failed 3476
+# low tm 4270
+# high tm 71031
+# high any compl 97
+# high end compl 737
+#high 3' stability 1379
+# ok 6261
+
+# REVERSE PRIMER STATISTICS:
+# considered 87244
+# GC content failed 3476
+# low tm 4373
+# high tm 70845
+# high any compl 84
+# high end compl 587
+#high 3' stability 1372
+# ok 6507
+
+# PRIMER PAIR STATISTICS:
+# considered 2030304
+# unacceptable product size 2022508
+# high any compl 41
+# high end compl 687
+# no internal oligo 10
+# ok 7058
+
+# INTERNAL OLIGO STATISTICS:
+# considered 99795
+# GC content failed 3476
+# low tm 4422
+# high tm 81868
+# high any compl 4
+# ok 10025
+
+#                      Start  Len   Tm     GC%   Sequence
+
+   1 PRODUCT SIZE: 150
+     FORWARD PRIMER    4223   20  60.04  45.00  TGCATGATCGATGTCTCCAT
+
+     REVERSE PRIMER    4353   20  60.21  45.00  AGAAGAAAGCCGACGGAAAT
+
+     INTERNAL OLIGO    4276   20  60.02  50.00  GCAGTCGTTGAGATTACGCA
+
+
+   2 PRODUCT SIZE: 150
+     FORWARD PRIMER    1805   20  59.99  60.00  GTCTGTCCCAGCTCCTGAAG
+
+     REVERSE PRIMER    1935   20  60.37  55.00  CGACGGCGAGGTAGAAGATA
+
+     INTERNAL OLIGO    1832   20  59.80  55.00  CTTTCCTGACCTGGATCGAG
+
+
+   3 PRODUCT SIZE: 147
+     FORWARD PRIMER    4223   20  60.04  45.00  TGCATGATCGATGTCTCCAT
+
+     REVERSE PRIMER    4350   20  60.21  45.00  AGAAAGCCGACGGAAATCTT
+
+     INTERNAL OLIGO    4276   20  60.02  50.00  GCAGTCGTTGAGATTACGCA
+
+
+   4 PRODUCT SIZE: 144
+     FORWARD PRIMER    4547   20  59.87  50.00  TCAAGACTGCCAAACAGGTG
+
+     REVERSE PRIMER    4671   20  59.96  50.00  CCTGGATGGTTAGCGTGAAT
+
+     INTERNAL OLIGO    4624   20  59.95  50.00  GTCCATGCTCATCAGCAGAA
+
+
+   5 PRODUCT SIZE: 149
+     FORWARD PRIMER    4221   20  59.75  50.00  TCTGCATGATCGATGTCTCC
+
+     REVERSE PRIMER    4350   20  60.21  45.00  AGAAAGCCGACGGAAATCTT
+
+     INTERNAL OLIGO    4276   20  60.02  50.00  GCAGTCGTTGAGATTACGCA
+
+
+
+
+# EPRIMER3 RESULTS FOR NirK00006
+
+# FORWARD PRIMER STATISTICS:
+# considered 85867
+# GC content failed 1287
+# low tm 7342
+# high tm 65768
+# high any compl 128
+# high end compl 876
+# long poly-x seq 128
+#high 3' stability 1473
+# ok 8865
+
+# REVERSE PRIMER STATISTICS:
+# considered 85290
+# GC content failed 1272
+# low tm 7456
+# high tm 65061
+# high any compl 90
+# high end compl 796
+# long poly-x seq 121
+#high 3' stability 1546
+# ok 8948
+
+# PRIMER PAIR STATISTICS:
+# considered 2902817
+# unacceptable product size 2892752
+# high any compl 8
+# high end compl 858
+# no internal oligo 3
+# ok 9196
+
+# INTERNAL OLIGO STATISTICS:
+# considered 98877
+# GC content failed 1294
+# low tm 7456
+# high tm 76729
+# high any compl 33
+# long poly-x seq 132
+# ok 13233
+
+#                      Start  Len   Tm     GC%   Sequence
+
+   1 PRODUCT SIZE: 149
+     FORWARD PRIMER    8918   20  60.10  50.00  CCGGCACAAGAATAGACGAT
+
+     REVERSE PRIMER    9047   20  60.07  45.00  GCCTGGTCTGGCATTAAAAA
+
+     INTERNAL OLIGO    8943   20  60.05  55.00  GGAGGAGTGTCATGAAGGGA
+
+
+   2 PRODUCT SIZE: 148
+     FORWARD PRIMER    9844   20  60.05  55.00  CGAGACCACGCTCTACAACA
+
+     REVERSE PRIMER    9972   20  59.90  50.00  AAGCTTCTTGCAGCCTTCAG
+
+     INTERNAL OLIGO    9898   20  59.96  50.00  GGCTGAAAATCTCAAGGCTG
+
+
+   3 PRODUCT SIZE: 150
+     FORWARD PRIMER    9043   20  60.07  45.00  TGGCTTTTTAATGCCAGACC
+
+     REVERSE PRIMER    9173   20  59.79  45.00  TTGAACTGTTGCTGCTGCTT
+
+     INTERNAL OLIGO    9127   20  59.89  55.00  CGAGAGCTGCAAGGTTCTCT
+
+
+   4 PRODUCT SIZE: 149
+     FORWARD PRIMER    9044   20  60.07  45.00  GGCTTTTTAATGCCAGACCA
+
+     REVERSE PRIMER    9173   20  59.79  45.00  TTGAACTGTTGCTGCTGCTT
+
+     INTERNAL OLIGO    9127   20  59.89  55.00  CGAGAGCTGCAAGGTTCTCT
+
+
+   5 PRODUCT SIZE: 150
+     FORWARD PRIMER    8918   20  60.10  50.00  CCGGCACAAGAATAGACGAT
+
+     REVERSE PRIMER    9048   20  59.71  45.00  AGCCTGGTCTGGCATTAAAA
+
+     INTERNAL OLIGO    8943   20  60.05  55.00  GGAGGAGTGTCATGAAGGGA
+
+
+
+
+# EPRIMER3 RESULTS FOR NirK00007
+
+# FORWARD PRIMER STATISTICS:
+# considered 85153
+# GC content failed 1250
+# low tm 7464
+# high tm 64879
+# high any compl 96
+# high end compl 843
+# long poly-x seq 122
+#high 3' stability 1562
+# ok 8937
+
+# REVERSE PRIMER STATISTICS:
+# considered 85748
+# GC content failed 1265
+# low tm 7347
+# high tm 65616
+# high any compl 112
+# high end compl 760
+# long poly-x seq 129
+#high 3' stability 1487
+# ok 9032
+
+# PRIMER PAIR STATISTICS:
+# considered 2871561
+# unacceptable product size 2861494
+# high any compl 7
+# high end compl 852
+# no internal oligo 3
+# ok 9205
+
+# INTERNAL OLIGO STATISTICS:
+# considered 98869
+# GC content failed 1272
+# low tm 7464
+# high tm 76670
+# high any compl 50
+# long poly-x seq 133
+# ok 13280
+
+#                      Start  Len   Tm     GC%   Sequence
+
+   1 PRODUCT SIZE: 149
+     FORWARD PRIMER     935   20  60.07  45.00  GCCTGGTCTGGCATTAAAAA
+
+     REVERSE PRIMER    1064   20  60.10  50.00  CCGGCACAAGAATAGACGAT
+
+     INTERNAL OLIGO    1039   20  60.05  55.00  TCCCTTCATGACACTCCTCC
+
+
+   2 PRODUCT SIZE: 148
+     FORWARD PRIMER      10   20  59.90  50.00  AAGCTTCTTGCAGCCTTCAG
+
+     REVERSE PRIMER     138   20  60.05  55.00  CGAGACCACGCTCTACAACA
+
+     INTERNAL OLIGO      84   20  59.96  50.00  CAGCCTTGAGATTTTCAGCC
+
+
+   3 PRODUCT SIZE: 150
+     FORWARD PRIMER     809   20  59.79  45.00  TTGAACTGTTGCTGCTGCTT
+
+     REVERSE PRIMER     939   20  60.07  45.00  TGGCTTTTTAATGCCAGACC
+
+     INTERNAL OLIGO     855   20  59.89  55.00  AGAGAACCTTGCAGCTCTCG
+
+
+   4 PRODUCT SIZE: 149
+     FORWARD PRIMER     809   20  59.79  45.00  TTGAACTGTTGCTGCTGCTT
+
+     REVERSE PRIMER     938   20  60.07  45.00  GGCTTTTTAATGCCAGACCA
+
+     INTERNAL OLIGO     855   20  59.89  55.00  AGAGAACCTTGCAGCTCTCG
+
+
+   5 PRODUCT SIZE: 150
+     FORWARD PRIMER     934   20  59.71  45.00  AGCCTGGTCTGGCATTAAAA
+
+     REVERSE PRIMER    1064   20  60.10  50.00  CCGGCACAAGAATAGACGAT
+
+     INTERNAL OLIGO    1039   20  60.05  55.00  TCCCTTCATGACACTCCTCC
+
+
+
+
+# EPRIMER3 RESULTS FOR NirK00008
+
+# FORWARD PRIMER STATISTICS:
+# considered 85199
+# GC content failed 1188
+# low tm 7566
+# high tm 64875
+# high any compl 100
+# high end compl 846
+# long poly-x seq 125
+#high 3' stability 1558
+# ok 8941
+
+# REVERSE PRIMER STATISTICS:
+# considered 85783
+# GC content failed 1203
+# low tm 7452
+# high tm 65587
+# high any compl 111
+# high end compl 769
+# long poly-x seq 128
+#high 3' stability 1485
+# ok 9048
+
+# PRIMER PAIR STATISTICS:
+# considered 2844588
+# unacceptable product size 2834600
+# high any compl 7
+# high end compl 802
+# no internal oligo 3
+# ok 9176
+
+# INTERNAL OLIGO STATISTICS:
+# considered 98877
+# GC content failed 1210
+# low tm 7566
+# high tm 76619
+# high any compl 52
+# long poly-x seq 132
+# ok 13298
+
+#                      Start  Len   Tm     GC%   Sequence
+
+   1 PRODUCT SIZE: 149
+     FORWARD PRIMER     936   20  60.07  45.00  GCCTGGTCTGGCATTAAAAA
+
+     REVERSE PRIMER    1065   20  60.10  50.00  CCGGCACAAGAATAGACGAT
+
+     INTERNAL OLIGO    1040   20  60.05  55.00  TCCCTTCATGACACTCCTCC
+
+
+   2 PRODUCT SIZE: 148
+     FORWARD PRIMER      11   20  59.90  50.00  AAGCTTCTTGCAGCCTTCAG
+
+     REVERSE PRIMER     139   20  60.05  55.00  CGAGACCACGCTCTACAACA
+
+     INTERNAL OLIGO      85   20  59.96  50.00  CAGCCTTGAGATTTTCAGCC
+
+
+   3 PRODUCT SIZE: 150
+     FORWARD PRIMER     810   20  59.79  45.00  TTGAACTGTTGCTGCTGCTT
+
+     REVERSE PRIMER     940   20  60.07  45.00  TGGCTTTTTAATGCCAGACC
+
+     INTERNAL OLIGO     856   20  59.89  55.00  AGAGAACCTTGCAGCTCTCG
+
+
+   4 PRODUCT SIZE: 149
+     FORWARD PRIMER     810   20  59.79  45.00  TTGAACTGTTGCTGCTGCTT
+
+     REVERSE PRIMER     939   20  60.07  45.00  GGCTTTTTAATGCCAGACCA
+
+     INTERNAL OLIGO     856   20  59.89  55.00  AGAGAACCTTGCAGCTCTCG
+
+
+   5 PRODUCT SIZE: 150
+     FORWARD PRIMER     935   20  59.71  45.00  AGCCTGGTCTGGCATTAAAA
+
+     REVERSE PRIMER    1065   20  60.10  50.00  CCGGCACAAGAATAGACGAT
+
+     INTERNAL OLIGO    1040   20  60.05  55.00  TCCCTTCATGACACTCCTCC
+
+
+
+
+# EPRIMER3 RESULTS FOR NirK00009
+
+# FORWARD PRIMER STATISTICS:
+# considered 85199
+# GC content failed 1188
+# low tm 7566
+# high tm 64875
+# high any compl 100
+# high end compl 846
+# long poly-x seq 125
+#high 3' stability 1558
+# ok 8941
+
+# REVERSE PRIMER STATISTICS:
+# considered 85783
+# GC content failed 1203
+# low tm 7452
+# high tm 65587
+# high any compl 111
+# high end compl 769
+# long poly-x seq 128
+#high 3' stability 1485
+# ok 9048
+
+# PRIMER PAIR STATISTICS:
+# considered 2844588
+# unacceptable product size 2834600
+# high any compl 7
+# high end compl 802
+# no internal oligo 3
+# ok 9176
+
+# INTERNAL OLIGO STATISTICS:
+# considered 98877
+# GC content failed 1210
+# low tm 7566
+# high tm 76619
+# high any compl 52
+# long poly-x seq 132
+# ok 13298
+
+#                      Start  Len   Tm     GC%   Sequence
+
+   1 PRODUCT SIZE: 149
+     FORWARD PRIMER     936   20  60.07  45.00  GCCTGGTCTGGCATTAAAAA
+
+     REVERSE PRIMER    1065   20  60.10  50.00  CCGGCACAAGAATAGACGAT
+
+     INTERNAL OLIGO    1040   20  60.05  55.00  TCCCTTCATGACACTCCTCC
+
+
+   2 PRODUCT SIZE: 148
+     FORWARD PRIMER      11   20  59.90  50.00  AAGCTTCTTGCAGCCTTCAG
+
+     REVERSE PRIMER     139   20  60.05  55.00  CGAGACCACGCTCTACAACA
+
+     INTERNAL OLIGO      85   20  59.96  50.00  CAGCCTTGAGATTTTCAGCC
+
+
+   3 PRODUCT SIZE: 150
+     FORWARD PRIMER     810   20  59.79  45.00  TTGAACTGTTGCTGCTGCTT
+
+     REVERSE PRIMER     940   20  60.07  45.00  TGGCTTTTTAATGCCAGACC
+
+     INTERNAL OLIGO     856   20  59.89  55.00  AGAGAACCTTGCAGCTCTCG
+
+
+   4 PRODUCT SIZE: 149
+     FORWARD PRIMER     810   20  59.79  45.00  TTGAACTGTTGCTGCTGCTT
+
+     REVERSE PRIMER     939   20  60.07  45.00  GGCTTTTTAATGCCAGACCA
+
+     INTERNAL OLIGO     856   20  59.89  55.00  AGAGAACCTTGCAGCTCTCG
+
+
+   5 PRODUCT SIZE: 150
+     FORWARD PRIMER     935   20  59.71  45.00  AGCCTGGTCTGGCATTAAAA
+
+     REVERSE PRIMER    1065   20  60.10  50.00  CCGGCACAAGAATAGACGAT
+
+     INTERNAL OLIGO    1040   20  60.05  55.00  TCCCTTCATGACACTCCTCC
+
+
+
+
+# EPRIMER3 RESULTS FOR NirK00010
+
+# FORWARD PRIMER STATISTICS:
+# considered 85959
+# GC content failed 1273
+# low tm 7643
+# high tm 65398
+# high any compl 130
+# high end compl 887
+# long poly-x seq 103
+#high 3' stability 1483
+# ok 9042
+
+# REVERSE PRIMER STATISTICS:
+# considered 85404
+# GC content failed 1251
+# low tm 8174
+# high tm 64238
+# high any compl 86
+# high end compl 792
+# long poly-x seq 99
+#high 3' stability 1551
+# ok 9213
+
+# PRIMER PAIR STATISTICS:
+# considered 2884339
+# unacceptable product size 2874225
+# high any compl 8
+# high end compl 833
+# ok 9273
+
+# INTERNAL OLIGO STATISTICS:
+# considered 99030
+# GC content failed 1273
+# low tm 8174
+# high tm 75932
+# high any compl 25
+# long poly-x seq 110
+# ok 13516
+
+#                      Start  Len   Tm     GC%   Sequence
+
+   1 PRODUCT SIZE: 149
+     FORWARD PRIMER    8808   20  60.10  50.00  CCGGCACAAGAATAGACGAT
+
+     REVERSE PRIMER    8937   20  60.07  45.00  GCCTGGTCTGGCATTAAAAA
+
+     INTERNAL OLIGO    8833   20  60.05  55.00  GGAGGAGTGTCATGAAGGGA
+
+
+   2 PRODUCT SIZE: 148
+     FORWARD PRIMER    9716   20  60.05  55.00  CGAGACCACGCTCTACAACA
+
+     REVERSE PRIMER    9844   20  59.90  50.00  AAGCTTCTTGCAGCCTTCAG
+
+     INTERNAL OLIGO    9770   20  59.96  50.00  GGCTGAAAATCTCAAGGCTG
+
+
+   3 PRODUCT SIZE: 150
+     FORWARD PRIMER    8933   20  60.07  45.00  TGGCTTTTTAATGCCAGACC
+
+     REVERSE PRIMER    9063   20  59.79  45.00  TTGAACTGTTGCTGCTGCTT
+
+     INTERNAL OLIGO    9017   20  59.89  55.00  CGAGAGCTGCAAGGTTCTCT
+
+
+   4 PRODUCT SIZE: 149
+     FORWARD PRIMER    8934   20  60.07  45.00  GGCTTTTTAATGCCAGACCA
+
+     REVERSE PRIMER    9063   20  59.79  45.00  TTGAACTGTTGCTGCTGCTT
+
+     INTERNAL OLIGO    9017   20  59.89  55.00  CGAGAGCTGCAAGGTTCTCT
+
+
+   5 PRODUCT SIZE: 150
+     FORWARD PRIMER    8808   20  60.10  50.00  CCGGCACAAGAATAGACGAT
+
+     REVERSE PRIMER    8938   20  59.71  45.00  AGCCTGGTCTGGCATTAAAA
+
+     INTERNAL OLIGO    8833   20  60.05  55.00  GGAGGAGTGTCATGAAGGGA
+
+
+
+
+# EPRIMER3 RESULTS FOR NirK00011
+
+# FORWARD PRIMER STATISTICS:
+# considered 89983
+# GC content failed 6442
+# low tm 3302
+# high tm 73164
+# high any compl 79
+# high end compl 613
+# long poly-x seq 21
+#high 3' stability 1037
+# ok 5325
+
+# REVERSE PRIMER STATISTICS:
+# considered 89739
+# GC content failed 6442
+# low tm 3317
+# high tm 72931
+# high any compl 60
+# high end compl 490
+# long poly-x seq 19
+#high 3' stability 1068
+# ok 5412
+
+# PRIMER PAIR STATISTICS:
+# considered 2029923
+# unacceptable product size 2021914
+# high any compl 101
+# high end compl 940
+# no internal oligo 29
+# ok 6939
+
+# INTERNAL OLIGO STATISTICS:
+# considered 99686
+# GC content failed 6468
+# low tm 3317
+# high tm 81835
+# high any compl 18
+# long poly-x seq 21
+# ok 8027
+
+#                      Start  Len   Tm     GC%   Sequence
+
+   1 PRODUCT SIZE: 146
+     FORWARD PRIMER    4625   20  60.16  55.00  GTGGAGTTCAAGCTGGTGGT
+
+     REVERSE PRIMER    4751   20  59.99  50.00  TTGATCAGCGTCAGTTCGAC
+
+     INTERNAL OLIGO    4731   20  59.86  55.00  TCGTGCATCAGGACGACTAC
+
+
+   2 PRODUCT SIZE: 149
+     FORWARD PRIMER    6301   20  60.29  55.00  CAGTATCGGTAGCCGCTTGT
+
+     REVERSE PRIMER    6430   20  59.84  55.00  CAAATAGGGCACAGGCTCTC
+
+     INTERNAL OLIGO    6325   20  58.62  45.00  ATTGTTGACGTTGAAGGTCG
+
+
+   3 PRODUCT SIZE: 148
+     FORWARD PRIMER    6301   20  60.29  55.00  CAGTATCGGTAGCCGCTTGT
+
+     REVERSE PRIMER    6429   20  59.84  50.00  AAATAGGGCACAGGCTCTCA
+
+     INTERNAL OLIGO    6325   20  58.62  45.00  ATTGTTGACGTTGAAGGTCG
+
+
+   4 PRODUCT SIZE: 144
+     FORWARD PRIMER    8972   20  60.37  50.00  GCAGCTGTTCGATCAGGAAT
+
+     REVERSE PRIMER    9096   20  60.00  55.00  GTCTCGGCGAAGAAGTTGTC
+
+     INTERNAL OLIGO    9030   20  59.86  50.00  AAGATCATCCCGGAGGAGAT
+
+
+   5 PRODUCT SIZE: 142
+     FORWARD PRIMER    6308   20  60.14  50.00  GGTAGCCGCTTGTTGACATT
+
+     REVERSE PRIMER    6430   20  59.84  55.00  CAAATAGGGCACAGGCTCTC
+
+     INTERNAL OLIGO    6332   19  60.82  52.63  ACGTTGAAGGTCGCGATCT
+
+
+
+
+# EPRIMER3 RESULTS FOR NirK00012
+
+# FORWARD PRIMER STATISTICS:
+# considered 90415
+# GC content failed 5828
+# low tm 2402
+# high tm 76341
+# high any compl 73
+# high end compl 348
+# long poly-x seq 24
+#high 3' stability 977
+# ok 4422
+
+# REVERSE PRIMER STATISTICS:
+# considered 90692
+# GC content failed 5866
+# low tm 2396
+# high tm 76578
+# high any compl 57
+# high end compl 335
+# long poly-x seq 23
+#high 3' stability 947
+# ok 4490
+
+# PRIMER PAIR STATISTICS:
+# considered 993874
+# unacceptable product size 990489
+# high any compl 7
+# high end compl 335
+# no internal oligo 43
+# ok 3000
+
+# INTERNAL OLIGO STATISTICS:
+# considered 99631
+# GC content failed 5870
+# low tm 2420
+# high tm 84584
+# high any compl 3
+# long poly-x seq 24
+# ok 6730
+
+#                      Start  Len   Tm     GC%   Sequence
+
+   1 PRODUCT SIZE: 147
+     FORWARD PRIMER    2867   20  60.02  55.00  GGCACGTGCAGATAGAGTGA
+
+     REVERSE PRIMER    2994   20  60.15  50.00  AGTGAGCTACGGCGAAGAAA
+
+     INTERNAL OLIGO    2969   20  60.00  60.00  GGATAGCTCGTGTAGCGAGG
+
+
+   2 PRODUCT SIZE: 146
+     FORWARD PRIMER    2867   20  60.02  55.00  GGCACGTGCAGATAGAGTGA
+
+     REVERSE PRIMER    2993   20  60.15  55.00  GTGAGCTACGGCGAAGAAAG
+
+     INTERNAL OLIGO    2969   20  60.00  60.00  GGATAGCTCGTGTAGCGAGG
+
+
+   3 PRODUCT SIZE: 146
+     FORWARD PRIMER    8657   20  59.91  45.00  TATTGGCGGCGATTATTAGG
+
+     REVERSE PRIMER    8783   20  60.11  45.00  CGCAACTTGATGGGTTTTCT
+
+     INTERNAL OLIGO    8693   20  59.81  50.00  CGTCAATGATACGGGGTTCT
+
+
+   4 PRODUCT SIZE: 149
+     FORWARD PRIMER    5297   20  59.69  60.00  GCGACTATGTCTGGGAGACC
+
+     REVERSE PRIMER    5426   20  59.82  50.00  CTCGATCAGGTTATGCGTGA
+
+     INTERNAL OLIGO    5382   20  59.87  50.00  GGCTGCGATGTACAAGTTCA
+
+
+   5 PRODUCT SIZE: 142
+     FORWARD PRIMER    2867   20  60.02  55.00  GGCACGTGCAGATAGAGTGA
+
+     REVERSE PRIMER    2989   20  60.15  55.00  GCTACGGCGAAGAAAGACTG
+
+     INTERNAL OLIGO    2969   20  60.00  60.00  GGATAGCTCGTGTAGCGAGG
+
+
+
+
+# EPRIMER3 RESULTS FOR NirK00013
+
+# FORWARD PRIMER STATISTICS:
+# considered 87074
+# GC content failed 3447
+# low tm 4188
+# high tm 71171
+# high any compl 85
+# high end compl 754
+# long poly-x seq 43
+#high 3' stability 1359
+# ok 6027
+
+# REVERSE PRIMER STATISTICS:
+# considered 87306
+# GC content failed 3420
+# low tm 4123
+# high tm 71502
+# high any compl 95
+# high end compl 748
+# long poly-x seq 43
+#high 3' stability 1334
+# ok 6041
+
+# PRIMER PAIR STATISTICS:
+# considered 2359499
+# unacceptable product size 2351372
+# high any compl 59
+# high end compl 834
+# ok 7234
+
+# INTERNAL OLIGO STATISTICS:
+# considered 99489
+# GC content failed 3449
+# low tm 4195
+# high tm 82287
+# long poly-x seq 44
+# ok 9514
+
+#                      Start  Len   Tm     GC%   Sequence
+
+   1 PRODUCT SIZE: 148
+     FORWARD PRIMER    4368   20  59.84  55.00  GAACAGGCAAAGAGGAGGTG
+
+     REVERSE PRIMER    4496   20  60.14  50.00  GAGCATGTTTCGCTCTGTCA
+
+     INTERNAL OLIGO    4476   20  60.92  55.00  CTCCTCCGCTACAAATGCTG
+
+
+   2 PRODUCT SIZE: 142
+     FORWARD PRIMER    1422   20  60.22  50.00  TCTGGACGTGGAAAAGGAAG
+
+     REVERSE PRIMER    1544   20  59.89  45.00  CATCGGTTCATCGAAATCCT
+
+     INTERNAL OLIGO    1474   20  60.12  45.00  TGCGGTGACATTCACTCAAT
+
+
+   3 PRODUCT SIZE: 147
+     FORWARD PRIMER    9699   20  60.33  55.00  GGGAAGCTCCTGGGTAATGT
+
+     REVERSE PRIMER    9826   20  59.72  45.00  TTGGATATTCTTCCCGATGG
+
+     INTERNAL OLIGO    9780   20  60.23  50.00  GACATCCTGCTCGACGAAAT
+
+
+   4 PRODUCT SIZE: 144
+     FORWARD PRIMER    2755   20  59.61  55.00  CTGATCCGGCCATCTATCTC
+
+     REVERSE PRIMER    2879   20  60.07  55.00  GCTCCGGGTAAAGAAAGGTC
+
+     INTERNAL OLIGO    2816   20  59.81  50.00  GCTTAAATCGCTGGATCGTC
+
+
+   5 PRODUCT SIZE: 138
+     FORWARD PRIMER    4368   20  59.84  55.00  GAACAGGCAAAGAGGAGGTG
+
+     REVERSE PRIMER    4486   20  60.06  50.00  CGCTCTGTCACAGCATTTGT
+
+     INTERNAL OLIGO    4442   21  59.87  42.86  AGCGAAGTTTGTTCCATCTCA
+
+
+
+
+# EPRIMER3 RESULTS FOR NirK00014
+
+# FORWARD PRIMER STATISTICS:
+# considered 87323
+# GC content failed 3420
+# low tm 4119
+# high tm 71497
+# high any compl 103
+# high end compl 836
+# long poly-x seq 43
+#high 3' stability 1333
+# ok 5972
+
+# REVERSE PRIMER STATISTICS:
+# considered 87004
+# GC content failed 3418
+# low tm 4122
+# high tm 71241
+# high any compl 75
+# high end compl 709
+# long poly-x seq 43
+#high 3' stability 1366
+# ok 6030
+
+# PRIMER PAIR STATISTICS:
+# considered 2341928
+# unacceptable product size 2333905
+# high any compl 58
+# high end compl 775
+# ok 7190
+
+# INTERNAL OLIGO STATISTICS:
+# considered 99489
+# GC content failed 3420
+# low tm 4128
+# high tm 82432
+# long poly-x seq 44
+# ok 9465
+
+#                      Start  Len   Tm     GC%   Sequence
+
+   1 PRODUCT SIZE: 148
+     FORWARD PRIMER    5554   20  60.14  50.00  GAGCATGTTTCGCTCTGTCA
+
+     REVERSE PRIMER    5682   20  59.84  55.00  GAACAGGCAAAGAGGAGGTG
+
+     INTERNAL OLIGO    5574   20  60.92  55.00  CAGCATTTGTAGCGGAGGAG
+
+
+   2 PRODUCT SIZE: 142
+     FORWARD PRIMER    8506   20  59.89  45.00  CATCGGTTCATCGAAATCCT
+
+     REVERSE PRIMER    8628   20  60.22  50.00  TCTGGACGTGGAAAAGGAAG
+
+     INTERNAL OLIGO    8576   20  60.12  45.00  ATTGAGTGAATGTCACCGCA
+
+
+   3 PRODUCT SIZE: 147
+     FORWARD PRIMER     224   20  59.72  45.00  TTGGATATTCTTCCCGATGG
+
+     REVERSE PRIMER     351   20  60.33  55.00  GGGAAGCTCCTGGGTAATGT
+
+     INTERNAL OLIGO     270   20  60.23  50.00  ATTTCGTCGAGCAGGATGTC
+
+
+   4 PRODUCT SIZE: 144
+     FORWARD PRIMER    7171   20  60.07  55.00  GCTCCGGGTAAAGAAAGGTC
+
+     REVERSE PRIMER    7295   20  59.61  55.00  CTGATCCGGCCATCTATCTC
+
+     INTERNAL OLIGO    7234   20  59.81  50.00  GACGATCCAGCGATTTAAGC
+
+
+   5 PRODUCT SIZE: 138
+     FORWARD PRIMER    5564   20  60.06  50.00  CGCTCTGTCACAGCATTTGT
+
+     REVERSE PRIMER    5682   20  59.84  55.00  GAACAGGCAAAGAGGAGGTG
+
+     INTERNAL OLIGO    5607   21  59.87  42.86  TGAGATGGAACAAACTTCGCT
+
+
+
+
+# EPRIMER3 RESULTS FOR NirK00015
+
+# FORWARD PRIMER STATISTICS:
+# considered 87748
+# GC content failed 3268
+# low tm 9717
+# high tm 63380
+# high any compl 66
+# high end compl 746
+# long poly-x seq 148
+#high 3' stability 1245
+# ok 9178
+
+# REVERSE PRIMER STATISTICS:
+# considered 88011
+# GC content failed 3280
+# low tm 9717
+# high tm 63581
+# high any compl 51
+# high end compl 657
+# long poly-x seq 142
+#high 3' stability 1218
+# ok 9365
+
+# PRIMER PAIR STATISTICS:
+# considered 2139247
+# unacceptable product size 2129956
+# high any compl 38
+# high end compl 791
+# no internal oligo 33
+# ok 8429
+
+# INTERNAL OLIGO STATISTICS:
+# considered 98798
+# GC content failed 3278
+# low tm 9717
+# high tm 72841
+# high any compl 6
+# long poly-x seq 150
+# ok 12806
+
+#                      Start  Len   Tm     GC%   Sequence
+
+   1 PRODUCT SIZE: 148
+     FORWARD PRIMER    1577   20  59.98  50.00  CGGTGATGTTCAAGAGCAGA
+
+     REVERSE PRIMER    1705   20  59.94  50.00  CATCTGCTCAACGAGATGGA
+
+     INTERNAL OLIGO    1681   20  60.33  50.00  TACTGCAGGTGTTGTGCGAT
+
+
+   2 PRODUCT SIZE: 150
+     FORWARD PRIMER     955   20  59.84  45.00  GGTGGTTTTCACGAACGAAT
+
+     REVERSE PRIMER    1085   20  59.96  55.00  GACCCTGTACGGCCTATCAA
+
+     INTERNAL OLIGO    1037   20  59.91  45.00  TTGATGATGAGCTCGATTGC
+
+
+   3 PRODUCT SIZE: 150
+     FORWARD PRIMER    1758   20  60.14  55.00  AGCCCTACACCTCACAATGC
+
+     REVERSE PRIMER    1888   20  59.85  45.00  AGCGGGAAAGAGTGTTTTCA
+
+     INTERNAL OLIGO    1784   20  59.63  55.00  GAACAGTCTGCACGCTGTTC
+
+
+   4 PRODUCT SIZE: 148
+     FORWARD PRIMER    1758   20  60.14  55.00  AGCCCTACACCTCACAATGC
+
+     REVERSE PRIMER    1886   20  59.85  50.00  CGGGAAAGAGTGTTTTCAGC
+
+     INTERNAL OLIGO    1784   20  59.63  55.00  GAACAGTCTGCACGCTGTTC
+
+
+   5 PRODUCT SIZE: 144
+     FORWARD PRIMER     251   20  60.01  55.00  CTTTCGCCTCGGTGACTTAG
+
+     REVERSE PRIMER     375   20  60.19  55.00  GAACCCGGGACCTACTGATT
+
+     INTERNAL OLIGO     308   20  60.05  45.00  CGCGATTCCATCGCTATAAT
+
+
+
+
+# EPRIMER3 RESULTS FOR NirK00016
+
+# FORWARD PRIMER STATISTICS:
+# considered 83779
+# GC content failed 729
+# low tm 24977
+# high tm 35695
+# high any compl 315
+# high end compl 1320
+# long poly-x seq 241
+#high 3' stability 1806
+# ok 18696
+
+# REVERSE PRIMER STATISTICS:
+# considered 83707
+# GC content failed 731
+# low tm 25014
+# high tm 35609
+# high any compl 244
+# high end compl 1147
+# long poly-x seq 223
+#high 3' stability 1809
+# ok 18930
+
+# PRIMER PAIR STATISTICS:
+# considered 4438939
+# unacceptable product size 4421225
+# high any compl 31
+# high end compl 1409
+# ok 16274
+
+# INTERNAL OLIGO STATISTICS:
+# considered 98090
+# GC content failed 729
+# low tm 25257
+# high tm 46152
+# high any compl 58
+# long poly-x seq 247
+# ok 25647
+
+#                      Start  Len   Tm     GC%   Sequence
+
+   1 PRODUCT SIZE: 149
+     FORWARD PRIMER    6353   20  60.02  50.00  ACTCACTTCGGCTGAATGCT
+
+     REVERSE PRIMER    6482   20  60.15  45.00  CATTTAATCCGGATGCCAAC
+
+     INTERNAL OLIGO    6435   20  59.43  50.00  CCCACCAATATTTGGCTAGC
+
+
+   2 PRODUCT SIZE: 147
+     FORWARD PRIMER    6202   20  59.97  55.00  GGCGATTAGCGCTGTCTATC
+
+     REVERSE PRIMER    6329   20  60.06  50.00  TGGCCTTTCTCTCCTCTTCA
+
+     INTERNAL OLIGO    6252   20  60.26  50.00  AATCTTCTGTGCACCTTGCC
+
+
+   3 PRODUCT SIZE: 148
+     FORWARD PRIMER    6353   20  60.02  50.00  ACTCACTTCGGCTGAATGCT
+
+     REVERSE PRIMER    6481   20  60.15  40.00  ATTTAATCCGGATGCCAACA
+
+     INTERNAL OLIGO    6435   20  59.43  50.00  CCCACCAATATTTGGCTAGC
+
+
+   4 PRODUCT SIZE: 148
+     FORWARD PRIMER    4535   20  59.97  55.00  TAGGCGTATAGACCGGGTTG
+
+     REVERSE PRIMER    4663   20  59.85  50.00  CACACATTATTGGCGGTCAC
+
+     INTERNAL OLIGO    4636   20  60.16  50.00  TGAGCCTGTGTTCCACACAT
+
+
+   5 PRODUCT SIZE: 150
+     FORWARD PRIMER    7896   20  59.91  50.00  AGCAAGCTGACCACTGGTTT
+
+     REVERSE PRIMER    8026   20  60.23  50.00  TCTGAAACCACCAAGGAAGC
+
+     INTERNAL OLIGO    7976   20  60.10  50.00  CTATGCCCTTCTGCCACAAT
+
+
+
