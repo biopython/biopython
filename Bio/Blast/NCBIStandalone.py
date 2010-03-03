@@ -5,10 +5,21 @@
 # Patches by Mike Poidinger to support multiple databases.
 # Updated by Peter Cock in 2007 to do a better job on BLAST 2.2.15
 
-"""
-This module provides code to work with the standalone version of
-BLAST, either blastall, rpsblast or blastpgp, provided by the NCBI.
-http://www.ncbi.nlm.nih.gov/BLAST/
+"""Code for calling standalone BLAST and parsing plain text output (OBSOLETE).
+
+Rather than parsing the human readable plain text BLAST output (which seems to
+change with every update to BLAST), we and the NBCI recommend you parse the
+XML output instead. The plain text parser in this module still works at the
+time of writing, but is considered obsolete and updating it to cope with the
+latest versions of BLAST is not a priority for us.
+
+This module also provides code to work with the "legacy" standalone version of
+NCBI BLAST, tools blastall, rpsblast and blastpgp via three helper functions of
+the same name. These functions are very limited for dealing with the output as
+files rather than handles, for which the wrappers in Bio.Blast.Applications are
+prefered. Furthermore, the NCBI themselves regard these command line tools as
+"legacy", and encourage using the new BLAST+ tools instead. Biopython has
+wrappers for these under Bio.Blast.Applications (see the tutorial).
 
 Classes:
 LowQualityBlastError     Except that indicates low quality query sequences.
