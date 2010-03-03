@@ -36,13 +36,14 @@ files which are used by 454 Life Sciences (Roche) sequencers. This means
 you can use SeqIO to convert from SFF to FASTQ, FASTA and QUAL (as
 trimmed or untrimmed reads).
 
-(At least) 8 people contributed to this release, including 3 new people:
+(At least) 9 people contributed to this release, including 3 new people:
 
 Brad Chapman
 Christian Zmasek
 Eric Talevich
 Jose Blanca (first contribution)
 Kevin Jacobs (first contribution)
+Leighton Pritchard
 Michiel de Hoon
 Peter Cock
 Thomas Holder (first contribution)

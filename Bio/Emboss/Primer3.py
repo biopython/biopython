@@ -1,10 +1,21 @@
 # Copyright 2008 Michiel de Hoon.
+# Revisions copyright 2009 Leighton Pritchard.
 # Revisions copyright 2010 Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Code to parse output from the EMBOSS eprimer3 program."""
+"""Code to parse output from the EMBOSS eprimer3 program.
+
+As elsewhere in Biopython there are two input functions, read and parse,
+for single record output and multi-record output. For primer3, a single
+record object is created for each target sequence and may contain
+multiple primers.
+
+i.e. If you ran eprimer3 with a single target sequence, use the read
+function. If you ran eprimer3 with multiple targets, use the parse
+function to iterate over the retsults.
+"""
 
 # --- primer3
 
@@ -13,7 +24,9 @@ class Record:
 
     Members:
 
-    primers   A list of primers that are generated (usually 5)
+    primers  - list of Primer objects describing primer pairs for
+               this target sequence.
+    comments - the comment line(s) for the record
     """
     def __init__(self):
         self.comments = ""
@@ -49,32 +62,31 @@ class Primers:
         self.reverse_tm = 0.0
         self.reverse_gc = 0.0
 
-def read(handle):
-    """Parse primer3 output into a Primer3Record.
+
+def parse(handle):
+    """Iterate over primer3 output as Bio.Emboss.Primer3.Record objects.
     """
-    handle = iter(handle)
-    record = Record()
-    primer = None
-
-    # Skip empty lines at the top of the file
-    for line in handle:
-        if line.strip():
-            break
-
-    # Read the comment lines
-    while line[0]=='#':
-        # Ignore this common line which isn't a useful comment
-        if line.strip() != "#                      Start  Len   Tm     GC%   Sequence":
-            assert line[0] == '#', line
-            record.comments += line
-        try:
-            line = handle.next()
-        except StopIteration:
-            return record
-
-    # Read the primers
+    # Skip blank lines at head of file
     while True:
-        if not line.strip():
+        line = handle.readline()
+        if line.strip():
+            break # Starting a record
+
+    # Read each record
+    record = None
+    primer = None
+    while True:
+        if line.startswith('# EPRIMER3') or line.startswith('# PRIMER3'):
+            # Record data
+            if record is not None:
+                yield record
+            record = Record()
+            record.comments += line
+            primer = None
+        elif line.startswith('#'):
+            if line.strip() != '#                      Start  Len   Tm     GC%   Sequence':
+                record.comments += line
+        elif not line.strip():
             pass
         elif line[5:19]=="PRODUCT SIZE: ":
             primer = Primers()
@@ -114,5 +126,25 @@ def read(handle):
             line = handle.next()
         except StopIteration:
             break
+    if record:
+        yield record
 
-    return record
+
+def read(handle):
+    """Parse primer3 output into a Bio.Emboss.Primer3.Record object.
+
+    This is for when there is one and only one target sequence. If
+    designing primers for multiple sequences, use the parse function.
+    """
+    iterator = parse(handle)
+    try:
+        first = iterator.next()
+    except StopIteration:
+        raise ValueError("No records found in handle")
+    try:
+        second = iterator.next()
+    except StopIteration:
+        second = None
+    if second is not None:
+        raise ValueError("More than one record found in handle")
+    return first

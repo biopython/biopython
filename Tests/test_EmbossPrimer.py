@@ -17,15 +17,20 @@ class Primer3ParseTest(unittest.TestCase):
            os.path.join("Emboss", "cds_forward.primer3"),
            os.path.join("Emboss", "cds_reverse.primer3"),
            os.path.join("Emboss", "short.primer3"),
-           os.path.join("Emboss", "internal_oligo.primer3")
+           os.path.join("Emboss", "internal_oligo.primer3"),
            ]
 
     def test_simple_parse(self):
-        """Make sure that we can parse all primer3 files.
+        """Make sure that we can use all single target primer3 files.
         """
         for file in self.test_files:
+            # First using read...
             h = open(file, "r")
             Primer3.read(h)
+            h.close()
+            # Now using parse...
+            h = open(file, "r")
+            self.assertEqual(1, len(list(Primer3.parse(h))))
             h.close()
 
     def test_indepth_regular_parse(self):
@@ -85,6 +90,93 @@ class Primer3ParseTest(unittest.TestCase):
         self.assertEqual(primer_info.primers[2].internal_tm, 58.62)
         self.assertEqual(primer_info.primers[3].internal_start, 16)
         self.assertEqual(primer_info.primers[4].internal_gc, 35.00)
+
+    def test_mutli_record_fwd(self):
+        """Test parsing multiple primer sets (NirK forward)"""
+        h = open(os.path.join("Emboss", "NirK.primer3"))
+        targets = list(Primer3.parse(h))
+        h.close()
+
+        self.assertEqual(len(targets), 16)
+        for target in targets:
+            self.assertEqual(len(target.primers), 5)
+
+        self.assertEqual(targets[0].primers[0].forward_seq,
+                         "GCAAACTGAAAAGCGGACTC")
+        self.assertEqual(targets[0].primers[1].forward_seq,
+                         "GGGACGTACTTTCGCACAAT")
+        self.assertEqual(targets[0].primers[2].forward_seq,
+                         "GTCTTATGCGTGGTGGAGGT")
+        self.assertEqual(targets[0].primers[3].forward_seq,
+                         "GTACATCAACATCCGCAACG")
+        self.assertEqual(targets[0].primers[4].forward_seq,
+                         "CGTACATCAACATCCGCAAC")
+
+        self.assertEqual(targets[1].primers[0].forward_seq,
+                         "GGAAGTGCTTCTCGTTTTCG")
+        self.assertEqual(targets[1].primers[1].forward_seq,
+                         "TACAGAGCGTCACGGATGAG")
+        self.assertEqual(targets[1].primers[2].forward_seq,
+                         "TTGTCATCGTGCTCTTCGTC")
+        self.assertEqual(targets[1].primers[3].forward_seq,
+                         "GACTCCAACCTCAGCTTTCG")
+        self.assertEqual(targets[1].primers[4].forward_seq,
+                         "GGCACGAAGAAGGACAGAAG")
+
+        self.assertEqual(targets[15].primers[0].forward_seq,
+                         "TGCTTGAAAATGACGCACTC")
+        self.assertEqual(targets[15].primers[1].forward_seq,
+                         "CTCGCTGGCTAGGTCATAGG")
+        self.assertEqual(targets[15].primers[2].forward_seq,
+                         "TATCGCACCAAACACGGTAA")
+        self.assertEqual(targets[15].primers[3].forward_seq,
+                         "CGATTACCCTCACCGTCACT")
+        self.assertEqual(targets[15].primers[4].forward_seq,
+                         "TATCGCAACCACTGAGCAAG")
+
+
+    def test_mutli_record_full(self):
+        """Test parsing multiple primer sets (NirK full)"""
+        h = open(os.path.join("Emboss", "NirK_full.primer3"))
+        targets = list(Primer3.parse(h))
+        h.close()
+
+        self.assertEqual(len(targets), 16)
+        for target in targets:
+            self.assertEqual(len(target.primers), 5)
+
+        self.assertEqual(targets[15].primers[0].forward_seq,
+                         "ACTCACTTCGGCTGAATGCT")
+        self.assertEqual(targets[15].primers[1].forward_seq,
+                         "GGCGATTAGCGCTGTCTATC")
+        self.assertEqual(targets[15].primers[2].forward_seq,
+                         "ACTCACTTCGGCTGAATGCT")
+        self.assertEqual(targets[15].primers[3].forward_seq,
+                         "TAGGCGTATAGACCGGGTTG")
+        self.assertEqual(targets[15].primers[4].forward_seq,
+                         "AGCAAGCTGACCACTGGTTT")
+
+        self.assertEqual(targets[15].primers[0].reverse_seq,
+                         "CATTTAATCCGGATGCCAAC")
+        self.assertEqual(targets[15].primers[1].reverse_seq,
+                         "TGGCCTTTCTCTCCTCTTCA")
+        self.assertEqual(targets[15].primers[2].reverse_seq,
+                         "ATTTAATCCGGATGCCAACA")
+        self.assertEqual(targets[15].primers[3].reverse_seq,
+                         "CACACATTATTGGCGGTCAC")
+        self.assertEqual(targets[15].primers[4].reverse_seq,
+                         "TCTGAAACCACCAAGGAAGC")
+
+        self.assertEqual(targets[15].primers[0].internal_seq,
+                         "CCCACCAATATTTGGCTAGC")
+        self.assertEqual(targets[15].primers[1].internal_seq,
+                         "AATCTTCTGTGCACCTTGCC")
+        self.assertEqual(targets[15].primers[2].internal_seq,
+                         "CCCACCAATATTTGGCTAGC")
+        self.assertEqual(targets[15].primers[3].internal_seq,
+                         "TGAGCCTGTGTTCCACACAT")
+        self.assertEqual(targets[15].primers[4].internal_seq,
+                         "CTATGCCCTTCTGCCACAAT")
 
 
 class PrimersearchParseTest(unittest.TestCase):
