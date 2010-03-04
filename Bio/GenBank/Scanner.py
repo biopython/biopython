@@ -639,7 +639,7 @@ class EmblScanner(InsdcScanner):
             #'RN' : 'reference_num',
             #'RP' : 'reference_bases',
             #'RX' : reference cross reference... DOI or Pubmed
-            'RA' : 'authors',
+            #'RA' : 'authors',
             #'RT' : 'title',
             'RL' : 'journal',
             'OS' : 'organism',
@@ -717,6 +717,9 @@ class EmblScanner(InsdcScanner):
                     # TODO - Data reference...
                     # How should we store the secondary identifier (if present)?  Ignore it?
                     pass
+                elif line_type == 'RA':
+                    # Remove trailing ; at end of authors list
+                    consumer.authors(data.rstrip(";"))
                 elif line_type in consumer_dict:
                     #Its a semi-automatic entry!
                     getattr(consumer, consumer_dict[line_type])(data)

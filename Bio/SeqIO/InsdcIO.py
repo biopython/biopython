@@ -829,7 +829,7 @@ class EmblWriter(_InsdcWriter):
                 self._write_single_line("RX", "PUBMED; %s." % ref.pubmed_id)
             if ref.authors:
                 #We store the AUTHORS data as a single string
-                self._write_multi_line("RA", ref.authors)
+                self._write_multi_line("RA", ref.authors+";")
             if ref.title:
                 #We store the title as a single string
                 self._write_multi_line("RT", '"%s";' % ref.title)

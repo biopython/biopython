@@ -75,7 +75,8 @@ def compare_record(old, new, expect_minor_diffs=False):
             assert len(old.annotations[key]) == len(new.annotations[key])
             for r1, r2 in zip(old.annotations[key], new.annotations[key]):
                 assert r1.title == r2.title
-                assert r1.authors == r2.authors
+                assert r1.authors == r2.authors, \
+                       "Old: '%s'\nNew: '%s'" % (r1.authors, r2.authors)
                 assert r1.journal == r2.journal
                 if r1.consrtm and r2.consrtm:
                     #Not held in EMBL files
