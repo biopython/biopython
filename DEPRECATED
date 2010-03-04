@@ -178,8 +178,8 @@ for the output of MetaTool 3.5 which is now obsolete.
 Bio.GenBank
 ===========
 The online functionality (search_for, download_many, and NCBIDictionary) was
-declared obsolete in Release 1.48, and deprecated in Release 1.50.
-Please use Bio.Entrez instead.
+declared obsolete in Release 1.48, deprecated in Release 1.50, and removed
+in Release 1.54. Please use Bio.Entrez instead.
 
 Bio.PubMed
 ==========
