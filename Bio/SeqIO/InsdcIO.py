@@ -602,6 +602,7 @@ class GenBankWriter(_InsdcWriter):
 
         data = self._get_seq_string(record) #Catches sequence being None
         seq_len = len(data)
+        #TODO - Should we change the case?
         self.handle.write("ORIGIN\n")
         for line_number in range(0, seq_len, LETTERS_PER_LINE):
             self.handle.write(str(line_number+1).rjust(SEQUENCE_INDENT))
@@ -712,7 +713,7 @@ class EmblWriter(_InsdcWriter):
         BLOCKS_PER_LINE = 6
         LETTERS_PER_LINE = LETTERS_PER_BLOCK * BLOCKS_PER_LINE
         POSITION_PADDING = 10
-        handle = self.handle
+        handle = self.handle #save looking up this multiple times
         
         if isinstance(record.seq, UnknownSeq):
             #We have already recorded the length, and there is no need
@@ -721,30 +722,38 @@ class EmblWriter(_InsdcWriter):
                 self._write_contig(record)
             else:
                 #TODO - Can the sequence just be left out as in GenBank files?
-                self.handle.write("SQ   \n")
+                handle.write("SQ   \n")
             return
 
         data = self._get_seq_string(record) #Catches sequence being None
         seq_len = len(data)
-        # TODO - Length and base composition on SQ line?
-        handle.write("SQ   \n")
+        #TODO - Should we change the case?
+        #TODO - What if we have RNA?
+        a_count = data.count('A') + data.count('a')
+        c_count = data.count('C') + data.count('c')
+        g_count = data.count('G') + data.count('g')
+        t_count = data.count('T') + data.count('t')
+        other = seq_len - (a_count + c_count + g_count + t_count)
+        handle.write("SQ   Sequence %i BP; %i A; %i C; %i G; %i T; %i other;\n" \
+                     % (seq_len, a_count, c_count, g_count, t_count, other))
+        
         for line_number in range(0, seq_len // LETTERS_PER_LINE):
             handle.write("    ") #Just four, not five
             for block in range(BLOCKS_PER_LINE) :
                 index = LETTERS_PER_LINE*line_number + LETTERS_PER_BLOCK*block
-                self.handle.write((" %s" % data[index:index+LETTERS_PER_BLOCK]))
-            self.handle.write(str((line_number+1)
-                                  *LETTERS_PER_LINE).rjust(POSITION_PADDING))
-            self.handle.write("\n")
+                handle.write((" %s" % data[index:index+LETTERS_PER_BLOCK]))
+            handle.write(str((line_number+1)
+                             *LETTERS_PER_LINE).rjust(POSITION_PADDING))
+            handle.write("\n")
         if seq_len % LETTERS_PER_LINE:
             #Final (partial) line
             line_number = (seq_len // LETTERS_PER_LINE)
             handle.write("    ") #Just four, not five
             for block in range(BLOCKS_PER_LINE) :
                 index = LETTERS_PER_LINE*line_number + LETTERS_PER_BLOCK*block
-                self.handle.write((" %s" % data[index:index+LETTERS_PER_BLOCK]).ljust(11))
-            self.handle.write(str(seq_len).rjust(POSITION_PADDING))
-            self.handle.write("\n")
+                handle.write((" %s" % data[index:index+LETTERS_PER_BLOCK]).ljust(11))
+            handle.write(str(seq_len).rjust(POSITION_PADDING))
+            handle.write("\n")
 
     def _write_single_line(self, tag, text):
         assert len(tag)==2
