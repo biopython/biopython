@@ -31,6 +31,7 @@ Tests/Graphics/*.png
 
 #TODO - The unit tests shouldn't leave temp files after running:
 Tests/BioSQL/temp_sqlite.db
+Tests/BioSQL/temp_sqlite.db-journal
 
 #Ignore LaTeX temp files, and compiled output
 Doc/*.aux
