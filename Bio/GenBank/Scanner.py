@@ -720,6 +720,11 @@ class EmblScanner(InsdcScanner):
                 elif line_type == 'RA':
                     # Remove trailing ; at end of authors list
                     consumer.authors(data.rstrip(";"))
+                elif line_type == 'PR':
+                    # Remove trailing ; at end of the project reference
+                    # In GenBank files this corresponds to the old PROJECT
+                    # line which is being replaced with the DBLINK line.
+                    consumer.project(data.rstrip(";"))
                 elif line_type in consumer_dict:
                     #Its a semi-automatic entry!
                     getattr(consumer, consumer_dict[line_type])(data)
