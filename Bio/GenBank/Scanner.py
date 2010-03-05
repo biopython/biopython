@@ -637,8 +637,10 @@ class EmblScanner(InsdcScanner):
             'SV' : 'version', # SV line removed in June 2006, now part of ID line
             'DE' : 'definition',
             #'RN' : 'reference_num',
+            #'RC' : reference comment... TODO
             #'RP' : 'reference_bases',
             #'RX' : reference cross reference... DOI or Pubmed
+            'RG' : 'consrtm', #optional consortium
             #'RA' : 'authors',
             #'RT' : 'title',
             'RL' : 'journal',
