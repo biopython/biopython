@@ -405,7 +405,7 @@ class GenBankWriter(_InsdcWriter):
             #    Bacteriophage            PHG - common
             #    Environmental Sample     ENV - common
             #    Fungal                   FUN - map to PLN (plants + fungal)
-            #    Human                    HUM - map to MAM
+            #    Human                    HUM - map to PRI (primates)
             #    Invertebrate             INV - common
             #    Other Mammal             MAM - common
             #    Other Vertebrate         VRT - common
@@ -418,7 +418,7 @@ class GenBankWriter(_InsdcWriter):
             #    Unclassified             UNC - map to UNK
             #    Viral                    VRL - common
             embl_to_gbk = {"FUN":"PLN",
-                           "HUM":"MAM",
+                           "HUM":"PRI",
                            "MUS":"ROD",
                            "PRO":"BCT",
                            "UNC":"UNK",
@@ -804,14 +804,68 @@ class EmblWriter(_InsdcWriter):
             #Must be something like NucleotideAlphabet
             raise ValueError("Need a DNA or RNA alphabet")
 
+        #Get the taxonomy division
+        division = self._get_data_division(record)
+
         #TODO - Full ID line
         handle = self.handle
-        self._write_single_line("ID", "%s; %s; ; %s; ; ; %i BP." \
-                                % (accession, version, mol_type, len(record)))
+        #ID   <1>; SV <2>; <3>; <4>; <5>; <6>; <7> BP.
+        #1. Primary accession number
+        #2. Sequence version number
+        #3. Topology: 'circular' or 'linear'
+        #4. Molecule type
+        #5. Data class
+        #6. Taxonomic division
+        #7. Sequence length
+        self._write_single_line("ID", "%s; %s; ; %s; ; %s; %i BP." \
+                                % (accession, version, mol_type,
+                                   division, len(record)))
         handle.write("XX\n")
         self._write_single_line("AC", accession+";")
         handle.write("XX\n")
 
+    def _get_data_division(self, record):
+        try:
+            division = record.annotations["data_file_division"]
+        except KeyError:
+            division = "UNC"
+        if division in ["PHG", "ENV", "FUN", "HUM", "INV", "MAM", "VRT",
+                        "MUS", "PLN", "PRO", "ROD", "SYN", "TGN", "UNC",
+                        "VRL"]:
+            #Good, already EMBL style
+            #    Division                 Code
+            #    -----------------        ----
+            #    Bacteriophage            PHG
+            #    Environmental Sample     ENV
+            #    Fungal                   FUN
+            #    Human                    HUM
+            #    Invertebrate             INV
+            #    Other Mammal             MAM
+            #    Other Vertebrate         VRT
+            #    Mus musculus             MUS
+            #    Plant                    PLN
+            #    Prokaryote               PRO
+            #    Other Rodent             ROD
+            #    Synthetic                SYN
+            #    Transgenic               TGN
+            #    Unclassified             UNC (i.e. unknown)
+            #    Viral                    VRL
+            pass
+        else:
+            #See if this is in GenBank style & can be converted.
+            #Generally a problem as the GenBank groups are wider
+            #than those of EMBL. Note that GenBank use "BCT" for
+            #both bacteria and acherea thus this maps to EMBL's
+            #"PRO" nicely.
+            gbk_to_embl = {"BCT":"PRO",
+                           "UNK":"UNC",
+                           }
+            try:
+                division = gbk_to_embl[division]
+            except KeyError:
+                division = "UNC"
+        assert len(division)==3
+        return division
 
     def _write_references(self, record):
         #The order should be RN, RC, RP, RX, RG, RA, RT, RL
