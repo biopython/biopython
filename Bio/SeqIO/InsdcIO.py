@@ -825,6 +825,8 @@ class EmblWriter(_InsdcWriter):
                 self._write_single_line("RP", "%i-%i" % (ref.location[0].nofuzzy_start+1,
                                                          ref.location[0].nofuzzy_end))
             #TODO - record any DOI or AGRICOLA identifier in the reference object?
+            if ref.consrtm:
+                self._write_single_line("RG", "%s" % ref.consrtm)
             if ref.pubmed_id:
                 self._write_single_line("RX", "PUBMED; %s." % ref.pubmed_id)
             if ref.authors:
