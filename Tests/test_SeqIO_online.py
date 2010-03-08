@@ -31,17 +31,6 @@ from Bio.SeqUtils.CheckSum import seguid
 #This lets us set the email address to be sent to NCBI Entrez:
 Entrez.email = "biopython-dev@biopython.org"
 
-def checksum_summary(record):
-    if len(record.seq) < 25:
-        short = record.seq.tostring()
-    else:
-        short = record.seq.tostring()[:19] \
-              + "..." + record.seq.tostring()[-3:]
-    return "%s [%s] len %i" \
-           % (short, seguid(record.seq), len(record.seq))
-
-#####################################################################
-
 class ExPASyTests(unittest.TestCase):
     """Tests for Bio.ExPASy module."""
     def test_get_sprot_raw(self):
