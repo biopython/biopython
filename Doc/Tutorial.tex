@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 3 March 2009 (Biopython 1.53+)}
+\date{Last Update -- 12 March 2009 (Biopython 1.53+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -2926,7 +2926,7 @@ COATB_BPIF1/22-73             FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVS
 //
 \end{verbatim}
 
-This is the seed alignment for the Phage\_Coat\_Gp8 (PF05371) PFAM entry, downloaded as a compressed archive from \url{http://pfam.sanger.ac.uk/family/alignment/download/gzipped?acc=PF05371&alnType=seed}.  We can load this file as follows (assuming it has been saved to disk as ``PF05371\_seed.sth'' in the current working directory):
+This is the seed alignment for the Phage\_Coat\_Gp8 (PF05371) PFAM entry, downloaded from a now out of date release of PFAM from \url{http://pfam.sanger.ac.uk/}.  We can load this file as follows (assuming it has been saved to disk as ``PF05371\_seed.sth'' in the current working directory):
 
 \begin{verbatim}
 from Bio import AlignIO
@@ -3452,6 +3452,161 @@ clustal_data = out_handle.getvalue()
 
 print clustal_data
 \end{verbatim}
+
+\section{Manipulating Alignments}
+\label{sec:manipulating-alignments}
+
+Now that we've covered loading and saving alignments, we'll look at what else you can do
+with them. Note that many of these features are new in Biopython 1.54.
+
+First of all, in some senses the alignment objects act like a Python \verb|list| of
+\verb|SeqRecord| objects (the rows). With this model in mind hopefully the actions
+of \verb|len()| (the number of rows) and iteration (each row as a \verb|SeqRecord|)
+make sense:
+
+\begin{verbatim}
+>>> from Bio import AlignIO
+>>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
+>>> print "Number of rows: %i" % len(align)
+>>> for record in alignment:
+...     print "%s - %s" % (record.seq, record.id)
+\end{verbatim}
+
+You can also use the list-like \verb|append| and \verb|extend| methods to add
+more rows to the alignment (as \verb|SeqRecord| objects). Keeping the list
+metaphor in mind, simple slicing of the alignment should also make sense -
+it selects some of the rows giving back another alignment object:
+
+\begin{verbatim}
+>>> print alignment
+SingleLetterAlphabet() alignment with 7 rows and 52 columns
+AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRL...SKA COATB_BPIKE/30-81
+AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKL...SRA Q9T0Q8_BPIKE/1-52
+DGTSTATSYATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRL...SKA COATB_BPI22/32-83
+AEGDDP---AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA COATB_BPM13/24-72
+AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA COATB_BPZJ2/1-49
+AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA Q9T0Q9_BPFD/1-49
+FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKL...SRA COATB_BPIF1/22-73
+>>> print alignment[3:7]
+SingleLetterAlphabet() alignment with 4 rows and 52 columns
+AEGDDP---AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA COATB_BPM13/24-72
+AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA COATB_BPZJ2/1-49
+AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKL...SKA Q9T0Q9_BPFD/1-49
+FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKL...SRA COATB_BPIF1/22-73
+\end{verbatim}
+
+What if you wanted to select by column? Those of you who have used the NumPy
+matrix or array objects won't be surprised at this - you use a double index.
+
+\begin{verbatim}
+>>> print alignment[2,6]
+T
+\end{verbatim}
+
+\noindent Using two integer indices pulls out a single letter, short hand for this:
+
+\begin{verbatim}
+>>> print alignment[2].seq[6]
+T
+\end{verbatim}
+
+You can pull out a single column as a \verb|Seq| record like this:
+
+\begin{verbatim}
+>>> print alignment[:,6]
+TTT---T
+\end{verbatim}
+
+You can also select a range of columns. For example, to pick out those same
+three rows we extracted earlier, but take just their first six columns:
+
+\begin{verbatim}
+>>> print alignment[3:6,:6]
+SingleLetterAlphabet() alignment with 3 rows and 6 columns
+AEGDDP COATB_BPM13/24-72
+AEGDDP COATB_BPZJ2/1-49
+AEGDDP Q9T0Q9_BPFD/1-49
+\end{verbatim}
+
+Leaving the first index as \verb|:| means take all the rows:
+
+\begin{verbatim}
+>>> print alignment[:,:6]
+SingleLetterAlphabet() alignment with 7 rows and 6 columns
+AEPNAA COATB_BPIKE/30-81
+AEPNAA Q9T0Q8_BPIKE/1-52
+DGTSTA COATB_BPI22/32-83
+AEGDDP COATB_BPM13/24-72
+AEGDDP COATB_BPZJ2/1-49
+AEGDDP Q9T0Q9_BPFD/1-49
+FAADDA COATB_BPIF1/22-73
+\end{verbatim}
+
+This brings us to a neat way to remove a section. Notice columns
+7, 8 and 9 which are gaps in three of the seven sequences:
+
+\begin{verbatim}
+>>> print alignment[:,6:9]
+SingleLetterAlphabet() alignment with 7 rows and 3 columns
+TNY COATB_BPIKE/30-81
+TNY Q9T0Q8_BPIKE/1-52
+TSY COATB_BPI22/32-83
+--- COATB_BPM13/24-72
+--- COATB_BPZJ2/1-49
+--- Q9T0Q9_BPFD/1-49
+TSQ COATB_BPIF1/22-73
+\end{verbatim}
+
+\noindent Again, you can slice to get everything after the ninth column:
+
+\begin{verbatim}>>> print alignment[:,9:]
+SingleLetterAlphabet() alignment with 7 rows and 43 columns
+ATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA COATB_BPIKE/30-81
+ATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA Q9T0Q8_BPIKE/1-52
+ATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA COATB_BPI22/32-83
+AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA COATB_BPM13/24-72
+AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFASKA COATB_BPZJ2/1-49
+AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA Q9T0Q9_BPFD/1-49
+AKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA COATB_BPIF1/22-73
+\end{verbatim}
+
+\noindent Now, the interesting thing is that addition of alignment objects works
+by column. This lets you do this as a way to remove a block of columns:
+
+\begin{verbatim}
+>>> edited = alignment[:,:6] + alignment[:,9:]
+>>> print edited
+SingleLetterAlphabet() alignment with 7 rows and 49 columns
+AEPNAAATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA COATB_BPIKE/30-81
+AEPNAAATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA Q9T0Q8_BPIKE/1-52
+DGTSTAATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA COATB_BPI22/32-83
+AEGDDPAKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA COATB_BPM13/24-72
+AEGDDPAKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFASKA COATB_BPZJ2/1-49
+AEGDDPAKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA Q9T0Q9_BPFD/1-49
+FAADDAAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA COATB_BPIF1/22-73
+\end{verbatim}
+
+Another common use of alignment addition would be to combine alignments for
+several different genes into a meta-alignment. Watch out though - the identifiers
+need to match up (see Section~\ref{{sec:SeqRecord-addition}} for how adding
+\verb|SeqRecord| objects works). You may find it helpful to first sort the
+alignment rows alphabetically by id:
+
+\begin{verbatim}
+>>> edited.sort()
+>>> print edited
+SingleLetterAlphabet() alignment with 7 rows and 49 columns
+DGTSTAATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA COATB_BPI22/32-83
+FAADDAAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA COATB_BPIF1/22-73
+AEPNAAATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA COATB_BPIKE/30-81
+AEGDDPAKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA COATB_BPM13/24-72
+AEGDDPAKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFASKA COATB_BPZJ2/1-49
+AEPNAAATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA Q9T0Q8_BPIKE/1-52
+AEGDDPAKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA Q9T0Q9_BPFD/1-49
+\end{verbatim}
+
+\noindent Note that you can only add two alignments together if they
+have the same number of rows.
 
 \section{Alignment Tools}
 \label{sec:alignment-tools}
