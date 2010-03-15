@@ -629,14 +629,42 @@ class Tree(TreeElement, TreeMixin):
             node.name = name
         return rtree
 
+    # Attributes assumed by TreeMixin
+
     @property
     def clade(self):
         """The first subtree in this tree (not itself)."""
         return self.root
 
     def is_terminal(self):
-        """Returns True if the root of this tree is terminal."""
+        """True if the root of this tree is terminal."""
         return (not self.root.clades)
+
+    # Convention from SeqRecord and Alignment classes  
+
+    def __format__(self, format_spec):
+        """Serialize the tree as a string in the specified file format.
+
+        This method supports the format() built-in function added in Python
+        2.6/3.0. The format_spec should be a lower case string supported by
+        Bio.Phylo.write as an output file format. 
+        """
+        if format_spec:
+            from StringIO import StringIO
+            import _io
+            handle = StringIO()
+            _io.write([self], handle, format_spec)
+            return handle.getvalue()
+        else:
+            # Follow python convention and default to using __str__
+            return str(self)
+
+    def format(self, format):
+        """Serialize the tree as a string in the specified file format.
+
+        This duplicates the __format__ magic method for pre-2.6 Pythons.
+        """
+        return self.__format__(format)
 
 
 class Subtree(TreeElement, TreeMixin):
@@ -657,21 +685,14 @@ class Subtree(TreeElement, TreeMixin):
         self.name = name
         self.branch_length = branch_length
 
-    def is_terminal(self):
-        """Returns True if this is a terminal (leaf) node."""
-        return (not self.clades)
-
-    # Properties may be overridden by subclasses
-
-    # XXX kind of superfluous
-    # @property
-    # def label(self):
-    #     return str(self)
-
     @property
     def root(self):
         """Allow TreeMixin methods to traverse subtrees properly."""
         return self
+
+    def is_terminal(self):
+        """True if this is a terminal (leaf) node."""
+        return (not self.clades)
 
     # Sequence-type behavior methods
 
