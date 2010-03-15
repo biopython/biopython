@@ -70,9 +70,6 @@ def read(file, format):
 
 def write(trees, file, format, **kwargs):
     """Write a sequence of trees to file in the given format."""
-    if not hasattr(trees, '__iter__'):
-        # Probably passed a single tree instead of a sequence -- that's OK
-        trees = [trees]
     do_close = False
     if isinstance(file, basestring):
         file = open(file, 'w+')
