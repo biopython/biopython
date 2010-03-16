@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 12 March 2009 (Biopython 1.53+)}
+\date{Last Update -- 16 March 2009 (Biopython 1.53+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -734,7 +734,8 @@ False
 True
 \end{verbatim}
 
-Note that strictly speaking the IUPAC alphabets are for upper case sequences only, thus:
+Note that strictly speaking the IUPAC alphabets are for upper case
+sequences only, thus:
 
 \begin{verbatim}
 >>> from Bio.Seq import Seq
@@ -750,7 +751,8 @@ Seq('acgt', DNAAlphabet())
 \section{Nucleotide sequences and (reverse) complements}
 \label{sec:seq-reverse-complement}
 
-For nucleotide sequences, you can easily obtain the complement or reverse complement of a \verb|Seq| object using its built-in methods:
+For nucleotide sequences, you can easily obtain the complement or reverse
+complement of a \verb|Seq| object using its built-in methods:
 
 \begin{verbatim}
 >>> from Bio.Seq import Seq
@@ -764,7 +766,17 @@ Seq('CTAGCTACCCGGATATATCCTAGCTTTTAGCG', IUPACUnambiguousDNA())
 Seq('GCGATTTTCGATCCTATATAGGCCCATCGATC', IUPACUnambiguousDNA())
 \end{verbatim}
 
-In all of these operations, the alphabet property is maintained. This is very useful in case you accidentally end up trying to do something weird like take the (reverse)complement of a protein sequence:
+As mentioned earlier, an easy way to just reverse a \verb|Seq| object (or a
+Python string) is slice it with -1 step:
+
+\begin{verbatim}
+>>> my_seq[::-1]
+Seq('CGCTAAAAGCTAGGATATATCCGGGTAGCTAG', IUPACUnambiguousDNA())
+\end{verbatim}
+
+In all of these operations, the alphabet property is maintained. This is very
+useful in case you accidentally end up trying to do something weird like take
+the (reverse)complement of a protein sequence:
 
 \begin{verbatim}
 >>> from Bio.Seq import Seq
