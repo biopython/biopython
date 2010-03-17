@@ -1,6 +1,7 @@
 # Copyright 2001-2009 Brad Chapman.
-# Revisions copyright 2009 by Peter Cock.
+# Revisions copyright 2009-2010 by Peter Cock.
 # Revisions copyright 2009 by David Winter.
+# Revisions copyright 2009 by Leighton Pritchard.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -176,15 +177,23 @@ class PrimerSearchCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="primersearch", **kwargs):
         self.parameters = \
-         [_Option(["-sequences","sequences"], ["input"], None, 1,
-                  "Sequence to look for the primer pairs in."),
-          _Option(["-primers","primers"], ["input", "file"], None, 1,
-                  "File containing the primer pairs to search for."),
-          #Including -out and out for backwards compatibility only!
-          #_Option(["-outfile","-out","out","outfile"], ["output", "file"], None, 0,
-          #        "Name of the output file."),
+         [_Option(["-seqall","-sequences","sequences","seqall"], ["input"],
+                  None, 1, "Sequence to look for the primer pairs in."),
+                  #When this wrapper was written primersearch used -sequences
+                  #as the argument name. Since at least EMBOSS 5.0 (and
+                  #perhaps earlier) this has been -seqall instead.
+          _Option(["-input","-primers","primers","input"], ["input", "file"],
+                  None, 1, "File containing the primer pairs to search for."),
+                  #When this wrapper was written primersearch used -primers
+                  #as the argument name. Since at least EMBOSS 5.0 (and
+                  #perhaps earlier) this has been -input instead.
           _Option(["-mismatchpercent","mismatchpercent"], ["input"], None, 1,
-                  "Allowed percentage mismatch.")]
+                  "Allowed percentage mismatch (any integer value, default 0)."),
+          _Option(["-snucleotide","snucleotide"], ["input"], None, 0,
+                  "Sequences are nucleotide (boolean)"),
+          _Option(["-sprotein","sprotein"], ["input"], None, 0,
+                  "Sequences are protein (boolean)"),
+          ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
     def set_parameter(self, name, value=None):
