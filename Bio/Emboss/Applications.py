@@ -117,21 +117,33 @@ class Primer3Commandline(_EmbossCommandLine):
     """Commandline object for the Primer3 interface from EMBOSS.
 
     The precise set of supported arguments depends on your version of EMBOSS.
-    This version accepts arguments current at EMBOSS 6.1.0 and is backwards-compatible.
+    This version accepts arguments current at EMBOSS 6.1.0, but in order to
+    remain backwards compatible also support the old argument names as well.
 
-    e.g.
+    e.g. Using EMBOSS 6.1.0 or later,
+    
     >>> cline = Primer3Commandline(sequence="mysequence.fas", auto=True, hybridprobe=True)
     >>> cline.explainflag = True
-    >>> cline.osizeopt=20               # EMBOSS 6.1.0
-    >>> cline.productosize=200          # Old EMBOSS
+    >>> cline.osizeopt=20
+    >>> cline.psizeopt=200
     >>> cline.outfile = "myresults.out"
     >>> cline.bogusparameter = 1967     # Invalid parameter
     Traceback (most recent call last):
         ...
     ValueError: Option name bogusparameter was not found.
     >>> print cline
-    eprimer3 -auto -outfile=myresults.out -sequence=mysequence.fas -hybridprobe=True -productosize=200 -osizeopt=20 -explainflag=True
+    eprimer3 -auto -outfile=myresults.out -sequence=mysequence.fas -hybridprobe=True -psizeopt=200 -osizeopt=20 -explainflag=True
 
+    The equivalent for anyone still using an older version of EMBOSS would be:
+
+    >>> cline = Primer3Commandline(sequence="mysequence.fas", auto=True, hybridprobe=True)
+    >>> cline.explainflag = True
+    >>> cline.oligosize=20
+    >>> cline.productosize=200          # Old EMBOSS
+    >>> cline.outfile = "myresults.out"
+    >>> print cline
+    eprimer3 -auto -outfile=myresults.out -sequence=mysequence.fas -hybridprobe=True -productosize=200 -oligosize=20 -explainflag=True
+    
     """
     def __init__(self, cmd="eprimer3", **kwargs):
         self.parameters = \
@@ -674,7 +686,7 @@ class FDNADistCommandline(_EmbossCommandLine):
     """Commandline object for the fdnadist program from EMBOSS.
 
     fdnadist is an EMBOSS wrapper for the PHYLIP program dnadist for
-    calulating distance matrices from DNA sequence files
+    calulating distance matrices from DNA sequence files.
     """
     def __init__(self, cmd = "fdnadist", **kwargs):
         self.parameters = \
@@ -711,7 +723,7 @@ class FTreeDistCommandline(_EmbossCommandLine):
     """Commandline object for the ftreedist program from EMBOSS.
 
     ftreedist is an EMBOSS wrapper for the PHYLIP program treedist used for
-    calulating distance measures between phylogentic trees
+    calulating distance measures between phylogentic trees.
     """
     def __init__(self, cmd = "ftreedist", **kwargs):
         self.parameters = \
@@ -734,7 +746,7 @@ class FNeighborCommandline(_EmbossCommandLine):
     """Commandline object for the fneighbor program from EMBOSS.
 
     fneighbor is an EMBOSS wrapper for the PHYLIP program neighbor used for
-    calulating neighbor-joining or UPGMA trees from distance matrices 
+    calulating neighbor-joining or UPGMA trees from distance matrices.
     """
     def __init__(self, cmd = "fneighbor", **kwargs):
         self.parameters = \
@@ -765,7 +777,7 @@ class FSeqBootCommandline(_EmbossCommandLine):
     """Commandline object for the fseqboot program from EMBOSS.
 
     fseqboot is an EMBOSS wrapper for the PHYLIP program seqboot used to
-    pseudo-sample alignment files
+    pseudo-sample alignment files.
     """
     def __init__(self, cmd = "fseqboot", **kwargs):
         self.parameters = \
@@ -805,7 +817,7 @@ class FDNAParsCommandline(_EmbossCommandLine):
     estimating trees from DNA sequences using parsiomny. Calling this command
     without providing a value for the option "-intreefile" will invoke
     "interactive mode" (and as a result fail if called with subprocess) if
-    "-auto" is not set to true
+    "-auto" is not set to true.
     """
     def __init__(self, cmd = "fdnapars", **kwargs):
         self.parameters = \
@@ -849,7 +861,7 @@ class FProtParsCommandline(_EmbossCommandLine):
     estimating trees from protein  sequences using parsiomny. Calling this
     command without providing a value for the option "-intreefile" will invoke
     "interactive mode" (and as a result fail if called with subprocess) if
-    "-auto" is not set to true
+    "-auto" is not set to true.
     """
     def __init__(self, cmd = "fprotpars", **kwargs):
         self.parameters = \
