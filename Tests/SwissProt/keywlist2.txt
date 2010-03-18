@@ -1,0 +1,33 @@
+ID   2Fe-2S.
+AC   KW-0001
+DE   Protein which contains at least one 2Fe-2S iron-sulfur cluster: 2 iron
+DE   atoms complexed to 2 inorganic sulfides and 4 sulfur atoms of
+DE   cysteines from the protein.
+SY   Fe2S2; [2Fe-2S] cluster; [Fe2S2] cluster; Fe2/S2 (inorganic) cluster;
+SY   Di-mu-sulfido-diiron; 2 iron, 2 sulfur cluster binding.
+GO   GO:0051537; 2 iron, 2 sulfur cluster binding
+HI   Ligand: Iron; Iron-sulfur; 2Fe-2S.
+HI   Ligand: Metal-binding; 2Fe-2S.
+CA   Ligand.
+//
+ID   3D-structure.
+AC   KW-0002
+DE   Protein, or part of a protein, whose three-dimensional structure has
+DE   been resolved experimentally (for example by X-ray crystallography or
+DE   NMR spectroscopy) and whose coordinates are available in the PDB
+DE   database. Can also be used for theoretical models.
+HI   Technical term: 3D-structure.
+CA   Technical term.
+//
+ID   3Fe-4S.
+AC   KW-0003
+DE   Protein which contains at least one 3Fe-4S iron-sulfur cluster: 3 iron
+DE   atoms complexed to 4 inorganic sulfides and 3 sulfur atoms of
+DE   cysteines from the protein. In a number of iron-sulfur proteins, the
+DE   4Fe-4S cluster can be reversibly converted by oxidation and loss of
+DE   one iron ion to a 3Fe-4S cluster.
+GO   GO:0051538; 3 iron, 4 sulfur cluster binding
+HI   Ligand: Iron; Iron-sulfur; 3Fe-4S.
+HI   Ligand: Metal-binding; 3Fe-4S.
+CA   Ligand.
+//
