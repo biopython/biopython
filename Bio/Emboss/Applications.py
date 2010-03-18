@@ -183,17 +183,73 @@ class Primer3Commandline(_EmbossCommandLine):
            _Option(["-maxployx","maxployx"], ["input"], None, 0,
                    "Maximum allowable mononucleotide repeat length in a primer."),
            _Option(["-productosize","productosize"], ["input"], None, 0,
-                   "Optimum size for the PCR product (OBSOLETE)."),
+                   """Optimum size for the PCR product (OBSOLETE).
+
+                   Option replaced in EMBOSS 6.1.0 by -psizeopt
+                   """),
+           _Option(["-psizeopt", "psizeopt"], ["input"], None, 0, 
+                   """Optimum size for the PCR product.
+
+                   Option added in EMBOSS 6.1.0, replacing -productosize
+                   """),
            _Option(["-productsizerange","productsizerange"], ["input"], None, 0,
-                   "Acceptable range of length for the PCR product (OBSOLETE)."),
+                   """Acceptable range of length for the PCR product (OBSOLETE).
+
+                   Option replaced in EMBOSS 6.1.0 by -prange
+                   """),
+           _Option(["-prange", "prange"], ["input"], None, 0, 
+                   """Acceptable range of length for the PCR product.
+
+                   Option added in EMBOSS 6.1.0, replacing -productsizerange
+                   """),
            _Option(["-productotm","productotm"], ["input"], None, 0,
-                   "Optimum melting temperature for the PCR product (OBSOLETE)."),
+                   """Optimum melting temperature for the PCR product (OBSOLETE).
+
+                   Option replaced in EMBOSS 6.1.0 by -ptmopt
+                   """),
+           _Option(["-ptmopt", "ptmopt"], ["input"], None, 0, 
+                   """Optimum melting temperature for the PCR product.
+
+                   Option added in EMBOSS 6.1.0, replacing -productotm
+                   """),
            _Option(["-productmintm","productmintm"], ["input"], None, 0,
-                   "Minimum allowed melting temperature for the amplicon (OBSOLETE)."),
+                   """Minimum allowed melting temperature for the amplicon (OBSOLETE)
+
+                   Option replaced in EMBOSS 6.1.0 by -ptmmin
+                   """),
+           _Option(["-ptmmin", "ptmmin"], ["input"], None, 0, 
+                   """Minimum allowed melting temperature for the amplicon."),
+
+                   Option added in EMBOSS 6.1.0, replacing -productmintm
+                   """),
            _Option(["-productmaxtm","productmaxtm"], ["input"], None, 0,
-                   "Maximum allowed melting temperature for the amplicon (OBSOLETE)."),
-           _Option(["-oligoexcluderegion","oligoexcluderegion"], ["input"], None, 0,
-                   "Do not pick internal oligos in this region (OBSOLETE)."),
+                   """Maximum allowed melting temperature for the amplicon (OBSOLETE).
+
+                   Option replaced in EMBOSS 6.1.0 by -ptmmax
+                   """),
+           _Option(["-ptmmax", "ptmmax"], ["input"], None, 0, 
+                   """Maximum allowed melting temperature for the amplicon."),
+
+                   Option added in EMBOSS 6.1.0, replacing -productmaxtm
+                   """),
+           _Option(["-oligoexcludedregion", "oligoexcludedregion"], ["input"],
+                   None, 0,
+                   """Do not pick internal oligos in this region (OBSOLETE)."),
+
+                   Option replaced in EMBOSS 6.1.0 by -oexcludedregion.
+                   """),
+           #Note to self, should be -oexcludedregion not -oexcluderegion
+           _Option(["-oexcludedregion", "oexcludedregion"], ["input"], None, 0, 
+                   """Do not pick internal oligos in this region."),
+
+                   Option added in EMBOSS 6.1.0, replacing -oligoexcludedregion.
+                   """),
+           _Option(["-oligoexcludedregion", "oligoexcludedregion"], ["input"],
+                   None, 0,
+                   """Do not pick internal oligos in this region (OBSOLETE)."),
+
+                   Option replaced in EMBOSS 6.1.0 by -oexcluderegion.
+                   """),
            _Option(["-oligoinput","oligoinput"], ["input"], None, 0,
                    "Sequence of the internal oligo (OBSOLETE)."),
            _Option(["-oligosize","oligosize"], ["input"], None, 0, 
@@ -276,42 +332,6 @@ class Primer3Commandline(_EmbossCommandLine):
                    "Produce output tags with eprimer3 statistics"),
            # EMBOSS 6.1.0 command line option changes below this comment
            # TODO - Finish moving these up next to their old versions?
-           _Option(["-psizeopt", "psizeopt"], ["input"], None, 0, 
-                   """Optimum size for the PCR product.
-
-                   Option added in EMBOSS 6.1.0.
-                   """),
-           _Option(["-prange", "prange"], ["input"], None, 0, 
-                   """Acceptable range of length for the PCR product.
-
-                   Option added in EMBOSS 6.1.0.
-                   """),
-           _Option(["-ptmopt", "ptmopt"], ["input"], None, 0, 
-                   """Optimum melting temperature for the PCR product.
-
-                   Option added in EMBOSS 6.1.0.
-                   """),
-           _Option(["-ptmmin", "ptmmin"], ["input"], None, 0, 
-                   """Minimum allowed melting temperature for the amplicon."),
-
-                   Option added in EMBOSS 6.1.0.
-                   """),
-           _Option(["-ptmmax", "ptmmax"], ["input"], None, 0, 
-                   """Maximum allowed melting temperature for the amplicon."),
-
-                   Option added in EMBOSS 6.1.0.
-                   """),
-           _Option(["-oexcluderegion", "oexcluderegion"], ["input"], None, 0, 
-                   """Do not pick internal oligos in this region."),
-
-                   Option added in EMBOSS 6.1.0, replacing -oligoexcludedregion.
-                   """),
-           _Option(["-oligoexcludedregion", "oligoexcludedregion"], ["input"],
-                   None, 0,
-                   """Do not pick internal oligos in this region (OBSOLETE)."),
-
-                   Option replaced in EMBOSS 6.1.0 by -oexcluderegion.
-                   """),
            _Option(["-osizeopt", "osizeopt"], ["input"], None, 0, 
                    """Optimum length of internal oligo.
 
