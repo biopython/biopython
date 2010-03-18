@@ -139,9 +139,39 @@ class Seq(object):
         """
         return self._data
 
-    # TODO - Alphabet aware __eq__ etc would be nice, but has implications for
-    # __hash__ and therefore use as dictionary keys. See also:
-    # http://mail.python.org/pipermail/python-dev/2002-December/031455.html
+    def __cmp__(self, other):
+        """Compare the sequence to another sequence or a string (README).
+
+        Historically comparing Seq objects has done Python object comparison.
+        After considerable discussion (keeping in mind constraints of the
+        Python language, hashes and dictionary support) a future release of
+        Biopython will change this to use simple string comparison. The plan is
+        that comparing incompatible alphabets (e.g. DNA to RNA) will trigger a
+        warning.
+
+        This version of Biopython still does Python object comparison, but with
+        a warning about this future change. During this transition period,
+        please just do explicit comparisons:
+
+        >>> seq1 = Seq("ACGT")
+        >>> seq2 = Seq("ACGT")
+        >>> id(seq1) == id(seq2)
+        False
+        >>> str(seq1) == str(seq2)
+        True
+
+        Note - This method indirectly supports ==, < , etc.
+        """
+        if hasattr(other, "alphabet"):
+            #other should be a Seq or a MutableSeq
+            import warnings
+            warnings.warn("In future comparing Seq objects will use string "
+                          "comparison (not object comparison). Incompatible "
+                          "alphabets will trigger a warning (not an exception). "
+                          "In the interim please use id(seq1)==id(seq2) or "
+                          "str(seq1)==str(seq2) to make your code explicit "
+                          "and to avoid this warning.", FutureWarning)
+        return cmp(id(self), id(other))
 
     def __len__(self):
         """Returns the length of the sequence, use len(my_seq)."""
@@ -1448,18 +1478,37 @@ class MutableSeq(object):
         return "".join(self.data)
 
     def __cmp__(self, other):
-        """Compare the sequence for to another sequence or a string.
+        """Compare the sequence to another sequence or a string (README).
 
-        If compared to another sequence the alphabets must be compatible.
-        Comparing DNA to RNA, or Nucleotide to Protein will raise an
-        exception.
+        Currently if compared to another sequence the alphabets must be
+        compatible. Comparing DNA to RNA, or Nucleotide to Protein will raise
+        an exception. Otherwise only the sequence itself is compared, not the
+        precise alphabet.
 
-        Otherwise only the sequence itself is compared, not the precise
-        alphabet.
+        A future release of Biopython will change this (and the Seq object etc)
+        to use simple string comparison. The plan is that comparing sequences
+        with incompatible alphabets (e.g. DNA to RNA) will trigger a warning
+        but not an exception.
 
-        This method indirectly supports ==, < , etc."""
+        During this transition period, please just do explicit comparisons:
+
+        >>> seq1 = MutableSeq("ACGT")
+        >>> seq2 = MutableSeq("ACGT")
+        >>> id(seq1) == id(seq2)
+        False
+        >>> str(seq1) == str(seq2)
+        True
+
+        This method indirectly supports ==, < , etc.
+        """
         if hasattr(other, "alphabet"):
             #other should be a Seq or a MutableSeq
+            import warnings
+            warnings.warn("In future comparing incompatible alphabets will "
+                          "only trigger a warning (not an exception). In " 
+                          "the interim please use id(seq1)==id(seq2) or "
+                          "str(seq1)==str(seq2) to make your code explicit "
+                          "and to avoid this warning.", FutureWarning)
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
                 raise TypeError("Incompatable alphabets %s and %s" \
