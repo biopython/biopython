@@ -22,7 +22,8 @@ class RecordTest(unittest.TestCase):
 
 class ParserTest(unittest.TestCase):
     def setUp(self):
-        files = ["c2line.gen", "c3line.gen", "c2space.gen", "c3space.gen"]
+        files = ["c2line.gen", "c3line.gen", "c2space.gen", "c3space.gen",
+                 "haplo3.gen", "haplo2.gen"]
         self.handles = []
         for filename in files:
             self.handles.append(open(os.path.join("PopGen", filename)))
@@ -31,10 +32,12 @@ class ParserTest(unittest.TestCase):
             (3, [4, 3, 5]),
             (3, [4, 3, 5]),
             (3, [4, 3, 5]),
+            (3, [4, 3, 5]),
+            (3, [4, 3, 5]),
             (3, [4, 3, 5])
         ]
-        self.num_loci = [3, 3, 3, 3]
-        self.marker_len = [2, 3, 2, 3]
+        self.num_loci = [3, 3, 3, 3, 3, 3]
+        self.marker_len = [2, 3, 2, 3, 3, 2]
         self.pop_names = ["4", "b3", "5"]
 
     def tearDown(self):

@@ -59,12 +59,17 @@ def read(handle):
             markers = marker_line.replace('\t', ' ').split(' ')
             markers = [marker for marker in markers if marker!='']
             if marker_len==None:
-                if len(markers[0]) == 4: #2 digits per allele
+                if len(markers[0]) in [2, 4]: #2 digits per allele
                     marker_len = 2
                 else:
                     marker_len = 3
                 record.marker_len = marker_len
-            allele_list = [(int(marker[0:marker_len]), int(marker[marker_len:]))
+            try:
+                allele_list = [(int(marker[0:marker_len]),
+                               int(marker[marker_len:]))
+                           for marker in markers]
+            except ValueError: #Haploid
+                allele_list = [(int(marker[0:marker_len]),)
                            for marker in markers]
             record.populations[-1].append((indiv_name, allele_list))
     loci = record.loci_list
