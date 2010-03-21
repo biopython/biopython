@@ -439,7 +439,7 @@ class TreeMixin(object):
         """True if all direct descendents are terminal."""
         if self.root.is_terminal():
             return False
-        for clade in self.clades:
+        for clade in self.root.clades:
             if not clade.is_terminal():
                 return False
         return True
