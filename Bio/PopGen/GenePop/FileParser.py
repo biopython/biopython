@@ -216,7 +216,7 @@ class FileRecord:
         """
         for i in range(len(self.loci_list)):
             if self.loci_list[i] == name:
-                self.remove_locus_by_position(i)
+                self.remove_locus_by_position(i, fw)
                 return
         #If here than locus not existent... Maybe raise exception?
         #   Although it should be Ok... Just a boolean return, maybe?

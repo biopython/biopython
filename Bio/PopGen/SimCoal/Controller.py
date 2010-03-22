@@ -44,7 +44,7 @@ class SimCoalController:
         """Executes SimCoal.
         """
         if par_dir == None:
-            par_dir = os.sep.join([Config.dataDir, 'SimCoal', 'runs'])
+            par_dir = os.sep.join([".", 'SimCoal', 'runs'])
         curr_dir = os.getcwd()
         #TODO - Make sure we change drive on Windows as well?
         os.chdir(par_dir)

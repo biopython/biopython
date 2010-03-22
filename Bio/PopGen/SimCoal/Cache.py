@@ -76,7 +76,7 @@ class SimCoalCache:
            This mainly means untaring a file.
         '''
         if parDir == None:
-            parDir = os.sep.join([Config.dataDir, 'SimCoal', 'runs'])
+            parDir = os.sep.join([self.dataDir, 'SimCoal', 'runs'])
         tar_name = os.sep.join([self.cacheDir, ploidy, sim_name + 
             '.tar.bz2'])
         tf = tarfile.open(tar_name)
@@ -84,7 +84,7 @@ class SimCoalCache:
         tf.close()
 
 
-if __name__ == '__main__':
-  cache = Cache('/home/work/werk/consolidator/sc_cache',
-      '/home/work/software/simcoal')
-  cache.run_simcoal('.', 'island_snp-50_0.0025_10_0.083_100_60.par', 102)
+#if __name__ == '__main__':
+#  cache = Cache('/home/work/werk/consolidator/sc_cache',
+#      '/home/work/software/simcoal')
+#  cache.run_simcoal('.', 'island_snp-50_0.0025_10_0.083_100_60.par', 102)

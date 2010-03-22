@@ -75,8 +75,8 @@ class Async:
         '''
         self.access_ds.acquire()
         if id in self.done:
-            returnCode, fileObject = done[id]
-            del done[id]
+            returnCode, fileObject = self.done[id]
+            del self.done[id]
             self.access_ds.release()
         else:
             self.access_ds.release()
