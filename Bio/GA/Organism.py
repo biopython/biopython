@@ -124,9 +124,13 @@ class Organism:
     def __cmp__(self, other):
         """Define comparisons for organisms.
 
-        Compare organisms by their genomes.
+        Compare organisms by their genomes (as strings of letters).
         """
-        return cmp(self.genome, other.genome)
+        # See Bio/Seq.py and the comments there about shifting to
+        # using simple string equality. Previously Seq objects used
+        # object equality, while MutableSeq objects used alphabet
+        # aware string equality.
+        return cmp(str(self.genome), str(other.genome))
 
     def copy(self):
         """Return a copy of the organism.
