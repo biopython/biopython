@@ -11,9 +11,13 @@ This is used by sequences which contain a finite number of similar words.
 """
 
 class Alphabet:
-    size = None     # no fixed size for words
-    letters = None  # no fixed alphabet; implement as a list-like
-                    # interface,
+    size = None     # default to no fixed size for words
+    letters = None  # default to no fixed alphabet
+                    # In general, a list-like object. However,
+                    # assuming letters are single characters, use a
+                    # string. This is expected for use with Seq like
+                    # objects.
+
     def __repr__(self):
         return self.__class__.__name__ + "()"
 
