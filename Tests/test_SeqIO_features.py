@@ -1,4 +1,4 @@
-# Copyright 2009 by Peter Cock.  All rights reserved.
+# Copyright 2009-2010 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -199,6 +199,20 @@ class SeqFeatureExtraction(unittest.TestCase):
         f = SeqFeature(FeatureLocation(5,10))
         self.assertEqual(_insdc_feature_location_string(f), "6..10")
         self.check(s, f, "YWSMK")
+
+    def test_single_letter_dna(self):
+        """Extract feature from DNA (single letter, default strand)"""
+        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        f = SeqFeature(FeatureLocation(5,6))
+        self.assertEqual(_insdc_feature_location_string(f), "6")
+        self.check(s, f, "Y")
+
+    def test_zero_len_dna(self):
+        """Extract feature from DNA (between location, zero length, default strand)"""
+        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        f = SeqFeature(FeatureLocation(5,5))
+        self.assertEqual(_insdc_feature_location_string(f), "5^6")
+        self.check(s, f, "")
 
     def test_simple_dna_strand0(self):
         """Extract feature from DNA (simple, strand 0)"""
