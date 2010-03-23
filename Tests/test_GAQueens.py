@@ -150,9 +150,8 @@ class QueensAlphabet(Alphabet.Alphabet):
         """Initialize with the number of queens we are calculating for.
         """
         # set up the letters for the alphabet
-        self.letters = []
-        for num in range(num_queens):
-            self.letters.append(num)
+        assert 0 <= num_queens <= 9
+        self.letters = "".join(str(i) for i in range(num_queens))
 
 # --- Problem specific crossover, mutation and repair operations
 class QueensRepair:
