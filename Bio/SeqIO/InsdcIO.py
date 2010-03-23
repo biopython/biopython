@@ -424,11 +424,14 @@ class GenBankWriter(_InsdcWriter):
             #    Transgenic               TGN - ??? map to SYN ???
             #    Unclassified             UNC - map to UNK
             #    Viral                    VRL - common
+            #
+            #(plus XXX for submiting which we can map to UNK)
             embl_to_gbk = {"FUN":"PLN",
                            "HUM":"PRI",
                            "MUS":"ROD",
                            "PRO":"BCT",
                            "UNC":"UNK",
+                           "XXX":"UNK",
                            }
             try:
                 division = embl_to_gbk[division]
@@ -838,7 +841,7 @@ class EmblWriter(_InsdcWriter):
             division = "UNC"
         if division in ["PHG", "ENV", "FUN", "HUM", "INV", "MAM", "VRT",
                         "MUS", "PLN", "PRO", "ROD", "SYN", "TGN", "UNC",
-                        "VRL"]:
+                        "VRL", "XXX"]:
             #Good, already EMBL style
             #    Division                 Code
             #    -----------------        ----
@@ -857,6 +860,8 @@ class EmblWriter(_InsdcWriter):
             #    Transgenic               TGN
             #    Unclassified             UNC (i.e. unknown)
             #    Viral                    VRL
+            #
+            #(plus XXX used for submiting data to EMBL)
             pass
         else:
             #See if this is in GenBank style & can be converted.
