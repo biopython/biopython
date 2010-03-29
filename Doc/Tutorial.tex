@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 16 March 2010 (Biopython 1.53+)}
+\date{Last Update -- 29 March 2010 (Biopython 1.53+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -4834,13 +4834,18 @@ To paraphrase:
 \item For any series of more than 100 requests, do this at weekends or outside USA peak times.  This is up to you to obey.
 \item Use the \url{http://eutils.ncbi.nlm.nih.gov} address, not the standard NCBI Web address.  Biopython uses this web address.
 \item Make no more than three requests every seconds (relaxed from at most one request every three seconds in early 2009).  This is automatically enforced by Biopython.
-\item Use the optional email parameter so the NCBI can contact you if there is a problem.  You can either explicitly set the email address as a parameter with each call to Entrez (e.g., include {\tt email="A.N.Other@example.com"} in the argument list), or as of Biopython 1.48, you can set a global email address:
+\item Use the optional email parameter so the NCBI can contact you if there is a problem.  You can either explicitly set this as a parameter with each call to Entrez (e.g. include {\tt email="A.N.Other@example.com"} in the argument list), or as of Biopython 1.48, you can set a global email address:
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"
 \end{verbatim}
 {\tt Bio.Entrez} will then use this email address with each call to Entrez.  The {\tt example.com} address is a reserved domain name specifically for documentation (RFC 2606).  Please DO NOT use a random email -- it's better not to give an email at all. The email parameter will be mandatory from June 1, 2010. In case of excessive usage, NCBI will attempt to contact a user at the e-mail address provided prior to blocking access to the E-utilities.
-\item If you are using Biopython within some larger software suite, use the tool parameter to specify this.  The tool parameter will default to Biopython.
+\item If you are using Biopython within some larger software suite, use the tool parameter to specify this.  You can either explicitly set the tool name as a parameter with each call to Entrez (e.g. include {\tt tool="MyLocalScript"} in the argument list), or as of Biopython 1.54, you can set a global tool name:
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> Entrez.tool = "MyLocalScript"
+\end{verbatim}
+The tool parameter will default to Biopython.
 \item For large queries, the NCBI also recommend using their session history feature (the WebEnv session cookie string, see Section~\ref{sec:entrez-webenv}).  This is only slightly more complicated.
 \end{itemize}
 

@@ -12,6 +12,9 @@ http://www.ncbi.nlm.nih.gov/Entrez/
 A list of the Entrez utilities is available at:
 http://www.ncbi.nlm.nih.gov/entrez/utils/utils_index.html
 
+Variables:
+email        Set the Entrez email parameter (default is not set).
+tool         Set the Entrez tool parameter (default is  biopython).
 
 Functions:
 efetch       Retrieves records in the requested format from a list of one or
@@ -50,6 +53,7 @@ from Bio import File
 
 
 email = None
+tool = "biopython"
 
 
 # XXX retmode?
@@ -289,9 +293,10 @@ def _open(cgi, params={}, post=False):
     for key, value in params.items():
         if value is None:
             del params[key]
-    # Tell Entrez that we are using Biopython
+    # Tell Entrez that we are using Biopython (or whatever the user has
+    # specified explicitly in the parameters or by changing the default)
     if not "tool" in params:
-        params["tool"] = "biopython"
+        params["tool"] = tool
     # Tell Entrez who we are
     if not "email" in params:
         if email!=None:
