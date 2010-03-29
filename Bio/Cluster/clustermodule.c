@@ -26,7 +26,7 @@ parse_data(PyObject* object, PyArrayObject** array)
   if(!PyArray_Check (object)) /* Try to convert object to a 2D double array */
   { *array = (PyArrayObject*) PyArray_FromObject(object, NPY_DOUBLE, 2, 2);
     if (*array==NULL)
-    { strcpy (message, "data cannot be converted to needed array.");
+    { strcpy(message, "data cannot be converted to needed array.");
       PyErr_SetString(PyExc_TypeError, buffer);
       return NULL;
     }
@@ -45,7 +45,7 @@ parse_data(PyObject* object, PyArrayObject** array)
     { *array = (PyArrayObject*) PyArray_Cast(*array, NPY_DOUBLE);
       Py_DECREF(object);
       if (!(*array))
-      { strcpy (message, "data cannot be cast to needed type.");
+      { strcpy(message, "data cannot be cast to needed type.");
         PyErr_SetString(PyExc_ValueError, buffer);
         return NULL;
       }
@@ -54,14 +54,14 @@ parse_data(PyObject* object, PyArrayObject** array)
   nrows = (int) PyArray_DIM(*array, 0);
   ncols = (int) PyArray_DIM(*array, 1);
   if (nrows != PyArray_DIM(*array, 0) || ncols != PyArray_DIM(*array, 1))
-  { strcpy (message, "data matrix is too large");
+  { strcpy(message, "data matrix is too large");
     PyErr_SetString(PyExc_ValueError, buffer);
     Py_DECREF((PyObject*) (*array));
     *array = NULL;
     return NULL;
   }
   if (nrows < 1 || ncols < 1)
-  { strcpy (message, "data is an empty matrix");
+  { strcpy(message, "data is an empty matrix");
     PyErr_SetString(PyExc_ValueError, buffer);
     Py_DECREF((PyObject*) (*array));
     *array = NULL;
@@ -119,7 +119,7 @@ parse_mask(PyObject* object, PyArrayObject** array,
   if(!PyArray_Check (object)) /* Try to convert object to a 2D double array */
   { *array = (PyArrayObject*) PyArray_FromObject(object, NPY_INT, 2, 2);
     if (!(*array))
-    { strcpy (message, "mask cannot be converted to needed array");
+    { strcpy(message, "mask cannot be converted to needed array");
       PyErr_SetString(PyExc_TypeError, buffer);
       return NULL;
     }
@@ -136,7 +136,7 @@ parse_mask(PyObject* object, PyArrayObject** array,
     else
     { *array = (PyArrayObject*) PyArray_Cast (*array, NPY_INT);
       if (!(*array))
-      { strcpy (message, "mask cannot be cast to needed type.");
+      { strcpy(message, "mask cannot be cast to needed type.");
         PyErr_SetString(PyExc_ValueError, buffer);
         return NULL;
       }
@@ -207,7 +207,7 @@ parse_weight (PyObject* object, PyArrayObject** array, const int ndata)
   if(!PyArray_Check (object)) /* Try to convert object to a 1D double array */
   { *array = (PyArrayObject*) PyArray_FromObject(object, NPY_DOUBLE, 1, 1);
     if (!(*array))
-    { strcpy (message, "weight cannot be converted to needed array.");
+    { strcpy(message, "weight cannot be converted to needed array.");
       PyErr_SetString(PyExc_TypeError, buffer);
       return NULL;
     }
@@ -218,7 +218,7 @@ parse_weight (PyObject* object, PyArrayObject** array, const int ndata)
     else
     { *array = (PyArrayObject*)PyArray_Cast(*array, NPY_DOUBLE);
       if (!(*array))
-      { strcpy (message, "weight cannot be cast to needed type.");
+      { strcpy(message, "weight cannot be cast to needed type.");
         PyErr_SetString(PyExc_ValueError, message);
         return NULL;
       }
@@ -294,7 +294,7 @@ parse_initialid(PyObject* object, int* nclusters, npy_intp nitems)
   if(!PyArray_Check (object))
   { array = (PyArrayObject*) PyArray_FromObject(object, NPY_INT,1,1);
     if (!array)
-    { strcpy (message, "initialid cannot be converted to needed array.");
+    { strcpy(message, "initialid cannot be converted to needed array.");
       PyErr_SetString(PyExc_TypeError, buffer);
       Py_DECREF((PyObject*) clusterid);
       return NULL;
@@ -307,7 +307,7 @@ parse_initialid(PyObject* object, int* nclusters, npy_intp nitems)
     else
     { array = (PyArrayObject*) PyArray_Cast(array, NPY_INT);
       if (!array)
-      { strcpy (message, "initialid cannot be cast to needed type.");
+      { strcpy(message, "initialid cannot be cast to needed type.");
         PyErr_SetString(PyExc_ValueError, buffer);
         Py_DECREF((PyObject*) clusterid);
         return NULL;
@@ -399,7 +399,7 @@ parse_clusterid(PyObject* object, PyArrayObject** array, unsigned int nitems,
   if(!PyArray_Check (object))
   { *array = (PyArrayObject*) PyArray_FromObject(object, NPY_INT, 1, 1);
     if (!(*array))
-    { strcpy (message, "clusterid cannot be converted to needed array.");
+    { strcpy(message, "clusterid cannot be converted to needed array.");
       PyErr_SetString(PyExc_TypeError, buffer);
       return NULL;
     }
@@ -411,7 +411,7 @@ parse_clusterid(PyObject* object, PyArrayObject** array, unsigned int nitems,
     else
     { *array = (PyArrayObject*) PyArray_Cast(*array, NPY_INT);
       if (!(*array))
-      { strcpy (message, "clusterid cannot be cast to needed type.");
+      { strcpy(message, "clusterid cannot be cast to needed type.");
         PyErr_SetString(PyExc_ValueError, buffer);
         return NULL;
       }
@@ -535,7 +535,7 @@ parse_distance(PyObject* object, PyArrayObject** array, int* n)
        * indicator set by PyArrayFromObject first. */
       PyErr_Clear();
       if (!PyList_Check(object))
-      { strcpy (message, "distance cannot be converted to needed array.");
+      { strcpy(message, "distance cannot be converted to needed array.");
         PyErr_SetString(PyExc_TypeError, buffer);
         *n = 0;
         return NULL;
@@ -543,7 +543,7 @@ parse_distance(PyObject* object, PyArrayObject** array, int* n)
       *n = PyList_GET_SIZE(object);
       distance = malloc((*n)*sizeof(double*));
       if (!distance)
-      { strcpy (message, "failed to store distance matrix.");
+      { strcpy(message, "failed to store distance matrix.");
         PyErr_SetString(PyExc_MemoryError, buffer);
         *n = 0;
         return NULL;
@@ -648,7 +648,7 @@ parse_distance(PyObject* object, PyArrayObject** array, int* n)
     else
     { *array = (PyArrayObject*) PyArray_Cast((*array), NPY_DOUBLE);
       if (!(*array))
-      { strcpy (message, "distance cannot be cast to needed type.");
+      { strcpy(message, "distance cannot be cast to needed type.");
         PyErr_SetString(PyExc_ValueError, buffer);
         *n = 0;
         return NULL;
@@ -808,7 +808,7 @@ parse_index(PyObject* object, PyArrayObject** array, int* n)
     else
     { object = PyArray_Cast(*array, NPY_INT);
       if (!object)
-      { strcpy (message, "index argument cannot be cast to needed type.");
+      { strcpy(message, "index argument cannot be cast to needed type.");
         PyErr_SetString(PyExc_ValueError, buffer);
         *n = 0;
         return NULL;
@@ -1403,7 +1403,7 @@ py_kcluster (PyObject* self, PyObject* args, PyObject* keywords)
                                   &DIST,
                                   &INITIALID)) return NULL;
   /* Set the function name for error messages */
-  strcpy (buffer, "kcluster: ");
+  strcpy(buffer, "kcluster: ");
   message = strchr(buffer, '\0');
   /* -- Reset None variables to NULL ------------------------------------- */
   if(MASK==Py_None) MASK = NULL;
@@ -1583,7 +1583,7 @@ py_kmedoids (PyObject* self, PyObject* args, PyObject* keywords)
                                   &NPASS,
                                   &INITIALID)) return NULL;
   /* Set the function name for error messages */
-  strcpy (buffer, "kmedoids: ");
+  strcpy(buffer, "kmedoids: ");
   message = strchr(buffer, '\0');
   /* -- Reset None variables to NULL ------------------------------------- */
   if (INITIALID==Py_None) INITIALID = NULL;
@@ -1743,7 +1743,7 @@ py_treecluster (PyObject* self, PyObject* args, PyObject* keywords)
                                   &DIST,
                                   &DISTANCEMATRIX)) return NULL;
   /* Set the function name for error messages */
-  strcpy (buffer, "treecluster: ");
+  strcpy(buffer, "treecluster: ");
   message = strchr(buffer, '\0');
 
   /* -- Reset None variables to NULL ------------------------------------- */
@@ -1959,7 +1959,7 @@ py_somcluster (PyObject* self, PyObject* args, PyObject* keywords)
                                   &NITER,
                                   &DIST)) return NULL;
   /* Set the function name for error messages */
-  strcpy (buffer, "somcluster: ");
+  strcpy(buffer, "somcluster: ");
   message = strchr(buffer, '\0');
   /* -- Reset None variables to NULL ------------------------------------- */
   if(WEIGHT==Py_None) WEIGHT = NULL;
@@ -2284,7 +2284,7 @@ py_clusterdistance (PyObject* self, PyObject* args, PyObject* keywords)
                                   &DIST,
                                   &TRANSPOSE)) return NULL;
   /* Set the function name for error messages */
-  strcpy (buffer, "clusterdistance: ");
+  strcpy(buffer, "clusterdistance: ");
   message = strchr(buffer, '\0');
 
   /* -- Reset None variables to NULL ------------------------------------- */
@@ -2441,7 +2441,7 @@ py_clustercentroids(PyObject* self, PyObject* args, PyObject* keywords)
                                   &METHOD,
                                   &TRANSPOSE)) return NULL;
   /* Set the function name for error messages */
-  strcpy (buffer, "clustercentroids: ");
+  strcpy(buffer, "clustercentroids: ");
   message = strchr(buffer, '\0');
   /* -- Reset None variables to NULL ------------------------------------- */
   if (MASK==Py_None) MASK = NULL;
@@ -2596,7 +2596,7 @@ py_distancematrix (PyObject* self, PyObject* args, PyObject* keywords)
                                   &TRANSPOSE,
                                   &DIST)) return NULL;
   /* Set the function name for error messages */
-  strcpy (buffer, "distancematrix: ");
+  strcpy(buffer, "distancematrix: ");
   message = strchr(buffer, '\0');
   /* -- Reset None variables to NULL ------------------------------------- */
   if (MASK==Py_None) MASK = NULL;
@@ -2689,6 +2689,134 @@ py_distancematrix (PyObject* self, PyObject* args, PyObject* keywords)
   free_weight(aWEIGHT, weight);
   return result;
 }
+/* end of wrapper for distancematrix */
+
+
+/* pca */
+static char pca__doc__[] =
+"pca(data) -> (columnmean, coordinates, pc, eigenvalues)\n"
+"\n"
+"This function returns the principal component decomposition of the gene\n"
+"expression data.\n"
+"data     : nrows x ncolumns array containing the expression data\n"
+"\n"
+"Return value:\n"
+"This function returns an array containing the mean of each column, the\n"
+"principal components as an nmin x ncolumns array, as well as the\n"
+"coordinates (an nrows x nmin array) of the data along the principal\n"
+"components, and the associated eigenvalues. The principal components, the\n"
+"coordinates, and the eigenvalues are sorted by the magnitude of the\n"
+"eigenvalue, with the largest eigenvalues appearing first. Here, nmin is\n"
+"the smaller of nrows and ncolumns.\n"
+"Adding the column means to the dot product of the coordinates and the\n"
+"principal components,\n"
+">>> columnmean + dot(coordinates, pc)\n"
+"recreates the data matrix.\n";
+
+static PyObject*
+py_pca(PyObject* self, PyObject* args)
+{ PyArrayObject* aMEAN = NULL;
+  PyArrayObject* aPC = NULL;
+  PyArrayObject* aCOORDINATES = NULL;
+  PyArrayObject* aEIGENVALUES = NULL;
+  double** u;
+  double** v;
+  double* w;
+  PyObject* DATA = NULL;
+  PyArrayObject* aDATA = NULL;
+  double** data = NULL;
+  int nrows, ncolumns;
+  npy_intp shape[2];
+  npy_intp nmin;
+  int error;
+  double* p;
+  double* q;
+  int i, j;
+ 
+  /* -- Read the input variables ----------------------------------------- */
+  if(!PyArg_ParseTuple(args, "O", &DATA)) return NULL;
+  /* Set the function name for error messages */
+  strcpy(buffer, "pca: ");
+  message = strchr(buffer, '\0');
+  /* -- Check the data input array --------------------------------------- */
+  data = parse_data(DATA, &aDATA);
+  if (!data) return NULL;
+  nrows = (int) PyArray_DIM(aDATA, 0);
+  ncolumns = (int) PyArray_DIM(aDATA, 1);
+  if (nrows!=PyArray_DIM(aDATA, 0) || ncolumns!=PyArray_DIM(aDATA, 1))
+  { strcpy(message, "data array is too large");
+    PyErr_SetString(PyExc_RuntimeError, buffer);
+    return NULL;
+  }
+  nmin = nrows < ncolumns ? nrows : ncolumns;
+  /* -- Create the output variables -------------------------------------- */
+  u = malloc(nrows*sizeof(double*));
+  v = malloc(nmin*sizeof(double*));
+  aEIGENVALUES = (PyArrayObject*) PyArray_SimpleNew(1, &nmin, NPY_DOUBLE);
+  shape[0] = nmin;
+  shape[1] = ncolumns;
+  aPC = (PyArrayObject*) PyArray_SimpleNew(2, shape, NPY_DOUBLE);
+  aMEAN = (PyArrayObject*) PyArray_SimpleNew(1, &shape[1], NPY_DOUBLE);
+  shape[0] = nrows;
+  shape[1] = nmin;
+  aCOORDINATES = (PyArrayObject*) PyArray_SimpleNew(2, shape, NPY_DOUBLE);
+  if (!u || !v || !aPC || !aEIGENVALUES || !aCOORDINATES || !aMEAN)
+  {   error = -2;
+      goto exit;
+  }
+  if (nrows >= ncolumns)
+  { p = PyArray_DATA(aCOORDINATES);
+    q = PyArray_DATA(aPC);
+  }
+  else /* nrows < ncolums */
+  { p = PyArray_DATA(aPC);
+    q = PyArray_DATA(aCOORDINATES);
+  }
+  for (i=0; i<nrows; i++, p+=ncolumns) u[i]=p;
+  for (i=0; i<nmin; i++, q+=nmin) v[i]=q;
+  w = (double*) PyArray_DATA(aEIGENVALUES);
+  /* -- Calculate the mean of each column ------------------------------ */
+  p = PyArray_DATA(aMEAN);
+  for (j = 0; j < ncolumns; j++)
+  { p[j] = 0.0;
+    for (i = 0; i < nrows; i++) p[j] += data[i][j];
+    p[j] /= nrows;
+  }
+  /* -- Subtract the mean of each column --------------------------------- */
+  for (i = 0; i < nrows; i++)
+      for (j = 0; j < ncolumns; j++)
+          u[i][j] = data[i][j] - p[j];
+  /* -- Perform the principal component analysis ----------------------- */
+  error = pca(nrows, ncolumns, u, v, w);
+  /* --------------------------------------------------------------------- */
+exit:
+  free_data(aDATA, data);
+  if (u) free(u);
+  if (v) free(v);
+  if (error==0)
+      return Py_BuildValue("NNNN",
+                           PyArray_Return(aMEAN),
+                           PyArray_Return(aCOORDINATES),
+                           PyArray_Return(aPC),
+                           PyArray_Return(aEIGENVALUES));
+  else if (error==-2)
+          PyErr_SetString(PyExc_MemoryError,
+              "Insufficient memory for to store the output variables of principal components analysis");
+  else if (error==-1)
+      PyErr_SetString(PyExc_MemoryError,
+          "Insufficient memory for principal components analysis");
+  else if (error > 0)
+      PyErr_SetString(PyExc_RuntimeError,
+          "Singular value decomposition failed to converge");
+  else
+      PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+  Py_XDECREF(aMEAN);
+  Py_XDECREF(aPC);
+  Py_XDECREF(aCOORDINATES);
+  Py_XDECREF(aEIGENVALUES);
+  return NULL;
+}
+/* end of wrapper for pca */
 
 
 /* ========================================================================== */
@@ -2707,6 +2835,7 @@ static struct PyMethodDef methods[] = {
    {"clusterdistance", (PyCFunction) py_clusterdistance, METH_KEYWORDS, clusterdistance__doc__},
    {"clustercentroids", (PyCFunction) py_clustercentroids, METH_KEYWORDS, clustercentroids__doc__},
    {"distancematrix", (PyCFunction) py_distancematrix, METH_KEYWORDS, distancematrix__doc__},
+   {"pca", (PyCFunction) py_pca, METH_KEYWORDS, pca__doc__},
    {NULL,          NULL, 0, NULL}/* sentinel */
 };
 

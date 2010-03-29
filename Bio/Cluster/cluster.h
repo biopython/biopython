@@ -38,7 +38,7 @@
 #  include <windows.h>
 #endif
 
-#define CLUSTERVERSION "1.47"
+#define CLUSTERVERSION "1.48"
 
 /* Chapter 2 */
 double clusterdistance (int nrows, int ncolumns, double** data, int** mask,
@@ -82,7 +82,7 @@ void somcluster (int nrows, int ncolumns, double** data, int** mask,
   int clusterid[][2]);
 
 /* Chapter 6 */
-void svd(int m, int n, double** u, double w[], double** v, int* ierr);
+int pca(int m, int n, double** u, double** v, double* w);
 
 /* Utility routines, currently undocumented */
 void sort(int n, const double data[], int index[]);
