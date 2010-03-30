@@ -253,6 +253,9 @@ and HTML formats
   \item \emph{Why won't the } \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{functions} \verb|parse|\emph{,} \verb|read| \emph{and} \verb|write| \emph{take filenames? They insist on handles!} \\
   You need Biopython 1.54 or later, or just use handles explicitly. It is especially important to remember to close output handles explicitly after writing your data.
 
+  \item \emph{Why won't the } \verb|Bio.SeqIO.write()| \emph{and} \verb|Bio.AlignIO.write()| \emph{functions accept a single record or alignment? They insist on a list or iterator!} \\
+  You need Biopython 1.54 or later, or just wrap the item with \verb|[...]| to create a list of one element.
+
   \item \emph{Why doesn't} \verb|str(...)| \emph{give me the full sequence of a} \verb|Seq| \emph{object?} \\
   You need Biopython 1.45 or later.  Alternatively, rather than \verb|str(my_seq)|, use \verb|my_seq.tostring()| (which will also work on recent versions of Biopython).
   
