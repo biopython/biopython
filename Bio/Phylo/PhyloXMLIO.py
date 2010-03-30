@@ -178,8 +178,8 @@ def get_child_text(parent, tag, construct=unicode):
     Returns None if no matching child is found.
     """
     child = parent.find(_ns(tag))
-    if child is not None:
-        return child.text and construct(child.text) or None
+    if child is not None and child.text:
+        return construct(child.text)
 
 def get_children_as(parent, tag, construct):
     """Find child nodes by tag; pass each through a constructor.
