@@ -108,7 +108,7 @@ def parse(file):
     """
     return Parser(file).parse()
 
-def write(obj, file, encoding=None):
+def write(obj, file, encoding=None, indent=False):
     """Write a phyloXML file.
 
     The first argument is an instance of Phyloxml, Phylogeny or BaseTree.Tree,
@@ -139,7 +139,7 @@ def write(obj, file, encoding=None):
     else:
         raise ValueError("First argument must be a Phyloxml, Phylogeny, "
                 "Tree, or iterable of Trees or Phylogenies.")
-    return Writer(obj, encoding).write(file)
+    return Writer(obj).write(file, encoding=encoding, indent=indent)
 
 
 # ---------------------------------------------------------
@@ -178,8 +178,8 @@ def get_child_text(parent, tag, construct=unicode):
     Returns None if no matching child is found.
     """
     child = parent.find(_ns(tag))
-    if child is not None:
-        return child.text and construct(child.text) or None
+    if child is not None and child.text:
+        return construct(child.text)
 
 def get_children_as(parent, tag, construct):
     """Find child nodes by tag; pass each through a constructor.
@@ -210,6 +210,26 @@ def dump_tags(handle, file=sys.stdout):
         else:
             elem.clear()
 
+def _indent(elem, level=0):
+    """Add line breaks and indentation to ElementTree in-place.
+
+    Sources:
+        U{ http://effbot.org/zone/element-lib.htm#prettyprint }
+        U{ http://infix.se/2007/02/06/gentlemen-indent-your-xml }
+    """
+    i = "\n" + level*"  "
+    if len(elem):
+        if not elem.text or not elem.text.strip():
+            elem.text = i + "  "
+        for e in elem:
+            _indent(e, level+1)
+            if not e.tail or not e.tail.strip():
+                e.tail = i + "  "
+        if not e.tail or not e.tail.strip():
+            e.tail = i
+    else:
+        if level and (not elem.tail or not elem.tail.strip()):
+            elem.tail = i
 
 # ---------------------------------------------------------
 # INPUT
@@ -658,15 +678,16 @@ def _handle_simple(tag):
 class Writer(object):
     """Methods for serializing a PhyloXML object to XML."""
 
-    def __init__(self, phyloxml, encoding):
+    def __init__(self, phyloxml):
         """Build an ElementTree from a PhyloXML object."""
         assert isinstance(phyloxml, PX.Phyloxml), "Not a Phyloxml object"
         self._tree = ElementTree.ElementTree(self.phyloxml(phyloxml))
-        self.encoding = encoding
 
-    def write(self, file):
-        if self.encoding is not None:
-            self._tree.write(file, self.encoding)
+    def write(self, file, encoding=None, indent=False):
+        if indent:
+            _indent(self._tree.getroot())
+        if encoding is not None:
+            self._tree.write(file, encoding)
         else:
             self._tree.write(file)
         return len(self._tree.getroot())

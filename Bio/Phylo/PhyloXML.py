@@ -21,7 +21,7 @@ from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
 
 import BaseTree
-from BaseTree import trim_str
+import _sugar
 
 
 class PhyloXMLWarning(Warning):
@@ -43,9 +43,9 @@ class PhyloElement(BaseTree.TreeElement):
     def __str__(self):
         """Show the class name and an identifying attribute."""
         if hasattr(self, 'name') and self.name:
-            return trim_str(self.name, maxlen=40)
+            return _sugar.trim_str(self.name, maxlen=40)
         if hasattr(self, 'value') and self.value:
-            return trim_str(unicode(self.value), maxlen=40)
+            return _sugar.trim_str(unicode(self.value), maxlen=40)
         if hasattr(self, 'id') and self.id:
             return str(self.id)
         return self.__class__.__name__
