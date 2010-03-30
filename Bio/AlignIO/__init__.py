@@ -172,8 +172,9 @@ def write(alignments, handle, format):
     """Write complete set of alignments to a file.
 
     Arguments:
-     - sequences - A list (or iterator) of Alignment objects (ideally the
-                   new MultipleSeqAlignment objects).
+     - alignments - A list (or iterator) of Alignment objects (ideally the
+                   new MultipleSeqAlignment objects), or (if using Biopython
+                   1.54 or later) a single alignment object.
      - handle    - File handle object to write to, or filename as string
                    (note older versions of Biopython only took a handle).
      - format    - lower case string describing the file format to write.
@@ -191,9 +192,10 @@ def write(alignments, handle, format):
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
+
     if isinstance(alignments, Alignment):
-        raise TypeError(\
-            "Need an Alignment list/iterator, not just a single Alignment")
+        #This raised an exception in order version of Biopython
+        alignments = [alignments]
 
     if isinstance(handle, basestring):
         handle = open(handle, "w")

@@ -326,7 +326,8 @@ _BinaryFormats = ["sff", "sff-trim"]
 def write(sequences, handle, format):
     """Write complete set of sequences to a file.
 
-     - sequences - A list (or iterator) of SeqRecord objects.
+     - sequences - A list (or iterator) of SeqRecord objects, or (if using
+                   Biopython 1.54 or later) a single SeqRecord.
      - handle    - File handle object to write to, or filename as string
                    (note older versions of Biopython only took a handle).
      - format    - lower case string describing the file format to write.
@@ -344,9 +345,10 @@ def write(sequences, handle, format):
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
+
     if isinstance(sequences, SeqRecord):
-        raise ValueError(\
-            "Use a SeqRecord list/iterator, not just a single SeqRecord")
+        #This raised an exception in order version of Biopython
+        sequences = [sequences]
 
     if isinstance(handle, basestring):
         if format in _BinaryFormats :

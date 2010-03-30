@@ -369,6 +369,12 @@ def check_simple_write_read(records, indent=" "):
                 assert r1.id == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
 
+        if len(records)>1:
+            #Try writing just one record (passing a SeqRecord, not a list)
+            handle = StringIO()
+            SeqIO.write(records[0], handle, format)
+            assert handle.getvalue() == records[0].format(format)
+
 
 #Check parsers can cope with an empty file
 for t_format in SeqIO._FormatToIterator:

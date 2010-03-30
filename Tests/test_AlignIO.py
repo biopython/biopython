@@ -148,6 +148,12 @@ def check_simple_write_read(alignments, indent=" "):
                                   % (str(e), repr(handle.read()), repr(alignments2)))
             simple_alignment_comparison(alignments, alignments2, format)
 
+        if len(alignments)>1:
+            #Try writing just one Alignment (not a list)
+            handle = StringIO()
+            SeqIO.write(alignments[0], handle, format)
+            assert handle.getvalue() == alignments[0].format(format)
+
 def simple_alignment_comparison(alignments, alignments2, format):
     assert len(alignments) == len(alignments2)
     for a1, a2 in zip(alignments, alignments2):
