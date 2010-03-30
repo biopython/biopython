@@ -139,7 +139,7 @@ def write(obj, file, encoding=None):
     else:
         raise ValueError("First argument must be a Phyloxml, Phylogeny, "
                 "Tree, or iterable of Trees or Phylogenies.")
-    return Writer(obj, encoding).write(file)
+    return Writer(obj).write(file, encoding=encoding)
 
 
 # ---------------------------------------------------------
@@ -658,15 +658,14 @@ def _handle_simple(tag):
 class Writer(object):
     """Methods for serializing a PhyloXML object to XML."""
 
-    def __init__(self, phyloxml, encoding):
+    def __init__(self, phyloxml):
         """Build an ElementTree from a PhyloXML object."""
         assert isinstance(phyloxml, PX.Phyloxml), "Not a Phyloxml object"
         self._tree = ElementTree.ElementTree(self.phyloxml(phyloxml))
-        self.encoding = encoding
 
-    def write(self, file):
-        if self.encoding is not None:
-            self._tree.write(file, self.encoding)
+    def write(self, file, encoding=None):
+        if encoding is not None:
+            self._tree.write(file, encoding)
         else:
             self._tree.write(file)
         return len(self._tree.getroot())
