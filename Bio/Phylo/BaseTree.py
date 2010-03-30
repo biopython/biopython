@@ -15,14 +15,7 @@ import itertools
 import random
 import re
 
-
-def trim_str(text, maxlen=60):
-    """Truncate a string to maxlen characters, including ellipsis."""
-    assert isinstance(text, basestring), \
-            "%s should be a string, not a %s" % (text, type(text))
-    if len(text) > maxlen:
-        return text[:maxlen-3] + '...'
-    return text
+import _sugar
 
 # General tree-traversal algorithms
 
@@ -162,7 +155,7 @@ class TreeElement(object):
         """Show this object's constructor with its primitive arguments."""
         s = '%s(%s)' % (self.__class__.__name__,
                         ', '.join("%s='%s'"
-                                  % (key, trim_str(unicode(val)))
+                                  % (key, _sugar.trim_str(unicode(val)))
                             for key, val in self.__dict__.iteritems()
                             if val is not None
                             and type(val) in (str, int, float, bool, unicode)))
