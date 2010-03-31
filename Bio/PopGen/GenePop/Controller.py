@@ -38,7 +38,6 @@ def _read_allele_freq_table(f):
     l = f.readline()
     while l.find(" --")==-1:
         if l == "":
-            self.done = True
             raise StopIteration
         l = f.readline()
     alleles = filter(lambda x: x != '', f.readline().rstrip().split(" "))
@@ -445,6 +444,7 @@ class GenePopController:
         opts = self._get_opts(dememorization, batches, iterations)
         ret, out, err = self._run_genepop([".DIS"], [2, 1], fname, opts)
         def ld_pop_func(self):
+            current_pop = None
             l = self.stream.readline().rstrip()
             if l == "":
                 self.done = True

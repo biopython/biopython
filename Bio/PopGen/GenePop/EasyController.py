@@ -30,7 +30,7 @@ class EasyController:
 
     def get_basic_info(self):
         f=open(self._fname)
-        rec = GenePop.parse(f)
+        rec = GenePop.read(f)
         f.close()
         return rec.pop_list, rec.loci_list
 
