@@ -59,6 +59,14 @@ class Async:
             self._run_program(id, self.hooks[program], parameters, input_files)
             return id
 
+    def _run_program(self, id, program, parameters, input_files):
+        """Actually run the program, handled by a subclass (PRIVATE).
+
+        This method should be replaced by any derived class to do
+        something useful. It will be called by the run_program method.
+        """
+        raise NotImplementedError("This object should be subclassed")
+
     def get_result(self, id):
         ''' Returns the results for a certain Id, the info for that Id is
             forgotten.
