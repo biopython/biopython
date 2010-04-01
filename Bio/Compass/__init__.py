@@ -225,7 +225,7 @@ from Bio.ParserSupport import *
 
 
 class _Scanner:
-    """Reads compass output and generate events"""
+    """Reads compass output and generate events (OBSOLETE)"""
 
     def feed(self, handle, consumer):
         """Feed in COMPASS ouput"""
@@ -380,7 +380,7 @@ class _Consumer:
         self.data.hit_aln = self.data.hit_aln + m.group(1)
     
 class RecordParser(AbstractParser):
-        """Parses compass results into a Record object.
+        """Parses compass results into a Record object (OBSOLETE).
         """
         def __init__(self):
             self._scanner = _Scanner()
@@ -396,7 +396,7 @@ class RecordParser(AbstractParser):
             return self._consumer.data
                 
 class Iterator:
-    """Iterate through a file of compass results"""
+    """Iterate through a file of compass results (OBSOLETE)."""
     def __init__(self, handle):
         self._uhandle = File.UndoHandle(handle)
         self._parser = RecordParser()
