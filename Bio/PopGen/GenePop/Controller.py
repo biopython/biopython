@@ -370,7 +370,7 @@ class GenePopController:
             dememorization, batches, iterations)
 
     #1.3 P file
-    def test_pop_hw_prob(self, fname, ext, enum_test = False,
+    def test_pop_hz_prob(self, fname, ext, enum_test = False,
         dememorization = 10000, batches = 20, iterations = 5000):
         """Hardy-Weinberg test based on probability.
 

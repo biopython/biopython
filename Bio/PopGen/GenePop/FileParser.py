@@ -194,7 +194,8 @@ class FileRecord:
            pos - position
            fw  - A file handle (write enabled) to write the new record
         """
-        del self.populations[pos]
+        #del self.populations[pos]
+        pass
     
     def remove_locus_by_position(self, pos, fw):
         """Removes a locus by position.
@@ -202,11 +203,11 @@ class FileRecord:
            pos - position
            fw  - A file handle (write enabled) to write the new record
         """
-        del self.loci_list[pos]
-        for pop in self.populations:
-            for indiv in pop:
-                name, loci = indiv
-                del loci[pos]
+        #del self.loci_list[pos]
+        #for pop in self.populations:
+        #    for indiv in pop:
+        #        name, loci = indiv
+        #        del loci[pos]
 
     def remove_locus_by_name(self, name, fw):
         """Removes a locus by name.
