@@ -9,6 +9,7 @@ This API follows the same semantics as Biopython's SeqIO and AlignIO.
 """
 __docformat__ = "epytext en"
 
+import BaseTree
 import NewickIO
 import NexusIO
 import PhyloXMLIO
@@ -70,6 +71,9 @@ def read(file, format):
 
 def write(trees, file, format, **kwargs):
     """Write a sequence of trees to file in the given format."""
+    if isinstance(trees, BaseTree.Tree):
+        # Passed a single tree instead of an iterable -- that's OK
+        trees = [trees]
     do_close = False
     if isinstance(file, basestring):
         file = open(file, 'w+')
