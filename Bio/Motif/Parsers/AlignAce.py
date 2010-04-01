@@ -60,9 +60,12 @@ from Bio.ParserSupport import *
 
 class AlignAceConsumer:
     """
-    The general purpose consumer for the AlignAceScanner.
+    The general purpose consumer for the AlignAceScanner (OBSOLETE).
 
     Should be passed as the consumer to the feed method of the AlignAceScanner. After 'consuming' the file, it has the list of motifs in the motifs property.
+
+    This class is OBSOLETE; please use the read() function in this module
+    instead.
     """
     def __init__(self):
         self.motifs=[]
@@ -109,7 +112,10 @@ class AlignAceConsumer:
         self.cmd_line = line
     
 class AlignAceParser(AbstractParser):
-    """Parses AlignAce data into a sequence of Motifs.
+    """Parses AlignAce data into a sequence of Motifs (OBSOLETE)
+
+    This class is OBSOLETE; please use the read() function in this module
+    instead.
     """
     def __init__(self):
         """__init__(self)"""
@@ -122,7 +128,7 @@ class AlignAceParser(AbstractParser):
         return self._consumer
 
 class AlignAceScanner:
-    """Scannner for AlignACE output
+    """Scannner for AlignACE output (OBSOLETE).
 
     Methods:
     feed     Feed data into the scanner.
@@ -142,6 +148,8 @@ class AlignAceScanner:
     motif_mask - mask of the motif (space - gap, asterisk - significant position)
     motif_score - MAP score of the motif - approx. N * log R, where R == (num. of actual occur.) / (num. of occur. expected by random.)
     
+    This class is OBSOLETE; please use the read() function in this module
+    instead.
     """
     def feed(self, handle, consumer):
         """S.feed(handle, consumer)
@@ -175,7 +183,7 @@ class AlignAceScanner:
                 raise ValueError(line)
 
 class CompareAceScanner:
-    """Scannner for CompareACE output
+    """Scannner for CompareACE output (OBSOLETE).
 
     Methods:
     feed     Feed data into the scanner.
@@ -199,7 +207,7 @@ class CompareAceScanner:
 
 class CompareAceConsumer:
     """
-    The general purpose consumer for the CompareAceScanner.
+    The general purpose consumer for the CompareAceScanner (OBSOLETE).
 
     Should be passed as the consumer to the feed method of the CompareAceScanner. After 'consuming' the file, it has the list of motifs in the motifs property.
     """

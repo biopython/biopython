@@ -11,11 +11,13 @@ from Bio.MEME import Motif
 import re
 
 class MEMERecord:
-    """A class for holding the results of a MEME run.
+    """A class for holding the results of a MEME run (OBSOLETE).
     
     A MEMERecord is an object that holds the results from running
     MEME. It implements no methods of its own.
         
+    This class is OBSOLETE; its functionality is now available through
+    Bio.Motif.Parsers.MEME.
     """
     def __init__ (self):
         """__init__ (self)"""
@@ -32,7 +34,7 @@ class MEMERecord:
                 return m
 
 class MEMEParser (AbstractParser):
-    """A parser for the text output of the MEME program.
+    """A parser for the text output of the MEME program (OBSOLETE).
     Parses the output into an object of the MEMERecord class.
     
     Methods:
@@ -47,6 +49,8 @@ class MEMEParser (AbstractParser):
         for instance in motif.instances:
             print instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue
     
+    This class is OBSOLETE; its functionality is now available through
+    Bio.Motif.Parsers.MEME.
     """
     def __init__ (self):
         """__init__ (self)"""
@@ -61,11 +65,13 @@ class MEMEParser (AbstractParser):
 
 
 class _MEMEScanner:
-    """Scanner for MEME output. 
+    """Scanner for MEME output (OBSOLETE).
     
     Methods:
     feed
         
+    This class is OBSOLETE; its functionality is now available through
+    Bio.Motif.Parsers.MEME.
     """
     
     def feed (self, handle, consumer):
@@ -129,10 +135,13 @@ class _MEMEScanner:
 
 class _MEMEConsumer:
     """
-    Consumer that can receive events from MEME Scanner.
+    Consumer that can receive events from MEME Scanner (OBSOLETE).
     
     This is the Consumer object that should be passed to the 
     MEME Scanner.
+
+    This class is OBSOLETE; its functionality is now available through
+    Bio.Motif.Parsers.MEME.
     """
     
     def __init__ (self):
@@ -217,7 +226,7 @@ class _MEMEConsumer:
 
 class _MASTConsumer:
     """
-    Consumer that can receive events from _MASTScanner.
+    Consumer that can receive events from _MASTScanner (OBSOLETE).
     
     A _MASTConsumer parses lines from a mast text output file.
     The motif match diagrams are parsed using line buffering. 
@@ -225,6 +234,9 @@ class _MASTConsumer:
     required for testing using the Bio.ParserSupport.TaggingConsumer.
     If this variable isn't there, the TaggingConsumer barfs. In
     the _MASTScanner, None is passed in the place of this variable.
+
+    This class is OBSOLETE; its functionality is now available through
+    Bio.Motif.Parsers.MAST.
     """
     def __init__ (self):
         self.data = MASTRecord()
@@ -450,7 +462,8 @@ class _MASTConsumer:
 
 class MASTParser(AbstractParser):
     """
-    Parser for MAST text output. HTML output cannot be parsed, yet. Returns a MASTRecord
+    Parser for MAST text output (OBSOLETE).
+    HTML output cannot be parsed, yet. Returns a MASTRecord
     
     A MASTParser takes a file handle for a MAST text output file and 
     returns a MASTRecord, containing the hits between motifs and 
@@ -469,6 +482,9 @@ class MASTParser(AbstractParser):
     for motif in mast_record.motifs:
         for instance in motif.instances:
             print instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue
+
+    This class is OBSOLETE; its functionality is now available through
+    Bio.Motif.Parsers.MAST.
     """
     def __init__ (self):
         self._consumer = _MASTConsumer()
@@ -482,8 +498,10 @@ class MASTParser(AbstractParser):
 
 class _MASTScanner:
     """
-    Scanner for MAST text output. 
-        
+    Scanner for MAST text output (OBSOLETE).
+
+    This class is OBSOLETE; its functionality is now available through
+    Bio.Motif.Parsers.MAST.
     """
     def feed (self, handle, consumer):
         if isinstance(handle, File.UndoHandle):
@@ -559,7 +577,7 @@ class _MASTScanner:
 
 
 class MASTRecord:
-    """The class for holding the results from a MAST run.
+    """The class for holding the results from a MAST run (OBSOLETE).
     
     A MASTRecord holds data about matches between motifs and sequences.
     The motifs held by the MASTRecord are objects of the class MEMEMotif.
@@ -573,6 +591,9 @@ class MASTRecord:
         MEME.Motif.Instance
     get_motif_by_name (motif_name): returns a MEMEMotif with the given
         name.
+
+    This class is OBSOLETE; its functionality is now available through
+    Bio.Motif.Parsers.MAST.
     """
     def __init__ (self):
         self.sequences = []

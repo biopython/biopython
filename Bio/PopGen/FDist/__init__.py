@@ -97,8 +97,10 @@ class Record:
 from Bio.ParserSupport import *
 
 class RecordParser(AbstractParser):
-    """Parses FDist data into a Record object.
+    """Parses FDist data into a Record object (OBSOLETE).
 
+    This function is OBSOLETE; plesae use the read() function in this module
+    instead.
     """
     def __init__(self):
         self._scanner = _Scanner()
@@ -109,10 +111,12 @@ class RecordParser(AbstractParser):
         return self._consumer.data
 
 class _Scanner:
-    """Scans a FDist record.
+    """Scans a FDist record (OBSOLETE).
     
     There is only one record per file.
-    
+
+    This function is OBSOLETE; plesae use the read() function in this module
+    instead.
     """
 
     def feed(self, handle, consumer):
@@ -150,11 +154,13 @@ class _Scanner:
         consumer.end_record()
 
 class _RecordConsumer(AbstractConsumer):
-    """Consumer that converts a FDist record to a Record object.
+    """Consumer that converts a FDist record to a Record object (OBSOLETE).
 
     Members:
     data    Record with FDist data.
 
+    This function is OBSOLETE; plesae use the read() function in this module
+    instead.
     """
     def __init__(self):
         self.data = None

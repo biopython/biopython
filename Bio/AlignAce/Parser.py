@@ -3,7 +3,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """
-Classes for parsing AlignAce and CompareACE files
+Classes for parsing AlignAce and CompareACE files.
+
+This module is OBSOLETE; please use Bio.Motif.Parsers.AlignAce instead.
 """
 
 from Bio.ParserSupport import *

@@ -77,7 +77,7 @@ from Bio.ParserSupport import AbstractConsumer
 from numpy import *
 
 class CelScanner:
-    """Scannner for Affymetrix CEL files.
+    """Scanner for Affymetrix CEL files (OBSOLETE)
 
     Methods:
     feed     Feed data into the scanner.
@@ -90,6 +90,7 @@ class CelScanner:
     StartIntensity - generated when the section [INTENSITY] is found
     ReadIntensity - one line in the section [INTENSITY]
 
+    This class is OBSOLETE; please use the read() function in this module.
     """
     def feed(self, handle, consumer):
         """scanner.feed(handle, consumer)
@@ -120,6 +121,10 @@ class CelScanner:
 
 
 class CelConsumer(AbstractConsumer):
+    """Consumer for Affymetrix CEL files (OBSOLETE)
+
+    This class is OBSOLETE; please use the read() function in this module.
+    """
 
     def __init__(self):
         self._mean  = None
@@ -147,10 +152,12 @@ class CelConsumer(AbstractConsumer):
 
 class CelRecord:
     """
-    Stores the information in a cel file
+    Stores the information in a cel file (OBSOLETE).
 
     Needs error handling.
     Needs to know the chip design.
+
+    This class is OBSOLETE; please use the Record class instead.
     """
 
 
@@ -220,6 +227,9 @@ class CelParser:
     returns an instance of a CelRecord
 
     This class needs error handling.
+
+    This class is OBSOLETE; please use the read() function in this module
+    instead.
     """
 
     def __init__(self, handle=None):
