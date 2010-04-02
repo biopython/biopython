@@ -9,6 +9,8 @@ The latest news is at the top.
 
 ===================================================================
 
+April 2, 2010: Biopython 1.54 beta released.
+
 We are phasing out support for Python 2.4. We will continue to support it
 for at least two further releases, and at least one year (whichever takes
 longer), before dropping support for Python 2.4. This could be delayed
