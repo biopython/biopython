@@ -2433,11 +2433,19 @@ Length 394
 ['Acyltransferase', 'Flavonoid biosynthesis', 'Transferase']
 \end{verbatim}
 
-\section{Sequence files as Dictionaries}
+\section{Sequence files as Dictionaries -- In memory}
+\label{SeqIO:to_dict}
 
-The next thing that we'll do with our ubiquitous orchid files is to show how to index them and access them like a database using the Python \verb|dictionary| data type (like a hash in Perl). This is very useful for moderately large files where you only need to access certain elements of the file, and makes for a nice quick 'n dirty database.
+The next thing that we'll do with our ubiquitous orchid files is to show how
+to index them and access them like a database using the Python \verb|dictionary|
+data type (like a hash in Perl). This is very useful for moderately large files
+where you only need to access certain elements of the file, and makes for a nice
+quick 'n dirty database. For dealing with larger files where memory becomes a
+problem, see Section~\ref{sec:SeqIO-index} below.
 
-You can use the function \verb|Bio.SeqIO.to_dict()| to make a SeqRecord dictionary (in memory).  By default this will use each record's identifier (i.e. the \verb|.id| attribute) as the key.  Let's try this using our GenBank file:
+You can use the function \verb|Bio.SeqIO.to_dict()| to make a SeqRecord dictionary
+(in memory).  By default this will use each record's identifier (i.e. the \verb|.id|
+attribute) as the key.  Let's try this using our GenBank file:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -2564,8 +2572,9 @@ print record.description
 
 \noindent That should have retrieved the record {\tt Z78532.1}, the second entry in the file.
 
-\subsection{Indexing really large files}
-\label{sec:seqio-index}
+\section{Sequence files as Dictionaries -- Indexed files}
+%\subsection{Indexing really large files}
+\label{sec:SeqIO-index}
 
 As the previous couple of examples tried to illustrate, using
 \verb|Bio.SeqIO.to_dict()| is very flexible. However, because it holds
@@ -2617,10 +2626,13 @@ filename and the format name:
  ..., 'gi|2765613|emb|Z78488.1|PTZ78488', 'gi|2765583|emb|Z78458.1|PHZ78458']
 \end{verbatim}
 
+\subsection{Specifying the dictionary keys}
+\label{seq:seqio-index-functionkey}
+
 Suppose you want to use the same keys as before? Much like with the
 \verb|Bio.SeqIO.to_dict()| example in Section~\ref{seq:seqio-todict-functionkey},
-you'll need to write a tiny function to map from the FASTA identifier to the key
-you want:
+you'll need to write a tiny function to map from the FASTA identifier
+(as a string) to the key you want:
 
 \begin{verbatim}
 def get_acc(identifier):
@@ -2633,7 +2645,7 @@ def get_acc(identifier):
     return parts[3]
 \end{verbatim}
 
-\noindent Then we can give this function to the \verb|SeqIO.index()|
+\noindent Then we can give this function to the \verb|Bio.SeqIO.index()|
 function to use in building the dictionary:
 
 \begin{verbatim}
@@ -2645,9 +2657,42 @@ function to use in building the dictionary:
 
 \noindent Easy when you know how?
 
+\subsection{Getting the raw data for a record}
+
+The dictionary-like object from \verb|Bio.SeqIO.index()| gives you each
+entry as a \verb|SeqRecord| object. However, it is sometimes useful to
+be able to get the original raw data straight from the file. For this
+reason Biopython 1.54 added a \verb|get_raw()| method which takes a
+single argument (the record identifier) and returns a string (extracted
+from the file without modification).
+
+A motivating example is extracting a subset of a records from a large
+file where either \verb|Bio.SeqIO.write()| does not (yet) support the
+output file format (e.g. the plain text SwissProt file format) or
+where you need to preserve the text exactly (e.g.GenBank or EMBL
+output from Biopython does not yet preserve every last bit of
+annotation).
+
+Let's suppose you have download the whole of UniProt in the plain
+text SwissPort file format from their FTP site
+(\url{ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.dat.gz})
+and uncompressed it as the file \verb|uniprot_sprot.dat|, and you
+want to extract just a few records from it:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> uniprot = SeqIO.index("uniprot_sprot.dat", "swiss")
+>>> handle = open("selected.dat", "w")
+>>> for acc in ["ABP1_ARATH", "ABP1_HUMAN", "ABP1_MAIZE", "ABP1_MOUSE", "ABP1_PIG"]:
+...     handle.write(uniprot.get_raw(acc))
+>>> handle.close()
+\end{verbatim}
+
 There is a longer example in Section~\ref{sec:SeqIO-sort} using the
 \verb|SeqIO.index()| function to sort a large sequence file (without
 loading everything into memory at once).
+
+\subsection{Discussion}
 
 While using \verb|Bio.SeqIO.index()| is much more memory-efficient than
 using a simple dictionary of records, the record keys and the offsets are
@@ -9423,7 +9468,7 @@ looking at just one \verb|SeqRecord| at a time.
 However, sometimes you can't use a big loop or an iterator - you may need
 random access to the reads. Here the \verb|Bio.SeqIO.index()| function
 may prove very helpful, as it allows you to access any read in the FASTQ file
-by its name (see Section~\ref{sec:seqio-index}).
+by its name (see Section~\ref{sec:SeqIO-index}).
 
 Again we'll use the \texttt{SRR014849.fastq} file from the NCBI
 (\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}),
