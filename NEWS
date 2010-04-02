@@ -31,6 +31,12 @@ the write functions will now accept a single SeqRecord or alignment.
 
 Bio.SeqIO now supports writing EMBL files (DNA and RNA sequences only).
 
+The dictionary-like objects from Bio.SeqIO.index() now support a get_raw
+method for most file formats, giving you the original unparsed data from the
+file as a string. This is useful for selecting a subset of records from a
+file where Bio.SeqIO.write() does not support the file format (e.g. the
+"swiss" format) or where you need to exactly preserve the original layout.
+
 Based on code from Jose Blanca (author of sff_extract), Bio.SeqIO now
 supports reading, indexing and writing Standard Flowgram Format (SFF)
 files which are used by 454 Life Sciences (Roche) sequencers. This means

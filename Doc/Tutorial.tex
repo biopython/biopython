@@ -9014,11 +9014,11 @@ to sort by length. This can be solved using the
 
 \begin{verbatim}
 from Bio import SeqIO
-#Get the lengths and ids, and sort on length                         
+#Get the lengths and ids, and sort on length         
 len_and_ids = sorted((len(rec), rec.id) for rec in \
                      SeqIO.parse("ls_orchid.fasta","fasta"))
 ids = reversed([id for (length, id) in len_and_ids])
-del len_and_ids	#free this memory                                                     
+del len_and_ids	#free this memory
 record_index = SeqIO.index("ls_orchid.fasta", "fasta")
 records = (record_index[id] for id in ids)
 SeqIO.write(records, "sorted.fasta", "fasta")
@@ -9030,6 +9030,29 @@ We then sort this list to get them in length order, and discard the lengths.
 Using this sorted list of identifiers \verb|Bio.SeqIO.index()| allows us to
 retrieve the records one by one, and we pass them to \verb|Bio.SeqIO.write()|
 for output.
+
+These examples all use \verb|Bio.SeqIO| to parse the records into
+\verb|SeqRecord| objects which are output using \verb|Bio.SeqIO.write()|.
+What if you want to sort a file format which \verb|Bio.SeqIO.write()| doesn't
+support, like the plain text SwissProt format? Here is another option using
+the \verb|get_raw()| method added to \verb|Bio.SeqIO.index()| in Biopython 1.54.
+
+\begin{verbatim}
+from Bio import SeqIO
+#Get the lengths and ids, and sort on length         
+len_and_ids = sorted((len(rec), rec.id) for rec in \
+                     SeqIO.parse("ls_orchid.fasta","fasta"))
+ids = reversed([id for (length, id) in len_and_ids])
+del len_and_ids	#free this memory
+record_index = SeqIO.index("ls_orchid.fasta", "fasta")
+handle = open("sorted.fasta", "w")
+for id in ids:
+    handle.write(record_index.get_raw(id))
+handle.close()
+\end{verbatim}
+
+As a bonus, because this never parses the data into \verb|SeqRecord| objects
+it should be faster.
 
 \subsection{Simple quality filtering for FASTQ files}
 \label{sec:FASTQ-filtering-example}
