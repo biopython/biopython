@@ -8,6 +8,11 @@ dist
 *~
 *.swp
 
+#Ignore patches and any original files created by patch command
+*.diff
+*.patch
+*.orig
+
 #Ignore these hidden files from Mac OS X
 .DS_Store
 
