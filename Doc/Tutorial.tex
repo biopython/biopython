@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 31 March 2010 (Biopython 1.53+)}
+\date{Last Update -- 2 April 2010 (Biopython 1.53+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -2577,19 +2577,7 @@ For very large files, Biopython 1.52 introduced an alternative,
 it still returns a dictionary like object, this does \emph{not} keep
 \emph{everything} in memory. Instead, it just records where each record
 is within the file -- when you ask for a particular record, it then parses
-it on demand. The record keys and the offsets are still in memory, but this
-works fine even for millions of sequences. However, if you have tens of
-millions of sequences, then you probably more RAM (and a 64bit version
-of Python in order to use more than 4GB of RAM).
-
-The main benefits are far lower memory requirements, and also building
-the index is much faster (as it only scans the file quickly looking for
-the start of each record).
-
-The main drawback is less flexibility. You cannot specify the keys with quite
-the same freedom as you can with \verb|Bio.SeqIO.to_dict()|. Also, these
-indexed dictionaries are \emph{read only}, so you cannot add or remove
-entries as you could with a real Python dictionary.
+it on demand.
 
 As an example, let's use the same GenBank file as before:
 
@@ -2657,6 +2645,28 @@ function to use in building the dictionary:
 
 \noindent Easy when you know how?
 
+There is a longer example in Section~\ref{sec:SeqIO-sort} using the
+\verb|SeqIO.index()| function to sort a large sequence file (without
+loading everything into memory at once).
+
+While using \verb|Bio.SeqIO.index()| is much more memory-efficient than
+using a simple dictionary of records, the record keys and the offsets are
+still in memory. This works fine even for millions of sequences. However,
+if you have tens of millions of sequences, then you \emph{will} need
+\emph{lots} of RAM (and a 64bit version of Python in order to use more
+than 4GB of RAM). Future versions of Biopython may support storing the
+index on disk (e.g. in an SQLite database) rather than in memory in order
+to work better with such extreme cases.
+
+Although the main benefit of using \verb|Bio.SeqIO.index()| is too reduce
+memory requirements, you will also find building the index is much faster
+than using \verb|Bio.SeqIO.to_dict()| and \verb|Bio.SeqIO.parse()| (as the
+indexing only scans the file quickly looking for the start of each record).
+
+The main drawback is less flexibility. You cannot specify the keys with quite
+the same freedom as you can with \verb|Bio.SeqIO.to_dict()|. Also, these
+indexed dictionaries are \emph{read only}, so you cannot add or remove
+entries as you could with a real Python dictionary.
 
 \section{Writing Sequence Files}
 
@@ -3730,8 +3740,8 @@ path to the tool, for example:
 >>> cline = ClustalwCommandline(clustalw_exe, infile="opuntia.fasta")
 \end{verbatim}
 
-\noindent Remember, in Python a default string \verb|\n| and/or \verb|\t|
-translates as a new line and/or a tab -- which is why we're put a letter
+\noindent Remember, in Python a default string \verb|\n| and \verb|\t|
+translate as a new line and a tab -- which is why we're put a letter
 ``r'' at the start for a raw string that isn't translated in this way.
 This is generally good practice when specifying a Windows style file name.
 
@@ -3741,7 +3751,7 @@ older options like the \verb|os.system()| and the \verb|os.popen*| functions.
 
 Now, at this point it helps to know about how command line tools ``work''.
 When you run a tool at the command line, it will often print text output
-and/or directly to screen. This text can be captured or redirected, via
+directly to screen. This text can be captured or redirected, via
 two ``pipes'', called standard output (the normal results) and standard
 error (for error messages and debug messages). There is also standard
 input, which is any text fed into the tool. These names get shortened
@@ -8967,6 +8977,60 @@ If you are working on partial coding sequences, you may prefer to use
 \verb|nuc_record.seq.translate(to_stop=True)| in the example above, as
 this wouldn't check for a valid start codon etc.
 
+\subsection{Sorting a sequence file}
+\label{sec:SeqIO-sort}
+
+Suppose you wanted to sort a sequence file by length (e.g. a set of
+contigs from an assembly), and you are working with a file format like
+FASTA or FASTQ which \verb|Bio.SeqIO| can read, write (and index).
+
+If the file is small enough, you can load it all into memory at once
+as a list of \verb|SeqRecord| objects, sort the list, and save it:
+
+\begin{verbatim}
+from Bio import SeqIO
+records = list(SeqIO.parse("ls_orchid.fasta","fasta"))
+records.sort(cmp=lambda x,y: cmp(len(x),len(y)))
+SeqIO.write(records, "sorted_orchids.fasta", "fasta")
+\end{verbatim}
+
+The only clever bit is specifying a comparison function for how to
+sort the records (here we sort them by length). If you wanted the
+longest records first, you could flip the comparison or use the
+reverse argument:
+
+\begin{verbatim}
+from Bio import SeqIO
+records = list(SeqIO.parse("ls_orchid.fasta","fasta"))
+records.sort(cmp=lambda x,y: cmp(len(y),len(x)))
+SeqIO.write(records, "sorted_orchids.fasta", "fasta")
+\end{verbatim}
+
+Now that's pretty straight forward - but what happens if you have a
+very large file and you can't load it all into memory like this?
+For example, you might have some next-generation sequencing reads
+to sort by length. This can be solved using the
+\verb|Bio.SeqIO.index()| function.
+
+\begin{verbatim}
+from Bio import SeqIO
+#Get the lengths and ids, and sort on length                         
+len_and_ids = sorted((len(rec), rec.id) for rec in \
+                     SeqIO.parse("ls_orchid.fasta","fasta"))
+ids = reversed([id for (length, id) in len_and_ids])
+del len_and_ids	#free this memory                                                     
+record_index = SeqIO.index("ls_orchid.fasta", "fasta")
+records = (record_index[id] for id in ids)
+SeqIO.write(records, "sorted.fasta", "fasta")
+\end{verbatim}
+
+First we scan through the file once using \verb|Bio.SeqIO.parse()|,
+recording the record identifiers and their lengths in a list of tuples.
+We then sort this list to get them in length order, and discard the lengths.
+Using this sorted list of identifiers \verb|Bio.SeqIO.index()| allows us to
+retrieve the records one by one, and we pass them to \verb|Bio.SeqIO.write()|
+for output.
+
 \subsection{Simple quality filtering for FASTQ files}
 \label{sec:FASTQ-filtering-example}
 
@@ -9355,6 +9419,10 @@ Seq('AAAATCATCTCTGGCGCCCCGTTGGAACCGAAAGGGTTTGAATTCAAACCCTTT...CAG', SingleLetter
 
 When testing this on a FASTQ file with seven million reads,
 indexing took about a minute, but record access was almost instant.
+
+The example in Section~\ref{sec:SeqIO-sort} show how you can use the
+\verb|Bio.SeqIO.index()| function to sort a large FASTA file -- this
+could also be used on FASTQ files.
 
 \subsection{Converting SFF files}
 \label{sec:SeqIO-sff-conversion}
