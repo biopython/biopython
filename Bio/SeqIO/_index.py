@@ -139,6 +139,16 @@ class _IndexedSeqFileDict(dict):
         except KeyError:
             return d
 
+    def get_raw(self, key):
+        """Similar to the get method, but returns the record as a raw string.
+
+        If the key is not found, a KeyError exception is raised.
+
+        NOTE - This functionality is not supported for every file format.
+        """
+        #Should be done by each sub-class (if possible)
+        raise NotImplementedError("Not available for this file format.")
+
     def __setitem__(self, key, value):
         """Would allow setting or replacing records, but not implemented."""
         raise NotImplementedError("An indexed a sequence file is read only.")
@@ -255,6 +265,7 @@ class _SequentialSeqFileDict(_IndexedSeqFileDict):
         handle = self._handle
         marker_re = re.compile("^%s" % marker)
         marker_offset = len(marker)
+        self._marker_re = marker_re #saved for the get_raw method
         while True:
             offset = handle.tell()
             line = handle.readline()
@@ -264,6 +275,21 @@ class _SequentialSeqFileDict(_IndexedSeqFileDict):
                 #marker. This is generally fine... but not for GenBank, EMBL, Swiss
                 self._record_key(line[marker_offset:].strip().split(None, 1)[0], \
                                  offset)
+
+    def get_raw(self, key):
+        """Similar to the get method, but returns the record as a raw string."""
+        #For non-trivial file formats this must be over-ridden in the subclass
+        handle = self._handle
+        marker_re = self._marker_re
+        handle.seek(dict.__getitem__(self, key))
+        data = handle.readline()
+        while True:
+            line = handle.readline()
+            if not line or marker_re.match(line):
+                #End of file, or start of next record => end of this record
+                break
+            data += line
+        return data
 
 class FastaDict(_SequentialSeqFileDict):
     """Indexed dictionary like access to a FASTA file."""
@@ -300,13 +326,14 @@ class AceDict(_SequentialSeqFileDict):
 # Fiddly indexers: GenBank, EMBL, ... #
 #######################################
 
-class GenBankDict(_IndexedSeqFileDict):
+class GenBankDict(_SequentialSeqFileDict):
     """Indexed dictionary like access to a GenBank file."""
     def __init__(self, filename, alphabet, key_function):
         _IndexedSeqFileDict.__init__(self, filename, alphabet, key_function)
         self._format = "genbank"
         handle = self._handle
         marker_re = re.compile("^LOCUS ")
+        self._marker_re = marker_re #saved for the get_raw method
         while True:
             offset = handle.tell()
             line = handle.readline()
@@ -338,13 +365,14 @@ class GenBankDict(_IndexedSeqFileDict):
                     raise ValueError("Did not find ACCESSION/VERSION lines")
                 self._record_key(key, offset)
 
-class EmblDict(_IndexedSeqFileDict):
+class EmblDict(_SequentialSeqFileDict):
     """Indexed dictionary like access to an EMBL file."""
     def __init__(self, filename, alphabet, key_function):
         _IndexedSeqFileDict.__init__(self, filename, alphabet, key_function)
         self._format = "embl"
         handle = self._handle
         marker_re = re.compile("^ID ")
+        self._marker_re = marker_re #saved for the get_raw method
         while True:
             offset = handle.tell()
             line = handle.readline()
@@ -373,13 +401,14 @@ class EmblDict(_IndexedSeqFileDict):
                         break
                 self._record_key(key, offset)
 
-class SwissDict(_IndexedSeqFileDict):
+class SwissDict(_SequentialSeqFileDict):
     """Indexed dictionary like access to a SwissProt file."""
     def __init__(self, filename, alphabet, key_function):
         _IndexedSeqFileDict.__init__(self, filename, alphabet, key_function)
         self._format = "swiss"
         handle = self._handle
         marker_re = re.compile("^ID ")
+        self._marker_re = marker_re #saved for the get_raw method
         while True:
             offset = handle.tell()
             line = handle.readline()
@@ -392,13 +421,14 @@ class SwissDict(_IndexedSeqFileDict):
                 key = line[3:].strip().split(";")[0].strip()
                 self._record_key(key, offset)
 
-class IntelliGeneticsDict(_IndexedSeqFileDict):
+class IntelliGeneticsDict(_SequentialSeqFileDict):
     """Indexed dictionary like access to a IntelliGenetics file."""
     def __init__(self, filename, alphabet, key_function):
         _IndexedSeqFileDict.__init__(self, filename, alphabet, key_function)
         self._format = "ig"
         handle = self._handle
         marker_re = re.compile("^;")
+        self._marker_re = marker_re #saved for the get_raw method
         while True:
             offset = handle.tell()
             line = handle.readline()
@@ -434,6 +464,12 @@ class TabDict(_IndexedSeqFileDict):
                     raise err
             else:
                 self._record_key(key, offset)
+
+    def get_raw(self, key):
+        """Like the get method, but returns the record as a raw string."""
+        handle = self._handle
+        handle.seek(dict.__getitem__(self, key))
+        return handle.readline()
 
 ##########################
 # Now the FASTQ indexers #
@@ -485,6 +521,48 @@ class _FastqSeqFileDict(_IndexedSeqFileDict):
             if seq_len != qual_len:
                 raise ValueError("Problem with quality section")
         #print "EOF"
+
+    def get_raw(self, key):
+        """Similar to the get method, but returns the record as a raw string."""
+        #TODO - Refactor this and the __init__ method to reduce code duplication?
+        handle = self._handle
+        handle.seek(dict.__getitem__(self, key))
+        line = handle.readline()
+        data = line
+        if line[0] != "@":
+            raise ValueError("Problem with FASTQ @ line:\n%s" % repr(line))
+        identifier = line[1:].rstrip().split(None, 1)[0]
+        if self._key_function:
+            identifier = self._key_function(identifier)
+        if key != identifier:
+            raise ValueError("Key did not match")
+        #Find the seq line(s)
+        seq_len = 0
+        while line:
+            line = handle.readline()
+            data += line
+            if line.startswith("+") : break
+            seq_len += len(line.strip())
+        if not line:
+            raise ValueError("Premature end of file in seq section")
+        assert line[0]=="+"
+        #Find the qual line(s)
+        qual_len = 0
+        while line:
+            if seq_len == qual_len:
+                #Should be end of record...
+                pos = handle.tell()
+                line = handle.readline()
+                if line and line[0] != "@":
+                    ValueError("Problem with line %s" % repr(line))
+                break
+            else:
+                line = handle.readline()
+                data += line
+                qual_len += len(line.strip())
+        if seq_len != qual_len:
+            raise ValueError("Problem with quality section")
+        return data
 
 class FastqSangerDict(_FastqSeqFileDict):
     """Indexed dictionary like access to a standard Sanger FASTQ file."""

@@ -102,6 +102,39 @@ Many but not all of the supported input file formats can be indexed like
 this. For example "fasta", "fastq", "qual" and even the binary format "sff"
 work, but alignment formats like "phylip", "clustalw" and "nexus" will not.
 
+In most cases you can also use SeqIO.index to get the record from the file
+as a raw string (not a SeqRecord). This can be useful for example to extract
+a sub-set of records from a file where SeqIO cannot output the file format
+(e.g. the plain text SwissProt format, "swiss") or where it is important to
+keep the output 100% identical to the input). For example,
+
+    >>> from Bio import SeqIO
+    >>> record_dict = SeqIO.index("Fasta/f002", "fasta")
+    >>> len(record_dict)
+    3
+    >>> print record_dict.get_raw("gi|1348917|gb|G26685|G26685")
+    >gi|1348917|gb|G26685|G26685 human STS STS_D11734.
+    CGGAGCCAGCGAGCATATGCTGCATGAGGACCTTTCTATCTTACATTATGGCTGGGAATCTTACTCTTTC
+    ATCTGATACCTTGTTCAGATTTCAAAATAGTTGTAGCCTTATCCTGGTTTTACAGATGTGAAACTTTCAA
+    GAGATTTACTGACTTTCCTAGAATAGTTTCTCTACTGGAAACCTGATGCTTTTATAAGCCATTGTGATTA
+    GGATGACTGTTACAGGCTTAGCTTTGTGTGAAANCCAGTCACCTTTCTCCTAGGTAATGAGTAGTGCTGT
+    TCATATTACTNTAAGTTCTATAGCATACTTGCNATCCTTTANCCATGCTTATCATANGTACCATTTGAGG
+    AATTGNTTTGCCCTTTTGGGTTTNTTNTTGGTAAANNNTTCCCGGGTGGGGGNGGTNNNGAAA
+    <BLANKLINE>
+    >>> print record_dict["gi|1348917|gb|G26685|G26685"].format("fasta")
+    >gi|1348917|gb|G26685|G26685 human STS STS_D11734.
+    CGGAGCCAGCGAGCATATGCTGCATGAGGACCTTTCTATCTTACATTATGGCTGGGAATC
+    TTACTCTTTCATCTGATACCTTGTTCAGATTTCAAAATAGTTGTAGCCTTATCCTGGTTT
+    TACAGATGTGAAACTTTCAAGAGATTTACTGACTTTCCTAGAATAGTTTCTCTACTGGAA
+    ACCTGATGCTTTTATAAGCCATTGTGATTAGGATGACTGTTACAGGCTTAGCTTTGTGTG
+    AAANCCAGTCACCTTTCTCCTAGGTAATGAGTAGTGCTGTTCATATTACTNTAAGTTCTA
+    TAGCATACTTGCNATCCTTTANCCATGCTTATCATANGTACCATTTGAGGAATTGNTTTG
+    CCCTTTTGGGTTTNTTNTTGGTAAANNNTTCCCGGGTGGGGGNGGTNNNGAAA
+    <BLANKLINE>
+
+Here the original file and what Biopython would output differ in the line
+wrapping.
+
 Input - Alignments
 ==================
 You can read in alignment files as alignment objects using Bio.AlignIO.

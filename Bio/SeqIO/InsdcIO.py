@@ -283,7 +283,8 @@ class _InsdcWriter(SequentialSequenceWriter):
 
         words = text.split()
         assert max([len(w) for w in words]) < max_len, \
-               "Your description cannot be broken into nice lines!"
+               "Your description cannot be broken into nice lines!:\n%s" \
+               % repr(text)
         text = ""
         while words and len(text) + 1 + len(words[0]) < max_len:
             text += " " + words.pop(0)
