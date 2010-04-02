@@ -2658,6 +2658,7 @@ function to use in building the dictionary:
 \noindent Easy when you know how?
 
 \subsection{Getting the raw data for a record}
+\label{sec:seqio-index-getraw}
 
 The dictionary-like object from \verb|Bio.SeqIO.index()| gives you each
 entry as a \verb|SeqRecord| object. However, it is sometimes useful to
@@ -2669,7 +2670,7 @@ from the file without modification).
 A motivating example is extracting a subset of a records from a large
 file where either \verb|Bio.SeqIO.write()| does not (yet) support the
 output file format (e.g. the plain text SwissProt file format) or
-where you need to preserve the text exactly (e.g.GenBank or EMBL
+where you need to preserve the text exactly (e.g. GenBank or EMBL
 output from Biopython does not yet preserve every last bit of
 annotation).
 
@@ -2683,7 +2684,7 @@ want to extract just a few records from it:
 >>> from Bio import SeqIO
 >>> uniprot = SeqIO.index("uniprot_sprot.dat", "swiss")
 >>> handle = open("selected.dat", "w")
->>> for acc in ["ABP1_ARATH", "ABP1_HUMAN", "ABP1_MAIZE", "ABP1_MOUSE", "ABP1_PIG"]:
+>>> for acc in ["P33487", "P19801", "P13689", "Q8JZQ5", "Q9TRC7"]:
 ...     handle.write(uniprot.get_raw(acc))
 >>> handle.close()
 \end{verbatim}
@@ -2781,6 +2782,40 @@ Suppose you wanted to know how many records the \verb|Bio.SeqIO.write()| functio
 If your records were in a list you could just use \verb|len(my_records)|, however you can't do that when your records come from a generator/iterator.  Therefore as of Biopython 1.49, the \verb|Bio.SeqIO.write()| function returns the number of \verb|SeqRecord| objects written to the file.   
 
 \emph{Note} - If you tell the \verb|Bio.SeqIO.write()| function to write to a file that already exists, the old file will be overwritten without any warning.
+
+\subsection{Round trips}
+
+Some people like their parsers to be ``round-tripable'', meaning if you read in
+a file and write it back out again it is unchanged. This requires that the parser
+must extract enough information to reproduce the original file \emph{exactly}.
+\verb|Bio.SeqIO| does \emph{not} aim to do this.
+
+As a trivial example, any line wrapping of the sequence data in FASTA files is
+allowed. An identical \verb|SeqRecord| would be given from parsing the following
+two examples which differ only in their line breaks:
+
+\begin{verbatim}
+>YAL068C-7235.2170 Putative promoter sequence
+TACGAGAATAATTTCTCATCATCCAGCTTTAACACAAAATTCGCACAGTTTTCGTTAAGA
+GAACTTAACATTTTCTTATGACGTAAATGAAGTTTATATATAAATTTCCTTTTTATTGGA
+
+>YAL068C-7235.2170 Putative promoter sequence
+TACGAGAATAATTTCTCATCATCCAGCTTTAACACAAAATTCGCA
+CAGTTTTCGTTAAGAGAACTTAACATTTTCTTATGACGTAAATGA
+AGTTTATATATAAATTTCCTTTTTATTGGA
+\end{verbatim}
+
+To make a round-tripable FASTA parser you would need to keep track of where the
+sequence line breaks occurred, and this extra information is usually pointless.
+Instead Biopython uses a default line wrapping of $60$ characters on output.
+The same problem with white space applies in many other file formats too.
+Another issue in some cases is that Biopython does not (yet) preserve every
+last bit of annotation (e.g. GenBank and EMBL).
+
+Occasionally preserving the original layout (with any quirks it may have) is
+important. See Section~\ref{sec:seqio-index-getraw} about the \verb|get_raw()|
+method of the \verb|Bio.SeqIO.index()| dictionary-like object for one potential
+solution.
 
 \subsection{Converting between sequence file formats}
 \label{sec:SeqIO-conversion}
@@ -9079,8 +9114,9 @@ for output.
 These examples all use \verb|Bio.SeqIO| to parse the records into
 \verb|SeqRecord| objects which are output using \verb|Bio.SeqIO.write()|.
 What if you want to sort a file format which \verb|Bio.SeqIO.write()| doesn't
-support, like the plain text SwissProt format? Here is another option using
-the \verb|get_raw()| method added to \verb|Bio.SeqIO.index()| in Biopython 1.54.
+support, like the plain text SwissProt format? Here is an alternative
+solution using the \verb|get_raw()| method added to \verb|Bio.SeqIO.index()|
+in Biopython 1.54 (see Section~\ref{sec:seqio-index-getraw}).
 
 \begin{verbatim}
 from Bio import SeqIO
