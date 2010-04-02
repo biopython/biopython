@@ -63,6 +63,8 @@ def get_emboss_version():
     for line in stdout.split("\n"):
         if line.strip()=="Reports the current EMBOSS version number":
             pass
+        elif line.strip()=="Writes the current EMBOSS version number":
+            pass
         elif line.count(".")==2:
             return tuple(int(v) for v in line.strip().split("."))
         else:
