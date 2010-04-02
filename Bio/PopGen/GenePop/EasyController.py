@@ -40,7 +40,7 @@ class EasyController:
         elif test_type=="excess":
             hw_res = self._controller.test_pop_hz_excess(self._fname)
         else:
-            loci_res, hw_res, fisher_full = self._controller.test_pop_hz_prob(self._fname)
+            loci_res, hw_res, fisher_full = self._controller.test_pop_hz_prob(self._fname, ".P")
         for i in range(pop_pos-1):
             hw_res.next()
         return hw_res.next()
