@@ -87,8 +87,8 @@ def to_networkx(tree):
     """Convert a Tree object to a networkx graph.
 
     The result is useful for graph-oriented analysis, and also interactive
-    plotting with pylab, matplotlib or pygraphviz, though the result is not
-    quite a proper dendrogram typically used to represent a phylogeny.
+    plotting with pylab, matplotlib or pygraphviz, though the resulting diagram
+    is usually not ideal for displaying a phylogeny.
 
     Requires NetworkX version 0.99 or 1.0.
     """
@@ -97,7 +97,7 @@ def to_networkx(tree):
     except ImportError:
         from Bio import MissingExternalDependencyError
         raise MissingExternalDependencyError(
-                "The networkx library is not installed.")
+                "Install NetworkX if you want to use to_networkx.")
 
     def add_edge(graph, n1, n2):
         # NB (1/2010): the networkx API congealed recently
@@ -142,6 +142,16 @@ def draw_graphviz(tree, label_func=str, prog='neato', args='',
         >>> pylab.show()
         >>> pylab.savefig('apaf.png')
 
+    The third and fourth parameters apply to Graphviz, and the remaining
+    arbitrary keyword arguments are passed directly to networkx.draw(), which
+    in turn mostly wraps matplotlib/pylab.  See the documentation for Graphviz
+    and networkx for detailed explanations.
+
+    The NetworkX/matplotlib parameters are described in the docstrings for
+    networkx.draw() and pylab.scatter(), but the most reasonable options to try
+    are: I{ alpha, node_color, node_size, node_shape, edge_color, style,
+    font_size, font_color, font_weight, font_family }
+
     @param label_func: A function to extract a label from a node. By default
         this is str(), but you can use a different function to select another
         string associated with each node. If this function returns None for a
@@ -154,14 +164,7 @@ def draw_graphviz(tree, label_func=str, prog='neato', args='',
         the desired value without checking if the intermediate attributes are
         available:
 
-        >>> Phylo.draw_graphviz(tree, lambda n: n.taxonomies[0].code)
-
-    The third and fourth parameters apply to Graphviz, and the remaining
-    arbitrary keyword arguments are passed directly to networkx.draw(), which
-    in turn mostly wraps matplotlib/pylab.  See the documentation for Graphviz
-    and networkx for detailed explanations.
-
-    Graphviz parameters:
+            >>> Phylo.draw_graphviz(tree, lambda n: n.taxonomies[0].code)
 
     @param prog: The Graphviz program to use when rendering the graph. 'twopi'
         behaves the best for large graphs, reliably avoiding crossing edges, but
@@ -172,19 +175,13 @@ def draw_graphviz(tree, label_func=str, prog='neato', args='',
 
     @param args: String of options passed to the external graphviz program.
         Normally not needed, but offered here for completeness.
-
-    The NetworkX/matplotlib parameters are described in the docstrings for
-    networkx.draw() and pylab.scatter(), but the most reasonable options to try
-    are: 
-        alpha, node_color, node_size, node_shape, edge_color, style,
-        font_size, font_color, font_weight, font_family
     """
     try:
         import networkx
     except ImportError:
         from Bio import MissingExternalDependencyError
         raise MissingExternalDependencyError(
-                "The networkx library is not installed.")
+                "Install NetworkX if you want to use to_networkx.")
 
     G = to_networkx(tree)
     Gi = networkx.convert_node_labels_to_integers(G, discard_old_labels=False)
@@ -195,7 +192,8 @@ def draw_graphviz(tree, label_func=str, prog='neato', args='',
             posi = networkx.pydot_layout(Gi, prog)
         except ImportError:
             raise MissingExternalDependencyError(
-                    "Neither PyGraphviz nor Pydot is installed.")
+                    "Install PyGraphviz or Pydot if you want to use "
+                    "draw_graphviz.")
     posn = dict((n, posi[Gi.node_labels[n]]) for n in G)
 
     def get_label_mapping(G, selection):
@@ -223,7 +221,7 @@ def draw_graphviz(tree, label_func=str, prog='neato', args='',
 def draw_ascii(tree, file=sys.stdout, column_width=80):
     """Draw an ascii-art phylogram of the given tree.
 
-    The printed result looks like:
+    The printed result looks like::
 
                                         _________ Orange
                          ______________|

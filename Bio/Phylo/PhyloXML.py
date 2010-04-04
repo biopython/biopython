@@ -116,6 +116,7 @@ class Other(PhyloElement):
 class Phylogeny(PhyloElement, BaseTree.Tree):
     """A phylogenetic tree.
 
+    @param root: the root node/clade of this tree
     @param rooted: True if this tree is rooted
     @param rerootable: True if this tree is rerootable
     @param branch_length_unit: unit for branch_length values on clades
@@ -126,7 +127,6 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
     @param description: plain-text description
     @param date: date for the root node of this tree (type Date)
     @param confidences: list of Confidence objects for this tree
-    @param clade: the root node/clade of this tree
     @param clade_relations: list of CladeRelation objects
     @param sequence_relations: list of SequenceRelation objects
     @param properties: list of Property objects
@@ -310,8 +310,8 @@ class Clade(PhyloElement, BaseTree.Subtree):
 class Accession(PhyloElement):
     """Captures the local part in a sequence identifier.
 
-    Example: In 'UniProtKB:P17304', the value of Accession is 'P17304'  and the
-    'source' attribute is 'UniProtKB'.
+    Example: In 'UniProtKB:P17304', the Accession instance attribute 'value' is
+    'P17304' and the 'source' attribute is 'UniProtKB'.
     """
     def __init__(self, value, source):
         self.value = value

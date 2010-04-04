@@ -214,26 +214,6 @@ class TreeMixin(object):
             **kwargs):
         """Find all tree elements matching the given attributes.
 
-        @param cls: 
-            Specifies the class of the object to search for. Objects that
-            inherit from this type will also match. (The default, TreeElement,
-            matches any standard Bio.Phylo type.)
-        @type cls: type
-
-        @param terminal:
-            A boolean value to select for or against terminal nodes (a.k.a. leaf
-            nodes). True searches for only terminal nodes, False excludes
-            terminal nodes, and the default, None, searches both terminal and
-            non-terminal nodes, as well as any tree elements lacking the
-            'is_terminal' method.
-        @type terminal: bool
-
-        @param order:
-            Tree traversal order: 'preorder' (default) is depth-first search,
-            'postorder' is DFS with child nodes preceding parents, and 'level'
-            is breadth-first search.
-        @type order: string ('preorder'|'postorder'|'level')
-
         The arbitrary keyword arguments indicate the attribute name of the
         sub-element and the value to match: string, integer or boolean. Strings
         are evaluated as regular expression matches; integers are compared
@@ -255,6 +235,26 @@ class TreeMixin(object):
             >>> matches = phx.phylogenies[5].find_all(code='OCTVU')
             >>> matches.next()
             Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
+
+        @param cls: 
+            Specifies the class of the object to search for. Objects that
+            inherit from this type will also match. (The default, TreeElement,
+            matches any standard Bio.Phylo type.)
+        @type cls: type
+
+        @param terminal:
+            A boolean value to select for or against terminal nodes (a.k.a. leaf
+            nodes). True searches for only terminal nodes, False excludes
+            terminal nodes, and the default, None, searches both terminal and
+            non-terminal nodes, as well as any tree elements lacking the
+            'is_terminal' method.
+        @type terminal: bool
+
+        @param order:
+            Tree traversal order: 'preorder' (default) is depth-first search,
+            'postorder' is DFS with child nodes preceding parents, and 'level'
+            is breadth-first search.
+        @type order: string ('preorder'|'postorder'|'level')
         """ 
         assert isinstance(cls, type), "cls argument must be a class or type"
         match_class = _class_matcher(cls)
@@ -503,7 +503,7 @@ class TreeMixin(object):
         and its branch length added to remaining terminal node. This might be no
         longer a meaningful value.
 
-        @return parent clade of the pruned target
+        @return: parent clade of the pruned target
         """
         path = self.get_path(target)
         if not path:
@@ -667,8 +667,8 @@ class Subtree(TreeElement, TreeMixin):
         The length of the branch leading to the root node of this subtree.
     @type branch_length: str
 
-    @param label: The label of a node.
-    @type label: str
+    @param name: The clade's name (a label).
+    @type name: str
 
     @param clades: Sub-trees rooted directly under this tree's root.
     @type clades: list

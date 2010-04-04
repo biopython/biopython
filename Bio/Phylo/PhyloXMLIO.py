@@ -214,8 +214,8 @@ def _indent(elem, level=0):
     """Add line breaks and indentation to ElementTree in-place.
 
     Sources:
-        U{ http://effbot.org/zone/element-lib.htm#prettyprint }
-        U{ http://infix.se/2007/02/06/gentlemen-indent-your-xml }
+        - U{ http://effbot.org/zone/element-lib.htm#prettyprint }
+        - U{ http://infix.se/2007/02/06/gentlemen-indent-your-xml }
     """
     i = "\n" + level*"  "
     if len(elem):
