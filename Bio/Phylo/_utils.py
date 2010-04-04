@@ -49,39 +49,6 @@ def pretty_print(treeobj, file=sys.stdout, show_all=False, indent=0):
 
     print_tree(treeobj, indent)
 
-# XXX - What about 0-length branches? Uncomment once we've figured this out.
-# def to_adjacency_matrix(tree):
-#     """Create an adjacency matrix (NumPy array) from clades/branches in tree.
-
-#     Also returns a list of all clades in tree ("allclades"), where the position
-#     of each clade in the list corresponds to a row and column of the numpy
-#     array. So, a cell i,j in the array represents the length of the branch from
-#     allclades[i] to allclades[j].
-
-#     @return: tuple of (allclades, adjacency_matrix) where allclades is a list
-#     and adjacency_matrix is a NumPy 2D array.
-#     """
-#     try:
-#         import numpy
-#     except ImportError:
-#         from Bio import MissingExternalDependencyError
-#         raise MissingExternalDependencyError(
-#                 "Install NumPy if you want to use to_adjacency_matrix.")
-
-#     # ENH/future: use OrderedDict for both lookup and allclades
-#     allclades = list(tree.find_clades(order='level'))
-#     lookup = {}
-#     for i, elem in enumerate(allclades):
-#         lookup[elem] = i
-#     adj = numpy.zeros((len(allclades), len(allclades)))
-#     for parent in tree.find_clades(terminal=False, order='level'):
-#         for child in parent.clades:
-#             if child.branch_length:
-#                 adj[lookup[parent], lookup[child]] = child.branch_length
-#     if not tree.rooted:
-#         adj += adj.transpose
-#     return (allclades, adj)
-
 
 def to_networkx(tree):
     """Convert a Tree object to a networkx graph.
@@ -101,7 +68,7 @@ def to_networkx(tree):
 
     def add_edge(graph, n1, n2):
         # NB (1/2010): the networkx API congealed recently
-        # Ubuntu Karmic uses v0.99, newest is v1.0, let's support both
+        # Ubuntu Lucid uses v0.99, newest is v1.0.1, let's support both
         if networkx.__version__ >= '1.0':
             graph.add_edge(n1, n2, weight=str(n2.branch_length or 1.0))
             if hasattr(n2, 'color') and n2.color is not None:
