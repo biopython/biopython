@@ -1,4 +1,3 @@
-#include <stdio.h>
 /* The C clustering library.
  * Copyright (C) 2002 Michiel Jan Laurens de Hoon.
  *

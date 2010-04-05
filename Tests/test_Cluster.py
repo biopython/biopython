@@ -767,10 +767,10 @@ class TestCluster(unittest.TestCase):
         self.assertAlmostEqual(pc[2,1],  0.091155993862151397)
         self.assertAlmostEqual(pc[2,2],  0.045630391256086845)
         self.assertAlmostEqual(pc[2,3], -0.67456694780914772)
-        self.assertAlmostEqual(pc[3,0], -0.048761895268936734)
-        self.assertAlmostEqual(pc[3,1], -0.67539991756847362)
-        self.assertAlmostEqual(pc[3,2],  0.12236256199075392)
-        self.assertAlmostEqual(pc[3,3],  0.26108894408374461)
+        # As the last eigenvalue is zero, the corresponding eigenvector is
+        # strongly affected by roundoff error, and is not being tested here.
+        # For PCA, this doesn't matter since all data have a zero coefficient
+        # along this eigenvector.
         self.assertAlmostEqual(eigenvalues[0], 6.7678878332578778)
         self.assertAlmostEqual(eigenvalues[1], 3.0108911400291856)
         self.assertAlmostEqual(eigenvalues[2], 1.8775592718563467)
