@@ -65,17 +65,18 @@ def _sorted_attrs(elem):
 # Factory functions to generalize searching for clades/nodes
 
 def _identity_matcher(target):
-    """Match each node (or its root) to the target object by identity."""
+    """Match a node to the target object by identity."""
     def match(node):
         return (node is target)
     return match
 
 def _class_matcher(target_cls):
+    """Match a node if it's an instance of the given class."""
     def match(node):
         return isinstance(node, target_cls)
     return match
 
-def _attribute_matcher(**kwargs):
+def _attribute_matcher(kwargs):
     """Match a node by specified attribute values.
 
     'terminal' is a special case: True restricts the search to external (leaf)
@@ -89,14 +90,17 @@ def _attribute_matcher(**kwargs):
     multiple keys.
     """
     def match(node):
-        for key, pattern in kwargs.iteritems():
+        if 'terminal' in kwargs:
             # Special case: restrict to internal/external/any nodes
-            if key == 'terminal':
-                if (pattern is None
-                    or (hasattr(node, 'is_terminal')
-                        and node.is_terminal() == pattern)):
-                    continue
-                return False
+            kwa_copy = kwargs.copy()
+            pattern = kwa_copy.pop('terminal')
+            if (pattern is not None
+                and (not hasattr(node, 'is_terminal')
+                    or node.is_terminal() != pattern)):
+                    return False
+        else:
+            kwa_copy = kwargs
+        for key, pattern in kwa_copy.iteritems():
             # Nodes must match all other specified attributes
             if not hasattr(node, key):
                 return False
@@ -115,7 +119,7 @@ def _attribute_matcher(**kwargs):
     return match
 
 def _function_matcher(matcher_func):
-    """Safer attribute lookup -- returns False instead of raising"""
+    """Safer attribute lookup -- returns False instead of raising an error."""
     def match(node):
         try:
             return matcher_func(node)
@@ -140,10 +144,26 @@ def _object_matcher(obj):
     if isinstance(obj, type):
         return _class_matcher(obj)
     if isinstance(obj, dict):
-        return _attribute_matcher(**obj)
+        return _attribute_matcher(obj)
     if callable(obj):
         return _function_matcher(obj)
-    raise ValueError("%s (type %s) is not a valid type for comparison.")
+    raise ValueError("%s (type %s) is not a valid type for comparison."
+                     % (obj, type(obj)))
+
+def _combine_matchers(target, kwargs, require_spec):
+    # ENH: handle terminal=foo here?
+    if not target:
+        if not kwargs:
+            if require_spec:
+                raise ValueError("you must specify a target object or keyword "
+                                "arguments.")
+            return lambda x: True
+        return _attribute_matcher(kwargs)
+    match_obj = _object_matcher(target)
+    if not kwargs:
+        return match_obj
+    match_kwargs = _attribute_matcher(kwargs)
+    return (lambda x: match_obj(x) and match_kwargs(x))
 
 
 # Class definitions
@@ -210,7 +230,7 @@ class TreeMixin(object):
         except StopIteration:
             return None
 
-    def find_all(self, cls=TreeElement, terminal=None, order='preorder',
+    def find_all(self, target=None, terminal=None, order='preorder',
             **kwargs):
         """Find all tree elements matching the given attributes.
 
@@ -236,11 +256,10 @@ class TreeMixin(object):
             >>> matches.next()
             Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
 
-        @param cls: 
-            Specifies the class of the object to search for. Objects that
-            inherit from this type will also match. (The default, TreeElement,
-            matches any standard Bio.Phylo type.)
-        @type cls: type
+        @param target: 
+            Specifies the characteristics to search for. (The default,
+            TreeElement, matches any standard Bio.Phylo type.)
+        @type target: TreeElement instance, type, dict, or callable
 
         @param terminal:
             A boolean value to select for or against terminal nodes (a.k.a. leaf
@@ -256,19 +275,12 @@ class TreeMixin(object):
             is breadth-first search.
         @type order: string ('preorder'|'postorder'|'level')
         """ 
-        assert isinstance(cls, type), "cls argument must be a class or type"
-        match_class = _class_matcher(cls)
         if terminal is not None:
             kwargs['terminal'] = terminal
-        if kwargs:
-            match_attr = _attribute_matcher(**kwargs)
-            def is_matching_elem(elem):
-                return (match_class(elem) and match_attr(elem))
-        else:
-            is_matching_elem = match_class
+        is_matching_elem = _combine_matchers(target, kwargs, False)
         return self._filter_search(is_matching_elem, order, True)
 
-    def find_clades(self, cls=TreeElement, terminal=None, order='preorder',
+    def find_clades(self, target=None, terminal=None, order='preorder',
             **kwargs):
         """Find each clade containing a matching element.
 
@@ -277,7 +289,7 @@ class TreeMixin(object):
         """
         def match_attrs(elem):
             orig_clades = elem.__dict__.pop('clades')
-            found = elem.find(cls=cls, **kwargs)
+            found = elem.find(target, **kwargs)
             elem.clades = orig_clades
             return (found is not None)
         if terminal is None:
@@ -288,7 +300,7 @@ class TreeMixin(object):
                         and match_attrs(elem))
         return self._filter_search(is_matching_elem, order, False)
 
-    def get_path(self, target):
+    def get_path(self, target=None, **kwargs):
         """List the clades directly between the root and the given target.
 
         Returns a list of all clade objects along this path, ending with
@@ -296,7 +308,7 @@ class TreeMixin(object):
         """
         # Only one path will work -- ignore weights and visits
         path = []
-        match = _object_matcher(target)
+        match = _combine_matchers(target, kwargs, True)
         def check_in_path(v):
             if match(v):
                 path.append(v)
@@ -421,12 +433,12 @@ class TreeMixin(object):
             else:
                 return False
 
-    def is_parent_of(self, target):
+    def is_parent_of(self, target=None, **kwargs):
         """True if target is a descendent of this tree.
 
         Not required to be a direct descendent.
         """
-        return (self.get_path(target) is not None)
+        return (self.get_path(target, **kwargs) is not None)
 
     def is_preterminal(self):
         """True if all direct descendents are terminal."""
@@ -444,19 +456,20 @@ class TreeMixin(object):
 
     # Tree manipulation methods
 
-    def collapse(self, target):
+    def collapse(self, target=None, **kwargs):
         """Deletes target from the tree, relinking its children to its parent.
 
         @return: the parent clade.
         """
-        path = list(self.get_path(target))
+        path = self.get_path(target, **kwargs)
         if not path:
-            raise ValueError("couldn't collapse %s in this tree" % target)
+            raise ValueError("couldn't collapse %s in this tree"
+                             % (target or kwargs))
         if len(path) == 1:
             parent = self.root
         else:
             parent = path[-2]
-        popped = parent.clades.pop(parent.clades.index(target))
+        popped = parent.clades.pop(parent.clades.index(path[-1]))
         extra_length = popped.branch_length or 0
         for child in popped:
             child.branch_length += extra_length
@@ -496,7 +509,7 @@ class TreeMixin(object):
             subclade.ladderize(reverse=reverse)
 
     # TODO - unit test
-    def prune(self, target):
+    def prune(self, target=None, **kwargs):
         """Prunes a terminal clade from the tree.
 
         If taxon is from a bifurcation, the connecting node will be collapsed
@@ -505,7 +518,7 @@ class TreeMixin(object):
 
         @return: parent clade of the pruned target
         """
-        path = self.get_path(target)
+        path = self.get_path(target, **kwargs)
         if not path:
             raise ValueError("can't prune the root clade")
         if not path[-1].is_terminal():
