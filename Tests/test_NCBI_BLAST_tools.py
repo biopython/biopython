@@ -103,6 +103,10 @@ class CheckCompleteArgList(unittest.TestCase):
                   "(Exta args: %s; Missing: %s)" \
                   % (exe_name, ",".join(sorted(extra)), ",".join(sorted(missing))))
 
+        #An almost trivial example to test any validation
+        cline = wrapper(exe, query="dummy")
+        str(cline)
+
     def test_blastx(self):
         """Check all blastx arguments are supported"""
         self.check("blastx", Applications.NcbiblastxCommandline)
