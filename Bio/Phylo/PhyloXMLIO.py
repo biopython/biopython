@@ -440,7 +440,8 @@ class Parser(object):
                 elif tag == 'name':
                     clade.name = collapse_wspace(elem.text)
                 elif tag == 'node_id':
-                    clade.node_id = elem.text and elem.text.strip() or None
+                    clade.node_id = PX.Id(elem.text.strip(),
+                                          elem.attrib.get('provider'))
                 elif namespace != NAMESPACES['phy']:
                     clade.other.append(self.other(elem, namespace, tag))
                     elem.clear()
