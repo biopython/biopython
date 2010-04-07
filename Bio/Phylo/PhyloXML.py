@@ -212,8 +212,10 @@ class Clade(PhyloElement, BaseTree.Subtree):
 
     Used recursively, describes the topology of a phylogenetic tree.
 
-    Both 'color' and 'width' elements apply for the whole clade unless
-    overwritten in-sub clades.
+    Both 'color' and 'width' elements should be interpreted by client code as
+    applying to the whole clade, including all descendents, unless overwritten
+    in-sub clades. This module doesn't automatically assign these attributes to
+    sub-clades to achieve this cascade -- and neither should you.
 
     @param branch_length: parent branch length of this clade
     @param id_source: link other elements to a clade (on the xml-level)
@@ -221,7 +223,7 @@ class Clade(PhyloElement, BaseTree.Subtree):
     @param name: short string label for this clade
     @param confidences: list of Confidence objects, used to indicate the
         support for a clade/parent branch.
-    @param width: branch width for this clade (including parent branch)
+    @param width: branch width for this clade (including branch from parent)
     @param color: color used for graphical display of this clade
     @param node_id: unique identifier for the root node of this clade
     @param taxonomies: list of Taxonomy objects
@@ -380,10 +382,11 @@ class BinaryCharacters(PhyloElement):
 class BranchColor(PhyloElement):
     """Indicates the color of a clade when rendered graphically.
 
-    The color applies to the whole clade unless overwritten by the color(s) of
-    sub-clades.
+    The color should be interpreted by client code (e.g. visualization
+    programs) as applying to the whole clade, unless overwritten by the
+    color(s) of sub-clades.
 
-    Color values should be unsigned bytes, or integers from 0 to 255.
+    Color values must be integers from 0 to 255.
     """
 
     color_names = {
