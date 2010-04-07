@@ -426,13 +426,29 @@ class BranchColor(PhyloElement):
             }
 
     def __init__(self, red, green, blue):
-        assert (isinstance(red, int)
-                and isinstance(green, int)
-                and isinstance(blue, int)
-                ), "Color values must be integers between 0 and 255."
+        for color in (red, green, blue):
+            assert (isinstance(color, int)
+                    and 0 <= color <= 255
+                    ), "Color values must be integers between 0 and 255."
         self.red = red
         self.green = green
         self.blue = blue
+
+    @classmethod
+    def from_hex(cls, hexstr):
+        """Construct a BranchColor object from a hexadecimal string.
+
+        The string format is the same style used in HTML and CSS, such as
+        '#FF8000' for an RGB value of (255, 128, 0).
+        """
+        assert (isinstance(hexstr, basestring)
+                and hexstr.startswith('#')
+                and len(hexstr) == 7
+                ), "need a 24-bit hexadecimal string, e.g. #000000"
+        def unpack(cc):
+            return int('0x'+cc, base=16)
+        RGB = hexstr[1:3], hexstr[3:5], hexstr[5:]
+        return cls(*map(unpack, RGB))
 
     @classmethod
     def from_name(cls, colorname):
