@@ -467,6 +467,16 @@ class BranchColor(PhyloElement):
         """
         return (self.red/255.0, self.green/255.0, self.blue/255.0)
 
+    def __repr__(self):
+        """Preserve the standard RGB order when representing this object."""
+        return ('%s(red=%d, green=%d, blue=%d)'
+                % (self.__class__.__name__, self.red, self.green, self.blue)
+                ).encode('utf-8')
+
+    def __str__(self):
+        """Show the color's RGB values."""
+        return "(%d, %d, %d)" % (self.red, self.green, self.blue)
+
 
 class CladeRelation(PhyloElement):
     """Expresses a typed relationship between two clades.
