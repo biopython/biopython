@@ -923,14 +923,6 @@ class NcbitblastxCommandline(_Ncbiblast2SeqCommandline):
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
 
-    def _validate(self):
-        if self.remote and self.in_pssm:
-            raise ValueError("The remote option cannot be used with in_pssm")
-        if self.query and self.in_pssm:
-            raise ValueError("The query option cannot be used with in_pssm")
-        _Ncbiblast2SeqCommandline._validate(self)
-
-
 class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
     """Wrapper for the NCBI BLAST+ program psiblast.
 
