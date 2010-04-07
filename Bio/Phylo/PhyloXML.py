@@ -457,15 +457,15 @@ class BranchColor(PhyloElement):
                 + self.blue)[2:].zfill(6)
 
     def to_rgb(self):
-        """Return a tuple of RGB values (0.0 to 1.0) representing this color.
+        """Return a tuple of RGB values (0 to 255) representing this color.
 
         Example:
 
             >>> bc = BranchColor(255, 165, 0)
             >>> bc.to_rgb()
-            (1.0, 0.6470588235294118, 0.0)
+            (255, 165, 0)
         """
-        return (self.red/255.0, self.green/255.0, self.blue/255.0)
+        return (self.red, self.green, self.blue)
 
     def __repr__(self):
         """Preserve the standard RGB order when representing this object."""
