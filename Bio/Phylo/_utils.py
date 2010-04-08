@@ -71,8 +71,20 @@ def to_networkx(tree):
         # Ubuntu Lucid uses v0.99, newest is v1.0.1, let's support both
         if networkx.__version__ >= '1.0':
             graph.add_edge(n1, n2, weight=str(n2.branch_length or 1.0))
+            # Copy branch color value as hex, if available
             if hasattr(n2, 'color') and n2.color is not None:
                 graph[n1][n2]['color'] = n2.color.to_hex()
+            elif hasattr(n1, 'color') and n1.color is not None:
+                # Cascading color attributes
+                graph[n1][n2]['color'] = n1.color.to_hex()
+                n2.color = n1.color
+            # Copy branch weight value (float) if available
+            if hasattr(n2, 'weight') and n2.weight is not None:
+                graph[n1][n2]['weight'] = n2.weight
+            elif hasattr(n1, 'weight') and n1.weight is not None:
+                # Cascading weight attributes
+                graph[n1][n2]['weight'] = n1.weight
+                n2.weight = n1.weight
         elif networkx.__version__ >= '0.99':
             graph.add_edge(n1, n2, (n2.branch_length or 1.0))
         else:
