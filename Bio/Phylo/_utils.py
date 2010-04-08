@@ -79,12 +79,12 @@ def to_networkx(tree):
                 graph[n1][n2]['color'] = n1.color.to_hex()
                 n2.color = n1.color
             # Copy branch weight value (float) if available
-            if hasattr(n2, 'weight') and n2.weight is not None:
-                graph[n1][n2]['weight'] = n2.weight
-            elif hasattr(n1, 'weight') and n1.weight is not None:
-                # Cascading weight attributes
-                graph[n1][n2]['weight'] = n1.weight
-                n2.weight = n1.weight
+            if hasattr(n2, 'width') and n2.width is not None:
+                graph[n1][n2]['width'] = n2.width
+            elif hasattr(n1, 'width') and n1.width is not None:
+                # Cascading width attributes
+                graph[n1][n2]['width'] = n1.width
+                n2.width = n1.width
         elif networkx.__version__ >= '0.99':
             graph.add_edge(n1, n2, (n2.branch_length or 1.0))
         else:
@@ -193,6 +193,10 @@ def draw_graphviz(tree, label_func=str, prog='neato', args='',
     if 'edge_color' not in kwargs:
         kwargs['edge_color'] = [isinstance(e[2], dict)
                                 and e[2].get('color', 'k') or 'k'
+                                for e in G.edges(data=True)]
+    if 'width' not in kwargs:
+        kwargs['width'] = [isinstance(e[2], dict)
+                                and e[2].get('width', 1.0) or 1.0
                                 for e in G.edges(data=True)]
     networkx.draw(G, posn, labels=labels, node_color=node_color, **kwargs)
 
