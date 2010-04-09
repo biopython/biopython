@@ -305,6 +305,30 @@ class Clade(PhyloElement, BaseTree.Subtree):
                                "use Clade().taxonomies")
         return self.taxonomies[0]
 
+    # Syntax sugar for setting the branch color
+    def _get_color(self):
+        return self._color
+
+    def _set_color(self, arg):
+        if arg is None or isinstance(arg, BranchColor):
+            self._color = arg
+        elif isinstance(arg, basestring):
+            if arg in BranchColor.color_names:
+                # Known color name
+                self._color = BranchColor.from_name(arg)
+            elif arg.startswith('#') and len(arg) == 7:
+                # HTML-style hex string
+                self._color = BranchColor.from_hex(arg)
+            else:
+                raise ValueError("invalid color string %s" % arg)
+        elif hasattr(arg, '__iter__') and len(arg) == 3:
+            # RGB triplet
+            self._color = BranchColor(*arg)
+        else:
+            raise ValueError("invalid color value %s" % arg)
+
+    color = property(_get_color, _set_color, doc="Branch color.")
+
 
 # PhyloXML-specific complex types
 
