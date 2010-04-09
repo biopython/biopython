@@ -12,7 +12,15 @@ import zipfile
 from itertools import izip, chain
 from cStringIO import StringIO
 
-from Bio.Phylo import PhyloXML as PX, PhyloXMLIO
+# Python 2.4 doesn't have ElementTree, which PhyloXMLIO needs
+from Bio import MissingExternalDependencyError
+try:
+    from Bio.Phylo import PhyloXML as PX, PhyloXMLIO
+except ImportError:
+    raise MissingExternalDependencyError(
+            "Install an ElementTree implementation if you want to use "
+            "Bio.Phylo to parse phyloXML files.")
+
 from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
