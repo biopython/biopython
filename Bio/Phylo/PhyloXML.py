@@ -15,7 +15,7 @@ import re
 import warnings
 
 from Bio import Alphabet
-from Bio.Align.Generic import Alignment
+from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
@@ -157,8 +157,8 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
         self.other = other or []
 
     @classmethod
-    def from_tree(self, tree, **kwargs):
-        phy = Phylogeny(
+    def from_tree(cls, tree, **kwargs):
+        phy = cls(
                 root=Clade.from_subtree(tree.root),
                 rooted=tree.rooted,
                 name=tree.name,
@@ -166,31 +166,30 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
         phy.__dict__.update(kwargs)
         return phy
 
-    def from_subtree(self, subtree, **kwargs):
+    @classmethod
+    def from_subtree(cls, subtree, **kwargs):
         return Clade.from_subtree(subtree).to_phylogeny(**kwargs)
 
     def to_phyloxml(self, **kwargs):
         """Create a new PhyloXML object containing just this phylogeny."""
         return Phyloxml(kwargs, phylogenies=[self])
 
-    def get_alignment(self):
+    def to_alignment(self):
         """Construct an alignment from the aligned sequences in this tree."""
-        def is_aligned_seq(node):
-            if isinstance(node, Sequence) and node.mol_seq.is_aligned:
+        def is_aligned_seq(elem):
+            if isinstance(elem, Sequence) and elem.mol_seq.is_aligned:
                 return True
             return False
         seqs = self._filter_search(is_aligned_seq, 'preorder', True)
         try:
             first_seq = seqs.next()
         except StopIteration:
-            # No aligned sequences were found
-            # Can't construct an Alignment without an alphabet, so... nothin'
-            return
-        aln = Alignment(first_seq.get_alphabet())
-        aln.add_sequence(str(first_seq), first_seq.mol_seq.value)
-        for seq in seqs:
-            aln.add_sequence(str(seq), seq.mol_seq.value)
-        return aln
+            # No aligned sequences were found --> empty MSA
+            return MultipleSeqAlignment([])
+        msa = MultipleSeqAlignment([first_seq.to_seqrecord()],
+                                   first_seq.get_alphabet())
+        msa.extend(seq.to_seqrecord() for seq in seqs)
+        return msa
 
     # Singular property for plural attribute
     @property
