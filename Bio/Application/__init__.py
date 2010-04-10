@@ -1,19 +1,26 @@
 # Copyright 2001-2004 Brad Chapman.
-# Revisions copyright 2009 by Peter Cock.
+# Revisions copyright 2009-2010 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """General mechanisms to access applications in Biopython.
 
-This module is not intended for direct use (any more). It provides
-the basic objects for our command line wrappers such as:
+This module is not intended for direct use. It provides the basic objects which
+are subclassed by our command line wrappers, such as:
 
  - Bio.Align.Applications
  - Bio.Blast.Applications
  - Bio.Emboss.Applications
  - Bio.Sequencing.Applications
 
+These modules provide wrapper classes for command line tools to help you
+construct command line strings by setting the values of each parameter.
+The finished command line strings are then normally invoked via the built-in
+Python module subprocess.
+
+This module also includes some deprecated functionality (function generic_run
+and class ApplicationResult) which should not be used anymore.
 """
 import os, sys
 import StringIO
@@ -42,8 +49,9 @@ def generic_run(commandline):
     import warnings
     warnings.warn("Bio.Application.generic_run and the associated "
                   "Bio.Application.ApplicationResult are deprecated. "
-                  "Please use the built in Python module subprocess "
-                  "instead, as described in the Biopython Tutorial.",
+                  "Please use the Bio.Application based wrappers with "
+                  "the built in Python module subprocess instead, as "
+                  "described in the Biopython Tutorial.",
                   DeprecationWarning)
     #We don't need to supply any piped input, but we setup the
     #standard input pipe anyway as a work around for a python
@@ -68,8 +76,8 @@ class ApplicationResult:
     This tries to pick up output information available from the program
     and make it available programmatically.
 
-    NOTE - This obsolete is considered to be obsolete, and we intend to
-    deprecate it and then remove it in future releases of Biopython.
+    NOTE - This class hase been deprecated and we intend to remove it in
+    a future release of Biopython.
     """
     def __init__(self, application_cl, return_code):
         """Intialize with the commandline from the program.
@@ -77,9 +85,10 @@ class ApplicationResult:
         import warnings
         warnings.warn("Bio.Application.ApplicationResult and the "
                       "associated function Bio.Application.generic_run "
-                      "are deprecated. Please use the built in Python "
-                      "module subprocess instead, as described in the "
-                      "Biopython Tutorial", DeprecationWarning)
+                      "are deprecated. Please use the Bio.Application "
+                      "based wrappers with the built in Python module "
+                      "subprocess instead, as described in the Biopython "
+                      "Tutorial.", DeprecationWarning)
         self._cl = application_cl
 
         # provide the return code of the application
