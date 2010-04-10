@@ -324,6 +324,10 @@ class TreeMixin(object):
             return None
         return path[-2::-1]
 
+    def get_nonterminals(self, order='preorder'):
+        """Get a list of all of this tree's nonterminal (internal) nodes."""
+        return list(self.find_clades(terminal=False, order=order))
+
     def get_terminals(self, order='preorder'):
         """Get a list of all of this tree's terminal (leaf) nodes."""
         return list(self.find_clades(terminal=True, order=order))
