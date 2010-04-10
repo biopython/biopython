@@ -97,7 +97,7 @@ def _attribute_matcher(kwargs):
             if (pattern is not None
                 and (not hasattr(node, 'is_terminal')
                     or node.is_terminal() != pattern)):
-                    return False
+                return False
         else:
             kwa_copy = kwargs
         for key, pattern in kwa_copy.iteritems():
@@ -371,10 +371,7 @@ class TreeMixin(object):
 
     def count_terminals(self):
         """Counts the number of terminal (leaf) nodes within this tree."""
-        counter = 0
-        for i, leaf in enumerate(self.find_clades(terminal=True)):
-            counter = i
-        return counter + 1
+        return _sugar.iterlen(self.find_clades(terminal=True))
 
     def depths(self, unit_branch_lengths=False):
         """Create a mapping of tree clades to depths (by branch length).
@@ -639,12 +636,12 @@ class Tree(TreeElement, TreeMixin):
             node.name = name
         return rtree
 
-    # Attributes assumed by TreeMixin
-
     @property
     def clade(self):
         """The first subtree in this tree (not itself)."""
         return self.root
+
+    # Method assumed by TreeMixin
 
     def is_terminal(self):
         """True if the root of this tree is terminal."""
