@@ -218,7 +218,7 @@ class TreeMixin(object):
             root = self.root
         return itertools.ifilter(filter_func, order_func(root, get_children))
 
-    def find(self, *args, **kwargs):
+    def find_any(self, *args, **kwargs):
         """Return the first element found by find_all(), or None.
 
         This is also useful for checking whether any matching element exists in
@@ -289,7 +289,7 @@ class TreeMixin(object):
         """
         def match_attrs(elem):
             orig_clades = elem.__dict__.pop('clades')
-            found = elem.find(target, **kwargs)
+            found = elem.find_any(target, **kwargs)
             elem.clades = orig_clades
             return (found is not None)
         if terminal is None:
