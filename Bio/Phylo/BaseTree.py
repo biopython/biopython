@@ -673,6 +673,33 @@ class Tree(TreeElement, TreeMixin):
         """
         return self.__format__(format)
 
+    # Pretty-printer for the entire tree hierarchy
+
+    def __str__(self):
+        """String representation of the entire tree.
+
+        Serializes each sub-clade recursively using repr() to create a summary
+        of the object structure.
+        """
+        textlines = []
+        def print_tree(obj, indent):
+            """Recursively serialize sub-elements.
+
+            This closes over textlines and modifies it in-place.
+            """
+            textlines.append('\t'*indent + repr(obj))
+            indent += 1
+            for attr in obj.__dict__:
+                child = getattr(obj, attr)
+                if isinstance(child, TreeElement):
+                    print_tree(child, indent)
+                elif isinstance(child, list):
+                    for elem in child:
+                        if isinstance(elem, TreeElement):
+                            print_tree(elem, indent)
+        print_tree(self, 0)
+        return '\n'.join(textlines)
+
 
 class Subtree(TreeElement, TreeMixin):
     """A recursively defined subtree.

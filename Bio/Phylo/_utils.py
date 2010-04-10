@@ -12,43 +12,6 @@ __docformat__ = "epytext en"
 import math
 import sys
 
-import BaseTree
-
-
-def pretty_print(treeobj, file=sys.stdout, show_all=False, indent=0):
-    """Print a summary of the structure of a Phylo tree or subtree object.
-
-    With the show_all option, also prints the primitive (native Python instead
-    of just TreeElement) objects in the object tree.
-    """
-    assert isinstance(treeobj, BaseTree.TreeElement), \
-            "%s is not a valid TreeElement" % repr(treeobj)
-    if show_all:
-        show = repr
-    else:
-        def show(obj):
-            return '%s: %s' % (obj.__class__.__name__, obj)
-
-    # Closing over file
-    def print_indented(text, indent):
-        """Write an indented string of text to file."""
-        file.write('\t'*indent + text + '\n')
-
-    def print_tree(obj, indent):
-        """Recursively print a TreeElement object tree."""
-        print_indented(show(obj), indent)
-        indent += 1
-        for attr in obj.__dict__:
-            child = getattr(obj, attr)
-            if isinstance(child, BaseTree.TreeElement):
-                print_tree(child, indent)
-            elif isinstance(child, list):
-                for elem in child:
-                    if isinstance(elem, BaseTree.TreeElement):
-                        print_tree(elem, indent)
-
-    print_tree(treeobj, indent)
-
 
 def to_networkx(tree):
     """Convert a Tree object to a networkx graph.

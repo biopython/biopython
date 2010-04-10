@@ -156,6 +156,9 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
         self.properties = properties or []
         self.other = other or []
 
+    # Prevent PhyloElement from overriding the pretty-printer
+    __str__ = BaseTree.Tree.__str__
+
     @classmethod
     def from_tree(cls, tree, **kwargs):
         phy = cls(
