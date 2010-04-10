@@ -192,18 +192,32 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
         return msa
 
     # Singular property for plural attribute
-    @property
-    def confidence(self):
+    def _get_confidence(self):
         """Equivalent to self.confidences[0] if there is only 1 value.
 
         See also: Clade.confidence, Clade.taxonomy
         """
         if len(self.confidences) == 0:
-            raise AttributeError("Phylogeny().confidences is empty")
+            return None
         if len(self.confidences) > 1:
-            raise ValueError("more than 1 confidence value available; "
-                               "use Phylogeny().confidences")
+            raise AttributeError("more than 1 confidence value available; "
+                                 "use Phylogeny.confidences")
         return self.confidences[0]
+
+    def _set_confidence(self, value):
+        if isinstance(value, float) or isinstance(value, int):
+            value = Confidence(value)
+        elif not isinstance(value, Confidence):
+            raise ValueError("value must be a number or Confidence instance")
+        if len(self.confidences) == 0:
+            self.confidences.append(value)
+        elif len(self.confidences) == 1:
+            self.confidences[0] = value
+        else:
+            raise ValueError("multiple confidence values already exist; "
+                             "use Phylogeny.confidences instead")
+
+    confidence = property(_get_confidence, _set_confidence)
 
 
 class Clade(PhyloElement, BaseTree.Subtree):
@@ -281,29 +295,50 @@ class Clade(PhyloElement, BaseTree.Subtree):
         phy.__dict__.update(kwargs)
         return phy
 
-    # Potential addition to BaseTree.Subtree
-    # @property
-    # def id(self):
-    #     return self.node_id.value
-
     # Shortcuts for list attributes that are usually only 1 item
-    @property
-    def confidence(self):
+    def _get_confidence(self):
         if len(self.confidences) == 0:
-            raise AttributeError("Clade().confidences is empty")
+            return None
         if len(self.confidences) > 1:
-            raise ValueError("more than 1 confidence value available; "
-                               "use Clade().confidences")
+            raise AttributeError("more than 1 confidence value available; "
+                                 "use Clade.confidences")
         return self.confidences[0]
 
-    @property
-    def taxonomy(self):
+    def _set_confidence(self, value):
+        if isinstance(value, float) or isinstance(value, int):
+            value = Confidence(value)
+        elif not isinstance(value, Confidence):
+            raise ValueError("value must be a number or Confidence instance")
+        if len(self.confidences) == 0:
+            self.confidences.append(value)
+        elif len(self.confidences) == 1:
+            self.confidences[0] = value
+        else:
+            raise ValueError("multiple confidence values already exist; "
+                             "use Phylogeny.confidences instead")
+
+    confidence = property(_get_confidence, _set_confidence)
+
+    def _get_taxonomy(self):
         if len(self.taxonomies) == 0:
-            raise AttributeError("Clade().taxonomies is empty")
+            return None
         if len(self.taxonomies) > 1:
-            raise ValueError("more than 1 taxonomy value available; "
-                               "use Clade().taxonomies")
+            raise AttributeError("more than 1 taxonomy value available; "
+                                 "use Clade.taxonomies")
         return self.taxonomies[0]
+
+    def _set_taxonomy(self, value):
+        if not isinstance(value, Taxonomy):
+            raise ValueError("assigned value must be a Taxonomy instance")
+        if len(self.taxonomies) == 0:
+            self.taxonomies.append(value)
+        elif len(self.taxonomies) == 1:
+            self.taxonomies[0] = value
+        else:
+            raise ValueError("multiple taxonomy values already exist; "
+                             "use Phylogeny.taxonomies instead")
+
+    taxonomy = property(_get_taxonomy, _set_taxonomy)
 
     # Syntax sugar for setting the branch color
     def _get_color(self):
@@ -550,9 +585,15 @@ class Confidence(PhyloElement):
     @type value: float
     @type type: str
     """
-    def __init__(self, value, type):
+    def __init__(self, value, type='unknown'):
         self.value = value
         self.type = type
+
+    def __float__(self):
+        return float(self.value)
+
+    def __int__(self):
+        return int(self.value)
 
 
 class Date(PhyloElement):
