@@ -7847,6 +7847,133 @@ incorporated in Bio.PopGen, that code covers the applications FDist and
 SimCoal2, the HapMap and UCSC Table Browser databases and some simple statistics
 like $F_{st}$, or allele counts.
 
+\chapter{Phylogenetics with Bio.Phylo}
+
+Phylo is a new module in Biopython 1.54. Following the lead of SeqIO and AlignIO, 
+it aims to provide a common way to work with phylogenetic data independently of the source data
+format, as well as a consistent API for I/O operations.
+
+Much of this module was written during Google Summer of Code 2009, under the auspices of
+NESCent, as a project to implement Python support for the phyloXML data format (see
+\ref{sec:PhyloXML}). Support for Newick and Nexus formats was added by porting part of the
+existing Bio.Nexus module to the new classes used by Bio.Phylo.
+
+{\em Note:} Since Phylo is a recent addition to Biopython, we anticipate that parts of it may
+change in backwards-incompatible ways in future releases --- we'll try our best to avoid it,
+though. We're open to any suggestions for improving the functionality and usability of this
+module; just let us know on the mailing list or Bugzilla.
+
+\section{Basic I/O}
+
+Like SeqIO and AlignIO, Phylo handles file input and output through four functions:
+\verb|parse|, \verb|read|, \verb|write| and \verb|convert|.
+
+\begin{verbatim}
+>>> from Bio import Phylo
+>>> tree = Phylo.read('example.xml', 'phyloxml')
+\end{verbatim}
+
+(Example files are available in the Tests/PhyloXML/ directory of the Biopython distribution.)
+
+% TODO - examples of each
+See the Phylo page on the Biopython wiki (\url{http://biopython.org/wiki/Phylo}) for
+explanations of each of these functions.
+
+
+\section{Using Tree objects}
+
+The \verb|Tree| objects produced by \verb|parse| and \verb|read| are containers for recursive
+sub-trees, attached to the \verb|Tree| object at the \verb|root| attribute (whether or not the
+phylogenic tree is actually considered rooted). A \verb|Tree| has globally applied information
+for the phylogeny, such as rootedness, and a reference to a single \verb|Subtree|; a
+\verb|Subtree| has node- and clade-specific information, such as branch length, and a list of
+its own descendent \verb|Subtree| instances, attached at the \verb|clades| attribute.
+
+So there is a distinction between \verb|tree| and \verb|tree.root|. In practice, though, you
+don't need to worry about it much. To paper over the difference, both \verb|Tree| and
+\verb|Subtree| inherit from \verb|TreeMixin|, which contains the implementations for methods
+that would be commonly used to search, inspect or modify a tree or any of its clades. This
+means that almost all of the methods supported by \verb|tree| are also available on
+\verb|tree.root| and any clade below it. (To make this possible, \verb|Subtree| also has a
+\verb|root| property, which returns the subtree itself.)
+
+% TODO - use dia to make a class diagram like images/smcra.png
+
+% TODO
+See the Phylo page on the Biopython wiki (\url{http://biopython.org/wiki/Phylo}) for
+descriptions of each of the available methods.
+
+% \subsection{Search and traversal methods}
+% \verb|find_all|
+% \verb|find_any|
+% \verb|find_clades|
+% \verb|get_nonterminals|
+% \verb|get_path|
+% \verb|get_terminals|
+% \verb|trace|
+
+% \subsection{Information methods}
+% \verb|common_ancestor|
+% \verb|count_terminals|
+% \verb|depths|
+% \verb|distance|
+% \verb|is_bifurcating|
+% \verb|is_monophyletic|
+% \verb|is_parent_of|
+% \verb|is_preterminal|
+% \verb|total_branch_length|
+
+% \subsection{Modification methods}
+% \verb|collapse|
+% \verb|collapse_all|
+% \verb|ladderize|
+% \verb|prune|
+% \verb|split|
+
+
+\section{Viewing and exporting trees}
+
+The simplest way to get an overview of a \verb|Tree| object is to \verb|print| it:
+
+\begin{verbatim}
+>>> tree = Phylo.read('example.xml', 'phyloxml')
+>>> print tree
+Phylogeny(rooted='True', description='phyloXML allows to use either a "branch_length"
+attribute...', name='example from Prof. Joe Felsenstein's book "Inferring Phyl...')
+    Clade()
+        Clade(branch_length='0.06')
+            Clade(branch_length='0.102', name='A')
+            Clade(branch_length='0.23', name='B')
+        Clade(branch_length='0.4', name='C')
+\end{verbatim}
+
+% TODO
+See the Phylo page on the Biopython wiki (\url{http://biopython.org/wiki/Phylo}) for
+descriptions and examples of the more advanced functions \verb|draw_ascii|,
+\verb|draw_graphviz| and \verb|to_networkx|.
+
+% \verb|draw_ascii|
+
+% \verb|draw_graphviz|
+
+% \verb|to_networkx|
+
+
+\section{Features of PhyloXML trees}
+\label{sec:PhyloXML}
+
+% TODO
+See the PhyloXML page on the Biopython wiki (\url{http://biopython.org/wiki/PhyloXML}) for
+descriptions and examples of using the additional annotation features provided by PhyloXML.
+
+% visual cues -- color, width of branches
+%     - simple example
+%     - more cookbook entries in wiki
+
+% annotations -- see wiki and epydoc pages
+%     - on wiki, discuss each class
+
+
 \chapter{Supervised learning methods}
 
 Note the supervised learning methods described in this chapter all require Numerical Python (numpy) to be installed.
