@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phy:phyloxml xmlns:phy="http://www.phyloxml.org">
+  <phy:phylogeny rooted="true">
+    <phy:name>example from Prof. Joe Felsenstein's book "Inferring Phylogenies"</phy:name>
+    <phy:description>phyloXML allows to use either a "branch_length" attribute or element to indicate branch lengths.</phy:description>
+    <phy:clade>
+      <phy:clade>
+        <phy:branch_length>0.06</phy:branch_length>
+        <phy:clade>
+          <phy:name>A</phy:name>
+          <phy:branch_length>0.102</phy:branch_length>
+        </phy:clade>
+        <phy:clade>
+          <phy:name>B</phy:name>
+          <phy:branch_length>0.23</phy:branch_length>
+        </phy:clade>
+      </phy:clade>
+      <phy:clade>
+        <phy:name>C</phy:name>
+        <phy:branch_length>0.4</phy:branch_length>
+      </phy:clade>
+    </phy:clade>
+  </phy:phylogeny>
+</phy:phyloxml>
