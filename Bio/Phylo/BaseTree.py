@@ -681,13 +681,14 @@ class Tree(TreeElement, TreeMixin):
         Serializes each sub-clade recursively using repr() to create a summary
         of the object structure.
         """
+        TAB = '    '
         textlines = []
         def print_tree(obj, indent):
             """Recursively serialize sub-elements.
 
             This closes over textlines and modifies it in-place.
             """
-            textlines.append('\t'*indent + repr(obj))
+            textlines.append(TAB*indent + repr(obj))
             indent += 1
             for attr in obj.__dict__:
                 child = getattr(obj, attr)
