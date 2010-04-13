@@ -49,11 +49,12 @@ An improved multiple sequence alignment object has been introduced,
 and is used by Bio.AlignIO for input. This is a little stricter than the
 old class but should otherwise be backwards compatible.
 
-(At least) 10 people contributed to this release, including 4 new people:
+(At least) 11 people contributed to this release, including 5 new people:
 
 Anne Pajon (first contribution)
 Brad Chapman
 Christian Zmasek
+Diana Jaunzeikare (first contribution)
 Eric Talevich
 Jose Blanca (first contribution)
 Kevin Jacobs (first contribution)
