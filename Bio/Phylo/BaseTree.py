@@ -151,7 +151,6 @@ def _object_matcher(obj):
                      % (obj, type(obj)))
 
 def _combine_matchers(target, kwargs, require_spec):
-    # ENH: handle terminal=foo here?
     if not target:
         if not kwargs:
             if require_spec:
@@ -219,18 +218,18 @@ class TreeMixin(object):
         return itertools.ifilter(filter_func, order_func(root, get_children))
 
     def find_any(self, *args, **kwargs):
-        """Return the first element found by find_all(), or None.
+        """Return the first element found by find_elements(), or None.
 
         This is also useful for checking whether any matching element exists in
         the tree.
         """
-        hits = self.find_all(*args, **kwargs)
+        hits = self.find_elements(*args, **kwargs)
         try:
             return hits.next()
         except StopIteration:
             return None
 
-    def find_all(self, target=None, terminal=None, order='preorder',
+    def find_elements(self, target=None, terminal=None, order='preorder',
             **kwargs):
         """Find all tree elements matching the given attributes.
 
@@ -252,7 +251,7 @@ class TreeMixin(object):
 
             >>> from Bio.Phylo.IO import PhyloXMIO
             >>> phx = PhyloXMLIO.read('phyloxml_examples.xml')
-            >>> matches = phx.phylogenies[5].find_all(code='OCTVU')
+            >>> matches = phx.phylogenies[5].find_elements(code='OCTVU')
             >>> matches.next()
             Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
 
@@ -284,7 +283,7 @@ class TreeMixin(object):
             **kwargs):
         """Find each clade containing a matching element.
 
-        That is, find each element as with find_all(), but return the
+        That is, find each element as with find_elements(), but return the
         corresponding clade object.
         """
         def match_attrs(elem):
@@ -453,7 +452,7 @@ class TreeMixin(object):
     def total_branch_length(self):
         """Calculate the sum of all the branch lengths in this tree."""
         return sum(node.branch_length
-                   for node in self.find_all(branch_length=True))
+                   for node in self.find_clades(branch_length=True))
 
     # Tree manipulation methods
 

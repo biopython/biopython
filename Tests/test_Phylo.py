@@ -52,31 +52,31 @@ class MixinTests(unittest.TestCase):
 
     # Traversal methods
 
-    def test_find_all(self):
-        """TreeMixin: find_all() method."""
+    def test_find_elements(self):
+        """TreeMixin: find_elements() method."""
         # From the docstring example
         tree = self.phylogenies[5]
-        matches = list(tree.find_all(PhyloXML.Taxonomy, code='OCTVU'))
+        matches = list(tree.find_elements(PhyloXML.Taxonomy, code='OCTVU'))
         self.assertEqual(len(matches), 1)
         self.assert_(isinstance(matches[0], PhyloXML.Taxonomy))
         self.assertEqual(matches[0].code, 'OCTVU')
         self.assertEqual(matches[0].scientific_name, 'Octopus vulgaris')
         # Iteration and regexps
         tree = self.phylogenies[10]
-        for point, alt in izip(tree.find_all(geodetic_datum=r'WGS\d{2}'),
+        for point, alt in izip(tree.find_elements(geodetic_datum=r'WGS\d{2}'),
                                (472, 10, 452)):
             self.assert_(isinstance(point, PhyloXML.Point))
             self.assertEqual(point.geodetic_datum, 'WGS84')
             self.assertAlmostEqual(point.alt, alt)
         # class filter
         tree = self.phylogenies[4]
-        events = list(tree.find_all(PhyloXML.Events))
+        events = list(tree.find_elements(PhyloXML.Events))
         self.assertEqual(len(events), 2)
         self.assertEqual(events[0].speciations, 1)
         self.assertEqual(events[1].duplications, 1)
         # integer filter
         tree = Phylo.read(EX_APAF, 'phyloxml')
-        domains = list(tree.find_all(start=5))
+        domains = list(tree.find_elements(start=5))
         self.assertEqual(len(domains), 8)
         for dom in domains:
             self.assertEqual(dom.start, 5)
@@ -96,16 +96,18 @@ class MixinTests(unittest.TestCase):
         self.assertEqual(octo[0].taxonomies[0].code, 'OCTVU')
 
     def test_find_terminal(self):
-        """TreeMixin: find_all() with terminal argument."""
+        """TreeMixin: find_elements() with terminal argument."""
         for tree, total, extern, intern in izip(
                 self.phylogenies,
                 (6, 6, 7, 18, 21, 27, 7, 9, 9, 19, 15, 9, 6),
                 (3, 3, 3, 3,  3,  3,  3, 3, 3, 3,  4,  3, 3),
                 (3, 3, 3, 3,  3,  3,  3, 3, 3, 3,  3,  3, 3),
                 ):
-            self.assertEqual(len(list(tree.find_all())), total)
-            self.assertEqual(len(list(tree.find_all(terminal=True))), extern)
-            self.assertEqual(len(list(tree.find_all(terminal=False))), intern)
+            self.assertEqual(len(list(tree.find_elements())), total)
+            self.assertEqual(len(list(tree.find_elements(terminal=True))),
+                             extern)
+            self.assertEqual(len(list(tree.find_elements(terminal=False))),
+                             intern)
 
     def test_get_path(self):
         """TreeMixin: get_path() method."""
