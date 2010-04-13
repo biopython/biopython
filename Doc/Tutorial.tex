@@ -3819,8 +3819,8 @@ the full path of the tool. For example:
 >>> cline = ClustalwCommandline(clustalw_exe, infile="opuntia.fasta")
 \end{verbatim}
 
-\noindent Remember, in Python a default string \verb|\n| and \verb|\t|
-translate as a new line and a tab -- which is why we're put a letter
+\noindent Remember, in Python strings \verb|\n| and \verb|\t| are by default
+interpreted as a new line and a tab -- which is why we're put a letter
 ``r'' at the start for a raw string that isn't translated in this way.
 This is generally good practice when specifying a Windows style file name.
 
