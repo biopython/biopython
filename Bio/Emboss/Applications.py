@@ -1,7 +1,7 @@
 # Copyright 2001-2009 Brad Chapman.
 # Revisions copyright 2009-2010 by Peter Cock.
 # Revisions copyright 2009 by David Winter.
-# Revisions copyright 2009 by Leighton Pritchard.
+# Revisions copyright 2009-2010 by Leighton Pritchard.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -450,11 +450,11 @@ class PrimerSearchCommandline(_EmbossCommandLine):
                   #When this wrapper was written primersearch used -sequences
                   #as the argument name. Since at least EMBOSS 5.0 (and
                   #perhaps earlier) this has been -seqall instead.
-          _Option(["-input","-primers","primers","input"], ["input", "file"],
+          _Option(["-infile","-primers","primers","infile"], ["input", "file"],
                   None, 1, "File containing the primer pairs to search for."),
                   #When this wrapper was written primersearch used -primers
                   #as the argument name. Since at least EMBOSS 5.0 (and
-                  #perhaps earlier) this has been -input instead.
+                  #perhaps earlier) this has been -infile instead.
           _Option(["-mismatchpercent","mismatchpercent"], ["input"], None, 1,
                   "Allowed percentage mismatch (any integer value, default 0)."),
           _Option(["-snucleotide","snucleotide"], ["input"], None, 0,
