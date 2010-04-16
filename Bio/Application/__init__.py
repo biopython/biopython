@@ -213,6 +213,10 @@ class AbstractCommandline(object):
                                      % name)
                 aliases.add(name)
             name = p.names[-1]
+            if " " in name or "-" in name or "/" in name or "\\" in name:
+                raise ValueError("Final parameter name %s cannot be used as "
+                                 "an argument or property name in python"
+                                 % repr(name))
             #Beware of binding-versus-assignment confusion issues
             def getter(name):
                 return lambda x : x._get_parameter(name)

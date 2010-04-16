@@ -192,7 +192,7 @@ class BlastallCommandline(_BlastAllOrPgpCommandLine):
                    "and tblastx). 3 is both, 1 is top, 2 is bottom.", False),
            _Option(["-l", "restrict_gi"], ["input"], None, 0,
                    "Restrict search of database to list of GI's.", False),
-           _Option(["-R"], ["input", "file"], None, 0,
+           _Option(["-R", "checkpoint"], ["input", "file"], None, 0,
                    "PSI-TBLASTN checkpoint input file.", False),
            _Option(["-n", "megablast"], ["input"], None, 0,
                    "MegaBlast search T/F.", False),
