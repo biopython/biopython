@@ -38,6 +38,14 @@ assert _re_prop_name.match("_test") is None # we don't want private names
 assert _re_prop_name.match("-test") is None
 assert _re_prop_name.match("test_name")
 assert _re_prop_name.match("test2")
+#These are reserved names in Python itself,
+_reserved_names = ["and", "del", "from", "not", "while", "as", "elif",
+                   "global", "or", "with", "assert", "else", "if", "pass",
+                   "yield", "break", "except", "import", "print", "class",
+                   "exec", "in", "raise", "continue", "finally", "is",
+                   "return", "def", "for", "lambda", "try"]
+#These are reserved names due to the way the wrappers work
+_local_reserved_names = ["set_parameter"]
 
 def generic_run(commandline):
     """Run an application with the given commandline (DEPRECATED).
@@ -227,6 +235,15 @@ class AbstractCommandline(object):
             if _re_prop_name.match(name) is None:
                 raise ValueError("Final parameter name %s cannot be used as "
                                  "an argument or property name in python"
+                                 % repr(name))
+            if name in _reserved_names:
+                raise ValueError("Final parameter name %s cannot be used as "
+                                 "an argument or property name because it is "
+                                 "a reserved word in python" % repr(name))
+            if name in _local_reserved_names:
+                raise ValueError("Final parameter name %s cannot be used as "
+                                 "an argument or property name due to the "
+                                 "way the AbstractCommandline class works"
                                  % repr(name))
             #Beware of binding-versus-assignment confusion issues
             def getter(name):
