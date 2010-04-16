@@ -776,13 +776,8 @@ def to_alignment(sequences, alphabet=None, strict=True):
                   checking of sequence lengths and alphabets.
                   This is now always done.
 
-    Using this function is now discouraged.  Rather doing this:
-
-    >>> from Bio import SeqIO
-    >>> filename = "Clustalw/protein.aln"
-    >>> alignment = SeqIO.to_alignment(SeqIO.parse(filename, "clustal"))
-
-    You are now encouraged to use Bio.AlignIO instead, e.g.
+    Using this function is now discouraged. You are now encouraged to use
+    Bio.AlignIO instead, e.g.
 
     >>> from Bio import AlignIO
     >>> filename = "Clustalw/protein.aln"
