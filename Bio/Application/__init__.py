@@ -25,8 +25,19 @@ and class ApplicationResult) which should not be used anymore.
 import os, sys
 import StringIO
 import subprocess
+import re
 
 from Bio import File
+
+#Use this regular expresion to test the property names are going to
+#be valid as Python properties or arguments
+_re_prop_name = re.compile(r"[a-zA-Z][a-zA-Z0-9_]*")
+assert _re_prop_name.match("t")
+assert _re_prop_name.match("test")
+assert _re_prop_name.match("_test") is None # we don't want private names
+assert _re_prop_name.match("-test") is None
+assert _re_prop_name.match("test_name")
+assert _re_prop_name.match("test2")
 
 def generic_run(commandline):
     """Run an application with the given commandline (DEPRECATED).
@@ -213,7 +224,7 @@ class AbstractCommandline(object):
                                      % name)
                 aliases.add(name)
             name = p.names[-1]
-            if " " in name or "-" in name or "/" in name or "\\" in name:
+            if _re_prop_name.match(name) is None:
                 raise ValueError("Final parameter name %s cannot be used as "
                                  "an argument or property name in python"
                                  % repr(name))
