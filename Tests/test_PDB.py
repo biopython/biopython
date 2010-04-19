@@ -11,6 +11,7 @@
 """Unit tests for the Bio.PDB module."""
 import unittest
 import warnings
+from StringIO import StringIO
 
 try:
     from numpy.random import random
@@ -57,6 +58,15 @@ class PDBExceptionTest(unittest.TestCase):
 
     #TODO - check get expected warnings, may require Python 2.6+
     #See Bug 2820
+
+    def test_bad_xyz(self):
+        """Check error: Parse an entry with bad x,y,z value."""
+        data = "ATOM      9  N   ASP A 152      21.554  34.953  27.691  1.00 19.26           N\n"
+        parser = PDBParser(PERMISSIVE=False)
+        s = parser.get_structure("example", StringIO(data))
+        data = "ATOM      9  N   ASP A 152      21.ish  34.953  27.691  1.00 19.26           N\n"
+        self.assertRaises(PDBConstructionException,
+                parser.get_structure, "example", StringIO(data))       
 
 
 class PDBParseTest(unittest.TestCase):
