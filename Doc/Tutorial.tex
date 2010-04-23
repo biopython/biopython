@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 13 April 2010 (Biopython 1.54 \emph{beta}+)}
+\date{Last Update -- 23 April 2010 (Biopython 1.54 \emph{beta}+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -281,6 +281,10 @@ and HTML formats
   not been installed by default.  It requires a third party tool called flex
   (fast lexical analyzer generator). At the time of writing, you'll have install
   flex, then tweak your Biopython \verb|setup.py| file and reinstall from source.
+
+  \item \emph{Why doesn't} \verb|Bio.Blast.NCBIWWW.qblast()| \emph{give the same results as the NCBI BLAST website?} \\
+  You need to specify the same options -- the NCBI often adjust the default settings on the website,
+  and they do not match the QBLAST defaults anymore. Check things like the gap penalties and expectation threshold.
 
   \item \emph{Why doesn't} \verb|Bio.Blast.NCBIXML.read()| \emph{work? The module imports but there is no read function!} \\
   You need Biopython 1.50 or later.  Or, use \texttt{Bio.Blast.NCBIXML.parse(...).next()} instead.
@@ -4293,6 +4297,11 @@ documentation, or that built into Biopython:
 >>> from Bio.Blast import NCBIWWW
 >>> help(NCBIWWW.qblast)
 \end{verbatim}
+
+Note that the default settings on the NCBI BLAST website are not quite
+the same as the defaults on QBLAST. If you get different results, you'll
+need to check the parameters (e.g. the expectation value threshold and
+the gap values).
 
 For example, if you have a nucleotide sequence you want to search against
 the non-redundant database using BLASTN, and you know the GI number of your
