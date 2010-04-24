@@ -551,7 +551,6 @@ class TreeMixin(object):
                 parent = grandparent
         return parent
 
-    # TODO - unit test
     def split(self, n=2, branch_length=1.0):
         """Speciation: generate n (default 2) new descendants.
 
@@ -564,7 +563,6 @@ class TreeMixin(object):
             clade = subtree_cls(name=base_name+str(i),
                                 branch_length=branch_length)
             self.root.clades.append(clade)
-        return self.root.clades[-n:]
 
 
 class Tree(TreeElement, TreeMixin):

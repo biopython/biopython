@@ -251,10 +251,23 @@ class MixinTests(unittest.TestCase):
         self.assertEqual(len(tree.get_terminals()), 2)
         self.assertEqual(len(tree.get_nonterminals()), 1)
 
-    # TODO:
     def test_split(self):
         """TreeMixin: split() method."""
-        pass
+        tree = self.phylogenies[0]
+        C = tree.clade[1]
+        C.split()
+        self.assertEqual(len(C), 2)
+        self.assertEqual(len(tree.get_terminals()), 4)
+        self.assertEqual(len(tree.get_nonterminals()), 3)
+        C[0].split(3, .5)
+        self.assertEqual(len(tree.get_terminals()), 6)
+        self.assertEqual(len(tree.get_nonterminals()), 4)
+        for clade, name, blen in zip(C[0],
+                ('C00', 'C01', 'C02'),
+                (0.5, 0.5, 0.5)):
+            self.assert_(clade.is_terminal())
+            self.assertEqual(clade.name, name)
+            self.assertEqual(clade.branch_length, blen)
 
 
 # ---------------------------------------------------------
