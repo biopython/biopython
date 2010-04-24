@@ -508,7 +508,6 @@ class TreeMixin(object):
         for subclade in self.root.clades:
             subclade.ladderize(reverse=reverse)
 
-    # TODO - unit test
     def prune(self, target=None, **kwargs):
         """Prunes a terminal clade from the tree.
 
@@ -518,33 +517,37 @@ class TreeMixin(object):
 
         @return: parent clade of the pruned target
         """
-        path = self.get_path(target, **kwargs)
-        if not path:
-            raise ValueError("can't prune the root clade")
-        if not path[-1].is_terminal():
+        if 'terminal' in kwargs and kwargs['terminal']:
             raise ValueError("target must be terminal")
+        path = self.get_path(target, terminal=True, **kwargs)
+        if not path:
+            raise ValueError("can't find a matching target below this root")
         if len(path) == 1:
             parent = self.root
         else:
             parent = path[-2]
         parent.clades.remove(path[-1])
         if len(parent) == 1:
-            # We deleted one branch from a bifurcation
+            # We deleted a branch from a bifurcation
             if parent == self.root:
                 # If we're at the root, move the root upwards
+                # NB: This loses the length of the original branch
                 newroot = parent.clades[0]
                 newroot.branch_length = None
                 parent = self.root = newroot
             else:
                 # If we're not at the root, collapse this parent
                 child = parent.clades[0]
-                child.branch_length += (parent.branch_length or 0.0)
+                if child.branch_length is not None:
+                    child.branch_length += (parent.branch_length or 0.0)
                 if len(path) < 3:
                     grandparent = self.root
                 else:
                     grandparent = path[-3]
-                grandparent.clades.remove(parent)
-                grandparent.clades.append(child)
+                # Replace parent with child at the same place in grandparent
+                index = grandparent.clades.index(parent)
+                grandparent.clades.pop(index)
+                grandparent.clades.insert(index, child)
                 parent = grandparent
         return parent
 
