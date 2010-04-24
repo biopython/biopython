@@ -94,9 +94,9 @@ def _attribute_matcher(kwargs):
             # Special case: restrict to internal/external/any nodes
             kwa_copy = kwargs.copy()
             pattern = kwa_copy.pop('terminal')
-            if (pattern is not None
-                and (not hasattr(node, 'is_terminal')
-                    or node.is_terminal() != pattern)):
+            if (pattern is not None and
+                (not hasattr(node, 'is_terminal') or
+                    node.is_terminal() != pattern)):
                 return False
         else:
             kwa_copy = kwargs
@@ -106,8 +106,8 @@ def _attribute_matcher(kwargs):
                 return False
             target = getattr(node, key)
             if isinstance(pattern, basestring):
-                return (isinstance(target, basestring)
-                        and re.match(pattern+'$', target))
+                return (isinstance(target, basestring) and
+                        re.match(pattern+'$', target))
             if isinstance(pattern, bool):
                 return (pattern == bool(target))
             if isinstance(pattern, int):
@@ -176,8 +176,8 @@ class TreeElement(object):
                         ', '.join("%s='%s'"
                                   % (key, _sugar.trim_str(unicode(val)))
                             for key, val in self.__dict__.iteritems()
-                            if val is not None
-                            and type(val) in (str, int, float, bool, unicode)))
+                            if val is not None and
+                            type(val) in (str, int, float, bool, unicode)))
         return s.encode('utf-8')
 
     def __str__(self):
@@ -295,8 +295,8 @@ class TreeMixin(object):
             is_matching_elem = match_attrs
         else:
             def is_matching_elem(elem):
-                return ((elem.is_terminal() == terminal)
-                        and match_attrs(elem))
+                return ((elem.is_terminal() == terminal) and
+                        match_attrs(elem))
         return self._filter_search(is_matching_elem, order, False)
 
     def get_path(self, target=None, **kwargs):
@@ -405,12 +405,12 @@ class TreeMixin(object):
         """Return True if tree downstream of node is strictly bifurcating."""
         # Root can be trifurcating, because it has no ancestor
         if isinstance(self, Tree) and len(self.root) == 3:
-            return (self.root.clades[0].is_bifurcating()
-                    and self.root.clades[1].is_bifurcating()
-                    and self.root.clades[2].is_bifurcating())
+            return (self.root.clades[0].is_bifurcating() and
+                    self.root.clades[1].is_bifurcating() and
+                    self.root.clades[2].is_bifurcating())
         if len(self.root) == 2:
-            return (self.root.clades[0].is_bifurcating()
-                    and self.root.clades[1].is_bifurcating())
+            return (self.root.clades[0].is_bifurcating() and
+                    self.root.clades[1].is_bifurcating())
         if len(self.root) == 0:
             return True
         return False
@@ -483,9 +483,9 @@ class TreeMixin(object):
         loop with find_clades:
 
         >>> for clade in tree.find_clades(branch_length=True, order='level'):
-        >>>     if (clade.branch_length < .5
-        >>>             and not clade.is_terminal()
-        >>>             and clade is not self.root):
+        >>>     if (clade.branch_length < .5 and
+        >>>         not clade.is_terminal() and
+        >>>         clade is not self.root):
         >>>         tree.collapse(clade)
 
         Note that level-order traversal helps avoid strange side-effects when

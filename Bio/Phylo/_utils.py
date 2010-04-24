@@ -154,13 +154,13 @@ def draw_graphviz(tree, label_func=str, prog='neato', args='',
         labels = dict(get_label_mapping(G, None))
     kwargs['nodelist'] = labels.keys()
     if 'edge_color' not in kwargs:
-        kwargs['edge_color'] = [isinstance(e[2], dict)
-                                and e[2].get('color', 'k') or 'k'
+        kwargs['edge_color'] = [isinstance(e[2], dict) and
+                                e[2].get('color', 'k') or 'k'
                                 for e in G.edges(data=True)]
     if 'width' not in kwargs:
-        kwargs['width'] = [isinstance(e[2], dict)
-                                and e[2].get('width', 1.0) or 1.0
-                                for e in G.edges(data=True)]
+        kwargs['width'] = [isinstance(e[2], dict) and
+                           e[2].get('width', 1.0) or 1.0
+                           for e in G.edges(data=True)]
     networkx.draw(G, posn, labels=labels, node_color=node_color, **kwargs)
 
 
