@@ -15,7 +15,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_nucleotide, generic_dna, generic_rna, Gapped
 from Bio.Sequencing import Ace
-    
+
 #This is a generator function!
 def AceIterator(handle):
     """Returns SeqRecord objects from an ACE file.
@@ -115,11 +115,19 @@ def _test():
     """
     import doctest
     import os
-    if os.path.isdir(os.path.join("..", "..", "Tests")):
+    if os.path.isdir(os.path.join("..", "..", "Tests", "Ace")):
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("..", "..", "Tests"))
         assert os.path.isfile("Ace/consed_sample.ace")
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
+    elif os.path.isdir(os.path.join("Tests", "Ace")):
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("Tests"))
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir

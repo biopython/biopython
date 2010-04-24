@@ -19,6 +19,8 @@ import unittest
 import requires_internet
 requires_internet.check()
 
+from Bio import MissingExternalDependencyError
+
 #We want to test these:
 from Bio import Entrez
 from Bio import ExPASy
@@ -36,9 +38,13 @@ class ExPASyTests(unittest.TestCase):
     def test_get_sprot_raw(self):
         """Bio.ExPASy.get_sprot_raw("O23729")"""
         identifier = "O23729"
-        handle = ExPASy.get_sprot_raw(identifier)
-        record = SeqIO.read(handle, "swiss")
-        handle.close()
+        try:
+            handle = ExPASy.get_sprot_raw(identifier)
+            record = SeqIO.read(handle, "swiss")
+            handle.close()
+        except IOError:
+            raise MissingExternalDependencyError(
+                  "internet (or maybe just ExPASy) not available")
         self.assertEqual(record.id, identifier)
         self.assertEqual(len(record), 394)
         self.assertEqual(seguid(record.seq), "5Y08l+HJRDIlhLKzFEfkcKd1dkM")
@@ -46,9 +52,13 @@ class ExPASyTests(unittest.TestCase):
 class EntrezTests(unittest.TestCase):
     def simple(self, database, formats, entry, length, checksum):
         for f in formats:
-            handle = Entrez.efetch(db=database, id=entry, rettype=f)
-            record = SeqIO.read(handle, f)
-            handle.close()
+            try:
+                handle = Entrez.efetch(db=database, id=entry, rettype=f)
+                record = SeqIO.read(handle, f)
+                handle.close()
+            except IOError:
+                raise MissingExternalDependencyError(
+                      "internet (or maybe just NCBI) not available")
             self.assert_((entry in record.name) or \
                          (entry in record.id) or \
                          ("gi" in record.annotations \
