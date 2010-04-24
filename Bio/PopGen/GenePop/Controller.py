@@ -13,9 +13,11 @@ This module allows to control GenePop.
 import os
 import re
 import shutil
+import subprocess
+import sys
 import tempfile
 
-from Bio.Application import AbstractCommandline, _Argument, _Option, generic_run
+from Bio.Application import AbstractCommandline, _Argument, _Option
 
 def _gp_float(tok):
     """Gets a float from a token, if it fails, returns the string.
@@ -277,10 +279,18 @@ class GenePopController:
         self.controller.set_input(fname)
         for opt in opts:
             self.controller.set_parameter(opt, opt+"="+str(opts[opt]))
-        ret, out, err = generic_run(self.controller)
+        child = subprocess.Popen(str(self.controller),
+                             stdin=subprocess.PIPE,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             shell=(sys.platform!="win32"))
+        r_out, e_out = child.communicate()
+        # capture error code:
+        ret = child.returncode
+
         self._remove_garbage(None)
-        if ret.return_code != 0: raise IOError("GenePop not found")
-        return ret, out, err
+        if ret != 0: raise IOError("GenePop not found")
+        return
 
 
     def _test_pop_hz_both(self, fname, type, ext, enum_test = True,
@@ -293,7 +303,7 @@ class GenePopController:
                  SE might be none (for enumerations)
         """
         opts = self._get_opts(dememorization, batches, iterations, enum_test)
-        ret, out, err = self._run_genepop([ext], [1, type], fname, opts)
+        self._run_genepop([ext], [1, type], fname, opts)
         f = open(fname + ext)
         def hw_func(self):
             return _hw_func(self.stream, False)
@@ -316,7 +326,7 @@ class GenePopController:
 
         """
         opts = self._get_opts(dememorization, batches, iterations, enum_test)
-        ret, out, err = self._run_genepop([ext], [1, type], fname, opts)
+        self._run_genepop([ext], [1, type], fname, opts)
         def hw_pop_func(self):
             return _read_table(self.stream, [str, _gp_float, _gp_float, _gp_float])
         f1 = open(fname + ext)
@@ -389,7 +399,7 @@ class GenePopController:
           3. (Chi2, deg freedom, prob)
         """
         opts = self._get_opts(dememorization, batches, iterations, enum_test)
-        ret, out, err = self._run_genepop([ext], [1, 3], fname, opts)
+        self._run_genepop([ext], [1, 3], fname, opts)
         def hw_prob_loci_func(self): 
             return  _hw_func(self.stream, True, True)
         def hw_prob_pop_func(self): 
@@ -442,7 +452,7 @@ class GenePopController:
     def test_ld(self, fname,
         dememorization = 10000, batches = 20, iterations = 5000):
         opts = self._get_opts(dememorization, batches, iterations)
-        ret, out, err = self._run_genepop([".DIS"], [2, 1], fname, opts)
+        self._run_genepop([".DIS"], [2, 1], fname, opts)
         def ld_pop_func(self):
             current_pop = None
             l = self.stream.readline().rstrip()
@@ -511,7 +521,7 @@ class GenePopController:
 
     #4
     def estimate_nm(self, fname):
-        ret, out, err = self._run_genepop(["PRI"], [4], fname)
+        self._run_genepop(["PRI"], [4], fname)
         f = open(fname + ".PRI")
         lines = f.readlines() # Small file, it is ok
         f.close()
@@ -569,7 +579,7 @@ class GenePopController:
         
         Will create a file called fname.INF
         """
-        ret, out, err = self._run_genepop(["INF"], [5,1], fname)
+        self._run_genepop(["INF"], [5,1], fname)
         #First pass, general information
         #num_loci = None
         #num_pops = None
@@ -682,7 +692,7 @@ class GenePopController:
         return (pop_iter, locus_iter)
 
     def _calc_diversities_fis(self, fname, ext):
-        ret, out, err = self._run_genepop([ext], [5,2], fname)
+        self._run_genepop([ext], [5,2], fname)
         f = open(fname + ext)
         l = f.readline()
         while l<>"":
@@ -738,7 +748,7 @@ class GenePopController:
         This does not return the genotype frequencies.
         
         """
-        ret, out, err = self._run_genepop([".FST"], [6,1], fname)
+        self._run_genepop([".FST"], [6,1], fname)
         f = open(fname + ".FST")
         l = f.readline()
         while l<>'':
@@ -800,7 +810,7 @@ class GenePopController:
 
     #6.2
     def calc_fst_pair(self, fname):
-        ret, out, err = self._run_genepop([".ST2", ".MIG"], [6,2], fname)
+        self._run_genepop([".ST2", ".MIG"], [6,2], fname)
         f = open(fname + ".ST2")
         l = f.readline()
         while l<>"":
@@ -836,7 +846,7 @@ class GenePopController:
     def _calc_ibd(self, fname, sub, stat="a", scale="Log", min_dist=0.00001):
         """Calculates isolation by distance statistics
         """
-        ret, out, err = self._run_genepop([".GRA", ".MIG", ".ISO"], [6,sub],
+        self._run_genepop([".GRA", ".MIG", ".ISO"], [6,sub],
             fname, opts = {
             "MinimalDistance" : min_dist,
             "GeographicScale" : scale,

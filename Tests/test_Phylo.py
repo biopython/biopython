@@ -17,7 +17,6 @@ from Bio.Phylo import PhyloXML
 # Example PhyloXML files
 EX_APAF = 'PhyloXML/apaf.xml'
 EX_BCL2 = 'PhyloXML/bcl_2.xml'
-EX_MADE = 'PhyloXML/made_up.xml'
 EX_PHYLO = 'PhyloXML/phyloxml_examples.xml'
 EX_MOLLUSCA = 'PhyloXML/ncbi_taxonomy_mollusca.xml.zip'
 
@@ -29,62 +28,55 @@ def unzip(fname):
     return StringIO(z.read(z.filelist[0].filename))
 
 
-class UtilTests(unittest.TestCase):
-    """Tests for various utility functions."""
-    def test_pretty_print(self):
-        """Check pretty_print by counting lines of output for each example.
-
-        The line counts are liable to change whenever the object constructors
-        change.
-        """
-        for source, count in izip(
-                (EX_APAF, EX_BCL2, unzip(EX_MOLLUSCA),
-                    # unzip(EX_METAZOA), unzip(EX_NCBI),
-                    ),
-                (386, 747, 16207, 214911, 648553)):
-            tree = Phylo.read(source, 'phyloxml')
-            output = StringIO()
-            Phylo.pretty_print(tree, output)
-            output.seek(0)
-            self.assertEquals(len(output.readlines()), count)
-            output = StringIO()
-            Phylo.pretty_print(tree, output, show_all=True)
-            output.seek(0)
-            self.assertEquals(len(output.readlines()), count)
-
-
 class TreeTests(unittest.TestCase):
     """Tests for methods on BaseTree.Tree objects."""
+    # Magic method
+    def test_str(self):
+        """Tree.__str__: pretty-print to a string.
+
+        NB: The exact line counts are liable to change if the object
+        constructors change.
+        """
+        for source, count in izip(
+                (EX_APAF, EX_BCL2, unzip(EX_MOLLUSCA)),
+                (386, 747, 16207)):
+            tree = Phylo.read(source, 'phyloxml')
+            output = str(tree)
+            self.assertEquals(len(output.splitlines()), count)
+
+
+class MixinTests(unittest.TestCase):
+    """Tests for TreeMixin methods."""
     def setUp(self):
         self.phylogenies = list(Phylo.parse(EX_PHYLO, 'phyloxml'))
 
     # Traversal methods
 
-    def test_find_all(self):
-        """TreeMixin: find_all() method."""
+    def test_find_elements(self):
+        """TreeMixin: find_elements() method."""
         # From the docstring example
         tree = self.phylogenies[5]
-        matches = list(tree.find_all(PhyloXML.Taxonomy, code='OCTVU'))
+        matches = list(tree.find_elements(PhyloXML.Taxonomy, code='OCTVU'))
         self.assertEqual(len(matches), 1)
         self.assert_(isinstance(matches[0], PhyloXML.Taxonomy))
         self.assertEqual(matches[0].code, 'OCTVU')
         self.assertEqual(matches[0].scientific_name, 'Octopus vulgaris')
         # Iteration and regexps
         tree = self.phylogenies[10]
-        for point, alt in izip(tree.find_all(geodetic_datum=r'WGS\d{2}'),
+        for point, alt in izip(tree.find_elements(geodetic_datum=r'WGS\d{2}'),
                                (472, 10, 452)):
             self.assert_(isinstance(point, PhyloXML.Point))
             self.assertEqual(point.geodetic_datum, 'WGS84')
             self.assertAlmostEqual(point.alt, alt)
         # class filter
         tree = self.phylogenies[4]
-        events = list(tree.find_all(PhyloXML.Events))
+        events = list(tree.find_elements(PhyloXML.Events))
         self.assertEqual(len(events), 2)
         self.assertEqual(events[0].speciations, 1)
         self.assertEqual(events[1].duplications, 1)
         # integer filter
         tree = Phylo.read(EX_APAF, 'phyloxml')
-        domains = list(tree.find_all(start=5))
+        domains = list(tree.find_elements(start=5))
         self.assertEqual(len(domains), 8)
         for dom in domains:
             self.assertEqual(dom.start, 5)
@@ -104,19 +96,18 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(octo[0].taxonomies[0].code, 'OCTVU')
 
     def test_find_terminal(self):
-        """TreeMixin: find_all() with terminal argument."""
-        def iter_len(it, count=0):
-            for elem in it: count += 1
-            return count
+        """TreeMixin: find_elements() with terminal argument."""
         for tree, total, extern, intern in izip(
                 self.phylogenies,
                 (6, 6, 7, 18, 21, 27, 7, 9, 9, 19, 15, 9, 6),
                 (3, 3, 3, 3,  3,  3,  3, 3, 3, 3,  4,  3, 3),
                 (3, 3, 3, 3,  3,  3,  3, 3, 3, 3,  3,  3, 3),
                 ):
-            self.assertEqual(iter_len(tree.find_all()), total)
-            self.assertEqual(iter_len(tree.find_all(terminal=True)), extern)
-            self.assertEqual(iter_len(tree.find_all(terminal=False)), intern)
+            self.assertEqual(len(list(tree.find_elements())), total)
+            self.assertEqual(len(list(tree.find_elements(terminal=True))),
+                             extern)
+            self.assertEqual(len(list(tree.find_elements(terminal=False))),
+                             intern)
 
     def test_get_path(self):
         """TreeMixin: get_path() method."""
@@ -228,15 +219,55 @@ class TreeTests(unittest.TestCase):
         tree.ladderize(reverse=True)
         self.assertEqual(ordered_names(tree), list('ABCD'))
 
-    # TODO:
     def test_prune(self):
         """TreeMixin: prune() method."""
-        pass
+        tree = self.phylogenies[10]
+        # Taxon in a trifurcation -- no collapse afterward
+        parent = tree.prune(name='B')
+        self.assertEqual(len(parent.clades), 2)
+        self.assertEqual(parent.clades[0].name, 'A')
+        self.assertEqual(parent.clades[1].name, 'C')
+        self.assertEqual(len(tree.get_terminals()), 3)
+        self.assertEqual(len(tree.get_nonterminals()), 2)
+        # Taxon in a bifurcation -- collapse
+        tree = self.phylogenies[0]
+        parent = tree.prune(name='A')
+        self.assertEqual(len(parent.clades), 2)
+        for clade, name, blen in zip(parent, 'BC', (.29, .4)):
+            self.assert_(clade.is_terminal())
+            self.assertEqual(clade.name, name)
+            self.assertAlmostEqual(clade.branch_length, blen)
+        self.assertEqual(len(tree.get_terminals()), 2)
+        self.assertEqual(len(tree.get_nonterminals()), 1)
+        # Taxon just below the root -- don't screw up
+        tree = self.phylogenies[1]
+        parent = tree.prune(name='C')
+        self.assertEqual(parent, tree.root)
+        self.assertEqual(len(parent.clades), 2)
+        for clade, name, blen in zip(parent, 'AB', (.102, .23)):
+            self.assert_(clade.is_terminal())
+            self.assertEqual(clade.name, name)
+            self.assertAlmostEqual(clade.branch_length, blen)
+        self.assertEqual(len(tree.get_terminals()), 2)
+        self.assertEqual(len(tree.get_nonterminals()), 1)
 
-    # TODO:
     def test_split(self):
         """TreeMixin: split() method."""
-        pass
+        tree = self.phylogenies[0]
+        C = tree.clade[1]
+        C.split()
+        self.assertEqual(len(C), 2)
+        self.assertEqual(len(tree.get_terminals()), 4)
+        self.assertEqual(len(tree.get_nonterminals()), 3)
+        C[0].split(3, .5)
+        self.assertEqual(len(tree.get_terminals()), 6)
+        self.assertEqual(len(tree.get_nonterminals()), 4)
+        for clade, name, blen in zip(C[0],
+                ('C00', 'C01', 'C02'),
+                (0.5, 0.5, 0.5)):
+            self.assert_(clade.is_terminal())
+            self.assertEqual(clade.name, name)
+            self.assertEqual(clade.branch_length, blen)
 
 
 # ---------------------------------------------------------

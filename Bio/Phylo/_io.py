@@ -12,13 +12,24 @@ __docformat__ = "epytext en"
 import BaseTree
 import NewickIO
 import NexusIO
-import PhyloXMLIO
-
-supported_formats = {
-        'newick':   NewickIO,
-        'nexus':    NexusIO,
-        'phyloxml': PhyloXMLIO,
-        }
+# Python 2.4 doesn't have ElementTree, which PhyloXMLIO needs
+try:
+    import PhyloXMLIO
+except ImportError:
+    # TODO: should we issue a warning? the installer will have already whined
+    # raise MissingExternalDependencyError(
+    #         "Install an ElementTree implementation if you want to use "
+    #         "Bio.Phylo to parse phyloXML files.")
+    supported_formats = {
+            'newick':   NewickIO,
+            'nexus':    NexusIO,
+            }
+else:
+    supported_formats = {
+            'newick':   NewickIO,
+            'nexus':    NexusIO,
+            'phyloxml': PhyloXMLIO,
+            }
 
 
 def parse(file, format):

@@ -94,10 +94,10 @@ def _attribute_matcher(kwargs):
             # Special case: restrict to internal/external/any nodes
             kwa_copy = kwargs.copy()
             pattern = kwa_copy.pop('terminal')
-            if (pattern is not None
-                and (not hasattr(node, 'is_terminal')
-                    or node.is_terminal() != pattern)):
-                    return False
+            if (pattern is not None and
+                (not hasattr(node, 'is_terminal') or
+                    node.is_terminal() != pattern)):
+                return False
         else:
             kwa_copy = kwargs
         for key, pattern in kwa_copy.iteritems():
@@ -106,8 +106,8 @@ def _attribute_matcher(kwargs):
                 return False
             target = getattr(node, key)
             if isinstance(pattern, basestring):
-                return (isinstance(target, basestring)
-                        and re.match(pattern+'$', target))
+                return (isinstance(target, basestring) and
+                        re.match(pattern+'$', target))
             if isinstance(pattern, bool):
                 return (pattern == bool(target))
             if isinstance(pattern, int):
@@ -151,7 +151,6 @@ def _object_matcher(obj):
                      % (obj, type(obj)))
 
 def _combine_matchers(target, kwargs, require_spec):
-    # ENH: handle terminal=foo here?
     if not target:
         if not kwargs:
             if require_spec:
@@ -177,8 +176,8 @@ class TreeElement(object):
                         ', '.join("%s='%s'"
                                   % (key, _sugar.trim_str(unicode(val)))
                             for key, val in self.__dict__.iteritems()
-                            if val is not None
-                            and type(val) in (str, int, float, bool, unicode)))
+                            if val is not None and
+                            type(val) in (str, int, float, bool, unicode)))
         return s.encode('utf-8')
 
     def __str__(self):
@@ -218,19 +217,19 @@ class TreeMixin(object):
             root = self.root
         return itertools.ifilter(filter_func, order_func(root, get_children))
 
-    def find(self, *args, **kwargs):
-        """Return the first element found by find_all(), or None.
+    def find_any(self, *args, **kwargs):
+        """Return the first element found by find_elements(), or None.
 
         This is also useful for checking whether any matching element exists in
         the tree.
         """
-        hits = self.find_all(*args, **kwargs)
+        hits = self.find_elements(*args, **kwargs)
         try:
             return hits.next()
         except StopIteration:
             return None
 
-    def find_all(self, target=None, terminal=None, order='preorder',
+    def find_elements(self, target=None, terminal=None, order='preorder',
             **kwargs):
         """Find all tree elements matching the given attributes.
 
@@ -252,7 +251,7 @@ class TreeMixin(object):
 
             >>> from Bio.Phylo.IO import PhyloXMIO
             >>> phx = PhyloXMLIO.read('phyloxml_examples.xml')
-            >>> matches = phx.phylogenies[5].find_all(code='OCTVU')
+            >>> matches = phx.phylogenies[5].find_elements(code='OCTVU')
             >>> matches.next()
             Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
 
@@ -284,20 +283,20 @@ class TreeMixin(object):
             **kwargs):
         """Find each clade containing a matching element.
 
-        That is, find each element as with find_all(), but return the
+        That is, find each element as with find_elements(), but return the
         corresponding clade object.
         """
         def match_attrs(elem):
             orig_clades = elem.__dict__.pop('clades')
-            found = elem.find(target, **kwargs)
+            found = elem.find_any(target, **kwargs)
             elem.clades = orig_clades
             return (found is not None)
         if terminal is None:
             is_matching_elem = match_attrs
         else:
             def is_matching_elem(elem):
-                return ((elem.is_terminal() == terminal)
-                        and match_attrs(elem))
+                return ((elem.is_terminal() == terminal) and
+                        match_attrs(elem))
         return self._filter_search(is_matching_elem, order, False)
 
     def get_path(self, target=None, **kwargs):
@@ -323,6 +322,10 @@ class TreeMixin(object):
         if not check_in_path(self.root):
             return None
         return path[-2::-1]
+
+    def get_nonterminals(self, order='preorder'):
+        """Get a list of all of this tree's nonterminal (internal) nodes."""
+        return list(self.find_clades(terminal=False, order=order))
 
     def get_terminals(self, order='preorder'):
         """Get a list of all of this tree's terminal (leaf) nodes."""
@@ -367,10 +370,7 @@ class TreeMixin(object):
 
     def count_terminals(self):
         """Counts the number of terminal (leaf) nodes within this tree."""
-        counter = 0
-        for i, leaf in enumerate(self.find_clades(terminal=True)):
-            counter = i
-        return counter + 1
+        return _sugar.iterlen(self.find_clades(terminal=True))
 
     def depths(self, unit_branch_lengths=False):
         """Create a mapping of tree clades to depths (by branch length).
@@ -405,12 +405,12 @@ class TreeMixin(object):
         """Return True if tree downstream of node is strictly bifurcating."""
         # Root can be trifurcating, because it has no ancestor
         if isinstance(self, Tree) and len(self.root) == 3:
-            return (self.root.clades[0].is_bifurcating()
-                    and self.root.clades[1].is_bifurcating()
-                    and self.root.clades[2].is_bifurcating())
+            return (self.root.clades[0].is_bifurcating() and
+                    self.root.clades[1].is_bifurcating() and
+                    self.root.clades[2].is_bifurcating())
         if len(self.root) == 2:
-            return (self.root.clades[0].is_bifurcating()
-                    and self.root.clades[1].is_bifurcating())
+            return (self.root.clades[0].is_bifurcating() and
+                    self.root.clades[1].is_bifurcating())
         if len(self.root) == 0:
             return True
         return False
@@ -452,7 +452,7 @@ class TreeMixin(object):
     def total_branch_length(self):
         """Calculate the sum of all the branch lengths in this tree."""
         return sum(node.branch_length
-                   for node in self.find_all(branch_length=True))
+                   for node in self.find_clades(branch_length=True))
 
     # Tree manipulation methods
 
@@ -483,9 +483,9 @@ class TreeMixin(object):
         loop with find_clades:
 
         >>> for clade in tree.find_clades(branch_length=True, order='level'):
-        >>>     if (clade.branch_length < .5
-        >>>             and not clade.is_terminal()
-        >>>             and clade is not self.root):
+        >>>     if (clade.branch_length < .5 and
+        >>>         not clade.is_terminal() and
+        >>>         clade is not self.root):
         >>>         tree.collapse(clade)
 
         Note that level-order traversal helps avoid strange side-effects when
@@ -508,7 +508,6 @@ class TreeMixin(object):
         for subclade in self.root.clades:
             subclade.ladderize(reverse=reverse)
 
-    # TODO - unit test
     def prune(self, target=None, **kwargs):
         """Prunes a terminal clade from the tree.
 
@@ -518,37 +517,40 @@ class TreeMixin(object):
 
         @return: parent clade of the pruned target
         """
-        path = self.get_path(target, **kwargs)
-        if not path:
-            raise ValueError("can't prune the root clade")
-        if not path[-1].is_terminal():
+        if 'terminal' in kwargs and kwargs['terminal']:
             raise ValueError("target must be terminal")
+        path = self.get_path(target, terminal=True, **kwargs)
+        if not path:
+            raise ValueError("can't find a matching target below this root")
         if len(path) == 1:
             parent = self.root
         else:
             parent = path[-2]
         parent.clades.remove(path[-1])
         if len(parent) == 1:
-            # We deleted one branch from a bifurcation
+            # We deleted a branch from a bifurcation
             if parent == self.root:
                 # If we're at the root, move the root upwards
+                # NB: This loses the length of the original branch
                 newroot = parent.clades[0]
                 newroot.branch_length = None
                 parent = self.root = newroot
             else:
                 # If we're not at the root, collapse this parent
                 child = parent.clades[0]
-                child.branch_length += (parent.branch_length or 0.0)
+                if child.branch_length is not None:
+                    child.branch_length += (parent.branch_length or 0.0)
                 if len(path) < 3:
                     grandparent = self.root
                 else:
                     grandparent = path[-3]
-                grandparent.clades.remove(parent)
-                grandparent.clades.append(child)
+                # Replace parent with child at the same place in grandparent
+                index = grandparent.clades.index(parent)
+                grandparent.clades.pop(index)
+                grandparent.clades.insert(index, child)
                 parent = grandparent
         return parent
 
-    # TODO - unit test
     def split(self, n=2, branch_length=1.0):
         """Speciation: generate n (default 2) new descendants.
 
@@ -561,7 +563,6 @@ class TreeMixin(object):
             clade = subtree_cls(name=base_name+str(i),
                                 branch_length=branch_length)
             self.root.clades.append(clade)
-        return self.root.clades[-n:]
 
 
 class Tree(TreeElement, TreeMixin):
@@ -635,12 +636,12 @@ class Tree(TreeElement, TreeMixin):
             node.name = name
         return rtree
 
-    # Attributes assumed by TreeMixin
-
     @property
     def clade(self):
         """The first subtree in this tree (not itself)."""
         return self.root
+
+    # Method assumed by TreeMixin
 
     def is_terminal(self):
         """True if the root of this tree is terminal."""
@@ -671,6 +672,34 @@ class Tree(TreeElement, TreeMixin):
         This duplicates the __format__ magic method for pre-2.6 Pythons.
         """
         return self.__format__(format)
+
+    # Pretty-printer for the entire tree hierarchy
+
+    def __str__(self):
+        """String representation of the entire tree.
+
+        Serializes each sub-clade recursively using repr() to create a summary
+        of the object structure.
+        """
+        TAB = '    '
+        textlines = []
+        def print_tree(obj, indent):
+            """Recursively serialize sub-elements.
+
+            This closes over textlines and modifies it in-place.
+            """
+            textlines.append(TAB*indent + repr(obj))
+            indent += 1
+            for attr in obj.__dict__:
+                child = getattr(obj, attr)
+                if isinstance(child, TreeElement):
+                    print_tree(child, indent)
+                elif isinstance(child, list):
+                    for elem in child:
+                        if isinstance(elem, TreeElement):
+                            print_tree(elem, indent)
+        print_tree(self, 0)
+        return '\n'.join(textlines)
 
 
 class Subtree(TreeElement, TreeMixin):

@@ -101,7 +101,7 @@ class SeqMapIndex(dict):
         dict.__init__(self)
         self.filename = filename
 
-        f = open(self.filename)
+        f = open(self.filename, "rU")
         try:
             position = 0
             while True:
@@ -118,7 +118,7 @@ class SeqMapIndex(dict):
         """ Return an item from the indexed file. """
         position = dict.__getitem__(self,key)
 
-        f = open(self.filename)
+        f = open(self.filename, "rU")
         try:
             f.seek(position)
             line = f.readline()

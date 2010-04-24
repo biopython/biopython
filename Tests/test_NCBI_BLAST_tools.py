@@ -40,7 +40,8 @@ for folder in likely_dirs:
         if not os.path.isfile(exe_name):
             continue
         #To tell the old and new rpsblast apart (since I have both on
-        #my path and the old blast has priority), try -h as a parameter:
+        #my path and the old blast has priority), try -h as a parameter.
+        #This should also reject WU-BLAST (since it doesn't like -h).
         child = subprocess.Popen(exe_name + " -h",
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
@@ -95,13 +96,16 @@ class CheckCompleteArgList(unittest.TestCase):
             missing.remove("-use_index")
 
         if extra or missing :
-            print "Extra: " + ",".join(sorted(extra))
-            print "Missing: " + ",".join(sorted(missing))
+            raise MissingExternalDependencyError("BLAST+ and Biopython out of sync. "
+                  "Your version of the NCBI BLAST+ tool %s does not match what we "
+                  "are expecting. Please update your copy of Biopython, or report "
+                  "this issue if you are already using the latest version. "
+                  "(Exta args: %s; Missing: %s)" \
+                  % (exe_name, ",".join(sorted(extra)), ",".join(sorted(missing))))
 
-        self.assertEqual(len(extra), 0, \
-                         "Wrapper has extra: " + ", ".join(sorted(extra)))
-        self.assertEqual(len(missing), 0, \
-                         "Wrapper is missing: " + ", ".join(sorted(missing)))
+        #An almost trivial example to test any validation
+        cline = wrapper(exe, query="dummy")
+        str(cline)
 
     def test_blastx(self):
         """Check all blastx arguments are supported"""

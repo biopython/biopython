@@ -12,43 +12,6 @@ __docformat__ = "epytext en"
 import math
 import sys
 
-import BaseTree
-
-
-def pretty_print(treeobj, file=sys.stdout, show_all=False, indent=0):
-    """Print a summary of the structure of a Phylo tree or subtree object.
-
-    With the show_all option, also prints the primitive (native Python instead
-    of just TreeElement) objects in the object tree.
-    """
-    assert isinstance(treeobj, BaseTree.TreeElement), \
-            "%s is not a valid TreeElement" % repr(treeobj)
-    if show_all:
-        show = repr
-    else:
-        def show(obj):
-            return '%s: %s' % (obj.__class__.__name__, obj)
-
-    # Closing over file
-    def print_indented(text, indent):
-        """Write an indented string of text to file."""
-        file.write('\t'*indent + text + '\n')
-
-    def print_tree(obj, indent):
-        """Recursively print a TreeElement object tree."""
-        print_indented(show(obj), indent)
-        indent += 1
-        for attr in obj.__dict__:
-            child = getattr(obj, attr)
-            if isinstance(child, BaseTree.TreeElement):
-                print_tree(child, indent)
-            elif isinstance(child, list):
-                for elem in child:
-                    if isinstance(elem, BaseTree.TreeElement):
-                        print_tree(elem, indent)
-
-    print_tree(treeobj, indent)
-
 
 def to_networkx(tree):
     """Convert a Tree object to a networkx graph.
@@ -71,8 +34,20 @@ def to_networkx(tree):
         # Ubuntu Lucid uses v0.99, newest is v1.0.1, let's support both
         if networkx.__version__ >= '1.0':
             graph.add_edge(n1, n2, weight=str(n2.branch_length or 1.0))
+            # Copy branch color value as hex, if available
             if hasattr(n2, 'color') and n2.color is not None:
                 graph[n1][n2]['color'] = n2.color.to_hex()
+            elif hasattr(n1, 'color') and n1.color is not None:
+                # Cascading color attributes
+                graph[n1][n2]['color'] = n1.color.to_hex()
+                n2.color = n1.color
+            # Copy branch weight value (float) if available
+            if hasattr(n2, 'width') and n2.width is not None:
+                graph[n1][n2]['width'] = n2.width
+            elif hasattr(n1, 'width') and n1.width is not None:
+                # Cascading width attributes
+                graph[n1][n2]['width'] = n1.width
+                n2.width = n1.width
         elif networkx.__version__ >= '0.99':
             graph.add_edge(n1, n2, (n2.branch_length or 1.0))
         else:
@@ -179,9 +154,13 @@ def draw_graphviz(tree, label_func=str, prog='neato', args='',
         labels = dict(get_label_mapping(G, None))
     kwargs['nodelist'] = labels.keys()
     if 'edge_color' not in kwargs:
-        kwargs['edge_color'] = [isinstance(e[2], dict)
-                                and e[2].get('color', 'k') or 'k'
+        kwargs['edge_color'] = [isinstance(e[2], dict) and
+                                e[2].get('color', 'k') or 'k'
                                 for e in G.edges(data=True)]
+    if 'width' not in kwargs:
+        kwargs['width'] = [isinstance(e[2], dict) and
+                           e[2].get('width', 1.0) or 1.0
+                           for e in G.edges(data=True)]
     networkx.draw(G, posn, labels=labels, node_color=node_color, **kwargs)
 
 

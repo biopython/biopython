@@ -12,11 +12,19 @@ import zipfile
 from itertools import izip, chain
 from cStringIO import StringIO
 
-from Bio.Phylo import PhyloXML as PX, PhyloXMLIO
+# Python 2.4 doesn't have ElementTree, which PhyloXMLIO needs
+from Bio import MissingExternalDependencyError
+try:
+    from Bio.Phylo import PhyloXML as PX, PhyloXMLIO
+except ImportError:
+    raise MissingExternalDependencyError(
+            "Install an ElementTree implementation if you want to use "
+            "Bio.Phylo to parse phyloXML files.")
+
 from Bio import Alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align.Generic import  Alignment
+from Bio.Align import MultipleSeqAlignment
 
 # Example PhyloXML files
 EX_APAF = 'PhyloXML/apaf.xml'
@@ -639,9 +647,11 @@ class MethodTests(unittest.TestCase):
         pseq2 = PX.Sequence.from_seqrecord(srec)
         # TODO: check the round-tripped attributes again
 
-    def test_get_alignment(self):
+    def test_to_alignment(self):
         tree = self.phyloxml.phylogenies[0]
-        self.assertEqual(tree.get_alignment(), None)
+        aln = tree.to_alignment()
+        self.assert_(isinstance(aln, MultipleSeqAlignment))
+        self.assertEqual(len(aln), 0)
         # Add sequences to the terminals
         alphabet = Alphabet.Gapped(Alphabet.generic_dna)
         for tip, seqstr in izip(tree.get_terminals(),
@@ -649,8 +659,8 @@ class MethodTests(unittest.TestCase):
             tip.sequences.append(PX.Sequence.from_seqrecord(
                 SeqRecord(Seq(seqstr, alphabet), id=str(tip))))
         # Check the alignment
-        aln = tree.get_alignment()
-        self.assert_(isinstance(aln, Alignment))
+        aln = tree.to_alignment()
+        self.assert_(isinstance(aln, MultipleSeqAlignment))
         self.assertEqual(len(aln), 3)
         self.assertEqual(aln.get_alignment_length(), 7)
 
@@ -704,21 +714,21 @@ class MethodTests(unittest.TestCase):
         self.assertEqual(clade.taxonomy.rank, 'genus')
         # raise if len > 1
         clade.confidences.append(conf)
-        self.assertRaises(ValueError, getattr, clade, 'confidence')
-        clade.taxonomies.append(taxo)
-        self.assertRaises(ValueError, getattr, clade, 'taxonomy')
-        # raise if []
-        clade.confidences = []
         self.assertRaises(AttributeError, getattr, clade, 'confidence')
-        clade.taxonomies = []
+        clade.taxonomies.append(taxo)
         self.assertRaises(AttributeError, getattr, clade, 'taxonomy')
+        # None if []
+        clade.confidences = []
+        self.assertEqual(clade.confidence, None)
+        clade.taxonomies = []
+        self.assertEqual(clade.taxonomy, None)
         # Phylogeny.confidence
         tree = PX.Phylogeny(True, confidences=[conf])
         self.assertEqual(tree.confidence.type, 'bootstrap')
         tree.confidences.append(conf)
-        self.assertRaises(ValueError, getattr, tree, 'confidence')
-        tree.confidences = []
         self.assertRaises(AttributeError, getattr, tree, 'confidence')
+        tree.confidences = []
+        self.assertEqual(tree.confidence, None)
 
     # Other methods
 

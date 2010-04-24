@@ -779,9 +779,7 @@ class GenBankScanner(InsdcScanner):
         while self.line[:self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS \
         or self.line[:self.HEADER_WIDTH] == " "*self.HEADER_WIDTH \
         or "WGS" == self.line[:3]:
-#            if self.line[-1] == "\n" : self.line = self.line[:-1]
-            self.line = self.line.rstrip(os.linesep)
-            misc_lines.append(self.line)
+            misc_lines.append(self.line.rstrip())
             self.line = self.handle.readline()
             if not self.line:
                 raise ValueError("Premature end of file")

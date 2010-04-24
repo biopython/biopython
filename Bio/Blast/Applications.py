@@ -1,5 +1,5 @@
 # Copyright 2001 Brad Chapman.
-# Revisions copyright 2009 by Peter Cock.
+# Revisions copyright 2009-2010 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -192,7 +192,7 @@ class BlastallCommandline(_BlastAllOrPgpCommandLine):
                    "and tblastx). 3 is both, 1 is top, 2 is bottom.", False),
            _Option(["-l", "restrict_gi"], ["input"], None, 0,
                    "Restrict search of database to list of GI's.", False),
-           _Option(["-R"], ["input", "file"], None, 0,
+           _Option(["-R", "checkpoint"], ["input", "file"], None, 0,
                    "PSI-TBLASTN checkpoint input file.", False),
            _Option(["-n", "megablast"], ["input"], None, 0,
                    "MegaBlast search T/F.", False),
@@ -204,19 +204,19 @@ class BlastallCommandline(_BlastAllOrPgpCommandLine):
 
                    In older versions of BLAST, -L set the length of region
                    used to judge hits (see -K parameter).""", False),
-           _Option(["-w"], ["input"], None, 0,
+           _Option(["-w", "frame_shit_penalty"], ["input"], None, 0,
                    "Frame shift penalty (OOF algorithm for blastx).", False),
-           _Option(["-t"], ["input"], None, 0,
+           _Option(["-t", "largest_intron"], ["input"], None, 0,
                    "Length of the largest intron allowed in a translated " + \
                    "nucleotide sequence when linking multiple distinct " + \
                    "alignments. (0 invokes default behavior; a negative value " + \
                    "disables linking.)", False),
-           _Option(["-B"], ["input"], None, 0,
+           _Option(["-B", "num_concatenated_queries"], ["input"], None, 0,
                    "Number of concatenated queries, for blastn and tblastn.",
                    False),
            _Option(["-V", "oldengine"], ["input"], None, 0,
                    "Force use of the legacy BLAST engine.", False),
-           _Option(["-C"], ["input"], None, 0,
+           _Option(["-C", "composition_based"], ["input"], None, 0,
                    """Use composition-based statistics for tblastn:
                    D or d: default (equivalent to F)
                    0 or F or f: no composition-based statistics
@@ -227,7 +227,7 @@ class BlastallCommandline(_BlastAllOrPgpCommandLine):
                        21:902-911, 2005, unconditionally
                    For programs other than tblastn, must either be absent or be
                    D, F or 0.""", False),
-           _Option(["-s"], ["input"], None, 0,
+           _Option(["-s", "smith_waterman"], ["input"], None, 0,
                    "Compute locally optimal Smith-Waterman alignments (This " + \
                    "option is only available for gapped tblastn.) T/F", False),
         ] 
@@ -461,15 +461,18 @@ class _NcbiblastCommandline(AbstractCommandline):
         incompatibles = {"remote":["gilist", "negative_gilist", "num_threads"],
                          "import_search_strategy" : ["export_search_strategy"],
                          "gilist":["negative_gilist"]}
+        self._validate_incompatibilities(incompatibles)
+        if self.entrez_query and not self.remote :
+            raise ValueError("Option entrez_query requires remote option.")
+        AbstractCommandline._validate(self)
+
+    def _validate_incompatibilities(self, incompatibles):
         for a in incompatibles:
             if self._get_parameter(a):
                 for b in incompatibles[a]:
                     if self._get_parameter(b):
                         raise ValueError("Options %s and %s are incompatible." \
                                          % (a,b))
-        if self.entrez_query and not self.remote :
-            raise ValueError("Option entrez_query requires remote option.")
-        AbstractCommandline._validate(self)
 
 class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
     """Base Commandline object for (classic) NCBI BLAST wrappers (PRIVATE).
@@ -531,12 +534,7 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
         incompatibles = {"subject_loc":["db, gilist, negative_gilist, remote"],
                          "culling_limit":["best_hit_overhang","best_hit_score_edge"],
                          "subject":["db", "gilist", "negative_gilist"]}
-        for a in incompatibles:
-            if self._get_parameter(a):
-                for b in incompatibles[a]:
-                    if self._get_parameter(b):
-                        raise ValueError("Options %s and %s are incompatible." \
-                                         % (a,b))
+        self._validate_incompatibilities(incompatibles)
         _NcbiblastCommandline._validate(self)
 
 class NcbiblastpCommandline(_Ncbiblast2SeqCommandline):
@@ -600,12 +598,7 @@ class NcbiblastpCommandline(_Ncbiblast2SeqCommandline):
 
     def _validate(self):
         incompatibles = {"db_soft_mask":["subject", "subject_loc"]}
-        for a in incompatibles:
-            if self._get_parameter(a):
-                for b in incompatibles[a]:
-                    if self._get_parameter(b):
-                        raise ValueError("Options %s and %s are incompatible." \
-                                         % (a,b))
+        self._validate_incompatibilities(incompatibles)
         _Ncbiblast2SeqCommandline._validate(self)
 
 
@@ -704,12 +697,7 @@ class NcbiblastnCommandline(_Ncbiblast2SeqCommandline):
 
     def _validate(self):
         incompatibles = {"db_soft_mask":["subject", "subject_loc"]}
-        for a in incompatibles:
-            if self._get_parameter(a):
-                for b in incompatibles[a]:
-                    if self._get_parameter(b):
-                        raise ValueError("Options %s and %s are incompatible." \
-                                         % (a,b))
+        self._validate_incompatibilities(incompatibles)
         if (self.template_type and not self.template_length) \
         or (self.template_length and not self.template_type) :
             raise ValueError("Options template_type and template_type require each other.")
@@ -780,12 +768,7 @@ class NcbiblastxCommandline(_Ncbiblast2SeqCommandline):
 
     def _validate(self):
         incompatibles = {"db_soft_mask":["subject", "subject_loc"]}
-        for a in incompatibles:
-            if self._get_parameter(a):
-                for b in incompatibles[a]:
-                    if self._get_parameter(b):
-                        raise ValueError("Options %s and %s are incompatible." \
-                                         % (a,b))
+        self._validate_incompatibilities(incompatibles)
         _Ncbiblast2SeqCommandline._validate(self)
 
 
@@ -859,12 +842,7 @@ class NcbitblastnCommandline(_Ncbiblast2SeqCommandline):
 
     def _validate(self):
         incompatibles = {"in_pssm":["remote", "query"]}
-        for a in incompatibles:
-            if self._get_parameter(a):
-                for b in incompatibles[a]:
-                    if self._get_parameter(b):
-                        raise ValueError("Options %s and %s are incompatible." \
-                                         % (a,b))
+        self._validate_incompatibilities(incompatibles)
         _Ncbiblast2SeqCommandline._validate(self)
 
 
@@ -921,14 +899,6 @@ class NcbitblastxCommandline(_Ncbiblast2SeqCommandline):
                     Default is "12 2.2 2.5""", False),
            ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
-
-
-    def _validate(self):
-        if self.remote and self.in_pssm:
-            raise ValueError("The remote option cannot be used with in_pssm")
-        if self.query and self.in_pssm:
-            raise ValueError("The query option cannot be used with in_pssm")
-        _Ncbiblast2SeqCommandline._validate(self)
 
 
 class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
@@ -1015,12 +985,7 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
         incompatibles = {"num_iterations":["remote"],
                          "in_msa":["in_pssm", "query"],
                          "in_pssm":["in_msa","query","phi_pattern"]}
-        for a in incompatibles:
-            if self._get_parameter(a):
-                for b in incompatibles[a]:
-                    if self._get_parameter(b):
-                        raise ValueError("Options %s and %s are incompatible." \
-                                         % (a,b))
+        self._validate_incompatibilities(incompatibles)
         _Ncbiblast2SeqCommandline._validate(self)
 
 

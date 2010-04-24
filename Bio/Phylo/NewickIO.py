@@ -140,12 +140,12 @@ class Parser(object):
         if len(values) == 1:
             # Real branch length, or support as branch length
             if self.values_are_support:
-                clade.support = values[0]
+                clade.confidence = values[0]
             else:
                 clade.branch_length = values[0]
         elif len(values) == 2:
             # Two non-taxon values: support comes first. (Is that always so?)
-            clade.support, clade.branch_length = values
+            clade.confidence, clade.branch_length = values
         elif len(values) > 2:
             raise NewickError("Too many colons in tag: " + text)
         return clade
@@ -221,7 +221,7 @@ class Writer(object):
                     # terminal branches have 100% support
                     return ':%1.2f' % max_support
                 else:
-                    return ':%1.2f' % (clade.support)
+                    return ':%1.2f' % (clade.confidence)
 
         elif branchlengths_only:
             # write only branchlengths, ignore support
@@ -234,19 +234,19 @@ class Writer(object):
                 if terminal:
                     return ':%1.5f' % (clade.branch_length or 1.0)
                 else:
-                    if (clade.branch_length is not None
-                            and hasattr(clade, 'support')
-                            and clade.support is not None):
+                    if (clade.branch_length is not None and
+                        hasattr(clade, 'confidence') and
+                        clade.confidence is not None):
                         # we have blen and suppport
-                        return '%1.2f:%1.5f' % (clade.support,
+                        return '%1.2f:%1.5f' % (clade.confidence,
                                                 clade.branch_length)
                     elif clade.branch_length is not None:
                         # we have only blen
                         return '0.00000:%1.5f' % clade.branch_length
-                    elif (hasattr(clade, 'support')
-                            and clade.support is not None):
+                    elif (hasattr(clade, 'confidence') and
+                          clade.confidence is not None):
                         # we have only support
-                        return '%1.2f:0.00000' % clade.support
+                        return '%1.2f:0.00000' % clade.confidence
                     else:
                         return '0.00:0.00000'
 

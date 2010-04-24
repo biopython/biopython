@@ -69,9 +69,9 @@ class Record:
 
         h=[]
         for ht in self.hierarchy:
-             h.append("=".join(map(str,ht))) 
+            h.append("=".join(map(str,ht))) 
         s.append(",".join(h))
-       
+
         return "\t".join(map(str,s)) + "\n"
 
 
@@ -100,7 +100,7 @@ class Index(dict):
         """
         dict.__init__(self)
         self.filename = filename
-        f = open(self.filename)
+        f = open(self.filename, "rU")
         try:
             position = 0
             while True:
@@ -120,7 +120,7 @@ class Index(dict):
         """ Return an item from the indexed file. """
         position = dict.__getitem__(self,key)
 
-        f = open(self.filename)
+        f = open(self.filename, "rU")
         try:
             f.seek(position)
             line = f.readline()

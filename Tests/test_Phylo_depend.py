@@ -12,7 +12,7 @@ try:
     import networkx
 except ImportError:
     raise MissingExternalDependencyError(
-            "Install NetworkX if you want to use Bio.Phylo.Utils.")
+            "Install NetworkX if you want to use Bio.Phylo._utils.")
 
 try:
     import pygraphviz
@@ -22,7 +22,7 @@ except ImportError:
     except ImportError:
         raise MissingExternalDependencyError(
                 "Install PyGraphviz or Pydot if you want to use "
-                "Bio.Phylo.Utils.")
+                "Bio.Phylo._utils.")
 
 # OK, we can go ahead
 import unittest

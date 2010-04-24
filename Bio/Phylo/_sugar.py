@@ -10,6 +10,16 @@ The amount of code in this file should be kept to a minimum.
 __docformat__ = "epytext en"
 
 
+def iterlen(items):
+    """Count the number of items in an iterable.
+
+    Exhausts a generator, but doesn't require creating a full list.
+    """
+    for i, x in enumerate(items):
+        count = i
+    return count + 1
+
+
 def trim_str(text, maxlen=60):
     """Truncate a string to maxlen characters, including ellipsis."""
     assert isinstance(text, basestring), \
