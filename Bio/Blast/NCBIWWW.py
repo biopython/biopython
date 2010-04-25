@@ -199,7 +199,14 @@ def _parse_qblast_ref_page(handle):
             msg = msg.split("</div>",1)[0].split("\n",1)[0].strip()
             if msg:
                 raise ValueError("Error message from NCBI: %s" % msg)
+        i = s.find('<p class="error">')
+        if i != -1:
+            msg = s[i+len('<p class="error">'):].strip()
+            msg = msg.split("</p>",1)[0].split("\n",1)[0].strip()
+            if msg:
+                raise ValueError("Error message from NCBI: %s" % msg)
         #We didn't recognise the error layout :(
+        print s
         raise ValueError("No RID and no RTOE found in the 'please wait' page."
                          " (there was probably a problem with your request)")
     elif not rid:
@@ -216,3 +223,5 @@ def _parse_qblast_ref_page(handle):
     except ValueError:
         raise ValueError("A non-integer RTOE found in " \
                          +"the 'please wait' page, %s" % repr(rtoe))
+
+    
