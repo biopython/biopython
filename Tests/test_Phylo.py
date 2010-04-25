@@ -219,15 +219,55 @@ class MixinTests(unittest.TestCase):
         tree.ladderize(reverse=True)
         self.assertEqual(ordered_names(tree), list('ABCD'))
 
-    # TODO:
     def test_prune(self):
         """TreeMixin: prune() method."""
-        pass
+        tree = self.phylogenies[10]
+        # Taxon in a trifurcation -- no collapse afterward
+        parent = tree.prune(name='B')
+        self.assertEqual(len(parent.clades), 2)
+        self.assertEqual(parent.clades[0].name, 'A')
+        self.assertEqual(parent.clades[1].name, 'C')
+        self.assertEqual(len(tree.get_terminals()), 3)
+        self.assertEqual(len(tree.get_nonterminals()), 2)
+        # Taxon in a bifurcation -- collapse
+        tree = self.phylogenies[0]
+        parent = tree.prune(name='A')
+        self.assertEqual(len(parent.clades), 2)
+        for clade, name, blen in zip(parent, 'BC', (.29, .4)):
+            self.assert_(clade.is_terminal())
+            self.assertEqual(clade.name, name)
+            self.assertAlmostEqual(clade.branch_length, blen)
+        self.assertEqual(len(tree.get_terminals()), 2)
+        self.assertEqual(len(tree.get_nonterminals()), 1)
+        # Taxon just below the root -- don't screw up
+        tree = self.phylogenies[1]
+        parent = tree.prune(name='C')
+        self.assertEqual(parent, tree.root)
+        self.assertEqual(len(parent.clades), 2)
+        for clade, name, blen in zip(parent, 'AB', (.102, .23)):
+            self.assert_(clade.is_terminal())
+            self.assertEqual(clade.name, name)
+            self.assertAlmostEqual(clade.branch_length, blen)
+        self.assertEqual(len(tree.get_terminals()), 2)
+        self.assertEqual(len(tree.get_nonterminals()), 1)
 
-    # TODO:
     def test_split(self):
         """TreeMixin: split() method."""
-        pass
+        tree = self.phylogenies[0]
+        C = tree.clade[1]
+        C.split()
+        self.assertEqual(len(C), 2)
+        self.assertEqual(len(tree.get_terminals()), 4)
+        self.assertEqual(len(tree.get_nonterminals()), 3)
+        C[0].split(3, .5)
+        self.assertEqual(len(tree.get_terminals()), 6)
+        self.assertEqual(len(tree.get_nonterminals()), 4)
+        for clade, name, blen in zip(C[0],
+                ('C00', 'C01', 'C02'),
+                (0.5, 0.5, 0.5)):
+            self.assert_(clade.is_terminal())
+            self.assertEqual(clade.name, name)
+            self.assertEqual(clade.branch_length, blen)
 
 
 # ---------------------------------------------------------

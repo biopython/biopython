@@ -491,8 +491,8 @@ class BranchColor(PhyloElement):
 
     def __init__(self, red, green, blue):
         for color in (red, green, blue):
-            assert (isinstance(color, int)
-                    and 0 <= color <= 255
+            assert (isinstance(color, int) and
+                    0 <= color <= 255
                     ), "Color values must be integers between 0 and 255."
         self.red = red
         self.green = green
@@ -505,9 +505,9 @@ class BranchColor(PhyloElement):
         The string format is the same style used in HTML and CSS, such as
         '#FF8000' for an RGB value of (255, 128, 0).
         """
-        assert (isinstance(hexstr, basestring)
-                and hexstr.startswith('#')
-                and len(hexstr) == 7
+        assert (isinstance(hexstr, basestring) and
+                hexstr.startswith('#') and
+                len(hexstr) == 7
                 ), "need a 24-bit hexadecimal string, e.g. #000000"
         def unpack(cc):
             return int('0x'+cc, base=16)

@@ -273,8 +273,9 @@ The modules under Bio.WWW were deprecated in Release 1.45, and removed in
 Release 1.48.  The remaining stub Bio.WWW was deprecated in Release 1.48,
 and removed in Release 1.53.
 
-The functionality in Bio.WWW.SCOP, Bio.WWW.InterPro and Bio.WWW.ExPASy
-is now available from Bio.SCOP, Bio.InterPro and Bio.ExPASy instead.
+The functionality in Bio.WWW.SCOP, Bio.WWW.InterPro, Bio.WWW.ExPASy and
+Bio.WWW.NCBI is now available from Bio.SCOP, Bio.InterPro, Bio.ExPASy and
+Bio.Entrez instead.
 
 Bio.SeqIO
 =========

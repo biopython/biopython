@@ -234,17 +234,17 @@ class Writer(object):
                 if terminal:
                     return ':%1.5f' % (clade.branch_length or 1.0)
                 else:
-                    if (clade.branch_length is not None
-                            and hasattr(clade, 'confidence')
-                            and clade.confidence is not None):
+                    if (clade.branch_length is not None and
+                        hasattr(clade, 'confidence') and
+                        clade.confidence is not None):
                         # we have blen and suppport
                         return '%1.2f:%1.5f' % (clade.confidence,
                                                 clade.branch_length)
                     elif clade.branch_length is not None:
                         # we have only blen
                         return '0.00000:%1.5f' % clade.branch_length
-                    elif (hasattr(clade, 'confidence')
-                            and clade.confidence is not None):
+                    elif (hasattr(clade, 'confidence') and
+                          clade.confidence is not None):
                         # we have only support
                         return '%1.2f:0.00000' % clade.confidence
                     else:

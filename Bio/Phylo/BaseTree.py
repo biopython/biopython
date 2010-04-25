@@ -94,9 +94,9 @@ def _attribute_matcher(kwargs):
             # Special case: restrict to internal/external/any nodes
             kwa_copy = kwargs.copy()
             pattern = kwa_copy.pop('terminal')
-            if (pattern is not None
-                and (not hasattr(node, 'is_terminal')
-                    or node.is_terminal() != pattern)):
+            if (pattern is not None and
+                (not hasattr(node, 'is_terminal') or
+                    node.is_terminal() != pattern)):
                 return False
         else:
             kwa_copy = kwargs
@@ -106,8 +106,8 @@ def _attribute_matcher(kwargs):
                 return False
             target = getattr(node, key)
             if isinstance(pattern, basestring):
-                return (isinstance(target, basestring)
-                        and re.match(pattern+'$', target))
+                return (isinstance(target, basestring) and
+                        re.match(pattern+'$', target))
             if isinstance(pattern, bool):
                 return (pattern == bool(target))
             if isinstance(pattern, int):
@@ -176,8 +176,8 @@ class TreeElement(object):
                         ', '.join("%s='%s'"
                                   % (key, _sugar.trim_str(unicode(val)))
                             for key, val in self.__dict__.iteritems()
-                            if val is not None
-                            and type(val) in (str, int, float, bool, unicode)))
+                            if val is not None and
+                            type(val) in (str, int, float, bool, unicode)))
         return s.encode('utf-8')
 
     def __str__(self):
@@ -295,8 +295,8 @@ class TreeMixin(object):
             is_matching_elem = match_attrs
         else:
             def is_matching_elem(elem):
-                return ((elem.is_terminal() == terminal)
-                        and match_attrs(elem))
+                return ((elem.is_terminal() == terminal) and
+                        match_attrs(elem))
         return self._filter_search(is_matching_elem, order, False)
 
     def get_path(self, target=None, **kwargs):
@@ -405,12 +405,12 @@ class TreeMixin(object):
         """Return True if tree downstream of node is strictly bifurcating."""
         # Root can be trifurcating, because it has no ancestor
         if isinstance(self, Tree) and len(self.root) == 3:
-            return (self.root.clades[0].is_bifurcating()
-                    and self.root.clades[1].is_bifurcating()
-                    and self.root.clades[2].is_bifurcating())
+            return (self.root.clades[0].is_bifurcating() and
+                    self.root.clades[1].is_bifurcating() and
+                    self.root.clades[2].is_bifurcating())
         if len(self.root) == 2:
-            return (self.root.clades[0].is_bifurcating()
-                    and self.root.clades[1].is_bifurcating())
+            return (self.root.clades[0].is_bifurcating() and
+                    self.root.clades[1].is_bifurcating())
         if len(self.root) == 0:
             return True
         return False
@@ -483,9 +483,9 @@ class TreeMixin(object):
         loop with find_clades:
 
         >>> for clade in tree.find_clades(branch_length=True, order='level'):
-        >>>     if (clade.branch_length < .5
-        >>>             and not clade.is_terminal()
-        >>>             and clade is not self.root):
+        >>>     if (clade.branch_length < .5 and
+        >>>         not clade.is_terminal() and
+        >>>         clade is not self.root):
         >>>         tree.collapse(clade)
 
         Note that level-order traversal helps avoid strange side-effects when
@@ -508,7 +508,6 @@ class TreeMixin(object):
         for subclade in self.root.clades:
             subclade.ladderize(reverse=reverse)
 
-    # TODO - unit test
     def prune(self, target=None, **kwargs):
         """Prunes a terminal clade from the tree.
 
@@ -518,37 +517,40 @@ class TreeMixin(object):
 
         @return: parent clade of the pruned target
         """
-        path = self.get_path(target, **kwargs)
-        if not path:
-            raise ValueError("can't prune the root clade")
-        if not path[-1].is_terminal():
+        if 'terminal' in kwargs and kwargs['terminal']:
             raise ValueError("target must be terminal")
+        path = self.get_path(target, terminal=True, **kwargs)
+        if not path:
+            raise ValueError("can't find a matching target below this root")
         if len(path) == 1:
             parent = self.root
         else:
             parent = path[-2]
         parent.clades.remove(path[-1])
         if len(parent) == 1:
-            # We deleted one branch from a bifurcation
+            # We deleted a branch from a bifurcation
             if parent == self.root:
                 # If we're at the root, move the root upwards
+                # NB: This loses the length of the original branch
                 newroot = parent.clades[0]
                 newroot.branch_length = None
                 parent = self.root = newroot
             else:
                 # If we're not at the root, collapse this parent
                 child = parent.clades[0]
-                child.branch_length += (parent.branch_length or 0.0)
+                if child.branch_length is not None:
+                    child.branch_length += (parent.branch_length or 0.0)
                 if len(path) < 3:
                     grandparent = self.root
                 else:
                     grandparent = path[-3]
-                grandparent.clades.remove(parent)
-                grandparent.clades.append(child)
+                # Replace parent with child at the same place in grandparent
+                index = grandparent.clades.index(parent)
+                grandparent.clades.pop(index)
+                grandparent.clades.insert(index, child)
                 parent = grandparent
         return parent
 
-    # TODO - unit test
     def split(self, n=2, branch_length=1.0):
         """Speciation: generate n (default 2) new descendants.
 
@@ -561,7 +563,6 @@ class TreeMixin(object):
             clade = subtree_cls(name=base_name+str(i),
                                 branch_length=branch_length)
             self.root.clades.append(clade)
-        return self.root.clades[-n:]
 
 
 class Tree(TreeElement, TreeMixin):
