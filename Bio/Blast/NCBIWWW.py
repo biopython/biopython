@@ -192,23 +192,34 @@ def _parse_qblast_ref_page(handle):
         #Can we reliably extract the error message from the HTML page?
         #e.g.  "Message ID#24 Error: Failed to read the Blast query:
         #       Nucleotide FASTA provided for protein sequence"
-        #This occurs inside a <div class="error msInf"> entry so try this:
+        #or    "Message ID#32 Error: Query contains no data: Query
+        #       contains no sequence data"
+        #
+        #This used to occur inside a <div class="error msInf"> entry:
         i = s.find('<div class="error msInf">')
         if i != -1:
             msg = s[i+len('<div class="error msInf">'):].strip()
             msg = msg.split("</div>",1)[0].split("\n",1)[0].strip()
             if msg:
                 raise ValueError("Error message from NCBI: %s" % msg)
+        #In spring 2010 the markup was like this:
         i = s.find('<p class="error">')
         if i != -1:
             msg = s[i+len('<p class="error">'):].strip()
             msg = msg.split("</p>",1)[0].split("\n",1)[0].strip()
             if msg:
                 raise ValueError("Error message from NCBI: %s" % msg)
+        #Generic search based on the way the error messages start:
+        i = s.find('Message ID#')
+        if i != -1:
+            #Break the message at the first HTML tag
+            msg = s[i:].split("<",1)[0].split("\n",1)[0].strip()
+            raise ValueError("Error message from NCBI: %s" % msg)
         #We didn't recognise the error layout :(
-        print s
-        raise ValueError("No RID and no RTOE found in the 'please wait' page."
-                         " (there was probably a problem with your request)")
+        #print s
+        raise ValueError("No RID and no RTOE found in the 'please wait' page, "
+                         "there was probably an error in your request but we "
+                         "could not extract a helpful error message.")
     elif not rid:
         #Can this happen?
         raise ValueError("No RID found in the 'please wait' page."
