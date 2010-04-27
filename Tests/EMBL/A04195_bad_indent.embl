@@ -1,0 +1,36 @@
+ID   A04195 IMGT/LIGM annotation : by annotators; RNA; SYN; 51 BP.
+XX
+AC   A04195;
+XX
+DT   15-MAY-1995 (Rel. 2, arrived in LIGM-DB )
+DT   20-APR-1999 (Rel. 11, Last updated, Version 4)
+XX
+DE   Artificial Ig lambda-chain mRNA ;
+DE   RNA; rearranged configuration; Ig-Light-Lambda; regular. 
+XX
+KW   antigen receptor; Immunoglobulin superfamily (IgSF); 
+KW   Immunoglobulin (IG); IG-Light; IG-Light-Lambda; cDNA; rearranged. 
+XX
+OS   synthetic construct
+OC   other sequences; artificial sequences. 
+XX
+RN   [1]
+RP   1-51
+RA   ;
+RT   ;
+RL   Patent number WO8403712-A/4, 27-SEP-1984.
+XX
+DR   EMBL; A04195.
+XX
+FH   Key                 Location/Qualifiers 
+FH   
+FT   L-REGION            10..51
+FT                       /partial
+FT                       /organism="Artificial sequence"
+FT                       /product="Ig Lambda"
+FT                       /translation="MQAVMTQESALTTS"
+FT   INIT-CODON          10..12
+XX
+SQ   Sequence 51 BP; 15 A; 13 C; 10 G; 13 T; 0 other;
+     gattgatcaa tgcaggctgt tatgactcag gaatctgcac tcaccacatc a                 51
+//

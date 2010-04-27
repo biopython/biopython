@@ -139,6 +139,7 @@ test_files = [ \
     ("embl",   False, 'EMBL/AAA03323.embl', 1), # 2008, PA line but no AC
     ("embl",   False, 'EMBL/AE017046.embl', 1), #See also NC_005816.gb
     ("embl",   False, 'EMBL/Human_contigs.embl', 2), #contigs, no sequences
+    ("embl",   False, 'EMBL/A04195_bad_indent.embl', 1), # features over indented
     ("stockholm", True,  'Stockholm/simple.sth', 2),
     ("stockholm", True,  'Stockholm/funny.sth', 5),
 #Following PHYLIP files are currently only used here and in test_AlignIO.py,
