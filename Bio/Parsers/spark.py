@@ -59,7 +59,7 @@ class GenericScanner:
         return '|'.join(rv)
 
     def error(self, s, pos):
-        print "Lexical error at position %s" % pos
+        print >>sys.stderr, "Lexical error at position %s" % pos
         raise SystemExit
 
     def tokenize(self, s):
@@ -178,7 +178,7 @@ class GenericParser:
         return None
 
     def error(self, token):
-        print "Syntax error at or near `%s' token" % token
+        print >>sys.stderr, "Syntax error at or near `%s' token" % token
         raise SystemExit
 
     def parse(self, tokens):
