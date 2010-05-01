@@ -3899,41 +3899,30 @@ TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273291|gb|AF191665.1|AF19
 
 In case you are interested (and this is an aside from the main thrust of this
 chapter), the \texttt{opuntia.dnd} file ClustalW creates is just a standard
-Newick tree file, and \verb|Bio.Nexus| can parse these. You can either parse
-the file directly (as though it were a light weight NEXUS file), or just go
-directly to a tree object:
+Newick tree file, and \verb|Bio.Phylo| can parse these:
 
 \begin{verbatim}
->>> from Bio.Nexus import Trees
->>> tree_string = open("opuntia.dnd").read()
->>> tree = Trees.Tree(tree_string)
->>> print tree
-tree a_tree = ((gi|6273291|gb|AF191665.1|AF191665,(gi|6273290|gb|AF191664.1|AF191664,
-gi|6273289|gb|AF191663.1|AF191663)),(gi|6273287|gb|AF191661.1|AF191661,
-gi|6273286|gb|AF191660.1|AF191660),(gi|6273285|gb|AF191659.1|AF191659,
-gi|6273284|gb|AF191658.1|AF191658));
->>> print tree.display()
- #                            taxon   prev      succ    brlen blen (sum) support comment
- 0                                -   None [1, 6, 9]      0.0        0.0       -       -
- 1                                -      0    [2, 3]   0.0077     0.0077       -       -
- 2 gi|6273291|gb|AF191665.1|AF191665     1        []  0.00418    0.01188       -       -
- 3                                -      1    [4, 5]  0.00083    0.00853       -       -
- 4 gi|6273290|gb|AF191664.1|AF191664     3        []  0.00189    0.01042       -       -
- 5 gi|6273289|gb|AF191663.1|AF191663     3        []  0.00145    0.00998       -       -
- 6                                -      0    [7, 8]  0.00014    0.00014       -       -
- 7 gi|6273287|gb|AF191661.1|AF191661     6        []  0.00489    0.00503       -       -
- 8 gi|6273286|gb|AF191660.1|AF191660     6        []  0.00295    0.00309       -       -
- 9                                -      0  [10, 11]  0.00125    0.00125       -       -
-10 gi|6273285|gb|AF191659.1|AF191659     9        []  0.00094    0.00219       -       -
-11 gi|6273284|gb|AF191658.1|AF191658     9        []  0.00018    0.00143       -       -
+>>> from Bio import Phylo
+>>> tree = Phylo.read('opuntia.dnd', 'newick')
+>>> Phylo.draw_ascii(tree)
+                             _______________ gi|6273291|gb|AF191665.1|AF191665
+  __________________________|
+ |                          |   ______ gi|6273290|gb|AF191664.1|AF191664
+ |                          |__|
+ |                             |_____ gi|6273289|gb|AF191663.1|AF191663
+ |
+_|_________________ gi|6273287|gb|AF191661.1|AF191661
+ |
+ |__________ gi|6273286|gb|AF191660.1|AF191660
+ |
+ |    __ gi|6273285|gb|AF191659.1|AF191659
+ |___|
+     | gi|6273284|gb|AF191658.1|AF191658
 
-Root:  0
-None
 \end{verbatim}
 
-\noindent The spacing has been adjusted here for display purposes.
-The tree object is actually pretty powerful! Have a look at the list of
-methods with \texttt{dir(tree)} to get a hint of this...
+\noindent Chapter \ref{sec:Phylo} covers Biopython's support for phylogenetic trees in more
+depth.
 
 \subsection{MUSCLE}
 MUSCLE is a more recent multiple sequence alignment tool than ClustalW, and
@@ -7856,6 +7845,7 @@ SimCoal2, the HapMap and UCSC Table Browser databases and some simple statistics
 like $F_{st}$, or allele counts.
 
 \chapter{Phylogenetics with Bio.Phylo}
+\label{sec:Phylo}
 
 Phylo is a new module in Biopython 1.54. Following the lead of SeqIO and AlignIO, 
 it aims to provide a common way to work with phylogenetic data independently of the source data
