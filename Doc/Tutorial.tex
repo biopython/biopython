@@ -7866,16 +7866,90 @@ module; just let us know on the mailing list or Bugzilla.
 Like SeqIO and AlignIO, Phylo handles file input and output through four functions:
 \verb|parse|, \verb|read|, \verb|write| and \verb|convert|.
 
+The \verb|read| function parses a single tree in the given file and returns it. Careful; it
+will raise an error if the file contains more than one tree, or no trees.
+
 \begin{verbatim}
 >>> from Bio import Phylo
 >>> tree = Phylo.read('example.xml', 'phyloxml')
+>>> print tree
 \end{verbatim}
 
 (Example files are available in the Tests/PhyloXML/ directory of the Biopython distribution.)
 
-% TODO - examples of each
+To handle multiple (or an unknown number of) trees, use the \verb|parse| function iterates
+through each of the trees in the given file: 
+
+\begin{verbatim}
+>>> trees = Phylo.parse('example.xml', 'phyloxml')
+\end{verbatim}
+
+Write a tree or iterable of trees back to file with the \verb|write| function:
+
+\begin{verbatim}
+>>> trees = list(Phylo.parse('phyloxml_examples.xml', 'phyloxml'))
+>>> tree1 = trees[0]
+>>> others = trees[1:]
+>>> Phylo.write(tree1, 'tree1.xml', 'phyloxml')
+1
+>>> Phylo.write(others, 'other_trees.xml', 'phyloxml')
+12
+\end{verbatim}
+
+Convert between any of the supported formats with the \verb|convert| function:
+
+\begin{verbatim}
+>>> Phylo.convert('tree1.xml', 'phyloxml', 'tree1.dnd', 'newick')
+1
+>>> Phylo.convert('other_trees.xml', 'phyloxml', 'other_trees.nex', 'nexus')
+12
+\end{verbatim}
+
+
+\section{Viewing and exporting trees}
+
+The simplest way to get an overview of a \verb|Tree| object is to \verb|print| it:
+
+\begin{verbatim}
+>>> tree = Phylo.read('example.xml', 'phyloxml')
+>>> print tree
+Phylogeny(rooted='True', description='phyloXML allows to use either a "branch_length"
+attribute...', name='example from Prof. Joe Felsenstein's book "Inferring Phyl...')
+    Clade()
+        Clade(branch_length='0.06')
+            Clade(branch_length='0.102', name='A')
+            Clade(branch_length='0.23', name='B')
+        Clade(branch_length='0.4', name='C')
+\end{verbatim}
+
+This is essentially an outline of the object hierarchy Biopython uses to represent a tree. But
+more likely, you'd want to see a drawing of the tree. There are two functions to do this:
+\verb|draw_ascii| prints an ascii-art drawing of the tree (a rooted phylogram) to standard
+output, or an open file handle if given. Not all of the available information about the tree is
+shown, but it provides a way to quickly view the tree without relying on any external
+dependencies.
+
+\begin{verbatim}
+>>> tree = Phylo.read('example.xml', 'phyloxml')
+>>> Phylo.draw_ascii(tree)
+             __________________ A
+  __________|
+_|          |___________________________________________ B
+ |
+ |___________________________________________________________________________ C
+
+\end{verbatim}
+
+% TODO
 See the Phylo page on the Biopython wiki (\url{http://biopython.org/wiki/Phylo}) for
-explanations of each of these functions.
+descriptions and examples of the more advanced functionality in \verb|draw_ascii|,
+\verb|draw_graphviz| and \verb|to_networkx|.
+
+% \verb|draw_ascii|
+
+% \verb|draw_graphviz|
+
+% \verb|to_networkx|
 
 
 \section{Using Tree objects}
@@ -7929,36 +8003,11 @@ descriptions of each of the available methods.
 % \verb|split|
 
 
-\section{Viewing and exporting trees}
-
-The simplest way to get an overview of a \verb|Tree| object is to \verb|print| it:
-
-\begin{verbatim}
->>> tree = Phylo.read('example.xml', 'phyloxml')
->>> print tree
-Phylogeny(rooted='True', description='phyloXML allows to use either a "branch_length"
-attribute...', name='example from Prof. Joe Felsenstein's book "Inferring Phyl...')
-    Clade()
-        Clade(branch_length='0.06')
-            Clade(branch_length='0.102', name='A')
-            Clade(branch_length='0.23', name='B')
-        Clade(branch_length='0.4', name='C')
-\end{verbatim}
-
-% TODO
-See the Phylo page on the Biopython wiki (\url{http://biopython.org/wiki/Phylo}) for
-descriptions and examples of the more advanced functions \verb|draw_ascii|,
-\verb|draw_graphviz| and \verb|to_networkx|.
-
-% \verb|draw_ascii|
-
-% \verb|draw_graphviz|
-
-% \verb|to_networkx|
-
-
 \section{Features of PhyloXML trees}
 \label{sec:PhyloXML}
+
+The phyloXML file format includes fields for annotating trees with additional data types and
+visual cues.
 
 % TODO
 See the PhyloXML page on the Biopython wiki (\url{http://biopython.org/wiki/PhyloXML}) for
