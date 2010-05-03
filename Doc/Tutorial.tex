@@ -7851,15 +7851,8 @@ Phylo is a new module in Biopython 1.54. Following the lead of SeqIO and AlignIO
 it aims to provide a common way to work with phylogenetic data independently of the source data
 format, as well as a consistent API for I/O operations.
 
-Much of this module was written during Google Summer of Code 2009, under the auspices of
-NESCent, as a project to implement Python support for the phyloXML data format (see
-\ref{sec:PhyloXML}). Support for Newick and Nexus formats was added by porting part of the
-existing Bio.Nexus module to the new classes used by Bio.Phylo.
-
-{\em Note:} Since Phylo is a recent addition to Biopython, we anticipate that parts of it may
-change in backwards-incompatible ways in future releases --- we'll try our best to avoid it,
-though. We're open to any suggestions for improving the functionality and usability of this
-module; just let us know on the mailing list or Bugzilla.
+{\em Note:} Since Phylo is a recent addition to Biopython, we anticipate parts of it may change
+in backwards-incompatible ways in future releases --- we'll try our best to avoid it, though.
 
 \section{Basic I/O}
 
@@ -7896,7 +7889,7 @@ Write a tree or iterable of trees back to file with the \verb|write| function:
 12
 \end{verbatim}
 
-Convert between any of the supported formats with the \verb|convert| function:
+Convert files between any of the supported formats with the \verb|convert| function:
 
 \begin{verbatim}
 >>> Phylo.convert('tree1.xml', 'phyloxml', 'tree1.dnd', 'newick')
@@ -7923,7 +7916,8 @@ attribute...', name='example from Prof. Joe Felsenstein's book "Inferring Phyl..
 \end{verbatim}
 
 This is essentially an outline of the object hierarchy Biopython uses to represent a tree. But
-more likely, you'd want to see a drawing of the tree. There are two functions to do this:
+more likely, you'd want to see a drawing of the tree. There are two functions to do this.
+
 \verb|draw_ascii| prints an ascii-art drawing of the tree (a rooted phylogram) to standard
 output, or an open file handle if given. Not all of the available information about the tree is
 shown, but it provides a way to quickly view the tree without relying on any external
@@ -7940,16 +7934,74 @@ _|          |___________________________________________ B
 
 \end{verbatim}
 
-% TODO
+\verb|draw_graphviz| draws a more attractive cladogram, but requires that you have Graphviz,
+PyDot or PyGraphviz, NetworkX, and matplotlib (or pylab) installed. Using the same example as
+above, and the \verb|dot| program included with Graphviz, let's draw a rooted tree:
+
+\begin{verbatim}
+>>> tree = Phylo.read('example.xml', 'phyloxml')
+>>> Phylo.draw_graphviz(tree, prog='dot')
+>>> import pylab
+>>> pylab.show()                    # Displays the tree in an interactive viewer
+>>> pylab.savefig('phylo-dot.png')  # Creates a PNG file of the same graphic
+\end{verbatim}
+
+\begin{htmlonly}
+\imgsrc[width=400, height=312]{images/phylo-dot.png}
+\label{fig:phylo-dot}
+\end{htmlonly}
+
+\begin{latexonly}
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.4\textwidth]{images/phylo-dot.png}
+\caption{A simple rooted tree drawn with {\tt draw\_graphviz}, using {\tt dot} for node
+layout.}
+\label{fig:phylo-dot}
+\end{figure}
+\end{latexonly}
+
+(Tip: If you execute IPython with the \verb|-pylab| option, calling \verb|draw_graphviz| causes
+the matplotlib viewer to launch automatically without manually calling \verb|show()|.)
+
+This viewing mode is particularly handy for exploring larger trees, because the matplotlib
+viewer can zoom in on a selected region, thinning out a cluttered graphic.
+
+\begin{verbatim}
+>>> tree = Phylo.read('apaf.xml', 'phyloxml')
+>>> Phylo.draw_graphviz(tree, prog='neato', node_size=0)
+\end{verbatim}
+
+\begin{htmlonly}
+\imgsrc[width=519, height=400]{images/phylo-apaf.png}
+\label{fig:phylo-apaf}
+
+\imgsrc[width=506, height=400]{images/phylo-apaf-zoom.png}
+\label{fig:phylo-apaf-zoom}
+\end{htmlonly}
+
+\begin{latexonly}
+  \begin{figure}[tbp]
+    \centering
+    \includegraphics[width=0.65\textwidth]{images/phylo-apaf.png} \\
+    \caption{A larger tree, using {\tt neato} for layout.}
+    \label{fig:phylo-apaf}
+  \end{figure}
+  \begin{figure}[btp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/phylo-apaf-zoom.png}
+    \caption{A zoomed-in portion of the same tree.}
+    \label{fig:phylo-apaf-zoom}
+  \end{figure}
+\end{latexonly}
+
+Note that branch lengths are not displayed accurately, because Graphviz ignores them when
+creating the node layouts. The branch lengths are retained when exporting a tree as a NetworkX
+graph object (\verb|to_networkx|), however.
+
 See the Phylo page on the Biopython wiki (\url{http://biopython.org/wiki/Phylo}) for
 descriptions and examples of the more advanced functionality in \verb|draw_ascii|,
 \verb|draw_graphviz| and \verb|to_networkx|.
-
-% \verb|draw_ascii|
-
-% \verb|draw_graphviz|
-
-% \verb|to_networkx|
 
 
 \section{Using Tree objects}
@@ -7962,19 +8014,19 @@ for the phylogeny, such as rootedness, and a reference to a single \verb|Subtree
 its own descendent \verb|Subtree| instances, attached at the \verb|clades| attribute.
 
 So there is a distinction between \verb|tree| and \verb|tree.root|. In practice, though, you
-don't need to worry about it much. To paper over the difference, both \verb|Tree| and
+rarely need to worry about it. To smooth over the difference, both \verb|Tree| and
 \verb|Subtree| inherit from \verb|TreeMixin|, which contains the implementations for methods
 that would be commonly used to search, inspect or modify a tree or any of its clades. This
 means that almost all of the methods supported by \verb|tree| are also available on
-\verb|tree.root| and any clade below it. (To make this possible, \verb|Subtree| also has a
-\verb|root| property, which returns the subtree itself.)
+\verb|tree.root| and any clade below it. (\verb|Subtree| also has a \verb|root| property, which
+returns the subtree itself.)
 
 % TODO - use dia to make a class diagram like images/smcra.png
 
-% TODO
 See the Phylo page on the Biopython wiki (\url{http://biopython.org/wiki/Phylo}) for
 descriptions of each of the available methods.
 
+% TODO
 % \subsection{Search and traversal methods}
 % \verb|find_all|
 % \verb|find_any|
@@ -8010,16 +8062,40 @@ The phyloXML file format includes fields for annotating trees with additional da
 visual cues.
 
 % TODO
-See the PhyloXML page on the Biopython wiki (\url{http://biopython.org/wiki/PhyloXML}) for
-descriptions and examples of using the additional annotation features provided by PhyloXML.
-
 % visual cues -- color, width of branches
 %     - simple example
 %     - more cookbook entries in wiki
-
 % annotations -- see wiki and epydoc pages
 %     - on wiki, discuss each class
 
+See the PhyloXML page on the Biopython wiki (\url{http://biopython.org/wiki/PhyloXML}) for
+descriptions and examples of using the additional annotation features provided by PhyloXML.
+
+
+\section{Acknowledgements and future directions}
+\label{sec:PhyloFuture}
+
+Much of this module was written during Google Summer of Code 2009, under the auspices of
+NESCent, as a project to implement Python support for the phyloXML data format (see
+\ref{sec:PhyloXML}). Support for Newick and Nexus formats was added by porting part of the
+existing Bio.Nexus module to the new classes used by Bio.Phylo.
+
+Currently, Bio.Nexus contains some useful features that have not yet been ported to Bio.Phylo
+classes. If you find some functionality lacking in Bio.Phylo, try poking throught Bio.Nexus to
+see if it's there instead.
+
+Within the next few releases, we intend to add support for another file format, NeXML. This is
+unlikely to change the basic object hierarchy substantially, but could inspire some 
+additions to the attributes of existing classes.
+
+The string representations of Phylo objects are also likely to change in the next release;
+we're still determining which ``informal'' representations are most useful most often. To
+future-proof your code against this, we recommend using the attributes of objects directly
+(e.g. \verb|my_clade.name|) rather than automatic string conversion (\verb|str(my_clade)|) in
+scripts that require a consistent result.
+
+We're open to any suggestions for improving the functionality and usability of this module;
+just let us know on the mailing list or Bugzilla.
 
 \chapter{Supervised learning methods}
 
