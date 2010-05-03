@@ -69,7 +69,7 @@ def to_networkx(tree):
     return G
 
 
-def draw_graphviz(tree, label_func=str, prog='neato', args='',
+def draw_graphviz(tree, label_func=str, prog='twopi', args='',
         node_color='#c0deff', **kwargs):
     """Display a tree or subtree as a graph, using the graphviz engine.
 
