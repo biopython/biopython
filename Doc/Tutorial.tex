@@ -8004,22 +8004,22 @@ descriptions and examples of the more advanced functionality in \verb|draw_ascii
 \verb|draw_graphviz| and \verb|to_networkx|.
 
 
-\section{Using Tree objects}
+\section{Using Tree and Clade objects}
 
 The \verb|Tree| objects produced by \verb|parse| and \verb|read| are containers for recursive
 sub-trees, attached to the \verb|Tree| object at the \verb|root| attribute (whether or not the
 phylogenic tree is actually considered rooted). A \verb|Tree| has globally applied information
-for the phylogeny, such as rootedness, and a reference to a single \verb|Subtree|; a
-\verb|Subtree| has node- and clade-specific information, such as branch length, and a list of
-its own descendent \verb|Subtree| instances, attached at the \verb|clades| attribute.
+for the phylogeny, such as rootedness, and a reference to a single \verb|Clade|; a
+\verb|Clade| has node- and clade-specific information, such as branch length, and a list of
+its own descendent \verb|Clade| instances, attached at the \verb|clades| attribute.
 
 So there is a distinction between \verb|tree| and \verb|tree.root|. In practice, though, you
 rarely need to worry about it. To smooth over the difference, both \verb|Tree| and
-\verb|Subtree| inherit from \verb|TreeMixin|, which contains the implementations for methods
+\verb|Clade| inherit from \verb|TreeMixin|, which contains the implementations for methods
 that would be commonly used to search, inspect or modify a tree or any of its clades. This
 means that almost all of the methods supported by \verb|tree| are also available on
-\verb|tree.root| and any clade below it. (\verb|Subtree| also has a \verb|root| property, which
-returns the subtree itself.)
+\verb|tree.root| and any clade below it. (\verb|Clade| also has a \verb|root| property, which
+returns the clade object itself.)
 
 % TODO - use dia to make a class diagram like images/smcra.png
 

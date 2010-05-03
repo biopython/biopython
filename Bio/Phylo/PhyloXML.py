@@ -223,7 +223,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
     confidence = property(_get_confidence, _set_confidence)
 
 
-class Clade(PhyloElement, BaseTree.Subtree):
+class Clade(PhyloElement, BaseTree.Clade):
     """Describes a branch of the current phylogenetic tree.
 
     Used recursively, describes the topology of a phylogenetic tree.
@@ -285,7 +285,7 @@ class Clade(PhyloElement, BaseTree.Subtree):
 
     @classmethod
     def from_subtree(cls, subtree, **kwargs):
-        """Create a new Clade from a BaseTree.Subtree object."""
+        """Create a new Clade from a BaseTree.Clade object."""
         clade = cls(branch_length=subtree.branch_length,
                     name=subtree.name)
         clade.clades = [cls.from_subtree(st) for st in subtree.clades]

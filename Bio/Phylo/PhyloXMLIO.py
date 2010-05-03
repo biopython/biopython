@@ -123,15 +123,15 @@ def write(obj, file, encoding=None, indent=False):
             return tree.to_phylogeny()
         if isinstance(tree, PX.BaseTree.Tree):
             return PX.Phylogeny.from_tree(tree)
-        if isinstance(tree, PX.BaseTree.Subtree):
+        if isinstance(tree, PX.BaseTree.Clade):
             return PX.Phylogeny.from_tree(PX.BaseTree.Tree(root=tree))
         else:
-            raise ValueError("iterable must contain Tree or Subtree types")
+            raise ValueError("iterable must contain Tree or Clade types")
 
     if isinstance(obj, PX.Phyloxml):
         pass
     elif (isinstance(obj, PX.BaseTree.Tree) or
-          isinstance(obj, PX.BaseTree.Subtree)):
+          isinstance(obj, PX.BaseTree.Clade)):
         obj = fix_single(obj).to_phyloxml()
     elif hasattr(obj, '__iter__'):
         obj = PX.Phyloxml({}, phylogenies=(fix_single(t) for t in obj))

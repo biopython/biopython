@@ -187,11 +187,11 @@ class TreeElement(object):
 
 
 class TreeMixin(object):
-    """Methods for Tree- and Subtree-based classes.
+    """Methods for Tree- and Clade-based classes.
 
-    This lets Tree and Subtree support the same traversal and searching
-    operations without requiring Subtree to inherit from Tree, so Subtree isn't
-    required to have all of Tree's attributes -- just 'root' (a Subtree
+    This lets Tree and Clade support the same traversal and searching
+    operations without requiring Clade to inherit from Tree, so Clade isn't
+    required to have all of Tree's attributes -- just 'root' (a Clade
     instance) and 'is_terminal()'.
     """
     # Traversal methods
@@ -574,7 +574,7 @@ class Tree(TreeElement, TreeMixin):
     @param root:
         The starting node of the tree. If the tree is rooted, this will usually
         be the root node.
-    @type root: Subtree
+    @type root: Clade
 
     @param rooted:
         Whether or not the tree is rooted. By default, a tree is assumed to be
@@ -588,7 +588,7 @@ class Tree(TreeElement, TreeMixin):
     @type name: str
     """
     def __init__(self, root=None, rooted=True, id=None, name=None):
-        self.root = root or Subtree()
+        self.root = root or Clade()
         self.rooted = rooted
         self.id = id
         self.name = name
@@ -702,7 +702,7 @@ class Tree(TreeElement, TreeMixin):
         return '\n'.join(textlines)
 
 
-class Subtree(TreeElement, TreeMixin):
+class Clade(TreeElement, TreeMixin):
     """A recursively defined subtree.
 
     @param branch_length:
