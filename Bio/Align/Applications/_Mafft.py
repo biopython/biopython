@@ -41,7 +41,7 @@ class MafftCommandline(AbstractCommandline):
             _Switch(["--auto", "auto"], ["input"],
                     "Automatically select strategy. Default off."),
             #Distance is calculated based on the number of shared 6mers. Default: on
-            _Switch(["--6merpair", "6merpair"], ["input"],
+            _Switch(["--6merpair", "6merpair", "sixmerpair"], ["input"],
                      "Distance is calculated based on the number of shared " + \
                      "6mers. Default: on"),
             #All pairwise alignments are computed with the Needleman-Wunsch
