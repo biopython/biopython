@@ -162,8 +162,18 @@ class InsdcScanner:
                     line = self.handle.readline()
             else:
                 #Build up a list of the lines making up this feature:
-                feature_key = line[2:self.FEATURE_QUALIFIER_INDENT].strip()
-                feature_lines = [line[self.FEATURE_QUALIFIER_INDENT:]]
+                if line[self.FEATURE_QUALIFIER_INDENT]!=" " \
+                and " " in line[self.FEATURE_QUALIFIER_INDENT:]:
+                    #The feature table design enforces a length limit on the feature keys.
+                    #Some third party files (e.g. IGMT's EMBL like files) solve this by
+                    #over indenting the location and qualifiers.
+                    feature_key, line = line[2:].strip().split(None,1)
+                    feature_lines = [line]
+                    import warnings
+                    warnings.warn("Overindented %s feature?" % feature_key)
+                else:
+                    feature_key = line[2:self.FEATURE_QUALIFIER_INDENT].strip()
+                    feature_lines = [line[self.FEATURE_QUALIFIER_INDENT:]]
                 line = self.handle.readline()
                 while line[:self.FEATURE_QUALIFIER_INDENT] == self.FEATURE_QUALIFIER_SPACER \
                 or line.rstrip() == "" : # cope with blank lines in the midst of a feature
