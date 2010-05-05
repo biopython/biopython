@@ -392,6 +392,9 @@ class EmblDict(_SequentialSeqFileDict):
                     if line.startswith("SV "):
                         key = line.rstrip().split()[1]
                         break
+                    elif line.startswith("AC "):
+                        key = line[3:].split(";")[0].strip()
+                        break
                     elif line.startswith("FH ") \
                     or line.startswith("FT ") \
                     or line.startswith("SQ ") \
