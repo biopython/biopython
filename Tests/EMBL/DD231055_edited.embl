@@ -15,7 +15,7 @@ OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
 OC   Homo.
 XX
 RN   [1]
-RP   1-315
+RP   1-200, 300-315
 RA   Scarron B.;
 RT   "RSV PROTEINS, ANTIBODIES, COMPOSITIONS, METHODS AND USES";
 RL   Patent number JP2005522996-A/12, 04-AUG-2005.
@@ -25,7 +25,7 @@ DR   IMGT/LIGM; DD231055; DD231055.
 XX
 CC   This is a comments section added by hand to stress test the parser
 CC   in Biopython.  Please do not use this modified file for any real analysis!
-CC   I added lots of odd notes to the features...
+CC   I added lots of odd notes to the features, modified the RP line, ...
 XX
 FH   Key             Location/Qualifiers
 FH

@@ -676,8 +676,9 @@ class EmblScanner(InsdcScanner):
                 elif line_type == 'RP':
                     # Reformat reference numbers for the GenBank based consumer
                     # e.g. '1-4639675' becomes '(bases 1 to 4639675)'
-                    assert data.count("-")==1
-                    consumer.reference_bases("(bases " + data.replace("-", " to ") + ")")
+                    # and '160-550, 904-1055' becomes '(bases 160 to 550; 904 to 1055)'
+                    parts = [bases.replace("-"," to ").strip() for bases in data.split(",")]
+                    consumer.reference_bases("(bases %s)" % "; ".join(parts))
                 elif line_type == 'RT':
                     #Remove the enclosing quotes and trailing semi colon.
                     #Note the title can be split over multiple lines.
