@@ -380,21 +380,29 @@ class EmblDict(_SequentialSeqFileDict):
             if marker_re.match(line):
                 #We cannot assume the record.id is the first word after ID,
                 #normally the SV line is used.
-                parts = line[3:].rstrip().split(";")
-                if parts[1].strip().startswith("SV "):
-                    #The SV bit gives the version
-                    key = "%s.%s" \
-                          % (parts[0].strip(), parts[1].strip().split()[1])
+                if line[2:].count(";") == 6:
+                    #Looks like the semi colon separated style introduced in 2006
+                    parts = line[3:].rstrip().split(";")
+                    if parts[1].strip().startswith("SV "):
+                        #The SV bit gives the version
+                        key = "%s.%s" \
+                              % (parts[0].strip(), parts[1].strip().split()[1])
+                    else:
+                        key = parts[0].strip()
+                elif line[2:].count(";") == 3:
+                    #Looks like the pre 2006 style, take first word only
+                    key = line[3:].strip().split(None,1)[0]
                 else:
-                    key = parts[0].strip()
+                    raise ValueError('Did not recognise the ID line layout:\n' + line)
                 while True:
                     line = handle.readline()
                     if line.startswith("SV "):
                         key = line.rstrip().split()[1]
                         break
-                    elif line.startswith("AC "):
-                        key = line[3:].split(";")[0].strip()
-                        break
+                    #elif line.startswith("AC "):
+                    #    key = line[3:].split(";")[0].strip()
+                    #    #don't break - there could later be an SV line
+                    #    #which takes priority over the AC line
                     elif line.startswith("FH ") \
                     or line.startswith("FT ") \
                     or line.startswith("SQ ") \
