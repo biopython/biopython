@@ -57,7 +57,32 @@ if len(exe_names) < len(wanted) :
     raise MissingExternalDependencyError("Install the NCBI BLAST+ command line "
                                          "tools if you want to use the "
                                          "Bio.Blast.Applications wrapper.")
+
+
+class Pairwise(unittest.TestCase):
+    def test_blasp(self):
+        """Pairwise BLASTP search"""
+        global exe_names
+        cline = Applications.NcbiblastpCommandline(exe_names["blastp"],
+                        query="Fasta/rose.pro",
+                        subject="GenBank/NC_005816.faa",
+                        evalue=1)
+        child = subprocess.Popen(str(cline),
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 shell=(sys.platform!="win32"))
+        stdoutdata, stderrdata = child.communicate()
+        return_code = child.returncode
+        self.assertEqual(return_code, 0, "Got error code %i back from:\n%s"
+                         % (return_code, cline))
+        self.assertEqual(10, stdoutdata.count("Query= "))
+        self.assertEqual(9, stdoutdata.count("***** No hits found *****"))
         
+        #TODO - Parse it? I think we'd need to update this obsole code :(
+        #records = list(NCBIStandalone.Iterator(StringIO(stdoutdata),
+        #                                       NCBIStandalone.BlastParser()))   
+
+   
 class CheckCompleteArgList(unittest.TestCase):
     def check(self, exe_name, wrapper) :
         global exe_names
