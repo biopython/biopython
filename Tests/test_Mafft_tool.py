@@ -66,7 +66,7 @@ class MafftApplication(unittest.TestCase):
         self.assertEqual(return_code, 0, "Got error code %i back from:\n%s"
                          % (return_code, cmdline))
         self.assert_(stdoutdata.startswith(">gi|1348912|gb|G26680|G26680"))
-        self.assert_("STEP     2 / 2 d" in stderrdata)
+        self.assert_("Progressive alignment ..." in stderrdata, stderrdata)
         self.assert_("$#=0" not in stderrdata)
         del child
 
