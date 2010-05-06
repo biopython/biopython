@@ -48,12 +48,13 @@ class MafftApplication(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  shell=(sys.platform!="win32"))
-        return_code = child.wait()
-        self.assertEqual(return_code, 0)
-        stderr_string = child.stderr.read()
-        self.assert_(child.stdout.read().startswith(">gi|1348912|gb|G26680|G26680"))
-        self.assert_("STEP     2 / 2 d" in stderr_string)
-        self.assert_("$#=0" not in stderr_string)
+        stdoutdata, stderrdata = child.communicate()
+        return_code = child.returncode
+        self.assertEqual(return_code, 0, "Got error code %i back from:\n%s"
+                         % (return_code, cmdline))
+        self.assert_(stdoutdata.startswith(">gi|1348912|gb|G26680|G26680"))
+        self.assert_("STEP     2 / 2 d" in stderrdata)
+        self.assert_("$#=0" not in stderrdata)
         del child
 
     def test_Mafft_with_options(self):
@@ -69,10 +70,12 @@ class MafftApplication(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  shell=(sys.platform!="win32"))
-        return_code = child.wait()
-        self.assertEqual(return_code, 0)
-        self.assert_(child.stdout.read().startswith(">gi|1348912|gb|G26680|G26680"))
-        self.assert_("$#=0" not in child.stderr.read())
+        stdoutdata, stderrdata = child.communicate()
+        return_code = child.returncode
+        self.assertEqual(return_code, 0, "Got error code %i back from:\n%s"
+                         % (return_code, cmdline))
+        self.assert_(stdoutdata.startswith(">gi|1348912|gb|G26680|G26680"))
+        self.assert_("$#=0" not in stderrdata)
         del child
 
     def test_Mafft_with_Clustalw_output(self):
@@ -86,13 +89,14 @@ class MafftApplication(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  shell=(sys.platform!="win32"))
-        return_code = child.wait()
-        self.assertEqual(return_code, 0)
-        output = child.stdout.read()
+        stdoutdata, stderrdata = child.communicate()
+        return_code = child.returncode
+        self.assertEqual(return_code, 0, "Got error code %i back from:\n%s"
+                         % (return_code, cmdline))
         #e.g. "CLUSTAL format alignment by MAFFT ..."
         #or "CLUSTAL (-like) formatted alignment by MAFFT FFT-NS-2 (v6.240)"
-        self.assert_(output.startswith("CLUSTAL"), output)
-        self.assert_("$#=0" not in child.stderr.read())
+        self.assert_(stdoutdata.startswith("CLUSTAL"), stdoutdata)
+        self.assert_("$#=0" not in stderrdata)
         del child
 
     def test_Mafft_with_complex_command_line(self):
@@ -121,10 +125,12 @@ class MafftApplication(unittest.TestCase):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  shell=(sys.platform!="win32"))
-        return_code = child.wait()
-        self.assertEqual(return_code, 0)
-        self.assert_(child.stdout.read().startswith(">gi|1348912|gb|G26680|G26680"))
-        self.assert_("$#=0" not in child.stderr.read())
+        stdoutdata, stderrdata = child.communicate()
+        return_code = child.returncode
+        self.assertEqual(return_code, 0, "Got error code %i back from:\n%s"
+                         % (return_code, cmdline))
+        self.assert_(stdoutdata.startswith(">gi|1348912|gb|G26680|G26680"))
+        self.assert_("$#=0" not in stderrdata)
         del child
 
 if __name__ == "__main__":
