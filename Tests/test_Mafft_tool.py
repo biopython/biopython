@@ -28,6 +28,19 @@ if not mafft_exe:
     raise MissingExternalDependencyError(\
         "Install MAFFT if you want to use the Bio.Align.Applications wrapper.")
 
+#Check it actually runs!
+child = subprocess.Popen("%s --help" % mafft_exe,
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE,
+                         shell=(sys.platform!="win32"))
+stdoutdata, stderrdata = child.communicate()
+return_code = child.returncode
+if "correctly installed?" in stdoutdata + "\n" + stderrdata\
+or "mafft binaries have to be installed" in stdoutdata + "\n" + stderrdata:
+    raise MissingExternalDependencyError(
+        "MAFFT does not seem to be correctly installed.")
+del child
+
 class MafftApplication(unittest.TestCase):
 
     def setUp(self):
