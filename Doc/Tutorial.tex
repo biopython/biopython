@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 23 April 2010 (Biopython 1.54 \emph{beta}+)}
+\date{Last Update -- 6 May 2010 (Biopython 1.54 \emph{beta}+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -257,7 +257,8 @@ and HTML formats
   You need Biopython 1.49 or later.
 
   \item \emph{Why won't the } \verb|Bio.SeqIO| \emph{and} \verb|Bio.AlignIO| \emph{functions} \verb|parse|\emph{,} \verb|read| \emph{and} \verb|write| \emph{take filenames? They insist on handles!} \\
-  You need Biopython 1.54 or later, or just use handles explicitly. It is especially important to remember to close output handles explicitly after writing your data.
+  You need Biopython 1.54 or later, or just use handles explicitly (see Section~\ref{sec:appendix-handles}).
+  It is especially important to remember to close output handles explicitly after writing your data.
 
   \item \emph{Why won't the } \verb|Bio.SeqIO.write()| \emph{and} \verb|Bio.AlignIO.write()| \emph{functions accept a single record or alignment? They insist on a list or iterator!} \\
   You need Biopython 1.54 or later, or just wrap the item with \verb|[...]| to create a list of one element.
@@ -11629,6 +11630,37 @@ handle to the file \href{examples/m\_cold.fasta}{m\_cold.fasta}
 \end{verbatim}
 
 Handles are regularly used in Biopython for passing information to parsers.
+For example, since Biopython 1.54 the main functions in \verb|Bio.SeqIO|
+and \verb|Bio.AlignIO| have allowed you to use a filename instead of a
+handle:
+
+\begin{verbatim}
+from Bio import SeqIO
+for record in SeqIO.parse("m_cold.fasta", "fasta"):
+    print record.id, len(record)
+\end{verbatim}
+
+On older versions of Biopython you had to use a handle, e.g.
+
+\begin{verbatim}
+from Bio import SeqIO
+handle = open("m_cold.fasta", "r")
+for record in SeqIO.parse(handle, "fasta"):
+    print record.id, len(record)
+handle.close()
+\end{verbatim}
+
+This pattern is still useful - for example suppose you have a gzip
+compressed FASTA file you want to parse:
+
+\begin{verbatim}
+import gzip
+from Bio import SeqIO
+handle = gzip.open("m_cold.fasta.gz")
+for record in SeqIO.parse(handle, "fasta"):
+    print record.id, len(record)
+handle.close()
+\end{verbatim}
 
 \subsection{Creating a handle from a string}
 
