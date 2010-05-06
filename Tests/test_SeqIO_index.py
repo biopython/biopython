@@ -104,6 +104,7 @@ tests = [
     ("EMBL/A04195_bad_indent.embl", "embl", None),
     ("GenBank/NC_000932.faa", "fasta", generic_protein),
     ("GenBank/NC_005816.faa", "fasta", generic_protein),
+    ("GenBank/NC_005816.tsv", "tab", generic_protein),
     ("GenBank/NC_005816.ffn", "fasta", generic_dna),
     ("GenBank/NC_005816.fna", "fasta", generic_dna),
     ("GenBank/NC_005816.gb", "gb", None),
