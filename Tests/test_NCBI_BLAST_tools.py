@@ -119,6 +119,15 @@ class CheckCompleteArgList(unittest.TestCase):
         if "-use_index" in missing :
             #Known issue, need to establish how this option works
             missing.remove("-use_index")
+        if "-verbose" in missing :
+            #Known issue, seems to be present in some builds (Bug 3043)
+            missing.remove("-verbose")
+        if "-remote_verbose" in missing :
+            #Known issue, seems to be present in some builds (Bug 3043)
+            missing.remove("-remote_verbose")
+        if "-use_test_remote_service" in missing :
+            #Known issue, seems to be present in some builds (Bug 3043)
+            missing.remove("-use_test_remote_service")
 
         if extra or missing :
             raise MissingExternalDependencyError("BLAST+ and Biopython out of sync. "
