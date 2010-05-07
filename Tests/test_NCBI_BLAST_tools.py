@@ -67,6 +67,9 @@ class Pairwise(unittest.TestCase):
                         query="Fasta/rose.pro",
                         subject="GenBank/NC_005816.faa",
                         evalue=1)
+        self.assertEqual(str(cline), exe_names["blastp"] \
+                         + " -query Fasta/rose.pro -evalue 1" \
+                         + " -subject GenBank/NC_005816.faa")
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
@@ -81,6 +84,28 @@ class Pairwise(unittest.TestCase):
         #TODO - Parse it? I think we'd need to update this obsole code :(
         #records = list(NCBIStandalone.Iterator(StringIO(stdoutdata),
         #                                       NCBIStandalone.BlastParser()))   
+
+    def test_blastn(self):
+        """Pairwise BLASTN search"""
+        global exe_names
+        cline = Applications.NcbiblastpCommandline(exe_names["blastn"],
+                        query="GenBank/NC_005816.ffn",
+                        subject="GenBank/NC_005816.fna",
+                        evalue="0.000001")
+        self.assertEqual(str(cline), exe_names["blastn"] \
+                         + " -query GenBank/NC_005816.ffn -evalue 0.000001" \
+                         + " -subject GenBank/NC_005816.fna")
+        child = subprocess.Popen(str(cline),
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 shell=(sys.platform!="win32"))
+        stdoutdata, stderrdata = child.communicate()
+        return_code = child.returncode
+        self.assertEqual(return_code, 0, "Got error code %i back from:\n%s"
+                         % (return_code, cline))
+        self.assertEqual(10, stdoutdata.count("Query= "))
+        self.assertEqual(0, stdoutdata.count("***** No hits found *****"))
+        #TODO - Parse it? 
 
    
 class CheckCompleteArgList(unittest.TestCase):
