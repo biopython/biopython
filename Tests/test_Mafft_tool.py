@@ -28,18 +28,35 @@ if not mafft_exe:
     raise MissingExternalDependencyError(\
         "Install MAFFT if you want to use the Bio.Align.Applications wrapper.")
 
-#Check it actually runs!
-child = subprocess.Popen("%s --help" % mafft_exe,
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE,
-                         shell=(sys.platform!="win32"))
-stdoutdata, stderrdata = child.communicate()
-return_code = child.returncode
-if "correctly installed?" in stdoutdata + "\n" + stderrdata\
-or "mafft binaries have to be installed" in stdoutdata + "\n" + stderrdata:
-    raise MissingExternalDependencyError(
-        "MAFFT does not seem to be correctly installed.")
-del child
+def check_mafft_version(mafft_exe):
+    child = subprocess.Popen("%s --help" % mafft_exe,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             shell=(sys.platform!="win32"))
+    stdoutdata, stderrdata = child.communicate()
+    output = stdoutdata + "\n" + stderrdata
+    return_code = child.returncode
+    del child
+    if "correctly installed?" in output \
+    or "mafft binaries have to be installed" in output:
+        raise MissingExternalDependencyError(
+            "MAFFT does not seem to be correctly installed.")
+
+    #e.g. "MAFFT version 5.732 (2005/09/14)\n"
+    #e.g. "  MAFFT v6.717b (2009/12/03)\n"
+    for marker in ["MAFFT version", "MAFFT v"]:
+        index = output.find(marker)
+        if index == -1:
+            continue
+        version = output[index+len(marker):].strip().split(None,1)[0]
+        if int(version.split(".",1)[0]) < 6:
+            raise MissingExternalDependencyError("Test requires MAFFT v6 or "
+                                                 "later (found %s)." % version)
+        return True
+    raise MissingExternalDependencyError("Couldn't determine MAFFT version.")
+
+#This also checks it actually runs!
+check_mafft_version(mafft_exe)
 
 class MafftApplication(unittest.TestCase):
 
