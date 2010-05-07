@@ -105,7 +105,29 @@ class Pairwise(unittest.TestCase):
                          % (return_code, cline))
         self.assertEqual(10, stdoutdata.count("Query= "))
         self.assertEqual(0, stdoutdata.count("***** No hits found *****"))
-        #TODO - Parse it? 
+        #TODO - Parse it?
+
+    def test_tblastn(self):
+        """Pairwise TBLASTN search"""
+        global exe_names
+        cline = Applications.NcbiblastpCommandline(exe_names["tblastn"],
+                        query="GenBank/NC_005816.faa",
+                        subject="GenBank/NC_005816.fna",
+                        evalue="1e-6")
+        self.assertEqual(str(cline), exe_names["tblastn"] \
+                         + " -query GenBank/NC_005816.faa -evalue 1e-6" \
+                         + " -subject GenBank/NC_005816.fna")
+        child = subprocess.Popen(str(cline),
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 shell=(sys.platform!="win32"))
+        stdoutdata, stderrdata = child.communicate()
+        return_code = child.returncode
+        self.assertEqual(return_code, 0, "Got error code %i back from:\n%s"
+                         % (return_code, cline))
+        self.assertEqual(10, stdoutdata.count("Query= "))
+        self.assertEqual(0, stdoutdata.count("***** No hits found *****"))
+        #TODO - Parse it?
 
    
 class CheckCompleteArgList(unittest.TestCase):
