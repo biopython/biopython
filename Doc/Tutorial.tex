@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Ant\~ao}
-\date{Last Update -- 7 May 2010 (Biopython 1.54 \emph{beta}+)}
+\date{Last Update -- 8 May 2010 (Biopython 1.54 \emph{beta}+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -3904,7 +3904,7 @@ Newick tree file, and \verb|Bio.Phylo| can parse these:
 
 \begin{verbatim}
 >>> from Bio import Phylo
->>> tree = Phylo.read('opuntia.dnd', 'newick')
+>>> tree = Phylo.read("opuntia.dnd", "newick")
 >>> Phylo.draw_ascii(tree)
                              _______________ gi|6273291|gb|AF191665.1|AF191665
   __________________________|
@@ -7865,37 +7865,37 @@ will raise an error if the file contains more than one tree, or no trees.
 
 \begin{verbatim}
 >>> from Bio import Phylo
->>> tree = Phylo.read('example.xml', 'phyloxml')
+>>> tree = Phylo.read("example.xml", "phyloxml")
 >>> print tree
 \end{verbatim}
 
-(Example files are available in the Tests/PhyloXML/ directory of the Biopython distribution.)
+(Example files are available in the \texttt{Tests/PhyloXML/} directory of the Biopython distribution.)
 
 To handle multiple (or an unknown number of) trees, use the \verb|parse| function iterates
 through each of the trees in the given file: 
 
 \begin{verbatim}
->>> trees = Phylo.parse('example.xml', 'phyloxml')
+>>> trees = Phylo.parse("example.xml", "phyloxml")
 \end{verbatim}
 
 Write a tree or iterable of trees back to file with the \verb|write| function:
 
 \begin{verbatim}
->>> trees = list(Phylo.parse('phyloxml_examples.xml', 'phyloxml'))
+>>> trees = list(Phylo.parse("phyloxml_examples.xml", "phyloxml"))
 >>> tree1 = trees[0]
 >>> others = trees[1:]
->>> Phylo.write(tree1, 'tree1.xml', 'phyloxml')
+>>> Phylo.write(tree1, "tree1.xml", "phyloxml")
 1
->>> Phylo.write(others, 'other_trees.xml', 'phyloxml')
+>>> Phylo.write(others, "other_trees.xml", "phyloxml")
 12
 \end{verbatim}
 
 Convert files between any of the supported formats with the \verb|convert| function:
 
 \begin{verbatim}
->>> Phylo.convert('tree1.xml', 'phyloxml', 'tree1.dnd', 'newick')
+>>> Phylo.convert("tree1.xml", "phyloxml", "tree1.dnd", "newick")
 1
->>> Phylo.convert('other_trees.xml', 'phyloxml', 'other_trees.nex', 'nexus')
+>>> Phylo.convert("other_trees.xml", "phyloxml", "other_trees.nex", 'nexus")
 12
 \end{verbatim}
 
@@ -7905,7 +7905,7 @@ Convert files between any of the supported formats with the \verb|convert| funct
 The simplest way to get an overview of a \verb|Tree| object is to \verb|print| it:
 
 \begin{verbatim}
->>> tree = Phylo.read('example.xml', 'phyloxml')
+>>> tree = Phylo.read("example.xml", "phyloxml")
 >>> print tree
 Phylogeny(rooted='True', description='phyloXML allows to use either a "branch_length"
 attribute...', name='example from Prof. Joe Felsenstein's book "Inferring Phyl...')
@@ -7925,7 +7925,7 @@ shown, but it provides a way to quickly view the tree without relying on any ext
 dependencies.
 
 \begin{verbatim}
->>> tree = Phylo.read('example.xml', 'phyloxml')
+>>> tree = Phylo.read("example.xml", "phyloxml")
 >>> Phylo.draw_ascii(tree)
              __________________ A
   __________|
@@ -7940,7 +7940,7 @@ PyDot or PyGraphviz, NetworkX, and matplotlib (or pylab) installed. Using the sa
 above, and the \verb|dot| program included with Graphviz, let's draw a rooted tree:
 
 \begin{verbatim}
->>> tree = Phylo.read('example.xml', 'phyloxml')
+>>> tree = Phylo.read("example.xml", "phyloxml")
 >>> Phylo.draw_graphviz(tree, prog='dot')
 >>> import pylab
 >>> pylab.show()                    # Displays the tree in an interactive viewer
@@ -7969,8 +7969,8 @@ This viewing mode is particularly handy for exploring larger trees, because the 
 viewer can zoom in on a selected region, thinning out a cluttered graphic.
 
 \begin{verbatim}
->>> tree = Phylo.read('apaf.xml', 'phyloxml')
->>> Phylo.draw_graphviz(tree, prog='neato', node_size=0)
+>>> tree = Phylo.read("apaf.xml", "phyloxml")
+>>> Phylo.draw_graphviz(tree, prog="neato", node_size=0)
 \end{verbatim}
 
 \begin{htmlonly}
