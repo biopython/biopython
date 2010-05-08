@@ -172,12 +172,16 @@ class TreeElement(object):
 
     def __repr__(self):
         """Show this object's constructor with its primitive arguments."""
+        def pair_as_kwarg_string(key, val):
+            if isinstance(val, basestring):
+                return "%s='%s'" % (key, _sugar.trim_str(unicode(val)))
+            return "%s=%s" % (key, val)
         s = '%s(%s)' % (self.__class__.__name__,
-                        ', '.join("%s='%s'"
-                                  % (key, _sugar.trim_str(unicode(val)))
-                            for key, val in self.__dict__.iteritems()
-                            if val is not None and
-                            type(val) in (str, int, float, bool, unicode)))
+                        ', '.join(pair_as_kwarg_string(key, val)
+                                  for key, val in self.__dict__.iteritems()
+                                  if val is not None and
+                                  type(val) in (str, int, float, bool, unicode)
+                                  ))
         return s.encode('utf-8')
 
     __str__ = __repr__
