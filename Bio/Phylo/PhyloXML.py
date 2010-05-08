@@ -40,15 +40,6 @@ def _check_str(text, testfunc):
 
 class PhyloElement(BaseTree.TreeElement):
     """Base class for all PhyloXML objects."""
-    def __str__(self):
-        """Show the class name and an identifying attribute."""
-        if hasattr(self, 'name') and self.name:
-            return _sugar.trim_str(self.name, maxlen=40)
-        if hasattr(self, 'value') and self.value:
-            return _sugar.trim_str(unicode(self.value), maxlen=40)
-        if hasattr(self, 'id') and self.id:
-            return str(self.id)
-        return self.__class__.__name__
 
 
 class Phyloxml(PhyloElement):
@@ -85,6 +76,10 @@ class Phyloxml(PhyloElement):
     def __len__(self):
         """Number of phylogenetic trees in this object."""
         return len(self.phylogenies)
+
+    def __str__(self):
+        return '%s([%s])' % (self.__class__.__name__,
+                             ',\n'.join(map(str, self.phylogenies)))
 
 
 class Other(PhyloElement):
@@ -155,9 +150,6 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
         self.sequence_relations = sequence_relations or []
         self.properties = properties or []
         self.other = other or []
-
-    # Prevent PhyloElement from overriding the pretty-printer
-    __str__ = BaseTree.Tree.__str__
 
     @classmethod
     def from_tree(cls, tree, **kwargs):
@@ -379,6 +371,10 @@ class Accession(PhyloElement):
     def __init__(self, value, source):
         self.value = value
         self.source = source
+
+    def __str__(self):
+        """Show the class name and an identifying attribute."""
+        return '%s:%s' % (self.source, self.value)
 
 
 class Annotation(PhyloElement):
@@ -727,6 +723,11 @@ class Id(PhyloElement):
         self.value = value
         self.provider = provider
 
+    def __str__(self):
+        if self.provider is not None:
+            return '%s:%s' % (self.provider, self.value)
+        return self.value
+
 
 class MolSeq(PhyloElement):
     """Store a molecular sequence.
@@ -773,6 +774,10 @@ class Polygon(PhyloElement):
     """
     def __init__(self, points=None):
         self.points = points or []
+
+    def __str__(self):
+        return '%s([%s])' % (self.__class__.__name__,
+                             ',\n'.join(map(str, self.points)))
 
 
 class Property(PhyloElement):
@@ -1163,3 +1168,7 @@ class Uri(PhyloElement):
         self.desc = desc
         self.type = type
 
+    def __str__(self):
+        if self.value:
+            return self.value
+        return repr(self)

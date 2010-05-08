@@ -180,10 +180,7 @@ class TreeElement(object):
                             type(val) in (str, int, float, bool, unicode)))
         return s.encode('utf-8')
 
-    def __str__(self):
-        if hasattr(self, 'name') and self.name:
-            return self.name
-        return self.__class__.__name__
+    __str__ = __repr__
 
 
 class TreeMixin(object):
@@ -748,3 +745,7 @@ class Clade(TreeElement, TreeMixin):
         """Number of subtrees directy under the root."""
         return len(self.clades)
 
+    def __str__(self):
+        if self.name:
+            return _sugar.trim_str(self.name, maxlen=40)
+        return self.__class__.__name__
