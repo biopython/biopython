@@ -29,7 +29,7 @@ class PhyloXMLWarning(Warning):
     pass
 
 
-def check_str(text, testfunc):
+def _check_str(text, testfunc):
     """Check a string using testfunc, and warn if there's no match."""
     if text is not None and not testfunc(text):
         warnings.warn("String %s doesn't match the given regexp" % text,
@@ -408,7 +408,7 @@ class Annotation(PhyloElement):
             desc=None, confidence=None, uri=None,
             # Collection
             properties=None):
-        check_str(ref, self.re_ref.match)
+        _check_str(ref, self.re_ref.match)
         self.ref = ref
         self.source = source
         self.evidence = evidence
@@ -668,7 +668,7 @@ class Events(PhyloElement):
 
     def __init__(self, type=None, duplications=None, speciations=None,
             losses=None, confidence=None):
-        check_str(type, self.ok_type.__contains__)
+        _check_str(type, self.ok_type.__contains__)
         self.type = type
         self.duplications = duplications
         self.speciations = speciations
@@ -738,7 +738,7 @@ class MolSeq(PhyloElement):
     re_value = re.compile(r'[a-zA-Z\.\-\?\*_]+')
 
     def __init__(self, value, is_aligned=None):
-        check_str(value, self.re_value.match)
+        _check_str(value, self.re_value.match)
         self.value = value
         self.is_aligned = is_aligned
 
@@ -812,10 +812,10 @@ class Property(PhyloElement):
 
     def __init__(self, value, ref, applies_to, datatype,
             unit=None, id_ref=None):
-        check_str(ref, self.re_ref.match)
-        check_str(applies_to, self.ok_applies_to.__contains__)
-        check_str(datatype, self.ok_datatype.__contains__)
-        check_str(unit, self.re_ref.match)
+        _check_str(ref, self.re_ref.match)
+        _check_str(applies_to, self.ok_applies_to.__contains__)
+        _check_str(datatype, self.ok_datatype.__contains__)
+        _check_str(unit, self.re_ref.match)
         self.unit = unit
         self.id_ref = id_ref
         self.value = value
@@ -871,7 +871,7 @@ class Reference(PhyloElement):
     re_doi = re.compile(r'[a-zA-Z0-9_\.]+/[a-zA-Z0-9_\.]+')
 
     def __init__(self, doi=None, desc=None):
-        check_str(doi, self.re_doi.match)
+        _check_str(doi, self.re_doi.match)
         self.doi = doi
         self.desc = desc
 
@@ -912,8 +912,8 @@ class Sequence(PhyloElement):
             # Collections
             annotations=None, other=None,
             ):
-        check_str(type, self.alphabets.__contains__)
-        check_str(symbol, self.re_symbol.match)
+        _check_str(type, self.alphabets.__contains__)
+        _check_str(symbol, self.re_symbol.match)
         self.type = type
         self.id_ref = id_ref
         self.id_source = id_source
@@ -1077,7 +1077,7 @@ class SequenceRelation(PhyloElement):
 
     def __init__(self, type, id_ref_0, id_ref_1,
             distance=None, confidence=None):
-        check_str(type, self.ok_type.__contains__)
+        _check_str(type, self.ok_type.__contains__)
         self.distance = distance
         self.type = type
         self.id_ref_0 = id_ref_0
@@ -1125,8 +1125,8 @@ class Taxonomy(PhyloElement):
             # Collections
             common_names=None, synonyms=None, other=None,
             ):
-        check_str(code, self.re_code.match)
-        check_str(rank, self.ok_rank.__contains__)
+        _check_str(code, self.re_code.match)
+        _check_str(rank, self.ok_rank.__contains__)
         self.id_source = id_source
         self.id = id
         self.code = code
