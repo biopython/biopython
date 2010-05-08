@@ -81,6 +81,7 @@ test_files = [ \
     ("fasta",  False, 'GenBank/NC_005816.ffn', 10),
     ("fasta",  False, 'GenBank/NC_005816.faa', 10),
     ("fasta",  False, 'GenBank/NC_000932.faa', 85),
+    ("tab",  False, 'GenBank/NC_005816.tsv', 10), # FASTA -> Tabbed
 #Following examples are also used in test_GFF.py
     ("fasta",  False, 'GFF/NC_001802.fna', 1), #upper case
     ("fasta",  False, 'GFF/NC_001802lc.fna', 1), #lower case

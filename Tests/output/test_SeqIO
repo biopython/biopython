@@ -692,6 +692,42 @@ Testing reading fasta format file GenBank/NC_000932.faa
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
+Testing reading tab format file GenBank/NC_005816.tsv
+ ID and Name='gi|45478712|ref|NP_995567.1|',
+ Seq='MVTFETVMEIKILHKQGMSSRAIARELGISRNTVKRYLQA...SFCRGVA', length=340
+ ID and Name='gi|45478713|ref|NP_995568.1|',
+ Seq='MMMELQHQRLMALAGQLQLESLISAAPALSQQAVDQEWSY...IAEANPE', length=260
+ ID and Name='gi|45478714|ref|NP_995569.1|',
+ Seq='MNKQQQTALNMARFIRSQSLILLEKLDALDADEQAAMCER...AESETGT', length=64
+ ...
+ ID and Name='gi|45478721|ref|NP_995576.1|',
+ Seq='MADLKKLQVYGPELPRPYADTVKGSRYKNMKELRVQFSGR...LNTLESK', length=90
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'embl' format
+ Failed: Need a Nucleotide alphabet
+ Checking can write/read as 'fastq' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).
+ Checking can write/read as 'fastq-illumina' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).
+ Checking can write/read as 'fastq-solexa' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).
+ Checking can write/read as 'genbank' format
+ Failed: Locus identifier 'gi|45478721|ref|NP_995576.1|' is too long
+ Checking can write/read as 'phd' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).
+ Checking can write/read as 'qual' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).
+ Checking can write/read as 'sff' format
+ Failed: Missing SFF flow information
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
 Testing reading fasta format file GFF/NC_001802.fna
  ID and Name='gi|9629357|ref|NC_001802.1|',
  Seq='GGTCTCTCTGGTTAGACCAGATCTGAGCCTGGGAGCTCTC...GTGCTTC', length=9181
