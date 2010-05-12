@@ -8027,34 +8027,174 @@ returns the clade object itself.)
 See the Phylo page on the Biopython wiki (\url{http://biopython.org/wiki/Phylo}) for
 descriptions of each of the available methods.
 
-% TODO
-% \subsection{Search and traversal methods}
-% \verb|find_all|
-% \verb|find_any|
-% \verb|find_clades|
-% \verb|get_nonterminals|
-% \verb|get_path|
-% \verb|get_terminals|
-% \verb|trace|
+% TODO -- start with docstrings; clarify and add examples
 
-% \subsection{Information methods}
-% \verb|common_ancestor|
-% \verb|count_terminals|
-% \verb|depths|
-% \verb|distance|
-% \verb|is_bifurcating|
-% \verb|is_monophyletic|
-% \verb|is_parent_of|
-% \verb|is_preterminal|
-% \verb|total_branch_length|
+\subsection{Information methods}
 
-% \subsection{Modification methods}
-% \verb|collapse|
-% \verb|collapse_all|
-% \verb|ladderize|
-% \verb|prune|
-% \verb|split|
+These methods provide information about the whole tree (or any clade).
 
+\begin{description}
+  \item[\texttt{common\_ancestor}]
+    Find the most recent common ancestor of all the given targets. (This will be a Clade object). 
+    If no target is given, returns the root of the current clade (the one this method is called
+    from); if 1 target is given, this returns the target itself.  However, if any of the
+    specified targets are not found in the current tree (or clade), an exception is raised.
+
+  \item[\texttt{count\_terminals}]
+    Counts the number of terminal (leaf) nodes within the tree.
+
+  \item[\texttt{depths}]
+    Create a mapping of tree clades to depths. The result is a dictionary where the keys are
+    all of the Clade instances in the tree, and the values are the distance from the root to
+    each clade (including terminals). By default the distance is the cumulative branch length
+    leading to the clade, but with the \verb|unit_branch_lengths=True| option, only the number
+    of branches (levels in the tree) is counted.
+
+  \item[\texttt{distance}]
+    Calculate the sum of the branch lengths between two targets.  If only one target is
+    specified, the other is the root of this tree.
+
+  \item[\texttt{total\_branch\_length}]
+    Calculate the sum of all the branch lengths in this tree. This is usually just called the
+    ``length'' of the tree in phylogenetics, but we use a more explicit name to avoid confusion
+    with Python terminology.
+
+\end{description}
+
+% discussion?
+
+The rest of these methods are boolean checks:
+
+\begin{description}
+  \item[\texttt{is\_bifurcating}]
+    True if the tree is strictly bifurcating; i.e. all nodes have either 2 or 0 children
+    (internal or external, respectively). The root may have 3 descendents and still be
+    considered part of a bifurcating tree.
+
+  \item[\texttt{is\_monophyletic}]
+    Test if all of the given targets comprise a complete subclade --- i.e., there
+    exists a clade such that its terminals are the same set as the given targets. The targets
+    should be terminals of the tree. For convenience, this method returns the common ancestor
+    (MCRA) of the targets if they are monophyletic (instead of the value \verb|True|), and
+    \verb|False| otherwise.
+
+  \item[\texttt{is\_parent\_of}] True if target is a descendent of this tree --- not required
+    to be a direct descendent. To check direct descendents of a clade, simply use list
+    membership testing: \verb|if subclade in clade: ...|
+
+  \item[\texttt{is\_preterminal}] True if all direct descendents are terminal; False if any
+    direct descendent is not terminal.
+
+\end{description}
+
+\subsection{Search and traversal methods}
+
+\begin{description}
+  \item[\texttt{find\_clades}]
+    Find each clade containing a matching element.
+
+    % That is, find each element as with find\_elements(), but return the corresponding clade
+    % object.
+
+    % TODO: discussion about target specifications
+
+    Parameters:
+
+    \begin{itemize}
+      \item  target (TreeElement instance, type, dict, or callable) - Specifies the
+        characteristics to search for.
+
+      \item  terminal (bool) - A boolean value to select for or against terminal nodes (a.k.a.
+        leaf nodes). True searches for only terminal nodes, False excludes terminal nodes, and
+        the default, None, searches both terminal and non-terminal nodes, as well as any tree
+        elements lacking the \verb|is_terminal| method.
+
+      \item  order (string ('preorder'|'postorder'|'level')) - Tree traversal order: 'preorder'
+        (default) is depth-first search, 'postorder' is DFS with child nodes preceding parents,
+        and 'level' is breadth-first search.
+
+    \end{itemize}
+
+    The arbitrary keyword arguments indicate the attribute name of the sub-element and the
+    value to match: string, integer or boolean. Strings are evaluated as regular expression
+    matches; integers are compared directly for equality, and booleans evaluate the attribute's
+    truth value (True or False) before comparing. To handle nonzero floats, search with a
+    boolean argument, then filter the result manually.
+
+    If no keyword arguments are given, then any TreeElement types are matched.
+
+  \item[\texttt{find\_any}]
+    Return the first element found by \verb|find_elements()|, or None.
+    This is also useful for checking whether any matching element exists in the tree.
+
+  \item[\texttt{find\_elements}]
+    Find all tree elements matching the given attributes.
+
+    The result is an iterable through all matching objects, by depth-first search. (Not
+    necessarily the same order as the elements appear in the source file!)
+
+\end{description}
+
+For convenience, we provide a couple of simplified methods that return all external or internal
+nodes directly as a list:
+
+\begin{description}
+  \item[\texttt{get\_terminals}]
+    Make a list of all of this tree's terminal (leaf) nodes.
+  \item[\texttt{get\_nonterminals}]
+    Make a list of all of this tree's nonterminal (internal) nodes.
+\end{description}
+
+These also help navigating the tree:
+
+\begin{description}
+  \item[\texttt{get\_path}]
+    List the clades directly between the root and the given target.
+    Returns a list of all clade objects along this path, ending with the given target, but
+    excluding the root clade.
+
+  \item[\texttt{trace}]
+    List of all clade object between two targets in this tree.
+    Excluding start, including finish.
+
+\end{description}
+
+\subsection{Modification methods}
+
+These methods modify the tree in-place. If you want to keep the original tree intact, make a
+complete copy of the tree first, using Python's \texttt{copy} module:
+
+\begin{verbatim}
+tree = Phylo.read('example.xml', 'phyloxml')
+import copy
+newtree = copy.deepcopy(tree)
+\end{verbatim}
+
+\begin{description}
+  \item[\texttt{collapse}]
+    Deletes the target from the tree, relinking its children to its parent.
+
+  \item[\texttt{collapse\_all}]
+    Collapse all the descendents of this tree, leaving only terminals. Branch lengths are
+    preserved, i.e. the distance to each terminal stays the same.
+
+  \item[\texttt{ladderize}]
+    Sort clades in-place according to the number of terminal nodes.
+    Deepest clades are placed last by default. Use \verb|reverse=True| to sort clades
+    deepest-to-shallowest.
+
+  \item[\texttt{prune}]
+    Prunes a terminal clade from the tree.
+    If taxon is from a bifurcation, the connecting node will be collapsed and its branch length
+    added to remaining terminal node. This might no longer be a meaningful value.
+
+  \item[\texttt{split}]
+    Speciation: generate n (default 2) new descendants.
+    New clades have the given \verb|branch_length| and the same name as this clade's root plus
+    an integer suffix (counting from 0) --- for example, splitting a clade named ``A'' produces
+    the sub-clades ``A0'' and ``A1''.
+
+\end{description}
 
 \section{Features of PhyloXML trees}
 \label{sec:PhyloXML}
