@@ -351,12 +351,13 @@ class TreeMixin(object):
 
             - If no target is given, returns self.root
             - If 1 target is given, returns the target
-            - If any target is not found in this tree, raises an AssertionError
+            - If any target is not found in this tree, raises a ValueError
         """
         paths = [self.get_path(t) for t in targets]
         # Validation -- otherwise izip throws a spooky error below
         for p, t in zip(paths, targets):
-            assert p is not None, "target %s is not in this tree" % repr(t)
+            if p is None:
+                raise ValueError("target %s is not in this tree" % repr(t))
         mrca = self.root
         for level in itertools.izip(*paths):
             ref = level[0]
@@ -748,6 +749,15 @@ class Clade(TreeElement, TreeMixin):
     def __len__(self):
         """Number of subtrees directy under the root."""
         return len(self.clades)
+
+    def __nonzero__(self):
+        """Boolean value of an instance of this class.
+
+        NB: If this method is not defined, but __len__  is, then the object is
+        considered true if the result of __len__() is nonzero. We want Clade
+        instances to always be considered true.
+        """
+        return True
 
     def __str__(self):
         if self.name:
