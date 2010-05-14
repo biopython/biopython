@@ -58,6 +58,11 @@ class MultipleSeqAlignment(_Alignment):
     >>> print align[-1].id
     gi|6273291|gb|AF191665.1|AF191
 
+    And extract columns as strings:
+
+    >>> print align[:,1]
+    AAAAAAA
+
     Or, take just the first ten columns as a sub-alignment:
 
     >>> print align[:,:10]
@@ -70,7 +75,7 @@ class MultipleSeqAlignment(_Alignment):
     TATACATTAA gi|6273289|gb|AF191663.1|AF191
     TATACATTAA gi|6273291|gb|AF191665.1|AF191
     
-    Combining this alignment slicing with alignment addtion allows you to
+    Combining this alignment slicing with alignment addition allows you to
     remove a section of the alignment. For example, taking just the first
     and last ten columns:
 
@@ -404,16 +409,15 @@ class MultipleSeqAlignment(_Alignment):
         >>> align[3].seq[4]
         'C'
 
-        To get a single column (as a Seq object taking the alignment's alphabet),
-        use this syntax:
+        To get a single column (as a string) use this syntax:
 
         >>> align[:,4]
-        Seq('CCGCG', DNAAlphabet())
+        'CCGCG'
 
         Or, to get part of a column,
 
         >>> align[1:3,4]
-        Seq('CG', DNAAlphabet())
+        'CG'
 
         However, in general you get a sub-alignment,
 
@@ -443,9 +447,8 @@ class MultipleSeqAlignment(_Alignment):
             #e.g. row_or_part_row = align[6, 1:4], gives a SeqRecord
             return self._records[row_index][col_index]
         elif isinstance(col_index, int):
-            #e.g. col_or_part_col = align[1:5, 6], gives a Seq
-            return Seq("".join(rec[col_index] for rec in self._records[row_index]),
-                       self._alphabet)
+            #e.g. col_or_part_col = align[1:5, 6], gives a string
+            return "".join(rec[col_index] for rec in self._records[row_index])
         else:
             #e.g. sub_align = align[1:4, 5:7], gives another alignment
             return MultipleSeqAlignment((rec[col_index] for rec in self._records[row_index]),
