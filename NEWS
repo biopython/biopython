@@ -9,6 +9,13 @@ The latest news is at the top.
 
 ===================================================================
 
+See the notes below for the Biopython 1.54 beta release for changes since
+Biopython 1.53 was released. Since then there have been some changes to
+the new Bio.Phylo module, more documentation, and a number of smaller
+bug fixes.
+
+===================================================================
+
 April 2, 2010: Biopython 1.54 beta released.
 
 We are phasing out support for Python 2.4. We will continue to support it

@@ -67,6 +67,10 @@ def get_emboss_version():
             pass
         elif line.count(".")==2:
             return tuple(int(v) for v in line.strip().split("."))
+        elif line.count(".")==3:
+            #e.g. I installed mEMBOSS-6.2.0.1-setup.exe
+            #which reports 6.2.0.1 - for this return (6,2,0)
+            return tuple(int(v) for v in line.strip().split("."))[:3]
         else:
             raise ValueError(stdout)
 

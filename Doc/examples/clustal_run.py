@@ -5,23 +5,28 @@ Example code to show how to create a clustalw command line, run clustalw
 and parse the results into an object that can be dealt with easily."""
 # standard library
 import os
+import sys
+import subprocess
 
 # biopython
-from Bio.Alphabet import IUPAC
-from Bio import Clustalw
-from Bio.Clustalw import MultipleAlignCL
+from Bio.Alphabet import Gapped, IUPAC
+from Bio.Align.Applications import ClustalwCommandline
+from Bio import AlignIO
 from Bio.Align import AlignInfo
 from Bio.SubsMat import FreqTable
 
 # create the command line to run clustalw
 # this assumes you've got clustalw somewhere on your path, otherwise
-# you need to pass a second argument to MultipleAlignCL with the complete
-# path to clustalw
-cline = MultipleAlignCL(os.path.join(os.curdir, 'opuntia.fasta'))
-cline.set_output('test.aln')
+# you need to pass the full path of the executable to this via cmd="..."
+cline = ClustalwCommandline(infile='opuntia.fasta', outfile='test.aln')
 
-# actually perform the alignment and get back an alignment object
-alignment = Clustalw.do_alignment(cline)
+# actually perform the alignment
+return_code = subprocess.call(str(cline), shell=(sys.platform!="win32"))
+assert return_code==0, "Calling ClustalW failed"
+
+# Parse the output
+alignment = AlignIO.read("test.aln", "clustal",
+                         alphabet=Gapped(IUPAC.unambiguous_dna))
 
 print alignment
 
