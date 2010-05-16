@@ -8024,10 +8024,128 @@ returns the clade object itself.)
 
 % TODO - use dia to make a class diagram like images/smcra.png
 
-See the Phylo page on the Biopython wiki (\url{http://biopython.org/wiki/Phylo}) for
-descriptions of each of the available methods.
+\subsection{Search and traversal methods}
 
-% TODO -- start with docstrings; clarify and add examples
+For convenience, we provide a couple of simplified methods that return all external or internal
+nodes directly as a list:
+
+\begin{description}
+  \item[\texttt{get\_terminals}] makes a list of all of this tree's terminal (leaf) nodes.
+  \item[\texttt{get\_nonterminals}] makes a list of all of this tree's nonterminal (internal)
+    nodes.
+\end{description}
+
+These both wrap a method with full control over tree traversal, \verb|find_clades|. Two more
+traversal methods, \verb|find_elements| and \verb|find_any|, rely on the same core
+functionality and accept the same arguments, which we'll call a ``target specification'' for
+lack of a better description. These specify which objects in the tree will be matched and
+returned during iteration. The first argument can be any of the following types:
+
+\begin{itemize}
+  \item A \textbf{TreeElement instance}, which tree elements will match by identity --- so
+    searching with a Clade instance as the target will find that clade in the tree;
+
+  \item A \textbf{class} or \textbf{type}, where every tree element of the same type (or
+    sub-type) will be matched;
+
+  \item A \textbf{dictionary} where keys are tree element attributes and values are matched to the
+    corresponding attribute of each tree element. This one gets even more elaborate:
+
+    \begin{itemize}
+      \item If an \texttt{int} is given, it matches numerically equal attributes, e.g. 1 will
+        match 1 or 1.0
+
+      \item If a boolean is given (True or False), the corresponding attribute value is
+        evaluated as a boolean and checked for the same
+
+      \item \texttt{None} matches \texttt{None}
+
+      \item If a string is given, the value is treated as a regular expression (which must
+        match the whole string in the corresponding element attribute, not just a prefix).  A
+        given string without special regex characters will match string attributes exactly, so
+        if you don't use regexes, don't worry about it.  For example, in a tree with clade
+        names Foo1, Foo2 and Foo3, \verb|tree.find_clades({"name": "Foo1"})| matches Foo1,
+        \verb|{"name": "Foo.*"}| matches all three clades, and \verb|{"name": "Foo"}| doesn't
+        match anything.
+
+    \end{itemize}
+
+    Since floating-point arithmetic can produce some strange behavior, we don't support
+    matching \texttt{float}s directly. Instead, use the boolean \texttt{True} to match every
+    element with a nonzero value in the specified attribute, then filter on that attribute
+    manually with an inequality (or exact number, if you like living dangerously).
+
+    If the dictionary contains multiple entries, a matching element must match each of the
+    given attribute values --- think ``and'', not ``or''.
+
+  \item A \textbf{function} taking a single argument (it will be applied to each element in the
+    tree), returning True or False. For convenience, LookupError, AttributeError and ValueError
+    are silenced, so this provides another safe way to search for floating-point values in the
+    tree, or some more complex characteristic.
+
+\end{itemize}
+
+After the target, there are two optional keyword arguments:
+
+\begin{description}
+  \item[terminal] --- A boolean value to select for or against terminal clades (a.k.a. leaf
+    nodes): True searches for only terminal clades, False for non-terminal (internal) clades,
+    and the default, None, searches both terminal and non-terminal clades, as well as any tree
+    elements lacking the \verb|is_terminal| method.
+
+  \item[order] --- Tree traversal order: \texttt{"preorder"} (default) is depth-first search,
+    \texttt{"postorder"} is DFS with child nodes preceding parents, and \texttt{"level"} is
+    breadth-first search.
+
+\end{description}
+
+Finally, the methods accept arbitrary keyword arguments which are treated the same way as a
+dictionary target specification: keys indicate the name of the element attribute to search for,
+and the argument value (string, integer, None or boolean) is compared to the value of each
+attribute found. If no keyword arguments are given, then any TreeElement types are matched.
+The code for this is generally shorter than passing a dictionary as the target specification:
+\verb|tree.find_clades({"name": "Foo1"})| can be shortened to
+\verb|tree.find_clades(name="Foo1")|.
+
+% TODO -- introduce these / segue and clean up the descriptions
+
+Now that we've mastered target specifications, here are the methods used to traverse a tree:
+
+\begin{description}
+  \item[\texttt{find\_clades}]
+    Find each clade containing a matching element. That is, find each element as with
+    \verb|find_elements|, but return the corresponding clade object. (This is usually what you
+    want.)
+
+    The result is an iterable through all matching objects, searching depth-first by default.
+    This is not necessarily the same order as the elements appear in the Newick, Nexus or XML
+    source file!
+
+  \item[\texttt{find\_elements}]
+    Find all tree elements matching the given attributes, and return the matching elements
+    themselves. Simple Newick trees don't have complex sub-elements, so this behaves the same
+    as \verb|find_clades| on them. PhyloXML trees often do have complex objects attached to
+    clades, so this method is useful for extracting those.
+
+  \item[\texttt{find\_any}]
+    Return the first element found by \verb|find_elements()|, or None. This is also useful for
+    checking whether any matching element exists in the tree, and can be used in a conditional.
+
+\end{description}
+
+Two more methods help navigating between nodes in the tree:
+
+\begin{description}
+  \item[\texttt{get\_path}]
+    List the clades directly between the tree root (or current clade) and the given target.
+    Returns a list of all clade objects along this path, ending with the given target, but
+    excluding the root clade.
+
+  \item[\texttt{trace}]
+    List of all clade object between two targets in this tree. Excluding start, including
+    finish.
+
+\end{description}
 
 \subsection{Information methods}
 
@@ -8061,8 +8179,6 @@ These methods provide information about the whole tree (or any clade).
 
 \end{description}
 
-% discussion?
-
 The rest of these methods are boolean checks:
 
 \begin{description}
@@ -8087,77 +8203,6 @@ The rest of these methods are boolean checks:
 
 \end{description}
 
-\subsection{Search and traversal methods}
-
-\begin{description}
-  \item[\texttt{find\_clades}]
-    Find each clade containing a matching element.
-
-    % That is, find each element as with find\_elements(), but return the corresponding clade
-    % object.
-
-    % TODO: discussion about target specifications
-
-    Parameters:
-
-    \begin{itemize}
-      \item  target (TreeElement instance, type, dict, or callable) - Specifies the
-        characteristics to search for.
-
-      \item  terminal (bool) - A boolean value to select for or against terminal nodes (a.k.a.
-        leaf nodes). True searches for only terminal nodes, False excludes terminal nodes, and
-        the default, None, searches both terminal and non-terminal nodes, as well as any tree
-        elements lacking the \verb|is_terminal| method.
-
-      \item  order (string ('preorder'|'postorder'|'level')) - Tree traversal order: 'preorder'
-        (default) is depth-first search, 'postorder' is DFS with child nodes preceding parents,
-        and 'level' is breadth-first search.
-
-    \end{itemize}
-
-    The arbitrary keyword arguments indicate the attribute name of the sub-element and the
-    value to match: string, integer or boolean. Strings are evaluated as regular expression
-    matches; integers are compared directly for equality, and booleans evaluate the attribute's
-    truth value (True or False) before comparing. To handle nonzero floats, search with a
-    boolean argument, then filter the result manually.
-
-    If no keyword arguments are given, then any TreeElement types are matched.
-
-  \item[\texttt{find\_any}]
-    Return the first element found by \verb|find_elements()|, or None.
-    This is also useful for checking whether any matching element exists in the tree.
-
-  \item[\texttt{find\_elements}]
-    Find all tree elements matching the given attributes.
-
-    The result is an iterable through all matching objects, by depth-first search. (Not
-    necessarily the same order as the elements appear in the source file!)
-
-\end{description}
-
-For convenience, we provide a couple of simplified methods that return all external or internal
-nodes directly as a list:
-
-\begin{description}
-  \item[\texttt{get\_terminals}]
-    Make a list of all of this tree's terminal (leaf) nodes.
-  \item[\texttt{get\_nonterminals}]
-    Make a list of all of this tree's nonterminal (internal) nodes.
-\end{description}
-
-These also help navigating the tree:
-
-\begin{description}
-  \item[\texttt{get\_path}]
-    List the clades directly between the root and the given target.
-    Returns a list of all clade objects along this path, ending with the given target, but
-    excluding the root clade.
-
-  \item[\texttt{trace}]
-    List of all clade object between two targets in this tree.
-    Excluding start, including finish.
-
-\end{description}
 
 \subsection{Modification methods}
 
@@ -8179,22 +8224,25 @@ newtree = copy.deepcopy(tree)
     preserved, i.e. the distance to each terminal stays the same.
 
   \item[\texttt{ladderize}]
-    Sort clades in-place according to the number of terminal nodes.
-    Deepest clades are placed last by default. Use \verb|reverse=True| to sort clades
-    deepest-to-shallowest.
+    Sort clades in-place according to the number of terminal nodes.  Deepest clades are placed
+    last by default. Use \verb|reverse=True| to sort clades deepest-to-shallowest.
 
   \item[\texttt{prune}]
-    Prunes a terminal clade from the tree.
-    If taxon is from a bifurcation, the connecting node will be collapsed and its branch length
-    added to remaining terminal node. This might no longer be a meaningful value.
+    Prunes a terminal clade from the tree.  If taxon is from a bifurcation, the connecting node
+    will be collapsed and its branch length added to remaining terminal node. This might no
+    longer be a meaningful value.
 
   \item[\texttt{split}]
-    Speciation: generate n (default 2) new descendants.
-    New clades have the given \verb|branch_length| and the same name as this clade's root plus
-    an integer suffix (counting from 0) --- for example, splitting a clade named ``A'' produces
-    the sub-clades ``A0'' and ``A1''.
+    Generate \textit{n} (default 2) new descendants. In a species tree, this is a speciation
+    event.  New clades have the given \verb|branch_length| and the same name as this clade's
+    root plus an integer suffix (counting from 0) --- for example, splitting a clade named
+    ``A'' produces the sub-clades ``A0'' and ``A1''.
 
 \end{description}
+
+See the Phylo page on the Biopython wiki (\url{http://biopython.org/wiki/Phylo}) for
+more examples of using the available methods.
+
 
 \section{Features of PhyloXML trees}
 \label{sec:PhyloXML}
@@ -8237,6 +8285,7 @@ scripts that require a consistent result.
 
 We're open to any suggestions for improving the functionality and usability of this module;
 just let us know on the mailing list or Bugzilla.
+
 
 \chapter{Supervised learning methods}
 
