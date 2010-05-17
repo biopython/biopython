@@ -41,7 +41,13 @@ def compare_record(old, new, expect_minor_diffs=False):
                          % (old.id, old.name, new.id, new.name))
     if len(old.seq) != len(new.seq):
         raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
-    if str(old.seq).upper() != str(new.seq).upper():
+    if isinstance(old.seq, UnknownSeq) \
+    and isinstance(new.seq, UnknownSeq):
+        #Jython didn't like us comparing the string of very long
+        #UnknownSeq object (out of heap memory error)
+        if old.seq._character.upper() != new.seq._character:
+            raise ValueError("%s vs %s" % (repr(old.seq), repr(new.seq)))
+    elif str(old.seq).upper() != str(new.seq).upper():
         if len(old.seq) < 200:
             raise ValueError("'%s' vs '%s'" % (old.seq, new.seq))
         else:
