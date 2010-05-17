@@ -233,14 +233,23 @@ def compare_record(record_one, record_two):
     """This is meant to be a strict comparison for exact agreement..."""
     assert isinstance(record_one, SeqRecord)
     assert isinstance(record_two, SeqRecord)
+    assert record_one.seq is not None
+    assert record_two.seq is not None
     if record_one.id != record_two.id:
         return False
     if record_one.name != record_two.name:
         return False
     if record_one.description != record_two.description:
         return False
-    if record_one.seq is not None and record_two.seq is not None \
-    and record_one.seq.tostring() != record_two.seq.tostring():
+    if len(record_one) != len(record_two):
+        return False
+    if isinstance(record_one.seq, UnknownSeq) \
+    and isinstance(record_two.seq, UnknownSeq):
+        #Jython didn't like us comparing the string of very long UnknownSeq
+        #object (out of heap memory error)
+        if record_one.seq._character != record_two.seq._character:
+            return False
+    elif record_one.seq.tostring() != record_two.seq.tostring():
         return False
     #TODO - check features and annotation (see code for BioSQL tests)
     for key in set(record_one.letter_annotations).intersection( \
@@ -344,11 +353,18 @@ def check_simple_write_read(records, indent=" "):
         for r1, r2 in zip(records, records2):
             #Check the bare minimum (ID and sequence) as
             #many formats can't store more than that.
+            assert len(r1) == len(r2)
 
             #Check the sequence
             if format in ["gb", "genbank", "embl"]:
                 #The GenBank/EMBL parsers will convert to upper case.
-                assert r1.seq.tostring().upper() == r2.seq.tostring()
+                if isinstance(r1.seq, UnknownSeq) \
+                and isinstance(r2.seq, UnknownSeq):
+                    #Jython didn't like us comparing the string of very long
+                    #UnknownSeq object (out of heap memory error)
+                    assert r1.seq._character.upper() == r2.seq._character
+                else:
+                    assert r1.seq.tostring().upper() == r2.seq.tostring()
             elif format == "qual":
                 assert isinstance(r2.seq, UnknownSeq)
                 assert len(r2) == len(r1)
