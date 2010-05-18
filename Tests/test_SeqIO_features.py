@@ -21,15 +21,16 @@ from StringIO import StringIO
 from Bio.SeqIO.InsdcIO import _insdc_feature_location_string
 
 #Top level function as this makes it easier to use for debugging:
-def write_read(filename, in_format="gb", out_format="gb"):
-    gb_records = list(SeqIO.parse(open(filename),in_format))
-    #Write it out...
-    handle = StringIO()
-    SeqIO.write(gb_records, handle, out_format)
-    handle.seek(0)
-    #Now load it back and check it agrees,
-    gb_records2 = list(SeqIO.parse(handle,out_format))
-    compare_records(gb_records, gb_records2)
+def write_read(filename, in_format="gb", out_formats=["gb", "embl"]):
+    for out_format in out_formats:
+        gb_records = list(SeqIO.parse(open(filename),in_format))
+        #Write it out...
+        handle = StringIO()
+        SeqIO.write(gb_records, handle, out_format)
+        handle.seek(0)
+        #Now load it back and check it agrees,
+        gb_records2 = list(SeqIO.parse(handle,out_format))
+        compare_records(gb_records, gb_records2)
 
 def compare_record(old, new, expect_minor_diffs=False):
     #Note the name matching is a bit fuzzy
@@ -364,6 +365,10 @@ class FeatureWriting(unittest.TestCase):
         handle.seek(0)
         record2 = SeqIO.read(handle, format)
         compare_record(self.record, record2)
+    
+    def write_read_checks(self, formats=["gb", "embl"]):
+        for f in formats:
+            self.write_read_check(f)
 
     def test_exact(self):
         """Features: write/read simple exact locations."""
@@ -382,8 +387,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f),
                          "51..60")
         self.record.features.append(f)
-        self.write_read_check("gb")
-        self.write_read_check("embl")
+        self.write_read_checks()
 
     def test_between(self):
         """Features: write/read simple between locations."""
@@ -396,8 +400,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f),
                          "complement(20^21)")
         self.record.features.append(f)
-        self.write_read_check("gb")
-        self.write_read_check("embl")
+        self.write_read_checks()
 
     def test_join(self):
         """Features: write/read simple join locations."""
@@ -427,8 +430,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f),
                          "complement(join(311..320,326..340,346..350))")
         self.record.features.append(f)
-        self.write_read_check("gb")
-        self.write_read_check("embl")
+        self.write_read_checks()
 
     def test_fuzzy_join(self):
         """Features: write/read fuzzy join locations."""
@@ -462,8 +464,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f),
                          "complement(join(>311..320,326..one-of(340,337),346..(350.355)))")
         self.record.features.append(f)
-        self.write_read_check("gb")
-        self.write_read_check("embl")
+        self.write_read_checks()
 
     def test_before(self):
         """Features: write/read simple before locations."""
@@ -497,8 +498,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f),
                          "complement(56..<60)")
         self.record.features.append(f)
-        self.write_read_check("gb")
-        self.write_read_check("embl")
+        self.write_read_checks()
         
     def test_after(self):
         """Features: write/read simple after locations."""
@@ -532,8 +532,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f),
                          "complement(56..>60)")
         self.record.features.append(f)
-        self.write_read_check("gb")
-        self.write_read_check("embl")
+        self.write_read_checks()
 
     def test_oneof(self):
         """Features: write/read simple one-of locations."""
@@ -569,8 +568,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f),
                          "complement(56..one-of(60,63))")
         self.record.features.append(f)
-        self.write_read_check("gb")
-        self.write_read_check("embl")
+        self.write_read_checks()
 
     def test_within(self):
         """Features: write/read simple within locations."""
@@ -606,8 +604,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f),
                          "complement(56..(60.65))")
         self.record.features.append(f)
-        self.write_read_check("gb")
-        self.write_read_check("embl")
+        self.write_read_checks()
         
 class NC_000932(unittest.TestCase):
     #This includes an evil dual strand gene
@@ -711,116 +708,97 @@ class NC_005816(NC_000932):
 
 class TestWriteRead(unittest.TestCase):
     """Test can write and read back files."""
-
     def test_NC_000932(self):
         """Write and read back NC_000932.gb"""
-        write_read(os.path.join("GenBank", "NC_000932.gb"), "gb", "gb")
-        write_read(os.path.join("GenBank", "NC_000932.gb"), "gb", "embl")
+        write_read(os.path.join("GenBank", "NC_000932.gb"), "gb")
 
     def test_NC_005816(self):
         """Write and read back NC_005816.gb"""
-        write_read(os.path.join("GenBank", "NC_005816.gb"), "gb", "gb")
-        write_read(os.path.join("GenBank", "NC_005816.gb"), "gb", "embl")
+        write_read(os.path.join("GenBank", "NC_005816.gb"), "gb")
 
     def test_gbvrl1_start(self):
         """Write and read back gbvrl1_start.seq"""
-        write_read(os.path.join("GenBank", "gbvrl1_start.seq"), "gb", "gb")
-        write_read(os.path.join("GenBank", "gbvrl1_start.seq"), "gb", "embl")
+        write_read(os.path.join("GenBank", "gbvrl1_start.seq"), "gb")
 
     def test_NT_019265(self):
         """Write and read back NT_019265.gb"""
-        write_read(os.path.join("GenBank", "NT_019265.gb"), "gb", "gb")
-        write_read(os.path.join("GenBank", "NT_019265.gb"), "gb", "embl")
+        write_read(os.path.join("GenBank", "NT_019265.gb"), "gb")
 
     def test_cor6(self):
         """Write and read back cor6_6.gb"""
-        write_read(os.path.join("GenBank", "cor6_6.gb"), "gb", "gb")
-        write_read(os.path.join("GenBank", "cor6_6.gb"), "gb", "embl")
+        write_read(os.path.join("GenBank", "cor6_6.gb"), "gb")
 
     def test_arab1(self):
         """Write and read back arab1.gb"""
-        write_read(os.path.join("GenBank", "arab1.gb"), "gb", "gb")
-        write_read(os.path.join("GenBank", "one_of.gb"), "gb", "embl")
+        write_read(os.path.join("GenBank", "arab1.gb"), "gb")
 
     def test_one_of(self):
         """Write and read back of_one.gb"""
-        write_read(os.path.join("GenBank", "one_of.gb"), "gb", "gb")
-        write_read(os.path.join("GenBank", "one_of.gb"), "gb", "embl")
+        write_read(os.path.join("GenBank", "one_of.gb"), "gb")
 
     def test_pri1(self):
         """Write and read back pri1.gb"""
-        write_read(os.path.join("GenBank", "pri1.gb"), "gb", "gb")
-        write_read(os.path.join("GenBank", "pri1.gb"), "gb", "embl")
+        write_read(os.path.join("GenBank", "pri1.gb"), "gb")
 
     def test_noref(self):
         """Write and read back noref.gb"""
-        write_read(os.path.join("GenBank", "noref.gb"), "gb", "gb")
-        write_read(os.path.join("GenBank", "noref.gb"), "gb", "embl")
+        write_read(os.path.join("GenBank", "noref.gb"), "gb")
 
     def test_origin_line(self):
         """Write and read back origin_line.gb"""
-        write_read(os.path.join("GenBank", "origin_line.gb"), "gb", "gb")
-        write_read(os.path.join("GenBank", "origin_line.gb"), "gb", "embl")
+        write_read(os.path.join("GenBank", "origin_line.gb"), "gb")
 
     def test_dbsource_wrap(self):
         """Write and read back dbsource_wrap.gb"""
-        write_read(os.path.join("GenBank", "dbsource_wrap.gb"), "gb", "gb")
+        write_read(os.path.join("GenBank", "dbsource_wrap.gb"), "gb", ["gb"])
         #Protein so can't convert this to EMBL format
 
     def test_blank_seq(self):
         """Write and read back blank_seq.gb"""
-        write_read(os.path.join("GenBank", "blank_seq.gb"), "gb", "gb")
+        write_read(os.path.join("GenBank", "blank_seq.gb"), "gb", ["gb"])
         #Protein so can't convert this to EMBL format
 
     def test_extra_keywords(self):
         """Write and read back extra_keywords.gb"""
-        write_read(os.path.join("GenBank", "extra_keywords.gb"), "gb", "gb")
-        write_read(os.path.join("GenBank", "extra_keywords.gb"), "gb", "embl")
+        write_read(os.path.join("GenBank", "extra_keywords.gb"), "gb")
 
     def test_protein_refseq(self):
         """Write and read back protein_refseq.gb"""
-        write_read(os.path.join("GenBank", "protein_refseq.gb"), "gb", "gb")
+        write_read(os.path.join("GenBank", "protein_refseq.gb"), "gb", ["gb"])
         #Protein so can't convert this to EMBL format
 
     def test_protein_refseq2(self):
         """Write and read back protein_refseq2.gb"""
-        write_read(os.path.join("GenBank", "protein_refseq2.gb"), "gb", "gb")
+        write_read(os.path.join("GenBank", "protein_refseq2.gb"), "gb", ["gb"])
         #Protein so can't convert this to EMBL format
 
     def test_AAA03323(self):
         """Write and read back AAA03323.embl"""
-        write_read(os.path.join("EMBL", "AAA03323.embl"), "embl", "gb")
-        write_read(os.path.join("EMBL", "AAA03323.embl"), "embl", "embl")
+        write_read(os.path.join("EMBL", "AAA03323.embl"), "embl")
 
     def test_AE017046(self):
         """Write and read back AE017046.embl"""
-        write_read(os.path.join("EMBL", "AE017046.embl"), "embl", "gb")
-        write_read(os.path.join("EMBL", "AE017046.embl"), "embl", "embl")
+        write_read(os.path.join("EMBL", "AE017046.embl"), "embl")
 
     def test_DD231055_edited(self):
         """Write and read back DD231055_edited.embl"""
-        write_read(os.path.join("EMBL", "DD231055_edited.embl"), "embl", "gb")
-        write_read(os.path.join("EMBL", "DD231055_edited.embl"), "embl", "embl")
+        write_read(os.path.join("EMBL", "DD231055_edited.embl"), "embl")
 
     def test_Human_contigs(self):
         """Write and read back Human_contigs.embl"""
-        write_read(os.path.join("EMBL", "Human_contigs.embl"), "embl", "gb")
-        write_read(os.path.join("EMBL", "Human_contigs.embl"), "embl", "embl")
+        write_read(os.path.join("EMBL", "Human_contigs.embl"), "embl")
 
     def test_SC10H5(self):
         """Write and read back SC10H5.embl"""
-        write_read(os.path.join("EMBL", "SC10H5.embl"), "embl", "gb")
-        write_read(os.path.join("EMBL", "SC10H5.embl"), "embl", "embl")
+        write_read(os.path.join("EMBL", "SC10H5.embl"), "embl")
 
     def test_TRBG361(self):
         """Write and read back TRBG361.embl"""
-        write_read(os.path.join("EMBL", "TRBG361.embl"), "embl", "gb")
-        write_read(os.path.join("EMBL", "TRBG361.embl"), "embl", "embl")
+        write_read(os.path.join("EMBL", "TRBG361.embl"), "embl")
 
     def test_U87107(self):
         """Write and read back U87107.embl"""
-        write_read(os.path.join("EMBL", "U87107.embl"), "embl", "gb")
-        write_read(os.path.join("EMBL", "U87107.embl"), "embl", "embl")
+        write_read(os.path.join("EMBL", "U87107.embl"), "embl")
 
 
 if __name__ == "__main__":
