@@ -101,7 +101,7 @@ tests = [
     ("Quality/illumina_faked.fastq", "fastq-illumina", generic_dna),
     ("EMBL/U87107.embl", "embl", None),
     ("EMBL/TRBG361.embl", "embl", None),
-    ("EMBL/A04195_bad_indent.embl", "embl", None),
+    ("EMBL/A04195.imgt", "embl", None), #Not a proper EMBL file, an IMGT file
     ("GenBank/NC_000932.faa", "fasta", generic_protein),
     ("GenBank/NC_005816.faa", "fasta", generic_protein),
     ("GenBank/NC_005816.tsv", "tab", generic_protein),

@@ -1865,7 +1865,7 @@ Testing reading embl format file EMBL/Human_contigs.embl
  Checking can write/read as 'genbank' format
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AL954800.2).
-Testing reading embl format file EMBL/A04195_bad_indent.embl
+Testing reading embl format file EMBL/A04195.imgt
  ID and Name='A04195',
  Seq='GATTGATCAATGCAGGCTGTTATGACTCAGGAATCTGCAC...CACATCA', length=51
  Checking can write/read as 'fasta' format
