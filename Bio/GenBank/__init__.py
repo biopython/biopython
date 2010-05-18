@@ -1034,8 +1034,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if self._expected_size is not None \
         and len(sequence) != 0 \
         and self._expected_size != len(sequence):
-            raise ValueError("Expected sequence length %i, found %i." \
-                             % (self._expected_size, len(sequence)))
+            import warnings
+            warnings.warn("Expected sequence length %i, found %i (%s)." \
+                          % (self._expected_size, len(sequence), self.data.id))
 
         if self._seq_type:
             # mRNA is really also DNA, since it is actually cDNA
