@@ -658,7 +658,7 @@ class EmblScanner(InsdcScanner):
             'RL' : 'journal',
             'OS' : 'organism',
             'OC' : 'taxonomy',
-            #'DR' : data reference?
+            #'DR' : data reference
             'CC' : 'comment',
             #'XX' : splitter
         }
@@ -729,9 +729,12 @@ class EmblScanner(InsdcScanner):
                     # e.g.
                     # DR   MGI; 98599; Tcrb-V4.
                     #
-                    # TODO - Data reference...
-                    # How should we store the secondary identifier (if present)?  Ignore it?
-                    pass
+                    # TODO - How should we store any secondary identifier?
+                    parts = data.rstrip(".").split(";")
+                    #Turn it into "database_identifier:primary_identifier" to
+                    #mimic the GenBank parser. e.g. "MGI:98599"
+                    consumer.dblink("%s:%s" % (parts[0].strip(),
+                                               parts[1].strip()))
                 elif line_type == 'RA':
                     # Remove trailing ; at end of authors list
                     consumer.authors(data.rstrip(";"))
