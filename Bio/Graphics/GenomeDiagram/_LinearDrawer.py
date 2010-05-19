@@ -887,13 +887,13 @@ class LinearDrawer(AbstractDrawer):
         pos, val = data[0]
         lastfrag, lastx = self.canvas_location(pos)
         lastx += self.x0        # Start xy co-ords
-        lasty = trackheight*(val-minval)/resolution + \
+        lasty = trackheight*(val-midval)/resolution + \
                 self.fragment_lines[lastfrag][0] + ctr
         lastval = val
         # Add a series of lines linking consecutive data points
         for pos, val in data:   
             frag, x = self.canvas_location(pos)
-            x += self.x0        # next xy co-ords            
+            x += self.x0        # next xy co-ords
             y = trackheight*(val-midval)/resolution + \
                 self.fragment_lines[frag][0] + ctr
             if frag == lastfrag:    # Points on the same fragment: draw the line
@@ -911,7 +911,7 @@ class LinearDrawer(AbstractDrawer):
                         self.fragment_lines[frag][0] + ctr
                 line_elements.append(Line(self.x0, tempy, x, y,
                                           strokeColor = graph.poscolor,
-                                          strokeWidth = graph.linewidth))                
+                                          strokeWidth = graph.linewidth))
             lastfrag, lastx, lasty, lastval = frag, x, y, val
             
         return line_elements
