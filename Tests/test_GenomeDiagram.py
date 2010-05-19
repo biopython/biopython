@@ -11,6 +11,7 @@
 # Builtins
 import os
 import unittest
+import math
 
 # Do we have ReportLab?  Raise error if not present.
 from Bio import MissingExternalDependencyError
@@ -200,13 +201,47 @@ class ColorsTest(unittest.TestCase):
 
             
 class GraphTest(unittest.TestCase):
-    def setUp(self):
-        self.data = [(1, 10), (5, 15), (20, 40)]
+    def test_limits(self):
+        """Check line graphs."""
+        #TODO - Fix GD so that the same min/max is used for all three lines?
+        points = 1000
+        scale = math.pi * 2.0 / points
+        data1 = [math.sin(x*scale) for x in range(points)]
+        data2 = [math.cos(x*scale) for x in range(points)]
+        data3 = [2*math.sin(2*x*scale) for x in range(points)]
+        
+        gdd = Diagram('Test Diagram', circular=False,
+                      y=0.01, yt=0.01, yb=0.01,
+                      x=0.01, xl=0.01, xr=0.01)
+        gdt_data = gdd.new_track(1, greytrack=False)
+        gds_data = gdt_data.new_set("graph")
+        for data_values, name, color in zip([data1,data2,data3],
+                                            ["sin", "cos", "2sin2"],
+                                            ["red","green","blue"]):
+            data = zip(range(points), data_values)
+            gds_data.new_graph(data, "", style="line",
+                               color = color, altcolor = color,
+                               center = 0)
+
+        gdd.draw(format='linear',
+                 tracklines=False,
+                 pagesize=(15*cm,15*cm),
+                 fragments=1,
+                 start=0, end=points)
+        gdd.write(os.path.join('Graphics', "line_graph.pdf"), "pdf")
+        #Circular diagram - move tracks to make an empty space in the middle
+        for track_number in gdd.tracks.keys():
+            gdd.move_track(track_number,track_number+1)
+        gdd.draw(tracklines=False,
+                 pagesize=(15*cm,15*cm),
+                 circular=True, #Data designed to be periodic
+                 start=0, end=points)
+        gdd.write(os.path.join('Graphics', "line_graph_c.pdf"), "pdf")
         
     def test_slicing(self):
         """Check GraphData slicing."""
         gd = GraphData()
-        gd.set_data(self.data)
+        gd.set_data([(1, 10), (5, 15), (20, 40)])
         gd.add_point((10, 20))
         
         assert gd[4:16] == [(5, 15), (10, 20)], \
