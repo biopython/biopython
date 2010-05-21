@@ -26,8 +26,13 @@ import os
 
 # Make sure I have the right Python version.
 if sys.version_info[:2] < (2, 4):
-    print "Biopython requires Python 2.4 or better.  Python %d.%d detected" % \
-          sys.version_info[:2]
+    print "Biopython requires Python 2.4 or better (but not Python 3 " \
+          + "yet).  Python %d.%d detected" % sys.version_info[:2]
+    sys.exit(-1)
+elif sys.version_info[:2] == (2,4):
+    print "Warning - we are phasing out support for Python 2.4"
+elif sys.version_info[0] == 3:
+    print "Biopython does not yet support Python 3"
     sys.exit(-1)
 
 from distutils.core import setup

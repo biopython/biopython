@@ -14,6 +14,7 @@ This means we will continue to support Python 2.4 for at least two further
 releases, and at least one year (whichever takes longer), before dropping
 support for Python 2.4. This can be delayed given feedback from our users
 (e.g. if this proves to be a problem in combination with other libraries).
+An explicit warning was added to setup.py for Biopython 1.55.
 
 Bio.Restriction.DNAUtils and check_bases
 ========================================
