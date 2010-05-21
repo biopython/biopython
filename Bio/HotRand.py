@@ -9,11 +9,6 @@
 import urllib
 
 
-def hex_convert(text):
-    import warnings
-    warnings.warn("The function Bio.HotRand.hex_convert is deprecated. Instead of Bio.HotRand.hex_convert(text), please use int(text, 16) instead", DeprecationWarning)
-    return int(text, 16)
-
 def byte_concat( text ):
     val = 0
     numbytes = len( text )
