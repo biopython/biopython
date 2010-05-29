@@ -421,6 +421,7 @@ class PDBParseTest(unittest.TestCase):
                          "C C O C S N C C O C C C O N N C C O C C C C C C C O "
                          "N C C O C C C N C N N N C C O C S")
 
+
 class Exposure(unittest.TestCase):
     "Testing Bio.PDB.HSExposure."
     def setUp(self):
@@ -502,6 +503,49 @@ class Exposure(unittest.TestCase):
         self.assertEqual(48, residues[-2].xtra["EXP_CN"])
         self.assertEqual(1, len(residues[-1].xtra))
         self.assertEqual(38, residues[-1].xtra["EXP_CN"])
+
+
+class HeaderTests(unittest.TestCase):
+    """Tests for parse_pdb_header."""
+
+    def test_capsid(self):
+        """Parse the header of a known PDB file (1A8O)."""
+        parser = PDBParser()
+        struct = parser.get_structure('1A8O', 'PDB/1A8O.pdb')
+        self.assertAlmostEqual(struct.header['resolution'], 1.7)
+        # Case-insensitive string comparisons
+        known_strings = {
+                'author': 'T.R.Gamble,S.Yoo,F.F.Vajdos,U.K.Von Schwedler,D.K.Worthylake,H.Wang,J.P.Mccutcheon,W.I.Sundquist,C.P.Hill',
+                'deposition_date': '1998-03-27',
+                'head': 'viral protein',
+                'journal': 'AUTH   T.R.GAMBLE,S.YOO,F.F.VAJDOS,U.K.VON SCHWEDLER,AUTH 2 D.K.WORTHYLAKE,H.WANG,J.P.MCCUTCHEON,W.I.SUNDQUIST,AUTH 3 C.P.HILLTITL   STRUCTURE OF THE CARBOXYL-TERMINAL DIMERIZATIONTITL 2 DOMAIN OF THE HIV-1 CAPSID PROTEIN.REF    SCIENCE                       V. 278   849 1997REFN                   ISSN 0036-8075PMID   9346481DOI    10.1126/SCIENCE.278.5339.849',
+                'journal_reference': 't.r.gamble,s.yoo,f.f.vajdos,u.k.von schwedler, d.k.worthylake,h.wang,j.p.mccutcheon,w.i.sundquist, c.p.hill structure of the carboxyl-terminal dimerization domain of the hiv-1 capsid protein. science v. 278 849 1997 issn 0036-8075 9346481 10.1126/science.278.5339.849 ',
+                'keywords': 'capsid, core protein, hiv, c-terminal domain, viral protein',
+                'name': ' hiv capsid c-terminal domain',
+                'release_date': '1998-10-14',
+                'structure_method': 'x-ray diffraction',
+                }
+        for key, expect in known_strings.iteritems():
+            self.assertEqual(struct.header[key].lower(), expect.lower())
+
+    def test_fibril(self):
+        """Parse the header of another PDB file (2BEG)."""
+        parser = PDBParser()
+        struct = parser.get_structure('2BEG', 'PDB/2BEG.pdb')
+        known_strings = {
+                'author': 'T.Luhrs,C.Ritter,M.Adrian,D.Riek-Loher,B.Bohrmann,H.Dobeli,D.Schubert,R.Riek',
+                'deposition_date': '2005-10-24',
+                'head': 'protein fibril',
+                'journal': "AUTH   T.LUHRS,C.RITTER,M.ADRIAN,D.RIEK-LOHER,B.BOHRMANN,AUTH 2 H.DOBELI,D.SCHUBERT,R.RIEKTITL   3D STRUCTURE OF ALZHEIMER'S AMYLOID-{BETA}(1-42)TITL 2 FIBRILS.REF    PROC.NATL.ACAD.SCI.USA        V. 102 17342 2005REFN                   ISSN 0027-8424PMID   16293696DOI    10.1073/PNAS.0506723102",
+                'journal_reference': "t.luhrs,c.ritter,m.adrian,d.riek-loher,b.bohrmann, h.dobeli,d.schubert,r.riek 3d structure of alzheimer's amyloid-{beta}(1-42) fibrils. proc.natl.acad.sci.usa v. 102 17342 2005 issn 0027-8424 16293696 10.1073/pnas.0506723102 ",
+                'keywords': "alzheimer's, fibril, protofilament, beta-sandwich, quenched hydrogen/deuterium exchange, pairwise mutagenesis, protein fibril",
+                'name': " 3d structure of alzheimer's abeta(1-42) fibrils",
+                'release_date': '2005-11-22',
+                'structure_method': 'solution nmr',
+                }
+        for key, expect in known_strings.iteritems():
+            self.assertEqual(struct.header[key].lower(), expect.lower())
+
 
 class AssortedMisc(unittest.TestCase):
     "Testing with real PDB files."
