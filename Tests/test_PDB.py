@@ -9,6 +9,7 @@
 # as part of this package.
 
 """Unit tests for the Bio.PDB module."""
+import os
 import unittest
 import warnings
 from StringIO import StringIO
@@ -22,7 +23,7 @@ except ImportError:
 
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
-from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder
+from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO
 from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.NeighborSearch import NeighborSearch
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
@@ -600,6 +601,27 @@ class AssortedMisc(unittest.TestCase):
                          "O O O O O O O O O O O O O O O O O O O O O O O O "
                          "O O O O O O O O O O O O O O O O O O O O O")
 
+    def test_model_numbering(self):
+        """Preserve model serial numbers during I/O."""
+        tmp_path = "PDB/tmp.pdb"
+        def confirm_numbering(struct):
+            self.assertEqual(len(struct), 20)
+            for idx, model in enumerate(struct):
+                self.assert_(model.serial_num, idx + 1)
+                self.assert_(model.serial_num, model.id + 1)
+        parser = PDBParser()
+        struct1 = parser.get_structure("1mot", "PDB/1MOT.pdb")
+        confirm_numbering(struct1)
+        # Round trip: serialize and parse again
+        io = PDBIO()
+        io.set_structure(struct1)
+        try:
+            io.save(tmp_path)
+            struct2 = parser.get_structure("1mot", tmp_path)
+            confirm_numbering(struct2)
+        finally:
+            if os.path.isfile(tmp_path):
+                os.remove(tmp_path)
 
 # -------------------------------------------------------------
 
