@@ -62,13 +62,14 @@ class StructureBuilder:
         """
         self.structure=Structure(structure_id)
 
-    def init_model(self, model_id):
+    def init_model(self, model_id, serial_num = None):
         """Initiate a new Model object with given id.
         
         Arguments:
         o id - int
+        o serial_num - int
         """
-        self.model=Model(model_id)
+        self.model=Model(model_id,serial_num)
         self.structure.add(self.model)
 
     def init_chain(self, chain_id):

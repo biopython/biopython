@@ -206,7 +206,13 @@ class PDBParser:
                 anisou_array=(numpy.array(anisou, 'f')/10000.0).astype('f')
                 structure_builder.set_anisou(anisou_array)
             elif(record_type=='MODEL '):
-                structure_builder.init_model(current_model_id)
+                try:
+                    serial_num=int(line[10:14])
+                except:
+                    self._handle_PDB_exception("Invalid or missing model serial number",
+                                               global_line_counter)
+                    serial_num=0
+                structure_builder.init_model(current_model_id,serial_num)
                 current_model_id+=1
                 model_open=1
                 current_chain_id=None
