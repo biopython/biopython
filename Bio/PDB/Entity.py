@@ -37,6 +37,10 @@ class Entity:
         "Return the child with given id."
         return self.child_dict[id]
 
+    def __delitem__(self, id):
+        "Remove a child."
+        return self.detach_child(id)
+
     def __iter__(self):
         "Iterate over children."
         for child in self.child_list:

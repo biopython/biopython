@@ -70,13 +70,13 @@ class Chain(Entity):
         id=self._translate_id(id)
         return Entity.__getitem__(self, id)
 
-    # def __delitem__(self, id):
-    #     """
-    #     Arguments:
-    #     o id - (string, int, string) or int
-    #     """
-    #     id=self._translate_id(id)
-    #     return Entity.__delitem__(self, id)
+    def __delitem__(self, id):
+        """
+        Arguments:
+        o id - (string, int, string) or int
+        """
+        id=self._translate_id(id)
+        return Entity.__delitem__(self, id)
 
     def __repr__(self):
         return "<Chain id=%s>" % self.get_id()
