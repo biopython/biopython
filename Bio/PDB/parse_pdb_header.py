@@ -152,8 +152,10 @@ def _parse_pdb_header_list(header):
 
     for hh in header:
         h=re.sub("[\s\n\r]*\Z","",hh) # chop linebreaks off
-        key=re.sub("\s.+\s*","",h)
-        tail=re.sub("\A\w+\s+\d*\s*","",h)
+        #key=re.sub("\s.+\s*","",h)
+        key = h[:6].strip()
+        #tail=re.sub("\A\w+\s+\d*\s*","",h)
+        tail = h[10:].strip()
         # print key+":"+tail
         
         # From here, all the keys from the header are being parsed
