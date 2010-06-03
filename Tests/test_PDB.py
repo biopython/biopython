@@ -28,6 +28,67 @@ from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.NeighborSearch import NeighborSearch
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 
+
+# NB: the 'A_' prefix ensures this test case is run first
+class A_ExceptionTest(unittest.TestCase):
+    """Errors and warnings while parsing of flawed PDB files.
+
+    These tests must be executed because of the way Python's warnings module
+    works -- a warning is only logged the first time it is encountered.
+    """
+    def setUp(self):
+        warnings.resetwarnings()
+
+    def test_1_warnings(self):
+        """Check warnings: Parse a flawed PDB file in permissive mode.
+
+        NB: The try/finally block is adapted from the warnings.catch_warnings
+        context manager in the Python 2.6 standard library.
+        """
+        warnings.simplefilter('always', PDBConstructionWarning)
+        try:
+            # Equivalent to warnings.catch_warnings -- hackmagic
+            orig_showwarning = warnings.showwarning
+            all_warns = []
+            def showwarning(*args, **kwargs):
+                all_warns.append(*args[0])
+            warnings.showwarning = showwarning
+            # Trigger warnings
+            p = PDBParser(PERMISSIVE=True)
+            p.get_structure("example", "PDB/a_structure.pdb")
+            for wrn, msg in zip(all_warns, [
+                # Expected warning messages:
+                'Atom N defined twice in residue <Residue ARG het=  resseq=2 icode= > at line 19.',
+                'disordered atom found with blank altloc before line 31.',
+                "Residue (' ', 4, ' ') redefined at line 41.",
+                "Blank altlocs in duplicate residue SER (' ', 4, ' ') at line 41.",
+                "Residue (' ', 10, ' ') redefined at line 73.",
+                "Residue (' ', 14, ' ') redefined at line 104.",
+                "Residue (' ', 16, ' ') redefined at line 133.",
+                "Residue (' ', 80, ' ') redefined at line 631.",
+                "Residue (' ', 81, ' ') redefined at line 644.",
+                'Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 820.'
+                ]):
+                self.assert_(msg in str(wrn))
+        finally:
+            warnings.showwarning = orig_showwarning
+
+    def test_2_strict(self):
+        """Check error: Parse a flawed PDB file in strict mode."""
+        parser = PDBParser(PERMISSIVE=False)
+        self.assertRaises(PDBConstructionException,
+                parser.get_structure, "example", "PDB/a_structure.pdb")
+
+    def test_3_bad_xyz(self):
+        """Check error: Parse an entry with bad x,y,z value."""
+        data = "ATOM      9  N   ASP A 152      21.554  34.953  27.691  1.00 19.26           N\n"
+        parser = PDBParser(PERMISSIVE=False)
+        s = parser.get_structure("example", StringIO(data))
+        data = "ATOM      9  N   ASP A 152      21.ish  34.953  27.691  1.00 19.26           N\n"
+        self.assertRaises(PDBConstructionException,
+                parser.get_structure, "example", StringIO(data))       
+
+
 class PDBNeighborTest(unittest.TestCase):
     def setUp(self):
         warnings.resetwarnings()
@@ -47,27 +108,6 @@ class PDBNeighborTest(unittest.TestCase):
             ns = NeighborSearch(atoms)
             hits = ns.search_all(5.0)
             self.assert_(hits >= 0)
- 
- 
-class PDBExceptionTest(unittest.TestCase):
-    def test_strict(self):
-        """Check error: Parse a flawed PDB file in strict mode."""
-        warnings.resetwarnings()
-        parser = PDBParser(PERMISSIVE=False)
-        self.assertRaises(PDBConstructionException,
-                parser.get_structure, "example", "PDB/a_structure.pdb")
-
-    #TODO - check get expected warnings, may require Python 2.6+
-    #See Bug 2820
-
-    def test_bad_xyz(self):
-        """Check error: Parse an entry with bad x,y,z value."""
-        data = "ATOM      9  N   ASP A 152      21.554  34.953  27.691  1.00 19.26           N\n"
-        parser = PDBParser(PERMISSIVE=False)
-        s = parser.get_structure("example", StringIO(data))
-        data = "ATOM      9  N   ASP A 152      21.ish  34.953  27.691  1.00 19.26           N\n"
-        self.assertRaises(PDBConstructionException,
-                parser.get_structure, "example", StringIO(data))       
 
 
 class PDBParseTest(unittest.TestCase):
