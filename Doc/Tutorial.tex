@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich}
-\date{Last Update -- 21 May 2010 (Biopython 1.54+)}
+\date{Last Update -- 3 June 2010 (Biopython 1.54+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -9497,6 +9497,34 @@ If you are working on partial coding sequences, you may prefer to use
 \verb|nuc_record.seq.translate(to_stop=True)| in the example above, as
 this wouldn't check for a valid start codon etc.
 
+\subsection{Making the sequences in a FASTA file upper case}
+
+Often you'll get data from collaborators as FASTA files, and sometimes the
+sequences can be in a mixture of upper and lower case. In some cases this is
+deliberate (e.g. lower case for poor quality regions), but usually it is not
+important. You may want to edit the file to make everything consistent (e.g.
+all upper case), and you can do this easily using the \verb|upper()| method
+of the \verb|SeqRecord| object (added in Biopython 1.55):
+
+\begin{verbatim}
+from Bio import SeqIO
+records = (rec.upper() for rec in SeqIO.parse("mixed.fas", "fasta"))
+count = SeqIO.write(records, "upper.fas", "fasta")
+print "Converted %i records to upper case" % count
+\end{verbatim}
+
+How does this work? The first line is just importing the \verb|Bio.SeqIO|
+module. The second line is the interesting bit -- this is a Python
+generator expression which gives an upper case version of each record
+parsed from the input file (\texttt{mixed.fas}). In the third line we give
+this generator expression to the \verb|Bio.SeqIO.write()| function and it
+saves the new upper cases records to our output file (\texttt{upper.fas}).
+
+The reason we use a generator expression (rather than a list or list
+comprehension) is this means only one record is kept in memory at a time.
+This can be really important if you are dealing with large files with
+millions of entries.
+
 \subsection{Sorting a sequence file}
 \label{sec:SeqIO-sort}
 
@@ -9572,8 +9600,8 @@ for id in ids:
 handle.close()
 \end{verbatim}
 
-As a bonus, because this never parses the data into \verb|SeqRecord| objects
-it should be faster.
+As a bonus, because doesn't parse the data into \verb|SeqRecord| objects
+a second time it should be faster.
 
 \subsection{Simple quality filtering for FASTQ files}
 \label{sec:FASTQ-filtering-example}
