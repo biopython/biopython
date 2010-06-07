@@ -328,7 +328,7 @@ class GenBankDict(SequentialSeqFileDict):
                     elif line.startswith("VERSION "):
                         version_id = line.rstrip().split()[1]
                         if version_id.count(".")==1 and version_id.split(".")[1].isdigit():
-                            #This should mimics the GenBank parser...
+                            #This should mimic the GenBank parser...
                             key = version_id
                             done = True
                             break
