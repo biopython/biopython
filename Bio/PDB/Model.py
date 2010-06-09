@@ -19,12 +19,18 @@ class Model(Entity):
     normally contain many different models. 
     """
 
-    def __init__(self, id):
+    def __init__(self, id, serial_num = None):
         """
         Arguments:
         o id - int
+        o serial_num - int
         """
         self.level="M"
+        if serial_num is None:
+            self.serial_num=id
+        else:
+            self.serial_num=serial_num
+
         Entity.__init__(self, id)
 
     # Private methods
