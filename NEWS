@@ -9,9 +9,22 @@ The latest news is at the top.
 
 ===================================================================
 
+In progress: Biopython 1.55 (not yet released).
+
 The SeqRecord object now has upper and lower methods (like the Seq object and
 Python strings), which return a new SeqRecord with the sequence in upper or
 lower case and a copy of all the annotation unchanged.
+
+Several small issues with Bio.PDB have been resolved, which includes better
+handling of model numbers.
+
+(At least) 5 people have contributed to this release, including 2 new people:
+
+Carlos Rios Vera (first contribution)
+Eric Talevich
+Konstantin Okonechnikov (first contribution)
+Michiel de Hoon
+Peter Cock
 
 ===================================================================
 
