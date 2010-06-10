@@ -1,0 +1,14 @@
+>alpha
+ACGTA
+
+>beta
+CGTC
+
+>gamma
+CCGCC
+
+>alpha (again - this is a duplicate entry to test the indexing code)
+ACGTA
+
+>delta
+CGCGC
