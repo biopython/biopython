@@ -21,12 +21,9 @@
 # is now _parse_pdb_header_list)
 # Thomas 9/05/04
 
-__doc__="Parse the header of a PDB file."
+"""Parse the header of a PDB file."""
 
-import sys
-import os, re
-import urllib
-import types
+import re
 
 
 def _get_journal(inl):
@@ -82,12 +79,10 @@ def _format_date(pdb_date):
 
 def _chop_end_codes(line):
     """Chops lines ending with  '     1CSA  14' and the like."""
-    import re
     return re.sub("\s\s\s\s+[\w]{4}.\s+\d*\Z","",line)
 
 def _chop_end_misc(line):
     """Chops lines ending with  '     14-JUL-97  1CSA' and the like."""
-    import re
     return re.sub("\s\s\s\s+.*\Z","",line)
 
 def _nice_case(line):
@@ -108,7 +103,7 @@ def _nice_case(line):
         i+=1
     return s
 
-def parse_pdb_header(file):
+def parse_pdb_header(infile):
     """
     Returns the header lines of a pdb file as a dictionary.
 
@@ -116,18 +111,21 @@ def parse_pdb_header(file):
     resolution, structure_reference, journal_reference, author and
     compound.
     """
-    header=[]
-    if type(file)==types.StringType:
-        f=open(file,'r')
+    header = []
+    do_close = False
+    if isinstance(infile, basestring):
+        f = open(infile,'r')
+        do_close = True
     else:
-        f=file
+        f = infile
     for l in f:
         record_type=l[0:6]
         if record_type=='ATOM  ' or record_type=='HETATM' or record_type=='MODEL ':
             break
         else:
             header.append(l)    
-    f.close()
+    if do_close:
+        f.close()
     return _parse_pdb_header_list(header)
 
 def _parse_pdb_header_list(header):
@@ -152,8 +150,10 @@ def _parse_pdb_header_list(header):
 
     for hh in header:
         h=re.sub("[\s\n\r]*\Z","",hh) # chop linebreaks off
-        key=re.sub("\s.+\s*","",h)
-        tail=re.sub("\A\w+\s+\d*\s*","",h)
+        #key=re.sub("\s.+\s*","",h)
+        key = h[:6].strip()
+        #tail=re.sub("\A\w+\s+\d*\s*","",h)
+        tail = h[10:].strip()
         # print key+":"+tail
         
         # From here, all the keys from the header are being parsed
@@ -254,18 +254,15 @@ def _parse_pdb_header_list(header):
     return dict
 
 if __name__=='__main__':
-    """
-    Reads a PDB file passed as argument, parses its header, extracts
-    some data and returns it as a dictionary.
-    """
+    # Reads a PDB file passed as argument, parses its header, extracts
+    # some data and returns it as a dictionary.
+    import sys
     filename = sys.argv[1]
     file = open(filename,'r')
     dict = parse_pdb_header(file)
-    
+
     # print the dictionary
     for d in dict.keys():
         print "-"*40
         print d
         print dict[d]
-        
-

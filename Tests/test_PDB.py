@@ -9,6 +9,7 @@
 # as part of this package.
 
 """Unit tests for the Bio.PDB module."""
+import os
 import unittest
 import warnings
 from StringIO import StringIO
@@ -22,44 +23,63 @@ except ImportError:
 
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
-from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder
+from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO
 from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.NeighborSearch import NeighborSearch
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 
-class PDBNeighborTest(unittest.TestCase):
+
+# NB: the 'A_' prefix ensures this test case is run first
+class A_ExceptionTest(unittest.TestCase):
+    """Errors and warnings while parsing of flawed PDB files.
+
+    These tests must be executed because of the way Python's warnings module
+    works -- a warning is only logged the first time it is encountered.
+    """
     def setUp(self):
         warnings.resetwarnings()
 
-    def test_neighbor_search(self):
-        """NeighborSearch: Find nearby randomly generated coordinates.
-         
-        Based on the self test in Bio.PDB.NeighborSearch.
+    def test_1_warnings(self):
+        """Check warnings: Parse a flawed PDB file in permissive mode.
+
+        NB: The try/finally block is adapted from the warnings.catch_warnings
+        context manager in the Python 2.6 standard library.
         """
-        class RandomAtom:
-            def __init__(self):
-                self.coord = 100 * random(3)
-            def get_coord(self):
-                return self.coord
-        for i in range(0, 20):
-            atoms = [RandomAtom() for j in range(100)]
-            ns = NeighborSearch(atoms)
-            hits = ns.search_all(5.0)
-            self.assert_(hits >= 0)
- 
- 
-class PDBExceptionTest(unittest.TestCase):
-    def test_strict(self):
+        warnings.simplefilter('always', PDBConstructionWarning)
+        try:
+            # Equivalent to warnings.catch_warnings -- hackmagic
+            orig_showwarning = warnings.showwarning
+            all_warns = []
+            def showwarning(*args, **kwargs):
+                all_warns.append(*args[0])
+            warnings.showwarning = showwarning
+            # Trigger warnings
+            p = PDBParser(PERMISSIVE=True)
+            p.get_structure("example", "PDB/a_structure.pdb")
+            for wrn, msg in zip(all_warns, [
+                # Expected warning messages:
+                'Atom N defined twice in residue <Residue ARG het=  resseq=2 icode= > at line 19.',
+                'disordered atom found with blank altloc before line 31.',
+                "Residue (' ', 4, ' ') redefined at line 41.",
+                "Blank altlocs in duplicate residue SER (' ', 4, ' ') at line 41.",
+                "Residue (' ', 10, ' ') redefined at line 73.",
+                "Residue (' ', 14, ' ') redefined at line 104.",
+                "Residue (' ', 16, ' ') redefined at line 133.",
+                "Residue (' ', 80, ' ') redefined at line 631.",
+                "Residue (' ', 81, ' ') redefined at line 644.",
+                'Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 820.'
+                ]):
+                self.assert_(msg in str(wrn))
+        finally:
+            warnings.showwarning = orig_showwarning
+
+    def test_2_strict(self):
         """Check error: Parse a flawed PDB file in strict mode."""
-        warnings.resetwarnings()
         parser = PDBParser(PERMISSIVE=False)
         self.assertRaises(PDBConstructionException,
                 parser.get_structure, "example", "PDB/a_structure.pdb")
 
-    #TODO - check get expected warnings, may require Python 2.6+
-    #See Bug 2820
-
-    def test_bad_xyz(self):
+    def test_3_bad_xyz(self):
         """Check error: Parse an entry with bad x,y,z value."""
         data = "ATOM      9  N   ASP A 152      21.554  34.953  27.691  1.00 19.26           N\n"
         parser = PDBParser(PERMISSIVE=False)
@@ -69,7 +89,49 @@ class PDBExceptionTest(unittest.TestCase):
                 parser.get_structure, "example", StringIO(data))       
 
 
-class PDBParseTest(unittest.TestCase):
+class HeaderTests(unittest.TestCase):
+    """Tests for parse_pdb_header."""
+
+    def test_capsid(self):
+        """Parse the header of a known PDB file (1A8O)."""
+        parser = PDBParser()
+        struct = parser.get_structure('1A8O', 'PDB/1A8O.pdb')
+        self.assertAlmostEqual(struct.header['resolution'], 1.7)
+        # Case-insensitive string comparisons
+        known_strings = {
+                'author': 'T.R.Gamble,S.Yoo,F.F.Vajdos,U.K.Von Schwedler,D.K.Worthylake,H.Wang,J.P.Mccutcheon,W.I.Sundquist,C.P.Hill',
+                'deposition_date': '1998-03-27',
+                'head': 'viral protein',
+                'journal': 'AUTH   T.R.GAMBLE,S.YOO,F.F.VAJDOS,U.K.VON SCHWEDLER,AUTH 2 D.K.WORTHYLAKE,H.WANG,J.P.MCCUTCHEON,W.I.SUNDQUIST,AUTH 3 C.P.HILLTITL   STRUCTURE OF THE CARBOXYL-TERMINAL DIMERIZATIONTITL 2 DOMAIN OF THE HIV-1 CAPSID PROTEIN.REF    SCIENCE                       V. 278   849 1997REFN                   ISSN 0036-8075PMID   9346481DOI    10.1126/SCIENCE.278.5339.849',
+                'journal_reference': 't.r.gamble,s.yoo,f.f.vajdos,u.k.von schwedler, d.k.worthylake,h.wang,j.p.mccutcheon,w.i.sundquist, c.p.hill structure of the carboxyl-terminal dimerization domain of the hiv-1 capsid protein. science v. 278 849 1997 issn 0036-8075 9346481 10.1126/science.278.5339.849 ',
+                'keywords': 'capsid, core protein, hiv, c-terminal domain, viral protein',
+                'name': ' hiv capsid c-terminal domain',
+                'release_date': '1998-10-14',
+                'structure_method': 'x-ray diffraction',
+                }
+        for key, expect in known_strings.iteritems():
+            self.assertEqual(struct.header[key].lower(), expect.lower())
+
+    def test_fibril(self):
+        """Parse the header of another PDB file (2BEG)."""
+        parser = PDBParser()
+        struct = parser.get_structure('2BEG', 'PDB/2BEG.pdb')
+        known_strings = {
+                'author': 'T.Luhrs,C.Ritter,M.Adrian,D.Riek-Loher,B.Bohrmann,H.Dobeli,D.Schubert,R.Riek',
+                'deposition_date': '2005-10-24',
+                'head': 'protein fibril',
+                'journal': "AUTH   T.LUHRS,C.RITTER,M.ADRIAN,D.RIEK-LOHER,B.BOHRMANN,AUTH 2 H.DOBELI,D.SCHUBERT,R.RIEKTITL   3D STRUCTURE OF ALZHEIMER'S AMYLOID-{BETA}(1-42)TITL 2 FIBRILS.REF    PROC.NATL.ACAD.SCI.USA        V. 102 17342 2005REFN                   ISSN 0027-8424PMID   16293696DOI    10.1073/PNAS.0506723102",
+                'journal_reference': "t.luhrs,c.ritter,m.adrian,d.riek-loher,b.bohrmann, h.dobeli,d.schubert,r.riek 3d structure of alzheimer's amyloid-{beta}(1-42) fibrils. proc.natl.acad.sci.usa v. 102 17342 2005 issn 0027-8424 16293696 10.1073/pnas.0506723102 ",
+                'keywords': "alzheimer's, fibril, protofilament, beta-sandwich, quenched hydrogen/deuterium exchange, pairwise mutagenesis, protein fibril",
+                'name': " 3d structure of alzheimer's abeta(1-42) fibrils",
+                'release_date': '2005-11-22',
+                'structure_method': 'solution nmr',
+                }
+        for key, expect in known_strings.iteritems():
+            self.assertEqual(struct.header[key].lower(), expect.lower())
+
+
+class ParseTest(unittest.TestCase):
     def setUp(self):
         warnings.resetwarnings()
         warnings.simplefilter('ignore', PDBConstructionWarning)
@@ -420,90 +482,9 @@ class PDBParseTest(unittest.TestCase):
                          "C C O C S N C C O C C C O N N C C O C C C C C C C O "
                          "N C C O C C C N C N N N C C O C S")
 
-class Exposure(unittest.TestCase):
-    "Testing Bio.PDB.HSExposure."
-    def setUp(self):
-        warnings.resetwarnings()
-        warnings.simplefilter('ignore', PDBConstructionWarning)
-        pdb_filename = "PDB/a_structure.pdb"
-        structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
-        self.model=structure[1]
-        #Look at first chain only
-        a_residues=list(self.model["A"].child_list)
-        self.assertEqual(86, len(a_residues))
-        self.assertEqual(a_residues[0].get_resname(), "CYS")
-        self.assertEqual(a_residues[1].get_resname(), "ARG")
-        self.assertEqual(a_residues[2].get_resname(), "CYS")
-        self.assertEqual(a_residues[3].get_resname(), "GLY")
-        #...
-        self.assertEqual(a_residues[-3].get_resname(), "TYR")
-        self.assertEqual(a_residues[-2].get_resname(), "ARG")
-        self.assertEqual(a_residues[-1].get_resname(), "CYS")
-        self.a_residues = a_residues
-        self.radius = 13.0
 
-    def test_HSExposureCA(self):
-        """HSExposureCA."""
-        hse = HSExposureCA(self.model, self.radius)
-        residues = self.a_residues
-        self.assertEqual(0, len(residues[0].xtra))
-        self.assertEqual(0, len(residues[1].xtra))
-        self.assertEqual(3, len(residues[2].xtra))
-        self.assertAlmostEqual(0.81250973133184456, residues[2].xtra["EXP_CB_PCB_ANGLE"])
-        self.assertEqual(14, residues[2].xtra["EXP_HSE_A_D"])
-        self.assertEqual(14, residues[2].xtra["EXP_HSE_A_U"])
-        self.assertEqual(3, len(residues[3].xtra))
-        self.assertAlmostEqual(1.3383737, residues[3].xtra["EXP_CB_PCB_ANGLE"])
-        self.assertEqual(13, residues[3].xtra["EXP_HSE_A_D"])
-        self.assertEqual(16, residues[3].xtra["EXP_HSE_A_U"])
-        #...
-        self.assertEqual(3, len(residues[-2].xtra))
-        self.assertAlmostEqual(0.77124014456278489, residues[-2].xtra["EXP_CB_PCB_ANGLE"])
-        self.assertEqual(24, residues[-2].xtra["EXP_HSE_A_D"])
-        self.assertEqual(24, residues[-2].xtra["EXP_HSE_A_U"])
-        self.assertEqual(0, len(residues[-1].xtra))
-
-    def test_HSExposureCB(self):
-        """HSExposureCB."""
-        hse = HSExposureCB(self.model, self.radius)
-        residues = self.a_residues
-        self.assertEqual(0, len(residues[0].xtra))
-        self.assertEqual(2, len(residues[1].xtra))
-        self.assertEqual(20, residues[1].xtra["EXP_HSE_B_D"])
-        self.assertEqual(5, residues[1].xtra["EXP_HSE_B_U"])
-        self.assertEqual(2, len(residues[2].xtra))
-        self.assertEqual(10, residues[2].xtra["EXP_HSE_B_D"])
-        self.assertEqual(18, residues[2].xtra["EXP_HSE_B_U"])
-        self.assertEqual(2, len(residues[3].xtra))
-        self.assertEqual(7, residues[3].xtra["EXP_HSE_B_D"])
-        self.assertEqual(22, residues[3].xtra["EXP_HSE_B_U"])
-        #...
-        self.assertEqual(2, len(residues[-2].xtra))
-        self.assertEqual(14, residues[-2].xtra["EXP_HSE_B_D"])
-        self.assertEqual(34, residues[-2].xtra["EXP_HSE_B_U"])
-        self.assertEqual(2, len(residues[-1].xtra))
-        self.assertEqual(23, residues[-1].xtra["EXP_HSE_B_D"])
-        self.assertEqual(15, residues[-1].xtra["EXP_HSE_B_U"])
-
-    def test_ExposureCN(self):
-        """HSExposureCN."""
-        hse = ExposureCN(self.model, self.radius)
-        residues = self.a_residues
-        self.assertEqual(0, len(residues[0].xtra))
-        self.assertEqual(1, len(residues[1].xtra))
-        self.assertEqual(25, residues[1].xtra["EXP_CN"])
-        self.assertEqual(1, len(residues[2].xtra))
-        self.assertEqual(28, residues[2].xtra["EXP_CN"])
-        self.assertEqual(1, len(residues[3].xtra))
-        self.assertEqual(29, residues[3].xtra["EXP_CN"])
-        #...
-        self.assertEqual(1, len(residues[-2].xtra))
-        self.assertEqual(48, residues[-2].xtra["EXP_CN"])
-        self.assertEqual(1, len(residues[-1].xtra))
-        self.assertEqual(38, residues[-1].xtra["EXP_CN"])
-
-class AssortedMisc(unittest.TestCase):
-    "Testing with real PDB files."
+class ParseReal(unittest.TestCase):
+    """Testing with real PDB files."""
 
     def test_strict(self):
         """Parse 1A8O.pdb file in strict mode."""
@@ -600,6 +581,131 @@ class AssortedMisc(unittest.TestCase):
                          "O O O O O O O O O O O O O O O O O O O O O O O O "
                          "O O O O O O O O O O O O O O O O O O O O O")
 
+    def test_model_numbering(self):
+        """Preserve model serial numbers during I/O."""
+        tmp_path = "PDB/tmp.pdb"
+        def confirm_numbering(struct):
+            self.assertEqual(len(struct), 20)
+            for idx, model in enumerate(struct):
+                self.assert_(model.serial_num, idx + 1)
+                self.assert_(model.serial_num, model.id + 1)
+        parser = PDBParser()
+        struct1 = parser.get_structure("1mot", "PDB/1MOT.pdb")
+        confirm_numbering(struct1)
+        # Round trip: serialize and parse again
+        io = PDBIO()
+        io.set_structure(struct1)
+        try:
+            io.save(tmp_path)
+            struct2 = parser.get_structure("1mot", tmp_path)
+            confirm_numbering(struct2)
+        finally:
+            if os.path.isfile(tmp_path):
+                os.remove(tmp_path)
+
+
+class Exposure(unittest.TestCase):
+    "Testing Bio.PDB.HSExposure."
+    def setUp(self):
+        warnings.resetwarnings()
+        warnings.simplefilter('ignore', PDBConstructionWarning)
+        pdb_filename = "PDB/a_structure.pdb"
+        structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
+        self.model=structure[1]
+        #Look at first chain only
+        a_residues=list(self.model["A"].child_list)
+        self.assertEqual(86, len(a_residues))
+        self.assertEqual(a_residues[0].get_resname(), "CYS")
+        self.assertEqual(a_residues[1].get_resname(), "ARG")
+        self.assertEqual(a_residues[2].get_resname(), "CYS")
+        self.assertEqual(a_residues[3].get_resname(), "GLY")
+        #...
+        self.assertEqual(a_residues[-3].get_resname(), "TYR")
+        self.assertEqual(a_residues[-2].get_resname(), "ARG")
+        self.assertEqual(a_residues[-1].get_resname(), "CYS")
+        self.a_residues = a_residues
+        self.radius = 13.0
+
+    def test_HSExposureCA(self):
+        """HSExposureCA."""
+        hse = HSExposureCA(self.model, self.radius)
+        residues = self.a_residues
+        self.assertEqual(0, len(residues[0].xtra))
+        self.assertEqual(0, len(residues[1].xtra))
+        self.assertEqual(3, len(residues[2].xtra))
+        self.assertAlmostEqual(0.81250973133184456, residues[2].xtra["EXP_CB_PCB_ANGLE"])
+        self.assertEqual(14, residues[2].xtra["EXP_HSE_A_D"])
+        self.assertEqual(14, residues[2].xtra["EXP_HSE_A_U"])
+        self.assertEqual(3, len(residues[3].xtra))
+        self.assertAlmostEqual(1.3383737, residues[3].xtra["EXP_CB_PCB_ANGLE"])
+        self.assertEqual(13, residues[3].xtra["EXP_HSE_A_D"])
+        self.assertEqual(16, residues[3].xtra["EXP_HSE_A_U"])
+        #...
+        self.assertEqual(3, len(residues[-2].xtra))
+        self.assertAlmostEqual(0.77124014456278489, residues[-2].xtra["EXP_CB_PCB_ANGLE"])
+        self.assertEqual(24, residues[-2].xtra["EXP_HSE_A_D"])
+        self.assertEqual(24, residues[-2].xtra["EXP_HSE_A_U"])
+        self.assertEqual(0, len(residues[-1].xtra))
+
+    def test_HSExposureCB(self):
+        """HSExposureCB."""
+        hse = HSExposureCB(self.model, self.radius)
+        residues = self.a_residues
+        self.assertEqual(0, len(residues[0].xtra))
+        self.assertEqual(2, len(residues[1].xtra))
+        self.assertEqual(20, residues[1].xtra["EXP_HSE_B_D"])
+        self.assertEqual(5, residues[1].xtra["EXP_HSE_B_U"])
+        self.assertEqual(2, len(residues[2].xtra))
+        self.assertEqual(10, residues[2].xtra["EXP_HSE_B_D"])
+        self.assertEqual(18, residues[2].xtra["EXP_HSE_B_U"])
+        self.assertEqual(2, len(residues[3].xtra))
+        self.assertEqual(7, residues[3].xtra["EXP_HSE_B_D"])
+        self.assertEqual(22, residues[3].xtra["EXP_HSE_B_U"])
+        #...
+        self.assertEqual(2, len(residues[-2].xtra))
+        self.assertEqual(14, residues[-2].xtra["EXP_HSE_B_D"])
+        self.assertEqual(34, residues[-2].xtra["EXP_HSE_B_U"])
+        self.assertEqual(2, len(residues[-1].xtra))
+        self.assertEqual(23, residues[-1].xtra["EXP_HSE_B_D"])
+        self.assertEqual(15, residues[-1].xtra["EXP_HSE_B_U"])
+
+    def test_ExposureCN(self):
+        """HSExposureCN."""
+        hse = ExposureCN(self.model, self.radius)
+        residues = self.a_residues
+        self.assertEqual(0, len(residues[0].xtra))
+        self.assertEqual(1, len(residues[1].xtra))
+        self.assertEqual(25, residues[1].xtra["EXP_CN"])
+        self.assertEqual(1, len(residues[2].xtra))
+        self.assertEqual(28, residues[2].xtra["EXP_CN"])
+        self.assertEqual(1, len(residues[3].xtra))
+        self.assertEqual(29, residues[3].xtra["EXP_CN"])
+        #...
+        self.assertEqual(1, len(residues[-2].xtra))
+        self.assertEqual(48, residues[-2].xtra["EXP_CN"])
+        self.assertEqual(1, len(residues[-1].xtra))
+        self.assertEqual(38, residues[-1].xtra["EXP_CN"])
+
+
+class NeighborTest(unittest.TestCase):
+    def setUp(self):
+        warnings.resetwarnings()
+
+    def test_neighbor_search(self):
+        """NeighborSearch: Find nearby randomly generated coordinates.
+         
+        Based on the self test in Bio.PDB.NeighborSearch.
+        """
+        class RandomAtom:
+            def __init__(self):
+                self.coord = 100 * random(3)
+            def get_coord(self):
+                return self.coord
+        for i in range(0, 20):
+            atoms = [RandomAtom() for j in range(100)]
+            ns = NeighborSearch(atoms)
+            hits = ns.search_all(5.0)
+            self.assert_(hits >= 0)
 
 # -------------------------------------------------------------
 

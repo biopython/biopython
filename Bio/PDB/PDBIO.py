@@ -133,7 +133,7 @@ class PDBIO:
             model_residues_written=0
             atom_number=1
             if model_flag:
-                fp.write("MODEL \n")
+                fp.write("MODEL      %s\n" % model.serial_num)
             for chain in model.get_list():
                 if not select.accept_chain(chain):
                     continue
