@@ -203,7 +203,8 @@ class Vector:
         if y is None and z is None:
             # Array, list, tuple...
             if len(x)!=3:
-                raise "Vector: x is not a list/tuple/array of 3 numbers"
+                raise ValueError("Vector: x is not a "
+                                 "list/tuple/array of 3 numbers")
             self._ar=numpy.array(x, 'd')
         else:
             # Three numbers
