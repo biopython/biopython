@@ -819,11 +819,16 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         If parser.use_fuzziness is set at one, the positions for the
         end points will possibly be fuzzy.
         """
-        if isinstance(range_info, LocationParser.Between) \
-        and range_info.low.val+1 == range_info.high.val:
+        if isinstance(range_info, LocationParser.Between):
+            if not (range_info.low.val+1 == range_info.high.val \
+            or range_info.low.val==self._expected_size \
+            and range_info.high.val==1):
+                raise ValueError(range_info)
             #A between location like "67^68" (one based counting) is a
             #special case (note it has zero length). In python slice
             #notation this is 67:67, a zero length slice.  See Bug 2622
+            #Further more, on a circular genome of length N you can have
+            #a location N^1 meaning the junction at the origin. See Bug 3098.
             pos = self._get_position(range_info.low)
             return SeqFeature.FeatureLocation(pos, pos)
             #NOTE - We can imagine between locations like "2^4", but this
