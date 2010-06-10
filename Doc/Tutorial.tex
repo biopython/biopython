@@ -3839,7 +3839,7 @@ directly to screen. This text can be captured or redirected, via
 two ``pipes'', called standard output (the normal results) and standard
 error (for error messages and debug messages). There is also standard
 input, which is any text fed into the tool. These names get shortened
-to stdin, stdout and stderr. When the tool finished, it has a return
+to stdin, stdout and stderr. When the tool finishes, it has a return
 code (an integer), which by convention is zero for success.
 
 Now let's try an example. Unfortunately there are some subtle differences
@@ -3847,6 +3847,18 @@ depending on your Operating System (e.g. Windows versus Unix) and how you
 are running Python (e.g. at the command line, or in IDLE). You may see a
 second terminal window appear while ClustalW works. You may see the
 ClustalW output appear at your Python prompt.
+
+First of all, the simple option using \verb|os.system()|,
+
+\begin{verbatim}
+>>> import os
+>>> return_code = os.system(str(cline))
+...
+>>> print return_code
+0
+\end{verbatim}
+
+Now how we'd suggest doing this with the \verb|subprocess| module:
 
 \begin{verbatim}
 >>> import sys
