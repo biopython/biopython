@@ -47,7 +47,7 @@ def parse(handle):
                 branch_length=node.data.branchlength,
                 name=node.data.taxon,
                 clades=subclades,
-                support=node.data.support,
+                confidence=node.data.support,
                 comment=node.data.comment)
 
     for nxtree in nex.trees:
