@@ -197,56 +197,63 @@ class SeqFeatureExtraction(unittest.TestCase):
         """Extract feature from RNA (simple, default strand)"""
         s = Seq("GAUCRYWSMKHBVDN", generic_rna)
         f = SeqFeature(FeatureLocation(5,10))
-        self.assertEqual(_insdc_feature_location_string(f), "6..10")
+        self.assertEqual(_insdc_feature_location_string(f,len(s)), "6..10")
         self.check(s, f, "YWSMK")
 
     def test_simple_dna(self):
         """Extract feature from DNA (simple, default strand)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10))
-        self.assertEqual(_insdc_feature_location_string(f), "6..10")
+        self.assertEqual(_insdc_feature_location_string(f,len(s)), "6..10")
         self.check(s, f, "YWSMK")
 
     def test_single_letter_dna(self):
         """Extract feature from DNA (single letter, default strand)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,6))
-        self.assertEqual(_insdc_feature_location_string(f), "6")
+        self.assertEqual(_insdc_feature_location_string(f,len(s)), "6")
         self.check(s, f, "Y")
 
     def test_zero_len_dna(self):
         """Extract feature from DNA (between location, zero length, default strand)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,5))
-        self.assertEqual(_insdc_feature_location_string(f), "5^6")
+        self.assertEqual(_insdc_feature_location_string(f,len(s)), "5^6")
+        self.check(s, f, "")
+
+    def test_zero_len_dna_end(self):
+        """Extract feature from DNA (between location at end, zero length, default strand)"""
+        s = Seq("GATCRYWSMKHBVDN", generic_dna)
+        f = SeqFeature(FeatureLocation(15,15))
+        self.assertEqual(_insdc_feature_location_string(f,len(s)), "15^1")
         self.check(s, f, "")
 
     def test_simple_dna_strand0(self):
         """Extract feature from DNA (simple, strand 0)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10), strand=0)
-        self.assertEqual(_insdc_feature_location_string(f), "6..10")
+        self.assertEqual(_insdc_feature_location_string(f,len(s)), "6..10")
         self.check(s, f, "YWSMK")
 
     def test_simple_dna_strand_none(self):
         """Extract feature from DNA (simple, strand None)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10), strand=None)
-        self.assertEqual(_insdc_feature_location_string(f), "6..10")
+        self.assertEqual(_insdc_feature_location_string(f,len(s)), "6..10")
         self.check(s, f, "YWSMK")
 
     def test_simple_dna_strand1(self):
         """Extract feature from DNA (simple, strand +1)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10), strand=1)
-        self.assertEqual(_insdc_feature_location_string(f), "6..10")
+        self.assertEqual(_insdc_feature_location_string(f,len(s)), "6..10")
         self.check(s, f, "YWSMK")
         
     def test_simple_dna_strand_minus(self):
         """Extract feature from DNA (simple, strand -1)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10), strand=-1)
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,len(s)),
                          "complement(6..10)")
         self.check(s, f, "MKSWR")
 
@@ -256,7 +263,7 @@ class SeqFeatureExtraction(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(5,10), strand=1)
         f2 = SeqFeature(FeatureLocation(12,15), strand=1)
         f = make_join_feature([f1,f2])
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,len(s)),
                          "join(6..10,13..15)")
         self.check(s, f, "YWSMKVDN")
 
@@ -266,7 +273,7 @@ class SeqFeatureExtraction(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(5,10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12,15), strand=-1)
         f = make_join_feature([f1,f2])
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,len(s)),
                          "complement(join(6..10,13..15))")
         self.check(s, f, reverse_complement("CCCCC"+"TTT"))
 
@@ -276,7 +283,7 @@ class SeqFeatureExtraction(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(BeforePosition(5),10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12,15), strand=-1)
         f = make_join_feature([f1,f2])
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,len(s)),
                          "complement(join(<6..10,13..15))")
         self.check(s, f, reverse_complement("CCCCC"+"TTT"))
 
@@ -286,7 +293,7 @@ class SeqFeatureExtraction(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(5,10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12,AfterPosition(15)), strand=-1)
         f = make_join_feature([f1,f2])
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,len(s)),
                          "complement(join(6..10,13..>15))")
         self.check(s, f, reverse_complement("CCCCC"+"TTT"))
 
@@ -296,7 +303,7 @@ class SeqFeatureExtraction(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(5,10), strand=+1)
         f2 = SeqFeature(FeatureLocation(12,15), strand=-1)
         f = make_join_feature([f1,f2])
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,len(s)),
                          "join(6..10,complement(13..15))")
         self.check(s, f, "CCCCC"+reverse_complement("TTT"))
 
@@ -307,7 +314,7 @@ class SeqFeatureExtraction(unittest.TestCase):
         f2 = SeqFeature(FeatureLocation(12,15), strand=-1)
         f3 = SeqFeature(FeatureLocation(BeforePosition(0),5), strand=+1)
         f = make_join_feature([f1,f2,f3])
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,len(s)),
                          "join(6..10,complement(13..15),<1..5)")
         self.check(s, f, "CCCCC"+reverse_complement("TTT")+"AAAAA")
 
@@ -315,7 +322,7 @@ class SeqFeatureExtraction(unittest.TestCase):
         """Extract feature from protein (simple)"""
         s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
         f = SeqFeature(FeatureLocation(5,10))
-        self.assertEqual(_insdc_feature_location_string(f),"6..10")
+        self.assertEqual(_insdc_feature_location_string(f,len(s)),"6..10")
         self.check(s, f, "FGHIJ")
 
     def test_simple_protein_join(self):
@@ -324,7 +331,7 @@ class SeqFeatureExtraction(unittest.TestCase):
         f1 = SeqFeature(FeatureLocation(5,10))
         f2 = SeqFeature(FeatureLocation(15,20))
         f = make_join_feature([f1,f2])
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,len(s)),
                          "join(6..10,16..20)")
         self.check(s, f, "FGHIJ"+"PQRST")
 
@@ -375,16 +382,16 @@ class FeatureWriting(unittest.TestCase):
         #Note we don't have to explicitly give an ExactPosition object,
         #and integer will also work:
         f = SeqFeature(FeatureLocation(10,20), strand=+1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "11..20")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(30,40), strand=-1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(31..40)")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(ExactPosition(50),ExactPosition(60)), \
                        strand=+1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "51..60")
         self.record.features.append(f)
         self.write_read_checks()
@@ -393,11 +400,11 @@ class FeatureWriting(unittest.TestCase):
         """Features: write/read simple between locations."""
         #Note we don't use the BetweenPosition any more!
         f = SeqFeature(FeatureLocation(10,10), strand=+1, type="variation")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "10^11")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(20,20), strand=-1, type="variation")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(20^21)")
         self.record.features.append(f)
         self.write_read_checks()
@@ -408,26 +415,26 @@ class FeatureWriting(unittest.TestCase):
         f2 = SeqFeature(FeatureLocation(25,40), strand=+1)
         f = make_join_feature([f1,f2])
         self.record.features.append(f)
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,500),
                          "join(11..20,26..40)")
         f1 = SeqFeature(FeatureLocation(110,120), strand=+1)
         f2 = SeqFeature(FeatureLocation(125,140), strand=+1)
         f3 = SeqFeature(FeatureLocation(145,150), strand=+1)
         f = make_join_feature([f1,f2,f3], "CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,500),
                          "join(111..120,126..140,146..150)")
         self.record.features.append(f)
         f1 = SeqFeature(FeatureLocation(210,220), strand=-1)
         f2 = SeqFeature(FeatureLocation(225,240), strand=-1)
         f = make_join_feature([f1,f2], ftype="gene")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,500),
                          "complement(join(211..220,226..240))")
         self.record.features.append(f)
         f1 = SeqFeature(FeatureLocation(310,320), strand=-1)
         f2 = SeqFeature(FeatureLocation(325,340), strand=-1)
         f3 = SeqFeature(FeatureLocation(345,350), strand=-1)
         f = make_join_feature([f1,f2,f3], "CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,500),
                          "complement(join(311..320,326..340,346..350))")
         self.record.features.append(f)
         self.write_read_checks()
@@ -438,7 +445,7 @@ class FeatureWriting(unittest.TestCase):
         f2 = SeqFeature(FeatureLocation(25,AfterPosition(40)), strand=+1)
         f = make_join_feature([f1,f2])
         self.record.features.append(f)
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,500),
                          "join(<11..20,26..>40)")
         f1 = SeqFeature(FeatureLocation(OneOfPosition([ExactPosition(107),
                                                        ExactPosition(110)]),120),
@@ -446,13 +453,13 @@ class FeatureWriting(unittest.TestCase):
         f2 = SeqFeature(FeatureLocation(125,140), strand=+1)
         f3 = SeqFeature(FeatureLocation(145,WithinPosition(150,10)), strand=+1)
         f = make_join_feature([f1,f2,f3], "CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,500),
                          "join(one-of(108,111)..120,126..140,146..(150.160))")
         self.record.features.append(f)
         f1 = SeqFeature(FeatureLocation(BeforePosition(210),220), strand=-1)
         f2 = SeqFeature(FeatureLocation(225,WithinPosition(240,4)), strand=-1)
         f = make_join_feature([f1,f2], "gene")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,500),
                          "complement(join(<211..220,226..(240.244)))")
         self.record.features.append(f)
         f1 = SeqFeature(FeatureLocation(AfterPosition(310),320), strand=-1)
@@ -461,7 +468,7 @@ class FeatureWriting(unittest.TestCase):
                         strand=-1)
         f3 = SeqFeature(FeatureLocation(345,WithinPosition(350,5)), strand=-1)
         f = make_join_feature([f1,f2,f3], "CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,500),
                          "complement(join(>311..320,326..one-of(340,337),346..(350.355)))")
         self.record.features.append(f)
         self.write_read_checks()
@@ -470,32 +477,32 @@ class FeatureWriting(unittest.TestCase):
         """Features: write/read simple before locations."""
         f = SeqFeature(FeatureLocation(BeforePosition(5),10), \
                        strand=+1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "<6..10")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(BeforePosition(15),BeforePosition(20)), \
                        strand=+1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "<16..<20")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(25,BeforePosition(30)), \
                        strand=+1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "26..<30")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(BeforePosition(35),40), \
                        strand=-1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(<36..40)")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(BeforePosition(45),BeforePosition(50)), \
                        strand=-1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(<46..<50)")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(55,BeforePosition(60)), \
                        strand=-1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(56..<60)")
         self.record.features.append(f)
         self.write_read_checks()
@@ -504,32 +511,32 @@ class FeatureWriting(unittest.TestCase):
         """Features: write/read simple after locations."""
         f = SeqFeature(FeatureLocation(AfterPosition(5),10), \
                        strand=+1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          ">6..10")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(AfterPosition(15),AfterPosition(20)), \
                        strand=+1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          ">16..>20")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(25,AfterPosition(30)), \
                        strand=+1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "26..>30")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(AfterPosition(35),40), \
                        strand=-1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(>36..40)")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(AfterPosition(45),AfterPosition(50)), \
                        strand=-1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(>46..>50)")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(55,AfterPosition(60)), \
                        strand=-1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(56..>60)")
         self.record.features.append(f)
         self.write_read_checks()
@@ -538,34 +545,34 @@ class FeatureWriting(unittest.TestCase):
         """Features: write/read simple one-of locations."""
         start = OneOfPosition([ExactPosition(0),ExactPosition(3),ExactPosition(6)])
         f = SeqFeature(FeatureLocation(start,21), strand=+1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "one-of(1,4,7)..21")
         self.record.features.append(f)
         start = OneOfPosition([ExactPosition(x) for x in [10,13,16]])
         end = OneOfPosition([ExactPosition(x) for x in [41,44,50]])
         f = SeqFeature(FeatureLocation(start,end), strand=+1, type="gene")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "one-of(11,14,17)..one-of(41,44,50)")
         self.record.features.append(f)
         end = OneOfPosition([ExactPosition(x) for x in [30,33]])
         f = SeqFeature(FeatureLocation(27,end), strand=+1, type="gene")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "28..one-of(30,33)")
         self.record.features.append(f)
         start = OneOfPosition([ExactPosition(x) for x in [36,40]])
         f = SeqFeature(FeatureLocation(start,46), strand=-1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(one-of(37,41)..46)")
         self.record.features.append(f)
         start = OneOfPosition([ExactPosition(x) for x in [45,60]])
         end = OneOfPosition([ExactPosition(x) for x in [70,90]])
         f = SeqFeature(FeatureLocation(start,end), strand=-1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(one-of(46,61)..one-of(70,90))")
         self.record.features.append(f)
         end = OneOfPosition([ExactPosition(x) for x in [60,63]])
         f = SeqFeature(FeatureLocation(55,end), strand=-1, type="tRNA")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(56..one-of(60,63))")
         self.record.features.append(f)
         self.write_read_checks()
@@ -574,34 +581,34 @@ class FeatureWriting(unittest.TestCase):
         """Features: write/read simple within locations."""
         f = SeqFeature(FeatureLocation(WithinPosition(2,6),10), \
                        strand=+1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "(3.9)..10")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(WithinPosition(12,6),
                                        WithinPosition(20,8)), \
                        strand=+1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "(13.19)..(20.28)")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(25,WithinPosition(30,3)), \
                        strand=+1, type="misc_feature")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "26..(30.33)")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(WithinPosition(35,4),40), \
                        strand=-1, type="rRNA")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement((36.40)..40)")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(WithinPosition(45,2),
                                        WithinPosition(50,3)), \
                        strand=-1, type="repeat_region")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement((46.48)..(50.53))")
         self.record.features.append(f)
         f = SeqFeature(FeatureLocation(55,WithinPosition(60,5)), \
                        strand=-1, type="CDS")
-        self.assertEqual(_insdc_feature_location_string(f),
+        self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(56..(60.65))")
         self.record.features.append(f)
         self.write_read_checks()

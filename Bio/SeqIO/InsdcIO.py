@@ -108,7 +108,7 @@ def _insdc_feature_position_string(pos, offset=0):
         raise ValueError("Expected a SeqFeature position object.")
 
 
-def _insdc_location_string_ignoring_strand_and_subfeatures(feature):
+def _insdc_location_string_ignoring_strand_and_subfeatures(feature, rec_length):
     if feature.ref:
         ref = "%s:" % feature.ref
     else:
@@ -119,8 +119,14 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(feature):
     and feature.location.start.position == feature.location.end.position:
         #Special case, for 12:12 return 12^13
         #(a zero length slice, meaning the point between two letters)
-        return "%s%i^%i" % (ref, feature.location.end.position,
-                            feature.location.end.position+1)
+        if feature.location.end.position == rec_length:
+            #Very special case, for a between position at the end of a
+            #sequence (used on some circular genomes, Bug 3098) we have
+            #N:N so return N^1
+            return "%s%i^1" % (ref, rec_length)
+        else:
+            return "%s%i^%i" % (ref, feature.location.end.position,
+                                feature.location.end.position+1)
     if isinstance(feature.location.start, SeqFeature.ExactPosition) \
     and isinstance(feature.location.end, SeqFeature.ExactPosition) \
     and feature.location.start.position+1 == feature.location.end.position:
@@ -134,7 +140,7 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(feature):
                + ".." + \
                _insdc_feature_position_string(feature.location.end)
 
-def _insdc_feature_location_string(feature):
+def _insdc_feature_location_string(feature, rec_length):
     """Build a GenBank/EMBL location string from a SeqFeature (PRIVATE).
 
     There is a choice of how to show joins on the reverse complement strand,
@@ -161,7 +167,7 @@ def _insdc_feature_location_string(feature):
         #assert feature.location_operator == "", \
         #       "%s has no subfeatures but location_operator %s" \
         #       % (repr(feature), feature.location_operator)
-        location = _insdc_location_string_ignoring_strand_and_subfeatures(feature)
+        location = _insdc_location_string_ignoring_strand_and_subfeatures(feature, rec_length)
         if feature.strand == -1:
             location = "complement(%s)" % location
         return location
@@ -171,7 +177,7 @@ def _insdc_feature_location_string(feature):
             assert f.strand == -1
         return "complement(%s(%s))" \
                % (feature.location_operator,
-                  ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(f) \
+                  ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(f, rec_length) \
                            for f in feature.sub_features))
     #if feature.strand == +1:
     #    for f in feature.sub_features:
@@ -179,7 +185,7 @@ def _insdc_feature_location_string(feature):
     #This covers typical forward strand features, and also an evil mixed strand:
     assert feature.location_operator != ""
     return  "%s(%s)" % (feature.location_operator,
-                        ",".join([_insdc_feature_location_string(f) \
+                        ",".join([_insdc_feature_location_string(f, rec_length) \
                                   for f in feature.sub_features]))
 
 
@@ -239,10 +245,10 @@ class _InsdcWriter(SequentialSequenceWriter):
         return location[:index+1] + "\n" + \
                self.QUALIFIER_INDENT_STR + self._wrap_location(location[index+1:])
 
-    def _write_feature(self, feature):
+    def _write_feature(self, feature, record_length):
         """Write a single SeqFeature object to features table."""
         assert feature.type, feature
-        location = _insdc_feature_location_string(feature)
+        location = _insdc_feature_location_string(feature, record_length)
         line = (self.QUALIFIER_INDENT_TMP  % feature.type)[:self.QUALIFIER_INDENT] \
                + self._wrap_location(location) + "\n"
         self.handle.write(line)
@@ -702,8 +708,9 @@ class GenBankWriter(_InsdcWriter):
             self._write_comment(record)
 
         handle.write("FEATURES             Location/Qualifiers\n")
+        rec_length = len(record)
         for feature in record.features:
-            self._write_feature(feature) 
+            self._write_feature(feature, rec_length) 
         self._write_sequence(record)
         handle.write("//\n")
 
@@ -967,8 +974,9 @@ class EmblWriter(_InsdcWriter):
             self._write_comment(record)
 
         handle.write("FH   Key             Location/Qualifiers\n")
+        rec_length = len(record)
         for feature in record.features:
-            self._write_feature(feature) 
+            self._write_feature(feature, rec_length)
 
         self._write_sequence(record)
         handle.write("//\n")
