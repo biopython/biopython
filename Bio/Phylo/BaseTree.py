@@ -11,9 +11,11 @@ classes in order to use the common methods defined on them.
 __docformat__ = "epytext en"
 
 import collections
+import copy
 import itertools
 import random
 import re
+import warnings
 
 import _sugar
 
@@ -559,10 +561,10 @@ class TreeMixin(object):
         New clades have the given branch_length and the same name as this
         clade's root plus an integer suffix (counting from 0).
         """
-        subtree_cls = type(self.root)
+        clade_cls = type(self.root)
         base_name = self.root.name or ''
         for i in range(n):
-            clade = subtree_cls(name=base_name+str(i),
+            clade = clade_cls(name=base_name+str(i),
                                 branch_length=branch_length)
             self.root.clades.append(clade)
 
@@ -571,7 +573,7 @@ class Tree(TreeElement, TreeMixin):
     """A phylogenetic tree, containing global info for the phylogeny.
 
     The structure and node-specific data is accessible through the 'root'
-    subtree attached to the Tree instance.
+    clade attached to the Tree instance.
 
     @param root:
         The starting node of the tree. If the tree is rooted, this will usually
@@ -596,12 +598,21 @@ class Tree(TreeElement, TreeMixin):
         self.name = name
 
     @classmethod
-    def from_subtree(cls, subtree, **kwargs):
-        """Create a new Tree object given a subtree.
+    def from_clade(cls, clade, **kwargs):
+        """Create a new Tree object given a clade.
 
         Keyword arguments are the usual Tree constructor parameters.
         """
-        return cls(subtree, **kwargs)
+        root = copy.deepcopy(clade)
+        return cls(root, **kwargs)
+
+    # XXX Backward compatibility shim
+    @classmethod
+    def from_subtree(cls, clade, **kwargs):
+        """DEPRECATED: use from_clade() instead."""
+        warnings.warn("use from_clade() instead.""",
+                DeprecationWarning, stacklevel=2)
+        return cls.from_clade(clade, **kwargs)
 
     @classmethod
     def randomized(cls, taxa, branch_length=1.0, branch_stdev=None):
@@ -640,7 +651,7 @@ class Tree(TreeElement, TreeMixin):
 
     @property
     def clade(self):
-        """The first subtree in this tree (not itself)."""
+        """The first clade in this tree (not itself)."""
         return self.root
 
     # Method assumed by TreeMixin
@@ -705,10 +716,10 @@ class Tree(TreeElement, TreeMixin):
 
 
 class Clade(TreeElement, TreeMixin):
-    """A recursively defined subtree.
+    """A recursively defined sub-tree.
 
     @param branch_length:
-        The length of the branch leading to the root node of this subtree.
+        The length of the branch leading to the root node of this clade.
     @type branch_length: str
 
     @param name: The clade's name (a label).
@@ -724,7 +735,7 @@ class Clade(TreeElement, TreeMixin):
 
     @property
     def root(self):
-        """Allow TreeMixin methods to traverse subtrees properly."""
+        """Allow TreeMixin methods to traverse clades properly."""
         return self
 
     def is_terminal(self):
@@ -734,7 +745,7 @@ class Clade(TreeElement, TreeMixin):
     # Sequence-type behavior methods
 
     def __getitem__(self, index):
-        """Get subtrees by index (integer or slice)."""
+        """Get clades by index (integer or slice)."""
         if isinstance(index, int) or isinstance(index, slice):
             return self.clades[index]
         ref = self
@@ -743,11 +754,11 @@ class Clade(TreeElement, TreeMixin):
         return ref
 
     def __iter__(self):
-        """Iterate through this tree's direct subtrees (clades)."""
+        """Iterate through this tree's direct descendent clades (sub-trees)."""
         return iter(self.clades)
 
     def __len__(self):
-        """Number of subtrees directy under the root."""
+        """Number of clades directy under the root."""
         return len(self.clades)
 
     def __nonzero__(self):

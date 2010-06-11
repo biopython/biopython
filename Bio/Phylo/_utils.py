@@ -71,7 +71,7 @@ def to_networkx(tree):
 
 def draw_graphviz(tree, label_func=str, prog='twopi', args='',
         node_color='#c0deff', **kwargs):
-    """Display a tree or subtree as a graph, using the graphviz engine.
+    """Display a tree or clade as a graph, using the graphviz engine.
 
     Requires NetworkX, matplotlib, Graphviz and either PyGraphviz or pydot.
 

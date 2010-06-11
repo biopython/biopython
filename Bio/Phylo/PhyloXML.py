@@ -153,8 +153,12 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
 
     @classmethod
     def from_tree(cls, tree, **kwargs):
+        """Create a new Phylogeny given a Tree (from Newick/Nexus or BaseTree).
+
+        Keyword arguments are the usual Phylogeny constructor parameters.
+        """
         phy = cls(
-                root=Clade.from_subtree(tree.root),
+                root=Clade.from_clade(tree.root),
                 rooted=tree.rooted,
                 name=tree.name,
                 id=(tree.id is not None) and Id(str(tree.id)) or None)
@@ -162,8 +166,20 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
         return phy
 
     @classmethod
-    def from_subtree(cls, subtree, **kwargs):
-        return Clade.from_subtree(subtree).to_phylogeny(**kwargs)
+    def from_clade(cls, clade, **kwargs):
+        """Create a new Phylogeny given a Newick or BaseTree Clade object.
+
+        Keyword arguments are the usual PhyloXML Clade constructor parameters.
+        """
+        return Clade.from_clade(clade).to_phylogeny(**kwargs)
+
+    # XXX Backward compatibility shim
+    @classmethod
+    def from_subtree(cls, clade, **kwargs):
+        """DEPRECATED: use from_clade() instead."""
+        warnings.warn("use from_clade() instead.""",
+                DeprecationWarning, stacklevel=2)
+        return cls.from_clade(clade, **kwargs)
 
     def to_phyloxml(self, **kwargs):
         """Create a new PhyloXML object containing just this phylogeny."""
@@ -276,13 +292,24 @@ class Clade(PhyloElement, BaseTree.Clade):
         self.other = other or []
 
     @classmethod
-    def from_subtree(cls, subtree, **kwargs):
-        """Create a new Clade from a BaseTree.Clade object."""
-        clade = cls(branch_length=subtree.branch_length,
-                    name=subtree.name)
-        clade.clades = [cls.from_subtree(st) for st in subtree.clades]
-        clade.__dict__.update(kwargs)
-        return clade
+    def from_clade(cls, clade, **kwargs):
+        """Create a new PhyloXML Clade from a Newick or BaseTree Clade object.
+        
+        Keyword arguments are the usual PhyloXML Clade constructor parameters.
+        """
+        new_clade = cls(branch_length=clade.branch_length,
+                    name=clade.name)
+        new_clade.clades = [cls.from_clade(c) for c in clade]
+        new_clade.__dict__.update(kwargs)
+        return new_clade
+
+    # XXX Backward compatibility shim
+    @classmethod
+    def from_subtree(cls, clade, **kwargs):
+        """DEPRECATED: use from_clade() instead."""
+        warnings.warn("use from_clade() instead.""",
+                DeprecationWarning, stacklevel=2)
+        return cls.from_clade(clade, **kwargs)
 
     def to_phylogeny(self, **kwargs):
         """Create a new phylogeny containing just this clade."""
