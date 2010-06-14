@@ -11,6 +11,11 @@ The latest news is at the top.
 
 In progress: Biopython 1.55 (not yet released).
 
+We are phasing out support for Python 2.4. We will continue to support it
+for at least one further release (Biopython 1.56). This could be delayed
+given feedback from our users (e.g. if this proves to be a problem in
+combination with other libraries or a popular Linux distribution).
+
 The SeqRecord object now has upper and lower methods (like the Seq object and
 Python strings), which return a new SeqRecord with the sequence in upper or
 lower case and a copy of all the annotation unchanged.
