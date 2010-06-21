@@ -147,7 +147,10 @@ class SeqFeature(object):
         """
         out = "type: %s\n" % self.type
         out += "location: %s\n" % self.location
-        out += "ref: %s:%s\n" % (self.ref, self.ref_db)
+        if self.id:
+            out += "id: %s\n" % self.id
+        if self.ref or self.ref_db:
+            out += "ref: %s:%s\n" % (self.ref, self.ref_db)
         out += "strand: %s\n" % self.strand
         out += "qualifiers: \n"
         qualifier_keys = self.qualifiers.keys()
