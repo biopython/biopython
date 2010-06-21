@@ -143,6 +143,7 @@ class rt:
         self.padded_start=None
         self.padded_end=None
         self.date=''
+        self.comment=[]
         if line:
             header=line.split()
             self.name=header[0]
@@ -381,8 +382,20 @@ def parse(handle):
                         record.reads[-1].rt=[]
                     for line in handle:
                         line=line.strip()
-                        if line=='}': break
-                        record.reads[-1].rt.append(rt(line))
+                        #if line=="COMMENT{":
+                        if line.startswith("COMMENT{"):
+                            if line[8:].strip():
+                                #MIRA 3.0.5 would miss the new line out :(
+                                record.reads[-1].rt[-1].comment.append(line[8:])
+                            for line in handle:
+                                line = line.strip()
+                                if line.endswith("C}"):
+                                    break
+                                record.reads[-1].rt[-1].comment.append(line)
+                        elif line=='}':
+                            break
+                        else:
+                            record.reads[-1].rt.append(rt(line))
                     line = ""
                 elif line.startswith("WR{"):
                     if record.reads[-1].wr is None:
