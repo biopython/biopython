@@ -58,7 +58,10 @@ are needed, the 'read' function rather than the 'parse' function might be more a
 
 
 class rd:
-    """RD (reads), store a read with its name, sequence etc."""
+    """RD (reads), store a read with its name, sequence etc.
+    
+    The location and strand each read is mapped to is held in the AF lines.
+    """
     def __init__(self):
         self.name=''
         self.padded_bases=None
@@ -103,7 +106,12 @@ class ds:
 
     
 class af:
-    """AF lines, define the location of the read within the contig."""
+    """AF lines, define the location of the read within the contig.
+    
+    Note attribute coru is short for complemented (C) or uncomplemented (U),
+    since the strand information is stored in an ACE file using either the
+    C or U character.
+    """
     def __init__(self, line=None):
         self.name=''
         self.coru=None
