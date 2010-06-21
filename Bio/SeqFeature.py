@@ -107,7 +107,7 @@ class SeqFeature(object):
         if strand not in [-1, 0, 1, None] :
             raise ValueError("Strand should be +1, -1, 0 or None, not %s" \
                              % repr(strand))
-        if location and not isinstance(location, FeatureLocation):
+        if location is not None and not isinstance(location, FeatureLocation):
             raise TypeError("FeatureLocation (or None) required for the location")
         self.location = location
 
