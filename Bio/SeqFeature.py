@@ -67,9 +67,10 @@ class SeqFeature(object):
 
     CDS    join(1..10,30..40,50..60)
 
-    The the top level feature would be a CDS from 1 to 60, and the sub
-    features would be of 'CDS_join' type and would be from 1 to 10, 30 to
-    40 and 50 to 60, respectively.
+    Then the top level feature would be of type 'CDS' from 1 to 60 (actually 0
+    to 60 in Python counting) with location_operator='join', and the three sub-
+    features would also be of type 'CDS', and would be from 1 to 10, 30 to
+    40 and 50 to 60, respectively (although actually using Python counting).
 
     To get the nucleotide sequence for this CDS, you would need to take the
     parent sequence and do seq[0:10]+seq[29:40]+seq[49:60] (Python counting).
