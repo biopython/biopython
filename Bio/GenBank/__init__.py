@@ -43,6 +43,7 @@ for more details of this format, and an example.
 Added by Ying Huang & Iddo Friedberg
 """
 import cStringIO
+import re
 
 # other Biopython stuff
 from Bio import SeqFeature
@@ -63,6 +64,32 @@ FEATURE_KEY_INDENT = 5
 FEATURE_QUALIFIER_INDENT = 21
 FEATURE_KEY_SPACER = " " * FEATURE_KEY_INDENT
 FEATURE_QUALIFIER_SPACER = " " * FEATURE_QUALIFIER_INDENT
+
+#Regular expresions for location parsing
+_simple_location = r"[<>]?\d+\.\.[<>]?\d+"
+_re_simple_location = re.compile(r"^%s$" % _simple_location)
+_re_simple_compound = re.compile(r"^(join|order|bond)\(%s(,%s){1,}\)$" \
+                                 % (_simple_location, _simple_location))
+
+assert not _re_simple_location.match("join(104..160,320..390,504..579)")
+assert _re_simple_compound.match("join(104..160,320..390,504..579)")
+assert _re_simple_compound.match("order(1..69,1308..1465)")
+assert _re_simple_compound.match("join(<1..442,992..1228,1524..>1983)")
+assert _re_simple_compound.match("join(<1..181,254..336,422..497,574..>590)")
+assert _re_simple_compound.match("join(1475..1577,2841..2986,3074..3193,3314..3481,4126..>4215)")
+assert not _re_simple_compound.match("test(1..69,1308..1465)")
+assert not _re_simple_compound.match("complement(1..69)")
+assert not _re_simple_compound.match("(1..69)")
+
+def _pos(pos_str, offset=0):
+    """Build a Position object (PRIVATE.)."""
+    #TODO - Handle one-of etc
+    if pos_str.startswith("<"):
+        return SeqFeature.BeforePosition(int(pos_str[1:])+offset)
+    elif pos_str.startswith(">"):
+        return SeqFeature.AfterPosition(int(pos_str[1:])+offset)
+    else:
+        return SeqFeature.ExactPosition(int(pos_str)+offset)
 
 class Iterator:
     """Iterator interface to move over a file of GenBank entries one at a time.
@@ -666,7 +693,40 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if location_line.find('replace') != -1:
             comma_pos = location_line.find(',')
             location_line = location_line[8:comma_pos]
+        
+        cur_feature = self._cur_feature
 
+        #Handle top level complement here for speed        
+        if location_line.startswith("complement("):
+            assert location_line.endswith(")")
+            location_line = location_line[11:-1]
+            cur_feature.strand = -1
+            #And continue...
+            
+        #Special case handling of the most common cases for speed
+        if _re_simple_location.match(location_line):
+            #e.g. <123..>456
+            s, e = location_line.split("..")
+            cur_feature.location = SeqFeature.FeatureLocation(_pos(s,-1),
+                                                              _pos(e))
+            return
+        if _re_simple_compound.match(location_line):
+            #e.g. join(<123..456,480..>500)
+            i = location_line.find("(")
+            cur_feature.location_operator = location_line[:i]
+            #we can split on the comma because these are simple locations
+            for part in location_line[i+1:-1].split(","):
+                s, e = part.split("..")
+                f = SeqFeature.SeqFeature(SeqFeature.FeatureLocation(_pos(s,-1),
+                                                                     _pos(e)),
+                                          strand=cur_feature.strand,
+                                          type=cur_feature.type)
+                cur_feature.sub_features.append(f)
+            s = cur_feature.sub_features[0].location.start
+            e = cur_feature.sub_features[-1].location.end
+            cur_feature.location = SeqFeature.FeatureLocation(s,e)
+            return
+        
         # feed everything into the scanner and parser
         try:
             parse_info = \
@@ -678,7 +738,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # print "parse_info:", repr(parse_info)
         
         # add the parser information the current feature
-        self._set_location_info(parse_info, self._cur_feature)
+        self._set_location_info(parse_info, cur_feature)
 
     def _set_function(self, function, cur_feature):
         """Set the location information based on a function.
