@@ -42,6 +42,8 @@ else:
     import commands
     for name in exes_wanted:
         #This will "just work" if installed on the path as normal on Unix
+        #Note this will not spot error messages in other languages
+        #such as Japanese... see the version check
         if "not found" not in commands.getoutput("%s -help" % name):
             exes[name] = name
     del name
@@ -72,8 +74,12 @@ def get_emboss_version():
             #which reports 6.2.0.1 - for this return (6,2,0)
             return tuple(int(v) for v in line.strip().split("."))[:3]
         else:
-            raise ValueError(stdout)
-
+            #Either we can't understand the output, or this is really
+            #an error message not caught earlier (e.g. not in English)
+            raise MissingExternalDependencyError(\
+                "Install EMBOSS if you want to use Bio.Emboss (%s)." \
+                % line)
+            
 #To avoid confusing known errors from old versions of EMBOSS ...
 if get_emboss_version() < (6,1,0):
     raise MissingExternalDependencyError(\
