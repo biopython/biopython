@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich}
-\date{Last Update -- 3 June 2010 (Biopython 1.54+)}
+\date{Last Update -- 22 June 2010 (Biopython 1.54+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -1595,7 +1595,7 @@ To show an example of SeqFeatures in action, let's take a look at the following 
                      /gene="F28B23.12"
 \end{verbatim}
 
-To look at the easiest attributes of the \verb|SeqFeature| first, if you got a \verb|SeqFeature| object for this it would have it \verb|type| of 'mRNA', a \verb|strand| of -1 (due to the `complement'), and would have None for the \verb|ref| and \verb|ref_db| since there are no references to external databases. The \verb|qualifiers| for this SeqFeature would be a Python dictionarary that looked like \verb|{'gene' : ['F28B23.12']}|.
+To look at the easiest attributes of the \verb|SeqFeature| first, if you got a \verb|SeqFeature| object for this it would have it \verb|type| of 'mRNA', a \verb|strand| of -1 (due to the `complement'), and would have None for the \verb|ref| and \verb|ref_db| since there are no references to external databases. The \verb|qualifiers| for this SeqFeature would be a Python dictionary that looked like \verb|{'gene' : ['F28B23.12']}|.
 
 Now let's look at the more tricky part, how the `join' in the location
 line is handled. First, the location for the top level \verb|SeqFeature| (the
