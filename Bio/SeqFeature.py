@@ -374,15 +374,8 @@ class FeatureLocation(object):
     end = property(fget= lambda self : self._end,
                    doc="End location (possibly a fuzzy position, read only).")
 
-    def _get_nofuzzy_start(self):
-        #TODO - Do we still use the BetweenPosition class?
-        if ((self._start == self._end) and isinstance(self._start,
-             BetweenPosition)):
-            return self._start.position
-        else:
-            return min(self._start.position,
-                       self._start.position + self._start.extension)
-    nofuzzy_start = property(fget=_get_nofuzzy_start,
+    nofuzzy_start = property(
+        fget=lambda self: self._start.position,
         doc="""Start position (integer, approximated if fuzzy, read only).
 
         To get non-fuzzy attributes (ie. the position only) ask for
@@ -391,15 +384,8 @@ class FeatureLocation(object):
         (10.20)..(30.40) should return 10 for start, and 40 for end.
         """)
 
-    def _get_nofuzzy_end(self):
-        #TODO - Do we still use the BetweenPosition class?
-        if ((self._start == self._end) and isinstance(self._start,
-             BetweenPosition)):
-            return self._end.position
-        else:
-            return max(self._end.position,
-                       self._end.position + self._end.extension)
-    nofuzzy_end = property(fget=_get_nofuzzy_end,
+    nofuzzy_end = property(
+        fget=lambda self: self._end.position + self._end.extension,
         doc="""End position (integer, approximated if fuzzy, read only).
 
         To get non-fuzzy attributes (ie. the position only) ask for
@@ -413,6 +399,7 @@ class AbstractPosition(object):
     """
     def __init__(self, position, extension):
         self.position = position
+        assert extension >= 0, extension
         self.extension = extension
 
     def __repr__(self):
