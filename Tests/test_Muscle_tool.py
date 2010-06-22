@@ -42,7 +42,10 @@ if sys.platform=="win32":
 else:
     import commands
     output = commands.getoutput("muscle -version")
-    if "not found" not in output and "MUSCLE" in output.upper():
+    #Since "not found" may be in another language, try and be sure this is
+    #really the MUSCLE tool's output
+    if "not found" not in output and "MUSCLE" in output \
+    and "Edgar" in output:
         muscle_exe = "muscle"
 
 if not muscle_exe:

@@ -59,7 +59,7 @@ else:
     #the user for input (causing a lock up).
     output = commands.getoutput("clustalw2 --version")
     #Since "not found" may be in another language, try and be sure this is
-    #really the clustalw tools' output
+    #really the clustalw tool's output
     if "not found" not in output and "CLUSTAL" in output \
     and "Multiple Sequence Alignments" in output:
         clustalw_exe = "clustalw2"
