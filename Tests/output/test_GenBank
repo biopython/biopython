@@ -30,7 +30,6 @@ Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleost
 Feaures
 type: source
 location: [0:1622]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['taxon:9606']
@@ -39,7 +38,6 @@ qualifiers:
 
 type: gene
 location: [0:1622]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['LocusID:1783']
@@ -48,7 +46,6 @@ qualifiers:
 
 type: CDS
 location: [6:1485]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -107,7 +104,6 @@ Value: ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophy
 Feaures
 type: source
 location: [0:513]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['taxon:3702']
@@ -116,14 +112,12 @@ qualifiers:
 
 type: gene
 location: [49:250]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['cor6.6']
 
 type: CDS
 location: [49:250]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -178,7 +172,6 @@ Value: ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophy
 Feaures
 type: source
 location: [0:880]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['taxon:3702']
@@ -187,13 +180,11 @@ qualifiers:
 
 type: TATA_signal
 location: [8:20]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: exon
 location: [43:160]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['kin2']
@@ -201,47 +192,40 @@ qualifiers:
 
 type: prim_transcript
 location: [43:>579]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['kin2']
 
 type: mRNA
 location: [43:>579]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['kin2']
 Sub-Features
 type: mRNA
 location: [43:160]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [319:390]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [503:>579]
-ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: gene
 location: [43:579]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['kin2']
 
 type: CDS
 location: [103:579]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -252,26 +236,22 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [103:160]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [319:390]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [503:579]
-ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: intron
 location: [160:319]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['kin2']
@@ -279,7 +259,6 @@ qualifiers:
 
 type: exon
 location: [319:390]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['kin2']
@@ -287,7 +266,6 @@ qualifiers:
 
 type: intron
 location: [390:503]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['kin2']
@@ -295,7 +273,6 @@ qualifiers:
 
 type: exon
 location: [503:>579]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['kin2']
@@ -303,25 +280,21 @@ qualifiers:
 
 type: polyA_signal
 location: [619:625]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: polyA_signal
 location: [640:646]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: polyA_site
 location: [784:785]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: polyA_site
 location: [799:800]
-ref: None:None
 strand: 1
 qualifiers: 
 
@@ -362,7 +335,6 @@ Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatoph
 Feaures
 type: source
 location: [0:441]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: cultivar, Value: ['Jet neuf']
@@ -373,14 +345,12 @@ qualifiers:
 
 type: gene
 location: [33:300]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['kin1']
 
 type: CDS
 location: [33:231]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -392,7 +362,6 @@ qualifiers:
 
 type: polyA_signal
 location: [240:247]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['kin1']
@@ -400,7 +369,6 @@ qualifiers:
 
 type: polyA_signal
 location: [293:300]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['kin1']
@@ -408,7 +376,6 @@ qualifiers:
 
 type: polyA_site
 location: [440:441]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['kin1']
@@ -458,7 +425,6 @@ Value: ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophy
 Feaures
 type: source
 location: [0:206]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: country, Value: ['Russia:Bashkortostan']
@@ -467,27 +433,23 @@ qualifiers:
 
 type: mRNA
 location: [<0:>206]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['csp14']
 Sub-Features
 type: mRNA
 location: [<0:48]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [142:>206]
-ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: exon
 location: [0:48]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['csp14']
@@ -495,14 +457,12 @@ qualifiers:
 
 type: gene
 location: [0:206]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['csp14']
 
 type: CDS
 location: [<0:>206]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['2']
@@ -514,20 +474,17 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [<0:48]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [142:>206]
-ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: intron
 location: [48:142]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['csp14']
@@ -535,7 +492,6 @@ qualifiers:
 
 type: exon
 location: [142:206]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['csp14']
@@ -578,7 +534,6 @@ Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatoph
 Feaures
 type: source
 location: [0:282]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['taxon:3711']
@@ -587,14 +542,12 @@ qualifiers:
 
 type: gene
 location: [23:221]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['kin']
 
 type: CDS
 location: [23:221]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -648,7 +601,6 @@ Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatoph
 Feaures
 type: source
 location: [0:497]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: cultivar, Value: ['Cascade']
@@ -657,7 +609,6 @@ qualifiers:
 
 type: mRNA
 location: [<0:>497]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['BN28a']
@@ -665,33 +616,28 @@ qualifiers:
 Sub-Features
 type: mRNA
 location: [<0:54]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [240:309]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [422:>497]
-ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: gene
 location: [<0:>497]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['BN28a']
 
 type: CDS
 location: [0:497]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -704,19 +650,16 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [0:54]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [240:309]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [422:497]
-ref: None:None
 strand: 1
 qualifiers: 
 
@@ -780,7 +723,6 @@ Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Mammalia'
 Feaures
 type: source
 location: [0:1326]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: chromosome, Value: ['21']
@@ -792,14 +734,12 @@ qualifiers:
 
 type: gene
 location: [340:756]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['FTCD']
 
 type: exon
 location: [340:384]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['FTCD']
@@ -807,7 +747,6 @@ qualifiers:
 
 type: intron
 location: [384:617]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['FTCD']
@@ -815,7 +754,6 @@ qualifiers:
 
 type: exon
 location: [617:756]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['FTCD']
@@ -866,7 +804,6 @@ Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleost
 Feaures
 type: source
 location: [0:741]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: chromosome, Value: ['1']
@@ -880,27 +817,23 @@ qualifiers:
 
 type: repeat_region
 location: [0:73]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: rpt_family, Value: ['Alu']
 
 type: promoter
 location: [0:513]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: 5'UTR
 location: [513:609]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['GLUT5']
 
 type: exon
 location: [513:642]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['GLUT5']
@@ -978,7 +911,6 @@ Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatoph
 Feaures
 type: source
 location: [0:86436]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: chromosome, Value: ['1']
@@ -988,7 +920,6 @@ qualifiers:
 
 type: CDS
 location: [3461:5332]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1001,44 +932,37 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [3461:3615]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [3697:3978]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [4076:4307]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [4407:4797]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [4875:5028]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [5140:5332]
-ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: CDS
 location: [6616:8368]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1051,44 +975,37 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [6616:6953]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [7265:7351]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [7463:7603]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [7915:7998]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [8086:8166]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [8272:8368]
-ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
 location: [11565:12642]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1101,7 +1018,6 @@ qualifiers:
 
 type: CDS
 location: [23220:30781]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1114,116 +1030,97 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [23220:24174]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [24243:24357]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [24411:24664]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [24742:25137]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [25225:25445]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [25526:25711]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [25782:25905]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [25993:26478]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [26563:26730]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [26813:26983]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [27073:27235]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [27319:27415]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [27504:28133]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [28313:28507]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [28591:28782]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [28861:30013]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [30111:30518]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [30603:30781]
-ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: CDS
 location: [31083:32372]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1236,56 +1133,47 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [31083:31126]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [31222:31304]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [31340:31515]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [31634:31700]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [31789:31897]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [31983:32049]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [32132:32161]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [32248:32372]
-ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
 location: [33693:36763]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1298,50 +1186,42 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [33693:34029]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [34102:35173]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [35268:35349]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [35431:35701]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [36325:36387]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [36511:36623]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [36724:36763]
-ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
 location: [38599:40579]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1354,38 +1234,32 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [38599:38756]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [38837:38989]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [39110:39516]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [39914:40031]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [40376:40579]
-ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
 location: [45149:48868]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1398,50 +1272,42 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [45149:45261]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [45342:45656]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [45718:45847]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [46074:46313]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [47447:47684]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [47776:48554]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [48637:48868]
-ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
 location: [49985:50656]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1454,26 +1320,22 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [49985:50039]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [50120:50333]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [50584:50656]
-ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
 location: [51940:54196]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1486,38 +1348,32 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [51940:52048]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [52135:52432]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [52639:52885]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [53185:53326]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [53404:54196]
-ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: CDS
 location: [57093:58680]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1530,7 +1386,6 @@ qualifiers:
 
 type: CDS
 location: [59507:63513]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1543,26 +1398,22 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [59507:59665]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [61669:61826]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [63132:63513]
-ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
 location: [64099:67214]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1575,92 +1426,77 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [64099:64177]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [64271:64358]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [64452:64509]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [64602:64719]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [64811:64919]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [65032:65158]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [65264:65354]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [65434:65566]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [65808:65862]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [65963:66044]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [66151:66259]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [66379:66451]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [66536:66599]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [67025:67214]
-ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
 location: [69830:71700]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1673,32 +1509,27 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [69830:69987]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [70533:70670]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [70742:71357]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [71643:71700]
-ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
 location: [72284:73585]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1711,38 +1542,32 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [72284:72371]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [72788:72865]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [72988:73097]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [73189:73442]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [73523:73585]
-ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: CDS
 location: [73806:74145]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1755,20 +1580,17 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [73806:73990]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [74035:74145]
-ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: CDS
 location: [75334:77148]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1781,32 +1603,27 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [75334:76249]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [76515:76653]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [76732:76982]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [77014:77148]
-ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: CDS
 location: [82722:84581]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1819,19 +1636,16 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [82722:82738]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [82750:83373]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [83585:84581]
-ref: None:None
 strand: -1
 qualifiers: 
 
@@ -1880,7 +1694,6 @@ Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleost
 Feaures
 type: source
 location: [0:182]
-ref: None:None
 strand: None
 qualifiers: 
     Key: chromosome, Value: ['4']
@@ -1890,20 +1703,17 @@ qualifiers:
 
 type: Protein
 location: [0:182]
-ref: None:None
 strand: None
 qualifiers: 
     Key: product, Value: ['interferon beta, fibroblast']
 
 type: sig_peptide
 location: [0:21]
-ref: None:None
 strand: None
 qualifiers: 
 
 type: Region
 location: [0:182]
-ref: None:None
 strand: None
 qualifiers: 
     Key: db_xref, Value: ['CDD:pfam00143']
@@ -1912,14 +1722,12 @@ qualifiers:
 
 type: mat_peptide
 location: [21:182]
-ref: None:None
 strand: None
 qualifiers: 
     Key: product, Value: ['ifn-beta']
 
 type: Region
 location: [55:170]
-ref: None:None
 strand: None
 qualifiers: 
     Key: db_xref, Value: ['CDD:IFabd']
@@ -1928,7 +1736,6 @@ qualifiers:
 
 type: CDS
 location: [0:182]
-ref: None:None
 strand: None
 qualifiers: 
     Key: coded_by, Value: ['NM_010510.1:21..569']
@@ -2004,7 +1811,6 @@ Value: ['Eukaryota', 'Metazoa', 'Arthropoda', 'Tracheata', 'Hexapoda', 'Insecta'
 Feaures
 type: source
 location: [0:154329]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: clone, Value: ['BAC BACR25B3']
@@ -2013,14 +1819,12 @@ qualifiers:
 
 type: gene
 location: [22147:27773]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.11']
 
 type: CDS
 location: [22147:27773]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -2032,63 +1836,53 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [22147:22299]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [22374:22791]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [22859:23560]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [23629:24555]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [24615:24888]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [25023:25178]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [26676:27009]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [27622:27773]
-ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: gene
 location: [29925:33978]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.10']
 
 type: CDS
 location: [29925:33978]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -2100,69 +1894,58 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [29925:30108]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [30269:30519]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [30616:31076]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [31196:31591]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [31658:31836]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [32323:32634]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [32685:33289]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [33532:33713]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [33816:33978]
-ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: gene
 location: [36118:56153]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.1']
 
 type: CDS
 location: [36118:56153]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -2174,177 +1957,148 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [36118:37213]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [37280:39517]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [39655:40042]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [40344:40434]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [40518:40612]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [40680:40814]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [41545:41620]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [41854:42085]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [42187:42415]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [42750:42876]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [43603:43837]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [44240:44438]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [44811:44928]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [45147:45233]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [45660:45793]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [45975:46125]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [46517:46688]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [47221:47315]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [47682:47831]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [48410:48878]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [49436:49562]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [49762:49876]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [49970:50102]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [50318:50441]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [50826:50937]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [52848:52966]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [56030:56153]
-ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: gene
 location: [70719:75241]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.2']
 
 type: CDS
 location: [70719:75241]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -2356,51 +2110,43 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [70719:70988]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [71423:71621]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [72604:72768]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [72838:73016]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [73085:73559]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [75216:75241]
-ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: gene
 location: [121866:127124]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.3']
 
 type: CDS
 location: [121866:127124]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -2412,69 +2158,58 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [121866:122046]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [122173:122630]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [123671:123823]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [124062:124320]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [124391:124688]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [124754:125018]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [125093:125254]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [125316:125576]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [126792:127124]
-ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: gene
 location: [128488:129414]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.4']
 
 type: CDS
 location: [128488:129414]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -2486,39 +2221,33 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [128488:128715]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [128776:129140]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [129195:129313]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [129373:129414]
-ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: gene
 location: [132239:132926]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.5']
 
 type: CDS
 location: [132239:132926]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -2530,14 +2259,12 @@ qualifiers:
 
 type: gene
 location: [133491:134407]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.6']
 
 type: CDS
 location: [133491:134407]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -2549,39 +2276,33 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [133491:133595]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [133662:133748]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [133866:134135]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [134197:134407]
-ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: gene
 location: [135478:136829]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.7']
 
 type: CDS
 location: [135478:136829]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -2593,33 +2314,28 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [135478:135749]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [135960:136586]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [136640:136829]
-ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: gene
 location: [145402:147087]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.8']
 
 type: CDS
 location: [145402:147087]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -2630,27 +2346,23 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [145402:146203]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: CDS
 location: [146514:147087]
-ref: None:None
 strand: 1
 qualifiers: 
 
 
 type: gene
 location: [148859:152785]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.9']
 
 type: CDS
 location: [148859:152785]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -2662,45 +2374,38 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [148859:148905]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [148965:149462]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [149545:151809]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [151880:152032]
-ref: None:None
 strand: -1
 qualifiers: 
 
 type: CDS
 location: [152105:152785]
-ref: None:None
 strand: -1
 qualifiers: 
 
 
 type: gene
 location: [153489:1487]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['EG:BACR7C10.3']
 Sub-Features
 type: gene
 location: [153489:154269]
-ref: None:None
 strand: 1
 qualifiers: 
 
@@ -2719,7 +2424,6 @@ qualifiers:
 
 type: CDS
 location: [153489:1487]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -2730,7 +2434,6 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [153489:154269]
-ref: None:None
 strand: 1
 qualifiers: 
 
@@ -2794,7 +2497,6 @@ Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleost
 Feaures
 type: source
 location: [0:2509]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: chromosome, Value: ['12']
@@ -2806,21 +2508,18 @@ qualifiers:
 
 type: 5'UTR
 location: [one-of(1887,1900):2200]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['TMPO']
 
 type: gene
 location: [1887:3234]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['TMPO']
 Sub-Features
 type: gene
 location: [1887:2509]
-ref: None:None
 strand: 1
 qualifiers: 
 
@@ -2857,7 +2556,6 @@ qualifiers:
 
 type: exon
 location: [one-of(1887,1900):2479]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['TMPO']
@@ -2865,7 +2563,6 @@ qualifiers:
 
 type: CDS
 location: [2200:>128]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -2877,7 +2574,6 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [2200:2479]
-ref: None:None
 strand: 1
 qualifiers: 
 
@@ -2908,7 +2604,6 @@ qualifiers:
 
 type: CDS
 location: [2200:1558]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -2920,7 +2615,6 @@ qualifiers:
 Sub-Features
 type: CDS
 location: [2200:2479]
-ref: None:None
 strand: 1
 qualifiers: 
 
@@ -2988,7 +2682,6 @@ Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleost
 Feaures
 type: source
 location: [0:1250660]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: chromosome, Value: ['1']
@@ -2997,7 +2690,6 @@ qualifiers:
 
 type: source
 location: [0:3290]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: clone, Value: ['RP11-13G5']
@@ -3007,7 +2699,6 @@ qualifiers:
 
 type: misc_feature
 location: [215901:365470]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: note, Value: ['FISH-mapped clone']
@@ -3015,7 +2706,6 @@ qualifiers:
 
 type: variation
 location: [217507:217508]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: allele, Value: ['T', 'C']
@@ -3023,7 +2713,6 @@ qualifiers:
 
 type: mRNA
 location: [342429:409092]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['LocusID:55735']
@@ -3033,91 +2722,76 @@ qualifiers:
 Sub-Features
 type: mRNA
 location: [342429:342515]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [363170:363300]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [365740:365814]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [376397:376499]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [390168:390297]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [391256:391379]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [392605:392679]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [398229:398419]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [399081:399167]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [399533:399650]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [405843:405913]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [406703:406761]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [406867:407010]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [407961:408091]
-ref: None:None
 strand: 1
 qualifiers: 
 
 type: mRNA
 location: [408507:409092]
-ref: None:None
 strand: 1
 qualifiers: 
 
@@ -3166,7 +2840,6 @@ Value: ['Bacteria', 'Proteobacteria', 'alpha subdivision', 'Rhizobiaceae group',
 Feaures
 type: source
 location: [0:180]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['taxon:381']
@@ -3175,7 +2848,6 @@ qualifiers:
 
 type: gene
 location: [19:120]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: gene, Value: ['fake']
@@ -3251,7 +2923,6 @@ Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleost
 Feaures
 type: source
 location: [0:360]
-ref: None:None
 strand: None
 qualifiers: 
     Key: chromosome, Value: ['1']
@@ -3261,14 +2932,12 @@ qualifiers:
 
 type: Protein
 location: [0:360]
-ref: None:None
 strand: None
 qualifiers: 
     Key: product, Value: ['cannabinoid receptor 2 (macrophage)']
 
 type: Region
 location: [49:299]
-ref: None:None
 strand: None
 qualifiers: 
     Key: db_xref, Value: ['CDD:pfam00001']
@@ -3277,7 +2946,6 @@ qualifiers:
 
 type: CDS
 location: [0:360]
-ref: None:None
 strand: None
 qualifiers: 
     Key: coded_by, Value: ['NM_001841.1:127..1209']
@@ -3330,7 +2998,6 @@ Value: ['Eukaryota', 'Metazoa', 'Arthropoda', 'Chelicerata', 'Arachnida', 'Scorp
 Feaures
 type: source
 location: [0:64]
-ref: None:None
 strand: None
 qualifiers: 
     Key: db_xref, Value: ['taxon:6871']
@@ -3338,14 +3005,12 @@ qualifiers:
 
 type: Protein
 location: [0:64]
-ref: None:None
 strand: None
 qualifiers: 
     Key: product, Value: ['Neurotoxin III']
 
 type: Bond
 location: [11:63]
-ref: None:None
 strand: None
 qualifiers: 
     Key: bond_type, Value: ['disulfide']
@@ -3353,20 +3018,17 @@ qualifiers:
 Sub-Features
 type: Bond
 location: [11:12]
-ref: None:None
 strand: None
 qualifiers: 
 
 type: Bond
 location: [62:63]
-ref: None:None
 strand: None
 qualifiers: 
 
 
 type: Bond
 location: [15:36]
-ref: None:None
 strand: None
 qualifiers: 
     Key: bond_type, Value: ['disulfide']
@@ -3374,20 +3036,17 @@ qualifiers:
 Sub-Features
 type: Bond
 location: [15:16]
-ref: None:None
 strand: None
 qualifiers: 
 
 type: Bond
 location: [35:36]
-ref: None:None
 strand: None
 qualifiers: 
 
 
 type: Bond
 location: [21:46]
-ref: None:None
 strand: None
 qualifiers: 
     Key: bond_type, Value: ['disulfide']
@@ -3395,20 +3054,17 @@ qualifiers:
 Sub-Features
 type: Bond
 location: [21:22]
-ref: None:None
 strand: None
 qualifiers: 
 
 type: Bond
 location: [45:46]
-ref: None:None
 strand: None
 qualifiers: 
 
 
 type: Bond
 location: [25:48]
-ref: None:None
 strand: None
 qualifiers: 
     Key: bond_type, Value: ['disulfide']
@@ -3416,20 +3072,17 @@ qualifiers:
 Sub-Features
 type: Bond
 location: [25:26]
-ref: None:None
 strand: None
 qualifiers: 
 
 type: Bond
 location: [47:48]
-ref: None:None
 strand: None
 qualifiers: 
 
 
 type: Site
 location: [63:64]
-ref: None:None
 strand: None
 qualifiers: 
     Key: site_type, Value: ['amidation']
@@ -3479,7 +3132,6 @@ Value: ['Viruses', 'ssDNA viruses', 'Parvoviridae', 'Parvovirinae', 'Parvovirus'
 Feaures
 type: source
 location: [0:2007]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['taxon:10786']
@@ -3490,7 +3142,6 @@ qualifiers:
 
 type: CDS
 location: [0:2007]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -3544,7 +3195,6 @@ Value: ['Viruses', 'ssDNA viruses', 'Parvoviridae', 'Parvovirinae', 'Parvovirus'
 Feaures
 type: source
 location: [0:2007]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['taxon:10786']
@@ -3555,7 +3205,6 @@ qualifiers:
 
 type: CDS
 location: [0:2007]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -3609,7 +3258,6 @@ Value: ['Viruses', 'ssDNA viruses', 'Parvoviridae', 'Parvovirinae', 'Parvovirus'
 Feaures
 type: source
 location: [0:1755]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['taxon:10786']
@@ -3620,7 +3268,6 @@ qualifiers:
 
 type: CDS
 location: [0:1755]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -3695,7 +3342,6 @@ Value: ['Bacteria', 'Proteobacteria', 'Gammaproteobacteria', 'Enterobacteriales'
 Feaures
 type: source
 location: [0:9609]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: biovar, Value: ['Microtus']
@@ -3707,14 +3353,12 @@ qualifiers:
 
 type: repeat_region
 location: [0:1954]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: mobile_element, Value: ['insertion sequence:IS100']
 
 type: gene
 location: [86:1109]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767718']
@@ -3722,7 +3366,6 @@ qualifiers:
 
 type: CDS
 location: [86:1109]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -3736,7 +3379,6 @@ qualifiers:
 
 type: gene
 location: [1105:1888]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767716']
@@ -3744,7 +3386,6 @@ qualifiers:
 
 type: CDS
 location: [1105:1888]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -3758,7 +3399,6 @@ qualifiers:
 
 type: gene
 location: [2924:3119]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767717']
@@ -3768,7 +3408,6 @@ qualifiers:
 
 type: CDS
 location: [2924:3119]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -3784,7 +3423,6 @@ qualifiers:
 
 type: gene
 location: [3485:3857]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767720']
@@ -3792,7 +3430,6 @@ qualifiers:
 
 type: CDS
 location: [3485:3857]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -3806,7 +3443,6 @@ qualifiers:
 
 type: misc_feature
 location: [3497:3626]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: locus_tag, Value: ['YP_pPCP04']
@@ -3814,7 +3450,6 @@ qualifiers:
 
 type: gene
 location: [4342:4780]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767712']
@@ -3823,7 +3458,6 @@ qualifiers:
 
 type: CDS
 location: [4342:4780]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -3838,7 +3472,6 @@ qualifiers:
 
 type: gene
 location: [4814:5888]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767721']
@@ -3847,7 +3480,6 @@ qualifiers:
 
 type: CDS
 location: [4814:5888]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -3862,7 +3494,6 @@ qualifiers:
 
 type: variation
 location: [5909:5911]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: note, Value: ['compared to AF053945']
@@ -3870,7 +3501,6 @@ qualifiers:
 
 type: variation
 location: [5933:5933]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: note, Value: ['compared to AL109969']
@@ -3878,7 +3508,6 @@ qualifiers:
 
 type: variation
 location: [5933:5933]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: note, Value: ['compared to AF053945']
@@ -3886,7 +3515,6 @@ qualifiers:
 
 type: variation
 location: [5947:5948]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: note, Value: ['compared to AL109969']
@@ -3894,7 +3522,6 @@ qualifiers:
 
 type: gene
 location: [6004:6421]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767719']
@@ -3902,7 +3529,6 @@ qualifiers:
 
 type: CDS
 location: [6004:6421]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -3916,7 +3542,6 @@ qualifiers:
 
 type: variation
 location: [6524:6525]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: note, Value: ['compared to AF053945 and AL109969']
@@ -3924,7 +3549,6 @@ qualifiers:
 
 type: gene
 location: [6663:7602]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767715']
@@ -3933,7 +3557,6 @@ qualifiers:
 
 type: CDS
 location: [6663:7602]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: EC_number, Value: ['3.4.23.48']
@@ -3949,7 +3572,6 @@ qualifiers:
 
 type: gene
 location: [7788:8088]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767713']
@@ -3957,7 +3579,6 @@ qualifiers:
 
 type: CDS
 location: [7788:8088]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -3971,7 +3592,6 @@ qualifiers:
 
 type: gene
 location: [8087:8360]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767714']
@@ -3979,7 +3599,6 @@ qualifiers:
 
 type: CDS
 location: [8087:8360]
-ref: None:None
 strand: -1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -3993,7 +3612,6 @@ qualifiers:
 
 type: variation
 location: [8529:8529]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: note, Value: ['compared to AL109969']

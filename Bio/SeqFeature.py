@@ -156,7 +156,7 @@ class SeqFeature(object):
         """
         out = "type: %s\n" % self.type
         out += "location: %s\n" % self.location
-        if self.id:
+        if self.id and self.id != "<unknown id>":
             out += "id: %s\n" % self.id
         if self.ref or self.ref_db:
             out += "ref: %s:%s\n" % (self.ref, self.ref_db)
