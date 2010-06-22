@@ -1,3 +1,11 @@
+# Copyright 2000-2003 Jeff Chang.
+# Copyright 2001-2008 Brad Chapman.
+# Copyright 2005-2010 by Peter Cock.
+# Copyright 2006-2009 Michiel de Hoon.
+# All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 """Represent a Sequence Feature holding info about a part of a sequence.
 
 This is heavily modeled after the Biocorba SeqFeature objects, and
