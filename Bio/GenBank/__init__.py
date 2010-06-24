@@ -66,20 +66,63 @@ FEATURE_KEY_SPACER = " " * FEATURE_KEY_INDENT
 FEATURE_QUALIFIER_SPACER = " " * FEATURE_QUALIFIER_INDENT
 
 #Regular expresions for location parsing
-_simple_location = r"[<>]?\d+\.\.[<>]?\d+"
-_re_simple_location = re.compile(r"^%s$" % _simple_location)
-_re_simple_compound = re.compile(r"^(join|order|bond)\(%s(,%s){1,}\)$" \
-                                 % (_simple_location, _simple_location))
+_solo_location = r"[<>]?\d+"
+_pair_location = r"[<>]?\d+\.\.[<>]?\d+"
+_between_location = r"\d+\^\d+"
 
+_within_position = r"\(\d+\.\d+\)"
+_re_within_position = re.compile(_within_position)
+_within_location = r"([<>]?\d+|%s)\.\.([<>]?\d+|%s)" \
+                   % (_within_position,_within_position)
+assert _re_within_position.match("(3.9)")
+assert re.compile(_within_location).match("(3.9)..10")
+assert re.compile(_within_location).match("26..(30.33)")
+assert re.compile(_within_location).match("(13.19)..(20.28)")
+
+_oneof_position = r"one\-of\(\d+(,\d+)+\)"
+assert not re.compile(_oneof_position).match("one-of(3)")
+assert re.compile(_oneof_position).match("one-of(3,6)")
+assert re.compile(_oneof_position).match("one-of(3,6,9)")
+
+_simple_location = r"(%s|%s)" % (_pair_location, _solo_location)
+_re_simple_location = re.compile(r"^%s$" % _simple_location)
+_re_simple_compound = re.compile(r"^(join|order|bond)\(%s(,%s)*\)$" \
+                                 % (_simple_location, _simple_location))
+_complex_location = r"([a-zA-z][a-zA-Z0-9]*(\.[a-zA-Z0-9]+)?\:)?(%s|%s|%s|%s)" \
+                    % (_pair_location, _solo_location, _between_location,
+                       _within_location)
+_re_complex_location = re.compile(r"^%s$" % _complex_location)
+_possibly_complemented_complex_location = r"(%s|complement\(%s\))" \
+                                          % (_complex_location, _complex_location)
+_re_complex_compound = re.compile(r"^(join|order|bond)\(%s(,%s)*\)$" \
+                                 % (_possibly_complemented_complex_location,
+                                    _possibly_complemented_complex_location))
+
+assert _re_simple_location.match(">104..<160")
+assert _re_simple_location.match("104")
+assert _re_simple_location.match("<1")
+assert _re_simple_location.match(">99999")
 assert not _re_simple_location.match("join(104..160,320..390,504..579)")
+assert _re_simple_compound.match("bond(12,63)")
 assert _re_simple_compound.match("join(104..160,320..390,504..579)")
 assert _re_simple_compound.match("order(1..69,1308..1465)")
+assert _re_simple_compound.match("order(1..69,1308..1465,1524)")
 assert _re_simple_compound.match("join(<1..442,992..1228,1524..>1983)")
 assert _re_simple_compound.match("join(<1..181,254..336,422..497,574..>590)")
 assert _re_simple_compound.match("join(1475..1577,2841..2986,3074..3193,3314..3481,4126..>4215)")
 assert not _re_simple_compound.match("test(1..69,1308..1465)")
 assert not _re_simple_compound.match("complement(1..69)")
 assert not _re_simple_compound.match("(1..69)")
+assert _re_complex_location.match("(3.9)..10")
+assert _re_complex_location.match("26..(30.33)")
+assert _re_complex_location.match("(13.19)..(20.28)")
+assert _re_complex_location.match("41^42") #between
+assert _re_complex_location.match("AL121804:41^42")
+assert _re_complex_location.match("AL121804:41..610")
+assert _re_complex_location.match("AL121804.2:41..610")
+assert _re_complex_compound.match("join(153490..154269,AL121804.2:41..610,AL121804.2:672..1487)")
+assert not _re_simple_compound.match("join(153490..154269,AL121804.2:41..610,AL121804.2:672..1487)")
+assert _re_complex_compound.match("join(complement(69611..69724),139856..140650)")
 
 def _pos(pos_str, offset=0):
     """Build a Position object (PRIVATE.)."""
@@ -88,8 +131,38 @@ def _pos(pos_str, offset=0):
         return SeqFeature.BeforePosition(int(pos_str[1:])+offset)
     elif pos_str.startswith(">"):
         return SeqFeature.AfterPosition(int(pos_str[1:])+offset)
+    elif _re_within_position.match(pos_str):
+        s,e = pos_str[1:-1].split(".")
+        return SeqFeature.WithinPosition(int(s)+offset, int(e)-int(s))
     else:
         return SeqFeature.ExactPosition(int(pos_str)+offset)
+
+def _loc(loc_str, expected_seq_length):
+    try:
+        s, e = loc_str.split("..")
+    except ValueError:
+        assert ".." not in loc_str
+        if "^" in loc_str:
+            #A between location like "67^68" (one based counting) is a
+            #special case (note it has zero length). In python slice
+            #notation this is 67:67, a zero length slice.  See Bug 2622
+            #Further more, on a circular genome of length N you can have
+            #a location N^1 meaning the junction at the origin. See Bug 3098.
+            #NOTE - We can imagine between locations like "2^4", but this
+            #is just "3".  Similarly, "2^5" is just "3..4"
+            s, e = loc_str.split("^")
+            if int(s)+1==int(e):
+                pos = _pos(s)
+            elif int(s)==expected_seq_length and e=="1":
+                pos = _pos(s)
+            else:
+                raise ValueError("Invalid between location %s" % repr(loc_str))
+            return SeqFeature.FeatureLocation(pos, pos)
+        else:
+            #e.g. "123"
+            s = loc_str
+            e = loc_str
+    return SeqFeature.FeatureLocation(_pos(s,-1), _pos(e))
 
 class Iterator:
     """Iterator interface to move over a file of GenBank entries one at a time.
@@ -705,8 +778,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             
         #Special case handling of the most common cases for speed
         if _re_simple_location.match(location_line):
-            #e.g. <123..>456
-            s, e = location_line.split("..")
+            #e.g. "<123..>456" or just "123"
+            try:
+                s, e = location_line.split("..")
+            except ValueError:
+                assert ".." not in location_line
+                s = location_line
+                e = location_line
             cur_feature.location = SeqFeature.FeatureLocation(_pos(s,-1),
                                                               _pos(e))
             return
@@ -716,7 +794,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             cur_feature.location_operator = location_line[:i]
             #we can split on the comma because these are simple locations
             for part in location_line[i+1:-1].split(","):
-                s, e = part.split("..")
+                try:
+                    s, e = part.split("..")
+                except ValueError:
+                    assert ".." not in part
+                    s = part
+                    e = part
                 f = SeqFeature.SeqFeature(SeqFeature.FeatureLocation(_pos(s,-1),
                                                                      _pos(e)),
                                           strand=cur_feature.strand,
@@ -726,6 +809,48 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             e = cur_feature.sub_features[-1].location.end
             cur_feature.location = SeqFeature.FeatureLocation(s,e)
             return
+        if _re_complex_location.match(location_line):
+            #e.g. "AL121804.2:41..610"
+            if ":" in location_line:
+                cur_feature.ref, location_line = location_line.split(":")
+            cur_feature.location = _loc(location_line, self._expected_size)
+            return
+        if _re_complex_compound.match(location_line):
+            i = location_line.find("(")
+            cur_feature.location_operator = location_line[:i]
+            #We can split on the comma because we don't yet compound locations
+            #which include positions like one-of(1,2,3) with their own commas:
+            for part in location_line[i+1:-1].split(","):
+                if part.startswith("complement("):
+                    assert part[-1]==")"
+                    part = part[11:-1]
+                    assert cur_feature.strand != -1, "Double complement?"
+                    strand = -1
+                else:
+                    strand = cur_feature.strand
+                if ":" in part:
+                    ref, part = part.split(":")
+                else:
+                    ref = None
+                try:
+                    loc = _loc(part, self._expected_size)
+                except ValueError, err:
+                    print location_line
+                    print part
+                    raise err
+                f = SeqFeature.SeqFeature(location=loc,
+                                          ref=ref,
+                                          strand=strand,
+                                          type=cur_feature.type)
+                cur_feature.sub_features.append(f)
+            s = cur_feature.sub_features[0].location.start
+            e = cur_feature.sub_features[-1].location.end
+            #TODO - stand of parent may be mixed
+            cur_feature.location = SeqFeature.FeatureLocation(s,e)
+            return
+    
+        #The only unsupported case I'm only expecting is with one-of(...)
+        assert "one-of(" in location_line, "TODO %s\n" % location_line
         
         # feed everything into the scanner and parser
         try:
