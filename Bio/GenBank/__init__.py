@@ -80,17 +80,26 @@ assert re.compile(_within_location).match("26..(30.33)")
 assert re.compile(_within_location).match("(13.19)..(20.28)")
 
 _oneof_position = r"one\-of\(\d+(,\d+)+\)"
-assert not re.compile(_oneof_position).match("one-of(3)")
-assert re.compile(_oneof_position).match("one-of(3,6)")
-assert re.compile(_oneof_position).match("one-of(3,6,9)")
+_re_oneof_position = re.compile(_oneof_position)
+_oneof_location = r"([<>]?\d+|%s)\.\.([<>]?\d+|%s)" \
+                   % (_oneof_position,_oneof_position)
+assert _re_oneof_position.match("one-of(6,9)")
+assert re.compile(_oneof_location).match("one-of(6,9)..101")
+assert re.compile(_oneof_location).match("one-of(6,9)..one-of(101,104)")
+assert re.compile(_oneof_location).match("6..one-of(101,104)")
+
+assert not _re_oneof_position.match("one-of(3)")
+assert _re_oneof_position.match("one-of(3,6)")
+assert _re_oneof_position.match("one-of(3,6,9)")
+
 
 _simple_location = r"\d+\.\.\d+"
 _re_simple_location = re.compile(_simple_location)
 _re_simple_compound = re.compile(r"^(join|order|bond)\(%s(,%s)*\)$" \
                                  % (_simple_location, _simple_location))
-_complex_location = r"([a-zA-z][a-zA-Z0-9]*(\.[a-zA-Z0-9]+)?\:)?(%s|%s|%s|%s)" \
+_complex_location = r"([a-zA-z][a-zA-Z0-9]*(\.[a-zA-Z0-9]+)?\:)?(%s|%s|%s|%s|%s)" \
                     % (_pair_location, _solo_location, _between_location,
-                       _within_location)
+                       _within_location, _oneof_location)
 _re_complex_location = re.compile(r"^%s$" % _complex_location)
 _possibly_complemented_complex_location = r"(%s|complement\(%s\))" \
                                           % (_complex_location, _complex_location)
@@ -121,6 +130,7 @@ assert _re_complex_location.match("41^42") #between
 assert _re_complex_location.match("AL121804:41^42")
 assert _re_complex_location.match("AL121804:41..610")
 assert _re_complex_location.match("AL121804.2:41..610")
+assert _re_complex_location.match("one-of(3,6)..101")
 assert _re_complex_compound.match("join(153490..154269,AL121804.2:41..610,AL121804.2:672..1487)")
 assert not _re_simple_compound.match("join(153490..154269,AL121804.2:41..610,AL121804.2:672..1487)")
 assert _re_complex_compound.match("join(complement(69611..69724),139856..140650)")
@@ -135,6 +145,12 @@ def _pos(pos_str, offset=0):
     elif _re_within_position.match(pos_str):
         s,e = pos_str[1:-1].split(".")
         return SeqFeature.WithinPosition(int(s)+offset, int(e)-int(s))
+    elif _re_oneof_position.match(pos_str):
+        assert pos_str.startswith("one-of(")
+        assert pos_str[-1]==")"
+        parts = [SeqFeature.ExactPosition(int(pos)+offset) \
+                 for pos in pos_str[7:-1].split(",")]
+        return SeqFeature.OneOfPosition(parts)
     else:
         return SeqFeature.ExactPosition(int(pos_str)+offset)
 
@@ -809,7 +825,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 cur_feature.ref, location_line = location_line.split(":")
             cur_feature.location = _loc(location_line, self._expected_size)
             return
-        if _re_complex_compound.match(location_line):
+        if _re_complex_compound.match(location_line) \
+        and "one-of(" not in location_line:
             i = location_line.find("(")
             cur_feature.location_operator = location_line[:i]
             #We can split on the comma because we don't yet compound locations
