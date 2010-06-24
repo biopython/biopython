@@ -21,12 +21,13 @@ Python strings), which return a new SeqRecord with the sequence in upper or
 lower case and a copy of all the annotation unchanged.
 
 Several small issues with Bio.PDB have been resolved, which includes better
-handling of model numbers.
+handling of model numbers, and files missing the element column.
 
-(At least) 5 people have contributed to this release, including 2 new people:
+(At least) 6 people have contributed to this release, including 3 new people:
 
 Carlos Rios Vera (first contribution)
 Eric Talevich
+Joao Rodrigues (first contribution)
 Konstantin Okonechnikov (first contribution)
 Michiel de Hoon
 Peter Cock
