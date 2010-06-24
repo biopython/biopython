@@ -64,7 +64,7 @@ class Atom:
         self.serial_number=serial_number
         # Dictionary that keeps addictional properties
         self.xtra={}
-        if element is None :
+        if not element:
             import warnings
             from PDBExceptions import PDBConstructionWarning
             warnings.warn("Atom object (name=%s) without element" % name,
