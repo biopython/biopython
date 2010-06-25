@@ -93,7 +93,7 @@ class SeqFeature(object):
         """Initialize a SeqFeature on a Sequence.
 
         location can either be a FeatureLocation (with strand argument also
-        given if required), or a Python slice (with strand given as the step).
+        given if required), or None.
 
         e.g. With no strand, on the forward strand, and on the reverse strand:
 
