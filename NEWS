@@ -23,6 +23,9 @@ lower case and a copy of all the annotation unchanged.
 Several small issues with Bio.PDB have been resolved, which includes better
 handling of model numbers, and files missing the element column.
 
+Feature location parsing for GenBank and EMBL files has been rewritten,
+making the parser much faster.
+
 (At least) 6 people have contributed to this release, including 3 new people:
 
 Carlos Rios Vera (first contribution)
