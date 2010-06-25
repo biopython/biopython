@@ -868,8 +868,8 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 s, e = part.split("..")
                 f = SeqFeature.SeqFeature(SeqFeature.FeatureLocation(int(s)-1,
                                                                      int(e)),
-                                          strand=cur_feature.strand,
-                                          type=cur_feature.type)
+                        location_operator=cur_feature.location_operator,
+                        strand=cur_feature.strand, type=cur_feature.type)
                 cur_feature.sub_features.append(f)
             s = cur_feature.sub_features[0].location.start
             e = cur_feature.sub_features[-1].location.end
