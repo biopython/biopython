@@ -120,7 +120,9 @@ def compare_feature(old, new, ignore_sub_features=False):
     if old.ref != new.ref:
         raise ValueError("Different ref:\n%s\nvs:\n%s" % (repr(old), repr(new)))
     if old.ref_db != new.ref_db:
-        raise ValueError("Different ref:\n%s\nvs:\n%s" % (repr(old), repr(new)))
+        raise ValueError("Different ref_db:\n%s\nvs:\n%s" % (repr(old), repr(new)))
+    if old.location_operator != new.location_operator:
+        raise ValueError("Different location_operator:\n%s\nvs:\n%s" % (repr(old), repr(new)))
     if old.location.start != new.location.start \
     or str(old.location.start) != str(new.location.start):
         raise ValueError("Start %s versus %s:\n%s\nvs:\n%s" \
@@ -166,6 +168,7 @@ def make_join_feature(f_list, ftype="misc_feature"):
         strand = None
     for f in f_list:
         f.type=ftype
+        f.location_operator="join"
     jf = SeqFeature(FeatureLocation(f_list[0].location.start,
                                     f_list[-1].location.end),
                     type=ftype, strand=strand, location_operator="join")
