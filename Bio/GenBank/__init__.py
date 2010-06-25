@@ -136,7 +136,29 @@ assert not _re_simple_compound.match("join(153490..154269,AL121804.2:41..610,AL1
 assert _re_complex_compound.match("join(complement(69611..69724),139856..140650)")
 
 def _pos(pos_str, offset=0):
-    """Build a Position object (PRIVATE.)."""
+    """Build a Position object (PRIVATE).
+    
+    For an end position, leave offset as zero (default):
+
+    >>> _pos("5")
+    ExactPosition(5)
+
+    For a start position, set offset to minus one (for Python counting):
+
+    >>> _pos("5", -1)
+    ExactPosition(4)
+
+    This also covers fuzzy positions:
+
+    >>> _pos("<5")
+    BeforePosition(5)
+    >>> _pos(">5")
+    AfterPosition(5)
+    >>> _pos("one-of(5,8,11)")
+    OneOfPosition([ExactPosition(5), ExactPosition(8), ExactPosition(11)])
+    >>> _pos("(8.10)")
+    WithinPosition(8,2)
+    """
     if pos_str.startswith("<"):
         return SeqFeature.BeforePosition(int(pos_str[1:])+offset)
     elif pos_str.startswith(">"):
@@ -154,6 +176,38 @@ def _pos(pos_str, offset=0):
         return SeqFeature.ExactPosition(int(pos_str)+offset)
 
 def _loc(loc_str, expected_seq_length):
+    """FeatureLocation from non-compound non-complement location (PRIVATE).
+    
+    Simple examples,
+
+    >>> _loc("123..456", 1000)
+    FeatureLocation(ExactPosition(122),ExactPosition(456))
+    >>> _loc("<123..>456", 1000)
+    FeatureLocation(BeforePosition(122),AfterPosition(456))
+
+    A more complex location using within positions,
+
+    >>> _loc("(9.10)..(20.25)", 1000)
+    FeatureLocation(WithinPosition(8,1),WithinPosition(20,5))
+
+    Zero length between feature,
+
+    >>> _loc("123^124", 1000)
+    FeatureLocation(ExactPosition(123),ExactPosition(123))
+    
+    The expected sequence length is needed for a special case, a between
+    position at the start/end of a circular genome:
+
+    >>> _loc("1000^1", 1000)
+    FeatureLocation(ExactPosition(1000),ExactPosition(1000))
+    
+    Apart from this special case, between positions P^Q must have P+1==Q,
+
+    >>> _loc("123^456", 1000)
+    Traceback (most recent call last):
+       ...
+    ValueError: Invalid between location '123^456'
+    """
     try:
         s, e = loc_str.split("..")
     except ValueError:
