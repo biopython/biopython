@@ -979,8 +979,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             cur_feature.location = SeqFeature.FeatureLocation(s,e)
             return
 
+        #TODO - Raise LocationParserError here once the old parser is deprecated
         import warnings
-        warnings.warn("New parser didn't like %s, using old parser" \
+        warnings.warn("New parser didn't like %s, trying old parser instead" \
                       % repr(location_line))
         
         # feed everything into the scanner and parser
