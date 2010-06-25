@@ -110,25 +110,25 @@ def compare_records(old_list, new_list, expect_minor_diffs=False):
 def compare_feature(old, new, ignore_sub_features=False):
     """Check two SeqFeatures agree."""
     if old.type != new.type:
-        raise ValueError("Type %s versus %s" % (old.type, new.type))
+        raise ValueError("Type %s versus %s" % (repr(old.type), repr(new.type)))
     if old.location.nofuzzy_start != new.location.nofuzzy_start \
     or old.location.nofuzzy_end != new.location.nofuzzy_end:
         raise ValueError("%s versus %s:\n%s\nvs:\n%s" \
-                         % (old.location, new.location, str(old), str(new)))
+                         % (old.location, new.location, repr(old), repr(new)))
     if old.strand != new.strand:
-        raise ValueError("Different strand:\n%s\nvs:\n%s" % (str(old), str(new)))
+        raise ValueError("Different strand:\n%s\nvs:\n%s" % (repr(old), repr(new)))
     if old.ref != new.ref:
-        raise ValueError("Different ref:\n%s\nvs:\n%s" % (str(old), str(new)))
+        raise ValueError("Different ref:\n%s\nvs:\n%s" % (repr(old), repr(new)))
     if old.ref_db != new.ref_db:
-        raise ValueError("Different ref:\n%s\nvs:\n%s" % (str(old), str(new)))
+        raise ValueError("Different ref:\n%s\nvs:\n%s" % (repr(old), repr(new)))
     if old.location.start != new.location.start \
     or str(old.location.start) != str(new.location.start):
         raise ValueError("Start %s versus %s:\n%s\nvs:\n%s" \
-                         % (old.location.start, new.location.start, str(old), str(new)))
+                         % (old.location.start, new.location.start, repr(old), repr(new)))
     if old.location.end != new.location.end \
     or str(old.location.end) != str(new.location.end):
         raise ValueError("End %s versus %s:\n%s\nvs:\n%s" \
-                         % (old.location.end, new.location.end, str(old), str(new)))
+                         % (old.location.end, new.location.end, repr(old), repr(new)))
     if not ignore_sub_features:
         if len(old.sub_features) != len(new.sub_features):
             raise ValueError("Different sub features")
@@ -160,8 +160,7 @@ def compare_features(old_list, new_list, ignore_sub_features=False):
 def make_join_feature(f_list, ftype="misc_feature"):
     #NOTE - Does NOT reorder the sub-features (which you may
     #want to do for reverse strand features...)
-    strands = set(f.strand for f in f_list)
-    if len(strands)==1:
+    if len(set(f.strand for f in f_list))==1:
         strand = f_list[0].strand
     else:
         strand = None
@@ -173,8 +172,27 @@ def make_join_feature(f_list, ftype="misc_feature"):
     jf.sub_features = f_list
     return jf
 
-class SeqFeatureExtraction(unittest.TestCase):
-    """Tests for SeqFeature sequence extract method."""
+#Prepare a single GenBank record with one feature with a %s place holder for
+#the feature location
+gbk_template = open("GenBank/iro.gb", "rU").read()
+gbk_template = gbk_template.replace('     gene            341..756\n'
+                                    '                     /gene="FTCD"\n',
+                                    '     misc_feature    %s\n'
+                                    '                     /note="Test case"\n')
+gbk_template = gbk_template.replace('     exon            341..384\n'
+                                    '                     /gene="FTCD"\n'
+                                    '                     /number=1\n', '')
+gbk_template = gbk_template.replace('     intron          385..617\n'
+                                    '                     /gene="FTCD"\n'
+                                    '                     /number=1\n', '')
+gbk_template = gbk_template.replace('     exon            618..756\n'
+                                    '                     /gene="FTCD"\n'
+                                    '                     /number=2\n', '')
+assert len(gbk_template)==4445
+assert gbk_template.count("%") == 1, gbk_template
+
+class SeqFeatureExtractionWritingReading(unittest.TestCase):
+    """Tests for SeqFeature sequence extract method, writing, and reading."""
 
     def check(self, parent_seq, feature, answer_str, location_str):
         self.assertEqual(location_str,
@@ -195,63 +213,95 @@ class SeqFeatureExtraction(unittest.TestCase):
         new = feature.extract(UnknownSeq(len(parent_seq), parent_seq.alphabet))
         self.assert_(isinstance(new, UnknownSeq))
         self.assertEqual(len(new), len(answer_str))
+        
+        if _insdc_feature_location_string(feature, 1326) != location_str:
+            #This is to avoid issues with the N^1 between feature which only
+            #makes sense at the end of the sequence
+            return
+        #This template is DNA, but that will still be OK for protein features
+        #as they have no strand information... but see below for strand fun
+        rec = SeqIO.read(StringIO(gbk_template % location_str), "gb")
+        self.assertEqual(1326, len(rec))
+        self.assertEqual(2, len(rec.features))
+        self.assertEqual(rec.features[0].type, "source")
+        self.assertEqual(rec.features[1].type, "misc_feature")
+        new_f = rec.features[1]
+        self.assertEqual(location_str,
+                         _insdc_feature_location_string(new_f,1326))
+
+        #Checking the strand is tricky - on parsing a GenBank file
+        #strand +1 is assumed, but our constructed features for the
+        #unit test have mostly defaulted to strand None.
+        self.assertEqual(len(feature.sub_features), len(new_f.sub_features))
+        for f1, f2 in zip(feature.sub_features, new_f.sub_features):
+            f1.type = "misc_feature" #hack as may not be misc_feature
+            if f1.strand is None:
+                f1.strand = f2.strand #hack as described above
+            self.assertEqual(f1.strand, f2.strand)
+            self.assert_(compare_feature(f1,f2))
+        feature.type = "misc_feature" #hack as may not be misc_feature
+        if not feature.strand:
+            feature.strand = new_f.strand #hack as above
+        self.assertEqual(feature.strand, new_f.strand)
+        self.assert_(compare_feature(feature, new_f))
+        
 
     def test_simple_rna(self):
-        """Extract feature from RNA (simple, default strand)"""
+        """Feature on RNA (simple, default strand)"""
         s = Seq("GAUCRYWSMKHBVDN", generic_rna)
         f = SeqFeature(FeatureLocation(5,10))
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna(self):
-        """Extract feature from DNA (simple, default strand)"""
+        """Feature on DNA (simple, default strand)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10))
         self.check(s, f, "YWSMK", "6..10")
 
     def test_single_letter_dna(self):
-        """Extract feature from DNA (single letter, default strand)"""
+        """Feature on DNA (single letter, default strand)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,6))
         self.check(s, f, "Y", "6")
 
     def test_zero_len_dna(self):
-        """Extract feature from DNA (between location, zero length, default strand)"""
+        """Feature on DNA (between location, zero length, default strand)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,5))
         self.check(s, f, "", "5^6")
 
     def test_zero_len_dna_end(self):
-        """Extract feature from DNA (between location at end, zero length, default strand)"""
+        """Feature on DNA (between location at end, zero length, default strand)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(15,15))
         self.check(s, f, "", "15^1")
 
     def test_simple_dna_strand0(self):
-        """Extract feature from DNA (simple, strand 0)"""
+        """Feature on DNA (simple, strand 0)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10), strand=0)
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna_strand_none(self):
-        """Extract feature from DNA (simple, strand None)"""
+        """Feature on DNA (simple, strand None)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10), strand=None)
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna_strand1(self):
-        """Extract feature from DNA (simple, strand +1)"""
+        """Feature on DNA (simple, strand +1)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10), strand=1)
         self.check(s, f, "YWSMK", "6..10")
         
     def test_simple_dna_strand_minus(self):
-        """Extract feature from DNA (simple, strand -1)"""
+        """Feature on DNA (simple, strand -1)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10), strand=-1)
         self.check(s, f, "MKSWR", "complement(6..10)")
 
     def test_simple_dna_join(self):
-        """Extract feature from DNA (join, strand +1)"""
+        """Feature on DNA (join, strand +1)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f1 = SeqFeature(FeatureLocation(5,10), strand=1)
         f2 = SeqFeature(FeatureLocation(12,15), strand=1)
@@ -259,7 +309,7 @@ class SeqFeatureExtraction(unittest.TestCase):
         self.check(s, f, "YWSMKVDN", "join(6..10,13..15)")
 
     def test_simple_dna_join(self):
-        """Extract feature from DNA (join, strand -1)"""
+        """Feature on DNA (join, strand -1)"""
         s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
         f1 = SeqFeature(FeatureLocation(5,10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12,15), strand=-1)
@@ -268,7 +318,7 @@ class SeqFeatureExtraction(unittest.TestCase):
                    "complement(join(6..10,13..15))")
 
     def test_simple_dna_join(self):
-        """Extract feature from DNA (join, strand -1, before position)"""
+        """Feature on DNA (join, strand -1, before position)"""
         s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
         f1 = SeqFeature(FeatureLocation(BeforePosition(5),10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12,15), strand=-1)
@@ -277,7 +327,7 @@ class SeqFeatureExtraction(unittest.TestCase):
                    "complement(join(<6..10,13..15))")
 
     def test_simple_dna_join_after(self):
-        """Extract feature from DNA (join, strand -1, after position)"""
+        """Feature on DNA (join, strand -1, after position)"""
         s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
         f1 = SeqFeature(FeatureLocation(5,10), strand=-1)
         f2 = SeqFeature(FeatureLocation(12,AfterPosition(15)), strand=-1)
@@ -286,7 +336,7 @@ class SeqFeatureExtraction(unittest.TestCase):
                    "complement(join(6..10,13..>15))")
 
     def test_mixed_strand_dna_join(self):
-        """Extract feature from DNA (join, mixed strand)"""
+        """Feature on DNA (join, mixed strand)"""
         s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
         f1 = SeqFeature(FeatureLocation(5,10), strand=+1)
         f2 = SeqFeature(FeatureLocation(12,15), strand=-1)
@@ -295,7 +345,7 @@ class SeqFeatureExtraction(unittest.TestCase):
                    "join(6..10,complement(13..15))")
 
     def test_mixed_strand_dna_multi_join(self):
-        """Extract feature from DNA (multi-join, mixed strand)"""
+        """Feature on DNA (multi-join, mixed strand)"""
         s = Seq("AAAAACCCCCTTTTTGGGGG", generic_dna)
         f1 = SeqFeature(FeatureLocation(5,10), strand=+1)
         f2 = SeqFeature(FeatureLocation(12,15), strand=-1)
@@ -305,13 +355,13 @@ class SeqFeatureExtraction(unittest.TestCase):
                    "join(6..10,complement(13..15),<1..5)")
 
     def test_protein_simple(self):
-        """Extract feature from protein (simple)"""
+        """Feature on protein (simple)"""
         s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
         f = SeqFeature(FeatureLocation(5,10))
         self.check(s, f, "FGHIJ", "6..10")
 
     def test_protein_join(self):
-        """Extract feature from protein (join)"""
+        """Feature on protein (join)"""
         s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
         f1 = SeqFeature(FeatureLocation(5,10))
         f2 = SeqFeature(FeatureLocation(15,20))
@@ -319,7 +369,7 @@ class SeqFeatureExtraction(unittest.TestCase):
         self.check(s, f, "FGHIJ"+"PQRST", "join(6..10,16..20)")
 
     def test_protein_join_fuzzy(self):
-        """Extract feature from protein (fuzzy join)"""
+        """Feature on protein (fuzzy join)"""
         s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
         f1 = SeqFeature(FeatureLocation(BeforePosition(5),10))
         f2 = SeqFeature(FeatureLocation(OneOfPosition((ExactPosition(15),
@@ -329,7 +379,7 @@ class SeqFeatureExtraction(unittest.TestCase):
         self.check(s, f, "FGHIJ"+"PQRST", "join(<6..10,one-of(16,17)..>20)")
 
     def test_protein_multi_join(self):
-        """Extract feature from protein (multi-join)"""
+        """Feature on protein (multi-join)"""
         s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
         f1 = SeqFeature(FeatureLocation(1,2))
         f2 = SeqFeature(FeatureLocation(8,9))
@@ -343,13 +393,13 @@ class SeqFeatureExtraction(unittest.TestCase):
         self.check(s, f, "BIOPYTHON", "join(2,9,15..16,25,20,8,15,14)")
 
     def test_protein_between(self):
-        """Extract feature from protein (between location, zero length)"""
+        """Feature on protein (between location, zero length)"""
         s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
         f = SeqFeature(FeatureLocation(5,5))
         self.check(s, f, "", "5^6")
 
     def test_protein_oneof(self):
-        """Extract feature from protein (one-of positions)"""
+        """Feature on protein (one-of positions)"""
         s = Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ", generic_protein)
         start = OneOfPosition((ExactPosition(5),ExactPosition(7)))
         end = OneOfPosition((ExactPosition(10),ExactPosition(11)))
@@ -390,9 +440,9 @@ class FeatureWriting(unittest.TestCase):
             self.write_read_check(f)
 
     def test_exact(self):
-        """Features: write/read simple exact locations."""
+        """GenBank/EMBL write/read simple exact locations."""
         #Note we don't have to explicitly give an ExactPosition object,
-        #and integer will also work:
+        #an integer will also work:
         f = SeqFeature(FeatureLocation(10,20), strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "11..20")
@@ -409,7 +459,7 @@ class FeatureWriting(unittest.TestCase):
         self.write_read_checks()
 
     def test_between(self):
-        """Features: write/read simple between locations."""
+        """GenBank/EMBL write/read simple between locations."""
         #Note we don't use the BetweenPosition any more!
         f = SeqFeature(FeatureLocation(10,10), strand=+1, type="variation")
         self.assertEqual(_insdc_feature_location_string(f,100),
@@ -422,7 +472,7 @@ class FeatureWriting(unittest.TestCase):
         self.write_read_checks()
 
     def test_join(self):
-        """Features: write/read simple join locations."""
+        """GenBank/EMBL write/read simple join locations."""
         f1 = SeqFeature(FeatureLocation(10,20), strand=+1)
         f2 = SeqFeature(FeatureLocation(25,40), strand=+1)
         f = make_join_feature([f1,f2])
@@ -452,7 +502,7 @@ class FeatureWriting(unittest.TestCase):
         self.write_read_checks()
 
     def test_fuzzy_join(self):
-        """Features: write/read fuzzy join locations."""
+        """GenBank/EMBL write/read fuzzy join locations."""
         f1 = SeqFeature(FeatureLocation(BeforePosition(10),20), strand=+1)
         f2 = SeqFeature(FeatureLocation(25,AfterPosition(40)), strand=+1)
         f = make_join_feature([f1,f2])
@@ -486,7 +536,7 @@ class FeatureWriting(unittest.TestCase):
         self.write_read_checks()
 
     def test_before(self):
-        """Features: write/read simple before locations."""
+        """GenBank/EMBL write/read simple before locations."""
         f = SeqFeature(FeatureLocation(BeforePosition(5),10), \
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
@@ -520,7 +570,7 @@ class FeatureWriting(unittest.TestCase):
         self.write_read_checks()
         
     def test_after(self):
-        """Features: write/read simple after locations."""
+        """GenBank/EMBL write/read simple after locations."""
         f = SeqFeature(FeatureLocation(AfterPosition(5),10), \
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
@@ -554,7 +604,7 @@ class FeatureWriting(unittest.TestCase):
         self.write_read_checks()
 
     def test_oneof(self):
-        """Features: write/read simple one-of locations."""
+        """GenBank/EMBL write/read simple one-of locations."""
         start = OneOfPosition([ExactPosition(0),ExactPosition(3),ExactPosition(6)])
         f = SeqFeature(FeatureLocation(start,21), strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
@@ -590,7 +640,7 @@ class FeatureWriting(unittest.TestCase):
         self.write_read_checks()
 
     def test_within(self):
-        """Features: write/read simple within locations."""
+        """GenBank/EMBL write/read simple within locations."""
         f = SeqFeature(FeatureLocation(WithinPosition(2,6),10), \
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
