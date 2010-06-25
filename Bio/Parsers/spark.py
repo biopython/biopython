@@ -19,6 +19,20 @@
 #  TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 #  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+"""Copy of John Aycock's SPARK parser included with Biopython (OBSOLETE).
+
+To clarify, when we say obsolete we just mean to warn you that Biopython will
+in a future release no longer include this module. This does not affect the
+status of John Aycock's SPARK parser which can be installed separately from:
+http://pages.cpsc.ucalgary.ca/~aycock/spark/
+
+Biopython included this copy of SPARK purely for parsing GenBank/EMBL feature
+location strings using Bio.GenBank.LocationParser, and that code has now been
+replaced with something simpler and faster using regular expressions.
+"""
+# Don't issue a deprecation warning here, but via Bio.Parsers instead
+# This avoids the user seeing multiple deprecation warnings.
+
 __version__ = 'SPARK-0.6.1'
 
 import re

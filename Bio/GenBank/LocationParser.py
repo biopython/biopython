@@ -3,7 +3,9 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Code used for parsing GenBank/EMBL feature location strings."""
+"""Code used for parsing GenBank/EMBL feature location strings (OBSOLETE)."""
+# Don't issue a deprecation warning here, but via Bio.Parsers instead
+# This avoids the user seeing multiple deprecation warnings.
 
 # First pass at a parser for the location fields of a feature table.
 # Everything likely to change.

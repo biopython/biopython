@@ -51,7 +51,7 @@ from Bio.ParserSupport import AbstractConsumer
 from Bio import Entrez
 
 # other Bio.GenBank stuff
-import LocationParser
+import LocationParser # Obsolete
 from utils import FeatureValueCleaner
 from Scanner import GenBankScanner
 

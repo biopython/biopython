@@ -16,6 +16,18 @@ support for Python 2.4. This can be delayed given feedback from our users
 (e.g. if this proves to be a problem in combination with other libraries).
 An explicit warning was added to setup.py for Biopython 1.55.
 
+Bio.GenBank.LocationParser
+==========================
+This module used to be used for parsing GenBank and EMBL feature locations.
+It has been replaced with faster code using regular expressions, and is no
+longer needed. Declated obsolete in Release 1.55.
+
+Bio.Parsers and Bio.Parsers.spark
+=================================
+This module was a copy of John Aycock's SPARK parser included with Biopython
+soley for use in Bio.GenBank.LocationParser. Declated obsolete in Release
+1.55.
+
 Bio.Restriction.DNAUtils and check_bases
 ========================================
 This module (originally in C) offered complement and antiparallel functions
