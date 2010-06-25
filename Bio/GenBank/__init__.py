@@ -905,10 +905,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                     print location_line
                     print part
                     raise err
-                f = SeqFeature.SeqFeature(location=loc,
-                                          ref=ref,
-                                          strand=strand,
-                                          type=cur_feature.type)
+                f = SeqFeature.SeqFeature(location=loc, ref=ref,
+                        location_operator=cur_feature.location_operator,
+                        strand=strand, type=cur_feature.type)
                 cur_feature.sub_features.append(f)
             # Historically a join on the reverse strand has been represented
             # in Biopython with both the parent SeqFeature and its children
