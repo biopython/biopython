@@ -7,6 +7,7 @@ include LICENSE
 include NEWS
 include README
 include DEPRECATED
+include MANIFEST.in
 
 recursive-include Scripts *    # Include scripts.
 recursive-include Tests *      # Include regression tests.
