@@ -137,7 +137,6 @@ assert _re_complex_compound.match("join(complement(69611..69724),139856..140650)
 
 def _pos(pos_str, offset=0):
     """Build a Position object (PRIVATE.)."""
-    #TODO - Handle one-of etc
     if pos_str.startswith("<"):
         return SeqFeature.BeforePosition(int(pos_str[1:])+offset)
     elif pos_str.startswith(">"):
@@ -180,6 +179,65 @@ def _loc(loc_str, expected_seq_length):
             s = loc_str
             e = loc_str
     return SeqFeature.FeatureLocation(_pos(s,-1), _pos(e))
+
+def _split_compound_loc(compound_loc):
+    """Split a tricky compound location string (PRIVATE).
+    
+    >>> list(_split_compound_loc("123..145"))
+    ['123..145']
+    >>> list(_split_compound_loc("123..145,200..209"))
+    ['123..145', '200..209']
+    >>> list(_split_compound_loc("one-of(200,203)..300"))
+    ['one-of(200,203)..300']
+    >>> list(_split_compound_loc("complement(123..145),200..209"))
+    ['complement(123..145)', '200..209']
+    >>> list(_split_compound_loc("123..145,one-of(200,203)..209"))
+    ['123..145', 'one-of(200,203)..209']
+    >>> list(_split_compound_loc("123..145,one-of(200,203)..one-of(209,211),300"))
+    ['123..145', 'one-of(200,203)..one-of(209,211)', '300']
+    >>> list(_split_compound_loc("123..145,complement(one-of(200,203)..one-of(209,211)),300"))
+    ['123..145', 'complement(one-of(200,203)..one-of(209,211))', '300']
+    >>> list(_split_compound_loc("123..145,200..one-of(209,211),300"))
+    ['123..145', '200..one-of(209,211)', '300']
+    >>> list(_split_compound_loc("123..145,200..one-of(209,211)"))
+    ['123..145', '200..one-of(209,211)']
+    """
+    if "one-of(" in compound_loc:
+        #Hard case
+        while "," in compound_loc:
+            assert compound_loc[0] != ","
+            assert compound_loc[0:2] != ".."
+            i = compound_loc.find(",")
+            part = compound_loc[:i]
+            compound_loc = compound_loc[i:] #includes the comma
+            while part.count("(") > part.count(")"):
+                assert "one-of(" in part, (part, compound_loc)
+                i = compound_loc.find(")")
+                part += compound_loc[:i+1]
+                compound_loc = compound_loc[i+1:]
+            if compound_loc.startswith(".."):
+                i = compound_loc.find(",")
+                if i==-1:
+                    part += compound_loc
+                    compound_loc = ""
+                else:
+                    part += compound_loc[:i]
+                    compound_loc = compound_loc[i:] #includes the comma
+            while part.count("(") > part.count(")"):
+                assert part.count("one-of(") == 2
+                i = compound_loc.find(")")
+                part += compound_loc[:i+1]
+                compound_loc = compound_loc[i+1:]
+            if compound_loc.startswith(","):
+                compound_loc = compound_loc[1:]
+            assert part
+            yield part
+        if compound_loc:
+            yield compound_loc
+    else:
+        #Easy case
+        for part in compound_loc.split(","):
+            yield part
 
 class Iterator:
     """Iterator interface to move over a file of GenBank entries one at a time.
@@ -825,13 +883,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 cur_feature.ref, location_line = location_line.split(":")
             cur_feature.location = _loc(location_line, self._expected_size)
             return
-        if _re_complex_compound.match(location_line) \
-        and "one-of(" not in location_line:
+        if _re_complex_compound.match(location_line):
             i = location_line.find("(")
             cur_feature.location_operator = location_line[:i]
-            #We can split on the comma because we don't yet compound locations
-            #which include positions like one-of(1,2,3) with their own commas:
-            for part in location_line[i+1:-1].split(","):
+            #Can't split on the comma because of ositions like one-of(1,2,3)
+            for part in _split_compound_loc(location_line[i+1:-1]):
                 if part.startswith("complement("):
                     assert part[-1]==")"
                     part = part[11:-1]
@@ -859,9 +915,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             #TODO - stand of parent may be mixed
             cur_feature.location = SeqFeature.FeatureLocation(s,e)
             return
-    
-        #The only unsupported case I'm only expecting is with one-of(...)
-        assert "one-of(" in location_line, "TODO %s\n" % location_line
+
+        import warnings
+        warnings.warn("New parser didn't like %s, using old parser" \
+                      % repr(location_line))
         
         # feed everything into the scanner and parser
         try:
@@ -1499,3 +1556,12 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._add_feature()
 
 
+def _test():
+    """Run the Bio.GenBank module's doctests."""
+    print "Runing doctests..."
+    import doctest
+    doctest.testmod()
+    print "Done"
+
+if __name__ == "__main__":
+    _test()
