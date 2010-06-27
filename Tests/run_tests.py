@@ -89,6 +89,11 @@ def main(argv):
     if os.access(build_path, os.F_OK):
         sys.path.insert(1, build_path)
 
+    # Use "export LANG=C" (which should work on Linux and similar) to
+    # try to avoid problems detecting optional command line tools on
+    # non-English OS (we may want 'command not found' in English)
+    os.environ['LANG']='C'
+    
     # get the command line options
     try:
         opts, args = getopt.getopt(argv, 'gv', ["generate", "verbose",
