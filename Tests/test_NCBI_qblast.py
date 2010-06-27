@@ -39,7 +39,7 @@ tests = [ \
      "rat [ORGN]", ['9506405','13592137','37589612','149064087','56912225']),
     #This next example finds PCR primer matches in Chimpanzees, e.g. BRCA1:
     ("blastn", "nr", "GTACCTTGATTTCGTATTC"+("N"*30)+"GACTCTACTACCTTTACCC",
-     10, "pan [ORGN]", ["37953274"]),
+     10, "pan [ORGN]", ["37953274","51104367","51104367","51104367"]),
     #Try an orchid EST (nucleotide) sequence against NR using BLASTX
     ("blastx", "nr", """>gi|116660609|gb|EG558220.1|EG558220 CR02019H04 Leaf CR02 cDNA library Catharanthus roseus cDNA clone CR02019H04 5', mRNA sequence
 CTCCATTCCCTCTCTATTTTCAGTCTAATCAAATTAGAGCTTAAAAGAATGAGATTTTTAACAAATAAAA
@@ -51,7 +51,7 @@ CCACTACGTCCTTACTATTTTTGGCCGAGGAAAGATGCTTGGGAAGAACTTAAAACAGTTTTAGAAAGCA
 AGCCATGGATTTCTCAGAAGAAAATGATTATACTTCTTAATCAGGCAACTGATATTATCAATTTATGGCA
 GCAGAGTGGTGGCTCCTTGTCCCAGCAGCAGTAATTACTTTTTTTTCTCTTTTTGTTTCCAAATTAAGAA
 ACATTAGTATCATATGGCTATTTGCTCAATTGCAGATTTCTTTCTTTTGTGAATG""",
-     0.0000001, None, ["21554275","18409071"]),
+     0.0000001, None, ["21554275","18409071","296087288"]),
 ]
 
 print "Checking Bio.Blast.NCBIWWW.qblast() with various queries"
@@ -89,26 +89,31 @@ for program,database,query,e_value,entrez_filter,expected_hits in tests:
         assert len(record.alignments)==0, "Expected no alignments!"
     else:
         assert len(record.alignments) > 0, "Expected some alignments!"
+        found_result = False
         for expected_hit in expected_hits:
-            found_result = False
             for alignment in record.alignments:
                 if expected_hit in alignment.hit_id.split("|"):
                     found_result = True
                     break
-            assert found_result, "Missing %s in alignments" % expected_hit
+        if len(expected_hits)==1:
+            print "Update this test to have some redundancy..."
+            for alignment in record.alignments:
+                print alignment.hit_id
+        assert found_result, "Missing all of %s in alignments" \
+               % ", ".join(expected_hits)
 
     #Check the expected result(s) are found in the descriptions
     if expected_hits is None:
         assert len(record.descriptions)==0, "Expected no descriptions!"
     else:
         assert len(record.descriptions) > 0, "Expected some descriptions!"
+        found_result = False
         for expected_hit in expected_hits:
-            found_result = False
             for descr in record.descriptions:
                 if expected_hit == descr.accession \
                 or expected_hit in descr.title.split(None,1)[0].split("|"):
                     found_result = True
                     break
-            assert found_result, "Missing %s in descriptions" % expected_hit
+        assert found_result, "Missing all of %s in descriptions" % expected_hit
 
 print "Done"
