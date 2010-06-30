@@ -345,7 +345,7 @@ class DataHandler:
         if not self.valid:
             raise NotXMLError
         location, filename = os.path.split(systemId)
-        path = os.path.join(self.dtd_dir, filename)
+        path = os.path.join(str(self.dtd_dir), str(filename))
         try:
             handle = open(path)
         except IOError:

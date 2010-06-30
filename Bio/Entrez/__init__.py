@@ -257,14 +257,14 @@ def read(handle):
     the tag name in my_element.tag.
     """
     from Parser import DataHandler
-    DTDs = os.path.join(__path__[0], "DTDs")
+    DTDs = os.path.join(str(__path__[0]), "DTDs")
     handler = DataHandler(DTDs)
     record = handler.read(handle)
     return record
 
 def parse(handle):
     from Parser import DataHandler
-    DTDs = os.path.join(__path__[0], "DTDs")
+    DTDs = os.path.join(str(__path__[0]), "DTDs")
     handler = DataHandler(DTDs)
     records = handler.parse(handle)
     return records
