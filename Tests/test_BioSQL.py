@@ -135,7 +135,7 @@ class ReadTest(unittest.TestCase):
     def setUp(self):
         """Connect to and load up the database.
         """
-        gb_file = os.path.join(os.getcwd(), "GenBank", "cor6_6.gb")
+        gb_file = "GenBank/cor6_6.gb"
         gb_handle = open(gb_file, "r")
         load_database(gb_handle)
         gb_handle.close()
@@ -416,35 +416,35 @@ class ClosedLoopTest(unittest.TestCase):
     
     def test_NC_005816(self):
         """GenBank file to BioSQL and back to a GenBank file, NC_005816."""
-        self.loop(os.path.join(os.getcwd(), "GenBank", "NC_005816.gb"), "gb")
+        self.loop("GenBank/NC_005816.gb", "gb")
 
     def test_NC_000932(self):
         """GenBank file to BioSQL and back to a GenBank file, NC_000932."""
-        self.loop(os.path.join(os.getcwd(), "GenBank", "NC_000932.gb"), "gb")
+        self.loop("GenBank/NC_000932.gb", "gb")
 
     def test_NT_019265(self):
         """GenBank file to BioSQL and back to a GenBank file, NT_019265."""
-        self.loop(os.path.join(os.getcwd(), "GenBank", "NT_019265.gb"), "gb")
+        self.loop("GenBank/NT_019265.gb", "gb")
 
     def test_protein_refseq2(self):
         """GenBank file to BioSQL and back to a GenBank file, protein_refseq2."""
-        self.loop(os.path.join(os.getcwd(), "GenBank", "protein_refseq2.gb"), "gb")
+        self.loop("GenBank/protein_refseq2.gb", "gb")
 
     def test_no_ref(self):
         """GenBank file to BioSQL and back to a GenBank file, noref."""
-        self.loop(os.path.join(os.getcwd(), "GenBank", "noref.gb"), "gb")
+        self.loop("GenBank/noref.gb", "gb")
 
     def test_one_of(self):
         """GenBank file to BioSQL and back to a GenBank file, one_of."""
-        self.loop(os.path.join(os.getcwd(), "GenBank", "one_of.gb"), "gb")
+        self.loop("GenBank/one_of.gb", "gb")
 
     def test_cor6_6(self):
         """GenBank file to BioSQL and back to a GenBank file, cor6_6."""
-        self.loop(os.path.join(os.getcwd(), "GenBank", "cor6_6.gb"), "gb")
+        self.loop("GenBank/cor6_6.gb", "gb")
 
     def test_arab1(self):
         """GenBank file to BioSQL and back to a GenBank file, arab1."""
-        self.loop(os.path.join(os.getcwd(), "GenBank", "arab1.gb"), "gb")
+        self.loop("GenBank/arab1.gb", "gb")
 
     def loop(self, filename, format):
         original_records = list(SeqIO.parse(open(filename, "rU"), format))
@@ -489,35 +489,35 @@ class TransferTest(unittest.TestCase):
     
     def test_NC_005816(self):
         """GenBank file to BioSQL, then again to a new namespace, NC_005816."""
-        self.trans(os.path.join(os.getcwd(), "GenBank", "NC_005816.gb"), "gb")
+        self.trans("GenBank/NC_005816.gb", "gb")
 
     def test_NC_000932(self):
         """GenBank file to BioSQL, then again to a new namespace, NC_000932."""
-        self.trans(os.path.join(os.getcwd(), "GenBank", "NC_000932.gb"), "gb")
+        self.trans("GenBank/NC_000932.gb", "gb")
 
     def test_NT_019265(self):
         """GenBank file to BioSQL, then again to a new namespace, NT_019265."""
-        self.trans(os.path.join(os.getcwd(), "GenBank", "NT_019265.gb"), "gb")
+        self.trans("GenBank/NT_019265.gb", "gb")
 
     def test_protein_refseq2(self):
         """GenBank file to BioSQL, then again to a new namespace, protein_refseq2."""
-        self.trans(os.path.join(os.getcwd(), "GenBank", "protein_refseq2.gb"), "gb")
+        self.trans("GenBank/protein_refseq2.gb", "gb")
 
     def test_no_ref(self):
         """GenBank file to BioSQL, then again to a new namespace, noref."""
-        self.trans(os.path.join(os.getcwd(), "GenBank", "noref.gb"), "gb")
+        self.trans("GenBank/noref.gb", "gb")
 
     def test_one_of(self):
         """GenBank file to BioSQL, then again to a new namespace, one_of."""
-        self.trans(os.path.join(os.getcwd(), "GenBank", "one_of.gb"), "gb")
+        self.trans("GenBank/one_of.gb", "gb")
 
     def test_cor6_6(self):
         """GenBank file to BioSQL, then again to a new namespace, cor6_6."""
-        self.trans(os.path.join(os.getcwd(), "GenBank", "cor6_6.gb"), "gb")
+        self.trans("GenBank/cor6_6.gb", "gb")
 
     def test_arab1(self):
         """GenBank file to BioSQL, then again to a new namespace, arab1."""
-        self.trans(os.path.join(os.getcwd(), "GenBank", "arab1.gb"), "gb")
+        self.trans("GenBank/arab1.gb", "gb")
 
     def trans(self, filename, format):
         original_records = list(SeqIO.parse(open(filename, "rU"), format))
