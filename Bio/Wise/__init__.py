@@ -21,12 +21,23 @@ from Bio import SeqIO
 
 
 def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=None, quiet=False):
-    """
+    """Helper function to build a command line string (PRIVATE).
+
     >>> os.environ["WISE_KBYTE"]="300000"
-    >>> _build_align_cmdline(["dnal"], ("seq1.fna", "seq2.fna"), "/tmp/output", kbyte=100000)
-    'dnal -kbyte 100000 seq1.fna seq2.fna > /tmp/output'
-    >>> _build_align_cmdline(["psw"], ("seq1.faa", "seq2.faa"), "/tmp/output_aa")
-    'psw -kbyte 300000 seq1.faa seq2.faa > /tmp/output_aa'
+    >>> if os.isatty(sys.stderr.fileno()):
+    ...    c = _build_align_cmdline(["dnal"], ("seq1.fna", "seq2.fna"),
+    ...                             "/tmp/output", kbyte=100000)
+    ...    assert c == 'dnal -kbyte 100000 seq1.fna seq2.fna > /tmp/output', c
+    ...    c = _build_align_cmdline(["psw"], ("seq1.faa", "seq2.faa"),
+    ...                             "/tmp/output_aa")
+    ...    assert c == 'psw -kbyte 300000 seq1.faa seq2.faa > /tmp/output_aa', c
+    ... else:
+    ...    c = _build_align_cmdline(["dnal"], ("seq1.fna", "seq2.fna"),
+    ...                             "/tmp/output", kbyte=100000)
+    ...    assert c == 'dnal -kbyte 100000 -quiet seq1.fna seq2.fna > /tmp/output', c
+    ...    c = _build_align_cmdline(["psw"], ("seq1.faa", "seq2.faa"),
+    ...                             "/tmp/output_aa")
+    ...    assert c == 'psw -kbyte 300000 -quiet seq1.faa seq2.faa > /tmp/output_aa', c
 
     """
     cmdline = cmdline[:]
