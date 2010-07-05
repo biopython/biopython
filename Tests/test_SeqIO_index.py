@@ -85,8 +85,7 @@ class IndexDictTests(unittest.TestCase):
                continue
             rec1 = rec_dict[key]
             rec2 = SeqIO.read(StringIO(raw), format, alphabet)
-	    self.assertEqual(True, compare_record(rec1, rec2))
-        #Done
+            self.assertEqual(True, compare_record(rec1, rec2))
 
     def test_duplicates_index(self):
 	"""Index file with duplicate identifers with Bio.SeqIO.index()"""
