@@ -15,11 +15,16 @@ http://www.rubic.rdg.ac.uk/~mab/software.html
 
 import os
 import tempfile
-from sys import platform, maxint
+import sys
 from shutil import copyfile
 from random import randint, random
 from time import strftime, clock
 #from logging import debug
+
+if sys.version_info[0] == 3:
+    maxint = sys.maxsize
+else:
+    maxint = sys.maxint
 
 class FDistController:
     def __init__(self, fdist_dir = '', ext = None):
@@ -33,7 +38,7 @@ class FDistController:
         self.tmp_idx = 0
         self.fdist_dir = fdist_dir
         self.os_name = os.name
-        if self.os_name=='nt' or platform=='cygwin':
+        if self.os_name=='nt' or sys.platform=='cygwin':
             py_ext = '.exe'
         else:
             py_ext = ''
