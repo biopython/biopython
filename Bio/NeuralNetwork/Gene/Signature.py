@@ -102,7 +102,7 @@ class SignatureFinder:
         """Add a signature to the given dictionary.
         """
         # incrememt the count of the signature if it is already present
-        if sig_dict.has_key(sig_to_add):
+        if sig_to_add in sig_dict:
             sig_dict[sig_to_add] += 1
         # otherwise add it to the dictionary
         else:
@@ -195,7 +195,7 @@ class SignatureCoder:
                     second_sig = sequence[second:second + sig_size].data
 
                     # if we find the motif, increase the counts for it
-                    if sequence_sigs.has_key((first_sig, second_sig)):
+                    if (first_sig, second_sig) in sequence_sigs:
                         sequence_sigs[(first_sig, second_sig)] += 1
 
         # -- normalize the signature info to go between zero and one
