@@ -454,9 +454,9 @@ class CrystalTestCase(unittest.TestCase):
     def testDelItem(self):
         target = copy.deepcopy(self.crystal)
         del target[ 'b' ]
-        self.assertFalse(target.data.has_key('b'))
-        self.assertTrue(target.data.has_key('a'))
-        self.assertTrue(target.data.has_key('c'))
+        self.assertFalse('b' in target.data)
+        self.assertTrue('a' in target.data)
+        self.assertTrue('c' in target.data)
 
     def testClear(self):
         target = copy.deepcopy(self.crystal)
