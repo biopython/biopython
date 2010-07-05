@@ -54,7 +54,7 @@ class RouletteWheelSelection(AbstractSelection):
         # now create the new population with the same size as the original
         new_population = []
 
-        for pair_spin in range(len(population) / 2):
+        for pair_spin in range(len(population) // 2):
             # select two individuals using roulette wheel selection
             choice_num_1 = random.random()
             choice_num_2 = random.random()
