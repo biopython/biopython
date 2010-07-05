@@ -444,17 +444,19 @@ def _sff_read_roche_index(handle):
     xml_size, read_index_offset, read_index_size = _sff_find_roche_index(handle)
     #Now parse the read index...    
     handle.seek(read_index_offset)
-    start = chr(0)
-    end = chr(255)
+    start = "\0"
+    end = "\xff" #Char 255
     fmt = ">5B"
     for read in range(number_of_reads):
         #TODO - Be more aware of when the index should end?
         data = handle.read(6)
-        while data[-1] != end:
+        while True:
             more = handle.read(1)
             if not more:
                 raise ValueError("Premature end of file!")
             data += more
+            if more == end: break
+        assert data[-1] == end
         name = data[:-6]
         off4, off3, off2, off1, off0 = struct.unpack(fmt, data[-6:-1])
         offset = off0 + 255*off1 + 65025*off2 + 16581375*off3
