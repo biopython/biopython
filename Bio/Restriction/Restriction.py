@@ -1859,7 +1859,7 @@ class RestrictionBatch(set):
         func return True."""
         d = [x for x in itertools.ifilter(func, self)]
         new = RestrictionBatch()
-        new._data = dict(map(None, d, [True]*len(d)))
+        new._data = dict(zip(d, [True]*len(d)))
         return new
 
     def add_supplier(self, letter):
@@ -1964,7 +1964,7 @@ class RestrictionBatch(set):
             return True
         d = [k for k in itertools.ifilter(splittest, self)]
         new = RestrictionBatch()
-        new._data = dict(map(None, d, [True]*len(d)))
+        new._data = dict(zip(d, [True]*len(d)))
         return new
       
     def elements(self):
@@ -2411,6 +2411,6 @@ AllEnzymes = CommOnly | NonComm
 #   Now, place the enzymes in locals so they can be imported.
 #
 names = [str(x) for x in AllEnzymes]
-locals().update(dict(map(None, names, AllEnzymes)))
+locals().update(dict(zip(names, AllEnzymes)))
 __all__=['FormattedSeq', 'Analysis', 'RestrictionBatch','AllEnzymes','CommOnly','NonComm']+names
 del k, x, enzymes, TYPE, bases, names
