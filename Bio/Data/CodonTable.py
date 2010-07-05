@@ -9,7 +9,6 @@ ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
 Last updated for Version 3.9
 """
 
-import sys
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
