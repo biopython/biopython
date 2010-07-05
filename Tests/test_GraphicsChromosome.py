@@ -239,18 +239,17 @@ class OrganismGraphicTest(unittest.TestCase):
         properties = new_stdout.getvalue()
         sys.stdout = save_stdout
 
-        assert properties.find(expected_string) >= 0, \
-               "Unexpected results from dumpProperties: \n %s" % properties
+        self.assertTrue(properties.find(expected_string) >= 0,
+               "Unexpected results from dumpProperties: \n %s" % properties)
 
         properties = test_widget.getProperties()
-        assert properties.has_key("label_size") \
-               and properties["label_size"] == 6, \
-               "Unexpected results from getProperties: %s" % properties
+        self.assertEqual(properties["label_size"], 6, 
+               "Unexpected results from getProperties: %s" % properties)
 
         test_widget.setProperties({"start_x_position" : 12})
-        assert test_widget.start_x_position == 12, \
+        self.assertEqual(test_widget.start_x_position, 12,
                "setProperties doesn't seem to work right: %s" \
-               % test_widget.start_x_position
+               % test_widget.start_x_position)
         
 class ChromosomeCountTest(unittest.TestCase):
     """Test the display representation for simple counts on a chromosome.

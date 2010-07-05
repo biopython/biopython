@@ -476,9 +476,9 @@ class CrystalTestCase(unittest.TestCase):
         self.assertEqual(self.crystal.keys(), self.crystal.data.keys())
 
     def testHasKey(self):
-        self.assertTrue(self.crystal.has_key('b'))
-        self.assertTrue(self.crystal.has_key('c'))
-        self.assertFalse(self.crystal.has_key('z'))
+        self.assertTrue('b' in self.crystal)
+        self.assertTrue('c' in self.crystal)
+        self.assertFalse('z' in self.crystal)
 
 
 class HeteroTestCase(unittest.TestCase):

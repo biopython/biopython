@@ -9,7 +9,7 @@ import cStringIO
 import doctest, unittest
 import sys
 
-if sys.modules.has_key('requires_wise'):
+if 'requires_wise' in sys.modules:
     del sys.modules['requires_wise']
 import requires_wise
 

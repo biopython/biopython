@@ -9,7 +9,7 @@ import doctest, unittest
 import random
 import sys
 
-if sys.modules.has_key('requires_wise'):
+if 'requires_wise' in sys.modules:
     del sys.modules['requires_wise']
 import requires_wise
 
