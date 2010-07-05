@@ -1276,12 +1276,12 @@ class Nexus(object):
         nchar_adjusted=len(cropped_matrix[undelete[0]])
         if not undelete or (undelete and undelete[0]==''):
             return
-        if isinstance(filename,str):
+        if isinstance(filename,basestring):
             try:
                 fh=open(filename,'w')
             except IOError:
                 raise NexusError('Could not open %s for writing.' % filename)
-        elif hasattr(file, "write"):
+        elif isinstance(filename, file):
             fh=filename
         else:
             raise ValueError("Neither a filename nor a handle was supplied")
