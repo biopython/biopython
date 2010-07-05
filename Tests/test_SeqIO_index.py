@@ -85,20 +85,19 @@ class IndexDictTests(unittest.TestCase):
                continue
             rec1 = rec_dict[key]
             rec2 = SeqIO.read(StringIO(raw), format, alphabet)
-	    self.assertEqual(True, compare_record(rec1, rec2))
-        #Done
+            self.assertEqual(True, compare_record(rec1, rec2))
 
     def test_duplicates_index(self):
-	"""Index file with duplicate identifers with Bio.SeqIO.index()"""
-	self.assertRaises(ValueError, SeqIO.index, "Fasta/dups.fasta", "fasta")
+        """Index file with duplicate identifers with Bio.SeqIO.index()"""
+        self.assertRaises(ValueError, SeqIO.index, "Fasta/dups.fasta", "fasta")
 
     def test_duplicates_to_dict(self):
-	"""Index file with duplicate identifers with Bio.SeqIO.to_dict()"""
-	handle = open("Fasta/dups.fasta", "rU")
-	iterator = SeqIO.parse(handle, "fasta")
-	self.assertRaises(ValueError, SeqIO.to_dict, iterator)
-	handle.close()
-            
+        """Index file with duplicate identifers with Bio.SeqIO.to_dict()"""
+        handle = open("Fasta/dups.fasta", "rU")
+        iterator = SeqIO.parse(handle, "fasta")
+        self.assertRaises(ValueError, SeqIO.to_dict, iterator)
+        handle.close()
+
 tests = [
     ("Ace/contig1.ace", "ace", generic_dna),
     ("Ace/consed_sample.ace", "ace", None),

@@ -14,7 +14,7 @@ You are expected to use this module via the Bio.SeqIO functions."""
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Interfaces import SequentialSequenceWriter
+from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 
 #This is a generator function!
 def FastaIterator(handle, alphabet = single_letter_alphabet, title2ids = None):

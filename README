@@ -41,7 +41,7 @@ sudo python setup.py install
 
 **System Requirements**
 
-o "Python 2.4, 2.5 or 2.6":http://www.python.org/
+o "Python 2.4, 2.5, 2.6 or 2.7":http://www.python.org/
   
 o "NumPy":http://numpy.scipy.org/ (optional, but strongly recommended)
   This package is only used in the computationally-oriented modules.

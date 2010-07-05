@@ -5,7 +5,11 @@
 
 """Unittests for the Seq objects."""
 import unittest
-from string import maketrans
+import sys
+if sys.version_info[0] == 3:
+   maketrans = str.maketrans
+else:
+   from string import maketrans
 
 from Bio.Alphabet import generic_protein, generic_nucleotide, \
                          generic_dna, generic_rna

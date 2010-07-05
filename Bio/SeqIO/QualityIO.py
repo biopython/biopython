@@ -358,7 +358,7 @@ __docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqRecord import SeqRecord
-from Interfaces import SequentialSequenceWriter
+from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 from math import log
 import warnings
 # define score offsets. See discussion for differences between Sanger and

@@ -2,12 +2,19 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+import sys
 from Bio import Seq
 from Bio.Alphabet import IUPAC
 from Bio import Alphabet
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
 from Bio.Data.CodonTable import TranslationError
+
+
+if sys.version_info[0] == 3:
+   array_indicator = "u"
+else:
+   array_indicator = "c"
 
 print
 print "Testing Seq"
@@ -57,7 +64,7 @@ print "=================="
 
 print "Testing creating MutableSeqs in multiple ways"
 string_seq = MutableSeq("TCAAAAGGATGCATCATG", IUPAC.ambiguous_dna)
-array_seq = MutableSeq(array.array("c", "TCAAAAGGATGCATCATG"),
+array_seq = MutableSeq(array.array(array_indicator, "TCAAAAGGATGCATCATG"),
                        IUPAC.ambiguous_dna)
 converted_seq = s.tomutable()
 
@@ -74,7 +81,7 @@ for test_seq in [string_seq]:
     print "Set slice with string:", repr(test_seq)
     test_seq[1:3] = test_seq[5:7]
     print "Set slice with MutableSeq:", repr(test_seq)
-    test_seq[1:3] = array.array("c", "GAT")
+    test_seq[1:3] = array.array(array_indicator, "GAT")
     print "Set slice with array:", repr(test_seq)
 
     test_seq[3] = "G"
