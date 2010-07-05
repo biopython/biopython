@@ -159,7 +159,7 @@ def _parse_pdb_header_list(header):
         # From here, all the keys from the header are being parsed
         if key=="TITLE":
             name=_chop_end_codes(tail).lower()
-            if dict.has_key('name'):
+            if 'name' in dict:
                 dict['name'] += " "+name
             else:
                 dict['name']=name
@@ -207,7 +207,7 @@ def _parse_pdb_header_list(header):
                 dict['source'][comp_molid][last_src_key]+=tok[0]+" "
         elif key=="KEYWDS":
             kwd=_chop_end_codes(tail).lower()
-            if dict.has_key('keywords'):
+            if 'keywords' in dict:
                 dict['keywords']+=" "+kwd
             else:
                 dict['keywords']=kwd
@@ -227,13 +227,13 @@ def _parse_pdb_header_list(header):
                 dict['release_date']=_format_date(_nice_case(rr.group()))
         elif key=="JRNL":
             # print key,tail
-            if dict.has_key('journal'):
+            if 'journal' in dict:
                 dict['journal']+=tail
             else:
                 dict['journal']=tail
         elif key=="AUTHOR":
             auth = _nice_case(_chop_end_codes(tail))
-            if dict.has_key('author'):
+            if 'author' in dict:
                 dict['author']+=auth
             else:
                 dict['author']=auth
