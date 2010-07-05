@@ -400,7 +400,7 @@ class CircularDrawer(AbstractDrawer):
         btm, ctr, top = self.track_radii[self.current_track_level]
         startangle, startcos, startsin = self.canvas_angle(locstart)
         endangle, endcos, endsin = self.canvas_angle(locend)
-        midangle, midcos, midsin = self.canvas_angle(locend+locstart/2)
+        midangle, midcos, midsin = self.canvas_angle(float(locend+locstart)/2)
 
         # Distribution dictionary for various ways of drawing the feature
         # Each method takes the inner and outer radii, the start and end angle
@@ -703,7 +703,7 @@ class CircularDrawer(AbstractDrawer):
             #ones before self.start - but this seems wasteful.
             #Using tickiterval * (self.start/tickiterval) is a shortcut.
             largeticks = [pos for pos \
-                          in range(tickiterval * (self.start/tickiterval),
+                          in range(tickiterval * (self.start//tickiterval),
                                    int(self.end),
                                    tickiterval) \
                           if pos >= self.start]
@@ -718,7 +718,7 @@ class CircularDrawer(AbstractDrawer):
             ticklen = track.scale_smallticks * trackheight
             tickiterval = int(track.scale_smalltick_interval)
             smallticks = [pos for pos \
-                          in range(tickiterval * (self.start/tickiterval),
+                          in range(tickiterval * (self.start//tickiterval),
                                    int(self.end),
                                    tickiterval) \
                           if pos >= self.start]

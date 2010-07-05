@@ -50,7 +50,7 @@ def apply_to_window(sequence, window_size, function, step=None):
         o window_size   Int describing the length of sequence to consider
 
         o step          Int describing the step to take between windows
-                        (default = window_size/2)
+                        (default = window_size//2)
 
         o function      Method or function that accepts a Bio.Seq.Seq object
                         as its sole argument and returns a single value
@@ -61,7 +61,7 @@ def apply_to_window(sequence, window_size, function, step=None):
     """
     seqlen = len(sequence)      # Total length of sequence to be used
     if step is None:    # No step specified, so use half window-width or 1 if larger
-        step = max(window_size/2, 1)
+        step = max(window_size//2, 1)
     else:               # Use specified step, or 1 if greater
         step = max(step, 1)
 
