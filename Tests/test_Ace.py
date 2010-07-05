@@ -29,11 +29,11 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[0].nreads, 2)
         self.assertEqual(record.contigs[0].nsegments, 31)
         self.assertEqual(record.contigs[0].uorc, 'U')
-        center = len(record.contigs[0].sequence)/2
+        center = len(record.contigs[0].sequence)//2
         self.assertEqual(record.contigs[0].sequence[:10], "aatacgGGAT")
         self.assertEqual(record.contigs[0].sequence[center-5:center+5], "ACATCATCTG")
         self.assertEqual(record.contigs[0].sequence[-10:], "cATCTAGtac")
-        center = len(record.contigs[0].quality)/2
+        center = len(record.contigs[0].quality)//2
         self.assertEqual(record.contigs[0].quality[:10], [0, 0, 0, 0, 0, 0, 22, 23, 25, 28])
         self.assertEqual(record.contigs[0].quality[center-5:center+5], [90, 90, 90, 90, 90, 90, 90, 90, 90, 90])
         self.assertEqual(record.contigs[0].quality[-10:], [15, 22, 30, 24, 28, 22, 21, 15, 19, 0])
@@ -62,7 +62,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[0].rd.padded_bases, 868)
         self.assertEqual(record.contigs[0].reads[0].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[0].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[0].rd.sequence)/2
+        center = len(record.contigs[0].reads[0].rd.sequence)//2
         self.assertEqual(record.contigs[0].reads[0].rd.sequence[:10], "tagcgaggaa")
         self.assertEqual(record.contigs[0].reads[0].rd.sequence[center-5:center+5], "CCGAGGCCAA")
         self.assertEqual(record.contigs[0].reads[0].rd.sequence[-10:], "gaaccatcag")
@@ -106,7 +106,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[1].rd.padded_bases, 856)
         self.assertEqual(record.contigs[0].reads[1].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[1].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[1].rd.sequence)/2
+        center = len(record.contigs[0].reads[1].rd.sequence)//2
         self.assertEqual(record.contigs[0].reads[1].rd.sequence[:10], "aatacgGGAT")
         self.assertEqual(record.contigs[0].reads[1].rd.sequence[center-5:center+5], "ACATCATCTG")
         self.assertEqual(record.contigs[0].reads[1].rd.sequence[-10:], "cATCTAGtac")
@@ -124,11 +124,11 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].nreads, 14)
         self.assertEqual(record.contigs[1].nsegments, 214)
         self.assertEqual(record.contigs[1].uorc, 'U')
-        center = len(record.contigs[1].sequence) / 2
+        center = len(record.contigs[1].sequence) // 2
         self.assertEqual(record.contigs[1].sequence[:10], "cacggatgat")
         self.assertEqual(record.contigs[1].sequence[center-5:center+5], "TTTGAATATT")
         self.assertEqual(record.contigs[1].sequence[-10:], "Atccttgtag")
-        center = len(record.contigs[1].quality) / 2
+        center = len(record.contigs[1].quality) // 2
         self.assertEqual(record.contigs[1].quality[:10], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         self.assertEqual(record.contigs[1].quality[center-5:center+5], [90, 90, 90, 90, 90, 90, 90, 90, 90, 90])
         self.assertEqual(record.contigs[1].quality[-10:], [24, 0, 0, 0, 0, 0, 0, 0, 0, 0])
@@ -167,7 +167,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[0].rd.padded_bases, 862)
         self.assertEqual(record.contigs[1].reads[0].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[0].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[0].rd.sequence)/2
+        center = len(record.contigs[1].reads[0].rd.sequence)//2
         self.assertEqual(record.contigs[1].reads[0].rd.sequence[:10], "cacggatgat")
         self.assertEqual(record.contigs[1].reads[0].rd.sequence[center-5:center+5], "GTTCTCGTTG")
         self.assertEqual(record.contigs[1].reads[0].rd.sequence[-10:], "CGTTTACCcg")
@@ -190,7 +190,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[1].rd.padded_bases, 880)
         self.assertEqual(record.contigs[1].reads[1].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[1].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[1].rd.sequence)/2
+        center = len(record.contigs[1].reads[1].rd.sequence)//2
         self.assertEqual(record.contigs[1].reads[1].rd.sequence[:10], "ctttctgacC")
         self.assertEqual(record.contigs[1].reads[1].rd.sequence[center-5:center+5], "CTGTGGTTTC")
         self.assertEqual(record.contigs[1].reads[1].rd.sequence[-10:], "cggagttacg")
@@ -213,7 +213,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[2].rd.padded_bases, 864)
         self.assertEqual(record.contigs[1].reads[2].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[2].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[2].rd.sequence)/2
+        center = len(record.contigs[1].reads[2].rd.sequence)//2
         self.assertEqual(record.contigs[1].reads[2].rd.sequence[:10], "cacccaCTTT")
         self.assertEqual(record.contigs[1].reads[2].rd.sequence[center-5:center+5], "ACCAAACATT")
         self.assertEqual(record.contigs[1].reads[2].rd.sequence[-10:], "GGTAGCACgc")
@@ -236,7 +236,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[3].rd.padded_bases, 863)
         self.assertEqual(record.contigs[1].reads[3].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[3].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[3].rd.sequence)/2
+        center = len(record.contigs[1].reads[3].rd.sequence)//2
         self.assertEqual(record.contigs[1].reads[3].rd.sequence[:10], "ctaattggcc")
         self.assertEqual(record.contigs[1].reads[3].rd.sequence[center-5:center+5], "GGAACCTTTC")
         self.assertEqual(record.contigs[1].reads[3].rd.sequence[-10:], "CAACCTgact")
@@ -259,7 +259,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[4].rd.padded_bases, 877)
         self.assertEqual(record.contigs[1].reads[4].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[4].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[4].rd.sequence)/2
+        center = len(record.contigs[1].reads[4].rd.sequence)//2
         self.assertEqual(record.contigs[1].reads[4].rd.sequence[:10], "tgCTGCGGTT")
         self.assertEqual(record.contigs[1].reads[4].rd.sequence[center-5:center+5], "GGCAGTTTCA")
         self.assertEqual(record.contigs[1].reads[4].rd.sequence[-10:], "tactcataaa")
@@ -282,7 +282,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[5].rd.padded_bases, 874)
         self.assertEqual(record.contigs[1].reads[5].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[5].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[5].rd.sequence)/2
+        center = len(record.contigs[1].reads[5].rd.sequence)//2
         self.assertEqual(record.contigs[1].reads[5].rd.sequence[:10], "ctCTTAGGAT")
         self.assertEqual(record.contigs[1].reads[5].rd.sequence[center-5:center+5], "AACTCACATT")
         self.assertEqual(record.contigs[1].reads[5].rd.sequence[-10:], "*CACCCAAac")
@@ -305,7 +305,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[6].rd.padded_bases, 864)
         self.assertEqual(record.contigs[1].reads[6].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[6].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[6].rd.sequence)/2
+        center = len(record.contigs[1].reads[6].rd.sequence)//2
         self.assertEqual(record.contigs[1].reads[6].rd.sequence[:10], "CCaTGTCCAA")
         self.assertEqual(record.contigs[1].reads[6].rd.sequence[center-5:center+5], "AAGGGTT*CA")
         self.assertEqual(record.contigs[1].reads[6].rd.sequence[-10:], "ACACTCGCga")
@@ -328,7 +328,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[7].rd.padded_bases, 857)
         self.assertEqual(record.contigs[1].reads[7].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[7].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[7].rd.sequence)/2
+        center = len(record.contigs[1].reads[7].rd.sequence)//2
         self.assertEqual(record.contigs[1].reads[7].rd.sequence[:10], "agaaagagga")
         self.assertEqual(record.contigs[1].reads[7].rd.sequence[center-5:center+5], "nnnannnnnn")
         self.assertEqual(record.contigs[1].reads[7].rd.sequence[-10:], "gtctttgctc")
@@ -351,7 +351,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[8].rd.padded_bases, 878)
         self.assertEqual(record.contigs[1].reads[8].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[8].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[8].rd.sequence)/2
+        center = len(record.contigs[1].reads[8].rd.sequence)//2
         self.assertEqual(record.contigs[1].reads[8].rd.sequence[:10], "agTttc*ctc")
         self.assertEqual(record.contigs[1].reads[8].rd.sequence[center-5:center+5], "TCATAAAACT")
         self.assertEqual(record.contigs[1].reads[8].rd.sequence[-10:], "xxxxxxxxxx")
@@ -374,7 +374,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[9].rd.padded_bases, 880)
         self.assertEqual(record.contigs[1].reads[9].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[9].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[9].rd.sequence)/2
+        center = len(record.contigs[1].reads[9].rd.sequence)//2
         self.assertEqual(record.contigs[1].reads[9].rd.sequence[:10], "ggctaCGCCc")
         self.assertEqual(record.contigs[1].reads[9].rd.sequence[center-5:center+5], "ATTGAGTTTC")
         self.assertEqual(record.contigs[1].reads[9].rd.sequence[-10:], "tggcgttgcg")
@@ -397,7 +397,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[10].rd.padded_bases, 871)
         self.assertEqual(record.contigs[1].reads[10].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[10].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[10].rd.sequence)/2
+        center = len(record.contigs[1].reads[10].rd.sequence)//2
         self.assertEqual(record.contigs[1].reads[10].rd.sequence[:10], "ggtTCGATTA")
         self.assertEqual(record.contigs[1].reads[10].rd.sequence[center-5:center+5], "ACCAATTGAC")
         self.assertEqual(record.contigs[1].reads[10].rd.sequence[-10:], "ACCACCCatt")
@@ -420,7 +420,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[11].rd.padded_bases, 839)
         self.assertEqual(record.contigs[1].reads[11].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[11].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[11].rd.sequence)/2
+        center = len(record.contigs[1].reads[11].rd.sequence)//2
         self.assertEqual(record.contigs[1].reads[11].rd.sequence[:10], "ggttcatatg")
         self.assertEqual(record.contigs[1].reads[11].rd.sequence[center-5:center+5], "TAAAATCAGT")
         self.assertEqual(record.contigs[1].reads[11].rd.sequence[-10:], "TCTTGCaata")
@@ -443,7 +443,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[12].rd.padded_bases, 855)
         self.assertEqual(record.contigs[1].reads[12].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[12].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[12].rd.sequence)/2
+        center = len(record.contigs[1].reads[12].rd.sequence)//2
         self.assertEqual(record.contigs[1].reads[12].rd.sequence[:10], "cACTCGCGTA")
         self.assertEqual(record.contigs[1].reads[12].rd.sequence[center-5:center+5], "CTCGTAAAAT")
         self.assertEqual(record.contigs[1].reads[12].rd.sequence[-10:], "aacccctgca")
@@ -472,7 +472,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(record.contigs[1].reads[13].rd.padded_bases, 852)
         self.assertEqual(record.contigs[1].reads[13].rd.info_items, 0)
         self.assertEqual(record.contigs[1].reads[13].rd.read_tags, 0)
-        center = len(record.contigs[1].reads[13].rd.sequence)/2
+        center = len(record.contigs[1].reads[13].rd.sequence)//2
         self.assertEqual(record.contigs[1].reads[13].rd.sequence[:10], "cgCGTa*tTG")
         self.assertEqual(record.contigs[1].reads[13].rd.sequence[center-5:center+5], "GTAAAATATT")
         self.assertEqual(record.contigs[1].reads[13].rd.sequence[-10:], "Atccttgtag")
@@ -506,11 +506,11 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.nreads, 2)
         self.assertEqual(contig.nsegments, 31)
         self.assertEqual(contig.uorc, 'U')
-        center = len(contig.sequence)/2
+        center = len(contig.sequence)//2
         self.assertEqual(contig.sequence[:10], "aatacgGGAT")
         self.assertEqual(contig.sequence[center-5:center+5], "ACATCATCTG")
         self.assertEqual(contig.sequence[-10:], "cATCTAGtac")
-        center = len(contig.quality)/2
+        center = len(contig.quality)//2
         self.assertEqual(contig.quality[:10], [0, 0, 0, 0, 0, 0, 22, 23, 25, 28])
         self.assertEqual(contig.quality[center-5:center+5], [90, 90, 90, 90, 90, 90, 90, 90, 90, 90])
         self.assertEqual(contig.quality[-10:], [15, 22, 30, 24, 28, 22, 21, 15, 19, 0])
@@ -532,7 +532,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[0].rd.padded_bases, 868)
         self.assertEqual(contig.reads[0].rd.info_items, 0)
         self.assertEqual(contig.reads[0].rd.read_tags, 0)
-        center = len(contig.reads[0].rd.sequence)/2
+        center = len(contig.reads[0].rd.sequence)//2
         self.assertEqual(contig.reads[0].rd.sequence[:10], "tagcgaggaa")
         self.assertEqual(contig.reads[0].rd.sequence[center-5:center+5], "CCGAGGCCAA")
         self.assertEqual(contig.reads[0].rd.sequence[-10:], "gaaccatcag")
@@ -565,7 +565,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[1].rd.padded_bases, 856)
         self.assertEqual(contig.reads[1].rd.info_items, 0)
         self.assertEqual(contig.reads[1].rd.read_tags, 0)
-        center = len(contig.reads[1].rd.sequence)/2
+        center = len(contig.reads[1].rd.sequence)//2
         self.assertEqual(contig.reads[1].rd.sequence[:10], "aatacgGGAT")
         self.assertEqual(contig.reads[1].rd.sequence[center-5:center+5], "ACATCATCTG")
         self.assertEqual(contig.reads[1].rd.sequence[-10:], "cATCTAGtac")
@@ -585,11 +585,11 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.nreads, 14)
         self.assertEqual(contig.nsegments, 214)
         self.assertEqual(contig.uorc, 'U')
-        center = len(contig.sequence) / 2
+        center = len(contig.sequence) // 2
         self.assertEqual(contig.sequence[:10], "cacggatgat")
         self.assertEqual(contig.sequence[center-5:center+5], "TTTGAATATT")
         self.assertEqual(contig.sequence[-10:], "Atccttgtag")
-        center = len(contig.quality) / 2
+        center = len(contig.quality) // 2
         self.assertEqual(contig.quality[:10], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         self.assertEqual(contig.quality[center-5:center+5], [90, 90, 90, 90, 90, 90, 90, 90, 90, 90])
         self.assertEqual(contig.quality[-10:], [24, 0, 0, 0, 0, 0, 0, 0, 0, 0])
@@ -644,7 +644,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[0].rd.padded_bases, 862)
         self.assertEqual(contig.reads[0].rd.info_items, 0)
         self.assertEqual(contig.reads[0].rd.read_tags, 0)
-        center = len(contig.reads[0].rd.sequence)/2
+        center = len(contig.reads[0].rd.sequence)//2
         self.assertEqual(contig.reads[0].rd.sequence[:10], "cacggatgat")
         self.assertEqual(contig.reads[0].rd.sequence[center-5:center+5], "GTTCTCGTTG")
         self.assertEqual(contig.reads[0].rd.sequence[-10:], "CGTTTACCcg")
@@ -667,7 +667,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[1].rd.padded_bases, 880)
         self.assertEqual(contig.reads[1].rd.info_items, 0)
         self.assertEqual(contig.reads[1].rd.read_tags, 0)
-        center = len(contig.reads[1].rd.sequence)/2
+        center = len(contig.reads[1].rd.sequence)//2
         self.assertEqual(contig.reads[1].rd.sequence[:10], "ctttctgacC")
         self.assertEqual(contig.reads[1].rd.sequence[center-5:center+5], "CTGTGGTTTC")
         self.assertEqual(contig.reads[1].rd.sequence[-10:], "cggagttacg")
@@ -696,7 +696,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[2].rd.padded_bases, 864)
         self.assertEqual(contig.reads[2].rd.info_items, 0)
         self.assertEqual(contig.reads[2].rd.read_tags, 0)
-        center = len(contig.reads[2].rd.sequence)/2
+        center = len(contig.reads[2].rd.sequence)//2
         self.assertEqual(contig.reads[2].rd.sequence[:10], "cacccaCTTT")
         self.assertEqual(contig.reads[2].rd.sequence[center-5:center+5], "ACCAAACATT")
         self.assertEqual(contig.reads[2].rd.sequence[-10:], "GGTAGCACgc")
@@ -719,7 +719,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[3].rd.padded_bases, 863)
         self.assertEqual(contig.reads[3].rd.info_items, 0)
         self.assertEqual(contig.reads[3].rd.read_tags, 0)
-        center = len(contig.reads[3].rd.sequence)/2
+        center = len(contig.reads[3].rd.sequence)//2
         self.assertEqual(contig.reads[3].rd.sequence[:10], "ctaattggcc")
         self.assertEqual(contig.reads[3].rd.sequence[center-5:center+5], "GGAACCTTTC")
         self.assertEqual(contig.reads[3].rd.sequence[-10:], "CAACCTgact")
@@ -748,7 +748,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[4].rd.padded_bases, 877)
         self.assertEqual(contig.reads[4].rd.info_items, 0)
         self.assertEqual(contig.reads[4].rd.read_tags, 0)
-        center = len(contig.reads[4].rd.sequence)/2
+        center = len(contig.reads[4].rd.sequence)//2
         self.assertEqual(contig.reads[4].rd.sequence[:10], "tgCTGCGGTT")
         self.assertEqual(contig.reads[4].rd.sequence[center-5:center+5], "GGCAGTTTCA")
         self.assertEqual(contig.reads[4].rd.sequence[-10:], "tactcataaa")
@@ -771,7 +771,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[5].rd.padded_bases, 874)
         self.assertEqual(contig.reads[5].rd.info_items, 0)
         self.assertEqual(contig.reads[5].rd.read_tags, 0)
-        center = len(contig.reads[5].rd.sequence)/2
+        center = len(contig.reads[5].rd.sequence)//2
         self.assertEqual(contig.reads[5].rd.sequence[:10], "ctCTTAGGAT")
         self.assertEqual(contig.reads[5].rd.sequence[center-5:center+5], "AACTCACATT")
         self.assertEqual(contig.reads[5].rd.sequence[-10:], "*CACCCAAac")
@@ -794,7 +794,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[6].rd.padded_bases, 864)
         self.assertEqual(contig.reads[6].rd.info_items, 0)
         self.assertEqual(contig.reads[6].rd.read_tags, 0)
-        center = len(contig.reads[6].rd.sequence)/2
+        center = len(contig.reads[6].rd.sequence)//2
         self.assertEqual(contig.reads[6].rd.sequence[:10], "CCaTGTCCAA")
         self.assertEqual(contig.reads[6].rd.sequence[center-5:center+5], "AAGGGTT*CA")
         self.assertEqual(contig.reads[6].rd.sequence[-10:], "ACACTCGCga")
@@ -817,7 +817,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[7].rd.padded_bases, 857)
         self.assertEqual(contig.reads[7].rd.info_items, 0)
         self.assertEqual(contig.reads[7].rd.read_tags, 0)
-        center = len(contig.reads[7].rd.sequence)/2
+        center = len(contig.reads[7].rd.sequence)//2
         self.assertEqual(contig.reads[7].rd.sequence[:10], "agaaagagga")
         self.assertEqual(contig.reads[7].rd.sequence[center-5:center+5], "nnnannnnnn")
         self.assertEqual(contig.reads[7].rd.sequence[-10:], "gtctttgctc")
@@ -840,7 +840,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[8].rd.padded_bases, 878)
         self.assertEqual(contig.reads[8].rd.info_items, 0)
         self.assertEqual(contig.reads[8].rd.read_tags, 0)
-        center = len(contig.reads[8].rd.sequence)/2
+        center = len(contig.reads[8].rd.sequence)//2
         self.assertEqual(contig.reads[8].rd.sequence[:10], "agTttc*ctc")
         self.assertEqual(contig.reads[8].rd.sequence[center-5:center+5], "TCATAAAACT")
         self.assertEqual(contig.reads[8].rd.sequence[-10:], "xxxxxxxxxx")
@@ -863,7 +863,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[9].rd.padded_bases, 880)
         self.assertEqual(contig.reads[9].rd.info_items, 0)
         self.assertEqual(contig.reads[9].rd.read_tags, 0)
-        center = len(contig.reads[9].rd.sequence)/2
+        center = len(contig.reads[9].rd.sequence)//2
         self.assertEqual(contig.reads[9].rd.sequence[:10], "ggctaCGCCc")
         self.assertEqual(contig.reads[9].rd.sequence[center-5:center+5], "ATTGAGTTTC")
         self.assertEqual(contig.reads[9].rd.sequence[-10:], "tggcgttgcg")
@@ -886,7 +886,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[10].rd.padded_bases, 871)
         self.assertEqual(contig.reads[10].rd.info_items, 0)
         self.assertEqual(contig.reads[10].rd.read_tags, 0)
-        center = len(contig.reads[10].rd.sequence)/2
+        center = len(contig.reads[10].rd.sequence)//2
         self.assertEqual(contig.reads[10].rd.sequence[:10], "ggtTCGATTA")
         self.assertEqual(contig.reads[10].rd.sequence[center-5:center+5], "ACCAATTGAC")
         self.assertEqual(contig.reads[10].rd.sequence[-10:], "ACCACCCatt")
@@ -909,7 +909,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[11].rd.padded_bases, 839)
         self.assertEqual(contig.reads[11].rd.info_items, 0)
         self.assertEqual(contig.reads[11].rd.read_tags, 0)
-        center = len(contig.reads[11].rd.sequence)/2
+        center = len(contig.reads[11].rd.sequence)//2
         self.assertEqual(contig.reads[11].rd.sequence[:10], "ggttcatatg")
         self.assertEqual(contig.reads[11].rd.sequence[center-5:center+5], "TAAAATCAGT")
         self.assertEqual(contig.reads[11].rd.sequence[-10:], "TCTTGCaata")
@@ -932,7 +932,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[12].rd.padded_bases, 855)
         self.assertEqual(contig.reads[12].rd.info_items, 0)
         self.assertEqual(contig.reads[12].rd.read_tags, 0)
-        center = len(contig.reads[12].rd.sequence)/2
+        center = len(contig.reads[12].rd.sequence)//2
         self.assertEqual(contig.reads[12].rd.sequence[:10], "cACTCGCGTA")
         self.assertEqual(contig.reads[12].rd.sequence[center-5:center+5], "CTCGTAAAAT")
         self.assertEqual(contig.reads[12].rd.sequence[-10:], "aacccctgca")
@@ -955,7 +955,7 @@ class AceTestOne(unittest.TestCase):
         self.assertEqual(contig.reads[13].rd.padded_bases, 852)
         self.assertEqual(contig.reads[13].rd.info_items, 0)
         self.assertEqual(contig.reads[13].rd.read_tags, 0)
-        center = len(contig.reads[13].rd.sequence)/2
+        center = len(contig.reads[13].rd.sequence)//2
         self.assertEqual(contig.reads[13].rd.sequence[:10], "cgCGTa*tTG")
         self.assertEqual(contig.reads[13].rd.sequence[center-5:center+5], "GTAAAATATT")
         self.assertEqual(contig.reads[13].rd.sequence[-10:], "Atccttgtag")
@@ -1010,11 +1010,11 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].nreads, 6)
         self.assertEqual(record.contigs[0].nsegments, 0)
         self.assertEqual(record.contigs[0].uorc, "U")
-        center = len(record.contigs[0].sequence)/2
+        center = len(record.contigs[0].sequence)//2
         self.assertEqual(record.contigs[0].sequence[:10], "AGTTTTAGTT")
         self.assertEqual(record.contigs[0].sequence[center-5:center+5], "TGTGCGCGCA")
         self.assertEqual(record.contigs[0].sequence[-10:], "ATATCACATT")
-        center = len(record.contigs[0].quality)/2
+        center = len(record.contigs[0].quality)//2
         self.assertEqual(record.contigs[0].quality[:10], [61, 66, 67, 70, 71, 73, 73, 77, 77, 87])
         self.assertEqual(record.contigs[0].quality[center-5:center+5], [97, 97, 97, 97, 97, 97, 97, 97, 97, 97])
         self.assertEqual(record.contigs[0].quality[-10:], [56, 51, 49, 41, 38, 39, 45, 44, 49, 46])
@@ -1035,7 +1035,7 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[0].rd.padded_bases, 919)
         self.assertEqual(record.contigs[0].reads[0].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[0].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[0].rd.sequence)/2
+        center = len(record.contigs[0].reads[0].rd.sequence)//2
         self.assertEqual(record.contigs[0].reads[0].rd.sequence[:10], "NNNNNNNNNN")
         self.assertEqual(record.contigs[0].reads[0].rd.sequence[center-5:center+5], "ATGTGCGCTC")
         self.assertEqual(record.contigs[0].reads[0].rd.sequence[-10:], "CAGCTCACCA")
@@ -1057,7 +1057,7 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[1].rd.padded_bases, 864)
         self.assertEqual(record.contigs[0].reads[1].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[1].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[1].rd.sequence)/2
+        center = len(record.contigs[0].reads[1].rd.sequence)//2
         self.assertEqual(record.contigs[0].reads[1].rd.sequence[:10], "AGCCGGTACC")
         self.assertEqual(record.contigs[0].reads[1].rd.sequence[center-5:center+5], "GGGATGGCAC")
         self.assertEqual(record.contigs[0].reads[1].rd.sequence[-10:], "GGGCTGGGAG")
@@ -1079,7 +1079,7 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[2].rd.padded_bases, 1026)
         self.assertEqual(record.contigs[0].reads[2].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[2].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[2].rd.sequence)/2
+        center = len(record.contigs[0].reads[2].rd.sequence)//2
         self.assertEqual(record.contigs[0].reads[2].rd.sequence[:10], "NNNNNNNNNN")
         self.assertEqual(record.contigs[0].reads[2].rd.sequence[center-5:center+5], "GGATGCCTGG")
         self.assertEqual(record.contigs[0].reads[2].rd.sequence[-10:], "GGTTGAGGCC")
@@ -1101,7 +1101,7 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[3].rd.padded_bases, 925)
         self.assertEqual(record.contigs[0].reads[3].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[3].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[3].rd.sequence)/2
+        center = len(record.contigs[0].reads[3].rd.sequence)//2
         self.assertEqual(record.contigs[0].reads[3].rd.sequence[:10], "NNNNNNNNNN")
         self.assertEqual(record.contigs[0].reads[3].rd.sequence[center-5:center+5], "CCTCCCTACA")
         self.assertEqual(record.contigs[0].reads[3].rd.sequence[-10:], "GCCCCCGGNN")
@@ -1123,7 +1123,7 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[4].rd.padded_bases, 816)
         self.assertEqual(record.contigs[0].reads[4].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[4].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[4].rd.sequence)/2
+        center = len(record.contigs[0].reads[4].rd.sequence)//2
         self.assertEqual(record.contigs[0].reads[4].rd.sequence[:10], "CACTCAGCTC")
         self.assertEqual(record.contigs[0].reads[4].rd.sequence[center-5:center+5], "TCCAAAGGGT")
         self.assertEqual(record.contigs[0].reads[4].rd.sequence[-10:], "AGCTGAATCG")
@@ -1145,7 +1145,7 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[5].rd.padded_bases, 857)
         self.assertEqual(record.contigs[0].reads[5].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[5].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[5].rd.sequence)/2
+        center = len(record.contigs[0].reads[5].rd.sequence)//2
         self.assertEqual(record.contigs[0].reads[5].rd.sequence[:10], "CCGGCAGTGA")
         self.assertEqual(record.contigs[0].reads[5].rd.sequence[center-5:center+5], "AAAAAAAACC")
         self.assertEqual(record.contigs[0].reads[5].rd.sequence[-10:], "NNNNNNNNNN")
@@ -1176,11 +1176,11 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.nreads, 6)
         self.assertEqual(contig.nsegments, 0)
         self.assertEqual(contig.uorc, "U")
-        center = len(contig.sequence)/2
+        center = len(contig.sequence)//2
         self.assertEqual(contig.sequence[:10], "AGTTTTAGTT")
         self.assertEqual(contig.sequence[center-5:center+5], "TGTGCGCGCA")
         self.assertEqual(contig.sequence[-10:], "ATATCACATT")
-        center = len(contig.quality)/2
+        center = len(contig.quality)//2
         self.assertEqual(contig.quality[:10], [61, 66, 67, 70, 71, 73, 73, 77, 77, 87])
         self.assertEqual(contig.quality[center-5:center+5], [97, 97, 97, 97, 97, 97, 97, 97, 97, 97])
         self.assertEqual(contig.quality[-10:], [56, 51, 49, 41, 38, 39, 45, 44, 49, 46])
@@ -1201,7 +1201,7 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[0].rd.padded_bases, 919)
         self.assertEqual(contig.reads[0].rd.info_items, 0)
         self.assertEqual(contig.reads[0].rd.read_tags, 0)
-        center = len(contig.reads[0].rd.sequence)/2
+        center = len(contig.reads[0].rd.sequence)//2
         self.assertEqual(contig.reads[0].rd.sequence[:10], "NNNNNNNNNN")
         self.assertEqual(contig.reads[0].rd.sequence[center-5:center+5], "ATGTGCGCTC")
         self.assertEqual(contig.reads[0].rd.sequence[-10:], "CAGCTCACCA")
@@ -1223,7 +1223,7 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[1].rd.padded_bases, 864)
         self.assertEqual(contig.reads[1].rd.info_items, 0)
         self.assertEqual(contig.reads[1].rd.read_tags, 0)
-        center = len(contig.reads[1].rd.sequence)/2
+        center = len(contig.reads[1].rd.sequence)//2
         self.assertEqual(contig.reads[1].rd.sequence[:10], "AGCCGGTACC")
         self.assertEqual(contig.reads[1].rd.sequence[center-5:center+5], "GGGATGGCAC")
         self.assertEqual(contig.reads[1].rd.sequence[-10:], "GGGCTGGGAG")
@@ -1245,7 +1245,7 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[2].rd.padded_bases, 1026)
         self.assertEqual(contig.reads[2].rd.info_items, 0)
         self.assertEqual(contig.reads[2].rd.read_tags, 0)
-        center = len(contig.reads[2].rd.sequence)/2
+        center = len(contig.reads[2].rd.sequence)//2
         self.assertEqual(contig.reads[2].rd.sequence[:10], "NNNNNNNNNN")
         self.assertEqual(contig.reads[2].rd.sequence[center-5:center+5], "GGATGCCTGG")
         self.assertEqual(contig.reads[2].rd.sequence[-10:], "GGTTGAGGCC")
@@ -1267,7 +1267,7 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[3].rd.padded_bases, 925)
         self.assertEqual(contig.reads[3].rd.info_items, 0)
         self.assertEqual(contig.reads[3].rd.read_tags, 0)
-        center = len(contig.reads[3].rd.sequence)/2
+        center = len(contig.reads[3].rd.sequence)//2
         self.assertEqual(contig.reads[3].rd.sequence[:10], "NNNNNNNNNN")
         self.assertEqual(contig.reads[3].rd.sequence[center-5:center+5], "CCTCCCTACA")
         self.assertEqual(contig.reads[3].rd.sequence[-10:], "GCCCCCGGNN")
@@ -1289,7 +1289,7 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[4].rd.padded_bases, 816)
         self.assertEqual(contig.reads[4].rd.info_items, 0)
         self.assertEqual(contig.reads[4].rd.read_tags, 0)
-        center = len(contig.reads[4].rd.sequence)/2
+        center = len(contig.reads[4].rd.sequence)//2
         self.assertEqual(contig.reads[4].rd.sequence[:10], "CACTCAGCTC")
         self.assertEqual(contig.reads[4].rd.sequence[center-5:center+5], "TCCAAAGGGT")
         self.assertEqual(contig.reads[4].rd.sequence[-10:], "AGCTGAATCG")
@@ -1311,7 +1311,7 @@ class AceTestTwo(unittest.TestCase):
         self.assertEqual(contig.reads[5].rd.padded_bases, 857)
         self.assertEqual(contig.reads[5].rd.info_items, 0)
         self.assertEqual(contig.reads[5].rd.read_tags, 0)
-        center = len(contig.reads[5].rd.sequence)/2
+        center = len(contig.reads[5].rd.sequence)//2
         self.assertEqual(contig.reads[5].rd.sequence[:10], "CCGGCAGTGA")
         self.assertEqual(contig.reads[5].rd.sequence[center-5:center+5], "AAAAAAAACC")
         self.assertEqual(contig.reads[5].rd.sequence[-10:], "NNNNNNNNNN")
@@ -1360,11 +1360,11 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].nreads, 8)
         self.assertEqual(record.contigs[0].nsegments, 156)
         self.assertEqual(record.contigs[0].uorc, "U")
-        center = len(record.contigs[0].sequence)/2
+        center = len(record.contigs[0].sequence)//2
         self.assertEqual(record.contigs[0].sequence[:10], "agccccgggc")
         self.assertEqual(record.contigs[0].sequence[center-5:center+5], "CTTCCCCAGG")
         self.assertEqual(record.contigs[0].sequence[-10:], "gttgggtttg")
-        center = len(record.contigs[0].quality)/2
+        center = len(record.contigs[0].quality)//2
         self.assertEqual(record.contigs[0].quality[:10], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         self.assertEqual(record.contigs[0].quality[center-5:center+5], [90, 90, 90, 90, 90, 90, 90, 90, 89, 89])
         self.assertEqual(record.contigs[0].quality[-10:], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
@@ -1416,7 +1416,7 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[0].rd.padded_bases, 563)
         self.assertEqual(record.contigs[0].reads[0].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[0].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[0].rd.sequence)/2
+        center = len(record.contigs[0].reads[0].rd.sequence)//2
         self.assertEqual(record.contigs[0].reads[0].rd.sequence[:10], "tcccCgtgag")
         self.assertEqual(record.contigs[0].reads[0].rd.sequence[center-5:center+5], "CTCCTGcctg")
         self.assertEqual(record.contigs[0].reads[0].rd.sequence[-10:], "ggcccccctc")
@@ -1438,7 +1438,7 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[1].rd.padded_bases, 687)
         self.assertEqual(record.contigs[0].reads[1].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[1].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[1].rd.sequence)/2
+        center = len(record.contigs[0].reads[1].rd.sequence)//2
         self.assertEqual(record.contigs[0].reads[1].rd.sequence[:10], "ccgtcctgag")
         self.assertEqual(record.contigs[0].reads[1].rd.sequence[center-5:center+5], "cacagcccT*")
         self.assertEqual(record.contigs[0].reads[1].rd.sequence[-10:], "Ttttgtttta")
@@ -1460,7 +1460,7 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[2].rd.padded_bases, 517)
         self.assertEqual(record.contigs[0].reads[2].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[2].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[2].rd.sequence)/2
+        center = len(record.contigs[0].reads[2].rd.sequence)//2
         self.assertEqual(record.contigs[0].reads[2].rd.sequence[:10], "aatattaccg")
         self.assertEqual(record.contigs[0].reads[2].rd.sequence[center-5:center+5], "CAGATGGGTT")
         self.assertEqual(record.contigs[0].reads[2].rd.sequence[-10:], "ctattcaggg")
@@ -1482,7 +1482,7 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[3].rd.padded_bases, 628)
         self.assertEqual(record.contigs[0].reads[3].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[3].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[3].rd.sequence)/2
+        center = len(record.contigs[0].reads[3].rd.sequence)//2
         self.assertEqual(record.contigs[0].reads[3].rd.sequence[:10], "ctgcgtatcg")
         self.assertEqual(record.contigs[0].reads[3].rd.sequence[center-5:center+5], "AGGATTGCTT")
         self.assertEqual(record.contigs[0].reads[3].rd.sequence[-10:], "aaccctgggt")
@@ -1504,7 +1504,7 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[4].rd.padded_bases, 556)
         self.assertEqual(record.contigs[0].reads[4].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[4].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[4].rd.sequence)/2
+        center = len(record.contigs[0].reads[4].rd.sequence)//2
         self.assertEqual(record.contigs[0].reads[4].rd.sequence[:10], "gaggatcgct")
         self.assertEqual(record.contigs[0].reads[4].rd.sequence[center-5:center+5], "GTgcgaggat")
         self.assertEqual(record.contigs[0].reads[4].rd.sequence[-10:], "caggcagatg")
@@ -1526,7 +1526,7 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[5].rd.padded_bases, 593)
         self.assertEqual(record.contigs[0].reads[5].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[5].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[5].rd.sequence)/2
+        center = len(record.contigs[0].reads[5].rd.sequence)//2
         self.assertEqual(record.contigs[0].reads[5].rd.sequence[:10], "ggggatccg*")
         self.assertEqual(record.contigs[0].reads[5].rd.sequence[center-5:center+5], "GCaAgacCCt")
         self.assertEqual(record.contigs[0].reads[5].rd.sequence[-10:], "gttgggtttg")
@@ -1549,7 +1549,7 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[6].rd.padded_bases, 594)
         self.assertEqual(record.contigs[0].reads[6].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[6].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[6].rd.sequence)/2
+        center = len(record.contigs[0].reads[6].rd.sequence)//2
         self.assertEqual(record.contigs[0].reads[6].rd.sequence[:10], "agccccgggc")
         self.assertEqual(record.contigs[0].reads[6].rd.sequence[center-5:center+5], "ggatcACATA")
         self.assertEqual(record.contigs[0].reads[6].rd.sequence[-10:], "aatagtaaca")
@@ -1571,7 +1571,7 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(record.contigs[0].reads[7].rd.padded_bases, 603)
         self.assertEqual(record.contigs[0].reads[7].rd.info_items, 0)
         self.assertEqual(record.contigs[0].reads[7].rd.read_tags, 0)
-        center = len(record.contigs[0].reads[7].rd.sequence)/2
+        center = len(record.contigs[0].reads[7].rd.sequence)//2
         self.assertEqual(record.contigs[0].reads[7].rd.sequence[:10], "gaataattgg")
         self.assertEqual(record.contigs[0].reads[7].rd.sequence[center-5:center+5], "TggCCCATCT")
         self.assertEqual(record.contigs[0].reads[7].rd.sequence[-10:], "gaaccacacg")
@@ -1602,11 +1602,11 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.nreads, 8)
         self.assertEqual(contig.nsegments, 156)
         self.assertEqual(contig.uorc, "U")
-        center = len(contig.sequence)/2
+        center = len(contig.sequence)//2
         self.assertEqual(contig.sequence[:10], "agccccgggc")
         self.assertEqual(contig.sequence[center-5:center+5], "CTTCCCCAGG")
         self.assertEqual(contig.sequence[-10:], "gttgggtttg")
-        center = len(contig.quality)/2
+        center = len(contig.quality)//2
         self.assertEqual(contig.quality[:10], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         self.assertEqual(contig.quality[center-5:center+5], [90, 90, 90, 90, 90, 90, 90, 90, 89, 89])
         self.assertEqual(contig.quality[-10:], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
@@ -1658,7 +1658,7 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[0].rd.padded_bases, 563)
         self.assertEqual(contig.reads[0].rd.info_items, 0)
         self.assertEqual(contig.reads[0].rd.read_tags, 0)
-        center = len(contig.reads[0].rd.sequence)/2
+        center = len(contig.reads[0].rd.sequence)//2
         self.assertEqual(contig.reads[0].rd.sequence[:10], "tcccCgtgag")
         self.assertEqual(contig.reads[0].rd.sequence[center-5:center+5], "CTCCTGcctg")
         self.assertEqual(contig.reads[0].rd.sequence[-10:], "ggcccccctc")
@@ -1680,7 +1680,7 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[1].rd.padded_bases, 687)
         self.assertEqual(contig.reads[1].rd.info_items, 0)
         self.assertEqual(contig.reads[1].rd.read_tags, 0)
-        center = len(contig.reads[1].rd.sequence)/2
+        center = len(contig.reads[1].rd.sequence)//2
         self.assertEqual(contig.reads[1].rd.sequence[:10], "ccgtcctgag")
         self.assertEqual(contig.reads[1].rd.sequence[center-5:center+5], "cacagcccT*")
         self.assertEqual(contig.reads[1].rd.sequence[-10:], "Ttttgtttta")
@@ -1702,7 +1702,7 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[2].rd.padded_bases, 517)
         self.assertEqual(contig.reads[2].rd.info_items, 0)
         self.assertEqual(contig.reads[2].rd.read_tags, 0)
-        center = len(contig.reads[2].rd.sequence)/2
+        center = len(contig.reads[2].rd.sequence)//2
         self.assertEqual(contig.reads[2].rd.sequence[:10], "aatattaccg")
         self.assertEqual(contig.reads[2].rd.sequence[center-5:center+5], "CAGATGGGTT")
         self.assertEqual(contig.reads[2].rd.sequence[-10:], "ctattcaggg")
@@ -1724,7 +1724,7 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[3].rd.padded_bases, 628)
         self.assertEqual(contig.reads[3].rd.info_items, 0)
         self.assertEqual(contig.reads[3].rd.read_tags, 0)
-        center = len(contig.reads[3].rd.sequence)/2
+        center = len(contig.reads[3].rd.sequence)//2
         self.assertEqual(contig.reads[3].rd.sequence[:10], "ctgcgtatcg")
         self.assertEqual(contig.reads[3].rd.sequence[center-5:center+5], "AGGATTGCTT")
         self.assertEqual(contig.reads[3].rd.sequence[-10:], "aaccctgggt")
@@ -1746,7 +1746,7 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[4].rd.padded_bases, 556)
         self.assertEqual(contig.reads[4].rd.info_items, 0)
         self.assertEqual(contig.reads[4].rd.read_tags, 0)
-        center = len(contig.reads[4].rd.sequence)/2
+        center = len(contig.reads[4].rd.sequence)//2
         self.assertEqual(contig.reads[4].rd.sequence[:10], "gaggatcgct")
         self.assertEqual(contig.reads[4].rd.sequence[center-5:center+5], "GTgcgaggat")
         self.assertEqual(contig.reads[4].rd.sequence[-10:], "caggcagatg")
@@ -1768,7 +1768,7 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[5].rd.padded_bases, 593)
         self.assertEqual(contig.reads[5].rd.info_items, 0)
         self.assertEqual(contig.reads[5].rd.read_tags, 0)
-        center = len(contig.reads[5].rd.sequence)/2
+        center = len(contig.reads[5].rd.sequence)//2
         self.assertEqual(contig.reads[5].rd.sequence[:10], "ggggatccg*")
         self.assertEqual(contig.reads[5].rd.sequence[center-5:center+5], "GCaAgacCCt")
         self.assertEqual(contig.reads[5].rd.sequence[-10:], "gttgggtttg")
@@ -1791,7 +1791,7 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[6].rd.padded_bases, 594)
         self.assertEqual(contig.reads[6].rd.info_items, 0)
         self.assertEqual(contig.reads[6].rd.read_tags, 0)
-        center = len(contig.reads[6].rd.sequence)/2
+        center = len(contig.reads[6].rd.sequence)//2
         self.assertEqual(contig.reads[6].rd.sequence[:10], "agccccgggc")
         self.assertEqual(contig.reads[6].rd.sequence[center-5:center+5], "ggatcACATA")
         self.assertEqual(contig.reads[6].rd.sequence[-10:], "aatagtaaca")
@@ -1813,7 +1813,7 @@ class AceTestThree(unittest.TestCase):
         self.assertEqual(contig.reads[7].rd.padded_bases, 603)
         self.assertEqual(contig.reads[7].rd.info_items, 0)
         self.assertEqual(contig.reads[7].rd.read_tags, 0)
-        center = len(contig.reads[7].rd.sequence)/2
+        center = len(contig.reads[7].rd.sequence)//2
         self.assertEqual(contig.reads[7].rd.sequence[:10], "gaataattgg")
         self.assertEqual(contig.reads[7].rd.sequence[center-5:center+5], "TggCCCATCT")
         self.assertEqual(contig.reads[7].rd.sequence[-10:], "gaaccacacg")
