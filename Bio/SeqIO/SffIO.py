@@ -193,6 +193,13 @@ from Bio.SeqRecord import SeqRecord
 import struct
 import sys
 
+#This is a hack, want "\0" on Python 2.x and b"\0" on Python 3.x, etc
+_null = "\0".encode("ascii")
+_sff = ".sff".encode("ascii")
+_hsh = ".hsh".encode("ascii")
+_srt = ".srt".encode("ascii")
+_mft = ".mft".encode("ascii")
+
 def _sff_file_header(handle):
     """Read in an SFF file header (PRIVATE).
 
@@ -244,12 +251,12 @@ def _sff_file_header(handle):
     magic_number, ver0, ver1, ver2, ver3, index_offset, index_length, \
     number_of_reads, header_length, key_length, number_of_flows_per_read, \
     flowgram_format = struct.unpack(fmt, data)
-    if magic_number in [".hsh", ".srt", ".mft"]:
+    if magic_number in [_hsh, _srt, _mft]:
         #Probably user error, calling Bio.SeqIO.parse() twice!
         raise ValueError("Handle seems to be at SFF index block, not start")
-    if magic_number != ".sff": # 779314790
-        raise ValueError("SFF file did not start '.sff', but '%s'" \
-                         % magic_number)
+    if magic_number != _sff: # 779314790
+        raise ValueError("SFF file did not start '.sff', but %s" \
+                         % repr(magic_number))
     if (ver0, ver1, ver2, ver3) != (0, 0, 0, 1):
         raise ValueError("Unsupported SFF version in header, %i.%i.%i.%i" \
                          % (ver0, ver1, ver2, ver3))
@@ -268,7 +275,7 @@ def _sff_file_header(handle):
     assert header_length % 8 == 0
     padding = header_length - number_of_flows_per_read - key_length - 31
     assert 0 <= padding < 8, padding
-    if handle.read(padding).count('\0') != padding:
+    if handle.read(padding).count(_null) != padding:
         raise ValueError("Post header %i byte padding region contained data" \
                          % padding)
     return header_length, index_offset, index_length, \
@@ -320,7 +327,7 @@ def _sff_do_slow_index(handle):
         #now the name and any padding (remainder of header)
         name = handle.read(name_length)
         padding = read_header_length - read_header_size - name_length
-        if handle.read(padding).count('\0') != padding:
+        if handle.read(padding).count(_null) != padding:
             raise ValueError("Post name %i byte padding region contained data" \
                              % padding)
         assert record_offset + read_header_length == handle.tell()
@@ -331,7 +338,7 @@ def _sff_do_slow_index(handle):
         padding = size % 8
         if padding:
             padding = 8 - padding
-            if handle.read(padding).count('\0') != padding:
+            if handle.read(padding).count(_null) != padding:
                 raise ValueError("Post quality %i byte padding region contained data" \
                                  % padding)
         #print read, name, record_offset
@@ -369,7 +376,7 @@ def _sff_find_roche_index(handle):
         raise ValueError("Premature end of file? Expected index of size %i at offest %i, found %s" \
                          % (index_length, index_offset, repr(data)))
     magic_number, ver0, ver1, ver2, ver3 = struct.unpack(fmt, data)
-    if magic_number == ".mft": # 778921588
+    if magic_number == _mft: # 778921588
         #Roche 454 manifest index
         #This is typical from raw Roche 454 SFF files (2009), and includes
         #both an XML manifest and the sorted index.
@@ -387,7 +394,7 @@ def _sff_find_roche_index(handle):
                index_offset, index_length, \
                index_offset + fmt_size + fmt2_size, xml_size, \
                index_offset + fmt_size + fmt2_size + xml_size, data_size
-    elif magic_number == ".srt": #779317876
+    elif magic_number == _srt: #779317876
         #Roche 454 sorted index
         #I've had this from Roche tool sfffile when the read identifiers
         #had nonstandard lengths and there was no XML manifest.
@@ -396,13 +403,13 @@ def _sff_find_roche_index(handle):
             raise ValueError("Unsupported version in .srt index header, %i.%i.%i.%i" \
                              % (ver0, ver1, ver2, ver3))
         data = handle.read(4)
-        if data != "\0\0\0\0":
+        if data != _null*4:
             raise ValueError("Did not find expected null four bytes in .srt index")
         return number_of_reads, header_length, \
                index_offset, index_length, \
                0, 0, \
                index_offset + fmt_size + 4, index_length - fmt_size - 4
-    elif magic_number == ".hsh":
+    elif magic_number == _hsh:
         raise ValueError("Hash table style indexes (.hsh) in SFF files are "
                          "not (yet) supported")
     else:
@@ -444,7 +451,7 @@ def _sff_read_roche_index(handle):
     xml_size, read_index_offset, read_index_size = _sff_find_roche_index(handle)
     #Now parse the read index...    
     handle.seek(read_index_offset)
-    start = "\0"
+    start = _null
     end = "\xff" #Char 255
     fmt = ">5B"
     for read in range(number_of_reads):
@@ -501,7 +508,7 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     #now the name and any padding (remainder of header)
     name = handle.read(name_length)
     padding = read_header_length - read_header_size - name_length
-    if handle.read(padding).count('\0') != padding:
+    if handle.read(padding).count(_null) != padding:
         raise ValueError("Post name %i byte padding region contained data" \
                          % padding)
     #now the flowgram values, flowgram index, bases and qualities
@@ -515,7 +522,7 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     padding = (read_flow_size + seq_len*3)%8
     if padding:
         padding = 8 - padding
-        if handle.read(padding).count('\0') != padding:
+        if handle.read(padding).count(_null) != padding:
             raise ValueError("Post quality %i byte padding region contained data" \
                              % padding)
     #Now build a SeqRecord
@@ -784,7 +791,7 @@ class SffWriter(SequenceWriter):
         #Write to the file...
         fmt = ">I4BLL"
         fmt_size = struct.calcsize(fmt)
-        handle.write("\0"*fmt_size + xml) #will come back later to fill this
+        handle.write(_null*fmt_size + xml) #will come back later to fill this
         fmt2 = ">6B"
         assert 6 == struct.calcsize(fmt2)
         self._index.sort()
@@ -816,7 +823,7 @@ class SffWriter(SequenceWriter):
         #suggesting this padding should be there):
         if self._index_length % 8:
             padding = 8 - (self._index_length%8)
-            handle.write("\0"*padding)
+            handle.write(_null*padding)
         else:
             padding = 0
         offset = handle.tell()
@@ -867,7 +874,7 @@ class SffWriter(SequenceWriter):
                              self._number_of_flows_per_read,
                              1, #the only flowgram format code we support
                              self._flow_chars, self._key_sequence)
-        self.handle.write(header + "\0"*padding)
+        self.handle.write(header + _null*padding)
         
     def write_record(self, record):
         """Write a single additional record to the output file.
@@ -914,7 +921,7 @@ class SffWriter(SequenceWriter):
             #Check the position of the final record (before sort by name)
             #See comments earlier about how base 255 seems to be used.
             #This means the limit is 255**4 + 255**3 +255**2 + 255**1
-            if offset > 4244897280L:
+            if offset > 4244897280:
                 import warnings
                 warnings.warn("Read %s has file offset %i, which is too large "
                               "to store in the Roche SFF index structure. No index "
@@ -950,7 +957,7 @@ class SffWriter(SequenceWriter):
                            name_len, seq_len,
                            clip_qual_left, clip_qual_right,
                            clip_adapter_left, clip_adapter_right,
-                           name) + "\0"*padding
+                           name) + _null*padding
         assert len(data) == read_header_length
         #now the flowgram values, flowgram index, bases and qualities
         #NOTE - assuming flowgram_format==1, which means struct type H
@@ -965,7 +972,7 @@ class SffWriter(SequenceWriter):
         padding = (read_flow_size + seq_len*3)%8
         if padding:
             padding = 8 - padding
-        self.handle.write(data + "\0"*padding)
+        self.handle.write(data + _null*padding)
 
 
 if __name__ == "__main__":
