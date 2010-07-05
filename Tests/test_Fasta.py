@@ -29,8 +29,12 @@ class RecordTest(unittest.TestCase):
             return 0
 
         r = Fasta.Record()
-        assert pbool(type(r.title) is StringType)    # StringType
-        assert pbool(type(r.sequence) is StringType) # StringType
+        if sys.version_info[0] == 3:
+            assert pbool(type(r.title) is str)
+            assert pbool(type(r.sequence) is str)
+        else:
+            assert pbool(type(r.title) is StringType)    # StringType
+            assert pbool(type(r.sequence) is StringType) # StringType
 
 class ParserTest(unittest.TestCase):
     def setUp(self):
