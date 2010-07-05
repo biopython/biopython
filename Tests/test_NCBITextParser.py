@@ -14188,7 +14188,7 @@ class TestNCBITextParser(unittest.TestCase):
         for (a,b) in zip(record.alignments, descrs):
             self.assertEqual(a.title[0], ">")
             if b[0].endswith("..."):
-                self.assert_(a.title.startswith(">"+b[0][:-3]))
+                self.assertTrue(a.title.startswith(">"+b[0][:-3]))
             else:
                 self.assertEqual(a.title, ">" + b[0])
 

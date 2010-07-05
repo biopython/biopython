@@ -22,8 +22,8 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(record.id, "34_222_(80-A03-19).b.ab1")
         self.assertEqual(record.name, "34_222_(80-A03-19).b.ab1")
         self.assertEqual(record.description, "34_222_(80-A03-19).b.ab1")
-        self.assert_(record.seq.startswith("ctccgtcggaacatcatcggatcctatcaca"))
-        self.assert_(record.seq.endswith("ctctcctctccctccctccgactccaaagcgtg"))
+        self.assertTrue(record.seq.startswith("ctccgtcggaacatcatcggatcctatcaca"))
+        self.assertTrue(record.seq.endswith("ctctcctctccctccctccgactccaaagcgtg"))
         self.assertEqual(record.letter_annotations["phred_quality"][:10],
                          [9, 9, 10, 19, 22, 37, 28, 28, 24, 22])
         self.assertEqual(record[:10].format("fasta"),
@@ -231,8 +231,8 @@ class PhdTestTwo(unittest.TestCase):
         self.assertEqual(record.id, "ML4924R")
         self.assertEqual(record.name, "ML4924R")
         self.assertEqual(record.description, "ML4924R")
-        self.assert_(record.seq.startswith("actttggtcgcctgcaggtaccggtccgnga"))
-        self.assert_(record.seq.endswith("agaagctcgttctcaacatctccgttggtgaga"))
+        self.assertTrue(record.seq.startswith("actttggtcgcctgcaggtaccggtccgnga"))
+        self.assertTrue(record.seq.endswith("agaagctcgttctcaacatctccgttggtgaga"))
         self.assertEqual(record.letter_annotations["phred_quality"][:10],
                          [6, 6, 6, 8, 8, 12, 18, 16, 14, 11])
         self.assertEqual(record[:10].format("fasta"),

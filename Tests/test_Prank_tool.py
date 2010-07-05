@@ -83,7 +83,7 @@ class PrankApplication(unittest.TestCase):
                                  shell=(sys.platform!="win32"))
         return_code = child.wait()
         self.assertEqual(return_code, 0)
-        self.assert_("Total time" in child.stdout.read())
+        self.assertTrue("Total time" in child.stdout.read())
         self.assertEqual(child.stderr.read(), "")
         del child
 
@@ -107,7 +107,7 @@ class PrankApplication(unittest.TestCase):
                                  shell=(sys.platform!="win32"))
         return_code = child.wait()
         self.assertEqual(return_code, 0)
-        self.assert_("Total time" in child.stdout.read())
+        self.assertTrue("Total time" in child.stdout.read())
         self.assertEqual(child.stderr.read(), "")
         align = AlignIO.read(open("output.2.nex"), "nexus")
         for old, new in zip(records, align):
@@ -142,7 +142,7 @@ class PrankApplication(unittest.TestCase):
                                  shell=(sys.platform!="win32"))
         return_code = child.wait()
         self.assertEqual(return_code, 0)
-        self.assert_("Total time" in child.stdout.read())
+        self.assertTrue("Total time" in child.stdout.read())
         self.assertEqual(child.stderr.read(), "")
         del child
 
@@ -173,10 +173,10 @@ class PrankConversion(unittest.TestCase):
         return_code = child.wait()
         self.assertEqual(return_code, 0)
         message = child.stdout.read().strip()
-        self.assert_(("PRANK: converting '%s' to '%s'" % (self.input, filename)) \
+        self.assertTrue(("PRANK: converting '%s' to '%s'" % (self.input, filename)) \
                      in message, message)
         self.assertEqual(child.stderr.read(), "")
-        self.assert_(os.path.isfile(filename))
+        self.assertTrue(os.path.isfile(filename))
         old = AlignIO.read(open(self.input), "fasta")
         #Hack...
         if format=="phylip":

@@ -3734,20 +3734,20 @@ class TestPrositePattern(unittest.TestCase):
 
         # Good patterns
         pattern = 'W-[IV]-[STA]-[RK]-x-[DE]-Y-[DNE]-[DE].'
-        self.assert_(Pattern.verify_pattern(pattern))
+        self.assertTrue(Pattern.verify_pattern(pattern))
 
         pattern = '[LIV]-G-{P}-G-{P}-[FYWMGSTNH]-[SGA]-{PW}-[LIVCAT]-{PD}-x-[GSTACLIVMFY]-x(5,18)-[LIVMFYWCSTAR]-[AIVP]-[LIVMFAGCKR]-K.'
-        self.assert_(Pattern.verify_pattern(pattern))
+        self.assertTrue(Pattern.verify_pattern(pattern))
 
         # Bad patterns
         pattern = 'W-[IV]-[STA*]-[RK]-x-[DE]-Y-[DNE]-[DE].'
-        self.assert_(not Pattern.verify_pattern(pattern))
+        self.assertTrue(not Pattern.verify_pattern(pattern))
 
         pattern = 'W-[IV]-[STA-[RK]-x-[DE]-Y-[DNE]-[DE].'
-        self.assert_(not Pattern.verify_pattern(pattern))
+        self.assertTrue(not Pattern.verify_pattern(pattern))
 
         pattern = '[LIV]-G-P}-G-{P}-[FYWMGSTNH]-[SGA]-{PW}-[LIVCAT]-{PD}-x-[GSTACLIVMFY]-x(5,18)-[LIVMFYWCSTAR]-[AIVP]-[LIVMFAGCKR]-K.'
-        self.assert_(not Pattern.verify_pattern(pattern))
+        self.assertTrue(not Pattern.verify_pattern(pattern))
 
 
 if __name__ == "__main__":

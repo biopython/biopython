@@ -49,7 +49,7 @@ def _test_read_factory(source, count):
     fname = os.path.basename(source)
     def test_read(self):
         phx = PhyloXMLIO.read(source)
-        self.assert_(phx)
+        self.assertTrue(phx)
         self.assertEquals(len(phx), count[0])
         self.assertEquals(len(phx.other), count[1])
     test_read.__doc__ = "Read %s to produce a phyloXML object." % fname
@@ -174,17 +174,17 @@ class TreeTests(unittest.TestCase):
     def test_Phyloxml(self):
         """Instantiation of Phyloxml objects."""
         phx = PhyloXMLIO.read(EX_PHYLO)
-        self.assert_(isinstance(phx, PX.Phyloxml))
+        self.assertTrue(isinstance(phx, PX.Phyloxml))
         for tree in phx:
-            self.assert_(isinstance(tree, PX.Phylogeny))
+            self.assertTrue(isinstance(tree, PX.Phylogeny))
         for otr in phx.other:
-            self.assert_(isinstance(otr, PX.Other))
+            self.assertTrue(isinstance(otr, PX.Other))
 
     def test_Other(self):
         """Instantiation of Other objects."""
         phx = PhyloXMLIO.read(EX_PHYLO)
         otr = phx.other[0]
-        self.assert_(isinstance(otr, PX.Other))
+        self.assertTrue(isinstance(otr, PX.Other))
         self.assertEquals(otr.tag, 'alignment')
         self.assertEquals(otr.namespace, 'http://example.org/align')
         self.assertEquals(len(otr.children), 3)
@@ -219,7 +219,7 @@ class TreeTests(unittest.TestCase):
                 ('ab', 'a', 'b', 'c'),
                 ('AB', 'A', 'B', 'C'),
                 (0.06, 0.102, 0.23, 0.4)):
-            self.assert_(isinstance(clade, PX.Clade))
+            self.assertTrue(isinstance(clade, PX.Clade))
             self.assertEqual(clade.id_source, id_source)
             self.assertEqual(clade.name, name)
             self.assertAlmostEqual(clade.branch_length, blen)
@@ -228,7 +228,7 @@ class TreeTests(unittest.TestCase):
         """Instantiation of Annotation objects."""
         tree = list(PhyloXMLIO.parse(EX_PHYLO))[3]
         ann = tree.clade[1].sequences[0].annotations[0]
-        self.assert_(isinstance(ann, PX.Annotation))
+        self.assertTrue(isinstance(ann, PX.Annotation))
         self.assertEqual(ann.desc, 'alcohol dehydrogenase')
         self.assertAlmostEqual(ann.confidence.value, 0.67)
         self.assertEqual(ann.confidence.type, 'probability')
@@ -237,7 +237,7 @@ class TreeTests(unittest.TestCase):
         """Instantiation of BinaryCharacters objects."""
         tree = PhyloXMLIO.parse(EX_DOLLO).next()
         bchars = tree.clade[0,0].binary_characters
-        self.assert_(isinstance(bchars, PX.BinaryCharacters))
+        self.assertTrue(isinstance(bchars, PX.BinaryCharacters))
         self.assertEqual(bchars.type, 'parsimony inferred')
         for name, count, value in (
                 ('gained',  2, ['Cofilin_ADF', 'Gelsolin']),
@@ -254,7 +254,7 @@ class TreeTests(unittest.TestCase):
         """Instantiation of CladeRelation objects."""
         tree = list(PhyloXMLIO.parse(EX_PHYLO))[6]
         crel = tree.clade_relations[0]
-        self.assert_(isinstance(crel, PX.CladeRelation))
+        self.assertTrue(isinstance(crel, PX.CladeRelation))
         self.assertEqual(crel.id_ref_0, 'b')
         self.assertEqual(crel.id_ref_1, 'c')
         self.assertEqual(crel.type, 'network_connection')
@@ -266,14 +266,14 @@ class TreeTests(unittest.TestCase):
         for conf, type, val in izip(tree.confidences,
                 ('bootstrap', 'probability'),
                 (89.0, 0.71)):
-            self.assert_(isinstance(conf, PX.Confidence))
+            self.assertTrue(isinstance(conf, PX.Confidence))
             self.assertEqual(conf.type, type)
             self.assertAlmostEqual(conf.value, val)
         self.assertEqual(tree.clade.name, 'b')
         self.assertAlmostEqual(tree.clade.width, 0.2)
         for conf, val in izip(tree.clade[0].confidences,
                 (0.9, 0.71)):
-            self.assert_(isinstance(conf, PX.Confidence))
+            self.assertTrue(isinstance(conf, PX.Confidence))
             self.assertEqual(conf.type, 'probability')
             self.assertAlmostEqual(conf.value, val)
 
@@ -288,7 +288,7 @@ class TreeTests(unittest.TestCase):
                 # (10, 20, 30), # range is deprecated
                 ('Silurian', 'Devonian', 'Ediacaran'),
                 (425, 320, 600)):
-            self.assert_(isinstance(date, PX.Date))
+            self.assertTrue(isinstance(date, PX.Date))
             self.assertEqual(date.unit, 'mya')
             # self.assertAlmostEqual(date.range, rang)
             self.assertEqual(date.desc, desc)
@@ -313,10 +313,10 @@ class TreeTests(unittest.TestCase):
                 (47.481277, 35.155904, 47.376334, 32.880933),
                 (8.769303, 136.915863, 8.548108, -117.217543),
                 (472, 10, 452, 104)):
-            self.assert_(isinstance(dist, PX.Distribution))
+            self.assertTrue(isinstance(dist, PX.Distribution))
             self.assertEqual(dist.desc, desc)
             point = dist.points[0]
-            self.assert_(isinstance(point, PX.Point))
+            self.assertTrue(isinstance(point, PX.Point))
             self.assertEqual(point.geodetic_datum, 'WGS84')
             self.assertEqual(point.lat, lat)
             self.assertEqual(point.long, long)
@@ -330,7 +330,7 @@ class TreeTests(unittest.TestCase):
         tree = PhyloXMLIO.parse(EX_APAF).next()
         clade = tree.clade[0,0,0,0,0,0,0,0,0,0]
         darch = clade.sequences[0].domain_architecture
-        self.assert_(isinstance(darch, PX.DomainArchitecture))
+        self.assertTrue(isinstance(darch, PX.DomainArchitecture))
         self.assertEqual(darch.length, 1249)
         for domain, start, end, conf, value in izip(darch.domains,
                 (6, 109, 605, 647, 689, 733, 872, 993, 1075, 1117, 1168),
@@ -339,7 +339,7 @@ class TreeTests(unittest.TestCase):
                     4.6e-6, 6.3e-7, 1.4e-7, 0.3),
                 ('CARD', 'NB-ARC', 'WD40', 'WD40', 'WD40', 'WD40', 'WD40',
                     'WD40', 'WD40', 'WD40', 'WD40')):
-            self.assert_(isinstance(domain, PX.ProteinDomain))
+            self.assertTrue(isinstance(domain, PX.ProteinDomain))
             self.assertEqual(domain.start + 1, start)
             self.assertEqual(domain.end, end)
             self.assertAlmostEqual(domain.confidence, conf)
@@ -349,10 +349,10 @@ class TreeTests(unittest.TestCase):
         """Instantiation of Events objects."""
         tree = list(PhyloXMLIO.parse(EX_PHYLO))[4]
         event_s = tree.clade.events
-        self.assert_(isinstance(event_s, PX.Events))
+        self.assertTrue(isinstance(event_s, PX.Events))
         self.assertEqual(event_s.speciations, 1)
         event_d = tree.clade[0].events
-        self.assert_(isinstance(event_d, PX.Events))
+        self.assertTrue(isinstance(event_d, PX.Events))
         self.assertEqual(event_d.duplications, 1)
 
     def test_Polygon(self):
@@ -361,7 +361,7 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(tree.name, 'testing polygon')
         dist = tree.clade[0].distributions[0]
         for poly in dist.polygons:
-            self.assert_(isinstance(poly, PX.Polygon))
+            self.assertTrue(isinstance(poly, PX.Polygon))
             self.assertEqual(len(poly.points), 3)
         self.assertEqual(dist.polygons[0].points[0].alt_unit, 'm')
         for point, lat, long, alt in izip(
@@ -372,7 +372,7 @@ class TreeTests(unittest.TestCase):
                     7.548108),
                 (472, 10, 452, 42, 10, 452),
                 ):
-            self.assert_(isinstance(point, PX.Point))
+            self.assertTrue(isinstance(point, PX.Point))
             self.assertEqual(point.geodetic_datum, 'WGS84')
             self.assertEqual(point.lat, lat)
             self.assertEqual(point.long, long)
@@ -385,7 +385,7 @@ class TreeTests(unittest.TestCase):
                 tree.properties,
                 ('id_a', 'id_b', 'id_c'),
                 ('1200', '2300', '200')):
-            self.assert_(isinstance(prop, PX.Property))
+            self.assertTrue(isinstance(prop, PX.Property))
             self.assertEqual(prop.id_ref, id_ref)
             self.assertEqual(prop.datatype, "xsd:integer")
             self.assertEqual(prop.ref, "NOAA:depth")
@@ -397,7 +397,7 @@ class TreeTests(unittest.TestCase):
         """Instantiation of Reference objects."""
         tree = PhyloXMLIO.parse(EX_DOLLO).next()
         reference = tree.clade[0,0,0,0,0,0].references[0]
-        self.assert_(isinstance(reference, PX.Reference))
+        self.assertTrue(isinstance(reference, PX.Reference))
         self.assertEqual(reference.doi, '10.1038/nature06614')
         self.assertEqual(reference.desc, None)
 
@@ -409,7 +409,7 @@ class TreeTests(unittest.TestCase):
         trees = list(PhyloXMLIO.parse(EX_PHYLO))
         # Simple element with id_source
         seq0 = trees[4].clade[1].sequences[0]
-        self.assert_(isinstance(seq0, PX.Sequence))
+        self.assertTrue(isinstance(seq0, PX.Sequence))
         self.assertEqual(seq0.id_source, 'z')
         self.assertEqual(seq0.symbol, 'ADHX')
         self.assertEqual(seq0.accession.source, 'ncbi')
@@ -435,7 +435,7 @@ class TreeTests(unittest.TestCase):
                  ("GO:0008270", "GO:0016491"),
                  ("GO:0046872", "KEGG:Tetrachloroethene degradation")),
                 ):
-            self.assert_(isinstance(seq, PX.Sequence))
+            self.assertTrue(isinstance(seq, PX.Sequence))
             self.assertEqual(seq.symbol, sym)
             self.assertEqual(seq.accession.source, 'UniProtKB')
             self.assertEqual(seq.accession.value, acc)
@@ -451,7 +451,7 @@ class TreeTests(unittest.TestCase):
                 tree.sequence_relations,
                 ('x', 'x', 'y'), ('y', 'z', 'z'),
                 ('paralogy', 'orthology', 'orthology')):
-            self.assert_(isinstance(seqrel, PX.SequenceRelation))
+            self.assertTrue(isinstance(seqrel, PX.SequenceRelation))
             self.assertEqual(seqrel.id_ref_0, id_ref_0)
             self.assertEqual(seqrel.id_ref_1, id_ref_1)
             self.assertEqual(seqrel.type, type)
@@ -464,14 +464,14 @@ class TreeTests(unittest.TestCase):
         trees = list(PhyloXMLIO.parse(EX_PHYLO))
         # Octopus
         tax5 = trees[5].clade[0,0].taxonomies[0]
-        self.assert_(isinstance(tax5, PX.Taxonomy))
+        self.assertTrue(isinstance(tax5, PX.Taxonomy))
         self.assertEqual(tax5.id.value, '6645')
         self.assertEqual(tax5.id.provider, 'NCBI')
         self.assertEqual(tax5.code, 'OCTVU')
         self.assertEqual(tax5.scientific_name, 'Octopus vulgaris')
         # Nile monitor
         tax9 = trees[9].clade[0].taxonomies[0]
-        self.assert_(isinstance(tax9, PX.Taxonomy))
+        self.assertTrue(isinstance(tax9, PX.Taxonomy))
         self.assertEqual(tax9.id.value, '62046')
         self.assertEqual(tax9.id.provider, 'NCBI')
         self.assertEqual(tax9.scientific_name, 'Varanus niloticus')
@@ -482,7 +482,7 @@ class TreeTests(unittest.TestCase):
         """Instantiation of Uri objects."""
         tree = list(PhyloXMLIO.parse(EX_PHYLO))[9]
         uri = tree.clade.taxonomies[0].uri
-        self.assert_(isinstance(uri, PX.Uri))
+        self.assertTrue(isinstance(uri, PX.Uri))
         self.assertEqual(uri.desc, 'EMBL REPTILE DATABASE')
         self.assertEqual(uri.value,
                 'http://www.embl-heidelberg.de/~uetz/families/Varanidae.html')
@@ -602,13 +602,13 @@ class MethodTests(unittest.TestCase):
         """Convert a Clade object to a new Phylogeny."""
         clade = self.phyloxml.phylogenies[0].clade[0]
         tree = clade.to_phylogeny(rooted=True)
-        self.assert_(isinstance(tree, PX.Phylogeny))
+        self.assertTrue(isinstance(tree, PX.Phylogeny))
 
     def test_phylogeny_to_phyloxml(self):
         """Convert a Phylogeny object to a new Phyloxml."""
         tree = self.phyloxml.phylogenies[0]
         doc = tree.to_phyloxml()
-        self.assert_(isinstance(doc, PX.Phyloxml))
+        self.assertTrue(isinstance(doc, PX.Phyloxml))
 
     def test_sequence_conversion(self):
         pseq = PX.Sequence(
@@ -642,7 +642,7 @@ class MethodTests(unittest.TestCase):
     def test_to_alignment(self):
         tree = self.phyloxml.phylogenies[0]
         aln = tree.to_alignment()
-        self.assert_(isinstance(aln, MultipleSeqAlignment))
+        self.assertTrue(isinstance(aln, MultipleSeqAlignment))
         self.assertEqual(len(aln), 0)
         # Add sequences to the terminals
         alphabet = Alphabet.Gapped(Alphabet.generic_dna)
@@ -652,7 +652,7 @@ class MethodTests(unittest.TestCase):
                 SeqRecord(Seq(seqstr, alphabet), id=str(tip))))
         # Check the alignment
         aln = tree.to_alignment()
-        self.assert_(isinstance(aln, MultipleSeqAlignment))
+        self.assertTrue(isinstance(aln, MultipleSeqAlignment))
         self.assertEqual(len(aln), 3)
         self.assertEqual(aln.get_alignment_length(), 7)
 
@@ -670,8 +670,8 @@ class MethodTests(unittest.TestCase):
 
     def test_phyloxml_getitem(self):
         """Phyloxml.__getitem__: get phylogenies by name or index."""
-        self.assert_(self.phyloxml.phylogenies[9] is self.phyloxml[9])
-        self.assert_(self.phyloxml['monitor lizards'] is self.phyloxml[9])
+        self.assertTrue(self.phyloxml.phylogenies[9] is self.phyloxml[9])
+        self.assertTrue(self.phyloxml['monitor lizards'] is self.phyloxml[9])
         self.assertEqual(len(self.phyloxml[:]), len(self.phyloxml))
 
     def test_events(self):

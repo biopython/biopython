@@ -96,7 +96,7 @@ class DistanceTests(unittest.TestCase):
     
     def distances_from_alignment(self, filename, DNA = True):
         """ check we can make distance matrix from a given alignment """
-        self.assert_(os.path.isfile(filename), "Missing %s" % filename)
+        self.assertTrue(os.path.isfile(filename), "Missing %s" % filename)
         if DNA:
             cline =  FDNADistCommandline(exes["fdnadist"],
                                          method = 'j',
@@ -114,11 +114,11 @@ class DistanceTests(unittest.TestCase):
             raise ValueError("Return code %s from:\n%s" \
                              % (return_code, str(cline)))
         #biopython can't grok distance matrices, so we'll just check it exists
-        self.assert_(os.path.isfile("test_file"))
+        self.assertTrue(os.path.isfile("test_file"))
     
     def tree_from_distances(self, filename):
         """ Check we can estimate a tree from a distance matrix """
-        self.assert_(os.path.isfile(filename), "Missing %s" % filename)
+        self.assertTrue(os.path.isfile(filename), "Missing %s" % filename)
         cline = FNeighborCommandline(exes["fneighbor"],
                                      datafile = filename,
                                      outtreefile = "test_file",
@@ -175,7 +175,7 @@ class ParsimonyTests(unittest.TestCase):
 
     def parsimony_tree(self, filename, format, DNA=True):
         """ estimate a parsimony tree from an alignment """
-        self.assert_(os.path.isfile(filename), "Missing %s" % filename)
+        self.assertTrue(os.path.isfile(filename), "Missing %s" % filename)
         if DNA:
             cline = FDNAParsCommandline(exes["fdnapars"],
                                         sequence = filename,
@@ -236,7 +236,7 @@ class BootstrapTests(unittest.TestCase):
         The align_type type argument is passed to the commandline object to
         set the output format to use (from [D]na,[p]rotein and [r]na )
         """
-        self.assert_(os.path.isfile(filename), "Missing %s" % filename)
+        self.assertTrue(os.path.isfile(filename), "Missing %s" % filename)
         cline = FSeqBootCommandline(exes["fseqboot"],
                                     sequence = filename,
                                     outfile =  "test_file",
@@ -306,7 +306,7 @@ class TreeComparisonTests(unittest.TestCase):
         if return_code != 0:
             raise ValueError("Return code %s from:\n%s" \
                              % (return_code, str(cline)))
-        self.assert_(os.path.isfile("test_file"))
+        self.assertTrue(os.path.isfile("test_file"))
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

@@ -69,7 +69,7 @@ class A_ExceptionTest(unittest.TestCase):
                 "Residue (' ', 81, ' ') redefined at line 644.",
                 'Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 820.'
                 ]):
-                self.assert_(msg in str(wrn))
+                self.assertTrue(msg in str(wrn))
         finally:
             warnings.showwarning = orig_showwarning
 
@@ -149,7 +149,7 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(pp[-1].get_id()[1], 86)
         # Check the sequence
         s = pp.get_sequence()
-        self.assert_(isinstance(s, Seq))
+        self.assertTrue(isinstance(s, Seq))
         self.assertEqual(s.alphabet, generic_protein)
         self.assertEqual("RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
                          "SDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
@@ -166,7 +166,7 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(pp[-1].get_id()[1], 86)
         # Check the sequence
         s = pp.get_sequence()
-        self.assert_(isinstance(s, Seq))
+        self.assertTrue(isinstance(s, Seq))
         self.assertEqual(s.alphabet, generic_protein)
         self.assertEqual("RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
                          "SDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
@@ -587,8 +587,8 @@ class ParseReal(unittest.TestCase):
         def confirm_numbering(struct):
             self.assertEqual(len(struct), 20)
             for idx, model in enumerate(struct):
-                self.assert_(model.serial_num, idx + 1)
-                self.assert_(model.serial_num, model.id + 1)
+                self.assertTrue(model.serial_num, idx + 1)
+                self.assertTrue(model.serial_num, model.id + 1)
         parser = PDBParser()
         struct1 = parser.get_structure("1mot", "PDB/1MOT.pdb")
         confirm_numbering(struct1)
@@ -705,7 +705,7 @@ class NeighborTest(unittest.TestCase):
             atoms = [RandomAtom() for j in range(100)]
             ns = NeighborSearch(atoms)
             hits = ns.search_all(5.0)
-            self.assert_(hits >= 0)
+            self.assertTrue(hits >= 0)
 
 # -------------------------------------------------------------
 

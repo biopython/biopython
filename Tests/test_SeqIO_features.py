@@ -202,19 +202,19 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
             _insdc_feature_location_string(feature,len(parent_seq)))
 
         new = feature.extract(parent_seq)
-        self.assert_(isinstance(new, Seq))
+        self.assertTrue(isinstance(new, Seq))
         self.assertEqual(str(new), answer_str)
 
         new = feature.extract(str(parent_seq))
-        self.assert_(isinstance(new, str))
+        self.assertTrue(isinstance(new, str))
         self.assertEqual(new, answer_str)
 
         new = feature.extract(parent_seq.tomutable())
-        self.assert_(isinstance(new, Seq)) #Not MutableSeq!
+        self.assertTrue(isinstance(new, Seq)) #Not MutableSeq!
         self.assertEqual(str(new), answer_str)
 
         new = feature.extract(UnknownSeq(len(parent_seq), parent_seq.alphabet))
-        self.assert_(isinstance(new, UnknownSeq))
+        self.assertTrue(isinstance(new, UnknownSeq))
         self.assertEqual(len(new), len(answer_str))
         
         if _insdc_feature_location_string(feature, 1326) != location_str:
@@ -241,12 +241,12 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
             if f1.strand is None:
                 f1.strand = f2.strand #hack as described above
             self.assertEqual(f1.strand, f2.strand)
-            self.assert_(compare_feature(f1,f2))
+            self.assertTrue(compare_feature(f1,f2))
         feature.type = "misc_feature" #hack as may not be misc_feature
         if not feature.strand:
             feature.strand = new_f.strand #hack as above
         self.assertEqual(feature.strand, new_f.strand)
-        self.assert_(compare_feature(feature, new_f))
+        self.assertTrue(compare_feature(feature, new_f))
         
 
     def test_simple_rna(self):

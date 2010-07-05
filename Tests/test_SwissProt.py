@@ -23,7 +23,7 @@ class TestSwissProt(unittest.TestCase):
         seq_record = SeqIO.read(test_handle, "swiss")
         test_handle.close()
 
-        self.assert_(isinstance(seq_record, SeqRecord))
+        self.assertTrue(isinstance(seq_record, SeqRecord))
 
         self.assertEqual(seq_record.id, "Q13454")
         self.assertEqual(seq_record.name, "N33_HUMAN")
@@ -58,7 +58,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.seq.tostring(), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assert_(seq_record.id in record.accessions)
+        self.assertTrue(seq_record.id in record.accessions)
 
         #Now try using the iterator - note that all these
         #test cases have only one record.
@@ -69,7 +69,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SeqRecord))
+        self.assertTrue(isinstance(records[0], SeqRecord))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].seq.tostring(), seq_record.seq.tostring())
@@ -83,7 +83,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SwissProt.Record))
+        self.assertTrue(isinstance(records[0], SwissProt.Record))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -104,7 +104,7 @@ class TestSwissProt(unittest.TestCase):
         seq_record = SeqIO.read(test_handle, "swiss")
         test_handle.close()
 
-        self.assert_(isinstance(seq_record, SeqRecord))
+        self.assertTrue(isinstance(seq_record, SeqRecord))
 
         self.assertEqual(seq_record.id, "P54101")
         self.assertEqual(seq_record.name, "CSP_MOUSE")
@@ -142,7 +142,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.seq.tostring(), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assert_(seq_record.id in record.accessions)
+        self.assertTrue(seq_record.id in record.accessions)
 
         #Now try using the iterator - note that all these
         #test cases have only one record.
@@ -153,7 +153,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SeqRecord))
+        self.assertTrue(isinstance(records[0], SeqRecord))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].seq.tostring(), seq_record.seq.tostring())
@@ -167,7 +167,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SwissProt.Record))
+        self.assertTrue(isinstance(records[0], SwissProt.Record))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -187,7 +187,7 @@ class TestSwissProt(unittest.TestCase):
         seq_record = SeqIO.read(test_handle, "swiss")
         test_handle.close()
 
-        self.assert_(isinstance(seq_record, SeqRecord))
+        self.assertTrue(isinstance(seq_record, SeqRecord))
 
         self.assertEqual(seq_record.id, "P42655")
         self.assertEqual(seq_record.name, "143E_HUMAN")
@@ -265,7 +265,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.seq.tostring(), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assert_(seq_record.id in record.accessions)
+        self.assertTrue(seq_record.id in record.accessions)
 
         #Now try using the iterator - note that all these
         #test cases have only one record.
@@ -276,7 +276,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SeqRecord))
+        self.assertTrue(isinstance(records[0], SeqRecord))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].seq.tostring(), seq_record.seq.tostring())
@@ -290,7 +290,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SwissProt.Record))
+        self.assertTrue(isinstance(records[0], SwissProt.Record))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -311,7 +311,7 @@ class TestSwissProt(unittest.TestCase):
         seq_record = SeqIO.read(test_handle, "swiss")
         test_handle.close()
 
-        self.assert_(isinstance(seq_record, SeqRecord))
+        self.assertTrue(isinstance(seq_record, SeqRecord))
 
         self.assertEqual(seq_record.id, "P23082")
         self.assertEqual(seq_record.name, "NDOA_PSEPU")
@@ -363,7 +363,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.seq.tostring(), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assert_(seq_record.id in record.accessions)
+        self.assertTrue(seq_record.id in record.accessions)
 
         #Now try using the iterator - note that all these
         #test cases have only one record.
@@ -374,7 +374,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SeqRecord))
+        self.assertTrue(isinstance(records[0], SeqRecord))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].seq.tostring(), seq_record.seq.tostring())
@@ -388,7 +388,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SwissProt.Record))
+        self.assertTrue(isinstance(records[0], SwissProt.Record))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -408,7 +408,7 @@ class TestSwissProt(unittest.TestCase):
         seq_record = SeqIO.read(test_handle, "swiss")
         test_handle.close()
 
-        self.assert_(isinstance(seq_record, SeqRecord))
+        self.assertTrue(isinstance(seq_record, SeqRecord))
 
         self.assertEqual(seq_record.id, "P24973")
         self.assertEqual(seq_record.name, "NU3M_BALPH")
@@ -441,7 +441,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.seq.tostring(), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assert_(seq_record.id in record.accessions)
+        self.assertTrue(seq_record.id in record.accessions)
 
         #Now try using the iterator - note that all these
         #test cases have only one record.
@@ -452,7 +452,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SeqRecord))
+        self.assertTrue(isinstance(records[0], SeqRecord))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].seq.tostring(), seq_record.seq.tostring())
@@ -466,7 +466,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SwissProt.Record))
+        self.assertTrue(isinstance(records[0], SwissProt.Record))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -487,7 +487,7 @@ class TestSwissProt(unittest.TestCase):
         seq_record = SeqIO.read(test_handle, "swiss")
         test_handle.close()
 
-        self.assert_(isinstance(seq_record, SeqRecord))
+        self.assertTrue(isinstance(seq_record, SeqRecord))
 
         self.assertEqual(seq_record.id, "P39896")
         self.assertEqual(seq_record.name, "TCMO_STRGA")
@@ -516,7 +516,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.seq.tostring(), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assert_(seq_record.id in record.accessions)
+        self.assertTrue(seq_record.id in record.accessions)
 
         #Now try using the iterator - note that all these
         #test cases have only one record.
@@ -527,7 +527,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SeqRecord))
+        self.assertTrue(isinstance(records[0], SeqRecord))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].seq.tostring(), seq_record.seq.tostring())
@@ -541,7 +541,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SwissProt.Record))
+        self.assertTrue(isinstance(records[0], SwissProt.Record))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -562,7 +562,7 @@ class TestSwissProt(unittest.TestCase):
         seq_record = SeqIO.read(test_handle, "swiss")
         test_handle.close()
 
-        self.assert_(isinstance(seq_record, SeqRecord))
+        self.assertTrue(isinstance(seq_record, SeqRecord))
 
         self.assertEqual(seq_record.id, "O95832")
         self.assertEqual(seq_record.name, "CLD1_HUMAN")
@@ -600,7 +600,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.seq.tostring(), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assert_(seq_record.id in record.accessions)
+        self.assertTrue(seq_record.id in record.accessions)
 
         #Now try using the iterator - note that all these
         #test cases have only one record.
@@ -611,7 +611,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SeqRecord))
+        self.assertTrue(isinstance(records[0], SeqRecord))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].seq.tostring(), seq_record.seq.tostring())
@@ -625,7 +625,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SwissProt.Record))
+        self.assertTrue(isinstance(records[0], SwissProt.Record))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -646,7 +646,7 @@ class TestSwissProt(unittest.TestCase):
         seq_record = SeqIO.read(test_handle, "swiss")
         test_handle.close()
 
-        self.assert_(isinstance(seq_record, SeqRecord))
+        self.assertTrue(isinstance(seq_record, SeqRecord))
 
         self.assertEqual(seq_record.id, "P01892")
         self.assertEqual(seq_record.name, "1A02_HUMAN")
@@ -847,7 +847,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.seq.tostring(), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assert_(seq_record.id in record.accessions)
+        self.assertTrue(seq_record.id in record.accessions)
 
         #Now try using the iterator - note that all these
         #test cases have only one record.
@@ -858,7 +858,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SeqRecord))
+        self.assertTrue(isinstance(records[0], SeqRecord))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].seq.tostring(), seq_record.seq.tostring())
@@ -872,7 +872,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SwissProt.Record))
+        self.assertTrue(isinstance(records[0], SwissProt.Record))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -892,7 +892,7 @@ class TestSwissProt(unittest.TestCase):
         seq_record = SeqIO.read(test_handle, "swiss")
         test_handle.close()
 
-        self.assert_(isinstance(seq_record, SeqRecord))
+        self.assertTrue(isinstance(seq_record, SeqRecord))
 
         self.assertEqual(seq_record.id, "O23729")
         self.assertEqual(seq_record.name, "CHS3_BROFI")
@@ -922,7 +922,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.seq.tostring(), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assert_(seq_record.id in record.accessions)
+        self.assertTrue(seq_record.id in record.accessions)
 
         #Now try using the iterator - note that all these
         #test cases have only one record.
@@ -933,7 +933,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SeqRecord))
+        self.assertTrue(isinstance(records[0], SeqRecord))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].seq.tostring(), seq_record.seq.tostring())
@@ -947,7 +947,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SwissProt.Record))
+        self.assertTrue(isinstance(records[0], SwissProt.Record))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -967,7 +967,7 @@ class TestSwissProt(unittest.TestCase):
         seq_record = SeqIO.read(test_handle, "swiss")
         test_handle.close()
 
-        self.assert_(isinstance(seq_record, SeqRecord))
+        self.assertTrue(isinstance(seq_record, SeqRecord))
 
         self.assertEqual(seq_record.id, "Q13639")
         self.assertEqual(seq_record.name, "5H4_HUMAN")
@@ -1038,7 +1038,7 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(seq_record.seq.tostring(), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assert_(seq_record.id in record.accessions)
+        self.assertTrue(seq_record.id in record.accessions)
 
         #Now try using the iterator - note that all these
         #test cases have only one record.
@@ -1049,7 +1049,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SeqRecord))
+        self.assertTrue(isinstance(records[0], SeqRecord))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].seq.tostring(), seq_record.seq.tostring())
@@ -1063,7 +1063,7 @@ class TestSwissProt(unittest.TestCase):
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SwissProt.Record))
+        self.assertTrue(isinstance(records[0], SwissProt.Record))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -1083,7 +1083,7 @@ class TestSwissProt(unittest.TestCase):
         seq_record = SeqIO.read(test_handle, "swiss")
         test_handle.close()
 
-        self.assert_(isinstance(seq_record, SeqRecord))
+        self.assertTrue(isinstance(seq_record, SeqRecord))
 
         self.assertEqual(seq_record.id, "P16235")
         self.assertEqual(seq_record.name, "LSHR_RAT")
@@ -1201,7 +1201,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         self.assertEqual(seq_record.seq.tostring(), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assert_(seq_record.id in record.accessions)
+        self.assertTrue(seq_record.id in record.accessions)
 
         #Now try using the iterator - note that all these
         #test cases have only one record.
@@ -1212,7 +1212,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SeqRecord))
+        self.assertTrue(isinstance(records[0], SeqRecord))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].seq.tostring(), seq_record.seq.tostring())
@@ -1226,7 +1226,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SwissProt.Record))
+        self.assertTrue(isinstance(records[0], SwissProt.Record))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -1247,7 +1247,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         seq_record = SeqIO.read(test_handle, "swiss")
         test_handle.close()
 
-        self.assert_(isinstance(seq_record, SeqRecord))
+        self.assertTrue(isinstance(seq_record, SeqRecord))
 
         self.assertEqual(seq_record.id, "Q9Y736")
         self.assertEqual(seq_record.name, "Q9Y736")
@@ -1278,7 +1278,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         self.assertEqual(seq_record.seq.tostring(), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assert_(seq_record.id in record.accessions)
+        self.assertTrue(seq_record.id in record.accessions)
 
         #Now try using the iterator - note that all these
         #test cases have only one record.
@@ -1289,7 +1289,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SeqRecord))
+        self.assertTrue(isinstance(records[0], SeqRecord))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].seq.tostring(), seq_record.seq.tostring())
@@ -1303,7 +1303,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SwissProt.Record))
+        self.assertTrue(isinstance(records[0], SwissProt.Record))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -1324,7 +1324,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         seq_record = SeqIO.read(test_handle, "swiss")
         test_handle.close()
 
-        self.assert_(isinstance(seq_record, SeqRecord))
+        self.assertTrue(isinstance(seq_record, SeqRecord))
 
         self.assertEqual(seq_record.id, "P82909")
         self.assertEqual(seq_record.name, "P82909")
@@ -1355,7 +1355,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         self.assertEqual(seq_record.seq.tostring(), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assert_(seq_record.id in record.accessions)
+        self.assertTrue(seq_record.id in record.accessions)
 
         #Now try using the iterator - note that all these
         #test cases have only one record.
@@ -1366,7 +1366,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SeqRecord))
+        self.assertTrue(isinstance(records[0], SeqRecord))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].seq.tostring(), seq_record.seq.tostring())
@@ -1380,7 +1380,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SwissProt.Record))
+        self.assertTrue(isinstance(records[0], SwissProt.Record))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -1401,7 +1401,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         seq_record = SeqIO.read(test_handle, "swiss")
         test_handle.close()
 
-        self.assert_(isinstance(seq_record, SeqRecord))
+        self.assertTrue(isinstance(seq_record, SeqRecord))
 
         self.assertEqual(seq_record.id, "P12166")
         self.assertEqual(seq_record.name, "PSBL_ORYSA")
@@ -1523,7 +1523,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         self.assertEqual(seq_record.seq.tostring(), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assert_(seq_record.id in record.accessions)
+        self.assertTrue(seq_record.id in record.accessions)
 
         #Now try using the iterator - note that all these
         #test cases have only one record.
@@ -1534,7 +1534,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SeqRecord))
+        self.assertTrue(isinstance(records[0], SeqRecord))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].seq.tostring(), seq_record.seq.tostring())
@@ -1548,7 +1548,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SwissProt.Record))
+        self.assertTrue(isinstance(records[0], SwissProt.Record))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)
@@ -1569,7 +1569,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         seq_record = SeqIO.read(test_handle, "swiss")
         test_handle.close()
 
-        self.assert_(isinstance(seq_record, SeqRecord))
+        self.assertTrue(isinstance(seq_record, SeqRecord))
 
         self.assertEqual(seq_record.id, "IPI00383150")
         self.assertEqual(seq_record.name, "IPI00383150.2")
@@ -1593,7 +1593,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         self.assertEqual(seq_record.seq.tostring(), record.sequence)
         self.assertEqual(seq_record.description, record.description)
         self.assertEqual(seq_record.name, record.entry_name)
-        self.assert_(seq_record.id in record.accessions)
+        self.assertTrue(seq_record.id in record.accessions)
 
         #Now try using the iterator - note that all these
         #test cases have only one record.
@@ -1604,7 +1604,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SeqRecord))
+        self.assertTrue(isinstance(records[0], SeqRecord))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].seq.tostring(), seq_record.seq.tostring())
@@ -1618,7 +1618,7 @@ Aatsinki J.T., Pietila E.M., Lakkakorpi J.T., Rajaniemi H.J.;""")
         test_handle.close()
 
         self.assertEqual(len(records), 1)
-        self.assert_(isinstance(records[0], SwissProt.Record))
+        self.assertTrue(isinstance(records[0], SwissProt.Record))
 
         #Check matches what we got earlier without the iterator:
         self.assertEqual(records[0].sequence, record.sequence)

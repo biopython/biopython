@@ -90,7 +90,7 @@ class MuscleApplication(unittest.TestCase):
         output, error = child.communicate()
         self.assertEqual(child.returncode, 0)
         self.assertEqual(output, "")
-        self.assert_("ERROR" not in error)
+        self.assertTrue("ERROR" not in error)
         del child
 
     def test_Muscle_with_options(self):
@@ -113,7 +113,7 @@ class MuscleApplication(unittest.TestCase):
         output, error = child.communicate()
         self.assertEqual(child.returncode, 0)
         self.assertEqual(output, "")
-        self.assert_("ERROR" not in error)
+        self.assertTrue("ERROR" not in error)
         del child
 
     def test_Muscle_profile_simple(self):
@@ -134,7 +134,7 @@ class MuscleApplication(unittest.TestCase):
         output, error = child.communicate()
         self.assertEqual(child.returncode, 0)
         self.assertEqual(output, "")
-        self.assert_("ERROR" not in error)
+        self.assertTrue("ERROR" not in error)
         del child
 
     def test_Muscle_profile_with_options(self):
@@ -155,7 +155,7 @@ class MuscleApplication(unittest.TestCase):
         result, stdout, stderr = generic_run(cmdline)
         self.assertEqual(result.return_code, 0)
         self.assertEqual(stdout.read(), "")
-        self.assert_("ERROR" not in stderr.read())
+        self.assertTrue("ERROR" not in stderr.read())
         self.assertEqual(str(result._cl), str(cmdline))
         """
 
@@ -166,7 +166,7 @@ class SimpleAlignTest(unittest.TestCase):
     #FASTA output seems broken on Muscle 3.6 (on the Mac).
     def test_simple_fasta(self):
         input_file = "Fasta/f002"
-        self.assert_(os.path.isfile(input_file))
+        self.assertTrue(os.path.isfile(input_file))
         records = list(SeqIO.parse(open(input_file),"fasta"))
         #Prepare the command...
         cmdline = MuscleCommandline(muscle_exe)
@@ -189,7 +189,7 @@ class SimpleAlignTest(unittest.TestCase):
     def test_simple_clustal(self):
         """Simple muscle call using Clustal output with a MUSCLE header"""
         input_file = "Fasta/f002"
-        self.assert_(os.path.isfile(input_file))
+        self.assertTrue(os.path.isfile(input_file))
         records = list(SeqIO.parse(open(input_file),"fasta"))
         #Prepare the command... use Clustal output (with a MUSCLE header)
         cmdline = MuscleCommandline(muscle_exe, input=input_file,
@@ -203,7 +203,7 @@ class SimpleAlignTest(unittest.TestCase):
                                  shell=(sys.platform!="win32"))
         #Didn't use -quiet so there should be progress reports on stderr,
         align = AlignIO.read(child.stdout, "clustal")
-        self.assert_(child.stderr.read().strip().startswith("MUSCLE"))
+        self.assertTrue(child.stderr.read().strip().startswith("MUSCLE"))
         return_code = child.wait()
         self.assertEqual(return_code, 0)
         del child
@@ -215,7 +215,7 @@ class SimpleAlignTest(unittest.TestCase):
     def test_simple_clustal_strict(self):
         """Simple muscle call using strict Clustal output"""
         input_file = "Fasta/f002"
-        self.assert_(os.path.isfile(input_file))
+        self.assertTrue(os.path.isfile(input_file))
         records = list(SeqIO.parse(open(input_file),"fasta"))
         #Prepare the command...
         cmdline = MuscleCommandline(muscle_exe)
@@ -233,7 +233,7 @@ class SimpleAlignTest(unittest.TestCase):
                                  shell=(sys.platform!="win32"))
         #Didn't use -quiet so there should be progress reports on stderr,
         align = AlignIO.read(child.stdout, "clustal")
-        self.assert_(child.stderr.read().strip().startswith("MUSCLE"))
+        self.assertTrue(child.stderr.read().strip().startswith("MUSCLE"))
         self.assertEqual(len(records),len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
@@ -287,7 +287,7 @@ class SimpleAlignTest(unittest.TestCase):
     def test_using_stdin(self):
         """Simple alignment using stdin"""
         input_file = "Fasta/f002"
-        self.assert_(os.path.isfile(input_file))
+        self.assertTrue(os.path.isfile(input_file))
         records = list(SeqIO.parse(open(input_file),"fasta"))
         #Prepare the command... use Clustal output (with a MUSCLE header)
         cline = MuscleCommandline(muscle_exe, clw=True, stable=True)
@@ -314,7 +314,7 @@ class SimpleAlignTest(unittest.TestCase):
         input_file = "Fasta/f002"
         output_html = "temp_f002.html"
         output_clwstrict = "temp_f002.clw"
-        self.assert_(os.path.isfile(input_file))
+        self.assertTrue(os.path.isfile(input_file))
         records = list(SeqIO.parse(open(input_file),"fasta"))
         #Prepare the command... use Clustal output (with a MUSCLE header)
         cmdline = MuscleCommandline(muscle_exe, input=input_file,
@@ -332,7 +332,7 @@ class SimpleAlignTest(unittest.TestCase):
         #Clustalw on stdout:
         align = AlignIO.read(child.stdout, "clustal")
         #Didn't use -quiet so there should be progress reports on stderr,
-        self.assert_(child.stderr.read().strip().startswith("MUSCLE"))
+        self.assertTrue(child.stderr.read().strip().startswith("MUSCLE"))
         return_code = child.wait()
         self.assertEqual(return_code, 0)
         self.assertEqual(len(records),len(align))
@@ -340,8 +340,8 @@ class SimpleAlignTest(unittest.TestCase):
             self.assertEqual(old.id, new.id)
         del child
         html = open(output_html,"rU").read().strip().upper()
-        self.assert_(html.startswith("<HTML"))
-        self.assert_(html.endswith("</HTML>"))
+        self.assertTrue(html.startswith("<HTML"))
+        self.assertTrue(html.endswith("</HTML>"))
         #ClustalW strict:
         align = AlignIO.read(open(output_clwstrict), "clustal")
         self.assertEqual(len(records),len(align))

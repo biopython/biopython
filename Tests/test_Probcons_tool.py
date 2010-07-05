@@ -47,7 +47,7 @@ class ProbconsApplication(unittest.TestCase):
                                  shell=(sys.platform!="win32"))
         return_code = child.wait()
         self.assertEqual(return_code, 0)
-        self.assert_(child.stderr.read().startswith("\nPROBCONS"))
+        self.assertTrue(child.stderr.read().startswith("\nPROBCONS"))
         align = AlignIO.read(StringIO(child.stdout.read()), "fasta")
         records = list(SeqIO.parse(open(self.infile1),"fasta"))
         self.assertEqual(len(records),len(align))
@@ -70,8 +70,8 @@ class ProbconsApplication(unittest.TestCase):
                                  shell=(sys.platform!="win32"))
         return_code = child.wait()
         self.assertEqual(return_code, 0)
-        self.assert_(child.stderr.read().strip().startswith("PROBCONS"))
-        #self.assert_(stdout.read().strip().startswith("PROBCONS"))
+        self.assertTrue(child.stderr.read().strip().startswith("PROBCONS"))
+        #self.assertTrue(stdout.read().strip().startswith("PROBCONS"))
         align = AlignIO.read(StringIO(child.stdout.read()), "clustal")
         records = list(SeqIO.parse(open(self.infile1),"fasta"))
         self.assertEqual(len(records),len(align))
@@ -98,8 +98,8 @@ class ProbconsApplication(unittest.TestCase):
                                  shell=(sys.platform!="win32"))
         return_code = child.wait()
         self.assertEqual(return_code, 0)
-        self.assert_(child.stderr.read().startswith("\nPROBCONS"))
-        self.assert_(child.stdout.read().startswith(">AK1H_ECOLI/1-378"))
+        self.assertTrue(child.stderr.read().startswith("\nPROBCONS"))
+        self.assertTrue(child.stdout.read().startswith(">AK1H_ECOLI/1-378"))
         del child
 
 if __name__ == "__main__":

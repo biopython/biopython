@@ -58,14 +58,14 @@ class MixinTests(unittest.TestCase):
         tree = self.phylogenies[5]
         matches = list(tree.find_elements(PhyloXML.Taxonomy, code='OCTVU'))
         self.assertEqual(len(matches), 1)
-        self.assert_(isinstance(matches[0], PhyloXML.Taxonomy))
+        self.assertTrue(isinstance(matches[0], PhyloXML.Taxonomy))
         self.assertEqual(matches[0].code, 'OCTVU')
         self.assertEqual(matches[0].scientific_name, 'Octopus vulgaris')
         # Iteration and regexps
         tree = self.phylogenies[10]
         for point, alt in izip(tree.find_elements(geodetic_datum=r'WGS\d{2}'),
                                (472, 10, 452)):
-            self.assert_(isinstance(point, PhyloXML.Point))
+            self.assertTrue(isinstance(point, PhyloXML.Point))
             self.assertEqual(point.geodetic_datum, 'WGS84')
             self.assertAlmostEqual(point.alt, alt)
         # class filter
@@ -87,12 +87,12 @@ class MixinTests(unittest.TestCase):
         # boolean filter
         for clade, name in izip(self.phylogenies[10].find_clades(name=True),
                                 list('ABCD')):
-            self.assert_(isinstance(clade, PhyloXML.Clade))
+            self.assertTrue(isinstance(clade, PhyloXML.Clade))
             self.assertEqual(clade.name, name)
         # finding deeper attributes
         octo = list(self.phylogenies[5].find_clades(code='OCTVU'))
         self.assertEqual(len(octo), 1)
-        self.assert_(isinstance(octo[0], PhyloXML.Clade))
+        self.assertTrue(isinstance(octo[0], PhyloXML.Clade))
         self.assertEqual(octo[0].taxonomies[0].code, 'OCTVU')
 
     def test_find_terminal(self):
@@ -234,7 +234,7 @@ class MixinTests(unittest.TestCase):
         parent = tree.prune(name='A')
         self.assertEqual(len(parent.clades), 2)
         for clade, name, blen in zip(parent, 'BC', (.29, .4)):
-            self.assert_(clade.is_terminal())
+            self.assertTrue(clade.is_terminal())
             self.assertEqual(clade.name, name)
             self.assertAlmostEqual(clade.branch_length, blen)
         self.assertEqual(len(tree.get_terminals()), 2)
@@ -245,7 +245,7 @@ class MixinTests(unittest.TestCase):
         self.assertEqual(parent, tree.root)
         self.assertEqual(len(parent.clades), 2)
         for clade, name, blen in zip(parent, 'AB', (.102, .23)):
-            self.assert_(clade.is_terminal())
+            self.assertTrue(clade.is_terminal())
             self.assertEqual(clade.name, name)
             self.assertAlmostEqual(clade.branch_length, blen)
         self.assertEqual(len(tree.get_terminals()), 2)
@@ -265,7 +265,7 @@ class MixinTests(unittest.TestCase):
         for clade, name, blen in zip(C[0],
                 ('C00', 'C01', 'C02'),
                 (0.5, 0.5, 0.5)):
-            self.assert_(clade.is_terminal())
+            self.assertTrue(clade.is_terminal())
             self.assertEqual(clade.name, name)
             self.assertEqual(clade.branch_length, blen)
 

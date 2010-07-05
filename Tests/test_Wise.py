@@ -23,12 +23,12 @@ class TestWiseDryRun(unittest.TestCase):
     def test_dnal(self):
         """Call dnal, and do a trivial check on its output."""
         Wise.align(["dnal"], ("seq1.fna", "seq2.fna"), kbyte=100000, dry_run=True)
-        self.assert_(sys.stdout.getvalue().startswith("dnal -kbyte 100000 seq1.fna seq2.fna"))
+        self.assertTrue(sys.stdout.getvalue().startswith("dnal -kbyte 100000 seq1.fna seq2.fna"))
 
     def test_psw(self):
         """Call psw, and do a trivial check on its output."""
         Wise.align(["psw"], ("seq1.faa", "seq2.faa"), dry_run=True, kbyte=4)
-        self.assert_(sys.stdout.getvalue().startswith("psw -kbyte 4 seq1.faa seq2.faa"))
+        self.assertTrue(sys.stdout.getvalue().startswith("psw -kbyte 4 seq1.faa seq2.faa"))
 
     def tearDown(self):
         sys.stdout = self.old_stdout
@@ -49,7 +49,7 @@ class TestWise(unittest.TestCase):
             pass
         else:
             #Bad!
-            self.assert_(False, line)
+            self.assertTrue(False, line)
 
 
 

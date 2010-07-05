@@ -30,7 +30,7 @@ class IndexDictTests(unittest.TestCase):
         #Make sure boolean evaluation works
         self.assertEqual(bool(id_list), bool(rec_dict))
         for key in id_list:
-            self.assert_(key in rec_dict)
+            self.assertTrue(key in rec_dict)
             self.assertEqual(key, rec_dict[key].id)
             self.assertEqual(key, rec_dict.get(key).id)
         #Check non-existant keys,
@@ -43,8 +43,8 @@ class IndexDictTests(unittest.TestCase):
         self.assertEqual(rec_dict.get(chr(0), chr(1)), chr(1))
         #Now check iteritems...
         for key, rec in rec_dict.iteritems():
-            self.assert_(key in id_list)
-            self.assert_(isinstance(rec, SeqRecord))
+            self.assertTrue(key in id_list)
+            self.assertTrue(isinstance(rec, SeqRecord))
             self.assertEqual(rec.id, key)
         #Now check non-defined methods...
         self.assertRaises(NotImplementedError, rec_dict.values)
@@ -73,12 +73,12 @@ class IndexDictTests(unittest.TestCase):
         self.assertEqual(set(id_list), set(rec_dict.keys()))
         self.assertEqual(len(id_list), len(rec_dict))
         for key in id_list:
-            self.assert_(key in rec_dict)
+            self.assertTrue(key in rec_dict)
             self.assertEqual(key, rec_dict[key].id.lower())
             self.assertEqual(key, rec_dict.get(key).id.lower())
             raw = rec_dict.get_raw(key)
-            self.assert_(raw.strip())
-            self.assert_(raw in raw_file)
+            self.assertTrue(raw.strip())
+            self.assertTrue(raw in raw_file)
             if format in ["ig"]:
                #These have a header structure and can't be parsed
                #individually (at least, not right now).

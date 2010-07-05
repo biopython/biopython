@@ -369,7 +369,7 @@ class SchemaTest(unittest.TestCase):
 
         self.motif_coder.find_matches(test_motif, "GATCGATC")
 
-        self.assert_(test_motif in self.motif_coder._motif_cache,
+        self.assertTrue(test_motif in self.motif_coder._motif_cache,
                      "Did not find motif cached properly.")
 
         # make sure we don't bomb out if we use the same motif twice
