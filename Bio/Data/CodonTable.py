@@ -9,6 +9,7 @@ ftp://ftp.ncbi.nih.gov/entrez/misc/data/gc.prt
 Last updated for Version 3.9
 """
 
+import sys
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
@@ -356,12 +357,14 @@ class AmbiguousForwardTable:
         # All of these are valid, so choose one
         # To be unique, sort by smallet ambiguity then alphabetically
         # Can get this if "X" encodes for everything.
-        def _sort(x, y, table = self.ambiguous_protein):
-            a = cmp(len(table[x]), len(table[y]))
-            if a == 0:
-                return cmp(x, y)
-            return a
-        possible.sort(_sort)
+        #def _sort(x, y, table = self.ambiguous_protein):
+        #    a = cmp(len(table[x]), len(table[y]))
+        #    if a == 0:
+        #        return cmp(x, y)
+        #    return a
+
+        #Sort by key is 2.x and 3.x compatible
+        possible.sort(key=lambda x:(len(self.ambiguous_protein[x]), x))
                           
         x = possible[0]
         self._cache[codon] = x
