@@ -401,8 +401,8 @@ class ChainTestCase(unittest.TestCase):
     def testContains(self):
         chain = Chain(self.c[ : ])
         self.failIf('ser' in chain)
-        self.failUnless('lys' in chain)
-        self.failUnless('asp' in chain)
+        self.assertTrue('lys' in chain)
+        self.assertTrue('asp' in chain)
 
     def testAdd(self):
         texta = 'G U G G U C U G A U G A G G C C'
@@ -455,8 +455,8 @@ class CrystalTestCase(unittest.TestCase):
         target = copy.deepcopy(self.crystal)
         del target[ 'b' ]
         self.failIf(target.data.has_key('b'))
-        self.failUnless(target.data.has_key('a'))
-        self.failUnless(target.data.has_key('c'))
+        self.assertTrue(target.data.has_key('a'))
+        self.assertTrue(target.data.has_key('c'))
 
     def testClear(self):
         target = copy.deepcopy(self.crystal)
@@ -476,8 +476,8 @@ class CrystalTestCase(unittest.TestCase):
         self.assertEquals(self.crystal.keys(), self.crystal.data.keys())
 
     def testHasKey(self):
-        self.failUnless(self.crystal.has_key('b'))
-        self.failUnless(self.crystal.has_key('c'))
+        self.assertTrue(self.crystal.has_key('b'))
+        self.assertTrue(self.crystal.has_key('c'))
         self.failIf(self.crystal.has_key('z'))
 
 
