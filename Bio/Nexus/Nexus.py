@@ -1501,8 +1501,7 @@ class Nexus(object):
                 #    print 'failed'
             constant=newconstant
         cpos=[s[0] for s in constant]
-        return constant
-        # return [x[0] for x in constant]
+        return cpos
 
     def cstatus(self,site,delete=[],narrow=True):
         """Summarize character.
