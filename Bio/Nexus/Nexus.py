@@ -1281,7 +1281,8 @@ class Nexus(object):
                 fh=open(filename,'w')
             except IOError:
                 raise NexusError('Could not open %s for writing.' % filename)
-        elif isinstance(filename, file):
+        elif hasattr(filename, 'write'):
+            #e.g. StringIO or a real file handle
             fh=filename
         else:
             raise ValueError("Neither a filename nor a handle was supplied")
