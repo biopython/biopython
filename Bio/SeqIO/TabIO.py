@@ -34,7 +34,7 @@ example above.
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Interfaces import SequentialSequenceWriter
+from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 
 #This is a generator function!
 def TabIterator(handle, alphabet = single_letter_alphabet):
