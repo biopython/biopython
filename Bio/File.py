@@ -20,7 +20,6 @@ SGMLStripper   Object that strips SGML.  This is now considered OBSOLETE, and
                and later removed.
 
 """
-import os
 import StringIO
 import sgmllib
 
