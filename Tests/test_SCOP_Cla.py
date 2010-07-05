@@ -69,7 +69,7 @@ class ClaTests(unittest.TestCase):
         index = Cla.Index(self.filename)
         
         self.assertEqual(len(index), 14)
-        self.assertTrue(index.has_key('d4hbia_'))
+        self.assertTrue('d4hbia_' in index)
 
         rec = index['d1hbia_']
         self.assertEqual(rec.sunid, 14996)
