@@ -246,7 +246,8 @@ class InsdcScanner:
             feature_location = line.strip()
             while feature_location[-1:]==",":
                 #Multiline location, still more to come!
-                feature_location += iterator.next().strip()
+                line = iterator.next()
+                feature_location += line.strip()
 
             qualifiers=[]
 
