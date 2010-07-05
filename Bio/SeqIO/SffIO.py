@@ -199,6 +199,12 @@ _sff = ".sff".encode("ascii")
 _hsh = ".hsh".encode("ascii")
 _srt = ".srt".encode("ascii")
 _mft = ".mft".encode("ascii")
+try:
+    #If running on Python 3.x, this will do flag = b"\xff"
+    _flag = eval(r'b"\xff"')
+except SyntaxError:
+    #Must be on Python 2.x
+    _flag = "\xff" #Char 255
 
 def _sff_file_header(handle):
     """Read in an SFF file header (PRIVATE).
@@ -451,8 +457,6 @@ def _sff_read_roche_index(handle):
     xml_size, read_index_offset, read_index_size = _sff_find_roche_index(handle)
     #Now parse the read index...    
     handle.seek(read_index_offset)
-    start = _null
-    end = "\xff" #Char 255
     fmt = ">5B"
     for read in range(number_of_reads):
         #TODO - Be more aware of when the index should end?
@@ -462,8 +466,8 @@ def _sff_read_roche_index(handle):
             if not more:
                 raise ValueError("Premature end of file!")
             data += more
-            if more == end: break
-        assert data[-1] == end
+            if more == _flag: break
+        assert data[-1:] == _flag, data[-1:]
         name = data[:-6]
         off4, off3, off2, off1, off0 = struct.unpack(fmt, data[-6:-1])
         offset = off0 + 255*off1 + 65025*off2 + 16581375*off3
