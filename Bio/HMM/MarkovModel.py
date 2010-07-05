@@ -216,7 +216,7 @@ class MarkovModelBuilder:
         Raises:
         KeyError if the transition is not allowed.
         """
-        if self.transition_prob.has_key((from_state, to_state)):
+        if (from_state, to_state) in self.transition_prob:
             self.transition_prob[(from_state, to_state)] = probability
         else:
             raise KeyError("Transition from %s to %s is not allowed."
@@ -234,7 +234,7 @@ class MarkovModelBuilder:
         Raises:
         KeyError if the transition is not allowed.
         """
-        if self.transition_pseudo.has_key((from_state, to_state)):
+        if (from_state, to_state) in self.transition_pseudo:
             self.transition_pseudo[(from_state, to_state)] = count
         else:
             raise KeyError("Transition from %s to %s is not allowed."
@@ -248,7 +248,7 @@ class MarkovModelBuilder:
         Raises:
         KeyError if the emission from the given state is not allowed.
         """
-        if self.emission_prob.has_key((seq_state, emission_state)):
+        if (seq_state, emission_state) in self.emission_prob:
             self.emission_prob[(seq_state, emission_state)] = probability
         else:
             raise KeyError("Emission of %s from %s is not allowed."
@@ -266,7 +266,7 @@ class MarkovModelBuilder:
         Raises:
         KeyError if the emission from the given state is not allowed.
         """
-        if self.emission_pseudo.has_key((seq_state, emission_state)):
+        if (seq_state, emission_state) in self.emission_pseudo:
             self.emission_pseudo[(seq_state, emission_state)] = count
         else:
             raise KeyError("Emission of %s from %s is not allowed."

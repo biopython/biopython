@@ -234,7 +234,7 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         """
         # calculate the s value, if we haven't done so already (ie. during
         # a previous forward or backward recursion)
-        if not(self._s_values.has_key(sequence_pos)):
+        if sequence_pos not in self._s_values:
             self._s_values[sequence_pos] = \
               self._calculate_s_value(sequence_pos, forward_vars)
 
@@ -281,7 +281,7 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         """
         # calculate the s value, if we haven't done so already (ie. during
         # a previous forward or backward recursion)
-        if not(self._s_values.has_key(sequence_pos)):
+        if sequence_pos not in self._s_values:
             self._s_values[sequence_pos] = \
               self._calculate_s_value(sequence_pos, backward_vars)
 
