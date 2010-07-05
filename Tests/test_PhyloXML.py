@@ -50,8 +50,8 @@ def _test_read_factory(source, count):
     def test_read(self):
         phx = PhyloXMLIO.read(source)
         self.assertTrue(phx)
-        self.assertEquals(len(phx), count[0])
-        self.assertEquals(len(phx.other), count[1])
+        self.assertEqual(len(phx), count[0])
+        self.assertEqual(len(phx.other), count[1])
     test_read.__doc__ = "Read %s to produce a phyloXML object." % fname
     return test_read
 
@@ -65,7 +65,7 @@ def _test_parse_factory(source, count):
     fname = os.path.basename(source)
     def test_parse(self):
         trees = PhyloXMLIO.parse(source)
-        self.assertEquals(len(list(trees)), count)
+        self.assertEqual(len(list(trees)), count)
     test_parse.__doc__ = "Parse the phylogenies in %s." % fname
     return test_parse
 
@@ -80,11 +80,11 @@ def _test_shape_factory(source, shapes):
     def test_shape(self):
         trees = PhyloXMLIO.parse(source)
         for tree, shape_expect in izip(trees, shapes):
-            self.assertEquals(len(tree.clade), len(shape_expect))
+            self.assertEqual(len(tree.clade), len(shape_expect))
             for clade, sub_expect in izip(tree.clade, shape_expect):
-                self.assertEquals(len(clade), sub_expect[0])
+                self.assertEqual(len(clade), sub_expect[0])
                 for subclade, len_expect in izip(clade, sub_expect[1]):
-                    self.assertEquals(len(subclade), len_expect)
+                    self.assertEqual(len(subclade), len_expect)
     test_shape.__doc__ = "Check the branching structure of %s." % fname
     return test_shape
 
@@ -185,29 +185,29 @@ class TreeTests(unittest.TestCase):
         phx = PhyloXMLIO.read(EX_PHYLO)
         otr = phx.other[0]
         self.assertTrue(isinstance(otr, PX.Other))
-        self.assertEquals(otr.tag, 'alignment')
-        self.assertEquals(otr.namespace, 'http://example.org/align')
-        self.assertEquals(len(otr.children), 3)
+        self.assertEqual(otr.tag, 'alignment')
+        self.assertEqual(otr.namespace, 'http://example.org/align')
+        self.assertEqual(len(otr.children), 3)
         for child, name, value in izip(otr, ('A', 'B', 'C'), (
             'acgtcgcggcccgtggaagtcctctcct', 'aggtcgcggcctgtggaagtcctctcct',
             'taaatcgc--cccgtgg-agtccc-cct')):
-            self.assertEquals(child.tag, 'seq')
-            self.assertEquals(child.attributes['name'], name)
-            self.assertEquals(child.value, value)
+            self.assertEqual(child.tag, 'seq')
+            self.assertEqual(child.attributes['name'], name)
+            self.assertEqual(child.value, value)
 
     def test_Phylogeny(self):
         """Instantiation of Phylogeny objects."""
         trees = list(PhyloXMLIO.parse(EX_PHYLO))
         # Monitor lizards
-        self.assertEquals(trees[9].name, 'monitor lizards')
-        self.assertEquals(trees[9].description,
+        self.assertEqual(trees[9].name, 'monitor lizards')
+        self.assertEqual(trees[9].description,
                 'a pylogeny of some monitor lizards')
-        self.assertEquals(trees[9].rooted, True)
+        self.assertEqual(trees[9].rooted, True)
         # Network (unrooted)
         tree6 = trees[6]
-        self.assertEquals(trees[6].name,
+        self.assertEqual(trees[6].name,
                 'network, node B is connected to TWO nodes: AB and C')
-        self.assertEquals(trees[6].rooted, False)
+        self.assertEqual(trees[6].rooted, False)
 
     def test_Clade(self):
         """Instantiation of Clade objects."""
@@ -678,7 +678,7 @@ class MethodTests(unittest.TestCase):
         """Events: Mapping-type behavior."""
         evts = self.phyloxml.phylogenies[4].clade.events
         # Container behavior: __len__, __contains__
-        self.assertEquals(len(evts), 1)
+        self.assertEqual(len(evts), 1)
         self.assertEqual('speciations' in evts, True)
         self.assertEqual('duplications' in evts, False)
         # Attribute access: __get/set/delitem__
@@ -689,7 +689,7 @@ class MethodTests(unittest.TestCase):
         self.assertEqual(len(evts), 2)
         del evts['speciations']
         self.assertEqual(evts.speciations, None)
-        self.assertEquals(len(evts), 1)
+        self.assertEqual(len(evts), 1)
         # Iteration: __iter__, keys, values, items
         self.assertEqual(list(iter(evts)), ['duplications'])
         self.assertEqual(evts.keys(), ['duplications'])

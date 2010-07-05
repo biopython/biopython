@@ -27,7 +27,7 @@ class DomTests(unittest.TestCase):
             count = 0
             for record in Dom.parse(f):
                 count +=1
-            self.assertEquals(count,10)
+            self.assertEqual(count,10)
         finally:
             f.close()
     
@@ -38,7 +38,7 @@ class DomTests(unittest.TestCase):
             for line in f:
                 record = Dom.Record(line)
                 #End of line is platform dependent. Strip it off
-                self.assertEquals(str(record).rstrip(),line.rstrip())
+                self.assertEqual(str(record).rstrip(),line.rstrip())
         finally:
             f.close()
 
@@ -53,10 +53,10 @@ class DomTests(unittest.TestCase):
         recLine = 'd7hbib_\t7hbi\tb:\t1.001.001.001.001.001'
 
         rec = Dom.Record(recLine)
-        self.assertEquals(rec.sid, 'd7hbib_')
-        self.assertEquals(rec.residues.pdbid,'7hbi')
-        self.assertEquals(rec.residues.fragments,(('b','',''),) )        
-        self.assertEquals(rec.hierarchy,'1.001.001.001.001.001')
+        self.assertEqual(rec.sid, 'd7hbib_')
+        self.assertEqual(rec.residues.pdbid,'7hbi')
+        self.assertEqual(rec.residues.fragments,(('b','',''),) )        
+        self.assertEqual(rec.hierarchy,'1.001.001.001.001.001')
 
 
 

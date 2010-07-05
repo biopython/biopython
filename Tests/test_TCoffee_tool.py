@@ -81,7 +81,7 @@ class ProbconsApplication(unittest.TestCase):
                                  shell=(sys.platform!="win32"))
         return_code = child.wait()
         self.assertEqual(return_code, 0)
-        self.assertEquals(child.stderr.read(), "")
+        self.assertEqual(child.stderr.read(), "")
         align = AlignIO.read(open(self.outfile3), "pir")
         records = list(SeqIO.parse(open(self.infile1),"fasta"))
         self.assertEqual(len(records),len(align))

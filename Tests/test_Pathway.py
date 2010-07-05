@@ -221,16 +221,16 @@ class ReactionTestCase(unittest.TestCase):
         self.r_4 = Reaction({"c":-1, "d":-1, "a":1, "e":2})
 
     def testEq(self):
-        self.assertEquals(self.r_1, self.r_1i, "not equal to similar")
+        self.assertEqual(self.r_1, self.r_1i, "not equal to similar")
         self.assertNotEquals(self.r_3, self.r_4, "equal to different")
         
     def testRev(self):
-        self.assertEquals(self.r_empty.reverse(), self.r_empty, "empty reversed not empty")
-        self.assertEquals(self.r_prod.reverse(), self.r_dest,
+        self.assertEqual(self.r_empty.reverse(), self.r_empty, "empty reversed not empty")
+        self.assertEqual(self.r_prod.reverse(), self.r_dest,
                           "reversed reaction not equal to similar")
-        self.assertEquals(self.r_4.reverse(), Reaction({"c":1, "d":1, "a":-1, "e":-2}),
+        self.assertEqual(self.r_4.reverse(), Reaction({"c":1, "d":1, "a":-1, "e":-2}),
                          "reversed reaction not equal to similar")
-        self.assertEquals(self.r_3.reverse().reverse(), self.r_3,
+        self.assertEqual(self.r_3.reverse().reverse(), self.r_3,
                           "double reversal not identity")
     
 

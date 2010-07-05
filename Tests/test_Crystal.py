@@ -26,15 +26,15 @@ class ChainTestCase(unittest.TestCase):
     def testEquals(self):
         first = Chain(self.a)
         second = Chain(self.a)
-        self.assertEquals(first, second)
+        self.assertEqual(first, second)
 
         first = Chain(self.b)
         second = Chain(self.b)
-        self.assertEquals(first, second)
+        self.assertEqual(first, second)
 
         first = Chain(self.c)
         second = Chain(self.c)
-        self.assertEquals(first, second)
+        self.assertEqual(first, second)
 
         first = Chain(self.a)
         second = Chain(self.g)
@@ -57,17 +57,17 @@ class ChainTestCase(unittest.TestCase):
         chain = Chain(self.a)
         elements = self.a.strip().split()
         num_elements = len(elements)
-        self.assertEquals(len(chain), num_elements)
+        self.assertEqual(len(chain), num_elements)
 
         chain = Chain(self.b)
         elements = self.b.strip().split()
         num_elements = len(elements)
-        self.assertEquals(len(chain), num_elements)
+        self.assertEqual(len(chain), num_elements)
 
         chain = Chain(self.c)
         elements = self.c.strip().split()
         num_elements = len(elements)
-        self.assertEquals(len(chain), num_elements)
+        self.assertEqual(len(chain), num_elements)
 
 
     def testAppend(self):
@@ -76,40 +76,40 @@ class ChainTestCase(unittest.TestCase):
         elements = self.a.strip().split()
         num_elements = len(elements)
         last_element = chain.data[ -1 ]
-        self.assertEquals('u', last_element.data)
-        self.assertEquals(len(chain), num_elements + 1)
+        self.assertEqual('u', last_element.data)
+        self.assertEqual(len(chain), num_elements + 1)
 
         chain = Chain(self.a[:])
         chain.append(Hetero('A'))
         elements = self.a.strip().split()
         num_elements = len(elements)
         last_element = chain.data[ -1 ]
-        self.assertEquals('a', last_element.data)
-        self.assertEquals(len(chain), num_elements + 1)
+        self.assertEqual('a', last_element.data)
+        self.assertEqual(len(chain), num_elements + 1)
 
         chain = Chain(self.b[:])
         chain.append('t')
         elements = self.b.strip().split()
         num_elements = len(elements)
         last_element = chain.data[ -1 ]
-        self.assertEquals('t', last_element.data)
-        self.assertEquals(len(chain), num_elements + 1)
+        self.assertEqual('t', last_element.data)
+        self.assertEqual(len(chain), num_elements + 1)
 
         chain = Chain(self.b[:])
         chain.append(Hetero('C'))
         elements = self.b.strip().split()
         num_elements = len(elements)
         last_element = chain.data[ -1 ]
-        self.assertEquals('c', last_element.data)
-        self.assertEquals(len(chain), num_elements + 1)
+        self.assertEqual('c', last_element.data)
+        self.assertEqual(len(chain), num_elements + 1)
 
         chain = Chain(self.c[:])
         chain.append('ser')
         elements = self.c.strip().split()
         num_elements = len(elements)
         last_element = chain.data[ -1 ]
-        self.assertEquals('ser', last_element.data)
-        self.assertEquals(len(chain), num_elements + 1)
+        self.assertEqual('ser', last_element.data)
+        self.assertEqual(len(chain), num_elements + 1)
 
 
     def testInsert(self):
@@ -119,8 +119,8 @@ class ChainTestCase(unittest.TestCase):
         elements = self.a.strip().split()
         num_elements = len(elements)
         target_element = chain.data[ i ]
-        self.assertEquals('g', target_element.data)
-        self.assertEquals(len(chain), num_elements + 1)
+        self.assertEqual('g', target_element.data)
+        self.assertEqual(len(chain), num_elements + 1)
 
         chain = Chain(self.a[:])
         i = 0
@@ -128,8 +128,8 @@ class ChainTestCase(unittest.TestCase):
         elements = self.a.strip().split()
         num_elements = len(elements)
         target_element = chain.data[ i ]
-        self.assertEquals('t', target_element.data)
-        self.assertEquals(len(chain), num_elements + 1)
+        self.assertEqual('t', target_element.data)
+        self.assertEqual(len(chain), num_elements + 1)
 
         chain = Chain(self.b[:])
         i = 9
@@ -137,8 +137,8 @@ class ChainTestCase(unittest.TestCase):
         elements = self.a.strip().split()
         num_elements = len(elements)
         target_element = chain.data[ i ]
-        self.assertEquals('a', target_element.data)
-        self.assertEquals(len(chain), num_elements + 1)
+        self.assertEqual('a', target_element.data)
+        self.assertEqual(len(chain), num_elements + 1)
 
         chain = Chain(self.c[:])
         i = 5
@@ -146,8 +146,8 @@ class ChainTestCase(unittest.TestCase):
         elements = self.c.strip().split()
         num_elements = len(elements)
         target_element = chain.data[ i ]
-        self.assertEquals('gln', target_element.data)
-        self.assertEquals(len(chain), num_elements + 1)
+        self.assertEqual('gln', target_element.data)
+        self.assertEqual(len(chain), num_elements + 1)
 
 
     def testRemove(self):
@@ -158,8 +158,8 @@ class ChainTestCase(unittest.TestCase):
         num_a = chain.data.count(Hetero('a'))
         chain.remove('a')
         num_a_remaining = chain.data.count(Hetero('a'))
-        self.assertEquals(num_a_remaining, num_a - 1)
-        self.assertEquals(len(chain), num_elements - 1)
+        self.assertEqual(num_a_remaining, num_a - 1)
+        self.assertEqual(len(chain), num_elements - 1)
 
         chain = Chain(self.b[:])
         elements = self.b.strip().split()
@@ -167,8 +167,8 @@ class ChainTestCase(unittest.TestCase):
         num_b = chain.data.count(Hetero('t'))
         chain.remove('t')
         num_b_remaining = chain.data.count(Hetero('t'))
-        self.assertEquals(num_b_remaining, num_b - 1)
-        self.assertEquals(len(chain), num_elements - 1)
+        self.assertEqual(num_b_remaining, num_b - 1)
+        self.assertEqual(len(chain), num_elements - 1)
 
         chain = Chain(self.c[:])
         elements = self.c.strip().split()
@@ -176,87 +176,87 @@ class ChainTestCase(unittest.TestCase):
         num_leu = chain.data.count(Hetero('leu'))
         chain.remove('leu')
         num_leu_remaining = chain.data.count(Hetero('leu'))
-        self.assertEquals(num_leu_remaining, num_leu - 1)
-        self.assertEquals(len(chain), num_elements - 1)
+        self.assertEqual(num_leu_remaining, num_leu - 1)
+        self.assertEqual(len(chain), num_elements - 1)
 
 
     def testCount(self):
         chain = Chain(self.a[:])
         num_a = chain.data.count(Hetero('a'))
-        self.assertEquals(chain.count('a'), num_a)
+        self.assertEqual(chain.count('a'), num_a)
 
         chain = Chain(self.b[:])
         num_a = chain.data.count(Hetero('t'))
-        self.assertEquals(chain.count('t'), num_a)
+        self.assertEqual(chain.count('t'), num_a)
 
         chain = Chain(self.c[:])
         num_a = chain.data.count(Hetero('leu'))
-        self.assertEquals(chain.count('leu'), num_a)
+        self.assertEqual(chain.count('leu'), num_a)
 
         chain = Chain(self.c[:])
         num_a = chain.data.count(Hetero('cys'))
-        self.assertEquals(chain.count('cys'), num_a)
+        self.assertEqual(chain.count('cys'), num_a)
 
 
     def testIndex(self):
         chain = Chain(self.a[:])
         index_g = chain.data.index(Hetero('g'))
-        self.assertEquals(chain.index('g'), index_g)
+        self.assertEqual(chain.index('g'), index_g)
 
         chain = Chain(self.b[:])
         index_c = chain.data.index(Hetero('c'))
-        self.assertEquals(chain.index('c'), index_c)
+        self.assertEqual(chain.index('c'), index_c)
 
         chain = Chain(self.c[:])
         index_met = chain.data.index(Hetero('met'))
-        self.assertEquals(chain.index('met'), index_met)
+        self.assertEqual(chain.index('met'), index_met)
 
     def testGetItem(self):
         chain = Chain(self.a[:])
         element_3 = chain.data[ 3 ]
-        self.assertEquals(chain[ 3 ], element_3)
+        self.assertEqual(chain[ 3 ], element_3)
 
         chain = Chain(self.a[:])
         element_0 = chain.data[ 0 ]
-        self.assertEquals(chain[ 0 ], element_0)
+        self.assertEqual(chain[ 0 ], element_0)
 
         chain = Chain(self.b[:])
         element_7 = chain.data[ 7 ]
-        self.assertEquals(chain[ 7 ], element_7)
+        self.assertEqual(chain[ 7 ], element_7)
 
         chain = Chain(self.b[:])
         last_element = chain.data[ -1 ]
-        self.assertEquals(chain[ -1 ], last_element)
+        self.assertEqual(chain[ -1 ], last_element)
 
         chain = Chain(self.c[:])
         element_8 = chain.data[ 8 ]
-        self.assertEquals(chain[ 8 ], element_8)
+        self.assertEqual(chain[ 8 ], element_8)
 
     def testSetItem(self):
         chain = Chain(self.a[:])
         chain[ 2 ] = 't'
         element_2 = chain.data[ 2 ]
-        self.assertEquals(chain[ 2 ], element_2)
+        self.assertEqual(chain[ 2 ], element_2)
 
         chain = Chain(self.a[:])
         chain[ 0 ] = Hetero('U')
         element_0 = chain.data[ 0 ]
-        self.assertEquals(chain[ 0 ], element_0)
+        self.assertEqual(chain[ 0 ], element_0)
 
         chain = Chain(self.b[:])
         chain[ -1 ] = Hetero('c')
         last_element = chain.data[ -1 ]
-        self.assertEquals(chain[ -1 ], last_element)
+        self.assertEqual(chain[ -1 ], last_element)
 
         chain = Chain(self.b[:])
         chain[ 1 ] = 'a'
         element_1 = chain.data[ 1 ]
-        self.assertEquals(chain[ 1 ], element_1)
+        self.assertEqual(chain[ 1 ], element_1)
 
         chain = Chain(self.c[:])
         chain[ 5 ] = 'ser'
         element_5 = chain.data[ 5 ]
-        self.assertEquals(chain[ 5 ], element_5)
+        self.assertEqual(chain[ 5 ], element_5)
 
     def testDelItem(self):
 
@@ -266,8 +266,8 @@ class ChainTestCase(unittest.TestCase):
         num_t = chain.data.count(Hetero('t'))
         del chain[ 4 ]
         num_t_remaining = chain.data.count(Hetero('t'))
-        self.assertEquals(num_t_remaining, num_t - 1)
-        self.assertEquals(len(chain), num_elements - 1)
+        self.assertEqual(num_t_remaining, num_t - 1)
+        self.assertEqual(len(chain), num_elements - 1)
 
         chain = Chain(self.a[:])
         elements = self.a.strip().split()
@@ -275,8 +275,8 @@ class ChainTestCase(unittest.TestCase):
         num_u = chain.data.count(Hetero('u'))
         del chain[ 12 ]
         num_u_remaining = 0
-        self.assertEquals(num_u_remaining, num_u - 1)
-        self.assertEquals(len(chain), num_elements - 1)
+        self.assertEqual(num_u_remaining, num_u - 1)
+        self.assertEqual(len(chain), num_elements - 1)
 
         chain = Chain(self.b[:])
         elements = self.b.strip().split()
@@ -284,8 +284,8 @@ class ChainTestCase(unittest.TestCase):
         num_c = chain.data.count(Hetero('c'))
         del chain[ 0 ]
         num_c_remaining = chain.data.count(Hetero('c'))
-        self.assertEquals(num_c_remaining, num_c - 1)
-        self.assertEquals(len(chain), num_elements - 1)
+        self.assertEqual(num_c_remaining, num_c - 1)
+        self.assertEqual(len(chain), num_elements - 1)
 
         chain = Chain(self.b[:])
         elements = self.b.strip().split()
@@ -293,8 +293,8 @@ class ChainTestCase(unittest.TestCase):
         num_g = chain.data.count(Hetero('t'))
         del chain[ 6 ]
         num_g_remaining = chain.data.count(Hetero('t'))
-        self.assertEquals(num_g_remaining, num_g - 1)
-        self.assertEquals(len(chain), num_elements - 1)
+        self.assertEqual(num_g_remaining, num_g - 1)
+        self.assertEqual(len(chain), num_elements - 1)
 
         chain = Chain(self.c[:])
         elements = self.c.strip().split()
@@ -302,8 +302,8 @@ class ChainTestCase(unittest.TestCase):
         num_thr = chain.data.count(Hetero('thr'))
         del chain[ 0 ]
         num_thr_remaining = chain.data.count(Hetero('thr'))
-        self.assertEquals(num_thr_remaining, num_thr - 1)
-        self.assertEquals(len(chain), num_elements - 1)
+        self.assertEqual(num_thr_remaining, num_thr - 1)
+        self.assertEqual(len(chain), num_elements - 1)
 
     def testGetSlice(self):
         chain = Chain(self.a[:] )
@@ -311,7 +311,7 @@ class ChainTestCase(unittest.TestCase):
         last = len(chain)
         slice = chain[ : ]
         other = chain.data[:]
-        self.assertEquals(slice.data, other)
+        self.assertEqual(slice.data, other)
 
 
         chain = Chain(self.a[:] )
@@ -319,34 +319,34 @@ class ChainTestCase(unittest.TestCase):
         last = 4
         slice = chain[ first : last ]
         other = chain.data[ first : last ]
-        self.assertEquals(slice.data, other)
+        self.assertEqual(slice.data, other)
 
         chain = Chain(self.b[:])
         first = 2
         last = len(chain)
         slice = chain[ first: last ]
         other = chain.data[ first : last ]
-        self.assertEquals(slice.data, other)
+        self.assertEqual(slice.data, other)
 
         chain = Chain(self.b[:])
         first = -1
         slice = chain[ first : ]
         other = chain.data[ first:  ]
-        self.assertEquals(slice.data, other)
+        self.assertEqual(slice.data, other)
 
         chain = Chain(self.c[:])
         first = 3
         last = 7
         slice = chain[ first : last ]
         other = chain.data[ first: last ]
-        self.assertEquals(slice.data, other)
+        self.assertEqual(slice.data, other)
 
         chain = Chain(self.c[:])
         first = 3
         last = -1
         slice = chain[ first : last ]
         other = chain.data[ first: last ]
-        self.assertEquals(slice.data, other)
+        self.assertEqual(slice.data, other)
 
 
     def testSetSlice(self):
@@ -354,7 +354,7 @@ class ChainTestCase(unittest.TestCase):
         slice = 'G T C A G 5NC G C A T G G'
         chain[ : ] = slice[ 4 : 7 ]
         other = Chain(slice[ 4: 7 ] )
-        self.assertEquals(chain, other)
+        self.assertEqual(chain, other)
 
 
         chain = Chain(self.c[:] )
@@ -362,40 +362,40 @@ class ChainTestCase(unittest.TestCase):
         slice = 'MET ILE GLU ILE LYS ASP'
         chain[ 2 : 5 ] = slice
         other = Chain(old_chain.data[ :2 ] + Chain(slice).data + old_chain.data[ 5: ])
-        self.assertEquals(chain, other)
+        self.assertEqual(chain, other)
 
         chain = Chain(self.c[:] )
         old_chain = Chain(self.c[ : ])
         slice = 'CYS GLY ALA GLU CYS VAL TYR'
         chain[ 7 : ] = slice
         other = Chain(old_chain.data[ :7 ] + Chain(slice).data)
-        self.assertEquals(chain, other)
+        self.assertEqual(chain, other)
 
         chain = Chain(self.c[:] )
         old_chain = Chain(self.c[ : ])
         slice = 'SER ASN GLU TRP ASP '
         chain[ : 9 ] = slice
         other = Chain(Chain(slice).data + old_chain.data[ 9: ])
-        self.assertEquals(chain, other)
+        self.assertEqual(chain, other)
 
     def testDelSlice(self):
         chain = Chain(self.c[ : ])
         old_chain = Chain(self.c[ : ])
         del chain[ 3 : 8 ]
         other = Chain(old_chain.data[ :3 ] + old_chain.data[ 8: ])
-        self.assertEquals(chain, other)
+        self.assertEqual(chain, other)
 
         chain = Chain(self.c[:] )
         old_chain = Chain(self.c[ : ])
         del chain[ :4 ]
         other = Chain(old_chain.data[ 4: ])
-        self.assertEquals(chain, other)
+        self.assertEqual(chain, other)
 
         chain = Chain(self.c[:] )
         old_chain = Chain(self.c[ : ])
         del chain[ 9: ]
         other = Chain(old_chain.data[ :9 ])
-        self.assertEquals(chain, other)
+        self.assertEqual(chain, other)
 
 
     def testContains(self):
@@ -410,18 +410,18 @@ class ChainTestCase(unittest.TestCase):
         targeta = texta + Chain(textb)
         targetb = Chain(texta) + textb
         targetc = Chain(texta) + Chain(textb)
-        self.assertEquals(targeta, targetc)
-        self.assertEquals(targetb, targetc)
-        self.assertEquals(targeta, targetb)
-        self.assertEquals(len(targeta), len(Chain(texta)) + len(Chain(textb)))
+        self.assertEqual(targeta, targetc)
+        self.assertEqual(targetb, targetc)
+        self.assertEqual(targeta, targetb)
+        self.assertEqual(len(targeta), len(Chain(texta)) + len(Chain(textb)))
 
         targetd = Chain(texta)
         targetd += textb
 
         targete = Chain(texta)
         targete += Chain(textb)
-        self.assertEquals(targetd, targetc)
-        self.assertEquals(targete, targetb)
+        self.assertEqual(targetd, targetc)
+        self.assertEqual(targete, targetb)
 
 
 
@@ -437,10 +437,10 @@ class CrystalTestCase(unittest.TestCase):
                             })
 
     def testLen(self):
-        self.assertEquals(len(self.crystal), len(self.crystal.data))
+        self.assertEqual(len(self.crystal), len(self.crystal.data))
 
     def testGetItem(self):
-        self.assertEquals(self.crystal[ 'a' ], self.crystal.data[ 'a' ])
+        self.assertEqual(self.crystal[ 'a' ], self.crystal.data[ 'a' ])
 
     def testSetItem(self):
         target = copy.deepcopy(self.crystal)
@@ -448,8 +448,8 @@ class CrystalTestCase(unittest.TestCase):
         f = 'LEU GLY GLY GLY LEU GLN GLY THR LEU HIS CYS TYR GLU ILE PRO LEU'
         target[ 'e' ] = e
         target[ 'f' ] = Chain(f)
-        self.assertEquals(Chain(e), target[ 'e' ])
-        self.assertEquals(Chain(f), target[ 'f' ])
+        self.assertEqual(Chain(e), target[ 'e' ])
+        self.assertEqual(Chain(f), target[ 'f' ])
 
     def testDelItem(self):
         target = copy.deepcopy(self.crystal)
@@ -461,19 +461,19 @@ class CrystalTestCase(unittest.TestCase):
     def testClear(self):
         target = copy.deepcopy(self.crystal)
         target.clear()
-        self.assertEquals(len(target.data), 0)
+        self.assertEqual(len(target.data), 0)
 
     def testKeys(self):
-        self.assertEquals(self.crystal.keys(), self.crystal.data.keys())
+        self.assertEqual(self.crystal.keys(), self.crystal.data.keys())
 
     def testValues(self):
-        self.assertEquals(self.crystal.values(), self.crystal.data.values())
+        self.assertEqual(self.crystal.values(), self.crystal.data.values())
 
     def testItems(self):
-        self.assertEquals(self.crystal.items(), self.crystal.data.items())
+        self.assertEqual(self.crystal.items(), self.crystal.data.items())
 
     def testKeys(self):
-        self.assertEquals(self.crystal.keys(), self.crystal.data.keys())
+        self.assertEqual(self.crystal.keys(), self.crystal.data.keys())
 
     def testHasKey(self):
         self.assertTrue(self.crystal.has_key('b'))
@@ -492,24 +492,24 @@ class HeteroTestCase(unittest.TestCase):
 
     def testLen(self):
         bru = Hetero('bru')
-        self.assertEquals(len(bru), 3)
+        self.assertEqual(len(bru), 3)
         _14w = Hetero('14w')
-        self.assertEquals(len(_14w), 3)
+        self.assertEqual(len(_14w), 3)
         a = Hetero('a')
-        self.assertEquals(len(a), 1)
+        self.assertEqual(len(a), 1)
         ga = Hetero('ga')
-        self.assertEquals(len(ga), 2)
+        self.assertEqual(len(ga), 2)
 
     def testEquals(self):
         u = Hetero('u')
         u1 = Hetero('u')
-        self.assertEquals(u, u1)
-        self.assertEquals(u, Hetero('U'))
+        self.assertEqual(u, u1)
+        self.assertEqual(u, Hetero('U'))
         self.assertNotEquals(u, Hetero('u1'))
         self.assertNotEquals(u, Hetero('x'))
         gna = Hetero('gna')
-        self.assertEquals(gna, Hetero('gNA'))
-        self.assertEquals(gna, Hetero('GnA'))
+        self.assertEqual(gna, Hetero('gNA'))
+        self.assertEqual(gna, Hetero('GnA'))
         self.assertNotEquals(gna, Hetero('gnb'))
         self.assertNotEquals(gna, Hetero('na'))
 

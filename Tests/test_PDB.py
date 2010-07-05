@@ -175,21 +175,21 @@ class ParseTest(unittest.TestCase):
     def test_structure(self):
         """Verify the structure of the parsed example PDB file."""
         # Structure contains 2 models
-        self.assertEquals(len(self.structure), 2)
+        self.assertEqual(len(self.structure), 2)
         # --- Checking model 0 ---
         m0 = self.structure[0]
         # Model 0 contains 1 chain
-        self.assertEquals(len(m0), 1)
+        self.assertEqual(len(m0), 1)
         # Chain 'A' contains 1 residue
-        self.assertEquals(len(m0['A']), 1)
+        self.assertEqual(len(m0['A']), 1)
         # Residue ('H_PCA', 1, ' ') contains 8 atoms.
         residue = m0['A'].get_list()[0]
-        self.assertEquals(residue.get_id(), ('H_PCA', 1, ' '))
-        self.assertEquals(len(residue), 8)
+        self.assertEqual(residue.get_id(), ('H_PCA', 1, ' '))
+        self.assertEqual(len(residue), 8)
         # --- Checking model 1 ---
         m1 = self.structure[1]
         # Model 1 contains 3 chains
-        self.assertEquals(len(m1), 3)
+        self.assertEqual(len(m1), 3)
         # Deconstruct this data structure to check each chain
         chain_data = [ # chain_id, chain_len, [(residue_id, residue_len), ...]
             ('A', 86, [ ((' ', 0, ' '), 1 ),
@@ -366,23 +366,23 @@ class ParseTest(unittest.TestCase):
         for c_idx, chn in enumerate(chain_data):
             # Check chain ID and length
             chain = m1.get_list()[c_idx]
-            self.assertEquals(chain.get_id(), chn[0])
-            self.assertEquals(len(chain), chn[1])
+            self.assertEqual(chain.get_id(), chn[0])
+            self.assertEqual(len(chain), chn[1])
             for r_idx, res in enumerate(chn[2]):
                 residue = chain.get_list()[r_idx]
                 # Check residue ID and atom count
-                self.assertEquals(residue.get_id(), res[0])
-                self.assertEquals(len(residue), res[1])
+                self.assertEqual(residue.get_id(), res[0])
+                self.assertEqual(len(residue), res[1])
                 disorder_lvl = residue.is_disordered()
                 if disorder_lvl == 1:
                     # Check the number of disordered atoms
                     disordered_count = sum(1 for atom in residue
                                            if atom.is_disordered())
                     if disordered_count:
-                        self.assertEquals(disordered_count, res[2])
+                        self.assertEqual(disordered_count, res[2])
                 elif disorder_lvl == 2:
                     # Point mutation -- check residue names
-                    self.assertEquals(residue.disordered_get_id_list(), res[2])
+                    self.assertEqual(residue.disordered_get_id_list(), res[2])
 
     def test_details(self):
         """Verify details of the parsed example PDB file."""

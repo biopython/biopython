@@ -42,7 +42,7 @@ class TreeTests(unittest.TestCase):
                 (386, 747, 16207)):
             tree = Phylo.read(source, 'phyloxml')
             output = str(tree)
-            self.assertEquals(len(output.splitlines()), count)
+            self.assertEqual(len(output.splitlines()), count)
 
 
 class MixinTests(unittest.TestCase):
