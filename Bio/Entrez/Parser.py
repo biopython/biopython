@@ -347,7 +347,7 @@ class DataHandler:
         location, filename = os.path.split(systemId)
         path = os.path.join(str(self.dtd_dir), str(filename))
         try:
-            handle = open(path)
+            handle = open(path, "rb")
         except IOError:
             message = """\
 Unable to load DTD file %s.
