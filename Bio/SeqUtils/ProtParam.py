@@ -158,9 +158,9 @@ class ProteinAnalysis:
         for i in range(self.length - Window):
             SubSeq=self.sequence[i:i+Window]
             score = 0.0
-            for j in range(Window/2):
+            for j in range(Window//2):
                 score += (Flex[SubSeq[j]]+Flex[SubSeq[Window-j-1]]) * Weights[j]
-            score += Flex[SubSeq[Window/2+1]]
+            score += Flex[SubSeq[Window//2+1]]
             List.append(score/5.25)
         return List
 
@@ -178,8 +178,8 @@ class ProteinAnalysis:
     # you get a list of [0.4, 0.55, 0.7, 0.85]. 
     def _weight_list(self, window, edge):
         unit = ((1.0-edge)/(window-1))*2
-        list = [0.0]*(window/2)
-        for i in range(window/2):
+        list = [0.0]*(window//2)
+        for i in range(window//2):
             list[i] = edge + unit * i
         return list
     
@@ -202,7 +202,7 @@ class ProteinAnalysis:
         for i in range(self.length-Window+1):
             subsequence = self.sequence[i:i+Window]
             score = 0.0
-            for j in range(Window/2):
+            for j in range(Window//2):
                 # walk from the outside of the Window towards the middle.
                 # Iddo: try/except clauses added to avoid raising an exception on a non-standad amino acid
                     try:
@@ -212,10 +212,10 @@ class ProteinAnalysis:
                                  (subsequence[j],subsequence[Window-j-1]))
 
             # Now add the middle value, which always has a weight of 1.
-            if subsequence[Window/2] in ParamDict:
-                score += ParamDict[subsequence[Window/2]]
+            if subsequence[Window//2] in ParamDict:
+                score += ParamDict[subsequence[Window//2]]
             else:
-                sys.stderr.write('warning: %s  is not a standard amino acid.\n' % (subsequence[Window/2]))
+                sys.stderr.write('warning: %s  is not a standard amino acid.\n' % (subsequence[Window//2]))
         
             list.append(score/sum_of_weights)
         return list
