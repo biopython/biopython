@@ -113,7 +113,7 @@ class NexusTest1(unittest.TestCase):
 
         # now we check excluding characters, deleting taxa,
         # and exporting adjusted sets
-        f1=tempfile.NamedTemporaryFile()
+        f1=tempfile.NamedTemporaryFile("w+")
         n.write_nexus_data(f1,
                            delete=['t1','t7'],
                            exclude=n.invert(n.charsets['big']))
@@ -185,7 +185,7 @@ class NexusTest1(unittest.TestCase):
              "goodnames": ['t5', 't6', 't8', 't9'],
             })
 
-        f2=tempfile.NamedTemporaryFile()
+        f2=tempfile.NamedTemporaryFile("w+")
         n.write_nexus_data(f2,
                            delete=['t2_the_name'],
                            exclude=range(3,40,4))
@@ -308,8 +308,11 @@ usertype matrix_test stepmatrix=5
         try:
             sys.stdout = cStringIO.StringIO()
             t3.display()
-            sys.stdout.reset()
-            output = sys.stdout.read()
+            if sys.version_info[0] == 3:
+                output = sys.stdout.getvalue()
+            else:
+                sys.stdout.reset()
+                output = sys.stdout.read()
         finally:
             sys.stdout = stdout 
         self.assertEqual(output, """\
