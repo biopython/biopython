@@ -41,7 +41,10 @@ def _maketrans(complement_mapping):
     after  = ''.join(complement_mapping.values())
     before = before + before.lower()
     after  = after + after.lower()
-    return string.maketrans(before, after)
+    if sys.version_info[0] == 3 :
+        return str.maketrans(before, after)
+    else:
+        return string.maketrans(before, after)
 
 _dna_complement_table = _maketrans(ambiguous_dna_complement)
 _rna_complement_table = _maketrans(ambiguous_rna_complement)
@@ -1446,8 +1449,12 @@ class MutableSeq(object):
     or biological methods as the Seq object.
     """
     def __init__(self, data, alphabet = Alphabet.generic_alphabet):
+        if sys.version_info[0] == 3:
+            self.array_indicator = "u"
+        else:
+            self.array_indicator = "c"
         if type(data) == type(""):
-            self.data = array.array("c", data)
+            self.data = array.array(self.array_indicator, data)
         else:
             self.data = data   # assumes the input is an array
         self.alphabet = alphabet
@@ -1552,7 +1559,8 @@ class MutableSeq(object):
             elif isinstance(value, type(self.data)):
                 self.data[index] = value
             else:
-                self.data[index] = array.array("c", str(value))
+                self.data[index] = array.array(self.array_indicator,
+                                               str(value))
 
     def __delitem__(self, index):
         #Note since Python 2.0, __delslice__ is deprecated
@@ -1721,7 +1729,7 @@ class MutableSeq(object):
         c = dict([(x.lower(), y.lower()) for x,y in d.iteritems()])
         d.update(c)
         self.data = map(lambda c: d[c], self.data)
-        self.data = array.array('c', self.data)
+        self.data = array.array(self.array_indicator, self.data)
         
     def reverse_complement(self):
         """Modify the mutable sequence to take on its reverse complement.
