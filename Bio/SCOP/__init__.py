@@ -298,8 +298,7 @@ class Scop:
         """Build an HIE SCOP parsable file from this object"""
         nodes = self._sunidDict.values()
         # We order nodes to ease comparison with original file
-        nodes.sort(lambda n1,n2: cmp(n1.sunid, n2.sunid))
-
+        nodes.sort(key = lambda n: n.sunid)
         for n in nodes:
             handle.write(str(n.toHieRecord()))
 
@@ -308,8 +307,7 @@ class Scop:
         """Build a DES SCOP parsable file from this object""" 
         nodes = self._sunidDict.values()
         # Origional SCOP file is not ordered?
-        nodes.sort(lambda n1,n2: cmp(n1.sunid, n2.sunid))
-
+        nodes.sort(key = lambda n: n.sunid)
         for n in nodes:
             if n != self.root:
                 handle.write(str(n.toDesRecord()))
@@ -319,8 +317,7 @@ class Scop:
         """Build a CLA SCOP parsable file from this object"""                
         nodes = self._sidDict.values()
         # We order nodes to ease comparison with original file
-        nodes.sort(lambda n1,n2: cmp(n1.sunid, n2.sunid))
-
+        nodes.sort(key = lambda n: n.sunid)
         for n in nodes:
             handle.write(str(n.toClaRecord()))
 
