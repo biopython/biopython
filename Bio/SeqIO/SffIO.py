@@ -784,7 +784,7 @@ class SffWriter(SequenceWriter):
         self._index.sort()
         self._index_start = handle.tell() #need for header
         #XML...
-        if isinstance(self._xml, str):
+        if self._xml is not None:
             xml = self._xml
         else:
             from Bio import __version__
@@ -988,7 +988,12 @@ if __name__ == "__main__":
     assert index1 == index2
     assert len(index1) == len(list(SffIterator(open(filename, "rb"))))
     from StringIO import StringIO
-    assert len(index1) == len(list(SffIterator(StringIO(open(filename,"rb").read()))))
+    try:
+        #This is in Python 2.6+, and is essential on Python 3
+        from io import BytesIO
+    except ImportError:
+        BytesIO = StringIO
+    assert len(index1) == len(list(SffIterator(BytesIO(open(filename,"rb").read()))))
 
     if sys.platform != "win32":
         assert len(index1) == len(list(SffIterator(open(filename, "r"))))
@@ -997,8 +1002,8 @@ if __name__ == "__main__":
         index2 = sorted(_sff_do_slow_index(open(filename)))
         assert index1 == index2
         assert len(index1) == len(list(SffIterator(open(filename))))
-        assert len(index1) == len(list(SffIterator(StringIO(open(filename,"r").read()))))
-        assert len(index1) == len(list(SffIterator(StringIO(open(filename).read()))))
+        assert len(index1) == len(list(SffIterator(BytesIO(open(filename,"r").read()))))
+        assert len(index1) == len(list(SffIterator(BytesIO(open(filename).read()))))
                     
     sff = list(SffIterator(open(filename, "rb")))
 

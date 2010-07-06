@@ -13,6 +13,12 @@ from StringIO import StringIO
 from Bio import Alphabet
 from Bio.Align import MultipleSeqAlignment
 
+try:
+    #This is in Python 2.6+, but we need it on Python 3
+    from io import BytesIO
+except ImportError:
+    BytesIO = StringIO
+
 import warnings
 def send_warnings_to_stdout(message, category, filename, lineno,
                                 file=None, line=None):
@@ -310,7 +316,10 @@ def check_simple_write_read(records, indent=" "):
         print indent+"Checking can write/read as '%s' format" % format
         
         #Going to write to a handle...
-        handle = StringIO()
+        if format in SeqIO._BinaryFormats:
+            handle = BytesIO()
+        else:
+            handle = StringIO()
         
         try:
             c = SeqIO.write(sequences=records, handle=handle, format=format)
@@ -389,7 +398,10 @@ def check_simple_write_read(records, indent=" "):
 
         if len(records)>1:
             #Try writing just one record (passing a SeqRecord, not a list)
-            handle = StringIO()
+            if format in SeqIO._BinaryFormats:
+                handle = BytesIO()
+            else:
+                handle = StringIO()
             SeqIO.write(records[0], handle, format)
             assert handle.getvalue() == records[0].format(format)
 
@@ -608,7 +620,10 @@ for (records, descr) in test_records:
         #################
         # Write records #
         #################
-        handle = StringIO()
+        if format in SeqIO._BinaryFormats:
+            handle = BytesIO()
+        else:
+            handle = StringIO()
         try:
             c = SeqIO.write(records, handle, format)
             assert c == len(records)
@@ -648,7 +663,10 @@ for (records, descr) in test_records:
 
 #Check writers can cope with no alignments
 for format in SeqIO._FormatToWriter:
-    handle = StringIO()
+    if format in SeqIO._BinaryFormats:
+        handle = BytesIO()
+    else:
+        handle = StringIO()
     try :
         assert 0 == SeqIO.write([], handle, format), \
                "Writing no records to %s format should work!" \
