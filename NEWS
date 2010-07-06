@@ -26,7 +26,10 @@ handling of model numbers, and files missing the element column.
 Feature location parsing for GenBank and EMBL files has been rewritten,
 making the parser much faster.
 
-(At least) 6 people have contributed to this release, including 3 new people:
+We have also been working on updates to avoid code which has been deprecated
+in Python 2.7 or Python 3, an important step towards Python 3 support.
+
+(At least) 7 people have contributed to this release, including 3 new people:
 
 Carlos Rios Vera (first contribution)
 Eric Talevich
@@ -34,6 +37,7 @@ Joao Rodrigues (first contribution)
 Konstantin Okonechnikov (first contribution)
 Michiel de Hoon
 Peter Cock
+Tiago Antao
 
 ===================================================================
 
