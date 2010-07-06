@@ -18,6 +18,11 @@ get_interpro_entry
 
 """
 
+import warnings
+warnings.warn("Bio.InterPro is deprecated, and will be removed in a future "
+              "release of Biopython. Please get in contact via the mailing "
+              "lists if this is a problem for you.", DeprecationWarning)
+
 from Bio import File
 import sgmllib
 from Bio.SeqFeature import Reference
@@ -257,7 +262,7 @@ def get_interpro_entry( id ):
 
 if __name__ == '__main__':
     import Bio.File
-    handle = open('IPR001064.htm')
+    handle = get_interpro_entry('IPR001064')
     undo_handle = Bio.File.UndoHandle( handle )
     interpro_parser = InterProParser()
     record = interpro_parser.parse( handle )
