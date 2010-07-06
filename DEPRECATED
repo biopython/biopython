@@ -16,6 +16,11 @@ support for Python 2.4. This can be delayed given feedback from our users
 (e.g. if this proves to be a problem in combination with other libraries).
 An explicit warning was added to setup.py for Biopython 1.55.
 
+Bio.InterPro
+============
+This module was a parser for the EBI InterPro webpages, but no longer works
+with their current website. Deprecated in Release 1.55.
+
 Bio.GenBank.LocationParser
 ==========================
 This module used to be used for parsing GenBank and EMBL feature locations.
