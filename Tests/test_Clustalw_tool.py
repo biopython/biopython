@@ -233,6 +233,8 @@ for input_file, output_file, newtree_file in [
                              shell=(sys.platform!="win32"))
     output, error = child.communicate()
     return_code = child.returncode
+    output = output.decode("utf-8")
+    error = error.decode("utf-8")
     assert return_code == 0
     assert output.strip().startswith("CLUSTAL")
     assert error.strip() == ""
