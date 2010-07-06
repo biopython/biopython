@@ -43,7 +43,7 @@ blastall, blastpgp and rpsblast were declared obsolete in Biopython Release
 subprocess module instead.
 
 The remainder of this module is a parser for the plain text BLAST output,
-which was delclared obsolete in Release 1.54. For some time now, both the NCBI
+which was declared obsolete in Release 1.54. For some time now, both the NCBI
 and Biopython have encouraged people to parse the XML output instead.
 
 Bio.Blast.Applications
