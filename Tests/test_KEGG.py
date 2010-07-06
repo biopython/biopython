@@ -43,10 +43,13 @@ def t_KEGG_Map(testfiles):
             system.add_reaction(reaction)
         # sort the reaction output by the string names, so that the
         # output will be consistent between python versions
-        def str_cmp(first, second):
-            return cmp(str(first), str(second))
+        #def str_cmp(first, second):
+        #    return cmp(str(first), str(second))
         rxs = system.reactions()
-        rxs.sort(str_cmp)
+        #sort: key instead of compare function (for py3 support)
+        #  The function str_cmp above can be removed if the
+        #  solution below proves resilient
+        rxs.sort(key=lambda x:str(x))
         for x in rxs:
             print str(x)
 
