@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich}
-\date{Last Update -- 22 June 2010 (Biopython 1.54+)}
+\date{Last Update -- 6 July 2010 (Biopython 1.54+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -10230,9 +10230,7 @@ comprehension more pleasing:
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> handle = open("ls_orchid.fasta")
->>> sizes = [len(seq_record) for seq_record in SeqIO.parse(handle, "fasta")]
->>> handle.close()
+>>> sizes = [len(rec) for rec in SeqIO.parse("ls_orchid.fasta", "fasta")]
 >>> len(sizes), min(sizes), max(sizes)
 (94, 572, 789)
 >>> sizes
@@ -10244,9 +10242,7 @@ matplotlib histogram function to display it.
 
 \begin{verbatim}
 from Bio import SeqIO
-handle = open("ls_orchid.fasta")
-sizes = [len(seq_record) for seq_record in SeqIO.parse(handle, "fasta")]
-handle.close()
+sizes = [len(rec) for rec in SeqIO.parse("ls_orchid.fasta", "fasta")]
 
 import pylab
 pylab.hist(sizes, bins=20)
@@ -10296,17 +10292,13 @@ investigate any outliers which could have been recently acquired by horizontal g
 transfer.  Again, for this example we'll reuse our orchid FASTA file \href{http://biopython.org/DIST/docs/tutorial/examples/ls_orchid.fasta}{\tt ls\_orchid.fasta}.
 
 First of all, we will use \verb|Bio.SeqIO| to parse the FASTA file and compile a list
-of all the GC percentages.  Again, you could do this with a for loop, but I prefer the
-list comprehension used here:
+of all the GC percentages.  Again, you could do this with a for loop, but I prefer this:
 
 \begin{verbatim}
 from Bio import SeqIO
 from Bio.SeqUtils import GC
 
-handle = open("ls_orchid.fasta")
-gc_values = [GC(seq_record.seq) for seq_record in SeqIO.parse(handle, "fasta")]
-gc_values.sort()
-handle.close()
+gc_values = sorted(GC(rec.seq) for rec in SeqIO.parse("ls_orchid.fasta", "fasta"))
 \end{verbatim}
 
 Having read in each sequence and calculated the GC\%, we then sorted them into ascending
