@@ -16,12 +16,6 @@ Functions:
 read             Parses a GenePop record (file) into a Record object.
 
 
-Obsolete classes:
-RecordParser     Parses a GenePop record (file) into a Record object.
-
-_Scanner         Scans a GenePop record.
-_RecordConsumer  Consumes GenePop data to a Record object.
-
 Partially inspired on MedLine Code.
 
 """
