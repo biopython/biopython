@@ -443,17 +443,17 @@ def solexa_quality_from_phred(phred_quality):
     >>> print solexa_quality_from_phred(None)
     None
     """
-    if phred_quality > 0:
+    if phred_quality is None:
+        #Assume None is used as some kind of NULL or NA value; return None
+        #e.g. Bio.SeqIO gives Ace contig gaps a quality of None.
+        return None
+    elif phred_quality > 0:
         #Solexa uses a minimum value of -5, which after rounding matches a
         #random nucleotide base call.
         return max(-5.0, 10*log(10**(phred_quality/10.0) - 1, 10))
     elif phred_quality == 0:
         #Special case, map to -5 as discussed in the docstring
         return -5.0
-    elif phred_quality is None:
-        #Assume None is used as some kind of NULL or NA value; return None
-        #e.g. Bio.SeqIO gives Ace contig gaps a quality of None.
-        return None
     else:
         raise ValueError("PHRED qualities must be positive (or zero), not %s" \
                          % repr(phred_quality))
