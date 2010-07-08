@@ -407,6 +407,11 @@ class AbstractPosition(object):
         return "%s(%s,%s)" % (self.__class__.__name__, \
                               repr(self.position), repr(self.extension))
 
+    def __hash__(self):
+        """Simple position based hash."""
+        #Note __hash__ must be implemented on Python 3.x if overriding __eq__
+        return hash(self.position)
+
     def __cmp__(self, other):
         """A simple comparison function for positions.
 
