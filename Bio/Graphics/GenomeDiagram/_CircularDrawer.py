@@ -811,9 +811,9 @@ class CircularDrawer(AbstractDrawer):
         if draw_label:                          # Put tick position on as label
             if track.scale_format == 'SInt':
                 if tickpos >= 1000000:
-                    tickstring = str(tickpos/1000000) + " Mbp"
+                    tickstring = str(tickpos//1000000) + " Mbp"
                 elif tickpos >= 1000:
-                    tickstring = str(tickpos/1000) + " Kbp"
+                    tickstring = str(tickpos//1000) + " Kbp"
                 else:
                     tickstring = str(tickpos)
             else:

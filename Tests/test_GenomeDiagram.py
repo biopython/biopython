@@ -72,7 +72,7 @@ def apply_to_window(sequence, window_size, function, step=None):
     pos = 0
     while pos < seqlen-window_size+1:
         # Obtain sequence fragment
-        start, middle, end = pos, (pos+window_size+pos)/2, pos+window_size
+        start, middle, end = pos, (pos+window_size+pos)//2, pos+window_size
         fragment = sequence[start:end]
         # Apply function to the sequence fragment
         value = function(fragment)
@@ -85,7 +85,7 @@ def apply_to_window(sequence, window_size, function, step=None):
     if pos != seqlen - window_size:
         # Obtain sequence fragment
         pos = seqlen - window_size
-        start, middle, end = pos, (pos+window_size+pos)/2, pos+window_size
+        start, middle, end = pos, (pos+window_size+pos)//2, pos+window_size
         fragment = sequence[start:end]
         # Apply function to sequence fragment
         value = function(fragment)
@@ -516,7 +516,7 @@ class DiagramTest(unittest.TestCase):
         #We'll just use one feature set for these features,
         gds_features = gdt_features.new_set()
         for feature in genbank_entry.features:
-            if feature.type <> "CDS":
+            if feature.type != "CDS":
                 #We're going to ignore these.
                 continue
             if feature.location.end.position < start:
@@ -638,7 +638,7 @@ class DiagramTest(unittest.TestCase):
                                   greytrack_labels=True)
         gds_at_gc = gdt_at_gc.new_set(type="graph")
 
-        step = len(genbank_entry)/200
+        step = len(genbank_entry)//200
         gds_at_gc.new_graph(apply_to_window(genbank_entry.seq, step, calc_gc_content, step),
                         'GC content', style='line', 
                         color=colors.lightgreen,
@@ -724,7 +724,7 @@ class DiagramTest(unittest.TestCase):
 
         #Use a fairly large step so we can easily tell the difference
         #between the bar and line graphs.
-        step = len(genbank_entry)/200
+        step = len(genbank_entry)//200
         gdgs1 = GraphSet('GC skew')
         
         graphdata1 = apply_to_window(genbank_entry.seq, step, calc_gc_skew, step)
@@ -757,7 +757,7 @@ class DiagramTest(unittest.TestCase):
         gdt5.add_set(gdgs2)
 
         gdgs3 = GraphSet('Di-nucleotide count')
-        step = len(genbank_entry)/400 #smaller step
+        step = len(genbank_entry)//400 #smaller step
         gdgs3.new_graph(apply_to_window(genbank_entry.seq, step, calc_dinucleotide_counts, step),
                         'Di-nucleotide count', style='heat', 
                         color=colors.red, altcolor=colors.orange)
