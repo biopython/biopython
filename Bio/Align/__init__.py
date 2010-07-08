@@ -501,7 +501,7 @@ class MultipleSeqAlignment(_Alignment):
         ACGGCGGT Mouse
 
         """
-        self._records.sort(cmp = lambda x, y : cmp(x.id, y.id))
+        self._records.sort(key = lambda r: r.id)
 
     def get_column(self, col):
         """Returns a string containing a given column (OBSOLETE).
