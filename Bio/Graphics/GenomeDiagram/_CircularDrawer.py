@@ -887,8 +887,8 @@ class CircularDrawer(AbstractDrawer):
         greytrack_bgs.append(bg)
 
         if track.greytrack_labels:  # Labels are required for this track
-            labelstep = self.length/track.greytrack_labels  # label interval
-            for pos in range(self.start, self.end, int(labelstep)):
+            labelstep = self.length//track.greytrack_labels  # label interval
+            for pos in range(self.start, self.end, labelstep):
                 label = String(0, 0, track.name,            # Add a new label at
                            fontName=track.greytrack_font,   # each interval
                            fontSize=track.greytrack_fontsize,
