@@ -81,14 +81,15 @@ def train(xs, ys, update_fn=None, typecode=None):
         llik = sum(logp)
         if update_fn is not None:
             update_fn(iter, llik)
-        # Check to see if the likelihood decreased.  If it did, then
-        # restore the old beta parameters and half the step size.
-        if llik < old_llik:
-            stepsize = stepsize / 2.0
-            beta = old_beta
-        # If I've converged, then stop.
-        if old_llik is not None and numpy.fabs(llik-old_llik) <= CONVERGE_THRESHOLD:
-            break
+        if old_llik is not None:
+            # Check to see if the likelihood decreased.  If it did, then
+            # restore the old beta parameters and half the step size.
+            if llik < old_llik:
+                stepsize = stepsize / 2.0
+                beta = old_beta
+            # If I've converged, then stop.
+            if numpy.fabs(llik-old_llik) <= CONVERGE_THRESHOLD:
+                break
         old_llik, old_beta = llik, beta
         iter += 1
 
