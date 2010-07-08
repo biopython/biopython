@@ -3,6 +3,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""MEME motif search program parser, susperseded by Bio.Motif (DEPRECATED).
+"""
+
 from Bio.Alphabet import IUPAC
 from Bio import File
 from Bio.ParserSupport import *
@@ -11,7 +14,7 @@ from Bio.MEME import Motif
 import re
 
 class MEMERecord:
-    """A class for holding the results of a MEME run (OBSOLETE).
+    """A class for holding the results of a MEME run (DEPRECATED).
     
     A MEMERecord is an object that holds the results from running
     MEME. It implements no methods of its own.
@@ -34,7 +37,8 @@ class MEMERecord:
                 return m
 
 class MEMEParser (AbstractParser):
-    """A parser for the text output of the MEME program (OBSOLETE).
+    """A parser for the text output of the MEME program (DEPRECATED).
+
     Parses the output into an object of the MEMERecord class.
     
     Methods:

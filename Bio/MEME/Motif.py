@@ -3,13 +3,16 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""MEME motif search program objects, susperseded by Bio.Motif (DEPRECATED).
+"""
+
 from Bio import Seq
 from Bio.Alphabet import IUPAC
 from math import sqrt
 import sys
 
 class Motif:
-    """A generic motif class.
+    """A generic motif class (DEPRECATED).
     
     A Motif has information about the alphabet used in the motif,
     the length of the motif, the motif name, the number of occurrences,
@@ -123,7 +126,7 @@ class Motif:
         self.consensus = consensus
 
 class MEMEMotif (Motif):
-    """A subclass of Motif used in parsing MEME (and MAST) output.
+    """A subclass of Motif used in parsing MEME (and MAST) output (DEPRECATED).
     
     This sublcass defines functions and data specific to MEME motifs. 
     This includes the evalue for a motif and the PSSM of the motif.
@@ -199,7 +202,7 @@ class MEMEMotif (Motif):
 
 
 class Instance:
-    """A class describing the instances of a motif, and the data thereof. 
+    """A class describing the instances of a motif, and the data thereof (DEPRECATED). 
     """
     def __init__ (self):
         self.sequence = None
