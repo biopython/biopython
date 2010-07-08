@@ -622,7 +622,7 @@ class MASTRecord:
             for i in m.instances:
                 if i.sequence_name == seq:
                     insts.append(i)
-        insts.sort(lambda x,y: cmp(x.start, y.start))
+        insts.sort(key = lambda x: x.start)
         return insts
     
     def get_motif_matches (self, motif):
