@@ -35,7 +35,6 @@ warnings.warn("The old Bio.GFF module for access to a MySQL GFF database "
 __version__ = "$Revision: 1.10 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/__init__.py,v $
 
-import exceptions
 import operator
 import os.path
 import sys
@@ -193,7 +192,7 @@ class Feature(object):
                  location=None,
                  alphabet=DEFAULT_ALPHABET):
         if not isinstance(seqname, (types.StringType, types.NoneType)):
-            raise exceptions.TypeError("seqname needs to be string")
+            raise TypeError("seqname needs to be string")
         self.frame = frame
         self.alphabet = alphabet
         if location is None:
