@@ -50,6 +50,7 @@ def check_convert(in_filename, in_format, out_format, alphabet=None):
 def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
     qual_truncate = truncation_expected(out_format)
     #We want the SAME error message from parse/write as convert!
+    err1 = None
     try:
         records = list(SeqIO.parse(open(in_filename),in_format, alphabet))
         handle = StringIO()
@@ -60,7 +61,7 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
         handle.seek(0)
         assert False, "Parse or write should have failed!"
     except ValueError, err:
-        pass
+        err1 = err
     #Now do the conversion...
     try:
         handle2 = StringIO()
@@ -70,8 +71,9 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
         warnings.resetwarnings()
         assert False, "Convert should have failed!"
     except ValueError, err2:
-        assert str(err) == str(err2), \
-               "Different failures, parse/write:\n%s\nconvert:\n%s" % (err, err2)
+        assert str(err1) == str(err2), \
+               "Different failures, parse/write:\n%s\nconvert:\n%s" \
+               % (err1, err2)
     #print err
     warnings.resetwarnings()
     
