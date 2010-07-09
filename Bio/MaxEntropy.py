@@ -39,9 +39,10 @@ def calculate(me, observation):
 
     """
     scores = []
+    assert len(me.feature_fns) == len(me.alphas)
     for klass in me.classes:
         lprob = 0.0
-        for fn, alpha in map(None, me.feature_fns, me.alphas):
+        for fn, alpha in zip(me.feature_fns, me.alphas):
             lprob += fn(observation, klass) * alpha
         scores.append(lprob)
     return scores
@@ -131,7 +132,8 @@ def _calc_p_class_given_x(xs, classes, features, alphas):
     prob_yx = numpy.zeros((len(xs), len(classes)))
 
     # Calculate log P(y, x).
-    for feature, alpha in map(None, features, alphas):
+    assert len(features) == len(alphas)
+    for feature, alpha in zip(features, alphas):
         for (x, y), f in feature.items():
             prob_yx[x][y] += alpha * f
     # Take an exponent to get P(y, x)
