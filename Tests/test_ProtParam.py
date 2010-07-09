@@ -6,8 +6,13 @@ def PrintDictionary(MyDict):
     print ""
 
 X = ProtParam.ProteinAnalysis("MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGTRDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEECLFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILFLPLPV")
-print "Amino acid\tCount\n", PrintDictionary(X.count_amino_acids())
-print "Amino acid\tFraction\n", PrintDictionary(X.get_amino_acids_percent())
+
+print "Amino acid\tCount"
+PrintDictionary(X.count_amino_acids())
+
+print "Amino acid\tFraction"
+PrintDictionary(X.get_amino_acids_percent())
+
 print "Molecular weight of test protein:", X.molecular_weight()
 print "Aromaticity of test protein: %.2f" % X.aromaticity()
 print "Instability index of test protein: %.2f" % X.instability_index()
