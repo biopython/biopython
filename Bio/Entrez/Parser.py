@@ -370,9 +370,10 @@ in order for Bio.Entrez to find it.
 Alternatively, you can save %s in the directory
 Bio/Entrez/DTDs in the Biopython distribution, and reinstall Biopython.
 
-Please also inform the Biopython developers by sending an email to
-biopython-dev@biopython.org to inform us about this missing DTD, so that we
-can include it with the next release of Biopython.
+Please also inform the Biopython developers about this missing DTD, by
+reporting a bug on http://bugzilla.open-bio.org/ or sign up to our mailing
+list and emailing us, so that we can include it with the next release of
+Biopython.
 """ % (filename, filename, filename, self.dtd_dir, filename)
             raise RuntimeError(message)
             
