@@ -121,16 +121,39 @@ class Organism:
         """
         return "Genome: %s; Fitness %s" % (self.genome.data, self.fitness)
 
-    def __cmp__(self, other):
-        """Define comparisons for organisms.
-
-        Compare organisms by their genomes (as strings of letters).
+    def __eq__(self, other):
+        """Compare organisms by their genomes (as strings of letters).
         """
         # See Bio/Seq.py and the comments there about shifting to
         # using simple string equality. Previously Seq objects used
         # object equality, while MutableSeq objects used alphabet
         # aware string equality.
-        return cmp(str(self.genome), str(other.genome))
+        return str(self.genome) == str(other.genome)
+
+    def __ne__(self, other):
+        """Compare organisms by their genomes (as strings of letters).
+        """
+        return str(self.genome) != str(other.genome)
+
+    def __lt__(self, other):
+        """Compare organisms by their genomes (as strings of letters).
+        """
+        return str(self.genome) < str(other.genome)
+
+    def __le__(self, other):
+        """Compare organisms by their genomes (as strings of letters).
+        """
+        return str(self.genome) <= str(other.genome)
+
+    def __gt__(self, other):
+        """Compare organisms by their genomes (as strings of letters).
+        """
+        return str(self.genome) > str(other.genome)
+
+    def __ge__(self, other):
+        """Compare organisms by their genomes (as strings of letters).
+        """
+        return str(self.genome) >= str(other.genome)
 
     def copy(self):
         """Return a copy of the organism.
