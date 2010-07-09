@@ -360,7 +360,7 @@ case, you can download the DTD file from NCBI and install it manually.
 Usually, you can find missing DTD files at either
     http://www.ncbi.nlm.nih.gov/dtd/
 or
-    http://eutils.ncbi.nlm.nih.gov/entrez/query/DTD/
+    http://www.ncbi.nlm.nih.gov/corehtml/query/DTD/
 If you cannot find %s there, you may also try to search
 for it with a search engine such as Google.
 
