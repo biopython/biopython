@@ -28,7 +28,7 @@ to_one_letter_code -- A mapping from the 3-letter amino acid codes found
 
 from copy import copy 
 
-from Residues import Residues
+from Bio.SCOP.Residues import Residues
 
 # This table is taken from the RAF release notes, and includes the
 # undocumented mapping "UNK" -> "X"
