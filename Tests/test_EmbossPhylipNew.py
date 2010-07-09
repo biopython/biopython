@@ -291,7 +291,9 @@ class TreeComparisonTests(unittest.TestCase):
         if return_code != 0:
             raise ValueError("Return code %s from:\n%s" \
                              % (return_code, str(cline)))
-        taxa1 = parse_trees("test_file").next().get_taxa()
+        #Split the next and get_taxa into two steps to help 2to3 work
+        tree1 = parse_trees("test_file").next()
+        taxa1 = tree1.get_taxa()
         for tree in parse_trees("Phylip/horses.tree"):
             taxa2 = tree.get_taxa()
             self.assertEqual(sorted(taxa1),sorted(taxa2))
