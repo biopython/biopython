@@ -63,7 +63,7 @@ def get_emboss_version():
                              shell=(sys.platform!="win32"))
     stdout, stderr = child.communicate()
     assert stderr is None #Send to stdout instead
-    for line in stdout.decode("utf-8").split("\n"):
+    for line in stdout.split("\n"):
         if line.strip()=="Reports the current EMBOSS version number":
             pass
         elif line.startswith("Writes the current EMBOSS version number"):
