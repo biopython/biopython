@@ -32,6 +32,7 @@ def check_mafft_version(mafft_exe):
     child = subprocess.Popen("%s --help" % mafft_exe,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
+                             universal_newlines=True,
                              shell=(sys.platform!="win32"))
     stdoutdata, stderrdata = child.communicate()
     output = stdoutdata + "\n" + stderrdata
@@ -77,6 +78,7 @@ class MafftApplication(unittest.TestCase):
         child = subprocess.Popen(str(cmdline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         stdoutdata, stderrdata = child.communicate()
         return_code = child.returncode
@@ -99,6 +101,7 @@ class MafftApplication(unittest.TestCase):
         child = subprocess.Popen(str(cmdline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         stdoutdata, stderrdata = child.communicate()
         return_code = child.returncode
@@ -118,6 +121,7 @@ class MafftApplication(unittest.TestCase):
         child = subprocess.Popen(str(cmdline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         stdoutdata, stderrdata = child.communicate()
         return_code = child.returncode
@@ -154,6 +158,7 @@ class MafftApplication(unittest.TestCase):
         child = subprocess.Popen(str(cmdline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         stdoutdata, stderrdata = child.communicate()
         return_code = child.returncode

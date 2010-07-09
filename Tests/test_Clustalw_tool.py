@@ -230,6 +230,7 @@ for input_file, output_file, newtree_file in [
     child = subprocess.Popen(str(cline),
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
+                             universal_newlines=True,
                              shell=(sys.platform!="win32"))
     output, error = child.communicate()
     return_code = child.returncode

@@ -80,6 +80,7 @@ def generic_run(commandline):
                              stdin=subprocess.PIPE,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
+                             universal_newlines=True,
                              shell=(sys.platform!="win32"))
     #Use .communicate as might get deadlocks with .wait(), see Bug 2804/2806
     r_out, e_out = child.communicate()

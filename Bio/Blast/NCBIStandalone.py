@@ -2077,6 +2077,7 @@ def _invoke_blast(cline):
                                      stdin=subprocess.PIPE,
                                      stdout=subprocess.PIPE,
                                      stderr=subprocess.PIPE,
+                                     universal_newlines=True,
                                      shell=(sys.platform!="win32"))
     blast_process.stdin.close()
     return blast_process.stdout, blast_process.stderr
