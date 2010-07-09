@@ -166,8 +166,7 @@ class SeqMapIndex(dict):
         return seqMap
 
 
-
-class SeqMap:
+class SeqMap(object):
     """An ASTRAL RAF (Rapid Access Format) Sequence Map.
     
     This is a list like object; You can find the location of particular residues
@@ -323,10 +322,9 @@ class SeqMap:
                                      
             raise RuntimeError('I could not find at least one ATOM or HETATM' \
                    +' record for each and every residue in this sequence map.')
-        
-        
-        
-class Res:
+
+
+class Res(object):
     """ A single residue mapping from a RAF record.
 
     chainid -- A single character chain ID.
