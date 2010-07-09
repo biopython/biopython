@@ -13,7 +13,6 @@ now been deprecated, and will probably be removed in order to free the Bio.GFF
 namespace for a new GFF parser in Biopython (including GFF3 support).
 """
 
-import exceptions
 import os
 import sys
 import tempfile
@@ -65,10 +64,10 @@ class TempFile(file):
                         os.remove(self.name)
                     finally:
                         self.removed = 1
-                except exceptions.OSError:
+                except OSError:
                     pass
 
-class SurrogateNotInitedError(exceptions.AttributeError):
+class SurrogateNotInitedError(AttributeError):
     pass
 
 class Surrogate(object):
