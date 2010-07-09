@@ -25,7 +25,6 @@ CreatePeople(message=Success)
 __version__ = "$Revision: 1.13 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/DocSQL.py,v $
 
-import exceptions
 import sys
 
 from Bio import MissingExternalDependencyError
@@ -37,7 +36,7 @@ except:
 
 connection = None
 
-class NoInsertionError(exceptions.Exception):
+class NoInsertionError(Exception):
     pass
 
 def _check_is_public(name):
