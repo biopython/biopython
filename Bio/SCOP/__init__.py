@@ -81,12 +81,24 @@ astralEv_to_sql = { 10: 'e1', 5: 'e0_7', 1: 'e0', 0.5: 'e_0_3', 0.1: 'e_1',
                      1e-4: 'e_4',  1e-5: 'e_5', 1e-10: 'e_10', 1e-15: 'e_15',
                      1e-20: 'e_20', 1e-25: 'e_25', 1e-50: 'e_50' }
 
+try:
+    #See if the cmp function exists (will on Python 2)
+    _cmp = cmp
+except NameError:
+    def _cmp(a,b):
+        """Implementation of cmp(x,y) for Python 3 (PRIVATE).
+
+        Based on Python 3 docs which say if you really need the cmp()
+        functionality, you could use the expression (a > b) -  (a < b)
+        as the equivalent for cmp(a, b)
+        """
+        return (a > b) -  (a < b)
 
 def cmp_sccs(sccs1, sccs2):
     """Order SCOP concise classification strings (sccs).
 
-    a.4.5.1 < a.4.5.11 < b.1.1.1 
-
+    a.4.5.1 < a.4.5.11 < b.1.1.1
+    
     A sccs (e.g. a.4.5.11) compactly represents a domain's classification.
     The letter represents the class, and the numbers are the fold,
     superfamily, and family, respectively.
@@ -96,12 +108,12 @@ def cmp_sccs(sccs1, sccs2):
     s1 = sccs1.split(".")
     s2 = sccs2.split(".")
 
-    if s1[0] != s2[0]: return cmp(s1[0], s2[0])
+    if s1[0] != s2[0]: return _cmp(s1[0], s2[0])
 
-    s1 = map(int, s1[1:])
-    s2 = map(int, s2[1:])
+    s1 = list(map(int, s1[1:]))
+    s2 = list(map(int, s2[1:]))
 
-    return cmp(s1,s2)
+    return _cmp(s1,s2)
 
 
 _domain_re = re.compile(r">?([\w_\.]*)\s+([\w\.]*)\s+\(([^)]*)\) (.*)")
