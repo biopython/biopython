@@ -235,9 +235,11 @@ class SeqMap(object):
                 return i
         raise KeyError("No such residue "+chainid+resid)
 
-    def __getslice__(self, i, j):
+    def __getitem__(self, index):
+        if not isinstance(index, slice):
+            raise NotImplementedError
         s = copy(self)
-        s.res = s.res[i:j]
+        s.res = s.res[index]
         return s
 
     def append(self, res):
