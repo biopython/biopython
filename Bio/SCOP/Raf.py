@@ -27,7 +27,6 @@ to_one_letter_code -- A mapping from the 3-letter amino acid codes found
 """
 
 from copy import copy 
-from types import *
 
 from Residues import Residues
 
@@ -134,7 +133,7 @@ class SeqMapIndex(dict):
         residues -- A Residues instance, or a string that can be converted into
                     a Residues instance.
         """
-        if type(residues) == StringType:
+        if isinstance(residues, basestring):
             residues = Residues(residues)
 
         pdbid  = residues.pdbid
