@@ -102,9 +102,9 @@ def is_aa(residue, standard=0):
         residue=residue.get_resname()
     residue=residue.upper()
     if standard:
-        return d3_to_index.has_key(residue)
+        return residue in d3_to_index
     else:
-        return to_one_letter_code.has_key(residue)
+        return residue in to_one_letter_code
 
 
 class Polypeptide(list):
@@ -214,12 +214,7 @@ class Polypeptide(list):
         """
         s=""
         for res in self:
-            resname=res.get_resname()
-            if to_one_letter_code.has_key(resname):
-                resname=to_one_letter_code[resname]
-            else:
-                resname='X'
-            s=s+resname
+            s += to_one_letter_code.get(res.get_resname(), 'X')
         seq=Seq(s, generic_protein)
         return seq
 

@@ -69,9 +69,9 @@ def train(xs, ys, update_fn=None, typecode=None):
     stepsize = 1.0
     # Now iterate using Newton-Raphson until the log-likelihoods
     # converge.
-    iter = 0
+    i = 0
     old_beta = old_llik = None
-    while iter < MAX_ITERATIONS:
+    while i < MAX_ITERATIONS:
         # Calculate the probabilities.  p = e^(beta X) / (1+e^(beta X))
         ebetaX = numpy.exp(numpy.dot(beta, Xt))
         p = ebetaX / (1+ebetaX)
@@ -81,16 +81,17 @@ def train(xs, ys, update_fn=None, typecode=None):
         llik = sum(logp)
         if update_fn is not None:
             update_fn(iter, llik)
-        # Check to see if the likelihood decreased.  If it did, then
-        # restore the old beta parameters and half the step size.
-        if llik < old_llik:
-            stepsize = stepsize / 2.0
-            beta = old_beta
-        # If I've converged, then stop.
-        if old_llik is not None and numpy.fabs(llik-old_llik) <= CONVERGE_THRESHOLD:
-            break
+        if old_llik is not None:
+            # Check to see if the likelihood decreased.  If it did, then
+            # restore the old beta parameters and half the step size.
+            if llik < old_llik:
+                stepsize = stepsize / 2.0
+                beta = old_beta
+            # If I've converged, then stop.
+            if numpy.fabs(llik-old_llik) <= CONVERGE_THRESHOLD:
+                break
         old_llik, old_beta = llik, beta
-        iter += 1
+        i += 1
 
         W = numpy.identity(N) * p
         Xtyp = numpy.dot(Xt, y-p)         # Calculate the first derivative.

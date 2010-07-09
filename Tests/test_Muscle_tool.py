@@ -86,6 +86,7 @@ class MuscleApplication(unittest.TestCase):
         child = subprocess.Popen(str(cmdline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         output, error = child.communicate()
         self.assertEqual(child.returncode, 0)
@@ -109,6 +110,7 @@ class MuscleApplication(unittest.TestCase):
         child = subprocess.Popen(str(cmdline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         output, error = child.communicate()
         self.assertEqual(child.returncode, 0)
@@ -130,6 +132,7 @@ class MuscleApplication(unittest.TestCase):
         child = subprocess.Popen(str(cmdline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         output, error = child.communicate()
         self.assertEqual(child.returncode, 0)
@@ -200,6 +203,7 @@ class SimpleAlignTest(unittest.TestCase):
         child = subprocess.Popen(str(cmdline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         #Didn't use -quiet so there should be progress reports on stderr,
         align = AlignIO.read(child.stdout, "clustal")
@@ -230,6 +234,7 @@ class SimpleAlignTest(unittest.TestCase):
         child = subprocess.Popen(str(cmdline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         #Didn't use -quiet so there should be progress reports on stderr,
         align = AlignIO.read(child.stdout, "clustal")
@@ -271,6 +276,7 @@ class SimpleAlignTest(unittest.TestCase):
         child = subprocess.Popen(str(cmdline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         align = AlignIO.read(child.stdout, "clustal")
         self.assertEqual(len(records), len(align))
@@ -297,6 +303,7 @@ class SimpleAlignTest(unittest.TestCase):
                                  stdin=subprocess.PIPE,
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         SeqIO.write(records, child.stdin, "fasta")
         child.stdin.close()
@@ -328,6 +335,7 @@ class SimpleAlignTest(unittest.TestCase):
         child = subprocess.Popen(str(cmdline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         #Clustalw on stdout:
         align = AlignIO.read(child.stdout, "clustal")

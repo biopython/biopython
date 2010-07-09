@@ -142,6 +142,14 @@ class Seq(object):
         """
         return self._data
 
+
+    def __hash__(self):
+        """Hash for comparison.
+
+        See the __cmp__ documentation - we plan to change this!
+        """
+        return id(self) #Currently use object identity for equality testing
+    
     def __cmp__(self, other):
         """Compare the sequence to another sequence or a string (README).
 

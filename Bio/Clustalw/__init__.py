@@ -132,6 +132,7 @@ def do_alignment(command_line, alphabet=None):
                                      stdin=subprocess.PIPE,
                                      stdout=subprocess.PIPE,
                                      stderr=subprocess.PIPE,
+                                     universal_newlines=True,
                                      shell=(sys.platform!="win32")
                                      )
     #Use .communicate as can get deadlocks with .wait(), see Bug 2804

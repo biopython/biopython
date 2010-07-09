@@ -441,9 +441,9 @@ class LinearDrawer(AbstractDrawer):
         if draw_label: # Put tick position on as label
             if track.scale_format == 'SInt':
                 if tickpos >= 1000000:
-                    tickstring = str(tickpos/1000000) + " Mbp"
+                    tickstring = str(tickpos//1000000) + " Mbp"
                 elif tickpos >= 1000:
-                    tickstring = str(tickpos/1000) + " Kbp"
+                    tickstring = str(tickpos//1000) + " Kbp"
                 else:
                     tickstring = str(tickpos)
             else:
@@ -505,9 +505,9 @@ class LinearDrawer(AbstractDrawer):
             #Note that we could just start the list of ticks using
             #range(0,self.end,tickinterval) and the filter out the
             #ones before self.start - but this seems wasteful.
-            #Using tickiterval * (self.start/tickiterval) is a shortcut.
+            #Using tickiterval * (self.start//tickiterval) is a shortcut.
             largeticks = [pos for pos \
-                          in range(tickiterval * (self.start/tickiterval),
+                          in range(tickiterval * (self.start//tickiterval),
                                    int(self.end),
                                    tickiterval) \
                           if pos >= self.start]
@@ -522,7 +522,7 @@ class LinearDrawer(AbstractDrawer):
             ticklen = track.scale_smallticks * trackheight
             tickiterval = int(track.scale_smalltick_interval)
             smallticks = [pos for pos \
-                          in range(tickiterval * (self.start/tickiterval),
+                          in range(tickiterval * (self.start//tickiterval),
                                    int(self.end),
                                    tickiterval) \
                           if pos >= self.start]

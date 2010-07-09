@@ -59,10 +59,11 @@ def get_emboss_version():
     child = subprocess.Popen(exes["embossversion"],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT,
+                             universal_newlines=True,
                              shell=(sys.platform!="win32"))
     stdout, stderr = child.communicate()
     assert stderr is None #Send to stdout instead
-    for line in stdout.decode("utf-8").split("\n"):
+    for line in stdout.split("\n"):
         if line.strip()=="Reports the current EMBOSS version number":
             pass
         elif line.startswith("Writes the current EMBOSS version number"):
@@ -104,6 +105,7 @@ def emboss_convert(filename, old_format, new_format):
                              stdin=subprocess.PIPE,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
+                             universal_newlines=True,
                              shell=(sys.platform!="win32"))
     child.stdin.close()
     return child.stdout
@@ -123,6 +125,7 @@ def emboss_piped_SeqIO_convert(records, old_format, new_format):
                              stdin=subprocess.PIPE,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
+                             universal_newlines=True,
                              shell=(sys.platform!="win32"))
     SeqIO.write(records, child.stdin, old_format)
     child.stdin.close()
@@ -143,6 +146,7 @@ def emboss_piped_AlignIO_convert(alignments, old_format, new_format):
                              stdin=subprocess.PIPE,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
+                             universal_newlines=True,
                              shell=(sys.platform!="win32"))
     AlignIO.write(alignments, child.stdin, old_format)
     child.stdin.close()
@@ -408,6 +412,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                  stdin=subprocess.PIPE,
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         #Check it worked,
         return_code = child.wait()
@@ -462,6 +467,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                  stdin=subprocess.PIPE,
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         child.stdin.close()
         #Check we could read it's output
@@ -490,6 +496,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                  stdin=subprocess.PIPE,
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         out, err = child.communicate()
         return_code = child.returncode
@@ -527,6 +534,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                  stdin=subprocess.PIPE,
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         child.stdin.close()
         #Check we could read it's output
@@ -636,6 +644,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                  stdin=subprocess.PIPE,
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         child.stdin.close()
         #Check we can parse the output and it is sensible...
@@ -690,6 +699,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                  stdin=subprocess.PIPE,
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         child.stdin.close()
         #Check we could read it's output
@@ -736,6 +746,7 @@ def emboss_translate(sequence, table=None, frame=None):
                              stdin=subprocess.PIPE,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
+                             universal_newlines=True,
                              shell=(sys.platform!="win32"))
     child.stdin.close()
     #Check no error output:

@@ -471,17 +471,20 @@ class ACEFileRecord:
                 self.wa.extend(c.wa)
             if c.ct:
                 newcts=[ct_tag for ct_tag in c.ct if ct_tag.name!=c.name]
-                map(self.contigs[i].ct.remove,newcts)
+                for x in newcts:
+                    self.contigs[i].ct.remove(x)
                 ct.extend(newcts)
             for j in range(len(c.reads)):
                 r = c.reads[j]
                 if r.rt:
                     newrts=[rt_tag for rt_tag in r.rt if rt_tag.name!=r.rd.name]
-                    map(self.contigs[i].reads[j].rt.remove,newrts)
+                    for x in newrts:
+                        self.contigs[i].reads[j].rt.remove(x)
                     rt.extend(newrts)
                 if r.wr:
                     newwrs=[wr_tag for wr_tag in r.wr if wr_tag.name!=r.rd.name]
-                    map(self.contigs[i].reads[j].wr.remove,newwrs)
+                    for x in newwrs:
+                        self.contigs[i].reads[j].wr.remove(x)
                     wr.extend(newwrs)
         # now sort them into their proper place
         for i in range(len(self.contigs)):

@@ -45,6 +45,7 @@ for folder in likely_dirs:
         child = subprocess.Popen(exe_name + " -h",
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         output, error = child.communicate()
         if child.returncode==0 and "ERROR: Invalid argument: -h" not in output:
@@ -73,6 +74,7 @@ class Pairwise(unittest.TestCase):
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         stdoutdata, stderrdata = child.communicate()
         return_code = child.returncode
@@ -98,6 +100,7 @@ class Pairwise(unittest.TestCase):
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         stdoutdata, stderrdata = child.communicate()
         return_code = child.returncode
@@ -120,6 +123,7 @@ class Pairwise(unittest.TestCase):
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         stdoutdata, stderrdata = child.communicate()
         return_code = child.returncode
@@ -142,6 +146,7 @@ class CheckCompleteArgList(unittest.TestCase):
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
+                                 universal_newlines=True,
                                  shell=(sys.platform!="win32"))
         stdoutdata, stderrdata = child.communicate()
         self.assertEqual(stderrdata, "",
