@@ -1,4 +1,3 @@
-from types import ListType, TupleType
 # A superclass for reading [f]ixed-column type [f]lat-[f]ile records. (e.g.
 class fff_rec:
    def __init__(self,inrec=''):
@@ -7,14 +6,15 @@ class fff_rec:
       return str(self.data)
    __str__ = __repr__
 
-   def __getslice__(self,low,high):
-      return self.data[low:high]
-
    def __len__(self):
       return len(self.data)
+   
    def __getitem__(self,index):
-      if ((type(index) is TupleType or type(index) is ListType) and 
-         len(index) == 2):
+      if isinstance(index, slice):
+         return self.data[index]
+      elif (isinstance(index, tuple) or isinstance(index, list)) \
+      and len(index) == 2:
+         #Not sure if this is needed anymore:
          return self.data[index[0]:index[1]]
       else:
          return self.data[index]
