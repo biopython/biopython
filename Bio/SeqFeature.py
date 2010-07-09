@@ -412,8 +412,8 @@ class AbstractPosition(object):
         #Note __hash__ must be implemented on Python 3.x if overriding __eq__
         return hash(self.position)
 
-    def __cmp__(self, other):
-        """A simple comparison function for positions.
+    def __eq__(self, other):
+        """A simple equality for positions.
 
         This is very simple-minded and just compares the position attribute
         of the features; extensions are not considered at all. This could
@@ -421,8 +421,62 @@ class AbstractPosition(object):
         """
         assert isinstance(other, AbstractPosition), \
           "We can only do comparisons between Biopython Position objects."
+        return self.position == other.position
 
-        return cmp(self.position, other.position)
+    def __ne__(self, other):
+        """A simple non-equality for positions.
+
+        This is very simple-minded and just compares the position attribute
+        of the features; extensions are not considered at all. This could
+        potentially be expanded to try to take advantage of extensions.
+        """
+        assert isinstance(other, AbstractPosition), \
+          "We can only do comparisons between Biopython Position objects."
+        return self.position != other.position
+
+    def __le__(self, other):
+        """A simple less than or equal for positions.
+
+        This is very simple-minded and just compares the position attribute
+        of the features; extensions are not considered at all. This could
+        potentially be expanded to try to take advantage of extensions.
+        """
+        assert isinstance(other, AbstractPosition), \
+          "We can only do comparisons between Biopython Position objects."
+        return self.position <= other.position
+
+    def __lt__(self, other):
+        """A simple less than or equal for positions.
+
+        This is very simple-minded and just compares the position attribute
+        of the features; extensions are not considered at all. This could
+        potentially be expanded to try to take advantage of extensions.
+        """
+        assert isinstance(other, AbstractPosition), \
+          "We can only do comparisons between Biopython Position objects."
+        return self.position < other.position
+
+    def __ge__(self, other):
+        """A simple less than or equal for positions.
+
+        This is very simple-minded and just compares the position attribute
+        of the features; extensions are not considered at all. This could
+        potentially be expanded to try to take advantage of extensions.
+        """
+        assert isinstance(other, AbstractPosition), \
+          "We can only do comparisons between Biopython Position objects."
+        return self.position >= other.position
+
+    def __gt__(self, other):
+        """A simple less than or equal for positions.
+
+        This is very simple-minded and just compares the position attribute
+        of the features; extensions are not considered at all. This could
+        potentially be expanded to try to take advantage of extensions.
+        """
+        assert isinstance(other, AbstractPosition), \
+          "We can only do comparisons between Biopython Position objects."
+        return self.position > other.position
 
     def _shift(self, offset):
         #We want this to maintain the subclass when called from a subclass
