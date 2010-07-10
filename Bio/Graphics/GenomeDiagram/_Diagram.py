@@ -335,14 +335,17 @@ class Diagram(object):
 
             Add a pre-existing Track to the diagram at a given level
         """
+        if track is None:
+            raise ValueError("Must specify track")
         if track_level not in self.tracks:     # No track at that level
             self.tracks[track_level] = track   # so just add it
         else:       # Already a track there, so shunt all higher tracks up one
             occupied_levels = self.get_levels() # Get list of occupied levels...
             occupied_levels.sort()              # ...sort it...
             occupied_levels.reverse()           # ...reverse it (highest first)
-            for val in occupied_levels:     
-                if val >= track:        # If track value >= that to be added
+            for val in occupied_levels:
+                # If track value >= that to be added
+                if val >= track.track_level:
                     self.tracks[val+1] = self.tracks[val] # ...increment by 1
             self.tracks[track_level] = track   # And put the new track in
         self.tracks[track_level].track_level = track_level
