@@ -1010,7 +1010,7 @@ class CircularDrawer(AbstractDrawer):
         #    startangle, endangle = max(startangle, endangle), min(startangle, endangle)
         #else:
         startangle, endangle = min(startangle, endangle), max(startangle, endangle)
-        if orientation <> "left" and orientation <> "right":
+        if orientation != "left" and orientation != "right":
             raise ValueError("Invalid orientation %s, should be 'left' or 'right'" \
                              % repr(orientation))
 

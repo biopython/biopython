@@ -21,7 +21,6 @@ V	5.00
 W	1.00
 Y	8.00
 
-None
 Amino acid	Fraction
 A	0.04
 C	0.02
@@ -44,7 +43,6 @@ V	0.03
 W	0.01
 Y	0.05
 
-None
 Molecular weight of test protein: 17102.76
 Aromaticity of test protein: 0.10
 Instability index of test protein: 41.98

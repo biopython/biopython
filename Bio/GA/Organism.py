@@ -1,6 +1,7 @@
 """Deal with an Organism in a Genetic Algorithm population.
 """
 # standard modules
+import sys #for Python 3 hack
 import random
 import array
 
@@ -53,7 +54,10 @@ def random_population(genome_alphabet, genome_size, num_organisms,
 
     # figure out what type of characters are in the alphabet
     if type(genome_alphabet.letters[0]) == type("A"):
-        alphabet_type = "c"
+        if sys.version_info[0] == 3:
+            alphabet_type = "u" #Use unicode string on Python 3
+        else:
+            alphabet_type = "c" #Use byte string on Python 2
     elif type(genome_alphabet.letters[0]) == type(1):
         alphabet_type = "i"
     elif type(genome_alphabet.letters[0]) == type(1.0):
@@ -121,16 +125,39 @@ class Organism:
         """
         return "Genome: %s; Fitness %s" % (self.genome.data, self.fitness)
 
-    def __cmp__(self, other):
-        """Define comparisons for organisms.
-
-        Compare organisms by their genomes (as strings of letters).
+    def __eq__(self, other):
+        """Compare organisms by their genomes (as strings of letters).
         """
         # See Bio/Seq.py and the comments there about shifting to
         # using simple string equality. Previously Seq objects used
         # object equality, while MutableSeq objects used alphabet
         # aware string equality.
-        return cmp(str(self.genome), str(other.genome))
+        return str(self.genome) == str(other.genome)
+
+    def __ne__(self, other):
+        """Compare organisms by their genomes (as strings of letters).
+        """
+        return str(self.genome) != str(other.genome)
+
+    def __lt__(self, other):
+        """Compare organisms by their genomes (as strings of letters).
+        """
+        return str(self.genome) < str(other.genome)
+
+    def __le__(self, other):
+        """Compare organisms by their genomes (as strings of letters).
+        """
+        return str(self.genome) <= str(other.genome)
+
+    def __gt__(self, other):
+        """Compare organisms by their genomes (as strings of letters).
+        """
+        return str(self.genome) > str(other.genome)
+
+    def __ge__(self, other):
+        """Compare organisms by their genomes (as strings of letters).
+        """
+        return str(self.genome) >= str(other.genome)
 
     def copy(self):
         """Return a copy of the organism.

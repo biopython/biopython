@@ -27,9 +27,8 @@ to_one_letter_code -- A mapping from the 3-letter amino acid codes found
 """
 
 from copy import copy 
-from types import *
 
-from Residues import Residues
+from Bio.SCOP.Residues import Residues
 
 # This table is taken from the RAF release notes, and includes the
 # undocumented mapping "UNK" -> "X"
@@ -134,7 +133,7 @@ class SeqMapIndex(dict):
         residues -- A Residues instance, or a string that can be converted into
                     a Residues instance.
         """
-        if type(residues) == StringType:
+        if isinstance(residues, basestring):
             residues = Residues(residues)
 
         pdbid  = residues.pdbid
@@ -167,8 +166,7 @@ class SeqMapIndex(dict):
         return seqMap
 
 
-
-class SeqMap:
+class SeqMap(object):
     """An ASTRAL RAF (Rapid Access Format) Sequence Map.
     
     This is a list like object; You can find the location of particular residues
@@ -237,9 +235,11 @@ class SeqMap:
                 return i
         raise KeyError("No such residue "+chainid+resid)
 
-    def __getslice__(self, i, j):
+    def __getitem__(self, index):
+        if not isinstance(index, slice):
+            raise NotImplementedError
         s = copy(self)
-        s.res = s.res[i:j]
+        s.res = s.res[index]
         return s
 
     def append(self, res):
@@ -324,10 +324,9 @@ class SeqMap:
                                      
             raise RuntimeError('I could not find at least one ATOM or HETATM' \
                    +' record for each and every residue in this sequence map.')
-        
-        
-        
-class Res:
+
+
+class Res(object):
     """ A single residue mapping from a RAF record.
 
     chainid -- A single character chain ID.

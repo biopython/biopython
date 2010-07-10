@@ -13,7 +13,6 @@
 
 __version__ = "$Revision: 1.5 $"
 
-import exceptions
 import os
 import re
 import sys
@@ -25,7 +24,7 @@ _OPTION_GAP_START = "-g"
 _OPTION_GAP_EXTENSION = "-e"
 _OPTION_SCORES = "-m"
 
-class AlignmentColumnFullException(exceptions.Exception):
+class AlignmentColumnFullException(Exception):
     pass
 
 class Alignment(list):

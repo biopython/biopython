@@ -467,7 +467,7 @@ class AbstractDrawer:
         """
         low, high = self._parent.range()  # Extent of tracks
 
-        if start > end:
+        if start is not None and end is not None and start > end:
             start, end = end, start
 
         if start is None or start < 1:  # Check validity of passed args and 
