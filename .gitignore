@@ -57,6 +57,7 @@ Doc/*/*/*.out
 Doc/*/*/*.toc
 Doc/*/*/*.haux
 Doc/*/*/*.htoc
+Doc/Tutorial.txt
 Doc/Tutorial.pdf
 Doc/Tutorial.html
 Doc/install/Installation.txt
