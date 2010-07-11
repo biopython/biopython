@@ -41,13 +41,26 @@ class IndexDictTests(unittest.TestCase):
             pass
         self.assertEqual(rec_dict.get(chr(0)), None)
         self.assertEqual(rec_dict.get(chr(0), chr(1)), chr(1))
-        #Now check iteritems...
-        for key, rec in rec_dict.iteritems():
-            self.assertTrue(key in id_list)
-            self.assertTrue(isinstance(rec, SeqRecord))
-            self.assertEqual(rec.id, key)
-        #Now check non-defined methods...
-        self.assertRaises(NotImplementedError, rec_dict.values)
+        if hasattr(dict, "iteritems"):
+            #Python 2.x
+            for key, rec in rec_dict.iteritems():
+                self.assertTrue(key in id_list)
+                self.assertTrue(isinstance(rec, SeqRecord))
+                self.assertEqual(rec.id, key)
+            #Now check non-defined methods...
+            self.assertRaises(NotImplementedError, rec_dict.items)
+            self.assertRaises(NotImplementedError, rec_dict.values)
+        else:
+            #Python 3
+            assert not hasattr(rec_dict, "iteritems")
+            for key, rec in rec_dict.items():
+                self.assertTrue(key in id_list)
+                self.assertTrue(isinstance(rec, SeqRecord))
+                self.assertEqual(rec.id, key)
+            for rec in rec_dict.values():
+                self.assertTrue(key in id_list)
+                self.assertTrue(isinstance(rec, SeqRecord))
+        
         self.assertRaises(NotImplementedError, rec_dict.popitem)
         self.assertRaises(NotImplementedError, rec_dict.pop, chr(0))
         self.assertRaises(NotImplementedError, rec_dict.pop, chr(0), chr(1))
