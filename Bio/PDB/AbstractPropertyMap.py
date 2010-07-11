@@ -48,7 +48,7 @@ class AbstractPropertyMap:
 
         Example:
             >>> if map.has_key((chain_id, res_id)):
-            >>>     res, property=map[(chain_id, res_id)]
+            ...     res, property=map[(chain_id, res_id)]
 
         @param chain_id: chain id
         @type chain_id: char 
@@ -75,7 +75,7 @@ class AbstractPropertyMap:
 
         Example:
             >>> for (res, property) in iter(map):
-            >>>     print res, property
+            ...     print res, property
 
         @return: iterator
         """

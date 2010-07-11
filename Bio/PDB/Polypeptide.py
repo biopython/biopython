@@ -19,7 +19,7 @@ Example:
 
     >>> ppb=PPBuilder()
     >>> for pp in ppb.build_peptides(structure):
-    >>>     print pp.get_sequence()
+    ...     print pp.get_sequence()
 """
 
 standard_aa_names=["ALA", "CYS", "ASP", "GLU", "PHE", "GLY", "HIS", "ILE", "LYS", 

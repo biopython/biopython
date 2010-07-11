@@ -487,10 +487,10 @@ class TreeMixin(object):
         loop with find_clades:
 
         >>> for clade in tree.find_clades(branch_length=True, order='level'):
-        >>>     if (clade.branch_length < .5 and
-        >>>         not clade.is_terminal() and
-        >>>         clade is not self.root):
-        >>>         tree.collapse(clade)
+        ...     if (clade.branch_length < .5 and
+        ...         not clade.is_terminal() and
+        ...         clade is not self.root):
+        ...         tree.collapse(clade)
 
         Note that level-order traversal helps avoid strange side-effects when
         modifying the tree while iterating over its clades.

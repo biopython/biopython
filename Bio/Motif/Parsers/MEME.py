@@ -803,8 +803,8 @@ class MASTParser(AbstractParser):
     >>>parser = MASTParser()
     >>>mast_record = parser.parse(f)
     >>>for motif in mast_record.motifs:
-    >>>    for instance in motif.instances:
-    >>>        print instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue
+    ...    for instance in motif.instances:
+    ...        print instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue
     
     This class is OBSOLETE; please use the read() function in the module
     Bio.Motif.Parsers.MAST instead.
