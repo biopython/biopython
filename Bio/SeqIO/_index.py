@@ -87,34 +87,48 @@ class _IndexedSeqFileDict(dict):
         else:
             return "{}"
 
-    def values(self):
-        """Would be a list of the SeqRecord objects, but not implemented.
+    if hasattr(dict, "iteritems"):
+        #Python 2, use iteritems but not items etc
+        def values(self):
+            """Would be a list of the SeqRecord objects, but not implemented.
 
-        In general you can be indexing very very large files, with millions
-        of sequences. Loading all these into memory at once as SeqRecord
-        objects would (probably) use up all the RAM. Therefore we simply
-        don't support this dictionary method.
-        """
-        raise NotImplementedError("Due to memory concerns, when indexing a "
-                                  "sequence file you cannot access all the "
-                                  "records at once.")
+            In general you can be indexing very very large files, with millions
+            of sequences. Loading all these into memory at once as SeqRecord
+            objects would (probably) use up all the RAM. Therefore we simply
+            don't support this dictionary method.
+            """
+            raise NotImplementedError("Due to memory concerns, when indexing a "
+                                      "sequence file you cannot access all the "
+                                      "records at once.")
 
-    def items(self):
-        """Would be a list of the (key, SeqRecord) tuples, but not implemented.
+        def items(self):
+            """Would be a list of the (key, SeqRecord) tuples, but not implemented.
 
-        In general you can be indexing very very large files, with millions
-        of sequences. Loading all these into memory at once as SeqRecord
-        objects would (probably) use up all the RAM. Therefore we simply
-        don't support this dictionary method.
-        """
-        raise NotImplementedError("Due to memory concerns, when indexing a "
-                                  "sequence file you cannot access all the "
-                                  "records at once.")
+            In general you can be indexing very very large files, with millions
+            of sequences. Loading all these into memory at once as SeqRecord
+            objects would (probably) use up all the RAM. Therefore we simply
+            don't support this dictionary method.
+            """
+            raise NotImplementedError("Due to memory concerns, when indexing a "
+                                      "sequence file you cannot access all the "
+                                      "records at once.")
 
-    def iteritems(self):
-        """Iterate over the (key, SeqRecord) items."""
-        for key in self.__iter__():
-            yield key, self.__getitem__(key)
+        def iteritems(self):
+            """Iterate over the (key, SeqRecord) items."""
+            for key in self.__iter__():
+                yield key, self.__getitem__(key)
+    else:
+        #Python 3 - define items and values as iterators
+        def items(self):
+            """Iterate over the (key, SeqRecord) items."""
+            for key in self.__iter__():
+                yield key, self.__getitem__(key)
+
+        def values(self):
+            """Iterate over the SeqRecord items."""
+            for key in self.__iter__():
+                yield self.__getitem__(key)
+
 
     def __getitem__(self, key):
         """x.__getitem__(y) <==> x[y]"""
