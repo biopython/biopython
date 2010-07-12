@@ -9,7 +9,7 @@
 import os
 import tempfile
 import unittest
-from itertools import izip, chain
+from itertools import chain
 
 # Python 2.4 doesn't have ElementTree, which PhyloXMLIO needs
 from Bio import MissingExternalDependencyError
@@ -79,11 +79,11 @@ def _test_shape_factory(source, shapes):
     fname = os.path.basename(source)
     def test_shape(self):
         trees = PhyloXMLIO.parse(source)
-        for tree, shape_expect in izip(trees, shapes):
+        for tree, shape_expect in zip(trees, shapes):
             self.assertEqual(len(tree.clade), len(shape_expect))
-            for clade, sub_expect in izip(tree.clade, shape_expect):
+            for clade, sub_expect in zip(tree.clade, shape_expect):
                 self.assertEqual(len(clade), sub_expect[0])
-                for subclade, len_expect in izip(clade, sub_expect[1]):
+                for subclade, len_expect in zip(clade, sub_expect[1]):
                     self.assertEqual(len(subclade), len_expect)
     test_shape.__doc__ = "Check the branching structure of %s." % fname
     return test_shape
@@ -188,7 +188,7 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(otr.tag, 'alignment')
         self.assertEqual(otr.namespace, 'http://example.org/align')
         self.assertEqual(len(otr.children), 3)
-        for child, name, value in izip(otr, ('A', 'B', 'C'), (
+        for child, name, value in zip(otr, ('A', 'B', 'C'), (
             'acgtcgcggcccgtggaagtcctctcct', 'aggtcgcggcctgtggaagtcctctcct',
             'taaatcgc--cccgtgg-agtccc-cct')):
             self.assertEqual(child.tag, 'seq')
@@ -214,7 +214,7 @@ class TreeTests(unittest.TestCase):
         tree = list(PhyloXMLIO.parse(EX_PHYLO))[6]
         clade_ab, clade_c = tree.clade.clades
         clade_a, clade_b = clade_ab.clades
-        for clade, id_source, name, blen in izip(
+        for clade, id_source, name, blen in zip(
                 (clade_ab, clade_a, clade_b, clade_c),
                 ('ab', 'a', 'b', 'c'),
                 ('AB', 'A', 'B', 'C'),
@@ -263,7 +263,7 @@ class TreeTests(unittest.TestCase):
         """Instantiation of Confidence objects."""
         tree = PhyloXMLIO.parse(EX_MADE).next()
         self.assertEqual(tree.name, 'testing confidence')
-        for conf, type, val in izip(tree.confidences,
+        for conf, type, val in zip(tree.confidences,
                 ('bootstrap', 'probability'),
                 (89.0, 0.71)):
             self.assertTrue(isinstance(conf, PX.Confidence))
@@ -271,7 +271,7 @@ class TreeTests(unittest.TestCase):
             self.assertAlmostEqual(conf.value, val)
         self.assertEqual(tree.clade.name, 'b')
         self.assertAlmostEqual(tree.clade.width, 0.2)
-        for conf, val in izip(tree.clade[0].confidences,
+        for conf, val in zip(tree.clade[0].confidences,
                 (0.9, 0.71)):
             self.assertTrue(isinstance(conf, PX.Confidence))
             self.assertEqual(conf.type, 'probability')
@@ -283,7 +283,7 @@ class TreeTests(unittest.TestCase):
         silurian = tree.clade[0,0].date
         devonian = tree.clade[0,1].date
         ediacaran = tree.clade[1].date
-        for date, desc, val in izip(
+        for date, desc, val in zip(
                 (silurian, devonian, ediacaran),
                 # (10, 20, 30), # range is deprecated
                 ('Silurian', 'Devonian', 'Ediacaran'),
@@ -304,7 +304,7 @@ class TreeTests(unittest.TestCase):
         nagoya = tree.clade[0,1].distributions[0]
         eth_zurich = tree.clade[0,2].distributions[0]
         san_diego = tree.clade[1].distributions[0]
-        for dist, desc, lat, long, alt in izip(
+        for dist, desc, lat, long, alt in zip(
                 (hirschweg, nagoya, eth_zurich, san_diego),
                 ('Hirschweg, Winterthur, Switzerland',
                     'Nagoya, Aichi, Japan',
@@ -332,7 +332,7 @@ class TreeTests(unittest.TestCase):
         darch = clade.sequences[0].domain_architecture
         self.assertTrue(isinstance(darch, PX.DomainArchitecture))
         self.assertEqual(darch.length, 1249)
-        for domain, start, end, conf, value in izip(darch.domains,
+        for domain, start, end, conf, value in zip(darch.domains,
                 (6, 109, 605, 647, 689, 733, 872, 993, 1075, 1117, 1168),
                 (90, 414, 643, 685, 729, 771, 910, 1031, 1113, 1155, 1204),
                 (7.0e-26, 7.2e-117, 2.4e-6, 1.1e-12, 2.4e-7, 4.7e-14, 2.5e-8,
@@ -364,7 +364,7 @@ class TreeTests(unittest.TestCase):
             self.assertTrue(isinstance(poly, PX.Polygon))
             self.assertEqual(len(poly.points), 3)
         self.assertEqual(dist.polygons[0].points[0].alt_unit, 'm')
-        for point, lat, long, alt in izip(
+        for point, lat, long, alt in zip(
                 chain(dist.polygons[0].points, dist.polygons[1].points),
                 (47.481277, 35.155904, 47.376334, 40.481277, 25.155904,
                     47.376334),
@@ -381,7 +381,7 @@ class TreeTests(unittest.TestCase):
     def test_Property(self):
         """Instantiation of Property objects."""
         tree = list(PhyloXMLIO.parse(EX_PHYLO))[8]
-        for prop, id_ref, value in izip(
+        for prop, id_ref, value in zip(
                 tree.properties,
                 ('id_a', 'id_b', 'id_c'),
                 ('1200', '2300', '200')):
@@ -420,7 +420,7 @@ class TreeTests(unittest.TestCase):
         seq1 = trees[5].clade[0,0].sequences[0]
         seq2 = trees[5].clade[0,1].sequences[0]
         seq3 = trees[5].clade[1].sequences[0]
-        for seq, sym, acc, name, mol_seq, ann_refs in izip(
+        for seq, sym, acc, name, mol_seq, ann_refs in zip(
                 (seq1, seq2, seq3),
                 ('ADHX', 'RT4I1', 'ADHB'),
                 ('P81431', 'Q54II4', 'Q04945'),
@@ -447,7 +447,7 @@ class TreeTests(unittest.TestCase):
     def test_SequenceRelation(self):
         """Instantiation of SequenceRelation objects."""
         tree = list(PhyloXMLIO.parse(EX_PHYLO))[4]
-        for seqrel, id_ref_0, id_ref_1, type in izip(
+        for seqrel, id_ref_0, id_ref_1, type in zip(
                 tree.sequence_relations,
                 ('x', 'x', 'y'), ('y', 'z', 'z'),
                 ('paralogy', 'orthology', 'orthology')):
@@ -646,7 +646,7 @@ class MethodTests(unittest.TestCase):
         self.assertEqual(len(aln), 0)
         # Add sequences to the terminals
         alphabet = Alphabet.Gapped(Alphabet.generic_dna)
-        for tip, seqstr in izip(tree.get_terminals(),
+        for tip, seqstr in zip(tree.get_terminals(),
                 ('AA--TTA', 'AA--TTG', 'AACCTTC')):
             tip.sequences.append(PX.Sequence.from_seqrecord(
                 SeqRecord(Seq(seqstr, alphabet), id=str(tip))))

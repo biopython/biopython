@@ -6,7 +6,6 @@
 """Unit tests for the Bio.Phylo module."""
 
 import unittest
-from itertools import izip
 from cStringIO import StringIO
 
 from Bio import Phylo
@@ -52,7 +51,7 @@ class MixinTests(unittest.TestCase):
         self.assertEqual(matches[0].scientific_name, 'Octopus vulgaris')
         # Iteration and regexps
         tree = self.phylogenies[10]
-        for point, alt in izip(tree.find_elements(geodetic_datum=r'WGS\d{2}'),
+        for point, alt in zip(tree.find_elements(geodetic_datum=r'WGS\d{2}'),
                                (472, 10, 452)):
             self.assertTrue(isinstance(point, PhyloXML.Point))
             self.assertEqual(point.geodetic_datum, 'WGS84')
@@ -74,7 +73,7 @@ class MixinTests(unittest.TestCase):
     def test_find_clades(self):
         """TreeMixin: find_clades() method."""
         # boolean filter
-        for clade, name in izip(self.phylogenies[10].find_clades(name=True),
+        for clade, name in zip(self.phylogenies[10].find_clades(name=True),
                                 list('ABCD')):
             self.assertTrue(isinstance(clade, PhyloXML.Clade))
             self.assertEqual(clade.name, name)
@@ -86,7 +85,7 @@ class MixinTests(unittest.TestCase):
 
     def test_find_terminal(self):
         """TreeMixin: find_elements() with terminal argument."""
-        for tree, total, extern, intern in izip(
+        for tree, total, extern, intern in zip(
                 self.phylogenies,
                 (6, 6, 7, 18, 21, 27, 7, 9, 9, 19, 15, 9, 6),
                 (3, 3, 3, 3,  3,  3,  3, 3, 3, 3,  4,  3, 3),
@@ -133,7 +132,7 @@ class MixinTests(unittest.TestCase):
         tree = self.phylogenies[1]
         depths = tree.depths()
         self.assertEqual(len(depths), 5)
-        for found, expect in zip(sorted(depths.itervalues()),
+        for found, expect in zip(sorted(depths.values()),
                                  [0, 0.060, 0.162, 0.290, 0.400]):
             self.assertAlmostEqual(found, expect)
 
@@ -149,7 +148,7 @@ class MixinTests(unittest.TestCase):
 
     def test_is_bifurcating(self):
         """TreeMixin: is_bifurcating() method."""
-        for tree, is_b in izip(self.phylogenies,
+        for tree, is_b in zip(self.phylogenies,
                 (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1)):
             self.assertEqual(tree.is_bifurcating(), is_b)
 
