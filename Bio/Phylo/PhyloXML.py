@@ -173,7 +173,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
         """
         return Clade.from_clade(clade).to_phylogeny(**kwargs)
 
-    # XXX Backward compatibility shim
+    # XXX Backward compatibility shim -- remove in Biopython 1.56
     @classmethod
     def from_subtree(cls, clade, **kwargs):
         """DEPRECATED: use from_clade() instead."""
@@ -303,7 +303,7 @@ class Clade(PhyloElement, BaseTree.Clade):
         new_clade.__dict__.update(kwargs)
         return new_clade
 
-    # XXX Backward compatibility shim
+    # XXX Backward compatibility shim -- remove in Biopython 1.56
     @classmethod
     def from_subtree(cls, clade, **kwargs):
         """DEPRECATED: use from_clade() instead."""
@@ -698,23 +698,30 @@ class Events(PhyloElement):
         self.losses = losses
         self.confidence = confidence
 
-    def iteritems(self):
-        return ((k, v) for k, v in self.__dict__.iteritems() if v is not None)
-
-    def iterkeys(self):
-        return (k for k, v in self.__dict__.iteritems() if v is not None)
-
-    def itervalues(self):
-        return (v for v in self.__dict__.itervalues() if v is not None)
-
     def items(self):
-        return list(self.iteritems())
+        return [(k, v) for k, v in self.__dict__.iteritems() if v is not None]
 
     def keys(self):
-        return list(self.iterkeys())
+        return [k for k, v in self.__dict__.iteritems() if v is not None]
 
     def values(self):
-        return list(self.itervalues())
+        return [v for v in self.__dict__.itervalues() if v is not None]
+
+    # XXX Backwards compatibility shims -- remove in Biopython 1.56
+    def iteritems(self):
+        warnings.warn("use items() instead.""",
+                DeprecationWarning, stacklevel=2)
+        return iter(self.items())
+
+    def iterkeys(self):
+        warnings.warn("use keys() instead.""",
+                DeprecationWarning, stacklevel=2)
+        return iter(self.keys())
+
+    def itervalues(self):
+        warnings.warn("use values() instead.""",
+                DeprecationWarning, stacklevel=2)
+        return iter(self.values())
 
     def __len__(self):
         return len(self.values())
@@ -734,7 +741,7 @@ class Events(PhyloElement):
         setattr(self, key, None)
 
     def __iter__(self):
-        return iter(self.iterkeys())
+        return iter(self.keys())
 
     def __contains__(self, key):
         return (hasattr(self, key) and getattr(self, key) is not None)
