@@ -626,7 +626,7 @@ class Tree(TreeElement, TreeMixin):
         @return: a tree of the same type as this class.
         """
         if isinstance(taxa, int):
-            taxa = ['taxon%s' % (i+1) for i in xrange(taxa)]
+            taxa = ['taxon%s' % (i+1) for i in range(taxa)]
         elif hasattr(taxa, '__iter__'):
             taxa = list(taxa)
         else:

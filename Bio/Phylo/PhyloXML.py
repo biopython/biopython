@@ -62,12 +62,12 @@ class Phyloxml(PhyloElement):
         if isinstance(index, int) or isinstance(index, slice):
             return self.phylogenies[index]
         if not isinstance(index, basestring):
-            raise KeyError, "can't use %s as an index" % type(index)
+            raise KeyError("can't use %s as an index" % type(index))
         for tree in self.phylogenies:
             if tree.name == index:
                 return tree
         else:
-            raise KeyError, "no phylogeny found with name " + repr(index)
+            raise KeyError("no phylogeny found with name " + repr(index))
 
     def __iter__(self):
         """Iterate through the phylogenetic trees in this object."""
