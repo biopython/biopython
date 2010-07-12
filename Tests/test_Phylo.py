@@ -6,7 +6,6 @@
 """Unit tests for the Bio.Phylo module."""
 
 import unittest
-import zipfile
 from itertools import izip
 from cStringIO import StringIO
 
@@ -18,14 +17,6 @@ from Bio.Phylo import PhyloXML
 EX_APAF = 'PhyloXML/apaf.xml'
 EX_BCL2 = 'PhyloXML/bcl_2.xml'
 EX_PHYLO = 'PhyloXML/phyloxml_examples.xml'
-EX_MOLLUSCA = 'PhyloXML/ncbi_taxonomy_mollusca.xml.zip'
-
-
-def unzip(fname):
-    """Extract a single file from a Zip archive and return a handle to it."""
-    assert zipfile.is_zipfile(fname)
-    z = zipfile.ZipFile(fname)
-    return StringIO(z.read(z.filelist[0].filename))
 
 
 class TreeTests(unittest.TestCase):
@@ -37,9 +28,7 @@ class TreeTests(unittest.TestCase):
         NB: The exact line counts are liable to change if the object
         constructors change.
         """
-        for source, count in izip(
-                (EX_APAF, EX_BCL2, unzip(EX_MOLLUSCA)),
-                (386, 747, 16207)):
+        for source, count in zip((EX_APAF, EX_BCL2), (386, 747)):
             tree = Phylo.read(source, 'phyloxml')
             output = str(tree)
             self.assertEqual(len(output.splitlines()), count)
