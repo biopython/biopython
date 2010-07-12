@@ -304,7 +304,7 @@ class TreeTests(unittest.TestCase):
         nagoya = tree.clade[0,1].distributions[0]
         eth_zurich = tree.clade[0,2].distributions[0]
         san_diego = tree.clade[1].distributions[0]
-        for dist, desc, lat, long, alt in zip(
+        for dist, desc, lati, longi, alti in zip(
                 (hirschweg, nagoya, eth_zurich, san_diego),
                 ('Hirschweg, Winterthur, Switzerland',
                     'Nagoya, Aichi, Japan',
@@ -318,9 +318,9 @@ class TreeTests(unittest.TestCase):
             point = dist.points[0]
             self.assertTrue(isinstance(point, PX.Point))
             self.assertEqual(point.geodetic_datum, 'WGS84')
-            self.assertEqual(point.lat, lat)
-            self.assertEqual(point.long, long)
-            self.assertEqual(point.alt, alt)
+            self.assertEqual(point.lat, lati)
+            self.assertEqual(point.long, longi)
+            self.assertEqual(point.alt, alti)
 
     def test_DomainArchitecture(self):
         """Instantiation of DomainArchitecture objects.
@@ -364,7 +364,7 @@ class TreeTests(unittest.TestCase):
             self.assertTrue(isinstance(poly, PX.Polygon))
             self.assertEqual(len(poly.points), 3)
         self.assertEqual(dist.polygons[0].points[0].alt_unit, 'm')
-        for point, lat, long, alt in zip(
+        for point, lati, longi, alti in zip(
                 chain(dist.polygons[0].points, dist.polygons[1].points),
                 (47.481277, 35.155904, 47.376334, 40.481277, 25.155904,
                     47.376334),
@@ -374,9 +374,9 @@ class TreeTests(unittest.TestCase):
                 ):
             self.assertTrue(isinstance(point, PX.Point))
             self.assertEqual(point.geodetic_datum, 'WGS84')
-            self.assertEqual(point.lat, lat)
-            self.assertEqual(point.long, long)
-            self.assertEqual(point.alt, alt)
+            self.assertEqual(point.lat, lati)
+            self.assertEqual(point.long, longi)
+            self.assertEqual(point.alt, alti)
 
     def test_Property(self):
         """Instantiation of Property objects."""
@@ -692,9 +692,9 @@ class MethodTests(unittest.TestCase):
         self.assertEqual(len(evts), 1)
         # Iteration: __iter__, keys, values, items
         self.assertEqual(list(iter(evts)), ['duplications'])
-        self.assertEqual(evts.keys(), ['duplications'])
-        self.assertEqual(evts.values(), [3])
-        self.assertEqual(evts.items(), [('duplications', 3)])
+        self.assertEqual(list(evts.keys()), ['duplications'])
+        self.assertEqual(list(evts.values()), [3])
+        self.assertEqual(list(evts.items()), [('duplications', 3)])
 
     def test_singlular(self):
         """Clade, Phylogeny: Singular properties for plural attributes."""
