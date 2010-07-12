@@ -54,7 +54,8 @@ def _sorted_attrs(elem):
     singles = []
     lists = []
     # Sort attributes for consistent results
-    for child in sorted(elem.__dict__.itervalues()):
+    for attrname, child in sorted(elem.__dict__.iteritems(),
+                                  key=lambda kv: kv[0]):
         if child is None:
             continue
         if isinstance(child, list):
