@@ -32,9 +32,12 @@ The library files can be found in directory 'fragment_data'.
 
 import numpy
 
-from Bio.PDB import PDBParser, PPBuilder, Selection
-from Bio.PDB.PDBExceptions import PDBException
 from Bio.SVDSuperimposer import SVDSuperimposer
+
+import Selection
+from PDBExceptions import PDBException
+from PDBParser import PDBParser
+from Polypeptide import PPBuilder
 
 
 # fragment file (lib_SIZE_z_LENGTH.txt)

@@ -3,16 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import numpy
-import tempfile
-import os
-import sys
-
-from Bio.PDB import *
-from AbstractPropertyMap import AbstractPropertyMap
-
-__doc__="""
-Calculation of residue depth (using Michel Sanner's MSMS program for the
+"""Calculation of residue depth (using Michel Sanner's MSMS program for the
 surface calculation).
 
 Residue depth is the average distance of the atoms of a residue from 
@@ -20,22 +11,21 @@ the solvent accessible surface.
 
 Residue Depth:
 
-    rd=ResidueDepth(model, pdb_file)
-
-    print rd[(chain_id, res_id)]
+    >>> rd = ResidueDepth(model, pdb_file)
+    >>> print rd[(chain_id, res_id)]
 
 Direct MSMS interface:
 
     Typical use:
 
-        surface=get_surface("1FAT.pdb")
+        >>> surface = get_surface("1FAT.pdb")
 
     Surface is a Numeric array with all the surface 
     vertices.  
 
     Distance to surface:
 
-        dist=min_dist(coord, surface)
+        >>> dist = min_dist(coord, surface)
 
     where coord is the coord of an atom within the volume
     bound by the surface (ie. atom depth).
@@ -43,8 +33,18 @@ Direct MSMS interface:
     To calculate the residue depth (average atom depth
     of the atoms in a residue):
 
-    rd=residue_depth(residue, surface)
+        >>> rd = residue_depth(residue, surface)
 """
+
+import os
+import tempfile
+
+import numpy
+
+import Selection
+from AbstractPropertyMap import AbstractPropertyMap
+from Polypeptide import is_aa
+
 
 def _read_vertex_array(filename):
     """
@@ -153,6 +153,7 @@ class ResidueDepth(AbstractPropertyMap):
 if __name__=="__main__":
 
     import sys
+    from Bio.PDB import PDBParser
 
     p=PDBParser()
     s=p.get_structure("X", sys.argv[1])

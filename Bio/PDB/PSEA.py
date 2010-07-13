@@ -3,9 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Wrappers for PSEA, a program for secondary structure assignment."""
 
 import os
-from Bio.PDB import *
+
+from Polypeptide import is_aa
 
 
 def run_psea(fname):
@@ -84,7 +86,7 @@ class PSEA:
 if __name__=="__main__":
 
     import sys
-    from Bio.PDB import *
+    from Bio.PDB import PDBParser
 
     # Parse PDB file
     p=PDBParser()

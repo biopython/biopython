@@ -3,14 +3,15 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from math import pi
+"""Half-sphere exposure and coordination number calculation."""
+
 import warnings
+from math import pi
 
-from Bio.PDB import *
 from AbstractPropertyMap import AbstractPropertyMap
-
-
-__doc__="Half sphere exposure and coordination number calculation."
+from PDBParser import PDBParser
+from Polypeptide import CaPPBuilder, is_aa
+from Vector import rotaxis
 
 
 class _AbstractHSExposure(AbstractPropertyMap):
@@ -99,6 +100,10 @@ class _AbstractHSExposure(AbstractPropertyMap):
                 if angle_key:
                     r2.xtra[angle_key]=angle
         AbstractPropertyMap.__init__(self, hse_map, hse_keys, hse_list)
+
+    def _get_cb(self, r1, r2, r3):
+        """This method is provided by the subclasses to calculate HSE."""
+        return NotImplemented
 
     def _get_gly_cb_vector(self, residue):
         """

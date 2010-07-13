@@ -3,12 +3,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Superimpose two structures."""
+
 import numpy
 
 from Bio.SVDSuperimposer import SVDSuperimposer
-from Bio.PDB.PDBExceptions import PDBException
+from PDBExceptions import PDBException
 
-__doc__="Superimpose two structures."
 
 class Superimposer:
     """
@@ -58,7 +59,7 @@ class Superimposer:
 if __name__=="__main__":
     import sys
 
-    from Bio.PDB import *
+    from Bio.PDB import PDBParser, Selection
 
     p=PDBParser()
     s1=p.get_structure("FIXED", sys.argv[1])
@@ -81,8 +82,3 @@ if __name__=="__main__":
     print sup.rms
 
     sup.apply(moving)
-
-
-
-
-

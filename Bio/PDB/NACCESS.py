@@ -173,7 +173,7 @@ class NACCESS_atomic(AbstractAtomPropertyMap):
 if __name__=="__main__":
     
     import sys
-    from Bio.PDB import *
+    from Bio.PDB import PDBParser
     
     p=PDBParser()
     s=p.get_structure('X', sys.argv[1])
@@ -182,6 +182,4 @@ if __name__=="__main__":
     n = NACCESS(model, sys.argv[1])
     for e in n.get_iterator():
         print e
-
-
 

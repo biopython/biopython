@@ -3,12 +3,14 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio.PDB import *
-
-__doc__="""
-Map the residues of two structures to each other based on 
-a FASTA alignment file.
+"""Map the residues of two structures to each other based on a FASTA alignment
+file.
 """
+
+from Bio.SCOP.Raf import to_one_letter_code
+
+import Selection
+from Polypeptide import is_aa
 
 
 class StructureAlignment:
@@ -100,7 +102,7 @@ if __name__=="__main__":
     import sys
     from Bio.Alphabet import generic_protein
     from Bio import AlignIO
-    from Bio.PDB import *
+    from Bio.PDB import PDBParser
 
     if len(sys.argv) != 4:
         print "Expects three arguments,"
