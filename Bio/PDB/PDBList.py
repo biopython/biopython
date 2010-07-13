@@ -33,10 +33,12 @@
 # Including bugfixes from Sunjoong Lee (9/2006)
 #
 
-__doc__="Access the PDB over the internet (for example to download structures)."
+"""Access the PDB over the internet (for example to download structures)."""
 
-import urllib, re, os
+import os
 import shutil
+import urllib
+
 
 class PDBList:
     """
@@ -124,9 +126,11 @@ class PDBList:
         url = urllib.urlopen(self.pdb_server+'/pub/pdb/data/status/')
 
         # added by S.Lee
-        recent = filter(lambda x: x.isdigit(), \
-                        map(lambda x: x.split()[-1], url.readlines()))[-1]
-        
+        # recent = filter(lambda x: x.isdigit(), \
+        #                 map(lambda x: x.split()[-1], url.readlines()))[-1]
+        recent = filter(str.isdigit,
+                        (x.split()[-1] for x in url.readlines())
+                        )[-1]
         path = self.pdb_server+'/pub/pdb/data/status/%s/'%(recent)
         # retrieve the lists
         added = self.get_status_list(path+'added.pdb')
@@ -134,23 +138,17 @@ class PDBList:
         obsolete = self.get_status_list(path+'obsolete.pdb')
         return [added,modified,obsolete]
 
-
-
     def get_all_entries(self):
         """Retrieves a big file containing all the 
         PDB entries and some annotation to them. 
         Returns a list of PDB codes in the index file.
         """
-        entries = []
         print "retrieving index file. Takes about 5 MB."
         url = urllib.urlopen(self.pdb_server+'/pub/pdb/derived_data/index/entries.idx')
         # extract four-letter-codes
-        entries = map(lambda x: x[:4], \
-                      filter(lambda x: len(x)>4, url.readlines()[2:]))
-                      
-        return entries
-
-
+        # entries = map(lambda x: x[:4], \
+        #               filter(lambda x: len(x)>4, url.readlines()[2:]))
+        return [line[:4] for line in url.readlines()[2:] if len(line) > 4]
 
     def get_all_obsolete(self):
         """Returns a list of all obsolete entries ever in the PDB.
@@ -301,44 +299,53 @@ class PDBList:
                 print "Obsolete file %s is missing" % old_file
 
 
-    def download_entire_pdb(self,listfile=None):
-        """Retrieves all PDB entries not present in the local PDB copy.
-        Writes a list file containing all PDB codes (optional, if listfile is given).
+    def download_entire_pdb(self, listfile=None):
+        """Retrieve all PDB entries not present in the local PDB copy.
+
+        Writes a list file containing all PDB codes (optional, if listfile is
+        given).
         """ 
         entries = self.get_all_entries()
-        for pdb_code in entries: self.retrieve_pdb_file(pdb_code)
-
-        # write the list
+        for pdb_code in entries:
+            self.retrieve_pdb_file(pdb_code)
+        # Write the list
         if listfile:
-            open(listfile,'w').writelines(map(lambda x: x+'\n',entries))
+            outfile = open(listfile, 'w')
+            outfile.writelines((x+'\n' for x in entries))
+            outfile.close()
 
+    def download_obsolete_entries(self, listfile=None):
+        """Retrieve all obsolete PDB entries not present in the local obsolete
+        PDB copy.
 
-    def download_obsolete_entries(self,listfile=None):
-
-        """Retrieves all obsolete PDB entries not present in the local obsolete PDB copy.
-        Writes a list file containing all PDB codes (optional, if listfile is given).
+        Writes a list file containing all PDB codes (optional, if listfile is
+        given).
         """ 
         entries = self.get_all_obsolete()
-        for pdb_code in entries: self.retrieve_pdb_file(pdb_code,obsolete=1)
+        for pdb_code in entries:
+            self.retrieve_pdb_file(pdb_code, obsolete=1)
 
-        # write the list
+        # Write the list
         if listfile:
-            open(listfile,'w').writelines(map(lambda x: x+'\n',entries))            
+            outfile = open(listfile, 'w')
+            outfile.writelines((x+'\n' for x in entries))
+            outfile.close()
 
 
-
-    #
     # this is actually easter egg code not used by any of the methods
     # maybe someone will find it useful.
     #    
     def get_seqres_file(self,savefile='pdb_seqres.txt'):
-        """Retrieves a (big) file containing all the sequences 
-        of PDB entries and writes it to a file."""
+        """Retrieves a (big) file containing all the sequences of PDB entries
+        and writes it to a file.
+        """
         print "retrieving sequence file. Takes about 15 MB."
-        url = urllib.urlopen(self.pdb_server+'/pub/pdb/derived_data/pdb_seqres.txt')        
-        file = url.readlines()
-        open(savefile,'w').writelines(file)
-        
+        url = urllib.urlopen(self.pdb_server + 
+                '/pub/pdb/derived_data/pdb_seqres.txt')
+        lines = url.readlines()
+        outfile = open(savefile, 'w')
+        outfile.writelines(lines)
+        outfile.close()
 
 
 if __name__ == '__main__':
@@ -390,7 +397,7 @@ if __name__ == '__main__':
             # get all obsolete entries
             pl.download_obsolete_entries(pdb_path)
 
-        elif re.search('^\d...$',sys.argv[1]):
+        elif len(sys.argv[1]) == 4 and sys.argv[1][0].isdigit():
             # get single PDB entry
             pl.retrieve_pdb_file(sys.argv[1],pdir=pdb_path)
 
