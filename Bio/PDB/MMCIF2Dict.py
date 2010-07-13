@@ -3,12 +3,12 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Turn an mmCIF file into a dictionary."""
+
 import os.path
 import warnings
 import Bio.PDB.mmCIF.MMCIFlex
 from UserDict import UserDict
-
-__doc__="Turn an mmCIF file into a dictionary."
 
 
 class MMCIF2Dict(UserDict):
@@ -130,18 +130,18 @@ if __name__=="__main__":
 
     mmcif_dict=MMCIF2Dict(filename)
 
-    input=""
+    entry = ""
     print "Now type a key ('q' to end, 'k' for a list of all keys):"
-    while(input!="q"):
-        input=raw_input("MMCIF dictionary key ==> ")    
-        if input=="q":
+    while(entry != "q"):
+        entry = raw_input("MMCIF dictionary key ==> ")    
+        if entry == "q":
             sys.exit()
-        if input=="k":
-            for key in mmcif_dict.keys():
+        if entry == "k":
+            for key in mmcif_dict:
                 print key
             continue
         try:
-            value=mmcif_dict[input]
+            value=mmcif_dict[entry]
             if type(value)==type([]):
                 for item in value:
                     print item
