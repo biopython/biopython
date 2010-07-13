@@ -3,11 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Vector class, including rotation-related functions."""
+
 import numpy
-import sys
 
-
-__doc__="Vector class, including rotation-related functions."
 
 def m2rotaxis(m):
     """
