@@ -3,18 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-import os
-import tempfile
-from Bio.PDB import *
-from PDBExceptions import PDBException
-from AbstractPropertyMap import AbstractResiduePropertyMap
-import re
+"""Use the DSSP program to calculate secondary structure and accessibility.
 
-
-__doc__="""
-Use the DSSP program to calculate secondary structure and accessibility.
-You need to have a working version of DSSP (and a license, free for 
-academic use) in order to use this. For DSSP, see U{http://www.cmbi.kun.nl/gv/dssp/}.
+You need to have a working version of DSSP (and a license, free for academic
+use) in order to use this. For DSSP, see U{http://www.cmbi.kun.nl/gv/dssp/}.
 
 The DSSP codes for secondary structure used here are:
 
@@ -27,6 +19,17 @@ The DSSP codes for secondary structure used here are:
     - S        Bend
     - -        None
 """
+
+import os
+import re
+import tempfile
+
+from Bio.SCOP.Raf import to_one_letter_code
+
+from AbstractPropertyMap import AbstractResiduePropertyMap
+from PDBExceptions import PDBException
+from PDBParser import PDBParser
+
 
 # Match C in DSSP
 _dssp_cys=re.compile('[a-z]')
