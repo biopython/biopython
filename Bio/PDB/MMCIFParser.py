@@ -49,7 +49,7 @@ class MMCIFParser:
             aniso_flag=0
         # if auth_seq_id is present, we use this.
         # Otherwise label_seq_id is used.
-        if mmcif_dict.has_key("_atom_site.auth_seq_id"):
+        if "_atom_site.auth_seq_id" in mmcif_dict:
             seq_id_list=mmcif_dict["_atom_site.auth_seq_id"]
         else:
             seq_id_list=mmcif_dict["_atom_site.label_seq_id"]

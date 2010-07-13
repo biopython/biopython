@@ -8,7 +8,7 @@ from PDBExceptions import PDBConstructionException
 from Entity import Entity, DisorderedEntityWrapper
 
 
-__doc__="Residue class, used by Structure objects."
+"""Residue class, used by Structure objects."""
 
 
 _atom_name_dict={}
@@ -52,11 +52,11 @@ class Residue(Entity):
         name2=a2.get_name()
         if name1==name2:
             return(cmp(a1.get_altloc(), a2.get_altloc()))
-        if _atom_name_dict.has_key(name1):
+        if name1 in _atom_name_dict:
             index1=_atom_name_dict[name1]
         else:
             index1=None
-        if _atom_name_dict.has_key(name2):
+        if name2 in _atom_name_dict:
             index2=_atom_name_dict[name2]
         else:
             index2=None
@@ -161,7 +161,3 @@ class DisorderedResidue(DisorderedEntityWrapper):
         self[resname]=residue
         self.disordered_select(resname)
 
-
-    
-
-    

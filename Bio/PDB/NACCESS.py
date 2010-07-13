@@ -9,7 +9,9 @@ import os, sys, tempfile
 from Bio.PDB.PDBIO import PDBIO
 from AbstractPropertyMap import AbstractResiduePropertyMap, AbstractAtomPropertyMap
 
-__doc__="""Interface for the program NACCESS - http://wolf.bms.umist.ac.uk/naccess/
+"""Interface for the program NACCESS.
+
+See: http://wolf.bms.umist.ac.uk/naccess/
 
 errors likely to occur with the binary:
 default values are often due to low default settings in accall.pars
@@ -117,7 +119,6 @@ class NACCESS(AbstractResiduePropertyMap):
         res_data, atm_data = run_naccess(model, pdb_file, naccess = naccess_binary,
                                          temp_path = tmp_directory)
         naccess_dict = process_rsa_data(res_data)
-        map = {}
         res_list = []
         property_dict={}
         property_keys=[]
@@ -127,7 +128,7 @@ class NACCESS(AbstractResiduePropertyMap):
             chain_id=chain.get_id()
             for res in chain:
                 res_id=res.get_id()
-                if naccess_dict.has_key((chain_id, res_id)):
+                if (chain_id, res_id) in naccess_dict:
                     item = naccess_dict[(chain_id, res_id)]
                     res_name = item['res_name']
                     assert (res_name == res.get_resname())
@@ -139,7 +140,7 @@ class NACCESS(AbstractResiduePropertyMap):
                     pass
         AbstractResiduePropertyMap.__init__(self, property_dict, property_keys, 
                 property_list)
-        
+
 class NACCESS_atomic(AbstractAtomPropertyMap):
 
     def __init__(self, model, pdb_file = None,
@@ -147,7 +148,6 @@ class NACCESS_atomic(AbstractAtomPropertyMap):
         res_data, atm_data = run_naccess(model, pdb_file, naccess = naccess_binary,
                                          temp_path = tmp_directory)
         self.naccess_atom_dict = process_asa_data(atm_data)
-        map = {}
         atom_list = []
         property_dict={}
         property_keys=[]
@@ -160,7 +160,7 @@ class NACCESS_atomic(AbstractAtomPropertyMap):
                 for atom in residue:
                     atom_id = atom.get_id()
                     full_id=(chain_id, res_id, atom_id)
-                    if self.naccess_atom_dict.has_key(full_id):
+                    if full_id in self.naccess_atom_dict:
                         asa = self.naccess_atom_dict[full_id]
                         property_dict[full_id]=asa
                         property_keys.append((full_id))
