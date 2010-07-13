@@ -11,24 +11,20 @@ from PDBExceptions import PDBException
 
 entity_levels=["A", "R", "C", "M", "S"]
 
-def uniqueify(l):
-    "Return unique items in list l."
-    d={}
-    for i in l:
-        if not d.has_key(i):
-            d[i]=None
-    return d.keys()
+
+def uniqueify(items):
+    """Return a list of the unique items in the given iterable.
+
+    Order is NOT preserved.
+    """
+    return list(set(items))
+
 
 def get_unique_parents(entity_list):
-    """
-    Translate a list of entities to a list of their
-    (unique) parents.
-    """ 
-    l=[]
-    for entity in entity_list:
-        parent=entity.get_parent()
-        l.append(parent)
-    return uniqueify(l)
+    """Translate a list of entities to a list of their (unique) parents.""" 
+    parents = [entity.get_parent() for entity in entity_list]
+    return uniqueify(parents)
+
 
 def unfold_entities(entity_list, target_level):
     """
