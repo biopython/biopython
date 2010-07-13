@@ -3,11 +3,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.  
 
-# My Stuff
+"""The structure class, representing a macromolecular structure."""
+
 from Entity import Entity
-
-
-__doc__="The structure class, representing a macromolecular structure."
 
 
 class Structure(Entity):

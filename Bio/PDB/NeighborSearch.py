@@ -3,14 +3,15 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""Fast atom neighbor lookup using a KD tree (implemented in C++)."""
+
 import numpy
 
 from Bio.KDTree import KDTree
-from PDBExceptions import PDBException
-from Selection import unfold_entities, get_unique_parents, entity_levels, \
-     uniqueify
 
-__doc__="Fast atom neighbor lookup using a KD tree (implemented in C++)."
+from PDBExceptions import PDBException
+from Selection import unfold_entities, entity_levels, uniqueify
+
 
 class NeighborSearch:
     """

@@ -3,17 +3,14 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-#Python stuff
+"""mmCIF parser (partly implemented in C)."""
+
 from string import letters
 
 import numpy
 
-# My stuff
 from MMCIF2Dict import MMCIF2Dict
 from StructureBuilder import StructureBuilder
-
-
-__doc__="mmCIF parser (partly implemented in C)." 
 
 
 class MMCIFParser:

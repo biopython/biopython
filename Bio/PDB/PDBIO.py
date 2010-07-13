@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-__doc__="Output of PDB files."
+"""Output of PDB files."""
 
 
 _ATOM_FORMAT_STRING="%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%6.2f%6.2f      %4s%2s%2s\n"
