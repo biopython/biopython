@@ -3,7 +3,14 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from types import StringType
+"""Polypeptide-related classes (construction and representation).
+
+Example:
+
+    >>> ppb=PPBuilder()
+    >>> for pp in ppb.build_peptides(structure):
+    ...     print pp.get_sequence()
+"""
 
 from Bio.Alphabet import generic_protein
 from Bio.Seq import Seq
@@ -12,15 +19,6 @@ from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Residue import Residue, DisorderedResidue
 from Vector import calc_dihedral, calc_angle
 
-__doc__="""
-Polypeptide related classes (construction and representation).
-
-Example:
-
-    >>> ppb=PPBuilder()
-    >>> for pp in ppb.build_peptides(structure):
-    ...     print pp.get_sequence()
-"""
 
 standard_aa_names=["ALA", "CYS", "ASP", "GLU", "PHE", "GLY", "HIS", "ILE", "LYS", 
                    "LEU", "MET", "ASN", "PRO", "GLN", "ARG", "SER", "THR", "VAL",
@@ -98,7 +96,7 @@ def is_aa(residue, standard=0):
     @param standard: flag to check for the 20 AA (default false) 
     @type standard: boolean
     """
-    if not type(residue)==StringType:
+    if not isinstance(residue, basestring):
         residue=residue.get_resname()
     residue=residue.upper()
     if standard:

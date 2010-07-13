@@ -3,8 +3,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from types import IntType
-
 """Class that maps (chain_id, residue_id) to a residue property."""
 
 
@@ -112,7 +110,7 @@ class AbstractResiduePropertyMap(AbstractPropertyMap):
 
     def _translate_id(self, ent_id):
         chain_id, res_id=ent_id
-        if type(res_id)==IntType:
+        if isinstance(res_id, int):
             ent_id=(chain_id, (' ', res_id, ' '))
         return ent_id
 
@@ -128,7 +126,7 @@ class AbstractAtomPropertyMap(AbstractPropertyMap):
         else:
             chain_id, res_id, atom_name=ent_id
             icode=None
-        if type(res_id)==IntType:
+        if isinstance(res_id, int):
             ent_id=(chain_id, (' ', res_id, ' '), atom_name, icode)
         return ent_id
 

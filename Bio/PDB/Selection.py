@@ -3,11 +3,10 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from types import ListType
+"""Selection of atoms, residues, etc."""
 
+from Entity import Entity
 from PDBExceptions import PDBException
-
-__doc__="Selection of atoms, residues, etc."
 
 
 entity_levels=["A", "R", "C", "M", "S"]
@@ -45,7 +44,7 @@ def unfold_entities(entity_list, target_level):
     """
     if not target_level in entity_levels:
         raise PDBException("%s: Not an entity level." % target_level)
-    if type(entity_list)!=ListType:
+    if isinstance(entity_list, Entity):
         # single entity
         entity_list=[entity_list]
     # level of entity list

@@ -3,13 +3,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.  
 
-# Python stuff
-from types import IntType
+"""Chain class, used in Structure objects."""
 
-# My Stuff
 from Entity import Entity
-
-__doc__="Chain class, used in Structure objects."
 
 
 class Chain(Entity):
@@ -51,7 +47,7 @@ class Chain(Entity):
         Arguments:
         o id - int, residue resseq 
         """
-        if type(id)==IntType:
+        if isinstance(id, int):
             id=(' ', id, ' ')
         return id
             
