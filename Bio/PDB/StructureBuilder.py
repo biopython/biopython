@@ -3,14 +3,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.  
 
-__doc__="""
-Consumer class that builds a Structure object. This is used by 
-the PDBParser and MMCIFparser classes.
+"""Consumer class that builds a Structure object.
+
+This is used by the PDBParser and MMCIFparser classes.
 """
 
 import warnings
 
-# My stuff 
 # SMCRA hierarchy
 from Structure import Structure
 from Model import Model
@@ -80,10 +79,9 @@ class StructureBuilder:
         """
         if self.model.has_id(chain_id):
             self.chain=self.model[chain_id]
-            if __debug__:
-                warnings.warn("WARNING: Chain %s is discontinuous at line %i."
-                              % (chain_id, self.line_counter),
-                              PDBConstructionWarning)
+            warnings.warn("WARNING: Chain %s is discontinuous at line %i."
+                          % (chain_id, self.line_counter),
+                          PDBConstructionWarning)
         else:
             self.chain=Chain(chain_id)
             self.model.add(self.chain)
@@ -116,11 +114,10 @@ class StructureBuilder:
             if self.chain.has_id(res_id):
                 # There already is a residue with the id (field, resseq, icode).
                 # This only makes sense in the case of a point mutation.
-                if __debug__:
-                    warnings.warn("WARNING: Residue ('%s', %i, '%s') "
-                                  "redefined at line %i."
-                                  % (field, resseq, icode, self.line_counter),
-                                  PDBConstructionWarning)
+                warnings.warn("WARNING: Residue ('%s', %i, '%s') "
+                              "redefined at line %i."
+                              % (field, resseq, icode, self.line_counter),
+                              PDBConstructionWarning)
                 duplicate_residue=self.chain[res_id]
                 if duplicate_residue.is_disordered()==2:
                     # The residue in the chain is a DisorderedResidue object.
@@ -190,12 +187,11 @@ class StructureBuilder:
                 if duplicate_fullname!=fullname:
                     # name of current atom now includes spaces
                     name=fullname
-                    if __debug__:
-                        warnings.warn("WARNING: atom names %s and %s differ "
-                                      "only in spaces at line %i."
-                                      % (duplicate_fullname, fullname,
-                                         self.line_counter),
-                                      PDBConstructionWarning)
+                    warnings.warn("WARNING: atom names %s and %s differ "
+                                  "only in spaces at line %i."
+                                  % (duplicate_fullname, fullname,
+                                     self.line_counter),
+                                  PDBConstructionWarning)
         atom=self.atom=Atom(name, coord, b_factor, occupancy, altloc,
                             fullname, serial_number, element)
         if altloc!=" ":
@@ -217,11 +213,10 @@ class StructureBuilder:
                     disordered_atom.disordered_add(atom)
                     disordered_atom.disordered_add(duplicate_atom)
                     residue.flag_disordered()
-                    if __debug__:
-                        warnings.warn("WARNING: disordered atom found "
-                                      "with blank altloc before line %i.\n"
-                                      % self.line_counter,
-                                      PDBConstructionWarning)
+                    warnings.warn("WARNING: disordered atom found "
+                                  "with blank altloc before line %i.\n"
+                                  % self.line_counter,
+                                  PDBConstructionWarning)
             else:
                 # The residue does not contain this disordered atom
                 # so we create a new one.
