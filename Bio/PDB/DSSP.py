@@ -215,7 +215,7 @@ if __name__=="__main__":
 
     print len(d)
 
-    print d.has_key(('A', 1))
+    print ('A', 1) in d
 
     print d[('A', 1)]
 
