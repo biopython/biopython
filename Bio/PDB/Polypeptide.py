@@ -175,9 +175,8 @@ class Polypeptide(list):
         ca_list=self.get_ca_list()
         tau_list=[]
         for i in range(0, len(ca_list)-3):
-            atom_list=[ca_list[i], ca_list[i+1], ca_list[i+2], ca_list[i+3]]
-            vector_list=map(lambda a: a.get_vector(), atom_list)
-            v1, v2, v3, v4=vector_list
+            atom_list = (ca_list[i], ca_list[i+1], ca_list[i+2], ca_list[i+3])
+            v1, v2, v3, v4 = [a.get_vector() for a in atom_list]
             tau=calc_dihedral(v1, v2, v3, v4)
             tau_list.append(tau)
             # Put tau in xtra dict of residue
@@ -193,9 +192,8 @@ class Polypeptide(list):
         theta_list=[]
         ca_list=self.get_ca_list()
         for i in range(0, len(ca_list)-2):
-            atom_list=[ca_list[i], ca_list[i+1], ca_list[i+2]]
-            vector_list=map(lambda a: a.get_vector(), atom_list)
-            v1, v2, v3=vector_list
+            atom_list = (ca_list[i], ca_list[i+1], ca_list[i+2])
+            v1, v2, v3 = [a.get_vector() for a in atom_list]
             theta=calc_angle(v1, v2, v3)
             theta_list.append(theta)
             # Put tau in xtra dict of residue
