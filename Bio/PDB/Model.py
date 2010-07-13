@@ -3,12 +3,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.  
 
-import os
+"""Model class, used in Structure objects."""
 
-# My Stuff
 from Entity import Entity
-
-__doc__="Model class, used in Structure objects."
 
 
 class Model(Entity):
