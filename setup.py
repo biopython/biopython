@@ -33,7 +33,7 @@ elif sys.version_info[:2] == (2,4):
     print "Warning - we are phasing out support for Python 2.4"
 elif sys.version_info[0] == 3:
     print "Biopython does not yet officially support Python 3, but you"
-    print "try it by using the 2to3 script on our source code."
+    print "can try it by first using the 2to3 script on our source code."
     
 from distutils.core import setup
 from distutils.core import Command
