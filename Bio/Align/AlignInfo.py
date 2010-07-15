@@ -79,7 +79,7 @@ class SummaryInfo:
                 # if they are of different lengths
                 if n < len(record.seq):
                     if record.seq[n] != '-' and record.seq[n] != '.':
-                        if record.seq[n] not in atom_dict.keys():
+                        if record.seq[n] not in atom_dict:
                             atom_dict[record.seq[n]] = 1
                         else:
                             atom_dict[record.seq[n]] += 1
@@ -89,7 +89,7 @@ class SummaryInfo:
             max_atoms = []
             max_size = 0
 
-            for atom in atom_dict.keys():
+            for atom in atom_dict:
                 if atom_dict[atom] > max_size:
                     max_atoms = [atom]
                     max_size = atom_dict[atom]
@@ -134,7 +134,7 @@ class SummaryInfo:
                 # make sure we haven't run past the end of any sequences
                 # if they are of different lengths
                 if n < len(record.seq):
-                    if record.seq[n] not in atom_dict.keys():
+                    if record.seq[n] not in atom_dict:
                         atom_dict[record.seq[n]] = 1
                     else:
                         atom_dict[record.seq[n]] += 1
@@ -144,7 +144,7 @@ class SummaryInfo:
             max_atoms = []
             max_size = 0
 
-            for atom in atom_dict.keys():
+            for atom in atom_dict:
                 if atom_dict[atom] > max_size:
                     max_atoms = [atom]
                     max_size = atom_dict[atom]
@@ -505,7 +505,7 @@ class SummaryInfo:
         for column_info in info_content.values():
             total_info += column_info
         # fill in the ic_vector member: holds IC for each column
-        for i in info_content.keys():
+        for i in info_content:
             self.ic_vector[i] = info_content[i]
         return total_info
 
@@ -543,12 +543,12 @@ class SummaryInfo:
 
         if total_count == 0:
             # This column must be entirely ignored characters
-            for letter in freq_info.keys():
+            for letter in freq_info:
                 assert freq_info[letter] == 0
                 #TODO - Map this to NA or NaN?
         else:
             # now convert the counts into frequencies
-            for letter in freq_info.keys():
+            for letter in freq_info:
                 freq_info[letter] = freq_info[letter] / total_count
 
         return freq_info
@@ -575,7 +575,7 @@ class SummaryInfo:
             if not isinstance(e_freq_table, FreqTable.FreqTable):
                 raise ValueError("e_freq_table should be a FreqTable object")
             # check the expected freq information to make sure it is good
-            for key in obs_freq.keys():
+            for key in obs_freq:
                 if (key != gap_char and key not in e_freq_table):
                     raise ValueError("Expected frequency letters %s "
                                      "do not match observed %s" \
@@ -584,7 +584,7 @@ class SummaryInfo:
         
         total_info = 0.0
 
-        for letter in obs_freq.keys():
+        for letter in obs_freq:
             inner_log = 0.0
             # if we have expected frequencies, modify the log value by them
             # gap characters do not have expected frequencies, so they
