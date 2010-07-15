@@ -217,12 +217,12 @@ class Crystal:
 
     def fix(self):
         data = self.data
-        for key in data.keys():
-            element = data[ key ]
+        for key in data:
+            element = data[key]
             if isinstance(element, Chain):
                 pass
             elif type(element) == type(''):
-                data[ key ] = Chain(element)
+                data[key] = Chain(element)
             else:
                 raise TypeError
 
