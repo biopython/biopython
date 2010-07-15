@@ -1,4 +1,4 @@
-# Copyright 2009 by Peter Cock.  All rights reserved.
+# Copyright 2009-2010 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -7,12 +7,19 @@
 import os
 import unittest
 import warnings
+
+from StringIO import StringIO
+try:
+    #This is in Python 2.6+, but we need it on Python 3
+    from io import BytesIO
+except ImportError:
+    BytesIO = StringIO
+
 from Bio.Alphabet import generic_dna
 from Bio.SeqIO import QualityIO
 from Bio import SeqIO
 from Bio.Seq import Seq, UnknownSeq, MutableSeq
 from Bio.SeqRecord import SeqRecord
-from StringIO import StringIO
 from Bio.Data.IUPACData import ambiguous_dna_letters, ambiguous_rna_letters
 
 BINARY_FORMATS = ["sff", "sff-trim"]
@@ -30,11 +37,12 @@ def truncation_expected(format):
 def write_read(filename, in_format, out_format):
     if in_format in BINARY_FORMATS:
         mode = "rb"
+        handle = BytesIO()
     else :
         mode = "r"
+        handle = StringIO()
     records = list(SeqIO.parse(open(filename, mode),in_format))
     #Write it out...
-    handle = StringIO()
     SeqIO.write(records, handle, out_format)
     handle.seek(0)
     #Now load it back and check it agrees,
