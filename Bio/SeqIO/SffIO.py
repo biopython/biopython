@@ -199,12 +199,16 @@ _sff = ".sff".encode("ascii")
 _hsh = ".hsh".encode("ascii")
 _srt = ".srt".encode("ascii")
 _mft = ".mft".encode("ascii")
-try:
+if sys.version_info[0] >= 3:
     #If running on Python 3.x, this will do flag = b"\xff"
     _flag = eval(r'b"\xff"')
-except SyntaxError:
+    _bytes_to_string = lambda b: b.decode() # bytes to unicode
+    _string_to_bytes = lambda s: s.encode() # unicode to bytes
+else:
     #Must be on Python 2.x
     _flag = "\xff" #Char 255
+    _bytes_to_string = lambda b: b # i.e. do nothing
+    _string_to_bytes = lambda s: str(s) # str or unicode to str
 
 def _sff_file_header(handle):
     """Read in an SFF file header (PRIVATE).
@@ -272,8 +276,8 @@ def _sff_file_header(handle):
     if (index_offset!=0) ^ (index_length!=0):
         raise ValueError("Index offset %i but index length %i" \
                          % (index_offset, index_length))
-    flow_chars = handle.read(number_of_flows_per_read)
-    key_sequence = handle.read(key_length)
+    flow_chars = _bytes_to_string(handle.read(number_of_flows_per_read))
+    key_sequence = _bytes_to_string(handle.read(key_length))
     #According to the spec, the header_length field should be the total number
     #of bytes required by this set of header fields, and should be equal to
     #"31 + number_of_flows_per_read + key_length" rounded up to the next value
@@ -331,7 +335,7 @@ def _sff_do_slow_index(handle):
             raise ValueError("Malformed read header, says length is %i:\n%s" \
                              % (read_header_length, repr(data)))
         #now the name and any padding (remainder of header)
-        name = handle.read(name_length)
+        name = _bytes_to_string(handle.read(name_length))
         padding = read_header_length - read_header_size - name_length
         if handle.read(padding).count(_null) != padding:
             raise ValueError("Post name %i byte padding region contained data" \
@@ -432,7 +436,7 @@ def _sff_read_roche_index_xml(handle):
     if not xml_offset or not xml_size:
         raise ValueError("No XML manifest found")
     handle.seek(xml_offset)
-    return handle.read(xml_size)
+    return _bytes_to_string(handle.read(xml_size))
 
 
 #This is a generator function!
@@ -468,7 +472,7 @@ def _sff_read_roche_index(handle):
             data += more
             if more == _flag: break
         assert data[-1:] == _flag, data[-1:]
-        name = data[:-6]
+        name = _bytes_to_string(data[:-6])
         off4, off3, off2, off1, off0 = struct.unpack(fmt, data[-6:-1])
         offset = off0 + 255*off1 + 65025*off2 + 16581375*off3
         if off4:
@@ -510,7 +514,7 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
         raise ValueError("Malformed read header, says length is %i" \
                          % read_header_length)
     #now the name and any padding (remainder of header)
-    name = handle.read(name_length)
+    name = _bytes_to_string(handle.read(name_length))
     padding = read_header_length - read_header_size - name_length
     if handle.read(padding).count(_null) != padding:
         raise ValueError("Post name %i byte padding region contained data" \
@@ -520,7 +524,7 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     flow_values = handle.read(read_flow_size) #unpack later if needed
     temp_fmt = ">%iB" % seq_len # used for flow index and quals
     flow_index = handle.read(seq_len) #unpack later if needed
-    seq = handle.read(seq_len)
+    seq = _bytes_to_string(handle.read(seq_len)) #TODO - Use bytes in Seq?
     quals = list(struct.unpack(temp_fmt, handle.read(seq_len)))
     #now any padding...
     padding = (read_flow_size + seq_len*3)%8
@@ -707,12 +711,9 @@ class SffWriter(SequenceWriter):
         """
         if hasattr(handle,"mode") and "U" in handle.mode.upper():
             raise ValueError("SFF files must NOT be opened in universal new "
-                             "lines mode. Binary mode is recommended (although "
-                             "on Unix the default mode is also fine).")
-        elif hasattr(handle,"mode") and "B" not in handle.mode.upper() \
-        and sys.platform == "win32":
-            raise ValueError(\
-                "SFF files must be opened in binary mode on Windows")
+                             "lines mode. Binary mode is required")
+        elif hasattr(handle,"mode") and "B" not in handle.mode.upper():
+            raise ValueError("SFF files must be opened in binary mode")
         self.handle = handle
         self._xml = xml
         if index:
@@ -754,8 +755,8 @@ class SffWriter(SequenceWriter):
             #return 0
             raise ValueError("Need at least one record for SFF output")
         try:
-            self._key_sequence = record.annotations["flow_key"]
-            self._flow_chars = record.annotations["flow_chars"]
+            self._key_sequence = _string_to_bytes(record.annotations["flow_key"])
+            self._flow_chars = _string_to_bytes(record.annotations["flow_chars"])
             self._number_of_flows_per_read = len(self._flow_chars)
         except KeyError:
             raise ValueError("Missing SFF flow information")
@@ -785,12 +786,13 @@ class SffWriter(SequenceWriter):
         self._index_start = handle.tell() #need for header
         #XML...
         if self._xml is not None:
-            xml = self._xml
+            xml = _string_to_bytes(self._xml)
         else:
             from Bio import __version__
             xml = "<!-- This file was output with Biopython %s -->\n" % __version__
             xml += "<!-- This XML and index block attempts to mimic Roche SFF files -->\n"
             xml += "<!-- This file may be a combination of multiple SFF files etc -->\n"
+            xml = _string_to_bytes(xml)
         xml_len = len(xml)
         #Write to the file...
         fmt = ">I4BLL"
@@ -886,9 +888,9 @@ class SffWriter(SequenceWriter):
         This assumes the header has been done.
         """
         #Basics
-        name = record.id
+        name = _string_to_bytes(record.id)
         name_len = len(name)
-        seq = str(record.seq).upper()
+        seq = _string_to_bytes(str(record.seq).upper())
         seq_len = len(seq)
         #Qualities
         try:
@@ -899,8 +901,8 @@ class SffWriter(SequenceWriter):
         try:
             flow_values = record.annotations["flow_values"]
             flow_index = record.annotations["flow_index"]
-            if self._key_sequence != record.annotations["flow_key"] \
-            or self._flow_chars != record.annotations["flow_chars"]:
+            if self._key_sequence != _string_to_bytes(record.annotations["flow_key"]) \
+            or self._flow_chars != _string_to_bytes(record.annotations["flow_chars"]):
                 raise ValueError("Records have inconsistent SFF flow data")
         except KeyError:
             raise ValueError("Missing SFF flow information")

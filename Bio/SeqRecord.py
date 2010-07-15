@@ -645,15 +645,25 @@ class SeqRecord(object):
         supported by Bio.SeqIO as an output file format. See also the
         SeqRecord's format() method.
         """
-        if format_spec:
-            from StringIO import StringIO
-            from Bio import SeqIO
-            handle = StringIO()
-            SeqIO.write([self], handle, format_spec)
-            return handle.getvalue()
-        else:
+        if not format_spec:
             #Follow python convention and default to using __str__
             return str(self)    
+        from Bio import SeqIO
+        if format_spec in SeqIO._BinaryFormats:
+            #Return bytes on Python 3
+            try:
+                #This is in Python 2.6+, but we need it on Python 3
+                from io import BytesIO
+                handle = BytesIO()
+            except ImportError:
+                #Must me on Python 2.5 or older
+                from StringIO import StringIO
+                handle = StringIO()
+        else:
+            from StringIO import StringIO
+            handle = StringIO()
+        SeqIO.write(self, handle, format_spec)
+        return handle.getvalue()
 
     def __len__(self):
         """Returns the length of the sequence.
