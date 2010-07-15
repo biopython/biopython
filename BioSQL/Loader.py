@@ -868,7 +868,7 @@ class DatabaseLoader:
             {key : [value1, value2]}
         """
         tag_ontology_id = self._get_ontology_id('Annotation Tags')
-        for qualifier_key in qualifiers.keys():
+        for qualifier_key in qualifiers:
             # Treat db_xref qualifiers differently to sequence annotation
             # qualifiers by populating the seqfeature_dbxref and dbxref
             # tables.  Other qualifiers go into the seqfeature_qualifier_value
