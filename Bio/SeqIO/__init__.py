@@ -613,7 +613,7 @@ def to_dict(sequences, key_function=None):
     >>> filename = "GenBank/cor6_6.gb"
     >>> format = "genbank"
     >>> id_dict = SeqIO.to_dict(SeqIO.parse(filename, format))
-    >>> print sorted(id_dict.keys())
+    >>> print sorted(id_dict)
     ['AF297471.1', 'AJ237582.1', 'L31939.1', 'M81224.1', 'X55053.1', 'X62281.1']
     >>> print id_dict["L31939.1"].description
     Brassica rapa (clone bif72) kin mRNA, complete cds.
@@ -670,7 +670,7 @@ def index(filename, format, alphabet=None, key_function=None):
     >>> records = SeqIO.index("Quality/example.fastq", "fastq")
     >>> len(records)
     3
-    >>> sorted(records.keys())
+    >>> sorted(records)
     ['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_443_348', 'EAS54_6_R1_2_1_540_792']
     >>> print records["EAS54_6_R1_2_1_540_792"].format("fasta")
     >EAS54_6_R1_2_1_540_792
@@ -702,7 +702,7 @@ def index(filename, format, alphabet=None, key_function=None):
     >>> records = SeqIO.to_dict(SeqIO.parse(open("Quality/example.fastq"), "fastq"))
     >>> len(records)
     3
-    >>> sorted(records.keys())
+    >>> sorted(records)
     ['EAS54_6_R1_2_1_413_324', 'EAS54_6_R1_2_1_443_348', 'EAS54_6_R1_2_1_540_792']
     >>> print records["EAS54_6_R1_2_1_540_792"].format("fasta")
     >EAS54_6_R1_2_1_540_792
@@ -721,7 +721,7 @@ def index(filename, format, alphabet=None, key_function=None):
     ...                       key_function=make_tuple)
     >>> len(records)
     3
-    >>> sorted(records.keys())
+    >>> sorted(records)
     [(413, 324), (443, 348), (540, 792)]
     >>> print records[(540, 792)].format("fasta")
     >EAS54_6_R1_2_1_540_792

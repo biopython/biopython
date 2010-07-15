@@ -1,7 +1,7 @@
 from Bio.SeqUtils import ProtParam, ProtParamData
 
 def PrintDictionary(MyDict):
-    for i in sorted(MyDict.keys()):
+    for i in sorted(MyDict):
         print "%s\t%.2f" %(i, MyDict[i])
     print ""
 

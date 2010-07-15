@@ -54,7 +54,7 @@ tests = [
     ('IntelliGenetics/VIF_mase-pro.txt', "ig", generic_protein),
     ('NBRF/clustalw.pir', "pir", None),
     ]
-output_formats = ["fasta"] + sorted(AlignIO._FormatToWriter.keys())
+output_formats = ["fasta"] + sorted(AlignIO._FormatToWriter)
 
 for filename, in_format, alphabet in tests:
     for out_format in output_formats:
