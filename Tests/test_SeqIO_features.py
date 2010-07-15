@@ -63,7 +63,7 @@ def compare_record(old, new, expect_minor_diffs=False):
                          % (repr(old.description), repr(new.description)))
     #This only checks common annotation
     #Would a white list be easier?
-    for key in set(old.annotations.keys()).intersection(new.annotations.keys()):
+    for key in set(old.annotations).intersection(new.annotations):
         if key in ["data_file_division", "accessions"]:
             #TODO - These are not yet supported on output, or
             #have other complications (e.g. different number of accessions
@@ -140,7 +140,7 @@ def compare_feature(old, new, ignore_sub_features=False):
     #This only checks key shared qualifiers
     #Would a white list be easier?
     #for key in ["name","gene","translation","codon_table","codon_start","locus_tag"]:
-    for key in set(old.qualifiers.keys()).intersection(new.qualifiers.keys()):
+    for key in set(old.qualifiers).intersection(new.qualifiers):
         if key in ["db_xref","protein_id","product","note"]:
             #EMBL and GenBank files are use different references/notes/etc
             continue
