@@ -851,10 +851,9 @@ class Astral:
         cur.execute("DROP TABLE IF EXISTS astral")
         cur.execute("CREATE TABLE astral (sid CHAR(8), seq TEXT, PRIMARY KEY (sid))")
 
-        for dom in self.fasta_dict.keys():
-            cur.execute( "INSERT INTO astral (sid,seq) values (%s,%s)",
-                         (dom, self.fasta_dict[dom].seq.data))
-        
+        for dom in self.fasta_dict:
+            cur.execute("INSERT INTO astral (sid,seq) values (%s,%s)",
+                        (dom, self.fasta_dict[dom].seq.data))
         
         for i in astralBibIds:
             cur.execute("ALTER TABLE astral ADD (id"+str(i)+" TINYINT)")
@@ -886,9 +885,9 @@ def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
     params = {'pdb' : pdb, 'key' : key, 'sid' : sid, 'disp' : disp,
               'dir' : dir, 'loc' : loc}
     variables = {}
-    for k in params.keys():
-        if params[k] is not None:
-            variables[k] = params[k]
+    for k, v in params.iteritmes():
+        if v is not None:
+            variables[k] = v
     variables.update(keywds)
     return _open(cgi, variables)
 
