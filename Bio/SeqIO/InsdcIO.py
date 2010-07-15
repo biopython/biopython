@@ -1045,7 +1045,7 @@ if __name__ == "__main__":
         #This only checks key shared qualifiers
         #Would a white list be easier?
         #for key in ["name", "gene", "translation", "codon_table", "codon_start", "locus_tag"]:
-        for key in set(old.qualifiers.keys()).intersection(new.qualifiers.keys()):
+        for key in set(old.qualifiers).intersection(new.qualifiers):
             if key in ["db_xref", "protein_id", "product", "note"]:
                 #EMBL and GenBank files are use different references/notes/etc
                 continue

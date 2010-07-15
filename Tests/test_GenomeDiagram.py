@@ -230,7 +230,7 @@ class GraphTest(unittest.TestCase):
                  start=0, end=points)
         gdd.write(os.path.join('Graphics', "line_graph.pdf"), "pdf")
         #Circular diagram - move tracks to make an empty space in the middle
-        for track_number in gdd.tracks.keys():
+        for track_number in gdd.tracks:
             gdd.move_track(track_number,track_number+1)
         gdd.draw(tracklines=False,
                  pagesize=(15*cm,15*cm),
@@ -274,7 +274,7 @@ class LabelTest(unittest.TestCase):
         #self.gdd.write(os.path.join('Graphics', name+".png"), "png")
         if circular:
             #Circular diagram - move tracks to make an empty space in the middle
-            for track_number in self.gdd.tracks.keys():
+            for track_number in self.gdd.tracks:
                 self.gdd.move_track(track_number,track_number+1)
             self.gdd.draw(tracklines=False,
                           pagesize=(15*cm,15*cm),
@@ -350,7 +350,7 @@ class SigilsTest(unittest.TestCase):
         #self.gdd.write(os.path.join('Graphics', name+".png"), "png")
         if circular:
             #Circular diagram - move tracks to make an empty space in the middle
-            for track_number in self.gdd.tracks.keys():
+            for track_number in self.gdd.tracks:
                 self.gdd.move_track(track_number,track_number+1)
             self.gdd.draw(tracklines=False,
                           pagesize=(15*cm,15*cm),
