@@ -703,7 +703,7 @@ class Nexus(object):
                 #self.unambiguous_letters=self.symbols
             else:
                 raise NexusError('Unsupported datatype: '+self.datatype)
-            self.valid_characters=''.join(self.ambiguous_values.keys())+self.unambiguous_letters
+            self.valid_characters=''.join(self.ambiguous_values)+self.unambiguous_letters
             if not self.respectcase:
                 self.valid_characters=self.valid_characters.lower()+self.valid_characters.upper()
             #we have to sort the reverse ambig coding dict key characters:
@@ -894,8 +894,7 @@ class Nexus(object):
                 raise NexusError('Matrx Nchar %d does not match data length (%d) for taxon %s' \
                                  % (self.nchar, len(self.matrix[taxon]),taxon))
         #check that taxlabels is identical with matrix.keys. If not, it's a problem
-        matrixkeys=self.matrix.keys()
-        matrixkeys.sort()
+        matrixkeys=sorted(self.matrix)
         taxlabelssort=self.taxlabels[:]
         taxlabelssort.sort()
         assert matrixkeys==taxlabelssort,"ERROR: TAXLABELS must be identical with MATRIX. Please Report this as a bug, and send in data file."
@@ -1005,10 +1004,10 @@ class Nexus(object):
         the name CodonPositions and the partitions N,1,2,3
         """
 
-        prev_partitions=self.charpartitions.keys()
+        prev_partitions=self.charpartitions
         self._charpartition(options)
         # mcclade calls it CodonPositions, but you never know...
-        codonname=[n for n in self.charpartitions.keys() if n not in prev_partitions]
+        codonname=[n for n in self.charpartitions if n not in prev_partitions]
         if codonname==[] or len(codonname)>1:
             raise NexusError('Formatting Error in codonposset: %s ' % options)
         else:
@@ -1313,8 +1312,7 @@ class Nexus(object):
         #    fh.write('taxlabels '+' '.join(self.taxlabels)+';\n')
         if self.charlabels:
             newcharlabels=self._adjust_charlabels(exclude=exclude)
-            clkeys=newcharlabels.keys()
-            clkeys.sort()
+            clkeys=sorted(newcharlabels)
             fh.write('charlabels '+', '.join(["%s %s" % (k+1,safename(newcharlabels[k])) for k in clkeys])+';\n')
         fh.write('matrix\n')
         if not blocksize:
@@ -1606,7 +1604,7 @@ class Nexus(object):
         else:
             unique_name=name
 
-        assert unique_name not in self.matrix.keys(), "ERROR. There is a discrepancy between taxlabels and matrix keys. Report this as a bug."
+        assert unique_name not in self.matrix, "ERROR. There is a discrepancy between taxlabels and matrix keys. Report this as a bug."
 
         self.matrix[unique_name]=Seq(sequence,self.alphabet)
         self.ntax+=1
@@ -1672,8 +1670,7 @@ class Nexus(object):
             raise NexusError('Can\'t exclude and insert at the same time')
         if not self.charlabels:
             return None
-        labels=self.charlabels.keys()
-        labels.sort()
+        labels=sorted(self.charlabels)
         newcharlabels={}
         if exclude:
             exclude.sort()
