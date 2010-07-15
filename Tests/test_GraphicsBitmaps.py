@@ -64,7 +64,7 @@ def real_test():
         plot_info.append(cur_list)
     
     compare_plot = ComparativeScatterPlot("png")
-    compare_plot.display_info = _make_random_points()
+    compare_plot.display_info = plot_info
 
     output_file = os.path.join(os.getcwd(), "Graphics", "scatter_test.png")
     try:
