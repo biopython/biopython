@@ -83,6 +83,12 @@ class ComparativeTest(unittest.TestCase):
         # error here.
         except IndexError:
             pass
+        except IOError, err:
+            if "encoder zip not available" in str(err):
+                raise MissingExternalDependencyError(
+                    "Check zip encoder installed for PIL and ReportLab renderPM")
+            else:
+                raise err
         except RenderPMError, err :
             if str(err).startswith("Can't setFont(") :
                 #TODO - can we raise the error BEFORE the unit test function
