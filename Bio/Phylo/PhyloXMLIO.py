@@ -17,31 +17,37 @@ About capitalization:
 """
 __docformat__ = "epytext en"
 
+import sys
 import warnings
 
 from Bio.Phylo import PhyloXML as PX
 
-try:
-    from xml.etree import cElementTree as ElementTree
-except ImportError:
+if sys.version_info[0] == 3:
+    # cElementTree regression in Python 3; use the pure-Python version
+    # See http://bugs.python.org/issue9257
+    from xml.etree import ElementTree
+else:
     try:
-        from xml.etree import ElementTree as ElementTree
+        from xml.etree import cElementTree as ElementTree
     except ImportError:
-        # Python 2.4 -- check for 3rd-party implementations
         try:
-            from lxml import etree as ElementTree
+            from xml.etree import ElementTree as ElementTree
         except ImportError:
+            # Python 2.4 -- check for 3rd-party implementations
             try:
-                import cElementTree as ElementTree
+                from lxml import etree as ElementTree
             except ImportError:
                 try:
-                    from elementtree import ElementTree
+                    import cElementTree as ElementTree
                 except ImportError:
-                    from Bio import MissingExternalDependencyError
-                    raise MissingExternalDependencyError(
-                            "No ElementTree module was found. "
-                            "Use Python 2.5+, lxml or elementtree if you "
-                            "want to use Bio.PhyloXML.")
+                    try:
+                        from elementtree import ElementTree
+                    except ImportError:
+                        from Bio import MissingExternalDependencyError
+                        raise MissingExternalDependencyError(
+                                "No ElementTree module was found. "
+                                "Use Python 2.5+, lxml or elementtree if you "
+                                "want to use Bio.PhyloXML.")
 
 # Keep the standard namespace prefixes when writing
 # See http://effbot.org/zone/element-namespaces.htm
