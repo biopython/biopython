@@ -63,8 +63,8 @@ class Reaction:
 
     Invariants:
 
-    for all S in reactants.keys(): reactants[S] != 0
-    for all C in catalysts.keys(): catalysts[C] != 0
+    for all S in reactants: reactants[S] != 0
+    for all C in catalysts: catalysts[C] != 0
 
     """
     
@@ -73,8 +73,9 @@ class Reaction:
         """Initializes a new Reaction object."""
         # enforce invariants on reactants:
         self.reactants = reactants.copy()
-        for r in self.reactants.keys():
-            if self.reactants[r] == 0:
+        # loop over original, edit the copy
+        for r, value in reactants.iteritems():
+            if value == 0:
                 del self.reactants[r]
         self.catalysts  = HashSet(catalysts).list()
         self.data       = data
@@ -109,8 +110,7 @@ class Reaction:
         """Returns a string representation of self."""
         substrates = ""
         products   = ""
-        all_species = self.reactants.keys()
-        all_species.sort()
+        all_species = sorted(self.reactants)
         for species in all_species:
             stoch = self.reactants[species]
             if stoch < 0:
@@ -137,7 +137,7 @@ class Reaction:
     def reverse(self):
         """Returns a new Reaction that is the reverse of self."""
         reactants = {}
-        for r in self.reactants.keys():
+        for r in self.reactants:
             reactants[r] = - self.reactants[r]
         return Reaction(reactants, self.catalysts,
                         self.reversible, self.data)
