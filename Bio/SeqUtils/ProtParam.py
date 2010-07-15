@@ -93,7 +93,7 @@ class ProteinAnalysis:
         
     def count_amino_acids(self):
         ProtDic = dict([ (k, 0) for k in IUPACData.protein_letters])
-        for i in ProtDic.keys():
+        for i in ProtDic:
             ProtDic[i]=self.sequence.count(i)
         self.amino_acids_content = ProtDic
         return ProtDic
@@ -106,7 +106,7 @@ class ProteinAnalysis:
             self.count_amino_acids()
                 
         PercentAA = {}
-        for i in self.amino_acids_content.keys():
+        for i in self.amino_acids_content:
             if self.amino_acids_content[i] > 0:
                 PercentAA[i]=self.amino_acids_content[i]/float(self.length)
             else:
@@ -120,7 +120,7 @@ class ProteinAnalysis:
         # make local dictionary for speed
         MwDict = {}
         # remove a molecule of water from the amino acid weight.
-        for i in IUPACData.protein_weights.keys():
+        for i in IUPACData.protein_weights:
             MwDict[i] = IUPACData.protein_weights[i] - 18.02
         MW = 18.02 # add just one water molecule for the whole sequence.
         for i in self.sequence:

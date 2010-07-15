@@ -41,7 +41,7 @@ class UniGeneParser( sgmllib.SGMLParser ):
     def parse( self, handle ):
         self.reset()
         self.feed( handle )
-        for key in self.queue.keys():
+        for key in self.queue:
             if( self.queue[ key ] == {} ):
                 if( key[ :15 ] == 'UniGene Cluster' ):
                     self.queue[ 'UniGene Cluster' ] = key[ 16: ]
@@ -198,14 +198,14 @@ class UniGeneParser( sgmllib.SGMLParser ):
             for subitem in item:
                 self.print_item( subitem, level + 1 )
         elif( isinstance( item, UserDict.UserDict ) ):
-            for subitem in item.keys():
+            for subitem in item:
                 print '%skey is %s' % ( indent, subitem )
                 self.print_item( item[ subitem ], level + 1 )
         else:
             print item
 
     def print_tags( self ):
-        for key in self.queue.keys():
+        for key in self.queue:
             print 'key %s' % key
             self.print_item( self.queue[ key ] )
 
