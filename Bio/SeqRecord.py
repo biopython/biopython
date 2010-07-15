@@ -656,7 +656,7 @@ class SeqRecord(object):
                 from io import BytesIO
                 handle = BytesIO()
             except ImportError:
-                #Must me on Python 2.5 or older
+                #Must be on Python 2.5 or older
                 from StringIO import StringIO
                 handle = StringIO()
         else:
