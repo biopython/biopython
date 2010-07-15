@@ -91,6 +91,8 @@ def real_test():
     
     return True
 
+#Run the actual test BEFORE the unittest stuff gets called
+real_test()
                
 class ComparativeTest(unittest.TestCase):
     """Do tests for modules involved with comparing data."""
