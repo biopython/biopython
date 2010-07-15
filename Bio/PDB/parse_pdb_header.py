@@ -258,11 +258,12 @@ if __name__=='__main__':
     # some data and returns it as a dictionary.
     import sys
     filename = sys.argv[1]
-    file = open(filename,'r')
-    dict = parse_pdb_header(file)
+    handle = open(filename,'r')
+    data_dict = parse_pdb_header(handle)
+    handle.close()
 
     # print the dictionary
-    for d in dict.keys():
+    for k, y in data_dict.iteritems():
         print "-"*40
-        print d
-        print dict[d]
+        print k
+        print y
