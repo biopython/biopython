@@ -1782,8 +1782,8 @@ class MutableSeq(object):
 
         >>> from Bio.Seq import Seq
         >>> from Bio.Alphabet import IUPAC
-        >>> my_mseq = MutableSeq("MKQHKAMIVALIVICITAVVAAL", \
-                                 IUPAC.protein)
+        >>> my_mseq = MutableSeq("MKQHKAMIVALIVICITAVVAAL", 
+        ...                      IUPAC.protein)
         >>> my_mseq
         MutableSeq('MKQHKAMIVALIVICITAVVAAL', IUPACProtein())
         >>> my_mseq.toseq()

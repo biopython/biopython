@@ -295,8 +295,7 @@ class SeqRecord(object):
         ...                     IUPAC.protein),
         ...                 id="1JOY", name="EnvZ",
         ...                 description="Homodimeric domain of EnvZ from E. coli")
-        >>> rec.letter_annotations["secondary_structure"] = \
-            "  S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  "
+        >>> rec.letter_annotations["secondary_structure"] = "  S  SSSSSSHHHHHTTTHHHHHHHHHHHHHHHHHHHHHHTHHHHHHHHHHHHHHHHHHHHHTT  "
         >>> rec.features.append(SeqFeature(FeatureLocation(20,21),
         ...                     type = "Site"))
 

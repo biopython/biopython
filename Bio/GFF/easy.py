@@ -430,7 +430,7 @@ def open_file(filename):
 
 def fasta_single(filename=None, string=None):
     """
-    >>> record = fasta_single(string=\"""
+    >>> record = fasta_single(string='''
     ... >gi|9629360|ref|NP_057850.1| Gag [Human immunodeficiency virus type 1]
     ... MGARASVLSGGELDRWEKIRLRPGGKKKYKLKHIVWASRELERFAVNPGLLETSEGCRQILGQLQPSLQT
     ... GSEELRSLYNTVATLYCVHQRIEIKDTKEALDKIEEEQNKSKKKAQQAAADTGHSNQVSQNYPIVQNIQG
@@ -440,7 +440,7 @@ def fasta_single(filename=None, string=None):
     ... QGVGGPGHKARVLAEAMSQVTNSATIMMQRGNFRNQRKIVKCFNCGKEGHTARNCRAPRKKGCWKCGKEG
     ... HQMKDCTERQANFLGKIWPSYKGRPGNFLQSRPEPTAPPEESFRSGVETTTPPQKQEPIDKELYPLTSLR
     ... SLFGNDPSSQ
-    ... \""")
+    ... ''')
     >>> record.id
     'gi|9629360|ref|NP_057850.1|'
     >>> record.description

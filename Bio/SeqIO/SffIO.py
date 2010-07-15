@@ -144,9 +144,9 @@ region (i.e. the sequence after trimming) starts with AAAGA exactly (the non-
 degenerate bit of this pretend primer):
 
     >>> from Bio import SeqIO
-    >>> records = (record for record in \
-                   SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff","sff") \
-                   if record.seq[record.annotations["clip_qual_left"]:].startswith("AAAGA"))
+    >>> records = (record for record in 
+    ...            SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff","sff") 
+    ...            if record.seq[record.annotations["clip_qual_left"]:].startswith("AAAGA"))
     >>> count = SeqIO.write(records, "temp_filtered.sff", "sff")
     >>> print "Selected %i records" % count
     Selected 2 records
