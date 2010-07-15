@@ -37,12 +37,14 @@ def truncation_expected(format):
 def write_read(filename, in_format, out_format):
     if in_format in BINARY_FORMATS:
         mode = "rb"
-        handle = BytesIO()
-    else :
+    else:
         mode = "r"
-        handle = StringIO()
     records = list(SeqIO.parse(open(filename, mode),in_format))
     #Write it out...
+    if out_format in BINARY_FORMATS:
+        handle = BytesIO()
+    else :
+        handle = StringIO()
     SeqIO.write(records, handle, out_format)
     handle.seek(0)
     #Now load it back and check it agrees,
