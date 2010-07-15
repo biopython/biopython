@@ -29,20 +29,18 @@ class MultiGraph:
     def __repr__(self):
         """Returns an unique string representation of this graph."""
         s = "<MultiGraph: "
-        keys = self.__adjacency_list.keys()
-        keys.sort()
+        keys = sorted(self.__adjacency_list.keys())
         for key in keys:
-            values = self.__adjacency_list[key].list()
-            values.sort()
-            s = s + "(" + repr(key) + ": " + ",".join(map(repr, values)) + ")" 
+            values = sorted(self.__adjacency_list[key].list())
+            s += "(" + repr(key) + ": " + ",".join(map(repr, values)) + ")" 
         return s + ">"
 
     def __str__(self):
         """Returns a concise string description of this graph."""
-        nodenum = len(self.__adjacency_list.keys())
+        nodenum = len(self.__adjacency_list)
         edgenum = reduce(lambda x,y: x+y,
                          map(len, self.__adjacency_list.values()))
-        labelnum = len(self.__label_map.keys())
+        labelnum = len(self.__label_map)
         return "<MultiGraph: " + \
                str(nodenum) + " node(s), " + \
                str(edgenum) + " edge(s), " + \
@@ -95,7 +93,7 @@ class MultiGraph:
         if child not in self.__adjacency_list:
             raise ValueError("Unknown <child> node: " + str(child))
         parents = []
-        for parent in self.__adjacency_list.keys():
+        for parent in self.__adjacency_list:
             children = self.__adjacency_list[parent]
             for x in children.list():
                 if x[0] is child:
@@ -114,7 +112,7 @@ class MultiGraph:
         # remove node (and all out-edges) from adjacency list
         del self.__adjacency_list[node]
         # remove all in-edges from adjacency list
-        for n in self.__adjacency_list.keys():
+        for n in self.__adjacency_list:
             self.__adjacency_list[n] = HashSet(filter(lambda x,node=node: x[0] is not node,
                                                       self.__adjacency_list[n].list()))
         # remove all refering pairs in label map
