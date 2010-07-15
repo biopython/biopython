@@ -108,13 +108,13 @@ class MarkovModelBuilder:
         each set of transitions adds up to 1.
         """
         # first set the transitions
-        new_trans_prob = float(1) / float(len(self.transition_prob.keys()))
-        for key in self.transition_prob.keys():
+        new_trans_prob = float(1) / float(len(self.transition_prob))
+        for key in self.transition_prob:
             self.transition_prob[key] = new_trans_prob
 
         # now set the emissions
-        new_emission_prob = float(1) / float(len(self.emission_prob.keys()))
-        for key in self.emission_prob.keys():
+        new_emission_prob = float(1) / float(len(self.emission_prob))
+        for key in self.emission_prob:
             self.emission_prob[key] = new_emission_prob
             
 
@@ -130,10 +130,10 @@ class MarkovModelBuilder:
         all of the probabilities is less then 1. It just randomly assigns
         a probability to each
         """
-        for key in self.transition_prob.keys():
+        for key in self.transition_prob:
             self.transition_prob[key] = random.random()
 
-        for key in self.emission_prob.keys():
+        for key in self.emission_prob:
             self.emission_prob[key] = random.random()
 
     # --- functions to deal with the transitions in the sequence
@@ -154,10 +154,10 @@ class MarkovModelBuilder:
 
         # now set any probabilities and pseudo counts that
         # were previously set
-        for set_key in self.transition_prob.keys():
+        for set_key in self.transition_prob:
             all_probs[set_key] = self.transition_prob[set_key]
 
-        for set_key in self.transition_pseudo.keys():
+        for set_key in self.transition_pseudo:
             all_pseudo[set_key] = self.transition_pseudo[set_key]
 
         # finally reinitialize the transition probs and pseudo counts
@@ -182,8 +182,8 @@ class MarkovModelBuilder:
                    "State %s was not found in the sequence alphabet" % state
 
         # ensure that the states are not already set
-        if ((from_state, to_state) not in self.transition_prob.keys() and 
-            (from_state, to_state) not in self.transition_pseudo.keys()):
+        if ((from_state, to_state) not in self.transition_prob and 
+            (from_state, to_state) not in self.transition_pseudo):
             # set the initial probability
             if probability is None:
                 probability = 0
@@ -319,7 +319,7 @@ class HiddenMarkovModel:
         from_transitions = {}
 
         # loop over all of the different transitions
-        for trans_key in trans_probs.keys():
+        for trans_key in trans_probs:
             # if the letter to 'transition from' already exists, add the
             # new letter which can be 'transitioned to' to the list
             try:
@@ -422,7 +422,7 @@ class HiddenMarkovModel:
                 viterbi_probs[(main_state, i)] = (emission_part + max_prob)
 
                 # now get the most likely state
-                for state in possible_state_probs.keys():
+                for state in possible_state_probs:
                     if possible_state_probs[state] == max_prob:
                         pred_state_seq[(i - 1, main_state)] = state
                         break
@@ -443,7 +443,7 @@ class HiddenMarkovModel:
 
         # find the last pointer we need to trace back from
         last_state = ''
-        for state in all_probs.keys():
+        for state in all_probs:
             if all_probs[state] == state_path_prob:
                 last_state = state
 
@@ -477,7 +477,7 @@ class HiddenMarkovModel:
         """
         log_prob = copy.copy(probability)
 
-        for key in log_prob.keys():
+        for key in log_prob:
             log_prob[key] = math.log(log_prob[key])
 
         return log_prob
