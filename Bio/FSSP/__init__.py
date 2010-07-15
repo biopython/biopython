@@ -43,7 +43,7 @@ class FSSPHeader:
       self.seqlength = 0
       self.nalign = 0
    def fill_header(self,inline):
-      for i in header_records.keys():
+      for i in header_records:
          if header_records[i].match(inline):
             if i == 'database' or i == 'seqlength' or i == 'nalign':
                setattr(self,i,int(inline.split()[1]))
@@ -160,7 +160,7 @@ class FSSPAlignDict(dict):
       self.abs_res_dict = {}
       self.data = {}
    def build_resnum_list(self):
-      for i in self.keys():
+      for i in self:
          self.abs_res_dict[self[i].abs_res_num] = i
          self.pdb_res_dict[self[i].pdb_res_num] = i
    # Given an absolute residue number & chain, returns the relevant fssp
@@ -183,10 +183,10 @@ class FSSPAlignDict(dict):
 
    def fasta_mult_align(self):
       mult_align_dict = {}
-      for j in self.abs(1).pos_align_dict.keys():
+      for j in self.abs(1).pos_align_dict:
          mult_align_dict[j] = ''
       for fssp_rec in self.values():
-         for j in fssp_rec.pos_align_dict.keys():
+         for j in fssp_rec.pos_align_dict:
             mult_align_dict[j] += fssp_rec.pos_align_dict[j].aa
       seq_order = mult_align_dict.keys()
       seq_order.sort()

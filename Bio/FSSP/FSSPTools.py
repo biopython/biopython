@@ -18,12 +18,12 @@ class FSSPMultAlign(dict):
 def mult_align(sum_dict,align_dict):
    """Returns a biopython multiple alignment instance (Bio.Align.Generic)"""
    mult_align_dict = {}
-   for j in align_dict.abs(1).pos_align_dict.keys():
+   for j in align_dict.abs(1).pos_align_dict:
       mult_align_dict[j] = ''
    
    for i in range(1,len(align_dict)+1):
       # loop on positions
-      for j in align_dict.abs(i).pos_align_dict.keys():
+      for j in align_dict.abs(i).pos_align_dict:
          # loop within a position
          mult_align_dict[j] += align_dict.abs(i).pos_align_dict[j].aa
    seq_order = mult_align_dict.keys()
@@ -56,17 +56,17 @@ def filter(sum_dict,align_dict,filter_attribute,low_bound, high_bound):
    attribute in the summary section. Returns new summary and alignment sections"""
    new_sum_dict = FSSP.FSSPSumDict()
    new_align_dict = copy.deepcopy(align_dict)
-#   for i in align_dict.keys():
+#   for i in align_dict:
 #      new_align_dict[i]  = copy.copy(align_dict[i])
    # new_align_dict = copy.copy(align_dict)
-   for prot_num in sum_dict.keys():
+   for prot_num in sum_dict:
       attr_value = getattr(sum_dict[prot_num],filter_attribute)
       if (attr_value >= low_bound and
           attr_value <= high_bound):
          new_sum_dict[prot_num] = sum_dict[prot_num]
    prot_numbers = new_sum_dict.keys()
    prot_numbers.sort()
-   for pos_num in new_align_dict.abs_res_dict.keys():
+   for pos_num in new_align_dict.abs_res_dict:
       new_align_dict.abs(pos_num).pos_align_dict = {}
       for prot_num in prot_numbers:
          new_align_dict.abs(pos_num).pos_align_dict[prot_num] = \
@@ -79,12 +79,12 @@ def name_filter(sum_dict, align_dict, name_list):
    new_sum_dict = FSSP.FSSPSumDict()
    new_align_dict = copy.deepcopy(align_dict)
    for cur_pdb_name in name_list:
-      for prot_num in sum_dict.keys():
+      for prot_num in sum_dict:
          if sum_dict[prot_num].pdb2+sum_dict[prot_num].chain2 == cur_pdb_name:
             new_sum_dict[prot_num] = sum_dict[prot_num]
    prot_numbers = new_sum_dict.keys()
    prot_numbers.sort()
-   for pos_num in new_align_dict.abs_res_dict.keys():
+   for pos_num in new_align_dict.abs_res_dict:
       new_align_dict.abs(pos_num).pos_align_dict = {}
       for prot_num in prot_numbers:
          new_align_dict.abs(pos_num).pos_align_dict[prot_num] = \
