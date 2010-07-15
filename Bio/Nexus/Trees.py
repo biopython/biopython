@@ -455,8 +455,6 @@ class Tree(Nodes.Chain):
         else:
             return False
 
-
-
     def branchlength2support(self):
         """Move values stored in data.branchlength to data.support, and set branchlength to 0.0
 
@@ -464,7 +462,7 @@ class Tree(Nodes.Chain):
         been read in as branchlength. 
         """
 
-        for n in self.chain.keys():
+        for n in self.chain:
             self.node(n).data.support=self.node(n).data.branchlength
             self.node(n).data.branchlength=0.0
 
