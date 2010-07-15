@@ -74,7 +74,7 @@ class BlastTableReader:
       current_entry = BlastTableEntry(inline)
       self.table_record.add_entry(current_entry)
    def _consume_header(self, inline):
-      for keyword in reader_keywords.keys():
+      for keyword in reader_keywords:
          if inline.find(keyword) > -1:
             in_header = self._Parse('_parse_%s' % reader_keywords[keyword],inline)
             break

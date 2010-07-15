@@ -2016,7 +2016,7 @@ def _get_cols(line, cols_to_get, ncols=None, expected={}):
                          % (ncols, len(cols), line))
 
     # Check to make sure columns contain the correct data
-    for k in expected.keys():
+    for k in expected:
         if cols[k] != expected[k]:
             raise ValueError("I expected '%s' in column %d in line\n%s" \
                              % (expected[k], k, line))
