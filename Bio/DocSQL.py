@@ -8,7 +8,9 @@
 """
 Bio.DocSQL: easy access to DB API databases.
 
->>> import DocSQL, MySQLdb, os
+>>> import os
+>>> import MySQLdb
+>>> from Bio import DocSQL
 >>> db=MySQLdb.connect(passwd='', db='test')
 >>> class CreatePeople(DocSQL.Create):
 ...     '''
