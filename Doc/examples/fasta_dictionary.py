@@ -1,9 +1,10 @@
-# The New Way
-# ===========
-# This next bit of code use Bio.SeqIO to parse a FASTA file, and turn
-# it into an in-memory python dictionary.
-# Note Bio.SeqIO will use a generic alphabet for the SeqRecord objects.
+# In Memory
+# =========
+# This next bit of code uses Bio.SeqIO.parse() to load a FASTA file,
+# and then turns it into an in-memory python dictionary.
+# This is *not* suitable for FASTA files with millions of entries.
 
+from Bio.Alphabet import generic_dna
 from Bio import SeqIO
 
 def get_accession_num(seq_record):
@@ -12,44 +13,33 @@ def get_accession_num(seq_record):
     # strip the version info before returning
     return gb_name[:-2]
 
-orchid_dict = SeqIO.to_dict(SeqIO.parse(open("ls_orchid.fasta"),"fasta"), \
-                            get_accession_num)
+rec_iterator = SeqIO.parse("ls_orchid.fasta","fasta", generic_dna)
+orchid_dict = SeqIO.to_dict(rec_iterator, get_accession_num)
 
-for id_num in orchid_dict.keys():
+for id_num in orchid_dict:
     print 'id number:', id_num
     print 'description:', orchid_dict[id_num].description
     print 'sequence:', orchid_dict[id_num].seq
 
-# The Old Way
-# ===========
-# This next bit of code still works fine. It uses Bio.Fasta instead,
-# and builds an index as a set of files on disc in the sub-directory
-# my_orchid_dict.idx
-# Note that the alphabet is explicitly defined for the sequences.
 
-import os
-from Bio import Fasta
-from Bio.Alphabet import IUPAC
+# Indexed
+# =======
+# This next version uses the Bio.SeqIO.index() function which will index
+# the FASTA file without loading all the records into memory at once.
+# This is suitable for FASTA files with millions of entries.
 
-def get_accession_num(fasta_record):
-    title_atoms = fasta_record.title.split()
-    accession_atoms = title_atoms[0].split('|')
+from Bio.Alphabet import generic_dna
+from Bio import SeqIO
+
+def get_accession_num(record_id):
+    accession_atoms = record_id.split('|')
     gb_name = accession_atoms[3]
     # strip the version info before returning
     return gb_name[:-2]
 
-if not os.path.isdir("my_orchid_dict.idx") :
-    #Build a new index
-    Fasta.index_file("ls_orchid.fasta", "my_orchid_dict.idx",
-                     get_accession_num)
-else :
-    print "Reusing existing index"
+orchid_dict = SeqIO.index("ls_orchid.fasta","fasta", generic_dna)
 
-dna_parser = Fasta.SequenceParser(IUPAC.ambiguous_dna)
-
-orchid_dict = Fasta.Dictionary("my_orchid_dict.idx", dna_parser)
-
-for id_num in orchid_dict.keys():
+for id_num in orchid_dict:
     print 'id number:', id_num
     print 'description:', orchid_dict[id_num].description
     print 'sequence:', orchid_dict[id_num].seq
