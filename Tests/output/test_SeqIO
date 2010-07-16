@@ -2462,16 +2462,11 @@ Testing reading ace format file Ace/contig1.ace
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
- Failed: A quality value of None was found
  Checking can write/read as 'fastq-illumina' format
- Failed: A quality value of None was found
  Checking can write/read as 'fastq-solexa' format
- Failed: A quality value of None was found
  Checking can write/read as 'genbank' format
  Checking can write/read as 'phd' format
- Failed: A quality value of None was found
  Checking can write/read as 'qual' format
- Failed: A quality value of None was found
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -2486,16 +2481,11 @@ Testing reading ace format file Ace/consed_sample.ace
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
- Failed: A quality value of None was found
  Checking can write/read as 'fastq-illumina' format
- Failed: A quality value of None was found
  Checking can write/read as 'fastq-solexa' format
- Failed: A quality value of None was found
  Checking can write/read as 'genbank' format
  Checking can write/read as 'phd' format
- Failed: A quality value of None was found
  Checking can write/read as 'qual' format
- Failed: A quality value of None was found
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -2509,16 +2499,12 @@ Testing reading ace format file Ace/seq.cap.ace
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
- Failed: A quality value of None was found
+UserWarning - Data loss - max PHRED quality 93 in Sanger FASTQ
  Checking can write/read as 'fastq-illumina' format
- Failed: A quality value of None was found
  Checking can write/read as 'fastq-solexa' format
- Failed: A quality value of None was found
  Checking can write/read as 'genbank' format
  Checking can write/read as 'phd' format
- Failed: A quality value of None was found
  Checking can write/read as 'qual' format
- Failed: A quality value of None was found
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format

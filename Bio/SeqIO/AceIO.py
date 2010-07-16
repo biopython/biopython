@@ -39,8 +39,10 @@ def AceIterator(handle):
 
     However, ACE files do not include a base quality for any gaps in the
     consensus sequence, and these are represented in Biopython with a quality
-    of None. Using zero would be misleading as there may be very strong
-    evidence to support the gap in the consensus.
+    of zero. Using zero is perhaps misleading as there may be very strong
+    evidence to support the gap in the consensus. Previous versions of
+    Biopython therefore used None instead, but this complicated usage, and
+    prevented output of the gapped sequence as FASTQ format.
 
     >>> from Bio import SeqIO
     >>> handle = open("Ace/contig1.ace", "rU")
@@ -49,7 +51,7 @@ def AceIterator(handle):
     ...     print record.letter_annotations["phred_quality"][85:95]
     ...     print max(record.letter_annotations["phred_quality"])
     Contig1 ...AGAGG-ATGC...
-    [57, 57, 54, 57, 57, None, 57, 72, 72, 72]
+    [57, 57, 54, 57, 57, 0, 57, 72, 72, 72]
     90
     Contig2 ...GAATTACTAT...
     [68, 68, 68, 68, 68, 68, 68, 68, 68, 68]
@@ -97,7 +99,7 @@ def AceIterator(handle):
         i = 0
         for base in consensus_seq:
             if base == "-":
-                quals.append(None)
+                quals.append(0)
             else:
                 quals.append(ace_contig.quality[i])
                 i += 1
