@@ -276,7 +276,7 @@ class Motif(object):
         for i in range(max(self.length,offset+other.length)):
             f1=self[i]
             f2=other[i-offset]
-            for n,b in self.background.items():
+            for n,b in self.background.iteritems():
                 s+=b*f1[n]*f2[n]
         return s/i
 
