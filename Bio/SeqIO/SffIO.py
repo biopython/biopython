@@ -215,22 +215,16 @@ def _sff_file_header(handle):
 
     Assumes the handle is at the start of the file, will read forwards
     though the header and leave the handle pointing at the first record.
-    Returns a tuple of values from the header.
+    Returns a tuple of values from the header (header_length, index_offset,
+    index_length, number_of_reads, flows_per_read, flow_chars, key_sequence)
 
     >>> handle = open("Roche/greek.sff", "rb")
-    >>> header_length, index_offset, index_length, number_of_reads, \
-        flows_per_read, flow_chars, key_sequence = _sff_file_header(handle)
-    >>> header_length
-    840
-    >>> print index_offset, index_length
-    65040 256
-    >>> print number_of_reads
-    24
-    >>> print flows_per_read
-    800
-    >>> key_sequence
+    >>> values = _sff_file_header(handle)
+    >>> values[0:5]
+    (840, 65040, 256, 24, 800)
+    >>> values[-1]
     'TCAG'
-    
+
     """
     if hasattr(handle,"mode") and "U" in handle.mode.upper():
         raise ValueError("SFF files must NOT be opened in universal new "
