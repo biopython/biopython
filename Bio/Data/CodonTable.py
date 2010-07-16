@@ -282,12 +282,12 @@ class AmbiguousForwardTable:
         self.ambiguous_protein = ambiguous_protein
 
         inverted = {}
-        for name, val in ambiguous_protein.items():
+        for name, val in ambiguous_protein.iteritems():
             for c in val:
                 x = inverted.get(c, {})
                 x[name] = 1
                 inverted[c] = x
-        for name, val in inverted.items():
+        for name, val in inverted.iteritems():
             inverted[name] = val.keys()
         self._inverted = inverted
         
@@ -345,7 +345,7 @@ class AmbiguousForwardTable:
 
         n = len(possible)
         possible = []
-        for amino, val in ambiguous_possible.items():
+        for amino, val in ambiguous_possible.iteritems():
             if val == n:
                 possible.append(amino)
 
@@ -390,7 +390,7 @@ def register_ncbi_table(name, alt_name, id,
     # replace all T's with U's for the RNA tables
     rna_table = {}
     generic_table = {}
-    for codon, val in table.items():
+    for codon, val in table.iteritems():
         generic_table[codon] = val
         codon = codon.replace("T", "U")
         generic_table[codon] = val
@@ -857,13 +857,13 @@ register_ncbi_table(name = 'Thraustochytrium Mitochondrial',
 
 
 #Basic sanity test,
-for key, val in generic_by_name.items():
+for key, val in generic_by_name.iteritems():
     assert key in ambiguous_generic_by_name[key].names
-for key, val in generic_by_id.items():
+for key, val in generic_by_id.iteritems():
     assert ambiguous_generic_by_id[key].id == key
 del key, val
 
-for n in ambiguous_generic_by_id.keys():
+for n in ambiguous_generic_by_id:
     assert ambiguous_rna_by_id[n].forward_table["GUU"] == "V"
     assert ambiguous_rna_by_id[n].forward_table["GUN"] == "V"
     if n != 23 :
