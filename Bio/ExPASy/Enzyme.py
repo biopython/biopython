@@ -145,4 +145,4 @@ def __read(handle):
             else: # This was the copyright notice
                 continue
     if record:
-        raise ValueError, "Unexpected end of stream"
+        raise ValueError("Unexpected end of stream")
