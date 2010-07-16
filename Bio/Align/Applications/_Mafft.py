@@ -25,8 +25,8 @@ Miyata (Nucleic Acids Res. 30:3059-3066, 2002)
 
 Last checked against version: 6.626b (2009/03/16)
 """
+
 import os
-import types
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
 class MafftCommandline(AbstractCommandline):
@@ -79,20 +79,20 @@ class MafftCommandline(AbstractCommandline):
             #alignments. Valid when either of --blobalpair, --localpair, --
             #genafpair, --fastapair or --blastpair is selected. Default: 2.7
             _Option(["--weighti", "weighti"], ["input"],
-                     lambda x: isinstance(x, types.FloatType), 0,
+                     lambda x: isinstance(x, float), 0,
                      "Weighting factor for the consistency term calculated " + \
                      "from pairwise alignments. Default: 2.7",
                      0),
             #Guide tree is built number times in the progressive stage. Valid
             #with 6mer distance. Default: 2
             _Option(["--retree", "retree"], ["input"],
-                     lambda x: isinstance(x, types.IntType), 0,
+                     lambda x: isinstance(x, int), 0,
                      "Guide tree is built number times in the progressive " + \
                      "stage. Valid with 6mer distance. Default: 2",
                      0),
             #Number cycles of iterative refinement are performed. Default: 0
             _Option(["--maxiterate", "maxiterate"], ["input"],
-                     lambda x: isinstance(x, types.IntType), 0,
+                     lambda x: isinstance(x, int), 0,
                      "Number cycles of iterative refinement are performed. " + \
                      "Default: 0",
                      0),
@@ -137,7 +137,7 @@ class MafftCommandline(AbstractCommandline):
                     "on FASTA. Default: off"),
             #The number of partitions in the PartTree algorithm. Default: 50
             _Option(["--partsize", "partsize"], ["input"],
-                    lambda x: isinstance(x, types.IntType), 0,
+                    lambda x: isinstance(x, int), 0,
                     "The number of partitions in the PartTree algorithm. " + \
                     "Default: 50",
                     0),
@@ -149,49 +149,49 @@ class MafftCommandline(AbstractCommandline):
             #**** Parameter ****
             #Gap opening penalty at group-to-group alignment. Default: 1.53
             _Option(["--op", "op"], ["input"],
-                    lambda x: isinstance(x, types.FloatType), 0,
+                    lambda x: isinstance(x, float), 0,
                     "Gap opening penalty at group-to-group alignment. " + \
                     "Default: 1.53",
                     0),
             #Offset value, which works like gap extension penalty, for group-to-
             #group alignment. Deafult: 0.123
             _Option(["--ep", "ep"], ["input"],
-                    lambda x: isinstance(x, types.FloatType), 0,
+                    lambda x: isinstance(x, float), 0,
                     "Offset value, which works like gap extension penalty, " + \
                     "for group-to- group alignment. Default: 0.123",
                     0),
             #Gap opening penalty at local pairwise alignment. Valid when the --
             #localpair or --genafpair option is selected. Default: -2.00
             _Option(["--lop", "lop"], ["input"],
-                    lambda x: isinstance(x, types.FloatType), 0,
+                    lambda x: isinstance(x, float), 0,
                     "Gap opening penalty at local pairwise alignment. " + \
                     "Default: 0.123",
                     0),
             #Offset value at local pairwise alignment. Valid when the --
             #localpair or --genafpair option is selected. Default: 0.1
             _Option(["--lep", "lep"], ["input"],
-                    lambda x: isinstance(x, types.FloatType), 0,
+                    lambda x: isinstance(x, float), 0,
                     "Offset value at local pairwise alignment. " + \
                     "Default: 0.1",
                     0),
             #Gap extension penalty at local pairwise alignment. Valid when the -
             #-localpair or --genafpair option is selected. Default: -0.1
             _Option(["--lexp", "lexp"], ["input"],
-                    lambda x: isinstance(x, types.FloatType), 0,
+                    lambda x: isinstance(x, float), 0,
                     "Gap extension penalty at local pairwise alignment. " + \
                     "Default: -0.1",
                     0),
             #Gap opening penalty to skip the alignment. Valid when the --
             #genafpair option is selected. Default: -6.00
             _Option(["--LOP", "LOP"], ["input"],
-                    lambda x: isinstance(x, types.FloatType), 0,
+                    lambda x: isinstance(x, float), 0,
                     "Gap opening penalty to skip the alignment. " + \
                     "Default: -6.00",
                     0),
             #Gap extension penalty to skip the alignment. Valid when the --
             #genafpair option is selected. Default: 0.00
             _Option(["--LEXP", "LEXP"], ["input"],
-                    lambda x: isinstance(x, types.FloatType),
+                    lambda x: isinstance(x, float),
                     0,
                     "Gap extension penalty to skip the alignment. " + \
                     "Default: 0.00",

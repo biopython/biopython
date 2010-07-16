@@ -17,13 +17,13 @@ errors in sequence alignment and evolutionary analysis. Science, 320: 1632.
 
 Last checked agains version: 081202
 """
-import types
+
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
 class PrankCommandline(AbstractCommandline):
     """Command line wrapper for the multiple alignment program PRANK."""
     def __init__(self, cmd="prank", **kwargs):
-        OUTPUT_FORMAT_VALUES = range(1,18)
+        OUTPUT_FORMAT_VALUES = list(range(1,18))
         self.parameters = \
             [
             ################## input/output parameters: ##################
@@ -77,29 +77,29 @@ class PrankCommandline(AbstractCommandline):
                     "Show insertion gaps as dots"),
             #-gaprate=# [gap opening rate; default: dna 0.025 / prot 0.0025]
             _Option(["-gaprate", "gaprate"], ["input"],
-                    lambda x: isinstance(x, types.FloatType), 
+                    lambda x: isinstance(x, float), 
                     0,
                     "Gap opening rate. Default: dna 0.025 prot 0.0025"),
             #-gapext=# [gap extension probability; default: dna 0.5 / prot 0.5]
             _Option(["-gapext", "gapext"], ["input"],
-                    lambda x: isinstance(x, types.FloatType), 
+                    lambda x: isinstance(x, float), 
                     0,
                     "Gap extension probability. Default: dna 0.5 " + \
                     "/ prot 0.5"),
             #-dnafreqs=#,#,#,# [ACGT; default: empirical]
             _Option(["-dnafreqs", "dnafreqs"], ["input"],
-                    lambda x: isinstance(x, types.StringType), 
+                    lambda x: isinstance(x, bytes), 
                     0,
                     "DNA frequencies - 'A,C,G,T'. eg '25,25,25,25' as a quote " + \
                     "surrounded string value. Default: empirical"),
             #-kappa=# [ts/tv rate ratio; default:2]
             _Option(["-kappa", "kappa"], ["input"],
-                    lambda x: isinstance(x, types.IntType), 
+                    lambda x: isinstance(x, int), 
                     0,
                     "Transition/transversion ratio. Default: 2"),
             #-rho=# [pur/pyr rate ratio; default:1]
             _Option(["-rho", "rho"], ["input"],
-                    lambda x: isinstance(x, types.IntType), 
+                    lambda x: isinstance(x, int), 
                     0,
                     "Purine/pyrimidine ratio. Default: 1"),
             #-codon [for DNA: use empirical codon model]
@@ -124,7 +124,7 @@ class PrankCommandline(AbstractCommandline):
             #-pwdist=# [expected pairwise distance for computing guidetree;
             #default: dna 0.25 / prot 0.5]
             _Option(["-pwdist", "pwdist"], ["input"],
-                    lambda x: isinstance(x, types.FloatType),
+                    lambda x: isinstance(x, float),
                     0,
                     "Expected pairwise distance for computing guidetree. " + \
                     "Default: dna 0.25 / prot 0.5"),
@@ -143,15 +143,15 @@ class PrankCommandline(AbstractCommandline):
             #-matresize=# [matrix resizing multiplier]
             # Doesnt specify type but Float and Int work
             _Option(["-matresize", "matresize"], ["input"],
-                    lambda x: isinstance(x, types.FloatType) or isinstance(x,
-                              types.IntType),
+                    lambda x: isinstance(x, float) or isinstance(x,
+                              int),
                     0,
                     "Matrix resizing multiplier"),
             #-matinitsize=# [matrix initial size multiplier]
             # Doesnt specify type but Float and Int work
             _Option(["-matinitsize", "matinitsize"], ["input"],
-                    lambda x: isinstance(x, types.FloatType) or isinstance(x,
-                              types.IntType),
+                    lambda x: isinstance(x, float) or isinstance(x,
+                              int),
                     0,
                     "Matrix initial size multiplier"),
             _Switch(["-longseq", "longseq"], ["input"],
@@ -160,24 +160,24 @@ class PrankCommandline(AbstractCommandline):
                     "Do pairwise alignment, no guidetree"),
             #-pwgenomicdist=# [distance for pairwise alignment; default: 0.3]
             _Option(["-pwgenomicdist", "pwgenomicdist"], ["input"],
-                    lambda x: isinstance(x, types.FloatType),
+                    lambda x: isinstance(x, float),
                     0,
                     "Distance for pairwise alignment. Default: 0.3"),
             #-scalebranches=# [scale branch lengths; default: dna 1 / prot 2]
             _Option(["-scalebranches", "scalebranches"], ["input"],
-                    lambda x: isinstance(x, types.IntType),
+                    lambda x: isinstance(x, int),
                     0,
                     "Scale branch lengths. Default: dna 1 / prot 2"),
             #-fixedbranches=# [use fixed branch lengths]
             #Assume looking for a float
             _Option(["-fixedbranches", "fixedbranches"], ["input"],
-                    lambda x: isinstance(x, types.FloatType),
+                    lambda x: isinstance(x, float),
                     0,
                     "Use fixed branch lengths of input value"),
             #-maxbranches=# [set maximum branch length]
             #Assume looking for a float
             _Option(["-maxbranches", "maxbranches"], ["input"],
-                    lambda x: isinstance(x, types.FloatType),
+                    lambda x: isinstance(x, float),
                     0,
                     "Use maximum branch lengths of input value"),
             #-realbranches [disable branch length truncation]
