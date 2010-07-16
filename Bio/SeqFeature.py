@@ -162,16 +162,13 @@ class SeqFeature(object):
             out += "ref: %s:%s\n" % (self.ref, self.ref_db)
         out += "strand: %s\n" % self.strand
         out += "qualifiers: \n"
-        qualifier_keys = self.qualifiers.keys()
-        qualifier_keys.sort()
-        for qual_key in qualifier_keys:
+        for qual_key in sorted(self.qualifiers):
             out += "    Key: %s, Value: %s\n" % (qual_key,
                                                self.qualifiers[qual_key])
         if len(self.sub_features) != 0:
             out += "Sub-Features\n"
             for sub_feature in self.sub_features:
                 out +="%s\n" % sub_feature
-
         return out
 
     def _shift(self, offset):

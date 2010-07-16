@@ -235,8 +235,7 @@ def train(training_set, results, feature_fns, update_fn=None,
     xs, ys = training_set, results
 
     # Get a list of all the classes that need to be trained.
-    classes = list(set(results))
-    classes.sort()
+    classes = sorted(set(results))
 
     # Cache values for all features.
     features = [_eval_feature_fn(fn, training_set, classes)

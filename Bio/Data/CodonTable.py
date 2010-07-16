@@ -121,8 +121,7 @@ def make_back_table(table, default_stop_codon):
     # Do the sort so changes in the hash implementation won't affect
     # the result when one amino acid is coded by more than one codon.
     back_table = {}
-    keys = table.keys() ; keys.sort()
-    for key in keys:
+    for key in sorted(table):
         back_table[table[key]] = key
     back_table[None] = default_stop_codon
     return back_table
@@ -194,7 +193,7 @@ def list_possible_proteins(codon, forward_table, ambiguous_nucleotide_values):
                         # If tripping over a stop codon
                         stops.append(y1+y2+y3)
         if stops:
-            if possible.keys():
+            if possible:
                 raise TranslationError("ambiguous codon '%s' codes " % codon \
                                        + "for both proteins and stop codons")
             # This is a true stop codon - tell the caller about it
