@@ -101,9 +101,8 @@ class Record:
                            ["EC " + self.entry])
     def _name(self):
         return _write_kegg("NAME",
-                           map(lambda l:
-                               _wrap_kegg(l, wrap_rule = name_wrap),
-                               self.name))
+                           [_wrap_kegg(l, wrap_rule = name_wrap) \
+                            for l in self.name])
     def _classname(self):
         return _write_kegg("CLASS",
                            self.classname)
