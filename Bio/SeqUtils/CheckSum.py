@@ -62,9 +62,13 @@ def gcg(seq):
     Based on BioPerl GCG_checksum. Adapted by Sebastian Bassi
     with the help of John Lenton, Pablo Ziliani, and Gabriel Genellina.
     All sequences are converted to uppercase """
+    try:
+        #Assume its a Seq object
+        seq = seq.tostring()
+    except AttributeError:
+        #Assume its a string
+        pass
     index = checksum = 0
-    if type(seq)!=type("aa"):
-        seq=seq.tostring()
     for char in seq:
         index += 1
         checksum += index * ord(char.upper())
@@ -89,13 +93,20 @@ def seguid(seq):
         import sha
         m = sha.new()
     import base64
-    if type(seq)!=type("aa"):
-        seq=seq.tostring().upper()
-    else:
-        seq=seq.upper()
-    m.update(seq)
     try:
-        #For Python 2.5
+        #Assume its a Seq object
+         seq = seq.tostring()
+    except AttributeError:
+        #Assume its a string
+        pass
+    m.update(seq.upper().encode())
+    try:
+        #For Python 3+
+        return base64.encodebytes(m.digest()).decode().replace("\n","").rstrip("=")
+    except AttributeError:
+        pass
+    try:
+        #For Python 2.5+
         return base64.b64encode(m.digest()).rstrip("=")
     except:
         #For older versions
