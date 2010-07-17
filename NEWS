@@ -26,6 +26,9 @@ handling of model numbers, and files missing the element column.
 Feature location parsing for GenBank and EMBL files has been rewritten,
 making the parser much faster.
 
+Ace parsing by SeqIO now uses zero rather than None for the quality score of
+any gaps (insertions) in the contig sequence.
+
 We have also been working on updates to avoid code which has been deprecated
 in Python 2.7 or Python 3, an important step towards Python 3 support.
 

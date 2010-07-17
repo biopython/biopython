@@ -130,7 +130,7 @@ class PatternRepository:
 
         # create the list representation
         self._pattern_list = []
-        for pattern_name in self._pattern_dict.keys():
+        for pattern_name in self._pattern_dict:
             self._pattern_list.append((self._pattern_dict[pattern_name],
                                        pattern_name))
 

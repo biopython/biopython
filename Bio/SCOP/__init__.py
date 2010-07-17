@@ -476,7 +476,7 @@ class Scop:
         cur.execute("CREATE TABLE hie (parent INT, child INT, PRIMARY KEY (child),\
         INDEX (parent) )")
 
-        for p in self._sunidDict.values():
+        for p in self._sunidDict.itervalues():
             for c in p.children:
                 cur.execute("INSERT INTO hie VALUES (%s,%s)" % (p.sunid, c.sunid))
 
@@ -490,7 +490,7 @@ class Scop:
         residues VARCHAR(50), sccs CHAR(10), cl INT, cf INT, sf INT, fa INT,\
         dm INT, sp INT, px INT, PRIMARY KEY (sunid), INDEX (SID) )")
 
-        for n in self._sidDict.values():
+        for n in self._sidDict.itervalues():
             c = n.toClaRecord()
             cur.execute( "INSERT INTO cla VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                          (n.sunid, n.sid, c.residues.pdbid, c.residues, n.sccs,
@@ -509,7 +509,7 @@ class Scop:
         description VARCHAR(255),\
         PRIMARY KEY (sunid) )")
         
-        for n in self._sunidDict.values():
+        for n in self._sunidDict.itervalues():
             cur.execute( "INSERT INTO des VALUES (%s,%s,%s,%s)",
                          ( n.sunid, n.type, n.sccs, n.description ) )                        
         

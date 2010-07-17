@@ -205,7 +205,7 @@ class SignatureCoder:
         # as long as we have some signatures present, normalize them
         # otherwise we'll just return 0 for everything 
         if max_count > 0:
-            for sig in sequence_sigs.keys():
+            for sig in sequence_sigs:
                 sequence_sigs[sig] = (float(sequence_sigs[sig] - min_count)
                                       / float(max_count))
 

@@ -351,32 +351,32 @@ def six_frame_translations(seq, genetic_code = 1):
 ######################
 # {{{ 
 
-def fasta_uniqids(file):
+def fasta_uniqids(filename):
     """Checks and changes the name/ID's to be unique identifiers by adding numbers (OBSOLETE).
 
     file - a FASTA format filename to read in.
 
     No return value, the output is written to screen.
     """
-    dict = {}
-    txt = open(file).read()
+    mydict = {}
+    txt = open(filename).read()
     entries = []
     for entry in txt.split('>')[1:]:
         name, seq= entry.split('\n',1)
         name = name.split()[0].split(',')[0]
       
-        if name in dict:
+        if name in mydict:
             n = 1
             while 1:
                 n = n + 1
                 _name = name + str(n)
-                if _name not in dict:
+                if _name not in mydict:
                     name = _name
                     break
             
-        dict[name] = seq
+        mydict[name] = seq
 
-    for name, seq in dict.items():
+    for name, seq in mydict.iteritems():
         print '>%s\n%s' % (name, seq)
 
 def quick_FASTA_reader(file):

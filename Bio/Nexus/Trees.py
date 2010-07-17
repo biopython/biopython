@@ -217,7 +217,7 @@ class Tree(Nodes.Chain):
         
         node_id = search_taxon(self,taxon)
         """
-        for id,node in self.chain.items():
+        for id,node in self.chain.iteritems():
             if node.data.taxon==taxon:
                 return id
         return None
@@ -805,13 +805,13 @@ def consensus(trees, threshold=0.5,outgroup=None):
             #else:
             #    countclades[subclade_taxa]=t.weight
     # weed out clades below threshold
-    for (c,p) in clades.items():
+    for c, p in clades.iteritems():
         if p<threshold:
             del clades[c]
     # create a tree with a root node
     consensus=Tree(name='consensus_%2.1f' % float(threshold),data=dataclass)
     # each clade needs a node in the new tree, add them as isolated nodes
-    for (c,s) in clades.items():
+    for c, s in clades.iteritems():
         node=Nodes.Node(data=dataclass())
         node.data.support=s
         node.data.taxon=set(eval(c))

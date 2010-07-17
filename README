@@ -65,6 +65,25 @@ o "MySQLdb":http://sourceforge.net/projects/mysql-python (optional)
 In addition there are a number of useful third party tools you may wish to
 install such as standalone NCBI BLAST, EMBOSS or ClustalW.
 
+**Python 3.x**
+
+Python 3 support is still incomplete, but the majority of modules are
+already functional. In order to be able to run Biopython with Python 3
+you first need to convert the code. The conversion process is easy but
+it has to be done BEFORE running setup.py.
+
+To convert the code to Python 3, the 2to3 tool is required (comes
+with Python 3). On the top-level directory do:
+
+$ 2to3 --no-diffs -n -w Bio BioSQL Tests Scripts Doc/examples
+$ 2to3 --no-diffs -n -w -d Bio BioSQL Tests Scripts Doc/examples
+
+The first command converts the code, the second command converts the
+doctests (examples within the docstrings). You can in general ignore
+the output of 2to3. The tool takes some time to complete, please be
+patient (or use the -j option to set the number of threads used).
+
+After 2to3 execution the normal setup process should be followed.
 
 **Installation**
 

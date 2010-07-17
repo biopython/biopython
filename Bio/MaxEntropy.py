@@ -117,7 +117,7 @@ def _calc_model_expects(xs, classes, features, alphas):
     expects = []
     for feature in features:
         sum = 0.0
-        for (i, j), f in feature.items():
+        for (i, j), f in feature.iteritems():
             sum += p_yx[i][j] * f
         expects.append(sum/len(xs))
     return expects
@@ -134,7 +134,7 @@ def _calc_p_class_given_x(xs, classes, features, alphas):
     # Calculate log P(y, x).
     assert len(features) == len(alphas)
     for feature, alpha in zip(features, alphas):
-        for (x, y), f in feature.items():
+        for (x, y), f in feature.iteritems():
             prob_yx[x][y] += alpha * f
     # Take an exponent to get P(y, x)
     prob_yx = numpy.exp(prob_yx)
@@ -163,7 +163,7 @@ def _calc_f_sharp(N, nclasses, features):
     # f#(x, y) = SUM_i feature(x, y)
     f_sharp = numpy.zeros((N, nclasses))
     for feature in features:
-        for (i, j), f in feature.items():
+        for (i, j), f in feature.iteritems():
             f_sharp[i][j] += f
     return f_sharp
 
@@ -175,7 +175,7 @@ def _iis_solve_delta(N, feature, f_sharp, empirical, prob_yx,
     iters = 0
     while iters < max_newton_iterations: # iterate for Newton's method
         f_newton = df_newton = 0.0       # evaluate the function and derivative
-        for (i, j), f in feature.items():
+        for (i, j), f in feature.iteritems():
             prod = prob_yx[i][j] * f * numpy.exp(delta * f_sharp[i][j])
             f_newton += prod
             df_newton += prod * f_sharp[i][j]
@@ -235,8 +235,7 @@ def train(training_set, results, feature_fns, update_fn=None,
     xs, ys = training_set, results
 
     # Get a list of all the classes that need to be trained.
-    classes = list(set(results))
-    classes.sort()
+    classes = sorted(set(results))
 
     # Cache values for all features.
     features = [_eval_feature_fn(fn, training_set, classes)

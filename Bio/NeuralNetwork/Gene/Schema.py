@@ -138,9 +138,7 @@ class Schema:
     def all_unambiguous(self):
         """Return a listing of all unambiguous letters allowed in motifs.
         """
-        all_letters = self._ambiguity_info.keys()
-        all_letters.sort()
-
+        all_letters = sorted(self._ambiguity_info)
         unambig_letters = []
 
         for letter in all_letters:

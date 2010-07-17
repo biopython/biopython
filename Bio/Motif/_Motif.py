@@ -25,7 +25,8 @@ class Motif(object):
         self._log_odds = []
         self.alphabet=alphabet
         self.length=None
-        self.background=dict(map(lambda n: (n,1.0/len(self.alphabet.letters)), self.alphabet.letters))
+        self.background=dict((n, 1.0/len(self.alphabet.letters)) \
+                             for n in self.alphabet.letters)
         self.beta=1.0
         self.info=None
         self.name=""
@@ -190,7 +191,7 @@ class Motif(object):
             if not masked:
                 score/=self.length
             else:
-                score/=len(filter(lambda x: x, self.mask))
+                score/=len([x for x in self.mask if x])
         return score
     
     def search_pwm(self,sequence,normalized=0,masked=0,threshold=0.0,both=True):
@@ -275,7 +276,7 @@ class Motif(object):
         for i in range(max(self.length,offset+other.length)):
             f1=self[i]
             f2=other[i-offset]
-            for n,b in self.background.items():
+            for n,b in self.background.iteritems():
                 s+=b*f1[n]*f2[n]
         return s/i
 
@@ -471,8 +472,7 @@ class Motif(object):
                 self.counts[i]=map(float,ln) #map(lambda s: int(100*float(s)),ln)
             #print counts[i]
         
-        s = sum(map(lambda nuc: self.counts[nuc][0],letters))
-        #print "sum", s
+        s = sum(self.counts[nuc][0] for nuc in letters)
         l = len(self.counts[letters[0]])
         self.length=l
         self.set_mask("*"*l)
@@ -484,7 +484,8 @@ class Motif(object):
     def make_instances_from_counts(self):
         """Creates "fake" instances for a motif created from a count matrix.
 
-        In case the sums of counts are different for different columnes, the shorter columns are padded with background.
+        In case the sums of counts are different for different columnes, the
+        shorter columns are padded with background.
         """
         alpha="".join(self.alphabet.letters)
         #col[i] is a column taken from aligned motif instances
@@ -522,7 +523,7 @@ class Motif(object):
         self.has_counts=True
         s = len(self.instances)
         for i in range(self.length):
-            ci = dict(map(lambda a: (a,0),self.alphabet.letters))
+            ci = dict((a,0) for a in self.alphabet.letters)
             for inst in self.instances:
                 ci[inst[i]]+=1
             for a in self.alphabet.letters:
@@ -652,7 +653,7 @@ class Motif(object):
                   'color6' : 'orange',
                   'color1' : 'black',
                   }
-        for k,v in kwds.items():
+        for k,v in kwds.iteritems():
             values[k]=str(v)
             
         data = urllib.urlencode(values)
@@ -752,8 +753,10 @@ class Motif(object):
             raise ValueError("Wrong format type")
 
     def scanPWM(self,seq):
-        """
-        scans (using a fast C extension) a nucleotide sequence and returns the matrix of log-odds scores for all positions
+        """Matrix of log-odds scores for a nucleotide sequence.
+ 
+        scans (using a fast C extension) a nucleotide sequence and returns
+        the matrix of log-odds scores for all positions
 
         - the result is a one-dimensional numpy array
         - the sequence can only be a DNA sequence
@@ -764,10 +767,11 @@ class Motif(object):
         if seq.alphabet!=IUPAC.unambiguous_dna:
             raise ValueError("Wrong alphabet! Use only with DNA sequences")
 
-        
         import numpy
-        # get the log-odds matrix into a proper shape (each column contains sorted (ACGT) log-odds values)
-        logodds=numpy.array([map(lambda x: x[1],sorted(x.items())) for x in self.log_odds()]).transpose()
+        # get the log-odds matrix into a proper shape
+        # (each column contains sorted (ACGT) log-odds values)
+        logodds=numpy.array([[y[1] for y in sorted(x.items())] \
+                             for x in self.log_odds()]).transpose()
         
         import _pwm
         

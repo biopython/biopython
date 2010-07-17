@@ -87,7 +87,7 @@ def contents(items):
     counts = count(items)
     l = float(len(items))
     contents = {}
-    for i, c in counts.items():
+    for i, c in counts.iteritems():
         contents[i] = c / l
     return contents
 

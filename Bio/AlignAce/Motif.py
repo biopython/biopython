@@ -104,7 +104,7 @@ class Motif(object):
             if not masked:
                 score/=self.length
             else:
-                score/=len(filter(lambda x: x, self.mask))
+                score/=len([x for x in self.mask if x])
         return score
     
     def search_pwm(self,sequence,threshold=0.0,normalized=1,masked=1):
@@ -155,7 +155,7 @@ class Motif(object):
                     sxy = sxy + xi * yi
                     
         if masked:
-            norm = len(filter(lambda x: x,self.mask))
+            norm = len([x for x in self.mask if x])
         else:
             norm = self.length
             
@@ -260,7 +260,7 @@ class Motif(object):
                   'color6' : 'orange',
                   'color1' : 'black',
                   }
-        for k,v in kwds.items():
+        for k,v in kwds.iteritems():
             values[k]=str(v)
             
         data = urllib.urlencode(values)
