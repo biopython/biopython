@@ -371,7 +371,7 @@ class GenBankWriter(_InsdcWriter):
         if isinstance(date, list) and len(date)==1 :
             date = date[0]
         #TODO - allow a Python date object
-        if not isinstance(date, str) or len(date) != 11 \
+        if not isinstance(date, basestring) or len(date) != 11 \
         or date[2] != "-" or date[6] != "-" \
         or not date[:2].isdigit() or not date[7:].isdigit() \
         or int(date[:2]) > 31 \

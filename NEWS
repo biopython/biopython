@@ -32,9 +32,10 @@ any gaps (insertions) in the contig sequence.
 We have also been working on updates to avoid code which has been deprecated
 in Python 2.7 or Python 3, an important step towards Python 3 support.
 
-(At least) 7 people have contributed to this release, including 3 new people:
+(At least) 8 people have contributed to this release, including 4 new people:
 
 Carlos Rios Vera (first contribution)
+Claude Paroz (first contribution)
 Eric Talevich
 Joao Rodrigues (first contribution)
 Konstantin Okonechnikov (first contribution)
