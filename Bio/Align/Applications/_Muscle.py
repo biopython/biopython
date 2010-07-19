@@ -14,7 +14,7 @@ and high throughput, Nucleic Acids Research 32(5), 1792-97.
 Edgar, R.C. (2004) MUSCLE: a multiple sequence alignment method with reduced
 time and space complexity. BMC Bioinformatics 5(1): 113.
 
-Last checked against version: 3.7
+Last checked against version: 3.7, briefly against 3.8
 """
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
@@ -407,7 +407,7 @@ class MuscleCommandline(AbstractCommandline):
             #                                   file. Default is to group sequences by
             #                                   similarity (group).
             _Switch(["-stable", "stable"], ["input"],
-                    "Do not group similar sequences in output"),
+                    "Do not group similar sequences in output (not supported in v3.8)"),
             ############## log-expectation profile score ######################
             # One of either -le, -sp, or -sv
             #
