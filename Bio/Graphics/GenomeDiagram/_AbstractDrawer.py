@@ -81,13 +81,14 @@ def page_sizes(size):
         raise ValueError, "%s not in list of page sizes" % size
 
 
-def draw_box((x1, y1), (x2, y2),
+def draw_box(point1, point2,
              color=colors.lightgreen, border=None, colour=None,
              **kwargs):
     """ draw_box(self, (x1, y1), (x2, y2), (x3, y3), (x4, y4),
               color=colors.lightgreen)
 
-        o (x1,y1) and (x2,y2) Co-ordinates for opposite corners of the box
+        o point1, point2 Co-ordinates for opposite corners of the box
+                         (x,y tuples)
         
         o color /colour       The color for the box
                               (colour takes priority over color)
@@ -97,6 +98,9 @@ def draw_box((x1, y1), (x2, y2),
         Returns a closed path object, beginning at (x1,y1) going round
         the four points in order, and filling with the passed color.            
     """
+    x1, y1 = point1
+    x2, y2 = point2
+
     #Let the UK spelling (colour) override the USA spelling (color)
     if colour is not None:
         color = colour
@@ -159,15 +163,18 @@ def draw_polygon(list_of_points,
                    **kwargs)
 
 
-def draw_arrow((x1, y1), (x2, y2), color=colors.lightgreen, border=None,
+def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
                shaft_height_ratio=0.4, head_length_ratio=0.5, orientation='right',
                colour=None, **kwargs):
     """ Returns a closed path object representing an arrow enclosed by the
-        box with corners at {(x1,y1),(x2,y2)}, a shaft height
+        box with corners at {point1=(x1,y1), point2=(x2,y2)}, a shaft height
         given by shaft_height_ratio (relative to box height), a head length
         given by head_length_ratio (also relative to box height), and
         an orientation that may be 'left' or 'right'.
     """
+    x1, y1 = point1
+    x2, y2 = point2
+    
     if shaft_height_ratio < 0 or 1 < shaft_height_ratio:
         raise ValueError("Arrow shaft height ratio should be in range 0 to 1")
     if head_length_ratio < 0:
