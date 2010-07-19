@@ -169,7 +169,6 @@ class InsdcScanner:
                     #over indenting the location and qualifiers.
                     feature_key, line = line[2:].strip().split(None,1)
                     feature_lines = [line]
-                    import warnings
                     warnings.warn("Overindented %s feature?" % feature_key)
                 else:
                     feature_key = line[2:self.FEATURE_QUALIFIER_INDENT].strip()
