@@ -194,24 +194,6 @@ class PrankConversion(unittest.TestCase):
         os.remove(filename)
         del child
         
-    def test_convert_to_ig(self):
-        """Convert FASTA to Inteligenetics format."""
-        self.conversion(1, "igs", "ig")
-
-    #Works, but parsing gives a user warning due to malformed LOCUS line
-    #def test_convert_to_genbank(self):
-    #    """Convert FASTA to GenBank."""
-    #    self.conversion(2, "gen", "genbank")
-
-    def test_convert_to_nbrf(self):
-        """Convert FASTA to NBRF/PIR format."""
-        self.conversion(3, "nbr", "pir")
-
-    #Our EMBL parser doesn't (yet) support the minimal ID line format used
-    #def test_convert_to_genbank(self):
-    #    """Convert FASTA to EMBL."""
-    #    self.conversion(4, "emb", "embl")
-
     def test_convert_to_fasta(self):
         """Convert FASTA to FASTA format."""
         self.conversion(8, "fas", "fasta")
@@ -224,15 +206,12 @@ class PrankConversion(unittest.TestCase):
         """Convert FASTA to PHYLIP format."""
         self.conversion(12, "phy", "phylip")
 
-    #This isn't the NBRF/PIR format, what ever it is, we don't support it yet:
-    #def test_convert_to_pir_codata(self):
-    #    """Convert FASTA to PIR/CODATA."""
-    #    self.conversion(14, "pir", "???")
-
     #PRANK truncated the record names in the matrix block. An error?
     #def test_convert_to_paup_nexus(self):
     #    """Convert FASTA to PAUP/NEXUS."""
     #    self.conversion(17, "nex", "nexus")
+
+    #We don't support format 18, PAML
 
 
 if __name__ == "__main__":
