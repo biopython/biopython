@@ -139,7 +139,8 @@ if db_name in server.keys():
 
 print "(Re)creating empty sub-database '%s'" % db_name
 db = server.new_database(db_name)
-     
+
+db_count = 0
 for (t_format, t_alignment, t_filename, t_count) in test_files:
     print "Testing loading from %s format file %s" % (t_format, t_filename)
     assert os.path.isfile(t_filename), t_filename
@@ -147,6 +148,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     iterator = SeqIO.parse(handle=open(t_filename,"r"), format=t_format)
     count = db.load(iterator)
     assert count == t_count
+    db_count += count
     
     #print " - Committing %i records" % count
     server.commit()
@@ -190,6 +192,17 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
                 db_rec = db.lookup(primary_id=key)
                 compare_record(record, db_rec)
                 print "OK"
+
+    assert db_count == len(db), "%i vs %i" % (count, len(db))
+    assert db_count == len(db.keys())
+    assert db_count == len(db.values())
+    assert db_count == len(db.items())
+
+for db_rec in db.itervalues():
+    assert isinstance(db_rec, BioSeq.DBSeqRecord)
+for key, db_rec in db.iteritems():
+    assert isinstance(db_rec, BioSeq.DBSeqRecord)
+    compare_record(db_rec, db[key])
 
 print "Removing (deleting) '%s'" % db_name
 server.remove_database(db_name)

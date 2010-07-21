@@ -423,13 +423,6 @@ class BioSeqDatabase:
         seqids = self.adaptor.fetch_seqids_by_accession(self.dbid, name)
         return [BioSeq.DBSeqRecord(self.adaptor, seqid) for seqid in seqids]
 
-    def get_PrimarySeq_stream(self):
-        # my @array = $self->get_all_primary_ids;
-        # my $stream = Bio::DB::BioDatabasePSeqStream->new(
-        #         -adaptor => $self->_adaptor->db->get_PrimarySeqAdaptor,
-        #         -idlist => \@array);
-        raise NotImplementedError("waiting for Python 2.2's iter")
-
     def get_all_primary_ids(self):
         """All the primary_ids of the sequences in the database (OBSOLETE).
 
@@ -451,14 +444,53 @@ class BioSeqDatabase:
     def keys(self):
         """List of ids which may not be meaningful outside this database."""
         return self.adaptor.list_bioentry_ids(self.dbid)
-        
-    def values(self):
-        """List of DBSeqRecord objects in the database."""
-        return [self[key] for key in self.keys()]
 
-    def items(self):
-        """List of (id, DBSeqRecord) for entries in the database."""
-        return [(key, self[key]) for key in self.keys()]
+    def __len__(self):
+        """Number of records in this database."""
+        #TODO - Use SQL for this, much more efficient!
+        return len(self.adaptor.list_bioentry_ids(self.dbid))
+
+    def __contains__(self, value):
+        """Check if a primary (internal) id is this database."""
+        #TODO - Use SQL for this, much more efficient!
+        return value in self.adaptor.list_bioentry_ids(self.dbid)
+    
+    def __iter__(self):
+        #TODO - Iterate over the cursor, much more efficient
+        return iter(self.adaptor.list_bioentry_ids(self.dbid))        
+
+    if hasattr(dict, "iteritems"):
+        #Python 2, use iteritems etc    
+        def values(self):
+            """List of DBSeqRecord objects in the database."""
+            return [self[key] for key in self.keys()]
+    
+        def items(self):
+            """List of (id, DBSeqRecord) for entries in the database."""
+            return [(key, self[key]) for key in self.keys()]
+        
+        def iterkeys(self):
+            return iter(self)
+    
+        def itervalues(self):
+            for key in self:
+                yield self[key]
+            
+        def iteritems(self):
+            for key in self:
+                yield key, self[key]
+    else:
+        #Python 3, items etc are all iterators
+        def keys(self):
+            return iter(self)
+            
+        def values(self):
+            for key in self:
+                yield self[key]
+    
+        def items(self):
+            for key in self:
+                yield key, self[key]
 
     def lookup(self, **kwargs):
         if len(kwargs) != 1:
