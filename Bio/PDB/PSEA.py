@@ -3,7 +3,16 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Wrappers for PSEA, a program for secondary structure assignment."""
+"""Wrappers for PSEA, a program for secondary structure assignment.
+
+See this citation for P-SEA, PMID: 9183534
+
+Labesse G, Colloc'h N, Pothier J, Mornon J-P:  P-SEA: a new efficient
+assignment of secondary structure from C_alpha.
+Comput Appl Biosci 1997 , 13:291-295
+
+ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/
+"""
 
 import os
 
