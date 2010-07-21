@@ -29,6 +29,10 @@ making the parser much faster.
 Ace parsing by SeqIO now uses zero rather than None for the quality score of
 any gaps (insertions) in the contig sequence.
 
+The BioSQL classes DBServer and BioSeqDatabase now act more like Python
+dictionaries, making it easier to count, delete, iterate over, or check for
+membership of namespaces and records.
+
 We have also been working on updates to avoid code which has been deprecated
 in Python 2.7 or Python 3, an important step towards Python 3 support.
 
