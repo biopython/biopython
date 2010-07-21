@@ -443,15 +443,15 @@ class BioSeqDatabase:
         warnings.warn("Use bio_seq_database.keys() instead of "
                       "bio_seq_database.get_all_primary_ids()",
                       PendingDeprecationWarning)
-        return self.adaptor.list_bioentry_ids(self.dbid)
+        return self.keys()
 
     def __getitem__(self, key):
         return BioSeq.DBSeqRecord(self.adaptor, key)
 
     def keys(self):
         """List of ids which may not be meaningful outside this database."""
-        return self.get_all_primary_ids()
-    
+        return self.adaptor.list_bioentry_ids(self.dbid)
+        
     def values(self):
         """List of DBSeqRecord objects in the database."""
         return [self[key] for key in self.keys()]
