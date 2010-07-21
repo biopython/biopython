@@ -108,6 +108,11 @@ def open_database(driver = "MySQLdb", **kwargs):
     return server
 
 class DBServer:
+    """Represents a BioSQL database continaing namespaces (sub-databases).
+    
+    This acts like a Python dictionary, giving access to each namespace
+    (defined by a row in the biodatabase table) as a BioSeqDatabase object.
+    """
     def __init__(self, conn, module, module_name=None):
         self.module = module
         if module_name is None:
@@ -117,17 +122,82 @@ class DBServer:
         
     def __repr__(self):
         return self.__class__.__name__ + "(%r)" % self.adaptor.conn
+
     def __getitem__(self, name):
         return BioSeqDatabase(self.adaptor, name)
-    def keys(self):
-        return self.adaptor.list_biodatabase_names()
-    def values(self):
-        return [self[key] for key in self.keys()]
-    def items(self):
-        return [(key, self[key]) for key in self.keys()]
+
+    def __len__(self):
+        """Number of namespaces (sub-databases) in this database."""
+        #TODO - Use SQL for this, much more efficient!
+        return len(self.adaptor.list_biodatabase_names())
+
+    def __contains__(self, value):
+        """Check if a namespace (sub-database) in this database."""
+        #TODO - Use SQL for this, much more efficient!
+        return value in self.adaptor.list_biodatabase_names()
+    
+    def __iter__(self):
+        """Iterate over namespaces (sub-databases) in the database."""
+        #TODO - Iterate over the cursor, much more efficient
+        return iter(self.adaptor.list_biodatabase_names())        
+
+    if hasattr(dict, "iteritems"):
+        #Python 2, use iteritems etc    
+        def keys(self):
+            """List of namespaces (sub-databases) in the database."""
+            return self.adaptor.list_biodatabase_names()
+
+        def values(self):
+            """List of BioSeqDatabase objects in the database."""
+            return [self[key] for key in self.keys()]
+    
+        def items(self):
+            """List of (namespace, BioSeqDatabase) for entries in the database."""
+            return [(key, self[key]) for key in self.keys()]
+        
+        def iterkeys(self):
+            """Iterate over namespaces (sub-databases) in the database."""
+            return iter(self)
+    
+        def itervalues(self):
+            """Iterate over BioSeqDatabase objects in the database."""
+            for key in self:
+                yield self[key]
+            
+        def iteritems(self):
+            """Iterate over (namespace, BioSeqDatabase) in the database."""
+            for key in self:
+                yield key, self[key]
+    else:
+        #Python 3, items etc are all iterators
+        def keys(self):
+            """Iterate over namespaces (sub-databases) in the database."""
+            return iter(self)
+            
+        def values(self):
+            """Iterate over BioSeqDatabase objects in the database."""
+            for key in self:
+                yield self[key]
+    
+        def items(self):
+            """Iterate over (namespace, BioSeqDatabase) in the database."""
+            for key in self:
+                yield key, self[key]
+
+    def __delitem__(self, name):
+        """Remove a namespace and all its entries."""
+        self.remove_database(name)
 
     def remove_database(self, db_name):
-        """Try to remove all references to items in a database.
+        """Remove a namespace and all its entries (OBSOLETE).
+        
+        Try to remove all references to items in a database.
+        
+        server.remove_database(name)
+        
+        In keeping with the dictionary interface, you can now do this:
+        
+        del server[name]
         """
         db_id = self.adaptor.fetch_dbid_by_dbname(db_name)
         remover = Loader.DatabaseRemover(self.adaptor, db_id)
@@ -370,6 +440,11 @@ _allowed_lookups = {
     }
 
 class BioSeqDatabase:
+    """Represents a namespace (sub-database) within the BioSQL database.
+    
+    i.e. One row in the biodatabase table, and all all rows in the bioentry
+    table associated with it.
+    """
     def __init__(self, adaptor, name):
         self.adaptor = adaptor
         self.name = name
