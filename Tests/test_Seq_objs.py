@@ -472,7 +472,12 @@ class StringMethodTests(unittest.TestCase):
                         #TODO - Use the Bio.Data.IUPACData module for the
                         #ambiguous protein mappings?
 
-                    
+    def test_init_typeerror(self):
+        """Check Seq __init__ gives TypeError exceptions."""
+        #Only expect it to take strings and unicode - not Seq objects!
+        self.assertRaises(TypeError, Seq, (1066))
+        self.assertRaises(TypeError, Seq, (Seq("ACGT", generic_dna)))
+
     #TODO - Addition...
 
 if __name__ == "__main__":

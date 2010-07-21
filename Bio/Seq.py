@@ -86,8 +86,9 @@ class Seq(object):
         MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
         """
         # Enforce string storage
-        assert (type(data) == type("") or # must use a string
-                type(data) == type(u""))  # but can be a unicode string
+        if not isinstance(data, basestring):
+            raise TypeError("The sequence data given to a Seq object should "
+                            "be a string (not another Seq object etc)")
         self._data = data
         self.alphabet = alphabet  # Seq API requirement
  
@@ -1461,7 +1462,7 @@ class MutableSeq(object):
             self.array_indicator = "u"
         else:
             self.array_indicator = "c"
-        if type(data) == type(""):
+        if isinstance(data, str): #TODO - What about unicode?
             self.data = array.array(self.array_indicator, data)
         else:
             self.data = data   # assumes the input is an array
