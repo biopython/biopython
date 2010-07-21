@@ -441,10 +441,6 @@ class BioSeqDatabase:
     def __getitem__(self, key):
         return BioSeq.DBSeqRecord(self.adaptor, key)
 
-    def keys(self):
-        """List of ids which may not be meaningful outside this database."""
-        return self.adaptor.list_bioentry_ids(self.dbid)
-
     def __len__(self):
         """Number of records in this database."""
         #TODO - Use SQL for this, much more efficient!
@@ -461,6 +457,10 @@ class BioSeqDatabase:
 
     if hasattr(dict, "iteritems"):
         #Python 2, use iteritems etc    
+        def keys(self):
+            """List of ids which may not be meaningful outside this database."""
+            return self.adaptor.list_bioentry_ids(self.dbid)
+
         def values(self):
             """List of DBSeqRecord objects in the database."""
             return [self[key] for key in self.keys()]
