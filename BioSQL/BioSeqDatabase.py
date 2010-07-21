@@ -186,6 +186,8 @@ class DBServer:
 
     def __delitem__(self, name):
         """Remove a namespace and all its entries."""
+        if name not in self:
+            raise KeyError(name)
         self.remove_database(name)
 
     def remove_database(self, db_name):
@@ -515,6 +517,15 @@ class BioSeqDatabase:
 
     def __getitem__(self, key):
         return BioSeq.DBSeqRecord(self.adaptor, key)
+
+    def __delitem__(self, key):
+        """Remove an entry and all its annotation."""
+        if key not in self:
+            raise KeyError(key)
+        #Assuming this will automatically cascade to the other tables...
+        sql = "DELETE FROM bioentry " + \
+              "WHERE biodatabase_id=%s AND bioentry_id=%s;"
+        self.adaptor.execute(sql, (self.dbid,key))
 
     def __len__(self):
         """Number of records in this namespace (sub database)."""

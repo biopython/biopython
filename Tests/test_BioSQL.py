@@ -161,6 +161,11 @@ class ReadTest(unittest.TestCase):
         #Check we can delete the namespace...
         del server["biosql-test"]
         self.assertEqual(0, len(server))
+        try:
+            del server["non-existant-name"]
+            assert False, "Should have raised KeyError"
+        except KeyError:
+            pass
 
     def test_get_db_items(self):
         """Check list, keys, length etc"""
@@ -175,6 +180,14 @@ class ReadTest(unittest.TestCase):
         for (k1,r1), (k2,r2) in zip(zip(keys, items), db.iteritems()):
             self.assertEqual(k1, k2)
             self.assertEqual(r1.id, r2.id)
+        for k in keys:
+            del db[k]
+        self.assertEqual(0, len(db))
+        try:
+            del db["non-existant-name"]
+            assert False, "Should have raised KeyError"
+        except KeyError:
+            pass
 
     def test_lookup_items(self):
         """Test retrieval of items using various ids.
