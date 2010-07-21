@@ -25,7 +25,7 @@ def open_database(driver = "MySQLdb", **kwargs):
     database, doing something like:
         
         >>> from BioSeq import BioSeqDatabase
-        >>> server = BioSeqDatabase.open_database(user = "root", db="minidb")
+        >>> server = BioSeqDatabase.open_database(user="root", db="minidb")
 
     the various options are:
     driver -> The name of the database driver to use for connecting. The
@@ -379,37 +379,46 @@ class BioSeqDatabase:
         return "BioSeqDatabase(%r, %r)" % (self.adaptor, self.name)
         
     def get_Seq_by_id(self, name):
-        """Gets a Bio::Seq object by its name
+        """Gets a DBSeqRecord object by its name
 
-        Example: seq = db.get_Seq_by_id('ROA1_HUMAN')
+        Example: seq_rec = db.get_Seq_by_id('ROA1_HUMAN')
         
+        The name of this method is misleading since it returns a DBSeqRecord
+        rather than a DBSeq ojbect, and presumably was to mirror BioPerl.
         """
         seqid = self.adaptor.fetch_seqid_by_display_id(self.dbid, name)
         return BioSeq.DBSeqRecord(self.adaptor, seqid)
 
     def get_Seq_by_acc(self, name):
-        """Gets a Bio::Seq object by accession number
+        """Gets a DBSeqRecord object by accession number
 
-        Example: seq = db.get_Seq_by_acc('X77802')
+        Example: seq_rec = db.get_Seq_by_acc('X77802')
 
+        The name of this method is misleading since it returns a DBSeqRecord
+        rather than a DBSeq ojbect, and presumably was to mirror BioPerl.
         """
         seqid = self.adaptor.fetch_seqid_by_accession(self.dbid, name)
         return BioSeq.DBSeqRecord(self.adaptor, seqid)
 
     def get_Seq_by_ver(self, name):
-        """Gets a Bio::Seq object by version number
+        """Gets a DBSeqRecord object by version number
 
-        Example: seq = db.get_Seq_by_ver('X77802.1')
+        Example: seq_rec = db.get_Seq_by_ver('X77802.1')
 
+        The name of this method is misleading since it returns a DBSeqRecord
+        rather than a DBSeq ojbect, and presumably was to mirror BioPerl.
         """
         seqid = self.adaptor.fetch_seqid_by_version(self.dbid, name)
         return BioSeq.DBSeqRecord(self.adaptor, seqid)
 
     def get_Seqs_by_acc(self, name):
-        """Gets a *list* of Bio::Seq objects by accession number
+        """Gets a list of DBSeqRecord objects by accession number
 
-        Example: seqs = db.get_Seq_by_acc('X77802')
+        Example: seq_recs = db.get_Seq_by_acc('X77802')
 
+        The name of this method is misleading since it returns a list of
+        DBSeqRecord objects rather than a list of DBSeq ojbects, and presumably
+        was to mirror BioPerl.
         """
         seqids = self.adaptor.fetch_seqids_by_accession(self.dbid, name)
         return [BioSeq.DBSeqRecord(self.adaptor, seqid) for seqid in seqids]
@@ -422,21 +431,33 @@ class BioSeqDatabase:
         raise NotImplementedError("waiting for Python 2.2's iter")
 
     def get_all_primary_ids(self):
-        """Array of all the primary_ids of the sequences in the database.
+        """All the primary_ids of the sequences in the database (OBSOLETE).
 
         These maybe ids (display style) or accession numbers or
         something else completely different - they *are not*
         meaningful outside of this database implementation.
+        
+        Please use .keys() instead of .get_all_primary_ids()
         """
+        import warnings
+        warnings.warn("Use bio_seq_database.keys() instead of "
+                      "bio_seq_database.get_all_primary_ids()",
+                      PendingDeprecationWarning)
         return self.adaptor.list_bioentry_ids(self.dbid)
 
     def __getitem__(self, key):
         return BioSeq.DBSeqRecord(self.adaptor, key)
+
     def keys(self):
+        """List of ids which may not be meaningful outside this database."""
         return self.get_all_primary_ids()
+    
     def values(self):
+        """List of DBSeqRecord objects in the database."""
         return [self[key] for key in self.keys()]
+
     def items(self):
+        """List of (id, DBSeqRecord) for entries in the database."""
         return [(key, self[key]) for key in self.keys()]
 
     def lookup(self, **kwargs):
@@ -452,12 +473,17 @@ class BioSeqDatabase:
         return BioSeq.DBSeqRecord(self.adaptor, seqid)
         
     def get_Seq_by_primary_id(self, seqid):
-        """Gets a Bio::Seq object by the primary (internal) id.
-
-        The primary id in these cases has to come from
-        $db->get_all_primary_ids.  There is no other way to get (or
-        guess) the primary_ids in a database.
+        """Get a DBSeqRecord by the primary (internal) id (OBSOLETE).
+        
+        Rather than db.get_Seq_by_primary_id(my_id) use db[my_id]
+        
+        The name of this method is misleading since it returns a DBSeqRecord
+        rather than a DBSeq ojbect, and presumably was to mirror BioPerl.
         """
+        import warnings
+        warnings.warn("Use bio_seq_database[my_id] instead of "
+                      "bio_seq_database.get_Seq_by_primary_id(my_id)",
+                      PendingDeprecationWarning)
         return self[seqid]
 
     def load(self, record_iterator, fetch_NCBI_taxonomy=False):
