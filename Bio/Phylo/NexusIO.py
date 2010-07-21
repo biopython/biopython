@@ -9,9 +9,8 @@ __docformat__ = "epytext en"
 from itertools import chain
 
 from Bio.Nexus import Nexus
-from Bio.Phylo import Newick
+from Bio.Phylo import Newick, NewickIO
 
-import NewickIO
 
 # Structure of a Nexus tree-only file
 NEX_TEMPLATE = """\

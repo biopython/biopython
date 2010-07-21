@@ -11,7 +11,7 @@ __docformat__ = "epytext en"
 
 import warnings
 
-import BaseTree
+from Bio.Phylo import BaseTree
 
 
 class Tree(BaseTree.Tree):

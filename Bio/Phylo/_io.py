@@ -9,12 +9,11 @@ This API follows the same semantics as Biopython's SeqIO and AlignIO.
 """
 __docformat__ = "epytext en"
 
-import BaseTree
-import NewickIO
-import NexusIO
+from Bio.Phylo import BaseTree, NewickIO, NexusIO
+
 # Python 2.4 doesn't have ElementTree, which PhyloXMLIO needs
 try:
-    import PhyloXMLIO
+    from Bio.Phylo import PhyloXMLIO
 except ImportError:
     # TODO: should we issue a warning? the installer will have already whined
     # raise MissingExternalDependencyError(

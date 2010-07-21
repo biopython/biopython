@@ -17,7 +17,7 @@ import random
 import re
 import warnings
 
-import _sugar
+from Bio.Phylo import _sugar
 
 # General tree-traversal algorithms
 
@@ -672,7 +672,7 @@ class Tree(TreeElement, TreeMixin):
         """
         if format_spec:
             from StringIO import StringIO
-            import _io
+            from Bio.Phylo import _io
             handle = StringIO()
             _io.write([self], handle, format_spec)
             return handle.getvalue()
