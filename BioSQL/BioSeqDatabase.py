@@ -128,13 +128,13 @@ class DBServer:
 
     def __len__(self):
         """Number of namespaces (sub-databases) in this database."""
-        #TODO - Use SQL for this, much more efficient!
-        return len(self.adaptor.list_biodatabase_names())
+        sql = "SELECT COUNT(name) FROM biodatabase;"
+        return int(self.adaptor.execute_and_fetch_col0(sql)[0])
 
     def __contains__(self, value):
         """Check if a namespace (sub-database) in this database."""
-        #TODO - Use SQL for this, much more efficient!
-        return value in self.adaptor.list_biodatabase_names()
+        sql = "SELECT COUNT(name) FROM biodatabase WHERE name=%s;"
+        return bool(self.adaptor.execute_and_fetch_col0(sql, (value,))[0])
     
     def __iter__(self):
         """Iterate over namespaces (sub-databases) in the database."""
@@ -517,16 +517,20 @@ class BioSeqDatabase:
         return BioSeq.DBSeqRecord(self.adaptor, key)
 
     def __len__(self):
-        """Number of records in this database."""
-        #TODO - Use SQL for this, much more efficient!
-        return len(self.adaptor.list_bioentry_ids(self.dbid))
+        """Number of records in this namespace (sub database)."""
+        sql = "SELECT COUNT(bioentry_id) FROM bioentry " + \
+              "WHERE biodatabase_id=%s;"
+        return int(self.adaptor.execute_and_fetch_col0(sql, (self.dbid,))[0])
 
     def __contains__(self, value):
-        """Check if a primary (internal) id is this database."""
-        #TODO - Use SQL for this, much more efficient!
-        return value in self.adaptor.list_bioentry_ids(self.dbid)
+        """Check if a primary (internal) id is this namespace (sub database)."""
+        sql = "SELECT COUNT(bioentry_id) FROM bioentry " + \
+              "WHERE biodatabase_id=%s AND bioentry_id=%s;"
+        return bool(self.adaptor.execute_and_fetch_col0(sql,
+                                                        (self.dbid, value))[0])
     
     def __iter__(self):
+        """Iterate over ids (which may not be meaningful outside this database)."""
         #TODO - Iterate over the cursor, much more efficient
         return iter(self.adaptor.list_bioentry_ids(self.dbid))        
 
@@ -537,33 +541,39 @@ class BioSeqDatabase:
             return self.adaptor.list_bioentry_ids(self.dbid)
 
         def values(self):
-            """List of DBSeqRecord objects in the database."""
+            """List of DBSeqRecord objects in the namespace (sub database)."""
             return [self[key] for key in self.keys()]
     
         def items(self):
-            """List of (id, DBSeqRecord) for entries in the database."""
+            """List of (id, DBSeqRecord) for the namespace (sub database)."""
             return [(key, self[key]) for key in self.keys()]
         
         def iterkeys(self):
+            """Iterate over ids (which may not be meaningful outside this database)."""
             return iter(self)
     
         def itervalues(self):
+            """Iterate over DBSeqRecord objects in the namespace (sub database)."""
             for key in self:
                 yield self[key]
             
         def iteritems(self):
+            """Iterate over (id, DBSeqRecord) for the namespace (sub database)."""
             for key in self:
                 yield key, self[key]
     else:
         #Python 3, items etc are all iterators
         def keys(self):
+            """Iterate over ids (which may not be meaningful outside this database)."""
             return iter(self)
             
         def values(self):
+            """Iterate over DBSeqRecord objects in the namespace (sub database)."""
             for key in self:
                 yield self[key]
     
         def items(self):
+            """Iterate over (id, DBSeqRecord) for the namespace (sub database)."""
             for key in self:
                 yield key, self[key]
 
