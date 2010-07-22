@@ -26,9 +26,9 @@ import tempfile
 
 from Bio.SCOP.Raf import to_one_letter_code
 
-from AbstractPropertyMap import AbstractResiduePropertyMap
-from PDBExceptions import PDBException
-from PDBParser import PDBParser
+from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap
+from Bio.PDB.PDBExceptions import PDBException
+from Bio.PDB.PDBParser import PDBParser
 
 
 # Match C in DSSP

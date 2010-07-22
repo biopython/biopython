@@ -8,10 +8,10 @@
 import warnings
 from math import pi
 
-from AbstractPropertyMap import AbstractPropertyMap
-from PDBParser import PDBParser
-from Polypeptide import CaPPBuilder, is_aa
-from Vector import rotaxis
+from Bio.PDB.AbstractPropertyMap import AbstractPropertyMap
+from Bio.PDB.PDBParser import PDBParser
+from Bio.PDB.Polypeptide import CaPPBuilder, is_aa
+from Bio.PDB.Vector import rotaxis
 
 
 class _AbstractHSExposure(AbstractPropertyMap):

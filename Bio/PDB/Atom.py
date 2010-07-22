@@ -5,10 +5,13 @@
 
 """Atom class, used in Structure objects."""
 
+import warnings
+
 import numpy
 
-from Entity import DisorderedEntityWrapper
-from Vector import Vector
+from Bio.PDB.Entity import DisorderedEntityWrapper
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
+from Bio.PDB.Vector import Vector
 
 
 class Atom:
@@ -64,8 +67,6 @@ class Atom:
         # Dictionary that keeps addictional properties
         self.xtra={}
         if not element:
-            import warnings
-            from PDBExceptions import PDBConstructionWarning
             warnings.warn("Atom object (name=%s) without element" % name,
                           PDBConstructionWarning)
             element = "?"

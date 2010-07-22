@@ -9,8 +9,8 @@ file.
 
 from Bio.SCOP.Raf import to_one_letter_code
 
-import Selection
-from Polypeptide import is_aa
+from Bio.PDB import Selection
+from Bio.PDB.Polypeptide import is_aa
 
 
 class StructureAlignment:

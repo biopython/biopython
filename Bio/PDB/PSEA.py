@@ -16,7 +16,7 @@ ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/
 
 import os
 
-from Polypeptide import is_aa
+from Bio.PDB.Polypeptide import is_aa
 
 
 def run_psea(fname):

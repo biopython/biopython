@@ -4,8 +4,8 @@
 # as part of this package.  
 
 # My Stuff
-from PDBExceptions import PDBConstructionException
-from Entity import Entity, DisorderedEntityWrapper
+from Bio.PDB.PDBExceptions import PDBConstructionException
+from Bio.PDB.Entity import Entity, DisorderedEntityWrapper
 
 
 """Residue class, used by Structure objects."""

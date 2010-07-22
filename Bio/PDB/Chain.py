@@ -5,7 +5,7 @@
 
 """Chain class, used in Structure objects."""
 
-from Entity import Entity
+from Bio.PDB.Entity import Entity
 
 
 class Chain(Entity):

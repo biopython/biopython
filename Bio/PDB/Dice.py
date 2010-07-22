@@ -5,6 +5,7 @@
 
 import re
 import warnings
+
 from Bio.PDB.PDBIO import PDBIO
 
 

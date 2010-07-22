@@ -8,7 +8,7 @@
 import numpy
 
 from Bio.SVDSuperimposer import SVDSuperimposer
-from PDBExceptions import PDBException
+from Bio.PDB.PDBExceptions import PDBException
 
 
 class Superimposer:

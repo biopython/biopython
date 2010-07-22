@@ -5,8 +5,8 @@
 
 """Selection of atoms, residues, etc."""
 
-from Entity import Entity
-from PDBExceptions import PDBException
+from Bio.PDB.Entity import Entity
+from Bio.PDB.PDBExceptions import PDBException
 
 
 entity_levels=["A", "R", "C", "M", "S"]

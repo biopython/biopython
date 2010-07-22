@@ -11,13 +11,14 @@ This is used by the PDBParser and MMCIFparser classes.
 import warnings
 
 # SMCRA hierarchy
-from Structure import Structure
-from Model import Model
-from Chain import Chain
-from Residue import Residue, DisorderedResidue
-from Atom import Atom, DisorderedAtom 
+from Bio.PDB.Structure import Structure
+from Bio.PDB.Model import Model
+from Bio.PDB.Chain import Chain
+from Bio.PDB.Residue import Residue, DisorderedResidue
+from Bio.PDB.Atom import Atom, DisorderedAtom 
 
-from PDBExceptions import PDBConstructionException, PDBConstructionWarning
+from Bio.PDB.PDBExceptions import \
+        PDBConstructionException, PDBConstructionWarning
 
 
 class StructureBuilder:

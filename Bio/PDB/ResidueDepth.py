@@ -41,9 +41,9 @@ import tempfile
 
 import numpy
 
-import Selection
-from AbstractPropertyMap import AbstractPropertyMap
-from Polypeptide import is_aa
+from Bio.PDB import Selection
+from Bio.PDB.AbstractPropertyMap import AbstractPropertyMap
+from Bio.PDB.Polypeptide import is_aa
 
 
 def _read_vertex_array(filename):

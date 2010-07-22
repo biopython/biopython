@@ -7,7 +7,7 @@
 
 import os, sys, tempfile
 from Bio.PDB.PDBIO import PDBIO
-from AbstractPropertyMap import AbstractResiduePropertyMap, AbstractAtomPropertyMap
+from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap, AbstractAtomPropertyMap
 
 """Interface for the program NACCESS.
 

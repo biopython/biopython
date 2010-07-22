@@ -34,10 +34,10 @@ import numpy
 
 from Bio.SVDSuperimposer import SVDSuperimposer
 
-import Selection
-from PDBExceptions import PDBException
-from PDBParser import PDBParser
-from Polypeptide import PPBuilder
+from Bio.PDB import Selection
+from Bio.PDB.PDBExceptions import PDBException
+from Bio.PDB.PDBParser import PDBParser
+from Bio.PDB.Polypeptide import PPBuilder
 
 
 # fragment file (lib_SIZE_z_LENGTH.txt)

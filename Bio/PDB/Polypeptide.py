@@ -12,12 +12,14 @@ Example:
     ...     print pp.get_sequence()
 """
 
+import warnings
+
 from Bio.Alphabet import generic_protein
 from Bio.Seq import Seq
 from Bio.SCOP.Raf import to_one_letter_code
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Residue import Residue, DisorderedResidue
-from Vector import calc_dihedral, calc_angle
+from Bio.PDB.Vector import calc_dihedral, calc_angle
 
 
 standard_aa_names=["ALA", "CYS", "ASP", "GLU", "PHE", "GLY", "HIS", "ILE", "LYS", 
@@ -247,7 +249,6 @@ class _PPBuilder:
                 #It has an alpha carbon...
                 #We probably need to update the hard coded list of
                 #non-standard residues, see function is_aa for details.
-                import warnings
                 warnings.warn("Assuming residue %s is an unknown modified "
                               "amino acid" % residue.get_resname())
                 return 1

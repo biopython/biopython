@@ -9,8 +9,8 @@ from string import letters
 
 import numpy
 
-from MMCIF2Dict import MMCIF2Dict
-from StructureBuilder import StructureBuilder
+from Bio.PDB.MMCIF2Dict import MMCIF2Dict
+from Bio.PDB.StructureBuilder import StructureBuilder
 
 
 class MMCIFParser:
