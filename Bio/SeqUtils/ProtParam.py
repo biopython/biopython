@@ -245,7 +245,7 @@ print X.molecular_weight()
 print X.aromaticity()
 print X.instability_index()
 print X.flexibility()
-print X.pi()
+print X.isoelectric_point()
 print X.secondary_structure_fraction()
 print X.protein_scale(ProtParamData.kd, 9, 0.4)
 """
