@@ -534,3 +534,12 @@ if __name__ == '__main__':
 
 # }}}
 
+def _test():
+    """Run the Bio.SeqUtils module's doctests (PRIVATE)."""
+    print "Runing doctests..."
+    import doctest
+    doctest.testmod()
+    print "Done"
+
+if __name__ == "__main__":
+    _test()

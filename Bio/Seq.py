@@ -2050,7 +2050,7 @@ def reverse_complement(sequence):
     return sequence.translate(ttable)[::-1]
 
 def _test():
-    """Run the Bio.Seq module's doctests."""
+    """Run the Bio.Seq module's doctests (PRIVATE)."""
     print "Runing doctests..."
     import doctest
     doctest.testmod()
