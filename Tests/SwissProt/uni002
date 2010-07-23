@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uniprot xmlns="http://uniprot.org/uniprot"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://uniprot.org/uniprot http://www.uniprot.org/support/docs/uniprot.xsd">
+<entry version="21" modified="2009-07-07" dataset="Swiss-Prot" created="2009-06-16">
+  <accession>Q91G55</accession>
+  <name>043L_IIV6</name>
+  <protein>
+    <recommendedName>
+      <fullName>Uncharacterized protein 043L</fullName>
+    </recommendedName>
+  </protein>
+  <gene>
+    <name type="ORF">IIV6-043L</name>
+  </gene>
+  <organism key="1">
+    <name type="scientific">Invertebrate iridescent virus 6</name>
+    <name type="common">IIV-6</name>
+    <name type="synonym">Chilo iridescent virus</name>
+    <dbReference type="NCBI Taxonomy" key="2" id="176652"/>
+    <lineage>
+      <taxon>Viruses</taxon>
+      <taxon>dsDNA viruses, no RNA stage</taxon>
+      <taxon>Iridoviridae</taxon>
+      <taxon>Iridovirus</taxon>
+    </lineage>
+  </organism>
+  <organismHost key="3">
+    <name type="scientific">Acheta domesticus</name>
+    <name type="common">House cricket</name>
+    <dbReference type="NCBI Taxonomy" key="4" id="6997"/>
+  </organismHost>
+  <organismHost key="5">
+    <name type="scientific">Chilo suppressalis</name>
+    <name type="common">striped riceborer</name>
+    <dbReference type="NCBI Taxonomy" key="6" id="168631"/>
+  </organismHost>
+  <organismHost key="7">
+    <name type="scientific">Gryllus bimaculatus</name>
+    <name type="common">Two-spotted cricket</name>
+    <dbReference type="NCBI Taxonomy" key="8" id="6999"/>
+  </organismHost>
+  <organismHost key="9">
+    <name type="scientific">Gryllus campestris</name>
+    <dbReference type="NCBI Taxonomy" key="10" id="58607"/>
+  </organismHost>
+  <organismHost key="11">
+    <name type="scientific">Spodoptera frugiperda</name>
+    <name type="common">Fall armyworm</name>
+    <dbReference type="NCBI Taxonomy" key="12" id="7108"/>
+  </organismHost>
+  <reference key="13">
+    <citation volume="286" type="journal article" name="Virology" last="196" first="182" date="2001">
+      <title>Analysis of the first complete DNA sequence of an invertebrate iridovirus: coding strategy of the genome of Chilo iridescent virus.</title>
+      <authorList>
+        <person name="Jakob N.J."/>
+        <person name="Mueller K."/>
+        <person name="Bahr U."/>
+        <person name="Darai G."/>
+      </authorList>
+      <dbReference type="DOI" key="14" id="10.1006/viro.2001.0963"/>
+      <dbReference type="MEDLINE" key="15" id="21342589"/>
+      <dbReference type="PubMed" key="16" id="11448171"/>
+    </citation>
+    <scope>NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA]</scope>
+  </reference>
+  <reference key="17">
+    <citation volume="4" type="journal article" name="Virol. J." last="11" first="11" date="2007">
+      <title>Comparative genomic analysis of the family Iridoviridae: re-annotating and defining the core set of iridovirus genes.</title>
+      <authorList>
+        <person name="Eaton H.E."/>
+        <person name="Metcalf J."/>
+        <person name="Penny E."/>
+        <person name="Tcherepanov V."/>
+        <person name="Upton C."/>
+        <person name="Brunetti C.R."/>
+      </authorList>
+      <dbReference type="DOI" key="18" id="10.1186/1743-422X-4-11"/>
+      <dbReference type="PubMed" key="19" id="17239238"/>
+    </citation>
+    <scope>GENOME REANNOTATION</scope>
+  </reference>
+  <dbReference type="EMBL" key="20" id="AF303741">
+    <property value="AAK81977.1" type="protein sequence ID"/>
+    <property value="Genomic_DNA" type="molecule type"/>
+  </dbReference>
+  <dbReference type="RefSeq" key="21" id="NP_149506.1"/>
+  <dbReference type="GeneId" key="22" id="1733003"/>
+  <proteinExistence type="Predicted"/>
+  <keyword id="KW-0181">Complete proteome</keyword>
+  <keyword id="KW-1019">Virus reference strain</keyword>
+  <feature type="chain" id="PRO_0000377969" description="Uncharacterized protein 043L">
+    <location>
+      <begin position="1"/>
+      <end position="116"/>
+    </location>
+  </feature>
+  <sequence version="1" modified="2001-12-01" mass="13673" length="116" checksum="4A29B35FB716523C">MDLINNKLNIEIQKFCLDLEKKYNINYNNLIDLWFNKESTERLIKCEVNLENKIKFNQKYNSDTIKIMNILFLICSDGVFGKIENNDVKPLTDEDEKICVKFGYKIMIGCLNDIPI</sequence>
+</entry>
+<entry version="30" modified="2009-07-07" dataset="Swiss-Prot" created="2009-06-16">
+  <accession>O55717</accession>
+  <name>094L_IIV6</name>
+  <protein>
+    <recommendedName>
+      <fullName>Uncharacterized protein 094L</fullName>
+    </recommendedName>
+  </protein>
+  <gene>
+    <name type="ORF">IIV6-094L</name>
+  </gene>
+  <organism key="1">
+    <name type="scientific">Invertebrate iridescent virus 6</name>
+    <name type="common">IIV-6</name>
+    <name type="synonym">Chilo iridescent virus</name>
+    <dbReference type="NCBI Taxonomy" key="2" id="176652"/>
+    <lineage>
+      <taxon>Viruses</taxon>
+      <taxon>dsDNA viruses, no RNA stage</taxon>
+      <taxon>Iridoviridae</taxon>
+      <taxon>Iridovirus</taxon>
+    </lineage>
+  </organism>
+  <organismHost key="3">
+    <name type="scientific">Acheta domesticus</name>
+    <name type="common">House cricket</name>
+    <dbReference type="NCBI Taxonomy" key="4" id="6997"/>
+  </organismHost>
+  <organismHost key="5">
+    <name type="scientific">Chilo suppressalis</name>
+    <name type="common">striped riceborer</name>
+    <dbReference type="NCBI Taxonomy" key="6" id="168631"/>
+  </organismHost>
+  <organismHost key="7">
+    <name type="scientific">Gryllus bimaculatus</name>
+    <name type="common">Two-spotted cricket</name>
+    <dbReference type="NCBI Taxonomy" key="8" id="6999"/>
+  </organismHost>
+  <organismHost key="9">
+    <name type="scientific">Gryllus campestris</name>
+    <dbReference type="NCBI Taxonomy" key="10" id="58607"/>
+  </organismHost>
+  <organismHost key="11">
+    <name type="scientific">Spodoptera frugiperda</name>
+    <name type="common">Fall armyworm</name>
+    <dbReference type="NCBI Taxonomy" key="12" id="7108"/>
+  </organismHost>
+  <reference key="13">
+    <citation volume="286" type="journal article" name="Virology" last="196" first="182" date="2001">
+      <title>Analysis of the first complete DNA sequence of an invertebrate iridovirus: coding strategy of the genome of Chilo iridescent virus.</title>
+      <authorList>
+        <person name="Jakob N.J."/>
+        <person name="Mueller K."/>
+        <person name="Bahr U."/>
+        <person name="Darai G."/>
+      </authorList>
+      <dbReference type="DOI" key="14" id="10.1006/viro.2001.0963"/>
+      <dbReference type="MEDLINE" key="15" id="21342589"/>
+      <dbReference type="PubMed" key="16" id="11448171"/>
+    </citation>
+    <scope>NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA]</scope>
+  </reference>
+  <reference key="17">
+    <citation volume="4" type="journal article" name="Virol. J." last="11" first="11" date="2007">
+      <title>Comparative genomic analysis of the family Iridoviridae: re-annotating and defining the core set of iridovirus genes.</title>
+      <authorList>
+        <person name="Eaton H.E."/>
+        <person name="Metcalf J."/>
+        <person name="Penny E."/>
+        <person name="Tcherepanov V."/>
+        <person name="Upton C."/>
+        <person name="Brunetti C.R."/>
+      </authorList>
+      <dbReference type="DOI" key="18" id="10.1186/1743-422X-4-11"/>
+      <dbReference type="PubMed" key="19" id="17239238"/>
+    </citation>
+    <scope>GENOME REANNOTATION</scope>
+  </reference>
+  <dbReference type="EMBL" key="20" id="AF303741">
+    <property value="AAB94428.1" type="protein sequence ID"/>
+    <property value="Genomic_DNA" type="molecule type"/>
+  </dbReference>
+  <dbReference type="PIR" key="21" id="T03054">
+    <property value="T03054" type="entry name"/>
+  </dbReference>
+  <dbReference type="RefSeq" key="22" id="NP_149557.1"/>
+  <dbReference type="GeneId" key="23" id="1733205"/>
+  <proteinExistence type="Predicted"/>
+  <keyword id="KW-0181">Complete proteome</keyword>
+  <keyword id="KW-1019">Virus reference strain</keyword>
+  <feature type="chain" id="PRO_0000377984" description="Uncharacterized protein 094L">
+    <location>
+      <begin position="1"/>
+      <end position="118"/>
+    </location>
+  </feature>
+  <sequence version="1" modified="1998-06-01" mass="13689" length="118" checksum="426CF04C1B8387E7">MSGGSLINSIAINTRIKKIKKSLLQNYTKEKTDMIKILYLLSTPKIVIKNNGCFEKHYTICNFISKNQQNLNENNLNFHLNGYDKYEYLSNNDKNACTCINMDFIVERLMISSEHMTV</sequence>
+</entry>
+<entry version="5" modified="2009-11-03" dataset="Swiss-Prot" created="2009-05-05">
+  <accession>P0C9J6</accession>
+  <name>11011_ASFP4</name>
+  <protein>
+    <recommendedName>
+      <fullName>Protein MGF 360-1L</fullName>
+    </recommendedName>
+  </protein>
+  <gene>
+    <name type="ordered locus">Pret-022</name>
+  </gene>
+  <organism key="1">
+    <name type="scientific">African swine fever virus (isolate Tick/South Africa/Pretoriuskop Pr4/1996)</name>
+    <name type="common">ASFV</name>
+    <dbReference type="NCBI Taxonomy" key="2" id="561443"/>
+    <lineage>
+      <taxon>Viruses</taxon>
+      <taxon>dsDNA viruses, no RNA stage</taxon>
+      <taxon>Asfarviridae</taxon>
+      <taxon>Asfivirus</taxon>
+    </lineage>
+  </organism>
+  <organismHost key="3">
+    <name type="scientific">Ornithodoros</name>
+    <name type="common">relapsing fever ticks</name>
+    <dbReference type="NCBI Taxonomy" key="4" id="6937"/>
+  </organismHost>
+  <organismHost key="5">
+    <name type="scientific">Phacochoerus aethiopicus</name>
+    <name type="common">Warthog</name>
+    <dbReference type="NCBI Taxonomy" key="6" id="85517"/>
+  </organismHost>
+  <organismHost key="7">
+    <name type="scientific">Phacochoerus africanus</name>
+    <name type="common">Warthog</name>
+    <dbReference type="NCBI Taxonomy" key="8" id="41426"/>
+  </organismHost>
+  <organismHost key="9">
+    <name type="scientific">Potamochoerus larvatus</name>
+    <name type="common">Bushpig</name>
+    <dbReference type="NCBI Taxonomy" key="10" id="273792"/>
+  </organismHost>
+  <organismHost key="11">
+    <name type="scientific">Sus scrofa</name>
+    <name type="common">Pig</name>
+    <dbReference type="NCBI Taxonomy" key="12" id="9823"/>
+  </organismHost>
+  <reference key="13">
+    <citation type="submission" db="EMBL/GenBank/DDBJ databases" date="2003-03">
+      <title>African swine fever virus genomes.</title>
+      <authorList>
+        <person name="Kutish G.F."/>
+        <person name="Rock D.L."/>
+      </authorList>
+    </citation>
+    <scope>NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA]</scope>
+  </reference>
+  <comment type="function">
+    <text status="By similarity">Plays a role in virus cell tropism, and may be required for efficient virus replication in macrophages.</text>
+  </comment>
+  <comment type="subcellular location">
+    <subcellularLocation>
+      <location>Host membrane; Multi-pass membrane protein</location>
+    </subcellularLocation>
+  </comment>
+  <comment type="similarity">
+    <text>Belongs to the asfivirus MGF 110 family.</text>
+  </comment>
+  <dbReference type="EMBL" key="14" id="AY261363">
+    <property value="NOT_ANNOTATED_CDS" type="status"/>
+    <property value="Genomic_DNA" type="molecule type"/>
+  </dbReference>
+  <dbReference type="Go" key="15" id="GO:0016021">
+    <property value="C:integral to membrane" type="term"/>
+    <property value="IEA:UniProtKB-SubCell" type="evidence"/>
+  </dbReference>
+  <dbReference type="InterPro" key="16" id="IPR004848">
+    <property value="V110_vir" type="entry name"/>
+  </dbReference>
+  <dbReference type="Pfam" key="17" id="PF01639">
+    <property value="v110" type="entry name"/>
+    <property value="2" type="match status"/>
+  </dbReference>
+  <proteinExistence type="Inferred from homology"/>
+  <keyword id="KW-0325">Glycoprotein</keyword>
+  <keyword id="KW-1043">Host membrane</keyword>
+  <keyword id="KW-0472">Membrane</keyword>
+  <keyword id="KW-0812">Transmembrane</keyword>
+  <feature type="chain" id="PRO_0000373218" description="Protein MGF 360-1L">
+    <location>
+      <begin position="1"/>
+      <end position="302"/>
+    </location>
+  </feature>
+  <feature type="transmembrane region" status="Potential">
+    <location>
+      <begin position="26"/>
+      <end position="46"/>
+    </location>
+  </feature>
+  <feature type="transmembrane region" status="Potential">
+    <location>
+      <begin position="154"/>
+      <end position="174"/>
+    </location>
+  </feature>
+  <feature type="transmembrane region" status="Potential">
+    <location>
+      <begin position="183"/>
+      <end position="203"/>
+    </location>
+  </feature>
+  <feature type="glycosylation site" status="Potential" description="N-linked (GlcNAc...); by host">
+    <location>
+      <position position="97"/>
+    </location>
+  </feature>
+  <feature type="glycosylation site" status="Potential" description="N-linked (GlcNAc...); by host">
+    <location>
+      <position position="294"/>
+    </location>
+  </feature>
+  <sequence version="1" modified="2009-05-05" mass="35742" length="302" checksum="7121F87EC41D9595">MYFYKKYLHFFFVVSKFKFFLKMQVPFGCNMKGLGVLLGLFSLILAQQLPDLPRTQHPPKRELKYWCTYVPQCDFCWDCQNGICKNKIMETQLIDSNHSIVNCRVSRNSETQTCFYEISSKMPNHFSMSCSHPTPYIGNEIFMKKVGGDYMTLLTLKQYCLYFIISIAFAGCFVYAVRKNLRLNTTIKLLTLLSILVYLAQPVLNRPLSIFYTKQFLPRTYTPPTRELDYWCTYAKHCDFCWECRKGICKNKVLDDMPPFIIQNDYINKCSIARYFDRCMYFIEPKIPYIHYMNCSLPTYYG</sequence>
+</entry>
+</uniprot>

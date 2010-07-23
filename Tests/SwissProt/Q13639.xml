@@ -1,0 +1,623 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<uniprot xmlns="http://uniprot.org/uniprot" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://uniprot.org/uniprot http://www.uniprot.org/support/docs/uniprot.xsd">
+<entry dataset="Swiss-Prot" created="1997-11-01" modified="2010-01-19" version="95">
+<accession>Q13639</accession>
+<accession>Q96KH9</accession>
+<accession>Q96KI0</accession>
+<accession>Q9H199</accession>
+<accession>Q9NY73</accession>
+<accession>Q9UBM6</accession>
+<accession>Q9UBT4</accession>
+<accession>Q9UE22</accession>
+<accession>Q9UE23</accession>
+<accession>Q9UQR6</accession>
+<name>5HT4R_HUMAN</name>
+<protein>
+<recommendedName>
+<fullName>5-hydroxytryptamine receptor 4</fullName>
+<shortName>5-HT-4</shortName>
+<shortName>5-HT4</shortName>
+</recommendedName>
+<alternativeName>
+<fullName>Serotonin receptor 4</fullName>
+</alternativeName>
+</protein>
+<gene>
+<name type="primary">HTR4</name>
+</gene>
+<organism key="1">
+<name type="scientific">Homo sapiens</name>
+<name type="common">Human</name>
+<dbReference type="NCBI Taxonomy" id="9606" key="2" />
+<lineage>
+<taxon>Eukaryota</taxon>
+<taxon>Metazoa</taxon>
+<taxon>Chordata</taxon>
+<taxon>Craniata</taxon>
+<taxon>Vertebrata</taxon>
+<taxon>Euteleostomi</taxon>
+<taxon>Mammalia</taxon>
+<taxon>Eutheria</taxon>
+<taxon>Euarchontoglires</taxon>
+<taxon>Primates</taxon>
+<taxon>Haplorrhini</taxon>
+<taxon>Catarrhini</taxon>
+<taxon>Hominidae</taxon>
+<taxon>Homo</taxon>
+</lineage>
+</organism>
+<reference key="3">
+<citation type="journal article" date="1998" name="J. Neurochem." volume="70" first="2252" last="2261">
+<title>Cloning, expression, and pharmacology of four human 5-hydroxytryptamine 4 receptor isoforms produced by alternative splicing in the carboxyl terminus.</title>
+<authorList>
+<person name="Blondel O." />
+<person name="Gastineau M." />
+<person name="Dahmoune Y." />
+<person name="Langlois M." />
+<person name="Fischmeister R." />
+</authorList>
+<dbReference type="MEDLINE" id="98264328" key="4" />
+<dbReference type="PubMed" id="9603189" key="5" />
+</citation>
+<scope>NUCLEOTIDE SEQUENCE [MRNA] (ISOFORMS 5-HT4(A); 5-HT4(B); 5-HT4(C) AND 5-HT4(D))</scope>
+<source>
+<tissue>Gut</tissue>
+</source>
+</reference>
+<reference key="6">
+<citation type="submission" date="1997-06" db="EMBL/GenBank/DDBJ databases">
+<title>Cloning and expression of 5-HT4 receptor species and splice variants.</title>
+<authorList>
+<person name="Van den Wyngaert I." />
+<person name="Gommeren W." />
+<person name="Jurzak M." />
+<person name="Verhasselt P." />
+<person name="Gordon R." />
+<person name="Leysen J." />
+<person name="Luyten W." />
+<person name="Bender E." />
+</authorList>
+</citation>
+<scope>NUCLEOTIDE SEQUENCE [MRNA] (ISOFORMS 5-HT4(A) AND 5-HT4(B))</scope>
+<source>
+<tissue>Brain</tissue>
+</source>
+</reference>
+<reference key="7">
+<citation type="journal article" date="1997" name="NeuroReport" volume="8" first="3189" last="3195">
+<title>Cloning and expression of human 5-HT4S receptors. Effect of receptor density on their coupling to adenylyl cyclase.</title>
+<authorList>
+<person name="Claeysen S." />
+<person name="Faye P." />
+<person name="Sebben M." />
+<person name="Lemaire S." />
+<person name="Bockaert J." />
+<person name="Dumuis A." />
+</authorList>
+<dbReference type="MEDLINE" id="98012006" key="8" />
+<dbReference type="PubMed" id="9351641" key="9" />
+</citation>
+<scope>NUCLEOTIDE SEQUENCE [MRNA] (ISOFORM 5-HT4(A))</scope>
+<source>
+<tissue>Heart</tissue>
+</source>
+</reference>
+<reference key="10">
+<citation type="journal article" date="1999" name="Mol. Pharmacol." volume="55" first="910" last="920">
+<title>Novel brain-specific 5-HT4 receptor splice variants show marked constitutive activity: role of the C-terminal intracellular domain.</title>
+<authorList>
+<person name="Claeysen S." />
+<person name="Sebben M." />
+<person name="Becamel C." />
+<person name="Bockaert J." />
+<person name="Dumuis A." />
+</authorList>
+<dbReference type="MEDLINE" id="99238795" key="11" />
+<dbReference type="PubMed" id="10220570" key="12" />
+</citation>
+<scope>NUCLEOTIDE SEQUENCE [MRNA] (ISOFORM 5-HT4(E))</scope>
+<source>
+<tissue>Brain</tissue>
+</source>
+</reference>
+<reference key="13">
+<citation type="submission" date="2000-09" db="EMBL/GenBank/DDBJ databases">
+<title>Cloning and characterization of multiple human 5-HT4 receptor variants including a novel variant that lacks the alternatively spliced C-terminal exon.</title>
+<authorList>
+<person name="Vilaro M.T." />
+<person name="Domenech T." />
+<person name="Palacios J.M." />
+<person name="Mengod G." />
+</authorList>
+</citation>
+<scope>NUCLEOTIDE SEQUENCE [MRNA] (ISOFORMS 5-HT4(A); 5-HT4(E) AND 5-HT4(G))</scope>
+<source>
+<tissue>Hippocampus</tissue>
+</source>
+</reference>
+<reference key="14">
+<citation type="journal article" date="2004" name="Genome Res." volume="14" first="2121" last="2127">
+<title>The status, quality, and expansion of the NIH full-length cDNA project: the Mammalian Gene Collection (MGC).</title>
+<authorList>
+<consortium name="The MGC Project Team" />
+</authorList>
+<dbReference type="PubMed" id="15489334" key="15" />
+<dbReference type="DOI" id="10.1101/gr.2596504" key="16" />
+</citation>
+<scope>NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA] (ISOFORM 5-HT4(B))</scope>
+</reference>
+<reference key="17">
+<citation type="journal article" date="2000" name="J. Neurochem." volume="74" first="478" last="489">
+<title>Structure of the human serotonin 5-HT4 receptor gene and cloning of a novel 5-HT4 splice variant.</title>
+<authorList>
+<person name="Bender E." />
+<person name="Pindon A." />
+<person name="van Oers I." />
+<person name="Zhang Y.B." />
+<person name="Gommeren W." />
+<person name="Verhasselt P." />
+<person name="Jurzak M." />
+<person name="Leysen J." />
+<person name="Luyten W." />
+</authorList>
+<dbReference type="MEDLINE" id="20110418" key="18" />
+<dbReference type="PubMed" id="10646498" key="19" />
+<dbReference type="DOI" id="10.1046/j.1471-4159.2000.740478.x" key="20" />
+</citation>
+<scope>NUCLEOTIDE SEQUENCE [GENOMIC DNA] OF 10-388 (ISOFORM 5-HT4(F))</scope>
+</reference>
+<reference key="21">
+<citation type="journal article" date="1995" name="FEBS Lett." volume="370" first="215" last="221">
+<title>Expression of serotonin receptor mRNAs in blood vessels.</title>
+<authorList>
+<person name="Ullmer C." />
+<person name="Schmuck K." />
+<person name="Kalkman H.O." />
+<person name="Luebbert H." />
+</authorList>
+<dbReference type="MEDLINE" id="95385798" key="22" />
+<dbReference type="PubMed" id="7656980" key="23" />
+<dbReference type="DOI" id="10.1016/0014-5793(95)00828-W" key="24" />
+</citation>
+<scope>NUCLEOTIDE SEQUENCE [MRNA] OF 112-255</scope>
+<source>
+<tissue>Brain</tissue>
+</source>
+</reference>
+<comment type="function">
+<text>This is one of the several different receptors for 5-hydroxytryptamine (serotonin), a biogenic hormone that functions as a neurotransmitter, a hormone, and a mitogen. The activity of this receptor is mediated by G proteins that stimulate adenylate cyclase.</text>
+</comment>
+<comment type="subunit">
+<text>Isoform 5-HT4(A) interacts with MAGI2, MPP3, SLC9A3R1 and SNX27 isoforms 1 and 2. Isoform 5-HT4(E) interacts with INADL, NOS1 and SEC23A. Isoform 5-HT4(A) forms a complex including SLC9A3R1 and EZR (By similarity).</text>
+</comment>
+<comment type="subcellular location">
+<subcellularLocation>
+<location>Cell membrane</location>
+<topology>Multi-pass membrane protein</topology>
+</subcellularLocation>
+<subcellularLocation>
+<location>Endosome</location>
+</subcellularLocation>
+<text>Interaction with SNX27 mediates recruitment to early endosomes, while interaction with SLC9A3R1 and EZR might target the protein to specialized subcellular regions, such as microvilli (By similarity).</text>
+</comment>
+<comment type="alternative products">
+<event type="alternative splicing" />
+<isoform>
+<id>Q13639-1</id>
+<name>5-HT4(B)</name>
+<sequence type="displayed" />
+</isoform>
+<isoform>
+<id>Q13639-2</id>
+<name>5-HT4(A)</name>
+<name>5-HT4S</name>
+<sequence type="described" ref="VSP_001849" />
+</isoform>
+<isoform>
+<id>Q13639-3</id>
+<name>5-HT4(C)</name>
+<sequence type="described" ref="VSP_001848" />
+</isoform>
+<isoform>
+<id>Q13639-4</id>
+<name>5-HT4(D)</name>
+<sequence type="described" ref="VSP_001847" />
+</isoform>
+<isoform>
+<id>Q13639-5</id>
+<name>5-HT4(E)</name>
+<name>H5-HT4(g)</name>
+<sequence type="described" ref="VSP_001846" />
+</isoform>
+<isoform>
+<id>Q13639-6</id>
+<name>5-HT4(F)</name>
+<sequence type="described" ref="VSP_001845" />
+</isoform>
+<isoform>
+<id>Q13639-7</id>
+<name>5-HT4(G)</name>
+<sequence type="described" ref="VSP_001850" />
+</isoform>
+<text>Additional isoforms seem to exist.</text>
+</comment>
+<comment type="tissue specificity">
+<text>Isoform 5-HT4(A) is expressed in ileum, brain, and atrium, but not in the ventricle.</text>
+</comment>
+<comment type="similarity">
+<text>Belongs to the G-protein coupled receptor 1 family.</text>
+</comment>
+<dbReference type="EMBL" id="Y08756" key="25">
+<property type="protein sequence ID" value="CAA70002.1" />
+<property type="molecule type" value="mRNA" />
+</dbReference>
+<dbReference type="EMBL" id="Y12505" key="26">
+<property type="protein sequence ID" value="CAA73107.1" />
+<property type="molecule type" value="mRNA" />
+</dbReference>
+<dbReference type="EMBL" id="Y12506" key="27">
+<property type="protein sequence ID" value="CAA73108.1" />
+<property type="molecule type" value="mRNA" />
+</dbReference>
+<dbReference type="EMBL" id="Y12507" key="28">
+<property type="protein sequence ID" value="CAA73109.1" />
+<property type="molecule type" value="mRNA" />
+</dbReference>
+<dbReference type="EMBL" id="Y10437" key="29">
+<property type="protein sequence ID" value="CAA71462.1" />
+<property type="molecule type" value="mRNA" />
+</dbReference>
+<dbReference type="EMBL" id="Y13584" key="30">
+<property type="protein sequence ID" value="CAA73911.1" />
+<property type="molecule type" value="mRNA" />
+</dbReference>
+<dbReference type="EMBL" id="Y09586" key="31">
+<property type="protein sequence ID" value="CAA70774.1" />
+<property type="molecule type" value="mRNA" />
+</dbReference>
+<dbReference type="EMBL" id="AJ011371" key="32">
+<property type="protein sequence ID" value="CAA09600.1" />
+<property type="molecule type" value="mRNA" />
+</dbReference>
+<dbReference type="EMBL" id="AJ278979" key="33">
+<property type="protein sequence ID" value="CAC22248.1" />
+<property type="molecule type" value="mRNA" />
+</dbReference>
+<dbReference type="EMBL" id="AJ278981" key="34">
+<property type="protein sequence ID" value="CAC22250.1" />
+<property type="molecule type" value="mRNA" />
+</dbReference>
+<dbReference type="EMBL" id="AJ278982" key="35">
+<property type="protein sequence ID" value="CAC22251.1" />
+<property type="molecule type" value="mRNA" />
+</dbReference>
+<dbReference type="EMBL" id="BC074755" key="36">
+<property type="protein sequence ID" value="AAH74755.1" />
+<property type="molecule type" value="mRNA" />
+</dbReference>
+<dbReference type="EMBL" id="AJ243213" key="37">
+<property type="protein sequence ID" value="CAB71316.1" />
+<property type="molecule type" value="Genomic_DNA" />
+</dbReference>
+<dbReference type="EMBL" id="Z48150" key="38">
+<property type="protein sequence ID" value="CAA88167.1" />
+<property type="molecule type" value="mRNA" />
+</dbReference>
+<dbReference type="IPI" id="IPI00014378" key="39" />
+<dbReference type="IPI" id="IPI00064638" key="40" />
+<dbReference type="IPI" id="IPI00186777" key="41" />
+<dbReference type="IPI" id="IPI00216427" key="42" />
+<dbReference type="IPI" id="IPI00216428" key="43" />
+<dbReference type="IPI" id="IPI00216429" key="44" />
+<dbReference type="IPI" id="IPI00291659" key="45" />
+<dbReference type="PIR" id="S66493" key="46">
+<property type="entry name" value="S66493" />
+</dbReference>
+<dbReference type="RefSeq" id="NP_000861.1" key="47" />
+<dbReference type="RefSeq" id="NP_001035259.1" key="48" />
+<dbReference type="RefSeq" id="NP_001035261.1" key="49" />
+<dbReference type="RefSeq" id="NP_001035264.1" key="50" />
+<dbReference type="RefSeq" id="NP_955525.1" key="51" />
+<dbReference type="UniGene" id="Hs.483773" key="52" />
+<dbReference type="SMR" id="Q13639" key="53">
+<property type="residue range" value="18-329" />
+</dbReference>
+<dbReference type="STRING" id="Q13639" key="54" />
+<dbReference type="Ensembl" id="ENST00000377888" key="55">
+<property type="protein sequence ID" value="ENSP00000367120" />
+<property type="gene designation" value="ENSG00000164270" />
+<property type="organism name" value="Homo sapiens" />
+</dbReference>
+<dbReference type="GeneID" id="3360" key="56" />
+<dbReference type="KEGG" id="hsa:3360" key="57" />
+<dbReference type="UCSC" id="uc003lpj.1" key="58">
+<property type="organism name" value="human" />
+</dbReference>
+<dbReference type="UCSC" id="uc003lpk.1" key="59">
+<property type="organism name" value="human" />
+</dbReference>
+<dbReference type="UCSC" id="uc003lpl.1" key="60">
+<property type="organism name" value="human" />
+</dbReference>
+<dbReference type="UCSC" id="uc003lpn.1" key="61">
+<property type="organism name" value="human" />
+</dbReference>
+<dbReference type="UCSC" id="uc003lpo.1" key="62">
+<property type="organism name" value="human" />
+</dbReference>
+<dbReference type="CTD" id="3360" key="63" />
+<dbReference type="GeneCards" id="GC05M147810" key="64" />
+<dbReference type="H-InvDB" id="HIX0005295" key="65" />
+<dbReference type="H-InvDB" id="HIX0078165" key="66" />
+<dbReference type="HGNC" id="HGNC:5299" key="67">
+<property type="gene designation" value="HTR4" />
+</dbReference>
+<dbReference type="MIM" id="602164" key="68">
+<property type="type" value="gene" />
+</dbReference>
+<dbReference type="PharmGKB" id="PA29557" key="69" />
+<dbReference type="eggNOG" id="prNOG13487" key="70" />
+<dbReference type="HOVERGEN" id="Q13639" key="71" />
+<dbReference type="Reactome" id="REACT_14797" key="72">
+<property type="pathway name" value="Signaling by GPCR" />
+</dbReference>
+<dbReference type="DrugBank" id="DB00604" key="73">
+<property type="generic name" value="Cisapride" />
+</dbReference>
+<dbReference type="DrugBank" id="DB00953" key="74">
+<property type="generic name" value="Rizatriptan" />
+</dbReference>
+<dbReference type="DrugBank" id="DB01079" key="75">
+<property type="generic name" value="Tegaserod" />
+</dbReference>
+<dbReference type="DrugBank" id="DB00315" key="76">
+<property type="generic name" value="Zolmitriptan" />
+</dbReference>
+<dbReference type="NextBio" id="13288" key="77" />
+<dbReference type="ArrayExpress" id="Q13639" key="78" />
+<dbReference type="Bgee" id="Q13639" key="79" />
+<dbReference type="Genevestigator" id="Q13639" key="80" />
+<dbReference type="GermOnline" id="ENSG00000164270" key="81">
+<property type="organism name" value="Homo sapiens" />
+</dbReference>
+<dbReference type="GO" id="GO:0005768" key="82">
+<property type="term" value="C:endosome" />
+<property type="evidence" value="IEA:UniProtKB-SubCell" />
+</dbReference>
+<dbReference type="GO" id="GO:0005887" key="83">
+<property type="term" value="C:integral to plasma membrane" />
+<property type="evidence" value="TAS:ProtInc" />
+</dbReference>
+<dbReference type="GO" id="GO:0005624" key="84">
+<property type="term" value="C:membrane fraction" />
+<property type="evidence" value="IDA:MGI" />
+</dbReference>
+<dbReference type="GO" id="GO:0004993" key="85">
+<property type="term" value="F:serotonin receptor activity" />
+<property type="evidence" value="IDA:MGI" />
+</dbReference>
+<dbReference type="GO" id="GO:0007187" key="86">
+<property type="term" value="P:G-protein signaling, coupled to cyclic nucl..." />
+<property type="evidence" value="TAS:ProtInc" />
+</dbReference>
+<dbReference type="InterPro" id="IPR001520" key="87">
+<property type="entry name" value="5HT4_rcpt" />
+</dbReference>
+<dbReference type="InterPro" id="IPR000276" key="88">
+<property type="entry name" value="7TM_GPCR_Rhodpsn" />
+</dbReference>
+<dbReference type="InterPro" id="IPR017452" key="89">
+<property type="entry name" value="GPCR_Rhodpsn_supfam" />
+</dbReference>
+<dbReference type="Pfam" id="PF00001" key="90">
+<property type="entry name" value="7tm_1" />
+<property type="match status" value="1" />
+</dbReference>
+<dbReference type="PRINTS" id="PR01059" key="91">
+<property type="entry name" value="5HT4RECEPTR" />
+</dbReference>
+<dbReference type="PRINTS" id="PR00237" key="92">
+<property type="entry name" value="GPCRRHODOPSN" />
+</dbReference>
+<dbReference type="PROSITE" id="PS00237" key="93">
+<property type="entry name" value="G_PROTEIN_RECEP_F1_1" />
+<property type="match status" value="1" />
+</dbReference>
+<dbReference type="PROSITE" id="PS50262" key="94">
+<property type="entry name" value="G_PROTEIN_RECEP_F1_2" />
+<property type="match status" value="1" />
+</dbReference>
+<proteinExistence type="Evidence at transcript level" />
+<keyword id="KW-0025">Alternative splicing</keyword>
+<keyword id="KW-1003">Cell membrane</keyword>
+<keyword id="KW-0181">Complete proteome</keyword>
+<keyword id="KW-1015">Disulfide bond</keyword>
+<keyword id="KW-0967">Endosome</keyword>
+<keyword id="KW-0297">G-protein coupled receptor</keyword>
+<keyword id="KW-0325">Glycoprotein</keyword>
+<keyword id="KW-0449">Lipoprotein</keyword>
+<keyword id="KW-0472">Membrane</keyword>
+<keyword id="KW-0564">Palmitate</keyword>
+<keyword id="KW-0621">Polymorphism</keyword>
+<keyword id="KW-0675">Receptor</keyword>
+<keyword id="KW-0807">Transducer</keyword>
+<keyword id="KW-0812">Transmembrane</keyword>
+<feature type="chain" description="5-hydroxytryptamine receptor 4" id="PRO_0000068965">
+<location>
+<begin position="1" />
+<end position="388" />
+</location>
+</feature>
+<feature type="topological domain" description="Extracellular" status="by similarity">
+<location>
+<begin position="1" />
+<end position="19" />
+</location>
+</feature>
+<feature type="transmembrane region" description="1" status="by similarity">
+<location>
+<begin position="20" />
+<end position="40" />
+</location>
+</feature>
+<feature type="topological domain" description="Cytoplasmic" status="by similarity">
+<location>
+<begin position="41" />
+<end position="58" />
+</location>
+</feature>
+<feature type="transmembrane region" description="2" status="by similarity">
+<location>
+<begin position="59" />
+<end position="79" />
+</location>
+</feature>
+<feature type="topological domain" description="Extracellular" status="by similarity">
+<location>
+<begin position="80" />
+<end position="93" />
+</location>
+</feature>
+<feature type="transmembrane region" description="3" status="by similarity">
+<location>
+<begin position="94" />
+<end position="116" />
+</location>
+</feature>
+<feature type="topological domain" description="Cytoplasmic" status="by similarity">
+<location>
+<begin position="117" />
+<end position="137" />
+</location>
+</feature>
+<feature type="transmembrane region" description="4" status="by similarity">
+<location>
+<begin position="138" />
+<end position="158" />
+</location>
+</feature>
+<feature type="topological domain" description="Extracellular" status="by similarity">
+<location>
+<begin position="159" />
+<end position="192" />
+</location>
+</feature>
+<feature type="transmembrane region" description="5" status="by similarity">
+<location>
+<begin position="193" />
+<end position="213" />
+</location>
+</feature>
+<feature type="topological domain" description="Cytoplasmic" status="by similarity">
+<location>
+<begin position="214" />
+<end position="260" />
+</location>
+</feature>
+<feature type="transmembrane region" description="6" status="by similarity">
+<location>
+<begin position="261" />
+<end position="281" />
+</location>
+</feature>
+<feature type="topological domain" description="Extracellular" status="by similarity">
+<location>
+<begin position="282" />
+<end position="294" />
+</location>
+</feature>
+<feature type="transmembrane region" description="7" status="by similarity">
+<location>
+<begin position="295" />
+<end position="315" />
+</location>
+</feature>
+<feature type="topological domain" description="Cytoplasmic" status="by similarity">
+<location>
+<begin position="316" />
+<end position="388" />
+</location>
+</feature>
+<feature type="lipid moiety-binding region" description="S-palmitoyl cysteine" status="by similarity">
+<location>
+<position position="329" />
+</location>
+</feature>
+<feature type="glycosylation site" description="N-linked (GlcNAc...)" status="potential">
+<location>
+<position position="7" />
+</location>
+</feature>
+<feature type="disulfide bond" status="by similarity">
+<location>
+<begin position="93" />
+<end position="184" />
+</location>
+</feature>
+<feature type="splice variant" description="In isoform 5-HT4(F)." id="VSP_001845">
+<original>L</original>
+<variation>LERSLNQGLGQDFHA</variation>
+<location>
+<position position="169" />
+</location>
+</feature>
+<feature type="splice variant" description="In isoform 5-HT4(D)." id="VSP_001847">
+<original>RDAVECGGQWESQCHPPATSPLVAAQPSDT</original>
+<variation>SSGTETDRRNFGIRKRRLTKPS</variation>
+<location>
+<begin position="359" />
+<end position="388" />
+</location>
+</feature>
+<feature type="splice variant" description="In isoform 5-HT4(E)." id="VSP_001846">
+<original>RDAVECGGQWESQCHPPATSPLVAAQPSDT</original>
+<variation>SGCSPVSSFLLLFCNRPVPV</variation>
+<location>
+<begin position="359" />
+<end position="388" />
+</location>
+</feature>
+<feature type="splice variant" description="In isoform 5-HT4(A)." id="VSP_001849">
+<original>DAVECGGQWESQCHPPATSPLVAAQPSDT</original>
+<variation>YTVLHRGHHQELEKLPIHNDPESLESCF</variation>
+<location>
+<begin position="360" />
+<end position="388" />
+</location>
+</feature>
+<feature type="splice variant" description="In isoform 5-HT4(C)." id="VSP_001848">
+<original>DAVECGGQWESQCHPPATSPLVAAQPSDT</original>
+<variation>F</variation>
+<location>
+<begin position="360" />
+<end position="388" />
+</location>
+</feature>
+<feature type="splice variant" description="In isoform 5-HT4(G)." id="VSP_001850">
+<location>
+<begin position="360" />
+<end position="388" />
+</location>
+</feature>
+<feature type="sequence variant" description="In dbSNP:rs34826744." id="VAR_049364">
+<original>C</original>
+<variation>Y</variation>
+<location>
+<position position="372" />
+</location>
+</feature>
+<sequence length="388" mass="43761" checksum="7FCFEC60E7BDF560" modified="2001-01-11" version="2">
+MDKLDANVSSEEGFGSVEKVVLLTFLSTVILMAILGNLLVMVAVCWDRQLRKIKTNYFIV
+SLAFADLLVSVLVMPFGAIELVQDIWIYGEVFCLVRTSLDVLLTTASIFHLCCISLDRYY
+AICCQPLVYRNKMTPLRIALMLGGCWVIPTFISFLPIMQGWNNIGIIDLIEKRKFNQNSN
+STYCVFMVNKPYAITCSVVAFYIPFLLMVLAYYRIYVTAKEHAHQIQMLQRAGASSESRP
+QSADQHSTHRMRTETKAAKTLCIIMGCFCLCWAPFFVTNIVDPFIDYTVPGQVWTAFLWL
+GYINSGLNPFLYAFLNKSFRRAFLIILCCDDERYRRPSILGQTVPCSTTTINGSTHVLRD
+AVECGGQWESQCHPPATSPLVAAQPSDT
+</sequence>
+</entry>
+<copyright>
+Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+Distributed under the Creative Commons Attribution-NoDerivs License
+</copyright>
+</uniprot>

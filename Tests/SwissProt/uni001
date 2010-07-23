@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uniprot xmlns="http://uniprot.org/uniprot"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://uniprot.org/uniprot http://www.uniprot.org/support/docs/uniprot.xsd">
+<entry version="21" modified="2009-07-07" dataset="Swiss-Prot" created="2009-06-16">
+  <accession>Q91G55</accession>
+  <name>043L_IIV6</name>
+  <protein>
+    <recommendedName>
+      <fullName>Uncharacterized protein 043L</fullName>
+    </recommendedName>
+  </protein>
+  <gene>
+    <name type="ORF">IIV6-043L</name>
+  </gene>
+  <organism key="1">
+    <name type="scientific">Invertebrate iridescent virus 6</name>
+    <name type="common">IIV-6</name>
+    <name type="synonym">Chilo iridescent virus</name>
+    <dbReference type="NCBI Taxonomy" key="2" id="176652"/>
+    <lineage>
+      <taxon>Viruses</taxon>
+      <taxon>dsDNA viruses, no RNA stage</taxon>
+      <taxon>Iridoviridae</taxon>
+      <taxon>Iridovirus</taxon>
+    </lineage>
+  </organism>
+  <organismHost key="3">
+    <name type="scientific">Acheta domesticus</name>
+    <name type="common">House cricket</name>
+    <dbReference type="NCBI Taxonomy" key="4" id="6997"/>
+  </organismHost>
+  <organismHost key="5">
+    <name type="scientific">Chilo suppressalis</name>
+    <name type="common">striped riceborer</name>
+    <dbReference type="NCBI Taxonomy" key="6" id="168631"/>
+  </organismHost>
+  <organismHost key="7">
+    <name type="scientific">Gryllus bimaculatus</name>
+    <name type="common">Two-spotted cricket</name>
+    <dbReference type="NCBI Taxonomy" key="8" id="6999"/>
+  </organismHost>
+  <organismHost key="9">
+    <name type="scientific">Gryllus campestris</name>
+    <dbReference type="NCBI Taxonomy" key="10" id="58607"/>
+  </organismHost>
+  <organismHost key="11">
+    <name type="scientific">Spodoptera frugiperda</name>
+    <name type="common">Fall armyworm</name>
+    <dbReference type="NCBI Taxonomy" key="12" id="7108"/>
+  </organismHost>
+  <reference key="13">
+    <citation volume="286" type="journal article" name="Virology" last="196" first="182" date="2001">
+      <title>Analysis of the first complete DNA sequence of an invertebrate iridovirus: coding strategy of the genome of Chilo iridescent virus.</title>
+      <authorList>
+        <person name="Jakob N.J."/>
+        <person name="Mueller K."/>
+        <person name="Bahr U."/>
+        <person name="Darai G."/>
+      </authorList>
+      <dbReference type="DOI" key="14" id="10.1006/viro.2001.0963"/>
+      <dbReference type="MEDLINE" key="15" id="21342589"/>
+      <dbReference type="PubMed" key="16" id="11448171"/>
+    </citation>
+    <scope>NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA]</scope>
+  </reference>
+  <reference key="17">
+    <citation volume="4" type="journal article" name="Virol. J." last="11" first="11" date="2007">
+      <title>Comparative genomic analysis of the family Iridoviridae: re-annotating and defining the core set of iridovirus genes.</title>
+      <authorList>
+        <person name="Eaton H.E."/>
+        <person name="Metcalf J."/>
+        <person name="Penny E."/>
+        <person name="Tcherepanov V."/>
+        <person name="Upton C."/>
+        <person name="Brunetti C.R."/>
+      </authorList>
+      <dbReference type="DOI" key="18" id="10.1186/1743-422X-4-11"/>
+      <dbReference type="PubMed" key="19" id="17239238"/>
+    </citation>
+    <scope>GENOME REANNOTATION</scope>
+  </reference>
+  <dbReference type="EMBL" key="20" id="AF303741">
+    <property value="AAK81977.1" type="protein sequence ID"/>
+    <property value="Genomic_DNA" type="molecule type"/>
+  </dbReference>
+  <dbReference type="RefSeq" key="21" id="NP_149506.1"/>
+  <dbReference type="GeneId" key="22" id="1733003"/>
+  <proteinExistence type="Predicted"/>
+  <keyword id="KW-0181">Complete proteome</keyword>
+  <keyword id="KW-1019">Virus reference strain</keyword>
+  <feature type="chain" id="PRO_0000377969" description="Uncharacterized protein 043L">
+    <location>
+      <begin position="1"/>
+      <end position="116"/>
+    </location>
+  </feature>
+  <sequence version="1" modified="2001-12-01" mass="13673" length="116" checksum="4A29B35FB716523C">MDLINNKLNIEIQKFCLDLEKKYNINYNNLIDLWFNKESTERLIKCEVNLENKIKFNQKYNSDTIKIMNILFLICSDGVFGKIENNDVKPLTDEDEKICVKFGYKIMIGCLNDIPI</sequence>
+</entry>
+</uniprot>

@@ -1354,6 +1354,110 @@ Testing reading swiss format file Registry/EDD_RAT.dat
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
+Testing reading uniprot format file SwissProt/uni001
+ ID = 'Q91G55', Name='043L_IIV6',
+ Seq='MDLINNKLNIEIQKFCLDLEKKYNINYNNLIDLWFNKEST...CLNDIPI', length=116
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'embl' format
+ Failed: Need a Nucleotide alphabet
+ Checking can write/read as 'fastq' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q91G55).
+ Checking can write/read as 'fastq-illumina' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q91G55).
+ Checking can write/read as 'fastq-solexa' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q91G55).
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'phd' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q91G55).
+ Checking can write/read as 'qual' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q91G55).
+ Checking can write/read as 'sff' format
+ Failed: Missing SFF flow information
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+Testing reading uniprot format file SwissProt/uni002
+ ID = 'Q91G55', Name='043L_IIV6',
+ Seq='MDLINNKLNIEIQKFCLDLEKKYNINYNNLIDLWFNKEST...CLNDIPI', length=116
+ ID = 'O55717', Name='094L_IIV6',
+ Seq='MSGGSLINSIAINTRIKKIKKSLLQNYTKEKTDMIKILYL...SSEHMTV', length=118
+ ID = 'P0C9J6', Name='11011_ASFP4',
+ Seq='MYFYKKYLHFFFVVSKFKFFLKMQVPFGCNMKGLGVLLGL...SLPTYYG', length=302
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'embl' format
+ Failed: Need a Nucleotide alphabet
+ Checking can write/read as 'fastq' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).
+ Checking can write/read as 'fastq-illumina' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).
+ Checking can write/read as 'fastq-solexa' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'phd' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).
+ Checking can write/read as 'qual' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).
+ Checking can write/read as 'sff' format
+ Failed: Missing SFF flow information
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Sequences must all be the same length
+Testing reading uniprot format file SwissProt/Q13639.xml
+ ID = 'Q13639', Name='5HT4R_HUMAN',
+ Seq='MDKLDANVSSEEGFGSVEKVVLLTFLSTVILMAILGNLLV...AAQPSDT', length=388
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'embl' format
+ Failed: Need a Nucleotide alphabet
+ Checking can write/read as 'fastq' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
+ Checking can write/read as 'fastq-illumina' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
+ Checking can write/read as 'fastq-solexa' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'phd' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
+ Checking can write/read as 'qual' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
+ Checking can write/read as 'sff' format
+ Failed: Missing SFF flow information
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+Testing reading swiss format file SwissProt/Q13639.txt
+ ID = 'Q13639', Name='5HT4R_HUMAN',
+ Seq='MDKLDANVSSEEGFGSVEKVVLLTFLSTVILMAILGNLLV...AAQPSDT', length=388
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'embl' format
+ Failed: Need a Nucleotide alphabet
+ Checking can write/read as 'fastq' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
+ Checking can write/read as 'fastq-illumina' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
+ Checking can write/read as 'fastq-solexa' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'phd' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
+ Checking can write/read as 'qual' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
+ Checking can write/read as 'sff' format
+ Failed: Missing SFF flow information
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/noref.gb
  ID = 'NM_006141.1', Name='NM_006141',
  Seq='GGCAAGATGGCGCCGGTGGGGGTGGAGAAGAAGCTGCTGC...AAAAAAA', length=1622

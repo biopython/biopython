@@ -1,0 +1,243 @@
+ID   5HT4R_HUMAN             Reviewed;         388 AA.
+AC   Q13639; Q96KH9; Q96KI0; Q9H199; Q9NY73; Q9UBM6; Q9UBT4; Q9UE22;
+AC   Q9UE23; Q9UQR6;
+DT   01-NOV-1997, integrated into UniProtKB/Swiss-Prot.
+DT   11-JAN-2001, sequence version 2.
+DT   19-JAN-2010, entry version 95.
+DE   RecName: Full=5-hydroxytryptamine receptor 4;
+DE            Short=5-HT-4;
+DE            Short=5-HT4;
+DE   AltName: Full=Serotonin receptor 4;
+GN   Name=HTR4;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ISOFORMS 5-HT4(A); 5-HT4(B); 5-HT4(C) AND
+RP   5-HT4(D)).
+RC   TISSUE=Gut;
+RX   MEDLINE=98264328; PubMed=9603189;
+RA   Blondel O., Gastineau M., Dahmoune Y., Langlois M., Fischmeister R.;
+RT   "Cloning, expression, and pharmacology of four human 5-
+RT   hydroxytryptamine 4 receptor isoforms produced by alternative splicing
+RT   in the carboxyl terminus.";
+RL   J. Neurochem. 70:2252-2261(1998).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ISOFORMS 5-HT4(A) AND 5-HT4(B)).
+RC   TISSUE=Brain;
+RA   Van den Wyngaert I., Gommeren W., Jurzak M., Verhasselt P., Gordon R.,
+RA   Leysen J., Luyten W., Bender E.;
+RT   "Cloning and expression of 5-HT4 receptor species and splice
+RT   variants.";
+RL   Submitted (JUN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ISOFORM 5-HT4(A)).
+RC   TISSUE=Heart;
+RX   MEDLINE=98012006; PubMed=9351641;
+RA   Claeysen S., Faye P., Sebben M., Lemaire S., Bockaert J., Dumuis A.;
+RT   "Cloning and expression of human 5-HT4S receptors. Effect of receptor
+RT   density on their coupling to adenylyl cyclase.";
+RL   NeuroReport 8:3189-3195(1997).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ISOFORM 5-HT4(E)).
+RC   TISSUE=Brain;
+RX   MEDLINE=99238795; PubMed=10220570;
+RA   Claeysen S., Sebben M., Becamel C., Bockaert J., Dumuis A.;
+RT   "Novel brain-specific 5-HT4 receptor splice variants show marked
+RT   constitutive activity: role of the C-terminal intracellular domain.";
+RL   Mol. Pharmacol. 55:910-920(1999).
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ISOFORMS 5-HT4(A); 5-HT4(E) AND 5-HT4(G)).
+RC   TISSUE=Hippocampus;
+RA   Vilaro M.T., Domenech T., Palacios J.M., Mengod G.;
+RT   "Cloning and characterization of multiple human 5-HT4 receptor
+RT   variants including a novel variant that lacks the alternatively
+RT   spliced C-terminal exon.";
+RL   Submitted (SEP-2000) to the EMBL/GenBank/DDBJ databases.
+RN   [6]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA] (ISOFORM 5-HT4(B)).
+RX   PubMed=15489334; DOI=10.1101/gr.2596504;
+RG   The MGC Project Team;
+RT   "The status, quality, and expansion of the NIH full-length cDNA
+RT   project: the Mammalian Gene Collection (MGC).";
+RL   Genome Res. 14:2121-2127(2004).
+RN   [7]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] OF 10-388 (ISOFORM 5-HT4(F)).
+RX   MEDLINE=20110418; PubMed=10646498;
+RX   DOI=10.1046/j.1471-4159.2000.740478.x;
+RA   Bender E., Pindon A., van Oers I., Zhang Y.B., Gommeren W.,
+RA   Verhasselt P., Jurzak M., Leysen J., Luyten W.;
+RT   "Structure of the human serotonin 5-HT4 receptor gene and cloning of a
+RT   novel 5-HT4 splice variant.";
+RL   J. Neurochem. 74:478-489(2000).
+RN   [8]
+RP   NUCLEOTIDE SEQUENCE [MRNA] OF 112-255.
+RC   TISSUE=Brain;
+RX   MEDLINE=95385798; PubMed=7656980; DOI=10.1016/0014-5793(95)00828-W;
+RA   Ullmer C., Schmuck K., Kalkman H.O., Luebbert H.;
+RT   "Expression of serotonin receptor mRNAs in blood vessels.";
+RL   FEBS Lett. 370:215-221(1995).
+CC   -!- FUNCTION: This is one of the several different receptors for 5-
+CC       hydroxytryptamine (serotonin), a biogenic hormone that functions
+CC       as a neurotransmitter, a hormone, and a mitogen. The activity of
+CC       this receptor is mediated by G proteins that stimulate adenylate
+CC       cyclase.
+CC   -!- SUBUNIT: Isoform 5-HT4(A) interacts with MAGI2, MPP3, SLC9A3R1 and
+CC       SNX27 isoforms 1 and 2. Isoform 5-HT4(E) interacts with INADL,
+CC       NOS1 and SEC23A. Isoform 5-HT4(A) forms a complex including
+CC       SLC9A3R1 and EZR (By similarity).
+CC   -!- SUBCELLULAR LOCATION: Cell membrane; Multi-pass membrane protein.
+CC       Endosome. Note=Interaction with SNX27 mediates recruitment to
+CC       early endosomes, while interaction with SLC9A3R1 and EZR might
+CC       target the protein to specialized subcellular regions, such as
+CC       microvilli (By similarity).
+CC   -!- ALTERNATIVE PRODUCTS:
+CC       Event=Alternative splicing; Named isoforms=7;
+CC         Comment=Additional isoforms seem to exist;
+CC       Name=5-HT4(B);
+CC         IsoId=Q13639-1; Sequence=Displayed;
+CC       Name=5-HT4(A); Synonyms=5-HT4S;
+CC         IsoId=Q13639-2; Sequence=VSP_001849;
+CC       Name=5-HT4(C);
+CC         IsoId=Q13639-3; Sequence=VSP_001848;
+CC       Name=5-HT4(D);
+CC         IsoId=Q13639-4; Sequence=VSP_001847;
+CC       Name=5-HT4(E); Synonyms=H5-HT4(g);
+CC         IsoId=Q13639-5; Sequence=VSP_001846;
+CC       Name=5-HT4(F);
+CC         IsoId=Q13639-6; Sequence=VSP_001845;
+CC       Name=5-HT4(G);
+CC         IsoId=Q13639-7; Sequence=VSP_001850;
+CC   -!- TISSUE SPECIFICITY: Isoform 5-HT4(A) is expressed in ileum, brain,
+CC       and atrium, but not in the ventricle.
+CC   -!- SIMILARITY: Belongs to the G-protein coupled receptor 1 family.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; Y08756; CAA70002.1; -; mRNA.
+DR   EMBL; Y12505; CAA73107.1; -; mRNA.
+DR   EMBL; Y12506; CAA73108.1; -; mRNA.
+DR   EMBL; Y12507; CAA73109.1; -; mRNA.
+DR   EMBL; Y10437; CAA71462.1; -; mRNA.
+DR   EMBL; Y13584; CAA73911.1; -; mRNA.
+DR   EMBL; Y09586; CAA70774.1; -; mRNA.
+DR   EMBL; AJ011371; CAA09600.1; -; mRNA.
+DR   EMBL; AJ278979; CAC22248.1; -; mRNA.
+DR   EMBL; AJ278981; CAC22250.1; -; mRNA.
+DR   EMBL; AJ278982; CAC22251.1; -; mRNA.
+DR   EMBL; BC074755; AAH74755.1; -; mRNA.
+DR   EMBL; AJ243213; CAB71316.1; -; Genomic_DNA.
+DR   EMBL; Z48150; CAA88167.1; -; mRNA.
+DR   IPI; IPI00014378; -.
+DR   IPI; IPI00064638; -.
+DR   IPI; IPI00186777; -.
+DR   IPI; IPI00216427; -.
+DR   IPI; IPI00216428; -.
+DR   IPI; IPI00216429; -.
+DR   IPI; IPI00291659; -.
+DR   PIR; S66493; S66493.
+DR   RefSeq; NP_000861.1; -.
+DR   RefSeq; NP_001035259.1; -.
+DR   RefSeq; NP_001035261.1; -.
+DR   RefSeq; NP_001035264.1; -.
+DR   RefSeq; NP_955525.1; -.
+DR   UniGene; Hs.483773; -.
+DR   SMR; Q13639; 18-329.
+DR   STRING; Q13639; -.
+DR   Ensembl; ENST00000377888; ENSP00000367120; ENSG00000164270; Homo sapiens.
+DR   GeneID; 3360; -.
+DR   KEGG; hsa:3360; -.
+DR   UCSC; uc003lpj.1; human.
+DR   UCSC; uc003lpk.1; human.
+DR   UCSC; uc003lpl.1; human.
+DR   UCSC; uc003lpn.1; human.
+DR   UCSC; uc003lpo.1; human.
+DR   CTD; 3360; -.
+DR   GeneCards; GC05M147810; -.
+DR   H-InvDB; HIX0005295; -.
+DR   H-InvDB; HIX0078165; -.
+DR   HGNC; HGNC:5299; HTR4.
+DR   MIM; 602164; gene.
+DR   PharmGKB; PA29557; -.
+DR   eggNOG; prNOG13487; -.
+DR   HOVERGEN; Q13639; -.
+DR   Reactome; REACT_14797; Signaling by GPCR.
+DR   DrugBank; DB00604; Cisapride.
+DR   DrugBank; DB00953; Rizatriptan.
+DR   DrugBank; DB01079; Tegaserod.
+DR   DrugBank; DB00315; Zolmitriptan.
+DR   NextBio; 13288; -.
+DR   ArrayExpress; Q13639; -.
+DR   Bgee; Q13639; -.
+DR   Genevestigator; Q13639; -.
+DR   GermOnline; ENSG00000164270; Homo sapiens.
+DR   GO; GO:0005768; C:endosome; IEA:UniProtKB-SubCell.
+DR   GO; GO:0005887; C:integral to plasma membrane; TAS:ProtInc.
+DR   GO; GO:0005624; C:membrane fraction; IDA:MGI.
+DR   GO; GO:0004993; F:serotonin receptor activity; IDA:MGI.
+DR   GO; GO:0007187; P:G-protein signaling, coupled to cyclic nucl...; TAS:ProtInc.
+DR   InterPro; IPR001520; 5HT4_rcpt.
+DR   InterPro; IPR000276; 7TM_GPCR_Rhodpsn.
+DR   InterPro; IPR017452; GPCR_Rhodpsn_supfam.
+DR   Pfam; PF00001; 7tm_1; 1.
+DR   PRINTS; PR01059; 5HT4RECEPTR.
+DR   PRINTS; PR00237; GPCRRHODOPSN.
+DR   PROSITE; PS00237; G_PROTEIN_RECEP_F1_1; 1.
+DR   PROSITE; PS50262; G_PROTEIN_RECEP_F1_2; 1.
+PE   2: Evidence at transcript level;
+KW   Alternative splicing; Cell membrane; Complete proteome;
+KW   Disulfide bond; Endosome; G-protein coupled receptor; Glycoprotein;
+KW   Lipoprotein; Membrane; Palmitate; Polymorphism; Receptor; Transducer;
+KW   Transmembrane.
+FT   CHAIN         1    388       5-hydroxytryptamine receptor 4.
+FT                                /FTId=PRO_0000068965.
+FT   TOPO_DOM      1     19       Extracellular (By similarity).
+FT   TRANSMEM     20     40       1 (By similarity).
+FT   TOPO_DOM     41     58       Cytoplasmic (By similarity).
+FT   TRANSMEM     59     79       2 (By similarity).
+FT   TOPO_DOM     80     93       Extracellular (By similarity).
+FT   TRANSMEM     94    116       3 (By similarity).
+FT   TOPO_DOM    117    137       Cytoplasmic (By similarity).
+FT   TRANSMEM    138    158       4 (By similarity).
+FT   TOPO_DOM    159    192       Extracellular (By similarity).
+FT   TRANSMEM    193    213       5 (By similarity).
+FT   TOPO_DOM    214    260       Cytoplasmic (By similarity).
+FT   TRANSMEM    261    281       6 (By similarity).
+FT   TOPO_DOM    282    294       Extracellular (By similarity).
+FT   TRANSMEM    295    315       7 (By similarity).
+FT   TOPO_DOM    316    388       Cytoplasmic (By similarity).
+FT   LIPID       329    329       S-palmitoyl cysteine (By similarity).
+FT   CARBOHYD      7      7       N-linked (GlcNAc...) (Potential).
+FT   DISULFID     93    184       By similarity.
+FT   VAR_SEQ     169    169       L -> LERSLNQGLGQDFHA (in isoform 5-
+FT                                HT4(F)).
+FT                                /FTId=VSP_001845.
+FT   VAR_SEQ     359    388       RDAVECGGQWESQCHPPATSPLVAAQPSDT -> SSGTETD
+FT                                RRNFGIRKRRLTKPS (in isoform 5-HT4(D)).
+FT                                /FTId=VSP_001847.
+FT   VAR_SEQ     359    388       RDAVECGGQWESQCHPPATSPLVAAQPSDT -> SGCSPVS
+FT                                SFLLLFCNRPVPV (in isoform 5-HT4(E)).
+FT                                /FTId=VSP_001846.
+FT   VAR_SEQ     360    388       DAVECGGQWESQCHPPATSPLVAAQPSDT -> YTVLHRGH
+FT                                HQELEKLPIHNDPESLESCF (in isoform 5-
+FT                                HT4(A)).
+FT                                /FTId=VSP_001849.
+FT   VAR_SEQ     360    388       DAVECGGQWESQCHPPATSPLVAAQPSDT -> F (in
+FT                                isoform 5-HT4(C)).
+FT                                /FTId=VSP_001848.
+FT   VAR_SEQ     360    388       Missing (in isoform 5-HT4(G)).
+FT                                /FTId=VSP_001850.
+FT   VARIANT     372    372       C -> Y (in dbSNP:rs34826744).
+FT                                /FTId=VAR_049364.
+SQ   SEQUENCE   388 AA;  43761 MW;  7FCFEC60E7BDF560 CRC64;
+     MDKLDANVSS EEGFGSVEKV VLLTFLSTVI LMAILGNLLV MVAVCWDRQL RKIKTNYFIV
+     SLAFADLLVS VLVMPFGAIE LVQDIWIYGE VFCLVRTSLD VLLTTASIFH LCCISLDRYY
+     AICCQPLVYR NKMTPLRIAL MLGGCWVIPT FISFLPIMQG WNNIGIIDLI EKRKFNQNSN
+     STYCVFMVNK PYAITCSVVA FYIPFLLMVL AYYRIYVTAK EHAHQIQMLQ RAGASSESRP
+     QSADQHSTHR MRTETKAAKT LCIIMGCFCL CWAPFFVTNI VDPFIDYTVP GQVWTAFLWL
+     GYINSGLNPF LYAFLNKSFR RAFLIILCCD DERYRRPSIL GQTVPCSTTT INGSTHVLRD
+     AVECGGQWES QCHPPATSPL VAAQPSDT
+//

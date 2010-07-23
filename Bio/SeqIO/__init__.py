@@ -309,7 +309,7 @@ import SffIO
 import SwissIO
 import TabIO
 import QualityIO #FastQ and qual files
-
+import UniprotIO
 
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl or EMBOSS where possible.
@@ -341,6 +341,7 @@ _FormatToIterator = {"fasta" : FastaIO.FastaIterator,
                      "sff": SffIO.SffIterator,
                      #Not sure about this in the long run:
                      "sff-trim": SffIO._SffTrimIterator,
+                     "uniprot": UniprotIO.UniprotIterator,
                      }
 
 _FormatToWriter = {"fasta" : FastaIO.FastaWriter,
