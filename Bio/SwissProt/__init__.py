@@ -231,8 +231,8 @@ def _read(handle):
             record.organism = " ".join(record.organism)
             record.organelle   = record.organelle.rstrip()
             for reference in record.references:
-                reference.authors = " ".join(reference.authors)
-                reference.title = " ".join(reference.title)
+                reference.authors = " ".join(reference.authors).rstrip(";")
+                reference.title = " ".join(reference.title).rstrip(";")
                 if reference.title.startswith('"') and reference.title.endswith('"'):
                     reference.title = reference.title[1:-1] #remove quotes
                 reference.location = " ".join(reference.location)
