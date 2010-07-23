@@ -233,6 +233,8 @@ def _read(handle):
             for reference in record.references:
                 reference.authors = " ".join(reference.authors)
                 reference.title = " ".join(reference.title)
+                if reference.title.startswith('"') and reference.title.endswith('"'):
+                    reference.title = reference.title[1:-1] #remove quotes
                 reference.location = " ".join(reference.location)
             record.sequence = "".join(_sequence_lines)
             return record
