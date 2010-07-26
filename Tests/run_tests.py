@@ -71,7 +71,7 @@ import unittest
 import doctest
 import distutils.util
 
-
+system_lang = os.environ.get('LANG', 'C') #Cache this
 
 def main(argv):
     # insert our paths in sys.path:
@@ -266,6 +266,10 @@ class TestRunner(unittest.TextTestRunner):
         from Bio import MissingExternalDependencyError
         result = self._makeResult()
         output = cStringIO.StringIO()
+        # Restore the language and thus default encoding (in case a prior
+        # test changed this, e.g. to help with detecting command line tools)
+        global system_lang
+        os.environ['LANG']=system_lang
         # Run the actual test inside a try/except to catch import errors.
         # Have to do a nested try because try/except/except/finally requires
         # python 2.5+
