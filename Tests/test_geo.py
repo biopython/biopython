@@ -1,7 +1,7 @@
 """Tests the basic functionality of the GEO parsers.
 """
 
-import os
+import os, sys
 
 import Bio.Geo
 
@@ -17,7 +17,12 @@ testfiles.extend(['soft_ex_affy.txt',
                   'soft_ex_series.txt'])
 
 for file in testfiles:
-    fh = open(os.path.join("Geo", file))
+    if sys.version_info[0] >= 3:
+        #Python 3 problem: Can't use utf8 on Tests/Geo/soft_ex_*.txt
+        #due to micro (\xb5) and degrees (\xb0) symbols
+        fh = open(os.path.join("Geo", file), encoding="latin")
+    else:
+        fh = open(os.path.join("Geo", file))
     print "Testing Bio.Geo on " + file + "\n\n"
     records = Bio.Geo.parse(fh)
     for record in records:

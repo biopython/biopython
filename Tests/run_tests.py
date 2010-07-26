@@ -166,7 +166,12 @@ class ComparisonTestCase(unittest.TestCase):
         outputdir = os.path.join(TestRunner.testdir, "output")
         outputfile = os.path.join(outputdir, self.name)
         try:
-            expected = open(outputfile, 'r')
+            if sys.version_info[0] >= 3:
+                #Python 3 problem: Can't use utf8 on output/test_geo
+                #due to micro (\xb5) and degrees (\xb0) symbols
+                expected = open(outputfile, encoding="latin")
+            else:
+                expected = open(outputfile, 'rU')
         except IOError:
             self.fail("Warning: Can't open %s for test %s" % (outputfile, self.name))
 
