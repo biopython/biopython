@@ -42,7 +42,8 @@ def compare_reference(old_r, new_r):
     #TODO - assert old_r.comment == new_r.comment
     #Looking at the tables, I *think* the current schema does not
     #allow us to store a reference comment.  Must confirm this.
-    assert old_r.comment == new_r.comment or new_r.comment == ""
+    assert old_r.comment == new_r.comment or new_r.comment == "", \
+                          "%r vs %r" % (old_r.comment, new_r.comment)
 
     #TODO - assert old_r.consrtm == new_r.consrtm
     #Looking at the tables, I *think* the current schema does not
@@ -79,8 +80,7 @@ def compare_feature(old_f, new_f):
         "%s -> %s" % (old_f.ref_db, new_f.ref_db)
 
     #TODO - BioSQL does not store/retrieve feature's id (Bug 2526)   
-    #assert old_f.id == new_f.id
-    assert new_f.id == "<unknown id>"
+    assert old_f.id == new_f.id or new_f.id == "<unknown id>"
 
     #TODO - Work out how the location_qualifier_value table should
     #be used, given BioPerl seems to ignore it (Bug 2766)
