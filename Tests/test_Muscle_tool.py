@@ -15,6 +15,9 @@ from Bio import AlignIO
 
 #################################################################
 
+#Try to avoid problems when the OS is in another language
+os.environ['LANG'] = 'C'
+
 muscle_exe = None
 if sys.platform=="win32":
     try:

@@ -21,6 +21,9 @@ from Bio.SeqRecord import SeqRecord
 
 #################################################################
 
+#Try to avoid problems when the OS is in another language
+os.environ['LANG'] = 'C'
+
 exes_wanted = ["water", "needle", "seqret", "transeq", "seqmatchall",
                "embossversion"]
 exes = dict() #Dictionary mapping from names to exe locations

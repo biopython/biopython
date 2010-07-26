@@ -17,6 +17,9 @@ from Bio.Emboss.Applications import FSeqBootCommandline, FProtDistCommandline
 from Bio.Emboss.Applications import FProtParsCommandline, FConsenseCommandline
 from Bio.Emboss.Applications import FTreeDistCommandline, FDNAParsCommandline
 
+#Try to avoid problems when the OS is in another language
+os.environ['LANG'] = 'C'
+
 exes_wanted = ['fdnadist', 'fneighbor', 'fprotdist','fprotpars','fconsense',
                'fseqboot', 'ftreedist', 'fdnapars']
 exes = dict() #Dictionary mapping from names to exe locations

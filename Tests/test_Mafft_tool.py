@@ -16,6 +16,9 @@ import subprocess
 from Bio import MissingExternalDependencyError
 from Bio.Align.Applications import MafftCommandline
 
+#Try to avoid problems when the OS is in another language
+os.environ['LANG'] = 'C'
+
 mafft_exe = None
 if sys.platform=="win32":
     raise MissingExternalDependencyError("Testing with MAFFT not implemented on Windows yet")

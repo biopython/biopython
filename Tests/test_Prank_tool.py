@@ -16,6 +16,9 @@ from Bio import MissingExternalDependencyError
 from Bio.Align.Applications import PrankCommandline
 from Bio.Nexus.Nexus import NexusError
 
+#Try to avoid problems when the OS is in another language
+os.environ['LANG'] = 'C'
+
 prank_exe = None
 if sys.platform=="win32":
     try:
