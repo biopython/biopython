@@ -83,16 +83,9 @@ class MuscleApplication(unittest.TestCase):
         self.assertEqual(str(cmdline), muscle_exe \
                          + ' -in Fasta/f002 -out "Fasta/temp align out1.fa"')
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        child = subprocess.Popen(str(cmdline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
-        output, error = child.communicate()
-        self.assertEqual(child.returncode, 0)
+        output, error = cmdline()
         self.assertEqual(output, "")
         self.assertTrue("ERROR" not in error)
-        del child
 
     def test_Muscle_with_options(self):
         """Round-trip through app with a switch and valued option"""
@@ -107,16 +100,10 @@ class MuscleApplication(unittest.TestCase):
                          " -out Fasta/temp_align_out2.fa" + \
                          " -objscore sp -noanchors")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        child = subprocess.Popen(str(cmdline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
-        output, error = child.communicate()
-        self.assertEqual(child.returncode, 0)
+        output, error = cmdline()
         self.assertEqual(output, "")
         self.assertTrue("ERROR" not in error)
-        del child
+        self.assertTrue(error.strip().startswith("MUSCLE"), output)
 
     def test_Muscle_profile_simple(self):
         """Simple round-trip through app doing a profile alignment"""
@@ -129,16 +116,10 @@ class MuscleApplication(unittest.TestCase):
                          " -out Fasta/temp_align_out3.fa" + \
                          " -profile -in1 Fasta/fa01 -in2 Fasta/f001")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        child = subprocess.Popen(str(cmdline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
-        output, error = child.communicate()
-        self.assertEqual(child.returncode, 0)
+        output, error = cmdline()
         self.assertEqual(output, "")
         self.assertTrue("ERROR" not in error)
-        del child
+        self.assertTrue(error.strip().startswith("MUSCLE"), output)
 
     def test_Muscle_profile_with_options(self):
         """Profile alignment, and switch and valued options"""

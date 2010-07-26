@@ -78,16 +78,9 @@ class PrankApplication(unittest.TestCase):
         cmdline.set_parameter("d", self.infile1)
         self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        child = subprocess.Popen(str(cmdline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
-        return_code = child.wait()
-        self.assertEqual(return_code, 0)
-        self.assertTrue("Total time" in child.stdout.read())
-        self.assertEqual(child.stderr.read(), "")
-        del child
+        output, error = cmdline()
+        self.assertEqual(error, "")
+        self.assertTrue("Total time" in output)
 
     def test_Prank_simple_with_NEXUS_output(self):
         """Simple round-trip through app with infile, output in NEXUS
@@ -144,16 +137,9 @@ class PrankApplication(unittest.TestCase):
                          " -notree -dots -gaprate=0.321 -gapext=0.6 -kappa=3" + \
                          " -once -skipins -realbranches")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        child = subprocess.Popen(str(cmdline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
-        return_code = child.wait()
-        self.assertEqual(return_code, 0)
-        self.assertTrue("Total time" in child.stdout.read())
-        self.assertEqual(child.stderr.read(), "")
-        del child
+        stdout, stderr = cmdline()
+        self.assertTrue("Total time" in stdout, stdout)
+
 
 class PrankConversion(unittest.TestCase):
     def setUp(self):
@@ -175,17 +161,10 @@ class PrankConversion(unittest.TestCase):
                          + ' -f=%i' % prank_number \
                          + ' -convert')
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        child = subprocess.Popen(str(cmdline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
-        return_code = child.wait()
-        self.assertEqual(return_code, 0)
-        message = child.stdout.read().strip()
+        message, error = cmdline()
         self.assertTrue(("PRANK: converting '%s' to '%s'" % (self.input, filename)) \
-                     in message, message)
-        self.assertEqual(child.stderr.read(), "")
+                        in message, message)
+        self.assertEqual(error, "")
         self.assertTrue(os.path.isfile(filename))
         old = AlignIO.read(open(self.input), "fasta")
         #Hack...
@@ -198,7 +177,6 @@ class PrankConversion(unittest.TestCase):
             self.assertEqual(old_r.id, new_r.id)
             self.assertEqual(str(old_r.seq), str(new_r.seq))
         os.remove(filename)
-        del child
         
     def test_convert_to_fasta(self):
         """Convert FASTA to FASTA format."""

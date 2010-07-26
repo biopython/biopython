@@ -33,6 +33,11 @@ The BioSQL classes DBServer and BioSeqDatabase now act more like Python
 dictionaries, making it easier to count, delete, iterate over, or check for
 membership of namespaces and records.
 
+The command line tool application wrapper classes are now executable, so you
+can use them to call the tool (using the subprocess module internally) and
+capture the output and any error messages as strings (stdout and stderr).
+This avoids having to worry about the details of how best to use subprocess.
+
 We have also been working on updates to avoid code which has been deprecated
 in Python 2.7 or Python 3, an important step towards Python 3 support.
 
