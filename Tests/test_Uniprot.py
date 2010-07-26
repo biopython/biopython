@@ -66,9 +66,7 @@ class TestUniprot(unittest.TestCase):
         self.assertEqual(seq_record.annotations['sequence_version'], 1)
         self.assertEqual(seq_record.annotations['proteinExistence'], ['Predicted'])
 
-    def test_Q13639(self):
-	old = SeqIO.read("SwissProt/Q13639.txt", "swiss")
-        new = SeqIO.read("SwissProt/Q13639.xml", "uniprot")
+    def compare_txt_xml(self, old, new):
         self.assertEqual(old.id, new.id)
         self.assertEqual(old.name, new.name)
         self.assertEqual(len(old), len(new))
@@ -88,9 +86,49 @@ class TestUniprot(unittest.TestCase):
                     r2.comment = ""
                     if not r2.journal: r1.journal = ""
                     compare_reference(r1, r2)
+	    elif old.annotations[key] == new.annotations[key]:
+		pass
+	    elif key in ["date"]:
+		#TODO - Why is this a list vs str?
+		pass
+	    elif type(old.annotations[key]) != type(new.annotations[key]):
+		raise TypeError("%s gives %s vs %s" % \
+				 (key, old.annotations[key], new.annotations[key]))
+	    elif key in ["organism"]:
+		if old.annotations[key] == new.annotations[key]:
+		    pass
+		elif old.annotations[key].startswith(new.annotations[key]+" "):
+		    pass
+		else:
+		    raise ValueError(key)
+	    elif isinstance(old.annotations[key], list) \
+	    and sorted(old.annotations[key]) == sorted(new.annotations[key]):
+		pass
             else:
-                self.assertEqual(old.annotations[key], new.annotations[key])
+		raise ValueError("%s gives %s vs %s" % \
+				 (key, old.annotations[key], new.annotations[key]))
         #TODO - Parse features in plain text, and compare those
+
+    def test_Q13639(self):
+	"""Compare SwissProt text and uniprot XML versions of Q13639."""
+	old = SeqIO.read("SwissProt/Q13639.txt", "swiss")
+        new = SeqIO.read("SwissProt/Q13639.xml", "uniprot")
+	self.compare_txt_xml(old, new)
+    
+    def test_swiss4(self):
+	"""Compare SwissProt text and uniprot XML versions of 4 entries."""
+	old = list(SeqIO.parse("SwissProt/swiss4.txt", "swiss"))
+	new = list(SeqIO.parse("SwissProt/swiss4.xml", "uniprot"))
+	fasta = list(SeqIO.parse("SwissProt/swiss4.fasta", "fasta"))
+	ids = [x.strip() for x in open("SwissProt/swiss4.list")]
+	self.assertEqual(len(old), len(fasta))
+	self.assertEqual(len(old), len(ids))
+	self.assertEqual(len(old), len(new))
+	for txt, xml, fas, id in zip(old, new, fasta, ids):
+	    self.assertEqual(txt.id, id)
+	    self.assertTrue(txt.id in fas.id.split("|"))
+	    self.assertEqual(str(txt.seq), str(fas.seq))
+	    self.compare_txt_xml(txt, xml)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
