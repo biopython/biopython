@@ -407,6 +407,67 @@ class SwissDict(SequentialSeqFileDict):
                 key = line[3:].strip().split(";")[0].strip()
                 yield key, offset
 
+class UniprotDict(SequentialSeqFileDict):
+    """Indexed dictionary like access to a UniProt XML file."""
+    def _build(self):
+        handle = self._handle
+        marker_re = re.compile("^<entry ") #Assumes start of line!
+        self._marker_re = marker_re #saved for the get_raw method
+        while True:
+            offset = handle.tell()
+            line = handle.readline()
+            if not line : break #End of file
+            if marker_re.match(line):
+                #We expect the next line to be <accession>xxx</accession>
+                #but allow it to be later on within the <entry>
+                key = None
+                done = False
+                while True:
+                    line = handle.readline()
+                    if line.startswith("<accession>"):
+                        assert "</accession>" in line, line
+                        key = line[11:].split("<")[0]
+                        break
+                    elif "</entry>" in line \
+                    or marker_re.match(line) \
+                    or not line:
+                        break
+                if not key:
+                    raise ValueError("Did not find <accession> line")
+                yield key, offset
+    
+    def get_raw(self, key):
+        """Similar to the get method, but returns the record as a raw string."""
+        handle = self._handle
+        marker_re = self._marker_re
+        handle.seek(dict.__getitem__(self, key))
+        data = handle.readline()
+        while True:
+            line = handle.readline()
+            if "</entry>" in line:
+                data += line[:line.find("</entry>")+8]
+                break
+            if not line or marker_re.match(line):
+                #End of file, or start of next record => end of this record
+                break
+            data += line
+        return data
+
+    def __getitem__(self, key) :
+        #TODO - Can we handle this directly in the parser?
+        #This is a hack - use get_raw for <entry>...</entry> and wrap it with
+        #the apparently required XML header and footer.
+        data = """<?xml version='1.0' encoding='UTF-8'?>
+        <uniprot xmlns="http://uniprot.org/uniprot"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://uniprot.org/uniprot
+        http://www.uniprot.org/support/docs/uniprot.xsd">
+        %s
+        </uniprot>
+        """ % self.get_raw(key)
+        #TODO - For consistency, this function should not accept a string:
+        return SeqIO.UniprotIO.UniprotIterator(data).next()
+
 class IntelliGeneticsDict(SequentialSeqFileDict):
     """Indexed dictionary like access to a IntelliGenetics file."""
     def _build(self):
@@ -565,5 +626,6 @@ _FormatToIndexedDict = {"ace" : SequentialSeqFileDict,
                         "swiss" : SwissDict,
                         "tab" : TabDict,
                         "qual" : SequentialSeqFileDict,
+                        "uniprot" : UniprotDict,
                         }
 
