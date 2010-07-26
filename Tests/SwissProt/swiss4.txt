@@ -1,0 +1,860 @@
+ID   TPA_HUMAN               Reviewed;         562 AA.
+AC   P00750; A8K022; B2R8E8; Q15103; Q503B0; Q6PJA5; Q7Z7N2; Q86YK8;
+AC   Q9BU99; Q9BZW1;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   21-JUL-1986, sequence version 1.
+DT   15-JUN-2010, entry version 158.
+DE   RecName: Full=Tissue-type plasminogen activator;
+DE            Short=t-plasminogen activator;
+DE            Short=t-PA;
+DE            Short=tPA;
+DE            EC=3.4.21.68;
+DE   AltName: INN=Alteplase;
+DE   AltName: INN=Reteplase;
+DE   Contains:
+DE     RecName: Full=Tissue-type plasminogen activator chain A;
+DE   Contains:
+DE     RecName: Full=Tissue-type plasminogen activator chain B;
+DE   Flags: Precursor;
+GN   Name=PLAT;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ISOFORM 1).
+RC   TISSUE=Melanoma;
+RX   MEDLINE=83115262; PubMed=6337343; DOI=10.1038/301214a0;
+RA   Pennica D., Holmes W.E., Kohr W.J., Harkins R.N., Vehar G.A.,
+RA   Ward C.A., Bennett W.F., Yelverton E., Seeburg P.H., Heyneker H.L.,
+RA   Goeddel D.V., Collen D.;
+RT   "Cloning and expression of human tissue-type plasminogen activator
+RT   cDNA in E. coli.";
+RL   Nature 301:214-221(1983).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=84298137; PubMed=6089198; DOI=10.1073/pnas.81.17.5355;
+RA   Ny T., Elgh F., Lund B.;
+RT   "The structure of the human tissue-type plasminogen activator gene:
+RT   correlation of intron and exon structures to functional and structural
+RT   domains.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81:5355-5359(1984).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=86196143; PubMed=3009482;
+RA   Friezner Degen S.J., Rajput B., Reich E.;
+RT   "The human tissue plasminogen activator gene.";
+RL   J. Biol. Chem. 261:6972-6985(1986).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ISOFORM 1).
+RX   MEDLINE=86284200; PubMed=3090401;
+RA   Harris T.J., Patel T., Marston F.A., Little S., Emtage J.S.,
+RA   Opdenakker G., Volckaert G., Rombauts W., Billiau A., Somer P.;
+RT   "Cloning of cDNA coding for human tissue-type plasminogen activator
+RT   and its expression in Escherichia coli.";
+RL   Mol. Biol. Med. 3:279-292(1986).
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ISOFORM 1).
+RX   MEDLINE=88054470; PubMed=2824147;
+RA   Reddy V.B., Garramone A.J., Sasak H., Wei C.-M., Watkins P., Galli J.,
+RA   Hsiung N.;
+RT   "Expression of human uterine tissue-type plasminogen activator in
+RT   mouse cells using BPV vectors.";
+RL   DNA 6:461-472(1987).
+RN   [6]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ISOFORM 1).
+RC   TISSUE=Fetal lung;
+RX   MEDLINE=88262579; PubMed=3133640; DOI=10.1093/nar/16.12.5695;
+RA   Sasaki H., Saito Y., Hayashi M., Otsuka K., Niwa M.;
+RT   "Nucleotide sequence of the tissue-type plasminogen activator cDNA
+RT   from human fetal lung cells.";
+RL   Nucleic Acids Res. 16:5695-5695(1988).
+RN   [7]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ISOFORM 2).
+RC   TISSUE=Umbilical vein;
+RX   MEDLINE=90192129; PubMed=2107528; DOI=10.1093/nar/18.4.1086;
+RA   Siebert P.D., Fong K.;
+RT   "Variant tissue-type plasminogen activator (PLAT) cDNA obtained from
+RT   human endothelial cells.";
+RL   Nucleic Acids Res. 18:1086-1086(1990).
+RN   [8]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ISOFORM 4).
+RA   Dou D.;
+RT   "A brain-type plasminogen activator.";
+RL   Submitted (APR-2000) to the EMBL/GenBank/DDBJ databases.
+RN   [9]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ISOFORM 1).
+RA   Liu Y., Xu L., Zeng Y., He X.;
+RT   "cDNA of tissue plasminogen activator.";
+RL   Submitted (JAN-2003) to the EMBL/GenBank/DDBJ databases.
+RN   [10]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA] (ISOFORMS 1 AND 3).
+RC   TISSUE=Testis;
+RX   PubMed=14702039; DOI=10.1038/ng1285;
+RA   Ota T., Suzuki Y., Nishikawa T., Otsuki T., Sugiyama T., Irie R.,
+RA   Wakamatsu A., Hayashi K., Sato H., Nagai K., Kimura K., Makita H.,
+RA   Sekine M., Obayashi M., Nishi T., Shibahara T., Tanaka T., Ishii S.,
+RA   Yamamoto J., Saito K., Kawai Y., Isono Y., Nakamura Y., Nagahari K.,
+RA   Murakami K., Yasuda T., Iwayanagi T., Wagatsuma M., Shiratori A.,
+RA   Sudo H., Hosoiri T., Kaku Y., Kodaira H., Kondo H., Sugawara M.,
+RA   Takahashi M., Kanda K., Yokoi T., Furuya T., Kikkawa E., Omura Y.,
+RA   Abe K., Kamihara K., Katsuta N., Sato K., Tanikawa M., Yamazaki M.,
+RA   Ninomiya K., Ishibashi T., Yamashita H., Murakawa K., Fujimori K.,
+RA   Tanai H., Kimata M., Watanabe M., Hiraoka S., Chiba Y., Ishida S.,
+RA   Ono Y., Takiguchi S., Watanabe S., Yosida M., Hotuta T., Kusano J.,
+RA   Kanehori K., Takahashi-Fujii A., Hara H., Tanase T.-O., Nomura Y.,
+RA   Togiya S., Komai F., Hara R., Takeuchi K., Arita M., Imose N.,
+RA   Musashino K., Yuuki H., Oshima A., Sasaki N., Aotsuka S.,
+RA   Yoshikawa Y., Matsunawa H., Ichihara T., Shiohata N., Sano S.,
+RA   Moriya S., Momiyama H., Satoh N., Takami S., Terashima Y., Suzuki O.,
+RA   Nakagawa S., Senoh A., Mizoguchi H., Goto Y., Shimizu F., Wakebe H.,
+RA   Hishigaki H., Watanabe T., Sugiyama A., Takemoto M., Kawakami B.,
+RA   Yamazaki M., Watanabe K., Kumagai A., Itakura S., Fukuzumi Y.,
+RA   Fujimori Y., Komiyama M., Tashiro H., Tanigami A., Fujiwara T.,
+RA   Ono T., Yamada K., Fujii Y., Ozaki K., Hirao M., Ohmori Y.,
+RA   Kawabata A., Hikiji T., Kobatake N., Inagaki H., Ikema Y., Okamoto S.,
+RA   Okitani R., Kawakami T., Noguchi S., Itoh T., Shigeta K., Senba T.,
+RA   Matsumura K., Nakajima Y., Mizuno T., Morinaga M., Sasaki M.,
+RA   Togashi T., Oyama M., Hata H., Watanabe M., Komatsu T.,
+RA   Mizushima-Sugano J., Satoh T., Shirai Y., Takahashi Y., Nakagawa K.,
+RA   Okumura K., Nagase T., Nomura N., Kikuchi H., Masuho Y., Yamashita R.,
+RA   Nakai K., Yada T., Nakamura Y., Ohara O., Isogai T., Sugano S.;
+RT   "Complete sequencing and characterization of 21,243 full-length human
+RT   cDNAs.";
+RL   Nat. Genet. 36:40-45(2004).
+RN   [11]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA] (ISOFORM 1).
+RA   Kalnine N., Chen X., Rolfs A., Halleck A., Hines L., Eisenstein S.,
+RA   Koundinya M., Raphael J., Moreira D., Kelley T., LaBaer J., Lin Y.,
+RA   Phelan M., Farmer A.;
+RT   "Cloning of human full-length CDSs in BD Creator(TM) system donor
+RT   vector.";
+RL   Submitted (MAY-2003) to the EMBL/GenBank/DDBJ databases.
+RN   [12]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA], AND VARIANTS ASP-34; SER-136;
+RP   THR-146 AND TRP-164.
+RG   SeattleSNPs variation discovery resource;
+RL   Submitted (MAY-2003) to the EMBL/GenBank/DDBJ databases.
+RN   [13]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RA   Mural R.J., Istrail S., Sutton G.G., Florea L., Halpern A.L.,
+RA   Mobarry C.M., Lippert R., Walenz B., Shatkay H., Dew I., Miller J.R.,
+RA   Flanigan M.J., Edwards N.J., Bolanos R., Fasulo D., Halldorsson B.V.,
+RA   Hannenhalli S., Turner R., Yooseph S., Lu F., Nusskern D.R.,
+RA   Shue B.C., Zheng X.H., Zhong F., Delcher A.L., Huson D.H.,
+RA   Kravitz S.A., Mouchard L., Reinert K., Remington K.A., Clark A.G.,
+RA   Waterman M.S., Eichler E.E., Adams M.D., Hunkapiller M.W., Myers E.W.,
+RA   Venter J.C.;
+RL   Submitted (SEP-2005) to the EMBL/GenBank/DDBJ databases.
+RN   [14]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA] (ISOFORMS 1 AND 3).
+RC   TISSUE=Brain, Placenta, and Skin;
+RX   PubMed=15489334; DOI=10.1101/gr.2596504;
+RG   The MGC Project Team;
+RT   "The status, quality, and expansion of the NIH full-length cDNA
+RT   project: the Mammalian Gene Collection (MGC).";
+RL   Genome Res. 14:2121-2127(2004).
+RN   [15]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA] OF 1-36.
+RX   MEDLINE=85289338; PubMed=3161893;
+RA   Fisher R., Waller E.K., Grossi G., Thompson D., Tizard R.,
+RA   Schleuning W.-D.;
+RT   "Isolation and characterization of the human tissue-type plasminogen
+RT   activator structural gene including its 5' flanking region.";
+RL   J. Biol. Chem. 260:11223-11230(1985).
+RN   [16]
+RP   NUCLEOTIDE SEQUENCE [MRNA] OF 31-562.
+RX   MEDLINE=91291340; PubMed=1368681;
+RA   Itagaki Y., Yasuda H., Morinaga T., Mitsuda S., Higashio K.;
+RT   "Purification and characterization of tissue plasminogen activator
+RT   secreted by human embryonic lung diploid fibroblasts, IMR-90 cells.";
+RL   Agric. Biol. Chem. 55:1225-1232(1991).
+RN   [17]
+RP   PROTEIN SEQUENCE OF 33-52 AND 311-330.
+RC   TISSUE=Melanoma;
+RX   MEDLINE=83209620; PubMed=6682760;
+RX   DOI=10.1111/j.1432-1033.1983.tb07418.x;
+RA   Wallen P., Pohl G., Bergsdorf N., Raanby M., Ny T., Joernvall H.;
+RT   "Purification and characterization of a melanoma cell plasminogen
+RT   activator.";
+RL   Eur. J. Biochem. 132:681-686(1983).
+RN   [18]
+RP   PROTEIN SEQUENCE OF 36-562.
+RC   TISSUE=Melanoma;
+RX   MEDLINE=85000468; PubMed=6433976; DOI=10.1021/bi00311a020;
+RA   Pohl G., Kaellstroem M., Bergsdorf N., Wallen P., Joernvall H.;
+RT   "Tissue plasminogen activator: peptide analyses confirm an indirectly
+RT   derived amino acid sequence, identify the active site serine residue,
+RT   establish glycosylation sites, and localize variant differences.";
+RL   Biochemistry 23:3701-3707(1984).
+RN   [19]
+RP   NUCLEOTIDE SEQUENCE [MRNA] OF 251-358.
+RX   MEDLINE=83169656; PubMed=6572897; DOI=10.1073/pnas.80.2.349;
+RA   Edlund T., Ny T., Raanby M., Heden L.-O., Palm G., Holmgren E.,
+RA   Josephson S.;
+RT   "Isolation of cDNA sequences coding for a part of human tissue
+RT   plasminogen activator.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 80:349-352(1983).
+RN   [20]
+RP   PARTIAL PROTEIN SEQUENCE, AND SIGNAL SEQUENCE CLEAVAGE SITE.
+RA   Jalah R., Pavlakis G.N., Felber B.J.;
+RL   Submitted (JUL-2007) to UniProtKB.
+RN   [21]
+RP   STRUCTURE OF CARBOHYDRATES.
+RX   MEDLINE=90092112; PubMed=2513186;
+RX   DOI=10.1111/j.1432-1033.1989.tb15206.x;
+RA   Pfeiffer G., Schmidt M., Strube K.-H., Geyer R.;
+RT   "Carbohydrate structure of recombinant human uterine tissue
+RT   plasminogen activator expressed in mouse epithelial cells.";
+RL   Eur. J. Biochem. 186:273-286(1989).
+RN   [22]
+RP   GLYCOSYLATION AT THR-96.
+RX   MEDLINE=91159408; PubMed=1900431; DOI=10.1021/bi00223a004;
+RA   Harris R.J., Leonard C.K., Guzzetta A.W., Spellman M.W.;
+RT   "Tissue plasminogen activator has an O-linked fucose attached to
+RT   threonine-61 in the epidermal growth factor domain.";
+RL   Biochemistry 30:2311-2314(1991).
+RN   [23]
+RP   DISULFIDE BONDS IN KRINGLE 2.
+RX   MEDLINE=91244765; PubMed=1645336;
+RA   Vlahos C.J., Wilhelm O.G., Hassell T., Jaskunas S.R., Bang N.U.;
+RT   "Disulfide pairing of the recombinant kringle-2 domain of tissue
+RT   plasminogen activator produced in Escherichia coli.";
+RL   J. Biol. Chem. 266:10070-10072(1991).
+RN   [24]
+RP   INTERACTION WITH LRP1B.
+RX   MEDLINE=21369943; PubMed=11384978; DOI=10.1074/jbc.M102727200;
+RA   Liu C.-X., Li Y., Obermoeller-McCormick L.M., Schwartz A.L., Bu G.;
+RT   "The putative tumor suppressor LRP1B, a novel member of the low
+RT   density lipoprotein (LDL) receptor family, exhibits both overlapping
+RT   and distinct properties with the LDL receptor-related protein.";
+RL   J. Biol. Chem. 276:28889-28896(2001).
+RN   [25]
+RP   SPLICE ISOFORM(S) THAT ARE POTENTIAL NMD TARGET(S).
+RX   PubMed=14759258; DOI=10.1186/gb-2004-5-2-r8;
+RA   Hillman R.T., Green R.E., Brenner S.E.;
+RT   "An unappreciated role for RNA surveillance.";
+RL   Genome Biol. 5:R8.1-R8.16(2004).
+RN   [26]
+RP   STRUCTURE BY NMR OF KRINGLE 2.
+RX   MEDLINE=90122799; PubMed=2558718; DOI=10.1021/bi00450a016;
+RA   Byeon I.-J.L., Kelley R.F., Llinas M.;
+RT   "1H NMR structural characterization of a recombinant kringle 2 domain
+RT   from human tissue-type plasminogen activator.";
+RL   Biochemistry 28:9350-9360(1989).
+RN   [27]
+RP   STRUCTURE BY NMR OF KRINGLE 2.
+RX   MEDLINE=91200042; PubMed=1901789;
+RX   DOI=10.1111/j.1432-1033.1991.tb15894.x;
+RA   Byeon I.-J.L., Kelley R.F., Llinas M.;
+RT   "Kringle-2 domain of the tissue-type plasminogen activator. 1H-NMR
+RT   assignments and secondary structure.";
+RL   Eur. J. Biochem. 197:155-165(1991).
+RN   [28]
+RP   STRUCTURE BY NMR OF KRINGLE 2.
+RX   MEDLINE=92106329; PubMed=1762144; DOI=10.1016/0022-2836(91)90592-T;
+RA   Byeon I.-J.L., Llinas M.;
+RT   "Solution structure of the tissue-type plasminogen activator kringle 2
+RT   domain complexed to 6-aminohexanoic acid an antifibrinolytic drug.";
+RL   J. Mol. Biol. 222:1035-1051(1991).
+RN   [29]
+RP   X-RAY CRYSTALLOGRAPHY (2.4 ANGSTROMS) OF KRINGLE 2.
+RX   MEDLINE=92118803; PubMed=1310033; DOI=10.1021/bi00116a037;
+RA   de Vos A., Ultsch M.H., Kelley R.F., Padmanabhan K., Tulinskly A.,
+RA   Westbrook M.L., Kossiakof A.A.;
+RT   "Crystal structure of the kringle 2 domain of tissue plasminogen
+RT   activator at 2.4-A resolution.";
+RL   Biochemistry 31:270-279(1992).
+RN   [30]
+RP   STRUCTURE BY NMR OF 38-85.
+RX   MEDLINE=92292163; PubMed=1602484; DOI=10.1016/0022-2836(92)90403-7;
+RA   Downing A.K., Driscoll P.C., Harvey T.S., Dudgeon T.J., Smith B.O.,
+RA   Baron M., Campbell I.D.;
+RT   "Solution structure of the fibrin binding finger domain of tissue-type
+RT   plasminogen activator determined by 1H nuclear magnetic resonance.";
+RL   J. Mol. Biol. 225:821-833(1992).
+RN   [31]
+RP   STRUCTURE BY NMR OF 36-126.
+RX   MEDLINE=96027104; PubMed=7582899; DOI=10.1016/S0969-2126(01)00217-9;
+RA   Smith B.O., Downing A.K., Driscoll P.C., Dudgeon T.J., Campbell I.D.;
+RT   "The solution structure and backbone dynamics of the fibronectin type
+RT   I and epidermal growth factor-like pair of modules of tissue-type
+RT   plasminogen activator.";
+RL   Structure 3:823-833(1995).
+RN   [32]
+RP   X-RAY CRYSTALLOGRAPHY (2.3 ANGSTROMS) OF CATALYTIC DOMAIN.
+RX   MEDLINE=96200985; PubMed=8613982; DOI=10.1006/jmbi.1996.0238;
+RA   Lamba D., Bauer M., Huber R., Fischer S., Rudolph R., Kohnert U.,
+RA   Bode W.;
+RT   "The 2.3 A crystal structure of the catalytic domain of recombinant
+RT   two-chain human tissue-type plasminogen activator.";
+RL   J. Mol. Biol. 258:117-135(1996).
+RN   [33]
+RP   X-RAY CRYSTALLOGRAPHY (3.1 ANGSTROMS) OF CATALYTIC DOMAIN.
+RX   MEDLINE=97449126; PubMed=9305622; DOI=10.1093/emboj/16.16.4797;
+RA   Renatus M., Engh R.A., Stubbs M.T., Huber R., Fischer S., Kohnert U.,
+RA   Bode W.;
+RT   "Lysine 156 promotes the anomalous proenzyme activity of tPA: X-ray
+RT   crystal structure of single-chain human tPA.";
+RL   EMBO J. 16:4797-4805(1997).
+CC   -!- FUNCTION: Converts the abundant, but inactive, zymogen plasminogen
+CC       to plasmin by hydrolyzing a single Arg-Val bond in plasminogen. By
+CC       controlling plasmin-mediated proteolysis, it plays an important
+CC       role in tissue remodeling and degradation, in cell migration and
+CC       many other physiopathological events. Play a direct role in
+CC       facilitating neuronal migration.
+CC   -!- CATALYTIC ACTIVITY: Specific cleavage of Arg-|-Val bond in
+CC       plasminogen to form plasmin.
+CC   -!- SUBUNIT: Heterodimer of chain A and chain B held by a disulfide
+CC       bond. Binds to fibrin with high affinity. This interaction leads
+CC       to an increase in the catalytic efficiency of the enzyme between
+CC       100-fold and 1000-fold, due to an increase in affinity for
+CC       plasminogen. Similarly, binding to heparin increases the
+CC       activation of plasminogen. Binds to annexin A2, cytokeratin-8,
+CC       fibronectin and laminin. Binds to mannose receptor and the low-
+CC       density lipoprotein receptor-related protein (LRP1); these
+CC       proteins are involved in TPA clearance. Yet unidentified
+CC       interactions on endothelial cells and vascular smooth muscle cells
+CC       (VSMC) lead to a 100-fold stimulation of plasminogen activation.
+CC       In addition, binding to VSMC reduces TPA inhibition by PAI-1 by
+CC       30-fold. Binds LRP1B; binding is followed by internalization and
+CC       degradation.
+CC   -!- SUBCELLULAR LOCATION: Secreted, extracellular space.
+CC   -!- ALTERNATIVE PRODUCTS:
+CC       Event=Alternative splicing; Named isoforms=4;
+CC       Name=1; Synonyms=Long;
+CC         IsoId=P00750-1; Sequence=Displayed;
+CC       Name=2; Synonyms=Short;
+CC         IsoId=P00750-2; Sequence=VSP_005411, VSP_005412;
+CC         Note=May be produced at very low levels due to a premature stop
+CC         codon in the mRNA, leading to nonsense-mediated mRNA decay;
+CC       Name=3;
+CC         IsoId=P00750-3; Sequence=VSP_015957;
+CC         Note=No experimental confirmation available;
+CC       Name=4; Synonyms=Neonatal;
+CC         IsoId=P00750-4; Sequence=VSP_028029, VSP_028030;
+CC         Note=No experimental confirmation available;
+CC   -!- TISSUE SPECIFICITY: Synthesized in numerous tissues (including
+CC       tumors) and secreted into most extracellular body fluids, such as
+CC       plasma, uterine fluid, saliva, gingival crevicular fluid, tears,
+CC       seminal fluid, and milk.
+CC   -!- DOMAIN: Both FN1 and one of the kringle domains are required for
+CC       binding to fibrin.
+CC   -!- DOMAIN: Both FN1 and EGF-like domains are important for binding to
+CC       LRP1.
+CC   -!- DOMAIN: The FN1 domain mediates binding to annexin A2.
+CC   -!- DOMAIN: The second kringle domain is implicated in binding to
+CC       cytokeratin-8 and to the endothelial cell surface binding site.
+CC   -!- PTM: The single chain, almost fully active enzyme, can be further
+CC       processed into a two-chain fully active form by a cleavage after
+CC       Arg-310 catalyzed by plasmin, tissue kallikrein or factor Xa.
+CC   -!- PTM: Differential cell-specific N-linked glycosylation gives rise
+CC       to two glycoforms, type I (glycosylated at Asn-219) and type II
+CC       (not glycosylated at Asn-219). The single chain type I glycoform
+CC       is less readily converted into the two-chain form by plasmin, and
+CC       the two-chain type I glycoform has a lower activity than the two-
+CC       chain type II glycoform in the presence of fibrin.
+CC   -!- PTM: N-glycosylation of Asn-152; the bound oligomannosidic glycan
+CC       is involved in the interaction with the mannose receptor.
+CC   -!- PTM: Characterization of O-linked glycan was studied in Bowes
+CC       melanoma cell line.
+CC   -!- DISEASE: Increased activity of TPA is the cause of
+CC       hyperfibrinolysis [MIM:173370]. Hyperfibrinolysis leads to
+CC       excessive bleeding. Defective release of TPA causes
+CC       hypofibrinolysis, leading to thrombosis or embolism.
+CC   -!- PHARMACEUTICAL: Available under the names Activase (Genentech) and
+CC       Retavase (Centocor and Roche) [Retavase is a fragment of TPA that
+CC       contains kringle 2 and the protease domain; it was also known as
+CC       BM 06.022]. Used in Acute Myocardial Infarction (AMI), in Acute
+CC       Ischemic Stroke (AIS) and Pulmonary Embolism (PE) to initiate
+CC       fibrinolysis.
+CC   -!- SIMILARITY: Belongs to the peptidase S1 family.
+CC   -!- SIMILARITY: Contains 1 EGF-like domain.
+CC   -!- SIMILARITY: Contains 1 fibronectin type-I domain.
+CC   -!- SIMILARITY: Contains 2 kringle domains.
+CC   -!- SIMILARITY: Contains 1 peptidase S1 domain.
+CC   -!- WEB RESOURCE: Name=Wikipedia; Note=Tissue plasminogen activator
+CC       entry;
+CC       URL="http://en.wikipedia.org/wiki/Tissue_plasminogen_Activator";
+CC   -!- WEB RESOURCE: Name=SeattleSNPs;
+CC       URL="http://pga.gs.washington.edu/data/plat/";
+CC   -!- WEB RESOURCE: Name=SHMPD; Note=The Singapore human mutation and
+CC       polymorphism database;
+CC       URL="http://shmpd.bii.a-star.edu.sg/gene.php?genestart=A&genename=PLAT";
+CC   -!- WEB RESOURCE: Name=Activase; Note=Clinical information on
+CC       Activase;
+CC       URL="http://www.gene.com/gene/products/information/cardiovascular/activase/index.jsp";
+CC   -!- WEB RESOURCE: Name=Retavase; Note=Clinical information on
+CC       Retavase;
+CC       URL="http://www.retavase.com/pdf/Retavase_PI.pdf";
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; L00153; AAB59510.1; -; Genomic_DNA.
+DR   EMBL; L00141; AAB59510.1; JOINED; Genomic_DNA.
+DR   EMBL; L00142; AAB59510.1; JOINED; Genomic_DNA.
+DR   EMBL; L00143; AAB59510.1; JOINED; Genomic_DNA.
+DR   EMBL; L00144; AAB59510.1; JOINED; Genomic_DNA.
+DR   EMBL; L00145; AAB59510.1; JOINED; Genomic_DNA.
+DR   EMBL; L00146; AAB59510.1; JOINED; Genomic_DNA.
+DR   EMBL; L00147; AAB59510.1; JOINED; Genomic_DNA.
+DR   EMBL; L00148; AAB59510.1; JOINED; Genomic_DNA.
+DR   EMBL; L00149; AAB59510.1; JOINED; Genomic_DNA.
+DR   EMBL; L00150; AAB59510.1; JOINED; Genomic_DNA.
+DR   EMBL; L00151; AAB59510.1; JOINED; Genomic_DNA.
+DR   EMBL; K03021; AAA98809.1; -; Genomic_DNA.
+DR   EMBL; M15518; AAA60111.1; -; mRNA.
+DR   EMBL; M18182; AAA36800.1; -; mRNA.
+DR   EMBL; X07393; CAA30302.1; -; mRNA.
+DR   EMBL; X13097; CAA31489.1; -; mRNA.
+DR   EMBL; AF260825; AAK11956.1; -; mRNA.
+DR   EMBL; AY221101; AAO34406.1; -; mRNA.
+DR   EMBL; AK289387; BAF82076.1; -; mRNA.
+DR   EMBL; AK290575; BAF83264.1; -; mRNA.
+DR   EMBL; AK313342; BAG36145.1; -; mRNA.
+DR   EMBL; BT007060; AAP35709.1; -; mRNA.
+DR   EMBL; AY291060; AAP34246.1; -; Genomic_DNA.
+DR   EMBL; CH471080; EAW63235.1; -; Genomic_DNA.
+DR   EMBL; CH471080; EAW63233.1; -; Genomic_DNA.
+DR   EMBL; BC002795; AAH02795.3; -; mRNA.
+DR   EMBL; BC007231; AAH07231.1; -; mRNA.
+DR   EMBL; BC013968; AAH13968.3; -; mRNA.
+DR   EMBL; BC018636; AAH18636.3; -; mRNA.
+DR   EMBL; BC095403; AAH95403.1; -; mRNA.
+DR   EMBL; M11890; AAA61213.1; -; Genomic_DNA.
+DR   EMBL; M11889; AAA61213.1; JOINED; Genomic_DNA.
+DR   EMBL; D01096; BAA00881.1; -; mRNA.
+DR   EMBL; V00570; CAA23833.1; -; mRNA.
+DR   IPI; IPI00019590; -.
+DR   IPI; IPI00479511; -.
+DR   IPI; IPI00910450; -.
+DR   IPI; IPI00953228; -.
+DR   PIR; A94004; UKHUT.
+DR   PIR; I38098; I38098.
+DR   RefSeq; NP_000921.1; -.
+DR   RefSeq; NP_127509.1; -.
+DR   UniGene; Hs.491582; -.
+DR   PDB; 1A5H; X-ray; 2.90 A; A/B=311-562, C/D=298-304.
+DR   PDB; 1BDA; X-ray; 3.35 A; A/B=298-562.
+DR   PDB; 1PK2; NMR; -; A=209-298.
+DR   PDB; 1PML; X-ray; 2.38 A; A/B/C=213-298.
+DR   PDB; 1RTF; X-ray; 2.30 A; B=311-562.
+DR   PDB; 1TPG; NMR; -; A=36-126.
+DR   PDB; 1TPK; X-ray; 2.40 A; A/B/C=211-298.
+DR   PDB; 1TPM; NMR; -; A=36-85.
+DR   PDB; 1TPN; NMR; -; A=36-85.
+DR   PDBsum; 1A5H; -.
+DR   PDBsum; 1BDA; -.
+DR   PDBsum; 1PK2; -.
+DR   PDBsum; 1PML; -.
+DR   PDBsum; 1RTF; -.
+DR   PDBsum; 1TPG; -.
+DR   PDBsum; 1TPK; -.
+DR   PDBsum; 1TPM; -.
+DR   PDBsum; 1TPN; -.
+DR   SMR; P00750; 126-210, 174-299, 212-334.
+DR   STRING; P00750; -.
+DR   MEROPS; S01.232; -.
+DR   GlycoSuiteDB; P00750; -.
+DR   PRIDE; P00750; -.
+DR   Ensembl; ENST00000220809; ENSP00000220809; ENSG00000104368; Homo sapiens.
+DR   GeneID; 5327; -.
+DR   KEGG; hsa:5327; -.
+DR   UCSC; uc003xos.2; human.
+DR   UCSC; uc003xot.2; human.
+DR   UCSC; uc010lxf.1; human.
+DR   CTD; 5327; -.
+DR   GeneCards; GC08M042151; -.
+DR   H-InvDB; HIX0007476; -.
+DR   HGNC; HGNC:9051; PLAT.
+DR   HPA; CAB009335; -.
+DR   HPA; HPA003412; -.
+DR   MIM; 173370; gene+phenotype.
+DR   PharmGKB; PA33381; -.
+DR   eggNOG; prNOG16610; -.
+DR   HOVERGEN; HBG008633; -.
+DR   InParanoid; P00750; -.
+DR   OMA; TCGLRQY; -.
+DR   OrthoDB; EOG9TQPVK; -.
+DR   PhylomeDB; P00750; -.
+DR   BRENDA; 3.4.21.68; 247.
+DR   Pathway_Interaction_DB; amb2_neutrophils_pathway; amb2 Integrin signaling.
+DR   Reactome; REACT_16888; Signaling by PDGF.
+DR   Reactome; REACT_604; Hemostasis.
+DR   DrugBank; DB00009; Alteplase.
+DR   DrugBank; DB00513; Aminocaproic Acid.
+DR   DrugBank; DB00029; Anistreplase.
+DR   DrugBank; DB01088; Iloprost.
+DR   DrugBank; DB00015; Reteplase.
+DR   DrugBank; DB00031; Tenecteplase.
+DR   DrugBank; DB00302; Tranexamic Acid.
+DR   DrugBank; DB00013; Urokinase.
+DR   NextBio; 20622; -.
+DR   PMAP-CutDB; P00750; -.
+DR   ArrayExpress; P00750; -.
+DR   Bgee; P00750; -.
+DR   Genevestigator; P00750; -.
+DR   GermOnline; ENSG00000104368; Homo sapiens.
+DR   GO; 0009986; C:cell surface; IDA:UniProtKB.
+DR   GO; 0005615; C:extracellular space; IEA:UniProtKB-SubCell.
+DR   GO; 0005515; F:protein binding; IPI:UniProtKB.
+DR   GO; 0004252; F:serine-type endopeptidase activity; IDA:UniProtKB.
+DR   GO; 0007596; P:blood coagulation; TAS:ProtInc.
+DR   GO; 0045861; P:negative regulation of proteolysis; IDA:UniProtKB.
+DR   GO; 0006464; P:protein modification process; TAS:ProtInc.
+DR   GO; 0006508; P:proteolysis; TAS:ProtInc.
+DR   InterPro; IPR016060; Complement_control_module.
+DR   InterPro; IPR006209; EGF.
+DR   InterPro; IPR006210; EGF-like.
+DR   InterPro; IPR013032; EGF-like_reg_CS.
+DR   InterPro; IPR000742; EGF_3.
+DR   InterPro; IPR000083; Fibrnctn1.
+DR   InterPro; IPR000001; Kringle.
+DR   InterPro; IPR013806; Kringle-like.
+DR   InterPro; IPR018056; Kringle_CS.
+DR   InterPro; IPR018059; Kringle_sub.
+DR   InterPro; IPR018114; Peptidase_S1/S6_AS.
+DR   InterPro; IPR001254; Peptidase_S1_S6.
+DR   InterPro; IPR001314; Peptidase_S1A.
+DR   InterPro; IPR009003; Ser/Cys_Pept_Trypsin-like.
+DR   Gene3D; G3DSA:2.10.70.10; Complement_control_module; 1.
+DR   Gene3D; G3DSA:2.40.20.10; Kringle; 2.
+DR   Pfam; PF00008; EGF; 1.
+DR   Pfam; PF00039; fn1; 1.
+DR   Pfam; PF00051; Kringle; 2.
+DR   Pfam; PF00089; Trypsin; 1.
+DR   PRINTS; PR00722; CHYMOTRYPSIN.
+DR   PRINTS; PR00018; KRINGLE.
+DR   SMART; SM00181; EGF; 1.
+DR   SMART; SM00058; FN1; 1.
+DR   SMART; SM00130; KR; 2.
+DR   SMART; SM00020; Tryp_SPc; 1.
+DR   SUPFAM; SSF57440; Kringle-like; 2.
+DR   SUPFAM; SSF50494; Pept_Ser_Cys; 1.
+DR   PROSITE; PS00022; EGF_1; 1.
+DR   PROSITE; PS01186; EGF_2; 1.
+DR   PROSITE; PS50026; EGF_3; 1.
+DR   PROSITE; PS01253; FN1_1; 1.
+DR   PROSITE; PS51091; FN1_2; 1.
+DR   PROSITE; PS00021; KRINGLE_1; 2.
+DR   PROSITE; PS50070; KRINGLE_2; 2.
+DR   PROSITE; PS50240; TRYPSIN_DOM; 1.
+DR   PROSITE; PS00134; TRYPSIN_HIS; 1.
+DR   PROSITE; PS00135; TRYPSIN_SER; 1.
+PE   1: Evidence at protein level;
+KW   3D-structure; Alternative splicing;
+KW   Cleavage on pair of basic residues; Complete proteome;
+KW   Direct protein sequencing; Disulfide bond; EGF-like domain;
+KW   Glycoprotein; Hydrolase; Kringle; Pharmaceutical;
+KW   Plasminogen activation; Polymorphism; Protease; Repeat; Secreted;
+KW   Serine protease; Signal; Zymogen.
+FT   SIGNAL        1     22
+FT   PROPEP       23     32
+FT                                /FTId=PRO_0000028348.
+FT   PROPEP       33     35       Removed by plasmin.
+FT                                /FTId=PRO_0000028349.
+FT   CHAIN        36    562       Tissue-type plasminogen activator.
+FT                                /FTId=PRO_0000028350.
+FT   CHAIN        36    310       Tissue-type plasminogen activator chain
+FT                                A.
+FT                                /FTId=PRO_0000028351.
+FT   CHAIN       311    562       Tissue-type plasminogen activator chain
+FT                                B.
+FT                                /FTId=PRO_0000028352.
+FT   DOMAIN       39     81       Fibronectin type-I.
+FT   DOMAIN       82    120       EGF-like.
+FT   DOMAIN      127    208       Kringle 1.
+FT   DOMAIN      215    296       Kringle 2.
+FT   DOMAIN      311    561       Peptidase S1.
+FT   REGION       42     52       Important for binding to annexin A2.
+FT   ACT_SITE    357    357       Charge relay system.
+FT   ACT_SITE    406    406       Charge relay system.
+FT   ACT_SITE    513    513       Charge relay system.
+FT   SITE        102    102       Important for binding to LRP1.
+FT   SITE        253    253       Not glycosylated.
+FT   SITE        464    464       Important for single-chain activity.
+FT   SITE        512    512       Important for single-chain activity.
+FT   CARBOHYD     96     96       O-linked (Fuc).
+FT                                /FTId=CAR_000029.
+FT   CARBOHYD    152    152       N-linked (GlcNAc...).
+FT   CARBOHYD    219    219       N-linked (GlcNAc...); partial.
+FT                                /FTId=CAR_000030.
+FT   CARBOHYD    483    483       N-linked (GlcNAc...).
+FT                                /FTId=CAR_000031.
+FT   DISULFID     41     71
+FT   DISULFID     69     78
+FT   DISULFID     86     97
+FT   DISULFID     91    108
+FT   DISULFID    110    119
+FT   DISULFID    127    208       By similarity.
+FT   DISULFID    148    190       By similarity.
+FT   DISULFID    179    203       By similarity.
+FT   DISULFID    215    296
+FT   DISULFID    236    278
+FT   DISULFID    267    291
+FT   DISULFID    299    430       Interchain (between A and B chains).
+FT   DISULFID    342    358       By similarity.
+FT   DISULFID    350    419       By similarity.
+FT   DISULFID    444    519       By similarity.
+FT   DISULFID    476    492       By similarity.
+FT   DISULFID    509    537       By similarity.
+FT   VAR_SEQ       1     40       MDAMKRGLCCVLLLCGAVFVSPSQEIHARFRRGARSYQVI
+FT                                -> MAS (in isoform 4).
+FT                                /FTId=VSP_028029.
+FT   VAR_SEQ      39     85       VICRDEKTQMIYQQHQSWLRPVLRSNRVEYCWCNSGRAQCH
+FT                                SVPVKS -> G (in isoform 3).
+FT                                /FTId=VSP_015957.
+FT   VAR_SEQ      79    208       Missing (in isoform 4).
+FT                                /FTId=VSP_028030.
+FT   VAR_SEQ     269    291       NPDGDAKPWCHVLKNRRLTWEYC -> TGRSVSSPATASMR
+FT                                PCPLSIRSG (in isoform 2).
+FT                                /FTId=VSP_005411.
+FT   VAR_SEQ     292    562       Missing (in isoform 2).
+FT                                /FTId=VSP_005412.
+FT   VARIANT      34     34       A -> D (in dbSNP:rs8178733).
+FT                                /FTId=VAR_020181.
+FT   VARIANT     136    136       R -> S (in dbSNP:rs8178747).
+FT                                /FTId=VAR_038732.
+FT   VARIANT     146    146       A -> T (in dbSNP:rs8178748).
+FT                                /FTId=VAR_038733.
+FT   VARIANT     164    164       R -> W (in dbSNP:rs2020921).
+FT                                /FTId=VAR_011783.
+FT   CONFLICT     93     93       N -> T (in Ref. 2; AAB59510).
+FT   CONFLICT    159    160       KP -> NA (in Ref. 7; CAA31489).
+FT   CONFLICT    247    247       K -> N (in Ref. 9; AAO34406).
+FT   CONFLICT    283    283       N -> S (in Ref. 14; AAH95403).
+FT   CONFLICT    333    334       RR -> EE (in Ref. 8; AAK11956).
+FT   CONFLICT    389    389       V -> C (in Ref. 8; AAK11956).
+FT   STRAND       44     46
+FT   STRAND       55     59
+FT   STRAND       61     64
+FT   STRAND       66     70
+FT   STRAND       72     74
+FT   STRAND       83     85
+FT   STRAND       96    104
+FT   STRAND      106    109
+FT   STRAND      115    118
+FT   HELIX       242    244
+FT   STRAND      248    250
+FT   HELIX       256    259
+FT   STRAND      262    264
+FT   STRAND      277    282
+FT   STRAND      285    291
+FT   STRAND      312    316
+FT   HELIX       319    321
+FT   STRAND      325    331
+FT   STRAND      338    346
+FT   STRAND      348    354
+FT   HELIX       356    359
+FT   HELIX       365    367
+FT   STRAND      368    373
+FT   STRAND      375    379
+FT   STRAND      385    394
+FT   TURN        400    402
+FT   STRAND      408    412
+FT   STRAND      415    417
+FT   STRAND      443    449
+FT   STRAND      464    470
+FT   HELIX       473    475
+FT   TURN        478    483
+FT   STRAND      490    494
+FT   STRAND      516    521
+FT   STRAND      524    533
+FT   STRAND      535    538
+FT   STRAND      544    548
+FT   HELIX       549    552
+FT   HELIX       553    559
+SQ   SEQUENCE   562 AA;  62917 MW;  B7EC9B1A5E3FDC4D CRC64;
+     MDAMKRGLCC VLLLCGAVFV SPSQEIHARF RRGARSYQVI CRDEKTQMIY QQHQSWLRPV
+     LRSNRVEYCW CNSGRAQCHS VPVKSCSEPR CFNGGTCQQA LYFSDFVCQC PEGFAGKCCE
+     IDTRATCYED QGISYRGTWS TAESGAECTN WNSSALAQKP YSGRRPDAIR LGLGNHNYCR
+     NPDRDSKPWC YVFKAGKYSS EFCSTPACSE GNSDCYFGNG SAYRGTHSLT ESGASCLPWN
+     SMILIGKVYT AQNPSAQALG LGKHNYCRNP DGDAKPWCHV LKNRRLTWEY CDVPSCSTCG
+     LRQYSQPQFR IKGGLFADIA SHPWQAAIFA KHRRSPGERF LCGGILISSC WILSAAHCFQ
+     ERFPPHHLTV ILGRTYRVVP GEEEQKFEVE KYIVHKEFDD DTYDNDIALL QLKSDSSRCA
+     QESSVVRTVC LPPADLQLPD WTECELSGYG KHEALSPFYS ERLKEAHVRL YPSSRCTSQH
+     LLNRTVTDNM LCAGDTRSGG PQANLHDACQ GDSGGPLVCL NDGRMTLVGI ISWGLGCGQK
+     DVPGVYTKVT NYLDWIRDNM RP
+//
+ID   CBBQ_CHRVI              Reviewed;          74 AA.
+AC   P56540;
+DT   15-JUL-1998, integrated into UniProtKB/Swiss-Prot.
+DT   15-JUL-1998, sequence version 1.
+DT   19-JAN-2010, entry version 30.
+DE   RecName: Full=Protein cbbQ;
+DE   Flags: Fragment;
+GN   Name=cbbQ;
+OS   Chromatium vinosum (Allochromatium vinosum).
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Chromatiales;
+OC   Chromatiaceae; Allochromatium.
+OX   NCBI_TaxID=1049;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=89213919; PubMed=2708310;
+RA   Viale A.M., Kobayashi H., Akazawa T.;
+RT   "Expressed genes for plant-type ribulose 1,5-bisphosphate
+RT   carboxylase/oxygenase in the photosynthetic bacterium Chromatium
+RT   vinosum, which possesses two complete sets of the genes.";
+RL   J. Bacteriol. 171:2391-2400(1989).
+RN   [2]
+RP   IDENTIFICATION.
+RX   MEDLINE=95189107; PubMed=7883189; DOI=10.1016/0378-1119(94)00808-6;
+RA   Yokoyama K., Hayashi N.R., Arai H., Chung S.Y., Igarashi Y.,
+RA   Kodama T.;
+RT   "Genes encoding RubisCO in Pseudomonas hydrogenothermophila are
+RT   followed by a novel cbbQ gene similar to nirQ of the denitrification
+RT   gene cluster from Pseudomonas species.";
+RL   Gene 153:75-79(1995).
+CC   -!- FUNCTION: May affect the post-translational activation and/or
+CC       assembly of the oligomeric structure of RuBisCO.
+CC   -!- SIMILARITY: Belongs to the cbbQ/nirQ/norQ/gpvN family.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; M26396; -; NOT_ANNOTATED_CDS; Genomic_DNA.
+DR   SMR; P56540; 10-72.
+DR   GO; 0005524; F:ATP binding; IEA:UniProtKB-KW.
+DR   GO; 0016887; F:ATPase activity; IEA:InterPro.
+DR   InterPro; IPR011704; ATPase_AAA-5.
+DR   Pfam; PF07728; AAA_5; 1.
+PE   3: Inferred from homology;
+KW   ATP-binding; Nucleotide-binding.
+FT   CHAIN         1    >74       Protein cbbQ.
+FT                                /FTId=PRO_0000219562.
+FT   NP_BIND      41     48       ATP (Potential).
+FT   NON_TER      74     74
+SQ   SEQUENCE   74 AA;  8377 MW;  B7AB23BF4DEA291C CRC64;
+     MSDIDRNQFL IDHEPYYRPV SNEVALYEAA YAARMPVMLK GPTGCGKTRF VEYMAWKLGK
+     PLITVACNED MTAS
+//
+ID   CBBQ_PSEHY              Reviewed;         267 AA.
+AC   Q51858;
+DT   15-JUL-1998, integrated into UniProtKB/Swiss-Prot.
+DT   01-NOV-1996, sequence version 1.
+DT   13-JUL-2010, entry version 35.
+DE   RecName: Full=Protein cbbQ;
+GN   Name=cbbQ;
+OS   Pseudomonas hydrogenothermophila.
+OC   Bacteria; Proteobacteria; Betaproteobacteria; Hydrogenophilales;
+OC   Hydrogenophilaceae; Hydrogenophilus.
+OX   NCBI_TaxID=297;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RC   STRAIN=TH-1;
+RX   MEDLINE=95189107; PubMed=7883189; DOI=10.1016/0378-1119(94)00808-6;
+RA   Yokoyama K., Hayashi N.R., Arai H., Chung S.Y., Igarashi Y.,
+RA   Kodama T.;
+RT   "Genes encoding RubisCO in Pseudomonas hydrogenothermophila are
+RT   followed by a novel cbbQ gene similar to nirQ of the denitrification
+RT   gene cluster from Pseudomonas species.";
+RL   Gene 153:75-79(1995).
+CC   -!- FUNCTION: May affect the post-translational activation and/or
+CC       assembly of the oligomeric structure of RuBisCO.
+CC   -!- SIMILARITY: Belongs to the cbbQ/nirQ/norQ/gpvN family.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; D30764; BAA06439.1; -; Genomic_DNA.
+DR   SMR; Q51858; 21-191.
+DR   GO; 0005524; F:ATP binding; IEA:UniProtKB-KW.
+DR   GO; 0016887; F:ATPase activity; IEA:InterPro.
+DR   InterPro; IPR011704; ATPase_AAA-5.
+DR   InterPro; IPR013615; CbbQ_C.
+DR   Pfam; PF07728; AAA_5; 1.
+DR   Pfam; PF08406; CbbQ_C; 1.
+PE   3: Inferred from homology;
+KW   ATP-binding; Nucleotide-binding.
+FT   CHAIN         1    267       Protein cbbQ.
+FT                                /FTId=PRO_0000219563.
+FT   NP_BIND      39     46       ATP (Potential).
+FT   NP_BIND      99    106       ATP (Potential).
+SQ   SEQUENCE   267 AA;  29613 MW;  EA99FE2DB05B0118 CRC64;
+     MDLRNQYLVR SEPYYHAVGD EIERFEAAYA NRIPMMLKGP TGCGKSRFVE YMAWKLGKPL
+     ITVACNEDMT AADLVGRFLL DKEGTRWQDG PLTTAARIGA ICYLDEVVEA RQDTTVVIHP
+     LTDHRRILPL DKKGEVVEAH PDFQIVISYN PGYQSAMKDL KTSTKQRFAA MDFDYPAPEV
+     ESEIVAHESG VDAATAKKLV EVAIRSRHLK GHGLDEGIST RLLVYAGSLI TKGIAPLIAC
+     EMALICPITD DPDLRYALRA AAQTLFA
+//
+ID   NIRQ_PSEAE              Reviewed;         260 AA.
+AC   Q51481;
+DT   15-JUL-1998, integrated into UniProtKB/Swiss-Prot.
+DT   01-NOV-1996, sequence version 1.
+DT   13-JUL-2010, entry version 65.
+DE   RecName: Full=Denitrification regulatory protein nirQ;
+GN   Name=nirQ; OrderedLocusNames=PA0520;
+OS   Pseudomonas aeruginosa.
+OC   Bacteria; Proteobacteria; Gammaproteobacteria; Pseudomonadales;
+OC   Pseudomonadaceae; Pseudomonas.
+OX   NCBI_TaxID=287;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RC   STRAIN=PAO1161;
+RX   MEDLINE=94362287; PubMed=7765251;
+RA   Arai H., Igarashi Y., Kodama T.;
+RT   "Structure and ANR-dependent transcription of the nir genes for
+RT   denitrification from Pseudomonas aeruginosa.";
+RL   Biosci. Biotechnol. Biochem. 58:1286-1291(1994).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RC   STRAIN=ATCC 15692 / PAO1 / 1C / PRS 101 / LMG 12228;
+RX   MEDLINE=20437337; PubMed=10984043; DOI=10.1038/35023079;
+RA   Stover C.K., Pham X.-Q.T., Erwin A.L., Mizoguchi S.D., Warrener P.,
+RA   Hickey M.J., Brinkman F.S.L., Hufnagle W.O., Kowalik D.J., Lagrou M.,
+RA   Garber R.L., Goltry L., Tolentino E., Westbrock-Wadman S., Yuan Y.,
+RA   Brody L.L., Coulter S.N., Folger K.R., Kas A., Larbig K., Lim R.M.,
+RA   Smith K.A., Spencer D.H., Wong G.K.-S., Wu Z., Paulsen I.T.,
+RA   Reizer J., Saier M.H. Jr., Hancock R.E.W., Lory S., Olson M.V.;
+RT   "Complete genome sequence of Pseudomonas aeruginosa PAO1, an
+RT   opportunistic pathogen.";
+RL   Nature 406:959-964(2000).
+CC   -!- FUNCTION: Activator of nitrite and nitric oxide reductases.
+CC   -!- SUBCELLULAR LOCATION: Cytoplasm (Potential).
+CC   -!- INDUCTION: Under denitrifying conditions.
+CC   -!- SIMILARITY: Belongs to the cbbQ/nirQ/norQ/gpvN family.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; D37883; BAA07123.1; -; Genomic_DNA.
+DR   EMBL; AE004091; AAG03909.1; -; Genomic_DNA.
+DR   PIR; JC2288; JC2288.
+DR   RefSeq; NP_249211.1; -.
+DR   SMR; Q51481; 14-183.
+DR   GeneID; 882214; -.
+DR   GenomeReviews; AE004091_GR; PA0520.
+DR   KEGG; pae:PA0520; -.
+DR   NMPDR; fig|208964.1.peg.521; -.
+DR   PseudoCAP; PA0520; -.
+DR   HOGENOM; HBG295312; -.
+DR   OMA; HEARILV; -.
+DR   ProtClustDB; CLSK865916; -.
+DR   BioCyc; PAER208964:PA0520-MONOMER; -.
+DR   GO; 0005737; C:cytoplasm; IEA:UniProtKB-SubCell.
+DR   GO; 0005524; F:ATP binding; IEA:UniProtKB-KW.
+DR   GO; 0016887; F:ATPase activity; IEA:InterPro.
+DR   GO; 0003677; F:DNA binding; IEA:UniProtKB-KW.
+DR   GO; 0045449; P:regulation of transcription; IEA:UniProtKB-KW.
+DR   GO; 0006350; P:transcription; IEA:UniProtKB-KW.
+DR   InterPro; IPR011704; ATPase_AAA-5.
+DR   InterPro; IPR013615; CbbQ_C.
+DR   Pfam; PF07728; AAA_5; 1.
+DR   Pfam; PF08406; CbbQ_C; 1.
+PE   2: Evidence at transcript level;
+KW   Activator; ATP-binding; Complete proteome; Cytoplasm; DNA-binding;
+KW   Nucleotide-binding; Transcription; Transcription regulation.
+FT   CHAIN         1    260       Denitrification regulatory protein nirQ.
+FT                                /FTId=PRO_0000219569.
+FT   NP_BIND      32     39       ATP (Potential).
+FT   NP_BIND      92     99       ATP (Potential).
+FT   DNA_BIND    234    253       H-T-H motif (Potential).
+SQ   SEQUENCE   260 AA;  28904 MW;  3FD36F19BEBA38B5 CRC64;
+     MRDATPFYEA TGHEIEVFER AWRHGLPVLL KGPTGCGKTR FVQYMARRLE LPLYSVACHD
+     DLGAADLLGR HLIGADGTWW QDGPLTRAVR EGGICYLDEV VEARQDTTVA IHPLADDRRE
+     LYLERTGETL QAPPSFMLVV SYNPGYQNLL KGLKPSTRQR FVALRFDYPA AQQEARILVG
+     ESGCAETLAQ RLVQLGQALR RLEQHDLEEV ASTRLLIFAA RLIGDGMDPR EACRVALAEP
+     LSDDPATVAA LMDIVDLHVA
+//
