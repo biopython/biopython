@@ -220,8 +220,16 @@ def _sff_file_header(handle):
 
     >>> handle = open("Roche/greek.sff", "rb")
     >>> values = _sff_file_header(handle)
-    >>> values[0:5]
-    (840, 65040, 256, 24, 800)
+    >>> print values[0]
+    840
+    >>> print values[1]
+    65040
+    >>> print values[2]
+    256
+    >>> print values[3]
+    24
+    >>> print values[4]
+    800
     >>> values[-1]
     'TCAG'
 
