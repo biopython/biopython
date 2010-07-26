@@ -1,0 +1,94 @@
+##gff-version 3
+##sequence-region P00750 1 562
+P00750	UniProtKB	Signal peptide	1	22	.	.	.	.	
+P00750	UniProtKB	Propeptide	23	32	.	.	.	ID=PRO_0000028348	
+P00750	UniProtKB	Propeptide	33	35	.	.	.	ID=PRO_0000028349;Note=Removed by plasmin	
+P00750	UniProtKB	Chain	36	562	.	.	.	ID=PRO_0000028350;Note=Tissue-type plasminogen activator	
+P00750	UniProtKB	Chain	36	310	.	.	.	ID=PRO_0000028351;Note=Tissue-type plasminogen activator chain A	
+P00750	UniProtKB	Chain	311	562	.	.	.	ID=PRO_0000028352;Note=Tissue-type plasminogen activator chain B	
+P00750	UniProtKB	Domain	39	81	.	.	.	Note=Fibronectin type-I	
+P00750	UniProtKB	Domain	82	120	.	.	.	Note=EGF-like	
+P00750	UniProtKB	Domain	127	208	.	.	.	Note=Kringle 1	
+P00750	UniProtKB	Domain	215	296	.	.	.	Note=Kringle 2	
+P00750	UniProtKB	Domain	311	561	.	.	.	Note=Peptidase S1	
+P00750	UniProtKB	Region	42	52	.	.	.	Note=Important for binding to annexin A2	
+P00750	UniProtKB	Active site	357	357	.	.	.	Note=Charge relay system	
+P00750	UniProtKB	Active site	406	406	.	.	.	Note=Charge relay system	
+P00750	UniProtKB	Active site	513	513	.	.	.	Note=Charge relay system	
+P00750	UniProtKB	Site	102	102	.	.	.	Note=Important for binding to LRP1	
+P00750	UniProtKB	Site	253	253	.	.	.	Note=Not glycosylated	
+P00750	UniProtKB	Site	464	464	.	.	.	Note=Important for single-chain activity	
+P00750	UniProtKB	Site	512	512	.	.	.	Note=Important for single-chain activity	
+P00750	UniProtKB	Glycosylation	96	96	.	.	.	ID=CAR_000029;Note=O-linked (Fuc)	
+P00750	UniProtKB	Glycosylation	152	152	.	.	.	Note=N-linked (GlcNAc...)	
+P00750	UniProtKB	Glycosylation	219	219	.	.	.	ID=CAR_000030;Note=N-linked (GlcNAc...)%3B partial	
+P00750	UniProtKB	Glycosylation	483	483	.	.	.	ID=CAR_000031;Note=N-linked (GlcNAc...)	
+P00750	UniProtKB	Disulfide bond	41	71	.	.	.	.	
+P00750	UniProtKB	Disulfide bond	69	78	.	.	.	.	
+P00750	UniProtKB	Disulfide bond	86	97	.	.	.	.	
+P00750	UniProtKB	Disulfide bond	91	108	.	.	.	.	
+P00750	UniProtKB	Disulfide bond	110	119	.	.	.	.	
+P00750	UniProtKB	Disulfide bond	127	208	.	.	.	Status=By similarity	
+P00750	UniProtKB	Disulfide bond	148	190	.	.	.	Status=By similarity	
+P00750	UniProtKB	Disulfide bond	179	203	.	.	.	Status=By similarity	
+P00750	UniProtKB	Disulfide bond	215	296	.	.	.	.	
+P00750	UniProtKB	Disulfide bond	236	278	.	.	.	.	
+P00750	UniProtKB	Disulfide bond	267	291	.	.	.	.	
+P00750	UniProtKB	Disulfide bond	299	430	.	.	.	Note=Interchain (between A and B chains)	
+P00750	UniProtKB	Disulfide bond	342	358	.	.	.	Status=By similarity	
+P00750	UniProtKB	Disulfide bond	350	419	.	.	.	Status=By similarity	
+P00750	UniProtKB	Disulfide bond	444	519	.	.	.	Status=By similarity	
+P00750	UniProtKB	Disulfide bond	476	492	.	.	.	Status=By similarity	
+P00750	UniProtKB	Disulfide bond	509	537	.	.	.	Status=By similarity	
+P00750	UniProtKB	Beta strand	44	46	.	.	.	.	
+P00750	UniProtKB	Beta strand	55	59	.	.	.	.	
+P00750	UniProtKB	Beta strand	61	64	.	.	.	.	
+P00750	UniProtKB	Beta strand	66	70	.	.	.	.	
+P00750	UniProtKB	Beta strand	72	74	.	.	.	.	
+P00750	UniProtKB	Beta strand	83	85	.	.	.	.	
+P00750	UniProtKB	Beta strand	96	104	.	.	.	.	
+P00750	UniProtKB	Beta strand	106	109	.	.	.	.	
+P00750	UniProtKB	Beta strand	115	118	.	.	.	.	
+P00750	UniProtKB	Helix	242	244	.	.	.	.	
+P00750	UniProtKB	Beta strand	248	250	.	.	.	.	
+P00750	UniProtKB	Helix	256	259	.	.	.	.	
+P00750	UniProtKB	Beta strand	262	264	.	.	.	.	
+P00750	UniProtKB	Beta strand	277	282	.	.	.	.	
+P00750	UniProtKB	Beta strand	285	291	.	.	.	.	
+P00750	UniProtKB	Beta strand	312	316	.	.	.	.	
+P00750	UniProtKB	Helix	319	321	.	.	.	.	
+P00750	UniProtKB	Beta strand	325	331	.	.	.	.	
+P00750	UniProtKB	Beta strand	338	346	.	.	.	.	
+P00750	UniProtKB	Beta strand	348	354	.	.	.	.	
+P00750	UniProtKB	Helix	356	359	.	.	.	.	
+P00750	UniProtKB	Helix	365	367	.	.	.	.	
+P00750	UniProtKB	Beta strand	368	373	.	.	.	.	
+P00750	UniProtKB	Beta strand	375	379	.	.	.	.	
+P00750	UniProtKB	Beta strand	385	394	.	.	.	.	
+P00750	UniProtKB	Turn	400	402	.	.	.	.	
+P00750	UniProtKB	Beta strand	408	412	.	.	.	.	
+P00750	UniProtKB	Beta strand	415	417	.	.	.	.	
+P00750	UniProtKB	Beta strand	443	449	.	.	.	.	
+P00750	UniProtKB	Beta strand	464	470	.	.	.	.	
+P00750	UniProtKB	Helix	473	475	.	.	.	.	
+P00750	UniProtKB	Turn	478	483	.	.	.	.	
+P00750	UniProtKB	Beta strand	490	494	.	.	.	.	
+P00750	UniProtKB	Beta strand	516	521	.	.	.	.	
+P00750	UniProtKB	Beta strand	524	533	.	.	.	.	
+P00750	UniProtKB	Beta strand	535	538	.	.	.	.	
+P00750	UniProtKB	Beta strand	544	548	.	.	.	.	
+P00750	UniProtKB	Helix	549	552	.	.	.	.	
+P00750	UniProtKB	Helix	553	559	.	.	.	.	
+##sequence-region P56540 1 74
+P56540	UniProtKB	Chain	1	74	.	.	.	ID=PRO_0000219562;Note=Protein cbbQ	
+P56540	UniProtKB	Nucleotide binding	41	48	.	.	.	Note=ATP;Status=Potential	
+P56540	UniProtKB	Non-terminal residue	74	74	.	.	.	.	
+##sequence-region Q51858 1 267
+Q51858	UniProtKB	Chain	1	267	.	.	.	ID=PRO_0000219563;Note=Protein cbbQ	
+Q51858	UniProtKB	Nucleotide binding	39	46	.	.	.	Note=ATP;Status=Potential	
+Q51858	UniProtKB	Nucleotide binding	99	106	.	.	.	Note=ATP;Status=Potential	
+##sequence-region Q51481 1 260
+Q51481	UniProtKB	Chain	1	260	.	.	.	ID=PRO_0000219569;Note=Denitrification regulatory protein nirQ	
+Q51481	UniProtKB	Nucleotide binding	32	39	.	.	.	Note=ATP;Status=Potential	
+Q51481	UniProtKB	Nucleotide binding	92	99	.	.	.	Note=ATP;Status=Potential	
+Q51481	UniProtKB	DNA binding	234	253	.	.	.	Note=H-T-H motif;Status=Potential	
