@@ -95,8 +95,6 @@ localds(sequenceA, sequenceB, match_dict, open, extend) -> alignments
 # - one_alignment_only: boolean
 #   Only recover one alignment.
 
-from types import InstanceType
-
 MAX_ALIGNMENTS = 1000   # maximum alignments recovered in traceback
 
 class align:
@@ -260,11 +258,8 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
     if not sequenceA or not sequenceB:
         return []
 
-    if (not force_generic) and \
-       type(gap_A_fn) is InstanceType and \
-       gap_A_fn.__class__ is affine_penalty and \
-       type(gap_B_fn) is InstanceType and \
-       gap_B_fn.__class__ is affine_penalty:
+    if (not force_generic) and isinstance(gap_A_fn, affine_penalty) \
+    and isinstance(gap_B_fn, affine_penalty):
         open_A, extend_A = gap_A_fn.open, gap_A_fn.extend
         open_B, extend_B = gap_B_fn.open, gap_B_fn.extend
         x = _make_score_matrix_fast(
