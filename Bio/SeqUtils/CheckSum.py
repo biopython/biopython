@@ -16,10 +16,15 @@ def crc32(seq):
     """Returns the crc32 checksum for a sequence (string or Seq object)."""
     try:
         #Assume its a Seq object
-        return _crc32(seq.tostring())
+        return _crc32(seq.tostring().encode())
     except AttributeError:
-        #Assume its a string
-        return _crc32(seq)
+        #Assume its a string/unicode
+        try:
+            #Must turn it into bytes on Python 3
+            return _crc32(seq.encode())
+        except AttribueError:
+            #Should already be in bytes
+            return _crc32(seq)
 
 def _init_table_h():
     _table_h = []
