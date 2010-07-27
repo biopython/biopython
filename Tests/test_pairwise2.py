@@ -4,13 +4,13 @@ from Bio import pairwise2
 
 
 def _pretty_print_align(align1, align2, score, begin, end):
-    s = pairwise2.format_alignment(align1, align2, score, begin, end)
-    print s,
+    print pairwise2.format_alignment(align1, align2, score, begin, end)
 
 def _pretty_print_all(aligns):
     aligns.sort()
     for align in aligns:
         _pretty_print_align(*align)
+    print
 
 def _align_and_print(fn, *args, **keywds):
     print fn.__name__
