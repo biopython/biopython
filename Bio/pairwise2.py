@@ -95,7 +95,7 @@ localds(sequenceA, sequenceB, match_dict, open, extend) -> alignments
 # - one_alignment_only: boolean
 #   Only recover one alignment.
 
-from types import *
+from types import InstanceType
 
 MAX_ALIGNMENTS = 1000   # maximum alignments recovered in traceback
 
