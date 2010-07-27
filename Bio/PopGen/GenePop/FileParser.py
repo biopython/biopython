@@ -112,11 +112,11 @@ class FileRecord:
         """Starts parsing a file containing a GenePop file.
         """
         self._handle = open(self.fname)
-        self.comment_line = str(self._handle.next()).rstrip()
+        self.comment_line = self._handle.next().rstrip()
         #We can now have one loci per line or all loci in a single line
         #separated by either space or comma+space...
         #We will remove all commas on loci... that should not be a problem
-        sample_loci_line = str(self._handle.next()).rstrip().replace(',', '')
+        sample_loci_line = self._handle.next().rstrip().replace(',', '')
         all_loci = sample_loci_line.split(' ')
         self.loci_list.extend(all_loci)
         for line in self._handle:
@@ -188,36 +188,94 @@ class FileRecord:
                 return (indiv_name, allele_list)
         return False
 
-    def remove_population(self, pos):
+    def remove_population(self, pos, fname):
         """Removes a population (by position).
 
            pos - position
-           fw  - A file handle (write enabled) to write the new record
+           fname - file to be created with population removed
         """
-        #del self.populations[pos]
-        pass
+        old_rec = read(self.fname)
+        f = open(fname, "w")
+        f.write(self.comment_line + "\n")
+        for locus in old_rec.loci_list:
+            f.write(locus + "\n")
+        curr_pop = 0
+        l_parser = old_rec.get_individual()
+        f.write("POP\n")
+        while l_parser:
+            if curr_pop == pos:
+                old_rec.skip_population()
+                curr_pop += 1
+            else:
+                if l_parser == True:
+                    f.write("POP\n")
+                    curr_pop += 1
+                else:
+                    name, markers = l_parser
+                    f.write(name + ",")
+                    for marker in markers:
+                        f.write(' ')
+                        for al in marker:
+                            if al == None:
+                                al = '0'
+                            aStr = str(al)
+                            while len(aStr)<3:
+                                aStr = "".join(['0', aStr])
+                            f.write(aStr)
+                    f.write('\n')
+
+                l_parser = old_rec.get_individual()
+        f.close()
     
-    def remove_locus_by_position(self, pos, fw):
+    def remove_locus_by_position(self, pos, fname):
         """Removes a locus by position.
 
            pos - position
-           fw  - A file handle (write enabled) to write the new record
+           fname - file to be created with locus removed
         """
-        #del self.loci_list[pos]
-        #for pop in self.populations:
-        #    for indiv in pop:
-        #        name, loci = indiv
-        #        del loci[pos]
+        old_rec = read(self.fname)
+        f = open(fname, "w")
+        f.write(self.comment_line + "\n")
+        loci_list = old_rec.loci_list
+        del loci_list[pos]
+        for locus in loci_list:
+            f.write(locus + "\n")
+        l_parser = old_rec.get_individual()
+        f.write("POP\n")
+        while l_parser:
+            if l_parser == True:
+                f.write("POP\n")
+            else:
+                name, markers = l_parser
+                f.write(name + ",")
+                marker_pos = 0
+                for marker in markers:
+                    if marker_pos == pos:
+                        marker_pos += 1
+                        continue
+                    marker_pos += 1
+                    f.write(' ')
+                    for al in marker:
+                        if al == None:
+                            al = '0'
+                        aStr = str(al)
+                        while len(aStr)<3:
+                            aStr = "".join(['0', aStr])
+                        f.write(aStr)
+                f.write('\n')
 
-    def remove_locus_by_name(self, name, fw):
+            l_parser = old_rec.get_individual()
+        f.close()
+
+    def remove_locus_by_name(self, name, fname):
         """Removes a locus by name.
 
            name - name
-           fw   - A file handle (write enabled) to write the new record
+           fname - file to be created with population removed
         """
         for i in range(len(self.loci_list)):
             if self.loci_list[i] == name:
-                self.remove_locus_by_position(i, fw)
+                self.remove_locus_by_position(i, fname)
                 return
         #If here than locus not existent... Maybe raise exception?
         #   Although it should be Ok... Just a boolean return, maybe?

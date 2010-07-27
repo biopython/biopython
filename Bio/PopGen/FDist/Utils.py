@@ -6,17 +6,32 @@
 
 import os
 from Bio.PopGen import GenePop
+from Bio.PopGen.GenePop import FileParser
 import Bio.PopGen.FDist
 
 # Quite a few utility functions could be done (like remove pop,
 # add locus, etc...). The recommended strategy is convert back
 # and forth from/to GenePop and use GenePop Utils
 
-def convert_genepop_to_fdist(gp_rec):
+def convert_genepop_to_fdist(gp_rec, report_loci = None):
     """Converts a GenePop record to a FDist one.
 
        Parameters:
-       gp_rec - Genepop Record
+       gp_rec - Genepop Record (either standard or big)
+
+       Returns:
+       FDist record.
+    """
+    if hasattr(gp_rec, "populations"):
+        return _convert_genepop_to_fdist(gp_rec)
+    else:
+        return _convert_genepop_to_fdist_big(gp_rec, report_loci)
+
+def _convert_genepop_to_fdist(gp_rec):
+    """Converts a standard GenePop record to a FDist one.
+
+       Parameters:
+       gp_rec - Genepop Record (Standard)
 
        Returns:
        FDist record.
@@ -50,6 +65,74 @@ def convert_genepop_to_fdist(gp_rec):
             #    print alleles, allele_counts#, pop_data
         fd_rec.loci_data.append((len(alleles), pop_data))
     return fd_rec
+
+def _convert_genepop_to_fdist_big(gp_rec, report_loci = None):
+    """Converts a big GenePop record to a FDist one.
+
+       Parameters:
+       gp_rec - Genepop Record (Big)
+
+       Returns:
+       FDist record.
+    """
+    fd_rec = Bio.PopGen.FDist.Record()
+
+    def countPops(rec):
+        f2 = FileParser.read(rec.fname)
+        popCnt = 1
+        while f2.skip_population():
+            popCnt += 1
+        return popCnt
+
+    
+    fd_rec.data_org = 0
+    fd_rec.num_loci = len(gp_rec.loci_list)
+    work_rec0 = FileParser.read(gp_rec.fname)
+    fd_rec.num_pops = countPops(work_rec0)
+
+    num_loci = len(gp_rec.loci_list)
+    for lc_i in range(num_loci):
+        if report_loci:
+            report_loci(lc_i, num_loci)
+        work_rec = FileParser.read(gp_rec.fname)
+        work_rec2 = FileParser.read(gp_rec.fname)
+
+        alleles = []
+        pop_data = []
+        lParser = work_rec.get_individual()
+        while lParser:
+            if lParser != True:
+                for al in lParser[1][lc_i]:
+                    if al is not None and al not in alleles:
+                        alleles.append(al)
+            lParser = work_rec.get_individual()
+        #here we go again (necessary...)
+        def process_pop(pop_data, alleles, allele_counts):
+            allele_array = [] #We need the same order as in alleles
+            for allele in alleles:
+                allele_array.append(allele_counts.get(allele, 0))
+            pop_data.append(allele_array)
+        lParser = work_rec2.get_individual()
+        allele_counts = {}
+        for allele in alleles:
+            allele_counts[allele] = 0
+        allele_counts[None]=0
+        while lParser:
+            if lParser == True:
+                process_pop(pop_data, alleles, allele_counts)
+                allele_counts = {}
+                for allele in alleles:
+                    allele_counts[allele] = 0
+                allele_counts[None]=0
+            else:
+                for al in lParser[1][lc_i]:
+                    allele_counts[al] += 1
+            lParser = work_rec2.get_individual()
+        process_pop(pop_data, alleles, allele_counts)
+        fd_rec.loci_data.append((len(alleles), pop_data))
+    return fd_rec
+
+
 
 def approximate_fst(desired_fst, simulated_fst, parameter_fst,
            max_run_fst = 1, min_run_fst = 0, limit = 0.005):
