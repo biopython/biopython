@@ -15,6 +15,7 @@ Functions:
 qblast        Do a BLAST search using the QBLAST API.
 """
 
+import sys
 try:
     from cStringIO import StringIO
 except ImportError:
@@ -151,6 +152,10 @@ def qblast(program, database, sequence,
                                   {"User-Agent":"BiopythonClient"})
         handle = urllib2.urlopen(request)
         results = handle.read()
+        if sys.version_info[0] >= 3:
+            #On Python 3, want to go from bytes to unicode
+            results = results.decode()
+
         # Can see an "\n\n" page while results are in progress,
         # if so just wait a bit longer...
         if results=="\n\n":
@@ -173,6 +178,9 @@ def _parse_qblast_ref_page(handle):
     'Request Time of Execution' and RID would be 'Request Identifier'.
     """
     s = handle.read()
+    if sys.version_info[0] >= 3:
+        #On Python 3, want to go from bytes to unicode
+        s = s.decode()
     i = s.find("RID =")
     if i == -1:
         rid = None
