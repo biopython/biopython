@@ -16,10 +16,9 @@ qblast        Do a BLAST search using the QBLAST API.
 """
 
 try:
-    import cStringIO as StringIO
+    from cStringIO import StringIO
 except ImportError:
-    import StringIO
-
+    from StringIO import StringIO
 
 
 def qblast(program, database, sequence,
@@ -165,7 +164,7 @@ def qblast(program, database, sequence,
         if status.upper() == "READY":
             break
 
-    return StringIO.StringIO(results)
+    return StringIO(results)
 
 def _parse_qblast_ref_page(handle):
     """Extract a tuple of RID, RTOE from the 'please wait' page (PRIVATE).
