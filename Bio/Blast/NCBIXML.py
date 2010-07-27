@@ -619,8 +619,9 @@ def parse(handle, debug=0):
     while text:
         #We are now starting a new XML file
         if not text.startswith(XML_START):
-            raise ValueError("Your XML file did not start with %s..." \
-                             % XML_START)
+            raise ValueError("Your XML file did not start with %s... "
+                             "but instead %s" \
+                             % (XML_START, repr(text[:20])))
 
         expat_parser = expat.ParserCreate()
         blast_parser = BlastParser(debug)
