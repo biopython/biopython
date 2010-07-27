@@ -34,7 +34,7 @@ except ImportError:
     except ImportError:
         # Python 2.4 -- check for 3rd-party implementations
         try:
-            from lxml.etree import ElementTree
+            from lxml import etree as ElementTree
         except ImportError:
             try:
                 import cElementTree as ElementTree
