@@ -8,21 +8,21 @@ Example CAI 0.09978 using E. coli (default)
 Example CAI 0.67213 using Yersinia pestis biovar Microtus str. 91001
 
 Example 1, length 110, QSALTQPASV...
- crc32 = -1299987031
+ u_crc32 = 2994980265
  crc64 = CRC-44CAAD88706CC153
  gcg = 9729
  seguid = BpBeDdcNUYNsdk46JoJdw7Pd3BI
  simple_LCC = 1.03
  windowed_LCC = 0.00, 1.00, 0.96, 0.96, 0.96, 0.65, 0.43, 0.35, 0.35, 0.35, 0.35, 0.53, 0.59, 0.26
 Example 2, length 110, QSALTQPASV...
- crc32 = 802105214
+ u_crc32 = 802105214
  crc64 = CRC-44CAAD88706CC153
  gcg = 9647
  seguid = X5XEaayob1nZLOc7eVT9qyczarY
  simple_LCC = 1.07
  windowed_LCC = 0.00, 1.00, 0.96, 0.96, 0.96, 0.65, 0.43, 0.35, 0.35, 0.35, 0.35, 0.53, 0.59, 0.26
 Example 3, length 32, ATGCGTATCG...
- crc32 = 817679856
+ u_crc32 = 817679856
  crc64 = CRC-6234FF451DC6DFC6
  gcg = 7959
  seguid = 8WCUbVjBgiRmM10gfR7XJNjbwnE

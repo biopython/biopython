@@ -14,6 +14,9 @@ from binascii import crc32 as _crc32
 
 def crc32(seq):
     """Returns the crc32 checksum for a sequence (string or Seq object)."""
+    #NOTE - On Python 2 returns a signed int, on Python 3 it is unsigned
+    #Docs suggest should use crc32(x) & 0xffffffff for consistency.
+    #TODO - Should we return crc32(x) & 0xffffffff here?
     try:
         #Assume its a Seq object
         return _crc32(seq.tostring().encode())
