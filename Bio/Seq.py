@@ -919,7 +919,7 @@ class Seq(object):
         >>> coding_dna.translate(table=1, cds=True)
         Traceback (most recent call last):
             ...
-        Bio.Data.CodonTable.TranslationError: First codon 'GTG' is not a start codon
+        TranslationError: First codon 'GTG' is not a start codon
 
         If the sequence has no in-frame stop codon, then the to_stop argument
         has no effect:
@@ -1887,17 +1887,17 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
     >>> _translate_str("TA?", table)
     Traceback (most recent call last):
        ...
-    Bio.Data.CodonTable.TranslationError: Codon 'TA?' is invalid
+    TranslationError: Codon 'TA?' is invalid
     >>> _translate_str("ATGCCCTAG", table, cds=True)
     'MP'
     >>> _translate_str("AAACCCTAG", table, cds=True)
     Traceback (most recent call last):
        ...
-    Bio.Data.CodonTable.TranslationError: First codon 'AAA' is not a start codon
+    TranslationError: First codon 'AAA' is not a start codon
     >>> _translate_str("ATGCCCTAGCCCTAG", table, cds=True)
     Traceback (most recent call last):
        ...
-    Bio.Data.CodonTable.TranslationError: Extra in frame stop codon found.
+    TranslationError: Extra in frame stop codon found.
     """
     sequence = sequence.upper()
     amino_acids = []
