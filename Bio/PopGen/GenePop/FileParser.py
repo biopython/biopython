@@ -112,11 +112,11 @@ class FileRecord:
         """Starts parsing a file containing a GenePop file.
         """
         self._handle = open(self.fname)
-        self.comment_line = self._handle.next().rstrip()
+        self.comment_line = self._handle.readline().rstrip()
         #We can now have one loci per line or all loci in a single line
         #separated by either space or comma+space...
         #We will remove all commas on loci... that should not be a problem
-        sample_loci_line = self._handle.next().rstrip().replace(',', '')
+        sample_loci_line = self._handle.readline().rstrip().replace(',', '')
         all_loci = sample_loci_line.split(' ')
         self.loci_list.extend(all_loci)
         for line in self._handle:
