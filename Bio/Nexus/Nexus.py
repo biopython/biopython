@@ -878,8 +878,9 @@ class Nexus(object):
             #check for invalid characters
             for i,c in enumerate(iupac_seq.tostring()):
                 if c not in self.valid_characters and c!=self.gap and c!=self.missing:
-                    raise NexusError('Taxon %s: Illegal character %s in line: %s (check dimensions / interleaving)'\
-                            % (id,c,l[i-10:i+10]))
+                    raise NexusError( \
+                        ('Taxon %s: Illegal character %s in sequence %s ' + \
+                         '(check dimensions/interleaving)') % (id,c, iupac_seq))
             #add sequence to matrix
             if first_matrix_block:
                 self.unaltered_taxlabels.append(id)
