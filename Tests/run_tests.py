@@ -22,6 +22,21 @@ doctest       -- run the docstring tests.
 By default, all tests are run.
 """
 
+# The default verbosity (not verbose)
+VERBOSITY = 0
+
+# standard modules
+import sys
+import cStringIO
+import os
+import re
+import getopt
+import time
+import traceback
+import unittest
+import doctest
+import distutils.util
+
 # This is the list of modules containing docstring tests.
 # If you develop docstring tests for other modules, please add
 # those modules here.
@@ -55,21 +70,9 @@ try:
 except ImportError:
     pass
 
-
-# The default verbosity (not verbose)
-VERBOSITY = 0
-
-# standard modules
-import sys
-import cStringIO
-import os
-import re
-import getopt
-import time
-import traceback
-import unittest
-import doctest
-import distutils.util
+#Skip Bio.Seq doctest under Python 3.0, see http://bugs.python.org/issue7490
+if sys.version_info[0:2] == (3,1):
+    DOCTEST_MODULES.remove("Bio.Seq")
 
 system_lang = os.environ.get('LANG', 'C') #Cache this
 
