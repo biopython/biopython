@@ -112,7 +112,7 @@ class IndexDictTests(unittest.TestCase):
             raw = rec_dict.get_raw(key)
             self.assertTrue(raw.strip())
             self.assertTrue(raw in raw_file)
-            if format in ["ig", "uniprot"]:
+            if format in ["ig", "uniprot-xml"]:
                #These have a header structure and can't be parsed
                #individually (at least, not right now).
                continue
@@ -168,7 +168,7 @@ tests = [
     ("SwissProt/sp010", "swiss", None),
     ("SwissProt/sp016", "swiss", None),
     ("SwissProt/swiss4.txt", "swiss", None),
-    ("SwissProt/swiss4.xml", "uniprot", None),
+    ("SwissProt/swiss4.xml", "uniprot-xml", None),
     ("SwissProt/swiss4.fasta", "fasta", None),
     ("Roche/E3MFGYR02_random_10_reads.sff", "sff", generic_dna),
     ("Roche/E3MFGYR02_random_10_reads.sff", "sff-trim", generic_dna),

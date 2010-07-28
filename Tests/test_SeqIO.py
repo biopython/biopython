@@ -116,9 +116,9 @@ test_files = [ \
 #Following example is also used in test_registry.py
     ("swiss",  False, 'Registry/EDD_RAT.dat', 1),
 #Following examples are also used in test_Uniprot.py
-    ("uniprot",  False, 'SwissProt/uni001', 1),
-    ("uniprot",  False, 'SwissProt/uni002', 3),
-    ("uniprot",  False, 'SwissProt/Q13639.xml', 1),
+    ("uniprot-xml",  False, 'SwissProt/uni001', 1),
+    ("uniprot-xml",  False, 'SwissProt/uni002', 3),
+    ("uniprot-xml",  False, 'SwissProt/Q13639.xml', 1),
     ("swiss",    False, 'SwissProt/Q13639.txt', 1),
 #Following examples are also used in test_GenBank.py
     ("genbank",False, 'GenBank/noref.gb', 1),
@@ -415,7 +415,7 @@ def check_simple_write_read(records, indent=" "):
 
 #Check parsers can cope with an empty file
 for t_format in SeqIO._FormatToIterator:
-    if t_format in SeqIO._BinaryFormats or t_format=="uniprot":
+    if t_format in SeqIO._BinaryFormats or t_format=="uniprot-xml":
         #Not allowed empty SFF files.
         continue
     handle = StringIO()

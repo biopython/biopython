@@ -1354,7 +1354,7 @@ Testing reading swiss format file Registry/EDD_RAT.dat
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
-Testing reading uniprot format file SwissProt/uni001
+Testing reading uniprot-xml format file SwissProt/uni001
  ID = 'Q91G55', Name='043L_IIV6',
  Seq='MDLINNKLNIEIQKFCLDLEKKYNINYNNLIDLWFNKEST...CLNDIPI', length=116
  Checking can write/read as 'fasta' format
@@ -1378,7 +1378,7 @@ Testing reading uniprot format file SwissProt/uni001
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
-Testing reading uniprot format file SwissProt/uni002
+Testing reading uniprot-xml format file SwissProt/uni002
  ID = 'Q91G55', Name='043L_IIV6',
  Seq='MDLINNKLNIEIQKFCLDLEKKYNINYNNLIDLWFNKEST...CLNDIPI', length=116
  ID = 'O55717', Name='094L_IIV6',
@@ -1410,7 +1410,7 @@ Testing reading uniprot format file SwissProt/uni002
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
-Testing reading uniprot format file SwissProt/Q13639.xml
+Testing reading uniprot-xml format file SwissProt/Q13639.xml
  ID = 'Q13639', Name='5HT4R_HUMAN',
  Seq='MDKLDANVSSEEGFGSVEKVVLLTFLSTVILMAILGNLLV...AAQPSDT', length=388
  Checking can write/read as 'fasta' format

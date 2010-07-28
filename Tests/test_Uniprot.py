@@ -20,7 +20,7 @@ class TestUniprot(unittest.TestCase):
         datafile = os.path.join('SwissProt', filename)
 
         test_handle = open(datafile)
-        seq_record = SeqIO.read(test_handle, "uniprot")
+        seq_record = SeqIO.read(test_handle, "uniprot-xml")
         test_handle.close()
 
         self.assertTrue(isinstance(seq_record, SeqRecord))
@@ -112,13 +112,13 @@ class TestUniprot(unittest.TestCase):
     def test_Q13639(self):
 	"""Compare SwissProt text and uniprot XML versions of Q13639."""
 	old = SeqIO.read("SwissProt/Q13639.txt", "swiss")
-        new = SeqIO.read("SwissProt/Q13639.xml", "uniprot")
+        new = SeqIO.read("SwissProt/Q13639.xml", "uniprot-xml")
 	self.compare_txt_xml(old, new)
     
     def test_swiss4(self):
 	"""Compare SwissProt text and uniprot XML versions of 4 entries."""
 	txt_list = list(SeqIO.parse("SwissProt/swiss4.txt", "swiss"))
-	xml_list = list(SeqIO.parse("SwissProt/swiss4.xml", "uniprot"))
+	xml_list = list(SeqIO.parse("SwissProt/swiss4.xml", "uniprot-xml"))
 	fas_list = list(SeqIO.parse("SwissProt/swiss4.fasta", "fasta"))
 	ids = [x.strip() for x in open("SwissProt/swiss4.list")]
 	self.assertEqual(len(txt_list), len(ids))
@@ -133,17 +133,17 @@ class TestUniprot(unittest.TestCase):
     def test_swiss4_index(self):
 	"""Index SwissProt text and uniprot XML versions of 4 entries."""
 	txt_list = list(SeqIO.parse("SwissProt/swiss4.txt", "swiss"))
-	xml_list = list(SeqIO.parse("SwissProt/swiss4.xml", "uniprot"))
+	xml_list = list(SeqIO.parse("SwissProt/swiss4.xml", "uniprot-xml"))
 	ids = [x.strip() for x in open("SwissProt/swiss4.list")]
 	txt_index = SeqIO.index("SwissProt/swiss4.txt", "swiss")
-	xml_index = SeqIO.index("SwissProt/swiss4.xml", "uniprot")
+	xml_index = SeqIO.index("SwissProt/swiss4.xml", "uniprot-xml")
 	self.assertEqual(sorted(txt_index), sorted(ids))
 	self.assertEqual(sorted(xml_index), sorted(ids))
 	#Check SeqIO.parse() versus SeqIO.index() for plain text "swiss"
 	for old in txt_list:
 	    new = txt_index[old.id]
 	    compare_record(old, new)
-	#Check SeqIO.parse() versus SeqIO.index() for XML "uniprot"
+	#Check SeqIO.parse() versus SeqIO.index() for XML "uniprot-xml"
 	for old in xml_list:
 	    new = xml_index[old.id]
 	    compare_record(old, new)

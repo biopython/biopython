@@ -626,6 +626,6 @@ _FormatToIndexedDict = {"ace" : SequentialSeqFileDict,
                         "swiss" : SwissDict,
                         "tab" : TabDict,
                         "qual" : SequentialSeqFileDict,
-                        "uniprot" : UniprotDict,
+                        "uniprot-xml" : UniprotDict,
                         }
 
