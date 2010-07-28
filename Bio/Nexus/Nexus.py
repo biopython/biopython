@@ -109,14 +109,16 @@ class CharBuffer:
             return None
         word.append(first)
         if first=="'":                                      # word starts with a quote
-            quoted=True
+            quoted="'"
+        elif first=='"':
+            quoted='"'
         elif first in PUNCTUATION:                          # if it's punctuation, return immediately
             return first
         while True:             
             c=self.peek()
-            if c=="'":                                      # a quote?
+            if c==quoted:                                      # a quote?
                 word.append(self.next())                    # store quote 
-                if self.peek()=="'":                        # double quote
+                if self.peek()==quoted:                        # double quote
                     skip=self.next()                        # skip second quote 
                 elif quoted:                                # second single quote ends word
                     break
@@ -929,6 +931,8 @@ class Nexus(object):
         
     def _tree(self,options):
         opts=CharBuffer(options)
+        if opts.peek_nonwhitespace()=='*': # a star can be used to make it the default tree in some software packages
+            dummy=opts.next_nonwhitespace()
         name=opts.next_word()
         if opts.next_nonwhitespace()!='=':
             raise NexusError('Syntax error in tree description: %s' \
