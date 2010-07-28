@@ -323,16 +323,28 @@ class RestrictionType(type):
         length of the recognition site."""
         return cls.size
     
+    def __hash__(cls):
+        #Python default is to use id(...)
+        #This is consistent with the __eq__ implementation
+        return id(cls)
+    
     def __eq__(cls, other):
         """RE == other -> bool
 
-        True if RE and other are the same enzyme."""
-        return other is cls
+        True if RE and other are the same enzyme.
+        
+        Specifically this checks they are the same Python object.
+        """
+        #assert (id(cls)==id(other)) == (other is cls) == (cls is other)
+        return id(cls)==id(other)
 
     def __ne__(cls, other):
         """RE != other -> bool.
         isoschizomer strict, same recognition site, same restriction -> False
-        all the other-> True"""
+        all the other-> True
+        
+        WARNING - This is not the inverse of the __eq__ method.
+        """
         if not isinstance(other, RestrictionType):
             return True
         elif cls.charac == other.charac:
@@ -2411,6 +2423,11 @@ AllEnzymes = CommOnly | NonComm
 #   Now, place the enzymes in locals so they can be imported.
 #
 names = [str(x) for x in AllEnzymes]
+try:
+    del x
+except NameError:
+    #Scoping changed in Python 3, the variable isn't leaked
+    pass
 locals().update(dict(zip(names, AllEnzymes)))
 __all__=['FormattedSeq', 'Analysis', 'RestrictionBatch','AllEnzymes','CommOnly','NonComm']+names
-del k, x, enzymes, TYPE, bases, names
+del k, enzymes, TYPE, bases, names
