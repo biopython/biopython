@@ -17,10 +17,10 @@ import string #for maketrans only
 import array
 import sys
 
-import Alphabet
-from Alphabet import IUPAC
+from Bio import Alphabet
+from Bio.Alphabet import IUPAC
 from Bio.SeqRecord import SeqRecord
-from Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
+from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 from Bio.Data import CodonTable
 
 def _maketrans(complement_mapping):
