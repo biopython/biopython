@@ -21,6 +21,13 @@ except ImportError:
     raise MissingExternalDependencyError(\
         "Install NumPy if you want to use Bio.PDB.")
 
+try:
+    from Bio.KDTree import _CKDTree
+except ImportError:
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(\
+        "C module in Bio.KDTree not compiled")
+
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
 from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO
