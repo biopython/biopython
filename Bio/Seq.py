@@ -59,6 +59,12 @@ class Seq(object):
     The Seq object provides a number of string like methods (such as count,
     find, split and strip), which are alphabet aware where appropriate.
 
+    In addition to the string like sequence, the Seq object has an alphabet
+    property. This is an instance of an Alphabet class from Bio.Alphabet,
+    for example generic DNA, or IUPAC DNA. This describes the type of molecule
+    (e.g. RNA, DNA, protein) and may also indicate the expected symbols
+    (letters).
+
     The Seq object also provides some biological methods, such as complement,
     reverse_complement, transcribe, back_transcribe and translate (which are
     not applicable to sequences with a protein alphabet).
@@ -84,6 +90,9 @@ class Seq(object):
         Seq('MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF', IUPACProtein())
         >>> print my_seq
         MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
+        >>> my_seq.alphabet
+        IUPACProtein()
+
         """
         # Enforce string storage
         if not isinstance(data, basestring):
