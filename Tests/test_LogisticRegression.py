@@ -59,9 +59,9 @@ class TestLogisticRegression(unittest.TestCase):
     def test_calculate_model(self):
         model = LogisticRegression.train(xs, ys)
         beta = model.beta
-        self.assertAlmostEqual(beta[0],  8.9830, 4)
-        self.assertAlmostEqual(beta[1], -0.0360, 4)
-        self.assertAlmostEqual(beta[2],  0.0218, 4)
+        self.assertAlmostEqual(beta[0],  8.9830, places=4)
+        self.assertAlmostEqual(beta[1], -0.0360, places=4)
+        self.assertAlmostEqual(beta[2],  0.0218, places=4)
 
     def test_classify(self):
         model = LogisticRegression.train(xs, ys)
@@ -73,11 +73,11 @@ class TestLogisticRegression(unittest.TestCase):
     def test_calculate_probability(self):
         model = LogisticRegression.train(xs, ys)
         q, p = LogisticRegression.calculate(model, [6,-173.143442352])
-        self.assertAlmostEqual(p,  0.993242, 6)
-        self.assertAlmostEqual(q,  0.006758, 6)
+        self.assertAlmostEqual(p, 0.993242, places=6)
+        self.assertAlmostEqual(q, 0.006758, places=6)
         q, p = LogisticRegression.calculate(model, [309, -271.005880394])
-        self.assertAlmostEqual(p,  0.000321, 6)
-        self.assertAlmostEqual(q,  0.999679, 6)
+        self.assertAlmostEqual(p, 0.000321, places=6)
+        self.assertAlmostEqual(q, 0.999679, places=6)
 
     def test_model_accuracy(self):
         correct = 0
