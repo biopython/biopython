@@ -22,14 +22,15 @@ import warnings
 
 from Bio.Phylo import PhyloXML as PX
 
-if sys.version_info[0] == 3:
-    # cElementTree regression in Python 3; use the pure-Python version
+if (3, 0, 0) <= sys.version_info < (3, 1, 2):
+    # Workaround for cElementTree regression in python 3.0--3.1.1
     # See http://bugs.python.org/issue9257
     from xml.etree import ElementTree
 else:
     try:
         from xml.etree import cElementTree as ElementTree
     except ImportError:
+        # Alternative Python implementation, perhaps?
         try:
             from xml.etree import ElementTree as ElementTree
         except ImportError:
