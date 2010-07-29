@@ -41,11 +41,12 @@ This avoids having to worry about the details of how best to use subprocess.
 We have also been working on updates to avoid code which has been deprecated
 in Python 2.7 or Python 3, an important step towards Python 3 support.
 
-(At least) 8 people have contributed to this release, including 4 new people:
+(At least) 9 people have contributed to this release, including 4 new people:
 
 Carlos Rios Vera (first contribution)
 Claude Paroz (first contribution)
 Eric Talevich
+Frank Kauff
 Joao Rodrigues (first contribution)
 Konstantin Okonechnikov (first contribution)
 Michiel de Hoon
