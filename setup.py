@@ -33,7 +33,7 @@ def get_yes_or_no(question, default):
         default_str = 'n'
 
     while True:
-        print ("%s %s " % (question, option_str),)
+        print ("%s %s:" % (question, option_str))
         if sys.version_info[0] == 3:
             response = input().lower()
         else:
