@@ -111,8 +111,8 @@ class PrankApplication(unittest.TestCase):
         try:
             align = AlignIO.read(open("output.2.nex"), "nexus")
             for old, new in zip(records, align):
-                #Prank automatically reduces name to 9 chars
-                self.assertEqual(old.id[:9], new.id)
+                #Old versions of Prank reduced name to 9 chars
+                self.assertTrue(old.id==new.id or old.id[:9]==new.id)
                 #infile1 has alignment gaps in it
                 self.assertEqual(str(new.seq).replace("-",""),
                                  str(old.seq).replace("-",""))
