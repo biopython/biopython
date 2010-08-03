@@ -72,7 +72,7 @@ def epost(db, **keywds):
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi'
     variables = {'db' : db}
     variables.update(keywds)
-    return _open(cgi, variables, post=False)
+    return _open(cgi, variables, post=True)
 
 def efetch(db, **keywds):
     """Fetches Entrez results which are returned as a handle.
