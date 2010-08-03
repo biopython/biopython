@@ -134,6 +134,7 @@ def _read(handle):
     record = None
     unread = ""
     for line in handle:
+        line = line.decode('ascii')
         key, value = line[:2], line[5:].rstrip()
         if unread:
             value = unread + " " + value
