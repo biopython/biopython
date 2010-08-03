@@ -47,9 +47,8 @@ read         Parses the XML results returned by any of the above functions.
 _open        Internally used function.
 
 """
-import urllib, time, warnings
+import urllib, urllib2, time, warnings
 import os.path
-from Bio import File
 
 
 email = None
@@ -73,7 +72,7 @@ def epost(db, **keywds):
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi'
     variables = {'db' : db}
     variables.update(keywds)
-    return _open(cgi, variables, post=True)
+    return _open(cgi, variables, post=False)
 
 def efetch(db, **keywds):
     """Fetches Entrez results which are returned as a handle.
@@ -316,67 +315,17 @@ a user at the email address provided before blocking access to the
 E-utilities.""", UserWarning)
     # Open a handle to Entrez.
     options = urllib.urlencode(params, doseq=True)
-    if post:
-        #HTTP POST
-        handle = urllib.urlopen(cgi, data=options)
-    else:
-        #HTTP GET
-        cgi += "?" + options
-        handle = urllib.urlopen(cgi)
-
-    # Wrap the handle inside an UndoHandle.
-    uhandle = File.UndoHandle(handle)
-
-    # Check for errors in the first 7 lines.
-    # This is kind of ugly.
-    lines = []
-    for i in range(7):
-        lines.append(uhandle.readline())
-    for i in range(6, -1, -1):
-        uhandle.saveline(lines[i])
-
     try:
-        data = ''.join(lines)
-    except TypeError:
-        #On Python 3 the lines will be bytes not unicode strings...
-        data = ''.join(x.decode() for x in lines)
-        #Note that this doesn't alter the nature of the UndoHandle this
-        #function will return to the caller (it will still be using bytes)
-                   
-    if "500 Proxy Error" in data:
-        # Sometimes Entrez returns a Proxy Error instead of results
-        raise IOError("500 Proxy Error (NCBI busy?)")
-    elif "502 Proxy Error" in data:
-        raise IOError("502 Proxy Error (NCBI busy?)")
-    elif "WWW Error 500 Diagnostic" in data:
-        raise IOError("WWW Error 500 Diagnostic (NCBI busy?)")
-    elif "<title>Service unavailable!</title>" in data:
-        #Probably later in the file it will say "Error 503"
-        raise IOError("Service unavailable!")
-    elif "<title>Bad Gateway!</title>" in data:
-        #Probably later in the file it will say:
-        #  "The proxy server received an invalid
-        #   response from an upstream server."
-        raise IOError("Bad Gateway!")
-    elif "<title>414 Request-URI Too Large</title>" in data \
-    or "<h1>Request-URI Too Large</h1>" in data:
-        raise IOError("Requested URL too long (try using EPost?)")
-    elif data.startswith("Error:"):
-        #e.g. 'Error: Your session has expired. Please repeat your search.\n'
-        raise IOError(data.strip())
-    elif data.startswith("The resource is temporarily unavailable"):
-        #This can occur with an invalid query_key
-        #Perhaps this should be a ValueError?
-        raise IOError("The resource is temporarily unavailable")
-    elif data.startswith("download dataset is empty"):
-        #This can occur when omit the identifier, or the WebEnv and query_key
-        #Perhaps this should be a ValueError?
-        raise IOError("download dataset is empty")
-    elif data[:5] == "ERROR":
-        # XXX Possible bug here, because I don't know whether this really
-        # occurs on the first line.  I need to check this!
-        raise IOError("ERROR, possibly because id not available?")
-    # Should I check for 404?  timeout?  etc?
-    return uhandle
+        if post:
+            #HTTP POST
+            handle = urllib2.urlopen(cgi, data=options)
+        else:
+            #HTTP GET
+            cgi += "?" + options
+            handle = urllib2.urlopen(cgi)
+    except urllib2.HTTPError, exception:
+        raise exception
+
+    return handle
 
 _open.previous = 0
