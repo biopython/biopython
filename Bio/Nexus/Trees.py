@@ -419,7 +419,7 @@ class Tree(Nodes.Chain):
         return self.sum_branchlength(ca,node1)+self.sum_branchlength(ca,node2)
 
     def is_monophyletic(self,taxon_list):
-        """Return node_id of common ancestor if taxon_list is monophyletic, False otherwise.
+        """Return node_id of common ancestor if taxon_list is monophyletic, -1 otherwise.
         
         result = is_monophyletic(self,taxon_list)
         """
@@ -438,7 +438,7 @@ class Tree(Nodes.Chain):
                         node_id=subnode
                         break   # out of for loop
                 else:
-                    return False   # taxon set was not with successors, for loop exhausted
+                    return -1   # taxon set was not with successors, for loop exhausted
 
     def is_bifurcating(self,node=None):
         """Return True if tree downstream of node is strictly bifurcating."""
