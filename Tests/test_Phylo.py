@@ -20,6 +20,15 @@ EX_PHYLO = 'PhyloXML/phyloxml_examples.xml'
 
 class TreeTests(unittest.TestCase):
     """Tests for methods on BaseTree.Tree objects."""
+    def test_root_with_outgroup(self):
+        """Tree.root_with_outgroup: reroot at a given clade."""
+        tree = Phylo.read(EX_APAF, 'phyloxml')
+        orig_num_tips = len(tree.get_terminals())
+        orig_tree_len = tree.total_branch_length()
+        tree.root_with_outgroup({'name': '19_NEMVE'}, {'name': '20_NEMVE'})
+        self.assertEqual(orig_num_tips, len(tree.get_terminals()))
+        self.assertAlmostEqual(orig_tree_len, tree.total_branch_length())
+
     # Magic method
     def test_str(self):
         """Tree.__str__: pretty-print to a string.

@@ -517,7 +517,7 @@ class TreeMixin(object):
 
         If taxon is from a bifurcation, the connecting node will be collapsed
         and its branch length added to remaining terminal node. This might be no
-        longer a meaningful value.
+        longer be a meaningful value.
 
         @return: parent clade of the pruned target
         """
@@ -653,6 +653,69 @@ class Tree(TreeElement, TreeMixin):
     def clade(self):
         """The first clade in this tree (not itself)."""
         return self.root
+
+    def root_with_outgroup(self, *outgroup_targets):
+        """Reroot this tree with the outgroup clade containing outgroup_targets.
+
+        Operates in-place.
+
+        Edge cases:
+
+        - If outgroup == self.root, no change
+        - If outgroup is terminal, create new bifurcating root node with a
+          0-length branch to the outgroup
+        - If outgroup is internal, use the given outgroup node as the new
+          trifurcating root, keeping branches the same
+        - If the original root was bifurcating, drop it from the tree,
+          preserving total branch lengths
+        """
+        # This raises a ValueError if any target is not in this tree
+        # Otherwise, common_ancestor guarantees outgroup is in this tree
+        outgroup = self.common_ancestor(*outgroup_targets)
+        outgroup_path = self.get_path(outgroup)
+        if len(outgroup_path) == 0:
+            # Outgroup is the current root -- no change
+            return
+
+        prev_blen = outgroup.branch_length
+        if outgroup.is_terminal():
+            # Create a new root with a 0-length branch to the outgroup
+            outgroup.branch_length = 0.0
+            new_root = self.root.__class__(branch_length=None, clades=[outgroup])
+        else:
+            # Use the given outgroup node as the new (trifurcating) root
+            new_root = outgroup
+            new_root.branch_length = None
+
+        # Tracing the outgroup lineage backwards, reattach the subclades under a
+        # new root clade. Reverse the branches directly above the outgroup in
+        # the tree, but keep the descendants of those clades as they are.
+        new_parent = new_root
+        for parent in outgroup_path[-2::-1]:
+            parent.clades.pop(parent.clades.index(new_parent))
+            prev_blen, parent.branch_length = parent.branch_length, prev_blen
+            new_parent.clades.insert(0, parent)
+            new_parent = parent
+        # Finally, handle the original root according to number of descendents
+        old_root = self.root
+        old_root.clades.pop(old_root.clades.index(new_parent))
+        if len(old_root) == 1:
+            # Delete the old bifurcating root & add branch lengths
+            ingroup = old_root.clades[0]
+            if ingroup.branch_length:
+               ingroup.branch_length += prev_blen
+            else:
+               ingroup.branch_length = prev_blen
+            new_parent.clades.insert(0, ingroup)
+            # ENH: If annotations are attached to old_root, do... something.
+        else:
+            # Keep the old trifurcating/polytomous root as an internal node
+            old_root.branch_length = prev_blen
+            new_parent.clades.insert(0, old_root)
+
+        self.root = new_root
+        self.rooted = True
+        return
 
     # Method assumed by TreeMixin
 
