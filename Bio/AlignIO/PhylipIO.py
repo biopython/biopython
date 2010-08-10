@@ -19,7 +19,9 @@ character as in the first sequence.  The PHYLIP 3.6 documentation says:
 
 At the time of writing, we do nothing special with a dot/period.
 """
-   
+
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord  
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
@@ -193,20 +195,10 @@ class PhylipIterator(AlignmentIterator):
                     raise ValueError("End of file mid-block")
             if not line : break #end of file
 
-        alignment = MultipleSeqAlignment(self.alphabet)
-        for i in range(0,number_of_seqs):
-            seq = "".join(seqs[i])
-            if len(seq)!=length_of_seqs:
-                raise ValueError("Sequence %i length %i, expected length %i" \
-                                  % (i+1, len(seq), length_of_seqs))
-            alignment.add_sequence(ids[i], seq)
-            
-            record = alignment[-1]
-            assert ids[i] == record.id or ids[i] == record.description
-            record.id = ids[i]
-            record.name = ids[i]
-            record.description = ids[i]
-        return alignment
+        records = (SeqRecord(Seq("".join(s), self.alphabet), \
+                             id=i, name=i, description=i) \
+                   for (i,s) in zip(ids, seqs)) 
+        return MultipleSeqAlignment(records, self.alphabet)
 
 if __name__=="__main__":
     print "Running short mini-test"
