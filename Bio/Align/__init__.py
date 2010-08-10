@@ -204,10 +204,25 @@ class MultipleSeqAlignment(_Alignment):
         SeqRecords, you can use the extend method with a second alignment
         (provided its sequences have the same length as the original alignment).
         """
+        if len(self):
+            #Use the standard method to get the length
+            expected_length = self.get_alignment_length()
+        else:
+            #Take the first record's length
+            records = iter(records) #records arg could be list or iterator
+            try:
+                rec = records.next()
+            except StopIteration:
+                #Special case, no records
+                return
+            expected_length = len(rec)
+            self.append(rec, expected_length)
+            #Now continue to the rest of the records as usual
+            
         for rec in records:
-            self.append(rec)
-
-    def append(self, record):
+            self.append(rec, _private_expected_length=expected_length)
+            
+    def append(self, record, _private_expected_length=None):
         """Add one more SeqRecord object to the alignment as a new row.
 
         This must have the same length as the original alignment (unless this is
@@ -253,11 +268,19 @@ class MultipleSeqAlignment(_Alignment):
         """
         if not isinstance(record, SeqRecord):
             raise TypeError("New sequence is not a SeqRecord object")
-        if self._records and len(record) != self.get_alignment_length():
-            #TODO - Use the following more helpful error, but update unit tests
-            #raise ValueError("New sequence is not of length %i" \
-            #                 % self.get_alignment_length())
+
+        #Currently the get_alignment_length() call is expensive, so we need
+        #to avoid calling it repeatedly for __init__ and extend, hence this
+        #hack via a private argument to the append method:
+        if _private_expected_length is None:
+            if self._records and len(record) != self.get_alignment_length():
+                #TODO - Use the following more helpful error, but update unit tests
+                #raise ValueError("New sequence is not of length %i" \
+                #                 % self.get_alignment_length())
+                raise ValueError("Sequences must all be the same length")
+        elif len(record) != _private_expected_length:
             raise ValueError("Sequences must all be the same length")
+            
         #Using not self.alphabet.contains(record.seq.alphabet) needs fixing
         #for AlphabetEncoders (e.g. gapped versus ungapped).
         if not Alphabet._check_type_compatible([self._alphabet, record.seq.alphabet]):
