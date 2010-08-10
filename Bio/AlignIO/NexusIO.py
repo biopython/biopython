@@ -40,7 +40,6 @@ def NexusIterator(handle, seq_count=None):
     if not n.matrix:
         #No alignment found
         raise StopIteration
-    alignment = MultipleSeqAlignment(n.alphabet)
 
     #Bio.Nexus deals with duplicated names by adding a '.copy' suffix.
     #The original names and the modified names are kept in these two lists:
