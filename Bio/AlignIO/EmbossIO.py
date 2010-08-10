@@ -13,6 +13,8 @@ This module contains a parser for the EMBOSS pairs/simple file format, for
 example from the alignret, water and needle tools.
 """
 
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
@@ -202,7 +204,7 @@ class EmbossIterator(AlignmentIterator):
             raise ValueError("Found %i records in this alignment, told to expect %i" \
                              % (len(ids), self.records_per_alignment))
 
-        alignment = MultipleSeqAlignment(self.alphabet)
+        records = []
         for id, seq in zip(ids, seqs):
             if len(seq) != length_of_seqs:
                 #EMBOSS 2.9.0 is known to use spaces instead of minus signs
@@ -212,9 +214,11 @@ class EmbossIterator(AlignmentIterator):
                 raise ValueError("Error parsing alignment - sequences of "
                                  "different length? You could be using an "
                                  "old version of EMBOSS.")
-            alignment.add_sequence(id, seq)
-        return alignment
-    
+            records.append(SeqRecord(Seq(seq, self.alphabet), \
+                                     id=id, description=id))
+        return MultipleSeqAlignment(records, self.alphabet)
+
+
 if __name__ == "__main__":
     print "Running a quick self-test"
 
