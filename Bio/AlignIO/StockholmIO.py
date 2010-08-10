@@ -424,13 +424,8 @@ class StockholmIterator(AlignmentIterator):
                 raise ValueError("Found %i records in this alignment, told to expect %i" \
                                  % (len(ids), self.records_per_alignment))
 
-            alignment = MultipleSeqAlignment(self.alphabet)
-
-            #TODO - Introduce an annotated alignment class?
-            #For now, store the annotation a new private property:
-            alignment._annotations = gr
-
             alignment_length = len(seqs.values()[0])
+            records = [] #Alignment obj will put them all in a list anyway
             for id in ids:
                 seq = seqs[id]
                 if alignment_length != len(seq):
@@ -449,7 +444,13 @@ class StockholmIterator(AlignmentIterator):
                     record.annotations["end"] = end
 
                 self._populate_meta_data(id, record)
-                alignment.append(record)
+                records.append(record)
+            alignment = MultipleSeqAlignment(records, self.alphabet)
+
+            #TODO - Introduce an annotated alignment class?
+            #For now, store the annotation a new private property:
+            alignment._annotations = gr
+
             return alignment
         else:
             return None
