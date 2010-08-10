@@ -234,7 +234,7 @@ class FastaM10Iterator(AlignmentIterator):
 
         #TODO - Look at the "sq_type" to assign a sensible alphabet?
         alphabet = self.alphabet
-        alignment = MultipleSeqAlignment(alphabet)
+        alignment = MultipleSeqAlignment([], alphabet)
 
         #TODO - Introduce an annotated alignment class?
         #For now, store the annotation a new private property:
