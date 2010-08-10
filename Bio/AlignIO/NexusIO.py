@@ -14,9 +14,10 @@ as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
 
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord  
 from Bio.Nexus import Nexus
 from Bio.Align import MultipleSeqAlignment
-from Bio.SeqRecord import SeqRecord
 from Interfaces import AlignmentWriter
 from Bio import Alphabet
 
@@ -48,15 +49,14 @@ def NexusIterator(handle, seq_count=None):
     if seq_count and seq_count != len(n.unaltered_taxlabels):
         raise ValueError("Found %i sequences, but seq_count=%i" \
                % (len(n.unaltered_taxlabels), seq_count))
-        
-    for old_name, new_name in zip (n.unaltered_taxlabels, n.taxlabels):
-        assert new_name.startswith(old_name)
-        seq = n.matrix[new_name] #already a Seq object with the alphabet set
-        #ToDo - Can we extract any annotation too?
-        alignment.append(SeqRecord(seq, id=new_name, name=old_name,
-                                   description=""))
+
+    #ToDo - Can we extract any annotation too?
+    records = (SeqRecord(n.matrix[new_name], id=new_name, \
+                         name=old_name, description="") \
+               for old_name, new_name \
+               in zip (n.unaltered_taxlabels, n.taxlabels))
     #All done
-    yield alignment
+    yield MultipleSeqAlignment(records, n.alphabet)
 
 class NexusWriter(AlignmentWriter):
     """Nexus alignment writer.
