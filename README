@@ -75,8 +75,8 @@ it has to be done BEFORE running setup.py.
 To convert the code to Python 3, the 2to3 tool is required (comes
 with Python 3). On the top-level directory do:
 
-$ 2to3 --no-diffs -n -w Bio BioSQL Tests Scripts Doc/examples
-$ 2to3 --no-diffs -n -w -d Bio BioSQL Tests Scripts Doc/examples
+$ 2to3 --nofix=long --no-diffs -n -w Bio BioSQL Tests Scripts Doc/examples
+$ 2to3 --nofix=long --no-diffs -n -w -d Bio BioSQL Tests Scripts Doc/examples
 
 The first command converts the code, the second command converts the
 doctests (examples within the docstrings). You can in general ignore
