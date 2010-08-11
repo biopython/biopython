@@ -193,22 +193,19 @@ from Bio.SeqRecord import SeqRecord
 import struct
 import sys
 
-#This is a hack, want "\0" on Python 2.x and b"\0" on Python 3.x, etc
-_null = "\0".encode("ascii")
-_sff = ".sff".encode("ascii")
-_hsh = ".hsh".encode("ascii")
-_srt = ".srt".encode("ascii")
-_mft = ".mft".encode("ascii")
-if sys.version_info[0] >= 3:
-    #If running on Python 3.x, this will do flag = b"\xff"
+from Bio._py3k import _bytes_to_string, _as_bytes
+_null = _as_bytes("\0")
+_sff = _as_bytes(".sff")
+_hsh = _as_bytes(".hsh")
+_srt = _as_bytes(".srt")
+_mft = _as_bytes(".mft")
+#This is a hack because char 255 is special in unicode:
+try:
+    #This works on Python 2.6+ or Python 3.0
     _flag = eval(r'b"\xff"')
-    _bytes_to_string = lambda b: b.decode() # bytes to unicode
-    _string_to_bytes = lambda s: s.encode() # unicode to bytes
-else:
-    #Must be on Python 2.x
+except SyntaxError:
+    #Must be on Python 2.4 or 2.5
     _flag = "\xff" #Char 255
-    _bytes_to_string = lambda b: b # i.e. do nothing
-    _string_to_bytes = lambda s: str(s) # str or unicode to str
 
 def _sff_file_header(handle):
     """Read in an SFF file header (PRIVATE).
@@ -757,8 +754,8 @@ class SffWriter(SequenceWriter):
             #return 0
             raise ValueError("Need at least one record for SFF output")
         try:
-            self._key_sequence = _string_to_bytes(record.annotations["flow_key"])
-            self._flow_chars = _string_to_bytes(record.annotations["flow_chars"])
+            self._key_sequence = _as_bytes(record.annotations["flow_key"])
+            self._flow_chars = _as_bytes(record.annotations["flow_chars"])
             self._number_of_flows_per_read = len(self._flow_chars)
         except KeyError:
             raise ValueError("Missing SFF flow information")
@@ -788,13 +785,13 @@ class SffWriter(SequenceWriter):
         self._index_start = handle.tell() #need for header
         #XML...
         if self._xml is not None:
-            xml = _string_to_bytes(self._xml)
+            xml = _as_bytes(self._xml)
         else:
             from Bio import __version__
             xml = "<!-- This file was output with Biopython %s -->\n" % __version__
             xml += "<!-- This XML and index block attempts to mimic Roche SFF files -->\n"
             xml += "<!-- This file may be a combination of multiple SFF files etc -->\n"
-            xml = _string_to_bytes(xml)
+            xml = _as_bytes(xml)
         xml_len = len(xml)
         #Write to the file...
         fmt = ">I4BLL"
@@ -890,9 +887,9 @@ class SffWriter(SequenceWriter):
         This assumes the header has been done.
         """
         #Basics
-        name = _string_to_bytes(record.id)
+        name = _as_bytes(record.id)
         name_len = len(name)
-        seq = _string_to_bytes(str(record.seq).upper())
+        seq = _as_bytes(str(record.seq).upper())
         seq_len = len(seq)
         #Qualities
         try:
@@ -903,8 +900,8 @@ class SffWriter(SequenceWriter):
         try:
             flow_values = record.annotations["flow_values"]
             flow_index = record.annotations["flow_index"]
-            if self._key_sequence != _string_to_bytes(record.annotations["flow_key"]) \
-            or self._flow_chars != _string_to_bytes(record.annotations["flow_chars"]):
+            if self._key_sequence != _as_bytes(record.annotations["flow_key"]) \
+            or self._flow_chars != _as_bytes(record.annotations["flow_chars"]):
                 raise ValueError("Records have inconsistent SFF flow data")
         except KeyError:
             raise ValueError("Missing SFF flow information")
