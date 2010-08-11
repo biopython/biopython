@@ -220,7 +220,7 @@ class MultipleSeqAlignment(_Alignment):
             #Now continue to the rest of the records as usual
             
         for rec in records:
-            self.append(rec, _private_expected_length=expected_length)
+            self._append(rec, expected_length)
             
     def append(self, record, _private_expected_length=None):
         """Add one more SeqRecord object to the alignment as a new row.
@@ -266,19 +266,23 @@ class MultipleSeqAlignment(_Alignment):
         8
 
         """
+        if self._records:
+            self._append(record, self.get_alignment_length())
+        else:
+            self._append(record)
+    
+    def _append(self, record, expected_length=None):
+        """Helper function (PRIVATE)."""
         if not isinstance(record, SeqRecord):
             raise TypeError("New sequence is not a SeqRecord object")
 
         #Currently the get_alignment_length() call is expensive, so we need
         #to avoid calling it repeatedly for __init__ and extend, hence this
-        #hack via a private argument to the append method:
-        if _private_expected_length is None:
-            if self._records and len(record) != self.get_alignment_length():
-                #TODO - Use the following more helpful error, but update unit tests
-                #raise ValueError("New sequence is not of length %i" \
-                #                 % self.get_alignment_length())
-                raise ValueError("Sequences must all be the same length")
-        elif len(record) != _private_expected_length:
+        #private _append method
+        if expected_length is not None and len(record) != expected_length:
+            #TODO - Use the following more helpful error, but update unit tests
+            #raise ValueError("New sequence is not of length %i" \
+            #                 % self.get_alignment_length())
             raise ValueError("Sequences must all be the same length")
             
         #Using not self.alphabet.contains(record.seq.alphabet) needs fixing
