@@ -21,6 +21,7 @@ parse              Read multiple SwissProt records
 
 """
 
+from Bio._py3k import _as_string
 
 class Record:
     """Holds information from a SwissProt record.
@@ -134,7 +135,9 @@ def _read(handle):
     record = None
     unread = ""
     for line in handle:
-        line = line.decode('ascii')
+        #This is for Python 3 to cope with a binary handle (byte strings),
+        #or a text handle (unicode strings):
+        line = _as_string(line)
         key, value = line[:2], line[5:].rstrip()
         if unread:
             value = unread + " " + value
