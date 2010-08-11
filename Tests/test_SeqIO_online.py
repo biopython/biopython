@@ -31,6 +31,7 @@ from StringIO import StringIO
 from Bio.SeqUtils.CheckSum import seguid
 
 from Bio.File import UndoHandle
+from Bio._py3k import _as_string
 
 #This lets us set the email address to be sent to NCBI Entrez:
 Entrez.email = "biopython-dev@biopython.org"
@@ -43,7 +44,7 @@ class ExPASyTests(unittest.TestCase):
         try:
             #This is to catch an error page from our proxy:
             handle = UndoHandle(ExPASy.get_sprot_raw(identifier))
-            if handle.peekline().startswith("<!DOCTYPE HTML"):
+            if _as_string(handle.peekline()).startswith("<!DOCTYPE HTML"):
                 raise IOError
             record = SeqIO.read(handle, "swiss")
             handle.close()
