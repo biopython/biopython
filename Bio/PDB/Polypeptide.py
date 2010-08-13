@@ -5,7 +5,7 @@
 
 """Polypeptide-related classes (construction and representation).
 
-Example:
+Simple example with multiple chains,
 
     >>> from Bio.PDB.PDBParser import PDBParser
     >>> from Bio.PDB.Polypeptide import PPBuilder
@@ -19,6 +19,21 @@ Example:
     LVFFAEDVGSNKGAIIGLMVGGVVIA
     LVFFAEDVGSNKGAIIGLMVGGVVIA
 
+Example with non-standard amino acids using HETATM lines in the PDB file,
+in this case selenomethionine (MSE):
+
+    >>> from Bio.PDB.PDBParser import PDBParser
+    >>> from Bio.PDB.Polypeptide import PPBuilder
+    >>> structure = PDBParser().get_structure('1A8O', 'PDB/1A8O.pdb')
+    >>> ppb=PPBuilder()
+    >>> for pp in ppb.build_peptides(structure):
+    ...     print pp.get_sequence()
+    ...     print pp.get_sequence()[-6], pp[-6].get_resname()
+    MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG
+    M MSE
+
+In this case the selenomethionine (the sixth from last residue) has been
+shown as M (methionine) by the get_sequence method.
 """
 
 import warnings
@@ -100,6 +115,13 @@ def three_to_one(s):
     'A'
     >>> three_to_one('TYR')
     'Y'
+
+    For non-standard amino acids, you get a KeyError:
+
+    >>> three_to_one('MSE')
+    Traceback (most recent call last):
+       ...
+    KeyError: 'MSE'
     """
     i=d3_to_index[s]
     return dindex_to_1[i]
@@ -260,6 +282,8 @@ class _PPBuilder:
     
     It checks if two consecutive residues in a chain are connected.
     The connectivity test is implemented by a subclass.
+    
+    This assumes you want both standard and non-standard amino acids.
     """
     def __init__(self, radius):
         """
@@ -269,19 +293,19 @@ class _PPBuilder:
         self.radius=radius
 
     def _accept(self, residue):
-        """Check if the residue is an amino acid."""
+        """Check if the residue is an amino acid (PRIVATE)."""
         if is_aa(residue):
-            return 1
+            return True
+        elif "CA" in residue.child_dict:
+            #It has an alpha carbon...
+            #We probably need to update the hard coded list of
+            #non-standard residues, see function is_aa for details.
+            warnings.warn("Assuming residue %s is an unknown modified "
+                          "amino acid" % residue.get_resname())
+            return True
         else:
-            if "CA" in residue.child_dict:
-                #It has an alpha carbon...
-                #We probably need to update the hard coded list of
-                #non-standard residues, see function is_aa for details.
-                warnings.warn("Assuming residue %s is an unknown modified "
-                              "amino acid" % residue.get_resname())
-                return 1
             # not a standard AA so skip
-            return 0
+            return False
     
     def build_peptides(self, entity, aa_only=1):
         """Build and return a list of Polypeptide objects.
