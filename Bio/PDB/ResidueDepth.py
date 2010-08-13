@@ -3,8 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Calculation of residue depth (using Michel Sanner's MSMS program for the
-surface calculation).
+"""Calculation of residue depth using command line tool MSMS.
+
+This module uses Michel Sanner's MSMS program for the surface calculation
+(specifically commands msms and pdb_to_xyzr). See:
+http://mgltools.scripps.edu/packages/MSMS
 
 Residue depth is the average distance of the atoms of a residue from 
 the solvent accessible surface.
@@ -73,14 +76,18 @@ def get_surface(pdb_file, PDB_TO_XYZR="pdb_to_xyzr", MSMS="msms"):
     # extract xyz and set radii
     xyz_tmp=tempfile.mktemp()
     PDB_TO_XYZR=PDB_TO_XYZR+" %s > %s"
-    make_xyz=PDB_TO_XYZR % (pdb_file, xyz_tmp) 
+    make_xyz=PDB_TO_XYZR % (pdb_file, xyz_tmp)
     os.system(make_xyz)
+    assert os.path.isfile(xyz_tmp), \
+        "Failed to generate XYZR file using command:\n%s" % make_xyz
     # make surface
     surface_tmp=tempfile.mktemp()
     MSMS=MSMS+" -probe_radius 1.5 -if %s -of %s > "+tempfile.mktemp()
     make_surface=MSMS % (xyz_tmp, surface_tmp)
     os.system(make_surface)
     surface_file=surface_tmp+".vert"
+    assert os.path.isfile(surface_file), \
+        "Failed to generate surface file using command:\n%s" % make_surface
     # read surface vertices from vertex file
     surface=_read_vertex_array(surface_file)
     # clean up tmp files
