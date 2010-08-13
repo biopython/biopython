@@ -104,7 +104,7 @@ def min_dist(coord, surface):
     and surface.
     """
     d=surface-coord
-    d2=sum(d*d, 1)
+    d2=numpy.sum(d*d, 1)
     return numpy.sqrt(min(d2))
 
 def residue_depth(residue, surface):
