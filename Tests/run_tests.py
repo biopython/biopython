@@ -66,7 +66,9 @@ DOCTEST_MODULES = ["Bio.Application",
 #Silently ignore any doctests for modules requiring numpy!
 try:
     import numpy
-    DOCTEST_MODULES.extend(["Bio.Statistics.lowess"])
+    DOCTEST_MODULES.extend(["Bio.Statistics.lowess",
+                            "Bio.PDB.Polypeptide",
+                            ])
 except ImportError:
     pass
 

@@ -7,9 +7,18 @@
 
 Example:
 
+    >>> from Bio.PDB.PDBParser import PDBParser
+    >>> from Bio.PDB.Polypeptide import PPBuilder
+    >>> structure = PDBParser().get_structure('2BEG', 'PDB/2BEG.pdb')
     >>> ppb=PPBuilder()
     >>> for pp in ppb.build_peptides(structure):
     ...     print pp.get_sequence()
+    LVFFAEDVGSNKGAIIGLMVGGVVIA
+    LVFFAEDVGSNKGAIIGLMVGGVVIA
+    LVFFAEDVGSNKGAIIGLMVGGVVIA
+    LVFFAEDVGSNKGAIIGLMVGGVVIA
+    LVFFAEDVGSNKGAIIGLMVGGVVIA
+
 """
 
 import warnings
@@ -47,35 +56,50 @@ for i in range(0, 20):
 def index_to_one(index):
     """Index to corresponding one letter amino acid name.
     
-    For example: 0 to A.
+    >>> index_to_one(0)
+    'A'
+    >>> index_to_one(19)
+    'Y'
     """
     return dindex_to_1[index]
 
 def one_to_index(s):
     """One letter code to index.
     
-    For example: A to 0.
+    >>> one_to_index('A')
+    0
+    >>> one_to_index('Y')
+    19
     """
     return d1_to_index[s]
 
 def index_to_three(i):
     """Index to corresponding three letter amino acid name.
     
-    For example: 0 to ALA.
+    >>> index_to_three(0)
+    'ALA'
+    >>> index_to_three(19)
+    'TYR'
     """
     return dindex_to_3[i]
 
 def three_to_index(s):
     """Three letter code to index.
     
-    For example: ALA to 0.
+    >>> three_to_index('ALA')
+    0
+    >>> three_to_index('TYR')
+    19
     """
     return d3_to_index[s]
 
 def three_to_one(s):
     """Three letter code to one letter code.
     
-    For example: ALA to A.
+    >>> three_to_one('ALA')
+    'A'
+    >>> three_to_one('TYR')
+    'Y'
     """
     i=d3_to_index[s]
     return dindex_to_1[i]
@@ -83,7 +107,10 @@ def three_to_one(s):
 def one_to_three(s):
     """One letter code to three letter code.
     
-    For example: A to ALA.
+    >>> one_to_three('A')
+    'ALA'
+    >>> one_to_three('Y')
+    'TYR'
     """
     i=d1_to_index[s]
     return dindex_to_3[i]
@@ -96,6 +123,18 @@ def is_aa(residue, standard=False):
 
     @param standard: flag to check for the 20 AA (default false) 
     @type standard: boolean
+
+    >>> is_aa('ALA')
+    True
+    >>> is_aa('XXX')
+    False
+
+    Known three letter codes for modified amino acids are supported,
+
+    >>> is_aa('FME')
+    True
+    >>> is_aa('FME', standard=True)
+    False
     """
     if not isinstance(residue, basestring):
         residue=residue.get_resname()
