@@ -45,52 +45,51 @@ for i in range(0, 20):
     dindex_to_3[i]=n3
 
 def index_to_one(index):
-    """
-    Index to corresponding one letter amino acid name.
+    """Index to corresponding one letter amino acid name.
+    
     For example: 0 to A.
     """
     return dindex_to_1[index]
 
 def one_to_index(s):
-    """
-    One letter code to index.
+    """One letter code to index.
+    
     For example: A to 0.
     """
     return d1_to_index[s]
 
 def index_to_three(i):
-    """
-    Index to corresponding three letter amino acid name.
+    """Index to corresponding three letter amino acid name.
+    
     For example: 0 to ALA.
     """
     return dindex_to_3[i]
 
 def three_to_index(s):
-    """
-    Three letter code to index.
+    """Three letter code to index.
+    
     For example: ALA to 0.
     """
     return d3_to_index[s]
 
 def three_to_one(s):
-    """
-    Three letter code to one letter code.
+    """Three letter code to one letter code.
+    
     For example: ALA to A.
     """
     i=d3_to_index[s]
     return dindex_to_1[i]
 
 def one_to_three(s):
-    """
-    One letter code to three letter code.
+    """One letter code to three letter code.
+    
     For example: A to ALA.
     """
     i=d1_to_index[s]
     return dindex_to_3[i]
 
-def is_aa(residue, standard=0):
-    """
-    Return 1 if residue object/string is an amino acid.
+def is_aa(residue, standard=False):
+    """Return True if residue object/string is an amino acid.
 
     @param residue: a L{Residue} object OR a three letter amino acid code
     @type residue: L{Residue} or string
@@ -108,11 +107,10 @@ def is_aa(residue, standard=0):
 
 
 class Polypeptide(list):
-    """
-    A polypeptide is simply a list of L{Residue} objects.
-    """
+    """A polypeptide is simply a list of L{Residue} objects."""
     def get_ca_list(self):
-        """
+        """Get list of C-alpha atoms in the polypeptide.
+        
         @return: the list of C-alpha atoms
         @rtype: [L{Atom}, L{Atom}, ...]
         """
@@ -123,9 +121,7 @@ class Polypeptide(list):
         return ca_list
 
     def get_phi_psi_list(self):
-        """
-        Return the list of phi/psi dihedral angles
-        """
+        """Return the list of phi/psi dihedral angles."""
         ppl=[]
         lng=len(self)
         for i in range(0, lng):
@@ -170,10 +166,7 @@ class Polypeptide(list):
         return ppl
 
     def get_tau_list(self):
-        """
-        Return list of tau torsions angles for all 4 consecutive
-        Calpha atoms.
-        """
+        """List of tau torsions angles for all 4 consecutive Calpha atoms."""
         ca_list=self.get_ca_list()
         tau_list=[]
         for i in range(0, len(ca_list)-3):
@@ -187,10 +180,7 @@ class Polypeptide(list):
         return tau_list
 
     def get_theta_list(self):
-        """
-        Return list of theta angles for all 3 consecutive
-        Calpha atoms.
-        """
+        """List of theta angles for all 3 consecutive Calpha atoms."""
         theta_list=[]
         ca_list=self.get_ca_list()
         for i in range(0, len(ca_list)-2):
@@ -204,8 +194,7 @@ class Polypeptide(list):
         return theta_list
 
     def get_sequence(self):
-        """
-        Return the AA sequence.
+        """Return the AA sequence as a Seq object.
 
         @return: polypeptide sequence 
         @rtype: L{Seq}
@@ -217,7 +206,8 @@ class Polypeptide(list):
         return seq
 
     def __repr__(self):
-        """
+        """Return string representation of the polypeptide.
+        
         Return <Polypeptide start=START end=END>, where START
         and END are sequence identifiers of the outer residues.
         """
@@ -227,11 +217,10 @@ class Polypeptide(list):
         return s
 
 class _PPBuilder:
-    """
-    Base class to extract polypeptides.
-    It checks if two consecutive residues in a chain 
-    are connected. The connectivity test is implemented by a 
-    subclass.
+    """Base class to extract polypeptides.
+    
+    It checks if two consecutive residues in a chain are connected.
+    The connectivity test is implemented by a subclass.
     """
     def __init__(self, radius):
         """
@@ -241,7 +230,7 @@ class _PPBuilder:
         self.radius=radius
 
     def _accept(self, residue):
-        "Check if the residue is an amino acid."
+        """Check if the residue is an amino acid."""
         if is_aa(residue):
             return 1
         else:
@@ -256,8 +245,7 @@ class _PPBuilder:
             return 0
     
     def build_peptides(self, entity, aa_only=1):
-        """
-        Build and return a list of Polypeptide objects.
+        """Build and return a list of Polypeptide objects.
 
         @param entity: polypeptides are searched for in this object
         @type entity: L{Structure}, L{Model} or L{Chain}
@@ -300,9 +288,7 @@ class _PPBuilder:
 
 
 class CaPPBuilder(_PPBuilder):
-    """
-    Use CA--CA distance to find polypeptides.
-    """
+    """Use CA--CA distance to find polypeptides."""
     def __init__(self, radius=4.3):
         _PPBuilder.__init__(self, radius)
 
@@ -329,9 +315,7 @@ class CaPPBuilder(_PPBuilder):
 
 
 class PPBuilder(_PPBuilder):
-    """
-    Use C--N distance to find polypeptides.
-    """
+    """Use C--N distance to find polypeptides."""
     def __init__(self, radius=1.8):
         _PPBuilder.__init__(self, radius)
 
@@ -371,7 +355,7 @@ class PPBuilder(_PPBuilder):
         return 0
 
     def _test_dist(self, c, n):
-        "Return 1 if distance between atoms<radius"
+        """Return 1 if distance between atoms<radius (PRIVATE)."""
         if (c-n)<self.radius:
             return 1
         else:
@@ -379,9 +363,7 @@ class PPBuilder(_PPBuilder):
     
 
 if __name__=="__main__":
-
     import sys
-
     from Bio.PDB.PDBParser import PDBParser
 
     p=PDBParser(PERMISSIVE=1)
@@ -411,6 +393,4 @@ if __name__=="__main__":
         print pp.get_sequence()
     for pp in ppb.build_peptides(s[0]["A"]):
         print pp.get_sequence()
-
-
 
