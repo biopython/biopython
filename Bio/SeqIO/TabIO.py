@@ -63,7 +63,9 @@ def TabIterator(handle, alphabet = single_letter_alphabet):
                              % (line.count("\t"), repr(line)))
         title = title.strip()
         seq = seq.strip() #removes the trailing new line
-        yield SeqRecord(Seq(seq, alphabet), id = title, name = title)
+        yield SeqRecord(Seq(seq, alphabet),
+                        id=title, name=title,
+                        description="")
 
 class TabWriter(SequentialSequenceWriter):
     """Class to write simple tab separated format files.
