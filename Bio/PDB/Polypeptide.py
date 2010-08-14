@@ -148,8 +148,6 @@ def is_aa(residue, standard=False):
 
     >>> is_aa('ALA')
     True
-    >>> is_aa('XXX')
-    False
 
     Known three letter codes for modified amino acids are supported,
 
@@ -158,6 +156,7 @@ def is_aa(residue, standard=False):
     >>> is_aa('FME', standard=True)
     False
     """
+    #TODO - What about special cases like XXX, can they appear in PDB files?
     if not isinstance(residue, basestring):
         residue=residue.get_resname()
     residue=residue.upper()
