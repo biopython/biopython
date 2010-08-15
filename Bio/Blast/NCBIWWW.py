@@ -21,6 +21,7 @@ try:
 except ImportError:
     from StringIO import StringIO
 
+from Bio._py3k import _as_string
 
 def qblast(program, database, sequence,
            auto_format=None,composition_based_statistics=None,
@@ -151,10 +152,7 @@ def qblast(program, database, sequence,
                                   message,
                                   {"User-Agent":"BiopythonClient"})
         handle = urllib2.urlopen(request)
-        results = handle.read()
-        if sys.version_info[0] >= 3:
-            #On Python 3, want to go from bytes to unicode
-            results = results.decode()
+        results = _as_string(handle.read())
 
         # Can see an "\n\n" page while results are in progress,
         # if so just wait a bit longer...
@@ -177,10 +175,7 @@ def _parse_qblast_ref_page(handle):
     The NCBI FAQ pages use TOE for 'Time of Execution', so RTOE is proably
     'Request Time of Execution' and RID would be 'Request Identifier'.
     """
-    s = handle.read()
-    if sys.version_info[0] >= 3:
-        #On Python 3, want to go from bytes to unicode
-        s = s.decode()
+    s = _as_string(handle.read())
     i = s.find("RID =")
     if i == -1:
         rid = None
