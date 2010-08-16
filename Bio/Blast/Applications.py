@@ -337,7 +337,7 @@ class RpsBlastCommandline(_BlastCommandLine):
 
    
 class _NcbiblastCommandline(AbstractCommandline):
-    """Base Commandline object for (classic) NCBI BLAST wrappers (PRIVATE).
+    """Base Commandline object for (new) NCBI BLAST+ wrappers (PRIVATE).
 
     This is provided for subclassing, it deals with shared options
     common to all the BLAST tools (blastn, rpsblast, rpsblast, etc).
@@ -480,7 +480,7 @@ class _NcbiblastCommandline(AbstractCommandline):
                                          % (a,b))
 
 class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
-    """Base Commandline object for (classic) NCBI BLAST wrappers (PRIVATE).
+    """Base Commandline object for (new) NCBI BLAST+ wrappers (PRIVATE).
 
     This is provided for subclassing, it deals with shared options
     common to all the BLAST tools supporting two-sequence BLAST
