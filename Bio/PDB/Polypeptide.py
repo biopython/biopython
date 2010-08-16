@@ -331,21 +331,21 @@ class _PPBuilder:
         pp_list=[]
         for chain in chain_list:
             chain_it=iter(chain)
-            prev=chain_it.next()
+            prev_res=chain_it.next()
             pp=None
-            for next in chain_it:
-                if aa_only and not accept(prev):
-                    prev=next
+            for next_res in chain_it:
+                if aa_only and not accept(prev_res):
+                    prev_rev=next_res
                     continue
-                if is_connected(prev, next):
+                if is_connected(prev_res, next_res):
                     if pp is None:
                         pp=Polypeptide()
-                        pp.append(prev)
+                        pp.append(prev_res)
                         pp_list.append(pp)
-                    pp.append(next)
+                    pp.append(next_res)
                 else:
                     pp=None
-                prev=next
+                prev_res=next_res
         return pp_list
 
 
@@ -354,12 +354,12 @@ class CaPPBuilder(_PPBuilder):
     def __init__(self, radius=4.3):
         _PPBuilder.__init__(self, radius)
 
-    def _is_connected(self, prev, next):
-        for r in [prev, next]:
+    def _is_connected(self, prev_res, next_res):
+        for r in [prev_res, next_res]:
             if not r.has_id("CA"):
-                return 0
-        n=next["CA"]
-        p=prev["CA"]
+                return False
+        n=next_res["CA"]
+        p=prev_res["CA"]
         # Unpack disordered
         if n.is_disordered():
             nlist=n.disordered_get_list()
@@ -372,8 +372,8 @@ class CaPPBuilder(_PPBuilder):
         for nn in nlist:
             for pp in plist:
                 if (nn-pp)<self.radius:
-                    return 1
-        return 0
+                    return True
+        return False
 
 
 class PPBuilder(_PPBuilder):
@@ -381,14 +381,14 @@ class PPBuilder(_PPBuilder):
     def __init__(self, radius=1.8):
         _PPBuilder.__init__(self, radius)
 
-    def _is_connected(self, prev, next):
-        if not prev.has_id("C"):
-            return 0
-        if not next.has_id("N"):
-            return 0
+    def _is_connected(self, prev_res, next_res):
+        if not prev_res.has_id("C"):
+            return False
+        if not next_res.has_id("N"):
+            return False
         test_dist=self._test_dist
-        c=prev["C"]
-        n=next["N"]
+        c=prev_res["C"]
+        n=next_res["N"]
         # Test all disordered atom positions!
         if c.is_disordered():
             clist=c.disordered_get_list()
@@ -413,8 +413,8 @@ class PPBuilder(_PPBuilder):
                             c.disordered_select(c_altloc)
                         if n.is_disordered():
                             n.disordered_select(n_altloc)
-                        return 1
-        return 0
+                        return True
+        return False
 
     def _test_dist(self, c, n):
         """Return 1 if distance between atoms<radius (PRIVATE)."""
