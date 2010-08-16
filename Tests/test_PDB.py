@@ -15,24 +15,16 @@ import warnings
 from StringIO import StringIO
 
 try:
-    from numpy.random import random
+    import numpy
 except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(\
         "Install NumPy if you want to use Bio.PDB.")
 
-try:
-    from Bio.KDTree import _CKDTree
-except ImportError:
-    from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError(\
-        "C module in Bio.KDTree not compiled")
-
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
 from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO
 from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
-from Bio.PDB.NeighborSearch import NeighborSearch
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 
 
@@ -692,27 +684,6 @@ class Exposure(unittest.TestCase):
         self.assertEqual(48, residues[-2].xtra["EXP_CN"])
         self.assertEqual(1, len(residues[-1].xtra))
         self.assertEqual(38, residues[-1].xtra["EXP_CN"])
-
-
-class NeighborTest(unittest.TestCase):
-    def setUp(self):
-        warnings.resetwarnings()
-
-    def test_neighbor_search(self):
-        """NeighborSearch: Find nearby randomly generated coordinates.
-         
-        Based on the self test in Bio.PDB.NeighborSearch.
-        """
-        class RandomAtom:
-            def __init__(self):
-                self.coord = 100 * random(3)
-            def get_coord(self):
-                return self.coord
-        for i in range(0, 20):
-            atoms = [RandomAtom() for j in range(100)]
-            ns = NeighborSearch(atoms)
-            hits = ns.search_all(5.0)
-            self.assertTrue(hits >= 0)
 
 # -------------------------------------------------------------
 
