@@ -24,6 +24,11 @@ Wrappers for the new NCBI BLAST+ tools (written in C++):
 - NcbirpsblastCommandline - Reverse Position Specific BLAST
 - NcbirpstblastnCommandline - Translated Reverse Position Specific BLAST
 
+For further details, see:
+
+Camacho et al. BLAST+: architecture and applications
+BMC Bioinformatics 2009, 10:421
+doi:10.1186/1471-2105-10-421
 """
 from Bio.Application import _Option, AbstractCommandline, _Switch
 
@@ -692,6 +697,13 @@ class NcbiblastnCommandline(_Ncbiblast2SeqCommandline):
                     "Minimum raw gapped score to keep an alignment in the preliminary gapped and traceback stages (integer).", False),
             _Switch(["-ungapped", "ungapped"], ["input"],
                     "Perform ungapped alignment only?"),
+            _Option(["-off_diagonal_range", "off_diagonal_range"], ["input"], None, 0,
+                    """Number of off-diagonals to search for the 2nd hit (integer).
+                    
+                    Expects a positive integer, or 0 (default) to turn off.
+                    
+                    Added in BLAST 2.2.23+
+                    """, False),
             ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
