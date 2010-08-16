@@ -138,7 +138,8 @@ class build_ext_biopython(build_ext):
         if not check_dependencies_once():
             return
         # add software that requires NumPy to install
-        if is_Numpy_installed():
+        # TODO - Convert these for Python 3
+        if is_Numpy_installed() and sys.version_info[0] < 3:
             import numpy
             numpy_include_dir = numpy.get_include()
             self.extensions.append(
