@@ -186,8 +186,8 @@ class CheckCompleteArgList(unittest.TestCase):
         if exe_name == "tblastx":
             #These appear to have been removed in BLAST 2.2.23+
             #(which seems a bit odd - TODO - check with NCBI?)
-            missing = missing.difference(["-gapextend","-gapopen",
-                                          "-xdrop_gap","-xdrop_gap_final"])
+            extra = extra.difference(["-gapextend","-gapopen",
+                                      "-xdrop_gap","-xdrop_gap_final"])
 
         if extra or missing:
             raise MissingExternalDependencyError("BLAST+ and Biopython out "
