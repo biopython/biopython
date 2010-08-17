@@ -32,6 +32,13 @@ if sys.version_info[0] >= 3:
     
     _as_string = _as_unicode
 
+    def _is_int_or_long(i):
+        """Check if the value is an integer.
+
+        Note there are no longs on Python 3.
+        """
+        return isinstance(i, int)
+
 else:
     #Python 2 code
 
@@ -50,3 +57,10 @@ else:
         return str(s)
     
     _as_string = _as_bytes
+
+    def _is_int_or_long(i):
+        """Check if the value is an integer or long."""
+        #If the 2to3 long fixer is enabled (which it is by default), this
+        #will be changed to "isinstance(i, int) or isinstance(i, int)"
+        #but that doesn't matter.
+        return isinstance(i, int) or isinstance(i, long)

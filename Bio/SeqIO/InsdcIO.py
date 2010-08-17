@@ -31,6 +31,8 @@ from Bio import Alphabet
 from Interfaces import SequentialSequenceWriter
 from Bio import SeqFeature
 
+from Bio._py3k import _is_int_or_long
+
 # NOTE
 # ====
 # The "brains" for parsing GenBank and EMBL files (and any
@@ -204,7 +206,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         #self.handle.write('%s/%s="%s"\n' % (self.QUALIFIER_INDENT_STR, key, value))
         if quote is None:
             #Try to mimic unwritten rules about when quotes can be left out:
-            if isinstance(value, int) or isinstance(value, long):
+            if _is_int_or_long(value):
                 quote = False
             else:
                 quote = True

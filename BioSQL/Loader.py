@@ -24,6 +24,8 @@ from Bio.SeqUtils.CheckSum import crc64
 from Bio import Entrez
 from Bio.Seq import UnknownSeq
 
+from Bio._py3k import _is_int_or_long
+
 class DatabaseLoader:
     """Object used to load SeqRecord objects into a BioSQL database."""
     def __init__(self, adaptor, dbid, fetch_NCBI_taxonomy=False):
@@ -466,7 +468,7 @@ class DatabaseLoader:
         if len(taxonomic_lineage) > 1:
             #Use recursion to find out the taxon id (database key) of the parent.
             parent_taxon_id = self._get_taxon_id_from_ncbi_lineage(taxonomic_lineage[:-1])
-            assert isinstance(parent_taxon_id, int) or isinstance(parent_taxon_id, long), repr(parent_taxon_id)
+            assert _is_int_or_long(parent_taxon_id), repr(parent_taxon_id)
         else:
             parent_taxon_id = None
 
