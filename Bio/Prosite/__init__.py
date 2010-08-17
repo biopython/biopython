@@ -730,7 +730,7 @@ def index_file(filename, indexname, rec2key=None):
     end = 0L
     for record in records:
         start = end
-        end = long(handle.tell())
+        end = handle.tell()
         length = end - start
         
         if rec2key is not None:
