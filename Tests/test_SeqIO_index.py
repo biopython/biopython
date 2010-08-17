@@ -4,6 +4,12 @@
 # as part of this package.
 
 """Additional unit tests for Bio.SeqIO.convert(...) function."""
+import sys
+if sys.version_info[0] >= 3:
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(\
+        "Skipping since currently this is very slow on Python 3.")
+    
 import os
 import unittest
 from StringIO import StringIO
