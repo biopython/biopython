@@ -2027,6 +2027,7 @@ def _get_cols(line, cols_to_get, ncols=None, expected={}):
         results.append(cols[c])
     return tuple(results)
 
+
 def _safe_int(str):
     try:
         return int(str)
@@ -2034,14 +2035,10 @@ def _safe_int(str):
         # Something went wrong.  Try to clean up the string.
         # Remove all commas from the string
         str = str.replace(',', '')
-    try:
-        # try again.
-        return int(str)
-    except ValueError:
-        pass
-    # If it fails again, maybe it's too long?
-    # XXX why converting to float?
-    return long(float(str))
+    # try again. Note int() will return a long rather than overflow
+    # Call float first to handle things like "54.3"
+    return int(float(str))
+
 
 def _safe_float(str):
     # Thomas Rosleff Soerensen (rosleff@mpiz-koeln.mpg.de) noted that
