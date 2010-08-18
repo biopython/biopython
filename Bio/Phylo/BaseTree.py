@@ -661,13 +661,13 @@ class Tree(TreeElement, TreeMixin):
 
         Edge cases:
 
-        - If outgroup == self.root, no change
-        - If outgroup is terminal, create new bifurcating root node with a
-          0-length branch to the outgroup
-        - If outgroup is internal, use the given outgroup node as the new
-          trifurcating root, keeping branches the same
-        - If the original root was bifurcating, drop it from the tree,
-          preserving total branch lengths
+         - If outgroup == self.root, no change
+         - If outgroup is terminal, create new bifurcating root node with a
+           0-length branch to the outgroup
+         - If outgroup is internal, use the given outgroup node as the new
+           trifurcating root, keeping branches the same
+         - If the original root was bifurcating, drop it from the tree,
+           preserving total branch lengths
         """
         # This raises a ValueError if any target is not in this tree
         # Otherwise, common_ancestor guarantees outgroup is in this tree
