@@ -37,7 +37,7 @@ quality are then stored in pairs in a FASTA like format.
 
 Unfortunately there is no official document describing the FASTQ file format,
 and worse, several related but different variants exist. For more details,
-please read this open access publication:
+please read this open access publication::
 
     The Sanger FASTQ file format for sequences with quality scores, and the
     Solexa/Illumina FASTQ variants.
@@ -168,7 +168,7 @@ as the format! The reason for this is all these scores are high enough that
 the PHRED and Solexa scores are almost equal. The differences become apparent
 for poor quality reads. See the functions solexa_quality_from_phred and
 phred_quality_from_solexa for more details.
- 
+
 If you wanted to trim your sequences (perhaps to remove low quality regions,
 or to remove a primer sequence), try slicing the SeqRecord objects.  e.g.
 
