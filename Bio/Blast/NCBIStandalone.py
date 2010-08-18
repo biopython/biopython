@@ -2035,8 +2035,17 @@ def _safe_int(str):
         # Something went wrong.  Try to clean up the string.
         # Remove all commas from the string
         str = str.replace(',', '')
-    # try again. Note int() will return a long rather than overflow
-    # Call float first to handle things like "54.3"
+    # try again after removing commas.
+    # Note int() will return a long rather than overflow
+    try:
+        return int(str)
+    except ValueError:
+        pass
+    # Call float to handle things like "54.3", note could lose precision, e.g.
+    # >>> int("5399354557888517312")
+    # 5399354557888517312
+    # >>> int(float("5399354557888517312"))
+    # 5399354557888517120
     return int(float(str))
 
 
