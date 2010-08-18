@@ -42,6 +42,8 @@ sudo python setup.py install
 **System Requirements**
 
 o "Python 2.4, 2.5, 2.6 or 2.7":http://www.python.org/
+  We are phasing out support for Python 2.4.
+  See below for notes about testing with Python 3.
   
 o "NumPy":http://numpy.scipy.org/ (optional, but strongly recommended)
   This package is only used in the computationally-oriented modules.
@@ -72,8 +74,8 @@ already functional. In order to be able to run Biopython with Python 3
 you first need to convert the code. The conversion process is easy but
 it has to be done BEFORE running setup.py.
 
-To convert the code to Python 3, the 2to3 tool is required (comes
-with Python 3). On the top-level directory do:
+To convert the code to Python 3, the 2to3 tool is required (this comes
+with Python 2.6+ and Python 3). On the top-level directory do:
 
 $ 2to3 --nofix=long --no-diffs -n -w Bio BioSQL Tests Scripts Doc/examples
 $ 2to3 --nofix=long --no-diffs -n -w -d Bio BioSQL Tests Scripts Doc/examples
@@ -83,7 +85,8 @@ doctests (examples within the docstrings). You can in general ignore
 the output of 2to3. The tool takes some time to complete, please be
 patient (or use the -j option to set the number of threads used).
 
-After 2to3 execution the normal setup process should be followed.
+After 2to3 execution the normal install from source process should be
+followed, i.e. "python3 setup.py build" etc (see below).
 
 **Installation**
 

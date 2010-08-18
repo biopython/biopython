@@ -9,7 +9,11 @@ The latest news is at the top.
 
 ===================================================================
 
-In progress: Biopython 1.55 (not yet released).
+18 August 2010: Biopython 1.55 beta released.
+
+This is a beta release for testing purposes, both for new features added,
+and more importantly updates to avoid code deprecated in Python 2.7 or in
+Python 3. This is an important step towards Python 3 support.
 
 We are phasing out support for Python 2.4. We will continue to support it
 for at least one further release (Biopython 1.56). This could be delayed
@@ -37,9 +41,6 @@ The command line tool application wrapper classes are now executable, so you
 can use them to call the tool (using the subprocess module internally) and
 capture the output and any error messages as strings (stdout and stderr).
 This avoids having to worry about the details of how best to use subprocess.
-
-We have also been working on updates to avoid code which has been deprecated
-in Python 2.7 or Python 3, an important step towards Python 3 support.
 
 (At least) 10 people have contributed to this release, including 5 new people:
 
