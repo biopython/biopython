@@ -196,4 +196,3 @@ class _RecordConsumer(AbstractConsumer):
 
     def new_locus(self, num_alleles, pop_data):
         self.data.loci_data.append((num_alleles, pop_data))
-
