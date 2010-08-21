@@ -11,11 +11,45 @@ from cStringIO import StringIO
 from Bio import Phylo
 from Bio.Phylo import PhyloXML
 
+# Example Newick and Nexus files
+EX_NEWICK = 'Nexus/int_node_labels.nwk'
+EX_NEXUS = 'Nexus/test_Nexus_input.nex'
 
 # Example PhyloXML files
 EX_APAF = 'PhyloXML/apaf.xml'
 EX_BCL2 = 'PhyloXML/bcl_2.xml'
 EX_PHYLO = 'PhyloXML/phyloxml_examples.xml'
+
+
+class IOTests(unittest.TestCase):
+    """Tests for parsing and writing the supported formats."""
+    def setUp(self):
+        self.mem_file = StringIO()
+
+    def test_newick(self):
+        """Read a Newick file with one tree."""
+        tree = Phylo.read(EX_NEWICK, 'newick')
+        self.assertEqual(len(tree.get_terminals()), 28)
+
+    def test_newick(self):
+        """Parse a Nexus file with multiple trees."""
+        trees = list(Phylo.parse(EX_NEXUS, 'nexus'))
+        self.assertEqual(len(trees), 3)
+        for tree in trees:
+            self.assertEqual(len(tree.get_terminals()), 9)
+
+    def test_convert(self):
+        """Convert a tree between all supported formats."""
+        mem_file_2 = StringIO()
+        mem_file_3 = StringIO()
+        Phylo.convert(EX_NEWICK, 'newick', self.mem_file, 'nexus')
+        self.mem_file.seek(0)
+        Phylo.convert(self.mem_file, 'nexus', mem_file_2, 'phyloxml')
+        mem_file_2.seek(0)
+        Phylo.convert(mem_file_2, 'phyloxml', mem_file_3, 'newick')
+        mem_file_3.seek(0)
+        tree = Phylo.read(mem_file_3, 'newick')
+        self.assertEqual(len(tree.get_terminals()), 28)
 
 
 class TreeTests(unittest.TestCase):
