@@ -180,8 +180,22 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
                 DeprecationWarning, stacklevel=2)
         return cls.from_clade(clade, **kwargs)
 
+    def as_phyloxml(self):
+        """Return this tree, a PhyloXML-compatible Phylogeny object.
+
+        Overrides the BaseTree method.
+        """
+        return self
+
+    # XXX Backward compatibility shim -- remove in Biopython 1.56
     def to_phyloxml(self, **kwargs):
-        """Create a new PhyloXML object containing just this phylogeny."""
+        """DEPRECATED: use to_phyloxml_container instead."""
+        warnings.warn("use to_phyloxml_container() instead.""",
+                      DeprecationWarning, stacklevel=2)
+        return self.to_phyloxml_container(**kwargs)
+
+    def to_phyloxml_container(self, **kwargs):
+        """Create a new Phyloxml object containing just this phylogeny."""
         return Phyloxml(kwargs, phylogenies=[self])
 
     def to_alignment(self):

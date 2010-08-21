@@ -654,6 +654,15 @@ class Tree(TreeElement, TreeMixin):
         """The first clade in this tree (not itself)."""
         return self.root
 
+    def as_phyloxml(self, **kwargs):
+        """Convert this tree to a PhyloXML-compatible Phylogeny.
+
+        This lets you use the additional annotation types PhyloXML defines, and
+        save this information when you write this tree as 'phyloxml'.
+        """
+        from Bio.Phylo.PhyloXML import Phylogeny
+        return Phylogeny.from_tree(self, **kwargs)
+
     def root_with_outgroup(self, *outgroup_targets):
         """Reroot this tree with the outgroup clade containing outgroup_targets.
 
