@@ -22,18 +22,6 @@ parse              Iterates over entries in a Prodoc file.
 Classes:
 Record             Holds Prodoc data.
 Reference          Holds data from a Prodoc reference.
-
-
-DEPRECATED functions:
-index_file         Index a Prodoc file for a Dictionary.
-_extract_record    Extract Prodoc data from a web page.
-
-DEPRECATED classes:
-Dictionary         Accesses a Prodoc file using a dictionary interface.
-RecordParser       Parses a Prodoc record into a Record object.
-_Scanner           Scans Prodoc-formatted data.
-_RecordConsumer    Consumes Prodoc data to a Record object.
-Iterator           Iterates over entries in a Prodoc file.
 """
 
 
