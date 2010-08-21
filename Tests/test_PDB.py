@@ -50,7 +50,7 @@ class A_ExceptionTest(unittest.TestCase):
             orig_showwarning = warnings.showwarning
             all_warns = []
             def showwarning(*args, **kwargs):
-                all_warns.append(*args[0])
+                all_warns.append(args[0])
             warnings.showwarning = showwarning
             # Trigger warnings
             p = PDBParser(PERMISSIVE=True)
