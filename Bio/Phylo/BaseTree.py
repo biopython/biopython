@@ -703,9 +703,9 @@ class Tree(TreeElement, TreeMixin):
             # Delete the old bifurcating root & add branch lengths
             ingroup = old_root.clades[0]
             if ingroup.branch_length:
-               ingroup.branch_length += prev_blen
+                ingroup.branch_length += prev_blen
             else:
-               ingroup.branch_length = prev_blen
+                ingroup.branch_length = prev_blen
             new_parent.clades.insert(0, ingroup)
             # ENH: If annotations are attached to old_root, do... something.
         else:

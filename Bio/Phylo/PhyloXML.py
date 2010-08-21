@@ -20,7 +20,7 @@ from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
 
-from Bio.Phylo import BaseTree, _sugar
+from Bio.Phylo import BaseTree
 
 
 class PhyloXMLWarning(Warning):
