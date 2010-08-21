@@ -16,6 +16,7 @@ SplitFDist splits a single Fdist execution in several, taking advantage
 """
 
 import os
+import shutil
 import thread
 from time import sleep
 from Bio.PopGen.Async import Local
