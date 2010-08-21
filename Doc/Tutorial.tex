@@ -7838,14 +7838,276 @@ like $F_{st}$, or allele counts.
 \chapter{Phylogenetics with Bio.Phylo}
 \label{sec:Phylo}
 
-Phylo is a new module in Biopython 1.54. Following the lead of SeqIO and AlignIO, 
+The Bio.Phylo module was introduced in Biopython 1.54. Following the lead of SeqIO and AlignIO,
 it aims to provide a common way to work with phylogenetic data independently of the source data
 format, as well as a consistent API for I/O operations.
 
-{\em Note:} Since Phylo is a recent addition to Biopython, we anticipate parts of it may change
-in backwards-incompatible ways in future releases --- we'll try our best to avoid it, though.
+{\em Note:} Since Phylo is a relatively recent addition to Biopython, we anticipate parts of it
+may change in backwards-incompatible ways in future releases --- we'll try our best to avoid
+it, though.
 
-\section{Basic I/O}
+\section{Demo: What's in a Tree?}
+
+To get acquainted with the module, let's start with a tree that we've already constructed, and
+inspect it a few different ways.  Then we'll colorize the branches, to use a special phyloXML
+feature, and finally save it.
+
+In a terminal, create a simple Newick file using your favorite text editor:
+
+\begin{verbatim}
+% cat > simple.dnd <<EOF
+> (((A,B),(C,D)),(E,F,G));
+> EOF
+\end{verbatim}
+
+This tree has no branch lengths, only a topology and labelled terminals. (If you have a real
+tree file available, you can follow this demo using that instead.)
+
+Launch the Python interpreter of your choice:
+
+\begin{verbatim}
+% ipython -pylab
+\end{verbatim}
+
+For interactive work, launching the IPython interpreter with the \verb|-pylab| flag enables
+\textbf{matplotlib} integration, so graphics will pop up automatically. We'll use that during
+this demo.
+
+Now, within Python, read the tree file, giving the file name and the name of the format.
+
+\begin{verbatim}
+>>> from Bio import Phylo
+>>> tree = Phylo.read("simple.dnd", "newick")
+\end{verbatim}
+
+Printing the tree object as a string gives us a look at the entire object hierarchy.
+
+\begin{verbatim}
+>>> print tree
+
+Tree(weight=1.0, rooted=False, name="")
+    Clade(branch_length=1.0)
+        Clade(branch_length=1.0)
+            Clade(branch_length=1.0)
+                Clade(branch_length=1.0, name="A")
+                Clade(branch_length=1.0, name="B")
+            Clade(branch_length=1.0)
+                Clade(branch_length=1.0, name="C")
+                Clade(branch_length=1.0, name="D")
+        Clade(branch_length=1.0)
+            Clade(branch_length=1.0, name="E")
+            Clade(branch_length=1.0, name="F")
+            Clade(branch_length=1.0, name="G")
+\end{verbatim}
+
+The \texttt{Tree} object contains global information about the tree, such as whether it's
+rooted or unrooted. It has one root clade, and under that, it's nested lists of clades all the
+way down to the tips.
+
+The function \verb|draw_ascii| creates a simple ASCII-art (plain text) dendrogram.  This is a
+convenient visualization for interactive exploration, in case better graphical tools aren't
+available.
+
+\begin{verbatim}
+>>> Phylo.draw_ascii(tree)
+                                                    ________________________ A
+                           ________________________|
+                          |                        |________________________ B
+  ________________________|
+ |                        |                         ________________________ C
+ |                        |________________________|
+_|                                                 |________________________ D
+ |
+ |                         ________________________ E
+ |                        |
+ |________________________|________________________ F
+                          |
+                          |________________________ G
+
+\end{verbatim}
+
+If you have \textbf{matplotlib}, \textbf{NetworkX}, \textbf{PyGraphviz} and \textbf{Graphviz}
+installed, you can create a graphic using the \verb|draw_graphviz| function, named after the
+corresponding function in NetworkX:
+
+\begin{verbatim}
+>>> tree.rooted = True
+>>> Phylo.draw_graphiz(tree)
+\end{verbatim}
+
+This exports the tree object to a NetworkX graph, uses Graphviz to lay out the nodes, and
+displays it using matplotlib. There are a number of keyword arguments that can modify the
+resulting diagram, as described later in this chapter.
+
+\textit{Note:} If you're not using IPython with the \verb|-pylab| option, to display or save
+the figure, call the appropriate library function in PyLab or matplotlib:
+
+\begin{verbatim}
+>>> import pylab
+>>> pylab.show()
+\end{verbatim}
+
+
+\begin{htmlonly}
+\imgsrc[width=432, height=368]{images/phylo-rooted.png}
+\label{fig:phylo-rooted}
+\end{htmlonly}
+
+\begin{latexonly}
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.5\textwidth]{images/phylo-rooted.png}
+\caption{A rooted tree drawn with {\tt draw\_graphviz}.}
+\label{fig:phylo-rooted}
+\end{figure}
+\end{latexonly}
+
+The difference between rooted and unrooted trees here is whether it shows the direction on
+branches. Since we rooted the tree, we can see the root must be along the branch with two
+``heads''.
+
+
+\subsection{Coloring branches with PhyloXML}
+
+The PhyloXML specification allows assigning 24-bit color values to clades within a phylogeny.
+In order to colorize our tree, and later save those attributes along with the tree topology, we
+convert to a subclass of the basic tree object called Phylogeny, from the Bio.Phylo.PhyloXML
+module.
+
+In Biopython 1.55 and later, this is a convenient tree method:
+
+\begin{verbatim}
+>>> phy = tree.as_phyloxml()
+\end{verbatim}
+
+In Biopython 1.54, we can accomplish the same thing with one extra import:
+
+\begin{verbatim}
+>>> from Bio.Phylo.PhyloXML import Phylogeny
+>>> phy = Phylogeny.from_tree(tree)
+\end{verbatim}
+
+The object hierarchy still looks and behaves similarly:
+
+\begin{verbatim}
+>>> print phy
+
+Phylogeny(rooted=True, name="")
+    Clade(branch_length=1.0)
+        Clade(branch_length=1.0)
+            Clade(branch_length=1.0)
+                Clade(branch_length=1.0, name="A")
+                Clade(branch_length=1.0, name="B")
+            Clade(branch_length=1.0)
+                Clade(branch_length=1.0, name="C")
+                Clade(branch_length=1.0, name="D")
+        Clade(branch_length=1.0)
+            Clade(branch_length=1.0, name="E")
+            Clade(branch_length=1.0, name="F")
+            Clade(branch_length=1.0, name="G")
+\end{verbatim}
+
+Now we can begin assigning colors.
+
+First, color the root clade gray.  We can do that by assigning an RGB triple, an HTML-style
+hex string, or the name of one of the predefined colors.
+
+\begin{verbatim}
+>>> phy.root.color = (128, 128, 128)
+\end{verbatim}
+
+Or:
+
+\begin{verbatim}
+>>> phy.root.color = "#808080"
+\end{verbatim}
+
+Or:
+
+\begin{verbatim}
+>>> phy.root.color = "gray"
+\end{verbatim}
+
+Colors for a clade are treated as cascading down through the entire clade, so when we colorize
+the root here, it turns the whole tree gray.  We can override that by assigning a different
+color lower down on the tree.
+
+Let's target the most recent common ancestor (MRCA) of the nodes named ``E'' and ``F''.  The
+\verb|common_ancestor| method returns a reference to that clade in the original tree, so when
+we color that clade ``salmon'', the color will show up in the original tree.
+
+\begin{verbatim}
+>>> mrca = phy.common_ancestor({"name": "E"}, {"name": "F"})
+>>> mrca.color = "salmon"
+\end{verbatim}
+
+If we happend to know exactly where a certain clade is in the tree, in terms of nested list
+entries, we can jump directly to that position in the tree by indexing it.  Here, the index
+\verb|[0,1]| refers to the second child of the first child of the root.
+
+\begin{verbatim}
+>>> phy.clade[0,1].color = "blue"
+\end{verbatim}
+
+Finally, show our work --- using a different Graphviz engine for a slightly prettier layout.
+
+\begin{verbatim}
+>>> Phylo.draw_graphviz(phy, prog="neato")
+\end{verbatim}
+
+
+\begin{htmlonly}
+\imgsrc[width=499, height=348]{images/phylo-color.png}
+\label{fig:phylo-color}
+\end{htmlonly}
+
+\begin{latexonly}
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.6\textwidth]{images/phylo-color.png}
+\caption{A colorized tree drawn with {\tt draw\_graphviz}, using {\tt neato} for node layout.}
+\label{fig:phylo-color}
+\end{figure}
+\end{latexonly}
+
+Note that a clade's color includes the branch leading to that clade, as well as its
+descendents. The common ancestor of E and F turns out to be just under the root, and with this
+coloring we can see exactly where the root of the tree is.
+
+My, we've accomplished a lot! Let's take a break here and save our work.  Call the
+\texttt{write} function with a file name or handle --- here we use standard output, to see what
+would be written --- and the format \texttt{phyloxml}.  PhyloXML saves the colors we assigned,
+so you can open this phyloXML file in another tree viewer like Archaeopteryx, and the colors
+will show up there, too.
+
+\begin{verbatim}
+>>> import sys
+>>> Phylo.write(phy, sys.stdout, "phyloxml")
+
+<phy:phyloxml xmlns:phy="http://www.phyloxml.org">
+  <phy:phylogeny rooted="true">
+    <phy:clade>
+      <phy:branch_length>1.0</phy:branch_length>
+      <phy:color>
+        <phy:red>128</phy:red>
+        <phy:green>128</phy:green>
+        <phy:blue>128</phy:blue>
+      </phy:color>
+      <phy:clade>
+        <phy:branch_length>1.0</phy:branch_length>
+        <phy:clade>
+          <phy:branch_length>1.0</phy:branch_length>
+          <phy:clade>
+            <phy:name>A</phy:name>
+            ...
+\end{verbatim}
+
+The rest of this chapter covers the core functionality of Bio.Phylo in greater detail. For more
+examples of using Bio.Phylo, see the cookbook page on Biopython.org:
+
+\url{http://biopython.org/wiki/Phylo_cookbook}
+
+\section{I/O functions}
 
 Like SeqIO and AlignIO, Phylo handles file input and output through four functions:
 \verb|parse|, \verb|read|, \verb|write| and \verb|convert|.
@@ -7855,17 +8117,20 @@ will raise an error if the file contains more than one tree, or no trees.
 
 \begin{verbatim}
 >>> from Bio import Phylo
->>> tree = Phylo.read("example.xml", "phyloxml")
+>>> tree = Phylo.read("Tests/Nexus/int_node_labels.nwk", "newick")
 >>> print tree
 \end{verbatim}
 
-(Example files are available in the \texttt{Tests/PhyloXML/} directory of the Biopython distribution.)
+(Example files are available in the \texttt{Tests/Nexus/} and \texttt{Tests/PhyloXML/}
+directories of the Biopython distribution.)
 
 To handle multiple (or an unknown number of) trees, use the \verb|parse| function iterates
 through each of the trees in the given file: 
 
 \begin{verbatim}
->>> trees = Phylo.parse("example.xml", "phyloxml")
+>>> trees = Phylo.parse("Tests/PhyloXML/phyloxml_examples.xml", "phyloxml")
+>>> for tree in trees:
+...     print tree
 \end{verbatim}
 
 Write a tree or iterable of trees back to file with the \verb|write| function:
