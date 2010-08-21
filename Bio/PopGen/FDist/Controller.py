@@ -285,7 +285,8 @@ class FDistController:
         f.close()
         return conf_lines
         
-    def run_pv(self, out_file='probs.dat', data_dir='.', version = 1):
+    def run_pv(self, out_file='probs.dat', data_dir='.',
+               version = 1, smooth=0.04):
         """Executes pv.
 
         out_file - Name of output file.
@@ -295,6 +296,7 @@ class FDistController:
         out_name = self._get_temp_file()
         f = open(data_dir + os.sep + in_name, 'w')
         f.write('data_fst_outfile ' + out_file + ' out.dat\n')
+        f.write(str(smooth) + '\n')
         f.close()
         self._generate_intfile(data_dir)
         if version == 1:
