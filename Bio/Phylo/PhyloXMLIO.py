@@ -114,7 +114,7 @@ def parse(file):
     """
     return Parser(file).parse()
 
-def write(obj, file, encoding='utf-8', indent=False):
+def write(obj, file, encoding='utf-8', indent=True):
     """Write a phyloXML file.
 
     The first argument is an instance of Phyloxml, Phylogeny or BaseTree.Tree,
@@ -678,7 +678,7 @@ class Writer(object):
         assert isinstance(phyloxml, PX.Phyloxml), "Not a Phyloxml object"
         self._tree = ElementTree.ElementTree(self.phyloxml(phyloxml))
 
-    def write(self, file, encoding='utf-8', indent=False):
+    def write(self, file, encoding='utf-8', indent=True):
         if indent:
             _indent(self._tree.getroot())
         self._tree.write(file, encoding)
