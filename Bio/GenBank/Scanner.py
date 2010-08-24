@@ -154,8 +154,11 @@ class InsdcScanner:
                 line = self.handle.readline()
                 break
             if line[2:self.FEATURE_QUALIFIER_INDENT].strip() == "":
-                raise ValueError("Expected a feature qualifier in line '%s'" % line)
-
+                #This is an empty feature line between qualifiers. Empty
+                #feature lines within qualifiers are handled below (ignored).
+                line = self.handle.readline()
+                continue
+            
             if skip:
                 line = self.handle.readline()
                 while line[:self.FEATURE_QUALIFIER_INDENT] == self.FEATURE_QUALIFIER_SPACER:
