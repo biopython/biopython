@@ -188,6 +188,10 @@ class CheckCompleteArgList(unittest.TestCase):
             #(which seems a bit odd - TODO - check with NCBI?)
             extra = extra.difference(["-gapextend","-gapopen",
                                       "-xdrop_gap","-xdrop_gap_final"])
+        if exe_name in ["rpsblast", "rpstblastn"]:
+            #These appear to have been removed in BLAST 2.2.24+
+            #(which seems a bit odd - TODO - check with NCBI?)
+            extra = extra.difference(["-num_threads"])
 
         if extra or missing:
             raise MissingExternalDependencyError("BLAST+ and Biopython out "

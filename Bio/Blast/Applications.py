@@ -398,12 +398,17 @@ class _NcbiblastCommandline(AbstractCommandline):
             _Option(["-gilist", "gilist"], ["input", "file"], None, 0,
                     """Restrict search of database to list of GI's.
  
-                    Incompatible with: negative_gilist, remote, subject, subject_loc""",
+                    Incompatible with: negative_gilist, seqidlist, remote, subject, subject_loc""",
                     False),
             _Option(["-negative_gilist", "negative_gilist"], ["input", "file"], None, 0,
                     """Restrict search of database to everything except the listed GIs.
  
-                    Incompatible with: gilist, remote, subject, subject_loc""",
+                    Incompatible with: gilist, seqidlist, remote, subject, subject_loc""",
+                    False),
+            _Option(["-seqidlist", "seqidlist"], ["input", "file"], None, 0,
+                    """Restrict search of database to list of SeqID's.
+ 
+                    Incompatible with: gilist, negative_gilist, remote, subject, subject_loc""",
                     False),
             _Option(["-entrez_query", "entrez_query"], ["input"], None, 0,
                     "Restrict search with the given Entrez query (requires remote).", False),
@@ -465,7 +470,8 @@ class _NcbiblastCommandline(AbstractCommandline):
     def _validate(self):
         incompatibles = {"remote":["gilist", "negative_gilist", "num_threads"],
                          "import_search_strategy" : ["export_search_strategy"],
-                         "gilist":["negative_gilist"]}
+                         "gilist":["negative_gilist"],
+                         "seqidlist":["gilist", "negative_gilist", "remote"]}
         self._validate_incompatibilities(incompatibles)
         if self.entrez_query and not self.remote :
             raise ValueError("Option entrez_query requires remote option.")
@@ -536,9 +542,9 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
 
 
     def _validate(self):
-        incompatibles = {"subject_loc":["db, gilist, negative_gilist, remote"],
+        incompatibles = {"subject_loc":["db", "gilist", "negative_gilist", "seqidlist", "remote"],
                          "culling_limit":["best_hit_overhang","best_hit_score_edge"],
-                         "subject":["db", "gilist", "negative_gilist"]}
+                         "subject":["db", "gilist", "negative_gilist", "seqidlist"]}
         self._validate_incompatibilities(incompatibles)
         _NcbiblastCommandline._validate(self)
 
@@ -838,6 +844,12 @@ class NcbitblastnCommandline(_Ncbiblast2SeqCommandline):
 
                     Format: "yes", "window locut hicut", or "no" to disable.
                     Default is "12 2.2 2.5""", False),
+            #Restrict search or results:
+            _Option(["-db_soft_mask", "db_soft_mask"], ["input"], None, 0,
+                    """Filtering algorithm ID to apply to the BLAST database as soft masking (string).
+                    
+                    Incompatible with: subject, subject_loc
+                    """, False),
             #Extension options:
             _Switch(["-ungapped", "ungapped"], ["input"],
                     "Perform ungapped alignment only?"),
@@ -909,6 +921,12 @@ class NcbitblastxCommandline(_Ncbiblast2SeqCommandline):
 
                     Format: "yes", "window locut hicut", or "no" to disable.
                     Default is "12 2.2 2.5""", False),
+            #Restrict search or results:
+            _Option(["-db_soft_mask", "db_soft_mask"], ["input"], None, 0,
+                    """Filtering algorithm ID to apply to the BLAST database as soft masking (string).
+                    
+                    Incompatible with: subject, subject_loc
+                    """, False),
            ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
