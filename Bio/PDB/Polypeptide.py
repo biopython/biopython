@@ -291,11 +291,11 @@ class _PPBuilder:
         """
         self.radius=radius
 
-    def _accept(self, residue):
+    def _accept(self, residue, standard_aa_only):
         """Check if the residue is an amino acid (PRIVATE)."""
-        if is_aa(residue):
+        if is_aa(residue, standard=standard_aa_only):
             return True
-        elif "CA" in residue.child_dict:
+        elif not standard_aa_only and "CA" in residue.child_dict:
             #It has an alpha carbon...
             #We probably need to update the hard coded list of
             #non-standard residues, see function is_aa for details.
@@ -331,19 +331,26 @@ class _PPBuilder:
         pp_list=[]
         for chain in chain_list:
             chain_it=iter(chain)
-            prev_res=chain_it.next()
+            try:
+                prev_res = chain_it.next()
+                while not accept(prev_res, aa_only):
+                    prev_res = chain_it.next()
+            except StopIteration:
+                #No interesting residues at all in this chain
+                continue
             pp=None
             for next_res in chain_it:
-                if aa_only and not accept(prev_res):
-                    prev_rev=next_res
-                    continue
-                if is_connected(prev_res, next_res):
+                if accept(prev_res, aa_only) \
+                and accept(next_res, aa_only) \
+                and is_connected(prev_res, next_res):
                     if pp is None:
                         pp=Polypeptide()
                         pp.append(prev_res)
                         pp_list.append(pp)
                     pp.append(next_res)
                 else:
+                    #Either too far apart, or one of the residues is unwanted.
+                    #End the current peptide
                     pp=None
                 prev_res=next_res
         return pp_list
