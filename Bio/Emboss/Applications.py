@@ -464,21 +464,6 @@ class PrimerSearchCommandline(_EmbossCommandLine):
           ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
-    def set_parameter(self, name, value=None):
-        #Due to a historical inconsistency, the PrimerSearchCommandline
-        #wrapper used -out and out, rather than -output and output like all
-        #the other EMBOSS wrappers.  I want to implement this paramter via
-        #the common _EmbossCommandLine base class, hence this hack for
-        #backwards compatibility:
-        if name in ["out", "-out"]:
-            import warnings
-            warnings.warn('Aliases "-out" and "out" are deprecated, please use '
-                          'either "-outfile" or "outfile" with set_parameter '
-                          'instead, or use the outfile property.',
-                          DeprecationWarning)
-            name = "outfile"
-        _EmbossCommandLine.set_parameter(self, name, value)
-
 
 class EProtDistCommandline(_EmbossCommandLine):
     """Commandline object for the eprotdist program from EMBOSS (DEPRECATED).

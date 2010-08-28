@@ -86,7 +86,8 @@ Bio.Entrez.efetch and rettype="genbank"
 As of Easter 2009, the NCBI have stopped supporting the unofficial return type
 of "genbank" in EFetch.  Instead we should be using "gb" (GenBank) or "gp"
 (GenPept).  As of Biopython 1.50, Bio.Entrez.efetch will correct this
-automatically, but issues a deprecation warning.
+automatically, but issues a deprecation warning. The code to check and correct
+for "genbank" was removed in Biopython 1.55 final.
 
 Bio.Entrez.query function
 =========================

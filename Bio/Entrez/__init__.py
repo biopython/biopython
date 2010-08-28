@@ -93,15 +93,6 @@ def efetch(db, **keywds):
     handle = Entrez.efetch(db="nucleotide", id="57240072", rettype="gb")
     print handle.read()
     """
-    for key in keywds:
-        if key.lower()=="rettype" and keywds[key].lower()=="genbank":
-            warnings.warn('As of Easter 2009, Entrez EFetch no longer '
-                          'supports the unofficial return type "genbank", '
-                          'use "gb" or "gp" instead.', DeprecationWarning)
-            if db.lower()=="protein":
-                keywds[key] = "gp" #GenPept
-            else:
-                keywds[key] = "gb" #GenBank
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
     variables = {'db' : db}
     variables.update(keywds)
