@@ -6,7 +6,12 @@
 import os
 from StringIO import StringIO
 from Bio import AlignIO
+
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 from Bio import Clustalw
+warnings.resetwarnings()
+
 from Bio.Align.Generic import Alignment
 
 
