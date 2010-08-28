@@ -287,10 +287,11 @@ class DataHandler:
             value.attributes = dict(self.attributes)
             del self.attributes
         current = self.stack[-1]
-        try:
-            current.append(value)
-        except AttributeError:
-            current[name] = value
+        if current!="":
+            try:
+                current.append(value)
+            except AttributeError:
+                current[name] = value
 
     def characterDataHandler(self, content):
         if not self.valid:
