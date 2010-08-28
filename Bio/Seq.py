@@ -105,7 +105,7 @@ class Seq(object):
     # Note this is read only since the Seq object is meant to be imutable
     @property
     def data(self) :
-        """Sequence as a string (OBSOLETE/DEPRECATED).
+        """Sequence as a string (DEPRECATED).
 
         This is a read only property provided for backwards compatility with
         older versions of Biopython (as is the tostring() method). We now
@@ -127,6 +127,8 @@ class Seq(object):
            ...
         AttributeError: can't set attribute
         """
+        import warnings
+        warnings.warn("Accessing the .data attribute is deprecated. Please use str(my_seq) or my_seq_tostring() instead of my_seq.data.", DeprecationWarning)
         return str(self)
 
     def __repr__(self):
