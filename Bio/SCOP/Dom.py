@@ -108,19 +108,3 @@ class Iterator:
         if self._parser is not None:
             return self._parser.parse(line)
         return line
-
-class Parser:
-    def parse(self, entry):
-        """Returns a Dom.Record """
-        import warnings
-        warnings.warn("""Bio.SCOP.Dom.Parser is deprecated.
-        Instead of
-
-        parser = Dom.Parser()
-        record = parser.parse(entry)
-
-        please use
-
-        record = Dom.Record(entry)
-        """, DeprecationWarning)
-        return Record(entry)
