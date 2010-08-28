@@ -4,7 +4,14 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Miscellaneous functions for dealing with sequences (obsolete?)."""
+"""Miscellaneous functions for dealing with sequences (OBSOLETE).
+
+This module is obsolete, and is likely to be deprecated in a future version
+of Biopython, and to be removed after that. If you use this module, please
+contact the Biopython developers at biopython-dev@biopython.org.
+"""
+
+
 
 import Seq
 import Alphabet
