@@ -607,7 +607,7 @@ class MethodTests(unittest.TestCase):
     def test_phylogeny_to_phyloxml(self):
         """Convert a Phylogeny object to a new Phyloxml."""
         tree = self.phyloxml.phylogenies[0]
-        doc = tree.to_phyloxml()
+        doc = tree.to_phyloxml_container()
         self.assertTrue(isinstance(doc, PX.Phyloxml))
 
     def test_sequence_conversion(self):
