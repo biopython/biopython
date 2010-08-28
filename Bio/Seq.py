@@ -120,7 +120,7 @@ class Seq(object):
         >>> from Bio.Seq import Seq
         >>> from Bio.Alphabet import generic_dna
         >>> my_seq = Seq("ACGT", generic_dna)
-        >>> str(my_seq) == my_seq.tostring() == my_seq.data == "ACGT"
+        >>> str(my_seq) == my_seq.tostring() == "ACGT"
         True
         >>> my_seq.data = "AAAA"
         Traceback (most recent call last):
