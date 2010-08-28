@@ -179,8 +179,9 @@ which is suitable even for very large files.
 
 Bio.Fasta (including Bio.Fasta.FastaAlign)
 ==========================================
-Declared obsolete in Release 1.48, and deprecated in Release 1.51.
-Please use the "fasta" support in Bio.SeqIO or Bio.AlignIO instead.
+Declared obsolete in Release 1.48, deprecated in Release 1.51, and removed
+in Release 1.55 final. Please use the "fasta" support in Bio.SeqIO or
+Bio.AlignIO instead.
 
 Bio.Align.FormatConvert
 =======================

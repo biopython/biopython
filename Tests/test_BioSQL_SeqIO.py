@@ -52,7 +52,7 @@ test_files = [ \
     ("fasta",  False, 'Fasta/loveliesbleeding.pro', 1),
     ("fasta",  False, 'Fasta/rose.pro', 1),
     ("fasta",  False, 'Fasta/rosemary.pro', 1),
-#Following examples are also used in test_Fasta.py
+#Following examples are also used in test_SeqIO.py
     ("fasta",  False, 'Fasta/f001', 1), #Protein
     ("fasta",  False, 'Fasta/f002', 3), #DNA
     #("fasta", False, 'Fasta/f003', 2), #Protein with comments

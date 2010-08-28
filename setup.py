@@ -225,7 +225,6 @@ PACKAGES = [
     'Bio.Entrez',
     'Bio.Enzyme',
     'Bio.ExPASy',
-    'Bio.Fasta',
     'Bio.FSSP',
     'Bio.GA',
     'Bio.GA.Crossover',
