@@ -183,8 +183,9 @@ Please use the "fasta" support in Bio.SeqIO or Bio.AlignIO instead.
 
 Bio.Align.FormatConvert
 =======================
-Declared obsolete in Release 1.48, and deprecated in Release 1.51.
-Please use Bio.AlignIO or the Alignment object's format method instead.
+Declared obsolete in Release 1.48, deprecated in Release 1.51, and
+removed in Release 1.55 final. Please use Bio.AlignIO or the Alignment
+object's format method instead.
 
 Bio.Emboss.Primer
 =================
