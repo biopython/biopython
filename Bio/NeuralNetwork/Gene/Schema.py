@@ -248,7 +248,7 @@ class GeneticAlgorithmFinder:
             # convert the Genome from a MutableSeq to a Seq so that
             # the schemas are just strings (and not array("c")s)
             seq_genome = org.genome.toseq()
-            schema_info[seq_genome.data] = org.fitness
+            schema_info[seq_genome.tostring()] = org.fitness
 
         return PatternRepository(schema_info)
 
@@ -289,20 +289,20 @@ class DifferentialSchemaFitness:
         """
         # convert the genome into a string
         seq_motif = genome.toseq()
-        motif = seq_motif.data
+        motif = seq_motif.tostring()
         
         # get the counts in the positive examples
         num_pos = 0
         for seq_record in self._pos_seqs:
             cur_counts = self._schema_eval.num_matches(motif,
-                                                      seq_record.seq.data)
+                                                      seq_record.seq.tostring())
             num_pos += cur_counts
 
         # get the counts in the negative examples
         num_neg = 0
         for seq_record in self._neg_seqs:
             cur_counts = self._schema_eval.num_matches(motif,
-                                                      seq_record.seq.data)
+                                                      seq_record.seq.tostring())
 
             num_neg += cur_counts
 
@@ -349,13 +349,13 @@ class MostCountSchemaFitness:
         """
         # convert the genome into a string
         seq_motif = genome.toseq()
-        motif = seq_motif.data
+        motif = seq_motif.tostring()
         
         # find the number of times the genome matches
         num_times = 0
         for seq_record in self._records:
             cur_counts = self._evaluator.num_matches(motif,
-                                                     seq_record.seq.data)
+                                                     seq_record.seq.tostring())
             num_times += cur_counts
 
         return num_times
@@ -510,7 +510,7 @@ class SchemaCoder:
         schema_counts = []
 
         for schema in self._schemas:
-            num_counts = self._converter.num_matches(schema, sequence.data)
+            num_counts = self._converter.num_matches(schema, sequence.tostring())
             schema_counts.append(num_counts)
 
         # normalize the counts to go between zero and one

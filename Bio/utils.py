@@ -23,7 +23,7 @@ def ungap(seq):
                   DeprecationWarning)
     gap = seq.gap_char
     letters = []
-    for c in seq.data:
+    for c in seq:
         if c != gap:
             letters.append(c)
     return Seq.Seq("".join(letters), seq.alphabet.alphabet)
@@ -33,7 +33,7 @@ def verify_alphabet(seq):
     for c in seq.alphabet.letters:
         letters[c] = 1
     try:
-        for c in seq.data:
+        for c in seq:
             letters[c]
     except KeyError:
         return 0
@@ -41,10 +41,8 @@ def verify_alphabet(seq):
 
 def count_monomers(seq):
     dict = {}
-#    bugfix: string.count(s,c) raises an AttributeError. Iddo Friedberg 16 Mar. 04
-#    s = buffer(seq.data)  # works for strings and array.arrays
     for c in seq.alphabet.letters:
-        dict[c] = seq.data.count(c)
+        dict[c] = seq.count(c)
     return dict
 
 def percent_monomers(seq):

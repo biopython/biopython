@@ -266,14 +266,10 @@ class StringMethodTests(unittest.TestCase):
                                              str1[i:j:step])
 
     def test_tostring(self):
-        """Check str(obj) and obj.tostring() match.
-
-        Also check the obj.data attribute for non-MutableSeq objects."""
+        """Check str(obj) and obj.tostring() match."""
         for example1 in self._examples:
             str1 = str(example1)
             self.assertEqual(example1.tostring(), str1)
-            if not isinstance(example1, MutableSeq):
-                self.assertEqual(example1.data, str1)
 
     def test_tomutable(self):
         """Check obj.tomutable() method."""

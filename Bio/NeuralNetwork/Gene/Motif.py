@@ -71,7 +71,7 @@ class MotifFinder:
 
             # now start finding motifs in the sequence
             for start in range(len(seq_record.seq) - (motif_size - 1)):
-                motif = seq_record.seq[start:start + motif_size].data
+                motif = seq_record.seq[start:start + motif_size].tostring()
 
                 # if we are being alphabet strict, make sure the motif
                 # falls within the specified alphabet
@@ -187,7 +187,7 @@ class MotifCoder:
         
         # count all of the motifs we are looking for in the sequence
         for start in range(len(sequence) - (self._motif_size - 1)):
-            motif = sequence[start:start + self._motif_size].data
+            motif = sequence[start:start + self._motif_size].tostring()
 
             if motif in seq_motifs:
                 seq_motifs[motif] += 1

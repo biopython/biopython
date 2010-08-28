@@ -30,7 +30,7 @@ def test_fitness(genome):
     """Simple class for calculating fitnesses.
     """
     seq_genome = genome.toseq()
-    return int(seq_genome.data)
+    return int(seq_genome.tostring())
 
 class SinglePointTest(unittest.TestCase):
     """Test simple point crossovers.
@@ -324,8 +324,8 @@ class TestCrossover:
     def do_crossover(self, org_1, org_2):
         seq_org1 = org_1.genome.toseq()
         seq_org2 = org_2.genome.toseq()
-        org1_genome = seq_org1.data
-        org2_genome = seq_org2.data
+        org1_genome = seq_org1.tostring()
+        org2_genome = seq_org2.tostring()
 
         new_org_1 = org_1.copy()
         new_org_2 = org_2.copy()

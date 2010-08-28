@@ -63,9 +63,9 @@ class PatternIO:
         for seq_pattern in seq_pattern_list:
             if isinstance(seq_pattern, MutableSeq):
                 seq = seq_pattern.toseq()
-                all_patterns.append(seq.data)
+                all_patterns.append(seq.tostring())
             elif isinstance(seq_pattern, Seq):
-                all_patterns.append(seq_pattern.data)
+                all_patterns.append(seq_pattern.tostring())
             else:
                 raise ValueError("Unexpected pattern type %r" % seq_pattern)
 

@@ -24,7 +24,7 @@ def test_fitness(genome):
     """Simple class for calculating fitnesses.
     """
     seq_genome = genome.toseq()
-    return int(seq_genome.data)
+    return int(seq_genome.tostring())
 
 class MutationHelper:
     """Mixin class which provides useful functions for testing mutations.
@@ -122,7 +122,7 @@ class TestMutator:
 
     def mutate(self, org):
         org_genome_seq = org.genome.toseq()
-        old_org_genome = org_genome_seq.data
+        old_org_genome = org_genome_seq.tostring()
         
         new_org = org.copy()
         

@@ -31,7 +31,7 @@ def test_fitness(genome):
     """Simple class for calculating fitnesses.
     """
     genome_seq = genome.toseq()
-    return int(genome_seq.data)
+    return int(genome_seq.tostring())
 
 class NoSelection:
     """A simple 'selection' class that just returns the generated population.

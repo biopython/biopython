@@ -52,8 +52,8 @@ class AmbiguousRepairTest(unittest.TestCase):
             new_org = repairer.repair(self.organism)
             new_genome_seq = new_org.genome.toseq()
 
-            assert new_genome_seq.data.count("*") == 2, \
-                   "Did not repair genome, got %s" % new_genome_seq.data
+            assert new_genome_seq.count("*") == 2, \
+                   "Did not repair genome, got %s" % new_genome_seq.tostring()
 
     def test_multiple_repair(self):
         """Test repair of multiple ambiguous positions in a genome.
@@ -64,8 +64,8 @@ class AmbiguousRepairTest(unittest.TestCase):
             new_org = repairer.repair(self.organism)
             new_genome_seq = new_org.genome.toseq()
 
-            assert new_genome_seq.data.count("*") == 0, \
-                   "Did not repair genome, got %s" % new_genome_seq.data
+            assert new_genome_seq.count("*") == 0, \
+                   "Did not repair genome, got %s" % new_genome_seq.tostring()
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

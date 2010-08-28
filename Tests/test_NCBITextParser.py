@@ -27,7 +27,7 @@ class TestBlastRecord(unittest.TestCase):
         generic_align = record.multiple_alignment.to_generic(IUPAC.protein)
         test_seq = generic_align.get_seq_by_num(0)
         self.assertEqual(test_seq.alphabet, IUPAC.protein)
-        self.assertEqual(test_seq.data[:60], record.multiple_alignment.alignment[0][2])
+        self.assertEqual(test_seq[:60].tostring(), record.multiple_alignment.alignment[0][2])
 
 
 class TestNCBITextParser(unittest.TestCase):

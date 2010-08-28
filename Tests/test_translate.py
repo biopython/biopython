@@ -78,12 +78,12 @@ p2 = dna.translate(table=2, to_stop=True)
 print len(p2), "SGC1 has a stop codon"
 print p2.tostring()
 p2 = dna.translate(table=2)
-print "Actually, there are", p2.data.count("*"), "stops."
+print "Actually, there are", p2.count("*"), "stops."
 print p2.tostring()
 
 # Make sure I can change the stop character
 p2 = dna.translate(table=2, stop_symbol="+")
-print "Yep,", p2.data.count("+"), "stops."
+print "Yep,", p2.count("+"), "stops."
 print p2.tostring()
 
 
@@ -94,13 +94,13 @@ rna = Seq.Seq(s.replace("T", "U"), IUPAC.unambiguous_rna)
 print "RNA translation ...",
 protein_from_rna = rna.translate(to_stop=True)
 assert protein.alphabet is protein_from_rna.alphabet
-assert protein.data == protein_from_rna.data
+assert protein.tostring() == protein_from_rna.tostring()
 print "works."
 
 print "RNA translation to stop ...",
 gapped_protein_from_rna = rna.translate()
 assert len(gapped_protein) == len(gapped_protein_from_rna)
-assert gapped_protein.data == gapped_protein_from_rna.data
+assert gapped_protein.tostring() == gapped_protein_from_rna.tostring()
 print "works."
 
 # some tests for "by name"

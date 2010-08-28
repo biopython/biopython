@@ -166,17 +166,17 @@ class Prosite:
     
     def search(self, seq, pos=0, endpos=None):
         if endpos is not None:
-            m = self.grouped_re.search(buffer(seq.data), pos, endpos)
+            m = self.grouped_re.search(buffer(seq.tostring()), pos, endpos)
         else:
-            m = self.grouped_re.search(buffer(seq.data), pos)
+            m = self.grouped_re.search(buffer(seq.tostring()), pos)
         if m is None:
             return None
         return PrositeMatch(self, seq, m)
     def match(self, seq, pos=0, endpos=None):
         if endpos is not None:
-            m = self.grouped_re.match(buffer(seq.data), pos, endpos)
+            m = self.grouped_re.match(buffer(seq.tostring()), pos, endpos)
         else:
-            m = self.grouped_re.match(buffer(seq.data), pos)           
+            m = self.grouped_re.match(buffer(seq.tostring()), pos)
         if m is None:
             return None
         return PrositeMatch(self, seq, m)

@@ -75,11 +75,11 @@ class SignatureFinder:
             largest_sig_size = sig_size * 2 + max_gap
             for start in range(len(seq_record.seq) - (largest_sig_size - 1)):
                 # find the first part of the signature
-                first_sig = seq_record.seq[start:start + sig_size].data
+                first_sig = seq_record.seq[start:start + sig_size].tostring()
 
                 # now find all of the second parts of the signature
                 for second in range(start + 1, (start + 1) + max_gap):
-                    second_sig = seq_record.seq[second: second + sig_size].data
+                    second_sig = seq_record.seq[second: second + sig_size].tostring()
 
                     # if we are being alphabet strict, make sure both parts
                     # of the sig fall within the specified alphabet
@@ -188,11 +188,11 @@ class SignatureCoder:
         for start in range(len(sequence) - (smallest_sig_size - 1)):
             # if the first part matches any of the signatures we are looking
             # for, then expand out to look for the second part
-            first_sig = sequence[start:start + sig_size].data
+            first_sig = sequence[start:start + sig_size].tostring()
             if first_sig in all_first_sigs:
                 for second in range(start + sig_size,
                                     (start + sig_size + 1) + self._max_gap):
-                    second_sig = sequence[second:second + sig_size].data
+                    second_sig = sequence[second:second + sig_size].tostring()
 
                     # if we find the motif, increase the counts for it
                     if (first_sig, second_sig) in sequence_sigs:
