@@ -3,8 +3,13 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """
-Consumers for AlignACE and CompareACE parsers.
+Consumers for AlignACE and CompareACE parsers (DEPRECATED).
 """
+
+import warnings
+warnings.warn('Bio.AlignAce is deprecated. Please use Bio.Motif instead.',
+              DeprecationWarning)
+
 
 class AlignAceScanner:
     """Scannner for AlignACE output

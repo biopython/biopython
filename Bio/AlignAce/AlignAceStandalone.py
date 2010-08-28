@@ -6,7 +6,7 @@
 """
 
 This module provides code to work with the standalone version of AlignACE, 
-for motif search in DNA sequences.
+for motif search in DNA sequences (DEPRECATED).
 
 AlignACE homepage:
 
@@ -28,6 +28,10 @@ functions:
 AlignAce - runs the AlignACE standalone prgram and returns the 
 ApplicationResult object
 """
+
+import warnings
+warnings.warn('Bio.AlignAce is deprecated. Please use Bio.Motif instead.',
+              DeprecationWarning)
 
 import os
 

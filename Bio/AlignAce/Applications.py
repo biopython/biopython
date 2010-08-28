@@ -1,5 +1,10 @@
-"""Definitions for interacting with AlignAce.
+"""Definitions for interacting with AlignAce (DEPRECATED).
 """
+
+import warnings
+warnings.warn('Bio.AlignAce is deprecated. Please use Bio.Motif instead.',
+              DeprecationWarning)
+
 from Bio.Application import _Option,_Argument, AbstractCommandline
 from Bio.Application import generic_run
 

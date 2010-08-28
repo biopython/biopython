@@ -3,11 +3,16 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """
-Implementation of sequence motifs.
+Implementation of sequence motifs (DEPRECATED).
 
 Changes:
 9.2007 (BW) : added the to_faste() and .weblogo() methods allowing to use the Berkeley weblogo server at http://weblogo.berkeley.edu/
 """
+
+import warnings
+warnings.warn('Bio.AlignAce is deprecated. Please use Bio.Motif instead.',
+              DeprecationWarning)
+
 
 from Bio.SubsMat import FreqTable
 

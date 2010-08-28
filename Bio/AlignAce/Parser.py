@@ -5,8 +5,13 @@
 """
 Classes for parsing AlignAce and CompareACE files.
 
-This module is OBSOLETE; please use Bio.Motif.Parsers.AlignAce instead.
+This module is DEPRECATED; please use Bio.Motif.Parsers.AlignAce instead.
 """
+
+import warnings
+warnings.warn('Bio.AlignAce is deprecated. Please use Bio.Motif instead.',
+              DeprecationWarning)
+
 
 from Bio.ParserSupport import *
 from Scanner import AlignAceScanner,CompareAceScanner

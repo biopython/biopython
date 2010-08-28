@@ -6,7 +6,7 @@
 """
 
 This module provides code to work with the standalone version of CompareAce, 
-for motif comparison
+for motif comparison (DEPRECATED).
 
 CompareACE homepage:
 
@@ -15,6 +15,11 @@ http://atlas.med.harvard.edu/
 functions:
 CompareAce - runs the AlignACE standalone prgram and returns the ApplicationResult object
 """
+
+import warnings
+warnings.warn('Bio.AlignAce is deprecated. Please use Bio.Motif instead.',
+              DeprecationWarning)
+
 
 import os
 import re

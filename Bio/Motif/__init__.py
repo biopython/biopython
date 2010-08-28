@@ -10,12 +10,12 @@ as well as methods for motif comparisons and motif searching in sequences.
 It also inlcudes functionality for parsing AlignACE and MEME programs
 """
 from _Motif import Motif
-from Parsers.AlignAce import AlignAceParser, CompareAceParser
-from Parsers.MEME import MEMEParser,MASTParser
+import Parsers.AlignAce
+import Parsers.MEME
 from Thresholds import ScoreDistribution
 
-_parsers={"AlignAce":AlignAceParser,
-          "MEME":MEMEParser
+_parsers={"AlignAce":Parsers.AlignAce.read,
+          "MEME":Parsers.MEME.read
           }
 
 def _from_pfm(handle):
@@ -75,7 +75,7 @@ def parse(handle,format):
         else: #we have a proper reader 
             yield reader(handle)
     else: # we have a proper reader
-        for m in parser().parse(handle).motifs:
+        for m in parser(handle).motifs:
             yield m
 
 def read(handle,format):
