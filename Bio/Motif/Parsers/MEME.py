@@ -356,7 +356,7 @@ def __skip_unused_lines(handle):
         raise ValueError("Line does not start with '***':\n%s" % line)
 
 
-# Everything below is obsolete.
+# Everything below is deprecated.
 
 
 from Bio import File
@@ -364,7 +364,7 @@ from Bio.ParserSupport import *
 
 
 class MEMEParser (AbstractParser):
-    """A parser for the text output of the MEME program (OBSOLETE).
+    """A parser for the text output of the MEME program (DEPRECATED).
     Parses the output into an object of the MEMERecord class.
     
     Methods:
@@ -379,11 +379,13 @@ class MEMEParser (AbstractParser):
     ...    for instance in motif.instances:
     ...        print instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue
     
-    This class is OBSOLETE; please use the read() function in this module
+    This class is DEPRECATED; please use the read() function in this module
     instead.
     """
     def __init__ (self):
         """__init__ (self)"""
+        import warnings
+        warnings.warn("Bio.Motif.Parsers.MEME.MEMEParser is deprecated; please use the read() function in this module instead", DeprecationWarning)
         self._scanner = _MEMEScanner()
         self._consumer = _MEMEConsumer()
     
@@ -395,15 +397,19 @@ class MEMEParser (AbstractParser):
 
 
 class _MEMEScanner:
-    """Scanner for MEME output (OBSOLETE).
+    """Scanner for MEME output (DEPRECATED).
     
     Methods:
     feed
     
-    This class is OBSOLETE; please use the read() function in this module
+    This class is DEPRECATED; please use the read() function in this module
     instead.
     """
     
+    def __init__(self):
+        import warnings
+        warnings.warn("Bio.Motif.Parsers.MEME._MEMEScanner is deprecated; please use the read() function in this module instead", DeprecationWarning)
+
     def feed (self, handle, consumer):
         """
         Feeds in MEME output for scanning. handle should
@@ -465,16 +471,18 @@ class _MEMEScanner:
 
 class _MEMEConsumer:
     """
-    Consumer that can receive events from MEME Scanner (OBSOLETE).
+    Consumer that can receive events from MEME Scanner (DEPRECATED).
     
     This is the Consumer object that should be passed to the 
     MEME Scanner.
     
-    This class is OBSOLETE; please use the read() function in this module
+    This class is DEPRECATED; please use the read() function in this module
     instead.
     """
     
     def __init__ (self):
+        import warnings
+        warnings.warn("Bio.Motif.Parsers.MEME._MEMEConsumer is deprecated; please use the read() function in this module instead", DeprecationWarning)
         self.current_motif = None
         self.sequence_names = []
         self.data = MEMERecord()
@@ -550,7 +558,7 @@ class _MEMEConsumer:
 
 class _MASTConsumer:
     """
-    Consumer that can receive events from _MASTScanner (OBSOLETE).
+    Consumer that can receive events from _MASTScanner (DEPRECATED).
     
     A _MASTConsumer parses lines from a mast text output file.
     The motif match diagrams are parsed using line buffering. 
@@ -559,10 +567,12 @@ class _MASTConsumer:
     If this variable isn't there, the TaggingConsumer barfs. In
     the _MASTScanner, None is passed in the place of this variable.
     
-    This class is OBSOLETE; please use the read() function in the module
+    This class is DEPRECATED; please use the read() function in the module
     Bio.Motif.Parsers.MAST instead.
     """
     def __init__ (self):
+        import warnings
+        warnings.warn("Bio.Motif.Parsers.MEME._MASTConsumer is deprecated; please use the read() function in the module Bio.Motif.Parsers.MAST instead", DeprecationWarning)
         self.data = MASTRecord()
         self._current_seq = ""
         self._line_buffer = []
@@ -785,7 +795,7 @@ class _MASTConsumer:
 
 class MASTParser(AbstractParser):
     """
-    Parser for MAST text output (OBSOLETE).
+    Parser for MAST text output (DEPRECATED).
     HTML output cannot be parsed, yet. Returns a MASTRecord
     
     A MASTParser takes a file handle for a MAST text output file and 
@@ -806,10 +816,12 @@ class MASTParser(AbstractParser):
     ...    for instance in motif.instances:
     ...        print instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue
     
-    This class is OBSOLETE; please use the read() function in the module
+    This class is DEPRECATED; please use the read() function in the module
     Bio.Motif.Parsers.MAST instead.
     """
     def __init__ (self):
+        import warnings
+        warnings.warn("Bio.Motif.Parsers.MEME.MASTParser is deprecated; please use the read() function in the module Bio.Motif.Parsers.MAST instead", DeprecationWarning)
         self._consumer = _MASTConsumer()
         self._scanner = _MASTScanner()
     
@@ -821,11 +833,15 @@ class MASTParser(AbstractParser):
 
 class _MASTScanner:
     """
-    Scanner for MAST text output (OBSOLETE).
+    Scanner for MAST text output (DEPRECATED).
     
-    This class is OBSOLETE; please use the read() function in the module
+    This class is DEPRECATED; please use the read() function in the module
     Bio.Motif.Parsers.MAST instead.
     """
+    def __init__(self):
+        import warnings
+        warnings.warn("Bio.Motif.Parsers.MEME._MASTScanner is deprecated; please use the read() function in the module Bio.Motif.Parsers.MAST instead", DeprecationWarning)
+
     def feed (self, handle, consumer):
         if isinstance(handle, File.UndoHandle):
             uhandle = handle
@@ -900,7 +916,7 @@ class _MASTScanner:
 
 
 class MASTRecord:
-    """The class for holding the results from a MAST run (OBSOLETE).
+    """The class for holding the results from a MAST run (DEPRECATED).
     
     A MASTRecord holds data about matches between motifs and sequences.
     The motifs held by the MASTRecord are objects of the class MEMEMotif.
@@ -915,10 +931,12 @@ class MASTRecord:
     get_motif_by_name (motif_name): returns a MEMEMotif with the given
     name.
     
-    This class is OBSOLETE; please use the read() function in the module
+    This class is DEPRECATED; please use the read() function in the module
     Bio.Motif.Parsers.MAST instead.
     """
     def __init__ (self):
+        import warnings
+        warnings.warn("Bio.Motif.Parsers.MEME.MASTRecord is deprecated; please use the read() function in the module Bio.Motif.Parsers.MAST instead", DeprecationWarning)
         self.sequences = []
         self.version = ""
         self.matches = []

@@ -481,13 +481,15 @@ class PrimerSearchCommandline(_EmbossCommandLine):
 
 
 class EProtDistCommandline(_EmbossCommandLine):
-    """Commandline object for the eprotdist program from EMBOSS (OBSOLETE).
+    """Commandline object for the eprotdist program from EMBOSS (DEPRECATED).
 
     This is an EMBOSS wrapper around protdist from PHYLIP.
 
     It has been replaced by "fprotdist", see FProtDistCommandline.
     """
     def __init__(self, cmd="eprotdist", **kwargs):
+        import warnings
+        warnings.warn("Bio.Emboss.Application.EProtDistCommandline has been deprecated; please use 'fprotdist' instead (see FProtDistCommandline).", DeprecationWarning)
         self.parameters = \
          [_Option(["-msf","msf"], ["input"], None, 1,
                   "File containing sequences"),
@@ -519,13 +521,15 @@ class EProtDistCommandline(_EmbossCommandLine):
 
 
 class ENeighborCommandline(_EmbossCommandLine):
-    """Commandline object for the eneighbor program from EMBOSS (OBSOLETE).
+    """Commandline object for the eneighbor program from EMBOSS (DEPRECATED).
 
     This is an EMBOSS wrapper around neighbor from PHYLIP.
 
     It has been replaced by "fneighbor", see FNeighborCommandline.
     """
     def __init__(self, cmd="eneighbor", **kwargs):
+        import warnings
+        warnings.warn("Bio.Emboss.Application.ENeighborCommandline has been deprecated; please use 'fneighbor' instead (see FNeighborCommandline).", DeprecationWarning)
         self.parameters = \
          [_Option(["-infile","infile"], ["input"], None, 1,
                   "infile value"),
@@ -563,13 +567,15 @@ class ENeighborCommandline(_EmbossCommandLine):
 
 
 class EProtParsCommandline(_EmbossCommandLine):
-    """Commandline object for the eprotpars program from EMBOSS (OBSOLETE).
+    """Commandline object for the eprotpars program from EMBOSS (DEPRECATED).
 
     This is an EMBOSS wrapper around protpars from PHYLIP.
 
     It has been replaced by "fprotpars", see FProtParsCommandline.
     """
     def __init__(self, cmd="eprotpars", **kwargs):
+        import warnings
+        warnings.warn("Bio.Emboss.Application.EProtParsCommandline has been deprecated; please use 'fprotpars' instead (see FProtParsCommandline).", DeprecationWarning)
         self.parameters = \
          [_Option(["-msf","msf"], ["input", "file"], None, 1,
                   "Sequences file to be read in"),
@@ -613,13 +619,15 @@ class EProtParsCommandline(_EmbossCommandLine):
 
 
 class EConsenseCommandline(_EmbossCommandLine):
-    """Commandline object for the econsense program from EMBOSS (OBSOLETE).
+    """Commandline object for the econsense program from EMBOSS (DEPRECATED).
 
     This is an EMBOSS wrapper around consense from PHYLIP.
 
     It has been replaced by "fconsense", see FConsenseCommandline.
     """
     def __init__(self, cmd="econsense", **kwargs):
+        import warnings
+        warnings.warn("Bio.Emboss.Application.EConsenseCommandline has been deprecated; please use 'fconsense' instead (see FConsenseCommandline).", DeprecationWarning)
         self.parameters = \
          [_Option(["-infile","infile"], ["input", "file"], None, 1,
                   "file to read in (New Hampshire standard form)"),
@@ -651,13 +659,15 @@ class EConsenseCommandline(_EmbossCommandLine):
 
 
 class ESeqBootCommandline(_EmbossCommandLine):
-    """Commandline object for the eseqboot program from EMBOSS (OBSOLETE).
+    """Commandline object for the eseqboot program from EMBOSS (DEPRECATED).
 
     This is an EMBOSS wrapper around seqboot from PHYLIP.
 
     It has been replaced by "fseqboot", see FSeqBootCommandline.
     """
     def __init__(self, cmd="eseqboot", **kwargs):
+        import warnings
+        warnings.warn("Bio.Emboss.Application.ESeqBootCommandline has been deprecated; please use 'fseqboot' instead (see FSeqBootCommandline).", DeprecationWarning)
         self.parameters = \
          [_Option(["-datafile","datafile"], ["input", "file"], None, 1,
                   "Input file"),

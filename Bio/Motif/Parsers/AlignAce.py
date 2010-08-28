@@ -53,21 +53,23 @@ def read(handle):
     return record
 
 
-# Everything below is obsolete.
+# Everything below is deprecated.
 
 from Bio.ParserSupport import *
 
 
 class AlignAceConsumer:
     """
-    The general purpose consumer for the AlignAceScanner (OBSOLETE).
+    The general purpose consumer for the AlignAceScanner (DEPRECATED).
 
     Should be passed as the consumer to the feed method of the AlignAceScanner. After 'consuming' the file, it has the list of motifs in the motifs property.
 
-    This class is OBSOLETE; please use the read() function in this module
+    This class is DEPRECATED; please use the read() function in this module
     instead.
     """
     def __init__(self):
+        import warnings
+        warnings.warn("Bio.Motif.Parsers.AlignAce.AlignAceConsumer is deprecated; please use the read() function in this module instead.", DeprecationWarning)
         self.motifs=[]
         self.current_motif=None
         self.param_dict = None
@@ -112,13 +114,15 @@ class AlignAceConsumer:
         self.cmd_line = line
     
 class AlignAceParser(AbstractParser):
-    """Parses AlignAce data into a sequence of Motifs (OBSOLETE)
+    """Parses AlignAce data into a sequence of Motifs (DEPRECATED)
 
-    This class is OBSOLETE; please use the read() function in this module
+    This class is DEPRECATED; please use the read() function in this module
     instead.
     """
     def __init__(self):
         """__init__(self)"""
+        import warnings
+        warnings.warn("Bio.Motif.Parsers.AlignAce.AlignAceParser is deprecated; please use the read() function in this module instead.", DeprecationWarning)
         self._scanner = AlignAceScanner()
         self._consumer = AlignAceConsumer()
 
@@ -128,7 +132,7 @@ class AlignAceParser(AbstractParser):
         return self._consumer
 
 class AlignAceScanner:
-    """Scannner for AlignACE output (OBSOLETE).
+    """Scannner for AlignACE output (DEPRECATED).
 
     Methods:
     feed     Feed data into the scanner.
@@ -148,9 +152,13 @@ class AlignAceScanner:
     motif_mask - mask of the motif (space - gap, asterisk - significant position)
     motif_score - MAP score of the motif - approx. N * log R, where R == (num. of actual occur.) / (num. of occur. expected by random.)
     
-    This class is OBSOLETE; please use the read() function in this module
+    This class is DEPRECATED; please use the read() function in this module
     instead.
     """
+    def __init__(self):
+        import warnings
+        warnings.warn("Bio.Motif.Parsers.AlignAce.AlignAceScanner is deprecated; please use the read() function in this module instead.", DeprecationWarning)
+
     def feed(self, handle, consumer):
         """S.feed(handle, consumer)
 
@@ -183,7 +191,7 @@ class AlignAceScanner:
                 raise ValueError(line)
 
 class CompareAceScanner:
-    """Scannner for CompareACE output (OBSOLETE).
+    """Scannner for CompareACE output (DEPRECATED).
 
     Methods:
     feed     Feed data into the scanner.
@@ -195,6 +203,10 @@ class CompareAceScanner:
     ###### TO DO #############3
     extend the scanner to include other, more complex outputs.
     """
+    def __init__(self):
+        import warnings
+        warnings.warn("Bio.Motif.Parsers.AlignAce.CompareAceScanner is deprecated.", DeprecationWarning)
+
     def feed(self, handle, consumer):
         """S.feed(handle, consumer)
 
@@ -207,12 +219,14 @@ class CompareAceScanner:
 
 class CompareAceConsumer:
     """
-    The general purpose consumer for the CompareAceScanner (OBSOLETE).
+    The general purpose consumer for the CompareAceScanner (DEPRECATED).
 
     Should be passed as the consumer to the feed method of the CompareAceScanner. After 'consuming' the file, it has the list of motifs in the motifs property.
     """
     def __init__(self):
-        pass
+        import warnings
+        warnings.warn("Bio.Motif.Parsers.AlignAce.CompareAceConsumer is deprecated.", DeprecationWarning)
+
     def motif_score(self,line):
         self.data = float(line.split()[-1])
     

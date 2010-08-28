@@ -288,10 +288,12 @@ def seq3(seq):
 # {{{ 
 
 def GC_Frame(seq, genetic_code = 1):
-    """Just an alias for six_frame_translations (OBSOLETE).
+    """Just an alias for six_frame_translations (DEPRECATED).
 
-    Use six_frame_translation directly, as this function may be deprecated
-    in a future release."""
+    Please use six_frame_translations directly, as this function is deprecated."""
+    import warnings
+    warnings.warn("GC_Frame is deprecated; please use six_frame_translations instead",
+                  DeprecationWarning)
     return six_frame_translations(seq, genetic_code)
 
 def six_frame_translations(seq, genetic_code = 1):
@@ -352,12 +354,15 @@ def six_frame_translations(seq, genetic_code = 1):
 # {{{ 
 
 def fasta_uniqids(filename):
-    """Checks and changes the name/ID's to be unique identifiers by adding numbers (OBSOLETE).
+    """Checks and changes the name/ID's to be unique identifiers by adding numbers (DEPRECATED).
 
     file - a FASTA format filename to read in.
 
     No return value, the output is written to screen.
     """
+    import warnings
+    warnings.warn("fasta_uniqids is deprecated", DeprecationWarning)
+
     mydict = {}
     txt = open(filename).read()
     entries = []
@@ -411,7 +416,7 @@ def quick_FASTA_reader(file):
     return entries
 
 def apply_on_multi_fasta(file, function, *args):
-    """Apply a function on each sequence in a multiple FASTA file (OBSOLETE).
+    """Apply a function on each sequence in a multiple FASTA file (DEPRECATED).
 
     file - filename of a FASTA format file
     function - the function you wish to invoke on each record
@@ -426,6 +431,8 @@ def apply_on_multi_fasta(file, function, *args):
     FASTA format string.  If your function never has a return value, this
     means apply_on_multi_fasta will return an empty list.
     """
+    import warnings
+    warnings.warn("apply_on_multi_fasta is deprecated", DeprecationWarning)
     try:
         f = globals()[function]
     except:
@@ -444,7 +451,7 @@ def apply_on_multi_fasta(file, function, *args):
     return results
          
 def quicker_apply_on_multi_fasta(file, function, *args):
-    """Apply a function on each sequence in a multiple FASTA file (OBSOLETE).
+    """Apply a function on each sequence in a multiple FASTA file (DEPRECATED).
 
     file - filename of a FASTA format file
     function - the function you wish to invoke on each record
@@ -460,6 +467,8 @@ def quicker_apply_on_multi_fasta(file, function, *args):
     FASTA format string.  If your function never has a return value, this
     means quicker_apply_on_multi_fasta will return an empty list.
     """
+    import warnings
+    warnings.warn("quicker_apply_on_multi_fasta is deprecated", DeprecationWarning)
     try:
         f = globals()[function]
     except:

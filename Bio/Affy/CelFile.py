@@ -13,7 +13,7 @@ Classes:
 Record    Contains the information from a cel file
 
 
-The following classes are obsolete:
+The following classes are DEPRECATED:
 
 class CelParser: parses cel files
 class CelRecord: stores the information from a cel file
@@ -77,7 +77,7 @@ from Bio.ParserSupport import AbstractConsumer
 from numpy import *
 
 class CelScanner:
-    """Scanner for Affymetrix CEL files (OBSOLETE)
+    """Scanner for Affymetrix CEL files (DEPRECATED)
 
     Methods:
     feed     Feed data into the scanner.
@@ -90,8 +90,12 @@ class CelScanner:
     StartIntensity - generated when the section [INTENSITY] is found
     ReadIntensity - one line in the section [INTENSITY]
 
-    This class is OBSOLETE; please use the read() function in this module.
+    This class is DEPRECATED; please use the read() function in this module.
     """
+    def __init__(self):
+        import warnings
+        warnings.warn("Bio.Affy.CelFile.CelScanner is deprecated; please use the read() function in this module instead",
+                      DeprecatingWarning)
     def feed(self, handle, consumer):
         """scanner.feed(handle, consumer)
 
@@ -121,12 +125,16 @@ class CelScanner:
 
 
 class CelConsumer(AbstractConsumer):
-    """Consumer for Affymetrix CEL files (OBSOLETE)
+    """Consumer for Affymetrix CEL files (DEPRECATED)
 
-    This class is OBSOLETE; please use the read() function in this module.
+    This class is DEPRECATED; please use the read() function in this module.
     """
 
     def __init__(self):
+        import warnings
+        warnings.warn("Bio.Affy.CelFile.CelConsumer is deprecated; please use the read() function in this module instead",
+                      DeprecationWarning)
+
         self._mean  = None
         self._stdev = None
         self._npix  = None
@@ -152,12 +160,12 @@ class CelConsumer(AbstractConsumer):
 
 class CelRecord:
     """
-    Stores the information in a cel file (OBSOLETE).
+    Stores the information in a cel file (DEPRECATED).
 
     Needs error handling.
     Needs to know the chip design.
 
-    This class is OBSOLETE; please use the Record class instead.
+    This class is DEPRECATED; please use the Record class instead.
     """
 
 
@@ -165,6 +173,10 @@ class CelRecord:
         """
         Pass the data attributes as a dictionary.
         """
+        import warnings
+        warnings.warn("Bio.Affy.CelFile.CelRecord is deprecated; please use the read() function in this module instead",
+                      DeprecationWarning)
+
         from copy import deepcopy as dcopy
 
         self._intensities = dcopy(data_dict['intensities'])
@@ -228,7 +240,7 @@ class CelParser:
 
     This class needs error handling.
 
-    This class is OBSOLETE; please use the read() function in this module
+    This class is DEPRECATED; please use the read() function in this module
     instead.
     """
 
@@ -237,6 +249,9 @@ class CelParser:
         Usually load the class with the cel file (not file name) as
         an argument.
         """
+        import warnings
+        warnings.warn("Bio.Affy.CelFile.CelParser is deprecated; please use the read() function in this module instead",
+                      DeprecatingWarning)
         
         self._intensities = None
         self._stdevs      = None

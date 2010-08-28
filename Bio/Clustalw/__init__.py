@@ -1,14 +1,14 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""Code for calling ClustalW and parsing its output (OBSOLETE).
+"""Code for calling ClustalW and parsing its output (DEPRECATED).
 
 This module has been superseded by the Bio.AlignIO framework for
 alignment parsing, and the ClustalW command line wrapper in
 Bio.Align.Applications for calling the tool. These are both described
 in the current version of the Biopython Tutorial and Cookbook.
-This means Bio.Clustalw is now obsolete and is likely to be deprecated
-and eventually removed in future releases of Biopython.
+This means Bio.Clustalw is now deprecated and likely to be
+removed in future releases of Biopython.
 
 A set of classes to interact with the multiple alignment command
 line program clustalw. 
@@ -28,6 +28,9 @@ o do_alignment
 classes:
 o ClustalAlignment
 o MultipleAlignCL"""
+
+import warnings
+warnings.warn("Bio.Clustalw is deprecated. Please use the Bio.AlignIO framework for alignment parsing, and the ClustalW command line wrapper in Bio.Align.Applications for calling the tool. These are both described in the current version of the Biopython Tutorial and Cookbook.", DeprecationWarning)
 
 # standard library
 import os

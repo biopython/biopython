@@ -391,16 +391,20 @@ class AbstractDrawer:
         self.tracklines = tracklines    # Set flags
         
     def _set_xcentre(self, value):
+        import warnings
+        warnings.warn("The _set_xcentre method and .xcentre attribute are deprecated; please use the .xcenter attribute instead", DeprecationWarning)
         self.xcenter = value
     xcentre = property(fget = lambda self : self.xcenter,
                        fset = _set_xcentre,
-                       doc="Backwards compatible alias for xcenter (OBSOLETE)")
+                       doc="Backwards compatible alias for xcenter (DEPRECATED)")
 
     def _set_ycentre(self, value):
+        import warnings
+        warnings.warn("The _set_ycentre method and .xcentre attribute are deprecated; please use the .ycenter attribute instead", DeprecationWarning)
         self.ycenter = value
     ycentre = property(fget = lambda self : self.ycenter,
                        fset = _set_ycentre,
-                       doc="Backwards compatible alias for ycenter (OBSOLETE)")
+                       doc="Backwards compatible alias for ycenter (DEPRECATED)")
 
     def set_page_size(self, pagesize, orientation):
         """ set_page_size(self, pagesize, orientation)

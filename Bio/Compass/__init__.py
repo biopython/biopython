@@ -21,7 +21,7 @@ parse         Iterates over records in a COMPASS file.
 Classes:
 Record        One result of a COMPASS file
 
-OBSOLETE CLASSES:
+DEPRECATED CLASSES:
 
 _Scanner      Scan compass results
 _Consumer     Consume scanner events
@@ -218,14 +218,17 @@ def __read_hit_alignment(record, line):
     assert m!=None, "invalid match"
     record.hit_aln += m.group(1)
 
-# Everything below is obsolete
+# Everything below is deprecated
 
 from Bio import File
 from Bio.ParserSupport import *
 
 
 class _Scanner:
-    """Reads compass output and generate events (OBSOLETE)"""
+    """Reads compass output and generate events (DEPRECATED)"""
+    def __init__(self):
+        import warnings
+        warnings.warn("Bio.Compass._Scanner is deprecated; please use the read() and parse() functions in this module instead", DeprecationWarning)
 
     def feed(self, handle, consumer):
         """Feed in COMPASS ouput"""
@@ -319,6 +322,8 @@ class _Consumer:
     _re_positive_alignment = re.compile("^.{15}(.+)")
 
     def __init__(self):
+        import warnings
+        warnings.warn("Bio.Compass._Consumer is deprecated; please use the read() and parse() functions in this module instead", DeprecationWarning)
         self.data = None
 
     def names(self, line):
@@ -380,9 +385,11 @@ class _Consumer:
         self.data.hit_aln = self.data.hit_aln + m.group(1)
     
 class RecordParser(AbstractParser):
-        """Parses compass results into a Record object (OBSOLETE).
+        """Parses compass results into a Record object (DEPRECATED).
         """
         def __init__(self):
+            import warnings
+            warnings.warn("Bio.Compass._RecordParser is deprecated; please use the read() and parse() functions in this module instead", DeprecationWarning)
             self._scanner = _Scanner()
             self._consumer = _Consumer()
 
@@ -396,8 +403,11 @@ class RecordParser(AbstractParser):
             return self._consumer.data
                 
 class Iterator:
-    """Iterate through a file of compass results (OBSOLETE)."""
+    """Iterate through a file of compass results (DEPRECATED)."""
     def __init__(self, handle):
+        import warnings
+        warnings.warn("Bio.Compass.Iterator is deprecated; please use the parse() function in this module instead", DeprecationWarning)
+
         self._uhandle = File.UndoHandle(handle)
         self._parser = RecordParser()
 
