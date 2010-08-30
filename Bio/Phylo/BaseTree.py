@@ -224,7 +224,7 @@ class TreeMixin(object):
         """Return the first element found by find_elements(), or None.
 
         This is also useful for checking whether any matching element exists in
-        the tree.
+        the tree, and can be used in a conditional expression.
         """
         hits = self.find_elements(*args, **kwargs)
         try:
@@ -287,7 +287,10 @@ class TreeMixin(object):
         """Find each clade containing a matching element.
 
         That is, find each element as with find_elements(), but return the
-        corresponding clade object.
+        corresponding clade object. (This is usually what you want.)
+
+        The result is an iterable through all matching objects, searching
+        depth-first (preorder) by default.
         """
         def match_attrs(elem):
             orig_clades = elem.__dict__.pop('clades')
@@ -303,7 +306,7 @@ class TreeMixin(object):
         return self._filter_search(is_matching_elem, order, False)
 
     def get_path(self, target=None, **kwargs):
-        """List the clades directly between the root and the given target.
+        """List the clades directly between this root and the given target.
 
         Returns a list of all clade objects along this path, ending with
         the given target, but excluding the root clade.
@@ -379,6 +382,14 @@ class TreeMixin(object):
     def depths(self, unit_branch_lengths=False):
         """Create a mapping of tree clades to depths (by branch length).
 
+        The result is a dictionary where the keys are all of the Clade instances
+        in the tree, and the values are the distance from the root to each clade
+        (including terminals).
+        
+        By default the distance is the cumulative branch length leading to the
+        clade. With the unit_branch_lengths=True option, only the number of
+        branches (levels in the tree) is counted.
+
         @return: dict of {clade: depth}
         """
         if unit_branch_lengths:
@@ -406,8 +417,13 @@ class TreeMixin(object):
         return mrca.distance(target1) + mrca.distance(target2)
 
     def is_bifurcating(self):
-        """Return True if tree downstream of node is strictly bifurcating."""
-        # Root can be trifurcating, because it has no ancestor
+        """Return True if tree downstream of node is strictly bifurcating.
+        
+        I.e., all nodes have either 2 or 0 children (internal or external,
+        respectively). The root may have 3 descendents and still be considered
+        part of a bifurcating tree, because it has no ancestor.
+        """
+        # Root can be trifurcating
         if isinstance(self, Tree) and len(self.root) == 3:
             return (self.root.clades[0].is_bifurcating() and
                     self.root.clades[1].is_bifurcating() and
@@ -421,6 +437,15 @@ class TreeMixin(object):
 
     def is_monophyletic(self, terminals):
         """MRCA of terminals if they comprise a complete subclade, or False.
+
+        I.e., there exists a clade such that its terminals are the same set as
+        the given targets.
+
+        The given targets must be terminals of the tree.
+
+        For convenience, this method returns the common ancestor (MCRA) of the
+        targets if they are monophyletic (instead of the value True), and False
+        otherwise.
 
         @return: common ancestor if terminals are monophyletic, otherwise False.
         """
@@ -441,8 +466,10 @@ class TreeMixin(object):
         """True if target is a descendent of this tree.
 
         Not required to be a direct descendent.
-        """
-        return (self.get_path(target, **kwargs) is not None)
+        
+        To check only direct descendents of a clade, simply use list membership
+        testing: "if subclade in clade: ..."
+        """ return (self.get_path(target, **kwargs) is not None)
 
     def is_preterminal(self):
         """True if all direct descendents are terminal."""
@@ -482,6 +509,9 @@ class TreeMixin(object):
 
     def collapse_all(self):
         """Collapse all the descendents of this tree, leaving only terminals.
+
+        Branch lengths are preserved, i.e. the distance to each terminal stays
+        the same.
 
         To collapse only certain elements, use the collapse method directly in a
         loop with find_clades:
@@ -556,10 +586,13 @@ class TreeMixin(object):
         return parent
 
     def split(self, n=2, branch_length=1.0):
-        """Speciation: generate n (default 2) new descendants.
+        """Generate n (default 2) new descendants.
+
+        In a species tree, this is a speciation event.
 
         New clades have the given branch_length and the same name as this
-        clade's root plus an integer suffix (counting from 0).
+        clade's root plus an integer suffix (counting from 0). For example,
+        splitting a clade named "A" produces sub-clades named "A0" and "A1".
         """
         clade_cls = type(self.root)
         base_name = self.root.name or ''

@@ -8487,6 +8487,18 @@ newtree = copy.deepcopy(tree)
     will be collapsed and its branch length added to remaining terminal node. This might no
     longer be a meaningful value.
 
+  \item[\texttt{root\_with\_outgroup}]
+    Reroot this tree with the outgroup clade containing the given targets, i.e. the common
+    ancestor of the outgroup. This method is only available on Tree objects, not Clades.
+
+    If the outgroup is identical self.root, no change occurs. If the outgroup clade is terminal
+    (e.g. a single terminal node is given as the outgroup), a new bifurcating root clade is
+    created with a 0-length branch to the given outgroup. Otherwise, the internal node at the
+    base of the outgroup becomes a trifurcating root for the whole tree. If the original root
+    was bifurcating, it is dropped from the tree.
+
+    In all cases, the total branch length of the tree stays the same.
+
   \item[\texttt{split}]
     Generate \textit{n} (default 2) new descendants. In a species tree, this is a speciation
     event.  New clades have the given \verb|branch_length| and the same name as this clade's
