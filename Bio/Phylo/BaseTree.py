@@ -469,7 +469,8 @@ class TreeMixin(object):
         
         To check only direct descendents of a clade, simply use list membership
         testing: "if subclade in clade: ..."
-        """ return (self.get_path(target, **kwargs) is not None)
+        """
+        return self.get_path(target, **kwargs) is not None
 
     def is_preterminal(self):
         """True if all direct descendents are terminal."""
