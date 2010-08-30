@@ -78,14 +78,6 @@ class _PostgreSQL_dbutils(Generic_dbutils):
         rv = cursor.fetchone()
         return rv[0]
 
-class Psycopg_dbutils(_PostgreSQL_dbutils):
-    """Custom database utilities for Psycopg (PostgreSQL)."""
-    def autocommit(self, conn, y = True):
-        conn.autocommit(y)
-
-_dbutils["psycopg"] = Psycopg_dbutils
- 
-
 class Psycopg2_dbutils(_PostgreSQL_dbutils):
     """Custom database utilities for Psycopg2 (PostgreSQL)."""
     def autocommit(self, conn, y = True):

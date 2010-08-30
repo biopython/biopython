@@ -82,7 +82,7 @@ ClustalW command line tool (Release 1.51). See the Tutorial for examples.
 BioSQL and psycopg
 ==================
 Support for psycopg (version one) in Biopython's BioSQL code was deprecated
-in Release 1.51, please use psycopg2 instead.
+in Release 1.51, and removed in Release 1.55. Please use psycopg2 instead.
 
 Bio.Application.generic_run and ApplicationResult
 =================================================

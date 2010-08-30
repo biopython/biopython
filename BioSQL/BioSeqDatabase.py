@@ -36,6 +36,10 @@ def open_database(driver = "MySQLdb", **kwargs):
     host -> the hostname of the database
     database or db -> the name of the database
     """
+    if driver == "psycopg":
+        raise ValueError("Using BioSQL with psycopg (version one) is no "
+                         "longer supported. Use psycopg2 instead.")
+
     module = __import__(driver)
     connect = getattr(module, "connect")
 
@@ -56,7 +60,7 @@ def open_database(driver = "MySQLdb", **kwargs):
         if "passwd" in kw:
             kw["password"] = kw["passwd"]
             del kw["passwd"]
-    if driver in ["psycopg", "psycopg2", "pgdb"] and not kw.get("database"):
+    if driver in ["psycopg2", "pgdb"] and not kw.get("database"):
         kw["database"] = "template1"
     # SQLite connect takes the database name as input
     if driver in ["sqlite3"]:
@@ -78,17 +82,9 @@ def open_database(driver = "MySQLdb", **kwargs):
 
     server = DBServer(conn, module)
 
-    if driver == "psycopg":
-        import warnings
-        warnings.warn("Using BioSQL with psycopg (version one) is deprecated. "
-                      "It still works for now, but we recommend you update "
-                      "to using psycopg2 as a future release of Biopython "
-                      "will drop support for psycop (version one).",
-                      DeprecationWarning)
-
     # TODO - Remove the following once BioSQL Bug 2839 is fixed.
     # Test for RULES in PostgreSQL schema, see also Bug 2833.
-    if driver in ["psycopg", "psycopg2", "pgdb"]:
+    if driver in ["psycopg2", "pgdb"]:
         sql = "SELECT ev_class FROM pg_rewrite WHERE " + \
               "rulename='rule_bioentry_i1' OR " + \
               "rulename='rule_bioentry_i2';"
@@ -241,7 +237,7 @@ class DBServer:
         # 1. PostgreSQL can load it all at once and actually needs to
         # due to FUNCTION defines at the end of the SQL which mess up
         # the splitting by semicolons
-        if self.module_name in ["psycopg", "psycopg2", "pgdb"]:
+        if self.module_name in ["psycopg2", "pgdb"]:
             self.adaptor.cursor.execute(sql)
         # 2. MySQL needs the database loading split up into single lines of
         # SQL executed one at a time
@@ -659,13 +655,8 @@ class BioSeqDatabase:
                       "'%s' AND version = '%s' AND biodatabase_id = '%s')"
                 self.adaptor.execute(sql % (gi, self.dbid, accession, version, self.dbid))
                 if self.adaptor.cursor.fetchone():
-                    try:
-                        raise self.adaptor.conn.IntegrityError("Duplicate record " 
-                        "detected: record has not been inserted")
-                    except AttributeError: #psycopg version 1
-                        import psycopg
-                        raise psycopg.IntegrityError("Psycopg1: Duplicate record " 
-                        "detected: record has not been inserted")
+                    raise self.adaptor.conn.IntegrityError("Duplicate record " 
+                                     "detected: record has not been inserted")
             #End of hack
             db_loader.load_seqrecord(cur_record)
         return num_records
