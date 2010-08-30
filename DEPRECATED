@@ -52,8 +52,7 @@ Bio.Blast.NCBIStandalone
 ========================
 The three functions for calling the "legacy" NCBI BLAST command line tools
 blastall, blastpgp and rpsblast were declared obsolete in Biopython Release
-1.53, please use the BLAST+ wrappers in Bio.Blast.Applications and the Python
-subprocess module instead.
+1.53, please use the BLAST+ wrappers in Bio.Blast.Applications instead.
 
 The remainder of this module is a parser for the plain text BLAST output,
 which was declared obsolete in Release 1.54. For some time now, both the NCBI
@@ -87,7 +86,8 @@ in Release 1.51, and removed in Release 1.55. Please use psycopg2 instead.
 Bio.Application.generic_run and ApplicationResult
 =================================================
 Declared obsolete in Release 1.51, and deprecated in Release 1.53.
-Please use the Python subprocess module instead.
+Please use the Python subprocess module instead, of as of Release 1.55 the
+application wrappers can be used directly to execute the command.
 
 Bio.Entrez.efetch and rettype="genbank"
 =======================================
