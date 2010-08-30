@@ -9,6 +9,14 @@ The latest news is at the top.
 
 ===================================================================
 
+See the notes below for the Biopython 1.55 beta release for changes since
+Biopython 1.54 was released. Since the beta release we have marked a few
+modules as obsolete or deprecated, and removed some deprecated code. There
+have also been a few bug fixes, extra unit tests, and documentation
+improvements.
+
+===================================================================
+
 18 August 2010: Biopython 1.55 beta released.
 
 This is a beta release for testing purposes, both for new features added,
