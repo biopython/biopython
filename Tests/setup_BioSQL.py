@@ -26,7 +26,7 @@ TESTDB = 'biosql_test'
 #DBDRIVER = 'MySQLdb'
 #DBTYPE = 'mysql'
 # -- PostgreSQL
-#DBDRIVER = 'psycopg'
+#DBDRIVER = 'psycopg2'
 #DBTYPE = 'pg'
 # -- SQLite
 DBDRIVER = 'sqlite3'
