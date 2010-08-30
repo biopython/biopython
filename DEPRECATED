@@ -16,6 +16,14 @@ support for Python 2.4. This can be delayed given feedback from our users
 (e.g. if this proves to be a problem in combination with other libraries).
 An explicit warning was added to setup.py for Biopython 1.55.
 
+Bio.Encodings
+=============
+Declared obsolete in Release 1.55.
+
+Bio.PropertyManager
+===================
+Declared obsolete in Biopython 1.55.
+
 Bio.InterPro
 ============
 This module was a parser for the EBI InterPro webpages, but no longer works
@@ -184,7 +192,7 @@ in Release 1.55 final. Please use the "fasta" support in Bio.SeqIO or
 Bio.AlignIO instead.
 
 Bio.Align.FormatConvert
-=======================
+======================
 Declared obsolete in Release 1.48, deprecated in Release 1.51, and
 removed in Release 1.55 final. Please use Bio.AlignIO or the Alignment
 object's format method instead.
@@ -414,6 +422,7 @@ Bio.utils
 Functions 'translate', 'translate_to_stop', 'back_translate', 'transcribe',
 and 'back_transcribe' were deprecated in Release 1.49, and removed in Release
 1.53. Function 'ungap' was deprecated in Release 1.53. Use Bio.Seq instead.
+The whole of Bio.utils was declared obsolete in Release 1.55.
 
 Bio.Motif
 =========
