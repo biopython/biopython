@@ -15,6 +15,21 @@ modules as obsolete or deprecated, and removed some deprecated code. There
 have also been a few bug fixes, extra unit tests, and documentation
 improvements.
 
+(At least) 12 people have contributed to this release, including 6 new people:
+
+Andres Colubri (first contribution)
+Carlos Rios Vera (first contribution)
+Claude Paroz (first contribution)
+Cymon Cox
+Eric Talevich
+Frank Kauff
+Joao Rodrigues (first contribution)
+Konstantin Okonechnikov (first contribution)
+Michiel de Hoon
+Nathan Edwards (first contribution)
+Peter Cock
+Tiago Antao
+
 ===================================================================
 
 18 August 2010: Biopython 1.55 beta released.
