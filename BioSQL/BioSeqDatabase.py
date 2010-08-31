@@ -533,8 +533,14 @@ class BioSeqDatabase:
         """Check if a primary (internal) id is this namespace (sub database)."""
         sql = "SELECT COUNT(bioentry_id) FROM bioentry " + \
               "WHERE biodatabase_id=%s AND bioentry_id=%s;"
+        #The bioentry_id field is an integer in the schema.
+        #PostgreSQL will throw an error if we use a non integer in the query.
+        try:
+            bioentry_id = int(value)
+        except ValueError:
+            return False
         return bool(self.adaptor.execute_and_fetch_col0(sql,
-                                                        (self.dbid, value))[0])
+                                                  (self.dbid, bioentry_id))[0])
     
     def __iter__(self):
         """Iterate over ids (which may not be meaningful outside this database)."""
