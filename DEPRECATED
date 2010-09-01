@@ -38,7 +38,7 @@ longer needed. Declated obsolete in Release 1.55.
 Bio.Parsers and Bio.Parsers.spark
 =================================
 This module was a copy of John Aycock's SPARK parser included with Biopython
-soley for use in Bio.GenBank.LocationParser. Declated obsolete in Release
+soley for use in Bio.GenBank.LocationParser. Declared obsolete in Release
 1.55.
 
 Bio.Restriction.DNAUtils and check_bases
