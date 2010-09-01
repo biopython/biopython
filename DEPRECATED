@@ -33,7 +33,7 @@ Bio.GenBank.LocationParser
 ==========================
 This module used to be used for parsing GenBank and EMBL feature locations.
 It has been replaced with faster code using regular expressions, and is no
-longer needed. Declated obsolete in Release 1.55.
+longer needed. Declared obsolete in Release 1.55.
 
 Bio.Parsers and Bio.Parsers.spark
 =================================
