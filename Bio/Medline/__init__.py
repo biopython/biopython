@@ -93,62 +93,6 @@ class Record(dict):
     SPIN      Summary for patients in
     ORI       Original report in
     """
-    def __init__(self):
-        # The __init__ function can be removed when we remove the old parser
-        self.id = ''
-        self.pubmed_id = ''
-
-        self.mesh_headings = []
-        self.mesh_tree_numbers = []
-        self.mesh_subheadings = []
-
-        self.abstract = ''
-        self.comments = []
-        self.abstract_author = ''
-        self.english_abstract = ''
-
-        self.source = ''
-        self.publication_types = []
-        self.number_of_references = ''
-
-        self.authors = []
-        self.no_author = ''
-        self.address = ''
-
-        self.journal_title_code = ''
-        self.title_abbreviation = ''
-        self.issn = ''
-        self.journal_subsets = []
-        self.country = ''
-        self.languages = []
-
-        self.title = ''
-        self.transliterated_title = ''
-        self.call_number = ''
-        self.issue_part_supplement = ''
-        self.volume_issue = ''
-        self.publication_date = ''
-        self.year = ''
-        self.pagination = ''
-
-        self.special_list = ''
-
-        self.substance_name = ''
-        self.gene_symbols = []
-        self.secondary_source_ids = []
-        self.identifications = []
-        self.registry_numbers = []
-
-        self.personal_name_as_subjects = []
-
-        self.record_originators = []
-        self.entry_date = ''
-        self.entry_month = ''
-        self.class_update_date = ''
-        self.last_revision_date = ''
-        self.major_revision_date = ''
-
-        self.undefined = []
 
 
 def parse(handle):
