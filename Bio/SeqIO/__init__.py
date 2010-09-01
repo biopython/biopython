@@ -223,6 +223,8 @@ names are also used in Bio.AlignIO and include the following:
  - gb      - An alias for "genbank", for consistency with NCBI Entrez Utilities
  - ig      - The IntelliGenetics file format, apparently the same as the
              MASE alignment format.
+ - imgt    - An EMBL like format from IMGT where the feature tables are more
+             indented to allow for longer feature types.
  - phd     - Output from PHRED, used by PHRAP and CONSED for input.
  - pir     - A "FASTA like" format introduced by the National Biomedical
              Research Foundation (NBRF) for the Protein Information Resource
@@ -324,6 +326,7 @@ _FormatToIterator = {"fasta" : FastaIO.FastaIterator,
                      "genbank-cds" : InsdcIO.GenBankCdsFeatureIterator,
                      "embl" : InsdcIO.EmblIterator,
                      "embl-cds" : InsdcIO.EmblCdsFeatureIterator,
+                     "imgt" : InsdcIO.ImgtIterator,
                      "ig" : IgIO.IgIterator,
                      "swiss" : SwissIO.SwissIterator,
                      "phd" : PhdIO.PhdIterator,
@@ -344,6 +347,7 @@ _FormatToWriter = {"fasta" : FastaIO.FastaWriter,
                    "gb" : InsdcIO.GenBankWriter,
                    "genbank" : InsdcIO.GenBankWriter,
                    "embl" : InsdcIO.EmblWriter,
+                   "imgt" : InsdcIO.ImgtWriter,
                    "tab" : TabIO.TabWriter,
                    "fastq" : QualityIO.FastqPhredWriter,
                    "fastq-sanger" : QualityIO.FastqPhredWriter,

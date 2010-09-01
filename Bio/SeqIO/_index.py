@@ -389,6 +389,9 @@ class EmblDict(SequentialSeqFileDict):
                         break
                 yield key, offset
 
+class ImgtDict(EmblDict):
+    pass
+
 class SwissDict(SequentialSeqFileDict):
     """Indexed dictionary like access to a SwissProt file."""
     def _build(self):
@@ -557,6 +560,7 @@ _FormatToIndexedDict = {"ace" : SequentialSeqFileDict,
                         "genbank" : GenBankDict,
                         "gb" : GenBankDict, #alias of the above
                         "ig" : IntelliGeneticsDict,
+                        "imgt" : ImgtDict,
                         "phd" : SequentialSeqFileDict,
                         "pir" : SequentialSeqFileDict,
                         "sff" : SffDict,

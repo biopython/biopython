@@ -36,7 +36,7 @@ nucleotide_alphas = [Alphabet.generic_nucleotide,
                      Alphabet.Gapped(Alphabet.generic_nucleotide)]
 no_alpha_formats = ["fasta","clustal","phylip","tab","ig","stockholm","emboss",
                     "fastq","fastq-solexa","fastq-illumina","qual"]
-possible_unknown_seq_formats = ["qual", "genbank", "gb", "embl"]
+possible_unknown_seq_formats = ["qual", "genbank", "gb", "embl", "imgt"]
 
 #List of formats including alignment only file formats we can read AND write.
 #The list is initially hard coded to preserve the original order of the unit
@@ -147,6 +147,7 @@ test_files = [ \
     ("embl",   False, 'EMBL/AE017046.embl', 1), #See also NC_005816.gb
     ("embl",   False, 'EMBL/Human_contigs.embl', 2), #contigs, no sequences
     ("embl",   False, 'EMBL/A04195.imgt', 1), # features over indented for EMBL
+    ("imgt",   False, 'EMBL/A04195.imgt', 1), # features over indented for EMBL
     ("stockholm", True,  'Stockholm/simple.sth', 2),
     ("stockholm", True,  'Stockholm/funny.sth', 5),
 #Following PHYLIP files are currently only used here and in test_AlignIO.py,
@@ -365,7 +366,7 @@ def check_simple_write_read(records, indent=" "):
             assert len(r1) == len(r2)
 
             #Check the sequence
-            if format in ["gb", "genbank", "embl"]:
+            if format in ["gb", "genbank", "embl", "imgt"]:
                 #The GenBank/EMBL parsers will convert to upper case.
                 if isinstance(r1.seq, UnknownSeq) \
                 and isinstance(r2.seq, UnknownSeq):

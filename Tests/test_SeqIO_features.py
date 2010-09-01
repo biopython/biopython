@@ -21,7 +21,7 @@ from StringIO import StringIO
 from Bio.SeqIO.InsdcIO import _insdc_feature_location_string
 
 #Top level function as this makes it easier to use for debugging:
-def write_read(filename, in_format="gb", out_formats=["gb", "embl"]):
+def write_read(filename, in_format="gb", out_formats=["gb", "embl", "imgt"]):
     for out_format in out_formats:
         gb_records = list(SeqIO.parse(open(filename),in_format))
         #Write it out...
@@ -438,7 +438,7 @@ class FeatureWriting(unittest.TestCase):
         record2 = SeqIO.read(handle, format)
         compare_record(self.record, record2)
     
-    def write_read_checks(self, formats=["gb", "embl"]):
+    def write_read_checks(self, formats=["gb", "embl", "imgt"]):
         for f in formats:
             self.write_read_check(f)
 

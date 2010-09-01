@@ -21,6 +21,7 @@ Testing reading sff format file Roche/E3MFGYR02_random_10_reads.sff
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'sff' format
@@ -54,6 +55,8 @@ Testing reading clustal format file Clustalw/cw02.aln as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|671626|emb|CAA85685.1|' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).
  Checking can write/read as 'qual' format
@@ -95,6 +98,8 @@ Testing reading clustal format file Clustalw/opuntia.aln as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|6273291|gb|AF191665.1|AF191' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|6273291|gb|AF191665.1|AF191).
  Checking can write/read as 'qual' format
@@ -136,6 +141,8 @@ Testing reading clustal format file Clustalw/hedgehog.aln as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|56122354|gb|AAV74328.1|' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|56122354|gb|AAV74328.1|).
  Checking can write/read as 'qual' format
@@ -173,6 +180,8 @@ Testing reading clustal format file Clustalw/odd_consensus.aln as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AT3G20900.1-SEQ).
  Checking can write/read as 'qual' format
@@ -199,6 +208,8 @@ Testing reading fasta format file Fasta/lupine.nu
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|5049839|gb|AI730987.1|AI730987' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5049839|gb|AI730987.1|AI730987).
  Checking can write/read as 'qual' format
@@ -225,6 +236,8 @@ Testing reading fasta format file Fasta/elderberry.nu
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|4218935|gb|AF074388.1|AF074388' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4218935|gb|AF074388.1|AF074388).
  Checking can write/read as 'qual' format
@@ -251,6 +264,8 @@ Testing reading fasta format file Fasta/phlox.nu
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|5052071|gb|AF067555.1|AF067555' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5052071|gb|AF067555.1|AF067555).
  Checking can write/read as 'qual' format
@@ -277,6 +292,8 @@ Testing reading fasta format file Fasta/centaurea.nu
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|4104054|gb|AH007193.1|SEG_CVIGS' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4104054|gb|AH007193.1|SEG_CVIGS).
  Checking can write/read as 'qual' format
@@ -303,6 +320,8 @@ Testing reading fasta format file Fasta/wisteria.nu
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|5817701|gb|AF142731.1|AF142731' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5817701|gb|AF142731.1|AF142731).
  Checking can write/read as 'qual' format
@@ -329,6 +348,8 @@ Testing reading fasta format file Fasta/sweetpea.nu
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|3176602|gb|U78617.1|LOU78617' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3176602|gb|U78617.1|LOU78617).
  Checking can write/read as 'qual' format
@@ -355,6 +376,8 @@ Testing reading fasta format file Fasta/lavender.nu
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|5690369|gb|AF158246.1|AF158246' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|5690369|gb|AF158246.1|AF158246).
  Checking can write/read as 'qual' format
@@ -381,6 +404,8 @@ Testing reading fasta format file Fasta/aster.pro
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|3298468|dbj|BAA31520.1|' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3298468|dbj|BAA31520.1|).
  Checking can write/read as 'qual' format
@@ -407,6 +432,8 @@ Testing reading fasta format file Fasta/loveliesbleeding.pro
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|2781234|pdb|1JLY|B' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|2781234|pdb|1JLY|B).
  Checking can write/read as 'qual' format
@@ -433,6 +460,8 @@ Testing reading fasta format file Fasta/rose.pro
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|4959044|gb|AAD34209.1|AF069992_1' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|4959044|gb|AAD34209.1|AF069992_1).
  Checking can write/read as 'qual' format
@@ -459,6 +488,8 @@ Testing reading fasta format file Fasta/rosemary.pro
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|671626|emb|CAA85685.1|' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|671626|emb|CAA85685.1|).
  Checking can write/read as 'qual' format
@@ -485,6 +516,8 @@ Testing reading fasta format file Fasta/f001
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|3318709|pdb|1A91|' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|3318709|pdb|1A91|).
  Checking can write/read as 'qual' format
@@ -518,6 +551,8 @@ Testing reading fasta format file Fasta/f002
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|1592936|gb|G29385|G29385' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|1592936|gb|G29385|G29385).
  Checking can write/read as 'qual' format
@@ -549,6 +584,8 @@ Testing reading fasta format file Fasta/fa01
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AKH_HAEIN/1-382).
  Checking can write/read as 'qual' format
@@ -575,6 +612,8 @@ Testing reading fasta format file GenBank/NC_005816.fna
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|45478711|ref|NC_005816.1|' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478711|ref|NC_005816.1|).
  Checking can write/read as 'qual' format
@@ -611,6 +650,8 @@ Testing reading fasta format file GenBank/NC_005816.ffn
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'ref|NC_005816.1|:c8360-8088' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=ref|NC_005816.1|:c8360-8088).
  Checking can write/read as 'qual' format
@@ -647,6 +688,8 @@ Testing reading fasta format file GenBank/NC_005816.faa
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|45478721|ref|NP_995576.1|' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).
  Checking can write/read as 'qual' format
@@ -683,6 +726,8 @@ Testing reading fasta format file GenBank/NC_000932.faa
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|7525099|ref|NP_051123.1|' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|7525099|ref|NP_051123.1|).
  Checking can write/read as 'qual' format
@@ -719,6 +764,8 @@ Testing reading tab format file GenBank/NC_005816.tsv
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|45478721|ref|NP_995576.1|' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|45478721|ref|NP_995576.1|).
  Checking can write/read as 'qual' format
@@ -745,6 +792,8 @@ Testing reading fasta format file GFF/NC_001802.fna
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|9629357|ref|NC_001802.1|' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|NC_001802.1|).
  Checking can write/read as 'qual' format
@@ -771,6 +820,8 @@ Testing reading fasta format file GFF/NC_001802lc.fna
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|9629357|ref|nc_001802.1|' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|9629357|ref|nc_001802.1|).
  Checking can write/read as 'qual' format
@@ -809,6 +860,8 @@ Testing reading fasta format file GFF/multi.fna as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=test3).
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=test3).
  Checking can write/read as 'qual' format
@@ -840,6 +893,8 @@ Testing reading fasta format file Registry/seqs.fasta
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|129628|sp|P07175|PARA_AGRTU' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|129628|sp|P07175|PARA_AGRTU).
  Checking can write/read as 'qual' format
@@ -881,6 +936,8 @@ Testing reading nexus format file Nexus/test_Nexus_input.nex as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=t9).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'one should be punished, for (that)!' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Cannot have spaces in EMBL accession, 'one should be punished, for (that)!'
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=t9).
  Checking can write/read as 'qual' format
@@ -905,6 +962,8 @@ Testing reading swiss format file SwissProt/sp001
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13454).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13454).
  Checking can write/read as 'qual' format
@@ -929,6 +988,8 @@ Testing reading swiss format file SwissProt/sp002
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P54101).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P54101).
  Checking can write/read as 'qual' format
@@ -953,6 +1014,8 @@ Testing reading swiss format file SwissProt/sp003
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P42655).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P42655).
  Checking can write/read as 'qual' format
@@ -977,6 +1040,8 @@ Testing reading swiss format file SwissProt/sp004
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P23082).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P23082).
  Checking can write/read as 'qual' format
@@ -1001,6 +1066,8 @@ Testing reading swiss format file SwissProt/sp005
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P24973).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P24973).
  Checking can write/read as 'qual' format
@@ -1025,6 +1092,8 @@ Testing reading swiss format file SwissProt/sp006
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P39896).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P39896).
  Checking can write/read as 'qual' format
@@ -1049,6 +1118,8 @@ Testing reading swiss format file SwissProt/sp007
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=O95832).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=O95832).
  Checking can write/read as 'qual' format
@@ -1073,6 +1144,8 @@ Testing reading swiss format file SwissProt/sp008
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P01892).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P01892).
  Checking can write/read as 'qual' format
@@ -1097,6 +1170,8 @@ Testing reading swiss format file SwissProt/sp009
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=O23729).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=O23729).
  Checking can write/read as 'qual' format
@@ -1121,6 +1196,8 @@ Testing reading swiss format file SwissProt/sp010
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
  Checking can write/read as 'qual' format
@@ -1145,6 +1222,8 @@ Testing reading swiss format file SwissProt/sp011
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P16235).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P16235).
  Checking can write/read as 'qual' format
@@ -1169,6 +1248,8 @@ Testing reading swiss format file SwissProt/sp012
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q9Y736).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q9Y736).
  Checking can write/read as 'qual' format
@@ -1193,6 +1274,8 @@ Testing reading swiss format file SwissProt/sp013
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P82909).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P82909).
  Checking can write/read as 'qual' format
@@ -1217,6 +1300,8 @@ Testing reading swiss format file SwissProt/sp014
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P12166).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P12166).
  Checking can write/read as 'qual' format
@@ -1241,6 +1326,8 @@ Testing reading swiss format file SwissProt/sp015
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=IPI00383150).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=IPI00383150).
  Checking can write/read as 'qual' format
@@ -1265,6 +1352,8 @@ Testing reading swiss format file SwissProt/sp016
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P01100).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P01100).
  Checking can write/read as 'qual' format
@@ -1289,6 +1378,8 @@ Testing reading swiss format file Registry/EDD_RAT.dat
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q62671).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q62671).
  Checking can write/read as 'qual' format
@@ -1312,6 +1403,7 @@ Testing reading genbank format file GenBank/noref.gb
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).
  Checking can write/read as 'qual' format
@@ -1345,6 +1437,7 @@ Testing reading genbank format file GenBank/cor6_6.gb
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AF297471.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AF297471.1).
  Checking can write/read as 'qual' format
@@ -1369,6 +1462,7 @@ Testing reading genbank format file GenBank/iro.gb
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).
  Checking can write/read as 'qual' format
@@ -1392,6 +1486,7 @@ Testing reading genbank format file GenBank/pri1.gb
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=U05344.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=U05344.1).
  Checking can write/read as 'qual' format
@@ -1415,6 +1510,7 @@ Testing reading genbank format file GenBank/arab1.gb
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AC007323.5).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AC007323.5).
  Checking can write/read as 'qual' format
@@ -1439,6 +1535,8 @@ Testing reading genbank format file GenBank/protein_refseq.gb
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NP_034640.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NP_034640.1).
  Checking can write/read as 'qual' format
@@ -1463,6 +1561,8 @@ Testing reading genbank format file GenBank/protein_refseq2.gb
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NP_034640.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NP_034640.1).
  Checking can write/read as 'qual' format
@@ -1486,6 +1586,7 @@ Testing reading genbank format file GenBank/extra_keywords.gb
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AL138972.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AL138972.1).
  Checking can write/read as 'qual' format
@@ -1509,6 +1610,7 @@ Testing reading genbank format file GenBank/one_of.gb
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=U18266.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=U18266.1).
  Checking can write/read as 'qual' format
@@ -1522,6 +1624,7 @@ Testing reading genbank format file GenBank/NT_019265.gb
  Seq='NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN', length=1250660
  Checking can write/read as 'embl' format
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NT_019265.6).
 Testing reading genbank format file GenBank/origin_line.gb
@@ -1539,6 +1642,7 @@ Testing reading genbank format file GenBank/origin_line.gb
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NC_002678.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NC_002678.1).
  Checking can write/read as 'qual' format
@@ -1563,6 +1667,8 @@ Testing reading genbank format file GenBank/blank_seq.gb
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NP_001832.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NP_001832.1).
  Checking can write/read as 'qual' format
@@ -1587,6 +1693,8 @@ Testing reading genbank format file GenBank/dbsource_wrap.gb
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P01485).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P01485).
  Checking can write/read as 'qual' format
@@ -1610,6 +1718,7 @@ Testing reading genbank format file GenBank/NC_005816.gb
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NC_005816.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NC_005816.1).
  Checking can write/read as 'qual' format
@@ -1633,6 +1742,7 @@ Testing reading genbank format file GenBank/NC_000932.gb
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NC_000932.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NC_000932.1).
  Checking can write/read as 'qual' format
@@ -1656,6 +1766,7 @@ Testing reading genbank format file GenBank/pBAD30.gb
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=pBAD30).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=pBAD30).
  Checking can write/read as 'qual' format
@@ -1686,6 +1797,7 @@ Testing reading genbank format file GenBank/gbvrl1_start.seq
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AB000050.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AB000050.1).
  Checking can write/read as 'qual' format
@@ -1710,6 +1822,7 @@ Testing reading genbank format file GFF/NC_001422.gbk
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NC_001422.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NC_001422.1).
  Checking can write/read as 'qual' format
@@ -1733,6 +1846,7 @@ Testing reading embl format file EMBL/TRBG361.embl
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).
  Checking can write/read as 'qual' format
@@ -1756,6 +1870,7 @@ Testing reading embl format file EMBL/DD231055_edited.embl
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).
  Checking can write/read as 'qual' format
@@ -1779,6 +1894,7 @@ Testing reading embl format file EMBL/SC10H5.embl
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AL031232).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AL031232).
  Checking can write/read as 'qual' format
@@ -1802,6 +1918,7 @@ Testing reading embl format file EMBL/U87107.embl
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=U87107.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=U87107.1).
  Checking can write/read as 'qual' format
@@ -1825,6 +1942,7 @@ Testing reading embl format file EMBL/AAA03323.embl
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AAA03323.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AAA03323.1).
  Checking can write/read as 'qual' format
@@ -1848,6 +1966,7 @@ Testing reading embl format file EMBL/AE017046.embl
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AE017046.1).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AE017046.1).
  Checking can write/read as 'qual' format
@@ -1863,6 +1982,7 @@ Testing reading embl format file EMBL/Human_contigs.embl
  Seq='NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN...NNNNNNN', length=87191216
  Checking can write/read as 'embl' format
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AL954800.2).
 Testing reading embl format file EMBL/A04195.imgt
@@ -1880,6 +2000,31 @@ Testing reading embl format file EMBL/A04195.imgt
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Checking can write/read as 'phd' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).
+ Checking can write/read as 'qual' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).
+ Checking can write/read as 'sff' format
+ Failed: Missing SFF flow information
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+Testing reading imgt format file EMBL/A04195.imgt
+ ID and Name='A04195',
+ Seq='GATTGATCAATGCAGGCTGTTATGACTCAGGAATCTGCAC...CACATCA', length=51
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'embl' format
+ Checking can write/read as 'fastq' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).
+ Checking can write/read as 'fastq-illumina' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).
+ Checking can write/read as 'fastq-solexa' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).
  Checking can write/read as 'qual' format
@@ -1915,6 +2060,8 @@ Testing reading stockholm format file Stockholm/simple.sth as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AE007476.1).
  Checking can write/read as 'qual' format
@@ -1956,6 +2103,8 @@ Testing reading stockholm format file Stockholm/funny.sth as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=O31699/88-139).
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=O31699/88-139).
  Checking can write/read as 'qual' format
@@ -1997,6 +2146,8 @@ Testing reading phylip format file Phylip/reference_dna.phy as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).
  Checking can write/read as 'qual' format
@@ -2038,6 +2189,8 @@ Testing reading phylip format file Phylip/reference_dna2.phy as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=B.subtilis).
  Checking can write/read as 'qual' format
@@ -2079,6 +2232,8 @@ Testing reading phylip format file Phylip/hennigian.phy as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=J).
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=J).
  Checking can write/read as 'qual' format
@@ -2120,6 +2275,8 @@ Testing reading phylip format file Phylip/horses.phy as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Pliohippus).
  Checking can write/read as 'qual' format
@@ -2161,6 +2318,8 @@ Testing reading phylip format file Phylip/random.phy as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=J).
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=J).
  Checking can write/read as 'qual' format
@@ -2199,6 +2358,8 @@ Testing reading phylip format file Phylip/interlaced.phy as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=CATH_HUMAN).
  Checking can write/read as 'qual' format
@@ -2239,6 +2400,8 @@ Testing reading phylip format file Phylip/interlaced2.phy as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).
  Checking can write/read as 'qual' format
@@ -2279,6 +2442,8 @@ Testing reading emboss format file Emboss/alignret.txt as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_237).
  Checking can write/read as 'qual' format
@@ -2315,6 +2480,8 @@ Testing reading emboss format file Emboss/needle.txt
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'gi|94970041|receiver' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=gi|94970041|receiver).
  Checking can write/read as 'qual' format
@@ -2351,6 +2518,8 @@ Testing reading emboss format file Emboss/water.txt as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=IXI_235).
  Checking can write/read as 'qual' format
@@ -2382,6 +2551,7 @@ UserWarning - Data loss - max PHRED quality 62 in Illumina FASTQ
 UserWarning - Data loss - max Solexa quality 62 in Solexa FASTQ
  Checking can write/read as 'genbank' format
  Failed: Locus identifier '425_7_(71-A03-19).b.ab1' is too long
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'sff' format
@@ -2401,6 +2571,7 @@ Testing reading phd format file Phd/phd2
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'sff' format
@@ -2423,6 +2594,7 @@ Testing reading phd format file Phd/phd_solexa
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'HWI-EAS94_4_1_1_602_99' is too long
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'sff' format
@@ -2442,6 +2614,7 @@ Testing reading phd format file Phd/phd_454
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'EBE03TV04IHLTF.77-243' is too long
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'sff' format
@@ -2465,6 +2638,7 @@ Testing reading ace format file Ace/contig1.ace
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'sff' format
@@ -2484,6 +2658,7 @@ Testing reading ace format file Ace/consed_sample.ace
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'sff' format
@@ -2503,6 +2678,7 @@ UserWarning - Data loss - max PHRED quality 93 in Sanger FASTQ
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'sff' format
@@ -2536,6 +2712,8 @@ Testing reading ig format file IntelliGenetics/TAT_mase_nuc.txt
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=SYK_SYK).
  Checking can write/read as 'qual' format
@@ -2577,6 +2755,8 @@ Testing reading ig format file IntelliGenetics/VIF_mase-pro.txt as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=SYK).
  Checking can write/read as 'qual' format
@@ -2613,6 +2793,8 @@ Testing reading ig format file IntelliGenetics/vpu_nucaligned.txt
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=CPZANT).
  Checking can write/read as 'qual' format
@@ -2647,6 +2829,7 @@ Testing reading pir format file NBRF/B_nuc.pir
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01135).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01135).
  Checking can write/read as 'qual' format
@@ -2682,6 +2865,8 @@ Testing reading pir format file NBRF/Cw_prot.pir
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00484).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00484).
  Checking can write/read as 'qual' format
@@ -2715,6 +2900,7 @@ Testing reading pir format file NBRF/DMA_nuc.pir
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00488).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA00488).
  Checking can write/read as 'qual' format
@@ -2750,6 +2936,8 @@ Testing reading pir format file NBRF/DMB_prot.pir
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01083).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=HLA:HLA01083).
  Checking can write/read as 'qual' format
@@ -2785,6 +2973,7 @@ Testing reading pir format file NBRF/clustalw.pir as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=815Parelaphostrongylus_odocoil).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier '815Parelaphostrongylus_odocoil' is too long
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=815Parelaphostrongylus_odocoil).
  Checking can write/read as 'qual' format
@@ -2823,6 +3012,8 @@ Testing reading fasta format file Quality/example.fasta as an alignment
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'EAS54_6_R1_2_1_443_348' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=EAS54_6_R1_2_1_443_348).
  Checking can write/read as 'qual' format
@@ -2851,6 +3042,8 @@ Testing reading qual format file Quality/example.qual
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'EAS54_6_R1_2_1_443_348' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'sff' format
@@ -2885,6 +3078,8 @@ Testing reading fastq format file Quality/example.fastq as an alignment
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'EAS54_6_R1_2_1_443_348' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'sff' format
@@ -2921,6 +3116,8 @@ Testing reading fastq format file Quality/tricky.fastq as an alignment
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
  Failed: Locus identifier '071113_EAS56_0053:1:3:990:501' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'sff' format
@@ -2942,6 +3139,8 @@ Testing reading fastq format file Quality/sanger_faked.fastq
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'sff' format
@@ -2963,6 +3162,8 @@ Testing reading fastq format file Quality/sanger_93.fastq
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'sff' format
@@ -2984,6 +3185,8 @@ Testing reading fastq-illumina format file Quality/illumina_faked.fastq
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
  Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'sff' format
@@ -3005,6 +3208,8 @@ Testing reading fastq-solexa format file Quality/solexa_faked.fastq
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'slxa_0001_1_0001_01' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'sff' format
@@ -3042,6 +3247,8 @@ Testing reading fastq-solexa format file Quality/solexa_example.fastq as an alig
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'SLXA-B3_649_FC8437_R1_1_1_183_714' is too long
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'sff' format
@@ -3067,6 +3274,7 @@ Testing can write/read zero records
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'sff' format
@@ -3091,6 +3299,8 @@ Testing can write/read three peptides of different lengths
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Alpha).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Alpha).
  Checking can write/read as 'qual' format
@@ -3114,6 +3324,8 @@ Testing can write/read three proteins alignment
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Alpha).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Alpha).
  Checking can write/read as 'qual' format
@@ -3135,6 +3347,7 @@ Testing can write/read three DNA sequence alignment
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=X).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=X).
  Checking can write/read as 'qual' format
@@ -3157,6 +3370,7 @@ Testing can write/read 3 DNA seq alignment with CR/LF in name/descr
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=X).
  Checking can write/read as 'genbank' format
  Failed: Locus identifier 'The\nMystery\rSequece:\r\nX' is too long
+ Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=X).
  Checking can write/read as 'qual' format
@@ -3181,6 +3395,8 @@ Testing can write/read alignment with repeated record
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Alpha).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Alpha).
  Checking can write/read as 'qual' format
