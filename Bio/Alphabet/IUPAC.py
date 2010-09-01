@@ -114,6 +114,8 @@ def _bootstrap(manager, klass, property):
     del default_manager.class_resolver[IUPACAmbiguousRNA]
     del default_manager.class_resolver[IUPACUnambiguousRNA]
 
+    from Bio.Encodings import IUPACEncoding
+
     return manager.resolve_class(klass, property)
 
 default_manager.class_resolver[IUPACProtein] = _bootstrap
