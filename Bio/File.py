@@ -12,9 +12,6 @@ UndoHandle     File object decorator with support for undo-like operations.
 
 StringHandle   Wraps a file object around a string.
 
-SGMLHandle     File object that automatically strips SGML tags from data
-               (DEPRECATED).
-
 SGMLStripper   Object that strips SGML.  This is now considered OBSOLETE, and
                is likely to be deprecated in a future release of Biopython,
                and later removed.
@@ -112,50 +109,12 @@ StringHandle = StringIO.StringIO
 try:
     import sgmllib
 except ImportError:
-    #This isn't available on Python 3, but we don't care much as SGMLHandle
-    #is deprecated
+    #This isn't available on Python 3, but we don't care much as SGMLStripper
+    #is obsolete
     pass
 else:
-    class SGMLHandle:
-        """A Python handle that automatically strips SGML tags from data (DEPRECATED).
-    
-        This module is now considered to be obsolete, and is likely to be
-        deprecated in a future release of Biopython, and later removed.
-        """
-        def __init__(self, handle):
-            """SGMLStripper(handle)
-    
-            handle is a file handle to SGML-formatted data.
-            
-            """
-            import warnings
-            warnings.warn("Bio.File.SGMLHandle is deprecated, and will be removed"\
-                          " in a future release of Biopython.  If you want to"\
-                          " continue to use this code, please get in contact via"\
-                          " the mailing lists to avoid its permanent removal from"\
-                          " Biopython.", DeprecationWarning)
-            self._handle = handle
-            self._stripper = SGMLStripper()
-    
-        def read(self, *args, **keywds):
-            data = self._handle.read(*args, **keywds)
-            return self._stripper.strip(data)
-    
-        def readline(self, *args, **keywds):
-            line = self._handle.readline(*args, **keywds)
-            return self._stripper.strip(line)
-    
-        def readlines(self, *args, **keywds):
-            lines = self._handle.readlines(*args, **keywds)
-            for i in range(len(lines)):
-                lines[i] = self._stripper.strip(str)
-            return lines
-    
-        def __getattr__(self, attr):
-            return getattr(self._handle, attr)
-    
-    
     class SGMLStripper:
+        """Object to strip SGML tags (OBSOLETE)."""
         class MyParser(sgmllib.SGMLParser):
             def __init__(self):
                 sgmllib.SGMLParser.__init__(self)
