@@ -49,6 +49,8 @@ def _convert_genepop_to_fdist(gp_rec):
                 for al in indiv[1][lc_i]:
                     if al is not None and al not in alleles:
                         alleles.append(al)
+        alleles.sort() #Dominance requires this
+
         #here we go again (necessary...)
         for pop_i in range(len(gp_rec.populations)):
             allele_counts = {}
