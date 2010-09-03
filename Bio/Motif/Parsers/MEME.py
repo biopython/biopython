@@ -92,6 +92,8 @@ class MEMEMotif (Motif):
         inst._strand(strand)
         if self.length:
             inst._length(self.length)
+        else:
+            inst._length(len(sequence))
         if self.name:
             inst._motifname(self.name)
         self.add_instance(inst)
