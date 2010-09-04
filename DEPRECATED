@@ -129,8 +129,8 @@ of Biopython.
 
 Bio.AlignAce and Bio.MEME
 =========================
-Declared obsolete in Release 1.50, and deprecated in Release 1.52. Please
-use Bio.Motif instead.
+Declared obsolete in Release 1.50, deprecated in Release 1.52, and removed
+in Release 1.56. Please use Bio.Motif instead.
 
 Numeric support
 ===============
