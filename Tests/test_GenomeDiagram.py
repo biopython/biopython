@@ -120,7 +120,6 @@ def calc_at_content(sequence):
 
         Returns the % A+T content in a passed sequence
     """
-    seq = sequence.data
     d = {}
     for nt in ['A','T','G','C']:
         d[nt] = sequence.count(nt) + sequence.count(nt.lower())
