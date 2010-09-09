@@ -19,9 +19,9 @@
 #  TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 #  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Copy of John Aycock's SPARK parser included with Biopython (OBSOLETE).
+"""Copy of John Aycock's SPARK parser included with Biopython (DEPRECATED).
 
-To clarify, when we say obsolete we just mean to warn you that Biopython will
+To clarify, when we say deprecated we just mean to warn you that Biopython will
 in a future release no longer include this module. This does not affect the
 status of John Aycock's SPARK parser which can be installed separately from:
 http://pages.cpsc.ucalgary.ca/~aycock/spark/

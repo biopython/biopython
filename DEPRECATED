@@ -33,13 +33,13 @@ Bio.GenBank.LocationParser
 ==========================
 This module used to be used for parsing GenBank and EMBL feature locations.
 It has been replaced with faster code using regular expressions, and is no
-longer needed. Declared obsolete in Release 1.55.
+longer needed. Declared obsolete in Release 1.55, deprecated in Release 1.56.
 
 Bio.Parsers and Bio.Parsers.spark
 =================================
 This module was a copy of John Aycock's SPARK parser included with Biopython
 soley for use in Bio.GenBank.LocationParser. Declared obsolete in Release
-1.55.
+1.55, deprecated in Release 1.56.
 
 Bio.Restriction.DNAUtils and check_bases
 ========================================
