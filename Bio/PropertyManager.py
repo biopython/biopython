@@ -1,9 +1,10 @@
-"""Stores properties associated with the class of an object (OBSOLETE).
+"""Stores properties associated with the class of an object (DEPRECATED).
 
-This module is obsolete, and is likely to be deprecated in a future version
-of Biopython, and to be removed after that. If you use this module, please
-contact the Biopython developers at biopython-dev@biopython.org.
+This module is deprecated, and is expected to be removed in the next release.
+If you use this module, please contact the Biopython developers via the
+mailing lists.
 """
+#NOTE - Adding a deprecation warning would affect Bio.Alphabet.IUPAC
 
 
 # Would it be nice to have support for more than one resolver per

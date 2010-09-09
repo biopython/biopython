@@ -4,13 +4,16 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Miscellaneous functions for dealing with sequences (OBSOLETE).
+"""Miscellaneous functions for dealing with sequences (DEPRECATED).
 
-This module is obsolete, and is likely to be deprecated in a future version
-of Biopython, and to be removed after that. If you use this module, please
-contact the Biopython developers at biopython-dev@biopython.org.
+This module is deprecated, and is expected to be removed in the next release.
+If you use this module, please contact the Biopython developers via the
+mailing lists.
 """
 
+import warnings
+warnings.warn("Bio.utils has been deprecated, and we intend to remove it in "
+              "the next release of Biopython.", DeprecationWarning)
 
 
 import Seq
@@ -23,10 +26,10 @@ def ungap(seq):
     #TODO - Fix this?  It currently assumes the outmost AlphabetEncoder
     #is for the gap.  Consider HasStopCodon(Gapped(Protein())) as a test case.
     import warnings
-    warnings.warn("Bio.utils.ungap() has been deprecated, and we"
-                  " intend to remove it in a future release of Biopython."
-                  " Instead, please use the ungap method of the Seq object "
-                  " (added in Biopython 1.53).",
+    warnings.warn("Bio.utils has been deprecated, and we intend to remove it "
+                  "in the next release of Biopython. Instead of function "
+                  "Bio.utils.ungap please use the ungap method of the Seq "
+                  "object (added in Biopython 1.53).",
                   DeprecationWarning)
     gap = seq.gap_char
     letters = []

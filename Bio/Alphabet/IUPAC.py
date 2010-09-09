@@ -97,6 +97,10 @@ unambiguous_rna = IUPACUnambiguousRNA()
 #    #   W == wyosine
 
 
+# ====================================================================
+# TODO - Remove all the following code using now deprecated modules
+# Bio.PropertyManager, Bio.Encoding (all used by Bio.utils)
+#
 # We need to load the property resolution information, but we need to
 # wait until after the systems have been loaded. (There's a nasty loop
 # where, eg, translation objects need an alphabet, which need to be
