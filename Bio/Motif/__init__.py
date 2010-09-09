@@ -9,13 +9,13 @@ it contains the core Motif class containing various I/O methods
 as well as methods for motif comparisons and motif searching in sequences.
 It also inlcudes functionality for parsing AlignACE and MEME programs
 """
-from _Motif import Motif
-import Parsers.AlignAce
-import Parsers.MEME
-from Thresholds import ScoreDistribution
+from Bio.Motif._Motif import Motif
+from Bio.Motif.Parsers.AlignAce import read as _AlignAce_read
+from Bio.Motif.Parsers.MEME import read as _MEME_read
+from Bio.Motif.Thresholds import ScoreDistribution
 
-_parsers={"AlignAce":Parsers.AlignAce.read,
-          "MEME":Parsers.MEME.read
+_parsers={"AlignAce" : _AlignAce_read,
+          "MEME" : _MEME_read,
           }
 
 def _from_pfm(handle):
