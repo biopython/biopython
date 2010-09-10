@@ -18,12 +18,12 @@ problem in combination with other libraries or a popular Linux distribution).
 Bio.SeqIO can now read and write IMGT files, a variant of the EMBL sequence
 text file format with longer feature indentation.
 
-(At least) 4 people have contributed to this release, include 1 new person:
+(At least) 5 people have contributed to this release, include 2 new people:
 
 Bartek Wilczynski
 Michiel de Hoon
 Peter Cock
-Siong Kong
+Siong Kong (first contribution)
 Uri Laserson (first contribution)
 
 ===================================================================
