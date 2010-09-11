@@ -788,9 +788,10 @@ def to_alignment(sequences, alphabet=None, strict=True):
     >>> alignment = AlignIO.read(filename, "clustal")
     """
     import warnings
+    import Bio
     warnings.warn("The Bio.SeqIO.to_alignment(...) function is deprecated. "
                   "Please use the Bio.Align.MultipleSeqAlignment(...) object "
-                  "directly instead.", DeprecationWarning)
+                  "directly instead.", Bio.BiopythonDeprecationWarning)
     return MultipleSeqAlignment(sequences, alphabet)
 
 def convert(in_file, in_format, out_file, out_format, alphabet=None):

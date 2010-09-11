@@ -19,9 +19,10 @@ get_interpro_entry
 """
 
 import warnings
+import Bio
 warnings.warn("Bio.InterPro is deprecated, and will be removed in a future "
               "release of Biopython. Please get in contact via the mailing "
-              "lists if this is a problem for you.", DeprecationWarning)
+              "lists if this is a problem for you.", Bio.BiopythonDeprecationWarning)
 
 from Bio import File
 import sgmllib

@@ -32,9 +32,10 @@ def reverse(seq):
     'TGGCA'
     """
     import warnings
+    import Bio
     warnings.warn("Bio.SeqUtils.reverse() is deprecated, use the string's "
                   "slice method with a step of minus one instead.",
-                  DeprecationWarning)
+                  Bio.BiopythonDeprecationWarning)
     r = list(seq)
     r.reverse()
     return ''.join(r)
@@ -231,8 +232,9 @@ class MissingTable:
     def __init__(self, table):
         self._table = table
         import warnings
+        import Bio
         warnings.warn("Function Bio.SeqUtils.makeTableX() and related classes ProteinX "
-                      "and MissingTable are deprecated.", DeprecationWarning)
+                      "and MissingTable are deprecated.", Bio.BiopythonDeprecationWarning)
     def get(self, codon, stop_symbol):
         try:
             return self._table.get(codon, stop_symbol)
@@ -292,8 +294,9 @@ def GC_Frame(seq, genetic_code = 1):
 
     Please use six_frame_translations directly, as this function is deprecated."""
     import warnings
+    import Bio
     warnings.warn("GC_Frame is deprecated; please use six_frame_translations instead",
-                  DeprecationWarning)
+                  Bio.BiopythonDeprecationWarning)
     return six_frame_translations(seq, genetic_code)
 
 def six_frame_translations(seq, genetic_code = 1):
@@ -361,7 +364,8 @@ def fasta_uniqids(filename):
     No return value, the output is written to screen.
     """
     import warnings
-    warnings.warn("fasta_uniqids is deprecated", DeprecationWarning)
+    import Bio
+    warnings.warn("fasta_uniqids is deprecated", Bio.BiopythonDeprecationWarning)
 
     mydict = {}
     txt = open(filename).read()
@@ -432,7 +436,8 @@ def apply_on_multi_fasta(file, function, *args):
     means apply_on_multi_fasta will return an empty list.
     """
     import warnings
-    warnings.warn("apply_on_multi_fasta is deprecated", DeprecationWarning)
+    import Bio
+    warnings.warn("apply_on_multi_fasta is deprecated", Bio.BiopythonDeprecationWarning)
     try:
         f = globals()[function]
     except:
@@ -468,7 +473,8 @@ def quicker_apply_on_multi_fasta(file, function, *args):
     means quicker_apply_on_multi_fasta will return an empty list.
     """
     import warnings
-    warnings.warn("quicker_apply_on_multi_fasta is deprecated", DeprecationWarning)
+    import Bio
+    warnings.warn("quicker_apply_on_multi_fasta is deprecated", Bio.BiopythonDeprecationWarning)
     try:
         f = globals()[function]
     except:

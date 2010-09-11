@@ -94,8 +94,10 @@ class CelScanner:
     """
     def __init__(self):
         import warnings
+        import Bio
         warnings.warn("Bio.Affy.CelFile.CelScanner is deprecated; please use the read() function in this module instead",
-                      DeprecatingWarning)
+                      Bio.BiopythonDeprecationWarning)
+
     def feed(self, handle, consumer):
         """scanner.feed(handle, consumer)
 
@@ -132,8 +134,9 @@ class CelConsumer(AbstractConsumer):
 
     def __init__(self):
         import warnings
+        import Bio
         warnings.warn("Bio.Affy.CelFile.CelConsumer is deprecated; please use the read() function in this module instead",
-                      DeprecationWarning)
+                      Bio.BiopythonDeprecationWarning)
 
         self._mean  = None
         self._stdev = None
@@ -174,8 +177,9 @@ class CelRecord:
         Pass the data attributes as a dictionary.
         """
         import warnings
+        import Bio
         warnings.warn("Bio.Affy.CelFile.CelRecord is deprecated; please use the read() function in this module instead",
-                      DeprecationWarning)
+                      Bio.BiopythonDeprecationWarning)
 
         from copy import deepcopy as dcopy
 
@@ -250,8 +254,9 @@ class CelParser:
         an argument.
         """
         import warnings
+        import Bio
         warnings.warn("Bio.Affy.CelFile.CelParser is deprecated; please use the read() function in this module instead",
-                      DeprecatingWarning)
+                      Bio.BiopythonDeprecationWarning)
         
         self._intensities = None
         self._stdevs      = None

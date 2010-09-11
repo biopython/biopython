@@ -12,8 +12,9 @@ mailing lists.
 """
 
 import warnings
+import Bio
 warnings.warn("Bio.utils has been deprecated, and we intend to remove it in "
-              "the next release of Biopython.", DeprecationWarning)
+              "the next release of Biopython.", Bio.BiopythonDeprecationWarning)
 
 
 import Seq
@@ -25,12 +26,11 @@ def ungap(seq):
     """given a sequence with gap encoding, return the ungapped sequence"""
     #TODO - Fix this?  It currently assumes the outmost AlphabetEncoder
     #is for the gap.  Consider HasStopCodon(Gapped(Protein())) as a test case.
-    import warnings
     warnings.warn("Bio.utils has been deprecated, and we intend to remove it "
                   "in the next release of Biopython. Instead of function "
                   "Bio.utils.ungap please use the ungap method of the Seq "
                   "object (added in Biopython 1.53).",
-                  DeprecationWarning)
+                  Bio.BiopythonDeprecationWarning)
     gap = seq.gap_char
     letters = []
     for c in seq:

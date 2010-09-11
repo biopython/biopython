@@ -474,7 +474,8 @@ class EProtDistCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="eprotdist", **kwargs):
         import warnings
-        warnings.warn("Bio.Emboss.Application.EProtDistCommandline has been deprecated; please use 'fprotdist' instead (see FProtDistCommandline).", DeprecationWarning)
+        import Bio
+        warnings.warn("Bio.Emboss.Application.EProtDistCommandline has been deprecated; please use 'fprotdist' instead (see FProtDistCommandline).", Bio.BiopythonDeprecationWarning)
         self.parameters = \
          [_Option(["-msf","msf"], ["input"], None, 1,
                   "File containing sequences"),
@@ -514,7 +515,8 @@ class ENeighborCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="eneighbor", **kwargs):
         import warnings
-        warnings.warn("Bio.Emboss.Application.ENeighborCommandline has been deprecated; please use 'fneighbor' instead (see FNeighborCommandline).", DeprecationWarning)
+        import Bio
+        warnings.warn("Bio.Emboss.Application.ENeighborCommandline has been deprecated; please use 'fneighbor' instead (see FNeighborCommandline).", Bio.BiopythonDeprecationWarning)
         self.parameters = \
          [_Option(["-infile","infile"], ["input"], None, 1,
                   "infile value"),
@@ -560,7 +562,8 @@ class EProtParsCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="eprotpars", **kwargs):
         import warnings
-        warnings.warn("Bio.Emboss.Application.EProtParsCommandline has been deprecated; please use 'fprotpars' instead (see FProtParsCommandline).", DeprecationWarning)
+        import Bio
+        warnings.warn("Bio.Emboss.Application.EProtParsCommandline has been deprecated; please use 'fprotpars' instead (see FProtParsCommandline).", Bio.BiopythonDeprecationWarning)
         self.parameters = \
          [_Option(["-msf","msf"], ["input", "file"], None, 1,
                   "Sequences file to be read in"),
@@ -612,7 +615,8 @@ class EConsenseCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="econsense", **kwargs):
         import warnings
-        warnings.warn("Bio.Emboss.Application.EConsenseCommandline has been deprecated; please use 'fconsense' instead (see FConsenseCommandline).", DeprecationWarning)
+        import Bio
+        warnings.warn("Bio.Emboss.Application.EConsenseCommandline has been deprecated; please use 'fconsense' instead (see FConsenseCommandline).", Bio.BiopythonDeprecationWarning)
         self.parameters = \
          [_Option(["-infile","infile"], ["input", "file"], None, 1,
                   "file to read in (New Hampshire standard form)"),
@@ -652,7 +656,8 @@ class ESeqBootCommandline(_EmbossCommandLine):
     """
     def __init__(self, cmd="eseqboot", **kwargs):
         import warnings
-        warnings.warn("Bio.Emboss.Application.ESeqBootCommandline has been deprecated; please use 'fseqboot' instead (see FSeqBootCommandline).", DeprecationWarning)
+        import Bio
+        warnings.warn("Bio.Emboss.Application.ESeqBootCommandline has been deprecated; please use 'fseqboot' instead (see FSeqBootCommandline).", Bio.BiopythonDeprecationWarning)
         self.parameters = \
          [_Option(["-datafile","datafile"], ["input", "file"], None, 1,
                   "Input file"),

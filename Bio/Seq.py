@@ -128,9 +128,10 @@ class Seq(object):
         AttributeError: can't set attribute
         """
         import warnings
+        import Bio
         warnings.warn("Accessing the .data attribute is deprecated. Please "
                       "use str(my_seq) or my_seq.tostring() instead of "
-                      "my_seq.data.", DeprecationWarning)
+                      "my_seq.data.", Bio.BiopythonDeprecationWarning)
         return str(self)
 
     def __repr__(self):

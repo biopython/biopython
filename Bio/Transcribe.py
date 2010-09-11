@@ -7,6 +7,7 @@ This module is now deprecated, and will be removed in a future release of
 Biopython.
 """
 import warnings
+import Bio
 warnings.warn("Bio.Translate and Bio.Transcribe are deprecated, and will be "\
               "removed in a future release of Biopython. Please use the "\
               "functions or object methods defined in Bio.Seq instead "\
@@ -14,7 +15,7 @@ warnings.warn("Bio.Translate and Bio.Transcribe are deprecated, and will be "\
               "this code, please get in contact with the Biopython developers "\
               "via the mailing lists to avoid its permanent removal from "
               +"Biopython.", \
-              DeprecationWarning)
+              Bio.BiopythonDeprecationWarning)
 
 
 from Bio import Alphabet, Seq

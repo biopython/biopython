@@ -9,7 +9,8 @@ import string
 #Bio.MEME is deprecated now, but I want to keep testing it until
 #it is removed (without showing the deprecation warning)
 import warnings
-warnings.filterwarnings("ignore", category=DeprecationWarning)
+from Bio import BiopythonDeprecationWarning
+warnings.filterwarnings("ignore", category=BiopythonDeprecationWarning)
 from Bio.MEME import Parser
 warnings.resetwarnings()
 

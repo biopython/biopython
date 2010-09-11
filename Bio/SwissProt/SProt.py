@@ -35,8 +35,9 @@ index_file         Index a SwissProt file for a Dictionary.
 
 """
 import warnings
+import Bio
 warnings.warn("Bio.SwissProt.SProt is deprecated. Please use the functions Bio.SwissProt.parse or Bio.SwissProt.read if you want to get a SwissProt.Record, or Bio.SeqIO.parse or Bio.SeqIO.read if you want to get a SeqRecord. If these solutions do not work for you, please get in contact with the Biopython developers (biopython-dev@biopython.org).",
-              DeprecationWarning)
+              Bio.BiopythonDeprecationWarning)
 
 from types import *
 import os

@@ -184,10 +184,11 @@ class Alignment:
         Python builtin function list, i.e. my_list = list(my_align)
         """
         import warnings
+        import Bio
         warnings.warn("This method is deprecated, since the alignment object"
                       "now acts more like a list. Instead of calling "
                       "align.get_all_seqs() you can use list(align)",
-                      DeprecationWarning)
+                      Bio.BiopythonDeprecationWarning)
         return self._records
 
     def __iter__(self):

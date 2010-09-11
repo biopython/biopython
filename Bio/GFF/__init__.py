@@ -24,13 +24,14 @@ Based on documentation for Lincoln Stein's Perl Bio::DB::GFF
 """
 
 import warnings
+import Bio
 warnings.warn("The old Bio.GFF module for access to a MySQL GFF database "
               "created with BioPerl is deprecated, and will be removed (or "
               "possibly just moved) in a future release of Biopython.  If you "
               "want to continue to use this code, please get in contact with "
               "the developers via the mailing lists to avoid its permanent "
               "removal from Biopython. The plan is to re-use the Bio.GFF "
-              "namespace for a new GFF parsing module.", DeprecationWarning)
+              "namespace for a new GFF parsing module.", Bio.BiopythonDeprecationWarning)
 
 __version__ = "$Revision: 1.10 $"
 # $Source: /home/bartek/cvs2bzr/biopython_fastimport/cvs_repo/biopython/Bio/GFF/__init__.py,v $

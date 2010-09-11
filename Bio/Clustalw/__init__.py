@@ -29,8 +29,9 @@ classes:
 o ClustalAlignment
 o MultipleAlignCL"""
 
+import Bio
 import warnings
-warnings.warn("Bio.Clustalw is deprecated. Please use the Bio.AlignIO framework for alignment parsing, and the ClustalW command line wrapper in Bio.Align.Applications for calling the tool. These are both described in the current version of the Biopython Tutorial and Cookbook.", DeprecationWarning)
+warnings.warn("Bio.Clustalw is deprecated. Please use the Bio.AlignIO framework for alignment parsing, and the ClustalW command line wrapper in Bio.Align.Applications for calling the tool. These are both described in the current version of the Biopython Tutorial and Cookbook.", Bio.BiopythonDeprecationWarning)
 
 # standard library
 import os

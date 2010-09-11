@@ -28,7 +28,8 @@ if sys.version_info[0] >= 3:
         "library sgmllib which is not supported on Python 3")
         
 import warnings
-warnings.filterwarnings("ignore", category=DeprecationWarning)
+from Bio import BiopythonDeprecationWarning
+warnings.filterwarnings("ignore", category=BiopythonDeprecationWarning)
 from Bio.Prosite import Pattern
 warnings.resetwarnings()
 

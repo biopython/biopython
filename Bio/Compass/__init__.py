@@ -222,13 +222,14 @@ def __read_hit_alignment(record, line):
 
 from Bio import File
 from Bio.ParserSupport import *
+import Bio
 
 
 class _Scanner:
     """Reads compass output and generate events (DEPRECATED)"""
     def __init__(self):
         import warnings
-        warnings.warn("Bio.Compass._Scanner is deprecated; please use the read() and parse() functions in this module instead", DeprecationWarning)
+        warnings.warn("Bio.Compass._Scanner is deprecated; please use the read() and parse() functions in this module instead", Bio.BiopythonDeprecationWarning)
 
     def feed(self, handle, consumer):
         """Feed in COMPASS ouput"""
@@ -323,7 +324,7 @@ class _Consumer:
 
     def __init__(self):
         import warnings
-        warnings.warn("Bio.Compass._Consumer is deprecated; please use the read() and parse() functions in this module instead", DeprecationWarning)
+        warnings.warn("Bio.Compass._Consumer is deprecated; please use the read() and parse() functions in this module instead", Bio.BiopythonDeprecationWarning)
         self.data = None
 
     def names(self, line):
@@ -389,7 +390,7 @@ class RecordParser(AbstractParser):
         """
         def __init__(self):
             import warnings
-            warnings.warn("Bio.Compass._RecordParser is deprecated; please use the read() and parse() functions in this module instead", DeprecationWarning)
+            warnings.warn("Bio.Compass._RecordParser is deprecated; please use the read() and parse() functions in this module instead", Bio.BiopythonDeprecationWarning)
             self._scanner = _Scanner()
             self._consumer = _Consumer()
 
@@ -406,7 +407,7 @@ class Iterator:
     """Iterate through a file of compass results (DEPRECATED)."""
     def __init__(self, handle):
         import warnings
-        warnings.warn("Bio.Compass.Iterator is deprecated; please use the parse() function in this module instead", DeprecationWarning)
+        warnings.warn("Bio.Compass.Iterator is deprecated; please use the parse() function in this module instead", Bio.BiopythonDeprecationWarning)
 
         self._uhandle = File.UndoHandle(handle)
         self._parser = RecordParser()

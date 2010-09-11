@@ -392,7 +392,8 @@ class AbstractDrawer:
         
     def _set_xcentre(self, value):
         import warnings
-        warnings.warn("The _set_xcentre method and .xcentre attribute are deprecated; please use the .xcenter attribute instead", DeprecationWarning)
+        import Bio
+        warnings.warn("The _set_xcentre method and .xcentre attribute are deprecated; please use the .xcenter attribute instead", Bio.BiopythonDeprecationWarning)
         self.xcenter = value
     xcentre = property(fget = lambda self : self.xcenter,
                        fset = _set_xcentre,
@@ -400,7 +401,8 @@ class AbstractDrawer:
 
     def _set_ycentre(self, value):
         import warnings
-        warnings.warn("The _set_ycentre method and .xcentre attribute are deprecated; please use the .ycenter attribute instead", DeprecationWarning)
+        import Bio
+        warnings.warn("The _set_ycentre method and .xcentre attribute are deprecated; please use the .ycenter attribute instead", Bio.BiopythonDeprecationWarning)
         self.ycenter = value
     ycentre = property(fget = lambda self : self.ycenter,
                        fset = _set_ycentre,

@@ -104,8 +104,9 @@ class RecordParser(AbstractParser):
     """
     def __init__(self):
         import warnings
+        from Bio import BiopythonDeprecationWarning
         warnings.warn("Bio.PopGen.FDist.RecordParser is deprecated. Please use the read() function in this module instead.",
-              DeprecationWarning)
+              BiopythonDeprecationWarning)
         self._scanner = _Scanner()
         self._consumer = _RecordConsumer()
 
@@ -124,8 +125,9 @@ class _Scanner:
 
     def __init__(self):
         import warnings
+        from Bio import BiopythonDeprecationWarning
         warnings.warn("Bio.PopGen.FDist._Scanner is deprecated. Please use the read() function in this module instead.",
-              DeprecationWarning)
+              BiopythonDeprecationWarning)
 
     def feed(self, handle, consumer):
         """feed(self, handle, consumer)
@@ -172,8 +174,9 @@ class _RecordConsumer(AbstractConsumer):
     """
     def __init__(self):
         import warnings
+        from Bio import BiopythonDeprecationWarning
         warnings.warn("Bio.PopGen.FDist._RecordConsumer is deprecated. Please use the read() function in this module instead.",
-              DeprecationWarning)
+              BiopythonDeprecationWarning)
         self.data = None
 
     def start_record(self):

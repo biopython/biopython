@@ -19,6 +19,7 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
+import Bio
 
 from Bio.Phylo import BaseTree
 
@@ -177,7 +178,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
     def from_subtree(cls, clade, **kwargs):
         """DEPRECATED: use from_clade() instead."""
         warnings.warn("use from_clade() instead.""",
-                DeprecationWarning, stacklevel=2)
+                Bio.BiopythonDeprecationWarning, stacklevel=2)
         return cls.from_clade(clade, **kwargs)
 
     def as_phyloxml(self):
@@ -191,7 +192,7 @@ class Phylogeny(PhyloElement, BaseTree.Tree):
     def to_phyloxml(self, **kwargs):
         """DEPRECATED: use to_phyloxml_container instead."""
         warnings.warn("use to_phyloxml_container() instead.""",
-                      DeprecationWarning, stacklevel=2)
+                      Bio.BiopythonDeprecationWarning, stacklevel=2)
         return self.to_phyloxml_container(**kwargs)
 
     def to_phyloxml_container(self, **kwargs):
@@ -321,7 +322,7 @@ class Clade(PhyloElement, BaseTree.Clade):
     def from_subtree(cls, clade, **kwargs):
         """DEPRECATED: use from_clade() instead."""
         warnings.warn("use from_clade() instead.""",
-                DeprecationWarning, stacklevel=2)
+                Bio.BiopythonDeprecationWarning, stacklevel=2)
         return cls.from_clade(clade, **kwargs)
 
     def to_phylogeny(self, **kwargs):
@@ -722,17 +723,17 @@ class Events(PhyloElement):
     # XXX Backwards compatibility shims -- remove in Biopython 1.56
     def iteritems(self):
         warnings.warn("use items() instead.""",
-                DeprecationWarning, stacklevel=2)
+                Bio.BiopythonDeprecationWarning, stacklevel=2)
         return iter(self.items())
 
     def iterkeys(self):
         warnings.warn("use keys() instead.""",
-                DeprecationWarning, stacklevel=2)
+                Bio.BiopythonDeprecationWarning, stacklevel=2)
         return iter(self.keys())
 
     def itervalues(self):
         warnings.warn("use values() instead.""",
-                DeprecationWarning, stacklevel=2)
+                Bio.BiopythonDeprecationWarning, stacklevel=2)
         return iter(self.values())
 
     def __len__(self):

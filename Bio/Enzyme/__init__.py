@@ -15,12 +15,13 @@ deprecated and will be removed in a future release of Biopython.
 """
 
 import warnings
+import Bio
 warnings.warn("Bio.Enzyme is deprecated, and will be removed in a"\
               " future release of Biopython. Most of the functionality "
               " is now provided by Bio.ExPASy.Enzyme.  If you want to "
               " continue to use Bio.Enzyme, please get in contact "
               " via the mailing lists to avoid its permanent removal from"\
-              " Biopython.", DeprecationWarning)
+              " Biopython.", Bio.BiopythonDeprecationWarning)
 
 from Bio import File
 from Bio.ParserSupport import *

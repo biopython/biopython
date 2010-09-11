@@ -16,6 +16,7 @@ import itertools
 import random
 import re
 import warnings
+import Bio
 
 from Bio.Phylo import _sugar
 
@@ -645,7 +646,7 @@ class Tree(TreeElement, TreeMixin):
     def from_subtree(cls, clade, **kwargs):
         """DEPRECATED: use from_clade() instead."""
         warnings.warn("use from_clade() instead.""",
-                DeprecationWarning, stacklevel=2)
+                Bio.BiopythonDeprecationWarning, stacklevel=2)
         return cls.from_clade(clade, **kwargs)
 
     @classmethod

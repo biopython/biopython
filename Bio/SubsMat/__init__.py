@@ -116,6 +116,7 @@ import math
 import warnings
 
 # BioPython imports
+import Bio
 from Bio import Alphabet
 from Bio.SubsMat import FreqTable
 
@@ -163,7 +164,7 @@ class SeqMat(dict):
           mat_type==NOTYPE
       else:
           assert type(mat_type) == type(1)
-          warnings.warn("values for mat_type other than NOTYPE are deprecated; use the appropriate subclass of SeqMat instead", DeprecationWarning)
+          warnings.warn("values for mat_type other than NOTYPE are deprecated; use the appropriate subclass of SeqMat instead", Bio.BiopythonDeprecationWarning)
 
       # "data" may be:
       # 1) None --> then self.data is an empty dictionary
@@ -259,7 +260,7 @@ class SeqMat(dict):
       self.entropy = -self.entropy
 
    def letter_sum(self,letter):
-      warnings.warn("SeqMat.letter_sum is deprecated; please use SeqMat.sum instead", DeprecationWarning)
+      warnings.warn("SeqMat.letter_sum is deprecated; please use SeqMat.sum instead", Bio.BiopythonDeprecationWarning)
       assert letter in self.alphabet.letters
       sum = 0.
       for i in self:
@@ -272,7 +273,7 @@ class SeqMat(dict):
 
    def all_letters_sum(self):
       import warnings
-      warnings.warn("SeqMat.all_letters_sum is deprecated; please use SeqMat.sum instead", DeprecationWarning)
+      warnings.warn("SeqMat.all_letters_sum is deprecated; please use SeqMat.sum instead", Bio.BiopythonDeprecationWarning)
       for letter in self.alphabet.letters:
          self.sum_letters[letter] = self.letter_sum(letter)
 

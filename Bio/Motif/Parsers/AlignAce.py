@@ -56,6 +56,7 @@ def read(handle):
 # Everything below is deprecated.
 
 from Bio.ParserSupport import *
+import Bio
 
 
 class AlignAceConsumer:
@@ -69,7 +70,7 @@ class AlignAceConsumer:
     """
     def __init__(self):
         import warnings
-        warnings.warn("Bio.Motif.Parsers.AlignAce.AlignAceConsumer is deprecated; please use the read() function in this module instead.", DeprecationWarning)
+        warnings.warn("Bio.Motif.Parsers.AlignAce.AlignAceConsumer is deprecated; please use the read() function in this module instead.", Bio.BiopythonDeprecationWarning)
         self.motifs=[]
         self.current_motif=None
         self.param_dict = None
@@ -122,7 +123,7 @@ class AlignAceParser(AbstractParser):
     def __init__(self):
         """__init__(self)"""
         import warnings
-        warnings.warn("Bio.Motif.Parsers.AlignAce.AlignAceParser is deprecated; please use the read() function in this module instead.", DeprecationWarning)
+        warnings.warn("Bio.Motif.Parsers.AlignAce.AlignAceParser is deprecated; please use the read() function in this module instead.", Bio.BiopythonDeprecationWarning)
         self._scanner = AlignAceScanner()
         self._consumer = AlignAceConsumer()
 
@@ -157,7 +158,7 @@ class AlignAceScanner:
     """
     def __init__(self):
         import warnings
-        warnings.warn("Bio.Motif.Parsers.AlignAce.AlignAceScanner is deprecated; please use the read() function in this module instead.", DeprecationWarning)
+        warnings.warn("Bio.Motif.Parsers.AlignAce.AlignAceScanner is deprecated; please use the read() function in this module instead.", Bio.BiopythonDeprecationWarning)
 
     def feed(self, handle, consumer):
         """S.feed(handle, consumer)
@@ -205,7 +206,7 @@ class CompareAceScanner:
     """
     def __init__(self):
         import warnings
-        warnings.warn("Bio.Motif.Parsers.AlignAce.CompareAceScanner is deprecated.", DeprecationWarning)
+        warnings.warn("Bio.Motif.Parsers.AlignAce.CompareAceScanner is deprecated.", Bio.BiopythonDeprecationWarning)
 
     def feed(self, handle, consumer):
         """S.feed(handle, consumer)
@@ -225,7 +226,7 @@ class CompareAceConsumer:
     """
     def __init__(self):
         import warnings
-        warnings.warn("Bio.Motif.Parsers.AlignAce.CompareAceConsumer is deprecated.", DeprecationWarning)
+        warnings.warn("Bio.Motif.Parsers.AlignAce.CompareAceConsumer is deprecated.", Bio.BiopythonDeprecationWarning)
 
     def motif_score(self,line):
         self.data = float(line.split()[-1])
@@ -244,7 +245,7 @@ class CompareAceParser(AbstractParser):
               +" please get in contact with the Biopython developers via"\
               +" the mailing lists to avoid its permanent removal from"\
               +" Biopython. See also the Python built in set datatype.", \
-              DeprecationWarning)
+              Bio.BiopythonDeprecationWarning)
         self._scanner = CompareAceScanner()
         self._consumer = CompareAceConsumer()
 

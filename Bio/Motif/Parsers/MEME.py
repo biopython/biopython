@@ -363,6 +363,7 @@ def __skip_unused_lines(handle):
 
 from Bio import File
 from Bio.ParserSupport import *
+import Bio
 
 
 class MEMEParser (AbstractParser):
@@ -387,7 +388,7 @@ class MEMEParser (AbstractParser):
     def __init__ (self):
         """__init__ (self)"""
         import warnings
-        warnings.warn("Bio.Motif.Parsers.MEME.MEMEParser is deprecated; please use the read() function in this module instead", DeprecationWarning)
+        warnings.warn("Bio.Motif.Parsers.MEME.MEMEParser is deprecated; please use the read() function in this module instead", Bio.BiopythonDeprecationWarning)
         self._scanner = _MEMEScanner()
         self._consumer = _MEMEConsumer()
     
@@ -410,7 +411,7 @@ class _MEMEScanner:
     
     def __init__(self):
         import warnings
-        warnings.warn("Bio.Motif.Parsers.MEME._MEMEScanner is deprecated; please use the read() function in this module instead", DeprecationWarning)
+        warnings.warn("Bio.Motif.Parsers.MEME._MEMEScanner is deprecated; please use the read() function in this module instead", Bio.BiopythonDeprecationWarning)
 
     def feed (self, handle, consumer):
         """
@@ -484,7 +485,7 @@ class _MEMEConsumer:
     
     def __init__ (self):
         import warnings
-        warnings.warn("Bio.Motif.Parsers.MEME._MEMEConsumer is deprecated; please use the read() function in this module instead", DeprecationWarning)
+        warnings.warn("Bio.Motif.Parsers.MEME._MEMEConsumer is deprecated; please use the read() function in this module instead", Bio.BiopythonDeprecationWarning)
         self.current_motif = None
         self.sequence_names = []
         self.data = MEMERecord()
@@ -574,7 +575,7 @@ class _MASTConsumer:
     """
     def __init__ (self):
         import warnings
-        warnings.warn("Bio.Motif.Parsers.MEME._MASTConsumer is deprecated; please use the read() function in the module Bio.Motif.Parsers.MAST instead", DeprecationWarning)
+        warnings.warn("Bio.Motif.Parsers.MEME._MASTConsumer is deprecated; please use the read() function in the module Bio.Motif.Parsers.MAST instead", Bio.BiopythonDeprecationWarning)
         self.data = MASTRecord()
         self._current_seq = ""
         self._line_buffer = []
@@ -823,7 +824,7 @@ class MASTParser(AbstractParser):
     """
     def __init__ (self):
         import warnings
-        warnings.warn("Bio.Motif.Parsers.MEME.MASTParser is deprecated; please use the read() function in the module Bio.Motif.Parsers.MAST instead", DeprecationWarning)
+        warnings.warn("Bio.Motif.Parsers.MEME.MASTParser is deprecated; please use the read() function in the module Bio.Motif.Parsers.MAST instead", Bio.BiopythonDeprecationWarning)
         self._consumer = _MASTConsumer()
         self._scanner = _MASTScanner()
     
@@ -842,7 +843,7 @@ class _MASTScanner:
     """
     def __init__(self):
         import warnings
-        warnings.warn("Bio.Motif.Parsers.MEME._MASTScanner is deprecated; please use the read() function in the module Bio.Motif.Parsers.MAST instead", DeprecationWarning)
+        warnings.warn("Bio.Motif.Parsers.MEME._MASTScanner is deprecated; please use the read() function in the module Bio.Motif.Parsers.MAST instead", Bio.BiopythonDeprecationWarning)
 
     def feed (self, handle, consumer):
         if isinstance(handle, File.UndoHandle):
@@ -938,7 +939,7 @@ class MASTRecord:
     """
     def __init__ (self):
         import warnings
-        warnings.warn("Bio.Motif.Parsers.MEME.MASTRecord is deprecated; please use the read() function in the module Bio.Motif.Parsers.MAST instead", DeprecationWarning)
+        warnings.warn("Bio.Motif.Parsers.MEME.MASTRecord is deprecated; please use the read() function in the module Bio.Motif.Parsers.MAST instead", Bio.BiopythonDeprecationWarning)
         self.sequences = []
         self.version = ""
         self.matches = []
