@@ -77,6 +77,8 @@ class AbstractPropertyMap:
         @param res_id: residue id
         @type res_id: char 
         """
+        import warnings
+        warnings.warn("This function is obsolete; use 'id in mapping' instead", PendingDeprecationWarning)
         return (id in self)
 
     def keys(self):

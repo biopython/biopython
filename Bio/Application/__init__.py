@@ -59,8 +59,8 @@ def generic_run(commandline):
     This may be in issue when the program writes a large amount of
     data to standard output.
 
-    NOTE - This function is considered to be obsolete, and we intend to
-    deprecate it and then remove it in future releases of Biopython.
+    NOTE - This function is deprecated, and we intend to remove it in
+    future releases of Biopython.
     We now recommend you invoke subprocess directly, using str(commandline)
     to turn an AbstractCommandline wrapper into a command line string. This
     will give you full control of the tool's input and output as well.

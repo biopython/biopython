@@ -176,6 +176,8 @@ class BlastallCommandline(_BlastAllOrPgpCommandLine):
     """
     #TODO - This could use more checking for valid parameters to the program.
     def __init__(self, cmd="blastall",**kwargs):
+        import warnings
+        warnings.warn("Like blastall, this wrapper is now obsolete, and will be deprecated and removed in a future release of Biopython.", PendingDeprecationWarning)
         self.parameters = [ \
             #Sorted in the same order as the output from blastall --help
             #which should make it easier to keep them up to date in future.
@@ -260,6 +262,8 @@ class BlastpgpCommandline(_BlastAllOrPgpCommandLine):
     as described in the Biopython tutorial.
     """
     def __init__(self, cmd="blastpgp",**kwargs):
+        import warnings
+        warnings.warn("Like blastpgp (and blastall), this wrapper is now obsolete, and will be deprecated and removed in a future release of Biopython.", PendingDeprecationWarning)
         self.parameters = [ \
            _Option(["-C", "checkpoint_outfile"], ["output", "file"], None, 0,
                    "Output file for PSI-BLAST checkpointing.", False),
@@ -317,6 +321,8 @@ class RpsBlastCommandline(_BlastCommandLine):
     as described in the Biopython tutorial.
     """
     def __init__(self, cmd="rpsblast",**kwargs):
+        import warnings
+        warnings.warn("Like the old rpsblast (and blastall), this wrapper is now obsolete, and will be deprecated and removed in a future release of Biopython.", PendingDeprecationWarning)
         self.parameters = [ \
            #Note -N is also in blastpgp, but not blastall
            _Option(["-N", "nbits_gapping"], ["input"], None, 0, 

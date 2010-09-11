@@ -387,6 +387,8 @@ def _kill_comments_and_break_lines(text):
    
     NOTE: this function is very slow for large files, and obsolete when using C extension cnexus
     """
+    import warnings
+    warnings.warn("This function is very slow for large files, and obsolete when using C extension cnexus", PendingDeprecationWarning)
     contents=CharBuffer(text)
     newtext=[] 
     newline=[]

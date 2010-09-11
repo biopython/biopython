@@ -79,6 +79,8 @@ def parse_file(file_name, alphabet = IUPAC.unambiguous_dna, debug_level = 0):
     >>> assert clustalw_string == align.format("clustal")
     """ 
 
+    import warnings
+    warnings.warn("This function is obsolete, and any new code should call Bio.AlignIO instead.", PendingDeprecationWarning)
     # Avoid code duplication by calling Bio.AlignIO to do this for us.
     handle = open(file_name, 'r')
     from Bio import AlignIO
@@ -128,6 +130,8 @@ def do_alignment(command_line, alphabet=None):
     the Python subprocess module (and Bio.AlignIO for parsing) as described
     in the tutorial.
     """
+    import warnings
+    warnings.warn("This function (and the associated command line object) are now obsolete. Please use the Bio.Align.Applications.ClustalwCommandline wrapper with the Python subprocess module (and Bio.AlignIO for parsing) as described in the tutorial.", PendingDeprecationWarning)
     #We don't need to supply any piped input, but we setup the
     #standard input pipe anyway as a work around for a python
     #bug if this is called from a Windows GUI program.  For
@@ -199,6 +203,8 @@ class ClustalAlignment(Alignment):
     you must do align.format("clustal"), which supports other formats too.
     """
     # the default version to use if one isn't set
+    import warnings
+    warnings.warn("This class is obsolete.", PendingDeprecationWarning)
     DEFAULT_VERSION = '1.81'
     
     def __init__(self, alphabet = Alphabet.Gapped(IUPAC.ambiguous_dna)):
@@ -223,6 +229,8 @@ class MultipleAlignCL:
     standardised Bio.Application style interface. This is described in the
     tutorial, with examples using ClustalW.
     """
+    import warnings
+    warnings.warn("This command line wrapper is considerd obsolete. Please use the replacement Bio.Align.Applications.ClustalwCommandline wrapper instead, which uses the standardised Bio.Application style interface. This is described in the tutorial, with examples using ClustalW.", PendingDeprecationWarning)
     # set the valid options for different parameters
     OUTPUT_TYPES = ['GCG', 'GDE', 'PHYLIP', 'PIR', 'NEXUS', 'FASTA']
     OUTPUT_ORDER = ['INPUT', 'ALIGNED']

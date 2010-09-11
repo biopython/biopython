@@ -297,6 +297,8 @@ class FragmentMapper:
 
         @type res: L{Residue}
         """
+        import warnings
+        warnings.warn("has_key is obsolete; use 'res in object' instead", PendingDeprecationWarning)
         return (res in self)
 
     def __contains__(self, res):

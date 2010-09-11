@@ -545,6 +545,8 @@ class MultipleSeqAlignment(_Alignment):
         Bio.Align.Generic.Alignment object. You are encouraged to use the
         slice notation instead.
         """
+        import warnings
+        warnings.warn("This is a method provided for backwards compatibility with the old Bio.Align.Generic.Alignment object. You are encouraged to use the slice notation instead.", PendingDeprecationWarning)
         return _Alignment.get_column(self, col)
 
     def add_sequence(self, descriptor, sequence, start = None, end = None,
@@ -556,6 +558,8 @@ class MultipleSeqAlignment(_Alignment):
         Bio.Align.Generic.Alignment object. You are encouraged to use the
         append method with a SeqRecord instead.
         """
+        import warnings
+        warnings.warn("The start, end, and weight arguments are not supported! This method only provides limited backwards compatibility with the old Bio.Align.Generic.Alignment object. You are encouraged to use the append method with a SeqRecord instead.", PendingDeprecationWarning)
         #Should we handle start/end/strand information somehow? What for?
         #TODO - Should we handle weights somehow? See also AlignInfo code...
         if start is not None or end is not None or weight != 1.0:

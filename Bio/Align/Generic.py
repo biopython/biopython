@@ -47,6 +47,8 @@ class Alignment:
         ACT-CTAGCTAG Beta
         ACTGCTAGATAG Gamma
         """
+        import warnings
+        warnings.warn("With the introduction of the MultipleSeqAlignment class in Bio.Align, this base class is effectively obsolete and will likely be deprecated and later removed in future releases of Biopython.", PendingDeprecationWarning)
         if not (isinstance(alphabet, Alphabet.Alphabet) \
         or isinstance(alphabet, Alphabet.AlphabetEncoder)):
             raise ValueError("Invalid alphabet argument")
@@ -231,6 +233,8 @@ class Alignment:
         first_record = alignment[0]
         last_record = alignment[-1]
         """
+        import warnings
+        warnings.warn("This is a legacy method. In new code where you need to access the rows of the alignment (i.e. the sequences) consider iterating over them or accessing them as SeqRecord objects.", PendingDeprecationWarning)
         return self._records[number].seq
 
     def __len__(self):

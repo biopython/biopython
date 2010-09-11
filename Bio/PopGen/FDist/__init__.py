@@ -92,7 +92,7 @@ class Record:
             rep.append('\n')
         return "".join(rep)
     
-# Everything below is obsolete
+# Everything below is deprecated
 
 from Bio.ParserSupport import *
 

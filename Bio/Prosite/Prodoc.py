@@ -48,6 +48,9 @@ _Scanner           Scans Prodoc-formatted data.
 _RecordConsumer    Consumes Prodoc data to a Record object.
 """
 
+import warnings
+warnings.warn("This module is OBSOLETE. Most of the functionality in this module has moved to Bio.ExPASy.Prodoc.", PendingDeprecationWarning)
+
 from types import *
 import os
 import sgmllib

@@ -123,6 +123,8 @@ else:
                 self.data = self.data + data
     
         def __init__(self):
+            import warnings
+            warnings.warn("This class is obsolete, and likely to be deprecated and later removed in a future version of Biopython", PendingDeprecationWarning)
             self._parser = SGMLStripper.MyParser()
     
         def strip(self, str):

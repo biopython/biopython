@@ -197,6 +197,8 @@ class DBServer:
         
         del server[name]
         """
+        import warnings
+        warnings.warn("This method is obsolete.  In keeping with the dictionary interface, you can now use 'del server[name]' instead", PendingDeprecationWarning)
         db_id = self.adaptor.fetch_dbid_by_dbname(db_name)
         remover = Loader.DatabaseRemover(self.adaptor, db_id)
         remover.remove()

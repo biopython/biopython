@@ -71,7 +71,7 @@ def read(handle):
     return record
 
 
-# Everything below is considered obsolete
+# Everything below is considered deprecated
 
 from Bio.ParserSupport import AbstractConsumer
 from numpy import *
