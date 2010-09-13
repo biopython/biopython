@@ -500,18 +500,18 @@ def _read_ft(record, line):
         to_res = int(line[16:22])
     except ValueError:
         to_res = line[16:22].lstrip()
-    description = line[29:70].rstrip()
     #if there is a feature_id (FTId), store it away
     if line[29:35]==r"/FTId=":
         ft_id = line[35:70].rstrip()[:-1]
         description = ""
     else:
         ft_id =""
+        description = line[29:70].rstrip()
     if not name:  # is continuation of last one
         assert not from_res and not to_res
         name, from_res, to_res, old_description,old_ft_id = record.features[-1]
         del record.features[-1]
-        description = "%s %s" % (old_description, description)
+        description = ("%s %s" % (old_description, description)).strip()
 
         # special case -- VARSPLIC, reported by edvard@farmasi.uit.no
         if name == "VARSPLIC":
