@@ -9,7 +9,10 @@
 
 You are expected to use this module via the Bio.SeqIO functions.
 See also the Bio.SwissProt module which offers more than just accessing
-the sequences as SeqRecord objects."""
+the sequences as SeqRecord objects.
+
+See also Bio.SeqIO.UniprotIO.py which supports the "uniprot-xml" format.
+"""
 
 from Bio import Seq
 from Bio import SeqRecord
@@ -29,11 +32,8 @@ def SwissIterator(handle):
      * TrEMBL
      * UniProtKB aka UniProt Knowledgebase
 
-    It does NOT read their new XML file format.
-    http://www.expasy.org/sprot/
-
     For consistency with BioPerl and EMBOSS we call this the "swiss"
-    format.
+    format. See also the SeqIO support for "uniprot-xml" format.
     """
     swiss_records = SwissProt.parse(handle)
     for swiss_record in swiss_records:
@@ -115,3 +115,4 @@ if __name__ == "__main__":
             print repr(record.annotations['organism'])
             print record.seq.tostring()[:20] + "..."
         handle.close()
+
