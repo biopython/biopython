@@ -52,7 +52,7 @@ def _make_position(location_string, offset=0):
 
 def _make_seqfeature(name, from_res, to_res, description, ft_id):
     """Construct SeqFeature from feature data from parser (PRIVATE)."""
-    print name, repr(from_res), repr(to_res), "..."
+    #print name, repr(from_res), repr(to_res), "..."
     if from_res == "?" and to_res == "?":
         #If this does happen, will need to think about this some more!
         raise ValueError("Swiss file FT location ? ? (completely unknown)")
@@ -64,7 +64,7 @@ def _make_seqfeature(name, from_res, to_res, description, ft_id):
         to_res = ">%s" % from_res
     loc = SeqFeature.FeatureLocation(_make_position(from_res,-1),
 	                             _make_position(to_res, 0))
-    print name, repr(from_res), repr(to_res), loc
+    #print name, repr(from_res), repr(to_res), loc
     return SeqFeature.SeqFeature(loc, type=name, id=ft_id,
                                  qualifiers={"description":description})
 
