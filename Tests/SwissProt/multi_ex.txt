@@ -1001,3 +1001,436 @@ SQ   SEQUENCE   594 AA;  65358 MW;  E9764CD0F325A501 CRC64;
      FRGKELQPGS HIQSDKEIDA FVRAKADSAY HPSCTCKMGQ PSDPTAVVDP QTRVLGVENL
      RVVDASIMPS MVSGNLNAPT IMIAEKAADI IKGQPALWDK DVPVYKPRTL ATQR
 //
+ID   IVBKI_DENPO             Reviewed;          79 AA.
+AC   P00981; Q91351;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   15-MAR-2004, sequence version 2.
+DT   10-AUG-2010, entry version 84.
+DE   RecName: Full=Dendrotoxin-K;
+DE            Short=DTX-K;
+DE   AltName: Full=Venom basic protease inhibitor K;
+DE   Flags: Precursor; Fragment;
+OS   Dendroaspis polylepis polylepis (Black mamba).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Lepidosauria; Squamata; Scleroglossa; Serpentes; Colubroidea;
+OC   Elapidae; Elapinae; Dendroaspis.
+OX   NCBI_TaxID=8620;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [MRNA], AND PROTEIN SEQUENCE OF 23-39.
+RX   MEDLINE=93277850; PubMed=8504088; DOI=10.1021/bi00072a026;
+RA   Smith L.A., Lafaye P.J., LaPenotiere H.F., Spain T., Dolly J.O.;
+RT   "Cloning and functional expression of dendrotoxin K from black mamba,
+RT   a K+ channel blocker.";
+RL   Biochemistry 32:5692-5697(1993).
+RN   [2]
+RP   PROTEIN SEQUENCE OF 23-79.
+RC   TISSUE=Venom;
+RX   MEDLINE=77158069; PubMed=857902; DOI=10.1016/0005-2795(77)90279-3;
+RA   Strydom D.J.;
+RT   "Snake venom toxins. The amino acid sequence of toxin Vi2, a homologue
+RT   of pancreatic trypsin inhibitor, from Dendroaspis polylepis polylepis
+RT   (black mamba) venom.";
+RL   Biochim. Biophys. Acta 491:361-369(1977).
+RN   [3]
+RP   STRUCTURE BY NMR OF 23-79.
+RX   MEDLINE=94076347; PubMed=8254670; DOI=10.1006/jmbi.1993.1623;
+RA   Berndt K.D., Guentert P., Wuethrich K.;
+RT   "Nuclear magnetic resonance solution structure of dendrotoxin K from
+RT   the venom of Dendroaspis polylepis polylepis.";
+RL   J. Mol. Biol. 234:735-750(1993).
+CC   -!- FUNCTION: This protein is much less toxic to mice than is whole
+CC       venom. It inhibits trypsin slightly, but chymotrypsin not at all.
+CC       It is a highly selective blocker of voltage-gated potassium
+CC       channels.
+CC   -!- SUBCELLULAR LOCATION: Secreted.
+CC   -!- TISSUE SPECIFICITY: Expressed by the venom gland.
+CC   -!- TOXIC DOSE: LD(50) is 30 mg/kg by intravenous injection.
+CC   -!- SIMILARITY: Contains 1 BPTI/Kunitz inhibitor domain.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; S61886; AAB26998.1; -; mRNA.
+DR   PIR; A49291; TIEPVK.
+DR   PDB; 1DTK; NMR; -; A=23-79.
+DR   PDBsum; 1DTK; -.
+DR   ProteinModelPortal; P00981; -.
+DR   GO; GO:0005576; C:extracellular region; IEA:UniProtKB-SubCell.
+DR   GO; GO:0019870; F:potassium channel inhibitor activity; IEA:UniProtKB-KW.
+DR   GO; GO:0004867; F:serine-type endopeptidase inhibitor activity; IEA:UniProtKB-KW.
+DR   GO; GO:0009405; P:pathogenesis; IEA:UniProtKB-KW.
+DR   InterPro; IPR002223; Prot_inh_Kunz-m.
+DR   InterPro; IPR020901; Prtase_inh_Kunz-CS.
+DR   Gene3D; G3DSA:4.10.410.10; Prot_inh_Kunz-m; 1.
+DR   Pfam; PF00014; Kunitz_BPTI; 1.
+DR   PRINTS; PR00759; BASICPTASE.
+DR   SMART; SM00131; KU; 1.
+DR   SUPFAM; SSF57362; Prot_inh_Kunz-m; 1.
+DR   PROSITE; PS00280; BPTI_KUNITZ_1; 1.
+DR   PROSITE; PS50279; BPTI_KUNITZ_2; 1.
+PE   1: Evidence at protein level;
+KW   3D-structure; Direct protein sequencing; Disulfide bond;
+KW   Ionic channel inhibitor; Neurotoxin; Potassium channel inhibitor;
+KW   Protease inhibitor; Secreted; Serine protease inhibitor; Signal;
+KW   Toxin.
+FT   SIGNAL       <1      ?
+FT   PROPEP        ?     22
+FT                                /FTId=PRO_0000016869.
+FT   CHAIN        23     79       Dendrotoxin-K.
+FT                                /FTId=PRO_0000016870.
+FT   DOMAIN       27     77       BPTI/Kunitz inhibitor.
+FT   SITE         37     38       Reactive bond.
+FT   DISULFID     27     77       By similarity.
+FT   DISULFID     36     60       By similarity.
+FT   DISULFID     52     73       By similarity.
+FT   NON_TER       1      1
+FT   HELIX        25     28
+FT   STRAND       35     37
+FT   STRAND       40     45
+FT   TURN         47     49
+FT   STRAND       50     57
+FT   STRAND       59     61
+FT   STRAND       67     69
+FT   HELIX        70     77
+SQ   SEQUENCE   79 AA;  8852 MW;  DCDFB9AFA07D7D46 CRC64;
+     SGHLLLLLGL LTLWAELTPV SGAAKYCKLP LRIGPCKRKI PSFYYKWKAK QCLPFDYSGC
+     GGNANRFKTI EECRRTCVG
+//
+ID   GRN_HUMAN               Reviewed;         593 AA.
+AC   P28799; P23781; P23782; P23783; P23784; Q53Y88; Q540U8; Q9BWE7;
+AC   Q9UCH0;
+DT   01-DEC-1992, integrated into UniProtKB/Swiss-Prot.
+DT   11-OCT-2005, sequence version 2.
+DT   10-AUG-2010, entry version 118.
+DE   RecName: Full=Granulins;
+DE   AltName: Full=Proepithelin;
+DE            Short=PEPI;
+DE   Contains:
+DE     RecName: Full=Acrogranin;
+DE   Contains:
+DE     RecName: Full=Paragranulin;
+DE   Contains:
+DE     RecName: Full=Granulin-1;
+DE     AltName: Full=Granulin G;
+DE   Contains:
+DE     RecName: Full=Granulin-2;
+DE     AltName: Full=Granulin F;
+DE   Contains:
+DE     RecName: Full=Granulin-3;
+DE     AltName: Full=Granulin B;
+DE   Contains:
+DE     RecName: Full=Granulin-4;
+DE     AltName: Full=Granulin A;
+DE   Contains:
+DE     RecName: Full=Granulin-5;
+DE     AltName: Full=Granulin C;
+DE   Contains:
+DE     RecName: Full=Granulin-6;
+DE     AltName: Full=Granulin D;
+DE   Contains:
+DE     RecName: Full=Granulin-7;
+DE     AltName: Full=Granulin E;
+DE   Flags: Precursor;
+GN   Name=GRN;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [MRNA], AND SEQUENCE REVISION.
+RX   MEDLINE=93038704; PubMed=1417868; DOI=10.1016/0006-291X(92)92349-3;
+RA   Bhandari V., Bateman A.;
+RT   "Structure and chromosomal location of the human granulin gene.";
+RL   Biochem. Biophys. Res. Commun. 188:57-63(1992).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [MRNA].
+RC   TISSUE=Kidney;
+RX   MEDLINE=92317004; PubMed=1618805;
+RA   Plowman G.D., Green J.M., Neubauer M.G., Buckley S.D., McDonald V.L.,
+RA   Todaro G.J., Shoyab M.;
+RT   "The epithelin precursor encodes two proteins with opposing activities
+RT   on epithelial cell growth.";
+RL   J. Biol. Chem. 267:13073-13078(1992).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [MRNA], AND PARTIAL PROTEIN SEQUENCE.
+RC   TISSUE=Bone marrow;
+RX   MEDLINE=92179253; PubMed=1542665; DOI=10.1073/pnas.89.5.1715;
+RA   Bhandari V., Palfree R.G.E., Bateman A.;
+RT   "Isolation and sequence of the granulin precursor cDNA from human bone
+RT   marrow reveals tandem cysteine-rich granulin domains.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 89:1715-1719(1992).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [MRNA] (ISOFORM 1).
+RA   Lu R., Tian C., Serrero G.;
+RT   "PCDGF sequence from lambda phage human Jurkat T cell cDNA library
+RT   (Clontech).";
+RL   Submitted (JUN-2002) to the EMBL/GenBank/DDBJ databases.
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RC   TISSUE=Brain;
+RA   Yu W., Gibbs R.A.;
+RL   Submitted (MAR-1998) to the EMBL/GenBank/DDBJ databases.
+RN   [6]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA] (ISOFORM 2).
+RA   Kalnine N., Chen X., Rolfs A., Halleck A., Hines L., Eisenstein S.,
+RA   Koundinya M., Raphael J., Moreira D., Kelley T., LaBaer J., Lin Y.,
+RA   Phelan M., Farmer A.;
+RT   "Cloning of human full-length CDSs in BD Creator(TM) system donor
+RT   vector.";
+RL   Submitted (MAY-2003) to the EMBL/GenBank/DDBJ databases.
+RN   [7]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RA   Mural R.J., Istrail S., Sutton G.G., Florea L., Halpern A.L.,
+RA   Mobarry C.M., Lippert R., Walenz B., Shatkay H., Dew I., Miller J.R.,
+RA   Flanigan M.J., Edwards N.J., Bolanos R., Fasulo D., Halldorsson B.V.,
+RA   Hannenhalli S., Turner R., Yooseph S., Lu F., Nusskern D.R.,
+RA   Shue B.C., Zheng X.H., Zhong F., Delcher A.L., Huson D.H.,
+RA   Kravitz S.A., Mouchard L., Reinert K., Remington K.A., Clark A.G.,
+RA   Waterman M.S., Eichler E.E., Adams M.D., Hunkapiller M.W., Myers E.W.,
+RA   Venter J.C.;
+RL   Submitted (SEP-2005) to the EMBL/GenBank/DDBJ databases.
+RN   [8]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA] (ISOFORMS 1 AND 2).
+RC   TISSUE=Cervix, and Lung;
+RX   PubMed=15489334; DOI=10.1101/gr.2596504;
+RG   The MGC Project Team;
+RT   "The status, quality, and expansion of the NIH full-length cDNA
+RT   project: the Mammalian Gene Collection (MGC).";
+RL   Genome Res. 14:2121-2127(2004).
+RN   [9]
+RP   PROTEIN SEQUENCE OF 206-233; 281-336; 364-396 AND 442-447.
+RC   TISSUE=Leukocyte;
+RX   MEDLINE=91097544; PubMed=2268320; DOI=10.1016/S0006-291X(05)80908-8;
+RA   Bateman A., Belcourt D.R., Bennett H.P., Lazure C., Solomon S.;
+RT   "Granulins, a novel class of peptide from leukocytes.";
+RL   Biochem. Biophys. Res. Commun. 173:1161-1168(1990).
+RN   [10]
+RP   PROTEIN SEQUENCE OF 281-295.
+RX   PubMed=8471426;
+RA   Kardana A., Bagshawe K.D., Coles B., Read D., Taylor M.;
+RT   "Characterisation of UGP and its relationship with beta-core
+RT   fragment.";
+RL   Br. J. Cancer 67:686-692(1993).
+RN   [11]
+RP   GLYCOSYLATION [LARGE SCALE ANALYSIS] AT ASN-265, AND MASS
+RP   SPECTROMETRY.
+RC   TISSUE=Liver;
+RX   PubMed=19159218; DOI=10.1021/pr8008012;
+RA   Chen R., Jiang X., Sun D., Han G., Wang F., Ye M., Wang L., Zou H.;
+RT   "Glycoproteomics analysis of human liver tissue by combination of
+RT   multiple enzyme digestion and hydrazide chemistry.";
+RL   J. Proteome Res. 8:651-661(2009).
+RN   [12]
+RP   STRUCTURE BY NMR OF 284-311.
+RX   PubMed=10715107; DOI=10.1021/bi992130u;
+RA   Tolkatchev D., Ng A., Vranken W., Ni F.;
+RT   "Design and solution structure of a well-folded stack of two beta-
+RT   hairpins based on the amino-terminal fragment of human granulin A.";
+RL   Biochemistry 39:2878-2886(2000).
+RN   [13]
+RP   INVOLVEMENT IN UP-FTD.
+RX   PubMed=16862116; DOI=10.1038/nature05016;
+RA   Baker M., Mackenzie I.R., Pickering-Brown S.M., Gass J.,
+RA   Rademakers R., Lindholm C., Snowden J., Adamson J., Sadovnick A.D.,
+RA   Rollinson S., Cannon A., Dwosh E., Neary D., Melquist S.,
+RA   Richardson A., Dickson D., Berger Z., Eriksen J., Robinson T.,
+RA   Zehr C., Dickey C.A., Crook R., McGowan E., Mann D., Boeve B.,
+RA   Feldman H., Hutton M.;
+RT   "Mutations in progranulin cause tau-negative frontotemporal dementia
+RT   linked to chromosome 17.";
+RL   Nature 442:916-919(2006).
+RN   [14]
+RP   VARIANT UP-FTD ASP-9.
+RX   PubMed=16983685; DOI=10.1002/ana.20963;
+RA   Mukherjee O., Pastor P., Cairns N.J., Chakraverty S., Kauwe J.S.K.,
+RA   Shears S., Behrens M.I., Budde J., Hinrichs A.L., Norton J.,
+RA   Levitch D., Taylor-Reinwald L., Gitcho M., Tu P.-H.,
+RA   Tenenholz Grinberg L., Liscic R.M., Armendariz J., Morris J.C.,
+RA   Goate A.M.;
+RT   "HDDD2 is a familial frontotemporal lobar degeneration with ubiquitin-
+RT   positive, tau-negative inclusions caused by a missense mutation in the
+RT   signal peptide of progranulin.";
+RL   Ann. Neurol. 60:314-322(2006).
+RN   [15]
+RP   CHARACTERIZATION OF VARIANT UP-FTD ASP-9.
+RX   PubMed=18183624; DOI=10.1002/humu.20681;
+RA   Mukherjee O., Wang J., Gitcho M., Chakraverty S., Taylor-Reinwald L.,
+RA   Shears S., Kauwe J.S.K., Norton J., Levitch D., Bigio E.H.,
+RA   Hatanpaa K.J., White C.L., Morris J.C., Cairns N.J., Goate A.;
+RT   "Molecular characterization of novel progranulin (GRN) mutations in
+RT   frontotemporal dementia.";
+RL   Hum. Mutat. 29:512-521(2008).
+CC   -!- FUNCTION: Granulins have possible cytokine-like activity. They may
+CC       play a role in inflammation, wound repair, and tissue remodeling.
+CC   -!- FUNCTION: Granulin-4 promotes proliferation of the epithelial cell
+CC       line A431 in culture while granulin-3 acts as an antagonist to
+CC       granulin-4, inhibiting the growth.
+CC   -!- SUBCELLULAR LOCATION: Secreted.
+CC   -!- ALTERNATIVE PRODUCTS:
+CC       Event=Alternative splicing; Named isoforms=2;
+CC       Name=1;
+CC         IsoId=P28799-1; Sequence=Displayed;
+CC       Name=2;
+CC         IsoId=P28799-2; Sequence=VSP_001837;
+CC   -!- TISSUE SPECIFICITY: In myelogenous leukemic cell lines of
+CC       promonocytic, promyelocytic, and proerythroid lineage, in
+CC       fibroblasts, and very strongly in epithelial cell lines. Present
+CC       in inflammatory cells and bone marrow. Highest levels in kidney.
+CC   -!- PTM: Granulins are disulfide bridged.
+CC   -!- DISEASE: Defects in GRN are the cause of ubiquitin-positive
+CC       frontotemporal dementia (UP-FTD) [MIM:607485]; also known as tau-
+CC       negative frontotemporal dementia linked to chromosome 17.
+CC       Frontotemporal dementia (FTD) is the second most common cause of
+CC       dementia in people under the age of 65 years. It is an autosomal
+CC       dominant neurodegenerative disease.
+CC   -!- SIMILARITY: Belongs to the granulin family.
+CC   -!- WEB RESOURCE: Name=Atlas of Genetics and Cytogenetics in Oncology
+CC       and Haematology;
+CC       URL="http://atlasgeneticsoncology.org/Genes/GRNID40757ch17q21.html";
+CC   -!- WEB RESOURCE: Name=GeneReviews;
+CC       URL="http://www.ncbi.nlm.nih.gov/sites/GeneTests/lab/gene/GRN";
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; X62320; CAA44196.1; -; mRNA.
+DR   EMBL; AF055008; AAC09359.1; -; mRNA.
+DR   EMBL; M75161; AAA58617.1; ALT_SEQ; mRNA.
+DR   EMBL; AY124489; AAM94026.1; -; mRNA.
+DR   EMBL; BT006844; AAP35490.1; -; mRNA.
+DR   EMBL; CH471178; EAW51599.1; -; Genomic_DNA.
+DR   EMBL; BC000324; AAH00324.1; -; mRNA.
+DR   EMBL; BC010577; AAH10577.1; -; mRNA.
+DR   IPI; IPI00182138; -.
+DR   IPI; IPI00296713; -.
+DR   PIR; JC1284; GYHU.
+DR   RefSeq; NP_002078.1; -.
+DR   UniGene; Hs.514220; -.
+DR   PDB; 1G26; NMR; -; A=284-311.
+DR   PDB; 2JYE; NMR; -; A=281-337.
+DR   PDB; 2JYT; NMR; -; A=364-417.
+DR   PDB; 2JYU; NMR; -; A=364-417.
+DR   PDB; 2JYV; NMR; -; A=123-179.
+DR   PDBsum; 1G26; -.
+DR   PDBsum; 2JYE; -.
+DR   PDBsum; 2JYT; -.
+DR   PDBsum; 2JYU; -.
+DR   PDBsum; 2JYV; -.
+DR   ProteinModelPortal; P28799; -.
+DR   SMR; P28799; 206-236.
+DR   IntAct; P28799; 17.
+DR   MINT; MINT-271687; -.
+DR   STRING; P28799; -.
+DR   PRIDE; P28799; -.
+DR   Ensembl; ENST00000053867; ENSP00000053867; ENSG00000030582; Homo sapiens.
+DR   GeneID; 2896; -.
+DR   KEGG; hsa:2896; -.
+DR   UCSC; uc002igp.1; human.
+DR   CTD; 2896; -.
+DR   GeneCards; GC17P042433; -.
+DR   H-InvDB; HIX0013882; -.
+DR   HGNC; HGNC:4601; GRN.
+DR   HPA; CAB019394; -.
+DR   HPA; HPA008763; -.
+DR   HPA; HPA028747; -.
+DR   MIM; 138945; gene.
+DR   MIM; 607485; phenotype.
+DR   Orphanet; 282; Frontotemporal dementia.
+DR   Orphanet; 98929; Frontotemporal dementia with motor neuron-disease type inclusions.
+DR   PharmGKB; PA24626; -.
+DR   eggNOG; prNOG11069; -.
+DR   HOVERGEN; HBG000845; -.
+DR   InParanoid; P28799; -.
+DR   OMA; CCEDRVH; -.
+DR   OrthoDB; EOG9JQ6HG; -.
+DR   PhylomeDB; P28799; -.
+DR   NextBio; 11459; -.
+DR   PMAP-CutDB; P28799; -.
+DR   ArrayExpress; P28799; -.
+DR   Bgee; P28799; -.
+DR   CleanEx; HS_GRN; -.
+DR   Genevestigator; P28799; -.
+DR   GermOnline; ENSG00000030582; Homo sapiens.
+DR   GO; GO:0005615; C:extracellular space; IEA:UniProtKB-KW.
+DR   GO; GO:0005125; F:cytokine activity; IEA:UniProtKB-KW.
+DR   GO; GO:0008083; F:growth factor activity; TAS:ProtInc.
+DR   GO; GO:0007165; P:signal transduction; NAS:ProtInc.
+DR   InterPro; IPR006150; Cys_repeat_1.
+DR   InterPro; IPR000118; Granulin.
+DR   Pfam; PF00396; Granulin; 7.
+DR   SMART; SM00277; GRAN; 7.
+DR   SMART; SM00289; WR1; 5.
+DR   PROSITE; PS00799; GRANULINS; 7.
+PE   1: Evidence at protein level;
+KW   3D-structure; Alternative splicing; Complete proteome; Cytokine;
+KW   Direct protein sequencing; Disulfide bond; Glycoprotein; Polymorphism;
+KW   Repeat; Secreted; Signal.
+FT   SIGNAL        1     17       Potential.
+FT   CHAIN        18    593       Acrogranin.
+FT                                /FTId=PRO_0000012693.
+FT   PEPTIDE      18    ?47       Paragranulin.
+FT                                /FTId=PRO_0000012694.
+FT   PEPTIDE     ?58   ?113       Granulin-1.
+FT                                /FTId=PRO_0000012695.
+FT   PEPTIDE    ?123   ?179       Granulin-2.
+FT                                /FTId=PRO_0000012696.
+FT   PEPTIDE     206    261       Granulin-3.
+FT                                /FTId=PRO_0000012697.
+FT   PEPTIDE     281    336       Granulin-4.
+FT                                /FTId=PRO_0000012698.
+FT   PEPTIDE     364   ?417       Granulin-5.
+FT                                /FTId=PRO_0000012699.
+FT   PEPTIDE     442   ?496       Granulin-6.
+FT                                /FTId=PRO_0000012700.
+FT   PEPTIDE    ?518   ?573       Granulin-7.
+FT                                /FTId=PRO_0000012701.
+FT   CARBOHYD    118    118       N-linked (GlcNAc...) (Potential).
+FT   CARBOHYD    236    236       N-linked (GlcNAc...) (Potential).
+FT   CARBOHYD    265    265       N-linked (GlcNAc...).
+FT   CARBOHYD    368    368       N-linked (GlcNAc...).
+FT   CARBOHYD    530    530       N-linked (GlcNAc...) (Potential).
+FT   DISULFID    284    296
+FT   DISULFID    290    306
+FT   VAR_SEQ     377    531       Missing (in isoform 2).
+FT                                /FTId=VSP_001837.
+FT   VARIANT       9      9       A -> D (in UP-FTD; no significant
+FT                                difference in the total mRNA between
+FT                                cases and controls; although the mutant
+FT                                protein is expressed it is not secreted
+FT                                and appears to be trapped within an
+FT                                intracellular compartment).
+FT                                /FTId=VAR_044451.
+FT   VARIANT     515    515       G -> A (in dbSNP:rs25647).
+FT                                /FTId=VAR_014830.
+FT   CONFLICT    219    219       S -> H (in Ref. 9; AA sequence).
+FT   CONFLICT    290    290       C -> S (in Ref. 10; AA sequence).
+FT   CONFLICT    386    386       W -> H (in Ref. 9; AA sequence).
+FT   CONFLICT    454    454       Q -> G (in Ref. 3; AAA58617).
+FT   STRAND      137    141
+FT   STRAND      143    145
+FT   STRAND      147    151
+FT   STRAND      282    285
+FT   STRAND      288    290
+FT   STRAND      294    298
+FT   STRAND      304    308
+FT   STRAND      315    319
+FT   TURN        330    333
+FT   STRAND      377    380
+FT   STRAND      382    384
+FT   STRAND      386    389
+FT   STRAND      409    411
+FT   TURN        412    414
+FT   STRAND      415    417
+SQ   SEQUENCE   593 AA;  63544 MW;  4E5947F1B4EDE619 CRC64;
+     MWTLVSWVAL TAGLVAGTRC PDGQFCPVAC CLDPGGASYS CCRPLLDKWP TTLSRHLGGP
+     CQVDAHCSAG HSCIFTVSGT SSCCPFPEAV ACGDGHHCCP RGFHCSADGR SCFQRSGNNS
+     VGAIQCPDSQ FECPDFSTCC VMVDGSWGCC PMPQASCCED RVHCCPHGAF CDLVHTRCIT
+     PTGTHPLAKK LPAQRTNRAV ALSSSVMCPD ARSRCPDGST CCELPSGKYG CCPMPNATCC
+     SDHLHCCPQD TVCDLIQSKC LSKENATTDL LTKLPAHTVG DVKCDMEVSC PDGYTCCRLQ
+     SGAWGCCPFT QAVCCEDHIH CCPAGFTCDT QKGTCEQGPH QVPWMEKAPA HLSLPDPQAL
+     KRDVPCDNVS SCPSSDTCCQ LTSGEWGCCP IPEAVCCSDH QHCCPQGYTC VAEGQCQRGS
+     EIVAGLEKMP ARRASLSHPR DIGCDQHTSC PVGQTCCPSL GGSWACCQLP HAVCCEDRQH
+     CCPAGYTCNV KARSCEKEVV SAQPATFLAR SPHVGVKDVE CGEGHFCHDN QTCCRDNRQG
+     WACCPYRQGV CCADRRHCCP AGFRCAARGT KCLRREAPRW DAPLRDPALR QLL
+//

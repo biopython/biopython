@@ -96,3 +96,52 @@ Q51481	UniProtKB	DNA binding	234	253	.	.	.	Note=H-T-H motif;Status=Potential
 Q8NE62	UniProtKB	Nucleotide binding	42	71	.	.	.	Note=FAD;Status=By similarity	
 Q8NE62	UniProtKB	Active site	511	511	.	.	.	Status=By similarity	
 Q8NE62	UniProtKB	Modified residue	496	496	.	.	.	Note=N6-acetyllysine;Status=By similarity	
+##sequence-region P00981 1 79
+P00981	UniProtKB	Chain	23	79	.	.	.	ID=PRO_0000016870;Note=Dendrotoxin-K	
+P00981	UniProtKB	Domain	27	77	.	.	.	Note=BPTI/Kunitz inhibitor	
+P00981	UniProtKB	Site	37	38	.	.	.	Note=Reactive bond	
+P00981	UniProtKB	Disulfide bond	27	77	.	.	.	Status=By similarity	
+P00981	UniProtKB	Disulfide bond	36	60	.	.	.	Status=By similarity	
+P00981	UniProtKB	Disulfide bond	52	73	.	.	.	Status=By similarity	
+P00981	UniProtKB	Non-terminal residue	1	1	.	.	.	.	
+P00981	UniProtKB	Helix	25	28	.	.	.	.	
+P00981	UniProtKB	Beta strand	35	37	.	.	.	.	
+P00981	UniProtKB	Beta strand	40	45	.	.	.	.	
+P00981	UniProtKB	Turn	47	49	.	.	.	.	
+P00981	UniProtKB	Beta strand	50	57	.	.	.	.	
+P00981	UniProtKB	Beta strand	59	61	.	.	.	.	
+P00981	UniProtKB	Beta strand	67	69	.	.	.	.	
+P00981	UniProtKB	Helix	70	77	.	.	.	.	
+##sequence-region P28799 1 593
+P28799	UniProtKB	Signal peptide	1	17	.	.	.	Status=Potential	
+P28799	UniProtKB	Chain	18	593	.	.	.	ID=PRO_0000012693;Note=Acrogranin	
+P28799	UniProtKB	Peptide	18	47	.	.	.	ID=PRO_0000012694;Note=Paragranulin	
+P28799	UniProtKB	Peptide	58	113	.	.	.	ID=PRO_0000012695;Note=Granulin-1	
+P28799	UniProtKB	Peptide	123	179	.	.	.	ID=PRO_0000012696;Note=Granulin-2	
+P28799	UniProtKB	Peptide	206	261	.	.	.	ID=PRO_0000012697;Note=Granulin-3	
+P28799	UniProtKB	Peptide	281	336	.	.	.	ID=PRO_0000012698;Note=Granulin-4	
+P28799	UniProtKB	Peptide	364	417	.	.	.	ID=PRO_0000012699;Note=Granulin-5	
+P28799	UniProtKB	Peptide	442	496	.	.	.	ID=PRO_0000012700;Note=Granulin-6	
+P28799	UniProtKB	Peptide	518	573	.	.	.	ID=PRO_0000012701;Note=Granulin-7	
+P28799	UniProtKB	Glycosylation	118	118	.	.	.	Note=N-linked (GlcNAc...);Status=Potential	
+P28799	UniProtKB	Glycosylation	236	236	.	.	.	Note=N-linked (GlcNAc...);Status=Potential	
+P28799	UniProtKB	Glycosylation	265	265	.	.	.	Note=N-linked (GlcNAc...)	
+P28799	UniProtKB	Glycosylation	368	368	.	.	.	Note=N-linked (GlcNAc...)	
+P28799	UniProtKB	Glycosylation	530	530	.	.	.	Note=N-linked (GlcNAc...);Status=Potential	
+P28799	UniProtKB	Disulfide bond	284	296	.	.	.	.	
+P28799	UniProtKB	Disulfide bond	290	306	.	.	.	.	
+P28799	UniProtKB	Beta strand	137	141	.	.	.	.	
+P28799	UniProtKB	Beta strand	143	145	.	.	.	.	
+P28799	UniProtKB	Beta strand	147	151	.	.	.	.	
+P28799	UniProtKB	Beta strand	282	285	.	.	.	.	
+P28799	UniProtKB	Beta strand	288	290	.	.	.	.	
+P28799	UniProtKB	Beta strand	294	298	.	.	.	.	
+P28799	UniProtKB	Beta strand	304	308	.	.	.	.	
+P28799	UniProtKB	Beta strand	315	319	.	.	.	.	
+P28799	UniProtKB	Turn	330	333	.	.	.	.	
+P28799	UniProtKB	Beta strand	377	380	.	.	.	.	
+P28799	UniProtKB	Beta strand	382	384	.	.	.	.	
+P28799	UniProtKB	Beta strand	386	389	.	.	.	.	
+P28799	UniProtKB	Beta strand	409	411	.	.	.	.	
+P28799	UniProtKB	Turn	412	414	.	.	.	.	
+P28799	UniProtKB	Beta strand	415	417	.	.	.	.	
