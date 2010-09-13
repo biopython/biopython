@@ -1370,6 +1370,8 @@ Testing reading uniprot-xml format file SwissProt/uni001
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q91G55).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q91G55).
  Checking can write/read as 'qual' format
@@ -1401,6 +1403,8 @@ Testing reading uniprot-xml format file SwissProt/uni002
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P0C9J6).
  Checking can write/read as 'qual' format
@@ -1426,6 +1430,8 @@ Testing reading uniprot-xml format file SwissProt/Q13639.xml
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
  Checking can write/read as 'qual' format
@@ -1450,6 +1456,8 @@ Testing reading swiss format file SwissProt/Q13639.txt
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
  Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Failed: Need a Nucleotide alphabet
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
  Checking can write/read as 'qual' format
