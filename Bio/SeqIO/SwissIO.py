@@ -58,10 +58,11 @@ def _make_seqfeature(name, from_res, to_res, description, ft_id):
         raise ValueError("Swiss file FT location ? ? (completely unknown)")
     elif from_res == "?":
         #e.g. given "? 5" in the Swiss file, treat this as <5..5 in GenBank
-        from_res = "<%s" % to_res
+        from_res = "<%s" % str(to_res).lstrip("<").lstrip(">")
     elif to_res == "?":
         #e.g. given "10 ?" in the Swiss file, treat this as 10..>10 in GenBank
-        to_res = ">%s" % from_res
+	#or worse "<1 ?", treat is as <1..>1 in GenBank notation
+        to_res = ">%s" % str(from_res).lstrip("<").lstrip(">")
     loc = SeqFeature.FeatureLocation(_make_position(from_res,-1),
 	                             _make_position(to_res, 0))
     #print name, repr(from_res), repr(to_res), loc
