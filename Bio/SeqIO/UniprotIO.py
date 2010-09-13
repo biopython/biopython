@@ -324,6 +324,7 @@ class Parser():
                                     for elem in pairs:
                                         pair=elem.strip().split('=')
                                         if pair[1]!='-':
+                                            #TODO - How best to store these, do SeqFeatures make sense?
                                             feature=SeqFeature.SeqFeature()
                                             feature.type=element.attrib['type']
                                             feature.qualifiers['name']=element.attrib['id']
@@ -333,7 +334,7 @@ class Parser():
                                             start=int(pair[1].split('-')[0])-1
                                             end=int(pair[1].split('-')[1])
                                             feature.location=SeqFeature.FeatureLocation(start,end)
-                                            self.ParsedSeqRecord.features.append(feature)
+                                            #self.ParsedSeqRecord.features.append(feature)
 
             for ref_element in  element.getchildren():  
                 if ref_element.tag==NS + 'property':

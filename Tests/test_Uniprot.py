@@ -107,9 +107,6 @@ class TestUniprot(unittest.TestCase):
             else:
                 raise ValueError("%s gives %s vs %s" % \
                                  (key, old.annotations[key], new.annotations[key]))
-        if len(old.features) != len(new.features):
-            #TODO - remove this hack once understand why data differs
-            return
         self.assertEqual(len(old.features), len(new.features),
                          "Features in %s, %i vs %i" %
                          (old.id, len(old.features), len(new.features)))
