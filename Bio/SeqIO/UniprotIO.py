@@ -78,12 +78,13 @@ def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comm
             try:
                 yield Parser(elem, alphabet=alphabet, return_raw_comments=return_raw_comments).parse()
                 elem.clear()
-            except:
+            except Exception, err:
                 # TODO: log warning, test
                 if skip_parsing_errors:
-                    pass
+                    import warnings
+                    warning.warn(str(err))
                 else:
-                    raise
+                    raise err
 
 class Parser():
     '''Parse a UniProt XML entry to a SeqRecord
@@ -269,10 +270,11 @@ class Parser():
                     # this try should be avoided, maybe it is safer to skip postion parsing for mass spectrometry
                     try:
                         if pos_els:
-                            start=end=int(pos_els[0].attrib['position'])-1
+                            end=int(pos_els[0].attrib['position'])
+                            start=end-1
                         else:
-                                start=int(loc_element.getiterator(NS +'begin')[0].attrib['position'])-1
-                                end=int(loc_element.getiterator(NS +'end')[0].attrib['position'])-1
+                            start=int(loc_element.getiterator(NS +'begin')[0].attrib['position'])-1
+                            end=int(loc_element.getiterator(NS +'end')[0].attrib['position'])
                     except :#undefined positions or erroneusly mapped
                         pass    
                 mass=element.attrib['mass']
@@ -325,7 +327,7 @@ class Parser():
                                             feature.qualifiers['resolution']=resolution
                                             feature.qualifiers['chains']=pair[0].split('/')
                                             start=int(pair[1].split('-')[0])-1
-                                            end=int(pair[1].split('-')[1])-1
+                                            end=int(pair[1].split('-')[1])
                                             feature.location=SeqFeature.FeatureLocation(start,end)
                                             self.ParsedSeqRecord.features.append(feature)
 
@@ -419,8 +421,8 @@ class Parser():
                     try:
                         position_elements=feature_element.findall(NS + 'position')
                         if position_elements:
-                            position=int(position_elements[0].attrib['position'])-1
-                            feature.location=SeqFeature.FeatureLocation(position,position)
+                            end_position=int(position_elements[0].attrib['position'])
+                            start_position=end_position-1
                         else:
                             start_positions_elements=feature_element.findall(NS + 'begin')
                             
@@ -432,10 +434,11 @@ class Parser():
                             end_positions_elements=feature_element.findall(NS + 'end')
                             if end_positions_elements:
                                 if end_positions_elements[0].attrib.has_key('position'):
-                                    end_position=int(end_positions_elements[0].attrib['position'])-1
+                                    end_position=int(end_positions_elements[0].attrib['position'])
                                 elif end_positions_elements[0].attrib.has_key('status'):#fuzzy location
+                                    raise NotImplementedError #Peter testing
                                     return #skip feature with unparsable position
-                            feature.location=SeqFeature.FeatureLocation(start_position,end_position)
+                        feature.location=SeqFeature.FeatureLocation(start_position,end_position)
                     except:
                         return #skip feature with unparsable position
                 else:
