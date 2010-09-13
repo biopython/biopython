@@ -44,8 +44,8 @@ If you want to, you can include non-standard amino acids in the peptides:
     M MSE
     M MSE
 
-In this case the selenomethionine (the sixth from last residue) has been
-shown as M (methionine) by the get_sequence method.
+In this case the selenomethionines (the first and also seventh and sixth from
+last residues) have been shown as M (methionine) by the get_sequence method.
 """
 
 import warnings
