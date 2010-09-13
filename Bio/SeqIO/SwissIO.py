@@ -19,7 +19,55 @@ from Bio import SeqRecord
 from Bio import Alphabet
 from Bio import SeqFeature
 from Bio import SwissProt
-    
+
+def _make_position(location_string, offset=0):
+    """Turn a Swiss location position into a SeqFeature position object (PRIVATE).
+
+    An offset of -1 is used with a start location to make it pythonic.
+    """
+    #Hack so that feature from 0 to 0 becomes 0 to 0, not -1 to 0.
+    try:
+        return SeqFeature.ExactPosition(max(0, offset+int(location_string)))
+    except ValueError:
+        pass
+    if location_string.startswith("<"):
+        try:
+            return SeqFeature.BeforePosition(max(0,offset+int(location_string[1:])))
+        except ValueError:
+            pass
+    elif location_string.startswith(">"): # e.g. ">13"
+        try:
+            return SeqFeature.AfterPosition(max(0,offset+int(location_string[1:])))
+        except ValueError :
+            pass
+    elif location_string.startswith("?"): # e.g. "?22"
+        raise NotImplementedError("Cannot parse location '%s'" % location_string)
+        try:
+            #TODO - Is there a suitable FuzzyPosition we can use?
+            return SeqFeature.AbstractPosition(max(0,offset+int(location_string[1:])),
+                                               None)
+        except ValueError:
+            pass
+    raise NotImplementedError("Cannot parse location '%s'" % location_string)
+
+def _make_seqfeature(name, from_res, to_res, description, ft_id):
+    """Construct SeqFeature from feature data from parser (PRIVATE)."""
+    print name, repr(from_res), repr(to_res), "..."
+    if from_res == "?" and to_res == "?":
+        #If this does happen, will need to think about this some more!
+        raise ValueError("Swiss file FT location ? ? (completely unknown)")
+    elif from_res == "?":
+        #e.g. given "? 5" in the Swiss file, treat this as <5..5 in GenBank
+        from_res = "<%s" % to_res
+    elif to_res == "?":
+        #e.g. given "10 ?" in the Swiss file, treat this as 10..>10 in GenBank
+        to_res = ">%s" % from_res
+    loc = SeqFeature.FeatureLocation(_make_position(from_res,-1),
+	                             _make_position(to_res, 0))
+    print name, repr(from_res), repr(to_res), loc
+    return SeqFeature.SeqFeature(loc, type=name, id=ft_id,
+                                 qualifiers={"description":description})
+
 #This is a generator function!
 def SwissIterator(handle):
     """Breaks up a Swiss-Prot/UniProt file into SeqRecord objects.
@@ -43,6 +91,8 @@ def SwissIterator(handle):
                                      id=swiss_record.accessions[0],
                                      name=swiss_record.entry_name,
                                      description=swiss_record.description,
+                                     features=[_make_seqfeature(*f) for f \
+                                               in swiss_record.features],
                                     )
         record.description = swiss_record.description
         for cross_reference in swiss_record.cross_references:
@@ -114,5 +164,6 @@ if __name__ == "__main__":
             print record.annotations['keywords']
             print repr(record.annotations['organism'])
             print record.seq.tostring()[:20] + "..."
+            for f in record.features: print f
         handle.close()
 
