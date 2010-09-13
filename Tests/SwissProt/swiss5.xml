@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <uniprot xmlns="http://uniprot.org/uniprot" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://uniprot.org/uniprot http://www.uniprot.org/support/docs/uniprot.xsd">
-<entry dataset="Swiss-Prot" created="1986-07-21" modified="2010-06-15" version="158">
+<entry dataset="Swiss-Prot" created="1986-07-21" modified="2010-08-10" version="159">
 <accession>P00750</accession>
 <accession>A8K022</accession>
 <accession>B2R8E8</accession>
@@ -837,7 +837,7 @@
 <text>Characterization of O-linked glycan was studied in Bowes melanoma cell line.</text>
 </comment>
 <comment type="disease">
-<text>Increased activity of TPA is the cause of hyperfibrinolysis [MIM:173370]. Hyperfibrinolysis leads to excessive bleeding. Defective release of TPA causes hypofibrinolysis, leading to thrombosis or embolism.</text>
+<text>Note=Increased activity of TPA results in increased fibrinolysis of fibrin blood clots that is associated with excessive bleeding. Defective release of TPA results in hypofibrinolysis that can lead to thrombosis or embolism.</text>
 </comment>
 <comment type="pharmaceutical">
 <text>Available under the names Activase (Genentech) and Retavase (Centocor and Roche) [Retavase is a fragment of TPA that contains kringle 2 and the protease domain; it was also known as BM 06.022]. Used in Acute Myocardial Infarction (AMI), in Acute Ischemic Stroke (AIS) and Pulmonary Embolism (PE) to initiate fibrinolysis.</text>
@@ -1092,152 +1092,150 @@
 <dbReference type="PDBsum" id="1TPK" key="167" />
 <dbReference type="PDBsum" id="1TPM" key="168" />
 <dbReference type="PDBsum" id="1TPN" key="169" />
-<dbReference type="SMR" id="P00750" key="170">
+<dbReference type="ProteinModelPortal" id="P00750" key="170" />
+<dbReference type="SMR" id="P00750" key="171">
 <property type="residue range" value="126-210, 174-299, 212-334" />
 </dbReference>
-<dbReference type="STRING" id="P00750" key="171" />
-<dbReference type="MEROPS" id="S01.232" key="172" />
-<dbReference type="GlycoSuiteDB" id="P00750" key="173" />
-<dbReference type="PRIDE" id="P00750" key="174" />
-<dbReference type="Ensembl" id="ENST00000220809" key="175">
+<dbReference type="STRING" id="P00750" key="172" />
+<dbReference type="MEROPS" id="S01.232" key="173" />
+<dbReference type="GlycoSuiteDB" id="P00750" key="174" />
+<dbReference type="PRIDE" id="P00750" key="175" />
+<dbReference type="Ensembl" id="ENST00000220809" key="176">
 <property type="protein sequence ID" value="ENSP00000220809" />
 <property type="gene designation" value="ENSG00000104368" />
 <property type="organism name" value="Homo sapiens" />
 </dbReference>
-<dbReference type="GeneID" id="5327" key="176" />
-<dbReference type="KEGG" id="hsa:5327" key="177" />
-<dbReference type="UCSC" id="uc003xos.2" key="178">
+<dbReference type="GeneID" id="5327" key="177" />
+<dbReference type="KEGG" id="hsa:5327" key="178" />
+<dbReference type="UCSC" id="uc003xos.2" key="179">
 <property type="organism name" value="human" />
 </dbReference>
-<dbReference type="UCSC" id="uc003xot.2" key="179">
+<dbReference type="UCSC" id="uc003xot.2" key="180">
 <property type="organism name" value="human" />
 </dbReference>
-<dbReference type="UCSC" id="uc010lxf.1" key="180">
+<dbReference type="UCSC" id="uc010lxf.1" key="181">
 <property type="organism name" value="human" />
 </dbReference>
-<dbReference type="CTD" id="5327" key="181" />
-<dbReference type="GeneCards" id="GC08M042151" key="182" />
-<dbReference type="H-InvDB" id="HIX0007476" key="183" />
-<dbReference type="HGNC" id="HGNC:9051" key="184">
+<dbReference type="CTD" id="5327" key="182" />
+<dbReference type="GeneCards" id="GC08M042050" key="183" />
+<dbReference type="H-InvDB" id="HIX0007476" key="184" />
+<dbReference type="HGNC" id="HGNC:9051" key="185">
 <property type="gene designation" value="PLAT" />
 </dbReference>
-<dbReference type="HPA" id="CAB009335" key="185" />
-<dbReference type="HPA" id="HPA003412" key="186" />
-<dbReference type="MIM" id="173370" key="187">
-<property type="type" value="gene+phenotype" />
+<dbReference type="HPA" id="CAB009335" key="186" />
+<dbReference type="HPA" id="HPA003412" key="187" />
+<dbReference type="MIM" id="173370" key="188">
+<property type="type" value="gene" />
 </dbReference>
-<dbReference type="PharmGKB" id="PA33381" key="188" />
-<dbReference type="eggNOG" id="prNOG16610" key="189" />
-<dbReference type="HOVERGEN" id="HBG008633" key="190" />
-<dbReference type="InParanoid" id="P00750" key="191" />
-<dbReference type="OMA" id="TCGLRQY" key="192" />
-<dbReference type="OrthoDB" id="EOG9TQPVK" key="193" />
-<dbReference type="PhylomeDB" id="P00750" key="194" />
-<dbReference type="BRENDA" id="3.4.21.68" key="195">
+<dbReference type="PharmGKB" id="PA33381" key="189" />
+<dbReference type="eggNOG" id="prNOG16610" key="190" />
+<dbReference type="HOVERGEN" id="HBG008633" key="191" />
+<dbReference type="InParanoid" id="P00750" key="192" />
+<dbReference type="OMA" id="TCGLRQY" key="193" />
+<dbReference type="OrthoDB" id="EOG9TQPVK" key="194" />
+<dbReference type="PhylomeDB" id="P00750" key="195" />
+<dbReference type="BRENDA" id="3.4.21.68" key="196">
 <property type="organism ID" value="247" />
 </dbReference>
-<dbReference type="Pathway_Interaction_DB" id="amb2_neutrophils_pathway" key="196">
+<dbReference type="Pathway_Interaction_DB" id="amb2_neutrophils_pathway" key="197">
 <property type="pathway name" value="amb2 Integrin signaling" />
 </dbReference>
-<dbReference type="Reactome" id="REACT_16888" key="197">
+<dbReference type="Reactome" id="REACT_16888" key="198">
 <property type="pathway name" value="Signaling by PDGF" />
 </dbReference>
-<dbReference type="Reactome" id="REACT_604" key="198">
+<dbReference type="Reactome" id="REACT_604" key="199">
 <property type="pathway name" value="Hemostasis" />
 </dbReference>
-<dbReference type="DrugBank" id="DB00009" key="199">
+<dbReference type="DrugBank" id="DB00009" key="200">
 <property type="generic name" value="Alteplase" />
 </dbReference>
-<dbReference type="DrugBank" id="DB00513" key="200">
+<dbReference type="DrugBank" id="DB00513" key="201">
 <property type="generic name" value="Aminocaproic Acid" />
 </dbReference>
-<dbReference type="DrugBank" id="DB00029" key="201">
+<dbReference type="DrugBank" id="DB00029" key="202">
 <property type="generic name" value="Anistreplase" />
 </dbReference>
-<dbReference type="DrugBank" id="DB01088" key="202">
+<dbReference type="DrugBank" id="DB01088" key="203">
 <property type="generic name" value="Iloprost" />
 </dbReference>
-<dbReference type="DrugBank" id="DB00015" key="203">
+<dbReference type="DrugBank" id="DB00015" key="204">
 <property type="generic name" value="Reteplase" />
 </dbReference>
-<dbReference type="DrugBank" id="DB00031" key="204">
+<dbReference type="DrugBank" id="DB00031" key="205">
 <property type="generic name" value="Tenecteplase" />
 </dbReference>
-<dbReference type="DrugBank" id="DB00302" key="205">
+<dbReference type="DrugBank" id="DB00302" key="206">
 <property type="generic name" value="Tranexamic Acid" />
 </dbReference>
-<dbReference type="DrugBank" id="DB00013" key="206">
+<dbReference type="DrugBank" id="DB00013" key="207">
 <property type="generic name" value="Urokinase" />
 </dbReference>
-<dbReference type="NextBio" id="20622" key="207" />
-<dbReference type="PMAP-CutDB" id="P00750" key="208" />
-<dbReference type="ArrayExpress" id="P00750" key="209" />
-<dbReference type="Bgee" id="P00750" key="210" />
-<dbReference type="Genevestigator" id="P00750" key="211" />
-<dbReference type="GermOnline" id="ENSG00000104368" key="212">
+<dbReference type="NextBio" id="20622" key="208" />
+<dbReference type="PMAP-CutDB" id="P00750" key="209" />
+<dbReference type="ArrayExpress" id="P00750" key="210" />
+<dbReference type="Bgee" id="P00750" key="211" />
+<dbReference type="Genevestigator" id="P00750" key="212" />
+<dbReference type="GermOnline" id="ENSG00000104368" key="213">
 <property type="organism name" value="Homo sapiens" />
 </dbReference>
-<dbReference type="GO" id="GO:0009986" key="213">
+<dbReference type="GO" id="GO:0009986" key="214">
 <property type="term" value="C:cell surface" />
-<property type="evidence" value="IDA:UniProtKB" />
+<property type="evidence" value="IDA:BHF-UCL" />
 </dbReference>
-<dbReference type="GO" id="GO:0005615" key="214">
+<dbReference type="GO" id="GO:0005615" key="215">
 <property type="term" value="C:extracellular space" />
 <property type="evidence" value="IEA:UniProtKB-SubCell" />
 </dbReference>
-<dbReference type="GO" id="GO:0005515" key="215">
+<dbReference type="GO" id="GO:0005515" key="216">
 <property type="term" value="F:protein binding" />
-<property type="evidence" value="IPI:UniProtKB" />
+<property type="evidence" value="IPI:BHF-UCL" />
 </dbReference>
-<dbReference type="GO" id="GO:0004252" key="216">
+<dbReference type="GO" id="GO:0004252" key="217">
 <property type="term" value="F:serine-type endopeptidase activity" />
-<property type="evidence" value="IDA:UniProtKB" />
+<property type="evidence" value="IDA:BHF-UCL" />
 </dbReference>
-<dbReference type="GO" id="GO:0007596" key="217">
+<dbReference type="GO" id="GO:0007596" key="218">
 <property type="term" value="P:blood coagulation" />
 <property type="evidence" value="TAS:ProtInc" />
 </dbReference>
-<dbReference type="GO" id="GO:0045861" key="218">
+<dbReference type="GO" id="GO:0045861" key="219">
 <property type="term" value="P:negative regulation of proteolysis" />
-<property type="evidence" value="IDA:UniProtKB" />
+<property type="evidence" value="IDA:BHF-UCL" />
 </dbReference>
-<dbReference type="GO" id="GO:0006464" key="219">
+<dbReference type="GO" id="GO:0006464" key="220">
 <property type="term" value="P:protein modification process" />
 <property type="evidence" value="TAS:ProtInc" />
 </dbReference>
-<dbReference type="GO" id="GO:0006508" key="220">
+<dbReference type="GO" id="GO:0006508" key="221">
 <property type="term" value="P:proteolysis" />
 <property type="evidence" value="TAS:ProtInc" />
 </dbReference>
-<dbReference type="InterPro" id="IPR016060" key="221">
+<dbReference type="InterPro" id="IPR016060" key="222">
 <property type="entry name" value="Complement_control_module" />
 </dbReference>
-<dbReference type="InterPro" id="IPR006209" key="222">
+<dbReference type="InterPro" id="IPR006209" key="223">
 <property type="entry name" value="EGF" />
 </dbReference>
-<dbReference type="InterPro" id="IPR006210" key="223">
+<dbReference type="InterPro" id="IPR006210" key="224">
 <property type="entry name" value="EGF-like" />
 </dbReference>
-<dbReference type="InterPro" id="IPR013032" key="224">
+<dbReference type="InterPro" id="IPR013032" key="225">
 <property type="entry name" value="EGF-like_reg_CS" />
 </dbReference>
-<dbReference type="InterPro" id="IPR000742" key="225">
+<dbReference type="InterPro" id="IPR000742" key="226">
 <property type="entry name" value="EGF_3" />
 </dbReference>
-<dbReference type="InterPro" id="IPR000083" key="226">
+<dbReference type="InterPro" id="IPR000083" key="227">
 <property type="entry name" value="Fibrnctn1" />
 </dbReference>
-<dbReference type="InterPro" id="IPR000001" key="227">
+<dbReference type="InterPro" id="IPR000001" key="228">
 <property type="entry name" value="Kringle" />
 </dbReference>
-<dbReference type="InterPro" id="IPR013806" key="228">
+<dbReference type="InterPro" id="IPR013806" key="229">
 <property type="entry name" value="Kringle-like" />
 </dbReference>
-<dbReference type="InterPro" id="IPR018056" key="229">
+<dbReference type="InterPro" id="IPR018056" key="230">
 <property type="entry name" value="Kringle_CS" />
-</dbReference>
-<dbReference type="InterPro" id="IPR018059" key="230">
-<property type="entry name" value="Kringle_sub" />
 </dbReference>
 <dbReference type="InterPro" id="IPR018114" key="231">
 <property type="entry name" value="Peptidase_S1/S6_AS" />
@@ -1278,70 +1276,67 @@
 <dbReference type="PRINTS" id="PR00722" key="241">
 <property type="entry name" value="CHYMOTRYPSIN" />
 </dbReference>
-<dbReference type="PRINTS" id="PR00018" key="242">
-<property type="entry name" value="KRINGLE" />
-</dbReference>
-<dbReference type="SMART" id="SM00181" key="243">
+<dbReference type="SMART" id="SM00181" key="242">
 <property type="entry name" value="EGF" />
 <property type="match status" value="1" />
 </dbReference>
-<dbReference type="SMART" id="SM00058" key="244">
+<dbReference type="SMART" id="SM00058" key="243">
 <property type="entry name" value="FN1" />
 <property type="match status" value="1" />
 </dbReference>
-<dbReference type="SMART" id="SM00130" key="245">
+<dbReference type="SMART" id="SM00130" key="244">
 <property type="entry name" value="KR" />
 <property type="match status" value="2" />
 </dbReference>
-<dbReference type="SMART" id="SM00020" key="246">
+<dbReference type="SMART" id="SM00020" key="245">
 <property type="entry name" value="Tryp_SPc" />
 <property type="match status" value="1" />
 </dbReference>
-<dbReference type="SUPFAM" id="SSF57440" key="247">
+<dbReference type="SUPFAM" id="SSF57440" key="246">
 <property type="entry name" value="Kringle-like" />
 <property type="match status" value="2" />
 </dbReference>
-<dbReference type="SUPFAM" id="SSF50494" key="248">
+<dbReference type="SUPFAM" id="SSF50494" key="247">
 <property type="entry name" value="Pept_Ser_Cys" />
 <property type="match status" value="1" />
 </dbReference>
-<dbReference type="PROSITE" id="PS00022" key="249">
+<dbReference type="PROSITE" id="PS00022" key="248">
 <property type="entry name" value="EGF_1" />
 <property type="match status" value="1" />
 </dbReference>
-<dbReference type="PROSITE" id="PS01186" key="250">
+<dbReference type="PROSITE" id="PS01186" key="249">
 <property type="entry name" value="EGF_2" />
 <property type="match status" value="1" />
 </dbReference>
-<dbReference type="PROSITE" id="PS50026" key="251">
+<dbReference type="PROSITE" id="PS50026" key="250">
 <property type="entry name" value="EGF_3" />
 <property type="match status" value="1" />
 </dbReference>
-<dbReference type="PROSITE" id="PS01253" key="252">
+<dbReference type="PROSITE" id="PS01253" key="251">
 <property type="entry name" value="FN1_1" />
 <property type="match status" value="1" />
 </dbReference>
-<dbReference type="PROSITE" id="PS51091" key="253">
+<dbReference type="PROSITE" id="PS51091" key="252">
 <property type="entry name" value="FN1_2" />
 <property type="match status" value="1" />
 </dbReference>
-<dbReference type="PROSITE" id="PS00021" key="254">
+<dbReference type="PROSITE" id="PS00021" key="253">
 <property type="entry name" value="KRINGLE_1" />
 <property type="match status" value="2" />
 </dbReference>
-<dbReference type="PROSITE" id="PS50070" key="255">
+<dbReference type="PROSITE" id="PS50070" key="254">
 <property type="entry name" value="KRINGLE_2" />
 <property type="match status" value="2" />
 </dbReference>
-<dbReference type="PROSITE" id="PS50240" key="256">
+<dbReference type="PROSITE" id="PS50240" key="255">
 <property type="entry name" value="TRYPSIN_DOM" />
 <property type="match status" value="1" />
 </dbReference>
-<dbReference type="PROSITE" id="PS00134" key="257">
+<dbReference type="PROSITE" id="PS00134" key="256">
 <property type="entry name" value="TRYPSIN_HIS" />
 <property type="match status" value="1" />
 </dbReference>
-<dbReference type="PROSITE" id="PS00135" key="258">
+<dbReference type="PROSITE" id="PS00135" key="257">
 <property type="entry name" value="TRYPSIN_SER" />
 <property type="match status" value="1" />
 </dbReference>
@@ -1936,13 +1931,13 @@
 <end position="559" />
 </location>
 </feature>
-<evidence key="EC1" category="curator" type="Literature" attribute="PubMed=11384978" date="2010-04-01" />
-<evidence key="EC2" category="curator" type="Literature" attribute="PubMed=8613982" date="2010-04-01" />
-<evidence key="EC3" category="curator" type="Literature" attribute="PubMed=9305622" date="2010-04-01" />
-<evidence key="EC4" category="curator" type="Literature" attribute="PubMed=2513186" date="2010-04-01" />
-<evidence key="EC5" category="curator" type="Literature" attribute="PubMed=1900431" date="2010-04-01" />
-<evidence key="EC6" category="curator" type="Literature" attribute="PubMed=1645336" date="2010-04-01" />
-<evidence key="EC7" category="curator" type="Literature" attribute="Reference=12" date="2010-04-01" />
+<evidence key="EC1" category="curator" type="Literature" attribute="PubMed=11384978" date="2010-07-01" />
+<evidence key="EC2" category="curator" type="Literature" attribute="PubMed=8613982" date="2010-07-01" />
+<evidence key="EC3" category="curator" type="Literature" attribute="PubMed=9305622" date="2010-07-01" />
+<evidence key="EC4" category="curator" type="Literature" attribute="PubMed=2513186" date="2010-07-01" />
+<evidence key="EC5" category="curator" type="Literature" attribute="PubMed=1900431" date="2010-07-01" />
+<evidence key="EC6" category="curator" type="Literature" attribute="PubMed=1645336" date="2010-07-01" />
+<evidence key="EC7" category="curator" type="Literature" attribute="Reference=12" date="2010-07-01" />
 <sequence length="562" mass="62917" checksum="B7EC9B1A5E3FDC4D" modified="1986-07-21" version="1" precursor="true">
 MDAMKRGLCCVLLLCGAVFVSPSQEIHARFRRGARSYQVICRDEKTQMIYQQHQSWLRPV
 LRSNRVEYCWCNSGRAQCHSVPVKSCSEPRCFNGGTCQQALYFSDFVCQCPEGFAGKCCE
@@ -1956,12 +1951,12 @@ LLNRTVTDNMLCAGDTRSGGPQANLHDACQGDSGGPLVCLNDGRMTLVGIISWGLGCGQK
 DVPGVYTKVTNYLDWIRDNMRP
 </sequence>
 </entry>
-<entry dataset="Swiss-Prot" created="1998-07-15" modified="2010-01-19" version="30">
+<entry dataset="Swiss-Prot" created="1998-07-15" modified="2010-08-10" version="31">
 <accession>P56540</accession>
 <name>CBBQ_CHRVI</name>
 <protein>
 <recommendedName>
-<fullName>Protein cbbQ</fullName>
+<fullName>Protein CbbQ</fullName>
 </recommendedName>
 </protein>
 <gene>
@@ -2014,34 +2009,35 @@ DVPGVYTKVTNYLDWIRDNMRP
 <text>May affect the post-translational activation and/or assembly of the oligomeric structure of RuBisCO.</text>
 </comment>
 <comment type="similarity">
-<text>Belongs to the cbbQ/nirQ/norQ/gpvN family.</text>
+<text>Belongs to the CbbQ/NirQ/NorQ/GpvN family.</text>
 </comment>
 <dbReference type="EMBL" id="M26396" key="9">
 <property type="status" value="NOT_ANNOTATED_CDS" />
 <property type="molecule type" value="Genomic_DNA" />
 </dbReference>
-<dbReference type="SMR" id="P56540" key="10">
+<dbReference type="ProteinModelPortal" id="P56540" key="10" />
+<dbReference type="SMR" id="P56540" key="11">
 <property type="residue range" value="10-72" />
 </dbReference>
-<dbReference type="GO" id="GO:0005524" key="11">
+<dbReference type="GO" id="GO:0005524" key="12">
 <property type="term" value="F:ATP binding" />
 <property type="evidence" value="IEA:UniProtKB-KW" />
 </dbReference>
-<dbReference type="GO" id="GO:0016887" key="12">
+<dbReference type="GO" id="GO:0016887" key="13">
 <property type="term" value="F:ATPase activity" />
 <property type="evidence" value="IEA:InterPro" />
 </dbReference>
-<dbReference type="InterPro" id="IPR011704" key="13">
+<dbReference type="InterPro" id="IPR011704" key="14">
 <property type="entry name" value="ATPase_AAA-5" />
 </dbReference>
-<dbReference type="Pfam" id="PF07728" key="14">
+<dbReference type="Pfam" id="PF07728" key="15">
 <property type="entry name" value="AAA_5" />
 <property type="match status" value="1" />
 </dbReference>
 <proteinExistence type="inferred from homology" />
 <keyword id="KW-0067">ATP-binding</keyword>
 <keyword id="KW-0547">Nucleotide-binding</keyword>
-<feature type="chain" description="Protein cbbQ" id="PRO_0000219562">
+<feature type="chain" description="Protein CbbQ" id="PRO_0000219562">
 <location>
 <begin position="1" />
 <end position="74" status="greater than" />
@@ -2063,12 +2059,12 @@ MSDIDRNQFLIDHEPYYRPVSNEVALYEAAYAARMPVMLKGPTGCGKTRFVEYMAWKLGK
 PLITVACNEDMTAS
 </sequence>
 </entry>
-<entry dataset="Swiss-Prot" created="1998-07-15" modified="2010-07-13" version="35">
+<entry dataset="Swiss-Prot" created="1998-07-15" modified="2010-08-10" version="36">
 <accession>Q51858</accession>
 <name>CBBQ_PSEHY</name>
 <protein>
 <recommendedName>
-<fullName>Protein cbbQ</fullName>
+<fullName>Protein CbbQ</fullName>
 </recommendedName>
 </protein>
 <gene>
@@ -2110,41 +2106,42 @@ PLITVACNEDMTAS
 <text>May affect the post-translational activation and/or assembly of the oligomeric structure of RuBisCO.</text>
 </comment>
 <comment type="similarity">
-<text>Belongs to the cbbQ/nirQ/norQ/gpvN family.</text>
+<text>Belongs to the CbbQ/NirQ/NorQ/GpvN family.</text>
 </comment>
 <dbReference type="EMBL" id="D30764" key="6">
 <property type="protein sequence ID" value="BAA06439.1" />
 <property type="molecule type" value="Genomic_DNA" />
 </dbReference>
-<dbReference type="SMR" id="Q51858" key="7">
+<dbReference type="ProteinModelPortal" id="Q51858" key="7" />
+<dbReference type="SMR" id="Q51858" key="8">
 <property type="residue range" value="21-191" />
 </dbReference>
-<dbReference type="GO" id="GO:0005524" key="8">
+<dbReference type="GO" id="GO:0005524" key="9">
 <property type="term" value="F:ATP binding" />
 <property type="evidence" value="IEA:UniProtKB-KW" />
 </dbReference>
-<dbReference type="GO" id="GO:0016887" key="9">
+<dbReference type="GO" id="GO:0016887" key="10">
 <property type="term" value="F:ATPase activity" />
 <property type="evidence" value="IEA:InterPro" />
 </dbReference>
-<dbReference type="InterPro" id="IPR011704" key="10">
+<dbReference type="InterPro" id="IPR011704" key="11">
 <property type="entry name" value="ATPase_AAA-5" />
 </dbReference>
-<dbReference type="InterPro" id="IPR013615" key="11">
+<dbReference type="InterPro" id="IPR013615" key="12">
 <property type="entry name" value="CbbQ_C" />
 </dbReference>
-<dbReference type="Pfam" id="PF07728" key="12">
+<dbReference type="Pfam" id="PF07728" key="13">
 <property type="entry name" value="AAA_5" />
 <property type="match status" value="1" />
 </dbReference>
-<dbReference type="Pfam" id="PF08406" key="13">
+<dbReference type="Pfam" id="PF08406" key="14">
 <property type="entry name" value="CbbQ_C" />
 <property type="match status" value="1" />
 </dbReference>
 <proteinExistence type="inferred from homology" />
 <keyword id="KW-0067">ATP-binding</keyword>
 <keyword id="KW-0547">Nucleotide-binding</keyword>
-<feature type="chain" description="Protein cbbQ" id="PRO_0000219563">
+<feature type="chain" description="Protein CbbQ" id="PRO_0000219563">
 <location>
 <begin position="1" />
 <end position="267" />
@@ -2170,7 +2167,7 @@ ESEIVAHESGVDAATAKKLVEVAIRSRHLKGHGLDEGISTRLLVYAGSLITKGIAPLIAC
 EMALICPITDDPDLRYALRAAAQTLFA
 </sequence>
 </entry>
-<entry dataset="Swiss-Prot" created="1998-07-15" modified="2010-07-13" version="65">
+<entry dataset="Swiss-Prot" created="1998-07-15" modified="2010-08-10" version="66">
 <accession>Q51481</accession>
 <name>NIRQ_PSEAE</name>
 <protein>
@@ -2267,7 +2264,7 @@ EMALICPITDDPDLRYALRAAAQTLFA
 <text>Under denitrifying conditions.</text>
 </comment>
 <comment type="similarity">
-<text>Belongs to the cbbQ/nirQ/norQ/gpvN family.</text>
+<text>Belongs to the CbbQ/NirQ/NorQ/GpvN family.</text>
 </comment>
 <dbReference type="EMBL" id="D37883" key="9">
 <property type="protein sequence ID" value="BAA07123.1" />
@@ -2281,55 +2278,56 @@ EMALICPITDDPDLRYALRAAAQTLFA
 <property type="entry name" value="JC2288" />
 </dbReference>
 <dbReference type="RefSeq" id="NP_249211.1" key="12" />
-<dbReference type="SMR" id="Q51481" key="13">
+<dbReference type="ProteinModelPortal" id="Q51481" key="13" />
+<dbReference type="SMR" id="Q51481" key="14">
 <property type="residue range" value="14-183" />
 </dbReference>
-<dbReference type="GeneID" id="882214" key="14" />
-<dbReference type="GenomeReviews" id="AE004091_GR" key="15">
+<dbReference type="GeneID" id="882214" key="15" />
+<dbReference type="GenomeReviews" id="AE004091_GR" key="16">
 <property type="gene designation" value="PA0520" />
 </dbReference>
-<dbReference type="KEGG" id="pae:PA0520" key="16" />
-<dbReference type="NMPDR" id="fig|208964.1.peg.521" key="17" />
-<dbReference type="PseudoCAP" id="PA0520" key="18" />
-<dbReference type="HOGENOM" id="HBG295312" key="19" />
-<dbReference type="OMA" id="HEARILV" key="20" />
-<dbReference type="ProtClustDB" id="CLSK865916" key="21" />
-<dbReference type="BioCyc" id="PAER208964:PA0520-MONOMER" key="22" />
-<dbReference type="GO" id="GO:0005737" key="23">
+<dbReference type="KEGG" id="pae:PA0520" key="17" />
+<dbReference type="NMPDR" id="fig|208964.1.peg.521" key="18" />
+<dbReference type="PseudoCAP" id="PA0520" key="19" />
+<dbReference type="HOGENOM" id="HBG295312" key="20" />
+<dbReference type="OMA" id="HEARILV" key="21" />
+<dbReference type="ProtClustDB" id="CLSK865916" key="22" />
+<dbReference type="BioCyc" id="PAER208964:PA0520-MONOMER" key="23" />
+<dbReference type="GO" id="GO:0005737" key="24">
 <property type="term" value="C:cytoplasm" />
 <property type="evidence" value="IEA:UniProtKB-SubCell" />
 </dbReference>
-<dbReference type="GO" id="GO:0005524" key="24">
+<dbReference type="GO" id="GO:0005524" key="25">
 <property type="term" value="F:ATP binding" />
 <property type="evidence" value="IEA:UniProtKB-KW" />
 </dbReference>
-<dbReference type="GO" id="GO:0016887" key="25">
+<dbReference type="GO" id="GO:0016887" key="26">
 <property type="term" value="F:ATPase activity" />
 <property type="evidence" value="IEA:InterPro" />
 </dbReference>
-<dbReference type="GO" id="GO:0003677" key="26">
+<dbReference type="GO" id="GO:0003677" key="27">
 <property type="term" value="F:DNA binding" />
 <property type="evidence" value="IEA:UniProtKB-KW" />
 </dbReference>
-<dbReference type="GO" id="GO:0045449" key="27">
+<dbReference type="GO" id="GO:0045449" key="28">
 <property type="term" value="P:regulation of transcription" />
 <property type="evidence" value="IEA:UniProtKB-KW" />
 </dbReference>
-<dbReference type="GO" id="GO:0006350" key="28">
+<dbReference type="GO" id="GO:0006350" key="29">
 <property type="term" value="P:transcription" />
 <property type="evidence" value="IEA:UniProtKB-KW" />
 </dbReference>
-<dbReference type="InterPro" id="IPR011704" key="29">
+<dbReference type="InterPro" id="IPR011704" key="30">
 <property type="entry name" value="ATPase_AAA-5" />
 </dbReference>
-<dbReference type="InterPro" id="IPR013615" key="30">
+<dbReference type="InterPro" id="IPR013615" key="31">
 <property type="entry name" value="CbbQ_C" />
 </dbReference>
-<dbReference type="Pfam" id="PF07728" key="31">
+<dbReference type="Pfam" id="PF07728" key="32">
 <property type="entry name" value="AAA_5" />
 <property type="match status" value="1" />
 </dbReference>
-<dbReference type="Pfam" id="PF08406" key="32">
+<dbReference type="Pfam" id="PF08406" key="33">
 <property type="entry name" value="CbbQ_C" />
 <property type="match status" value="1" />
 </dbReference>
@@ -2372,6 +2370,392 @@ DLGAADLLGRHLIGADGTWWQDGPLTRAVREGGICYLDEVVEARQDTTVAIHPLADDRRE
 LYLERTGETLQAPPSFMLVVSYNPGYQNLLKGLKPSTRQRFVALRFDYPAAQQEARILVG
 ESGCAETLAQRLVQLGQALRRLEQHDLEEVASTRLLIFAARLIGDGMDPREACRVALAEP
 LSDDPATVAALMDIVDLHVA
+</sequence>
+</entry>
+<entry dataset="Swiss-Prot" created="2004-02-16" modified="2010-08-10" version="71">
+<accession>Q8NE62</accession>
+<accession>Q9NY17</accession>
+<name>CHDH_HUMAN</name>
+<protein>
+<recommendedName ref="1">
+<fullName>Choline dehydrogenase, mitochondrial</fullName>
+<shortName>CHD</shortName>
+<shortName>CDH</shortName>
+</recommendedName>
+</protein>
+<gene>
+<name type="primary">CHDH</name>
+</gene>
+<organism>
+<name type="scientific">Homo sapiens</name>
+<name type="common">Human</name>
+<dbReference type="NCBI Taxonomy" id="9606" key="2" />
+<lineage>
+<taxon>Eukaryota</taxon>
+<taxon>Metazoa</taxon>
+<taxon>Chordata</taxon>
+<taxon>Craniata</taxon>
+<taxon>Vertebrata</taxon>
+<taxon>Euteleostomi</taxon>
+<taxon>Mammalia</taxon>
+<taxon>Eutheria</taxon>
+<taxon>Euarchontoglires</taxon>
+<taxon>Primates</taxon>
+<taxon>Haplorrhini</taxon>
+<taxon>Catarrhini</taxon>
+<taxon>Hominidae</taxon>
+<taxon>Homo</taxon>
+</lineage>
+</organism>
+<reference key="3">
+<citation type="journal article" date="2006" name="Nature" volume="440" first="1194" last="1198">
+<title>The DNA sequence, annotation and analysis of human chromosome 3.</title>
+<authorList>
+<person name="Muzny D.M." />
+<person name="Scherer S.E." />
+<person name="Kaul R." />
+<person name="Wang J." />
+<person name="Yu J." />
+<person name="Sudbrak R." />
+<person name="Buhay C.J." />
+<person name="Chen R." />
+<person name="Cree A." />
+<person name="Ding Y." />
+<person name="Dugan-Rocha S." />
+<person name="Gill R." />
+<person name="Gunaratne P." />
+<person name="Harris R.A." />
+<person name="Hawes A.C." />
+<person name="Hernandez J." />
+<person name="Hodgson A.V." />
+<person name="Hume J." />
+<person name="Jackson A." />
+<person name="Khan Z.M." />
+<person name="Kovar-Smith C." />
+<person name="Lewis L.R." />
+<person name="Lozado R.J." />
+<person name="Metzker M.L." />
+<person name="Milosavljevic A." />
+<person name="Miner G.R." />
+<person name="Morgan M.B." />
+<person name="Nazareth L.V." />
+<person name="Scott G." />
+<person name="Sodergren E." />
+<person name="Song X.-Z." />
+<person name="Steffen D." />
+<person name="Wei S." />
+<person name="Wheeler D.A." />
+<person name="Wright M.W." />
+<person name="Worley K.C." />
+<person name="Yuan Y." />
+<person name="Zhang Z." />
+<person name="Adams C.Q." />
+<person name="Ansari-Lari M.A." />
+<person name="Ayele M." />
+<person name="Brown M.J." />
+<person name="Chen G." />
+<person name="Chen Z." />
+<person name="Clendenning J." />
+<person name="Clerc-Blankenburg K.P." />
+<person name="Chen R." />
+<person name="Chen Z." />
+<person name="Davis C." />
+<person name="Delgado O." />
+<person name="Dinh H.H." />
+<person name="Dong W." />
+<person name="Draper H." />
+<person name="Ernst S." />
+<person name="Fu G." />
+<person name="Gonzalez-Garay M.L." />
+<person name="Garcia D.K." />
+<person name="Gillett W." />
+<person name="Gu J." />
+<person name="Hao B." />
+<person name="Haugen E." />
+<person name="Havlak P." />
+<person name="He X." />
+<person name="Hennig S." />
+<person name="Hu S." />
+<person name="Huang W." />
+<person name="Jackson L.R." />
+<person name="Jacob L.S." />
+<person name="Kelly S.H." />
+<person name="Kube M." />
+<person name="Levy R." />
+<person name="Li Z." />
+<person name="Liu B." />
+<person name="Liu J." />
+<person name="Liu W." />
+<person name="Lu J." />
+<person name="Maheshwari M." />
+<person name="Nguyen B.-V." />
+<person name="Okwuonu G.O." />
+<person name="Palmeiri A." />
+<person name="Pasternak S." />
+<person name="Perez L.M." />
+<person name="Phelps K.A." />
+<person name="Plopper F.J." />
+<person name="Qiang B." />
+<person name="Raymond C." />
+<person name="Rodriguez R." />
+<person name="Saenphimmachak C." />
+<person name="Santibanez J." />
+<person name="Shen H." />
+<person name="Shen Y." />
+<person name="Subramanian S." />
+<person name="Tabor P.E." />
+<person name="Verduzco D." />
+<person name="Waldron L." />
+<person name="Wang J." />
+<person name="Wang J." />
+<person name="Wang Q." />
+<person name="Williams G.A." />
+<person name="Wong G.K.-S." />
+<person name="Yao Z." />
+<person name="Zhang J." />
+<person name="Zhang X." />
+<person name="Zhao G." />
+<person name="Zhou J." />
+<person name="Zhou Y." />
+<person name="Nelson D." />
+<person name="Lehrach H." />
+<person name="Reinhardt R." />
+<person name="Naylor S.L." />
+<person name="Yang H." />
+<person name="Olson M." />
+<person name="Weinstock G." />
+<person name="Gibbs R.A." />
+</authorList>
+<dbReference type="PubMed" id="16641997" key="4" />
+<dbReference type="DOI" id="10.1038/nature04728" key="5" />
+</citation>
+<scope>NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA]</scope>
+</reference>
+<reference key="6">
+<citation type="journal article" date="2004" name="Genome Res." volume="14" first="2121" last="2127">
+<title>The status, quality, and expansion of the NIH full-length cDNA project: the Mammalian Gene Collection (MGC).</title>
+<authorList>
+<consortium name="The MGC Project Team" />
+</authorList>
+<dbReference type="PubMed" id="15489334" key="7" />
+<dbReference type="DOI" id="10.1101/gr.2596504" key="8" />
+</citation>
+<scope>NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA]</scope>
+<scope>VARIANT ARG-78</scope>
+<source>
+<tissue>Testis</tissue>
+</source>
+</reference>
+<reference key="9">
+<citation type="submission" date="2000-02" db="EMBL/GenBank/DDBJ databases">
+<title>Analysis of a putative tumor suppressor gene region of 100 kb at chromosome 3p21.1 in conventional renal cell carcinoma.</title>
+<authorList>
+<person name="Bugert P." />
+<person name="Hanke S." />
+<person name="Chudek J." />
+<person name="Kovacs G." />
+</authorList>
+</citation>
+<scope>NUCLEOTIDE SEQUENCE [MRNA] OF 113-594</scope>
+<source>
+<tissue>Kidney</tissue>
+</source>
+</reference>
+<comment type="catalytic activity">
+<text>Choline + acceptor = betaine aldehyde + reduced acceptor.</text>
+</comment>
+<comment type="cofactor">
+<text>FAD (By similarity).</text>
+</comment>
+<comment type="pathway">
+<text>Amine and polyamine biosynthesis; betaine biosynthesis via choline pathway; betaine aldehyde from choline (cytochrome c reductase route): step 1/1.</text>
+</comment>
+<comment type="subcellular location">
+<subcellularLocation>
+<location status="potential">Mitochondrion</location>
+</subcellularLocation>
+</comment>
+<comment type="similarity">
+<text>Belongs to the GMC oxidoreductase family.</text>
+</comment>
+<dbReference type="EC" id="1.1.99.1" key="1" />
+<dbReference type="EMBL" id="AC012467" key="10">
+<property type="status" value="NOT_ANNOTATED_CDS" />
+<property type="molecule type" value="Genomic_DNA" />
+</dbReference>
+<dbReference type="EMBL" id="BC034502" key="11">
+<property type="protein sequence ID" value="AAH34502.1" />
+<property type="molecule type" value="mRNA" />
+</dbReference>
+<dbReference type="EMBL" id="AJ272267" key="12">
+<property type="protein sequence ID" value="CAB75961.1" />
+<property type="molecule type" value="mRNA" />
+</dbReference>
+<dbReference type="IPI" id="IPI00168603" key="13" />
+<dbReference type="RefSeq" id="NP_060867.2" key="14" />
+<dbReference type="UniGene" id="Hs.126688" key="15" />
+<dbReference type="ProteinModelPortal" id="Q8NE62" key="16" />
+<dbReference type="STRING" id="Q8NE62" key="17" />
+<dbReference type="PhosphoSite" id="Q8NE62" key="18" />
+<dbReference type="Ensembl" id="ENST00000315251" key="19">
+<property type="protein sequence ID" value="ENSP00000319851" />
+<property type="gene designation" value="ENSG00000016391" />
+<property type="organism name" value="Homo sapiens" />
+</dbReference>
+<dbReference type="GeneID" id="55349" key="20" />
+<dbReference type="KEGG" id="hsa:55349" key="21" />
+<dbReference type="UCSC" id="uc003dgz.1" key="22">
+<property type="organism name" value="human" />
+</dbReference>
+<dbReference type="CTD" id="55349" key="23" />
+<dbReference type="GeneCards" id="GC03M053826" key="24" />
+<dbReference type="HGNC" id="HGNC:24288" key="25">
+<property type="gene designation" value="CHDH" />
+</dbReference>
+<dbReference type="PharmGKB" id="PA134873121" key="26" />
+<dbReference type="eggNOG" id="prNOG07180" key="27" />
+<dbReference type="HOGENOM" id="HBG734713" key="28" />
+<dbReference type="HOVERGEN" id="HBG023639" key="29" />
+<dbReference type="InParanoid" id="Q8NE62" key="30" />
+<dbReference type="OMA" id="SRDEYSY" key="31" />
+<dbReference type="OrthoDB" id="EOG9962C6" key="32" />
+<dbReference type="PhylomeDB" id="Q8NE62" key="33" />
+<dbReference type="BRENDA" id="1.1.99.1" key="34">
+<property type="organism ID" value="247" />
+</dbReference>
+<dbReference type="DrugBank" id="DB00122" key="35">
+<property type="generic name" value="Choline" />
+</dbReference>
+<dbReference type="NextBio" id="59691" key="36" />
+<dbReference type="ArrayExpress" id="Q8NE62" key="37" />
+<dbReference type="Bgee" id="Q8NE62" key="38" />
+<dbReference type="CleanEx" id="HS_CHDH" key="39" />
+<dbReference type="Genevestigator" id="Q8NE62" key="40" />
+<dbReference type="GermOnline" id="ENSG00000016391" key="41">
+<property type="organism name" value="Homo sapiens" />
+</dbReference>
+<dbReference type="GO" id="GO:0008812" key="42">
+<property type="term" value="F:choline dehydrogenase activity" />
+<property type="evidence" value="IEA:EC" />
+</dbReference>
+<dbReference type="GO" id="GO:0050660" key="43">
+<property type="term" value="F:FAD binding" />
+<property type="evidence" value="IEA:InterPro" />
+</dbReference>
+<dbReference type="GO" id="GO:0006066" key="44">
+<property type="term" value="P:alcohol metabolic process" />
+<property type="evidence" value="IEA:InterPro" />
+</dbReference>
+<dbReference type="GO" id="GO:0055114" key="45">
+<property type="term" value="P:oxidation reduction" />
+<property type="evidence" value="IEA:UniProtKB-KW" />
+</dbReference>
+<dbReference type="InterPro" id="IPR012132" key="46">
+<property type="entry name" value="GMC_OxRdtase" />
+</dbReference>
+<dbReference type="InterPro" id="IPR000172" key="47">
+<property type="entry name" value="GMC_OxRdtase_N" />
+</dbReference>
+<dbReference type="InterPro" id="IPR007867" key="48">
+<property type="entry name" value="GMC_OxRtase_C" />
+</dbReference>
+<dbReference type="Pfam" id="PF05199" key="49">
+<property type="entry name" value="GMC_oxred_C" />
+<property type="match status" value="1" />
+</dbReference>
+<dbReference type="Pfam" id="PF00732" key="50">
+<property type="entry name" value="GMC_oxred_N" />
+<property type="match status" value="1" />
+</dbReference>
+<dbReference type="PIRSF" id="PIRSF000137" key="51">
+<property type="entry name" value="Alcohol_oxidase" />
+<property type="match status" value="1" />
+</dbReference>
+<dbReference type="PROSITE" id="PS00623" key="52">
+<property type="entry name" value="GMC_OXRED_1" />
+<property type="match status" value="1" />
+</dbReference>
+<dbReference type="PROSITE" id="PS00624" key="53">
+<property type="entry name" value="GMC_OXRED_2" />
+<property type="match status" value="1" />
+</dbReference>
+<proteinExistence type="evidence at transcript level" />
+<keyword id="KW-0007">Acetylation</keyword>
+<keyword id="KW-0181">Complete proteome</keyword>
+<keyword id="KW-0274">FAD</keyword>
+<keyword id="KW-0285">Flavoprotein</keyword>
+<keyword id="KW-0496">Mitochondrion</keyword>
+<keyword id="KW-0560">Oxidoreductase</keyword>
+<keyword id="KW-0621">Polymorphism</keyword>
+<keyword id="KW-0809">Transit peptide</keyword>
+<feature type="transit peptide" description="Mitochondrion" status="potential">
+<location>
+<begin position="1" />
+<end status="unknown" />
+</location>
+</feature>
+<feature type="chain" description="Choline dehydrogenase, mitochondrial" id="PRO_0000012329">
+<location>
+<begin status="unknown" />
+<end position="594" />
+</location>
+</feature>
+<feature type="nucleotide phosphate-binding region" description="FAD" status="by similarity">
+<location>
+<begin position="42" />
+<end position="71" />
+</location>
+</feature>
+<feature type="active site" status="by similarity">
+<location>
+<position position="511" />
+</location>
+</feature>
+<feature type="modified residue" description="N6-acetyllysine" status="by similarity">
+<location>
+<position position="496" />
+</location>
+</feature>
+<feature type="sequence variant" description="In dbSNP:rs9001." id="VAR_020421">
+<original>E</original>
+<variation>A</variation>
+<location>
+<position position="40" />
+</location>
+</feature>
+<feature type="sequence variant" description="In dbSNP:rs12676." id="VAR_055097" evidence="EC1">
+<original>L</original>
+<variation>R</variation>
+<location>
+<position position="78" />
+</location>
+</feature>
+<feature type="sequence variant" description="In dbSNP:rs34974961." id="VAR_049357">
+<original>N</original>
+<variation>S</variation>
+<location>
+<position position="441" />
+</location>
+</feature>
+<feature type="sequence conflict" description="In Ref. 3; CAB75961." ref="9">
+<original>R</original>
+<variation>A</variation>
+<location>
+<position position="113" />
+</location>
+</feature>
+<evidence key="EC1" category="curator" type="Literature" attribute="PubMed=15489334" date="2010-07-01" />
+<sequence length="594" mass="65358" checksum="E9764CD0F325A501" modified="2009-05-05" version="2" precursor="true">
+MWCLLRGLGRPGALARGALGQQQSLGARALASAGSESRDEYSYVVVGAGSAGCVLAGRLT
+EDPAERVLLLEAGPKDVLAGSKRLSWKIHMPAALVANLCDDRYNWCYHTEVQRGLDGRVL
+YWPRGRVWGGSSSLNAMVYVRGHAEDYERWQRQGARGWDYAHCLPYFRKAQGHELGASRY
+RGADGPLRVSRGKTNHPLHCAFLEATQQAGYPLTEDMNGFQQEGFGWMDMTIHEGKRWSA
+ACAYLHPALSRTNLKAEAETLVSRVLFEGTRAVGVEYVKNGQSHRAYASKEVILSGGAIN
+SPQLLMLSGIGNADDLKKLGIPVVCHLPGVGQNLQDHLEIYIQQACTRPITLHSAQKPLR
+KVCIGLEWLWKFTGEGATAHLETGGFIRSQPGVPHPDIQFHFLPSQVIDHGRVPTQQEAY
+QVHVGPMRGTSVGWLKLRSANPQDHPVIQPNYLSTETDIEDFRLCVKLTREIFAQEALAP
+FRGKELQPGSHIQSDKEIDAFVRAKADSAYHPSCTCKMGQPSDPTAVVDPQTRVLGVENL
+RVVDASIMPSMVSGNLNAPTIMIAEKAADIIKGQPALWDKDVPVYKPRTLATQR
 </sequence>
 </entry>
 <copyright>

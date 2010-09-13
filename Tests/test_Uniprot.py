@@ -115,12 +115,12 @@ class TestUniprot(unittest.TestCase):
         new = SeqIO.read("SwissProt/Q13639.xml", "uniprot-xml")
 	self.compare_txt_xml(old, new)
     
-    def test_swiss4(self):
-	"""Compare SwissProt text and uniprot XML versions of 4 entries."""
-	txt_list = list(SeqIO.parse("SwissProt/swiss4.txt", "swiss"))
-	xml_list = list(SeqIO.parse("SwissProt/swiss4.xml", "uniprot-xml"))
-	fas_list = list(SeqIO.parse("SwissProt/swiss4.fasta", "fasta"))
-	ids = [x.strip() for x in open("SwissProt/swiss4.list")]
+    def test_swiss5(self):
+	"""Compare SwissProt text and uniprot XML versions of 5 entries."""
+	txt_list = list(SeqIO.parse("SwissProt/swiss5.txt", "swiss"))
+	xml_list = list(SeqIO.parse("SwissProt/swiss5.xml", "uniprot-xml"))
+	fas_list = list(SeqIO.parse("SwissProt/swiss5.fasta", "fasta"))
+	ids = [x.strip() for x in open("SwissProt/swiss5.list")]
 	self.assertEqual(len(txt_list), len(ids))
 	self.assertEqual(len(txt_list), len(fas_list))
 	self.assertEqual(len(txt_list), len(xml_list))
@@ -130,13 +130,13 @@ class TestUniprot(unittest.TestCase):
 	    self.assertEqual(str(txt.seq), str(fas.seq))
 	    self.compare_txt_xml(txt, xml)
     
-    def test_swiss4_index(self):
-	"""Index SwissProt text and uniprot XML versions of 4 entries."""
-	txt_list = list(SeqIO.parse("SwissProt/swiss4.txt", "swiss"))
-	xml_list = list(SeqIO.parse("SwissProt/swiss4.xml", "uniprot-xml"))
-	ids = [x.strip() for x in open("SwissProt/swiss4.list")]
-	txt_index = SeqIO.index("SwissProt/swiss4.txt", "swiss")
-	xml_index = SeqIO.index("SwissProt/swiss4.xml", "uniprot-xml")
+    def test_swiss5_index(self):
+	"""Index SwissProt text and uniprot XML versions of 5 entries."""
+	txt_list = list(SeqIO.parse("SwissProt/swiss5.txt", "swiss"))
+	xml_list = list(SeqIO.parse("SwissProt/swiss5.xml", "uniprot-xml"))
+	ids = [x.strip() for x in open("SwissProt/swiss5.list")]
+	txt_index = SeqIO.index("SwissProt/swiss5.txt", "swiss")
+	xml_index = SeqIO.index("SwissProt/swiss5.xml", "uniprot-xml")
 	self.assertEqual(sorted(txt_index), sorted(ids))
 	self.assertEqual(sorted(xml_index), sorted(ids))
 	#Check SeqIO.parse() versus SeqIO.index() for plain text "swiss"

@@ -80,11 +80,11 @@ P00750	UniProtKB	Beta strand	544	548	.	.	.	.
 P00750	UniProtKB	Helix	549	552	.	.	.	.	
 P00750	UniProtKB	Helix	553	559	.	.	.	.	
 ##sequence-region P56540 1 74
-P56540	UniProtKB	Chain	1	74	.	.	.	ID=PRO_0000219562;Note=Protein cbbQ	
+P56540	UniProtKB	Chain	1	74	.	.	.	ID=PRO_0000219562;Note=Protein CbbQ	
 P56540	UniProtKB	Nucleotide binding	41	48	.	.	.	Note=ATP;Status=Potential	
 P56540	UniProtKB	Non-terminal residue	74	74	.	.	.	.	
 ##sequence-region Q51858 1 267
-Q51858	UniProtKB	Chain	1	267	.	.	.	ID=PRO_0000219563;Note=Protein cbbQ	
+Q51858	UniProtKB	Chain	1	267	.	.	.	ID=PRO_0000219563;Note=Protein CbbQ	
 Q51858	UniProtKB	Nucleotide binding	39	46	.	.	.	Note=ATP;Status=Potential	
 Q51858	UniProtKB	Nucleotide binding	99	106	.	.	.	Note=ATP;Status=Potential	
 ##sequence-region Q51481 1 260
@@ -92,3 +92,7 @@ Q51481	UniProtKB	Chain	1	260	.	.	.	ID=PRO_0000219569;Note=Denitrification regula
 Q51481	UniProtKB	Nucleotide binding	32	39	.	.	.	Note=ATP;Status=Potential	
 Q51481	UniProtKB	Nucleotide binding	92	99	.	.	.	Note=ATP;Status=Potential	
 Q51481	UniProtKB	DNA binding	234	253	.	.	.	Note=H-T-H motif;Status=Potential	
+##sequence-region Q8NE62 1 594
+Q8NE62	UniProtKB	Nucleotide binding	42	71	.	.	.	Note=FAD;Status=By similarity	
+Q8NE62	UniProtKB	Active site	511	511	.	.	.	Status=By similarity	
+Q8NE62	UniProtKB	Modified residue	496	496	.	.	.	Note=N6-acetyllysine;Status=By similarity	

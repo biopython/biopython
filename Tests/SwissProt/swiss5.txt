@@ -3,7 +3,7 @@ AC   P00750; A8K022; B2R8E8; Q15103; Q503B0; Q6PJA5; Q7Z7N2; Q86YK8;
 AC   Q9BU99; Q9BZW1;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   21-JUL-1986, sequence version 1.
-DT   15-JUN-2010, entry version 158.
+DT   10-AUG-2010, entry version 159.
 DE   RecName: Full=Tissue-type plasminogen activator;
 DE            Short=t-plasminogen activator;
 DE            Short=t-PA;
@@ -359,10 +359,10 @@ CC   -!- PTM: N-glycosylation of Asn-152; the bound oligomannosidic glycan
 CC       is involved in the interaction with the mannose receptor.
 CC   -!- PTM: Characterization of O-linked glycan was studied in Bowes
 CC       melanoma cell line.
-CC   -!- DISEASE: Increased activity of TPA is the cause of
-CC       hyperfibrinolysis [MIM:173370]. Hyperfibrinolysis leads to
-CC       excessive bleeding. Defective release of TPA causes
-CC       hypofibrinolysis, leading to thrombosis or embolism.
+CC   -!- DISEASE: Note=Increased activity of TPA results in increased
+CC       fibrinolysis of fibrin blood clots that is associated with
+CC       excessive bleeding. Defective release of TPA results in
+CC       hypofibrinolysis that can lead to thrombosis or embolism.
 CC   -!- PHARMACEUTICAL: Available under the names Activase (Genentech) and
 CC       Retavase (Centocor and Roche) [Retavase is a fragment of TPA that
 CC       contains kringle 2 and the protease domain; it was also known as
@@ -454,6 +454,7 @@ DR   PDBsum; 1TPG; -.
 DR   PDBsum; 1TPK; -.
 DR   PDBsum; 1TPM; -.
 DR   PDBsum; 1TPN; -.
+DR   ProteinModelPortal; P00750; -.
 DR   SMR; P00750; 126-210, 174-299, 212-334.
 DR   STRING; P00750; -.
 DR   MEROPS; S01.232; -.
@@ -466,12 +467,12 @@ DR   UCSC; uc003xos.2; human.
 DR   UCSC; uc003xot.2; human.
 DR   UCSC; uc010lxf.1; human.
 DR   CTD; 5327; -.
-DR   GeneCards; GC08M042151; -.
+DR   GeneCards; GC08M042050; -.
 DR   H-InvDB; HIX0007476; -.
 DR   HGNC; HGNC:9051; PLAT.
 DR   HPA; CAB009335; -.
 DR   HPA; HPA003412; -.
-DR   MIM; 173370; gene+phenotype.
+DR   MIM; 173370; gene.
 DR   PharmGKB; PA33381; -.
 DR   eggNOG; prNOG16610; -.
 DR   HOVERGEN; HBG008633; -.
@@ -497,14 +498,14 @@ DR   ArrayExpress; P00750; -.
 DR   Bgee; P00750; -.
 DR   Genevestigator; P00750; -.
 DR   GermOnline; ENSG00000104368; Homo sapiens.
-DR   GO; 0009986; C:cell surface; IDA:UniProtKB.
-DR   GO; 0005615; C:extracellular space; IEA:UniProtKB-SubCell.
-DR   GO; 0005515; F:protein binding; IPI:UniProtKB.
-DR   GO; 0004252; F:serine-type endopeptidase activity; IDA:UniProtKB.
-DR   GO; 0007596; P:blood coagulation; TAS:ProtInc.
-DR   GO; 0045861; P:negative regulation of proteolysis; IDA:UniProtKB.
-DR   GO; 0006464; P:protein modification process; TAS:ProtInc.
-DR   GO; 0006508; P:proteolysis; TAS:ProtInc.
+DR   GO; GO:0009986; C:cell surface; IDA:BHF-UCL.
+DR   GO; GO:0005615; C:extracellular space; IEA:UniProtKB-SubCell.
+DR   GO; GO:0005515; F:protein binding; IPI:BHF-UCL.
+DR   GO; GO:0004252; F:serine-type endopeptidase activity; IDA:BHF-UCL.
+DR   GO; GO:0007596; P:blood coagulation; TAS:ProtInc.
+DR   GO; GO:0045861; P:negative regulation of proteolysis; IDA:BHF-UCL.
+DR   GO; GO:0006464; P:protein modification process; TAS:ProtInc.
+DR   GO; GO:0006508; P:proteolysis; TAS:ProtInc.
 DR   InterPro; IPR016060; Complement_control_module.
 DR   InterPro; IPR006209; EGF.
 DR   InterPro; IPR006210; EGF-like.
@@ -514,7 +515,6 @@ DR   InterPro; IPR000083; Fibrnctn1.
 DR   InterPro; IPR000001; Kringle.
 DR   InterPro; IPR013806; Kringle-like.
 DR   InterPro; IPR018056; Kringle_CS.
-DR   InterPro; IPR018059; Kringle_sub.
 DR   InterPro; IPR018114; Peptidase_S1/S6_AS.
 DR   InterPro; IPR001254; Peptidase_S1_S6.
 DR   InterPro; IPR001314; Peptidase_S1A.
@@ -526,7 +526,6 @@ DR   Pfam; PF00039; fn1; 1.
 DR   Pfam; PF00051; Kringle; 2.
 DR   Pfam; PF00089; Trypsin; 1.
 DR   PRINTS; PR00722; CHYMOTRYPSIN.
-DR   PRINTS; PR00018; KRINGLE.
 DR   SMART; SM00181; EGF; 1.
 DR   SMART; SM00058; FN1; 1.
 DR   SMART; SM00130; KR; 2.
@@ -682,8 +681,8 @@ ID   CBBQ_CHRVI              Reviewed;          74 AA.
 AC   P56540;
 DT   15-JUL-1998, integrated into UniProtKB/Swiss-Prot.
 DT   15-JUL-1998, sequence version 1.
-DT   19-JAN-2010, entry version 30.
-DE   RecName: Full=Protein cbbQ;
+DT   10-AUG-2010, entry version 31.
+DE   RecName: Full=Protein CbbQ;
 DE   Flags: Fragment;
 GN   Name=cbbQ;
 OS   Chromatium vinosum (Allochromatium vinosum).
@@ -709,20 +708,21 @@ RT   gene cluster from Pseudomonas species.";
 RL   Gene 153:75-79(1995).
 CC   -!- FUNCTION: May affect the post-translational activation and/or
 CC       assembly of the oligomeric structure of RuBisCO.
-CC   -!- SIMILARITY: Belongs to the cbbQ/nirQ/norQ/gpvN family.
+CC   -!- SIMILARITY: Belongs to the CbbQ/NirQ/NorQ/GpvN family.
 CC   -----------------------------------------------------------------------
 CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
 DR   EMBL; M26396; -; NOT_ANNOTATED_CDS; Genomic_DNA.
+DR   ProteinModelPortal; P56540; -.
 DR   SMR; P56540; 10-72.
-DR   GO; 0005524; F:ATP binding; IEA:UniProtKB-KW.
-DR   GO; 0016887; F:ATPase activity; IEA:InterPro.
+DR   GO; GO:0005524; F:ATP binding; IEA:UniProtKB-KW.
+DR   GO; GO:0016887; F:ATPase activity; IEA:InterPro.
 DR   InterPro; IPR011704; ATPase_AAA-5.
 DR   Pfam; PF07728; AAA_5; 1.
 PE   3: Inferred from homology;
 KW   ATP-binding; Nucleotide-binding.
-FT   CHAIN         1    >74       Protein cbbQ.
+FT   CHAIN         1    >74       Protein CbbQ.
 FT                                /FTId=PRO_0000219562.
 FT   NP_BIND      41     48       ATP (Potential).
 FT   NON_TER      74     74
@@ -734,8 +734,8 @@ ID   CBBQ_PSEHY              Reviewed;         267 AA.
 AC   Q51858;
 DT   15-JUL-1998, integrated into UniProtKB/Swiss-Prot.
 DT   01-NOV-1996, sequence version 1.
-DT   13-JUL-2010, entry version 35.
-DE   RecName: Full=Protein cbbQ;
+DT   10-AUG-2010, entry version 36.
+DE   RecName: Full=Protein CbbQ;
 GN   Name=cbbQ;
 OS   Pseudomonas hydrogenothermophila.
 OC   Bacteria; Proteobacteria; Betaproteobacteria; Hydrogenophilales;
@@ -753,22 +753,23 @@ RT   gene cluster from Pseudomonas species.";
 RL   Gene 153:75-79(1995).
 CC   -!- FUNCTION: May affect the post-translational activation and/or
 CC       assembly of the oligomeric structure of RuBisCO.
-CC   -!- SIMILARITY: Belongs to the cbbQ/nirQ/norQ/gpvN family.
+CC   -!- SIMILARITY: Belongs to the CbbQ/NirQ/NorQ/GpvN family.
 CC   -----------------------------------------------------------------------
 CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
 CC   -----------------------------------------------------------------------
 DR   EMBL; D30764; BAA06439.1; -; Genomic_DNA.
+DR   ProteinModelPortal; Q51858; -.
 DR   SMR; Q51858; 21-191.
-DR   GO; 0005524; F:ATP binding; IEA:UniProtKB-KW.
-DR   GO; 0016887; F:ATPase activity; IEA:InterPro.
+DR   GO; GO:0005524; F:ATP binding; IEA:UniProtKB-KW.
+DR   GO; GO:0016887; F:ATPase activity; IEA:InterPro.
 DR   InterPro; IPR011704; ATPase_AAA-5.
 DR   InterPro; IPR013615; CbbQ_C.
 DR   Pfam; PF07728; AAA_5; 1.
 DR   Pfam; PF08406; CbbQ_C; 1.
 PE   3: Inferred from homology;
 KW   ATP-binding; Nucleotide-binding.
-FT   CHAIN         1    267       Protein cbbQ.
+FT   CHAIN         1    267       Protein CbbQ.
 FT                                /FTId=PRO_0000219563.
 FT   NP_BIND      39     46       ATP (Potential).
 FT   NP_BIND      99    106       ATP (Potential).
@@ -783,7 +784,7 @@ ID   NIRQ_PSEAE              Reviewed;         260 AA.
 AC   Q51481;
 DT   15-JUL-1998, integrated into UniProtKB/Swiss-Prot.
 DT   01-NOV-1996, sequence version 1.
-DT   13-JUL-2010, entry version 65.
+DT   10-AUG-2010, entry version 66.
 DE   RecName: Full=Denitrification regulatory protein nirQ;
 GN   Name=nirQ; OrderedLocusNames=PA0520;
 OS   Pseudomonas aeruginosa.
@@ -814,7 +815,7 @@ RL   Nature 406:959-964(2000).
 CC   -!- FUNCTION: Activator of nitrite and nitric oxide reductases.
 CC   -!- SUBCELLULAR LOCATION: Cytoplasm (Potential).
 CC   -!- INDUCTION: Under denitrifying conditions.
-CC   -!- SIMILARITY: Belongs to the cbbQ/nirQ/norQ/gpvN family.
+CC   -!- SIMILARITY: Belongs to the CbbQ/NirQ/NorQ/GpvN family.
 CC   -----------------------------------------------------------------------
 CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
 CC   Distributed under the Creative Commons Attribution-NoDerivs License
@@ -823,6 +824,7 @@ DR   EMBL; D37883; BAA07123.1; -; Genomic_DNA.
 DR   EMBL; AE004091; AAG03909.1; -; Genomic_DNA.
 DR   PIR; JC2288; JC2288.
 DR   RefSeq; NP_249211.1; -.
+DR   ProteinModelPortal; Q51481; -.
 DR   SMR; Q51481; 14-183.
 DR   GeneID; 882214; -.
 DR   GenomeReviews; AE004091_GR; PA0520.
@@ -833,12 +835,12 @@ DR   HOGENOM; HBG295312; -.
 DR   OMA; HEARILV; -.
 DR   ProtClustDB; CLSK865916; -.
 DR   BioCyc; PAER208964:PA0520-MONOMER; -.
-DR   GO; 0005737; C:cytoplasm; IEA:UniProtKB-SubCell.
-DR   GO; 0005524; F:ATP binding; IEA:UniProtKB-KW.
-DR   GO; 0016887; F:ATPase activity; IEA:InterPro.
-DR   GO; 0003677; F:DNA binding; IEA:UniProtKB-KW.
-DR   GO; 0045449; P:regulation of transcription; IEA:UniProtKB-KW.
-DR   GO; 0006350; P:transcription; IEA:UniProtKB-KW.
+DR   GO; GO:0005737; C:cytoplasm; IEA:UniProtKB-SubCell.
+DR   GO; GO:0005524; F:ATP binding; IEA:UniProtKB-KW.
+DR   GO; GO:0016887; F:ATPase activity; IEA:InterPro.
+DR   GO; GO:0003677; F:DNA binding; IEA:UniProtKB-KW.
+DR   GO; GO:0045449; P:regulation of transcription; IEA:UniProtKB-KW.
+DR   GO; GO:0006350; P:transcription; IEA:UniProtKB-KW.
 DR   InterPro; IPR011704; ATPase_AAA-5.
 DR   InterPro; IPR013615; CbbQ_C.
 DR   Pfam; PF07728; AAA_5; 1.
@@ -857,4 +859,145 @@ SQ   SEQUENCE   260 AA;  28904 MW;  3FD36F19BEBA38B5 CRC64;
      LYLERTGETL QAPPSFMLVV SYNPGYQNLL KGLKPSTRQR FVALRFDYPA AQQEARILVG
      ESGCAETLAQ RLVQLGQALR RLEQHDLEEV ASTRLLIFAA RLIGDGMDPR EACRVALAEP
      LSDDPATVAA LMDIVDLHVA
+//
+ID   CHDH_HUMAN              Reviewed;         594 AA.
+AC   Q8NE62; Q9NY17;
+DT   16-FEB-2004, integrated into UniProtKB/Swiss-Prot.
+DT   05-MAY-2009, sequence version 2.
+DT   10-AUG-2010, entry version 71.
+DE   RecName: Full=Choline dehydrogenase, mitochondrial;
+DE            Short=CHD;
+DE            Short=CDH;
+DE            EC=1.1.99.1;
+DE   Flags: Precursor;
+GN   Name=CHDH;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RX   PubMed=16641997; DOI=10.1038/nature04728;
+RA   Muzny D.M., Scherer S.E., Kaul R., Wang J., Yu J., Sudbrak R.,
+RA   Buhay C.J., Chen R., Cree A., Ding Y., Dugan-Rocha S., Gill R.,
+RA   Gunaratne P., Harris R.A., Hawes A.C., Hernandez J., Hodgson A.V.,
+RA   Hume J., Jackson A., Khan Z.M., Kovar-Smith C., Lewis L.R.,
+RA   Lozado R.J., Metzker M.L., Milosavljevic A., Miner G.R., Morgan M.B.,
+RA   Nazareth L.V., Scott G., Sodergren E., Song X.-Z., Steffen D., Wei S.,
+RA   Wheeler D.A., Wright M.W., Worley K.C., Yuan Y., Zhang Z., Adams C.Q.,
+RA   Ansari-Lari M.A., Ayele M., Brown M.J., Chen G., Chen Z.,
+RA   Clendenning J., Clerc-Blankenburg K.P., Chen R., Chen Z., Davis C.,
+RA   Delgado O., Dinh H.H., Dong W., Draper H., Ernst S., Fu G.,
+RA   Gonzalez-Garay M.L., Garcia D.K., Gillett W., Gu J., Hao B.,
+RA   Haugen E., Havlak P., He X., Hennig S., Hu S., Huang W., Jackson L.R.,
+RA   Jacob L.S., Kelly S.H., Kube M., Levy R., Li Z., Liu B., Liu J.,
+RA   Liu W., Lu J., Maheshwari M., Nguyen B.-V., Okwuonu G.O., Palmeiri A.,
+RA   Pasternak S., Perez L.M., Phelps K.A., Plopper F.J., Qiang B.,
+RA   Raymond C., Rodriguez R., Saenphimmachak C., Santibanez J., Shen H.,
+RA   Shen Y., Subramanian S., Tabor P.E., Verduzco D., Waldron L., Wang J.,
+RA   Wang J., Wang Q., Williams G.A., Wong G.K.-S., Yao Z., Zhang J.,
+RA   Zhang X., Zhao G., Zhou J., Zhou Y., Nelson D., Lehrach H.,
+RA   Reinhardt R., Naylor S.L., Yang H., Olson M., Weinstock G.,
+RA   Gibbs R.A.;
+RT   "The DNA sequence, annotation and analysis of human chromosome 3.";
+RL   Nature 440:1194-1198(2006).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA], AND VARIANT ARG-78.
+RC   TISSUE=Testis;
+RX   PubMed=15489334; DOI=10.1101/gr.2596504;
+RG   The MGC Project Team;
+RT   "The status, quality, and expansion of the NIH full-length cDNA
+RT   project: the Mammalian Gene Collection (MGC).";
+RL   Genome Res. 14:2121-2127(2004).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [MRNA] OF 113-594.
+RC   TISSUE=Kidney;
+RA   Bugert P., Hanke S., Chudek J., Kovacs G.;
+RT   "Analysis of a putative tumor suppressor gene region of 100 kb at
+RT   chromosome 3p21.1 in conventional renal cell carcinoma.";
+RL   Submitted (FEB-2000) to the EMBL/GenBank/DDBJ databases.
+CC   -!- CATALYTIC ACTIVITY: Choline + acceptor = betaine aldehyde +
+CC       reduced acceptor.
+CC   -!- COFACTOR: FAD (By similarity).
+CC   -!- PATHWAY: Amine and polyamine biosynthesis; betaine biosynthesis
+CC       via choline pathway; betaine aldehyde from choline (cytochrome c
+CC       reductase route): step 1/1.
+CC   -!- SUBCELLULAR LOCATION: Mitochondrion (Potential).
+CC   -!- SIMILARITY: Belongs to the GMC oxidoreductase family.
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; AC012467; -; NOT_ANNOTATED_CDS; Genomic_DNA.
+DR   EMBL; BC034502; AAH34502.1; -; mRNA.
+DR   EMBL; AJ272267; CAB75961.1; -; mRNA.
+DR   IPI; IPI00168603; -.
+DR   RefSeq; NP_060867.2; -.
+DR   UniGene; Hs.126688; -.
+DR   ProteinModelPortal; Q8NE62; -.
+DR   STRING; Q8NE62; -.
+DR   PhosphoSite; Q8NE62; -.
+DR   Ensembl; ENST00000315251; ENSP00000319851; ENSG00000016391; Homo sapiens.
+DR   GeneID; 55349; -.
+DR   KEGG; hsa:55349; -.
+DR   UCSC; uc003dgz.1; human.
+DR   CTD; 55349; -.
+DR   GeneCards; GC03M053826; -.
+DR   HGNC; HGNC:24288; CHDH.
+DR   PharmGKB; PA134873121; -.
+DR   eggNOG; prNOG07180; -.
+DR   HOGENOM; HBG734713; -.
+DR   HOVERGEN; HBG023639; -.
+DR   InParanoid; Q8NE62; -.
+DR   OMA; SRDEYSY; -.
+DR   OrthoDB; EOG9962C6; -.
+DR   PhylomeDB; Q8NE62; -.
+DR   BRENDA; 1.1.99.1; 247.
+DR   DrugBank; DB00122; Choline.
+DR   NextBio; 59691; -.
+DR   ArrayExpress; Q8NE62; -.
+DR   Bgee; Q8NE62; -.
+DR   CleanEx; HS_CHDH; -.
+DR   Genevestigator; Q8NE62; -.
+DR   GermOnline; ENSG00000016391; Homo sapiens.
+DR   GO; GO:0008812; F:choline dehydrogenase activity; IEA:EC.
+DR   GO; GO:0050660; F:FAD binding; IEA:InterPro.
+DR   GO; GO:0006066; P:alcohol metabolic process; IEA:InterPro.
+DR   GO; GO:0055114; P:oxidation reduction; IEA:UniProtKB-KW.
+DR   InterPro; IPR012132; GMC_OxRdtase.
+DR   InterPro; IPR000172; GMC_OxRdtase_N.
+DR   InterPro; IPR007867; GMC_OxRtase_C.
+DR   Pfam; PF05199; GMC_oxred_C; 1.
+DR   Pfam; PF00732; GMC_oxred_N; 1.
+DR   PIRSF; PIRSF000137; Alcohol_oxidase; 1.
+DR   PROSITE; PS00623; GMC_OXRED_1; 1.
+DR   PROSITE; PS00624; GMC_OXRED_2; 1.
+PE   2: Evidence at transcript level;
+KW   Acetylation; Complete proteome; FAD; Flavoprotein; Mitochondrion;
+KW   Oxidoreductase; Polymorphism; Transit peptide.
+FT   TRANSIT       1      ?       Mitochondrion (Potential).
+FT   CHAIN         ?    594       Choline dehydrogenase, mitochondrial.
+FT                                /FTId=PRO_0000012329.
+FT   NP_BIND      42     71       FAD (By similarity).
+FT   ACT_SITE    511    511       By similarity.
+FT   MOD_RES     496    496       N6-acetyllysine (By similarity).
+FT   VARIANT      40     40       E -> A (in dbSNP:rs9001).
+FT                                /FTId=VAR_020421.
+FT   VARIANT      78     78       L -> R (in dbSNP:rs12676).
+FT                                /FTId=VAR_055097.
+FT   VARIANT     441    441       N -> S (in dbSNP:rs34974961).
+FT                                /FTId=VAR_049357.
+FT   CONFLICT    113    113       R -> A (in Ref. 3; CAB75961).
+SQ   SEQUENCE   594 AA;  65358 MW;  E9764CD0F325A501 CRC64;
+     MWCLLRGLGR PGALARGALG QQQSLGARAL ASAGSESRDE YSYVVVGAGS AGCVLAGRLT
+     EDPAERVLLL EAGPKDVLAG SKRLSWKIHM PAALVANLCD DRYNWCYHTE VQRGLDGRVL
+     YWPRGRVWGG SSSLNAMVYV RGHAEDYERW QRQGARGWDY AHCLPYFRKA QGHELGASRY
+     RGADGPLRVS RGKTNHPLHC AFLEATQQAG YPLTEDMNGF QQEGFGWMDM TIHEGKRWSA
+     ACAYLHPALS RTNLKAEAET LVSRVLFEGT RAVGVEYVKN GQSHRAYASK EVILSGGAIN
+     SPQLLMLSGI GNADDLKKLG IPVVCHLPGV GQNLQDHLEI YIQQACTRPI TLHSAQKPLR
+     KVCIGLEWLW KFTGEGATAH LETGGFIRSQ PGVPHPDIQF HFLPSQVIDH GRVPTQQEAY
+     QVHVGPMRGT SVGWLKLRSA NPQDHPVIQP NYLSTETDIE DFRLCVKLTR EIFAQEALAP
+     FRGKELQPGS HIQSDKEIDA FVRAKADSAY HPSCTCKMGQ PSDPTAVVDP QTRVLGVENL
+     RVVDASIMPS MVSGNLNAPT IMIAEKAADI IKGQPALWDK DVPVYKPRTL ATQR
 //
