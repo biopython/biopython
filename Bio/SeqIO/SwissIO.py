@@ -41,11 +41,8 @@ def _make_position(location_string, offset=0):
         except ValueError :
             pass
     elif location_string.startswith("?"): # e.g. "?22"
-        raise NotImplementedError("Cannot parse location '%s'" % location_string)
         try:
-            #TODO - Is there a suitable FuzzyPosition we can use?
-            return SeqFeature.AbstractPosition(max(0,offset+int(location_string[1:])),
-                                               None)
+            return SeqFeature.UncertainPosition(max(0,offset+int(location_string[1:])))
         except ValueError:
             pass
     raise NotImplementedError("Cannot parse location '%s'" % location_string)

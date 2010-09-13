@@ -711,6 +711,14 @@ class ExactPosition(AbstractPosition):
     def __str__(self):
         return str(self.position)
 
+class UncertainPosition(ExactPosition):
+    """Specify a specific position which is uncertain.
+    
+    This is used in UniProt, e.g. ?222 for uncertain position 222, or in the
+    XML format explicitly marked as uncertain. Does not apply to GenBank/EMBL.
+    """
+    pass
+
 class WithinPosition(AbstractPosition):
     """Specify the position of a boundary within some coordinates.
 
