@@ -310,12 +310,16 @@ class Seq(object):
             raise TypeError
 
     def tostring(self):                            # Seq API requirement
-        """Returns the full sequence as a python string (OBSOLETE).
+        """Returns the full sequence as a python string (semi-obsolete).
 
         Although not formally deprecated, you are now encouraged to use
         str(my_seq) instead of my_seq.tostring()."""
-        import warnings
-        warnings.warn("This method is obsolete; please use str(my_seq) instead of my_seq.tostring().", PendingDeprecationWarning)
+        #TODO - Fix all places elsewhere in Biopython using this method,
+        #then start deprecation process?
+        #import warnings
+        #warnings.warn("This method is obsolete; please use str(my_seq) "
+        #              "instead of my_seq.tostring().",
+        #              PendingDeprecationWarning)
         return str(self)
     
     def tomutable(self):   # Needed?  Or use a function?
@@ -1777,7 +1781,7 @@ class MutableSeq(object):
                 self.data.append(c)
 
     def tostring(self):
-        """Returns the full sequence as a python string.
+        """Returns the full sequence as a python string (semi-obsolete).
 
         Although not formally deprecated, you are now encouraged to use
         str(my_seq) instead of my_seq.tostring().
