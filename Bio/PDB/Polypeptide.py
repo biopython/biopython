@@ -26,7 +26,7 @@ in this case selenomethionine (MSE):
     >>> from Bio.PDB.Polypeptide import PPBuilder
     >>> structure = PDBParser().get_structure('1A8O', 'PDB/1A8O.pdb')
     >>> ppb=PPBuilder()
-    >>> for pp in ppb.build_peptides(structure):
+    >>> for pp in ppb.build_peptides(structure, aa_only=False):
     ...     print pp.get_sequence()
     ...     print pp.get_sequence()[-6], pp[-6].get_resname()
     MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG
