@@ -114,16 +114,17 @@ class TestUniprot(unittest.TestCase):
 			 "Features in %s, %i vs %i" %
 			 (old.id, len(old.features), len(new.features)))
 	for f1, f2 in zip(old.features, new.features):
+	    """
 	    self.assertEqual(f1.location.nofuzzy_start, f2.location.nofuzzy_start,
 			     "%s %s vs %s %s" %
 	                     (f1.location, f1.type, f2.location, f2.type))
 	    self.assertEqual(f1.location.nofuzzy_end, f2.location.nofuzzy_end,
 			     "%s %s vs %s %s" %
 	                     (f1.location, f1.type, f2.location, f2.type))
-	    #TODO - Check the fuzzy locations as well...
-	    #self.assertEqual(repr(f1.location), repr(f2.location),
-	    #                "%s %s vs %s %s" %
-	    #                (f1.location, f1.type, f2.location, f2.type))
+	    """
+	    self.assertEqual(repr(f1.location), repr(f2.location),
+	                    "%s %s vs %s %s" %
+	                    (f1.location, f1.type, f2.location, f2.type))
 
     def test_Q13639(self):
 	"""Compare SwissProt text and uniprot XML versions of Q13639."""

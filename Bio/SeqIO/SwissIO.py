@@ -25,6 +25,8 @@ def _make_position(location_string, offset=0):
 
     An offset of -1 is used with a start location to make it pythonic.
     """
+    if location_string=="?":
+	return SeqFeature.UnknownPosition()
     #Hack so that feature from 0 to 0 becomes 0 to 0, not -1 to 0.
     try:
         return SeqFeature.ExactPosition(max(0, offset+int(location_string)))
@@ -49,20 +51,8 @@ def _make_position(location_string, offset=0):
 
 def _make_seqfeature(name, from_res, to_res, description, ft_id):
     """Construct SeqFeature from feature data from parser (PRIVATE)."""
-    #print name, repr(from_res), repr(to_res), "..."
-    if from_res == "?" and to_res == "?":
-        #If this does happen, will need to think about this some more!
-        raise ValueError("Swiss file FT location ? ? (completely unknown)")
-    elif from_res == "?":
-        #e.g. given "? 5" in the Swiss file, treat this as <5..5 in GenBank
-        from_res = "<%s" % str(to_res).lstrip("<").lstrip(">")
-    elif to_res == "?":
-        #e.g. given "10 ?" in the Swiss file, treat this as 10..>10 in GenBank
-	#or worse "<1 ?", treat is as <1..>1 in GenBank notation
-        to_res = ">%s" % str(from_res).lstrip("<").lstrip(">")
     loc = SeqFeature.FeatureLocation(_make_position(from_res,-1),
 	                             _make_position(to_res, 0))
-    #print name, repr(from_res), repr(to_res), loc
     return SeqFeature.SeqFeature(loc, type=name, id=ft_id,
                                  qualifiers={"description":description})
 

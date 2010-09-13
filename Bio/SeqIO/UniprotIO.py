@@ -75,6 +75,9 @@ def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comm
 
     for event, elem in ElementTree.iterparse(handle, events=("start", "end")):
         if event=="end" and elem.tag == NS + "entry":
+            yield Parser(elem, alphabet=alphabet, return_raw_comments=return_raw_comments).parse()
+            elem.clear()
+            """
             try:
                 yield Parser(elem, alphabet=alphabet, return_raw_comments=return_raw_comments).parse()
                 elem.clear()
@@ -85,6 +88,7 @@ def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comm
                     warning.warn(str(err))
                 else:
                     raise err
+            """
 
 class Parser():
     '''Parse a UniProt XML entry to a SeqRecord
@@ -403,7 +407,27 @@ class Parser():
                     reference.journal = journal_name 
             reference.comment = ' | '.join((pub_type,pub_date,scopes_str,tissues_str))
             append_to_annotations('references', reference)
-            
+        
+        def _parse_position(element, offset=0):
+            try:
+                position=int(element.attrib['position']) + offset
+            except KeyError, err:
+                position=None
+            status = element.attrib.get('status', '')
+            if status == 'unknown':
+                assert position is None
+                return SeqFeature.UnknownPosition()
+            elif not status:
+                return SeqFeature.ExactPosition(position)
+            elif status == 'greater than':
+                return SeqFeature.AfterPosition(position)
+            elif status == 'less than':
+                return SeqFeature.BeforePosition(position)
+            elif status == 'uncertain':
+                return SeqFeature.UncertainPosition(position)
+            else:
+                raise NotImplementedError("Position status %r" % status)
+
         def _parse_feature(element):
             feature=SeqFeature.SeqFeature()
             for k,v in element.attrib.items():
@@ -418,29 +442,17 @@ class Parser():
                 feature.id=element.attrib['id']
             for feature_element in element.getchildren():
                 if feature_element.tag==NS + 'location':
-                    try:
-                        position_elements=feature_element.findall(NS + 'position')
-                        if position_elements:
-                            end_position=int(position_elements[0].attrib['position'])
-                            start_position=end_position-1
-                        else:
-                            start_positions_elements=feature_element.findall(NS + 'begin')
-                            
-                            if start_positions_elements:
-                                if start_positions_elements[0].attrib.has_key('position'):
-                                    start_position=int(start_positions_elements[0].attrib['position'])-1
-                                elif start_positions_elements[0].attrib.has_key('status'):#fuzzy location
-                                    return #skip feature with unparsable position
-                            end_positions_elements=feature_element.findall(NS + 'end')
-                            if end_positions_elements:
-                                if end_positions_elements[0].attrib.has_key('position'):
-                                    end_position=int(end_positions_elements[0].attrib['position'])
-                                elif end_positions_elements[0].attrib.has_key('status'):#fuzzy location
-                                    raise NotImplementedError #Peter testing
-                                    return #skip feature with unparsable position
-                        feature.location=SeqFeature.FeatureLocation(start_position,end_position)
-                    except:
-                        return #skip feature with unparsable position
+                    position_elements=feature_element.findall(NS + 'position')
+                    if position_elements:
+                        element = position_elements[0]
+                        start_position = _parse_position(element, -1)
+                        end_position = _parse_position(element)
+                    else:
+                        element = feature_element.findall(NS + 'begin')[0]
+                        start_position=_parse_position(element, -1)
+                        element = feature_element.findall(NS + 'end')[0]
+                        end_position=_parse_position(element)
+                    feature.location=SeqFeature.FeatureLocation(start_position,end_position)
                 else:
                     try:
                         feature.qualifiers[feature_element.tag.replace(NS,'')]=feature_element.text

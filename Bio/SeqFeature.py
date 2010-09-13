@@ -719,6 +719,20 @@ class UncertainPosition(ExactPosition):
     """
     pass
 
+class UnknownPosition(AbstractPosition):
+    """Specify a specific position which is unknown (has no position).
+
+    This is used in UniProt, e.g. ? or in the XML as unknown.
+    """
+    def __init__(self):
+        self.position = None
+        self.extension = None
+        pass
+
+    def __repr__(self):
+        """String representation of the UnknownPosition location for debugging."""
+        return "%s()" % self.__class__.__name__
+        
 class WithinPosition(AbstractPosition):
     """Specify the position of a boundary within some coordinates.
 
