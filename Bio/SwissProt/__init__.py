@@ -504,6 +504,7 @@ def _read_ft(record, line):
     #if there is a feature_id (FTId), store it away
     if line[29:35]==r"/FTId=":
         ft_id = line[35:70].rstrip()[:-1]
+        description = ""
     else:
         ft_id =""
     if not name:  # is continuation of last one
