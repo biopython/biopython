@@ -53,6 +53,8 @@ def _make_seqfeature(name, from_res, to_res, description, ft_id):
     """Construct SeqFeature from feature data from parser (PRIVATE)."""
     loc = SeqFeature.FeatureLocation(_make_position(from_res,-1),
 	                             _make_position(to_res, 0))
+    if not ft_id:
+	ft_id = "<unknown id>" #The default in SeqFeature object
     return SeqFeature.SeqFeature(loc, type=name, id=ft_id,
                                  qualifiers={"description":description})
 
