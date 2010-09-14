@@ -41,6 +41,26 @@ special_table = CodonTable(forward_table={
     start_codons=['TAA', 'TAG', 'TGA'],
     stop_codons=['TAG'])
 
+Chilodonella_uncinata_table = CodonTable(forward_table={
+    'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L',
+    'TCT': 'S', 'TCC': 'S', 'TCA': 'S', 'TCG': 'S',
+    'TAT': 'Y', 'TAC': 'Y',             'TAG': 'Q', 
+    'TGT': 'C', 'TGC': 'C', 'TGA': 'W', 'TGG': 'W',
+    'CTT': 'L', 'CTC': 'L', 'CTA': 'L', 'CTG': 'L',
+    'CCT': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
+    'CAT': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q',
+    'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
+    'ATT': 'I', 'ATC': 'I', 'ATA': 'I', 'ATG': 'M',
+    'ACT': 'T', 'ACC': 'T', 'ACA': 'T', 'ACG': 'T',
+    'AAT': 'N', 'AAC': 'N', 'AAA': 'K', 'AAG': 'K',
+    'AGT': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R',
+    'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
+    'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',
+    'GAT': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E',
+    'GGT': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G'},
+    start_codons = [ 'ATG'],
+    stop_codons = ['TAA' ])
+
 class StringMethodTests(unittest.TestCase):
     _examples = [ \
         Seq("ACGTGGGGT", generic_protein),
@@ -434,7 +454,9 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual("***RR", str(nuc.translate(table='Bacterial')))
             self.assertEqual("", str(nuc.translate(to_stop=True)))
             self.assertEqual("O*ORR", str(nuc.translate(table=special_table)))
+            self.assertEqual("*QWRR", str(nuc.translate(table=Chilodonella_uncinata_table)))
             #These test the Bio.Seq.translate() function - move these?:
+            self.assertEqual("*QWRR", translate(str(nuc), table=Chilodonella_uncinata_table))
             self.assertEqual("O*ORR", translate(str(nuc), table=special_table))
             self.assertEqual("", translate(str(nuc), to_stop=True))
             self.assertEqual("***RR", translate(str(nuc), table='Bacterial'))
