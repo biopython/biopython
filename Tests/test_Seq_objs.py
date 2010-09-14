@@ -16,9 +16,30 @@ from Bio.Alphabet import generic_protein, generic_nucleotide, \
 from Bio.Alphabet.IUPAC import protein, extended_protein
 from Bio.Alphabet.IUPAC import unambiguous_dna, ambiguous_dna, ambiguous_rna
 from Bio.Data.IUPACData import ambiguous_dna_values, ambiguous_rna_values
-from Bio.Seq import Seq, UnknownSeq, MutableSeq
-from Bio.Data.CodonTable import TranslationError
+from Bio.Seq import Seq, UnknownSeq, MutableSeq, translate
+from Bio.Data.CodonTable import TranslationError, CodonTable
 
+#This is just the standard table with less stop codons
+#(replaced with coding for O as an artifical example)
+special_table = CodonTable(forward_table={
+    'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L',
+    'TCT': 'S', 'TCC': 'S', 'TCA': 'S', 'TCG': 'S',
+    'TAT': 'Y', 'TAC': 'Y', 'TAA': 'O',
+    'TGT': 'C', 'TGC': 'C', 'TGA': 'O', 'TGG': 'W',
+    'CTT': 'L', 'CTC': 'L', 'CTA': 'L', 'CTG': 'L',
+    'CCT': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
+    'CAT': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q',
+    'CGT': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
+    'ATT': 'I', 'ATC': 'I', 'ATA': 'I', 'ATG': 'M',
+    'ACT': 'T', 'ACC': 'T', 'ACA': 'T', 'ACG': 'T',
+    'AAT': 'N', 'AAC': 'N', 'AAA': 'K', 'AAG': 'K',
+    'AGT': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R',
+    'GTT': 'V', 'GTC': 'V', 'GTA': 'V', 'GTG': 'V',
+    'GCT': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',
+    'GAT': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E',
+    'GGT': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G'},
+    start_codons=['TAA', 'TAG', 'TGA'],
+    stop_codons=['TAG'])
 
 class StringMethodTests(unittest.TestCase):
     _examples = [ \
@@ -409,8 +430,17 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual("**WSS", str(nuc.translate(table=9)))
             self.assertEqual("**CRR", str(nuc.translate(table='Euplotid Nuclear')))
             self.assertEqual("***RR", str(nuc.translate(table=11)))
+            self.assertEqual("***RR", str(nuc.translate(table='11')))
             self.assertEqual("***RR", str(nuc.translate(table='Bacterial')))
             self.assertEqual("", str(nuc.translate(to_stop=True)))
+            self.assertEqual("O*ORR", str(nuc.translate(table=special_table)))
+            #These test the Bio.Seq.translate() function - move these?:
+            self.assertEqual("O*ORR", translate(str(nuc), table=special_table))
+            self.assertEqual("", translate(str(nuc), to_stop=True))
+            self.assertEqual("***RR", translate(str(nuc), table='Bacterial'))
+            self.assertEqual("***RR", translate(str(nuc), table='11'))
+            self.assertEqual("***RR", translate(str(nuc), table=11))
+            self.assertEqual("**W**", translate(str(nuc), table=2))
         self.assertEqual(str(Seq("TAT").translate()), "Y")
         self.assertEqual(str(Seq("TAR").translate()), "*")
         self.assertEqual(str(Seq("TAN").translate()), "X")

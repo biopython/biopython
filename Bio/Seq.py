@@ -882,8 +882,9 @@ class Seq(object):
 
         Arguments:
          - table - Which codon table to use?  This can be either a name
-                   (string) or an NCBI identifier (integer).  This defaults
-                   to the "Standard" table.
+                   (string), an NCBI identifier (integer), or a CodonTable
+                   object (useful for non-standard genetic codes).  This
+                   defaults to the "Standard" table.
          - stop_symbol - Single character string, what to use for terminators.
                          This defaults to the asterisk, "*".
          - to_stop - Boolean, defaults to False meaning do a full translation
@@ -949,10 +950,6 @@ class Seq(object):
         NOTE - This does NOT behave like the python string's translate
         method.  For that use str(my_seq).translate(...) instead.
         """
-        try:
-            table_id = int(table)
-        except ValueError:
-            table_id = None
         if isinstance(table, str) and len(table)==256:
             raise ValueError("The Seq object translate method DOES NOT take " \
                              + "a 256 character string mapping table like " \
@@ -961,25 +958,39 @@ class Seq(object):
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.ProteinAlphabet):
             raise ValueError("Proteins cannot be translated!")
-        if self.alphabet==IUPAC.unambiguous_dna:
-            #Will use standard IUPAC protein alphabet, no need for X
-            if table_id is None:
+        try:
+            table_id = int(table)
+        except ValueError:
+            #Assume its a table name
+            if self.alphabet==IUPAC.unambiguous_dna:
+                #Will use standard IUPAC protein alphabet, no need for X
                 codon_table = CodonTable.unambiguous_dna_by_name[table]
-            else:
-                codon_table = CodonTable.unambiguous_dna_by_id[table_id]
-        elif self.alphabet==IUPAC.unambiguous_rna:
-            #Will use standard IUPAC protein alphabet, no need for X
-            if table_id is None:
+            elif self.alphabet==IUPAC.unambiguous_rna:
+                #Will use standard IUPAC protein alphabet, no need for X
                 codon_table = CodonTable.unambiguous_rna_by_name[table]
             else:
-                codon_table = CodonTable.unambiguous_rna_by_id[table_id]
-        else:
-            #This will use the extend IUPAC protein alphabet with X etc.
-            #The same table can be used for RNA or DNA (we use this for
-            #translating strings).
-            if table_id is None:
+                #This will use the extended IUPAC protein alphabet with X etc.
+                #The same table can be used for RNA or DNA (we use this for
+                #translating strings).
                 codon_table = CodonTable.ambiguous_generic_by_name[table]
+        except AttributeError:
+            #Assume its a CodonTable object
+            if isinstance(table, CodonTable.CodonTable):
+                codon_table = table
             else:
+                raise ValueError('Bad table argument')
+        else:
+            #Assume its a table ID
+            if self.alphabet==IUPAC.unambiguous_dna:
+                #Will use standard IUPAC protein alphabet, no need for X
+                codon_table = CodonTable.unambiguous_dna_by_id[table_id]
+            elif self.alphabet==IUPAC.unambiguous_rna:
+                #Will use standard IUPAC protein alphabet, no need for X
+                codon_table = CodonTable.unambiguous_rna_by_id[table_id]
+            else:
+                #This will use the extended IUPAC protein alphabet with X etc.
+                #The same table can be used for RNA or DNA (we use this for
+                #translating strings).
                 codon_table = CodonTable.ambiguous_generic_by_id[table_id]
         protein = _translate_str(str(self), codon_table, \
                                  stop_symbol, to_stop, cds)
@@ -1961,9 +1972,10 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
     MutableSeq, returns a Seq object with a protein alphabet.
 
     Arguments:
-     - table - Which codon table to use?  This can be either a name
-               (string) or an NCBI identifier (integer).  Defaults
-               to the "Standard" table.
+     - table - Which codon table to use?  This can be either a name (string),
+               an NCBI identifier (integer), or a CodonTable object (useful
+               for non-standard genetic codes).  Defaults to the "Standard"
+               table.
      - stop_symbol - Single character string, what to use for any
                      terminators, defaults to the asterisk, "*".
      - to_stop - Boolean, defaults to False meaning do a full
@@ -2032,6 +2044,11 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
             codon_table = CodonTable.ambiguous_generic_by_id[int(table)]
         except ValueError:
             codon_table = CodonTable.ambiguous_generic_by_name[table]
+        except AttributeError:
+            if isinstance(table, CodonTable.CodonTable):
+                codon_table = table
+            else:
+                raise ValueError('Bad table argument')
         return _translate_str(sequence, codon_table, stop_symbol, to_stop, cds)
       
 def reverse_complement(sequence):
