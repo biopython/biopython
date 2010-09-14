@@ -1,6 +1,6 @@
 # Copyright 2000-2002 Brad Chapman.
 # Copyright 2004-2005 by M de Hoon.
-# Copyright 2007-2009 by Peter Cock.
+# Copyright 2007-2010 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
