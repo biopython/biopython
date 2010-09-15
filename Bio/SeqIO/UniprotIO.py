@@ -1,15 +1,19 @@
 # Copyright 2010 by Andrea Pierleoni
+# Revisions copyright 2010 by Peter Cock
 # All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Bio.SeqIO support for the "uniprot" XML file formats.
+"""Bio.SeqIO support for the "uniprot-xml" file format.
 
 See also:
 
 http://www.uniprot.org
+
+The UniProt XML format essentially replaces the old plain text file format
+originally introduced by SwissProt ("swiss" format in Bio.SeqIO).
 """
 import sys
 
@@ -51,7 +55,7 @@ except ImportError:
 NS = "{http://uniprot.org/uniprot}"
 REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"
 
-def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comments=False, skip_parsing_errors=False):
+def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comments=False):
     '''Generator Function
     parses an XML entry at a time from any UniProt XML file 
     returns a SeqRecord for each iteration
@@ -77,18 +81,6 @@ def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comm
         if event=="end" and elem.tag == NS + "entry":
             yield Parser(elem, alphabet=alphabet, return_raw_comments=return_raw_comments).parse()
             elem.clear()
-            """
-            try:
-                yield Parser(elem, alphabet=alphabet, return_raw_comments=return_raw_comments).parse()
-                elem.clear()
-            except Exception, err:
-                # TODO: log warning, test
-                if skip_parsing_errors:
-                    import warnings
-                    warning.warn(str(err))
-                else:
-                    raise err
-            """
 
 class Parser():
     '''Parse a UniProt XML entry to a SeqRecord
