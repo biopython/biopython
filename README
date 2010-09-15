@@ -1,13 +1,3 @@
-**NOTE ABOUT CVS**
-
-Until late September 2009, Biopython source code was hosted in CVS running
-on the Open Bioinformatics Foundation (OBF) servers. We are now using git,
-a distributed version control system. The CVS repositories at the OBF will
-remain for a while as "read only" static backups of everything up to and
-including Biopython 1.52 but will not be updated in future. See our website
-for further details, http://www.biopython.org/
-
-
 **Biopython README file**
  
 	"The Biopython Project":http://www.biopython.org/ is an international
@@ -29,6 +19,7 @@ publications (listed on our website):
 Cock, P.J.A. et al. Biopython: freely available Python tools for computational
 molecular biology and bioinformatics. Bioinformatics 2009 Jun 1; 25(11) 1422-3
 doi:10.1093/bioinformatics/btp163 pmid:19304878
+
 
 **For the impatient**
 
@@ -67,6 +58,7 @@ o "MySQLdb":http://sourceforge.net/projects/mysql-python (optional)
 In addition there are a number of useful third party tools you may wish to
 install such as standalone NCBI BLAST, EMBOSS or ClustalW.
 
+
 **Python 3.x**
 
 Python 3 support is still incomplete, but the majority of modules are
@@ -87,6 +79,7 @@ patient (or use the -j option to set the number of threads used).
 
 After 2to3 execution the normal install from source process should be
 followed, i.e. "python3 setup.py build" etc (see below).
+
 
 **Installation**
 
@@ -121,6 +114,17 @@ planning on using.  If you did want to use that module, please install
 the required dependency and re-run the tests.
 
 
+**Source Code Repository**
+
+Like most of the Open Bioinformatics Foundation (OBF) projects, Biopython
+currently uses git for distributed source code control, hosted by github
+at http://github.com/biopython/biopython
+
+Until late September 2009, Biopython source code was kept in CVS running
+on the OBF servers. These will remain online for a while as "read only"
+static backups of everything up to and including Biopython 1.52.
+
+
 **Bugs**
 
 While we try to ship a robust package, bugs inevitably pop up.  If you
@@ -134,8 +138,7 @@ data format has changed and broken the parsing code.  (The BLAST and
 GenBank formats seem to be particularly fragile.)  Thus, the parsing
 code in Biopython is sometimes updated faster than we can build Biopython
 releases.  You can get the most recent parser by pulling the relevant
-files (e.g. the ones in Bio.SeqIO or Bio.Blast) from our git repository
-on "github":http://github.com/biopython/biopython/ .
+files (e.g. the ones in Bio.SeqIO or Bio.Blast) from our git repository.
 However, be careful when doing this, because the code in github is
 not as well-tested as released code, and may contain new dependencies.
 
@@ -144,7 +147,6 @@ biopython@biopython.org.  In the bug report, please let us know 1)
 which operating system and hardware you are using, 2) Python version,
 3) Biopython version (or git version/date), 4) traceback that occurs,
 5) offending code, and 6) data file that causes the problem.
-
 
 
 **Contributing, Bug Reports**
@@ -157,7 +159,6 @@ writing, technical administration, and whatever else comes up.
 If you wish to contribute, please visit the 
 "web site":http://www.biopython.org
 and join our "mailing list":http://biopython.org/wiki/Mailing_lists
-
 
 
 **Distribution Structure**
