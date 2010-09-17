@@ -336,6 +336,21 @@ def _check_type_compatible(alphabets):
 def _verify_alphabet(sequence):
     """Check all letters in sequence are in the alphabet (PRIVATE).
 
+    >>> from Bio.Seq import Seq
+    >>> from Bio.Alphabet import IUPAC
+    >>> my_seq = Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
+    ...              IUPAC.protein)
+    >>> _verify_alphabet(my_seq)
+    True
+
+    This example has an X, which is not in the IUPAC protein alphabet
+    (you should be using the IUPAC extended protein alphabet):
+
+    >>> bad_seq = Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVFX",
+    ...                IUPAC.protein)
+    >>> _verify_alphabet(bad_seq)
+    False
+
     This replaces Bio.utils.verify_alphabet() since we are deprecating
     that. Potentially this could be added to the Alphabet object, and
     I would like it to be an option when creating a Seq object... but

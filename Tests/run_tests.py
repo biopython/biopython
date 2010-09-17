@@ -40,7 +40,8 @@ import distutils.util
 # This is the list of modules containing docstring tests.
 # If you develop docstring tests for other modules, please add
 # those modules here.
-DOCTEST_MODULES = ["Bio.Application",
+DOCTEST_MODULES = ["Bio.Alphabet",
+                   "Bio.Application",
                    "Bio.Seq",
                    "Bio.SeqFeature",
                    "Bio.SeqRecord",
