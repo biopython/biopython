@@ -214,21 +214,22 @@ class MultipleAlignment:
 
         Thanks to James Casbon for the code.
         """
+        #TODO - Switch to new Bio.Align.MultipleSeqAlignment class?
         seq_parts = []
         seq_names = []
         parse_number = 0
         n = 0
         for name, start, seq, end in self.alignment:
             if name == 'QUERY': #QUERY is the first in each alignment block
-                parse_number = parse_number + 1
+                parse_number += 1
                 n = 0
 
             if parse_number == 1: # create on first_parse, append on all others
                 seq_parts.append(seq)
                 seq_names.append(name)
             else:
-                seq_parts[n] = seq_parts[n] + seq
-                n = n + 1
+                seq_parts[n] += seq
+                n += 1
 
         generic = Generic.Alignment(alphabet)
         for (name,seq) in zip(seq_names,seq_parts):
