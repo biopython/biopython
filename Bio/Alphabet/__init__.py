@@ -1,5 +1,5 @@
 # Copyright 2000-2002 by Andrew Dalke.
-# Revisions copyright 2007-2008 by Peter Cock.
+# Revisions copyright 2007-2010 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
