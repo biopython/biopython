@@ -25,7 +25,7 @@ class TestBlastRecord(unittest.TestCase):
         handle = open(path)
         record = self.parser.parse(handle)
         generic_align = record.multiple_alignment.to_generic(IUPAC.protein)
-        test_seq = generic_align.get_seq_by_num(0)
+        test_seq = generic_align[0].seq
         self.assertEqual(test_seq.alphabet, IUPAC.protein)
         self.assertEqual(test_seq[:60].tostring(), record.multiple_alignment.alignment[0][2])
 
