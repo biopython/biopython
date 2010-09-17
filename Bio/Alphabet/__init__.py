@@ -332,3 +332,20 @@ def _check_type_compatible(alphabets):
             protein = True
             if nucl : return False
     return True
+
+def _verify_alphabet(sequence):
+    """Check all letters in sequence are in the alphabet (PRIVATE).
+
+    This replaces Bio.utils.verify_alphabet() since we are deprecating
+    that. Potentially this could be added to the Alphabet object, and
+    I would like it to be an option when creating a Seq object... but
+    that might slow things down.
+    """
+    letters = sequence.alphabet.letters
+    if not letters:
+        raise ValueError("Alphabet does not define letters.")
+    for letter in sequence:
+        if letter not in letters:
+            return False
+    return True
+

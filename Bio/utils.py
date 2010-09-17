@@ -15,10 +15,12 @@ import warnings
 import Bio
 warnings.warn("Bio.utils has been deprecated, and we intend to remove it in "
               "the next release of Biopython.", Bio.BiopythonDeprecationWarning)
-
+raise NotImplementedError("Error to force a traceback")
 
 import Seq
 import Alphabet
+
+from Bio.Alphabet import _verify_alphabet as verify_alphabet
 
 from PropertyManager import default_manager
 
@@ -37,17 +39,6 @@ def ungap(seq):
         if c != gap:
             letters.append(c)
     return Seq.Seq("".join(letters), seq.alphabet.alphabet)
-
-def verify_alphabet(seq):
-    letters = {}
-    for c in seq.alphabet.letters:
-        letters[c] = 1
-    try:
-        for c in seq:
-            letters[c]
-    except KeyError:
-        return 0
-    return 1
 
 def count_monomers(seq):
     dict = {}

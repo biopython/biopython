@@ -7,7 +7,7 @@ the case of very diverged sequences, where signatures may pick out
 important conservation that can't be found by motifs (hopefully!).
 """
 # biopython
-from Bio import utils
+from Bio.Alphabet import _verify_alphabet
 from Bio.Seq import Seq
 
 # local stuff
@@ -86,8 +86,8 @@ class SignatureFinder:
                     if alphabet is not None:
                         first_seq = Seq(first_sig, alphabet)
                         second_seq = Seq(second_sig, alphabet)
-                        if utils.verify_alphabet(first_seq) and \
-                           utils.verify_alphabet(second_seq):
+                        if _verify_alphabet(first_seq) \
+                        and _verify_alphabet(second_seq):
                             all_sigs = self._add_sig(all_sigs,
                                                      (first_sig, second_sig))
 

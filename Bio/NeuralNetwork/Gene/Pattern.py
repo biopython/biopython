@@ -9,7 +9,7 @@ handle any of the different specific patterns.
 import random
 
 # biopython
-from Bio import utils
+from Bio.Alphabet import _verify_alphabet
 from Bio.Seq import Seq, MutableSeq
 
 class PatternIO:
@@ -96,7 +96,7 @@ class PatternIO:
                     test_pattern = cur_pattern
                 for pattern_item in test_pattern: 
                     pattern_seq = Seq(pattern_item, self._alphabet)
-                    if not(utils.verify_alphabet(pattern_seq)):
+                    if not(_verify_alphabet(pattern_seq)):
                         raise ValueError("Pattern %s not matching alphabet %s"
                                          % (cur_pattern, self._alphabet))
 

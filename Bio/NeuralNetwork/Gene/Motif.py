@@ -8,7 +8,7 @@ then be used for creating the neural networks, with occurances of motifs
 going into the network instead of raw sequence data.
 """
 # biopython
-from Bio import utils
+from Bio.Alphabet import _verify_alphabet
 from Bio.Seq import Seq
 
 # local modules
@@ -77,7 +77,7 @@ class MotifFinder:
                 # falls within the specified alphabet
                 if alphabet is not None:
                     motif_seq = Seq(motif, alphabet)
-                    if utils.verify_alphabet(motif_seq):
+                    if _verify_alphabet(motif_seq):
                         all_motifs = self._add_motif(all_motifs, motif)
 
                 # if we are not being strict, just add the motif
