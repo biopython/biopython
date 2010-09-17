@@ -264,12 +264,40 @@ def _consensus_base_alphabet(alphabets):
 def _consensus_alphabet(alphabets):
     """Returns a common but often generic alphabet object (PRIVATE).
 
+    >>> from Bio.Alphabet import IUPAC
+    >>> _consensus_alphabet([IUPAC.extended_protein, IUPAC.protein])
+    ExtendedIUPACProtein()
+    >>> _consensus_alphabet([generic_protein, IUPAC.protein])
+    ProteinAlphabet()
+
     Note that DNA+RNA -> Nucleotide, and Nucleotide+Protein-> generic single
     letter.  These DO NOT raise an exception!
+
+    >>> _consensus_alphabet([generic_dna, generic_nucleotide])
+    NucleotideAlphabet()
+    >>> _consensus_alphabet([generic_dna, generic_rna])
+    NucleotideAlphabet()
+    >>> _consensus_alphabet([generic_dna, generic_protein])
+    SingleLetterAlphabet()
+    >>> _consensus_alphabet([single_letter_alphabet, generic_protein])
+    SingleLetterAlphabet()
     
     This is aware of Gapped and HasStopCodon and new letters added by
     other AlphabetEncoders.  This WILL raise an exception if more than
-    one gap character or stop symbol is present."""
+    one gap character or stop symbol is present.
+
+    >>> from Bio.Alphabet import IUPAC
+    >>> _consensus_alphabet([Gapped(IUPAC.extended_protein), HasStopCodon(IUPAC.protein)])
+    HasStopCodon(Gapped(ExtendedIUPACProtein(), '-'), '*')
+    >>> _consensus_alphabet([Gapped(IUPAC.protein, "-"), Gapped(IUPAC.protein, "=")])
+    Traceback (most recent call last):
+        ...
+    ValueError: More than one gap character present
+    >>> _consensus_alphabet([HasStopCodon(IUPAC.protein, "*"), HasStopCodon(IUPAC.protein, "+")])
+    Traceback (most recent call last):
+        ...
+    ValueError: More than one stop symbol present
+    """
     base = _consensus_base_alphabet(alphabets)
     gap = None
     stop = None
