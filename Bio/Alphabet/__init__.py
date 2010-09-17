@@ -312,6 +312,15 @@ def _consensus_alphabet(alphabets):
 def _check_type_compatible(alphabets):
     """Returns True except for DNA+RNA or Nucleotide+Protein (PRIVATE).
 
+    >>> _check_type_compatible([generic_dna, generic_nucleotide])
+    True
+    >>> _check_type_compatible([generic_dna, generic_rna])
+    False
+    >>> _check_type_compatible([generic_dna, generic_protein])
+    False
+    >>> _check_type_compatible([single_letter_alphabet, generic_protein])
+    True
+
     This relies on the Alphabet subclassing hierarchy.  It does not
     check things like gap characters or stop symbols."""
     dna, rna, nucl, protein = False, False, False, False
