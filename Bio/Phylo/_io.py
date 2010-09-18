@@ -76,8 +76,6 @@ def read(file, format):
         raise ValueError(
                 "There are multiple trees in this file; use parse() instead.")
 
-    return getattr(supported_formats[format], 'read')(file)
-
 
 def write(trees, file, format, **kwargs):
     """Write a sequence of trees to file in the given format."""
