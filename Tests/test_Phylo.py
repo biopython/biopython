@@ -5,6 +5,7 @@
 
 """Unit tests for the Bio.Phylo module."""
 
+import sys
 import unittest
 from cStringIO import StringIO
 
@@ -23,8 +24,6 @@ EX_PHYLO = 'PhyloXML/phyloxml_examples.xml'
 
 class IOTests(unittest.TestCase):
     """Tests for parsing and writing the supported formats."""
-    def setUp(self):
-        self.mem_file = StringIO()
 
     def test_newick(self):
         """Read a Newick file with one tree."""
@@ -40,11 +39,16 @@ class IOTests(unittest.TestCase):
 
     def test_convert(self):
         """Convert a tree between all supported formats."""
-        mem_file_2 = StringIO()
+        mem_file_1 = StringIO()
         mem_file_3 = StringIO()
-        Phylo.convert(EX_NEWICK, 'newick', self.mem_file, 'nexus')
-        self.mem_file.seek(0)
-        Phylo.convert(self.mem_file, 'nexus', mem_file_2, 'phyloxml')
+        if sys.version_info == 3:
+            from io import BytesIO
+            mem_file_2 = BytesIO()
+        else:
+            mem_file_2 = StringIO()
+        Phylo.convert(EX_NEWICK, 'newick', mem_file_1, 'nexus')
+        mem_file_1.seek(0)
+        Phylo.convert(mem_file_1, 'nexus', mem_file_2, 'phyloxml')
         mem_file_2.seek(0)
         Phylo.convert(mem_file_2, 'phyloxml', mem_file_3, 'newick')
         mem_file_3.seek(0)
