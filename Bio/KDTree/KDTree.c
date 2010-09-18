@@ -308,6 +308,7 @@ void KDTree_destroy(struct KDTree* tree)
     Region_destroy(tree->_query_region);
     if (tree->_center_coord) free(tree->_center_coord);
     if (tree->_coords) free(tree->_coords);
+    if (tree->_data_point_list) free(tree->_data_point_list);
     free(tree);
 }
 
