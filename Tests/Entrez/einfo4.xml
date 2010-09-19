@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
+<eInfoResult>
+<DbList>
+	<DbName>pubmed</DbName>
+	<DbName>protein</DbName>
+	<DbName>nucleotide</DbName>
+	<DbName>nuccore</DbName>
+	<DbName>nucgss</DbName>
+	<DbName>nucest</DbName>
+	<DbName>structure</DbName>
+	<DbName>genome</DbName>
+	<DbName>books</DbName>
+	<DbName>cancerchromosomes</DbName>
+	<DbName>cdd</DbName>
