@@ -231,7 +231,7 @@ def espell(**keywds):
     variables.update(keywds)
     return _open(cgi, variables)
 
-def read(handle):
+def read(handle, validate=True):
     """Parses an XML file from the NCBI Entrez Utilities into python objects.
     
     This function parses an XML file created by NCBI's Entrez Utilities,
@@ -239,6 +239,11 @@ def read(handle):
     Most XML files returned by NCBI's Entrez Utilities can be parsed by
     this function, provided its DTD is available. Biopython includes the
     DTDs for most commonly used Entrez Utilities.
+
+    If validate is True (default), the parser will validate the XML file
+    against the DTD, and raise an error if the XML file contains tags that
+    are not represented in the DTD. If validate is False, the parser will
+    simply skip such tags.
 
     Whereas the data structure seems to consist of generic Python lists,
     dictionaries, strings, and so on, each of these is actually a class
@@ -248,14 +253,39 @@ def read(handle):
     """
     from Parser import DataHandler
     DTDs = os.path.join(str(__path__[0]), "DTDs")
-    handler = DataHandler(DTDs)
+    handler = DataHandler(DTDs, validate)
     record = handler.read(handle)
     return record
 
-def parse(handle):
+def parse(handle, validate=True):
+    """Parses an XML file from the NCBI Entrez Utilities into python objects.
+    
+    This function parses an XML file created by NCBI's Entrez Utilities,
+    returning a multilevel data structure of Python lists and dictionaries.
+    This function is suitable for XML files that (in Python) can be represented
+    as a list of individual records. Whereas 'read' reads the complete file
+    and returns a single Python list, 'parse' is a generator function that
+    returns the records one by one. This function is therefore particularly
+    useful for parsing large files.
+
+    Most XML files returned by NCBI's Entrez Utilities can be parsed by
+    this function, provided its DTD is available. Biopython includes the
+    DTDs for most commonly used Entrez Utilities.
+
+    If validate is True (default), the parser will validate the XML file
+    against the DTD, and raise an error if the XML file contains tags that
+    are not represented in the DTD. If validate is False, the parser will
+    simply skip such tags.
+
+    Whereas the data structure seems to consist of generic Python lists,
+    dictionaries, strings, and so on, each of these is actually a class
+    derived from the base type. This allows us to store the attributes
+    (if any) of each element in a dictionary my_element.attributes, and
+    the tag name in my_element.tag.
+    """
     from Parser import DataHandler
     DTDs = os.path.join(str(__path__[0]), "DTDs")
-    handler = DataHandler(DTDs)
+    handler = DataHandler(DTDs, validate)
     records = handler.parse(handle)
     return records
 

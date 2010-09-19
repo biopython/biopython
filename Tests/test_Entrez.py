@@ -96,14 +96,26 @@ class EInfoTest(unittest.TestCase):
         self.assertEqual(record["DbInfo"]['LinkList'][0]['DbTo'], 'books')
 
     def test_pubmed2(self):
-        '''Test parsing database info returned by EInfo with an inconsistent DTD
+        '''Test validating the XML against the DTD
+        '''
+        # To create the XML file, use
+        # >>> Bio.Entrez.einfo(db="pubmed")
+        # Starting some time in 2010, the results returned by Bio.Entrez
+        # included some tags that are not part of the corresponding DTD.
+        from Bio.Entrez import Parser
+        handle = open('Entrez/einfo3.xml', "rb")
+        self.assertRaises(Parser.ValidationError, Entrez.read, handle)
+        handle.close()
+
+    def test_pubmed3(self):
+        '''Test non-validating parser on XML with an inconsistent DTD
         '''
         # To create the XML file, use
         # >>> Bio.Entrez.einfo(db="pubmed")
         # Starting some time in 2010, the results returned by Bio.Entrez
         # included some tags that are not part of the corresponding DTD.
         handle = open('Entrez/einfo3.xml', "rb")
-        record = Entrez.read(handle)
+        record = Entrez.read(handle, validate=False)
         self.assertEqual(record["DbInfo"]['DbName'], 'pubmed')
         self.assertEqual(record["DbInfo"]['MenuName'], 'PubMed')
         self.assertEqual(record["DbInfo"]['Description'], 'PubMed bibliographic record')

@@ -123,9 +123,17 @@ class CorruptedXMLError(ValueError):
         return "Failed to parse the XML data (%s). Please make sure that the input data are not corrupted." % self.message
 
 
+class ValidationError(ValueError):
+    """Validating parsers raise this error if the parser finds a tag in the XML that is not defined in the DTD. Non-validating parsers do not raise this error. The Bio.Entrez.read and Bio.Entrez.parse functions use validating parsers by default (see those functions for more information)"""
+    def __init__(self, name):
+        self.name = name
+    def __str__(self):
+        return "Failed to find tag '%s' in the DTD. To skip all tags that are not represented in the DTD, please call Bio.Entrez.read or Bio.Entrez.parse with validate=False" % self.name
+
+
 class DataHandler:
 
-    def __init__(self, dtd_dir):
+    def __init__(self, dtd_dir, validate):
         self.stack = []
         self.errors = []
         self.integers = []
@@ -135,6 +143,7 @@ class DataHandler:
         self.structures = {}
         self.items = []
         self.dtd_dir = dtd_dir
+        self.validating = validate
         self.parser = expat.ParserCreate(namespace_separator=" ")
         self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
         self.parser.XmlDeclHandler = self.xmlDeclHandler
@@ -232,8 +241,12 @@ class DataHandler:
             self.attributes = attrs
             return
         else:
-            # Element not found in DTD; this will not be stored in the record
-            object = ""
+            # Element not found in DTD
+            if self.validating:
+                raise ValidationError(name)
+            else:
+                # this will not be stored in the record
+                object = ""
         if object!="":
             object.tag = name
             if attrs:
