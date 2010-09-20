@@ -41,7 +41,7 @@ class IOTests(unittest.TestCase):
         """Convert a tree between all supported formats."""
         mem_file_1 = StringIO()
         mem_file_3 = StringIO()
-        if sys.version_info == 3:
+        if sys.version_info[0] == 3:
             from io import BytesIO
             mem_file_2 = BytesIO()
         else:
