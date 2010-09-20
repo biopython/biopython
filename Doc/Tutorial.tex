@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich}
-\date{Last Update -- 1 September 2010 (Biopython 1.55+)}
+\date{Last Update -- 20 September 2010 (Biopython 1.55+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -5134,12 +5134,12 @@ Let's look at a simple example to see how EPost works -- uploading some PubMed i
 \noindent The returned XML includes two important strings, \verb|QueryKey| and \verb|WebEnv| which together define your history session.
 You would extract these values for use with another Entrez call such as EFetch:
 \begin{verbatim}
-from Bio import Entrez
-Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
-id_list = ["19304878", "18606172", "16403221", "16377612", "14871861", "14630660"]
-search_results = Entrez.read(Entrez.epost("pubmed", id=",".join(id_list)))
-webenv = search_results["WebEnv"]
-query_key = search_results["QueryKey"] 
+>>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+>>> id_list = ["19304878", "18606172", "16403221", "16377612", "14871861", "14630660"]
+>>> search_results = Entrez.read(Entrez.epost("pubmed", id=",".join(id_list)))
+>>> webenv = search_results["WebEnv"]
+>>> query_key = search_results["QueryKey"] 
 \end{verbatim}
 \noindent Section~\ref{sec:entrez-webenv} shows how to use the history feature.
 
@@ -5270,23 +5270,23 @@ Seq('ATTTTTTACGAACCTGTGGAAATTTTTGGTTATGACAATAAATCTAGTTTAGTA...GAA', IUPACAmbiguo
 Note that a more typical use would be to save the sequence data to a local file, and \emph{then} parse it with \verb|Bio.SeqIO|.  This can save you having to re-download the same file repeatedly while working on your script, and places less load on the NCBI's servers.  For example:
 
 \begin{verbatim}
-import os
-from Bio import SeqIO
-from Bio import Entrez
-Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
-filename = "gi_186972394.gbk"
-if not os.path.isfile(filename):
-    print "Downloading..."
-    net_handle = Entrez.efetch(db="nucleotide",id="186972394",rettype="gb")
-    out_handle = open(filename, "w")
-    out_handle.write(net_handle.read())
-    out_handle.close()
-    net_handle.close()
-    print "Saved"
-
-print "Parsing..."
-record = SeqIO.read(filename, "genbank")
-print record
+>>> import os
+>>> from Bio import SeqIO
+>>> from Bio import Entrez
+>>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
+>>> filename = "gi_186972394.gbk"
+>>> if not os.path.isfile(filename):
+...     print "Downloading..."
+...     net_handle = Entrez.efetch(db="nucleotide",id="186972394",rettype="gb")
+...     out_handle = open(filename, "w")
+...     out_handle.write(net_handle.read())
+...     out_handle.close()
+...     net_handle.close()
+...     print "Saved"
+...
+>>> print "Parsing..."
+>>> record = SeqIO.read(filename, "genbank")
+>>> print record
 \end{verbatim}
 
 To get the output in XML format, which you can parse using the \verb+Bio.Entrez.read()+ function, use \verb+retmode="xml"+:
@@ -5460,6 +5460,120 @@ This will print:
 17 AAVS1
 ...
 \end{verbatim}
+
+
+\section{Handling errors}
+
+Three things can go wrong when parsing an XML file:
+\begin{itemize}
+\item The file may not be an XML file to begin with;
+\item The file may end prematurely or otherwise be corrupted;
+\item The file may be correct XML, but contain items that are not represented in the associated DTD.
+\end{itemize}
+
+The first case occurs if, for example, you try to parse a Fasta file as if it were an XML file:
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> handle = open("NC_005816.fna") # a Fasta file
+>>> record = Entrez.read(handle)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/__init__.py", line 257, in read
+    record = handler.read(handle)
+  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/Parser.py", line 164, in read
+    raise NotXMLError(e)
+Bio.Entrez.Parser.NotXMLError: Failed to parse the XML data (syntax error: line 1, column 0). Please make sure that the input data are in XML format.
+\end{verbatim}
+Here, the parser didn't find the \verb|<?xml ...| tag with which an XML file is supposed to start, and therefore decides (correctly) that the file is not an XML file.
+
+When your file is in the XML format but is corrupted (for example, by ending prematurely), the parser will raise a CorruptedXMLError.
+Here is an example of an XML file that ends prematurely:
+\begin{verbatim}
+<?xml version="1.0"?>
+<!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
+<eInfoResult>
+<DbList>
+        <DbName>pubmed</DbName>
+        <DbName>protein</DbName>
+        <DbName>nucleotide</DbName>
+        <DbName>nuccore</DbName>
+        <DbName>nucgss</DbName>
+        <DbName>nucest</DbName>
+        <DbName>structure</DbName>
+        <DbName>genome</DbName>
+        <DbName>books</DbName>
+        <DbName>cancerchromosomes</DbName>
+        <DbName>cdd</DbName>
+\end{verbatim}
+which will generate the following traceback:
+\begin{verbatim}
+>>> Entrez.read(handle)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/__init__.py", line 257, in read
+    record = handler.read(handle)
+  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/Parser.py", line 160, in read
+    raise CorruptedXMLError(e)
+Bio.Entrez.Parser.CorruptedXMLError: Failed to parse the XML data (no element found: line 16, column 0). Please make sure that the input data are not corrupted.
+
+>>>
+\end{verbatim}
+Note that the error message tells you at what point in the XML file the error was detected.
+
+The third type of error occurs if the XML file contains tags that do not have a description in the corresponding DTD file. This is an example of such an XML file:
+
+\begin{verbatim}
+<?xml version="1.0"?>
+<!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
+<eInfoResult>
+        <DbInfo>
+        <DbName>pubmed</DbName>
+        <MenuName>PubMed</MenuName>
+        <Description>PubMed bibliographic record</Description>
+        <Count>20161961</Count>
+        <LastUpdate>2010/09/10 04:52</LastUpdate>
+        <FieldList>
+                <Field>
+...
+                </Field>
+        </FieldList>
+        <DocsumList>
+                <Docsum>
+                        <DsName>PubDate</DsName>
+                        <DsType>4</DsType>
+                        <DsTypeName>string</DsTypeName>
+                </Docsum>
+                <Docsum>
+                        <DsName>EPubDate</DsName>
+...
+        </DbInfo>
+</eInfoResult>
+\end{verbatim}
+
+In this file, for some reason the tag \verb|<DocsumList>| (and several others) are not listed in the DTD file \verb|eInfo_020511.dtd|, which is specified on the second line as the DTD for this XML file. By default, the parser will stop and raise a ValidationError if it cannot find some tag in the DTD:
+
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> handle = open("einfo3.xml")
+>>> record = Entrez.read(handle)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/__init__.py", line 257, in read
+    record = handler.read(handle)
+  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/Parser.py", line 154, in read
+    self.parser.ParseFile(handle)
+  File "/usr/local/lib/python2.7/site-packages/Bio/Entrez/Parser.py", line 246, in startElementHandler
+    raise ValidationError(name)
+Bio.Entrez.Parser.ValidationError: Failed to find tag 'DocsumList' in the DTD. To skip all tags that are not represented in the DTD, please call Bio.Entrez.read or Bio.Entrez.parse with validate=False.
+\end{verbatim}
+Optionally, you can instruct the parser to skip such tags instead of raising a ValidationError. This is done by calling \verb|Entrez.read| or \verb|Entrez.parse| with the argument \verb|validate| equal to False:
+\begin{verbatim}
+>>> from Bio import Entrez
+>>> handle = open("einfo3.xml")
+>>> record = Entrez.read(handle,validate=False)
+>>>
+\end{verbatim}
+Of course, the information contained in the XML tags that are not in the DTD are not present in the record returned by \verb|Entrez.read|.
 
 
 \section{Specialized parsers}
@@ -6071,21 +6185,22 @@ additional argument of \verb|usehistory="y"|,
 
 Having stored these values in variables {\tt session\_cookie} and {\tt query\_key} we can use them as parameters to \verb|Bio.Entrez.efetch()| instead of giving the GI numbers as identifiers.  
 
-While for small searches you might be OK downloading everything at once, its better download in batches.  You use the {\tt retstart} and {\tt retmax} parameters to specify which range of search results you want returned (starting entry using zero-based counting, and maximum number of results to return).  For example,
+While for small searches you might be OK downloading everything at once, it is better to download in batches.  You use the {\tt retstart} and {\tt retmax} parameters to specify which range of search results you want returned (starting entry using zero-based counting, and maximum number of results to return).  For example,
 
 \begin{verbatim}
-batch_size = 3
-out_handle = open("orchid_rpl16.fasta", "w")
-for start in range(0,count,batch_size):
-    end = min(count, start+batch_size)
-    print "Going to download record %i to %i" % (start+1, end)
-    fetch_handle = Entrez.efetch(db="nucleotide", rettype="fasta",
-                                 retstart=start, retmax=batch_size,
-                                 webenv=webenv, query_key=query_key)
-    data = fetch_handle.read()
-    fetch_handle.close()
-    out_handle.write(data)
-out_handle.close()
+>>> batch_size = 3
+>>> out_handle = open("orchid_rpl16.fasta", "w")
+>>> for start in range(0,count,batch_size):
+...     end = min(count, start+batch_size)
+...     print "Going to download record %i to %i" % (start+1, end)
+...     fetch_handle = Entrez.efetch(db="nucleotide", rettype="fasta",
+...                                  retstart=start, retmax=batch_size,
+...                                  webenv=webenv, query_key=query_key)
+...     data = fetch_handle.read()
+...     fetch_handle.close()
+...     out_handle.write(data)
+...
+>>> out_handle.close()
 \end{verbatim}
 
 \noindent For illustrative purposes, this example downloaded the FASTA records in batches of three.  Unless you are downloading genomes or chromosomes, you would normally pick a larger batch size.
@@ -6094,29 +6209,30 @@ out_handle.close()
 Here is another history example, searching for papers published in the last year about the \textit{Opuntia}, and then downloading them into a file in MedLine format:
 
 \begin{verbatim}
-from Bio import Entrez
-Entrez.email = "history.user@example.com"
-search_results = Entrez.read(Entrez.esearch(db="pubmed",
-                                            term="Opuntia[ORGN]",
-                                            reldate=365, datetype="pdat",
-                                            usehistory="y"))
-count = int(search_results["Count"])
-print "Found %i results" % count
+>>> from Bio import Entrez
+>>> Entrez.email = "history.user@example.com"
+>>> search_results = Entrez.read(Entrez.esearch(db="pubmed",
+...                                             term="Opuntia[ORGN]",
+...                                             reldate=365, datetype="pdat",
+...                                             usehistory="y"))
+>>> count = int(search_results["Count"])
+>>> print "Found %i results" % count
 
-batch_size = 10
-out_handle = open("recent_orchid_papers.txt", "w")
-for start in range(0,count,batch_size):
-    end = min(count, start+batch_size)
-    print "Going to download record %i to %i" % (start+1, end)
-    fetch_handle = Entrez.efetch(db="pubmed",
-                                 rettype="medline", retmode="text",
-                                 retstart=start, retmax=batch_size,
-                                 webenv=search_results["WebEnv"],
-                                 query_key=search_results["QueryKey"])
-    data = fetch_handle.read()
-    fetch_handle.close()
-    out_handle.write(data)
-out_handle.close()
+>>> batch_size = 10
+>>> out_handle = open("recent_orchid_papers.txt", "w")
+>>> for start in range(0,count,batch_size):
+...     end = min(count, start+batch_size)
+...     print "Going to download record %i to %i" % (start+1, end)
+...     fetch_handle = Entrez.efetch(db="pubmed",
+...                                  rettype="medline", retmode="text",
+...                                  retstart=start, retmax=batch_size,
+...                                  webenv=search_results["WebEnv"],
+...                                  query_key=search_results["QueryKey"])
+...     data = fetch_handle.read()
+...     fetch_handle.close()
+...     out_handle.write(data)
+...
+>>> out_handle.close()
 \end{verbatim}
 
 \noindent At the time of writing, this gave 28 matches - but because this is a date dependent search, this will of course vary.  As described in Section~\ref{subsec:entrez-and-medline} above, you can then use \verb|Bio.Medline| to parse the saved records.
