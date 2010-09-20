@@ -973,7 +973,7 @@ class Seq(object):
                 #The same table can be used for RNA or DNA (we use this for
                 #translating strings).
                 codon_table = CodonTable.ambiguous_generic_by_name[table]
-        except AttributeError:
+        except (AttributeError, TypeError):
             #Assume its a CodonTable object
             if isinstance(table, CodonTable.CodonTable):
                 codon_table = table
@@ -2044,7 +2044,7 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
             codon_table = CodonTable.ambiguous_generic_by_id[int(table)]
         except ValueError:
             codon_table = CodonTable.ambiguous_generic_by_name[table]
-        except AttributeError:
+        except (AttributeError, TypeError):
             if isinstance(table, CodonTable.CodonTable):
                 codon_table = table
             else:
