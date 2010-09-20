@@ -111,16 +111,16 @@ class StructureElement(dict):
 
 class NotXMLError(ValueError):
     def __init__(self, message):
-        self.message = message
+        self.msg = message
     def __str__(self):
-        return "Failed to parse the XML data (%s). Please make sure that the input data are in XML format." % self.message
+        return "Failed to parse the XML data (%s). Please make sure that the input data are in XML format." % self.msg
 
 
 class CorruptedXMLError(ValueError):
     def __init__(self, message):
-        self.message = message
+        self.msg = message
     def __str__(self):
-        return "Failed to parse the XML data (%s). Please make sure that the input data are not corrupted." % self.message
+        return "Failed to parse the XML data (%s). Please make sure that the input data are not corrupted." % self.msg
 
 
 class ValidationError(ValueError):
@@ -128,7 +128,7 @@ class ValidationError(ValueError):
     def __init__(self, name):
         self.name = name
     def __str__(self):
-        return "Failed to find tag '%s' in the DTD. To skip all tags that are not represented in the DTD, please call Bio.Entrez.read or Bio.Entrez.parse with validate=False" % self.name
+        return "Failed to find tag '%s' in the DTD. To skip all tags that are not represented in the DTD, please call Bio.Entrez.read or Bio.Entrez.parse with validate=False." % self.name
 
 
 class DataHandler:
