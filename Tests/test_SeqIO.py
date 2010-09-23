@@ -138,7 +138,8 @@ test_files = [ \
     ("genbank",False, 'GenBank/gbvrl1_start.seq', 3),
 #Following files are also used in test_GFF.py
     ("genbank",False, 'GFF/NC_001422.gbk', 1),
-#Following files are currently only used here:
+#Following files are currently only used here or in test_SeqIO_index.py:
+    ("embl",   False, 'EMBL/epo_prt_start.embl', 8), #proteins
     ("embl",   False, 'EMBL/TRBG361.embl', 1),
     ("embl",   False, 'EMBL/DD231055_edited.embl', 1),
     ("embl",   False, 'EMBL/SC10H5.embl', 1), # Pre 2006 style ID line

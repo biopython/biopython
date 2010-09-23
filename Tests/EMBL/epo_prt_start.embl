@@ -1,0 +1,261 @@
+ID   A00022; SV 1; linear; protein; PRT; SYN; 14 AA.
+XX
+AC   A00022;
+XX
+DT   28-JAN-1993 (Rel. 34, Created)
+DT   31-MAY-2006 (Rel. 88, Last updated, Version 4)
+XX
+DE   Artificial protein Sequence of the Beta-EA2-Block Leu-15
+XX
+KW   .
+XX
+OS   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   [1]
+RP   1-14
+RA   Auerswald E.A., Schroeder W., Schnabel E., Bruns W., Reinhardt G.,
+RA   Kotick M.;
+RT   "Aprotinin homologues produced by genetic engineering.";
+RL   Patent number EP0238993-A2/21, 30-SEP-1987.
+RL   BAYER AG.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..14
+FT                   /organism="synthetic construct"
+FT                   /mol_type="protein"
+FT                   /db_xref="taxon:32630"
+XX
+SQ   Sequence 14 AA; 1702 MW; FAA8492B CRC32;
+     CLARIIRYFY NAKA                                                          14
+//
+ID   A00028; SV 1; linear; protein; PRT; SYN; 14 AA.
+XX
+AC   A00028;
+XX
+DT   28-JAN-1993 (Rel. 34, Created)
+DT   31-MAY-2006 (Rel. 88, Last updated, Version 4)
+XX
+DE   Artificial protein Sequence of the Beta-EA5-Block Ile-15
+XX
+KW   .
+XX
+OS   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   [1]
+RP   1-14
+RA   Auerswald E.A., Schroeder W., Schnabel E., Bruns W., Reinhardt G.,
+RA   Kotick M.;
+RT   "Aprotinin homologues produced by genetic engineering.";
+RL   Patent number EP0238993-A2/27, 30-SEP-1987.
+RL   BAYER AG.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..14
+FT                   /organism="synthetic construct"
+FT                   /mol_type="protein"
+FT                   /db_xref="taxon:32630"
+XX
+SQ   Sequence 14 AA; 1702 MW; E787FA38 CRC32;
+     CIARIIRYFY NAKA                                                          14
+//
+ID   A00031; SV 1; linear; protein; PRT; SYN; 58 AA.
+XX
+AC   A00031;
+XX
+DT   28-JAN-1993 (Rel. 34, Created)
+DT   31-MAY-2006 (Rel. 88, Last updated, Version 3)
+XX
+DE   Protein Sequence of synthetic Glu-52 aprotinin
+XX
+KW   .
+XX
+OS   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   [1]
+RP   1-58
+RA   Auerswald E.A., Schroeder W., Schnabel E., Bruns W., Reinhardt G.,
+RA   Kotick M.;
+RT   "Aprotinin homologues produced by genetic engineering.";
+RL   Patent number EP0238993-A2/30, 30-SEP-1987.
+RL   BAYER AG.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..58
+FT                   /organism="synthetic construct"
+FT                   /mol_type="protein"
+FT                   /db_xref="taxon:32630"
+XX
+SQ   Sequence 58 AA; 6515 MW; CCFA0F77 CRC32;
+     RPDFCLEPPY TGPCKARIIR YFYNAKAGLC QTFVYGGCRA KRNNFKSAED CERTCGGA          58
+//
+ID   A00034; SV 1; linear; protein; PRT; PRO; 384 AA.
+XX
+AC   A00034;
+XX
+DT   28-JAN-1993 (Rel. 34, Created)
+DT   31-MAY-2006 (Rel. 88, Last updated, Version 3)
+XX
+DE   B.subtilis xylR protein
+XX
+KW   .
+XX
+OS   Bacillus subtilis
+OC   Bacteria; Firmicutes; Bacillales; Bacillaceae; Bacillus.
+XX
+RN   [1]
+RP   1-384
+RA   Hastrup S.;
+RT   "Gene expression system";
+RL   Patent number EP0242220-A2/2, 21-OCT-1987.
+RL   NOVO NORDISK A/S;
+RL   Bagsvaerd, ;
+RL   Denmark.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..384
+FT                   /organism="Bacillus subtilis"
+FT                   /mol_type="protein"
+FT                   /db_xref="taxon:1423"
+XX
+SQ   Sequence 384 AA; 42342 MW; 5371855A CRC32;
+     MDIADQTFVK KVNQKLLLKE ILKNSPISRA KLSFMTGLNK STVSSQVNTL MKESMVFEIG        60
+     QGQSSGGRRP VMLVFNKKAG YSVGIDVGVD YINGILTDLE GTIVLDQYRH LESNSPEITK       120
+     DILIDMIHHF ITQMPQSPYG FIGIGICVPG LIDKDQKIVF TPNSNWRDID LKSSIQEKYN       180
+     VSVFIENEAN AGAYGEKLFG AAKNHDNIIY VSISTGIGIG VIINNHLYRG VSGFSGEMGH       240
+     MTIDFNGPKC SCGNRGCWEL YASEKALLKS LQTKEKKLSY QDIINLAHLN DIGTLNALQN       300
+     FGFYLGIGLT NILNTFNPQA VILRNSIIES HPMVLNSMRS EVSSRVYSQL GNSYELLPSS       360
+     LGQNAPALGM SSIVIDHFLD MITM                                              384
+//
+ID   A00060; SV 1; linear; protein; PRT; SYN; 163 AA.
+XX
+AC   A00060;
+XX
+DT   04-MAR-1993 (Rel. 35, Created)
+DT   31-MAY-2006 (Rel. 88, Last updated, Version 3)
+XX
+DE   Artificial sequence of bFGF
+XX
+KW   .
+XX
+OS   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   [1]
+RP   1-163
+RA   ;
+RT   ;
+RL   Patent number GB2223495-A/8, 11-APR-1990.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..163
+FT                   /organism="synthetic construct"
+FT                   /mol_type="protein"
+FT                   /db_xref="taxon:32630"
+XX
+SQ   Sequence 163 AA; 18043 MW; FECB4208 CRC32;
+     SLPAMAAGSI TTLPALPEDG GSGAFPPGHF KDPKRLYCKN GGFFLRIHPD GRVDGVREKS        60
+     DPHIKLQLQA EERGVVSIKG VCANRYLAMK EDGRLLASKC VTDECFFFER LESNNYNTYR       120
+     SRKYTSWYVA LKRTGQYKLG SKTGPGQKAI LFLPMSAKSG SEF                         163
+//
+ID   A00071; SV 1; linear; protein; PRT; SYN; 149 AA.
+XX
+AC   A00071;
+XX
+DT   09-MAR-1993 (Rel. 35, Created)
+DT   31-MAY-2006 (Rel. 88, Last updated, Version 4)
+XX
+DE   Artificial human aFGF
+XX
+KW   .
+XX
+OS   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   [1]
+RP   1-149
+RA   ;
+RT   ;
+RL   Patent number GB2223496-A/8, 11-APR-1990.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..149
+FT                   /organism="synthetic construct"
+FT                   /mol_type="protein"
+FT                   /db_xref="taxon:32630"
+XX
+SQ   Sequence 149 AA; 16756 MW; BDC70E18 CRC32;
+     SLPAMFNLPP GNYKKPKLLY CSNGGHFLRI LPDGTVDGTR DRSDQHIQLQ LSAESVGEVY        60
+     IKSTETGQYL AMDTDGLLYG SQTPNEECLF LERLEENHYN TYISKKHAEK NWFVGLKKNG       120
+     SCKRGPRTHY GQKAILFLPL PVSSDGSEF                                         149
+//
+ID   A00072; SV 1; linear; protein; PRT; SYN; 4 AA.
+XX
+AC   A00072;
+XX
+DT   09-MAR-1993 (Rel. 35, Created)
+DT   31-MAY-2006 (Rel. 88, Last updated, Version 3)
+XX
+DE   Protein sequence 9 from patent number GB2223496
+XX
+KW   .
+XX
+OS   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   [1]
+RP   1-4
+RA   ;
+RT   ;
+RL   Patent number GB2223496-A/9, 11-APR-1990.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..4
+FT                   /organism="synthetic construct"
+FT                   /mol_type="protein"
+FT                   /db_xref="taxon:32630"
+XX
+SQ   Sequence 4 AA; 438 MW; A4338F6B CRC32;
+     GSEF                                                                      4
+//
+ID   A00078; SV 1; linear; protein; PRT; SYN; 153 AA.
+XX
+AC   A00078;
+XX
+DT   04-MAR-1993 (Rel. 35, Created)
+DT   31-MAY-2006 (Rel. 88, Last updated, Version 3)
+XX
+DE   Synthetic IL4
+XX
+KW   .
+XX
+OS   synthetic construct
+OC   other sequences; artificial sequences.
+XX
+RN   [1]
+RP   1-153
+RA   ;
+RT   ;
+RL   Patent number GB2218420-A/9, 15-NOV-1989.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..153
+FT                   /organism="synthetic construct"
+FT                   /mol_type="protein"
+FT                   /db_xref="taxon:32630"
+XX
+SQ   Sequence 153 AA; 17492 MW; 2159E552 CRC32;
+     MGLTSQLLPP LFFLLACAGN FVHGHKCDIT LQEIIKTLNS LTEQKTLCTE LTVTDIFAAS        60
+     KNTTEKETFC RAATVLRQFY SHHEKDTRCL GATAQQFHRH KQLIRFLKRL DRNLWGLAGL       120
+     NSCPVKEANQ STLENFLERL KTIMREKYSK CSS                                    153
+//

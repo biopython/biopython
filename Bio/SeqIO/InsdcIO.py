@@ -766,14 +766,20 @@ class EmblWriter(_InsdcWriter):
         data = self._get_seq_string(record) #Catches sequence being None
         seq_len = len(data)
         #TODO - Should we change the case?
-        #TODO - What if we have RNA?
-        a_count = data.count('A') + data.count('a')
-        c_count = data.count('C') + data.count('c')
-        g_count = data.count('G') + data.count('g')
-        t_count = data.count('T') + data.count('t')
-        other = seq_len - (a_count + c_count + g_count + t_count)
-        handle.write("SQ   Sequence %i BP; %i A; %i C; %i G; %i T; %i other;\n" \
-                     % (seq_len, a_count, c_count, g_count, t_count, other))
+
+        #Get the base alphabet (underneath any Gapped or StopCodon encoding)
+        a = Alphabet._get_base_alphabet(record.seq.alphabet)
+        if isinstance(a, Alphabet.DNAAlphabet):
+            #TODO - What if we have RNA?
+            a_count = data.count('A') + data.count('a')
+            c_count = data.count('C') + data.count('c')
+            g_count = data.count('G') + data.count('g')
+            t_count = data.count('T') + data.count('t')
+            other = seq_len - (a_count + c_count + g_count + t_count)
+            handle.write("SQ   Sequence %i BP; %i A; %i C; %i G; %i T; %i other;\n" \
+                         % (seq_len, a_count, c_count, g_count, t_count, other))
+        else:
+            handle.write("SQ   \n")
         
         for line_number in range(0, seq_len // LETTERS_PER_LINE):
             handle.write("    ") #Just four, not five
@@ -832,15 +838,18 @@ class EmblWriter(_InsdcWriter):
         a = Alphabet._get_base_alphabet(record.seq.alphabet)
         if not isinstance(a, Alphabet.Alphabet):
             raise TypeError("Invalid alphabet")
-        elif not isinstance(a, Alphabet.NucleotideAlphabet):
-            raise ValueError("Need a Nucleotide alphabet")
         elif isinstance(a, Alphabet.DNAAlphabet):
             mol_type = "DNA"
+            units = "BP"
         elif isinstance(a, Alphabet.RNAAlphabet):
             mol_type = "RNA"
+            units = "BP"
+        elif isinstance(a, Alphabet.ProteinAlphabet):
+            mol_type = "PROTEIN"
+            units = "AA"
         else:
             #Must be something like NucleotideAlphabet
-            raise ValueError("Need a DNA or RNA alphabet")
+            raise ValueError("Need a DNA, RNA or Protein alphabet")
 
         #Get the taxonomy division
         division = self._get_data_division(record)
@@ -855,9 +864,9 @@ class EmblWriter(_InsdcWriter):
         #5. Data class
         #6. Taxonomic division
         #7. Sequence length
-        self._write_single_line("ID", "%s; %s; ; %s; ; %s; %i BP." \
+        self._write_single_line("ID", "%s; %s; ; %s; ; %s; %i %s." \
                                 % (accession, version, mol_type,
-                                   division, len(record)))
+                                   division, len(record), units))
         handle.write("XX\n")
         self._write_single_line("AC", accession+";")
         handle.write("XX\n")

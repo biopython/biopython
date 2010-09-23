@@ -644,7 +644,7 @@ class EmblScanner(InsdcScanner):
     def _feed_seq_length(self, consumer, text):
         length_parts = text.split()
         assert len(length_parts) == 2
-        assert length_parts[1].upper() in ["BP", "BP."]
+        assert length_parts[1].upper() in ["BP", "BP.", "AA."]
         consumer.size(length_parts[0])
 
     def _feed_header_lines(self, consumer, lines):
