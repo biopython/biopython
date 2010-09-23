@@ -307,21 +307,21 @@ class _InsdcWriter(SequentialSequenceWriter):
             return [text]
 
         words = text.split()
-        assert max([len(w) for w in words]) < max_len, \
+        assert max([len(w) for w in words]) <= max_len, \
                "Your description cannot be broken into nice lines!:\n%s" \
                % repr(text)
         text = ""
         while words and len(text) + 1 + len(words[0]) < max_len:
             text += " " + words.pop(0)
             text = text.strip()
-        assert len(text) < max_len
+        assert len(text) <= max_len
         answer = [text]
         while words:
             text = ""
             while words and len(text) + 1 + len(words[0]) < max_len:
                 text += " " + words.pop(0)
                 text = text.strip()
-            assert len(text) < max_len
+            assert len(text) <= max_len
             answer.append(text)
         assert not words
         return answer
