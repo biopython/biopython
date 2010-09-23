@@ -1789,7 +1789,7 @@ Testing reading genbank format file GFF/NC_001422.gbk
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
-Testing reading embl format file EMBL/epo_prt_start.embl
+Testing reading embl format file EMBL/epo_prt_selection.embl
  ID = 'A00022.1', Name='A00022',
  Seq='CLARIIRYFYNAKA', length=14
  ID = 'A00028.1', Name='A00028',
@@ -1797,8 +1797,8 @@ Testing reading embl format file EMBL/epo_prt_start.embl
  ID = 'A00031.1', Name='A00031',
  Seq='RPDFCLEPPYTGPCKARIIRYFYNAKAGLCQTFVYGGCRA...ERTCGGA', length=58
  ...
- ID = 'A00078.1', Name='A00078',
- Seq='MGLTSQLLPPLFFLLACAGNFVHGHKCDITLQEIIKTLNS...KYSKCSS', length=153
+ ID = 'CQ797900.1', Name='CQ797900',
+ Seq='MAIGTLEATTLIRGRAMTTVLPSPELIASFVDIVGPGNAL...LREDRGE', length=496
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Failed: Sequences must all be the same length
@@ -1808,17 +1808,19 @@ Testing reading embl format file EMBL/epo_prt_start.embl
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=A00078.1).
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).
  Checking can write/read as 'fastq-illumina' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=A00078.1).
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).
  Checking can write/read as 'fastq-solexa' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=A00078.1).
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).
  Checking can write/read as 'genbank' format
+ Failed: Text cannot be broken into len 68 lines!:
+'Dna encoding flavin-adenine-dinucleotide-dependent-d-erythronate-4-phosphate-dehydrogena se , pdxr , and microbial production of vitamin b6'
  Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=A00078.1).
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).
  Checking can write/read as 'qual' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=A00078.1).
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=CQ797900.1).
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format

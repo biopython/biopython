@@ -259,3 +259,45 @@ SQ   Sequence 153 AA; 17492 MW; 2159E552 CRC32;
      KNTTEKETFC RAATVLRQFY SHHEKDTRCL GATAQQFHRH KQLIRFLKRL DRNLWGLAGL       120
      NSCPVKEANQ STLENFLERL KTIMREKYSK CSS                                    153
 //
+ID   CQ797900; SV 1; linear; protein; PRT; PRO; 496 AA.
+XX
+AC   CQ797900;
+XX
+DT   20-APR-2004 (Rel. 79, Created)
+DT   31-MAY-2006 (Rel. 88, Last updated, Version 3)
+XX
+DE   Sequence 2 from Patent WO2004029250.
+XX
+KW   .
+XX
+OS   Sinorhizobium meliloti
+OC   Bacteria; Proteobacteria; Alphaproteobacteria; Rhizobiales; Rhizobiaceae;
+OC   Sinorhizobium/Ensifer group; Sinorhizobium.
+XX
+RN   [1]
+RA   Hoshino T., Ichikawa K., Tazoe M.;
+RT   "Dna encoding
+RT   flavin-adenine-dinucleotide-dependent-d-erythronate-4-phosphate-dehydrogena
+RT   se , pdxr , and microbial production of vitamin b6";
+RL   Patent number WO2004029250-A1/2, 08-APR-2004.
+RL   DSM IP Assets B.V. (NL).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..496
+FT                   /organism="Sinorhizobium meliloti"
+FT                   /mol_type="protein"
+FT                   /db_xref="taxon:382"
+XX
+SQ   Sequence 496 AA; 53189 MW; 54C0D9AD CRC32;
+     MAIGTLEATT LIRGRAMTTV LPSPELIASF VDIVGPGNAL TAPADTAPYL VESRGLYRGT        60
+     TPLVLRPGSV EEVSLVMRLA SQTRTAVVPQ GGNTGHVAGQ IPREGKADVV LSLERLNRIR       120
+     DIDPVGNVIV ADAGCILADI QKAADDVDRL FPLSLGSEGS ARIGGNLSTN AGGTAVLAYG       180
+     NMRQLCLGLE VVLPTGEIWD GLRRLRKDNT GYDLRDLFIG AEGTLGVITG AVLKLFPKPR       240
+     GHQVAFAGLR SVEDALTLFD RATSVCGPAL TGFELMPRLG IEFTTRHIAG VRDPMETTHP       300
+     WYALIDISTS DTAESAERMV QDLLEAVIAD GLVENAVIAQ NEAQRRALWH MRESMSPAQK       360
+     PEGGSIKHDV SVPVSSIPAF MTEADALVSK AIPGARICAF GHMGDGNIHY NISQPVGADK       420
+     QSFLDRWREI NAIVHAVVLK HDGSISAEHG IGQLKRDELA AIRSPIEIEL MRRIKHAFDP       480
+     AGIMNPDKVL REDRGE                                                       496
+//
+

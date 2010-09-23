@@ -303,22 +303,22 @@ class _InsdcWriter(SequentialSequenceWriter):
         "Returns a list of strings."""
         #TODO - Do the line spliting while preserving white space?
         text = text.strip()
-        if len(text) < max_len:
+        if len(text) <= max_len:
             return [text]
 
         words = text.split()
-        assert max([len(w) for w in words]) <= max_len, \
-               "Your description cannot be broken into nice lines!:\n%s" \
-               % repr(text)
+        if max([len(w) for w in words]) > max_len:
+            raise ValueError("Text cannot be broken into len %i lines!:\n%s"
+                             % (max_len, repr(text)))
         text = ""
-        while words and len(text) + 1 + len(words[0]) < max_len:
+        while words and len(text) + 1 + len(words[0]) <= max_len:
             text += " " + words.pop(0)
             text = text.strip()
         assert len(text) <= max_len
         answer = [text]
         while words:
-            text = ""
-            while words and len(text) + 1 + len(words[0]) < max_len:
+            text = words.pop(0)
+            while words and len(text) + 1 + len(words[0]) <= max_len:
                 text += " " + words.pop(0)
                 text = text.strip()
             assert len(text) <= max_len
@@ -356,7 +356,7 @@ class GenBankWriter(_InsdcWriter):
     def _write_single_line(self, tag, text):
         "Used in the the 'header' of each GenBank record."""
         assert len(tag) < self.HEADER_WIDTH
-        assert len(text) < self.MAX_WIDTH - self.HEADER_WIDTH, \
+        assert len(text) <= self.MAX_WIDTH - self.HEADER_WIDTH, \
                "Annotation %s too long for %s line" % (repr(text), tag)
         self.handle.write("%s%s\n" % (tag.ljust(self.HEADER_WIDTH),
                                       text.replace("\n", " ")))
@@ -366,9 +366,8 @@ class GenBankWriter(_InsdcWriter):
         #TODO - Do the line spliting while preserving white space?
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
         lines = self._split_multi_line(text, max_len)
-        assert len(tag) < self.HEADER_WIDTH
         self._write_single_line(tag, lines[0])
-        for line in lines[1:] :
+        for line in lines[1:]:
             self._write_single_line("", line)
 
     def _write_multi_entries(self, tag, text_list):

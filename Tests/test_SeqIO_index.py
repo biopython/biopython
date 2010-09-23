@@ -128,7 +128,7 @@ tests = [
     ("Quality/sanger_faked.fastq", "fastq-sanger", generic_dna),
     ("Quality/solexa_faked.fastq", "fastq-solexa", generic_dna),
     ("Quality/illumina_faked.fastq", "fastq-illumina", generic_dna),
-    ("EMBL/epo_prt_start.embl", "embl", None),
+    ("EMBL/epo_prt_selection.embl", "embl", None),
     ("EMBL/U87107.embl", "embl", None),
     ("EMBL/TRBG361.embl", "embl", None),
     ("EMBL/A04195.imgt", "embl", None), #Not a proper EMBL file, an IMGT file
