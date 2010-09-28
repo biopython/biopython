@@ -162,7 +162,7 @@ class EasyController:
         return self._controller.calc_fst_pair(self._fname)[1]
 
     def get_avg_fst_pair_locus(self, locus):
-        if len(self.__fst_pair_locus) == 0
+        if len(self.__fst_pair_locus) == 0:
             iter = self._controller.calc_fst_pair(self._fname)[0]
             for locus_info in iter:
                 self.__fst_pair_locus[locus_info[0]] = locus_info[1]
