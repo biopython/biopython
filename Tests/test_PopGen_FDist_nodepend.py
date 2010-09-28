@@ -7,6 +7,7 @@ import os
 import unittest
 from Bio.PopGen import GenePop
 from Bio.PopGen import FDist
+from Bio.PopGen.GenePop import FileParser
 from Bio.PopGen.FDist.Utils import convert_genepop_to_fdist
 
 #Tests fdist related code. Note: this case doesn't require fdist
@@ -69,16 +70,29 @@ class ParserTest(unittest.TestCase):
 
 class ConversionTest(unittest.TestCase):
     def setUp(self):
-        files = ["c2line.gen"]
+        files = ["c2line.gen", "haplo2.gen"]
         self.handles = []
+        self.names = []
         for filename in files:
+            self.names.append(os.path.join("PopGen", filename))
             self.handles.append(open(os.path.join("PopGen", filename)))
 
     def test_convert(self):
         """Basic conversion test.
         """
-        for i in range(len(self.handles)):
-            gp_rec = GenePop.read(self.handles[i])
+        for i in range(len(self.names)):
+            handle = self.handles[i]
+	    gp_rec = GenePop.read(handle)
+	    fd_rec = convert_genepop_to_fdist(gp_rec)
+	    assert(fd_rec.num_loci == 3)
+	    assert(fd_rec.num_pops == 3)
+
+
+    def test_convert_big(self):
+        """Big interface conversion test.
+        """
+        for i in range(len(self.names)):
+            gp_rec = FileParser.read(self.names[i])
             fd_rec = convert_genepop_to_fdist(gp_rec)
             assert(fd_rec.num_loci == 3)
             assert(fd_rec.num_pops == 3)
