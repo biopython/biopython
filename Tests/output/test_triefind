@@ -1,7 +1,0 @@
-test_triefind
-hello
-['he', 'hello']
-[('he', 0, 2), ('hello', 0, 5), ('wor', 6, 9)]
-[('hello', 0, 5)]
-[('he', 0, 2), ('hello', 0, 5), ('wor', 6, 9), ('world', 6, 11)]
-[('hello', 0, 5), ('world', 6, 11)]

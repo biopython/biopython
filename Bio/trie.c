@@ -744,38 +744,3 @@ Trie* Trie_deserialize(int (*read)(void *wasread, const int length, void *data),
     }
     return trie;
 }
-
-void test(void) {
-    Trie* trie;
-
-    printf("Hello world!\n");
-
-    trie = Trie_new();
-    printf("New trie %p\n", trie);
-    Trie_set(trie, "hello world", "s1");
-    Trie_set(trie, "bye", "s2");
-    Trie_set(trie, "hell sucks", "s3");
-    Trie_set(trie, "hebee", "s4");
-
-    printf("%s\n", (char *)Trie_get(trie, "hello world"));
-    printf("%s\n", (char *)Trie_get(trie, "bye"));
-    printf("%s\n", (char *)Trie_get(trie, "hell sucks"));
-    printf("%s\n", (char *)Trie_get(trie, "hebee"));
-
-    Trie_set(trie, "blah", "s5");
-    printf("%s\n", (char *)Trie_get(trie, "blah"));
-
-    printf("%p\n", Trie_get(trie, "foobar"));
-    printf("%d\n", Trie_len(trie));
-
-    Trie_set(trie, "blah", "snew");
-    printf("%s\n", (char *)Trie_get(trie, "blah"));
-
-    Trie_del(trie);
-}
-
-#if 0
-int main() {
-    test();
-}
-#endif
