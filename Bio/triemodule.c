@@ -12,14 +12,14 @@ staticforward PyTypeObject Trie_Type;
 
 typedef struct {
     PyObject_HEAD
-    Trie trie;
+    Trie* trie;
 } trieobject;
 
 static PyObject*
 trie_trie(PyObject* self, PyObject* args)
 {
     trieobject* trieobj;
-    Trie trie;
+    Trie* trie;
 
     if (!PyArg_ParseTuple(args,":trie")) 
         return NULL;
@@ -32,7 +32,7 @@ trie_trie(PyObject* self, PyObject* args)
 }
 
 static void 
-_decref_objects(const unsigned char *key, const void *value, void *data) 
+_decref_objects(const char *key, const void *value, void *data) 
 {
     Py_DECREF((PyObject *)value);
 }
@@ -55,7 +55,7 @@ trie_length(trieobject *mp)
 static PyObject *
 trie_subscript(trieobject *mp, PyObject *py_key)
 {
-    unsigned char *key;
+    const char *key;
     PyObject *py_value;
 
     /* Make sure key is a string. */
@@ -63,10 +63,10 @@ trie_subscript(trieobject *mp, PyObject *py_key)
 	PyErr_SetString(PyExc_TypeError, "key must be a string");
 	return NULL;
     }
-    key = (unsigned char *)PyString_AS_STRING(py_key);
-    py_value = (PyObject *)Trie_get(mp->trie, key);
+    key = PyString_AS_STRING(py_key);
+    py_value = Trie_get(mp->trie, key);
     if(py_value == NULL)
-	PyErr_SetString(PyExc_KeyError, (char *)key);
+	PyErr_SetString(PyExc_KeyError, key);
     else
 	Py_INCREF(py_value);
     return py_value;
@@ -75,7 +75,7 @@ trie_subscript(trieobject *mp, PyObject *py_key)
 static int
 trie_ass_sub(trieobject *mp, PyObject *py_key, PyObject *py_value)
 {
-    unsigned char *key;
+    const char *key;
     PyObject *py_prev;
 
     /* Make sure key is a string. */
@@ -83,12 +83,12 @@ trie_ass_sub(trieobject *mp, PyObject *py_key, PyObject *py_value)
 	PyErr_SetString(PyExc_TypeError, "key must be a string");
 	return -1;
     }
-    key = (unsigned char *)PyString_AS_STRING((char *)py_key);
+    key = PyString_AS_STRING(py_key);
     
     /* Check to see whether something already exists at that key.  If
        there's already an object there, then I will have to remove it.
     */
-    py_prev = (PyObject *)Trie_get(mp->trie, key);
+    py_prev = Trie_get(mp->trie, key);
     if(py_prev) {
 	Py_DECREF(py_prev);
     }
@@ -99,7 +99,7 @@ trie_ass_sub(trieobject *mp, PyObject *py_key, PyObject *py_value)
     if(!py_value) {
 	/* If the key doesn't exist, raise a KeyError. */
 	if(!py_prev) {
-	    PyErr_SetString(PyExc_KeyError, (char *)key);
+	    PyErr_SetString(PyExc_KeyError, key);
 	    return -1;
 	}
 	Trie_set(mp->trie, key, NULL);
@@ -121,7 +121,7 @@ static char has_key__doc__[] =
 static PyObject *
 trie_has_key(trieobject *mp, PyObject *py_key)
 {
-    unsigned char *key;
+    const char *key;
     int has_key;
 
     /* Make sure key is a string. */
@@ -129,7 +129,7 @@ trie_has_key(trieobject *mp, PyObject *py_key)
 	PyErr_SetString(PyExc_TypeError, "key must be a string");
 	return NULL;
     }
-    key = (unsigned char *)PyString_AS_STRING(py_key);
+    key = PyString_AS_STRING(py_key);
     has_key = Trie_has_key(mp->trie, key);
     return PyInt_FromLong((long)has_key);
 }
@@ -151,7 +151,7 @@ static char has_prefix__doc__[] =
 static PyObject *
 trie_has_prefix(trieobject *mp, PyObject *py_prefix)
 {
-    unsigned char *prefix;
+    const char *prefix;
     int has_prefix;
 
     /* Make sure prefix is a string. */
@@ -159,7 +159,7 @@ trie_has_prefix(trieobject *mp, PyObject *py_prefix)
 	PyErr_SetString(PyExc_TypeError, "k must be a string");
 	return NULL;
     }
-    prefix = (unsigned char *)PyString_AS_STRING(py_prefix);
+    prefix = PyString_AS_STRING(py_prefix);
     has_prefix = Trie_has_prefix(mp->trie, prefix);
     return PyInt_FromLong((long)has_prefix);
 }
@@ -177,8 +177,7 @@ static char with_prefix__doc__[] =
 "D.with_prefix(prefix) -> list of D's keys that begins with prefix";
 
 static void 
-_trie_with_prefix_helper(const unsigned char *key, const void *value, 
-			 void *data) 
+_trie_with_prefix_helper(const char *key, const void *value, void *data) 
 {
     PyObject *py_list = (PyObject *)data;
     PyObject *py_key;
@@ -186,7 +185,7 @@ _trie_with_prefix_helper(const unsigned char *key, const void *value,
     if(PyErr_Occurred())
 	return;
 
-    if(!(py_key = PyString_FromString((const char *)key)))
+    if(!(py_key = PyString_FromString(key)))
 	return;
     PyList_Append(py_list, py_key);
     Py_DECREF(py_key);
@@ -195,7 +194,7 @@ _trie_with_prefix_helper(const unsigned char *key, const void *value,
 static PyObject *
 trie_with_prefix(trieobject *mp, PyObject *py_prefix)
 {
-    unsigned char *prefix;
+    const char *prefix;
     PyObject *py_list;
 
     /* Make sure prefix is a string. */
@@ -203,7 +202,7 @@ trie_with_prefix(trieobject *mp, PyObject *py_prefix)
 	PyErr_SetString(PyExc_TypeError, "k must be a string");
 	return NULL;
     }
-    prefix = (unsigned char *)PyString_AS_STRING(py_prefix);
+    prefix = PyString_AS_STRING(py_prefix);
 
     if(!(py_list = PyList_New(0)))
 	return NULL;
@@ -230,7 +229,7 @@ static char keys__doc__[] =
 "D.keys() -> list of D's keys";
 
 static void 
-_trie_keys_helper(const unsigned char *key, const void *value, void *data) 
+_trie_keys_helper(const char *key, const void *value, void *data) 
 {
     PyObject *py_list = (PyObject *)data;
     PyObject *py_key;
@@ -238,7 +237,7 @@ _trie_keys_helper(const unsigned char *key, const void *value, void *data)
     if(PyErr_Occurred())
 	return;
 
-    if(!(py_key = PyString_FromString((char *)key)))
+    if(!(py_key = PyString_FromString(key)))
 	return;
     PyList_Append(py_list, py_key);
     Py_DECREF(py_key);
@@ -273,7 +272,7 @@ static char values__doc__[] =
 "D.values() -> list of D's values";
 
 static void 
-_trie_values_helper(const unsigned char *key, const void *value, void *data) 
+_trie_values_helper(const char *key, const void *value, void *data) 
 {
     PyObject *py_list = (PyObject *)data;
     if(PyErr_Occurred())
@@ -312,13 +311,13 @@ static char get__doc__[] =
 static PyObject *
 trie_get(trieobject *mp, PyObject *args)
 {
-    unsigned char *key;
+    const char *key;
     PyObject *py_value;
     PyObject *py_failobj = Py_None;
 
     if (!PyArg_ParseTuple(args, "s|O:get", &key, &py_failobj))
 	return NULL;
-    py_value = (PyObject *)Trie_get(mp->trie, key);
+    py_value = Trie_get(mp->trie, key);
     if(!py_value)
 	py_value = py_failobj;
     Py_INCREF(py_value);
@@ -328,8 +327,8 @@ trie_get(trieobject *mp, PyObject *args)
 static char get_approximate__doc__[] =
 "D.get_approximate(key, k) -> List of (key, value, mismatches) in D, allowing up to k mismatches in key.";
 
-void 
-_trie_get_approximate_helper(const unsigned char *key, const void *value, 
+static void 
+_trie_get_approximate_helper(const char *key, const void *value, 
 			     const int mismatches, void *data)
 {
     /* Append a tuple of (key, value) to data, which is a PyList. */
@@ -342,7 +341,7 @@ _trie_get_approximate_helper(const unsigned char *key, const void *value,
     if(PyErr_Occurred())
 	return;
 
-    if(!(py_key = PyString_FromString((const char *)key)))
+    if(!(py_key = PyString_FromString(key)))
 	return;
     if(!(py_mismatches = PyInt_FromLong(mismatches))) {
 	Py_DECREF(py_key);
@@ -366,7 +365,7 @@ _trie_get_approximate_helper(const unsigned char *key, const void *value,
 static PyObject *
 trie_get_approximate(trieobject *mp, PyObject *args)
 {
-    unsigned char *key;
+    const char *key;
     int k;
     PyObject *py_list;
 
@@ -434,9 +433,9 @@ static PyMethodDef trieobj_methods[] = {
     {NULL, NULL}   /* sentinel */
 };
 
-static PyObject *trie_getattr(PyObject *obj, char *name)
+static PyObject *trie_getattr(PyObject *obj, const char *name)
 {
-    return Py_FindMethod(trieobj_methods, (PyObject *)obj, name);
+    return Py_FindMethod(trieobj_methods, obj, name);
 
 }
 
@@ -448,7 +447,7 @@ static PyTypeObject Trie_Type = {
     0,
     trie_dealloc,       /*tp_dealloc*/
     0,                  /*tp_print*/
-    trie_getattr,                  /*tp_getattr*/
+    (getattrfunc)trie_getattr,                  /*tp_getattr*/
     0,                  /*tp_setattr*/
     0,                  /*tp_compare*/
     0,                  /*tp_repr*/
@@ -480,7 +479,7 @@ _write_to_handle(const void *towrite, const int length, void *handle)
     return success;
 }
 
-int _write_value_to_handle(const void *value, void *handle)
+static int _write_value_to_handle(const void *value, void *handle)
 {
     PyObject *py_value = (PyObject *)value,
 	*py_marshalled = NULL;
@@ -607,7 +606,7 @@ static PyObject *
 trie_load(PyObject *self, PyObject *args)
 {
     PyObject *py_handle;
-    Trie trie;
+    Trie* trie;
     trieobject *trieobj;
 
     if(!PyArg_ParseTuple(args, "O:load", &py_handle))

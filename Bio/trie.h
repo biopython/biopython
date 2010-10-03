@@ -1,4 +1,4 @@
-typedef struct _Trie *Trie;
+typedef struct Trie Trie; /* forward declaration */
 
 
 
@@ -9,14 +9,14 @@ typedef struct _Trie *Trie;
  * details of this structure.  When finished, each Trie should be
  * freed with Trie_del.
  */
-Trie Trie_new(void);
+Trie* Trie_new(void);
 
 
 /* Trie_del
  * --------
  * Free a Trie data structure.
  */
-void Trie_del(Trie trie);
+void Trie_del(Trie* trie);
 
 
 /* Trie_set
@@ -24,14 +24,14 @@ void Trie_del(Trie trie);
  * Set a string in the Trie to some value.  Returns a 0 if the
  * function succeeded.
  */
-int Trie_set(Trie trie, const unsigned char *key, const void *value);
+int Trie_set(Trie* trie, const char *key, const void *value);
 
 /* Trie_get
  * --------
  * Lookup whether a key exists in the Trie.  Returns the value that
  * was previous set in the Trie, or NULL if it doesn't exist.
  */
-void *Trie_get(const Trie trie, const unsigned char *key);
+void *Trie_get(const Trie* trie, const char *key);
 
 
 /* Trie_get_approximate
@@ -40,8 +40,8 @@ void *Trie_get(const Trie trie, const unsigned char *key);
  * the dictionary.  Passes back values using a callback function.
  */
 void 
-Trie_get_approximate(const Trie trie, const unsigned char *key, const int k,
-		     void (*callback)(const unsigned char *key, 
+Trie_get_approximate(const Trie* trie, const char *key, const int k,
+		     void (*callback)(const char *key, 
 				      const void *value,
 				      const int mismatches,
 				      void *data),
@@ -52,29 +52,29 @@ Trie_get_approximate(const Trie trie, const unsigned char *key, const int k,
  * --------
  * Return the number of strings in the trie.
  */
-int Trie_len(const Trie trie);
+int Trie_len(const Trie* trie);
 
 
 /* Trie_has_key
  * ------------
  * Return whether a key exists in the trie.
  */
-int Trie_has_key(const Trie trie, const unsigned char *key);
+int Trie_has_key(const Trie* trie, const char *key);
 
 
 /* Trie_has_prefix
  * ---------------
  * Return whether a string is a prefix of a key in the trie.
  */
-int Trie_has_prefix(const Trie trie, const unsigned char *prefix);
+int Trie_has_prefix(const Trie* trie, const char *prefix);
 
 
 /* Trie_with_prefix
  * ----------------
  * Iterate over all the keys in the trie that start with a prefix.
  */
-void Trie_with_prefix(const Trie trie, const unsigned char *prefix,
-		      void (*callback)(const unsigned char *key, 
+void Trie_with_prefix(const Trie* trie, const char *prefix,
+		      void (*callback)(const char *key, 
 				       const void *value,
 				       void *data),
 		      void *data
@@ -88,8 +88,8 @@ void Trie_with_prefix(const Trie trie, const unsigned char *prefix,
  * in arbitrary order.  data is a pointer to some arbitrary data and
  * gets passed unchanged to the callback.
  */
-void Trie_iterate(const Trie trie, 
-		  void (*callback)(const unsigned char *key, 
+void Trie_iterate(const Trie* trie, 
+		  void (*callback)(const char *key, 
 				   const void *value,
 				   void *data),
 		  void *data
@@ -108,7 +108,7 @@ void Trie_iterate(const Trie trie,
  * This function is platform-dependent, so byte streams created on one
  * machine may not necessarily port to another.
  */
-int Trie_serialize(const Trie trie, 
+int Trie_serialize(const Trie* trie, 
 		   int (*write)(const void *towrite, const int length, 
 				void *data),
 		   int (*write_value)(const void *value, void *data),
@@ -124,6 +124,6 @@ int Trie_serialize(const Trie trie,
  * read a value and return a pointer to it.  'data' is a pointer that
  * will be passed unchanged to 'read' and 'read_value'.
  */
-Trie Trie_deserialize(int (*read)(void *wasread, const int length, void *data),
+Trie* Trie_deserialize(int (*read)(void *wasread, const int length, void *data),
 		      void *(*read_value)(void *data),
 		      void *data);
