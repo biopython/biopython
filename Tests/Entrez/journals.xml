@@ -1,0 +1,241 @@
+<!DOCTYPE SerialsSet PUBLIC "-//NLM//DTDSERIALS, 1st January 2008//EN" "http://www.nlm.nih.gov/databases/dtd/nlmserials_080101.dtd">
+<SerialsSet>
+<Serial DataCreationMethod="P" Status="NLMCollection">
+    <NlmUniqueID>0413066</NlmUniqueID>
+    <Title>Cell</Title>
+    <MedlineTA>Cell</MedlineTA>
+    <PublicationInfo>
+        <Country>United States</Country>
+        <Place>Cambridge, Ma</Place>
+        <Publisher>Cell Press</Publisher>
+        <PublicationFirstYear>1974</PublicationFirstYear>
+        <Frequency>Biweekly</Frequency>
+    </PublicationInfo>
+    <ISSN IssnType="Print">0092-8674</ISSN>
+    <ISSN IssnType="Electronic">1097-4172</ISSN>
+    <ISSNLinking>0092-8674</ISSNLinking>
+    <ISOAbbreviation>Cell</ISOAbbreviation>
+    <Language>eng</Language>
+    <AcidFreeYN>N</AcidFreeYN>
+    <Coden>CELLB5</Coden>
+    <MinorTitleChangeYN>N</MinorTitleChangeYN>
+    <IndexingHistoryList>
+        <IndexingHistory CitationSubset="IM" IndexingTreatment="Full"
+IndexingStatus="Currently-indexed">
+            <DateOfAction>
+                <Year>1974</Year>
+                <Month>08</Month>
+                <Day>16</Day>
+            </DateOfAction>
+            <Coverage>v2n1,May 1974-</Coverage>
+            <CoverageNote>Last issue indexed from print: v132n1, Jan 11,
+2008.</CoverageNote>
+        </IndexingHistory>
+    </IndexingHistoryList>
+    <CurrentlyIndexedYN>Y</CurrentlyIndexedYN>
+    <CurrentlyIndexedForSubset CurrentSubset="IM"
+CurrentIndexingTreatment="Full"/>
+    <IndexOnlineYN>Y</IndexOnlineYN>
+    <IndexingSubset>IM</IndexingSubset>
+    <ReportedMedlineYN>Y</ReportedMedlineYN>
+    <BroadJournalHeadingList>
+        <BroadJournalHeading>Cell Biology</BroadJournalHeading>
+    </BroadJournalHeadingList>
+    <MeshHeadingList>
+        <MeshHeading>
+            <DescriptorName MajorTopicYN="Y">Cell Biology</DescriptorName>
+        </MeshHeading>
+    </MeshHeadingList>
+    <CrossReferenceList>
+        <CrossReference XrType="A">
+            <XrTitle>CELL</XrTitle>
+        </CrossReference>
+        <CrossReference XrType="X">
+            <XrTitle>Cell (Cambridge)</XrTitle>
+        </CrossReference>
+        <CrossReference XrType="A">
+            <XrTitle>Cell(Cambridge,Mass.)</XrTitle>
+        </CrossReference>
+        <CrossReference XrType="A">
+            <XrTitle>Cell.</XrTitle>
+        </CrossReference>
+    </CrossReferenceList>
+    <SortSerialName>CELL</SortSerialName>
+    <IlsCreatedTimestamp>
+        <Year>1998</Year>
+        <Month>11</Month>
+        <Day>05</Day>
+    </IlsCreatedTimestamp>
+    <IlsUpdatedTimestamp>
+        <Year>2010</Year>
+        <Month>06</Month>
+        <Day>11</Day>
+    </IlsUpdatedTimestamp>
+</Serial>
+
+
+<Serial DataCreationMethod="P" Status="NLMCollection">
+    <NlmUniqueID>0410462</NlmUniqueID>
+    <Title>Nature</Title>
+    <MedlineTA>Nature</MedlineTA>
+    <PublicationInfo>
+        <Country>England</Country>
+        <Place>Basingstoke</Place>
+        <Publisher>Nature Publishing Group</Publisher>
+        <PublicationFirstYear>1869</PublicationFirstYear>
+        <Frequency>Weekly</Frequency>
+    </PublicationInfo>
+    <ISSN IssnType="Print">0028-0836</ISSN>
+    <ISSN IssnType="Electronic">1476-4687</ISSN>
+    <ISSNLinking>0028-0836</ISSNLinking>
+    <ISOAbbreviation>Nature</ISOAbbreviation>
+    <Language>eng</Language>
+    <AcidFreeYN>N</AcidFreeYN>
+    <Coden>NATUAS</Coden>
+    <MinorTitleChangeYN>N</MinorTitleChangeYN>
+    <IndexingHistoryList>
+        <IndexingHistory CitationSubset="OM" IndexingTreatment="Unknown"
+IndexingStatus="Date-range-of-indexed-citations-unspecified">
+            <DateOfAction>
+                <Year>2005</Year>
+                <Month>05</Month>
+                <Day>10</Day>
+            </DateOfAction>
+        </IndexingHistory>
+        <IndexingHistory CitationSubset="IM" IndexingTreatment="Selective"
+IndexingStatus="Currently-indexed">
+            <DateOfAction>
+                <Year>1963</Year>
+                <Month>05</Month>
+                <Day>31</Day>
+            </DateOfAction>
+            <Coverage>v205n976,Mar. 13, 1965-</Coverage>
+            <CoverageNote>Indexed online with v423n6943 June 26,
+2003</CoverageNote>
+        </IndexingHistory>
+    </IndexingHistoryList>
+    <CurrentlyIndexedYN>Y</CurrentlyIndexedYN>
+    <CurrentlyIndexedForSubset CurrentSubset="IM"
+CurrentIndexingTreatment="Selective"/>
+    <IndexOnlineYN>Y</IndexOnlineYN>
+    <IndexingSubset>IM</IndexingSubset>
+    <ReportedMedlineYN>Y</ReportedMedlineYN>
+    <BroadJournalHeadingList>
+        <BroadJournalHeading>Science</BroadJournalHeading>
+    </BroadJournalHeadingList>
+    <MeshHeadingList>
+        <MeshHeading>
+            <DescriptorName MajorTopicYN="Y">Science</DescriptorName>
+        </MeshHeading>
+    </MeshHeadingList>
+    <CrossReferenceList>
+        <CrossReference XrType="A">
+            <XrTitle>NATURE</XrTitle>
+        </CrossReference>
+        <CrossReference XrType="A">
+            <XrTitle>NATURE (LOND</XrTitle>
+        </CrossReference>
+        <CrossReference XrType="A">
+            <XrTitle>Nature (Lond)</XrTitle>
+        </CrossReference>
+        <CrossReference XrType="A">
+            <XrTitle>Nature (London)</XrTitle>
+        </CrossReference>
+        <CrossReference XrType="A">
+            <XrTitle>Nature.</XrTitle>
+        </CrossReference>
+        <CrossReference XrType="A">
+            <XrTitle>Natyre, Lond.</XrTitle>
+        </CrossReference>
+    </CrossReferenceList>
+    <SortSerialName>NATURE</SortSerialName>
+    <IlsCreatedTimestamp>
+        <Year>1998</Year>
+        <Month>11</Month>
+        <Day>05</Day>
+    </IlsCreatedTimestamp>
+    <IlsUpdatedTimestamp>
+        <Year>2010</Year>
+        <Month>06</Month>
+        <Day>11</Day>
+    </IlsUpdatedTimestamp>
+</Serial>
+
+
+<Serial DataCreationMethod="P" Status="NLMCollection">
+    <NlmUniqueID>0404511</NlmUniqueID>
+    <Title>Science (New York, N.Y.)</Title>
+    <MedlineTA>Science</MedlineTA>
+    <PublicationInfo>
+        <Country>United States</Country>
+        <Place>Washington, DC</Place>
+        <Publisher>American Association for the Advancement of
+Science</Publisher>
+        <PublicationFirstYear>1880</PublicationFirstYear>
+        <Frequency>Weekly (except last week in Dec.)</Frequency>
+    </PublicationInfo>
+    <ISSN IssnType="Print">0036-8075</ISSN>
+    <ISSN IssnType="Electronic">1095-9203</ISSN>
+    <ISSNLinking>0036-8075</ISSNLinking>
+    <ISOAbbreviation>Science</ISOAbbreviation>
+    <Language>eng</Language>
+    <AcidFreeYN>N</AcidFreeYN>
+    <Coden>SCIEAS</Coden>
+    <ContinuationNotes>Absorbed: Scientific monthly. Jan. 1958
+</ContinuationNotes>
+    <MinorTitleChangeYN>N</MinorTitleChangeYN>
+    <IndexingHistoryList>
+        <IndexingHistory CitationSubset="OM" IndexingTreatment="Unknown"
+IndexingStatus="Date-range-of-indexed-citations-unspecified">
+            <DateOfAction>
+                <Year>2005</Year>
+                <Month>05</Month>
+                <Day>10</Day>
+            </DateOfAction>
+        </IndexingHistory>
+        <IndexingHistory CitationSubset="IM" IndexingTreatment="Selective"
+IndexingStatus="Currently-indexed">
+            <DateOfAction>
+                <Year>1963</Year>
+                <Month>05</Month>
+                <Day>31</Day>
+            </DateOfAction>
+            <Coverage>v149n687,Aug. 27, 1965-</Coverage>
+            <CoverageNote>Indexed online with v295n5552, Jan. 4,
+2002</CoverageNote>
+        </IndexingHistory>
+    </IndexingHistoryList>
+    <CurrentlyIndexedYN>Y</CurrentlyIndexedYN>
+    <CurrentlyIndexedForSubset CurrentSubset="IM"
+CurrentIndexingTreatment="Selective"/>
+    <IndexOnlineYN>Y</IndexOnlineYN>
+    <IndexingSubset>IM</IndexingSubset>
+    <ReportedMedlineYN>Y</ReportedMedlineYN>
+    <BroadJournalHeadingList>
+        <BroadJournalHeading>Science</BroadJournalHeading>
+    </BroadJournalHeadingList>
+    <MeshHeadingList>
+        <MeshHeading>
+            <DescriptorName MajorTopicYN="Y">Science</DescriptorName>
+        </MeshHeading>
+    </MeshHeadingList>
+    <CrossReferenceList>
+        <CrossReference XrType="A">
+            <XrTitle>Science.</XrTitle>
+        </CrossReference>
+    </CrossReferenceList>
+    <SortSerialName>SCIENCE (NEW YORK, N.Y.)</SortSerialName>
+    <IlsCreatedTimestamp>
+        <Year>1998</Year>
+        <Month>11</Month>
+        <Day>05</Day>
+    </IlsCreatedTimestamp>
+    <IlsUpdatedTimestamp>
+        <Year>2010</Year>
+        <Month>07</Month>
+        <Day>16</Day>
+    </IlsUpdatedTimestamp>
+</Serial>
+
+
+</SerialsSet>

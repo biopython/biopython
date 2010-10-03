@@ -4696,6 +4696,36 @@ class EFetchTest(unittest.TestCase):
         self.assertRaises(Parser.NotXMLError, iterator.next)
         handle.close()
 
+    def test_pubmed_html(self):
+        '''Test error handling when presented with HTML (so XML-like) data
+        '''
+        # To create the HTML file, use
+        # >>> Bio.Entrez.efetch(db="pubmed", id="19304878")
+        from Bio.Entrez import Parser
+        handle = open('Entrez/pubmed3.html', "rb")
+        self.assertRaises(Parser.NotXMLError, Entrez.read, handle)
+        handle.close()
+        # Test if the error is also raised with Entrez.parse
+        handle = open('Entrez/pubmed3.html', "rb")
+        records = Entrez.parse(handle)
+        self.assertRaises(Parser.NotXMLError, records.next)
+        handle.close()
+
+    def test_xml_without_declaration(self):
+        '''Test error handling for a missing XML declaration
+        '''
+        # To create the XML file, use
+        # >>> Bio.Entrez.efetch(db="journals",id="2830,6011,7473",retmode='xml')
+        from Bio.Entrez import Parser
+        handle = open('Entrez/journals.xml', "rb")
+        self.assertRaises(Parser.NotXMLError, Entrez.read, handle)
+        handle.close()
+        # Test if the error is also raised with Entrez.parse
+        handle = open('Entrez/journals.xml', "rb")
+        records = Entrez.parse(handle)
+        self.assertRaises(Parser.NotXMLError, records.next)
+        handle.close()
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity = 2)

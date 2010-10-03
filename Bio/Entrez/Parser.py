@@ -162,7 +162,18 @@ class DataHandler:
                 # We have not seen the initial <!xml declaration, so probably
                 # the input data is not in XML format.
                 raise NotXMLError(e)
-        return self.object
+        try:
+            return self.object
+        except AttributeError:
+            if self.parser.StartElementHandler:
+                # We saw the initial <!xml declaration, and expat didn't notice
+                # any errors, so self.object should be defined. If not, this is
+                # a bug.
+                raise RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers at biopython-dev@biopython.org for assistance.")
+            else:
+                # We did not see the initial <!xml declaration, so probably
+                # the input data is not in XML format.
+                raise NotXMLError("XML declaration not found")
 
     def parse(self, handle):
         BLOCK = 1024
@@ -172,9 +183,22 @@ class DataHandler:
             if not text:
                 # We have reached the end of the XML file
                 if self.stack:
+                    # No more XML data, but there is still some unfinished
+                    # business
                     raise CorruptedXMLError
-                for record in self.object:
-                    yield record
+                try:
+                    for record in self.object:
+                        yield record
+                except AttributeError:
+                    if self.parser.StartElementHandler:
+                        # We saw the initial <!xml declaration, and expat
+                        # didn't notice any errors, so self.object should be
+                        # defined. If not, this is a bug.
+                        raise RuntimeError("Failed to parse the XML file correctly, possibly due to a bug in Bio.Entrez. Please contact the Biopython developers at biopython-dev@biopython.org for assistance.")
+                    else:
+                        # We did not see the initial <!xml declaration, so
+                        # probably the input data is not in XML format.
+                        raise NotXMLError("XML declaration not found")
                 self.parser.Parse("", True)
                 self.parser = None
                 return
