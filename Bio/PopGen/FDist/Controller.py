@@ -306,7 +306,10 @@ class FDistController:
         os.system('cd ' + data_dir + ' && ' +
                 self._get_path(pv_name) + ' < ' + in_name + ' > ' + out_name)
         pvf = open(data_dir + os.sep + out_file, 'r')
-        result = map(lambda x: tuple(map(lambda y: float(y), x.rstrip().split(' '))),
+        def my_float(f):
+            if f=="-nan": f="nan"
+            return float(f)
+        result = map(lambda x: tuple(map(lambda y: my_float(y), x.rstrip().split(' '))),
             pvf.readlines())
         pvf.close()
         os.remove(data_dir + os.sep + in_name)
