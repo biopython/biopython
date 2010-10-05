@@ -363,7 +363,8 @@ def _retrieve_qualifier_value(adaptor, primary_id):
     qualifiers = {}
     for name, value in qvs:
         if name == "keyword": name = "keywords"
-        elif name == "date_changed": name = "dates"
+        #See handling of "date" in Loader.py
+        elif name == "date_changed": name = "date"
         elif name == "secondary_accession": name = "accessions"
         qualifiers.setdefault(name, []).append(value)
     return qualifiers

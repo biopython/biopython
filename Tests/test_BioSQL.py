@@ -508,9 +508,6 @@ class ClosedLoopTest(unittest.TestCase):
             for key in ["comment", "references", "db_source"]:
                 if key in old.annotations and key not in new.annotations:
                     del old.annotations[key]
-            #TODO - remove this hack one we write the date properly:
-            del old.annotations["date"]
-            del new.annotations["date"]
             self.assertTrue(compare_record(old, new))
         #Done
         server.close()

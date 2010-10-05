@@ -653,7 +653,7 @@ class DatabaseLoader:
                    " VALUES (%s, %s, %s, %s)"
         tag_ontology_id = self._get_ontology_id('Annotation Tags')
         for key, value in record.annotations.iteritems():
-            if key in ["references", "comment", "ncbi_taxid"]:
+            if key in ["references", "comment", "ncbi_taxid", "date"]:
                 #Handled separately
                 continue
             term_id = self._get_term_id(key, ontology_id=tag_ontology_id)
