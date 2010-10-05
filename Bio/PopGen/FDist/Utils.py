@@ -109,6 +109,7 @@ def _convert_genepop_to_fdist_big(gp_rec, report_loci = None):
                         alleles.append(al)
             lParser = work_rec.get_individual()
         #here we go again (necessary...)
+        alleles.sort()
         def process_pop(pop_data, alleles, allele_counts):
             allele_array = [] #We need the same order as in alleles
             for allele in alleles:
