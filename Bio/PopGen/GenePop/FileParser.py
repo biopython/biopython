@@ -201,16 +201,19 @@ class FileRecord:
             f.write(locus + "\n")
         curr_pop = 0
         l_parser = old_rec.get_individual()
-        f.write("POP\n")
+        start_pop = True
         while l_parser:
             if curr_pop == pos:
                 old_rec.skip_population()
                 curr_pop += 1
             else:
                 if l_parser == True:
-                    f.write("POP\n")
                     curr_pop += 1
+                    start_pop = True
                 else:
+                    if start_pop:
+                        f.write("POP\n")
+                        start_pop = False
                     name, markers = l_parser
                     f.write(name + ",")
                     for marker in markers:
@@ -223,8 +226,8 @@ class FileRecord:
                                 aStr = "".join(['0', aStr])
                             f.write(aStr)
                     f.write('\n')
-
-                l_parser = old_rec.get_individual()
+        
+            l_parser = old_rec.get_individual()
         f.close()
     
     def remove_locus_by_position(self, pos, fname):
