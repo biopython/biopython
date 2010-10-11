@@ -26,6 +26,11 @@ if sys.version_info[0] == 3:
 else:
     maxint = sys.maxint
 
+def my_float(f):
+    #Because of Jython, mostly
+    if f=="-nan": f="nan"
+    return float(f)
+
 class FDistController:
     def __init__(self, fdist_dir = '', ext = None):
         """Initializes the controller.
@@ -89,18 +94,18 @@ class FDistController:
         f = open(data_dir + os.sep + out_name)
         if version == 1:
             fst_line = f.readline().rstrip().split(' ')
-            fst = float(fst_line[4])
+            fst = my_float(fst_line[4])
             sample_line = f.readline().rstrip().split(' ')
             sample = int(sample_line[9])
         else:
             l = f.readline().rstrip().split(" ")
             loci, pops = int(l[-5]), int(l[-2])
             fst_line = f.readline().rstrip().split(' ')
-            fst = float(fst_line[4])
+            fst = my_float(fst_line[4])
             sample_line = f.readline().rstrip().split(' ')
             sample = int(sample_line[9])
             F_line = f.readline().rstrip().split(' ')
-            F, obs = float(F_line[5]), int (F_line[8])
+            F, obs = my_float(F_line[5]), int (F_line[8])
         f.close()
         os.remove(data_dir + os.sep + in_name)
         os.remove(data_dir + os.sep + out_name)
@@ -190,7 +195,7 @@ class FDistController:
         f.close()
         for line in lines:
           if line.startswith('average Fst'):
-            fst = float(line.rstrip().split(' ')[-1])
+            fst = my_float(line.rstrip().split(' ')[-1])
         os.remove(data_dir + os.sep + in_name)
         os.remove(data_dir + os.sep + out_name)
         return fst
@@ -276,7 +281,7 @@ class FDistController:
         try:
             while l!='':
                 conf_lines.append(
-                    tuple(map(lambda x : float(x), l.rstrip().split(' ')))
+                    tuple(map(lambda x : my_float(x), l.rstrip().split(' ')))
                 )
                 l = f.readline()
         except ValueError:
@@ -306,9 +311,6 @@ class FDistController:
         os.system('cd ' + data_dir + ' && ' +
                 self._get_path(pv_name) + ' < ' + in_name + ' > ' + out_name)
         pvf = open(data_dir + os.sep + out_file, 'r')
-        def my_float(f):
-            if f=="-nan": f="nan"
-            return float(f)
         result = map(lambda x: tuple(map(lambda y: my_float(y), x.rstrip().split(' '))),
             pvf.readlines())
         pvf.close()
