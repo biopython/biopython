@@ -58,11 +58,19 @@ print "Checking Bio.Blast.NCBIWWW.qblast() with various queries"
 for program,database,query,e_value,entrez_filter,expected_hits in tests:
     print "qblast('%s', '%s', %s, ...)" % (program, database, repr(query))
     try:
-        handle = NCBIWWW.qblast(program, database, query, \
-                                alignments=10, descriptions=10, \
-                                hitlist_size=10, \
-                                entrez_query=entrez_filter,
-                                expect=e_value)
+        if program=="blastn":
+            #Check the megablast parameter is accepted
+            handle = NCBIWWW.qblast(program, database, query, \
+                                    alignments=10, descriptions=10, \
+                                    hitlist_size=10, \
+                                    entrez_query=entrez_filter,
+                                    expect=e_value, megablast="FALSE")
+        else:
+            handle = NCBIWWW.qblast(program, database, query, \
+                                    alignments=10, descriptions=10, \
+                                    hitlist_size=10, \
+                                    entrez_query=entrez_filter,
+                                    expect=e_value)
     except HTTPError:
         #e.g. a proxy error
         raise MissingExternalDependencyError("internet connection failed")

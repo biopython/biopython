@@ -19,8 +19,9 @@ Bio.SeqIO can now read and write IMGT files, a variant of the EMBL sequence
 text file format with longer feature indentation, and protein EMBL files
 (used in the EMBL patents database file epo_prt.dat).
 
-(At least) 8 people have contributed to this release, include 3 new people:
+(At least) 9 people have contributed to this release, include 4 new people:
 
+Bart de Koning
 Bartek Wilczynski
 Bartosz Telenczuk (first contribution)
 Cymon Cox
