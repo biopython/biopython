@@ -41,12 +41,13 @@ import os.path
 import sys
 import types
 
-from Bio import MissingExternalDependencyError
+from Bio import MissingPythonDependencyError
 
 try:
     import MySQLdb
 except:
-    raise MissingExternalDependencyError("Install MySQLdb if you want to use Bio.GFF.")
+    raise MissingPythonDependencyError("Install MySQLdb if you want to use "
+                                       "Bio.GFF.")
 
 from Bio.Alphabet import IUPAC
 from Bio import DocSQL

@@ -5,8 +5,8 @@
 try:
     from numpy import asarray
 except ImportError:
-    from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError(\
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(\
         "Install NumPy if you want to use Bio.MarkovModel.")
 
 from Bio import MarkovModel

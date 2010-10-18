@@ -10,12 +10,12 @@ try:
     from Bio import trie
 except ImportError:
     import os
-    from Bio import MissingExternalDependencyError
+    from Bio import MissingPythonDependencyError
     if os.name=="java":
         message = "Not available on Jython, Bio.trie requires compiled C code."
     else:
         message = "Could not import Bio.trie, check C code was compiled."
-    raise MissingExternalDependencyError(message)
+    raise MissingPythonDependencyError(message)
 
 
 class TestTrie(unittest.TestCase):

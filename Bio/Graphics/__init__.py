@@ -11,8 +11,8 @@ try:
     import reportlab as r
     del r
 except ImportError:
-    from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError( \
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError( \
         "Please install ReportLab if you want "
         "to use Bio.Graphics. You can find ReportLab at "
         "http://www.reportlab.org/downloads.html")
@@ -67,8 +67,8 @@ def _write(drawing, output_file, format, dpi=72):
     if drawmethod is None:
         #i.e. We wanted renderPM but it isn't installed
         #See the import at the top of the function.
-        from Bio import MissingExternalDependencyError
-        raise MissingExternalDependencyError( \
+        from Bio import MissingPythonDependencyError
+        raise MissingPythonDependencyError(
             "Please install ReportLab's renderPM module")
 
     if drawmethod == renderPM:

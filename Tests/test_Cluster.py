@@ -7,15 +7,16 @@ import unittest
 try:
     from Bio import Cluster
 except ImportError:
-    from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError(\
-        "If you want to use Bio.Cluster, install NumPy first and then reinstall Biopython")
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError("If you want to use Bio.Cluster, "
+                                       "install NumPy first and then "
+                                       "reinstall Biopython")
 
 try:
     import numpy
 except ImportError:
-    from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError(\
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(\
         "Install NumPy if you want to use Bio.Cluster")
 
 class TestCluster(unittest.TestCase):

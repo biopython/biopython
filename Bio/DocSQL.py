@@ -29,12 +29,13 @@ __version__ = "$Revision: 1.13 $"
 
 import sys
 
-from Bio import MissingExternalDependencyError
+from Bio import MissingPythonDependencyError
 
 try:
     import MySQLdb
 except:
-    raise MissingExternalDependencyError("Install MySQLdb if you want to use Bio.DocSQL.")
+    raise MissingPythonDependencyError("Install MySQLdb if you want to use "
+                                       "Bio.DocSQL.")
 
 connection = None
 

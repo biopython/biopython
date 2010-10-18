@@ -6,7 +6,7 @@ try:
     from numpy import array
 except ImportError:
     from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install NumPy if you want to use Bio.Statistics.lowess.")
 
 from Bio.Statistics.lowess import lowess

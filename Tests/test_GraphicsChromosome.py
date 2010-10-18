@@ -17,12 +17,12 @@ import random
 import cStringIO
 import unittest
 
-from Bio import MissingExternalDependencyError
+from Bio import MissingPythonDependencyError
 try:
     # reportlab
     from reportlab.lib import colors
 except:
-    raise MissingExternalDependencyError(\
+    raise MissingPythonDependencyError(
         "Install reportlab if you want to use Bio.Graphics.")
 
 # local stuff

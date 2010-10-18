@@ -16,7 +16,7 @@ try:
     from Bio.Phylo import PhyloXMLIO
 except ImportError:
     # TODO: should we issue a warning? the installer will have already whined
-    # raise MissingExternalDependencyError(
+    # raise MissingPythonDependencyError(
     #         "Install an ElementTree implementation if you want to use "
     #         "Bio.Phylo to parse phyloXML files.")
     supported_formats = {

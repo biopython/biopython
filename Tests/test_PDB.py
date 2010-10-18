@@ -17,8 +17,8 @@ from StringIO import StringIO
 try:
     import numpy
 except ImportError:
-    from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError(\
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.PDB.")
 
 from Bio.Seq import Seq

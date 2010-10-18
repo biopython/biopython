@@ -44,8 +44,8 @@ else:
                     try:
                         from elementtree import ElementTree
                     except ImportError:
-                        from Bio import MissingExternalDependencyError
-                        raise MissingExternalDependencyError(
+                        from Bio import MissingPythonDependencyError
+                        raise MissingPythonDependencyError(
                                 "No ElementTree module was found. "
                                 "Use Python 2.5+, lxml or elementtree if you "
                                 "want to use Bio.PhyloXML.")

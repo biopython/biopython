@@ -16,7 +16,7 @@ from Bio import MissingExternalDependencyError
 try:
     from Bio.Phylo import PhyloXML as PX, PhyloXMLIO
 except ImportError:
-    raise MissingExternalDependencyError(
+    raise MissingPythonDependencyError(
             "Install an ElementTree implementation if you want to use "
             "Bio.Phylo to parse phyloXML files.")
 
