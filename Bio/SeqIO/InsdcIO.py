@@ -300,28 +300,29 @@ class _InsdcWriter(SequentialSequenceWriter):
             return str(answer)
 
     def _split_multi_line(self, text, max_len):
-        "Returns a list of strings."""
+        """Returns a list of strings.
+        
+        Any single words which are too long get returned as a whole line
+        (e.g. URLs) without an exception or warning.
+        """
         #TODO - Do the line spliting while preserving white space?
         text = text.strip()
         if len(text) <= max_len:
             return [text]
 
         words = text.split()
-        if max([len(w) for w in words]) > max_len:
-            raise ValueError("Text cannot be broken into len %i lines!:\n%s"
-                             % (max_len, repr(text)))
         text = ""
         while words and len(text) + 1 + len(words[0]) <= max_len:
             text += " " + words.pop(0)
             text = text.strip()
-        assert len(text) <= max_len
+        #assert len(text) <= max_len
         answer = [text]
         while words:
             text = words.pop(0)
             while words and len(text) + 1 + len(words[0]) <= max_len:
                 text += " " + words.pop(0)
                 text = text.strip()
-            assert len(text) <= max_len
+            #assert len(text) <= max_len
             answer.append(text)
         assert not words
         return answer
@@ -356,8 +357,9 @@ class GenBankWriter(_InsdcWriter):
     def _write_single_line(self, tag, text):
         "Used in the the 'header' of each GenBank record."""
         assert len(tag) < self.HEADER_WIDTH
-        assert len(text) <= self.MAX_WIDTH - self.HEADER_WIDTH, \
-               "Annotation %s too long for %s line" % (repr(text), tag)
+        if len(text) > self.MAX_WIDTH - self.HEADER_WIDTH:
+            import warnings
+            warnings.warn("Annotation %r too long for %s line" % (text, tag))
         self.handle.write("%s%s\n" % (tag.ljust(self.HEADER_WIDTH),
                                       text.replace("\n", " ")))
 
