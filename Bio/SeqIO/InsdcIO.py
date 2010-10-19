@@ -803,7 +803,9 @@ class EmblWriter(_InsdcWriter):
     def _write_single_line(self, tag, text):
         assert len(tag)==2
         line = tag+"   "+text
-        assert len(line) <= self.MAX_WIDTH, line
+        if len(text) > self.MAX_WIDTH:
+            import warnings
+            warnings.warn("Line %r too long" % line)
         self.handle.write(line+"\n")
 
     def _write_multi_line(self, tag, text):
