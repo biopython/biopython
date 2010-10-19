@@ -152,6 +152,27 @@ def _insdc_location_string_ignoring_strand_and_subfeatures(feature, rec_length):
         #Special case, for 11:12 return 12 rather than 12..12
         #(a length one slice, meaning a single letter)
         return "%s%i" % (ref, feature.location.end.position)
+    elif isinstance(feature.location.start, SeqFeature.UnknownPosition) \
+    or isinstance(feature.location.end, SeqFeature.UnknownPosition):
+        #Special case for features from SwissProt/UniProt files
+        if isinstance(feature.location.start, SeqFeature.UnknownPosition) \
+        and isinstance(feature.location.end, SeqFeature.UnknownPosition):
+            #import warnings
+            #warnings.warn("Feature with unknown location")
+            #return "?"
+            raise ValueError("Feature with unknown location")
+        elif isinstance(feature.location.start, SeqFeature.UnknownPosition):
+            #Treat the unknown start position as a BeforePosition
+            return "%s<%i..%s" \
+                % (ref,
+                   feature.location.nofuzzy_end,
+                   _insdc_feature_position_string(feature.location.end))
+        else:
+            #Treat the unknown end position as an AfterPosition
+            return "%s%s..>%i" \
+                % (ref,
+                   _insdc_feature_position_string(feature.location.start),
+                   feature.location.nofuzzy_start)
     else:
         #Typical case, e.g. 12..15 gets mapped to 11:15
         return ref \
@@ -268,7 +289,8 @@ class _InsdcWriter(SequentialSequenceWriter):
         """Write a single SeqFeature object to features table."""
         assert feature.type, feature
         location = _insdc_feature_location_string(feature, record_length)
-        line = (self.QUALIFIER_INDENT_TMP  % feature.type)[:self.QUALIFIER_INDENT] \
+        f_type = feature.type.replace(" ","_")
+        line = (self.QUALIFIER_INDENT_TMP  % f_type)[:self.QUALIFIER_INDENT] \
                + self._wrap_location(location) + "\n"
         self.handle.write(line)
         #Now the qualifiers...
