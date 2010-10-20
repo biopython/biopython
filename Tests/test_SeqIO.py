@@ -444,15 +444,10 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
         try:
             record = seq_iterator.next()
         except StopIteration:
-            record = None
-        #Note that if the SeqRecord class has a __len__ method,
-        #and it has a zero-length sequence, this would fail an
-        #"if record" test.
-        if record is not None:
-            records3.append(record)
-        else:
             break
-
+        assert record is not None, "Should raise StopIteration not return None"
+        records3.append(record)
+        
     #Try a mixture of next() and list (a torture test!)
     seq_iterator = SeqIO.parse(handle=open(t_filename,mode), format=t_format)
     try:
