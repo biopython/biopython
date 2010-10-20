@@ -874,16 +874,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def location(self, content):
         """Parse out location information from the location string.
 
-        This uses a comprehensive but slow spark based parser to do the
-        parsing, and then translates the results of the parse into appropriate
-        Location objects.
+        This uses simple Python code with some regular expressions to do the
+        parsing, and then translates the results into appropriate objects.
         """
-        # --- first preprocess the location for the spark parser
-        
-        # we need to clean up newlines and other whitespace inside
-        # the location before feeding it to the parser.
-        # locations should have no whitespace whatsoever based on the
-        # grammer
+        # clean up newlines and other whitespace inside the location before
+        # parsing - locations should have no whitespace whatsoever
         location_line = self._clean_location(content)
 
         # Older records have junk like replace(266,"c") in the
@@ -903,7 +898,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             location_line = location_line[11:-1]
             cur_feature.strand = -1
             #And continue...
-            
 
         #Special case handling of the most common cases for speed
         if _re_simple_location.match(location_line):
