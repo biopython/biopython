@@ -78,9 +78,9 @@ class IndexDictTests(unittest.TestCase):
         self.assertRaises(NotImplementedError, rec_dict.__setitem__, "X", None)
         self.assertRaises(NotImplementedError, rec_dict.copy)
         self.assertRaises(NotImplementedError, rec_dict.fromkeys, [])
-	#Check with key_function
+        #Check with key_function
         key_list = [add_prefix(id) for id in id_list]
-	rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
+        rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
         self.assertEqual(set(key_list), set(rec_dict.keys()))
         for key in key_list:
             self.assertTrue(key in rec_dict)
