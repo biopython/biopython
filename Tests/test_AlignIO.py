@@ -238,11 +238,9 @@ for (t_format, t_per, t_count, t_filename) in test_files:
         try:
             record = seq_iterator.next()
         except StopIteration:
-            record = None
-        if record:
-            alignments3.append(record)
-        else:
             break
+        assert record is not None, "Should raise StopIteration not return None"
+        alignments3.append(record)
 
     #Try a mixture of next() and list (a torture test!)
     seq_iterator = AlignIO.parse(handle=open(t_filename,"r"), format=t_format)

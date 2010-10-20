@@ -76,12 +76,12 @@ class EmbossIterator(AlignmentIterator):
         except AttributeError:      
             line = handle.readline()
         if not line:
-            return None
+            raise StopIteration
 
         while line.rstrip() != "#=======================================":
             line = handle.readline()
             if not line:
-                return None
+                raise StopIteration
 
         length_of_seqs = None
         number_of_seqs = None

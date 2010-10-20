@@ -76,7 +76,7 @@ class FastaM10Iterator(AlignmentIterator):
         except AttributeError:      
             line = handle.readline()
         if not line:
-            return None
+            raise StopIteration
 
         if line.startswith("#"):
             #Skip the file header before the alignments.  e.g.
@@ -90,10 +90,10 @@ class FastaM10Iterator(AlignmentIterator):
             #Now should be some alignments, but if not we move onto the next query
         if not line:
             #End of file
-            return None
+            raise StopIteration
         if ">>><<<" in line:
             #Reached the end of the alignments, no need to read the footer...
-            return None
+            raise StopIteration
 
 
         #Should start >>... and not >>>...

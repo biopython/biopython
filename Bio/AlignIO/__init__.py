@@ -269,9 +269,7 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
         records = list(SeqIO.parse(handle, format, alphabet))
         if records:
             yield MultipleSeqAlignment(records, alphabet)
-        else:
-            #No alignment found!
-            pass
+    raise StopIteration
 
 def _force_alphabet(alignment_iterator, alphabet):
     """Iterate over alignments, over-riding the alphabet (PRIVATE)."""

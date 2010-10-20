@@ -318,7 +318,7 @@ class StockholmIterator(AlignmentIterator):
             line = self.handle.readline()
         if not line:
             #Empty file - just give up.
-            return
+            raise StopIteration
         if not line.strip() == '# STOCKHOLM 1.0':
             raise ValueError("Did not find STOCKHOLM header")
             #import sys
@@ -453,7 +453,7 @@ class StockholmIterator(AlignmentIterator):
 
             return alignment
         else:
-            return None
+            raise StopIteration
 
 
     def _identifier_split(self, identifier):

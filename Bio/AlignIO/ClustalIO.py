@@ -91,7 +91,7 @@ class ClustalIterator(AlignmentIterator):
         except AttributeError:      
             line = handle.readline()
         if not line:
-            return None
+            raise StopIteration
 
         #Whitelisted headers we know about
         known_headers = ['CLUSTAL', 'PROBCONS', 'MUSCLE']
@@ -245,7 +245,7 @@ class ClustalIterator(AlignmentIterator):
 
         assert len(ids) == len(seqs)
         if len(seqs) == 0 or len(seqs[0]) == 0:
-            return None
+            raise StopIteration
 
         if self.records_per_alignment is not None \
         and self.records_per_alignment != len(ids):
