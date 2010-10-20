@@ -245,26 +245,23 @@ class SffDict(_IndexedSeqFileDict) :
     def __getitem__(self, key) :
         handle = self._handle
         handle.seek(dict.__getitem__(self, key))
-        record = SeqIO.SffIO._sff_read_seq_record(handle,
-                                                  self._flows_per_read,
-                                                  self._flow_chars,
-                                                  self._key_sequence,
-                                                  self._alphabet)
-        assert record.id == key
-        return record
+        return SeqIO.SffIO._sff_read_seq_record(handle,
+                                                self._flows_per_read,
+                                                self._flow_chars,
+                                                self._key_sequence,
+                                                self._alphabet)
+
 
 class SffTrimmedDict(SffDict) :
     def __getitem__(self, key) :
         handle = self._handle
         handle.seek(dict.__getitem__(self, key))
-        record = SeqIO.SffIO._sff_read_seq_record(handle,
-                                                  self._flows_per_read,
-                                                  self._flow_chars,
-                                                  self._key_sequence,
-                                                  self._alphabet,
-                                                  trim=True)
-        assert record.id == key
-        return record
+        return SeqIO.SffIO._sff_read_seq_record(handle,
+                                                self._flows_per_read,
+                                                self._flow_chars,
+                                                self._key_sequence,
+                                                self._alphabet,
+                                                trim=True)
 
 ###################
 # Simple indexers #

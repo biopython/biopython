@@ -20,6 +20,10 @@ from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
 from seq_tests_common import compare_record
 
+def add_prefix(key):
+    """Dummy key_function for testing index code."""
+    return "id_" + key
+
 class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
     def simple_check(self, filename, format, alphabet):
@@ -74,6 +78,14 @@ class IndexDictTests(unittest.TestCase):
         self.assertRaises(NotImplementedError, rec_dict.__setitem__, "X", None)
         self.assertRaises(NotImplementedError, rec_dict.copy)
         self.assertRaises(NotImplementedError, rec_dict.fromkeys, [])
+	#Check with key_function
+        key_list = [add_prefix(id) for id in id_list]
+	rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
+        self.assertEqual(set(key_list), set(rec_dict.keys()))
+        for key in key_list:
+            self.assertTrue(key in rec_dict)
+            self.assertEqual(key, add_prefix(rec_dict[key].id))
+            self.assertEqual(key, add_prefix(rec_dict.get(key).id))
         #Done
 
     def get_raw_check(self, filename, format, alphabet):
