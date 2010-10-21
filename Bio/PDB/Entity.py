@@ -165,9 +165,27 @@ class DisorderedEntityWrapper:
             raise AttributeError
         return getattr(self.selected_child, method)
 
+    def __getitem__(self, id):
+        "Return the child with the given id."
+        return self.selected_child[id]
+
+    # XXX Why doesn't this forward to selected_child?
+    # (NB: setitem was here before getitem, iter, len, sub)
     def __setitem__(self, id, child):
         "Add a child, associated with a certain id."
         self.child_dict[id]=child
+
+    def __iter__(self):
+        "Return the number of children."
+        return iter(self.selected_child)
+
+    def __len__(self):
+        "Return the number of children."
+        return len(self.selected_child)
+
+    def __sub__(self, other):
+        """Subtraction with another object."""
+        return self.selected_child - other
 
     # Public methods    
 
