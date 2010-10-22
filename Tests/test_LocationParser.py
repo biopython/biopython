@@ -2,6 +2,12 @@
 """Test the spark based location parser for parsing GenBank locations.
 """
 
+import sys
+if sys.version_info[0] >= 3:
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(\
+        "This deprecated module doesn't work on Python 3.")
+
 # test the feature table parser
 from Bio.GenBank import LocationParser
 
