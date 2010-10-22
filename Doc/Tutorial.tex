@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich}
-\date{Last Update -- 20 September 2010 (Biopython 1.55+)}
+\date{Last Update -- 22 October 2010 (Biopython 1.55+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -4904,9 +4904,7 @@ For the DOM and SAX parsers, see the Python documentation. The parser in \verb+B
 
 NCBI uses DTD (Document Type Definition) files to describe the structure of the information contained in XML files. Most of the DTD files used by NCBI are included in the Biopython distribution. The \verb+Bio.Entrez+ parser makes use of the DTD files when parsing an XML file returned by NCBI Entrez.
 
-Occasionally, you may find that the DTD file associated with a specific XML file is missing in the Biopython distribution. In particular, this may happen when NCBI updates its DTD files. If this happens, \verb+Entrez.read+ will give an error message showing which DTD file is missing.
-You can download the DTD file from NCBI; most can be found at \url{http://www.ncbi.nlm.nih.gov/dtd/} or \url{http://eutils.ncbi.nlm.nih.gov/entrez/query/DTD/}.
-After downloading, the DTD file should be stored in the directory \verb+...site-packages/Bio/Entrez/DTDs+, containing the other DTD files.  Alternatively, if you installed Biopython from source, you can add the DTD file to the source code's \verb+Bio/Entrez/DTDs+ directory, and reinstall Biopython. This will install the new DTD file in the correct location together with the other DTD files.
+Occasionally, you may find that the DTD file associated with a specific XML file is missing in the Biopython distribution. In particular, this may happen when NCBI updates its DTD files. If this happens, \verb+Entrez.read+ will show a warning message with the name and URL of the missing DTD file. The parser will proceed to access the missing DTD file through the internet, allowing the parsing of the XML file to continue.  However, the parser is much faster if the DTD file is available locally. For this purpose, please download the DTD file from the URL in the warning message and place it in the directory \verb+...site-packages/Bio/Entrez/DTDs+, containing the other DTD files.  Alternatively, if you installed Biopython from source, you can add the DTD file to the source code's \verb+Bio/Entrez/DTDs+ directory, and reinstall Biopython. This will install the new DTD file in the correct location together with the other DTD files.
 
 The Entrez Programming Utilities can also generate output in other formats, such as the Fasta or GenBank file formats for sequence databases, or the MedLine format for the literature database, discussed in Section~\ref{sec:entrez-specialized-parsers}.
 

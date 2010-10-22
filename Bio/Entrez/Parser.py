@@ -36,6 +36,9 @@ be used directly.
 
 
 import os.path
+import urlparse
+import urllib
+import warnings
 from xml.parsers import expat
 
 # The following four classes are used to add a member .attributes to integers,
@@ -143,6 +146,7 @@ class DataHandler:
         self.structures = {}
         self.items = []
         self.dtd_dir = dtd_dir
+        self.dtd_urls = []
         self.validating = validate
         self.parser = expat.ParserCreate(namespace_separator=" ")
         self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
@@ -413,6 +417,17 @@ class DataHandler:
         we try to download it. In practice, this may fail though, if the XML
         relies on many interrelated DTDs. If new DTDs appear, putting them in
         Bio/Entrez/DTDs will allow the parser to see them."""
+        urlinfo = urlparse.urlparse(systemId)
+        if urlinfo.scheme=='http':
+            # Then this is an absolute path to the DTD.
+            url = systemId
+        elif urlinfo.scheme=='':
+            # Then this is a relative path to the DTD.
+            # Look at the parent URL to find the full path.
+            url = self.dtd_urls[-1]
+            source = os.path.dirname(url)
+            url = os.path.join(source, systemId)
+        self.dtd_urls.append(url)
         location, filename = os.path.split(systemId)
         path = os.path.join(str(self.dtd_dir), str(filename))
         try:
@@ -423,19 +438,20 @@ Unable to load DTD file %s.
 
 Bio.Entrez uses NCBI's DTD files to parse XML files returned by NCBI Entrez.
 Though most of NCBI's DTD files are included in the Biopython distribution,
-sometimes you may find that a particular DTD file is missing. In such a
-case, you can download the DTD file from NCBI and install it manually.
+sometimes you may find that a particular DTD file is missing. While we can
+access the DTD file through the internet, the parser is much faster if the
+required DTD files are available locally.
 
-Usually, you can find missing DTD files at either
-    http://www.ncbi.nlm.nih.gov/dtd/
-or
-    http://www.ncbi.nlm.nih.gov/corehtml/query/DTD/
-If you cannot find %s there, you may also try to search
-for it with a search engine such as Google.
+For this purpose, please download %s from
 
-Please save %s in the directory
 %s
+
+and save it the directory
+
+%s
+
 in order for Bio.Entrez to find it.
+
 Alternatively, you can save %s in the directory
 Bio/Entrez/DTDs in the Biopython distribution, and reinstall Biopython.
 
@@ -443,10 +459,17 @@ Please also inform the Biopython developers about this missing DTD, by
 reporting a bug on http://bugzilla.open-bio.org/ or sign up to our mailing
 list and emailing us, so that we can include it with the next release of
 Biopython.
-""" % (filename, filename, filename, self.dtd_dir, filename)
-            raise RuntimeError(message)
-            
+
+Proceeding to access the DTD file through the internet...
+""" % (filename, filename, url, self.dtd_dir, filename)
+            warnings.warn(message)
+            try:
+                handle = urllib.urlopen(url)
+            except IOError:
+                raise RuntimeException("Failed to access %s at %s" % (filename, url))
+
         parser = self.parser.ExternalEntityParserCreate(context)
         parser.ElementDeclHandler = self.elementDecl
         parser.ParseFile(handle)
+        self.dtd_urls.pop()
         return 1
