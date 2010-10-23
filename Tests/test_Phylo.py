@@ -210,6 +210,8 @@ class MixinTests(unittest.TestCase):
         self.assertEqual(tree.is_monophyletic(abc), tree.clade[0])
         self.assertEqual(tree.is_monophyletic(ab), False)
         self.assertEqual(tree.is_monophyletic(d), tree.clade[1])
+        # Alternate argument form
+        self.assertEqual(tree.is_monophyletic(*abcd), tree.root)
 
     def test_total_branch_length(self):
         """TreeMixin: total_branch_length() method."""
