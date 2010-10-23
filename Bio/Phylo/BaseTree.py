@@ -641,14 +641,6 @@ class Tree(TreeElement, TreeMixin):
         root = copy.deepcopy(clade)
         return cls(root, **kwargs)
 
-    # XXX Backward compatibility shim
-    @classmethod
-    def from_subtree(cls, clade, **kwargs):
-        """DEPRECATED: use from_clade() instead."""
-        warnings.warn("use from_clade() instead.""",
-                Bio.BiopythonDeprecationWarning, stacklevel=2)
-        return cls.from_clade(clade, **kwargs)
-
     @classmethod
     def randomized(cls, taxa, branch_length=1.0, branch_stdev=None):
         """Create a randomized bifurcating tree given a list of taxa.
