@@ -29,7 +29,6 @@ class Clade(BaseTree.Clade):
     def __init__(self, branch_length=1.0, name=None, clades=None,
                  confidence=None, comment=None):
         BaseTree.Clade.__init__(self, branch_length=branch_length,
-                name=name, clades=clades)
-        self.confidence = confidence
+                name=name, clades=clades, confidence=confidence)
         self.comment = comment
 

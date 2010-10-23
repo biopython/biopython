@@ -827,10 +827,12 @@ class Clade(TreeElement, TreeMixin):
     @param clades: Sub-trees rooted directly under this tree's root.
     @type clades: list
     """
-    def __init__(self, branch_length=None, name=None, clades=None):
-        self.clades = clades or []
-        self.name = name
+    def __init__(self, branch_length=None, name=None, clades=None,
+            confidence=None):
         self.branch_length = branch_length
+        self.name = name
+        self.clades = clades or []
+        self.confidence = confidence
 
     @property
     def root(self):
