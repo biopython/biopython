@@ -414,9 +414,8 @@ class DataHandler:
         """The purpose of this function is to load the DTD locally, instead
         of downloading it from the URL specified in the XML. Using the local
         DTD results in much faster parsing. If the DTD is not found locally,
-        we try to download it. In practice, this may fail though, if the XML
-        relies on many interrelated DTDs. If new DTDs appear, putting them in
-        Bio/Entrez/DTDs will allow the parser to see them."""
+        we try to download it. If new DTDs become available from NCBI,
+        putting them in Bio/Entrez/DTDs will allow the parser to see them."""
         urlinfo = urlparse.urlparse(systemId)
         if urlinfo.scheme=='http':
             # Then this is an absolute path to the DTD.
@@ -428,11 +427,14 @@ class DataHandler:
             source = os.path.dirname(url)
             url = os.path.join(source, systemId)
         self.dtd_urls.append(url)
+        # First, try to load the local version of the DTD file
         location, filename = os.path.split(systemId)
         path = os.path.join(str(self.dtd_dir), str(filename))
         try:
             handle = open(path, "rb")
         except IOError:
+            # DTD is not available as a local file. Try accessing it through
+            # the internet instead.
             message = """\
 Unable to load DTD file %s.
 
