@@ -90,7 +90,7 @@ class Pairwise(unittest.TestCase):
     def test_blastn(self):
         """Pairwise BLASTN search"""
         global exe_names
-        cline = Applications.NcbiblastpCommandline(exe_names["blastn"],
+        cline = Applications.NcbiblastnCommandline(exe_names["blastn"],
                         query="GenBank/NC_005816.ffn",
                         subject="GenBank/NC_005816.fna",
                         evalue="0.000001")
@@ -113,7 +113,7 @@ class Pairwise(unittest.TestCase):
     def test_tblastn(self):
         """Pairwise TBLASTN search"""
         global exe_names
-        cline = Applications.NcbiblastpCommandline(exe_names["tblastn"],
+        cline = Applications.NcbitblastnCommandline(exe_names["tblastn"],
                         query="GenBank/NC_005816.faa",
                         subject="GenBank/NC_005816.fna",
                         evalue="1e-6")
