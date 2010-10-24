@@ -95,7 +95,8 @@ def _convert_genepop_to_fdist_big(gp_rec, report_pops = None):
         return my_pop
     curr_pop = init_pop()
     num_pops = 1
-    report_pops(num_pops)
+    if report_pops:
+        report_pops(num_pops)
     while lParser:
         if lParser != True:
             for loci_pos in range(num_loci):
@@ -106,7 +107,8 @@ def _convert_genepop_to_fdist_big(gp_rec, report_pops = None):
         else:
             pops.append(curr_pop)
             num_pops += 1
-            report_pops(num_pops)
+            if report_pops:
+                report_pops(num_pops)
             curr_pop = init_pop()
         lParser = work_rec.get_individual()
     pops.append(curr_pop)
