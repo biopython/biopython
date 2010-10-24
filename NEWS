@@ -22,7 +22,7 @@ text file format with longer feature indentation, and protein EMBL files
 The Bio.Seq translation methods and function will now accept an arbitrary
 CodonTable object (for those of your working on very unusual organisms).
 
-(At least) 9 people have contributed to this release, include 4 new people:
+(At least) 10 people have contributed to this release, include 5 new people:
 
 Bart de Koning
 Bartek Wilczynski
@@ -31,6 +31,7 @@ Cymon Cox
 Eric Talevich
 Michiel de Hoon
 Peter Cock
+Phillip Garland (first contribution)
 Siong Kong (first contribution)
 Uri Laserson (first contribution)
 
