@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Additional unit tests for Bio.SeqIO.convert(...) function."""
+"""Additional unit tests for Bio.SeqIO.index(...) function."""
 import sys
 if sys.version_info[0] >= 3:
     from Bio import MissingExternalDependencyError
