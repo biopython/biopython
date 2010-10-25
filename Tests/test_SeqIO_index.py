@@ -33,17 +33,27 @@ class IndexDictTests(unittest.TestCase):
             mode = "r"
         id_list = [rec.id for rec in \
                    SeqIO.parse(open(filename, mode), format, alphabet)]
+        #Without key_function
         rec_dict = SeqIO.index(filename, format, alphabet)
-        self.assertEqual(set(id_list), set(rec_dict.keys()))
+        self.check_dict_methods(rec_dict, id_list, id_list)
+        #Check with key_function
+        key_list = [add_prefix(id) for id in id_list]
+        rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
+        self.check_dict_methods(rec_dict, key_list, id_list)
+        #Done
+    
+    def check_dict_methods(self, rec_dict, keys, ids):
+        self.assertEqual(set(keys), set(rec_dict.keys()))
         #This is redundant, I just want to make sure len works:
-        self.assertEqual(len(id_list), len(rec_dict))
+        self.assertEqual(len(keys), len(rec_dict))
         #Make sure boolean evaluation works
-        self.assertEqual(bool(id_list), bool(rec_dict))
-        for key in id_list:
+        self.assertEqual(bool(keys), bool(rec_dict))
+        for key,id in zip(keys, ids):
             self.assertTrue(key in rec_dict)
-            self.assertEqual(key, rec_dict[key].id)
-            self.assertEqual(key, rec_dict.get(key).id)
+            self.assertEqual(id, rec_dict[key].id)
+            self.assertEqual(id, rec_dict.get(key).id)
         #Check non-existant keys,
+        assert chr(0) not in keys, "Bad example in test"
         try:
             rec = rec_dict[chr(0)]
             raise ValueError("Accessing a non-existent key should fail")
@@ -54,9 +64,9 @@ class IndexDictTests(unittest.TestCase):
         if hasattr(dict, "iteritems"):
             #Python 2.x
             for key, rec in rec_dict.iteritems():
-                self.assertTrue(key in id_list)
+                self.assertTrue(key in keys)
                 self.assertTrue(isinstance(rec, SeqRecord))
-                self.assertEqual(rec.id, key)
+                self.assertTrue(rec.id, ids)
             #Now check non-defined methods...
             self.assertRaises(NotImplementedError, rec_dict.items)
             self.assertRaises(NotImplementedError, rec_dict.values)
@@ -66,11 +76,12 @@ class IndexDictTests(unittest.TestCase):
             for key, rec in rec_dict.iteritems():
                 self.assertTrue(key in id_list)
                 self.assertTrue(isinstance(rec, SeqRecord))
-                self.assertEqual(rec.id, key)
+                self.assertTrue(rec.id, ids)
             for rec in rec_dict.itervalues():
                 self.assertTrue(key in id_list)
                 self.assertTrue(isinstance(rec, SeqRecord))
-        
+                self.assertTrue(rec.id, ids)
+        #Check the following fail
         self.assertRaises(NotImplementedError, rec_dict.popitem)
         self.assertRaises(NotImplementedError, rec_dict.pop, chr(0))
         self.assertRaises(NotImplementedError, rec_dict.pop, chr(0), chr(1))
@@ -78,15 +89,6 @@ class IndexDictTests(unittest.TestCase):
         self.assertRaises(NotImplementedError, rec_dict.__setitem__, "X", None)
         self.assertRaises(NotImplementedError, rec_dict.copy)
         self.assertRaises(NotImplementedError, rec_dict.fromkeys, [])
-        #Check with key_function
-        key_list = [add_prefix(id) for id in id_list]
-        rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
-        self.assertEqual(set(key_list), set(rec_dict.keys()))
-        for key in key_list:
-            self.assertTrue(key in rec_dict)
-            self.assertEqual(key, add_prefix(rec_dict[key].id))
-            self.assertEqual(key, add_prefix(rec_dict.get(key).id))
-        #Done
 
     def get_raw_check(self, filename, format, alphabet):
         if format in SeqIO._BinaryFormats:
