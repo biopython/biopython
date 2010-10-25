@@ -66,7 +66,7 @@ class IndexDictTests(unittest.TestCase):
             for key, rec in rec_dict.iteritems():
                 self.assertTrue(key in keys)
                 self.assertTrue(isinstance(rec, SeqRecord))
-                self.assertTrue(rec.id, ids)
+                self.assertTrue(rec.id in ids)
             #Now check non-defined methods...
             self.assertRaises(NotImplementedError, rec_dict.items)
             self.assertRaises(NotImplementedError, rec_dict.values)
@@ -76,11 +76,11 @@ class IndexDictTests(unittest.TestCase):
             for key, rec in rec_dict.iteritems():
                 self.assertTrue(key in id_list)
                 self.assertTrue(isinstance(rec, SeqRecord))
-                self.assertTrue(rec.id, ids)
+                self.assertTrue(rec.id in ids)
             for rec in rec_dict.itervalues():
                 self.assertTrue(key in id_list)
                 self.assertTrue(isinstance(rec, SeqRecord))
-                self.assertTrue(rec.id, ids)
+                self.assertTrue(rec.id in ids)
         #Check the following fail
         self.assertRaises(NotImplementedError, rec_dict.popitem)
         self.assertRaises(NotImplementedError, rec_dict.pop, chr(0))
