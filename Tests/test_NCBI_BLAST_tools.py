@@ -61,7 +61,7 @@ if len(exe_names) < len(wanted) :
 
 
 class Pairwise(unittest.TestCase):
-    def test_blasp(self):
+    def test_blastp(self):
         """Pairwise BLASTP search"""
         global exe_names
         cline = Applications.NcbiblastpCommandline(exe_names["blastp"],
