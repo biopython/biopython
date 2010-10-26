@@ -74,7 +74,7 @@ class EntrezTests(unittest.TestCase):
             self.assertEqual(seguid(record.seq), checksum)
 
 for database, formats, entry, length, checksum in [
-    ("genome", ["fasta", "gb"], "X52960", 248,
+    ("nuccore", ["fasta", "gb"], "X52960", 248,
      "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU"),
     ("nucleotide", ["fasta", "gb"], "6273291", 902,
      "bLhlq4mEFJOoS9PieOx4nhGnjAQ"),
