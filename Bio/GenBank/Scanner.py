@@ -561,10 +561,11 @@ class EmblScanner(InsdcScanner):
                 break
             assert self.line[:self.HEADER_WIDTH] == " " * self.HEADER_WIDTH, \
                    repr(self.line)
-            seq_lines.append("".join(line.split()[:-1]))
+            #Remove tailing number now, remove spaces later
+            seq_lines.append(line.rsplit(None,1)[0])
             line = self.handle.readline()
         self.line = line
-        return (misc_lines, "".join(seq_lines))
+        return (misc_lines, "".join(seq_lines).replace(" ", ""))
 
     def _feed_first_line(self, consumer, line):
         assert line[:self.HEADER_WIDTH].rstrip() == "ID"
