@@ -1,5 +1,11 @@
 from Bio.PropertyManager import PropertyManager
 
+import sys
+if sys.version_info[0] >= 3:
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(\
+        "This deprecated module doesn't work on Python 3.")
+
 def test():
     pm = PropertyManager()
     class Foo:
