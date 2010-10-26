@@ -281,7 +281,44 @@ class SeqFeature(object):
             return sum(len(f) for f in self.sub_features)
         else:
             return len(self.location)
-        
+
+    def __iter__(self):
+        """Iterate over the parent positions within the feature.
+
+        The iteration order is strand aware, and can be thought of as moving
+        along the feature using the parent sequence coordinates:
+
+        >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
+        >>> f = SeqFeature(FeatureLocation(5,10), type="domain", strand=-1)
+        >>> len(f)
+        5
+        >>> for i in f: print i
+        9
+        8
+        7
+        6
+        5
+        >>> list(f)
+        [9, 8, 7, 6, 5]
+        """
+        if self.sub_features:
+            if self.strand == -1:
+                for f in self.sub_features[::-1]:
+                    for i in f.location:
+                        yield i
+            else:
+                for f in self.sub_features:
+                    for i in f.location:
+                        yield i
+        elif self.strand == -1:
+            for i in range(self.location.nofuzzy_end-1,
+                           self.location.nofuzzy_start-1, -1):
+                yield i
+        else:
+            for i in range(self.location.nofuzzy_start,
+                           self.location.nofuzzy_end):
+                yield i
+
     def __contains__(self, value):
         """Check if an integer position is within the feature.
 
@@ -481,6 +518,7 @@ class FeatureLocation(object):
         >>> len(loc)
         5
         """
+        #TODO - Should we use nofuzzy_start and nofuzzy_end here?
         return self._end.position + self._end.extension - self._start.position
 
     def __contains__(self, value):
@@ -499,11 +537,36 @@ class FeatureLocation(object):
         if not isinstance(value, int):
             raise ValueError("Currently we only support checking for integer "
                              "positions being within a FeatureLocation.")
+        #TODO - Should we use nofuzzy_start and nofuzzy_end here?
         if value < self._start.position \
         or value >= self._end.position + self._end.extension:
             return False
         else:
             return True
+
+    def __iter__(self):
+        """Iterate over the parent positions within the FeatureLocation.
+
+        >>> from Bio.SeqFeature import FeatureLocation
+        >>> from Bio.SeqFeature import BeforePosition, AfterPosition
+        >>> loc = FeatureLocation(BeforePosition(5),AfterPosition(10))
+        >>> len(loc)
+        5
+        >>> for i in loc: print i
+        5
+        6
+        7
+        8
+        9
+        >>> list(loc)
+        [5, 6, 7, 8, 9]
+        >>> [i for i in range(15) if i in loc]
+        [5, 6, 7, 8, 9]
+        """
+        #TODO - Should we use nofuzzy_start and nofuzzy_end here?
+        for i in range(self._start.position,
+                       self._end.position + self._end.extension):
+            yield i
 
     def _shift(self, offset):
         """Returns a copy of the location shifted by the offset (PRIVATE)."""

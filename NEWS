@@ -23,8 +23,10 @@ The Bio.Seq translation methods and function will now accept an arbitrary
 CodonTable object (for those of your working on very unusual organisms).
 
 The SeqFeature object now supports len(feature) giving the length consistent
-with the existing extract method. Also, it now supports "in", which allows
-you to check if a base (integer) is within the feature location.
+with the existing extract method. Also, it now supports iteration giving the
+coordindate (with respect to the parent sequence) of each letter within the
+feature (in frame aware order), and "in" which allows you to check if a
+(parent based) coordindate is within the feature location.
 
 (At least) 10 people have contributed to this release, include 5 new people:
 

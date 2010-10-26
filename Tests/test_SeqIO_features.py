@@ -248,6 +248,17 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.assertEqual(feature.strand, new_f.strand)
         self.assertTrue(compare_feature(feature, new_f))
         
+        #Some feature method tests
+        parent = "ACGT"*250
+        s = feature.extract(parent)
+        self.assertEqual(len(feature), len(s))
+        for i in feature:
+            self.assertTrue(i in feature)
+        self.assertEqual(set(feature),
+                         set(i for i in range(1000) if i in feature))
+        if feature.strand == +1:
+            self.assertEqual(s, "".join(parent[i] for i in feature))
+            
 
     def test_simple_rna(self):
         """Feature on RNA (simple, default strand)"""
