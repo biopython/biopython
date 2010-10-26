@@ -924,12 +924,12 @@ class GenBankScanner(InsdcScanner):
                 break
             if len(line) > 9 and  line[9:10]!=' ':
                 raise ValueError("Sequence line mal-formed, '%s'" % line)
-            seq_lines.append(line[10:].replace(" ",""))
+            seq_lines.append(line[10:]) #remove spaces later
             line = self.handle.readline()
 
         self.line = line
         #Seq("".join(seq_lines), self.alphabet)
-        return (misc_lines,"".join(seq_lines))
+        return (misc_lines,"".join(seq_lines).replace(" ",""))
 
     def _feed_first_line(self, consumer, line):
         #####################################
