@@ -671,93 +671,82 @@ class EmblScanner(InsdcScanner):
         }
         #We have to handle the following specially:
         #RX (depending on reference type...)
-        lines = filter(None,lines)
-        line_iter = iter(lines)
-        try:
-            while True:
-                try:
-                    line = line_iter.next()
-                except StopIteration:
-                    break
-                if not line : break
-                line_type = line[:EMBL_INDENT].strip()
-                data = line[EMBL_INDENT:].strip()
-
-                if line_type == 'XX':
-                    pass
-                elif line_type == 'RN':
-                    # Reformat reference numbers for the GenBank based consumer
-                    # e.g. '[1]' becomes '1'
-                    if data[0] == "[" and data[-1] == "]" : data = data[1:-1]
-                    consumer.reference_num(data)
-                elif line_type == 'RP':
-                    # Reformat reference numbers for the GenBank based consumer
-                    # e.g. '1-4639675' becomes '(bases 1 to 4639675)'
-                    # and '160-550, 904-1055' becomes '(bases 160 to 550; 904 to 1055)'
-                    parts = [bases.replace("-"," to ").strip() for bases in data.split(",")]
-                    consumer.reference_bases("(bases %s)" % "; ".join(parts))
-                elif line_type == 'RT':
-                    #Remove the enclosing quotes and trailing semi colon.
-                    #Note the title can be split over multiple lines.
-                    if data.startswith('"'):
-                        data = data[1:]
-                    if data.endswith('";'):
-                        data = data[:-2]
-                    consumer.title(data)
-                elif line_type == 'RX':
-                    # EMBL support three reference types at the moment:
-                    # - PUBMED    PUBMED bibliographic database (NLM)
-                    # - DOI       Digital Object Identifier (International DOI Foundation)
-                    # - AGRICOLA  US National Agriculture Library (NAL) of the US Department
-                    #             of Agriculture (USDA)
-                    #
-                    # Format:
-                    # RX  resource_identifier; identifier.
-                    #
-                    # e.g.
-                    # RX   DOI; 10.1016/0024-3205(83)90010-3.
-                    # RX   PUBMED; 264242.
-                    #
-                    # Currently our reference object only supports PUBMED and MEDLINE
-                    # (as these were in GenBank files?).
-                    key, value = data.split(";",1)
-                    if value.endswith(".") : value = value[:-1]
-                    value = value.strip()
-                    if key == "PUBMED":
-                        consumer.pubmed_id(value)
-                    #TODO - Handle other reference types (here and in BioSQL bindings)
-                elif line_type == 'CC':
-                    # Have to pass a list of strings for this one (not just a string)
-                    consumer.comment([data])
-                elif line_type == 'DR':
-                    # Database Cross-reference, format:
-                    # DR   database_identifier; primary_identifier; secondary_identifier.
-                    #
-                    # e.g.
-                    # DR   MGI; 98599; Tcrb-V4.
-                    #
-                    # TODO - How should we store any secondary identifier?
-                    parts = data.rstrip(".").split(";")
-                    #Turn it into "database_identifier:primary_identifier" to
-                    #mimic the GenBank parser. e.g. "MGI:98599"
-                    consumer.dblink("%s:%s" % (parts[0].strip(),
-                                               parts[1].strip()))
-                elif line_type == 'RA':
-                    # Remove trailing ; at end of authors list
-                    consumer.authors(data.rstrip(";"))
-                elif line_type == 'PR':
-                    # Remove trailing ; at end of the project reference
-                    # In GenBank files this corresponds to the old PROJECT
-                    # line which is being replaced with the DBLINK line.
-                    consumer.project(data.rstrip(";"))
-                elif line_type in consumer_dict:
-                    #Its a semi-automatic entry!
-                    getattr(consumer, consumer_dict[line_type])(data)
-                else:
-                    if self.debug:
-                        print "Ignoring EMBL header line:\n%s" % line
-        except StopIteration:
-            raise ValueError("Problem with header")
+        for line in lines:
+            line_type = line[:EMBL_INDENT].strip()
+            data = line[EMBL_INDENT:].strip()
+            if line_type == 'XX':
+                pass
+            elif line_type == 'RN':
+                # Reformat reference numbers for the GenBank based consumer
+                # e.g. '[1]' becomes '1'
+                if data[0] == "[" and data[-1] == "]" : data = data[1:-1]
+                consumer.reference_num(data)
+            elif line_type == 'RP':
+                # Reformat reference numbers for the GenBank based consumer
+                # e.g. '1-4639675' becomes '(bases 1 to 4639675)'
+                # and '160-550, 904-1055' becomes '(bases 160 to 550; 904 to 1055)'
+                parts = [bases.replace("-"," to ").strip() for bases in data.split(",")]
+                consumer.reference_bases("(bases %s)" % "; ".join(parts))
+            elif line_type == 'RT':
+                #Remove the enclosing quotes and trailing semi colon.
+                #Note the title can be split over multiple lines.
+                if data.startswith('"'):
+                    data = data[1:]
+                if data.endswith('";'):
+                    data = data[:-2]
+                consumer.title(data)
+            elif line_type == 'RX':
+                # EMBL support three reference types at the moment:
+                # - PUBMED    PUBMED bibliographic database (NLM)
+                # - DOI       Digital Object Identifier (International DOI Foundation)
+                # - AGRICOLA  US National Agriculture Library (NAL) of the US Department
+                #             of Agriculture (USDA)
+                #
+                # Format:
+                # RX  resource_identifier; identifier.
+                #
+                # e.g.
+                # RX   DOI; 10.1016/0024-3205(83)90010-3.
+                # RX   PUBMED; 264242.
+                #
+                # Currently our reference object only supports PUBMED and MEDLINE
+                # (as these were in GenBank files?).
+                key, value = data.split(";",1)
+                if value.endswith(".") : value = value[:-1]
+                value = value.strip()
+                if key == "PUBMED":
+                    consumer.pubmed_id(value)
+                #TODO - Handle other reference types (here and in BioSQL bindings)
+            elif line_type == 'CC':
+                # Have to pass a list of strings for this one (not just a string)
+                consumer.comment([data])
+            elif line_type == 'DR':
+                # Database Cross-reference, format:
+                # DR   database_identifier; primary_identifier; secondary_identifier.
+                #
+                # e.g.
+                # DR   MGI; 98599; Tcrb-V4.
+                #
+                # TODO - How should we store any secondary identifier?
+                parts = data.rstrip(".").split(";")
+                #Turn it into "database_identifier:primary_identifier" to
+                #mimic the GenBank parser. e.g. "MGI:98599"
+                consumer.dblink("%s:%s" % (parts[0].strip(),
+                                           parts[1].strip()))
+            elif line_type == 'RA':
+                # Remove trailing ; at end of authors list
+                consumer.authors(data.rstrip(";"))
+            elif line_type == 'PR':
+                # Remove trailing ; at end of the project reference
+                # In GenBank files this corresponds to the old PROJECT
+                # line which is being replaced with the DBLINK line.
+                consumer.project(data.rstrip(";"))
+            elif line_type in consumer_dict:
+                #Its a semi-automatic entry!
+                getattr(consumer, consumer_dict[line_type])(data)
+            else:
+                if self.debug:
+                    print "Ignoring EMBL header line:\n%s" % line
         
     def _feed_misc_lines(self, consumer, lines):
         #TODO - Should we do something with the information on the SQ line(s)?
