@@ -8710,7 +8710,7 @@ Now we have a full \verb|Motif| instance, so we can try to get some
 basic information about it. Let's start with length and consensus
 sequence:
 \begin{verbatim}
->>> m.length
+>>> len(m)
 5
 >>> m.consensus()
 Seq('TATAA', IUPACUnambiguousDNA())
@@ -8948,7 +8948,7 @@ that looks more like the motif than the background.
 If you want to use a less arbitrary way of selecting thresholds, you
 can explore the \verb|Motif.score_distribution| class implementing an
 distribution of scores for a given motif. Since the space for a score
-distribution grows exponentially with motif.length, we are using an
+distribution grows exponentially with motif length, we are using an
 approximation with a given precision to keep computation cost manageable:
 \begin{verbatim}
 >>> sd = Motif.score_distribution(m,precision=10**4)
