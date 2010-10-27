@@ -373,6 +373,8 @@ class Motif(object):
 
     def __len__(self):
         """return the length of a motif
+
+        Please use this method (i.e. invoke len(m)) instead of refering to the m.length directly.
         """
         if self.length==None:
             return 0
