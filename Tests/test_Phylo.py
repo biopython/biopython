@@ -63,7 +63,7 @@ class TreeTests(unittest.TestCase):
         tree = Phylo.read(EX_APAF, 'phyloxml')
         orig_num_tips = len(tree.get_terminals())
         orig_tree_len = tree.total_branch_length()
-        tree.root_with_outgroup({'name': '19_NEMVE'}, {'name': '20_NEMVE'})
+        tree.root_with_outgroup('19_NEMVE', '20_NEMVE')
         self.assertEqual(orig_num_tips, len(tree.get_terminals()))
         self.assertAlmostEqual(orig_tree_len, tree.total_branch_length())
 
@@ -109,6 +109,10 @@ class MixinTests(unittest.TestCase):
         self.assertEqual(len(events), 2)
         self.assertEqual(events[0].speciations, 1)
         self.assertEqual(events[1].duplications, 1)
+        # string filter & find_any
+        tree = self.phylogenies[3]
+        taxonomy = tree.find_any("B. subtilis")
+        self.assertEqual(taxonomy.scientific_name, "B. subtilis")
         # integer filter
         tree = Phylo.read(EX_APAF, 'phyloxml')
         domains = list(tree.find_elements(start=5))
@@ -129,6 +133,10 @@ class MixinTests(unittest.TestCase):
         self.assertEqual(len(octo), 1)
         self.assertTrue(isinstance(octo[0], PhyloXML.Clade))
         self.assertEqual(octo[0].taxonomies[0].code, 'OCTVU')
+        # string filter
+        dee = self.phylogenies[10].find_clades('D').next()
+        self.assertEqual(dee.name, 'D')
+
 
     def test_find_terminal(self):
         """TreeMixin: find_elements() with terminal argument."""
@@ -146,7 +154,7 @@ class MixinTests(unittest.TestCase):
 
     def test_get_path(self):
         """TreeMixin: get_path() method."""
-        path = self.phylogenies[1].get_path({'name': 'B'})
+        path = self.phylogenies[1].get_path('B')
         self.assertEqual(len(path), 2)
         self.assertAlmostEqual(path[0].branch_length, 0.06)
         self.assertAlmostEqual(path[1].branch_length, 0.23)
@@ -155,7 +163,7 @@ class MixinTests(unittest.TestCase):
     def test_trace(self):
         """TreeMixin: trace() method."""
         tree = self.phylogenies[1]
-        path = tree.trace({'name': 'A'}, {'name': 'C'})
+        path = tree.trace('A', 'C')
         self.assertEqual(len(path), 3)
         self.assertAlmostEqual(path[0].branch_length, 0.06)
         self.assertAlmostEqual(path[2].branch_length, 0.4)
@@ -166,12 +174,12 @@ class MixinTests(unittest.TestCase):
     def test_common_ancestor(self):
         """TreeMixin: common_ancestor() method."""
         tree = self.phylogenies[1]
-        lca = tree.common_ancestor({'name': 'A'}, {'name': 'B'})
+        lca = tree.common_ancestor('A', 'B')
         self.assertEqual(lca, tree.clade[0])
-        lca = tree.common_ancestor({'name': 'A'}, {'name': 'C'})
+        lca = tree.common_ancestor('A', 'C')
         self.assertEqual(lca, tree.clade)
         tree = self.phylogenies[10]
-        lca = tree.common_ancestor({'name': 'A'}, {'name': 'B'}, {'name': 'C'})
+        lca = tree.common_ancestor('A', 'B', 'C')
         self.assertEqual(lca, tree.clade[0])
 
     def test_depths(self):
@@ -186,12 +194,12 @@ class MixinTests(unittest.TestCase):
     def test_distance(self):
         """TreeMixin: distance() method."""
         t = self.phylogenies[1]
-        self.assertAlmostEqual(t.distance({'name': 'A'}), 0.162)
-        self.assertAlmostEqual(t.distance({'name': 'B'}), 0.29)
-        self.assertAlmostEqual(t.distance({'name': 'C'}), 0.4)
-        self.assertAlmostEqual(t.distance({'name': 'A'}, {'name': 'B'}), 0.332)
-        self.assertAlmostEqual(t.distance({'name': 'A'}, {'name': 'C'}), 0.562)
-        self.assertAlmostEqual(t.distance({'name': 'B'}, {'name': 'C'}), 0.69)
+        self.assertAlmostEqual(t.distance('A'), 0.162)
+        self.assertAlmostEqual(t.distance('B'), 0.29)
+        self.assertAlmostEqual(t.distance('C'), 0.4)
+        self.assertAlmostEqual(t.distance('A', 'B'), 0.332)
+        self.assertAlmostEqual(t.distance('A', 'C'), 0.562)
+        self.assertAlmostEqual(t.distance('B', 'C'), 0.69)
 
     def test_is_bifurcating(self):
         """TreeMixin: is_bifurcating() method."""

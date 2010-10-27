@@ -82,6 +82,11 @@ def _class_matcher(target_cls):
         return isinstance(node, target_cls)
     return match
 
+def _string_matcher(target):
+    def match(node):
+        return unicode(node) == target
+    return match
+
 def _attribute_matcher(kwargs):
     """Match a node by specified attribute values.
 
@@ -149,6 +154,8 @@ def _object_matcher(obj):
         return _identity_matcher(obj)
     if isinstance(obj, type):
         return _class_matcher(obj)
+    if isinstance(obj, basestring):
+        return _string_matcher(obj)
     if isinstance(obj, dict):
         return _attribute_matcher(obj)
     if callable(obj):
@@ -190,7 +197,8 @@ def _combine_args(first, *rest):
     # of cases where either style is more convenient, so let's support both
     # (for backward compatibility and consistency between methods).
     if hasattr(first, '__iter__') and not (isinstance(first, TreeElement) or
-            isinstance(first, dict) or isinstance(first, type)):
+            isinstance(first, type) or isinstance(first, basestring) or
+            isinstance(first, dict)):
         # `terminals` is an iterable of targets
         if rest:
             raise ValueError("Arguments must be either a single list of "
