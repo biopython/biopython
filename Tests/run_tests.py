@@ -351,6 +351,7 @@ class TestRunner(unittest.TextTestRunner):
         sys.stderr.write("\n")
         if failures:
             sys.stderr.write("FAILED (failures = %d)\n" % failures)
+            sys.exit(1)
 
 
 if __name__ == "__main__":
