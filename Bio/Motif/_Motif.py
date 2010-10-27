@@ -325,7 +325,7 @@ class Motif(object):
         """
         calculates the dist_dpq measure with a given offset.
 
-        offset should satisfy 0<=offset<=self.length
+        offset should satisfy 0<=offset<=len(self)
         """
         def dpq (f1,f2,alpha):
             s=0
