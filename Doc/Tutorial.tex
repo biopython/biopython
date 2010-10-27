@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 26 October 2010 (Biopython 1.55+)}
+\date{Last Update -- 27 October 2010 (Biopython 1.55+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -8672,7 +8672,7 @@ This chapter gives an overview of the functionality of the
 \verb|Bio.Motif| package included in Biopython distribution. It is intended
 for people who are involved in analysis of sequence motif, so I'll
 assume that you are familiar with basic notions of motif analysis. In
-case something is unclear, please look into Section \ref{sec:links}
+case something is unclear, please look into Section~\ref{sec:links}
 for some relevant links.
 
 It should be also noted, that \verb|Bio.Motif| was based on two
@@ -8682,7 +8682,8 @@ former Biopython modules, \verb|Bio.AlignAce| and \verb|Bio.MEME|. It provides
 Speaking of other libraries, if you are reading this you might be
 interested in the \href{http://fraenkel.mit.edu/TAMO/}{TAMO}, another python library
 designed to deal with sequence motifs. It supports more \emph{de-novo}
-motif finders, but it is not a part of biopython and  some restrictions on commercial use.
+motif finders, but it is not a part of Biopython and has some restrictions
+on commercial use.
 
 \section{Motif objects}
 \label{sec:object}
@@ -8690,7 +8691,7 @@ Since we are interested in motif analysis, we need to take a look at
 \verb|Motif| objects in the first place. For that we need to import 
 the Motif library:
 \begin{verbatim}
-from  Bio import Motif
+from Bio import Motif
 \end{verbatim}
 and we can start creating our first motif objects. Let's create a DNA motif:
 \begin{verbatim}
@@ -8801,7 +8802,7 @@ background. We can use the \verb|.log_odds()| method:
 Here we can see positive values for symbols more frequent in the motif
 than in the background and negative for symbols more frequent in the
 background. $0.0$ means that it's equally likely to see a symbol in
-background and in the motif (e.g. 'T' in the second-last position).
+background and in the motif (e.g. `T' in the second-last position).
 
 \subsection{Reading and writing}
 \label{sec:io}
@@ -9026,7 +9027,7 @@ Seq('TAAT', IUPACUnambiguousDNA())
 
 The first function we'll use to compare these motifs is based on
 Pearson correlation. Since we want it to resemble a distance
-measure, we actually take $1-r$, where r is the Pearson correlation
+measure, we actually take $1-r$, where $r$ is the Pearson correlation
 coefficient (PCC):
 \begin{verbatim}
 >>> m.dist_pearson(ubx)
