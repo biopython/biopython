@@ -23,13 +23,15 @@ class TestWiseDryRun(unittest.TestCase):
     def test_dnal(self):
         """Call dnal, and do a trivial check on its output."""
         Wise.align(["dnal"], ("seq1.fna", "seq2.fna"), kbyte=100000, dry_run=True)
-        output = sys.stdout.getvalue()
+        #If test output is redirected to a file, the wrapper adds -quiet
+        output = sys.stdout.getvalue().replace(" -quiet ", " ")
         self.assertTrue(output.startswith("dnal -kbyte 100000 seq1.fna seq2.fna"), output[:200])
 
     def test_psw(self):
         """Call psw, and do a trivial check on its output."""
         Wise.align(["psw"], ("seq1.faa", "seq2.faa"), dry_run=True, kbyte=4)
-        output = sys.stdout.getvalue()
+        #If test output is redirected to a file, the wrapper adds -quiet
+        output = sys.stdout.getvalue().replace(" -quiet ", " ")
         self.assertTrue(output.startswith("psw -kbyte 4 seq1.faa seq2.faa"), output[:200])
 
     def tearDown(self):
