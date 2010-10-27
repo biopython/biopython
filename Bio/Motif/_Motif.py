@@ -396,7 +396,7 @@ class Motif(object):
             self.make_instances_from_counts()
         str = ""
         for i,inst in enumerate(self.instances):
-            str = str + "> instance %d\n"%i + inst.tostring() + "\n"
+            str = str + ">instance%d\n"%i + inst.tostring() + "\n"
             
         return str       
 
