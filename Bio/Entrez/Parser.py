@@ -136,7 +136,15 @@ class ValidationError(ValueError):
 
 class DataHandler:
 
-    def __init__(self, dtd_dir, validate):
+    home = os.path.expanduser('~')
+    local_dtd_dir = os.path.join(home, '.biopython', 'Bio', 'Entrez', 'DTDs')
+    del home
+
+    from Bio import Entrez
+    global_dtd_dir = os.path.join(str(Entrez.__path__[0]), "DTDs")
+    del Entrez
+
+    def __init__(self, validate):
         self.stack = []
         self.errors = []
         self.integers = []
@@ -145,7 +153,6 @@ class DataHandler:
         self.dictionaries = []
         self.structures = {}
         self.items = []
-        self.dtd_dir = dtd_dir
         self.dtd_urls = []
         self.validating = validate
         self.parser = expat.ParserCreate(namespace_separator=" ")
@@ -410,6 +417,23 @@ class DataHandler:
         else:
             self.structures.update({name: multiple})
 
+    def open_dtd_file(self, filename):
+        path = os.path.join(DataHandler.global_dtd_dir, filename)
+        try:
+            handle = open(path, "rb")
+        except IOError:
+            pass
+        else:
+            return handle
+        path = os.path.join(DataHandler.local_dtd_dir, filename)
+        try:
+            handle = open(path, "rb")
+        except IOError:
+            pass
+        else:
+            return handle
+        return None
+
     def externalEntityRefHandler(self, context, base, systemId, publicId):
         """The purpose of this function is to load the DTD locally, instead
         of downloading it from the URL specified in the XML. Using the local
@@ -429,10 +453,8 @@ class DataHandler:
         self.dtd_urls.append(url)
         # First, try to load the local version of the DTD file
         location, filename = os.path.split(systemId)
-        path = os.path.join(str(self.dtd_dir), str(filename))
-        try:
-            handle = open(path, "rb")
-        except IOError:
+        handle = self.open_dtd_file(filename)
+        if not handle:
             # DTD is not available as a local file. Try accessing it through
             # the internet instead.
             message = """\
@@ -448,7 +470,11 @@ For this purpose, please download %s from
 
 %s
 
-and save it the directory
+and save it either in directory
+
+%s
+
+or in directory
 
 %s
 
@@ -463,7 +489,7 @@ list and emailing us, so that we can include it with the next release of
 Biopython.
 
 Proceeding to access the DTD file through the internet...
-""" % (filename, filename, url, self.dtd_dir, filename)
+""" % (filename, filename, url, self.global_dtd_dir, self.local_dtd_dir, filename)
             warnings.warn(message)
             try:
                 handle = urllib.urlopen(url)
@@ -473,5 +499,6 @@ Proceeding to access the DTD file through the internet...
         parser = self.parser.ExternalEntityParserCreate(context)
         parser.ElementDeclHandler = self.elementDecl
         parser.ParseFile(handle)
+        handle.close()
         self.dtd_urls.pop()
         return 1

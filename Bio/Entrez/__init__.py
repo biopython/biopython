@@ -40,16 +40,29 @@ espell       Retrieves spelling suggestions.
 
 read         Parses the XML results returned by any of the above functions.
              Typical usage is:
+
              >>> handle = Entrez.einfo() # or esearch, efetch, ...
              >>> record = Entrez.read(handle)
+
              where record is now a Python dictionary or list.
+
+parse        Parses the XML results returned by any of the above functions,
+             returning records one by one.
+             Typical usage is:
+
+             >>> handle = Entrez.efetch(...) # or esummary, elink, ...
+             >>> records = Entrez.parse(handle)
+             >>> for record in records:
+             ...     # each record is a Python dictionary or list.
+
+             This function is appropriate only if the XML file contains
+             multiple records, and is particular useful for large files. 
 
 _open        Internally used function.
 
 """
 import urllib, urllib2, time, warnings
 import os.path
-
 
 email = None
 tool = "biopython"
@@ -252,8 +265,7 @@ def read(handle, validate=True):
     the tag name in my_element.tag.
     """
     from Parser import DataHandler
-    DTDs = os.path.join(str(__path__[0]), "DTDs")
-    handler = DataHandler(DTDs, validate)
+    handler = DataHandler(validate)
     record = handler.read(handle)
     return record
 
@@ -284,8 +296,7 @@ def parse(handle, validate=True):
     the tag name in my_element.tag.
     """
     from Parser import DataHandler
-    DTDs = os.path.join(str(__path__[0]), "DTDs")
-    handler = DataHandler(DTDs, validate)
+    handler = DataHandler(validate)
     records = handler.parse(handle)
     return records
 
