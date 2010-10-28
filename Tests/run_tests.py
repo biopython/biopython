@@ -80,6 +80,7 @@ if sys.version_info[0:2] == (3,1):
 system_lang = os.environ.get('LANG', 'C') #Cache this
 
 def main(argv):
+    """Run tests, return number of failures (integer)."""
     # insert our paths in sys.path:
     # ../build/lib.*
     # ..
@@ -146,7 +147,7 @@ def main(argv):
 
     # run the tests
     runner = TestRunner(args, verbosity)
-    runner.run()
+    return runner.run()
 
 
 class ComparisonTestCase(unittest.TestCase):
@@ -335,6 +336,7 @@ class TestRunner(unittest.TextTestRunner):
             sys.stdout = stdout
 
     def run(self):
+        """Run tests, return number of failures (integer)."""
         failures = 0
         startTime = time.time()
         for test in self.tests:
@@ -351,9 +353,11 @@ class TestRunner(unittest.TextTestRunner):
         sys.stderr.write("\n")
         if failures:
             sys.stderr.write("FAILED (failures = %d)\n" % failures)
-            sys.exit(1)
+        return failures
 
 
 if __name__ == "__main__":
-    #Don't do a sys.exit(...) as it isn't nice if run from IDLE.
-    main(sys.argv[1:])
+    errors = main(sys.argv[1:])
+    if errors:
+        #Doing a sys.exit(...) isn't nice if run from IDLE...
+        sys.exit(1)
