@@ -868,8 +868,8 @@ class TabRandomAccess(SeqFileRandomAccess):
     def __iter__(self):
         handle = self._handle
         handle.seek(0)
+        start_offset = handle.tell()
         while True:
-            offset = handle.tell()
             line = handle.readline()
             if not line : break #End of file
             try:
@@ -877,11 +877,14 @@ class TabRandomAccess(SeqFileRandomAccess):
             except ValueError, err:
                 if not line.strip():
                     #Ignore blank lines
+                    start_offset = handle.tell()
                     continue
                 else:
                     raise err
             else:
-                yield key, offset, 0
+                end_offset = handle.tell()
+                yield key, start_offset, end_offset - start_offset
+                start_offset = end_offset
 
     def get_raw(self, offset):
         """Like the get method, but returns the record as a raw string."""
