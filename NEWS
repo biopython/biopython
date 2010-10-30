@@ -28,6 +28,10 @@ coordindate (with respect to the parent sequence) of each letter within the
 feature (in frame aware order), and "in" which allows you to check if a
 (parent based) coordindate is within the feature location.
 
+The provisional database schema for BioSQL support on SQLite which Biopython
+has been using since Release 1.53 has now been added to BioSQL, and updated
+slightly.
+
 (At least) 10 people have contributed to this release, include 5 new people:
 
 Bart de Koning
