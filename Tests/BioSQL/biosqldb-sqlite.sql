@@ -19,9 +19,20 @@
 --
 -- See MySQL database schema and BioSQL website for table documentation.
 -- This contains notes specific to SQLite
+-- 
+-- A note about Primary Keys in SQLite
+-- SQLite automatically creates a ROWID for each row of a table.
+--   Using this ROWID as the primary key is faster than using a 
+--   user-defined primary key. By declaring a column as an 
+--   INTEGER PRIMARY KEY, you are actually creating an alias to the
+--   ROWID and get the associated speed benefits.  The ROWID effectively
+--   "autoincrements"; however, it can reuse ROWIDs of deleted rows. 
+--   To avoid reusing old ROWIDs would require adding the AUTOINCREMENT
+--   keyword, which also reduces the performance.
+--   ( see http://www.sqlite.org/autoinc.html) 
 
 CREATE TABLE biodatabase (
-  	biodatabase_id 	INTEGER PRIMARY KEY AUTOINCREMENT,
+  	biodatabase_id 	INTEGER PRIMARY KEY,
   	name           	VARCHAR(128) NOT NULL,
 	authority	VARCHAR(128),
 	description	TEXT,
@@ -31,7 +42,7 @@ CREATE TABLE biodatabase (
 CREATE INDEX db_auth on biodatabase(authority);
 
 CREATE TABLE taxon (
-       taxon_id		INTEGER PRIMARY KEY AUTOINCREMENT,
+       taxon_id		INTEGER PRIMARY KEY,
        ncbi_taxon_id 	INT(10),
        parent_taxon_id	INT(10) ,
        node_rank	VARCHAR(32),
@@ -57,14 +68,14 @@ CREATE INDEX taxnametaxonid ON taxon_name(taxon_id);
 CREATE INDEX taxnamename    ON taxon_name(name);
 
 CREATE TABLE ontology (
-       	ontology_id        INTEGER PRIMARY KEY AUTOINCREMENT,
+       	ontology_id        INTEGER PRIMARY KEY,
        	name	   	   VARCHAR(32)  NOT NULL,
        	definition	   TEXT,
 	UNIQUE (name)
 );
 
 CREATE TABLE term (
-       	term_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+       	term_id   INTEGER PRIMARY KEY,
        	name	   	   VARCHAR(255)  NOT NULL,
        	definition	   TEXT,
 	identifier	   VARCHAR(40) ,
@@ -92,7 +103,7 @@ CREATE TABLE term_dbxref (
 CREATE INDEX trmdbxref_dbxrefid ON term_dbxref(dbxref_id);
 
 CREATE TABLE term_relationship (
-        term_relationship_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        term_relationship_id INTEGER PRIMARY KEY,
        	subject_term_id	INTEGER,
        	predicate_term_id    INTEGER,
        	object_term_id       INTEGER,
@@ -111,7 +122,7 @@ CREATE TABLE term_relationship_term (
 );
 
 CREATE TABLE term_path (
-        term_path_id         INTEGER PRIMARY KEY AUTOINCREMENT,
+        term_path_id         INTEGER PRIMARY KEY,
        	subject_term_id	     INTEGER,
        	predicate_term_id    INTEGER,
        	object_term_id       INTEGER,
@@ -125,7 +136,7 @@ CREATE INDEX trmpath_objectid ON term_path(object_term_id);
 CREATE INDEX trmpath_ontid ON term_path(ontology_id);
 
 CREATE TABLE bioentry (
-	bioentry_id	    INTEGER PRIMARY KEY AUTOINCREMENT,
+	bioentry_id	    INTEGER PRIMARY KEY,
   	biodatabase_id  INTEGER,
   	taxon_id     	INT(10) ,
   	name		VARCHAR(40) NOT NULL,
@@ -143,7 +154,7 @@ CREATE INDEX bioentry_db   ON bioentry(biodatabase_id);
 CREATE INDEX bioentry_tax  ON bioentry(taxon_id);
 
 CREATE TABLE bioentry_relationship (
-        bioentry_relationship_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        bioentry_relationship_id INTEGER PRIMARY KEY,
         object_bioentry_id 	 INTEGER,
    	subject_bioentry_id 	 INTEGER,
    	term_id 		 INTEGER,
@@ -174,7 +185,7 @@ CREATE TABLE biosequence (
 );
 
 CREATE TABLE dbxref (
-        dbxref_id	INTEGER PRIMARY KEY AUTOINCREMENT,
+        dbxref_id	INTEGER PRIMARY KEY,
         dbname          VARCHAR(40)  NOT NULL,
         accession       VARCHAR(128)  NOT NULL,
 	version		SMALLINT  NOT NULL,
@@ -204,7 +215,7 @@ CREATE TABLE bioentry_dbxref (
 CREATE INDEX dblink_dbx  ON bioentry_dbxref(dbxref_id);
 
 CREATE TABLE reference (
-  	reference_id       INTEGER PRIMARY KEY AUTOINCREMENT,
+  	reference_id       INTEGER PRIMARY KEY,
 	dbxref_id	   INT(10) ,
   	location 	   TEXT NOT NULL,
   	title    	   TEXT,
@@ -226,7 +237,7 @@ CREATE TABLE bioentry_reference (
 CREATE INDEX bioentryref_ref ON bioentry_reference(reference_id);
 
 CREATE TABLE comment (
-  	comment_id  	INTEGER PRIMARY KEY AUTOINCREMENT,
+  	comment_id  	INTEGER PRIMARY KEY,
   	bioentry_id    	INTEGER,
   	comment_text   	TEXT NOT NULL,
   	rank   		SMALLINT NOT NULL DEFAULT 0,
@@ -244,7 +255,7 @@ CREATE TABLE bioentry_qualifier_value (
 CREATE INDEX bioentryqual_trm ON bioentry_qualifier_value(term_id);
 
 CREATE TABLE seqfeature (
-   	seqfeature_id 		INTEGER PRIMARY KEY AUTOINCREMENT,
+   	seqfeature_id 		INTEGER PRIMARY KEY,
    	bioentry_id   		INTEGER,
    	type_term_id		INTEGER,
    	source_term_id  	INTEGER,
@@ -257,7 +268,7 @@ CREATE INDEX seqfeature_trm  ON seqfeature(type_term_id);
 CREATE INDEX seqfeature_fsrc ON seqfeature(source_term_id);
 
 CREATE TABLE seqfeature_relationship (
-        seqfeature_relationship_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        seqfeature_relationship_id INTEGER PRIMARY KEY,
    	object_seqfeature_id	INTEGER,
    	subject_seqfeature_id 	INTEGER,
    	term_id 	        INTEGER,
@@ -299,7 +310,7 @@ CREATE TABLE seqfeature_dbxref (
 CREATE INDEX feadblink_dbx  ON seqfeature_dbxref(dbxref_id);
 
 CREATE TABLE location (
-	location_id		INTEGER PRIMARY KEY AUTOINCREMENT,
+	location_id		INTEGER PRIMARY KEY,
    	seqfeature_id		INTEGER,
 	dbxref_id		INT(10),
 	term_id			INT(10),
