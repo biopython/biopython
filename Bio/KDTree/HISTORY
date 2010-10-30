@@ -1,7 +1,0 @@
-
-05/09/04
-
-Fixed a bug that caused problems when KDTree objects with
-different dimensions are used in the same program. Thanks
-to Keir Mierle for reporting the bug.
-
