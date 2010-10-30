@@ -18,6 +18,24 @@ MarkovModel     Holds the description of a markov model
 
 import numpy
 
+try:
+    logaddexp = numpy.logaddexp
+except AttributeError:
+    # Numpy versions older than 1.3 do not contain logaddexp.
+    # Once we require Numpy version 1.3 or later, we should revisit this
+    # module to see if we can simplify some of the other functions in
+    # this module.
+    import warnings
+    warnings.warn("For optimal speed, please update to Numpy version 1.3 or later (current version is %s)" % numpy.__version__)
+    def logaddexp(logx, logy):
+        if logy - logx > 100:
+            return logy
+        elif logx - logy > 100:
+            return logx
+        minxy = min(logx, logy)
+        return minxy + numpy.log(numpy.exp(logx-minxy) + numpy.exp(logy-minxy))
+
+
 
 def itemindex(values):
     d = {}
@@ -296,7 +314,7 @@ def _baum_welch_one(N, M, outputs,
         for t in range(T):
             k = outputs[t]
             for j in range(N):
-                ksum[k] = _logadd(ksum[k], lp_arc[i,j,t])
+                ksum[k] = logaddexp(ksum[k], lp_arc[i,j,t])
         ksum = ksum - _logsum(ksum)      # Normalize
         if lpseudo_emission!=None:
             ksum = _logvecadd(ksum, lpseudo_emission[i])
@@ -331,7 +349,7 @@ def _forward(N, T, lp_initial, lp_transition, lp_emission, outputs):
                 lp = matrix[i][t-1] + \
                      lp_transition[i][j] + \
                      lp_emission[i][k]
-                lprob = _logadd(lprob, lp)
+                lprob = logaddexp(lprob, lp)
             matrix[j][t] = lprob
     return matrix
 
@@ -347,7 +365,7 @@ def _backward(N, T, lp_transition, lp_emission, outputs):
                 lp = matrix[j][t+1] + \
                      lp_transition[i][j] + \
                      lp_emission[i][k]
-                lprob = _logadd(lprob, lp)
+                lprob = logaddexp(lprob, lp)
             matrix[i][t] = lprob
     return matrix
 
@@ -550,14 +568,6 @@ def _copy_and_check(matrix, desired_shape):
         raise ValueError("I don't handle matrices > 2 dimensions")
     return matrix
 
-def _logadd(logx, logy):
-    if logy - logx > 100:
-        return logy
-    elif logx - logy > 100:
-        return logx
-    minxy = min(logx, logy)
-    return minxy + numpy.log(numpy.exp(logx-minxy) + numpy.exp(logy-minxy))
-
 def _logsum(matrix):
     if len(matrix.shape) > 1:
         vec = numpy.reshape(matrix, (numpy.product(matrix.shape),))
@@ -565,27 +575,16 @@ def _logsum(matrix):
         vec = matrix
     sum = LOG0
     for num in vec:
-        sum = _logadd(sum, num)
+        sum = logaddexp(sum, num)
     return sum
 
 def _logvecadd(logvec1, logvec2):
     assert len(logvec1) == len(logvec2), "vectors aren't the same length"
     sumvec = numpy.zeros(len(logvec1))
     for i in range(len(logvec1)):
-        sumvec[i] = _logadd(logvec1[i], logvec2[i])
+        sumvec[i] = logaddexp(logvec1[i], logvec2[i])
     return sumvec
 
 def _exp_logsum(numbers):
     sum = _logsum(numbers)
     return numpy.exp(sum)
-
-try:
-    import cMarkovModel
-except ImportError, x:
-    pass
-else:
-    import sys
-    this_module = sys.modules[__name__]
-    for name in cMarkovModel.__dict__.keys():
-        if not name.startswith("__"):
-            this_module.__dict__[name] = cMarkovModel.__dict__[name]

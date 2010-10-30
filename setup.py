@@ -304,11 +304,6 @@ else :
                'Bio/trie.c'],
               include_dirs=["Bio"]
               ),
-    Extension('Bio.cMarkovModel',
-              ['Bio/cMarkovModelmodule.c',
-               'Bio/csupport.c'],
-              include_dirs=["Bio"]
-              ),
 #Commented out due to the build dependency on flex, see Bug 2619
 #   Extension('Bio.PDB.mmCIF.MMCIFlex',
 #              ['Bio/PDB/mmCIF/lex.yy.c',
