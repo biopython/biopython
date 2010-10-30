@@ -782,7 +782,6 @@ class Motif(object):
         # get the log-odds matrix into a proper shape
         # (each row contains sorted (ACGT) log-odds values)
         logodds=[[y[1] for y in sorted(x.items())] for x in self.log_odds()]
-        logodds=numpy.array(logodds)
         return _pwm.calculate(seq, logodds)
 
     def _pwm_calculate(self, sequence):
