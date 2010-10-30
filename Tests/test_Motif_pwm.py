@@ -24,12 +24,17 @@ class MotifTestsBasic(unittest.TestCase):
         m=Motif.read(open("Motif/SRF.pfm"),"jaspar-pfm")
         result = m.scanPWM(Seq.Seq("ACGTGTGCGTAGTGCGT",m.alphabet))
         self.assertEqual(6, len(result))
-        self.assertAlmostEqual(result[0], -29.18363571)
-        self.assertAlmostEqual(result[1], -38.3365097)
-        self.assertAlmostEqual(result[2], -29.17756271)
-        self.assertAlmostEqual(result[3], -38.04542542)
-        self.assertAlmostEqual(result[4], -20.3014183)
-        self.assertAlmostEqual(result[5], -25.18009186)
+        # The fast C-code in Bio/Motif/_pwm.c stores all results as 32-bit
+        # floats; the slower Python code in Bio/Motif/_Motif.py uses 64-bit
+        # doubles. The C-code and Python code results will therefore not be
+        # exactly equal. Test the first 5 decimal places only to avoid either
+        # the C-code or the Python code to inadvertently fail this test.
+        self.assertAlmostEqual(result[0], -29.18363571, 5)
+        self.assertAlmostEqual(result[1], -38.3365097, 5)
+        self.assertAlmostEqual(result[2], -29.17756271, 5)
+        self.assertAlmostEqual(result[3], -38.04542542, 5)
+        self.assertAlmostEqual(result[4], -20.3014183, 5)
+        self.assertAlmostEqual(result[5], -25.18009186, 5)
 
 
 if __name__ == "__main__":

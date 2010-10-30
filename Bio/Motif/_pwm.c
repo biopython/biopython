@@ -39,16 +39,16 @@ calculate(const char sequence[], int s, PyObject* matrix, npy_intp m)
             {
                 case 'A':
                 case 'a':
-                    score += *((double*)PyArray_GETPTR2(matrix, 0, j)); break;
+                    score += *((double*)PyArray_GETPTR2(matrix, j, 0)); break;
                 case 'C':
                 case 'c':
-                    score += *((double*)PyArray_GETPTR2(matrix, 1, j)); break;
+                    score += *((double*)PyArray_GETPTR2(matrix, j, 1)); break;
                 case 'G':
                 case 'g':
-                    score += *((double*)PyArray_GETPTR2(matrix, 2, j)); break;
+                    score += *((double*)PyArray_GETPTR2(matrix, j, 2)); break;
                 case 'T':
                 case 't':
-                    score += *((double*)PyArray_GETPTR2(matrix, 3, j)); break;
+                    score += *((double*)PyArray_GETPTR2(matrix, j, 3)); break;
                 default:
                     ok = 0;
             }
@@ -94,15 +94,15 @@ py_calculate(PyObject* self, PyObject* args, PyObject* keywords)
             "position-weight matrix has incorrect rank (%d expected 2)",
             PyArray_NDIM(matrix));
     }
-    else if(PyArray_DIM(matrix, 0) != 4)
+    else if(PyArray_DIM(matrix, 1) != 4)
     {
         result = PyErr_Format(PyExc_ValueError,
-            "position-weight matrix should have four rows (%" NPY_INTP_FMT
-            " rows found)", PyArray_DIM(matrix, 0));
+            "position-weight matrix should have four columns (%" NPY_INTP_FMT
+            " columns found)", PyArray_DIM(matrix, 1));
     }
     else
     {
-        m = PyArray_DIM(matrix, 1);
+        m = PyArray_DIM(matrix, 0);
         result = calculate(sequence, s, matrix, m);
     }
     Py_DECREF(matrix);

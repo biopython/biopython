@@ -769,12 +769,36 @@ class Motif(object):
         if seq.alphabet!=IUPAC.unambiguous_dna:
             raise ValueError("Wrong alphabet! Use only with DNA sequences")
 
-        import numpy
+        seq = seq.tostring()
+
+        # check if the fast C code can be used
+        try:
+            import numpy
+            import _pwm
+        except ImportError:
+            # use the slower Python code otherwise
+            return self._pwm_calculate(seq)
+        
         # get the log-odds matrix into a proper shape
-        # (each column contains sorted (ACGT) log-odds values)
-        logodds=numpy.array([[y[1] for y in sorted(x.items())] \
-                             for x in self.log_odds()]).transpose()
-        
-        import _pwm
-        
-        return _pwm.calculate(seq.tostring(),logodds)
+        # (each row contains sorted (ACGT) log-odds values)
+        logodds=[[y[1] for y in sorted(x.items())] for x in self.log_odds()]
+        logodds=numpy.array(logodds)
+        return _pwm.calculate(seq, logodds)
+
+    def _pwm_calculate(self, sequence):
+        logodds = self.log_odds()
+        m = len(logodds)
+        s = len(sequence)
+        n = s - m + 1
+        result = [None] * n
+        for i in xrange(n):
+            score = 0.0
+            for j in xrange(m):
+                c = sequence[i+j]
+                temp = logodds[j].get(c)
+                if temp==None:
+                    break
+                score += temp
+            else:
+                result[i] = score
+        return result
