@@ -1504,7 +1504,7 @@ class TestMAST(unittest.TestCase):
         handle.close()
 
 
-class MotifTestsBasic(unittest.TestCase):
+class MotifTestPWM(unittest.TestCase):
     def setUp(self):
         from Bio import Seq
         self.m=Motif.read(open("Motif/SRF.pfm"),"jaspar-pfm")
