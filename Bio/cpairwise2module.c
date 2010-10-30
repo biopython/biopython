@@ -10,11 +10,26 @@
  */
 
 #include "Python.h"
-#include "csupport.h"
 
 
 #define _PRECISION 1000
 #define rint(x) (int)((x)*_PRECISION+0.5)
+
+
+/* Return a PyNumber as a double.
+ * Raises a TypeError if I can't do it.
+ */
+static double PyNumber_AsDouble(PyObject *py_num)
+{
+    double val;
+    PyObject *floatobj;
+
+    if((floatobj = PyNumber_Float(py_num)) == NULL)
+	return(0.0);
+    val = PyFloat_AsDouble(floatobj);
+    Py_DECREF(floatobj);
+    return val;
+}
 
 /* Functions in this module. */
 

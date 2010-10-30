@@ -295,8 +295,7 @@ elif sys.version_info[0] == 3:
 else :
     EXTENSIONS = [
     Extension('Bio.cpairwise2',
-              ['Bio/cpairwise2module.c',
-               'Bio/csupport.c'],
+              ['Bio/cpairwise2module.c'],
               include_dirs=["Bio"]
               ),
     Extension('Bio.trie',
