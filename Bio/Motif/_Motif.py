@@ -757,10 +757,10 @@ class Motif(object):
     def scanPWM(self,seq):
         """Matrix of log-odds scores for a nucleotide sequence.
  
-        scans (using a fast C extension) a nucleotide sequence and returns
-        the matrix of log-odds scores for all positions
+        scans a nucleotide sequence and returns the matrix of log-odds
+        scores for all positions.
 
-        - the result is a one-dimensional numpy array
+        - the result is a one-dimensional list or numpy array
         - the sequence can only be a DNA sequence
         - the search is performed only on one strand
         """
@@ -773,7 +773,6 @@ class Motif(object):
 
         # check if the fast C code can be used
         try:
-            import numpy
             import _pwm
         except ImportError:
             # use the slower Python code otherwise
