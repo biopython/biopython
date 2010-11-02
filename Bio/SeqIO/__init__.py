@@ -508,7 +508,7 @@ def parse(handle, format, alphabet=None):
             return iterator_generator(handle)
         try:
             return iterator_generator(handle, alphabet=alphabet)
-        except:
+        except TypeError:
             return _force_alphabet(iterator_generator(handle), alphabet)
     elif format in AlignIO._FormatToIterator:
         #Use Bio.AlignIO to read in the alignments
