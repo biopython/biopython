@@ -1519,12 +1519,12 @@ class MotifTestPWM(unittest.TestCase):
         # doubles. The C-code and Python code results will therefore not be
         # exactly equal. Test the first 5 decimal places only to avoid either
         # the C-code or the Python code to inadvertently fail this test.
-        self.assertAlmostEqual(result[0], -29.18363571, 5)
-        self.assertAlmostEqual(result[1], -38.3365097, 5)
-        self.assertAlmostEqual(result[2], -29.17756271, 5)
-        self.assertAlmostEqual(result[3], -38.04542542, 5)
-        self.assertAlmostEqual(result[4], -20.3014183, 5)
-        self.assertAlmostEqual(result[5], -25.18009186, 5)
+        self.assertAlmostEqual(result[0], -29.18363571, places=5)
+        self.assertAlmostEqual(result[1], -38.3365097, places=5)
+        self.assertAlmostEqual(result[2], -29.17756271, places=5)
+        self.assertAlmostEqual(result[3], -38.04542542, places=5)
+        self.assertAlmostEqual(result[4], -20.3014183, places=5)
+        self.assertAlmostEqual(result[5], -25.18009186, places=5)
 
 
 if __name__ == "__main__":
