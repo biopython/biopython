@@ -12,7 +12,7 @@ if "MYSQLPASS" not in os.environ:
 import warnings
 warnings.filterwarnings("ignore", category=BiopythonDeprecationWarning)
 import Bio.GFF
-warnings.resetwarnings()
+warnings.filters.pop()
 
 print "Running Bio.GFF doctests..."
 Bio.GFF._test()

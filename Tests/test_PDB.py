@@ -35,9 +35,6 @@ class A_ExceptionTest(unittest.TestCase):
     These tests must be executed because of the way Python's warnings module
     works -- a warning is only logged the first time it is encountered.
     """
-    def setUp(self):
-        warnings.resetwarnings()
-
     def test_1_warnings(self):
         """Check warnings: Parse a flawed PDB file in permissive mode.
 
@@ -132,10 +129,10 @@ class HeaderTests(unittest.TestCase):
 
 class ParseTest(unittest.TestCase):
     def setUp(self):
-        warnings.resetwarnings()
         warnings.simplefilter('ignore', PDBConstructionWarning)
         p = PDBParser(PERMISSIVE=1)
         self.structure = p.get_structure("example", "PDB/a_structure.pdb")
+        warnings.filters.pop()
  
     def test_c_n(self):
         """Extract polypeptides using C-N."""
@@ -487,7 +484,6 @@ class ParseReal(unittest.TestCase):
     
     def test_c_n(self):
         """Extract polypeptides from 1A80."""
-        warnings.resetwarnings()
         parser = PDBParser(PERMISSIVE=False)
         structure = parser.get_structure("example", "PDB/1A8O.pdb")
         self.assertEqual(len(structure), 1)
@@ -540,7 +536,6 @@ class ParseReal(unittest.TestCase):
 
     def test_strict(self):
         """Parse 1A8O.pdb file in strict mode."""
-        warnings.resetwarnings()
         parser = PDBParser(PERMISSIVE=False)
         structure = parser.get_structure("example", "PDB/1A8O.pdb")
         self.assertEqual(len(structure), 1)
@@ -659,10 +654,10 @@ class ParseReal(unittest.TestCase):
 class Exposure(unittest.TestCase):
     "Testing Bio.PDB.HSExposure."
     def setUp(self):
-        warnings.resetwarnings()
         warnings.simplefilter('ignore', PDBConstructionWarning)
         pdb_filename = "PDB/a_structure.pdb"
         structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
+        warnings.filters.pop()
         self.model=structure[1]
         #Look at first chain only
         a_residues=list(self.model["A"].child_list)

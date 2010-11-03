@@ -128,9 +128,6 @@ def compare_records(old_list, new_list, truncate_qual=None):
 
 class TestFastqErrors(unittest.TestCase):
     """Test reject invalid FASTQ files."""
-    def setUp(self):
-        warnings.resetwarnings()
-
     def check_fails(self, filename, good_count, formats=None, raw=True):
         if not formats:
             formats = ["fastq-sanger", "fastq-solexa", "fastq-illumina"]
@@ -272,9 +269,7 @@ class TestReferenceFastqConversions(unittest.TestCase):
     """Tests where we have reference output."""
     def simple_check(self, base_name, in_variant):
         for out_variant in ["sanger", "solexa", "illumina"]:
-            if out_variant == "sanger":
-                warnings.resetwarnings()
-            else:
+            if out_variant != "sanger":
                 #Ignore data loss warnings from max qualities
                 warnings.simplefilter('ignore', UserWarning)
             in_filename = "Quality/%s_original_%s.fastq" \
@@ -294,6 +289,9 @@ class TestReferenceFastqConversions(unittest.TestCase):
             SeqIO.write(SeqIO.parse(open(in_filename), "fastq-"+in_variant),
                         handle, "fastq-"+out_variant)
             self.assertEqual(expected, handle.getvalue())
+            if out_variant != "sanger":
+                warnings.filters.pop()
+
 #Now add methods at run time...
 tests = [("illumina_full_range", "illumina"),
          ("sanger_full_range", "sanger"),
@@ -314,9 +312,6 @@ for base_name, variant in tests:
 
 class TestQual(unittest.TestCase):
     """Tests with QUAL files."""
-    def setUp(self):
-        warnings.resetwarnings()
-
     def test_paired(self):
         """Check FASTQ parsing matches FASTA+QUAL parsing"""
         records1 = list(\
@@ -355,9 +350,6 @@ class TestQual(unittest.TestCase):
 
 class TestReadWrite(unittest.TestCase):
     """Test can read and write back files."""
-    def setUp(self):
-        warnings.resetwarnings()
-
     def test_fastq_2000(self):
         """Read and write back simple example with upper case 2000bp read"""
         data = "@%s\n%s\n+\n%s\n" \
@@ -415,9 +407,6 @@ class TestReadWrite(unittest.TestCase):
 
 class TestWriteRead(unittest.TestCase):
     """Test can write and read back files."""
-    def setUp(self):
-        warnings.resetwarnings()
-
     def test_generated(self):
         """Write and read back odd SeqRecord objects"""
         record1 = SeqRecord(Seq("ACGT"*500, generic_dna),  id="Test", description="Long "*500,
@@ -448,6 +437,7 @@ class TestWriteRead(unittest.TestCase):
             compare_records(records,
                             list(SeqIO.parse(handle, format)),
                             truncation_expected(format))
+        warnings.filters.pop()
             
     def check(self, filename, format, out_formats):
         for f in out_formats:
@@ -468,6 +458,7 @@ class TestWriteRead(unittest.TestCase):
         warnings.simplefilter('ignore', UserWarning)
         self.check(os.path.join("Quality", "sanger_93.fastq"), "fastq",
                    ["fastq-solexa","fastq-illumina"])
+        warnings.filters.pop()
 
     def test_sanger_faked(self):
         """Write and read back sanger_faked.fastq"""
@@ -572,9 +563,6 @@ class TestWriteRead(unittest.TestCase):
 
 
 class MappingTests(unittest.TestCase):
-    def setUp(self):
-        warnings.resetwarnings()
-
     def test_solexa_quality_from_phred(self):
         """Mapping check for function solexa_quality_from_phred"""
         self.assertEqual(-5, round(QualityIO.solexa_quality_from_phred(0)))
@@ -626,7 +614,7 @@ class MappingTests(unittest.TestCase):
         warnings.simplefilter('ignore', UserWarning)
         SeqIO.write(SeqIO.parse(in_handle, "fastq-sanger"),
                     out_handle, "fastq-solexa")
-        warnings.resetwarnings()
+        warnings.filters.pop()
         out_handle.seek(0)
         record = SeqIO.read(out_handle, "fastq-solexa")
         self.assertEqual(str(record.seq), seq)
@@ -649,7 +637,7 @@ class MappingTests(unittest.TestCase):
         warnings.simplefilter('ignore', UserWarning)
         SeqIO.write(SeqIO.parse(in_handle, "fastq-solexa"),
                     out_handle, "fastq-sanger")
-        warnings.resetwarnings()
+        warnings.filters.pop()
         out_handle.seek(0)
         record = SeqIO.read(out_handle, "fastq-sanger")
         self.assertEqual(str(record.seq), seq)
@@ -668,7 +656,7 @@ class MappingTests(unittest.TestCase):
         warnings.simplefilter('ignore', UserWarning)
         SeqIO.write(SeqIO.parse(in_handle, "fastq-sanger"),
                     out_handle, "fastq-illumina")
-        warnings.resetwarnings()
+        warnings.filters.pop()
         out_handle.seek(0)
         record = SeqIO.read(out_handle, "fastq-illumina")
         self.assertEqual(str(record.seq), seq)

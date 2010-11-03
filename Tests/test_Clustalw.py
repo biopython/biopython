@@ -11,7 +11,7 @@ import Bio
 import warnings
 warnings.filterwarnings("ignore", category=Bio.BiopythonDeprecationWarning)
 from Bio import Clustalw
-warnings.resetwarnings()
+warnings.filters.pop()
 
 from Bio.Align.Generic import Alignment
 

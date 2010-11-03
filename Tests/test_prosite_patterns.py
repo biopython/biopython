@@ -31,7 +31,7 @@ import warnings
 from Bio import BiopythonDeprecationWarning
 warnings.filterwarnings("ignore", category=BiopythonDeprecationWarning)
 from Bio.Prosite import Pattern
-warnings.resetwarnings()
+warnings.filters.pop()
 
 from Bio import Seq
 

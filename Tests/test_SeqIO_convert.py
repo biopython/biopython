@@ -25,7 +25,6 @@ def truncation_expected(format):
 
 #Top level function as this makes it easier to use for debugging:
 def check_convert(in_filename, in_format, out_format, alphabet=None):
-    warnings.resetwarnings()
     records = list(SeqIO.parse(open(in_filename),in_format, alphabet))
     #Write it out...
     handle = StringIO()
@@ -33,7 +32,8 @@ def check_convert(in_filename, in_format, out_format, alphabet=None):
     if qual_truncate:
         warnings.simplefilter('ignore', UserWarning)
     SeqIO.write(records, handle, out_format)
-    warnings.resetwarnings()
+    if qual_truncate:
+        warnings.filters.pop()
     handle.seek(0)
     #Now load it back and check it agrees,
     records2 = list(SeqIO.parse(handle, out_format, alphabet))
@@ -43,7 +43,8 @@ def check_convert(in_filename, in_format, out_format, alphabet=None):
     if qual_truncate:
         warnings.simplefilter('ignore', UserWarning)
     SeqIO.convert(in_filename, in_format, handle2, out_format, alphabet)
-    warnings.resetwarnings()
+    if qual_truncate:
+        warnings.filters.pop()
     #We could re-parse this, but it is simpler and stricter:
     assert handle.getvalue() == handle2.getvalue()
 
@@ -57,7 +58,8 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
         if qual_truncate:
             warnings.simplefilter('ignore', UserWarning)
         SeqIO.write(records, handle, out_format)
-        warnings.resetwarnings()
+        if qual_truncate:
+            warnings.filters.pop()
         handle.seek(0)
         assert False, "Parse or write should have failed!"
     except ValueError, err:
@@ -68,14 +70,14 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
         if qual_truncate:
             warnings.simplefilter('ignore', UserWarning)
         SeqIO.convert(in_filename, in_format, handle2, out_format, alphabet)
-        warnings.resetwarnings()
+        if qual_truncate:
+            warnings.filters.pop()
         assert False, "Convert should have failed!"
     except ValueError, err2:
         assert str(err1) == str(err2), \
                "Different failures, parse/write:\n%s\nconvert:\n%s" \
                % (err1, err2)
     #print err
-    warnings.resetwarnings()
     
 #TODO - move this to a shared test module...
 def compare_record(old, new, truncate=None):

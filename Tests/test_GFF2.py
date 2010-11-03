@@ -8,7 +8,7 @@ warnings.filterwarnings("ignore", category=BiopythonDeprecationWarning)
 import Bio.GFF
 import Bio.GFF.GenericTools
 import Bio.GFF.easy
-warnings.resetwarnings()
+warnings.filters.pop()
 
 print "Running Bio.GFF.GenericTools doctests..."
 Bio.GFF.GenericTools._test()
