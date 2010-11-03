@@ -27,7 +27,7 @@ except ImportError:
     from StringIO import StringIO
 import warnings
 try:
-    if (3,0,0) <= sys.version_info <= (3,1,2):
+    if (3,0,0) <= sys.version_info[:3] <= (3,1,2):
         #workaround for bug in python 3 to 3.1.2  see http://bugs.python.org/issue9257
         from xml.etree import ElementTree as ElementTree
     else:
