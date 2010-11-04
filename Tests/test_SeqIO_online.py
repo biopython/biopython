@@ -14,6 +14,11 @@ Goals:
     May catch some format changes early too.
 """
 import sys
+if sys.version_info[0] >= 3:
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(\
+        "This test doesn't work on Python 3 (bytes vs unicode issue).")
+
 import unittest
 
 import requires_internet
