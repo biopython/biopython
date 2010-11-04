@@ -24,8 +24,7 @@ if sys.version_info[0] >= 3:
     #but it will do in the short term to skip this unit test on Python 3
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(\
-        "The (deprecated) Bio.Prosite module uses the Python "
-        "library sgmllib which is not supported on Python 3")
+        "This deprecated module doesn't work on Python 3.")
         
 import warnings
 from Bio import BiopythonDeprecationWarning
