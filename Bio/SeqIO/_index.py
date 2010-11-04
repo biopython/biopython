@@ -258,6 +258,28 @@ class SffTrimmedDict(SffDict) :
 
 class SequentialSeqFileDict(_IndexedSeqFileDict):
     """Indexed dictionary like access to most sequential sequence files."""
+    def __init__(self, filename, format, alphabet, key_function):
+        _IndexedSeqFileDict.__init__(self, filename, format, alphabet, key_function)
+        #Load the parser class/function once an avoid the dict lookup in each
+        #__getitem__ call:
+        i = SeqIO._FormatToIterator[format]
+        #The following alphabet code is a bit nasty... duplicates logic in
+        #Bio.SeqIO.parse()
+        if alphabet is None:
+            def _parse():
+                """Dynamically generated parser function (PRIVATE)."""
+                return i(self._handle).next()
+        else:
+            #TODO - Detect alphabet support ONCE at __init__
+            def _parse():
+                """Dynamically generated parser function (PRIVATE)."""
+                try:
+                    return i(self._handle, alphabet=alphabet).next()
+                except TypeError:
+                    return SeqIO._force_alphabet(i(self._handle),
+                                                 alphabet).next()
+        self._parse = _parse
+
     def _build(self):
         handle = self._handle
         marker = {"ace" : "CO ",
@@ -280,12 +302,11 @@ class SequentialSeqFileDict(_IndexedSeqFileDict):
                 #End of file
                 break
 
-
     def __getitem__(self, key):
         """x.__getitem__(y) <==> x[y]"""
         handle = self._handle
         handle.seek(dict.__getitem__(self, key))
-        record = SeqIO.parse(handle, self._format, self._alphabet).next()
+        record = self._parse()
         if self._key_function:
             assert self._key_function(record.id) == key, \
                    "Requested key %s, found record.id %s which has key %s" \
