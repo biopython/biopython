@@ -138,8 +138,8 @@ class Primer3Commandline(_EmbossCommandLine):
 
     >>> cline = Primer3Commandline(sequence="mysequence.fas", auto=True, hybridprobe=True)
     >>> cline.explainflag = True
-    >>> cline.oligosize=20
-    >>> cline.productosize=200          # Old EMBOSS
+    >>> cline.oligosize=20              # Old EMBOSS, instead of osizeopt
+    >>> cline.productosize=200          # Old EMBOSS, instead of psizeopt
     >>> cline.outfile = "myresults.out"
     >>> print cline
     eprimer3 -auto -outfile=myresults.out -sequence=mysequence.fas -hybridprobe=True -productosize=200 -oligosize=20 -explainflag=True
