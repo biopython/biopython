@@ -8,7 +8,8 @@
 
 SFF was designed by 454 Life Sciences (Roche), the Whitehead Institute for
 Biomedical Research and the Wellcome Trust Sanger Institute. You are expected
-to use this module via the Bio.SeqIO functions under the format name "sff".
+to use this module via the Bio.SeqIO functions under the format name "sff" (or
+"sff-trim" as described below).
 
 For example, to iterate over the records in an SFF file,
 
