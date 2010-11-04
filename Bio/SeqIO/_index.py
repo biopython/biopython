@@ -327,7 +327,7 @@ class SequentialSeqFileDict(_IndexedSeqFileDict):
         data = handle.readline()
         while True:
             line = handle.readline()
-            if not line or marker_re.match(line):
+            if marker_re.match(line) or not line:
                 #End of file, or start of next record => end of this record
                 break
             data += line
@@ -463,10 +463,11 @@ class UniprotDict(SequentialSeqFileDict):
                         assert "</accession>" in line, line
                         key = line[11:].split("<")[0]
                         break
-                    elif "</entry>" in line \
-                    or marker_re.match(line) \
-                    or not line:
+                    elif "</entry>" in line:
                         break
+                    elif marker_re.match(line) or not line:
+                        #Start of next record or end of file
+                        raise ValueError("Didn't find end of record")
                 if not key:
                     raise ValueError("Did not find <accession> line")
                 yield key, offset
@@ -482,12 +483,13 @@ class UniprotDict(SequentialSeqFileDict):
         data = handle.readline()
         while True:
             line = handle.readline()
-            if "</entry>" in line:
-                data += line[:line.find("</entry>")+8]
+            i = line.find("</entry>")
+            if i != -1:
+                data += line[:i+8]
                 break
-            if not line or marker_re.match(line):
-                #End of file, or start of next record => end of this record
-                break
+            if marker_re.match(line) or not line:
+                #End of file, or start of next record
+                raise ValueError("Didn't find end of record")
             data += line
         return data
 
