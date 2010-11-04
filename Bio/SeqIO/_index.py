@@ -132,20 +132,8 @@ class _IndexedSeqFileDict(dict):
 
     def __getitem__(self, key):
         """x.__getitem__(y) <==> x[y]"""
-        #For non-trivial file formats this must be over-ridden in the subclass
-        handle = self._handle
-        handle.seek(dict.__getitem__(self, key))
-        record = SeqIO.parse(handle, self._format, self._alphabet).next()
-        if self._key_function:
-            assert self._key_function(record.id) == key, \
-                   "Requested key %s, found record.id %s which has key %s" \
-                   % (repr(key), repr(record.id),
-                      repr(self._key_function(record.id)))
-        else:
-            assert record.id == key, \
-                   "Requested key %s, found record.id %s" \
-                   % (repr(key), repr(record.id))
-        return record
+        #Should be done by each sub-class
+        raise NotImplementedError("Not implemented for this file format (yet).")
 
     def get(self, k, d=None):
         """D.get(k[,d]) -> D[k] if k in D, else d.  d defaults to None."""
@@ -288,6 +276,23 @@ class SequentialSeqFileDict(_IndexedSeqFileDict):
                 #Here we can assume the record.id is the first word after the
                 #marker. This is generally fine... but not for GenBank, EMBL, Swiss
                 yield line[marker_offset:].strip().split(None, 1)[0], offset
+
+
+    def __getitem__(self, key):
+        """x.__getitem__(y) <==> x[y]"""
+        handle = self._handle
+        handle.seek(dict.__getitem__(self, key))
+        record = SeqIO.parse(handle, self._format, self._alphabet).next()
+        if self._key_function:
+            assert self._key_function(record.id) == key, \
+                   "Requested key %s, found record.id %s which has key %s" \
+                   % (repr(key), repr(record.id),
+                      repr(self._key_function(record.id)))
+        else:
+            assert record.id == key, \
+                   "Requested key %s, found record.id %s" \
+                   % (repr(key), repr(record.id))
+        return record
 
     def get_raw(self, key):
         """Similar to the get method, but returns the record as a raw string."""
@@ -486,7 +491,7 @@ class IntelliGeneticsDict(SequentialSeqFileDict):
                         yield key, offset
                         break
 
-class TabDict(_IndexedSeqFileDict):
+class TabDict(SequentialSeqFileDict):
     """Indexed dictionary like access to a simple tabbed file."""
     def _build(self):
         handle = self._handle
@@ -515,7 +520,7 @@ class TabDict(_IndexedSeqFileDict):
 # Now the FASTQ indexers #
 ##########################
          
-class FastqDict(_IndexedSeqFileDict):
+class FastqDict(SequentialSeqFileDict):
     """Indexed dictionary like access to a FASTQ file (any supported variant).
     
     With FASTQ the records all start with a "@" line, but so can quality lines.
