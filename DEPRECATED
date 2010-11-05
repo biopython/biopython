@@ -416,8 +416,8 @@ Release 1.53.
 Bio.SCOP
 ========
 The module Bio.SCOP.FileIndex was deprecated in Release 1.46, and removed in
-Release 1.53. The class Parser in Bio.SCOP.DOM was removed in Release 1.55
-final.
+Release 1.53. The class Parser in Bio.SCOP.Dom was removed in Release 1.55
+final. The class Iterator in Bio.SCOP.Dom was removed in Release 1.56.
 
 Bio.utils
 =========

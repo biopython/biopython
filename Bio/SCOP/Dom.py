@@ -76,36 +76,3 @@ def parse(handle):
         if line.startswith('#'):
             continue
         yield Record(line)
-
-    
-class Iterator:
-    """Iterates over a DOM file.
-    """
-    def __init__(self, handle, parser=None):
-        """Create an object that iterates over a DES file.
-
-        handle -- file-like object.
-
-        parser -- an optional Parser object to change the results into
-                  another form.  If set to None, then the raw contents
-                  of the file will be returned.
-                  
-        """
-        import warnings
-        import Bio
-        warnings.warn("Bio.SCOP.Dom.Iterator is deprecated. Please use Bio.SCOP.Dom.parse() instead.", Bio.BiopythonDeprecationWarning)
-        from types import FileType, InstanceType
-        if type(handle) is not FileType and type(handle) is not InstanceType:
-            raise ValueError("I expected a file handle or file-like object")
-        self._handle = handle
-        self._parser = parser
-
-    def next(self):
-        line = self._handle.readline()
-        if not line:
-            return None
-        if line.startswith('#'):
-            return self.next()
-        if self._parser is not None:
-            return self._parser.parse(line)
-        return line
