@@ -103,8 +103,9 @@ Deprecated in Release 1.47, removed in Release 1.52.
 
 Bio.SwissProt.SProt
 ===================
-Declared obsolete in Release 1.50, and deprecated in Release 1.51. Most of the
-functionality in Bio.SwissProt.SProt is available from Bio.SwissProt.
+Declared obsolete in Release 1.50, deprecated in Release 1.51, and removed in
+Release 1.56. Most of the functionality in Bio.SwissProt.SProt is available
+from Bio.SwissProt.
 
 Bio.Prosite and Bio.Enzyme
 ==========================
