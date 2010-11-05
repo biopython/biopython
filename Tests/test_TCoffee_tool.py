@@ -30,7 +30,7 @@ if not t_coffee_exe:
     raise MissingExternalDependencyError(\
         "Install TCOFFEE if you want to use the Bio.Align.Applications wrapper.")
 
-class ProbconsApplication(unittest.TestCase):
+class TCoffeeApplication(unittest.TestCase):
 
     def setUp(self):
         self.infile1 = "Fasta/fa01"
@@ -86,7 +86,9 @@ class ProbconsApplication(unittest.TestCase):
                                  shell=(sys.platform!="win32"))
         return_code = child.wait()
         self.assertEqual(return_code, 0)
-        self.assertEqual(child.stderr.read(), "")
+        #Can get warnings in stderr output
+        stderr = child.stderr.read()
+        self.assertTrue("error" not in stderr.lower(), stderr)
         align = AlignIO.read(open(self.outfile3), "pir")
         records = list(SeqIO.parse(open(self.infile1),"fasta"))
         self.assertEqual(len(records),len(align))
