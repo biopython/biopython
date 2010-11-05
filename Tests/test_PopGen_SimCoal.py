@@ -16,7 +16,7 @@ found = False
 for path in os.environ['PATH'].split(os.pathsep):
     try:
         for filename in os.listdir(path):
-            if filename.startswith('simcoal2') \
+            if filename == "simcoal2" \
             or (filename.lower() == "simcoal2.exe"):
                 found = True
                 simcoal_dir = path
