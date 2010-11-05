@@ -82,11 +82,10 @@ class ConversionTest(unittest.TestCase):
         """
         for i in range(len(self.names)):
             handle = self.handles[i]
-	    gp_rec = GenePop.read(handle)
-	    fd_rec = convert_genepop_to_fdist(gp_rec)
-	    assert(fd_rec.num_loci == 3)
-	    assert(fd_rec.num_pops == 3)
-
+            gp_rec = GenePop.read(handle)
+            fd_rec = convert_genepop_to_fdist(gp_rec)
+            assert(fd_rec.num_loci == 3)
+            assert(fd_rec.num_pops == 3)
 
     def test_convert_big(self):
         """Big interface conversion test.
@@ -96,7 +95,6 @@ class ConversionTest(unittest.TestCase):
             fd_rec = convert_genepop_to_fdist(gp_rec)
             assert(fd_rec.num_loci == 3)
             assert(fd_rec.num_pops == 3)
-
 
     def tearDown(self):
         for handle in self.handles:
