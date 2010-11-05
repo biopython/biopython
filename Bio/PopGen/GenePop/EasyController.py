@@ -27,6 +27,7 @@ class EasyController:
         """
         self._fname = fname
         self._controller = GenePopController(genepop_dir)
+        self.__fst_pair_locus = {} #More caches like this needed!
 
     def get_basic_info(self):
         f=open(self._fname)
@@ -161,10 +162,11 @@ class EasyController:
         return self._controller.calc_fst_pair(self._fname)[1]
 
     def get_avg_fst_pair_locus(self, locus):
-        iter = self._controller.calc_fst_pair(self._fname)[0]
-        for locus_info in iter:
-            if locus_info[0] == locus:
-                return locus_info[1]
+        if len(self.__fst_pair_locus) == 0:
+            iter = self._controller.calc_fst_pair(self._fname)[0]
+            for locus_info in iter:
+                self.__fst_pair_locus[locus_info[0]] = locus_info[1]
+        return self.__fst_pair_locus[locus]
 
     def calc_ibd(self, is_diplo = True, stat="a", scale="Log", min_dist=0.00001):
         if is_diplo:

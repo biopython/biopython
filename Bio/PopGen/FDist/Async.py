@@ -16,6 +16,7 @@ SplitFDist splits a single Fdist execution in several, taking advantage
 """
 
 import os
+import shutil
 import thread
 from time import sleep
 from Bio.PopGen.Async import Local
@@ -50,8 +51,14 @@ class FDistAsync(FDistController):
         mut = parameters.get('mut', 0)
         num_sims = parameters.get('num_sims', 20000)
         data_dir = parameters.get('data_dir', '.')
+        is_dominant = parameters.get('is_dominant', False)
+        theta = parameters.get('theta', 0.06)
+        beta = parameters.get('beta', (0.25, 0.25))
+        max_freq = parameters.get('max_freq', 0.99)
         fst = self.run_fdist(npops, nsamples, fst, sample_size,
-            mut, num_sims, data_dir)
+            mut, num_sims, data_dir,
+            is_dominant, theta, beta,
+            max_freq)
         output_files = {}
         output_files['out.dat'] = open(data_dir + os.sep + 'out.dat', 'r')
         return fst, output_files
@@ -138,7 +145,9 @@ class SplitFDist:
 
     #You can only run a fdist case at a time
     def run_fdist(self, npops, nsamples, fst, sample_size,
-        mut = 0, num_sims = 20000, data_dir='.'):
+        mut = 0, num_sims = 20000, data_dir='.',
+        is_dominant = False, theta = 0.06, beta = (0.25, 0.25),
+        max_freq = 0.99):
         """Runs FDist.
 
            Parameters can be seen on FDistController.run_fdist.
@@ -155,6 +164,8 @@ class SplitFDist:
                os.mkdir(full_path)
            except OSError:
                pass #Its ok, if it is already there
+           if "ss_file" in os.listdir(data_dir):
+               shutil.copy(data_dir + os.sep + "ss_file", full_path)
            id = self.async.run_program('fdist', {
                'npops'       : npops,
                'nsamples'    : nsamples,
@@ -162,7 +173,11 @@ class SplitFDist:
                'sample_size' : sample_size,
                'mut'         : mut,
                'num_sims'    : self.split_size,
-               'data_dir'    : full_path
+               'data_dir'    : full_path,
+               'is_dominant' : is_dominant,
+               'theta'       : theta,
+               'beta'        : beta,
+               'max_freq'    : max_freq 
            }, {})
            self.parts[id] = full_path
         thread.start_new_thread(self.monitor, ())
