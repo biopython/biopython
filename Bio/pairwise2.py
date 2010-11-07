@@ -794,12 +794,6 @@ def format_alignment(align1, align2, score, begin, end):
 # Try and load C implementations of functions.  If I can't,
 # then just ignore and use the pure python implementations.
 try:
-    import cpairwise2
+    from cpairwise2 import rint, _make_score_matrix_fast
 except ImportError:
     pass
-else:
-    import sys
-    this_module = sys.modules[__name__]
-    for name in cpairwise2.__dict__.keys():
-        if not name.startswith("__"):
-            this_module.__dict__[name] = cpairwise2.__dict__[name]
