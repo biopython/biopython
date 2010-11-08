@@ -69,22 +69,38 @@ class TestMarkovModel(unittest.TestCase):
         self.assertEqual(len(markov_model.p_emission[1]), 4)
         self.assertEqual(len(markov_model.p_emission[2]), 4)
         self.assertEqual(len(markov_model.p_emission[3]), 4)
-        self.assertAlmostEqual(markov_model.p_emission[0][0], 0.666667, 4)
-        self.assertAlmostEqual(markov_model.p_emission[0][1], 0.111111, 4)
-        self.assertAlmostEqual(markov_model.p_emission[0][2], 0.111111, 4)
-        self.assertAlmostEqual(markov_model.p_emission[0][3], 0.111111, 4)
-        self.assertAlmostEqual(markov_model.p_emission[1][0], 0.083333, 4)
-        self.assertAlmostEqual(markov_model.p_emission[1][1], 0.750000, 4)
-        self.assertAlmostEqual(markov_model.p_emission[1][2], 0.083333, 4)
-        self.assertAlmostEqual(markov_model.p_emission[1][3], 0.083333, 4)
-        self.assertAlmostEqual(markov_model.p_emission[2][0], 0.083333, 4)
-        self.assertAlmostEqual(markov_model.p_emission[2][1], 0.083333, 4)
-        self.assertAlmostEqual(markov_model.p_emission[2][2], 0.750000, 4)
-        self.assertAlmostEqual(markov_model.p_emission[2][3], 0.083333, 4)
-        self.assertAlmostEqual(markov_model.p_emission[3][0], 0.031250, 4)
-        self.assertAlmostEqual(markov_model.p_emission[3][1], 0.031250, 4)
-        self.assertAlmostEqual(markov_model.p_emission[3][2], 0.031250, 4)
-        self.assertAlmostEqual(markov_model.p_emission[3][3], 0.906250, 4)
+        self.assertAlmostEqual(markov_model.p_emission[0][0], 0.666667,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_emission[0][1], 0.111111,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_emission[0][2], 0.111111,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_emission[0][3], 0.111111,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_emission[1][0], 0.083333,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_emission[1][1], 0.750000,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_emission[1][2], 0.083333,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_emission[1][3], 0.083333,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_emission[2][0], 0.083333,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_emission[2][1], 0.083333,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_emission[2][2], 0.750000,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_emission[2][3], 0.083333,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_emission[3][0], 0.031250,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_emission[3][1], 0.031250,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_emission[3][2], 0.031250,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_emission[3][3], 0.906250,
+                               places=4)
 
     def test_baum_welch(self):
         states = ["CP", "IP"]
@@ -109,15 +125,21 @@ class TestMarkovModel(unittest.TestCase):
         self.assertEqual(markov_model.states, ['CP', 'IP'])
         self.assertEqual(markov_model.alphabet, ['cola', 'ice_t', 'lem'])
         self.assertEqual(len(markov_model.p_initial), 2)
-        self.assertAlmostEqual(markov_model.p_initial[0], 1.0, 4)
-        self.assertAlmostEqual(markov_model.p_initial[1], 0.0, 4)
+        self.assertAlmostEqual(markov_model.p_initial[0], 1.0,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_initial[1], 0.0,
+                               places=4)
         self.assertEqual(len(markov_model.p_transition), 2)
         self.assertEqual(len(markov_model.p_transition[0]), 2)
         self.assertEqual(len(markov_model.p_transition[1]), 2)
-        self.assertAlmostEqual(markov_model.p_transition[0][0], 0.02460365, 4)
-        self.assertAlmostEqual(markov_model.p_transition[0][1], 0.97539634, 4)
-        self.assertAlmostEqual(markov_model.p_transition[1][0], 1.0, 4)
-        self.assertAlmostEqual(markov_model.p_transition[1][1], 0.0, 4)
+        self.assertAlmostEqual(markov_model.p_transition[0][0], 0.02460365,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_transition[0][1], 0.97539634,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_transition[1][0], 1.0,
+                               places=4)
+        self.assertAlmostEqual(markov_model.p_transition[1][1], 0.0,
+                               places=4)
         self.assertEqual(len(markov_model.p_emission), 2)
         self.assertEqual(len(markov_model.p_emission[0]), 3)
         self.assertEqual(len(markov_model.p_emission[1]), 3)
