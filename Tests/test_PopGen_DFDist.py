@@ -12,21 +12,23 @@ from Bio.PopGen import FDist
 from Bio.PopGen.FDist import Controller
 from Bio import MissingExternalDependencyError
 
-#Tests fdist related code. Note: this case requires fdist
-#test_PopGen_FDist_nodepend tests code that does not require fdist
+#Tests DFDist related code. Note: this case requires Dfdist (four binaries)
+#test_PopGen_FDist_nodepend tests code that does not require fdist2 or Dfdist
 
-found = False
+wanted = dict()
 for path in os.environ['PATH'].split(os.pathsep):
     try:
         list = os.listdir(path)
         for file in os.listdir(path):
-            if file.startswith('Dfdist'):
-                found = True
+            for f in ['Dfdist', 'Ddatacal', 'pv2', 'cplot2']:
+                if file == f or file.lower() == f+".exe":
+                    wanted[f] = file
     except os.error:
         pass #Path doesn't exist - correct to pass
-if not found:
+if len(wanted) != 4:
     raise MissingExternalDependencyError(\
-        "Install FDist if you want to use Bio.PopGen.FDist.")
+        "Install Dfdist, Ddatacal, pv2 and cplot2 if you want to use DFDist with Bio.PopGen.FDist.")
+del wanted
 
 
 class AppTest(unittest.TestCase):
