@@ -12,8 +12,9 @@ The latest news is at the top.
 In progress: Biopython 1.56 (not yet released).
 
 This is planned to be our last release to support Python 2.4, however this
-could be delayed given feedback from our users (e.g. if this proves to be a
-problem in combination with other libraries or a popular Linux distribution).
+could be delayed given immediate feedback from our users (e.g. if this proves
+to be a problem in combination with other libraries or a popular Linux
+distribution).
 
 Bio.SeqIO can now read and index UniProt XML files (under format name
 "uniprot-xml", which was agreed with EMBOSS and BioPerl for when/if they
@@ -34,8 +35,8 @@ coordindate (with respect to the parent sequence) of each letter within the
 feature (in frame aware order), and "in" which allows you to check if a
 (parent based) coordindate is within the feature location.
 
-Bio.Entrez will now try to download any missing NCBI DTD files and cache
-them in the user's home directory.
+Bio.Entrez will now try to download any missing NCBI DTD files and cache them
+in the user's home directory.
 
 The provisional database schema for BioSQL support on SQLite which Biopython
 has been using since Release 1.53 has now been added to BioSQL, and updated

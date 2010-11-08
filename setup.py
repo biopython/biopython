@@ -51,7 +51,7 @@ if sys.version_info[:2] < (2, 4):
           + "yet).  Python %d.%d detected" % sys.version_info[:2])
     sys.exit(-1)
 elif sys.version_info[:2] == (2,4):
-    print ("Warning - we are phasing out support for Python 2.4")
+    print ("WARNING - This is the last Biopython release to support Python 2.4")
 elif sys.version_info[0] == 3:
     print("Biopython does not yet officially support Python 3, but you")
     print("can try it by first using the 2to3 script on our source code.")
