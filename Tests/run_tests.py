@@ -11,6 +11,7 @@ additional facilities.
 Command line options:
 
 --help        -- show usage info
+--offline     -- skip tests which require internet access
 -g;--generate -- write the output file for a test instead of comparing it.
                  The name of the test to write the output for must be
                  specified.
@@ -106,7 +107,7 @@ def main(argv):
     # get the command line options
     try:
         opts, args = getopt.getopt(argv, 'gv', ["generate", "verbose",
-            "doctest", "help"])
+            "doctest", "help", "offline"])
     except getopt.error, msg:
         print msg
         print __doc__
@@ -119,6 +120,12 @@ def main(argv):
         if o == "--help":
             print __doc__
             return 0
+        if o == "--offline":
+            print "Skipping any tests requiring internet access"
+            #This is a bit of a hack...
+            import requires_internet
+            requires_internet.check.available = False
+            #The check() function should now report internet not available
         if o == "-g" or o == "--generate":
             if len(args) > 1:
                 print "Only one argument (the test name) needed for generate"
