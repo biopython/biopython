@@ -60,12 +60,12 @@ class AppTest(unittest.TestCase):
         """
         fst, samp_size, loci, pops, F, obs = \
             self.ctrl.run_datacal(data_dir = self.dirname, version=2)
-        assert (fst - 0.23 < 0.02)
-        assert (samp_size == 32)
-        assert (loci == 300)
-        assert (pops == 2)
-        assert (F - 0.11 < 0.01)
-        assert (obs == 300)
+        self.assertTrue(fst - 0.23 < 0.02)
+        self.assertEqual(samp_size, 32)
+        self.assertEqual(loci, 300)
+        self.assertEqual(pops, 2)
+        self.assertTrue(F - 0.11 < 0.01)
+        self.assertEqual(obs, 300)
 
     def test_dfdist(self):
         """Test dfdist execution.
@@ -75,7 +75,7 @@ class AppTest(unittest.TestCase):
         fst = self.ctrl.run_fdist(npops = 15, nsamples = 10, fst = 0.1,
                 sample_size = 20, mut = 0, num_sims = 100,
                 data_dir = self.dirname, is_dominant = True)
-        assert(abs(fst - 0.1) < 0.02) #Stochastic result...
+        self.assertTrue(abs(fst - 0.1) < 0.02) #Stochastic result...
 
     def atest_dfdist_force_fst(self):
         """Test dfdist execution approximating Fst.
@@ -87,19 +87,19 @@ class AppTest(unittest.TestCase):
                 fst = 0.1,
                 sample_size = 20, mut = 0, num_sims = 100,
                 data_dir = self.dirname, is_dominant=True)
-        assert(abs(fst - 0.09) < 0.05) #Stochastic result...
+        self.assertTrue(abs(fst - 0.09) < 0.05) #Stochastic result...
 
     def test_cplot2(self):
         """Test cplot2 execution.
         """
         cpl_interval =self.ctrl.run_cplot(data_dir = self.dirname, version=2)
-        assert (len(cpl_interval)==300)
+        self.assertEqual(len(cpl_interval), 300)
 
     def test_pv2(self):
         """Test pv2 execution.
         """
         pv_data = self.ctrl.run_pv(data_dir = self.dirname, version=2)
-        assert(len(pv_data) == 300)
+        self.assertEqual(len(pv_data), 300)
 
 
 if __name__ == "__main__":
