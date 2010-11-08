@@ -296,8 +296,8 @@ def _sff_file_header(handle):
 def _sff_do_slow_index(handle):
     """Generates an index by scanning though all the reads in an SFF file (PRIVATE).
 
-    This is a slow but generic approach if we can't parse the provided index (if
-    present).
+    This is a slow but generic approach if we can't parse the provided index
+    (if present).
 
     Will use the handle seek/tell functions.
     """
@@ -362,8 +362,8 @@ def _sff_find_roche_index(handle):
     Makes a number of hard coded assumptions based on reverse engineered SFF
     files from Roche 454 machines.
 
-    Returns a tuple of read count, SFF "index" offset and size, XML offset and
-    size, and the actual read index offset and size.
+    Returns a tuple of read count, SFF "index" offset and size, XML offset
+    and size, and the actual read index offset and size.
 
     Raises a ValueError for unsupported or non-Roche index blocks.
     """    
@@ -447,15 +447,15 @@ def _sff_read_roche_index(handle):
 
     This works on ".srt1.00" and ".mft1.00" style Roche SFF index blocks.
 
-    Roche SFF indices use base 255 not 256, meaning we see bytes in range the range
-    0 to 254 only. This appears to be so that byte 0xFF (character 255) can be used
-    as a marker character to separate entries (required if the read name lengths
-    vary).
+    Roche SFF indices use base 255 not 256, meaning we see bytes in range the
+    range 0 to 254 only. This appears to be so that byte 0xFF (character 255)
+    can be used as a marker character to separate entries (required if the
+    read name lengths vary).
 
-    Note that since only four bytes are used for the read offset, this is limited to
-    255^4 bytes (nearly 4GB). If you try to use the Roche sfffile tool to combined
-    SFF files beyound this limit, they issue a warning and ommit the index (and
-    manifest).
+    Note that since only four bytes are used for the read offset, this is
+    limited to 255^4 bytes (nearly 4GB). If you try to use the Roche sfffile
+    tool to combine SFF files beyound this limit, they issue a warning and
+    omit the index (and manifest).
     """
     number_of_reads, header_length, index_offset, index_length, xml_offset, \
     xml_size, read_index_offset, read_index_size = _sff_find_roche_index(handle)
@@ -574,10 +574,10 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     alphabet - optional alphabet, defaults to generic DNA.
     trim - should the sequences be trimmed?
 
-    The resulting SeqRecord objects should match those from a paired
-    FASTA and QUAL file converted from the SFF file using the Roche
-    454 tool ssfinfo. i.e. The sequence will be mixed case, with the
-    trim regions shown in lower case.
+    The resulting SeqRecord objects should match those from a paired FASTA
+    and QUAL file converted from the SFF file using the Roche 454 tool
+    ssfinfo. i.e. The sequence will be mixed case, with the trim regions
+    shown in lower case.
 
     This function is used internally via the Bio.SeqIO functions:
 
@@ -664,8 +664,6 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     #in the file...
     for read in range(number_of_reads):
         if index_offset and handle.tell() == index_offset:
-            #import warnings
-            #warnings.warn("Found SFF index before read %i (not at end)" % (read+1))
             offset = index_offset + index_length
             if offset % 8:
                 offset += 8 - (offset % 8)
@@ -930,8 +928,8 @@ class SffWriter(SequenceWriter):
             if offset > 4244897280:
                 import warnings
                 warnings.warn("Read %s has file offset %i, which is too large "
-                              "to store in the Roche SFF index structure. No index "
-                              "block will be recorded." % (name, offset))
+                              "to store in the Roche SFF index structure. No "
+                              "index block will be recorded." % (name, offset))
                 #No point recoring the offsets now
                 self._index = None
             else:
