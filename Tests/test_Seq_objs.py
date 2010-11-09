@@ -95,7 +95,7 @@ class StringMethodTests(unittest.TestCase):
 
     def _test_method(self, method_name, pre_comp_function=None, start_end=False):
         """Check this method matches the plain string's method."""
-        assert isinstance(method_name, str)
+        self.assertTrue(isinstance(method_name, str))
         for example1 in self._examples:
             if not hasattr(example1, method_name):
                 #e.g. MutableSeq does not support find
@@ -356,8 +356,7 @@ class StringMethodTests(unittest.TestCase):
                 mapping = maketrans("CGcg","GCgc")
             else :
                 #TODO - look at alphabet?
-                assert False, example1
-                continue
+                raise ValueError(example1)
             self.assertEqual(str1.translate(mapping), str(comp))
             self.assertEqual(comp.alphabet, example1.alphabet)
                 
