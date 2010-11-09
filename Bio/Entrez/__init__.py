@@ -54,6 +54,7 @@ parse        Parses the XML results returned by any of the above functions,
              >>> records = Entrez.parse(handle)
              >>> for record in records:
              ...     # each record is a Python dictionary or list.
+             ...     print record
 
              This function is appropriate only if the XML file contains
              multiple records, and is particular useful for large files. 
