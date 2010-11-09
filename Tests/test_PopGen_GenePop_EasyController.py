@@ -41,61 +41,61 @@ class AppTest(unittest.TestCase):
         """Test basic info.
         """
         pops, loci = self.ctrl.get_basic_info()
-        assert len(pops) == 10
-        assert len(loci) == 37
+        self.assertEqual(len(pops), 10)
+        self.assertEqual(len(loci), 37)
 
     def test_get_heterozygosity_info(self):
         """Test heterozygosity info.
         """
         hz_info = self.ctrl.get_heterozygosity_info(0, "Locus2")
-        assert hz_info[1] == 24
-        assert hz_info[3] == 7
+        self.assertEqual(hz_info[1], 24)
+        self.assertEqual(hz_info[3], 7)
 
     def test_get_alleles(self):
         """Test get alleles.
         """
-        assert self.ctrl.get_alleles(0,"Locus3") == [3, 20]
+        self.assertEqual(self.ctrl.get_alleles(0,"Locus3"), [3, 20])
 
     def test_get_alleles_all_pops(self):
         """Test get alleles for all populations.
         """
-        assert self.ctrl.get_alleles_all_pops("Locus4") == [1, 3]
+        self.assertEqual(self.ctrl.get_alleles_all_pops("Locus4"), [1, 3])
 
     def test_get_fis(self):
         """Test get Fis.
         """
         alleles, overall = self.ctrl.get_fis(0,"Locus2")
-        assert alleles[3][0] == 55
-        assert overall[0] == 62
+        self.assertEqual(alleles[3][0], 55)
+        self.assertEqual(overall[0], 62)
 
     def test_get_allele_frequency(self):
         """Test allele frequency.
         """
         tot_genes, alleles = self.ctrl.get_allele_frequency(0,"Locus2")
-        assert tot_genes == 62
-        assert abs(alleles[20] - 0.113) < 0.05
+        self.assertEqual(tot_genes, 62)
+        self.assertTrue(abs(alleles[20] - 0.113) < 0.05)
 
     def test_get_genotype_count(self):
         """Test genotype count.
         """
-        assert len(self.ctrl.get_genotype_count(0,"Locus2")) == 3
+        self.assertEqual(len(self.ctrl.get_genotype_count(0,"Locus2")), 3)
 
     def test_estimate_nm(self):
         """Test Nm estimation.
         """
         nms = self.ctrl.estimate_nm()
-        assert nms[0] == 28.0
+        self.assertEqual(nms[0], 28.0)
 
     def test_get_avg_fst_pair_locus(self):
         """Test get average Fst for pairwise pops on a locus.
         """
-        assert len(self.ctrl.get_avg_fst_pair_locus("Locus4")) == 45
+        self.assertEqual(len(self.ctrl.get_avg_fst_pair_locus("Locus4")), 45)
 
     def test_get_avg_fst_pair(self):
         """Test get pairwise Fst.
         """
         pop_fis =  self.ctrl.get_avg_fst_pair()
-        assert len(pop_fis) == 45
+        self.assertEqual(len(pop_fis), 45)
 
     def test_get_avg_fis(self):
         """Test average Fis.
@@ -106,15 +106,15 @@ class AppTest(unittest.TestCase):
         """Test multilocus F stats.
         """
         mf = self.ctrl.get_multilocus_f_stats()
-        assert len(mf) == 3
-        assert mf[0]<0.1
+        self.assertEqual(len(mf), 3)
+        self.assertTrue(mf[0]<0.1)
 
     def test_get_f_stats(self):
         """Test F stats.
         """
         fs = self.ctrl.get_f_stats("Locus2")
-        assert len(fs)==5
-        assert fs[0]<0
+        self.assertEqual(len(fs), 5)
+        self.assertTrue(fs[0]<0)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
