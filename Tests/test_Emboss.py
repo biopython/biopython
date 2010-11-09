@@ -479,8 +479,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         self.assertEqual(str(align[0].seq), "ACCCGGGCGCGGT")
         self.assertEqual(str(align[1].seq), "ACCCGAGCGCGGT")
         #Check no error output:
-        assert child.stderr.read() == ""
-        assert 0 == child.wait()
+        self.assertEqual(child.stderr.read(), "")
+        self.assertEqual(0, child.wait())
 
     def test_needle_file(self):
         """needle with the asis trick, output to a file."""
@@ -546,8 +546,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         self.assertEqual(str(align[0].seq), "ACCCGGGCGCGGT")
         self.assertEqual(str(align[1].seq), "ACCCGAGCGCGGT")
         #Check no error output:
-        assert child.stderr.read() == ""
-        assert 0 == child.wait()
+        self.assertEqual(child.stderr.read(), "")
+        self.assertEqual(0, child.wait())
 
     def test_water_file2(self):
         """water with the asis trick and nucleotide FASTA file, output to a file."""
@@ -656,8 +656,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
                                       AlignIO.parse(child.stdout,"emboss"),
                                       local=False)
         #Check no error output:
-        assert child.stderr.read() == ""
-        assert 0 == child.wait()
+        self.assertEqual(child.stderr.read(), "")
+        self.assertEqual(0, child.wait())
 
     def test_water_needs_output(self):
         """water without output file or stdout/filter should give error."""
@@ -710,8 +710,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
             self.assertEqual(len(align), 2)
             self.assertEqual(align.get_alignment_length(), 9)
         #Check no error output:
-        assert child.stderr.read() == ""
-        assert 0 == child.wait()
+        self.assertEqual(child.stderr.read(), "")
+        self.assertEqual(0, child.wait())
         
 #Top level function as this makes it easier to use for debugging:
 def emboss_translate(sequence, table=None, frame=None):
