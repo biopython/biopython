@@ -185,6 +185,12 @@ tests = [
     ]
 for filename, format, alphabet in tests:
     assert format in _FormatToIndexedDict
+
+    #TODO - remove this hack once we drop Python 2.4
+    if format=="uniprot-xml" and SeqIO.UniprotIO.ElementTree is None:
+        #skip this test
+        continue
+    
     def funct(fn,fmt,alpha):
         f = lambda x : x.simple_check(fn, fmt, alpha)
         f.__doc__ = "Index %s file %s" % (fmt, fn)
