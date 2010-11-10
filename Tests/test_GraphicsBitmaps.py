@@ -33,6 +33,14 @@ except:
     raise MissingPythonDependencyError(\
         "Install ReportLab's renderPM module if you want to create "
         "bitmaps with Bio.Graphics.")
+try:
+    # Skip the test if PIL is not installed
+    import Image as i
+    del i
+except:
+    raise MissingPythonDependencyError(\
+        "Install PIL (Python Imaging Library) if you want to create "
+        "bitmaps with Bio.Graphics.")
 
 from reportlab.graphics.renderPM import RenderPMError
 
