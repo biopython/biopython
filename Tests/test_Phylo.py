@@ -12,6 +12,13 @@ from cStringIO import StringIO
 from Bio import Phylo
 from Bio.Phylo import PhyloXML
 
+#TODO - Remove this hack
+#This will raise MissingPythonDependencyError if we don't have ElementTree
+#and thus skip the all these tests. A couple of them could be run without
+#ElementTree, but we're about drop Python 2.4 support so I don't mind.
+from Bio.Phylo import PhyloXMLIO as PXIO
+del PXIO
+
 # Example Newick and Nexus files
 EX_NEWICK = 'Nexus/int_node_labels.nwk'
 EX_NEXUS = 'Nexus/test_Nexus_input.nex'
