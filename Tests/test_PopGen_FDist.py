@@ -21,7 +21,7 @@ for path in os.environ['PATH'].split(os.pathsep):
         list = os.listdir(path)
         for file in os.listdir(path):
             for f in ['fdist2', 'datacal', 'pv', 'cplot2']:
-                if file == f or file.lower() == f+".exe":
+                if file == f or file.lower() == f.lower()+".exe":
                     wanted[f] = file
     except os.error:
         pass #Path doesn't exist - correct to pass
