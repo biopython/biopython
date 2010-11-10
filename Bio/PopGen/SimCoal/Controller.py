@@ -48,8 +48,10 @@ class SimCoalController:
         curr_dir = os.getcwd()
         #TODO - Make sure we change drive on Windows as well?
         os.chdir(par_dir)
-        cmd = self.simcoal_dir + os.sep + self.bin_name + ' ' + \
-              par_file + ' ' + str(num_sims) + ' ' + ploydi
+        exe = os.path.join(self.simcoal_dir, self.bin_name)
+        if " " in exe:
+            exe = '"' + exe + '"'
+        cmd = exe + ' ' + par_file + ' ' + str(num_sims) + ' ' + ploydi
         #TODO - Better way to spot if on Jython on Windows?
         if sys.platform=="win32" or self.bin_name.endswith(".exe"):
             #There is no /dev/nul on Windows
