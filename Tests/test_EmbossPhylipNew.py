@@ -56,14 +56,6 @@ if len(exes) < len(exes_wanted):
  ###########################################################################
 
 # A few top level functions that are called repeatedly in the test cases
-def run_command(cline):
-    """ Run a given commandline using subprocess"""
-    return subprocess.call(str(cline),
-                           stdin=subprocess.PIPE,
-                           stdout=subprocess.PIPE,
-                           stderr=subprocess.PIPE,
-                           shell=(sys.platform!="win32"))
-
 def write_AlignIO_dna():
     """ Convert opuntia.aln to a phylip file """
     dna = AlignIO.parse(open("Clustalw/opuntia.aln", "r"), "clustal")
@@ -112,10 +104,7 @@ class DistanceTests(unittest.TestCase):
                                          sequence= filename,
                                          outfile = "test_file",
                                          auto = True)
-        return_code = run_command(cline)
-        if return_code != 0:
-            raise ValueError("Return code %s from:\n%s" \
-                             % (return_code, str(cline)))
+        stdout, strerr = cline()
         #biopython can't grok distance matrices, so we'll just check it exists
         self.assertTrue(os.path.isfile("test_file"))
     
@@ -126,9 +115,7 @@ class DistanceTests(unittest.TestCase):
                                      datafile = filename,
                                      outtreefile = "test_file",
                                      auto= True, filter = True)
-        return_code = run_command(cline)
-        if return_code != 0:
-            raise ValueError("Return code %s from:\n%s" % (return_code, str(cline)))
+        stdout, stderr = cline()
         for tree in parse_trees("test_file"):
             tree_taxa = [t.replace(" ", "_") for t in tree.get_taxa()]
             self.assertEqual(self.test_taxa, sorted(tree_taxa))
@@ -189,10 +176,7 @@ class ParsimonyTests(unittest.TestCase):
                                          sequence = filename,
                                          outtreefile = "test_file",
                                          auto= True, stdout=True)
-        return_code = run_command(cline)
-        if return_code != 0:
-            raise ValueError("Return code %s from:\n%s" \
-                             % (return_code, str(cline)))
+        stdout, stderr = cline()
         a_taxa = [s.name.replace(" ", "_") for s in
                   AlignIO.parse(open(filename, "r"), format).next()]
         for tree in parse_trees("test_file"):
@@ -246,10 +230,7 @@ class BootstrapTests(unittest.TestCase):
                                     seqtype = align_type,
                                     reps = 2,
                                     auto = True, filter = True)
-        return_code = run_command(cline)
-        if return_code != 0:
-            raise ValueError("Return code %s from:\n%s" \
-                             % (return_code, str(cline)))
+        stdout, stderr = cline()
         # the resultant file should have 2 alignments...
         bs = list(AlignIO.parse(open("test_file", "r" ), format))
         self.assertEqual(len(bs), 2)
@@ -290,10 +271,7 @@ class TreeComparisonTests(unittest.TestCase):
                                      intreefile = "Phylip/horses.tree",
                                      outtreefile = "test_file",
                                      auto = True, filter = True)
-        return_code = run_command(str(cline))
-        if return_code != 0:
-            raise ValueError("Return code %s from:\n%s" \
-                             % (return_code, str(cline)))
+        stdout, stderr = cline()
         #Split the next and get_taxa into two steps to help 2to3 work
         tree1 = parse_trees("test_file").next()
         taxa1 = tree1.get_taxa()
@@ -307,10 +285,7 @@ class TreeComparisonTests(unittest.TestCase):
                                      intreefile = "Phylip/horses.tree",
                                      outfile = "test_file",
                                      auto = True, filter = True)
-        return_code = run_command(str(cline))
-        if return_code != 0:
-            raise ValueError("Return code %s from:\n%s" \
-                             % (return_code, str(cline)))
+        stdout, stderr = cline()
         self.assertTrue(os.path.isfile("test_file"))
 
 if __name__ == "__main__":
