@@ -32,7 +32,7 @@ del wanted
 
 
 class AppTest(unittest.TestCase):
-    """Tests the fdist suite of applications.
+    """Tests the Dfdist suite of applications.
     """
     def _copyfile(self, inname, outname):
         shutil.copyfile(
@@ -68,7 +68,7 @@ class AppTest(unittest.TestCase):
         self.assertEqual(obs, 300)
 
     def test_dfdist(self):
-        """Test dfdist execution.
+        """Test Dfdist execution.
         """
         #The number of simulations in real life should be at least 10000,
         #see the fdist2 documentation.
