@@ -23,22 +23,22 @@ class SimCoalController:
         The initializer checks for existance and executability of binaries.
         """
         self.simcoal_dir = simcoal_dir
-        self.os_name = os.name
+        self.os_name = os.name #remove this?
         dir_contents = os.listdir(self.simcoal_dir)
         #We expect the tool to be installed as simcoal2(.exe)
         #without any trailing version number.
-        if self.os_name=='nt' or sys.platform=='cygwin':
-            self.bin_name = 'simcoal2.exe'
-            #Windows is case insenstive
+        self.bin_name = "simcoal2"
+        if self.bin_name not in dir_contents:
+            #Try case insensitive,
             dir_contents = [x.lower() for x in dir_contents]
-        else:
-            self.bin_name = 'simcoal2'
-        if self.bin_name in dir_contents:
-            if not os.access(self.simcoal_dir + os.sep +
-                self.bin_name, os.X_OK):
-                raise IOError("SimCoal not executable")
-        else:
+        if self.bin_name not in dir_contents:
+            #Try with .exe
+            self.bin_name += '.exe'
+        if self.bin_name not in dir_contents:
             raise IOError("SimCoal not available")
+        if not os.access(os.path.join(self.simcoal_dir, self.bin_name),
+                         os.X_OK):
+            raise IOError("SimCoal not executable")
 
     def run_simcoal(self, par_file, num_sims, ploydi = '1', par_dir = '.'):
         """Executes SimCoal.
@@ -50,7 +50,8 @@ class SimCoalController:
         os.chdir(par_dir)
         cmd = self.simcoal_dir + os.sep + self.bin_name + ' ' + \
               par_file + ' ' + str(num_sims) + ' ' + ploydi
-        if sys.platform=="win32":
+        #TODO - Better way to spot if on Jython on Windows?
+        if sys.platform=="win32" or self.bin_name.endswith(".exe"):
             #There is no /dev/nul on Windows
             cmd += ' > nul 2>nul'
         else:
