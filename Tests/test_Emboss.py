@@ -8,6 +8,7 @@ import os
 import sys
 import unittest
 import subprocess
+from StringIO import StringIO
 
 from Bio.Emboss.Applications import WaterCommandline, NeedleCommandline
 from Bio.Emboss.Applications import SeqretCommandline, SeqmatchallCommandline
@@ -752,13 +753,13 @@ def emboss_translate(sequence, table=None, frame=None):
                              universal_newlines=True,
                              shell=(sys.platform!="win32"))
     child.stdin.close()
+    out, err = child.communicate()
     #Check no error output:
-    err = child.stderr.read()
     if err != "":
         raise ValueError(str(cline) + "\n" + err)
 
     #Check we could read it's output
-    record = SeqIO.read(child.stdout, "fasta")
+    record = SeqIO.read(StringIO(out), "fasta")
 
     if 0 != child.wait():
         raise ValueError(str(cline))
