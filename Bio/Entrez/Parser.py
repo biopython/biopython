@@ -441,10 +441,12 @@ class DataHandler:
         we try to download it. If new DTDs become available from NCBI,
         putting them in Bio/Entrez/DTDs will allow the parser to see them."""
         urlinfo = urlparse.urlparse(systemId)
-        if urlinfo.scheme=='http':
+        #Following attribute requires Python 2.5+
+        #if urlinfo.scheme=='http':
+        if urlinfo[0]=='http':
             # Then this is an absolute path to the DTD.
             url = systemId
-        elif urlinfo.scheme=='':
+        elif urlinfo[0]=='':
             # Then this is a relative path to the DTD.
             # Look at the parent URL to find the full path.
             url = self.dtd_urls[-1]
