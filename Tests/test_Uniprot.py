@@ -8,6 +8,13 @@ import unittest
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
+#Left as None if the import within UniProtIO fails
+if SeqIO.UniprotIO.ElementTree is None:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError("No ElementTree module was found. "
+                            "Use Python 2.5+, lxml or elementtree if you "
+                            "want to use Bio.SeqIO.UniprotIO.")
+
 from seq_tests_common import compare_reference, compare_record
 
 class TestUniprot(unittest.TestCase):
