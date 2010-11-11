@@ -58,13 +58,21 @@ if len(exes) < len(exes_wanted):
 # A few top level functions that are called repeatedly in the test cases
 def write_AlignIO_dna():
     """Convert opuntia.aln to a phylip file"""
-    dna = AlignIO.parse(open("Clustalw/opuntia.aln", "r"), "clustal")
-    AlignIO.write(dna, open("Phylip/opuntia.phy", "w"), "phylip")
+    in_handle = open("Clustalw/opuntia.aln", "r")
+    dna = AlignIO.parse(in_handle, "clustal")
+    out_handle = open("Phylip/opuntia.phy", "w")
+    AlignIO.write(dna, out_handle, "phylip")
+    in_handle.close()
+    out_handle.close()
 
 def write_AlignIO_protein():
     """Convert hedgehog.aln to a phylip file"""
-    protein = AlignIO.parse(open("Clustalw/hedgehog.aln", "r"), "clustal")
-    AlignIO.write(protein, open("Phylip/hedgehog.phy", "w"), "phylip")
+    in_handle = open("Clustalw/hedgehog.aln", "r")
+    protein = AlignIO.parse(in_handle, "clustal")
+    out_handle = open("Phylip/hedgehog.phy", "w")
+    AlignIO.write(protein, out_handle, "phylip")
+    in_handle.close()
+    out_handle.close()
 
 def clean_up():
     """Delete tests files (to be used as tearDown() function in test fixtures)"""

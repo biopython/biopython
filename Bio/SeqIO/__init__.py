@@ -482,6 +482,8 @@ def parse(handle, format, alphabet=None):
     #string mode (see the leading r before the opening quote).
     from Bio import AlignIO
 
+    handle_close = False
+    
     if isinstance(handle, basestring):
         #Hack for SFF, will need to make this more general in future
         if format in _BinaryFormats :
@@ -489,6 +491,7 @@ def parse(handle, format, alphabet=None):
         else :
             handle = open(handle, "rU")
         #TODO - On Python 2.5+ use with statement to close handle
+        handle_close = True
 
     #Try and give helpful error messages:
     if not isinstance(format, basestring):
@@ -505,18 +508,24 @@ def parse(handle, format, alphabet=None):
     if format in _FormatToIterator:
         iterator_generator = _FormatToIterator[format]
         if alphabet is None:
-            return iterator_generator(handle)
-        try:
-            return iterator_generator(handle, alphabet=alphabet)
-        except TypeError:
-            return _force_alphabet(iterator_generator(handle), alphabet)
+            i = iterator_generator(handle)
+        else:
+            try:
+                i = iterator_generator(handle, alphabet=alphabet)
+            except TypeError:
+                i = _force_alphabet(iterator_generator(handle), alphabet)
     elif format in AlignIO._FormatToIterator:
         #Use Bio.AlignIO to read in the alignments
         #TODO - Can this helper function can be replaced with a generator
         #expression, or something from itertools?
-        return _iterate_via_AlignIO(handle, format, alphabet)
+        i = _iterate_via_AlignIO(handle, format, alphabet)
     else:
         raise ValueError("Unknown format '%s'" % format)
+    #This imposes some overhead... wait until we drop Python 2.4 to fix it
+    for r in i:
+        yield r
+    if handle_close:
+        handle.close()
 
 #This is a generator function
 def _iterate_via_AlignIO(handle, format, alphabet):
