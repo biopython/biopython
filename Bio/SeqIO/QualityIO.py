@@ -108,7 +108,7 @@ offet of 33).  This means we can parse this file using Bio.SeqIO using
 "fastq" as the format name:
 
     >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse(open("Quality/example.fastq"), "fastq"):
+    >>> for record in SeqIO.parse("Quality/example.fastq", "fastq"):
     ...     print record.id, record.seq
     EAS54_6_R1_2_1_413_324 CCCTTCTTGTCTTCAGCGTTTCTCC
     EAS54_6_R1_2_1_540_792 TTGGCAGGCCAAGGCCGATGGATCA
@@ -192,7 +192,7 @@ or to remove a primer sequence), try slicing the SeqRecord objects.  e.g.
 If you wanted to, you could read in this FASTQ file, and save it as a QUAL file:
 
     >>> from Bio import SeqIO
-    >>> record_iterator = SeqIO.parse(open("Quality/example.fastq"), "fastq")
+    >>> record_iterator = SeqIO.parse("Quality/example.fastq", "fastq")
     >>> out_handle = open("Quality/temp.qual", "w")
     >>> SeqIO.write(record_iterator, out_handle, "qual")
     3
@@ -201,7 +201,7 @@ If you wanted to, you could read in this FASTQ file, and save it as a QUAL file:
 You can of course read in a QUAL file, such as the one we just created:
 
     >>> from Bio import SeqIO
-    >>> for record in SeqIO.parse(open("Quality/temp.qual"), "qual"):
+    >>> for record in SeqIO.parse("Quality/temp.qual", "qual"):
     ...     print record.id, record.seq
     EAS54_6_R1_2_1_413_324 ?????????????????????????
     EAS54_6_R1_2_1_540_792 ?????????????????????????
