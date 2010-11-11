@@ -54,7 +54,8 @@ class AppTest(unittest.TestCase):
     def test_get_alleles(self):
         """Test get alleles.
         """
-        self.assertEqual(self.ctrl.get_alleles(0,"Locus3"), [3, 20])
+        #Returns keys of a dict, so order is Python implementation dependent
+        self.assertEqual(set(self.ctrl.get_alleles(0,"Locus3")), set([3, 20]))
 
     def test_get_alleles_all_pops(self):
         """Test get alleles for all populations.
