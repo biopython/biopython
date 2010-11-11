@@ -446,7 +446,9 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #Run the tool,
         self.run_water(cline)
         #Check we can parse the output...
-        align = AlignIO.read(open(cline.outfile),"emboss")
+        handle = open(cline.outfile)
+        align = AlignIO.read(handle,"emboss")
+        handle.close()
         self.assertEqual(len(align), 2)
         self.assertEqual(str(align[0].seq), "ACCCGGGCGCGGT")
         self.assertEqual(str(align[1].seq), "ACCCGAGCGCGGT")
@@ -513,7 +515,9 @@ class PairwiseAlignmentTests(unittest.TestCase):
         filename = cline.outfile
         self.assertTrue(os.path.isfile(filename))
         #Check we can parse the output...
-        align = AlignIO.read(open(filename),"emboss")
+        handle = open(filename)
+        align = AlignIO.read(handle,"emboss")
+        handle.close()
         self.assertEqual(len(align), 2)
         self.assertEqual(str(align[0].seq), "ACCCGGGCGCGGT")
         self.assertEqual(str(align[1].seq), "ACCCGAGCGCGGT")
@@ -569,10 +573,12 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #Run the tool,
         self.run_water(cline)
         #Check we can parse the output and it is sensible...
+        handle = open(out_file)
         self.pairwise_alignment_check(query,
                                       SeqIO.parse(open(in_file),"fasta"),
-                                      AlignIO.parse(open(out_file),"emboss"),
+                                      AlignIO.parse(handle,"emboss"),
                                       local=True)
+        handle.close()
         #Clean up,
         os.remove(out_file)
 
@@ -596,10 +602,12 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #Run the tool,
         self.run_water(cline)
         #Check we can parse the output and it is sensible...
+        handle = open(out_file)
         self.pairwise_alignment_check(query,
                                       SeqIO.parse(open(in_file),"genbank"),
-                                      AlignIO.parse(open(out_file),"emboss"),
+                                      AlignIO.parse(handle,"emboss"),
                                       local=True)
+        handle.close()
         #Clean up,
         os.remove(out_file)
 
@@ -625,10 +633,12 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #Run the tool,
         self.run_water(cline)
         #Check we can parse the output and it is sensible...
+        handle = open(out_file)
         self.pairwise_alignment_check(query,
                                       SeqIO.parse(open(in_file),"swiss"),
-                                      AlignIO.parse(open(out_file),"emboss"),
+                                      AlignIO.parse(handle,"emboss"),
                                       local=True)
+        handle.close()
         #Clean up,
         os.remove(out_file)
         
