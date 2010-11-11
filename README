@@ -80,6 +80,11 @@ patient (or use the -j option to set the number of threads used).
 After 2to3 execution the normal install from source process should be
 followed, i.e. "python3 setup.py build" etc (see below).
 
+To try Biopython on Python 3 on Windows, to call the 2to3 script you
+would use something like this (before compiling from source):
+
+C:\Python31\python.exe C:\Python31\Tools\Scripts\2to3.py --nofix=long ...
+
 
 **Installation**
 
