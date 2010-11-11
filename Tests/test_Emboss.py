@@ -752,7 +752,6 @@ def emboss_translate(sequence, table=None, frame=None):
                              stderr=subprocess.PIPE,
                              universal_newlines=True,
                              shell=(sys.platform!="win32"))
-    child.stdin.close()
     out, err = child.communicate()
     #Check no error output:
     if err != "":
