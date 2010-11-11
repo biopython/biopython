@@ -157,12 +157,10 @@ class Parser(object):
             for organism_element in element.getchildren():  
                 if organism_element.tag==NS + 'name':
                     if organism_element.attrib['type']== 'scientific':
-                        if organism_element.text:
-                            sci_name=organism_element.text
-                    if (organism_element.attrib['type']== 'common') and not sci_name:
-                        if organism_element.text:
-                            com_name=organism_element.text
-                    if (sci_name == '') and (com_name == ''):
+                        sci_name=organism_element.text
+                    elif organism_element.attrib['type']== 'common':
+                        com_name=organism_element.text
+                    else:
                         append_to_annotations("organism_name", organism_element.text)
                 elif organism_element.tag==NS + 'dbReference':
                     self.ParsedSeqRecord.dbxrefs.append(organism_element.attrib['type']+':'+organism_element.attrib['id'])
