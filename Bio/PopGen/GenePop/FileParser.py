@@ -79,8 +79,7 @@ class FileRecord:
         rep.append('\n'.join(self.loci_list) + '\n')
         current_pop = self.current_pop
         current_ind = self.current_ind
-        self._handle.close()
-        self._handle = open(self.fname)
+        self._handle.seek(0)
         self.skip_header()
         rep.append('Pop\n')
         more = True
@@ -144,8 +143,7 @@ class FileRecord:
            pop   - pop position (0 is first)
            indiv - individual in pop
         """
-        self._handle.close()
-        self._handle = open(self.fname)
+        self._handle.seek(0)
         self.skip_header()
         while pop>0:
             self.skip_population()
