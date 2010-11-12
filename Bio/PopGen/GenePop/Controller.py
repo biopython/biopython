@@ -289,7 +289,13 @@ class GenePopController:
         ret = child.returncode
 
         self._remove_garbage(None)
-        if ret != 0: raise IOError("GenePop not found? (error %i)" % ret)
+        if ret != 0:
+            if e_out:
+                #Include first line of stdout for diagnostics
+                raise IOError("GenePop error %i, %s)" \
+                              % (ret, e_out.strip().split("\n",1)[0]))
+            else:
+                raise IOError("GenePop not found? (error %i)" % ret)
         return
 
 
