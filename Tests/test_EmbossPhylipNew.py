@@ -33,7 +33,7 @@ if sys.platform=="win32":
     except KeyError:
         #print >> sys.stderr, "Missing EMBOSS_ROOT environment variable!"
         raise MissingExternalDependencyError(\
-        "Install the Emboss package 'Phylip New' if you want to use the "+\
+        "Install the EMBOSS package 'Phylip New' if you want to use the "+\
         "Bio.Emboss.Applications wrappers for phylogenetic tools")
     if os.path.isdir(path):
         for name in exes_wanted:
@@ -44,8 +44,11 @@ else:
     import commands
     for name in exes_wanted:
         #This will "just work" if installed on the path as normal on Unix
-        if "not found" not in commands.getoutput("%s -help" % name):
+        #Seems to work for Jython on Windows too.        
+        output = commands.getoutput("%s -help" % name)
+        if "not found" not in output and "not recognized" not in output:
             exes[name] = name
+        del output
     del name
 
 if len(exes) < len(exes_wanted):
