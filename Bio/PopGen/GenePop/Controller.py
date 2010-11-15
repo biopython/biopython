@@ -157,7 +157,11 @@ class _FileIterator:
 
     def __del__(self):
         self.stream.close()
-        os.remove(self.fname)
+        try:
+            os.remove(self.fname)
+        except OSError:
+            #Jython seems to call the iterator twice
+            pass
 
 class _GenePopCommandline(AbstractCommandline):
     """ Command Line Wrapper for GenePop.
