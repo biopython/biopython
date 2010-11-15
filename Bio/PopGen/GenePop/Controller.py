@@ -283,23 +283,8 @@ class GenePopController:
         self.controller.set_input(fname)
         for opt in opts:
             self.controller.set_parameter(opt, opt+"="+str(opts[opt]))
-        child = subprocess.Popen(str(self.controller),
-                             stdin=subprocess.PIPE,
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE,
-                             shell=(sys.platform!="win32"))
-        r_out, e_out = child.communicate()
-        # capture error code:
-        ret = child.returncode
-
+        self.controller() #checks error level is zero
         self._remove_garbage(None)
-        if ret != 0:
-            if e_out:
-                #Include first line of stdout for diagnostics
-                raise IOError("GenePop error %i, %s" \
-                              % (ret, e_out.strip().split("\n",1)[0]))
-            else:
-                raise IOError("GenePop not found? (error %i)" % ret)
         return
 
 
