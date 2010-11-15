@@ -786,7 +786,7 @@ class SeqRecord(object):
         del l
         for ref in other.dbxrefs:
             if ref not in answer.dbxrefs:
-                answer.append(ref)
+                answer.dbxrefs.append(ref)
         #Take common id/name/description/annotation
         if self.id == other.id:
             answer.id = self.id
