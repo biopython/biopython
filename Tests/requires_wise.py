@@ -14,7 +14,7 @@ if sys.platform=="win32":
         "Don't know how to find the Wise2 tool dnal on Windows.")
 
 import commands
-not_found_types = ["command not found", "dnal: not found"]
+not_found_types = ["command not found", "dnal: not found", "not recognized"]
 dnal_output = commands.getoutput("dnal")
 
 for not_found in not_found_types:
