@@ -27,6 +27,13 @@ import StringIO
 import subprocess
 import re
 
+#TODO - Remove this hack once we drop Python 2.4 support.
+try:
+    from subprocess import CalledProcessError as _ProcessCalledError
+except:
+    #For Python 2.4 use Exception as base class
+    _ProcessCalledError = Exception
+
 from Bio import File
 
 #Use this regular expresion to test the property names are going to
@@ -90,6 +97,48 @@ def generic_run(commandline):
     return ApplicationResult(commandline, error_code), \
            File.UndoHandle(StringIO.StringIO(r_out)), \
            File.UndoHandle(StringIO.StringIO(e_out))
+
+
+class ApplicationError(_ProcessCalledError):
+    """Raised when an application returns a non-zero exit status.
+    
+    The exit status will be stored in the returncode attribute, similarly
+    the command line string used in the cmd attribute, and (if captured)
+    stdout and stderr as strings.
+    
+    This exception is a subclass of subprocess.CalledProcessError
+    (unless run on Python 2.4 where that does not exist).
+    
+    >>> err = ApplicationError(-11, "helloworld", "", "Some error text")
+    >>> err.returncode, err.cmd, err.stdout, err.stderr
+    (-11, 'helloworld', '', 'Some error text')
+    >>> print err
+    Command 'helloworld' returned non-zero exit status -11, 'Some error text'
+    
+    """
+    def __init__(self, returncode, cmd, stdout="", stderr=""):
+        self.returncode = returncode
+        self.cmd = cmd
+        self.stdout = stdout
+        self.stderr = stderr
+    
+    def __str__(self):
+        #get first line of any stderr message
+        try:
+            msg = self.stderr.lstrip().split("\n",1)[0].rstrip()
+        except:
+            msg = ""
+        if msg:
+            return "Command '%s' returned non-zero exit status %d, %r" \
+                   % (self.cmd, self.returncode, msg)
+        else:
+            return "Command '%s' returned non-zero exit status %d" \
+                   % (self.cmd, self.returncode)
+    
+    def __repr__(self):
+        return "ApplicationError(%i, %s, %s, %s)" \
+               % (self.returncode, self.cmd, self.stdout, self.stderr)
+
 
 class ApplicationResult:
     """Make results of a program available through a standard interface (DEPRECATED).
@@ -452,6 +501,11 @@ class AbstractCommandline(object):
         This functionality is similar to subprocess.check_output() added in
         Python 2.7. In general if you require more control over running the
         command, use subprocess directly.
+        
+        As of Biopython 1.56, when the program called returns a non-zero error
+        level, a custom ApplicationError exception is raised. This includes
+        any stdout and stderr strings captured as attributes of the exception
+        object, since they may be useful for diagnosing what went wrong.
         """
         if stdout:
             stdout_arg = subprocess.PIPE
@@ -479,14 +533,8 @@ class AbstractCommandline(object):
         if not stderr: assert not stderr_str
         return_code = child_process.returncode
         if return_code:
-            try:
-                #Mimic what subprocess.call_check() and output_check() do,
-                raise subprocess.ProcessCalledError(return_code, str(self))
-            except AttributeError:
-                #Python 2.5+ needed for  subprocess.CalledProcessError
-                raise RuntimeError( \
-                    "Command %s returned non-zero exit status %i" \
-                    % (str(self), return_code))
+            raise ApplicationError(return_code, str(self),
+                                   stdout_str, stderr_str)
         return stdout_str, stderr_str
 
 
