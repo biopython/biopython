@@ -9,6 +9,7 @@ Initially this takes matched tests of GenBank and FASTA files from the NCBI
 and confirms they are consistent using our different parsers.
 """
 import unittest
+from Bio import SeqIO
 from Bio.Alphabet import generic_dna, generic_rna, generic_protein
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -138,6 +139,29 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(rec.features[0].type, "source")
             self.assertEqual(rec.features[0].location.nofuzzy_start, 0)
             self.assertEqual(rec.features[0].location.nofuzzy_end, 26) #not +3
+
+    def test_add_seqrecord(self):
+        """Simple left addition of SeqRecord from genbank file."""
+        other = SeqIO.read("GenBank/dbsource_wrap.gb", "gb")
+        other.dbxrefs = ["dummy"]
+        rec = self.record + other
+        self.assertEqual(len(rec), len(self.record)+len(other))
+        self.assertEqual(str(rec.seq), str(self.record.seq)+str(other.seq))
+        self.assertEqual(rec.id, "<unknown id>")
+        self.assertEqual(rec.name, "<unknown name>")
+        self.assertEqual(rec.description, "<unknown description>")
+        self.assertEqual(rec.dbxrefs, ["TestXRef", "dummy"])
+        self.assertEqual(len(rec.annotations), 0)
+        self.assertEqual(len(rec.letter_annotations),0)
+        self.assertEqual(len(rec.features),
+                         len(self.record.features) + len(other.features))
+        self.assertEqual(rec.features[0].type, "source")
+        self.assertEqual(rec.features[0].location.nofuzzy_start, 0)
+        self.assertEqual(rec.features[0].location.nofuzzy_end, len(self.record)) #not +3
+        i = len(self.record.features)
+        self.assertEqual(rec.features[i].type, "source")
+        self.assertEqual(rec.features[i].location.nofuzzy_start, len(self.record))
+        self.assertEqual(rec.features[i].location.nofuzzy_end, len(rec))
 
     def test_add_seq_left(self):
         """Simple left addition of Seq or string"""
