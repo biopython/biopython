@@ -548,7 +548,7 @@ class Tree(Nodes.Chain):
         print '\n'.join(['%3s %32s %15s %15s %8s %10s %8s %20s' % l for l in table])
         print '\nRoot: ',self.root
 
-    def to_string(self,support_as_branchlengths=False,branchlengths_only=False,plain=True,plain_newick=False,ladderize=None):
+    def to_string(self,support_as_branchlengths=False,branchlengths_only=False,plain=True,plain_newick=False,ladderize=None,ignore_comments=True):
         """Return a paup compatible tree line.
        
         to_string(self,support_as_branchlengths=False,branchlengths_only=False,plain=True)
@@ -558,32 +558,39 @@ class Tree(Nodes.Chain):
             plain=False
         self.support_as_branchlengths=support_as_branchlengths
         self.branchlengths_only=branchlengths_only
+        self.ignore_comments=ignore_comments
         self.plain=plain
 
         def make_info_string(data,terminal=False):
             """Creates nicely formatted support/branchlengths."""
             # CHECK FORMATTING
             if self.plain: # plain tree only. That's easy.
-                return ''
+                info_string= ''
             elif self.support_as_branchlengths: # support as branchlengths (eg. PAUP), ignore actual branchlengths
                 if terminal:    # terminal branches have 100% support
-                    return ':%1.2f' % self.max_support
+                    info_string= ':%1.2f' % self.max_support
+                elif data.support:
+                    info_string= ':%1.2f' % (data.support)
                 else:
-                    return ':%1.2f' % (data.support)
+                    info_string=':0.00'
             elif self.branchlengths_only: # write only branchlengths, ignore support
-                return ':%1.5f' % (data.branchlength)
+                info_string= ':%1.5f' % (data.branchlength)
             else:   # write suport and branchlengths (e.g. .con tree of mrbayes)
                 if terminal:
-                    return ':%1.5f' % (data.branchlength)
+                    info_string= ':%1.5f' % (data.branchlength)
                 else:
                     if data.branchlength is not None and data.support is not None:  # we have blen and suppport
-                        return '%1.2f:%1.5f' % (data.support,data.branchlength)
+                        info_string= '%1.2f:%1.5f' % (data.support,data.branchlength)
                     elif data.branchlength is not None:                             # we have only blen
-                        return '0.00000:%1.5f' % (data.branchlength)
+                        info_string= '0.00000:%1.5f' % (data.branchlength)
                     elif data.support is not None:                                  # we have only support
-                        return '%1.2f:0.00000' % (data.support)
+                        info_string= '%1.2f:0.00000' % (data.support)
                     else:
-                        return '0.00:0.00000'
+                        info_string= '0.00:0.00000'
+            if not ignore_comments and hasattr(data,'nodecomment'):
+                info_string=str(data.nodecomment)+info_string
+            return info_string
+            
         def ladderize_nodes(nodes,ladderize=None):
             """Sorts node numbers according to the number of terminal nodes."""
             if ladderize in ['left','LEFT','right','RIGHT']:
@@ -787,7 +794,7 @@ def consensus(trees, threshold=0.5,outgroup=None):
     for t in trees:
         c+=1
         #print c
-        #if c%1==0:
+        #if c%100==0:
         #    print c
         if alltaxa!=set(t.get_taxa()):
             raise TreeError('Trees for consensus must contain the same taxa')
@@ -805,9 +812,9 @@ def consensus(trees, threshold=0.5,outgroup=None):
             #else:
             #    countclades[subclade_taxa]=t.weight
     # weed out clades below threshold
-    for c, p in clades.iteritems():
-        if p<threshold:
-            del clades[c]
+    delclades=[c for c,p in clades.iteritems() if round(p,3)<threshold] # round can be necessary 
+    for c in delclades:
+        del clades[c]
     # create a tree with a root node
     consensus=Tree(name='consensus_%2.1f' % float(threshold),data=dataclass)
     # each clade needs a node in the new tree, add them as isolated nodes
@@ -843,5 +850,7 @@ def consensus(trees, threshold=0.5,outgroup=None):
         consensus.link(parent,current)
     # eliminate root taxon name
     consensus.node(consensus_ids[-1]).data.taxon=None 
+    if alltaxa != set(consensus.get_taxa()):
+        raise TreeError('FATAL ERROR: consensus tree is corrupt') 
     return consensus
 
