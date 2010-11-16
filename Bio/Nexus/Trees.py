@@ -793,7 +793,6 @@ def consensus(trees, threshold=0.5,outgroup=None):
     c=0
     for t in trees:
         c+=1
-        #print c
         #if c%100==0:
         #    print c
         if alltaxa!=set(t.get_taxa()):
