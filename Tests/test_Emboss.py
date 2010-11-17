@@ -448,9 +448,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #Run the tool,
         self.run_water(cline)
         #Check we can parse the output...
-        handle = open(cline.outfile)
-        align = AlignIO.read(handle,"emboss")
-        handle.close()
+        align = AlignIO.read(cline.outfile,"emboss")
         self.assertEqual(len(align), 2)
         self.assertEqual(str(align[0].seq), "ACCCGGGCGCGGT")
         self.assertEqual(str(align[1].seq), "ACCCGAGCGCGGT")
@@ -517,9 +515,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         filename = cline.outfile
         self.assertTrue(os.path.isfile(filename))
         #Check we can parse the output...
-        handle = open(filename)
-        align = AlignIO.read(handle,"emboss")
-        handle.close()
+        align = AlignIO.read(filename,"emboss")
         self.assertEqual(len(align), 2)
         self.assertEqual(str(align[0].seq), "ACCCGGGCGCGGT")
         self.assertEqual(str(align[1].seq), "ACCCGAGCGCGGT")
@@ -575,12 +571,10 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #Run the tool,
         self.run_water(cline)
         #Check we can parse the output and it is sensible...
-        handle = open(out_file)
         self.pairwise_alignment_check(query,
-                                      SeqIO.parse(open(in_file),"fasta"),
-                                      AlignIO.parse(handle,"emboss"),
+                                      SeqIO.parse(in_file,"fasta"),
+                                      AlignIO.parse(out_file,"emboss"),
                                       local=True)
-        handle.close()
         #Clean up,
         os.remove(out_file)
 
@@ -604,12 +598,10 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #Run the tool,
         self.run_water(cline)
         #Check we can parse the output and it is sensible...
-        handle = open(out_file)
         self.pairwise_alignment_check(query,
-                                      SeqIO.parse(open(in_file),"genbank"),
-                                      AlignIO.parse(handle,"emboss"),
+                                      SeqIO.parse(in_file,"genbank"),
+                                      AlignIO.parse(out_file,"emboss"),
                                       local=True)
-        handle.close()
         #Clean up,
         os.remove(out_file)
 
@@ -635,12 +627,10 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #Run the tool,
         self.run_water(cline)
         #Check we can parse the output and it is sensible...
-        handle = open(out_file)
         self.pairwise_alignment_check(query,
-                                      SeqIO.parse(open(in_file),"swiss"),
-                                      AlignIO.parse(handle,"emboss"),
+                                      SeqIO.parse(in_file,"swiss"),
+                                      AlignIO.parse(out_file,"emboss"),
                                       local=True)
-        handle.close()
         #Clean up,
         os.remove(out_file)
         
@@ -745,10 +735,7 @@ def emboss_translate(sequence, table=None, frame=None):
         #There are limits on command line string lengths...
         #use a temp file instead.
         filename = "Emboss/temp_transeq.txt"
-        handle = open(filename,"w")
-        SeqIO.write([SeqRecord(sequence, id="Test")], handle, "fasta")
-        handle.flush()
-        handle.close()
+        SeqIO.write(SeqRecord(sequence, id="Test"), filename, "fasta")
         cline += " -sequence %s" % filename
 
     cline += " -auto" #no prompting
