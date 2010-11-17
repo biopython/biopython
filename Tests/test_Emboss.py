@@ -29,25 +29,19 @@ exes_wanted = ["water", "needle", "seqret", "transeq", "seqmatchall",
                "embossversion"]
 exes = dict() #Dictionary mapping from names to exe locations
 
-if sys.platform=="win32":
-    #The default installation path is C:\mEMBOSS which contains the exes.
+if "EMBOSS_ROOT" in os.environ:
+    #Windows default installation path is C:\mEMBOSS which contains the exes.
     #EMBOSS also sets an environment variable which we will check for.
-    try:
-        path = os.environ["EMBOSS_ROOT"]
-    except KeyError:
-        #print >> sys.stderr, "Missing EMBOSS_ROOT environment variable!"
-        raise MissingExternalDependencyError(\
-              "Install EMBOSS if you want to use Bio.Emboss")
+    path = os.environ["EMBOSS_ROOT"]
     if os.path.isdir(path):
         for name in exes_wanted:
             if os.path.isfile(os.path.join(path, name+".exe")):
                 exes[name] = os.path.join(path, name+".exe")
     del path, name
-else:
+if sys.platform!="win32":
     import commands
     for name in exes_wanted:
         #This will "just work" if installed on the path as normal on Unix
-        #Seems to work for Jython on Windows too.        
         output = commands.getoutput("%s -help" % name)
         if "not found" not in output and "not recognized" not in output:
             exes[name] = name
