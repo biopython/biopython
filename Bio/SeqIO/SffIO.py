@@ -427,9 +427,39 @@ def _sff_find_roche_index(handle):
                          % (repr(magic_number), repr(data)))
 
 def _sff_read_roche_index_xml(handle):
-    """Reads any existing Roche style XML manifest data in the SFF "index" (PRIVATE).
+    """Reads any existing Roche style XML manifest data in the SFF "index" (PRIVATE, DEPRECATED).
 
     Will use the handle seek/tell functions. Returns a string.
+
+    This has been replaced by ReadRocheXmlManifest. We would normally just
+    delete an old private function without warning, but I believe some people
+    are using this so we'll handle this with a deprecation warning.
+    """
+    import warnings
+    warnings.warn("Private function _sff_read_roche_index_xml is deprecated. "
+                  "Use new public function ReadRocheXmlManifest instead",
+                  DeprecationWarning)
+    return ReadRocheXmlManifest(handle)
+
+
+def ReadRocheXmlManifest(handle):
+    """Reads any Roche style XML manifest data in the SFF "index".
+
+    The SFF file format allows for multiple different index blocks, and Roche
+    took advantage of this to define their own index block wich also embeds
+    an XML manifest string. This is not a publically documented extension to
+    the SFF file format, this was reverse engineered.
+    
+    The handle should be to an SFF file opened in binary mode. This function
+    will use the handle seek/tell functions and leave the handle in an
+    arbitrary location.
+
+    Any XML manifest found is returned as a Python string, which you can then
+    parse as appropriate, or reuse when writing out SFF files with the
+    SffWriter class.
+
+    Returns a string, or raises a ValueError if an Roche manifest could not be
+    found.
     """
     number_of_reads, header_length, index_offset, index_length, xml_offset, \
     xml_size, read_index_offset, read_index_size = _sff_find_roche_index(handle)
@@ -705,7 +735,8 @@ class SffWriter(SequenceWriter):
 
         handle - Output handle, ideally in binary write mode.
         index - Boolean argument, should we try and write an index?
-        xml - Optional string argument, xml to be recorded in the index block.
+        xml - Optional string argument, xml manifest to be recorded in the index
+              block (see function ReadRocheXmlManifest for reading this data).
         """
         if hasattr(handle,"mode") and "U" in handle.mode.upper():
             raise ValueError("SFF files must NOT be opened in universal new "
@@ -982,7 +1013,7 @@ class SffWriter(SequenceWriter):
 if __name__ == "__main__":
     print "Running quick self test"
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads.sff"
-    metadata = _sff_read_roche_index_xml(open(filename, "rb"))
+    metadata = ReadRocheXmlManifest(open(filename, "rb"))
     index1 = sorted(_sff_read_roche_index(open(filename, "rb")))
     index2 = sorted(_sff_do_slow_index(open(filename, "rb")))
     assert index1 == index2
@@ -1039,7 +1070,7 @@ if __name__ == "__main__":
     
     sff_trim = list(SffIterator(open(filename, "rb"), trim=True))
 
-    print _sff_read_roche_index_xml(open(filename, "rb"))
+    print ReadRocheXmlManifest(open(filename, "rb"))
 
     from Bio import SeqIO
     filename = "../../Tests/Roche/E3MFGYR02_random_10_reads_no_trim.fasta"
@@ -1094,7 +1125,7 @@ if __name__ == "__main__":
     index2 = sorted(_sff_do_slow_index(open(filename, "rb")))
     assert index1 == index2
     try:
-        print _sff_read_roche_index_xml(open(filename, "rb"))
+        print ReadRocheXmlManifest(open(filename, "rb"))
         assert False, "Should fail!"
     except ValueError:
         pass
@@ -1207,7 +1238,7 @@ if __name__ == "__main__":
     for old, new in zip(records, records2):
         assert str(old.seq)==str(new.seq)
     try:
-        print _sff_read_roche_index_xml(open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb"))
+        print ReadRocheXmlManifest(open("../../Tests/Roche/E3MFGYR02_alt_index_at_end.sff", "rb"))
         assert False, "Should fail!"
     except ValueError:
         pass
