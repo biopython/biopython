@@ -44,8 +44,8 @@ class Record:
     organism_classification  The taxonomy classification.  List of strings.
                              (http://www.ncbi.nlm.nih.gov/Taxonomy/)
     taxonomy_id       A list of NCBI taxonomy id's.
-    host_organism     A list of NCBI taxonomy id's of the hosts of a virus,
-                      if any.
+    host_organism     A list of names of the hosts of a virus, if any.
+    host_taxonomy_id  A list of NCBI taxonomy id's of the hosts, if any.
     references        List of Reference objects.
     comments          List of strings.
     cross_references  List of tuples (db, id1[, id2][, id3]).  See the docs.
@@ -76,6 +76,7 @@ class Record:
         self.organism_classification = []
         self.taxonomy_id = []
         self.host_organism = []
+        self.host_taxonomy_id = []
         self.references = []
         self.comments = []
         self.cross_references = []
@@ -394,16 +395,12 @@ def _read_ox(record, line):
 
 def _read_oh(record, line):
     # Line type OH (Organism Host) for viral hosts
-    # same code as in taxonomy_id()
-    line = line[5:].rstrip().rstrip(";")
-    index = line.find('=')
-    if index >= 0:
-        descr = line[:index]
-        assert descr == "NCBI_TaxID", "Unexpected taxonomy type %s" % descr
-        ids = line[index+1:].split(',')
-    else:
-        ids = line.split(',')
-    record.host_organism.extend([id.strip() for id in ids])
+    assert line[5:].startswith("NCBI_TaxID="), "Unexpected %s" % line
+    line = line[16:].rstrip()
+    assert line[-1]=="." and line.count(";")==1, line
+    taxid, name = line[:-1].split(";")
+    record.host_taxonomy_id.append(taxid.strip())
+    record.host_organism.append(name.strip())
 
 
 def _read_rn(reference, rn):

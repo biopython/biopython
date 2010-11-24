@@ -176,7 +176,7 @@ class Parser(object):
         def _parse_organismHost(element):
             for organism_element in element.getchildren():  
                 if organism_element.tag==NS + 'name': 
-                    append_to_annotations("organismHost_name", organism_element.text)
+                    append_to_annotations("organism_host", organism_element.text)
                         
         def _parse_keyword(element):      
             append_to_annotations('keywords',element.text)

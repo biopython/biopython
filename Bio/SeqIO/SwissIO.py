@@ -104,9 +104,9 @@ def SwissIterator(handle):
         annotations['taxonomy'] = swiss_record.organism_classification
         annotations['ncbi_taxid'] = swiss_record.taxonomy_id
         if swiss_record.host_organism:
-            annotations['organism_host'] = [word.rstrip(".") \
-                                            for word \
-                                            in swiss_record.host_organism]
+            annotations['organism_host'] = swiss_record.host_organism
+        if swiss_record.host_taxonomy_id:
+            annotations['host_ncbi_taxid'] = swiss_record.host_taxonomy_id
         if swiss_record.comments:
             annotations['comment'] = "\n".join(swiss_record.comments)
         if swiss_record.references:
