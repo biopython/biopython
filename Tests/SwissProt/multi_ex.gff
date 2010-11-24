@@ -145,3 +145,5 @@ P28799	UniProtKB	Beta strand	386	389	.	.	.	.
 P28799	UniProtKB	Beta strand	409	411	.	.	.	.	
 P28799	UniProtKB	Turn	412	414	.	.	.	.	
 P28799	UniProtKB	Beta strand	415	417	.	.	.	.	
+##sequence-region Q01436 1 71
+Q01436	UniProtKB	Chain	1	71	.	.	.	ID=PRO_0000164920;Note=Protein cef	

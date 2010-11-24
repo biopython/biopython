@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <uniprot xmlns="http://uniprot.org/uniprot" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://uniprot.org/uniprot http://www.uniprot.org/support/docs/uniprot.xsd">
-<entry dataset="Swiss-Prot" created="1986-07-21" modified="2010-08-10" version="159">
+<entry dataset="Swiss-Prot" created="1986-07-21" modified="2010-10-05" version="160">
 <accession>P00750</accession>
 <accession>A8K022</accession>
 <accession>B2R8E8</accession>
@@ -15,8 +15,8 @@
 <protein>
 <recommendedName ref="1">
 <fullName>Tissue-type plasminogen activator</fullName>
-<shortName>t-plasminogen activator</shortName>
 <shortName>t-PA</shortName>
+<shortName>t-plasminogen activator</shortName>
 <shortName>tPA</shortName>
 </recommendedName>
 <innName>Alteplase</innName>
@@ -1102,8 +1102,7 @@
 <dbReference type="PRIDE" id="P00750" key="175" />
 <dbReference type="Ensembl" id="ENST00000220809" key="176">
 <property type="protein sequence ID" value="ENSP00000220809" />
-<property type="gene designation" value="ENSG00000104368" />
-<property type="organism name" value="Homo sapiens" />
+<property type="gene ID" value="ENSG00000104368" />
 </dbReference>
 <dbReference type="GeneID" id="5327" key="177" />
 <dbReference type="KEGG" id="hsa:5327" key="178" />
@@ -2372,15 +2371,15 @@ ESGCAETLAQRLVQLGQALRRLEQHDLEEVASTRLLIFAARLIGDGMDPREACRVALAEP
 LSDDPATVAALMDIVDLHVA
 </sequence>
 </entry>
-<entry dataset="Swiss-Prot" created="2004-02-16" modified="2010-08-10" version="71">
+<entry dataset="Swiss-Prot" created="2004-02-16" modified="2010-10-05" version="72">
 <accession>Q8NE62</accession>
 <accession>Q9NY17</accession>
 <name>CHDH_HUMAN</name>
 <protein>
 <recommendedName ref="1">
 <fullName>Choline dehydrogenase, mitochondrial</fullName>
-<shortName>CHD</shortName>
 <shortName>CDH</shortName>
+<shortName>CHD</shortName>
 </recommendedName>
 </protein>
 <gene>
@@ -2599,8 +2598,7 @@ LSDDPATVAALMDIVDLHVA
 <dbReference type="PhosphoSite" id="Q8NE62" key="18" />
 <dbReference type="Ensembl" id="ENST00000315251" key="19">
 <property type="protein sequence ID" value="ENSP00000319851" />
-<property type="gene designation" value="ENSG00000016391" />
-<property type="organism name" value="Homo sapiens" />
+<property type="gene ID" value="ENSG00000016391" />
 </dbReference>
 <dbReference type="GeneID" id="55349" key="20" />
 <dbReference type="KEGG" id="hsa:55349" key="21" />
@@ -2639,7 +2637,7 @@ LSDDPATVAALMDIVDLHVA
 <property type="evidence" value="IEA:EC" />
 </dbReference>
 <dbReference type="GO" id="GO:0050660" key="43">
-<property type="term" value="F:FAD binding" />
+<property type="term" value="F:FAD or FADH2 binding" />
 <property type="evidence" value="IEA:InterPro" />
 </dbReference>
 <dbReference type="GO" id="GO:0006066" key="44">
@@ -3035,7 +3033,7 @@ SGHLLLLLGLLTLWAELTPVSGAAKYCKLPLRIGPCKRKIPSFYYKWKAKQCLPFDYSGC
 GGNANRFKTIEECRRTCVG
 </sequence>
 </entry>
-<entry dataset="Swiss-Prot" created="1992-12-01" modified="2010-08-10" version="118">
+<entry dataset="Swiss-Prot" created="1992-12-01" modified="2010-11-02" version="120">
 <accession>P28799</accession>
 <accession>P23781</accession>
 <accession>P23782</accession>
@@ -3573,15 +3571,14 @@ GGNANRFKTIEECRRTCVG
 <property type="residue range" value="206-236" />
 </dbReference>
 <dbReference type="IntAct" id="P28799" key="66">
-<property type="interactions" value="17" />
+<property type="interactions" value="23" />
 </dbReference>
 <dbReference type="MINT" id="MINT-271687" key="67" />
 <dbReference type="STRING" id="P28799" key="68" />
 <dbReference type="PRIDE" id="P28799" key="69" />
 <dbReference type="Ensembl" id="ENST00000053867" key="70">
 <property type="protein sequence ID" value="ENSP00000053867" />
-<property type="gene designation" value="ENSG00000030582" />
-<property type="organism name" value="Homo sapiens" />
+<property type="gene ID" value="ENSG00000030582" />
 </dbReference>
 <dbReference type="GeneID" id="2896" key="71" />
 <dbReference type="KEGG" id="hsa:2896" key="72" />
@@ -3603,63 +3600,60 @@ GGNANRFKTIEECRRTCVG
 <dbReference type="MIM" id="607485" key="82">
 <property type="type" value="phenotype" />
 </dbReference>
-<dbReference type="Orphanet" id="282" key="83">
-<property type="disease" value="Frontotemporal dementia" />
-</dbReference>
-<dbReference type="Orphanet" id="98929" key="84">
+<dbReference type="Orphanet" id="98929" key="83">
 <property type="disease" value="Frontotemporal dementia with motor neuron-disease type inclusions" />
 </dbReference>
-<dbReference type="PharmGKB" id="PA24626" key="85" />
-<dbReference type="eggNOG" id="prNOG11069" key="86" />
-<dbReference type="HOVERGEN" id="HBG000845" key="87" />
-<dbReference type="InParanoid" id="P28799" key="88" />
-<dbReference type="OMA" id="CCEDRVH" key="89" />
-<dbReference type="OrthoDB" id="EOG9JQ6HG" key="90" />
-<dbReference type="PhylomeDB" id="P28799" key="91" />
-<dbReference type="NextBio" id="11459" key="92" />
-<dbReference type="PMAP-CutDB" id="P28799" key="93" />
-<dbReference type="ArrayExpress" id="P28799" key="94" />
-<dbReference type="Bgee" id="P28799" key="95" />
-<dbReference type="CleanEx" id="HS_GRN" key="96" />
-<dbReference type="Genevestigator" id="P28799" key="97" />
-<dbReference type="GermOnline" id="ENSG00000030582" key="98">
+<dbReference type="PharmGKB" id="PA24626" key="84" />
+<dbReference type="eggNOG" id="prNOG11069" key="85" />
+<dbReference type="HOVERGEN" id="HBG000845" key="86" />
+<dbReference type="InParanoid" id="P28799" key="87" />
+<dbReference type="OMA" id="CCEDRVH" key="88" />
+<dbReference type="OrthoDB" id="EOG9JQ6HG" key="89" />
+<dbReference type="PhylomeDB" id="P28799" key="90" />
+<dbReference type="NextBio" id="11459" key="91" />
+<dbReference type="PMAP-CutDB" id="P28799" key="92" />
+<dbReference type="ArrayExpress" id="P28799" key="93" />
+<dbReference type="Bgee" id="P28799" key="94" />
+<dbReference type="CleanEx" id="HS_GRN" key="95" />
+<dbReference type="Genevestigator" id="P28799" key="96" />
+<dbReference type="GermOnline" id="ENSG00000030582" key="97">
 <property type="organism name" value="Homo sapiens" />
 </dbReference>
-<dbReference type="GO" id="GO:0005615" key="99">
+<dbReference type="GO" id="GO:0005615" key="98">
 <property type="term" value="C:extracellular space" />
 <property type="evidence" value="IEA:UniProtKB-KW" />
 </dbReference>
-<dbReference type="GO" id="GO:0005125" key="100">
+<dbReference type="GO" id="GO:0005125" key="99">
 <property type="term" value="F:cytokine activity" />
 <property type="evidence" value="IEA:UniProtKB-KW" />
 </dbReference>
-<dbReference type="GO" id="GO:0008083" key="101">
+<dbReference type="GO" id="GO:0008083" key="100">
 <property type="term" value="F:growth factor activity" />
 <property type="evidence" value="TAS:ProtInc" />
 </dbReference>
-<dbReference type="GO" id="GO:0007165" key="102">
+<dbReference type="GO" id="GO:0007165" key="101">
 <property type="term" value="P:signal transduction" />
 <property type="evidence" value="NAS:ProtInc" />
 </dbReference>
-<dbReference type="InterPro" id="IPR006150" key="103">
+<dbReference type="InterPro" id="IPR006150" key="102">
 <property type="entry name" value="Cys_repeat_1" />
 </dbReference>
-<dbReference type="InterPro" id="IPR000118" key="104">
+<dbReference type="InterPro" id="IPR000118" key="103">
 <property type="entry name" value="Granulin" />
 </dbReference>
-<dbReference type="Pfam" id="PF00396" key="105">
+<dbReference type="Pfam" id="PF00396" key="104">
 <property type="entry name" value="Granulin" />
 <property type="match status" value="7" />
 </dbReference>
-<dbReference type="SMART" id="SM00277" key="106">
+<dbReference type="SMART" id="SM00277" key="105">
 <property type="entry name" value="GRAN" />
 <property type="match status" value="7" />
 </dbReference>
-<dbReference type="SMART" id="SM00289" key="107">
+<dbReference type="SMART" id="SM00289" key="106">
 <property type="entry name" value="WR1" />
 <property type="match status" value="5" />
 </dbReference>
-<dbReference type="PROSITE" id="PS00799" key="108">
+<dbReference type="PROSITE" id="PS00799" key="107">
 <property type="entry name" value="GRANULINS" />
 <property type="match status" value="7" />
 </dbReference>
@@ -3925,6 +3919,101 @@ KRDVPCDNVSSCPSSDTCCQLTSGEWGCCPIPEAVCCSDHQHCCPQGYTCVAEGQCQRGS
 EIVAGLEKMPARRASLSHPRDIGCDQHTSCPVGQTCCPSLGGSWACCQLPHAVCCEDRQH
 CCPAGYTCNVKARSCEKEVVSAQPATFLARSPHVGVKDVECGEGHFCHDNQTCCRDNRQG
 WACCPYRQGVCCADRRHCCPAGFRCAARGTKCLRREAPRWDAPLRDPALRQLL
+</sequence>
+</entry>
+<entry dataset="Swiss-Prot" created="1993-10-01" modified="2010-06-15" version="37">
+<accession>Q01436</accession>
+<name>CEF_BPT4</name>
+<protein>
+<recommendedName>
+<fullName>Protein cef</fullName>
+</recommendedName>
+</protein>
+<gene>
+<name type="primary">cef</name>
+<name type="synonym">mb</name>
+</gene>
+<organism>
+<name type="scientific">Enterobacteria phage T4</name>
+<name type="synonym">Bacteriophage T4</name>
+<dbReference type="NCBI Taxonomy" id="10665" key="1" />
+<lineage>
+<taxon>Viruses</taxon>
+<taxon>dsDNA viruses, no RNA stage</taxon>
+<taxon>Caudovirales</taxon>
+<taxon>Myoviridae</taxon>
+<taxon>T4-like viruses</taxon>
+</lineage>
+</organism>
+<organismHost>
+<name type="scientific">Escherichia coli</name>
+<dbReference type="NCBI Taxonomy" id="562" key="2" />
+<lineage>
+<taxon>Bacteria</taxon>
+<taxon>Proteobacteria</taxon>
+<taxon>Gammaproteobacteria</taxon>
+<taxon>Enterobacteriales</taxon>
+<taxon>Enterobacteriaceae</taxon>
+<taxon>Escherichia</taxon>
+</lineage>
+</organismHost>
+<reference key="3">
+<citation type="journal article" date="1992" name="J. Bacteriol." volume="174" first="6539" last="6547">
+<title>Sequence and characterization of the bacteriophage T4 comC alpha gene product, a possible transcription antitermination factor.</title>
+<authorList>
+<person name="Sanson B." />
+<person name="Uzan M." />
+</authorList>
+<dbReference type="MEDLINE" id="93015705" key="4" />
+<dbReference type="PubMed" id="1400206" key="5" />
+</citation>
+<scope>NUCLEOTIDE SEQUENCE [GENOMIC DNA]</scope>
+</reference>
+<reference key="6">
+<citation type="journal article" date="2003" name="Microbiol. Mol. Biol. Rev." volume="67" first="86" last="156">
+<title>Bacteriophage T4 genome.</title>
+<authorList>
+<person name="Miller E.S." />
+<person name="Kutter E." />
+<person name="Mosig G." />
+<person name="Arisaka F." />
+<person name="Kunisawa T." />
+<person name="Ruger W." />
+</authorList>
+<dbReference type="MEDLINE" id="22514363" key="7" />
+<dbReference type="PubMed" id="12626685" key="8" />
+<dbReference type="DOI" id="10.1128/MMBR.67.1.86-156.2003" key="9" />
+</citation>
+<scope>NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA]</scope>
+</reference>
+<dbReference type="EMBL" id="M89919" key="10">
+<property type="protein sequence ID" value="AAA32484.1" />
+<property type="molecule type" value="Genomic_DNA" />
+</dbReference>
+<dbReference type="EMBL" id="AF158101" key="11">
+<property type="protein sequence ID" value="AAD42588.1" />
+<property type="molecule type" value="Genomic_DNA" />
+</dbReference>
+<dbReference type="PIR" id="B45731" key="12">
+<property type="entry name" value="B45731" />
+</dbReference>
+<dbReference type="RefSeq" id="NP_049625.1" key="13" />
+<dbReference type="GeneID" id="1258628" key="14" />
+<dbReference type="GenomeReviews" id="AF158101_GR" key="15">
+<property type="gene designation" value="T4p011" />
+</dbReference>
+<dbReference type="ProtClustDB" id="CLSP2343268" key="16" />
+<proteinExistence type="predicted" />
+<keyword id="KW-1019">Virus reference strain</keyword>
+<feature type="chain" description="Protein cef" id="PRO_0000164920">
+<location>
+<begin position="1" />
+<end position="71" />
+</location>
+</feature>
+<sequence length="71" mass="8465" checksum="031505CA6FE414FA" modified="1993-10-01" version="1">
+MKRKIVQNCTNDEFEDVLFDPNLVVVQKEHTSKFTHLTSVYVYEKVGDKQPIYGVFREIT
+EDGTTYWKEIY
 </sequence>
 </entry>
 <copyright>

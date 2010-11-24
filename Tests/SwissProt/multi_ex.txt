@@ -3,10 +3,10 @@ AC   P00750; A8K022; B2R8E8; Q15103; Q503B0; Q6PJA5; Q7Z7N2; Q86YK8;
 AC   Q9BU99; Q9BZW1;
 DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
 DT   21-JUL-1986, sequence version 1.
-DT   10-AUG-2010, entry version 159.
+DT   05-OCT-2010, entry version 160.
 DE   RecName: Full=Tissue-type plasminogen activator;
-DE            Short=t-plasminogen activator;
 DE            Short=t-PA;
+DE            Short=t-plasminogen activator;
 DE            Short=tPA;
 DE            EC=3.4.21.68;
 DE   AltName: INN=Alteplase;
@@ -460,7 +460,7 @@ DR   STRING; P00750; -.
 DR   MEROPS; S01.232; -.
 DR   GlycoSuiteDB; P00750; -.
 DR   PRIDE; P00750; -.
-DR   Ensembl; ENST00000220809; ENSP00000220809; ENSG00000104368; Homo sapiens.
+DR   Ensembl; ENST00000220809; ENSP00000220809; ENSG00000104368.
 DR   GeneID; 5327; -.
 DR   KEGG; hsa:5327; -.
 DR   UCSC; uc003xos.2; human.
@@ -864,10 +864,10 @@ ID   CHDH_HUMAN              Reviewed;         594 AA.
 AC   Q8NE62; Q9NY17;
 DT   16-FEB-2004, integrated into UniProtKB/Swiss-Prot.
 DT   05-MAY-2009, sequence version 2.
-DT   10-AUG-2010, entry version 71.
+DT   05-OCT-2010, entry version 72.
 DE   RecName: Full=Choline dehydrogenase, mitochondrial;
-DE            Short=CHD;
 DE            Short=CDH;
+DE            Short=CHD;
 DE            EC=1.1.99.1;
 DE   Flags: Precursor;
 GN   Name=CHDH;
@@ -938,7 +938,7 @@ DR   UniGene; Hs.126688; -.
 DR   ProteinModelPortal; Q8NE62; -.
 DR   STRING; Q8NE62; -.
 DR   PhosphoSite; Q8NE62; -.
-DR   Ensembl; ENST00000315251; ENSP00000319851; ENSG00000016391; Homo sapiens.
+DR   Ensembl; ENST00000315251; ENSP00000319851; ENSG00000016391.
 DR   GeneID; 55349; -.
 DR   KEGG; hsa:55349; -.
 DR   UCSC; uc003dgz.1; human.
@@ -962,7 +962,7 @@ DR   CleanEx; HS_CHDH; -.
 DR   Genevestigator; Q8NE62; -.
 DR   GermOnline; ENSG00000016391; Homo sapiens.
 DR   GO; GO:0008812; F:choline dehydrogenase activity; IEA:EC.
-DR   GO; GO:0050660; F:FAD binding; IEA:InterPro.
+DR   GO; GO:0050660; F:FAD or FADH2 binding; IEA:InterPro.
 DR   GO; GO:0006066; P:alcohol metabolic process; IEA:InterPro.
 DR   GO; GO:0055114; P:oxidation reduction; IEA:UniProtKB-KW.
 DR   InterPro; IPR012132; GMC_OxRdtase.
@@ -1101,7 +1101,7 @@ AC   P28799; P23781; P23782; P23783; P23784; Q53Y88; Q540U8; Q9BWE7;
 AC   Q9UCH0;
 DT   01-DEC-1992, integrated into UniProtKB/Swiss-Prot.
 DT   11-OCT-2005, sequence version 2.
-DT   10-AUG-2010, entry version 118.
+DT   02-NOV-2010, entry version 120.
 DE   RecName: Full=Granulins;
 DE   AltName: Full=Proepithelin;
 DE            Short=PEPI;
@@ -1319,11 +1319,11 @@ DR   PDBsum; 2JYU; -.
 DR   PDBsum; 2JYV; -.
 DR   ProteinModelPortal; P28799; -.
 DR   SMR; P28799; 206-236.
-DR   IntAct; P28799; 17.
+DR   IntAct; P28799; 23.
 DR   MINT; MINT-271687; -.
 DR   STRING; P28799; -.
 DR   PRIDE; P28799; -.
-DR   Ensembl; ENST00000053867; ENSP00000053867; ENSG00000030582; Homo sapiens.
+DR   Ensembl; ENST00000053867; ENSP00000053867; ENSG00000030582.
 DR   GeneID; 2896; -.
 DR   KEGG; hsa:2896; -.
 DR   UCSC; uc002igp.1; human.
@@ -1336,7 +1336,6 @@ DR   HPA; HPA008763; -.
 DR   HPA; HPA028747; -.
 DR   MIM; 138945; gene.
 DR   MIM; 607485; phenotype.
-DR   Orphanet; 282; Frontotemporal dementia.
 DR   Orphanet; 98929; Frontotemporal dementia with motor neuron-disease type inclusions.
 DR   PharmGKB; PA24626; -.
 DR   eggNOG; prNOG11069; -.
@@ -1433,4 +1432,48 @@ SQ   SEQUENCE   593 AA;  63544 MW;  4E5947F1B4EDE619 CRC64;
      EIVAGLEKMP ARRASLSHPR DIGCDQHTSC PVGQTCCPSL GGSWACCQLP HAVCCEDRQH
      CCPAGYTCNV KARSCEKEVV SAQPATFLAR SPHVGVKDVE CGEGHFCHDN QTCCRDNRQG
      WACCPYRQGV CCADRRHCCP AGFRCAARGT KCLRREAPRW DAPLRDPALR QLL
+//
+ID   CEF_BPT4                Reviewed;          71 AA.
+AC   Q01436;
+DT   01-OCT-1993, integrated into UniProtKB/Swiss-Prot.
+DT   01-OCT-1993, sequence version 1.
+DT   15-JUN-2010, entry version 37.
+DE   RecName: Full=Protein cef;
+GN   Name=cef; Synonyms=mb;
+OS   Enterobacteria phage T4 (Bacteriophage T4).
+OC   Viruses; dsDNA viruses, no RNA stage; Caudovirales; Myoviridae;
+OC   T4-like viruses.
+OX   NCBI_TaxID=10665;
+OH   NCBI_TaxID=562; Escherichia coli.
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   MEDLINE=93015705; PubMed=1400206;
+RA   Sanson B., Uzan M.;
+RT   "Sequence and characterization of the bacteriophage T4 comC alpha gene
+RT   product, a possible transcription antitermination factor.";
+RL   J. Bacteriol. 174:6539-6547(1992).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA].
+RX   MEDLINE=22514363; PubMed=12626685; DOI=10.1128/MMBR.67.1.86-156.2003;
+RA   Miller E.S., Kutter E., Mosig G., Arisaka F., Kunisawa T., Ruger W.;
+RT   "Bacteriophage T4 genome.";
+RL   Microbiol. Mol. Biol. Rev. 67:86-156(2003).
+CC   -----------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see http://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution-NoDerivs License
+CC   -----------------------------------------------------------------------
+DR   EMBL; M89919; AAA32484.1; -; Genomic_DNA.
+DR   EMBL; AF158101; AAD42588.1; -; Genomic_DNA.
+DR   PIR; B45731; B45731.
+DR   RefSeq; NP_049625.1; -.
+DR   GeneID; 1258628; -.
+DR   GenomeReviews; AF158101_GR; T4p011.
+DR   ProtClustDB; CLSP2343268; -.
+PE   4: Predicted;
+KW   Virus reference strain.
+FT   CHAIN         1     71       Protein cef.
+FT                                /FTId=PRO_0000164920.
+SQ   SEQUENCE   71 AA;  8465 MW;  031505CA6FE414FA CRC64;
+     MKRKIVQNCT NDEFEDVLFD PNLVVVQKEH TSKFTHLTSV YVYEKVGDKQ PIYGVFREIT
+     EDGTTYWKEI Y
 //
