@@ -153,24 +153,29 @@ class Parser(object):
             append_to_annotations('geneLocation', element.attrib['type'])
         
         def _parse_organism(element):
-            com_name=sci_name=''
+            organism_name = com_name = sci_name = ''
             for organism_element in element.getchildren():  
                 if organism_element.tag==NS + 'name':
-                    if organism_element.attrib['type']== 'scientific':
-                        sci_name=organism_element.text
-                    elif organism_element.attrib['type']== 'common':
-                        com_name=organism_element.text
-                    else:
-                        append_to_annotations("organism_name", organism_element.text)
+                    if organism_element.text:
+                        if organism_element.attrib['type'] == 'scientific':
+                            sci_name = organism_element.text
+                        elif organism_element.attrib['type'] == 'common':
+                            com_name = organism_element.text
+                        else:
+                            #e.g. synonym
+                            append_to_annotations("organism_name", organism_element.text)
                 elif organism_element.tag==NS + 'dbReference':
                     self.ParsedSeqRecord.dbxrefs.append(organism_element.attrib['type']+':'+organism_element.attrib['id'])
                 elif organism_element.tag==NS + 'lineage':
                     for taxon_element in organism_element.getchildren():
                         if taxon_element.tag==NS + 'taxon':
                             append_to_annotations('taxonomy',taxon_element.text)
-            organism_name=sci_name 
-            if com_name:
-                organism_name+=' (%s)'%com_name
+            if sci_name and com_name:
+                organism_name = '%s (%s)' % (sci_name, com_name)
+            elif sci_name:
+                organism_name = sci_name
+            elif com_name:
+                organism_name = com_name
             self.ParsedSeqRecord.annotations['organism']=organism_name
             
         def _parse_organismHost(element):
