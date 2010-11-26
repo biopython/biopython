@@ -9,7 +9,7 @@ The latest news is at the top.
 
 ===================================================================
 
-In progress: Biopython 1.56 (not yet released).
+26 November 2010: Biopython 1.56 released.
 
 This is planned to be our last release to support Python 2.4, however this
 could be delayed given immediate feedback from our users (e.g. if this proves
@@ -41,6 +41,8 @@ in the user's home directory.
 The provisional database schema for BioSQL support on SQLite which Biopython
 has been using since Release 1.53 has now been added to BioSQL, and updated
 slightly.
+
+Bio.PopGen.FDist now supports the DFDist command line tool as well as FDist2.
 
 Bio.Motif now has a chapter in the Tutorial.
 
