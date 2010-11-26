@@ -10,6 +10,15 @@ The latest news is at the top of this file.
 
 ===================================================================
 
+In progress: Biopython 1.57 (not yet released).
+
+Bio.Blast.Applications now includes a wrapper for the blast_formatter tool
+the NCBI added in BLAST 2.2.24+ -- you can now run BLAST once and save the
+output as ASN.1 format, then convert this to any other supported BLAST ouput
+format (plain text, tabular, XML, HTML).
+
+===================================================================
+
 26 November 2010: Biopython 1.56 released.
 
 This is planned to be our last release to support Python 2.4, however this
