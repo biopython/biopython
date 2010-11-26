@@ -171,8 +171,8 @@ class BlastallCommandline(_BlastAllOrPgpCommandLine):
     >>> print cline
     blastall -d nr -i m_cold.fasta -e 0.001 -p blastx
 
-    You would typically run the command line with the Python subprocess module,
-    as described in the Biopython tutorial.
+    You would typically run the command line with cline() or via the Python
+    subprocess module, as described in the Biopython tutorial.
     """
     #TODO - This could use more checking for valid parameters to the program.
     def __init__(self, cmd="blastall",**kwargs):
@@ -258,8 +258,8 @@ class BlastpgpCommandline(_BlastAllOrPgpCommandLine):
     >>> print cline
     blastpgp --help
 
-    You would typically run the command line with the Python subprocess module,
-    as described in the Biopython tutorial.
+    You would typically run the command line with cline() or via the Python
+    subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="blastpgp",**kwargs):
         import warnings
@@ -317,8 +317,8 @@ class RpsBlastCommandline(_BlastCommandLine):
     >>> print cline
     rpsblast --help
 
-    You would typically run the command line with the Python subprocess module,
-    as described in the Biopython tutorial.
+    You would typically run the command line with cline() or via the Python
+    subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="rpsblast",**kwargs):
         import warnings
@@ -569,8 +569,8 @@ class NcbiblastpCommandline(_Ncbiblast2SeqCommandline):
     >>> print cline
     blastp -query rosemary.pro -db nr -evalue 0.001 -remote -ungapped
 
-    You would typically run the command line with the Python subprocess module,
-    as described in the Biopython tutorial.
+    You would typically run the command line with cline() or via the Python
+    subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="blastp", **kwargs):
         self.parameters = [ \
@@ -638,8 +638,8 @@ class NcbiblastnCommandline(_Ncbiblast2SeqCommandline):
     >>> print cline
     blastn -query m_cold.fasta -db nt -out m_cold.xml -evalue 0.001 -outfmt 5 -strand plus
 
-    You would typically run the command line with the Python subprocess module,
-    as described in the Biopython tutorial.
+    You would typically run the command line with cline() or via the Python
+    subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="blastn", **kwargs):
         self.parameters = [ \
@@ -742,8 +742,8 @@ class NcbiblastxCommandline(_Ncbiblast2SeqCommandline):
     >>> print cline
     blastx -query m_cold.fasta -db nr -evalue 0.001
 
-    You would typically run the command line with the Python subprocess module,
-    as described in the Biopython tutorial.
+    You would typically run the command line with cline() or via the Python
+    subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="blastx", **kwargs):
         self.parameters = [ \
@@ -810,8 +810,8 @@ class NcbitblastnCommandline(_Ncbiblast2SeqCommandline):
     >>> print cline
     tblastn -help
 
-    You would typically run the command line with the Python subprocess module,
-    as described in the Biopython tutorial.
+    You would typically run the command line with cline() or via the Python
+    subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="tblastn", **kwargs):
         self.parameters = [ \
@@ -890,8 +890,8 @@ class NcbitblastxCommandline(_Ncbiblast2SeqCommandline):
     >>> print cline
     tblastx -help
 
-    You would typically run the command line with the Python subprocess module,
-    as described in the Biopython tutorial.
+    You would typically run the command line with cline() or via the Python
+    subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="tblastx", **kwargs):
         self.parameters = [ \
@@ -951,8 +951,8 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
     >>> print cline
     psiblast -help
 
-    You would typically run the command line with the Python subprocess module,
-    as described in the Biopython tutorial.
+    You would typically run the command line with cline() or via the Python
+    subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="psiblast", **kwargs):
         self.parameters = [ \
@@ -1039,8 +1039,8 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
     >>> print cline
     rpsblast -help
 
-    You would typically run the command line with the Python subprocess module,
-    as described in the Biopython tutorial.
+    You would typically run the command line with cline() or via the Python
+    subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="rpsblast", **kwargs):
         self.parameters = [ \
@@ -1068,8 +1068,8 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
     >>> print cline
     rpstblastn -help
 
-    You would typically run the command line with the Python subprocess module,
-    as described in the Biopython tutorial.
+    You would typically run the command line with cline() or via the Python
+    subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="rpstblastn", **kwargs):
         self.parameters = [ \
