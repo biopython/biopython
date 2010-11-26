@@ -385,6 +385,9 @@ class _NcbibaseblastCommandline(AbstractCommandline):
                     See also num_alignments.""", False),
             _Switch(["-html", "html"], ["input"],
                     "Produce HTML output? See also the outfmt option."),
+            #Miscellaneous options
+            _Switch(["-parse_deflines", "parse_deflines"], ["input"],
+                    "Should the query and subject defline(s) be parsed?"),
             ]
         try:
             #Insert extra parameters - at the start just in case there
@@ -490,8 +493,6 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
 
                     Incompatible with: import_search_strategy""", False),
             #Miscellaneous options
-            _Switch(["-parse_deflines", "parse_deflines"], ["input"],
-                    "Should the query and subject defline(s) be parsed?"),
             _Option(["-num_threads", "num_threads"], ["input"], None, 0,
                     """Number of threads to use in the BLAST search.
 
