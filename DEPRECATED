@@ -46,7 +46,7 @@ Bio.Restriction.DNAUtils and check_bases
 This module (originally in C) offered complement and antiparallel functions
 (duplicating functionality in Bio.Seq) and a rather odd function called
 check_bases (also available as Bio.Restriction.Restriction.check_bases).
-Deprecated in Release 1.53.
+Deprecated in Release 1.53, removed in Release 1.57.
 
 Bio.Blast.NCBIStandalone
 ========================

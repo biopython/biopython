@@ -113,13 +113,6 @@ def _check_bases(seq_string):
         raise TypeError("Invalid character found in %s" % repr(seq_string))
     return " " + seq_string
 
-def check_bases(seq_string):
-    """Check characters in a string (DEPRECATED)."""
-    import warnings
-    import Bio
-    warnings.warn("The check_bases function has been deprecated, and will be"
-                  "removed in a future release of Biopython.", Bio.BiopythonDeprecationWarning)
-    return _check_bases(seq_string)
 
 matching = {'A' : 'ARWMHVDN', 'C' : 'CYSMHBVN', 'G' : 'GRSKBVDN',
             'T' : 'TYWKHBDN', 'R' : 'ABDGHKMNSRWV', 'Y' : 'CBDHKMNSTWVY',
