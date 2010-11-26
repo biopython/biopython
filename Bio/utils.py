@@ -15,7 +15,6 @@ import warnings
 import Bio
 warnings.warn("Bio.utils has been deprecated, and we intend to remove it in "
               "the next release of Biopython.", Bio.BiopythonDeprecationWarning)
-raise NotImplementedError("Error to force a traceback")
 
 import Seq
 import Alphabet
