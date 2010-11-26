@@ -85,9 +85,10 @@ in Release 1.51, and removed in Release 1.55. Please use psycopg2 instead.
 
 Bio.Application.generic_run and ApplicationResult
 =================================================
-Declared obsolete in Release 1.51, and deprecated in Release 1.53.
-Please use the Python subprocess module instead, of as of Release 1.55 the
-application wrappers can be used directly to execute the command.
+Declared obsolete in Release 1.51, deprecated in Release 1.53, and removed in
+Release 1.57. Please use the Python subprocess module instead, or as of
+Release 1.55 the application wrappers can be used directly to execute the
+command.
 
 Bio.Entrez.efetch and rettype="genbank"
 =======================================
