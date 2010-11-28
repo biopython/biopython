@@ -49,6 +49,10 @@ for folder in likely_dirs:
                                  shell=(sys.platform!="win32"))
         output, error = child.communicate()
         if child.returncode==0 and "ERROR: Invalid argument: -h" not in output:
+            #Special case, blast_formatter from BLAST 2.2.23+ (i.e. BLAST+)
+            #has mandatory argument -rid, but no -archive. We don't support it.
+            if name == "blast_formatter" and " -archive " not in output:
+                continue
             exe_names[name] = exe_name
         #else :
         #    print "Rejecting", exe_name
