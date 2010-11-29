@@ -111,7 +111,7 @@ class IndexDictTests(unittest.TestCase):
             raw = rec_dict.get_raw(key)
             self.assertTrue(raw.strip())
             self.assertTrue(raw in raw_file)
-            if format in ["ig", "uniprot-xml"]:
+            if format in ["uniprot-xml"]:
                #These have a header structure and can't be parsed
                #individually (at least, not right now).
                continue

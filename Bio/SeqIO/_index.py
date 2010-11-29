@@ -537,6 +537,20 @@ class IntelliGeneticsDict(SequentialSeqFileDict):
                 #End of file
                 break
 
+    def get_raw(self, key):
+        """Like the get method, but returns the record as a raw string."""
+        handle = self._handle
+        handle.seek(dict.__getitem__(self, key))
+        lines = []
+        line = handle.readline()
+        while line.startswith(";"):
+            lines.append(line)
+            line = handle.readline()
+        while line and not line.startswith(";"):
+            lines.append(line)
+            line = handle.readline()
+        return "".join(lines)
+
 
 class TabDict(SequentialSeqFileDict):
     """Indexed dictionary like access to a simple tabbed file."""
