@@ -111,10 +111,6 @@ class IndexDictTests(unittest.TestCase):
             raw = rec_dict.get_raw(key)
             self.assertTrue(raw.strip())
             self.assertTrue(raw in raw_file)
-            if format in ["uniprot-xml"]:
-               #These have a header structure and can't be parsed
-               #individually (at least, not right now).
-               continue
             rec1 = rec_dict[key]
             #Following isn't very elegant, but it lets me test the
             #__getitem__ SFF code is working.
@@ -133,6 +129,18 @@ class IndexDictTests(unittest.TestCase):
                             rec_dict._key_sequence,
                             rec_dict._alphabet,
                             trim=True)
+            elif format == "uniprot-xml":
+                #Currently the __getitem__ method uses this
+                #trick too, but we hope to fix that later
+                raw = """<?xml version='1.0' encoding='UTF-8'?>
+                <uniprot xmlns="http://uniprot.org/uniprot"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://uniprot.org/uniprot
+                http://www.uniprot.org/support/docs/uniprot.xsd">
+                %s
+                </uniprot>
+                """ % raw
+                rec2 = SeqIO.read(StringIO(raw), format, alphabet)
             else:
                 rec2 = SeqIO.read(StringIO(raw), format, alphabet)
             self.assertEqual(True, compare_record(rec1, rec2))
