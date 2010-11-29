@@ -1134,8 +1134,8 @@ class NcbiblastformatterCommandline(_NcbibaseblastCommandline):
     """Wrapper for the NCBI BLAST+ program blast_formatter.
 
     With the release of BLAST 2.2.24+ (i.e. the BLAST suite rewritten in C++
-    instead of C), the NCBI introduced the blast_formatter command line tool
-    and a new output format option to the existing tools, ASN.1.
+    instead of C), the NCBI added the ASN.1 output format option to all the
+    search tools, and extended the blast_formatter to support this as input.
 
     The blast_formatter command allows you to convert the ASN.1 output into
     the other output formats (XML, tabular, plain text, HTML).
@@ -1149,6 +1149,13 @@ class NcbiblastformatterCommandline(_NcbibaseblastCommandline):
 
     You would typically run the command line with cline() or via the Python
     subprocess module, as described in the Biopython tutorial.
+
+    Note that this wrapper is for the version of blast_formatter from BLAST
+    2.2.24+ (or later) which is when the NCBI first announced the inclusion
+    this tool. There was actually an early version in BLAST 2.2.23+ (and
+    possibly in older releases) but this did not have the -archive option
+    (instead -rid is a mandatory argument), and is not supported by this
+    wrapper.
     """
     def __init__(self, cmd="blast_formatter", **kwargs):
         self.parameters = [ \
