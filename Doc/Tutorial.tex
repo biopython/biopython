@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 26 November 2010 (Biopython 1.56)}
+\date{Last Update -- 29 November 2010 (Biopython 1.56+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -1718,6 +1718,40 @@ Bio.SeqFeature.ExactPosition(5)
 \end{verbatim}
 
 That is all of the nitty gritty about dealing with fuzzy positions in Biopython. It has been designed so that dealing with fuzziness is not that much more complicated than dealing with exact positions, and hopefully you find that true!
+
+\subsection{Sequence}
+
+A \verb|SeqFeature| object doesn't directly contain a sequence, instead its location (see Section~\ref{sec:locations}) describes how to get this from the parent sequence. For example consider a (short) gene sequence with location 5:18 on the reverse strand, which in GenBank/EMBL notation using 1-based counting would be \texttt{complement(4..18)}, like this:
+
+\begin{verbatim}
+from Bio import Seq
+from Bio.SeqFeature import SeqFeature, FeatureLocation
+example_parent = Seq("ACCGAGACGGCAAAGGCTAGCATAGGTATGAGACTTCCTTCCTGCCAGTGCTGAGGAACTGGGAGCCTAC")
+example_feature = example_feature = SeqFeature(FeatureLocation(5, 18), type="gene", strand=-1)
+\end{verbatim}
+
+You could take the parent sequence, slice it to extract 5:18, and then take the reverse complement:
+
+\begin{verbatim}
+feature_seq = example_parent[5:18].reverse_complement()
+\end{verbatim}
+
+This is a simple example so this isn't too bad -- however once you have to deal with compound features (joins) this is rather messy. Instead, the \verb|SeqFeature| object has an \verb|extract| method to take care of all this:
+
+\begin{verbatim}
+feature_seq = example_feature.extract(example_parent)
+\end{verbatim}
+
+The \verb|extract| method was added in Biopython 1.53, and in Biopython 1.56 the \verb|SeqFeature| was further extended to give its length as that of the region of sequence it describes.
+
+\begin{verbatim}
+>>> print example_feature.extract(example_parent)
+AGCCTTTGCCGTC
+>>> print len(example_feature.extract(example_parent))
+13
+>>> print len(example_feature)
+13
+\end{verbatim}
 
 \section{References}
 
