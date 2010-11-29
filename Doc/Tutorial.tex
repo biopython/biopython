@@ -2164,7 +2164,7 @@ print second_record.id
 print second_record.description
 \end{verbatim}
 
-Note that if you try and use \verb|.next()| and there are no more results, you'll either get back the special Python object \verb|None| or a \verb|StopIteration| exception.
+Note that if you try and use \verb|.next()| and there are no more results, you'll get the special \verb|StopIteration| exception.
 
 One special case to consider is when your sequence files have multiple records, but you only want the first one.  In this situation the following code is very concise:
 
