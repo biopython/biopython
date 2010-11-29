@@ -27,6 +27,23 @@ class MafftCommandline(AbstractCommandline):
 
     You would typically run the command line with mafft_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
+    Note that MAFFT will write the alignment to stdout, which you may
+    want to save to a file and then parse, e.g.
+
+    stdout, stderr = mafft_cline()
+    handle = open("aligned.fasta", "w")
+    handle.write(stdout)
+    handle.close()
+    from Bio import AlignIO
+    align = AlignIO.read("aligned.fasta", "fasta")
+
+    Alternatively, to parse the output with AlignIO directly you can
+    use StringIO to turn the string into a handle:
+
+    stdout, stderr = mafft_cline()
+    from StringIO import StringiO
+    from Bio import AlignIO
+    align = AlignIO.read(StringIO(stdout), "fasta")
 
     Citations:
 
