@@ -515,6 +515,7 @@ def _sff_read_roche_index(handle):
         raise ValueError("Problem with index length? %i vs %i" \
                          % (handle.tell(), read_index_offset + read_index_size))
 
+
 def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
                          key_sequence, alphabet, trim=False):
     """Parse the next read in the file, return data as a SeqRecord (PRIVATE)."""
@@ -594,6 +595,44 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     #TODO - adaptor clipping
     #Return the record and then continue...
     return record
+
+
+def _sff_read_raw_record(handle, number_of_flows_per_read):
+    """Extract the next read in the file as a raw (bytes) string (PRIVATE)."""
+    read_header_fmt = '>2HI'
+    read_header_size = struct.calcsize(read_header_fmt)
+    read_flow_fmt = ">%iH" % number_of_flows_per_read
+    read_flow_size = struct.calcsize(read_flow_fmt)
+
+    raw = handle.read(read_header_size)
+    read_header_length, name_length, seq_len \
+                        = struct.unpack(read_header_fmt, raw)
+    if read_header_length < 10 or read_header_length % 8 != 0:
+        raise ValueError("Malformed read header, says length is %i" \
+                         % read_header_length)
+    #now the four clip values (4H = 8 bytes), and read name
+    raw += _bytes_to_string(handle.read(8 + name_length))
+    #and any padding (remainder of header)
+    padding = read_header_length - read_header_size - 8 - name_length
+    pad = handle.read(padding)
+    if pad.count(_null) != padding:
+        raise ValueError("Post name %i byte padding region contained data" \
+                         % padding)
+    raw += pad
+    #now the flowgram values, flowgram index, bases and qualities
+    raw += handle.read(read_flow_size + seq_len*3)
+    padding = (read_flow_size + seq_len*3)%8
+    #now any padding...
+    if padding:
+        padding = 8 - padding
+        pad = handle.read(padding)
+        if pad.count(_null) != padding:
+            raise ValueError("Post quality %i byte padding region contained data" \
+                             % padding)
+        raw += pad
+    #Return the raw bytes
+    return raw
+
 
 #This is a generator function!
 def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):

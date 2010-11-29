@@ -177,7 +177,7 @@ def compare_feature(old_f, new_f):
 
 def compare_sequence(old, new):
     """Compare two Seq or DBSeq objects"""
-    assert len(old) == len(new)
+    assert len(old) == len(new), "%i vs %i" % (len(old), len(new))
     assert old.tostring() == new.tostring()
 
     if isinstance(old, UnknownSeq):

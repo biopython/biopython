@@ -239,6 +239,11 @@ class SffDict(_IndexedSeqFileDict) :
                                                 self._key_sequence,
                                                 self._alphabet)
 
+    def get_raw(self, key):
+        handle = self._handle
+        handle.seek(dict.__getitem__(self, key))
+        return SeqIO.SffIO._sff_read_raw_record(handle, self._flows_per_read)
+
 
 class SffTrimmedDict(SffDict) :
     def __getitem__(self, key) :
