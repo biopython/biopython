@@ -3,24 +3,25 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Command line wrapper for the multiple alignment program MUSCLE.
-
-http://www.drive5.com/muscle/
-
-Citations:
-
-Edgar, Robert C. (2004), MUSCLE: multiple sequence alignment with high accuracy
-and high throughput, Nucleic Acids Research 32(5), 1792-97.
-
-Edgar, R.C. (2004) MUSCLE: a multiple sequence alignment method with reduced
-time and space complexity. BMC Bioinformatics 5(1): 113.
-
-Last checked against version: 3.7, briefly against 3.8
 """
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
 class MuscleCommandline(AbstractCommandline):
-    """Command line wrapper for the multiple alignment program MUSCLE."""
+    """Command line wrapper for the multiple alignment program MUSCLE.
+
+    http://www.drive5.com/muscle/
+
+    Citations:
+
+    Edgar, Robert C. (2004), MUSCLE: multiple sequence alignment with high
+    accuracy and high throughput, Nucleic Acids Research 32(5), 1792-97.
+
+    Edgar, R.C. (2004) MUSCLE: a multiple sequence alignment method with
+    reduced time and space complexity. BMC Bioinformatics 5(1): 113.
+
+    Last checked against version: 3.7, briefly against 3.8
+    """
     def __init__(self, cmd="muscle", **kwargs):
         CLUSTERING_ALGORITHMS   = ["upgma", "upgmb", "neighborjoining"]
         DISTANCE_MEASURES_ITER1 = ["kmer6_6", "kmer20_3", "kmer20_4", "kbit20_3",

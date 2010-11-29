@@ -3,23 +3,25 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Command line wrapper for the multiple alignment program Clustal W.
-
-http://www.clustal.org/
-
-Citation:
-
-Larkin MA, Blackshields G, Brown NP, Chenna R, McGettigan PA, McWilliam H, 
-Valentin F, Wallace IM, Wilm A, Lopez R, Thompson JD, Gibson TJ, Higgins DG.
-(2007). Clustal W and Clustal X version 2.0. Bioinformatics, 23, 2947-2948. 
-
-Last checked against versions: 1.83 and 2.0.10
 """
 
 import os
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
 class ClustalwCommandline(AbstractCommandline):
-    """Command line wrapper for clustalw (version one or two)."""
+    """Command line wrapper for clustalw (version one or two).
+
+    http://www.clustal.org/
+
+    Citation:
+
+    Larkin MA, Blackshields G, Brown NP, Chenna R, McGettigan PA,
+    McWilliam H, Valentin F, Wallace IM, Wilm A, Lopez R, Thompson JD,
+    Gibson TJ, Higgins DG. (2007). Clustal W and Clustal X version 2.0.
+    Bioinformatics, 23, 2947-2948. 
+
+    Last checked against versions: 1.83 and 2.0.10
+    """
     #TODO - Should we default to cmd="clustalw2" now?
     def __init__(self, cmd="clustalw", **kwargs):
         self.parameters = \

@@ -3,34 +3,39 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Command line wrapper for the multiple alignment programme MAFFT.
-
-http://align.bmr.kyushu-u.ac.jp/mafft/software/
-
-Citations:
-
-Katoh, Toh (BMC Bioinformatics 9:212, 2008) Improved accuracy of
-multiple ncRNA alignment by incorporating structural information into a
-MAFFT-based framework (describes RNA structural alignment methods)
-
-Katoh, Toh (Briefings in Bioinformatics 9:286-298, 2008) Recent developments in
-the MAFFT multiple sequence alignment program (outlines version 6)
-Katoh, Toh (Bioinformatics 23:372-374, 2007)  Errata PartTree: an algorithm to
-build an approximate tree from a large number of unaligned sequences (describes
-the PartTree algorithm)
-
-Katoh, Kuma, Toh, Miyata (Nucleic Acids Res. 33:511-518, 2005) MAFFT version 5:
-improvement in accuracy of multiple sequence alignment (describes [ancestral
-versions of] the G-INS-i, L-INS-i and E-INS-i strategies) Katoh, Misawa, Kuma,
-Miyata (Nucleic Acids Res. 30:3059-3066, 2002)
-
-Last checked against version: 6.626b (2009/03/16)
 """
 
 import os
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
 class MafftCommandline(AbstractCommandline):
-    """Command line wrapper for the multiple alignment program MAFFT."""
+    """Command line wrapper for the multiple alignment program MAFFT.
+
+    http://align.bmr.kyushu-u.ac.jp/mafft/software/
+
+    Citations:
+
+    Katoh, Toh (BMC Bioinformatics 9:212, 2008) Improved accuracy of
+    multiple ncRNA alignment by incorporating structural information into
+    a MAFFT-based framework (describes RNA structural alignment methods)
+
+    Katoh, Toh (Briefings in Bioinformatics 9:286-298, 2008) Recent
+    developments in the MAFFT multiple sequence alignment program
+    (outlines version 6)
+
+    Katoh, Toh (Bioinformatics 23:372-374, 2007)  Errata PartTree: an
+    algorithm to build an approximate tree from a large number of
+    unaligned sequences (describes the PartTree algorithm)
+
+    Katoh, Kuma, Toh, Miyata (Nucleic Acids Res. 33:511-518, 2005) MAFFT
+    version 5: improvement in accuracy of multiple sequence alignment
+    (describes [ancestral versions of] the G-INS-i, L-INS-i and E-INS-i
+    strategies)
+
+    Katoh, Misawa, Kuma, Miyata (Nucleic Acids Res. 30:3059-3066, 2002)
+
+    Last checked against version: 6.626b (2009/03/16)
+    """
     def __init__(self, cmd="mafft", **kwargs):
         BLOSUM_MATRICES = ["30","45","62","80"]
         self.parameters = \

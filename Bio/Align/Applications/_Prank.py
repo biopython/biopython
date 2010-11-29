@@ -3,25 +3,27 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Command line wrapper for the multiple alignment program PRANK.
-
-http://www.ebi.ac.uk/goldman-srv/prank/prank/
-
-Citations:
-
-Loytynoja, A. and Goldman, N. 2005. An algorithm for progressive multiple
-alignment of sequences with insertions. Proceedings of the National Academy
-of Sciences, 102: 10557--10562.
-
-Loytynoja, A. and Goldman, N. 2008. Phylogeny-aware gap placement prevents
-errors in sequence alignment and evolutionary analysis. Science, 320: 1632.
-
-Last checked agains version: 081202
 """
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
 class PrankCommandline(AbstractCommandline):
-    """Command line wrapper for the multiple alignment program PRANK."""
+    """Command line wrapper for the multiple alignment program PRANK.
+
+    http://www.ebi.ac.uk/goldman-srv/prank/prank/
+
+    Citations:
+
+    Loytynoja, A. and Goldman, N. 2005. An algorithm for progressive
+    multiple alignment of sequences with insertions. Proceedings of
+    the National Academy of Sciences, 102: 10557--10562.
+
+    Loytynoja, A. and Goldman, N. 2008. Phylogeny-aware gap placement
+    prevents errors in sequence alignment and evolutionary analysis.
+    Science, 320: 1632.
+
+    Last checked agains version: 081202
+    """
     def __init__(self, cmd="prank", **kwargs):
         OUTPUT_FORMAT_VALUES = list(range(1,18))
         self.parameters = \

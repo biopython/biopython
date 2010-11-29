@@ -2,25 +2,23 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-
-"""
-Bio.Application command line for the multiple alignment program DIALIGN2-2.
-
-http://bibiserv.techfak.uni-bielefeld.de/dialign/welcome.html
-
-Citations:
-
-B. Morgenstern (2004). DIALIGN: Multiple DNA and Protein Sequence Alignment
-at BiBiServ. Nucleic Acids Research 32, W33-W36.
-
-Last checked against version: 2.2
+"""Command line wrapper for the multiple alignment program DIALIGN2-2.
 """
 
-from Bio import Application
 from Bio.Application import _Option, _Argument, _Switch, AbstractCommandline
 
 class DialignCommandline(AbstractCommandline):
-    """Command line wrapper for the multiple alignment program DIALIGN2-2."""
+    """Command line wrapper for the multiple alignment program DIALIGN2-2.
+
+    http://bibiserv.techfak.uni-bielefeld.de/dialign/welcome.html
+
+    Citations:
+
+    B. Morgenstern (2004). DIALIGN: Multiple DNA and Protein Sequence
+    Alignment at BiBiServ. Nucleic Acids Research 32, W33-W36.
+
+    Last checked against version: 2.2
+    """
     def __init__(self, cmd="dialign2-2", **kwargs):
         self.program_name = cmd
         self.parameters = \

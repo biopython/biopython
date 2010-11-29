@@ -3,21 +3,24 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Command line wrapper for the multiple alignment program PROBCONS.
-
-http://probcons.stanford.edu/
-
-Citations:
-Do, C.B., Mahabhashyam, M.S.P., Brudno, M., and Batzoglou, S. 2005. PROBCONS:
-Probabilistic Consistency-based Multiple Sequence Alignment. Genome Research 15:
-330-340. 
-
-Last checked agains version: 1.12
 """
+
 import types
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
 class ProbconsCommandline(AbstractCommandline):
-    """Command line wrapper for the multiple alignment program PROBCONS."""
+    """Command line wrapper for the multiple alignment program PROBCONS.
+
+    http://probcons.stanford.edu/
+
+    Citations:
+
+    Do, C.B., Mahabhashyam, M.S.P., Brudno, M., and Batzoglou, S. 2005.
+    PROBCONS: Probabilistic Consistency-based Multiple Sequence Alignment.
+    Genome Research 15: 330-340. 
+
+    Last checked agains version: 1.12
+    """"
     def __init__(self, cmd="probcons", **kwargs):
         self.parameters = \
             [
