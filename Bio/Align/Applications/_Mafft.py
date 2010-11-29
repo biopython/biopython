@@ -226,38 +226,42 @@ class MafftCommandline(AbstractCommandline):
             #input. Default: BLOSUM62
             _Option(["--aamatrix", "aamatrix"], ["input"],
                     os.path.exists, 0,
-                    "Use a user-defined AA scoring matrix. " + \
+                    "Use a user-defined AA scoring matrix. "
                     "Default: BLOSUM62",
                     0),
             #Incorporate the AA/nuc composition information into the scoring
             #matrix. Default: off
             _Switch(["--fmodel", "fmodel"], ["input"],
-                    "Incorporate the AA/nuc composition information " + \
-                    "into the scoring matrix. Default: off"),
+                    "Incorporate the AA/nuc composition information into"
+                    "the scoring matrix (True) or not (False, default)"),
             #**** Output ****
             #Output format: clustal format. Default: off (fasta format)
             _Switch(["--clustalout", "clustalout"], ["input"],
-                    "Output format: clustal format. Default: off (fasta" + \
-                    "format)"),
+                    "Output format: clustal (True) or fasta (False, default)"),
             #Output order: same as input. Default: on
             _Switch(["--inputorder", "inputorder"], ["input"],
-                    "Output order: same as input. Default: on"),
+                    "Output order: same as input (True, default) or alignment "
+                    "based (False)"),
             #Output order: aligned. Default: off (inputorder)
             _Switch(["--reorder", "reorder"], ["input"],
-                    "Output order: aligned. Default: off (inputorder)"),
+                    "Output order: aligned (True) or in input order (False, "
+                    "default)"),
             #Guide tree is output to the input.tree file. Default: off
             _Switch(["--treeout", "treeout"], ["input"],
-                    "Guide tree is output to the input.tree file. Default: off"),
+                    "Guide tree is output to the input.tree file (True) or "
+                    "not (False, default)"),
             #Do not report progress. Default: off
             _Switch(["--quiet", "quiet"], ["input"],
-                    "Do not report progress. Default: off"),
+                    "Do not report progress (True) or not (False, default)."),
             #**** Input ****
             #Assume the sequences are nucleotide. Deafult: auto
             _Switch(["--nuc", "nuc"], ["input"],
-                    "Assume the sequences are nucleotide. Default: auto"),
+                    "Assume the sequences are nucleotide (True/False). "
+                    "Default: auto"),
             #Assume the sequences are amino acid. Deafult: auto
             _Switch(["--amino", "amino"], ["input"],
-                    "Assume the sequences are amino acid. Default: auto"),
+                    "Assume the sequences are amino acid (True/False). "
+                    "Default: auto"),
             ###################### SEEDS #####################################
             # MAFFT has multiple --seed commands where the unaligned input is
             # aligned to the seed alignment. There can be multiple seeds in the
