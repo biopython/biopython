@@ -5,6 +5,9 @@
 """Command line wrapper for the multiple alignment programme MAFFT.
 """
 
+#TODO - Remove file exist checks? Other wrappers don't do this, and
+#it prevent things like preparing commands to run on a cluster.
+
 import os
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
@@ -12,6 +15,18 @@ class MafftCommandline(AbstractCommandline):
     """Command line wrapper for the multiple alignment program MAFFT.
 
     http://align.bmr.kyushu-u.ac.jp/mafft/software/
+
+    Example:
+
+    >>> from Bio.Align.Applications import MafftCommandline
+    >>> mafft_exe = "/opt/local/mafft"
+    >>> in_file = "../Doc/examples/opuntia.fasta"
+    >>> mafft_cline = MafftCommandline(mafft_exe, input=in_file)
+    >>> print mafft_cline
+    /opt/local/mafft ../Doc/examples/opuntia.fasta
+
+    You would typically run the command line with mafft_cline() or via
+    the Python subprocess module, as described in the Biopython tutorial.
 
     Citations:
 
@@ -34,7 +49,7 @@ class MafftCommandline(AbstractCommandline):
 
     Katoh, Misawa, Kuma, Miyata (Nucleic Acids Res. 30:3059-3066, 2002)
 
-    Last checked against version: 6.626b (2009/03/16)
+    Last checked against version: MAFFT v6.717b (2009/12/03)
     """
     def __init__(self, cmd="mafft", **kwargs):
         BLOSUM_MATRICES = ["30","45","62","80"]
