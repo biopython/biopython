@@ -20,7 +20,7 @@ class ProbconsCommandline(AbstractCommandline):
     Genome Research 15: 330-340. 
 
     Last checked agains version: 1.12
-    """"
+    """
     def __init__(self, cmd="probcons", **kwargs):
         self.parameters = \
             [
