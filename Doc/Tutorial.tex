@@ -1753,6 +1753,33 @@ AGCCTTTGCCGTC
 13
 \end{verbatim}
 
+\section{Location testing}
+
+As of Biopython 1.56, you can use the Python keyword \verb|in| with a
+\verb|SeqFeature| to see if the base/residue for a parent coordinate is
+within the feature or not.
+
+For example, suppose you have a SNP of interest and you want to know which
+features this SNP is within, and lets suppose this SNP is at index 4350
+(Python counting!). Here is a simple brute force solution where we just
+check all the features one by one in a loop:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> my_snp = 4350
+>>> record = SeqIO.read("NC_005816.gb", "genbank")
+>>> for feature in record.features:
+...     if my_snp in feature:
+...         print feature.type, feature.qualifiers.get('db_xref')
+...
+source ['taxon:229193']
+gene ['GeneID:2767712']
+CDS ['GI:45478716', 'GeneID:2767712']
+\end{verbatim}
+
+Note that gene and CDS features from GenBank or EMBL files defined with joins
+are the union of the exons -- they do not cover any introns.
+
 \section{References}
 
 Another common annotation related to a sequence is a reference to a journal or other published work dealing with the sequence. We have a fairly simple way of representing a Reference in Biopython -- we have a \verb|Bio.SeqFeature.Reference| class that stores the relevant information about a reference as attributes of an object.
