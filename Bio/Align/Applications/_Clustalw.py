@@ -13,6 +13,17 @@ class ClustalwCommandline(AbstractCommandline):
 
     http://www.clustal.org/
 
+    Example:
+
+    >>> from Bio.Align.Applications import ClustalwCommandline
+    >>> in_file = "unaligned.fasta"
+    >>> clustalw_cline = ClustalwCommandline("clustalw2", infile=in_file)
+    >>> print clustalw_cline
+    clustalw2 -infile=unaligned.fasta
+
+    You would typically run the command line with clustalw_cline() or via
+    the Python subprocess module, as described in the Biopython tutorial.
+
     Citation:
 
     Larkin MA, Blackshields G, Brown NP, Chenna R, McGettigan PA,
