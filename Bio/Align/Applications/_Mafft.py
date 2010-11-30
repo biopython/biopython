@@ -25,6 +25,15 @@ class MafftCommandline(AbstractCommandline):
     >>> print mafft_cline
     /opt/local/mafft ../Doc/examples/opuntia.fasta
 
+    If the mafft binary is on the path (typically the case on a Unix style
+    operating system) then you don't need to supply the executable location:
+
+    >>> from Bio.Align.Applications import MafftCommandline
+    >>> in_file = "../Doc/examples/opuntia.fasta"
+    >>> mafft_cline = MafftCommandline(input=in_file)
+    >>> print mafft_cline
+    mafft ../Doc/examples/opuntia.fasta
+
     You would typically run the command line with mafft_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
     Note that MAFFT will write the alignment to stdout, which you may
@@ -41,7 +50,7 @@ class MafftCommandline(AbstractCommandline):
     use StringIO to turn the string into a handle:
 
     stdout, stderr = mafft_cline()
-    from StringIO import StringiO
+    from StringIO import StringIO
     from Bio import AlignIO
     align = AlignIO.read(StringIO(stdout), "fasta")
 
