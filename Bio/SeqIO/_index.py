@@ -732,19 +732,27 @@ class SwissRandomAccess(SequentialSeqFileRandomAccess):
         handle = self._handle
         handle.seek(0)
         marker_re = self._marker_re
+        #Skip any header before first record
         while True:
-            offset = handle.tell()
+            start_offset = handle.tell()
             line = handle.readline()
-            if marker_re.match(line):
-                #We cannot assume the record.id is the first word after ID,
-                #normally the following AC line is used.
-                line = handle.readline()
-                assert line.startswith("AC ")
-                key = line[3:].strip().split(";")[0].strip()
-                yield key, offset, 0
-            elif not line:
-                #End of file
+            if marker_re.match(line) or not line:
                 break
+        #Should now be at the start of a record, or end of the file
+        while marker_re.match(line):
+            #We cannot assume the record.id is the first word after ID,
+            #normally the following AC line is used.
+            line = handle.readline()
+            assert line.startswith("AC ")
+            key = line[3:].strip().split(";")[0].strip()
+            while True:
+                end_offset = handle.tell()
+                line = handle.readline()
+                if marker_re.match(line) or not line:
+                    yield key, start_offset, end_offset - start_offset
+                    start_offset = end_offset
+                    break
+        assert not line, repr(line)
 
 
 class UniprotRandomAccess(SequentialSeqFileRandomAccess):
