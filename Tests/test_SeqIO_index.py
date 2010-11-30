@@ -27,12 +27,21 @@ from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
 from seq_tests_common import compare_record
 
+index_tmp = "index.tmp"
+
 def add_prefix(key):
     """Dummy key_function for testing index code."""
     return "id_" + key
 
 class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
+    def startUp(self):
+        if os.path.isfile(index_tmp):
+            os.remove(index_tmp)
+
+    def tearDown(self):
+        if os.path.isfile(index_tmp):
+            os.remove(index_tmp)
 
     def simple_check(self, filename, format, alphabet):
         if format in SeqIO._BinaryFormats:
@@ -46,10 +55,34 @@ class IndexDictTests(unittest.TestCase):
         #Without key_function
         rec_dict = SeqIO.index(filename, format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
+        #Saving to file...
+        rec_dict = SeqIO.index_many(index_tmp, [filename], format, alphabet)
+        self.check_dict_methods(rec_dict, id_list, id_list)
+        #Now reload it...
+        rec_dict = SeqIO.index_many(index_tmp, [filename], format, alphabet)
+        self.check_dict_methods(rec_dict, id_list, id_list)
+        #Now reload without passing filenames and format
+        rec_dict = SeqIO.index_many(index_tmp, alphabet=alphabet)
+        self.check_dict_methods(rec_dict, id_list, id_list)
+        #check error conditions
+        self.assertRaises(ValueError, SeqIO.index_many, index_tmp, format="dummy")
+        self.assertRaises(ValueError, SeqIO.index_many, index_tmp, filenames=["dummy"])
+        os.remove(index_tmp)
+
         #Check with key_function
         key_list = [add_prefix(id) for id in id_list]
         rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
+        #Saving to file...
+        rec_dict = SeqIO.index_many(index_tmp, [filename], format, alphabet, add_prefix)
+        self.check_dict_methods(rec_dict, key_list, id_list)
+        #Now reload it...
+        rec_dict = SeqIO.index_many(index_tmp, [filename], format, alphabet, add_prefix)
+        self.check_dict_methods(rec_dict, key_list, id_list)
+        #Now reload without passing filenames and format
+        rec_dict = SeqIO.index_many(index_tmp, alphabet=alphabet, key_function=add_prefix)
+        self.check_dict_methods(rec_dict, key_list, id_list)
+        os.remove(index_tmp)
         #Done
     
     def check_dict_methods(self, rec_dict, keys, ids):

@@ -759,6 +759,8 @@ def index(filename, format, alphabet=None, key_function=None):
     would impose a severe performance penalty as it would require the file
     to be completely parsed while building the index. Right now this is
     usually avoided.
+    
+    See also: Bio.SeqIO.index_many() and Bio.SeqIO.to_dict()
     """
     #Try and give helpful error messages:
     if not isinstance(filename, basestring):
@@ -776,6 +778,67 @@ def index(filename, format, alphabet=None, key_function=None):
     #Map the file format to a sequence iterator:    
     import _index #Lazy import
     return _index._IndexedSeqFileDict(filename, format, alphabet, key_function)
+
+def index_many(index_filename, filenames=None, format=None, alphabet=None,
+               key_function=None):
+    """Index several sequence files and return a dictionary like object.
+
+    The index is stored in an SQLite database rather than in memory (as in the
+    Bio.SeqIO.index(...) function).
+    
+     - index_filename - Where to store the SQLite index
+     - filenames - list of strings specifying file(s) to be indexed
+                  (optional if reloading an existing index, but must match)
+     - format   - lower case string describing the file format
+                  (optional if reloading an existing index, but must match)
+     - alphabet - optional Alphabet object, useful when the sequence type
+                  cannot be automatically inferred from the file itself
+                  (e.g. format="fasta" or "tab")
+     - key_function - Optional callback function which when given a
+                  SeqRecord identifier string should return a unique
+                  key for the dictionary.
+    
+    This indexing function will return a dictionary like object, giving the
+    SeqRecord objects as values:
+
+    >>> from Bio.Alphabet import generic_protein
+    >>> from Bio import SeqIO
+    >>> files = ["GenBank/NC_000932.faa", "GenBank/NC_005816.faa"]
+    >>> def get_gi(name):
+    ...     parts = name.split("|")
+    ...     i = parts.index("gi")
+    ...     assert i != -1
+    ...     return parts[i+1]
+    >>> idx_name = ":memory:" #use an in memory SQLite DB for this test
+    >>> records = SeqIO.index_many(idx_name, files, "fasta", generic_protein, get_gi)
+    >>> len(records)
+    95
+    >>> records["7525076"].description
+    'gi|7525076|ref|NP_051101.1| Ycf2 [Arabidopsis thaliana]'
+    >>> records["45478717"].description
+    'gi|45478717|ref|NP_995572.1| pesticin [Yersinia pestis biovar Microtus str. 91001]'
+
+    In this example the two files contain 85 and 10 records respectively.
+    
+    See also: Bio.SeqIO.index() and Bio.SeqIO.to_dict()
+    """
+    #Try and give helpful error messages:
+    if not isinstance(index_filename, basestring):
+        raise TypeError("Need a string for the index filename")
+    if filenames is not None and not isinstance(filenames, list):
+        raise TypeError("Need a list of filenames (as strings)")
+    if format is not None and not isinstance(format, basestring):
+        raise TypeError("Need a string for the file format (lower case)")
+    if format and format != format.lower():
+        raise ValueError("Format string '%s' should be lower case" % format)
+    if alphabet is not None and not (isinstance(alphabet, Alphabet) or \
+                                     isinstance(alphabet, AlphabetEncoder)):
+        raise ValueError("Invalid alphabet, %s" % repr(alphabet))
+
+    #Map the file format to a sequence iterator:    
+    import _index #Lazy import
+    return _index._SQLiteManySeqFilesDict(index_filename, filenames, format,
+                                          alphabet, key_function)
 
 def to_alignment(sequences, alphabet=None, strict=True):
     """Returns a multiple sequence alignment (DEPRECATED).
