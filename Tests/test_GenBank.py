@@ -3,11 +3,7 @@
 """
 # standard library
 import os
-import copy
 import cStringIO
-
-# Biopython
-from Bio import File
 
 # GenBank stuff to test
 from Bio import GenBank
