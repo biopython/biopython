@@ -419,7 +419,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         file_number, offset = row
         proxies = self._proxies
         if file_number in proxies:
-            record = proxies[file_number].get_raw(offset)
+            return proxies[file_number].get_raw(offset)
         else:
             #This code is duplicated from __getitem__ to avoid a function call
             if len(proxies) >= self._max_open:
