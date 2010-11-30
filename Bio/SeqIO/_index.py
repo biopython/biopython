@@ -608,16 +608,25 @@ class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
         marker_re = self._marker_re
         handle = self._handle
         handle.seek(0)
+        #Skip and header before first record
         while True:
-            offset = handle.tell()
+            start_offset = handle.tell()
             line = handle.readline()
-            if marker_re.match(line):
-                #Here we can assume the record.id is the first word after the
-                #marker. This is generally fine... but not for GenBank, EMBL, Swiss
-                yield line[marker_offset:].strip().split(None, 1)[0], offset, 0
-            elif not line:
-                #End of file
+            if not line or marker_re.match(line):
                 break
+        #Should now be at the start of a record, or end of the file
+        while marker_re.match(line):
+            #Here we can assume the record.id is the first word after the
+            #marker. This is generally fine... but not for GenBank, EMBL, Swiss
+            id = line[marker_offset:].strip().split(None, 1)[0]
+            while True:
+                end_offset = handle.tell()
+                line = handle.readline()
+                if not line or marker_re.match(line):
+                    yield id, start_offset, end_offset - start_offset
+                    start_offset = end_offset
+                    break
+        assert not line
 
     def get_raw(self, offset):
         """Similar to the get method, but returns the record as a raw string."""
