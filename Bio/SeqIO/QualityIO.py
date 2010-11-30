@@ -1195,17 +1195,20 @@ def FastqIlluminaIterator(handle, alphabet = single_letter_alphabet, title2ids =
     For each sequence in Illumina 1.3+ FASTQ files there is a matching string
     encoding PHRED integer qualities using ASCII values with an offset of 64.
 
+    >>> from Bio import SeqIO
+    >>> record = SeqIO.read(open("Quality/illumina_faked.fastq"), "fastq-illumina")
+    >>> print record.id, record.seq
+    Test ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTN
+    >>> max(record.letter_annotations["phred_quality"])
+    40
+    >>> min(record.letter_annotations["phred_quality"])
+    0
+
     NOTE - Older versions of the Solexa/Illumina pipeline encoded Solexa scores
     with an ASCII offset of 64. They are approximately equal but only for high
-    qaulity reads. If you have an old Solexa/Illumina file with negative
+    quality reads. If you have an old Solexa/Illumina file with negative
     Solexa scores, and try and read this as an Illumina 1.3+ file it will fail:
 
-    >>> from Bio import SeqIO
-    >>> record = SeqIO.read(open("Quality/solexa_faked.fastq"), "fastq-solexa")
-    >>> print record.id, record.seq
-    slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNN
-    >>> print record.letter_annotations["solexa_quality"]
-    [40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
     >>> record2 = SeqIO.read(open("Quality/solexa_faked.fastq"), "fastq-illumina")
     Traceback (most recent call last):
        ...
