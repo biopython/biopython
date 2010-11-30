@@ -18,11 +18,13 @@ An explicit warning was added to setup.py for Biopython 1.55 and 1.56.
 
 Bio.Encodings
 =============
-Explicitly declared obsolete in Release 1.55, and deprecated in Release 1.56.
+Explicitly declared obsolete in Release 1.55, deprecated in Release 1.56, and
+removed in Release 1.57.
 
 Bio.PropertyManager
 ===================
-Explicitly declared obsolete in Release 1.55, and deprecated in Release 1.56.
+Explicitly declared obsolete in Release 1.55, deprecated in Release 1.56, and
+removed in Release 1.57.
 
 Bio.InterPro
 ============
@@ -148,8 +150,8 @@ Release 1.55 final, accessing the .data property gives a DeprecationWarning.
 
 Bio.Transcribe and Bio.Translate
 ================================
-Declared obsolete in Release 1.49, deprecated in Release 1.51.
-Please use the methods or functions in Bio.Seq instead.
+Declared obsolete in Release 1.49, deprecated in Release 1.51, and removed
+in Release 1.57. Please use the methods or functions in Bio.Seq instead.
 
 Bio.mathfns, Bio.stringfns and Bio.listfns (and their C code variants)
 ==========================================
@@ -425,8 +427,8 @@ Bio.utils
 Functions 'translate', 'translate_to_stop', 'back_translate', 'transcribe',
 and 'back_transcribe' were deprecated in Release 1.49, and removed in Release
 1.53. Function 'ungap' was deprecated in Release 1.53. Use Bio.Seq instead.
-The whole of Bio.utils was declared obsolete in Release 1.55, and deprecated
-in Biopython 1.56.
+The whole of Bio.utils was declared obsolete in Release 1.55, deprecated in
+Release 1.56, and removed in Release 1.57.
 
 Bio.Motif
 =========
