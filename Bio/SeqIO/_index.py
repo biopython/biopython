@@ -37,9 +37,10 @@ from Bio import Alphabet
 class _IndexedSeqFileDict(UserDict.DictMixin):
     """Read only dictionary interface to a sequential sequence file.
 
-    Keeps the keys in memory, reads the file to access entries as
-    SeqRecord objects using Bio.SeqIO for parsing them. This approach
-    is memory limited, but will work even with millions of sequences.
+    Keeps the keys and associated file offsets in memory, reads the file to
+    access entries as SeqRecord objects using Bio.SeqIO for parsing them.
+    This approach is memory limited, but will work even with millions of
+    sequences.
 
     Note - as with the Bio.SeqIO.to_dict() function, duplicate keys
     (record identifiers by default) are not allowed. If this happens,
@@ -65,11 +66,14 @@ class _IndexedSeqFileDict(UserDict.DictMixin):
         self._proxy = random_access_proxy
         self._key_function = key_function
         if key_function:
-            offset_iter = ((key_function(k),o) for (k,o) in random_access_proxy)
+            offset_iter = ((key_function(k),o,l) for (k,o,l) in random_access_proxy)
         else:
             offset_iter = random_access_proxy
         offsets = {}
-        for key, offset in offset_iter:
+        for key, offset, length in offset_iter:
+            #Note - we don't store the length because I want to minimise the
+            #memory requirements. With the SQLite backend the length is kept
+            #and is used to speed up the get_raw method (by about 3 times).
             if key in offsets:
                 raise ValueError("Duplicate key '%s'" % key)
             else:
@@ -303,22 +307,22 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             #TODO - Record the alphabet?
             #TODO - Record the file size and modified date?
             con.execute("CREATE TABLE file_data (file_number INTEGER, name TEXT);")
-            con.execute("CREATE TABLE offset_data (key TEXT, file_number INTEGER, offset INTEGER);")
+            con.execute("CREATE TABLE offset_data (key TEXT, file_number INTEGER, offset INTEGER, length INTEGER);")
             count = 0
             for i, filename in enumerate(filenames):
                 con.execute("INSERT INTO file_data (file_number, name) VALUES (?,?);",
                             (i, filename))
                 random_access_proxy = proxy_class(filename, format, alphabet)
                 if key_function:
-                    offset_iter = ((key_function(k),i,o) for (k,o) in random_access_proxy)
+                    offset_iter = ((key_function(k),i,o,l) for (k,o,l) in random_access_proxy)
                 else:
-                    offset_iter = ((k,i,o) for (k,o) in random_access_proxy)
+                    offset_iter = ((k,i,o,l) for (k,o,l) in random_access_proxy)
                 while True:
                     batch = list(itertools.islice(offset_iter, 100))
                     if not batch: break
                     #print "Inserting batch of %i offsets, %s ... %s" \
                     # % (len(batch), batch[0][0], batch[-1][0])
-                    con.executemany("INSERT INTO offset_data (key,file_number,offset) VALUES (?,?,?);",
+                    con.executemany("INSERT INTO offset_data (key,file_number,offset,length) VALUES (?,?,?,?);",
                                     batch)
                     con.commit()
                     count += len(batch)
@@ -413,13 +417,19 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         NOTE - This functionality is not supported for every file format.
         """
         #Pass the offset to the proxy
-        row = self._con.execute("SELECT file_number, offset FROM offset_data WHERE key=?;",
+        row = self._con.execute("SELECT file_number, offset, length FROM offset_data WHERE key=?;",
                                 (key,)).fetchone()
         if not row: raise KeyError
-        file_number, offset = row
+        file_number, offset, length = row
         proxies = self._proxies
         if file_number in proxies:
-            return proxies[file_number].get_raw(offset)
+            if length:
+                #Shortcut if we have the length
+                h = proxies[file_number]._handle
+                h.seek(offset)
+                return h.read(length)
+            else:
+                return proxies[file_number].get_raw(offset)
         else:
             #This code is duplicated from __getitem__ to avoid a function call
             if len(proxies) >= self._max_open:
@@ -430,7 +440,13 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                         self._filenames[file_number],
                         self._format, self._alphabet)
             proxies[file_number] = proxy
-            return proxy.get_raw(offset)
+            if length:
+                #Shortcut if we have the length
+                h = proxy._handle
+                h.seek(offset)
+                return h.read(length)
+            else:
+                return proxy.get_raw(offset)
 
 ##############################################################################
 
@@ -513,7 +529,7 @@ class SffRandomAccess(SeqFileRandomAccess):
             count = 0
             try :
                 for name, offset in SeqIO.SffIO._sff_read_roche_index(handle) :
-                    yield name, offset
+                    yield name, offset, 0
                     count += 1
                 assert count == number_of_reads, \
                        "Indexed %i records, expected %i" \
@@ -531,7 +547,7 @@ class SffRandomAccess(SeqFileRandomAccess):
         #Fall back on the slow way!
         count = 0
         for name, offset in SeqIO.SffIO._sff_do_slow_index(handle) :
-            yield name, offset
+            yield name, offset, 0
             count += 1
         assert count == number_of_reads, \
                "Indexed %i records, expected %i" % (count, number_of_reads)
@@ -598,7 +614,7 @@ class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
             if marker_re.match(line):
                 #Here we can assume the record.id is the first word after the
                 #marker. This is generally fine... but not for GenBank, EMBL, Swiss
-                yield line[marker_offset:].strip().split(None, 1)[0], offset
+                yield line[marker_offset:].strip().split(None, 1)[0], offset, 0
             elif not line:
                 #End of file
                 break
@@ -657,7 +673,7 @@ class GenBankRandomAccess(SequentialSeqFileRandomAccess):
                         break
                 if not key:
                     raise ValueError("Did not find ACCESSION/VERSION lines")
-                yield key, offset
+                yield key, offset, 0
             elif not line:
                 #End of file
                 break
@@ -701,11 +717,10 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
                     or marker_re.match(line) \
                     or not line:
                         break
-                yield key, offset
+                yield key, offset, 0
             elif not line:
                 #End of file
                 break
-
 
 
 class SwissRandomAccess(SequentialSeqFileRandomAccess):
@@ -723,11 +738,10 @@ class SwissRandomAccess(SequentialSeqFileRandomAccess):
                 line = handle.readline()
                 assert line.startswith("AC ")
                 key = line[3:].strip().split(";")[0].strip()
-                yield key, offset
+                yield key, offset, 0
             elif not line:
                 #End of file
                 break
-
 
 
 class UniprotRandomAccess(SequentialSeqFileRandomAccess):
@@ -757,7 +771,7 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
                         raise ValueError("Didn't find end of record")
                 if not key:
                     raise ValueError("Did not find <accession> line")
-                yield key, offset
+                yield key, offset, 0
             elif not line:
                 #End of file
                 break
@@ -815,7 +829,7 @@ class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
                     line = handle.readline()
                     if line[0] != ";" and line.strip():
                         key = line.split()[0]
-                        yield key, offset
+                        yield key, offset, 0
                         break
                     if not line:
                         raise ValueError("Premature end of file?")
@@ -856,7 +870,7 @@ class TabRandomAccess(SeqFileRandomAccess):
                 else:
                     raise err
             else:
-                yield key, offset
+                yield key, offset, 0
 
     def get_raw(self, offset):
         """Like the get method, but returns the record as a raw string."""
@@ -888,7 +902,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
         while line:
             #assert line[0]=="@"
             #This record seems OK (so far)
-            yield line[1:].rstrip().split(None, 1)[0], pos
+            yield line[1:].rstrip().split(None, 1)[0], pos, 0
             #Find the seq line(s)
             seq_len = 0
             while line:
