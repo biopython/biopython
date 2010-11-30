@@ -690,42 +690,40 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
         handle = self._handle
         handle.seek(0)
         marker_re = self._marker_re
+        #Skip any header before first record
         while True:
-            offset = handle.tell()
+            start_offset = handle.tell()
             line = handle.readline()
-            if marker_re.match(line):
-                #We cannot assume the record.id is the first word after ID,
-                #normally the SV line is used.
-                if line[2:].count(";") == 6:
-                    #Looks like the semi colon separated style introduced in 2006
-                    parts = line[3:].rstrip().split(";")
-                    if parts[1].strip().startswith("SV "):
-                        #The SV bit gives the version
-                        key = "%s.%s" \
-                              % (parts[0].strip(), parts[1].strip().split()[1])
-                    else:
-                        key = parts[0].strip()
-                elif line[2:].count(";") == 3:
-                    #Looks like the pre 2006 style, take first word only
-                    key = line[3:].strip().split(None,1)[0]
-                else:
-                    raise ValueError('Did not recognise the ID line layout:\n' + line)
-                while True:
-                    line = handle.readline()
-                    if line.startswith("SV "):
-                        key = line.rstrip().split()[1]
-                        break
-                    elif line.startswith("FH ") \
-                    or line.startswith("FT ") \
-                    or line.startswith("SQ ") \
-                    or line.startswith("//") \
-                    or marker_re.match(line) \
-                    or not line:
-                        break
-                yield key, offset, 0
-            elif not line:
-                #End of file
+            if marker_re.match(line) or not line:
                 break
+        #Should now be at the start of a record, or end of the file
+        while marker_re.match(line):
+            #We cannot assume the record.id is the first word after ID,
+            #normally the SV line is used.
+            if line[2:].count(";") == 6:
+                #Looks like the semi colon separated style introduced in 2006
+                parts = line[3:].rstrip().split(";")
+                if parts[1].strip().startswith("SV "):
+                    #The SV bit gives the version
+                    key = "%s.%s" \
+                          % (parts[0].strip(), parts[1].strip().split()[1])
+                else:
+                    key = parts[0].strip()
+            elif line[2:].count(";") == 3:
+                #Looks like the pre 2006 style, take first word only
+                key = line[3:].strip().split(None,1)[0]
+            else:
+                raise ValueError('Did not recognise the ID line layout:\n' + line)
+            while True:
+                end_offset = handle.tell()
+                line = handle.readline()
+                if marker_re.match(line) or not line:
+                    yield key, start_offset, end_offset - start_offset
+                    start_offset = end_offset
+                    break
+                elif line.startswith("SV "):
+                    key = line.rstrip().split()[1]
+        assert not line, repr(line)
 
 
 class SwissRandomAccess(SequentialSeqFileRandomAccess):
