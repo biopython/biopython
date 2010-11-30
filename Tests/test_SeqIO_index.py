@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Additional unit tests for Bio.SeqIO.index(...) function."""
+"""Unit tests for Bio.SeqIO.index(...) and index_many() functions."""
 import sys
 if sys.version_info[0] >= 3:
     from Bio import MissingExternalDependencyError
@@ -22,7 +22,7 @@ except ImportError:
 
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
-from Bio.SeqIO._index import _FormatToIndexedDict
+from Bio.SeqIO._index import _FormatToRandomAccess
 from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
 from seq_tests_common import compare_record
@@ -33,13 +33,16 @@ def add_prefix(key):
 
 class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
+
     def simple_check(self, filename, format, alphabet):
         if format in SeqIO._BinaryFormats:
             mode = "rb"
         else :
             mode = "r"
+
         id_list = [rec.id for rec in \
                    SeqIO.parse(open(filename, mode), format, alphabet)]
+
         #Without key_function
         rec_dict = SeqIO.index(filename, format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
@@ -127,17 +130,17 @@ class IndexDictTests(unittest.TestCase):
                 handle = StringIO(raw)
             if format == "sff":
                 rec2 = SeqIO.SffIO._sff_read_seq_record(handle,
-                            rec_dict._flows_per_read,
-                            rec_dict._flow_chars,
-                            rec_dict._key_sequence,
-                            rec_dict._alphabet,
+                            rec_dict._proxy._flows_per_read,
+                            rec_dict._proxy._flow_chars,
+                            rec_dict._proxy._key_sequence,
+                            rec_dict._proxy._alphabet,
                             trim=False)
             elif format == "sff-trim":
                 rec2 = SeqIO.SffIO._sff_read_seq_record(handle,
-                            rec_dict._flows_per_read,
-                            rec_dict._flow_chars,
-                            rec_dict._key_sequence,
-                            rec_dict._alphabet,
+                            rec_dict._proxy._flows_per_read,
+                            rec_dict._proxy._flow_chars,
+                            rec_dict._proxy._key_sequence,
+                            rec_dict._proxy._alphabet,
                             trim=True)
             elif format == "uniprot-xml":
                 #Currently the __getitem__ method uses this
@@ -220,7 +223,7 @@ tests = [
     ("Roche/paired.sff", "sff-trim", None),
     ]
 for filename, format, alphabet in tests:
-    assert format in _FormatToIndexedDict
+    assert format in _FormatToRandomAccess
 
     #TODO - remove this hack once we drop Python 2.4
     if format=="uniprot-xml" and SeqIO.UniprotIO.ElementTree is None:
