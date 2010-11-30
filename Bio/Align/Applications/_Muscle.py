@@ -8,7 +8,7 @@
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
 class MuscleCommandline(AbstractCommandline):
-    """Command line wrapper for the multiple alignment program MUSCLE.
+    r"""Command line wrapper for the multiple alignment program MUSCLE.
 
     http://www.drive5.com/muscle/
 
