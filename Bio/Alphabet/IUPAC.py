@@ -95,37 +95,3 @@ unambiguous_rna = IUPACUnambiguousRNA()
 #    #   D == 5,6-dihydrouridine
 #    #   S == thiouridine
 #    #   W == wyosine
-
-
-# ====================================================================
-# TODO - Remove all the following code using now deprecated modules
-# Bio.PropertyManager, Bio.Encoding (all used by Bio.utils)
-#
-# We need to load the property resolution information, but we need to
-# wait until after the systems have been loaded. (There's a nasty loop
-# where, eg, translation objects need an alphabet, which need to be
-# assocated with translators.)
-
-from Bio.PropertyManager import default_manager
-
-def _bootstrap(manager, klass, property):
-    assert manager is default_manager
-    del default_manager.class_resolver[IUPACProtein]
-    del default_manager.class_resolver[ExtendedIUPACProtein]
-    del default_manager.class_resolver[IUPACAmbiguousDNA]
-    del default_manager.class_resolver[IUPACUnambiguousDNA]
-    del default_manager.class_resolver[ExtendedIUPACDNA]
-    del default_manager.class_resolver[IUPACAmbiguousRNA]
-    del default_manager.class_resolver[IUPACUnambiguousRNA]
-
-    from Bio.Encodings import IUPACEncoding
-
-    return manager.resolve_class(klass, property)
-
-default_manager.class_resolver[IUPACProtein] = _bootstrap
-default_manager.class_resolver[ExtendedIUPACProtein] = _bootstrap
-default_manager.class_resolver[IUPACAmbiguousDNA] = _bootstrap
-default_manager.class_resolver[IUPACUnambiguousDNA] = _bootstrap
-default_manager.class_resolver[ExtendedIUPACDNA] = _bootstrap
-default_manager.class_resolver[IUPACAmbiguousRNA] = _bootstrap
-default_manager.class_resolver[IUPACUnambiguousRNA] = _bootstrap

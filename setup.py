@@ -220,7 +220,6 @@ PACKAGES = [
     'Bio.Crystal',
     'Bio.Data',
     'Bio.Emboss',
-    'Bio.Encodings',
     'Bio.Entrez',
     'Bio.Enzyme',
     'Bio.ExPASy',
