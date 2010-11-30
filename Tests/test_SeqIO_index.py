@@ -176,6 +176,8 @@ class IndexDictTests(unittest.TestCase):
                             rec_dict._proxy._alphabet,
                             trim=True)
             elif format == "uniprot-xml":
+                self.assertTrue(raw.startswith("<entry "))
+                self.assertTrue(raw.endswith("</entry>"))
                 #Currently the __getitem__ method uses this
                 #trick too, but we hope to fix that later
                 raw = """<?xml version='1.0' encoding='UTF-8'?>

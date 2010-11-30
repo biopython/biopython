@@ -761,31 +761,38 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
         handle = self._handle
         handle.seek(0)
         marker_re = self._marker_re
+        #Skip any header before first record
         while True:
-            offset = handle.tell()
+            start_offset = handle.tell()
             line = handle.readline()
-            if marker_re.match(line):
-                #We expect the next line to be <accession>xxx</accession>
-                #but allow it to be later on within the <entry>
-                key = None
-                done = False
-                while True:
-                    line = handle.readline()
-                    if line.startswith("<accession>"):
-                        assert "</accession>" in line, line
-                        key = line[11:].split("<")[0]
-                        break
-                    elif "</entry>" in line:
-                        break
-                    elif marker_re.match(line) or not line:
-                        #Start of next record or end of file
-                        raise ValueError("Didn't find end of record")
-                if not key:
-                    raise ValueError("Did not find <accession> line")
-                yield key, offset, 0
-            elif not line:
-                #End of file
+            if marker_re.match(line) or not line:
                 break
+        #Should now be at the start of a record, or end of the file
+        while marker_re.match(line):
+            #We expect the next line to be <accession>xxx</accession>
+            #but allow it to be later on within the <entry>
+            key = None
+            done = False
+            while True:
+                end_offset = handle.tell()
+                line = handle.readline()
+                if key is None and line.startswith("<accession>"):
+                    assert "</accession>" in line, line
+                    key = line[11:].split("<")[0]
+                elif "</entry>" in line:
+                    end_offset += line.find("</entry>") + 8
+                    break
+                elif marker_re.match(line) or not line:
+                    #Start of next record or end of file
+                    raise ValueError("Didn't find end of record")
+            if not key:
+                raise ValueError("Did not find <accession> line")
+            yield key, start_offset, end_offset - start_offset
+            #Find start of next record
+            while not marker_re.match(line) and line:
+                start_offset = handle.tell()
+                line = handle.readline()
+        assert not line, repr(line)
     
     def get_raw(self, offset):
         """Similar to the get method, but returns the record as a raw string."""
