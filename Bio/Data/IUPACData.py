@@ -100,7 +100,7 @@ ambiguous_rna_complement = {
 
 def _make_ranges(mydict):
     d = {}
-    for key,value in mydict.iteritems():
+    for key, value in mydict.iteritems():
         d[key] = (value, value)
     return d
 
@@ -114,8 +114,7 @@ unambiguous_dna_weights = {
 unambiguous_dna_weight_ranges = _make_ranges(unambiguous_dna_weights)
 
 unambiguous_rna_weights = {
-    "A": unambiguous_dna_weights["A"] + 16.,
- # 16 for the oxygen
+    "A": unambiguous_dna_weights["A"] + 16.,  # 16 for the oxygen
     "C": unambiguous_dna_weights["C"] + 16.,
     "G": unambiguous_dna_weights["G"] + 16.,
     "U": 340.,
@@ -157,15 +156,13 @@ protein_weights = {
     "L": 131.18,
     "M": 149.21,
     "N": 132.12,
-    #"O": 0.0,
-# Needs to be recorded!
+    #"O": 0.0, # Needs to be recorded!
     "P": 115.13,
     "Q": 146.15,
     "R": 174.20,
     "S": 105.09,
     "T": 119.12,
-    #"U": 168.05,
-# To be confirmed
+    #"U": 168.05, # To be confirmed
     "V": 117.15,
     "W": 204.23,
     "Y": 181.19
