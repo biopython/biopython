@@ -87,6 +87,7 @@ class PDBIO:
         args=(record_type, atom_number, name, altloc, resname, chain_id,
             resseq, icode, x, y, z, occupancy, bfactor, segid,
             element, charge)
+
         return _ATOM_FORMAT_STRING % args
 
     # Public methods
