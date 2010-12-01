@@ -73,10 +73,10 @@ class PDBIO:
         else:
             record_type="ATOM  "
         if atom.element:
-            element = atom.element.strip()
+            element = atom.element.strip().upper()
             if not atom_weigths.has_key(element.capitalize()):
                 raise ValueError("Unrecognised element %s" % repr(atom.element))
-            element = element.upper().rjust(2)
+            element = element.rjust(2)
         else:
             element = "  "
         name=atom.get_fullname()
