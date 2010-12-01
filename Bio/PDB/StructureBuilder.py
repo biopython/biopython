@@ -158,7 +158,7 @@ class StructureBuilder:
         self.residue=residue
 
     def init_atom(self, name, coord, b_factor, occupancy, altloc, fullname,
-                  serial_number=None, element=None):
+                  serial_number=None, element=None, hetero_flag=" "):
         """
         Initiate a new Atom object.
 
@@ -170,6 +170,7 @@ class StructureBuilder:
         o altloc - string, alternative location specifier
         o fullname - string, atom name including spaces, e.g. " CA "
         o element - string, upper case, e.g. "HG" for mercury
+        o hetero_flag - string, empty if ATOM, otherwise HETATM. e.g. " " for CA (C-alpha), "H" for HG (mercury)
         """
         residue=self.residue
         # if residue is None, an exception was generated during
@@ -194,7 +195,7 @@ class StructureBuilder:
                                      self.line_counter),
                                   PDBConstructionWarning)
         atom=self.atom=Atom(name, coord, b_factor, occupancy, altloc,
-                            fullname, serial_number, element)
+                            fullname, serial_number, element, hetero_flag)
         if altloc!=" ":
             # The atom is disordered
             if residue.has_id(name):
