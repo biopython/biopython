@@ -14,7 +14,7 @@ from Bio.Data import IUPACData
 
 class Atom:
     def __init__(self, name, coord, bfactor, occupancy, altloc, fullname, serial_number,
-                 element=None, hetero_flag=' '):
+                 element=None):
         """
         Atom object.
 
@@ -44,9 +44,7 @@ class Atom:
 
         @param element: atom element, e.g. "C" for Carbon, "HG" for mercury,
         @type fullname: uppercase string (or None if unknown)
-
-        @param hetero_flag: ATOM/HETATM source,
-        @type hetero_flag: string, ' ' if ATOM, otherwise HETATM. e.g. " " for CA (C-alpha), "H" for HG (mercury)        
+     
         """
         self.level="A"
         # Reference to the residue 
@@ -67,9 +65,6 @@ class Atom:
         self.serial_number=serial_number
         # Dictionary that keeps addictional properties
         self.xtra={}
-                
-        # Is HETATM?
-        self.hetatm = (hetero_flag != " ")
 
         # Atom Element
         if not element or not IUPACData.atom_weigths.has_key(element):
@@ -84,16 +79,16 @@ class Atom:
             # In cases of MSE for example, that count as HETATM, the elements will come out wrong .. how to fix?
             # Does not work for metals..
 
-            if self.hetatm:
-                putative_element = self.name
+            if self.fullname[0] != " ": # HETATM Non organic elements
+                putative_element = self.name.strip()
             else:
                 # Hs may have digit in [0]
                 if not self.name[0].isdigit():
-                    putative_element = self.name[0] 
+                    putative_element = self.name[0]
                 else:
                     putative_element = self.name[1]
             
-            if IUPACData.atom_weigths.has_key(putative_element):
+            if IUPACData.atom_weigths.has_key(putative_element.capitalize()):
                 warnings.warn("Atom object (name=%s) assigned element %s based on atom name" % (name, putative_element),
                                PDBConstructionWarning)
                 element = putative_element
@@ -106,9 +101,9 @@ class Atom:
 
         # Added by Joao for C.O.M. purposes
         if self.element:
-            self.mass = IUPACData.atom_weigths[self.element]
+            self.mass = IUPACData.atom_weigths[self.element.capitalize()]
         else:
-            self.mass = 'ukn'
+            self.mass = float('NaN')
         
     # Special methods   
 
