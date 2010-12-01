@@ -4,15 +4,17 @@ REMARK 3 DISORDERED ATOM WITH BLANC ALTLOC
 REMARK 4 CHANGE IN RESNAME
 REMARK WAT 67 IS PRESENT TWICE
 REMARK RESIDUE 0 SHOULD GENERATE A POLYPEPTIDE WARNING (DUPLICATED C ATOM)
+REMARK MISSING ELEMENTS IN THE FIRST RESIDUE
 MODEL
-HETATM    1  N   PCA A   1       0.525   2.690  13.317  1.00 20.26           N  
-HETATM    2  CA  PCA A   1      -0.993   2.924  13.160  1.00 21.23           C  
+HETATM    1  N   PCA A   1       0.525   2.690  13.317  1.00 20.26             
+HETATM    2  CA  PCA A   1      -0.993   2.924  13.160  1.00 21.23             
 HETATM    3  CB  PCA A   1      -1.783   1.879  14.043  1.00 24.73           C  
 HETATM    4  CG  PCA A   1      -0.609   1.208  14.621  1.00 22.31           C  
 HETATM    5  CD  PCA A   1       0.869   1.560  14.229  1.00 23.27           C  
 HETATM    6  OE  PCA A   1       2.053   1.323  14.293  1.00 26.24           O  
 HETATM    7  C   PCA A   1      -1.375   4.270  13.719  1.00 19.21           C  
 HETATM    8  O   PCA A   1      -0.389   5.021  14.230  1.00 18.05           O  
+HETATM    8 CA   PCA A   1      -0.189   5.321  14.250  1.00 18.06             
 ENDMDL
 ATOM     22  C   CYS A   0      -3.637   9.026  17.672  1.00 16.22           C  
 ATOM      9  N   ARG A   2      -2.607   4.673  13.504  1.00 20.57           N  
