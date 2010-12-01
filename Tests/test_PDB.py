@@ -54,16 +54,23 @@ class A_ExceptionTest(unittest.TestCase):
             p.get_structure("example", "PDB/a_structure.pdb")
             for wrn, msg in zip(all_warns, [
                 # Expected warning messages:
-                'Atom N defined twice in residue <Residue ARG het=  resseq=2 icode= > at line 19.',
-                'disordered atom found with blank altloc before line 31.',
-                "Residue (' ', 4, ' ') redefined at line 41.",
-                "Blank altlocs in duplicate residue SER (' ', 4, ' ') at line 41.",
-                "Residue (' ', 10, ' ') redefined at line 73.",
-                "Residue (' ', 14, ' ') redefined at line 104.",
-                "Residue (' ', 16, ' ') redefined at line 133.",
-                "Residue (' ', 80, ' ') redefined at line 631.",
-                "Residue (' ', 81, ' ') redefined at line 644.",
-                'Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 820.'
+                "Atom object (name=N) without element or element not recognized ('')",
+                "Atom object (name=N) assigned element N based on atom name",
+                "Atom object (name=CA) without element or element not recognized ('')",
+                "Atom object (name=CA) assigned element C based on atom name",
+                "WARNING: atom names  CA  and CA   differ only in spaces at line 17.",
+                "Atom object (name=CA  ) without element or element not recognized ('')",
+                "Atom object (name=CA  ) assigned element CA based on atom name",
+                'Atom N defined twice in residue <Residue ARG het=  resseq=2 icode= > at line 21.',
+                'disordered atom found with blank altloc before line 33.',
+                "Residue (' ', 4, ' ') redefined at line 43.",
+                "Blank altlocs in duplicate residue SER (' ', 4, ' ') at line 43.",
+                "Residue (' ', 10, ' ') redefined at line 75.",
+                "Residue (' ', 14, ' ') redefined at line 106.",
+                "Residue (' ', 16, ' ') redefined at line 135.",
+                "Residue (' ', 80, ' ') redefined at line 633.",
+                "Residue (' ', 81, ' ') redefined at line 646.",
+                'Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 822.'
                 ]):
                 self.assertTrue(msg in str(wrn))
         finally:
@@ -181,7 +188,7 @@ class ParseTest(unittest.TestCase):
         # Residue ('H_PCA', 1, ' ') contains 8 atoms.
         residue = m0['A'].get_list()[0]
         self.assertEqual(residue.get_id(), ('H_PCA', 1, ' '))
-        self.assertEqual(len(residue), 8)
+        self.assertEqual(len(residue), 9)
         # --- Checking model 1 ---
         m1 = self.structure[1]
         # Model 1 contains 3 chains
@@ -396,9 +403,9 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(len(chain), 1)
         self.assertEqual(" ".join(residue.resname for residue in chain), "PCA")
         self.assertEqual(" ".join(atom.name for atom in chain.get_atoms()),
-                         "N CA CB CG CD OE C O")
+                         "N CA CB CG CD OE C O CA  ")
         self.assertEqual(" ".join(atom.element for atom in chain.get_atoms()),
-                         "N C C C C O C O")
+                         "N C C C C O C O CA")
         #Second model
         model = structure[1]
         self.assertEqual(model.id, 1)
@@ -738,20 +745,19 @@ class Atom_Element(unittest.TestCase):
     
     def setUp(self):
         warnings.simplefilter('ignore', PDBConstructionWarning)
-        pdb_filename = "PDB/1A8O.pdb"
+        pdb_filename = "PDB/a_structure.pdb"
         structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
         warnings.filters.pop()
-        self.model=structure
+        self.residue=structure[0]['A'][('H_PCA', 1, ' ')]
     
     def test_AtomElement(self):
         """ Atom Element """
         
-        struct = self.model
-        
-        atoms = [a for a in struct.get_atoms()]
+        atoms = self.residue.child_list
 
-        self.assertEqual('C', atoms[9].element) # CA
-        self.assertEqual('C', atoms[10].element) # CA
+        self.assertEqual('N', atoms[0].element) # N
+        self.assertEqual('C', atoms[1].element) # Alpha Carbon
+        self.assertEqual('CA', atoms[8].element) # Calcium
         
 # -------------------------------------------------------------
 
