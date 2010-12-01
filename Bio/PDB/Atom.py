@@ -5,18 +5,16 @@
 
 """Atom class, used in Structure objects."""
 
-import warnings
-
 import numpy
 
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.Vector import Vector
-
+from Bio.Data import IUPACData
 
 class Atom:
     def __init__(self, name, coord, bfactor, occupancy, altloc, fullname, serial_number,
-                 element=None):
+                 element=None, hetero_flag=' '):
         """
         Atom object.
 
@@ -46,6 +44,9 @@ class Atom:
 
         @param element: atom element, e.g. "C" for Carbon, "HG" for mercury,
         @type fullname: uppercase string (or None if unknown)
+
+        @param hetero_flag: ATOM/HETATM source,
+        @type hetero_flag: string, ' ' if ATOM, otherwise HETATM. e.g. " " for CA (C-alpha), "H" for HG (mercury)        
         """
         self.level="A"
         # Reference to the residue 
@@ -66,14 +67,48 @@ class Atom:
         self.serial_number=serial_number
         # Dictionary that keeps addictional properties
         self.xtra={}
-        if not element:
-            warnings.warn("Atom object (name=%s) without element" % name,
+                
+        # Is HETATM?
+        self.hetatm = (hetero_flag != " ")
+
+        # Atom Element
+        if not element or not IUPACData.atom_weigths.has_key(element):
+
+            import warnings
+            from PDBExceptions import PDBConstructionWarning
+            warnings.warn("Atom object (name=%s) without element or element not recognized ('%s')" % (name, element),
                           PDBConstructionWarning)
-            element = "?"
-            print name, "--> ?"
-        elif len(element)>2 or element != element.upper() or element != element.strip():
-            raise ValueError(element)
+            
+            # Try to get element from atom name
+            # HETATM check to clear ambiguities (CA: calcium, c/alpha ; HG: mercury, gamma hydrogen ; etc)
+            # In cases of MSE for example, that count as HETATM, the elements will come out wrong .. how to fix?
+            # Does not work for metals..
+
+            if self.hetatm:
+                putative_element = self.name
+            else:
+                # Hs may have digit in [0]
+                if not self.name[0].isdigit():
+                    putative_element = self.name[0] 
+                else:
+                    putative_element = self.name[1]
+            
+            if IUPACData.atom_weigths.has_key(putative_element):
+                warnings.warn("Atom object (name=%s) assigned element %s based on atom name" % (name, putative_element),
+                               PDBConstructionWarning)
+                element = putative_element
+            else:
+                warnings.warn("Atom object (name=%s) element could not be assigned" % (name),
+                               PDBConstructionWarning)
+                element = ""
+
         self.element=element
+
+        # Added by Joao for C.O.M. purposes
+        if self.element:
+            self.mass = IUPACData.atom_weigths[self.element]
+        else:
+            self.mass = 'ukn'
         
     # Special methods   
 
