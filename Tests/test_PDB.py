@@ -733,6 +733,26 @@ class Exposure(unittest.TestCase):
         self.assertEqual(1, len(residues[-1].xtra))
         self.assertEqual(38, residues[-1].xtra["EXP_CN"])
 
+class Atom_Element(unittest.TestCase):
+    """Atom Element from Atom Name"""
+    
+    def setUp(self):
+        warnings.simplefilter('ignore', PDBConstructionWarning)
+        pdb_filename = "PDB/1A8O.pdb"
+        structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
+        warnings.filters.pop()
+        self.model=structure
+    
+    def test_AtomElement(self):
+        """ Atom Element """
+        
+        struct = self.model
+        
+        atoms = [a for a in struct.get_atoms()]
+
+        self.assertEqual('C', atoms[9].element) # CA
+        self.assertEqual('C', atoms[10].element) # CA
+        
 # -------------------------------------------------------------
 
 if __name__ == '__main__':
