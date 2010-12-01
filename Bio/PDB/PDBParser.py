@@ -196,8 +196,10 @@ class PDBParser:
                         self._handle_PDB_exception(message, global_line_counter) 
                 # init atom
                 try:
+                    # Atom is unaware of parent when created.. thus hetero_flag.
+                                        
                     structure_builder.init_atom(name, coord, bfactor, occupancy, altloc,
-                                                fullname, serial_number, element)
+                                                fullname, serial_number, element, hetero_flag)
                 except PDBConstructionException, message:
                     self._handle_PDB_exception(message, global_line_counter)
             elif(record_type=='ANISOU'):
