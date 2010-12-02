@@ -50,7 +50,7 @@ class DialignCommandline(AbstractCommandline):
                     "fragments that are part of the respective optimal "
                     "pairwise alignmnets plus information about "
                     "consistency in the multiple alignment"),
-            _Option(["-fn", "fn"], ["input"],
+            _Option(["-fn", "fn"], [],
                     None,
                     0,
                     "Output files are named <out_file>.<extension>.",
@@ -75,7 +75,7 @@ class DialignCommandline(AbstractCommandline):
                     "at the peptide level (rather than 'mixed alignments' "
                     "as with the '-lgs' option). Therefore faster than "
                     "-lgs but not very sensitive for non-coding regions."),
-            _Option(["-lmax", "lmax"], ["input"],
+            _Option(["-lmax", "lmax"], [],
                     lambda x: isinstance(x, int),
                     0,
                     "Maximum fragment length = x  (default: x = 40 or "
@@ -104,7 +104,7 @@ class DialignCommandline(AbstractCommandline):
                     "sequence tree (instead of UPGMA)."),
             _Switch(["-min_link", "min_link"],
                     "'minimum linkage' clustering used."),
-            _Option(["-mot", "mot"], ["input"],
+            _Option(["-mot", "mot"], [],
                     None, 
                     0,
                     "'motif' option.",
@@ -141,7 +141,7 @@ class DialignCommandline(AbstractCommandline):
                     "(or codon pair) in fragments. Speeds up protein "
                     "alignment or alignment of translated DNA fragments "
                     "at the expense of sensitivity."),
-            _Option(["-stars", "stars"], ["input"],
+            _Option(["-stars", "stars"], [],
                     lambda x: x in range(0,10),
                     0,
                     "Maximum number of `*' characters indicating degree "
@@ -154,7 +154,7 @@ class DialignCommandline(AbstractCommandline):
                     "Standard textual alignment printed (overrides "
                     "suppression of textual alignments in special "
                     "options, e.g. -lgs)"),
-            _Option(["-thr", "thr"], ["input"],
+            _Option(["-thr", "thr"], [],
                     lambda x: isinstance(x, int),
                     0,
                     "Threshold T = x.",
@@ -162,7 +162,7 @@ class DialignCommandline(AbstractCommandline):
             _Switch(["-xfr", "xfr"],
                     "'exclude fragments' - list of fragments can be "
                     "specified that are NOT considered for pairwise alignment"),
-            _Argument(["input"], ["input", "file"], None, 1,
+            _Argument([], ["file"], None, 1,
                       "Input file name. Must be FASTA format")
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)

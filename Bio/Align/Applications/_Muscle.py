@@ -49,39 +49,39 @@ class MuscleCommandline(AbstractCommandline):
         self.parameters = \
            [
             #Can't use "in" as the final alias as this is a reserved word in python:
-            _Option(["-in", "in", "input"], ["input", "file"],
+            _Option(["-in", "in", "input"], ["file"],
                     None, 0, "Input filename",
                     0), #No equate
-            _Option(["-out", "out"], ["output", "file"],
+            _Option(["-out", "out"], ["file"],
                     None, 0, "Output filename",
                     0), #No equate
             _Switch(["-diags", "diags"],
                     "Find diagonals (faster for similar sequences)"),
             _Switch(["-profile", "profile"],
                     "Perform a profile alignment"),
-            _Option(["-in1", "in1"], ["input", "file"],
+            _Option(["-in1", "in1"], ["file"],
                     None, 0,
                     "First input filename for profile alignment",
                     0),
-            _Option(["-in2", "in2"], ["input", "file"],
+            _Option(["-in2", "in2"], ["file"],
                     None, 0,
                     "Second input filename for a profile alignment",
                     0),
             #anchorspacing   Integer              32                 Minimum spacing between
-            _Option(["-anchorspacing", "anchorspacing"], ["input"],
+            _Option(["-anchorspacing", "anchorspacing"], [],
                     lambda x: isinstance(x, int),
                     0,
                     "Minimum spacing between anchor columns",
                     0),
             #center          Floating point       [1]                Center parameter.
             #                                                        Should be negative.
-            _Option(["-center", "center"], ["input"],
+            _Option(["-center", "center"], [],
                     lambda x: isinstance(x, float),
                     0,
                     "Center parameter - should be negative",
                     0),
             #cluster1        upgma                upgmb              Clustering method.
-            _Option(["-cluster1", "cluster1"], ["input"],
+            _Option(["-cluster1", "cluster1"], [],
                     lambda x: x in CLUSTERING_ALGORITHMS, 0,
                     "Clustering method used in iteration 1",
                     0),
@@ -89,13 +89,13 @@ class MuscleCommandline(AbstractCommandline):
             #                neighborjoining                         iteration 1 and 2,
             #                                                        cluster2 in later
             #                                                        iterations.
-            _Option(["-cluster2", "cluster2"], ["input"],
+            _Option(["-cluster2", "cluster2"], [],
                     lambda x: x in CLUSTERING_ALGORITHMS, 0,
                     "Clustering method used in iteration 2",
                     0),
             #diaglength      Integer              24                 Minimum length of
             #                                                        diagonal.
-            _Option(["-diaglength", "diaglength"], ["input"],
+            _Option(["-diaglength", "diaglength"], [],
                     lambda x: isinstance(x, int),
                     0,
                     "Minimum length of diagonal",
@@ -103,7 +103,7 @@ class MuscleCommandline(AbstractCommandline):
             #diagmargin      Integer              5                  Discard this many
             #                                                        positions at ends of
             #                                                        diagonal.
-            _Option(["-diagmargin", "diagmargin"], ["input"],
+            _Option(["-diagmargin", "diagmargin"], [],
                     lambda x: isinstance(x, int),
                     0,
                     "Discard this many positions at ends of diagonal",
@@ -113,7 +113,7 @@ class MuscleCommandline(AbstractCommandline):
             #                kmer20_4
             #                kbit20_3
             #                kmer4_6
-            _Option(["-distance1", "distance1"], ["input"],
+            _Option(["-distance1", "distance1"], [],
                     lambda x: x in DISTANCE_MEASURES_ITER1,
                     0,
                     "Distance measure for iteration 1",
@@ -124,14 +124,14 @@ class MuscleCommandline(AbstractCommandline):
             #                kbit20_3
             #                pctid_kimura
             #                pctid_log
-            _Option(["-distance2", "distance2"], ["input"],
+            _Option(["-distance2", "distance2"], [],
                     lambda x: x in DISTANCE_MEASURES_ITER2,
                     0,
                     "Distance measure for iteration 2",
                     0),
             #gapopen         Floating point       [1]                The gap open score.
             #                                                        Must be negative.
-            _Option(["-gapopen", "gapopen"], ["input"],
+            _Option(["-gapopen", "gapopen"], [],
                     lambda x: isinstance(x, float),
                     0,
                     "Gap open score - negative number",
@@ -139,7 +139,7 @@ class MuscleCommandline(AbstractCommandline):
             #hydro           Integer              5                  Window size for
             #                                                        determining whether a
             #                                                        region is hydrophobic.
-            _Option(["-hydro", "hydro"], ["input"],
+            _Option(["-hydro", "hydro"], [],
                     lambda x: isinstance(x, int),
                     0,
                     "Window size for hydrophobic region",
@@ -147,20 +147,20 @@ class MuscleCommandline(AbstractCommandline):
             #hydrofactor     Floating point       1.2                Multiplier for gap
             #                                                        open/close penalties in
             #                                                        hydrophobic regions.
-            _Option(["-hydrofactor", "hydrofactor"], ["input"],
+            _Option(["-hydrofactor", "hydrofactor"], [],
                     lambda x: isinstance(x, float),
                     0,
                     "Multiplier for gap penalties in hydrophobic regions",
                     0),
             #log             File name            None.              Log file name (delete
             #                                                        existing file).
-            _Option(["-log", "log"], ["output", "file"],
+            _Option(["-log", "log"], ["file"],
                     None, 0,
                     "Log file name",
                     0),
             #loga            File name            None.              Log file name (append
             #                                                        to existing file).
-            _Option(["-loga", "loga"], ["output", "file"],
+            _Option(["-loga", "loga"], ["file"],
                     None, 0,
                     "Log file name (append to existing file)",
                     0),
@@ -169,7 +169,7 @@ class MuscleCommandline(AbstractCommandline):
             #                                                        that allows them to
             #                                                        merge into one
             #                                                        diagonal.
-            _Option(["-maxdiagbreak", "maxdiagbreak"], ["input"],
+            _Option(["-maxdiagbreak", "maxdiagbreak"], [],
                     lambda x: isinstance(x, int),
                     0,
                     "Maximum distance between two diagonals that allows "
@@ -183,14 +183,14 @@ class MuscleCommandline(AbstractCommandline):
             #                                                        are allowed, so 1.5
             #                                                        means one hour and 30
             #                                                        minutes.
-            _Option(["-maxhours", "maxhours"], ["input"],
+            _Option(["-maxhours", "maxhours"], [],
                     lambda x: isinstance(x, float),
                     0,
                     "Maximum time to run in hours",
                     0),
             #maxiters        Integer 1, 2 ...     16                 Maximum number of
             #                                                        iterations.
-            _Option(["-maxiters", "maxiters"], ["input"],
+            _Option(["-maxiters", "maxiters"], [],
                     lambda x: isinstance(x, int),
                     0,
                     "Maximum number of iterations",
@@ -198,7 +198,7 @@ class MuscleCommandline(AbstractCommandline):
             #maxtrees        Integer              1                  Maximum number of new
             #                                                        trees to build in
             #                                                        iteration 2.
-            _Option(["-maxtrees", "maxtrees"], ["input"],
+            _Option(["-maxtrees", "maxtrees"], [],
                     lambda x: isinstance(x, int),
                     0,
                     "Maximum number of trees to build in iteration 2",
@@ -206,7 +206,7 @@ class MuscleCommandline(AbstractCommandline):
             #minbestcolscore Floating point       [1]                Minimum score a column
             #                                                        must have to be an
             #                                                        anchor.
-            _Option(["-minbestcolscore", "minbestcolscore"], ["input"],
+            _Option(["-minbestcolscore", "minbestcolscore"], [],
                     lambda x: isinstance(x, float),
                     0,
                     "Minimum score a column must have to be an anchor",
@@ -214,7 +214,7 @@ class MuscleCommandline(AbstractCommandline):
             #minsmoothscore  Floating point       [1]                Minimum smoothed score
             #                                                        a column must have to
             #                                                        be an anchor.
-            _Option(["-minsmoothscore", "minsmoothscore"], ["input"],
+            _Option(["-minsmoothscore", "minsmoothscore"], [],
                     lambda x: isinstance(x, float),
                     0,
                     "Minimum smoothed score a column must have to "
@@ -233,13 +233,13 @@ class MuscleCommandline(AbstractCommandline):
             #                                                        ps=average profile-
             #                                                        sequence score.
             #                                                        xp=cross profile score.
-            _Option(["-objscore", "objscore"], ["input"],
+            _Option(["-objscore", "objscore"], [],
                     lambda x: x in OBJECTIVE_SCORES,
                     0,
                     "Objective score used by tree dependent refinement",
                     0),
             #root1           pseudo               psuedo             Method used to root
-            _Option(["-root1", "root1"], ["input"],
+            _Option(["-root1", "root1"], [],
                     lambda x: x in TREE_ROOT_METHODS,
                     0,
                     "Method used to root tree in iteration 1",
@@ -248,7 +248,7 @@ class MuscleCommandline(AbstractCommandline):
             #                minavgleafdist                          iteration 1 and 2,
             #                                                        root2 in later
             #                                                        iterations.
-            _Option(["-root2", "root2"], ["input"],
+            _Option(["-root2", "root2"], [],
                     lambda x: x in TREE_ROOT_METHODS,
                     0,
                     "Method used to root tree in iteration 2",
@@ -256,7 +256,7 @@ class MuscleCommandline(AbstractCommandline):
             #seqtype         protein              auto               Sequence type.
             #                nucleo
             #                auto
-            _Option(["-seqtype", "seqtype"], ["input"],
+            _Option(["-seqtype", "seqtype"], [],
                     lambda x: x in SEQUENCE_TYPES,
                     0,
                     "Sequence type",
@@ -264,14 +264,14 @@ class MuscleCommandline(AbstractCommandline):
             #smoothscoreceil Floating point       [1]                Maximum value of column
             #                                                        score for smoothing
             #                                                        purposes.
-            _Option(["-smoothscoreceil", "smoothscoreceil"], ["input"],
+            _Option(["-smoothscoreceil", "smoothscoreceil"], [],
                     lambda x: isinstance(x, float),
                     0,
                     "Maximum value of column score for smoothing",
                     0),
             #smoothwindow    Integer              7                  Window used for anchor
             #                                                        column smoothing.
-            _Option(["-smoothwindow", "smoothwindow"], ["input"],
+            _Option(["-smoothwindow", "smoothwindow"], [],
                     lambda x: isinstance(x, int),
                     0,
                     "Window used for anchor column smoothing",
@@ -283,13 +283,13 @@ class MuscleCommandline(AbstractCommandline):
             #                                                        (SUEFF) vs. nearest-
             #                                                        neighbor linkage (1
             #                                                        SUEFF).
-            _Option(["-sueff", "sueff"], ["input"],
+            _Option(["-sueff", "sueff"], [],
                     lambda x: isinstance(x, float),
                     0,
                     "Constant used in UPGMB clustering",
                     0),
             #tree1           File name            None               Save tree produced in
-            _Option(["-tree1", "tree1"], ["input"],
+            _Option(["-tree1", "tree1"], [],
                     None, 0,
                     "Save Newick tree from iteration 1",
                     0),
@@ -297,12 +297,12 @@ class MuscleCommandline(AbstractCommandline):
             #                                                        iteration to given file
             #                                                        in Newick (Phylip-
             #                                                        compatible) format.
-            _Option(["-tree2", "tree2"], ["input"],
+            _Option(["-tree2", "tree2"], [],
                     None, 0,
                     "Save Newick tree from iteration 2",
                     0),
             #weight1         none                 clustalw           Sequence weighting
-            _Option(["-weight1", "weight1"], ["input"],
+            _Option(["-weight1", "weight1"], [],
                     lambda x: x in WEIGHTING_SCHEMES,
                     0,
                     "Weighting scheme used in iteration 1",
@@ -325,7 +325,7 @@ class MuscleCommandline(AbstractCommandline):
             #                                                        method.
             #                                                        threeway=Gotoh three-
             #                                                        way method.
-            _Option(["-weight2", "weight2"], ["input"],
+            _Option(["-weight2", "weight2"], [],
                     lambda x: x in WEIGHTING_SCHEMES,
                     0,
                     "Weighting scheme used in iteration 2",
@@ -371,33 +371,33 @@ class MuscleCommandline(AbstractCommandline):
             _Switch(["-phys", "phys"],
                     "Write output in PHYLIP sequential format"),
             ################## Additional specified output files #########
-            _Option(["-phyiout", "phyiout"], ["output", "file"],
+            _Option(["-phyiout", "phyiout"], ["file"],
                     None, 0,
                     "Write PHYLIP interleaved output to specified filename",
                     0), #No equate
-            _Option(["-physout", "physout"], ["output", "file"],
+            _Option(["-physout", "physout"], ["file"],
                     None, 0,
                     "Write PHYLIP sequential format to specified filename",
                     0), #No equate
-            _Option(["-htmlout", "htmlout"], ["output", "file"],
+            _Option(["-htmlout", "htmlout"], ["file"],
                     None, 0,
                     "Write HTML output to specified filename",
                     0), #No equate
-            _Option(["-clwout", "clwout"], ["output", "file"],
+            _Option(["-clwout", "clwout"], ["file"],
                     None, 0,
                     "Write CLUSTALW output (with MUSCLE header) to specified "
                     "filename",
                     0), #No equate
-            _Option(["-clwstrictout", "clwstrictout"], ["output", "file"],
+            _Option(["-clwstrictout", "clwstrictout"], ["file"],
                     None, 0,
                     "Write CLUSTALW output (with version 1.81 header) to "
                     "specified filename",
                     0), #No equate
-            _Option(["-msfout", "msfout"], ["output", "file"],
+            _Option(["-msfout", "msfout"], ["file"],
                     None, 0,
                     "Write MSF format output to specified filename",
                     0), #No equate
-            _Option(["-fastaout", "fastaout"], ["output", "file"],
+            _Option(["-fastaout", "fastaout"], ["file"],
                     None, 0,
                     "Write FASTA format output to specified filename",
                     0), #No equate

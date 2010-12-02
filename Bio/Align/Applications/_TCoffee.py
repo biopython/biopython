@@ -25,7 +25,7 @@ class TCoffeeCommandline(AbstractCommandline):
 
     def __init__(self, cmd="t_coffee", **kwargs):
         self.parameters = \
-          [_Option(["-output", "output"], ["output"],
+          [_Option(["-output", "output"], [],
                     None,
                     0,
                     "Specify the output type. "
@@ -34,45 +34,45 @@ class TCoffeeCommandline(AbstractCommandline):
                     "'pir_aln', 'fasta_aln', 'phylip', 'pir_seq', 'fasta_seq'"
                     "Note that biopython will only read clustalw, pir, and fasta",
                     0),
-           _Option(["-infile", "infile"], ["input"],
+           _Option(["-infile", "infile"], ["file"],
                     None,
                     1,
                     "Specify the input file.",
                     0,),
            #Indicates the name of the alignment output by t_coffee. If the
            #default is used, the alignment is named <your sequences>.aln
-           _Option(["-outfile", "outfile"], ["output"],
+           _Option(["-outfile", "outfile"], ["file"],
                     None,
                     0,
                     "Specify the output file. Default: <your sequences>.aln",
                     0),
            _Switch(["-convert", "convert"],
                     "Specify you want to perform a file conversion"),
-           _Option(["-type", "type"], ["input"],
+           _Option(["-type", "type"], [],
                     lambda x: x in self.SEQ_TYPES,
                     0,
                     "Specify the type of sequence being aligned",
                     0),
-           _Option(["-outorder", "outorder"], ["input"],
+           _Option(["-outorder", "outorder"], [],
                     None,
                     0,
                     "Specify the order of sequence to output"
                     "Either 'input', 'aligned' or <filename> of "
                     "Fasta file with sequence order",
                     0),
-           _Option(["-matrix", "matrix"], ["input"],
+           _Option(["-matrix", "matrix"], [],
                     None,
                     0,
                     "Specify the filename of the substitution matrix to use."
                     "Default: blosum62mt",
                     0),
-           _Option(["-gapopen", "gapopen"], ["input"],
+           _Option(["-gapopen", "gapopen"], [],
                     lambda x: isinstance(x, int),
                     0,
                     "Indicates the penalty applied for opening a gap "
                     "(negative integer)",
                     0),
-           _Option(["-gapext", "gapext"], ["input"],
+           _Option(["-gapext", "gapext"], [],
                     lambda x: isinstance(x, int),
                     0,
                     "Indicates the penalty applied for extending a "
@@ -80,7 +80,7 @@ class TCoffeeCommandline(AbstractCommandline):
                     0),
            _Switch(["-quiet", "quiet"],
                     "Turn off log output"),
-           _Option(["-mode", "mode"], ["input"],
+           _Option(["-mode", "mode"], [],
                     None,
                     0,
                     "Specifies a special mode: genome, quickaln, dali, 3dcoffee",

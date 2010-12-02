@@ -124,20 +124,20 @@ class MafftCommandline(AbstractCommandline):
             #Weighting factor for the consistency term calculated from pairwise
             #alignments. Valid when either of --blobalpair, --localpair, --
             #genafpair, --fastapair or --blastpair is selected. Default: 2.7
-            _Option(["--weighti", "weighti"], ["input"],
+            _Option(["--weighti", "weighti"], [],
                      lambda x: isinstance(x, float), 0,
                      "Weighting factor for the consistency term calculated "
                      "from pairwise alignments. Default: 2.7",
                      0),
             #Guide tree is built number times in the progressive stage. Valid
             #with 6mer distance. Default: 2
-            _Option(["--retree", "retree"], ["input"],
+            _Option(["--retree", "retree"], [],
                      lambda x: isinstance(x, int), 0,
                      "Guide tree is built number times in the progressive "
                      "stage. Valid with 6mer distance. Default: 2",
                      0),
             #Number cycles of iterative refinement are performed. Default: 0
-            _Option(["--maxiterate", "maxiterate"], ["input"],
+            _Option(["--maxiterate", "maxiterate"], [],
                      lambda x: isinstance(x, int), 0,
                      "Number cycles of iterative refinement are performed. "
                      "Default: 0",
@@ -182,7 +182,7 @@ class MafftCommandline(AbstractCommandline):
                     "The PartTree algorithm is used with distances based "
                     "on FASTA. Default: off"),
             #The number of partitions in the PartTree algorithm. Default: 50
-            _Option(["--partsize", "partsize"], ["input"],
+            _Option(["--partsize", "partsize"], [],
                     lambda x: isinstance(x, int), 0,
                     "The number of partitions in the PartTree algorithm. "
                     "Default: 50",
@@ -194,49 +194,49 @@ class MafftCommandline(AbstractCommandline):
                     "Default: the number of input sequences"),
             #**** Parameter ****
             #Gap opening penalty at group-to-group alignment. Default: 1.53
-            _Option(["--op", "op"], ["input"],
+            _Option(["--op", "op"], [],
                     lambda x: isinstance(x, float), 0,
                     "Gap opening penalty at group-to-group alignment. "
                     "Default: 1.53",
                     0),
             #Offset value, which works like gap extension penalty, for group-to-
             #group alignment. Deafult: 0.123
-            _Option(["--ep", "ep"], ["input"],
+            _Option(["--ep", "ep"], [],
                     lambda x: isinstance(x, float), 0,
                     "Offset value, which works like gap extension penalty, "
                     "for group-to- group alignment. Default: 0.123",
                     0),
             #Gap opening penalty at local pairwise alignment. Valid when the --
             #localpair or --genafpair option is selected. Default: -2.00
-            _Option(["--lop", "lop"], ["input"],
+            _Option(["--lop", "lop"], [],
                     lambda x: isinstance(x, float), 0,
                     "Gap opening penalty at local pairwise alignment. "
                     "Default: 0.123",
                     0),
             #Offset value at local pairwise alignment. Valid when the --
             #localpair or --genafpair option is selected. Default: 0.1
-            _Option(["--lep", "lep"], ["input"],
+            _Option(["--lep", "lep"], [],
                     lambda x: isinstance(x, float), 0,
                     "Offset value at local pairwise alignment. "
                     "Default: 0.1",
                     0),
             #Gap extension penalty at local pairwise alignment. Valid when the -
             #-localpair or --genafpair option is selected. Default: -0.1
-            _Option(["--lexp", "lexp"], ["input"],
+            _Option(["--lexp", "lexp"], [],
                     lambda x: isinstance(x, float), 0,
                     "Gap extension penalty at local pairwise alignment. "
                     "Default: -0.1",
                     0),
             #Gap opening penalty to skip the alignment. Valid when the --
             #genafpair option is selected. Default: -6.00
-            _Option(["--LOP", "LOP"], ["input"],
+            _Option(["--LOP", "LOP"], [],
                     lambda x: isinstance(x, float), 0,
                     "Gap opening penalty to skip the alignment. "
                     "Default: -6.00",
                     0),
             #Gap extension penalty to skip the alignment. Valid when the --
             #genafpair option is selected. Default: 0.00
-            _Option(["--LEXP", "LEXP"], ["input"],
+            _Option(["--LEXP", "LEXP"], [],
                     lambda x: isinstance(x, float),
                     0,
                     "Gap extension penalty to skip the alignment. "
@@ -245,19 +245,19 @@ class MafftCommandline(AbstractCommandline):
 
             #BLOSUM number matrix (Henikoff and Henikoff 1992) is used.
             #number=30, 45, 62 or 80. Default: 62
-            _Option(["--bl", "bl"], ["input"],
+            _Option(["--bl", "bl"], [],
                     lambda x: x in BLOSUM_MATRICES, 0,
                     "BLOSUM number matrix is used. Default: 62",
                     0),
             #JTT PAM number (Jones et al. 1992) matrix is used. number>0.
             #Default: BLOSUM62
-            _Option(["--jtt", "jtt"], ["input"], None, 0,
+            _Option(["--jtt", "jtt"], [], None, 0,
                     "JTT PAM number (Jones et al. 1992) matrix is used. "
                     "number>0. Default: BLOSUM62",
                     0),
             #Transmembrane PAM number (Jones et al. 1994) matrix is used.
             #number>0. Default: BLOSUM62
-            _Option(["--tm", "tm"], ["input"],
+            _Option(["--tm", "tm"], [],
                     os.path.exists, 0,
                     "Transmembrane PAM number (Jones et al. 1994) "
                     "matrix is used. number>0. Default: BLOSUM62",
@@ -265,7 +265,7 @@ class MafftCommandline(AbstractCommandline):
             #Use a user-defined AA scoring matrix. The format of matrixfile is
             #the same to that of BLAST. Ignored when nucleotide sequences are
             #input. Default: BLOSUM62
-            _Option(["--aamatrix", "aamatrix"], ["input"],
+            _Option(["--aamatrix", "aamatrix"], [],
                     os.path.exists, 0,
                     "Use a user-defined AA scoring matrix. "
                     "Default: BLOSUM62",
@@ -309,7 +309,7 @@ class MafftCommandline(AbstractCommandline):
             # form: "mafft --seed align1 --seed align2 [etc] input"
             # Effectively for n number of seed alignments. Here we're going to
             # assume 6 extra are enough
-            _Option(["--seed", "seed"], ["input", "file"], os.path.exists, 0,
+            _Option(["--seed", "seed"], ["file"], os.path.exists, 0,
                     "Seed alignments given in alignment_n (fasta format) "
                     "are aligned with sequences in input.",
                     0),
@@ -322,12 +322,12 @@ class MafftCommandline(AbstractCommandline):
             #assigned to the value?
             ####################### END SEEDS  ################################
             #The input (must be FASTA format)
-            _Argument(["input"], ["input"], os.path.exists, 1,
+            _Argument(["input"], ["file"], os.path.exists, 1,
                       "Input file name"),
             ###################################################################
             #mafft-profile takes a second alignment input as an argument:
             #mafft-profile align1 align2
-            _Argument(["input1"], ["input"], os.path.exists, 0,
+            _Argument(["input1"], ["file"], os.path.exists, 0,
                       "Second input file name for the mafft-profile command")
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)

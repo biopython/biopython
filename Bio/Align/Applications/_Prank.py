@@ -30,28 +30,28 @@ class PrankCommandline(AbstractCommandline):
             [
             ################## input/output parameters: ##################
             #-d=sequence_file
-            _Option(["-d", "d"], ["input", "file"],
+            _Option(["-d", "d"], ["file"],
                     None, 1, "Input filename"),
             #-t=tree_file [default: no tree, generate approximate NJ tree]
-            _Option(["-t", "t"], ["input", "file"],
+            _Option(["-t", "t"], ["file"],
                     None, 0, "Input guide tree filename"),
             #-tree="tree_string" [tree in newick format; in double quotes]
-            _Option(["-tree", "tree"], ["input"],
+            _Option(["-tree", "tree"], [],
                     None, 0,
                     "Input guide tree as Newick string"),
             #-m=model_file [default: HKY2/WAG]
-            _Option(["-m", "m"], ["input"],
+            _Option(["-m", "m"], [],
                     None, 0,
                     "User-defined alignment model filename. Default: "
                     "HKY2/WAG"),
             #-o=output_file [default: 'output']
-            _Option(["-o", "o"], ["output"],
+            _Option(["-o", "o"], ["file"],
                     None, 0,
                     "Output filenames prefix. Default: 'output'\n "
                     "Will write: output.?.fas (depending on requested "
                     "format), output.?.xml and output.?.dnd"),
             #-f=output_format [default: 8]
-            _Option(["-f", "f"], ["input"],
+            _Option(["-f", "f"], [],
                     lambda x: x in OUTPUT_FORMAT_VALUES, 0,
                     "Output alignment format. Default: 8 FASTA\n"
                     "Option are:\n"
@@ -78,54 +78,54 @@ class PrankCommandline(AbstractCommandline):
             _Switch(["-dots", "dots"],
                     "Show insertion gaps as dots"),
             #-gaprate=# [gap opening rate; default: dna 0.025 / prot 0.0025]
-            _Option(["-gaprate", "gaprate"], ["input"],
+            _Option(["-gaprate", "gaprate"], [],
                     lambda x: isinstance(x, float), 
                     0,
                     "Gap opening rate. Default: dna 0.025 prot 0.0025"),
             #-gapext=# [gap extension probability; default: dna 0.5 / prot 0.5]
-            _Option(["-gapext", "gapext"], ["input"],
+            _Option(["-gapext", "gapext"], [],
                     lambda x: isinstance(x, float), 
                     0,
                     "Gap extension probability. Default: dna 0.5 "
                     "/ prot 0.5"),
             #-dnafreqs=#,#,#,# [ACGT; default: empirical]
-            _Option(["-dnafreqs", "dnafreqs"], ["input"],
+            _Option(["-dnafreqs", "dnafreqs"], [],
                     lambda x: isinstance(x, bytes), 
                     0,
                     "DNA frequencies - 'A,C,G,T'. eg '25,25,25,25' as a quote "
                     "surrounded string value. Default: empirical"),
             #-kappa=# [ts/tv rate ratio; default:2]
-            _Option(["-kappa", "kappa"], ["input"],
+            _Option(["-kappa", "kappa"], [],
                     lambda x: isinstance(x, int), 
                     0,
                     "Transition/transversion ratio. Default: 2"),
             #-rho=# [pur/pyr rate ratio; default:1]
-            _Option(["-rho", "rho"], ["input"],
+            _Option(["-rho", "rho"], [],
                     lambda x: isinstance(x, int), 
                     0,
                     "Purine/pyrimidine ratio. Default: 1"),
             #-codon [for DNA: use empirical codon model]
             #Assuming this is an input file as in -m
-            _Option(["-codon", "codon"], ["input"],
+            _Option(["-codon", "codon"], [],
                     None, 
                     0,
                     "Codon model filename. Default: empirical codon model"),
             #-termgap [penalise terminal gaps normally]
-            _Option(["-termgap", "termgap"], ["input"],
+            _Option(["-termgap", "termgap"], [],
                     lambda x: 0, #Does not take a value 
                     0,
                     "Penalise terminal gaps normally",
                     0),
             ################ other parameters: ################################
             #-nopost [do not compute posterior support; default: compute]
-            _Option(["-nopost", "nopost"], ["input"],
+            _Option(["-nopost", "nopost"], [],
                     lambda x: 0, #Does not take a value 
                     0,
                     "Do not compute posterior support. Default: compute",
                     0),
             #-pwdist=# [expected pairwise distance for computing guidetree;
             #default: dna 0.25 / prot 0.5]
-            _Option(["-pwdist", "pwdist"], ["input"],
+            _Option(["-pwdist", "pwdist"], [],
                     lambda x: isinstance(x, float),
                     0,
                     "Expected pairwise distance for computing guidetree. "
@@ -144,14 +144,14 @@ class PrankCommandline(AbstractCommandline):
                     "Output each node; mostly for debugging"),
             #-matresize=# [matrix resizing multiplier]
             # Doesnt specify type but Float and Int work
-            _Option(["-matresize", "matresize"], ["input"],
+            _Option(["-matresize", "matresize"], [],
                     lambda x: isinstance(x, float) or isinstance(x,
                               int),
                     0,
                     "Matrix resizing multiplier"),
             #-matinitsize=# [matrix initial size multiplier]
             # Doesnt specify type but Float and Int work
-            _Option(["-matinitsize", "matinitsize"], ["input"],
+            _Option(["-matinitsize", "matinitsize"], [],
                     lambda x: isinstance(x, float) or isinstance(x,
                               int),
                     0,
@@ -161,24 +161,24 @@ class PrankCommandline(AbstractCommandline):
             _Switch(["-pwgenomic", "pwgenomic"],
                     "Do pairwise alignment, no guidetree"),
             #-pwgenomicdist=# [distance for pairwise alignment; default: 0.3]
-            _Option(["-pwgenomicdist", "pwgenomicdist"], ["input"],
+            _Option(["-pwgenomicdist", "pwgenomicdist"], [],
                     lambda x: isinstance(x, float),
                     0,
                     "Distance for pairwise alignment. Default: 0.3"),
             #-scalebranches=# [scale branch lengths; default: dna 1 / prot 2]
-            _Option(["-scalebranches", "scalebranches"], ["input"],
+            _Option(["-scalebranches", "scalebranches"], [],
                     lambda x: isinstance(x, int),
                     0,
                     "Scale branch lengths. Default: dna 1 / prot 2"),
             #-fixedbranches=# [use fixed branch lengths]
             #Assume looking for a float
-            _Option(["-fixedbranches", "fixedbranches"], ["input"],
+            _Option(["-fixedbranches", "fixedbranches"], [],
                     lambda x: isinstance(x, float),
                     0,
                     "Use fixed branch lengths of input value"),
             #-maxbranches=# [set maximum branch length]
             #Assume looking for a float
-            _Option(["-maxbranches", "maxbranches"], ["input"],
+            _Option(["-maxbranches", "maxbranches"], [],
                     lambda x: isinstance(x, float),
                     0,
                     "Use maximum branch lengths of input value"),
