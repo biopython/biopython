@@ -26,8 +26,7 @@ class PrankCommandline(AbstractCommandline):
     """
     def __init__(self, cmd="prank", **kwargs):
         OUTPUT_FORMAT_VALUES = list(range(1,18))
-        self.parameters = \
-            [
+        self.parameters = [
             ################## input/output parameters: ##################
             #-d=sequence_file
             _Option(["-d", "d"], ["file"],
@@ -111,18 +110,12 @@ class PrankCommandline(AbstractCommandline):
                     0,
                     "Codon model filename. Default: empirical codon model"),
             #-termgap [penalise terminal gaps normally]
-            _Option(["-termgap", "termgap"], [],
-                    lambda x: 0, #Does not take a value 
-                    0,
-                    "Penalise terminal gaps normally",
-                    0),
+            _Switch(["-termgap", "termgap"], [],
+                    "Penalise terminal gaps normally"),
             ################ other parameters: ################################
             #-nopost [do not compute posterior support; default: compute]
-            _Option(["-nopost", "nopost"], [],
-                    lambda x: 0, #Does not take a value 
-                    0,
-                    "Do not compute posterior support. Default: compute",
-                    0),
+            _Switch(["-nopost", "nopost"],
+                    "Do not compute posterior support. Default: compute"),
             #-pwdist=# [expected pairwise distance for computing guidetree;
             #default: dna 0.25 / prot 0.5]
             _Option(["-pwdist", "pwdist"], [],
