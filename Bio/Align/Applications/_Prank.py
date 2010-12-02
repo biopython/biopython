@@ -110,7 +110,7 @@ class PrankCommandline(AbstractCommandline):
                     0,
                     "Codon model filename. Default: empirical codon model"),
             #-termgap [penalise terminal gaps normally]
-            _Switch(["-termgap", "termgap"], [],
+            _Switch(["-termgap", "termgap"],
                     "Penalise terminal gaps normally"),
             ################ other parameters: ################################
             #-nopost [do not compute posterior support; default: compute]
