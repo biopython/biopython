@@ -1089,7 +1089,7 @@ class ETandemCommandline(_EmbossCommandLine):
                    "Allow N as a mismatch"),
          _Option(["-uniform","uniform"], [], None, 0,
                    "Allow uniform consensus"),
-         _Option(["-rformat","rformat"], ["output"], None, 0,
+         _Option(["-rformat","rformat"], [], None, 0,
                  "Output report format")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
