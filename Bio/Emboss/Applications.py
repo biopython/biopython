@@ -36,7 +36,7 @@ class _EmbossMinimalCommandLine(AbstractCommandline):
     """
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
-        extra_parameters = [\
+        extra_parameters = [
            _Switch(["-auto","auto"], 
                    """Turn off prompts.
            
@@ -91,7 +91,7 @@ class _EmbossCommandLine(_EmbossMinimalCommandLine):
     """
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
-        extra_parameters = [\
+        extra_parameters = [
            _Option(["-outfile","outfile"], ["file"], None, 0,
                    "Output filename"),
             ]
@@ -146,8 +146,8 @@ class Primer3Commandline(_EmbossCommandLine):
     
     """
     def __init__(self, cmd="eprimer3", **kwargs):
-        self.parameters = \
-          [_Option(["-sequence","sequence"], [], None, 1,
+        self.parameters = [
+           _Option(["-sequence","sequence"], [], None, 1,
                    "Sequence to choose primers from."),
            _Option(["-task","task"], [], None, 0,
                    "Tell eprimer3 what task to perform."),
@@ -180,8 +180,8 @@ class Primer3Commandline(_EmbossCommandLine):
            _Option(["-maxtm","maxtm"], [], None, 0,
                    "Maximum melting temperature for a primer oligo."),
            _Option(["-maxdifftm","maxdifftm"], [], None, 0,
-                   "Maximum difference in melting temperatures between forward and " +\
-                   "reverse primers."),
+                   "Maximum difference in melting temperatures between "
+                   "forward and reverse primers."),
            _Option(["-ogcpercent","ogcpercent"], [], None, 0,
                    "Optimum GC% for a primer."),
            _Option(["-mingc","mingc"], [], None, 0,
@@ -386,8 +386,8 @@ class Primer3Commandline(_EmbossCommandLine):
                    Option added in EMBOSS 6.1.0, replacing -oligoselfany
                    """),
            _Option(["-oligoselfend","oligoselfend"], [], None, 0, 
-                   """Maximum allowable 3`-anchored global alignment score for " +\
-                   self-complementarity (OBSOLETE).
+                   """Maximum allowable 3`-anchored global alignment score
+                   for self-complementarity (OBSOLETE).
  
                    Option replaced in EMBOSS 6.1.0 by -oendself
                    """),
@@ -409,7 +409,7 @@ class Primer3Commandline(_EmbossCommandLine):
            _Option(["-mispriminglibraryfile","mispriminglibraryfile"], [], None, 0,
                     "File containing library of sequences to avoid amplifying"),
            _Option(["-maxmispriming","maxmispriming"], [], None, 0,
-                   "Maximum allowed similarity of primers to sequences in " +\
+                   "Maximum allowed similarity of primers to sequences in "
                    "library specified by -mispriminglibrary"),
            _Option(["-oligomaxmishyb","oligomaxmishyb"], [], None, 0, 
                    """Maximum alignment score for hybridisation of internal oligo to
@@ -444,8 +444,8 @@ class PrimerSearchCommandline(_EmbossCommandLine):
     """Commandline object for the primersearch program from EMBOSS.
     """
     def __init__(self, cmd="primersearch", **kwargs):
-        self.parameters = \
-         [_Option(["-seqall","-sequences","sequences","seqall"], [],
+        self.parameters = [
+          _Option(["-seqall","-sequences","sequences","seqall"], [],
                   None, 1, "Sequence to look for the primer pairs in."),
                   #When this wrapper was written primersearch used -sequences
                   #as the argument name. Since at least EMBOSS 5.0 (and
@@ -476,8 +476,8 @@ class EProtDistCommandline(_EmbossCommandLine):
         import warnings
         import Bio
         warnings.warn("Bio.Emboss.Application.EProtDistCommandline has been deprecated; please use 'fprotdist' instead (see FProtDistCommandline).", Bio.BiopythonDeprecationWarning)
-        self.parameters = \
-         [_Option(["-msf","msf"], [], None, 1,
+        self.parameters = [
+          _Option(["-msf","msf"], [], None, 1,
                   "File containing sequences"),
           _Option(["-method","method"], [], None, 1,
                   "Choose the method to use"),
@@ -517,8 +517,8 @@ class ENeighborCommandline(_EmbossCommandLine):
         import warnings
         import Bio
         warnings.warn("Bio.Emboss.Application.ENeighborCommandline has been deprecated; please use 'fneighbor' instead (see FNeighborCommandline).", Bio.BiopythonDeprecationWarning)
-        self.parameters = \
-         [_Option(["-infile","infile"], [], None, 1,
+        self.parameters = [
+          _Option(["-infile","infile"], [], None, 1,
                   "infile value"),
           _Option(["-trout","trout"], [], None, 1,
                   "Create a tree file"),
@@ -564,8 +564,8 @@ class EProtParsCommandline(_EmbossCommandLine):
         import warnings
         import Bio
         warnings.warn("Bio.Emboss.Application.EProtParsCommandline has been deprecated; please use 'fprotpars' instead (see FProtParsCommandline).", Bio.BiopythonDeprecationWarning)
-        self.parameters = \
-         [_Option(["-msf","msf"], ["file"], None, 1,
+        self.parameters = [
+          _Option(["-msf","msf"], ["file"], None, 1,
                   "Sequences file to be read in"),
           _Option(["-besttree","besttree"], [], None, 0,
                   "Search for the best tree"),
@@ -617,8 +617,8 @@ class EConsenseCommandline(_EmbossCommandLine):
         import warnings
         import Bio
         warnings.warn("Bio.Emboss.Application.EConsenseCommandline has been deprecated; please use 'fconsense' instead (see FConsenseCommandline).", Bio.BiopythonDeprecationWarning)
-        self.parameters = \
-         [_Option(["-infile","infile"], ["file"], None, 1,
+        self.parameters = [
+          _Option(["-infile","infile"], ["file"], None, 1,
                   "file to read in (New Hampshire standard form)"),
           _Option(["-notrout","notrout"], [], None, 0,
                   "Do not create a tree file"),
@@ -658,8 +658,8 @@ class ESeqBootCommandline(_EmbossCommandLine):
         import warnings
         import Bio
         warnings.warn("Bio.Emboss.Application.ESeqBootCommandline has been deprecated; please use 'fseqboot' instead (see FSeqBootCommandline).", Bio.BiopythonDeprecationWarning)
-        self.parameters = \
-         [_Option(["-datafile","datafile"], ["file"], None, 1,
+        self.parameters = [
+          _Option(["-datafile","datafile"], ["file"], None, 1,
                   "Input file"),
           _Option(["-randseed","randseed"], [], None, 1,
                   "Random number seed (must be odd)"),
@@ -689,9 +689,9 @@ class FDNADistCommandline(_EmbossCommandLine):
     calulating distance matrices from DNA sequence files.
     """
     def __init__(self, cmd = "fdnadist", **kwargs):
-        self.parameters = \
-        [_Option(["-sequence", "sequence"], [], None, 1,
-                  "seq file to use (phylip)"),
+        self.parameters = [
+        _Option(["-sequence", "sequence"], [], None, 1,
+                 "seq file to use (phylip)"),
         _Option(["-method", "method"], [], None, 1,
                  "sub. model [f,k,j,l,s]"),
         _Option(["-gamma", "gamma"], [], None, 0,
@@ -726,9 +726,9 @@ class FTreeDistCommandline(_EmbossCommandLine):
     calulating distance measures between phylogentic trees.
     """
     def __init__(self, cmd = "ftreedist", **kwargs):
-        self.parameters = \
-        [_Option(["-intreefile", "intreefile"], [], None, 1,
-                  "tree file to score (phylip)"),
+        self.parameters = [
+        _Option(["-intreefile", "intreefile"], [], None, 1,
+                 "tree file to score (phylip)"),
         _Option(["-dtype", "dtype"], [], None, 0,
                  "distance type ([S]ymetric, [b]ranch score)"),
         _Option(["-pairing", "pairing"], [], None, 0,
@@ -749,8 +749,8 @@ class FNeighborCommandline(_EmbossCommandLine):
     calulating neighbor-joining or UPGMA trees from distance matrices.
     """
     def __init__(self, cmd = "fneighbor", **kwargs):
-        self.parameters = \
-        [_Option(["-datafile", "datafile"], [], None, 1,
+        self.parameters = [
+        _Option(["-datafile", "datafile"], [], None, 1,
                   "dist file to use (phylip)"),
         _Option(["-matrixtype", "matrixtype"], [], None, 0,
                  "is martrix [S]quare pr [u]pper or [l]ower"),
@@ -780,9 +780,9 @@ class FSeqBootCommandline(_EmbossCommandLine):
     pseudo-sample alignment files.
     """
     def __init__(self, cmd = "fseqboot", **kwargs):
-        self.parameters = \
-        [_Option(["-sequence", "sequence"], [], None, 1,
-                  "seq file to sample (phylip)"),
+        self.parameters = [
+        _Option(["-sequence", "sequence"], [], None, 1,
+                 "seq file to sample (phylip)"),
         _Option(["-categories", "catergories"], [], None, 0,
                  "file of input categories"),
         _Option(["-weights", "weights"], [], None, 0,
@@ -820,9 +820,9 @@ class FDNAParsCommandline(_EmbossCommandLine):
     "-auto" is not set to true.
     """
     def __init__(self, cmd = "fdnapars", **kwargs):
-        self.parameters = \
-        [_Option(["-sequence", "sequence"], [], None, 1,
-                  "seq file to use (phylip)"),
+        self.parameters = [
+        _Option(["-sequence", "sequence"], [], None, 1,
+                 "seq file to use (phylip)"),
         _Option(["-intreefile", "intreefile"], [], None, 0,
                  "Phylip tree file"),
         _Option(["-weights", "weights"], [], None, 0,
@@ -864,9 +864,9 @@ class FProtParsCommandline(_EmbossCommandLine):
     "-auto" is not set to true.
     """
     def __init__(self, cmd = "fprotpars", **kwargs):
-        self.parameters = \
-        [_Option(["-sequence", "sequence"], [], None, 1,
-                  "seq file to use (phylip)"),
+        self.parameters = [
+        _Option(["-sequence", "sequence"], [], None, 1,
+                 "seq file to use (phylip)"),
         _Option(["-intreefile", "intreefile"], [], None, 0,
                  "Phylip tree file to score"),
         _Option(["-outtreefile", "outtreefile"], [], None, 1,
@@ -899,9 +899,9 @@ class FProtDistCommandline(_EmbossCommandLine):
     estimate trees from protein sequences using parsimony
     """
     def __init__(self, cmd = "fprotdist", **kwargs):
-        self.parameters = \
-        [_Option(["-sequence", "sequence"], [], None, 1,
-                  "seq file to use (phylip)"),
+        self.parameters = [
+        _Option(["-sequence", "sequence"], [], None, 1,
+                 "seq file to use (phylip)"),
         _Option(["-ncategories", "ncategories"], [], None, 0,
                  "number of rate catergories (1-9)"),
         _Option(["-rate", "rate"], [], None, 0,
@@ -938,9 +938,9 @@ class FConsenseCommandline(_EmbossCommandLine):
     calculate consensus trees.
     """
     def __init__(self, cmd = "fconsense", **kwargs):
-        self.parameters = \
-        [_Option(["-intreefile", "intreefile"], [], None, 1,
-                  "file with phylip trees to make consensus from"),
+        self.parameters = [
+        _Option(["-intreefile", "intreefile"], [], None, 1,
+                 "file with phylip trees to make consensus from"),
         _Option(["-method", "method"], [], None, 0,
                  "consensus method [s, mr, MRE, ml]"),
         _Option(["-mlfrac", "mlfrac"], [], None, 0,
@@ -960,11 +960,11 @@ class WaterCommandline(_EmbossCommandLine):
     """Commandline object for the water program from EMBOSS.
     """
     def __init__(self, cmd="water", **kwargs):
-        self.parameters = \
-         [_Option(["-asequence","asequence"], ["file"], None, 1,
-                  "First sequence to align"),
+        self.parameters = [
+         _Option(["-asequence","asequence"], ["file"], None, 1,
+                 "First sequence to align"),
          _Option(["-bsequence","bsequence"], ["file"], None, 1,
-                  "Second sequence to align"),
+                 "Second sequence to align"),
          _Option(["-gapopen","gapopen"], [], None, 1,
                  "Gap open penalty"),
          _Option(["-gapextend","gapextend"], [], None, 1,
@@ -986,11 +986,11 @@ class NeedleCommandline(_EmbossCommandLine):
     """Commandline object for the needle program from EMBOSS.
     """
     def __init__(self, cmd="needle", **kwargs):
-        self.parameters = \
-         [_Option(["-asequence","asequence"], ["file"], None, 1,
-                  "First sequence to align"),
+        self.parameters = [
+         _Option(["-asequence","asequence"], ["file"], None, 1,
+                 "First sequence to align"),
          _Option(["-bsequence","bsequence"], ["file"], None, 1,
-                  "Second sequence to align"),
+                 "Second sequence to align"),
          _Option(["-gapopen","gapopen"], [], None, 1,
                  "Gap open penalty"),
          _Option(["-gapextend","gapextend"], [], None, 1,
@@ -1040,12 +1040,12 @@ class Est2GenomeCommandline(_EmbossCommandLine):
          _Option(["-mismatch","mismatch"], [], None, 0,
                  "Cost for mismatching two bases"),
          _Option(["-gappenalty","gappenalty"], [], None, 0,
-                 "Cost for deleting a single base in either sequence, " + \
+                 "Cost for deleting a single base in either sequence, "
                  "excluding introns"),
          _Option(["-intronpenalty","intronpenalty"], [], None, 0,
                  "Cost for an intron, independent of length."),
          _Option(["-splicepenalty","splicepenalty"], [], None, 0,
-                 "Cost for an intron, independent of length " + \
+                 "Cost for an intron, independent of length "
                  "and starting/ending on donor-acceptor sites"),
          _Option(["-minscore","minscore"], [], None, 0,
                  "Exclude alignments with scores below this threshold score."),
@@ -1054,7 +1054,7 @@ class Est2GenomeCommandline(_EmbossCommandLine):
          _Option(["-splice","splice"], [], None, 0,
                  "Use donor and acceptor splice sites."),
          _Option(["-mode","mode"], [], None, 0,
-                 "This determines the comparion mode. 'both', 'forward' " + \
+                 "This determines the comparion mode. 'both', 'forward' "
                  "'reverse'"),
          _Option(["-best","best"], [], None, 0,
                  "You can print out all comparisons instead of just the best"),
