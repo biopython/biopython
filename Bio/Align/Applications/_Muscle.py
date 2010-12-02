@@ -55,9 +55,9 @@ class MuscleCommandline(AbstractCommandline):
             _Option(["-out", "out"], ["output", "file"],
                     None, 0, "Output filename",
                     0), #No equate
-            _Switch(["-diags", "diags"], ["input"],
+            _Switch(["-diags", "diags"],
                     "Find diagonals (faster for similar sequences)"),
-            _Switch(["-profile", "profile"], ["input"],
+            _Switch(["-profile", "profile"],
                     "Perform a profile alignment"),
             _Option(["-in1", "in1"], ["input", "file"],
                     None, 0,
@@ -342,33 +342,33 @@ class MuscleCommandline(AbstractCommandline):
             # will html be used. I kid ye not.
             #clw                no              Write output in CLUSTALW format (default is
             #                                   FASTA).
-            _Switch(["-clw", "clw"], ["input"],
+            _Switch(["-clw", "clw"],
                     "Write output in CLUSTALW format (with a MUSCLE header)"),
             #clwstrict          no              Write output in CLUSTALW format with the
             #                                   "CLUSTAL W (1.81)" header rather than the
             #                                   MUSCLE version. This is useful when a post-
             #                                   processing step is picky about the file
             #                                   header.
-            _Switch(["-clwstrict", "clwstrict"], ["input"],
+            _Switch(["-clwstrict", "clwstrict"],
                     "Write output in CLUSTALW format with version 1.81 header"),
             #fasta              yes             Write output in FASTA format. Alternatives
             #                                   include clw,
             #                                   clwstrict, msf and html.
-            _Switch(["-fasta", "fasta"], ["input"],
+            _Switch(["-fasta", "fasta"],
                     "Write output in FASTA format"),
             #html               no              Write output in HTML format (default is
             #                                   FASTA).
-            _Switch(["-html", "html"], ["input"],
+            _Switch(["-html", "html"],
                     "Write output in HTML format"),
             #msf                no              Write output in MSF format (default is
             #                                   FASTA).
-            _Switch(["-msf", "msf"], ["input"],
+            _Switch(["-msf", "msf"],
                     "Write output in MSF format"),
             #Phylip interleaved - undocumented as of 3.7
-            _Switch(["-phyi", "phyi"], ["input"],
+            _Switch(["-phyi", "phyi"],
                     "Write output in PHYLIP interleaved format"),
             #Phylip sequential - undocumented as of 3.7
-            _Switch(["-phys", "phys"], ["input"],
+            _Switch(["-phys", "phys"],
                     "Write output in PHYLIP sequential format"),
             ################## Additional specified output files #########
             _Option(["-phyiout", "phyiout"], ["output", "file"],
@@ -404,23 +404,23 @@ class MuscleCommandline(AbstractCommandline):
             ############## END FORMATS ###################################
             #anchors            yes             Use anchor optimization in tree dependent
             #                                   refinement iterations.
-            _Switch(["-anchors", "anchors"], ["input"],
+            _Switch(["-anchors", "anchors"],
                     "Use anchor optimisation in tree dependent "
                     "refinement iterations"),
             #noanchors          no              Disable anchor optimization. Default is
             #                                   anchors.
-            _Switch(["-noanchors", "noanchors"], ["input"],
+            _Switch(["-noanchors", "noanchors"],
                     "Do not use anchor optimisation in tree dependent "
                     "refinement iterations"),
             #group              yes             Group similar sequences together in the
             #                                   output. This is the default. See also
             #                                   stable.
-            _Switch(["-group", "group"], ["input"],
+            _Switch(["-group", "group"],
                     "Group similar sequences in output"),
             #stable             no              Preserve input order of sequences in output
             #                                   file. Default is to group sequences by
             #                                   similarity (group).
-            _Switch(["-stable", "stable"], ["input"],
+            _Switch(["-stable", "stable"],
                     "Do not group similar sequences in output (not supported in v3.8)"),
             ############## log-expectation profile score ######################
             # One of either -le, -sp, or -sv
@@ -433,38 +433,38 @@ class MuscleCommandline(AbstractCommandline):
             #le                 maybe           Use log-expectation profile score (VTML240).
             #                                    Alternatives are to use sp or sv. This is
             #                                    the default for amino acid sequences.
-            _Switch(["-le", "le"], ["input"],
+            _Switch(["-le", "le"],
                     "Use log-expectation profile score (VTML240)"),
             #sv                 no              Use sum-of-pairs profile score (VTML240).
             #                                   Default is le.
-            _Switch(["-sv", "sv"], ["input"],
+            _Switch(["-sv", "sv"],
                     "Use sum-of-pairs profile score (VTML240)"),
             #sp                 no              Use sum-of-pairs protein profile score
             #                                   (PAM200). Default is le.
-            _Switch(["-sp", "sp"], ["input"],
+            _Switch(["-sp", "sp"],
                     "Use sum-of-pairs protein profile score (PAM200)"),
             #spn                maybe           Use sum-of-pairs nucleotide profile score
             #                                   (BLASTZ parameters). This is the only option
             #                                   for nucleotides, and is therefore the
             #                                   default.
-            _Switch(["-spn", "spn"], ["input"],
+            _Switch(["-spn", "spn"],
                     "Use sum-of-pairs protein nucleotide profile score"),
             ############## END log-expectation profile score ######################
             #quiet              no              Do not display progress messages.
-            _Switch(["-quiet", "quiet"], ["input"],
+            _Switch(["-quiet", "quiet"],
                     "Use sum-of-pairs protein nucleotide profile score"),
             #refine             no              Input file is already aligned, skip first
             #                                   two iterations and begin tree dependent
             #                                   refinement.
-            _Switch(["-refine", "refine"], ["input"],
+            _Switch(["-refine", "refine"],
                     "Only do tree dependent refinement"),
             #core               yes in muscle,  Do not catch exceptions.
             #                   no in muscled.
-            _Switch(["-core", "core"], ["input"],
+            _Switch(["-core", "core"],
                     "Catch exceptions"),
             #nocore             no in muscle,   Catch exceptions and give an error message
             #                   yes in muscled. if possible.
-            _Switch(["-nocore", "nocore"], ["input"],
+            _Switch(["-nocore", "nocore"],
                     "Do not catch exceptions"),
             #termgapsfull       no              Terminal gaps penalized with full penalty.
             #                                   [1] Not fully supported in this version.
@@ -479,10 +479,10 @@ class MuscleCommandline(AbstractCommandline):
             #                                   [1] Not fully supported in this version.
             #verbose            no              Write parameter settings and progress
             #                                   messages to log file.
-            _Switch(["-verbose", "verbose"], ["input"],
+            _Switch(["-verbose", "verbose"],
                     "Write parameter settings and progress"),
             #version            no              Write version string to stdout and exit.
-            _Switch(["-version", "version"], ["input"],
+            _Switch(["-version", "version"],
                     "Write version string to stdout and exit"),
            ]
         AbstractCommandline.__init__(self, cmd, **kwargs)

@@ -46,7 +46,7 @@ class TCoffeeCommandline(AbstractCommandline):
                     0,
                     "Specify the output file. Default: <your sequences>.aln",
                     0),
-           _Switch(["-convert", "convert"], ["input"],
+           _Switch(["-convert", "convert"],
                     "Specify you want to perform a file conversion"),
            _Option(["-type", "type"], ["input"],
                     lambda x: x in self.SEQ_TYPES,
@@ -78,7 +78,7 @@ class TCoffeeCommandline(AbstractCommandline):
                     "Indicates the penalty applied for extending a "
                     "gap. (negative integer)",
                     0),
-           _Switch(["-quiet", "quiet"], ["input"],
+           _Switch(["-quiet", "quiet"],
                     "Turn off log output"),
            _Option(["-mode", "mode"], ["input"],
                     None,

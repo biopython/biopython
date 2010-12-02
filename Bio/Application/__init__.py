@@ -533,21 +533,14 @@ class _Switch(_AbstractParameter):
     is assumed to be a "human readable" name describing the option in one
     word.
 
-    o param_types -- a list of string describing the type of parameter, 
-    which can help let programs know how to use it. Example descriptions
-    include 'input', 'output', 'file'.  Note that if 'file' is included,
-    these argument values will automatically be escaped if the filename
-    contains spaces.
-
     o description -- a description of the option.
 
     o is_set -- if the parameter has been set
 
     NOTE - There is no value attribute, see is_set instead,
     """
-    def __init__(self, names = [], types = [], description = ""):
+    def __init__(self, names=[], description=""):
         self.names = names
-        self.param_types = types
         self.description = description
         self.is_set = False
         self.is_required = False

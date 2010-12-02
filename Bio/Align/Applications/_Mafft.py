@@ -84,10 +84,10 @@ class MafftCommandline(AbstractCommandline):
             #**** Algorithm ****
             #Automatically selects an appropriate strategy from L-INS-i, FFT-NS-
             #i and FFT-NS-2, according to data size. Default: off (always FFT-NS-2)
-            _Switch(["--auto", "auto"], ["input"],
+            _Switch(["--auto", "auto"],
                     "Automatically select strategy. Default off."),
             #Distance is calculated based on the number of shared 6mers. Default: on
-            _Switch(["--6merpair", "6merpair", "sixmerpair"], ["input"],
+            _Switch(["--6merpair", "6merpair", "sixmerpair"],
                      "Distance is calculated based on the number of shared "
                      "6mers. Default: on"),
             #All pairwise alignments are computed with the Needleman-Wunsch
@@ -95,7 +95,7 @@ class MafftCommandline(AbstractCommandline):
             #set of globally alignable sequences. Applicable to up to ~200
             #sequences. A combination with --maxiterate 1000 is recommended (G-
             #INS-i). Default: off (6mer distance is used)
-            _Switch(["--globalpair", "globalpair"], ["input"],
+            _Switch(["--globalpair", "globalpair"],
                      "All pairwise alignments are computed with the "
                      "Needleman-Wunsch algorithm. Default: off"),
             #All pairwise alignments are computed with the Smith-Waterman
@@ -103,7 +103,7 @@ class MafftCommandline(AbstractCommandline):
             #set of locally alignable sequences. Applicable to up to ~200
             #sequences. A combination with --maxiterate 1000 is recommended (L-
             #INS-i). Default: off (6mer distance is used)
-            _Switch(["--localpair", "localpair"], ["input"],
+            _Switch(["--localpair", "localpair"],
                      "All pairwise alignments are computed with the "
                      "Smith-Waterman algorithm. Default: off"),
             #All pairwise alignments are computed with a local algorithm with
@@ -112,13 +112,13 @@ class MafftCommandline(AbstractCommandline):
             #expected. Applicable to up to ~200 sequences. A combination with --
             #maxiterate 1000 is recommended (E-INS-i). Default: off (6mer
             #distance is used)
-            _Switch(["--genafpair", "genafpair"], ["input"],
+            _Switch(["--genafpair", "genafpair"],
                      "All pairwise alignments are computed with a local "
                      "algorithm with the generalized affine gap cost "
                      "(Altschul 1998). Default: off"),
             #All pairwise alignments are computed with FASTA (Pearson and Lipman
             #1988). FASTA is required. Default: off (6mer distance is used)
-            _Switch(["--fastapair", "fastapair"], ["input"],
+            _Switch(["--fastapair", "fastapair"],
                      "All pairwise alignments are computed with FASTA "
                      "(Pearson and Lipman 1988). Default: off"),
             #Weighting factor for the consistency term calculated from pairwise
@@ -143,42 +143,42 @@ class MafftCommandline(AbstractCommandline):
                      "Default: 0",
                      0),
             #Use FFT approximation in group-to-group alignment. Default: on
-            _Switch(["--fft", "fft"], ["input"],
+            _Switch(["--fft", "fft"],
                     "Use FFT approximation in group-to-group alignment. "
                     "Default: on"),
             #Do not use FFT approximation in group-to-group alignment. Default:
             #off
-            _Switch(["--nofft", "nofft"], ["input"],
+            _Switch(["--nofft", "nofft"],
                      "Do not use FFT approximation in group-to-group "
                      "alignment. Default: off"),
             #Alignment score is not checked in the iterative refinement stage.
             #Default: off (score is checked)
-            _Switch(["--noscore", "noscore"], ["input"],
+            _Switch(["--noscore", "noscore"],
                     "Alignment score is not checked in the iterative "
                     "refinement stage. Default: off (score is checked)"),
             #Use the Myers-Miller (1988) algorithm. Default: automatically
             #turned on when the alignment length exceeds 10,000 (aa/nt).
-            _Switch(["--memsave", "memsave"], ["input"],
+            _Switch(["--memsave", "memsave"],
                     "Use the Myers-Miller (1988) algorithm. Default: "
                     "automatically turned on when the alignment length "
                     "exceeds 10,000 (aa/nt)."),
             #Use a fast tree-building method (PartTree, Katoh and Toh 2007) with
             #the 6mer distance. Recommended for a large number (> ~10,000) of
             #sequences are input. Default: off
-            _Switch(["--parttree", "parttree"], ["input"],
+            _Switch(["--parttree", "parttree"],
                     "Use a fast tree-building method with the 6mer "
                     "distance. Default: off"),
             #The PartTree algorithm is used with distances based on DP. Slightly
             #more accurate and slower than --parttree. Recommended for a large
             #number (> ~10,000) of sequences are input. Default: off
-            _Switch(["--dpparttree", "dpparttree"], ["input"],
+            _Switch(["--dpparttree", "dpparttree"],
                     "The PartTree algorithm is used with distances "
                     "based on DP. Default: off"),
             #The PartTree algorithm is used with distances based on FASTA.
             #Slightly more accurate and slower than --parttree. Recommended for
             #a large number (> ~10,000) of sequences are input. FASTA is
             #required. Default: off
-            _Switch(["--fastaparttree", "fastaparttree"], ["input"],
+            _Switch(["--fastaparttree", "fastaparttree"],
                     "The PartTree algorithm is used with distances based "
                     "on FASTA. Default: off"),
             #The number of partitions in the PartTree algorithm. Default: 50
@@ -189,7 +189,7 @@ class MafftCommandline(AbstractCommandline):
                     0),
             #Do not make alignment larger than number sequences. Valid only with
             #the --*parttree options. Default: the number of input sequences
-            _Switch(["--groupsize", "groupsize"], ["input"],
+            _Switch(["--groupsize", "groupsize"],
                     "Do not make alignment larger than number sequences. "
                     "Default: the number of input sequences"),
             #**** Parameter ****
@@ -272,35 +272,35 @@ class MafftCommandline(AbstractCommandline):
                     0),
             #Incorporate the AA/nuc composition information into the scoring
             #matrix. Default: off
-            _Switch(["--fmodel", "fmodel"], ["input"],
-                    "Incorporate the AA/nuc composition information into"
+            _Switch(["--fmodel", "fmodel"],
+                    "Incorporate the AA/nuc composition information into "
                     "the scoring matrix (True) or not (False, default)"),
             #**** Output ****
             #Output format: clustal format. Default: off (fasta format)
-            _Switch(["--clustalout", "clustalout"], ["input"],
+            _Switch(["--clustalout", "clustalout"],
                     "Output format: clustal (True) or fasta (False, default)"),
             #Output order: same as input. Default: on
-            _Switch(["--inputorder", "inputorder"], ["input"],
+            _Switch(["--inputorder", "inputorder"],
                     "Output order: same as input (True, default) or alignment "
                     "based (False)"),
             #Output order: aligned. Default: off (inputorder)
-            _Switch(["--reorder", "reorder"], ["input"],
+            _Switch(["--reorder", "reorder"],
                     "Output order: aligned (True) or in input order (False, "
                     "default)"),
             #Guide tree is output to the input.tree file. Default: off
-            _Switch(["--treeout", "treeout"], ["input"],
+            _Switch(["--treeout", "treeout"],
                     "Guide tree is output to the input.tree file (True) or "
                     "not (False, default)"),
             #Do not report progress. Default: off
-            _Switch(["--quiet", "quiet"], ["input"],
+            _Switch(["--quiet", "quiet"],
                     "Do not report progress (True) or not (False, default)."),
             #**** Input ****
             #Assume the sequences are nucleotide. Deafult: auto
-            _Switch(["--nuc", "nuc"], ["input"],
+            _Switch(["--nuc", "nuc"],
                     "Assume the sequences are nucleotide (True/False). "
                     "Default: auto"),
             #Assume the sequences are amino acid. Deafult: auto
-            _Switch(["--amino", "amino"], ["input"],
+            _Switch(["--amino", "amino"],
                     "Assume the sequences are amino acid (True/False). "
                     "Default: auto"),
             ###################### SEEDS #####################################

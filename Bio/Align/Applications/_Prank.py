@@ -61,21 +61,21 @@ class PrankCommandline(AbstractCommandline):
                     "4. EMBL       	14. PIR/CODATA\n"
                     "6. DNAStrider 	15. MSF\n"
                     "7. Fitch      	17. PAUP/NEXUS"),
-            _Switch(["-noxml", "noxml"], ["input"],
+            _Switch(["-noxml", "noxml"],
                     "Do not output XML files"),
-            _Switch(["-notree", "notree"], ["input"],
+            _Switch(["-notree", "notree"],
                     "Do not output dnd tree files"),
-            _Switch(["-shortnames", "shortnames"], ["input"],
+            _Switch(["-shortnames", "shortnames"],
                     "Truncate names at first space"),
-            _Switch(["-quiet", "quiet"], ["input"],
+            _Switch(["-quiet", "quiet"],
                     "Reduce verbosity"),
             ####################### model parameters: ######################
             #+F [force insertions to be always skipped]
             #-F [equivalent]
-            _Switch(["-F", "+F", "F"], ["input"],
+            _Switch(["-F", "+F", "F"],
                     "Force insertions to be always skipped: same as +F"),
             #-dots [show insertion gaps as dots]
-            _Switch(["-dots", "dots"], ["input"],
+            _Switch(["-dots", "dots"],
                     "Show insertion gaps as dots"),
             #-gaprate=# [gap opening rate; default: dna 0.025 / prot 0.0025]
             _Option(["-gaprate", "gaprate"], ["input"],
@@ -130,17 +130,17 @@ class PrankCommandline(AbstractCommandline):
                     0,
                     "Expected pairwise distance for computing guidetree. "
                     "Default: dna 0.25 / prot 0.5"),
-            _Switch(["-once", "once"], ["input"],
+            _Switch(["-once", "once"], 
                     "Run only once. Default: twice if no guidetree given"),
-            _Switch(["-twice", "twice"], ["input"],
+            _Switch(["-twice", "twice"],
                     "Always run twice"),
-            _Switch(["-skipins", "skipins"], ["input"],
+            _Switch(["-skipins", "skipins"],
                     "Skip insertions in posterior support"),
-            _Switch(["-uselogs", "uselogs"], ["input"],
+            _Switch(["-uselogs", "uselogs"],
                     "Slower but should work for a greater number of sequences"),
-            _Switch(["-writeanc", "writeanc"], ["input"],
+            _Switch(["-writeanc", "writeanc"],
                     "Output ancestral sequences"),
-            _Switch(["-printnodes", "printnodes"], ["input"],
+            _Switch(["-printnodes", "printnodes"],
                     "Output each node; mostly for debugging"),
             #-matresize=# [matrix resizing multiplier]
             # Doesnt specify type but Float and Int work
@@ -156,9 +156,9 @@ class PrankCommandline(AbstractCommandline):
                               int),
                     0,
                     "Matrix initial size multiplier"),
-            _Switch(["-longseq", "longseq"], ["input"],
+            _Switch(["-longseq", "longseq"],
                     "Save space in pairwise alignments"),
-            _Switch(["-pwgenomic", "pwgenomic"], ["input"],
+            _Switch(["-pwgenomic", "pwgenomic"],
                     "Do pairwise alignment, no guidetree"),
             #-pwgenomicdist=# [distance for pairwise alignment; default: 0.3]
             _Option(["-pwgenomicdist", "pwgenomicdist"], ["input"],
@@ -183,14 +183,14 @@ class PrankCommandline(AbstractCommandline):
                     0,
                     "Use maximum branch lengths of input value"),
             #-realbranches [disable branch length truncation]
-            _Switch(["-realbranches", "realbranches"], ["input"],
+            _Switch(["-realbranches", "realbranches"],
                     "Disable branch length truncation"),
-            _Switch(["-translate", "translate"], ["input"],
+            _Switch(["-translate", "translate"],
                     "Translate to protein"),
-            _Switch(["-mttranslate", "mttranslate"], ["input"],
+            _Switch(["-mttranslate", "mttranslate"],
                     "Translate to protein using mt table"),
             ###################### other: ####################
-            _Switch(["-convert", "convert"], ["input"],
+            _Switch(["-convert", "convert"],
                     "Convert input alignment to new format. Do "
                     "not perform alignment")
             ]

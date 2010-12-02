@@ -37,38 +37,38 @@ class _EmbossMinimalCommandLine(AbstractCommandline):
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
         extra_parameters = [\
-           _Switch(["-auto","auto"], [],
+           _Switch(["-auto","auto"], 
                    """Turn off prompts.
            
                    Automatic mode disables prompting, so we recommend you set
                    this argument all the time when calling an EMBOSS tool from
                    Biopython.
                    """),
-           _Switch(["-stdout","stdout"], [],
+           _Switch(["-stdout","stdout"],
                    "Write standard output."),
-           _Switch(["-filter","filter"], [],
+           _Switch(["-filter","filter"],
                    "Read standard input, write standard output."),
-           _Switch(["-options","options"], [],
+           _Switch(["-options","options"],
                    """Prompt for standard and additional values.
 
                    If you are calling an EMBOSS tool from within Biopython,
                    we DO NOT recommend using this option.
                    """),
-           _Switch(["-debug","debug"], [],
+           _Switch(["-debug","debug"],
                    "Write debug output to program.dbg."),
-           _Switch(["-verbose","verbose"], [],
+           _Switch(["-verbose","verbose"],
                    "Report some/full command line options"),
-           _Switch(["-help","help"], [],
+           _Switch(["-help","help"],
                    """Report command line options.
 
                    More information on associated and general qualifiers can
                    be found with -help -verbose
                    """),
-           _Switch(["-warning","warning"], [],
+           _Switch(["-warning","warning"],
                    "Report warnings."),
-           _Switch(["-error","error"], [],
+           _Switch(["-error","error"],
                    "Report errors."),
-           _Switch(["-die","die"], [],
+           _Switch(["-die","die"],
                    "Report dying program messages."),
             ]
         try:

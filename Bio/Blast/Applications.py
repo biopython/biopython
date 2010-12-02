@@ -58,7 +58,7 @@ class _BlastCommandLine(AbstractCommandline):
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
         extra_parameters = [\
-           _Switch(["--help", "help"], ["input"],
+           _Switch(["--help", "help"],
                     "Print USAGE, DESCRIPTION and ARGUMENTS description;  ignore other arguments."),
            _Option(["-d", "database"], ["input"], None, 1,
                    "The database to BLAST against.", False),
@@ -358,11 +358,11 @@ class _NcbibaseblastCommandline(AbstractCommandline):
         assert cmd is not None
         extra_parameters = [ \
             #Core:
-            _Switch(["-h", "h"], ["input"],
+            _Switch(["-h", "h"],
                     "Print USAGE and DESCRIPTION;  ignore other arguments."),
-            _Switch(["-help", "help"], ["input"],
+            _Switch(["-help", "help"],
                     "Print USAGE, DESCRIPTION and ARGUMENTS description;  ignore other arguments."),
-            _Switch(["-version", "version"], ["input"],
+            _Switch(["-version", "version"],
                     "Print version number;  ignore other arguments."),
             # Output configuration options
             _Option(["-out", "out"], ["output", "file"], None, 0,
@@ -371,7 +371,7 @@ class _NcbibaseblastCommandline(AbstractCommandline):
             _Option(["-outfmt", "outfmt"], ["input"], None, 0, 
                     "Alignment view.  Integer 0-11.  Use 5 for XML output (differs from classic BLAST which used 7 for XML).",
                     False), #TODO - Document and test the column options
-            _Switch(["-show_gis","show_gis"], ["input"],
+            _Switch(["-show_gis","show_gis"],
                     "Show NCBI GIs in deflines?"),
             _Option(["-num_descriptions","num_descriptions"], ["input"], None, 0,
                     """Number of database sequences to show one-line descriptions for.
@@ -383,10 +383,10 @@ class _NcbibaseblastCommandline(AbstractCommandline):
 
                     Integer argument (at least zero). Default is 200.
                     See also num_alignments.""", False),
-            _Switch(["-html", "html"], ["input"],
+            _Switch(["-html", "html"],
                     "Produce HTML output? See also the outfmt option."),
             #Miscellaneous options
-            _Switch(["-parse_deflines", "parse_deflines"], ["input"],
+            _Switch(["-parse_deflines", "parse_deflines"],
                     "Should the query and subject defline(s) be parsed?"),
             ]
         try:
@@ -437,9 +437,9 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             # - see baseclass
             #Query filtering options
             # TODO -soft_masking <Boolean>, is this a switch or an option?
-            #_Switch(["-soft_masking", "soft_masking"], ["input"],
+            #_Switch(["-soft_masking", "soft_masking"],
             #        "Apply filtering locations as soft masks?"),
-            _Switch(["-lcase_masking", "lcase_masking"], ["input"],
+            _Switch(["-lcase_masking", "lcase_masking"],
                     "Use lower case filtering in query and subject sequence(s)?"),
             #Restrict search or results
             _Option(["-gilist", "gilist"], ["input", "file"], None, 0,
@@ -498,7 +498,7 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
 
                     Integer of at least one. Default is one.
                     Incompatible with: remote""", False),
-            _Switch(["-remote", "remote"], ["input"],
+            _Switch(["-remote", "remote"],
                     """Execute search remotely?
 
                     Incompatible with: gilist, negative_gilist, subject_loc, num_threads, ..."""),
@@ -638,10 +638,10 @@ class NcbiblastpCommandline(_Ncbiblast2SeqCommandline):
 
                     Incompatible with: subject, subject_loc""", False),
             #Extension options:
-            _Switch(["-ungapped", "ungapped"], ["input"],
+            _Switch(["-ungapped", "ungapped"],
                     "Perform ungapped alignment only?"),
             #Miscellaneous options:
-            _Switch(["-use_sw_tback", "use_sw_tback"], ["input"],
+            _Switch(["-use_sw_tback", "use_sw_tback"],
                     "Compute locally optimal Smith-Waterman alignments?"),
             ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
@@ -736,11 +736,11 @@ class NcbiblastnCommandline(_Ncbiblast2SeqCommandline):
                     
                     Requires: template_type.""", False),
             #Extension options:
-            _Switch(["-no_greedy", "no_greedy"], ["input"],
+            _Switch(["-no_greedy", "no_greedy"],
                     "Use non-greedy dynamic programming extension"),
             _Option(["-min_raw_gapped_score", "min_raw_gapped_score"], ["input"], None, 0,
                     "Minimum raw gapped score to keep an alignment in the preliminary gapped and traceback stages (integer).", False),
-            _Switch(["-ungapped", "ungapped"], ["input"],
+            _Switch(["-ungapped", "ungapped"],
                     "Perform ungapped alignment only?"),
             _Option(["-off_diagonal_range", "off_diagonal_range"], ["input"], None, 0,
                     """Number of off-diagonals to search for the 2nd hit (integer).
@@ -818,7 +818,7 @@ class NcbiblastxCommandline(_Ncbiblast2SeqCommandline):
 
                     Incompatible with: subject, subject_loc""", False),
             #Extension options:
-            _Switch(["-ungapped", "ungapped"], ["input"],
+            _Switch(["-ungapped", "ungapped"],
                     "Perform ungapped alignment only?"),
             ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
@@ -890,10 +890,10 @@ class NcbitblastnCommandline(_Ncbiblast2SeqCommandline):
                     Incompatible with: subject, subject_loc
                     """, False),
             #Extension options:
-            _Switch(["-ungapped", "ungapped"], ["input"],
+            _Switch(["-ungapped", "ungapped"],
                     "Perform ungapped alignment only?"),
             #Miscellaneous options:
-            _Switch(["-use_sw_tback", "use_sw_tback"], ["input"],
+            _Switch(["-use_sw_tback", "use_sw_tback"],
                     "Compute locally optimal Smith-Waterman alignments?"),
             #PSI-TBLASTN options:
             _Option(["-in_pssm", "in_pssm"], ["input", "file"], None, 0,
@@ -1013,7 +1013,7 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
             _Option(["-gap_trigger", "gap_trigger"], ["input"], None, 0,
                     "Number of bits to trigger gapping (float, default 22)", False),
             #Miscellaneous options:
-            _Switch(["-use_sw_tback", "use_sw_tback"], ["input"],
+            _Switch(["-use_sw_tback", "use_sw_tback"],
                     "Compute locally optimal Smith-Waterman alignments?"),
             #PSI-BLAST options:
             _Option(["-num_iterations", "num_iterations"], ["input"], None, 0,
@@ -1124,7 +1124,7 @@ class NcbirpstblastnCommandline(_NcbiblastCommandline):
                     Format: "yes", "window locut hicut", or "no" to disable.
                     Default is "12 2.2 2.5""", False),
             #Extension options:
-            _Switch(["-ungapped", "ungapped"], ["input"],
+            _Switch(["-ungapped", "ungapped"],
                     "Perform ungapped alignment only?"),
             ]
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
