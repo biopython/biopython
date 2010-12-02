@@ -145,7 +145,7 @@ class ClustalwCommandline(AbstractCommandline):
                     ["input"],
                     None,
                     False,
-                    "Sequence range to write starting m to m+n. " + \
+                    "Sequence range to write starting m to m+n. "
                     "Input as string eg. '24,200'",
                     True),
             _Option(["-maxseqlen", "-MAXSEQLEN", "MAXSEQLEN", "maxseqlen"],

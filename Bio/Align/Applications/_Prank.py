@@ -42,24 +42,24 @@ class PrankCommandline(AbstractCommandline):
             #-m=model_file [default: HKY2/WAG]
             _Option(["-m", "m"], ["input"],
                     None, 0,
-                    "User-defined alignment model filename. Default: " + \
+                    "User-defined alignment model filename. Default: "
                     "HKY2/WAG"),
             #-o=output_file [default: 'output']
             _Option(["-o", "o"], ["output"],
                     None, 0,
-                    "Output filenames prefix. Default: 'output'\n " + \
-                    "Will write: output.?.fas (depending on requested " + \
+                    "Output filenames prefix. Default: 'output'\n "
+                    "Will write: output.?.fas (depending on requested "
                     "format), output.?.xml and output.?.dnd"),
             #-f=output_format [default: 8]
             _Option(["-f", "f"], ["input"],
                     lambda x: x in OUTPUT_FORMAT_VALUES, 0,
-                    "Output alignment format. Default: 8 FASTA\n" + \
-                    "Option are:\n" + \
-                    "1. IG/Stanford	8. Pearson/Fasta\n" + \
-                    "2. GenBank/GB 	11. Phylip3.2\n" + \
-                    "3. NBRF       	12. Phylip\n" + \
-                    "4. EMBL       	14. PIR/CODATA\n" + \
-                    "6. DNAStrider 	15. MSF\n" + \
+                    "Output alignment format. Default: 8 FASTA\n"
+                    "Option are:\n"
+                    "1. IG/Stanford	8. Pearson/Fasta\n"
+                    "2. GenBank/GB 	11. Phylip3.2\n"
+                    "3. NBRF       	12. Phylip\n"
+                    "4. EMBL       	14. PIR/CODATA\n"
+                    "6. DNAStrider 	15. MSF\n"
                     "7. Fitch      	17. PAUP/NEXUS"),
             _Switch(["-noxml", "noxml"], ["input"],
                     "Do not output XML files"),
@@ -86,13 +86,13 @@ class PrankCommandline(AbstractCommandline):
             _Option(["-gapext", "gapext"], ["input"],
                     lambda x: isinstance(x, float), 
                     0,
-                    "Gap extension probability. Default: dna 0.5 " + \
+                    "Gap extension probability. Default: dna 0.5 "
                     "/ prot 0.5"),
             #-dnafreqs=#,#,#,# [ACGT; default: empirical]
             _Option(["-dnafreqs", "dnafreqs"], ["input"],
                     lambda x: isinstance(x, bytes), 
                     0,
-                    "DNA frequencies - 'A,C,G,T'. eg '25,25,25,25' as a quote " + \
+                    "DNA frequencies - 'A,C,G,T'. eg '25,25,25,25' as a quote "
                     "surrounded string value. Default: empirical"),
             #-kappa=# [ts/tv rate ratio; default:2]
             _Option(["-kappa", "kappa"], ["input"],
@@ -128,7 +128,7 @@ class PrankCommandline(AbstractCommandline):
             _Option(["-pwdist", "pwdist"], ["input"],
                     lambda x: isinstance(x, float),
                     0,
-                    "Expected pairwise distance for computing guidetree. " + \
+                    "Expected pairwise distance for computing guidetree. "
                     "Default: dna 0.25 / prot 0.5"),
             _Switch(["-once", "once"], ["input"],
                     "Run only once. Default: twice if no guidetree given"),
@@ -191,7 +191,7 @@ class PrankCommandline(AbstractCommandline):
                     "Translate to protein using mt table"),
             ###################### other: ####################
             _Switch(["-convert", "convert"], ["input"],
-                    "Convert input alignment to new format. Do " + \
+                    "Convert input alignment to new format. Do "
                     "not perform alignment")
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)

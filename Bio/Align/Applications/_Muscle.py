@@ -172,7 +172,7 @@ class MuscleCommandline(AbstractCommandline):
             _Option(["-maxdiagbreak", "maxdiagbreak"], ["input"],
                     lambda x: isinstance(x, int),
                     0,
-                    "Maximum distance between two diagonals that allows " + \
+                    "Maximum distance between two diagonals that allows "
                     "them to merge into one diagonal",
                     0),
             #maxhours        Floating point       None.              Maximum time to run in
@@ -217,7 +217,7 @@ class MuscleCommandline(AbstractCommandline):
             _Option(["-minsmoothscore", "minsmoothscore"], ["input"],
                     lambda x: isinstance(x, float),
                     0,
-                    "Minimum smoothed score a column must have to " + \
+                    "Minimum smoothed score a column must have to "
                     "be an anchor",
                     0),
             #objscore        sp                   spm                Objective score used by
@@ -405,12 +405,12 @@ class MuscleCommandline(AbstractCommandline):
             #anchors            yes             Use anchor optimization in tree dependent
             #                                   refinement iterations.
             _Switch(["-anchors", "anchors"], ["input"],
-                    "Use anchor optimisation in tree dependent " + \
+                    "Use anchor optimisation in tree dependent "
                     "refinement iterations"),
             #noanchors          no              Disable anchor optimization. Default is
             #                                   anchors.
             _Switch(["-noanchors", "noanchors"], ["input"],
-                    "Do not use anchor optimisation in tree dependent " + \
+                    "Do not use anchor optimisation in tree dependent "
                     "refinement iterations"),
             #group              yes             Group similar sequences together in the
             #                                   output. This is the default. See also
