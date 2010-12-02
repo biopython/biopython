@@ -1272,7 +1272,7 @@ class Nexus(object):
                              % ', '.join(set(delete).difference(set(self.taxlabels))))
         if interleave_by_partition:
             if not interleave_by_partition in self.charpartitions:
-                raise NexusError('Unknown partition: '+interleave_by_partition)
+                raise NexusError('Unknown partition: %r' % interleave_by_partition)
             else:
                 partition=self.charpartitions[interleave_by_partition]
                 # we need to sort the partition names by starting position before we exclude characters
