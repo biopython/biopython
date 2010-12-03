@@ -288,6 +288,8 @@ class TestRunner(unittest.TextTestRunner):
         # test changed this, e.g. to help with detecting command line tools)
         global system_lang
         os.environ['LANG']=system_lang
+        # Note the current directory:
+        cur_dir = os.path.abspath(".")
         # Run the actual test inside a try/except to catch import errors.
         # Have to do a nested try because try/except/except/finally requires
         # python 2.5+
@@ -312,7 +314,19 @@ class TestRunner(unittest.TextTestRunner):
                     suite = doctest.DocTestSuite(module)
                     del module
                 suite.run(result)
-                if result.wasSuccessful():
+                if cur_dir != os.path.abspath("."):
+                    sys.stderr.write("FAIL\n")
+                    result.stream.write(result.separator1+"\n")
+                    result.stream.write("ERROR: %s\n" % name)
+                    result.stream.write(result.separator2+"\n")
+                    result.stream.write("Current directory changed\n")
+                    result.stream.write("Was: %s\n" % cur_dir)
+                    result.stream.write("Now: %s\n" % os.path.abspath("."))
+                    os.chdir(cur_dir)
+                    if not result.wasSuccessful():
+                        result.printErrors()
+                    return False
+                elif result.wasSuccessful():
                     sys.stderr.write("ok\n")
                     return True
                 else:
