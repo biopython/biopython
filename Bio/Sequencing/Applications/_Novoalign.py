@@ -11,6 +11,27 @@ class NovoalignCommandline(AbstractCommandline):
 
     See www.novocraft.com - novoalign is a short read alignment program.
 
+    Example:
+
+    >>> from Bio.Sequencing.Applications import NovoalignCommandline
+    >>> novoalign_cline = NovoalignCommandline(database='some_db',
+    ...                                        readfile='some_seq.txt')
+    >>> print novoalign_cline
+    novoalign -d some_db -f some_seq.txt
+
+    As will all the Biopython application wrappers, you can also add or
+    change options after creating the object:
+
+    >>> novoalign_cline.format = 'PRBnSEQ'
+    >>> novoalign_cline.r_method='0.99' # limited valid values
+    >>> novoalign_cline.fragment = '250 20' # must be given as a string
+    >>> novoalign_cline.miRNA = 100
+    >>> print novoalign_cline
+    novoalign -d some_db -f some_seq.txt -F PRBnSEQ -r 0.99 -i 250 20 -m 100
+
+    You would typically run the command line with novoalign_cline() or via
+    the Python subprocess module, as described in the Biopython tutorial.
+
     Last checked against version: 2.05.04
     """
     def __init__(self, cmd="novoalign", **kwargs):
@@ -96,7 +117,7 @@ class NovoalignCommandline(AbstractCommandline):
                     0, "If score difference is higher, report repeats.\n\n"
                     "Otherwise -r read method applies [default: 5]",
                     0),
-            _Option(["-r", "read_method"], [],
+            _Option(["-r", "r_method"], [],
                     lambda x: x.split()[0] in REPEAT_METHOD,
                     0, "Methods to report reads with multiple matches.\n\n"
                     "Allowed values: %s\n"
@@ -147,12 +168,12 @@ class NovoalignCommandline(AbstractCommandline):
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
-if __name__ == '__main__':
-    cml = NovoalignCommandline(database='~/some_dir/some_db',
-                               readfile='~/some_dir/some_seq.txt')
-    cml.format = 'PRBnSEQ'
-    cml.r_method='0.99'
-    cml.fragment = '250 20' # must be given as a string
-    cml.miRNA = 100
-    print cml
-#    subprocess.call(str(cml), shell=True)
+def _test():
+    """Run the module's doctests (PRIVATE)."""
+    print "Runing Novoalign doctests..."
+    import doctest
+    doctest.testmod()
+    print "Done"
+
+if __name__ == "__main__":
+    _test()
