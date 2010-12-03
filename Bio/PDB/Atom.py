@@ -70,18 +70,16 @@ class Atom:
         self.mass = self._assign_atom_mass()
         
     def _assign_element(self, element):
-        """Tries to get element from atom name."""
+        """Tries to guess element from atom name."""
         if not element or not IUPACData.atom_weigths.has_key(element):
             import warnings
             from PDBExceptions import PDBConstructionWarning
             warnings.warn("Atom object (name=%s) without element or element not recognized ('%s')" % (self.name, element),
                           PDBConstructionWarning)
             
-            # HETATM check to clear ambiguities (CA: calcium, c/alpha ; HG: mercury, gamma hydrogen ; etc)
-            # In cases of MSE for example, that count as HETATM, the elements will come out wrong .. how to fix?
-            # Work sfor metals if the name is shifted left by one position 
+            # Inorganic elements have their name shifted left by one position 
             #  (is a convention in PDB, but not part of the standard).
-            if self.fullname[0] != " ": # HETATM Non organic elements
+            if self.fullname[0] != " ":
                 putative_element = self.name.strip()
             else:
                 # Hs may have digit in [0]
@@ -102,7 +100,7 @@ class Atom:
         return element
         
     def _assign_atom_mass(self):
-        # Added by Joao for C.O.M. purposes
+        # Needed for Bio/Struct/Geometry.py C.O.M. function
         if self.element:
             return IUPACData.atom_weigths[self.element.capitalize()]
         else:
