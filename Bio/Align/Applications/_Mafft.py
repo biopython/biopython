@@ -331,3 +331,32 @@ class MafftCommandline(AbstractCommandline):
                       "Second input file name for the mafft-profile command")
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
+def _test():
+    """Run the module's doctests (PRIVATE).
+
+    This will try and locate the unit tests directory, and run the doctests
+    from there in order that the relative paths used in the examples work.
+    """
+    #TODO - Remove os.path checks on input filenames?
+    import doctest
+    import os
+    if os.path.isdir(os.path.join("..","Tests")):
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("..","Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
+    elif os.path.isdir(os.path.join("Tests")) :
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
+
+if __name__ == "__main__":
+    _test()

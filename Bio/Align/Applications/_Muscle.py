@@ -486,3 +486,13 @@ class MuscleCommandline(AbstractCommandline):
                     "Write version string to stdout and exit"),
            ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
+def _test():
+    """Run the module's doctests (PRIVATE)."""
+    print "Runing MUSCLE doctests..."
+    import doctest
+    doctest.testmod()
+    print "Done"
+
+if __name__ == "__main__":
+    _test()
