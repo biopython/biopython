@@ -13,6 +13,37 @@ class ProbconsCommandline(AbstractCommandline):
 
     http://probcons.stanford.edu/
 
+    Example:
+
+    To align a FASTA file (unaligned.fasta) with the output in ClustalW
+    format, and otherwise default settings, use:
+
+    >>> from Bio.Align.Applications import ProbconsCommandline
+    >>> probcons_cline = ProbconsCommandline(input="unaligned.fasta",
+    ...                                      clustalw=True)
+    >>> print probcons_cline
+    probcons -clustalw unaligned.fasta
+
+    You would typically run the command line with probcons_cline() or via
+    the Python subprocess module, as described in the Biopython tutorial.
+    Note that PROBCONS will write the alignment to stdout, which you may
+    want to save to a file and then parse, e.g.
+
+    stdout, stderr = probcons_cline()
+    handle = open("aligned.aln", "w")
+    handle.write(stdout)
+    handle.close()
+    from Bio import AlignIO
+    align = AlignIO.read("aligned.fasta", "clustalw")
+
+    Alternatively, to parse the output with AlignIO directly you can
+    use StringIO to turn the string into a handle:
+
+    stdout, stderr = probcons_cline()
+    from StringIO import StringIO
+    from Bio import AlignIO
+    align = AlignIO.read(StringIO(stdout), "clustalw")
+    
     Citations:
 
     Do, C.B., Mahabhashyam, M.S.P., Brudno, M., and Batzoglou, S. 2005.
