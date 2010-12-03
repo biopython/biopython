@@ -105,3 +105,13 @@ class ProbconsCommandline(AbstractCommandline):
                       is_required=True),
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
+def _test():
+    """Run the module's doctests (PRIVATE)."""
+    print "Runing modules doctests..."
+    import doctest
+    doctest.testmod()
+    print "Done"
+
+if __name__ == "__main__":
+    _test()

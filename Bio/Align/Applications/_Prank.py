@@ -12,6 +12,24 @@ class PrankCommandline(AbstractCommandline):
 
     http://www.ebi.ac.uk/goldman-srv/prank/prank/
 
+    Example:
+
+    To align a FASTA file (unaligned.fasta) with the output in aligned
+    FASTA format with the output filename starting with "aligned" (you
+    can't pick the filename explicitly), no tree ouput and no XML output,
+    use:
+
+    >>> from Bio.Align.Applications import PrankCommandline
+    >>> prank_cline = PrankCommandline(d="unaligned.fasta",
+    ...                                o="aligned", #prefix only!
+    ...                                f=8, #FASTA output
+    ...                                notree=True, noxml=True)
+    >>> print prank_cline
+    prank -d=unaligned.fasta -o=aligned -f=8 -noxml -notree
+
+    You would typically run the command line with prank_cline() or via
+    the Python subprocess module, as described in the Biopython tutorial.
+
     Citations:
 
     Loytynoja, A. and Goldman, N. 2005. An algorithm for progressive
@@ -174,3 +192,13 @@ class PrankCommandline(AbstractCommandline):
                     "not perform alignment")
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
+def _test():
+    """Run the module's doctests (PRIVATE)."""
+    print "Runing modules doctests..."
+    import doctest
+    doctest.testmod()
+    print "Done"
+
+if __name__ == "__main__":
+    _test()
