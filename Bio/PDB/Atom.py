@@ -66,45 +66,49 @@ class Atom:
         # Dictionary that keeps addictional properties
         self.xtra={}
 
-        # Atom Element
+        self.element = self._assign_element(element)
+        self.mass = self._assign_atom_mass()
+        
+    def _assign_element(self, element):
+        """Tries to get element from atom name."""
         if not element or not IUPACData.atom_weigths.has_key(element):
-
             import warnings
             from PDBExceptions import PDBConstructionWarning
-            warnings.warn("Atom object (name=%s) without element or element not recognized ('%s')" % (name, element),
+            warnings.warn("Atom object (name=%s) without element or element not recognized ('%s')" % (self.name, element),
                           PDBConstructionWarning)
             
-            # Try to get element from atom name
             # HETATM check to clear ambiguities (CA: calcium, c/alpha ; HG: mercury, gamma hydrogen ; etc)
             # In cases of MSE for example, that count as HETATM, the elements will come out wrong .. how to fix?
-            # Does not work for metals..
-
+            # Work sfor metals if the name is shifted left by one position 
+            #  (is a convention in PDB, but not part of the standard).
             if self.fullname[0] != " ": # HETATM Non organic elements
                 putative_element = self.name.strip()
             else:
                 # Hs may have digit in [0]
-                if not self.name[0].isdigit():
-                    putative_element = self.name[0]
-                else:
+                if self.name[0].isdigit():
                     putative_element = self.name[1]
+                else:
+                    putative_element = self.name[0]
             
             if IUPACData.atom_weigths.has_key(putative_element.capitalize()):
-                warnings.warn("Atom object (name=%s) assigned element %s based on atom name" % (name, putative_element),
+                warnings.warn("Atom object (name=%s) assigned element %s based on atom name" % (self.name, putative_element),
                                PDBConstructionWarning)
                 element = putative_element
             else:
-                warnings.warn("Atom object (name=%s) element could not be assigned" % (name),
+                warnings.warn("Atom object (name=%s) element could not be assigned" % (self.name),
                                PDBConstructionWarning)
                 element = ""
-
-        self.element=element
-
+                
+        return element
+        
+    def _assign_atom_mass(self):
         # Added by Joao for C.O.M. purposes
         if self.element:
-            self.mass = IUPACData.atom_weigths[self.element.capitalize()]
+            return IUPACData.atom_weigths[self.element.capitalize()]
         else:
-            self.mass = float('NaN')
-        
+            return float('NaN')
+
+
     # Special methods   
 
     def __repr__(self):

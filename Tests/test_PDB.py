@@ -741,24 +741,48 @@ class Exposure(unittest.TestCase):
         self.assertEqual(38, residues[-1].xtra["EXP_CN"])
 
 class Atom_Element(unittest.TestCase):
-    """Atom Element from Atom Name"""
+    """induces Atom Element from Atom Name"""
     
     def setUp(self):
         warnings.simplefilter('ignore', PDBConstructionWarning)
         pdb_filename = "PDB/a_structure.pdb"
         structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
         warnings.filters.pop()
-        self.residue=structure[0]['A'][('H_PCA', 1, ' ')]
+        self.residue = structure[0]['A'][('H_PCA', 1, ' ')]
     
     def test_AtomElement(self):
         """ Atom Element """
-        
         atoms = self.residue.child_list
 
         self.assertEqual('N', atoms[0].element) # N
         self.assertEqual('C', atoms[1].element) # Alpha Carbon
         self.assertEqual('CA', atoms[8].element) # Calcium
         
+    def test_ions(self):
+        """Element for magnesium is assigned correctly."""
+        pdb_filename = "PDB/ions.pdb"
+        structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
+        warnings.filters.pop()
+        # check magnesium atom
+        atoms = structure[0]['A'][('H_ MG', 1, ' ')].child_list
+        self.assertEqual('MG', atoms[0].element)
+        
+        
+#class RenumberTests(unittest.TestCase):
+#    """Tests renumbering of structures."""
+#    
+#    def setUp(self):
+#        warnings.simplefilter('ignore', PDBConstructionWarning)
+#        pdb_filename = "PDB/1A8O.pdb"
+#        self.structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
+#        warnings.filters.pop()
+#        
+#    def test_renumber_residues(self):
+#        """Residues in a structure are renumbered."""
+#        self.structure.renumber_residues()
+#        nums = [resi.id[1] for resi in self.structure[0]['A'].child_list]
+#        print nums
+# 
 # -------------------------------------------------------------
 
 if __name__ == '__main__':
