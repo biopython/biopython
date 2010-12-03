@@ -9,12 +9,29 @@ from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
 class TCoffeeCommandline(AbstractCommandline):
     """Commandline object for the TCoffee alignment program.
+
+    http://www.tcoffee.org/Projects_home_page/t_coffee_home_page.html
     
     The T-Coffee command line tool has a lot of switches and options.
     This wrapper implements a VERY limited number of options - if you
     would like to help improve it please get in touch.
 
-    http://www.tcoffee.org/Projects_home_page/t_coffee_home_page.html
+    Example:
+
+    To align a FASTA file (unaligened.fasta) with the output in ClustalW
+    format (file aligned.aln), and otherwise default settings, use:
+
+    >>> from Bio.Align.Applications import TCoffeeCommandline
+    >>> tcoffee_cline = TCoffeeCommandline(infile="unaligned.fasta",
+    ...                                    output="clustalw",
+    ...                                    outfile="aligned.aln")
+    >>> print tcoffee_cline
+    t_coffee -output clustalw -infile unaligned.fasta -outfile aligned.aln
+
+    You would typically run the command line with tcoffee_cline() or via
+    the Python subprocess module, as described in the Biopython tutorial.
+    
+    Citation:
 
     T-Coffee: A novel method for multiple sequence alignments.
     Notredame, Higgins, Heringa, JMB,302(205-217) 2000
@@ -28,11 +45,15 @@ class TCoffeeCommandline(AbstractCommandline):
           [_Option(["-output", "output"], [],
                     None,
                     0,
-                    "Specify the output type. "
-                    "One (or more separated by a comma) of: "
-                    "'clustalw_aln', 'clustalw', 'gcg', 'msf_aln', "
-                    "'pir_aln', 'fasta_aln', 'phylip', 'pir_seq', 'fasta_seq'"
-                    "Note that biopython will only read clustalw, pir, and fasta",
+                    """Specify the output type.
+
+                    One (or more separated by a comma) of:
+                    'clustalw_aln', 'clustalw', 'gcg', 'msf_aln',
+                    'pir_aln', 'fasta_aln', 'phylip', 'pir_seq', 'fasta_seq'
+
+                    Note that of these Biopython's AlignIO module will only
+                    read clustalw, pir, and fasta.
+                    """,
                     0),
            _Option(["-infile", "infile"], ["file"],
                     None,
