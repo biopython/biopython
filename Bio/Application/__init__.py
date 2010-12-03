@@ -465,6 +465,8 @@ class _Option(_AbstractParameter):
     is assumed to be a "human readable" name describing the option in one
     word.
 
+    o description -- a description of the option.
+
     o param_types -- a list of string describing the type of parameter, 
     which can help let programs know how to use it. The only supported
     values for this are the empty list (default), and ['file'] which means
@@ -478,8 +480,6 @@ class _Option(_AbstractParameter):
 
     o equate -- should an equals sign be inserted if a value is used?
 
-    o description -- a description of the option.
-
     o is_required -- a flag to indicate if the parameter must be set for
     the program to be run.
 
@@ -487,9 +487,11 @@ class _Option(_AbstractParameter):
 
     o value -- the value of a parameter
     """
-    def __init__(self, names = [], types = [], checker_function = None, 
-                 is_required = False, description = "", equate=True):
+    def __init__(self, names, description, types=[], checker_function=None,
+                 is_required=False, equate=True):
         self.names = names
+        assert isinstance(description, basestring), \
+               "%r for %s" % (description, names[-1])
         assert types == [] or types == ["file"], \
                "%r for %s" % (types, names[0])
         self.param_types = types
@@ -541,7 +543,7 @@ class _Switch(_AbstractParameter):
 
     NOTE - There is no value attribute, see is_set instead,
     """
-    def __init__(self, names=[], description=""):
+    def __init__(self, names, description):
         self.names = names
         self.description = description
         self.is_set = False
@@ -561,9 +563,11 @@ class _Switch(_AbstractParameter):
 class _Argument(_AbstractParameter):
     """Represent an argument on a commandline.
     """
-    def __init__(self, names = [], types = [], checker_function = None, 
-                 is_required = False, description = ""):
+    def __init__(self, names, description, types=[], checker_function=None,
+                 is_required=False):
         self.names = names
+        assert isinstance(description, basestring), \
+               "%r for %s" % (description, names[-1])
         assert types == [] or types == ["file"], \
                "%r for %s" % (types, names[0])
         self.param_types = types

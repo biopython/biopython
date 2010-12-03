@@ -41,70 +41,57 @@ class TCoffeeCommandline(AbstractCommandline):
     SEQ_TYPES = ["dna","protein","dna_protein"]
 
     def __init__(self, cmd="t_coffee", **kwargs):
-        self.parameters = \
-          [_Option(["-output", "output"], [],
-                    None,
-                    0,
-                    """Specify the output type.
+        self.parameters = [
+           _Option(["-output", "output"],
+                   """Specify the output type.
+                   One (or more separated by a comma) of:
+                   'clustalw_aln', 'clustalw', 'gcg', 'msf_aln',
+                   'pir_aln', 'fasta_aln', 'phylip', 'pir_seq', 'fasta_seq'
 
-                    One (or more separated by a comma) of:
-                    'clustalw_aln', 'clustalw', 'gcg', 'msf_aln',
-                    'pir_aln', 'fasta_aln', 'phylip', 'pir_seq', 'fasta_seq'
-
-                    Note that of these Biopython's AlignIO module will only
-                    read clustalw, pir, and fasta.
-                    """,
-                    0),
-           _Option(["-infile", "infile"], ["file"],
-                    None,
-                    1,
-                    "Specify the input file.",
-                    0,),
+                   Note that of these Biopython's AlignIO module will only
+                   read clustalw, pir, and fasta.
+                   """, #TODO - Can we read the PHYLIP output?
+                   equate=False),
+           _Option(["-infile", "infile"],
+                   "Specify the input file.",
+                   types=["file"],
+                   is_required=True,
+                   equate=False),
            #Indicates the name of the alignment output by t_coffee. If the
            #default is used, the alignment is named <your sequences>.aln
-           _Option(["-outfile", "outfile"], ["file"],
-                    None,
-                    0,
-                    "Specify the output file. Default: <your sequences>.aln",
-                    0),
+           _Option(["-outfile", "outfile"],
+                   "Specify the output file. Default: <your sequences>.aln",
+                   types=["file"],
+                   equate=False),
            _Switch(["-convert", "convert"],
-                    "Specify you want to perform a file conversion"),
-           _Option(["-type", "type"], [],
-                    lambda x: x in self.SEQ_TYPES,
-                    0,
-                    "Specify the type of sequence being aligned",
-                    0),
-           _Option(["-outorder", "outorder"], [],
-                    None,
-                    0,
-                    "Specify the order of sequence to output"
-                    "Either 'input', 'aligned' or <filename> of "
-                    "Fasta file with sequence order",
-                    0),
-           _Option(["-matrix", "matrix"], [],
-                    None,
-                    0,
-                    "Specify the filename of the substitution matrix to use."
-                    "Default: blosum62mt",
-                    0),
-           _Option(["-gapopen", "gapopen"], [],
-                    lambda x: isinstance(x, int),
-                    0,
-                    "Indicates the penalty applied for opening a gap "
-                    "(negative integer)",
-                    0),
-           _Option(["-gapext", "gapext"], [],
-                    lambda x: isinstance(x, int),
-                    0,
-                    "Indicates the penalty applied for extending a "
-                    "gap. (negative integer)",
-                    0),
+                   "Specify you want to perform a file conversion"),
+           _Option(["-type", "type"],
+                   "Specify the type of sequence being aligned",
+                   checker_function=lambda x: x in self.SEQ_TYPES,
+                   equate=False),
+           _Option(["-outorder", "outorder"],
+                   "Specify the order of sequence to output"
+                   "Either 'input', 'aligned' or <filename> of "
+                   "Fasta file with sequence order",
+                   equate=False),
+           _Option(["-matrix", "matrix"],
+                   "Specify the filename of the substitution matrix to use."
+                   "Default: blosum62mt",
+                   equate=False),
+           _Option(["-gapopen", "gapopen"],
+                   "Indicates the penalty applied for opening a gap "
+                   "(negative integer)",
+                   checker_function=lambda x: isinstance(x, int),
+                   equate=False),
+           _Option(["-gapext", "gapext"],
+                   "Indicates the penalty applied for extending a "
+                   "gap. (negative integer)",
+                   checker_function=lambda x: isinstance(x, int),
+                   equate=False),
            _Switch(["-quiet", "quiet"],
-                    "Turn off log output"),
-           _Option(["-mode", "mode"], [],
-                    None,
-                    0,
-                    "Specifies a special mode: genome, quickaln, dali, 3dcoffee",
-                    0)
+                   "Turn off log output"),
+           _Option(["-mode", "mode"],
+                   "Specifies a special mode: genome, quickaln, dali, 3dcoffee",
+                   equate=False),
            ]
         AbstractCommandline.__init__(self, cmd, **kwargs)           

@@ -49,132 +49,124 @@ class MuscleCommandline(AbstractCommandline):
         self.parameters = \
            [
             #Can't use "in" as the final alias as this is a reserved word in python:
-            _Option(["-in", "in", "input"], ["file"],
-                    None, 0, "Input filename",
-                    0), #No equate
-            _Option(["-out", "out"], ["file"],
-                    None, 0, "Output filename",
-                    0), #No equate
+            _Option(["-in", "in", "input"],
+                    "Input filename",
+                    types=["file"],
+                    equate=False),
+            _Option(["-out", "out"],
+                    "Output filename",
+                    types=["file"],
+                    equate=False),
             _Switch(["-diags", "diags"],
                     "Find diagonals (faster for similar sequences)"),
             _Switch(["-profile", "profile"],
                     "Perform a profile alignment"),
-            _Option(["-in1", "in1"], ["file"],
-                    None, 0,
+            _Option(["-in1", "in1"],
                     "First input filename for profile alignment",
-                    0),
-            _Option(["-in2", "in2"], ["file"],
-                    None, 0,
+                    types=["file"],
+                    equate=False),
+            _Option(["-in2", "in2"],
                     "Second input filename for a profile alignment",
-                    0),
+                    types=["file"],
+                    equate=False),
             #anchorspacing   Integer              32                 Minimum spacing between
-            _Option(["-anchorspacing", "anchorspacing"], [],
-                    lambda x: isinstance(x, int),
-                    0,
+            _Option(["-anchorspacing", "anchorspacing"],
                     "Minimum spacing between anchor columns",
-                    0),
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
             #center          Floating point       [1]                Center parameter.
             #                                                        Should be negative.
-            _Option(["-center", "center"], [],
-                    lambda x: isinstance(x, float),
-                    0,
+            _Option(["-center", "center"],
                     "Center parameter - should be negative",
-                    0),
+                    checker_function=lambda x: isinstance(x, float),
+                    equate=False),
             #cluster1        upgma                upgmb              Clustering method.
-            _Option(["-cluster1", "cluster1"], [],
-                    lambda x: x in CLUSTERING_ALGORITHMS, 0,
+            _Option(["-cluster1", "cluster1"],
                     "Clustering method used in iteration 1",
-                    0),
+                    checker_function=lambda x: x in CLUSTERING_ALGORITHMS,
+                    equate=False),
             #cluster2        upgmb                                   cluster1 is used in
             #                neighborjoining                         iteration 1 and 2,
             #                                                        cluster2 in later
             #                                                        iterations.
-            _Option(["-cluster2", "cluster2"], [],
-                    lambda x: x in CLUSTERING_ALGORITHMS, 0,
+            _Option(["-cluster2", "cluster2"],
                     "Clustering method used in iteration 2",
-                    0),
+                    checker_function=lambda x: x in CLUSTERING_ALGORITHMS,
+                    equate=False),
             #diaglength      Integer              24                 Minimum length of
             #                                                        diagonal.
-            _Option(["-diaglength", "diaglength"], [],
-                    lambda x: isinstance(x, int),
-                    0,
+            _Option(["-diaglength", "diaglength"],
                     "Minimum length of diagonal",
-                    0),
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=True),
             #diagmargin      Integer              5                  Discard this many
             #                                                        positions at ends of
             #                                                        diagonal.
-            _Option(["-diagmargin", "diagmargin"], [],
-                    lambda x: isinstance(x, int),
-                    0,
+            _Option(["-diagmargin", "diagmargin"],
                     "Discard this many positions at ends of diagonal",
-                    0),
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
             #distance1       kmer6_6              Kmer6_6 (amino) or Distance measure for
             #                kmer20_3             Kmer4_6 (nucleo)   iteration 1.
             #                kmer20_4
             #                kbit20_3
             #                kmer4_6
-            _Option(["-distance1", "distance1"], [],
-                    lambda x: x in DISTANCE_MEASURES_ITER1,
-                    0,
+            _Option(["-distance1", "distance1"],
                     "Distance measure for iteration 1",
-                    0),
+                    checker_function=lambda x: x in DISTANCE_MEASURES_ITER1,
+                    equate=False),
             #distance2       kmer6_6              pctid_kimura       Distance measure for
             #                kmer20_3                                iterations 2, 3 ...
             #                kmer20_4
             #                kbit20_3
             #                pctid_kimura
             #                pctid_log
-            _Option(["-distance2", "distance2"], [],
-                    lambda x: x in DISTANCE_MEASURES_ITER2,
-                    0,
+            _Option(["-distance2", "distance2"],
                     "Distance measure for iteration 2",
-                    0),
+                    checker_function=lambda x: x in DISTANCE_MEASURES_ITER2,
+                    equate=False),
             #gapopen         Floating point       [1]                The gap open score.
             #                                                        Must be negative.
-            _Option(["-gapopen", "gapopen"], [],
-                    lambda x: isinstance(x, float),
-                    0,
+            _Option(["-gapopen", "gapopen"],
                     "Gap open score - negative number",
-                    0),
+                    checker_function=lambda x: isinstance(x, float),
+                    equate=False),
             #hydro           Integer              5                  Window size for
             #                                                        determining whether a
             #                                                        region is hydrophobic.
-            _Option(["-hydro", "hydro"], [],
-                    lambda x: isinstance(x, int),
-                    0,
+            _Option(["-hydro", "hydro"],
                     "Window size for hydrophobic region",
-                    0),
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
             #hydrofactor     Floating point       1.2                Multiplier for gap
             #                                                        open/close penalties in
             #                                                        hydrophobic regions.
-            _Option(["-hydrofactor", "hydrofactor"], [],
-                    lambda x: isinstance(x, float),
-                    0,
+            _Option(["-hydrofactor", "hydrofactor"],
                     "Multiplier for gap penalties in hydrophobic regions",
-                    0),
+                    checker_function=lambda x: isinstance(x, float),
+                    equate=False),
             #log             File name            None.              Log file name (delete
             #                                                        existing file).
-            _Option(["-log", "log"], ["file"],
-                    None, 0,
+            _Option(["-log", "log"],
                     "Log file name",
-                    0),
+                    types=["file"],
+                    equate=False),
             #loga            File name            None.              Log file name (append
             #                                                        to existing file).
-            _Option(["-loga", "loga"], ["file"],
-                    None, 0,
+            _Option(["-loga", "loga"],
                     "Log file name (append to existing file)",
-                    0),
+                    types=["file"],
+                    equate=False),
             #maxdiagbreak    Integer              1                  Maximum distance
             #                                                        between two diagonals
             #                                                        that allows them to
             #                                                        merge into one
             #                                                        diagonal.
-            _Option(["-maxdiagbreak", "maxdiagbreak"], [],
-                    lambda x: isinstance(x, int),
-                    0,
+            _Option(["-maxdiagbreak", "maxdiagbreak"],
                     "Maximum distance between two diagonals that allows "
                     "them to merge into one diagonal",
-                    0),
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
             #maxhours        Floating point       None.              Maximum time to run in
             #                                                        hours. The actual time
             #                                                        may exceed the
@@ -183,43 +175,38 @@ class MuscleCommandline(AbstractCommandline):
             #                                                        are allowed, so 1.5
             #                                                        means one hour and 30
             #                                                        minutes.
-            _Option(["-maxhours", "maxhours"], [],
-                    lambda x: isinstance(x, float),
-                    0,
+            _Option(["-maxhours", "maxhours"],
                     "Maximum time to run in hours",
-                    0),
+                    checker_function=lambda x: isinstance(x, float),
+                    equate=False),
             #maxiters        Integer 1, 2 ...     16                 Maximum number of
             #                                                        iterations.
-            _Option(["-maxiters", "maxiters"], [],
-                    lambda x: isinstance(x, int),
-                    0,
+            _Option(["-maxiters", "maxiters"],
                     "Maximum number of iterations",
-                    0),
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
             #maxtrees        Integer              1                  Maximum number of new
             #                                                        trees to build in
             #                                                        iteration 2.
-            _Option(["-maxtrees", "maxtrees"], [],
-                    lambda x: isinstance(x, int),
-                    0,
+            _Option(["-maxtrees", "maxtrees"],
                     "Maximum number of trees to build in iteration 2",
-                    0),
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
             #minbestcolscore Floating point       [1]                Minimum score a column
             #                                                        must have to be an
             #                                                        anchor.
-            _Option(["-minbestcolscore", "minbestcolscore"], [],
-                    lambda x: isinstance(x, float),
-                    0,
+            _Option(["-minbestcolscore", "minbestcolscore"],
                     "Minimum score a column must have to be an anchor",
-                    0),
+                    checker_function=lambda x: isinstance(x, float),
+                    equate=False),
             #minsmoothscore  Floating point       [1]                Minimum smoothed score
             #                                                        a column must have to
             #                                                        be an anchor.
-            _Option(["-minsmoothscore", "minsmoothscore"], [],
-                    lambda x: isinstance(x, float),
-                    0,
+            _Option(["-minsmoothscore", "minsmoothscore"],
                     "Minimum smoothed score a column must have to "
                     "be an anchor",
-                    0),
+                    checker_function=lambda x: isinstance(x, float),
+                    equate=False),
             #objscore        sp                   spm                Objective score used by
             #                ps                                      tree dependent
             #                dp                                      refinement.
@@ -233,49 +220,43 @@ class MuscleCommandline(AbstractCommandline):
             #                                                        ps=average profile-
             #                                                        sequence score.
             #                                                        xp=cross profile score.
-            _Option(["-objscore", "objscore"], [],
-                    lambda x: x in OBJECTIVE_SCORES,
-                    0,
+            _Option(["-objscore", "objscore"],
                     "Objective score used by tree dependent refinement",
-                    0),
+                    checker_function=lambda x: x in OBJECTIVE_SCORES,
+                    equate=False),
             #root1           pseudo               psuedo             Method used to root
-            _Option(["-root1", "root1"], [],
-                    lambda x: x in TREE_ROOT_METHODS,
-                    0,
+            _Option(["-root1", "root1"],
                     "Method used to root tree in iteration 1",
-                    0),
+                    checker_function=lambda x: x in TREE_ROOT_METHODS,
+                    equate=False),
             #root2           midlongestspan                          tree; root1 is used in
             #                minavgleafdist                          iteration 1 and 2,
             #                                                        root2 in later
             #                                                        iterations.
-            _Option(["-root2", "root2"], [],
-                    lambda x: x in TREE_ROOT_METHODS,
-                    0,
+            _Option(["-root2", "root2"],
                     "Method used to root tree in iteration 2",
-                    0),
+                    checker_function=lambda x: x in TREE_ROOT_METHODS,
+                    equate=False),
             #seqtype         protein              auto               Sequence type.
             #                nucleo
             #                auto
-            _Option(["-seqtype", "seqtype"], [],
-                    lambda x: x in SEQUENCE_TYPES,
-                    0,
+            _Option(["-seqtype", "seqtype"],
                     "Sequence type",
-                    0),
+                    checker_function=lambda x: x in SEQUENCE_TYPES,
+                    equate=False),
             #smoothscoreceil Floating point       [1]                Maximum value of column
             #                                                        score for smoothing
             #                                                        purposes.
-            _Option(["-smoothscoreceil", "smoothscoreceil"], [],
-                    lambda x: isinstance(x, float),
-                    0,
+            _Option(["-smoothscoreceil", "smoothscoreceil"],
                     "Maximum value of column score for smoothing",
-                    0),
+                    checker_function=lambda x: isinstance(x, float),
+                    equate=False),
             #smoothwindow    Integer              7                  Window used for anchor
             #                                                        column smoothing.
-            _Option(["-smoothwindow", "smoothwindow"], [],
-                    lambda x: isinstance(x, int),
-                    0,
+            _Option(["-smoothwindow", "smoothwindow"],
                     "Window used for anchor column smoothing",
-                    0),
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
             #SUEFF           Floating point value 0.1                Constant used in UPGMB
             #                between 0 and 1.                        clustering. Determines
             #                                                        the relative fraction
@@ -283,30 +264,26 @@ class MuscleCommandline(AbstractCommandline):
             #                                                        (SUEFF) vs. nearest-
             #                                                        neighbor linkage (1
             #                                                        SUEFF).
-            _Option(["-sueff", "sueff"], [],
-                    lambda x: isinstance(x, float),
-                    0,
+            _Option(["-sueff", "sueff"],
                     "Constant used in UPGMB clustering",
-                    0),
+                    checker_function=lambda x: isinstance(x, float),
+                    equate=False),
             #tree1           File name            None               Save tree produced in
-            _Option(["-tree1", "tree1"], [],
-                    None, 0,
+            _Option(["-tree1", "tree1"],
                     "Save Newick tree from iteration 1",
-                    0),
+                    equate=False),
             #tree2                                                   first or second
             #                                                        iteration to given file
             #                                                        in Newick (Phylip-
             #                                                        compatible) format.
-            _Option(["-tree2", "tree2"], [],
-                    None, 0,
+            _Option(["-tree2", "tree2"],
                     "Save Newick tree from iteration 2",
-                    0),
+                    equate=False),
             #weight1         none                 clustalw           Sequence weighting
-            _Option(["-weight1", "weight1"], [],
-                    lambda x: x in WEIGHTING_SCHEMES,
-                    0,
+            _Option(["-weight1", "weight1"],
                     "Weighting scheme used in iteration 1",
-                    0),
+                    checker_function=lambda x: x in WEIGHTING_SCHEMES,
+                    equate=False),
             #weight2         henikoff                                scheme.
             #                henikoffpb                              weight1 is used in
             #                gsc                                     iterations 1 and 2.
@@ -325,11 +302,10 @@ class MuscleCommandline(AbstractCommandline):
             #                                                        method.
             #                                                        threeway=Gotoh three-
             #                                                        way method.
-            _Option(["-weight2", "weight2"], [],
-                    lambda x: x in WEIGHTING_SCHEMES,
-                    0,
+            _Option(["-weight2", "weight2"],
                     "Weighting scheme used in iteration 2",
-                    0),
+                    checker_function=lambda x: x in WEIGHTING_SCHEMES,
+                    equate=False),
             #################### FORMATS #######################################
             # Multiple formats can be specified on the command line
             # If -msf appears it will be used regardless of other formats
@@ -371,36 +347,34 @@ class MuscleCommandline(AbstractCommandline):
             _Switch(["-phys", "phys"],
                     "Write output in PHYLIP sequential format"),
             ################## Additional specified output files #########
-            _Option(["-phyiout", "phyiout"], ["file"],
-                    None, 0,
+            _Option(["-phyiout", "phyiout"],
                     "Write PHYLIP interleaved output to specified filename",
-                    0), #No equate
-            _Option(["-physout", "physout"], ["file"],
-                    None, 0,
-                    "Write PHYLIP sequential format to specified filename",
-                    0), #No equate
-            _Option(["-htmlout", "htmlout"], ["file"],
-                    None, 0,
-                    "Write HTML output to specified filename",
-                    0), #No equate
-            _Option(["-clwout", "clwout"], ["file"],
-                    None, 0,
+                    types=["file"],
+                    equate=False),
+            _Option(["-physout", "physout"],"Write PHYLIP sequential format to specified filename",
+                    types=["file"],
+                    equate=False),
+            _Option(["-htmlout", "htmlout"],"Write HTML output to specified filename",
+                    types=["file"],
+                    equate=False),
+            _Option(["-clwout", "clwout"],
                     "Write CLUSTALW output (with MUSCLE header) to specified "
                     "filename",
-                    0), #No equate
-            _Option(["-clwstrictout", "clwstrictout"], ["file"],
-                    None, 0,
+                    types=["file"],
+                    equate=False),
+            _Option(["-clwstrictout", "clwstrictout"],
                     "Write CLUSTALW output (with version 1.81 header) to "
                     "specified filename",
-                    0), #No equate
-            _Option(["-msfout", "msfout"], ["file"],
-                    None, 0,
+                    types=["file"],
+                    equate=False),
+            _Option(["-msfout", "msfout"],
                     "Write MSF format output to specified filename",
-                    0), #No equate
-            _Option(["-fastaout", "fastaout"], ["file"],
-                    None, 0,
+                    types=["file"],
+                    equate=False),
+            _Option(["-fastaout", "fastaout"],
                     "Write FASTA format output to specified filename",
-                    0), #No equate
+                    types=["file"],
+                    equate=False),
             ############## END FORMATS ###################################
             #anchors            yes             Use anchor optimization in tree dependent
             #                                   refinement iterations.

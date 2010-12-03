@@ -1,4 +1,5 @@
 # Copyright 2009 by Osvaldo Zagordi.  All rights reserved.
+# Revisions copyright 2010 by Peter Cock.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -42,129 +43,132 @@ class NovoalignCommandline(AbstractCommandline):
         
         self.parameters = \
            [
-            _Option(["-d", "database"], ["file"],
-                    None, 0, "database filename",
-                    0),
-            _Option(["-f", "readfile"], ["file"],
-                    None, 0, "read file",
-                    0),
-            _Option(["-F", "format"], [],
-                    lambda x: x in READ_FORMAT,
-                    0, "Format of read files.\n\nAllowed values: %s" % ", ".join(READ_FORMAT),
-                    0),
+            _Option(["-d", "database"],
+                    "database filename",
+                    types=["file"],
+                    equate=False),
+            _Option(["-f", "readfile"],
+                    "read file",
+                    types=["file"],
+                    equate=False),
+            _Option(["-F", "format"],
+                    "Format of read files.\n\nAllowed values: %s" \
+                    % ", ".join(READ_FORMAT),
+                    checker_function=lambda x: x in READ_FORMAT,
+                    equate=False),
             
             # Alignment scoring options
-            _Option(["-t", "threshold"], [],
-                    lambda x: isinstance(x, types.IntType),
-                    0, "Threshold for alignment score",
-                    0),
-            _Option(["-g", "gap_open"], [],
-                    lambda x: isinstance(x, types.IntType),
-                    0, "Gap opening penalty [default: 40]",
-                    0),
-            _Option(["-x", "gap_extend"], [],
-                    lambda x: isinstance(x, types.IntType),
-                    0, "Gap extend penalty [default: 15]",
-                    0),
-            _Option(["-u", "unconverted"], [],
-                    lambda x: isinstance(x, types.IntType), 0,
+            _Option(["-t", "threshold"],
+                    "Threshold for alignment score",
+                    checker_function=lambda x: isinstance(x, types.IntType),
+                    equate=False),
+            _Option(["-g", "gap_open"],
+                    "Gap opening penalty [default: 40]",
+                    checker_function=lambda x: isinstance(x, types.IntType),
+                    equate=False),
+            _Option(["-x", "gap_extend"],
+                    "Gap extend penalty [default: 15]",
+                    checker_function=lambda x: isinstance(x, types.IntType),
+                    equate=False),
+            _Option(["-u", "unconverted"],
                     "Experimental: unconverted cytosines penalty in bisulfite mode\n\n"
                     "Default: no penalty",
-                    0),
+                    checker_function=lambda x: isinstance(x, types.IntType),
+                    equate=False),
             
             # Quality control and read filtering
-            _Option(["-l", "good_bases"], [],
-                    lambda x: isinstance(x, types.IntType),
-                    0, "Minimum number of good quality bases [default: log(N_g, 4) + 5]",
-                    0),
-            _Option(["-h", "homopolymer"], [],
-                    lambda x: isinstance(x, types.IntType),
-                    0, "Homopolymer read filter [default: 20; disable: negative value]",
-                    0),
+            _Option(["-l", "good_bases"],
+                    "Minimum number of good quality bases [default: log(N_g, 4) + 5]",
+                    checker_function=lambda x: isinstance(x, types.IntType),
+                    equate=False),
+            _Option(["-h", "homopolymer"],
+                    "Homopolymer read filter [default: 20; disable: negative value]",
+                    checker_function=lambda x: isinstance(x, types.IntType),
+                    equate=False),
             
             # Read preprocessing options
-            _Option(["-a", "adapter3"], [],
-                    lambda x: isinstance(x, types.StringType),
-                    0, "Strips a 3' adapter sequence prior to alignment.\n\n"
+            _Option(["-a", "adapter3"],
+                    "Strips a 3' adapter sequence prior to alignment.\n\n"
                     "With paired ends two adapters can be specified",
-                    0),
-            _Option(["-n", "truncate"], [],
-                    lambda x: isinstance(x, types.IntType),
-                    0, "Truncate to specific length before alignment",
-                    0),
-            _Option(["-s", "trimming"], [],
-                    lambda x: isinstance(x, types.IntType),
-                    0, "If fail to align, trim by s bases until they map or become shorter than l.\n\n"
+                    checker_function=lambda x: isinstance(x, types.StringType),
+                    equate=False),
+            _Option(["-n", "truncate"],
+                    "Truncate to specific length before alignment",
+                    checker_function=lambda x: isinstance(x, types.IntType),
+                    equate=False),
+            _Option(["-s", "trimming"],
+                    "If fail to align, trim by s bases until they map or become shorter than l.\n\n"
                     "Ddefault: 2",
-                    0),
-            _Option(["-5", "adapter5"], [],
-                    lambda x: isinstance(x, types.StringType),
-                    0, "Strips a 5' adapter sequence.\n\n"
+                    checker_function=lambda x: isinstance(x, types.IntType),
+                    equate=False),
+            _Option(["-5", "adapter5"],
+                    "Strips a 5' adapter sequence.\n\n"
                     "Similar to -a (adaptor3), but on the 5' end.",
-                    0),
+                    checker_function=lambda x: isinstance(x, types.StringType),
+                    equate=False),
             # Reporting options
-            _Option(["-o", "report"], [],
-                    lambda x: x in REPORT_FORMAT,
-                    0, "Specifies the report format.\n\nAllowed values: %s\nDefault: Native" \
+            _Option(["-o", "report"],
+                    "Specifies the report format.\n\nAllowed values: %s\nDefault: Native" \
                     % ", ".join(REPORT_FORMAT),
-                    0),
-            _Option(["-Q", "quality"], [],
-                    lambda x: isinstance(x, types.IntType),
-                    0, "Lower threshold for an alignment to be reported [default: 0]",
-                    0),
-            _Option(["-R", "repeats"], [],
-                    lambda x: isinstance(x, types.IntType),
-                    0, "If score difference is higher, report repeats.\n\n"
+                    checker_function=lambda x: x in REPORT_FORMAT,
+                    equate=False),
+            _Option(["-Q", "quality"],
+                    "Lower threshold for an alignment to be reported [default: 0]",
+                    checker_function=lambda x: isinstance(x, types.IntType),
+                    equate=False),
+            _Option(["-R", "repeats"],
+                    "If score difference is higher, report repeats.\n\n"
                     "Otherwise -r read method applies [default: 5]",
-                    0),
-            _Option(["-r", "r_method"], [],
-                    lambda x: x.split()[0] in REPEAT_METHOD,
-                    0, "Methods to report reads with multiple matches.\n\n"
+                    checker_function=lambda x: isinstance(x, types.IntType),
+                    equate=False),
+            _Option(["-r", "r_method"],
+                    "Methods to report reads with multiple matches.\n\n"
                     "Allowed values: %s\n"
                     "'All' and 'Exhaustive' accept limits." \
                     % ", ".join(REPEAT_METHOD),
-                    0),
-            _Option(["-e", "recorded"], [],
-                    lambda x: isinstance(x, types.IntType),
-                    0, "Alignments recorded with score equal to the best.\n\n"
+                    checker_function=lambda x: x.split()[0] in REPEAT_METHOD,
+                    equate=False),
+            _Option(["-e", "recorded"],
+                    "Alignments recorded with score equal to the best.\n\n"
                     "Default: 1000 in default read method, otherwise no limit.",
-                    0),
-            _Option(["-q", "qual_digits"], [],
-                    lambda x: isinstance(x, types.IntType),
-                    0, "Decimal digits for quality scores [default: 0]",
-                    0),
+                    checker_function=lambda x: isinstance(x, types.IntType),
+                    equate=False),
+            _Option(["-q", "qual_digits"],
+                    "Decimal digits for quality scores [default: 0]",
+                    checker_function=lambda x: isinstance(x, types.IntType),
+                    equate=False),
 
             # Paired end options
-            _Option(["-i", "fragment"], [],
-                    lambda x: len(x.split()) == 2,
-                    0, "Fragment length (2 reads + insert) and standard deviation [default: 250 30]",
-                    0),
-            _Option(["-v", "variation"], [],
-                    lambda x: isinstance(x, types.IntType),
-                    0, "Structural variation penalty [default: 70]",
-                    0),
+            _Option(["-i", "fragment"],
+                    "Fragment length (2 reads + insert) and standard deviation [default: 250 30]",
+                    checker_function=lambda x: len(x.split()) == 2,
+                    equate=False),
+            _Option(["-v", "variation"],
+                    "Structural variation penalty [default: 70]",
+                    checker_function=lambda x: isinstance(x, types.IntType),
+                    equate=False),
             
             # miRNA mode
-            _Option(["-m", "miRNA"], [],
-                    lambda x: isinstance(x, types.IntType),
-                    0, "Sets miRNA mode and optionally sets a value for the region scanned [default: off]",
-                    0),
+            _Option(["-m", "miRNA"],
+                    "Sets miRNA mode and optionally sets a value for the region scanned [default: off]",
+                    checker_function=lambda x: isinstance(x, types.IntType),
+                    equate=False),
             
             # Multithreading
-            _Option(["-c", "cores"], [],
-                    lambda x: isinstance(x, types.IntType),
-                    0, "Number of threads, disabled on free versions [default: number of cores]",
-                    0),
+            _Option(["-c", "cores"],
+                    "Number of threads, disabled on free versions [default: number of cores]",
+                    checker_function=lambda x: isinstance(x, types.IntType),
+                    equate=False),
             
             # Quality calibrations
-            _Option(["-k", "read_cal"], [],
-                    lambda x: isinstance(x, types.StringType),
-                    0, "Read quality calibration from file (mismatch counts)",
-                    0),
-            _Option(["-K", "write_cal"], [],
-                    lambda x: isinstance(x, types.StringType),
-                    0, "Accumulate mismatch counts and write to file",
-                    0)
+            _Option(["-k", "read_cal"],
+                    "Read quality calibration from file (mismatch counts)",
+                    checker_function=lambda x: isinstance(x, types.StringType),
+                    equate=False),
+            _Option(["-K", "write_cal"],
+                    "Accumulate mismatch counts and write to file",
+                    checker_function=lambda x: isinstance(x, types.StringType),
+                    equate=False),
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 

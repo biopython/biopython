@@ -88,24 +88,24 @@ class MafftCommandline(AbstractCommandline):
                     "Automatically select strategy. Default off."),
             #Distance is calculated based on the number of shared 6mers. Default: on
             _Switch(["--6merpair", "6merpair", "sixmerpair"],
-                     "Distance is calculated based on the number of shared "
-                     "6mers. Default: on"),
+                    "Distance is calculated based on the number of shared "
+                    "6mers. Default: on"),
             #All pairwise alignments are computed with the Needleman-Wunsch
             #algorithm. More accurate but slower than --6merpair. Suitable for a
             #set of globally alignable sequences. Applicable to up to ~200
             #sequences. A combination with --maxiterate 1000 is recommended (G-
             #INS-i). Default: off (6mer distance is used)
             _Switch(["--globalpair", "globalpair"],
-                     "All pairwise alignments are computed with the "
-                     "Needleman-Wunsch algorithm. Default: off"),
+                    "All pairwise alignments are computed with the "
+                    "Needleman-Wunsch algorithm. Default: off"),
             #All pairwise alignments are computed with the Smith-Waterman
             #algorithm. More accurate but slower than --6merpair. Suitable for a
             #set of locally alignable sequences. Applicable to up to ~200
             #sequences. A combination with --maxiterate 1000 is recommended (L-
             #INS-i). Default: off (6mer distance is used)
             _Switch(["--localpair", "localpair"],
-                     "All pairwise alignments are computed with the "
-                     "Smith-Waterman algorithm. Default: off"),
+                    "All pairwise alignments are computed with the "
+                    "Smith-Waterman algorithm. Default: off"),
             #All pairwise alignments are computed with a local algorithm with
             #the generalized affine gap cost (Altschul 1998). More accurate but
             #slower than --6merpair. Suitable when large internal gaps are
@@ -113,35 +113,35 @@ class MafftCommandline(AbstractCommandline):
             #maxiterate 1000 is recommended (E-INS-i). Default: off (6mer
             #distance is used)
             _Switch(["--genafpair", "genafpair"],
-                     "All pairwise alignments are computed with a local "
-                     "algorithm with the generalized affine gap cost "
-                     "(Altschul 1998). Default: off"),
+                    "All pairwise alignments are computed with a local "
+                    "algorithm with the generalized affine gap cost "
+                    "(Altschul 1998). Default: off"),
             #All pairwise alignments are computed with FASTA (Pearson and Lipman
             #1988). FASTA is required. Default: off (6mer distance is used)
             _Switch(["--fastapair", "fastapair"],
-                     "All pairwise alignments are computed with FASTA "
-                     "(Pearson and Lipman 1988). Default: off"),
+                    "All pairwise alignments are computed with FASTA "
+                    "(Pearson and Lipman 1988). Default: off"),
             #Weighting factor for the consistency term calculated from pairwise
             #alignments. Valid when either of --blobalpair, --localpair, --
             #genafpair, --fastapair or --blastpair is selected. Default: 2.7
-            _Option(["--weighti", "weighti"], [],
-                     lambda x: isinstance(x, float), 0,
-                     "Weighting factor for the consistency term calculated "
-                     "from pairwise alignments. Default: 2.7",
-                     0),
+            _Option(["--weighti", "weighti"],
+                    "Weighting factor for the consistency term calculated "
+                    "from pairwise alignments. Default: 2.7",
+                    checker_function=lambda x: isinstance(x, float),
+                    equate=False),
             #Guide tree is built number times in the progressive stage. Valid
             #with 6mer distance. Default: 2
-            _Option(["--retree", "retree"], [],
-                     lambda x: isinstance(x, int), 0,
-                     "Guide tree is built number times in the progressive "
-                     "stage. Valid with 6mer distance. Default: 2",
-                     0),
+            _Option(["--retree", "retree"],
+                    "Guide tree is built number times in the progressive "
+                    "stage. Valid with 6mer distance. Default: 2",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
             #Number cycles of iterative refinement are performed. Default: 0
-            _Option(["--maxiterate", "maxiterate"], [],
-                     lambda x: isinstance(x, int), 0,
-                     "Number cycles of iterative refinement are performed. "
-                     "Default: 0",
-                     0),
+            _Option(["--maxiterate", "maxiterate"],
+                    "Number cycles of iterative refinement are performed. "
+                    "Default: 0",
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
             #Use FFT approximation in group-to-group alignment. Default: on
             _Switch(["--fft", "fft"],
                     "Use FFT approximation in group-to-group alignment. "
@@ -149,8 +149,8 @@ class MafftCommandline(AbstractCommandline):
             #Do not use FFT approximation in group-to-group alignment. Default:
             #off
             _Switch(["--nofft", "nofft"],
-                     "Do not use FFT approximation in group-to-group "
-                     "alignment. Default: off"),
+                    "Do not use FFT approximation in group-to-group "
+                    "alignment. Default: off"),
             #Alignment score is not checked in the iterative refinement stage.
             #Default: off (score is checked)
             _Switch(["--noscore", "noscore"],
@@ -182,11 +182,11 @@ class MafftCommandline(AbstractCommandline):
                     "The PartTree algorithm is used with distances based "
                     "on FASTA. Default: off"),
             #The number of partitions in the PartTree algorithm. Default: 50
-            _Option(["--partsize", "partsize"], [],
-                    lambda x: isinstance(x, int), 0,
+            _Option(["--partsize", "partsize"],
                     "The number of partitions in the PartTree algorithm. "
                     "Default: 50",
-                    0),
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
             #Do not make alignment larger than number sequences. Valid only with
             #the --*parttree options. Default: the number of input sequences
             _Switch(["--groupsize", "groupsize"],
@@ -194,82 +194,83 @@ class MafftCommandline(AbstractCommandline):
                     "Default: the number of input sequences"),
             #**** Parameter ****
             #Gap opening penalty at group-to-group alignment. Default: 1.53
-            _Option(["--op", "op"], [],
-                    lambda x: isinstance(x, float), 0,
+            _Option(["--op", "op"],
                     "Gap opening penalty at group-to-group alignment. "
                     "Default: 1.53",
-                    0),
+                    checker_function=lambda x: isinstance(x, float),
+                    equate=False),
             #Offset value, which works like gap extension penalty, for group-to-
             #group alignment. Deafult: 0.123
-            _Option(["--ep", "ep"], [],
-                    lambda x: isinstance(x, float), 0,
+            _Option(["--ep", "ep"],
                     "Offset value, which works like gap extension penalty, "
                     "for group-to- group alignment. Default: 0.123",
-                    0),
+                    checker_function=lambda x: isinstance(x, float),
+                    equate=False),
             #Gap opening penalty at local pairwise alignment. Valid when the --
             #localpair or --genafpair option is selected. Default: -2.00
-            _Option(["--lop", "lop"], [],
-                    lambda x: isinstance(x, float), 0,
+            _Option(["--lop", "lop"],
                     "Gap opening penalty at local pairwise alignment. "
                     "Default: 0.123",
-                    0),
+                    checker_function=lambda x: isinstance(x, float),
+                    equate=False),
             #Offset value at local pairwise alignment. Valid when the --
             #localpair or --genafpair option is selected. Default: 0.1
-            _Option(["--lep", "lep"], [],
-                    lambda x: isinstance(x, float), 0,
+            _Option(["--lep", "lep"],
                     "Offset value at local pairwise alignment. "
                     "Default: 0.1",
-                    0),
+                    checker_function=lambda x: isinstance(x, float),
+                    equate=False),
             #Gap extension penalty at local pairwise alignment. Valid when the -
             #-localpair or --genafpair option is selected. Default: -0.1
-            _Option(["--lexp", "lexp"], [],
-                    lambda x: isinstance(x, float), 0,
+            _Option(["--lexp", "lexp"],
                     "Gap extension penalty at local pairwise alignment. "
                     "Default: -0.1",
-                    0),
+                    checker_function=lambda x: isinstance(x, float),
+                    equate=False),
             #Gap opening penalty to skip the alignment. Valid when the --
             #genafpair option is selected. Default: -6.00
-            _Option(["--LOP", "LOP"], [],
-                    lambda x: isinstance(x, float), 0,
+            _Option(["--LOP", "LOP"],
                     "Gap opening penalty to skip the alignment. "
                     "Default: -6.00",
-                    0),
+                    checker_function=lambda x: isinstance(x, float),
+                    equate=False),
             #Gap extension penalty to skip the alignment. Valid when the --
             #genafpair option is selected. Default: 0.00
-            _Option(["--LEXP", "LEXP"], [],
-                    lambda x: isinstance(x, float),
-                    0,
+            _Option(["--LEXP", "LEXP"],
                     "Gap extension penalty to skip the alignment. "
                     "Default: 0.00",
-                    0),
+                    checker_function=lambda x: isinstance(x, float),
+                    equate=False),
 
             #BLOSUM number matrix (Henikoff and Henikoff 1992) is used.
             #number=30, 45, 62 or 80. Default: 62
-            _Option(["--bl", "bl"], [],
-                    lambda x: x in BLOSUM_MATRICES, 0,
+            _Option(["--bl", "bl"],
                     "BLOSUM number matrix is used. Default: 62",
-                    0),
+                    checker_function=lambda x: x in BLOSUM_MATRICES,
+                    equate=False),
             #JTT PAM number (Jones et al. 1992) matrix is used. number>0.
             #Default: BLOSUM62
-            _Option(["--jtt", "jtt"], [], None, 0,
+            _Option(["--jtt", "jtt"],
                     "JTT PAM number (Jones et al. 1992) matrix is used. "
                     "number>0. Default: BLOSUM62",
-                    0),
+                    equate=False),
             #Transmembrane PAM number (Jones et al. 1994) matrix is used.
             #number>0. Default: BLOSUM62
-            _Option(["--tm", "tm"], [],
-                    os.path.exists, 0,
+            _Option(["--tm", "tm"],
                     "Transmembrane PAM number (Jones et al. 1994) "
                     "matrix is used. number>0. Default: BLOSUM62",
-                    0),
+                    checker_function=os.path.exists,
+                    types=["file"],
+                    equate=False),
             #Use a user-defined AA scoring matrix. The format of matrixfile is
             #the same to that of BLAST. Ignored when nucleotide sequences are
             #input. Default: BLOSUM62
-            _Option(["--aamatrix", "aamatrix"], [],
-                    os.path.exists, 0,
+            _Option(["--aamatrix", "aamatrix"],
                     "Use a user-defined AA scoring matrix. "
                     "Default: BLOSUM62",
-                    0),
+                    checker_function=os.path.exists,
+                    types=["file"],
+                    equate=False),
             #Incorporate the AA/nuc composition information into the scoring
             #matrix. Default: off
             _Switch(["--fmodel", "fmodel"],
@@ -309,10 +310,12 @@ class MafftCommandline(AbstractCommandline):
             # form: "mafft --seed align1 --seed align2 [etc] input"
             # Effectively for n number of seed alignments. Here we're going to
             # assume 6 extra are enough
-            _Option(["--seed", "seed"], ["file"], os.path.exists, 0,
+            _Option(["--seed", "seed"],
                     "Seed alignments given in alignment_n (fasta format) "
                     "are aligned with sequences in input.",
-                    0),
+                    checker_function=os.path.exists,
+                    types=["file"],
+                    equate=False),
             #The old solution of also defining extra parameters with
             #["--seed", "seed1"] etc worked, but clashes with the recent
             #code in the base class to look for duplicate paramters and raise
@@ -322,13 +325,18 @@ class MafftCommandline(AbstractCommandline):
             #assigned to the value?
             ####################### END SEEDS  ################################
             #The input (must be FASTA format)
-            _Argument(["input"], ["file"], os.path.exists, 1,
-                      "Input file name"),
+            _Argument(["input"],
+                      "Input file name",
+                      checker_function=os.path.exists,
+                      types=["file"],
+                      is_required=True),
             ###################################################################
             #mafft-profile takes a second alignment input as an argument:
             #mafft-profile align1 align2
-            _Argument(["input1"], ["file"], os.path.exists, 0,
-                      "Second input file name for the mafft-profile command")
+            _Argument(["input1"],
+                      "Second input file name for the mafft-profile command",
+                      checker_function=os.path.exists,
+                      types=["file"]),
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
