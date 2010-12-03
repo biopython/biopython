@@ -18,7 +18,7 @@ class TCoffeeCommandline(AbstractCommandline):
 
     Example:
 
-    To align a FASTA file (unaligened.fasta) with the output in ClustalW
+    To align a FASTA file (unaligned.fasta) with the output in ClustalW
     format (file aligned.aln), and otherwise default settings, use:
 
     >>> from Bio.Align.Applications import TCoffeeCommandline
