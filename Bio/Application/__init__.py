@@ -490,9 +490,8 @@ class _Option(_AbstractParameter):
     def __init__(self, names = [], types = [], checker_function = None, 
                  is_required = False, description = "", equate=True):
         self.names = names
-        #TODO - What is Bio.PopGen using this for?
-        #assert types == [] or types == ["file"], \
-        #       "%r for %s" % (types, names[0])
+        assert types == [] or types == ["file"], \
+               "%r for %s" % (types, names[0])
         self.param_types = types
         self.checker_function = checker_function
         self.description = description
@@ -565,9 +564,8 @@ class _Argument(_AbstractParameter):
     def __init__(self, names = [], types = [], checker_function = None, 
                  is_required = False, description = ""):
         self.names = names
-        #TODO - What is Bio.PopGen using this for?
-        #assert types == [] or types == ["file"], \
-        #       "%r for %s" % (types, names[0])
+        assert types == [] or types == ["file"], \
+               "%r for %s" % (types, names[0])
         self.param_types = types
         self.checker_function = checker_function
         self.description = description
