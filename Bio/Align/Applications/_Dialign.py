@@ -12,7 +12,21 @@ class DialignCommandline(AbstractCommandline):
 
     http://bibiserv.techfak.uni-bielefeld.de/dialign/welcome.html
 
-    Citations:
+    Example:
+
+    To align a FASTA file (unaligned.fasta) with the output files names
+    aligned.* including a FASTA output file (aligned.fa), use:
+
+    >>> from Bio.Align.Applications import DialignCommandline
+    >>> dialign_cline = DialignCommandline(input="unaligned.fasta",
+    ...                                    fn="aligned", fa=True)
+    >>> print dialign_cline
+    dialign2-2 -fa -fn aligned unaligned.fasta
+
+    You would typically run the command line with dialign_cline() or via
+    the Python subprocess module, as described in the Biopython tutorial.
+    
+    Citation:
 
     B. Morgenstern (2004). DIALIGN: Multiple DNA and Protein Sequence
     Alignment at BiBiServ. Nucleic Acids Research 32, W33-W36.
@@ -161,3 +175,13 @@ class DialignCommandline(AbstractCommandline):
                       is_required=True),
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
+def _test():
+    """Run the module's doctests (PRIVATE)."""
+    print "Runing modules doctests..."
+    import doctest
+    doctest.testmod()
+    print "Done"
+
+if __name__ == "__main__":
+    _test()
