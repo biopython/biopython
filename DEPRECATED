@@ -112,8 +112,8 @@ from Bio.SwissProt.
 
 Bio.Prosite and Bio.Enzyme
 ==========================
-Declared obsolete in Release 1.50, and deprecated in Release 1.53.
-Most of the functionality has moved to Bio.ExPASy.Prosite and
+Declared obsolete in Release 1.50, deprecated in Release 1.53, and removed in
+Release 1.57. Most of the functionality has moved to Bio.ExPASy.Prosite and
 Bio.ExPASy.Enzyme, respectively.
 
 Bio.EZRetrieve, Bio.NetCatch, Bio.File.SGMLHandle, Bio.FilteredReader
