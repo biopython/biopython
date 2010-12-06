@@ -59,17 +59,10 @@ class DialignApplication(unittest.TestCase):
         #Test using keyword arguments:
         cmdline = DialignCommandline(dialign_exe, input=self.infile1)
         self.assertEqual(str(cmdline), dialign_exe + " Fasta/f002")
-        child = subprocess.Popen(str(cmdline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
-        return_code = child.wait()
-        self.assertEqual(return_code, 0)
-        self.assertEqual(child.stderr.read(), "")
-        self.assertEqual(child.stdout.read(), "")
+        stdout, stderr = cmdline()
+        self.assertEqual(stderr, "")
+        self.assertEqual(stdout, "")
         self.assertTrue(os.path.exists(self.outfile1))
-        del child
 
     def test_Dialign_simple_with_options(self):
         """Simple round-trip through app with infile and options
@@ -80,17 +73,10 @@ class DialignApplication(unittest.TestCase):
         cmdline.set_parameter("stars", 4)
         self.assertEqual(str(cmdline), dialign_exe + \
                          " -max_link -stars 4 Fasta/f002")
-        child = subprocess.Popen(str(cmdline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
-        return_code = child.wait()
-        self.assertEqual(return_code, 0)
-        self.assertEqual(child.stderr.read(), "")
-        self.assertEqual(child.stdout.read(), "")
+        stdout, stderr = cmdline()
+        self.assertEqual(stderr, "")
+        self.assertEqual(stdout, "")
         self.assertTrue(os.path.exists(self.outfile1))
-        del child
 
     def test_Dialign_simple_with_MSF_output(self):
         """Simple round-trip through app with infile, output MSF
@@ -100,18 +86,11 @@ class DialignApplication(unittest.TestCase):
         cmdline.input = self.infile1
         cmdline.msf = True
         self.assertEqual(str(cmdline), dialign_exe + " -msf Fasta/f002")
-        child = subprocess.Popen(str(cmdline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
-        return_code = child.wait()
-        self.assertEqual(return_code, 0)
-        self.assertEqual(child.stdout.read(), "")
-        self.assertEqual(child.stderr.read(), "")
+        stdout, stderr = cmdline()
+        self.assertEqual(stderr, "")
+        self.assertEqual(stdout, "")
         self.assertTrue(os.path.exists(self.outfile1))
         self.assertTrue(os.path.exists(self.outfile2))
-        del child
 
     def test_Dialign_complex_command_line(self):
         """Round-trip through app with complex command line."""
@@ -125,17 +104,11 @@ class DialignApplication(unittest.TestCase):
         cmdline.set_parameter("-cs", True)
         self.assertEqual(str(cmdline), dialign_exe + \
                          " -cs -mask -nt -ow -stars 9 -thr 4 Fasta/f002")
-        child = subprocess.Popen(str(cmdline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
-        return_code = child.wait()
-        self.assertEqual(return_code, 0)
-        self.assertEqual(child.stderr.read(), "")
+        stdout, stderr = cmdline()
+        self.assertEqual(stderr, "")
         self.assertTrue(os.path.exists(self.outfile1))
-        self.assertTrue(child.stdout.read().startswith(" e_len = 633"))
-        del child
+        self.assertTrue(stdout.startswith(" e_len = 633"))
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
