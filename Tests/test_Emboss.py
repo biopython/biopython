@@ -408,25 +408,15 @@ class PairwiseAlignmentTests(unittest.TestCase):
 
     def run_water(self, cline):
         #Run the tool,
-        child = subprocess.Popen(str(cline),
-                                 stdin=subprocess.PIPE,
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
-        #Check it worked,
-        return_code = child.wait()
-        if return_code != 0 : print >> sys.stderr, "\n%s"%cline
-        self.assertEqual(return_code, 0)
-        errors = child.stderr.read().strip()
-        self.assertTrue(errors.startswith("Smith-Waterman local alignment"),
-                     errors)
+        stdout, stderr = cline()
+        self.assertTrue(stderr.strip().startswith("Smith-Waterman local alignment"),
+                        stderr)
         if cline.outfile:
-            self.assertEqual(child.stdout.read().strip(), "")
+            self.assertEqual(stdout.strip(), "")
             self.assertTrue(os.path.isfile(cline.outfile))
         else :
             #Don't use this yet... could return stdout handle instead?
-            return child.stdout.read()
+            return stdout
 
     def test_water_file(self):
         """water with the asis trick, output to a file."""
@@ -492,20 +482,10 @@ class PairwiseAlignmentTests(unittest.TestCase):
         cline.set_parameter("-outfile", "Emboss/temp with space.needle")
         self.assertEqual(str(eval(repr(cline))), str(cline))
         #Run the tool,
-        child = subprocess.Popen(str(cline),
-                                 stdin=subprocess.PIPE,
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
-        out, err = child.communicate()
-        return_code = child.returncode
+        stdout, stderr = cline()
         #Check it worked,
-        errors = err.strip()
-        self.assertTrue(err.strip().startswith("Needleman-Wunsch global alignment"), errors)
-        self.assertEqual(out.strip(), "")
-        if return_code != 0 : print >> sys.stderr, "\n%s"%cline
-        self.assertEqual(return_code, 0)
+        self.assertTrue(stderr.strip().startswith("Needleman-Wunsch global alignment"), stderr)
+        self.assertEqual(stdout.strip(), "")
         filename = cline.outfile
         self.assertTrue(os.path.isfile(filename))
         #Check we can parse the output...
