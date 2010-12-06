@@ -50,11 +50,9 @@ class DialignCommandline(AbstractCommandline):
                     "fragments that are part of the respective optimal "
                     "pairwise alignmnets plus information about "
                     "consistency in the multiple alignment"),
-            _Option(["-fn", "fn"], [],
-                    None,
-                    0,
+            _Option(["-fn", "fn"],
                     "Output files are named <out_file>.<extension>.",
-                    0),
+                    equate=False),
             _Switch(["-fop", "fop"],
                     "Creates file *.fop containing coordinates of all "
                     "fragments that are part of the respective pairwise alignments."),
@@ -75,13 +73,12 @@ class DialignCommandline(AbstractCommandline):
                     "at the peptide level (rather than 'mixed alignments' "
                     "as with the '-lgs' option). Therefore faster than "
                     "-lgs but not very sensitive for non-coding regions."),
-            _Option(["-lmax", "lmax"], [],
-                    lambda x: isinstance(x, int),
-                    0,
+            _Option(["-lmax", "lmax"],
                     "Maximum fragment length = x  (default: x = 40 or "
                     "x = 120 for `translated' fragments). Shorter x "
                     "speeds up the program but may affect alignment quality.",
-                    0),
+                    checker_function=lambda x: isinstance(x, int),
+                    equate=False),
             _Switch(["-lo", "lo"],
                     "(Long Output) Additional file *.log with information "
                     "about fragments selected for pairwise alignment and "
@@ -104,11 +101,9 @@ class DialignCommandline(AbstractCommandline):
                     "sequence tree (instead of UPGMA)."),
             _Switch(["-min_link", "min_link"],
                     "'minimum linkage' clustering used."),
-            _Option(["-mot", "mot"], [],
-                    None, 
-                    0,
+            _Option(["-mot", "mot"],
                     "'motif' option.",
-                    0),
+                    equate=False),
             _Switch(["-msf", "msf"],
                     "Separate output file in MSF format."),
             _Switch(["-n", "n"],
@@ -141,28 +136,28 @@ class DialignCommandline(AbstractCommandline):
                     "(or codon pair) in fragments. Speeds up protein "
                     "alignment or alignment of translated DNA fragments "
                     "at the expense of sensitivity."),
-            _Option(["-stars", "stars"], [],
-                    lambda x: x in range(0,10),
-                    0,
+            _Option(["-stars", "stars"],
                     "Maximum number of `*' characters indicating degree "
                     "of local similarity among sequences. By default, no "
                     "stars are used but numbers between 0 and 9, instead.",
-                    0),
+                    checker_function = lambda x: x in range(0,10),
+                    equate=False),
             _Switch(["-stdo", "stdo"],
                     "Results written to standard output."),
             _Switch(["-ta", "ta"],
                     "Standard textual alignment printed (overrides "
                     "suppression of textual alignments in special "
                     "options, e.g. -lgs)"),
-            _Option(["-thr", "thr"], [],
-                    lambda x: isinstance(x, int),
-                    0,
+            _Option(["-thr", "thr"],
                     "Threshold T = x.",
-                    0),
+                    checker_function = lambda x: isinstance(x, int),
+                    equate=False),
             _Switch(["-xfr", "xfr"],
                     "'exclude fragments' - list of fragments can be "
                     "specified that are NOT considered for pairwise alignment"),
-            _Argument([], ["file"], None, 1,
-                      "Input file name. Must be FASTA format")
+            _Argument(["input"],
+                      "Input file name. Must be FASTA format",
+                      types=["file"],
+                      is_required=True),
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
