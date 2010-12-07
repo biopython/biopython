@@ -1276,7 +1276,7 @@ class IepCommandline(_EmbossCommandLine):
          _Option(["-sequence","sequence"],
                 "Protein sequence(s) filename",
                  filename=True,
-                 is_require=True),
+                 is_required=True),
          _Option(["-amino","amino"],
                  "Amino acid"),
          _Option(["-lysinemodified","lysinemodified"],
