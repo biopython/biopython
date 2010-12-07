@@ -70,7 +70,8 @@ class AppTest(unittest.TestCase):
         fst = self.ctrl.run_fdist(npops = 15, nsamples = 10, fst = 0.1,
                 sample_size = 20, mut = 0, num_sims = 100,
                 data_dir = self.dirname)
-        self.assertTrue(abs(fst - 0.1) < 0.02) #Stochastic result...
+        self.assertTrue(abs(fst - 0.1) < 0.025,
+                        "Stochastic result, expected %f close to 0.1" % fst)
 
     def test_fdist_force_fst(self):
         """Test fdist execution approximating Fst.
@@ -81,7 +82,8 @@ class AppTest(unittest.TestCase):
                 fst = 0.1,
                 sample_size = 20, mut = 0, num_sims = 100,
                 data_dir = self.dirname)
-        self.assertTrue(abs(fst - 0.09) < 0.05) #Stochastic result...
+        self.assertTrue(abs(fst - 0.09) < 0.05,
+                        "Stochastic result, expected %f close to 0.09" % fst)
 
     def test_cplot(self):
         """Test cplot execution.
