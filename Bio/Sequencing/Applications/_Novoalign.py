@@ -45,11 +45,11 @@ class NovoalignCommandline(AbstractCommandline):
            [
             _Option(["-d", "database"],
                     "database filename",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Option(["-f", "readfile"],
                     "read file",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Option(["-F", "format"],
                     "Format of read files.\n\nAllowed values: %s" \

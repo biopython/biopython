@@ -54,14 +54,14 @@ class TCoffeeCommandline(AbstractCommandline):
                    equate=False),
            _Option(["-infile", "infile"],
                    "Specify the input file.",
-                   types=["file"],
+                   filename=True,
                    is_required=True,
                    equate=False),
            #Indicates the name of the alignment output by t_coffee. If the
            #default is used, the alignment is named <your sequences>.aln
            _Option(["-outfile", "outfile"],
                    "Specify the output file. Default: <your sequences>.aln",
-                   types=["file"],
+                   filename=True,
                    equate=False),
            _Switch(["-convert", "convert"],
                    "Specify you want to perform a file conversion"),

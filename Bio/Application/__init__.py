@@ -467,11 +467,8 @@ class _Option(_AbstractParameter):
 
     o description -- a description of the option.
 
-    o param_types -- a list of string describing the type of parameter, 
-    which can help let programs know how to use it. The only supported
-    values for this are the empty list (default), and ['file'] which means
-    these argument values will automatically be escaped if the filename
-    contains spaces.
+    o filename -- True if this argument is a filename and should be
+    automatically quoted if it contains spaces.
 
     o checker_function -- a reference to a function that will determine
     if a given value is valid for this parameter. This function can either
@@ -487,14 +484,12 @@ class _Option(_AbstractParameter):
 
     o value -- the value of a parameter
     """
-    def __init__(self, names, description, types=[], checker_function=None,
+    def __init__(self, names, description, filename=False, checker_function=None,
                  is_required=False, equate=True):
         self.names = names
         assert isinstance(description, basestring), \
                "%r for %s" % (description, names[-1])
-        assert types == [] or types == ["file"], \
-               "%r for %s" % (types, names[0])
-        self.param_types = types
+        self.is_filename = filename
         self.checker_function = checker_function
         self.description = description
         self.equate = equate
@@ -514,7 +509,7 @@ class _Option(_AbstractParameter):
         # now made explicitly when setting up the option.
         if self.value is None:
             return "%s " % self.names[0]
-        if "file" in self.param_types:
+        if self.is_filename:
             v = _escape_filename(self.value)
         else:
             v = str(self.value)
@@ -563,14 +558,12 @@ class _Switch(_AbstractParameter):
 class _Argument(_AbstractParameter):
     """Represent an argument on a commandline.
     """
-    def __init__(self, names, description, types=[], checker_function=None,
-                 is_required=False):
+    def __init__(self, names, description, filename=False,
+                 checker_function=None, is_required=False):
         self.names = names
         assert isinstance(description, basestring), \
                "%r for %s" % (description, names[-1])
-        assert types == [] or types == ["file"], \
-               "%r for %s" % (types, names[0])
-        self.param_types = types
+        self.is_filename = filename
         self.checker_function = checker_function
         self.description = description
         self.is_required = is_required
@@ -580,6 +573,8 @@ class _Argument(_AbstractParameter):
     def __str__(self):
         if self.value is None:
             return " "
+        elif self.is_filename:
+            return "%s " % _escape_filename(self.value)
         else:
             return "%s " % self.value
 

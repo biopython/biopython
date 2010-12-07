@@ -69,7 +69,7 @@ class _BlastCommandLine(AbstractCommandline):
                    equate=False),
            _Option(["-i", "infile"],
                    "The sequence to search with.",
-                   types=["file"],
+                   filename=True,
                    is_required=True,
                    equate=False),
            _Option(["-e", "expectation"], 
@@ -80,7 +80,7 @@ class _BlastCommandLine(AbstractCommandline):
                    equate=False),
            _Option(["-o", "align_outfile", "outfile"],
                    "Output file for alignment.",
-                   types=["file"],
+                   filename=True,
                    equate=False),
            _Option(["-y", "xdrop_extension"], 
                    "Dropoff for blast extensions.",
@@ -105,7 +105,7 @@ class _BlastCommandLine(AbstractCommandline):
                    equate=False),
            _Option(["-O", "seqalign_file"],
                    "seqalign file to output.",
-                   types=["file"],
+                   filename=True,
                    equate=False),
            _Option(["-v", "descriptions"], 
                    "Number of one-line descriptions.",
@@ -245,7 +245,7 @@ class BlastallCommandline(_BlastAllOrPgpCommandLine):
                    equate=False),
            _Option(["-R", "checkpoint"],
                    "PSI-TBLASTN checkpoint input file.",
-                   types=["file"],
+                   filename=True,
                    equate=False),
            _Option(["-n", "megablast"],
                    "MegaBlast search T/F.",
@@ -319,23 +319,23 @@ class BlastpgpCommandline(_BlastAllOrPgpCommandLine):
         self.parameters = [
            _Option(["-C", "checkpoint_outfile"],
                    "Output file for PSI-BLAST checkpointing.",
-                   types=["file"],
+                   filename=True,
                    equate=False),
            _Option(["-R", "restart_infile"],
                    "Input file for PSI-BLAST restart.",
-                   types=["file"],
+                   filename=True,
                    equate=False),
            _Option(["-k", "hit_infile"],
                    "Hit file for PHI-BLAST.",
-                   types=["file"],
+                   filename=True,
                    equate=False),
            _Option(["-Q", "matrix_outfile"],
                    "Output file for PSI-BLAST matrix in ASCII.",
-                   types=["file"],
+                   filename=True,
                    equate=False),
            _Option(["-B", "align_infile"],
                    "Input alignment file for PSI-BLAST restart.",
-                   types=["file"],
+                   filename=True,
                    equate=False),
            _Option(["-S", "required_start"], 
                    "Start of required region in query.",
@@ -407,7 +407,7 @@ class RpsBlastCommandline(_BlastCommandLine):
                    equate=False),
            _Option(["-l", "logfile"],
                    "Logfile name.",
-                   types=["file"],
+                   filename=True,
                    equate=False),
            _Option(["-p", "protein"], 
                    "Query sequence is protein. T/F",
@@ -443,7 +443,7 @@ class _NcbibaseblastCommandline(AbstractCommandline):
             # Output configuration options
             _Option(["-out", "out"],
                     "Output file for alignment.",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             #Formatting options:
             _Option(["-outfmt", "outfmt"], 
@@ -502,7 +502,7 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             #Input query options:
             _Option(["-query", "query"],
                     "The sequence to search with.",
-                    types=["file"],
+                    filename=True,
                     equate=False), #Should this be required?
             _Option(["-query_loc", "query_loc"],
                     "Location on the query sequence (Format: start-stop)",
@@ -534,19 +534,19 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
                     """Restrict search of database to list of GI's.
  
                     Incompatible with: negative_gilist, seqidlist, remote, subject, subject_loc""",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Option(["-negative_gilist", "negative_gilist"],
                     """Restrict search of database to everything except the listed GIs.
  
                     Incompatible with: gilist, seqidlist, remote, subject, subject_loc""",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Option(["-seqidlist", "seqidlist"],
                     """Restrict search of database to list of SeqID's.
  
                     Incompatible with: gilist, negative_gilist, remote, subject, subject_loc""",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Option(["-entrez_query", "entrez_query"],
                     "Restrict search with the given Entrez query (requires remote).",
@@ -581,13 +581,13 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
                     """Search strategy to use.
 
                     Incompatible with: export_search_strategy""",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Option(["-export_search_strategy", "export_search_strategy"],
                     """File name to record the search strategy used.
 
                     Incompatible with: import_search_strategy""",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             #Miscellaneous options
             _Option(["-num_threads", "num_threads"],
@@ -644,7 +644,7 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
 
                     Incompatible with: db, gilist, negative_gilist.
                     See also subject_loc.""",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Option(["-subject_loc", "subject_loc"],
                     """Location on the subject sequence (Format: start-stop)
@@ -1054,7 +1054,7 @@ class NcbitblastnCommandline(_Ncbiblast2SeqCommandline):
                     """PSI-BLAST checkpoint file
 
                     Incompatible with: remote, query""",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
@@ -1196,24 +1196,24 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
                     equate=False),
             _Option(["-out_pssm", "out_pssm"],
                     "File name to store checkpoint file",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Option(["-out_ascii_pssm", "out_ascii_pssm"],
                     "File name to store ASCII version of PSSM",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Option(["-in_msa", "in_msa"],
                     """File name of multiple sequence alignment to restart
                     PSI-BLAST
 
                     Incompatible with: in_pssm, query""",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Option(["-in_pssm", "in_pssm"],
                     """PSI-BLAST checkpoint file
 
                     Incompatible with: in_msa, query, phi_pattern""",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             #PSSM engine options:
             _Option(["-pseudocount", "pseudocount"],
@@ -1231,7 +1231,7 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
                     """File name containing pattern to search
 
                     Incompatible with: in_pssm""",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
@@ -1357,7 +1357,7 @@ class NcbiblastformatterCommandline(_NcbibaseblastCommandline):
                     equate=False),
             _Option(["-archive", "archive"],
                     "Archive file of results, not compatiable with rid arg.",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             # Restrict search or results
             _Option(["-max_target_seqs", "max_target_seqs"],

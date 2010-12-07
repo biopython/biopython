@@ -51,11 +51,11 @@ class MuscleCommandline(AbstractCommandline):
             #Can't use "in" as the final alias as this is a reserved word in python:
             _Option(["-in", "in", "input"],
                     "Input filename",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Option(["-out", "out"],
                     "Output filename",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Switch(["-diags", "diags"],
                     "Find diagonals (faster for similar sequences)"),
@@ -63,11 +63,11 @@ class MuscleCommandline(AbstractCommandline):
                     "Perform a profile alignment"),
             _Option(["-in1", "in1"],
                     "First input filename for profile alignment",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Option(["-in2", "in2"],
                     "Second input filename for a profile alignment",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             #anchorspacing   Integer              32                 Minimum spacing between
             _Option(["-anchorspacing", "anchorspacing"],
@@ -149,13 +149,13 @@ class MuscleCommandline(AbstractCommandline):
             #                                                        existing file).
             _Option(["-log", "log"],
                     "Log file name",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             #loga            File name            None.              Log file name (append
             #                                                        to existing file).
             _Option(["-loga", "loga"],
                     "Log file name (append to existing file)",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             #maxdiagbreak    Integer              1                  Maximum distance
             #                                                        between two diagonals
@@ -349,31 +349,31 @@ class MuscleCommandline(AbstractCommandline):
             ################## Additional specified output files #########
             _Option(["-phyiout", "phyiout"],
                     "Write PHYLIP interleaved output to specified filename",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Option(["-physout", "physout"],"Write PHYLIP sequential format to specified filename",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Option(["-htmlout", "htmlout"],"Write HTML output to specified filename",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Option(["-clwout", "clwout"],
                     "Write CLUSTALW output (with MUSCLE header) to specified "
                     "filename",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Option(["-clwstrictout", "clwstrictout"],
                     "Write CLUSTALW output (with version 1.81 header) to "
                     "specified filename",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Option(["-msfout", "msfout"],
                     "Write MSF format output to specified filename",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             _Option(["-fastaout", "fastaout"],
                     "Write FASTA format output to specified filename",
-                    types=["file"],
+                    filename=True,
                     equate=False),
             ############## END FORMATS ###################################
             #anchors            yes             Use anchor optimization in tree dependent

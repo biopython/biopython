@@ -101,7 +101,7 @@ class ProbconsCommandline(AbstractCommandline):
             _Argument(["input"],
                       "Input file name. Must be multiple FASTA alignment "+ \
                       "(MFA) format",
-                      types=["file"],
+                      filename=True,
                       is_required=True),
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)

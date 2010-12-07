@@ -171,7 +171,7 @@ class DialignCommandline(AbstractCommandline):
                     "specified that are NOT considered for pairwise alignment"),
             _Argument(["input"],
                       "Input file name. Must be FASTA format",
-                      types=["file"],
+                      filename=True,
                       is_required=True),
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)

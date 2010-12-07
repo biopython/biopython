@@ -49,11 +49,11 @@ class PrankCommandline(AbstractCommandline):
             #-d=sequence_file
             _Option(["-d", "d"],
                     "Input filename",
-                    types=["file"],
+                    filename=True,
                     is_required=True),
             #-t=tree_file [default: no tree, generate approximate NJ tree]
             _Option(["-t", "t"],"Input guide tree filename",
-                    types=["file"]),
+                    filename=True),
             #-tree="tree_string" [tree in newick format; in double quotes]
             _Option(["-tree", "tree"],
                     "Input guide tree as Newick string"),
@@ -66,7 +66,7 @@ class PrankCommandline(AbstractCommandline):
                     "Output filenames prefix. Default: 'output'\n "
                     "Will write: output.?.fas (depending on requested "
                     "format), output.?.xml and output.?.dnd",
-                    types=["file"]),
+                    filename=True),
             #-f=output_format [default: 8]
             _Option(["-f", "f"],
                     "Output alignment format. Default: 8 FASTA\n"

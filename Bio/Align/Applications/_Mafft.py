@@ -260,7 +260,7 @@ class MafftCommandline(AbstractCommandline):
                     "Transmembrane PAM number (Jones et al. 1994) "
                     "matrix is used. number>0. Default: BLOSUM62",
                     checker_function=os.path.exists,
-                    types=["file"],
+                    filename=True,
                     equate=False),
             #Use a user-defined AA scoring matrix. The format of matrixfile is
             #the same to that of BLAST. Ignored when nucleotide sequences are
@@ -269,7 +269,7 @@ class MafftCommandline(AbstractCommandline):
                     "Use a user-defined AA scoring matrix. "
                     "Default: BLOSUM62",
                     checker_function=os.path.exists,
-                    types=["file"],
+                    filename=True,
                     equate=False),
             #Incorporate the AA/nuc composition information into the scoring
             #matrix. Default: off
@@ -314,7 +314,7 @@ class MafftCommandline(AbstractCommandline):
                     "Seed alignments given in alignment_n (fasta format) "
                     "are aligned with sequences in input.",
                     checker_function=os.path.exists,
-                    types=["file"],
+                    filename=True,
                     equate=False),
             #The old solution of also defining extra parameters with
             #["--seed", "seed1"] etc worked, but clashes with the recent
@@ -328,7 +328,7 @@ class MafftCommandline(AbstractCommandline):
             _Argument(["input"],
                       "Input file name",
                       checker_function=os.path.exists,
-                      types=["file"],
+                      filename=True,
                       is_required=True),
             ###################################################################
             #mafft-profile takes a second alignment input as an argument:
@@ -336,7 +336,7 @@ class MafftCommandline(AbstractCommandline):
             _Argument(["input1"],
                       "Second input file name for the mafft-profile command",
                       checker_function=os.path.exists,
-                      types=["file"]),
+                      filename=True),
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
