@@ -1270,6 +1270,17 @@ class DiffseqCommandline(_EmbossCommandLine):
 
 class IepCommandline(_EmbossCommandLine):
     """Commandline for EMBOSS iep: calculated isoelectric point and charge.
+    
+    Example:
+
+    >>> from Bio.Emboss.Applications import IepCommandline
+    >>> iep_cline = IepCommandline(sequence="proteins.faa",
+    ...                            outfile="proteins.txt")
+    >>> print iep_cline
+    iep -outfile=proteins.txt -sequence=proteins.faa
+
+    You would typically run the command line with iep_cline() or via the
+    Python subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="iep", **kwargs):
         self.parameters = [
@@ -1278,13 +1289,28 @@ class IepCommandline(_EmbossCommandLine):
                  filename=True,
                  is_required=True),
          _Option(["-amino","amino"],
-                 "Amino acid"),
+                 """Number of N-termini
+                 
+                 Integer 0 (default) or more.
+                 """),
+         _Option(["-carboxyl","carboxyl"],
+                 """Number of C-termini
+                 
+                 Integer 0 (default) or more.
+                 """),
          _Option(["-lysinemodified","lysinemodified"],
-                 ""), #TODO
+                 """Number of modified lysines
+
+                 Integer 0 (default) or more.
+                 """),
          _Option(["-disulphides","disulphides"],
-                 ""), #TODO
+                 """Number of disulphide bridges
+                 
+                 Integer 0 (default) or more.
+                 """),
+         #Should we implement the -termini switch as well?
          _Option(["-notermini","notermini"],
-                 "") #TODO
+                 "Exclude (True) or include (False) charge at N and C terminus."),
          ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
@@ -1356,7 +1382,7 @@ class SeqmatchallCommandline(_EmbossCommandLine):
 def _test():
     """Run the Bio.Emboss.Applications module doctests."""
     import doctest
-    doctest.testmod(verbose=1)
+    doctest.testmod()
 
 if __name__ == "__main__":
     #Run the doctests
