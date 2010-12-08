@@ -760,7 +760,7 @@ def index(filename, format, alphabet=None, key_function=None):
     to be completely parsed while building the index. Right now this is
     usually avoided.
     
-    See also: Bio.SeqIO.index_many() and Bio.SeqIO.to_dict()
+    See also: Bio.SeqIO.index_db() and Bio.SeqIO.to_dict()
     """
     #Try and give helpful error messages:
     if not isinstance(filename, basestring):
@@ -779,7 +779,7 @@ def index(filename, format, alphabet=None, key_function=None):
     import _index #Lazy import
     return _index._IndexedSeqFileDict(filename, format, alphabet, key_function)
 
-def index_many(index_filename, filenames=None, format=None, alphabet=None,
+def index_db(index_filename, filenames=None, format=None, alphabet=None,
                key_function=None):
     """Index several sequence files and return a dictionary like object.
 
@@ -810,7 +810,7 @@ def index_many(index_filename, filenames=None, format=None, alphabet=None,
     ...     assert i != -1
     ...     return parts[i+1]
     >>> idx_name = ":memory:" #use an in memory SQLite DB for this test
-    >>> records = SeqIO.index_many(idx_name, files, "fasta", generic_protein, get_gi)
+    >>> records = SeqIO.index_db(idx_name, files, "fasta", generic_protein, get_gi)
     >>> len(records)
     95
     >>> records["7525076"].description

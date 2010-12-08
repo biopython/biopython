@@ -348,7 +348,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         self._key_function = key_function
     
     def __repr__(self):
-        return "SeqIO.index_many(%r, filename=%r, format=%r, alphabet=%r, key_function=%r)" \
+        return "SeqIO.index_db(%r, filename=%r, format=%r, alphabet=%r, key_function=%r)" \
                % (self._index_filenane, self._filenames, self._format,
                   self._alphabet, self._key_function)
 

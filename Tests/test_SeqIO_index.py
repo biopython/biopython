@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Unit tests for Bio.SeqIO.index(...) and index_many() functions."""
+"""Unit tests for Bio.SeqIO.index(...) and index_db() functions."""
 import sys
 if sys.version_info[0] >= 3:
     from Bio import MissingExternalDependencyError
@@ -56,17 +56,17 @@ class IndexDictTests(unittest.TestCase):
         rec_dict = SeqIO.index(filename, format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         #Saving to file...
-        rec_dict = SeqIO.index_many(index_tmp, [filename], format, alphabet)
+        rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         #Now reload it...
-        rec_dict = SeqIO.index_many(index_tmp, [filename], format, alphabet)
+        rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         #Now reload without passing filenames and format
-        rec_dict = SeqIO.index_many(index_tmp, alphabet=alphabet)
+        rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         #check error conditions
-        self.assertRaises(ValueError, SeqIO.index_many, index_tmp, format="dummy")
-        self.assertRaises(ValueError, SeqIO.index_many, index_tmp, filenames=["dummy"])
+        self.assertRaises(ValueError, SeqIO.index_db, index_tmp, format="dummy")
+        self.assertRaises(ValueError, SeqIO.index_db, index_tmp, filenames=["dummy"])
         os.remove(index_tmp)
 
         #Check with key_function
@@ -74,13 +74,13 @@ class IndexDictTests(unittest.TestCase):
         rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         #Saving to file...
-        rec_dict = SeqIO.index_many(index_tmp, [filename], format, alphabet, add_prefix)
+        rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet, add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         #Now reload it...
-        rec_dict = SeqIO.index_many(index_tmp, [filename], format, alphabet, add_prefix)
+        rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet, add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         #Now reload without passing filenames and format
-        rec_dict = SeqIO.index_many(index_tmp, alphabet=alphabet, key_function=add_prefix)
+        rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet, key_function=add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         os.remove(index_tmp)
         #Done
@@ -194,9 +194,9 @@ class IndexDictTests(unittest.TestCase):
                 rec2 = SeqIO.read(handle, format, alphabet)
             self.assertEqual(True, compare_record(rec1, rec2))
 
-    def test_duplicates_index_many(self):
-        """Index file with duplicate identifers with Bio.SeqIO.index_many()"""
-        self.assertRaises(ValueError, SeqIO.index_many, index_tmp,
+    def test_duplicates_index_db(self):
+        """Index file with duplicate identifers with Bio.SeqIO.index_db()"""
+        self.assertRaises(ValueError, SeqIO.index_db, index_tmp,
                           ["Fasta/dups.fasta"], "fasta")
 
     def test_duplicates_index(self):
