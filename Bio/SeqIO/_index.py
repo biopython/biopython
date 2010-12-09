@@ -79,7 +79,31 @@ class _IndexedSeqFileDict(UserDict.DictMixin):
             else:
                 offsets[key] = offset
         self._offsets = offsets
-    
+        #Now for some speed tricks: For __getitem__ we want to avoid doing a
+        #key_function the test on every record access, and also avoid repeated
+        #attribute lookups:
+        #if key_function:
+        #    def getitem(key):
+        #        #Pass the offset to the proxy
+        #        record = random_access_proxy.get(offsets[key])
+        #        if key != key_function(record.id):
+        #            raise ValueError("Key did not match (%s vs %s)" \
+        #                             % (key, key_function(record.id)))
+        #        return record
+        #else:
+        #    def getitem(key):
+        #        #Pass the offset to the proxy
+        #        record = random_access_proxy.get(offsets[key])
+        #        if key != record.id:
+        #            raise ValueError("Key did not match (%s vs %s)" \
+        #                             % (key, record.id))
+        #        return record
+        #self.__getitem__ = getitem
+        #This doesn't check the key (faster)
+        self.__getitem__ = lambda key: random_access_proxy.get(offsets[key])
+        #Similar hack for get_raw method to save some attribute lookups:
+        self.get_raw = lambda key: random_access_proxy.get_raw(offsets[key])
+
     def __repr__(self):
         return "SeqIO.index(%r, %r, alphabet=%r, key_function=%r)" \
                % (self._proxy._handle.name, self._proxy._format,
@@ -163,24 +187,16 @@ class _IndexedSeqFileDict(UserDict.DictMixin):
         """Iterate over the keys."""
         return iter(self._offsets)
         
-    def __getitem__(self, key):
-        """x.__getitem__(y) <==> x[y]"""
-        #Pass the offset to the proxy
-        record = self._proxy.get(self._offsets[key])
-        if self._key_function:
-            key2 = self._key_function(record.id)
-        else:
-            key2 = record.id
-        if key != key2:
-            raise ValueError("Key did not match (%s vs %s)" % (key, key2))
-        return record
-
     def get(self, k, d=None):
         """D.get(k[,d]) -> D[k] if k in D, else d.  d defaults to None."""
         try:
             return self.__getitem__(k)
         except KeyError:
             return d
+
+    def __getitem__(self, key):
+        """x.__getitem__(y) <==> x[y]"""
+        raise NotImplementedError("Should be setup via __init__ method!")
 
     def get_raw(self, key):
         """Similar to the get method, but returns the record as a raw string.
@@ -189,8 +205,7 @@ class _IndexedSeqFileDict(UserDict.DictMixin):
 
         NOTE - This functionality is not supported for every file format.
         """
-        #Pass the offset to the proxy
-        return self._proxy.get_raw(self._offsets[key])
+        raise NotImplementedError("Should be setup via __init__ method!")
 
     def __setitem__(self, key, value):
         """Would allow setting or replacing records, but not implemented."""
