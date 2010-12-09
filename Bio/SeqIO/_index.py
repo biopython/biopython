@@ -620,9 +620,9 @@ class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
             #marker. This is generally fine... but not for GenBank, EMBL, Swiss
             id = line[marker_offset:].strip().split(None, 1)[0]
             while True:
-                end_offset = handle.tell()
                 line = handle.readline()
                 if marker_re.match(line) or not line:
+                    end_offset = handle.tell() - len(line)
                     yield id, start_offset, end_offset - start_offset
                     start_offset = end_offset
                     break
@@ -666,11 +666,11 @@ class GenBankRandomAccess(SequentialSeqFileRandomAccess):
             #normally the first entry on the VERSION or ACCESSION line is used.
             key = None
             while True:
-                end_offset = handle.tell()
                 line = handle.readline()
                 if marker_re.match(line) or not line:
                     if not key:
                         raise ValueError("Did not find ACCESSION/VERSION lines")
+                    end_offset = handle.tell() - len(line)
                     yield key, start_offset, end_offset - start_offset
                     start_offset = end_offset
                     break
@@ -715,9 +715,9 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
             else:
                 raise ValueError('Did not recognise the ID line layout:\n' + line)
             while True:
-                end_offset = handle.tell()
                 line = handle.readline()
                 if marker_re.match(line) or not line:
+                    end_offset = handle.tell() - len(line)
                     yield key, start_offset, end_offset - start_offset
                     start_offset = end_offset
                     break
@@ -746,9 +746,9 @@ class SwissRandomAccess(SequentialSeqFileRandomAccess):
             assert line.startswith("AC ")
             key = line[3:].strip().split(";")[0].strip()
             while True:
-                end_offset = handle.tell()
                 line = handle.readline()
                 if marker_re.match(line) or not line:
+                    end_offset = handle.tell() - len(line)
                     yield key, start_offset, end_offset - start_offset
                     start_offset = end_offset
                     break
@@ -774,13 +774,13 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
             key = None
             done = False
             while True:
-                end_offset = handle.tell()
                 line = handle.readline()
                 if key is None and line.startswith("<accession>"):
                     assert "</accession>" in line, line
                     key = line[11:].split("<")[0]
                 elif "</entry>" in line:
-                    end_offset += line.find("</entry>") + 8
+                    end_offset = handle.tell() - len(line) \
+                               + line.find("</entry>") + 8
                     break
                 elif marker_re.match(line) or not line:
                     #Start of next record or end of file
@@ -939,7 +939,6 @@ class FastqRandomAccess(SeqFileRandomAccess):
             while line:
                 if seq_len == qual_len:
                     #Should be end of record...
-                    end_offset = handle.tell()
                     line = handle.readline()
                     if line and line[0] != "@":
                         ValueError("Problem with line %s" % repr(line))
@@ -949,6 +948,7 @@ class FastqRandomAccess(SeqFileRandomAccess):
                     qual_len += len(line.strip())
             if seq_len != qual_len:
                 raise ValueError("Problem with quality section")
+            end_offset = handle.tell() - len(line)
             yield id, start_offset, end_offset - start_offset
             start_offset = end_offset
         #print "EOF"
