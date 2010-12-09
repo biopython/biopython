@@ -25,6 +25,8 @@ if not found:
         "Install GenePop if you want to use Bio.PopGen.GenePop.")
 
 
+cur_dir = os.path.abspath(".") #Tests directory
+
 class AppTest(unittest.TestCase):
     """Tests genepop execution via biopython using EasyController.
     """
@@ -35,7 +37,7 @@ class AppTest(unittest.TestCase):
         self.ctrl = EasyController("big.gen")
 
     def tearDown(self):
-        os.chdir("..")
+        os.chdir(cur_dir)
 
     def test_basic_info(self):
         """Test basic info.
