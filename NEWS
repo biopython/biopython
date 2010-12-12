@@ -18,6 +18,14 @@ ability to run the BLAST tools and save the output as ASN.1 format, and then
 convert this to any other supported BLAST ouput format (plain text, tabular,
 XML, or HTML) with the blast_formatter tool.
 
+(At least) 5 people have contributed to this release, include 1 new person:
+
+Erick Matsen (first contribution)
+Joao Rodrigues
+Michiel de Hoon
+Peter Cock
+Phillip Garland
+
 ===================================================================
 
 26 November 2010: Biopython 1.56 released.
