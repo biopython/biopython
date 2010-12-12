@@ -48,7 +48,7 @@ o ReportLab, see http://www.reportlab.org/downloads.html (optional)
   it later if needed.
 
 o psycopg2, see http://initd.org/software/psycopg/ (optional) or
-  "pgdb":http://www.druid.net/pygresql/ (optional)
+  PyGreSQL (pgdb), see http://www.pygresql.org/ (optional)
   These packages are used by BioSQL to access a PostgreSQL database.
 
 o MySQLdb, see http://sourceforge.net/projects/mysql-python (optional)
