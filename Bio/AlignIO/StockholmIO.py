@@ -28,9 +28,7 @@ This is a single multiple sequence alignment, so you would probably load this
 using the Bio.AlignIO.read() function:
 
     >>> from Bio import AlignIO
-    >>> handle = open("Stockholm/simple.sth", "rU")
-    >>> align = AlignIO.read(handle, "stockholm")
-    >>> handle.close()
+    >>> align = AlignIO.read("Stockholm/simple.sth", "stockholm")
     >>> print align
     SingleLetterAlphabet() alignment with 2 rows and 104 columns
     UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-G...UGU AP001509.1
@@ -47,17 +45,16 @@ optional argument to the Bio.AlignIO.read() function:
 
     >>> from Bio import AlignIO
     >>> from Bio.Alphabet import generic_rna
-    >>> handle = open("Stockholm/simple.sth", "rU")
-    >>> align = AlignIO.read(handle, "stockholm", alphabet=generic_rna)
-    >>> handle.close()
+    >>> align = AlignIO.read("Stockholm/simple.sth", "stockholm",
+    ...                      alphabet=generic_rna)
     >>> print align
     RNAAlphabet() alignment with 2 rows and 104 columns
     UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCAAUAUGG-G...UGU AP001509.1
     AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-C...GAU AE007476.1
 
 In addition to the sequences themselves, this example alignment also includes
-some GR lines for the secondary structure of the sequences.  These are strings,
-with one character for each letter in the associated sequence:
+some GR lines for the secondary structure of the sequences.  These are
+strings, with one character for each letter in the associated sequence:
 
     >>> for record in align:
     ...     print record.id
@@ -71,8 +68,8 @@ with one character for each letter in the associated sequence:
     -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
 
 Any general annotation for each row is recorded in the SeqRecord's annotations
-dictionary.  You can output this alignment in many different file formats using
-Bio.AlignIO.write(), or the MultipleSeqAlignment object's format method:
+dictionary.  You can output this alignment in many different file formats
+using Bio.AlignIO.write(), or the MultipleSeqAlignment object's format method:
 
     >>> print align.format("fasta")
     >AP001509.1
@@ -83,7 +80,8 @@ Bio.AlignIO.write(), or the MultipleSeqAlignment object's format method:
     GGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
     <BLANKLINE>
 
-Most output formats won't be able to hold the annotation possible in a Stockholm file:
+Most output formats won't be able to hold the annotation possible in a
+Stockholm file:
 
     >>> print align.format("stockholm")
     # STOCKHOLM 1.0
@@ -99,18 +97,19 @@ Most output formats won't be able to hold the annotation possible in a Stockholm
     //
     <BLANKLINE>
 
-Note that when writing Stockholm files, Biopython does not break long sequences up and
-interleave them (as in the input file shown above).  The standard allows this simpler
-layout, and it is more likely to be understood by other tools. 
+Note that when writing Stockholm files, AlignIO does not break long sequences
+up and interleave them (as in the input file shown above).  The standard
+allows this simpler layout, and it is more likely to be understood by other
+tools. 
 
-Finally, as an aside, it can sometimes be useful to use Bio.SeqIO.parse() to iterate over
-the two rows as SeqRecord objects - rather than working with Alignnment objects.
-Again, if you want to you can specify this is RNA:
+Finally, as an aside, it can sometimes be useful to use Bio.SeqIO.parse() to
+iterate over the alignment rows as SeqRecord objects - rather than working
+with Alignnment objects. Again, if you want to you can specify this is RNA:
 
     >>> from Bio import SeqIO
     >>> from Bio.Alphabet import generic_rna
-    >>> handle = open("Stockholm/simple.sth", "rU")
-    >>> for record in SeqIO.parse(handle, "stockholm", alphabet=generic_rna):
+    >>> for record in SeqIO.parse("Stockholm/simple.sth", "stockholm",
+    ...                           alphabet=generic_rna):
     ...     print record.id
     ...     print record.seq
     ...     print record.letter_annotations['secondary_structure']
@@ -120,7 +119,6 @@ Again, if you want to you can specify this is RNA:
     AE007476.1
     AAAAUUGAAUAUCGUUUUACUUGUUUAU-GUCGUGAAU-UGG-CACGA-CGUUUCUACAAGGUG-CCGG-AA-CACCUAACAAUAAGUAAGUCAGCAGUGAGAU
     -----------------<<<<<<<<-----<<.<<-------->>.>>----------.<<<<<--------->>>>>.-->>>>>>>>---------------
-    >>> handle.close()
 
 Remember that if you slice a SeqRecord, the per-letter-annotions like the
 secondary structure string here, are also sliced:
