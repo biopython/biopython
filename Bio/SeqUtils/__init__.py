@@ -43,7 +43,7 @@ def reverse(seq):
 def GC(seq):
     """Calculates G+C content, returns the percentage (float between 0 and 100).
 
-    Copes mixed case seuqneces, and with the ambiguous nucleotide S (G or C)
+    Copes mixed case sequences, and with the ambiguous nucleotide S (G or C)
     when counting the G and C content.  The percentage is calculated against
     the full length, e.g.: 
 
