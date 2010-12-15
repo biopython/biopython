@@ -18,7 +18,7 @@ ability to run the BLAST tools and save the output as ASN.1 format, and then
 convert this to any other supported BLAST ouput format (plain text, tabular,
 XML, or HTML) with the blast_formatter tool.
 
-(At least) 5 people have contributed to this release, include 1 new person:
+(At least) 5 people have contributed to this release, including 1 new person:
 
 Erick Matsen (first contribution)
 Joao Rodrigues
@@ -65,7 +65,7 @@ Bio.PopGen.FDist now supports the DFDist command line tool as well as FDist2.
 
 Bio.Motif now has a chapter in the Tutorial.
 
-(At least) 13 people have contributed to this release, include 6 new people:
+(At least) 13 people have contributed to this release, including 6 new people:
 
 Andrea Pierleoni (first contribution)
 Bart de Koning (first contribution)
