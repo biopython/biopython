@@ -5,7 +5,7 @@
 
 """Output of PDB files."""
 
-from Bio.Data.IUPACData import atom_weigths # Allowed Elements
+from Bio.Data.IUPACData import atom_weights # Allowed Elements
 
 _ATOM_FORMAT_STRING="%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%6.2f%6.2f      %4s%2s%2s\n"
 
@@ -74,7 +74,7 @@ class PDBIO:
             record_type="ATOM  "
         if atom.element:
             element = atom.element.strip().upper()
-            if not atom_weigths.has_key(element.capitalize()):
+            if not atom_weights.has_key(element.capitalize()):
                 raise ValueError("Unrecognised element %s" % repr(atom.element))
             element = element.rjust(2)
         else:

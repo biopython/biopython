@@ -71,7 +71,7 @@ class Atom:
         
     def _assign_element(self, element):
         """Tries to guess element from atom name."""
-        if not element or not IUPACData.atom_weigths.has_key(element):
+        if not element or not IUPACData.atom_weights.has_key(element):
             import warnings
             from PDBExceptions import PDBConstructionWarning
             warnings.warn("Atom object (name=%s) without element or element not recognized ('%s')" % (self.name, element),
@@ -88,7 +88,7 @@ class Atom:
                 else:
                     putative_element = self.name[0]
             
-            if IUPACData.atom_weigths.has_key(putative_element.capitalize()):
+            if IUPACData.atom_weights.has_key(putative_element.capitalize()):
                 warnings.warn("Atom object (name=%s) assigned element %s based on atom name" % (self.name, putative_element),
                                PDBConstructionWarning)
                 element = putative_element
@@ -102,7 +102,7 @@ class Atom:
     def _assign_atom_mass(self):
         # Needed for Bio/Struct/Geometry.py C.O.M. function
         if self.element:
-            return IUPACData.atom_weigths[self.element.capitalize()]
+            return IUPACData.atom_weights[self.element.capitalize()]
         else:
             return float('NaN')
 
