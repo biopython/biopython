@@ -68,7 +68,6 @@ from distutils.command.build_py import build_py
 from distutils.command.build_ext import build_ext
 from distutils.extension import Extension
 
-
 _CHECKED = None
 def check_dependencies_once():
     # Call check_dependencies, but cache the result for subsequent
@@ -118,6 +117,21 @@ class install_biopython(install):
     if packages are missing.
 
     """
+    # Adds support for the single-version-externally-managed flag
+    # which is present in setuptools but not distutils. pip requires it.
+    # In setuptools this forces installation the "old way" which we
+    # only support here, so we just make it a no-op.
+    user_options = install.user_options + [
+        ('single-version-externally-managed', None,
+            "used by system package builders to create 'flat' eggs"),
+    ]
+    boolean_options = install.boolean_options + [
+        'single-version-externally-managed',
+    ]
+    def initialize_options(self):
+        install.initialize_options(self)
+        self.single_version_externally_managed = None
+
     def run(self):
         if check_dependencies_once():
             # Run the normal install.
