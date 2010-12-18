@@ -18,9 +18,6 @@ These modules provide wrapper classes for command line tools to help you
 construct command line strings by setting the values of each parameter.
 The finished command line strings are then normally invoked via the built-in
 Python module subprocess.
-
-This module also includes some deprecated functionality (function generic_run
-and class ApplicationResult) which should not be used anymore.
 """
 import os, sys
 import StringIO

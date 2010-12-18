@@ -140,6 +140,7 @@ class MuscleApplication(unittest.TestCase):
         #TODO - Why doesn't this work with MUSCLE 3.6 on the Mac?
         #It may be another bug fixed in MUSCLE 3.7 ...
         result, stdout, stderr = generic_run(cmdline)
+        #NOTE: generic_run has been removed from Biopython
         self.assertEqual(result.return_code, 0)
         self.assertEqual(stdout.read(), "")
         self.assertTrue("ERROR" not in stderr.read())
@@ -164,6 +165,7 @@ class SimpleAlignTest(unittest.TestCase):
         cmdline.set_parameter("maxiters", 2)
         self.assertEqual(str(cmdline).rstrip(), "muscle -in Fasta/f002 -maxiters 2 -stable")
         result, out_handle, err_handle = generic_run(cmdline)
+        #NOTE: generic_run has been removed from Biopython
         print err_handle.read()
         print out_handle.read()
         align = AlignIO.read(out_handle, "fasta")
