@@ -60,27 +60,12 @@ def get_prosite_raw(id, cgi='http://www.expasy.ch/cgi-bin/get-prosite-raw.pl'):
     handle = urllib.urlopen("%s?%s" % (cgi, id))
     return handle
 
-def get_sprot_raw(id, cgi=None):
+def get_sprot_raw(id):
     """Get a handle to a raw SwissProt entry at ExPASy.
 
     For an ID of XXX, fetches http://www.uniprot.org/uniprot/XXX.txt
     (as per the http://www.expasy.ch/expasy_urls.html documentation).
-
-
-    For a non-existing key XXX, ExPASy returns an HTML Error 404 page.
-
-    This function used to take a cgi option to specify the URL, but that
-    is no longer supported. This is because prior to November 2009 we
-    used to use http://www.expasy.ch/cgi-bin/get-sprot-raw.pl?XXX
-    However, at the time of writting this returns FASTA format instead
-    (probably an ExPASy/UniProt oversight). Under the new URL scheme,
-    we cannot just append "?XXX" to the cgi argument.
     """
-    if cgi :
-        import warnings
-        import Bio
-        warnings.warn("The cgi argument in get_sprot_raw is not "
-                      "supported anymore", Bio.BiopythonDeprecationWarning)
     return urllib.urlopen("http://www.uniprot.org/uniprot/%s.txt" % id)
 
 def sprot_search_ful(text, make_wild=None, swissprot=1, trembl=None,

@@ -384,8 +384,9 @@ The functions 'forward_complement' and 'antiparallel' in Bio.GFF.easy have
 been deprecated as of Release 1.31, and removed in Release 1.43.
 Use the functions 'complement' and 'reverse_complement' in Bio.Seq instead.
 
-The whole of the old Bio.GFF module was deprecated in Release 1.53
-(with the intention of reusing this name space for a GFF parser).
+The whole of the old Bio.GFF module was deprecated in Release 1.53, and removed
+in Release 1.57 (with the intention of reusing this name space for a GFF
+parser).
 
 Bio.sequtils
 ============
@@ -434,14 +435,16 @@ Release 1.56, and removed in Release 1.57.
 Bio.Motif
 =========
 CompareAceParser and CompareAceConsumer from Bio.Motif.Parsers.AlignAce were
-declared obsolete in Release 1.53, and deprecated in Release 1.55 final.
+declared obsolete in Release 1.53, deprecated in Release 1.55 final, and removed
+in Release 1.57.
 AlignAceConsumer, AlignAceParser, and AlignAceScanner were declared obsolete
 in Release 1.53 and deprecated in Release 1.55 final; their functionality is
 now available through a read() function in Bio.Motif.Parsers.AlignAce.
-MEMEParser, _MEMEScanner, _MEMEConsumer, _MASTConsumer, MASTParser, _MASTScanner,
-and MASTRecord were declared obsolete in Release 1.54 and deprecated in Release
-1.55 final; their functionality is now available through a read() function in
-Bio.Motif.Parsers.MEME and Bio.Motif.Parsers.MAST, respectively.
+MEMEParser, _MEMEScanner, _MEMEConsumer, _MASTConsumer, MASTParser,
+_MASTScanner, and MASTRecord were declared obsolete in Release 1.54 and
+deprecated in Release 1.55 final; their functionality is now available through
+a read() function in Bio.Motif.Parsers.MEME and Bio.Motif.Parsers.MAST,
+respectively.
 
 Bio.Compass
 ===========
@@ -469,3 +472,7 @@ Bio.UniGene were declared obsolete in Release 1.54, and deprecated in Release
 1.55 final. Their functionality is now available through a read() and a parse()
 function in Bio.UniGene.
 
+Bio.SubsMat
+===========
+The methods letter_sum and all_letters_sum were removed from the SeqMat class in
+Bio.SubsMat in Release 1.57.

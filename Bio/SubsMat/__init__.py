@@ -147,11 +147,9 @@ class SeqMat(dict):
          s += i
       self.alphabet.letters = s
 
-   def __init__(self,data=None, alphabet=None,
-             mat_type=None,mat_name='',build_later=0):
+   def __init__(self, data=None, alphabet=None, mat_name='', build_later=0):
       # User may supply:
       # data: matrix itself
-      # mat_type: its type. See below (DEPRECATED)
       # mat_name: its name. See below.
       # alphabet: an instance of Bio.Alphabet, or a subclass. If not
       # supplied, constructor builds its own from that matrix."""
@@ -160,11 +158,6 @@ class SeqMat(dict):
       # filled with zeroes.
 
       assert type(mat_name) == type('')
-      if mat_type==None:
-          mat_type==NOTYPE
-      else:
-          assert type(mat_type) == type(1)
-          warnings.warn("values for mat_type other than NOTYPE are deprecated; use the appropriate subclass of SeqMat instead", Bio.BiopythonDeprecationWarning)
 
       # "data" may be:
       # 1) None --> then self.data is an empty dictionary
@@ -192,16 +185,13 @@ class SeqMat(dict):
          assert len(self) == N**2 or len(self) == N*(N+1)/2
       self.ab_list = list(self.alphabet.letters)
       self.ab_list.sort()
-      # type can be: ACCREP, OBSFREQ, SUBS, EXPFREQ, LO
-      self.mat_type = mat_type
       # Names: a string like "BLOSUM62" or "PAM250"
       self.mat_name = mat_name
       if build_later:
          self._init_zero()
       else:
-         # Convert full to half if matrix is not already a log-odds matrix
-         if self.mat_type != LO:
-            self._full_to_half()
+         # Convert full to half
+         self._full_to_half()
          self._correct_matrix()
       self.sum_letters = {}
       self.relative_entropy = 0
@@ -236,46 +226,12 @@ class SeqMat(dict):
          for j in self.ab_list[:self.ab_list.index(i)+1]:
             self[j,i] = 0.
 
-   def make_relative_entropy(self,obs_freq_mat):
-      """if this matrix is a log-odds matrix, return its entropy
-      Needs the observed frequency matrix for that"""
-      # This method should be removed once the usage of mat_type is removed.
-      ent = 0.
-      if self.mat_type == LO:
-         for i in self:
-            ent += obs_freq_mat[i]*self[i]/log(2)
-      elif self.mat_type == SUBS:
-         for i in self:
-            if self[i] > EPSILON:
-               ent += obs_freq_mat[i]*log(self[i])/log(2)
-      else:
-         raise TypeError("entropy: substitution or log-odds matrices only")
-      self.relative_entropy = ent
-   #
    def make_entropy(self):
       self.entropy = 0
       for i in self:
          if self[i] > EPSILON:
             self.entropy += self[i]*log(self[i])/log(2)
       self.entropy = -self.entropy
-
-   def letter_sum(self,letter):
-      warnings.warn("SeqMat.letter_sum is deprecated; please use SeqMat.sum instead", Bio.BiopythonDeprecationWarning)
-      assert letter in self.alphabet.letters
-      sum = 0.
-      for i in self:
-         if letter in i:
-            if i[0] == i[1]:
-               sum += self[i]
-            else:
-               sum += (self[i] / 2.)
-      return sum
-
-   def all_letters_sum(self):
-      import warnings
-      warnings.warn("SeqMat.all_letters_sum is deprecated; please use SeqMat.sum instead", Bio.BiopythonDeprecationWarning)
-      for letter in self.alphabet.letters:
-         self.sum_letters[letter] = self.letter_sum(letter)
 
    def sum(self):
       result = {}
@@ -534,7 +490,7 @@ def observed_frequency_to_substitution_matrix(obs_freq_mat):
    subs_mat = _build_subs_mat(obs_freq_mat, exp_freq_mat)
    return subs_mat
 
-def read_text_matrix(data_file,mat_type=NOTYPE):
+def read_text_matrix(data_file):
    matrix = {}
    tmp = data_file.read().split("\n")
    table=[]
@@ -568,7 +524,7 @@ def read_text_matrix(data_file,mat_type=NOTYPE):
    # delete entries with an asterisk
    for i in matrix.keys():
       if '*' in i: del(matrix[i])
-   ret_mat = SeqMat(matrix,mat_type=mat_type)
+   ret_mat = SeqMat(matrix)
    return ret_mat
 
 diagNO = 1

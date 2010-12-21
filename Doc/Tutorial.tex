@@ -12367,27 +12367,13 @@ The dictionary is of the form \verb|{(i1,j1):n1, (i1,j2):n2,...,(ik,jk):nk}| whe
 
     \item
 \begin{verbatim}
-__init__(self,data=None,alphabet=None,
-         mat_type=NOTYPE,mat_name='',build_later=0):
+__init__(self,data=None,alphabet=None, mat_name='', build_later=0):
 \end{verbatim}
 
     \begin{enumerate}
 
       \item \verb|data|: can be either a dictionary, or another SeqMat instance.
       \item \verb|alphabet|: a Bio.Alphabet instance. If not provided, construct an alphabet from data.
-
-      \item \verb|mat_type|: type of matrix generated. One of the following:
-
-      \begin{description}
-        \item[NOTYPE]     No type defined
-        \item[ACCREP]     Accepted Replacements Matrix
-        \item[OBSFREQ]    Observed Frequency Matrix
-        \item[EXPFREQ]    Expsected Frequency Matrix
-        \item[SUBS]       Substitution Matrix      
-        \item[LO]         Log Odds Matrix
-      \end{description}
-
-      \verb|mat_type| is provided automatically by some of SubsMat's functions.
 
       \item \verb|mat_name|: matrix name, such as "BLOSUM62" or "PAM250"
 

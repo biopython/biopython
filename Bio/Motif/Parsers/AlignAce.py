@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Parsing AlignACE and CompareACE files: AlignAceParser,CompareAceParser
+"""Parsing AlignACE files: AlignAceParser
 """
 
 from Bio.Motif import Motif
@@ -190,66 +190,3 @@ class AlignAceScanner:
                 consumer.motif_mask(line)
             else:
                 raise ValueError(line)
-
-class CompareAceScanner:
-    """Scannner for CompareACE output (DEPRECATED).
-
-    Methods:
-    feed     Feed data into the scanner.
-
-    The scanner generates (and calls the consumer) the following types of events:
-
-    motif_score - CompareACE score of motifs
-
-    ###### TO DO #############3
-    extend the scanner to include other, more complex outputs.
-    """
-    def __init__(self):
-        import warnings
-        warnings.warn("Bio.Motif.Parsers.AlignAce.CompareAceScanner is deprecated.", Bio.BiopythonDeprecationWarning)
-
-    def feed(self, handle, consumer):
-        """S.feed(handle, consumer)
-
-        Feed in a CompareACE report for scanning.  handle is a file-like
-        object that contains the CompareACE report.  consumer is a Consumer
-        object that will receive events as the report is scanned.
-        """
-        consumer.motif_score(handle.readline())
-
-
-class CompareAceConsumer:
-    """
-    The general purpose consumer for the CompareAceScanner (DEPRECATED).
-
-    Should be passed as the consumer to the feed method of the CompareAceScanner. After 'consuming' the file, it has the list of motifs in the motifs property.
-    """
-    def __init__(self):
-        import warnings
-        warnings.warn("Bio.Motif.Parsers.AlignAce.CompareAceConsumer is deprecated.", Bio.BiopythonDeprecationWarning)
-
-    def motif_score(self,line):
-        self.data = float(line.split()[-1])
-    
-class CompareAceParser(AbstractParser):
-    """Parses CompareAce output to usable form
-
-    ### so far only in a very limited way
-    """
-    def __init__(self):
-        """__init__(self)"""
-        import warnings
-        warnings.warn("CompareAceParser and ComparAceConsumer are" \
-              +" deprecated, and will be removed in a future release of"\
-              +" Biopython. If you want to continue to use this code,"\
-              +" please get in contact with the Biopython developers via"\
-              +" the mailing lists to avoid its permanent removal from"\
-              +" Biopython. See also the Python built in set datatype.", \
-              Bio.BiopythonDeprecationWarning)
-        self._scanner = CompareAceScanner()
-        self._consumer = CompareAceConsumer()
-
-    def parse(self, handle):
-        """parse(self, handle)"""
-        self._scanner.feed(handle, self._consumer)
-        return self._consumer.data
