@@ -18,8 +18,9 @@ ability to run the BLAST tools and save the output as ASN.1 format, and then
 convert this to any other supported BLAST ouput format (plain text, tabular,
 XML, or HTML) with the blast_formatter tool.
 
-(At least) 7 people have contributed to this release, including 1 new person:
+(At least) 8 people have contributed to this release, including 1 new person:
 
+Brad Chapman
 Eric Talevich
 Erick Matsen (first contribution)
 Joao Rodrigues
