@@ -116,10 +116,16 @@ Declared obsolete in Release 1.50, deprecated in Release 1.53, and removed in
 Release 1.57. Most of the functionality has moved to Bio.ExPASy.Prosite and
 Bio.ExPASy.Enzyme, respectively.
 
-Bio.EZRetrieve, Bio.NetCatch, Bio.File.SGMLHandle, Bio.FilteredReader
-=====================================================================
-Declared obsolete in Release 1.50, deprecated in Release 1.52, removed in
+Bio.EZRetrieve, Bio.NetCatch, Bio.FilteredReader
+================================================
+Declared obsolete in Release 1.50, deprecated in Release 1.52, and removed in
 Release 1.56.
+
+Bio.File
+========
+Bio.File.SGMLHandle was declared obsolete in Release 1.50, deprecated in
+Release 1.52, and removed in Release 1.56. Bio.File.SGMLStripper was deprecated
+in Release 1.57.
 
 Bio.Graphics.GenomeDiagram and colour/color, centre/center
 ==========================================================
@@ -476,3 +482,9 @@ Bio.SubsMat
 ===========
 The methods letter_sum and all_letters_sum were removed from the SeqMat class in
 Bio.SubsMat in Release 1.57.
+
+Bio.Align
+=========
+The methods get_column and add_sequence of the MultipleSeqAlignment class were
+deprecated in Release 1.57. The Alignment class in Bio.Align.Generic and its
+method get_seq_by_num were deprecated in Release 1.57.

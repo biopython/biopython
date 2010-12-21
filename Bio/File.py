@@ -12,9 +12,8 @@ UndoHandle     File object decorator with support for undo-like operations.
 
 StringHandle   Wraps a file object around a string.
 
-SGMLStripper   Object that strips SGML.  This is now considered OBSOLETE, and
-               is likely to be deprecated in a future release of Biopython,
-               and later removed.
+SGMLStripper   Object that strips SGML.  This is now DEPRECATED, and is likely
+               to be removed in a future release of Biopython.
 
 """
 import StringIO
@@ -124,7 +123,8 @@ else:
     
         def __init__(self):
             import warnings
-            warnings.warn("This class is obsolete, and likely to be deprecated and later removed in a future version of Biopython", PendingDeprecationWarning)
+            import Bio
+            warnings.warn("This class is deprecated, and is likely to be removed in a future version of Biopython", Bio.BiopythonDeprecationWarning)
             self._parser = SGMLStripper.MyParser()
     
         def strip(self, str):

@@ -19,14 +19,14 @@ from Bio.SeqRecord import SeqRecord
 from Bio import Alphabet
 
 class Alignment:
-    """Represent a set of alignments (OBSOLETE?).
+    """Represent a set of alignments (DEPRECATED).
 
     This is a base class to represent alignments, which can be subclassed
     to deal with an alignment in a specific format.
 
     With the introduction of the MultipleSeqAlignment class in Bio.Align,
-    this base class is effectively obsolete and will likely be deprecated and
-    later removed in future releases of Biopython.
+    this base class is deprecated and is likely to be removed in future
+    releases of Biopython.
     """
     def __init__(self, alphabet):
         """Initialize a new Alignment object.
@@ -48,7 +48,8 @@ class Alignment:
         ACTGCTAGATAG Gamma
         """
         import warnings
-        warnings.warn("With the introduction of the MultipleSeqAlignment class in Bio.Align, this base class is effectively obsolete and will likely be deprecated and later removed in future releases of Biopython.", PendingDeprecationWarning)
+        import Bio
+        warnings.warn("With the introduction of the MultipleSeqAlignment class in Bio.Align, this base class is deprecated and is likely to be removed in a future release of Biopython.", Bio.BiopythonDeprecationWarning)
         if not (isinstance(alphabet, Alphabet.Alphabet) \
         or isinstance(alphabet, Alphabet.AlphabetEncoder)):
             raise ValueError("Invalid alphabet argument")
@@ -215,7 +216,7 @@ class Alignment:
         return iter(self._records) 
 
     def get_seq_by_num(self, number):
-        """Retrieve a sequence by row number (OBSOLETE).
+        """Retrieve a sequence by row number (DEPRECATED).
 
         Returns:
         o A Seq object for the requested sequence.
@@ -234,7 +235,8 @@ class Alignment:
         last_record = alignment[-1]
         """
         import warnings
-        warnings.warn("This is a legacy method. In new code where you need to access the rows of the alignment (i.e. the sequences) consider iterating over them or accessing them as SeqRecord objects.", PendingDeprecationWarning)
+        import Bio
+        warnings.warn("This is a legacy method and is likely to be removed in a future release of Biopython. In new code where you need to access the rows of the alignment (i.e. the sequences) consider iterating over them or accessing them as SeqRecord objects.", Bio.BiopythonDeprecationWarning)
         return self._records[number].seq
 
     def __len__(self):
