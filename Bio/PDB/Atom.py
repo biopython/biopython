@@ -70,13 +70,8 @@ class Atom:
         self.mass = self._assign_atom_mass()
         
     def _assign_element(self, element):
-        """Tries to guess element from atom name."""
+        """Tries to guess element from atom name if not recognised."""
         if not element or element.capitalize() not in IUPACData.atom_weights:
-            import warnings
-            from PDBExceptions import PDBConstructionWarning
-            warnings.warn("Atom object (name=%s) without element or element not recognized ('%s')" % (self.name, element),
-                          PDBConstructionWarning)
-            
             # Inorganic elements have their name shifted left by one position 
             #  (is a convention in PDB, but not part of the standard).
             if self.fullname[0] != " ":
@@ -89,13 +84,15 @@ class Atom:
                     putative_element = self.name[0]
             
             if putative_element.capitalize() in IUPACData.atom_weights:
-                warnings.warn("Atom object (name=%s) assigned element %s based on atom name" % (self.name, putative_element),
-                               PDBConstructionWarning)
+                msg = "Used element %r for Atom (name=%s) with given element %r" \
+                      % (putative_element, self.name, element)
                 element = putative_element
             else:
-                warnings.warn("Atom object (name=%s) element could not be assigned" % (self.name),
-                               PDBConstructionWarning)
+                msg = "Could not assign element %r for Atom (name=%s) with given element %r" \
+                      % (self.name, element)
                 element = ""
+            import warnings
+            warnings.warn(msg, PDBConstructionWarning)
                 
         return element
         

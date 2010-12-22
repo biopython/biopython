@@ -52,16 +52,13 @@ class A_ExceptionTest(unittest.TestCase):
             # Trigger warnings
             p = PDBParser(PERMISSIVE=True)
             p.get_structure("example", "PDB/a_structure.pdb")
-            self.assertEqual(len(all_warns), 17)
+            self.assertEqual(len(all_warns), 14)
             for wrn, msg in zip(all_warns, [
                 # Expected warning messages:
-                "Atom object (name=N) without element or element not recognized ('')",
-                "Atom object (name=N) assigned element N based on atom name",
-                "Atom object (name=CA) without element or element not recognized ('')",
-                "Atom object (name=CA) assigned element C based on atom name",
+                "Used element 'N' for Atom (name=N) with given element ''",
+                "Used element 'C' for Atom (name=CA) with given element ''",
                 "WARNING: atom names  CA  and CA   differ only in spaces at line 17.",
-                "Atom object (name=CA  ) without element or element not recognized ('')",
-                "Atom object (name=CA  ) assigned element CA based on atom name",
+                "Used element 'CA' for Atom (name=CA  ) with given element ''",
                 'Atom N defined twice in residue <Residue ARG het=  resseq=2 icode= > at line 21.',
                 'disordered atom found with blank altloc before line 33.',
                 "Residue (' ', 4, ' ') redefined at line 43.",
