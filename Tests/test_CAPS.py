@@ -3,20 +3,17 @@ import unittest
 from Bio import CAPS
 from Bio.Restriction import EcoRI, AluI
 from Bio import Alphabet
-from Bio.Align.Generic import Alignment
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from Bio.Align import MultipleSeqAlignment
 
 def createAlignment(sequences, alphabet):
     """Create an Alignment object from a list of sequences"""
-    align = Alignment(alphabet)
-    counter = 0
-    for sequence in sequences:
-        name = "sequence" + str(counter)
-        align.add_sequence(name, sequence)
-        counter+=1
-    return align
-
+    return MultipleSeqAlignment((SeqRecord(Seq(s,alphabet), id="sequence%i"%(i+1)) \
+                                 for (i,s) in enumerate(sequences)),
+                                alphabet)
+    
 class TestCAPS(unittest.TestCase):
-
 
     def test_trivial(self):
         enzymes = [EcoRI]
@@ -73,7 +70,6 @@ AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC
 
 
     def testNoCAPS(self):
-  
         alignment = ["aaaaaaaaaaaaaaaaaaaa",
                      "aaaaaaaaaaaaaaaaaaaa",
                     ]
@@ -85,10 +81,11 @@ AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC
 
     def test_uneven(self):
         alignment = ["aaaaaaaaaaaaaa",
-                     "aaaaaaaa",
+                     "aaaaaaaaaaaaaa", #we'll change this below
                      "aaaaaaaaaaaaaa",
                     ]
         align = createAlignment(alignment, Alphabet.generic_nucleotide)
+        align[1].seq = align[1].seq[:8] #evil
         self.assertRaises(CAPS.AlignmentHasDifferentLengthsError,
                           CAPS.CAPSMap,
                           align)
