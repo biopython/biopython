@@ -18,13 +18,6 @@ from Bio.Seq import Seq
 
 from Trees import Tree,NodeData
 
-try:
-    import cnexus
-except ImportError:
-    C=False
-else:
-    C=True
-
 INTERLEAVE=70
 SPECIAL_COMMANDS=['charstatelabels','charlabels','taxlabels', 'taxset', 'charset','charpartition','taxpartition',\
         'matrix','tree', 'utree','translate','codonposset','title']
@@ -387,8 +380,6 @@ def _kill_comments_and_break_lines(text):
    
     NOTE: this function is very slow for large files, and obsolete when using C extension cnexus
     """
-    import warnings
-    warnings.warn("This function is very slow for large files, and obsolete when using C extension cnexus", PendingDeprecationWarning)
     contents=CharBuffer(text)
     newtext=[] 
     newline=[]
@@ -592,16 +583,7 @@ class Nexus(object):
         file_contents=file_contents.strip()
         if file_contents.startswith('#NEXUS'):
             file_contents=file_contents[6:]
-        if C:
-            decommented=cnexus.scanfile(file_contents)
-            #check for unmatched parentheses
-            if decommented=='[' or decommented==']':
-                raise NexusError('Unmatched %s' % decommented)
-            # cnexus can't return lists, so in analogy we separate commandlines with chr(7)
-            # (a character that shoudn't be part of a nexus file under normal circumstances)
-            commandlines=_adjust_lines(decommented.split(chr(7)))
-        else:
-            commandlines=_adjust_lines(_kill_comments_and_break_lines(file_contents))
+        commandlines=_get_command_lines(file_contents)
         # get rid of stupid 'NEXUS token - in merged treefiles, this might appear multiple times'
         for i,cl in enumerate(commandlines):
             try:
@@ -1272,7 +1254,7 @@ class Nexus(object):
                              % ', '.join(set(delete).difference(set(self.taxlabels))))
         if interleave_by_partition:
             if not interleave_by_partition in self.charpartitions:
-                raise NexusError('Unknown partition: %r' % interleave_by_partition)
+                raise NexusError('Unknown partition: '+interleave_by_partition)
             else:
                 partition=self.charpartitions[interleave_by_partition]
                 # we need to sort the partition names by starting position before we exclude characters
@@ -1739,3 +1721,22 @@ class Nexus(object):
             assert length==len(sequence), 'Illegal sequence manipulation in Nexus.termial_gap_to_missing in taxon %s' % taxon
             self.matrix[taxon]=Seq(sequence,self.alphabet)
 
+
+try:
+    import cnexus
+except ImportError:
+    def _get_command_lines(file_contents):
+        lines=_kill_comments_and_break_lines(file_contents)
+        commandlines=_adjust_lines(lines)
+        return commandlines
+else:
+    def _get_command_lines(file_contents):
+        decommented=cnexus.scanfile(file_contents)
+        #check for unmatched parentheses
+        if decommented=='[' or decommented==']':
+            raise NexusError('Unmatched %s' % decommented)
+        # cnexus can't return lists, so in analogy we separate
+        # commandlines with chr(7) (a character that shoudn't be part of a
+        # nexus file under normal circumstances)
+        commandlines=_adjust_lines(decommented.split(chr(7)))
+        return commandlines
