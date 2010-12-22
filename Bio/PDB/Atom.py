@@ -65,13 +65,13 @@ class Atom:
         self.serial_number=serial_number
         # Dictionary that keeps addictional properties
         self.xtra={}
-
+        assert not element or element == element.upper(), element
         self.element = self._assign_element(element)
         self.mass = self._assign_atom_mass()
         
     def _assign_element(self, element):
         """Tries to guess element from atom name."""
-        if not element or element not in IUPACData.atom_weights:
+        if not element or element.capitalize() not in IUPACData.atom_weights:
             import warnings
             from PDBExceptions import PDBConstructionWarning
             warnings.warn("Atom object (name=%s) without element or element not recognized ('%s')" % (self.name, element),
