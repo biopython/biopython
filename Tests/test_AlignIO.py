@@ -79,13 +79,13 @@ def alignment_summary(alignment, index="  ", vertical_threshold=5):
     else:
         #Show each sequence row vertically
         for i in range(min(5,alignment_len)):
-            answer.append(index + str_summary(alignment.get_column(i)) \
+            answer.append(index + str_summary(alignment[:,i]) \
                                 + " alignment column %i" % i)
         if alignment_len > 5:
             i = alignment_len - 1
             answer.append(index + str_summary("|" * rec_count) \
                                 + " ...")
-            answer.append(index + str_summary(alignment.get_column(i)) \
+            answer.append(index + str_summary(alignment[:,i]) \
                                 + " alignment column %i" % i)
     return "\n".join(answer)
 
