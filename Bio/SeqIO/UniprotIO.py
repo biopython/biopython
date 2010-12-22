@@ -362,22 +362,10 @@ class Parser(object):
                         pub_type+=' to the '+ref_element.attrib['db']
                     if 'name' in ref_element.attrib:
                         journal_name=ref_element.attrib['name']
-                    if 'date' in ref_element.attrib:
-                        pub_date=ref_element.attrib['date']
-                    else:
-                        pub_date=''
-                    if 'volume' in ref_element.attrib:
-                        j_volume=ref_element.attrib['volume']
-                    else:
-                        j_volume=''
-                    if 'first' in ref_element.attrib:
-                        j_first=ref_element.attrib['first']
-                    else:
-                        j_first=''
-                    if 'last' in ref_element.attrib:
-                        j_last=ref_element.attrib['last']
-                    else:
-                        j_last=''
+                    pub_date=ref_element.attrib.get('date','')
+                    j_volume=ref_element.attrib.get('volume','')
+                    j_first=ref_element.attrib.get('first','')
+                    j_last=ref_element.attrib.get('last','')
                     for cit_element in ref_element.getchildren():
                         if cit_element.tag==NS + 'title':
                             reference.title=cit_element.text
@@ -440,10 +428,7 @@ class Parser(object):
             feature=SeqFeature.SeqFeature()
             for k,v in element.attrib.items():
                 feature.qualifiers[k]=v
-            if 'type' in element.attrib:
-                feature.type=element.attrib['type']
-            else:
-                feature.type=''
+            feature.type=element.attrib.get('type','')
             if 'id' in element.attrib:
                 feature.id=element.attrib['id']
             for feature_element in element.getchildren():
@@ -488,10 +473,8 @@ class Parser(object):
         self.ParsedSeqRecord=SeqRecord('', id='') 
         
         '''Entry attribs parsing '''
-        if 'dataset' in self.entry.attrib:
-            self.dbname=self.entry.attrib['dataset']
-        else:
-            self.dbname='UnknownDataset'#this should not happen!
+        #Unknown dataset should not happen!
+        self.dbname=self.entry.attrib.get('dataset', 'UnknownDataset')
         '''add attribs to annotations '''
         for k, v in self.entry.attrib.items():
             if k in ("version"):
@@ -545,8 +528,6 @@ class Parser(object):
         # use first accession as id
         if not self.ParsedSeqRecord.id:
             self.ParsedSeqRecord.id=self.ParsedSeqRecord.annotations['accessions'][0]
-
-
         
         return self.ParsedSeqRecord
         
