@@ -767,7 +767,27 @@ class Atom_Element(unittest.TestCase):
         atoms = structure[0]['A'][('H_ MG', 1, ' ')].child_list
         self.assertEqual('MG', atoms[0].element)
         
+class IterationTests(unittest.TestCase):        
+    
+    def setUp(self):
+        self.struc = PDBParser(PERMISSIVE=True).get_structure('X', "PDB/a_structure.pdb")
         
+    def test_get_chains(self):
+        """Yields chains from different models separately."""
+        chains = [chain.id for chain in self.struc.get_chains()]
+        self.assertEqual(chains, ['A','A', 'B', ' '])
+        
+    def test_get_residues(self):
+        """Yields all residues from all models."""
+        residues = [resi.id for resi in self.struc.get_residues()]
+        self.assertEqual(len(residues), 167)
+
+    def test_get_atoms(self):
+        """Yields all atoms from the structure, excluding duplicates and ALTLOCs which are not parsed."""
+        atoms = ["%12s"%str((atom.id, atom.altloc)) for atom in self.struc.get_atoms()]
+        self.assertEqual(len(atoms), 756)
+
+
 #class RenumberTests(unittest.TestCase):
 #    """Tests renumbering of structures."""
 #    
