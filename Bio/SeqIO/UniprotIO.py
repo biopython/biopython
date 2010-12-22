@@ -444,8 +444,6 @@ class Parser(object):
                 feature.type=element.attrib['type']
             else:
                 feature.type=''
-            if element.attrib.has_key('type'):
-                feature.type=element.attrib['type']
             if element.attrib.has_key('id'):
                 feature.id=element.attrib['id']
             for feature_element in element.getchildren():
