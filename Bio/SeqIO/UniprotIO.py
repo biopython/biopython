@@ -289,7 +289,7 @@ class Parser(object):
                     except :#undefined positions or erroneusly mapped
                         pass    
                 mass=element.attrib['mass']
-                method=element.attrib['mass']
+                method=element.attrib['mass'] #TODO - Check this, looks wrong!
                 if start==end==0:  
                     append_to_annotations(ann_key,'undefined:%s|%s'%(mass,method))
                 else:
