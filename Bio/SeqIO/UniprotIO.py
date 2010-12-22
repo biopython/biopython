@@ -107,7 +107,7 @@ class Parser(object):
         assert self.entry.tag == NS + 'entry'
         
         def append_to_annotations(key, value):
-            if not self.ParsedSeqRecord.annotations.has_key(key):
+            if key not in self.ParsedSeqRecord.annotations:
                 self.ParsedSeqRecord.annotations[key]=[]
             if value not in self.ParsedSeqRecord.annotations[key]:
                 self.ParsedSeqRecord.annotations[key].append(value)
@@ -142,7 +142,7 @@ class Parser(object):
         
         def _parse_gene(element):
             for genename_element in element.getchildren():  
-                if genename_element.attrib.has_key('type'):
+                if 'type' in genename_element.attrib:
                     ann_key='gene_%s_%s' % (genename_element.tag.replace(NS,''), genename_element.attrib['type'])
                     if genename_element.attrib['type']=='primary':
                         self.ParsedSeqRecord.annotations[ann_key]=genename_element.text
@@ -360,21 +360,21 @@ class Parser(object):
                     pub_type=ref_element.attrib['type']
                     if pub_type=='submission':
                         pub_type+=' to the '+ref_element.attrib['db']
-                    if ref_element.attrib.has_key('name'):
+                    if 'name' in ref_element.attrib:
                         journal_name=ref_element.attrib['name']
-                    if ref_element.attrib.has_key('date'):
+                    if 'date' in ref_element.attrib:
                         pub_date=ref_element.attrib['date']
                     else:
                         pub_date=''
-                    if ref_element.attrib.has_key('volume'):
+                    if 'volume' in ref_element.attrib:
                         j_volume=ref_element.attrib['volume']
                     else:
                         j_volume=''
-                    if ref_element.attrib.has_key('first'):
+                    if 'first' in ref_element.attrib:
                         j_first=ref_element.attrib['first']
                     else:
                         j_first=''
-                    if ref_element.attrib.has_key('last'):
+                    if 'last' in ref_element.attrib:
                         j_last=ref_element.attrib['last']
                     else:
                         j_last=''
@@ -440,11 +440,11 @@ class Parser(object):
             feature=SeqFeature.SeqFeature()
             for k,v in element.attrib.items():
                 feature.qualifiers[k]=v
-            if element.attrib.has_key('type'):
+            if 'type' in element.attrib:
                 feature.type=element.attrib['type']
             else:
                 feature.type=''
-            if element.attrib.has_key('id'):
+            if 'id' in element.attrib:
                 feature.id=element.attrib['id']
             for feature_element in element.getchildren():
                 if feature_element.tag==NS + 'location':
@@ -488,7 +488,7 @@ class Parser(object):
         self.ParsedSeqRecord=SeqRecord('', id='') 
         
         '''Entry attribs parsing '''
-        if self.entry.attrib.has_key('dataset'):
+        if 'dataset' in self.entry.attrib:
             self.dbname=self.entry.attrib['dataset']
         else:
             self.dbname='UnknownDataset'#this should not happen!
