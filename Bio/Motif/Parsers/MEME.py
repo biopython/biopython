@@ -256,12 +256,12 @@ def __read_command(record, handle):
 
 
 def __create_motif(line):
-    line = line.strip()
+    line = line[5:].strip()
     ls = line.split()
     motif = MEMEMotif()
-    motif.length = int(ls[4])
-    motif._numoccurrences(ls[7])
-    motif._evalue(ls[13])
+    motif.length = int(ls[3])
+    motif._numoccurrences(ls[6])
+    motif._evalue(ls[12])
     return motif
 
 
