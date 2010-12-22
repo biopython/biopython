@@ -52,6 +52,7 @@ class A_ExceptionTest(unittest.TestCase):
             # Trigger warnings
             p = PDBParser(PERMISSIVE=True)
             p.get_structure("example", "PDB/a_structure.pdb")
+            self.assertEqual(len(all_warns), 17)
             for wrn, msg in zip(all_warns, [
                 # Expected warning messages:
                 "Atom object (name=N) without element or element not recognized ('')",
