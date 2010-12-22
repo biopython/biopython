@@ -1238,6 +1238,7 @@ class Nexus(object):
         filename - Either a filename as a string (which will be opened,
                    written to and closed), or a handle object (which will
                    be written to but NOT closed).
+        interleave_by_partition - Optional name of partition (string)
         omit_NEXUS - Boolean.  If true, the '#NEXUS' line normally at the
                    start of the file is ommited.
 
