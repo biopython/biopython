@@ -57,7 +57,7 @@ class A_ExceptionTest(unittest.TestCase):
                 # Expected warning messages:
                 "Used element 'N' for Atom (name=N) with given element ''",
                 "Used element 'C' for Atom (name=CA) with given element ''",
-                "WARNING: atom names  CA  and CA   differ only in spaces at line 17.",
+                "Atom names ' CA ' and 'CA  ' differ only in spaces at line 17.",
                 "Used element 'CA' for Atom (name=CA  ) with given element ''",
                 'Atom N defined twice in residue <Residue ARG het=  resseq=2 icode= > at line 21.',
                 'disordered atom found with blank altloc before line 33.',
@@ -70,7 +70,7 @@ class A_ExceptionTest(unittest.TestCase):
                 "Residue (' ', 81, ' ') redefined at line 646.",
                 'Atom O defined twice in residue <Residue HOH het=W resseq=67 icode= > at line 822.'
                 ]):
-                self.assertTrue(msg in str(wrn))
+                self.assertTrue(msg in str(wrn), str(wrn))
         finally:
             warnings.showwarning = orig_showwarning
 

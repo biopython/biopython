@@ -188,7 +188,7 @@ class StructureBuilder:
                 if duplicate_fullname!=fullname:
                     # name of current atom now includes spaces
                     name=fullname
-                    warnings.warn("WARNING: atom names %s and %s differ "
+                    warnings.warn("Atom names %r and %r differ "
                                   "only in spaces at line %i."
                                   % (duplicate_fullname, fullname,
                                      self.line_counter),
