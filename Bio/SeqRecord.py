@@ -925,19 +925,19 @@ class SeqRecord(object):
         You can specify the returned record's id, name and description as
         strings, or True to keep that of the parent, or False for a default.
 
-        You can specify the returned record's features as a list of SeqFeature
-        objects, True to keep that of the parent, or False to omit them.
-        The default is to keep the original features (with the strand and
-        locations adjusted).
+        You can specify the returned record's features with a list of
+        SeqFeature objects, or True to keep that of the parent, or False to
+        omit them. The default is to keep the original features (with the
+        strand and locations adjusted).
 
-        You can specify the returned record's annotations and letter_annotations
-        as dictionaries, True to keep that of the parent, or False to omit them.
-        The default is to keep the original annotations (with the letter
-        annotations reversed).
+        You can also specify both the returned record's annotations and
+        letter_annotations as dictionaries, True to keep that of the parent,
+        or False to omit them. The default is to keep the original
+        annotations (with the letter annotations reversed).
 
-        To show what happens to the pre-letter annotations, consider an example
-        Solexa variant FASTQ file with a single entry, which we'll read in as a
-        SeqRecord:
+        To show what happens to the pre-letter annotations, consider an
+        example Solexa variant FASTQ file with a single entry, which we'll
+        read in as a SeqRecord:
 
         >>> from Bio import SeqIO
         >>> handle = open("Quality/solexa_faked.fastq", "rU")
@@ -956,14 +956,15 @@ class SeqRecord(object):
         >>> print rc_record.id, rc_record.seq
         slxa_0001_1_0001_01_rc NNNNNNACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
 
-        Notice that the per-letter-annotations have also been reversed, although
-        this may not be appropriate for all possible per-letter-annotation.
+        Notice that the per-letter-annotations have also been reversed,
+        although this may not be appropriate for all cases.
 
         >>> print rc_record.letter_annotations["solexa_quality"]
         [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
 
-        Now for the features, we need a different example. Parsing a GenBank file
-        is probably the easiest way to get an nice example with features in it...
+        Now for the features, we need a different example. Parsing a GenBank
+        file is probably the easiest way to get an nice example with features
+        in it...
 
         >>> from Bio import SeqIO
         >>> handle = open("GenBank/pBAD30.gb")
@@ -986,9 +987,9 @@ class SeqRecord(object):
         >>> len(rc_plasmid.features)
         13
 
-        Let's compare the first CDS feature - it has gone from being the second
-        feature (index 1) to the second last feature (index -2), its strand has
-        changed, and the location switched round.
+        Let's compare the first CDS feature - it has gone from being the
+        second feature (index 1) to the second last feature (index -2), its
+        strand has changed, and the location switched round.
 
         >>> print plasmid.features[1]
         type: CDS
@@ -1016,7 +1017,12 @@ class SeqRecord(object):
         >>> len(plasmid) - 1960
         2963
 
-        Note trying to reverse complement a protein SeqRecord raises an exception:
+        Note that if the SeqFeature annotation includes any strand specific
+        information (e.g. base changes for a SNP), this information is not
+        ammended, and would need correction after the reverse complement.
+
+        Note trying to reverse complement a protein SeqRecord raises an
+        exception:
 
         >>> from Bio.SeqRecord import SeqRecord
         >>> from Bio.Seq import Seq
