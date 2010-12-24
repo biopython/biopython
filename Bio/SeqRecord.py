@@ -440,7 +440,7 @@ class SeqRecord(object):
         >>> record = SeqIO.read(open("Fasta/loveliesbleeding.pro"),"fasta")
         >>> for amino in record:
         ...     print amino
-        ...     if amino == "L" : break
+        ...     if amino == "L": break
         X
         A
         G
@@ -452,7 +452,7 @@ class SeqRecord(object):
 
         >>> for amino in record.seq:
         ...     print amino
-        ...     if amino == "L" : break
+        ...     if amino == "L": break
         X
         A
         G
@@ -552,11 +552,15 @@ class SeqRecord(object):
         Note that long sequences are shown truncated.
         """
         lines = []
-        if self.id : lines.append("ID: %s" % self.id)
-        if self.name : lines.append("Name: %s" % self.name)
-        if self.description : lines.append("Description: %s" % self.description)
-        if self.dbxrefs : lines.append("Database cross-references: " \
-                                       + ", ".join(self.dbxrefs))
+        if self.id:
+            lines.append("ID: %s" % self.id)
+        if self.name:
+            lines.append("Name: %s" % self.name)
+        if self.description:
+            lines.append("Description: %s" % self.description)
+        if self.dbxrefs:
+            lines.append("Database cross-references: " \
+                         + ", ".join(self.dbxrefs))
         lines.append("Number of features: %i" % len(self.features))
         for a in self.annotations:
             lines.append("/%s=%s" % (a, str(self.annotations[a])))
@@ -929,7 +933,7 @@ def _test():
         os.chdir(cur_dir)
         del cur_dir
         print "Done"
-    elif os.path.isdir(os.path.join("Tests")) :
+    elif os.path.isdir(os.path.join("Tests")):
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("Tests"))
