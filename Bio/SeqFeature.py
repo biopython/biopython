@@ -176,15 +176,42 @@ class SeqFeature(object):
 
         The annotation qaulifiers are copied."""
         return SeqFeature(location = self.location._shift(offset),
-                type = self.type,
-                location_operator = self.location_operator,
-                strand = self.strand,
-                id = self.id,
-                qualifiers = dict(self.qualifiers.iteritems()),
-                sub_features = [f._shift(offset) for f in self.sub_features],
-                ref = self.ref,
-                ref_db = self.ref_db)
+            type = self.type,
+            location_operator = self.location_operator,
+            strand = self.strand,
+            id = self.id,
+            qualifiers = dict(self.qualifiers.iteritems()),
+            sub_features = [f._shift(offset) for f in self.sub_features],
+            ref = self.ref,
+            ref_db = self.ref_db)
 
+    def _flip(self, length):
+        """Returns a copy of the feature with its location flipped (PRIVATE).
+        
+        The argument length gives the length of the parent sequence. For
+        example a location 0..20 (+1 strand) with parent length 30 becomes
+        after flipping 10..30 (-1 strand). Dual strand or strandless features
+        remain dual strand or strandless - just their end points are changed.
+
+        The annotation qaulifiers are copied.
+        """
+        if self.strand == +1 :
+            new_strand = -1
+        elif self.strand == -1 :
+            new_strand = +1
+        else :
+            assert self.strand == 0 or self.strand is None
+            new_strand = self.strand
+        return SeqFeature(location = self.location._flip(length),
+            type = self.type,
+            location_operator = self.location_operator,
+            strand = new_strand,
+            id = self.id,
+            qualifiers = dict(self.qualifiers.iteritems()),
+            sub_features = [f._flip(length) for f in self.sub_features[::-1]],
+            ref = self.ref,
+            ref_db = self.ref_db)
+    
     def extract(self, parent_sequence):
         """Extract feature sequence from the supplied parent sequence.
 
@@ -573,6 +600,12 @@ class FeatureLocation(object):
         return FeatureLocation(start = self._start._shift(offset),
                                end = self._end._shift(offset))
 
+    def _flip(self, length):
+        """Returns a copy of the location after the parent is reversed (PRIVATE)."""
+        #Note this will flip the start and end too!
+        return FeatureLocation(start = self._end._flip(length),
+                               end = self._start._flip(length))
+
     start = property(fget= lambda self : self._start,
                  doc="Start location (possibly a fuzzy position, read only).")
 
@@ -598,6 +631,7 @@ class FeatureLocation(object):
         the largest range of the fuzzy position. So something like:
         (10.20)..(30.40) should return 10 for start, and 40 for end.
         """)
+
 
 class AbstractPosition(object):
     """Abstract base class representing a position.
@@ -686,7 +720,13 @@ class AbstractPosition(object):
     def _shift(self, offset):
         #We want this to maintain the subclass when called from a subclass
         return self.__class__(self.position + offset, self.extension)
-            
+
+    def _flip(self, length):
+        #We want this to maintain the subclass when called from a subclass
+        return self.__class__(length - self.position - self.extension,
+                              self.extension)
+
+
 class ExactPosition(AbstractPosition):
     """Specify the specific position of a boundary.
 
@@ -751,6 +791,7 @@ class WithinPosition(AbstractPosition):
     def __str__(self):
         return "(%s.%s)" % (self.position, self.position + self.extension)
 
+
 class BetweenPosition(AbstractPosition):
     """Specify the position of a boundary between two coordinates (OBSOLETE?).
 
@@ -768,6 +809,7 @@ class BetweenPosition(AbstractPosition):
 
     def __str__(self):
         return "(%s^%s)" % (self.position, self.position + self.extension)
+
 
 class BeforePosition(AbstractPosition):
     """Specify a position where the actual location occurs before it.
@@ -795,6 +837,9 @@ class BeforePosition(AbstractPosition):
     def __str__(self):
         return "<%s" % self.position
 
+    def _flip(self, length):
+        return AfterPosition(length - self.position)
+
 class AfterPosition(AbstractPosition):
     """Specify a position where the actual location is found after it.
 
@@ -820,6 +865,10 @@ class AfterPosition(AbstractPosition):
 
     def __str__(self):
         return ">%s" % self.position
+
+    def _flip(self, length):
+        return BeforePosition(length - self.position)
+
 
 class OneOfPosition(AbstractPosition):
     """Specify a position where the location can be multiple positions.
@@ -869,6 +918,10 @@ class OneOfPosition(AbstractPosition):
     def _shift(self, offset):
         return self.__class__([position_choice._shift(offset) \
                                for position_choice in self.position_choices])
+
+    def _flip(self, length):
+        return OneOfPosition([p._flip(length) for p in self.position_choices[::-1]])
+
 
 class PositionGap(object):
     """Simple class to hold information about a gap between positions.

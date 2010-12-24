@@ -18,6 +18,10 @@ ability to run the BLAST tools and save the output as ASN.1 format, and then
 convert this to any other supported BLAST ouput format (plain text, tabular,
 XML, or HTML) with the blast_formatter tool.
 
+The SeqRecord object now as a reverse_complement method (similar to that of
+the Seq object). This is most useful to reversing per-letter-annotation (such
+as quality scores from FASTQ) or features (such as annotation from GenBank).
+
 (At least) 9 people have contributed to this release, including 1 new person:
 
 Brad Chapman

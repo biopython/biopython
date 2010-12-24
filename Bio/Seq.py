@@ -19,7 +19,6 @@ import sys
 
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
-from Bio.SeqRecord import SeqRecord
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 from Bio.Data import CodonTable
 
@@ -276,7 +275,8 @@ class Seq(object):
         elif isinstance(other, basestring):
             #other is a plain string - use the current alphabet
             return self.__class__(str(self) + other, self.alphabet)
-        elif isinstance(other, SeqRecord):
+        from Bio.SeqRecord import SeqRecord #Lazy to avoid circular imports
+        if isinstance(other, SeqRecord):
             #Get the SeqRecord's __radd__ to handle this
             return NotImplemented
         else :
