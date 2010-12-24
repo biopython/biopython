@@ -1080,8 +1080,7 @@ class SeqRecord(object):
             #so we need to resort in case of overlapping features.
             #NOTE - In the common case of gene before CDS (and similar) with
             #the exact same locations, this will still maintain gene before CDS
-            answer.features.sort(cmp=lambda x,y: cmp(x.location.start.position,
-                                                     y.location.start.position))
+            answer.features.sort(key=lambda x : x.location.start.position)
         if isinstance(annotations, dict):
             answer.annotations = annotations
         elif annotations:
