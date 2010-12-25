@@ -162,7 +162,7 @@ class build_ext_biopython(build_ext):
                            'Bio/Cluster/cluster.c'],
                           include_dirs=[numpy_include_dir],
                           ))
-        if is_Numpy_installed() and sys.version_info[0] < 3:
+        if is_Numpy_installed():
             self.extensions.append(
                 Extension('Bio.KDTree._CKDTree',
                           ["Bio/KDTree/KDTree.c",

@@ -2,6 +2,19 @@
 #include <numpy/arrayobject.h>
 #include "KDTree.h"
 
+
+/* Must define Py_TYPE for Python 2.5 or older */
+#ifndef Py_TYPE
+#  define Py_TYPE(o) ((o)->ob_type)
+#endif
+
+/* Must define PyVarObject_HEAD_INIT for Python 2.5 or older */
+#ifndef PyVarObject_HEAD_INIT
+#define PyVarObject_HEAD_INIT(type, size)       \
+        PyObject_HEAD_INIT(type) size,
+#endif
+
+
 typedef struct {
     PyObject_HEAD 
     struct Neighbor neighbor;
@@ -30,7 +43,12 @@ PyNeighbor_repr(PyNeighbor* self)
     char string[64];
     sprintf(string, "(%ld, %ld): %g",
             self->neighbor.index1, self->neighbor.index2, self->neighbor.radius);
+#if PY_MAJOR_VERSION >= 3
+    return PyUnicode_FromString(string);
+#else
     return PyString_FromString(string);
+#endif
+
 }
 
 static char PyNeighbor_index1__doc__[] =
@@ -39,13 +57,21 @@ static char PyNeighbor_index1__doc__[] =
 static PyObject*
 PyNeighbor_getindex1(PyNeighbor* self, void* closure)
 {
+#if PY_MAJOR_VERSION >= 3
+    return PyLong_FromLong(self->neighbor.index1);
+#else
     return PyInt_FromLong(self->neighbor.index1);
+#endif
 }
 
 static int
 PyNeighbor_setindex1(PyNeighbor* self, PyObject* value, void* closure)
 {
+#if PY_MAJOR_VERSION >= 3
+    long index1 = PyLong_AsLong(value);
+#else
     long index1 = PyInt_AsLong(value);
+#endif
     if (PyErr_Occurred()) return -1;
     self->neighbor.index1 = index1;
     return 0;
@@ -57,13 +83,21 @@ static char PyNeighbor_index2__doc__[] =
 static PyObject*
 PyNeighbor_getindex2(PyNeighbor* self, void* closure)
 {
+#if PY_MAJOR_VERSION >= 3
+    return PyLong_FromLong(self->neighbor.index2);
+#else
     return PyInt_FromLong(self->neighbor.index2);
+#endif
 }
 
 static int
 PyNeighbor_setindex2(PyNeighbor* self, PyObject* value, void* closure)
 {
+#if PY_MAJOR_VERSION >= 3
+    long index2 = PyLong_AsLong(value);
+#else
     long index2 = PyInt_AsLong(value);
+#endif
     if (PyErr_Occurred()) return -1;
     self->neighbor.index2 = index2;
     return 0;
@@ -98,8 +132,7 @@ static char PyNeighbor_doc[] =
 "A neighbor pair; members are index1, index2, and radius.\n";
 
 static PyTypeObject PyNeighborType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /* ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "KDTree.Neighbor",         /* tp_name*/
     sizeof(PyNeighbor),        /* tp_basicsize*/
     0,                         /* tp_itemsize*/
@@ -146,7 +179,7 @@ static void
 PyTree_dealloc(PyTree* self)
 {
     KDTree_destroy(self->tree);
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static int
@@ -182,7 +215,11 @@ PyTree_get_count(PyTree* self)
     struct KDTree* tree = self->tree;
     PyObject* result;
     count = KDTree_get_count(tree);
+#if PY_MAJOR_VERSION >= 3
+    result = PyLong_FromLong(count);
+#else
     result = PyInt_FromLong(count);
+#endif
     if (!result)
     {
         PyErr_SetString (PyExc_MemoryError, "Failed to allocate memory for object.");
@@ -198,7 +235,11 @@ PyTree_neighbor_get_count(PyTree* self)
     struct KDTree* tree = self->tree;
     PyObject* result;
     count = KDTree_neighbor_get_count(tree);
+#if PY_MAJOR_VERSION >= 3
+    result = PyLong_FromLong(count);
+#else
     result = PyInt_FromLong(count);
+#endif
     if (!result)
     {
         PyErr_SetString (PyExc_MemoryError, "Failed to allocate memory for object.");
@@ -570,8 +611,7 @@ static PyMethodDef PyTree_methods[] = {
 static char PyTree_doc[] = "C KDTree.\n";
 
 static PyTypeObject PyTreeType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                           /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
     "C KDTree",                  /*tp_name*/
     sizeof(PyTree),              /*tp_basicsize*/
     0,                           /*tp_itemsize*/
@@ -613,24 +653,63 @@ static PyTypeObject PyTreeType = {
 /* -- Initialization -------------------------------------------------------- */
 /* ========================================================================== */
 
-void init_CKDTree(void)
+#if PY_MAJOR_VERSION >= 3
+
+static struct PyModuleDef moduledef = {
+        PyModuleDef_HEAD_INIT,
+        "_CKDTree",
+        NULL,
+        -1,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL
+};
+
+PyObject *
+PyInit__CKDTree(void)
+
+#else
+
+void
+init_CKDTree(void)
+#endif
 {
-  PyObject *m;
+  PyObject *module;
 
   import_array();
 
   PyTreeType.tp_new = PyType_GenericNew;
   PyNeighborType.tp_new = PyType_GenericNew;
-  if (PyType_Ready(&PyTreeType) < 0) return;
-  if (PyType_Ready(&PyNeighborType) < 0) return;
+  if (PyType_Ready(&PyTreeType) < 0)
+#if PY_MAJOR_VERSION >= 3
+      return NULL;
+#else
+      return;
+#endif
+  if (PyType_Ready(&PyNeighborType) < 0)
+#if PY_MAJOR_VERSION >= 3
+      return NULL;
+#else
+      return;
+#endif
 
+#if PY_MAJOR_VERSION >= 3
+  module = PyModule_Create(&moduledef);
+  if (module==NULL) return NULL;
+#else
   m = Py_InitModule("_CKDTree", NULL);
   if (m==NULL) return;
+#endif
 
   Py_INCREF(&PyTreeType);
   Py_INCREF(&PyNeighborType);
-  PyModule_AddObject(m, "KDTree", (PyObject*) &PyTreeType);
-  PyModule_AddObject(m, "Neighbor", (PyObject*) &PyNeighborType);
+  PyModule_AddObject(module, "KDTree", (PyObject*) &PyTreeType);
+  PyModule_AddObject(module, "Neighbor", (PyObject*) &PyNeighborType);
 
   if (PyErr_Occurred()) Py_FatalError("can't initialize module _CKDTree");
+#if PY_MAJOR_VERSION >= 3
+  return module;
+#endif
 }
