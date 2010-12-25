@@ -111,23 +111,51 @@ py_calculate(PyObject* self, PyObject* args, PyObject* keywords)
 
 
 static struct PyMethodDef methods[] = {
-   {"calculate", (PyCFunction)py_calculate, METH_KEYWORDS, calculate__doc__},
+   {"calculate", (PyCFunction)py_calculate, METH_VARARGS | METH_KEYWORDS, calculate__doc__},
    {NULL,          NULL, 0, NULL} /* sentinel */
 };
 
 
+#if PY_MAJOR_VERSION >= 3
+
+static struct PyModuleDef moduledef = {
+        PyModuleDef_HEAD_INIT,
+        "_pwm",
+        "Fast calculations involving position-weight matrices",
+        -1,
+        methods,
+        NULL,
+        NULL,
+        NULL,
+        NULL
+};
+
+PyObject*
+PyInit__pwm(void)
+
+#else
+
 void init_pwm(void)
+#endif
 {
   PyObject *m;
 
   import_array();
 
+#if PY_MAJOR_VERSION >= 3
+  m = PyModule_Create(&moduledef);
+  if (m==NULL) return NULL;
+#else
   m = Py_InitModule4("_pwm",
                      methods,
                      "Fast calculations involving position-weight matrices",
                      NULL,
                      PYTHON_API_VERSION);
   if (m==NULL) return;
+#endif
 
   if (PyErr_Occurred()) Py_FatalError("can't initialize module _pwm");
+#if PY_MAJOR_VERSION >= 3
+    return m;
+#endif
 }
