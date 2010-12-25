@@ -2827,10 +2827,6 @@ static struct PyMethodDef cluster_methods[] = {
 /* -- Initialization -------------------------------------------------------- */
 /* ========================================================================== */
 
-struct module_state {
-    PyObject* error;
-};
-
 void
 initcluster(void)
 {
@@ -2851,13 +2847,6 @@ initcluster(void)
                           NULL,
                           PYTHON_API_VERSION);
   if (module==NULL) return;
-
-  struct module_state *st = GETSTATE(module);
-  st->error = PyErr_NewException("cluster.Error", NULL, NULL);
-  if (st->error == NULL) {
-      Py_DECREF(module);
-      return;
-  }
 
   Py_INCREF(&PyTreeType);
   Py_INCREF(&PyNodeType);
