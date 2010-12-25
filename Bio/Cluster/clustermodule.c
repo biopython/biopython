@@ -2098,7 +2098,7 @@ py_median(PyObject* unused, PyObject* args)
   if(!PyArg_ParseTuple(args, "O", &DATA)) return NULL;
 
   /* -- Check the input variable ----------------------------------------- */
-  if (PyFloat_Check(DATA) || PyLong_Check(DATA) || PyLong_Check(DATA))
+  if (PyFloat_Check(DATA) || PyLong_Check(DATA))
   { Py_INCREF(DATA);
     return DATA;
   }
@@ -2164,7 +2164,7 @@ py_mean(PyObject* unused, PyObject* args)
   if(!PyArg_ParseTuple(args, "O", &DATA)) return NULL;
 
   /* -- Check the input variable ----------------------------------------- */
-  if (PyFloat_Check(DATA) || PyLong_Check(DATA) || PyLong_Check(DATA))
+  if (PyFloat_Check(DATA) || PyLong_Check(DATA))
   { Py_INCREF(DATA);
     return DATA;
   }
