@@ -1,6 +1,6 @@
 import numpy
 
-from cluster import *
+from Bio.Cluster.cluster import *
 
 def _treesort(order, nodeorder, nodecounts, tree):
     # Find the order of the nodes consistent with the hierarchical clustering
@@ -8,7 +8,7 @@ def _treesort(order, nodeorder, nodecounts, tree):
     nNodes = len(tree)
     nElements = nNodes + 1
     neworder = numpy.zeros(nElements)
-    clusterids = range(nElements)
+    clusterids = numpy.arange(nElements)
     for i in range(nNodes):
         i1 = tree[i].left
         i2 = tree[i].right
@@ -184,11 +184,11 @@ Cluster/TreeView program.
                                  (len(line), n))
             if line[0] == "EWEIGHT":
                 i = max(cols) + 1
-                self.eweight = map(float, line[i:])
+                self.eweight = numpy.array(line[i:], float)
                 continue
             if line[0] == "EORDER":
                 i = max(cols) + 1
-                self.eorder = map(float, line[i:])
+                self.eorder = numpy.array(line[i:], float)
                 continue
             rowdata = []
             rowmask = []

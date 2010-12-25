@@ -5,6 +5,13 @@
 #include <float.h>
 #include "cluster.h"
 
+#if PY_MAJOR_VERSION >= 3
+#   define GETSTATE(m) ((struct module_state*)PyModule_GetState(m))
+#else
+#   define GETSTATE(m) (&_state)
+static struct module_state _state;
+#endif
+
 
 /* ========================================================================== */
 /* -- Helper routines ------------------------------------------------------- */
@@ -15,9 +22,11 @@ distance_converter(PyObject* object, void* pointer)
 { char c;
   const char* data;
   const char known_distances[] = "ebcauxsk";
+#if PY_MAJOR_VERSION < 3
   if (PyString_Check(object))
       data = PyString_AsString(object);
   else
+#endif
   if (PyUnicode_Check(object))
       data = PyUnicode_AS_DATA(object);
   else
@@ -42,9 +51,11 @@ method_treecluster_converter(PyObject* object, void* pointer)
 { char c;
   const char* data;
   const char known_methods[] = "csma";
+#if PY_MAJOR_VERSION < 3
   if (PyString_Check(object))
       data = PyString_AsString(object);
   else
+#endif
   if (PyUnicode_Check(object))
       data = PyUnicode_AS_DATA(object);
   else
@@ -69,9 +80,11 @@ method_kcluster_converter(PyObject* object, void* pointer)
 { char c;
   const char* data;
   const char known_methods[] = "am";
+#if PY_MAJOR_VERSION < 3
   if (PyString_Check(object))
       data = PyString_AsString(object);
   else
+#endif
   if (PyUnicode_Check(object))
       data = PyUnicode_AS_DATA(object);
   else
@@ -96,9 +109,11 @@ method_clusterdistance_converter(PyObject* object, void* pointer)
 { char c;
   const char* data;
   const char known_methods[] = "amsxv";
+#if PY_MAJOR_VERSION < 3
   if (PyString_Check(object))
       data = PyString_AsString(object);
   else
+#endif
   if (PyUnicode_Check(object))
       data = PyUnicode_AS_DATA(object);
   else
@@ -863,7 +878,11 @@ parse_index(PyObject* object, PyArrayObject** array, int* n)
   { *array = NULL;
     index = malloc(sizeof(int));
     if (!object) index[0] = 0;
+#if PY_MAJOR_VERSION >= 3
+    else index[0] = (int) PyLong_AS_LONG(object);
+#else
     else index[0] = (int) PyInt_AS_LONG(object);
+#endif
     *n = 1;
     return index;
   }
@@ -962,7 +981,11 @@ PyNode_repr(PyNode* self)
 { char string[64];
   sprintf(string, "(%d, %d): %g",
                   self->node.left, self->node.right, self->node.distance);
+#if PY_MAJOR_VERSION >= 3
+  return PyUnicode_FromString(string);
+#else
   return PyString_FromString(string);
+#endif
 }
 
 static char PyNode_left__doc__[] =
@@ -1155,21 +1178,40 @@ PyTree_str(PyTree* self)
   Node node;
   PyObject* line;
   PyObject* output;
+#if PY_MAJOR_VERSION >= 3
+  PyObject* temp;
+  output = PyUnicode_FromString("");
+#else
   output = PyString_FromString("");
+#endif
   for (i = 0; i < n; i++)
   { node = self->nodes[i];
     sprintf(string, "(%d, %d): %g", node.left, node.right, node.distance);
     if (i < n-1) strcat(string, "\n");
+#if PY_MAJOR_VERSION >= 3
+    line = PyUnicode_FromString(string);
+#else
     line = PyString_FromString(string);
+#endif
     if(!line)
     { Py_DECREF(output);
       return NULL;
     }
+#if PY_MAJOR_VERSION >= 3
+    temp = PyUnicode_Concat(output, line);
+    if (!temp)
+    { Py_DECREF(output);
+      Py_DECREF(line);
+      return NULL;
+    }
+    output = temp;
+#else
     PyString_ConcatAndDel(&output, line);
     if(!output)
     {   Py_DECREF(line);
         return NULL;
     }
+#endif
   }
   return output;
 }
@@ -1383,7 +1425,11 @@ static char version__doc__[] =
 static PyObject*
 py_version(PyObject* self)
 {
+#if PY_MAJOR_VERSION >= 3
+  return PyUnicode_FromString( CLUSTERVERSION );
+#else
   return PyString_FromString( CLUSTERVERSION );
+#endif
 } 
 
 /* kcluster */
@@ -2827,8 +2873,43 @@ static struct PyMethodDef cluster_methods[] = {
 /* -- Initialization -------------------------------------------------------- */
 /* ========================================================================== */
 
+struct module_state {
+    PyObject* error;
+};
+
+#if PY_MAJOR_VERSION >= 3
+
+static int cluster_traverse(PyObject *m, visitproc visit, void *arg) {
+    Py_VISIT(GETSTATE(m)->error);
+    return 0;
+}
+
+static int cluster_clear(PyObject *m) {
+    Py_CLEAR(GETSTATE(m)->error);
+    return 0;
+}
+
+
+static struct PyModuleDef moduledef = {
+        PyModuleDef_HEAD_INIT,
+        "cluster",
+        "C Clustering Library",
+        sizeof(struct module_state),
+        cluster_methods,
+        NULL,
+        cluster_traverse,
+        cluster_clear,
+        NULL
+};
+
+PyObject *
+PyInit_cluster(void)
+
+#else
+
 void
 initcluster(void)
+#endif
 {
   PyObject *module;
 
@@ -2837,20 +2918,47 @@ initcluster(void)
   PyNodeType.tp_new = PyType_GenericNew;
   PyTreeType.tp_new = PyType_GenericNew;
   if (PyType_Ready(&PyNodeType) < 0)
+#if PY_MAJOR_VERSION >= 3
+      return NULL;
+#else
       return;
+#endif
   if (PyType_Ready(&PyTreeType) < 0)
+#if PY_MAJOR_VERSION >= 3
+      return NULL;
+#else
       return;
+#endif
 
+#if PY_MAJOR_VERSION >= 3
+  module = PyModule_Create(&moduledef);
+  if (module==NULL) return NULL;
+#else
   module = Py_InitModule4("cluster",
                           cluster_methods,
                           "C Clustering Library",
                           NULL,
                           PYTHON_API_VERSION);
   if (module==NULL) return;
+#endif
+
+  struct module_state *st = GETSTATE(module);
+  st->error = PyErr_NewException("cluster.Error", NULL, NULL);
+  if (st->error == NULL) {
+      Py_DECREF(module);
+#if PY_MAJOR_VERSION >= 3
+      return NULL;
+#else
+      return;
+#endif
+  }
 
   Py_INCREF(&PyTreeType);
   Py_INCREF(&PyNodeType);
   PyModule_AddObject(module, "Tree", (PyObject*) &PyTreeType);
   PyModule_AddObject(module, "Node", (PyObject*) &PyNodeType);
 
+#if PY_MAJOR_VERSION >= 3
+    return module;
+#endif
 }

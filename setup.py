@@ -153,7 +153,7 @@ class build_ext_biopython(build_ext):
             return
         # add software that requires NumPy to install
         # TODO - Convert these for Python 3
-        if is_Numpy_installed() and sys.version_info[0] < 3:
+        if is_Numpy_installed():
             import numpy
             numpy_include_dir = numpy.get_include()
             self.extensions.append(
@@ -162,6 +162,7 @@ class build_ext_biopython(build_ext):
                            'Bio/Cluster/cluster.c'],
                           include_dirs=[numpy_include_dir],
                           ))
+        if is_Numpy_installed() and sys.version_info[0] < 3:
             self.extensions.append(
                 Extension('Bio.KDTree._CKDTree',
                           ["Bio/KDTree/KDTree.c",
