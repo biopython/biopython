@@ -151,27 +151,6 @@ class build_ext_biopython(build_ext):
     def run(self):
         if not check_dependencies_once():
             return
-        # add software that requires NumPy to install
-        if is_Numpy_installed():
-            import numpy
-            numpy_include_dir = numpy.get_include()
-            self.extensions.append(
-                Extension('Bio.Cluster.cluster',
-                          ['Bio/Cluster/clustermodule.c',
-                           'Bio/Cluster/cluster.c'],
-                          include_dirs=[numpy_include_dir],
-                          ))
-            self.extensions.append(
-                Extension('Bio.KDTree._CKDTree',
-                          ["Bio/KDTree/KDTree.c",
-                           "Bio/KDTree/KDTreemodule.c"],
-                          include_dirs=[numpy_include_dir],
-                          ))
-            self.extensions.append(
-                Extension('Bio.Motif._pwm',
-                          ["Bio/Motif/_pwm.c"],
-                          include_dirs=[numpy_include_dir],
-                          ))
         build_ext.run(self)
 
 
@@ -323,6 +302,28 @@ else :
               ['Bio/Nexus/cnexus.c']
               ),
     ]
+
+#Add extensions that requires NumPy to build
+if is_Numpy_installed():
+    import numpy
+    numpy_include_dir = numpy.get_include()
+    EXTENSIONS.append(
+        Extension('Bio.Cluster.cluster',
+                  ['Bio/Cluster/clustermodule.c',
+                   'Bio/Cluster/cluster.c'],
+                  include_dirs=[numpy_include_dir],
+                  ))
+    EXTENSIONS.append(
+        Extension('Bio.KDTree._CKDTree',
+                  ["Bio/KDTree/KDTree.c",
+                   "Bio/KDTree/KDTreemodule.c"],
+                  include_dirs=[numpy_include_dir],
+                  ))
+    EXTENSIONS.append(
+        Extension('Bio.Motif._pwm',
+                  ["Bio/Motif/_pwm.c"],
+                  include_dirs=[numpy_include_dir],
+                  ))
 
 
 #We now define the Biopython version number in Bio/__init__.py
