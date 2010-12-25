@@ -699,8 +699,8 @@ init_CKDTree(void)
   module = PyModule_Create(&moduledef);
   if (module==NULL) return NULL;
 #else
-  m = Py_InitModule("_CKDTree", NULL);
-  if (m==NULL) return;
+  module = Py_InitModule("_CKDTree", NULL);
+  if (module==NULL) return;
 #endif
 
   Py_INCREF(&PyTreeType);
