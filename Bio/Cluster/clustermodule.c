@@ -998,7 +998,11 @@ static char PyNode_left__doc__[] =
 static PyObject*
 PyNode_getleft(PyNode* self, void* closure)
 { int left = self->node.left;
-  return PyLong_FromLong((long)left);
+#if PY_MAJOR_VERSION >= 3
+    return PyLong_FromLong((long)left);
+#else
+    return PyInt_FromLong((long)left);
+#endif
 }
 
 static int
@@ -1015,7 +1019,11 @@ static char PyNode_right__doc__[] =
 static PyObject*
 PyNode_getright(PyNode* self, void* closure)
 { int right = self->node.right;
-  return PyLong_FromLong((long)right);
+#if PY_MAJOR_VERSION >= 3
+    return PyLong_FromLong((long)right);
+#else
+    return PyInt_FromLong((long)right);
+#endif
 }
 
 static int
