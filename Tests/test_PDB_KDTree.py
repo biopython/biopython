@@ -42,7 +42,8 @@ class NeighborTest(unittest.TestCase):
             atoms = [RandomAtom() for j in range(100)]
             ns = NeighborSearch(atoms)
             hits = ns.search_all(5.0)
-            self.assertTrue(hits >= 0)
+            self.assertTrue(isinstance(hits, list), hits)
+            self.assertTrue(len(hits) >= 0, hits)
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
