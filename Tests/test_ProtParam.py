@@ -13,10 +13,10 @@ PrintDictionary(X.count_amino_acids())
 print "Amino acid\tFraction"
 PrintDictionary(X.get_amino_acids_percent())
 
-print "Molecular weight of test protein:", X.molecular_weight()
+print "Molecular weight of test protein: %.2f" % X.molecular_weight()
 print "Aromaticity of test protein: %.2f" % X.aromaticity()
 print "Instability index of test protein: %.2f" % X.instability_index()
-print "length of flexibility list:", len(X.flexibility())
+print "length of flexibility list: %i" % len(X.flexibility())
 print "The isoelectric point of the test protein is: %.2f" \
       % X.isoelectric_point()
 Helix, Turn, Sheet = X.secondary_structure_fraction()
@@ -47,3 +47,4 @@ for i,e in zip(X.protein_scale(ProtParamData.kd, 9, 0.4), expected):
 print "ok"
 print "\nGRAVY:"
 print "%0.4f" % X.gravy()
+
