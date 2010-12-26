@@ -14,7 +14,8 @@ import os
 
 # biopython
 from Bio import Alphabet
-from Bio import Seq
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC
 from Bio.Align import AlignInfo
 from Bio import AlignIO
@@ -30,17 +31,17 @@ del alignment
 #Basic tests on simple three string alignment
 alignment = MultipleSeqAlignment([], Alphabet.generic_alphabet)
 letters = "AbcDefGhiJklMnoPqrStuVwxYz"
-alignment.add_sequence("mixed", letters)
-alignment.add_sequence("lower", letters.lower())
-alignment.add_sequence("upper", letters.upper())
+alignment.append(SeqRecord(Seq(letters), id="mixed"))
+alignment.append(SeqRecord(Seq(letters.lower()), id="lower"))
+alignment.append(SeqRecord(Seq(letters.upper()), id="upper"))
 assert alignment.get_alignment_length() == 26
 assert len(alignment) == 3
-assert alignment.get_seq_by_num(0).tostring() == letters
-assert alignment.get_seq_by_num(1).tostring() == letters.lower()
-assert alignment.get_seq_by_num(2).tostring() == letters.upper()
-assert alignment[0].description == "mixed"
-assert alignment[1].description == "lower"
-assert alignment[2].description == "upper"
+assert str(alignment[0].seq) == letters
+assert str(alignment[1].seq) == letters.lower()
+assert str(alignment[2].seq) == letters.upper()
+assert alignment[0].id == "mixed"
+assert alignment[1].id == "lower"
+assert alignment[2].id == "upper"
 for (col, letter) in enumerate(letters):
     assert alignment[:,col] == letter + letter.lower() + letter.upper()
 #Check row extractions:
@@ -82,7 +83,7 @@ print 'length:', alignment.get_alignment_length()
 print 'Calculating summary information...'
 align_info = AlignInfo.SummaryInfo(alignment)
 consensus = align_info.dumb_consensus()
-assert isinstance(consensus, Seq.Seq)
+assert isinstance(consensus, Seq)
 print 'consensus:', repr(consensus)
 
 
@@ -100,7 +101,7 @@ print 'defaulting to a consensus sequence...'
 print align_info.pos_specific_score_matrix(chars_to_ignore = ['N'])
 
 print 'with a selected sequence...'
-second_seq = alignment.get_seq_by_num(1)
+second_seq = alignment[1].seq
 print align_info.pos_specific_score_matrix(second_seq, ['N'])
 
 print 'information content'
@@ -144,7 +145,7 @@ for seq_record in alignment:
 print 'length:', alignment.get_alignment_length()
 align_info = AlignInfo.SummaryInfo(alignment)
 consensus = align_info.dumb_consensus(ambiguous="N", threshold=0.6)
-assert isinstance(consensus, Seq.Seq)
+assert isinstance(consensus, Seq)
 print 'consensus:', repr(consensus)
 
 print alignment
@@ -175,7 +176,7 @@ alignment = Alignment(gapped_unambiguous)
 for seq in alignment_info:
     alignment.add_sequence("Blah", seq)
 
-test_seq_1 = Seq.Seq("GATCCGATCG")
+test_seq_1 = Seq("GATCCGATCG")
 orig_pos = alignment.original_sequence_pos(3, test_seq_1, 0)
 assert orig_pos == 3, "Got unexpected position: %s" % orig_pos
 orig_pos = alignment.original_sequence_pos(7, test_seq_1, 0)
