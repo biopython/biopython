@@ -59,12 +59,17 @@ class PDBParser:
         self.trailer=None
         # Make a StructureBuilder instance (pass id of structure as parameter)
         self.structure_builder.init_structure(id)
+        handle_close = False
         if isinstance(file, basestring):
             file=open(file)
+            handle_close = True
         self._parse(file.readlines())
         self.structure_builder.set_header(self.header)
         # Return the Structure instance
-        return self.structure_builder.get_structure()
+        structure = self.structure_builder.get_structure()
+        if handle_close:
+            file.close()
+        return structure
 
     def get_header(self):
         "Return the header."
