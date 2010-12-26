@@ -99,15 +99,9 @@ class PrankApplication(unittest.TestCase):
         self.assertEqual(str(cmdline), prank_exe + \
                          " -d=Fasta/fa01 -f=17 -noxml -notree")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
-        child = subprocess.Popen(str(cmdline),
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 universal_newlines=True,
-                                 shell=(sys.platform!="win32"))
-        return_code = child.wait()
-        self.assertEqual(return_code, 0)
-        self.assertTrue("Total time" in child.stdout.read())
-        self.assertEqual(child.stderr.read(), "")
+        stdout, stderr = cmdline()
+        self.assertTrue("Total time" in stdout)
+        self.assertEqual(stderr, "")
         try:
             align = AlignIO.read("output.2.nex", "nexus")
             for old, new in zip(records, align):
@@ -120,7 +114,6 @@ class PrankApplication(unittest.TestCase):
             #See bug 3119,
             #Bio.Nexus can't parse output from prank v100701 (1 July 2010)
             pass
-        del child
 
     def test_Prank_complex_command_line(self):
         """Round-trip with complex command line."""
