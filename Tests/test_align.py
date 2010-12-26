@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 """test_align.py
 
@@ -105,10 +106,10 @@ second_seq = alignment.get_seq_by_num(1)
 print align_info.pos_specific_score_matrix(second_seq, ['N'])
 
 print 'information content'
-print 'part of alignment:', align_info.information_content(5, 50,
-                                chars_to_ignore = ['N'])
-print 'entire alignment:', align_info.information_content(
-                                chars_to_ignore = ['N'])
+print 'part of alignment: %0.2f' \
+      % align_info.information_content(5, 50, chars_to_ignore = ['N'])
+print 'entire alignment: %0.2f' \
+      % align_info.information_content(chars_to_ignore = ['N'])
 
 print 'relative information content'
 e_freq = {'G' : 0.25,
@@ -119,21 +120,21 @@ e_freq = {'G' : 0.25,
 e_freq_table = FreqTable.FreqTable(e_freq, FreqTable.FREQ,
                                    IUPAC.unambiguous_dna)
 
-print 'relative information:', align_info.information_content(
-                                   e_freq_table = e_freq_table,
-                                   chars_to_ignore = ['N'])
+print 'relative information: %0.2f' \
+      % align_info.information_content(e_freq_table = e_freq_table,
+                                       chars_to_ignore = ['N'])
 
 print 'Column 1:', align_info.get_column(1)
-print 'IC for column 1:', align_info.ic_vector[1]
+print 'IC for column 1: %0.2f' % align_info.ic_vector[1]
 print 'Column 7:', align_info.get_column(7)
-print 'IC for column 7:', align_info.ic_vector[7]
+print 'IC for column 7: %0.2f' % align_info.ic_vector[7]
 print 'test print_info_content'
 AlignInfo.print_info_content(align_info)
 print "testing reading and writing fasta format..."
 
 to_parse = os.path.join(os.curdir, 'Quality', 'example.fasta')
 
-alignment = AlignIO.read(open(to_parse), "fasta",
+alignment = AlignIO.read(to_parse, "fasta",
                          alphabet = Alphabet.Gapped(IUPAC.ambiguous_dna))
 
 # test the base alignment stuff

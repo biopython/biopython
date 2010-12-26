@@ -612,14 +612,14 @@ G  0.0 0.0 7.0 0.0
 A  7.0 0.0 0.0 0.0
 
 information content
-part of alignment: 88.4230990854
-entire alignment: 287.54558449
+part of alignment: 88.42
+entire alignment: 287.55
 relative information content
-relative information: 287.54558449
+relative information: 287.55
 Column 1: AAAAAAA
-IC for column 1: 2.0
+IC for column 1: 2.00
 Column 7: TTTATTT
-IC for column 7: 1.40832722142
+IC for column 7: 1.41
 test print_info_content
 0 T 2.000
 1 A 2.000
