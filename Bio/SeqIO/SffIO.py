@@ -611,7 +611,7 @@ def _sff_read_raw_record(handle, number_of_flows_per_read):
         raise ValueError("Malformed read header, says length is %i" \
                          % read_header_length)
     #now the four clip values (4H = 8 bytes), and read name
-    raw += _bytes_to_string(handle.read(8 + name_length))
+    raw += handle.read(8 + name_length)
     #and any padding (remainder of header)
     padding = read_header_length - read_header_size - 8 - name_length
     pad = handle.read(padding)
