@@ -24,6 +24,7 @@ class EInfoTest(unittest.TestCase):
         # >>> Bio.Entrez.einfo()
         handle = open('Entrez/einfo1.xml', "rb")
         record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(record["DbList"], ['pubmed',
                                             'protein',
                                             'nucleotide',
@@ -70,6 +71,7 @@ class EInfoTest(unittest.TestCase):
         # >>> Bio.Entrez.einfo(db="pubmed")
         handle = open('Entrez/einfo2.xml', "rb")
         record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(record["DbInfo"]['DbName'], 'pubmed')
         self.assertEqual(record["DbInfo"]['MenuName'], 'PubMed')
         self.assertEqual(record["DbInfo"]['Description'], 'PubMed bibliographic record')
@@ -116,6 +118,7 @@ class EInfoTest(unittest.TestCase):
         # included some tags that are not part of the corresponding DTD.
         handle = open('Entrez/einfo3.xml', "rb")
         record = Entrez.read(handle, validate=False)
+        handle.close()
         self.assertEqual(record["DbInfo"]['DbName'], 'pubmed')
         self.assertEqual(record["DbInfo"]['MenuName'], 'PubMed')
         self.assertEqual(record["DbInfo"]['Description'], 'PubMed bibliographic record')
@@ -779,6 +782,7 @@ class ESearchTest(unittest.TestCase):
         # >>> Bio.Entrez.esearch(db="pubmed", term="biopython")
         handle = open('Entrez/esearch1.xml', "rb")
         record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(record['Count'], '5')
         self.assertEqual(record['RetMax'], '5')
         self.assertEqual(record['RetStart'], '0')
@@ -808,6 +812,7 @@ class ESearchTest(unittest.TestCase):
         #                        datetype="edat", retmax=100, usehistory="y")
         handle = open('Entrez/esearch2.xml', "rb")
         record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(record['Count'], "10238")
         self.assertEqual(record['RetMax'], "100")
         self.assertEqual(record['RetStart'], "0")
@@ -961,6 +966,7 @@ class ESearchTest(unittest.TestCase):
         #                        retstart=6, retmax=6)
         handle = open('Entrez/esearch3.xml', "rb")
         record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(record['Count'], '2652')
         self.assertEqual(record['RetMax'], '6')
         self.assertEqual(record['RetStart'], '6')
@@ -994,6 +1000,7 @@ class ESearchTest(unittest.TestCase):
         # >>> Bio.Entrez.esearch(db="journals", term="obstetrics")
         handle = open('Entrez/esearch4.xml', "rb")
         record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(record['Count'], '177')
         self.assertEqual(record['RetMax'], '20')
         self.assertEqual(record['RetStart'], '0')
@@ -1038,6 +1045,7 @@ class ESearchTest(unittest.TestCase):
         #                        term="stem cells AND free fulltext[filter]")
         handle = open('Entrez/esearch5.xml', "rb")
         record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(record['Count'], '23492')
         self.assertEqual(record['RetMax'], '20')
         self.assertEqual(record['RetStart'], '0')
@@ -1116,6 +1124,7 @@ class ESearchTest(unittest.TestCase):
         # >>> Bio.Entrez.esearch(db="nucleotide", term="biomol trna[prop]")
         handle = open('Entrez/esearch6.xml', "rb")
         record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(record['Count'], "699")
         self.assertEqual(record['RetMax'], "20")
         self.assertEqual(record['RetStart'], "0")
@@ -1151,6 +1160,7 @@ class ESearchTest(unittest.TestCase):
         # >>> Bio.Entrez.esearch(db="protein", term="200020[molecular weight]")
         handle = open('Entrez/esearch7.xml', "rb")
         record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(record['Count'], '3')
         self.assertEqual(record['RetMax'], '3')
         self.assertEqual(record['RetStart'], '0')
@@ -1174,6 +1184,7 @@ class ESearchTest(unittest.TestCase):
         # >>> Bio.Entrez.esearch(db="protein", term="abcXYZ")
         handle = open('Entrez/esearch8.xml')
         record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(record['Count'], '3')
         self.assertEqual(record['RetMax'], '3')
         self.assertEqual(record['RetStart'], '0')
@@ -1197,6 +1208,7 @@ class ESearchTest(unittest.TestCase):
         # >>> Bio.Entrez.esearch(db="protein", term="abcXYZ")
         handle = open('Entrez/esearch8.xml', "rb")
         record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(record['Count'], "0")
         self.assertEqual(record['RetMax'], "0")
         self.assertEqual(record['RetStart'], "0")
@@ -1230,6 +1242,7 @@ class EPostTest(unittest.TestCase):
         # >>> Bio.Entrez.epost(db="pubmed", id="11237011")
         handle = open('Entrez/epost1.xml', "rb")
         record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(record["QueryKey"],  '1')
         self.assertEqual(record["WebEnv"], '0zYsuLk3zG_lRMkblPBEqnT8nIENUGw4HAy8xXChTnoVm7GEnWY71jv3nz@1FC077F3806DE010_0042SID')
 
@@ -1240,6 +1253,7 @@ class EPostTest(unittest.TestCase):
         # >>> Bio.Entrez.epost(db="nothing")
         handle = open('Entrez/epost2.xml', "rb")
         self.assertRaises(RuntimeError, Entrez.read, handle)
+        handle.close()
 
     def test_invalid(self):
         '''Test parsing XML returned by EPost with an invalid id (overflow tag)
@@ -1248,7 +1262,7 @@ class EPostTest(unittest.TestCase):
         # >>> Bio.Entrez.epost(db="pubmed", id=99999999999999999999999999999999)
         handle = open('Entrez/epost3.xml', "rb")
         record = Entrez.read(handle)
-
+        handle.close()
         self.assertEqual(record["InvalidIdList"], ["-1"])
         self.assertEqual(record["QueryKey"], "1")
         self.assertEqual(record["WebEnv"], "08AIUeBsfIk6BfdzKnd3GM2RtCudczC9jm5aeb4US0o7azCTQCeCsr-xg0@1EDE54E680D03C40_0011SID")
@@ -1271,6 +1285,7 @@ class ESummaryTest(unittest.TestCase):
         #                         retmode="xml")
         handle = open('Entrez/esummary1.xml', "rb")
         record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(record[0]["Id"], "11850928")
         self.assertEqual(record[0]["PubDate"], "1965 Aug")
         self.assertEqual(record[0]["EPubDate"], "")
@@ -1348,6 +1363,7 @@ class ESummaryTest(unittest.TestCase):
         # >>> Bio.Entrez.esummary(db="journals", id="27731,439,735,905")
         handle = open('Entrez/esummary2.xml', "rb")
         record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(record[0]["Id"], "27731")
         self.assertEqual(record[0]["Title"], "The American journal of obstetrics and diseases of women and children")
         self.assertEqual(record[0]["MedAbbr"], "Am J Obstet Dis Women Child")
@@ -1422,7 +1438,7 @@ class ESummaryTest(unittest.TestCase):
         # >>> Bio.Entrez.esummary(db="protein", id="28800982,28628843", retmode="xml")
         handle = open('Entrez/esummary3.xml', "rb")
         record = Entrez.read(handle)
-
+        handle.close()
         self.assertEqual(record[0]["Id"], "28800982")
         self.assertEqual(record[0]["Caption"], "AAO47091")
         self.assertEqual(record[0]["Title"], "hemochromatosis [Homo sapiens]")
@@ -1461,7 +1477,7 @@ class ESummaryTest(unittest.TestCase):
         #                         retmode="xml")
         handle = open('Entrez/esummary4.xml', "rb")
         record = Entrez.read(handle)
-
+        handle.close()
         self.assertEqual(record[0]["Id"], "28864546")
         self.assertEqual(record[0]["Caption"], "AY207443")
         self.assertEqual(record[0]["Title"], "Homo sapiens alpha hemoglobin (HBZP) pseudogene 3' UTR/AluJo repeat breakpoint junction")
@@ -1500,6 +1516,7 @@ class ESummaryTest(unittest.TestCase):
         #                         retmode="xml")
         handle = open('Entrez/esummary5.xml', "rb")
         record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(record[0]["Id"], "19923")
         self.assertEqual(record[0]["PdbAcc"], "1L5J")
         self.assertEqual(record[0]["PdbDescr"], "Crystal Structure Of E. Coli Aconitase B")
@@ -1550,6 +1567,7 @@ class ESummaryTest(unittest.TestCase):
         #                         retmode="xml")
         handle = open('Entrez/esummary6.xml', "rb")
         record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(record[0]["Id"], "9913")
         self.assertEqual(record[0]["Rank"], "species")
         self.assertEqual(record[0]["Division"], "even-toed ungulates")
@@ -1590,7 +1608,7 @@ class ESummaryTest(unittest.TestCase):
         #                         retmode="xml")
         handle = open('Entrez/esummary7.xml', "rb")
         record = Entrez.read(handle)
-
+        handle.close()
         self.assertEqual(record[0]["Id"], "254085")
         self.assertEqual(record[0]["Marker_Name"], "SE234324")
         self.assertEqual(len(record[0]["Map_Gene_Summary_List"]), 1)
@@ -1616,6 +1634,7 @@ class ESummaryTest(unittest.TestCase):
         # >>> Bio.Entrez.esummary()
         handle = open('Entrez/esummary8.xml', "rb")
         self.assertRaises(RuntimeError, Entrez.read, handle)
+        handle.close()
 
 
 class ELinkTest(unittest.TestCase):
@@ -1629,7 +1648,7 @@ class ELinkTest(unittest.TestCase):
         # >>> Bio.Entrez.elink(dbfrom="pubmed", id="9298984", cmd="neighbor")
         handle = open('Entrez/elink1.xml', "rb")
         record = Entrez.read(handle)
-
+        handle.close()
         self.assertEqual(len(record), 1)
         self.assertEqual(record[0]["DbFrom"], "pubmed")
         self.assertEqual(record[0]["IdList"], ["9298984"])
@@ -1934,7 +1953,7 @@ class ELinkTest(unittest.TestCase):
         #                      id="48819,7140345")
         handle = open('Entrez/elink2.xml', "rb")
         record = Entrez.read(handle)
-
+        handle.close()
         self.assertEqual(record[0]["DbFrom"], "nucleotide")
         self.assertEqual(record[0]["IdList"], ["48819", "7140345"])
 
@@ -1948,7 +1967,7 @@ class ELinkTest(unittest.TestCase):
         #                      db="pubmed", mindate="1995", datetype="pdat")
         handle = open('Entrez/elink3.xml', "rb")
         record = Entrez.read(handle)
-
+        handle.close()
         self.assertEqual(len(record), 1)
         self.assertEqual(record[0]["DbFrom"], "pubmed")
         self.assertEqual(len(record[0]['IdList']), 2)
@@ -2660,7 +2679,7 @@ class ELinkTest(unittest.TestCase):
         #                      term="medline[sb]")
         handle = open('Entrez/elink4.xml', "rb")
         record = Entrez.read(handle)
-        
+        handle.close()
         self.assertEqual(len(record), 1)
         self.assertEqual(record[0]["DbFrom"], "pubmed")
         self.assertEqual(record[0]["IdList"], ["12242737"])
@@ -3099,7 +3118,7 @@ class ELinkTest(unittest.TestCase):
 
         handle = open('Entrez/elink5.xml', "rb")
         record = Entrez.read(handle)
-
+        handle.close()
         self.assertEqual(record[0]["DbFrom"], "pubmed")
         self.assertEqual(len(record[0]["IdUrlList"]), 1)
         self.assertEqual(len(record[0]["IdUrlList"][0]), 2)
@@ -3126,7 +3145,7 @@ class ELinkTest(unittest.TestCase):
         # >>> Bio.Entrez.elink(dbfrom="pubmed", id="12085856,12085853", cmd="llinks")
         handle = open('Entrez/elink6.xml', "rb")
         record = Entrez.read(handle)
-        
+        handle.close()
         self.assertEqual(record[0]["DbFrom"], "pubmed")
         self.assertEqual(len(record[0]["IdUrlList"]), 2)
         self.assertEqual(record[0]["IdUrlList"][0]["Id"], "12085856")
@@ -3194,7 +3213,7 @@ class ELinkTest(unittest.TestCase):
         #                      cmd="acheck")
         handle = open('Entrez/elink7.xml', "rb")
         record = Entrez.read(handle)
-        
+        handle.close()
         self.assertEqual(len(record), 1)
         self.assertEqual(record[0]["DbFrom"], "pubmed")
         self.assertEqual(len(record[0]["IdCheckList"]), 2)
@@ -3364,7 +3383,7 @@ class ELinkTest(unittest.TestCase):
         #                      id="12068369", cmd="ncheck")
         handle = open('Entrez/elink8.xml', "rb")
         record = Entrez.read(handle)
-
+        handle.close()
         self.assertEqual(len(record), 1)
         self.assertEqual(record[0]["DbFrom"], "pubmed")
         self.assertEqual(len(record[0]["IdCheckList"]), 2)
@@ -3385,7 +3404,7 @@ class ELinkTest(unittest.TestCase):
         #                       linkname="cancerchromosomes_cancerchromosomes_cyto")
         handle = open('Entrez/elink9.xml', "rb")
         record = Entrez.read(handle)
-        
+        handle.close()
         self.assertEqual(record[0]["DbFrom"], "cancerchromosomes")
         self.assertEqual(record[0]["IdList"], ["2662"])
 
@@ -3401,7 +3420,7 @@ class EGQueryTest(unittest.TestCase):
         # >>> Bio.Entrez.egquery(term="stem cells")
         handle = open('Entrez/egquery1.xml', "rb")
         record = Entrez.read(handle)
-
+        handle.close()
         self.assertEqual(record["Term"], "stem cells")
 
         self.assertEqual(record["eGQueryResult"][0]["DbName"], "pubmed")
@@ -3553,7 +3572,7 @@ class EGQueryTest(unittest.TestCase):
         # >>> Bio.Entrez.egquery(term="brca1 OR brca2")
         handle = open('Entrez/egquery2.xml', "rb")
         record = Entrez.read(handle)
-
+        handle.close()
         self.assertEqual(record["Term"], "brca1 OR brca2")
 
         self.assertEqual(record["eGQueryResult"][0]["DbName"], "pubmed")
@@ -3708,6 +3727,7 @@ class ESpellTest(unittest.TestCase):
         # >>> Bio.Entrez.espell(db="pubmed", term="biopythooon")
         handle = open('Entrez/espell.xml', "rb")
         record = Entrez.read(handle)
+        handle.close()
         self.assertEqual(record["Database"], "pubmed")
         self.assertEqual(record["Query"], "biopythooon")
         self.assertEqual(record["CorrectedQuery"], "biopython")
@@ -3729,7 +3749,7 @@ class EFetchTest(unittest.TestCase):
         #                       retmode='xml', rettype='abstract')
         handle = open('Entrez/pubmed1.xml', "rb")
         record = Entrez.read(handle)
-
+        handle.close()
         self.assertEqual(record[0]["MedlineCitation"].attributes["Owner"], "KIE")
         self.assertEqual(record[0]["MedlineCitation"].attributes["Status"], "MEDLINE")
         self.assertEqual(record[0]["MedlineCitation"]["PMID"], "12091962")
@@ -3932,7 +3952,7 @@ class EFetchTest(unittest.TestCase):
         #                       retmode="xml")
         handle = open('Entrez/pubmed2.xml', "rb")
         record = Entrez.read(handle)
-
+        handle.close()
         self.assertEqual(record[0]["MedlineCitation"].attributes["Owner"], "NLM")
         self.assertEqual(record[0]["MedlineCitation"].attributes["Status"], "MEDLINE")
         self.assertEqual(record[0]["MedlineCitation"]["PMID"], "11748933")
@@ -4146,7 +4166,7 @@ class EFetchTest(unittest.TestCase):
         #                       rettype='full')
         handle = open('Entrez/ncbi_mim.xml', "rb")
         record = Entrez.read(handle)
-
+        handle.close()
         self.assertEqual(len(record), 1)
         self.assertEqual(record[0]["Mim-entry_mimNumber"], "601100")
         self.assertEqual(record[0]["Mim-entry_mimType"], "1")
@@ -4323,7 +4343,7 @@ class EFetchTest(unittest.TestCase):
         # >>> Bio.Entrez.efetch(db="taxonomy", id="9685", retmode="xml")
         handle = open('Entrez/taxonomy.xml', "rb")
         record = Entrez.read(handle)
-
+        handle.close()
         self.assertEqual(len(record), 1)
         self.assertEqual(record[0]["TaxId"], "9685")
         self.assertEqual(record[0]["ScientificName"], "Felis catus")
@@ -4432,7 +4452,7 @@ class EFetchTest(unittest.TestCase):
         # >>> Bio.Entrez.efetch(db='nucleotide', id=5, retmode='xml')
         handle = open('Entrez/nucleotide1.xml', "rb")
         record = Entrez.read(handle)
-
+        handle.close()
         self.assertEqual(record[0]["GBSeq_locus"], "X60065")
         self.assertEqual(record[0]["GBSeq_length"], "1136")
         self.assertEqual(record[0]["GBSeq_strandedness"], "single")
@@ -4556,7 +4576,7 @@ class EFetchTest(unittest.TestCase):
         #                       rettype='fasta', complexity=0, retmode='xml')
         handle = open('Entrez/nucleotide2.xml', "rb")
         record = Entrez.read(handle)
-
+        handle.close()
         self.assertEqual(record[0]["TSeq_seqtype"], "")
         self.assertEqual(record[0]["TSeq_seqtype"].attributes["value"], "nucleotide")
         self.assertEqual(record[0]["TSeq_gi"], "5")
@@ -4584,7 +4604,7 @@ class EFetchTest(unittest.TestCase):
         # >>> Bio.Entrez.efetch(db='protein', id=8, rettype='gp', retmode='xml')
         handle = open('Entrez/protein.xml', "rb")
         record = Entrez.read(handle)
-
+        handle.close()
         self.assertEqual(record[0]["GBSeq_locus"], "CAA35997")
         self.assertEqual(record[0]["GBSeq_length"], "100")
         self.assertEqual(record[0]["GBSeq_moltype"], "AA")
