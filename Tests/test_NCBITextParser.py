@@ -14204,6 +14204,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
         self.assertEqual(None, records.next())
+        handle.close()
 
     def test_bt077(self):
         "Test parsing BLASTX 2.2.20 output (bt077)"

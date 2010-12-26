@@ -1430,6 +1430,7 @@ class TestNCBIXML(unittest.TestCase):
 
         filename = 'xbt003.xml'
         datafile = os.path.join("Blast", filename)
+
         handle = open(datafile)
         records = NCBIXML.parse(handle)
         record = records.next()
@@ -1437,9 +1438,12 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.query_id, "gi|1347369|gb|G25137.1|G25137")
         self.assertEqual(len(alignments), 78)
         self.assertEqual(sum([len(a.hsps) for a in alignments]), 84)
-
         self.assertRaises(StopIteration, records.next)
+        handle.close()
+
+        handle = open(datafile)
         record = NCBIXML.read(open(datafile))
+        handle.close()
 
     def test_xbt004(self):
         "Parsing TBLASTN 2.2.12, gi|729325|sp|P39483|DHG2_BACME (xbt004)"
