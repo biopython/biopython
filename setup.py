@@ -279,7 +279,12 @@ if os.name == 'java' :
     EXTENSIONS = []
 elif sys.version_info[0] == 3:
     # TODO - Must update our C extensions for Python 3
-    EXTENSIONS = []
+    EXTENSIONS = [
+    Extension('Bio.cpairwise2',
+              ['Bio/cpairwise2module.c'],
+              include_dirs=["Bio"]
+              ),
+    ]
 else :
     EXTENSIONS = [
     Extension('Bio.cpairwise2',

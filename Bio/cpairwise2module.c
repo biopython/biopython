@@ -198,6 +198,21 @@ double _get_match_score(PyObject *py_sequenceA, PyObject *py_sequenceB,
     return score;
 }
 
+static PyObject* _create_bytes_object(PyObject* o) {
+    PyObject* b;
+    if (PyBytes_Check(o)) {
+	return o;
+    }
+    if (!PyUnicode_Check(o)) {
+        return NULL;
+    }
+    b = PyUnicode_AsASCIIString(o);
+    if (!b) {
+        PyErr_Clear();
+        return NULL;
+    }
+    return b;
+}
 
 /* This function is a more-or-less straightforward port of the
  * equivalent function in pairwise2.  Please see there for algorithm
@@ -210,12 +225,16 @@ static PyObject *cpairwise2__make_score_matrix_fast(
     int row, col;
 
     PyObject *py_sequenceA, *py_sequenceB, *py_match_fn;
+#if PY_MAJOR_VERSION >= 3
+    PyObject *py_bytesA, *py_bytesB;
+#endif
     char *sequenceA=NULL, *sequenceB=NULL;
     int use_sequence_cstring;
     double open_A, extend_A, open_B, extend_B;
     int penalize_extend_when_opening, penalize_end_gaps;
     int align_globally, score_only;
 
+    PyObject *py_match=NULL, *py_mismatch=NULL;
     double first_A_gap, first_B_gap;
     double match, mismatch;
     int use_match_mismatch_scores;
@@ -245,12 +264,27 @@ static PyObject *cpairwise2__make_score_matrix_fast(
     /* Optimize for the common case.  Check to see if py_sequenceA and
        py_sequenceB are strings.  If they are, use the c string
        representation. */
+#if PY_MAJOR_VERSION < 3
     use_sequence_cstring = 0;
     if(PyString_Check(py_sequenceA) && PyString_Check(py_sequenceB)) {
 	sequenceA = PyString_AS_STRING(py_sequenceA);
 	sequenceB = PyString_AS_STRING(py_sequenceB);
 	use_sequence_cstring = 1;
     }
+#else
+    py_bytesA = _create_bytes_object(py_sequenceA);
+    py_bytesB = _create_bytes_object(py_sequenceB);
+    if (py_bytesA && py_bytesB) {
+        sequenceA = PyBytes_AS_STRING(py_bytesA);
+        sequenceB = PyBytes_AS_STRING(py_bytesB);
+	use_sequence_cstring = 1;
+    }
+    else {
+        Py_XDECREF(py_bytesA);
+        Py_XDECREF(py_bytesB);
+        use_sequence_cstring = 0;
+    }
+#endif
 
     if(!PyCallable_Check(py_match_fn)) {
 	PyErr_SetString(PyExc_TypeError, "py_match_fn must be callable.");
@@ -261,28 +295,25 @@ static PyObject *cpairwise2__make_score_matrix_fast(
        member variables and calculate the scores myself. */
     match = mismatch = 0;
     use_match_mismatch_scores = 0;
-    if(PyInstance_Check(py_match_fn)) {
-	PyObject *py_match=NULL, *py_mismatch=NULL;
-	if(!(py_match = PyObject_GetAttrString(py_match_fn, "match")))
-	    goto cleanup_after_py_match_fn;
-	match = PyNumber_AsDouble(py_match);
-	if(PyErr_Occurred())
-	    goto cleanup_after_py_match_fn;
-	if(!(py_mismatch = PyObject_GetAttrString(py_match_fn, "mismatch")))
-	    goto cleanup_after_py_match_fn;
-	mismatch = PyNumber_AsDouble(py_mismatch);
-	if(PyErr_Occurred())
-	    goto cleanup_after_py_match_fn;
-	use_match_mismatch_scores = 1;
-    cleanup_after_py_match_fn:
-	if(PyErr_Occurred())
-	    PyErr_Clear();
-	if(py_match) {
-	    Py_DECREF(py_match);
-	}
-	if(py_mismatch) {
-	    Py_DECREF(py_mismatch);
-	}
+    if(!(py_match = PyObject_GetAttrString(py_match_fn, "match")))
+        goto cleanup_after_py_match_fn;
+    match = PyNumber_AsDouble(py_match);
+    if(PyErr_Occurred())
+        goto cleanup_after_py_match_fn;
+    if(!(py_mismatch = PyObject_GetAttrString(py_match_fn, "mismatch")))
+        goto cleanup_after_py_match_fn;
+    mismatch = PyNumber_AsDouble(py_mismatch);
+    if(PyErr_Occurred())
+        goto cleanup_after_py_match_fn;
+    use_match_mismatch_scores = 1;
+cleanup_after_py_match_fn:
+    if(PyErr_Occurred())
+        PyErr_Clear();
+    if(py_match) {
+        Py_DECREF(py_match);
+    }
+    if(py_mismatch) {
+        Py_DECREF(py_mismatch);
     }
 
     /* Cache some commonly used gap penalties */
@@ -294,8 +325,8 @@ static PyObject *cpairwise2__make_score_matrix_fast(
     /* Allocate matrices for storing the results and initalize them. */
     lenA = PySequence_Length(py_sequenceA);
     lenB = PySequence_Length(py_sequenceB);
-    score_matrix = (double *)malloc(lenA*lenB*sizeof(*score_matrix));
-    trace_matrix = (struct IndexList *)malloc(lenA*lenB*sizeof(*trace_matrix));
+    score_matrix = malloc(lenA*lenB*sizeof(*score_matrix));
+    trace_matrix = malloc(lenA*lenB*sizeof(*trace_matrix));
     if(!score_matrix || !trace_matrix) {
 	PyErr_SetString(PyExc_MemoryError, "Out of memory");
 	goto _cleanup_make_score_matrix_fast;
@@ -336,12 +367,10 @@ static PyObject *cpairwise2__make_score_matrix_fast(
     }
 
     /* Now initialize the row and col cache. */
-    row_cache_score = (double *)malloc((lenA-1)*sizeof(*row_cache_score));
-    row_cache_index = (struct IndexList *)malloc((lenA-1)*
-						 sizeof(*row_cache_index));
-    col_cache_score = (double *)malloc((lenB-1)*sizeof(*col_cache_score));
-    col_cache_index = (struct IndexList *)malloc((lenB-1)*
-						 sizeof(*col_cache_index));
+    row_cache_score = malloc((lenA-1)*sizeof(*row_cache_score));
+    row_cache_index = malloc((lenA-1)* sizeof(*row_cache_index));
+    col_cache_score = malloc((lenB-1)*sizeof(*col_cache_score));
+    col_cache_index = malloc((lenB-1)* sizeof(*col_cache_index));
     if(!row_cache_score || !row_cache_index || 
        !col_cache_score || !col_cache_index) {
 	PyErr_SetString(PyExc_MemoryError, "Out of memory");
@@ -533,6 +562,10 @@ static PyObject *cpairwise2__make_score_matrix_fast(
     if(py_trace_matrix) {
 	Py_DECREF(py_trace_matrix);
     }
+#if PY_MAJOR_VERSION >= 3
+    if (py_bytesA != NULL && py_bytesA != py_sequenceA) Py_DECREF(py_bytesA);
+    if (py_bytesB != NULL && py_bytesB != py_sequenceB) Py_DECREF(py_bytesB);
+#endif
 
     return py_retval;
 }
@@ -550,7 +583,11 @@ static PyObject *cpairwise2_rint(
 				    &x, &precision))
 	return NULL;
     rint_x = (int)(x * precision + 0.5);
-    return PyInt_FromLong(rint_x);
+#if PY_MAJOR_VERSION >= 3
+    return PyLong_FromLong((long)rint_x);
+#else
+    return PyInt_FromLong((long)rint_x);
+#endif
 }
 
 /* Module definition stuff */
@@ -567,7 +604,35 @@ static char cpairwise2__doc__[] =
 \n\
 ";
 
-void initcpairwise2(void)
+#if PY_MAJOR_VERSION >= 3
+
+static struct PyModuleDef moduledef = {
+        PyModuleDef_HEAD_INIT,
+        "cpairwise2",
+        cpairwise2__doc__,
+        -1,
+        cpairwise2Methods,
+        NULL,
+        NULL,
+        NULL,
+        NULL
+};
+
+PyObject *
+PyInit_cpairwise2(void)
+
+#else
+
+void
+initcpairwise2(void)
+#endif
+
 {
+#if PY_MAJOR_VERSION >= 3
+    PyObject* module = PyModule_Create(&moduledef);
+    if (module==NULL) return NULL;
+    return module;
+#else
     (void) Py_InitModule3("cpairwise2", cpairwise2Methods, cpairwise2__doc__);
+#endif
 }
