@@ -15,11 +15,6 @@
 #define _PRECISION 1000
 #define rint(x) (int)((x)*_PRECISION+0.5)
 
-/* Must define PyBytes_Check for Python 2.5 or older on Windows */
-#ifndef PyBytes_Check
-#define PyBytes_Check PyString_Check
-#endif
-
 /* Return a PyNumber as a double.
  * Raises a TypeError if I can't do it.
  */
@@ -202,6 +197,7 @@ double _get_match_score(PyObject *py_sequenceA, PyObject *py_sequenceB,
     return score;
 }
 
+#if PY_MAJOR_VERSION >= 3
 static PyObject* _create_bytes_object(PyObject* o) {
     PyObject* b;
     if (PyBytes_Check(o)) {
@@ -217,6 +213,7 @@ static PyObject* _create_bytes_object(PyObject* o) {
     }
     return b;
 }
+#endif
 
 /* This function is a more-or-less straightforward port of the
  * equivalent function in pairwise2.  Please see there for algorithm
