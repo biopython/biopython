@@ -206,9 +206,9 @@ class SeqRetSeqIOTests(unittest.TestCase):
                               alphabet=None):
         """Can Bio.SeqIO write files seqret can read back?"""
         if alphabet:
-            records = list(SeqIO.parse(open(in_filename), in_format, alphabet))
+            records = list(SeqIO.parse(in_filename, in_format, alphabet))
         else:
-            records = list(SeqIO.parse(open(in_filename), in_format))
+            records = list(SeqIO.parse(in_filename, in_format))
         for temp_format in ["genbank","embl","fasta"]:
             if temp_format in skip_formats:
                 continue
@@ -224,7 +224,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
         """Can Bio.SeqIO read seqret's conversion of the file?"""
         #TODO: Why can't we read EMBOSS's swiss output?
         self.assertTrue(os.path.isfile(filename))
-        old_records = list(SeqIO.parse(open(filename), old_format))
+        old_records = list(SeqIO.parse(filename, old_format))
         for new_format in ["genbank","fasta","pir","embl", "ig"]:
             if new_format in skip_formats:
                 continue
@@ -294,7 +294,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
                               skip_formats=[]):
         """Can AlignIO read seqret's conversion of the file?"""
         self.assertTrue(os.path.isfile(filename), filename)
-        old_aligns = list(AlignIO.parse(open(filename), old_format))
+        old_aligns = list(AlignIO.parse(filename, old_format))
         formats = ["clustal", "phylip", "ig"]
         if len(old_aligns) == 1:
             formats.extend(["fasta","nexus"])
@@ -317,10 +317,9 @@ class SeqRetAlignIOTests(unittest.TestCase):
                                 alphabet=None):
         """Can Bio.AlignIO write files seqret can read back?"""
         if alphabet:
-            old_aligns = list(AlignIO.parse(open(in_filename), in_format,
-                                            alphabet))
+            old_aligns = list(AlignIO.parse(in_filename,in_format,alphabet))
         else:
-            old_aligns = list(AlignIO.parse(open(in_filename), in_format))
+            old_aligns = list(AlignIO.parse(in_filename,in_format))
 
         formats = ["clustal", "phylip"]
         if len(old_aligns) == 1:
@@ -629,7 +628,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         child.stdin.close()
         #Check we can parse the output and it is sensible...
         self.pairwise_alignment_check(query,
-                                      SeqIO.parse(open("Fasta/f002"),"fasta"),
+                                      SeqIO.parse("Fasta/f002","fasta"),
                                       AlignIO.parse(child.stdout,"emboss"),
                                       local=False)
         #Check no error output:
