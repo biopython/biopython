@@ -16,7 +16,6 @@ import os
 from Bio import Alphabet
 from Bio import Seq
 from Bio.Alphabet import IUPAC
-from Bio import Clustalw
 from Bio.Align import AlignInfo
 from Bio import AlignIO
 from Bio.SubsMat import FreqTable
@@ -67,12 +66,13 @@ for name in test_names:
 
 for test_file in test_files:
     # parse the alignment file and get an aligment object
-    alignment = Clustalw.parse_file(test_file)
+    alignment = AlignIO.read(test_file, "clustal")
 
     # print the alignment back out
-    print alignment
+    print alignment.format("clustal")
 
-alignment = Clustalw.parse_file(os.path.join(test_dir, test_names[0]))
+alignment = AlignIO.read(os.path.join(test_dir, test_names[0]), "clustal",
+                         alphabet = Alphabet.Gapped(IUPAC.unambiguous_dna))
 
 # test the base alignment stuff
 print 'all_seqs...'
@@ -155,8 +155,8 @@ print alignment
 print "Test format conversion..."
 
 # parse the alignment file and get an aligment object
-alignment = Clustalw.parse_file(os.path.join(os.curdir, 'Clustalw',
-                                             'opuntia.aln'))
+alignment = AlignIO.read(os.path.join(os.curdir, 'Clustalw', 'opuntia.aln'),
+                         'clustal')
 
 print "As FASTA:"
 print alignment.format("fasta")
