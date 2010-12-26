@@ -284,6 +284,9 @@ elif sys.version_info[0] == 3:
               ['Bio/cpairwise2module.c'],
               include_dirs=["Bio"]
               ),
+    Extension('Bio.Nexus.cnexus',
+              ['Bio/Nexus/cnexus.c']
+              ),
     ]
 else :
     EXTENSIONS = [
