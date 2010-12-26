@@ -413,7 +413,11 @@ class DupLoadTest(unittest.TestCase):
             count = self.db.load([record,record])
         except Exception, err:
             #Good!
-            self.assertEqual("IntegrityError", err.__class__.__name__)
+            #Note we don't do a specific exception handler because the
+            #exception class will depend on which DB back end is in use.            
+            self.assertTrue(err.__class__.__name__ in ["IntegrityError",
+                                                       "OperationalError"],
+                            err.__class__.__name__)
             return
         raise Exception("Should have failed! Loaded %i records" % count)
 
