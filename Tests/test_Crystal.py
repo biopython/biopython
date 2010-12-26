@@ -38,19 +38,19 @@ class ChainTestCase(unittest.TestCase):
 
         first = Chain(self.a)
         second = Chain(self.g)
-        self.assertNotEquals(first, second)
+        self.assertNotEqual(first, second)
 
         first = Chain(self.a)
         second = Chain(self.h)
-        self.assertNotEquals(first, second)
+        self.assertNotEqual(first, second)
 
         first = Chain(self.c)
         second = Chain(self.e)
-        self.assertNotEquals(first, second)
+        self.assertNotEqual(first, second)
 
         first = Chain(self.c)
         second = Chain(self.f)
-        self.assertNotEquals(first, second)
+        self.assertNotEqual(first, second)
 
 
     def testLen(self):
@@ -505,13 +505,13 @@ class HeteroTestCase(unittest.TestCase):
         u1 = Hetero('u')
         self.assertEqual(u, u1)
         self.assertEqual(u, Hetero('U'))
-        self.assertNotEquals(u, Hetero('u1'))
-        self.assertNotEquals(u, Hetero('x'))
+        self.assertNotEqual(u, Hetero('u1'))
+        self.assertNotEqual(u, Hetero('x'))
         gna = Hetero('gna')
         self.assertEqual(gna, Hetero('gNA'))
         self.assertEqual(gna, Hetero('GnA'))
-        self.assertNotEquals(gna, Hetero('gnb'))
-        self.assertNotEquals(gna, Hetero('na'))
+        self.assertNotEqual(gna, Hetero('gnb'))
+        self.assertNotEqual(gna, Hetero('na'))
 
 
 if __name__ == "__main__":

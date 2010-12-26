@@ -222,7 +222,7 @@ class ReactionTestCase(unittest.TestCase):
 
     def testEq(self):
         self.assertEqual(self.r_1, self.r_1i, "not equal to similar")
-        self.assertNotEquals(self.r_3, self.r_4, "equal to different")
+        self.assertNotEqual(self.r_3, self.r_4, "equal to different")
         
     def testRev(self):
         self.assertEqual(self.r_empty.reverse(), self.r_empty, "empty reversed not empty")
