@@ -81,11 +81,11 @@ class IndexDictTests(unittest.TestCase):
             #Python 3
             assert not hasattr(rec_dict, "iteritems")
             for key, rec in rec_dict.iteritems():
-                self.assertTrue(key in id_list)
+                self.assertTrue(key in ids)
                 self.assertTrue(isinstance(rec, SeqRecord))
                 self.assertTrue(rec.id in ids)
             for rec in rec_dict.itervalues():
-                self.assertTrue(key in id_list)
+                self.assertTrue(key in ids)
                 self.assertTrue(isinstance(rec, SeqRecord))
                 self.assertTrue(rec.id in ids)
         #Check the following fail
