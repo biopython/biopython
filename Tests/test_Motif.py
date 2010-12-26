@@ -8,7 +8,7 @@ import os
 import unittest
 
 from Bio import Motif
-
+from Bio.Seq import Seq
 
 class MotifTestsBasic(unittest.TestCase):
     def setUp(self):
@@ -17,7 +17,6 @@ class MotifTestsBasic(unittest.TestCase):
         self.TFout = "Motif/tf.out"
         self.FAout = "Motif/fa.out"
         self.PFMout = "Motif/fa.out"
-        from Bio.Seq import Seq
         self.m=Motif.Motif()
         self.m.add_instance(Seq("ATATA",self.m.alphabet))
         
@@ -1506,9 +1505,10 @@ class TestMAST(unittest.TestCase):
 
 class MotifTestPWM(unittest.TestCase):
     def setUp(self):
-        from Bio import Seq
-        self.m=Motif.read(open("Motif/SRF.pfm"),"jaspar-pfm")
-        self.s=Seq.Seq("ACGTGTGCGTAGTGCGT",self.m.alphabet)
+        handle = open("Motif/SRF.pfm")
+        self.m = Motif.read(handle, "jaspar-pfm")
+        handle.close()
+        self.s = Seq("ACGTGTGCGTAGTGCGT", self.m.alphabet)
 
     def test_simple(self):
         """Test if Motif PWM scoring works."""
