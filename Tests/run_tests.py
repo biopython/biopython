@@ -81,8 +81,8 @@ try:
 except ImportError:
     pass
 
-#Skip Bio.Seq doctest under Python 3.0, see http://bugs.python.org/issue7490
-if sys.version_info[0:2] == (3,1):
+#Skip Bio.Seq doctest under Python 3, see http://bugs.python.org/issue7490
+if sys.version_info[0] == 3:
     DOCTEST_MODULES.remove("Bio.Seq")
 
 system_lang = os.environ.get('LANG', 'C') #Cache this
