@@ -9,7 +9,6 @@ from Bio import MissingExternalDependencyError
 
 import sys
 import os
-import subprocess
 from Bio import Clustalw #old and obsolete
 from Bio.Clustalw import MultipleAlignCL #old and obsolete
 from Bio import SeqIO
@@ -230,14 +229,7 @@ for input_file, output_file, newtree_file in [
         cline.align = True
         assert str(eval(repr(cline)))==str(cline)
     #print cline
-    child = subprocess.Popen(str(cline),
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE,
-                             universal_newlines=True,
-                             shell=(sys.platform!="win32"))
-    output, error = child.communicate()
-    return_code = child.returncode
-    assert return_code == 0
+    output, error = cline()
     assert output.strip().startswith("CLUSTAL")
     assert error.strip() == ""
     align = AlignIO.read(output_file, "clustal")
@@ -248,7 +240,6 @@ for input_file, output_file, newtree_file in [
                str(input_records[record.id].seq)
 
     #Clean up...
-    del child
     os.remove(output_file)
 
     #Check the DND file was created.
