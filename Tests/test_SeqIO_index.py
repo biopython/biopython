@@ -9,10 +9,17 @@ if sys.version_info[0] >= 3:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(\
         "Skipping since currently this is very slow on Python 3.")
-    
+
 import os
 import unittest
 from StringIO import StringIO
+try:
+    #This is in Python 2.6+, but we need it on Python 3
+    from io import BytesIO
+except ImportError:
+    BytesIO = StringIO
+
+
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 from Bio.SeqIO._index import _FormatToIndexedDict
@@ -114,16 +121,19 @@ class IndexDictTests(unittest.TestCase):
             rec1 = rec_dict[key]
             #Following isn't very elegant, but it lets me test the
             #__getitem__ SFF code is working.
-            #TODO - Fix use of StringIO for Python 3 compatibility
+            if format in SeqIO._BinaryFormats:
+                handle = BytesIO(raw)
+            else:
+                handle = StringIO(raw)
             if format == "sff":
-                rec2 = SeqIO.SffIO._sff_read_seq_record(StringIO(raw),
+                rec2 = SeqIO.SffIO._sff_read_seq_record(handle,
                             rec_dict._flows_per_read,
                             rec_dict._flow_chars,
                             rec_dict._key_sequence,
                             rec_dict._alphabet,
                             trim=False)
             elif format == "sff-trim":
-                rec2 = SeqIO.SffIO._sff_read_seq_record(StringIO(raw),
+                rec2 = SeqIO.SffIO._sff_read_seq_record(handle,
                             rec_dict._flows_per_read,
                             rec_dict._flow_chars,
                             rec_dict._key_sequence,
@@ -140,9 +150,10 @@ class IndexDictTests(unittest.TestCase):
                 %s
                 </uniprot>
                 """ % raw
-                rec2 = SeqIO.read(StringIO(raw), format, alphabet)
+                handle = StringIO(raw)
+                rec2 = SeqIO.read(handle, format, alphabet)
             else:
-                rec2 = SeqIO.read(StringIO(raw), format, alphabet)
+                rec2 = SeqIO.read(handle, format, alphabet)
             self.assertEqual(True, compare_record(rec1, rec2))
 
     def test_duplicates_index(self):
