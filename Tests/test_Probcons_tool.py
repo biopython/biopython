@@ -53,7 +53,7 @@ class ProbconsApplication(unittest.TestCase):
         self.assertEqual(return_code, 0)
         self.assertTrue(child.stderr.read().startswith("\nPROBCONS"))
         align = AlignIO.read(StringIO(child.stdout.read()), "fasta")
-        records = list(SeqIO.parse(open(self.infile1),"fasta"))
+        records = list(SeqIO.parse(self.infile1,"fasta"))
         self.assertEqual(len(records),len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
@@ -78,7 +78,7 @@ class ProbconsApplication(unittest.TestCase):
         self.assertTrue(child.stderr.read().strip().startswith("PROBCONS"))
         #self.assertTrue(stdout.read().strip().startswith("PROBCONS"))
         align = AlignIO.read(StringIO(child.stdout.read()), "clustal")
-        records = list(SeqIO.parse(open(self.infile1),"fasta"))
+        records = list(SeqIO.parse(self.infile1,"fasta"))
         self.assertEqual(len(records),len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
