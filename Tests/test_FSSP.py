@@ -8,7 +8,9 @@ import time
 test_file = os.path.join('FSSP', '1cnv.fssp')
 f = sys.stdout
 f.write("\nRead in %s\n" % os.path.basename(test_file))
-head_rec, sum_rec, align_rec = FSSP.read_fssp(open(test_file))
+handle = open(test_file)
+head_rec, sum_rec, align_rec = FSSP.read_fssp(handle)
+handle.close()
 f.write("...1cnv.fssp read\n")
 for i in ["author", "compnd", "database", "header", "nalign",
           "pdbid", "seqlength", "source"]:
@@ -49,3 +51,4 @@ ks = dict.keys()
 ks.sort()
 for key in ks:
     f.write("%s : %s\n" % (key, dict[key]))
+

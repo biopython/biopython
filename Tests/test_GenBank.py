@@ -156,6 +156,7 @@ def t_write_format():
             do_comparison(compare_record, output_record)
 
         cur_handle.close()
+        compare_handle.close()
 
 t_write_format()
 
@@ -176,6 +177,8 @@ def t_cleaning_features():
       "Did not clean spaces out of the translation"
     assert test_trans.find("\012") == -1, \
       "Did not clean newlines out of the translation"
+
+    handle.close()
 
 print "Testing feature cleaning..."
 t_cleaning_features()
@@ -204,6 +207,7 @@ def t_bioformat():
     assert all_records[0].description == \
       "Homo sapiens mRNA full length insert cDNA clone EUROIMAGE 125195.", \
       "Unexpected description: %s" % all_records[0].description
+    test_handle.close()
 
 print "Testing format conversions..."
 # t_bioformat() # XXX this is mucked up right now and still under work

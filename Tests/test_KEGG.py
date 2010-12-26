@@ -21,6 +21,7 @@ def t_KEGG_Enzyme(testfiles):
         for record in records:
             print record
         print "\n"
+        fh.close()
 
 def t_KEGG_Compound(testfiles):
     """Tests Bio.KEGG.Compound functionality."""
@@ -30,7 +31,8 @@ def t_KEGG_Compound(testfiles):
         records = Compound.parse(fh)
         for record in records:
             print record
-        print "\n"    
+        print "\n"
+        fh.close()
 
 def t_KEGG_Map(testfiles):
     """Tests Bio.KEGG.Map functionality."""
@@ -52,6 +54,7 @@ def t_KEGG_Map(testfiles):
         rxs.sort(key=lambda x:str(x))
         for x in rxs:
             print str(x)
+        fh.close()
 
 
 t_KEGG_Enzyme(test_KEGG_Enzyme_files)

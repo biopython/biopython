@@ -13,6 +13,7 @@ class TestMedline(unittest.TestCase):
     def test_read(self):
         handle = open("Medline/pubmed_result1.txt")
         record = Medline.read(handle)
+        handle.close()
         self.assertEqual(record["PMID"], "12230038")
         self.assertEqual(record["OWN"], "NLM")
         self.assertEqual(record["STAT"], "MEDLINE")
@@ -176,6 +177,7 @@ class TestMedline(unittest.TestCase):
         self.assertEqual(record["PST"], "ppublish")
         self.assertEqual(record["SO"], "Bioinformatics. 2003 Nov 22;19(17):2308-10.")
         self.assertRaises(StopIteration, records.next)
+        handle.close()
 
 
 if __name__ == "__main__":
