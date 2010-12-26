@@ -89,7 +89,7 @@ class PrankApplication(unittest.TestCase):
         """Simple round-trip through app with infile, output in NEXUS
         output.?.??? files written to cwd - no way to redirect
         """
-        records = list(SeqIO.parse(open(self.infile1),"fasta"))
+        records = list(SeqIO.parse(self.infile1,"fasta"))
         #Try using keyword argument,
         cmdline = PrankCommandline(prank_exe, d=self.infile1, noxml=True)
         #Try using a property,
@@ -109,7 +109,7 @@ class PrankApplication(unittest.TestCase):
         self.assertTrue("Total time" in child.stdout.read())
         self.assertEqual(child.stderr.read(), "")
         try:
-            align = AlignIO.read(open("output.2.nex"), "nexus")
+            align = AlignIO.read("output.2.nex", "nexus")
             for old, new in zip(records, align):
                 #Old versions of Prank reduced name to 9 chars
                 self.assertTrue(old.id==new.id or old.id[:9]==new.id)
@@ -169,12 +169,12 @@ class PrankConversion(unittest.TestCase):
                         in message, message)
         self.assertEqual(error, "")
         self.assertTrue(os.path.isfile(filename))
-        old = AlignIO.read(open(self.input), "fasta")
+        old = AlignIO.read(self.input, "fasta")
         #Hack...
         if format=="phylip":
             for record in old:
                 record.id = record.id[:10]
-        new = AlignIO.read(open(filename), format)
+        new = AlignIO.read(filename, format)
         assert len(old) == len(new)
         for old_r, new_r in zip(old, new):
             self.assertEqual(old_r.id, new_r.id)
