@@ -15,6 +15,10 @@
 #define _PRECISION 1000
 #define rint(x) (int)((x)*_PRECISION+0.5)
 
+/* Must define PyBytes_Check for Python 2.5 or older on Windows */
+#ifndef PyBytes_Check
+#define PyBytes_Check PyString_Check
+#endif
 
 /* Return a PyNumber as a double.
  * Raises a TypeError if I can't do it.
