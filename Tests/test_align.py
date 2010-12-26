@@ -42,9 +42,7 @@ assert alignment[0].description == "mixed"
 assert alignment[1].description == "lower"
 assert alignment[2].description == "upper"
 for (col, letter) in enumerate(letters):
-    assert alignment.get_column(col) == letter \
-                                      + letter.lower() \
-                                      + letter.upper()
+    assert alignment[:,col] == letter + letter.lower() + letter.upper()
 #Check row extractions:
 assert alignment[0].id == "mixed"
 assert alignment[-1].id == "upper"
