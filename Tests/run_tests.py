@@ -232,6 +232,7 @@ class ComparisonTestCase(unittest.TestCase):
                 assert expected_line == output_line, \
                       "\nOutput  : %s\nExpected: %s" \
                       % (repr(output_line), repr(expected_line))
+        expected.close()
 
     def generate_output(self):
         """Generate the golden output for the specified test.
