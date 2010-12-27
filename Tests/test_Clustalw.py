@@ -60,7 +60,7 @@ for (t_per, t_count, t_filename) in test_files:
     assert os.path.isfile(t_filename), t_filename
 
     print "Using Bio.AlignIO.parse(...)"
-    alignments  = list(AlignIO.parse(handle=open(t_filename,"r"), format="clustal"))
+    alignments  = list(AlignIO.parse(t_filename, "clustal"))
     assert len(alignments)  == t_count, \
          "Found %i alignments but expected %i" % (len(alignments), t_count)
     for alignment in alignments:
@@ -74,7 +74,7 @@ for (t_per, t_count, t_filename) in test_files:
     print
 
     # Check Bio.AlignIO.read(...)
-    alignment = AlignIO.read(handle=open(t_filename), format="clustal")
+    alignment = AlignIO.read(t_filename, "clustal")
     assert isinstance(alignment, Alignment)
     assert compare(alignment, alignments[0])
 
