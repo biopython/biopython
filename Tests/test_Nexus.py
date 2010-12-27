@@ -315,29 +315,33 @@ usertype matrix_test stepmatrix=5
                 output = sys.stdout.read()
         finally:
             sys.stdout = stdout 
-        self.assertEqual(output, """\
+        expected = """\
   #                            taxon            prev            succ    brlen blen (sum)  support              comment
-  1    'isn''that [a] strange name?'               2              []    100.0     119.84     10.0                    -
-  2                                -               4          [3, 1]      0.4      19.84      0.3                    -
-  3 'one should be punished, for (that)!'               2              []      0.5      20.34        -                    -
-  4                                -               6          [2, 5]      4.0      19.44      3.0                    -
-  5                    't2 the name'               4              []      0.3      19.74        -                    -
-  6                                -               9       [4, 7, 8]      2.0      15.44      1.0                    -
-  7                               t8               6              []      1.2      16.64        -                    -
-  8                               t9               6        [17, 18]      3.4      18.84        -                    -
-  9                                -              11         [6, 10]     0.44      13.44     33.0                    -
- 10                               t6               9              []      1.0      14.44        -                    -
- 11                                -              16         [9, 12]     13.0       13.0     12.0                    -
- 12                               t7              11              []     99.9      112.9        -                    -
- 13                                -              16        [14, 15]      0.0        0.0      0.0                    -
- 14                               t5              13              []     99.0       99.0        -                    -
+  1    'isn''that [a] strange name?'               2              []   100.00     119.84    10.00                    -
+  2                                -               4          [3, 1]     0.40      19.84     0.30                    -
+  3 'one should be punished, for (that)!'               2              []     0.50      20.34        -                    -
+  4                                -               6          [2, 5]     4.00      19.44     3.00                    -
+  5                    't2 the name'               4              []     0.30      19.74        -                    -
+  6                                -               9       [4, 7, 8]     2.00      15.44     1.00                    -
+  7                               t8               6              []     1.20      16.64        -                    -
+  8                               t9               6        [17, 18]     3.40      18.84        -                    -
+  9                                -              11         [6, 10]     0.44      13.44    33.00                    -
+ 10                               t6               9              []     1.00      14.44        -                    -
+ 11                                -              16         [9, 12]    13.00      13.00    12.00                    -
+ 12                               t7              11              []    99.90     112.90        -                    -
+ 13                                -              16        [14, 15]     0.00       0.00     0.00                    -
+ 14                               t5              13              []    99.00      99.00        -                    -
  15                               t1              13              []     0.98       0.98        -                    -
- 16                                -            None        [11, 13]      0.0        0.0        -                    -
- 17                              t90               8              []      1.0      19.84        -                    -
- 18                              t91               8              []      1.0      19.84        -                    -
+ 16                                -            None        [11, 13]     0.00       0.00        -                    -
+ 17                              t90               8              []     1.00      19.84        -                    -
+ 18                              t91               8              []     1.00      19.84        -                    -
 
 Root:  16
-""")
+"""
+        self.assertEqual(len(output.split("\n")), len(expected.split("\n")))
+        for l1, l2 in zip(output.split("\n"), expected.split("\n")):
+            self.assertEqual(l1, l2)
+        self.assertEqual(output, expected)
         self.assertEqual(t3.is_compatible(t2,threshold=0.3), [])
 
     def test_internal_node_labels(self):

@@ -532,19 +532,22 @@ class Tree(Nodes.Chain):
                 tx=n.data.taxon
                 if not tx:
                     tx='-'
-                blength=n.data.branchlength
+                blength="%0.2f" % n.data.branchlength
                 if blength is None:
                     blength='-'
                     sum_blength='-'
                 else:
-                    sum_blength=self.sum_branchlength(node=i)
+                    sum_blength="%0.2f" % self.sum_branchlength(node=i)
                 support=n.data.support
                 if support is None:
                     support='-'
+                else:
+                    support="%0.2f" % support
                 comment=n.data.comment
                 if comment is None:
                     comment='-'
-                table.append((str(i),tx,str(n.prev),str(n.succ),blength,sum_blength,support,comment))
+                table.append((str(i),tx,str(n.prev),str(n.succ),
+                             blength, sum_blength, support, comment))
         print '\n'.join(['%3s %32s %15s %15s %8s %10s %8s %20s' % l for l in table])
         print '\nRoot: ',self.root
 
