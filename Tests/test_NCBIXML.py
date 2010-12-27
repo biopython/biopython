@@ -1442,7 +1442,7 @@ class TestNCBIXML(unittest.TestCase):
         handle.close()
 
         handle = open(datafile)
-        record = NCBIXML.read(open(datafile))
+        record = NCBIXML.read(handle)
         handle.close()
 
     def test_xbt004(self):
