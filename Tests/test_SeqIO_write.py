@@ -31,33 +31,36 @@ test_write_read_alignment_formats.remove("gb") #an alias for genbank
 test_write_read_alignment_formats.remove("fastq-sanger") #an alias for fastq
 
 
-# This is a list of two-tuples.  Each tuple contains a
-# list of SeqRecord objects and a description (string)
+# This is a list of three-tuples.  Each tuple contains a
+# list of SeqRecord objects, a description (string), and
+# a list of tuples for expected failures (each with a
+# list of formats, exception type, exception message).
 test_records = [
-    ([], "zero records"),
+    ([], "zero records", {}),
     ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL",Alphabet.generic_protein), id="Alpha"),
       SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",Alphabet.generic_protein), id="Gamma"),
       SeqRecord(Seq("DITHGVG",Alphabet.generic_protein), id="delta")],
-     "three peptides of different lengths"),
+     "three peptides of different lengths", []),
     ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL",Alphabet.generic_protein), id="Alpha"),
       SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",Alphabet.generic_protein), id="Beta"),
       SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",Alphabet.generic_protein), id="Gamma")],
-     "three proteins alignment"),
+     "three proteins alignment", []),
     ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA",Alphabet.generic_dna), id="X"),
       SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA",Alphabet.generic_dna), id="Y"),
       SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT",Alphabet.generic_dna), id="Z")],
-     "three DNA sequence alignment"),
+     "three DNA sequence alignment", []),
     ([SeqRecord(Seq("AATAAACCTTGCTGGCCATTGTGATCCATCCA",Alphabet.generic_dna), id="X",
                 name="The\nMystery\rSequece:\r\nX"),
       SeqRecord(Seq("ACTCAACCTTGCTGGTCATTGTGACCCCAGCA",Alphabet.generic_dna), id="Y",
                 description="an%sevil\rdescription right\nhere" % os.linesep),
       SeqRecord(Seq("TTTCCTCGGAGGCCAATCTGGATCAAGACCAT",Alphabet.generic_dna), id="Z")],
-     "3 DNA seq alignment with CR/LF in name/descr"),
+     "3 DNA seq alignment with CR/LF in name/descr",
+      [(["genbank"], ValueError, r"Locus identifier 'The\nMystery\rSequece:\r\nX' is too long")]),
     ([SeqRecord(Seq("CHSMAIKLSSEHNIPSGIANAL",Alphabet.generic_protein), id="Alpha"),
       SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",Alphabet.generic_protein), id="Beta"),
       SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",Alphabet.generic_protein), id="Beta"),
       SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",Alphabet.generic_protein), id="Gamma")],
-     "alignment with repeated record"),
+     "alignment with repeated record", []),
     ]
 # Meddle with the annotation too:
 assert test_records[4][1] == "3 DNA seq alignment with CR/LF in name/descr"
@@ -73,20 +76,20 @@ test_records[4][0][2].annotations["weight"] = 2.5
 
 class WriterTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
-    def check(self, records, format, descr):
-        """General test function with format specific information.
+    def check(self, records, format):
+        """General test function with with a little format specific information.
 
-        This has all the expected exceptions hard coded!
+        This has some general expected exceptions hard coded!
         """
         #TODO - Check the exception messages?
         lengths = len(set(len(r) for r in records))
         ids = len(set(r.id for r in records))
         if not records and format in ["stockholm", "phylip", "nexus", "clustal", "sff"]:
-            #ValueError: Must have at least one sequence
-            self.check_write_fails(records, format, ValueError)
+            self.check_write_fails(records, format, ValueError,
+                                   "Must have at least one sequence")
         elif lengths > 1 and format in AlignIO._FormatToWriter:
-            #ValueError: Sequences must all be the same length
-            self.check_write_fails(records, format, ValueError)
+            self.check_write_fails(records, format, ValueError,
+                                   "Sequences must all be the same length")
         elif ids != len(records) and format in ["phylip", "stockholm"]:
             #ValueError: Repeated identifier, possibly due to truncation
             #ValueError: Duplicate record identifier: Beta
@@ -96,12 +99,8 @@ class WriterTests(unittest.TestCase):
             #ValueError: No suitable quality scores found ...
             self.check_write_fails(records, format, ValueError)
         elif records and format == "sff":
-            #ValueError: Missing SFF flow information
-            self.check_write_fails(records, format, ValueError)
-        elif descr == "3 DNA seq alignment with CR/LF in name/descr" \
-        and format in ["gb", "genbank"]:
-            #ValueError: Locus identifier 'The\nMystery\rSequece:\r\nX' is too long
-            self.check_write_fails(records, format, ValueError)
+            self.check_write_fails(records, format, ValueError,
+                                   "Missing SFF flow information")
         else:
             self.check_simple(records, format)
     
@@ -127,23 +126,42 @@ class WriterTests(unittest.TestCase):
             self.assertEqual(record.seq.tostring(), new_record.seq.tostring())
         handle.close()
 
-    def check_write_fails(self, records, format, err):
+    def check_write_fails(self, records, format, err_type, err_msg=""):
         if format in SeqIO._BinaryFormats:
             handle = BytesIO()
         else:
             handle = StringIO()
-        self.assertRaises(err, SeqIO.write, records, handle, format)
+        if err_msg:
+            try:
+                SeqIO.write(records, handle, format)
+            except err_type, err:
+                self.assertEqual(str(err), err_msg)
+        else:
+            self.assertRaises(err_type, SeqIO.write, records, handle, format)
         handle.close()
 
-for (records, descr) in test_records:
+for (records, descr, errs) in test_records:
     for format in test_write_read_alignment_formats:
+        #Assume no errors expected...
         def funct(records, format, descr):
-            f = lambda x : x.check(records, format, descr)
+            f = lambda x : x.check(records, format)
             f.__doc__ = "%s for %s" % (format, descr)
             return f
         setattr(WriterTests,
                 "test_%s_%s" % (format, descr.replace(" ","_")),
                 funct(records, format, descr))
+        #Replace the method with an error specific one?
+        for err_formats, err_type, err_msg in errs:
+            if format in err_formats:
+                def funct_e(records, format, descr, err_type, err_msg):
+                    f = lambda x : x.check_write_fails(records, format,
+                                                       err_type, err_msg)
+                    f.__doc__ = "%s for %s" % (format, descr)
+                    return f
+                setattr(WriterTests,
+                        "test_%s_%s" % (format, descr.replace(" ","_")),
+                        funct_e(records, format, descr, err_type, err_msg))
+                break
         del funct
 
 if __name__ == "__main__":

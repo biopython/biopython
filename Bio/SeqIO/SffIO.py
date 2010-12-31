@@ -821,7 +821,7 @@ class SffWriter(SequenceWriter):
             #No records -> empty SFF file (or an error)?
             #We can't write a header without the flow information.
             #return 0
-            raise ValueError("Need at least one record for SFF output")
+            raise ValueError("Must have at least one sequence")
         try:
             self._key_sequence = _as_bytes(record.annotations["flow_key"])
             self._flow_chars = _as_bytes(record.annotations["flow_chars"])
