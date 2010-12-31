@@ -60,7 +60,9 @@ test_records = [
       SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",Alphabet.generic_protein), id="Beta"),
       SeqRecord(Seq("VHGMAHPLGAFYNTPHGVANAI",Alphabet.generic_protein), id="Beta"),
       SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",Alphabet.generic_protein), id="Gamma")],
-     "alignment with repeated record", []),
+     "alignment with repeated record",
+     [(["stockholm"],ValueError,"Duplicate record identifier: Beta"),
+      (["phylip"],ValueError,"Repeated identifier, possibly due to truncation")]),
     ]
 # Meddle with the annotation too:
 assert test_records[4][1] == "3 DNA seq alignment with CR/LF in name/descr"
@@ -83,17 +85,12 @@ class WriterTests(unittest.TestCase):
         """
         #TODO - Check the exception messages?
         lengths = len(set(len(r) for r in records))
-        ids = len(set(r.id for r in records))
         if not records and format in ["stockholm", "phylip", "nexus", "clustal", "sff"]:
             self.check_write_fails(records, format, ValueError,
                                    "Must have at least one sequence")
         elif lengths > 1 and format in AlignIO._FormatToWriter:
             self.check_write_fails(records, format, ValueError,
                                    "Sequences must all be the same length")
-        elif ids != len(records) and format in ["phylip", "stockholm"]:
-            #ValueError: Repeated identifier, possibly due to truncation
-            #ValueError: Duplicate record identifier: Beta
-            self.check_write_fails(records, format, ValueError)
         elif records and format in ["fastq", "fastq-sanger", "fastq-solexa",
                                     "fastq-illumina", "qual", "phd"]:
             #ValueError: No suitable quality scores found ...
