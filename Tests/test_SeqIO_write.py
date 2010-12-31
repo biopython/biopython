@@ -93,8 +93,10 @@ class WriterTests(unittest.TestCase):
                                    "Sequences must all be the same length")
         elif records and format in ["fastq", "fastq-sanger", "fastq-solexa",
                                     "fastq-illumina", "qual", "phd"]:
-            #ValueError: No suitable quality scores found ...
-            self.check_write_fails(records, format, ValueError)
+            self.check_write_fails(records, format, ValueError,
+                                   "No suitable quality scores found in "
+                                   "letter_annotations of SeqRecord "
+                                   "(id=%s)." % records[0].id)
         elif records and format == "sff":
             self.check_write_fails(records, format, ValueError,
                                    "Missing SFF flow information")
