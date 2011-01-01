@@ -268,7 +268,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         if not _sqlite:
             #Hack for Python 2.4 (of if Python is compiled without it)
             from Bio import MissingPythonDependencyError
-            raise MissingPythonDependencyError("Requires sqlite3, which is"
+            raise MissingPythonDependencyError("Requires sqlite3, which is "
                                                "included Python 2.5+")
         if filenames is not None:
             filenames = list(filenames) #In case it was a generator
