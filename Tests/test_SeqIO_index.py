@@ -95,9 +95,11 @@ class IndexDictTests(unittest.TestCase):
         #Check with key_function
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet, add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
+        rec_dict.close()
         #Now reload it...
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet, add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
+        rec_dict.close()
         #Now reload without passing filenames and format
         rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet, key_function=add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
