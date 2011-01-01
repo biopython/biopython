@@ -70,8 +70,18 @@ class IndexDictTests(unittest.TestCase):
         if not sqlite3:
             return
 
+        #In memory,
+        rec_dict = SeqIO.index_db(":memory:", [filename], format, alphabet)
+        self.check_dict_methods(rec_dict, id_list, id_list)
+        #check error conditions
+        self.assertRaises(ValueError, SeqIO.index_db,
+                          ":memory:", format="dummy")
+        self.assertRaises(ValueError, SeqIO.index_db,
+                          ":memory:", filenames=["dummy"])
+
         #Saving to file...
         #Without key_function
+        #To disk,
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         #Now reload it...
@@ -80,9 +90,6 @@ class IndexDictTests(unittest.TestCase):
         #Now reload without passing filenames and format
         rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
-        #check error conditions
-        self.assertRaises(ValueError, SeqIO.index_db, index_tmp, format="dummy")
-        self.assertRaises(ValueError, SeqIO.index_db, index_tmp, filenames=["dummy"])
         rec_dict.close()
         os.remove(index_tmp)
         #Check with key_function
