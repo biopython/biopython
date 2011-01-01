@@ -400,7 +400,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             """Return a list of all the keys (SeqRecord identifiers)."""
             return [str(row[0]) for row in \
                     self._con.execute("SELECT key FROM offset_data;").fetchall()]
-            
+
     def __getitem__(self, key):
         """x.__getitem__(y) <==> x[y]"""
         #Pass the offset to the proxy
@@ -474,6 +474,13 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 return h.read(length)
             else:
                 return proxy.get_raw(offset)
+
+    def close(self):
+        """Close any open file handles."""
+        proxies = self._proxies
+        while proxies:
+            proxies.popitem()[1]._handle.close()
+        
 
 ##############################################################################
 

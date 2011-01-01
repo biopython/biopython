@@ -83,6 +83,7 @@ class IndexDictTests(unittest.TestCase):
         #check error conditions
         self.assertRaises(ValueError, SeqIO.index_db, index_tmp, format="dummy")
         self.assertRaises(ValueError, SeqIO.index_db, index_tmp, filenames=["dummy"])
+        rec_dict.close()
         os.remove(index_tmp)
         #Check with key_function
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet, add_prefix)
@@ -93,6 +94,7 @@ class IndexDictTests(unittest.TestCase):
         #Now reload without passing filenames and format
         rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet, key_function=add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
+        rec_dict.close()
         os.remove(index_tmp)
         #Done
     
