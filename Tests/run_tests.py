@@ -81,8 +81,11 @@ try:
 except ImportError:
     pass
 
-#Skip Bio.SeqIO doctest under Python 2.4, index_db won't work
-if sys.version_info[0] == 2 and sys.version_info[1] <= 4:
+try:
+    import sqlite3
+    del sqlite3
+except ImportError:
+    #Missing on Jython or Python 2.4
     DOCTEST_MODULES.remove("Bio.SeqIO")
 
 #Skip Bio.Seq doctest under Python 3, see http://bugs.python.org/issue7490
