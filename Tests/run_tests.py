@@ -91,6 +91,9 @@ except ImportError:
 #Skip Bio.Seq doctest under Python 3, see http://bugs.python.org/issue7490
 if sys.version_info[0] == 3:
     DOCTEST_MODULES.remove("Bio.Seq")
+    #Need to sort out UserDict on Python 3 for Bio.SeqIO.index_db
+    if "Bio.SeqIO" in DOCTEST_MODULES:
+        DOCTEST_MODULES.remove("Bio.SeqIO")
 
 system_lang = os.environ.get('LANG', 'C') #Cache this
 
