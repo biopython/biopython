@@ -24,7 +24,10 @@ temp lookup file might be one idea (e.g. using SQLite or an OBDA style index).
 """
 
 import os
-import UserDict
+try:
+    from collections import UserDict as _dict_base
+except ImportError:
+    from UserDict import DictMixin as _dict_base
 import re
 import itertools
 
@@ -41,7 +44,7 @@ except ImportError:
 from Bio import SeqIO
 from Bio import Alphabet
 
-class _IndexedSeqFileDict(UserDict.DictMixin):
+class _IndexedSeqFileDict(_dict_base):
     """Read only dictionary interface to a sequential sequence file.
 
     Keeps the keys and associated file offsets in memory, reads the file to
