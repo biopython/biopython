@@ -1,4 +1,4 @@
-# Copyright 2009-2010 by Peter Cock.  All rights reserved.
+# Copyright 2009-2011 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -27,9 +27,16 @@ import os
 import UserDict
 import re
 import itertools
-from sqlite3 import dbapi2 as _sqlite
-from sqlite3 import IntegrityError as _IntegrityError
-from sqlite3 import OperationalError as _OperationalError
+
+try:
+    from sqlite3 import dbapi2 as _sqlite
+    from sqlite3 import IntegrityError as _IntegrityError
+    from sqlite3 import OperationalError as _OperationalError
+except ImportError:
+    #Not expected to be present on Python 2.4, ignore it
+    #and at least offer Bio.SeqIO.index() functionality
+    _sqlite = None
+    pass
 
 from Bio import SeqIO
 from Bio import Alphabet
@@ -258,6 +265,11 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         #Should save a chunk of memory if dealing with 1000s of files.
         #Furthermore could compare a generator to the DB on reloading
         #(no need to turn it into a list)
+        if not _sqlite:
+            #Hack for Python 2.4 (of if Python is compiled without it)
+            from Bio import MissingPythonDependencyError
+            raise MissingPythonDependencyError("Requires sqlite3, which is"
+                                               "included Python 2.5+")
         if filenames is not None:
             filenames = list(filenames) #In case it was a generator
         if os.path.isfile(index_filename):

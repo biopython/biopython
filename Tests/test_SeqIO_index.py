@@ -1,4 +1,4 @@
-# Copyright 2009-2010 by Peter Cock.  All rights reserved.
+# Copyright 2009-2011 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -9,6 +9,13 @@ if sys.version_info[0] >= 3:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(\
         "Skipping since currently this is very slow on Python 3.")
+
+try:
+    import sqlite3
+except ImportError:
+    #Try and run what tests we can on Python 2.4
+    #where we don't expect this to be installed.
+    sqlite3 = None
 
 import os
 import unittest
@@ -55,7 +62,16 @@ class IndexDictTests(unittest.TestCase):
         #Without key_function
         rec_dict = SeqIO.index(filename, format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
+        #Check with key_function
+        key_list = [add_prefix(id) for id in id_list]
+        rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
+        self.check_dict_methods(rec_dict, key_list, id_list)
+
+        if not sqlite3:
+            return
+
         #Saving to file...
+        #Without key_function
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         #Now reload it...
@@ -68,12 +84,7 @@ class IndexDictTests(unittest.TestCase):
         self.assertRaises(ValueError, SeqIO.index_db, index_tmp, format="dummy")
         self.assertRaises(ValueError, SeqIO.index_db, index_tmp, filenames=["dummy"])
         os.remove(index_tmp)
-
         #Check with key_function
-        key_list = [add_prefix(id) for id in id_list]
-        rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
-        self.check_dict_methods(rec_dict, key_list, id_list)
-        #Saving to file...
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet, add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         #Now reload it...
@@ -194,10 +205,11 @@ class IndexDictTests(unittest.TestCase):
                 rec2 = SeqIO.read(handle, format, alphabet)
             self.assertEqual(True, compare_record(rec1, rec2))
 
-    def test_duplicates_index_db(self):
-        """Index file with duplicate identifers with Bio.SeqIO.index_db()"""
-        self.assertRaises(ValueError, SeqIO.index_db, index_tmp,
-                          ["Fasta/dups.fasta"], "fasta")
+    if sqlite3:
+        def test_duplicates_index_db(self):
+            """Index file with duplicate identifers with Bio.SeqIO.index_db()"""
+            self.assertRaises(ValueError, SeqIO.index_db, index_tmp,
+                              ["Fasta/dups.fasta"], "fasta")
 
     def test_duplicates_index(self):
         """Index file with duplicate identifers with Bio.SeqIO.index()"""
