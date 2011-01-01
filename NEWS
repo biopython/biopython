@@ -12,6 +12,11 @@ The latest news is at the top of this file.
 
 In progress: Biopython 1.57 (not yet released).
 
+Bio.SeqIO now includes an index_db() function which extends the existing
+indexing functionality to allow indexing many files, and more importantly
+this keeps the index on disk in a simple SQLite3 database rather than in
+memory in a Python dictionary.
+
 Bio.Blast.Applications now includes a wrapper for the BLAST+ blast_formatter
 tool from NCBI BLAST 2.2.24+ or later. This release of BLAST+ added the
 ability to run the BLAST tools and save the output as ASN.1 format, and then
