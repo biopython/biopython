@@ -84,6 +84,7 @@ class IndexDictTests(unittest.TestCase):
         #To disk,
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
+        rec_dict.close()
         #Now reload it...
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
