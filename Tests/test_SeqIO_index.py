@@ -221,7 +221,7 @@ class IndexDictTests(unittest.TestCase):
     if sqlite3:
         def test_duplicates_index_db(self):
             """Index file with duplicate identifers with Bio.SeqIO.index_db()"""
-            self.assertRaises(ValueError, SeqIO.index_db, index_tmp,
+            self.assertRaises(ValueError, SeqIO.index_db, ":memory:",
                               ["Fasta/dups.fasta"], "fasta")
 
     def test_duplicates_index(self):
