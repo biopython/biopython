@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 29 November 2010 (Biopython 1.56+)}
+\date{Last Update -- 3 January 2011 (Biopython 1.56+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -305,6 +305,9 @@ and HTML formats
 
   \item \emph{Why doesn't} \verb|Bio.SeqIO.index()| \emph{work? The module imports fine but there is no index function!} \\
   You need Biopython 1.52 or later.
+  
+  \item \emph{Why doesn't} \verb|Bio.SeqIO.index_db()| \emph{work? The module imports fine but there is no \texttt{index\_db} function!} \\
+  You need Biopython 1.57 or later (and a Python with SQLite3 support).
   
   \item \emph{Where is the} \verb|MultipleSeqAlignment| \emph{object? The} \verb|Bio.Align| \emph{module imports fine but this class isn't there!} \\
   You need Biopython 1.54 or later. Alternatively, the older \verb|Bio.Align.Generic.Alignment| class supports some of its functionality, but using this is now discouraged.
@@ -2502,7 +2505,29 @@ Length 394
 ['Acyltransferase', 'Flavonoid biosynthesis', 'Transferase']
 \end{verbatim}
 
-\section{Sequence files as Dictionaries -- In memory}
+\section{Sequence files as Dictionaries}
+
+We're now going to introduce three related functions in the \verb|Bio.SeqIO|
+module which allow dictionary like random access to a multi-sequence file.
+There is a trade off here between flexibility and memory usage. In summary:
+\begin{itemize}
+\item \verb|Bio.SeqIO.to_dict()| is the most flexible but also the most
+memory demanding option (see Section~\ref{SeqIO:to_dict}). This is basically
+a helper function to build a normal Python \verb|dictionary| with each entry
+held as a \verb|SeqRecord| object in memory, allowing you to modify the
+records.
+\item \verb|Bio.SeqIO.index()| is a useful middle ground, acting like a
+read only dictionary and parsing sequences into \verb|SeqRecord| objects
+on demand (see Section~\ref{sec:SeqIO-index}).
+\item \verb|Bio.SeqIO.index_db()| also acts like a read only dictionary
+but stores the identifiers and file offsets in a file on disk (as an
+SQLite3 database), meaning it has very low memory requirements (see
+Section~\ref{sec:SeqIO-index-db}), but will be a little bit slower.
+\end{itemize}
+See the discussion for an broad overview
+(Section~\ref{sec:SeqIO-indexing-discussion}).
+
+\subsection{Sequence files as Dictionaries -- In memory}
 \label{SeqIO:to_dict}
 
 The next thing that we'll do with our ubiquitous orchid files is to show how
@@ -2650,7 +2675,7 @@ As the previous couple of examples tried to illustrate, using
 everything in memory, the size of file you can work with is limited by your
 computer's RAM. In general, this will only work on small to medium files.
 
-For very large files, Biopython 1.52 introduced an alternative,
+For large files, Biopython 1.52 introduced an alternative,
 \verb|Bio.SeqIO.index()|, which works a little differently. Although
 it still returns a dictionary like object, this does \emph{not} keep
 \emph{everything} in memory. Instead, it just records where each record
@@ -2762,26 +2787,60 @@ There is a longer example in Section~\ref{sec:SeqIO-sort} using the
 \verb|SeqIO.index()| function to sort a large sequence file (without
 loading everything into memory at once).
 
+\section{Sequence files as Dictionaries -- Database indexed files}
+\label{sec:SeqIO-index-db}
+
+Biopython 1.57 introduced an alternative, \verb|Bio.SeqIO.index_db()|, which
+can work on even extremely large files since it stores the record information
+as a file on disk (using an SQLite3 database) rather than in memory.
+
 \subsection{Discussion}
+\label{sec:SeqIO-indexing-discussion}
 
-While using \verb|Bio.SeqIO.index()| is much more memory-efficient than
-using a simple dictionary of records, the record keys and the offsets are
-still in memory. This works fine even for millions of sequences. However,
-if you have tens of millions of sequences, then you \emph{will} need
-\emph{lots} of RAM (and a 64bit version of Python in order to use more
-than 4GB of RAM). Future versions of Biopython may support storing the
-index on disk (e.g. in an SQLite database) rather than in memory in order
-to work better with such extreme cases.
+So, which of these methods should you use and why? It depends on what you are
+trying to do (and how much data you are dealing with). However, in general
+picking \verb|Bio.SeqIO.index()| is a good starting point. If you are dealing
+with millions of records, multiple files, or repeated analyses, then look at
+\verb|Bio.SeqIO.index_db()|.
 
-Although the main benefit of using \verb|Bio.SeqIO.index()| is to reduce
-memory requirements, you will also find building the index is much faster
-than using \verb|Bio.SeqIO.to_dict()| and \verb|Bio.SeqIO.parse()| (as the
-indexing only scans the file quickly looking for the start of each record).
+Reasons to choose \verb|Bio.SeqIO.to_dict()| over either
+\verb|Bio.SeqIO.index()| or \verb|Bio.SeqIO.index_db()| boil down to a need
+for flexibility despite its high memory needs. The advantage of storing the
+\verb|SeqRecord| objects in memory is they can be changed, added to, or
+removed at will. In addition to the downside of high memory consumption,
+indexing can also take longer because all the recorda must be fully parsed.
 
-The main drawback is less flexibility. You cannot specify the keys with quite
-the same freedom as you can with \verb|Bio.SeqIO.to_dict()|. Also, these
-indexed dictionaries are \emph{read only}, so you cannot add or remove
-entries as you could with a real Python dictionary.
+Both \verb|Bio.SeqIO.index()| and \verb|Bio.SeqIO.index_db()| only parse
+records on demand. When indexing, they scan the file once looking for the
+start of each record and do as little work as possible to extract the
+identifier.
+
+Reasons to choose \verb|Bio.SeqIO.index()| over \verb|Bio.SeqIO.index_db()|
+include:
+\begin{itemize}
+\item Faster to build the index
+\item Slightly faster access as SeqRecord objects (but the difference is only
+really noticable for simple to parse file formats).
+\item Can use any immutable Python object as the dictionary keys (e.g. a
+tuple of strings, or a frozen set) not just strings.
+\item Don't need to worry about the index database being out of date if the
+sequence file being indexed has changed.
+\end{itemize}
+
+Reasons to choose \verb|Bio.SeqIO.index_db()| over \verb|Bio.SeqIO.index()|
+include:
+\begin{itemize}
+\item Not memory limited -- this is already important with files from second
+generation sequencing where 10s of millions of sequences are common, and
+using \verb|Bio.SeqIO.index()| can require more than 4GB of RAM and therefore
+a 64bit version of Python.
+\item Because the index is kept on disk, it can be reused. Although building
+the index database file takes longer, if you have a script which will be
+rerun on the same datafiles in future, this could save time in the long run.
+\item Indexing multiple files together
+\item The \verb|get_raw()| method can be much faster, since for most file
+formats the length of each record is stored as well as its offset.
+\end{itemize}
 
 \section{Writing Sequence Files}
 
