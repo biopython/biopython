@@ -309,6 +309,7 @@ void KDTree_destroy(struct KDTree* tree)
     if (tree->_center_coord) free(tree->_center_coord);
     if (tree->_coords) free(tree->_coords);
     if (tree->_data_point_list) free(tree->_data_point_list);
+    if (tree->_neighbor_list) free(tree->_neighbor_list);
     free(tree);
 }
 
