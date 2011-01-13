@@ -764,15 +764,21 @@ class Tree(TreeElement, TreeMixin):
             # Create a new root with a 0-length branch to the outgroup
             outgroup.branch_length = 0.0
             new_root = self.root.__class__(branch_length=None, clades=[outgroup])
+            # The first branch reversal (see the upcoming loop) is modified
+            parent = outgroup_path.pop(-2)
+            parent.clades.pop(parent.clades.index(outgroup))
+            prev_blen, parent.branch_length = parent.branch_length, prev_blen
+            new_root.clades.insert(0, parent)
+            new_parent = parent
         else:
             # Use the given outgroup node as the new (trifurcating) root
             new_root = outgroup
             new_root.branch_length = None
+            new_parent = new_root
 
         # Tracing the outgroup lineage backwards, reattach the subclades under a
         # new root clade. Reverse the branches directly above the outgroup in
         # the tree, but keep the descendants of those clades as they are.
-        new_parent = new_root
         for parent in outgroup_path[-2::-1]:
             parent.clades.pop(parent.clades.index(new_parent))
             prev_blen, parent.branch_length = parent.branch_length, prev_blen
