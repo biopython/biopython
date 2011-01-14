@@ -1,0 +1,157 @@
+<!-- NLM Serials DTD
+                  
+
+       Comments and suggestions are welcome.
+       January 1, 2010
+              
+       This is the DTD which the U.S. National Library of Medicine 
+       has written for Internal and External Use. 
+
+     SEE http://www.nlm.nih.gov/databases/dtd/nlmserials_110101.dtd 
+   FOR THE FORTHCOMING NLM SERIALS DTD DATED JANUARY 1, 2011 FOR FUTURE USE. 
+       
+    
+    
+     NOTE:  The use of "Medline" in a DTD or element name does not mean the record 
+     represents a citation from a Medline-selected journal.  When the NLM DTDs and 
+     XML elements were first created, MEDLINE records were the only data exported.  
+     Now NLM exports citations other than MEDLINE records using these tools. To 
+     minimize unnecessary disruption to users of the data and tools, NLM has 
+     retained the original DTD and element names (e.g., NLMMedline DTD, MedlineTA,
+     MedlineJournalInfo).  
+    
+* = 0 or more occurrences (optional element, repeatable)
+? = 0 or 1 occurrences (optional element, at most 1)
++ = 1 or more occurrences (required element, repeatable)
+| = choice, one or the other but not both 
+no symbol = required element
+
+-->
+<!-- ================================================================= -->
+<!--   Revision Notes Section 
+
+
+  The following changes were made in the nlmserials_090101.dtd:
+  
+       a.  The nlmserials dtd has been used as a base.
+       b.  The nlmcommon and sharedcatcit external entities have been merged 
+           into this DTD.
+       c.  No internal DTD entity references are used.
+       d.  Removed PlaceCode, Imprint, ProjectedPublicationDate,
+           Edition and DateOfSerialPublication from PublicationInfo.
+       e.  Removed element LastName.
+       f.  Added MeshHeadingList, DescriptorName and QualifierName.
+       g.  Added IndexingSourceList and IndexingSourceName.
+
+       
+-->
+<!-- ============================================================= -->
+<!ELEMENT SerialsSet (Serial+)>
+<!ELEMENT Serial (NlmUniqueID, Title, MedlineTA?, PublicationInfo?, ISSN*, 
+                  ISSNLinking?, ISOAbbreviation?, Language*, AcidFreeYN?,
+                  Coden?, ContinuationNotes?, CurrentFormatStatus?, 
+                  MinorTitleChangeYN?, IndexingHistoryList?, 
+                  IndexingSourceList?, CurrentlyIndexedYN?,
+                  CurrentlyIndexedForSubset*, IndexOnlineYN?, 
+                  IndexingSubset?, ReportedMedlineYN, PMCHoldings?, 
+                  PMCEmbargo?, BroadJournalHeadingList?, MeshHeadingList?,
+                  CrossReferenceList?, SortSerialName, IlsCreatedTimestamp?,
+                  IlsUpdatedTimestamp?, DeletedTimestamp?)>
+<!ATTLIST Serial
+	DataCreationMethod (P | K | O) #IMPLIED
+	PMC (Yes | Forthcoming) #IMPLIED
+	Status (NLMCollection | NotNLMCollection) #REQUIRED
+>
+<!ELEMENT AcidFreeYN (#PCDATA)>
+<!ELEMENT BroadJournalHeading (#PCDATA)>
+<!ELEMENT BroadJournalHeadingList (BroadJournalHeading+)>
+<!ELEMENT Coden (#PCDATA)>
+<!ELEMENT ContinuationNotes (#PCDATA)>
+<!ELEMENT Country (#PCDATA)>
+<!ELEMENT Coverage (#PCDATA)>
+<!ELEMENT CoverageNote (#PCDATA)>
+<!ELEMENT CrossReference (XrTitle)>
+<!ATTLIST CrossReference
+	XrType (A | X | S) #REQUIRED
+>
+<!ELEMENT CrossReferenceList (CrossReference+)>
+<!ELEMENT CurrentFormatStatus (#PCDATA)>
+<!ELEMENT CurrentlyIndexedForSubset (#PCDATA)>
+<!ATTLIST CurrentlyIndexedForSubset
+	CurrentSubset (AIM | D | E | H | IM | K | N | Q | QIS | S | T | X) #REQUIRED
+	CurrentIndexingTreatment (Full | Selective) #REQUIRED
+>
+<!ELEMENT CurrentlyIndexedYN (#PCDATA)>
+<!ELEMENT DateOfAction (Year, Month, Day, (Hour, (Minute, Second?)?)?)>
+<!ELEMENT DatesOfSerialPublication (#PCDATA)>
+<!ELEMENT Day (#PCDATA)>
+<!ELEMENT DeletedTimestamp (Year, Month, Day, (Hour, (Minute, Second?)?)?)>
+<!ELEMENT DescriptorName (#PCDATA)>
+<!ATTLIST DescriptorName
+	MajorTopicYN (Y | N) "N"
+>
+<!ELEMENT Frequency (#PCDATA)>
+<!ATTLIST Frequency
+	FrequencyType (Current | Former) "Current"
+>
+<!ELEMENT Hour (#PCDATA)>
+<!ELEMENT ISOAbbreviation (#PCDATA)>
+<!ELEMENT ISSN (#PCDATA)>
+<!ATTLIST ISSN
+	IssnType (Electronic | Print | Undetermined) #REQUIRED
+>
+<!ELEMENT ISSNLinking (#PCDATA)>
+<!ELEMENT IlsCreatedTimestamp (Year, Month, Day, (Hour, (Minute, Second?)?)?)>
+<!ELEMENT IlsUpdatedTimestamp (Year, Month, Day, (Hour, (Minute, Second?)?)?)>
+<!ELEMENT IndexOnlineYN (#PCDATA)>
+<!ELEMENT IndexingHistory (DateOfAction, Coverage?, CoverageNote?)>
+<!ATTLIST IndexingHistory
+	CitationSubset (AIM | B | C | D | E | F | H | IM | J | K | N | 
+                        OM | P | Q | QIS | R | S | T | X) #REQUIRED
+	IndexingTreatment (Unknown | Full | Selective | ReferencedIn |
+                           ReferencedInNoDetails) #IMPLIED
+	IndexingStatus (Ceased-publication | Continued-by-another-indexed-title | 
+                        Currently-indexed | Currently-indexed-Title-changed | 
+                        Date-range-of-indexed-citations-unspecified | 
+	                Deselected) #IMPLIED
+>
+<!ELEMENT IndexingHistoryList (IndexingHistory+)>
+<!ELEMENT IndexingSource (IndexingSourceName, Coverage?)>
+<!ELEMENT IndexingSourceList (IndexingSource+)>
+<!ELEMENT IndexingSourceName (#PCDATA)>
+<!ATTLIST IndexingSourceName
+	IndexingTreatment (Unknown | Full | Selective | ReferencedIn |
+                           ReferencedInNoDetails) #IMPLIED
+	IndexingStatus (Ceased-publication | Continued-by-another-indexed-title | 
+                        Currently-indexed | Currently-indexed-Title-changed | 
+                        Date-range-of-indexed-citations-unspecified | 
+                        Deselected) #IMPLIED
+>
+<!ELEMENT IndexingSubset (#PCDATA)>
+<!ELEMENT Language (#PCDATA)>
+<!ELEMENT MedlineTA (#PCDATA)>
+<!ELEMENT MeshHeading (DescriptorName, QualifierName*)>
+<!ELEMENT MeshHeadingList (MeshHeading+)>
+<!ELEMENT MinorTitleChangeYN (#PCDATA)>
+<!ELEMENT Minute (#PCDATA)>
+<!ELEMENT Month (#PCDATA)>
+<!ELEMENT NlmUniqueID (#PCDATA)>
+<!ELEMENT PMCEmbargo (#PCDATA)>
+<!ELEMENT PMCHoldings (#PCDATA)>
+<!ELEMENT Place (#PCDATA)>
+<!ELEMENT PublicationEndYear (#PCDATA)>
+<!ELEMENT PublicationFirstYear (#PCDATA)>
+<!ELEMENT PublicationInfo (Country?, Place*, Publisher*, 
+                           PublicationFirstYear?, PublicationEndYear?,
+                           Frequency*)>
+<!ELEMENT Publisher (#PCDATA)>
+<!ELEMENT QualifierName (#PCDATA)>
+<!ATTLIST QualifierName
+	MajorTopicYN (Y | N) "N"
+>
+<!ELEMENT ReportedMedlineYN (#PCDATA)>
+<!ELEMENT Second (#PCDATA)>
+<!ELEMENT SortSerialName (#PCDATA)>
+<!ELEMENT Title (#PCDATA)>
+<!ELEMENT XrTitle (#PCDATA)>
+<!ELEMENT Year (#PCDATA)>
