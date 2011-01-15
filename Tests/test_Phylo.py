@@ -67,12 +67,26 @@ class TreeTests(unittest.TestCase):
     """Tests for methods on BaseTree.Tree objects."""
     def test_root_with_outgroup(self):
         """Tree.root_with_outgroup: reroot at a given clade."""
+        # On a large realistic tree, at a deep internal node
         tree = Phylo.read(EX_APAF, 'phyloxml')
         orig_num_tips = len(tree.get_terminals())
         orig_tree_len = tree.total_branch_length()
         tree.root_with_outgroup('19_NEMVE', '20_NEMVE')
         self.assertEqual(orig_num_tips, len(tree.get_terminals()))
         self.assertAlmostEqual(orig_tree_len, tree.total_branch_length())
+        # On small contrived trees, testing edge cases
+        for small_nwk in (
+                '(A,B,(C,D));',
+                '((E,F),((G,H)),(I,J));',
+                '((Q,R),(S,T),(U,V));',
+                '(X,Y);',
+                ):
+            tree = Phylo.read(StringIO(small_nwk), 'newick')
+            orig_tree_len = tree.total_branch_length()
+            for node in list(tree.find_clades()):
+                tree.root_with_outgroup(node)
+                self.assertAlmostEqual(orig_tree_len,
+                                       tree.total_branch_length())
 
     # Magic method
     def test_str(self):

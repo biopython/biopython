@@ -763,17 +763,22 @@ class Tree(TreeElement, TreeMixin):
         if outgroup.is_terminal():
             # Create a new root with a 0-length branch to the outgroup
             outgroup.branch_length = 0.0
-            new_root = self.root.__class__(branch_length=None, clades=[outgroup])
+            new_root = self.root.__class__(
+                    branch_length=self.root.branch_length, clades=[outgroup])
             # The first branch reversal (see the upcoming loop) is modified
-            parent = outgroup_path.pop(-2)
-            parent.clades.pop(parent.clades.index(outgroup))
-            prev_blen, parent.branch_length = parent.branch_length, prev_blen
-            new_root.clades.insert(0, parent)
-            new_parent = parent
+            if len(outgroup_path) == 1:
+                # Trivial tree like '(A,B);
+                new_parent = new_root
+            else:
+                parent = outgroup_path.pop(-2)
+                parent.clades.pop(parent.clades.index(outgroup))
+                prev_blen, parent.branch_length = parent.branch_length, prev_blen
+                new_root.clades.insert(0, parent)
+                new_parent = parent
         else:
             # Use the given outgroup node as the new (trifurcating) root
             new_root = outgroup
-            new_root.branch_length = None
+            new_root.branch_length = self.root.branch_length
             new_parent = new_root
 
         # Tracing the outgroup lineage backwards, reattach the subclades under a
@@ -784,9 +789,14 @@ class Tree(TreeElement, TreeMixin):
             prev_blen, parent.branch_length = parent.branch_length, prev_blen
             new_parent.clades.insert(0, parent)
             new_parent = parent
+
         # Finally, handle the original root according to number of descendents
         old_root = self.root
-        old_root.clades.pop(old_root.clades.index(new_parent))
+        if outgroup in old_root.clades:
+            assert len(outgroup_path) == 1
+            old_root.clades.pop(old_root.clades.index(outgroup))
+        else:
+            old_root.clades.pop(old_root.clades.index(new_parent))
         if len(old_root) == 1:
             # Delete the old bifurcating root & add branch lengths
             ingroup = old_root.clades[0]
