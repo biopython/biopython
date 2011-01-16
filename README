@@ -60,29 +60,12 @@ install such as standalone NCBI BLAST, EMBOSS or ClustalW.
 
 **Python 3.x**
 
-Python 3 support is still incomplete, but the majority of modules are
-already functional. In order to be able to run Biopython with Python 3
-you first need to convert the code. The conversion process is easy but
-it has to be done BEFORE running setup.py.
-
-To convert the code to Python 3, the 2to3 tool is required (this comes
-with Python 2.6+ and Python 3). On the top-level directory do:
-
-$ 2to3 --nofix=long --no-diffs -n -w Bio BioSQL Tests Scripts Doc/examples
-$ 2to3 --nofix=long --no-diffs -n -w -d Bio BioSQL Tests Scripts Doc/examples
-
-The first command converts the code, the second command converts the
-doctests (examples within the docstrings). You can in general ignore
-the output of 2to3. The tool takes some time to complete, please be
-patient (or use the -j option to set the number of threads used).
-
-After 2to3 execution the normal install from source process should be
-followed, i.e. "python3 setup.py build" etc (see below).
-
-To try Biopython on Python 3 on Windows, to call the 2to3 script you
-would use something like this (before compiling from source):
-
-C:\Python31\python.exe C:\Python31\Tools\Scripts\2to3.py --nofix=long ...
+Note we do not intend to support Python 3.0, please use Python 3.1 or later.
+Python 3 support is still incomplete (and we do not yet officially support
+using Biopython with Python 3), but the majority of modules are largely
+functional. In order to be able to run Biopython with Python 3 it is first
+converted using the 2to3 script. This is done automatically by the setup.py
+script. Use "python3 setup.py build" etc (see installation notes below).
 
 
 **Installation**
