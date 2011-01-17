@@ -112,7 +112,7 @@ keep the output 100% identical to the input). For example,
     >>> record_dict = SeqIO.index("Fasta/f002", "fasta")
     >>> len(record_dict)
     3
-    >>> print record_dict.get_raw("gi|1348917|gb|G26685|G26685")
+    >>> print record_dict.get_raw("gi|1348917|gb|G26685|G26685").decode()
     >gi|1348917|gb|G26685|G26685 human STS STS_D11734.
     CGGAGCCAGCGAGCATATGCTGCATGAGGACCTTTCTATCTTACATTATGGCTGGGAATCTTACTCTTTC
     ATCTGATACCTTGTTCAGATTTCAAAATAGTTGTAGCCTTATCCTGGTTTTACAGATGTGAAACTTTCAA
@@ -133,7 +133,10 @@ keep the output 100% identical to the input). For example,
     <BLANKLINE>
 
 Here the original file and what Biopython would output differ in the line
-wrapping.
+wrapping. Also note that under Python 3, the get_raw method will return a
+bytes string, hence the use of decode to turn it into a (unicode) string.
+This is uncessary on Python 2.
+
 
 Input - Alignments
 ==================
@@ -172,6 +175,7 @@ Or, using a handle::
 You are expected to call this function once (with all your records) and if
 using a handle, make sure you close it to flush the data to the hard disk.
 
+
 Output - Advanced
 =================
 The effect of calling write() multiple times on a single file will vary
@@ -200,6 +204,7 @@ In general however, you can combine the Bio.SeqIO.parse(...) function with
 the Bio.SeqIO.write(...) function for sequence file conversion. Using
 generator expressions or generator functions provides a memory efficient way
 to perform filtering or other extra operations as part of the process.
+
 
 File Formats
 ============
