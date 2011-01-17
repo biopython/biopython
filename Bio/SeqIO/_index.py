@@ -200,6 +200,9 @@ class _IndexedSeqFileDict(_dict_base):
 
         If the key is not found, a KeyError exception is raised.
 
+        Note that on Python 3 a bytes string is returned, not a typical
+        unicode string.
+
         NOTE - This functionality is not supported for every file format.
         """
         #Pass the offset to the proxy
@@ -432,6 +435,9 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
 
         If the key is not found, a KeyError exception is raised.
 
+        Note that on Python 3 a bytes string is returned, not a typical
+        unicode string.
+
         NOTE - This functionality is not supported for every file format.
         """
         #Pass the offset to the proxy
@@ -506,11 +512,11 @@ class SeqFileRandomAccess(object):
 
     def get(self, offset):
         """Returns SeqRecord."""
-        raw = self.get_raw(offset)
-        return self._parse(StringIO(_bytes_to_string(raw)))
+        #Should be overriden for binary file formats etc:
+        return self._parse(StringIO(_bytes_to_string(self.get_raw(offset))))
 
     def get_raw(self, offset):
-        """Returns string (if implemented for this file format)."""
+        """Returns bytes string (if implemented for this file format)."""
         #Should be done by each sub-class (if possible)
         raise NotImplementedError("Not available for this file format.")
 
@@ -675,6 +681,8 @@ class GenBankRandomAccess(SequentialSeqFileRandomAccess):
         handle.seek(0)
         marker_re = self._marker_re
         dot_char = _as_bytes(".")
+        accession_marker = _as_bytes("ACCESSION ")
+        version_marker = _as_bytes("VERSION ")
         #Skip and header before first record
         while True:
             start_offset = handle.tell()
@@ -695,9 +703,9 @@ class GenBankRandomAccess(SequentialSeqFileRandomAccess):
                     yield _bytes_to_string(key), start_offset, end_offset - start_offset
                     start_offset = end_offset
                     break
-                elif line.startswith(_as_bytes("ACCESSION ")):
+                elif line.startswith(accession_marker):
                     key = line.rstrip().split()[1]
-                elif line.startswith(_as_bytes("VERSION ")):
+                elif line.startswith(version_marker):
                     version_id = line.rstrip().split()[1]
                     if version_id.count(dot_char)==1 and version_id.split(dot_char)[1].isdigit():
                         #This should mimic the GenBank parser...
@@ -713,6 +721,7 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
         marker_re = self._marker_re
         semi_char = _as_bytes(";")
         dot_char = _as_bytes(".")
+        sv_marker = _as_bytes("SV ")
         #Skip any header before first record
         while True:
             start_offset = handle.tell()
@@ -726,7 +735,7 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
             if line[2:].count(semi_char) == 6:
                 #Looks like the semi colon separated style introduced in 2006
                 parts = line[3:].rstrip().split(semi_char)
-                if parts[1].strip().startswith(_as_bytes("SV ")):
+                if parts[1].strip().startswith(sv_marker):
                     #The SV bit gives the version
                     key = parts[0].strip() + dot_char + parts[1].strip().split()[1]
                 else:
@@ -743,7 +752,7 @@ class EmblRandomAccess(SequentialSeqFileRandomAccess):
                     yield _bytes_to_string(key), start_offset, end_offset - start_offset
                     start_offset = end_offset
                     break
-                elif line.startswith(_as_bytes("SV ")):
+                elif line.startswith(sv_marker):
                     key = line.rstrip().split()[1]
         assert not line, repr(line)
 
@@ -784,6 +793,9 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
         handle = self._handle
         handle.seek(0)
         marker_re = self._marker_re
+        start_acc_marker = _as_bytes("<accession>")
+        end_acc_marker = _as_bytes("</accession>")
+        end_entry_marker = _as_bytes("</entry>")
         #Skip any header before first record
         while True:
             start_offset = handle.tell()
@@ -798,12 +810,12 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
             done = False
             while True:
                 line = handle.readline()
-                if key is None and line.startswith(_as_bytes("<accession>")):
-                    assert _as_bytes("</accession>") in line, line
+                if key is None and line.startswith(start_acc_marker):
+                    assert end_acc_marker in line, line
                     key = line[11:].split(_as_bytes("<"))[0]
-                elif _as_bytes("</entry>") in line:
+                elif end_entry_marker in line:
                     end_offset = handle.tell() - len(line) \
-                               + line.find(_as_bytes("</entry>")) + 8
+                               + line.find(end_entry_marker) + 8
                     break
                 elif marker_re.match(line) or not line:
                     #Start of next record or end of file
@@ -821,11 +833,12 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
         """Similar to the get method, but returns the record as a raw string."""
         handle = self._handle
         marker_re = self._marker_re
+        end_entry_marker = _as_bytes("</entry>")
         handle.seek(offset)
         data = handle.readline()
         while True:
             line = handle.readline()
-            i = line.find(_as_bytes("</entry>"))
+            i = line.find(end_entry_marker)
             if i != -1:
                 data += line[:i+8]
                 break
