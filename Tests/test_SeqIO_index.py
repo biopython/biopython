@@ -20,6 +20,7 @@ try:
     from io import BytesIO
 except ImportError:
     BytesIO = StringIO
+from Bio._py3k import _as_bytes, _bytes_to_string
 
 
 from Bio.SeqRecord import SeqRecord
@@ -179,10 +180,7 @@ class IndexDictTests(unittest.TestCase):
         self.assertRaises(NotImplementedError, rec_dict.fromkeys, [])
 
     def get_raw_check(self, filename, format, alphabet):
-        if format in SeqIO._BinaryFormats:
-            handle = open(filename, "rb")
-        else:
-            handle = open(filename, "rU")
+        handle = open(filename, "rb")
         raw_file = handle.read()
         handle.close()
         #Also checking the key_function here
@@ -205,7 +203,7 @@ class IndexDictTests(unittest.TestCase):
             if format in SeqIO._BinaryFormats:
                 handle = BytesIO(raw)
             else:
-                handle = StringIO(raw)
+                handle = StringIO(_bytes_to_string(raw))
             if format == "sff":
                 rec2 = SeqIO.SffIO._sff_read_seq_record(handle,
                             rec_dict._proxy._flows_per_read,
@@ -221,8 +219,8 @@ class IndexDictTests(unittest.TestCase):
                             rec_dict._proxy._alphabet,
                             trim=True)
             elif format == "uniprot-xml":
-                self.assertTrue(raw.startswith("<entry "))
-                self.assertTrue(raw.endswith("</entry>"))
+                self.assertTrue(raw.startswith(_as_bytes("<entry ")))
+                self.assertTrue(raw.endswith(_as_bytes("</entry>")))
                 #Currently the __getitem__ method uses this
                 #trick too, but we hope to fix that later
                 raw = """<?xml version='1.0' encoding='UTF-8'?>
@@ -232,7 +230,7 @@ class IndexDictTests(unittest.TestCase):
                 http://www.uniprot.org/support/docs/uniprot.xsd">
                 %s
                 </uniprot>
-                """ % raw
+                """ % _bytes_to_string(raw)
                 handle = StringIO(raw)
                 rec2 = SeqIO.read(handle, format, alphabet)
             else:
