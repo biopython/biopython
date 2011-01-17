@@ -4,16 +4,11 @@
 # as part of this package.
 
 """Unit tests for Bio.SeqIO.index(...) and index_db() functions."""
-import sys
-if sys.version_info[0] >= 3:
-    from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError(\
-        "Skipping since currently this is very slow on Python 3.")
 
 try:
     import sqlite3
 except ImportError:
-    #Try and run what tests we can on Python 2.4
+    #Try and run what tests we can on Python 2.4 or Jython
     #where we don't expect this to be installed.
     sqlite3 = None
 
