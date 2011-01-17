@@ -35,6 +35,7 @@ def _genbank_convert_fasta(in_handle, out_handle, alphabet=None):
     #For FASTA output we can ignore the alphabet too
     return SeqIO.write(records, out_handle, "fasta")
 
+
 def _embl_convert_fasta(in_handle, out_handle, alphabet=None):
     """Fast EMBL to FASTA (PRIVATE)."""
     #We don't need to parse the features...
@@ -42,6 +43,7 @@ def _embl_convert_fasta(in_handle, out_handle, alphabet=None):
     records = EmblScanner().parse_records(in_handle, do_features=False)
     #For FASTA output we can ignore the alphabet too
     return SeqIO.write(records, out_handle, "fasta")
+
 
 def _fastq_generic(in_handle, out_handle, mapping):
     """FASTQ helper function where can't have data loss by truncation (PRIVATE)."""
@@ -57,6 +59,7 @@ def _fastq_generic(in_handle, out_handle, mapping):
             raise ValueError("Invalid character in quality string")
         out_handle.write("@%s\n%s\n+\n%s\n" % (title, seq, qual))
     return count
+
     
 def _fastq_generic2(in_handle, out_handle, mapping, truncate_char, truncate_msg):
     """FASTQ helper function where there could be data loss by truncation (PRIVATE)."""
@@ -77,6 +80,7 @@ def _fastq_generic2(in_handle, out_handle, mapping, truncate_char, truncate_msg)
         out_handle.write("@%s\n%s\n+\n%s\n" % (title, seq, qual))
     return count
 
+
 def _fastq_sanger_convert_fastq_sanger(in_handle, out_handle, alphabet=None):
     """Fast Sanger FASTQ to Sanger FASTQ conversion (PRIVATE).
 
@@ -93,6 +97,7 @@ def _fastq_sanger_convert_fastq_sanger(in_handle, out_handle, alphabet=None):
     assert len(mapping)==256
     return _fastq_generic(in_handle, out_handle, mapping)
 
+
 def _fastq_solexa_convert_fastq_solexa(in_handle, out_handle, alphabet=None):
     """Fast Solexa FASTQ to Solexa FASTQ conversion (PRIVATE).
 
@@ -107,6 +112,7 @@ def _fastq_solexa_convert_fastq_solexa(in_handle, out_handle, alphabet=None):
                      +[chr(0) for ascii in range(127, 256)])
     assert len(mapping)==256
     return _fastq_generic(in_handle, out_handle, mapping)
+
 
 def _fastq_illumina_convert_fastq_illumina(in_handle, out_handle, alphabet=None):
     """Fast Illumina 1.3+ FASTQ to Illumina 1.3+ FASTQ conversion (PRIVATE).
@@ -123,6 +129,7 @@ def _fastq_illumina_convert_fastq_illumina(in_handle, out_handle, alphabet=None)
     assert len(mapping)==256
     return _fastq_generic(in_handle, out_handle, mapping)
 
+
 def _fastq_illumina_convert_fastq_sanger(in_handle, out_handle, alphabet=None):
     """Fast Illumina 1.3+ FASTQ to Sanger FASTQ conversion (PRIVATE).
 
@@ -135,6 +142,7 @@ def _fastq_illumina_convert_fastq_sanger(in_handle, out_handle, alphabet=None):
                      +[chr(0) for ascii in range(127, 256)])
     assert len(mapping)==256
     return _fastq_generic(in_handle, out_handle, mapping)
+
 
 def _fastq_sanger_convert_fastq_illumina(in_handle, out_handle, alphabet=None):
     """Fast Sanger FASTQ to Illumina 1.3+ FASTQ conversion (PRIVATE).
@@ -152,6 +160,7 @@ def _fastq_sanger_convert_fastq_illumina(in_handle, out_handle, alphabet=None):
     assert len(mapping)==256
     return _fastq_generic2(in_handle, out_handle, mapping, trunc_char,
                           "Data loss - max PHRED quality 62 in Illumina 1.3+ FASTQ")
+
 
 def _fastq_solexa_convert_fastq_sanger(in_handle, out_handle, alphabet=None):
     """Fast Solexa FASTQ to Sanger FASTQ conversion (PRIVATE).
@@ -202,6 +211,7 @@ def _fastq_solexa_convert_fastq_illumina(in_handle, out_handle, alphabet=None):
                       +[chr(0) for ascii in range(127, 256)])
     assert len(mapping)==256
     return _fastq_generic(in_handle, out_handle, mapping)
+
 
 def _fastq_illumina_convert_fastq_solexa(in_handle, out_handle, alphabet=None):
     """Fast Illumina 1.3+ FASTQ to Solexa FASTQ conversion (PRIVATE).
@@ -257,6 +267,52 @@ def _fastq_convert_tab(in_handle, out_handle, alphabet=None):
         out_handle.write("%s\t%s\n" % (title.split(None, 1)[0], seq))
     return count
 
+def _fastq_convert_qual(in_handle, out_handle, mapping):
+    """FASTQ helper function for QUAL output (PRIVATE).
+
+    Mapping should be a dictionary mapping expected ASCII characters from the
+    FASTQ quality string to PHRED quality scores (as strings).
+    """
+    from Bio.SeqIO.QualityIO import FastqGeneralIterator
+    #For real speed, don't even make SeqRecord and Seq objects!
+    count = 0
+    for title, seq, qual in FastqGeneralIterator(in_handle):
+        count += 1
+        out_handle.write(">%s\n" % title)
+        #map the qual...
+        try:
+            qualities_strs = [mapping[ascii] for ascii in qual]
+        except KeyError:
+            raise ValueError("Invalid character in quality string")
+        while qualities_strs:
+            line = qualities_strs.pop(0)
+            while qualities_strs \
+            and len(line) + 1 + len(qualities_strs[0]) < 60:
+                line += " " + qualities_strs.pop(0)
+            out_handle.write(line + "\n")
+    return count
+
+    
+def _fastq_sanger_convert_qual(in_handle, out_handle, alphabet=None):
+    """Fast Sanger FASTQ to QUAL conversion (PRIVATE)."""
+    mapping = dict((chr(q+33), str(q)) for q in range(0,93+1))
+    return _fastq_convert_qual(in_handle, out_handle, mapping)
+
+
+def _fastq_solexa_convert_qual(in_handle, out_handle, alphabet=None):
+    """Fast Solexa FASTQ to QUAL conversion (PRIVATE)."""
+    from Bio.SeqIO.QualityIO import phred_quality_from_solexa
+    mapping = dict((chr(q+64), str(int(round(phred_quality_from_solexa(q))))) \
+                   for q in range(-5,62+1))
+    return _fastq_convert_qual(in_handle, out_handle, mapping)
+
+
+def _fastq_illumina_convert_qual(in_handle, out_handle, alphabet=None):
+    """Fast Illumina 1.3+ FASTQ to QUAL conversion (PRIVATE)."""
+    mapping = dict((chr(q+64), str(q)) for q in range(0,62+1))
+    return _fastq_convert_qual(in_handle, out_handle, mapping)
+
+
 #TODO? - Handling aliases explicitly would let us shorten this list:
 _converter = {
     ("genbank", "fasta") : _genbank_convert_fasta,
@@ -286,6 +342,10 @@ _converter = {
     ("fastq-sanger", "fastq-illumina") : _fastq_sanger_convert_fastq_illumina,
     ("fastq-solexa", "fastq-illumina") : _fastq_solexa_convert_fastq_illumina,
     ("fastq-illumina", "fastq-illumina") : _fastq_illumina_convert_fastq_illumina,
+    ("fastq", "qual") : _fastq_sanger_convert_qual,
+    ("fastq-sanger", "qual") : _fastq_sanger_convert_qual,
+    ("fastq-solexa", "qual") : _fastq_solexa_convert_qual,
+    ("fastq-illumina", "qual") : _fastq_illumina_convert_qual,
     }
 
 def _handle_convert(in_handle, in_format, out_handle, out_format, alphabet=None):
