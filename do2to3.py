@@ -46,7 +46,7 @@ def run2to3(filenames):
             e = lib2to3.main.main("lib2to3.fixes", args + [filename])
             if e != 0:
                 sys.stderr = stderr
-                sys.stderr.write(handle.get_value())
+                sys.stderr.write(handle.getvalue())
                 os.remove(filename) #Don't want a half edited file!
                 raise RuntimeError("Error %i from 2to3 on %s" \
                                    % (e, filename))
@@ -54,7 +54,7 @@ def run2to3(filenames):
             e = lib2to3.main.main("lib2to3.fixes", args + ["-d", filename])
             if e != 0:
                 sys.stderr = stderr
-                sys.stderr.write(handle.get_value())
+                sys.stderr.write(handle.getvalue())
                 os.remove(filename) #Don't want a half edited file!
                 raise RuntimeError("Error %i from 2to3 (doctests) on %s" \
                                    % (e, filename))
