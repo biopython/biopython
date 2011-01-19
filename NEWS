@@ -27,8 +27,8 @@ The SeqRecord object now as a reverse_complement method (similar to that of
 the Seq object). This is most useful to reversing per-letter-annotation (such
 as quality scores from FASTQ) or features (such as annotation from GenBank).
 
-FASTQ to QUAL conversion Using Bio.SeqIO.convert(...) has been optimised, and
-is now about three times faster.
+Bio.SeqIO.write's QUAL output has been speed up, and Bio.SeqIO.convert now
+uses an optimised routine for FASTQ to QUAL making this much faster.
 
 (At least) 11 people have contributed to this release, including 3 new people:
 
