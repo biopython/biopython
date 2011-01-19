@@ -1477,6 +1477,9 @@ class QualPhredWriter(SequentialSequenceWriter):
         assert not self._footer_written
         self._record_written = True
 
+        handle = self.handle
+        wrap = self.wrap
+
         if self.record2title:
             title = self.clean(self.record2title(record))
         else:
@@ -1489,7 +1492,7 @@ class QualPhredWriter(SequentialSequenceWriter):
                 title = "%s %s" % (id, description)
             else:
                 title = id
-        self.handle.write(">%s\n" % title)
+        handle.write(">%s\n" % title)
 
         qualities = _get_phred_quality(record)
         try:
@@ -1502,16 +1505,31 @@ class QualPhredWriter(SequentialSequenceWriter):
             else:
                 raise e
 
-        if self.wrap:
+        if wrap > 5:
+            #Fast wrapping
+            data = " ".join(qualities_strs)
+            while True:
+                if len(data) <= wrap:
+                    self.handle.write(data + "\n")
+                    break
+                else:
+                    #By construction there must be spaces in the first X chars
+                    #(unless we have X digit or higher quality scores!)
+                    i = data.rfind(" ", 0, wrap)
+                    handle.write(data[:i] + "\n")
+                    data = data[i+1:]
+        elif wrap:
+            #Safe wrapping
             while qualities_strs:
                 line = qualities_strs.pop(0)
                 while qualities_strs \
-                and len(line) + 1 + len(qualities_strs[0]) < self.wrap:
+                and len(line) + 1 + len(qualities_strs[0]) < wrap:
                     line += " " + qualities_strs.pop(0)
-                self.handle.write(line + "\n")
+                handle.write(line + "\n")
         else:
+            #No wrapping
             data = " ".join(qualities_strs)
-            self.handle.write(data + "\n")
+            handle.write(data + "\n")
 
 class FastqSolexaWriter(SequentialSequenceWriter):
     r"""Write old style Solexa/Illumina FASTQ format files (with Solexa qualities).
