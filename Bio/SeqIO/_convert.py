@@ -284,12 +284,17 @@ def _fastq_convert_qual(in_handle, out_handle, mapping):
             qualities_strs = [mapping[ascii] for ascii in qual]
         except KeyError:
             raise ValueError("Invalid character in quality string")
-        while qualities_strs:
-            line = qualities_strs.pop(0)
-            while qualities_strs \
-            and len(line) + 1 + len(qualities_strs[0]) < 60:
-                line += " " + qualities_strs.pop(0)
-            out_handle.write(line + "\n")
+        data = " ".join(qualities_strs)
+        while True:
+            if len(data) <= 60:
+                out_handle.write(data + "\n")
+                break
+            else:
+                #By construction there must be spaces in the first 60 chars
+                #(unless we have 60 digit or higher quality scores!)
+                i = data.rfind(" ", 0, 60)
+                out_handle.write(data[:i] + "\n")
+                data = data[i+1:]
     return count
 
     
