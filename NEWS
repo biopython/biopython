@@ -30,11 +30,12 @@ as quality scores from FASTQ) or features (such as annotation from GenBank).
 Bio.SeqIO.write's QUAL output has been speed up, and Bio.SeqIO.convert now
 uses an optimised routine for FASTQ to QUAL making this much faster.
 
-(At least) 11 people have contributed to this release, including 3 new people:
+(At least) 12 people have contributed to this release, including 3 new people:
 
 Brad Chapman
 Eric Talevich
 Erick Matsen (first contribution)
+Hongbo Zhu
 Joanna & Dominik Kasprzak (first contribution)
 Joao Rodrigues
 Kristian Rother
