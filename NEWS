@@ -23,11 +23,11 @@ ability to run the BLAST tools and save the output as ASN.1 format, and then
 convert this to any other supported BLAST ouput format (plain text, tabular,
 XML, or HTML) with the blast_formatter tool.
 
-The SeqRecord object now as a reverse_complement method (similar to that of
+The SeqRecord object now has a reverse_complement method (similar to that of
 the Seq object). This is most useful to reversing per-letter-annotation (such
 as quality scores from FASTQ) or features (such as annotation from GenBank).
 
-Bio.SeqIO.write's QUAL output has been speed up, and Bio.SeqIO.convert now
+Bio.SeqIO.write's QUAL output has been sped up, and Bio.SeqIO.convert now
 uses an optimised routine for FASTQ to QUAL making this much faster.
 
 (At least) 12 people have contributed to this release, including 3 new people:
