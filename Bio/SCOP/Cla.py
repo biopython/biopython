@@ -1,5 +1,6 @@
 # Copyright 2001 by Gavin E. Crooks.  All rights reserved.
-# Copyright 2010 Jeffrey Finkelstein
+# Modifications Copyright 2010 Jeffrey Finkelstein. All rights reserved.
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -22,7 +23,7 @@ from Residues import *
 
 
 class Record:
-    """Holds information for one SCOP domain
+    """Holds information for one SCOP domain.
 
     sid         --  SCOP identifier. e.g. d1danl2
 
@@ -32,9 +33,11 @@ class Record:
 
     sunid       --  SCOP unique identifier for this domain
 
-    hierarchy   --  A sequence of tuples (nodetype, sunid) describing the
-                    location of this domain in the SCOP hierarchy.
-                    See the Scop module for a description of nodetypes.
+    hierarchy   --  A dictionary, keys are nodetype, values are sunid,
+                    describing the location of this domain in the SCOP
+                    hierarchy. See the Scop module for a description of
+                    nodetypes. This used to be a list of (key,value) tuples
+                    in older versions of Biopython (see Bug 3109).
     """
     def __init__(self, line=None):
         self.sid = ''

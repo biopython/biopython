@@ -1,6 +1,6 @@
 # Copyright 2001 by Gavin E. Crooks.  All rights reserved.
 # Modifications Copyright 2004/2005 James Casbon. All rights Reserved.
-# Copyright 2010 Jeffrey Finkelstein
+# Modifications Copyright 2010 Jeffrey Finkelstein. All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included

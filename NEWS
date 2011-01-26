@@ -33,12 +33,16 @@ uses an optimised routine for FASTQ to QUAL making this much faster.
 Bio.SeqIO.write now uses lower case for the sequence for GenBank, EMBL and
 IMGT output.
 
-(At least) 12 people have contributed to this release, including 3 new people:
+The nodetype hierachy in the Bio.SCOP.Cla.Record class is now a dictionary
+(previously it was a list of key,value tuples) to better match the standard.
+
+(At least) 13 people have contributed to this release, including 4 new people:
 
 Brad Chapman
 Eric Talevich
 Erick Matsen (first contribution)
 Hongbo Zhu
+Jeffrey Finkelstein (first contribution)
 Joanna & Dominik Kasprzak (first contribution)
 Joao Rodrigues
 Kristian Rother
