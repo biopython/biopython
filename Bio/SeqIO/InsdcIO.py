@@ -659,9 +659,9 @@ class GenBankWriter(_InsdcWriter):
                 self.handle.write("ORIGIN\n")
             return
 
-        data = self._get_seq_string(record) #Catches sequence being None
+        #Catches sequence being None:
+        data = self._get_seq_string(record).lower()
         seq_len = len(data)
-        #TODO - Should we change the case?
         self.handle.write("ORIGIN\n")
         for line_number in range(0, seq_len, LETTERS_PER_LINE):
             self.handle.write(str(line_number+1).rjust(SEQUENCE_INDENT))
@@ -786,9 +786,9 @@ class EmblWriter(_InsdcWriter):
                 handle.write("SQ   \n")
             return
 
-        data = self._get_seq_string(record) #Catches sequence being None
+        #Catches sequence being None
+        data = self._get_seq_string(record).lower()
         seq_len = len(data)
-        #TODO - Should we change the case?
 
         #Get the base alphabet (underneath any Gapped or StopCodon encoding)
         a = Alphabet._get_base_alphabet(record.seq.alphabet)
