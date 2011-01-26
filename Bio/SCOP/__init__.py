@@ -1,5 +1,6 @@
 # Copyright 2001 by Gavin E. Crooks.  All rights reserved.
 # Modifications Copyright 2004/2005 James Casbon. All rights Reserved.
+# Copyright 2010 Jeffrey Finkelstein
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -673,10 +674,12 @@ class Domain(Node):
         
         n = self
         while n.sunid != 0: #Not root node
-            rec.hierarchy.append( (n.type, str(n.sunid)) )
+            rec.hierarchy[n.type] = str(n.sunid)
             n = n.getParent()
 
-        rec.hierarchy.reverse()
+        # Order does not matter in the hierarchy field. For more info, see
+        # http://scop.mrc-lmb.cam.ac.uk/scop/release-notes.html
+        #rec.hierarchy.reverse()
        
         return rec
             

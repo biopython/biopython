@@ -1,4 +1,5 @@
 # Copyright 2001 by Gavin E. Crooks.  All rights reserved.
+# Copyright 2010 Jeffrey Finkelstein
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -40,7 +41,7 @@ class Record:
         self.residues = None 
         self.sccs = ''
         self.sunid =''
-        self.hierarchy = []
+        self.hierarchy = {}
         if line:
             self._process(line)
         
@@ -57,8 +58,7 @@ class Record:
         
         for ht in hierarchy.split(","):
             key, value = ht.split('=')
-            value = int(value)
-            self.hierarchy.append([key, value])
+            self.hierarchy[key] = int(value)
 
     def __str__(self):
         s = []
@@ -67,10 +67,8 @@ class Record:
         s.append(self.sccs)
         s.append(self.sunid)
 
-        h=[]
-        for ht in self.hierarchy:
-            h.append("=".join(map(str,ht))) 
-        s.append(",".join(h))
+        s.append(','.join('='.join((key, str(value))) for key, value
+                          in self.hierarchy.iteritems()))
 
         return "\t".join(map(str,s)) + "\n"
 
