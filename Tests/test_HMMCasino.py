@@ -11,6 +11,15 @@ to roll any other number. The probability of switching from the fair to
 loaded dice is .05 and the probability of switching from loaded to fair is
 .1.
 """
+
+import os
+if os.name == 'java':
+    from Bio import MissingExternalDependencyError
+    #This is a slight miss-use of MissingExternalDependencyError,
+    #but it will do in the short term to skip this unit test on Jython
+    raise MissingExternalDependencyError("This test can cause a fatal error "
+        "on Jython with some versions of Java")
+
 # standard modules
 import random
 
