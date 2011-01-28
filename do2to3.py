@@ -123,12 +123,25 @@ def do_update(py2folder, py3folder, verbose=False):
                 continue
             old = os.path.join(py2folder, relpath, f)
             new = os.path.join(py3folder, relpath, f)
+            #The filesystem can (in Linux) record nanoseconds, but
+            #when copying only microsecond accuracy is used.
+            #See http://bugs.python.org/issue10148
+            #Compare modified times down to milliseconds only. In theory
+            #might able to use times down to microseconds (10^-6), but
+            #that doesn't work on this Windows machine I'm testing on.
             if os.path.isfile(new) \
-            and os.stat(new).st_mtime >= os.stat(old).st_mtime:
+            and round(os.stat(new).st_mtime*1000) >= \
+                round(os.stat(old).st_mtime*1000):
                 if verbose: print("Current: %s" % new)
                 continue
             #Python, C code, data files, etc - copy with date stamp etc
             shutil.copy2(old, new)
+            assert round(os.stat(old).st_mtime*1000) == \
+                   round(os.stat(new).st_mtime*1000), \
+                   "Modified time not copied! %0.8f vs %0.8f, %i vs %i" \
+                   % (os.stat(old).st_mtime, os.stat(new).st_mtime,
+                      round(os.stat(old).st_mtime*1000),
+                      round(os.stat(new).st_mtime*1000))
             if f.endswith(".py"):
                 #Also run 2to3 on it
                 to_convert.append(new)
