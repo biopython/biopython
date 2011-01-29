@@ -391,7 +391,7 @@ class HiddenMarkovModel:
         # et al, since we are indexing the sequence going from 0 to
         # (Length - 1) not 1 to Length, like in Durbin et al.
         #
-        # v_{0}(0) = 1
+        # v_{0}(0) = 0
         viterbi_probs[(state_letters[0], -1)] = 0
         # v_{k}(0) = 0 for k > 0
         for state_letter in state_letters[1:]:
