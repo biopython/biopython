@@ -391,8 +391,8 @@ class HiddenMarkovModel:
         # et al, since we are indexing the sequence going from 0 to
         # (Length - 1) not 1 to Length, like in Durbin et al.
         #
-        # v_{0}(0) = 1
-        viterbi_probs[(state_letters[0], -1)] = 1
+        # v_{0}(0) = 0
+        viterbi_probs[(state_letters[0], -1)] = 0
         # v_{k}(0) = 0 for k > 0
         for state_letter in state_letters[1:]:
             viterbi_probs[(state_letter, -1)] = 0
@@ -433,11 +433,7 @@ class HiddenMarkovModel:
         all_probs = {}
         for state in state_letters:
             # v_{k}(L)
-            viterbi_part = viterbi_probs[(state, len(sequence) - 1)]
-            # a_{k0}
-            transition_part = log_trans[(state, state_letters[0])]
-
-            all_probs[state] = viterbi_part * transition_part
+            all_probs[state] = viterbi_probs[(state, len(sequence) - 1)]
 
         state_path_prob = max(all_probs.values())
 
