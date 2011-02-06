@@ -400,36 +400,39 @@ class HiddenMarkovModel:
         # --- recursion
         # loop over the training squence (i = 1 .. L)
         for i in range(0, len(sequence)):
-            # now loop over all of the letters in the state path
-            for main_state in state_letters:
+            # loop over all of the possible i-th states in the state path
+            for cur_state in state_letters:
                 # e_{l}(x_{i})
-                emission_part = log_emission[(main_state, sequence[i])]
+                emission_part = log_emission[(cur_state, sequence[i])]
 
-                # loop over all possible states
+                # loop over all possible (i-1)-th previous states
                 possible_state_probs = {}
-                for cur_state in self.transitions_from(main_state):
+                # (BUG: must consider possible transitions *to* cur_state,
+                # not *from* cur_state)
+                for prev_state in self.transitions_from(cur_state):
                     # a_{kl}
-                    trans_part = log_trans[(cur_state, main_state)]
+                    trans_part = log_trans[(prev_state, cur_state)]
 
                     # v_{k}(i - 1)
-                    viterbi_part = viterbi_probs[(cur_state, i - 1)]
+                    viterbi_part = viterbi_probs[(prev_state, i - 1)]
                     cur_prob = viterbi_part + trans_part
 
-                    possible_state_probs[cur_state] = cur_prob
+                    possible_state_probs[prev_state] = cur_prob
 
-                # finally calculate the viterbi probability using the max
+                # calculate the viterbi probability using the max
                 max_prob = max(possible_state_probs.values())
-                viterbi_probs[(main_state, i)] = (emission_part + max_prob)
+                # v_{k}(i)
+                viterbi_probs[(cur_state, i)] = (emission_part + max_prob)
 
-                # now get the most likely state
+                # get the most likely prev_state leading to cur_state
                 for state in possible_state_probs:
                     if possible_state_probs[state] == max_prob:
-                        pred_state_seq[(i - 1, main_state)] = state
+                        pred_state_seq[(i - 1, cur_state)] = state
                         break
                     
         # --- termination
         # calculate the probability of the state path
-        # loop over all letters
+        # loop over all states
         all_probs = {}
         for state in state_letters:
             # v_{k}(L)
@@ -451,11 +454,14 @@ class HiddenMarkovModel:
         loop_seq = range(0, len(sequence))
         loop_seq.reverse()
 
-        cur_state = last_state
+        # last_state is the last state in the most probable state sequence.
+        # Compute that sequence by walking backwards in time. From the i-th
+        # state in the sequence, find the (i-1)-th state as the most
+        # probable state preceding the i-th state.
+        state = last_state
         for i in loop_seq:
-            traceback_seq.append(cur_state)
-            
-            cur_state = pred_state_seq[(i - 1, cur_state)]
+            traceback_seq.append(state)            
+            state = pred_state_seq[(i - 1, state)]
 
         # put the traceback sequence in the proper orientation
         traceback_seq.reverse()
