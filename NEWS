@@ -36,7 +36,7 @@ IMGT output.
 The nodetype hierachy in the Bio.SCOP.Cla.Record class is now a dictionary
 (previously it was a list of key,value tuples) to better match the standard.
 
-(At least) 13 people have contributed to this release, including 4 new people:
+(At least) 14 people have contributed to this release, including 5 new people:
 
 Brad Chapman
 Eric Talevich
@@ -50,6 +50,7 @@ Leighton Pritchard
 Michiel de Hoon
 Peter Cock
 Phillip Garland
+Walter Gillett (first contribution)
 
 ===================================================================
 
