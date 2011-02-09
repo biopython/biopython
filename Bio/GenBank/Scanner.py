@@ -265,6 +265,9 @@ class InsdcScanner:
                         #Qualifier with no key, e.g. /pseudo
                         key = line[1:]
                         qualifiers.append((key,None))
+                    elif not value:
+                        #ApE can output /note=
+                        qualifiers.append((key,""))
                     elif value[0]=='"':
                         #Quoted...
                         if value[-1]!='"' or value!='"':

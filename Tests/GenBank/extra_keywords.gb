@@ -49,6 +49,7 @@ FEATURES             Location/Qualifiers
                      /clone="BAC BACR25B3"
      gene            complement(22148..27773)
                      /gene="EG:BACR25B3.11"
+                     /note=
      CDS             complement(join(22148..22299,22375..22791,22860..23560,
                      23630..24555,24616..24888,25024..25178,26677..27009,
                      27623..27773))

@@ -1822,6 +1822,7 @@ location: [22147:27773]
 strand: -1
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.11']
+    Key: note, Value: ['']
 
 type: CDS
 location: [22147:27773]
@@ -4214,8 +4215,9 @@ key: /db_xref= value: "taxon:7227"
 key: /clone= value: "BAC BACR25B3"
 feature key: gene
 location: complement(22148..27773)
-num qualifiers: 1
+num qualifiers: 2
 key: /gene= value: "EG:BACR25B3.11"
+key: /note= value: 
 feature key: CDS
 location: complement(join(22148..22299,22375..22791,22860..23560,23630..24555,24616..24888,25024..25178,26677..27009,27623..27773))
 num qualifiers: 6
