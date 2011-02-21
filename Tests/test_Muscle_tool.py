@@ -197,6 +197,8 @@ class SimpleAlignTest(unittest.TestCase):
         self.assertTrue(child.stderr.read().strip().startswith("MUSCLE"))
         return_code = child.wait()
         self.assertEqual(return_code, 0)
+        child.stdout.close()
+        child.stderr.close()
         del child
         self.assertEqual(len(records),len(align))
         for old, new in zip(records, align):
@@ -232,6 +234,8 @@ class SimpleAlignTest(unittest.TestCase):
             self.assertEqual(str(new.seq).replace("-",""), str(old.seq))
         return_code = child.wait()
         self.assertEqual(return_code, 0)
+        child.stdout.close()
+        child.stderr.close()
         del child
 
     def test_long(self):
@@ -301,6 +305,8 @@ class SimpleAlignTest(unittest.TestCase):
             self.assertEqual(old.id, new.id)
             self.assertEqual(str(new.seq).replace("-",""), str(old.seq))
         self.assertEqual(0, child.wait())
+        child.stdout.close()
+        child.stderr.close()
         del child
 
     def test_with_multiple_output_formats(self):
@@ -334,6 +340,8 @@ class SimpleAlignTest(unittest.TestCase):
         self.assertEqual(len(records),len(align))
         for old, new in zip(records, align):
             self.assertEqual(old.id, new.id)
+        child.stdout.close()
+        child.stderr.close()
         del child
         handle = open(output_html,"rU")
         html = handle.read().strip().upper()
