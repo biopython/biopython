@@ -277,6 +277,8 @@ class SimpleAlignTest(unittest.TestCase):
         self.assertEqual("", child.stderr.read().strip())
         return_code = child.wait()
         self.assertEqual(return_code, 0)
+        child.stdout.close()
+        child.stderr.close()
         del child
 
     def test_using_stdin(self):
