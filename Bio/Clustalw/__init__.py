@@ -146,7 +146,10 @@ def do_alignment(command_line, alphabet=None):
     #Use .communicate as can get deadlocks with .wait(), see Bug 2804
     child_process.communicate() #ignore the stdout and strerr data
     value = child_process.returncode
-
+    child_process.stdin.close()
+    child_process.stdout.close()
+    child_process.stderr.close()
+    
     # check the return value for errors, as on 1.81 the return value
     # from Clustalw is actually helpful for figuring out errors
     # TODO - Update this for new error codes using in clustalw 2
