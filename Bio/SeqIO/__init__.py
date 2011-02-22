@@ -319,6 +319,7 @@ import SwissIO
 import TabIO
 import QualityIO #FastQ and qual files
 import UniprotIO
+import SeqXmlIO
 
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl or EMBOSS where possible.
@@ -351,6 +352,7 @@ _FormatToIterator = {"fasta" : FastaIO.FastaIterator,
                      #Not sure about this in the long run:
                      "sff-trim": SffIO._SffTrimIterator,
                      "uniprot-xml": UniprotIO.UniprotIterator,
+                     "seqxml" : SeqXmlIO.SeqXmlIterator,
                      }
 
 _FormatToWriter = {"fasta" : FastaIO.FastaWriter,
@@ -366,6 +368,7 @@ _FormatToWriter = {"fasta" : FastaIO.FastaWriter,
                    "phd" : PhdIO.PhdWriter,
                    "qual" : QualityIO.QualPhredWriter,
                    "sff" : SffIO.SffWriter,
+                   "seqxml" : SeqXmlIO.SeqXmlWriter,
                    }
 
 _BinaryFormats = ["sff", "sff-trim"]

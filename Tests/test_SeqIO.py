@@ -202,6 +202,10 @@ test_files = [ \
     ("fastq-illumina", False,'Quality/illumina_faked.fastq', 1),
     ("fastq-solexa", False, 'Quality/solexa_faked.fastq', 1),
     ("fastq-solexa", True, 'Quality/solexa_example.fastq', 5),
+#Following examples are also used in test_SeqXML.py
+    ("seqxml", False, 'SeqXML/dna_example.xml', 4),
+    ("seqxml", False, 'SeqXML/rna_example.xml', 5),
+    ("seqxml", False, 'SeqXML/protein_example.xml', 5),
     ]
 
 
