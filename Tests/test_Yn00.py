@@ -1,0 +1,143 @@
+# Copyright (C) 2011 by Brandon Invergo (b.invergo@gmail.com)
+# This code is part of the Biopython distribution and governed by its
+# license. Please see the LICENSE file that should have been included
+# as part of this package.
+
+from __future__ import with_statement
+import unittest
+import os
+import os.path
+import sys
+from Bio.Phylo.PAML import yn00
+
+class ModTest(unittest.TestCase):
+    
+    align_file = os.path.join("Tests", "PAML", "alignment.phylip")
+    out_file = os.path.join("Tests", "PAML", "test.out")
+    working_dir = os.path.join("Tests", "PAML", "yn00_test")
+    results_file = os.path.join("Tests", "PAML", "bad_results.out")
+    bad_ctl_file1 = os.path.join("Tests", "PAML", "bad1.ctl")
+    bad_ctl_file2 = os.path.join("Tests", "PAML", "bad2.ctl")
+    ctl_file = os.path.join("Tests", "PAML", "yn00.ctl")
+       
+    def __del__(self):
+        """Just in case yn00 creates some junk files, do a clean-up."""
+        del_files = [self.out_file, "2YN.dN", "2YN.dS", "2YN.t", "rst",
+            "rst1", "rub"]
+        for filename in del_files:
+            if os.path.exists(filename):
+                os.remove(filename)
+        if os.path.exists(self.working_dir):
+            for filename in os.listdir(self.working_dir):
+                os.remove(filename)
+            os.rmdir(self.working_dir)
+    
+    def setUp(self):
+        self.yn00 = yn00.Yn00()
+        
+    def testAlignmentFileIsValid(self):
+        self.assertRaises((AttributeError, TypeError),
+            yn00.Yn00, alignment = 1)
+        self.yn00.alignment = 1
+        self.yn00.out_file = self.out_file
+        self.assertRaises((AttributeError, TypeError),
+            self.yn00.run)
+        
+    def testAlignmentExists(self):
+        self.assertRaises((EnvironmentError, IOError), yn00.Yn00, 
+            alignment = "nonexistent")
+        self.yn00.alignment = "nonexistent"
+        self.yn00.out_file = self.out_file
+        self.assertRaises((EnvironmentError, IOError), 
+            self.yn00.run)
+    
+    def testWorkingDirValid(self):
+        self.yn00.alignment = self.align_file
+        self.yn00.out_file = self.out_file
+        self.yn00.working_dir = 1
+        self.assertRaises((AttributeError, TypeError),
+            self.yn00.run)
+    
+    def testOutputFileValid(self):
+        self.yn00.alignment = self.align_file
+        self.yn00.out_file = 1
+        self.assertRaises((AttributeError, TypeError),
+            self.yn00.run)
+    
+    def testOptionExists(self):
+        self.assertRaises((AttributeError, KeyError),
+            self.yn00.set_option, "xxxx", 1)
+        self.assertRaises((AttributeError, KeyError),
+            self.yn00.get_option, "xxxx")
+    
+    def testAlignmentSpecified(self):
+        self.yn00.out_file = self.out_file
+        self.assertRaises((AttributeError, ValueError),
+            self.yn00.run)
+        
+    def testOutputFileSpecified(self):
+        self.yn00.alignment = self.align_file
+        self.assertRaises((AttributeError, ValueError),
+            self.yn00.run)
+        
+    #def testYn00ErrorsCaught(self):
+        #self.yn00.alignment = self.align_file
+        #self.yn00.out_file = self.out_file
+        #self.assertRaises((EnvironmentError, yn00.Yn00Error),
+            #self.yn00.run)
+        
+    def testCtlFileValidOnRun(self):
+        self.yn00.alignment = self.align_file
+        self.yn00.out_file = self.out_file
+        self.assertRaises((AttributeError, TypeError),
+            self.yn00.run, ctl_file = 1)
+        
+    def testCtlFileExistsOnRun(self):
+        self.yn00.alignment = self.align_file
+        self.yn00.out_file = self.out_file
+        self.assertRaises((EnvironmentError, IOError),
+            self.yn00.run, ctl_file = "nonexistent")
+            
+    def testCtlFileValidOnRead(self):
+        self.assertRaises((AttributeError, TypeError),
+            self.yn00.read_ctl_file, 1)
+        self.assertRaises((AttributeError, KeyError), 
+            self.yn00.read_ctl_file, self.bad_ctl_file1)
+        self.assertRaises(AttributeError, 
+            self.yn00.read_ctl_file, self.bad_ctl_file2)
+        target_options = {"verbose": 1,
+                        "icode": 1,
+                        "weighting": 0,
+                        "commonf3x4": 0,
+                        "ndata": 1}
+        self.yn00.read_ctl_file(self.ctl_file)
+        self.assertEqual(self.yn00._options, target_options)
+        
+    def testCtlFileExistsOnRead(self):
+        self.assertRaises((EnvironmentError, IOError),
+            self.yn00.read_ctl_file, ctl_file = "nonexistent")
+        
+    def testResultsValid(self):
+        self.assertRaises((AttributeError, TypeError),
+            yn00.read, 1)
+    
+    def testResultsExist(self):
+        self.assertRaises((EnvironmentError, IOError),
+            yn00.read, "nonexistent")
+        
+    def testResultsParsable(self):
+        self.assertRaises(ValueError, yn00.read, self.results_file)
+        
+    def testParseAllVersions(self):
+        for results_file in os.listdir(os.path.join("Tests", "PAML",
+                "Results", "yn00", "versions")):
+            if os.path.isfile(results_file) and results_file[:4] == "yn00":
+                results = yn00.read(os.path.join("Tests", "PAML",
+                    "Results", results_file))
+                self.assertEqual(len(results), 5)
+                self.assertEqual(len(results["Homo_sapie"]), 4)
+                self.assertEqual(len(results["Homo_sapie"]["Pan_troglo"]),
+                    5)
+        
+if __name__ == '__main__':
+    unittest.main()
