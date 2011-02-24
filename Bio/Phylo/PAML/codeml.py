@@ -405,11 +405,6 @@ def read(results_file):
                 SEs_flag = False
             # Find tree lengths.
             # Example match: "tree length =   1.71931"
-            elif "tree length" in line and len(line_floats) == 1:
-                results["NSsites"][current_model]["tree length"] = \
-                    line_floats[0]
-            # Find tree lengths.
-            # Example match: "tree length =   1.71931"
             elif "tree length =" in line and len(line_floats) > 0:
                 results["NSsites"][current_model]["tree length"] = \
                     line_floats[0]
