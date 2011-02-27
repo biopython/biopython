@@ -365,12 +365,13 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             #print "Index created"
         self._proxies = random_access_proxies
         self._max_open = max_open
+        self._index_filename = index_filename
         self._alphabet = alphabet
         self._key_function = key_function
     
     def __repr__(self):
-        return "SeqIO.index_db(%r, filename=%r, format=%r, alphabet=%r, key_function=%r)" \
-               % (self._index_filenane, self._filenames, self._format,
+        return "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)" \
+               % (self._index_filename, self._filenames, self._format,
                   self._alphabet, self._key_function)
 
     def __contains__(self, key):
