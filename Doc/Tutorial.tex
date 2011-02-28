@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 3 January 2011 (Biopython 1.56+)}
+\date{Last Update -- 28 February 2011 (Biopython 1.56+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -2580,7 +2580,7 @@ So, it is very easy to create an in memory ``database'' of our GenBank records. 
 
 Note that those of you with prior Python experience should all be able to construct a dictionary like this ``by hand''.  However, typical dictionary construction methods will not deal with the case of repeated keys very nicely.  Using the \verb|Bio.SeqIO.to_dict()| will explicitly check for duplicate keys, and raise an exception if any are found.
 
-\subsection{Specifying the dictionary keys}
+\subsubsection{Specifying the dictionary keys}
 \label{seq:seqio-todict-functionkey}
 
 Using the same code as above, but for the FASTA file instead:
@@ -2630,7 +2630,7 @@ print orchid_dict.keys()
 
 \noindent Not too complicated, I hope!
 
-\subsection{Indexing a dictionary using the SEGUID checksum}
+\subsubsection{Indexing a dictionary using the SEGUID checksum}
 
 To give another example of working with dictionaries of \verb|SeqRecord| objects, we'll use the SEGUID checksum function.  This is a relatively recent checksum, and collisions should be very rare (i.e. two different sequences with the same checksum), an improvement on the CRC64 checksum.
 
@@ -2666,7 +2666,7 @@ print record.description
 
 \noindent That should have retrieved the record {\tt Z78532.1}, the second entry in the file.
 
-\section{Sequence files as Dictionaries -- Indexed files}
+\subsection{Sequence files as Dictionaries -- Indexed files}
 %\subsection{Indexing really large files}
 \label{sec:SeqIO-index}
 
@@ -2720,7 +2720,7 @@ filename and the format name:
  ..., 'gi|2765613|emb|Z78488.1|PTZ78488', 'gi|2765583|emb|Z78458.1|PHZ78458']
 \end{verbatim}
 
-\subsection{Specifying the dictionary keys}
+\subsubsection{Specifying the dictionary keys}
 \label{seq:seqio-index-functionkey}
 
 Suppose you want to use the same keys as before? Much like with the
@@ -2751,7 +2751,7 @@ function to use in building the dictionary:
 
 \noindent Easy when you know how?
 
-\subsection{Getting the raw data for a record}
+\subsubsection{Getting the raw data for a record}
 \label{sec:seqio-index-getraw}
 
 The dictionary-like object from \verb|Bio.SeqIO.index()| gives you each
@@ -2787,12 +2787,64 @@ There is a longer example in Section~\ref{sec:SeqIO-sort} using the
 \verb|SeqIO.index()| function to sort a large sequence file (without
 loading everything into memory at once).
 
-\section{Sequence files as Dictionaries -- Database indexed files}
+\subsection{Sequence files as Dictionaries -- Database indexed files}
 \label{sec:SeqIO-index-db}
 
 Biopython 1.57 introduced an alternative, \verb|Bio.SeqIO.index_db()|, which
 can work on even extremely large files since it stores the record information
-as a file on disk (using an SQLite3 database) rather than in memory.
+as a file on disk (using an SQLite3 database) rather than in memory. Also,
+you can index multiple files together (providing all the record identifiers
+are unique).
+
+The \verb|Bio.SeqIO.index()| function takes three required arguments:
+\begin{itemize}
+\item Index filename, we suggest using something ending \texttt{.idx}.
+This index file is actually an SQLite3 database.
+\item List of sequence filenames to index
+\item File format (lower case string as used in the rest of the
+\verb|SeqIO| module).
+\end{itemize}
+
+As an example, consider the GenBank flat file releases from the NCBI FTP site,
+\url{ftp://ftp.ncbi.nih.gov/genbank/}, which are gzip compressed GenBank files.
+As of GenBank release $182$, there are $16$ files making up the viral sequences,
+\texttt{gbvrl1.seq}, \ldots, \texttt{gbvrl16.seq}, containing in total almost
+one million records. You can index them like this:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> files = ["gbvrl%i.seq" % (i+1) for i in range(16)]
+>>> gb_vrl = SeqIO.index_db("gbvrl.idx", files, "genbank")
+>>> print "%i sequences indexed" % len(gb_vrl)
+958086 sequences indexed
+\end{verbatim}
+
+That takes about two minutes to run on my machine. If you rerun it then the
+index file (here \texttt{gbvrl.idx}) is reloaded in under a second. You can
+use the index as a read only Python dictionary - without having to worry
+about which file the sequence comes from, e.g.
+
+\begin{verbatim}
+>>> print gb_vrl["GQ333173.1"].description
+HIV-1 isolate F12279A1 from Uganda gag protein (gag) gene, partial cds.
+\end{verbatim}
+
+\subsubsection{Getting the raw data for a record}
+\label{sec:seqio-index-getraw}
+
+Just as with the \verb|Bio.SeqIO.index()| function discussed above in
+Section~\ref{sec:seqio-index-getraw}, the dictionary like object also lets you
+get at the raw text of each record:
+
+\begin{verbatim}
+>>> print gb_vrl.get_raw("GQ333173.1")
+LOCUS       GQ333173                 459 bp    DNA     linear   VRL 21-OCT-2009
+DEFINITION  HIV-1 isolate F12279A1 from Uganda gag protein (gag) gene, partial
+            cds.
+ACCESSION   GQ333173
+...
+//
+\end{verbatim}
 
 \subsection{Discussion}
 \label{sec:SeqIO-indexing-discussion}
@@ -2808,7 +2860,7 @@ Reasons to choose \verb|Bio.SeqIO.to_dict()| over either
 for flexibility despite its high memory needs. The advantage of storing the
 \verb|SeqRecord| objects in memory is they can be changed, added to, or
 removed at will. In addition to the downside of high memory consumption,
-indexing can also take longer because all the recorda must be fully parsed.
+indexing can also take longer because all the records must be fully parsed.
 
 Both \verb|Bio.SeqIO.index()| and \verb|Bio.SeqIO.index_db()| only parse
 records on demand. When indexing, they scan the file once looking for the
