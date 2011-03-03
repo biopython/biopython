@@ -84,8 +84,8 @@ class TutorialTestCase(unittest.TestCase):
         runner = doctest.DocTestRunner()
         failures = []
         for test in doctest.DocTestFinder().find(TutorialDocTestHolder):
-            result = runner.run(test)
-            if result.failed:
+            failed, success = runner.run(test)
+            if failed:
                 name = test.name
                 assert name.startswith("TutorialDocTestHolder.doctest_")
                 failures.append(name[30:])
