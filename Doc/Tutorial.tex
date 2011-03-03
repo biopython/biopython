@@ -4575,12 +4575,13 @@ and there are also other tools which can produce imitation BLAST output files, s
 
 \href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}
 {NCBI ``legacy'' BLAST} included command line tools \verb|blastall|, \verb|blastpgp| and
-\verb|rpsblast|. This is probably the most widely used standalone BLAST tool at the moment.
+\verb|rpsblast|. This was the most widely used standalone BLAST tool up until its replacement
+BLAST+ was released by the NCBI.
 
 The \verb|Bio.Blast.Applications| module has wrappers for the ``legacy'' NCBI BLAST tools
 like \verb|blastall|, \verb|blastpgp| and \verb|rpsblast|, and there are also helper
 functions in \verb|Bio.Blast.NCBIStandalone|. These are now considered obsolete, and will
-be deprecated and eventually removed from Biopython as the NCBI move over to the replacement
+be deprecated and eventually removed from Biopython as people move over to the replacement
 BLAST+ suite.
 
 To try and avoid confusion, we will not cover calling these old tools from Biopython
