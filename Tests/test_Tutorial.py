@@ -3,6 +3,11 @@ import doctest
 import os
 import sys
 
+if sys.version_info[0] >= 3:
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(\
+        "This test doesn't work on Python 3 yet (need to call 2to3).")
+
 tutorial = os.path.join(os.path.dirname(sys.argv[0]), "../Doc/Tutorial.tex")
 
 def _extract(handle):
