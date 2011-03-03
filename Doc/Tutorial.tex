@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 28 February 2011 (Biopython 1.56+)}
+\date{Last Update -- 3 March 2011 (Biopython 1.56+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -4585,7 +4585,8 @@ BLAST+ suite.
 
 To try and avoid confusion, we will not cover calling these old tools from Biopython
 in this tutorial. Have a look at the older edition of this tutorial included with
-Biopython 1.52 if you are curious.
+Biopython 1.52 if you are curious (look at the Tutorial PDF or HTML file in the Doc
+directory within \texttt{biopython-1.52.tar.gz} or \texttt{biopython-1.52.zip}).
 
 \subsection{Standalone NCBI BLAST+}
 
@@ -4596,6 +4597,9 @@ like \verb|blastn|, \verb|blastp|, \verb|blastx|, \verb|tblastn|, \verb|tblastx|
 (which all used to be handled by \verb|blastall|), \verb|psiblast|
 (replacing \verb|blastpgp|) and \verb|rpsblast| and \verb|rpstblastn|
 (which replace the old \verb|rpsblast|).
+We don't include a wrapper for the \verb|makeblastdb| used in BLAST+ to build a
+local BLAST database from FASTA file, nor the equivalent tool \verb|formatdb| in
+``legacy'' BLAST.
 
 This section will show briefly how to use these tools from within Python. If you have
 already read or tried the alignment tool examples in Section~\ref{sec:alignment-tools}
