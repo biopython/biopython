@@ -346,6 +346,7 @@ Disputably (of course!), the central object in bioinformatics is the sequence. T
 
 Most of the time when we think about sequences we have in my mind a string of letters like `\verb|AGTACACTGGT|'. You can create such \verb|Seq| object with this sequence as follows - the ``$>>>$'' represents the Python prompt followed by what you would type in:
 
+%doctest Creating a Seq object
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> my_seq = Seq("AGTACACTGGT")
@@ -361,6 +362,7 @@ What we have here is a sequence object with a \emph{generic} alphabet - reflecti
 
 In addition to having an alphabet, the \verb|Seq| object differs from the Python string in the methods it supports.  You can't do this with a plain string:
 
+%cont-doctest
 \begin{verbatim}
 >>> my_seq
 Seq('AGTACACTGGT', Alphabet())
@@ -524,6 +526,7 @@ The advantages of having an alphabet class are two fold. First, this gives an id
 Now that we know what we are dealing with, let's look at how to utilize this class to do interesting work.
 You can create an ambiguous sequence with the default generic alphabet like this:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> my_seq = Seq("AGTACACTGGT")
@@ -535,6 +538,7 @@ Alphabet()
 
 However, where possible you should specify the alphabet explicitly when creating your sequence objects - in this case an unambiguous DNA alphabet object:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -547,6 +551,7 @@ IUPACUnambiguousDNA()
 
 Unless of course, this really is an amino acid sequence:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -561,28 +566,41 @@ IUPACProtein()
 
 In many ways, we can deal with Seq objects as if they were normal Python strings, for example getting the length, or iterating over the elements:
 
+%doctest Seq iteration
 \begin{verbatim}
-from Bio.Seq import Seq
-from Bio.Alphabet import IUPAC
-my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", IUPAC.unambiguous_dna)
-for index, letter in enumerate(my_seq):
-    print index, letter
-print len(letter)
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import IUPAC
+>>> my_seq = Seq("GATCG", IUPAC.unambiguous_dna)
+>>> for index, letter in enumerate(my_seq):
+...     print index, letter
+0 G
+1 A
+2 T
+3 C
+4 G
+>>> print len(my_seq)
+5
 \end{verbatim}
 
 You can access elements of the sequence in the same way as for strings (but remember, Python counts from zero!):
 
+%cont-doctest
 \begin{verbatim}
 >>> print my_seq[0] #first letter
+G
 >>> print my_seq[2] #third letter
+T
 >>> print my_seq[-1] #last letter
+G
 \end{verbatim}
 
 The \verb|Seq| object has a \verb|.count()| method, just like a string.
 Note that this means that like a Python string, this gives a
 \emph{non-overlapping} count:
 
+%doctest
 \begin{verbatim}
+>>> from Bio.Seq import Seq
 >>> "AAAA".count("AA")
 2
 >>> Seq("AAAA").count("AA")
@@ -593,17 +611,22 @@ Note that this means that like a Python string, this gives a
 (i.e. $3$ in this trivial example). When searching for single letters, this
 makes no difference:
 
+%doctest GC1
 \begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import IUPAC
+>>> my_seq = Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPAC.unambiguous_dna)
 >>> len(my_seq)
 32
 >>> my_seq.count("G")
-10
+9
 >>> 100 * float(my_seq.count("G") + my_seq.count("C")) / len(my_seq)
 46.875
 \end{verbatim}
 
 While you could use the above snippet of code to calculate a GC\%, note that  the \verb|Bio.SeqUtils| module has several GC functions already built.  For example:
 
+%doctest GC2
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -621,6 +644,7 @@ Also note that just like a normal Python string, the \verb|Seq| object is in som
 
 A more complicated example, let's get a slice of the sequence:
 
+%doctest Slicing a sequence
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -635,6 +659,7 @@ The second thing to notice is that the slice is performed on the sequence data s
 
 Also like a Python string, you can do slices with a start, stop and \emph{stride} (the step size, which defaults to one).  For example, we can get the first, second and third codon positions of this DNA sequence:
 
+%cont-doctest
 \begin{verbatim}
 >>> my_seq[0::3]
 Seq('GCTGTAGTAAG', IUPACUnambiguousDNA())
@@ -646,6 +671,7 @@ Seq('TAGCTAAGAC', IUPACUnambiguousDNA())
 
 Another stride trick you might have seen with a Python string is the use of a -1 stride to reverse the string.  You can do this with a \verb|Seq| object too:
 
+%cont-doctest
 \begin{verbatim}
 >>> my_seq[::-1]
 Seq('CGCTAAAAGCTAGGATATATCCGGGTAGCTAG', IUPACUnambiguousDNA())
@@ -655,6 +681,7 @@ Seq('CGCTAAAAGCTAGGATATATCCGGGTAGCTAG', IUPACUnambiguousDNA())
 \label{sec:seq-to-string}
 
 If you really do just need a plain string, for example to write to a file, or insert into a database, then this is very easy to get:
+%cont-doctest
 \begin{verbatim}
 >>> str(my_seq)
 'GATCGATGGGCCTATATAGGATCGAAAATCGC'
@@ -663,17 +690,20 @@ If you really do just need a plain string, for example to write to a file, or in
 Since calling \verb|str()| on a \verb|Seq| object returns the full sequence as a string,
 you often don't actually have to do this conversion explicitly.
 Python does this automatically with a print statement:
+%cont-doctest
 \begin{verbatim}
 >>> print my_seq
 GATCGATGGGCCTATATAGGATCGAAAATCGC
 \end{verbatim}
 
 You can also use the \verb|Seq| object directly with a \verb|%s| placeholder when using the Python string formatting or interpolation operator (\verb|%|):
+%cont-doctest
 \begin{verbatim}
 >>> fasta_format_string = ">Name\n%s\n" % my_seq
 >>> print fasta_format_string
 >Name
 GATCGATGGGCCTATATAGGATCGAAAATCGC
+<BLANKLINE>
 \end{verbatim}
 
 \noindent This line of code constructs a simple FASTA format record (without worrying about line wrapping).
@@ -685,6 +715,7 @@ writing FASTA format sequence files is covered in Chapter~\ref{chapter:Bio.SeqIO
 will give just a truncated representation.  Instead use \verb|my_seq.tostring()|
 (which is still available in the current Biopython releases for backwards compatibility):
 
+%cont-doctest
 \begin{verbatim}
 >>> my_seq.tostring()
 'GATCGATGGGCCTATATAGGATCGAAAATCGC'
@@ -694,15 +725,21 @@ will give just a truncated representation.  Instead use \verb|my_seq.tostring()|
 
 Naturally, you can in principle add any two Seq objects together - just like you can with Python strings to concatenate them.  However, you can't add sequences with incompatible alphabets, such as a protein sequence and a DNA sequence:
 
+%doctest Mixing alphabets
 \begin{verbatim}
+>>> from Bio.Alphabet import IUPAC
+>>> from Bio.Seq import Seq
+>>> protein_seq = Seq("EVRNAK", IUPAC.protein)
+>>> dna_seq = Seq("ACGT", IUPAC.unambiguous_dna)
 >>> protein_seq + dna_seq
 Traceback (most recent call last):
 ...
-TypeError: ('incompatable alphabets', 'IUPACProtein()', 'IUPACUnambiguousDNA()')
+TypeError: Incompatable alphabets IUPACProtein() and IUPACUnambiguousDNA()
 \end{verbatim}
 
 If you \emph{really} wanted to do this, you'd have to first give both sequences generic alphabets:
 
+%cont-doctest
 \begin{verbatim}
 >>> from Bio.Alphabet import generic_alphabet
 >>> protein_seq.alphabet = generic_alphabet
@@ -713,6 +750,7 @@ Seq('EVRNAKACGT', Alphabet())
 
 Here is an example of adding a generic nucleotide sequence to an unambiguous IUPAC DNA sequence, resulting in an ambiguous nucleotide sequence:
 
+%doctest Adding DNA
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import generic_nucleotide
@@ -4633,10 +4671,10 @@ and run it:
 >>> blastx_cline = NcbiblastxCommandline(query="opuntia.fasta", db="nr", evalue=0.001,
 ...                                      outfmt=5, out="opuntia.xml")
 >>> blastx_cline
-NcbiblastxCommandline(cmd='blastx', query='opuntia.fasta', db='nr', out='opuntia.xml',
-evalue=0.001, outfmt=5)
+NcbiblastxCommandline(cmd='blastx', out='opuntia.xml', outfmt=5, query='opuntia.fasta',
+db='nr', evalue=0.001)
 >>> print blastx_cline
-blastx -query opuntia.fasta -db nr -out opuntia.xml -evalue 0.001 -outfmt 5
+blastx -out opuntia.xml -outfmt 5 -query opuntia.fasta -db nr -evalue 0.001
 >>> stdout, stderr = blastx_cline()
 \end{verbatim}
 
