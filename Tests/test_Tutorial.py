@@ -69,7 +69,7 @@ class TutorialDocTestHolder(object):
 
 #Create dummy methods on the object purely to hold doctests
 for name, example in extract_doctests(tutorial):
-    print name, repr(doctest)
+    #print name, repr(doctest)
     def funct(n, d):
         method = lambda x : None
         method.__doc__ = "%s\n\n%s\n" % (n, d)
