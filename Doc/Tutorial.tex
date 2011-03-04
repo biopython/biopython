@@ -771,6 +771,7 @@ Python strings have very useful \verb|upper| and \verb|lower| methods for changi
 As of Biopython 1.53, the \verb|Seq| object gained similar methods which are alphabet aware.
 For example,
 
+%doctest Changing case
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import generic_dna
@@ -785,6 +786,7 @@ Seq('acgtacgt', DNAAlphabet())
 
 These are useful for doing case insensitive matching:
 
+%cont-doctest
 \begin{verbatim}
 >>> "GTAC" in dna_seq
 False
@@ -795,6 +797,7 @@ True
 Note that strictly speaking the IUPAC alphabets are for upper case
 sequences only, thus:
 
+%doctest IUPAC is upper case
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -812,6 +815,7 @@ Seq('acgt', DNAAlphabet())
 For nucleotide sequences, you can easily obtain the complement or reverse
 complement of a \verb|Seq| object using its built-in methods:
 
+%doctest Reverse complement
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -827,6 +831,7 @@ Seq('GCGATTTTCGATCCTATATAGGCCCATCGATC', IUPACUnambiguousDNA())
 As mentioned earlier, an easy way to just reverse a \verb|Seq| object (or a
 Python string) is slice it with -1 step:
 
+%cont-doctest
 \begin{verbatim}
 >>> my_seq[::-1]
 Seq('CGCTAAAAGCTAGGATATATCCGGGTAGCTAG', IUPACUnambiguousDNA())
@@ -836,11 +841,13 @@ In all of these operations, the alphabet property is maintained. This is very
 useful in case you accidentally end up trying to do something weird like take
 the (reverse)complement of a protein sequence:
 
+%doctest Protein reverse complement
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
 >>> protein_seq = Seq("EVRNAK", IUPAC.protein)
 >>> protein_seq.complement()
+Traceback (most recent call last):
 ...
 ValueError: Proteins do not have complements!
 \end{verbatim}
@@ -873,6 +880,7 @@ encodes a short peptide:
 The actual biological transcription process works from the template strand, doing a reverse complement (TCAG $\rightarrow$ CUGA) to give the mRNA.  However, in Biopython and bioinformatics in general, we typically work directly with the coding strand because this means we can get the mRNA sequence just by switching T $\rightarrow$ U.
 
 Now let's actually get down to doing a transcription in Biopython.  First, let's create \verb|Seq| objects for the coding and template DNA strands:
+%doctest Transcription
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -886,6 +894,7 @@ Seq('CTATCGGGCACCCTTTCAGCGGCCCATTACAATGGCCAT', IUPACUnambiguousDNA())
 \noindent These should match the figure above - remember by convention nucleotide sequences are normally read from the 5' to 3' direction, while in the figure the template strand is shown reversed.
 
 Now let's transcribe the coding strand into the corresponding mRNA, using the \verb|Seq| object's built in \verb|transcribe| method:
+%cont-doctest
 \begin{verbatim}
 >>> coding_dna
 Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
@@ -896,12 +905,14 @@ Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
 \noindent As you can see, all this does is switch T $\rightarrow$ U, and adjust the alphabet.
 
 If you do want to do a true biological transcription starting with the template strand, then this becomes a two-step process:
+%cont-doctest
 \begin{verbatim}
 >>> template_dna.reverse_complement().transcribe()
 Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
 \end{verbatim}
 
 The \verb|Seq| object also includes a back-transcription method for going from the mRNA to the coding strand of the DNA.  Again, this is a simple U $\rightarrow$ T substitution and associated change of alphabet:
+%doctest Back-transcription
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -922,6 +933,7 @@ Sticking with the same example discussed in the transcription section above,
 now let's translate this mRNA into the corresponding protein sequence - again taking
 advantage of one of the \verb|Seq| object's biological methods:
 
+%doctest Translation
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -933,6 +945,7 @@ Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
 \end{verbatim}
 
 You can also translate directly from the coding strand DNA sequence:
+%doctest Translate DNA
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -947,12 +960,14 @@ You should notice in the above protein sequences that in addition to the end sto
 
 The translation tables available in Biopython are based on those \href{http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi}{from the NCBI} (see the next section of this tutorial).  By default, translation will use the \emph{standard} genetic code (NCBI table id 1).
 Suppose we are dealing with a mitochondrial sequence.  We need to tell the translation function to use the relevant genetic code instead:
+%cont-doctest
 \begin{verbatim}
 >>> coding_dna.translate(table="Vertebrate Mitochondrial")
 Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
 \end{verbatim}
 
 You can also specify the table using the NCBI table number which is shorter, and often included in the feature annotation of GenBank files:
+%cont-doctest
 \begin{verbatim}
 >>> coding_dna.translate(table=2)
 Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
@@ -960,6 +975,7 @@ Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
 
 Now, you may want to translate the nucleotides up to the first in frame stop codon,
 and then stop (as happens in nature):
+%cont-doctest
 \begin{verbatim}
 >>> coding_dna.translate()
 Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
@@ -975,6 +991,7 @@ is not translated - and the stop symbol is not included at the end of your prote
 sequence.
 
 You can even specify the stop symbol if you don't like the default asterisk:
+%cont-doctest
 \begin{verbatim}
 >>> coding_dna.translate(table=2, stop_symbol="@")
 Seq('MAIVMGRWKGAR@', HasStopCodon(IUPACProtein(), '@'))
@@ -989,7 +1006,10 @@ you want (perhaps with the \verb|to_stop| option). However, what if your
 sequence uses a non-standard start codon? This happens a lot in bacteria --
 for example the gene yaaX in \texttt{E. coli} K12:
 
+%TODO - handle line wrapping in doctest?
 \begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import generic_dna
 >>> gene = Seq("GTGAAAAAGATGCAATCTATCGTACTCGCACTTTCCCTGGTTCTGGTCGCTCCCATGGCA" + \
 ...            "GCACAGGCTGCGGAAATTACGTTAGTCCCGTCAGTAAAATTACAGATAGGCGATCGTGAT" + \
 ...            "AATCGTGGCTATTACTGGGATGGAGGTCACTGGCGCGACCACGGCTGGTGGAAACAACAT" + \
@@ -1009,6 +1029,7 @@ and while it does \emph{normally} encode valine, if used as a start codon it
 should be translated as methionine. This happens if you tell Biopython your
 sequence is a complete CDS:
 
+%TODO - handle line wrapping in doctest?
 \begin{verbatim}
 >>> gene.translate(table="Bacterial", cds=True)
 Seq('MKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HHR',
@@ -1039,6 +1060,7 @@ Internally these use codon table objects derived from the NCBI information at
 As before, let's just focus on two choices: the Standard translation table, and the
 translation table for Vertebrate Mitochondrial DNA. 
 
+%doctest Codon Tables
 \begin{verbatim}
 >>> from Bio.Data import CodonTable
 >>> standard_table = CodonTable.unambiguous_dna_by_name["Standard"]
@@ -1046,6 +1068,7 @@ translation table for Vertebrate Mitochondrial DNA.
 \end{verbatim}
 
 Alternatively, these tables are labeled with ID numbers 1 and 2, respectively:
+%cont-doctest
 \begin{verbatim}
 >>> from Bio.Data import CodonTable
 >>> standard_table = CodonTable.unambiguous_dna_by_id[1]
@@ -1053,6 +1076,7 @@ Alternatively, these tables are labeled with ID numbers 1 and 2, respectively:
 \end{verbatim}
 
 You can compare the actual tables visually by printing them:
+%TODO - handle <BLANKLINE> automatically in doctest?
 \begin{verbatim}
 >>> print standard_table
 Table 1 Standard, SGC0
@@ -1111,6 +1135,7 @@ G | GTG V(s)| GCG A   | GAG E   | GGG G   | G
 
 You may find these following properties useful -- for example if you are trying
 to do your own gene finding:
+%cont-doctest
 \begin{verbatim}
 >>> mito_table.stop_codons
 ['TAA', 'TAG', 'AGA', 'AGG']
@@ -1147,14 +1172,19 @@ IUPAC.protein)} to be equal -- which most people would agree is just not right.
 This transitivity problem would also have implications for using \verb|Seq|
 objects as Python dictionary keys.
 
-So, what does Biopython do? Well, the equality test is the default for Python
-objects -- it tests to see if they are the same object in memory. This is a
-very strict test:
+%doctest Seq comparison
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
 >>> seq1 = Seq("ACGT", IUPAC.unambiguous_dna)
 >>> seq2 = Seq("ACGT", IUPAC.unambiguous_dna)
+\end{verbatim}
+
+So, what does Biopython do? Well, the equality test is the default for Python
+objects -- it tests to see if they are the same object in memory. This is a
+very strict test:
+%TODO - silence FutureWarning from this doctest?
+\begin{verbatim}
 >>> seq1 == seq2
 False
 >>> seq1 == seq1
@@ -1163,6 +1193,7 @@ True
 
 If you actually want to do this, you can be more explicit by using the Python
 \verb|id| function,
+%cont-doctest
 \begin{verbatim}
 >>> id(seq1) == id(seq2)
 False
@@ -1174,7 +1205,7 @@ Now, in every day use, your sequences will probably all have the same
 alphabet, or at least all be the same type of sequence (all DNA, all RNA, or
 all protein). What you probably want is to just compare the sequences as
 strings -- so do this explicitly:
-
+%cont-doctest
 \begin{verbatim}
 >>> str(seq1) == str(seq2)
 True
@@ -1191,18 +1222,20 @@ string for the key. See also Section~\ref{sec:seq-to-string}.
 
 Just like the normal Python string, the \verb|Seq| object is ``read only'', or in Python terminology, immutable.  Apart from wanting the \verb|Seq| object to act like a string, this is also a useful default since in many biological applications you want to ensure you are not changing your sequence data:
 
+%doctest MutableSeq
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
 >>> my_seq = Seq("GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA", IUPAC.unambiguous_dna)
 >>> my_seq[5] = "G"
 Traceback (most recent call last):
-  File "<stdin>", line 1, in ?
-AttributeError: 'Seq' instance has no attribute '__setitem__'
+...
+TypeError: 'Seq' object does not support item assignment
 \end{verbatim}
 
 However, you can convert it into a mutable sequence (a \verb|MutableSeq| object) and do pretty much anything you want with it:
 
+%cont-doctest
 \begin{verbatim}
 >>> mutable_seq = my_seq.tomutable()
 >>> mutable_seq
@@ -1210,6 +1243,7 @@ MutableSeq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
 \end{verbatim}
 
 Alternatively, you can create a \verb|MutableSeq| object directly from a string:
+%doctest MutableSeq from string
 \begin{verbatim}
 >>> from Bio.Seq import MutableSeq
 >>> from Bio.Alphabet import IUPAC
@@ -1217,6 +1251,7 @@ Alternatively, you can create a \verb|MutableSeq| object directly from a string:
 \end{verbatim}
 
 Either way will give you a sequence object which can be changed:
+%cont-doctest
 \begin{verbatim}
 >>> mutable_seq
 MutableSeq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
@@ -1237,6 +1272,7 @@ An important technical difference between mutable and immutable objects in Pytho
 
 Once you have finished editing your a \verb|MutableSeq| object, it's easy to get back to a read-only \verb|Seq| object should you need to:
 
+%cont-doctest
 \begin{verbatim}
 >>> new_seq = mutable_seq.toseq()
 >>> new_seq
@@ -1253,6 +1289,7 @@ You could of course use a normal \verb|Seq| object in this situation, but it was
 rather a lot of memory to hold a string of a million ``N'' characters when you could
 just store a single letter ``N'' and the desired length as an integer.
 
+%doctest UnknownSeq
 \begin{verbatim}
 >>> from Bio.Seq import UnknownSeq
 >>> unk = UnknownSeq(20)
@@ -1267,6 +1304,7 @@ UnknownSeq(20, alphabet = Alphabet(), character = '?')
 You can of course specify an alphabet, meaning for nucleotide sequences
 the letter defaults to ``N'' and for proteins ``X'', rather than just ``?''.
 
+%cont-doctest
 \begin{verbatim}
 >>> from Bio.Seq import UnknownSeq
 >>> from Bio.Alphabet import IUPAC
@@ -1280,6 +1318,7 @@ NNNNNNNNNNNNNNNNNNNN
 You can use all the usual \verb|Seq| object methods too, note these give back
 memory saving \verb|UnknownSeq| objects where appropriate as you might expect:
 
+%cont-doctest
 \begin{verbatim}
 >>> unk_dna
 UnknownSeq(20, alphabet = IUPACAmbiguousDNA(), character = 'N')
@@ -1316,6 +1355,7 @@ objects (or who prefer a functional programming style to an object orientated on
 there are module level functions in \verb|Bio.Seq| will accept plain Python strings,
 \verb|Seq| objects (including \verb|UnknownSeq| objects) or \verb|MutableSeq| objects:
 
+%doctest Bio.Seq and strings
 \begin{verbatim}
 >>> from Bio.Seq import reverse_complement, transcribe, back_transcribe, translate
 >>> my_string = "GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGTTAG"
