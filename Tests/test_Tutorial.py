@@ -4,10 +4,11 @@ import os
 import sys
 
 if sys.version_info[0] >= 3:
-    from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError(\
-        "This test doesn't work on Python 3 yet (need to call 2to3).")
-
+    from lib2to3 import refactor
+    rt = refactor.RefactoringTool(refactor.get_fixers_from_package("lib2to3.fixes"))
+    assert rt.refactor_docstring(">>> print 2+2\n4\n", "example") == \
+           ">>> print(2+2)\n4\n"
+    
 tutorial = os.path.join(os.path.dirname(sys.argv[0]), "../Doc/Tutorial.tex")
 
 def _extract(handle):
@@ -69,7 +70,8 @@ class TutorialDocTestHolder(object):
 
 #Create dummy methods on the object purely to hold doctests
 for name, example in extract_doctests(tutorial):
-    #print name, repr(doctest)
+    if sys.version_info[0] >= 3:
+        example = rt.refactor_docstring(example, name)
     def funct(n, d):
         method = lambda x : None
         method.__doc__ = "%s\n\n%s\n" % (n, d)
@@ -102,4 +104,10 @@ class TutorialTestCase(unittest.TestCase):
 
 #This is to run the doctests if the script is called directly:
 if __name__ == "__main__":
-    doctest.testmod()
+    print "Runing Tutorial doctests..."
+    import doctest
+    tests = doctest.testmod()
+    if tests[0]:
+        #Note on Python 2.5+ can use tests.failed rather than tests[0]
+        raise RuntimeError("%i/%i tests failed" % tests)
+    print "Tests done"
