@@ -1425,6 +1425,7 @@ below).  However, creating \verb|SeqRecord| can be quite simple.
 
 To create a \verb|SeqRecord| at a minimum you just need a \verb|Seq| object:
 
+%doctest Make SeqRecord
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> simple_seq = Seq("GATC")
@@ -1434,6 +1435,7 @@ To create a \verb|SeqRecord| at a minimum you just need a \verb|Seq| object:
 
 Additionally, you can also pass the id, name and description to the initialization function, but if not they will be set as strings indicating they are unknown, and can be modified subsequently:
 
+$cont-doctest
 \begin{verbatim}
 >>> simple_seq_r.id
 '<unknown id>'
@@ -1447,6 +1449,7 @@ Seq('GATC', Alphabet())
 
 Including an identifier is very important if you want to output your \verb|SeqRecord| to a file.  You would normally include this when creating the object:
 
+%doctest Make SeqRecord 2
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> simple_seq = Seq("GATC")
@@ -1458,6 +1461,7 @@ As mentioned above, the \verb|SeqRecord| has an dictionary attribute \verb|annot
 for any miscellaneous annotations that doesn't fit under one of the other more specific attributes.
 Adding annotations is easy, and just involves dealing directly with the annotation dictionary:
 
+%cont-doctest
 \begin{verbatim}
 >>> simple_seq_r.annotations["evidence"] = "None. I just made it up."
 >>> print simple_seq_r.annotations
@@ -1470,9 +1474,10 @@ Working with per-letter-annotations is similar, \verb|letter_annotations| is a
 dictionary like attribute which will let you assign any Python sequence (i.e.
 a string, list or tuple) which has the same length as the sequence:
 
+%cont-doctest
 \begin{verbatim}
 >>> simple_seq_r.letter_annotations["phred_quality"] = [40,40,38,30]
->>> print simple_seq_r. letter_annotations
+>>> print simple_seq_r.letter_annotations
 {'phred_quality': [40, 40, 38, 30]}
 >>> print simple_seq_r.letter_annotations["phred_quality"]
 [40, 40, 38, 30]
@@ -1748,6 +1753,7 @@ The complication in dealing with locations comes in the positions themselves. In
 
 Now that we've got all of the types of fuzzy positions we can have taken care of, we are ready to actually specify a location on a sequence. This is handled by the \verb|FeatureLocation| class. An object of this type basically just holds the potentially fuzzy start and end positions of a feature. You can create a \verb|FeatureLocation| object by creating the positions and passing them in:
 
+%doctest SeqFeature
 \begin{verbatim}
 >>> from Bio import SeqFeature
 >>> start_pos = SeqFeature.AfterPosition(5)
@@ -1764,36 +1770,39 @@ If you print out a \verb|FeatureLocation| object, you can get a nice representat
 
 We can access the fuzzy start and end positions using the start and end attributes of the location:
 
+%cont-doctest
 \begin{verbatim}
 >>> my_location.start
-Bio.SeqFeature.AfterPosition(5)
+AfterPosition(5)
 >>> print my_location.start
 >5
 >>> my_location.end
-Bio.SeqFeature.BetweenPosition(8,1)
+BetweenPosition(8,1)
 >>> print my_location.end
 (8^9)
 \end{verbatim}
 
 If you don't want to deal with fuzzy positions and just want numbers, you just need to ask for the \verb|nofuzzy_start| and \verb|nofuzzy_end| attributes of the location:
 
+%cont-doctest
 \begin{verbatim}
 >>> my_location.nofuzzy_start
 5
 >>> my_location.nofuzzy_end
-8
+9
 \end{verbatim}
 
 Notice that this just gives you back the position attributes of the fuzzy locations.
 
 Similary, to make it easy to create a position without worrying about fuzzy positions, you can just pass in numbers to the \verb|FeaturePosition| constructors, and you'll get back out \verb|ExactPosition| objects:
 
+%cont-doctest
 \begin{verbatim}
->>> exact_location = SeqFeature.FeatureLocation(5, 8)
+>>> exact_location = SeqFeature.FeatureLocation(5, 9)
 >>> print exact_location
-[5:8]
+[5:9]
 >>> exact_location.start
-Bio.SeqFeature.ExactPosition(5)
+ExactPosition(5)
 >>> exact_location.nofuzzy_start
 5
 \end{verbatim}
@@ -1804,27 +1813,35 @@ That is all of the nitty gritty about dealing with fuzzy positions in Biopython.
 
 A \verb|SeqFeature| object doesn't directly contain a sequence, instead its location (see Section~\ref{sec:locations}) describes how to get this from the parent sequence. For example consider a (short) gene sequence with location 5:18 on the reverse strand, which in GenBank/EMBL notation using 1-based counting would be \texttt{complement(4..18)}, like this:
 
+%doctest SeqFeature methods
 \begin{verbatim}
-from Bio import Seq
-from Bio.SeqFeature import SeqFeature, FeatureLocation
-example_parent = Seq("ACCGAGACGGCAAAGGCTAGCATAGGTATGAGACTTCCTTCCTGCCAGTGCTGAGGAACTGGGAGCCTAC")
-example_feature = example_feature = SeqFeature(FeatureLocation(5, 18), type="gene", strand=-1)
+>>> from Bio.Seq import Seq
+>>> from Bio.SeqFeature import SeqFeature, FeatureLocation
+>>> example_parent = Seq("ACCGAGACGGCAAAGGCTAGCATAGGTATGAGACTTCCTTCCTGCCAGTGCTGAGGAACTGGGAGCCTAC")
+>>> example_feature = SeqFeature(FeatureLocation(5, 18), type="gene", strand=-1)
 \end{verbatim}
 
 You could take the parent sequence, slice it to extract 5:18, and then take the reverse complement:
 
+%cont-doctest
 \begin{verbatim}
-feature_seq = example_parent[5:18].reverse_complement()
+>>> feature_seq = example_parent[5:18].reverse_complement()
+>>> print feature_seq
+AGCCTTTGCCGTC
 \end{verbatim}
 
 This is a simple example so this isn't too bad -- however once you have to deal with compound features (joins) this is rather messy. Instead, the \verb|SeqFeature| object has an \verb|extract| method to take care of all this:
 
+%cont-doctest
 \begin{verbatim}
-feature_seq = example_feature.extract(example_parent)
+>>> feature_seq = example_feature.extract(example_parent)
+>>> print feature_seq
+AGCCTTTGCCGTC
 \end{verbatim}
 
 The \verb|extract| method was added in Biopython 1.53, and in Biopython 1.56 the \verb|SeqFeature| was further extended to give its length as that of the region of sequence it describes.
 
+%cont-doctest
 \begin{verbatim}
 >>> print example_feature.extract(example_parent)
 AGCCTTTGCCGTC
@@ -4388,12 +4405,13 @@ KEFTPPVQAAYQKVVAGVANALAHKYH
 
 Let's start by creating a complete \texttt{needle} command line object in one go:
 
+%doctest needle 0
 \begin{verbatim}
 >>> from Bio.Emboss.Applications import NeedleCommandline
 >>> needle_cline = NeedleCommandline(asequence="alpha.faa", bsequence="beta.faa",
 ...                                  gapopen=10, gapextend=0.5, outfile="needle.txt")
 >>> print needle_cline
-needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5 
+needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5
 \end{verbatim}
 
 Why not try running this by hand at the command prompt? You should see it does a
@@ -4406,6 +4424,7 @@ probably means that the EMBOSS tools are not on your PATH environment
 variable. You can either update your PATH setting, or simply tell Biopython
 the full path to the tool, for example:
 
+%doctest needle 1
 \begin{verbatim}
 >>> from Bio.Emboss.Applications import NeedleCommandline
 >>> needle_cline = NeedleCommandline(r"C:\EMBOSS\needle.exe",
@@ -4428,6 +4447,7 @@ Biopython help text:
 
 Note that you can also specify (or change or look at) the settings like this:
 
+%doctest needle 2
 \begin{verbatim}
 >>> from Bio.Emboss.Applications import NeedleCommandline
 >>> needle_cline = NeedleCommandline()
@@ -4437,7 +4457,7 @@ Note that you can also specify (or change or look at) the settings like this:
 >>> needle_cline.gapextend=0.5
 >>> needle_cline.outfile="needle.txt"
 >>> print needle_cline
-needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5 
+needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5
 >>> print needle_cline.outfile
 needle.txt
 \end{verbatim}
@@ -4534,6 +4554,7 @@ documentation, or that built into Biopython:
 \begin{verbatim}
 >>> from Bio.Blast import NCBIWWW
 >>> help(NCBIWWW.qblast)
+...
 \end{verbatim}
 
 Note that the default settings on the NCBI BLAST website are not quite
@@ -8972,6 +8993,8 @@ on commercial use.
 
 \section{Motif objects}
 \label{sec:object}
+
+%TODO - turn these into doctests...
 Since we are interested in motif analysis, we need to take a look at
 \verb|Motif| objects in the first place. For that we need to import 
 the Motif library:
@@ -9535,6 +9558,8 @@ Gene pair & Intergene distance ($x_1$) & Gene expression score ($x_2$) & Class\\
 Table \ref{table:training} lists some of the {\it Bacillus subtilis} gene pairs for which the operon structure is known.
 Let's calculate the logistic regression model from these data:
 
+%NOTE - can't use this as a doctest in case NumPy is missing (Jython).
+%Also the ... are missing but that means the user can copy/paste the example.
 \begin{verbatim}
 >>> from Bio import LogisticRegression
 >>> xs = [[-53, -200.78],
