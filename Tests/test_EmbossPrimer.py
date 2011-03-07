@@ -49,6 +49,7 @@ class Primer3ParseTest(unittest.TestCase):
         self.assertEqual(primer_info.primers[2].reverse_seq,
                          "TCACATTCCCAAATGTAGATCG")
         self.assertEqual(primer_info.primers[0].size, 218)
+        self.assertEqual(len(primer_info.primers[0]), 218)
         self.assertEqual(primer_info.primers[3].forward_start, 112)
         self.assertEqual(primer_info.primers[3].forward_length, 20)
         self.assertEqual(primer_info.primers[3].forward_tm, 59.57)
@@ -70,7 +71,9 @@ class Primer3ParseTest(unittest.TestCase):
         self.assertEqual(primer_info.comments,
                          "# PRIMER3 RESULTS FOR 26964-28647#\n")
         self.assertEqual(primer_info.primers[1].reverse_seq, "")
+        self.assertEqual(primer_info.primers[1].internal_seq, "")
         self.assertEqual(primer_info.primers[3].forward_seq, "TGTGATTGCTTGAGCTGGAC")
+        self.assertEqual(primer_info.primers[3].internal_seq, "")
         self.assertEqual(primer_info.primers[3].forward_start, 253)
 
     def test_internal_oligo_single_parse(self):
