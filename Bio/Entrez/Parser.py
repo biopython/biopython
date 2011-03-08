@@ -418,14 +418,14 @@ class DataHandler:
             self.structures.update({name: multiple})
 
     def open_dtd_file(self, filename):
-        path = os.path.join(DataHandler.global_dtd_dir, filename)
+        path = os.path.join(DataHandler.local_dtd_dir, filename)
         try:
             handle = open(path, "rb")
         except IOError:
             pass
         else:
             return handle
-        path = os.path.join(DataHandler.local_dtd_dir, filename)
+        path = os.path.join(DataHandler.global_dtd_dir, filename)
         try:
             handle = open(path, "rb")
         except IOError:
