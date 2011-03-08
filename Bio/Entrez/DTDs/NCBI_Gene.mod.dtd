@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqfeat.asn"
      ::DATATOOL:: by application DATATOOL version 1.9.0
-     ::DATATOOL:: on 04/10/2008 16:04:22
+     ::DATATOOL:: on 10/09/2008 23:08:21
      ============================================ -->
 
 <!-- ============================================ -->
@@ -19,7 +19,8 @@
 -->
 
 <!-- Elements used by other modules:
-          Gene-ref -->
+          Gene-ref,
+          Gene-nomenclature -->
 
 <!-- Elements referenced from other modules:
           Dbtag FROM NCBI-General -->
@@ -39,7 +40,8 @@
         Gene-ref_pseudo?, 
         Gene-ref_db?, 
         Gene-ref_syn?, 
-        Gene-ref_locus-tag?)>
+        Gene-ref_locus-tag?, 
+        Gene-ref_formal-name?)>
 
 <!-- Official gene symbol -->
 <!ELEMENT Gene-ref_locus (#PCDATA)>
@@ -69,4 +71,27 @@
 
 <!-- systematic gene name (e.g., MI0001, ORF0069) -->
 <!ELEMENT Gene-ref_locus-tag (#PCDATA)>
+
+<!ELEMENT Gene-ref_formal-name (Gene-nomenclature)>
+
+
+<!ELEMENT Gene-nomenclature (
+        Gene-nomenclature_status, 
+        Gene-nomenclature_symbol?, 
+        Gene-nomenclature_name?, 
+        Gene-nomenclature_source?)>
+
+<!ELEMENT Gene-nomenclature_status %ENUM;>
+<!ATTLIST Gene-nomenclature_status value (
+        unknown |
+        official |
+        interim
+        ) #REQUIRED >
+
+
+<!ELEMENT Gene-nomenclature_symbol (#PCDATA)>
+
+<!ELEMENT Gene-nomenclature_name (#PCDATA)>
+
+<!ELEMENT Gene-nomenclature_source (Dbtag)>
 

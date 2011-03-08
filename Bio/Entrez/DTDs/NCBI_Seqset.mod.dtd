@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqset.asn"
-     ::DATATOOL:: by application DATATOOL version 1.9.0
-     ::DATATOOL:: on 04/10/2008 16:04:22
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 08/02/2010 23:05:14
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 1.1 $
+$Revision: 149839 $
 **********************************************************************
 
   NCBI Sequence Collections
@@ -76,8 +76,12 @@ $Revision: 1.1 $
     pop-set	-  population study
     phy-set	-  phylogenetic study
     eco-set	-  ecological sample study
-    gen-prod-set	-  genomic products, chrom+mRNa+protein
+    gen-prod-set	-  genomic products, chrom+mRNA+protein
     wgs-set	-  whole genome shotgun project
+    named-annot	-  named annotation set
+    named-annot-prod	-  with instantiated mRNA+protein
+    read-set	-  set from a single read
+    paired-end-reads	-  paired sequences within a read-set
 -->
 <!ATTLIST Bioseq-set_class value (
         not-set |
@@ -99,6 +103,10 @@ $Revision: 1.1 $
         eco-set |
         gen-prod-set |
         wgs-set |
+        named-annot |
+        named-annot-prod |
+        read-set |
+        paired-end-reads |
         other
         ) #REQUIRED >
 

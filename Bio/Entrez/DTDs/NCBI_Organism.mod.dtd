@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqfeat.asn"
-     ::DATATOOL:: by application DATATOOL version 1.9.0
-     ::DATATOOL:: on 04/10/2008 16:04:22
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 07/07/2010 23:05:04
      ============================================ -->
 
 <!-- ============================================ -->
@@ -72,7 +72,8 @@
         OrgName_lineage?, 
         OrgName_gcode?, 
         OrgName_mgcode?, 
-        OrgName_div?)>
+        OrgName_div?, 
+        OrgName_pgcode?)>
 
 <!ELEMENT OrgName_name (
         OrgName_name_binomial | 
@@ -112,6 +113,9 @@
 
 <!-- GenBank division code -->
 <!ELEMENT OrgName_div (#PCDATA)>
+
+<!-- plastid genetic code -->
+<!ELEMENT OrgName_pgcode (%INTEGER;)>
 
 
 <!ELEMENT OrgMod (

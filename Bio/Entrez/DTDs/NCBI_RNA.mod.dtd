@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqfeat.asn"
      ::DATATOOL:: by application DATATOOL version 1.9.0
-     ::DATATOOL:: on 04/10/2008 16:04:22
+     ::DATATOOL:: on 09/15/2008 23:08:25
      ============================================ -->
 
 <!-- ============================================ -->
@@ -20,7 +20,10 @@
 
 <!-- Elements used by other modules:
           RNA-ref,
-          Trna-ext -->
+          Trna-ext,
+          RNA-gen,
+          RNA-qual,
+          RNA-qual-set -->
 
 <!-- Elements referenced from other modules:
           Seq-loc FROM NCBI-Seqloc -->
@@ -32,7 +35,6 @@
 *  various rnas
 *
  minimal RNA sequence
- for tRNAs
 -->
 <!ELEMENT RNA-ref (
         RNA-ref_type, 
@@ -40,6 +42,13 @@
         RNA-ref_ext?)>
 <!-- type of RNA feature -->
 <!ELEMENT RNA-ref_type %ENUM;>
+
+<!--
+    snRNA	-  will become ncRNA, with RNA-gen.class = snRNA
+    scRNA	-  will become ncRNA, with RNA-gen.class = scRNA
+    snoRNA	-  will become ncRNA, with RNA-gen.class = snoRNA
+    ncRNA	-  non-coding RNA; subsumes snRNA, scRNA, snoRNA
+-->
 <!ATTLIST RNA-ref_type value (
         unknown |
         premsg |
@@ -49,6 +58,9 @@
         snRNA |
         scRNA |
         snoRNA |
+        ncRNA |
+        tmRNA |
+        miscRNA |
         other
         ) #REQUIRED >
 
@@ -57,14 +69,19 @@
 <!ATTLIST RNA-ref_pseudo value ( true | false ) #REQUIRED >
 
 
+<!-- generic fields for ncRNA, tmRNA, miscRNA -->
 <!ELEMENT RNA-ref_ext (
         RNA-ref_ext_name | 
-        RNA-ref_ext_tRNA)>
+        RNA-ref_ext_tRNA | 
+        RNA-ref_ext_gen)>
 
 <!-- for naming "other" type -->
 <!ELEMENT RNA-ref_ext_name (#PCDATA)>
-<!-- tRNA feature extensions -->
+
+<!-- for tRNAs -->
 <!ELEMENT RNA-ref_ext_tRNA (Trna-ext)>
+
+<!ELEMENT RNA-ref_ext_gen (RNA-gen)>
 
 <!-- tRNA feature extensions -->
 <!ELEMENT Trna-ext (
@@ -94,4 +111,34 @@
 
 <!-- location of anticodon -->
 <!ELEMENT Trna-ext_anticodon (Seq-loc)>
+
+
+<!ELEMENT RNA-gen (
+        RNA-gen_class?, 
+        RNA-gen_product?, 
+        RNA-gen_quals?)>
+
+<!--
+ for ncRNAs, the class of non-coding RNA:
+ examples: antisense_RNA, guide_RNA, snRNA
+-->
+<!ELEMENT RNA-gen_class (#PCDATA)>
+
+<!ELEMENT RNA-gen_product (#PCDATA)>
+
+<!-- e.g., tag_peptide qualifier for tmRNAs -->
+<!ELEMENT RNA-gen_quals (RNA-qual-set)>
+
+<!-- Additional data values for RNA-gen, -->
+<!ELEMENT RNA-qual (
+        RNA-qual_qual, 
+        RNA-qual_val)>
+
+<!-- in a tag (qual), value (val) format -->
+<!ELEMENT RNA-qual_qual (#PCDATA)>
+
+<!ELEMENT RNA-qual_val (#PCDATA)>
+
+
+<!ELEMENT RNA-qual-set (RNA-qual*)>
 
