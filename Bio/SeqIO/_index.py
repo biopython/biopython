@@ -806,14 +806,15 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
         #Should now be at the start of a record, or end of the file
         while marker_re.match(line):
             #We expect the next line to be <accession>xxx</accession>
+            #(possibly with leading spaces)
             #but allow it to be later on within the <entry>
             key = None
             done = False
             while True:
                 line = handle.readline()
-                if key is None and line.startswith(start_acc_marker):
+                if key is None and start_acc_marker in line:
                     assert end_acc_marker in line, line
-                    key = line[11:].split(_as_bytes("<"))[0]
+                    key = line[line.find(start_acc_marker)+11:].split(_as_bytes("<"))[0]
                 elif end_entry_marker in line:
                     end_offset = handle.tell() - len(line) \
                                + line.find(end_entry_marker) + 8
@@ -822,7 +823,8 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
                     #Start of next record or end of file
                     raise ValueError("Didn't find end of record")
             if not key:
-                raise ValueError("Did not find <accession> line")
+                raise ValueError("Did not find <accession> line in bytes %i to %i" \
+                                 % (start_offset, end_offset))
             yield _bytes_to_string(key), start_offset, end_offset - start_offset
             #Find start of next record
             while not marker_re.match(line) and line:
