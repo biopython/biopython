@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 3 March 2011 (Biopython 1.56+)}
+\date{Last Update -- 10 March 2011 (Biopython 1.56+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -2900,7 +2900,7 @@ The \verb|Bio.SeqIO.index()| function takes three required arguments:
 \begin{itemize}
 \item Index filename, we suggest using something ending \texttt{.idx}.
 This index file is actually an SQLite3 database.
-\item List of sequence filenames to index
+\item List of sequence filenames to index (or a single filename)
 \item File format (lower case string as used in the rest of the
 \verb|SeqIO| module).
 \end{itemize}
@@ -2970,9 +2970,9 @@ identifier.
 Reasons to choose \verb|Bio.SeqIO.index()| over \verb|Bio.SeqIO.index_db()|
 include:
 \begin{itemize}
-\item Faster to build the index
+\item Faster to build the index (more noticeable in simple file formats)
 \item Slightly faster access as SeqRecord objects (but the difference is only
-really noticable for simple to parse file formats).
+really noticeable for simple to parse file formats).
 \item Can use any immutable Python object as the dictionary keys (e.g. a
 tuple of strings, or a frozen set) not just strings.
 \item Don't need to worry about the index database being out of date if the

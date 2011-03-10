@@ -53,6 +53,7 @@ class IndexDictTests(unittest.TestCase):
             return
 
         #In memory,
+        #note here give filenames as list of strings
         rec_dict = SeqIO.index_db(":memory:", [filename], format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         #check error conditions
@@ -64,7 +65,9 @@ class IndexDictTests(unittest.TestCase):
         #Saving to file...
         index_tmp = filename + ".idx"
         #To disk,
-        rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet)
+        #note here we give the filename as a single string
+        #to confirm that works too (convience feature).
+        rec_dict = SeqIO.index_db(index_tmp, filename, format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
         del rec_dict
