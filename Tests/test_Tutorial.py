@@ -33,34 +33,38 @@ def _extract(handle):
 def extract_doctests(latex_filename):
     """Scans LaTeX file and pulls out marked doctests as strings."""
     handle = open(latex_filename, "rU")
+    line_number = 0
     in_test = False
-    count = 0
     lines = []
     while True:
         line = handle.readline()
+        line_number += 1
         if not line:
             #End of file
             break
         elif line.startswith("%cont-doctest"):
-            lines.extend(_extract(handle))
+            x = _extract(handle)
+            lines.extend(x)
+            line_number += len(x) + 2
         elif line.startswith("%doctest"):
             if lines:
                 if not lines[0].startswith(">>> "):
                     raise ValueError("Should start '>>> ' not %r" % lines[0])
                 yield name, "".join(lines)
-                count += 1
                 lines = []
             try:
                 name = line.split(None,1)[1].strip()
+                name = "test_from_line_%05i_%s" % (line_number, name)
             except:
-                name = "unnamed_test_%i" % count
-            lines = _extract(handle)
+                name = "test_from_line_%05i" % line_number
+            x = _extract(handle)
+            lines.extend(x)
+            line_number += len(x) + 2
     handle.close()
     if lines:
         if not lines[0].startswith(">>> "):
             raise ValueError("Should start '>>> ' not %r" % lines[0])
         yield name, "".join(lines)
-        count += 1
     #yield "dummy", ">>> 2 + 2\n5\n"
 
 class TutorialDocTestHolder(object):
