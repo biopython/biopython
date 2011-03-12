@@ -11398,28 +11398,25 @@ this time we'll start with a plain FASTA file with no pre-marked genes:
 {\texttt{NC\_005816.fna}}. This is a bacterial sequence, so we'll want to use
 NCBI codon table 11 (see Section~\ref{sec:translation} about translation).
 
+%doctest ../Tests/GenBank
 \begin{verbatim}
-from Bio import SeqIO 
-record = SeqIO.read("NC_005816.fna","fasta")
-table = 11
-min_pro_len = 100
+>>> from Bio import SeqIO 
+>>> record = SeqIO.read("NC_005816.fna","fasta")
+>>> table = 11
+>>> min_pro_len = 100
 \end{verbatim}
 
 Here is a neat trick using the \verb|Seq| object's \verb|split| method to
 get a list of all the possible ORF translations in the six reading frames:
 
+%cont-doctest
 \begin{verbatim}
-for strand, nuc in [(+1, record.seq), (-1, record.seq.reverse_complement())]:
-    for frame in range(3):
-        for pro in nuc[frame:].translate(table).split("*"):
-            if len(pro) >= min_pro_len:
-                print "%s...%s - length %i, strand %i, frame %i" \
-                      % (pro[:30], pro[-3:], len(pro), strand, frame)
-\end{verbatim}
-
-\noindent This should give:
-
-\begin{verbatim}
+>>> for strand, nuc in [(+1, record.seq), (-1, record.seq.reverse_complement())]:
+...     for frame in range(3):
+...         for pro in nuc[frame:].translate(table).split("*"):
+...             if len(pro) >= min_pro_len:
+...                 print "%s...%s - length %i, strand %i, frame %i" \
+...                       % (pro[:30], pro[-3:], len(pro), strand, frame)
 GCLMKKSSIVATIITILSGSANAASSQLIP...YRF - length 315, strand 1, frame 0
 KSGELRQTPPASSTLHLRLILQRSGVMMEL...NPE - length 285, strand 1, frame 1
 GLNCSFFSICNWKFIDYINRLFQIIYLCKN...YYH - length 176, strand 1, frame 1
