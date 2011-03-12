@@ -1511,6 +1511,7 @@ Back in Chapter~\ref{chapter:quick-start} you will have seen the function \verb|
 used to loop over all the records in a file as \verb|SeqRecord| objects. The \verb|Bio.SeqIO| module
 has a sister function for use on files which contain just one record which we'll use here (see Chapter~\ref{chapter:Bio.SeqIO} for details):
 
+%TODO - line wrapping for doctest?
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.fna", "fasta")
@@ -1867,6 +1868,7 @@ features this SNP is within, and lets suppose this SNP is at index 4350
 (Python counting!). Here is a simple brute force solution where we just
 check all the features one by one in a loop:
 
+%doctest ../Tests/GenBank
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> my_snp = 4350
@@ -1940,19 +1942,27 @@ completely within the new sequence are preserved (with their locations adjusted)
 
 For example, taking the same GenBank file used earlier:
 
+%doctest ../Tests/GenBank
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
+\end{verbatim}
+%TODO - support line wrapping in doctest
+\begin{verbatim}
 >>> record
 SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
 IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
 description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
 dbxrefs=['Project:10638'])
+\end{verbatim}
+%cont-doctest
+\begin{verbatim}
 >>> len(record)
 9609
 >>> len(record.features)
 29
 \end{verbatim}
+
 
 For this example we're going to focus in on the \verb|pim| gene, \verb|YP_pPCP05|.
 If you have a look at the GenBank file directly you'll find this gene/CDS has
@@ -1961,21 +1971,23 @@ From looking at the file you can work out that these are the twelfth and
 thirteenth entries in the file, so in Python zero-based counting they are
 entries $11$ and $12$ in the \texttt{features} list:
 
+%cont-doctest
 \begin{verbatim}
 >>> print record.features[11]
 type: gene
 location: [4342:4780]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767712']
     Key: gene, Value: ['pim']
     Key: locus_tag, Value: ['YP_pPCP05']
-
+<BLANKLINE>
+\end{verbatim}
+%This one is truncated so can't use for doctest
+\begin{verbatim}
 >>> print record.features[12]
 type: CDS
 location: [4342:4780]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1992,13 +2004,20 @@ qualifiers:
 Let's slice this parent record from 4300 to 4800 (enough to include the \verb|pim|
 gene/CDS), and see how many features we get:
 
+%cont-doctest
 \begin{verbatim}
 >>> sub_record = record[4300:4800]
+\end{verbatim}
+%TODO - Line wrapping for doctest?
+\begin{verbatim}
 >>> sub_record
 SeqRecord(seq=Seq('ATAAATAGATTATTCCAAATAATTTATTTATGTAAGAACAGGATGGGAGGGGGA...TTA',
 IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
 description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
 dbxrefs=[])
+\end{verbatim}
+%cont-doctest
+\begin{verbatim}
 >>> len(sub_record)
 500
 >>> len(sub_record.features)
@@ -2007,17 +2026,19 @@ dbxrefs=[])
 
 Our sub-record just has two features, the gene and CDS entries for \verb|YP_pPCP05|:
 
+%cont-doctest
 \begin{verbatim}
 >>> print sub_record.features[0]
 type: gene
 location: [42:480]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767712']
     Key: gene, Value: ['pim']
     Key: locus_tag, Value: ['YP_pPCP05']
-
+<BLANKLINE>
+\end{verbatim}
+\begin{verbatim}
 >>> print sub_record.features[1]
 type: CDS
 location: [42:480]
@@ -2043,6 +2064,7 @@ this still applies to the sub-sequence or not. To avoid guessing, the \texttt{an
 and \texttt{dbxrefs} are omitted from the sub-record, and it is up to you to transfer
 any relevant information as appropriate.
 
+%cont-doctest
 \begin{verbatim}
 >>> sub_record.annotations
 {}
@@ -2053,6 +2075,7 @@ any relevant information as appropriate.
 The same point could be made about the record \texttt{id}, \texttt{name}
 and \texttt{description}, but for practicality these are preserved:
 
+%cont-doctest
 \begin{verbatim}
 >>> sub_record.id
 'NC_005816.1'
@@ -2089,6 +2112,7 @@ and description).
 For an example with per-letter annotation, we'll use the first record in a
 FASTQ file. Chapter~\ref{chapter:Bio.SeqIO} will explain the \verb|SeqIO| functions:
 
+%doctest ../Tests/Quality
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> record = SeqIO.parse("example.fastq", "fastq").next()
@@ -2096,6 +2120,9 @@ FASTQ file. Chapter~\ref{chapter:Bio.SeqIO} will explain the \verb|SeqIO| functi
 25
 >>> print record.seq
 CCCTTCTTGTCTTCAGCGTTTCTCC
+\end{verbatim}
+%TODO - doctest wrapping
+\begin{verbatim}
 >>> print record.letter_annotations["phred_quality"]
 [26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26,
 26, 26, 26, 23, 23]
@@ -2106,6 +2133,7 @@ you think the \texttt{TTT} should be only \texttt{TT}. We can make a new edited
 record by first slicing the \verb|SeqRecord| before and after the ``extra''
 third \texttt{T}:
 
+%cont-doctest
 \begin{verbatim}
 >>> left = record[:20]
 >>> print left.seq
@@ -2121,12 +2149,15 @@ CTCC
 
 \noindent Now add the two parts together:
 
+%cont-doctest
 \begin{verbatim}
 >>> edited = left + right
 >>> len(edited)
 24
 >>> print edited.seq
 CCCTTCTTGTCTTCAGCGTTCTCC
+\end{verbatim}
+\begin{verbatim}
 >>> print edited.letter_annotations["phred_quality"]
 [26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26,
 26, 26, 23, 23]
@@ -2134,6 +2165,7 @@ CCCTTCTTGTCTTCAGCGTTCTCC
 
 \noindent Easy and intuitive? We hope so! You can make this shorter with just:
 
+%cont-doctest
 \begin{verbatim}
 >>> edited = record[:20] + record[21:]
 \end{verbatim}
@@ -2141,20 +2173,30 @@ CCCTTCTTGTCTTCAGCGTTCTCC
 Now, for an example with features, we'll use a GenBank file.
 Suppose you have a circular genome:
 
+%doctest ../Tests/GenBank
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
+\end{verbatim}
+%TODO - doctest wrapping
+\begin{verbatim}
 >>> record
 SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
 IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
 description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
 dbxrefs=['Project:10638'])
+\end{verbatim}
+%cont-doctest
+\begin{verbatim}
 >>> len(record)
 9609
 >>> len(record.features)
 29
 >>> record.dbxrefs
 ['Project:10638']
+\end{verbatim}
+%TODO - doctest wrapping
+\begin{verbatim}
 >>> record.annotations.keys()
 ['comment', 'sequence_version', 'source', 'taxonomy', 'keywords', 'references',
 'accessions', 'data_file_division', 'date', 'organism', 'gi']
@@ -2162,13 +2204,20 @@ dbxrefs=['Project:10638'])
 
 You can shift the origin like this:
 
+%cont-doctest
 \begin{verbatim}
 >>> shifted = record[2000:] + record[:2000]
+\end{verbatim}
+%TODO - doctest wrapping
+\begin{verbatim}
 >>> shifted
 SeqRecord(seq=Seq('GATACGCAGTCATATTTTTTACACAATTCTCTAATCCCGACAAGGTCGTAGGTC...GGA',
 IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
 description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
 dbxrefs=[])
+\end{verbatim}
+%cont-doctest
+\begin{verbatim}
 >>> len(shifted)
 9609
 \end{verbatim}
@@ -2176,12 +2225,13 @@ dbxrefs=[])
 Note that this isn't perfect in that some annotation like the database cross references
 and one of the features (the source feature) have been lost:
 
+%cont-doctest
 \begin{verbatim}
 >>> len(shifted.features)
 28
 >>> shifted.dbxrefs
 []
->>> record.annotations.keys()
+>>> shifted.annotations.keys()
 []
 \end{verbatim}
 

@@ -10,6 +10,8 @@ if sys.version_info[0] >= 3:
            ">>> print(2+2)\n4\n"
     
 tutorial = os.path.join(os.path.dirname(sys.argv[0]), "../Doc/Tutorial.tex")
+tutorial_base = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), "../Doc/"))
+original_path = os.path.abspath(".")
 
 def _extract(handle):
     line = handle.readline()
@@ -50,13 +52,12 @@ def extract_doctests(latex_filename):
             if lines:
                 if not lines[0].startswith(">>> "):
                     raise ValueError("Should start '>>> ' not %r" % lines[0])
-                yield name, "".join(lines)
+                yield name, "".join(lines), folder
                 lines = []
             try:
-                name = line.split(None,1)[1].strip()
-                assert not name
+                folder = line.split(None,1)[1].strip()
             except:
-                pass
+                folder = ""
             name = "test_from_line_%05i" % line_number
             x = _extract(handle)
             lines.extend(x)
@@ -65,7 +66,7 @@ def extract_doctests(latex_filename):
     if lines:
         if not lines[0].startswith(">>> "):
             raise ValueError("Should start '>>> ' not %r" % lines[0])
-        yield name, "".join(lines)
+        yield name, "".join(lines), folder
     #yield "dummy", ">>> 2 + 2\n5\n"
 
 class TutorialDocTestHolder(object):
@@ -74,16 +75,23 @@ class TutorialDocTestHolder(object):
 
 
 #Create dummy methods on the object purely to hold doctests
-for name, example in extract_doctests(tutorial):
+for name, example, folder in extract_doctests(tutorial):
     if sys.version_info[0] >= 3:
         example = rt.refactor_docstring(example, name)
-    def funct(n, d):
+    def funct(n, d, f):
+        global tutorial_base
         method = lambda x : None
-        method.__doc__ = "%s\n\n%s\n" % (n, d)
+        if f:
+            p = os.path.join(tutorial_base, f)
+            method.__doc__ = "%s\n\n>>> import os\n>>> os.chdir(%r)\n%s\n" \
+                           % (n, p, d)
+        else:
+            method.__doc__ = "%s\n\n%s\n" % (n, d)
+        method._folder = f
         return method
     setattr(TutorialDocTestHolder,
             "doctest_%s" % name.replace(" ","_"),
-            funct(name, example))
+            funct(name, example, folder))
     del funct
 
 
@@ -105,6 +113,10 @@ class TutorialTestCase(unittest.TestCase):
         if failures:
             raise ValueError("%i Tutorial doctests failed: %s" % \
                              (len(failures), ", ".join(failures)))
+
+    def tearDown(self):
+        global original_path
+        os.chdir(original_path)
 
 
 #This is to run the doctests if the script is called directly:
