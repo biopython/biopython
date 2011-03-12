@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 10 March 2011 (Biopython 1.56+)}
+\date{Last Update -- 12 March 2011 (Biopython 1.56+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -5978,15 +5978,20 @@ AB  - Bioinformatics research is often difficult to do with commercial software.
 ...
 \end{verbatim}
 We first open the file and then parse it:
+%doctest ../Tests/Medline
 \begin{verbatim}
 >>> from Bio import Medline
 >>> input = open("pubmed_result1.txt")
 >>> record = Medline.read(input)
 \end{verbatim}
 The \verb+record+ now contains the Medline record as a Python dictionary:
+%cont-doctest
 \begin{verbatim}
 >>> record["PMID"]
 '12230038'
+\end{verbatim}
+%TODO - doctest wrapping?
+\begin{verbatim}
 >>> record["AB"]
 'Bioinformatics research is often difficult to do with commercial software.
 The Open Source BioPerl, BioPython and Biojava projects provide toolkits with
@@ -6003,6 +6008,7 @@ The key names used in a Medline record can be rather obscure; use
 for a brief summary.
 
 To parse a file containing multiple Medline records, you can use the \verb+parse+ function instead:
+%doctest ../Tests/Medline
 \begin{verbatim}
 >>> from Bio import Medline
 >>> input = open("pubmed_result2.txt")
@@ -6920,6 +6926,7 @@ In this example, the first line shows the EC (Enzyme Commission) number of lipop
 
 In Biopython, an Enzyme record is represented by the \verb|Bio.ExPASy.Enzyme.Record| class. This record derives from a Python dictionary and has keys corresponding to the two-letter codes used in Enzyme files. To read an Enzyme file containing one Enzyme record, use the \verb+read+ function in \verb|Bio.ExPASy.Enzyme|:
 
+%doctest ../Tests/Enzymes
 \begin{verbatim}
 >>> from Bio.ExPASy import Enzyme
 >>> handle = open("lipoprotein.txt")
@@ -6932,11 +6939,14 @@ In Biopython, an Enzyme record is represented by the \verb|Bio.ExPASy.Enzyme.Rec
 ['Clearing factor lipase.', 'Diacylglycerol lipase.', 'Diglyceride lipase.']
 >>> record["CA"]
 'Triacylglycerol + H(2)O = diacylglycerol + a carboxylate.'
+>>> record["PR"]
+['PDOC00110']
+\end{verbatim}
+%TODO - line wrapping?
+\begin{verbatim}
 >>> record["CC"]
 ['Hydrolyzes triacylglycerols in chylomicrons and very low-density lipoproteins
 (VLDL).', 'Also hydrolyzes diacylglycerol.']
->>> record["PR"]
-['PDOC00110']
 >>> record["DR"]
 [['P11151', 'LIPL_BOVIN'], ['P11153', 'LIPL_CAVPO'], ['P11602', 'LIPL_CHICK'],
 ['P55031', 'LIPL_FELCA'], ['P06858', 'LIPL_HUMAN'], ['P11152', 'LIPL_MOUSE'],
@@ -8641,7 +8651,9 @@ Convert files between any of the supported formats with the \verb|convert| funct
 To use strings as input or output instead of actual files, use \verb|StringIO| as you would
 with SeqIO and AlignIO:
 
+%doctest
 \begin{verbatim}
+>>> from Bio import Phylo
 >>> from StringIO import StringIO
 >>> handle = StringIO("(((A,B),(C,D)),(E,F,G));")
 >>> tree = Phylo.read(handle, "newick")
@@ -9094,25 +9106,29 @@ on commercial use.
 Since we are interested in motif analysis, we need to take a look at
 \verb|Motif| objects in the first place. For that we need to import 
 the Motif library:
+%doctest
 \begin{verbatim}
-from Bio import Motif
+>>> from Bio import Motif
 \end{verbatim}
 and we can start creating our first motif objects. Let's create a DNA motif:
+%cont-doctest
 \begin{verbatim}
-from Bio.Alphabet import IUPAC
-m=Motif.Motif(alphabet=IUPAC.unambiguous_dna)
+>>> from Bio.Alphabet import IUPAC
+>>> m = Motif.Motif(alphabet=IUPAC.unambiguous_dna)
 \end{verbatim}
 This is for now just an empty container, so let's add some sequences to our newly created motif:
+%cont-doctest
 \begin{verbatim}
-from Bio.Seq import Seq
-m.add_instance(Seq("TATAA",m.alphabet))
-m.add_instance(Seq("TATTA",m.alphabet))
-m.add_instance(Seq("TATAA",m.alphabet))
-m.add_instance(Seq("TATAA",m.alphabet))
+>>> from Bio.Seq import Seq
+>>> m.add_instance(Seq("TATAA",m.alphabet))
+>>> m.add_instance(Seq("TATTA",m.alphabet))
+>>> m.add_instance(Seq("TATAA",m.alphabet))
+>>> m.add_instance(Seq("TATAA",m.alphabet))
 \end{verbatim}
 Now we have a full \verb|Motif| instance, so we can try to get some
 basic information about it. Let's start with length and consensus
 sequence:
+%cont-doctest
 \begin{verbatim}
 >>> len(m)
 5
@@ -9120,22 +9136,25 @@ sequence:
 Seq('TATAA', IUPACUnambiguousDNA())
 \end{verbatim}
 In case of DNA motifs, we can also get a reverse complement of a motif:
+%>>> m.reverse_complement()
+%<Bio.Motif.Motif.Motif object at 0xb39890>
+%cont-doctest
 \begin{verbatim}
->>> m.reverse_complement()
-<Bio.Motif.Motif.Motif object at 0xb39890>
 >>> m.reverse_complement().consensus()
 Seq('TTATA', IUPACUnambiguousDNA())
->>> m.reverse_complement().instances  
-[Seq('TTATA', IUPACUnambiguousDNA()), 
- Seq('TAATA', IUPACUnambiguousDNA()), 
- Seq('TTATA', IUPACUnambiguousDNA()), 
- Seq('TTATA', IUPACUnambiguousDNA())]
+>>> for i in m.reverse_complement().instances:
+...     print i
+TTATA
+TAATA
+TTATA
+TTATA
 \end{verbatim}
 
 We can also calculate the information content of a motif with a simple call:
+%cont-doctest
 \begin{verbatim}
->>> m.ic()
-5.2735010263278932
+>>> print "%0.2f" % m.ic()
+5.27
 \end{verbatim}
 This gives us a number of bits of information provided by the motif,
 which tells us how much differs from background.
@@ -9168,6 +9187,7 @@ genome). It is by default set to a uniform distribution upon creation of a motif
 \end{verbatim}
 The other parameter is \verb|.beta|, which states the amount of
 pseudo-counts we should add to the PWM. By default it is set to $1.0$,
+%cont-doctest
 \begin{verbatim}
 >>> m.beta
 1.0
@@ -9220,18 +9240,22 @@ representation is based on instances or on some version of PWM matrix.
 On of the most popular motif databases \href{http://jaspar.genereg.net}{JASPAR}
  stores motifs in both formats, so
 let's look at how we can import JASPAR motifs from instances:
+%doctest ../Tests/Motif
 \begin{verbatim}
-arnt=Motif.read(open("Arnt.sites"),"jaspar-sites")
+>>> from Bio import Motif
+>>> arnt = Motif.read(open("Arnt.sites"),"jaspar-sites")
 \end{verbatim}
 and from a count matrix:
+%cont-doctest
 \begin{verbatim}
-srf=Motif.read(open("SRF.pfm"),"jaspar-pfm")
+>>> srf = Motif.read(open("SRF.pfm"),"jaspar-pfm")
 \end{verbatim}
 
 The \verb|arnt| and \verb|srf| motifs can both do the same things for
 us, but they use different internal representations of the motif. We
 can tell that by inspecting the \verb|has_counts| and
 \verb|has_instances| properties:
+%cont-doctest
 \begin{verbatim}
 >>> arnt.has_instances
 True
@@ -9239,6 +9263,9 @@ True
 False
 >>> srf.has_counts
 True
+\end{verbatim}
+%TODO - sort order and formatting for doctest?
+\begin{verbatim}
 >>> srf.counts
 {'A': [2, 9, 0, 1, 32, 3, 46, 1, 43, 15, 2, 2],
  'C': [1, 33, 45, 45, 1, 1, 0, 0, 0, 1, 0, 1],
@@ -10668,9 +10695,10 @@ website, \href{http://biopython.org/SRC/biopython/Tests/GenBank/NC_005816.gb}
 This file contains one and only one record, so we can read it in as a
 \verb|SeqRecord| using the \verb|Bio.SeqIO.read()| function:
 
+%doctest ../Tests/GenBank
 \begin{verbatim}
-from Bio import SeqIO
-original_rec = SeqIO.read("NC_005816.gb","genbank")
+>>> from Bio import SeqIO
+>>> original_rec = SeqIO.read("NC_005816.gb","genbank")
 \end{verbatim}
 
 So, how can we generate a shuffled versions of the original sequence?  I would
@@ -10678,10 +10706,11 @@ use the built in Python \verb|random| module for this, in particular the functio
 \verb|random.shuffle| -- but this works on a Python list.  Our sequence is a
 \verb|Seq| object, so in order to shuffle it we need to turn it into a list:
 
+%cont-doctest
 \begin{verbatim}
-import random
-nuc_list = list(original_rec.seq)
-random.shuffle(nuc_list) #acts in situ!
+>>> import random
+>>> nuc_list = list(original_rec.seq)
+>>> random.shuffle(nuc_list) #acts in situ!
 \end{verbatim}
 
 Now, in order to use \verb|Bio.SeqIO| to output the shuffled sequence, we need
@@ -10690,11 +10719,12 @@ shuffled list.  In order to do this, we need to turn the list of nucleotides
 (single letter strings) into a long string -- the standard Python way to do
 this is with the string object's join method.
 
+%cont-doctest
 \begin{verbatim}
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet), \
-                         id="Shuffled", description="Based on %s" % original_rec.id)
+>>> from Bio.Seq import Seq
+>>> from Bio.SeqRecord import SeqRecord
+>>> shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet),
+...                          id="Shuffled", description="Based on %s" % original_rec.id)
 \end{verbatim}
 
 Let's put all these pieces together to make a complete Python script which
@@ -11276,7 +11306,7 @@ although this is actually quite a small FASTQ file with less than $100,000$ read
 >>> fq_dict = SeqIO.index("SRR014849.fastq", "fastq")
 >>> len(fq_dict)
 94696
-fq_dict.keys()[:4]
+>>> fq_dict.keys()[:4]
 ['SRR014849.80961', 'SRR014849.80960', 'SRR014849.80963', 'SRR014849.288943']
 >>> fq_dict["SRR014849.171880"].seq
 Seq('AAAATCATCTCTGGCGCCCCGTTGGAACCGAAAGGGTTTGAATTCAAACCCTTT...CAG', SingleLetterAlphabet())
@@ -13126,6 +13156,7 @@ One useful thing is to be able to turn information contained in a
 string into a handle. The following example shows how to do this using
 \verb|cStringIO| from the Python standard library:
 
+%doctest
 \begin{verbatim}
 >>> my_info = 'A string\n with multiple lines.'
 >>> print my_info
@@ -13136,7 +13167,7 @@ A string
 >>> first_line = my_info_handle.readline()
 >>> print first_line
 A string
-
+<BLANKLINE>
 >>> second_line = my_info_handle.readline()
 >>> print second_line
  with multiple lines.
