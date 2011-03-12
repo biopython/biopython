@@ -2691,9 +2691,10 @@ You can use the function \verb|Bio.SeqIO.to_dict()| to make a SeqRecord dictiona
 (in memory).  By default this will use each record's identifier (i.e. the \verb|.id|
 attribute) as the key.  Let's try this using our GenBank file:
 
+%doctest examples
 \begin{verbatim}
-from Bio import SeqIO
-orchid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.gbk", "genbank"))
+>>> from Bio import SeqIO
+>>> orchid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.gbk", "genbank"))
 \end{verbatim}
 
 There is just one required argument for \verb|Bio.SeqIO.to_dict()|, a list or
@@ -2703,9 +2704,13 @@ Python dictionary.
 
 Since this variable \verb|orchid_dict| is an ordinary Python dictionary, we can look at all of the keys we have available:
 
+%cont-doctest
 \begin{verbatim}
 >>> len(orchid_dict)
 94
+\end{verbatim}
+%Can't use following for doctest due to abbreviation
+\begin{verbatim}
 >>> print orchid_dict.keys()
 ['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
 \end{verbatim}
@@ -2718,10 +2723,11 @@ If you really want to, you can even look at all the records at once:
 
 We can access a single \verb|SeqRecord| object via the keys and manipulate the object as normal:
 
+%cont-doctest
 \begin{verbatim}
 >>> seq_record = orchid_dict["Z78475.1"]
 >>> print seq_record.description
-P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
+P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA.
 >>> print repr(seq_record.seq)
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
 \end{verbatim}
@@ -2804,14 +2810,17 @@ Z78439.1 H+JfaShya/4yyAj7IbMqgNkxdxQ
 
 Now, recall the \verb|Bio.SeqIO.to_dict()| function's \verb|key_function| argument expects a function which turns a \verb|SeqRecord| into a string.  We can't use the \verb|seguid()| function directly because it expects to be given a \verb|Seq| object (or a string).  However, we can use Python's \verb|lambda| feature to create a ``one off'' function to give to \verb|Bio.SeqIO.to_dict()| instead:
 
+%doctest examples
 \begin{verbatim}
-from Bio import SeqIO
-from Bio.SeqUtils.CheckSum import seguid
-seguid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.gbk", "genbank"),
-                            lambda rec : seguid(rec.seq))
-record = seguid_dict["MN/s0q9zDoCVEEc+k/IFwCNF2pY"]
-print record.id
-print record.description
+>>> from Bio import SeqIO
+>>> from Bio.SeqUtils.CheckSum import seguid
+>>> seguid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.gbk", "genbank"),
+...                             lambda rec : seguid(rec.seq))
+>>> record = seguid_dict["MN/s0q9zDoCVEEc+k/IFwCNF2pY"]
+>>> print record.id
+Z78532.1
+>>> print record.description
+C.californicum 5.8S rRNA gene and ITS1 and ITS2 DNA.
 \end{verbatim}
 
 \noindent That should have retrieved the record {\tt Z78532.1}, the second entry in the file.
@@ -2834,16 +2843,23 @@ it on demand.
 
 As an example, let's use the same GenBank file as before:
 
+%doctest examples
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> orchid_dict = SeqIO.index("ls_orchid.gbk", "genbank")
 >>> len(orchid_dict)
 94
+\end{verbatim}
+%Following is abbr.
+\begin{verbatim}
 >>> orchid_dict.keys()
 ['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
+\end{verbatim}
+%cont-doctest
+\begin{verbatim}
 >>> seq_record = orchid_dict["Z78475.1"]
 >>> print seq_record.description
-P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
+P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA.
 >>> seq_record.seq
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
 \end{verbatim}
@@ -3369,15 +3385,17 @@ COATB_BPIF1/22-73             FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVS
 
 This is the seed alignment for the Phage\_Coat\_Gp8 (PF05371) PFAM entry, downloaded from a now out of date release of PFAM from \url{http://pfam.sanger.ac.uk/}.  We can load this file as follows (assuming it has been saved to disk as ``PF05371\_seed.sth'' in the current working directory):
 
+%doctest examples
 \begin{verbatim}
-from Bio import AlignIO
-alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
-print alignment
+>>> from Bio import AlignIO
+>>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 \end{verbatim}
 
 \noindent This code will print out a summary of the alignment:
 
+%cont-doctest
 \begin{verbatim}
+>>> print alignment
 SingleLetterAlphabet() alignment with 7 rows and 52 columns
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRL...SKA COATB_BPIKE/30-81
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKL...SRA Q9T0Q8_BPIKE/1-52
