@@ -54,9 +54,10 @@ def extract_doctests(latex_filename):
                 lines = []
             try:
                 name = line.split(None,1)[1].strip()
-                name = "test_from_line_%05i_%s" % (line_number, name)
+                assert not name
             except:
-                name = "test_from_line_%05i" % line_number
+                pass
+            name = "test_from_line_%05i" % line_number
             x = _extract(handle)
             lines.extend(x)
             line_number += len(x) + 2

@@ -346,7 +346,7 @@ Disputably (of course!), the central object in bioinformatics is the sequence. T
 
 Most of the time when we think about sequences we have in my mind a string of letters like `\verb|AGTACACTGGT|'. You can create such \verb|Seq| object with this sequence as follows - the ``$>>>$'' represents the Python prompt followed by what you would type in:
 
-%doctest Creating a Seq object
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> my_seq = Seq("AGTACACTGGT")
@@ -566,7 +566,7 @@ IUPACProtein()
 
 In many ways, we can deal with Seq objects as if they were normal Python strings, for example getting the length, or iterating over the elements:
 
-%doctest Seq iteration
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -611,7 +611,7 @@ Note that this means that like a Python string, this gives a
 (i.e. $3$ in this trivial example). When searching for single letters, this
 makes no difference:
 
-%doctest GC1
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -626,7 +626,7 @@ makes no difference:
 
 While you could use the above snippet of code to calculate a GC\%, note that  the \verb|Bio.SeqUtils| module has several GC functions already built.  For example:
 
-%doctest GC2
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -644,7 +644,7 @@ Also note that just like a normal Python string, the \verb|Seq| object is in som
 
 A more complicated example, let's get a slice of the sequence:
 
-%doctest Slicing a sequence
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -725,7 +725,7 @@ will give just a truncated representation.  Instead use \verb|my_seq.tostring()|
 
 Naturally, you can in principle add any two Seq objects together - just like you can with Python strings to concatenate them.  However, you can't add sequences with incompatible alphabets, such as a protein sequence and a DNA sequence:
 
-%doctest Mixing alphabets
+%doctest
 \begin{verbatim}
 >>> from Bio.Alphabet import IUPAC
 >>> from Bio.Seq import Seq
@@ -750,7 +750,7 @@ Seq('EVRNAKACGT', Alphabet())
 
 Here is an example of adding a generic nucleotide sequence to an unambiguous IUPAC DNA sequence, resulting in an ambiguous nucleotide sequence:
 
-%doctest Adding DNA
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import generic_nucleotide
@@ -771,7 +771,7 @@ Python strings have very useful \verb|upper| and \verb|lower| methods for changi
 As of Biopython 1.53, the \verb|Seq| object gained similar methods which are alphabet aware.
 For example,
 
-%doctest Changing case
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import generic_dna
@@ -797,7 +797,7 @@ True
 Note that strictly speaking the IUPAC alphabets are for upper case
 sequences only, thus:
 
-%doctest IUPAC is upper case
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -815,7 +815,7 @@ Seq('acgt', DNAAlphabet())
 For nucleotide sequences, you can easily obtain the complement or reverse
 complement of a \verb|Seq| object using its built-in methods:
 
-%doctest Reverse complement
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -841,7 +841,7 @@ In all of these operations, the alphabet property is maintained. This is very
 useful in case you accidentally end up trying to do something weird like take
 the (reverse)complement of a protein sequence:
 
-%doctest Protein reverse complement
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -880,7 +880,7 @@ encodes a short peptide:
 The actual biological transcription process works from the template strand, doing a reverse complement (TCAG $\rightarrow$ CUGA) to give the mRNA.  However, in Biopython and bioinformatics in general, we typically work directly with the coding strand because this means we can get the mRNA sequence just by switching T $\rightarrow$ U.
 
 Now let's actually get down to doing a transcription in Biopython.  First, let's create \verb|Seq| objects for the coding and template DNA strands:
-%doctest Transcription
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -912,7 +912,7 @@ Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
 \end{verbatim}
 
 The \verb|Seq| object also includes a back-transcription method for going from the mRNA to the coding strand of the DNA.  Again, this is a simple U $\rightarrow$ T substitution and associated change of alphabet:
-%doctest Back-transcription
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -933,7 +933,7 @@ Sticking with the same example discussed in the transcription section above,
 now let's translate this mRNA into the corresponding protein sequence - again taking
 advantage of one of the \verb|Seq| object's biological methods:
 
-%doctest Translation
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -945,7 +945,7 @@ Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
 \end{verbatim}
 
 You can also translate directly from the coding strand DNA sequence:
-%doctest Translate DNA
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -1060,7 +1060,7 @@ Internally these use codon table objects derived from the NCBI information at
 As before, let's just focus on two choices: the Standard translation table, and the
 translation table for Vertebrate Mitochondrial DNA. 
 
-%doctest Codon Tables
+%doctest
 \begin{verbatim}
 >>> from Bio.Data import CodonTable
 >>> standard_table = CodonTable.unambiguous_dna_by_name["Standard"]
@@ -1172,7 +1172,7 @@ IUPAC.protein)} to be equal -- which most people would agree is just not right.
 This transitivity problem would also have implications for using \verb|Seq|
 objects as Python dictionary keys.
 
-%doctest Seq comparison
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -1222,7 +1222,7 @@ string for the key. See also Section~\ref{sec:seq-to-string}.
 
 Just like the normal Python string, the \verb|Seq| object is ``read only'', or in Python terminology, immutable.  Apart from wanting the \verb|Seq| object to act like a string, this is also a useful default since in many biological applications you want to ensure you are not changing your sequence data:
 
-%doctest MutableSeq
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -1248,7 +1248,7 @@ MutableSeq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
 \end{verbatim}
 
 Alternatively, you can create a \verb|MutableSeq| object directly from a string:
-%doctest MutableSeq from string
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import MutableSeq
 >>> from Bio.Alphabet import IUPAC
@@ -1294,7 +1294,7 @@ You could of course use a normal \verb|Seq| object in this situation, but it was
 rather a lot of memory to hold a string of a million ``N'' characters when you could
 just store a single letter ``N'' and the desired length as an integer.
 
-%doctest UnknownSeq
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import UnknownSeq
 >>> unk = UnknownSeq(20)
@@ -1360,7 +1360,7 @@ objects (or who prefer a functional programming style to an object orientated on
 there are module level functions in \verb|Bio.Seq| will accept plain Python strings,
 \verb|Seq| objects (including \verb|UnknownSeq| objects) or \verb|MutableSeq| objects:
 
-%doctest Bio.Seq and strings
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import reverse_complement, transcribe, back_transcribe, translate
 >>> my_string = "GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGTTAG"
@@ -1430,7 +1430,7 @@ below).  However, creating \verb|SeqRecord| can be quite simple.
 
 To create a \verb|SeqRecord| at a minimum you just need a \verb|Seq| object:
 
-%doctest Make SeqRecord
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> simple_seq = Seq("GATC")
@@ -1454,7 +1454,7 @@ Seq('GATC', Alphabet())
 
 Including an identifier is very important if you want to output your \verb|SeqRecord| to a file.  You would normally include this when creating the object:
 
-%doctest Make SeqRecord 2
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> simple_seq = Seq("GATC")
@@ -1758,7 +1758,7 @@ The complication in dealing with locations comes in the positions themselves. In
 
 Now that we've got all of the types of fuzzy positions we can have taken care of, we are ready to actually specify a location on a sequence. This is handled by the \verb|FeatureLocation| class. An object of this type basically just holds the potentially fuzzy start and end positions of a feature. You can create a \verb|FeatureLocation| object by creating the positions and passing them in:
 
-%doctest SeqFeature
+%doctest
 \begin{verbatim}
 >>> from Bio import SeqFeature
 >>> start_pos = SeqFeature.AfterPosition(5)
@@ -1818,7 +1818,7 @@ That is all of the nitty gritty about dealing with fuzzy positions in Biopython.
 
 A \verb|SeqFeature| object doesn't directly contain a sequence, instead its location (see Section~\ref{sec:locations}) describes how to get this from the parent sequence. For example consider a (short) gene sequence with location 5:18 on the reverse strand, which in GenBank/EMBL notation using 1-based counting would be \texttt{complement(4..18)}, like this:
 
-%doctest SeqFeature methods
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
@@ -4410,7 +4410,7 @@ KEFTPPVQAAYQKVVAGVANALAHKYH
 
 Let's start by creating a complete \texttt{needle} command line object in one go:
 
-%doctest needle 0
+%doctest
 \begin{verbatim}
 >>> from Bio.Emboss.Applications import NeedleCommandline
 >>> needle_cline = NeedleCommandline(asequence="alpha.faa", bsequence="beta.faa",
@@ -4429,7 +4429,7 @@ probably means that the EMBOSS tools are not on your PATH environment
 variable. You can either update your PATH setting, or simply tell Biopython
 the full path to the tool, for example:
 
-%doctest needle 1
+%doctest
 \begin{verbatim}
 >>> from Bio.Emboss.Applications import NeedleCommandline
 >>> needle_cline = NeedleCommandline(r"C:\EMBOSS\needle.exe",
@@ -4452,7 +4452,7 @@ Biopython help text:
 
 Note that you can also specify (or change or look at) the settings like this:
 
-%doctest needle 2
+%doctest
 \begin{verbatim}
 >>> from Bio.Emboss.Applications import NeedleCommandline
 >>> needle_cline = NeedleCommandline()
