@@ -3408,18 +3408,14 @@ FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKL...SRA COATB_BPIF1/22-73
 
 You'll notice in the above output the sequences have been truncated.  We could instead write our own code to format this as we please by iterating over the rows as \verb|SeqRecord| objects:
 
+%doctest examples
 \begin{verbatim}
-from Bio import AlignIO
-alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
-print "Alignment length %i" % alignment.get_alignment_length()
-for record in alignment:
-    print "%s - %s" % (record.seq, record.id)
-\end{verbatim}
-
-\noindent This will give the following output:
-
-\begin{verbatim}
+>>> from Bio import AlignIO
+>>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
+>>> print "Alignment length %i" % alignment.get_alignment_length()
 Alignment length 52
+>>> for record in alignment:
+...     print "%s - %s" % (record.seq, record.id)
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA - COATB_BPIKE/30-81
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA - Q9T0Q8_BPIKE/1-52
 DGTSTATSYATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA - COATB_BPI22/32-83
@@ -3433,15 +3429,11 @@ You could also use the alignment object's \verb|format| method to show it in a p
 
 Did you notice in the raw file above that several of the sequences include database cross-references to the PDB and the associated known secondary structure?  Try this:
 
+%cont-doctest
 \begin{verbatim}
-for record in alignment:
-    if record.dbxrefs:
-        print record.id, record.dbxrefs
-\end{verbatim}
-
-\noindent giving:
-
-\begin{verbatim}
+>>> for record in alignment:
+...     if record.dbxrefs:
+...         print record.id, record.dbxrefs
 COATB_BPIKE/30-81 ['PDB; 1ifl ; 1-52;']
 COATB_BPM13/24-72 ['PDB; 2cpb ; 1-49;', 'PDB; 2cps ; 1-49;']
 Q9T0Q9_BPFD/1-49 ['PDB; 1nh4 A; 1-49;']
@@ -3451,8 +3443,8 @@ COATB_BPIF1/22-73 ['PDB; 1ifk ; 1-50;']
 \noindent To have a look at all the sequence annotation, try this:
 
 \begin{verbatim}
-for record in alignment:
-    print record
+>>> for record in alignment:
+...     print record
 \end{verbatim}
 
 Sanger provide a nice web interface at \url{http://pfam.sanger.ac.uk/family?acc=PF05371} which will actually let you download this alignment in several other formats.  This is what the file looks like in the FASTA file format:
@@ -3923,12 +3915,21 @@ First of all, in some senses the alignment objects act like a Python \verb|list|
 of \verb|len()| (the number of rows) and iteration (each row as a \verb|SeqRecord|)
 make sense:
 
+%doctest examples
 \begin{verbatim}
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
->>> print "Number of rows: %i" % len(align)
+>>> print "Number of rows: %i" % len(alignment)
+Number of rows: 7
 >>> for record in alignment:
 ...     print "%s - %s" % (record.seq, record.id)
+AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA - COATB_BPIKE/30-81
+AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA - Q9T0Q8_BPIKE/1-52
+DGTSTATSYATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA - COATB_BPI22/32-83
+AEGDDP---AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA - COATB_BPM13/24-72
+AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFASKA - COATB_BPZJ2/1-49
+AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA - Q9T0Q9_BPFD/1-49
+FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA - COATB_BPIF1/22-73
 \end{verbatim}
 
 You can also use the list-like \verb|append| and \verb|extend| methods to add
@@ -3936,6 +3937,7 @@ more rows to the alignment (as \verb|SeqRecord| objects). Keeping the list
 metaphor in mind, simple slicing of the alignment should also make sense -
 it selects some of the rows giving back another alignment object:
 
+%cont-doctest
 \begin{verbatim}
 >>> print alignment
 SingleLetterAlphabet() alignment with 7 rows and 52 columns
@@ -3957,6 +3959,7 @@ FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKL...SRA COATB_BPIF1/22-73
 What if you wanted to select by column? Those of you who have used the NumPy
 matrix or array objects won't be surprised at this - you use a double index.
 
+%cont-doctest
 \begin{verbatim}
 >>> print alignment[2,6]
 T
@@ -3964,6 +3967,7 @@ T
 
 \noindent Using two integer indices pulls out a single letter, short hand for this:
 
+%cont-doctest
 \begin{verbatim}
 >>> print alignment[2].seq[6]
 T
@@ -3971,6 +3975,7 @@ T
 
 You can pull out a single column as a string like this:
 
+%cont-doctest
 \begin{verbatim}
 >>> print alignment[:,6]
 TTT---T
@@ -3979,6 +3984,7 @@ TTT---T
 You can also select a range of columns. For example, to pick out those same
 three rows we extracted earlier, but take just their first six columns:
 
+%cont-doctest
 \begin{verbatim}
 >>> print alignment[3:6,:6]
 SingleLetterAlphabet() alignment with 3 rows and 6 columns
@@ -3989,6 +3995,7 @@ AEGDDP Q9T0Q9_BPFD/1-49
 
 Leaving the first index as \verb|:| means take all the rows:
 
+%cont-doctest
 \begin{verbatim}
 >>> print alignment[:,:6]
 SingleLetterAlphabet() alignment with 7 rows and 6 columns
@@ -4004,6 +4011,7 @@ FAADDA COATB_BPIF1/22-73
 This brings us to a neat way to remove a section. Notice columns
 7, 8 and 9 which are gaps in three of the seven sequences:
 
+%cont-doctest
 \begin{verbatim}
 >>> print alignment[:,6:9]
 SingleLetterAlphabet() alignment with 7 rows and 3 columns
@@ -4018,7 +4026,9 @@ TSQ COATB_BPIF1/22-73
 
 \noindent Again, you can slice to get everything after the ninth column:
 
-\begin{verbatim}>>> print alignment[:,9:]
+%cont-doctest
+\begin{verbatim}
+>>> print alignment[:,9:]
 SingleLetterAlphabet() alignment with 7 rows and 43 columns
 ATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA COATB_BPIKE/30-81
 ATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA Q9T0Q8_BPIKE/1-52
@@ -4032,6 +4042,7 @@ AKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA COATB_BPIF1/22-73
 \noindent Now, the interesting thing is that addition of alignment objects works
 by column. This lets you do this as a way to remove a block of columns:
 
+%cont-doctest
 \begin{verbatim}
 >>> edited = alignment[:,:6] + alignment[:,9:]
 >>> print edited
@@ -4051,6 +4062,7 @@ need to match up (see Section~\ref{{sec:SeqRecord-addition}} for how adding
 \verb|SeqRecord| objects works). You may find it helpful to first sort the
 alignment rows alphabetically by id:
 
+%cont-doctest
 \begin{verbatim}
 >>> edited.sort()
 >>> print edited
@@ -4138,6 +4150,7 @@ By default ClustalW will generate an alignment and guide tree file with names
 based on the input FASTA file, in this case \texttt{opuntia.aln} and
 \texttt{opuntia.dnd}, but you can override this or make it explicit:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Align.Applications import ClustalwCommandline
 >>> cline = ClustalwCommandline("clustalw2", infile="opuntia.fasta")
@@ -4159,12 +4172,16 @@ either update your PATH setting to include the location of your copy of
 ClustalW tools (how you do this will depend on your OS), or simply type in
 the full path of the tool. For example:
 
+%doctest
 \begin{verbatim}
 >>> import os
 >>> from Bio.Align.Applications import ClustalwCommandline
 >>> clustalw_exe = r"C:\Program Files\new clustal\clustalw2.exe"
->>> assert os.path.isfile(clustalw_exe), "Clustal W executable missing"
 >>> clustalw_cline = ClustalwCommandline(clustalw_exe, infile="opuntia.fasta")
+\end{verbatim}
+%Don't run it in the doctest
+\begin{verbatim}
+>>> assert os.path.isfile(clustalw_exe), "Clustal W executable missing"
 >>> stdout, stderr = clustalw_cline()
 \end{verbatim}
 
@@ -4265,6 +4282,7 @@ For the most basic usage, all you need is to have a FASTA input file, such as
 code). You can then tell MUSCLE to read in this FASTA file, and write the
 alignment to an output file:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.txt")
@@ -4281,6 +4299,7 @@ sequences). The \verb|Bio.AlignIO| module should be able to read this
 alignment using \texttt{format="fasta"}.
 You can also ask for ClustalW-like output:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clw=True)
@@ -4291,6 +4310,7 @@ muscle -in opuntia.fasta -out opuntia.aln -clw
 Or, strict ClustalW output where the original ClustalW header line is
 used for maximum compatibility:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clwstrict=True)
@@ -4320,6 +4340,7 @@ standard out (stdout) or standard error (stderr) handles. However, by default
 MUSCLE will write the alignment to standard output (stdout). We can take
 advantage of this to avoid having a temporary output file! For example:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> muscle_cline = MuscleCommandline(input="opuntia.fasta")
@@ -4384,6 +4405,7 @@ First, we'll need some unaligned sequences in memory as \verb|SeqRecord| objects
 For this demonstration I'm going to use a filtered version of the original FASTA
 file (using a generator expression), taking just six of the seven sequences:
 
+%doctest
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> records = (r for r in SeqIO.parse("opuntia.fasta", "fasta") if len(r) < 900)
@@ -4393,6 +4415,7 @@ Then we create the MUSCLE command line, leaving the input and output to their
 defaults (stdin and stdout). I'm also going to ask for strict ClustalW format
 as for the output.
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> muscle_cline = MuscleCommandline(clwstrict=True)
