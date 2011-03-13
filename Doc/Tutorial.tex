@@ -13158,8 +13158,8 @@ string into a handle. The following example shows how to do this using
 >>> print my_info
 A string
  with multiple lines.
->>> import cStringIO
->>> my_info_handle = cStringIO.StringIO(my_info)
+>>> from StringIO import StringIO
+>>> my_info_handle = StringIO(my_info)
 >>> first_line = my_info_handle.readline()
 >>> print first_line
 A string
