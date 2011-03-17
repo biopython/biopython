@@ -1260,15 +1260,15 @@ Either way will give you a sequence object which can be changed:
 \begin{verbatim}
 >>> mutable_seq
 MutableSeq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
->>> mutable_seq[5] = "T"
+>>> mutable_seq[5] = "C"
 >>> mutable_seq
-MutableSeq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
+MutableSeq('GCCATCGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
 >>> mutable_seq.remove("T")
 >>> mutable_seq
-MutableSeq('GCCATGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
+MutableSeq('GCCACGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
 >>> mutable_seq.reverse()
 >>> mutable_seq
-MutableSeq('AGCCCGTGGGAAAGTCGCCGGGTAATGTACCG', IUPACUnambiguousDNA())
+MutableSeq('AGCCCGTGGGAAAGTCGCCGGGTAATGCACCG', IUPACUnambiguousDNA())
 \end{verbatim}
 
 Do note that unlike the \verb|Seq| object, the \verb|MutableSeq| object's methods like \verb|reverse_complement()| and \verb|reverse()| act in-situ!
@@ -1281,7 +1281,7 @@ Once you have finished editing your a \verb|MutableSeq| object, it's easy to get
 \begin{verbatim}
 >>> new_seq = mutable_seq.toseq()
 >>> new_seq
-Seq('AGCCCGTGGGAAAGTCGCCGGGTAATGTACCG', IUPACUnambiguousDNA())
+Seq('AGCCCGTGGGAAAGTCGCCGGGTAATGCACCG', IUPACUnambiguousDNA())
 \end{verbatim}
 
 You can also get a string from a \verb|MutableSeq| object just like from a \verb|Seq| object (Section~\ref{sec:seq-to-string}).
