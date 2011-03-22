@@ -69,19 +69,23 @@ with an ASCII offset of 64.
 i.e. There are at least THREE different and INCOMPATIBLE variants of the FASTQ
 file format: The original Sanger PHRED standard, and two from Solexa/Illumina.
 
+The good news is that as of CASAVA version 1.8, Illumina sequencers will
+produce FASTQ files using the standard Sanger encoding.
+
 You are expected to use this module via the Bio.SeqIO functions, with the
 following format names:
 
  - "qual" means simple quality files using PHRED scores (e.g. from Roche 454)
  - "fastq" means Sanger style FASTQ files using PHRED scores and an ASCII
-    offset of 33 (e.g. from the NCBI Short Read Archive). These can hold PHRED
-    scores from 0 to 93.
+    offset of 33 (e.g. from the NCBI Short Read Archive and Illumina 1.8+).
+    These can potentially hold PHRED scores from 0 to 93.
  - "fastq-sanger" is an alias for "fastq".
  - "fastq-solexa" means old Solexa (and also very early Illumina) style FASTQ
     files, using Solexa scores with an ASCII offset 64. These can hold Solexa
     scores from -5 to 62.
- - "fastq-illumina" means new Illumina 1.3+ style FASTQ files, using PHRED
-    scores but with an ASCII offset 64, allowing PHRED scores from 0 to 62.
+ - "fastq-illumina" means newer Illumina 1.3 to 1.7 style FASTQ files, using
+    PHRED scores but with an ASCII offset 64, allowing PHRED scores from 0 to
+    62.
 
 We could potentially add support for "qual-solexa" meaning QUAL files which
 contain Solexa scores, but thus far there isn't any reason to use such files.
@@ -299,7 +303,7 @@ the letter "I":
     >>> [ord(letter)-33 for letter in '!"#$%&+5?I']
     [0, 1, 2, 3, 4, 5, 10, 20, 30, 40]
 
-Similarly, we could produce an Illumina 1.3+ style FASTQ file using PHRED
+Similarly, we could produce an Illumina 1.3 to 1.7 style FASTQ file using PHRED
 scores with an offset of 64:
 
     >>> print test.format("fastq-illumina")
@@ -319,7 +323,7 @@ And we can check this too - the first PHRED score was zero, and this mapped to
     >>> [ord(letter)-64 for letter in "@ABCDEJT^h"]
     [0, 1, 2, 3, 4, 5, 10, 20, 30, 40]
 
-Notice how different the standard Sanger FASTQ and the Illumina 1.3+ style
+Notice how different the standard Sanger FASTQ and the Illumina 1.3 to 1.7 style
 FASTQ files look for the same data! Then we have the older Solexa/Illumina
 format to consider which encodes Solexa scores instead of PHRED scores.
 
@@ -354,8 +358,8 @@ Again, this is using an ASCII offset of 64, so we can check the Solexa scores:
     [-5, -5, -2, 0, 2, 3, 10, 20, 30, 40]
 
 This explains why the last few letters of this FASTQ output matched that using
-the Illumina 1.3+ format - high quality PHRED scores and Solexa scores are
-approximately equal.
+the Illumina 1.3 to 1.7 format - high quality PHRED scores and Solexa scores
+are approximately equal.
 
 """
 __docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
@@ -652,7 +656,7 @@ _solexa_to_illumina_quality_str = dict( \
     (qs, chr(int(round(phred_quality_from_solexa(qs)))+SOLEXA_SCORE_OFFSET)) \
     for qs in range(-5, 62+1))
 def _get_illumina_quality_str(record):
-    """Returns an Illumina 1.3+ FASTQ encoded quality string (PRIVATE).
+    """Returns an Illumina 1.3 to 1.7 FASTQ encoded quality string (PRIVATE).
 
     Notice that due to the limited range of printable ASCII characters, a
     PHRED quality of 62 is the maximum that can be held in an Illumina FASTQ
@@ -1188,7 +1192,7 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
 
 #This is a generator function!
 def FastqIlluminaIterator(handle, alphabet = single_letter_alphabet, title2ids = None):
-    """Parse new Illumina 1.3+ FASTQ like files (which differ in the quality mapping).
+    """Parse Illumina 1.3 to 1.7 FASTQ like files (which differ in the quality mapping).
 
     The optional arguments are the same as those for the FastqPhredIterator.
 

@@ -222,8 +222,10 @@ names are also used in Bio.AlignIO and include the following:
  - fastq-solexa - Original Solexa/Illumnia variant of the FASTQ format which
              encodes Solexa quality scores (not PHRED quality scores) with an
              ASCII offset of 64.
- - fastq-illumina - Solexa/Illumnia 1.3+ variant of the FASTQ format which
-             encodes PHRED quality scores with an ASCII offset of 64 (not 33).
+ - fastq-illumina - Solexa/Illumina 1.3 to 1.7 variant of the FASTQ format
+             which encodes PHRED quality scores with an ASCII offset of 64
+             (not 33). Note as of version 1.8 of the CASAVA pipeline Illumina
+             will produce FASTQ files using the standard Sanger encoding.
  - genbank - The GenBank or GenPept flat file format.
  - gb      - An alias for "genbank", for consistency with NCBI Entrez Utilities
  - ig      - The IntelliGenetics file format, apparently the same as the
