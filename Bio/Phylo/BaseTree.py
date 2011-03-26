@@ -555,27 +555,33 @@ class TreeMixin(object):
         parent.clades.extend(popped.clades)
         return parent
 
-    def collapse_all(self):
+    def collapse_all(self, target=None, **kwargs):
         """Collapse all the descendents of this tree, leaving only terminals.
 
-        Branch lengths are preserved, i.e. the distance to each terminal stays
-        the same.
+        Total branch lengths are preserved, i.e. the distance to each terminal
+        stays the same.
 
-        To collapse only certain elements, use the collapse method directly in a
-        loop with find_clades:
+        This implementation avoids strange side-effects by using level-order
+        traversal and testing all clade properties (versus the target
+        specification) up front. In particular, if a clade meets the target
+        specification in the original tree, it will be collapsed.  For example,
+        if the condition is:
 
-        >>> for clade in tree.find_clades(branch_length=True, order='level'):
-        ...     if (clade.branch_length < .5 and
-        ...         not clade.is_terminal() and
-        ...         clade is not self.root):
-        ...         tree.collapse(clade)
+            >>> tree.collapse_all(lambda c: c.branch_length < 0.1)
 
-        Note that level-order traversal helps avoid strange side-effects when
-        modifying the tree while iterating over its clades.
+        Collapsing a clade's parent node adds the parent's branch length to the
+        child, so during the execution of collapse_all, a clade's branch_length
+        may increase. In this implementation, clades are collapsed according to
+        their properties in the original tree, not the properties when tree
+        traversal reaches the clade. (It's easier to debug.) If you want the
+        other behavior (incremental testing), modifying the source code of this
+        function is straightforward.
         """
-        internals = self.find_clades(terminal=False, order='level')
+        # Read the iterable into a list to protect against in-place changes
+        internals = list(self.find_clades(target, False, 'level', **kwargs))
         # Skip the root node -- it can't be collapsed
-        internals.next()
+        if internals[0] == self.root:
+            internals.pop(0)
         for clade in internals:
             self.collapse(clade)
 

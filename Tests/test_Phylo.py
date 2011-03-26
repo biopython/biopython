@@ -273,6 +273,16 @@ class MixinTests(unittest.TestCase):
         # No internal nodes should remain except the root
         self.assertEqual(len(tree.get_terminals()), len(tree.clade))
         self.assertEqual(len(list(tree.find_clades(terminal=False))), 1)
+        # Again, with a target specification
+        tree = Phylo.read(EX_APAF, 'phyloxml')
+        d1 = tree.depths()
+        internal_node_ct = len(tree.get_nonterminals())
+        tree.collapse_all(lambda c: c.branch_length < 0.1)
+        d2 = tree.depths()
+        # Should have collapsed 7 internal nodes
+        self.assertEqual(len(tree.get_nonterminals()), internal_node_ct - 7)
+        for clade in d2:
+            self.assertAlmostEqual(d1[clade], d2[clade])
 
     def test_ladderize(self):
         """TreeMixin: ladderize() method."""
