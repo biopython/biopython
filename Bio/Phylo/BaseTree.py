@@ -134,7 +134,7 @@ def _function_matcher(matcher_func):
     def match(node):
         try:
             return matcher_func(node)
-        except (LookupError, AttributeError, ValueError):
+        except (LookupError, AttributeError, ValueError, TypeError):
             return False
     return match
 
