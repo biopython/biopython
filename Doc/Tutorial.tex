@@ -2556,6 +2556,7 @@ only one record, use the \verb|Bio.SeqIO.read()| function:
 \begin{verbatim}
 from Bio import Entrez
 from Bio import SeqIO
+Entrez.email = "A.N.Other@example.com"
 handle = Entrez.efetch(db="nucleotide", rettype="fasta", id="6273291")
 seq_record = SeqIO.read(handle, "fasta")
 handle.close()
@@ -2580,6 +2581,7 @@ alias for ``genbank'' in \verb|Bio.SeqIO|.
 \begin{verbatim}
 from Bio import Entrez
 from Bio import SeqIO
+Entrez.email = "A.N.Other@example.com"
 handle = Entrez.efetch(db="nucleotide", rettype="gb", id="6273291")
 seq_record = SeqIO.read(handle, "gb") #using "gb" as an alias for "genbank"
 handle.close()
@@ -2600,6 +2602,7 @@ so we must use the \verb|Bio.SeqIO.parse()| function:
 \begin{verbatim}
 from Bio import Entrez
 from Bio import SeqIO
+Entrez.email = "A.N.Other@example.com"
 handle = Entrez.efetch(db="nucleotide", rettype="gb", \
                        id="6273291,6273290,6273289")
 for seq_record in SeqIO.parse(handle, "gb"):
