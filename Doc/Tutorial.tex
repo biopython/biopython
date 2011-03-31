@@ -8338,10 +8338,6 @@ The Bio.Phylo module was introduced in Biopython 1.54. Following the lead of Seq
 it aims to provide a common way to work with phylogenetic data independently of the source data
 format, as well as a consistent API for I/O operations.
 
-{\em Note:} Since Phylo is a relatively recent addition to Biopython, we anticipate parts of it
-may change in backwards-incompatible ways in future releases --- we'll try our best to avoid
-it, though.
-
 \section{Demo: What's in a Tree?}
 
 To get acquainted with the module, let's start with a tree that we've already constructed, and
@@ -8988,7 +8984,8 @@ newtree = copy.deepcopy(tree)
 
   \item[\texttt{collapse\_all}]
     Collapse all the descendents of this tree, leaving only terminals. Branch lengths are
-    preserved, i.e. the distance to each terminal stays the same.
+    preserved, i.e. the distance to each terminal stays the same. With a target specification
+    (see above), collapses only the internal nodes matching the specification.
 
   \item[\texttt{ladderize}]
     Sort clades in-place according to the number of terminal nodes.  Deepest clades are placed

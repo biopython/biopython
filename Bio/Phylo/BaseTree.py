@@ -561,6 +561,12 @@ class TreeMixin(object):
         Total branch lengths are preserved, i.e. the distance to each terminal
         stays the same.
 
+        For example, this will safely collapse nodes with poor bootstrap
+        support:
+
+            >>> tree.collapse_all(lambda c: c.confidence is not None and
+            ...                   c.confidence < 70)
+
         This implementation avoids strange side-effects by using level-order
         traversal and testing all clade properties (versus the target
         specification) up front. In particular, if a clade meets the target
