@@ -1198,6 +1198,13 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
                     Incompatible with: in_pssm, query""",
                     filename=True,
                     equate=False),
+            _Option(["-msa_master_idx", "msa_master_idx"],
+                    """Index of sequence to use as master in MSA.
+
+                    Index (1-based) of sequence to use as the master in the
+                    multiple sequence alignment. If not specified, the first
+                    sequence is used.""",
+                    equate=False),
             _Option(["-in_pssm", "in_pssm"],
                     """PSI-BLAST checkpoint file
 
