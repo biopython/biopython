@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 12 March 2011 (Biopython 1.56+)}
+\date{Last Update -- 1 April 2011 (Biopython 1.56+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -10943,21 +10943,37 @@ working with quality data in a \verb|SeqRecord| object.  All we are going to
 do here is read in a file of FASTQ data, and filter it to pick out only those
 records whose PHRED quality scores are all above some threshold (here 20).
 
-For this example we'll use some real data downloaded from the NCBI,
-\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}
-(8MB) which unzips to a 23MB file \texttt{SRR014849.fastq}.
+For this example we'll use some real data downloaded from the ENA sequence
+read archive,
+\url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR020/SRR020192/SRR020192.fastq.gz}
+(2MB) which unzips to a 19MB file \texttt{SRR020192.fastq}. This is some
+Roche 454 GS FLX single end data from virus infected California sea lions
+(see \url{http://www.ebi.ac.uk/ena/data/view/SRS004476} for details).
+
+First, let's count the reads:
+
+\begin{verbatim}
+from Bio import SeqIO
+count = 0
+for rec in SeqIO.parse("SRR020192.fastq", "fastq"):
+    count += 1
+print "%i reads" % count
+\end{verbatim}
+
+\noindent Now let's do a simple filtering for a minimum PHRED quality of 20:
 
 \begin{verbatim}
 from Bio import SeqIO
 good_reads = (rec for rec in \
-              SeqIO.parse("SRR014849.fastq", "fastq") \
+              SeqIO.parse("SRR020192.fastq", "fastq") \
               if min(rec.letter_annotations["phred_quality"]) >= 20)
 count = SeqIO.write(good_reads, "good_quality.fastq", "fastq")
 print "Saved %i reads" % count
 \end{verbatim}
 
-\noindent This pulled out only $412$ reads - maybe this dataset hasn't been
-quality trimmed yet?
+\noindent This pulled out only $14580$ reads out of the $41892$ present.
+A more sensible thing to do would be to quality trim the reads, but this
+is intended as an example only.
 
 FASTQ files can contain millions of entries, so it is best to avoid loading
 them all into memory at once.  This example uses a generator expression, which
@@ -10967,10 +10983,10 @@ limitations.
 \subsection{Trimming off primer sequences}
 \label{sec:FASTQ-slicing-off-primer}
 
-For this example we're going to pretend that \texttt{GTTGGAACCG} is a 3' primer
+For this example we're going to pretend that \texttt{GATGACGGTGT} is a 5' primer
 sequence we want to look for in some FASTQ formatted read data.  As in the example
-above, we'll use the \texttt{SRR014849.fastq} file downloaded from the NCBI
-(\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}).
+above, we'll use the \texttt{SRR020192.fastq} file downloaded from the ENA
+(\url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR020/SRR020192/SRR020192.fastq.gz}).
 The same approach would work with any other supported file format (e.g. FASTA files).
 
 This code uses \verb|Bio.SeqIO| with a generator expression (to avoid loading
@@ -10980,34 +10996,34 @@ all the sequences into memory at once), and the \verb|Seq| object's
 \begin{verbatim}
 from Bio import SeqIO
 primer_reads = (rec for rec in \
-                SeqIO.parse("SRR014849.fastq", "fastq") \
-                if rec.seq.startswith("GTTGGAACCG"))
+                SeqIO.parse("SRR020192.fastq", "fastq") \
+                if rec.seq.startswith("GATGACGGTGT"))
 count = SeqIO.write(primer_reads, "with_primer.fastq", "fastq")
 print "Saved %i reads" % count
 \end{verbatim}
 
-\noindent That should find $500$ reads from \texttt{SRR014849.fastq} and save them to
+\noindent That should find $13819$ reads from \texttt{SRR014849.fastq} and save them to
 a new FASTQ file, \texttt{with\_primer.fastq}.
 
-Now suppose that instead you wanted to make a FASTQ file containing these $500$ reads
+Now suppose that instead you wanted to make a FASTQ file containing these reads
 but with the primer sequence removed?  That's just a small change as we can slice the
-\verb|SeqRecord| (see Section~\ref{sec:SeqRecord-slicing}) to remove the first ten
+\verb|SeqRecord| (see Section~\ref{sec:SeqRecord-slicing}) to remove the first eleven
 letters (the length of our primer):
 
 \begin{verbatim}
 from Bio import SeqIO
-trimmed_primer_reads = (rec[10:] for rec in \
-                        SeqIO.parse("SRR014849.fastq", "fastq") \
-                        if rec.seq.startswith("GTTGGAACCG"))
+trimmed_primer_reads = (rec[11:] for rec in \
+                        SeqIO.parse("SRR020192.fastq", "fastq") \
+                        if rec.seq.startswith("GATGACGGTGT"))
 count = SeqIO.write(trimmed_primer_reads, "with_primer_trimmed.fastq", "fastq")
 print "Saved %i reads" % count
 \end{verbatim}
 
-\noindent Again, that should pull out the $500$ reads from \texttt{SRR014849.fastq},
+\noindent Again, that should pull out the $13819$ reads from \texttt{SRR020192.fastq},
 but this time strip off the first ten characters, and save them to another new
 FASTQ file, \texttt{with\_primer\_trimmed.fastq}.
 
-Finally, suppose you want to create a new FASTQ file where these $500$ reads have
+Finally, suppose you want to create a new FASTQ file where these reads have
 their primer removed, but all the other reads are kept as they were?
 If we want to still use a generator expression, it is probably clearest to
 define our own trim function:
@@ -11020,13 +11036,13 @@ def trim_primer(record, primer):
     else:
         return record
 
-trimmed_reads = (trim_primer(record, "GTTGGAACCG") for record in \
-                 SeqIO.parse("SRR014849.fastq", "fastq"))
+trimmed_reads = (trim_primer(record, "GATGACGGTGT") for record in \
+                 SeqIO.parse("SRR020192.fastq", "fastq"))
 count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq")
 print "Saved %i reads" % count
 \end{verbatim}
 
-This takes longer, as this time the output file contains all $94696$ reads.
+This takes longer, as this time the output file contains all $41892$ reads.
 Again, we're used a generator expression to avoid any memory problems.
 You could alternatively use a generator function rather than a generator
 expression.
@@ -11046,8 +11062,8 @@ def trim_primers(records, primer):
         else:
             yield record
 
-original_reads = SeqIO.parse("SRR014849.fastq", "fastq")
-trimmed_reads = trim_primers(original_reads, "GTTGGAACCG")
+original_reads = SeqIO.parse("SRR020192.fastq", "fastq")
+trimmed_reads = trim_primers(original_reads, "GATGACGGTGT")
 count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq") 
 print "Saved %i reads" % count
 \end{verbatim}
@@ -11059,9 +11075,9 @@ where only some of the records are retained -- as shown in the next example.
 \label{sec:FASTQ-slicing-off-adaptor}
 
 This is essentially a simple extension to the previous example. We are going
-to going to pretend \texttt{GTTGGAACCG} is an adaptor sequence in some FASTQ
-formatted read data, again the \texttt{SRR014849.fastq} file from the NCBI
-(\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}).
+to going to pretend \texttt{GATGACGGTGT} is an adaptor sequence in some FASTQ
+formatted read data, again the \texttt{SRR020192.fastq} file from the NCBI
+(\url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR020/SRR020192/SRR020192.fastq.gz}).
 
 This time however, we will look for the sequence \emph{anywhere} in the reads,
 not just at the very beginning:
@@ -11069,7 +11085,7 @@ not just at the very beginning:
 \begin{verbatim}
 from Bio import SeqIO
 
-def trim_adaptors(records, adaptor, min_len):
+def trim_adaptors(records, adaptor):
     """Trims perfect adaptor sequences.
     
     This is a generator function, the records argument should
@@ -11085,8 +11101,8 @@ def trim_adaptors(records, adaptor, min_len):
             #trim off the adaptor
             yield record[index+len_adaptor:]
 
-original_reads = SeqIO.parse("SRR014849.fastq", "fastq")
-trimmed_reads = trim_adaptors(original_reads, "GTTGGAACCG")
+original_reads = SeqIO.parse("SRR020192.fastq", "fastq")
+trimmed_reads = trim_adaptors(original_reads, "GATGACGGTGT")
 count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq") 
 print "Saved %i reads" % count
 \end{verbatim}
@@ -11125,8 +11141,8 @@ def trim_adaptors(records, adaptor, min_len):
             #after trimming this will still be long enough
             yield record[index+len_adaptor:]
 
-original_reads = SeqIO.parse("SRR014849.fastq", "fastq")
-trimmed_reads = trim_adaptors(original_reads, "GTTGGAACCG", 36)
+original_reads = SeqIO.parse("SRR020192.fastq", "fastq")
+trimmed_reads = trim_adaptors(original_reads, "GATGACGGTGT", 100)
 count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq") 
 print "Saved %i reads" % count
 \end{verbatim}
@@ -11296,19 +11312,19 @@ random access to the reads. Here the \verb|Bio.SeqIO.index()| function
 may prove very helpful, as it allows you to access any read in the FASTQ file
 by its name (see Section~\ref{sec:SeqIO-index}).
 
-Again we'll use the \texttt{SRR014849.fastq} file from the NCBI
-(\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}),
-although this is actually quite a small FASTQ file with less than $100,000$ reads:
+Again we'll use the \texttt{SRR020192.fastq} file from the ENA
+(\url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR020/SRR020192/SRR020192.fastq.gz}),
+although this is actually quite a small FASTQ file with less than $50,000$ reads:
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> fq_dict = SeqIO.index("SRR014849.fastq", "fastq")
+>>> fq_dict = SeqIO.index("SRR020192.fastq", "fastq")
 >>> len(fq_dict)
-94696
+41892
 >>> fq_dict.keys()[:4]
-['SRR014849.80961', 'SRR014849.80960', 'SRR014849.80963', 'SRR014849.288943']
->>> fq_dict["SRR014849.171880"].seq
-Seq('AAAATCATCTCTGGCGCCCCGTTGGAACCGAAAGGGTTTGAATTCAAACCCTTT...CAG', SingleLetterAlphabet())
+['SRR020192.38240', 'SRR020192.23181', 'SRR020192.40568', 'SRR020192.23186']
+>>> fq_dict["SRR020192.23186"].seq
+Seq('GTCCCAGTATTCGGATTTGTCTGCCAAAACAATGAAATTGACACAGTTTACAAC...CCG', SingleLetterAlphabet())
 \end{verbatim}
 
 When testing this on a FASTQ file with seven million reads,
