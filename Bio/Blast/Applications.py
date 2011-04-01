@@ -649,7 +649,9 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
             _Option(["-subject_loc", "subject_loc"],
                     """Location on the subject sequence (Format: start-stop)
 
-                    Incompatible with: db, gilist, negative_gilist, remote.
+                    Incompatible with: db, gilist, seqidlist, negative_gilist,
+                    db_soft_mask, db_hard_mask, remote.
+                    
                     See also subject.""",
                     equate=False),
             #Restrict search or results:
@@ -750,8 +752,16 @@ class NcbiblastpCommandline(_Ncbiblast2SeqCommandline):
 
                     Filtering algorithm ID to apply to the BLAST database as soft masking.
 
-                    Incompatible with: subject, subject_loc""",
+                    Incompatible with: db_hard_mask, subject, subject_loc""",
                     equate=False),
+            _Option(["-db_hard_mask", "db_hard_mask"],
+                    """Filtering algorithm for hard masking (integer).
+
+                    Filtering algorithm ID to apply to the BLAST database as hard masking.
+
+                    Incompatible with: db_soft_mask, subject, subject_loc""",
+                    equate=False),
+            
             #Extension options:
             _Switch(["-ungapped", "ungapped"],
                     "Perform ungapped alignment only?"),
@@ -762,7 +772,8 @@ class NcbiblastpCommandline(_Ncbiblast2SeqCommandline):
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
     def _validate(self):
-        incompatibles = {"db_soft_mask":["subject", "subject_loc"]}
+        incompatibles = {"db_soft_mask":["db_hard_mask", "subject", "subject_loc"],
+                         "db_hard_mask":["db_soft_mask", "subject", "subject_loc"]}
         self._validate_incompatibilities(incompatibles)
         _Ncbiblast2SeqCommandline._validate(self)
 
@@ -848,7 +859,14 @@ class NcbiblastnCommandline(_Ncbiblast2SeqCommandline):
 
                     Filtering algorithm ID to apply to the BLAST database as soft masking.
 
-                    Incompatible with: subject, subject_loc""",
+                    Incompatible with: db_hard_mask, subject, subject_loc""",
+                    equate=False),
+            _Option(["-db_hard_mask", "db_hard_mask"],
+                    """Filtering algorithm for hard masking (integer).
+
+                    Filtering algorithm ID to apply to the BLAST database as hard masking.
+
+                    Incompatible with: db_soft_mask, subject, subject_loc""",
                     equate=False),
             _Option(["-perc_identity", "perc_identity"],
                     "Percent identity (real, 0 to 100 inclusive).",
@@ -890,7 +908,8 @@ class NcbiblastnCommandline(_Ncbiblast2SeqCommandline):
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
     def _validate(self):
-        incompatibles = {"db_soft_mask":["subject", "subject_loc"]}
+        incompatibles = {"db_soft_mask":["db_hard_mask", "subject", "subject_loc"],
+                         "db_hard_mask":["db_soft_mask", "subject", "subject_loc"]}
         self._validate_incompatibilities(incompatibles)
         if (self.template_type and not self.template_length) \
         or (self.template_length and not self.template_type) :
@@ -961,7 +980,14 @@ class NcbiblastxCommandline(_Ncbiblast2SeqCommandline):
 
                     Filtering algorithm ID to apply to the BLAST database as soft masking.
 
-                    Incompatible with: subject, subject_loc""",
+                    Incompatible with: db_hard_mask, subject, subject_loc""",
+                    equate=False),
+            _Option(["-db_hard_mask", "db_hard_mask"],
+                    """Filtering algorithm for hard masking (integer).
+
+                    Filtering algorithm ID to apply to the BLAST database as hard masking.
+
+                    Incompatible with: db_soft_mask, subject, subject_loc""",
                     equate=False),
             #Extension options:
             _Switch(["-ungapped", "ungapped"],
@@ -970,7 +996,8 @@ class NcbiblastxCommandline(_Ncbiblast2SeqCommandline):
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
     def _validate(self):
-        incompatibles = {"db_soft_mask":["subject", "subject_loc"]}
+        incompatibles = {"db_soft_mask":["db_hard_mask", "subject", "subject_loc"],
+                         "db_hard_mask":["db_soft_mask", "subject", "subject_loc"]}
         self._validate_incompatibilities(incompatibles)
         _Ncbiblast2SeqCommandline._validate(self)
 
@@ -1038,10 +1065,18 @@ class NcbitblastnCommandline(_Ncbiblast2SeqCommandline):
                     equate=False),
             #Restrict search or results:
             _Option(["-db_soft_mask", "db_soft_mask"],
-                    """Filtering algorithm ID to apply to the BLAST database as soft masking (string).
-                    
-                    Incompatible with: subject, subject_loc
-                    """,
+                    """Filtering algorithm for soft masking (integer).
+
+                    Filtering algorithm ID to apply to the BLAST database as soft masking.
+
+                    Incompatible with: db_hard_mask, subject, subject_loc""",
+                    equate=False),
+            _Option(["-db_hard_mask", "db_hard_mask"],
+                    """Filtering algorithm for hard masking (integer).
+
+                    Filtering algorithm ID to apply to the BLAST database as hard masking.
+
+                    Incompatible with: db_soft_mask, subject, subject_loc""",
                     equate=False),
             #Extension options:
             _Switch(["-ungapped", "ungapped"],
@@ -1060,7 +1095,8 @@ class NcbitblastnCommandline(_Ncbiblast2SeqCommandline):
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
 
     def _validate(self):
-        incompatibles = {"in_pssm":["remote", "query"]}
+        incompatibles = {"db_soft_mask":["db_hard_mask", "subject", "subject_loc"],
+                         "db_hard_mask":["db_soft_mask", "subject", "subject_loc"]}
         self._validate_incompatibilities(incompatibles)
         _Ncbiblast2SeqCommandline._validate(self)
 
@@ -1126,13 +1162,27 @@ class NcbitblastxCommandline(_Ncbiblast2SeqCommandline):
                     equate=False),
             #Restrict search or results:
             _Option(["-db_soft_mask", "db_soft_mask"],
-                    """Filtering algorithm ID to apply to the BLAST database as soft masking (string).
-                    
-                    Incompatible with: subject, subject_loc
-                    """,
+                    """Filtering algorithm for soft masking (integer).
+
+                    Filtering algorithm ID to apply to the BLAST database as soft masking.
+
+                    Incompatible with: db_hard_mask, subject, subject_loc""",
                     equate=False),
-           ]
+            _Option(["-db_hard_mask", "db_hard_mask"],
+                    """Filtering algorithm for hard masking (integer).
+
+                    Filtering algorithm ID to apply to the BLAST database as hard masking.
+
+                    Incompatible with: db_soft_mask, subject, subject_loc""",
+                    equate=False),
+            ]
         _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
+
+    def _validate(self):
+        incompatibles = {"db_soft_mask":["db_hard_mask", "subject", "subject_loc"],
+                         "db_hard_mask":["db_soft_mask", "subject", "subject_loc"]}
+        self._validate_incompatibilities(incompatibles)
+        _Ncbiblast2SeqCommandline._validate(self)
 
 
 class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
