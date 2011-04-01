@@ -206,14 +206,13 @@ class CheckCompleteArgList(unittest.TestCase):
             extra.remove("-seqidlist")
 
         if extra or missing:
-            raise MissingExternalDependencyError("BLAST+ and Biopython out "
-                  "of sync. Your version of the NCBI BLAST+ tool %s does not "
-                  "match what we are expecting. Please update your copy of "
-                  "Biopython, or report this issue if you are already using "
-                  "the latest version. (Exta args: %s; Missing: %s)" \
-                  % (exe_name,
-                     ",".join(sorted(extra)),
-                     ",".join(sorted(missing))))
+            import warnings
+            warnings.warn("NCBI BLAST+ %s and Biopython out sync. Please "
+                          "update Biopython, or report this issue if you are "
+                          "already using the latest version. (Exta args: %s; "
+                          "Missing: %s)" % (exe_name,
+                          ",".join(sorted(extra)),
+                          ",".join(sorted(missing))))
 
         #An almost trivial example to test any validation
         if "-query" in names:
