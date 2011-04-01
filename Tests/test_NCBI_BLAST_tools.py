@@ -208,6 +208,9 @@ class CheckCompleteArgList(unittest.TestCase):
         and exe_name in ["blastn", "blastp", "blastx", "tblastx", "tblastn"]:
             #New in BLAST 2.2.25+ so will look like an extra arg on old BLAST
             extra.remove("-db_hard_mask")
+        if "-msa_master_idx" in extra and exe_name=="psiblast":
+            #New in BLAST 2.2.25+ so will look like an extra arg on old BLAST
+            extra.remove("-msa_master_idx")
 
         if extra or missing:
             import warnings
