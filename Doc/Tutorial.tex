@@ -11835,10 +11835,12 @@ matches in one color and the reverse matches in another.
 If you are working with second generation sequencing data, you may want to try plotting
 the quality data. Here is an example using two FASTQ files containing paired end reads,
 \texttt{SRR001666\_1.fastq} for the forward reads, and  \texttt{SRR001666\_2.fastq} for
-the reverse reads. These were downloaded from the NCBI short read archive (SRA) FTP site
-(see the \href{http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?cmd=viewer&m=data&s=viewer&run=SRR001666}
-{SRR001666 page} and \url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX000/SRX000430/}
-for details).
+the reverse reads. These were downloaded from the ENA sequence read archive FTP site
+(\url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR001/SRR001666/SRR001666_1.fastq.gz} and
+\url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR001/SRR001666/SRR001666_2.fastq.gz}), and
+are from \textit{E. coli} -- see \url{http://www.ebi.ac.uk/ena/data/view/SRR001666}
+for details.
+%Originally from ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX000/SRX000430/
 
 In the following code the \verb|pylab.subplot(...)| function is used in order to show
 the forward and reverse qualities on two subplots, side by side. There is also a little
