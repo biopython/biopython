@@ -31,6 +31,9 @@ as quality scores from FASTQ) or features (such as annotation from GenBank).
 Bio.SeqIO.write's QUAL output has been sped up, and Bio.SeqIO.convert now
 uses an optimised routine for FASTQ to QUAL making this much faster.
 
+Biopython can now be installed with pip. Thanks to David Koppstein and 
+James Casbon for reporting the problem.
+
 Bio.SeqIO.write now uses lower case for the sequence for GenBank, EMBL and
 IMGT output.
 
