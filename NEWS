@@ -21,7 +21,8 @@ Bio.Blast.Applications now includes a wrapper for the BLAST+ blast_formatter
 tool from NCBI BLAST 2.2.24+ or later. This release of BLAST+ added the
 ability to run the BLAST tools and save the output as ASN.1 format, and then
 convert this to any other supported BLAST ouput format (plain text, tabular,
-XML, or HTML) with the blast_formatter tool.
+XML, or HTML) with the blast_formatter tool. The wrappers were also updated
+to include new arguments added in BLAST 2.2.25+ such as -db_hard_mask.
 
 The SeqRecord object now has a reverse_complement method (similar to that of
 the Seq object). This is most useful to reversing per-letter-annotation (such
