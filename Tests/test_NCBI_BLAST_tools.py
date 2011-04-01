@@ -211,6 +211,11 @@ class CheckCompleteArgList(unittest.TestCase):
         if "-msa_master_idx" in extra and exe_name=="psiblast":
             #New in BLAST 2.2.25+ so will look like an extra arg on old BLAST
             extra.remove("-msa_master_idx")
+        if exe_name=="rpsblast":
+            #New in BLAST 2.2.25+ so will look like an extra arg on old BLAST
+            extra = extra.difference(["-best_hit_overhang",
+                                      "-best_hit_score_edge",
+                                      "-culling_limit"])
 
         if extra or missing:
             import warnings

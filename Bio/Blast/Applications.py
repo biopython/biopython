@@ -1266,8 +1266,37 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
                     Format: "yes", "window locut hicut", or "no" to disable.
                     Default is "12 2.2 2.5""",
                     equate=False),
+            #Restrict search or results:
+            _Option(["-culling_limit", "culling_limit"],
+                    """Hit culling limit (integer).
+
+                    If the query range of a hit is enveloped by that of at
+                    least this many higher-scoring hits, delete the hit.
+
+                    Incompatible with: best_hit_overhang, best_hit_score_edge.
+                    """,
+                    equate=False),
+            _Option(["-best_hit_overhang", "best_hit_overhang"],
+                    """Best Hit algorithm overhang value (recommended value: 0.1)
+
+                    Float between 0.0 and 0.5 inclusive.
+
+                    Incompatible with: culling_limit.""",
+                    equate=False),
+            _Option(["-best_hit_score_edge", "best_hit_score_edge"],
+                    """Best Hit algorithm score edge value (recommended value: 0.1)
+
+                    Float between 0.0 and 0.5 inclusive.
+
+                    Incompatible with: culling_limit.""",
+                    equate=False),
             ]
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
+
+    def _validate(self):
+        incompatibles = {"culling_limit":["best_hit_overhang","best_hit_score_edge"]}
+        self._validate_incompatibilities(incompatibles)
+        _NcbiblastCommandline._validate(self)
 
 
 class NcbirpstblastnCommandline(_NcbiblastCommandline):
