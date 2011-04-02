@@ -10,7 +10,7 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-In progress: Biopython 1.57 (not yet released).
+2 April 2011: Biopython 1.57
 
 Bio.SeqIO now includes an index_db() function which extends the existing
 indexing functionality to allow indexing many files, and more importantly
@@ -37,10 +37,17 @@ James Casbon for reporting the problem.
 Bio.SeqIO.write now uses lower case for the sequence for GenBank, EMBL and
 IMGT output.
 
+The Bio.PDB module received several fixes and improvements, including starting 
+to merge João's work from GSoC 2010; consequently Atom objects now know
+their element type and IUPAC mass. (The new features that use these
+attributes won't be included in Biopython until the next release, though, so
+stay tuned.)
+
 The nodetype hierachy in the Bio.SCOP.Cla.Record class is now a dictionary
 (previously it was a list of key,value tuples) to better match the standard.
 
-(At least) 14 people have contributed to this release, including 5 new people:
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
 
 Brad Chapman
 Eric Talevich
@@ -53,6 +60,7 @@ Kristian Rother
 Leighton Pritchard
 Michiel de Hoon
 Peter Cock
+Peter Thorpe
 Phillip Garland
 Walter Gillett (first contribution)
 
