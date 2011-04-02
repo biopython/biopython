@@ -10,7 +10,7 @@ of freely available Python tools for computational molecular biology.
 http://biopython.org
 """
 
-__version__ = "1.57"
+__version__ = "1.57+"
 
 class MissingExternalDependencyError(Exception):
     """Missing an external dependency.
