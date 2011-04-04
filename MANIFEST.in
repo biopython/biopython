@@ -8,6 +8,7 @@ include NEWS
 include README
 include DEPRECATED
 include MANIFEST.in
+include do2to3.py
 
 recursive-include Scripts *    # Include scripts.
 recursive-include Tests *      # Include regression tests.
