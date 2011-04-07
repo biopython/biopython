@@ -972,6 +972,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             cur_feature.location = SeqFeature.FeatureLocation(s,e)
             return
         #Not recognised
+        if "order" in location_line and "join" in location_line:
+            #See Bug 3197
+            msg = 'Combinations of "join" and "order" within the same ' + \
+                  'location (nested operators) are illegal:\n' + location_line
+            raise LocationParserError(msg)
         raise LocationParserError(location_line)
 
     def _add_qualifier(self):
