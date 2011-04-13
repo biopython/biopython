@@ -66,6 +66,13 @@ The annotations dictionary also contains any adapter clip positions
     >>> print len(record.annotations["flow_index"])
     219
 
+Note that to convert from a raw reading in flow_values to the corresponding
+homopolymer stretch estimate, the value should be rounded to the nearest 100:
+
+    >>> print [int(round(value, -2)) // 100
+    ...        for value in record.annotations["flow_values"][:10]], '...'
+    [1, 0, 1, 0, 0, 1, 0, 1, 0, 2] ...
+
 As a convenience method, you can read the file with SeqIO format name "sff-trim"
 instead of "sff" to get just the trimmed sequences (without any annotation
 except for the PHRED quality scores):
