@@ -10,6 +10,16 @@ The latest news is at the top of this file.
 
 ===================================================================
 
+In progress: Biopython 1.58 (not yet released)
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Connor McCoy (first contribution)
+Peter Cock
+
+===================================================================
+
 2 April 2011: Biopython 1.57
 
 Bio.SeqIO now includes an index_db() function which extends the existing
