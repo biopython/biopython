@@ -78,9 +78,10 @@ class FastaM10Iterator(AlignmentIterator):
         if not line:
             raise StopIteration
 
-        if line.startswith("#"):
-            #Skip the file header before the alignments.  e.g.
+        if line.startswith("#") or line.startswith(">>><<<"):
+            #Skip the file header before the alignments.
             line = self._skip_file_header(line)
+        assert not line.startswith(">>><<<")
         while ">>>" in line and not line.startswith(">>>"):
             #Moved onto the next query sequence!
             self._query_descr = ""
@@ -91,13 +92,16 @@ class FastaM10Iterator(AlignmentIterator):
         if not line:
             #End of file
             raise StopIteration
-        if ">>><<<" in line:
+        if ">>>///" in line:
             #Reached the end of the alignments, no need to read the footer...
+            #Note this is a new line type in fasta-36.3, previously >>><<<
+            #was used but that not occurs at the end of each query.
             raise StopIteration
+        assert not line.startswith(">>><<<")
 
 
         #Should start >>... and not >>>...
-        assert line[0:2] == ">>" and not line[2] == ">", line
+        assert line[0:2] == ">>" and not line[2] == ">", repr(line)
 
         query_seq_parts, match_seq_parts = [], []
         query_annotation, match_annotation = {}, {}
@@ -312,7 +316,7 @@ class FastaM10Iterator(AlignmentIterator):
         #Note that there is no point recording the command line here
         #from the # line, as it is included again in each alignment
         #under the "pg_argv" tag.  Likewise for the program version.
-        while ">>>" not in line:
+        while line and (">>>" not in line or line.startswith(">>><<<")):
             line = self.handle.readline()
         return line
 
@@ -363,15 +367,11 @@ class FastaM10Iterator(AlignmentIterator):
         
         line = self.handle.readline()
         #We ignore the free form text...
-        while not line[0:3] == ">>>":
+        while line[0:3] != ">>>" or line.startswith(">>><<<"):
             #print "Ignoring %s" % line.strip()
             line = self.handle.readline()
             if not line:
-                raise ValueError("Premature end of file!")
-            if ">>><<<" in line:
-                #End of alignments, looks like the last query
-                #or queries had no hits.
-                return line
+                return ""
 
         #Now want to parse this section:
         """
@@ -393,6 +393,7 @@ class FastaM10Iterator(AlignmentIterator):
         ; mp_Parameters: BL50 matrix (15:-5) ktup: 2  join: 36, opt: 24, open/ext: -10/-2, width:  16
         """
 
+        assert not line.startswith(">>><<<"), line
         assert line[0:3] == ">>>", line
         self._query_descr = line[3:].strip()
 
