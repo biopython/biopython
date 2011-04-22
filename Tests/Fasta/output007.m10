@@ -1,0 +1,437 @@
+# /home/username/fasta-36.3.4/bin/fasta36 -E 1 -m 10 NC_002127.faa NC_009649.faa
+FASTA searches a protein or DNA sequence data bank
+ version 36.3.4 Apr, 2011
+Please cite:
+ W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
+
+Query: NC_002127.faa
+  1>>>gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 s - 107 aa
+Library: NC_009649.faa
+    45119 residues in   180 sequences
+
+Statistics: (shuffled [498]) Expectation_n fit: rho(ln(x))= 3.0739+/-0.0105; mu= 13.5811+/- 0.558
+ mean_var=50.3269+/-12.335, 0's: 0 Z-trim(86.3): 0  B-trim: 0 in 0/33
+ Lambda= 0.180790
+ statistics sampled from 68 (68) to 498 sequences
+Algorithm: FASTA (3.7 Nov 2010) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -10/-2
+ ktup: 2, E-join: 1 (0.783), E-opt: 0.2 (0.378), width:  16
+ Scan time:  0.030
+
+The best scores are:                                      opt bits E(180)
+gi|152973457|ref|YP_001338508.1| ATPase with chape ( 931)   71 28.5   0.048
+gi|152973588|ref|YP_001338639.1| F pilus assembly  ( 459)   63 25.9    0.14
+gi|152973480|ref|YP_001338531.1| Arsenate reductas ( 141)   51 22.0    0.63
+
+>>>gi|10955263|ref|NP_052604.1|, 107 aa vs NC_009649.faa library
+; pg_name: /Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36
+; pg_ver: 36.3.4 Apr, 2011
+; pg_argv: /Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36 -E 1 -m 10 NC_002127.faa NC_009649.faa
+; pg_name_alg: FASTA
+; pg_ver_rel: 3.7 Nov 2010
+; pg_matrix: BL50 (15:-5)
+; pg_open-ext: -10 -2
+; pg_ktup: 2
+; pg_join_E(): 1 (0.783)
+; pg_optcut_E(): 0.2 (0.378)
+; mp_extrap: 60000 498
+; mp_stats: (shuffled [498]) Expectation_n fit: rho(ln(x))= 3.0739+/-0.0105; mu= 13.5811+/- 0.558  mean_var=50.3269+/-12.335, 0's: 0 Z-trim(86.3): 0  B-trim: 0 in 0/33  Lambda= 0.180790
+; mp_KS: -0.0000 (N=0) at  30
+; mp_Algorithm: FASTA (3.7 Nov 2010) [optimized]
+; mp_Parameters: BL50 matrix (15:-5), open/ext: -10/-2  ktup: 2, E-join: 1 (0.783), E-opt: 0.2 (0.378), width:  16
+>>gi|152973457|ref|YP_001338508.1| ATPase with chaperone activity, ATP-binding subunit [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+; fa_frame: f
+; fa_initn:  97
+; fa_init1:  43
+; fa_opt:  71
+; fa_z-score: 109.6
+; fa_bits: 28.5
+; fa_expect:  0.048
+; sw_score: 71
+; sw_ident: 0.250
+; sw_sim: 0.574
+; sw_overlap: 108
+>gi|10955263| ..
+; sq_len: 107
+; sq_offset: 1
+; sq_type: p
+; al_start: 5
+; al_stop: 103
+; al_display_start: 1
+--------------------------MTKRSGSNT-RRRAISRPVRLTAE
+ED---QEIRKRAAECGKTVSGFLRAAALGKKVNSLTDDRVLKEVM-----
+RLGALQKKLFIDGKRVGDREYAEVLIAITEYHRALLSRLMAD
+>gi|152973457|ref|YP_001338508.1| ..
+; sq_len: 931
+; sq_offset: 1
+; sq_type: p
+; al_start: 96
+; al_stop: 195
+; al_display_start: 66
+SDFFRIGDDATPVAADTDDVVDASFGEPAAAGSGAPRRRGSGLASRISEQ
+SEALLQEAAKHAAEFGRS------EVDTEHLLLALADSDVVKTILGQFKI
+KVDDLKRQIESEAKR-GDKPF-EGEIGVSPRVKDALSRAFVASNELGHSY
+VGPEHFLIGLAEEGEGLAANLLRRYGLTPQ
+; al_cons:
+                              .::..-:::. .   :.. .
+ .---::  :.::: :..------ .   . . .:.:. :.: ..-----
+..  :....  ..::-::. .-:  :...   .  :::
+>>gi|152973588|ref|YP_001338639.1| F pilus assembly protein [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+; fa_frame: f
+; fa_initn:  66
+; fa_init1:  33
+; fa_opt:  63
+; fa_z-score: 101.4
+; fa_bits: 25.9
+; fa_expect:   0.14
+; sw_score: 63
+; sw_ident: 0.266
+; sw_sim: 0.656
+; sw_overlap: 64
+>gi|10955263| ..
+; sq_len: 107
+; sq_offset: 1
+; sq_type: p
+; al_start: 32
+; al_stop: 94
+; al_display_start: 2
+TKRSGSNTRRRAISRPVRLTAEEDQEIRKRAAECGKTVSGFLRAAALGKK
+VNSLTDDRVLKEV-MRLGALQKKLFIDGKRVGDREYAEVLIAITEYHRAL
+LSRLMAD
+>gi|152973588|ref|YP_001338639.1| ..
+; sq_len: 459
+; sq_offset: 1
+; sq_type: p
+; al_start: 191
+; al_stop: 248
+; al_display_start: 161
+VGGLFPRTQVAQQKVCQDIAGESNIFSDWAASRQGCTVGG--KMDSVQDK
+ASDKDKERVMKNINIMWNALSKNRLFDG----NKELKEFIMTLTGTLIFG
+ENSEITPLPARTTDQDLIRAMMEGGTAKIYHCNDSDKCLKVVADATVTIT
+SNKALKSQISALLSSIQNKAVADEKLTDQE
+; al_cons:
+                              :.. : ::.:--.  ..  :
+...   .::.:..-.  .::.:. ..::----..:  : ....:
+>>gi|152973480|ref|YP_001338531.1| Arsenate reductase (Arsenical pump modifier) [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+; fa_frame: f
+; fa_initn:  45
+; fa_init1:  37
+; fa_opt:  51
+; fa_z-score: 89.6
+; fa_bits: 22.0
+; fa_expect:   0.63
+; sw_score: 51
+; sw_ident: 0.267
+; sw_sim: 0.622
+; sw_overlap: 45
+>gi|10955263| ..
+; sq_len: 107
+; sq_offset: 1
+; sq_type: p
+; al_start: 27
+; al_stop: 66
+; al_display_start: 1
+----MTKRSGSNTRRRAISRPVRLTAEEDQEIRKRAAECGKTVSGFLRAA
+A-----LGKKVNSLTDDRVLKEVMRLGALQKKLFIDGKRVGDREYAEVLI
+AITEYHRALLSRLMAD
+>gi|152973480|ref|YP_001338531.1| ..
+; sq_len: 141
+; sq_offset: 1
+; sq_type: p
+; al_start: 43
+; al_stop: 87
+; al_display_start: 13
+GTSRNTLEMIRNSGNEPTVIHYLENPPSRDELVKLIADMGISVRALLRKN
+VEPYEELGLEEDKFTDDQLIDFMLQHPILINRPIVVTPLGTRLCRPSEVV
+LDILPDAQKGAFAKEDGEKV
+; al_cons:
+                              :. :  :. : .: ..::  
+.-----:: . ...:::...  ...
+>>><<<
+  2>>>gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s - 126 aa
+Library: NC_009649.faa
+    45119 residues in   180 sequences
+
+Statistics: (shuffled [493]) Expectation_n fit: rho(ln(x))= 4.1464+/-0.0105; mu= 7.4394+/- 0.556
+ mean_var=56.5622+/-13.483, 0's: 0 Z-trim(85.2): 0  B-trim: 0 in 0/33
+ Lambda= 0.170534
+ statistics sampled from 51 (51) to 493 sequences
+Algorithm: FASTA (3.7 Nov 2010) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -10/-2
+ ktup: 2, E-join: 1 (0.728), E-opt: 0.2 (0.331), width:  16
+ Scan time:  0.050
+
+The best scores are:                                      opt bits E(180)
+gi|152973462|ref|YP_001338513.1| hypothetical prot ( 101)   58 23.9    0.15
+gi|152973509|ref|YP_001338560.1| probable sensor k ( 448)   56 24.0     0.6
+gi|152973581|ref|YP_001338632.1| inner membrane pr (  84)   48 21.3    0.72
+gi|152973536|ref|YP_001338587.1| putative inner me (  84)   48 21.3    0.72
+
+>>>gi|10955264|ref|NP_052605.1|, 126 aa vs NC_009649.faa library
+; pg_name: /Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36
+; pg_ver: 36.3.4 Apr, 2011
+; pg_argv: /Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36 -E 1 -m 10 NC_002127.faa NC_009649.faa
+; pg_name_alg: FASTA
+; pg_ver_rel: 3.7 Nov 2010
+; pg_matrix: BL50 (15:-5)
+; pg_open-ext: -10 -2
+; pg_ktup: 2
+; pg_join_E(): 1 (0.728)
+; pg_optcut_E(): 0.2 (0.331)
+; mp_extrap: 60000 493
+; mp_stats: (shuffled [493]) Expectation_n fit: rho(ln(x))= 4.1464+/-0.0105; mu= 7.4394+/- 0.556  mean_var=56.5622+/-13.483, 0's: 0 Z-trim(85.2): 0  B-trim: 0 in 0/33  Lambda= 0.170534
+; mp_KS: -0.0000 (N=0) at  30
+; mp_Algorithm: FASTA (3.7 Nov 2010) [optimized]
+; mp_Parameters: BL50 matrix (15:-5), open/ext: -10/-2  ktup: 2, E-join: 1 (0.728), E-opt: 0.2 (0.331), width:  16
+>>gi|152973462|ref|YP_001338513.1| hypothetical protein KPN_pKPN3p05904 [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+; fa_frame: f
+; fa_initn:  78
+; fa_init1:  50
+; fa_opt:  58
+; fa_z-score: 100.8
+; fa_bits: 23.9
+; fa_expect:   0.15
+; sw_score: 58
+; sw_ident: 0.289
+; sw_sim: 0.632
+; sw_overlap: 38
+>gi|10955264| ..
+; sq_len: 126
+; sq_offset: 1
+; sq_type: p
+; al_start: 1
+; al_stop: 38
+; al_display_start: 1
+------------------------------MKKDKKYQIEAIKNKDKTLF
+IVYATDIYSPSEFFSKIESDLKKKKSKGDVFFDLIIPNGGKKDRYVYTSF
+NGEKFSSYTLNKVTKTDEYN
+>gi|152973462|ref|YP_001338513.1| ..
+; sq_len: 101
+; sq_offset: 1
+; sq_type: p
+; al_start: 44
+; al_stop: 81
+; al_display_start: 14
+DALLGEIQRLRKQVHQLQLERDILTKANELIKKDLGVSFLKLKNREKTLI
+VDALKKKYPVAELLSVLQLARSCYFYQNVCTISMRKYA
+; al_cons:
+                              .:::   ..  .::..:::.
+.      :  .:..: ..
+>>gi|152973509|ref|YP_001338560.1| probable sensor kinase (silver resistance) [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+; fa_frame: f
+; fa_initn:  73
+; fa_init1:  56
+; fa_opt:  56
+; fa_z-score: 89.9
+; fa_bits: 24.0
+; fa_expect:    0.6
+; sw_score: 56
+; sw_ident: 0.727
+; sw_sim: 0.818
+; sw_overlap: 11
+>gi|10955264| ..
+; sq_len: 126
+; sq_offset: 1
+; sq_type: p
+; al_start: 51
+; al_stop: 61
+; al_display_start: 21
+IVYATDIYSPSEFFSKIESDLKKKKSKGDVFFDLIIPNGGKKDRYVYTSF
+NGEKFSSYTLNKVTKTDEYNDLSELSASFFKKNFDKINVNLLSKATSFAL
+KKGIPI
+>gi|152973509|ref|YP_001338560.1| ..
+; sq_len: 448
+; sq_offset: 1
+; sq_type: p
+; al_start: 408
+; al_stop: 418
+; al_display_start: 378
+RRAINNLLSNALRYTPEGQAITVSIREQESFFDLVIENPGKPIPEEHLSR
+LFDRFYRVDPSRQRKGEALRL
+; al_cons:
+                              ::::.: : ::
+>>gi|152973581|ref|YP_001338632.1| inner membrane protein [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+; fa_frame: f
+; fa_initn:  61
+; fa_init1:  46
+; fa_opt:  48
+; fa_z-score: 88.5
+; fa_bits: 21.3
+; fa_expect:   0.72
+; sw_score: 48
+; sw_ident: 0.300
+; sw_sim: 0.675
+; sw_overlap: 40
+>gi|10955264| ..
+; sq_len: 126
+; sq_offset: 1
+; sq_type: p
+; al_start: 16
+; al_stop: 53
+; al_display_start: 1
+---------------MKKDKKYQIEAIKNKDKTLFIVYATDIYSPSE-FF
+SKIESDLKKKKSKGD-VFFDLIIPNGGKKDRYVYTSFNGEKFSSYTLNKV
+TKTDEYNDLSELSASFFKKN
+>gi|152973581|ref|YP_001338632.1| ..
+; sq_len: 84
+; sq_offset: 1
+; sq_type: p
+; al_start: 45
+; al_stop: 84
+; al_display_start: 15
+LRLTLTIIIISPVIYFSWDAVKGTSGSDYVESVVFILMAGFAMSVCYLFF
+SVLEKVINARKSKDESIYHD
+; al_cons:
+                              ....::..:   .:   -::
+: .:. .. .::: .-.. :
+>>gi|152973536|ref|YP_001338587.1| putative inner membrane protein [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+; fa_frame: f
+; fa_initn:  63
+; fa_init1:  42
+; fa_opt:  48
+; fa_z-score: 88.5
+; fa_bits: 21.3
+; fa_expect:   0.72
+; sw_score: 48
+; sw_ident: 0.267
+; sw_sim: 0.667
+; sw_overlap: 30
+>gi|10955264| ..
+; sq_len: 126
+; sq_offset: 1
+; sq_type: p
+; al_start: 97
+; al_stop: 126
+; al_display_start: 67
+YTSFNGEKFSSYTLNKVTKTDEYNDLSELSASFFKKNFDKINVNLLSKAT
+SFALKKGIPI
+>gi|152973536|ref|YP_001338587.1| ..
+; sq_len: 84
+; sq_offset: 1
+; sq_type: p
+; al_start: 7
+; al_stop: 36
+; al_display_start: 1
+------------------------MSQWNIASFSKEEQDKVAVDKVAADV
+AWQERMNKPVMPELVEREQPEHLREYFHERFRVHRLNSQQLPRANAPEYN
+KPGDDQQN
+; al_cons:
+                              ::: :.. ::. :. ..  .
+..  . . :.
+>>><<<
+  3>>>gi|10955265|ref|NP_052606.1| hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s - 346 aa
+Library: NC_009649.faa
+    45119 residues in   180 sequences
+
+Statistics: (shuffled [445]) Expectation_n fit: rho(ln(x))= 3.1750+/-0.0113; mu= 16.4403+/- 0.606
+ mean_var=50.7026+/-12.811, 0's: 0 Z-trim(83.1): 0  B-trim: 0 in 0/32
+ Lambda= 0.180119
+ statistics sampled from 31 (31) to 444 sequences
+Algorithm: FASTA (3.7 Nov 2010) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -10/-2
+ ktup: 2, E-join: 1 (0.678), E-opt: 0.2 (0.278), width:  16
+ Scan time:  0.060
+
+The best scores are:                                      opt bits E(180)
+gi|152973545|ref|YP_001338596.1| putative plasmid  ( 242)   70 28.4   0.041
+gi|152973505|ref|YP_001338556.1| putative membrane ( 430)   57 25.4    0.59
+
+>>>gi|10955265|ref|NP_052606.1|, 346 aa vs NC_009649.faa library
+; pg_name: /Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36
+; pg_ver: 36.3.4 Apr, 2011
+; pg_argv: /Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36 -E 1 -m 10 NC_002127.faa NC_009649.faa
+; pg_name_alg: FASTA
+; pg_ver_rel: 3.7 Nov 2010
+; pg_matrix: BL50 (15:-5)
+; pg_open-ext: -10 -2
+; pg_ktup: 2
+; pg_join_E(): 1 (0.678)
+; pg_optcut_E(): 0.2 (0.278)
+; mp_extrap: 60000 444
+; mp_stats: (shuffled [445]) Expectation_n fit: rho(ln(x))= 3.1750+/-0.0113; mu= 16.4403+/- 0.606  mean_var=50.7026+/-12.811, 0's: 0 Z-trim(83.1): 0  B-trim: 0 in 0/32  Lambda= 0.180119
+; mp_KS: -0.0000 (N=0) at  30
+; mp_Algorithm: FASTA (3.7 Nov 2010) [optimized]
+; mp_Parameters: BL50 matrix (15:-5), open/ext: -10/-2  ktup: 2, E-join: 1 (0.678), E-opt: 0.2 (0.278), width:  16
+>>gi|152973545|ref|YP_001338596.1| putative plasmid SOS inhibition protein A [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+; fa_frame: f
+; fa_initn:  72
+; fa_init1:  52
+; fa_opt:  70
+; fa_z-score: 110.9
+; fa_bits: 28.4
+; fa_expect:  0.041
+; sw_score: 70
+; sw_ident: 0.279
+; sw_sim: 0.651
+; sw_overlap: 43
+>gi|10955265| ..
+; sq_len: 346
+; sq_offset: 1
+; sq_type: p
+; al_start: 197
+; al_stop: 238
+; al_display_start: 167
+DFMCSILNMKEIVEQKNKEFNVDIKKETIESELHSKLPKSIDKIHEDIKK
+QLSC-SLIMKKIDVEMEDYSTYCFSALRAIEGFIYQILNDVCNPSSSKNL
+GEYFTENKPKYIIREIHQET
+>gi|152973545|ref|YP_001338596.1| ..
+; sq_len: 242
+; sq_offset: 1
+; sq_type: p
+; al_start: 52
+; al_stop: 94
+; al_display_start: 22
+IMTVEEARQRGARLPSMPHVRTFLRLLTGCSRINSDVARRIPGIHRDPKD
+RLSSLKQVEEALDMLISSHGEYCPLPLTMDVQAENFPEVLHTRTVRRLKR
+QDFAFTRKMRREARQVEQSW
+; al_cons:
+                              :...: . . :  ::.: : 
+.:: -. . . .:. . ... ::
+>>gi|152973505|ref|YP_001338556.1| putative membrane fusion protein SilB [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+; fa_frame: f
+; fa_initn:  95
+; fa_init1:  52
+; fa_opt:  57
+; fa_z-score: 90.1
+; fa_bits: 25.4
+; fa_expect:   0.59
+; sw_score: 57
+; sw_ident: 0.234
+; sw_sim: 0.609
+; sw_overlap: 64
+>gi|10955265| ..
+; sq_len: 346
+; sq_offset: 1
+; sq_type: p
+; al_start: 40
+; al_stop: 101
+; al_display_start: 10
+NINIDKIESALTQNGVTNYSSNVKNERETHISGTYKGIDFLIKLMPSGGN
+TTIGRASGQNNTYFDEIALIIKENCLY--SDTKNFEYTIPKFSDDDRANL
+FEFLSEEGITITEDNNNDPNCKHQYIMTTSNGDRVRAKIYKRGSIQFQGK
+YLQIASLINDFMCSILNMKEIVEQKNKEFN
+>gi|152973505|ref|YP_001338556.1| ..
+; sq_len: 430
+; sq_offset: 1
+; sq_type: p
+; al_start: 222
+; al_stop: 281
+; al_display_start: 192
+RLRLAGMPEEDIQRLRSTRTIQTRFTIKAPIDGVITAFD-LRTGMNISKD
+KVVAQIQGMDPVW---ISAAVPESIAYLLKDTSQFEISVPAYPDKTFHVE
+KWNILPSVDQTTRTLQVRLQVSNKDEFLKPGMNAYLKLNTKSQEMLLIPS
+QAVIDTGKEQRVITVDDEGKFVPKQIHVLH
+; al_cons:
+                              :.:.  ..:-:   :  . .
+ .... .:.. ..---:.  . :.  :--.::..:: ..: . :
+>>><<<
+>>>///
+
+
+579 residues in 3 query   sequences
+45119 residues in 180 library sequences
+ Tcomplib [36.3.4 Apr, 2011] (8 proc)
+ start: Fri Apr 22 16:31:22 2011 done: Fri Apr 22 16:31:22 2011
+ Total Scan time:  0.140 Total Display time:  0.020
+
+Function used was FASTA [36.3.4 Apr, 2011]
