@@ -83,26 +83,6 @@ class _RestrictedDict(dict):
         for (key, value) in new_dict.iteritems():
             self[key] = value
 
-#    def __getstate__(self):
-#        """Magic method used in pickling."""
-#        return {"length":self._length, "values":self.items()}
-#    
-#    def __setstate__(self, state):
-#        """Magic method used in un-pickling."""
-#        self._length = state["length"]
-#        for k,v in state["values"]:
-#            dict.__setitem__(self, k, v)
-#
-#    def __getnewargs__(self):
-#        """Magic method used in pickling."""
-#        return self._length, self.items()
-#
-#    def __newobj__(self, length, values):
-#        """Magic method used in un-pickling."""
-#        self._length = length
-#        for key, value in values:
-#            self[key] = value
-
 
 class SeqRecord(object):
     """A SeqRecord object holds a sequence and information about it.
