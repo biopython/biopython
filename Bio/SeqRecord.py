@@ -23,21 +23,86 @@ class _RestrictedDict(dict):
     expected (the length of the SeqRecord's seq object).  It cannot however
     prevent the entries being edited in situ (for example appending entries
     to a list).
+
+    >>> x = _RestrictedDict(5)
+    >>> x["test"] = "hello"
+    >>> x
+    {'test': 'hello'}
+
+    Adding entries which don't have the expected length are blocked:
+
+    >>> x["test"] = "hello world"
+    Traceback (most recent call last):
+    ...
+    TypeError: We only allow python sequences (lists, tuples or strings) of length 5.
+
+    The expected length is stored as a private attribute,
+
+    >>> x._length
+    5
+
+    In order that the SeqRecord (and other objects using this class) can be
+    pickled, for example for use in the multiprocessing library, we need to
+    be able to pickle the restricted dictionary objects.
+    
+    Using the default protocol, which is 0 on Python 2.x,
+
+    >>> import pickle
+    >>> y = pickle.loads(pickle.dumps(x))
+    >>> y
+    {'test': 'hello'}
+    >>> y._length
+    5
+
+    Using the highest protocol, which is 2 on Python 2.x,
+
+    >>> import pickle
+    >>> z = pickle.loads(pickle.dumps(x, pickle.HIGHEST_PROTOCOL))
+    >>> z
+    {'test': 'hello'}
+    >>> z._length
+    5
     """
+
     def __init__(self, length):
         """Create an EMPTY restricted dictionary."""
         dict.__init__(self)
         self._length = int(length)
+
     def __setitem__(self, key, value):
+        #The check hasattr(self, "_length") is to cope with pickle protocol 2
+        #I couldn't seem to avoid this with __getstate__ and __setstate__
         if not hasattr(value,"__len__") or not hasattr(value,"__getitem__") \
-        or len(value) != self._length:
+        or (hasattr(self, "_length") and len(value) != self._length):
             raise TypeError("We only allow python sequences (lists, tuples or "
                             "strings) of length %i." % self._length)
         dict.__setitem__(self, key, value)
+
     def update(self, new_dict):
         #Force this to go via our strict __setitem__ method
         for (key, value) in new_dict.iteritems():
             self[key] = value
+
+#    def __getstate__(self):
+#        """Magic method used in pickling."""
+#        return {"length":self._length, "values":self.items()}
+#    
+#    def __setstate__(self, state):
+#        """Magic method used in un-pickling."""
+#        self._length = state["length"]
+#        for k,v in state["values"]:
+#            dict.__setitem__(self, k, v)
+#
+#    def __getnewargs__(self):
+#        """Magic method used in pickling."""
+#        return self._length, self.items()
+#
+#    def __newobj__(self, length, values):
+#        """Magic method used in un-pickling."""
+#        self._length = length
+#        for key, value in values:
+#            self[key] = value
+
 
 class SeqRecord(object):
     """A SeqRecord object holds a sequence and information about it.
