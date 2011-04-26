@@ -38,3 +38,5 @@ output007.m10 - recreation of output001.m10 using fasta-36.3.4 (note that
                 -Q quiet flag no longer exists). Get more hits due to revised
                 e-value calculations, also ">>><<<" marks end of a query, not
                 just end of the file!
+output008.m10 - tfastx36 protein-nucleotide, 4 queries, some with no hits,
+                some matches with multiple HSPs (new feature in FASTA v36)
