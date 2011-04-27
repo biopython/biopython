@@ -458,7 +458,261 @@ class FastaM10Iterator(AlignmentIterator):
             dictionary[tag] = value
             line = self.handle.readline()
         return line
-    
+
+"""
+New parser, which can cope with multiple HSPs for a query+match with the
+new >-- lines. Commented out until I write some more unit tests to check
+it gives the same output as the older parser.
+def FastaM10Iterator(handle, alphabet = single_letter_alphabet):
+    state_PREAMBLE = -1
+    state_NONE = 0
+    state_QUERY_HEADER = 1
+    state_ALIGN_HEADER = 2
+    state_ALIGN_QUERY = 3
+    state_ALIGN_MATCH = 4
+    state_ALIGN_CONS = 5
+
+    def build_hsp():
+        assert query_tags, query_tags
+        assert match_tags, match_tags
+        evalue = align_tags.get("fa_expect", None)
+        q = "?" #Just for printing len(q) in debug below
+        m = "?" #Just for printing len(m) in debug below
+        tool = global_tags.get("tool", "").upper()
+        try:
+            q = _extract_alignment_region(query_seq, query_tags)
+            if tool in ["TFASTX"] and len(match_seq) == len(q):
+                m = match_seq
+                #Quick hack until I can work out how -, * and / characters
+                #and the apparent mix of aa and bp coordindates works.
+            else:
+                m = _extract_alignment_region(match_seq, match_tags)
+            assert len(q) == len(m)
+        except AssertionError, err:
+            print "Darn... amino acids vs nucleotide coordinates?"
+            print tool
+            print query_seq
+            print query_tags
+            print q, len(q)
+            print match_seq
+            print match_tags
+            print m, len(m)
+            print handle.name
+            raise err
+
+        alignment = MultipleSeqAlignment([], alphabet)
+
+        #TODO - Introduce an annotated alignment class?
+        #For now, store the annotation a new private property:
+        alignment._annotations = {}
+        
+        #Want to record both the query header tags, and the alignment tags.
+        for key, value in header_tags.iteritems():
+            alignment._annotations[key] = value
+        for key, value in align_tags.iteritems():
+            alignment._annotations[key] = value
+        
+        #Query
+        #=====
+        record = SeqRecord(Seq(q, alphabet),
+                           id = "query_id",
+                           name = "query",
+                           description = query_descr,
+                           annotations = {"original_length" : int(query_tags["sq_len"])})
+        #TODO - handle start/end coordinates properly. Short term hack for now:
+        record._al_start = int(query_tags["al_start"])
+        record._al_stop = int(query_tags["al_stop"])
+        alignment.append(record)
+
+        #TODO - What if a specific alphabet has been requested?
+        #TODO - Use an IUPAC alphabet?
+        #TODO - Can FASTA output RNA?
+        if alphabet == single_letter_alphabet and "sq_type" in query_tags:
+            if query_tags["sq_type"] == "D":
+                record.seq.alphabet = generic_dna
+            elif query_tags["sq_type"] == "p":
+                record.seq.alphabet = generic_protein
+        if "-" in q:
+            if not hasattr(record.seq.alphabet,"gap_char"):
+                record.seq.alphabet = Gapped(record.seq.alphabet, "-")
+
+        #Match
+        #=====
+        record = SeqRecord(Seq(m, alphabet),
+                           id = match_id,
+                           name = "match",
+                           description = match_descr,
+                           annotations = {"original_length" : int(match_tags["sq_len"])})
+        #TODO - handle start/end coordinates properly. Short term hack for now:
+        record._al_start = int(match_tags["al_start"])
+        record._al_stop = int(match_tags["al_stop"])
+        alignment.append(record)
+
+        #This is still a very crude way of dealing with the alphabet:
+        if alphabet == single_letter_alphabet and "sq_type" in match_tags:
+            if match_tags["sq_type"] == "D":
+                record.seq.alphabet = generic_dna
+            elif match_tags["sq_type"] == "p":
+                record.seq.alphabet = generic_protein
+        if "-" in m:
+            if not hasattr(record.seq.alphabet,"gap_char"):
+                record.seq.alphabet = Gapped(record.seq.alphabet, "-")
+
+        return alignment
+
+    state = state_PREAMBLE
+    query_id = None
+    match_id = None
+    query_descr = ""
+    match_descr = ""
+    global_tags = {}
+    header_tags = {}
+    align_tags = {}
+    query_tags = {}
+    match_tags = {}
+    query_seq = ""
+    match_seq = ""
+    cons_seq = ""
+    for line in handle:
+        if ">>>" in line and not line.startswith(">>>"):
+            if query_id and match_id:
+                #This happens on old FASTA output which lacked an end of
+                #query >>><<< marker line.
+                yield build_hsp()
+            state = state_NONE
+            query_id = line[line.find(">>>")+3:].split(None,1)[0]
+            match_id = None
+            header_tags = {}
+            align_tags = {}
+            query_tags = {}
+            match_tags = {}
+            query_seq = ""
+            match_seq = ""
+            cons_seq = ""
+        elif line.startswith("!! No "):
+            #e.g.
+            #!! No library sequences with E() < 0.5
+            #or on more recent versions,
+            #No sequences with E() < 0.05
+            assert state == state_NONE
+            assert not header_tags
+            assert not align_tags
+            assert not match_tags
+            assert not query_tags
+            assert match_id is None
+            assert not query_seq
+            assert not match_seq
+            assert not cons_seq
+            query_id = None
+        elif line.strip() in [">>><<<", ">>>///"]:
+            #End of query, possible end of all queries
+            if query_id and match_id:
+                yield build_hsp()
+            state = state_NONE
+            query_id = None
+            match_id = None
+            header_tags = {}
+            align_tags = {}
+            query_tags = {}
+            match_tags = {}
+            query_seq = ""
+            match_seq = ""
+            cons_seq = ""
+        elif line.startswith(">>>"):
+            #Should be start of a match!
+            assert query_id is not None
+            assert line[3:].split(", ",1)[0] == query_id, line
+            assert match_id is None
+            assert not header_tags
+            assert not align_tags
+            assert not query_tags
+            assert not match_tags
+            assert not match_seq
+            assert not query_seq
+            assert not cons_seq
+            state = state_QUERY_HEADER
+        elif line.startswith(">>"):
+            #Should now be at start of a match alignment!
+            if query_id and match_id:
+                yield build_hsp()
+            align_tags = {}
+            query_tags = {}
+            match_tags = {}
+            query_seq = ""
+            match_seq = ""
+            cons_seq = ""
+            try:
+                match_id, match_descr = line[2:].split(None,1)
+            except ValueError:
+                match_id = line[2:].strip()
+                match_descr = ""
+            state = state_ALIGN_HEADER
+        elif line.startswith(">--"):
+            #End of one HSP
+            assert query_id and match_id, line
+            yield build_hsp()
+            #Clean up read for next HSP
+            #but reuse header_tags
+            align_tags = {}
+            query_tags = {}
+            match_tags = {}
+            query_seq = ""
+            match_seq = ""
+            cons_seq = ""
+            state = state_ALIGN_HEADER
+        elif line.startswith(">"):
+            if state == state_ALIGN_HEADER:
+                #Should be start of query alignment seq...
+                assert query_id is not None, line
+                assert match_id is not None, line
+                assert query_id.startswith(line[1:].split(None,1)[0]), line
+                state = state_ALIGN_QUERY
+            elif state == state_ALIGN_QUERY:
+                #Should be start of match alignment seq
+                assert query_id is not None, line
+                assert match_id is not None, line
+                assert match_id.startswith(line[1:].split(None,1)[0]), line
+                state = state_ALIGN_MATCH
+            elif state == state_NONE:
+                #Can get > as the last line of a histogram
+                pass
+            else:
+                assert False, "state %i got %r" % (state, line)
+        elif line.startswith("; al_cons"):
+            assert state == state_ALIGN_MATCH, line
+            state = state_ALIGN_CONS
+            #Next line(s) should be consensus seq...
+        elif line.startswith("; "):
+            key, value = [s.strip() for s in line[2:].split(": ",1)]
+            if state == state_QUERY_HEADER:
+                header_tags[key] = value
+            elif state == state_ALIGN_HEADER:
+                align_tags[key] = value
+            elif state == state_ALIGN_QUERY:
+                query_tags[key] = value
+            elif state == state_ALIGN_MATCH:
+                match_tags[key] = value
+            else:
+                assert False, "Unexpected state %r, %r" % (state, line)
+        elif state == state_ALIGN_QUERY:
+            query_seq += line.strip()
+        elif state == state_ALIGN_MATCH:
+            match_seq += line.strip()
+        elif state == state_ALIGN_CONS:
+            cons_seq += line.strip("\n")
+        elif state == state_PREAMBLE:
+            if line.startswith("#"):
+                global_tags["command"] = line[1:].strip()
+            elif line.startswith(" version "):
+                global_tags["version"] = line[9:].strip()
+            elif " compares a " in line:
+                global_tags["tool"] = line[:line.find(" compares a ")].strip()
+            elif " searches a " in line:
+                global_tags["tool"] = line[:line.find(" searches a ")].strip()
+        else:
+            pass
+"""
+
 if __name__ == "__main__":
     print "Running a quick self-test"
 
