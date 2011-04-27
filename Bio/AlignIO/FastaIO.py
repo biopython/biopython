@@ -424,15 +424,14 @@ class FastaM10Iterator(AlignmentIterator):
             start = int(annotation['al_start']) \
                   - display_start
             end   = int(annotation['al_stop']) \
-                  - display_start \
-                  + align_stripped.count("-") + 1
+                  - display_start + 1
         else:
             #FASTA has flipped this sequence...
             start = display_start \
                   - int(annotation['al_start'])
             end   = display_start \
-                  - int(annotation['al_stop']) \
-                  + align_stripped.count("-") + 1
+                  - int(annotation['al_stop']) + 1
+        end += align_stripped.count("-")
         assert 0 <= start and start < end and end <= len(align_stripped), \
                "Problem with sequence start/stop,\n%s[%i:%i]\n%s" \
                % (alignment_seq_with_flanking, start, end, annotation)
