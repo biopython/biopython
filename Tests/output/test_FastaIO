@@ -28,7 +28,7 @@ Alignment 0, with 2 sequences of length 108
  - sw_sim: '0.574'
 ------------------------------------------------------------------------------
 gi|10955263|ref|NP_052604.1|
-gi|10955263|ref|NP_052604.1|, 107 aa vs NC_009649.faa library
+gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 s 107 aa - 107 aa
 Seq('SGSNT-RRRAISRPVRLTAEED---QEIRKRAAECGKTVSGFLRAAALGKKVNS...LSR', Gapped(ProteinAlphabet(), '-'))
  - original_length: 107
 ------------------------------------------------------------------------------
@@ -64,7 +64,7 @@ Alignment 1, with 2 sequences of length 64
  - sw_sim: '0.656'
 ------------------------------------------------------------------------------
 gi|10955263|ref|NP_052604.1|
-gi|10955263|ref|NP_052604.1|, 107 aa vs NC_009649.faa library
+gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 s 107 aa - 107 aa
 Seq('AAECGKTVSGFLRAAALGKKVNSLTDDRVLKEV-MRLGALQKKLFIDGKRVGDR...AIT', Gapped(ProteinAlphabet(), '-'))
  - original_length: 107
 ------------------------------------------------------------------------------
@@ -100,7 +100,7 @@ Alignment 2, with 2 sequences of length 38
  - sw_sim: '0.632'
 ------------------------------------------------------------------------------
 gi|10955264|ref|NP_052605.1|
-gi|10955264|ref|NP_052605.1|, 126 aa vs NC_009649.faa library
+gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s 126 aa - 126 aa
 Seq('MKKDKKYQIEAIKNKDKTLFIVYATDIYSPSEFFSKIE', ProteinAlphabet())
  - original_length: 126
 ------------------------------------------------------------------------------
@@ -136,7 +136,7 @@ Alignment 3, with 2 sequences of length 43
  - sw_sim: '0.651'
 ------------------------------------------------------------------------------
 gi|10955265|ref|NP_052606.1|
-gi|10955265|ref|NP_052606.1|, 346 aa vs NC_009649.faa library
+gi|10955265|ref|NP_052606.1| hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s 346 aa - 346 aa
 Seq('SELHSKLPKSIDKIHEDIKKQLSC-SLIMKKIDVEMEDYSTYC', Gapped(ProteinAlphabet(), '-'))
  - original_length: 346
 ------------------------------------------------------------------------------
@@ -172,7 +172,7 @@ Alignment 0, with 2 sequences of length 88
  - sw_sim: '0.545'
 ------------------------------------------------------------------------------
 gi|10955263|ref|NP_052604.1|
-gi|10955263|ref|NP_052604.1|, 107 aa vs NC_002695.faa library
+gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 s 107 aa - 107 aa
 Seq('SGSNTRRRAISRPVR--LTAEEDQEIRKRAAECG-KTVSGFLRAAALGKKVNSL...AEV', Gapped(ProteinAlphabet(), '-'))
  - original_length: 107
 ------------------------------------------------------------------------------
@@ -206,7 +206,7 @@ Alignment 1, with 2 sequences of length 53
  - sw_sim: '0.660'
 ------------------------------------------------------------------------------
 gi|10955263|ref|NP_052604.1|
-gi|10955263|ref|NP_052604.1|, 107 aa vs NC_002695.faa library
+gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 s 107 aa - 107 aa
 Seq('EIRKRAAECGKTVSGFLRAAA-LGKKV----NSLTDDRVLKEVMRLGALQKKL', Gapped(ProteinAlphabet(), '-'))
  - original_length: 107
 ------------------------------------------------------------------------------
@@ -240,7 +240,7 @@ Alignment 2, with 2 sequences of length 92
  - sw_sim: '0.620'
 ------------------------------------------------------------------------------
 gi|10955264|ref|NP_052605.1|
-gi|10955264|ref|NP_052605.1|, 126 aa vs NC_002695.faa library
+gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s 126 aa - 126 aa
 Seq('SEFFSKIESDLKKKKSKGDVFFDLIIPNG-----GKKDRYVYTSFNGEKFSSYT...ATS', Gapped(ProteinAlphabet(), '-'))
  - original_length: 126
 ------------------------------------------------------------------------------
@@ -274,7 +274,7 @@ Alignment 3, with 2 sequences of length 73
  - sw_sim: '0.589'
 ------------------------------------------------------------------------------
 gi|10955264|ref|NP_052605.1|
-gi|10955264|ref|NP_052605.1|, 126 aa vs NC_002695.faa library
+gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s 126 aa - 126 aa
 Seq('FFDLIIPNGGKKDRYVYTSFNGEKFSSYTLNKVTKTDEYNDLSELSASFFKKNF...KKG', ProteinAlphabet())
  - original_length: 126
 ------------------------------------------------------------------------------
@@ -308,7 +308,7 @@ Alignment 4, with 2 sequences of length 63
  - sw_sim: '0.635'
 ------------------------------------------------------------------------------
 gi|10955265|ref|NP_052606.1|
-gi|10955265|ref|NP_052606.1|, 346 aa vs NC_002695.faa library
+gi|10955265|ref|NP_052606.1| hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s 346 aa - 346 aa
 Seq('VDIKK-ETIESELHSKLPKSIDKIHEDIKKQLSCSLI--MKKID-VEMEDYSTY...AIE', Gapped(ProteinAlphabet(), '-'))
  - original_length: 346
 ------------------------------------------------------------------------------
@@ -342,7 +342,7 @@ Alignment 5, with 2 sequences of length 157
  - sw_sim: '0.580'
 ------------------------------------------------------------------------------
 gi|10955265|ref|NP_052606.1|
-gi|10955265|ref|NP_052606.1|, 346 aa vs NC_002695.faa library
+gi|10955265|ref|NP_052606.1| hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s 346 aa - 346 aa
 Seq('QYIMTTSNGDRVRAKIYKRGSIQFQGKYLQIASLINDFMCSILNMKEIVEQKNK...REI', Gapped(ProteinAlphabet(), '-'))
  - original_length: 346
 ------------------------------------------------------------------------------
@@ -378,7 +378,7 @@ Alignment 0, with 2 sequences of length 55
  - sw_sim: '0.673'
 ------------------------------------------------------------------------------
 gi|152973837|ref|YP_001338874.1|
-gi|152973837|ref|YP_001338874.1|, 183 aa vs NC_002127.faa library
+gi|152973837|ref|YP_001338874.1| hypothetical protein KPN_pKPN7p10262 [Klebsiella pneumoniae subsp. pneumonia 183 aa - 183 aa
 Seq('ISISNNKDQYEELQKEQGERDLKTVDQLVRIAAAGGGLRLSASTKTVDQLVRIAA', ProteinAlphabet())
  - original_length: 183
 ------------------------------------------------------------------------------
@@ -412,7 +412,7 @@ Alignment 1, with 2 sequences of length 22
  - sw_sim: '0.636'
 ------------------------------------------------------------------------------
 gi|152973840|ref|YP_001338877.1|
-gi|152973840|ref|YP_001338877.1|, 63 aa vs NC_002127.faa library
+gi|152973840|ref|YP_001338877.1| RNA one modulator-like protein [Klebsiella pneumoniae subsp. pneumoniae  63 aa - 63 aa
 Seq('DDAEHLFRTLSSR-LDALQDGN', Gapped(ProteinAlphabet(), '-'))
  - original_length: 63
 ------------------------------------------------------------------------------
@@ -446,7 +446,7 @@ Alignment 2, with 2 sequences of length 63
  - sw_sim: '0.651'
 ------------------------------------------------------------------------------
 gi|152973841|ref|YP_001338878.1|
-gi|152973841|ref|YP_001338878.1|, 133 aa vs NC_002127.faa library
+gi|152973841|ref|YP_001338878.1| Excl1 protein [Klebsiella pneumoniae subsp. pneumoniae  133 aa - 133 aa
 Seq('VFGSFEQPKGEHLSGQVSEQ--RDTAFADQNEQVIRHLKQEIEHLNTLLLSKDS...QAM', Gapped(ProteinAlphabet(), '-'))
  - original_length: 133
 ------------------------------------------------------------------------------
@@ -485,7 +485,7 @@ Alignment 0, with 2 sequences of length 102
  - pg_ver_rel: '3.5 Sept 2006'
 ------------------------------------------------------------------------------
 ref|NC_002127.1|:c1351-971
-ref|NC_002127.1|:c1351-971, 381 nt vs NC_002695.ffn library
+ref|NC_002127.1|:c1351-971 - 381 nt
 Seq('AAAAAAGATAAAAAATATCAAATAGAAGCAATAAAAAATAAAGATAAAACTTTA...TCA', DNAAlphabet())
  - original_length: 381
 ------------------------------------------------------------------------------
@@ -518,7 +518,7 @@ Alignment 0, with 2 sequences of length 110
  - sw_z-score: '108.8'
 ------------------------------------------------------------------------------
 gi|10955264|ref|NP_052605.1|
-gi|10955264|ref|NP_052605.1|, 126 aa vs NC_002128.faa library
+gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s 126 aa - 126 aa
 Seq('IKNKDKTLFIVYAT-DIYSPSEFFSKIESDLKKKKSKGDV--FFDLIIPNGGKK...LSK', Gapped(ProteinAlphabet(), '-'))
  - original_length: 126
 ------------------------------------------------------------------------------
@@ -557,7 +557,7 @@ Alignment 0, with 2 sequences of length 131
  - pg_ver_rel: '3.5 Sept 2006'
 ------------------------------------------------------------------------------
 query
-query, 131 nt vs orchid_cds.txt library
+query - 131 nt
 Seq('GCAACGCTTCAAGAACTGGAATTAGGAACCGTGACAACGATTAATGAGGAGATT...CAT', DNAAlphabet())
  - original_length: 131
 ------------------------------------------------------------------------------
@@ -597,7 +597,7 @@ Alignment 0, with 2 sequences of length 108
  - sw_sim: '0.574'
 ------------------------------------------------------------------------------
 gi|10955263|ref|NP_052604.1|
-gi|10955263|ref|NP_052604.1|, 107 aa vs NC_009649.faa library
+gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 s - 107 aa
 Seq('SGSNT-RRRAISRPVRLTAEED---QEIRKRAAECGKTVSGFLRAAALGKKVNS...LSR', Gapped(ProteinAlphabet(), '-'))
  - original_length: 107
 ------------------------------------------------------------------------------
@@ -635,7 +635,7 @@ Alignment 1, with 2 sequences of length 64
  - sw_sim: '0.656'
 ------------------------------------------------------------------------------
 gi|10955263|ref|NP_052604.1|
-gi|10955263|ref|NP_052604.1|, 107 aa vs NC_009649.faa library
+gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 s - 107 aa
 Seq('AAECGKTVSGFLRAAALGKKVNSLTDDRVLKEV-MRLGALQKKLFIDGKRVGDR...AIT', Gapped(ProteinAlphabet(), '-'))
  - original_length: 107
 ------------------------------------------------------------------------------
@@ -673,7 +673,7 @@ Alignment 2, with 2 sequences of length 45
  - sw_sim: '0.622'
 ------------------------------------------------------------------------------
 gi|10955263|ref|NP_052604.1|
-gi|10955263|ref|NP_052604.1|, 107 aa vs NC_009649.faa library
+gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 s - 107 aa
 Seq('EIRKRAAECGKTVSGFLRAAA-----LGKKVNSLTDDRVLKEVMR', Gapped(ProteinAlphabet(), '-'))
  - original_length: 107
 ------------------------------------------------------------------------------
@@ -711,7 +711,7 @@ Alignment 3, with 2 sequences of length 38
  - sw_sim: '0.632'
 ------------------------------------------------------------------------------
 gi|10955264|ref|NP_052605.1|
-gi|10955264|ref|NP_052605.1|, 126 aa vs NC_009649.faa library
+gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s - 126 aa
 Seq('MKKDKKYQIEAIKNKDKTLFIVYATDIYSPSEFFSKIE', ProteinAlphabet())
  - original_length: 126
 ------------------------------------------------------------------------------
@@ -749,7 +749,7 @@ Alignment 4, with 2 sequences of length 11
  - sw_sim: '0.818'
 ------------------------------------------------------------------------------
 gi|10955264|ref|NP_052605.1|
-gi|10955264|ref|NP_052605.1|, 126 aa vs NC_009649.faa library
+gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s - 126 aa
 Seq('FFDLIIPNGGK', ProteinAlphabet())
  - original_length: 126
 ------------------------------------------------------------------------------
@@ -787,7 +787,7 @@ Alignment 5, with 2 sequences of length 40
  - sw_sim: '0.675'
 ------------------------------------------------------------------------------
 gi|10955264|ref|NP_052605.1|
-gi|10955264|ref|NP_052605.1|, 126 aa vs NC_009649.faa library
+gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s - 126 aa
 Seq('DKTLFIVYATDIYSPSE-FFSKIESDLKKKKSKGD-VFFD', Gapped(ProteinAlphabet(), '-'))
  - original_length: 126
 ------------------------------------------------------------------------------
@@ -825,7 +825,7 @@ Alignment 6, with 2 sequences of length 30
  - sw_sim: '0.667'
 ------------------------------------------------------------------------------
 gi|10955264|ref|NP_052605.1|
-gi|10955264|ref|NP_052605.1|, 126 aa vs NC_009649.faa library
+gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s - 126 aa
 Seq('ASFFKKNFDKINVNLLSKATSFALKKGIPI', ProteinAlphabet())
  - original_length: 126
 ------------------------------------------------------------------------------
@@ -863,7 +863,7 @@ Alignment 7, with 2 sequences of length 43
  - sw_sim: '0.651'
 ------------------------------------------------------------------------------
 gi|10955265|ref|NP_052606.1|
-gi|10955265|ref|NP_052606.1|, 346 aa vs NC_009649.faa library
+gi|10955265|ref|NP_052606.1| hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s - 346 aa
 Seq('SELHSKLPKSIDKIHEDIKKQLSC-SLIMKKIDVEMEDYSTYC', Gapped(ProteinAlphabet(), '-'))
  - original_length: 346
 ------------------------------------------------------------------------------
@@ -901,7 +901,7 @@ Alignment 8, with 2 sequences of length 64
  - sw_sim: '0.609'
 ------------------------------------------------------------------------------
 gi|10955265|ref|NP_052606.1|
-gi|10955265|ref|NP_052606.1|, 346 aa vs NC_009649.faa library
+gi|10955265|ref|NP_052606.1| hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s - 346 aa
 Seq('ISGTYKGIDFLIKLMPSGGNTTIGRASGQNNTYFDEIALIIKENCLY--SDTKN...FSD', Gapped(ProteinAlphabet(), '-'))
  - original_length: 346
 ------------------------------------------------------------------------------

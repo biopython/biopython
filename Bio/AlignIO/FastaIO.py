@@ -60,8 +60,7 @@ def _extract_alignment_region(alignment_seq_with_flanking, annotation):
            % (alignment_seq_with_flanking, start, end, annotation)
     return align_stripped[start:end]
 
-# TODO - Turn this into a doctest
-class FastaM10Iterator(AlignmentIterator):
+def FastaM10Iterator(handle, alphabet = single_letter_alphabet):
     """Alignment iterator for the FASTA tool's pairwise alignment output.
 
     This is for reading the pairwise alignments output by Bill Pearson's
@@ -92,378 +91,9 @@ class FastaM10Iterator(AlignmentIterator):
     part of the alignment itself, and is not included in the resulting
     MultipleSeqAlignment objects returned.
     """
+    if alphabet is None:
+        alphabet = single_letter_alphabet
     
-    def next(self):
-        """Reads from the handle to construct and return the next alignment.
-
-        This returns the pairwise alignment of query and match/library
-        sequences as an MultipleSeqAlignment object containing two rows.
-        """
-        handle = self.handle
-
-        try:
-            #Header we saved from when we were parsing
-            #the previous alignment.
-            line = self._header
-            del self._header
-        except AttributeError:      
-            line = handle.readline()
-        if not line:
-            raise StopIteration
-
-        if line.startswith("#") or line.startswith(">>><<<"):
-            #Skip the file header before the alignments.
-            line = self._skip_file_header(line)
-        assert not line.startswith(">>><<<")
-        while ">>>" in line and not line.startswith(">>>"):
-            #Moved onto the next query sequence!
-            self._query_descr = ""
-            self._query_header_annotation = {}
-            #Read in the query header
-            line = self._parse_query_header(line)
-            #Now should be some alignments, but if not we move onto the next query
-        if not line:
-            #End of file
-            raise StopIteration
-        if ">>>///" in line:
-            #Reached the end of the alignments, no need to read the footer...
-            #Note this is a new line type in fasta-36.3, previously >>><<<
-            #was used but that not occurs at the end of each query.
-            raise StopIteration
-        assert not line.startswith(">>><<<")
-
-
-        #Should start >>... and not >>>...
-        assert line[0:2] == ">>" and not line[2] == ">", repr(line)
-
-        query_seq_parts, match_seq_parts = [], []
-        query_tags, match_tags = {}, {}
-        match_descr = ""
-        align_tags = {}
-
-        #This should be followed by the target match ID line, then more tags.
-        #e.g.
-        """
-        >>gi|152973545|ref|YP_001338596.1| putative plasmid SOS inhibition protein A [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
-        ; fa_frame: f
-        ; fa_initn:  52
-        ; fa_init1:  52
-        ; fa_opt:  70
-        ; fa_z-score: 105.5
-        ; fa_bits: 27.5
-        ; fa_expect:  0.082
-        ; sw_score: 70
-        ; sw_ident: 0.279
-        ; sw_sim: 0.651
-        ; sw_overlap: 43
-        """
-        if (not line[0:2] == ">>") or line[0:3] == ">>>":
-            raise ValueError("Expected target line starting '>>'")
-        match_descr = line[2:].strip()
-        #Handle the following "alignment hit" tagged data, e.g.
-        line = handle.readline()
-        line = self._parse_tag_section(line, align_tags)
-        assert not line[0:2] == "; "
-        
-        #Then we have the alignment numbers and sequence for the query
-        """
-        >gi|10955265| ..
-        ; sq_len: 346
-        ; sq_offset: 1
-        ; sq_type: p
-        ; al_start: 197
-        ; al_stop: 238
-        ; al_display_start: 167
-        DFMCSILNMKEIVEQKNKEFNVDIKKETIESELHSKLPKSIDKIHEDIKK
-        QLSC-SLIMKKIDVEMEDYSTYCFSALRAIEGFIYQILNDVCNPSSSKNL
-        GEYFTENKPKYIIREIHQET
-        """
-        if not (line[0] == ">" and line.strip().endswith("..")):
-            raise ValueError("Expected line starting '>' and ending '..'")
-        assert self._query_descr.startswith(line[1:].split(None,1)[0])
-        
-        #Handle the following "query alignment" tagged data
-        line = handle.readline()
-        line = self._parse_tag_section(line, query_tags)
-        assert not line[0:2] == "; "
-
-        #Now should have the aligned query sequence (with leading flanking region)
-        while not line[0] == ">":
-            query_seq_parts.append(line.strip())
-            line = handle.readline()
-        
-        #Handle the following "match alignment" data
-        """
-        >gi|152973545|ref|YP_001338596.1| ..
-        ; sq_len: 242
-        ; sq_type: p
-        ; al_start: 52
-        ; al_stop: 94
-        ; al_display_start: 22
-        IMTVEEARQRGARLPSMPHVRTFLRLLTGCSRINSDVARRIPGIHRDPKD
-        RLSSLKQVEEALDMLISSHGEYCPLPLTMDVQAENFPEVLHTRTVRRLKR
-        QDFAFTRKMRREARQVEQSW
-        """
-        #Match identifier
-        if not (line[0] == ">" and line.strip().endswith("..")):
-            raise ValueError("Expected line starting '>' and ending '..', got '%s'" % repr(line))
-        assert match_descr.startswith(line[1:].split(None,1)[0])
-        
-        #Tagged data,
-        line = handle.readline()
-        line = self._parse_tag_section(line, match_tags)
-        assert not line[0:2] == "; "
-
-        #Now should have the aligned query sequence with flanking region...
-        #but before that, since FASTA 35.4.1 there can be an consensus here,
-        """
-        ; al_cons:
-        .::. : :. ---.  :: :. . :  ..-:::-:  :.:  ..:...: 
-        etc
-        """
-        while not (line[0:2] == "; " or line[0] == ">" or ">>>" in line):
-            match_seq_parts.append(line.strip())
-            line = handle.readline()
-        if line[0:2] == "; ":
-            assert line.strip() == "; al_cons:"
-            align_consensus_parts = []
-            line = handle.readline()
-            while not (line[0:2] == "; " or line[0] == ">" or ">>>" in line):
-                align_consensus_parts.append(line.strip())
-                line = handle.readline()
-            #If we do anything with this in future, must remove any flanking region.
-            align_consensus = "".join(align_consensus_parts)
-            del align_consensus_parts
-            assert not line[0:2] == "; "
-        else:
-            align_consensus = None
-        assert (line[0] == ">" or ">>>" in line)
-        self._header = line
-
-        #We built a list of strings and then joined them because
-        #its faster than appending to a string.
-        query_seq = "".join(query_seq_parts)
-        match_seq = "".join(match_seq_parts)
-        del query_seq_parts, match_seq_parts
-        #Note, query_seq and match_seq will usually be of different lengths, apparently
-        #because in the m10 format leading gaps are added but not trailing gaps!
-
-        #Remove the flanking regions,
-        query_align_seq = _extract_alignment_region(query_seq, query_tags)
-        match_align_seq = _extract_alignment_region(match_seq, match_tags)
-        #How can we do this for the (optional) consensus?
-
-        #The "sq_offset" values can be specified with the -X command line option.
-        #They appear to just shift the origin used in the calculation of the coordinates.
-        
-        if len(query_align_seq) != len(match_align_seq):
-            raise ValueError("Problem parsing the alignment sequence coordinates, " 
-                             "following should be the same length but are not:\n"
-                             "%s - len %i\n%s - len %i" % (query_align_seq,
-                                                           len(query_align_seq),
-                                                           match_align_seq,
-                                                           len(match_align_seq)))
-        if "sw_overlap" in align_tags:
-            if int(align_tags["sw_overlap"]) != len(query_align_seq):
-                raise ValueError("Specified sw_overlap = %s does not match expected value %i" \
-                                 % (align_tags["sw_overlap"],
-                                    len(query_align_seq)))
-
-        #TODO - Look at the "sq_type" to assign a sensible alphabet?
-        alphabet = self.alphabet
-        alignment = MultipleSeqAlignment([], alphabet)
-
-        #TODO - Introduce an annotated alignment class?
-        #For now, store the annotation a new private property:
-        alignment._annotations = {}
-        
-        #Want to record both the query header tags, and the alignment tags.
-        for key, value in self._query_header_annotation.iteritems():
-            alignment._annotations[key] = value
-        for key, value in align_tags.iteritems():
-            alignment._annotations[key] = value
-        
-        #Query
-        #=====
-        record = SeqRecord(Seq(query_align_seq, alphabet),
-                           id = self._query_descr.split(None,1)[0].strip(","),
-                           name = "query",
-                           description = self._query_descr,
-                           annotations = {"original_length" : int(query_tags["sq_len"])})
-        #TODO - handle start/end coordinates properly. Short term hack for now:
-        record._al_start = int(query_tags["al_start"])
-        record._al_stop = int(query_tags["al_stop"])
-        alignment.append(record)
-
-        #TODO - What if a specific alphabet has been requested?
-        #TODO - Use an IUPAC alphabet?
-        #TODO - Can FASTA output RNA?
-        if alphabet == single_letter_alphabet and "sq_type" in query_tags:
-            if query_tags["sq_type"] == "D":
-                record.seq.alphabet = generic_dna
-            elif query_tags["sq_type"] == "p":
-                record.seq.alphabet = generic_protein
-        if "-" in query_align_seq:
-            if not hasattr(record.seq.alphabet,"gap_char"):
-                record.seq.alphabet = Gapped(record.seq.alphabet, "-")
-
-        #Match
-        #=====
-        record = SeqRecord(Seq(match_align_seq, alphabet),
-                           id = match_descr.split(None,1)[0].strip(","),
-                           name = "match",
-                           description = match_descr,
-                           annotations = {"original_length" : int(match_tags["sq_len"])})
-        #TODO - handle start/end coordinates properly. Short term hack for now:
-        record._al_start = int(match_tags["al_start"])
-        record._al_stop = int(match_tags["al_stop"])
-        alignment.append(record)
-
-        #This is still a very crude way of dealing with the alphabet:
-        if alphabet == single_letter_alphabet and "sq_type" in match_tags:
-            if match_tags["sq_type"] == "D":
-                record.seq.alphabet = generic_dna
-            elif match_tags["sq_type"] == "p":
-                record.seq.alphabet = generic_protein
-        if "-" in match_align_seq:
-            if not hasattr(record.seq.alphabet,"gap_char"):
-                record.seq.alphabet = Gapped(record.seq.alphabet, "-")
-
-        return alignment
-
-    def _skip_file_header(self, line):
-        """Helper function for the main parsing code.
-
-        Skips over the file header region.
-        """
-        #e.g. This region:
-        """
-        # /home/xxx/Downloads/FASTA/fasta-35.3.6/fasta35 -Q -H -E 1 -m 10 -X "-5 -5" NC_002127.faa NC_009649.faa
-        FASTA searches a protein or DNA sequence data bank
-         version 35.03 Feb. 18, 2008
-        Please cite:
-         W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
-
-        Query: NC_002127.faa
-        """
-        #Note that there is no point recording the command line here
-        #from the # line, as it is included again in each alignment
-        #under the "pg_argv" tag.  Likewise for the program version.
-        while line and (">>>" not in line or line.startswith(">>><<<")):
-            line = self.handle.readline()
-        return line
-
-    def _parse_query_header(self, line):
-        """Helper function for the main parsing code.
-
-        Skips over the free format query header, extracting the tagged parameters.
-
-        If there are no hits for the current query, it is skipped entirely."""
-        #e.g. this region (where there is often a histogram too):
-        """
-          2>>>gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s 126 aa - 126 aa
-        Library: NC_009649.faa   45119 residues in   180 sequences
-
-          45119 residues in   180 sequences
-        Statistics: (shuffled [500]) Expectation_n fit: rho(ln(x))= 5.0398+/-0.00968; mu= 2.8364+/- 0.508
-         mean_var=44.7937+/-10.479, 0's: 0 Z-trim: 0  B-trim: 0 in 0/32
-         Lambda= 0.191631
-        Algorithm: FASTA (3.5 Sept 2006) [optimized]
-        Parameters: BL50 matrix (15:-5) ktup: 2
-         join: 36, opt: 24, open/ext: -10/-2, width:  16
-         Scan time:  0.040
-
-        The best scores are:                                      opt bits E(180)
-        gi|152973462|ref|YP_001338513.1| hypothetical prot ( 101)   58 23.3    0.22
-        gi|152973501|ref|YP_001338552.1| hypothetical prot ( 245)   55 22.5    0.93
-        """
-        #Sometimes have queries with no matches, in which case we continue to the
-        #next query block:
-        """
-          2>>>gi|152973838|ref|YP_001338875.1| hypothetical protein KPN_pKPN7p10263 [Klebsiella pneumoniae subsp. pneumonia 76 aa - 76 aa
-         vs  NC_002127.faa library
-
-            579 residues in     3 sequences
-         Altschul/Gish params: n0: 76 Lambda: 0.158 K: 0.019 H: 0.100
-
-        FASTA (3.5 Sept 2006) function [optimized, BL50 matrix (15:-5)] ktup: 2
-         join: 36, opt: 24, open/ext: -10/-2, width:  16
-         Scan time:  0.000
-        !! No library sequences with E() < 0.5
-        """
-
-        self._query_header_annotation = {}
-        self._query_descr = ""
-
-        assert ">>>" in line and not line[0:3] == ">>>"
-        #There is nothing useful in this line, the query description is truncated.
-        
-        line = self.handle.readline()
-        #We ignore the free form text...
-        while line[0:3] != ">>>" or line.startswith(">>><<<"):
-            #print "Ignoring %s" % line.strip()
-            line = self.handle.readline()
-            if not line:
-                return ""
-
-        #Now want to parse this section:
-        """
-        >>>gi|10955264|ref|NP_052605.1|, 126 aa vs NC_009649.faa library
-        ; pg_name: /home/pjcock/Downloads/FASTA/fasta-35.3.6/fasta35
-        ; pg_ver: 35.03
-        ; pg_argv: /home/pjcock/Downloads/FASTA/fasta-35.3.6/fasta35 -Q -H -E 1 -m 10 -X -5 -5 NC_002127.faa NC_009649.faa
-        ; pg_name: FASTA
-        ; pg_ver: 3.5 Sept 2006
-        ; pg_matrix: BL50 (15:-5)
-        ; pg_open-ext: -10 -2
-        ; pg_ktup: 2
-        ; pg_optcut: 24
-        ; pg_cgap: 36
-        ; mp_extrap: 60000 500
-        ; mp_stats: (shuffled [500]) Expectation_n fit: rho(ln(x))= 5.0398+/-0.00968; mu= 2.8364+/- 0.508  mean_var=44.7937+/-10.479, 0's: 0 Z-trim: 0  B-trim: 0 in 0/32  Lambda= 0.191631
-        ; mp_KS: -0.0000 (N=1066338402) at  20
-        ; mp_Algorithm: FASTA (3.5 Sept 2006) [optimized]
-        ; mp_Parameters: BL50 matrix (15:-5) ktup: 2  join: 36, opt: 24, open/ext: -10/-2, width:  16
-        """
-
-        assert not line.startswith(">>><<<"), line
-        assert line[0:3] == ">>>", line
-        self._query_descr = line[3:].strip()
-
-        #Handle the following "program" tagged data,
-        line = self.handle.readline()
-        line = self._parse_tag_section(line, self._query_header_annotation)
-        assert not line[0:2] == "; ", line
-        assert line[0:2] == ">>" or ">>>" in line, line
-        return line
-
-    def _parse_tag_section(self, line, dictionary):
-        """Helper function for the main parsing code.
-
-        line - supply line just read from the handle containing the start of
-               the tagged section.
-        dictionary - where to record the tagged values
-
-        Returns a string, the first line following the tagged section."""
-        if not line[0:2] == "; ":
-            raise ValueError("Expected line starting '; '")
-        while line[0:2] == "; ":
-            tag, value = line[2:].strip().split(": ",1)
-            #fasta34 and early versions of fasta35 will reuse the pg_name and
-            #pg_ver tags for the program executable and name, and the program
-            #version and the algorithm version, respectively.  This is fixed
-            #in FASTA 35.4.1, but we can't assume the tags are unique:
-            #if tag in dictionary:
-            #    raise ValueError("Repeated tag '%s' in section" % tag)
-            dictionary[tag.strip()] = value.strip()
-            line = self.handle.readline()
-        return line
-
-"""
-New parser, which can cope with multiple HSPs for a query+match with the
-new >-- lines. Commented out until I write some more unit tests to check
-it gives the same output as the older parser.
-def FastaM10Iterator(handle, alphabet = single_letter_alphabet):
     state_PREAMBLE = -1
     state_NONE = 0
     state_QUERY_HEADER = 1
@@ -500,6 +130,7 @@ def FastaM10Iterator(handle, alphabet = single_letter_alphabet):
             print handle.name
             raise err
 
+        assert alphabet is not None
         alignment = MultipleSeqAlignment([], alphabet)
 
         #TODO - Introduce an annotated alignment class?
@@ -515,7 +146,7 @@ def FastaM10Iterator(handle, alphabet = single_letter_alphabet):
         #Query
         #=====
         record = SeqRecord(Seq(q, alphabet),
-                           id = "query_id",
+                           id = query_id,
                            name = "query",
                            description = query_descr,
                            annotations = {"original_length" : int(query_tags["sq_len"])})
@@ -580,7 +211,8 @@ def FastaM10Iterator(handle, alphabet = single_letter_alphabet):
                 #query >>><<< marker line.
                 yield build_hsp()
             state = state_NONE
-            query_id = line[line.find(">>>")+3:].split(None,1)[0]
+            query_descr = line[line.find(">>>")+3:].strip()
+            query_id = query_descr.split(None,1)[0]
             match_id = None
             header_tags = {}
             align_tags = {}
@@ -641,11 +273,8 @@ def FastaM10Iterator(handle, alphabet = single_letter_alphabet):
             query_seq = ""
             match_seq = ""
             cons_seq = ""
-            try:
-                match_id, match_descr = line[2:].split(None,1)
-            except ValueError:
-                match_id = line[2:].strip()
-                match_descr = ""
+            match_descr = line[2:].strip()
+            match_id = match_descr.split(None,1)[0]
             state = state_ALIGN_HEADER
         elif line.startswith(">--"):
             #End of one HSP
@@ -711,7 +340,7 @@ def FastaM10Iterator(handle, alphabet = single_letter_alphabet):
                 global_tags["tool"] = line[:line.find(" searches a ")].strip()
         else:
             pass
-"""
+
 
 if __name__ == "__main__":
     print "Running a quick self-test"
