@@ -1,4 +1,4 @@
-# Copyright 2008-2010 by Peter Cock.  All rights reserved.
+# Copyright 2008-2011 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -104,9 +104,9 @@ class FastaM10Iterator(AlignmentIterator):
         assert line[0:2] == ">>" and not line[2] == ">", repr(line)
 
         query_seq_parts, match_seq_parts = [], []
-        query_annotation, match_annotation = {}, {}
+        query_tags, match_tags = {}, {}
         match_descr = ""
-        alignment_annotation = {}
+        align_tags = {}
 
         #This should be followed by the target match ID line, then more tags.
         #e.g.
@@ -129,7 +129,7 @@ class FastaM10Iterator(AlignmentIterator):
         match_descr = line[2:].strip()
         #Handle the following "alignment hit" tagged data, e.g.
         line = handle.readline()
-        line = self._parse_tag_section(line, alignment_annotation)
+        line = self._parse_tag_section(line, align_tags)
         assert not line[0:2] == "; "
         
         #Then we have the alignment numbers and sequence for the query
@@ -151,7 +151,7 @@ class FastaM10Iterator(AlignmentIterator):
         
         #Handle the following "query alignment" tagged data
         line = handle.readline()
-        line = self._parse_tag_section(line, query_annotation)
+        line = self._parse_tag_section(line, query_tags)
         assert not line[0:2] == "; "
 
         #Now should have the aligned query sequence (with leading flanking region)
@@ -178,7 +178,7 @@ class FastaM10Iterator(AlignmentIterator):
         
         #Tagged data,
         line = handle.readline()
-        line = self._parse_tag_section(line, match_annotation)
+        line = self._parse_tag_section(line, match_tags)
         assert not line[0:2] == "; "
 
         #Now should have the aligned query sequence with flanking region...
@@ -216,8 +216,8 @@ class FastaM10Iterator(AlignmentIterator):
         #because in the m10 format leading gaps are added but not trailing gaps!
 
         #Remove the flanking regions,
-        query_align_seq = self._extract_alignment_region(query_seq, query_annotation)
-        match_align_seq = self._extract_alignment_region(match_seq, match_annotation)
+        query_align_seq = self._extract_alignment_region(query_seq, query_tags)
+        match_align_seq = self._extract_alignment_region(match_seq, match_tags)
         #How can we do this for the (optional) consensus?
 
         #The "sq_offset" values can be specified with the -X command line option.
@@ -230,10 +230,10 @@ class FastaM10Iterator(AlignmentIterator):
                                                            len(query_align_seq),
                                                            match_align_seq,
                                                            len(match_align_seq)))
-        if "sw_overlap" in alignment_annotation:
-            if int(alignment_annotation["sw_overlap"]) != len(query_align_seq):
+        if "sw_overlap" in align_tags:
+            if int(align_tags["sw_overlap"]) != len(query_align_seq):
                 raise ValueError("Specified sw_overlap = %s does not match expected value %i" \
-                                 % (alignment_annotation["sw_overlap"],
+                                 % (align_tags["sw_overlap"],
                                     len(query_align_seq)))
 
         #TODO - Look at the "sq_type" to assign a sensible alphabet?
@@ -247,7 +247,7 @@ class FastaM10Iterator(AlignmentIterator):
         #Want to record both the query header tags, and the alignment tags.
         for key, value in self._query_header_annotation.iteritems():
             alignment._annotations[key] = value
-        for key, value in alignment_annotation.iteritems():
+        for key, value in align_tags.iteritems():
             alignment._annotations[key] = value
         
         #Query
@@ -256,19 +256,19 @@ class FastaM10Iterator(AlignmentIterator):
                            id = self._query_descr.split(None,1)[0].strip(","),
                            name = "query",
                            description = self._query_descr,
-                           annotations = {"original_length" : int(query_annotation["sq_len"])})
+                           annotations = {"original_length" : int(query_tags["sq_len"])})
         #TODO - handle start/end coordinates properly. Short term hack for now:
-        record._al_start = int(query_annotation["al_start"])
-        record._al_stop = int(query_annotation["al_stop"])
+        record._al_start = int(query_tags["al_start"])
+        record._al_stop = int(query_tags["al_stop"])
         alignment.append(record)
 
         #TODO - What if a specific alphabet has been requested?
         #TODO - Use an IUPAC alphabet?
         #TODO - Can FASTA output RNA?
-        if alphabet == single_letter_alphabet and "sq_type" in query_annotation:
-            if query_annotation["sq_type"] == "D":
+        if alphabet == single_letter_alphabet and "sq_type" in query_tags:
+            if query_tags["sq_type"] == "D":
                 record.seq.alphabet = generic_dna
-            elif query_annotation["sq_type"] == "p":
+            elif query_tags["sq_type"] == "p":
                 record.seq.alphabet = generic_protein
         if "-" in query_align_seq:
             if not hasattr(record.seq.alphabet,"gap_char"):
@@ -280,17 +280,17 @@ class FastaM10Iterator(AlignmentIterator):
                            id = match_descr.split(None,1)[0].strip(","),
                            name = "match",
                            description = match_descr,
-                           annotations = {"original_length" : int(match_annotation["sq_len"])})
+                           annotations = {"original_length" : int(match_tags["sq_len"])})
         #TODO - handle start/end coordinates properly. Short term hack for now:
-        record._al_start = int(match_annotation["al_start"])
-        record._al_stop = int(match_annotation["al_stop"])
+        record._al_start = int(match_tags["al_start"])
+        record._al_stop = int(match_tags["al_stop"])
         alignment.append(record)
 
         #This is still a very crude way of dealing with the alphabet:
-        if alphabet == single_letter_alphabet and "sq_type" in match_annotation:
-            if match_annotation["sq_type"] == "D":
+        if alphabet == single_letter_alphabet and "sq_type" in match_tags:
+            if match_tags["sq_type"] == "D":
                 record.seq.alphabet = generic_dna
-            elif match_annotation["sq_type"] == "p":
+            elif match_tags["sq_type"] == "p":
                 record.seq.alphabet = generic_protein
         if "-" in match_align_seq:
             if not hasattr(record.seq.alphabet,"gap_char"):
