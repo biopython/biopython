@@ -463,6 +463,27 @@ Testing reading fasta-m10 format file Fasta/output007.m10 with 9 alignments
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
+Testing reading fasta-m10 format file Fasta/output008.m10 with 12 alignments
+ Alignment 0, with 2 sequences of length 65
+  LQHRHPHQQQQQQQQQQQQQQQQQQQQQQQQQQQH-...QML sp|Q9NSY1|BMP2K_HUMAN
+  IPHQLPHALRHRPAQEAAHASQLHPAQPGCGQPLHG...GLL gi|283855822|gb|GQ290312.1|
+ Alignment 1, with 2 sequences of length 201
+  GPEIL---LGQ-GPPQQPPQQHRVLQQLQQGDWRLQ...NRS sp|Q9NSY1|BMP2K_HUMAN
+  GPELLRALLQQNGCGTQPLRVPTVLPG*AMAVLHAG...QKS gi|57163782|ref|NM_001009242.1|
+ Alignment 2, with 2 sequences of length 348
+  MNGTEGPNFYVPFSNATGVVRSPFEYPQYYLAEPWQ...APA sp|P08100|OPSD_HUMAN
+  MNGTEGPNFYVPFSNKTGVVRSPFEYPQYYLAEPWQ...APA gi|57163782|ref|NM_001009242.1|
+ ...
+ Alignment 11, with 2 sequences of length 31
+  AQQQESATTQKAEKEVTRMVIIMVIAFLICW sp|P08100|OPSD_HUMAN
+  SQQIRNATTMMMTMRVTSFSAFWVVADSCCW gi|283855822|gb|GQ290312.1|
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'nexus' format
+ Failed: We can only write one Alignment to a Nexus file.
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading ig format file IntelliGenetics/VIF_mase-pro.txt with 1 alignments
  Alignment 0, with 16 sequences of length 298
   MMMMMMMMMMMMMMMM alignment column 0
