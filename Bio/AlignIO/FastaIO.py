@@ -455,7 +455,7 @@ class FastaM10Iterator(AlignmentIterator):
             #in FASTA 35.4.1, but we can't assume the tags are unique:
             #if tag in dictionary:
             #    raise ValueError("Repeated tag '%s' in section" % tag)
-            dictionary[tag] = value
+            dictionary[tag.strip()] = value.strip()
             line = self.handle.readline()
         return line
 
