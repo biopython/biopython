@@ -27,6 +27,39 @@ from Interfaces import AlignmentIterator
 from Bio.Alphabet import single_letter_alphabet, generic_dna, generic_protein
 from Bio.Alphabet import Gapped
 
+
+def _extract_alignment_region(alignment_seq_with_flanking, annotation):
+    """Helper function for the main parsing code (PRIVATE).
+
+    To get the actual pairwise alignment sequences, we must first
+    translate the un-gapped sequence based coordinates into positions
+    in the gapped sequence (which may have a flanking region shown
+    using leading - characters).  To date, I have never seen any
+    trailing flanking region shown in the m10 file, but the
+    following code should also cope with that.
+
+    Note that this code seems to work fine even when the "sq_offset"
+    entries are prsent as a result of using the -X command line option.
+    """
+    align_stripped = alignment_seq_with_flanking.strip("-")
+    display_start = int(annotation['al_display_start'])
+    if int(annotation['al_start']) <= int(annotation['al_stop']):
+        start = int(annotation['al_start']) \
+              - display_start
+        end   = int(annotation['al_stop']) \
+              - display_start + 1
+    else:
+        #FASTA has flipped this sequence...
+        start = display_start \
+              - int(annotation['al_start'])
+        end   = display_start \
+              - int(annotation['al_stop']) + 1
+    end += align_stripped.count("-")
+    assert 0 <= start and start < end and end <= len(align_stripped), \
+           "Problem with sequence start/stop,\n%s[%i:%i]\n%s" \
+           % (alignment_seq_with_flanking, start, end, annotation)
+    return align_stripped[start:end]
+
 # TODO - Turn this into a doctest
 class FastaM10Iterator(AlignmentIterator):
     """Alignment iterator for the FASTA tool's pairwise alignment output.
@@ -216,8 +249,8 @@ class FastaM10Iterator(AlignmentIterator):
         #because in the m10 format leading gaps are added but not trailing gaps!
 
         #Remove the flanking regions,
-        query_align_seq = self._extract_alignment_region(query_seq, query_tags)
-        match_align_seq = self._extract_alignment_region(match_seq, match_tags)
+        query_align_seq = _extract_alignment_region(query_seq, query_tags)
+        match_align_seq = _extract_alignment_region(match_seq, match_tags)
         #How can we do this for the (optional) consensus?
 
         #The "sq_offset" values can be specified with the -X command line option.
@@ -403,40 +436,6 @@ class FastaM10Iterator(AlignmentIterator):
         assert not line[0:2] == "; ", line
         assert line[0:2] == ">>" or ">>>" in line, line
         return line
-
-
-    def _extract_alignment_region(self, alignment_seq_with_flanking, annotation):
-        """Helper function for the main parsing code.
-
-        To get the actual pairwise alignment sequences, we must first
-        translate the un-gapped sequence based coordinates into positions
-        in the gapped sequence (which may have a flanking region shown
-        using leading - characters).  To date, I have never seen any
-        trailing flanking region shown in the m10 file, but the
-        following code should also cope with that.
-
-        Note that this code seems to work fine even when the "sq_offset"
-        entries are prsent as a result of using the -X command line option.
-        """
-        align_stripped = alignment_seq_with_flanking.strip("-")
-        display_start = int(annotation['al_display_start'])
-        if int(annotation['al_start']) <= int(annotation['al_stop']):
-            start = int(annotation['al_start']) \
-                  - display_start
-            end   = int(annotation['al_stop']) \
-                  - display_start + 1
-        else:
-            #FASTA has flipped this sequence...
-            start = display_start \
-                  - int(annotation['al_start'])
-            end   = display_start \
-                  - int(annotation['al_stop']) + 1
-        end += align_stripped.count("-")
-        assert 0 <= start and start < end and end <= len(align_stripped), \
-               "Problem with sequence start/stop,\n%s[%i:%i]\n%s" \
-               % (alignment_seq_with_flanking, start, end, annotation)
-        return align_stripped[start:end]
-
 
     def _parse_tag_section(self, line, dictionary):
         """Helper function for the main parsing code.
