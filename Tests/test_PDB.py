@@ -76,10 +76,14 @@ class A_ExceptionTest(unittest.TestCase):
 
     def test_2_strict(self):
         """Check error: Parse a flawed PDB file in strict mode."""
-        parser = PDBParser(PERMISSIVE=False)
-        self.assertRaises(PDBConstructionException,
-                parser.get_structure, "example", "PDB/a_structure.pdb")
-
+        warnings.simplefilter('ignore', PDBConstructionWarning)
+        try:
+            parser = PDBParser(PERMISSIVE=False)
+            self.assertRaises(PDBConstructionException,
+                   parser.get_structure, "example", "PDB/a_structure.pdb")
+        finally:
+            warnings.filters.pop()
+     
     def test_3_bad_xyz(self):
         """Check error: Parse an entry with bad x,y,z value."""
         data = "ATOM      9  N   ASP A 152      21.554  34.953  27.691  1.00 19.26           N\n"
