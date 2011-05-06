@@ -171,7 +171,7 @@ if __name__=="__main__":
 
     import sys
 
-    p=PDBParser(PERMISSIVE=1)
+    p=PDBParser(PERMISSIVE=True)
 
     s=p.get_structure("test", sys.argv[1])
 

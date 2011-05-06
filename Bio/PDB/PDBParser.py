@@ -23,7 +23,8 @@ class PDBParser:
     Parse a PDB file and return a Structure object.
     """
 
-    def __init__(self, PERMISSIVE=1, get_header=0, structure_builder=None, QUIET=0):
+    def __init__(self, PERMISSIVE=True, get_header=False,
+                 structure_builder=None, QUIET=False):
         """
         The PDB parser call a number of standard methods in an aggregated
         StructureBuilder object. Normally this object is instanciated by the
@@ -32,16 +33,16 @@ class PDBParser:
 
         Arguments:
         
-        o PERMISSIVE - int, if this is 0 exceptions in constructing the
-        SMCRA data structure are fatal. If 1 (DEFAULT), the exceptions are 
-        caught, but some residues or atoms will be missing. THESE EXCEPTIONS 
-        ARE DUE TO PROBLEMS IN THE PDB FILE!.
+        o PERMISSIVE - Evaluated as a Boolean. If false, exceptions in
+        constructing the SMCRA data structure are fatal. If true (DEFAULT),
+        the exceptions are caught, but some residues or atoms will be missing.
+        THESE EXCEPTIONS ARE DUE TO PROBLEMS IN THE PDB FILE!.
 
         o structure_builder - an optional user implemented StructureBuilder class. 
 
-        o QUIET - int, if this is 1, warnings issued in constructing the SMCRA data
-        will be supressed. If 0 (DEFAULT), they will not. These warnings might be
-        indicative of problems in the PDB file!        
+        o QUIET - Evaluated as a Boolean. If true, warnings issued in constructing
+        the SMCRA data will be supressed. If false (DEFAULT), they will be shown.
+        These warnings might be indicative of problems in the PDB file!        
         """
         if structure_builder!=None:
             self.structure_builder=structure_builder
@@ -50,8 +51,8 @@ class PDBParser:
         self.header=None
         self.trailer=None
         self.line_counter=0
-        self.PERMISSIVE=PERMISSIVE
-        self.QUIET=QUIET
+        self.PERMISSIVE=bool(PERMISSIVE)
+        self.QUIET=bool(QUIET)
 
     # Public methods
 
@@ -265,7 +266,7 @@ class PDBParser:
     def _handle_PDB_exception(self, message, line_counter):
         """
         This method catches an exception that occurs in the StructureBuilder
-        object (if PERMISSIVE==1), or raises it again, this time adding the 
+        object (if PERMISSIVE), or raises it again, this time adding the 
         PDB line number to the error message.
         """
         message="%s at line %i." % (message, line_counter)
@@ -284,7 +285,7 @@ if __name__=="__main__":
 
     import sys
 
-    p=PDBParser(PERMISSIVE=1)
+    p=PDBParser(PERMISSIVE=True)
 
     filename = sys.argv[1]
     s=p.get_structure("scr", filename)
