@@ -23,7 +23,7 @@ class PDBParser:
     Parse a PDB file and return a Structure object.
     """
 
-    def __init__(self, PERMISSIVE=1, get_header=0, structure_builder=None):
+    def __init__(self, PERMISSIVE=1, get_header=0, QUIET=0, structure_builder=None):
         """
         The PDB parser call a number of standard methods in an aggregated
         StructureBuilder object. Normally this object is instanciated by the
@@ -31,10 +31,16 @@ class PDBParser:
         object, the latter is used instead.
 
         Arguments:
+        
         o PERMISSIVE - int, if this is 0 exceptions in constructing the
         SMCRA data structure are fatal. If 1 (DEFAULT), the exceptions are 
         caught, but some residues or atoms will be missing. THESE EXCEPTIONS 
         ARE DUE TO PROBLEMS IN THE PDB FILE!.
+
+        o QUIET - int, if this is 1, warnings issued in constructing the SMCRA data
+        will be supressed. If 0 (DEFAULT), they will not. These warnings might be
+        indicative of problems in the PDB file!        
+
         o structure_builder - an optional user implemented StructureBuilder class. 
         """
         if structure_builder!=None:
@@ -45,6 +51,7 @@ class PDBParser:
         self.trailer=None
         self.line_counter=0
         self.PERMISSIVE=PERMISSIVE
+        self.QUIET=QUIET
 
     # Public methods
 
@@ -55,6 +62,11 @@ class PDBParser:
         o id - string, the id that will be used for the structure
         o file - name of the PDB file OR an open filehandle
         """
+
+        if self.QUIET:
+            warning_list = warnings.filters[:]
+            warnings.filterwarnings('ignore', category=PDBConstructionWarning)
+            
         self.header=None
         self.trailer=None
         # Make a StructureBuilder instance (pass id of structure as parameter)
@@ -69,6 +81,10 @@ class PDBParser:
         structure = self.structure_builder.get_structure()
         if handle_close:
             file.close()
+        
+        if self.QUIET:
+            warnings.filters = warning_list
+        
         return structure
 
     def get_header(self):
