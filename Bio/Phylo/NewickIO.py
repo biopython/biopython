@@ -7,9 +7,9 @@
 
 """I/O function wrappers for the Newick file format.
 
-See: U{ http://evolution.genetics.washington.edu/phylip/newick_doc.html }
+See: http://evolution.genetics.washington.edu/phylip/newick_doc.html
 """
-__docformat__ = "epytext en"
+__docformat__ = "restructuredtext en"
 
 from cStringIO import StringIO
 
@@ -31,14 +31,14 @@ class NewickError(Exception):
 def parse(handle):
     """Iterate over the trees in a Newick file handle.
 
-    @return: a generator of Bio.Phylo.Newick.Tree objects.
+    :returns: generator of Bio.Phylo.Newick.Tree objects.
     """
     return Parser(handle).parse()
 
 def write(trees, handle, plain=False, **kwargs):
     """Write a trees in Newick format to the given file handle.
 
-    @return: number of trees written.
+    :returns: number of trees written.
     """
     return Writer(trees).write(handle, plain=plain, **kwargs)
 
@@ -49,7 +49,7 @@ def write(trees, handle, plain=False, **kwargs):
 class Parser(object):
     """Parse a Newick tree given a file handle.
 
-    Based on the parser in Bio.Nexus.Trees.
+    Based on the parser in `Bio.Nexus.Trees`.
     """
 
     def __init__(self, handle):
@@ -80,7 +80,7 @@ class Parser(object):
         return Newick.Tree(root=self._parse_subtree(text))
 
     def _parse_subtree(self, text):
-        """Parse (a,b,c...)[[[xx]:]yy] into subcomponents, recursively."""
+        """Parse ``(a,b,c...)[[[xx]:]yy]`` into subcomponents, recursively."""
         text = text.strip().rstrip(';')
         if text.count('(')!=text.count(')'):
             raise NewickError("Parentheses do not match in (sub)tree: " + text)
@@ -112,7 +112,7 @@ class Parser(object):
     def _parse_tag(self, text):
         """Extract the data for a node from text.
 
-        @return: Clade instance containing any available data
+        :returns: Clade instance containing any available data
         """
         # Extract the comment
         comment_start = text.find(NODECOMMENT_START)

@@ -3,8 +3,8 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""I/O function wrappers for Bio.Nexus trees."""
-__docformat__ = "epytext en"
+"""I/O function wrappers for `Bio.Nexus` trees."""
+__docformat__ = "restructuredtext en"
 
 from itertools import chain
 
@@ -33,8 +33,8 @@ def parse(handle):
 
     Uses the old Nexus.Trees parser to extract the trees, converts them back to
     plain Newick trees, and feeds those strings through the new Newick parser.
-    This way we don't have to modify the Nexus module yet. When we're satisfied
-    with Bio.Phylo, we can change Nexus to use the new NewickIO parser directly.
+    This way we don't have to modify the Nexus module yet. (Perhaps we'll
+    eventually change Nexus to use the new NewickIO parser directly.)
     """
     nex = Nexus.Nexus(handle)
     # NB: Once Nexus.Trees is modified to use Tree.Newick objects, do this:
