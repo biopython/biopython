@@ -40,7 +40,7 @@ class PhylipWriter(SequentialAlignmentWriter):
         http://evolution.genetics.washington.edu/phylip/doc/sequence.html
         http://evolution.genetics.washington.edu/phylip/doc/main.html#inputfiles
         """
-        truncate=10
+        truncate = 10
         handle = self.handle        
         
         if len(alignment)==0:
@@ -52,9 +52,13 @@ class PhylipWriter(SequentialAlignmentWriter):
         if length_of_seqs <= 0:
             raise ValueError("Non-empty sequences are required")
         
-        if len(alignment) > len(set([r.id[:truncate] for r in alignment])):
-            raise ValueError("Repeated identifier, possibly due to truncation")
-
+        # Check for repeated identifiers
+        ids = set()
+        for trunc_id in (r.id[:truncate] for r in alignment):
+            if trunc_id in ids:
+                raise ValueError(("Repeated identifier '%s', possibly due to "
+                                  "truncation" % trunc_id))
+            ids.add(trunc_id)
 
         # From experimentation, the use of tabs is not understood by the
         # EMBOSS suite.  The nature of the expected white space is not
