@@ -4,7 +4,12 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Code for dealing with sequence alignments.
+
+One of the most important things in this module is the MultipleSeqAlignment
+class, used in the Bio.AlignIO module.
+
 """
+__docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -13,7 +18,7 @@ from Bio import Alphabet
 #We only import this and subclass it for some limited backward compatibilty.
 from Bio.Align.Generic import Alignment as _Alignment
 class MultipleSeqAlignment(_Alignment):
-    """"Represents a classical multiple sequence alignment (MSA).
+    """Represents a classical multiple sequence alignment (MSA).
 
     By this we mean a collection of sequences (usually shown as rows) which
     are all the same length (usually with gap characters for insertions of
@@ -103,11 +108,13 @@ class MultipleSeqAlignment(_Alignment):
         """Initialize a new MultipleSeqAlignment object.
 
         Arguments:
-        records - A list (or iterator) of SeqRecord objects, whose sequences
-                  are all the same length.  This may be an be an empty list.
-        alphabet - The alphabet for the whole alignment, typically a gapped
-                  alphabet, which should be a super-set of the individual
-                  record alphabets.  If omitted, a consensus alphabet is used.
+         - records - A list (or iterator) of SeqRecord objects, whose
+                     sequences are all the same length.  This may be an be an
+                     empty list.
+         - alphabet - The alphabet for the whole alignment, typically a gapped
+                      alphabet, which should be a super-set of the individual
+                      record alphabets.  If omitted, a consensus alphabet is
+                      used.
 
         You would normally load a MSA from a file using Bio.AlignIO, but you
         can do this from a list of SeqRecord objects too:
