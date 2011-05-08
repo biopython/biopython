@@ -84,8 +84,8 @@ following format names:
     files, using Solexa scores with an ASCII offset 64. These can hold Solexa
     scores from -5 to 62.
  - "fastq-illumina" means newer Illumina 1.3 to 1.7 style FASTQ files, using
-    PHRED scores but with an ASCII offset 64, allowing PHRED scores from 0 to
-    62.
+    PHRED scores but with an ASCII offset 64, allowing PHRED scores from 0
+    to 62.
 
 We could potentially add support for "qual-solexa" meaning QUAL files which
 contain Solexa scores, but thus far there isn't any reason to use such files.
