@@ -3,6 +3,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Alignment command line tool wrappers."""
+
+__docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
+
 from _Muscle import MuscleCommandline
 from _Clustalw import ClustalwCommandline
 from _Prank import PrankCommandline
