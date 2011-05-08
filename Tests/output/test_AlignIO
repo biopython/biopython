@@ -50,7 +50,7 @@ Testing reading clustal format file Clustalw/odd_consensus.aln with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier 'AT3G20900.', possibly due to truncation
+ Failed: Repeated name 'AT3G20900.' (originally 'AT3G20900.1-SEQ'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -67,7 +67,7 @@ Testing reading clustal format file Clustalw/protein.aln with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier 'gi|1377497', possibly due to truncation
+ Failed: Repeated name 'gi|1377497' (originally 'gi|13774975|gb|AAK39115.1|AF35'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -84,7 +84,7 @@ Testing reading clustal format file Clustalw/promals3d.aln with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier 'gi_1393639', possibly due to truncation
+ Failed: Repeated name 'gi_1393639' (originally 'gi_13936397_dbj_BAB47195.'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -289,7 +289,7 @@ Testing reading emboss format file Emboss/needle_asis.txt with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier 'asis', possibly due to truncation
+ Failed: Repeated name 'asis' (originally 'asis'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Failed: Duplicate record identifier: asis
  Checking can write/read as 'fasta' format
@@ -313,7 +313,7 @@ Testing reading emboss format file Emboss/water2.txt with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier 'asis', possibly due to truncation
+ Failed: Repeated name 'asis' (originally 'asis'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Failed: Duplicate record identifier: asis
  Checking can write/read as 'fasta' format
@@ -416,7 +416,7 @@ Testing reading fasta-m10 format file Fasta/output004.m10 with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier 'ref|NC_002', possibly due to truncation
+ Failed: Repeated name 'ref|NC_002' (originally 'ref|NC_002695.1|:1970775-1971404'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format

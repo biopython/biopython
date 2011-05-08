@@ -52,13 +52,39 @@ class PhylipWriter(SequentialAlignmentWriter):
         if length_of_seqs <= 0:
             raise ValueError("Non-empty sequences are required")
         
-        # Check for repeated identifiers
-        ids = set()
-        for trunc_id in (r.id[:truncate] for r in alignment):
-            if trunc_id in ids:
-                raise ValueError(("Repeated identifier '%s', possibly due to "
-                                  "truncation" % trunc_id))
-            ids.add(trunc_id)
+        # Check for repeated identifiers...
+        # Apply this test *after* cleaning the identifiers
+        names = []
+        for record in alignment:
+            """
+            Quoting the PHYLIP version 3.6 documentation:
+            
+            The name should be ten characters in length, filled out to
+            the full ten characters by blanks if shorter. Any printable
+            ASCII/ISO character is allowed in the name, except for
+            parentheses ("(" and ")"), square brackets ("[" and "]"),
+            colon (":"), semicolon (";") and comma (","). If you forget
+            to extend the names to ten characters in length by blanks,
+            the program [i.e. PHYLIP] will get out of synchronization
+            with the contents of the data file, and an error message will
+            result.
+
+            Note that Tab characters count as only one character in the
+            species names. Their inclusion can cause trouble.
+            """
+            name = record.id.strip()
+            #Either remove the banned characters, or map them to something
+            #else like an underscore "_" or pipe "|" character...
+            for char in "[](),":
+                name = name.replace(char,"")
+            for char in ":;":
+                name = name.replace(char,"|")
+            name = name[:truncate]
+            if name in names:
+                raise ValueError("Repeated name %r (originally %r), "
+                                 "possibly due to truncation" \
+                                 % (name, record.id))
+            names.append(name)
 
         # From experimentation, the use of tabs is not understood by the
         # EMBOSS suite.  The nature of the expected white space is not
@@ -68,33 +94,9 @@ class PhylipWriter(SequentialAlignmentWriter):
         handle.write(" %i %s\n" % (len(alignment), length_of_seqs))
         block=0
         while True:
-            for record in alignment:
+            for name, record in zip(names, alignment):
                 if block==0:
                     #Write name (truncated/padded to 10 characters)
-                    """
-                    Quoting the PHYLIP version 3.6 documentation:
-                    
-                    The name should be ten characters in length, filled out to
-                    the full ten characters by blanks if shorter. Any printable
-                    ASCII/ISO character is allowed in the name, except for
-                    parentheses ("(" and ")"), square brackets ("[" and "]"),
-                    colon (":"), semicolon (";") and comma (","). If you forget
-                    to extend the names to ten characters in length by blanks,
-                    the program [i.e. PHYLIP] will get out of synchronization
-                    with the contents of the data file, and an error message will
-                    result.
-
-                    Note that Tab characters count as only one character in the
-                    species names. Their inclusion can cause trouble.
-                    """
-                    name = record.id.strip()
-                    #Either remove the banned characters, or map them to something
-                    #else like an underscore "_" or pipe "|" character...
-                    for char in "[](),":
-                        name = name.replace(char,"")
-                    for char in ":;":
-                        name = name.replace(char,"|")
-
                     #Now truncate and right pad to expected length.
                     handle.write(name[:truncate].ljust(truncate))
                 else:
