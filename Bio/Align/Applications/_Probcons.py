@@ -7,7 +7,6 @@
 
 __docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
 
-import types
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
 class ProbconsCommandline(AbstractCommandline):
