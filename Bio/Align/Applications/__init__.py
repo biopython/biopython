@@ -13,3 +13,13 @@ from _Mafft import MafftCommandline
 from _Dialign import DialignCommandline
 from _Probcons import ProbconsCommandline
 from _TCoffee import TCoffeeCommandline
+
+#Make this explicit, then they show up in the API docs
+__all__ = ["MuscleCommandline",
+           "ClustalwCommandline",
+           "PrankCommandline",
+           "MafftCommandline",
+           "DialignCommandline",
+           "ProbconsCommandline",
+           "TCoffeeCommandline",
+           ]
