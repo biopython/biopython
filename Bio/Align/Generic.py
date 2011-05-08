@@ -9,9 +9,10 @@
 Contains classes to deal with generic sequence alignment stuff not
 specific to a particular program or format.
 
-classes:
-o Alignment
+Classes:
+ - Alignment
 """
+__docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
 
 # biopython
 from Bio.Seq import Seq
@@ -32,10 +33,11 @@ class Alignment:
         """Initialize a new Alignment object.
 
         Arguments:
-        o alphabet - The alphabet to use for the sequence objects that are
-        created. This alphabet must be a gapped type.
+         - alphabet - The alphabet to use for the sequence objects that are
+                      created. This alphabet must be a gapped type.
 
         e.g.
+
         >>> from Bio.Alphabet import IUPAC, Gapped
         >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
@@ -132,6 +134,7 @@ class Alignment:
         string.
 
         e.g.
+
         >>> from Bio.Alphabet import IUPAC, Gapped
         >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
@@ -198,6 +201,7 @@ class Alignment:
         """Iterate over alignment rows as SeqRecord objects.
 
         e.g.
+
         >>> from Bio.Alphabet import IUPAC, Gapped
         >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
@@ -219,20 +223,14 @@ class Alignment:
         """Retrieve a sequence by row number (DEPRECATED).
 
         Returns:
-        o A Seq object for the requested sequence.
+         - A Seq object for the requested sequence.
 
         Raises:
-        o IndexError - If the specified number is out of range.
+         - IndexError - If the specified number is out of range.
 
         NOTE: This is a legacy method.  In new code where you need to access
         the rows of the alignment (i.e. the sequences) consider iterating
-        over them or accessing them as SeqRecord objects.  e.g.
-
-        for record in alignment:
-            print record.id
-            print record.seq
-        first_record = alignment[0]
-        last_record = alignment[-1]
+        over them or accessing them as SeqRecord objects.
         """
         import warnings
         import Bio
@@ -290,19 +288,19 @@ class Alignment:
         sequences.
 
         Arguments:
-        o descriptor - The descriptive id of the sequence being added.
+         - descriptor - The descriptive id of the sequence being added.
                        This will be used as the resulting SeqRecord's
                        .id property (and, for historical compatibility,
                        also the .description property)
-        o sequence - A string with sequence info.
-        o start - You can explicitly set the start point of the sequence.
-        This is useful (at least) for BLAST alignments, which can just
-        be partial alignments of sequences.
-        o end - Specify the end of the sequence, which is important
-        for the same reason as the start.
-        o weight - The weight to place on the sequence in the alignment.
-        By default, all sequences have the same weight. (0.0 => no weight,
-        1.0 => highest weight)
+         - sequence - A string with sequence info.
+         - start - You can explicitly set the start point of the sequence.
+                   This is useful (at least) for BLAST alignments, which can
+                   just be partial alignments of sequences.
+         - end - Specify the end of the sequence, which is important
+                 for the same reason as the start.
+         - weight - The weight to place on the sequence in the alignment.
+                    By default, all sequences have the same weight. (0.0 =>
+                    no weight, 1.0 => highest weight)
         """
         new_seq = Seq(sequence, self._alphabet)
 
@@ -336,6 +334,7 @@ class Alignment:
         """Returns a string containing a given column.
 
         e.g.
+
         >>> from Bio.Alphabet import IUPAC, Gapped
         >>> align = Alignment(Gapped(IUPAC.unambiguous_dna, "-"))
         >>> align.add_sequence("Alpha", "ACTGCTAGCTAG")
