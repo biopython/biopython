@@ -205,7 +205,7 @@ def check_phylip_reject_duplicate():
         assert False, "Duplicate IDs after truncation are not allowed."
     except ValueError, e:
         # Expected - check the error
-        assert e.message.startswith("Repeated name 'longsequen'"), e
+        assert "Repeated name 'longsequen'" in str(e)
 
 check_phylip_reject_duplicate()
 
