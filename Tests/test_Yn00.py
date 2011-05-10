@@ -9,6 +9,7 @@ import os
 import os.path
 import sys
 from Bio.Phylo.PAML import yn00
+from Bio.Phylo.PAML._paml import PamlError
 
 class ModTest(unittest.TestCase):
     
@@ -80,10 +81,10 @@ class ModTest(unittest.TestCase):
         self.assertRaises((AttributeError, ValueError),
             self.yn00.run)
         
-    #def testYn00ErrorsCaught(self):
+    #def testPamlErrorsCaught(self):
         #self.yn00.alignment = self.align_file
         #self.yn00.out_file = self.out_file
-        #self.assertRaises((EnvironmentError, yn00.Yn00Error),
+        #self.assertRaises((EnvironmentError, PamlError),
             #self.yn00.run)
         
     def testCtlFileValidOnRun(self):

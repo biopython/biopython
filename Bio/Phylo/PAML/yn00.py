@@ -5,15 +5,14 @@
 
 from __future__ import with_statement
 import os
-import os.path
-import subprocess
 import re
+from _paml import Paml, PamlError
 
 class Yn00Error(EnvironmentError):
     """yn00 has failed. Run with verbose = True to view yn00's error
 message"""
 
-class Yn00(object):
+class Yn00(Paml):
     """This class implements an interface to yn00, part of the PAML package."""
 
     def __init__(self, alignment = None, working_dir = None,
@@ -24,16 +23,8 @@ class Yn00(object):
         of the input alignment, the working directory and
         the final output file. 
         """
+        Paml.__init__(self, alignment, working_dir, out_file)
         self.ctl_file = "yn00.ctl"
-        if working_dir is None:
-            self.working_dir = os.getcwd()
-        else:
-            self.working_dir = working_dir
-        if alignment is not None:
-            if not os.path.exists(alignment):
-                raise IOError, "The specified alignment file does not exist."
-        self.alignment = alignment
-        self.out_file = out_file
         self._options = {"verbose": 0,
                         "icode": 0,
                         "weighting": 0,
@@ -101,113 +92,22 @@ class Yn00(object):
                 self._options[option] = temp_options[option]
             else:
                 self._options[option] = None
-                            
-    def print_options(self):
-        """Print out all of the options and their current settings."""
-        for option in self._options.items():
-            print "{0} = {1}".format(option[0], option[1])
-    
-    def set_option(self, option, value):
-        """Set the value of an option. 
-        
-        This function abstracts the options dict to prevent the user from 
-        adding options that do not exist or mispelling options.
-        """
-        if not self._options.has_key(option):
-            raise KeyError, "Invalid option: " + option
-        else:
-            self._options[option] = value
-    
-    def get_option(self, option):
-        """Return the value of an option."""
-        if not self._options.has_key(option):
-            raise KeyError, "Invalid option: " + option
-        else:
-            return self._options.get(option)
-        
-    def get_all_options(self):
-        """Return the values of all the options."""        
-        return self._options.items()
-        
-    def _set_rel_paths(self):
-        """Convert all file/directory locations to paths relative to the current working directory.
-        
-        yn00 requires that all paths specified in the control file be
-        relative to the directory from which it is called rather than 
-        absolute paths.
-        """
-        if self.working_dir is not None:
-            self._rel_working_dir = os.path.relpath(self.working_dir)
-        if self.alignment is not None:
-            self._rel_alignment = os.path.relpath(self.alignment, 
-                self.working_dir)
-        if self.out_file is not None:
-            self._rel_out_file = os.path.relpath(self.out_file, 
-                self.working_dir)
-        
+                
     def run(self, ctl_file = None, verbose = False, command = "yn00",
                 parse = True):
-        """Run cyn00 using the current configuration and then parse the results. 
-        
-        Return a process signal so the user can determine if
-        the execution was successful (return code 0 is successful, -N
-        indicates a failure). The arguments may be passed as either 
-        absolute or relative paths, despite the fact that yn00 
-        requires relative paths.
-        """
-        if self.alignment is None:
-            raise ValueError, "Alignment file not specified."
-        if not os.path.exists(self.alignment):
-            raise IOError, "The specified alignment file does not exist."
-        if self.out_file is None:
-            raise ValueError, "Output file not specified."
-        if self.working_dir is None:
-            raise ValueError, "Working directory not specified."
-        # Store the current working directory
-        cwd = os.getcwd()
-        # Move to the desired working directory
-        if not os.path.exists(self.working_dir):
-            os.mkdir(self.working_dir)
-        os.chdir(self.working_dir)
-        # If no external control file was specified...
-        if ctl_file is None:
-            # Dynamically build a control file
-            self.write_ctl_file()
-            if verbose:
-                result_code = subprocess.call([command, self.ctl_file])
-            else:
-                result_code = subprocess.call([command, self.ctl_file],
-                    stdout=open(os.devnull, 'w'))
-        else:
-            if not os.path.exists(ctl_file):
-                raise IOError, "The specified control file does not exist."
-            if verbose:
-                result_code = subprocess.call([command, ctl_file])
-            else:
-                result_code = subprocess.call([command, ctl_file],
-                    stdout=open(os.devnull, 'w'))
-        if result_code > 0:
-            # If yn00 fails for any reason
-            os.chdir(cwd)
-            raise Yn00Error, "yn00 has failed. Run with verbose = True to view yn00's error message"
-        if result_code < 0:
-            # If the yn00 process is killed by a signal somehow
-            os.chdir(cwd)
-            raise EnvironmentError, "The yn00 process was killed."
+        try:
+            Paml.run(self, ctl_file, verbose, command)
+        except PamlError as strerror:
+            raise PamlError, strerror
         if parse:
             try:
                 results = read(self._rel_out_file)
             except KeyError as (errorno, strerror):
-                os.chdir(cwd)
                 raise KeyError, strerror
             except ValueError as (errorno, strerror):
-                os.chdir(cwd)
                 raise ValueError, strerror
-            except:
-                os.chdir(cwd)
         else:
             results = None
-        os.chdir(cwd)
         return results
 
 def read(results_file):

@@ -8,6 +8,7 @@ import unittest
 import os
 import os.path
 from Bio.Phylo.PAML import codeml
+from Bio.Phylo.PAML._paml import PamlError
 
 class ModTest(unittest.TestCase):
     
@@ -113,11 +114,11 @@ class ModTest(unittest.TestCase):
         self.assertRaises((AttributeError, ValueError),
             self.cml.run)
         
-    def testCodemlErrorsCaught(self):
+    def testPamlErrorsCaught(self):
         self.cml.alignment = self.align_file
         self.cml.tree = self.bad_tree_file
         self.cml.out_file = self.out_file
-        self.assertRaises((EnvironmentError, codeml.CodemlError),
+        self.assertRaises((EnvironmentError, PamlError),
             self.cml.run)
         
     def testCtlFileValidOnRun(self):

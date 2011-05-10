@@ -6,14 +6,14 @@
 from __future__ import with_statement
 import os
 import os.path
-import subprocess
 import re
+from _paml import Paml, PamlError
 
 class CodemlError(EnvironmentError):
     """CODEML has failed. Run with verbose = True to view CODEML's error
 message"""
 
-class Codeml(object):
+class Codeml(Paml):
     """This class implements an interface to CODEML, part of the PAML package."""
 
     def __init__(self, alignment = None, tree = None, working_dir = None,
@@ -26,20 +26,12 @@ class Codeml(object):
         have typical settings by default to run site class models 0, 1 and
         2 on a nucleotide alignment.
         """
-        self.ctl_file = "codeml.ctl"
-        if working_dir is None:
-            self.working_dir = os.getcwd()
-        else:
-            self.working_dir = working_dir
-        if alignment is not None:
-            if not os.path.exists(alignment):
-                raise IOError, "The specified alignment file does not exist."
-        self.alignment = alignment
+        Paml.__init__(self, alignment, working_dir, out_file)
         if tree is not None:
             if not os.path.exists(tree):
                 raise IOError, "The specified tree file does not exist."
         self.tree = tree
-        self.out_file = out_file
+        self.ctl_file = "codeml.ctl"
         self._options = {"noisy": 9, 
                         "verbose": 1, 
                         "runmode": 0,
@@ -160,28 +152,6 @@ class Codeml(object):
                 print "{0} = {1}".format(option[0], NSsites)
             else:
                 print "{0} = {1}".format(option[0], option[1])
-    
-    def set_option(self, option, value):
-        """Set the value of an option. 
-        
-        This function abstracts the options dict to prevent the user from 
-        adding options that do not exist or mispelling options.
-        """
-        if not self._options.has_key(option):
-            raise KeyError, "Invalid option: " + option
-        else:
-            self._options[option] = value
-    
-    def get_option(self, option):
-        """Return the value of an option."""
-        if not self._options.has_key(option):
-            raise KeyError, "Invalid option: " + option
-        else:
-            return self._options.get(option)
-        
-    def get_all_options(self):
-        """Return the values of all the options."""        
-        return self._options.items()
         
     def _set_rel_paths(self):
         """Convert all file/directory locations to paths relative to the current working directory.
@@ -190,16 +160,9 @@ class Codeml(object):
         relative to the directory from which it is called rather than 
         absolute paths.
         """
-        if self.working_dir is not None:
-            self._rel_working_dir = os.path.relpath(self.working_dir)
-        if self.alignment is not None:
-            self._rel_alignment = os.path.relpath(self.alignment, 
-                self.working_dir)
+        Paml._set_rel_paths(self)
         if self.tree is not None:
             self._rel_tree = os.path.relpath(self.tree, 
-                self.working_dir)
-        if self.out_file is not None:
-            self._rel_out_file = os.path.relpath(self.out_file, 
                 self.working_dir)
         
     def run(self, ctl_file = None, verbose = False, command = "codeml",
@@ -212,65 +175,24 @@ class Codeml(object):
         absolute or relative paths, despite the fact that CODEML 
         requires relative paths.
         """
-        if self.alignment is None:
-            raise ValueError, "Alignment file not specified."
-        if not os.path.exists(self.alignment):
-            raise IOError, "The specified alignment file does not exist."
         if self.tree is None:
             raise ValueError, "Tree file not specified."
         if not os.path.exists(self.tree):
             raise IOError, "The specified tree file does not exist."
-        if self.out_file is None:
-            raise ValueError, "Output file not specified."
-        if self.working_dir is None:
-            raise ValueError, "Working directory not specified."
-        # Store the current working directory
-        cwd = os.getcwd()
-        # Move to the desired working directory
-        if not os.path.exists(self.working_dir):
-            os.mkdir(self.working_dir)
-        os.chdir(self.working_dir)
-        # If no external control file was specified...
-        if ctl_file is None:
-            # Dynamically build a control file
-            self.write_ctl_file()
-            if verbose:
-                result_code = subprocess.call([command, self.ctl_file])
-            else:
-                result_code = subprocess.call([command, self.ctl_file],
-                    stdout=open(os.devnull, 'w'))
-        else:
-            if not os.path.exists(ctl_file):
-                raise IOError, "The specified control file does not exist."
-            if verbose:
-                result_code = subprocess.call([command, ctl_file])
-            else:
-                result_code = subprocess.call([command, ctl_file],
-                    stdout=open(os.devnull, 'w'))
-        if result_code > 0:
-            # If codeml fails for any reason
-            os.chdir(cwd)
-            raise CodemlError, "CODEML has failed. Run with verbose = True to view CODEML's error message"
-        if result_code < 0:
-            # If the codeml process is killed by a signal somehow
-            os.chdir(cwd)
-            raise EnvironmentError, "The CODEML process was killed."
+        try:
+            Paml.run(self, ctl_file, verbose, command)
+        except PamlError as strerror:
+            raise PamlError, strerror
         if parse:
             try:
                 results = read(self._rel_out_file)
             except KeyError as (errorno, strerror):
-                os.chdir(cwd)
                 raise KeyError, strerror
             except ValueError as (errorno, strerror):
-                os.chdir(cwd)
                 raise ValueError, strerror
-            except Exception as (errorno, strerror):
-                os.chdir(cwd)
-                raise Exception, strerror
         else:
             results = None
-        os.chdir(cwd)
-        return results
+        return results        
 
 def read(results_file):
     """Parse a CODEML results file."""
