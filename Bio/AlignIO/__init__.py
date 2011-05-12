@@ -204,7 +204,7 @@ def write(alignments, handle, format):
         handle_close = False
 
     #Map the file format to a writer class
-    if format in _FormatToIterator:
+    if format in _FormatToWriter:
         writer_class = _FormatToWriter[format]
         count = writer_class(handle).write_file(alignments)
     elif format in SeqIO._FormatToWriter:
