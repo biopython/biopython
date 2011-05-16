@@ -12,6 +12,7 @@ Bio.SeqIO functions if you want to work directly with the gapped sequences).
 """
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio.Align.Generic import Alignment
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
@@ -36,6 +37,9 @@ class MafWriter(SequentialAlignmentWriter):
             this_src = record.annotations["src"]
         except (AttributeError, KeyError):
             this_src = record.id
+
+        #In the MAF file format, spaces are not allowed in the id
+        this_src = this_src.replace(" ","_")
 
         try:
             this_start = record.annotations["start"]
@@ -68,6 +72,10 @@ class MafWriter(SequentialAlignmentWriter):
         self.handle.write("\n")
 
     def write_alignment(self, alignment):
+
+        if not isinstance(alignment, Alignment):
+            raise TypeError("Expected an alignment object")
+        
         if len(set([len(x) for x in alignment])) > 1:
             raise ValueError("Sequences must all be the same length")
 
@@ -126,7 +134,7 @@ class MafIterator(AlignmentIterator):
         _s_line_fields =("src", "start", "size", "strand", "srcSize", "text")
 
         # stores the "a" line and all "s" lines
-        bundle_species = []
+        bundle_ids = []
         bundle_s_lines = {}
         bundle_a_line = None
 
@@ -137,12 +145,13 @@ class MafIterator(AlignmentIterator):
 
                 if len(line_split) > 7:
                     raise ValueError("Error parsing alignment - 's' line with > 7 fields")
-
-                this_species = line_split[1].split(".", 1)[0]
-                if this_species in bundle_species:
-                    raise ValueError("Error parsing alignment - duplicate species in one bundle")
-                bundle_species.append(this_species)
-                bundle_s_lines[this_species] = dict(zip(_s_line_fields, line_split[1:]))
+                #Cannot assume the identifier is database.chromosome
+                #idn = line_split[1].split(".", 1)[0]
+                idn = line_split[1]
+                if idn in bundle_ids:
+                    raise ValueError("Error parsing alignment - duplicate ID in one bundle")
+                bundle_ids.append(idn)
+                bundle_s_lines[idn] = dict(zip(_s_line_fields, line_split[1:]))
             elif line.startswith("a"):
                 if bundle_a_line != None:
                     raise ValueError("Error parsing alignment - multiple 'a' lines in one bundle")
@@ -157,7 +166,7 @@ class MafIterator(AlignmentIterator):
         if len(set([len(x["text"]) for x in bundle_s_lines.values()])) > 1:
             raise ValueError("Error parsing alignment - sequences of different length?")
 
-        return(bundle_a_line, bundle_s_lines, bundle_species)
+        return(bundle_a_line, bundle_s_lines, bundle_ids)
 
     def _build_alignment(self, parsed_bundle):
         # build the multiple alignment object
@@ -165,8 +174,8 @@ class MafIterator(AlignmentIterator):
 
         alignment.annotations = parsed_bundle[0]
 
-        for species in parsed_bundle[2]:
-            species_data = parsed_bundle[1][species]
+        for idn in parsed_bundle[2]:
+            species_data = parsed_bundle[1][idn]
             this_anno = {"src": species_data["src"],
                          "start": int(species_data["start"]),
                          "srcSize": int(species_data["srcSize"]),
@@ -174,9 +183,9 @@ class MafIterator(AlignmentIterator):
                          "size": int(species_data["size"])}
 
             record = SeqRecord(Seq(species_data["text"], self.alphabet),
-                                id = species_data["src"],
-                                name = species_data["src"],
-                                description = species,
+                                id = idn,
+                                name = idn,
+                                description = species_data["src"],
                                 annotations = this_anno)
 
             alignment.append(record)
@@ -430,7 +439,6 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
     assert first_bundle.annotations["score"] == "23262.0"
 
     assert first_bundle[4].id == "rn3.chr4"
-    assert first_bundle[4].description == "rn3"
     assert str(first_bundle[4].seq) == "-AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG"
     assert first_bundle[4].annotations["src"] == "rn3.chr4"
     assert first_bundle[4].annotations["start"] == 81344243
@@ -439,7 +447,6 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
     assert first_bundle[4].annotations["srcSize"] == 187371129
 
     assert first_bundle[3].id == "mm4.chr6"
-    assert first_bundle[3].description == "mm4"
     assert str(first_bundle[3].seq) == "-AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG"
     assert first_bundle[3].annotations["src"] == "mm4.chr6"
     assert first_bundle[3].annotations["start"] == 53215344
@@ -448,7 +455,6 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
     assert first_bundle[3].annotations["srcSize"] == 151104725
 
     assert first_bundle[2].id == "baboon"
-    assert first_bundle[2].description == "baboon"
     assert str(first_bundle[2].seq) == "AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG"
     assert first_bundle[2].annotations["src"] == "baboon"
     assert first_bundle[2].annotations["start"] == 116834
@@ -457,7 +463,6 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
     assert first_bundle[2].annotations["srcSize"] == 4622798
 
     assert first_bundle[1].id == "panTro1.chr6"
-    assert first_bundle[1].description == "panTro1"
     assert str(first_bundle[1].seq) == "AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG"
     assert first_bundle[1].annotations["src"] == "panTro1.chr6"
     assert first_bundle[1].annotations["start"] == 28741140
@@ -466,7 +471,6 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
     assert first_bundle[1].annotations["srcSize"] == 161576975
 
     assert first_bundle[0].id == "hg16.chr7"
-    assert first_bundle[0].description == "hg16"
     assert str(first_bundle[0].seq) == "AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG"
     assert first_bundle[0].annotations["src"] == "hg16.chr7"
     assert first_bundle[0].annotations["start"] == 27578828
@@ -479,7 +483,6 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
     assert second_bundle.annotations["score"] == "5062.0"
 
     assert second_bundle[4].id == "rn3.chr4"
-    assert second_bundle[4].description == "rn3"
     assert str(second_bundle[4].seq) == "taagga"
     assert second_bundle[4].annotations["src"] == "rn3.chr4"
     assert second_bundle[4].annotations["start"] == 81444246
@@ -488,7 +491,6 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
     assert second_bundle[4].annotations["srcSize"] == 187371129
 
     assert second_bundle[3].id == "mm4.chr6"
-    assert second_bundle[3].description == "mm4"
     assert str(second_bundle[3].seq) == "TAAAGA"
     assert second_bundle[3].annotations["src"] == "mm4.chr6"
     assert second_bundle[3].annotations["start"] == 53303881
@@ -497,7 +499,6 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
     assert second_bundle[3].annotations["srcSize"] == 151104725
 
     assert second_bundle[2].id == "baboon"
-    assert second_bundle[2].description == "baboon"
     assert str(second_bundle[2].seq) == "TAAAGA"
     assert second_bundle[2].annotations["src"] == "baboon"
     assert second_bundle[2].annotations["start"] == 241163
@@ -506,7 +507,6 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
     assert second_bundle[2].annotations["srcSize"] == 4622798
 
     assert second_bundle[1].id == "panTro1.chr6"
-    assert second_bundle[1].description == "panTro1"
     assert str(second_bundle[1].seq) == "TAAAGA"
     assert second_bundle[1].annotations["src"] == "panTro1.chr6"
     assert second_bundle[1].annotations["start"] == 28862317
@@ -515,7 +515,6 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
     assert second_bundle[1].annotations["srcSize"] == 161576975
 
     assert second_bundle[0].id == "hg16.chr7"
-    assert second_bundle[0].description == "hg16"
     assert str(second_bundle[0].seq) == "TAAAGA"
     assert second_bundle[0].annotations["src"] == "hg16.chr7"
     assert second_bundle[0].annotations["start"] == 27699739
@@ -528,7 +527,6 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
     assert third_bundle.annotations["score"] == "6636.0"
 
     assert third_bundle[3].id == "mm4.chr6"
-    assert third_bundle[3].description == "mm4"
     assert str(third_bundle[3].seq) == "ACAGCTGAAAATA"
     assert third_bundle[3].annotations["src"] == "mm4.chr6"
     assert third_bundle[3].annotations["start"] == 53310102
@@ -537,7 +535,6 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
     assert third_bundle[3].annotations["srcSize"] == 151104725
 
     assert third_bundle[2].id == "baboon"
-    assert third_bundle[2].description == "baboon"
     assert str(third_bundle[2].seq) == "gcagctgaaaaca"
     assert third_bundle[2].annotations["src"] == "baboon"
     assert third_bundle[2].annotations["start"] == 249182
@@ -546,7 +543,6 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
     assert third_bundle[2].annotations["srcSize"] == 4622798
 
     assert third_bundle[1].id == "panTro1.chr6"
-    assert third_bundle[1].description == "panTro1"
     assert str(third_bundle[1].seq) == "gcagctgaaaaca"
     assert third_bundle[1].annotations["src"] == "panTro1.chr6"
     assert third_bundle[1].annotations["start"] == 28869787
@@ -555,7 +551,6 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
     assert third_bundle[1].annotations["srcSize"] == 161576975
 
     assert third_bundle[0].id == "hg16.chr7"
-    assert third_bundle[0].description == "hg16"
     assert str(third_bundle[0].seq) == "gcagctgaaaaca"
     assert third_bundle[0].annotations["src"] == "hg16.chr7"
     assert third_bundle[0].annotations["start"] == 27707221
