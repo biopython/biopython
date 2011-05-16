@@ -62,6 +62,7 @@ test_records = [
       SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",Alphabet.generic_protein), id="Gamma")],
      "alignment with repeated record",
      [(["stockholm"],ValueError,"Duplicate record identifier: Beta"),
+      (["maf"],ValueError,"Identifiers in each MultipleSeqAlignment must be unique"),  
       (["phylip"],ValueError,"Repeated name 'Beta' (originally 'Beta'), possibly due to truncation")]),
     ]
 # Meddle with the annotation too:
