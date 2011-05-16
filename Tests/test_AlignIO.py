@@ -229,7 +229,7 @@ for t_format in list(AlignIO._FormatToWriter)+list(SeqIO._FormatToWriter):
     handle = StringIO()
     try:
         AlignIO.write([list_of_records], handle, t_format)
-        print False, "Writing non-alignment to %s format should fail!" \
+        assert False, "Writing non-alignment to %s format should fail!" \
             % t_format
     except (TypeError, AttributeError, ValueError):
         pass
