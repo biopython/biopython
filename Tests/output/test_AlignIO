@@ -685,4 +685,21 @@ Testing reading pir format file NBRF/clustalw.pir with 1 alignments
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
+Testing reading maf format file MAF/humor.maf with 2 alignments
+ Alignment 0, with 3 sequences of length 5486
+  gcacagcctttactccctgactgcgtttatattctg...CCG NM_006987
+  .......................................TTG mm3
+  .......................................... rn3
+ Alignment 1, with 3 sequences of length 5753
+  tttgtccatgttggtcaggctggtctcgaactcccc...GGT NM_018289
+  .......................................GGT mm3
+  .......................................GGT rn3
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
+ Checking can write/read as 'nexus' format
+ Failed: We can only write one Alignment to a Nexus file.
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Finished tested reading files

@@ -1713,6 +1713,7 @@ Testing reading swiss format file SwissProt/Q13639.txt
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Checking can write/read as 'phylip-sequential' format
 Testing reading uniprot-xml format file SwissProt/H2CNN8.xml
@@ -1795,6 +1796,7 @@ Testing reading uniprot-xml format file SwissProt/F2CXE6.xml
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Checking can write/read as 'phylip-sequential' format
 Testing reading swiss format file SwissProt/F2CXE6.txt
@@ -1822,6 +1824,7 @@ Testing reading swiss format file SwissProt/F2CXE6.txt
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Checking can write/read as 'phylip-sequential' format
 Testing reading genbank format file GenBank/noref.gb
@@ -2439,6 +2442,8 @@ Testing reading embl format file EMBL/epo_prt_selection.embl
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'phylip-sequential' format
@@ -2735,6 +2740,8 @@ Testing reading embl format file EMBL/kipo_prt_sample.embl
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'phylip-sequential' format
@@ -2863,6 +2870,8 @@ Testing reading imgt format file EMBL/hla_3260_sample.imgt
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'phylip-sequential' format

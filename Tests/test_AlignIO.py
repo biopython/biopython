@@ -67,6 +67,7 @@ test_files = [
     ("fasta-m10", 2, 12, 'Fasta/output008.m10'),
     ("ig", 16, 1, 'IntelliGenetics/VIF_mase-pro.txt'),
     ("pir", 2, 1, 'NBRF/clustalw.pir'),
+    ("maf", 3, 2, 'MAF/humor.maf'),
     ]
 
 
@@ -165,7 +166,7 @@ def check_simple_write_read(alignments, indent=" "):
         if len(alignments) > 1:
             # Try writing just one Alignment (not a list)
             handle = StringIO()
-            SeqIO.write(alignments[0], handle, format)
+            AlignIO.write(alignments[0:1], handle, format)
             assert handle.getvalue() == alignments[0].format(format)
 
 
@@ -200,11 +201,6 @@ def simple_alignment_comparison(alignments, alignments2, format):
             else:
                 assert r1.id == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
-
-            #Check the sequence
-            assert r1.seq.tostring() == r2.seq.tostring(), \
-                   "Seq does not match %s vs %s (%s vs %s)" \
-                   % (r1.seq, r2.seq, r1.id, r2.id)
     return True
 
 
