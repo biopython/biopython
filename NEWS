@@ -16,6 +16,10 @@ The Bio.AlignIO "fasta-m10" parser was updated to cope with the >>><<< lines
 as used in Bill Pearson's FASTA version 3.36, without this fix the parser
 would only return alignments for the first query sequence.
 
+The Bio.AlignIO "phylip" parser and writer now treat a dot/period in the
+sequence as an error, in line with the official PHYLIP specification. Older
+verions of our code didn't do anything special with this character.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
