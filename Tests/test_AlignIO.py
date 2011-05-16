@@ -190,8 +190,6 @@ def simple_alignment_comparison(alignments, alignments2, format):
             if format == "stockholm":
                 #We map dot to dash in the stockholm parser, since
                 #both are gaps (but technically different kinds in HMM)
-                #HOWEVER, other file formats such as PHYLIP and MAF can
-                #use dot to mean same as first sequence. TODO - fix at parse?
                 assert r1.seq.tostring().replace(".","-") == r2.seq.tostring(), \
                     "Seq does not match %s vs %s (%s vs %s)" \
                     % (r1.seq, r2.seq, r1.id, r2.id)
