@@ -175,7 +175,7 @@ def simple_alignment_comparison(alignments, alignments2, format):
             elif format=="clustal":
                 assert r1.id.replace(" ","_")[:30] == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format=="stockholm":
+            elif format in ["stockholm", "maf"]:
                 assert r1.id.replace(" ","_") == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
             elif format=="fasta":
