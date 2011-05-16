@@ -61,7 +61,8 @@ test_files = [
     ("fasta-m10", 2, 9, 'Fasta/output007.m10'),
     ("fasta-m10", 2, 12,'Fasta/output008.m10'),
     ("ig", 16, 1, 'IntelliGenetics/VIF_mase-pro.txt'),
-    ("pir", 2, 1,  'NBRF/clustalw.pir'),
+    ("pir", 2, 1, 'NBRF/clustalw.pir'),
+    ("maf", 3, 2, 'MAF/humor.maf'),
     ]
 
 def str_summary(text, max_len=40):
@@ -155,7 +156,7 @@ def check_simple_write_read(alignments, indent=" "):
         if len(alignments)>1:
             #Try writing just one Alignment (not a list)
             handle = StringIO()
-            SeqIO.write(alignments[0], handle, format)
+            AlignIO.write(alignments[0:1], handle, format)
             assert handle.getvalue() == alignments[0].format(format)
 
 def simple_alignment_comparison(alignments, alignments2, format):
@@ -185,9 +186,18 @@ def simple_alignment_comparison(alignments, alignments2, format):
                        "'%s' vs '%s'" % (r1.id, r2.id)
 
             #Check the sequence
-            assert r1.seq.tostring() == r2.seq.tostring(), \
-                   "Seq does not match %s vs %s (%s vs %s)" \
-                   % (r1.seq, r2.seq, r1.id, r2.id)
+            if format == "stockholm":
+                #We map dot to dash in the stockholm parser, since
+                #both are gaps (but technically different kinds in HMM)
+                #HOWEVER, other file formats such as PHYLIP and MAF can
+                #use dot to mean same as first sequence. TODO - fix at parse?
+                assert r1.seq.tostring().replace(".","-") == r2.seq.tostring(), \
+                    "Seq does not match %s vs %s (%s vs %s)" \
+                    % (r1.seq, r2.seq, r1.id, r2.id)
+            else:
+                assert r1.seq.tostring() == r2.seq.tostring(), \
+                    "Seq does not match %s vs %s (%s vs %s)" \
+                    % (r1.seq, r2.seq, r1.id, r2.id)
     return True
 
 #Check Phylip files reject duplicate identifiers.
