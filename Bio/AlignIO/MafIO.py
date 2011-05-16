@@ -171,14 +171,9 @@ class MafIterator(AlignmentIterator):
         return alignment
 
     def next(self):
-        if self.handle.tell() == 0:
-            # clear old data if necessary
-            try:
-                del self._header
-                del self._track
-            except AttributeError:
-                pass
-            
+        try:
+            _ = self._header
+        except AttributeError:
             def _check_nextline_header():
                 line = self.handle.readline()
 
