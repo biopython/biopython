@@ -167,9 +167,6 @@ def simple_alignment_comparison(alignments, alignments2, format):
             #Check the bare minimum (ID and sequence) as
             #many formats can't store more than that.
 
-            #Check the sequence
-            assert r1.seq.tostring() == r2.seq.tostring()
-            
             #Beware of different quirks and limitations in the
             #valid character sets and the identifier lengths!
             if format=="phylip":
@@ -186,6 +183,11 @@ def simple_alignment_comparison(alignments, alignments2, format):
             else:
                 assert r1.id == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
+
+            #Check the sequence
+            assert r1.seq.tostring() == r2.seq.tostring(), \
+                   "Seq does not match %s vs %s (%s vs %s)" \
+                   % (r1.seq, r2.seq, r1.id, r2.id)
     return True
 
 #Check Phylip files reject duplicate identifiers.
