@@ -36,25 +36,14 @@ class MafWriter(SequentialAlignmentWriter):
         #In the MAF file format, spaces are not allowed in the id
         this_src = record.id.replace(" ","_")
 
-        try:
-            this_start = record.annotations["start"]
-        except (AttributeError, KeyError):
-            this_start = 0
+        this_start = record.annotations.get("start", 0)
 
-        try:
-            this_size = record.annotations["size"]
-        except (AttributeError, KeyError):
-            this_size = len(record)
+        #TODO - Should this exclude the gaps?
+        this_size = record.annotations.get("size", len(record))
 
-        try:
-            this_strand = record.annotations["strand"]
-        except(AttributeError, KeyError):
-            this_strand = "+"
+        this_strand = record.annotations.get("strand", "+")
 
-        try:
-            this_srcSize = record.annotations["srcSize"]
-        except(AttributeError, KeyError):
-            this_srcSize = 0
+        this_srcSize = record.annotations.get("srcSize", 0)
 
         this_line.append("%-40s" % (this_src,))
         this_line.append("%15s" % (this_start,))
