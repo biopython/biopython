@@ -167,7 +167,10 @@ class MafIterator(AlignmentIterator):
         # build the multiple alignment object
         alignment = MultipleSeqAlignment([], self.alphabet)
 
-        alignment.annotations = parsed_bundle[0]
+        #TODO - Introduce an annotated alignment class?
+        #See also Bio/AlignIO/FastaIO.py for same requirement.        
+        #For now, store the annotation a new private property:
+        alignment._annotations = parsed_bundle[0]
 
         for idn in parsed_bundle[2]:
             species_data = parsed_bundle[1][idn]
@@ -341,7 +344,7 @@ s fugu_unc  4000 4 +  4038 AC----TT
 
     # assertions for the first bundle
     assert len(first_bundle) == 3
-    assert first_bundle.annotations["score"] == "0.128"
+    assert first_bundle._annotations["score"] == "0.128"
 
     assert first_bundle[0].id == "human_hoxa"
     assert str(first_bundle[0].seq) == "ACA-TTACT"
@@ -367,7 +370,7 @@ s fugu_unc  4000 4 +  4038 AC----TT
 
     # assertions for the second bundle
     assert len(second_bundle) == 3
-    assert second_bundle.annotations["score"] == "0.071"
+    assert second_bundle._annotations["score"] == "0.071"
 
     assert second_bundle[0].id == "human_unc"
     assert str(second_bundle[0].seq) == "ACAGTATT"
@@ -438,7 +441,7 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
 
     # assertions for the first bundle
     assert len(first_bundle) == 5
-    assert first_bundle.annotations["score"] == "23262.0"
+    assert first_bundle._annotations["score"] == "23262.0"
 
     assert first_bundle[4].id == "rn3.chr4"
     assert str(first_bundle[4].seq) == "-AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG"
@@ -477,7 +480,7 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
 
     # assertions for the second bundle
     assert len(second_bundle) == 5
-    assert second_bundle.annotations["score"] == "5062.0"
+    assert second_bundle._annotations["score"] == "5062.0"
 
     assert second_bundle[4].id == "rn3.chr4"
     assert str(second_bundle[4].seq) == "taagga"
@@ -516,7 +519,7 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
     
     # assertions for the third bundle
     assert len(third_bundle) == 4
-    assert third_bundle.annotations["score"] == "6636.0"
+    assert third_bundle._annotations["score"] == "6636.0"
 
     assert third_bundle[3].id == "mm4.chr6"
     assert str(third_bundle[3].seq) == "ACAGCTGAAAATA"
